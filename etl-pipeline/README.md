@@ -4,10 +4,26 @@ Generic project that help Data Scientists in analyze of the Client's data as wel
 
 # Service
 
-1. Install etl service the newest version (it's >0.5.4!)"
+## Docker
+
+1. Copy paste directory `etl_pipeline/config` and set up `config/service/service.yaml` settings without `__init__.py`
+
+2. Pull docker image:
+
+`docker pull docker.repo.silenteight.com/etl-pipeline-service`
+
+3. Launch:
+
+`docker run  -v <PATH_TO_CONFIG>:/config -p <PORT FROM YAML>:<PORT FROM YAML> -e CONFIG_APP_DIR=/config docker.repo.silenteight.com/etl-pipeline-service`
+
+## Locally
+
+1. Install etl service the newest version (it's >=0.5.4!)"
+
 `pip install etl_pipeline`
 
-2. Copy paste directory `config` and set-up `config/service/service.yaml` settings
+2. Copy paste directory `etl_pipeline/config` and set up `config/service/service.yaml` settings without `__init__.py`
+
 `CONFIG_APP_DIR=<PATH TO CONFIG DIRECTORY> python -m etl_pipeline`
 
 ## Emulating environment
@@ -20,8 +36,6 @@ Generic project that help Data Scientists in analyze of the Client's data as wel
 
 3. You can now send request as shown in:
 `pytest ./tests/test_custom/test_client.py`
-
-
 
 # Playground
 

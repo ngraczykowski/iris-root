@@ -3,11 +3,10 @@ from dataclasses import dataclass
 from typing import List
 
 import grpc
-from config import service_config
 
 import etl_pipeline.service.proto.etl_pipeline_pb2 as etl__pipeline__pb2
 from etl_pipeline.config import columns_namespace as cn
-from etl_pipeline.config import pipeline_config
+from etl_pipeline.config import pipeline_config, service_config
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.data_processor_engine.json_engine.json_engine import JsonProcessingEngine
 from etl_pipeline.service.agent_router import AgentInputCreator

@@ -1,7 +1,6 @@
 import json
 
 import grpc
-import pytest
 
 from etl_pipeline.service.proto.etl_pipeline_pb2 import Alert, Match, RunEtlRequest
 from etl_pipeline.service.proto.etl_pipeline_pb2_grpc import EtlPipelineServiceStub
@@ -18,10 +17,13 @@ def load_alert():
     return alert
 
 
-@pytest.mark.skip
-def test_flow():
+def flow():
     alert = load_alert()
-    channel = grpc.insecure_channel("localhost:50051")
+    channel = grpc.insecure_channel("localhost:9090")
     stub = EtlPipelineServiceStub(channel)
     response = stub.RunEtl(RunEtlRequest(alerts=[alert]))
     assert response.etl_alerts[0].etl_status == 0
+
+
+if __name__ == "__main__":
+    flow()
