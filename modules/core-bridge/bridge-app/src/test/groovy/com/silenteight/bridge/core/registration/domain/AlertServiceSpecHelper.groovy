@@ -1,8 +1,8 @@
 package com.silenteight.bridge.core.registration.domain
 
-import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand.AlertStatus
-import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand.AlertWithMatches
-import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand.Match
+import com.silenteight.bridge.core.registration.domain.command.RegisterAlertsCommand.AlertStatus
+import com.silenteight.bridge.core.registration.domain.command.RegisterAlertsCommand.AlertWithMatches
+import com.silenteight.bridge.core.registration.domain.command.RegisterAlertsCommand.Match
 import com.silenteight.bridge.core.registration.domain.model.AlertsToRegister
 import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert
 import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert.RegistrationMatch

@@ -8,9 +8,10 @@ import java.time.Duration;
 @ConstructorBinding
 @ConfigurationProperties("amqp.registration.incoming.verify-batch-timeout")
 public record AmqpRegistrationIncomingVerifyBatchTimeoutProperties(
+    String delayedQueueName,
     String queueName,
-    String deadLetterQueueName,
-    Integer deadLetterQueueTimeToLiveInMilliseconds,
+    String errorAlertsQueueName,
+    Integer queueTimeToLiveInMilliseconds,
     String deadLetterExchangeName,
     Duration delayTime
 ) {}

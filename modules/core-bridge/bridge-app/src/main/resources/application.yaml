@@ -65,11 +65,12 @@ amqp:
         dead-letter-queue-time-to-live-in-milliseconds: 10000
         dead-letter-exchange-name: recommendation-delivered.dlx
       verify-batch-timeout:
-        queue-name: verify-batch-timeout-queue
-        dead-letter-queue-name: verify-batch-timeout.dlq
-        dead-letter-queue-time-to-live-in-milliseconds: 10000
-        dead-letter-exchange-name: verify-batch-timeout.dlx
         delay-time: 60m
+        delayed-queue-name: verify-batch-timeout-delayed-queue
+        queue-name: verify-batch-timeout-queue
+        error-alerts-queue-name: error-alerts-verify-batch-timeout-queue
+        queue-time-to-live-in-milliseconds: 10000
+        dead-letter-exchange-name: verify-batch-timeout.dlx
   recommendation:
     number-of-retries-dead-messages: 3
     outgoing:

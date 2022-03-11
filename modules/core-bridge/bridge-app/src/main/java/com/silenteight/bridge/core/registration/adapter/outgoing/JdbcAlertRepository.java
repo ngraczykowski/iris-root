@@ -90,6 +90,11 @@ class JdbcAlertRepository implements AlertRepository {
   }
 
   @Override
+  public long countAllErroneousAlerts(String batchId) {
+    return alertRepository.countAllAlertsByBatchIdAndErrorStatus(batchId);
+  }
+
+  @Override
   public List<Alert> findAllByBatchIdAndAlertIdIn(String batchId, List<String> alertIds) {
     return alertRepository.findAllByBatchIdAndAlertIdIn(batchId, alertIds).stream()
         .map(mapper::toAlert)

@@ -200,8 +200,9 @@ class RegistrationRabbitConfiguration {
   }
 
   @Bean
-  Queue verifyBatchTimeoutQueue(AmqpRegistrationIncomingVerifyBatchTimeoutProperties properties) {
-    return QueueBuilder.durable(properties.queueName())
+  Queue verifyBatchTimeoutDelayedQueue(
+      AmqpRegistrationIncomingVerifyBatchTimeoutProperties properties) {
+    return QueueBuilder.durable(properties.delayedQueueName())
         .ttl(Long.valueOf(properties.delayTime().toMillis()).intValue())
         .deadLetterExchange(properties.deadLetterExchangeName())
         .deadLetterRoutingKey(EMPTY_ROUTING_KEY)
@@ -210,7 +211,7 @@ class RegistrationRabbitConfiguration {
 
   @Bean
   Binding verifyBatchTimeoutBinding(
-      @Qualifier("verifyBatchTimeoutQueue") Queue queue,
+      @Qualifier("verifyBatchTimeoutDelayedQueue") Queue queue,
       @Qualifier("verifyBatchTimeoutExchange") DirectExchange exchange) {
     return BindingBuilder
         .bind(queue)
@@ -225,17 +226,36 @@ class RegistrationRabbitConfiguration {
   }
 
   @Bean
-  Queue verifyBatchTimeoutDeadLetterQueue(
+  Queue verifyBatchTimeoutQueue(
       AmqpRegistrationIncomingVerifyBatchTimeoutProperties properties) {
-    return QueueBuilder.durable(properties.deadLetterQueueName())
-        .ttl(properties.deadLetterQueueTimeToLiveInMilliseconds())
+    return QueueBuilder.durable(properties.queueName())
+        .ttl(properties.queueTimeToLiveInMilliseconds())
+        .deadLetterExchange(EMPTY_ROUTING_KEY)
+        .build();
+  }
+
+  @Bean
+  Queue verifyBatchTimeoutForErrorAlertsQueue(
+      AmqpRegistrationIncomingVerifyBatchTimeoutProperties properties) {
+    return QueueBuilder.durable(properties.errorAlertsQueueName())
+        .ttl(properties.queueTimeToLiveInMilliseconds())
         .deadLetterExchange(EMPTY_ROUTING_KEY)
         .build();
   }
 
   @Bean
   Binding verifyBatchTimeoutDeadLetterBinding(
-      @Qualifier("verifyBatchTimeoutDeadLetterQueue") Queue queue,
+      @Qualifier("verifyBatchTimeoutQueue") Queue queue,
+      @Qualifier("verifyBatchTimeoutDeadLetterExchange") DirectExchange exchange) {
+    return BindingBuilder
+        .bind(queue)
+        .to(exchange)
+        .with(EMPTY_ROUTING_KEY);
+  }
+
+  @Bean
+  Binding verifyBatchTimeoutForErrorAlertsDeadLetterBinding(
+      @Qualifier("verifyBatchTimeoutForErrorAlertsQueue") Queue queue,
       @Qualifier("verifyBatchTimeoutDeadLetterExchange") DirectExchange exchange) {
     return BindingBuilder
         .bind(queue)

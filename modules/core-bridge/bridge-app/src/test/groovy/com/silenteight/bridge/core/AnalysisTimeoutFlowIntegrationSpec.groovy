@@ -20,7 +20,9 @@ import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ActiveProfiles
 import spock.util.concurrent.PollingConditions
 
+import static com.silenteight.bridge.core.registration.domain.model.AlertStatus.ERROR
 import static com.silenteight.bridge.core.registration.domain.model.AlertStatus.RECOMMENDED
+import static com.silenteight.proto.registration.api.v1.AlertStatus.FAILURE
 import static com.silenteight.proto.registration.api.v1.AlertStatus.SUCCESS
 
 @SpringBootTest(
@@ -53,20 +55,19 @@ class AnalysisTimeoutFlowIntegrationSpec extends BaseSpecificationIT {
   @Autowired
   RabbitTemplate rabbitTemplate
 
-  static def batchId = UUID.randomUUID().toString()
   static def alertsSize = 4
   static def batchMetadata = "{}"
 
   def 'should create custom recommendations and complete batch when it got timed out'() {
     given:
+    def batchId = UUID.randomUUID().toString()
     def registerBatchRequest = RegisterBatchRequest.newBuilder()
         .setBatchId(batchId)
         .setAlertCount(alertsSize)
         .setBatchMetadata(batchMetadata)
         .build()
 
-    def registerAlertAndMatchesRequest = createRegisterAlertAndMatchesRequest()
-
+    def registerAlertAndMatchesRequest = createRegisterAlertAndMatchesRequest(batchId, SUCCESS)
     def conditions = new PollingConditions(timeout: 10, initialDelay: 2, factor: 1)
 
     when:
@@ -94,18 +95,60 @@ class AnalysisTimeoutFlowIntegrationSpec extends BaseSpecificationIT {
       and: 'BatchCompleted event was published'
       def messageBatchCompleted = (MessageBatchCompleted) rabbitTemplate.receiveAndConvert(
           AnalysisTimeoutFlowRabbitMqTestConfig.TEST_BATCH_COMPLETED_QUEUE_NAME, 1000L)
-      verifyMessageBatchCompleted(messageBatchCompleted, batch.analysisName(), alerts)
+      def alertNames = alerts.collect {it.name()}
+
+      verifyMessageBatchCompleted(messageBatchCompleted, batch.analysisName(), alertNames)
     }
   }
 
-  private static def createRegisterAlertAndMatchesRequest() {
+  def 'should complete batch when batch is in STORED status and all alerts are in ERROR status'() {
+    given:
+    def batchId = UUID.randomUUID().toString()
+    def registerBatchRequest = RegisterBatchRequest.newBuilder()
+        .setBatchId(batchId)
+        .setAlertCount(alertsSize)
+        .setBatchMetadata(batchMetadata)
+        .build()
+
+    def registerAlertAndMatchesRequest = createRegisterAlertAndMatchesRequest(batchId, FAILURE)
+    def conditions = new PollingConditions(timeout: 10, initialDelay: 2, factor: 1)
+
+    when:
+    registrationGrpcService.registerBatch(registerBatchRequest)
+    registrationGrpcService.registerAlertsAndMatches(registerAlertAndMatchesRequest)
+
+    then:
+    conditions.eventually {
+
+      and: 'batch status was changed to COMPLETED'
+      def batch = batchRepository.findById(batchId).get()
+      assert batch.status() == BatchStatus.COMPLETED
+
+      and: 'no recommendations were created'
+      def recommendations = recommendationRepository.findByAnalysisName(batch.analysisName())
+      assert recommendations.size() == 0
+
+      and: 'alerts status is ERROR'
+      def alerts = alertRepository.findAllByBatchId(batchId)
+      alerts.each {alert ->
+        assert alert.status() == ERROR
+      }
+
+      and: 'BatchCompleted event was published'
+      def messageBatchCompleted = (MessageBatchCompleted) rabbitTemplate.receiveAndConvert(
+          AnalysisTimeoutFlowRabbitMqTestConfig.TEST_BATCH_COMPLETED_QUEUE_NAME, 1000L)
+      verifyMessageBatchCompleted(messageBatchCompleted, batch.analysisName(), List.of())
+    }
+  }
+
+  private static def createRegisterAlertAndMatchesRequest(String batchId, AlertStatus status) {
     def alertsWithMatches = (1..alertsSize).collect {alertId ->
       def matches = [Match.newBuilder()
                          .setMatchId("match of alert $alertId")
                          .build()]
       AlertWithMatches.newBuilder()
           .setAlertId(alertId.toString())
-          .setStatus(SUCCESS)
+          .setStatus(status)
           .addAllMatches(matches)
           .build()
     }
@@ -126,11 +169,11 @@ class AnalysisTimeoutFlowIntegrationSpec extends BaseSpecificationIT {
   }
 
   private def verifyMessageBatchCompleted(
-      MessageBatchCompleted message, String analysisName, List<Alert> alerts) {
+      MessageBatchCompleted message, String analysisName, List<String> alerts) {
     with(message) {
       it.batchId == batchId
       analysisId == analysisName
-      alertIdsList == alerts.collect {it.name()}
+      alertIdsList == alerts
       it.batchMetadata == batchMetadata
     }
   }

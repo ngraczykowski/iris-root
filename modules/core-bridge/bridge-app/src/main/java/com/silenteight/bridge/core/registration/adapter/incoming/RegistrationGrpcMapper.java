@@ -2,7 +2,7 @@ package com.silenteight.bridge.core.registration.adapter.incoming;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand;
+import com.silenteight.bridge.core.registration.domain.command.RegisterAlertsCommand;
 import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert;
 import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert.RegistrationMatch;
 import com.silenteight.proto.registration.api.v1.*;
@@ -57,7 +57,7 @@ class RegistrationGrpcMapper {
   private RegisteredMatch createMatch(RegistrationMatch match) {
     return RegisteredMatch.newBuilder()
         .setMatchId(match.id())
-        .setMatchName(match.name())
+        .setMatchName(Optional.ofNullable(match.name()).orElse(""))
         .build();
   }
 

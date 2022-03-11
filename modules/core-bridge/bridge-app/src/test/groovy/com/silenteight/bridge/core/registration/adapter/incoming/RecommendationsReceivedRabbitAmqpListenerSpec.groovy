@@ -1,6 +1,6 @@
 package com.silenteight.bridge.core.registration.adapter.incoming
 
-import com.silenteight.bridge.core.registration.domain.MarkAlertsAsRecommendedCommand
+import com.silenteight.bridge.core.registration.domain.command.MarkAlertsAsRecommendedCommand
 import com.silenteight.bridge.core.registration.domain.RegistrationFacade
 import com.silenteight.proto.recommendation.api.v1.RecommendationsStored
 

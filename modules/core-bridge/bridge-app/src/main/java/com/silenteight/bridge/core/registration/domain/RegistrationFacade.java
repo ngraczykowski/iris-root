@@ -3,8 +3,7 @@ package com.silenteight.bridge.core.registration.domain;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.bridge.core.registration.domain.command.GetBatchWithAlertsCommand;
-import com.silenteight.bridge.core.registration.domain.command.VerifyBatchTimeoutCommand;
+import com.silenteight.bridge.core.registration.domain.command.*;
 import com.silenteight.bridge.core.registration.domain.model.BatchId;
 import com.silenteight.bridge.core.registration.domain.model.BatchWithAlerts;
 import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert;
@@ -71,5 +70,9 @@ public class RegistrationFacade {
 
   public void verifyBatchTimeout(VerifyBatchTimeoutCommand command) {
     batchTimeoutService.verifyBatchTimeout(command);
+  }
+
+  public void verifyBatchTimeoutForAllErroneousAlerts(VerifyBatchTimeoutCommand command) {
+    batchTimeoutService.verifyBatchTimeoutForAllErroneousAlerts(command);
   }
 }

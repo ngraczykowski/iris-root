@@ -7,6 +7,7 @@ import com.silenteight.bridge.core.registration.domain.command.VerifyBatchTimeou
 import com.silenteight.bridge.core.registration.domain.model.AlertName;
 import com.silenteight.bridge.core.registration.domain.model.Batch;
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus;
+import com.silenteight.bridge.core.registration.domain.model.BatchCompleted;
 import com.silenteight.bridge.core.registration.domain.model.BatchTimedOut;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchEventPublisher;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Service;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import static com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus.COMPLETED;
 import static com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus.DELIVERED;
@@ -34,24 +37,50 @@ class BatchTimeoutService {
   private final BatchEventPublisher batchEventPublisher;
 
   void verifyBatchTimeout(VerifyBatchTimeoutCommand command) {
-    batchRepository.findById(command.batchId())
+    withExistingBatch(command, batch ->
+        validateStatus(batch, isNotCompleted())
+            .ifPresentOrElse(
+                this::notifyBatchTimedOut,
+                () -> logBatchIsAlreadyCompleted(batch)
+            )
+    );
+  }
+
+  void verifyBatchTimeoutForAllErroneousAlerts(VerifyBatchTimeoutCommand command) {
+    withExistingBatch(command, batch -> validateStatus(batch, isStored())
         .ifPresentOrElse(
-            batch -> validateStatus(batch)
-                .ifPresentOrElse(
-                    this::notifyBatchTimedOut,
-                    () -> logBatchIsAlreadyCompleted(batch)
-                ),
-            () -> logBatchDoesNotExist(command)
-        );
+            this::completeBatchIfAllAlertsAreErroneous,
+            () -> logNotInStoredStatus(batch)
+        )
+    );
   }
 
-  private Optional<Batch> validateStatus(Batch batch) {
+  private void withExistingBatch(VerifyBatchTimeoutCommand command, Consumer<Batch> consumer) {
+    batchRepository.findById(command.batchId())
+        .ifPresentOrElse(consumer, () -> logBatchDoesNotExist(command));
+  }
+
+  private Optional<Batch> validateStatus(Batch batch, Predicate<Batch> predicate) {
     return Optional.of(batch)
-        .filter(this::isNotCompleted);
+        .filter(predicate);
   }
 
-  private boolean isNotCompleted(Batch batch) {
-    return !COMPLETION_STATUSES.contains(batch.status());
+  private Predicate<Batch> isNotCompleted() {
+    return batch -> !COMPLETION_STATUSES.contains(batch.status());
+  }
+
+  private Predicate<Batch> isStored() {
+    return batch -> BatchStatus.STORED == batch.status();
+  }
+
+  private void completeBatchIfAllAlertsAreErroneous(Batch batch) {
+    var batchId = batch.id();
+    var erroneousAlerts = alertRepository.countAllErroneousAlerts(batchId);
+    if (erroneousAlerts == batch.alertsCount()) {
+      batchRepository.updateStatusToCompleted(batchId);
+      log.info("Batch [{}] marked as completed because all alerts are erroneous", batchId);
+      batchEventPublisher.publish(buildBatchCompletedEvent(batch));
+    }
   }
 
   private void notifyBatchTimedOut(Batch batch) {
@@ -71,10 +100,24 @@ class BatchTimeoutService {
         .toList();
   }
 
+  private BatchCompleted buildBatchCompletedEvent(Batch batch) {
+    return BatchCompleted.builder()
+        .id(batch.id())
+        .analysisId(batch.analysisName())
+        .alertIds(List.of())
+        .batchMetadata(batch.batchMetadata())
+        .build();
+  }
+
   private void logBatchIsAlreadyCompleted(Batch batch) {
     log.info(
         "Ignoring batch with id [{}] because it is already completed with status: {}", batch.id(),
         batch.status());
+  }
+
+  private void logNotInStoredStatus(Batch batch) {
+    log.info("Ignoring batch with id [{}] because it is not in STORED status: {}",
+        batch.id(), batch.status());
   }
 
   private void logBatchDoesNotExist(VerifyBatchTimeoutCommand command) {

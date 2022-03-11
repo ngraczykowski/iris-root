@@ -1,6 +1,6 @@
 package com.silenteight.bridge.core.registration.adapter.incoming
 
-import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand
+import com.silenteight.bridge.core.registration.domain.command.RegisterAlertsCommand
 import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert
 import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert.RegistrationMatch
 import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert.Status

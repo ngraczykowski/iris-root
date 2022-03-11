@@ -1,6 +1,6 @@
 package com.silenteight.bridge.core.registration.adapter.incoming
 
-import com.silenteight.bridge.core.registration.domain.MarkBatchAsDeliveredCommand
+import com.silenteight.bridge.core.registration.domain.command.MarkBatchAsDeliveredCommand
 import com.silenteight.bridge.core.registration.domain.RegistrationFacade
 import com.silenteight.proto.recommendation.api.v1.RecommendationsDelivered
 

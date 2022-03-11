@@ -2,6 +2,9 @@ package com.silenteight.bridge.core.registration.domain
 
 import com.silenteight.bridge.core.Fixtures
 import com.silenteight.bridge.core.recommendation.domain.RecommendationFixtures
+import com.silenteight.bridge.core.registration.domain.command.CompleteBatchCommand
+import com.silenteight.bridge.core.registration.domain.command.MarkAlertsAsRecommendedCommand
+import com.silenteight.bridge.core.registration.domain.command.MarkBatchAsDeliveredCommand
 import com.silenteight.bridge.core.registration.domain.command.VerifyBatchTimeoutCommand
 import com.silenteight.bridge.core.registration.domain.model.Alert
 

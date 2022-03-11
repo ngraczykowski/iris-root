@@ -2,10 +2,14 @@ package com.silenteight.bridge.core.registration.domain
 
 import com.silenteight.bridge.core.Fixtures
 import com.silenteight.bridge.core.recommendation.domain.FixturesMatchMetaData
-import com.silenteight.bridge.core.registration.domain.AddAlertToAnalysisCommand.FedMatch
-import com.silenteight.bridge.core.registration.domain.AddAlertToAnalysisCommand.FeedingStatus
-import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand.AlertWithMatches
+import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand
+import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand.FedMatch
+import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand.FeedingStatus
+import com.silenteight.bridge.core.registration.domain.command.NotifyBatchErrorCommand
+import com.silenteight.bridge.core.registration.domain.command.RegisterAlertsCommand
+import com.silenteight.bridge.core.registration.domain.command.RegisterAlertsCommand.AlertWithMatches
 import com.silenteight.bridge.core.registration.domain.command.GetBatchWithAlertsCommand
+import com.silenteight.bridge.core.registration.domain.command.RegisterBatchCommand
 import com.silenteight.bridge.core.registration.domain.model.Batch
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.model.BatchError

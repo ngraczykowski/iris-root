@@ -19,18 +19,27 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
       String batchId, String status, List<String> alertNames);
 
   @Query("""
-      SELECT COUNT(status) FROM core_bridge_alerts 
+      SELECT COUNT(status) 
+      FROM core_bridge_alerts 
       WHERE batch_id = :batchId AND NOT status = 'RECOMMENDED' AND NOT status = 'ERROR'""")
   long countAllAlertsByBatchIdAndNotRecommendedAndNotErrorStatuses(String batchId);
 
   @Query("""
-        SELECT name FROM core_bridge_alerts
+      SELECT COUNT(status) 
+      FROM core_bridge_alerts 
+      WHERE batch_id = :batchId AND status = 'ERROR'""")
+  long countAllAlertsByBatchIdAndErrorStatus(String batchId);
+
+  @Query("""
+        SELECT name 
+        FROM core_bridge_alerts
         WHERE batch_id = :batchId AND alert_id IN (:alertIds)
       """)
   List<AlertNameProjection> findNamesByBatchIdAndAlertIdIn(String batchId, List<String> alertIds);
 
   @Query("""
-        SELECT name FROM core_bridge_alerts
+        SELECT name 
+        FROM core_bridge_alerts
         WHERE batch_id = :batchId AND (status = 'REGISTERED' OR status = 'PROCESSING')
       """)
   List<AlertNameProjection> findNamesByBatchIdAndStatusIsRegisteredOrProcessing(String batchId);

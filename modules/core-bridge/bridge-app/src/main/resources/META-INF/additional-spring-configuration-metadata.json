@@ -96,17 +96,22 @@
       "description": "Exchange name for notify batch timed out event."
     },
     {
+      "name": "amqp.registration.incoming.verify-batch-timeout.delayed-queue-name",
+      "type": "java.lang.String",
+      "description": "Delayed queue name for verifying batch time out."
+    },
+    {
       "name": "amqp.registration.incoming.verify-batch-timeout.queue-name",
       "type": "java.lang.String",
       "description": "Queue name for verifying batch time out."
     },
     {
-      "name": "amqp.registration.incoming.verify-batch-timeout.dead-letter-queue-name",
+      "name": "amqp.registration.incoming.verify-batch-timeout.error-alerts-queue-name",
       "type": "java.lang.String",
-      "description": "Dead letter queue name for verifying batch time out."
+      "description": "Queue name for verifying batch time out for batch with all error alerts."
     },
     {
-      "name": "amqp.registration.incoming.verify-batch-timeout.dead-letter-queue-time-to-live-in-milliseconds",
+      "name": "amqp.registration.incoming.verify-batch-timeout.queue-time-to-live-in-milliseconds",
       "type": "java.lang.Integer",
       "description": "Dead letter queue TTL for verifying batch time out."
     },

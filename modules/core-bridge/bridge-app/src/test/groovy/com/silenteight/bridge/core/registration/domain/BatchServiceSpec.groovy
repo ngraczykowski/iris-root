@@ -1,6 +1,7 @@
 package com.silenteight.bridge.core.registration.domain
 
 import com.silenteight.bridge.core.Fixtures
+import com.silenteight.bridge.core.registration.domain.command.CompleteBatchCommand
 import com.silenteight.bridge.core.registration.domain.model.*
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.port.outgoing.*

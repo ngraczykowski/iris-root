@@ -13,18 +13,18 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-class VerifyBatchTimeoutAmqpListener {
+class VerityBatchTimeoutErrorAlertsAmqpListener {
 
   private final RegistrationFacade registrationFacade;
 
   @RabbitListener(
-      queues = "${amqp.registration.incoming.verify-batch-timeout.queue-name}",
+      queues = "${amqp.registration.incoming.verify-batch-timeout.error-alerts-queue-name}",
       errorHandler = "registrationAmqpErrorHandler")
-  void verifyBatchTimeout(MessageVerifyBatchTimeout message) {
+  void verifyBatchTimeoutAlerts(MessageVerifyBatchTimeout message) {
     log.info("Received a message that batch with id [{}] is timed out. "
-        + "Proceeding to verify whether it is still processing", message.getBatchId());
+        + "Proceeding to verify whether all alerts are erroneous", message.getBatchId());
 
     var command = new VerifyBatchTimeoutCommand(message.getBatchId());
-    registrationFacade.verifyBatchTimeout(command);
+    registrationFacade.verifyBatchTimeoutForAllErroneousAlerts(command);
   }
 }

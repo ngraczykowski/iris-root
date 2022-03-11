@@ -1,7 +1,7 @@
 package com.silenteight.bridge.core.registration.adapter.incoming
 
-import com.silenteight.bridge.core.registration.domain.AddAlertToAnalysisCommand
-import com.silenteight.bridge.core.registration.domain.AddAlertToAnalysisCommand.FeedingStatus
+import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand
+import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand.FeedingStatus
 import com.silenteight.bridge.core.registration.domain.RegistrationFacade
 import com.silenteight.proto.registration.api.v1.FedMatch
 import com.silenteight.proto.registration.api.v1.MessageAlertMatchesFeatureInputFed

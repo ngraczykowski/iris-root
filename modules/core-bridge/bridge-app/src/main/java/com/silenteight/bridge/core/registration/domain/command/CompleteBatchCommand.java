@@ -1,4 +1,4 @@
-package com.silenteight.bridge.core.registration.domain;
+package com.silenteight.bridge.core.registration.domain.command;
 
 import java.util.List;
 

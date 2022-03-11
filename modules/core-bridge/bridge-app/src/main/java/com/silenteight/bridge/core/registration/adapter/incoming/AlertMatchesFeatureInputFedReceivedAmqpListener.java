@@ -3,10 +3,10 @@ package com.silenteight.bridge.core.registration.adapter.incoming;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.bridge.core.registration.domain.AddAlertToAnalysisCommand;
-import com.silenteight.bridge.core.registration.domain.AddAlertToAnalysisCommand.FedMatch;
-import com.silenteight.bridge.core.registration.domain.AddAlertToAnalysisCommand.FeedingStatus;
 import com.silenteight.bridge.core.registration.domain.RegistrationFacade;
+import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand;
+import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand.FedMatch;
+import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand.FeedingStatus;
 import com.silenteight.proto.registration.api.v1.MessageAlertMatchesFeatureInputFed;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;

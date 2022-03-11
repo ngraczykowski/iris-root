@@ -1,5 +1,6 @@
 package com.silenteight.bridge.core.registration.domain;
 
+import com.silenteight.bridge.core.registration.domain.command.RegisterAlertsCommand;
 import com.silenteight.bridge.core.registration.domain.model.*;
 import com.silenteight.bridge.core.registration.domain.model.AlertsToRegister.AlertWithMatches;
 

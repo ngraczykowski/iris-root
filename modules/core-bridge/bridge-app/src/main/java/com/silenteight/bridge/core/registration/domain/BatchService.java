@@ -3,6 +3,9 @@ package com.silenteight.bridge.core.registration.domain;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.bridge.core.registration.domain.command.CompleteBatchCommand;
+import com.silenteight.bridge.core.registration.domain.command.NotifyBatchErrorCommand;
+import com.silenteight.bridge.core.registration.domain.command.RegisterBatchCommand;
 import com.silenteight.bridge.core.registration.domain.model.*;
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.*;

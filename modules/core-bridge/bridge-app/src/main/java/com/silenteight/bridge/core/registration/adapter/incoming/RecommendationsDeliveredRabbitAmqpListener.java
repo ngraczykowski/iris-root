@@ -3,8 +3,8 @@ package com.silenteight.bridge.core.registration.adapter.incoming;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.bridge.core.registration.domain.MarkBatchAsDeliveredCommand;
 import com.silenteight.bridge.core.registration.domain.RegistrationFacade;
+import com.silenteight.bridge.core.registration.domain.command.MarkBatchAsDeliveredCommand;
 import com.silenteight.proto.recommendation.api.v1.RecommendationsDelivered;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;

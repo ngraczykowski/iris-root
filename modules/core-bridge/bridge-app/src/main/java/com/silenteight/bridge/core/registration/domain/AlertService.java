@@ -3,7 +3,8 @@ package com.silenteight.bridge.core.registration.domain;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand.AlertStatus;
+import com.silenteight.bridge.core.registration.domain.command.RegisterAlertsCommand;
+import com.silenteight.bridge.core.registration.domain.command.RegisterAlertsCommand.AlertStatus;
 import com.silenteight.bridge.core.registration.domain.model.Alert;
 import com.silenteight.bridge.core.registration.domain.model.AlertWithMatches;
 import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert;

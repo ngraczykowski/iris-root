@@ -1,7 +1,8 @@
 package com.silenteight.bridge.core.registration.domain
 
-import com.silenteight.bridge.core.registration.domain.AddAlertToAnalysisCommand.FedMatch
-import com.silenteight.bridge.core.registration.domain.AddAlertToAnalysisCommand.FeedingStatus
+import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand
+import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand.FedMatch
+import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand.FeedingStatus
 import com.silenteight.bridge.core.registration.domain.model.Alert
 import com.silenteight.bridge.core.registration.domain.model.AlertName
 import com.silenteight.bridge.core.registration.domain.model.Batch

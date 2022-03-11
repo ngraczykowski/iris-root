@@ -3,9 +3,9 @@ package com.silenteight.bridge.core.registration.adapter.incoming;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.bridge.core.registration.domain.NotifyBatchErrorCommand;
-import com.silenteight.bridge.core.registration.domain.RegisterBatchCommand;
 import com.silenteight.bridge.core.registration.domain.RegistrationFacade;
+import com.silenteight.bridge.core.registration.domain.command.NotifyBatchErrorCommand;
+import com.silenteight.bridge.core.registration.domain.command.RegisterBatchCommand;
 import com.silenteight.proto.registration.api.v1.*;
 
 import com.google.protobuf.Empty;
