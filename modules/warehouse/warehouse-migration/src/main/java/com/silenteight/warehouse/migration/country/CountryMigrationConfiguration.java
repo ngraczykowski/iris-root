@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConditionalOnProperty(value = "warehouse.migration.enabled", havingValue = "true")
+@ConditionalOnProperty(value = "warehouse.country.migration.enabled", havingValue = "true")
 class CountryMigrationConfiguration {
 
   @Bean

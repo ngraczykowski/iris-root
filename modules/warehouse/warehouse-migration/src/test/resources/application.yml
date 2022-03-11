@@ -39,9 +39,13 @@ warehouse:
         routing-key: retention.alerts-expired
       to-remove:
         bindings: [ ]
-  migration:
-    enabled: true
-    batch-size: 20
+  country:
+    migration:
+      enabled: true
+  alert:
+    migration:
+      enabled: true
+      batch-size: 20
   partition:
     scheduledCron: 0 30 0 ? * *
     size: 1500000
