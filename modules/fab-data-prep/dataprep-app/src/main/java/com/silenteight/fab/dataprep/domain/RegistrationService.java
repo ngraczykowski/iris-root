@@ -2,7 +2,8 @@ package com.silenteight.fab.dataprep.domain;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.fab.dataprep.domain.model.ExtractedAlert;
+import com.silenteight.fab.dataprep.domain.model.ParsedAlertMessage;
+import com.silenteight.fab.dataprep.domain.model.ParsedAlertMessage.Hit;
 import com.silenteight.fab.dataprep.domain.model.RegisteredAlert;
 import com.silenteight.fab.dataprep.domain.model.RegisteredAlert.Match;
 import com.silenteight.registration.api.library.v1.*;
@@ -21,7 +22,7 @@ public class RegistrationService {
   private final RegistrationServiceClient registrationServiceClient;
 
   public List<RegisteredAlert> registerAlertsAndMatches(
-      Map<String, ExtractedAlert> extractedAlerts) {
+      Map<String, ParsedAlertMessage> extractedAlerts) {
     RegisterAlertsAndMatchesIn registerAlertsAndMatchesIn = RegisterAlertsAndMatchesIn
         .builder()
         .alertsWithMatches(
@@ -40,48 +41,48 @@ public class RegistrationService {
   }
 
   private static RegisteredAlert convert(
-      RegisteredAlertWithMatchesOut registeredAlertWithMatchesOut, ExtractedAlert extractedAlert) {
+      RegisteredAlertWithMatchesOut registeredAlertWithMatchesOut,
+      ParsedAlertMessage parsedAlertMessage) {
     List<Match> matches = registeredAlertWithMatchesOut
         .getRegisteredMatches()
         .stream()
         .map(registeredMatchOut -> convert(
-            registeredMatchOut, extractedAlert.getMatch(registeredMatchOut.getMatchId())))
+            registeredMatchOut, parsedAlertMessage.getHit(registeredMatchOut.getMatchId())))
         .collect(toList());
 
     return RegisteredAlert
         .builder()
-        .batchId(extractedAlert.getBatchId())
-        .alertId(registeredAlertWithMatchesOut.getAlertId())
+        .batchName(parsedAlertMessage.getBatchName())
+        .messageName(registeredAlertWithMatchesOut.getAlertId())
         .alertName(registeredAlertWithMatchesOut.getAlertName())
         .matches(matches)
         .build();
   }
 
-  private static Match convert(
-      RegisteredMatchOut registeredMatchOut, ExtractedAlert.Match match) {
+  private static Match convert(RegisteredMatchOut registeredMatchOut, Hit hit) {
     return Match
         .builder()
-        .matchId(registeredMatchOut.getMatchId())
+        .hitName(registeredMatchOut.getMatchId())
         .matchName(registeredMatchOut.getMatchName())
-        .payload(match.getPayload())
+        .payload(hit.getPayload())
         .build();
   }
 
-  private static AlertWithMatchesIn convert(ExtractedAlert extractedAlert) {
+  private static AlertWithMatchesIn convert(ParsedAlertMessage parsedAlertMessage) {
     return AlertWithMatchesIn
         .builder()
         //.status()//TODO: Is it needed?
         //.errorDescription()//TODO: Is it needed?
-        .alertId(extractedAlert.getAlertId())
-        .matches(extractedAlert
-            .getMatches()
+        .alertId(parsedAlertMessage.getMessageName())
+        .matches(parsedAlertMessage
+            .getHits()
             .values()
             .stream()
             .map(RegistrationService::convert)
             .collect(toList())).build();
   }
 
-  private static MatchIn convert(ExtractedAlert.Match match) {
-    return MatchIn.builder().matchId(match.getMatchId()).build();
+  private static MatchIn convert(Hit hit) {
+    return MatchIn.builder().matchId(hit.getHitName()).build();
   }
 }

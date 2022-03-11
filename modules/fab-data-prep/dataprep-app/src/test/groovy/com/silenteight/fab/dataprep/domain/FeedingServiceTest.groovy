@@ -27,9 +27,7 @@ class FeedingServiceTest extends Specification {
 
     def featureService = new FeedingService(features, agentInputServiceClient)
 
-    def command = FeatureInputsCommand.builder()
-        .batchId('123')
-        .build()
+    def command = FeatureInputsCommand.builder().build()
 
     when:
     featureService.createFeatureInputs(command)

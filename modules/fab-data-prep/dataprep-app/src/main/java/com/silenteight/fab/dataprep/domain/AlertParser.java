@@ -2,8 +2,8 @@ package com.silenteight.fab.dataprep.domain;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.fab.dataprep.domain.model.ExtractedAlert;
-import com.silenteight.fab.dataprep.domain.model.ExtractedAlert.Match;
+import com.silenteight.fab.dataprep.domain.model.ParsedAlertMessage;
+import com.silenteight.fab.dataprep.domain.model.ParsedAlertMessage.Hit;
 import com.silenteight.fab.dataprep.domain.model.ParsedMessageData;
 import com.silenteight.proto.fab.api.v1.AlertMessageDetails;
 import com.silenteight.proto.fab.api.v1.AlertMessageStored;
@@ -33,14 +33,14 @@ public class AlertParser {
 
   private final MessageDataTokenizer messageDataTokenizer;
 
-  public ExtractedAlert parse(AlertMessageStored message, AlertMessageDetails alertDetails) {
+  public ParsedAlertMessage parse(AlertMessageStored message, AlertMessageDetails alertDetails) {
     DocumentContext documentContext = parseContext.parse(alertDetails.getPayload());
 
-    return ExtractedAlert.builder()
-        .batchId(message.getBatchName())
-        .alertId(message.getMessageName())
+    return ParsedAlertMessage.builder()
+        .batchName(message.getBatchName())
+        .messageName(message.getMessageName())
         .parsedMessageData(parseMessageData(documentContext))
-        .matches(getMatches(documentContext))
+        .hits(getMatches(documentContext))
         .build();
     //TODO set fields: alertName, status, errorDescription, matches
   }
@@ -49,15 +49,15 @@ public class AlertParser {
     return messageDataTokenizer.convert(documentContext.read(MESSAGE_DATA_PATH, String.class));
   }
 
-  private static Map<String, Match> getMatches(DocumentContext documentContext) {
+  private static Map<String, Hit> getMatches(DocumentContext documentContext) {
     return getHits(documentContext)
         .stream()
         .map(AlertParser::convert)
-        .collect(toMap(Match::getMatchId, identity()));
+        .collect(toMap(Hit::getHitName, identity()));
   }
 
-  private static Match convert(JsonNode jsonNode) {
-    return Match.builder().matchId(UUID.randomUUID().toString()).payload(jsonNode).build();
+  private static Hit convert(JsonNode jsonNode) {
+    return Hit.builder().hitName(UUID.randomUUID().toString()).payload(jsonNode).build();
   }
 
   private static List<JsonNode> getHits(DocumentContext documentContext) {

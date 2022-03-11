@@ -48,7 +48,7 @@ public class NationalityFeature implements FabFeature {
     return of(registeredAlert.getParsedMessageData().getCountryOfIncorporation());
   }
 
-  protected List<String> getWatchlistPart(JsonNode jsonNode) {
+  private List<String> getWatchlistPart(JsonNode jsonNode) {
     String value = parseContext.parse(jsonNode).read(JSON_PATH, String.class);
     return value == null ? emptyList() : of(value);
   }

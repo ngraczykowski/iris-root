@@ -27,15 +27,15 @@ class FeedingFacadeSpec extends Specification {
   def "should get extracted alert"() {
     given:
     def registeredAlert = RegisteredAlert.builder()
-        .batchId('batchId')
-        .alertId('alertId')
+        .batchName('batchId')
+        .messageName('alertId')
         .alertName('alertName')
         .status(status)
         .errorDescription(errorDescription)
         .matches(
             [
                 Match.builder()
-                    .matchId('matchId')
+                    .hitName('matchId')
                     .matchName('matchName')
                     .build()
             ]
@@ -43,7 +43,6 @@ class FeedingFacadeSpec extends Specification {
         .build()
 
     def featureInputsCommand = FeatureInputsCommand.builder()
-        .batchId('batchId')
         .registeredAlert(registeredAlert)
         .build()
 

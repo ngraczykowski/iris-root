@@ -13,9 +13,9 @@ import java.util.List;
 public class RegisteredAlert {
 
   @NonNull
-  String batchId;
+  String batchName;
   @NonNull
-  String alertId;
+  String messageName;
   @NonNull
   String alertName;
   AlertStatus status;
@@ -28,7 +28,7 @@ public class RegisteredAlert {
   public static class Match {
 
     @NonNull
-    String matchId;
+    String hitName;
     @NonNull
     String matchName;
     JsonNode payload;

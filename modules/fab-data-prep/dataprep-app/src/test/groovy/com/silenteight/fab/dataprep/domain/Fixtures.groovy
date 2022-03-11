@@ -51,13 +51,13 @@ class Fixtures {
   private static URL HIT_URL = Resources.getResource("hit.json");
 
   static Match MATCH = Match.builder()
-      .matchId(UUID.randomUUID().toString())
+      .hitName(UUID.randomUUID().toString())
       .matchName(MATCH_NAME)
       .payload(MAPPER.readTree(HIT_URL))
       .build()
 
   static Match EMPTY_MATCH = Match.builder()
-      .matchId(UUID.randomUUID().toString())
+      .hitName(UUID.randomUUID().toString())
       .matchName(MATCH_NAME)
       .payload(MAPPER.readTree('{}'))
       .build()
@@ -67,11 +67,10 @@ class Fixtures {
   static String MESSAGE = Resources.toString(Resources.getResource("message.json"), UTF_8);
 
   static FeatureInputsCommand FEATURE_INPUTS_COMMAND = FeatureInputsCommand.builder()
-      .batchId('batchId')   //TODO remove one of batchId
       .registeredAlert(
           RegisteredAlert.builder()
-              .batchId('batchId')
-              .alertId('alertId')
+              .batchName('batchId')
+              .messageName('alertId')
               .alertName(ALERT_NAME)
               .parsedMessageData(PARSED_PAYLOAD)
               .matches([MATCH])
@@ -79,11 +78,10 @@ class Fixtures {
       .build()
 
   static FeatureInputsCommand EMPTY_FEATURE_INPUTS_COMMAND = FeatureInputsCommand.builder()
-      .batchId('batchId')
       .registeredAlert(
           RegisteredAlert.builder()
-              .batchId('batchId')
-              .alertId('alertId')
+              .batchName('batchId')
+              .messageName('alertId')
               .alertName(ALERT_NAME)
               .parsedMessageData(PARSED_PAYLOAD)
               .matches([EMPTY_MATCH])

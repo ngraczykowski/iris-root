@@ -10,26 +10,26 @@ import java.util.Map;
 
 @Value
 @Builder
-public class ExtractedAlert {
+public class ParsedAlertMessage {
 
   @NonNull
-  String batchId;
+  String batchName;
   @NonNull
-  String alertId;
+  String messageName;
   AlertStatus status;
   AlertErrorDescription errorDescription;
   ParsedMessageData parsedMessageData;
-  Map<String, Match> matches;
+  Map<String, Hit> hits;
 
-  public Match getMatch(String matchId) {
-    return matches.get(matchId);
+  public Hit getHit(String hitName) {
+    return hits.get(hitName);
   }
 
   @Value
   @Builder
-  public static class Match {
+  public static class Hit {
 
-    String matchId;
+    String hitName;
     JsonNode payload;
   }
 }

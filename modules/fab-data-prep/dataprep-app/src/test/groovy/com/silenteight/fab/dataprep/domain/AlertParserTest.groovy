@@ -23,12 +23,12 @@ class AlertParserTest extends Specification {
         .setMessageName("alertId").build();
 
     when:
-    def extractedAlert = underTest.parse(alertMessageStored, alertMessageDetails)
+    def parsedAlertMessage = underTest.parse(alertMessageStored, alertMessageDetails)
 
     then:
-    extractedAlert.getParsedMessageData().getGender() == "M";
-    extractedAlert.matches.size() == 1
-    extractedAlert.matches.values().each  {it ->
+    parsedAlertMessage.getParsedMessageData().getGender() == "M";
+    parsedAlertMessage.hits.size() == 1
+    parsedAlertMessage.hits.values().each  {it ->
       def parser = new JsonSlurper();
       assert parser.parseText(it.getPayload().toString()) == parser.parseText(Fixtures.HIT)
     }

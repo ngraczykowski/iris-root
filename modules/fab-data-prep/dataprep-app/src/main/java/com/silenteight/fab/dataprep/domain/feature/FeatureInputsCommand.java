@@ -9,6 +9,5 @@ import com.silenteight.fab.dataprep.domain.model.RegisteredAlert;
 @Builder
 public class FeatureInputsCommand {
 
-  String batchId;
   RegisteredAlert registeredAlert;
 }

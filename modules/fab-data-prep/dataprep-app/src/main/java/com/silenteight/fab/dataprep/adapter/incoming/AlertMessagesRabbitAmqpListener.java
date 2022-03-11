@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.fab.dataprep.domain.AlertParser;
 import com.silenteight.fab.dataprep.domain.FeedingFacade;
 import com.silenteight.fab.dataprep.domain.RegistrationService;
-import com.silenteight.fab.dataprep.domain.model.ExtractedAlert;
+import com.silenteight.fab.dataprep.domain.model.ParsedAlertMessage;
 import com.silenteight.fab.dataprep.domain.model.RegisteredAlert;
 import com.silenteight.proto.fab.api.v1.*;
 
@@ -41,14 +41,14 @@ class AlertMessagesRabbitAmqpListener {
         "Received a message with: batch name: {}, alert message name: {}", message.getBatchName(),
         message.getMessageName());
     AlertMessagesDetailsResponse response = getAlertDetails(message);
-    Map<String, ExtractedAlert> extractedAlerts =
+    Map<String, ParsedAlertMessage> extractedAlerts =
         getExtractedAlerts(message, response);
     List<RegisteredAlert> registeredAlerts =
         registrationService.registerAlertsAndMatches(extractedAlerts);
     registeredAlerts.forEach(feedingFacade::etlAndFeedUds);
   }
 
-  private Map<String, ExtractedAlert> getExtractedAlerts(
+  private Map<String, ParsedAlertMessage> getExtractedAlerts(
       AlertMessageStored message,
       AlertMessagesDetailsResponse alertsDetailsResponse) {
     return alertsDetailsResponse.getAlertsList()

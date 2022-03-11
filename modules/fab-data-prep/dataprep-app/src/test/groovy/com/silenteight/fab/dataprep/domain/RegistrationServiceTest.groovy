@@ -1,7 +1,7 @@
 package com.silenteight.fab.dataprep.domain
 
-import com.silenteight.fab.dataprep.domain.model.ExtractedAlert
-import com.silenteight.fab.dataprep.domain.model.ExtractedAlert.Match
+import com.silenteight.fab.dataprep.domain.model.ParsedAlertMessage
+import com.silenteight.fab.dataprep.domain.model.ParsedAlertMessage.Hit
 import com.silenteight.fab.dataprep.domain.model.RegisteredAlert
 import com.silenteight.registration.api.library.v1.RegisterAlertsAndMatchesOut
 import com.silenteight.registration.api.library.v1.RegisteredAlertWithMatchesOut
@@ -22,12 +22,12 @@ class RegistrationServiceTest extends Specification {
 
   def "registered alerts should have name"() {
     given:
-    def alerts = ['alertId': ExtractedAlert.builder()
-        .batchId('batchId')
-        .alertId('alertId')
-        .matches([
-            'matchId': Match.builder()
-                .matchId('matchId')
+    def alerts = ['alertId': ParsedAlertMessage.builder()
+        .batchName('batchId')
+        .messageName('alertId')
+        .hits([
+            'matchId': Hit.builder()
+                .hitName('matchId')
                 .build()
         ])
         .build()

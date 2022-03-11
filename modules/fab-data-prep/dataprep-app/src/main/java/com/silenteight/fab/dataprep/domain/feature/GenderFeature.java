@@ -10,10 +10,10 @@ import com.silenteight.universaldatasource.api.library.gender.v1.GenderFeatureIn
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.jayway.jsonpath.ParseContext;
-import com.jayway.jsonpath.TypeRef;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
 import static java.util.List.of;
 import static java.util.stream.Collectors.toList;
 
@@ -21,7 +21,7 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class GenderFeature implements FabFeature {
 
-  private static final String FEATURE_NAME = "features/gender";
+  static final String FEATURE_NAME = "features/gender";
 
   //TODO change this to correct path
   private static final String JSON_PATH = "$.HittedEntity.Gender";
@@ -50,12 +50,9 @@ public class GenderFeature implements FabFeature {
     return of(registeredAlert.getParsedMessageData().getGender());
   }
 
-  protected List<String> getWatchlistPart(JsonNode jsonNode) {
-    TypeRef<List<String>> typeRef = new TypeRef<>() {};
-
-    return parseContext
-        .parse(jsonNode)
-        .read(JSON_PATH, typeRef);
+  private List<String> getWatchlistPart(JsonNode jsonNode) {
+    String value = parseContext.parse(jsonNode).read(JSON_PATH, String.class);
+    return value == null ? emptyList() : of(value);
   }
 
 }
