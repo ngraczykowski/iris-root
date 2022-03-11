@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationsReceivedEvent;
 import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RecommendationEventPublisher;
 import com.silenteight.bridge.core.recommendation.infrastructure.amqp.RecommendationOutgoingRecommendationsReceivedConfigurationProperties;
-import com.silenteight.proto.recommendation.api.v1.RecommendationsReceived;
+import com.silenteight.proto.recommendation.api.v1.RecommendationsStored;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
@@ -21,9 +21,9 @@ class RecommendationsReceivedEventPublisher implements RecommendationEventPublis
 
   @Override
   public void publish(RecommendationsReceivedEvent event) {
-    var message = RecommendationsReceived.newBuilder()
-        .setAnalysisId(event.analysisName())
-        .addAllAlertIds(event.alertNames())
+    var message = RecommendationsStored.newBuilder()
+        .setAnalysisName(event.analysisName())
+        .addAllAlertNames(event.alertNames())
         .build();
 
     log.info(

@@ -2,7 +2,7 @@ package com.silenteight.bridge.core.recommendation.adapter.outgoing
 
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationsReceivedEvent
 import com.silenteight.bridge.core.recommendation.infrastructure.amqp.RecommendationOutgoingRecommendationsReceivedConfigurationProperties
-import com.silenteight.proto.recommendation.api.v1.RecommendationsReceived
+import com.silenteight.proto.recommendation.api.v1.RecommendationsStored
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import spock.lang.Specification
@@ -21,9 +21,9 @@ class RecommendationsReceivedEventPublisherSpec extends Specification {
     def analysisName = "analysis"
     def alertNames = ["alert/1"]
     def event = new RecommendationsReceivedEvent(analysisName, alertNames)
-    def message = RecommendationsReceived.newBuilder()
-        .setAnalysisId(analysisName)
-        .addAllAlertIds(alertNames)
+    def message = RecommendationsStored.newBuilder()
+        .setAnalysisName(analysisName)
+        .addAllAlertNames(alertNames)
         .build()
 
     when:

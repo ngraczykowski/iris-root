@@ -2,7 +2,7 @@ package com.silenteight.bridge.core.registration.adapter.incoming
 
 import com.silenteight.bridge.core.registration.domain.MarkAlertsAsRecommendedCommand
 import com.silenteight.bridge.core.registration.domain.RegistrationFacade
-import com.silenteight.proto.recommendation.api.v1.RecommendationsReceived
+import com.silenteight.proto.recommendation.api.v1.RecommendationsStored
 
 import spock.lang.Specification
 import spock.lang.Subject
@@ -16,9 +16,9 @@ class RecommendationsReceivedRabbitAmqpListenerSpec extends Specification {
 
   def 'should call alertService and batchService with mapped dto'() {
     given:
-    def message = RecommendationsReceived.newBuilder()
-        .setAnalysisId('analysisName')
-        .addAllAlertIds(['firstAlertName', 'secondAlertName'])
+    def message = RecommendationsStored.newBuilder()
+        .setAnalysisName('analysisName')
+        .addAllAlertNames(['firstAlertName', 'secondAlertName'])
         .build()
 
     when:
@@ -26,10 +26,10 @@ class RecommendationsReceivedRabbitAmqpListenerSpec extends Specification {
 
     then:
     1 * registrationFacade.markAlertsAsRecommended(_) >> {MarkAlertsAsRecommendedCommand command ->
-      assert command.analysisName == message.analysisId
-      assert command.alertNames.size() == message.getAlertIdsCount()
-      assert command.alertNames[0] == message.getAlertIds(0)
-      assert command.alertNames[1] == message.getAlertIds(1)
+      assert command.analysisName == message.analysisName
+      assert command.alertNames.size() == message.getAlertNamesCount()
+      assert command.alertNames[0] == message.getAlertNames(0)
+      assert command.alertNames[1] == message.getAlertNames(1)
     }
   }
 }

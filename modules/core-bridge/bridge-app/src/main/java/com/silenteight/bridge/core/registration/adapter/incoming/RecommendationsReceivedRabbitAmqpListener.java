@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.bridge.core.registration.domain.MarkAlertsAsRecommendedCommand;
 import com.silenteight.bridge.core.registration.domain.RegistrationFacade;
-import com.silenteight.proto.recommendation.api.v1.RecommendationsReceived;
+import com.silenteight.proto.recommendation.api.v1.RecommendationsStored;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
@@ -21,18 +21,18 @@ class RecommendationsReceivedRabbitAmqpListener {
       queues = "${amqp.registration.incoming.recommendation-received.queue-name}",
       errorHandler = "registrationAmqpErrorHandler"
   )
-  public void recommendationReceived(RecommendationsReceived recommendation) {
+  public void recommendationReceived(RecommendationsStored recommendation) {
     log.info(
-        "Received RecommendationsReceived amqp message for analysis id={}",
-        recommendation.getAnalysisId());
+        "Received RecommendationsStored amqp message for analysis name={}",
+        recommendation.getAnalysisName());
     registrationFacade.markAlertsAsRecommended(
         createMarkAlertsAsRecommendedCommand(recommendation));
   }
 
   private MarkAlertsAsRecommendedCommand createMarkAlertsAsRecommendedCommand(
-      RecommendationsReceived recommendation) {
+      RecommendationsStored recommendation) {
     return new MarkAlertsAsRecommendedCommand(
-        recommendation.getAnalysisId(),
-        recommendation.getAlertIdsList());
+        recommendation.getAnalysisName(),
+        recommendation.getAlertNamesList());
   }
 }

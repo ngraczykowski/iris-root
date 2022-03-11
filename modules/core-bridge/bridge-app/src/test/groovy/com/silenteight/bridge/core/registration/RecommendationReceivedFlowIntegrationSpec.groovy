@@ -5,7 +5,7 @@ import com.silenteight.bridge.core.recommendation.infrastructure.amqp.Recommenda
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository
-import com.silenteight.proto.recommendation.api.v1.RecommendationsReceived
+import com.silenteight.proto.recommendation.api.v1.RecommendationsStored
 import com.silenteight.proto.registration.api.v1.*
 import com.silenteight.proto.registration.api.v1.RegistrationServiceGrpc.RegistrationServiceBlockingStub
 
@@ -140,11 +140,11 @@ class RecommendationReceivedFlowIntegrationSpec extends BaseSpecificationIT {
         .build()
   }
 
-  private static RecommendationsReceived createRecommendationsReceived(
+  private static RecommendationsStored createRecommendationsReceived(
       String analysisName, List<String> alertNames) {
-    RecommendationsReceived.newBuilder()
-        .setAnalysisId(analysisName)
-        .addAllAlertIds(alertNames)
+    RecommendationsStored.newBuilder()
+        .setAnalysisName(analysisName)
+        .addAllAlertNames(alertNames)
         .build()
   }
 }
