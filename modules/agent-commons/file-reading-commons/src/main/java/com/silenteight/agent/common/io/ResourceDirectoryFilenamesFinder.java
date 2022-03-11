@@ -91,7 +91,8 @@ public class ResourceDirectoryFilenamesFinder {
       fileSystem = getOrCreateFileSystem(directoryUri);
       var nestedJarPath = getNestedJarPath(directoryUri.toString());
       if (nestedJarPath.isPresent()) {
-        fileSystem = FileSystems.newFileSystem(fileSystem.getPath(nestedJarPath.get()), null);
+        var path = fileSystem.getPath(nestedJarPath.get());
+        fileSystem = FileSystems.newFileSystem(path, (ClassLoader) null);
       }
     }
     return fileSystem;

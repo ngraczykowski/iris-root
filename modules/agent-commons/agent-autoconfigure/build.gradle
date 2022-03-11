@@ -17,4 +17,7 @@ dependencies {
   api libraries.spring_cloud_starter_sleuth
   api libraries.spring_cloud_consul_discovery
   api libraries.spring_cloud_starter_consul_config
+  api libraries.spring_boot
+  api libraries.spring_context
+  api libraries.spring_core
 }

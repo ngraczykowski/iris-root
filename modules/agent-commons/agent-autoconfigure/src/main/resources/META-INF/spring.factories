@@ -1,2 +1,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.silenteight.agent.autoconfigure.grpc.GrpcConfiguration
+
+org.springframework.context.ApplicationListener=\
+  com.silenteight.agent.autoconfigure.spring.EnvironmentLoggingApplicationListener

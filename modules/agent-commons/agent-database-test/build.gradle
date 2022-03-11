@@ -1,0 +1,19 @@
+plugins {
+  id "java-library"
+  id "groovy"
+  id "maven-publish"
+}
+
+description = "Agent Database Test"
+
+dependencies {
+  api libraries.spring_test
+  api libraries.spring_boot_test
+  api libraries.spring_boot_test_autoconfigure
+  api libraries.spring_integration_test
+  api libraries.test_containers
+
+  implementation libraries.commons_lang3
+  implementation libraries.test_containers_postgresql
+  implementation project(":agent-database")
+}

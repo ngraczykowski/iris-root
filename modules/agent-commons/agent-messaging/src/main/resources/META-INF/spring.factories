@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.silenteight.agent.common.messaging.amqp.IntegrationConfiguration,\
+  com.silenteight.agent.common.messaging.MessagingConfiguration

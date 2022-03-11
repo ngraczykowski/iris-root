@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.silenteight.agent.common.database.autoconfigure.DataSourceAutoConfiguration,\
+  com.silenteight.agent.common.database.hibernate.SilentEightNamingConventionConfiguration,\
+  com.silenteight.agent.common.database.autoconfigure.TransactionManagerAutoConfiguration
