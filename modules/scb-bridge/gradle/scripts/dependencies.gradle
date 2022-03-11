@@ -123,6 +123,7 @@ libraries.groovy_all = [group: 'org.codehaus.groovy', name: 'groovy-all', versio
 libraries.json_path = [group: 'com.jayway.jsonpath', name: 'json-path']
 libraries.junit_platform_commons = [group: 'org.junit.platform', name: 'junit-platform-commons', version: junitPlatformCommonsVersion]
 libraries.spock_spring = [group: 'org.spockframework', name: 'spock-spring', version: spockSpringVersion]
+libraries.test_containers = [group: 'org.testcontainers', name: 'testcontainers', version: '1.15.1']
 
 // @formatter:on
 
@@ -208,6 +209,7 @@ dependencies {
 
   testImplementation libraries.spock_spring
   testRuntimeOnly libraries.junit_platform_commons
+  testImplementation libraries.test_containers
 }
 
 configurations {
