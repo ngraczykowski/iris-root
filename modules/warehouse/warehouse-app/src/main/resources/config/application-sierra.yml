@@ -199,7 +199,6 @@ warehouse.reports.v2:
                         recommendation_date AS "S8 Alert Resolution Timestamp (UTC)",
                         (wa.payload ->> 'recommendation_comment') AS "S8 Alert Comment",
                         (wa.payload ->> 'firco_system_id') AS "Client Alert ID",
-                        (wa.payload ->> 'firco_analyst_decision') AS "Analyst Decision",
                         (wa.payload ->> 'status') AS "Alert Status",
                         (wa.payload ->> 'delivery_status') AS "Alert Delivery Status",
                         wm.name AS "S8 Match ID"
@@ -219,7 +218,6 @@ warehouse.reports.v2:
                (wsa.payload ->> 'recommendation_create_time')            AS "S8 Alert Resolution Timestamp (UTC)",
                (wsa.payload ->> 'recommendation_comment')                AS "S8 Alert Comment",
                (wa.payload ->> 'firco_system_id')                        AS "Client Alert ID",
-               (wa.payload ->> 'firco_analyst_decision')                 AS "Analyst Decision",
                wa.name                                                   AS "S8 Alert ID",
                (wa.payload ->> 'status')                                 AS "Alert Status",
                (wa.payload ->> 'delivery_status')                        AS "Alert Delivery Status",
