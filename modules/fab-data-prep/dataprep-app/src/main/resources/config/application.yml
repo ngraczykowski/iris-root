@@ -45,3 +45,4 @@ feeding:
     country-feature.enabled: true
     name-feature.enabled: true
     date-feature.enabled: true
+    nationality-feature.enabled: true

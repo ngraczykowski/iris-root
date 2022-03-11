@@ -45,4 +45,10 @@ public class FeatureConfiguration {
   FabFeature dateFeature(ParseContext parseContext) {
     return new DateFeature(parseContext);
   }
+
+  @Bean
+  @ConditionalOnProperty("feeding.features.nationality-feature.enabled")
+  FabFeature nationalityFeature(ParseContext parseContext) {
+    return new NationalityFeature(parseContext);
+  }
 }
