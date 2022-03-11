@@ -59,4 +59,10 @@ public class FeatureConfiguration {
   FabFeature passportFeature(ParseContext parseContext) {
     return new PassportFeature(parseContext);
   }
+
+  @Bean
+  @ConditionalOnProperty("feeding.features.bic-feature.enabled")
+  FabFeature bicFeature(ParseContext parseContext) {
+    return new BicFeature(parseContext);
+  }
 }

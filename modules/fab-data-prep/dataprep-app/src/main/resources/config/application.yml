@@ -47,3 +47,4 @@ feeding:
     date-feature.enabled: true
     nationality-feature.enabled: true
     passport-feature.enabled: true
+    bic-feature.enabled: true
