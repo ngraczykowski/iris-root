@@ -120,7 +120,7 @@ serp:
         integration:
           request:
             exchange: ${serp.governance.messaging.exchange.model}
-            routingKey: ${serp.governance.messaging.broker.model-export.routing-key}
+            routingKey: ${serp.governance.messaging.broker.model-in-use.routing-key}
 
   rabbitmq:
     host: localhost
