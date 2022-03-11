@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
-import com.silenteight.adjudication.engine.analysis.recommendation.domain.SaveRecommendationRequest;
 
 import org.springframework.stereotype.Service;
 
@@ -19,7 +18,7 @@ class GenerateAndSaveRecommendationUseCase {
 
   private final GenerateRecommendationsUseCase generateRecommendationsUseCase;
 
-  private final CreateRecommendationsUseCase createRecommendationsUseCase;
+
 
   Optional<RecommendationsGenerated> generateAndSaveRecommendations(String analysisName) {
     var recommendationInfos = generateRecommendationInfos(analysisName);
@@ -32,14 +31,7 @@ class GenerateAndSaveRecommendationUseCase {
 
   private List<RecommendationInfo> generateRecommendationInfos(String analysisName) {
     return generateRecommendationsUseCase.generateRecommendations(
-        analysisName,
-        this::createRecommendation);
-  }
-
-  private List<RecommendationInfo> createRecommendation(SaveRecommendationRequest request) {
-    return createRecommendationsUseCase.createRecommendations(
-        request.getAnalysisId(), request.getAlertSolutions(),
-        request.isShouldMetadataAttach(), request.isShouldRecommendationAttach());
+        analysisName);
   }
 
   private RecommendationsGenerated createRecommendationGenerated(

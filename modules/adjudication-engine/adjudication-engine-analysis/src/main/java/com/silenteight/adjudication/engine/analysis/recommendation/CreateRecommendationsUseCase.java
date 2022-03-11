@@ -7,6 +7,7 @@ import com.silenteight.adjudication.api.v1.RecommendationsGenerated.Recommendati
 import com.silenteight.adjudication.engine.analysis.pendingrecommendation.PendingRecommendationFacade;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertSolution;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.InsertRecommendationRequest;
+import com.silenteight.adjudication.engine.analysis.recommendation.domain.SaveRecommendationRequest;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.jetbrains.annotations.NotNull;
@@ -28,22 +29,21 @@ class CreateRecommendationsUseCase {
   @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "recommendation" })
   @Transactional
   List<RecommendationInfo> createRecommendations(
-      long analysisId, List<AlertSolution> alertSolutions,
-      final boolean shouldAttachMetaData,
-      final boolean shouldAttachRecommendation) {
+      SaveRecommendationRequest request) {
 
-    var recommendations = createInsertRequests(analysisId, alertSolutions);
+    var recommendations =
+        createInsertRequests(request.getAnalysisId(), request.getAlertSolutions());
     var savedRecommendations = recommendationDataAccess.insertAlertRecommendation(recommendations);
 
     pendingRecommendationFacade.removeSolvedPendingRecommendation();
 
     debug("Saved recommendations: analysis=analysis/{}, recommendationCount={}",
-        analysisId, recommendations.size());
+        request.getAnalysisId(), recommendations.size());
 
     return savedRecommendations
         .stream()
         .map(recommendationResponse -> recommendationResponse.toRecommendationInfo(
-            shouldAttachMetaData, shouldAttachRecommendation))
+            request.isShouldMetadataAttach(), request.isShouldRecommendationAttach()))
         .collect(toList());
   }
 

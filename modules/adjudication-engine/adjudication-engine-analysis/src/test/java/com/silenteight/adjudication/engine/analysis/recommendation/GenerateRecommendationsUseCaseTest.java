@@ -6,7 +6,6 @@ import com.silenteight.adjudication.api.v1.RecommendationsGenerated.Recommendati
 import com.silenteight.adjudication.engine.analysis.analysis.AnalysisFacade;
 import com.silenteight.adjudication.engine.analysis.commentinput.CommentInputDataAccess;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.GenerateCommentsResponse;
-import com.silenteight.adjudication.engine.analysis.recommendation.domain.SaveRecommendationRequest;
 import com.silenteight.solving.api.v1.BatchSolveAlertsResponse;
 import com.silenteight.solving.api.v1.SolveAlertSolutionResponse;
 
@@ -36,6 +35,8 @@ class GenerateRecommendationsUseCaseTest {
   private GenerateCommentsUseCase generateCommentsUseCase;
   @Mock
   private CommentInputDataAccess commentInputDataAccess;
+  @Mock
+  CreateRecommendationsUseCase createRecommendationsUseCase;
 
   private int handledRecommendation;
 
@@ -45,7 +46,7 @@ class GenerateRecommendationsUseCaseTest {
     generateRecommendationsUseCase =
         new GenerateRecommendationsUseCase(
             client, new InMemoryRecommendationDataAccess(), analysisFacade, generateCommentsUseCase,
-            commentInputDataAccess);
+            commentInputDataAccess, createRecommendationsUseCase);
   }
 
   @Test
@@ -68,29 +69,28 @@ class GenerateRecommendationsUseCaseTest {
         .setNotificationFlags(NotificationFlags.newBuilder()
             .setAttachRecommendation(true).setAttachMetadata(true).build()).build());
 
+    when(createRecommendationsUseCase.createRecommendations(any())).thenReturn(
+        List.of(RecommendationInfo
+            .newBuilder()
+            .setRecommendation("solved")
+            .setAlert("alerts/1")
+            .build()));
+
     var solution = generateRecommendationsUseCase
-        .generateRecommendations(analysisName, this::handleRecommendation)
+        .generateRecommendations(analysisName)
         .get(0);
     assertThat(solution.getAlert()).isEqualTo("alerts/1");
     assertThat(solution.getRecommendation()).isEqualTo("solved");
-    assertThat(handledRecommendation).isEqualTo(5);
+
+    verify(createRecommendationsUseCase, times(5)).createRecommendations(any());
   }
 
   @Test
   void shouldReturnEmptyList() {
     var solution = generateRecommendationsUseCase.generateRecommendations(
-        "analysis/5",
-        this::handleRecommendation);
+        "analysis/5");
     assertThat(solution.size()).isEqualTo(0);
-    assertThat(handledRecommendation).isEqualTo(0);
-  }
 
-  private List<RecommendationInfo> handleRecommendation(SaveRecommendationRequest request) {
-    handledRecommendation++;
-    return List.of(RecommendationInfo
-        .newBuilder()
-        .setRecommendation(request.getAlertSolutions().get(0).getRecommendedAction())
-        .setAlert("alerts/" + request.getAlertSolutions().get(0).getAlertId())
-        .build());
+    verify(createRecommendationsUseCase, times(0)).createRecommendations(any());
   }
 }

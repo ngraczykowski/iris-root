@@ -22,7 +22,6 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.function.Function;
 import javax.annotation.Nonnull;
 
 import static java.util.stream.Collectors.toList;
@@ -38,16 +37,15 @@ class GenerateRecommendationsUseCase {
   private final AnalysisFacade analysisFacade;
   private final GenerateCommentsUseCase generateCommentsUseCase;
   private final CommentInputDataAccess commentInputDataAccess;
+  private final CreateRecommendationsUseCase createRecommendationsUseCase;
 
   @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "recommendation" })
-  List<RecommendationInfo> generateRecommendations(
-      String analysisName,
-      Function<SaveRecommendationRequest, List<RecommendationInfo>> saveRecommendation) {
+  List<RecommendationInfo> generateRecommendations(String analysisName) {
 
     var analysisId = ResourceName.create(analysisName).getLong("analysis");
     log.debug("Starting generating recommendations: analysis={}", analysisName);
     var recommendationInfos =
-        prepareRecommendationInfos(analysisName, saveRecommendation, analysisId);
+        prepareRecommendationInfos(analysisName, analysisId);
 
     log.info("Finished generating recommendations: analysis={}, recommendationCount={}",
         analysisName, recommendationInfos.size());
@@ -57,7 +55,6 @@ class GenerateRecommendationsUseCase {
 
   private List<RecommendationInfo> prepareRecommendationInfos(
       String analysisName,
-      Function<SaveRecommendationRequest, List<RecommendationInfo>> saveRecommendation,
       long analysisId
   ) {
     var recommendationInfos = new ArrayList<RecommendationInfo>();
@@ -78,7 +75,7 @@ class GenerateRecommendationsUseCase {
       var alertSolutions = createAlertSolutions(pendingAlerts, response);
 
       recommendationInfos.addAll(
-          saveRecommendation.apply(
+          createRecommendationsUseCase.createRecommendations(
               new SaveRecommendationRequest(analysisId, shouldMetadataAttached,
                   shouldRecommendationBeAttached,
                   alertSolutions)));

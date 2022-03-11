@@ -7,6 +7,7 @@ import com.silenteight.adjudication.engine.analysis.analysis.AnalysisFacade;
 import com.silenteight.adjudication.engine.analysis.commentinput.CommentInputDataAccess;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertSolution;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.GenerateCommentsResponse;
+import com.silenteight.adjudication.engine.analysis.recommendation.domain.SaveRecommendationRequest;
 import com.silenteight.solving.api.v1.BatchSolveAlertsResponse;
 import com.silenteight.solving.api.v1.SolveAlertSolutionResponse;
 
@@ -46,10 +47,9 @@ class GenerateAndSaveRecommendationUseCaseTest {
   void setUp() {
     generateRecommendationsUseCase = new GenerateRecommendationsUseCase(
         client, new InMemoryRecommendationDataAccess(), analysisFacade, generateCommentsUseCase,
-        commentInputDataAccess);
+        commentInputDataAccess, createRecommendationsUseCase);
     generateAndSaveRecommendationUseCase = new GenerateAndSaveRecommendationUseCase(
-        generateRecommendationsUseCase,
-        createRecommendationsUseCase
+        generateRecommendationsUseCase
     );
   }
 
@@ -65,15 +65,14 @@ class GenerateAndSaveRecommendationUseCaseTest {
 
     when(analysisFacade.getAnalysisStrategy(1)).thenReturn("strategies");
 
-    when(createRecommendationsUseCase.createRecommendations(
+    when(createRecommendationsUseCase.createRecommendations(new SaveRecommendationRequest(
         1L,
-        List.of(AlertSolution.builder()
+        true, true, List.of(AlertSolution.builder()
             .alertId(1)
             .recommendedAction("solved")
             .matchIds(new long[] { 11 })
             .matchContexts(new ObjectNode[] {})
-            .build()),
-        true, true))
+            .build()))))
         .thenReturn(List.of(
             RecommendationInfo.newBuilder().build()));
 
