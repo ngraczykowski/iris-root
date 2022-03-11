@@ -55,8 +55,6 @@ class AlertMessageStatusService implements AlertMessageStatusUseCase {
       return false;
     }
 
-    log.info("Alert [{}] transitioned to {}. Delivery status: {}", alertMessageId,
-        destinationStatus, delivery);
 
     repository.save(entity);
 
@@ -66,6 +64,8 @@ class AlertMessageStatusService implements AlertMessageStatusUseCase {
       payloadRepository.deleteByAlertMessageId(alertMessageId);
     }
 
+    log.info("Alert [{}] transitioned to {}. Delivery status: {}", alertMessageId,
+        destinationStatus, delivery);
     return true;
   }
 
