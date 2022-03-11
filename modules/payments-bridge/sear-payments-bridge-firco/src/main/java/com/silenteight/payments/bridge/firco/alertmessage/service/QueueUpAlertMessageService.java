@@ -31,10 +31,10 @@ class QueueUpAlertMessageService {
   private final CreateRecommendationUseCase createRecommendationUseCase;
 
   void queueUp(FircoAlertMessage alert) {
-    if (isQueueOverflowed()) {
-      handleOverflow(alert);
-      return;
-    }
+//    if (isQueueOverflowed()) {
+//      handleOverflow(alert);
+//      return;
+//    }
 
     messageStoredPublisherPort.send(buildMessageStore(alert));
     statusService.transitionAlertMessageStatus(alert.getId(), STORED, NA);
