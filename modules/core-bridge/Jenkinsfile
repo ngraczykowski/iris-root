@@ -13,20 +13,50 @@ gradleBuild(
     includeBuildNumberInSnapshotVersion: true,
     archiveArtifactsPattern: '**/build/libs/*.jar, plugins/**/*.jar',
     additionalParams: [
-      extendedChoice(
-        name: 'environments',
-        value: 'dev,test,mike',
-        defaultValue: 'mike',
-        description: 'Environments to deploy to on Nomad',
-        multiSelectDelimiter: ',',
-        quoteValue: false,
-        saveJSONParameterToFile: false,
-        type: 'PT_MULTI_SELECT',
-        visibleItemCount: 10
+        extendedChoice(
+            name: 'environments',
+            value: 'dev,test,mike',
+            defaultValue: 'mike',
+            description: 'Environments to deploy to on Nomad',
+            multiSelectDelimiter: ',',
+            quoteValue: false,
+            saveJSONParameterToFile: false,
+            type: 'PT_MULTI_SELECT',
+            visibleItemCount: 10
         )
     ],
 
     additionalStages: {
       deployOnNomad()
+      if (params.environments) {
+        if (git.getGitBranch() == 'master' || (params.forceDeploy?.toBoolean())) {
+          for (env in params.environments.split(',')) {
+            stage("E2E test on Nomad ${env}") {
+              dir("e2e-test-${env}-repository") {
+                checkout(
+                    [
+                        $class           : 'GitSCM',
+                        branches         : [[name: '*/master']],
+                        extensions       : [],
+                        userRemoteConfigs: [[credentialsId: 'jenkins-gitlab-ssh', url: 'git@gitlab.silenteight.com:ms/ms-bridge-e2e.git']]
+                    ])
+                script {
+                  withEnv(['CONSUL_HTTP_ADDR=10.8.0.1:8500']) {
+                    List<String> testEnvVars = sh(
+                        returnStdout: true, script: "../nomad/e2etest.sh ${env}").trim().split(',')
+                    withEnv(testEnvVars) {
+                      gradle.gradle("clean test -Ptest.type=integration")
+                    }
+                  }
+                }
+              }
+            }
+          }
+        } else {
+          echo 'This is not a master branch ignore E2E test'
+        }
+      } else {
+        echo 'environments variable empty or null ignore E2E test'
+      }
     }
 )
