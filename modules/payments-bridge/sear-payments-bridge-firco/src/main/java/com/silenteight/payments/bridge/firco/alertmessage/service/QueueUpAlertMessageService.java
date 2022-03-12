@@ -31,6 +31,10 @@ class QueueUpAlertMessageService {
   private final CreateRecommendationUseCase createRecommendationUseCase;
 
   void queueUp(FircoAlertMessage alert) {
+    if (isQueueOverflowed()) {
+      handleOverflow(alert);
+      return;
+    }
     statusService.transitionAlertMessageStatus(alert.getId(), STORED, NA);
     log.info("Sending FircoAlertMessage to internal queue for processing:{}", alert.getId());
     messageStoredPublisherPort.send(buildMessageStore(alert));

@@ -140,6 +140,6 @@ class FircoInboundAmqpIntegrationConfiguration {
     return inboundFactory
         .simpleAdapter()
         .configureContainer(
-            c -> c.addQueueNames(queueNames).maxConcurrentConsumers(1).prefetchCount(5));
+            c -> c.addQueueNames(queueNames).maxConcurrentConsumers(1).prefetchCount(25));
   }
 }
