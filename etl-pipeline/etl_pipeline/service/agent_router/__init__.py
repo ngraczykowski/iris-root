@@ -49,10 +49,11 @@ class AgentInputCreator:
 
     def produce_batch_create_agent_input_request(self, alert, payload):
         agent_inputs = []
-        for match_id in payload[cn.MATCH_IDS]:
-            feature_inputs = self.produce_feature_inputs(
-                payload[cn.ALERT_FIELD][cn.MATCH_RECORDS][match_id]
-            )
+        for match_id, match in zip(
+            payload[cn.MATCH_IDS], payload[cn.ALERT_FIELD][cn.MATCH_RECORDS]
+        ):
+
+            feature_inputs = self.produce_feature_inputs(match)
             agent_input = AgentInput(
                 alert=alert.alert_name,
                 match=f"{alert.alert_name}/matches/{match_id}",
@@ -63,7 +64,9 @@ class AgentInputCreator:
 
     def upload_data_inputs(self, alert, payload):
         batch = self.produce_batch_create_agent_input_request(alert, payload)
-        self.stub.BatchCreateAgentInputs(batch)
+        response = self.stub.BatchCreateAgentInputs(batch)
+        for created_agent_input in response.created_agent_inputs:
+            pass
 
 
 class Producer(ABC):
@@ -112,8 +115,8 @@ class NationalityAgentFeatureInputProducer(Producer):
     feature_name = "residency"
 
     def produce_feature_input(self, payload):
-        ap_parties = payload.get("ap_all_nationalities_aggregated", [])
-        wl_parties = payload.get("wl_all_nationalities_aggregated", [])
+        ap_parties = payload.get("ap_all_residencies_aggregated", [])
+        wl_parties = payload.get("wl_all_residencies_aggregated", [])
         combinations = list(itertools.product(ap_parties, wl_parties))
 
         return [

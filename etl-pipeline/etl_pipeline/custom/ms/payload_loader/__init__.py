@@ -4,6 +4,7 @@ import re
 
 
 class PayloadLoader:
+    # TODO needs bigger refactor + tests
     LIST_ELEMENT_REGEX = re.compile(r"\[(\d+)\]")
 
     def get_index(self, value):
@@ -18,8 +19,17 @@ class PayloadLoader:
                 value = self.deep_update(dictionary_to_be_updated[key][idx], value[idx])
                 dictionary_to_be_updated[key][idx] = value
             except IndexError:
-                dictionary_to_be_updated[key].append(value[idx])
+                for _ in range(idx - len(dictionary_to_be_updated[key]) + 1):
+                    dictionary_to_be_updated[key].append(type(dictionary_to_be_updated[key][0])())
+                try:
+                    if isinstance(value[idx], dict):
+                        self.deep_update(dictionary_to_be_updated[key][idx], value[idx])
+                    if isinstance(value[idx], str):
+                        dictionary_to_be_updated[key][idx] = value[idx]
+                except IndexError:
+                    dictionary_to_be_updated[key][idx].append(value)
         except IndexError:
+
             dictionary_to_be_updated[key].extend(value)
         return dictionary_to_be_updated[key]
 
@@ -52,7 +62,6 @@ class PayloadLoader:
     def extract_dict(self, splitted_keys, value):
         is_list_array = False
         dict_ = {}
-
         try:
             new_key, next_keys = splitted_keys[0], splitted_keys[1:]
             if next_keys is []:

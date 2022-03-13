@@ -150,5 +150,4 @@ class WatchlistExtractor:
             )
         except (KeyError, TypeError):
             wl_record_data["WL_DOCUMENT_NUMBER"] = ""
-
         match.update(wl_record_data)

@@ -10,8 +10,9 @@ from etl_pipeline.config import pipeline_config, service_config
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.data_processor_engine.json_engine.json_engine import JsonProcessingEngine
 from etl_pipeline.service.agent_router import AgentInputCreator
-from etl_pipeline.service.proto.etl_pipeline_pb2 import SUCCESS, UNKNOWN, EtlAlert
-from pipelines.ms.json_pipeline import MSPipeline
+from etl_pipeline.service.proto.api.etl_pipeline_pb2 import FAILURE
+from etl_pipeline.service.proto.etl_pipeline_pb2 import SUCCESS, UNKNOWN, EtlAlert, EtlMatch
+from pipelines.ms.wm_address_pipeline import MSPipeline
 
 engine = JsonProcessingEngine(pipeline_config)
 pipeline = MSPipeline(engine, pipeline_config)
@@ -39,13 +40,19 @@ class EtlPipelineServiceServicer(object):
             )
             for alert in request.alerts
         ]
-        futures1 = [self.pool.submit(self.parse_alert, args) for args in alerts_to_parse]
-        payloads = [future.result() for future in futures1]
-        for alert, payload in zip(alerts_to_parse, payloads):
-            try:
-                self.add_to_datasouce(alert, payload[0])
-            except:
-                payload[1] = "NOK"
+        future_payloads = [self.pool.submit(self.parse_alert, alert) for alert in alerts_to_parse]
+        payloads = [future.result() for future in future_payloads]
+        # payloads = [self.parse_alert(alerts_to_parse[0])] debugging
+        statuses = []
+        for alert, record in zip(alerts_to_parse, payloads):
+            input_match_records, status = record
+            for input_match_record in input_match_records:
+                try:
+                    self.add_to_datasouce(alert, input_match_record)
+                except:
+                    status = FAILURE
+                    break
+            statuses.append(status)
         etl_alerts = [
             self._parse_alert(alert, payload[1])
             for alert, payload in zip(alerts_to_parse, payloads)
@@ -56,26 +63,26 @@ class EtlPipelineServiceServicer(object):
     def parse_alert(self, alert):
         payload = alert.flat_payload
         payload = PayloadLoader().load_payload_from_json(payload)
+        payload = payload["alertPayload"]
+
+        payload = {key: payload[key] for key in sorted(payload)}
+
         payload[cn.MATCH_IDS] = alert.matches
-        status = "OK"
+        status = SUCCESS
         try:
             payload = pipeline.transform_standardized_to_cleansed(payload)
             payload = pipeline.transform_cleansed_to_application(payload)
         except:
-            status = "NOK"
-
+            status = UNKNOWN
         return [payload, status]
 
     def _parse_alert(self, alert, status):
         etl_alert = EtlAlert(
             batch_id=alert.batch_id,
             alert_name=alert.alert_name,
+            etl_status=status,
+            etl_matches=[EtlMatch(match_name=str(match)) for match in alert.matches],
         )
-        payload = alert.flat_payload
-        payload = {key: payload[key] for key in sorted(payload)}
-        payload = PayloadLoader().load_payload_from_json(payload)
-        payload[cn.MATCH_IDS] = alert.matches
-        etl_alert.etl_status = SUCCESS if status == "OK" else UNKNOWN
         return etl_alert
 
     def add_to_datasouce(self, alert, payload):
