@@ -1,13 +1,17 @@
 import json
+import os
+import subprocess
+import time
+import unittest
 
 import grpc
 
-from etl_pipeline.service.proto.etl_pipeline_pb2 import Alert, Match, RunEtlRequest
+from etl_pipeline.service.proto.etl_pipeline_pb2 import SUCCESS, Alert, Match, RunEtlRequest
 from etl_pipeline.service.proto.etl_pipeline_pb2_grpc import EtlPipelineServiceStub
 
 
 def load_alert():
-    with open("API/xml_alignment_payload.json", "r") as f:
+    with open("notebooks/sample/alert_in_payload_format.json", "r") as f:
         text = json.load(f)
         match1 = Match(match_id="0", match_name="1")
         match2 = Match(match_id="1", match_name="2")
@@ -17,13 +21,27 @@ def load_alert():
     return alert
 
 
-def flow():
-    alert = load_alert()
-    channel = grpc.insecure_channel("localhost:9090")
-    stub = EtlPipelineServiceStub(channel)
-    response = stub.RunEtl(RunEtlRequest(alerts=[alert]))
-    assert response.etl_alerts[0].etl_status == 0
+class TestGrpcServer(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        environment = os.environ.copy()
+        subprocess.Popen("scripts/start_services.sh", env=environment)
+        time.sleep(1)
 
+    @classmethod
+    def tearDownClass(cls):
+        process = subprocess.Popen("scripts/kill_services.sh")
+        process.wait()
 
-if __name__ == "__main__":
-    flow()
+    def test_ok_flow(self):
+        alert = load_alert()
+        channel = grpc.insecure_channel("localhost:9090")
+        stub = EtlPipelineServiceStub(channel)
+        response = stub.RunEtl(RunEtlRequest(alerts=[alert]))
+        assert response.etl_alerts[0].etl_status == SUCCESS
+
+    def test_empty_flow(self):
+        channel = grpc.insecure_channel("localhost:9090")
+        stub = EtlPipelineServiceStub(channel)
+        response = stub.RunEtl(RunEtlRequest(alerts=[]))
+        assert [i for i in response.etl_alerts] == []

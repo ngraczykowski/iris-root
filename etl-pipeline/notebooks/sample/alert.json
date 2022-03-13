@@ -217,6 +217,137 @@
         "masterId": "72951854",
         "versionId": "122438658",
         "uniqueCustId": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480"
+      },
+      {
+        "version": "412740c151535f0756e8dbec7440b726c7a3e135",
+        "createdDate": "01/08/20",
+        "field": [
+          {
+            "name": "SOURCE_REF",
+            "isScreenable": "false",
+            "value": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480",
+            "sortOrder": "1"
+          },
+          {
+            "name": "UNIQUE_KEY",
+            "isScreenable": "false",
+            "value": "A05003324172",
+            "sortOrder": "2"
+          },
+          {
+            "name": "BARCODE",
+            "isScreenable": "false",
+            "sortOrder": "3"
+          },
+          {
+            "name": "ADDRESS_TYPE",
+            "isScreenable": "false",
+            "value": "Plating Address",
+            "sortOrder": "4"
+          },
+          {
+            "name": "CARE_OF_TEXT",
+            "isScreenable": "true",
+            "sortOrder": "5"
+          },
+          {
+            "name": "ATTENTION_TO_TEXT",
+            "isScreenable": "true",
+            "sortOrder": "6"
+          },
+          {
+            "name": "ADDRESS1_LINE1",
+            "isScreenable": "false",
+            "value": "Joe Black &",
+            "sortOrder": "7"
+          },
+          {
+            "name": "ADDRESS1_LINE2",
+            "isScreenable": "false",
+            "value": "Jane Doe AA BBB",
+            "sortOrder": "8"
+          },
+          {
+            "name": "ADDRESS1_LINE3",
+            "isScreenable": "false",
+            "value": "111 A 11TH ST AAA 1A",
+            "sortOrder": "9"
+          },
+          {
+            "name": "ADDRESS1_LINE4",
+            "isScreenable": "false",
+            "value": "New Jersey NJ 10011",
+            "sortOrder": "10"
+          },
+          {
+            "name": "ADDRESS1_LINE5",
+            "isScreenable": "false",
+            "sortOrder": "11"
+          },
+          {
+            "name": "ADDRESS1_LINE6",
+            "isScreenable": "false",
+            "sortOrder": "12"
+          },
+          {
+            "name": "CONCAT_ADDRESS",
+            "isScreenable": "true",
+            "value": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ",
+            "sortOrder": "13"
+          },
+          {
+            "name": "ADDRESS1_CITY",
+            "isScreenable": "true",
+            "sortOrder": "14"
+          },
+          {
+            "name": "ADDRESS1_STATE",
+            "isScreenable": "true",
+            "sortOrder": "15"
+          },
+          {
+            "name": "ADDRESS1_PROVINCE",
+            "isScreenable": "true",
+            "sortOrder": "16"
+          },
+          {
+            "name": "ADDRESS1_POSTALCODE",
+            "isScreenable": "true",
+            "sortOrder": "17"
+          },
+          {
+            "name": "ADDRESS1_ZIP5",
+            "isScreenable": "true",
+            "sortOrder": "18"
+          },
+          {
+            "name": "ADDRESS1_ZIP4",
+            "isScreenable": "true",
+            "sortOrder": "19"
+          },
+          {
+            "name": "ADDRESS1_COUNTRY",
+            "isScreenable": "true",
+            "value": "UNITED STATES OF AMERICA",
+            "sortOrder": "20"
+          },
+          {
+            "name": "ADDRESS1_COUNTRYCODE",
+            "isScreenable": "true",
+            "value": "USA",
+            "sortOrder": "21"
+          },
+          {
+            "name": "ADDRESS1_FOREIGNDOMESTICCODE",
+            "isScreenable": "true",
+            "value": "DOMESTIC",
+            "sortOrder": "22"
+          }
+        ],
+        "status": "A",
+        "masterId": "72951854",
+        "versionId": "122438659",
+        "uniqueCustId": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480"
       }
     ],
     "matchRecords": [
@@ -302,7 +433,7 @@
         "matchId": "49159506",
         "matchStatus": "O",
         "riskScore": "-1.0",
-        "inputVersionId": "122438658",
+        "inputVersionId": "122438659",
         "matchType": "GWL",
         "entityId": "908044",
         "entityVersion": "20150505194923",
@@ -342,8 +473,8 @@
               "city": "ATLANTA",
               "postalCode": "11111",
               "address2": "FL;US",
-              "country": "US",
-              "countryName": "United States of America"
+              "country": "PL",
+              "countryName": "Poland"
             }
           }
         },

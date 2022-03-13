@@ -274,13 +274,10 @@ class JsonProcessingEngine(ProcessingEngine):
     def merge_to_target_col_from_source_cols_sql_expression(
         self, target_col, source_cols, mapper, return_array
     ):
-        valid_source_cols = []
-        for source_col in source_cols:
-            valid_source_cols.append(source_col)
-        if len(valid_source_cols) >= 2:
-            value = [mapper[valid_source_col] for valid_source_col in valid_source_cols]
-        elif len(valid_source_cols) == 1:
-            value = mapper[valid_source_cols[0]]
+        if len(source_cols) >= 2:
+            value = [mapper[valid_source_col] for valid_source_col in source_cols]
+        elif len(source_cols) == 1:
+            value = mapper[source_cols[0]]
             if return_array:
                 value = [value]
         else:

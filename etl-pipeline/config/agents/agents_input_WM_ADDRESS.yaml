@@ -15,6 +15,6 @@ nationality_agent:
 
 residency_agent:
   ap:
-  - alert.inputRecordHist.INPUT_RECORD_FIELD.ADDRESS1_COUNTRY
+  - ADDRESS1_COUNTRY
   wl:
   - matchRecords.WL_COUNTRY

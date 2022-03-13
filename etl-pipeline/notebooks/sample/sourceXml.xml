@@ -175,6 +175,22 @@
             <matchScore>0.75</matchScore>
           </stopDescriptorDetail>
         </stopDescriptor>
+        <stopDescriptor>
+          <name>Agent Smith</name>
+          <totalMatchScore>0.9090909090909091</totalMatchScore>
+          <stopDescriptorDetail>
+            <inputToken>Agent</inputToken>
+            <inputSynonym>null</inputSynonym>
+            <sdToken>Agent</sdToken>
+            <matchScore>1.0</matchScore>
+          </stopDescriptorDetail>
+          <stopDescriptorDetail>
+            <inputToken>XXX</inputToken>
+            <inputSynonym>null</inputSynonym>
+            <sdToken>Smith</sdToken>
+            <matchScore>0.75</matchScore>
+          </stopDescriptorDetail>
+        </stopDescriptor>
       </stopDescriptors>
       <firstMatchedDate>01/23/20</firstMatchedDate>
       <lastMatchedDate>01/23/20</lastMatchedDate>
