@@ -7,13 +7,10 @@ import com.silenteight.payments.bridge.ae.alertregistration.domain.Label;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
 import com.silenteight.payments.bridge.common.model.AlertData;
-import com.silenteight.payments.bridge.common.model.SimpleAlertId;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessagePayloadUseCase;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessageUseCase;
-import com.silenteight.payments.bridge.firco.alertmessage.port.FilterAlertMessageUseCase;
 import com.silenteight.payments.bridge.firco.dto.input.AlertMessageDto;
 
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.time.ZoneOffset;
@@ -38,7 +35,15 @@ class AlertRegistrationInitialStep {
   private final AlertMessagePayloadUseCase alertMessagePayloadUseCase;
   private final UniversalDataSourceStep universalDataSourceStep;
 
-  private final FilterAlertMessageUseCase filterAlertMessageUseCase;
+  void start(UUID alertId) {
+    var alertData = alertMessageUseCase.findByAlertMessageId(alertId);
+    var alertMessageDto = alertMessagePayloadUseCase.findByAlertMessageId(alertId);
+
+    var response = registerAlertUseCase.register(createRequest(alertData, alertMessageDto));
+    log.info("Registered alert {} within ae. AlertName: {}", alertId, response.getAlertName());
+    var ctx = new Context(alertData, alertMessageDto, response);
+    universalDataSourceStep.invoke(ctx);
+  }
 
   private static RegisterAlertRequest createRequest(AlertData alertData, AlertMessageDto alertDto) {
 
@@ -72,23 +77,5 @@ class AlertRegistrationInitialStep {
 
   private static Label getAlertLabelSolvingCmapi() {
     return Label.of(ALERT_LABEL_SOLVING, ALERT_LABEL_SOLVING_CMAPI);
-  }
-
-  @EventListener(SimpleAlertId.class)
-  void test(SimpleAlertId event) {
-    if (!filterAlertMessageUseCase.isResolvedOrOutdated(event) &&
-        !filterAlertMessageUseCase.hasTooManyHits(event)) {
-      this.start(event.getAlertId());
-    }
-  }
-
-  void start(UUID alertId) {
-    var alertData = alertMessageUseCase.findByAlertMessageId(alertId);
-    var alertMessageDto = alertMessagePayloadUseCase.findByAlertMessageId(alertId);
-
-    var response = registerAlertUseCase.register(createRequest(alertData, alertMessageDto));
-    log.info("Registered alert {} within ae. AlertName: {}", alertId, response.getAlertName());
-    var ctx = new Context(alertData, alertMessageDto, response);
-    universalDataSourceStep.invoke(ctx);
   }
 }
