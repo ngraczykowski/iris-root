@@ -65,4 +65,10 @@ public class FeatureConfiguration {
   FabFeature bicFeature(ParseContext parseContext) {
     return new BicFeature(parseContext);
   }
+
+  @Bean
+  @ConditionalOnProperty("feeding.features.document-number-feature.enabled")
+  FabFeature documentNumberFeature(ParseContext parseContext) {
+    return new DocumentNumberFeature(parseContext);
+  }
 }

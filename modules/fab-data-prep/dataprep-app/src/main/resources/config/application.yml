@@ -48,3 +48,4 @@ feeding:
     nationality-feature.enabled: true
     passport-feature.enabled: true
     bic-feature.enabled: true
+    document-number-feature.enabled: true
