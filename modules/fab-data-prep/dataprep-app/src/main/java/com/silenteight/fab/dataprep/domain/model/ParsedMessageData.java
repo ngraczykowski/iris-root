@@ -34,7 +34,7 @@ public class ParsedMessageData {
   String customerSegment;
   String profession;
   String passportNum;
-  String national;
+  String nationalId;
   String tradeLicPlaceOfIssue;
   String groupOrCompanyName;
   String source;

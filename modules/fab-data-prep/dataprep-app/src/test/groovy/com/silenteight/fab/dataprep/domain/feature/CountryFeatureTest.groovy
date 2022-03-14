@@ -32,7 +32,7 @@ class CountryFeatureTest extends Specification {
                    .featureInputs(
                        [CountryFeatureInputOut.builder()
                             .feature(CountryFeature.FEATURE_NAME)
-                            .alertedPartyCountries(['IR'])
+                            .alertedPartyCountries(['IR', 'IR', 'IR', 'IR'])
                             .watchlistCountries(['UEA'])
                             .build()])
                    .build()]

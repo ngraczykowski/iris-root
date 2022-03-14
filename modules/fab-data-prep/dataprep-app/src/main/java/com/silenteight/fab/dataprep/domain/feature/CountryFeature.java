@@ -3,6 +3,7 @@ package com.silenteight.fab.dataprep.domain.feature;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.fab.dataprep.domain.model.ParsedMessageData;
 import com.silenteight.fab.dataprep.domain.model.RegisteredAlert;
 import com.silenteight.universaldatasource.api.library.Feature;
 import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputIn;
@@ -29,6 +30,7 @@ public class CountryFeature implements FabFeature {
   @Override
   public List<AgentInputIn<Feature>> createFeatureInput(FeatureInputsCommand featureInputsCommand) {
     RegisteredAlert registeredAlert = featureInputsCommand.getRegisteredAlert();
+    ParsedMessageData parsedMessageData = registeredAlert.getParsedMessageData();
     return registeredAlert.getMatches()
         .stream()
         .map(match ->
@@ -37,15 +39,18 @@ public class CountryFeature implements FabFeature {
                 .alert(registeredAlert.getAlertName())
                 .featureInputs(of(CountryFeatureInputOut.builder()
                     .feature(FEATURE_NAME)
-                    .alertedPartyCountries(getAlertedPart(registeredAlert))
+                    .alertedPartyCountries(getAlertedPart(parsedMessageData))
                     .watchlistCountries(getWatchlistPart(match.getPayload()))
                     .build()))
                 .build())
         .collect(toList());
   }
 
-  private List<String> getAlertedPart(RegisteredAlert registeredAlert) {
-    return of(registeredAlert.getParsedMessageData().getCountry());
+  private List<String> getAlertedPart(ParsedMessageData parsedMessageData) {
+    return of(parsedMessageData.getCountry(),
+        parsedMessageData.getCountryOfIncorporation(),
+        parsedMessageData.getCountryOfDomicile(),
+        parsedMessageData.getCountryOfBirth());
   }
 
   protected List<String> getWatchlistPart(JsonNode jsonNode) {

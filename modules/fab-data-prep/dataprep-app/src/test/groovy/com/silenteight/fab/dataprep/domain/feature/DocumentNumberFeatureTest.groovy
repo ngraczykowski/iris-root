@@ -29,7 +29,7 @@ class DocumentNumberFeatureTest extends Specification {
                    .featureInputs(
                        [DocumentFeatureInputOut.builder()
                             .feature(DocumentNumberFeature.FEATURE_NAME)
-                            .alertedPartyDocuments([''])
+                            .alertedPartyDocuments(['', 'AVB2833444', 'S93849384A'])
                             .watchlistDocuments([])
                             .build()])
                    .build()]

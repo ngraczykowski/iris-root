@@ -27,7 +27,7 @@ class MessageDataTokenizerTest extends Specification {
     result.getCustomerSegment() == expected[16]
     result.getProfession() == expected[17]
     result.getPassportNum() == expected[18]
-    result.getNational() == expected[19]
+    result.getNationalId() == expected[19]
     result.getTradeLicPlaceOfIssue() == expected[20]
     result.getGroupOrCompanyName() == expected[21]
     result.getSource() == expected[22]

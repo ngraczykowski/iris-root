@@ -43,7 +43,7 @@ public class MessageDataTokenizer implements Converter<String, ParsedMessageData
         .customerSegment(parts[16])
         .profession(parts[17])
         .passportNum(parts[18])
-        .national(parts[19])
+        .nationalId(parts[19])
         .tradeLicPlaceOfIssue(parts[20])
         .groupOrCompanyName(parts[21])
         .source(parts[22])

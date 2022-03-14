@@ -40,7 +40,7 @@ class Fixtures {
       .customerSegment('WEALTH')
       .profession('LAWYER')
       .passportNum('AVB2833444')
-      .national('S93849384A')
+      .nationalId('S93849384A')
       .tradeLicPlaceOfIssue('10/20/2020')
       .groupOrCompanyName('FIRST ABU DHABI BANK')
       .source('FAB_MOB')
