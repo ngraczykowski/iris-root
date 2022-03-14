@@ -18,6 +18,17 @@ service:
   metadata:
     annotations: { }
 
+category:
+  available:
+    - categories/crossmatch
+    - categories/specificTerms
+    - categories/specificTerms2
+    - categories/historicalRiskAssessment
+    - categories/watchlistType
+    - categories/matchType
+    - categories/companyNameSurrounding
+    - categories/messageStructure
+
 udsFeaturesMappingGeo2: geo
 udsFeaturesMappingOrganizationName2: organizationName
 

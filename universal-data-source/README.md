@@ -188,3 +188,21 @@ agent_inputs: [
 Field agent_feature_input contains agents input data, for example: NameFeatureInput or
 LocationFeatureInput. Because of custom data type put in a field of type google.protobuf.Any
 issues occur while using tools like grpc url or grpc ui.
+
+## Available categories configuration
+Feature has been made in order to fluent configuration of available categories which are collected via rest by frontend app.
+Current version:
+```
+uds:
+  category:
+    available:
+      - categories/crossmatch
+      - categories/specificTerms
+      - categories/specificTerms2
+      - categories/historicalRiskAssessment
+      - categories/watchlistType
+      - categories/matchType
+      - categories/companyNameSurrounding
+      - categories/messageStructure
+```
+

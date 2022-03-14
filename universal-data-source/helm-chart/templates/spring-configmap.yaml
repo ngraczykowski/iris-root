@@ -7,3 +7,8 @@ data:
     management:
       server:
         port: {{ .Values.ports.management }}
+    
+    uds:
+      category:
+        available: {{ .Values.category.available }}
+        

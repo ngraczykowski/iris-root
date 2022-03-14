@@ -22,6 +22,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 
 import java.util.List;
 
@@ -52,7 +53,8 @@ class CategoryIntegrationTest {
   private CategoryValueServiceBlockingStub categoryValueServiceBlockingStub;
 
   @Test
-  @Sql(scripts = "adapter/outgoing/jdbc/populate_categories.sql")
+  @Sql(scripts = "adapter/outgoing/jdbc/populate_categories.sql",
+      executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
   @Sql(scripts = "adapter/outgoing/jdbc/truncate_categories.sql",
       executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void testGettingCategories() {
@@ -60,11 +62,12 @@ class CategoryIntegrationTest {
     var listCategoriesResponse =
         categoryServiceBlockingStub.listCategories(ListCategoriesRequest.getDefaultInstance());
 
-    assertThat(listCategoriesResponse.getCategoriesCount()).isEqualTo(4);
+    assertThat(listCategoriesResponse.getCategoriesCount()).isEqualTo(1);
     assertThat((int) listCategoriesResponse
         .getCategoriesList()
         .stream()
-        .filter(c -> c.getName().equals("categories/categoryOne")).count()).isEqualTo(1);
+        .filter(c -> c.getName().equals("categories/historicalRiskAssessment")).count()).isEqualTo(
+        1);
   }
 
   @Test
@@ -75,7 +78,7 @@ class CategoryIntegrationTest {
 
     var categoryValues =
         categoryValueServiceBlockingStub.createCategoryValues(
-            getCreateCategoryValuesRequest("categoryFour"));
+            getCreateCategoryValuesRequest("historicalRiskAssessment"));
 
     assertThat(categoryValues.getCreatedCategoryValuesCount()).isEqualTo(3);
     assertThat((int) categoryValues
@@ -85,7 +88,7 @@ class CategoryIntegrationTest {
   }
 
   @Test
-  @Sql(scripts = { "adapter/outgoing/jdbc/populate_categories.sql", })
+  @Sql(scripts = { "adapter/outgoing/jdbc/populate_categories.sql"})
   @Sql(scripts = "adapter/outgoing/jdbc/truncate_categories.sql",
       executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void testBatchCreateCategoryValues() {
@@ -111,8 +114,8 @@ class CategoryIntegrationTest {
         categoryServiceBlockingStubV1.batchGetMatchCategoryValues(
             BatchGetMatchCategoryValuesRequest.newBuilder()
                 .addAllMatchValues(List.of(
-                    "categories/categoryOne/alerts/1/matches/1",
-                    "categories/categoryTwo/alerts/2/matches/2"))
+                    "categories/chineseCode/alerts/1/matches/1",
+                    "categories/delimiter/alerts/2/matches/2"))
                 .build()
         );
 
@@ -120,12 +123,12 @@ class CategoryIntegrationTest {
 
     assertThat(batchGetMatchCategoryValuesResponse.getCategoryValuesList().stream()
         .filter(c -> c.getSingleValue().equals("NO"))
-        .filter(c -> c.getName().startsWith("categories/categoryTwo/values/"))
+        .filter(c -> c.getName().startsWith("categories/delimiter/values/"))
         .count()).isEqualTo(1);
 
     assertThat(batchGetMatchCategoryValuesResponse.getCategoryValuesList().stream()
         .filter(c -> c.getSingleValue().equals("YES"))
-        .filter(c -> c.getName().startsWith("categories/categoryOne/values/"))
+        .filter(c -> c.getName().startsWith("categories/chineseCode/values/"))
         .count()).isEqualTo(1);
   }
 
@@ -139,9 +142,9 @@ class CategoryIntegrationTest {
         categoryServiceBlockingStubV1.batchGetMatchCategoryValues(
             BatchGetMatchCategoryValuesRequest.newBuilder()
                 .addAllMatchValues(List.of(
-                    "categories/categoryOne/alerts/9999999/matches/1",
-                    "categories/categoryTwo/alerts/9999998/matches/2",
-                    "categories/categoryThree/alerts/2/matches/2"))
+                    "categories/chineseCode/alerts/9999999/matches/1",
+                    "categories/delimiter/alerts/9999998/matches/2",
+                    "categories/firstTokenAddress/alerts/2/matches/2"))
                 .build()
         );
 
@@ -149,17 +152,17 @@ class CategoryIntegrationTest {
 
     assertThat(batchGetMatchCategoryValuesResponse.getCategoryValuesList().stream()
         .filter(c -> c.getSingleValue().equals("NO_DATA"))
-        .filter(c -> c.getName().startsWith("categories/categoryTwo"))
+        .filter(c -> c.getName().startsWith("categories/delimiter"))
         .count()).isEqualTo(1);
 
     assertThat(batchGetMatchCategoryValuesResponse.getCategoryValuesList().stream()
         .filter(c -> c.getSingleValue().equals("NO_DATA"))
-        .filter(c -> c.getName().startsWith("categories/categoryOne"))
+        .filter(c -> c.getName().startsWith("categories/chineseCode"))
         .count()).isEqualTo(1);
 
     assertThat(batchGetMatchCategoryValuesResponse.getCategoryValuesList().stream()
         .filter(c -> c.getSingleValue().equals("YES"))
-        .filter(c -> c.getName().startsWith("categories/categoryThree"))
+        .filter(c -> c.getName().startsWith("categories/firstTokenAddress"))
         .count()).isEqualTo(1);
   }
 
@@ -189,7 +192,7 @@ class CategoryIntegrationTest {
         () -> categoryValueServiceBlockingStub.batchCreateCategoryValues(
             BatchCreateCategoryValuesRequest.newBuilder()
                 .addRequests(CreateCategoryValuesRequest.newBuilder()
-                    .setCategory("categories/categoryThree")
+                    .setCategory("categories/firstTokenAddress")
                     .addAllCategoryValues(
                         List.of(
                             CategoryValue.newBuilder()
