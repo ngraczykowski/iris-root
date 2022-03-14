@@ -2,18 +2,18 @@
 // @no-log
 // @no-cookie-jar
 // request-1.json.json
-POST {{baseurl}}/rest/ftcc/alert
+POST {{baseurl}}/rest/ftcc/v1/alert
 Accept: application/json
 Content-Type: application/json
 
-< ./requests/request-example-cmapi-trust.json.json
+< ./requests/request-example-cmapi-trust.json
 
 ###  ear-customer-bridge with DC param
 // @no-log
 // @no-cookie-jar
 //
-POST {{baseurl}}/rest/ftcc/alert?dc=Data%20center
+POST {{baseurl}}/rest/ftcc/v1/alert?dc=Data%20center
 Accept: application/json
 Content-Type: application/json
 
-< ./requests/request-example-cmapi-trust.json.json
+< ./requests/request-example-cmapi-trust.json
