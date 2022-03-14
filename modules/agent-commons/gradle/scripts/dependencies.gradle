@@ -137,6 +137,7 @@ libraries.sentry_spring_boot_starter = "io.sentry:sentry-spring-boot-starter"
 
 configurations.all {
   exclude group: 'org.glassfish', module: 'javax.el'
+  exclude group: 'org.glassfish', module: 'jakarta.el'
   exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
 
   // Exclude outdated javax APIs from JBoss (newer version are already included)
