@@ -4,7 +4,7 @@ info:
   description: Report API
   version: 0.1.0
 servers:
-  - url: '{environment}/rest/warehouse/api/v1'
+  - url: '{environment}/rest/warehouse/api/v2'
     variables:
       environment:
         enum:
@@ -150,6 +150,28 @@ paths:
           description: Returns status of report.
         404:
           description: Report not found exception.
+
+  /analysis/production/reports:
+    get:
+      tags:
+        - Production
+      description: Returns a list of production reports
+      responses:
+        200:
+          description: Returns a list of reports
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Report'
+              example:
+                - name: '/analysis/production/reports/ACCURACY'
+                  type: 'ACCURACY'
+                  title: 'Accuracy'
+                - name: '/analysis/production/reports/METRICS'
+                  type: 'METRICS'
+                  title: 'Production Metrics'
 
   /analysis/production/reports/{type}:
     post:
