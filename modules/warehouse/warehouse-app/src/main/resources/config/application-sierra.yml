@@ -230,19 +230,20 @@ warehouse.reports.v2:
       type: production
       description: Accuracy (Alert Level)
       selectSqlQuery: >
-        SELECT DISTINCT (wm.payload ->> 'policy') AS "Policy ID",
-                        (wm.payload ->> 'policy_title') AS "Policy Name",
-                        (wa.payload ->> 'recommended_action') AS "S8 Alert Resolution",
-                        recommendation_date AS "S8 Alert Resolution Timestamp (UTC)",
-                        (wa.payload ->> 'recommendation_comment') AS "S8 Alert Comment",
-                        (wa.payload ->> 'firco_analyst_decision') AS "Analyst Decision",
-                        (wa.payload ->> 'firco_analyst_decision_time') AS "Analyst Decision Timestamp",
-                        (wa.payload ->> 'firco_analyst_comment') AS "Analyst Comment",
-                        (wa.payload ->> 'firco_system_id') AS "Client Alert ID",
-                        (wa.payload ->> 'status') AS "Alert Status",
-                        wa.name AS "S8 Alert ID"
+        SELECT DISTINCT (wm.payload ->> 'policy')                       AS "Policy ID",
+                        (wm.payload ->> 'policy_title')                 AS "Policy Name",
+                        (wa.payload ->> 'recommended_action')           AS "S8 Alert Resolution",
+                        recommendation_date                             AS "S8 Alert Resolution Timestamp (UTC)",
+                        (wa.payload ->> 'recommendation_comment')       AS "S8 Alert Comment",
+                        (wa.payload ->> 'firco_analyst_decision')       AS "Analyst Decision",
+                        (wa.payload ->> 'firco_analyst_decision_time')  AS "Analyst Decision Timestamp",
+                        (wa.payload ->> 'firco_analyst_comment')        AS "Analyst Comment",
+                        (wa.payload ->> 'firco_system_id')              AS "Client Alert ID",
+                        (wa.payload ->> 'status')                       AS "Alert Status",
+                        wa.name                                         AS "S8 Alert ID"
         FROM warehouse_alert wa JOIN warehouse_match wm ON wa.id = wm.alert_id 
         WHERE wa.recommendation_date BETWEEN DATE '${from}' AND DATE '${to}'
+            AND (wa.payload ->> 'firco_analyst_decision') IN ('analyst_decision_true_positive', 'analyst_decision_false_positive')
     - name: ACCURACY
       type: simulation
       description: Accuracy (Alert Level)
@@ -261,6 +262,7 @@ warehouse.reports.v2:
         FROM warehouse_alert wa
                  JOIN warehouse_simulation_alert wsa ON wa.name = wsa.name
         WHERE wsa.analysis_name = 'analysis/${analysisId}'
+          AND (wa.payload ->> 'firco_analyst_decision') IN ('analyst_decision_true_positive', 'analyst_decision_false_positive')
 
 sentry:
   traces-sample-rate: 0
