@@ -60,13 +60,11 @@ api libraries.s8_agents_monitoring
 Each Spring component that want to start using Monitoring bean has to provide additional parameters
 
 ```properties
-sentry.enabled=true
 sentry.dsn=
 sentry.environment=unknown
 sentry.traces-sample-rate: 0
 ```
 
-- **sentry.enabled** - has to be set to “true” for a bean to be created, otherwise it will log exceptions using log.error
 - **sentry.dns** - always empty in the component, this value should be update in deployment descriptor (see config below)
 - **sentry.environment** - by default set to “unknown”. This is to override sentry own default value which is “production” and would be misleading
 - **sentry.traces-sample-rate** - should be set to 0 to prevent sentry from gathering performance metrics.
@@ -107,8 +105,7 @@ args: ["name",
        "--logging.config=file:/etc/logback.xml",
        "--grpc.client.data-source.address={{ .Values.grpc.client.datasource.address }}",
        "--sentry.dsn=https://423d3bd99f14476dbf7354cbd584cc57@o1129201.ingest.sentry.io/6176119", 
-       "--sentry.environment=unknown",
-       "--sentry.enabled=true"
+       "--sentry.environment=unknown"
  ]
 ```
 
