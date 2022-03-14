@@ -12,7 +12,6 @@ import com.silenteight.payments.bridge.firco.callback.port.SendResponseUseCase;
 import com.silenteight.payments.bridge.firco.recommendation.model.BridgeSourcedRecommendation;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationReason;
 import com.silenteight.payments.bridge.firco.recommendation.port.CreateRecommendationUseCase;
-import com.silenteight.proto.payments.bridge.internal.v1.event.MessageStored;
 import com.silenteight.proto.payments.bridge.internal.v1.event.ResponseCompleted;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 
@@ -24,7 +23,6 @@ import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.messaging.MessageChannel;
 
-import java.util.UUID;
 import javax.validation.Valid;
 
 import static org.springframework.integration.dsl.IntegrationFlows.from;
