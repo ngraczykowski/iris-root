@@ -18,8 +18,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.silenteight.fab.dataprep.infrastructure.FeatureConfiguration.LIST_OF_STRINGS;
 import static java.util.function.UnaryOperator.identity;
 import static java.util.stream.Collectors.toMap;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +48,8 @@ public class AlertParser {
   }
 
   private ParsedMessageData parseMessageData(DocumentContext documentContext) {
-    return messageDataTokenizer.convert(documentContext.read(MESSAGE_DATA_PATH, String.class));
+    List<String> nodes = documentContext.read(MESSAGE_DATA_PATH, LIST_OF_STRINGS);
+    return messageDataTokenizer.convert(nodes.stream().findFirst().orElse(EMPTY));
   }
 
   private static Map<String, Hit> getMatches(DocumentContext documentContext) {

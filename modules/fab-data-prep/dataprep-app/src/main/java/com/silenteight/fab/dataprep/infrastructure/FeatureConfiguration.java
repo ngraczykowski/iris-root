@@ -5,20 +5,25 @@ import com.silenteight.fab.dataprep.domain.feature.*;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
 import com.jayway.jsonpath.ParseContext;
+import com.jayway.jsonpath.TypeRef;
 import com.jayway.jsonpath.spi.json.JacksonJsonNodeJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
+
 @Configuration
 public class FeatureConfiguration {
+
+  public static final TypeRef<List<String>> LIST_OF_STRINGS = new TypeRef<>() {};
 
   @Bean
   ParseContext parseContext() {
     return JsonPath.using(com.jayway.jsonpath.Configuration
         .builder()
-        .options(Option.SUPPRESS_EXCEPTIONS)
+        .options(Option.SUPPRESS_EXCEPTIONS, Option.ALWAYS_RETURN_LIST)
         .mappingProvider(new JacksonMappingProvider())
         .jsonProvider(new JacksonJsonNodeJsonProvider())
         .build());

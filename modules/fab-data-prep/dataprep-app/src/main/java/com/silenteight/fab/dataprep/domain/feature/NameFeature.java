@@ -1,26 +1,21 @@
 package com.silenteight.fab.dataprep.domain.feature;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.fab.dataprep.domain.model.ParsedMessageData;
-import com.silenteight.fab.dataprep.domain.model.RegisteredAlert;
+import com.silenteight.fab.dataprep.domain.model.RegisteredAlert.Match;
 import com.silenteight.universaldatasource.api.library.Feature;
-import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputIn;
 import com.silenteight.universaldatasource.api.library.name.v1.*;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.jayway.jsonpath.ParseContext;
-import com.jayway.jsonpath.TypeRef;
 
 import java.util.List;
 import java.util.stream.Stream;
 
-import static java.util.Collections.emptyList;
-import static java.util.List.of;
+import static com.silenteight.fab.dataprep.infrastructure.FeatureConfiguration.LIST_OF_STRINGS;
 import static java.util.stream.Collectors.toList;
 
-@Slf4j
 @RequiredArgsConstructor
 public class NameFeature implements FabFeature {
 
@@ -31,44 +26,34 @@ public class NameFeature implements FabFeature {
   private final ParseContext parseContext;
 
   @Override
-  public List<AgentInputIn<Feature>> createFeatureInput(FeatureInputsCommand featureInputsCommand) {
-    RegisteredAlert registeredAlert = featureInputsCommand.getRegisteredAlert();
-    ParsedMessageData parsedMessageData = registeredAlert.getParsedMessageData();
-    return registeredAlert.getMatches()
-        .stream()
-        .map(match ->
-            AgentInputIn.builder()
-                .match(match.getMatchName())
-                .alert(registeredAlert.getAlertName())
-                .featureInputs(of(NameFeatureInputOut.builder()
-                    .feature(FEATURE_NAME)
-                    .alertedPartyNames(getAlertedPart(parsedMessageData))
-                    .alertedPartyType(getPartyType(parsedMessageData))
-                    .watchlistNames(getWatchlistPart(match.getPayload()))
-                    .matchingTexts(getMatchingTexts(match.getPayload()))
-                    .build()))
-                .build())
-        .collect(toList());
+  public Feature buildFeature(BuildFeatureCommand buildFeatureCommand) {
+    ParsedMessageData parsedMessageData = buildFeatureCommand.getParsedMessageData();
+    Match match = buildFeatureCommand.getMatch();
+    return NameFeatureInputOut.builder()
+        .feature(FEATURE_NAME)
+        .alertedPartyNames(getAlertedPart(parsedMessageData))
+        .alertedPartyType(getPartyType(parsedMessageData))
+        .watchlistNames(getWatchlistPart(match.getPayload()))
+        .matchingTexts(getMatchingTexts(match.getPayload()))
+        .build();
   }
 
-  private List<AlertedPartyNameOut> getAlertedPart(ParsedMessageData parsedMessageData) {
+  private static List<AlertedPartyNameOut> getAlertedPart(ParsedMessageData parsedMessageData) {
     return Stream.of(parsedMessageData.getName(), parsedMessageData.getShortName())
-        .map(this::getAlertedPartyNameOut)
+        .map(NameFeature::getAlertedPartyNameOut)
         .collect(toList());
   }
 
-  private AlertedPartyNameOut getAlertedPartyNameOut(String name) {
+  private static AlertedPartyNameOut getAlertedPartyNameOut(String name) {
     return AlertedPartyNameOut.builder()
         .name(name)
         .build();
   }
 
   protected List<WatchlistNameOut> getWatchlistPart(JsonNode jsonNode) {
-    TypeRef<List<String>> typeRef = new TypeRef<>() {};
-
     return parseContext
         .parse(jsonNode)
-        .read(WATCH_LIST_NAME_PATH, typeRef)
+        .read(WATCH_LIST_NAME_PATH, LIST_OF_STRINGS)
         .stream()
         .map(name -> getWatchlistNameOut(name, NameTypeOut.REGULAR))
         .collect(toList());
@@ -76,14 +61,14 @@ public class NameFeature implements FabFeature {
     //TODO add alias names
   }
 
-  private WatchlistNameOut getWatchlistNameOut(String name, NameTypeOut type) {
+  private static WatchlistNameOut getWatchlistNameOut(String name, NameTypeOut type) {
     return WatchlistNameOut.builder()
         .name(name)
         .type(type)
         .build();
   }
 
-  private EntityTypeOut getPartyType(ParsedMessageData parsedMessageData) {
+  private static EntityTypeOut getPartyType(ParsedMessageData parsedMessageData) {
     switch (parsedMessageData.getCustomerTypeAsEnum()) {
       case INDIVIDUAL:
         return EntityTypeOut.INDIVIDUAL;
@@ -96,7 +81,6 @@ public class NameFeature implements FabFeature {
   }
 
   private List<String> getMatchingTexts(JsonNode jsonNode) {
-    String value = parseContext.parse(jsonNode).read(MATCHING_TEXT_PATH, String.class);
-    return value == null ? emptyList() : of(value);
+    return parseContext.parse(jsonNode).read(MATCHING_TEXT_PATH, LIST_OF_STRINGS);
   }
 }

@@ -2,8 +2,10 @@ package com.silenteight.fab.dataprep.domain;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.fab.dataprep.domain.feature.BuildFeatureCommand;
 import com.silenteight.fab.dataprep.domain.feature.FabFeature;
 import com.silenteight.fab.dataprep.domain.feature.FeatureInputsCommand;
+import com.silenteight.fab.dataprep.domain.model.RegisteredAlert;
 import com.silenteight.universaldatasource.api.library.Feature;
 import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputIn;
 import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputServiceClient;
@@ -33,11 +35,29 @@ class FeedingService {
   }
 
   void createFeatureInputs(FeatureInputsCommand featureInputsCommand) {
-    List<AgentInputIn<Feature>> agentInputs = features.stream()
-        .flatMap(feature -> feature.createFeatureInput(featureInputsCommand).stream())
+    RegisteredAlert registeredAlert = featureInputsCommand.getRegisteredAlert();
+    List<AgentInputIn<Feature>> agentInputs = registeredAlert.getMatches()
+        .stream()
+        .map(match ->
+            AgentInputIn.builder()
+                .match(match.getMatchName())
+                .alert(registeredAlert.getAlertName())
+                .featureInputs(buildFeatures(registeredAlert, match))
+                .build())
         .collect(toList());
 
     feedUds(agentInputs);
+  }
+
+  private List<Feature> buildFeatures(
+      RegisteredAlert registeredAlert, RegisteredAlert.Match match) {
+    return features.stream()
+        .map(feature -> feature.buildFeature(BuildFeatureCommand
+            .builder()
+            .parsedMessageData(registeredAlert.getParsedMessageData())
+            .match(match)
+            .build()))
+        .collect(toList());
   }
 
   void feedUds(List<AgentInputIn<Feature>> agentInputs) {

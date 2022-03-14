@@ -1,26 +1,21 @@
 package com.silenteight.fab.dataprep.domain.feature;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.fab.dataprep.domain.model.ParsedMessageData;
-import com.silenteight.fab.dataprep.domain.model.RegisteredAlert;
 import com.silenteight.universaldatasource.api.library.Feature;
-import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputIn;
 import com.silenteight.universaldatasource.api.library.date.v1.DateFeatureInputOut;
 import com.silenteight.universaldatasource.api.library.date.v1.EntityTypeOut;
 import com.silenteight.universaldatasource.api.library.date.v1.SeverityModeOut;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.jayway.jsonpath.ParseContext;
-import com.jayway.jsonpath.TypeRef;
 
 import java.util.List;
 
+import static com.silenteight.fab.dataprep.infrastructure.FeatureConfiguration.LIST_OF_STRINGS;
 import static java.util.List.of;
-import static java.util.stream.Collectors.toList;
 
-@Slf4j
 @RequiredArgsConstructor
 public class DateFeature implements FabFeature {
 
@@ -30,39 +25,26 @@ public class DateFeature implements FabFeature {
   private final ParseContext parseContext;
 
   @Override
-  public List<AgentInputIn<Feature>> createFeatureInput(FeatureInputsCommand featureInputsCommand) {
-    RegisteredAlert registeredAlert = featureInputsCommand.getRegisteredAlert();
-    ParsedMessageData parsedMessageData = registeredAlert.getParsedMessageData();
-    return registeredAlert.getMatches()
-        .stream()
-        .map(match ->
-            AgentInputIn.builder()
-                .match(match.getMatchName())
-                .alert(registeredAlert.getAlertName())
-                .featureInputs(of(DateFeatureInputOut.builder()
-                    .feature(FEATURE_NAME)
-                    .alertedPartyDates(getAlertedPart(parsedMessageData))
-                    .watchlistDates(getWatchlistPart(match.getPayload()))
-                    .alertedPartyType(getPartyType(parsedMessageData))
-                    .mode(SeverityModeOut.NORMAL)   //TODO is it correct?
-                    .build()))
-                .build())
-        .collect(toList());
+  public Feature buildFeature(BuildFeatureCommand buildFeatureCommand) {
+    ParsedMessageData parsedMessageData = buildFeatureCommand.getParsedMessageData();
+    return DateFeatureInputOut.builder()
+        .feature(FEATURE_NAME)
+        .alertedPartyDates(getAlertedPart(parsedMessageData))
+        .watchlistDates(getWatchlistPart(buildFeatureCommand.getMatch().getPayload()))
+        .alertedPartyType(getPartyType(parsedMessageData))
+        .mode(SeverityModeOut.NORMAL)   //TODO is it correct?
+        .build();
   }
 
-  private List<String> getAlertedPart(ParsedMessageData parsedMessageData) {
+  private static List<String> getAlertedPart(ParsedMessageData parsedMessageData) {
     return of(parsedMessageData.getDob());
   }
 
-  protected List<String> getWatchlistPart(JsonNode jsonNode) {
-    TypeRef<List<String>> typeRef = new TypeRef<>() {};
-
-    return parseContext
-        .parse(jsonNode)
-        .read(JSON_PATH, typeRef);
+  private List<String> getWatchlistPart(JsonNode jsonNode) {
+    return parseContext.parse(jsonNode).read(JSON_PATH, LIST_OF_STRINGS);
   }
 
-  private EntityTypeOut getPartyType(ParsedMessageData parsedMessageData) {
+  private static EntityTypeOut getPartyType(ParsedMessageData parsedMessageData) {
     switch (parsedMessageData.getCustomerTypeAsEnum()) {
       case INDIVIDUAL:
         return EntityTypeOut.INDIVIDUAL;

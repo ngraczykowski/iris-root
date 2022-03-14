@@ -1,6 +1,6 @@
 package com.silenteight.fab.dataprep.domain.feature
 
-import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputIn
+
 import com.silenteight.universaldatasource.api.library.name.v1.*
 
 import org.springframework.beans.factory.annotation.Autowired
@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import spock.lang.Specification
 import spock.lang.Subject
 
-import static com.silenteight.fab.dataprep.domain.Fixtures.*
+import static com.silenteight.fab.dataprep.domain.Fixtures.BUILD_FEATURE_COMMAND
 import static java.util.stream.Collectors.toList
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
@@ -32,20 +32,15 @@ class NameFeatureTest extends Specification {
             .collect(toList())
 
     when:
-    def result = underTest.createFeatureInput(FEATURE_INPUTS_COMMAND)
+    def result = underTest.buildFeature(BUILD_FEATURE_COMMAND)
 
     then:
-    result == [AgentInputIn.builder()
-                   .match(MATCH_NAME)
-                   .alert(ALERT_NAME)
-                   .featureInputs(
-                       [NameFeatureInputOut.builder()
-                            .feature(NameFeature.FEATURE_NAME)
-                            .alertedPartyNames(alertedPart)
-                            .watchlistNames(watchlistPart)
-                            .alertedPartyType(EntityTypeOut.INDIVIDUAL)
-                            .matchingTexts(["YASIN RAHMAN"])
-                            .build()])
-                   .build()]
+    result == NameFeatureInputOut.builder()
+        .feature(NameFeature.FEATURE_NAME)
+        .alertedPartyNames(alertedPart)
+        .watchlistNames(watchlistPart)
+        .alertedPartyType(EntityTypeOut.INDIVIDUAL)
+        .matchingTexts(["YASIN RAHMAN"])
+        .build()
   }
 }

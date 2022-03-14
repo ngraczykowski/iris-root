@@ -1,5 +1,6 @@
 package com.silenteight.fab.dataprep.domain
 
+import com.silenteight.fab.dataprep.domain.feature.BuildFeatureCommand
 import com.silenteight.fab.dataprep.domain.feature.FeatureInputsCommand
 import com.silenteight.fab.dataprep.domain.model.ParsedMessageData
 import com.silenteight.fab.dataprep.domain.model.RegisteredAlert
@@ -90,4 +91,12 @@ class Fixtures {
               .matches([EMPTY_MATCH])
               .build())
       .build()
+
+  static BuildFeatureCommand EMPTY_BUILD_FEATURE_COMMAND = BuildFeatureCommand.builder()
+              .parsedMessageData(PARSED_PAYLOAD)
+              .match(EMPTY_MATCH).build()
+
+  static BuildFeatureCommand BUILD_FEATURE_COMMAND = BuildFeatureCommand.builder()
+      .parsedMessageData(PARSED_PAYLOAD)
+      .match(MATCH).build()
 }
