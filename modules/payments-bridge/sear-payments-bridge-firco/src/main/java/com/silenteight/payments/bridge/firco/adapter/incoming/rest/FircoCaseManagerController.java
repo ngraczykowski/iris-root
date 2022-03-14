@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
  * The main REST controller for Firco Continuity integration, implementing the <em>Case Manager
  * API</em>.
  * <p/>
- * The Firco Continuity system sends message with alert(s) to the {@literal /alert} endpoint.
- * Firco is then waiting for decision on that message, exposing its own HTTP service, and expecting
- * this system to properly transition each message to the correct status.
+ * The Firco Continuity system sends message with alert(s) to the {@literal /alert} endpoint. Firco
+ * is then waiting for decision on that message, exposing its own HTTP service, and expecting this
+ * system to properly transition each message to the correct status.
  */
 @RestController
 @RequiredArgsConstructor
