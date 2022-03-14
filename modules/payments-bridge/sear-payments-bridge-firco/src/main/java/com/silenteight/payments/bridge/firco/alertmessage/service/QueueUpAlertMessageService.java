@@ -9,6 +9,7 @@ import com.silenteight.payments.bridge.firco.alertmessage.port.MessageStoredPubl
 import com.silenteight.payments.bridge.firco.recommendation.model.BridgeSourcedRecommendation;
 import com.silenteight.payments.bridge.firco.recommendation.port.CreateRecommendationUseCase;
 import com.silenteight.proto.payments.bridge.internal.v1.event.MessageStored;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -30,6 +31,7 @@ class QueueUpAlertMessageService {
   private final MessageStoredPublisherPort messageStoredPublisherPort;
   private final CreateRecommendationUseCase createRecommendationUseCase;
 
+  @Timed
   void queueUp(FircoAlertMessage alert) {
     if (isQueueOverflowed()) {
       handleOverflow(alert);

@@ -38,6 +38,7 @@ class FircoRequestAdapter {
     var mapper = new AlertMessageMapper(receiveUrl, dataCenter);
     log.info("Handling [{}] alert message(s)", requestDto.getAlerts().size());
     mapper.map(requestDto).forEach(createAlertMessageUseCase::createAlertMessage);
+    log.info("Finished Handling [{}] alert message(s)", requestDto.getAlerts().size());
   }
 
 }
