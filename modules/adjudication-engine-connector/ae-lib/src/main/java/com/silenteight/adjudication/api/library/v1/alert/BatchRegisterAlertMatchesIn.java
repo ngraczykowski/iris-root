@@ -11,5 +11,6 @@ import java.util.Collection;
 public class BatchRegisterAlertMatchesIn {
 
   @NonNull String alertId;
+  @NonNull Integer alertPriority;
   @NonNull Collection<String> matchIds;
 }

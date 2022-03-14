@@ -14,8 +14,11 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class AlertGrpcMapper {
 
-  public Alert toAlert(String alertId) {
-    return Alert.newBuilder().setAlertId(alertId).build();
+  public Alert toAlert(String alertId, Integer alertPriority) {
+    return Alert.newBuilder()
+        .setAlertId(alertId)
+        .setPriority(alertPriority)
+        .build();
   }
 
   public BatchCreateAlertsOut toBatchCreateAlertsOut(BatchCreateAlertsResponse response) {
