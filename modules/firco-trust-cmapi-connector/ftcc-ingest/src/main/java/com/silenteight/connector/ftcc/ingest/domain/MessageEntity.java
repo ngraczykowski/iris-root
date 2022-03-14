@@ -2,6 +2,9 @@ package com.silenteight.connector.ftcc.ingest.domain;
 
 import lombok.*;
 
+import com.silenteight.connector.ftcc.ingest.common.BatchResource;
+import com.silenteight.connector.ftcc.ingest.common.MessageResource;
+import com.silenteight.connector.ftcc.ingest.domain.dto.MessageDetailsDto;
 import com.silenteight.sep.base.common.entity.BaseEntity;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -42,4 +45,12 @@ class MessageEntity extends BaseEntity implements Serializable {
   @Type(type = "jsonb")
   @Column(columnDefinition = "jsonb")
   private JsonNode payload;
+
+  MessageDetailsDto toDetailsDto() {
+    return MessageDetailsDto.builder()
+        .batchName(BatchResource.toResourceName(getBatchId()))
+        .messageName(MessageResource.toResourceName(getMessageId()))
+        .payload(getPayload().asText())
+        .build();
+  }
 }

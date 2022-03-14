@@ -2,12 +2,15 @@ package com.silenteight.connector.ftcc.ingest.domain;
 
 import org.springframework.data.repository.Repository;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Optional;
 import java.util.UUID;
 
 interface MessageRepository extends Repository<MessageEntity, Long> {
 
   MessageEntity save(MessageEntity messageEntity);
 
-  List<MessageEntity> findByBatchId(UUID batchId);
+  Collection<MessageEntity> findAllByBatchId(UUID batchId);
+
+  Optional<MessageEntity> findByBatchIdAndMessageId(UUID batchId, UUID messageId);
 }

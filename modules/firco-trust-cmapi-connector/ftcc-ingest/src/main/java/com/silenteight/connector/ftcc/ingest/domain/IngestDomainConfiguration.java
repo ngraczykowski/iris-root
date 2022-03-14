@@ -39,4 +39,9 @@ class IngestDomainConfiguration {
   MessageService messageService(@NonNull MessageRepository messageRepository) {
     return new MessageService(new MessageIdGenerator(), messageRepository);
   }
+
+  @Bean
+  MessageQuery messageQuery(@NonNull MessageRepository messageRepository) {
+    return new MessageQuery(messageRepository);
+  }
 }

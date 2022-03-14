@@ -18,7 +18,7 @@ import javax.validation.Valid;
 @Configuration
 @RequiredArgsConstructor
 @EnableConfigurationProperties(DataPrepProperties.class)
-public class GatewayConfiguration {
+public class AmqpOutgoingConfiguration {
 
   public static final String DATA_PREP_OUTBOUND_CHANNEL = "dataPrepOutboundChannel";
 

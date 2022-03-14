@@ -8,7 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Collection;
 
 import static com.silenteight.connector.ftcc.ingest.domain.MessageFixtures.BATCH_ID;
 import static com.silenteight.connector.ftcc.ingest.domain.MessageFixtures.PAYLOAD;
@@ -31,9 +31,9 @@ class MessageServiceTest extends BaseDataJpaTest {
     underTest.create(BATCH_ID, PAYLOAD);
 
     // then
-    List<MessageEntity> messages = messageRepository.findByBatchId(BATCH_ID);
+    Collection<MessageEntity> messages = messageRepository.findAllByBatchId(BATCH_ID);
     assertThat(messages).isNotEmpty();
-    MessageEntity message = messages.get(0);
+    MessageEntity message = messages.iterator().next();
     assertThat(message.getBatchId()).isEqualTo(BATCH_ID);
     assertThat(message.getPayload()).isEqualTo(PAYLOAD);
   }
