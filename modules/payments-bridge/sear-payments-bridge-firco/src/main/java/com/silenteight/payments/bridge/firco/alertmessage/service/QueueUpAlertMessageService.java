@@ -3,6 +3,7 @@ package com.silenteight.payments.bridge.firco.alertmessage.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.payments.bridge.common.model.SimpleAlertId;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
 import com.silenteight.payments.bridge.firco.alertmessage.port.MessageStoredPublisherPort;
@@ -12,6 +13,7 @@ import com.silenteight.proto.payments.bridge.internal.v1.event.MessageStored;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.STORED;
@@ -30,6 +32,7 @@ class QueueUpAlertMessageService {
 
   private final MessageStoredPublisherPort messageStoredPublisherPort;
   private final CreateRecommendationUseCase createRecommendationUseCase;
+  private final ApplicationEventPublisher applicationEventPublisher;
 
   @Timed
   void queueUp(FircoAlertMessage alert) {
@@ -39,7 +42,7 @@ class QueueUpAlertMessageService {
     }
     statusService.transitionAlertMessageStatus(alert.getId(), STORED, NA);
     log.info("Sending FircoAlertMessage to internal queue for processing:{}", alert.getId());
-    messageStoredPublisherPort.send(buildMessageStore(alert));
+    this.applicationEventPublisher.publishEvent(new SimpleAlertId(alert.getId()));
   }
 
   private boolean isQueueOverflowed() {

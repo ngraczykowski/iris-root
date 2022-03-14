@@ -65,7 +65,6 @@ class FircoInboundAmqpIntegrationConfiguration {
         .handle(
             AlertId.class,
             (payload, headers) -> {
-              alertRegistrationInitialStep.start(payload.getAlertId());
               return null;
             }
         ).get();
