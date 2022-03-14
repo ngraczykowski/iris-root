@@ -49,27 +49,6 @@ class FircoInboundAmqpIntegrationConfiguration {
   private final CreateRecommendationUseCase createRecommendationUseCase;
   private final AlertDeliveredIntegrationService alertDeliveredIntegrationService;
 
-  @Bean
-  IntegrationFlow messageStoredInbound() {
-    return from(createInboundAdapter(properties.getCommands().getInboundQueueName()))
-        .log(INFO, FircoInboundAmqpIntegrationConfiguration.class.toString(), msg ->
-            "Initialized alert registration process for: " + mapToAlertId(
-                (MessageStored) msg.getPayload()))
-        .transform(MessageStored.class, source ->
-            new SimpleAlertId(ResourceName.create(source.getAlert()).getUuid("alert-messages"))
-        )
-        .filter(AlertId.class, alertId -> !filterAlertMessageUseCase.isResolvedOrOutdated(alertId))
-        .filter(AlertId.class, alertId -> !filterAlertMessageUseCase.hasTooManyHits(alertId),
-            spec -> spec.discardChannel(INT_DISCARD)
-        )
-        .handle(
-            AlertId.class,
-            (payload, headers) -> {
-              alertRegistrationInitialStep.start(payload.getAlertId());
-              return null;
-            }
-        ).get();
-  }
 
   private UUID mapToAlertId(MessageStored source) {
     return ResourceName.create(source.getAlert()).getUuid("alert-messages");
