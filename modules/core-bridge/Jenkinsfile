@@ -30,7 +30,8 @@ gradleBuild(
       deployOnNomad()
       if (params.environments) {
         if (git.getGitBranch() == 'master' || (params.forceDeploy?.toBoolean())) {
-          for (env in params.environments.split(',')) {
+          // Run e2e test only on mike env once the scenario is related to the MS customer.
+          if (env == 'mike') {
             stage("E2E test on Nomad ${env}") {
               dir("e2e-test-${env}-repository") {
                 checkout(
@@ -53,10 +54,10 @@ gradleBuild(
             }
           }
         } else {
-          echo 'This is not a master branch ignore E2E test'
+          echo 'This is not a master branch - ignore E2E test'
         }
       } else {
-        echo 'environments variable empty or null ignore E2E test'
+        echo 'This is not a mike env - ignore E2E test'
       }
     }
 )
