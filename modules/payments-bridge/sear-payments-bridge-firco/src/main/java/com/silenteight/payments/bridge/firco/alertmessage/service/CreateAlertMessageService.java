@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
 import com.silenteight.payments.bridge.firco.alertmessage.port.CreateAlertMessageUseCase;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,9 @@ class CreateAlertMessageService implements CreateAlertMessageUseCase {
   private final AlertMessageStatusService alertMessageStatusService;
   private final ApplicationEventPublisher applicationEventPublisher;
 
-  @Transactional
+
   @Override
+  @Timed
   public void createAlertMessage(FircoAlertMessage message) {
     log.info("Creating alert [{}] from message: [{}]", message.getId(),
         message.getAlertMessage().getMessageID());

@@ -3,6 +3,7 @@ package com.silenteight.payments.bridge.firco.alertmessage.service;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -17,6 +18,7 @@ class AlertMessageReceivedListener {
 
   @TransactionalEventListener
   @Transactional(propagation = Propagation.REQUIRES_NEW)
+  @Timed
   public void onReceived(FircoAlertMessage message) {
     service.queueUp(message);
   }
