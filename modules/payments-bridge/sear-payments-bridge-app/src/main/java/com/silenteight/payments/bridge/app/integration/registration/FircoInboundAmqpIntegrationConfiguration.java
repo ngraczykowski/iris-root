@@ -45,14 +45,9 @@ class FircoInboundAmqpIntegrationConfiguration {
   private final AmqpInboundFactory inboundFactory;
   private final FilterAlertMessageUseCase filterAlertMessageUseCase;
   private final SendResponseUseCase sendResponseUseCase;
-  private final AlertRegistrationInitialStep alertRegistrationInitialStep;
   private final CreateRecommendationUseCase createRecommendationUseCase;
   private final AlertDeliveredIntegrationService alertDeliveredIntegrationService;
 
-
-  private UUID mapToAlertId(MessageStored source) {
-    return ResourceName.create(source.getAlert()).getUuid("alert-messages");
-  }
 
   @Bean(INT_DISCARD)
   MessageChannel discardChannel() {
