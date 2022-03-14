@@ -24,7 +24,7 @@ class MessageStoreListener {
 
   @RabbitListener(queues = FIRCO_COMMAND_QUEUE_NAME)
   public void handle(final MessageStored messageStored) {
-    log.info("Fetching data from rabbitmq: {}", messageStored);
+    log.info("Fetching data from rabbitmq: {}", messageStored.getAlert());
     final SimpleAlertId simpleAlertId =
         new SimpleAlertId(ResourceName.create(messageStored.getAlert()).getUuid("alert-messages"));
 
