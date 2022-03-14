@@ -18,7 +18,6 @@ import com.icegreen.greenmail.util.GreenMail;
 import org.awaitility.core.ConditionEvaluationLogger;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -54,7 +53,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ActiveProfiles({
     "mockae", "mockdatasource", "mockgovernance", "mockagents", "mockaws", "test",
     "mockwarehouse" })
-@Disabled
 class PaymentsBridgeApplicationIT {
 
   private static final String SAMPLE_REQUESTS_DIR = "requests";
