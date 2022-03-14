@@ -9,7 +9,6 @@ import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -21,7 +20,7 @@ class CreateAlertMessageService implements CreateAlertMessageUseCase {
   private final ApplicationEventPublisher applicationEventPublisher;
 
 
-  @Transactional
+  //  @Transactional
   @Override
   @Timed
   public void createAlertMessage(FircoAlertMessage message) {
