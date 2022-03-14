@@ -14,12 +14,14 @@ public class RegisterBatchIn {
   String batchId;
   String batchMetadata;
   Long alertCount;
+  Integer batchPriority;
 
   RegisterBatchRequest toRegisterBatchRequest() {
     return RegisterBatchRequest.newBuilder()
         .setBatchId(batchId)
         .setAlertCount(alertCount)
         .setBatchMetadata(Optional.ofNullable(batchMetadata).orElse(""))
+        .setBatchPriority(Optional.ofNullable(batchPriority).orElse(0))
         .build();
   }
 }

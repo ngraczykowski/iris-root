@@ -7,6 +7,7 @@ import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
@@ -26,17 +27,31 @@ class RegistrationServiceGrpcAdapterTest {
   }
 
   @Test
-  void registerBatch() {
+  @DisplayName("should register batch")
+  void shouldRegisterBatch() {
     //when
     var response =
-        underTest.registerBatch(RegisterBatchInRequestFixtures.REGISTER_BATCH_IN_REQUEST);
+        underTest.registerBatch(RegisterBatchInRequestFixtures.REGISTER_BATCH_IN);
 
     //then
     Assertions.assertEquals(response, EmptyOut.getInstance());
   }
 
   @Test
-  void notifyBatchError() {
+  @DisplayName("should register batch with null priority")
+  void shouldRegisterBatchWithNullPriority() {
+    //when
+    var response =
+        underTest.registerBatch(
+            RegisterBatchInRequestFixtures.REGISTER_BATCH_IN_WITH_NULL_PRIORITY);
+
+    //then
+    Assertions.assertEquals(response, EmptyOut.getInstance());
+  }
+
+  @Test
+  @DisplayName("should notify batch error")
+  void shouldNotifyBatchError() {
     //when
     var response = underTest.notifyBatchError(NotifyBatchErrorRequestFixtures.NOTIFY_BATCH_ERROR);
 
@@ -45,7 +60,8 @@ class RegistrationServiceGrpcAdapterTest {
   }
 
   @Test
-  void registerAlertsAndMatches() {
+  @DisplayName("should register alerts and matches")
+  void shouldRegisterAlertsAndMatches() {
     //when
     var response = underTest.registerAlertsAndMatches(
         RegisterAlertAndMatchesRequestFixtures.REGISTER_ALERTS_AND_MATCHES_IN);

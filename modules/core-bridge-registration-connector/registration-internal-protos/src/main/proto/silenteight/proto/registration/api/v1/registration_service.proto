@@ -40,6 +40,7 @@ message RegisterBatchRequest {
   string batch_id = 1 [(google.api.field_behavior) = REQUIRED];
   int64 alert_count = 2 [(google.api.field_behavior) = REQUIRED];
   optional string batch_metadata = 3;
+  optional int32 batch_priority = 4;
 }
 
 message NotifyBatchErrorRequest {
