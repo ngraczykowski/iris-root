@@ -99,7 +99,7 @@ class Deployer:
         cwd = os.path.join(os.getcwd(), 'tmp/nomad')
         nomad_file = '%s.nomad' % artifact.job_name
         execution_params = ['nomad', 'job', 'run']
-        if self.env is None:
+        if self.env is not None:
             var_file = '-var-file=%s.vars' % self.env
             execution_params.append(var_file)
         execution_params.append(nomad_file)
