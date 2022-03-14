@@ -76,10 +76,8 @@ class AlertMessageStatusService implements AlertMessageStatusUseCase {
       throw new IllegalStateException("Unable to re-initialize the initial state for alertID: " +
           alertMessageId);
     }
-
-    log.debug("Alert [{}] initialized with RECEIVED", alertMessageId);
-
     repository.save(new AlertMessageStatusEntity(alertMessageId));
+    log.debug("Alert [{}] initialized with RECEIVED", alertMessageId);
   }
 
 }

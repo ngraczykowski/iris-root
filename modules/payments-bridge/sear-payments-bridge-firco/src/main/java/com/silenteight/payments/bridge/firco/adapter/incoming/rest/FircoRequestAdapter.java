@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.payments.bridge.firco.alertmessage.port.CreateAlertMessageUseCase;
 import com.silenteight.payments.bridge.firco.dto.input.RequestDto;
 import com.silenteight.payments.bridge.firco.security.port.AuthenticateUseCase;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,7 @@ class FircoRequestAdapter {
     authenticateUseCase.authenticate(requestDto.getAuthenticationToken());
   }
 
+  @Timed
   private void handleRequest(RequestDto requestDto, String receiveUrl, String dataCenter) {
     var mapper = new AlertMessageMapper(receiveUrl, dataCenter);
     log.info("Handling [{}] alert message(s)", requestDto.getAlerts().size());
