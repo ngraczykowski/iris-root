@@ -1,0 +1,9 @@
+serp:
+  scb:
+    bridge:
+      gns-rt.enabled: false
+
+      learning:
+        alert.enabled: true
+        watchlist.enabled: true
+        ecm.enabled: true
