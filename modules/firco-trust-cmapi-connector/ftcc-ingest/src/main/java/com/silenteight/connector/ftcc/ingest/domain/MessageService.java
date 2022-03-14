@@ -19,7 +19,7 @@ class MessageService {
     MessageEntity messageEntity = MessageEntity.builder()
         .batchId(batchId)
         .messageId(messageIdGenerator.generate())
-        .payload(payload.asText())
+        .payload(payload)
         .build();
     return messageRepository.save(messageEntity).getMessageId();
   }

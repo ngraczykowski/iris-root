@@ -35,6 +35,6 @@ class MessageServiceTest extends BaseDataJpaTest {
     assertThat(messages).isNotEmpty();
     MessageEntity message = messages.get(0);
     assertThat(message.getBatchId()).isEqualTo(BATCH_ID);
-    assertThat(message.getPayload()).isEqualTo(PAYLOAD.asText());
+    assertThat(message.getPayload()).isEqualTo(PAYLOAD);
   }
 }

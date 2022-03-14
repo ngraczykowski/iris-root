@@ -4,6 +4,7 @@ import lombok.*;
 
 import com.silenteight.sep.base.common.entity.BaseEntity;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
@@ -24,7 +25,7 @@ import javax.persistence.Table;
 @ToString(onlyExplicitlyIncluded = true)
 @Entity
 @Table
-@TypeDef(name = "json", typeClass = JsonBinaryType.class)
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 class MessageEntity extends BaseEntity implements Serializable {
 
   @Id
@@ -38,7 +39,7 @@ class MessageEntity extends BaseEntity implements Serializable {
   @Column(name = "batch_id", nullable = false)
   private UUID batchId;
 
-  @Type(type = "json")
+  @Type(type = "jsonb")
   @Column(columnDefinition = "jsonb")
-  private String payload;
+  private JsonNode payload;
 }
