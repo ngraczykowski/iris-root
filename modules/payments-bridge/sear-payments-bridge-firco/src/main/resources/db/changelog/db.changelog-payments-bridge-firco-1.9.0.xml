@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        dbchangelog-3.10.xsd">
+
+  <changeSet id="payments-bridge-firco-1.9.0" author="tbozek">
+    <createIndex tableName="pb_alert_message_status" indexName="idx_pb_alert_message_status_status">
+      <column name="status"/>
+    </createIndex>
+  </changeSet>
+
+</databaseChangeLog>
