@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
 
+import org.springframework.amqp.core.MessageDeliveryMode;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -51,6 +52,7 @@ class MessageStoredOutboundAmqpIntegrationConfiguration {
 
     return outboundFactory
         .outboundAdapter()
+        .defaultDeliveryMode(MessageDeliveryMode.NON_PERSISTENT)
         .exchangeName(outboundExchangeName)
         .routingKey(outboundRoutingKey);
   }
