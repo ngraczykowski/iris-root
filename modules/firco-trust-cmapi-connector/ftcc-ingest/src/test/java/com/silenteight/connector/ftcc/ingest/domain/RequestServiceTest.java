@@ -8,33 +8,31 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Optional;
 
-import static com.silenteight.connector.ftcc.ingest.domain.MessageFixtures.BATCH_ID;
-import static com.silenteight.connector.ftcc.ingest.domain.MessageFixtures.PAYLOAD;
+import static com.silenteight.connector.ftcc.ingest.domain.RequestFixtures.BATCH_ID;
 import static org.assertj.core.api.Assertions.*;
 
 @Transactional
 @TestPropertySource("classpath:/data-test.properties")
 @ContextConfiguration(classes = { IngestTestConfiguration.class })
-class MessageServiceTest extends BaseDataJpaTest {
+class RequestServiceTest extends BaseDataJpaTest {
 
   @Autowired
-  private MessageService underTest;
+  private RequestService underTest;
 
   @Autowired
-  private MessageRepository messageRepository;
+  private RequestRepository requestRepository;
 
   @Test
   void shouldCreateMessage() {
     // when
-    underTest.create(BATCH_ID, PAYLOAD);
+    underTest.create(BATCH_ID);
 
     // then
-    List<MessageEntity> messages = messageRepository.findByBatchId(BATCH_ID);
-    assertThat(messages).isNotEmpty();
-    MessageEntity message = messages.get(0);
-    assertThat(message.getBatchId()).isEqualTo(BATCH_ID);
-    assertThat(message.getPayload()).isEqualTo(PAYLOAD.asText());
+    Optional<RequestEntity> requestOpt = requestRepository.findByBatchId(BATCH_ID);
+    assertThat(requestOpt).isPresent();
+    RequestEntity request = requestOpt.get();
+    assertThat(request.getBatchId()).isEqualTo(BATCH_ID);
   }
 }

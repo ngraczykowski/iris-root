@@ -9,6 +9,7 @@ plugins {
 description = "Firco Trust CMAPI Connector"
 
 dependencies {
+  implementation project(":ftcc-common")
   implementation project(":ftcc-db-changelog")
   implementation project(":ftcc-ingest")
 

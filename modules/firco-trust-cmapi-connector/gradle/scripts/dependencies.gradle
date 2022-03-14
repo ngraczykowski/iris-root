@@ -16,6 +16,7 @@ ext {
   silenteightSepBaseVersion = "1.12.2"
   warehouseProtocolVersion = "2.2.0"
   coreBridgeRegistrationConnectorVersion = "1.14.0"
+  dataPrepProtocolVersion = "0.0.1"
   jacksonVersion = "2.13.0"
 
   //***********************************
@@ -49,6 +50,7 @@ libraries.warehouse_data_api = [group: 'com.silenteight.warehouse.api', name: 's
 libraries.data_retention_api = [group: 'com.silenteight.sens.data-retention-api', name: 'data-retention-api', version: dataRetentionVersion]
 libraries.core_bridge_registration_connector_lib = [group: 'com.silenteight.registration.api.library', name: 'registration-lib', version: coreBridgeRegistrationConnectorVersion]
 libraries.core_bridge_registration_connector_proto = [group: 'com.silenteight.registration.api.library', name: 'registration-internal-protos', version: coreBridgeRegistrationConnectorVersion]
+libraries.data_prep_proto = [group: 'com.silenteight.fab', name: 'dataprep-proto', version: dataPrepProtocolVersion]
 
 // Spring
 libraries.spring_aop = [group: 'org.springframework', name: 'spring-aop']

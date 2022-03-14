@@ -2,6 +2,7 @@ package com.silenteight.connector.ftcc.ingest.domain;
 
 import lombok.NonNull;
 
+import com.silenteight.connector.ftcc.ingest.domain.port.outgoing.DataPrepMessageGateway;
 import com.silenteight.connector.ftcc.ingest.domain.port.outgoing.RegistrationApiClient;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -18,10 +19,15 @@ class IngestDomainConfiguration {
   IngestFacade ingestFacade(
       @NonNull RequestService requestService,
       @NonNull MessageService messageService,
-      @NonNull RegistrationApiClient registrationApiClient) {
+      @NonNull RegistrationApiClient registrationApiClient,
+      @NonNull DataPrepMessageGateway dataPrepMessageGateway) {
 
     return new IngestFacade(
-        new BatchIdGenerator(), requestService, messageService, registrationApiClient);
+        new BatchIdGenerator(),
+        requestService,
+        messageService,
+        registrationApiClient,
+        dataPrepMessageGateway);
   }
 
   @Bean

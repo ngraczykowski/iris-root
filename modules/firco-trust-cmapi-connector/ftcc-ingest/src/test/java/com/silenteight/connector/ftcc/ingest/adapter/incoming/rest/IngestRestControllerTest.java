@@ -1,4 +1,4 @@
-package com.silenteight.connector.ftcc.ingest.adapter.incoming;
+package com.silenteight.connector.ftcc.ingest.adapter.incoming.rest;
 
 import com.silenteight.connector.ftcc.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.connector.ftcc.ingest.domain.IngestFacade;

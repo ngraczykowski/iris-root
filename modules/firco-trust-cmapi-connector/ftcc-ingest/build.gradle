@@ -16,6 +16,7 @@ dependencies {
   implementation libraries.silenteight_sep_base_common
   implementation libraries.core_bridge_registration_connector_lib
   implementation libraries.core_bridge_registration_connector_proto
+  implementation libraries.data_prep_proto
 
   // Application Starters
   implementation libraries.spring_boot_starter_actuator

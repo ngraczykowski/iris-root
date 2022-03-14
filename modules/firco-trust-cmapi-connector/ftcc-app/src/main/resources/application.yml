@@ -13,6 +13,13 @@ ftcc:
     name: ftcc
     username: ftcc
     password: ftcc
+  #-------------------------------------------------------------------------------------------------
+  # Data Prep
+  #-------------------------------------------------------------------------------------------------
+  data-prep:
+    outbound:
+      exchange: data-prep.command
+      routing-key: command.data-prep.alert
 
 grpc:
   client:

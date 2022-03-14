@@ -15,12 +15,12 @@ class MessageService {
   @NonNull
   private final MessageRepository messageRepository;
 
-  public void create(@NonNull UUID batchId, @NonNull JsonNode payload) {
+  public UUID create(@NonNull UUID batchId, @NonNull JsonNode payload) {
     MessageEntity messageEntity = MessageEntity.builder()
         .batchId(batchId)
         .messageId(messageIdGenerator.generate())
         .payload(payload.asText())
         .build();
-    messageRepository.save(messageEntity);
+    return messageRepository.save(messageEntity).getMessageId();
   }
 }

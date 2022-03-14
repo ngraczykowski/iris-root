@@ -1,4 +1,4 @@
-package com.silenteight.connector.ftcc.ingest.adapter.outgoing;
+package com.silenteight.connector.ftcc.ingest.adapter.outgoing.grpc;
 
 import com.silenteight.connector.ftcc.ingest.dto.input.RequestBodyDto;
 import com.silenteight.connector.ftcc.ingest.dto.input.RequestDto;
@@ -18,7 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.silenteight.connector.ftcc.ingest.adapter.outgoing.RegistrationFixtures.BATCH;
+import static com.silenteight.connector.ftcc.ingest.adapter.outgoing.grpc.RegistrationFixtures.BATCH;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

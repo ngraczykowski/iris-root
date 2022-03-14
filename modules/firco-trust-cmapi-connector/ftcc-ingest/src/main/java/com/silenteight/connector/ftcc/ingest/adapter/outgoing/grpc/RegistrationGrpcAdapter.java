@@ -1,4 +1,4 @@
-package com.silenteight.connector.ftcc.ingest.adapter.outgoing;
+package com.silenteight.connector.ftcc.ingest.adapter.outgoing.grpc;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

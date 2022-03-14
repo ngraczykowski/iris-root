@@ -5,6 +5,7 @@ import com.silenteight.commons.app.spring.ConfigurableApplicationBuilder;
 import com.silenteight.commons.app.spring.DefaultSpringApplicationContextCallback;
 import com.silenteight.commons.app.spring.SpringApplicationTemplate;
 import com.silenteight.connector.ftcc.app.grpc.GrpcModule;
+import com.silenteight.connector.ftcc.common.integration.AmqpCommonModule;
 import com.silenteight.connector.ftcc.ingest.IngestModule;
 
 import org.springframework.boot.Banner.Mode;
@@ -21,6 +22,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     // Domain modules
     IngestModule.class,
     // Interface modules
+    AmqpCommonModule.class,
     GrpcModule.class
 })
 public class FtccApplication {
