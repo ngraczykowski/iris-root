@@ -26,9 +26,10 @@ grpc:
     GLOBAL:
       enableKeepAlive: true
       negotiationType: PLAINTEXT
-
     core-bridge:
       address: static://localhost:24801
+  server:
+    port: 8081
 
 spring:
   application:

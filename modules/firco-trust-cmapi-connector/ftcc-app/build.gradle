@@ -44,6 +44,7 @@ dependencies {
   implementation libraries.spring_boot_starter_logging
   implementation libraries.spring_boot_starter_undertow
   implementation libraries.spring_boot_starter_web
+  implementation libraries.grpc_server_spring_boot_starter
 
   // Jackson
   implementation libraries.jackson_annotations
