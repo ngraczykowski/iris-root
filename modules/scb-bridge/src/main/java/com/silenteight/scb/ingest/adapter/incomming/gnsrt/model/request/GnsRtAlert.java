@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @Validated
+@HasValidAlertId
 public class GnsRtAlert {
 
   @JsonProperty("watchlistType")

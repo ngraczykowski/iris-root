@@ -125,7 +125,7 @@ class GnsRtRecommendationRequestValidationTest {
 
     @Test
     void validAlertIdTest() {
-      var request = request(of(alert("US_PERD_DUDL!8A1DFAFE-EA1041B0-9F1426E6-DBD75121|")));
+      var request = request(of(alert("US_PERD_DUDL!8A1DFAFE-EA1041B0-9F1426E6-DBD75121")));
 
       assertViolationMessagesAsExpected(request);
     }
@@ -161,7 +161,7 @@ class GnsRtRecommendationRequestValidationTest {
       var alert = new GnsRtAlert();
       alert.setAlertStatus(falseMatch);
       alert.setWatchlistType(SOME_WATCHLIST_TYPE);
-      alert.setAlertId("US_PERD_DUDL!8A1DFAFE-EA1041B0-9F1426E6-DBD75121|");
+      alert.setAlertId("US_PERD_DUDL!8A1DFAFE-EA1041B0-9F1426E6-DBD75121");
       return alert;
     }
 

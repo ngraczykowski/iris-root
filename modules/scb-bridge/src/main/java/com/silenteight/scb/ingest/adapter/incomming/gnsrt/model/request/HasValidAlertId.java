@@ -6,16 +6,14 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Documented
 @Constraint(validatedBy = PotentialMatchAlertIdValidator.class)
-@Target({ FIELD, PARAMETER, METHOD })
+@Target({ TYPE })
 @Retention(RUNTIME)
-@interface AllPotentialMatchesHasValidAlertId {
+@interface HasValidAlertId {
 
   String message() default "Alert has invalid id.";
 

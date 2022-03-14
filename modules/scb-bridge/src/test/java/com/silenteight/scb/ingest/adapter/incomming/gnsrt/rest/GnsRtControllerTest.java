@@ -12,6 +12,7 @@ import io.grpc.StatusRuntimeException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import reactor.core.publisher.Mono;
 
@@ -21,6 +22,7 @@ import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -56,11 +58,47 @@ class GnsRtControllerTest {
         .andExpect(status().isOk());
   }
 
-  private static GnsRtRecommendationRequest createRequest() {
+  @Test
+  void shouldReturnBadRequestForInvalidAlertId() throws Exception {
+    //given
+    GnsRtRecommendationRequest request = createRequest(incorrectGnsRtAlert());
+
+    //when
+
+    //then
+    myMockController
+        .perform(post("/v1/gnsrt/recommendation")
+            .content(objectMapper.writeValueAsString(request))
+            .contentType(APPLICATION_JSON_VALUE)
+            .accept(APPLICATION_JSON_VALUE))
+        .andDo(MockMvcResultHandlers.print())
+        .andExpect(request().asyncNotStarted())
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.message").value(
+            "screenCustomerNameRes.screenCustomerNameResPayload."
+                + "screenCustomerNameResInfo.immediateResponseData.alerts[0]"
+                + " - Alert has invalid id."));
+  }
+
+  private static GnsRtAlert correctGnsRtAlert() {
     GnsRtAlert alert = new GnsRtAlert();
-    alert.setAlertId("a!b");
+    alert.setAlertId("US_PERD_DUDL!8A1DFAFE-EA1041B0-9F1426E6-DBD75121");
     alert.setWatchlistType("AM");
     alert.setAlertStatus(GnsRtAlertStatus.POTENTIAL_MATCH);
+    return alert;
+  }
+
+  private static GnsRtAlert incorrectGnsRtAlert() {
+    GnsRtAlert alert = correctGnsRtAlert();
+    alert.setAlertId("VN_010101010_HCVN!Sanctions");
+    return alert;
+  }
+
+  private static GnsRtRecommendationRequest createRequest() {
+    return createRequest(correctGnsRtAlert());
+  }
+
+  private static GnsRtRecommendationRequest createRequest(GnsRtAlert alert) {
 
     ImmediateResponseData immediateResponseData = new ImmediateResponseData();
     immediateResponseData.setAlerts(singletonList(alert));
@@ -113,8 +151,10 @@ class GnsRtControllerTest {
     myMockController
         .perform(post("/v1/gnsrt/recommendation")
             .content(objectMapper.writeValueAsString(request))
-            .contentType(APPLICATION_JSON_VALUE))
+            .contentType(APPLICATION_JSON_VALUE)
+            .accept(APPLICATION_JSON_VALUE))
         .andExpect(request().asyncNotStarted())
-        .andExpect(status().isServiceUnavailable());
+        .andExpect(status().isServiceUnavailable())
+        .andExpect(jsonPath("$.message").value("DEADLINE_EXCEEDED"));
   }
 }

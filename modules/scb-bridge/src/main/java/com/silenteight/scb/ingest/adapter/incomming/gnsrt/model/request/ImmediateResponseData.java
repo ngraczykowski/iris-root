@@ -32,6 +32,5 @@ public class ImmediateResponseData {
   @Valid
   @NotNull
   @AtLeastOnePotentialMatch
-  @AllPotentialMatchesHasValidAlertId
   private List<GnsRtAlert> alerts = new ArrayList<>();
 }
