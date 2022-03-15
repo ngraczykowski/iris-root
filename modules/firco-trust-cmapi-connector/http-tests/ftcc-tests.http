@@ -7,13 +7,3 @@ Accept: application/json
 Content-Type: application/json
 
 < ./requests/request-example-cmapi-trust.json
-
-###  ear-customer-bridge with DC param
-// @no-log
-// @no-cookie-jar
-//
-POST {{baseurl}}/rest/ftcc/v1/alert?dc=Data%20center
-Accept: application/json
-Content-Type: application/json
-
-< ./requests/request-example-cmapi-trust.json

@@ -120,7 +120,3 @@ spring:
       #org.hibernate.flushMode: COMMIT
       org.hibernate.envers.audit_table_suffix: _audit
       org.hibernate.envers.store_data_at_delete: true
-
-  sql:
-    init:
-      mode: never
