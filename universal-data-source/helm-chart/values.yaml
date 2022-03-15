@@ -19,7 +19,7 @@ service:
     annotations: { }
 
 category:
-  available: { }
+  available: []
 
 sentry:
   dsn: https://da12c318c5d3498591da5b6416751038@o1129201.ingest.sentry.io/6176679
