@@ -4,9 +4,9 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.connector.ftcc.common.dto.input.RequestDto;
+import com.silenteight.connector.ftcc.common.dto.output.AckDto;
 import com.silenteight.connector.ftcc.ingest.domain.IngestFacade;
-import com.silenteight.connector.ftcc.ingest.dto.input.RequestDto;
-import com.silenteight.connector.ftcc.ingest.dto.output.AckDto;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

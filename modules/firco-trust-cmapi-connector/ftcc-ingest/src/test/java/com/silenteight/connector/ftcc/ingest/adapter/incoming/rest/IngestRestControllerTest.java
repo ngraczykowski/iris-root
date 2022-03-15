@@ -1,8 +1,8 @@
 package com.silenteight.connector.ftcc.ingest.adapter.incoming.rest;
 
+import com.silenteight.connector.ftcc.common.dto.input.RequestDto;
 import com.silenteight.connector.ftcc.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.connector.ftcc.ingest.domain.IngestFacade;
-import com.silenteight.connector.ftcc.ingest.dto.input.RequestDto;
 import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
 
 import org.jetbrains.annotations.NotNull;

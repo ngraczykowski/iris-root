@@ -1,8 +1,8 @@
 package com.silenteight.connector.ftcc.ingest.adapter.outgoing.grpc;
 
-import com.silenteight.connector.ftcc.ingest.dto.input.RequestBodyDto;
-import com.silenteight.connector.ftcc.ingest.dto.input.RequestDto;
-import com.silenteight.connector.ftcc.ingest.dto.input.RequestSendMessageDto;
+import com.silenteight.connector.ftcc.common.dto.input.RequestBodyDto;
+import com.silenteight.connector.ftcc.common.dto.input.RequestDto;
+import com.silenteight.connector.ftcc.common.dto.input.RequestSendMessageDto;
 import com.silenteight.proto.registration.api.v1.RegisterBatchRequest;
 import com.silenteight.proto.registration.api.v1.RegistrationServiceGrpc.RegistrationServiceBlockingStub;
 import com.silenteight.registration.api.library.v1.RegistrationServiceGrpcAdapter;

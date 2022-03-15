@@ -3,11 +3,11 @@ package com.silenteight.connector.ftcc.ingest.domain;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.connector.ftcc.common.dto.input.RequestDto;
 import com.silenteight.connector.ftcc.ingest.common.BatchResource;
 import com.silenteight.connector.ftcc.ingest.common.MessageResource;
 import com.silenteight.connector.ftcc.ingest.domain.port.outgoing.DataPrepMessageGateway;
 import com.silenteight.connector.ftcc.ingest.domain.port.outgoing.RegistrationApiClient;
-import com.silenteight.connector.ftcc.ingest.dto.input.RequestDto;
 import com.silenteight.proto.fab.api.v1.AlertMessageStored;
 
 import org.springframework.transaction.annotation.Transactional;
