@@ -7,6 +7,7 @@ import com.silenteight.bridge.core.registration.domain.command.MarkAlertsAsRecom
 import com.silenteight.bridge.core.registration.domain.command.MarkBatchAsDeliveredCommand
 import com.silenteight.bridge.core.registration.domain.command.VerifyBatchTimeoutCommand
 import com.silenteight.bridge.core.registration.domain.model.Alert
+import com.silenteight.bridge.core.registration.domain.model.BatchPriority
 
 import spock.lang.Specification
 import spock.lang.Subject
@@ -48,17 +49,18 @@ class RegistrationFacadeSpec extends Specification {
     1 * batchService.notifyBatchError(notifyBatchErrorCommand)
   }
 
-  def 'should call register alerts and matches method'() {
+  def 'should find batch priority and call register alerts and matches method'() {
     given:
     def registerAlertsCommand = RegistrationFixtures.REGISTER_ALERTS_COMMAND
-
     def alert = Alert.builder().batchId('batch_id').build()
+    def batchPriority = new BatchPriority(RegistrationFixtures.BATCH_PRIORITY)
 
     when:
     def response = underTest.registerAlertsAndMatches(registerAlertsCommand)
 
     then:
-    1 * alertService.registerAlertsAndMatches(registerAlertsCommand) >> [alert]
+    1 * batchService.findBatchPriority(registerAlertsCommand.batchId()) >> batchPriority
+    1 * alertService.registerAlertsAndMatches(registerAlertsCommand, _ as Integer) >> [alert]
     response.size() == 1
   }
 

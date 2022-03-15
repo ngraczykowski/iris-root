@@ -211,3 +211,19 @@ databaseChangeLog:
             columnNames: match_id, alert_id
             constraintName: match_id_alert_id
             tableName: core_bridge_matches
+
+  - changeSet:
+      id: 1.0.0-2
+      author: apozorski
+      changes:
+        - addColumn:
+            tableName: core_bridge_batches
+            columns:
+              - column:
+                  name: priority
+                  type: integer
+        - addNotNullConstraint:
+            constraintName: core_bridge_non_null_batch_priority
+            tableName: core_bridge_batches
+            columnName: priority
+            defaultNullValue: "0"

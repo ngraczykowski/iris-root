@@ -8,13 +8,28 @@ public record Batch(String id,
                     Long alertsCount,
                     BatchStatus status,
                     String errorDescription,
-                    String batchMetadata) {
+                    String batchMetadata,
+                    Integer batchPriority
+) {
+
+  private static final Integer BATCH_ERROR_PRIORITY = 0;
+  private static final Long BATCH_ERROR_ALERTS_COUNT = 0L;
+  private static final String BATCH_ERROR_POLICY_NAME = "";
+  private static final String BATCH_ERROR_ANALYSIS_NAME = "";
 
   @Builder
   public Batch {}
 
   public static Batch error(String id, String errorDescription, String batchMetadata) {
-    return new Batch(id, "", "", 0L, BatchStatus.ERROR, errorDescription, batchMetadata);
+    return new Batch(
+        id,
+        BATCH_ERROR_ANALYSIS_NAME,
+        BATCH_ERROR_POLICY_NAME,
+        BATCH_ERROR_ALERTS_COUNT,
+        BatchStatus.ERROR,
+        errorDescription,
+        batchMetadata,
+        BATCH_ERROR_PRIORITY);
   }
 
   public enum BatchStatus {

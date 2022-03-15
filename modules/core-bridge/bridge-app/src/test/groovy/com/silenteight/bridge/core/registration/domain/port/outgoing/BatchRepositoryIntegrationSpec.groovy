@@ -28,6 +28,7 @@ class BatchRepositoryIntegrationSpec extends BaseSpecificationIT {
         .alertsCount(123)
         .batchMetadata("batchMetadata")
         .status(BatchStatus.STORED)
+        .batchPriority(0)
         .build()
 
     when:

@@ -12,6 +12,8 @@ import java.util.stream.Collectors
 
 class AlertServiceSpecHelper {
 
+  static def PRIORITY = 1
+
   static AlertWithMatches buildAlert(String id, List<String> matchesIds, AlertStatus status) {
     AlertWithMatches.builder()
         .alertId(id)
@@ -23,7 +25,7 @@ class AlertServiceSpecHelper {
   static AlertsToRegister.AlertWithMatches buildAlertToRegister(
       String id,
       List<String> matchesIds) {
-    new AlertsToRegister.AlertWithMatches(id, buildMatchesToRegister(matchesIds))
+    new AlertsToRegister.AlertWithMatches(id, PRIORITY, buildMatchesToRegister(matchesIds))
   }
 
   static com.silenteight.bridge.core.registration.domain.model.AlertWithMatches buildRegisteredAlert(

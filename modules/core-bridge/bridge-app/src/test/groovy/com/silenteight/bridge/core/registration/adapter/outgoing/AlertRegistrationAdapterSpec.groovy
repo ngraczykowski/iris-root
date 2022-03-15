@@ -18,9 +18,12 @@ class AlertRegistrationAdapterSpec extends Specification {
   @Subject
   def underTest = new AlertRegistrationAdapter(mapper, alertServiceClient)
 
-  def "Should register alerts and matches"() {
+  def 'should register alerts and matches'() {
     given:
-    def registerAlerts = new AlertsToRegister([new AlertWithMatches('alertId', [new Match('matchId')])])
+    def alertId = 'alertId'
+    def priority = 0
+    def matches = [new Match('matchId')]
+    def registerAlerts = new AlertsToRegister([new AlertWithMatches(alertId, priority, matches)])
 
     when:
     underTest.registerAlerts(registerAlerts)

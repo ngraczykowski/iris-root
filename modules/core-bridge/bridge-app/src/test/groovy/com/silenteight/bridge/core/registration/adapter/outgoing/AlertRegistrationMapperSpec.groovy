@@ -17,9 +17,10 @@ class AlertRegistrationMapperSpec extends Specification {
 
   def 'should map RegisterAlerts to RegisterAlertsAndMatchesIn'() {
     given:
-    def registerAlertWithMatches = [
-        new AlertWithMatches('alertId', [new Match('matchId')])
-    ]
+    def alertId = 'alertId'
+    def priority = 0
+    def matches = [new Match('matchId')]
+    def registerAlertWithMatches = [new AlertWithMatches(alertId, priority, matches)]
 
     def registerAlerts = new AlertsToRegister(registerAlertWithMatches)
 
@@ -29,6 +30,7 @@ class AlertRegistrationMapperSpec extends Specification {
     then:
     with(result.getAlertsWithMatches().first()) {
       getAlertId() == 'alertId'
+      getAlertPriority() == 0
       getMatchIds().first() == 'matchId'
     }
   }

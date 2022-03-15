@@ -8,6 +8,7 @@ public record AlertsToRegister(
 
   public record AlertWithMatches(
       String alertId,
+      Integer priority,
       List<Match> matches
   ) {}
 

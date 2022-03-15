@@ -7,6 +7,7 @@ import com.silenteight.bridge.core.registration.domain.model.Batch;
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus;
 import com.silenteight.bridge.core.registration.domain.model.BatchId;
 import com.silenteight.bridge.core.registration.domain.model.BatchIdWithPolicy;
+import com.silenteight.bridge.core.registration.domain.model.BatchPriority;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository;
 
 import org.springframework.stereotype.Repository;
@@ -37,6 +38,12 @@ class JdbcBatchRepository implements BatchRepository {
   }
 
   @Override
+  public Optional<BatchPriority> findBatchPriorityById(String id) {
+    return crudBatchRepository.findPriorityByBatchId(id)
+        .map(projection -> new BatchPriority(projection.priority()));
+  }
+
+  @Override
   public void updateStatusToCompleted(String batchId) {
     crudBatchRepository.updateStatusByBatchId(Status.COMPLETED.name(), batchId);
   }
@@ -60,6 +67,7 @@ class JdbcBatchRepository implements BatchRepository {
         .analysisName(batch.analysisName())
         .policyName(batch.policyName())
         .alertsCount(batch.alertsCount())
+        .priority(batch.batchPriority())
         .status(Status.valueOf(batch.status().name()))
         .errorDescription(batch.errorDescription())
         .batchMetadata(batch.batchMetadata())
@@ -74,6 +82,7 @@ class JdbcBatchRepository implements BatchRepository {
         .analysisName(batchEntity.analysisName())
         .policyName(batchEntity.policyName())
         .alertsCount(batchEntity.alertsCount())
+        .batchPriority(batchEntity.priority())
         .status(BatchStatus.valueOf(batchEntity.status().name()))
         .errorDescription(batchEntity.errorDescription())
         .batchMetadata(batchEntity.batchMetadata())

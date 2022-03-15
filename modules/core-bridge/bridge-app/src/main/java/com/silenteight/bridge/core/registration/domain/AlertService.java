@@ -33,7 +33,8 @@ class AlertService {
     return alertRepository.findAllWithMatchesByBatchId(batchId);
   }
 
-  List<RegistrationAlert> registerAlertsAndMatches(RegisterAlertsCommand command) {
+  List<RegistrationAlert> registerAlertsAndMatches(
+      RegisterAlertsCommand command, Integer priority) {
     var batchId = command.batchId();
     var alertIds = getAlertIds(command);
 
@@ -43,7 +44,7 @@ class AlertService {
         command.alertWithMatches(), alreadyRegisteredAlertsWithMatches, batchId);
 
     var alreadyRegistered = getAlreadyRegistered(alreadyRegisteredAlertsWithMatches);
-    var successfulAlerts = registerSuccessful(batchId, newAlerts);
+    var successfulAlerts = registerSuccessful(batchId, newAlerts, priority);
     var failedAlerts = saveFailed(batchId, newAlerts);
 
     return Stream.of(successfulAlerts, failedAlerts, alreadyRegistered)
@@ -77,10 +78,10 @@ class AlertService {
   }
 
   private List<RegistrationAlert> registerSuccessful(
-      String batchId, List<RegisterAlertsCommand.AlertWithMatches> newAlerts) {
+      String batchId, List<RegisterAlertsCommand.AlertWithMatches> newAlerts, Integer priority) {
     var successfulAlerts = getSuccessful(newAlerts);
     if (CollectionUtils.isNotEmpty(successfulAlerts)) {
-      var alertsRegisteredInAE = register(successfulAlerts, batchId);
+      var alertsRegisteredInAE = register(successfulAlerts, batchId, priority);
       log.info(
           "Alerts registered in AE for batchId: {}, alertCount: {}", batchId,
           alertsRegisteredInAE.size());
@@ -133,8 +134,9 @@ class AlertService {
   }
 
   private List<Alert> register(
-      List<RegisterAlertsCommand.AlertWithMatches> successAlerts, String batchId) {
-    var alertsToRegister = alertMapper.toAlertsToRegister(successAlerts);
+      List<RegisterAlertsCommand.AlertWithMatches> successAlerts, String batchId,
+      Integer priority) {
+    var alertsToRegister = alertMapper.toAlertsToRegister(successAlerts, priority);
     var registeredAlerts = alertRegistrationService.registerAlerts(alertsToRegister);
     return alertMapper.toAlerts(registeredAlerts, successAlerts, batchId);
   }

@@ -28,9 +28,9 @@ class AlertRegistrationMapper {
 
   private BatchRegisterAlertMatchesIn toBatchCreateAlertMatchesIn(
       AlertsToRegister.AlertWithMatches alertWithMatches) {
-
     return BatchRegisterAlertMatchesIn.builder()
         .alertId(alertWithMatches.alertId())
+        .alertPriority(alertWithMatches.priority())
         .matchIds(alertWithMatches.matches().stream()
             .map(AlertsToRegister.Match::matchId)
             .toList())
@@ -38,7 +38,6 @@ class AlertRegistrationMapper {
   }
 
   private AlertWithMatches toAlertWithMatches(AlertWithMatchesOut alertWithMatchesOut) {
-
     return AlertWithMatches.builder()
         .alertId(alertWithMatchesOut.getAlertId())
         .name(alertWithMatchesOut.getAlertName())

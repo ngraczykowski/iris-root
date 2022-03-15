@@ -15,6 +15,12 @@ interface CrudBatchRepository extends CrudRepository<BatchEntity, Long> {
   Optional<BatchIdProjection> findByAnalysisName(String analysisName);
 
   @Query("""
+      SELECT priority
+      FROM core_bridge_batches
+      WHERE batch_id = :batchId""")
+  Optional<BatchPriorityProjection> findPriorityByBatchId(String batchId);
+
+  @Query("""
       SELECT batch_id, policy_name
       FROM core_bridge_batches
       WHERE analysis_name = :analysisName""")

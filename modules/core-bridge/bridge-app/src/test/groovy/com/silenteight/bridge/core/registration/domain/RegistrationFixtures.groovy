@@ -15,6 +15,7 @@ import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.model.BatchError
 import com.silenteight.bridge.core.registration.domain.model.BatchId
 import com.silenteight.bridge.core.registration.domain.model.BatchIdWithPolicy
+import com.silenteight.bridge.core.registration.domain.model.BatchPriority
 
 class RegistrationFixtures {
 
@@ -22,6 +23,7 @@ class RegistrationFixtures {
   static def POLICY_NAME = FixturesMatchMetaData.REASON_POLICY
   static def ALERTS_COUNT = 25
   static def METADATA = "batchMetadata"
+  static def BATCH_PRIORITY = 1
   static def ERROR_DESCRIPTION = "error occurred"
 
   static def ALERT_WITH_MATCHES = [AlertWithMatches.builder().build()]
@@ -45,7 +47,7 @@ class RegistrationFixtures {
   static def BATCH_ID_WITH_POLICY_PROJECTION = new BatchIdWithPolicy(Fixtures.BATCH_ID, POLICY_NAME)
 
   static def REGISTER_BATCH_COMMAND = new RegisterBatchCommand(
-      Fixtures.BATCH_ID, ALERTS_COUNT, METADATA)
+      Fixtures.BATCH_ID, ALERTS_COUNT, METADATA, BATCH_PRIORITY)
   static def REGISTER_ALERTS_COMMAND = new RegisterAlertsCommand(
       Fixtures.BATCH_ID, ALERT_WITH_MATCHES)
   static def ADD_ALERT_TO_ANALYSIS_COMMAND = AddAlertToAnalysisCommand.builder()

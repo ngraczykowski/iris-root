@@ -133,6 +133,19 @@ class BatchServiceSpec extends Specification {
     result == RegistrationFixtures.BATCH_ID_PROJECTION
   }
 
+  def 'should find batch priority by analysis name'() {
+    given:
+    def batchId = Fixtures.BATCH_ID
+
+    when:
+    def result = underTest.findBatchPriority(batchId)
+
+    then:
+    1 * batchRepository.findBatchPriorityById(batchId) >>
+        Optional.of(new BatchPriority(RegistrationFixtures.BATCH_PRIORITY))
+    result.priority() == RegistrationFixtures.BATCH_PRIORITY
+  }
+
   def 'should find batch with policy projection by analysis name'() {
     given:
     def analysisName = RegistrationFixtures.ANALYSIS_NAME

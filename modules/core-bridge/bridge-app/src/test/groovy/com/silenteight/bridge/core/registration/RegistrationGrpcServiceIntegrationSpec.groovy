@@ -2,6 +2,7 @@ package com.silenteight.bridge.core.registration
 
 import com.silenteight.bridge.core.BaseSpecificationIT
 import com.silenteight.bridge.core.registration.domain.model.AlertStatus
+import com.silenteight.bridge.core.registration.domain.model.Batch
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository
@@ -42,18 +43,20 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
   @GrpcClient("inProcess")
   private RegistrationServiceBlockingStub myService
 
-  def "Should register batch"() {
+  def 'should register batch'() {
     given:
     def batchId = UUID.randomUUID().toString()
     def alertsSize = 123
-    def metadata = """
+    def priority = 1
+    def metadata = '''
         { 
           "someClientField": "123",
           "someSpecialClientData": "Lorem ipsum" 
         }
-        """
+        '''
     def registerBatchRequest = RegisterBatchRequest.newBuilder()
         .setBatchId(batchId)
+        .setBatchPriority(priority)
         .setAlertCount(alertsSize)
         .setBatchMetadata(metadata)
         .build()
@@ -72,15 +75,16 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
         BatchStatus.STORED == status()
         alertsCount() == alertsSize
         batchMetadata() == metadata
+        batchPriority() == priority
       }
     }
   }
 
-  def "Should notify batch error"() {
+  def 'should notify batch error'() {
     given:
     def id = UUID.randomUUID().toString()
-    def error = "error occurred"
-    def metadata = "batchMetadata"
+    def error = 'error occurred'
+    def metadata = 'batchMetadata'
 
     def notifyBatchErrorRequest = NotifyBatchErrorRequest.newBuilder()
         .setBatchId(id)
@@ -107,7 +111,7 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
       }
     }
 
-    and: "Batch Error event has been published"
+    and: 'Batch Error event has been published'
 
     def messageBatchError = (MessageBatchError) rabbitTemplate
         .receiveAndConvert(NotifyBatchErrorFlowRabbitMqTestConfig.TEST_QUEUE_NAME, 10000L)
@@ -119,16 +123,16 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
     }
   }
 
-  def "Should register alerts with matches"() {
+  def 'should register alerts with matches'() {
     given:
     def batchIdInput = UUID.randomUUID().toString()
     def alertIdInput = UUID.randomUUID().toString()
-    def alertMetadata = """
+    def alertMetadata = '''
         { 
           "someClientField": "123",
           "someSpecialClientData": "Lorem ipsum" 
         }
-        """
+        '''
     def matchIdInput = UUID.randomUUID().toString()
 
     def matchesInput = [
@@ -150,6 +154,21 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
         .setBatchId(batchIdInput)
         .addAllAlertsWithMatches(alertsWithMatches)
         .build()
+
+    def analysisName = UUID.randomUUID().toString()
+    def policyName = UUID.randomUUID().toString()
+    def batch = Batch.builder()
+        .id(batchIdInput)
+        .analysisName(analysisName)
+        .policyName(policyName)
+        .alertsCount(123)
+        .batchMetadata('batchMetadata')
+        .status(BatchStatus.STORED)
+        .batchPriority(1)
+        .build()
+
+    and: 'Batch with priority was created'
+    batchRepository.create(batch)
 
     when:
     myService.registerAlertsAndMatches(registerAlertsAndMatchesRequest)

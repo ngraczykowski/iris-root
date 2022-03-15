@@ -4,6 +4,7 @@ import com.silenteight.bridge.core.registration.domain.model.Batch;
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus;
 import com.silenteight.bridge.core.registration.domain.model.BatchId;
 import com.silenteight.bridge.core.registration.domain.model.BatchIdWithPolicy;
+import com.silenteight.bridge.core.registration.domain.model.BatchPriority;
 
 import java.util.Optional;
 
@@ -14,6 +15,8 @@ public interface BatchRepository {
   Optional<BatchId> findBatchIdByAnalysisName(String analysisName);
 
   Optional<BatchIdWithPolicy> findBatchIdWithPolicyByAnalysisName(String analysisName);
+
+  Optional<BatchPriority> findBatchPriorityById(String id);
 
   Batch create(Batch batch);
 

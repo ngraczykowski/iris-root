@@ -52,6 +52,11 @@ class BatchService {
         .orElseThrow();
   }
 
+  BatchPriority findBatchPriority(String batchId) {
+    return batchRepository.findBatchPriorityById(batchId)
+        .orElseThrow();
+  }
+
   void notifyBatchError(NotifyBatchErrorCommand notifyBatchErrorCommand) {
     batchRepository.findById(notifyBatchErrorCommand.id())
         .ifPresentOrElse(
@@ -123,6 +128,7 @@ class BatchService {
         .alertsCount(registerBatchCommand.alertCount())
         .batchMetadata(registerBatchCommand.batchMetadata())
         .status(BatchStatus.STORED)
+        .batchPriority(registerBatchCommand.batchPriority())
         .build();
 
     var createdBatch = batchRepository.create(batch);

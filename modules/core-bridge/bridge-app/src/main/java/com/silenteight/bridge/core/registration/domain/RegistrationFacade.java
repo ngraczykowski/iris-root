@@ -57,7 +57,8 @@ public class RegistrationFacade {
   }
 
   public List<RegistrationAlert> registerAlertsAndMatches(RegisterAlertsCommand command) {
-    return alertService.registerAlertsAndMatches(command);
+    var batchPriority = batchService.findBatchPriority(command.batchId()).priority();
+    return alertService.registerAlertsAndMatches(command, batchPriority);
   }
 
   public void markBatchAsDelivered(MarkBatchAsDeliveredCommand markBatchAsDeliveredCommand) {

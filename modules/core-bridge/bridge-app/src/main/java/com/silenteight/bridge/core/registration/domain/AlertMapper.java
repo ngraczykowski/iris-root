@@ -11,9 +11,10 @@ import java.util.List;
 @Component
 class AlertMapper {
 
-  AlertsToRegister toAlertsToRegister(List<RegisterAlertsCommand.AlertWithMatches> alerts) {
+  AlertsToRegister toAlertsToRegister(
+      List<RegisterAlertsCommand.AlertWithMatches> alerts, Integer priority) {
     return new AlertsToRegister(alerts.stream()
-        .map(this::toAlertWithMatches)
+        .map(alertWithMatches -> toAlertWithMatches(alertWithMatches, priority))
         .toList());
   }
 
@@ -61,9 +62,11 @@ class AlertMapper {
         .orElseThrow();
   }
 
-  private AlertWithMatches toAlertWithMatches(RegisterAlertsCommand.AlertWithMatches alert) {
+  private AlertWithMatches toAlertWithMatches(
+      RegisterAlertsCommand.AlertWithMatches alert, Integer priority) {
     return new AlertWithMatches(
         alert.alertId(),
+        priority,
         alert.matches().stream()
             .map(match -> new AlertsToRegister.Match(match.id()))
             .toList());

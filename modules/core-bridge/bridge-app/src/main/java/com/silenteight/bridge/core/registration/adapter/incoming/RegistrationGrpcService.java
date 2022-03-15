@@ -26,7 +26,8 @@ class RegistrationGrpcService extends RegistrationServiceGrpc.RegistrationServic
     var batchId = registrationFacade.register(new RegisterBatchCommand(
         request.getBatchId(),
         request.getAlertCount(),
-        request.getBatchMetadata()
+        request.getBatchMetadata(),
+        request.getBatchPriority()
     ));
     log.info("New batch registered with id: {}", batchId);
     responseObserver.onNext(Empty.getDefaultInstance());

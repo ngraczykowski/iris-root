@@ -36,6 +36,7 @@ class AlertServiceSpec extends Specification {
 
   def 'two unregistered successful alerts: should save both alerts and matches'() {
     given:
+    def priority = 1
     def alertsWithMatches = [
         buildAlert('alert_id_1', ['match_id_11'], AlertStatus.SUCCESS),
         buildAlert('alert_id_2', ['match_id_21'], AlertStatus.SUCCESS)
@@ -62,7 +63,7 @@ class AlertServiceSpec extends Specification {
     ]
 
     when:
-    def response = underTest.registerAlertsAndMatches(command)
+    def response = underTest.registerAlertsAndMatches(command, priority)
 
     then:
     with(alertRepository) {
@@ -70,7 +71,7 @@ class AlertServiceSpec extends Specification {
       1 * saveAlerts(_ as List<Alert>)
     }
     with(alertMapper) {
-      1 * toAlertsToRegister(_ as List<AlertWithMatches>) >> alertsToRegister
+      1 * toAlertsToRegister(_ as List<AlertWithMatches>, _ as Integer) >> alertsToRegister
       1 * toAlerts(_ as RegisteredAlerts, alertsWithMatches, 'batch_id_1') >> alerts
       1 * toErrorAlerts([] as List<AlertWithMatches>, 'batch_id_1') >> []
     }
@@ -86,6 +87,7 @@ class AlertServiceSpec extends Specification {
 
   def 'one registered and one unregistered alerts: should save only unregistered alert and matches'() {
     given:
+    def priority = 1
     def registeredId = "alert_id_1"
     def unregisteredId = "alert_id_2"
     def unregistered = buildAlert(unregisteredId, ['match_id_21'], AlertStatus.SUCCESS)
@@ -117,7 +119,7 @@ class AlertServiceSpec extends Specification {
     def alertsFromDB = [buildRegisteredAlert(registeredId)]
 
     when:
-    def response = underTest.registerAlertsAndMatches(command)
+    def response = underTest.registerAlertsAndMatches(command, priority)
 
     then:
     with(alertRepository) {
@@ -125,7 +127,7 @@ class AlertServiceSpec extends Specification {
       1 * saveAlerts(_ as List<Alert>)
     }
     with(alertMapper) {
-      1 * toAlertsToRegister(_ as List<AlertWithMatches>) >> alertsToRegister
+      1 * toAlertsToRegister(_ as List<AlertWithMatches>, _ as Integer) >> alertsToRegister
       1 * toAlerts(_ as RegisteredAlerts, [unregistered], 'batch_id_1') >> alerts
       1 * toErrorAlerts([] as List<AlertWithMatches>, 'batch_id_1') >> []
     }
@@ -140,6 +142,7 @@ class AlertServiceSpec extends Specification {
   }
 
   def 'two registered successful alerts: should not register alerts'() {
+    def priority = 1
     def firstRegisteredId = "alert_id_1"
     def secondRegisteredId = "alert_id_2"
 
@@ -161,7 +164,7 @@ class AlertServiceSpec extends Specification {
     ]
 
     when:
-    def response = underTest.registerAlertsAndMatches(command)
+    def response = underTest.registerAlertsAndMatches(command, priority)
 
     then:
     with(alertRepository) {
@@ -169,7 +172,7 @@ class AlertServiceSpec extends Specification {
       0 * saveAlerts(_ as List<Alert>)
     }
     with(alertMapper) {
-      0 * toAlertsToRegister(_ as List<AlertWithMatches>)
+      0 * toAlertsToRegister(_ as List<AlertWithMatches>, _ as Integer)
       0 * toAlerts(_ as RegisteredAlerts, [], 'batch_id_1')
       1 * toErrorAlerts([] as List<AlertWithMatches>, 'batch_id_1') >> []
     }
@@ -185,6 +188,7 @@ class AlertServiceSpec extends Specification {
 
   def 'two unregistered alerts with status SUCCESS and FAILURE: should save both alerts and matches'() {
     given:
+    def priority = 1
     def successAlertId = 'alert_id_1'
     def failedAlertId = 'alert_id_2'
 
@@ -215,7 +219,7 @@ class AlertServiceSpec extends Specification {
     def failedAlerts = [buildRegistrationAlert(failedAlertId, Status.FAILURE)]
 
     when:
-    def response = underTest.registerAlertsAndMatches(command)
+    def response = underTest.registerAlertsAndMatches(command, priority)
 
     then:
     with(alertRepository) {
@@ -223,7 +227,7 @@ class AlertServiceSpec extends Specification {
       2 * saveAlerts(_ as List<Alert>)
     }
     with(alertMapper) {
-      1 * toAlertsToRegister(_ as List<AlertWithMatches>) >> alertsToRegister
+      1 * toAlertsToRegister(_ as List<AlertWithMatches>, _ as Integer) >> alertsToRegister
       1 * toAlerts(_ as RegisteredAlerts, [successAlert], 'batch_id_1') >> alerts
       1 * toErrorAlerts([failedAlert] as List<AlertWithMatches>, 'batch_id_1') >> failedAlerts
     }
@@ -239,6 +243,7 @@ class AlertServiceSpec extends Specification {
 
   def 'two alerts - registered FAILURE and unregistered SUCCESS: should register SUCCESS alert'() {
     given:
+    def priority = 1
     def successAlertId = 'alert_id_1'
     def failedAlertId = 'alert_id_2'
 
@@ -270,7 +275,7 @@ class AlertServiceSpec extends Specification {
     def failedAlerts = [buildRegistrationAlert(failedAlertId, Status.FAILURE)]
 
     when:
-    def response = underTest.registerAlertsAndMatches(command)
+    def response = underTest.registerAlertsAndMatches(command, priority)
 
     then:
     with(alertRepository) {
@@ -278,7 +283,7 @@ class AlertServiceSpec extends Specification {
       1 * saveAlerts(_ as List<Alert>)
     }
     with(alertMapper) {
-      1 * toAlertsToRegister(_ as List<AlertWithMatches>) >> alertsToRegister
+      1 * toAlertsToRegister(_ as List<AlertWithMatches>, _ as Integer) >> alertsToRegister
       1 * toAlerts(_ as RegisteredAlerts, [successAlert], 'batch_id_1') >> alerts
       0 * toErrorAlerts([failedAlert] as List<AlertWithMatches>, 'batch_id_1')
     }
@@ -293,6 +298,7 @@ class AlertServiceSpec extends Specification {
 
   def 'two alerts - unregistered FAILURE and registered SUCCESS: should register FAILURE alert'() {
     given:
+    def priority = 1
     def successAlertId = 'alert_id_1'
     def failedAlertId = 'alert_id_2'
 
@@ -313,7 +319,7 @@ class AlertServiceSpec extends Specification {
     def failedAlerts = [buildRegistrationAlert(failedAlertId, Status.FAILURE)]
 
     when:
-    def response = underTest.registerAlertsAndMatches(command)
+    def response = underTest.registerAlertsAndMatches(command, priority)
 
     then:
     with(alertRepository) {
@@ -321,7 +327,7 @@ class AlertServiceSpec extends Specification {
       1 * saveAlerts(_ as List<Alert>)
     }
     with(alertMapper) {
-      0 * toAlertsToRegister(_ as List<AlertWithMatches>)
+      0 * toAlertsToRegister(_ as List<AlertWithMatches>, _ as Integer)
       0 * toAlerts(_ as RegisteredAlerts, [successAlert], 'batch_id_1')
       1 * toErrorAlerts([failedAlert] as List<AlertWithMatches>, 'batch_id_1') >> failedAlerts
     }
@@ -336,6 +342,7 @@ class AlertServiceSpec extends Specification {
   }
 
   def 'two registered failure alerts: should not register alerts'() {
+    def priority = 1
     def firstRegisteredId = "alert_id_1"
     def secondRegisteredId = "alert_id_2"
 
@@ -357,7 +364,7 @@ class AlertServiceSpec extends Specification {
     ]
 
     when:
-    def response = underTest.registerAlertsAndMatches(command)
+    def response = underTest.registerAlertsAndMatches(command, priority)
 
     then:
     with(alertRepository) {
@@ -365,7 +372,7 @@ class AlertServiceSpec extends Specification {
       0 * saveAlerts(_ as List<Alert>)
     }
     with(alertMapper) {
-      0 * toAlertsToRegister(_ as List<AlertWithMatches>)
+      0 * toAlertsToRegister(_ as List<AlertWithMatches>, _ as Integer)
       0 * toAlerts(_ as RegisteredAlerts, [], 'batch_id_1')
       1 * toErrorAlerts([] as List<AlertWithMatches>, 'batch_id_1') >> []
     }

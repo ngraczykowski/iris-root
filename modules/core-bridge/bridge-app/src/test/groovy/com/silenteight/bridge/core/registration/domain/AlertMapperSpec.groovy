@@ -14,8 +14,9 @@ class AlertMapperSpec extends Specification {
   @Subject
   def underTest = new AlertMapper()
 
-  def 'should map command alerts to register alerts'() {
+  def 'should map command alerts to AlertsToRegister'() {
     given:
+    def priorityIn = 0;
     def matchesIn = [
         new Match('matchId')
     ]
@@ -29,11 +30,12 @@ class AlertMapperSpec extends Specification {
     ]
 
     when:
-    def result = underTest.toAlertsToRegister(alerts)
+    def result = underTest.toAlertsToRegister(alerts, priorityIn)
 
     then:
     with(result.registerAlertsWithMatches().first()) {
       alertId() == 'alertId'
+      priority() == priorityIn
       matches().first().matchId() == 'matchId'
     }
   }
