@@ -37,3 +37,6 @@ build/
 
 ## NOMAD
 nomad/artifacts
+
+## Python Scripts venvs
+scripts/deploy/venv

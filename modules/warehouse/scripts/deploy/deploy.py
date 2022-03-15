@@ -90,10 +90,10 @@ class Deployer:
 
         nomad_files = project.repository_tree(path=NOMAD_FOLDER, ref=artifact.branch, recursive=True)
 
-        additiona_configs = project.repository_tree(path=ADDITIONAL_CONF_FOLDER, ref=artifact.branch, recursive=True)
+        additional_configs = project.repository_tree(path=ADDITIONAL_CONF_FOLDER, ref=artifact.branch, recursive=True)
 
         _download_repository_files(artifact, nomad_files, project)
-        _download_repository_files(artifact, additiona_configs, project)
+        _download_repository_files(artifact, additional_configs, project)
 
     def _execute_nomad_deployment(self, artifact):
         cwd = os.path.join(os.getcwd(), 'tmp/nomad')
