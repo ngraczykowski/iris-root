@@ -15,28 +15,64 @@ client_id={{client-id}}&client_secret={{client-secret}}&grant_type=client_creden
   client.global.set("access_token", response.body["access_token"]);
 %}
 
+
 ### Trigger batch job etl
+### When file name is not set jobs will take all alerts
 POST {{baseurl}}/rest/pb/batch/trigger
 Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
-{"JobName" : "etl-job", "FileName" :  "learning/learningMockSystemId.csv"}
+{
+  "JobName": "etl-job",
+  "FileName": "learning/learningMockSystemId.csv"
+}
 
 ### Trigger batch historical risk job
+### When file name is not set jobs will take all alerts
 POST {{baseurl}}/rest/pb/batch/trigger
 Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
-{"JobName" : "historical-risk-assessment-job", "FileName" :  "learning/mocked_learning.csv"}
+{
+  "JobName": "historical-risk-assessment-job",
+  "FileName": ""
+}
+
+### Trigger batch contextual risk job
+### When file name is not set jobs will take all alerts
+POST {{baseurl}}/rest/pb/batch/trigger
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "JobName": "contextual-learning-job",
+  "FileName": ""
+}
+
+### Trigger batch historical risk job
+### When file name is not set jobs will take all alerts
+POST {{baseurl}}/rest/pb/batch/trigger
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "JobName": "re-etl-job",
+  "FileName": "sierra-user/learning_feed/svb_learn_02_03_2022.csv",
+  "Features": []
+}
 
 
 ### Trigger batch for re-etl
+### When file name is not set jobs will take all alerts
+### When features are not set job will etl all features
 POST {{baseurl}}/rest/pb/batch/trigger
 Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
-{"JobName" : "re-etl-job", "FileName" :  "learning/mocked_learning.csv", "Features":  []}
+{"JobName" : "re-etl-job", "FileName" :  "", "Features":  []}
 
