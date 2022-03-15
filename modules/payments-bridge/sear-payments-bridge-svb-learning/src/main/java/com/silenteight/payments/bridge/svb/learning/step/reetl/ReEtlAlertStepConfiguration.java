@@ -7,8 +7,8 @@ import com.silenteight.payments.bridge.svb.learning.domain.AlertComposite;
 import com.silenteight.payments.bridge.svb.learning.job.etl.EtlJobProperties;
 import com.silenteight.payments.bridge.svb.learning.step.composite.AlertCompositeReaderFactory;
 import com.silenteight.payments.bridge.svb.learning.step.etl.IngestDatasourceService;
-import com.silenteight.payments.bridge.svb.learning.step.etl.feature.port.CreateFeatureUseCase;
 
+import org.apache.commons.lang3.StringUtils;
 import org.intellij.lang.annotations.Language;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.Step;
@@ -44,6 +44,10 @@ class ReEtlAlertStepConfiguration {
       + " WHERE file_name= ? ";
 
 
+  @Language("PostgreSQL")
+  private static final String QUERY_WITH_OUT_FILE_NAME = "SELECT learning_alert_id"
+          + " FROM pb_learning_alert";
+
   @Bean
   @StepScope
   AbstractItemStreamItemReader<AlertComposite> reCompositeAlertReader(
@@ -51,10 +55,17 @@ class ReEtlAlertStepConfiguration {
       @Value("#{stepExecution}") final StepExecution stepExecution,
       final EtlJobProperties properties
   ) {
+
     final String fileName = stepExecution.getJobParameters().getString(FILE_NAME_PARAMETER);
+    if (StringUtils.isNotBlank(fileName)) {
+
+      return alertCompositeReaderFactory.createAlertCompositeReader(
+          QUERY, fileName, properties.getChunkSize());
+    }
 
     return alertCompositeReaderFactory.createAlertCompositeReader(
-        QUERY, fileName, properties.getChunkSize());
+        QUERY_WITH_OUT_FILE_NAME, fileName, properties.getChunkSize());
+
   }
 
 
@@ -86,10 +97,9 @@ class ReEtlAlertStepConfiguration {
   ReEtlAlertProcessor reEtlAlertProcessor(
       final FindRegisteredAlertUseCase findRegisteredAlertUseCase,
       @Value("#{stepExecution}") StepExecution stepExecution,
-      final CreateFeatureUseCase createFeatureUseCase,
       final IngestDatasourceService ingestDatasourceService
   ) {
-    return create(findRegisteredAlertUseCase, createFeatureUseCase,
+    return create(findRegisteredAlertUseCase,
         stepExecution.getJobParameters(), ingestDatasourceService
     );
   }
@@ -97,7 +107,6 @@ class ReEtlAlertStepConfiguration {
   @Nonnull
   private ReEtlAlertProcessor create(
       final FindRegisteredAlertUseCase findRegisteredAlertUseCase,
-      final CreateFeatureUseCase createFeatureUseCase,
       final JobParameters jobParameters,
       final IngestDatasourceService ingestDatasourceService
   ) {

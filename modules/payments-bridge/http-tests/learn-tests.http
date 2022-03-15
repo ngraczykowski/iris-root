@@ -31,3 +31,12 @@ Authorization: Bearer {{access_token}}
 
 {"JobName" : "historical-risk-assessment-job", "FileName" :  "learning/mocked_learning.csv"}
 
+
+### Trigger batch for re-etl
+POST {{baseurl}}/rest/pb/batch/trigger
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{"JobName" : "re-etl-job", "FileName" :  "learning/mocked_learning.csv", "Features":  []}
+

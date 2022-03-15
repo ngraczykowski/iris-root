@@ -32,7 +32,7 @@ class ApplicationJobMaintainer implements JobMaintainer {
 
   private final List<Job> jobs;
 
-  private final JobLauncher jobLauncher;
+  private final JobLauncher searJobLauncher;
   private final JobExplorer jobExplorer;
   private final JobOperator jobOperator;
   private final JobRegistry jobRegistry;
@@ -151,7 +151,7 @@ class ApplicationJobMaintainer implements JobMaintainer {
 
   private Optional<JobExecution> runJob(Job job, JobParameters params) {
     try {
-      return Optional.of(jobLauncher.run(job, params));
+      return Optional.of(searJobLauncher.run(job, params));
     } catch (JobExecutionAlreadyRunningException e) {
       log.warn("Job execution failure already running {}", job.getName());
     } catch (JobRestartException e) {
