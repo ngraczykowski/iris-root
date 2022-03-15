@@ -66,12 +66,18 @@ class RegistrationRabbitConfiguration {
   }
 
   @Bean
+  DirectExchange matchFeatureInputSetFedExchange(
+      AmqpRegistrationIncomingMatchFeatureInputSetFedProperties properties) {
+    return new DirectExchange(properties.exchangeName());
+  }
+
+  @Bean
   Binding matchFeatureInputSetFedBinding(
       @Qualifier("matchFeatureInputSetFedQueue") Queue queue,
-      AmqpRegistrationIncomingMatchFeatureInputSetFedProperties properties) {
+      @Qualifier("matchFeatureInputSetFedExchange") DirectExchange exchange) {
     return BindingBuilder
         .bind(queue)
-        .to(new DirectExchange(properties.exchangeName()))
+        .to(exchange)
         .with(EMPTY_ROUTING_KEY);
   }
 
@@ -147,12 +153,18 @@ class RegistrationRabbitConfiguration {
   }
 
   @Bean
+  DirectExchange recommendationsDeliveredExchange(
+      AmqpRegistrationIncomingRecommendationDeliveredProperties properties) {
+    return new DirectExchange(properties.exchangeName());
+  }
+
+  @Bean
   Binding recommendationsDeliveredBinding(
       @Qualifier("recommendationsDeliveredQueue") Queue queue,
-      AmqpRegistrationIncomingRecommendationDeliveredProperties properties) {
+      @Qualifier("recommendationsDeliveredExchange") DirectExchange exchange) {
     return BindingBuilder
         .bind(queue)
-        .to(new DirectExchange(properties.exchangeName()))
+        .to(exchange)
         .with(EMPTY_ROUTING_KEY);
   }
 
