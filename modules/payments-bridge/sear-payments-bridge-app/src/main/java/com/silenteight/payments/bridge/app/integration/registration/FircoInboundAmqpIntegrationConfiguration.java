@@ -111,7 +111,6 @@ class FircoInboundAmqpIntegrationConfiguration {
   private AmqpInboundChannelAdapterSMLCSpec createInboundAdapter(String... queueNames) {
     return inboundFactory
         .simpleAdapter()
-        .configureContainer(
-            c -> c.addQueueNames(queueNames).maxConcurrentConsumers(1).prefetchCount(25));
+        .configureContainer(c -> c.addQueueNames(queueNames));
   }
 }
