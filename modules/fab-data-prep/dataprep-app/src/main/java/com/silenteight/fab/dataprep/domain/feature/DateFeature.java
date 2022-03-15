@@ -13,7 +13,7 @@ import com.jayway.jsonpath.ParseContext;
 
 import java.util.List;
 
-import static com.silenteight.fab.dataprep.infrastructure.FeatureConfiguration.LIST_OF_STRINGS;
+import static com.silenteight.fab.dataprep.infrastructure.FeatureAndCategoryConfiguration.LIST_OF_STRINGS;
 import static java.util.List.of;
 
 @RequiredArgsConstructor

@@ -19,6 +19,7 @@ public class ParsedAlertMessage {
   AlertStatus status;
   AlertErrorDescription errorDescription;
   ParsedMessageData parsedMessageData;
+  String systemId;
   Map<String, Hit> hits;
 
   public Hit getHit(String hitName) {

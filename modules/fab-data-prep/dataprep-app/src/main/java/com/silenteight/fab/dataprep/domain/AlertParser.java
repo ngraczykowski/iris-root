@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.silenteight.fab.dataprep.infrastructure.FeatureConfiguration.LIST_OF_STRINGS;
+import static com.silenteight.fab.dataprep.infrastructure.FeatureAndCategoryConfiguration.LIST_OF_STRINGS;
 import static java.util.function.UnaryOperator.identity;
 import static java.util.stream.Collectors.toMap;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -31,6 +31,8 @@ public class AlertParser {
 
   private static final String MESSAGE_DATA_PATH = "$.MessageData";
 
+  private static final String SYSTEM_ID_PATH = "$.SystemID";
+
   private final ParseContext parseContext;
 
   private final MessageDataTokenizer messageDataTokenizer;
@@ -42,6 +44,7 @@ public class AlertParser {
         .batchName(message.getBatchName())
         .messageName(message.getMessageName())
         .parsedMessageData(parseMessageData(documentContext))
+        .systemId(getSystemId(documentContext))
         .hits(getMatches(documentContext))
         .build();
     //TODO set fields: alertName, status, errorDescription, matches
@@ -66,5 +69,11 @@ public class AlertParser {
   private static List<JsonNode> getHits(DocumentContext documentContext) {
     TypeRef<List<JsonNode>> typeRef = new TypeRef<>() {};
     return documentContext.read(HITS_PATH, typeRef);
+  }
+
+  private static String getSystemId(DocumentContext documentContext) {
+    return documentContext.read(SYSTEM_ID_PATH, LIST_OF_STRINGS).stream()
+        .findFirst()
+        .orElse(null);
   }
 }

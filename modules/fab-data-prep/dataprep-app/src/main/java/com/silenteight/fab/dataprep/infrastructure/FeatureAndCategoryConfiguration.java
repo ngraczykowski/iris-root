@@ -1,5 +1,7 @@
 package com.silenteight.fab.dataprep.infrastructure;
 
+import com.silenteight.fab.dataprep.domain.category.FabCategory;
+import com.silenteight.fab.dataprep.domain.category.SanctionCategory;
 import com.silenteight.fab.dataprep.domain.feature.*;
 
 import com.jayway.jsonpath.JsonPath;
@@ -15,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 @Configuration
-public class FeatureConfiguration {
+public class FeatureAndCategoryConfiguration {
 
   public static final TypeRef<List<String>> LIST_OF_STRINGS = new TypeRef<>() {};
 
@@ -75,5 +77,11 @@ public class FeatureConfiguration {
   @ConditionalOnProperty("feeding.features.document-number-feature.enabled")
   FabFeature documentNumberFeature(ParseContext parseContext) {
     return new DocumentNumberFeature(parseContext);
+  }
+
+  @Bean
+  @ConditionalOnProperty("feeding.categories.is_san.enabled")
+  FabCategory sanctionCategory() {
+    return new SanctionCategory("is_san");
   }
 }

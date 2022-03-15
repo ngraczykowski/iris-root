@@ -12,9 +12,11 @@ class FeedingServiceTest extends Specification {
 
   AgentInputServiceClient agentInputServiceClient = Mock()
 
+  CategoryService categoryService = Mock()
+
   def "should fail when no features were initialized"() {
     when:
-    new FeedingService([], agentInputServiceClient)
+    new FeedingService([], agentInputServiceClient, categoryService)
 
     then:
     thrown(IllegalStateException)
@@ -27,7 +29,7 @@ class FeedingServiceTest extends Specification {
         Mock(FabFeature)
     ]
 
-    def featureService = new FeedingService(features, agentInputServiceClient)
+    def featureService = new FeedingService(features, agentInputServiceClient, categoryService)
 
     def command = FeatureInputsCommand.builder()
         .registeredAlert(
@@ -50,5 +52,6 @@ class FeedingServiceTest extends Specification {
     then:
     features.each {1 * it.buildFeature(_) }
     1 * agentInputServiceClient.createBatchCreateAgentInputs(_) >> []
+    1 * categoryService.createCategoryInputs(command)
   }
 }

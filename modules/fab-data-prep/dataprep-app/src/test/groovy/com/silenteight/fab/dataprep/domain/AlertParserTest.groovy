@@ -7,11 +7,13 @@ import groovy.json.JsonSlurper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
+import org.springframework.test.context.ActiveProfiles
 import spock.lang.Specification
 
 import static com.silenteight.fab.dataprep.domain.Fixtures.*
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
+@ActiveProfiles("dev")
 class AlertParserTest extends Specification {
 
   @Autowired
@@ -29,6 +31,7 @@ class AlertParserTest extends Specification {
 
     then:
     parsedAlertMessage.getParsedMessageData().getGender() == "M";
+    parsedAlertMessage.getSystemId() == 'TRAINING!60C2ED1B-58A1D68E-0326AE78-A8C7CC79'
     parsedAlertMessage.hits.size() == 1
     parsedAlertMessage.hits.values().each  {it ->
       def parser = new JsonSlurper();

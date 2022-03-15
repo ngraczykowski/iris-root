@@ -55,6 +55,7 @@ public class RegistrationService {
         .batchName(parsedAlertMessage.getBatchName())
         .messageName(registeredAlertWithMatchesOut.getAlertId())
         .alertName(registeredAlertWithMatchesOut.getAlertName())
+        .systemId(parsedAlertMessage.getSystemId())
         .matches(matches)
         .build();
   }

@@ -23,15 +23,18 @@ class FeedingService {
 
   private final List<FabFeature> features;
   private final AgentInputServiceClient agentInputServiceClient;
+  private final CategoryService categoryService;
 
   FeedingService(
       List<FabFeature> features,
-      AgentInputServiceClient agentInputServiceClient) {
+      AgentInputServiceClient agentInputServiceClient,
+      CategoryService categoryService) {
     if (features.isEmpty()) {
       throw new IllegalStateException("There are no features enabled.");
     }
     this.features = features;
     this.agentInputServiceClient = agentInputServiceClient;
+    this.categoryService = categoryService;
   }
 
   void createFeatureInputs(FeatureInputsCommand featureInputsCommand) {
@@ -47,6 +50,8 @@ class FeedingService {
         .collect(toList());
 
     feedUds(agentInputs);
+
+    categoryService.createCategoryInputs(featureInputsCommand);
   }
 
   private List<Feature> buildFeatures(

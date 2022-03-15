@@ -25,6 +25,7 @@ class RegistrationServiceTest extends Specification {
     def alerts = ['alertId': ParsedAlertMessage.builder()
         .batchName('batchId')
         .messageName('alertId')
+        .systemId('systemId')
         .hits([
             'matchId': Hit.builder()
                 .hitName('matchId')
@@ -55,6 +56,7 @@ class RegistrationServiceTest extends Specification {
     then:
     registeredAlerts.each {
       assert it.getAlertName() == 'alertName'
+      assert it.getSystemId() == 'systemId'
       it.matches.each {assert it.getMatchName() == 'matchName'}
     }
     1 * registrationServiceClient.registerAlertsAndMatches(_) >> response

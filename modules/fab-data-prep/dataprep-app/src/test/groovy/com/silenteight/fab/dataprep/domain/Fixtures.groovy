@@ -1,5 +1,6 @@
 package com.silenteight.fab.dataprep.domain
 
+import com.silenteight.fab.dataprep.domain.category.BuildCategoryCommand
 import com.silenteight.fab.dataprep.domain.feature.BuildFeatureCommand
 import com.silenteight.fab.dataprep.domain.feature.FeatureInputsCommand
 import com.silenteight.fab.dataprep.domain.model.ParsedMessageData
@@ -13,11 +14,12 @@ import static java.nio.charset.StandardCharsets.UTF_8
 
 class Fixtures {
 
-  static final String MATCH_NAME = 'matches/1'
+  static final String MATCH_NAME = 'alerts/1/matches/1'
   static final String ALERT_NAME = 'alerts/1'
   static final String HIT_NAME = 'hits/d0bd7272-a12a-11ec-9ee7-7bf12518d571'
   static final String MESSAGE_NAME = 'messages/e525c926-a12a-11ec-97fc-3f5de86f02ac'
   static final String BATCH_NAME = 'batches/031dafde-a12b-11ec-8e04-2f2fd89dfc3f'
+  static final String SYSTEM_ID = 'TRAINING!60C2ED1B-58A1D68E-0326AE78-A8C7CC79'
 
   static def MAPPER = new ObjectMapper()
 
@@ -76,6 +78,7 @@ class Fixtures {
               .batchName(BATCH_NAME)
               .messageName(MESSAGE_NAME)
               .alertName(ALERT_NAME)
+              .systemId(SYSTEM_ID)
               .parsedMessageData(PARSED_PAYLOAD)
               .matches([MATCH])
               .build())
@@ -87,6 +90,7 @@ class Fixtures {
               .batchName(BATCH_NAME)
               .messageName(MESSAGE_NAME)
               .alertName(ALERT_NAME)
+              .systemId(SYSTEM_ID)
               .parsedMessageData(PARSED_PAYLOAD)
               .matches([EMPTY_MATCH])
               .build())
@@ -99,4 +103,9 @@ class Fixtures {
   static BuildFeatureCommand BUILD_FEATURE_COMMAND = BuildFeatureCommand.builder()
       .parsedMessageData(PARSED_PAYLOAD)
       .match(MATCH).build()
+
+  static BuildCategoryCommand BUILD_CATEGORY_COMMAND = BuildCategoryCommand.builder()
+      .matchName(MATCH_NAME)
+      .systemId(SYSTEM_ID)
+      .build()
 }

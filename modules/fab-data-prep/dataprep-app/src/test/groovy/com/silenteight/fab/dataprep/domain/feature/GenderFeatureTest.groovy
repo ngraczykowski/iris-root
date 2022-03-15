@@ -5,6 +5,7 @@ import com.silenteight.universaldatasource.api.library.gender.v1.GenderFeatureIn
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
+import org.springframework.test.context.ActiveProfiles
 import spock.lang.Specification
 import spock.lang.Subject
 
@@ -12,6 +13,7 @@ import static com.silenteight.fab.dataprep.domain.Fixtures.BUILD_FEATURE_COMMAND
 import static com.silenteight.fab.dataprep.domain.Fixtures.EMPTY_BUILD_FEATURE_COMMAND
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
+@ActiveProfiles("dev")
 class GenderFeatureTest extends Specification {
 
   @Subject

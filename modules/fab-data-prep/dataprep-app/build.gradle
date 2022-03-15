@@ -13,6 +13,7 @@ dependencies {
   implementation libraries.silenteight_sep_base_common
   implementation libraries.universal_datasource_api_library
   implementation libraries.data_source_agentinput_api
+  implementation libraries.data_source_categories_api
   implementation libraries.data_source_api
   implementation libraries.registration_api_proto
   implementation libraries.registration_lib

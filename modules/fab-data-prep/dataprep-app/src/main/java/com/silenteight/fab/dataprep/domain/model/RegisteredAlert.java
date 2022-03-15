@@ -21,6 +21,7 @@ public class RegisteredAlert {
   AlertStatus status;
   AlertErrorDescription errorDescription;
   ParsedMessageData parsedMessageData;
+  String systemId;
   List<Match> matches;
 
   @Value
