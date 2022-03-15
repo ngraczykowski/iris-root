@@ -19,18 +19,7 @@ service:
     annotations: { }
 
 category:
-  available:
-    - categories/crossmatch
-    - categories/specificTerms
-    - categories/specificTerms2
-    - categories/historicalRiskAssessment
-    - categories/watchlistType
-    - categories/matchType
-    - categories/companyNameSurrounding
-    - categories/messageStructure
-
-udsFeaturesMappingGeo2: geo
-udsFeaturesMappingOrganizationName2: organizationName
+  available: { }
 
 sentry:
   dsn: https://da12c318c5d3498591da5b6416751038@o1129201.ingest.sentry.io/6176679
