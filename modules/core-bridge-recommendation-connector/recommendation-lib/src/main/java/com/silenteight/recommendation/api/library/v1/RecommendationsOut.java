@@ -6,6 +6,7 @@ import lombok.Value;
 import com.silenteight.proto.recommendation.api.v1.RecommendationsResponse;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Value
 @Builder
@@ -20,7 +21,7 @@ public class RecommendationsOut {
         .recommendations(response.getRecommendationsList()
             .stream()
             .map(RecommendationOut::createFrom)
-            .toList())
+            .collect(Collectors.toList()))
         .statistics(StatisticsOut.createFrom(response.getStatistics()))
         .build();
   }

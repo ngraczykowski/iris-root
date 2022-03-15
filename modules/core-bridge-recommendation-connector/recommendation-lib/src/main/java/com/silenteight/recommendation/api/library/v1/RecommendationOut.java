@@ -7,6 +7,7 @@ import com.silenteight.proto.recommendation.api.v1.Recommendation;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Value
 @Builder
@@ -31,8 +32,7 @@ public class RecommendationOut {
         .recommendedAt(TimestampUtil.toOffsetDateTime(recommendation.getRecommendedAtOrBuilder()))
         .alert(AlertOut.createFrom(recommendation.getAlert()))
         .matches(recommendation.getMatchesList().stream()
-            .map(MatchOut::createFrom)
-            .toList())
+            .map(MatchOut::createFrom).collect(Collectors.toList()))
         .build();
   }
 }
