@@ -28,36 +28,34 @@ gradleBuild(
 
     additionalStages: {
       deployOnNomad()
-      if (params.environments) {
-        if (git.getGitBranch() == 'master' || (params.forceDeploy?.toBoolean())) {
-          // Run e2e test only on mike env once the scenario is related to the MS customer.
-          if (env == 'mike') {
-            stage("E2E test on Nomad ${env}") {
-              dir("e2e-test-${env}-repository") {
-                checkout(
-                    [
-                        $class           : 'GitSCM',
-                        branches         : [[name: '*/master']],
-                        extensions       : [],
-                        userRemoteConfigs: [[credentialsId: 'jenkins-gitlab-ssh', url: 'git@gitlab.silenteight.com:ms/ms-bridge-e2e.git']]
-                    ])
-                script {
-                  withEnv(['CONSUL_HTTP_ADDR=10.8.0.1:8500']) {
-                    List<String> testEnvVars = sh(
-                        returnStdout: true, script: "../nomad/e2etest.sh ${env}").trim().split(',')
-                    withEnv(testEnvVars) {
-                      gradle.gradle("clean test -Ptest.type=integration")
-                    }
+      if (git.getGitBranch() == 'master' || (params.forceDeploy?.toBoolean())) {
+        // Run e2e test only on mike env once the scenario is related to the MS customer.
+        if (params.environments.contains('mike')) {
+          stage("E2E test on Nomad mike") {
+            dir("e2e-test-repository") {
+              checkout(
+                  [
+                      $class           : 'GitSCM',
+                      branches         : [[name: '*/master']],
+                      extensions       : [],
+                      userRemoteConfigs: [[credentialsId: 'jenkins-gitlab-ssh', url: 'git@gitlab.silenteight.com:ms/ms-bridge-e2e.git']]
+                  ])
+              script {
+                withEnv(['CONSUL_HTTP_ADDR=10.8.0.1:8500']) {
+                  List<String> testEnvVars = sh(
+                      returnStdout: true, script: "../nomad/e2etest.sh mike").trim().split(',')
+                  withEnv(testEnvVars) {
+                    gradle.gradle("clean test -Ptest.type=integration")
                   }
                 }
               }
             }
           }
         } else {
-          echo 'This is not a master branch - ignore E2E test'
+          echo 'This is not a mike env - ignore E2E test'
         }
       } else {
-        echo 'This is not a mike env - ignore E2E test'
+        echo 'This is not a master branch - ignore E2E test'
       }
     }
 )
