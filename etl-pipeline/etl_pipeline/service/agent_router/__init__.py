@@ -15,6 +15,9 @@ from silenteight.datasource.api.location.v1.location_pb2 import LocationFeatureI
 
 from etl_pipeline.config import columns_namespace as cn
 from etl_pipeline.config import service_config
+from etl_pipeline.logger import get_logger
+
+logger = get_logger("UPDATE TO DATA SOURCE")
 
 
 class AgentInputCreator:
@@ -52,21 +55,21 @@ class AgentInputCreator:
         for match_id, match in zip(
             payload[cn.MATCH_IDS], payload[cn.ALERT_FIELD][cn.MATCH_RECORDS]
         ):
-
             feature_inputs = self.produce_feature_inputs(match)
+
             agent_input = AgentInput(
                 alert=alert.alert_name,
-                match=f"{alert.alert_name}/matches/{match_id}",
+                match=f"{alert.alert_name}/{match_id.match_name}",
                 feature_inputs=feature_inputs,
             )
+            logger.debug(agent_input)
             agent_inputs.append(agent_input)
         return BatchCreateAgentInputsRequest(agent_inputs=agent_inputs)
 
     def upload_data_inputs(self, alert, payload):
         batch = self.produce_batch_create_agent_input_request(alert, payload)
         response = self.stub.BatchCreateAgentInputs(batch)
-        for created_agent_input in response.created_agent_inputs:
-            pass
+        logger.error(response)
 
 
 class Producer(ABC):
@@ -76,7 +79,7 @@ class Producer(ABC):
 
 
 class DobAgentFeatureInputProducer(Producer):
-    feature_name = "dob"
+    feature_name = "features/dob"
 
     def produce_feature_input(self, payload):
         return DateFeatureInput(
@@ -97,7 +100,7 @@ class DobAgentFeatureInputProducer(Producer):
 
 
 class ResidencyAgentFeatureInputProducer(Producer):
-    feature_name = "residency"
+    feature_name = "features/residency"
 
     def produce_feature_input(self, payload):
         ap_parties = payload.get("ap_all_residencies_aggregated", [])
@@ -112,7 +115,7 @@ class ResidencyAgentFeatureInputProducer(Producer):
 
 
 class NationalityAgentFeatureInputProducer(Producer):
-    feature_name = "residency"
+    feature_name = "features/residency"
 
     def produce_feature_input(self, payload):
         ap_parties = payload.get("ap_all_residencies_aggregated", [])

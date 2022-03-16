@@ -9,6 +9,7 @@ from etl_pipeline.config import columns_namespace as cn
 from etl_pipeline.config import pipeline_config, service_config
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.data_processor_engine.json_engine.json_engine import JsonProcessingEngine
+from etl_pipeline.logger import get_logger
 from etl_pipeline.service.agent_router import AgentInputCreator
 from etl_pipeline.service.proto.api.etl_pipeline_pb2 import FAILURE
 from etl_pipeline.service.proto.etl_pipeline_pb2 import SUCCESS, UNKNOWN, EtlAlert, EtlMatch
@@ -17,6 +18,7 @@ from pipelines.ms.wm_address_pipeline import MSPipeline
 engine = JsonProcessingEngine(pipeline_config)
 pipeline = MSPipeline(engine, pipeline_config)
 router = AgentInputCreator()
+logger = get_logger("ETL PIPELINE")
 
 
 @dataclass
@@ -25,6 +27,12 @@ class AlertPayload:
     alert_name: str
     flat_payload: dict
     matches: List[int]
+
+
+@dataclass
+class Match:
+    match_id: str
+    match_name: str
 
 
 class EtlPipelineServiceServicer(object):
@@ -36,7 +44,7 @@ class EtlPipelineServiceServicer(object):
                 batch_id=alert.batch_id,
                 alert_name=alert.alert_name,
                 flat_payload={key: alert.flat_payload[key] for key in sorted(alert.flat_payload)},
-                matches=[int(match.match_id) for match in alert.matches],
+                matches=[Match(match.match_id, match.match_name) for match in alert.matches],
             )
             for alert in request.alerts
         ]
@@ -44,12 +52,16 @@ class EtlPipelineServiceServicer(object):
         payloads = [future.result() for future in future_payloads]
         # payloads = [self.parse_alert(alerts_to_parse[0])] debugging
         statuses = []
+        logger.info("Payload parsed by pipeline")
         for alert, record in zip(alerts_to_parse, payloads):
             input_match_records, status = record
             for input_match_record in input_match_records:
+                logger.info("Trying upload from pipeline to UDS")
                 try:
-                    self.add_to_datasouce(alert, input_match_record)
-                except:
+                    self.add_to_datasource(alert, input_match_record)
+                except Exception as e:
+
+                    logger.error("Exception :" + str(e))
                     status = FAILURE
                     break
             statuses.append(status)
@@ -85,7 +97,7 @@ class EtlPipelineServiceServicer(object):
         )
         return etl_alert
 
-    def add_to_datasouce(self, alert, payload):
+    def add_to_datasource(self, alert, payload):
         router.upload_data_inputs(alert, payload)
 
 
