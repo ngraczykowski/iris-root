@@ -13,7 +13,7 @@ spring:
 
 warehouse:
   report:
-    default-bucket: report
+    default-bucket: reports
     removal:
       cron: "0 0 1 * * ?"
       duration-time: P1D

@@ -1,7 +1,6 @@
 package com.silenteight.warehouse.report;
 
 import com.silenteight.sep.auth.token.TokenModule;
-import com.silenteight.sep.filestorage.minio.FileStorageMinioModule;
 import com.silenteight.warehouse.common.domain.country.CountryPermissionService;
 import com.silenteight.warehouse.report.create.ReportCreateModule;
 import com.silenteight.warehouse.report.download.ReportDownloadModule;
@@ -20,7 +19,6 @@ import org.springframework.context.annotation.Primary;
 import static org.mockito.Mockito.*;
 
 @ComponentScan(basePackageClasses = {
-    FileStorageMinioModule.class,
     ReportCreateModule.class,
     ReportDownloadModule.class,
     ReportFileNameModule.class,

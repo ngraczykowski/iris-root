@@ -12,8 +12,6 @@ ext {
   silenteightDataRetentionApiVersion = "0.3.0"
   silenteightSamplingAlertsApiVersion = "1.6.0"
   silenteightWarehouseInternalApiVersion = "1.6.0"
-  silenteightFileStorageApiVersion = "1.3.0"
-  silenteightFileStorageMinioVersion = "1.7.0"
   silenteightRabbitMqCommonSchemaVersion = "1.7.0"
 }
 
@@ -33,8 +31,6 @@ libraries.silenteight_sampling_alerts_api = [group: 'com.silenteight.warehouse.a
 libraries.silenteight_warehouse_internal_api = [group: 'com.silenteight.warehouse.api', name: 'se-warehouse-internal-api', version: silenteightWarehouseInternalApiVersion]
 libraries.silenteight_rabbit_mq_common_schema = [group: 'com.silenteight.rabbitmqcommonschema', name: 'sear-rabbitmq-common-schema-definitions', version: silenteightRabbitMqCommonSchemaVersion]
 libraries.consul_grpc_registration = [group: 'com.silenteight.commons', name: 'consul-grpc-registration', version: '1.0.0']
-libraries.silenteight_file_storage_api =  [group: 'com.silenteight.sep.filestorage.api', name: 'sep-filestorage-api', version: silenteightFileStorageApiVersion]
-libraries.silenteight_filestorage_minio = [group: 'com.silenteight.sep.filestorage-minio', name: 'sep-filestorage-minio', version: silenteightFileStorageMinioVersion]
 
 // Spring
 libraries.spring_aop = [group: 'org.springframework', name: 'spring-aop']
@@ -220,6 +216,7 @@ libraries.querydsl_jpa = [group: 'com.querydsl', name: 'querydsl-jpa']
 libraries.reactor_grpc_stub = [group: 'com.salesforce.servicelibs', name: 'reactor-grpc-stub']
 libraries.snakeyaml = [group: 'org.yaml', name: 'snakeyaml']
 libraries.tomcat_embed_el = [group: 'org.apache.tomcat.embed', name: 'tomcat-embed-el']
+libraries.aws_java_sdk = [group: 'software.amazon.awssdk', name: 's3', version: '2.17.137']
 
 // Testing
 libraries.assertj_json = [group: 'com.revinate', name: 'assertj-json']

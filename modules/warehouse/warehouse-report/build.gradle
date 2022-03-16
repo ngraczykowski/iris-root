@@ -31,12 +31,11 @@ dependencies {
   implementation libraries.minio
   implementation libraries.jakarta_validation_api
   implementation libraries.silenteight_sep_base_common
-  implementation libraries.silenteight_file_storage_api
   implementation libraries.postgresql
+  implementation libraries.aws_java_sdk
 
   testImplementation project(":warehouse-common-testing")
   testImplementation testFixtures(project(':warehouse-indexer'))
   testImplementation testFixtures(project(':warehouse-common'))
   testImplementation libraries.awaitility
-  testImplementation libraries.silenteight_filestorage_minio
 }

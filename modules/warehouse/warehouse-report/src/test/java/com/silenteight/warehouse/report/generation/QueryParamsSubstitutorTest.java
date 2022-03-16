@@ -20,6 +20,7 @@ class QueryParamsSubstitutorTest {
   private static final String FILENAME = "file.csv";
   private static final OffsetDateTime CREATED_AT = OffsetDateTime.now();
   private static final String SELECT_SQL_QUERY = "SELECT *";
+  private static final Long DOMAIN_ID = 1L;
 
   @Test
   void shouldHandleDataAccessPermissionParameter() {
@@ -28,6 +29,7 @@ class QueryParamsSubstitutorTest {
         .fileStorageName(FILENAME)
         .selectSqlQuery(SELECT_SQL_QUERY)
         .createdAt(CREATED_AT)
+        .domainId(DOMAIN_ID)
         .sqlTemplates(
             of("SELECT * FROM table WHERE countries IN (${" + PARAMETER_COUNTRIES + "})"))
         .dataAccessPermissions(orderedSet("PL", "UK"))
@@ -46,6 +48,7 @@ class QueryParamsSubstitutorTest {
         .fileStorageName(FILENAME)
         .selectSqlQuery(SELECT_SQL_QUERY)
         .createdAt(CREATED_AT)
+        .domainId(DOMAIN_ID)
         .sqlTemplates(List.of())
         .build();
 

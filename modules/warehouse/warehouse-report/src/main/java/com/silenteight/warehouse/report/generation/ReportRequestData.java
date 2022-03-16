@@ -19,7 +19,7 @@ import static java.util.Optional.empty;
 @Builder
 public class ReportRequestData {
 
-  @Nullable
+  @NonNull
   Long domainId;
 
   @NonNull

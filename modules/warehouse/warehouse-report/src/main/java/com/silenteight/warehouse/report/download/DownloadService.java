@@ -4,12 +4,12 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sep.base.common.time.DateFormatter;
-import com.silenteight.sep.filestorage.api.dto.FileDto;
 import com.silenteight.warehouse.report.name.ReportFileName;
 import com.silenteight.warehouse.report.name.ReportFileNameDto;
 import com.silenteight.warehouse.report.persistence.ReportDto;
 import com.silenteight.warehouse.report.persistence.ReportPersistenceService;
 import com.silenteight.warehouse.report.persistence.ReportRange;
+import com.silenteight.warehouse.report.storage.FileDto;
 import com.silenteight.warehouse.report.storage.ReportStorage;
 
 import java.time.OffsetDateTime;

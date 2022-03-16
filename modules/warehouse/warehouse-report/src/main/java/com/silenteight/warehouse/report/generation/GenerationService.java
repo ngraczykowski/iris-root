@@ -43,7 +43,6 @@ class GenerationService implements ReportGenerationService, ReportsRemoval {
     try {
       reportPersistenceService.generationStarted(request.getDomainId());
       doGenerate(request);
-      reportPersistenceService.generationSuccessful(request.getDomainId());
 
       log.debug(
           "Report generation done, id={}, fileStorageName={}",
@@ -69,13 +68,14 @@ class GenerationService implements ReportGenerationService, ReportsRemoval {
   }
 
   private void saveReport(ReportRequestData request, File reportFile) {
-    Report report = toReport(request.getFileStorageName(), reportFile);
+    Report report = toReport(request, reportFile);
     reportStorage.saveReport(report);
   }
 
-  private static Report toReport(String name, File reportFile) {
+  private static Report toReport(ReportRequestData request, File reportFile) {
     return TempFileReportDto.builder()
-        .reportName(name)
+        .reportName(request.getFileStorageName())
+        .reportId(request.getDomainId())
         .reportPath(reportFile.toPath())
         .build();
   }
