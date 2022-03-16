@@ -19,8 +19,7 @@ public class GenderFeature implements FabFeature {
 
   static final String FEATURE_NAME = "features/gender";
 
-  //TODO change this to correct path
-  private static final String JSON_PATH = "$.HittedEntity.Gender";
+  private static final String JSON_PATH = "$.HittedEntity.AdditionalInfo";
 
   private final ParseContext parseContext;
 

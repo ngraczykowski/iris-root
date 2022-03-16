@@ -53,6 +53,7 @@ feeding:
     passport-feature.enabled: true
     bic-feature.enabled: true
     document-number-feature.enabled: true
+    national-id-feature.enabled: true
   categories:
     is_san:
       enabled: true

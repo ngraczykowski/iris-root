@@ -80,6 +80,12 @@ public class FeatureAndCategoryConfiguration {
   }
 
   @Bean
+  @ConditionalOnProperty("feeding.features.national-id-feature.enabled")
+  FabFeature nationalIdFeature(ParseContext parseContext) {
+    return new NationalIdFeature(parseContext);
+  }
+
+  @Bean
   @ConditionalOnProperty("feeding.categories.is_san.enabled")
   FabCategory sanctionCategory() {
     return new SanctionCategory("is_san");

@@ -33,6 +33,6 @@ class GenderFeatureTest extends Specification {
     where:
     command                     | alertedParty | watchList
     EMPTY_BUILD_FEATURE_COMMAND | ['M']        | []
-    BUILD_FEATURE_COMMAND       | ['M']        | []
+    BUILD_FEATURE_COMMAND       | ['M']        | ['none']
   }
 }
