@@ -14,7 +14,7 @@ ext {
   silenteightSensWebappVersion = "1.28.3"
   silenteightSepFrontendVersion = "1.27.0"
   coreBridgeRegistrationApiVersion = '1.12.0'
-  universalDataSourceApiVersion = '1.3.0-BUILD.17'
+  universalDataSourceLibApiVersion = '1.2.0' //'1.3.0-BUILD.17'
   silenteightDataSourceApiVersion = '0.18.0'
 
   springBootVersion = '2.5.10'
@@ -59,7 +59,7 @@ libraries.silenteight_serp_protocol_base = [group: 'com.silenteight.serp.protoco
 libraries.silenteight_serp_protocol_scb = [group: 'com.silenteight.serp.protocol', name: 'serp-protocol-scb', version: serpProtocolVersion]
 libraries.registration_api_library = [group: 'com.silenteight.registration.api.library', name: 'registration-lib', version: coreBridgeRegistrationApiVersion]
 libraries.registration_api_proto = [group: 'com.silenteight.registration.api.library', name: 'registration-internal-protos', version: coreBridgeRegistrationApiVersion]
-libraries.universal_datasource_api_library = [group: 'com.silenteight.universaldatasource.api.library', name: 'uds-lib', version: universalDataSourceApiVersion]
+libraries.universal_datasource_api_library = [group: 'com.silenteight.universaldatasource.api.library', name: 'uds-lib', version: universalDataSourceLibApiVersion]
 libraries.data_source_agentinput_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-agentinput-api', version: silenteightDataSourceApiVersion]
 
 // Spring
