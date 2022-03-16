@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.silenteight.fab.dataprep.domain.model.AlertErrorDescription.*;
+import static com.silenteight.fab.dataprep.domain.model.UdsFedEvent.Status.FAILURE;
+import static com.silenteight.fab.dataprep.domain.model.UdsFedEvent.Status.SUCCESS;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
@@ -21,12 +24,16 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class FeedingFacade {
 
+  private static final String SUCCESS_MESSAGE =
+      "Feature inputs for batch: {} and alert: {} (Origin alert message: {}) created successfully.";
+  private static final String FAILURE_MESSAGE =
+      "Failed to create feature inputs for batch: {} and alert: {} (Origin alert message: {}).";
   private final FeedingService feedingService;
   private final FeedingEventPublisher feedingEventPublisher;
 
   public void etlAndFeedUds(RegisteredAlert registeredAlert) {
     if (registeredAlert.getStatus() == AlertStatus.FAILURE) {
-      feedingEventPublisher.publish(createUdsFedEvent(registeredAlert, Status.FAILURE,
+      feedingEventPublisher.publish(createUdsFedEvent(registeredAlert, FAILURE,
           registeredAlert.getErrorDescription()));
       return;
     }
@@ -34,18 +41,16 @@ public class FeedingFacade {
     Try.run(() -> feedingService.createFeatureInputs(createFeatureInputsCommand(registeredAlert)))
         .onFailure(e -> {
           log.error(
-              "Failed to create feature inputs for batch id: {} and alert id: {}.",
-              registeredAlert.getBatchName(), registeredAlert.getAlertName(), e);
+              FAILURE_MESSAGE, registeredAlert.getBatchName(), registeredAlert.getAlertName(),
+              registeredAlert.getMessageName(), e);
           feedingEventPublisher.publish(
-              createUdsFedEvent(
-                  registeredAlert, Status.FAILURE, AlertErrorDescription.CREATE_FEATURE_INPUT));
+              createUdsFedEvent(registeredAlert, FAILURE, CREATE_FEATURE_INPUT));
         })
         .onSuccess(e -> {
           log.info(
-              "Feature inputs for batch id: {} and alert id: {} created successfully.",
-              registeredAlert.getBatchName(), registeredAlert.getAlertName());
-          feedingEventPublisher.publish(
-              createUdsFedEvent(registeredAlert, Status.SUCCESS, AlertErrorDescription.NONE));
+              SUCCESS_MESSAGE, registeredAlert.getBatchName(), registeredAlert.getAlertName(),
+              registeredAlert.getMessageName());
+          feedingEventPublisher.publish(createUdsFedEvent(registeredAlert, SUCCESS, NONE));
         });
   }
 

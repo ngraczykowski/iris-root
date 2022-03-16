@@ -38,7 +38,7 @@ class AlertMessagesRabbitAmqpListener {
   @RabbitListener(queues = QUEUE_NAME_PROPERTY)
   public void subscribe(AlertMessageStored message) {
     log.info(
-        "Received a message with: batch name: {}, alert message name: {}", message.getBatchName(),
+        "Received a message with: batch: {}, alert message: {}", message.getBatchName(),
         message.getMessageName());
     AlertMessagesDetailsResponse response = getAlertDetails(message);
     Map<String, ParsedAlertMessage> extractedAlerts =

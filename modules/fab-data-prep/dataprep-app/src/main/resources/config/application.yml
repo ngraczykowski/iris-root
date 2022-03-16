@@ -1,5 +1,7 @@
 serp.show-env: true
 
+server:
+  port: 8082
 #TODO: Without that SilentEightImplicitNamingStrategy throws error
 spring:
   application:
@@ -37,7 +39,9 @@ grpc:
   client:
     registration.address: static://localhost:24804
     universal-data-source.address: static://localhost:24805
-    cm-api-connector.address: static://localhost:24806
+    cm-api-connector:
+      address: static://localhost:8081
+      deadline: 1m
     category.address: static://localhost:24807
     category-value.address: static://localhost:24808
     GLOBAL:

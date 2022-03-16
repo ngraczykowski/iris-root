@@ -60,7 +60,7 @@ class RegistrationGrpcServiceConfiguration {
     private static RegisteredAlertWithMatchesOut convert(AlertWithMatchesIn alertWithMatchesIn) {
       return RegisteredAlertWithMatchesOut.builder()
           .alertId(alertWithMatchesIn.getAlertId())
-          .alertName(alertWithMatchesIn.getAlertId().replace("hits", "alerts"))
+          .alertName(alertWithMatchesIn.getAlertId().replace("messages", "alerts"))
           .alertStatus(AlertStatusOut.SUCCESS)
           .registeredMatches(alertWithMatchesIn.getMatches().stream().map(
               RegistrationServiceClientMock::convert).collect(toList()))
@@ -71,7 +71,7 @@ class RegistrationGrpcServiceConfiguration {
       return RegisteredMatchOut
           .builder()
           .matchId(matchIn.getMatchId())
-          .matchName("exampleMatch")
+          .matchName(matchIn.getMatchId().replace("hits", "matches"))
           .build();
     }
   }
