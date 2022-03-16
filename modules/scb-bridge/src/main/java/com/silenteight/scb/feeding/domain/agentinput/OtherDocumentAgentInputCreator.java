@@ -8,7 +8,11 @@ import com.silenteight.universaldatasource.api.library.Feature;
 import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputIn;
 import com.silenteight.universaldatasource.api.library.document.v1.DocumentFeatureInputOut;
 
+import org.apache.commons.collections4.CollectionUtils;
+
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class OtherDocumentAgentInputCreator implements AgentInput {
@@ -29,7 +33,11 @@ public class OtherDocumentAgentInputCreator implements AgentInput {
   }
 
   private List<String> getApOtherDocuments(AlertedParty alertedParty) {
-    return alertedParty.apDocOthers().stream().toList();
+    Collection<String> apDocOthers = alertedParty.apDocOthers();
+    if (CollectionUtils.isNotEmpty(apDocOthers)) {
+      return new ArrayList<>(apDocOthers);
+    }
+    return Collections.emptyList();
   }
 
   private List<String> getWlOtherDocuments(MatchedParty matchedParty) {

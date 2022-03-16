@@ -8,6 +8,10 @@ import com.silenteight.universaldatasource.api.library.Feature;
 import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputIn;
 import com.silenteight.universaldatasource.api.library.document.v1.DocumentFeatureInputOut;
 
+import org.apache.commons.collections4.CollectionUtils;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,7 +33,11 @@ public class PassportNumberDocumentAgentInputCreator implements AgentInput {
   }
 
   private List<String> getApPassportNumberDocuments(AlertedParty alertedParty) {
-    return alertedParty.apDocPassports().stream().toList();
+    Collection<String> apDocPassports = alertedParty.apDocPassports();
+    if (CollectionUtils.isNotEmpty(apDocPassports)) {
+      return new ArrayList<>(apDocPassports);
+    }
+    return Collections.emptyList();
   }
 
   private List<String> getWlPassportNumberDocuments(MatchedParty matchedParty) {

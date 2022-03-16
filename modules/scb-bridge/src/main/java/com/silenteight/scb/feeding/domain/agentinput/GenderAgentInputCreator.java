@@ -8,6 +8,7 @@ import com.silenteight.universaldatasource.api.library.Feature;
 import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputIn;
 import com.silenteight.universaldatasource.api.library.gender.v1.GenderFeatureInputOut;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,9 +30,7 @@ public class GenderAgentInputCreator implements AgentInput {
   }
 
   private List<String> getApGenders(AlertedParty alertedParty) {
-    String apGender = alertedParty.apGender();
-    String apNameGender = alertedParty.apGenderFromName();
-    return List.of(apGender, apNameGender);
+    return Arrays.asList(alertedParty.apGender(), alertedParty.apGenderFromName());
   }
 
   private List<String> getWlGenders(MatchedParty matchedParty) {

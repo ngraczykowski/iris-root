@@ -8,6 +8,7 @@ import com.silenteight.universaldatasource.api.library.Feature;
 import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputIn;
 import com.silenteight.universaldatasource.api.library.nationalid.v1.NationalIdFeatureInputOut;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -35,6 +36,6 @@ public class NationalIdDocumentAgentInputCreator implements AgentInput {
   }
 
   private List<String> getWlCountries(MatchedParty matchedParty) {
-    return List.of(matchedParty.wlCountry(), matchedParty.wlDesignation());
+    return Arrays.asList(matchedParty.wlCountry(), matchedParty.wlDesignation());
   }
 }

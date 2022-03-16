@@ -8,7 +8,10 @@ import com.silenteight.universaldatasource.api.library.Feature;
 import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputIn;
 import com.silenteight.universaldatasource.api.library.country.v1.CountryFeatureInputOut;
 
+import org.apache.commons.collections4.CollectionUtils;
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,9 +35,25 @@ public class ResidencyCountryAgentInputCreator implements AgentInput {
   private List<String> getApCountries(AlertedParty alertedParty) {
     List<String> apResidencyCountries = new ArrayList<>();
     apResidencyCountries.add(alertedParty.apResidence());
-    apResidencyCountries.addAll(alertedParty.apResidenceSynonyms());
-    apResidencyCountries.addAll(alertedParty.apResidentialAddresses());
+    apResidencyCountries.addAll(getApResidenceSynonyms(alertedParty));
+    apResidencyCountries.addAll(getApResidentialAddresses(alertedParty));
     return apResidencyCountries;
+  }
+
+  private List<String> getApResidenceSynonyms(AlertedParty alertedParty) {
+    Collection<String> apResidenceSynonyms = alertedParty.apResidenceSynonyms();
+    if (CollectionUtils.isNotEmpty(apResidenceSynonyms)) {
+      return new ArrayList<>(apResidenceSynonyms);
+    }
+    return Collections.emptyList();
+  }
+
+  private List<String> getApResidentialAddresses(AlertedParty alertedParty) {
+    Collection<String> apResidentialAddresses = alertedParty.apResidentialAddresses();
+    if (CollectionUtils.isNotEmpty(apResidentialAddresses)) {
+      return new ArrayList<>(apResidentialAddresses);
+    }
+    return Collections.emptyList();
   }
 
   private List<String> getWlCountries(MatchedParty matchedParty) {
