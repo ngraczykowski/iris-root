@@ -22,19 +22,20 @@ public class NameAgentInputCreator implements AgentInput {
 
   @Override
   public AgentInputIn<Feature> createAgentInput(Alert alert, Match match) {
-    Set<String> apNames = getApNameValues(alert.alertedParty(), match.details().matchedApNames());
+    Set<String> apNames =
+        getApNameValues(alert.alertedParty(), match.details().getMatchedApNames());
     Set<WlName> wlNames = getWlNameValues(match.matchedParty());
 
     return AgentInputIn.builder()
-        .alert(alert.details().alertName())
-        .match(match.details().matchName())
+        .alert(alert.details().getAlertName())
+        .match(match.details().getMatchName())
         .featureInputs(List.of(
             NameFeatureInputOut.builder()
                 .feature("features/name")
                 .alertedPartyNames(createAlertedPartyNames(apNames))
                 .watchlistNames(createWatchlistNames(wlNames))
                 .alertedPartyType(determineApType(match.matchedParty().apType()))
-                .matchingTexts(match.details().matchingTexts().stream().toList())
+                .matchingTexts(match.details().getMatchingTexts().stream().toList())
                 .build()
         ))
         .build();

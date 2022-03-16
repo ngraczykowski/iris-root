@@ -33,6 +33,10 @@ public record Alert(
     return matches != null ? matches.size() : 0;
   }
 
+  public boolean isLearnFlag() {
+    return (flags & Flag.LEARN.getValue()) != 0;
+  }
+
   public enum State {
     STATE_CORRECT,
     STATE_INVALID,

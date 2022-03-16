@@ -10,6 +10,9 @@ import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert.Flag;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match;
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRecommendationService;
+import com.silenteight.scb.ingest.domain.model.RegistrationResponse;
+import com.silenteight.scb.ingest.domain.model.RegistrationResponse.RegisteredAlertWithMatches;
+import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
 import com.silenteight.sep.base.aspects.logging.LogContext;
 import com.silenteight.sep.base.common.messaging.MessageSender;
 import com.silenteight.sep.base.common.messaging.properties.MessagePropertiesProvider;
@@ -18,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javax.annotation.Nonnull;
@@ -34,21 +38,29 @@ class IngestService implements SingleAlertIngestService, BatchAlertIngestService
   private final Collection<IngestServiceListener> listeners;
   private final boolean solvedAlertsProcessingEnabled;
   private final ScbRecommendationService scbRecommendationService;
+  private final IngestEventPublisher ingestEventPublisher;
   @Getter
   private long ingestedLearningAlertsCounter;
 
   @Override
   public void ingestAlertsForLearn(@NonNull Stream<Alert> alerts) {
-    alerts.forEach(a -> {
-      var flags = determineLearningFlags(a);
-      send(a, flags);
+    //ALERT REGISTRATION IN CORE BRIDGE
+    RegistrationResponse registrationResponse = RegistrationResponse.builder().build();
+
+    alerts.forEach(alert -> {
+      var flags = determineLearningFlags(alert);
+      send(alert, flags, registrationResponse);
       ingestedLearningAlertsCounter++;
     });
   }
 
   @Override
   public void ingestAlertsForRecommendation(@NonNull Stream<Alert> alerts) {
-    filterAlerts(alerts).forEach(a -> send(a, ALERT_RECOMMENDATION_FLAGS));
+    //ALERT REGISTRATION IN CORE BRIDGE
+    RegistrationResponse registrationResponse = RegistrationResponse.builder().build();
+
+    filterAlerts(alerts).forEach(
+        alert -> send(alert, ALERT_RECOMMENDATION_FLAGS, registrationResponse));
   }
 
   private Stream<Alert> filterAlerts(Stream<Alert> alerts) {
@@ -61,13 +73,17 @@ class IngestService implements SingleAlertIngestService, BatchAlertIngestService
   }
 
   @LogContext
-  private void send(Alert alert, int flags) {
+  private void send(Alert alert, int flags, RegistrationResponse registrationResponse) {
     logAlert(alert.id().sourceId(), alert.id().discriminator());
 
     Alert ingestedAlert = updateIngestInfoForAlert(alert, flags);
+    updateRegistrationInfoForAlert(ingestedAlert, registrationResponse);
     listeners.forEach(l -> l.send(ingestedAlert));
 
-    log.info("Sending a batched alert, systemId={}", alert.id().sourceId());
+    log.info("Sending a batched alert, systemId={}", ingestedAlert.id().sourceId());
+
+    //UDS FEEDING
+    ingestEventPublisher.publish(ingestedAlert);
   }
 
   @NotNull
@@ -82,6 +98,26 @@ class IngestService implements SingleAlertIngestService, BatchAlertIngestService
         .flags(flags)
         .ingestedAt(ingestedAt)
         .build();
+  }
+
+  private static void updateRegistrationInfoForAlert(
+      Alert alert, RegistrationResponse registrationResponse) {
+    registrationResponse.getRegisteredAlertWithMatches().stream()
+        .peek(registeredAlertWithMatches -> alert
+            .details()
+            .setAlertName(registeredAlertWithMatches.getAlertName()))
+        .map(RegisteredAlertWithMatches::getRegisteredMatches)
+        .flatMap(Collection::stream)
+        .forEach(
+            registeredMatch -> updateRegistrationInfoForMatch(alert.matches(), registeredMatch));
+  }
+
+  private static void updateRegistrationInfoForMatch(
+      List<Match> matches, RegistrationResponse.RegisteredMatch registeredMatch) {
+    matches.stream()
+        .filter(match -> match.id().sourceId().equals(registeredMatch.getMatchId()))
+        .findFirst()
+        .ifPresent(match -> match.details().setMatchName(registeredMatch.getMatchName()));
   }
 
   private int determineLearningFlags(Alert alert) {

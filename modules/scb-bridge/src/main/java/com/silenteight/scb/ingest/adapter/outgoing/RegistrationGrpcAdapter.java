@@ -8,6 +8,7 @@ import com.silenteight.registration.api.library.v1.RegistrationServiceClient;
 import com.silenteight.scb.ingest.domain.model.Batch;
 import com.silenteight.scb.ingest.domain.model.RegistrationRequest;
 import com.silenteight.scb.ingest.domain.model.RegistrationResponse;
+import com.silenteight.scb.ingest.domain.port.outgoing.RegistrationApiClient;
 
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;

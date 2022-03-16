@@ -1,16 +1,19 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.model.alert;
 
 import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
-public record AlertDetails(
-    String batchId,
-    String unit,
-    String account,
-    String systemId,
-    String watchlistId,
-    String alertName,
-    String recordDetails) {
+@Getter
+@Builder
+public class AlertDetails {
 
-  @Builder
-  public AlertDetails {}
+  private final String batchId;
+  private final String unit;
+  private final String account;
+  private final String systemId;
+  private final String watchlistId;
+  private final String recordDetails;
+  @Setter
+  private String alertName;
 }

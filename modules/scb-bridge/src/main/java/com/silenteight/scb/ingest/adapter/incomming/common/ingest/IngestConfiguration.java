@@ -3,6 +3,7 @@ package com.silenteight.scb.ingest.adapter.incomming.common.ingest;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRecommendationService;
+import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
 import com.silenteight.sep.base.common.messaging.MessageSenderFactory;
 import com.silenteight.sep.base.common.messaging.MessagingConfiguration;
 
@@ -23,6 +24,7 @@ import java.util.Collection;
 class IngestConfiguration {
 
   private final IngestProperties properties;
+  private final IngestEventPublisher ingestEventPublisher;
 
   @Bean
   Declarables rabbitExchange() {
@@ -48,6 +50,7 @@ class IngestConfiguration {
         .listeners(listeners)
         .solvedAlertsProcessingEnabled(properties.isSolvedAlertsProcessingEnabled())
         .scbRecommendationService(scbRecommendationService)
+        .ingestEventPublisher(ingestEventPublisher)
         .build();
   }
 

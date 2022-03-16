@@ -6,6 +6,7 @@ import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert.Fla
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertDetails;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match;
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRecommendationService;
+import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
 import com.silenteight.sep.base.common.messaging.properties.CorrelatedMessagePropertiesProvider;
 import com.silenteight.sep.base.testing.messaging.MessageSenderSpyFactory;
 
@@ -41,6 +42,8 @@ class IngestServiceTest {
   private IngestServiceListener listener;
   @Mock
   private ScbRecommendationService scbRecommendationService;
+  @Mock
+  private IngestEventPublisher ingestEventPublisher;
   @Captor
   private ArgumentCaptor<Alert> alertCaptor;
 
@@ -57,7 +60,8 @@ class IngestServiceTest {
   }
 
   private void createIngestService() {
-    IngestConfiguration configuration = new IngestConfiguration(ingestProperties);
+    IngestConfiguration configuration =
+        new IngestConfiguration(ingestProperties, ingestEventPublisher);
     ingestService = configuration.ingestService(
         senderFactory,
         singleton(listener),
@@ -99,6 +103,7 @@ class IngestServiceTest {
 
     //then
     checkAndAssertResults(Flag.LEARN.getValue());
+    verify(ingestEventPublisher, times(2)).publish(any());
   }
 
   private void checkAndAssertResults(int learnFlags) {
@@ -135,6 +140,7 @@ class IngestServiceTest {
 
     //then
     checkAndAssertResults(Flag.LEARN.getValue() | Flag.PROCESS.getValue());
+    verify(ingestEventPublisher, times(2)).publish(any());
   }
 
   @Test
@@ -148,6 +154,7 @@ class IngestServiceTest {
     //then
     checkAndAssertResults(
         Flag.RECOMMEND.getValue() | Flag.PROCESS.getValue() | Flag.ATTACH.getValue());
+    verify(ingestEventPublisher, times(2)).publish(any());
   }
 
   @Test
@@ -161,6 +168,7 @@ class IngestServiceTest {
     //then
     checkAndAssertResults(
         Flag.RECOMMEND.getValue() | Flag.PROCESS.getValue() | Flag.ATTACH.getValue());
+    verify(ingestEventPublisher, times(2)).publish(any());
   }
 
   private static Stream<Alert> createDenyAlerts() {
@@ -197,6 +205,7 @@ class IngestServiceTest {
     //then
     checkAndAssertResults(
         Flag.RECOMMEND.getValue() | Flag.PROCESS.getValue() | Flag.ATTACH.getValue());
+    verify(ingestEventPublisher, times(2)).publish(any());
   }
 
   private static Stream<Alert> createNonDenyAlerts() {
@@ -230,6 +239,7 @@ class IngestServiceTest {
 
     //then
     verify(listener, never()).send(any());
+    verify(ingestEventPublisher, never()).publish(any());
   }
 
   @Test
@@ -261,5 +271,6 @@ class IngestServiceTest {
     //then
     checkAndAssertResults(
         Flag.RECOMMEND.getValue() | Flag.PROCESS.getValue() | Flag.ATTACH.getValue());
+    verify(ingestEventPublisher, times(2)).publish(any());
   }
 }

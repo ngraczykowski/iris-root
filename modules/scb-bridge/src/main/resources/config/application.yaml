@@ -26,7 +26,7 @@ spring:
       service-registry:
         auto-registration:
           enabled: false
-  ### RABBITMQ
+  # RABBITMQ
   rabbitmq:
     port: 24130
     username: serp
@@ -223,3 +223,10 @@ serp:
               priority: 1
               records-view: SENS_V_FFF_RECORDS_NON_DENY
               watchlist-level: false
+
+# AMQP
+amqp:
+  feeding:
+    outgoing:
+      match-feature-input-set-fed:
+        exchange-name: match-feature-input-set-fed-exchange

@@ -13,6 +13,7 @@ import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.request.GnsRtRec
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtRecommendationResponse;
 import com.silenteight.scb.ingest.domain.AlertService;
 import com.silenteight.scb.ingest.domain.model.RegistrationResponse;
+import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
 
 import org.jetbrains.annotations.NotNull;
 import reactor.core.publisher.Mono;
@@ -31,6 +32,7 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
   private final StoreGnsRtRecommendationUseCase storeGnsRtRecommendationUseCase;
   private final RecommendationGatewayService recommendationService;
   private final AlertService alertService;
+  private final IngestEventPublisher ingestEventPublisher;
 
   @Override
   public Mono<GnsRtRecommendationResponse> recommend(@NonNull GnsRtRecommendationRequest request) {
@@ -43,6 +45,8 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
     RegistrationResponse registrationResponse =
         alertService.registerAlertsAndMatches(batchId, alerts);
 
+    //feed uds
+    alerts.forEach(ingestEventPublisher::publish);
     return Mono.empty();
   }
 

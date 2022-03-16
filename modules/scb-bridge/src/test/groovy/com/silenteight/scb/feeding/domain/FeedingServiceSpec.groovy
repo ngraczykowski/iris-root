@@ -23,7 +23,7 @@ class FeedingServiceSpec extends Specification {
     ]
 
     def featureService = new FeedingService(features)
-    def alert = Fixtures.ALERT
+    def alert = Fixtures.LEARNING_ALERT
     def match = Fixtures.MATCH
 
     when:

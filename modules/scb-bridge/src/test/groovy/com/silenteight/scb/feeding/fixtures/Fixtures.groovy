@@ -2,6 +2,7 @@ package com.silenteight.scb.feeding.fixtures
 
 import com.silenteight.scb.ingest.adapter.incomming.common.model.ObjectId
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert.Flag
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertDetails
 import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match
 
@@ -15,11 +16,6 @@ class Fixtures {
       .batchId("batch-id")
       .build();
 
-  static def ALERT = Alert.builder()
-      .id(ALERT_ID)
-      .details(ALERT_DETAILS)
-      .build();
-
   static def MATCH_ID = ObjectId.builder()
       .sourceId('matchId')
       .build()
@@ -29,4 +25,17 @@ class Fixtures {
       .id(MATCH_ID)
       .build()
 
+  static def LEARNING_ALERT = Alert.builder()
+      .id(ALERT_ID)
+      .details(ALERT_DETAILS)
+      .matches(Collections.singletonList(MATCH))
+      .flags(Flag.LEARN.value)
+      .build();
+
+  static def RECOMMENDATION_ALERT = Alert.builder()
+      .id(ALERT_ID)
+      .details(ALERT_DETAILS)
+      .matches(Collections.singletonList(MATCH))
+      .flags(Flag.RECOMMEND.value)
+      .build();
 }

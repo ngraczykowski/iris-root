@@ -15,9 +15,9 @@ final class AlertCompositeToAckAlertMapper {
   static CbsAckAlert toAckAlert(@NonNull AlertDetails alertDetails) {
 
     return new CbsAckAlert(
-        alertDetails.systemId(),
-        alertDetails.batchId(),
-        isWatchlistLevel(alertDetails.watchlistId()));
+        alertDetails.getSystemId(),
+        alertDetails.getBatchId(),
+        isWatchlistLevel(alertDetails.getWatchlistId()));
   }
 
   private static boolean isWatchlistLevel(String watchlistId) {

@@ -4,6 +4,7 @@ import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.alerti
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtRequestToAlertMapper;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtResponseMapper;
 import com.silenteight.scb.ingest.domain.AlertService;
+import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,8 @@ class GnsRtRecommendationUseCaseImplTest {
   private RecommendationGatewayService recommendationService;
   @Mock
   private AlertService alertService;
+  @Mock
+  private IngestEventPublisher ingestEventPublisher;
 
   private GnsRtRecommendationUseCaseImpl underTest;
 
@@ -45,6 +48,7 @@ class GnsRtRecommendationUseCaseImplTest {
         .storeGnsRtRecommendationUseCase(storeGnsRtRecommendationUseCase)
         .recommendationService(recommendationService)
         .alertService(alertService)
+        .ingestEventPublisher(ingestEventPublisher)
         .build();
   }
 
@@ -60,6 +64,7 @@ class GnsRtRecommendationUseCaseImplTest {
         .verifyComplete();
 
     verify(alertService).registerAlertsAndMatches(fixtures.batchId, alerts);
+    verify(ingestEventPublisher, times(1)).publish(any());
   }
 
   @Test
@@ -74,5 +79,6 @@ class GnsRtRecommendationUseCaseImplTest {
         .verifyComplete();
 
     verify(alertService).registerAlertsAndMatches(fixtures.batchId, alerts);
+    verify(ingestEventPublisher, times(2)).publish(any());
   }
 }
