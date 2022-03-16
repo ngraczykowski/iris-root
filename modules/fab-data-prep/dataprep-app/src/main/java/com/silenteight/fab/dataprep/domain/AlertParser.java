@@ -27,11 +27,11 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 @RequiredArgsConstructor
 public class AlertParser {
 
-  private static final String HITS_PATH = "$.Hits.*.Hit";
+  private static final String HITS_PATH = "$.Message.Hits.*.Hit";
 
-  private static final String MESSAGE_DATA_PATH = "$.MessageData";
+  private static final String MESSAGE_DATA_PATH = "$.Message.MessageData";
 
-  private static final String SYSTEM_ID_PATH = "$.SystemID";
+  private static final String SYSTEM_ID_PATH = "$.Message.SystemID";
 
   private final ParseContext parseContext;
 

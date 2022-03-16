@@ -17,6 +17,7 @@ dependencies {
   implementation libraries.data_source_api
   implementation libraries.registration_api_proto
   implementation libraries.registration_lib
+  implementation libraries.sear_rabbitmq_common_schema
   implementation libraries.spring_boot_autoconfigure
   implementation libraries.spring_boot_starter_amqp
   implementation libraries.grpc_client_spring_boot_starter

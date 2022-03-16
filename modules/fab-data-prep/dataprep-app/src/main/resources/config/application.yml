@@ -16,8 +16,8 @@ spring:
 amqp:
   dataprep:
     incoming:
-      alert-and-matches-stored:
-        queue-name: alert-and-matches-stored-queue
+      alert-stored:
+        queue-name: alert-stored-queue
     outgoing:
       match-feature-input-set-fed:
         exchange-name: match-feature-input-set-fed-exchange

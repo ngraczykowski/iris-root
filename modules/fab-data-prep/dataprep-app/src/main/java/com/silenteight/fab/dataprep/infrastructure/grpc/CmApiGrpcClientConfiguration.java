@@ -16,13 +16,13 @@ class CmApiGrpcClientConfiguration {
   private AlertMessageDetailsServiceBlockingStub alertMessageDetailsServiceBlockingStub;
 
   @Bean
-  @Profile("!dev")
+  @Profile("!cmapiconnectormock")
   AlertDetailsServiceClient alertsDetailsServiceClient() {
     return new AlertDetailsServiceClient(alertMessageDetailsServiceBlockingStub);
   }
 
   @Bean
-  @Profile("dev")
+  @Profile("cmapiconnectormock")
   AlertDetailsServiceClient alertsDetailsServiceClientMock() {
     return new AlertDetailsServiceClientMock();
   }

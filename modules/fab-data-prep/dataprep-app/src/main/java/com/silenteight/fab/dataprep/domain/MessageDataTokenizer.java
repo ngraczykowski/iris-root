@@ -20,7 +20,7 @@ public class MessageDataTokenizer implements Converter<String, ParsedMessageData
     String[] parts = source.split(SEPARATOR, -1);
     if (parts.length != NUMBER_OF_SEGMENTS) {
       throw new IllegalArgumentException(
-          "Alert payload should contains " + NUMBER_OF_SEGMENTS + "segments separated with"
+          "Alert payload should contains " + NUMBER_OF_SEGMENTS + " segments separated with"
               + SEPARATOR);
     }
     return ParsedMessageData.builder()
