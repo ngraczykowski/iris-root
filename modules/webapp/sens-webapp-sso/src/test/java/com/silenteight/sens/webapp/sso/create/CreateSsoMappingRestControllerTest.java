@@ -3,6 +3,7 @@ package com.silenteight.sens.webapp.sso.create;
 import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.sens.webapp.sso.create.dto.CreateSsoMappingDto;
+import com.silenteight.sep.usermanagement.api.identityprovider.exception.SsoRoleMapperAlreadyExistsException;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,7 +22,9 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
-@Import({ CreateSsoMappingRestController.class })
+@Import({
+    CreateSsoMappingRestController.class,
+    CreateSsoMappingRestControllerAdvice.class })
 class CreateSsoMappingRestControllerTest extends BaseRestControllerTest {
 
   private static final String CREATE_SSO_MAPPING_URL = "/sso/mappings";
@@ -39,7 +42,8 @@ class CreateSsoMappingRestControllerTest extends BaseRestControllerTest {
         .body("attributes[0].attribute", is("Attribute #1"))
         .body("attributes[0].role", is("Role #1"))
         .body("roles[0]", is(USER_ADMINISTRATOR))
-        .body("roles[1]", is(AUDITOR));;
+        .body("roles[1]", is(AUDITOR));
+    ;
   }
 
   @Test
@@ -55,6 +59,18 @@ class CreateSsoMappingRestControllerTest extends BaseRestControllerTest {
   void its400WhenFieldLengthIsNotValid(CreateSsoMappingDto createSsoMappingDto) {
     post(CREATE_SSO_MAPPING_URL, createSsoMappingDto)
         .statusCode(BAD_REQUEST.value());
+  }
+
+  @Test
+  @WithMockUser(username = USERNAME, authorities = USER_ADMINISTRATOR)
+  void shouldCatchSsoRoleMapperAlreadyExistException() {
+    doThrow(SsoRoleMapperAlreadyExistsException.class)
+        .when(createSsoMappingUseCase)
+        .activate(any());
+
+    post(CREATE_SSO_MAPPING_URL, CREATE_SSO_MAPPING_DTO)
+        .statusCode(BAD_REQUEST.value())
+        .body(containsString("Sso role mapper already exists."));
   }
 
   private static Stream<CreateSsoMappingDto> getDtosWithInvalidFieldsLength() {

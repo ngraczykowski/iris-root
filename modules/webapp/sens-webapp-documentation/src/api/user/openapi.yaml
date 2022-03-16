@@ -318,7 +318,11 @@ paths:
               $ref: '#/components/schemas/CreateSsoMappingDto'
       responses:
         201:
-          description: Created
+          description: Created Sso Mapping.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SsoMappingDto'
 
   /sso/mappings/{id}:
     get:
