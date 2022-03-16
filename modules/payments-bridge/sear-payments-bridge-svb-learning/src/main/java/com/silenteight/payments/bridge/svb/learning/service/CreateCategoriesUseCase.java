@@ -5,24 +5,23 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.datasource.categories.api.v2.BatchCreateCategoriesRequest;
 import com.silenteight.datasource.categories.api.v2.Category;
 import com.silenteight.datasource.categories.api.v2.CategoryType;
-import com.silenteight.payments.bridge.agents.model.CompanyNameSurroundingAgentResponse;
-import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse;
-import com.silenteight.payments.bridge.common.dto.common.MessageStructure;
 import com.silenteight.payments.bridge.datasource.category.port.CreateCategoriesClient;
 
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
-import static com.silenteight.payments.bridge.common.app.CategoriesUtils.*;
+import static com.silenteight.payments.bridge.common.app.CategoriesUtils.CATEGORY_PREFIX;
 
-@Component
 @RequiredArgsConstructor
 class CreateCategoriesUseCase {
 
   private final CreateCategoriesClient createCategoriesClient;
+  private final Map<String, CreateCategoriesProperties.Category> categories;
 
   @EventListener(ApplicationReadyEvent.class)
   public void createCategories() {
@@ -32,106 +31,19 @@ class CreateCategoriesUseCase {
         .build());
   }
 
-  private static List<Category> getAllCategories() {
-    return List.of(
-        crossmatchCategory(),
-        specificTermsCategory(),
-        specificTerms2Category(),
-        historicalRiskAssessmentCategory(),
-        watchListTypeCategory(),
-        matchTypeCategory(),
-        companyNameSurroundingCategory(),
-        messageStructureCategory()
-    );
+  private List<Category> getAllCategories() {
+    return categories.entrySet().stream().map(this::createCategory).collect(Collectors.toList());
   }
 
-  private static Category crossmatchCategory() {
+  private Category createCategory(Entry<String, CreateCategoriesProperties.Category> category) {
+    var value = category.getValue();
     return Category
         .newBuilder()
-        .setName(CATEGORY_NAME_CROSSMATCH)
-        .setDisplayName("Name Address Crossmatch")
-        .setType(CategoryType.ENUMERATED)
-        .setMultiValue(false)
-        .addAllAllowedValues(NameAddressCrossmatchAgentResponse.getValues())
-        .build();
-  }
-
-  private static Category specificTermsCategory() {
-    return Category
-        .newBuilder()
-        .setName(CATEGORY_NAME_SPECIFIC_TERMS)
-        .setDisplayName(CATEGORY_SPECIFIC_TERMS_DISPLAY_NAME)
-        .setType(CategoryType.ENUMERATED)
-        .setMultiValue(false)
-        .addAllAllowedValues(List.of("YES", "NO"))
-        .build();
-  }
-
-  private static Category specificTerms2Category() {
-    return Category
-        .newBuilder()
-        .setName(CATEGORY_NAME_SPECIFIC_TERMS_2)
-        .setDisplayName(CATEGORY_SPECIFIC_TERMS_2_DISPLAY_NAME)
-        .setType(CategoryType.ENUMERATED)
-        .setMultiValue(false)
-        .addAllAllowedValues(List.of("YES", "YES_PTP", "NO"))
-        .build();
-  }
-
-  private static Category historicalRiskAssessmentCategory() {
-    return Category
-        .newBuilder()
-        .setName(CATEGORY_NAME_HISTORICAL_RISK_ASSESSMENT)
-        .setDisplayName(CATEGORY_HISTORICAL_RISK_ASSESSMENT_DISPLAY_NAME)
-        .setType(CategoryType.ENUMERATED)
-        .setMultiValue(false)
-        .addAllAllowedValues(List.of("YES", "NO"))
-        .build();
-  }
-
-  private static Category watchListTypeCategory() {
-    return Category
-        .newBuilder()
-        .setName(CATEGORY_NAME_WATCHLIST_TYPE)
-        .setDisplayName(CATEGORY_WATCHLIST_TYPE_DISPLAY_NAME)
-        .setType(CategoryType.ENUMERATED)
-        .addAllAllowedValues(List.of("ADDRESS", "COMPANY", "INDIVIDUAL", "VESSEL"))
-        .setMultiValue(false)
-        .build();
-  }
-
-  private static Category matchTypeCategory() {
-    return Category
-        .newBuilder()
-        .setName(CATEGORY_NAME_MATCH_TYPE)
-        .setDisplayName(CATEGORY_MATCH_TYPE_DISPLAY_NAME)
-        .setType(CategoryType.ENUMERATED)
-        .addAllAllowedValues(
-            List.of("ERROR", "UNKNOWN", "NAME", "SEARCH_CODE", "PASSPORT", "NATIONAL_ID", "BIC",
-                "EMBARGO", "FML_RULE"))
-        .setMultiValue(false)
-        .build();
-  }
-
-  private static Category companyNameSurroundingCategory() {
-    return Category
-        .newBuilder()
-        .setName(CATEGORY_NAME_COMPANY_NAME_SURROUNDING)
-        .setDisplayName(CATEGORY_COMPANY_NAME_SURROUNDING_DISPLAY_NAME)
-        .setType(CategoryType.ENUMERATED)
-        .addAllAllowedValues(CompanyNameSurroundingAgentResponse.getValues())
-        .setMultiValue(false)
-        .build();
-  }
-
-  private static Category messageStructureCategory() {
-    return Category
-        .newBuilder()
-        .setName(CATEGORY_NAME_MESSAGE_STRUCTURE)
-        .setDisplayName(CATEGORY_MESSAGE_STRUCTURE_DISPLAY_NAME)
-        .setType(CategoryType.ENUMERATED)
-        .addAllAllowedValues(MessageStructure.getValues())
-        .setMultiValue(false)
+        .setName(CATEGORY_PREFIX + category.getKey())
+        .setDisplayName(value.getDisplayName())
+        .setType(CategoryType.valueOf(value.getType()))
+        .setMultiValue(Boolean.parseBoolean(value.getMultiValue()))
+        .addAllAllowedValues(value.getAllowedValues())
         .build();
   }
 }
