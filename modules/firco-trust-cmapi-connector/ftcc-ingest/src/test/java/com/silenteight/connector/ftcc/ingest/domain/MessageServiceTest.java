@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 
 import static com.silenteight.connector.ftcc.ingest.domain.MessageFixtures.BATCH_ID;
-import static com.silenteight.connector.ftcc.ingest.domain.MessageFixtures.OBJECT_MAPPER;
 import static com.silenteight.connector.ftcc.ingest.domain.MessageFixtures.PAYLOAD;
+import static com.silenteight.sep.base.common.support.jackson.JsonConversionHelper.INSTANCE;
 import static org.assertj.core.api.Assertions.*;
 
 @Transactional
@@ -31,7 +31,7 @@ class MessageServiceTest extends BaseDataJpaTest {
   @Test
   void shouldCreateMessage() throws JsonProcessingException {
     // when
-    JsonNode jsonPayload = OBJECT_MAPPER.readTree(PAYLOAD);
+    JsonNode jsonPayload = INSTANCE.objectMapper().readTree(PAYLOAD);
     underTest.create(BATCH_ID, jsonPayload);
 
     // then

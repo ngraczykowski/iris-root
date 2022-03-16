@@ -18,8 +18,8 @@ import java.util.UUID;
 
 import static com.silenteight.connector.ftcc.ingest.domain.MessageFixtures.BATCH_ID;
 import static com.silenteight.connector.ftcc.ingest.domain.MessageFixtures.MESSAGE_ID;
-import static com.silenteight.connector.ftcc.ingest.domain.MessageFixtures.OBJECT_MAPPER;
 import static com.silenteight.connector.ftcc.ingest.domain.MessageFixtures.PAYLOAD;
+import static com.silenteight.sep.base.common.support.jackson.JsonConversionHelper.INSTANCE;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.*;
 
@@ -37,7 +37,7 @@ class MessageQueryTest extends BaseDataJpaTest {
   @Test
   void shouldGetMessageDetails() throws JsonProcessingException {
     // given
-    persistMessage(BATCH_ID, MESSAGE_ID, OBJECT_MAPPER.readTree(PAYLOAD));
+    persistMessage(BATCH_ID, MESSAGE_ID, INSTANCE.objectMapper().readTree(PAYLOAD));
 
     // when
     MessageDetailsDto message = underTest.details(BATCH_ID, MESSAGE_ID);
