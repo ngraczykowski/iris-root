@@ -35,3 +35,6 @@ eg: `DatabaseIntegrationTestIT` or they have the word `Integration` in the class
 eg: `DatabaseIntegrationTest`. So it's important to name test classes appropriately.
 
 ## Nomad Deployment
+
+The Nomad deployment descriptor(the job file) `scb-bridge.nomad` contains job specification and all its requirements. 
+Nomad scheduler deployed on-premise will use this file to run scb-bridge artifact (jar).

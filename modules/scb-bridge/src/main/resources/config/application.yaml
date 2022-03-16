@@ -5,6 +5,9 @@ grpc:
     registration:
       address: static://localhost:24806
       negotiation-type: PLAINTEXT
+    universal-data-source:
+      address: static://localhost:24805
+      negotiation-type: PLAINTEXT
   server:
     port: 24221
 
@@ -32,7 +35,7 @@ spring:
   batch:
     initialize-schema: never
     job:
-      enabled: 'false'
+      enabled: false
 
   datasource:
     password: cb
@@ -53,8 +56,8 @@ spring:
         jdbc:
           fetch_size: 10
           batch_size: 10
-        order_inserts: 'true'
-        order_updates: 'true'
+        order_inserts: true
+        order_updates: true
 
   application:
     name: customer-bridge
@@ -96,26 +99,28 @@ silenteight:
     grpc:
       registration:
         registration-deadline: 1m
+      universal-data-source:
+        uds-deadline: 1m
 serp:
   # GNS DB Configuration
   gns:
     db:
       password: 'CyevM34juNlBO'
       connection-init-query: SELECT 1 FROM DUAL
-      auto-commit: 'false'
+      auto-commit: false
       url: jdbc:oracle:thin:@${serp.gns.db.host}:${serp.gns.db.port}/${serp.gns.db.service.name}
       service:
         name: ORCLCDB
       user: LC_GNS_WEB_SIT_01
-      port: '1521'
+      port: 1521
       host: oracle.silenteight.com
-      isolate-internal-queries: 'true'
+      isolate-internal-queries: true
       connections:
-        min: '1'
-        max: '30'
+        min: 1
+        max: 30
         on-demand:
-          max: '20'
-          min: '1'
+          max: 20
+          min: 1
 
   # General Settings
   scb:
@@ -127,28 +132,94 @@ serp:
       alert:
         cleaner:
           offset: 1D
-          cron-expression: '0 0 0 * * ?'
+          cron-expression: 0 0 0 * * ?
         reader:
-          solvedAlertsProcessingEnabled: 'false'
+          solvedAlertsProcessingEnabled: false
       gns:
         solution:
           states:
             ANALYST_NO_SOLUTION: [ 0 ]
-      solving:
-        alert:
-          cronExpression: '0/6 * * * * ?'
-          db_relation_name: 'SENS_V_FFF_RECORDS'
-        watchlist:
-          cronExpression: '3/6 * * * * ?'
-          db_relation_name: 'SENS_V_FFF_RECORDS'
-      learning:
-        alert:
-          cronExpression: '0 0 3 ? * SUN'
-          db_relation_name: 'SENS_V_FFF_RECORDS'
-        watchlist:
-          cronExpression: '0 0 6 ? * SUN'
-          db_relation_name: 'SENS_V_FFF_RECORDS'
-        ecm:
-          cronExpression: '0 0 9 ? * SUN'
-          db_relation_name: 'SENS_V_FFF_RECORDS'
 
+      solving:
+        # Alert-Level Solving Job Configuration
+        alert:
+          enabled: false
+          cron-expression: 0/6 * * * * ?
+          ack-records: true
+          db-relation-name: SENS_V_FFF_RECORDS
+          cbs-hits-details-helper-view-name:
+
+        # Watchlist-Level Solving Job Configuration
+        watchlist:
+          enabled: false
+          cron-expression: 3/6 * * * * ?
+          ack-records: true
+          db-relation-name: SENS_V_FFF_RECORDS
+          cbs-hits-details-helper-view-name:
+
+      learning:
+        #  Alert level Learning Job Configuration
+        alert:
+          enabled: false
+          cron-expression: 0 0 3 ? * SUN
+          db-relation-name: SENS_V_FFF_RECORDS
+          cbs-hits-details-helper-view-name:
+
+        # Watchlist level Learning Job Configuration
+        watchlist:
+          enabled: false
+          cron-expression: 0 0 6 ? * SUN
+          db-relation-name: SENS_V_FFF_RECORDS
+          cbs-hits-details-helper-view-name:
+
+        # ECM Learning Job Configuration
+        ecm:
+          enabled: false
+          cron-expression: 0 0 9 ? * SUN
+          db-relation-name: SENS_V_FFF_RECORDS
+          cbs-hits-details-helper-view-name: ''
+          decisions:
+            - solution: ANALYST_TRUE_POSITIVE
+              text: Risk Relevant
+            - solution: ANALYST_FALSE_POSITIVE
+              text: Risk Irrelevant - Activity in line with Business
+          ecm-view-name: ECM
+
+        # Queuing Jobs Configuration
+        queuing:
+          jobs:
+            - ack-records: true
+              enabled: false
+              cron-expression: 0/30 * * * * ?
+              hit-details-view: ''
+              name: Watchlist-level queuing job (DENY)
+              priority: 10
+              records-view: SENS_V_FFF_RECORDS_DENY
+              watchlist-level: true
+
+            - ack-records: true
+              enabled: false
+              cron-expression: 3/30 * * * * ?
+              hit-details-view: ''
+              name: Watchlist-level queuing job (NON-DENY)
+              priority: 1
+              records-view: SENS_V_FFF_RECORDS_NON_DENY
+              watchlist-level: true
+
+            - ack-records: true
+              enabled: false
+              cron-expression: 5/30 * * * * ?
+              hit-details-view: ''
+              name: Alert-level queuing job (DENY)
+              priority: 10
+              records-view: SENS_V_FFF_RECORDS_DENY
+              watchlist-level: false
+
+            - ack-records: true
+              enabled: false
+              cron-expression: 7/30 * * * * ?
+              hit-details-view: ''
+              name: Alert-level queuing job (NON-DENY)
+              priority: 1
+              records-view: SENS_V_FFF_RECORDS_NON_DENY
+              watchlist-level: false
