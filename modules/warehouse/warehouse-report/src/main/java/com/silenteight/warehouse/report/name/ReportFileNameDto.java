@@ -19,4 +19,6 @@ public class ReportFileNameDto {
   String from = EMPTY;
   @Builder.Default
   String to = EMPTY;
+  @Builder.Default
+  String extension = EMPTY;
 }

@@ -12,11 +12,15 @@ import com.silenteight.warehouse.common.testing.e2e.CleanDatabase;
 import com.silenteight.warehouse.report.create.CreateReportRestController;
 import com.silenteight.warehouse.report.create.ReportNotAvailableException;
 import com.silenteight.warehouse.report.download.DownloadReportRestController;
+import com.silenteight.warehouse.report.generation.ReportZipProperties;
 import com.silenteight.warehouse.report.persistence.ReportStatus.Status;
 import com.silenteight.warehouse.report.status.ReportStatusRestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
@@ -27,9 +31,14 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.zip.ZipInputStream;
 
 import static com.silenteight.warehouse.report.ReportFixture.*;
 import static java.sql.Timestamp.valueOf;
@@ -52,6 +61,7 @@ import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORT
 @EnableAutoConfiguration
 @Transactional(propagation = NOT_SUPPORTED)
 @CleanDatabase
+@TestInstance(Lifecycle.PER_CLASS)
 class ReportGenerationIT {
 
   private static final String TEST_BUCKET = "report";
@@ -79,12 +89,19 @@ class ReportGenerationIT {
   @Autowired
   private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+  @Autowired
+  private ReportZipProperties reportZipProperties;
+
   private final ObjectMapper objectMapper = new ObjectMapper();
+
+  @BeforeAll
+  void setUp() {
+    createMinioBucket();
+  }
 
   @Test
   @WithMockUser(username = "user", authorities = COUNTRY_GROUP)
   void shouldGenerateReport() {
-    createMinioBucket();
     storeData(DISCRIMINATOR_1, NAME_1, RECOMMENDATION_DATE, Map.of(
         PAYLOAD_KEY_SIGNATURE, PAYLOAD_VALUE_SIGNATURE,
         PAYLOAD_KEY_COUNTRY, COUNTRY_PL));
@@ -100,13 +117,37 @@ class ReportGenerationIT {
         .until(() -> isReportCreated(instanceId));
     String reportContent = getReportContent(instanceId);
 
+    thenReportInDbHasCorrectExtension(instanceId, "CSV");
     assertThat(reportContent)
         .hasLineCount(2)
         .contains("9HzsNs1bv,PL,TEST[AAAGLOBAL186R1038]_81596ace,alerts/123,2021-01-12 10:00:37");
   }
 
   @Test
-  @SneakyThrows
+  @WithMockUser(username = "user", authorities = COUNTRY_GROUP)
+  void shouldZipReportWhenHasMoreRowsThanRowsLimitParameter() {
+    int givenRowsLimit = 1000;
+    int givenReportRowsCount = 1200;
+    when(reportZipProperties.isEnabled()).thenReturn(true);
+    when(reportZipProperties.getRowsLimit()).thenReturn(givenRowsLimit);
+
+    storeGivenAmountOfAlerts(givenReportRowsCount);
+    when(countryPermissionService.getCountries(of(COUNTRY_GROUP)))
+        .thenReturn(of(COUNTRY_PL));
+
+    Long instanceId = createReport();
+    await()
+        .atMost(5, SECONDS)
+        .until(() -> isReportCreated(instanceId));
+
+    var reportContent = getReportZipped(instanceId);
+    var zippedFiles = collectZipEntries(reportContent);
+
+    thenReportInDbHasCorrectExtension(instanceId, "ZIP");
+    assertThat(zippedFiles).hasSize(2);
+  }
+
+  @Test
   @WithMockUser(username = "user", authorities = COUNTRY_GROUP)
   void shouldNotGenerateReportWhenNotConfigured() {
     when(countryPermissionService.getCountries(of(COUNTRY_GROUP)))
@@ -132,9 +173,16 @@ class ReportGenerationIT {
     return Long.valueOf(location.replaceAll("[^0-9]", ""));
   }
 
+  private void thenReportInDbHasCorrectExtension(Long instanceId, String expectedExtension) {
+    String query = "SELECT extension FROM warehouse_report WHERE id = :ID";
+    String reportExtension = namedParameterJdbcTemplate.queryForObject(query,
+        Map.of("ID", instanceId), String.class);
+    assertThat(reportExtension).isEqualTo(expectedExtension);
+  }
+
   private boolean isReportCreated(Long reportId) {
     return Status.OK == reportStatusRestController.checkReportStatus(
-        REPORT_TYPE, REPORT_NAME, reportId).getBody()
+            REPORT_TYPE, REPORT_NAME, reportId).getBody()
         .getStatus();
   }
 
@@ -145,6 +193,15 @@ class ReportGenerationIT {
         .getBody()
         .getInputStream()
         .readAllBytes());
+  }
+
+  @SneakyThrows
+  private ZipInputStream getReportZipped(Long instanceId) {
+    var inputStream = downloadReportRestController
+        .downloadReport(REPORT_TYPE, REPORT_NAME, instanceId)
+        .getBody()
+        .getInputStream();
+    return new ZipInputStream(inputStream);
   }
 
   @SneakyThrows
@@ -165,13 +222,26 @@ class ReportGenerationIT {
             "payload", serializedPayload));
   }
 
-  @SneakyThrows
-  private void createMinioBucket() {
-    storageManager.create(TEST_BUCKET);
+  private void storeGivenAmountOfAlerts(int givenReportRowsCount) {
+    for (int i = 0; i < givenReportRowsCount; i++) {
+      storeData(
+          UUID.randomUUID().toString(), UUID.randomUUID().toString(), RECOMMENDATION_DATE,
+          Map.of(PAYLOAD_KEY_SIGNATURE, PAYLOAD_VALUE_SIGNATURE,
+              PAYLOAD_KEY_COUNTRY, COUNTRY_PL));
+    }
   }
 
   @SneakyThrows
-  private void removeMinioBucket() {
+  private List<InputStream> collectZipEntries(ZipInputStream reportContent) {
+    var entries = new ArrayList<InputStream>();
+    while (reportContent.getNextEntry() != null) {
+      entries.add(reportContent);
+    }
+    return entries;
+  }
+
+  @SneakyThrows
+  private void createMinioBucket() {
     storageManager.create(TEST_BUCKET);
   }
 }

@@ -4,14 +4,14 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
-import java.io.InputStream;
+import java.nio.file.Path;
 
 @Value
 @Builder
-public class InMemoryReportDto implements Report {
+public class TempFileReportDto implements Report {
 
   @NonNull
   String reportName;
   @NonNull
-  InputStream inputStream;
+  Path reportPath;
 }

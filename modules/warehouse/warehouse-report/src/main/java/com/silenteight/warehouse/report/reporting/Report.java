@@ -1,10 +1,10 @@
 package com.silenteight.warehouse.report.reporting;
 
-import java.io.InputStream;
+import java.nio.file.Path;
 
 public interface Report {
 
   String getReportName();
 
-  InputStream getInputStream();
+  Path getReportPath();
 }

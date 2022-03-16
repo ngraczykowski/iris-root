@@ -81,6 +81,10 @@ warehouse.report.statistics:
     AND (wa.payload ->> 'DN_CASE.currentState') = 'Level 1 Review'
     AND (wsa.payload ->> 'recommendation_recommended_action') = 'ACTION_FALSE_POSITIVE'
 
+warehouse.report.zip:
+  enabled: true
+  rowsLimit: 1000
+
 warehouse.reports.v2:
   reports:
     - name: AI_REASONING

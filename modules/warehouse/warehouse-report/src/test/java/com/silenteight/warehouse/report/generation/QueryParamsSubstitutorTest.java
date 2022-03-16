@@ -4,6 +4,7 @@ import com.silenteight.warehouse.report.sql.dto.SqlExecutorDto;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.OffsetDateTime;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,14 +16,18 @@ import static org.assertj.core.api.Assertions.*;
 
 class QueryParamsSubstitutorTest {
 
+  private static final String NAME = "AI_REASONING";
   private static final String FILENAME = "file.csv";
+  private static final OffsetDateTime CREATED_AT = OffsetDateTime.now();
   private static final String SELECT_SQL_QUERY = "SELECT *";
 
   @Test
   void shouldHandleDataAccessPermissionParameter() {
     ReportRequestData request = ReportRequestData.builder()
+        .name(NAME)
         .fileStorageName(FILENAME)
         .selectSqlQuery(SELECT_SQL_QUERY)
+        .createdAt(CREATED_AT)
         .sqlTemplates(
             of("SELECT * FROM table WHERE countries IN (${" + PARAMETER_COUNTRIES + "})"))
         .dataAccessPermissions(orderedSet("PL", "UK"))
@@ -37,8 +42,10 @@ class QueryParamsSubstitutorTest {
   @Test
   void shouldHandleEmptyParams() {
     ReportRequestData request = ReportRequestData.builder()
+        .name(NAME)
         .fileStorageName(FILENAME)
         .selectSqlQuery(SELECT_SQL_QUERY)
+        .createdAt(CREATED_AT)
         .sqlTemplates(List.of())
         .build();
 

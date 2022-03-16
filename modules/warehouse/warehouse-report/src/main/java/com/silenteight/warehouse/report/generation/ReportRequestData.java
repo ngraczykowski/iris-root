@@ -23,6 +23,9 @@ public class ReportRequestData {
   Long domainId;
 
   @NonNull
+  String name;
+
+  @NonNull
   String fileStorageName;
 
   @Default
@@ -30,6 +33,9 @@ public class ReportRequestData {
 
   @Default
   Optional<OffsetDateTime> to = empty();
+
+  @NonNull
+  OffsetDateTime createdAt;
 
   @Default
   List<String> sqlTemplates = emptyList();

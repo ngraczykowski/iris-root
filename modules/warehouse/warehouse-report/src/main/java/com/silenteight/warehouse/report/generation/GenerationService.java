@@ -7,15 +7,18 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.warehouse.report.persistence.ReportDto;
 import com.silenteight.warehouse.report.persistence.ReportPersistenceService;
 import com.silenteight.warehouse.report.remove.ReportsRemoval;
-import com.silenteight.warehouse.report.reporting.InMemoryReportDto;
 import com.silenteight.warehouse.report.reporting.Report;
+import com.silenteight.warehouse.report.reporting.TempFileReportDto;
 import com.silenteight.warehouse.report.sql.SqlExecutor;
 import com.silenteight.warehouse.report.sql.dto.SqlExecutorDto;
 import com.silenteight.warehouse.report.storage.ReportStorage;
 
 import org.springframework.scheduling.annotation.Async;
 
-import java.io.InputStream;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -32,6 +35,8 @@ class GenerationService implements ReportGenerationService, ReportsRemoval {
   private final ReportStorage reportStorage;
   @NonNull
   private final SqlExecutor sqlExecutor;
+  @NonNull
+  private final ReportTempFileCreator reportTempFileCreator;
 
   @Async
   public void generate(ReportRequestData request) {
@@ -51,24 +56,43 @@ class GenerationService implements ReportGenerationService, ReportsRemoval {
     }
   }
 
-  public void doGenerate(ReportRequestData request) {
+  private void doGenerate(ReportRequestData request) {
     SqlExecutorDto dto = QueryParamsSubstitutor.substitute(request);
-    sqlExecutor.execute(
-        dto,
-        inputStream -> reportStorage.saveReport(
-            toReport(request.getFileStorageName(), inputStream)));
+    sqlExecutor.execute(dto, inputStream -> {
+      ParsedFileDto parsed = reportTempFileCreator.inputStreamToFile(inputStream, request);
+      saveReport(request, parsed.getFile());
+      if (parsed.isZipped()) {
+        reportPersistenceService.zippingSuccessful(request.getDomainId());
+      }
+      deleteTempFile(parsed);
+    });
+  }
+
+  private void saveReport(ReportRequestData request, File reportFile) {
+    Report report = toReport(request.getFileStorageName(), reportFile);
+    reportStorage.saveReport(report);
+  }
+
+  private static Report toReport(String name, File reportFile) {
+    return TempFileReportDto.builder()
+        .reportName(name)
+        .reportPath(reportFile.toPath())
+        .build();
+  }
+
+  private static void deleteTempFile(ParsedFileDto parsed) {
+    Path path = parsed.getFile().toPath();
+    try {
+      boolean deleted = Files.deleteIfExists(path);
+      log.debug("File {} deleted={}", path, deleted);
+    } catch (IOException e) {
+      log.warn("Error while deleting temp file: {}", path);
+    }
   }
 
   private void doFail(Long id) {
     reportPersistenceService.generationFail(id);
     log.warn("Report generation failed, id={}", id);
-  }
-
-  private static Report toReport(String name, InputStream inputStream) {
-    return InMemoryReportDto.builder()
-        .reportName(name)
-        .inputStream(inputStream)
-        .build();
   }
 
   @Override

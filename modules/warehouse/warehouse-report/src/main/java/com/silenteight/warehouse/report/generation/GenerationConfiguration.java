@@ -14,11 +14,13 @@ class GenerationConfiguration {
   GenerationService reportGenerationService2(
       ReportPersistenceService reportPersistenceService,
       ReportStorage reportStorage,
-      SqlExecutor sqlExecutor) {
+      SqlExecutor sqlExecutor,
+      ReportTempFileCreator reportTempFileCreator) {
 
     return new GenerationService(
         reportPersistenceService,
         reportStorage,
-        sqlExecutor);
+        sqlExecutor,
+        reportTempFileCreator);
   }
 }

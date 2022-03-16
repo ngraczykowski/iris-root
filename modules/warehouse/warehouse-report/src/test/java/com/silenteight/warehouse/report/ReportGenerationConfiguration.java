@@ -6,6 +6,7 @@ import com.silenteight.warehouse.common.domain.country.CountryPermissionService;
 import com.silenteight.warehouse.report.create.ReportCreateModule;
 import com.silenteight.warehouse.report.download.ReportDownloadModule;
 import com.silenteight.warehouse.report.generation.ReportGenerationModule;
+import com.silenteight.warehouse.report.generation.ReportZipProperties;
 import com.silenteight.warehouse.report.name.ReportFileNameModule;
 import com.silenteight.warehouse.report.persistence.ReportPersistenceModule;
 import com.silenteight.warehouse.report.sql.SqlExecutorModule;
@@ -36,5 +37,11 @@ class ReportGenerationConfiguration {
   @Primary
   CountryPermissionService countryPermissionServiceMock() {
     return mock(CountryPermissionService.class);
+  }
+
+  @Bean
+  @Primary
+  ReportZipProperties reportZipProperties() {
+    return mock(ReportZipProperties.class);
   }
 }

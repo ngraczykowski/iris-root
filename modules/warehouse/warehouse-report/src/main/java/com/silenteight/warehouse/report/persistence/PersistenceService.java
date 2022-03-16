@@ -38,6 +38,11 @@ class PersistenceService implements ReportPersistenceService {
   }
 
   @Override
+  public void zippingSuccessful(Long id) {
+    reportRepository.getById(id).ifPresent(Report::zipped);
+  }
+
+  @Override
   public List<ReportDto> getAllByCreatedAtBefore(OffsetDateTime offsetDateTime) {
     return reportRepository.getAllByCreatedAtBefore(offsetDateTime).stream()
         .map(Report::toDto)

@@ -15,4 +15,5 @@ public class ReportDto {
   ReportRange range;
   OffsetDateTime createdAt;
   ReportState state;
+  ReportFileExtension extension;
 }
