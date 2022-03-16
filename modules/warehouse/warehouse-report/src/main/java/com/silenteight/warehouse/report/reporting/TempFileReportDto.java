@@ -14,4 +14,6 @@ public class TempFileReportDto implements Report {
   String reportName;
   @NonNull
   Path reportPath;
+  @NonNull
+  Long reportId;
 }

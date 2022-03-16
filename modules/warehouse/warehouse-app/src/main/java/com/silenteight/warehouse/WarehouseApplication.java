@@ -7,7 +7,6 @@ import com.silenteight.commons.app.spring.SpringApplicationTemplate;
 import com.silenteight.sep.auth.authentication.AuthenticationModule;
 import com.silenteight.sep.auth.authorization.AuthorizationModule;
 import com.silenteight.sep.auth.token.TokenModule;
-import com.silenteight.sep.filestorage.minio.FileStorageMinioModule;
 import com.silenteight.warehouse.alert.rest.RestAlertModule;
 import com.silenteight.warehouse.backup.BackupModule;
 import com.silenteight.warehouse.common.domain.DomainModule;
@@ -85,7 +84,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     AuthenticationModule.class,
     AuthorizationModule.class,
     ElasticsearchRestClientModule.class,
-    FileStorageMinioModule.class,
     OpendistroModule.class,
     QaMessageHandlerModule.class,
     QaProcessingModule.class,

@@ -1,27 +1,74 @@
 package com.silenteight.warehouse.report.storage;
 
-import com.silenteight.sep.filestorage.api.FileRemover;
-import com.silenteight.sep.filestorage.api.FileRetriever;
-import com.silenteight.sep.filestorage.api.FileUploader;
+import com.silenteight.warehouse.report.persistence.ReportPersistenceService;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.auth.signer.AwsS3V4Signer;
+import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
+import software.amazon.awssdk.core.client.config.SdkAdvancedClientOption;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.S3Configuration;
 
+import java.net.URI;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import javax.validation.Valid;
 
 @Configuration
-@EnableConfigurationProperties(ReportStorageProperties.class)
+@EnableConfigurationProperties({
+    ReportStorageProperties.class, ReportStorageClientProperties.class })
 class ReportStorageConfiguration {
 
   @Bean
-  MinioReportStorageService reportStorageService(
-      FileUploader fileUploader,
-      FileRemover fileRemover,
-      FileRetriever fileRetriever,
+  S3Client s3Client(ReportStorageClientProperties reportStorageClientProperties) {
+    final AwsBasicCredentials credentials =
+        AwsBasicCredentials.create(
+            reportStorageClientProperties.getAccessKey(),
+            reportStorageClientProperties.getPrivateKey());
+
+    return S3Client.builder()
+        .credentialsProvider(StaticCredentialsProvider.create(credentials))
+        .region(Region.of(reportStorageClientProperties.getRegion()))
+        .endpointOverride(URI.create(reportStorageClientProperties.getUrl()))
+        .serviceConfiguration(
+            S3Configuration.builder()
+                .pathStyleAccessEnabled(true)
+                .build())
+        .overrideConfiguration(
+            ClientOverrideConfiguration
+                .builder()
+                .putAdvancedOption(SdkAdvancedClientOption.SIGNER, AwsS3V4Signer.create())
+                .build())
+        .build();
+  }
+
+  @Bean
+  S3CompatibleStorage reportStorageService(
+      S3Client s3Client,
+      AsyncReportStorageChecker reportStorageChecker,
       @Valid ReportStorageProperties properties) {
 
-    return new MinioReportStorageService(
-        fileUploader, fileRemover, fileRetriever, properties.getDefaultBucket());
+    return new S3CompatibleStorage(
+        s3Client, reportStorageChecker, properties.getDefaultBucket());
+  }
+
+  @Bean
+  AsyncReportStorageChecker reportStorageChecker(
+      S3Client s3Client,
+      ReportPersistenceService reportPersistenceService) {
+
+    ExecutorService threadPool = Executors.newFixedThreadPool(2, threadFactory());
+    return new AsyncReportStorageChecker(s3Client, threadPool, reportPersistenceService);
+  }
+
+  private ThreadFactory threadFactory() {
+    return new ThreadFactoryBuilder().setNameFormat("s3Waiters-%d").build();
   }
 }

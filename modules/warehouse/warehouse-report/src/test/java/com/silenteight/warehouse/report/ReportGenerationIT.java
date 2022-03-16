@@ -5,10 +5,9 @@ import lombok.SneakyThrows;
 import com.silenteight.sep.base.common.database.HibernateCacheAutoConfiguration;
 import com.silenteight.sep.base.common.support.hibernate.SilentEightNamingConventionConfiguration;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
-import com.silenteight.sep.filestorage.api.StorageManager;
-import com.silenteight.sep.filestorage.minio.container.MinioContainer.MinioContainerInitializer;
 import com.silenteight.warehouse.common.domain.country.CountryPermissionService;
 import com.silenteight.warehouse.common.testing.e2e.CleanDatabase;
+import com.silenteight.warehouse.common.testing.storage.minio.MinioContainer.MinioContainerInitializer;
 import com.silenteight.warehouse.report.create.CreateReportRestController;
 import com.silenteight.warehouse.report.create.ReportNotAvailableException;
 import com.silenteight.warehouse.report.download.DownloadReportRestController;
@@ -30,6 +29,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
 
 import java.io.InputStream;
 import java.time.LocalDateTime;
@@ -64,12 +65,15 @@ import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORT
 @TestInstance(Lifecycle.PER_CLASS)
 class ReportGenerationIT {
 
-  private static final String TEST_BUCKET = "report";
+  private static final String TEST_BUCKET = "reports";
   private static final String TIMESTAMP_FROM = "2020-01-12T10:00:37.098Z";
   private static final String TIMESTAMP_TO = "2022-01-12T10:00:37.098Z";
   private static final String REPORT_NAME = "TEST_REPORT";
   private static final String REPORT_NAME_NOT_CONF = "TEST_REPORT_NOT_CONF";
   private static final String REPORT_TYPE = "production";
+
+  @Autowired
+  private S3Client s3Client;
 
   @Autowired
   private CreateReportRestController createReportRestController;
@@ -79,9 +83,6 @@ class ReportGenerationIT {
 
   @Autowired
   private DownloadReportRestController downloadReportRestController;
-
-  @Autowired
-  private StorageManager storageManager;
 
   @Autowired
   private CountryPermissionService countryPermissionService;
@@ -96,7 +97,7 @@ class ReportGenerationIT {
 
   @BeforeAll
   void setUp() {
-    createMinioBucket();
+    createBucket();
   }
 
   @Test
@@ -241,7 +242,7 @@ class ReportGenerationIT {
   }
 
   @SneakyThrows
-  private void createMinioBucket() {
-    storageManager.create(TEST_BUCKET);
+  private void createBucket() {
+    s3Client.createBucket(CreateBucketRequest.builder().bucket(TEST_BUCKET).build());
   }
 }

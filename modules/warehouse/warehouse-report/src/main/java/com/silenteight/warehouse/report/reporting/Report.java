@@ -7,4 +7,6 @@ public interface Report {
   String getReportName();
 
   Path getReportPath();
+
+  Long getReportId();
 }
