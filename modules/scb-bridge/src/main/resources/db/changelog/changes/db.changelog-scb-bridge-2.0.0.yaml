@@ -1,0 +1,52 @@
+databaseChangeLog:
+- changeSet:
+    id: 2.0.0-1
+    author: wzegarowski
+    comment: DB schema for Spring Batch 4.3.4
+    changes:
+      - sqlFile:
+          path: db/changelog/changes/spring-batch-4.3.4-schema-postgresql.sql
+
+      # Note, index declarations are not included in spring batch DDL scripts,
+      # as there are too many variations in how users may want to index tables
+
+      - createIndex:
+          indexName: ix_batch_job_execution_job_instance_id
+          tableName: batch_job_execution
+          column:
+            name: job_instance_id
+
+      - createIndex:
+          indexName: ix_batch_job_execution_context_job_execution_id
+          tableName: batch_job_execution_context
+          column:
+            name: job_execution_id
+
+      - createIndex:
+          indexName: ix_batch_job_execution_params_job_execution_id
+          tableName: batch_job_execution_params
+          column:
+            name: job_execution_id
+
+      - createIndex:
+          indexName: ix_batch_job_instance_job_name_job_key
+          tableName: batch_job_instance
+          unique: true
+          columns:
+            - column:
+                name: job_name
+            - column:
+                name: job_key
+
+      - createIndex:
+          indexName: ix_batch_step_execution_job_execution_id
+          tableName: batch_step_execution
+          column:
+            name: job_execution_id
+
+      - createIndex:
+          indexName: ix_batch_step_execution_context_step_execution_id
+          tableName: batch_step_execution_context
+          column:
+            name: step_execution_id
+
