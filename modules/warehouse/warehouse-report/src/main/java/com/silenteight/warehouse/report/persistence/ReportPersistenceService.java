@@ -12,6 +12,8 @@ public interface ReportPersistenceService {
 
   void generationStarted(Long id);
 
+  void zippingSuccessful(Long id);
+
   List<ReportDto> getAllByCreatedAtBefore(OffsetDateTime offsetDateTime);
 
   void deleteAll(List<ReportDto> reports);

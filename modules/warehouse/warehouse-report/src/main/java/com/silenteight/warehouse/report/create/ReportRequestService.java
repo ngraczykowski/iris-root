@@ -39,12 +39,14 @@ class ReportRequestService {
 
     reportProvider.generate(ReportRequestData.builder()
         .domainId(report.getId())
+        .name(name)
         .fileStorageName(report.getFileStorageName())
         .analysisId(type)
         .selectSqlQuery(properties.getSelectSqlQuery())
         .sqlTemplates(properties.getSqlTemplates())
         .from(Optional.ofNullable(from))
         .to(Optional.ofNullable(to))
+        .createdAt(report.getCreatedAt())
         .dataAccessPermissions(countries)
         .build());
 

@@ -12,6 +12,7 @@ class ProductionReportFileNameService implements ReportFileName {
   private static final String FROM_PLACEHOLDER = "[from]";
   private static final String TO_PLACEHOLDER = "[to]";
   private static final String TIMESTAMP_PLACEHOLDER = "[timestamp]";
+  private static final String EXTENSION_PLACEHOLDER = "[extension]";
 
   @NonNull
   private final String fileNamePattern;
@@ -22,7 +23,8 @@ class ProductionReportFileNameService implements ReportFileName {
         .replace(REPORT_TYPE_PLACEHOLDER, fileNameDto.getReportType())
         .replace(FROM_PLACEHOLDER, fileNameDto.getFrom())
         .replace(TO_PLACEHOLDER, fileNameDto.getTo())
-        .replace(TIMESTAMP_PLACEHOLDER, fileNameDto.getTimestamp());
+        .replace(TIMESTAMP_PLACEHOLDER, fileNameDto.getTimestamp())
+        .replace(EXTENSION_PLACEHOLDER, fileNameDto.getExtension());
   }
 
   @Override

@@ -2,6 +2,7 @@ package com.silenteight.warehouse.report.storage;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.filestorage.api.FileRemover;
@@ -11,6 +12,7 @@ import com.silenteight.sep.filestorage.api.dto.FileDto;
 import com.silenteight.sep.filestorage.api.dto.StoreFileRequestDto;
 import com.silenteight.warehouse.report.reporting.Report;
 
+import java.nio.file.Files;
 import java.util.Collection;
 
 @Slf4j
@@ -58,11 +60,12 @@ class MinioReportStorageService implements ReportStorage {
     reportNames.forEach(this::removeReport);
   }
 
+  @SneakyThrows
   private StoreFileRequestDto toStoreFileRequestDto(Report report) {
     return StoreFileRequestDto.builder()
         .storageName(bucketName)
         .fileName(report.getReportName())
-        .fileContent(report.getInputStream())
+        .fileContent(Files.newInputStream(report.getReportPath()))
         .fileSize(UNKNOWN_FILE_SIZE)
         .build();
   }

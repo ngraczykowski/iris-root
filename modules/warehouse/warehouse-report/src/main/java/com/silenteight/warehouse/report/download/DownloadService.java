@@ -52,6 +52,7 @@ class DownloadService {
               .from(dateFormatter.format(range.getFrom()))
               .to(dateFormatter.format(range.getTo()))
               .timestamp(toTimestamp(dto.getCreatedAt()))
+              .extension(dto.getExtension().getFileExtension())
               .build()
       );
     } else {
@@ -60,6 +61,7 @@ class DownloadService {
               .reportType(dto.getName())
               .analysisId(type)
               .timestamp(toTimestamp(dto.getCreatedAt()))
+              .extension(dto.getExtension().getFileExtension())
               .build()
       );
     }

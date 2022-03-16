@@ -113,11 +113,14 @@ warehouse:
       cron: "0 0 1 * * ?"
       duration-time: P1D
     file-name:
-      # Available patterns: [reportType], [from], [to], [timestamp]
-      production-pattern: "[reportType]_Prod_[from]_To_[to].csv"
-      # Available patterns: [reportType], [analysisId], [timestamp]
-      simulation-pattern: "[reportType]_Sim_[analysisId].csv"
+      # Available patterns: [reportType], [from], [to], [timestamp], [extension]
+      production-pattern: "[reportType]_Prod_[from]_To_[to].[extension]"
+      # Available patterns: [reportType], [analysisId], [timestamp], [extension]
+      simulation-pattern: "[reportType]_Sim_[analysisId].[extension]"
     copy-csv-pattern: "COPY ( %s ) TO STDOUT WITH (FORMAT CSV, HEADER)"
+    zip:
+      enabled: true
+      rowsLimit: 100000
   retention:
     simulation:
       analysis-expired:

@@ -62,6 +62,11 @@ class Report extends BaseEntity implements IdentifiableEntity {
   @Column(name = "file_storage_name")
   private String fileStorageName;
 
+  @ToString.Include
+  @Column(name = "extension", nullable = false)
+  @Enumerated(EnumType.STRING)
+  private ReportFileExtension extension;
+
   static Report of(ReportRange range, String analysisType, String reportType) {
     Report report = new Report();
     report.setType(reportType);
@@ -70,6 +75,7 @@ class Report extends BaseEntity implements IdentifiableEntity {
     report.setTo(range.getTo());
     report.generateFileStorageName();
     report.setAnalysis(analysisType);
+    report.setExtension(ReportFileExtension.CSV);
     return report;
   }
 
@@ -94,6 +100,10 @@ class Report extends BaseEntity implements IdentifiableEntity {
     setFileStorageName(null);
   }
 
+  void zipped() {
+    setExtension(ReportFileExtension.ZIP);
+  }
+
   private void assertAllowedStateChange(ReportState desirable, ReportState... state) {
     if (notInState(state))
       throw new IllegalStateException(
@@ -113,6 +123,7 @@ class Report extends BaseEntity implements IdentifiableEntity {
         .range(ReportRange.of(this.from, this.to, this.analysis))
         .createdAt(this.createdAt)
         .state(this.state)
+        .extension(this.extension)
         .build();
   }
 }
