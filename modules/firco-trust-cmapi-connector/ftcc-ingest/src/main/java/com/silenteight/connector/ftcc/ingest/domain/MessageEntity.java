@@ -50,7 +50,7 @@ class MessageEntity extends BaseEntity implements Serializable {
     return MessageDetailsDto.builder()
         .batchName(BatchResource.toResourceName(getBatchId()))
         .messageName(MessageResource.toResourceName(getMessageId()))
-        .payload(getPayload().asText())
+        .payload(getPayload().toString())
         .build();
   }
 }

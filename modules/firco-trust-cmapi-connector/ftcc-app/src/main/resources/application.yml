@@ -18,8 +18,8 @@ ftcc:
   #-------------------------------------------------------------------------------------------------
   data-prep:
     outbound:
-      exchange: data-prep.command
-      routing-key: command.data-prep.alert
+      exchange: connector.event
+      routing-key: alert.message
 
 grpc:
   client:

@@ -6,6 +6,7 @@ import com.silenteight.connector.ftcc.ingest.domain.dto.MessageDetailsDto;
 import com.silenteight.connector.ftcc.ingest.domain.exception.MessageNotFoundException;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import java.util.UUID;
 
 import static com.silenteight.connector.ftcc.ingest.domain.MessageFixtures.BATCH_ID;
 import static com.silenteight.connector.ftcc.ingest.domain.MessageFixtures.MESSAGE_ID;
+import static com.silenteight.connector.ftcc.ingest.domain.MessageFixtures.OBJECT_MAPPER;
 import static com.silenteight.connector.ftcc.ingest.domain.MessageFixtures.PAYLOAD;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.*;
@@ -33,9 +35,9 @@ class MessageQueryTest extends BaseDataJpaTest {
   private MessageRepository messageRepository;
 
   @Test
-  void shouldGetMessageDetails() {
+  void shouldGetMessageDetails() throws JsonProcessingException {
     // given
-    persistMessage(BATCH_ID, MESSAGE_ID, PAYLOAD);
+    persistMessage(BATCH_ID, MESSAGE_ID, OBJECT_MAPPER.readTree(PAYLOAD));
 
     // when
     MessageDetailsDto message = underTest.details(BATCH_ID, MESSAGE_ID);
@@ -43,7 +45,7 @@ class MessageQueryTest extends BaseDataJpaTest {
     // then
     assertThat(message.getBatchName()).isEqualTo("batches/" + BATCH_ID);
     assertThat(message.getMessageName()).isEqualTo("messages/" + MESSAGE_ID);
-    assertThat(message.getPayload()).isEqualTo(PAYLOAD.asText());
+    assertThat(message.getPayload()).isEqualTo(PAYLOAD);
   }
 
   @Test

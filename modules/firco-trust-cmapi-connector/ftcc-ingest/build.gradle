@@ -27,6 +27,8 @@ dependencies {
 
   implementation libraries.jakarta_validation_api
 
+  implementation libraries.grpc_server_spring_boot_starter
+
   // Jackson
   implementation libraries.jackson_annotations
   implementation libraries.jackson_databind
