@@ -11,8 +11,9 @@ gradleBuild(
     sonarDecorate: true,
     dependencyCheckEnabled: true,
     includeBuildNumberInSnapshotVersion: true,
+    archiveArtifactsPattern: '**/build/libs/*.jar, plugins/**/*.jar',
 
-//     additionalStages: {
-//         deployOnNomad()
-//     }
+    additionalStages: {
+         deployOnNomad()
+    }
 )
