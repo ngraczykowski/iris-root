@@ -1,5 +1,6 @@
 package com.silenteight.fab.dataprep.infrastructure;
 
+import com.silenteight.fab.dataprep.domain.category.CustomerTypeCategory;
 import com.silenteight.fab.dataprep.domain.category.FabCategory;
 import com.silenteight.fab.dataprep.domain.category.SanctionCategory;
 import com.silenteight.fab.dataprep.domain.feature.*;
@@ -89,5 +90,11 @@ public class FeatureAndCategoryConfiguration {
   @ConditionalOnProperty("feeding.categories.is_san.enabled")
   FabCategory sanctionCategory() {
     return new SanctionCategory("is_san");
+  }
+
+  @Bean
+  @ConditionalOnProperty("feeding.categories.customerType.enabled")
+  FabCategory customerTypeCategory() {
+    return new CustomerTypeCategory("customerType");
   }
 }

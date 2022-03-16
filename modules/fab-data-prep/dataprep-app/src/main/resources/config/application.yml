@@ -61,4 +61,9 @@ feeding:
       categoryType: ENUMERATED
       allowedValues: [True, False]
       multiValue: false
-
+    customerType:
+      enabled: true
+      displayName: Customer Type
+      categoryType: ENUMERATED
+      allowedValues: [I, C]
+      multiValue: false
