@@ -66,5 +66,13 @@ pipeline {
                 }
             }
         }
+        stage('Deploy On Nomad mike') {
+          when {
+              branch 'master'
+          }
+          steps {
+              sh './nomad/deploy.sh'
+          }
+        }
     }
 }

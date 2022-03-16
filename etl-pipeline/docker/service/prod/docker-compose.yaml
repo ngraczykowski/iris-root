@@ -4,8 +4,8 @@ services:
   etl_pipeline_service:
     image: docker.repo.silenteight.com/etl-pipeline-service
     volumes:
-      - /home/artur/repos/silenteight/etl-pipeline/etl_pipeline/config:/config:rw
+      - /config:/config:rw
     ports:
-      - "9090:9090" # jupyter notebook forward
+      - "9090:9090"
     environment:
       - CONFIG_APP_DIR=/config
