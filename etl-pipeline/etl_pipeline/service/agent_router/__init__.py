@@ -69,7 +69,7 @@ class AgentInputCreator:
     def upload_data_inputs(self, alert, payload):
         batch = self.produce_batch_create_agent_input_request(alert, payload)
         response = self.stub.BatchCreateAgentInputs(batch)
-        logger.error(response)
+        logger.debug(response)
 
 
 class Producer(ABC):
