@@ -99,73 +99,73 @@ pb:
         type: ENUMERATED
         multiValue: false
         allowedValues:
-          - NO_DECISION
-          - CROSSMATCH
-          - NO_CROSSMATCH
+          - "NO_DECISION"
+          - "CROSSMATCH"
+          - "NO_CROSSMATCH"
       specificTerms:
         displayName: Specific Terms
         type: ENUMERATED
         multiValue: false
         allowedValues:
-          - YES
-          - NO
+          - "YES"
+          - "NO"
       specificTerms2:
         displayName: Specific Terms 2
         type: ENUMERATED
         multiValue: false
         allowedValues:
-          - YES
-          - YES_PTP
-          - NO
+          - "YES"
+          - "YES_PTP"
+          - "NO"
       historicalRiskAssessment:
         displayName: Historical Risk Assessment
         type: ENUMERATED
         multiValue: false
         allowedValues:
-          - YES
-          - NO
+          - "YES"
+          - "NO"
       watchlistType:
         displayName: Watchlist Type
         type: ENUMERATED
         multiValue: false
         allowedValues:
-          - ADDRESS
-          - COMPANY
-          - INDIVIDUAL
-          - VESSEL
+          - "ADDRESS"
+          - "COMPANY"
+          - "INDIVIDUAL"
+          - "VESSEL"
       matchType:
         displayName: Match Type
         type: ENUMERATED
         multiValue: false
         allowedValues:
-          - ERROR
-          - UNKNOWN
-          - NAME
-          - SEARCH_CODE
-          - PASSPORT
-          - NATIONAL_ID
-          - BIC
-          - EMBARGO
-          - FML_RULE
+          - "ERROR"
+          - "UNKNOWN"
+          - "NAME"
+          - "SEARCH_CODE"
+          - "PASSPORT"
+          - "NATIONAL_ID"
+          - "BIC"
+          - "EMBARGO"
+          - "FML_RULE"
       companyNameSurrounding:
         displayName: Company Name Surrounding
         type: ENUMERATED
         multiValue: false
         allowedValues:
-          - NO_MATCH
-          - MATCH_1
-          - MATCH_2
-          - MATCH_3
-          - MATCH_4
-          - MATCH_5_OR_MORE
+          - "NO_MATCH"
+          - "MATCH_1"
+          - "MATCH_2"
+          - "MATCH_3"
+          - "MATCH_4"
+          - "MATCH_5_OR_MORE"
       messageStructure:
         displayName: Message Structure
         type: ENUMERATED
         multiValue: false
         allowedValues:
-          - STRUCTURED
-          - UNSUPPORTED
-          - UNSTRUCTURED
+          - "STRUCTURED"
+          - "UNSUPPORTED"
+          - "UNSTRUCTURED"
 #---------------------------------------------------------------------------------------------------
 # Warehouse
 #---------------------------------------------------------------------------------------------------
