@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package silenteight.agent.geo.v1.api;
+
+import "google/api/field_behavior.proto";
+
+import public "silenteight/agent/geo/v1/api/common.proto";
+
+option java_package = "com.silenteight.proto.agent.geo.v1.api";
+option java_outer_classname = "GeoSanctionsAgentApiProto";
+option java_multiple_files = true;
+
+service GeoSanctionsAgent {
+
+  rpc VerifySanctions (VerifySanctionsRequest) returns (VerifySanctionsResponse) {
+  }
+}
+
+message VerifySanctionsRequest {
+  Discriminator discriminator = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated string locations = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message VerifySanctionsResponse {
+  string solution = 1 [(google.api.field_behavior) = REQUIRED];
+  GeoSanctionsReason reason = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message GeoSanctionsReason {
+  repeated IdentifiedLocation identified_locations = 1 [(google.api.field_behavior) = REQUIRED];
+  // a subset of extracted countries found in allow/deny list specified for a discriminator
+  repeated MatchedLocation matched_locations = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message MatchedLocation {
+  Type type = 1 [(google.api.field_behavior) = REQUIRED];
+  Location location = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message Discriminator {
+  string value = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+enum Type {
+  ALLOWED = 0;
+  DENIED = 1;
+}
