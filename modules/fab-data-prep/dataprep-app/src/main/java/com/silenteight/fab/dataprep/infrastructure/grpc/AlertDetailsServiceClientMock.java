@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 public class AlertDetailsServiceClientMock extends AlertDetailsServiceClient {
 
   AlertDetailsServiceClientMock() {
-    super(null);
+    super(null, null);
   }
 
   @Override

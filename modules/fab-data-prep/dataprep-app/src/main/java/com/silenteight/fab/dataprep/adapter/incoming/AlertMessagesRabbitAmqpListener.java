@@ -8,13 +8,17 @@ import com.silenteight.fab.dataprep.domain.FeedingFacade;
 import com.silenteight.fab.dataprep.domain.RegistrationService;
 import com.silenteight.fab.dataprep.domain.model.ParsedAlertMessage;
 import com.silenteight.fab.dataprep.domain.model.RegisteredAlert;
-import com.silenteight.proto.fab.api.v1.*;
+import com.silenteight.proto.fab.api.v1.AlertMessageDetails;
+import com.silenteight.proto.fab.api.v1.AlertMessageStored;
+import com.silenteight.proto.fab.api.v1.AlertMessagesDetailsResponse;
 
+import com.google.common.base.Stopwatch;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static java.util.stream.Collectors.toMap;
 
@@ -40,12 +44,17 @@ class AlertMessagesRabbitAmqpListener {
     log.info(
         "Received a message with: batch: {}, alert message: {}", message.getBatchName(),
         message.getMessageName());
+    Stopwatch stopwatch = Stopwatch.createStarted();
     AlertMessagesDetailsResponse response = getAlertDetails(message);
     Map<String, ParsedAlertMessage> extractedAlerts =
         getExtractedAlerts(message, response);
     List<RegisteredAlert> registeredAlerts =
         registrationService.registerAlertsAndMatches(extractedAlerts);
     registeredAlerts.forEach(feedingFacade::etlAndFeedUds);
+    long alertMessageHandlingDuration = stopwatch.elapsed(TimeUnit.MILLISECONDS);
+    log.info(
+        "Batch: {}, alert message: {} handled in {} millis", message.getBatchName(),
+        message.getMessageName(), alertMessageHandlingDuration);
   }
 
   private Map<String, ParsedAlertMessage> getExtractedAlerts(

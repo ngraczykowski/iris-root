@@ -17,7 +17,6 @@ import java.time.Duration;
 import javax.validation.constraints.NotNull;
 
 import static com.silenteight.fab.dataprep.infrastructure.grpc.KnownServices.CM_API_CONNECTOR;
-import static java.util.concurrent.TimeUnit.SECONDS;
 
 @Configuration
 @EnableConfigurationProperties(CmApiGrpcClientConfiguration.Properties.class)
@@ -30,8 +29,8 @@ class CmApiGrpcClientConfiguration {
   @Profile("!cmapiconnectormock")
   AlertDetailsServiceClient alertsDetailsServiceClient(
       CmApiGrpcClientConfiguration.Properties properties) {
-    return new AlertDetailsServiceClient(alertMessageDetailsServiceBlockingStub.withDeadlineAfter(
-        properties.getDeadline().getSeconds(), SECONDS));
+    return new AlertDetailsServiceClient(
+        alertMessageDetailsServiceBlockingStub, properties.getDeadline());
   }
 
   @Bean

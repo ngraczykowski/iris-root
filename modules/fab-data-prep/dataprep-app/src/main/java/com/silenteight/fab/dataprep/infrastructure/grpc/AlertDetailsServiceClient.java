@@ -7,6 +7,9 @@ import com.silenteight.proto.fab.api.v1.AlertMessageDetailsServiceGrpc.AlertMess
 import com.silenteight.proto.fab.api.v1.AlertMessagesDetailsRequest;
 import com.silenteight.proto.fab.api.v1.AlertMessagesDetailsResponse;
 
+import java.time.Duration;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static lombok.AccessLevel.PACKAGE;
 
 @Slf4j
@@ -15,8 +18,10 @@ public class AlertDetailsServiceClient {
 
   private final AlertMessageDetailsServiceBlockingStub blockingStub;
 
+  private final Duration deadline;
+
   public AlertMessagesDetailsResponse get(AlertMessagesDetailsRequest request) {
-    return blockingStub.alertsDetails(request);
+    return blockingStub.withDeadlineAfter(deadline.getSeconds(), SECONDS).alertsDetails(request);
   }
 
 }
