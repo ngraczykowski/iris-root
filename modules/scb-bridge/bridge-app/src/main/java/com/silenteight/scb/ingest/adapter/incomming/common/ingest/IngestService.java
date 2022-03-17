@@ -10,6 +10,7 @@ import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert.Flag;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match;
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRecommendationService;
+import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
 import com.silenteight.scb.ingest.domain.model.RegistrationResponse;
 import com.silenteight.scb.ingest.domain.model.RegistrationResponse.RegisteredAlertWithMatches;
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
@@ -27,6 +28,7 @@ import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 
 import static com.silenteight.sep.base.common.logging.LogContextUtils.logAlert;
+import static java.util.stream.Collectors.groupingBy;
 
 @Slf4j
 @Builder
@@ -38,20 +40,23 @@ class IngestService implements SingleAlertIngestService, BatchAlertIngestService
   private final Collection<IngestServiceListener> listeners;
   private final boolean solvedAlertsProcessingEnabled;
   private final ScbRecommendationService scbRecommendationService;
+  private final AlertRegistrationFacade alertRegistrationFacade;
   private final IngestEventPublisher ingestEventPublisher;
   @Getter
   private long ingestedLearningAlertsCounter;
 
   @Override
-  public void ingestAlertsForLearn(@NonNull Stream<Alert> alerts) {
-    //ALERT REGISTRATION IN CORE BRIDGE
-    RegistrationResponse registrationResponse = RegistrationResponse.builder().build();
-
-    alerts.forEach(alert -> {
-      var flags = determineLearningFlags(alert);
-      send(alert, flags, registrationResponse);
-      ingestedLearningAlertsCounter++;
-    });
+  public void ingestAlertsForLearn(@NonNull Stream<Alert> alertStream) {
+    alertStream.collect(groupingBy(alert -> alert.details().getBatchId()))
+        .forEach((batchId, alerts) -> {
+          var registrationResponse =
+              alertRegistrationFacade.registerLearningAlert(batchId, alerts);
+          alerts.forEach(alert -> {
+            var flags = determineLearningFlags(alert);
+            send(alert, flags, registrationResponse);
+            ingestedLearningAlertsCounter++;
+          });
+        });
   }
 
   @Override

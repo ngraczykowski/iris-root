@@ -14,9 +14,9 @@ import java.util.List;
 
 @Slf4j
 @Component
-public class AlertWitchMatchesExtractor {
+class AlertWitchMatchesExtractor {
 
-  public AlertWithMatches extract(Alert alert) {
+  AlertWithMatches extract(Alert alert) {
     List<Match> matches = toMatches(alert);
     if (matches.isEmpty()) {
       return extractWithFailure(alert, AlertErrorDescription.NO_MATCHES);
@@ -29,7 +29,7 @@ public class AlertWitchMatchesExtractor {
         .build();
   }
 
-  public AlertWithMatches extractWithFailure(Alert alert, AlertErrorDescription errorDescription) {
+  private AlertWithMatches extractWithFailure(Alert alert, AlertErrorDescription errorDescription) {
     return AlertWithMatches.builder()
         .alertId(alert.id().sourceId())
         .status(AlertStatus.FAILURE)

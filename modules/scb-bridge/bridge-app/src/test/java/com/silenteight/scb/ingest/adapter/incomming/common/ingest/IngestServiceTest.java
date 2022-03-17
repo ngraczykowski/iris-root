@@ -6,6 +6,8 @@ import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert.Fla
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertDetails;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match;
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRecommendationService;
+import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
+import com.silenteight.scb.ingest.domain.model.RegistrationResponse;
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
 import com.silenteight.sep.base.common.messaging.properties.CorrelatedMessagePropertiesProvider;
 import com.silenteight.sep.base.testing.messaging.MessageSenderSpyFactory;
@@ -43,6 +45,8 @@ class IngestServiceTest {
   @Mock
   private ScbRecommendationService scbRecommendationService;
   @Mock
+  private AlertRegistrationFacade alertRegistrationFacade;
+  @Mock
   private IngestEventPublisher ingestEventPublisher;
   @Captor
   private ArgumentCaptor<Alert> alertCaptor;
@@ -61,7 +65,7 @@ class IngestServiceTest {
 
   private void createIngestService() {
     IngestConfiguration configuration =
-        new IngestConfiguration(ingestProperties, ingestEventPublisher);
+        new IngestConfiguration(ingestProperties, alertRegistrationFacade, ingestEventPublisher);
     ingestService = configuration.ingestService(
         senderFactory,
         singleton(listener),
@@ -97,12 +101,15 @@ class IngestServiceTest {
     Stream<Alert> alerts = createAlerts();
     when(scbRecommendationService.alertRecommendationExists(anyString(), anyString()))
         .thenReturn(true);
+    when(alertRegistrationFacade.registerLearningAlert(any(), any()))
+        .thenReturn(RegistrationResponse.builder().build());
 
     //when
     ingestService.ingestAlertsForLearn(alerts);
 
     //then
     checkAndAssertResults(Flag.LEARN.getValue());
+    verify(alertRegistrationFacade).registerLearningAlert(any(), any());
     verify(ingestEventPublisher, times(2)).publish(any());
   }
 
@@ -119,12 +126,14 @@ class IngestServiceTest {
             .id(objectId)
             .matches(Collections.singletonList(someMatch))
             .decisionGroup(DECISION_GROUP)
+            .details(AlertDetails.builder().batchId("batchId1").build())
             .build(),
         Alert
             .builder()
             .id(objectId)
             .matches(Collections.singletonList(someMatch))
             .decisionGroup(OTHER_DECISION_GROUP)
+            .details(AlertDetails.builder().batchId("batchId1").build())
             .build());
   }
 
@@ -134,12 +143,15 @@ class IngestServiceTest {
     Stream<Alert> alerts = createAlerts();
     when(scbRecommendationService.alertRecommendationExists(anyString(), anyString()))
         .thenReturn(false);
+    when(alertRegistrationFacade.registerLearningAlert(any(), any()))
+        .thenReturn(RegistrationResponse.builder().build());
 
     //when
     ingestService.ingestAlertsForLearn(alerts);
 
     //then
     checkAndAssertResults(Flag.LEARN.getValue() | Flag.PROCESS.getValue());
+    verify(alertRegistrationFacade).registerLearningAlert(any(), any());
     verify(ingestEventPublisher, times(2)).publish(any());
   }
 
@@ -177,7 +189,7 @@ class IngestServiceTest {
 
   private static Stream<Alert> createSolvingAlerts(String unit) {
     Match someMatch = Match.builder().build();
-    AlertDetails details = AlertDetails.builder().build();
+    AlertDetails details = AlertDetails.builder().batchId("batchId1").build();
     ObjectId objectId = ObjectId.builder().sourceId("").discriminator("").build();
     return Stream.of(
         Alert.builder()
@@ -226,12 +238,14 @@ class IngestServiceTest {
             .id(objectId)
             .matches(Collections.singletonList(obsoleteMatch))
             .decisionGroup(DECISION_GROUP)
+            .details(AlertDetails.builder().batchId("batchId1").build())
             .build(),
         Alert
             .builder()
             .id(objectId)
             .matches(Collections.singletonList(solvedMatch))
             .decisionGroup(OTHER_DECISION_GROUP)
+            .details(AlertDetails.builder().batchId("batchId1").build())
             .build());
 
     //when
@@ -239,7 +253,6 @@ class IngestServiceTest {
 
     //then
     verify(listener, never()).send(any());
-    verify(ingestEventPublisher, never()).publish(any());
   }
 
   @Test
@@ -257,12 +270,14 @@ class IngestServiceTest {
             .id(objectId)
             .matches(Collections.singletonList(obsoleteMatch))
             .decisionGroup(DECISION_GROUP)
+            .details(AlertDetails.builder().batchId("batchId1").build())
             .build(),
         Alert
             .builder()
             .id(objectId)
             .matches(Collections.singletonList(solvedMatch))
             .decisionGroup(OTHER_DECISION_GROUP)
+            .details(AlertDetails.builder().batchId("batchId1").build())
             .build());
 
     //when

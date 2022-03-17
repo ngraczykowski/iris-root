@@ -3,7 +3,7 @@ package com.silenteight.scb.ingest.adapter.incomming.gnsrt.recommendation;
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.alertinfo.AlertInfoService;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtRequestToAlertMapper;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtResponseMapper;
-import com.silenteight.scb.ingest.domain.AlertService;
+import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +33,7 @@ class GnsRtRecommendationUseCaseImplTest {
   @Mock
   private RecommendationGatewayService recommendationService;
   @Mock
-  private AlertService alertService;
+  private AlertRegistrationFacade registrationFacade;
   @Mock
   private IngestEventPublisher ingestEventPublisher;
 
@@ -47,7 +47,7 @@ class GnsRtRecommendationUseCaseImplTest {
         .alertInfoService(alertInfoService)
         .storeGnsRtRecommendationUseCase(storeGnsRtRecommendationUseCase)
         .recommendationService(recommendationService)
-        .alertService(alertService)
+        .alertRegistrationFacade(registrationFacade)
         .ingestEventPublisher(ingestEventPublisher)
         .build();
   }
@@ -63,8 +63,8 @@ class GnsRtRecommendationUseCaseImplTest {
         .create(mono)
         .verifyComplete();
 
-    verify(alertService).registerAlertsAndMatches(fixtures.batchId, alerts);
-    verify(ingestEventPublisher, times(1)).publish(any());
+    verify(registrationFacade).registerSolvingAlert(fixtures.batchId, alerts);
+    verify(ingestEventPublisher).publish(any());
   }
 
   @Test
@@ -78,7 +78,7 @@ class GnsRtRecommendationUseCaseImplTest {
         .create(mono)
         .verifyComplete();
 
-    verify(alertService).registerAlertsAndMatches(fixtures.batchId, alerts);
+    verify(registrationFacade).registerSolvingAlert(fixtures.batchId, alerts);
     verify(ingestEventPublisher, times(2)).publish(any());
   }
 }

@@ -33,9 +33,10 @@ spring:
     password: serp
 
   batch:
-    initialize-schema: never
     job:
       enabled: false
+    jdbc:
+      initialize-schema: never
 
   datasource:
     password: cb

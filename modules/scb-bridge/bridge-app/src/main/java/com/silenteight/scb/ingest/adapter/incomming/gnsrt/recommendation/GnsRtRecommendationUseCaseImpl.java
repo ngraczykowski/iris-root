@@ -11,7 +11,7 @@ import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtRequestToA
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtResponseMapper;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.request.GnsRtRecommendationRequest;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtRecommendationResponse;
-import com.silenteight.scb.ingest.domain.AlertService;
+import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
 import com.silenteight.scb.ingest.domain.model.RegistrationResponse;
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
 
@@ -31,7 +31,7 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
   private final AlertInfoService alertInfoService;
   private final StoreGnsRtRecommendationUseCase storeGnsRtRecommendationUseCase;
   private final RecommendationGatewayService recommendationService;
-  private final AlertService alertService;
+  private final AlertRegistrationFacade alertRegistrationFacade;
   private final IngestEventPublisher ingestEventPublisher;
 
   @Override
@@ -39,11 +39,9 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
     List<Alert> alerts = mapAlerts(request);
     logGnsRtRequest(alerts);
 
-    //register batch
-    //register alerts & matches
     String batchId = getBatchId(request);
     RegistrationResponse registrationResponse =
-        alertService.registerAlertsAndMatches(batchId, alerts);
+        alertRegistrationFacade.registerSolvingAlert(batchId, alerts);
 
     //feed uds
     alerts.forEach(ingestEventPublisher::publish);

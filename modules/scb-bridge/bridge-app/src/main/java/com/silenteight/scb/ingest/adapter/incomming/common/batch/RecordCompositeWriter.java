@@ -43,6 +43,7 @@ public class RecordCompositeWriter implements ItemWriter<AlertComposite> {
     if (log.isDebugEnabled())
       log.debug("Saved records: count={}", items.size());
 
+    //TODO: to remove, the acknowledgment is not used while learning
     if (configuration.isAckRecords())
       ackReadAlerts(items);
   }
