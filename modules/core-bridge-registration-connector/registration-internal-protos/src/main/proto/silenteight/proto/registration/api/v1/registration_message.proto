@@ -12,7 +12,7 @@ option java_package = "com.silenteight.proto.registration.api.v1";
 
 message MessageAlertMatchesFeatureInputFed {
   string batch_id = 1 [(google.api.field_behavior) = REQUIRED];
-  string alert_id = 2 [(google.api.field_behavior) = REQUIRED];
+  string alert_name = 2 [(google.api.field_behavior) = REQUIRED];
   string alert_error_description = 3 [(google.api.field_behavior) = OPTIONAL];
   FeedingStatus feeding_status = 4 [(google.api.field_behavior) = REQUIRED];
   repeated FedMatch fed_matches = 5 [(google.api.field_behavior) = REQUIRED];
@@ -25,7 +25,7 @@ message MessageAlertMatchesFeatureInputFed {
 }
 
 message FedMatch {
-  string match_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string match_name = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message MessageBatchCompleted {
