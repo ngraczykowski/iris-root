@@ -11,7 +11,7 @@ import org.springframework.test.context.ActiveProfiles
 import spock.lang.Specification
 import spock.lang.Subject
 
-import static com.silenteight.fab.dataprep.domain.Fixtures.BUILD_FEATURE_COMMAND
+import static com.silenteight.fab.dataprep.domain.Fixtures.*
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 @ActiveProfiles("dev")
@@ -23,15 +23,20 @@ class DateFeatureTest extends Specification {
 
   def 'featureInput should be created'() {
     when:
-    def result = underTest.buildFeature(BUILD_FEATURE_COMMAND)
+    def result = underTest.buildFeature(command)
 
     then:
     result == DateFeatureInputOut.builder()
         .feature(DateFeature.FEATURE_NAME)
-        .alertedPartyDates(['30/8/1965'])
-        .watchlistDates(['10/04/60\nNATIONALITY: \nnone'])
+        .alertedPartyDates(alertedParty)
+        .watchlistDates(watchList)
         .alertedPartyType(EntityTypeOut.INDIVIDUAL)
         .mode(SeverityModeOut.NORMAL)
         .build()
+
+    where:
+    command                     | alertedParty  | watchList
+    EMPTY_BUILD_FEATURE_COMMAND | ['30/8/1965'] | []
+    BUILD_FEATURE_COMMAND       | ['30/8/1965'] | ['10/04/60\nNATIONALITY: \nnone']
   }
 }

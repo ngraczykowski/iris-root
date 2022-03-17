@@ -10,6 +10,7 @@ import spock.lang.Specification
 import spock.lang.Subject
 
 import static com.silenteight.fab.dataprep.domain.Fixtures.BUILD_FEATURE_COMMAND
+import static com.silenteight.fab.dataprep.domain.Fixtures.EMPTY_BUILD_FEATURE_COMMAND
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 @ActiveProfiles("dev")
@@ -21,15 +22,20 @@ class NationalIdFeatureTest extends Specification {
 
   def 'featureInput should be created'() {
     when:
-    def result = underTest.buildFeature(BUILD_FEATURE_COMMAND)
+    def result = underTest.buildFeature(command)
 
     then:
     result == NationalIdFeatureInputOut.builder()
         .feature(NationalIdFeature.FEATURE_NAME)
-        .alertedPartyCountries(['IR'])
-        .watchlistCountries(['none'])
-        .alertedPartyDocumentNumbers(['S93849384A'])
-        .watchlistDocumentNumbers([])
+        .alertedPartyCountries(apCountries)
+        .watchlistCountries(wlCountries)
+        .alertedPartyDocumentNumbers(apDocumentNumbers)
+        .watchlistDocumentNumbers(wlDocumentNumbers)
         .build()
+
+    where:
+    command                     | apCountries | wlCountries | apDocumentNumbers | wlDocumentNumbers
+    EMPTY_BUILD_FEATURE_COMMAND | ['IR']      | []          | ['S93849384A']    | []
+    BUILD_FEATURE_COMMAND       | ['IR']      | ['none']    | ['S93849384A']    | []
   }
 }

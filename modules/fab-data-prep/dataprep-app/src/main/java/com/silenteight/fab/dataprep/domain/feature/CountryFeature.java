@@ -39,7 +39,7 @@ public class CountryFeature implements FabFeature {
         parsedMessageData.getCountryOfBirth());
   }
 
-  private List<String> getWatchlistPart(JsonNode jsonNode) {
+  List<String> getWatchlistPart(JsonNode jsonNode) {
     return parseContext.parse(jsonNode).read(JSON_PATH, LIST_OF_STRINGS);
   }
 }

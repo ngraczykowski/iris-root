@@ -7,9 +7,9 @@ import com.silenteight.fab.dataprep.domain.model.ParsedMessageData
 import com.silenteight.fab.dataprep.domain.model.RegisteredAlert
 import com.silenteight.fab.dataprep.domain.model.RegisteredAlert.Match
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.io.Resources
 
+import static com.silenteight.sep.base.common.support.jackson.JsonConversionHelper.INSTANCE
 import static java.nio.charset.StandardCharsets.UTF_8
 
 class Fixtures {
@@ -20,8 +20,6 @@ class Fixtures {
   static final String MESSAGE_NAME = 'messages/e525c926-a12a-11ec-97fc-3f5de86f02ac'
   static final String BATCH_NAME = 'batches/031dafde-a12b-11ec-8e04-2f2fd89dfc3f'
   static final String SYSTEM_ID = 'TRAINING!60C2ED1B-58A1D68E-0326AE78-A8C7CC79'
-
-  static def MAPPER = new ObjectMapper()
 
   static ParsedMessageData PARSED_PAYLOAD = ParsedMessageData.builder()
       .salutation('MR')
@@ -59,30 +57,18 @@ class Fixtures {
   static Match MATCH = Match.builder()
       .hitName(UUID.randomUUID().toString())
       .matchName(MATCH_NAME)
-      .payload(MAPPER.readTree(HIT_URL))
+      .payload(INSTANCE.objectMapper().readTree(HIT_URL))
       .build()
 
   static Match EMPTY_MATCH = Match.builder()
       .hitName(UUID.randomUUID().toString())
       .matchName(MATCH_NAME)
-      .payload(MAPPER.readTree('{}'))
+      .payload(INSTANCE.objectMapper().readTree('{}'))
       .build()
 
   static String HIT = Resources.toString(HIT_URL, UTF_8);
 
   static String MESSAGE = Resources.toString(Resources.getResource("message.json"), UTF_8);
-
-  static FeatureInputsCommand FEATURE_INPUTS_COMMAND = FeatureInputsCommand.builder()
-      .registeredAlert(
-          RegisteredAlert.builder()
-              .batchName(BATCH_NAME)
-              .messageName(MESSAGE_NAME)
-              .alertName(ALERT_NAME)
-              .systemId(SYSTEM_ID)
-              .parsedMessageData(PARSED_PAYLOAD)
-              .matches([MATCH])
-              .build())
-      .build()
 
   static FeatureInputsCommand EMPTY_FEATURE_INPUTS_COMMAND = FeatureInputsCommand.builder()
       .registeredAlert(

@@ -9,8 +9,8 @@ import org.springframework.test.context.ActiveProfiles
 import spock.lang.Specification
 import spock.lang.Subject
 
-import static com.silenteight.fab.dataprep.domain.Fixtures.BUILD_FEATURE_COMMAND
-import static com.silenteight.fab.dataprep.domain.Fixtures.MAPPER
+import static com.silenteight.fab.dataprep.domain.Fixtures.*
+import static com.silenteight.sep.base.common.support.jackson.JsonConversionHelper.INSTANCE
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 @ActiveProfiles("dev")
@@ -22,19 +22,24 @@ class CountryFeatureTest extends Specification {
 
   def 'featureInput should be created'() {
     when:
-    def result = underTest.buildFeature(BUILD_FEATURE_COMMAND)
+    def result = underTest.buildFeature(command)
 
     then:
     result == CountryFeatureInputOut.builder()
         .feature(CountryFeature.FEATURE_NAME)
-        .alertedPartyCountries(['IR', 'IR', 'IR', 'IR'])
-        .watchlistCountries(['UEA'])
+        .alertedPartyCountries(alertedParty)
+        .watchlistCountries(watchList)
         .build()
+
+    where:
+    command                     | alertedParty             | watchList
+    EMPTY_BUILD_FEATURE_COMMAND | ['IR', 'IR', 'IR', 'IR'] | []
+    BUILD_FEATURE_COMMAND       | ['IR', 'IR', 'IR', 'IR'] | ['UEA']
   }
 
   def 'countries should be extracted correctly'() {
     given:
-    def json = MAPPER.readTree(
+    def json = INSTANCE.objectMapper().readTree(
         '''{
 "HittedEntity": {
   "Addresses": [

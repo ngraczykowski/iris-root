@@ -30,6 +30,7 @@ class GenderFeatureTest extends Specification {
         .alertedPartyGenders(alertedParty)
         .watchlistGenders(watchList)
         .build()
+
     where:
     command                     | alertedParty | watchList
     EMPTY_BUILD_FEATURE_COMMAND | ['M']        | []
