@@ -60,14 +60,12 @@ class EtlPipelineServiceServicer(object):
                 try:
                     self.add_to_datasource(alert, input_match_record)
                 except Exception as e:
-
                     logger.error("Exception :" + str(e))
                     status = FAILURE
                     break
             statuses.append(status)
         etl_alerts = [
-            self._parse_alert(alert, payload[1])
-            for alert, payload in zip(alerts_to_parse, payloads)
+            self._parse_alert(alert, status) for alert, status in zip(alerts_to_parse, statuses)
         ]
         response = etl__pipeline__pb2.RunEtlResponse(etl_alerts=etl_alerts)
         return response
