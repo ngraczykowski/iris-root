@@ -30,7 +30,7 @@ public class DateFeature implements FabFeature {
     return DateFeatureInputOut.builder()
         .feature(FEATURE_NAME)
         .alertedPartyDates(getAlertedPart(parsedMessageData))
-        .watchlistDates(getWatchlistPart(buildFeatureCommand.getMatch().getPayload()))
+        .watchlistDates(merge(buildFeatureCommand.getMatch().getPayloads(), this::getWatchlistPart))
         .alertedPartyType(getPartyType(parsedMessageData))
         .mode(SeverityModeOut.NORMAL)   //TODO is it correct?
         .build();

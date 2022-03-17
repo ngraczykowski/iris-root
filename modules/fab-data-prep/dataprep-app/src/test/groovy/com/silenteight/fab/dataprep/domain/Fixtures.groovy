@@ -57,13 +57,13 @@ class Fixtures {
   static Match MATCH = Match.builder()
       .hitName(UUID.randomUUID().toString())
       .matchName(MATCH_NAME)
-      .payload(INSTANCE.objectMapper().readTree(HIT_URL))
+      .payloads([INSTANCE.objectMapper().readTree(HIT_URL)])
       .build()
 
   static Match EMPTY_MATCH = Match.builder()
       .hitName(UUID.randomUUID().toString())
       .matchName(MATCH_NAME)
-      .payload(INSTANCE.objectMapper().readTree('{}'))
+      .payloads([INSTANCE.objectMapper().readTree('{}')])
       .build()
 
   static String HIT = Resources.toString(HIT_URL, UTF_8);
@@ -88,7 +88,8 @@ class Fixtures {
 
   static BuildFeatureCommand BUILD_FEATURE_COMMAND = BuildFeatureCommand.builder()
       .parsedMessageData(PARSED_PAYLOAD)
-      .match(MATCH).build()
+      .match(MATCH)
+      .build()
 
   static BuildCategoryCommand BUILD_CATEGORY_COMMAND = BuildCategoryCommand.builder()
       .matchName(MATCH_NAME)

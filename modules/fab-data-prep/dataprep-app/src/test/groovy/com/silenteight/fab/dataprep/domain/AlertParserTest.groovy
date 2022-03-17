@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles
 import spock.lang.Specification
 
 import static com.silenteight.fab.dataprep.domain.Fixtures.*
+import static com.silenteight.sep.base.common.support.jackson.JsonConversionHelper.INSTANCE
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 @ActiveProfiles("dev")
@@ -33,10 +34,79 @@ class AlertParserTest extends Specification {
     parsedAlertMessage.getParsedMessageData().getGender() == "M";
     parsedAlertMessage.getSystemId() == 'TRAINING!60C2ED1B-58A1D68E-0326AE78-A8C7CC79'
     parsedAlertMessage.hits.size() == 1
-    parsedAlertMessage.hits.values().each  {it ->
+    parsedAlertMessage.hits.values().each {it ->
       def parser = new JsonSlurper();
-      assert parser.parseText(it.getPayload().toString()) == parser.parseText(HIT)
+      assert parser.parseText(it.getPayloads().first().toString()) == parser.parseText(HIT)
     }
   }
 
+  def 'hits with same ofacId should be merged'() {
+    given:
+    def hit1 = INSTANCE.objectMapper().readTree(
+        '''{
+  "EntityText": "hit-1",
+  "HittedEntity": {
+    "ID": "PSY0003"
+  },
+  "OfficialReferences": [
+    {
+      "OfficialReference": {
+        "Name": "OSFI_2006\\/02\\/09"
+      }
+    }
+  ]
+}''')
+    def hit2 = INSTANCE.objectMapper().readTree(
+        '''{
+  "EntityText": "hit-2",
+  "HittedEntity": {
+    "ID": "PSY0001"
+  },
+  "OfficialReferences": [
+    {
+      "OfficialReference": {
+        "Name": "OSFI_2006\\/02\\/09"
+      }
+    }
+  ]
+}''')
+    def hit3 = INSTANCE.objectMapper().readTree(
+        '''{
+  "EntityText": "hit-3",
+  "HittedEntity": {
+    "ID": "PSY0003"
+  },
+  "OfficialReferences": [
+    {
+      "OfficialReference": {
+        "Name": "OSFI_2022\\/02\\/09"
+      }
+    }
+  ]
+}''')
+    def hit4 = INSTANCE.objectMapper().readTree('{"EntityText": "hit-4"}')
+    def hit5 = INSTANCE.objectMapper().readTree('{"EntityText": "hit-5"}')
+    def hit6 = INSTANCE.objectMapper().readTree(
+        '''{
+  "EntityText": "hit-6",
+  "HittedEntity": {
+    "ID": "PSY0003"
+  },
+  "OfficialReferences": [
+    {
+      "OfficialReference": {
+        "Name": "OSFI_2021\\/02\\/09"
+      }
+    }
+  ]
+}''')
+
+    def hits = [hit1, hit2, hit3, hit4, hit5, hit6]
+
+    when:
+    def result = underTest.mergeHits(hits)
+
+    then:
+    result as Set == [[hit2], [hit4], [hit5], [hit1, hit3, hit6]] as Set
+  }
 }

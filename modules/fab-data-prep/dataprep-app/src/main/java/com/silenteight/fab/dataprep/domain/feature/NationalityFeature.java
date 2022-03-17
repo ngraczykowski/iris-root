@@ -27,7 +27,8 @@ public class NationalityFeature implements FabFeature {
     return CountryFeatureInputOut.builder()
         .feature(FEATURE_NAME)
         .alertedPartyCountries(getAlertedPart(buildFeatureCommand.getParsedMessageData()))
-        .watchlistCountries(getWatchlistPart(buildFeatureCommand.getMatch().getPayload()))
+        .watchlistCountries(
+            merge(buildFeatureCommand.getMatch().getPayloads(), this::getWatchlistPart))
         .build();
   }
 

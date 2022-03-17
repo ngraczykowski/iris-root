@@ -27,7 +27,7 @@ public class BicFeature implements FabFeature {
 
   @Override
   public Feature buildFeature(BuildFeatureCommand buildFeatureCommand) {
-    JsonNode payload = buildFeatureCommand.getMatch().getPayload();
+    JsonNode payload = getBestJsonNode(buildFeatureCommand.getMatch().getPayloads());
     return BankIdentificationCodesFeatureInputOut.builder()
         .feature(FEATURE_NAME)
         .alertedPartyMatchingField(getAlertedPart(buildFeatureCommand.getParsedMessageData()))
@@ -36,6 +36,13 @@ public class BicFeature implements FabFeature {
         .watchlistBicCodes(getWatchlistPart(payload))
         .watchlistSearchCodes(getWatchlistSearchCodes(payload))
         .build();
+  }
+
+  private JsonNode getBestJsonNode(List<JsonNode> jsonNodes) {
+    return jsonNodes.stream()
+        .filter(jsonNode -> !getWatchlistPart(jsonNode).isEmpty())
+        .findFirst()
+        .orElseGet(() -> jsonNodes.get(0));
   }
 
   private static String getAlertedPart(ParsedMessageData parsedMessageData) {

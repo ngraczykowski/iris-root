@@ -6,6 +6,7 @@ import lombok.Value;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import java.util.List;
 import java.util.Map;
 
 @Value
@@ -31,6 +32,10 @@ public class ParsedAlertMessage {
   public static class Hit {
 
     String hitName;
-    JsonNode payload;
+
+    /**
+     * Payloads with same ofacId
+     */
+    List<JsonNode> payloads;
   }
 }

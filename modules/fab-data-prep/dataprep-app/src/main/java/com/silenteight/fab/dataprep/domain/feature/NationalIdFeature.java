@@ -27,13 +27,13 @@ public class NationalIdFeature implements FabFeature {
   @Override
   public Feature buildFeature(BuildFeatureCommand buildFeatureCommand) {
     ParsedMessageData parsedMessageData = buildFeatureCommand.getParsedMessageData();
-    JsonNode payload = buildFeatureCommand.getMatch().getPayload();
+    List<JsonNode> payloads = buildFeatureCommand.getMatch().getPayloads();
     return NationalIdFeatureInputOut.builder()
         .feature(FEATURE_NAME)
         .alertedPartyCountries(getAlertedPartCountry(parsedMessageData))
-        .watchlistCountries(getWatchlistPartCountry(payload))
+        .watchlistCountries(merge(payloads, this::getWatchlistPartCountry))
         .alertedPartyDocumentNumbers(getAlertedPartDocument(parsedMessageData))
-        .watchlistDocumentNumbers(getWatchlistPartDocument(payload))
+        .watchlistDocumentNumbers(merge(payloads, this::getWatchlistPartDocument))
         .build();
   }
 

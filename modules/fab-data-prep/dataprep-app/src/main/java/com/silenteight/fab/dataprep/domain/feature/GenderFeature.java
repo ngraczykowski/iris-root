@@ -28,7 +28,8 @@ public class GenderFeature implements FabFeature {
     return GenderFeatureInputOut.builder()
         .feature(FEATURE_NAME)
         .alertedPartyGenders(getAlertedPart(buildFeatureCommand.getParsedMessageData()))
-        .watchlistGenders(getWatchlistPart(buildFeatureCommand.getMatch().getPayload()))
+        .watchlistGenders(
+            merge(buildFeatureCommand.getMatch().getPayloads(), this::getWatchlistPart))
         .build();
   }
 

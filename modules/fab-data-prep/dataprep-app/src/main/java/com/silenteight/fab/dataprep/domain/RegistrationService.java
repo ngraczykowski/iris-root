@@ -80,7 +80,7 @@ public class RegistrationService {
         .builder()
         .hitName(registeredMatchOut.getMatchId())
         .matchName(registeredMatchOut.getMatchName())
-        .payload(hit.getPayload())
+        .payloads(hit.getPayloads())
         .build();
   }
 

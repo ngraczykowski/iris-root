@@ -32,6 +32,6 @@ public class RegisteredAlert {
     String hitName;
     @NonNull
     String matchName;
-    JsonNode payload;
+    List<JsonNode> payloads;
   }
 }

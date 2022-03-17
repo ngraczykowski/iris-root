@@ -33,8 +33,8 @@ public class NameFeature implements FabFeature {
         .feature(FEATURE_NAME)
         .alertedPartyNames(getAlertedPart(parsedMessageData))
         .alertedPartyType(getPartyType(parsedMessageData))
-        .watchlistNames(getWatchlistPart(match.getPayload()))
-        .matchingTexts(getMatchingTexts(match.getPayload()))
+        .watchlistNames(merge(match.getPayloads(), this::getWatchlistPart))
+        .matchingTexts(merge(match.getPayloads(), this::getMatchingTexts))
         .build();
   }
 

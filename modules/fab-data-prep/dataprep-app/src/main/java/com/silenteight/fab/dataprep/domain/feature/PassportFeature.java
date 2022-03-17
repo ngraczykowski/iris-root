@@ -27,7 +27,8 @@ public class PassportFeature implements FabFeature {
     return DocumentFeatureInputOut.builder()
         .feature(FEATURE_NAME)
         .alertedPartyDocuments(getAlertedPart(buildFeatureCommand.getParsedMessageData()))
-        .watchlistDocuments(getWatchlistPart(buildFeatureCommand.getMatch().getPayload()))
+        .watchlistDocuments(
+            merge(buildFeatureCommand.getMatch().getPayloads(), this::getWatchlistPart))
         .build();
   }
 
