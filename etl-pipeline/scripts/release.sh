@@ -6,14 +6,7 @@ function gitRelease() {
   bump2version release
   echo 'Building'
   scripts/clean.sh
-
-  VERSION=`cat setup.py | grep version | xargs `
-  VERSION=${VERSION#version=}
-  VERSION=${VERSION%,}
-
-  scripts/push.sh $VERSION
   scripts/build_package.sh
-  echo 'Resetting release commit'
   git reset --hard HEAD~1 # remove release commit after tag
 }
 
@@ -38,5 +31,4 @@ else
 fi
 
 echo 'Pushing'
-
 git push --atomic --tags origin HEAD:$branch

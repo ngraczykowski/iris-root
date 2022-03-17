@@ -47,10 +47,10 @@ pipeline {
                             }
                         }
                     steps {
-                        sh 'pip install --index-url "${PYPI_URL}" bump2version tox'
+                        sh 'pip install --index-url "${PIP_INDEX_URL}" bump2version tox'
                         sh 'git tag --delete $(git tag --list)'
                         sshagent([env.JENKINS_SSH_NAME]) {
-                            sh './scripts/release.sh --index-url ${PYPI_URL}'
+                            sh './scripts/release.sh --index-url ${PIP_INDEX_URL}'
                         }
                         withCredentials([usernamePassword(
                             credentialsId: 'pypi-deployment-user',
@@ -62,6 +62,15 @@ pipeline {
                     }
                 }
             }
+        }
+        stage('Publish docker image') {
+            when {
+                branch 'master'
+            }
+            steps {
+            sshagent([env.JENKINS_SSH_NAME]) {
+                sh './scripts/push.sh --index-url ${PIP_INDEX_URL}'
+            }}
         }
         stage('Deploy On Nomad mike') {
           when {
