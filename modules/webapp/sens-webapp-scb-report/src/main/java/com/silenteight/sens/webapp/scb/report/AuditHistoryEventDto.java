@@ -7,8 +7,8 @@ import lombok.Value;
 @Builder
 public class AuditHistoryEventDto {
 
-  private String username;
-  private String status;
-  private String ipAddress;
-  private long timestamp;
+  String username;
+  String status;
+  String ipAddress;
+  long timestamp;
 }

@@ -40,11 +40,13 @@ class DeleteSsoMappingRestController {
   })
   public ResponseEntity<Void> delete(@PathVariable UUID id) {
     log.info(SSO_MANAGEMENT, "Deleting sso mapping id={}", id);
+
     DeleteSsoMappingRequest request = DeleteSsoMappingRequest.builder()
         .ssoMappingId(id)
         .build();
 
     deleteSsoMappingUseCase.activate(request);
+    log.debug("Sso mapping deleted.");
     return noContent().build();
   }
 }

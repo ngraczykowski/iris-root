@@ -13,8 +13,7 @@ import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
 
-public class RoleMappingDtoToSsoMappingDtoConverter implements
-    Converter<RoleMappingDto, SsoMappingDto> {
+class RoleMappingDtoToSsoMappingDtoConverter implements Converter<RoleMappingDto, SsoMappingDto> {
 
   @Override
   public SsoMappingDto convert(RoleMappingDto roleMappingDto) {

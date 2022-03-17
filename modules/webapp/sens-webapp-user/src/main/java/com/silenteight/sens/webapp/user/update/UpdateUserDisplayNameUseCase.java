@@ -14,7 +14,6 @@ import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.sep.usermanagement.api.user.UserUpdater;
 import com.silenteight.sep.usermanagement.api.user.dto.UpdateUserCommand;
 
-
 import static java.util.Optional.ofNullable;
 
 @Slf4j
@@ -31,6 +30,7 @@ public class UpdateUserDisplayNameUseCase {
   private final String rolesScope;
 
   public void apply(UpdateUserDisplayNameCommand command) {
+    log.info("Updating display name for user, userName={}", command.getUsername());
     auditTracer.save(new UserUpdateRequestedEvent(
         command.getUsername(), UpdateUserDisplayNameCommand.class.getName(), command));
     UpdateUserCommand updateUserCommand = command.toUpdatedUser();

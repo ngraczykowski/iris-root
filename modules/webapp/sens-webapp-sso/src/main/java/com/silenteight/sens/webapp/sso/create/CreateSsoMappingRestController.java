@@ -50,6 +50,7 @@ class CreateSsoMappingRestController {
         .attributes(dto.getAttributes())
         .build();
 
+    log.debug("Create new sso mapping processed.");
     return status(CREATED).body(createSsoMappingUseCase.activate(command));
   }
 }

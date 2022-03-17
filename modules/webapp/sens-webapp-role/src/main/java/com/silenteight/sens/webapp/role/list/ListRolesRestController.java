@@ -33,6 +33,7 @@ class ListRolesRestController {
   @GetMapping("/v2/roles")
   @PreAuthorize("isAuthorized('LIST_ROLES')")
   public ResponseEntity<Collection<RoleDto>> list() {
+    log.info("Listing roles.");
     return ok(listRolesQuery.listAll());
   }
 }
