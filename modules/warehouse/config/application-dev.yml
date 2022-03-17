@@ -427,12 +427,12 @@ warehouse.reports.v2:
         SELECT  to_char(recommendation_date, 'YYYY-MM') AS date,
         SUM(CASE WHEN payload ->> 's8_recommendation' = 'ACTION_FALSE_POSITIVE' THEN 1 END) AS count_solved_FP,
         SUM(CASE WHEN payload ->> 's8_recommendation' = 'ACTION_POTENTIAL_TRUE_POSITIVE' THEN 1 END) AS count_solved_PTP,
-        SUM(CASE WHEN payload ->> 's8_recommendation' = 'ACTION_MANUAL_INVESTIGATION' THEN 1 END) AS count_solved_MI,
+        SUM(CASE WHEN payload ->> 's8_recommendation' = 'ACTION_INVESTIGATE' THEN 1 END) AS count_solved_MI,
         SUM(CASE WHEN payload ->> 's8_recommendation' IN ('ACTION_FALSE_POSITIVE', 'ACTION_POTENTIAL_TRUE_POSITIVE') THEN 1 END) AS count_alerts_solved,
-        SUM(CASE WHEN payload ->> 's8_recommendation' IN ('ACTION_FALSE_POSITIVE', 'ACTION_POTENTIAL_TRUE_POSITIVE', 'ACTION_MANUAL_INVESTIGATION') THEN 1 END) AS count_alerts_received
+        SUM(CASE WHEN payload ->> 's8_recommendation' IN ('ACTION_FALSE_POSITIVE', 'ACTION_POTENTIAL_TRUE_POSITIVE', 'ACTION_INVESTIGATE') THEN 1 END) AS count_alerts_received
         FROM warehouse_alert
         WHERE recommendation_date BETWEEN DATE '${from}' AND DATE '${to}' AND payload ->> 's8_recommendation'
-        IN ('ACTION_FALSE_POSITIVE', 'ACTION_POTENTIAL_TRUE_POSITIVE', 'ACTION_MANUAL_INVESTIGATION')
+        IN ('ACTION_FALSE_POSITIVE', 'ACTION_POTENTIAL_TRUE_POSITIVE', 'ACTION_INVESTIGATE')
         GROUP BY date
     - name: QA_OUTCOME
       type: production

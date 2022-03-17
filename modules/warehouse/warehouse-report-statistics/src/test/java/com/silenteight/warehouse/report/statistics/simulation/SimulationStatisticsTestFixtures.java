@@ -37,7 +37,7 @@ public final class SimulationStatisticsTestFixtures {
       + "\"recommendation_recommended_action\": \"ACTION_FALSE_POSITIVE\"}";
 
   static final String ALERT_PAYLOAD_3 = "{\"DN_CASE.currentState\": \"Awaiting AAA Adjudication\", "
-      + "\"recommendation_recommended_action\": \"ACTION_MANUAL_INVESTIGATION\"}";
+      + "\"recommendation_recommended_action\": \"ACTION_INVESTIGATE\"}";
 
   static final AlertDefinition ALERT_1 = AlertDefinition.builder()
       .discriminator(ALERT_DISCRIMINATOR_1)
@@ -87,7 +87,7 @@ public final class SimulationStatisticsTestFixtures {
           .setDiscriminator(ALERT_DISCRIMINATOR_3)
           .setName(ALERT_NAME_3)
           .setPayload(convertToPayload(
-              "recommendation_recommended_action", "ACTION_MANUAL_INVESTIGATION"))
+              "recommendation_recommended_action", "ACTION_INVESTIGATE"))
           .build();
 
   static final SimulationDataIndexRequest SIM_INDEX_REQUEST_1 =

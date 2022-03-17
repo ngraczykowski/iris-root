@@ -7,7 +7,7 @@ policy_title;PROD Policy for HSBC - PoV v.16
 stepId;steps/5ca9d972-695b-4550-a383-b09311ff42e4
 step_title;STEP 4.0.1 - Escalate based on Key Evidence Match
 extendedAttribute5;SAN,PEP,SCION
-s8_recommendation;ACTION_FALSE_POSITIVE,ACTION_POTENTIAL_TRUE_POSITIVE,ACTION_MANUAL_INVESTIGATION
+s8_recommendation;ACTION_FALSE_POSITIVE,ACTION_POTENTIAL_TRUE_POSITIVE,ACTION_INVESTIGATE
 features/commonAp:solution;NO
 features/commonMp:solution;NO
 features/commonNames:solution;NO
