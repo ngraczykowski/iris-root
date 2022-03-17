@@ -11,7 +11,7 @@ import spock.lang.Subject
 
 class VerifyBatchTimeoutRabbitPublisherSpec extends Specification {
 
-  def amqpProperties = new AmqpRegistrationOutgoingVerifyBatchTimeoutProperties('exchange')
+  def amqpProperties = new AmqpRegistrationOutgoingVerifyBatchTimeoutProperties(true, 'exchange')
   def rabbitTemplate = Mock(RabbitTemplate)
 
   @Subject

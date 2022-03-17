@@ -5,4 +5,7 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 
 @ConstructorBinding
 @ConfigurationProperties("amqp.registration.outgoing.verify-batch-timeout")
-public record AmqpRegistrationOutgoingVerifyBatchTimeoutProperties(String exchangeName) {}
+public record AmqpRegistrationOutgoingVerifyBatchTimeoutProperties(
+    boolean timeoutEnabled,
+    String exchangeName
+) {}

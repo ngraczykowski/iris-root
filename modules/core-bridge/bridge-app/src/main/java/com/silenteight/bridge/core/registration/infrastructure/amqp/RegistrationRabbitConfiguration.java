@@ -6,6 +6,7 @@ import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFacto
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -206,14 +207,22 @@ class RegistrationRabbitConfiguration {
   }
 
   @Bean
+  @ConditionalOnProperty("amqp.registration.outgoing.verify-batch-timeout.timeout-enabled")
   DirectExchange verifyBatchTimeoutExchange(
       AmqpRegistrationOutgoingVerifyBatchTimeoutProperties properties) {
     return new DirectExchange(properties.exchangeName());
   }
 
   @Bean
+  @ConditionalOnProperty("amqp.registration.outgoing.verify-batch-timeout.timeout-enabled")
   Queue verifyBatchTimeoutDelayedQueue(
-      AmqpRegistrationIncomingVerifyBatchTimeoutProperties properties) {
+      AmqpRegistrationIncomingVerifyBatchTimeoutProperties properties,
+      AmqpRegistrationOutgoingVerifyBatchTimeoutProperties outgoingProperties
+  ) {
+    if (outgoingProperties.timeoutEnabled() && properties.delayTime() == null) {
+      throw new IllegalStateException(
+          "Batch timeout handling is enabled, but delay time is not configured.");
+    }
     return QueueBuilder.durable(properties.delayedQueueName())
         .ttl(Long.valueOf(properties.delayTime().toMillis()).intValue())
         .deadLetterExchange(properties.deadLetterExchangeName())
@@ -222,6 +231,7 @@ class RegistrationRabbitConfiguration {
   }
 
   @Bean
+  @ConditionalOnProperty("amqp.registration.outgoing.verify-batch-timeout.timeout-enabled")
   Binding verifyBatchTimeoutBinding(
       @Qualifier("verifyBatchTimeoutDelayedQueue") Queue queue,
       @Qualifier("verifyBatchTimeoutExchange") DirectExchange exchange) {

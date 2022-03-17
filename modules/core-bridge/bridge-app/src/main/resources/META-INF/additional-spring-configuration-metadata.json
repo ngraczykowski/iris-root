@@ -124,6 +124,11 @@
       "name": "amqp.registration.number-of-retries-dead-messages",
       "type": "java.lang.String",
       "description": "Amount of retries for a message before it will be discarded."
+    },
+    {
+      "name": "amqp.registration.outgoing.verify-batch-timeout.timeout-enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enable or disable batch timeout handling."
     }
   ]
 }

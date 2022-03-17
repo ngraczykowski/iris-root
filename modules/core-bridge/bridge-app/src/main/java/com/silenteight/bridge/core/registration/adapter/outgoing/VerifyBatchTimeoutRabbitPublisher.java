@@ -21,11 +21,13 @@ class VerifyBatchTimeoutRabbitPublisher implements VerifyBatchTimeoutPublisher {
 
   @Override
   public void publish(VerifyBatchTimeoutEvent event) {
-    log.info("Send verify batch timeout notification. Batch id: {}", event.batchId());
+    if (properties.timeoutEnabled()) {
+      log.info("Send verify batch timeout notification. Batch id: {}", event.batchId());
 
-    final var routingKey = "";
-    final var message = createMessage(event);
-    rabbitTemplate.convertAndSend(properties.exchangeName(), routingKey, message);
+      final var routingKey = "";
+      final var message = createMessage(event);
+      rabbitTemplate.convertAndSend(properties.exchangeName(), routingKey, message);
+    }
   }
 
   private MessageVerifyBatchTimeout createMessage(VerifyBatchTimeoutEvent event) {

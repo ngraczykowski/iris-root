@@ -41,6 +41,7 @@ amqp:
       notify-batch-completed:
         exchange-name: core-bridge.notify-batch-completed-exchange
       verify-batch-timeout:
+        timeout-enabled: true
         exchange-name: core-bridge.verify-batch-timeout-exchange
       notify-batch-timed-out:
         exchange-name: core-bridge.notify-batch-timed-out-exchange
