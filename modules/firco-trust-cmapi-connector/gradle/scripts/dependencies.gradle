@@ -53,6 +53,7 @@ libraries.core_bridge_registration_connector_lib = [group: 'com.silenteight.regi
 libraries.core_bridge_registration_connector_proto = [group: 'com.silenteight.registration.api.library', name: 'registration-internal-protos', version: coreBridgeRegistrationConnectorVersion]
 libraries.fab_cmap_connector_api = [group: 'com.silenteight.fab', name: 'cmapi-connector-api', version: fabCmapConnectorApi]
 libraries.recommendation_api_library = [group: 'com.silenteight.recommendation.api.library', name: 'recommendation-lib', version: recommendationApiLibraryVersion]
+libraries.recommendation_internal_protos = [group: 'com.silenteight.recommendation.api.library', name: 'recommendation-internal-protos', version: recommendationApiLibraryVersion]
 
 // Spring
 libraries.spring_aop = [group: 'org.springframework', name: 'spring-aop']

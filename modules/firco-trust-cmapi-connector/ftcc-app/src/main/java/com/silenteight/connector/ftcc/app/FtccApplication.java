@@ -5,6 +5,7 @@ import com.silenteight.commons.app.spring.ConfigurableApplicationBuilder;
 import com.silenteight.commons.app.spring.DefaultSpringApplicationContextCallback;
 import com.silenteight.commons.app.spring.SpringApplicationTemplate;
 import com.silenteight.connector.ftcc.app.grpc.GrpcModule;
+import com.silenteight.connector.ftcc.callback.CallbackModule;
 import com.silenteight.connector.ftcc.common.integration.AmqpCommonModule;
 import com.silenteight.connector.ftcc.ingest.IngestModule;
 
@@ -19,6 +20,8 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackageClasses = {
+    // Callback module
+    CallbackModule.class,
     // Domain modules
     IngestModule.class,
     // Interface modules

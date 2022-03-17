@@ -28,6 +28,20 @@ ftcc:
     outbound:
       exchange: connector.event
       routing-key: alert.message
+  #-------------------------------------------------------------------------------------------------
+  # Core Bridge
+  #-------------------------------------------------------------------------------------------------
+  core-bridge:
+    inbound:
+      batch-completed:
+        exchange: notify-batch-completed-exchange
+ #-------------------------------------------------------------------------------------------------
+ # CMAPI CALLBACK
+ #-------------------------------------------------------------------------------------------------
+  cmapi:
+    callback:
+      endpoint: "http://localhost:8080/rest/ftcc/v1/dummy"
+      enabled: false
 
 grpc:
   client:

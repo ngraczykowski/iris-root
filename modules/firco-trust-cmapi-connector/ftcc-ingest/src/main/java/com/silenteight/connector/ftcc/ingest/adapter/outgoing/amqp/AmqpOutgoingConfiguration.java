@@ -9,6 +9,7 @@ import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.integration.amqp.dsl.AmqpBaseOutboundEndpointSpec;
 import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.gateway.GatewayProxyFactoryBean;
@@ -30,18 +31,22 @@ public class AmqpOutgoingConfiguration {
       @Valid DataPrepProperties properties) {
 
     return createOutputFlow(
-        DATA_PREP_OUTBOUND_CHANNEL,
         properties.outboundExchange(),
         properties.outboundRoutingKey());
   }
 
-  private IntegrationFlow createOutputFlow(String channel, String exchange, String routingKey) {
+  private IntegrationFlow createOutputFlow(String exchange, String routingKey) {
     return flow -> flow
-        .channel(channel)
-        .handle(outboundFactory
-            .outboundAdapter()
-            .exchangeName(exchange)
-            .routingKey(routingKey));
+        .channel(DATA_PREP_OUTBOUND_CHANNEL)
+        .handle(creatOutboundAdapter(exchange, routingKey));
+  }
+
+  private AmqpBaseOutboundEndpointSpec<?, ?> creatOutboundAdapter(
+      String exchange, String routingKey) {
+    return outboundFactory
+        .outboundAdapter()
+        .exchangeName(exchange)
+        .routingKey(routingKey);
   }
 
   @Bean

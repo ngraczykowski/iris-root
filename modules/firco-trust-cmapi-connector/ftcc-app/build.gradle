@@ -10,6 +10,7 @@ description = "Firco Trust CMAPI Connector"
 
 dependencies {
   implementation project(":ftcc-common")
+  implementation project(":ftcc-callback")
   implementation project(":ftcc-db-changelog")
   implementation project(":ftcc-ingest")
 
@@ -37,6 +38,8 @@ dependencies {
 
   implementation libraries.core_bridge_registration_connector_lib
   implementation libraries.core_bridge_registration_connector_proto
+  implementation libraries.recommendation_api_library
+  implementation libraries.recommendation_internal_protos
 
   // Application Starters
 //  implementation libraries.spring_batch_starter
@@ -69,10 +72,10 @@ dependencies {
   // Messaging
   implementation libraries.amqp_client
   implementation libraries.lz4_java
-  implementation libraries.spring_boot_starter_integration
-  implementation libraries.spring_integration_amqp
-  implementation libraries.spring_integration_core
-  implementation libraries.spring_integration_http
+//  implementation libraries.spring_boot_starter_integration
+//  implementation libraries.spring_integration_amqp
+//  implementation libraries.spring_integration_core
+//  implementation libraries.spring_integration_http
   implementation libraries.sear_rabbitmq_common_schema
 
   // gRPC

@@ -19,11 +19,13 @@ dependencies {
   implementation libraries.fab_cmap_connector_api
 
   // Application Starters
-  implementation libraries.spring_boot_starter_actuator
-  implementation libraries.spring_boot_starter_logging
-  implementation libraries.spring_boot_starter_undertow
-  implementation libraries.spring_boot_starter_web
-  implementation libraries.spring_boot_starter_security
+//  implementation libraries.spring_boot_starter_actuator
+//  implementation libraries.spring_boot_starter_logging
+//  implementation libraries.spring_boot_starter_undertow
+//  implementation libraries.spring_boot_starter_web
+  implementation libraries.spring_security_core
+  implementation libraries.spring_security_config
+  implementation libraries.spring_security_web
 
   implementation libraries.jakarta_validation_api
 
