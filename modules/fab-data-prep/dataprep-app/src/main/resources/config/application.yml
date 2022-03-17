@@ -18,11 +18,11 @@ spring:
 amqp:
   dataprep:
     incoming:
-      alert-stored:
-        queue-name: alert-stored-queue
+      alert-message:
+        queue-name: alert-message-queue
     outgoing:
       match-feature-input-set-fed:
-        exchange-name: match-feature-input-set-fed-exchange
+        exchange-name: bridge.match-feature-input-set-fed-exchange
 
 silenteight:
   bridge:

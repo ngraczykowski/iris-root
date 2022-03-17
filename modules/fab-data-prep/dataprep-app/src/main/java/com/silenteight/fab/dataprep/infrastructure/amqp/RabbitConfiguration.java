@@ -12,7 +12,7 @@ import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.CON
     AmqpFeedingOutgoingMatchFeatureInputSetFedProperties.class,
     AlertMessagesProperties.class
 })
-class FeedingRabbitConfiguration {
+class RabbitConfiguration {
 
   @Bean
   Queue alertMessagesQueue(AlertMessagesProperties alertMessagesProperties) {

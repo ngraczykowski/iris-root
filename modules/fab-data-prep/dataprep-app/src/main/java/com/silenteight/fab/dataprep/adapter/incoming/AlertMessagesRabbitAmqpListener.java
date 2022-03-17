@@ -28,7 +28,7 @@ import static java.util.stream.Collectors.toMap;
 class AlertMessagesRabbitAmqpListener {
 
   public static final String QUEUE_NAME_PROPERTY =
-      "${amqp.dataprep.incoming.alert-stored.queue-name}";
+      "${amqp.dataprep.incoming.alert-message.queue-name}";
 
   private final FeedingFacade feedingFacade;
 

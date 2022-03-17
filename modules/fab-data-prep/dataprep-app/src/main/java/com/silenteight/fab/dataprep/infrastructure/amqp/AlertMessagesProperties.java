@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 
 @ConstructorBinding
-@ConfigurationProperties(prefix = "amqp.dataprep.incoming.alert-stored")
+@ConfigurationProperties(prefix = "amqp.dataprep.incoming.alert-message")
 @Value
 public class AlertMessagesProperties {
 
