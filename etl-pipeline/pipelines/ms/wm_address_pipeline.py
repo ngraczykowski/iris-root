@@ -162,14 +162,34 @@ class MSPipeline(ETLPipeline):
                     config,
                     False,
                 )
+
+                match.update(
+                    {
+                        key: self.flatten(match.get(key))
+                        for key in match
+                        if key.endswith("_ap") or key.endswith("_wl")
+                    }
+                )
+
                 config.update(
                     {
-                        key: match.get(key)
+                        key: self.flatten(match.get(key))
                         for key in match
                         if key.endswith("_ap") or key.endswith("_wl")
                     }
                 )
                 self.engine.sql_to_merge_specific_columns_to_standardized(
-                    agent_input_agg_col_config, match, config, True
+                    agent_input_agg_col_config, match, config, False
                 )
         return parsed_payloads
+
+    def flatten(self, value):
+        try:
+            if isinstance(value[0], list):
+                value = [item for item in value if item]
+                if isinstance(value[0], list):
+
+                    return [i for item in value for i in self.flatten(item) if item]
+        except (TypeError, IndexError):
+            pass
+        return value

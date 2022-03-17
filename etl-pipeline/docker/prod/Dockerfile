@@ -6,8 +6,9 @@ ENV PIP_INDEX_URL=$PIP_INDEX_URL
 ADD requirements.txt /requirements.txt
 ADD pipeline.yaml /pipeline.yaml
 RUN conda install -c anaconda python=3.7
+RUN apt-get update --fix-missing
+RUN apt install git gcc -y
 RUN conda env create  -f /pipeline.yaml
-RUN apt install git -y
 SHELL ["conda", "run", "-n", "pipeline", "/bin/bash", "-c"]
 RUN mkdir /server_entrypoint
 ADD scripts/start.sh /server_entrypoint/start.sh

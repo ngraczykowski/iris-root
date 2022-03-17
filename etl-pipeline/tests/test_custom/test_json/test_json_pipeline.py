@@ -8,6 +8,7 @@ from spark_manager.spark_config import SPARK_CONF
 from etl_pipeline.config import columns_namespace as cn
 from etl_pipeline.config import pipeline_config
 from etl_pipeline.custom.ms.datatypes.field import InputRecordField  # noqa F401
+from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.data_processor_engine.json_engine.json_engine import JsonProcessingEngine
 from pipelines.ms.wm_address_pipeline import MSPipeline
 
@@ -23,10 +24,11 @@ class TestMSPipeline(unittest.TestCase):
         self.uut = MSPipeline(self.spark_engine, config=pipeline_config)
 
     def test_pipeline(self):
-        with open("notebooks/sample/alert.json", "r") as file:
+        with open("notebooks/sample/alert_in_payload_format.json", "r") as file:
             payload = json.loads(file.read())
-
         payload_json = {key: payload[key] for key in sorted(payload)}
+        payload_json = PayloadLoader().load_payload_from_json(payload_json)
+        payload_json = payload_json["alertPayload"]
         payload_json["match_ids"] = [
             i for i in range(len(payload_json[cn.ALERT_FIELD][cn.MATCH_RECORDS]))
         ]

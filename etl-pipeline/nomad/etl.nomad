@@ -49,7 +49,11 @@ job "etl-pipeline" {
       }
 
       config {
+<<<<<<< HEAD
         image = "docker.repo.silenteight.com/etl-pipeline-service:0.5.7-dev"
+=======
+        image = "docker.repo.silenteight.com/etl-pipeline-service:latest"
+>>>>>>> add
         mount {
           type   = "bind"
           source = "local/config/pipeline/pipeline.yaml"

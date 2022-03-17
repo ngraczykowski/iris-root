@@ -9,6 +9,7 @@ dev_require = [
     "googleapis-common-protos==1.55.0",
     "data-source-agentinput-api==0.21.0.5",
     "data-source-api==0.21.0.5",
+    "python-Levenshtein==0.12.2",
 ]
 
 
@@ -19,12 +20,13 @@ tests_require = [
     "lxml==4.7.1",
     "data-source-agentinput-api==0.21.0.5",
     "data-source-api==0.21.0.5",
+    "python-Levenshtein==0.12.2",
 ]
 
 
 setup(
     name="etl_pipeline",
-    version="0.5.7-dev1",
+    version="0.5.6-dev",
     description="ETL pipeline",
     author="Silent Eight Pte. Ltd.",
     author_email="support@silenteight.com",
@@ -34,7 +36,7 @@ setup(
         "License :: Other/Proprietary License",
     ],
     packages=find_packages(exclude=("tests",)),
-    install_requires=tests_require,
+    install_requires=dev_require,
     extras_require={
         "tests": tests_require,
     },
