@@ -1,0 +1,146 @@
+= Batch Expiration Check
+
+In order to handle batch timeout, the Core Bridge uses RabbitMQ.
+After the batch is registered, there is a message published on the exchange
+`core-bridge.verify-batch-timeout-exchange`. The queue bounded to this exchange has set the message time-to-live
+and dead-letter exchange. Since there is no RabbitMQ listener listening on this queue, all messages
+that reached the TTL are routed to the dead-letter exchange. On the other hand, there is a queue
+bounded to the dead-letter exchange. By that, it only receives messages that reached the TTL.
+
+== Infrastructure
+
+=== Enabling timeout handling
+
+Timeout handling can be enabled or disabled using the property:
+`amqp.registration.outgoing.verify-batch-timeout.timeout-enabled`.
+Its value should be in a format of `java.time.Boolean`.
+The default value is `false`.
+
+=== Expiration Time
+
+It defines batch TTL, meaning how much time is needed from batch registration until it gets timed out.
+
+The default value is 60 minutes, and it can be modified using the property:
+`amqp.registration.incoming.verify-batch-timeout.delay-time`.
+Its value should be in a format of `java.time.Duration`.
+
+== Creating Manual Recommendations
+
+This feature was implemented to cover the case of Adjudication Engine timeout when processing alerts.
+
+There might be a chance that you add alerts to the analysis and wait for a very long time for
+the recommendations to arrive, or they never do. In order to handle such a case, the Core Bridge
+checks after given amount of time if the batch is completed. If it's not, all missing recommendations
+will be created.
+
+When the delayed message arrives, the batch related to the message is validated.
+If batch status is neither 'COMPLETED' nor 'DELIVERED' and not all recommendations exist,
+they are created as timed out recommendations by the Core Bridge.
+
+=== Timed Out Recommendation Structure
+
+To distinguish recommendations created by the AE and by the Core Bridge on batch timeout,
+the latter have a special form:
+
+.Timed Out Recommendation Structure
+|===
+|Property|Value
+
+|Name
+|''
+
+|Recommended action
+|'ACTION_INVESTIGATE'
+
+|Recommendation comment
+|''
+
+|Metadata
+|`null`
+
+|Timeout
+|`true`
+|===
+
+=== Flow Diagram
+
+[plantuml,importing-steps,svg]
+-----
+@startuml
+title Batch Timeout Flow
+
+participant "Customer Bridge" as cu
+participant "Core Bridge" as cb
+participant "RabbitMQ" as rm
+participant "Adjudication Engine" as ae
+
+cu -> cb: Register batch
+cb -> ae: Create analysis
+cb -> rm: Publish MessageVerifyBatchTimeout
+...
+cu -> cb: Publish MessageAlertMatchesFeatureInputFed
+cb -> ae: Add alerts to analysis
+
+...
+ae -> cb: Send recommendations for x out of y alerts
+...
+note across: After 60 minutes since MessageVerifyBatchTimeout was published
+
+rm -> rm: Route message to dead-letter-exchange
+
+rm -> cb: Send delayed MessageVerifyBatchTimeout
+cb -> cb: Verify batch status
+alt batch status not in [COMPLETED, DELIVERED]
+    cb -> rm: Publish MessageNotifyBatchTimedOut
+    ...
+    rm -> cb: Send MessageNotifyBatchTimedOut
+    cb -> cb: Create y-x manual recommendations\nComplete batch
+    cb -> rm: Publish MessageBatchCompleted
+    ...
+    rm -> cu: Send MessageBatchCompleted
+end
+
+@enduml
+-----
+
+== Alerts verification
+
+It prevents the situation when a batch is registered and the analysis never starts
+(for instance due to incorrect alerts data provided by the customer).
+
+If the batch status is 'STORED' and all alerts related to the batch have status 'ERROR',
+the batch is marked as completed.
+
+=== Flow Diagram
+
+[plantuml,importing-steps,svg]
+-----
+@startuml
+title Batch Timeout Flow
+
+participant "Customer Bridge" as cu
+participant "Core Bridge" as cb
+participant "RabbitMQ" as rm
+participant "Adjudication Engine" as ae
+
+cu -> cb: Register batch
+cb -> ae: Create analysis
+cb -> rm: Publish MessageVerifyBatchTimeout
+
+...
+note across: After 60 minutes since MessageVerifyBatchTimeout was published
+
+rm -> rm: Route message to dead-letter-exchange
+
+rm -> cb: Send delayed MessageVerifyBatchTimeout
+cb -> cb: Verify batch status
+alt batch status not in [COMPLETED, DELIVERED]
+cb -> cb: Count alerts with status ERROR
+cb -> cb: Complete batch
+cb -> rm: Publish MessageBatchCompleted
+...
+rm -> cu: Send MessageBatchCompleted
+end
+
+@enduml
+-----

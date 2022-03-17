@@ -35,3 +35,74 @@ On the other hand, tests are considered as integration when they have a suffix `
 e.g. `DatabaseIntegrationTestIntegrationSpec`. 
 So it's important to name test classes appropriately.
 
+## gRPC Connectors
+
+They are a convenient way to integrate with the Core Bridge when you don't want to waste your
+valuable time on implementing gRPC adapters.
+
+There are 2 connectors that can be used out of the box:
+* [Core Bridge Recommendation Connector](https://gitlab.silenteight.com/all-in/core-bridge-recommendation-connector)
+* [Core Bridge Registration Connector](https://gitlab.silenteight.com/all-in/core-bridge-registration-connector)
+
+Read their READMEs in order to learn how to add them to your project.
+Next step is the configuration described below.
+
+### Core Bridge Recommendation Connector
+
+There is an interface named `RecommendationServiceClient` and its implementation `RecommendationServiceGrpcAdapter`.
+The point is to create an instance of `RecommendationServiceGrpcAdapter` what can be achieved
+by creating a bean, for example:
+
+```java
+import com.silenteight.proto.recommendation.api.v1.RecommendationServiceGrpc.RecommendationServiceBlockingStub;
+import com.silenteight.recommendation.api.library.v1.RecommendationServiceClient;
+import com.silenteight.recommendation.api.library.v1.RecommendationServiceGrpcAdapter;
+
+import net.devh.boot.grpc.client.inject.GrpcClient;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+class RecommendationGrpcServiceConfiguration {
+
+  @GrpcClient("recommendation")
+  RecommendationServiceBlockingStub recommendationServiceBlockingStub;
+
+  @Bean
+  RecommendationServiceClient recommendationServiceClient() {
+    var deadlineInSeconds = 60;
+    return new RecommendationServiceGrpcAdapter(recommendationServiceBlockingStub, deadlineInSeconds);
+  }
+}
+```
+
+After that, the bean is ready to be used.
+Just call `RecommendationServiceClient recommendationServiceClient` to make a gRPC request.
+
+### Core Bridge Registration Connector
+
+Configuring the connector is analogous to the one mentioned before i.e. create a bean of `RegistrationServiceClient`
+by creating an instance of `RegistrationServiceGrpcAdapter`.
+
+```java
+import com.silenteight.proto.registration.api.v1.RegistrationServiceGrpc.RegistrationServiceBlockingStub;
+import com.silenteight.registration.api.library.v1.RegistrationServiceClient;
+import com.silenteight.registration.api.library.v1.RegistrationServiceGrpcAdapter;
+
+import net.devh.boot.grpc.client.inject.GrpcClient;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+class RegistrationGrpcServiceConfiguration {
+
+  @GrpcClient("registration")
+  RegistrationServiceBlockingStub registrationServiceBlockingStub;
+
+  @Bean
+  RegistrationServiceClient registrationServiceClientGrpcApi() {
+    var deadlineInSeconds = 60;
+    return new RegistrationServiceGrpcAdapter(registrationServiceBlockingStub, deadlineInSeconds);
+  }
+}
+```
