@@ -24,14 +24,6 @@ pipeline {
                 sh './scripts/test.sh'
             }
         }
-        stage('Publish docker image') {
-            when {
-                branch 'master'
-            }
-            steps {
-                sh './scripts/push.sh'
-            }
-        }
         stage('Build and publish package') {
             agent {
                 docker {
