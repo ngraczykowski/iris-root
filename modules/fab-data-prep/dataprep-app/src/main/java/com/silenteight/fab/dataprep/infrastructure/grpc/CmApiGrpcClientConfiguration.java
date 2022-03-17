@@ -2,6 +2,7 @@ package com.silenteight.fab.dataprep.infrastructure.grpc;
 
 import lombok.Value;
 
+import com.silenteight.fab.dataprep.infrastructure.grpc.CmApiGrpcClientConfiguration.GrpcProperties;
 import com.silenteight.proto.fab.api.v1.AlertMessageDetailsServiceGrpc.AlertMessageDetailsServiceBlockingStub;
 
 import net.devh.boot.grpc.client.inject.GrpcClient;
@@ -19,7 +20,7 @@ import javax.validation.constraints.NotNull;
 import static com.silenteight.fab.dataprep.infrastructure.grpc.KnownServices.CM_API_CONNECTOR;
 
 @Configuration
-@EnableConfigurationProperties(CmApiGrpcClientConfiguration.Properties.class)
+@EnableConfigurationProperties(GrpcProperties.class)
 class CmApiGrpcClientConfiguration {
 
   @GrpcClient(CM_API_CONNECTOR)
@@ -28,9 +29,9 @@ class CmApiGrpcClientConfiguration {
   @Bean
   @Profile("!cmapiconnectormock")
   AlertDetailsServiceClient alertsDetailsServiceClient(
-      CmApiGrpcClientConfiguration.Properties properties) {
+      GrpcProperties grpcProperties) {
     return new AlertDetailsServiceClient(
-        alertMessageDetailsServiceBlockingStub, properties.getDeadline());
+        alertMessageDetailsServiceBlockingStub, grpcProperties.getDeadline());
   }
 
   @Bean
@@ -43,7 +44,7 @@ class CmApiGrpcClientConfiguration {
   @ConstructorBinding
   @ConfigurationProperties("grpc.client.cm-api-connector")
   @Value
-  static class Properties {
+  static class GrpcProperties {
 
     @NotNull
     Duration deadline;

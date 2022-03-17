@@ -1,21 +1,29 @@
 package com.silenteight.fab.dataprep.infrastructure.grpc;
 
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 
+import com.silenteight.fab.dataprep.infrastructure.grpc.RegistrationGrpcServiceConfiguration.GrpcProperties;
 import com.silenteight.proto.registration.api.v1.RegistrationServiceGrpc.RegistrationServiceBlockingStub;
 import com.silenteight.registration.api.library.v1.*;
 
 import net.devh.boot.grpc.client.inject.GrpcClient;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.validation.annotation.Validated;
+
+import java.time.Duration;
+import javax.validation.constraints.NotNull;
 
 import static java.util.stream.Collectors.toList;
 
 @Configuration
 @RequiredArgsConstructor
-@EnableConfigurationProperties(RegistrationGrpcConfigurationProperties.class)
+@EnableConfigurationProperties(GrpcProperties.class)
 class RegistrationGrpcServiceConfiguration {
 
   @GrpcClient(KnownServices.REGISTRATION)
@@ -23,10 +31,9 @@ class RegistrationGrpcServiceConfiguration {
 
   @Bean
   @Profile("!dev")
-  RegistrationServiceClient registrationServiceClientGrpcApi(
-      RegistrationGrpcConfigurationProperties grpcProperties) {
+  RegistrationServiceClient registrationServiceClientGrpcApi(GrpcProperties grpcProperties) {
     return new RegistrationServiceGrpcAdapter(
-        registrationServiceBlockingStub, grpcProperties.getRegistrationDeadline().getSeconds());
+        registrationServiceBlockingStub, grpcProperties.getDeadline().getSeconds());
   }
 
   @Bean
@@ -74,5 +81,15 @@ class RegistrationGrpcServiceConfiguration {
           .matchName(matchIn.getMatchId().replace("hits", "matches"))
           .build();
     }
+  }
+
+  @Validated
+  @ConstructorBinding
+  @ConfigurationProperties("grpc.client.registration")
+  @Value
+  static class GrpcProperties {
+
+    @NotNull
+    Duration deadline;
   }
 }

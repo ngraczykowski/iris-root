@@ -1,21 +1,31 @@
 package com.silenteight.fab.dataprep.infrastructure.grpc;
 
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 
 import com.silenteight.datasource.categories.api.v2.CategoryServiceGrpc.CategoryServiceBlockingStub;
 import com.silenteight.datasource.categories.api.v2.CategoryValueServiceGrpc.CategoryValueServiceBlockingStub;
+import com.silenteight.fab.dataprep.infrastructure.grpc.CategoriesGrpcServiceConfiguration.GrpcCategoryProperties;
+import com.silenteight.fab.dataprep.infrastructure.grpc.CategoriesGrpcServiceConfiguration.GrpcCategoryValueProperties;
 import com.silenteight.universaldatasource.api.library.category.v2.*;
 
 import net.devh.boot.grpc.client.inject.GrpcClient;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.validation.annotation.Validated;
+
+import java.time.Duration;
+import javax.validation.constraints.NotNull;
 
 @Configuration
 @RequiredArgsConstructor
 @EnableConfigurationProperties({
-    CategoriesConfigurationProperties.class, CategoriesGrpcConfigurationProperties.class })
+    CategoriesConfigurationProperties.class, GrpcCategoryProperties.class,
+    GrpcCategoryValueProperties.class })
 class CategoriesGrpcServiceConfiguration {
 
   @GrpcClient(KnownServices.CATEGORY)
@@ -26,10 +36,9 @@ class CategoriesGrpcServiceConfiguration {
 
   @Bean
   @Profile("!dev")
-  CategoryServiceClient categoryServiceClientApi(
-      CategoriesGrpcConfigurationProperties grpcProperties) {
+  CategoryServiceClient categoryServiceClientApi(GrpcCategoryProperties grpcCategoryProperties) {
     return new CategoryGrpcAdapter(
-        categoryServiceBlockingStub, grpcProperties.getCategoryDeadline().getSeconds());
+        categoryServiceBlockingStub, grpcCategoryProperties.getDeadline().getSeconds());
   }
 
   @Bean
@@ -41,9 +50,9 @@ class CategoriesGrpcServiceConfiguration {
   @Bean
   @Profile("!dev")
   CategoryValuesServiceClient categoryValuesServiceClientApi(
-      CategoriesGrpcConfigurationProperties grpcProperties) {
+      GrpcCategoryValueProperties grpcCategoryValueProperties) {
     return new CategoryValuesGrpcAdapter(
-        categoryValueServiceBlockingStub, grpcProperties.getCategoryValueDeadline().getSeconds());
+        categoryValueServiceBlockingStub, grpcCategoryValueProperties.getDeadline().getSeconds());
   }
 
   @Bean
@@ -67,5 +76,25 @@ class CategoriesGrpcServiceConfiguration {
         BatchCreateCategoryValuesIn request) {
       return null;
     }
+  }
+
+  @Validated
+  @ConstructorBinding
+  @ConfigurationProperties("grpc.client.category")
+  @Value
+  static class GrpcCategoryProperties {
+
+    @NotNull
+    Duration deadline;
+  }
+
+  @Validated
+  @ConstructorBinding
+  @ConfigurationProperties("grpc.client.category-value")
+  @Value
+  static class GrpcCategoryValueProperties {
+
+    @NotNull
+    Duration deadline;
   }
 }

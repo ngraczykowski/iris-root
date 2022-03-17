@@ -24,26 +24,23 @@ amqp:
       match-feature-input-set-fed:
         exchange-name: bridge.match-feature-input-set-fed-exchange
 
-silenteight:
-  bridge:
-    grpc:
-      universal-data-source:
-        uds-deadline: 1m
-      registration:
-        registration-deadline: 1m
-      category:
-        categoryDeadline: 1m
-        categoryValueDeadline: 1m
-
 grpc:
   client:
-    registration.address: static://localhost:24804
-    universal-data-source.address: static://localhost:24805
+    registration:
+      address: static://localhost:24804
+      deadline: 1m
+    universal-data-source:
+      address: static://localhost:24805
+      deadline: 1m
     cm-api-connector:
       address: static://localhost:8081
       deadline: 1m
-    category.address: static://localhost:24807
-    category-value.address: static://localhost:24808
+    category:
+      address: static://localhost:24807
+      deadline: 1m
+    category-value:
+      address: static://localhost:24808
+      deadline: 1m
     GLOBAL:
       negotiation-type: PLAINTEXT
 
