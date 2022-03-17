@@ -14,6 +14,14 @@ ftcc:
     username: ftcc
     password: ftcc
   #-------------------------------------------------------------------------------------------------
+  # AMQP
+  #-------------------------------------------------------------------------------------------------
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: dev
+    password: dev
+  #-------------------------------------------------------------------------------------------------
   # Data Prep
   #-------------------------------------------------------------------------------------------------
   data-prep:
@@ -36,10 +44,10 @@ spring:
     name: ftcc
 
   rabbitmq:
-    host: localhost
-    port: 5672
-    username: dev
-    password: dev
+    host: ${ftcc.rabbitmq.host}
+    port: ${ftcc.rabbitmq.port}
+    username: ${ftcc.rabbitmq.username}
+    password: ${ftcc.rabbitmq.password}
     virtual-host: /
     listener:
       type: simple
