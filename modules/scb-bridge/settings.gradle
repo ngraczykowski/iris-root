@@ -1,1 +1,5 @@
 rootProject.name = 'scb-bridge'
+
+include('bridge-app')
+include('bridge-dist')
+

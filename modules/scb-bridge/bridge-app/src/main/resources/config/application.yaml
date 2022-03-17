@@ -40,7 +40,7 @@ spring:
   datasource:
     password: cb
     username: cb
-    url: jdbc:postgresql://localhost:24291/customer_bridge
+    url: jdbc:postgresql://localhost:24291/scb_bridge
 
   jpa:
     database: POSTGRESQL
@@ -60,7 +60,7 @@ spring:
         order_updates: true
 
   application:
-    name: customer-bridge
+    name: scb-bridge
 
   quartz:
     properties:

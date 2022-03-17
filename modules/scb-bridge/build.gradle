@@ -1,33 +1,21 @@
 plugins {
-  id "idea"
-  id "java"
-  id "groovy"
-  id "maven-publish"
-  id "org.springframework.boot" version "${springBootPluginVersion}"
-  id "com.silenteight.gradle.wrapper" version "${gradleWrapperPluginVersion}"
-  id "com.silenteight.gradle.release" version "${gradleReleasePluginVersion}"
-  id "com.silenteight.gradle.convention" version "${gradleConventionPluginVersion}"
   id 'org.sonarqube' version "${sonarqubePluginVersion}"
+  id "com.silenteight.gradle.release" version "${gradleReleasePluginVersion}"
+  id "com.silenteight.gradle.wrapper" version "${gradleWrapperPluginVersion}"
+  id "com.silenteight.gradle.convention" version "${gradleConventionPluginVersion}"
 }
-
 
 projectSetup {
   javaVersion = JavaVersion.VERSION_17
+  setupIde(false)
+}
+
+configure(subprojects) {Project subproject ->
+  subproject.pluginManager.withPlugin("java") {
+    archivesBaseName = "silenteight-" + subproject.name
+  }
 }
 
 ext {
   gradleScriptDir = "${rootProject.projectDir}/gradle/scripts"
-}
-
-apply from: "${gradleScriptDir}/dependencies.gradle"
-
-configurations {
-  implementation.extendsFrom starterDatabase
-  runtimeOnly.extendsFrom starterDatabaseRuntime
-}
-
-jar {
-  manifest {
-    attributes "Main-Class": "com.silenteight.customerbridge.CustomerBridgeApplication"
-  }
 }

@@ -223,4 +223,9 @@ configurations {
   starterDatabaseRuntime
 
 }
+
+repositories {
+  mavenCentral()
+}
+
 apply from: "${gradleScriptDir}/starterDatabase.gradle"

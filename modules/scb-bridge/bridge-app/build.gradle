@@ -1,0 +1,22 @@
+plugins {
+  id "idea"
+  id "java"
+  id "groovy"
+  id "maven-publish"
+  id "org.springframework.boot" version "2.5.10"
+}
+
+description = "bridge-app"
+
+apply from: "${rootProject.projectDir}/gradle/scripts/dependencies.gradle"
+
+configurations {
+  implementation.extendsFrom starterDatabase
+  runtimeOnly.extendsFrom starterDatabaseRuntime
+}
+
+jar {
+  manifest {
+    attributes "Main-Class": "com.silenteight.scb.ScbBridgeApplication"
+  }
+}

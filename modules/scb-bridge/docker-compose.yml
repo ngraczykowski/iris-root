@@ -31,7 +31,7 @@ services:
     ports:
       - "${POSTGRES_PORT:-24291}:5432"
     environment:
-      POSTGRES_DB: "${POSTGRES_DB:-customer_bridge}"
+      POSTGRES_DB: "${POSTGRES_DB:-scb_bridge}"
       POSTGRES_USER: "${POSTGRES_USER:-cb}"
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-cb}"
       PGDATA: "/var/lib/postgresql/data/pgdata"
