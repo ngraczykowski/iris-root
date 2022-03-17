@@ -19,7 +19,7 @@ if [ "${branch}" == "master" ]; then
   echo 'Releasing master'
   gitRelease
   echo 'Bumping minor'
-  bump2version minor # for master
+  bump2version patch # for master
 elif [[ $branch == release* ]]; then
   echo 'Releasing branch'
   gitRelease

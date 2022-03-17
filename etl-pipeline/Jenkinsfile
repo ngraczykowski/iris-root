@@ -45,6 +45,7 @@ pipeline {
                                 branch 'master'
                                 branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
                             }
+                            expression { return params.RELEASE }
                         }
                     steps {
                         sh 'pip install --index-url "${PIP_INDEX_URL}" bump2version tox'
