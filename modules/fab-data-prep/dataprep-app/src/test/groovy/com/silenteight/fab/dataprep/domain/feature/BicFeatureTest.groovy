@@ -1,6 +1,6 @@
 package com.silenteight.fab.dataprep.domain.feature
 
-import com.silenteight.universaldatasource.api.library.document.v1.DocumentFeatureInputOut
+import com.silenteight.universaldatasource.api.library.bankidentificationcodes.v1.BankIdentificationCodesFeatureInputOut
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -24,10 +24,13 @@ class BicFeatureTest extends Specification {
     def result = underTest.buildFeature(BUILD_FEATURE_COMMAND)
 
     then:
-    result == DocumentFeatureInputOut.builder()
+    result == BankIdentificationCodesFeatureInputOut.builder()
         .feature(BicFeature.FEATURE_NAME)
-        .alertedPartyDocuments([''])
-        .watchlistDocuments([])
+        .alertedPartyMatchingField('')
+        .watchListMatchingText('YASIN RAHMAN')
+        .watchlistType('I')
+        .watchlistBicCodes([])
+        .watchlistSearchCodes([])
         .build()
   }
 }
