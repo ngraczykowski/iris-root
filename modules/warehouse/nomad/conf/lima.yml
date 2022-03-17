@@ -113,6 +113,10 @@ warehouse.report.statistics:
     AND (wa.payload ->> 'analyst_decision') = 'ANALYST_FALSE_POSITIVE'
     AND (wsa.payload ->> 'recommendation_recommended_action') = 'ACTION_FALSE_POSITIVE'
 
+warehouse.report.zip:
+  enabled: true
+  rowsLimit: 10
+
 warehouse.reports.v2:
   reports:
     - name: RB_SCORER_MATCH_LEVEL
@@ -130,13 +134,14 @@ warehouse.reports.v2:
                match.payload ->> 'categories/customerType'                        AS "Customer Type",
                match.payload ->> 'categories/isDeny'                              AS "Sanctions",
                sim.payload ->> 'features/name:solution'                           AS "Name",
-               sim.payload ->> 'features/dateOfBirth:solution'                    AS "Date of Birth / Incorporation",
-               sim.payload ->> 'features/nationalIdDocument:solution'             AS "National ID",
-               sim.payload ->> 'features/passportNumberDocument:solution'         AS "Passport Number Document",
-               sim.payload ->> 'features/otherDocument:solution'                  AS "Other Document",
+               sim.payload ->> 'features/organizationName:solution'               AS "Organization Name",
+               sim.payload ->> 'features/date:solution'                           AS "Date of Birth / Incorporation",
+               sim.payload ->> 'features/nationalId:solution'                     AS "National ID",
+               sim.payload ->> 'features/passport:solution'                       AS "Passport Number Document",
+               sim.payload ->> 'features/document:solution'                       AS "Other Document",
                sim.payload ->> 'features/gender:solution'                         AS "Gender",
-               sim.payload ->> 'features/nationalityCountry:solution'             AS "Nationality Country",
-               sim.payload ->> 'features/residencyCountry:solution'               AS "Residency Country"
+               sim.payload ->> 'features/nationality:solution'                    AS "Nationality Country",
+               sim.payload ->> 'features/residency:solution'                      AS "Residency Country"               
         FROM warehouse_simulation_alert sim
             JOIN warehouse_alert prod on prod.name = sim.name
             JOIN warehouse_match match ON prod.id = match.alert_id
@@ -150,13 +155,14 @@ warehouse.reports.v2:
                  match.payload ->> 'categories/customerType',
                  match.payload ->> 'categories/isDeny',
                  sim.payload ->> 'features/name:solution',
-                 sim.payload ->> 'features/dateOfBirth:solution',
-                 sim.payload ->> 'features/nationalIdDocument:solution',
-                 sim.payload ->> 'features/passportNumberDocument:solution',
-                 sim.payload ->> 'features/otherDocument:solution',
+                 sim.payload ->> 'features/organizationName:solution',
+                 sim.payload ->> 'features/date:solution',
+                 sim.payload ->> 'features/nationalId:solution',
+                 sim.payload ->> 'features/passport:solution',
+                 sim.payload ->> 'features/document:solution',
                  sim.payload ->> 'features/gender:solution',
-                 sim.payload ->> 'features/nationalityCountry:solution',
-                 sim.payload ->> 'features/residencyCountry:solution'
+                 sim.payload ->> 'features/nationality:solution',
+                 sim.payload ->> 'features/residency:solution'
 
     - name: AI_REASONING_MATCH_LEVEL
       type: simulation
