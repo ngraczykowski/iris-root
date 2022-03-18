@@ -11,6 +11,7 @@ import com.silenteight.bridge.core.recommendation.domain.model.RecommendationMet
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationWithMetadata;
 import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RecommendationService;
 
+import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +30,11 @@ class RecommendationServiceAdapter implements RecommendationService {
   private final RecommendationServiceClient recommendationServiceClient;
 
   @Override
-  @Retryable(AdjudicationEngineLibraryRuntimeException.class)
+  @Retryable(value = AdjudicationEngineLibraryRuntimeException.class,
+      maxAttemptsExpression = "${grpc.client.retry.max-attempts}",
+      backoff = @Backoff(
+          multiplierExpression = "${grpc.client.retry.multiplier}",
+          delayExpression = "${grpc.client.retry.delay-in-milliseconds}"))
   public List<RecommendationWithMetadata> getRecommendations(String analysisName) {
     return recommendationServiceClient.getRecommendations(analysisName).stream()
         .map(e -> mapToRecommendationWithMetadata(e, analysisName))

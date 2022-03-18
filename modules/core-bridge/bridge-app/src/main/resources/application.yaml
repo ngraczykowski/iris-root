@@ -22,6 +22,10 @@ grpc:
   client:
     governance.address: static://localhost:24205
     adjudication-engine.address: static://localhost:24801
+    retry:
+      delay-in-milliseconds: 2500
+      multiplier: 2
+      max-attempts: 3
     GLOBAL:
       negotiation-type: PLAINTEXT
 
@@ -34,7 +38,34 @@ server:
 ### AMQP
 amqp:
   registration:
-    number-of-retries-dead-messages: 3
+    number-of-retries-dead-messages: 2
+    incoming:
+      match-feature-input-set-fed:
+        exchange-name: core-bridge.match-feature-input-set-fed-exchange
+        queue-name: core-bridge.match-feature-input-set-fed-queue
+        dead-letter-queue-name: core-bridge.match-feature-input-set-fed.dlq
+        dead-letter-queue-time-to-live-in-milliseconds: 30000
+        dead-letter-exchange-name: core-bridge.match-feature-input-set-fed.dlx
+        batch-size: 10
+        batch-receive-timeout: 3s
+      recommendation-received:
+        queue-name: core-bridge.recommendation-received-queue
+        dead-letter-queue-name: core-bridge.recommendation-received.dlq
+        dead-letter-queue-time-to-live-in-milliseconds: 30000
+        dead-letter-exchange-name: core-bridge.recommendation-received.dlx
+      recommendation-delivered:
+        exchange-name: core-bridge.recommendation-delivered-exchange
+        queue-name: core-bridge.recommendation-delivered-queue
+        dead-letter-queue-name: core-bridge.recommendation-delivered.dlq
+        dead-letter-queue-time-to-live-in-milliseconds: 30000
+        dead-letter-exchange-name: core-bridge.recommendation-delivered.dlx
+      verify-batch-timeout:
+        delay-time: 60m
+        delayed-queue-name: core-bridge.verify-batch-timeout-delayed-queue
+        queue-name: core-bridge.verify-batch-timeout-queue
+        error-alerts-queue-name: core-bridge.error-alerts-verify-batch-timeout-queue
+        queue-time-to-live-in-milliseconds: 10000
+        dead-letter-exchange-name: core-bridge.verify-batch-timeout.dlx
     outgoing:
       notify-batch-error:
         exchange-name: core-bridge.notify-batch-error-exchange
@@ -45,51 +76,24 @@ amqp:
         exchange-name: core-bridge.verify-batch-timeout-exchange
       notify-batch-timed-out:
         exchange-name: core-bridge.notify-batch-timed-out-exchange
-    incoming:
-      match-feature-input-set-fed:
-        exchange-name: core-bridge.match-feature-input-set-fed-exchange
-        queue-name: core-bridge.match-feature-input-set-fed-queue
-        dead-letter-queue-name: core-bridge.match-feature-input-set-fed.dlq
-        dead-letter-queue-time-to-live-in-milliseconds: 10000
-        dead-letter-exchange-name: core-bridge.match-feature-input-set-fed.dlx
-        batch-size: 10
-        batch-receive-timeout: 3s
-      recommendation-received:
-        queue-name: core-bridge.recommendation-received-queue
-        dead-letter-queue-name: core-bridge.recommendation-received.dlq
-        dead-letter-queue-time-to-live-in-milliseconds: 10000
-        dead-letter-exchange-name: core-bridge.recommendation-received.dlx
-      recommendation-delivered:
-        exchange-name: core-bridge.recommendation-delivered-exchange
-        queue-name: core-bridge.recommendation-delivered-queue
-        dead-letter-queue-name: core-bridge.recommendation-delivered.dlq
-        dead-letter-queue-time-to-live-in-milliseconds: 10000
-        dead-letter-exchange-name: core-bridge.recommendation-delivered.dlx
-      verify-batch-timeout:
-        delay-time: 60m
-        delayed-queue-name: core-bridge.verify-batch-timeout-delayed-queue
-        queue-name: core-bridge.verify-batch-timeout-queue
-        error-alerts-queue-name: core-bridge.error-alerts-verify-batch-timeout-queue
-        queue-time-to-live-in-milliseconds: 10000
-        dead-letter-exchange-name: core-bridge.verify-batch-timeout.dlx
   recommendation:
-    number-of-retries-dead-messages: 3
-    outgoing:
-      recommendation-received:
-        exchange-name: core-bridge.recommendation-received-exchange
+    number-of-retries-dead-messages: 2
     incoming:
       recommendations-generated:
         queue-name: core-bridge.recommendations-generated-queue
         dead-letter-queue-name: core-bridge.recommendations-generated.dlq
-        dead-letter-queue-time-to-live-in-milliseconds: 10000
+        dead-letter-queue-time-to-live-in-milliseconds: 30000
         dead-letter-exchange-name: core-bridge.recommendations-generated.dlx
         exchange-name: ae.event
         exchange-routing-key: ae.event.recommendations-generated
       notify-batch-timeout:
         queue-name: core-bridge.notify-batch-timeout-queue
         dead-letter-queue-name: core-bridge.notify-batch-timeout.dlq
-        dead-letter-queue-time-to-live-in-milliseconds: 10000
+        dead-letter-queue-time-to-live-in-milliseconds: 30000
         dead-letter-exchange-name: core-bridge.notify-batch-timeout.dlx
+    outgoing:
+      recommendation-received:
+        exchange-name: core-bridge.recommendation-received-exchange
 
 ### SPRING
 spring:
@@ -103,10 +107,12 @@ spring:
     password: dev
     listener:
       simple:
+        default-requeue-rejected: false
         retry:
           enabled: true
-          initial-interval: 1000ms
+          initial-interval: 2500ms
           multiplier: 2
+          max-attempts: 3
 
   ### CONSUL
   cloud:

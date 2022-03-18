@@ -9,6 +9,7 @@ import com.silenteight.bridge.core.registration.domain.model.AlertsToRegister;
 import com.silenteight.bridge.core.registration.domain.model.RegisteredAlerts;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRegistrationService;
 
+import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +22,11 @@ class AlertRegistrationAdapter implements AlertRegistrationService {
   private final AlertServiceClient alertServiceClient;
 
   @Override
-  @Retryable(AdjudicationEngineLibraryRuntimeException.class)
+  @Retryable(value = AdjudicationEngineLibraryRuntimeException.class,
+      maxAttemptsExpression = "${grpc.client.retry.max-attempts}",
+      backoff = @Backoff(
+          multiplierExpression = "${grpc.client.retry.multiplier}",
+          delayExpression = "${grpc.client.retry.delay-in-milliseconds}"))
   public RegisteredAlerts registerAlerts(AlertsToRegister alertsToRegister) {
     var request = mapper.toRequest(alertsToRegister);
     var result = alertServiceClient.registerAlertsAndMatches(request);

@@ -10,6 +10,7 @@ import com.silenteight.governance.api.library.v1.model.GovernanceLibraryRuntimeE
 import com.silenteight.governance.api.library.v1.model.ModelServiceClient;
 import com.silenteight.governance.api.library.v1.model.SolvingModelOut;
 
+import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +23,11 @@ class DefaultModelServiceAdapter implements DefaultModelService {
   private final ModelServiceClient modelServiceClient;
 
   @Override
-  @Retryable(GovernanceLibraryRuntimeException.class)
+  @Retryable(value = GovernanceLibraryRuntimeException.class,
+      maxAttemptsExpression = "${grpc.client.retry.max-attempts}",
+      backoff = @Backoff(
+          multiplierExpression = "${grpc.client.retry.multiplier}",
+          delayExpression = "${grpc.client.retry.delay-in-milliseconds}"))
   public DefaultModel getForSolving() {
     var solvingModel = modelServiceClient.getSolvingModel();
     return createDefaultModel(solvingModel);

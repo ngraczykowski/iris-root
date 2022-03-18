@@ -15,6 +15,7 @@ import com.silenteight.bridge.core.registration.domain.model.DefaultModelFeature
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AnalysisService;
 
 import com.google.protobuf.Timestamp;
+import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +29,11 @@ class AnalysisServiceAdapter implements AnalysisService {
   private final AnalysisServiceClient analysisServiceClient;
 
   @Override
-  @Retryable(AdjudicationEngineLibraryRuntimeException.class)
+  @Retryable(value = AdjudicationEngineLibraryRuntimeException.class,
+      maxAttemptsExpression = "${grpc.client.retry.max-attempts}",
+      backoff = @Backoff(
+          multiplierExpression = "${grpc.client.retry.multiplier}",
+          delayExpression = "${grpc.client.retry.delay-in-milliseconds}"))
   public Analysis create(DefaultModel defaultModel) {
     var createAnalysisIn = CreateAnalysisIn.builder()
         .categories(defaultModel.categories())
@@ -43,7 +48,11 @@ class AnalysisServiceAdapter implements AnalysisService {
   }
 
   @Override
-  @Retryable(AdjudicationEngineLibraryRuntimeException.class)
+  @Retryable(value = AdjudicationEngineLibraryRuntimeException.class,
+      maxAttemptsExpression = "${grpc.client.retry.max-attempts}",
+      backoff = @Backoff(
+          multiplierExpression = "${grpc.client.retry.multiplier}",
+          delayExpression = "${grpc.client.retry.delay-in-milliseconds}"))
   public void addAlertsToAnalysis(
       String analysisName, List<String> alertNames, Timestamp alertDeadlineTime) {
     log.info("Adding {} alerts to analysis {}", alertNames.size(), analysisName);
