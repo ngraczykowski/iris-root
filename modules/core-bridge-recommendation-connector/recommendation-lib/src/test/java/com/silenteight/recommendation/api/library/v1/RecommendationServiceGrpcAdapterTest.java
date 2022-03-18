@@ -53,20 +53,20 @@ class RecommendationServiceGrpcAdapterTest {
 
   static class Fixtures {
 
-    static final String ALERT_ID = "alert/a8d8ffd5-1a25-4385-a599-a9e54c307cd3";
+    static final String ALERT_NAME = "alert/a8d8ffd5-1a25-4385-a599-a9e54c307cd3";
     static final String ALERT_METADATA = "some_metadata";
     static final String ALERT_ERROR_MSG = "some_error_message";
 
     static final String SOME_ANALYSIS = "some_analysis";
-    static final List<String> ALERTS_IDS = List.of(ALERT_ID);
+    static final List<String> ALERTS_NAMES = List.of(ALERT_NAME);
 
     static final RecommendationsIn RECOMMENDATIONS_IN = RecommendationsIn.builder()
         .analysisId(SOME_ANALYSIS)
-        .alertIds(ALERTS_IDS)
+        .alertNames(ALERTS_NAMES)
         .build();
 
     static final Alert ALERT = Alert.newBuilder()
-        .setId(ALERT_ID)
+        .setId(ALERT_NAME)
         .setStatus(AlertStatus.SUCCESS)
         .setMetadata(ALERT_METADATA)
         .setErrorMessage(ALERT_ERROR_MSG)

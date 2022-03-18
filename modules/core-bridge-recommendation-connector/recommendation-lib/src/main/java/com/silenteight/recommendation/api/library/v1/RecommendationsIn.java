@@ -14,12 +14,12 @@ public class RecommendationsIn {
   String analysisId;
 
   @Builder.Default
-  List<String> alertIds = List.of();
+  List<String> alertNames = List.of();
 
   RecommendationsRequest toRecommendationsRequest() {
     return RecommendationsRequest.newBuilder()
         .setAnalysisId(this.analysisId)
-        .addAllAlertIds(alertIds)
+        .addAllAlertNames(alertNames)
         .build();
   }
 }
