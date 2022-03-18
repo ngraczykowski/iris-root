@@ -125,12 +125,12 @@ class BatchServiceSpec extends Specification {
     def analysisName = RegistrationFixtures.ANALYSIS_NAME
 
     when:
-    def result = underTest.findBatchId(analysisName)
+    def result = underTest.findBatchByAnalysisName(analysisName)
 
     then:
-    1 * batchRepository.findBatchIdByAnalysisName(analysisName) >>
-        Optional.of(RegistrationFixtures.BATCH_ID_PROJECTION)
-    result == RegistrationFixtures.BATCH_ID_PROJECTION
+    1 * batchRepository.findBatchByAnalysisName(analysisName) >>
+        Optional.of(RegistrationFixtures.BATCH)
+    result == RegistrationFixtures.BATCH
   }
 
   def 'should find batch priority by analysis name'() {
@@ -165,17 +165,17 @@ class BatchServiceSpec extends Specification {
     def analysisName = 'notExistingAnalysisName'
 
     when:
-    underTest.findBatchId(analysisName)
+    underTest.findBatchByAnalysisName(analysisName)
 
     then:
-    1 * batchRepository.findBatchIdByAnalysisName(analysisName) >> Optional.empty()
+    1 * batchRepository.findBatchByAnalysisName(analysisName) >> Optional.empty()
     thrown(NoSuchElementException.class)
   }
 
   def 'should update batch status as COMPLETED and publish message when batch exists'() {
     given:
     def alertNames = ['firstAlertName', 'secondAlertName']
-    def command = new CompleteBatchCommand(Fixtures.BATCH_ID, alertNames)
+    def command = new CompleteBatchCommand(RegistrationFixtures.BATCH, alertNames)
     def batchCompleted = new BatchCompleted(
         Fixtures.BATCH_ID,
         RegistrationFixtures.ANALYSIS_NAME,
@@ -183,31 +183,12 @@ class BatchServiceSpec extends Specification {
         alertNames
     )
 
-    and:
-    batchRepository.findById(Fixtures.BATCH_ID) >> Optional.of(RegistrationFixtures.BATCH)
-
     when:
     underTest.completeBatch(command)
 
     then:
-    1 * batchRepository.updateStatusToCompleted(command.id())
+    1 * batchRepository.updateStatusToCompleted(command.batch().id())
     1 * eventPublisher.publish(batchCompleted)
-  }
-
-  def 'should not update batch status as COMPLETED and publish message when batch does not exists'() {
-    given:
-    def batchId = 'notExistingBatchId'
-    def command = new CompleteBatchCommand(batchId, [])
-
-    and:
-    batchRepository.findById(batchId) >> Optional.empty()
-
-    when:
-    underTest.completeBatch(command)
-
-    then:
-    0 * batchRepository.updateStatusToCompleted(_ as CompleteBatchCommand)
-    0 * eventPublisher.publish(_ as BatchCompleted)
   }
 
   def 'should update batch status as DELIVERED'() {

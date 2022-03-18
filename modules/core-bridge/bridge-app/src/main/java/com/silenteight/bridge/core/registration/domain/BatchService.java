@@ -42,8 +42,8 @@ class BatchService {
         .orElseThrow();
   }
 
-  BatchId findBatchId(String analysisName) {
-    return batchRepository.findBatchIdByAnalysisName(analysisName)
+  Batch findBatchByAnalysisName(String analysisName) {
+    return batchRepository.findBatchByAnalysisName(analysisName)
         .orElseThrow();
   }
 
@@ -72,15 +72,8 @@ class BatchService {
   }
 
   void completeBatch(CompleteBatchCommand completeBatchCommand) {
-    batchRepository.findById(completeBatchCommand.id())
-        .ifPresentOrElse(
-            batch -> {
-              markBatchAsCompleted(batch.id());
-              publishBatchCompleted(batch, completeBatchCommand.alertNames());
-            },
-            () -> log.error(
-                "No batch found for batch id: {}",
-                completeBatchCommand.id()));
+    markBatchAsCompleted(completeBatchCommand.batch().id());
+    publishBatchCompleted(completeBatchCommand.batch(), completeBatchCommand.alertNames());
   }
 
   void markBatchAsDelivered(String batchId) {

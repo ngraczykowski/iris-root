@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.bridge.core.registration.adapter.outgoing.BatchEntity.Status;
 import com.silenteight.bridge.core.registration.domain.model.Batch;
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus;
-import com.silenteight.bridge.core.registration.domain.model.BatchId;
 import com.silenteight.bridge.core.registration.domain.model.BatchIdWithPolicy;
 import com.silenteight.bridge.core.registration.domain.model.BatchPriority;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository;
@@ -26,9 +25,9 @@ class JdbcBatchRepository implements BatchRepository {
   }
 
   @Override
-  public Optional<BatchId> findBatchIdByAnalysisName(String analysisName) {
+  public Optional<Batch> findBatchByAnalysisName(String analysisName) {
     return crudBatchRepository.findByAnalysisName(analysisName)
-        .map(batchIdProjection -> new BatchId(batchIdProjection.batchId()));
+        .map(this::mapToBatch);
   }
 
   @Override

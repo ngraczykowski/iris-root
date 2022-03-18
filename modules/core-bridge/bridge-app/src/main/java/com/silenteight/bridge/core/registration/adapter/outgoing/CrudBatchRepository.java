@@ -12,7 +12,7 @@ interface CrudBatchRepository extends CrudRepository<BatchEntity, Long> {
 
   Optional<BatchEntity> findByBatchId(String batchId);
 
-  Optional<BatchIdProjection> findByAnalysisName(String analysisName);
+  Optional<BatchEntity> findByAnalysisName(String analysisName);
 
   @Query("""
       SELECT priority

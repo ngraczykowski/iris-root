@@ -2,7 +2,6 @@ package com.silenteight.bridge.core.registration.domain.port.outgoing;
 
 import com.silenteight.bridge.core.registration.domain.model.Batch;
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus;
-import com.silenteight.bridge.core.registration.domain.model.BatchId;
 import com.silenteight.bridge.core.registration.domain.model.BatchIdWithPolicy;
 import com.silenteight.bridge.core.registration.domain.model.BatchPriority;
 
@@ -12,7 +11,7 @@ public interface BatchRepository {
 
   Optional<Batch> findById(String id);
 
-  Optional<BatchId> findBatchIdByAnalysisName(String analysisName);
+  Optional<Batch> findBatchByAnalysisName(String analysisName);
 
   Optional<BatchIdWithPolicy> findBatchIdWithPolicyByAnalysisName(String analysisName);
 
