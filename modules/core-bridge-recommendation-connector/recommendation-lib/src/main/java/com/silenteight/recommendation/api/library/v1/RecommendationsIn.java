@@ -11,14 +11,14 @@ import java.util.List;
 @Builder
 public class RecommendationsIn {
 
-  String analysisId;
+  String analysisName;
 
   @Builder.Default
   List<String> alertNames = List.of();
 
   RecommendationsRequest toRecommendationsRequest() {
     return RecommendationsRequest.newBuilder()
-        .setAnalysisId(this.analysisId)
+        .setAnalysisName(this.analysisName)
         .addAllAlertNames(alertNames)
         .build();
   }
