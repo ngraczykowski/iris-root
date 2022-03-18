@@ -8,8 +8,6 @@ import java.util.Optional;
 
 public interface SingleAlertIngestService {
 
-  void ingestOrderedAlert(Alert fetch, MessagePropertiesProvider propertiesProvider);
-
   Optional<Recommendation> ingestAlertAndTryToReceiveRecommendation(
       Alert alert, MessagePropertiesProvider propertiesProvider);
 }

@@ -2,11 +2,10 @@ package com.silenteight.scb.ingest.adapter.incomming.common.batch;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckGateway;
-import com.silenteight.scb.ingest.adapter.incomming.common.batch.RecordCompositeWriter.WriterConfiguration;
 import com.silenteight.scb.ingest.adapter.incomming.common.domain.GnsSyncDeltaService;
 import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertIngestService;
-import com.silenteight.scb.ingest.adapter.incomming.common.quartz.*;
+import com.silenteight.scb.ingest.adapter.incomming.common.quartz.EcmBridgeLearningJobProperties;
+import com.silenteight.scb.ingest.adapter.incomming.common.quartz.ScbBridgeAlertLevelLearningJobProperties;
 
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.context.annotation.Bean;
@@ -16,59 +15,8 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 class RecordCompositeWriterConfiguration {
 
-  private final ScbBridgeWatchlistLevelLearningJobProperties watchlistLevelLearningJobProperties;
   private final ScbBridgeAlertLevelLearningJobProperties alertLevelLearningJobProperties;
-  private final ScbBridgeAlertLevelSolvingJobProperties alertLevelSolvingJobProperties;
-  private final ScbBridgeWatchlistLevelSolvingJobProperties watchlistLevelSolvingJobProperties;
   private final EcmBridgeLearningJobProperties ecmBridgeLearningJobProperties;
-
-  @Bean
-  @JobScope
-  RecordCompositeWriter alertLevelRecordCompositeWriter(
-      CbsAckGateway cbsAckGateway,
-      GnsSyncDeltaService deltaService,
-      BatchAlertIngestService ingestService) {
-
-    WriterConfiguration writerConfiguration = solvingWriterConfiguration(
-        alertLevelSolvingJobProperties.isAckRecords());
-
-    return createRecordCompositeWriter(
-        cbsAckGateway, writerConfiguration, deltaService, ingestService,
-        alertLevelSolvingJobProperties.getName());
-  }
-
-  private static RecordCompositeWriter createRecordCompositeWriter(
-      CbsAckGateway cbsAckGateway,
-      WriterConfiguration writerConfiguration,
-      GnsSyncDeltaService deltaService,
-      BatchAlertIngestService ingestService,
-      String deltaJobName) {
-    return RecordCompositeWriter.builder()
-        .cbsAckGateway(cbsAckGateway)
-        .configuration(writerConfiguration)
-        .deltaService(deltaService)
-        .ingestService(ingestService)
-        .deltaJobName(deltaJobName)
-        .build();
-  }
-
-  private static WriterConfiguration solvingWriterConfiguration(boolean ackRecords) {
-    return WriterConfiguration.of(false, ackRecords, false);
-  }
-
-  @Bean
-  @JobScope
-  RecordCompositeWriter watchlistLevelRecordCompositeWriter(
-      CbsAckGateway cbsAckGateway,
-      GnsSyncDeltaService deltaService,
-      BatchAlertIngestService ingestService) {
-    WriterConfiguration writerConfiguration = solvingWriterConfiguration(
-        watchlistLevelSolvingJobProperties.isAckRecords());
-
-    return createRecordCompositeWriter(
-        cbsAckGateway, writerConfiguration, deltaService, ingestService,
-        watchlistLevelSolvingJobProperties.getName());
-  }
 
   @Bean
   @JobScope
@@ -76,31 +24,11 @@ class RecordCompositeWriterConfiguration {
       GnsSyncDeltaService deltaService,
       BatchAlertIngestService ingestService) {
 
-    final WriterConfiguration learningWriterConfiguration =
-        WriterConfiguration.of(alertLevelLearningJobProperties.isUseDelta(), false, true);
-
     return RecordCompositeWriter.builder()
-        .configuration(learningWriterConfiguration)
+        .useDelta(alertLevelLearningJobProperties.isUseDelta())
         .deltaService(deltaService)
         .ingestService(ingestService)
         .deltaJobName(alertLevelLearningJobProperties.getDeltaJobName())
-        .build();
-  }
-
-  @Bean
-  @JobScope
-  RecordCompositeWriter scbLearningWatchlistLevelRecordCompositeWriter(
-      GnsSyncDeltaService deltaService,
-      BatchAlertIngestService ingestService) {
-
-    final WriterConfiguration learningWriterConfiguration =
-        WriterConfiguration.of(watchlistLevelLearningJobProperties.isUseDelta(), false, true);
-
-    return RecordCompositeWriter.builder()
-        .configuration(learningWriterConfiguration)
-        .deltaService(deltaService)
-        .ingestService(ingestService)
-        .deltaJobName(watchlistLevelLearningJobProperties.getDeltaJobName())
         .build();
   }
 
@@ -110,11 +38,8 @@ class RecordCompositeWriterConfiguration {
       GnsSyncDeltaService deltaService,
       BatchAlertIngestService ingestService) {
 
-    final WriterConfiguration learningWriterConfiguration =
-        WriterConfiguration.of(ecmBridgeLearningJobProperties.isUseDelta(), false, true);
-
     return RecordCompositeWriter.builder()
-        .configuration(learningWriterConfiguration)
+        .useDelta(ecmBridgeLearningJobProperties.isUseDelta())
         .deltaService(deltaService)
         .ingestService(ingestService)
         .deltaJobName(ecmBridgeLearningJobProperties.getDeltaJobName())

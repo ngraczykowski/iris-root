@@ -9,7 +9,6 @@ import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRec
 import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
 import com.silenteight.scb.ingest.domain.model.RegistrationResponse;
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
-import com.silenteight.sep.base.common.messaging.properties.CorrelatedMessagePropertiesProvider;
 import com.silenteight.sep.base.testing.messaging.MessageSenderSpyFactory;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -19,18 +18,13 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.messaging.MessageHeaders;
 
 import java.util.Collections;
-import java.util.Map;
 import java.util.stream.Stream;
 
-import static com.silenteight.scb.ingest.adapter.incomming.common.messaging.MessagingConstants.HEADER_PRIORITY;
 import static java.util.Collections.singleton;
 import static java.util.UUID.randomUUID;
-import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.springframework.amqp.support.AmqpHeaders.CORRELATION_ID;
 
 @ExtendWith(MockitoExtension.class)
 class IngestServiceTest {
@@ -70,29 +64,6 @@ class IngestServiceTest {
         senderFactory,
         singleton(listener),
         scbRecommendationService);
-  }
-
-  @Test
-  void ingestAlertForRecommend() {
-    //given
-    ObjectId objectId = ObjectId.builder().sourceId("").discriminator("").build();
-    Alert alert = Alert.builder().id(objectId).decisionGroup(DECISION_GROUP).build();
-    MessageHeaders messageHeaders =
-        new MessageHeaders(Map.of(
-            CORRELATION_ID, CORRELATION_ID_VALUE,
-            HEADER_PRIORITY, PRIORITY_VALUE));
-    CorrelatedMessagePropertiesProvider propertiesProvider =
-        new CorrelatedMessagePropertiesProvider(messageHeaders);
-
-    //when
-    ingestService.ingestOrderedAlert(alert, propertiesProvider);
-
-    //then
-    verify(listener).send(alertCaptor.capture());
-    assertThat(alertCaptor.getValue().decisionGroup()).isEqualTo(DECISION_GROUP);
-    assertThat(alertCaptor.getValue().flags())
-        .isEqualTo(Flag.PROCESS.getValue() | Flag.RECOMMEND.getValue() | Flag.ATTACH.getValue());
-    assertThat(alertCaptor.getValue().ingestedAt()).isNotNull();
   }
 
   @Test

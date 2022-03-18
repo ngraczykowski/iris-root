@@ -16,7 +16,6 @@ import org.springframework.context.annotation.Import;
 @Import(JobRegistryConfiguration.class)
 class QuartzLearningConfiguration {
 
-  private final ScbBridgeWatchlistLevelLearningJobProperties watchlistLevelLearningJobProperties;
   private final ScbBridgeAlertLevelLearningJobProperties alertLevelLearningJobProperties;
   private final EcmBridgeLearningJobProperties learningEcmJobProperties;
   private final QuartzConfiguration quartzConfiguration;
@@ -25,12 +24,6 @@ class QuartzLearningConfiguration {
   JobDetail scbAlertLevelLearningJobDetail() {
     return quartzConfiguration.createBatchJobLaunchingJob(
         BatchJobConfiguration.SCB_ALERT_LEVEL_LEARNING);
-  }
-
-  @Bean
-  JobDetail scbWatchlistLevelLearningLearningJobDetail() {
-    return quartzConfiguration.createBatchJobLaunchingJob(
-        BatchJobConfiguration.SCB_WATCHLIST_LEVEL_LEARNING);
   }
 
   @Bean
@@ -48,18 +41,6 @@ class QuartzLearningConfiguration {
         "scbAlertLevelLearningJobTrigger",
         scbAlertLevelLearningJobDetail().getKey(),
         alertLevelLearningJobProperties.getCronExpression());
-  }
-
-  @Bean
-  @ConditionalOnProperty(
-      prefix = "serp.scb.bridge.learning.watchlist",
-      name = "enabled",
-      havingValue = "true")
-  Trigger scbWatchlistLevelLearningJobTrigger() {
-    return QuartzConfiguration.createCronTrigger(
-        "scbWatchlistLevelLearningJobTrigger",
-        scbWatchlistLevelLearningLearningJobDetail().getKey(),
-        watchlistLevelLearningJobProperties.getCronExpression());
   }
 
   @Bean

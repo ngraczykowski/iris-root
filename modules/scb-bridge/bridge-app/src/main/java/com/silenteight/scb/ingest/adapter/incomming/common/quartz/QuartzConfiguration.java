@@ -64,14 +64,8 @@ class QuartzConfiguration {
   @Getter
   @AllArgsConstructor
   enum BatchJobConfiguration {
-    SOLVING_ALERT_LEVEL(
-        JobName.SCB_ALERT_LEVEL_SYNC, "scbAlertLevelSolvingJob", "SOLVING_AL"),
-    SOLVING_WATCHLIST_LEVEL(
-        JobName.SCB_WATCHLIST_LEVEL_SYNC, "scbWatchlistLevelSolvingJob", "SOLVING_WL"),
     SCB_ALERT_LEVEL_LEARNING(
         JobName.SCB_ALERT_LEVEL_LEARNING_SYNC, "scbAlertLevelLearningJob", "LEARNING_AL"),
-    SCB_WATCHLIST_LEVEL_LEARNING(
-        JobName.SCB_WATCHLIST_LEVEL_LEARNING_SYNC, "scbWatchlistLevelLearningJob", "LEARNING_WL"),
     LEARNING_ECM(
         JobName.ECM_LEARNING_SYNC, "ecmLearningJob", "ECM_LEARNING");
 

@@ -2,7 +2,6 @@ package com.silenteight.scb.ingest.adapter.incomming.common.health;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.quartz.EcmBridgeLearningJobProperties;
 import com.silenteight.scb.ingest.adapter.incomming.common.quartz.ScbBridgeAlertLevelLearningJobProperties;
-import com.silenteight.scb.ingest.adapter.incomming.common.quartz.ScbBridgeWatchlistLevelLearningJobProperties;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,7 +32,6 @@ class DatabaseLearningJobsConsistencyHealthIndicatorTest {
   @Mock
   private ResultSet resultSet;
 
-  private ScbBridgeWatchlistLevelLearningJobProperties watchlistLevelLearningJobProperties;
   private ScbBridgeAlertLevelLearningJobProperties alertLevelLearningJobProperties;
   private EcmBridgeLearningJobProperties ecmBridgeLearningJobProperties;
 
@@ -42,10 +40,6 @@ class DatabaseLearningJobsConsistencyHealthIndicatorTest {
 
   @BeforeEach
   void setUp() throws SQLException {
-    watchlistLevelLearningJobProperties = new ScbBridgeWatchlistLevelLearningJobProperties();
-    watchlistLevelLearningJobProperties.setDbRelationName(DB_RELATION);
-    watchlistLevelLearningJobProperties.setCbsHitsDetailsHelperViewName(CBS_VIEW);
-
     alertLevelLearningJobProperties = new ScbBridgeAlertLevelLearningJobProperties();
     alertLevelLearningJobProperties.setDbRelationName(DB_RELATION);
     alertLevelLearningJobProperties.setCbsHitsDetailsHelperViewName(CBS_VIEW);
@@ -57,38 +51,6 @@ class DatabaseLearningJobsConsistencyHealthIndicatorTest {
     when(dataSource.getConnection()).thenReturn(connection);
     when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
     when(preparedStatement.executeQuery()).thenReturn(resultSet);
-  }
-
-  @Test
-  void shouldVerifyWatchlistLearningViewsWithStatusUp() throws SQLException {
-    //given
-    watchlistLevelLearningJobProperties.setEnabled(true);
-
-    when(resultSet.next()).thenReturn(true);
-
-    //when
-    final Health health = createHealthIndicator().health();
-
-    //then
-    verify(resultSet, times(2)).next();
-    assertThat(health.getStatus()).isEqualTo(Status.UP);
-  }
-
-  @Test
-  void shouldVerifyWatchlistLearningViewsWithStatusDown() throws SQLException {
-    //given
-    watchlistLevelLearningJobProperties.setEnabled(true);
-
-    when(resultSet.next())
-        .thenReturn(true)
-        .thenThrow(new SQLException("ORA-00904"));
-
-    //when
-    final Health health = createHealthIndicator().health();
-
-    //then
-    verify(resultSet, times(2)).next();
-    assertThat(health.getStatus()).isEqualTo(Status.DOWN);
   }
 
   @Test
@@ -126,7 +88,6 @@ class DatabaseLearningJobsConsistencyHealthIndicatorTest {
   private DatabaseLearningJobsConsistencyHealthIndicator createHealthIndicator() {
     return new DatabaseLearningJobsConsistencyHealthIndicator(
         dataSource,
-        watchlistLevelLearningJobProperties,
         alertLevelLearningJobProperties,
         ecmBridgeLearningJobProperties);
   }

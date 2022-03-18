@@ -25,33 +25,14 @@ class ScbSyncJobConfiguration {
   private final GnsSyncService gnsSyncService;
 
   private final Step startNewGnsSync;
-  private final Step collectRecordsAlertLevel;
-  private final Step collectRecordsWatchlistLevel;
   private final Step collectRecordsAlertLevelLearning;
-  private final Step collectRecordsWatchlistLevelLearning;
   private final Step collectEcmRecordsLearning;
   private final Step finishGnsSyncTasklet;
-
-  @Bean
-  Job scbAlertLevelSolvingJob() {
-    return createSyncBatchJob(JobName.SCB_ALERT_LEVEL_SYNC, collectRecordsAlertLevel);
-  }
-
-  @Bean
-  Job scbWatchlistLevelSolvingJob() {
-    return createSyncBatchJob(JobName.SCB_WATCHLIST_LEVEL_SYNC, collectRecordsWatchlistLevel);
-  }
 
   @Bean
   Job scbAlertLevelLearningJob() {
     return createSyncBatchJob(
         JobName.SCB_ALERT_LEVEL_LEARNING_SYNC, collectRecordsAlertLevelLearning);
-  }
-
-  @Bean
-  Job scbWatchlistLevelLearningJob() {
-    return createSyncBatchJob(
-        JobName.SCB_WATCHLIST_LEVEL_LEARNING_SYNC, collectRecordsWatchlistLevelLearning);
   }
 
   @Bean

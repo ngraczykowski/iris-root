@@ -1,7 +1,6 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.batch
 
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckGateway
-import com.silenteight.scb.ingest.adapter.incomming.common.batch.RecordCompositeWriter.WriterConfiguration
 import com.silenteight.scb.ingest.adapter.incomming.common.domain.GnsSyncDeltaService
 import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertIngestService
 import com.silenteight.scb.ingest.adapter.incomming.common.model.ObjectId
@@ -24,62 +23,17 @@ class RecordCompositeWriterSpec extends Specification {
   @Unroll
   def "should write alerts for learning, useDelta=#useDelta, ackRecords=#ackRecords"() {
     given:
-    def learningModeFlag = true
-    def writerConfiguration = new WriterConfiguration(useDelta, ackRecords, learningModeFlag)
-
     when:
-    createRecordWriter(writerConfiguration).write([])
+    createRecordWriter().write([])
 
     then:
     1 * ingestService.ingestAlertsForLearn(_ as Stream)
-    deltaInteractions * deltaService.updateDelta(_ as Map, deltaJobName)
-    ackInteractions * cbsAckGateway.ackReadAlerts(_ as Set)
-
-    where:
-    useDelta | ackRecords | deltaInteractions | ackInteractions
-    false    | false      | 0                 | 0
-    false    | true       | 0                 | 1
-    true     | true       | 1                 | 1
-    true     | false      | 1                 | 0
-  }
-
-  @Unroll
-  def "should write alerts for recommendation, useDelta=#useDelta, ackRecords=#ackRecords"() {
-    given:
-    def learningModeFlag = false
-    def writerConfiguration = new WriterConfiguration(useDelta, ackRecords, learningModeFlag)
-
-    when:
-    createRecordWriter(writerConfiguration).write([])
-
-    then:
-    1 * ingestService.ingestAlertsForRecommendation(_ as Stream)
-    deltaInteractions * deltaService.updateDelta(_ as Map, deltaJobName)
-    ackInteractions * cbsAckGateway.ackReadAlerts(_ as Set)
-
-    where:
-    useDelta | ackRecords | deltaInteractions | ackInteractions
-    false    | false      | 0                 | 0
-    false    | true       | 0                 | 1
-    true     | true       | 1                 | 1
-    true     | false      | 1                 | 0
-  }
-
-  def 'should do not pass duplicated cbs ack alerts to cbsGateway'() {
-    given:
-    def writerConfiguration = new WriterConfiguration(false, true, false)
-    def alerts = [createAlertComposite(), createAlertComposite()]
-
-    when:
-    createRecordWriter(writerConfiguration).write(alerts)
-
-    then:
-    1 * cbsAckGateway.ackReadAlerts({it.size() == 1} as Set)
+    1 * deltaService.updateDelta(_ as Map, deltaJobName)
   }
 
   def 'should merge duplicated alerts for delta update'() {
     given:
-    def underTest = createRecordWriter(new WriterConfiguration(true, false, true))
+    def underTest = createRecordWriter()
     def alerts = [createAlertComposite(), createAlertComposite()]
 
     when:
@@ -112,8 +66,8 @@ class RecordCompositeWriterSpec extends Specification {
     new AlertComposite(createAlert(), 0, [Mock(Tag)])
   }
 
-  def createRecordWriter(WriterConfiguration configuration) {
+  def createRecordWriter() {
     new RecordCompositeWriter(
-        deltaService, ingestService, cbsAckGateway, configuration, deltaJobName)
+        deltaService, ingestService, cbsAckGateway, true, deltaJobName)
   }
 }

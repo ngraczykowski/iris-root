@@ -83,7 +83,7 @@ class IngestService implements SingleAlertIngestService, BatchAlertIngestService
 
     Alert ingestedAlert = updateIngestInfoForAlert(alert, flags);
     updateRegistrationInfoForAlert(ingestedAlert, registrationResponse);
-    listeners.forEach(l -> l.send(ingestedAlert));
+    listeners.forEach(listener -> listener.send(ingestedAlert));
 
     log.info("Sending a batched alert, systemId={}", ingestedAlert.id().sourceId());
 
@@ -139,13 +139,6 @@ class IngestService implements SingleAlertIngestService, BatchAlertIngestService
     return !scbRecommendationService.alertRecommendationExists(
         alert.id().sourceId(),
         alert.id().discriminator());
-  }
-
-  @Override
-  public void ingestOrderedAlert(Alert alert, MessagePropertiesProvider propertiesProvider) {
-    Alert ingestedAlert = updateAlertAndHandleListeners(alert);
-
-    log.info("Sending an ordered alert: systemId={}", alert.id().sourceId());
   }
 
   @Override

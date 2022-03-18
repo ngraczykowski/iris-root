@@ -54,14 +54,6 @@ class ScbSyncStepsConfiguration {
         .build();
   }
 
-  @Bean
-  public Step collectRecordsAlertLevel(
-      RecordCompositeReader alertLevelRecordCompositeReader,
-      RecordCompositeWriter alertLevelRecordCompositeWriter) {
-    return createCollectRecordsStep(
-        alertLevelRecordCompositeReader, alertLevelRecordCompositeWriter);
-  }
-
   private Step createCollectRecordsStep(
       RecordCompositeReader reader, RecordCompositeWriter writer) {
     return createStep("collectRecordsStep")
@@ -78,27 +70,10 @@ class ScbSyncStepsConfiguration {
   }
 
   @Bean
-  public Step collectRecordsWatchlistLevel(
-      RecordCompositeReader watchlistLevelRecordCompositeReader,
-      RecordCompositeWriter watchlistLevelRecordCompositeWriter) {
-    return createCollectRecordsStep(
-        watchlistLevelRecordCompositeReader, watchlistLevelRecordCompositeWriter);
-  }
-
-  @Bean
   public Step collectRecordsAlertLevelLearning(
       RecordCompositeReader learningAlertLevelRecordCompositeReader,
       RecordCompositeWriter scbLearningAlertLevelRecordCompositeWriter) {
     return createCollectRecordsStep(
         learningAlertLevelRecordCompositeReader, scbLearningAlertLevelRecordCompositeWriter);
-  }
-
-  @Bean
-  public Step collectRecordsWatchlistLevelLearning(
-      RecordCompositeReader learningWatchlistLevelRecordCompositeReader,
-      RecordCompositeWriter scbLearningWatchlistLevelRecordCompositeWriter) {
-    return createCollectRecordsStep(
-        learningWatchlistLevelRecordCompositeReader,
-        scbLearningWatchlistLevelRecordCompositeWriter);
   }
 }

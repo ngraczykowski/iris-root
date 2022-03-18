@@ -5,5 +5,4 @@ serp:
 
       learning:
         alert.enabled: true
-        watchlist.enabled: true
         ecm.enabled: true

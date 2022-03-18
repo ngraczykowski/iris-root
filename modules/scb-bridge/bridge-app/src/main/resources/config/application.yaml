@@ -140,36 +140,11 @@ serp:
         solution:
           states:
             ANALYST_NO_SOLUTION: [ 0 ]
-
-      solving:
-        # Alert-Level Solving Job Configuration
-        alert:
-          enabled: false
-          cron-expression: 0/6 * * * * ?
-          ack-records: true
-          db-relation-name: SENS_V_FFF_RECORDS
-          cbs-hits-details-helper-view-name:
-
-        # Watchlist-Level Solving Job Configuration
-        watchlist:
-          enabled: false
-          cron-expression: 3/6 * * * * ?
-          ack-records: true
-          db-relation-name: SENS_V_FFF_RECORDS
-          cbs-hits-details-helper-view-name:
-
       learning:
         #  Alert level Learning Job Configuration
         alert:
           enabled: false
           cron-expression: 0 0 3 ? * SUN
-          db-relation-name: SENS_V_FFF_RECORDS
-          cbs-hits-details-helper-view-name:
-
-        # Watchlist level Learning Job Configuration
-        watchlist:
-          enabled: false
-          cron-expression: 0 0 6 ? * SUN
           db-relation-name: SENS_V_FFF_RECORDS
           cbs-hits-details-helper-view-name:
 
