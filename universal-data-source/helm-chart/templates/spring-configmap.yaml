@@ -11,5 +11,5 @@ data:
       category:
         available: |-
           {{- range .Values.category.available }}
-            - {{ . | title | quote }}
+            - {{ . | quote }}
           {{- end }}
