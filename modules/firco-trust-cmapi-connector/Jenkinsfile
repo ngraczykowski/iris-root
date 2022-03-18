@@ -5,5 +5,21 @@ gradleBuild(
     sonarEnabled: true,
     dependencyCheckEnabled: true,
     includeBuildNumberInSnapshotVersion: true,
-    archiveArtifactsPattern: '**/build/libs/*.jar, plugins/**/*.jar'
+    archiveArtifactsPattern: '**/build/libs/*-exec.jar',
+    additionalStages: {
+      stage('Minio') {
+        script {
+          def git = new com.silenteight.jenkins.ci.Git()
+          if (git.getGitBranch() == 'master') {
+            minio(
+                bucket: 'artifacts',
+                includes: 'ftcc-app/build/libs/ftcc-app*-exec.jar',
+                targetFolder: 'ftcc'
+            )
+          } else {
+            echo "Not on master branch, ignore upload to Minio"
+          }
+        }
+      }
+    }
 )
