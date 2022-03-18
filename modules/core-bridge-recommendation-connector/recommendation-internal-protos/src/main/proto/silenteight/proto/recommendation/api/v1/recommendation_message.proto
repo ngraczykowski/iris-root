@@ -12,7 +12,8 @@ option java_package = "com.silenteight.proto.recommendation.api.v1";
 
 message RecommendationsDelivered {
   string batch_id = 1 [(google.api.field_behavior) = REQUIRED];
-  repeated string alert_ids = 2 [(google.api.field_behavior) = REQUIRED];
+  string analysis_name = 2 [(google.api.field_behavior) = REQUIRED];
+  repeated string alert_names = 3 [(google.api.field_behavior) = REQUIRED];
 }
 
 message RecommendationsStored {
