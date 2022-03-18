@@ -227,7 +227,21 @@ Reducing algorithm is defined in [config file](#config), reduction-rules.yaml. T
     ```
     Source is always relative to config directory and contains a model - currently only sklearn models are supported.
     Model can be binary or multi-class. Solution probability is taken from model probability.
-    
+    The model probability for ```MATCH``` or ```NO_MATCH``` must be met for that solution to be returned and the solutions are applied in the order they appear in the config file.
+
+  The order that rules are written in the config file are the order the rules are applied to a name pair. For example, in the default config file in this repo the rules are, in order:
+  
+  1. If ```blacklisted == 1```, then ```MATCH``` with solution probability 1
+  2. Else, if ```token_inclusion==1``` , then ```MATCH``` with solution probability 1
+  3. Else, if ```partial_fuzzy==1``` , then ```MATCH``` with solution probability 1
+  4. Else, if ```first_token==1``` , then ```MATCH``` with solution probability 1
+  5. Else, if ```abbreviation>=0.9```, then ```MATCH``` with solution probability 0.8
+  6. Else, if ```model(alerted_party_name, wle_name)[1] >= 0.93```, then ```NO_MATCH``` with solution probability equal to the ```NO_MATCH``` likelihood (i.e. ```model(alerted_party_name, wle_name)[1]```)
+  7. Else, if ```model(alerted_party_name, wle_name)[0] >= 0.0```, then ```MATCH``` with solution probability equal to the ```MATCH``` likelihood
+  8. Else, ```INCONCLUSIVE```
+  
+  **NOTE:** It is possible to set the thresholds of the model ```MATCH```/```NO_MATCH``` likelihoods so that ```INCONCLUSIVE``` is returned if neither condition is met. For example, if the threshold for ```NO_MATCH``` is set to 0.85 and the threshold for ```MATCH``` is set to 0.2, then if the model returns a likelihood of 0.83 for ```NO_MATCH``` and a likelihood of 0.17 for ```MATCH```, then neither condition is met and the result will be ```INCONCLUSIVE```.
+  
   All solutions used must be defined in `company_name/solution/solution.py` - but not all defined there needs to be used.
   If rules will not be comprehensive, the default solution is INCONCLUSIVE.
 
