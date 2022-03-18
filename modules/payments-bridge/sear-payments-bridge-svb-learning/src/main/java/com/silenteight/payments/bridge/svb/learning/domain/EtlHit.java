@@ -75,7 +75,7 @@ public class EtlHit {
   public NameAddressCrossmatchAgentRequest toNameAddressCrossmatchAgentRequest() {
     return NameAddressCrossmatchAgentRequest.builder()
         .alertPartyEntities(alertedPartyEntities)
-        .watchlistName(getWlName())
+        .watchlistName(getWatchlistName())
         .watchlistCountry(hitComposite.getFkcoVListCountry())
         .watchlistType(hitComposite.getFkcoVListType())
         .build();
@@ -100,7 +100,7 @@ public class EtlHit {
     return hitComposite.getFkcoVMatchedTag();
   }
 
-  private String getWlName() {
+  public String getWatchlistName() {
     if (hitComposite.getFkcoVHitType().equals(EMBARGO)) {
 
       List<String> listOfNames = Arrays.asList(

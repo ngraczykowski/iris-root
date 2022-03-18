@@ -7,6 +7,8 @@ import com.silenteight.payments.bridge.agents.model.ContextualLearningAgentReque
 import com.silenteight.payments.bridge.agents.model.ContextualLearningAgentRequest.ContextualLearningAgentRequestBuilder;
 import com.silenteight.payments.bridge.common.dto.common.SolutionType;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
+import com.silenteight.payments.bridge.datasource.category.dto.CategoryValueUnstructured;
+import com.silenteight.payments.bridge.datasource.category.dto.CategoryValueUnstructured.CategoryValueUnstructuredBuilder;
 
 import java.util.List;
 
@@ -47,5 +49,13 @@ public class HitAndWatchlistPartyData {
 
   private String getMatchingField() {
     return allMatchingFieldValues.stream().findFirst().orElse("");
+  }
+
+  public CategoryValueUnstructuredBuilder toCategoryValueUnstructuredModelBuilder() {
+    return CategoryValueUnstructured.builder()
+        .tag(tag)
+        .solutionType(solutionType)
+        .watchlistType(watchlistType)
+        .allMatchingFieldValues(String.join(" ", allMatchingFieldValues));
   }
 }

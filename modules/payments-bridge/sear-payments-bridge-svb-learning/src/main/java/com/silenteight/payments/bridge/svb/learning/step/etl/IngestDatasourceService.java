@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
 import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
+import com.silenteight.payments.bridge.datasource.DefaultFeatureInputSpecification;
+import com.silenteight.payments.bridge.datasource.FeatureInputSpecification;
 import com.silenteight.payments.bridge.etl.parser.port.MessageParserUseCase;
 import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 import com.silenteight.payments.bridge.svb.learning.domain.AlertComposite;
@@ -13,8 +15,6 @@ import com.silenteight.payments.bridge.svb.learning.domain.EtlHit;
 import com.silenteight.payments.bridge.svb.learning.domain.HitComposite;
 import com.silenteight.payments.bridge.svb.learning.step.etl.category.port.CreateCategoriesUseCase;
 import com.silenteight.payments.bridge.svb.learning.step.etl.feature.port.CreateFeatureUseCase;
-import com.silenteight.payments.bridge.svb.learning.step.etl.feature.service.DefaultFeatureInputSpecification;
-import com.silenteight.payments.bridge.svb.learning.step.etl.feature.service.FeatureInputSpecification;
 import com.silenteight.payments.bridge.svb.oldetl.model.CreateAlertedPartyEntitiesRequest;
 import com.silenteight.payments.bridge.svb.oldetl.port.CreateAlertedPartyEntitiesUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;

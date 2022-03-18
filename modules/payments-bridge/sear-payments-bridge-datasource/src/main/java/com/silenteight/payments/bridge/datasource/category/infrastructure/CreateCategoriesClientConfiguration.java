@@ -1,10 +1,9 @@
-package com.silenteight.payments.bridge.datasource.category.adapter;
+package com.silenteight.payments.bridge.datasource.category.infrastructure;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import com.silenteight.datasource.categories.api.v2.CategoryServiceGrpc;
-import com.silenteight.payments.bridge.datasource.category.port.CreateCategoriesClient;
 
 import io.grpc.Channel;
 import net.devh.boot.grpc.client.inject.GrpcClient;
@@ -26,11 +25,11 @@ class CreateCategoriesClientConfiguration {
   private Channel categoriesDataChannel;
 
   @Bean
-  CreateCategoriesClient createCategoriesClient() {
+  CategoriesClient createCategoriesClient() {
     var stub = CategoryServiceGrpc
         .newBlockingStub(categoriesDataChannel)
         .withWaitForReady();
 
-    return new CreateCategoriesClientAdapter(stub, properties.getTimeout());
+    return new CategoriesClient(stub, properties.getTimeout());
   }
 }

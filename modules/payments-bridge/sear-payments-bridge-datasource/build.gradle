@@ -6,6 +6,9 @@ plugins {
 dependencies {
   // Application modules
   implementation project(":sear-payments-bridge-common")
+  implementation project(":sear-payments-bridge-agents")
+
+  implementation libraries.silenteight_sep_base_common
 
   // Datasource
   implementation libraries.data_source_api

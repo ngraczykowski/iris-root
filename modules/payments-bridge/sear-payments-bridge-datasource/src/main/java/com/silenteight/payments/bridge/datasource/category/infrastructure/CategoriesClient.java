@@ -1,11 +1,10 @@
-package com.silenteight.payments.bridge.datasource.category.adapter;
+package com.silenteight.payments.bridge.datasource.category.infrastructure;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.datasource.categories.api.v2.BatchCreateCategoriesRequest;
 import com.silenteight.datasource.categories.api.v2.CategoryServiceGrpc.CategoryServiceBlockingStub;
-import com.silenteight.payments.bridge.datasource.category.port.CreateCategoriesClient;
 
 import io.grpc.Deadline;
 import io.grpc.StatusRuntimeException;
@@ -15,13 +14,13 @@ import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 @Slf4j
-class CreateCategoriesClientAdapter implements CreateCategoriesClient {
+public class CategoriesClient {
 
   private final CategoryServiceBlockingStub blockingStub;
 
   private final Duration timeout;
 
-  public void createCategories(BatchCreateCategoriesRequest createCategoriesRequest) {
+  public void create(BatchCreateCategoriesRequest createCategoriesRequest) {
     var deadline = Deadline.after(timeout.toMillis(), TimeUnit.MILLISECONDS);
 
     log.info("Sending create categories request");

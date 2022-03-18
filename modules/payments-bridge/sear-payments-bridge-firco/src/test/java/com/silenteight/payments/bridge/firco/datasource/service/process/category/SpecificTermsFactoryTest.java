@@ -1,7 +1,7 @@
 package com.silenteight.payments.bridge.firco.datasource.service.process.category;
 
 import com.silenteight.payments.bridge.agents.model.SpecificTermsAgentResponse;
-import com.silenteight.payments.bridge.agents.port.SpecificTerms2UseCase;
+import com.silenteight.payments.bridge.agents.port.SpecificTermsUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,22 +15,22 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class SpecificTerms2ProcessTest {
+class SpecificTermsFactoryTest {
 
-  private SpecificTerms2Process specificTerms2Process;
+  private SpecificTermsProcess specificTermsProcess;
   @Mock
-  private SpecificTerms2UseCase specificTerms2UseCase;
+  private SpecificTermsUseCase specificTermsUseCase;
 
   @BeforeEach
   void setup() {
-    when(specificTerms2UseCase.invoke(any())).thenReturn(new SpecificTermsAgentResponse("NO"));
-    specificTerms2Process = new SpecificTerms2Process(specificTerms2UseCase);
+    when(specificTermsUseCase.invoke(any())).thenReturn(new SpecificTermsAgentResponse("NO"));
+    specificTermsProcess = new SpecificTermsProcess(specificTermsUseCase);
   }
 
   @Test
   void testExtract() {
     int id = 1;
-    specificTerms2Process.createCategoryValue(getDatasourceUnstructuredModel(id));
-    verify(specificTerms2UseCase, times(1)).invoke(any());
+    specificTermsProcess.createCategoryValue(getDatasourceUnstructuredModel(id));
+    verify(specificTermsUseCase, times(1)).invoke(any());
   }
 }

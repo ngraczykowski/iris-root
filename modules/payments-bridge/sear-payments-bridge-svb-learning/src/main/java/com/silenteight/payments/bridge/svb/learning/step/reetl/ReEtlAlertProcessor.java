@@ -8,9 +8,9 @@ import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterMatch
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredAlert;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredMatch;
 import com.silenteight.payments.bridge.ae.alertregistration.port.FindRegisteredAlertUseCase;
+import com.silenteight.payments.bridge.datasource.FeatureInputSpecification;
 import com.silenteight.payments.bridge.svb.learning.domain.AlertComposite;
 import com.silenteight.payments.bridge.svb.learning.step.etl.IngestDatasourceService;
-import com.silenteight.payments.bridge.svb.learning.step.etl.feature.service.FeatureInputSpecification;
 
 import org.springframework.batch.item.ItemProcessor;
 

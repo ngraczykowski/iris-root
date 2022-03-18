@@ -2,7 +2,7 @@ package com.silenteight.payments.bridge.svb.learning.service;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.datasource.category.port.CreateCategoriesClient;
+import com.silenteight.payments.bridge.datasource.category.infrastructure.CategoriesClient;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +19,7 @@ class CreateCategoriesConfiguration {
 
   @Bean
   CreateCategoriesUseCase createCategoriesUseCase(
-      final CreateCategoriesClient createCategoriesClient,
+      final CategoriesClient createCategoriesClient,
       @Valid final CreateCategoriesProperties properties) {
     return new CreateCategoriesUseCase(
         createCategoriesClient, emptyIfNull(properties.getSupported()));

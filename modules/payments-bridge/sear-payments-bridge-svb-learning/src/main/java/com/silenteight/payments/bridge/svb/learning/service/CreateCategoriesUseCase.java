@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.datasource.categories.api.v2.BatchCreateCategoriesRequest;
 import com.silenteight.datasource.categories.api.v2.Category;
 import com.silenteight.datasource.categories.api.v2.CategoryType;
-import com.silenteight.payments.bridge.datasource.category.port.CreateCategoriesClient;
+import com.silenteight.payments.bridge.datasource.category.infrastructure.CategoriesClient;
 
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
@@ -20,22 +20,27 @@ import static com.silenteight.payments.bridge.common.app.CategoriesUtils.CATEGOR
 @RequiredArgsConstructor
 class CreateCategoriesUseCase {
 
-  private final CreateCategoriesClient createCategoriesClient;
+  private final CategoriesClient categoriesClient;
   private final Map<String, CreateCategoriesProperties.Category> categories;
 
   @EventListener(ApplicationReadyEvent.class)
   public void createCategories() {
-    createCategoriesClient.createCategories(BatchCreateCategoriesRequest
+    categoriesClient.create(BatchCreateCategoriesRequest
         .newBuilder()
         .addAllCategories(getAllCategories())
         .build());
   }
 
   private List<Category> getAllCategories() {
-    return categories.entrySet().stream().map(this::createCategory).collect(Collectors.toList());
+    return categories
+        .entrySet()
+        .stream()
+        .map(CreateCategoriesUseCase::createCategory)
+        .collect(Collectors.toList());
   }
 
-  private Category createCategory(Entry<String, CreateCategoriesProperties.Category> category) {
+  private static Category createCategory(
+      Entry<String, CreateCategoriesProperties.Category> category) {
     var value = category.getValue();
     return Category
         .newBuilder()

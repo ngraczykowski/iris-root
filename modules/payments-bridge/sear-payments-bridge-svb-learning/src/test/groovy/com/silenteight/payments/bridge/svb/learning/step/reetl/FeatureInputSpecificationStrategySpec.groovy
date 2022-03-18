@@ -1,6 +1,7 @@
 package com.silenteight.payments.bridge.svb.learning.step.reetl
 
-import com.silenteight.payments.bridge.svb.learning.step.etl.feature.service.DefaultFeatureInputSpecification
+import com.silenteight.payments.bridge.datasource.DefaultFeatureInputSpecification
+import com.silenteight.payments.bridge.datasource.IndicatedFeatureInputSpecification
 
 import spock.lang.Specification
 

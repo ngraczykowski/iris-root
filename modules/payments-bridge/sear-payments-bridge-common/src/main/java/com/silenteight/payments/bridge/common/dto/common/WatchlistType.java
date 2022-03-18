@@ -9,7 +9,7 @@ import static java.util.Arrays.asList;
 
 @RequiredArgsConstructor
 public enum WatchlistType {
-  ADDRESS("Other","O", "OTHER"),
+  ADDRESS("Other","O", "OTHER", "ADDRESS"),
   COMPANY("Company", "C", "COMPANY", "CORPORATE"),
   INDIVIDUAL("Individual", "I", "INDIVIDUAL"),
   VESSEL("Vessel", "V", "VESSEL");

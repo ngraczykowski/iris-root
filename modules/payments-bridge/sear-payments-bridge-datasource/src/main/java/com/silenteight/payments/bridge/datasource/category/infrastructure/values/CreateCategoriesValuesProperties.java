@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.datasource.category.adapter;
+package com.silenteight.payments.bridge.datasource.category.infrastructure.values;
 
 import lombok.Data;
 
@@ -7,10 +7,10 @@ import org.springframework.validation.annotation.Validated;
 
 import java.time.Duration;
 
-@ConfigurationProperties(prefix = "pb.grpc.client.create-category")
+@ConfigurationProperties(prefix = "pb.grpc.client.create-category-values")
 @Validated
 @Data
-class CreateCategoriesClientProperties {
+class CreateCategoriesValuesProperties {
 
   private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(30);
 

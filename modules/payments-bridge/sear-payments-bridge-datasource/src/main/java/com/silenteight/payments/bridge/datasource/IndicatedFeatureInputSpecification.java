@@ -1,16 +1,16 @@
-package com.silenteight.payments.bridge.svb.learning.step.reetl;
+package com.silenteight.payments.bridge.datasource;
 
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.datasource.agentinput.api.v1.AgentInput;
 import com.silenteight.datasource.categories.api.v2.CategoryValue;
-import com.silenteight.payments.bridge.svb.learning.step.etl.feature.service.FeatureInputSpecification;
+import com.silenteight.payments.bridge.datasource.FeatureInputSpecification;
 
 import java.util.List;
 import javax.annotation.Nonnull;
 
 @RequiredArgsConstructor
-class IndicatedFeatureInputSpecification implements FeatureInputSpecification {
+public class IndicatedFeatureInputSpecification implements FeatureInputSpecification {
 
   private final List<String> allowedFeaturedInputs;
 

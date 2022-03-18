@@ -15,7 +15,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class HistoricalRiskAssessmentProcessTest {
+class HistoricalRiskAssessmentFactoryProcessTest {
 
   private HistoricalRiskAssessmentProcess historicalRiskAssessmentProcess;
 

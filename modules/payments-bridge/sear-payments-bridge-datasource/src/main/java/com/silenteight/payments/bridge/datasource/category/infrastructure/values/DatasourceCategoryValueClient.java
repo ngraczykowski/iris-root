@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.datasource.category.adapter;
+package com.silenteight.payments.bridge.datasource.category.infrastructure.values;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +8,6 @@ import com.silenteight.datasource.categories.api.v2.BatchCreateCategoryValuesRes
 import com.silenteight.datasource.categories.api.v2.CategoryValueServiceGrpc.CategoryValueServiceBlockingStub;
 import com.silenteight.datasource.categories.api.v2.CreateCategoryValuesRequest;
 import com.silenteight.datasource.categories.api.v2.CreatedCategoryValue;
-import com.silenteight.payments.bridge.datasource.category.port.CreateCategoryValuesClient;
 
 import io.grpc.Deadline;
 import io.grpc.StatusRuntimeException;
@@ -20,13 +19,13 @@ import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @RequiredArgsConstructor
-class CreateCategoriesValuesAdapter implements CreateCategoryValuesClient {
+final class DatasourceCategoryValueClient {
 
   private final CategoryValueServiceBlockingStub blockingStub;
 
   private final Duration timeout;
 
-  public void createCategoriesValues(BatchCreateCategoryValuesRequest createCategoryValuesRequest) {
+  void create(BatchCreateCategoryValuesRequest createCategoryValuesRequest) {
     if (!createCategoryValuesRequest.getRequestsList().isEmpty()) {
       sendToDatasource(createCategoryValuesRequest);
     } else {
