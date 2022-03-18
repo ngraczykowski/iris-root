@@ -9,7 +9,6 @@ import com.silenteight.sep.base.aspects.metrics.Timed;
 import com.silenteight.universaldatasource.app.category.port.incoming.ListAvailableCategoriesUseCase;
 import com.silenteight.universaldatasource.app.category.port.outgoing.CategoryDataAccess;
 
-import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +36,8 @@ class ListAvailableCategoriesService implements ListAvailableCategoriesUseCase {
     if (log.isDebugEnabled()) {
       log.debug(
           "Listing available categories: count={}, names={}",
-          filteredCategories.size(), filteredCategories.stream().map(Category::getName).collect(toList()));
+          filteredCategories.size(),
+          filteredCategories.stream().map(Category::getName).collect(toList()));
     }
 
     return ListCategoriesResponse.newBuilder()
