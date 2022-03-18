@@ -9,8 +9,11 @@ import com.silenteight.sep.base.aspects.metrics.Timed;
 import com.silenteight.universaldatasource.app.category.port.incoming.ListAvailableCategoriesUseCase;
 import com.silenteight.universaldatasource.app.category.port.outgoing.CategoryDataAccess;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
@@ -27,21 +30,25 @@ class ListAvailableCategoriesService implements ListAvailableCategoriesUseCase {
   @Timed(value = "uds.category.use_cases", extraTags = { "action", "getAvailableCategories" })
   @Override
   public ListCategoriesResponse getAvailableCategories() {
+
     var allCategories = categoryDataAccess.getAllCategories();
+    var filteredCategories = filterCategories(allCategories);
 
     if (log.isDebugEnabled()) {
       log.debug(
           "Listing available categories: count={}, names={}",
-          allCategories.size(), allCategories.stream().map(Category::getName).collect(toList()));
+          filteredCategories.size(), filteredCategories.stream().map(Category::getName).collect(toList()));
     }
-
-    var filteredCategories = allCategories.stream()
-        .filter(this::isContainsCategory)
-        .collect(toList());
 
     return ListCategoriesResponse.newBuilder()
         .addAllCategories(filteredCategories)
         .build();
+  }
+
+  private List<Category> filterCategories(List<Category> allCategories) {
+    return allCategories.stream()
+        .filter(this::isContainsCategory)
+        .collect(toList());
   }
 
   private boolean isContainsCategory(Category category) {
