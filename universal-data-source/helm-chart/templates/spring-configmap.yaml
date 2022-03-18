@@ -9,4 +9,4 @@ data:
         port: {{ .Values.ports.management }}
     uds:
       category:
-        available: | {{ .Values.category.available }}
+        available: {{ .Values.category.available }}
