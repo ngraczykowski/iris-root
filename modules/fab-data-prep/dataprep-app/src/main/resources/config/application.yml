@@ -5,7 +5,7 @@ server:
 #TODO: Without that SilentEightImplicitNamingStrategy throws error
 spring:
   application:
-    name: feb-dataprep
+    name: fab-dataprep
 
   ### RABBITMQ
   rabbitmq:

@@ -5,5 +5,21 @@ gradleBuild(
     sonarEnabled: true,
     dependencyCheckEnabled: true,
     includeBuildNumberInSnapshotVersion: true,
-    archiveArtifactsPattern: '**/build/libs/*-exec.jar'
+    archiveArtifactsPattern: '**/build/libs/*-exec.jar',
+    additionalStages: {
+      stage('Minio') {
+        script {
+          def git = new com.silenteight.jenkins.ci.Git()
+          if (git.getGitBranch() == 'master') {
+            minio(
+                bucket: 'artifacts',
+                includes: 'dataprep-app/build/libs/dataprep*-exec.jar',
+                targetFolder: 'dataprep'
+            )
+          } else {
+            echo "Not on master branch, ignore upload to Minio"
+          }
+        }
+      }
+    }
 )
