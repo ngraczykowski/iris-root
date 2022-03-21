@@ -12,7 +12,6 @@ import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
-
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -29,7 +28,8 @@ public class BatchCompletedHandler {
               + DEFAULT_EXCHANGE + "}"))
   })
   public void handle(MessageBatchCompleted messageBatchCompleted) {
-    log.info("BatchID: {} completed", messageBatchCompleted.getBatchId());
+    log.info("BatchCompleted BatchID={} AnalysisId={} ", messageBatchCompleted.getBatchId(),
+        messageBatchCompleted.getAnalysisId());
     responseProcessor.process(messageBatchCompleted);
   }
 }

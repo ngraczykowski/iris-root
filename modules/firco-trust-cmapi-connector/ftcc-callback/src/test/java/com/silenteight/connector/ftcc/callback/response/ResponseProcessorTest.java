@@ -1,5 +1,6 @@
 package com.silenteight.connector.ftcc.callback.response;
 
+import com.silenteight.connector.ftcc.callback.response.domain.MessageQuery;
 import com.silenteight.proto.registration.api.v1.MessageBatchCompleted;
 import com.silenteight.recommendation.api.library.v1.AlertOut;
 import com.silenteight.recommendation.api.library.v1.RecommendationOut;
@@ -15,6 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -27,6 +29,9 @@ class ResponseProcessorTest {
   @Mock
   ResponseCreator responseCreator;
 
+  @Mock
+  MessageQuery messageRepository;
+
   @BeforeEach
   void setUp() {
   }
@@ -36,20 +41,19 @@ class ResponseProcessorTest {
   void receiving2SolvedAlerts() {
 
     var responseProcessor = new ResponseProcessor(
-        responseCreator, recommendationSender, alertIds -> {
+        responseCreator, recommendationSender, (analysisId) -> {
       var collect =
-          alertIds
-              .stream()
-              .map(alertId -> RecommendationOut
+          IntStream.range(0, 2)
+              .mapToObj(alertId -> RecommendationOut
                   .builder()
                   .recommendationComment("PTP")
-                  .alert(AlertOut.builder().id(alertId).build())
+                  .alert(AlertOut.builder().id("alerts/" + alertId).build())
                   .build())
               .collect(Collectors.toList());
       return RecommendationsOut.builder()
           .recommendations(collect)
           .build();
-    });
+    }, messageRepository);
     var uuid = UUID.randomUUID();
     var messageBatchCompleted =
         MessageBatchCompleted
@@ -60,6 +64,6 @@ class ResponseProcessorTest {
             .build();
 
     Assertions.assertAll(() -> responseProcessor.process(messageBatchCompleted));
-    verify(responseCreator, atLeast(2)).create(any(), any());
+    verify(responseCreator, atLeast(2)).create(anyList(), any());
   }
 }

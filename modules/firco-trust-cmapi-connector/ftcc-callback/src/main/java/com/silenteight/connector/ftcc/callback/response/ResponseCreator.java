@@ -1,8 +1,12 @@
 package com.silenteight.connector.ftcc.callback.response;
 
-import com.silenteight.connector.ftcc.common.dto.input.AlertMessageDto;
+import lombok.RequiredArgsConstructor;
+
+import com.silenteight.connector.ftcc.callback.decision.MapStatusRequest;
+import com.silenteight.connector.ftcc.callback.decision.MapStatusUseCase;
+import com.silenteight.connector.ftcc.callback.response.domain.MessageEntity;
+import com.silenteight.connector.ftcc.common.dto.input.NextStatusDto;
 import com.silenteight.connector.ftcc.common.dto.output.*;
-import com.silenteight.proto.registration.api.v1.MessageBatchCompleted;
 import com.silenteight.recommendation.api.library.v1.RecommendationOut;
 import com.silenteight.recommendation.api.library.v1.RecommendationsOut;
 
@@ -12,32 +16,37 @@ import org.springframework.stereotype.Component;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 class ResponseCreator {
 
   private static final String ATTACHMENT_COMMENT_NAME = "attachment.txt";
   private static final String COMMENT_CUT_MSG = "\n\n=== See attachment for full comments ===";
   private static final int MAX_COMMENT_LENGTH = 1024;
+  public static final String DATA_CENTER = "";
+
+  private final MapStatusUseCase mapStatusUseCase;
 
   public ClientRequestDto create(
-      MessageBatchCompleted messageBatchCompleted,
-      RecommendationsOut recommendation) {
-    var source = new AlertDecisionMessageDto();
-    return mapToAlertDecision(null, null);
+      List<MessageEntity> messageEntities,
+      RecommendationsOut recommendations) {
+    // FIXME: get(0)
+    MessageEntity messageEntity = messageEntities.get(0);
+    RecommendationOut recommendation = recommendations.getRecommendations().get(0);
+    return mapToAlertDecision(messageEntity, recommendation);
   }
 
   private ClientRequestDto mapToAlertDecision(
-      AlertMessageDto alertDto, RecommendationOut recommendation) {
+      MessageEntity messageEntity, RecommendationOut recommendation) {
 
     var decision = new AlertDecisionMessageDto();
-    decision.setUnit(alertDto.getUnit());
-    decision.setBusinessUnit(alertDto.getBusinessUnit());
-    decision.setMessageID(alertDto.getMessageID());
-    decision.setSystemID(alertDto.getSystemID());
-    /*
-      decision.setOperator(alert.getUserLogin());
-    */
+    decision.setUnit(messageEntity.getUnit());
+    decision.setBusinessUnit(messageEntity.getBusinessUnit());
+    decision.setMessageID(messageEntity.getMessageID());
+    decision.setSystemID(messageEntity.getSystemID());
+    decision.setOperator(messageEntity.getLastOperator());
     decision.setActions(List.of());
     /*TODO: verify attachment*/
     decision.setAttachment(createAttachment(
@@ -47,19 +56,18 @@ class ResponseCreator {
     // decision.setUserPassword(alert.getUserPassword());
     setComment(recommendation.getRecommendationComment(), decision);
 
-    /*
     var destinationStatus = mapStatusUseCase.mapStatus(
         MapStatusRequest.builder()
-            .dataCenter(alert.getDataCenter())
-            .unit(alertDto.getUnit())
-            .nextStatuses(alertDto.getNextStatuses()
+            .dataCenter(DATA_CENTER)
+            .unit(messageEntity.getUnit())
+            .nextStatuses(messageEntity.nextStatusesDto()
                 .stream()
                 .map(NextStatusDto::getStatus)
                 .collect(Collectors.toList()))
-            .currentStatusName(alertDto.getCurrentStatus().getName())
+            .currentStatusName(messageEntity.getCurrentStatus().getName())
             .recommendedAction(recommendation.getRecommendedAction())
             .build());
-    decision.setStatus(destinationStatus.getStatus());*/
+    decision.setStatus(destinationStatus.getStatus());
 
     return create(decision);
   }
