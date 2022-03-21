@@ -49,7 +49,7 @@ def _download_repository_files(artifact, repo_files, project):
 
 def _set_up_minio_address(artifact):
     os.environ['NOMAD_VAR_%s_artifact_checksum' % artifact.nomad_name] = artifact.checksum
-    os.environ['NOMAD_VAR_%s_artifact' % artifact.nomad_name] = NOMAD_VAR_PATTERN % (MINIO_ADDRESS, artifact.job_name, artifact.version)
+    os.environ['NOMAD_VAR_%s_artifact' % artifact.nomad_name] = NOMAD_VAR_PATTERN % (MINIO_ADDRESS, artifact.job_name, artifact.artifact_name)
     os.environ['NOMAD_VAR_%s_version' % artifact.nomad_name] = artifact.version
 
 
@@ -131,6 +131,7 @@ class ArtifactReader:
 class ArtifactRepresentation:
     job_name = ''
     version = ''
+    artifact_name = ''
     checksum = ''
     repo = ''
     project_id = ''
@@ -140,6 +141,7 @@ class ArtifactRepresentation:
     def __init__(self, json_dict):
         self.job_name = json_dict['jobName']
         self.version = json_dict['version']
+        self.artifact_name = json_dict['artifact_name']
         self.checksum = json_dict['checksum']
         self.repo = json_dict['repo']
         self.project_id = json_dict['projectId']
