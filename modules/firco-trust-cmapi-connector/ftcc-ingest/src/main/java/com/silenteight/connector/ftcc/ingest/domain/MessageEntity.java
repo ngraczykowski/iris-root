@@ -2,8 +2,8 @@ package com.silenteight.connector.ftcc.ingest.domain;
 
 import lombok.*;
 
-import com.silenteight.connector.ftcc.ingest.common.BatchResource;
-import com.silenteight.connector.ftcc.ingest.common.MessageResource;
+import com.silenteight.connector.ftcc.common.resource.BatchResource;
+import com.silenteight.connector.ftcc.common.resource.MessageResource;
 import com.silenteight.connector.ftcc.ingest.domain.dto.MessageDetailsDto;
 import com.silenteight.sep.base.common.entity.BaseEntity;
 

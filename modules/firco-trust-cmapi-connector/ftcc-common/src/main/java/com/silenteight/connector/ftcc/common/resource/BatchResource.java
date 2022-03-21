@@ -1,4 +1,4 @@
-package com.silenteight.connector.ftcc.ingest.common;
+package com.silenteight.connector.ftcc.common.resource;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

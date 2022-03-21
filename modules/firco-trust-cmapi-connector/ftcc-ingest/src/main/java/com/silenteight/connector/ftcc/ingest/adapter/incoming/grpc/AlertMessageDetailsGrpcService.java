@@ -4,8 +4,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.connector.ftcc.ingest.common.BatchResource;
-import com.silenteight.connector.ftcc.ingest.common.MessageResource;
+import com.silenteight.connector.ftcc.common.resource.BatchResource;
+import com.silenteight.connector.ftcc.common.resource.MessageResource;
 import com.silenteight.connector.ftcc.ingest.domain.MessageDetailsQuery;
 import com.silenteight.connector.ftcc.ingest.domain.dto.MessageDetailsDto;
 import com.silenteight.proto.fab.api.v1.*;
