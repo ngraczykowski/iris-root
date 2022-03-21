@@ -18,7 +18,6 @@ import com.icegreen.greenmail.util.GreenMail;
 import org.awaitility.core.ConditionEvaluationLogger;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -54,7 +53,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ActiveProfiles({
     "mockae", "mockdatasource", "mockgovernance", "mockagents", "mockaws", "test",
     "mockwarehouse" })
-@Disabled
 class PaymentsBridgeApplicationIT {
 
   private static final String SAMPLE_REQUESTS_DIR = "requests";
@@ -70,16 +68,6 @@ class PaymentsBridgeApplicationIT {
   private static final String EMAIL_MESSAGE = "This is to confirm Silent Eight has received";
 
   private static GreenMail greenMail;
-
-  @BeforeAll
-  static void beforeAll() {
-    greenMail = new GreenMail(getServerStartup(3025));
-    greenMail.withConfiguration(GreenMailConfiguration
-            .aConfig()
-            .withUser("user", "password"))
-        .start();
-  }
-
   @Autowired
   ObjectMapper objectMapper;
   @Autowired
@@ -94,6 +82,38 @@ class PaymentsBridgeApplicationIT {
   MockDatasourceService mockDatasourceService;
   @Autowired
   MockWarehouseService mockWarehouseService;
+
+  @BeforeAll
+  static void beforeAll() {
+    greenMail = new GreenMail(getServerStartup(3025));
+    greenMail.withConfiguration(GreenMailConfiguration
+            .aConfig()
+            .withUser("user", "password"))
+        .start();
+  }
+
+  private static void assertMailSent() {
+    await().atMost(4, SECONDS).untilAsserted(() -> {
+      MimeMessage[] receivedMessages = greenMail.getReceivedMessages();
+      assertThat(receivedMessages.length).isGreaterThanOrEqualTo(1);
+      MimeMessage receivedMessage = receivedMessages[0];
+      assertEquals(1, receivedMessage.getAllRecipients().length);
+      assertEquals(EMAIL_RECEIVER, receivedMessage.getAllRecipients()[0].toString());
+      var receivedMessageContent =
+          new String(receivedMessage.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+      assertTrue(receivedMessageContent.contains(EMAIL_MESSAGE));
+      assertTrue(receivedMessage.getSubject().contains(EMAIL_SUBJECT));
+    });
+  }
+
+  static Stream<String> filesFactory() {
+    return VALID_REQUEST_FILES.stream();
+  }
+
+  @AfterAll
+  static void afterAll() {
+    greenMail.stop();
+  }
 
   @ParameterizedTest
   @MethodSource("filesFactory")
@@ -119,20 +139,6 @@ class PaymentsBridgeApplicationIT {
     assertAlertIndexed("system_id_2|87AB4899-BE5B-5E4F-E053-150A6C0A7A84");
   }
 
-  private static void assertMailSent() {
-    await().atMost(4, SECONDS).untilAsserted(() -> {
-      MimeMessage[] receivedMessages = greenMail.getReceivedMessages();
-      assertThat(receivedMessages.length).isGreaterThanOrEqualTo(1);
-      MimeMessage receivedMessage = receivedMessages[0];
-      assertEquals(1, receivedMessage.getAllRecipients().length);
-      assertEquals(EMAIL_RECEIVER, receivedMessage.getAllRecipients()[0].toString());
-      var receivedMessageContent =
-          new String(receivedMessage.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-      assertTrue(receivedMessageContent.contains(EMAIL_MESSAGE));
-      assertTrue(receivedMessage.getSubject().contains(EMAIL_SUBJECT));
-    });
-  }
-
   private void assertUdsValuesCreated(String alertName) {
     assertThat(mockDatasourceService.getCreatedFeatureInputsCount(alertName)).isEqualTo(10);
     assertThat(mockDatasourceService.getCreatedCategoryValuesCount(alertName)).isEqualTo(8);
@@ -150,10 +156,6 @@ class PaymentsBridgeApplicationIT {
         .until(() -> paymentsBridgeEventsListener.containsLearningRegisteredSystemId(
             "alert_system_id"));
     assertTrue(MockAlertUseCase.containsAlertId("alert_system_id"));
-  }
-
-  static Stream<String> filesFactory() {
-    return VALID_REQUEST_FILES.stream();
   }
 
   private UUID createAlert(String fileName) {
@@ -190,10 +192,5 @@ class PaymentsBridgeApplicationIT {
         .conditionEvaluationListener(new ConditionEvaluationLogger(log::info))
         .atMost(Duration.ofSeconds(3))
         .until(() -> !paymentsBridgeEventsListener.containsRegisteredAlert(alertId));
-  }
-
-  @AfterAll
-  static void afterAll() {
-    greenMail.stop();
   }
 }
