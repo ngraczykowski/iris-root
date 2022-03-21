@@ -1,7 +1,5 @@
 package com.silenteight.payments.bridge.app.integration.registration;
 
-import com.silenteight.sep.base.aspects.metrics.Timed;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,6 +10,7 @@ import com.silenteight.payments.bridge.common.model.AlertData;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessagePayloadUseCase;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessageUseCase;
 import com.silenteight.payments.bridge.firco.dto.input.AlertMessageDto;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
 
