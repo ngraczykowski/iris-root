@@ -28,7 +28,7 @@ for Mac: ``brew install hashicorp/tap/nomad``
 
 1. Open terminal and go to folder where you have your **deploy.py** script
 
-2. execute: ``python3 -m venv path-to-deploy/venv``
+2. execute: ``python3 -m venv venv``
 
     Folder ``venv`` should appear
 

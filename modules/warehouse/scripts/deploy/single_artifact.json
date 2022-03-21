@@ -1,11 +1,12 @@
 [
-   {
-      "jobName":"warehouse", 
-      "projectId": "643",
-      "version":"warehouse-app-2.0.0-exec.jar",
-      "branch":"master",
-      "nomadName":"warehouse",
-      "checksum":"sha256:cfcb29b6d9cbc5420bcb1afdb6e17a765122888bc77f956be86c8a8f6f6276b4",
-      "repo":"https://gitlab.silenteight.com/sens/warehouse"
-   }
+  {
+    "jobName":"name-agent",
+    "projectId": "434",
+    "artifact_name": "name-agent-dist-3.22.0.tar.bz2",
+    "version":"3.22.0",
+    "branch":"v3.22.0",
+    "nomadName":"name_agent",
+    "checksum":"sha256:b38f2dd6389cea64b6a5bd40c52042927147307ba4714e229cb8190c3984aa0b",
+    "repo":"https://gitlab.silenteight.com/ro/linguistics-agent-engine"
+  }
 ]
