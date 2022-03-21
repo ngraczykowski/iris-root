@@ -15,7 +15,6 @@ import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.model.BatchError
 import com.silenteight.bridge.core.registration.domain.model.BatchId
 import com.silenteight.bridge.core.registration.domain.model.BatchIdWithPolicy
-import com.silenteight.bridge.core.registration.domain.model.BatchPriority
 
 class RegistrationFixtures {
 
@@ -52,9 +51,9 @@ class RegistrationFixtures {
       Fixtures.BATCH_ID, ALERT_WITH_MATCHES)
   static def ADD_ALERT_TO_ANALYSIS_COMMAND = AddAlertToAnalysisCommand.builder()
       .batchId(Fixtures.BATCH_ID)
-      .alertId(Fixtures.ALERT_ID)
+      .alertName('alertName')
       .feedingStatus(FeedingStatus.SUCCESS)
-      .fedMatches([new FedMatch('matchId')])
+      .fedMatches([new FedMatch('matchName')])
       .build()
   static def NOTIFY_BATCH_ERROR_COMMAND = new NotifyBatchErrorCommand(
       Fixtures.BATCH_ID, ERROR_DESCRIPTION, METADATA)

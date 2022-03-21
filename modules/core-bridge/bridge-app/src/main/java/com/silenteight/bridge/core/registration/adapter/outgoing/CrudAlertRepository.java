@@ -33,13 +33,6 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
   @Query("""
         SELECT name 
         FROM core_bridge_alerts
-        WHERE batch_id = :batchId AND alert_id IN (:alertIds)
-      """)
-  List<AlertNameProjection> findNamesByBatchIdAndAlertIdIn(String batchId, List<String> alertIds);
-
-  @Query("""
-        SELECT name 
-        FROM core_bridge_alerts
         WHERE batch_id = :batchId AND (status = 'REGISTERED' OR status = 'PROCESSING')
       """)
   List<AlertNameProjection> findNamesByBatchIdAndStatusIsRegisteredOrProcessing(String batchId);
@@ -79,20 +72,20 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
 
   List<AlertEntity> findAllByBatchId(String batchId);
 
-  List<AlertEntity> findAllByBatchIdAndAlertIdIn(String batchId, List<String> alertIds);
+  List<AlertEntity> findAllByBatchIdAndNameIn(String batchId, List<String> alertNames);
 
   @Modifying
   @Query("""
       UPDATE core_bridge_alerts
       SET status = :status, updated_at = NOW()
-      WHERE batch_id = :batchId AND alert_id IN(:alertIds)""")
-  void updateAlertsStatusByBatchIdAndIdsIn(String batchId, String status, List<String> alertIds);
+      WHERE batch_id = :batchId AND name IN(:alertNames)""")
+  void updateAlertsStatusByBatchIdAndIdsIn(String batchId, String status, List<String> alertNames);
 
   @Modifying
   @Query("""
       UPDATE core_bridge_alerts
       SET status = :status, error_description = :errorDescription, updated_at = NOW()
-      WHERE batch_id = :batchId AND alert_id IN(:alertIds)""")
-  void updateAlertsStatusWithErrorDescriptionByBatchIdAndAlertIds(
-      String batchId, Set<String> alertIds, String status, String errorDescription);
+      WHERE batch_id = :batchId AND name IN(:alertNames)""")
+  void updateAlertsStatusWithErrorDescriptionByBatchIdAndAlertNames(
+      String batchId, Set<String> alertNames, String status, String errorDescription);
 }

@@ -6,7 +6,7 @@ import java.util.List;
 
 public record AddAlertToAnalysisCommand(
     String batchId,
-    String alertId,
+    String alertName,
     String errorDescription,
     FeedingStatus feedingStatus,
     List<FedMatch> fedMatches
@@ -20,6 +20,6 @@ public record AddAlertToAnalysisCommand(
   }
 
   public record FedMatch(
-      String id
+      String matchName
   ) {}
 }

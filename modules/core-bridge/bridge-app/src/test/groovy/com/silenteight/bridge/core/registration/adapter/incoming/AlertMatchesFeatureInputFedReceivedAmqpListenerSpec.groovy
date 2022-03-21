@@ -21,13 +21,13 @@ class AlertMatchesFeatureInputFedReceivedAmqpListenerSpec extends Specification 
     def messages = [
         MessageAlertMatchesFeatureInputFed.newBuilder()
             .setBatchId('1')
-            .setAlertId('2')
+            .setAlertName('alerts/1')
             .setAlertErrorDescription('')
             .setFeedingStatus(MessageAlertMatchesFeatureInputFed.FeedingStatus.SUCCESS)
             .addAllFedMatches(
                 [
                     FedMatch.newBuilder()
-                        .setMatchId('3')
+                        .setMatchName('matches/1')
                         .build()
                 ])
             .build()
@@ -35,13 +35,13 @@ class AlertMatchesFeatureInputFedReceivedAmqpListenerSpec extends Specification 
 
     def expectedCommand = AddAlertToAnalysisCommand.builder()
         .batchId(messages.first().batchId)
-        .alertId(messages.first().alertId)
+        .alertName(messages.first().alertName)
         .errorDescription('')
         .feedingStatus(FeedingStatus.SUCCESS)
         .fedMatches(
             [
                 new AddAlertToAnalysisCommand.FedMatch(
-                    messages.first().getFedMatchesList().first().matchId)
+                    messages.first().getFedMatchesList().first().matchName)
             ])
         .build()
 

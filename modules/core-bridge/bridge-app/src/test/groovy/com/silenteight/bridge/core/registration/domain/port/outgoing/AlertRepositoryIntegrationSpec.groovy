@@ -20,7 +20,7 @@ class AlertRepositoryIntegrationSpec extends BaseSpecificationIT {
   def 'should save alerts and then find alerts by given batchId'() {
     given:
     def batchIdIn = 'batch_id_' + UUID.randomUUID()
-    def alertsToSave = [dummyAlert(batchIdIn, 'alert_id_' + UUID.randomUUID())]
+    def alertsToSave = [dummyAlert(batchIdIn, 'alert_id_' + UUID.randomUUID(), 'match_id_' + UUID.randomUUID())]
 
     when:
     alertRepository.saveAlerts(alertsToSave)
@@ -34,8 +34,8 @@ class AlertRepositoryIntegrationSpec extends BaseSpecificationIT {
       status() == alertsToSave.first().status()
       batchId() == alertsToSave.first().batchId()
       with(matches().first()) {
-        matchId() == alertsToSave.first().matches().first().matchId()
         name() == alertsToSave.first().matches().first().name()
+        matchId() == alertsToSave.first().matches().first().matchId()
       }
     }
   }
@@ -43,20 +43,20 @@ class AlertRepositoryIntegrationSpec extends BaseSpecificationIT {
   def 'should update status of given alert ids to PROCESSING'() {
     given:
     def batchId = 'batch_id_' + UUID.randomUUID()
-    def alert1 = dummyAlert(batchId, 'alert_id_' + UUID.randomUUID())
-    def alert2 = dummyAlert(batchId, 'alert_id_' + UUID.randomUUID())
+    def alert1 = dummyAlert(batchId, 'alert_id_' + UUID.randomUUID(), 'match_id_' + UUID.randomUUID())
+    def alert2 = dummyAlert(batchId, 'alert_id_' + UUID.randomUUID(), 'match_id_' + UUID.randomUUID())
     alertRepository.saveAlerts([alert1, alert2])
 
     when:
-    alertRepository.updateStatusToProcessing(batchId, [alert1.alertId()])
+    alertRepository.updateStatusToProcessing(batchId, [alert1.name()])
 
     then: 'alert1 should have updated status'
-    with(alertRepository.findAllByBatchIdAndAlertIdIn(batchId, [alert1.alertId()]).first()) {
-      status() == Status.PROCESSING
+    with(alertRepository.findAllByBatchIdAndNameIn(batchId, [alert1.name()]).first()) {
+      status() == AlertStatus.PROCESSING
     }
 
     and: 'alert2 should not have updated status'
-    with(alertRepository.findAllByBatchIdAndAlertIdIn(batchId, [alert2.alertId()]).first()) {
+    with(alertRepository.findAllByBatchIdAndNameIn(batchId, [alert2.name()]).first()) {
       status() == alert2.status()
     }
   }
@@ -65,8 +65,8 @@ class AlertRepositoryIntegrationSpec extends BaseSpecificationIT {
     given:
     def batchId = 'batch_id_' + UUID.randomUUID()
     def alertsToSave = [
-        dummyAlert(batchId, 'alert_id_' + UUID.randomUUID()),
-        dummyAlert(batchId, 'alert_id_' + UUID.randomUUID())
+        dummyAlert(batchId, 'alert_id_' + UUID.randomUUID(), 'match_id_' + UUID.randomUUID()),
+        dummyAlert(batchId, 'alert_id_' + UUID.randomUUID(), 'match_id_' + UUID.randomUUID())
     ]
     alertRepository.saveAlerts(alertsToSave)
 
@@ -77,15 +77,15 @@ class AlertRepositoryIntegrationSpec extends BaseSpecificationIT {
     results.size() == 2
   }
 
-  private static def dummyAlert(String batchId, String alertId) {
+  private static def dummyAlert(String batchId, String alertId, String matchId) {
     Alert.builder()
-        .name("{$alertId}_name")
+        .name("alerts/{$alertId}")
         .status(AlertStatus.REGISTERED)
         .alertId(alertId)
         .batchId(batchId)
         .matches(
             [
-                new Match("{$alertId}_match_1_name", "{$alertId}_match_1_id")
+                new Match("matches/{$matchId}", matchId)
             ]
         )
         .build()

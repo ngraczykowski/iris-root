@@ -36,26 +36,17 @@ class JdbcAlertRepository implements AlertRepository {
   }
 
   @Override
-  public void updateStatusToProcessing(String batchId, List<String> alertIds) {
+  public void updateStatusToProcessing(String batchId, List<String> alertNames) {
     alertRepository.updateAlertsStatusByBatchIdAndIdsIn(
-        batchId, Status.PROCESSING.name(), alertIds);
+        batchId, Status.PROCESSING.name(), alertNames);
   }
 
   @Override
   public void updateStatusToError(
-      String batchId, Map<String, Set<String>> errorDescriptionsWithAlertIds) {
-    errorDescriptionsWithAlertIds.forEach((errorDescription, alertIds) ->
-        alertRepository.updateAlertsStatusWithErrorDescriptionByBatchIdAndAlertIds(
-            batchId, alertIds, Status.ERROR.name(), errorDescription)
-    );
-  }
-
-  @Override
-  public List<AlertName> findAllAlertNamesByBatchIdAndAlertIdIn(
-      String batchId, List<String> alertIds) {
-    return alertRepository.findNamesByBatchIdAndAlertIdIn(batchId, alertIds).stream()
-        .map(mapper::toAlertName)
-        .toList();
+      String batchId, Map<String, Set<String>> errorDescriptionsWithAlertNames) {
+    errorDescriptionsWithAlertNames.forEach((errorDescription, alertNames) ->
+        alertRepository.updateAlertsStatusWithErrorDescriptionByBatchIdAndAlertNames(
+            batchId, alertNames, Status.ERROR.name(), errorDescription));
   }
 
   @Override
@@ -95,8 +86,8 @@ class JdbcAlertRepository implements AlertRepository {
   }
 
   @Override
-  public List<Alert> findAllByBatchIdAndAlertIdIn(String batchId, List<String> alertIds) {
-    return alertRepository.findAllByBatchIdAndAlertIdIn(batchId, alertIds).stream()
+  public List<Alert> findAllByBatchIdAndNameIn(String batchId, List<String> alertNames) {
+    return alertRepository.findAllByBatchIdAndNameIn(batchId, alertNames).stream()
         .map(mapper::toAlert)
         .toList();
   }

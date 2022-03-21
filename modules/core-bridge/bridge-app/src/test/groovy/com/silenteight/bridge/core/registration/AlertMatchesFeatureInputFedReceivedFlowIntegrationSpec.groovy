@@ -26,14 +26,15 @@ import spock.util.concurrent.PollingConditions
         "grpc.server.port=-1",
         "grpc.client.inProcess.address=in-process:test",
         "registration.analysis.mock-recommendations-generation=false"
-    ])
+    ]
+)
 @ActiveProfiles("test")
 @DirtiesContext
 class AlertMatchesFeatureInputFedReceivedFlowIntegrationSpec extends BaseSpecificationIT {
 
-  static def BATCH_IDS = ['batch1', 'batch2']
-  static def ALERT_IDS = ['alert1', 'alert2', 'alert3']
-  static def ID_OF_ALERT_CONTAINING_FAILURE_FEEDING_STATUS = 'alert2'
+  static def BATCH_IDS = ['batch_1', 'batch_2']
+  static def ALERT_IDS = ['alert_1', 'alert_2', 'alert_3']
+  static def ID_OF_ALERT_CONTAINING_FAILURE_FEEDING_STATUS = 'alert_2'
   static def ALERT_ERROR_DESCRIPTION = 'Failed to flatten alert payload.'
 
   @Autowired
@@ -60,17 +61,16 @@ class AlertMatchesFeatureInputFedReceivedFlowIntegrationSpec extends BaseSpecifi
     }
 
     and: 'per each batch, create 3 alerts with 3 matches'
-    Map<String, List<String>> batchAlertIds = [:]
-    def alertsWithMatchesRequests = batches.collect {batchId ->
+    Map<String, List<RegisteredAlertWithMatches>> batchWithRegisteredAlerts = [:]
+    batches.forEach {batchId ->
       def alertsWithMatchesRequest = createRegisterAlertAndMatchesRequest(batchId)
-      registrationService.registerAlertsAndMatches(alertsWithMatchesRequest)
-      def alertIds = alertsWithMatchesRequest.getAlertsWithMatchesList().collect {it.alertId}
-      batchAlertIds[batchId] = alertIds
-      alertsWithMatchesRequest
+      def registerAlertsAndMatchesResponse = registrationService.registerAlertsAndMatches(alertsWithMatchesRequest)
+      def registeredAlerts = registerAlertsAndMatchesResponse.getRegisteredAlertsWithMatchesList()
+      batchWithRegisteredAlerts[batchId] = registeredAlerts
     }
 
     and: 'create messages'
-    def messages = createMessages(alertsWithMatchesRequests)
+    def messages = createMessages(batchWithRegisteredAlerts)
 
     def conditions = new PollingConditions(timeout: 10, initialDelay: 0.5, factor: 1.25)
 
@@ -87,7 +87,9 @@ class AlertMatchesFeatureInputFedReceivedFlowIntegrationSpec extends BaseSpecifi
           assert batch.status() == BatchStatus.PROCESSING
 
           and: 'alerts and matches statuses changed to ERROR/PROCESSING'
-          def alerts = alertRepository.findAllByBatchIdAndAlertIdIn(batchId, batchAlertIds[batchId])
+          def alerts = alertRepository.findAllByBatchIdAndNameIn(
+              batchId,
+              batchWithRegisteredAlerts[batchId].collect {it.alertName})
           alerts.each {alert ->
             assert alert.status() == getExpectedAlertStatus(alert.alertId())
             assert alert.errorDescription() == getExpectedAlertErrorDescription(alert.alertId())
@@ -111,7 +113,7 @@ class AlertMatchesFeatureInputFedReceivedFlowIntegrationSpec extends BaseSpecifi
           .setAlertId(alertId)
           .setStatus(com.silenteight.proto.registration.api.v1.AlertStatus.SUCCESS)
           .setErrorDescription('')
-          .addAllMatches(createMatches(batchId, alertId))
+          .addAllMatches(createMatches())
           .build()
     }
 
@@ -121,29 +123,29 @@ class AlertMatchesFeatureInputFedReceivedFlowIntegrationSpec extends BaseSpecifi
         .build()
   }
 
-  private static def createMatches(def batchId, def alertId) {
+  private static def createMatches() {
     (1..3).collect {
       Match.newBuilder()
-          .setMatchId("match $it of alert $alertId of batch $batchId")
+          .setMatchId("match_$it")
           .build()
     }
   }
 
-  private static def createMessages(List<RegisterAlertsAndMatchesRequest> requests) {
-    requests.collect {request ->
-      request.getAlertsWithMatchesList().collect {alert ->
-        createMessage(request.batchId, alert.alertId, alert.matchesList.collect {it.matchId})
+  private static def createMessages(Map<String, List<RegisteredAlertWithMatches>> batchWithRegisteredAlerts) {
+    batchWithRegisteredAlerts.collect {batchWithRegisteredAlert ->
+      batchWithRegisteredAlert.getValue().collect {registeredAlert ->
+        createMessage(batchWithRegisteredAlert.getKey(), registeredAlert)
       }
     }.flatten()
   }
 
-  private static def createMessage(String batchId, String alertId, List<String> matchIds) {
-    def fedMatches = matchIds.collect {matchId ->
+  private static def createMessage(String batchId, RegisteredAlertWithMatches registeredAlert) {
+    def fedMatches = registeredAlert.registeredMatchesList.collect {match ->
       FedMatch.newBuilder()
-          .setMatchId(matchId)
+          .setMatchName(match.matchName)
           .build()
     }
-    def feedingStatus = alertId == ID_OF_ALERT_CONTAINING_FAILURE_FEEDING_STATUS ?
+    def feedingStatus = registeredAlert.alertId == ID_OF_ALERT_CONTAINING_FAILURE_FEEDING_STATUS ?
                         FeedingStatus.FAILURE :
                         FeedingStatus.SUCCESS
     def errorDescription = (feedingStatus == FeedingStatus.FAILURE) ?
@@ -151,7 +153,7 @@ class AlertMatchesFeatureInputFedReceivedFlowIntegrationSpec extends BaseSpecifi
                            ''
     MessageAlertMatchesFeatureInputFed.newBuilder()
         .setBatchId(batchId)
-        .setAlertId(alertId)
+        .setAlertName(registeredAlert.alertName)
         .setAlertErrorDescription(errorDescription)
         .setFeedingStatus(feedingStatus)
         .addAllFedMatches(fedMatches)

@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand;
 import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand.FeedingStatus;
-import com.silenteight.bridge.core.registration.domain.model.AlertName;
 import com.silenteight.bridge.core.registration.domain.model.Batch;
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository;
@@ -95,22 +94,19 @@ class AlertAnalysisService {
 
   private void handleCommandsWithSucceededAlerts(
       Batch batch, List<AddAlertToAnalysisCommand> commands) {
-    final var alertIds = extractAlertIdsFromCommands(commands);
-    alertRepository.updateStatusToProcessing(batch.id(), alertIds);
-    addAlertsToAnalysis(batch, alertIds);
+    final var alertNames = extractAlertNamesFromCommands(commands);
+    alertRepository.updateStatusToProcessing(batch.id(), alertNames);
+    addAlertsToAnalysis(batch, alertNames);
   }
 
   private void handleCommandsWithFailedAlerts(
       Batch batch, List<AddAlertToAnalysisCommand> commands) {
-    var errorDescriptionsWithAlertIds = extractErrorDescriptionsWithAlertIdsFromCommands(commands);
-    alertRepository.updateStatusToError(batch.id(), errorDescriptionsWithAlertIds);
+    var errorDescriptionsWithAlertNames =
+        extractErrorDescriptionsWithAlertNamesFromCommands(commands);
+    alertRepository.updateStatusToError(batch.id(), errorDescriptionsWithAlertNames);
   }
 
-  private void addAlertsToAnalysis(Batch batch, List<String> alertIds) {
-    final var alertNames =
-        alertRepository.findAllAlertNamesByBatchIdAndAlertIdIn(batch.id(), alertIds).stream()
-            .map(AlertName::alertName)
-            .toList();
+  private void addAlertsToAnalysis(Batch batch, List<String> alertNames) {
     analysisService.addAlertsToAnalysis(
         batch.analysisName(),
         alertNames,
@@ -145,18 +141,18 @@ class AlertAnalysisService {
         .build();
   }
 
-  private List<String> extractAlertIdsFromCommands(List<AddAlertToAnalysisCommand> commands) {
+  private List<String> extractAlertNamesFromCommands(List<AddAlertToAnalysisCommand> commands) {
     return commands.stream()
-        .map(AddAlertToAnalysisCommand::alertId)
+        .map(AddAlertToAnalysisCommand::alertName)
         .toList();
   }
 
-  private Map<String, Set<String>> extractErrorDescriptionsWithAlertIdsFromCommands(
+  private Map<String, Set<String>> extractErrorDescriptionsWithAlertNamesFromCommands(
       List<AddAlertToAnalysisCommand> commands) {
     return commands.stream()
         .collect(Collectors.groupingBy(
                 AddAlertToAnalysisCommand::errorDescription,
-                Collectors.mapping(AddAlertToAnalysisCommand::alertId, Collectors.toSet())
+                Collectors.mapping(AddAlertToAnalysisCommand::alertName, Collectors.toSet())
             )
         );
   }

@@ -14,12 +14,10 @@ public interface AlertRepository {
 
   void updateStatusToRecommended(String batchId, List<String> alertNames);
 
-  void updateStatusToProcessing(String batchId, List<String> alertIds);
+  void updateStatusToProcessing(String batchId, List<String> alertNames);
 
   void updateStatusToError(
-      String batchId, Map<String, Set<String>> errorDescriptionsWithAlertIds);
-
-  List<AlertName> findAllAlertNamesByBatchIdAndAlertIdIn(String batchId, List<String> alertIds);
+      String batchId, Map<String, Set<String>> errorDescriptionsWithAlertNames);
 
   List<AlertName> findNamesByBatchIdAndStatusIsRegisteredOrProcessing(String batchId);
 
@@ -30,7 +28,7 @@ public interface AlertRepository {
   List<AlertWithMatches> findAllWithMatchesByBatchIdAndAlertIdsIn(
       String batchId, List<String> alertIds);
 
-  List<Alert> findAllByBatchIdAndAlertIdIn(String batchId, List<String> alertIds);
+  List<Alert> findAllByBatchIdAndNameIn(String batchId, List<String> alertNames);
 
   long countAllPendingAlerts(String batchId);
 

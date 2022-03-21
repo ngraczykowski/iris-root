@@ -37,11 +37,11 @@ class AlertMatchesFeatureInputFedReceivedAmqpListener {
   private AddAlertToAnalysisCommand createCommand(MessageAlertMatchesFeatureInputFed message) {
     return AddAlertToAnalysisCommand.builder()
         .batchId(message.getBatchId())
-        .alertId(message.getAlertId())
+        .alertName(message.getAlertName())
         .errorDescription(message.getAlertErrorDescription())
         .feedingStatus(FeedingStatus.valueOf(message.getFeedingStatus().name()))
         .fedMatches(message.getFedMatchesList().stream()
-            .map(fedMatch -> new FedMatch(fedMatch.getMatchId()))
+            .map(fedMatch -> new FedMatch(fedMatch.getMatchName()))
             .toList())
         .build();
   }
