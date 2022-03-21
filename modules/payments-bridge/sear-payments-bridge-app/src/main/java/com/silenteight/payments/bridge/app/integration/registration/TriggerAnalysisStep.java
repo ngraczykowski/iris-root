@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.TriggerAlertRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.port.TriggerAlertAnalysisUseCase;
 import com.silenteight.payments.bridge.common.event.SolvingAlertRegisteredEvent;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,7 @@ class TriggerAnalysisStep {
   private final IndexAlertRegisteredStep indexAlertRegisteredStep;
   private final ApplicationEventPublisher applicationEventPublisher;
 
+  @Timed(percentiles = { 0.95, 0.99 }, histogram = true)
   void invoke(Context ctx) {
     log.info("Adding alert [{}], ae name: [{}] to analysis",
         ctx.getAlertId(), ctx.getAlertName());

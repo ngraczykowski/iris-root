@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessagePayloadUseCase;
 import com.silenteight.payments.bridge.firco.dto.input.AlertMessageDto;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -20,6 +21,7 @@ class AlertMessagePayloadService implements AlertMessagePayloadUseCase {
   private final ObjectMapper objectMapper;
 
   @Override
+  @Timed(percentiles = { 0.95, 0.99 }, histogram = true)
   public AlertMessageDto findByAlertMessageId(UUID alertMessageId) {
     var payload = payloadRepository.findByAlertMessageId(alertMessageId)
         .orElseThrow(EntityNotFoundException::new);

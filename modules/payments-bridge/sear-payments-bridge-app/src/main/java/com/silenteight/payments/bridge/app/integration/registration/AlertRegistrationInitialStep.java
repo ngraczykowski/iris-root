@@ -11,6 +11,7 @@ import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessagePaylo
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessageUseCase;
 import com.silenteight.payments.bridge.firco.dto.input.AlertMessageDto;
 
+import io.micrometer.core.annotation.Timed;
 import org.springframework.stereotype.Service;
 
 import java.time.ZoneOffset;
@@ -34,16 +35,6 @@ class AlertRegistrationInitialStep {
   private final AlertMessageUseCase alertMessageUseCase;
   private final AlertMessagePayloadUseCase alertMessagePayloadUseCase;
   private final UniversalDataSourceStep universalDataSourceStep;
-
-  void start(UUID alertId) {
-    var alertData = alertMessageUseCase.findByAlertMessageId(alertId);
-    var alertMessageDto = alertMessagePayloadUseCase.findByAlertMessageId(alertId);
-
-    var response = registerAlertUseCase.register(createRequest(alertData, alertMessageDto));
-    log.info("Registered alert {} within ae. AlertName: {}", alertId, response.getAlertName());
-    var ctx = new Context(alertData, alertMessageDto, response);
-    universalDataSourceStep.invoke(ctx);
-  }
 
   private static RegisterAlertRequest createRequest(AlertData alertData, AlertMessageDto alertDto) {
 
@@ -77,5 +68,17 @@ class AlertRegistrationInitialStep {
 
   private static Label getAlertLabelSolvingCmapi() {
     return Label.of(ALERT_LABEL_SOLVING, ALERT_LABEL_SOLVING_CMAPI);
+  }
+
+  @Timed(percentiles = {
+      0.95, 0.99 }, histogram = true, description = "Start alert registration initial step")
+  void start(UUID alertId) {
+    var alertData = alertMessageUseCase.findByAlertMessageId(alertId);
+    var alertMessageDto = alertMessagePayloadUseCase.findByAlertMessageId(alertId);
+
+    var response = registerAlertUseCase.register(createRequest(alertData, alertMessageDto));
+    log.info("Registered alert {} within ae. AlertName: {}", alertId, response.getAlertName());
+    var ctx = new Context(alertData, alertMessageDto, response);
+    universalDataSourceStep.invoke(ctx);
   }
 }

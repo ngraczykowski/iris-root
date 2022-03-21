@@ -22,7 +22,7 @@ class FeatureInputSpecificationStrategySpec extends Specification {
   def "When  feature input is indicated "() {
 
     given:
-    def determinedFeatureInputs = [ "feature1", "feature2"] as List<String>
+    def determinedFeatureInputs = ["feature1", "feature2"] as List<String>
     when:
     def result = FeatureInputSpecificationStrategy.INSTANCE.chooseSpecification(
         determinedFeatureInputs

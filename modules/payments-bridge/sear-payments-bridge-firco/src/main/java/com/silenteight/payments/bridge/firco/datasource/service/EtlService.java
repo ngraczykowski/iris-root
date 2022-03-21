@@ -17,6 +17,7 @@ import com.silenteight.payments.bridge.firco.recommendation.port.CreateRecommend
 import com.silenteight.payments.bridge.notification.model.NotificationEvent;
 import com.silenteight.payments.bridge.svb.oldetl.model.UnsupportedMessageException;
 import com.silenteight.sep.base.aspects.logging.LogContext;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.slf4j.MDC;
 import org.springframework.context.ApplicationEventPublisher;
@@ -37,6 +38,7 @@ class EtlService implements EtlUseCase {
 
   @LogContext
   @Override
+  @Timed(percentiles = { 0.95, 0.99 }, histogram = true)
   public void process(AeAlert alert) {
     var alertId = alert.getAlertId();
     var alertName = alert.getAlertName();

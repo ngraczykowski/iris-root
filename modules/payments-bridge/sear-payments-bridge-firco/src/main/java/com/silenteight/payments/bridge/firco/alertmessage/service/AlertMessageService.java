@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.common.model.AlertData;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessageUseCase;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 import com.silenteight.sep.base.common.exception.EntityNotFoundException;
 
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ class AlertMessageService implements AlertMessageUseCase {
 
   private final AlertMessageRepository alertMessageRepository;
 
+  @Timed(percentiles = { 0.95, 0.99 }, histogram = true)
   public AlertData findByAlertMessageId(UUID alertMessageId) {
     var entity = alertMessageRepository.findById(alertMessageId)
         .orElseThrow(EntityNotFoundException::new);

@@ -12,6 +12,7 @@ import com.silenteight.payments.bridge.firco.callback.port.SendResponseUseCase;
 import com.silenteight.payments.bridge.firco.recommendation.model.BridgeSourcedRecommendation;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationReason;
 import com.silenteight.payments.bridge.firco.recommendation.port.CreateRecommendationUseCase;
+import com.silenteight.proto.payments.bridge.internal.v1.event.MessageStored;
 import com.silenteight.proto.payments.bridge.internal.v1.event.ResponseCompleted;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 
@@ -23,6 +24,7 @@ import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.messaging.MessageChannel;
 
+import java.util.UUID;
 import javax.validation.Valid;
 
 import static org.springframework.integration.dsl.IntegrationFlows.from;
@@ -43,9 +45,35 @@ class FircoInboundAmqpIntegrationConfiguration {
   private final AmqpInboundFactory inboundFactory;
   private final FilterAlertMessageUseCase filterAlertMessageUseCase;
   private final SendResponseUseCase sendResponseUseCase;
+  private final AlertRegistrationInitialStep alertRegistrationInitialStep;
   private final CreateRecommendationUseCase createRecommendationUseCase;
   private final AlertDeliveredIntegrationService alertDeliveredIntegrationService;
 
+  @Bean
+  IntegrationFlow messageStoredInbound() {
+    return from(createInboundAdapter(properties.getCommands().getInboundQueueName()))
+        .log(INFO, FircoInboundAmqpIntegrationConfiguration.class.toString(), msg ->
+            "Initialized alert registration process for: " + mapToAlertId(
+                (MessageStored) msg.getPayload()))
+        .transform(MessageStored.class, source ->
+            new SimpleAlertId(ResourceName.create(source.getAlert()).getUuid("alert-messages"))
+        )
+        .filter(AlertId.class, alertId -> !filterAlertMessageUseCase.isResolvedOrOutdated(alertId))
+        .filter(AlertId.class, alertId -> !filterAlertMessageUseCase.hasTooManyHits(alertId),
+            spec -> spec.discardChannel(INT_DISCARD)
+        )
+        .handle(
+            AlertId.class,
+            (payload, headers) -> {
+              alertRegistrationInitialStep.start(payload.getAlertId());
+              return null;
+            }
+        ).get();
+  }
+
+  private UUID mapToAlertId(MessageStored source) {
+    return ResourceName.create(source.getAlert()).getUuid("alert-messages");
+  }
 
   @Bean(INT_DISCARD)
   MessageChannel discardChannel() {
