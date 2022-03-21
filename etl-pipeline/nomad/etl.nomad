@@ -73,11 +73,28 @@ job "etl-pipeline" {
       service {
         name = "${var.namespace}-etl-pipeline"
         port = "grpc"
+        tags = [
+          "grpc",
+          # FIXME(ahaczewski): Remove when Consul Discovery can filter through results based on tags.
+          "gRPC.port=${NOMAD_PORT_grpc}",
+        ]
+
         check {
-          type     = "tcp"
+          name = "gRPC Port Alive Check"
+          type = "tcp"
           interval = "30s"
-          timeout  = "5s"
+          timeout = "10s"
         }
+      }
+      # Dummy registration of a service required for Spring Consul Discovery.
+      # FIXME(ahaczewski): Remove when Consul Discovery can filter through results based on tags.
+      service {
+        name = "${var.namespace}-grpc-etl-pipeline"
+        port = "grpc"
+        tags = [
+          "grpc",
+          "gRPC.port=${NOMAD_PORT_grpc}",
+        ]
       }
 
       resources {
