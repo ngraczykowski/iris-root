@@ -29,6 +29,7 @@ dependencies {
   runtimeOnly libraries.spring_boot_starter_actuator
   runtimeOnly libraries.grpc_brave_instrumentation
   runtimeOnly libraries.spring_cloud_starter_sleuth
+  runtimeOnly libraries.spring_cloud_consul_discovery
 
   testImplementation libraries.spring_boot_test
   testImplementation libraries.spring_test
