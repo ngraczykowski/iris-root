@@ -13,7 +13,7 @@ ext {
   silenteightSolversVersion = "2.7.0"
   silenteightSensWebappVersion = "1.28.3"
   silenteightSepFrontendVersion = "1.27.0"
-  coreBridgeRegistrationApiVersion = '1.12.0'
+  coreBridgeRegistrationApiVersion = '1.17.0'
   universalDataSourceLibApiVersion = '1.2.0' //'1.3.0-BUILD.17'
   silenteightDataSourceApiVersion = '0.18.0'
 

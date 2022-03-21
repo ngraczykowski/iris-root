@@ -23,6 +23,7 @@ class RegistrationMapper {
         .batchId(batch.id())
         .alertCount(batch.alertCount())
         .batchMetadata(converter.serializeFromObjectToJson(batch.metadata()))
+        .batchPriority(batch.priority().getValue())
         .build();
   }
 

@@ -24,20 +24,20 @@ class FeedingRabbitEventPublisherSpec extends Specification {
     given:
     def event = UdsFedEvent.builder()
         .batchId('batchId')
-        .alertId('alertId')
+        .alertName('alertName')
         .errorDescription(AlertErrorDescription.NONE)
         .feedingStatus(Status.SUCCESS)
-        .fedMatches([new FedMatch('matchId')])
+        .fedMatches([new FedMatch('matchName')])
         .build()
 
     def message = MessageAlertMatchesFeatureInputFed.newBuilder()
         .setBatchId(event.batchId())
-        .setAlertId(event.alertId())
+        .setAlertName(event.alertName())
         .setAlertErrorDescription(event.errorDescription().getDescription())
         .setFeedingStatus(FeedingStatus.SUCCESS)
         .addAllFedMatches(
             [com.silenteight.proto.registration.api.v1.FedMatch.newBuilder()
-                 .setMatchId(event.fedMatches().first().matchId())
+                 .setMatchName(event.fedMatches().first().matchName())
                  .build()])
         .build()
 

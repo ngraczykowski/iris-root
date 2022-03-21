@@ -6,7 +6,7 @@ import java.util.List;
 
 public record UdsFedEvent(
     String batchId,
-    String alertId,
+    String alertName,
     AlertErrorDescription errorDescription,
     Status feedingStatus,
     List<FedMatch> fedMatches) {
@@ -19,5 +19,5 @@ public record UdsFedEvent(
   }
 
   public record FedMatch(
-      String matchId) {}
+      String matchName) {}
 }

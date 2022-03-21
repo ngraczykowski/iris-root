@@ -12,6 +12,7 @@ import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtResponseMa
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.request.GnsRtRecommendationRequest;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtRecommendationResponse;
 import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
+import com.silenteight.scb.ingest.domain.model.Batch.Priority;
 import com.silenteight.scb.ingest.domain.model.RegistrationResponse;
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
 
@@ -41,7 +42,7 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
 
     String batchId = getBatchId(request);
     RegistrationResponse registrationResponse =
-        alertRegistrationFacade.registerSolvingAlert(batchId, alerts);
+        alertRegistrationFacade.registerSolvingAlert(batchId, alerts, Priority.HIGH);
 
     //feed uds
     alerts.forEach(ingestEventPublisher::publish);

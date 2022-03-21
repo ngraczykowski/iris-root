@@ -11,13 +11,13 @@ class RegistrationServiceClientMock implements RegistrationServiceClient {
 
   @Override
   public EmptyOut registerBatch(RegisterBatchIn request) {
-    log.info("MOCK: Batch with id: {} registered in Core Bridge.", request.batchId());
+    log.info("MOCK: Batch with id: {} registered in Core Bridge.", request.getBatchId());
     return EmptyOut.getInstance();
   }
 
   @Override
   public EmptyOut notifyBatchError(NotifyBatchErrorIn request) {
-    log.info("MOCK: Batch with id: {} status set to ERROR in Core Bridge", request.batchId());
+    log.info("MOCK: Batch with id: {} status set to ERROR in Core Bridge", request.getBatchId());
     return EmptyOut.getInstance();
   }
 

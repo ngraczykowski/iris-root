@@ -78,7 +78,7 @@ public class FeedingFacade {
       Alert alert, Status status, AlertErrorDescription errorDescription) {
     return UdsFedEvent.builder()
         .batchId(alert.details().getBatchId())
-        .alertId(alert.id().sourceId())
+        .alertName(alert.details().getAlertName())
         .errorDescription(errorDescription)
         .feedingStatus(status)
         .fedMatches(createFedMatches(alert))
@@ -87,7 +87,7 @@ public class FeedingFacade {
 
   private List<FedMatch> createFedMatches(Alert alert) {
     return alert.matches().stream()
-        .map(match -> new FedMatch(match.id().sourceId()))
+        .map(match -> new FedMatch(match.details().getMatchName()))
         .toList();
   }
 }

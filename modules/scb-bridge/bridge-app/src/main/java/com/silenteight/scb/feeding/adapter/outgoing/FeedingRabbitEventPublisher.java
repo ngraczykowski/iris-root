@@ -25,7 +25,7 @@ public class FeedingRabbitEventPublisher implements FeedingEventPublisher {
   public void publish(UdsFedEvent event) {
     var message = MessageAlertMatchesFeatureInputFed.newBuilder()
         .setBatchId(event.batchId())
-        .setAlertId(event.alertId())
+        .setAlertName(event.alertName())
         .setAlertErrorDescription(event.errorDescription().getDescription())
         .setFeedingStatus(FeedingStatus.valueOf(event.feedingStatus().name()))
         .addAllFedMatches(createFedMatches(event.fedMatches()))
@@ -36,7 +36,7 @@ public class FeedingRabbitEventPublisher implements FeedingEventPublisher {
   private Iterable<FedMatch> createFedMatches(List<UdsFedEvent.FedMatch> fedMatches) {
     return fedMatches.stream()
         .map(fedMatch -> FedMatch.newBuilder()
-            .setMatchId(fedMatch.matchId())
+            .setMatchName(fedMatch.matchName())
             .build())
         .toList();
   }

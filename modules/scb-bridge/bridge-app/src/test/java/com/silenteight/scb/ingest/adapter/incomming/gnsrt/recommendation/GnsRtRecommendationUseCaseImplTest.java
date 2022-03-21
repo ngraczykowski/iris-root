@@ -4,6 +4,7 @@ import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.alerti
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtRequestToAlertMapper;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtResponseMapper;
 import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
+import com.silenteight.scb.ingest.domain.model.Batch.Priority;
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -63,7 +64,7 @@ class GnsRtRecommendationUseCaseImplTest {
         .create(mono)
         .verifyComplete();
 
-    verify(registrationFacade).registerSolvingAlert(fixtures.batchId, alerts);
+    verify(registrationFacade).registerSolvingAlert(fixtures.batchId, alerts, Priority.HIGH);
     verify(ingestEventPublisher).publish(any());
   }
 
@@ -78,7 +79,7 @@ class GnsRtRecommendationUseCaseImplTest {
         .create(mono)
         .verifyComplete();
 
-    verify(registrationFacade).registerSolvingAlert(fixtures.batchId, alerts);
+    verify(registrationFacade).registerSolvingAlert(fixtures.batchId, alerts, Priority.HIGH);
     verify(ingestEventPublisher, times(2)).publish(any());
   }
 }
