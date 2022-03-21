@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db/changelog/changes/db.changelog-scb-bridge-1.0.0.yaml
   - include:
       file: db/changelog/changes/db.changelog-scb-bridge-2.0.0.yaml
+  - include:
+      file: db/changelog/changes/db.changelog-scb-bridge-3.0.0.yaml
