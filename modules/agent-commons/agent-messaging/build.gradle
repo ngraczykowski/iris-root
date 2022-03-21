@@ -18,6 +18,7 @@ dependencies {
   implementation libraries.spring_boot_starter_integration
   implementation libraries.spring_integration_core
   implementation libraries.amqp_client
+  implementation libraries.lz4_java
 
   implementation libraries.commons_lang3
   implementation libraries.classgraph

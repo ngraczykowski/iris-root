@@ -7,8 +7,16 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.google.protobuf.Any;
 import com.google.protobuf.ByteString;
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
+import com.google.protobuf.TextFormat;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
+
+import static com.google.common.base.Throwables.getRootCause;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -28,5 +36,25 @@ public final class AnyUtils {
         .setTypeUrl(TYPE_URL_PREFIX + "/" + typeName)
         .setValue(value)
         .build();
+  }
+
+  @NotNull
+  public static <T extends Message> Optional<T> maybeUnpack(
+      @NonNull Any anyMessage,
+      @NonNull Class<T> type) {
+
+    try {
+      return of(anyMessage.unpack(type));
+    } catch (InvalidProtocolBufferException e) {
+      if (log.isDebugEnabled()) {
+        Throwable rootCause = getRootCause(e);
+        log.debug("Unable to unpack message: type={}, exception={}, error={}, message={}",
+            type.getName(),
+            rootCause.getClass(),
+            rootCause.getMessage(),
+            TextFormat.shortDebugString(anyMessage));
+      }
+      return empty();
+    }
   }
 }

@@ -6,14 +6,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.google.common.base.Preconditions;
+import com.google.protobuf.Any;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Message;
 import com.google.protobuf.Parser;
+import org.springframework.amqp.support.converter.MessageConversionException;
 
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
+import java.util.stream.Stream;
 
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
@@ -97,6 +100,26 @@ public class MessageRegistry {
 
     Object result = org.springframework.util.ReflectionUtils.invokeMethod(getterMethod, null);
     return Optional.ofNullable(result);
+  }
+
+  public Message unpackAny(Any any) {
+    String typeUrl = any.getTypeUrl();
+    return maybeUnpackAny(any).orElseThrow(
+        () -> new MessageConversionException("Could not unpack message of type " + typeUrl));
+  }
+
+  Stream<Class<? extends Message>> streamMessageTypes() {
+    return messageTypes.values().stream().map(MessageType::getType);
+  }
+
+  private Optional<Message> maybeUnpackAny(Any any) {
+    String typeName = getTypeNameFromTypeUrl(any.getTypeUrl());
+
+    Preconditions.checkArgument(
+        !typeName.isBlank(), "Any message has invalid type URL %s", any.getTypeUrl());
+
+    return findMessageType(typeName)
+        .flatMap(messageType -> AnyUtils.maybeUnpack(any, (Class<Message>) messageType.getType()));
   }
 
   @RequiredArgsConstructor
