@@ -87,6 +87,9 @@ dependencies {
 //  implementation libraries.shedlock_spring
 //  implementation libraries.shedlock_jdbc_provider
 
+  //Consul
+  runtimeOnly libraries.spring_cloud_consul_discovery
+
   testImplementation libraries.silenteight_sep_base_testing
 
   aspect libraries.silenteight_sep_base_aspects

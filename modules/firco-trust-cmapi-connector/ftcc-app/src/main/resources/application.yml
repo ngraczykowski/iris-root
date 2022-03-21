@@ -1,3 +1,5 @@
+serp.show-env: true
+
 server:
   servlet:
     context-path: /rest/${spring.application.name}
