@@ -3,7 +3,7 @@ package com.silenteight.bridge.core.recommendation.domain
 import com.silenteight.adjudication.api.library.v1.util.TimeStampUtil
 import com.silenteight.bridge.core.Fixtures
 import com.silenteight.bridge.core.recommendation.domain.command.GetRecommendationCommand
-import com.silenteight.bridge.core.recommendation.domain.command.ReadyRecommendationsCommand
+import com.silenteight.bridge.core.recommendation.domain.command.ProceedReadyRecommendationsCommand
 import com.silenteight.bridge.core.recommendation.domain.command.ProceedBatchTimeoutCommand
 import com.silenteight.bridge.core.recommendation.domain.model.BatchStatistics
 import com.silenteight.bridge.core.recommendation.domain.model.BatchStatistics.RecommendationsStats
@@ -34,7 +34,7 @@ class RecommendationFixtures {
   static def RECOMMENDATION_COMMENT = 'recommendation_comment'
   static def ERROR_DESCRIPTION = 'error occurred'
 
-  static def READY_RECOMMENDATIONS_COMMAND = new ReadyRecommendationsCommand(ANALYSIS_NAME)
+  static def READY_RECOMMENDATIONS_COMMAND = new ProceedReadyRecommendationsCommand([RECOMMENDATION_WITH_METADATA])
 
   static def TIMED_OUT_RECOMMENDATIONS_COMMAND = new ProceedBatchTimeoutCommand(ANALYSIS_NAME, [ALERT_NAME])
 

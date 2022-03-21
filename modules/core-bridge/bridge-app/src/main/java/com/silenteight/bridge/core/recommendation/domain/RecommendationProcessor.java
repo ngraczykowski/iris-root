@@ -3,16 +3,13 @@ package com.silenteight.bridge.core.recommendation.domain;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.bridge.core.recommendation.domain.exception.CannotGetRecommendationsException;
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationMetadata;
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationWithMetadata;
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationsReceivedEvent;
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendedAction;
 import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RecommendationEventPublisher;
 import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RecommendationRepository;
-import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RecommendationService;
 
-import io.vavr.control.Try;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 
@@ -29,12 +26,11 @@ class RecommendationProcessor {
   private static final String TIMED_OUT_RECOMMENDATION_COMMENT = "";
   private static final RecommendationMetadata TIMED_OUT_RECOMMENDATION_METADATA = null;
 
-  private final RecommendationService recommendationService;
   private final RecommendationEventPublisher eventPublisher;
   private final RecommendationRepository recommendationRepository;
 
-  void proceedReadyRecommendations(String analysisName) {
-    var receivedRecommendations = getRecommendations(analysisName);
+  void proceedReadyRecommendations(List<RecommendationWithMetadata> receivedRecommendations) {
+    var analysisName = getAnalysisName(receivedRecommendations);
     var newRecommendations = filterOutExistingInDb(analysisName, receivedRecommendations);
 
     log.info(
@@ -66,12 +62,11 @@ class RecommendationProcessor {
     publishRecommendationsReceivedEvent(analysisName, newRecommendations);
   }
 
-  private List<RecommendationWithMetadata> getRecommendations(String analysisName) {
-    return Try.of(() -> recommendationService.getRecommendations(analysisName))
-        .onSuccess(
-            r -> log.info("{} recommendations received for analysis={}.", r.size(), analysisName))
-        .onFailure(e -> log.error("Cannot get recommendations for analysis={}", analysisName, e))
-        .getOrElseThrow(CannotGetRecommendationsException::new);
+  private String getAnalysisName(List<RecommendationWithMetadata> receivedRecommendations) {
+    return receivedRecommendations.stream()
+        .findAny()
+        .map(RecommendationWithMetadata::analysisName)
+        .orElseThrow();
   }
 
   private List<RecommendationWithMetadata> filterOutExistingInDb(

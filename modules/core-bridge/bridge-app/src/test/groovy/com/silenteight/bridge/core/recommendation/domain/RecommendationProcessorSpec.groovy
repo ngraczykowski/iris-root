@@ -4,33 +4,30 @@ import com.silenteight.bridge.core.recommendation.domain.model.RecommendationWit
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationsReceivedEvent
 import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RecommendationEventPublisher
 import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RecommendationRepository
-import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RecommendationService
 
 import spock.lang.Specification
 import spock.lang.Subject
 
 class RecommendationProcessorSpec extends Specification {
 
-  def recommendationService = Mock(RecommendationService)
   def eventPublisher = Mock(RecommendationEventPublisher)
   def recommendationRepository = Mock(RecommendationRepository)
 
   @Subject
   def underTest = new RecommendationProcessor(
-      recommendationService,
       eventPublisher,
       recommendationRepository
   )
 
   def 'should proceed ready recommendations without existing duplicates in DB'() {
     given:
-    def analysisName = RecommendationFixtures.ANALYSIS_NAME
+    def recommendationWithMetadata = [RecommendationFixtures.RECOMMENDATION_WITH_METADATA]
+    def analysisName = recommendationWithMetadata.first().analysisName()
 
     when:
-    underTest.proceedReadyRecommendations(analysisName)
+    underTest.proceedReadyRecommendations(recommendationWithMetadata)
 
     then:
-    1 * recommendationService.getRecommendations(analysisName) >> [RecommendationFixtures.RECOMMENDATION_WITH_METADATA]
     1 * recommendationRepository.findRecommendationAlertNamesByAnalysisName(analysisName) >> []
     1 * recommendationRepository.saveAll(_ as List<RecommendationWithMetadata>)
     1 * eventPublisher.publish(_ as RecommendationsReceivedEvent)
@@ -38,14 +35,14 @@ class RecommendationProcessorSpec extends Specification {
 
   def 'should proceed ready recommendations with existing duplicates in DB'() {
     given:
-    def analysisName = RecommendationFixtures.ANALYSIS_NAME
-    def existingRecommendationAlertNames = [RecommendationFixtures.ALERT_NAME]
+    def recommendationWithMetadata = [RecommendationFixtures.RECOMMENDATION_WITH_METADATA]
+    def analysisName = recommendationWithMetadata.first().analysisName()
+    def existingRecommendationAlertNames = [recommendationWithMetadata.first().alertName()]
 
     when:
-    underTest.proceedReadyRecommendations(analysisName)
+    underTest.proceedReadyRecommendations(recommendationWithMetadata)
 
     then:
-    1 * recommendationService.getRecommendations(analysisName) >> [RecommendationFixtures.RECOMMENDATION_WITH_METADATA]
     1 * recommendationRepository.findRecommendationAlertNamesByAnalysisName(analysisName) >>
         existingRecommendationAlertNames
     1 * recommendationRepository.saveAll([])

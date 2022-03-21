@@ -30,7 +30,7 @@ class RecommendationFacadeSpec extends Specification {
 
     then:
     1 * recommendationProcessor
-        .proceedReadyRecommendations(RecommendationFixtures.READY_RECOMMENDATIONS_COMMAND.analysisName())
+        .proceedReadyRecommendations(RecommendationFixtures.READY_RECOMMENDATIONS_COMMAND.recommendationsWithMetadata())
   }
 
   def 'should proceed batch timeout'() {

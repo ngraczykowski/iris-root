@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.bridge.core.recommendation.domain.command.GetRecommendationCommand;
 import com.silenteight.bridge.core.recommendation.domain.command.ProceedBatchTimeoutCommand;
-import com.silenteight.bridge.core.recommendation.domain.command.ReadyRecommendationsCommand;
+import com.silenteight.bridge.core.recommendation.domain.command.ProceedReadyRecommendationsCommand;
 import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RecommendationRepository;
 import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RegistrationService;
 import com.silenteight.proto.recommendation.api.v1.RecommendationsResponse;
@@ -24,8 +24,8 @@ public class RecommendationFacade {
   private final RecommendationRepository recommendationRepository;
   private final BatchStatisticsService batchStatisticsService;
 
-  public void proceedReadyRecommendations(ReadyRecommendationsCommand command) {
-    recommendationProcessor.proceedReadyRecommendations(command.analysisName());
+  public void proceedReadyRecommendations(ProceedReadyRecommendationsCommand command) {
+    recommendationProcessor.proceedReadyRecommendations(command.recommendationsWithMetadata());
   }
 
   public void proceedBatchTimeout(ProceedBatchTimeoutCommand command) {

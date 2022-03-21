@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Profile;
 
 @Configuration
 @EnableConfigurationProperties({ GrpcConfigurationProperties.class })
-public class GrpcServiceConfiguration {
+class GrpcServiceConfiguration {
 
   @GrpcClient(RegistrationKnownServices.GOVERNANCE)
   SolvingModelServiceBlockingStub solvingModelServiceBlockingStub;
@@ -44,9 +44,10 @@ public class GrpcServiceConfiguration {
   AnalysisServiceClient analysisServiceClientMock(
       RabbitTemplate rabbitTemplate,
       RecommendationIncomingRecommendationsGeneratedConfigurationProperties properties,
-      RegistrationAnalysisProperties registrationAnalysisProperties) {
+      RegistrationAnalysisProperties registrationAnalysisProperties,
+      RecommendationCreatorMock recommendationCreatorMock) {
     return new AnalysisServiceClientMock(
-        rabbitTemplate, properties, registrationAnalysisProperties);
+        rabbitTemplate, properties, registrationAnalysisProperties, recommendationCreatorMock);
   }
 
   @Bean

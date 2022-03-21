@@ -4,11 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.library.v1.AdjudicationEngineLibraryRuntimeException;
-import com.silenteight.adjudication.api.library.v1.analysis.AddAlertsToAnalysisIn;
+import com.silenteight.adjudication.api.library.v1.analysis.*;
 import com.silenteight.adjudication.api.library.v1.analysis.AddAlertsToAnalysisIn.Alert;
-import com.silenteight.adjudication.api.library.v1.analysis.AnalysisServiceClient;
-import com.silenteight.adjudication.api.library.v1.analysis.CreateAnalysisIn;
-import com.silenteight.adjudication.api.library.v1.analysis.FeatureIn;
 import com.silenteight.bridge.core.registration.domain.model.Analysis;
 import com.silenteight.bridge.core.registration.domain.model.DefaultModel;
 import com.silenteight.bridge.core.registration.domain.model.DefaultModelFeature;
@@ -26,6 +23,9 @@ import java.util.List;
 @Slf4j
 class AnalysisServiceAdapter implements AnalysisService {
 
+  private static final boolean ATTACH_RECOMMENDATION_TO_ANALYSIS = true;
+  private static final boolean ATTACH_METADATA_TO_ANALYSIS = true;
+
   private final AnalysisServiceClient analysisServiceClient;
 
   @Override
@@ -40,6 +40,7 @@ class AnalysisServiceAdapter implements AnalysisService {
         .policy(defaultModel.policyName())
         .strategy(defaultModel.strategyName())
         .features(getFeatures(defaultModel.features()))
+        .notificationFlags(getNotificationFlags())
         .build();
     log.info("Creating analysis: {}", createAnalysisIn);
     var analysis = analysisServiceClient.createAnalysis(createAnalysisIn);
@@ -79,5 +80,12 @@ class AnalysisServiceAdapter implements AnalysisService {
             .deadlineTime(alertDeadlineTime)
             .build())
         .toList();
+  }
+
+  private NotificationFlagsIn getNotificationFlags() {
+    return NotificationFlagsIn.builder()
+        .attachRecommendation(ATTACH_RECOMMENDATION_TO_ANALYSIS)
+        .attachMetadata(ATTACH_METADATA_TO_ANALYSIS)
+        .build();
   }
 }

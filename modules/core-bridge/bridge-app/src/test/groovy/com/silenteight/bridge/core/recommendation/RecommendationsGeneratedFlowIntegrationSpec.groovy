@@ -2,6 +2,7 @@ package com.silenteight.bridge.core.recommendation
 
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated
 import com.silenteight.bridge.core.BaseSpecificationIT
+import com.silenteight.bridge.core.recommendation.adapter.incoming.Fixtures
 import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RecommendationRepository
 import com.silenteight.bridge.core.recommendation.infrastructure.amqp.RecommendationIncomingRecommendationsGeneratedConfigurationProperties
 import com.silenteight.proto.recommendation.api.v1.RecommendationsStored
@@ -21,8 +22,6 @@ import spock.util.concurrent.PollingConditions
 @DirtiesContext
 class RecommendationsGeneratedFlowIntegrationSpec extends BaseSpecificationIT {
 
-  private static final String ANALYSIS_NAME = "ANALYSIS_NAME"
-
   @Autowired
   private RabbitTemplate rabbitTemplate
 
@@ -34,8 +33,10 @@ class RecommendationsGeneratedFlowIntegrationSpec extends BaseSpecificationIT {
 
   def "should store recommendations and publish RecommendationsReceivedEvent event when receive recommendations from AE"() {
     given:
+    def analysisName = Fixtures.ANALYSIS_NAME
     def recommendationsGenerated = RecommendationsGenerated.newBuilder()
-        .setAnalysis(ANALYSIS_NAME)
+        .setAnalysis(analysisName)
+        .addAllRecommendationInfos([Fixtures.RECOMMENDATION_INFO])
         .build()
     def conditions = new PollingConditions(timeout: 10, initialDelay: 0.2, factor: 1.25)
 
@@ -47,14 +48,14 @@ class RecommendationsGeneratedFlowIntegrationSpec extends BaseSpecificationIT {
 
     then:
     conditions.eventually {
-      def recommendations = recommendationRepository.findByAnalysisName(ANALYSIS_NAME)
-      assert recommendations.size() == 2
+      def recommendations = recommendationRepository.findByAnalysisName(analysisName)
+      assert recommendations.size() == 1
 
       def recommendationsReceived = (RecommendationsStored) rabbitTemplate.receiveAndConvert(
           RecommendationsGeneratedFlowRabbitMqTestConfig.TEST_QUEUE_NAME, 10000L)
       with(recommendationsReceived) {
-        analysisName == ANALYSIS_NAME
-        alertNamesCount == 2
+        analysisName == analysisName
+        alertNamesCount == 1
       }
     }
   }
