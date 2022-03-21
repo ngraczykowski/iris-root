@@ -52,7 +52,6 @@ public class AlertParser {
         .systemId(getSystemId(documentContext))
         .hits(getMatches(documentContext))
         .build();
-    //TODO set fields: alertName, status, errorDescription, matches
   }
 
   private ParsedMessageData parseMessageData(DocumentContext documentContext) {

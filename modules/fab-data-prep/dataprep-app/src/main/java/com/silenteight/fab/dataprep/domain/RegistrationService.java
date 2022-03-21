@@ -2,11 +2,12 @@ package com.silenteight.fab.dataprep.domain;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.fab.dataprep.domain.model.AlertErrorDescription;
 import com.silenteight.fab.dataprep.domain.model.ParsedAlertMessage;
-import com.silenteight.fab.dataprep.domain.model.ParsedAlertMessage.Hit;
 import com.silenteight.fab.dataprep.domain.model.RegisteredAlert;
-import com.silenteight.fab.dataprep.domain.model.RegisteredAlert.Match;
-import com.silenteight.registration.api.library.v1.*;
+import com.silenteight.registration.api.library.v1.RegisterAlertsAndMatchesIn;
+import com.silenteight.registration.api.library.v1.RegisterAlertsAndMatchesOut;
+import com.silenteight.registration.api.library.v1.RegistrationServiceClient;
 
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import static com.silenteight.fab.dataprep.domain.RegistrationConverter.convert;
+import static com.silenteight.fab.dataprep.domain.RegistrationConverter.createFailedAlertWithMatchesIn;
+import static com.silenteight.fab.dataprep.domain.RegistrationConverter.createFailedRegisteredAlert;
+import static com.silenteight.fab.dataprep.domain.RegistrationConverter.getBatchName;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
@@ -31,7 +36,7 @@ public class RegistrationService {
         .alertsWithMatches(
             parsedAlertMessages
                 .stream()
-                .map(RegistrationService::convert)
+                .map(RegistrationConverter::convert)
                 .collect(toList()))
         .build();
     RegisterAlertsAndMatchesOut result =
@@ -46,59 +51,27 @@ public class RegistrationService {
         .collect(toList());
   }
 
-  private String getBatchName(Collection<ParsedAlertMessage> parsedAlertMessages) {
-    return parsedAlertMessages
-        .stream()
-        .findAny()
-        .map(ParsedAlertMessage::getBatchName)
-        .orElseThrow(() -> new IllegalArgumentException("BatchName should be provided"));
-  }
+  public List<RegisteredAlert> registerFailedAlerts(
+      List<String> alerts,
+      String batchName,
+      AlertErrorDescription errorDescription) {
+    RegisterAlertsAndMatchesIn registerAlertsAndMatchesIn = RegisterAlertsAndMatchesIn
+        .builder()
+        .batchId(batchName)
+        .alertsWithMatches(
+            alerts
+                .stream()
+                .map(alertName -> createFailedAlertWithMatchesIn(alertName, errorDescription))
+                .collect(toList()))
+        .build();
+    RegisterAlertsAndMatchesOut result =
+        registrationServiceClient.registerAlertsAndMatches(registerAlertsAndMatchesIn);
 
-  private static RegisteredAlert convert(
-      RegisteredAlertWithMatchesOut registeredAlertWithMatchesOut,
-      ParsedAlertMessage parsedAlertMessage) {
-    List<Match> matches = registeredAlertWithMatchesOut
-        .getRegisteredMatches()
+    return result
+        .getRegisteredAlertWithMatches()
         .stream()
-        .map(registeredMatchOut -> convert(
-            registeredMatchOut, parsedAlertMessage.getHit(registeredMatchOut.getMatchId())))
+        .map(registeredAlertWithMatchesOut -> createFailedRegisteredAlert(
+            registeredAlertWithMatchesOut, batchName, errorDescription))
         .collect(toList());
-
-    return RegisteredAlert
-        .builder()
-        .batchName(parsedAlertMessage.getBatchName())
-        .parsedMessageData(parsedAlertMessage.getParsedMessageData())
-        .messageName(registeredAlertWithMatchesOut.getAlertId())
-        .alertName(registeredAlertWithMatchesOut.getAlertName())
-        .systemId(parsedAlertMessage.getSystemId())
-        .matches(matches)
-        .build();
-  }
-
-  private static Match convert(RegisteredMatchOut registeredMatchOut, Hit hit) {
-    return Match
-        .builder()
-        .hitName(registeredMatchOut.getMatchId())
-        .matchName(registeredMatchOut.getMatchName())
-        .payloads(hit.getPayloads())
-        .build();
-  }
-
-  private static AlertWithMatchesIn convert(ParsedAlertMessage parsedAlertMessage) {
-    return AlertWithMatchesIn
-        .builder()
-        .status(AlertStatusIn.SUCCESS)//TODO: What should be the origin of this value?
-        //.errorDescription()//TODO: Is it needed?
-        .alertId(parsedAlertMessage.getMessageName())
-        .matches(parsedAlertMessage
-            .getHits()
-            .values()
-            .stream()
-            .map(RegistrationService::convert)
-            .collect(toList())).build();
-  }
-
-  private static MatchIn convert(Hit hit) {
-    return MatchIn.builder().matchId(hit.getHitName()).build();
   }
 }

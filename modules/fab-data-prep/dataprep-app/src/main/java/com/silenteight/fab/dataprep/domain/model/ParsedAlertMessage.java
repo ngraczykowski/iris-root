@@ -17,8 +17,6 @@ public class ParsedAlertMessage {
   String batchName;
   @NonNull
   String messageName;
-  AlertStatus status;
-  AlertErrorDescription errorDescription;
   ParsedMessageData parsedMessageData;
   String systemId;
   Map<String, Hit> hits;
