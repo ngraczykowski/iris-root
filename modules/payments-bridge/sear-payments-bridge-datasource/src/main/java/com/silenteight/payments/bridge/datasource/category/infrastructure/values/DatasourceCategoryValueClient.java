@@ -10,9 +10,10 @@ import com.silenteight.datasource.categories.api.v2.CreateCategoryValuesRequest;
 import com.silenteight.datasource.categories.api.v2.CreatedCategoryValue;
 
 import io.grpc.Deadline;
-import io.grpc.StatusRuntimeException;
 
 import java.time.Duration;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static java.util.stream.Collectors.toList;
@@ -25,31 +26,7 @@ final class DatasourceCategoryValueClient {
 
   private final Duration timeout;
 
-  void create(BatchCreateCategoryValuesRequest createCategoryValuesRequest) {
-    if (!createCategoryValuesRequest.getRequestsList().isEmpty()) {
-      sendToDatasource(createCategoryValuesRequest);
-    } else {
-      log.debug(
-          "Batch category value request is empty. Data won't be send to datasource service");
-    }
-  }
-
-  private void sendToDatasource(BatchCreateCategoryValuesRequest createCategoryValuesRequest) {
-    var deadline = Deadline.after(timeout.toMillis(), TimeUnit.MILLISECONDS);
-
-    logRequest(createCategoryValuesRequest);
-
-    try {
-      var response = blockingStub
-          .withDeadline(deadline)
-          .batchCreateCategoryValues(createCategoryValuesRequest);
-
-      logResponse(response);
-
-    } catch (StatusRuntimeException e) {
-      log.error("Request with category values to the datasource service failed", e);
-    }
-  }
+  private final ExecutorService datasourceThreadPool;
 
   private static void logRequest(BatchCreateCategoryValuesRequest createCategoryValuesRequest) {
     if (log.isDebugEnabled()) {
@@ -77,6 +54,33 @@ final class DatasourceCategoryValueClient {
           matchesSaved.size(),
           matchesSaved.subList(0, Math.min(10, matchesSaved.size())));
     }
+  }
+
+  void create(BatchCreateCategoryValuesRequest createCategoryValuesRequest) {
+    if (!createCategoryValuesRequest.getRequestsList().isEmpty()) {
+      sendToDatasource(createCategoryValuesRequest);
+    } else {
+      log.debug(
+          "Batch category value request is empty. Data won't be send to datasource service");
+    }
+  }
+
+  private void sendToDatasource(BatchCreateCategoryValuesRequest createCategoryValuesRequest) {
+    CompletableFuture.runAsync(() -> {
+      var deadline = Deadline.after(timeout.toMillis(), TimeUnit.MILLISECONDS);
+
+      logRequest(createCategoryValuesRequest);
+
+      var response = blockingStub
+          .withDeadline(deadline)
+          .batchCreateCategoryValues(createCategoryValuesRequest);
+
+      logResponse(response);
+
+    }, this.datasourceThreadPool).exceptionally(throwable -> {
+      log.error("Request with category values to the datasource service failed", throwable);
+      return null;
+    });
   }
 }
 
