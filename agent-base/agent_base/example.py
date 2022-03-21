@@ -34,7 +34,7 @@ class JohnnyAgentDataSource(AgentDataSource):
     async def start(self):
         await super().start()
         stub = NameInputServiceStub(self.channel)
-        self.channel_stream = stub.BatchGetMatchNameInputs
+        self.channel_stream_method = stub.BatchGetMatchNameInputs
 
     def prepare_request(self, request: AgentExchangeRequest) -> BatchGetMatchNameInputsRequest:
         return BatchGetMatchNameInputsRequest(matches=request.matches, features=request.features)

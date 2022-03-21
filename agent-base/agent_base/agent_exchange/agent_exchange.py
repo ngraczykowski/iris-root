@@ -48,10 +48,10 @@ class AgentExchange(AgentService):
         if self.data_source:
             await self.data_source.start()
 
-        self.logger.debug("Agent exchange started")
+        self.logger.info("Agent exchange started")
 
     async def stop(self):
-        self.logger.debug("Stopping agent exchange")
+        self.logger.info("Stopping agent exchange")
 
         tasks = [s.stop() for s in self.connections]
         if self.data_source:
@@ -60,7 +60,7 @@ class AgentExchange(AgentService):
         await asyncio.gather(*tasks)
         self.connections = []
 
-        self.logger.debug("Agent exchange stopped")
+        self.logger.info("Agent exchange stopped")
 
     async def on_request(self, message: aio_pika.IncomingMessage) -> aio_pika.Message:
         body = message.body.strip()

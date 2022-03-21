@@ -23,7 +23,7 @@ class GrpcService(AgentService):
         self.servicers = (self.health_servicer, self.agent_servicer, *servicers)
 
     async def start(self, *args, **kwargs):
-        self.logger.debug("Starting grpc service")
+        self.logger.info("Starting grpc service")
 
         if self.server:
             raise Exception("Server already started")
@@ -32,7 +32,7 @@ class GrpcService(AgentService):
         await self._start_server()
         self.agent_servicer.set_create_resolve_task(self.create_resolve_task)
 
-        self.logger.debug("Grpc service started")
+        self.logger.info("Grpc service started")
         return self
 
     async def _start_server(self):
@@ -56,10 +56,10 @@ class GrpcService(AgentService):
         reflection.enable_server_reflection((reflection.SERVICE_NAME, *service_names), self.server)
 
     async def stop(self):
-        self.logger.debug("Stopping grpc service")
+        self.logger.info("Stopping grpc service")
 
         if self.server:
             await self.server.stop(grace=1)
             self.server = None
 
-        self.logger.debug("Grpc service stopped")
+        self.logger.info("Grpc service stopped")

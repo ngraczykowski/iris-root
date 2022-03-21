@@ -52,8 +52,8 @@ def create_message(message: AgentExchangeRequest, routing_key="", timestamp=1, c
 async def ask_for_many(agent_exchange, agent, matches, features, args):
     await agent_exchange.start(agent)
 
-    for args_ids, args in args.items():
-        agent_exchange.data_source.set(*args_ids, args)
+    for args_ids, args_values in args.items():
+        agent_exchange.data_source.set(*args_ids, args_values)
 
     response = await agent_exchange.connections[0].callback(
         create_message(AgentExchangeRequest(matches=matches, features=features))
