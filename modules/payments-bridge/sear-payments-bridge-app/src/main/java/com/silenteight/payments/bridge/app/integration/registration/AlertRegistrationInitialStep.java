@@ -1,5 +1,7 @@
 package com.silenteight.payments.bridge.app.integration.registration;
 
+import com.silenteight.sep.base.aspects.metrics.Timed;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,7 +13,6 @@ import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessagePaylo
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessageUseCase;
 import com.silenteight.payments.bridge.firco.dto.input.AlertMessageDto;
 
-import io.micrometer.core.annotation.Timed;
 import org.springframework.stereotype.Service;
 
 import java.time.ZoneOffset;
