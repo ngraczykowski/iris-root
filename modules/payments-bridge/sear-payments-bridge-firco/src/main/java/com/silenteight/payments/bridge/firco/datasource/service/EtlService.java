@@ -38,7 +38,7 @@ class EtlService implements EtlUseCase {
 
   @LogContext
   @Override
-  @Timed(percentiles = { 0.95, 0.99 }, histogram = true)
+  @Timed
   public void process(AeAlert alert) {
     var alertId = alert.getAlertId();
     var alertName = alert.getAlertName();

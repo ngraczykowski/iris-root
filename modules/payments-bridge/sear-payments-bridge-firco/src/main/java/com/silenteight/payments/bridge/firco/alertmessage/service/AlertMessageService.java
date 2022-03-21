@@ -21,7 +21,7 @@ class AlertMessageService implements AlertMessageUseCase {
 
   private final AlertMessageRepository alertMessageRepository;
 
-  @Timed(percentiles = { 0.95, 0.99 }, histogram = true)
+  @Timed
   public AlertData findByAlertMessageId(UUID alertMessageId) {
     var entity = alertMessageRepository.findById(alertMessageId)
         .orElseThrow(EntityNotFoundException::new);

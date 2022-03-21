@@ -23,7 +23,7 @@ class TriggerAnalysisStep {
   private final IndexAlertRegisteredStep indexAlertRegisteredStep;
   private final ApplicationEventPublisher applicationEventPublisher;
 
-  @Timed(percentiles = { 0.95, 0.99 }, histogram = true)
+  @Timed
   void invoke(Context ctx) {
     log.info("Adding alert [{}], ae name: [{}] to analysis",
         ctx.getAlertId(), ctx.getAlertName());

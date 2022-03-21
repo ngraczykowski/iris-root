@@ -75,7 +75,7 @@ class RegisterAlertService implements RegisterAlertUseCase {
   }
 
   @Override
-  @Timed(percentiles = { 0.95, 0.99 }, histogram = true)
+  @Timed
   public RegisterAlertResponse register(RegisterAlertRequest request) {
     var response = alertClient.createAlert(request.toCreateAlertRequest());
     var alertName = response.getName();
