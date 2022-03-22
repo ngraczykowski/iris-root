@@ -10,8 +10,6 @@ import org.springframework.stereotype.Component;
 import java.util.Collections;
 import java.util.List;
 
-import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.getFullFeatureName;
-
 @Component
 class CreateBankIdentificationCodesFeatureInput implements
     CreateBankIdentificationCodesFeatureInputUseCase {
@@ -21,7 +19,7 @@ class CreateBankIdentificationCodesFeatureInput implements
 
     return BankIdentificationCodesFeatureInput
         .newBuilder()
-        .setFeature(getFullFeatureName(request.getFeature()))
+        .setFeature(request.getFeature())
         .setAlertedPartyMatchingField(request.getFieldValue())
         .setWatchlistMatchingText(request.getMatchingText())
         .addAllWatchlistSearchCodes(setWatchlistSearchCodes(request))

@@ -96,4 +96,5 @@ public class HitData {
     var countries = hitAndWlPartyData.getCountries();
     return countries.isEmpty() ? "" : countries.get(0);
   }
+
 }

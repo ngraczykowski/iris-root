@@ -10,6 +10,8 @@ import com.silenteight.payments.bridge.agents.model.ContextualLearningAgentReque
 import com.silenteight.payments.bridge.agents.model.SpecificTermsRequest;
 import com.silenteight.payments.bridge.common.dto.common.SolutionType;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
+import com.silenteight.payments.bridge.datasource.agent.dto.FeatureInputUnstructured.ContextualAgentData;
+import com.silenteight.payments.bridge.datasource.agent.dto.FeatureInputUnstructured.NameMatchedTextAgent;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 
 import org.apache.commons.lang3.EnumUtils;
@@ -152,4 +154,23 @@ public class HitComposite {
         .matchingField(fkcoVMatchedTagContent)
         .matchText(fkcoVNameMatchedText);
   }
+
+  public ContextualAgentData getContextualAgentData() {
+    return ContextualAgentData.builder()
+        .ofacId(fkcoVListFmmId)
+        .watchlistType(fkcoVListType)
+        .matchingField(fkcoVMatchedTagContent)
+        .matchText(fkcoVNameMatchedText)
+        .build();
+  }
+
+  public NameMatchedTextAgent getNameMatchedTextAgent() {
+    return NameMatchedTextAgent.builder()
+        .watchlistName(fkcoVNameMatchedText)
+        .alertedPartyName(getMatchedNames())
+        .watchlistType(getWatchlistType())
+        .matchingTexts(getMatchingTexts())
+        .build();
+  }
+
 }

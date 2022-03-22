@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package com.silenteight.payments.bridge.datasource.agent.port;
+package com.silenteight.payments.bridge.datasource.agent.infrastructure;
 
 import javax.annotation.ParametersAreNonnullByDefault;

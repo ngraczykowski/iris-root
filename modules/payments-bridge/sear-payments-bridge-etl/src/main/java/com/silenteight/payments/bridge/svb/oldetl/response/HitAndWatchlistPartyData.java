@@ -7,6 +7,8 @@ import com.silenteight.payments.bridge.agents.model.ContextualLearningAgentReque
 import com.silenteight.payments.bridge.agents.model.ContextualLearningAgentRequest.ContextualLearningAgentRequestBuilder;
 import com.silenteight.payments.bridge.common.dto.common.SolutionType;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
+import com.silenteight.payments.bridge.datasource.agent.dto.FeatureInputUnstructured.ContextualAgentData;
+import com.silenteight.payments.bridge.datasource.agent.dto.FeatureInputUnstructured.NameMatchedTextAgent;
 import com.silenteight.payments.bridge.datasource.category.dto.CategoryValueUnstructured;
 import com.silenteight.payments.bridge.datasource.category.dto.CategoryValueUnstructured.CategoryValueUnstructuredBuilder;
 
@@ -41,10 +43,32 @@ public class HitAndWatchlistPartyData {
 
   public ContextualLearningAgentRequestBuilder contextualLearningAgentRequestBuilder() {
     return ContextualLearningAgentRequest.builder()
-        .ofacId(id.toUpperCase().trim())
+        .ofacId(getOfacId())
         .watchlistType(watchlistType.toString())
         .matchingField(getMatchingField())
         .matchText(matchingText);
+  }
+
+  public ContextualAgentData getContextualAgentData() {
+    return ContextualAgentData.builder()
+        .ofacId(getOfacId())
+        .watchlistType(getWatchlistType().toString())
+        .matchingField(getMatchingField())
+        .matchText(matchingText)
+        .build();
+  }
+
+  public NameMatchedTextAgent getNameMatchedTextAgent() {
+    return NameMatchedTextAgent.builder()
+        .watchlistName(name)
+        .alertedPartyName(List.of(matchingText))
+        .watchlistType(watchlistType)
+        .matchingTexts(allMatchingTexts)
+        .build();
+  }
+
+  private String getOfacId() {
+    return id.toUpperCase().trim();
   }
 
   private String getMatchingField() {

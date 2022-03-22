@@ -1,14 +1,14 @@
-package com.silenteight.payments.bridge.datasource.agent.adapter;
+package com.silenteight.payments.bridge.datasource.agent.infrastructure;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.datasource.agentinput.api.v1.*;
-import com.silenteight.datasource.agentinput.api.v1.AgentInputServiceGrpc.AgentInputServiceBlockingStub;
-import com.silenteight.payments.bridge.datasource.agent.port.CreateAgentInputsClient;
+import com.silenteight.datasource.agentinput.api.v1.AgentInput;
+import com.silenteight.datasource.agentinput.api.v1.AgentInputServiceGrpc.AgentInputServiceStub;
+import com.silenteight.datasource.agentinput.api.v1.BatchCreateAgentInputsRequest;
+import com.silenteight.datasource.agentinput.api.v1.FeatureInput;
 
 import io.grpc.Deadline;
-import io.grpc.StatusRuntimeException;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
@@ -16,11 +16,11 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
-@RequiredArgsConstructor
 @Slf4j
-class CreateAgentInputsAdapter implements CreateAgentInputsClient {
+@RequiredArgsConstructor
+public class CreateAgentInputsClient {
 
-  private final AgentInputServiceBlockingStub blockingStub;
+  private final AgentInputServiceStub stub;
 
   private final Duration timeout;
 
@@ -38,23 +38,15 @@ class CreateAgentInputsAdapter implements CreateAgentInputsClient {
 
     logRequest(batchCreateAgentInputsRequest);
 
-    try {
-      var response = blockingStub
-          .withDeadline(deadline)
-          .batchCreateAgentInputs(batchCreateAgentInputsRequest);
-
-      logResponse(response);
-
-    } catch (StatusRuntimeException status) {
-      log.warn("Request with agent inputs to the datasource service failed", status);
-    }
+    stub.withDeadline(deadline)
+        .batchCreateAgentInputs(batchCreateAgentInputsRequest, new AgentInputCallback());
   }
 
   private static void logRequest(BatchCreateAgentInputsRequest batchCreateAgentInputsRequest) {
     if (log.isDebugEnabled()) {
       var agentInputs = batchCreateAgentInputsRequest.getAgentInputsList();
       var features = agentInputs.stream()
-          .flatMap(CreateAgentInputsAdapter::getFeatures)
+          .flatMap(CreateAgentInputsClient::getFeatures)
           .collect(toList());
 
       var matches = agentInputs.stream()
@@ -73,20 +65,5 @@ class CreateAgentInputsAdapter implements CreateAgentInputsClient {
   private static Stream<String> getFeatures(AgentInput agentInput) {
     return agentInput.getFeatureInputsList().stream()
         .map(FeatureInput::getFeature);
-  }
-
-  private static void logResponse(BatchCreateAgentInputsResponse response) {
-    if (log.isDebugEnabled()) {
-
-      var matchesSaved = response.getCreatedAgentInputsList().stream()
-          .map(CreatedAgentInput::getMatch)
-          .distinct()
-          .collect(toList());
-
-      log.debug(
-          "Agent inputs saved for matches, matchCount={}, firstTenMatches={}",
-          matchesSaved.size(),
-          matchesSaved.subList(0, Math.min(10, matchesSaved.size())));
-    }
   }
 }

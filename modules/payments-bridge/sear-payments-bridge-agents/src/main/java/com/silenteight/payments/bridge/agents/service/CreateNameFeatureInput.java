@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 
-import static com.silenteight.payments.bridge.common.app.AgentsUtils.FEATURE_PREFIX;
-import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.getFullFeatureName;
 import static java.util.stream.Collectors.toList;
 
 @Component
@@ -37,7 +35,7 @@ class CreateNameFeatureInput implements CreateNameFeatureInputUseCase {
   private static NameFeatureInput createNameFeatureInput(NameAgentRequest request) {
     return NameFeatureInput
         .newBuilder()
-        .setFeature(getFeatureName(request.getFeature()))
+        .setFeature(request.getFeature())
         .addAllMatchingTexts(request.getMatchingTexts())
         .addAllWatchlistNames(createWatchlistNames(request))
         .addAllAlertedPartyNames(createAlertedPartyNames(request))
@@ -65,7 +63,7 @@ class CreateNameFeatureInput implements CreateNameFeatureInputUseCase {
       NameAgentRequest nameAgentRequest, List<String> alertedPartyNames,
       String watchlistPartyNames) {
     return NameFeatureInput.newBuilder()
-        .setFeature(getFullFeatureName(nameAgentRequest.getFeature()))
+        .setFeature(nameAgentRequest.getFeature())
         .addAllAlertedPartyNames(getAlertedPartyNames(alertedPartyNames))
         .addWatchlistNames(WatchlistName.newBuilder()
             .setName(watchlistPartyNames)
@@ -127,9 +125,4 @@ class CreateNameFeatureInput implements CreateNameFeatureInputUseCase {
         throw new UnsupportedOperationException();
     }
   }
-
-  private static String getFeatureName(String featureName) {
-    return FEATURE_PREFIX + featureName;
-  }
-
 }

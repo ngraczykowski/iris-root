@@ -1,5 +1,5 @@
 alertedPartyNames,feature,watchlistType,watchlistNames,expectedFeature,expectedWatchlistNames,expectedAlertedPartyName
-SINA BANK,organizationName,INDIVIDUAL,"AL-TIKRITI, ALI SADDAM HUSSEIN",features/organizationName,"AL-TIKRITI, ALI SADDAM HUSSEIN",""
-SINA BANK,organizationName,INDIVIDUAL,HUSSAIN,features/organizationName,HUSSAIN,""
-ADDR LINE 1 2000007429,organizationName,COMPANY,Line-Up,features/organizationName,Line-Up,ADDR LINE 1 2000007429
-ADDR LINE 1 2000007429,organizationName,COMPANY,"SANDA-M, OOO",features/organizationName,"SANDA-M, OOO",ADDR LINE 1 2000007429
+SINA BANK,features/organizationName,INDIVIDUAL,"AL-TIKRITI, ALI SADDAM HUSSEIN",features/organizationName,"AL-TIKRITI, ALI SADDAM HUSSEIN",""
+SINA BANK,features/organizationName,INDIVIDUAL,HUSSAIN,features/organizationName,HUSSAIN,""
+ADDR LINE 1 2000007429,features/organizationName,COMPANY,Line-Up,features/organizationName,Line-Up,ADDR LINE 1 2000007429
+ADDR LINE 1 2000007429,features/organizationName,COMPANY,"SANDA-M, OOO",features/organizationName,"SANDA-M, OOO",ADDR LINE 1 2000007429

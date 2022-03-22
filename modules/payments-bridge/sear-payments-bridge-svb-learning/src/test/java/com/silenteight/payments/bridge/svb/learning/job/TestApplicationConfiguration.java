@@ -2,13 +2,16 @@ package com.silenteight.payments.bridge.svb.learning.job;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.datasource.agentinput.api.v1.AgentInputServiceGrpc;
 import com.silenteight.datasource.categories.api.v2.CategoryServiceGrpc;
 import com.silenteight.payments.bridge.ae.alertregistration.port.FindRegisteredAlertUseCase;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
 import com.silenteight.payments.bridge.agents.port.*;
 import com.silenteight.payments.bridge.data.retention.port.CreateAlertDataRetentionUseCase;
 import com.silenteight.payments.bridge.data.retention.port.CreateFileRetentionUseCase;
-import com.silenteight.payments.bridge.datasource.agent.port.CreateAgentInputsClient;
+import com.silenteight.payments.bridge.datasource.agent.CreateFeatureInputsProcess;
+import com.silenteight.payments.bridge.datasource.agent.FeatureInputRepository;
+import com.silenteight.payments.bridge.datasource.agent.infrastructure.CreateAgentInputsClient;
 import com.silenteight.payments.bridge.datasource.category.CategoryValueRepository;
 import com.silenteight.payments.bridge.datasource.category.CreateCategoryValuesProcess;
 import com.silenteight.payments.bridge.datasource.category.infrastructure.CategoriesClient;
@@ -17,25 +20,29 @@ import com.silenteight.payments.bridge.svb.learning.port.HistoricalDecisionLearn
 import com.silenteight.payments.bridge.svb.oldetl.port.CreateAlertedPartyEntitiesUseCase;
 import com.silenteight.payments.bridge.warehouse.index.port.IndexLearningUseCase;
 
+import io.grpc.ManagedChannel;
 import io.grpc.inprocess.InProcessChannelBuilder;
 import io.grpc.inprocess.InProcessServerBuilder;
 import io.grpc.testing.GrpcCleanupRule;
 import org.junit.Rule;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.boot.autoconfigure.batch.BatchProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.time.Duration;
 import java.util.Collections;
 
 @Configuration
 @EnableBatchProcessing
 @RequiredArgsConstructor
+@EnableConfigurationProperties(DatasourceClientProperties.class)
 public class TestApplicationConfiguration {
 
   @Rule
   public final GrpcCleanupRule grpcCleanup = new GrpcCleanupRule();
+
+  private final DatasourceClientProperties properties;
 
   @Bean
   BatchProperties batchProperties() {
@@ -82,11 +89,6 @@ public class TestApplicationConfiguration {
   @Bean
   NameAddressCrossmatchUseCase nameAddressCrossmatchUseCase() {
     return new NameAddressCrossmatchUseCaseMock();
-  }
-
-  @Bean
-  CreateAgentInputsClient createAgentInputsClient() {
-    return new CreateAgentInputsClientMock();
   }
 
   @Bean
@@ -145,16 +147,37 @@ public class TestApplicationConfiguration {
 
   @Bean
   CategoriesClient categoriesClient() {
-
-    var serverName = InProcessServerBuilder.generateName();
-
-    var channel = grpcCleanup.register(
-        InProcessChannelBuilder.forName(serverName).directExecutor().build());
-
     var stub = CategoryServiceGrpc
-        .newBlockingStub(channel)
+        .newBlockingStub(getManagedChannel())
         .withWaitForReady();
 
-    return new CategoriesClient(stub, Duration.ofSeconds(30));
+    return new CategoriesClient(stub, properties.getTimeout());
+  }
+
+  @Bean
+  FeatureInputRepository featureInputRepository() {
+    return new RemoteDatasourceFeatureInputRepositoryMock();
+  }
+
+  @Bean
+  CreateFeatureInputsProcess createFeatureInputsProcess(
+      final FeatureInputRepository featureInputRepository) {
+    return new CreateFeatureInputsProcess(Collections.emptyList(), Collections.emptyList(),
+        featureInputRepository);
+  }
+
+  @Bean
+  CreateAgentInputsClient createAgentInputsClient() {
+    var stub = AgentInputServiceGrpc
+        .newStub(getManagedChannel())
+        .withWaitForReady();
+
+    return new CreateAgentInputsClient(stub, properties.getTimeout());
+  }
+
+  private ManagedChannel getManagedChannel() {
+    var serverName = InProcessServerBuilder.generateName();
+    return grpcCleanup.register(
+        InProcessChannelBuilder.forName(serverName).directExecutor().build());
   }
 }

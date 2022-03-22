@@ -8,6 +8,10 @@ import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
 import com.silenteight.payments.bridge.agents.model.CompanyNameSurroundingRequest;
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentRequest;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
+import com.silenteight.payments.bridge.datasource.agent.dto.FeatureInputStructured.GeoAgentData;
+import com.silenteight.payments.bridge.datasource.agent.dto.FeatureInputStructured.HistoricalAgentData;
+import com.silenteight.payments.bridge.datasource.agent.dto.FeatureInputStructured.IdentificationMismatchAgentData;
+import com.silenteight.payments.bridge.datasource.agent.dto.FeatureInputStructured.NameAgentData;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 
 import org.apache.commons.lang3.StringUtils;
@@ -122,5 +126,51 @@ public class EtlHit {
     return StringUtils.isNotBlank(elem) &&
         !WILDCARD.equals(elem) &&
         !NA.equals(elem);
+  }
+
+  public NameAgentData getNameAgentData() {
+    return NameAgentData.builder()
+        .watchlistType(getWatchlistType())
+        .alertedPartyNames(getAlertedPartyNames())
+        .watchlistPartyName(getWatchlistNames())
+        .matchingTexts(getMatchingTexts())
+        .build();
+  }
+
+  public GeoAgentData getGeoAgentData() {
+    return GeoAgentData.builder()
+        .alertedPartyLocation(getAlertedPartyLocation())
+        .watchListLocation(getWatchlistLocation())
+        .build();
+  }
+
+  public IdentificationMismatchAgentData getIdentificationMismatchAgentData() {
+    return IdentificationMismatchAgentData.builder()
+        .alertedPartyMatchingField(getMatchedTagContent())
+        .matchingText(StringUtils.join(getMatchingTexts(), ", "))
+        .watchlistSearchCodes(getSearchCodes())
+        .build();
+  }
+
+  public HistoricalAgentData getHistoricalAgentData() {
+    return HistoricalAgentData.builder()
+        .matchId(getMatchId())
+        .ofacId(getFkcoVListFmmId())
+        .watchlistType(getWatchlistType())
+        .accountNumber(getAccountNumber())
+        .customerName(getCustomerName())
+        .build();
+  }
+
+  private String getAccountNumber() {
+    var accountNumber = alertedPartyData.getAccountNumber();
+    return StringUtils.isBlank(accountNumber) ? "" : accountNumber.toUpperCase().trim();
+  }
+
+  private String getCustomerName() {
+    return alertedPartyData.getNames().stream()
+        .map(String::trim)
+        .findFirst()
+        .orElse("");
   }
 }

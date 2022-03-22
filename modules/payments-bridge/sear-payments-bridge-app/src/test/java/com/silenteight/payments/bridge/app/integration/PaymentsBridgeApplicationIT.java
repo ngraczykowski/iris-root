@@ -140,7 +140,7 @@ class PaymentsBridgeApplicationIT {
   }
 
   private void assertUdsValuesCreated(String alertName) {
-    assertThat(mockDatasourceService.getCreatedFeatureInputsCount(alertName)).isEqualTo(10);
+    assertThat(mockDatasourceService.getCreatedFeatureInputsCount(alertName)).isEqualTo(9);
     assertThat(mockDatasourceService.getCreatedCategoryValuesCount(alertName)).isEqualTo(8);
   }
 

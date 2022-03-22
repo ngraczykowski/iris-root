@@ -1,10 +1,9 @@
-package com.silenteight.payments.bridge.datasource.agent.adapter;
+package com.silenteight.payments.bridge.datasource.agent.infrastructure;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import com.silenteight.datasource.agentinput.api.v1.AgentInputServiceGrpc;
-import com.silenteight.payments.bridge.datasource.agent.port.CreateAgentInputsClient;
 
 import io.grpc.Channel;
 import net.devh.boot.grpc.client.inject.GrpcClient;
@@ -28,9 +27,9 @@ class CreateAgentInputsClientConfiguration {
   @Bean
   CreateAgentInputsClient createAgentInputsClient() {
     var stub = AgentInputServiceGrpc
-        .newBlockingStub(categoriesDataChannel)
+        .newStub(categoriesDataChannel)
         .withWaitForReady();
 
-    return new CreateAgentInputsAdapter(stub, properties.getTimeout());
+    return new CreateAgentInputsClient(stub, properties.getTimeout());
   }
 }
