@@ -124,7 +124,6 @@ spec:
             - name: 'ES_PASSWORD'
               value:  {{ .Values.elasticRestPassword }}
       {{ if .Values.migration.sim.enabled }}
-      simMigration:
         - name: warehouse-sim-migration
           image: {{ .Values.migration.sim.image }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
