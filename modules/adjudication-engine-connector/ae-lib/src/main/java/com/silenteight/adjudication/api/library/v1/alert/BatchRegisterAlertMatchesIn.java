@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
+import java.time.OffsetDateTime;
 import java.util.Collection;
 
 @Builder
@@ -13,4 +14,5 @@ public class BatchRegisterAlertMatchesIn {
   @NonNull String alertId;
   @NonNull Integer alertPriority;
   @NonNull Collection<String> matchIds;
+  OffsetDateTime alertTime;
 }

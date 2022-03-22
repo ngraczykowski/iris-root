@@ -33,7 +33,8 @@ public class AlertGrpcAdapter implements AlertServiceClient {
 
     var grpcRequest = BatchCreateAlertsRequest.newBuilder()
         .addAllAlerts(alerts.stream()
-            .map(alert -> AlertGrpcMapper.toAlert(alert.getAlertId(), alert.getAlertPriority()))
+            .map(alert -> AlertGrpcMapper.toAlert(alert.getAlertId(), alert.getAlertPriority(),
+                alert.getAlertTime()))
             .collect(Collectors.toList()))
         .build();
 
@@ -65,7 +66,8 @@ public class AlertGrpcAdapter implements AlertServiceClient {
   public RegisterAlertsAndMatchesOut registerAlertsAndMatches(RegisterAlertsAndMatchesIn command) {
     var registerAlertsRequest = BatchCreateAlertsRequest.newBuilder()
         .addAllAlerts(command.getAlertsWithMatches().stream()
-            .map(alert -> AlertGrpcMapper.toAlert(alert.getAlertId(), alert.getAlertPriority()))
+            .map(alert -> AlertGrpcMapper.toAlert(alert.getAlertId(), alert.getAlertPriority(),
+                alert.getAlertTime()))
             .collect(Collectors.toList()))
         .build();
 

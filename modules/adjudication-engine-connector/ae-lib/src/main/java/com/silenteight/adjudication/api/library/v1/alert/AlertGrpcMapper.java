@@ -2,22 +2,28 @@ package com.silenteight.adjudication.api.library.v1.alert;
 
 import lombok.experimental.UtilityClass;
 
+import com.silenteight.adjudication.api.library.v1.util.TimeStampUtil;
 import com.silenteight.adjudication.api.v1.Alert;
 import com.silenteight.adjudication.api.v1.BatchCreateAlertMatchesResponse;
 import com.silenteight.adjudication.api.v1.BatchCreateAlertsResponse;
 import com.silenteight.adjudication.api.v1.Match;
 
+import com.google.protobuf.Timestamp;
+
+import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @UtilityClass
 public class AlertGrpcMapper {
 
-  public Alert toAlert(String alertId, Integer alertPriority) {
+  public Alert toAlert(String alertId, Integer alertPriority, OffsetDateTime alertTime) {
     return Alert.newBuilder()
         .setAlertId(alertId)
         .setPriority(alertPriority)
+        .mergeAlertTime(toTimestamp(alertTime))
         .build();
   }
 
@@ -63,5 +69,11 @@ public class AlertGrpcMapper {
         .alertId(alert.getAlertId())
         .name(alert.getName())
         .build();
+  }
+
+  private Timestamp toTimestamp(OffsetDateTime time) {
+    return Optional.ofNullable(time)
+        .map(TimeStampUtil::fromOffsetDateTime)
+        .orElse(null);
   }
 }
