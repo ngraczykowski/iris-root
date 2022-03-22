@@ -24,6 +24,8 @@ ext {
   // Others libraries
   //***********************************
   shedlockVersion = "4.27.0"
+  springBootVersion = "2.6.4"
+  springCloudVersion = "2021.0.1"
 }
 
 // @formatter:off
@@ -276,9 +278,9 @@ dependencies {
   implementation platform("io.projectreactor:reactor-bom:2020.0.13")
   implementation platform("com.silenteight.sep:sep-dependencies:$sepDependenciesVersion")
   annotationProcessor platform("com.silenteight.sep:sep-dependencies:$sepDependenciesVersion")
-  implementation platform("org.springframework.boot:spring-boot-dependencies:2.6.4")
-  annotationProcessor platform("org.springframework.boot:spring-boot-dependencies:2.6.4")
-  implementation platform("org.springframework.cloud:spring-cloud-dependencies:2020.0.4")
+  implementation platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
+  annotationProcessor platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
+  implementation platform("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion")
   implementation platform("io.sentry:sentry-bom:5.6.0")
 
   implementation platform("software.amazon.awssdk:bom:2.17.46")
