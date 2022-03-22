@@ -56,7 +56,6 @@ class AgentInputCreator:
             payload[cn.MATCH_IDS], payload[cn.ALERT_FIELD][cn.MATCH_RECORDS]
         ):
             feature_inputs = self.produce_feature_inputs(match)
-
             agent_input = AgentInput(
                 alert=alert.alert_name,
                 match=f"{alert.alert_name}/{match_id.match_name}",
@@ -82,18 +81,11 @@ class DobAgentFeatureInputProducer(Producer):
     feature_name = "features/dob"
 
     def produce_feature_input(self, payload):
+
         return DateFeatureInput(
             feature=self.feature_name,
-            alerted_party_dates=[
-                element
-                for elements in payload.get("ap_all_dobs_aggregated", [])
-                for element in elements
-            ],
-            watchlist_dates=[
-                element
-                for elements in payload.get("wl_all_dobs_aggregated", [])
-                for element in elements
-            ],
+            alerted_party_dates=[element for element in payload.get("ap_all_dobs_aggregated", [])],
+            watchlist_dates=[element for element in payload.get("wl_all_dobs_aggregated", [])],
             alerted_party_type=DateFeatureInput.EntityType.INDIVIDUAL,
             mode=DateFeatureInput.SeverityMode.NORMAL,
         )

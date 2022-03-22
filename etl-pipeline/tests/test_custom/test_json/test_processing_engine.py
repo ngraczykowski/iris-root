@@ -41,14 +41,15 @@ class TestEngine(unittest.TestCase):
         assert parties[0][cn.CONNECTED_FULL_NAME] == "Ultra Giga Pole"
         assert parties[1][cn.CONNECTED_FULL_NAME] == ""
 
-    def test_collect_party_values(self):
+    def test_collect_party_values_from_parties(self):
         payload = {}
         parties = deepcopy(EXAMPLE_PARTIES)
-        self.uut.collect_party_values(parties, payload)
+        self.uut.collect_party_values_from_parties(parties, payload)
         assert payload == {
             "all_connected_parties_names": ["", ""],
             "ALL_PARTY_TYPES": ["", ""],
             "ALL_PARTY_NAMES": ["Shaolin kung fu master", "John, Doe Doe"],
+            "ALL_TAX_IDS": ["1231413412312", "12097381208937"],
             "ALL_PARTY_DOBS": ["", "10/10/1969"],
             "ALL_PARTY_BIRTH_COUNTRIES": ["1341412312312", "13413401280"],
             "ALL_PARTY_CITIZENSHIP_COUNTRIES": ["", "Arabian Emirates"],

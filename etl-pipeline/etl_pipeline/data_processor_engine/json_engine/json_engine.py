@@ -32,14 +32,39 @@ from etl_pipeline.pattern_json import (
     SRC_SYS_ACCT_KEY,
 )
 
-COLLECTIVE_REPRESENTATION_MAP = {
+COLLECTIVE_REPRESENTATION_MAP_FOR_PARTY = {
     cn.ALL_CONNECTED_PARTIES_NAMES: cn.CONNECTED_FULL_NAME,
     cn.ALL_PARTY_TYPES: "partyType",
     cn.ALL_PARTY_NAMES: "partyName",
+    cn.ALL_TAX_IDS: "taxId",
     cn.ALL_PARTY_DOBS: "dobDate",
     cn.ALL_PARTY_BIRTH_COUNTRIES: "partyCountryOfBirth",
     cn.ALL_PARTY_CITIZENSHIP_COUNTRIES: "partyPrimaryCitizenshipCountry",
     cn.ALL_PARTY_RESIDENCY_COUNTRIES: "partyResidenceCountryCode",
+}
+
+COLLECTIVE_REPRESENTATION_MAP_FOR_FIELD = {
+    cn.ALL_PARTY_EMPLOYERS: cn.EMPLOYER,
+    cn.ALL_PARTY_COUNTRY: cn.COUNTRY,
+    cn.ALL_PARTY_COUNTRY1: cn.COUNTRY1,
+    cn.ALL_PARTY_ADDRESS1_COUNTRY: cn.ADDRESS1_COUNTRY,
+    cn.ALL_PARTY_COUNTRY1_CITIZENSHIP: cn.COUNTRY1_CITIZENSHIP,
+    cn.ALL_PARTY_COUNTRY2_CITIZENSHIP: cn.COUNTRY2_CITIZENSHIP,
+    cn.ALL_PARTY_COUNTRY_FORMATION1: cn.COUNTRY_FORMATION1,
+    cn.ALL_PARTY_COUNTRY_DOMICILE1: cn.COUNTRY_DOMICILE1,
+    cn.ALL_PARTY_COUNTRY_OF_INCORPORATION: cn.COUNTRY_OF_INCORPORATION,
+}
+
+COLLECTIVE_REPRESENTATION_MAP_FOR_FIELD = {
+    cn.ALL_PARTY_EMPLOYERS: cn.EMPLOYER,
+    cn.ALL_PARTY_COUNTRY: cn.COUNTRY,
+    cn.ALL_PARTY_COUNTRY1: cn.COUNTRY1,
+    cn.ALL_PARTY_ADDRESS1_COUNTRY: cn.ADDRESS1_COUNTRY,
+    cn.ALL_PARTY_COUNTRY1_CITIZENSHIP: cn.COUNTRY1_CITIZENSHIP,
+    cn.ALL_PARTY_COUNTRY2_CITIZENSHIP: cn.COUNTRY2_CITIZENSHIP,
+    cn.ALL_PARTY_COUNTRY_FORMATION1: cn.COUNTRY_FORMATION1,
+    cn.ALL_PARTY_COUNTRY_DOMICILE1: cn.COUNTRY_DOMICILE1,
+    cn.ALL_PARTY_COUNTRY_OF_INCORPORATION: cn.COUNTRY_OF_INCORPORATION,
 }
 
 
@@ -110,9 +135,19 @@ class JsonProcessingEngine(ProcessingEngine):
                 ]
             ).strip()
 
-    def collect_party_values(self, parties, payload):
-        for collective_field_name, field_name_to_collect in COLLECTIVE_REPRESENTATION_MAP.items():
+    def collect_party_values_from_parties(self, parties, payload):
+        for (
+            collective_field_name,
+            field_name_to_collect,
+        ) in COLLECTIVE_REPRESENTATION_MAP_FOR_PARTY.items():
             payload[collective_field_name] = [i.get(field_name_to_collect, "") for i in parties]
+
+    def collect_party_values_from_accounts(self, accounts, payload):
+        for (
+            collective_field_name,
+            field_name_to_collect,
+        ) in COLLECTIVE_REPRESENTATION_MAP_FOR_PARTY.items():
+            payload[collective_field_name] = [i.get(field_name_to_collect, "") for i in accounts]
 
     def load_raw_data(self, *args, **kwargs):
         return self.spark_instance.read_csv(*args, **kwargs)
@@ -244,13 +279,13 @@ class JsonProcessingEngine(ProcessingEngine):
     def set_triggered_tokens_discovery(self, payload, match, fields):
         TRIGGERS_MAP = {
             cn.ALL_PARTY_NAMES: payload[cn.ALL_PARTY_NAMES],
-            cn.ADDRESS1_COUNTRY: fields.get(cn.ADDRESS1_COUNTRY).value,
-            cn.ADDRESS1_LINE1: fields.get(cn.ADDRESS1_LINE1).value,
-            cn.ADDRESS1_LINE2: fields.get(cn.ADDRESS1_LINE2).value,
-            cn.ADDRESS1_LINE3: fields.get(cn.ADDRESS1_LINE3).value,
-            cn.ADDRESS1_LINE4: fields.get(cn.ADDRESS1_LINE4).value,
-            cn.ADDRESS1_LINE5: fields.get(cn.ADDRESS1_LINE5).value,
-            cn.CONCAT_ADDRESS: fields.get(cn.CONCAT_ADDRESS).value,
+            cn.ADDRESS1_COUNTRY: self.get_field_value_name(fields, cn.ADDRESS1_COUNTRY),
+            cn.ADDRESS1_LINE1: self.get_field_value_name(fields, cn.ADDRESS1_LINE1),
+            cn.ADDRESS1_LINE2: self.get_field_value_name(fields, cn.ADDRESS1_LINE2),
+            cn.ADDRESS1_LINE3: self.get_field_value_name(fields, cn.ADDRESS1_LINE3),
+            cn.ADDRESS1_LINE4: self.get_field_value_name(fields, cn.ADDRESS1_LINE4),
+            cn.ADDRESS1_LINE5: self.get_field_value_name(fields, cn.ADDRESS1_LINE5),
+            cn.CONCAT_ADDRESS: self.get_field_value_name(fields, cn.CONCAT_ADDRESS),
         }
         return self.discoverer.discover(json.loads(match[cn.WL_MATCHED_TOKENS]), TRIGGERS_MAP)
 
@@ -261,15 +296,6 @@ class JsonProcessingEngine(ProcessingEngine):
         }
 
         return agent_mapper
-
-    def prepare_aggregation_mapper(self, payload, match):
-        aggregation_mapper = {
-            "all_party_dobs": payload[cn.ALL_PARTY_DOBS],
-            "WL_DOB": match["WL_DOB"],
-            "dob_agent_ap": match["dob_agent_ap"],
-            "dob_agent_wl": match["dob_agent_wl"],
-        }
-        return aggregation_mapper
 
     def merge_to_target_col_from_source_cols_sql_expression(
         self, target_col, source_cols, mapper, return_array
@@ -300,3 +326,13 @@ class JsonProcessingEngine(ProcessingEngine):
                     target_col, source_cols, mapper, aggregated
                 )
                 match_record.update(sql_expr)
+
+    def collect_party_values_from_parties_from_fields(self, fields, payload):
+        for connected_key, value in COLLECTIVE_REPRESENTATION_MAP_FOR_FIELD.items():
+            payload[connected_key] = self.get_field_value_name(fields, value)
+
+    def get_field_value_name(self, fields, name):
+        try:
+            return fields.get(name, name).value
+        except AttributeError:
+            return None

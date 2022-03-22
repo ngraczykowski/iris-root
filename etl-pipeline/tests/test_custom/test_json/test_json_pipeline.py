@@ -2,9 +2,6 @@ import json
 import pickle
 import unittest
 
-from spark_manager.spark_client import SparkClient
-from spark_manager.spark_config import SPARK_CONF
-
 from etl_pipeline.config import columns_namespace as cn
 from etl_pipeline.config import pipeline_config
 from etl_pipeline.custom.ms.datatypes.field import InputRecordField  # noqa F401
@@ -14,7 +11,6 @@ from pipelines.ms.wm_address_pipeline import MSPipeline
 
 ALERT_INTERNAL_ID = cn.ALERT_INTERNAL_ID
 TEST_PATH = "tests/shared/test_ms_pipeline/"
-spark_instance = SparkClient(SPARK_CONF)
 
 
 class TestMSPipeline(unittest.TestCase):
@@ -24,7 +20,7 @@ class TestMSPipeline(unittest.TestCase):
         self.uut = MSPipeline(self.spark_engine, config=pipeline_config)
 
     def test_pipeline(self):
-        with open("notebooks/sample/alert_in_payload_format.json", "r") as file:
+        with open("notebooks/sample/wm_address_in_payload_format.json", "r") as file:
             payload = json.loads(file.read())
         payload_json = {key: payload[key] for key in sorted(payload)}
         payload_json = PayloadLoader().load_payload_from_json(payload_json)

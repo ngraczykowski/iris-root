@@ -17,7 +17,7 @@ from etl_pipeline.service.proto.etl_pipeline_pb2_grpc import EtlPipelineServiceS
 
 
 def load_alert():
-    with open("notebooks/sample/alert_in_payload_format.json", "r") as f:
+    with open("notebooks/sample/wm_address_in_payload_format.json", "r") as f:
         text = json.load(f)
         match1 = Match(match_id="0", match_name="mathes/0")
         match2 = Match(match_id="1", match_name="matches/1")
@@ -56,6 +56,7 @@ class TestGrpcServer(unittest.TestCase):
         assert response.etl_alerts[0].etl_status == FAILURE
 
     def test_empty_flow(self):
+
         channel = grpc.insecure_channel("localhost:9090")
         stub = EtlPipelineServiceStub(channel)
         response = stub.RunEtl(RunEtlRequest(alerts=[]))
