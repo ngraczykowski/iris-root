@@ -70,7 +70,7 @@ class AlertRegistrationInitialStep {
     return Label.of(ALERT_LABEL_SOLVING, ALERT_LABEL_SOLVING_CMAPI);
   }
 
-  @Timed
+  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
   void start(UUID alertId) {
     var alertData = alertMessageUseCase.findByAlertMessageId(alertId);
     var alertMessageDto = alertMessagePayloadUseCase.findByAlertMessageId(alertId);
