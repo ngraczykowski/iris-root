@@ -59,13 +59,13 @@ class UniversalDataSourceGrpcServiceConfiguration {
 
   @Bean
   @Profile("dev")
-  CategoryServiceClient categoryServiceClient() {
+  CategoryServiceClient categoryServiceClientMock() {
     return new CategoryServiceClientMock();
   }
 
   @Bean
   @Profile("dev")
-  CategoryValuesServiceClient categoryValuesServiceClient() {
+  CategoryValuesServiceClient categoryValuesServiceClientMock() {
     return new CategoryValuesServiceClientMock();
   }
 
