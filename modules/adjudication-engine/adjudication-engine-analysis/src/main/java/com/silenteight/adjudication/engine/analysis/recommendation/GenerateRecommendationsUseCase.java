@@ -11,6 +11,7 @@ import com.silenteight.adjudication.engine.analysis.recommendation.domain.*;
 import com.silenteight.adjudication.engine.comments.comment.domain.AlertContext;
 import com.silenteight.adjudication.engine.comments.comment.domain.MatchContext;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
+import com.silenteight.adjudication.engine.governance.GovernanceFacade;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 import com.silenteight.solving.api.v1.BatchSolveAlertsRequest;
 import com.silenteight.solving.api.v1.BatchSolveAlertsResponse;
@@ -32,7 +33,7 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 class GenerateRecommendationsUseCase {
 
-  private final AlertSolvingClient client;
+  private final GovernanceFacade governanceFacade;
   private final RecommendationDataAccess recommendationDataAccess;
   private final AnalysisFacade analysisFacade;
   private final GenerateCommentsUseCase generateCommentsUseCase;
@@ -70,7 +71,7 @@ class GenerateRecommendationsUseCase {
         break;
       }
 
-      var response = client.batchSolveAlerts(request.get());
+      var response = governanceFacade.batchSolveAlerts(request.get());
 
       var alertSolutions = createAlertSolutions(pendingAlerts, response);
 

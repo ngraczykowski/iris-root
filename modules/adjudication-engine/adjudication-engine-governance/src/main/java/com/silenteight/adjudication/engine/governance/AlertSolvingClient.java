@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.analysis.recommendation;
+package com.silenteight.adjudication.engine.governance;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

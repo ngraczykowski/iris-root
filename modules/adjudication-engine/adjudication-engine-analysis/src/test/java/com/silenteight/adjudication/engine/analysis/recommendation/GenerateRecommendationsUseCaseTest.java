@@ -6,6 +6,7 @@ import com.silenteight.adjudication.api.v1.RecommendationsGenerated.Recommendati
 import com.silenteight.adjudication.engine.analysis.analysis.AnalysisFacade;
 import com.silenteight.adjudication.engine.analysis.commentinput.CommentInputDataAccess;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.GenerateCommentsResponse;
+import com.silenteight.adjudication.engine.governance.GovernanceFacade;
 import com.silenteight.solving.api.v1.BatchSolveAlertsResponse;
 import com.silenteight.solving.api.v1.SolveAlertSolutionResponse;
 
@@ -28,7 +29,7 @@ class GenerateRecommendationsUseCaseTest {
 
   private GenerateRecommendationsUseCase generateRecommendationsUseCase;
   @Mock
-  private AlertSolvingClient client;
+  private GovernanceFacade client;
   @Mock
   private AnalysisFacade analysisFacade;
   @Mock

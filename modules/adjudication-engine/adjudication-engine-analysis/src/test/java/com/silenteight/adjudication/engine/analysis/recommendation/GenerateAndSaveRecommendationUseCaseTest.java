@@ -8,6 +8,7 @@ import com.silenteight.adjudication.engine.analysis.commentinput.CommentInputDat
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertSolution;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.GenerateCommentsResponse;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.SaveRecommendationRequest;
+import com.silenteight.adjudication.engine.governance.GovernanceFacade;
 import com.silenteight.solving.api.v1.BatchSolveAlertsResponse;
 import com.silenteight.solving.api.v1.SolveAlertSolutionResponse;
 
@@ -35,7 +36,7 @@ class GenerateAndSaveRecommendationUseCaseTest {
   @Mock
   private CreateRecommendationsUseCase createRecommendationsUseCase;
   @Mock
-  private AlertSolvingClient client;
+  private GovernanceFacade client;
   @Mock
   private AnalysisFacade analysisFacade;
   @Mock
@@ -68,11 +69,11 @@ class GenerateAndSaveRecommendationUseCaseTest {
     when(createRecommendationsUseCase.createRecommendations(new SaveRecommendationRequest(
         1L,
         true, true, List.of(AlertSolution.builder()
-            .alertId(1)
-            .recommendedAction("solved")
-            .matchIds(new long[] { 11 })
-            .matchContexts(new ObjectNode[] {})
-            .build()))))
+        .alertId(1)
+        .recommendedAction("solved")
+        .matchIds(new long[] { 11 })
+        .matchContexts(new ObjectNode[] {})
+        .build()))))
         .thenReturn(List.of(
             RecommendationInfo.newBuilder().build()));
 

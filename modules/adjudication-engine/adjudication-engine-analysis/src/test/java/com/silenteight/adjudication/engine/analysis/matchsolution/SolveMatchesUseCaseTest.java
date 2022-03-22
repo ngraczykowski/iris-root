@@ -1,5 +1,6 @@
 package com.silenteight.adjudication.engine.analysis.matchsolution;
 
+import com.silenteight.adjudication.engine.governance.GovernanceFacade;
 import com.silenteight.solving.api.v1.BatchSolveFeaturesResponse;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +17,7 @@ import static org.mockito.Mockito.*;
 class SolveMatchesUseCaseTest {
 
   @Mock
-  private PolicyStepsClient policyStepsClient;
+  private GovernanceFacade policyStepsClient;
   @Mock
   private CreateMatchSolutionsUseCase createMatchSolutionsUseCase;
   private SolveMatchesUseCase solveMatchesUseCase;

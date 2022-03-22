@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.analysis.matchsolution;
+package com.silenteight.adjudication.engine.governance;
 
 import lombok.Data;
 

@@ -11,6 +11,7 @@ dependencies {
   implementation project(":adjudication-engine-comments")
   implementation project(":adjudication-engine-dataset")
   implementation project(":adjudication-engine-features")
+  implementation project(":adjudication-engine-governance")
   implementation project(":proto-adjudication-engine-internal-protos")
 
   implementation libraries.adjudication_engine_api
