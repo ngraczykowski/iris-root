@@ -6,6 +6,8 @@ ext {
   //***********************************
   s8commonsVersion = "2.0.0"
   s8consulGrpcRegistrationVersion = "1.0.0"
+  s8agentsApiVersion = "0.21.0"
+  s8dataSourceApiVersion = "0.18.0"
 
   // TODO all of this should be specified in agent-dependencies-common (MI6-638)
   aspectjVersion = "1.9.7" //TODO use version from platform (MI6-638)
@@ -20,6 +22,8 @@ ext {
 // Silent Eight libraries
 libraries.s8_commons_core = "com.silenteight.commons:silenteight-commons-core:$s8commonsVersion"
 libraries.consul_grpc_registration = "com.silenteight.commons:consul-grpc-registration:$s8consulGrpcRegistrationVersion"
+libraries.s8_agents_api = "com.silenteight.agent.api:agents-api:$s8agentsApiVersion"
+libraries.s8_datasource_api = "com.silenteight.sens.date-source-api:data-source-api:$s8dataSourceApiVersion"
 
 // Spring
 libraries.spring_aop = "org.springframework:spring-aop"
@@ -129,6 +133,8 @@ libraries.spock_core = "org.spockframework:spock-core"
 libraries.test_containers = "org.testcontainers:testcontainers"
 libraries.test_containers_postgresql = "org.testcontainers:postgresql"
 libraries.test_containers_spock = "org.testcontainers:spock"
+libraries.testcontainers_rabbitmq = "org.testcontainers:rabbitmq"
+libraries.testcontainers_junit_jupiter = "org.testcontainers:junit-jupiter"
 
 // Monitoring
 libraries.sentry = "io.sentry:sentry"
