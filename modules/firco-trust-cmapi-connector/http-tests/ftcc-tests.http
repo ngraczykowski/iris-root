@@ -7,3 +7,12 @@ Accept: application/json
 Content-Type: application/json
 
 < ./requests/request-example-cmapi-trust.json
+
+### Callback
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/ftcc/callback
+Accept: application/json
+Content-Type: application/json
+
+< ./requests/callback/callback-response-example-cmapi-trust.json
