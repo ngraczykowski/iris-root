@@ -22,7 +22,7 @@ import spock.lang.Unroll
 import spock.util.concurrent.PollingConditions
 
 import static com.silenteight.fab.dataprep.adapter.incoming.AlertMessagesRabbitAmqpListener.QUEUE_NAME_PROPERTY
-import static com.silenteight.fab.dataprep.domain.Fixtures.MESSAGE
+import static com.silenteight.fab.dataprep.domain.Fixtures.*
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 @ActiveProfiles("dev")
@@ -56,13 +56,13 @@ class DataPrepIT extends BaseSpecificationIT {
     given:
     def conditions = new PollingConditions(timeout: 5, initialDelay: 0.2, factor: 1.25)
     def fedMessage = AlertMessageStored.newBuilder()
-        .setBatchName("batch-id")
-        .setMessageName("alert-id")
+        .setBatchName(BATCH_NAME)
+        .setMessageName(MESSAGE_NAME)
         .build()
     def alertMessagesDetailsResponse = AlertMessagesDetailsResponse.newBuilder()
         .addAlerts(
             AlertMessageDetails.newBuilder()
-                .setMessageName("alert-id")
+                .setMessageName(MESSAGE_NAME)
                 .setPayload(MESSAGE)
                 .build())
         .build()
@@ -75,14 +75,14 @@ class DataPrepIT extends BaseSpecificationIT {
           RegisterAlertsAndMatchesOut.builder()
               .registeredAlertWithMatches(
                   [RegisteredAlertWithMatchesOut.builder()
-                       .alertName('alert-name')
-                       .alertId('alert-id')
+                       .alertName(ALERT_NAME)
+                       .alertId(MESSAGE_NAME)
                        .alertStatus(AlertStatusOut.SUCCESS)
                        .registeredMatches(
                            [
                                RegisteredMatchOut.builder()
                                    .matchId(matchId)
-                                   .matchName('match-name')
+                                   .matchName(MATCH_NAME)
                                    .build()])
                        .build()])
               .build()
@@ -103,9 +103,9 @@ class DataPrepIT extends BaseSpecificationIT {
     conditions.eventually {
       MessageAlertMatchesFeatureInputFed msg = coreBridgeListener.getMessages().last()
       assert msg.getFeedingStatus() == expectedStatus
-      assert msg.getAlertId() == 'alert-name'
-      assert msg.getBatchId() == 'batch-id'
-      assert msg.getFedMatchesList().first().getMatchId() == 'match-name'
+      assert msg.getAlertId() == ALERT_NAME
+      assert msg.getBatchId() == BATCH_NAME
+      assert msg.getFedMatchesList().first().getMatchId() == MATCH_NAME
     }
 
     where:
@@ -116,13 +116,13 @@ class DataPrepIT extends BaseSpecificationIT {
     given:
     def conditions = new PollingConditions(timeout: 5, initialDelay: 0.2, factor: 1.25)
     def fedMessage = AlertMessageStored.newBuilder()
-        .setBatchName("batch-id")
-        .setMessageName("alert-id")
+        .setBatchName(BATCH_NAME)
+        .setMessageName(MESSAGE_NAME)
         .build()
     def alertMessagesDetailsResponse = AlertMessagesDetailsResponse.newBuilder()
         .addAlerts(
             AlertMessageDetails.newBuilder()
-                .setMessageName("alert-id")
+                .setMessageName(MESSAGE_NAME)
                 .setPayload('invalid payload')
                 .build())
         .build()
@@ -135,8 +135,8 @@ class DataPrepIT extends BaseSpecificationIT {
           RegisterAlertsAndMatchesOut.builder()
               .registeredAlertWithMatches(
                   [RegisteredAlertWithMatchesOut.builder()
-                       .alertName('alert-name')
-                       .alertId('alert-id')
+                       .alertName(ALERT_NAME)
+                       .alertId(MESSAGE_NAME)
                        .alertStatus(AlertStatusOut.FAILURE)
                        .build()])
               .build()
@@ -149,8 +149,8 @@ class DataPrepIT extends BaseSpecificationIT {
     conditions.eventually {
       MessageAlertMatchesFeatureInputFed msg = coreBridgeListener.getMessages().last()
       assert msg.getFeedingStatus() == FeedingStatus.FAILURE
-      assert msg.getAlertId() == 'alert-name'
-      assert msg.getBatchId() == 'batch-id'
+      assert msg.getAlertId() == ALERT_NAME
+      assert msg.getBatchId() == BATCH_NAME
     }
   }
 }

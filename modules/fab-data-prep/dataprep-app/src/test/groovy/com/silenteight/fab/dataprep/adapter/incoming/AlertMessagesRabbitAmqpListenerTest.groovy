@@ -14,6 +14,8 @@ import org.springframework.test.context.ActiveProfiles
 import spock.util.concurrent.PollingConditions
 
 import static com.silenteight.fab.dataprep.adapter.incoming.AlertMessagesRabbitAmqpListener.QUEUE_NAME_PROPERTY
+import static com.silenteight.fab.dataprep.domain.Fixtures.BATCH_NAME
+import static com.silenteight.fab.dataprep.domain.Fixtures.MESSAGE_NAME
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 @Import(IngestFlowRabbitMqTestConfig.class)
@@ -33,8 +35,8 @@ class AlertMessagesRabbitAmqpListenerTest extends BaseSpecificationIT {
     given:
     def conditions = new PollingConditions(timeout: 5, initialDelay: 0.2, factor: 1.25)
     def message = AlertMessageStored.newBuilder()
-        .setBatchName("batchId")
-        .setMessageName("alertId")
+        .setBatchName(BATCH_NAME)
+        .setMessageName(MESSAGE_NAME)
         .build()
 
     def receivedMessage = null

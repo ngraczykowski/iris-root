@@ -4,16 +4,14 @@ import com.silenteight.fab.dataprep.domain.model.AlertErrorDescription
 import com.silenteight.fab.dataprep.domain.model.ParsedAlertMessage
 import com.silenteight.fab.dataprep.domain.model.ParsedAlertMessage.Hit
 import com.silenteight.fab.dataprep.domain.model.RegisteredAlert
-import com.silenteight.registration.api.library.v1.AlertStatusOut
-import com.silenteight.registration.api.library.v1.RegisterAlertsAndMatchesOut
-import com.silenteight.registration.api.library.v1.RegisteredAlertWithMatchesOut
-import com.silenteight.registration.api.library.v1.RegisteredMatchOut
-import com.silenteight.registration.api.library.v1.RegistrationServiceClient
+import com.silenteight.registration.api.library.v1.*
 
 import spock.lang.Specification
 import spock.lang.Subject
 
-import static com.silenteight.fab.dataprep.domain.model.AlertStatus.*
+import static com.silenteight.fab.dataprep.domain.Fixtures.*
+import static com.silenteight.fab.dataprep.domain.model.AlertStatus.FAILURE
+import static com.silenteight.fab.dataprep.domain.model.AlertStatus.SUCCESS
 
 class RegistrationServiceTest extends Specification {
 
@@ -26,30 +24,43 @@ class RegistrationServiceTest extends Specification {
 
   def "registered alerts should have name"() {
     given:
-    def alerts = ['alertId': ParsedAlertMessage.builder()
-        .batchName('batchId')
-        .messageName('alertId')
-        .systemId('systemId')
+    def systemId = 'systemId'
+    def alerts = [(MESSAGE_NAME): ParsedAlertMessage.builder()
+        .batchName(BATCH_NAME)
+        .messageName(MESSAGE_NAME)
+        .systemId(systemId)
         .hits(
             [
-                'matchId': Hit.builder()
-                    .hitName('matchId')
+                (HIT_ID): Hit.builder()
+                    .hitName(HIT_ID)
                     .build()
             ])
         .build()
     ]
+    def request = RegisterAlertsAndMatchesIn.builder()
+        .batchId(BATCH_NAME)
+        .alertsWithMatches(
+            [AlertWithMatchesIn.builder()
+                 .alertId(MESSAGE_NAME)
+                 .status(AlertStatusIn.SUCCESS)
+                 .matches(
+                     [MatchIn.builder()
+                          .matchId(HIT_ID)
+                          .build()])
+                 .build()])
+        .build()
     def response = RegisterAlertsAndMatchesOut.builder()
         .registeredAlertWithMatches(
             [
                 RegisteredAlertWithMatchesOut.builder()
-                    .alertId('alertId')
-                    .alertName('alertName')
+                    .alertId(MESSAGE_NAME)
+                    .alertName(ALERT_NAME)
                     .alertStatus(AlertStatusOut.SUCCESS)
                     .registeredMatches(
                         [
                             RegisteredMatchOut.builder()
-                                .matchId('matchId')
-                                .matchName('matchName')
+                                .matchId(HIT_ID)
+                                .matchName(MATCH_NAME)
                                 .build()
                         ]
                     )
@@ -61,23 +72,34 @@ class RegistrationServiceTest extends Specification {
 
     then:
     registeredAlerts.each {
-      assert it.getAlertName() == 'alertName'
-      assert it.getSystemId() == 'systemId'
+      assert it.getAlertName() == ALERT_NAME
+      assert it.getBatchName() == BATCH_NAME
+      assert it.getSystemId() == systemId
       assert it.getStatus() == SUCCESS
-      it.matches.each {assert it.getMatchName() == 'matchName'}
+      it.matches.each {assert it.getMatchName() == MATCH_NAME}
     }
-    1 * registrationServiceClient.registerAlertsAndMatches(_) >> response
+    1 * registrationServiceClient.registerAlertsAndMatches(request) >> response
   }
 
   def "failed alert should have correct status"() {
     given:
-    def alerts = ['alertId']
+    def alerts = [MESSAGE_NAME]
+    def request = RegisterAlertsAndMatchesIn.builder()
+        .batchId(BATCH_NAME)
+        .alertsWithMatches(
+            [AlertWithMatchesIn.builder()
+                 .alertId(MESSAGE_NAME)
+                 .status(AlertStatusIn.FAILURE)
+                 .errorDescription(AlertErrorDescription.EXTRACTION.getDescription())
+                 .matches([])
+                 .build()])
+        .build()
     def response = RegisterAlertsAndMatchesOut.builder()
         .registeredAlertWithMatches(
             [
                 RegisteredAlertWithMatchesOut.builder()
-                    .alertId('alertId')
-                    .alertName('alertName')
+                    .alertId(MESSAGE_NAME)
+                    .alertName(ALERT_NAME)
                     .alertStatus(AlertStatusOut.FAILURE)
                     .registeredMatches([])
                     .build()
@@ -85,14 +107,15 @@ class RegistrationServiceTest extends Specification {
 
     when:
     List<RegisteredAlert> registeredAlerts = underTest
-        .registerFailedAlerts(alerts, 'batchId', AlertErrorDescription.EXTRACTION)
+        .registerFailedAlerts(alerts, BATCH_NAME, AlertErrorDescription.EXTRACTION)
 
     then:
     registeredAlerts.each {
-      assert it.getAlertName() == 'alertName'
+      assert it.getAlertName() == ALERT_NAME
+      assert it.getBatchName() == BATCH_NAME
       assert it.getStatus() == FAILURE
       assert it.getMatches() == []
     }
-    1 * registrationServiceClient.registerAlertsAndMatches(_) >> response
+    1 * registrationServiceClient.registerAlertsAndMatches(request) >> response
   }
 }

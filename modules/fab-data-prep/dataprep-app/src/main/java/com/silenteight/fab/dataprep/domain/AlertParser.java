@@ -69,7 +69,10 @@ public class AlertParser {
   }
 
   private static Hit convert(List<JsonNode> jsonNodes) {
-    return Hit.builder().hitName(UUID.randomUUID().toString()).payloads(jsonNodes).build();
+    return Hit.builder()
+        .hitName(UUID.randomUUID().toString())
+        .payloads(jsonNodes)
+        .build();
   }
 
   private static List<JsonNode> getHits(DocumentContext documentContext) {

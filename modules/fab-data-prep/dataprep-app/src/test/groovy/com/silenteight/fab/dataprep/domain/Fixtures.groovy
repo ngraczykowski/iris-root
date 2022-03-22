@@ -16,7 +16,8 @@ class Fixtures {
 
   static final String MATCH_NAME = 'alerts/1/matches/1'
   static final String ALERT_NAME = 'alerts/1'
-  static final String HIT_NAME = 'hits/d0bd7272-a12a-11ec-9ee7-7bf12518d571'
+  static final String HIT_ID = 'd0bd7272-a12a-11ec-9ee7-7bf12518d571'
+  static final String HIT_NAME = "hits/$HIT_ID"
   static final String MESSAGE_NAME = 'messages/e525c926-a12a-11ec-97fc-3f5de86f02ac'
   static final String BATCH_NAME = 'batches/031dafde-a12b-11ec-8e04-2f2fd89dfc3f'
   static final String SYSTEM_ID = 'TRAINING!60C2ED1B-58A1D68E-0326AE78-A8C7CC79'

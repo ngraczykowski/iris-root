@@ -1,5 +1,6 @@
 package com.silenteight.fab.dataprep.adapter.outgoing
 
+
 import com.silenteight.fab.dataprep.domain.model.AlertErrorDescription
 import com.silenteight.fab.dataprep.domain.model.UdsFedEvent
 import com.silenteight.fab.dataprep.domain.model.UdsFedEvent.FedMatch
@@ -12,6 +13,8 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate
 import spock.lang.Specification
 import spock.lang.Subject
 
+import static com.silenteight.fab.dataprep.domain.Fixtures.*
+
 class FeedingRabbitEventPublisherTest extends Specification {
 
   def rabbitTemplate = Mock(RabbitTemplate)
@@ -23,11 +26,11 @@ class FeedingRabbitEventPublisherTest extends Specification {
   def 'should publish MatchFeatureInputSetFed message'() {
     given:
     def event = UdsFedEvent.builder()
-        .batchId('batchId')
-        .alertId('alertId')
+        .batchId(BATCH_NAME)
+        .alertId(MESSAGE_NAME)
         .errorDescription(AlertErrorDescription.NONE)
         .feedingStatus(Status.SUCCESS)
-        .fedMatches([new FedMatch('matchId')])
+        .fedMatches([new FedMatch(MATCH_NAME)])
         .build()
 
     def message = MessageAlertMatchesFeatureInputFed.newBuilder()
