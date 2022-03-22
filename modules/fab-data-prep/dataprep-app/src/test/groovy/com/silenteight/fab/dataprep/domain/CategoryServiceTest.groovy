@@ -4,13 +4,8 @@ import com.silenteight.fab.dataprep.domain.category.FabCategory
 import com.silenteight.fab.dataprep.domain.feature.FeatureInputsCommand
 import com.silenteight.fab.dataprep.domain.model.RegisteredAlert
 import com.silenteight.fab.dataprep.domain.model.RegisteredAlert.Match
-import com.silenteight.fab.dataprep.infrastructure.grpc.CategoriesConfigurationProperties
 import com.silenteight.fab.dataprep.infrastructure.grpc.CategoriesConfigurationProperties.CategoryDefinition
-import com.silenteight.universaldatasource.api.library.category.v2.BatchCreateCategoriesIn
-import com.silenteight.universaldatasource.api.library.category.v2.CategoryServiceClient
-import com.silenteight.universaldatasource.api.library.category.v2.CategoryShared
-import com.silenteight.universaldatasource.api.library.category.v2.CategoryTypeShared
-import com.silenteight.universaldatasource.api.library.category.v2.CategoryValuesServiceClient
+import com.silenteight.universaldatasource.api.library.category.v2.*
 
 import org.spockframework.spring.SpringBean
 import org.springframework.beans.factory.annotation.Autowired
@@ -34,18 +29,18 @@ class CategoryServiceTest extends Specification {
 
   def "categories should be created"() {
     given:
-    Map<String, CategoryDefinition> categories = [
-        "categories/isSan"           : CategoryDefinition.builder()
-            .enabled(true)
-            .displayName("isSanction")
-            .categoryType("ANY_STRING")
-            .allowedValues([])
-            .multiValue(true)
-            .build(),
-        "categories/disabledCategory": CategoryDefinition.builder()
-            .enabled(false)
-            .build()
-    ]
+    FabCategory isSanFabCategory = Mock() {
+      getCategoryName() >> "categories/is_san"
+      getCategoryDefinition() >> CategoryDefinition.builder()
+          .enabled(true)
+          .displayName("isSanction")
+          .categoryType("ANY_STRING")
+          .allowedValues([])
+          .multiValue(true)
+          .build()
+    }
+
+    List<FabCategory> categories = [isSanFabCategory]
 
     when:
     underTest.createCategories(categories)
@@ -55,7 +50,7 @@ class CategoryServiceTest extends Specification {
         BatchCreateCategoriesIn.builder()
             .categories(
                 [CategoryShared.builder()
-                     .name("categories/isSan")
+                     .name("categories/is_san")
                      .displayName("isSanction")
                      .categoryType(CategoryTypeShared.ANY_STRING)
                      .allowedValues([])
@@ -66,18 +61,24 @@ class CategoryServiceTest extends Specification {
 
   def "should call all categories"() {
     given:
+    def categoryDefinition = CategoryDefinition.builder()
+        .categoryType("ANY_STRING")
+        .build()
     def categories = [
-        Mock(FabCategory),
-        Mock(FabCategory)
+        Mock(FabCategory) {
+          getCategoryDefinition() >> categoryDefinition
+          getCategoryName() >> "categories/category-1"
+        },
+        Mock(FabCategory) {
+          getCategoryDefinition() >> categoryDefinition
+          getCategoryName() >> "categories/category-2"
+        }
     ]
 
     def categoryService = new CategoryService(
         categoryServiceClient,
         categoryValuesServiceClient,
-        categories,
-        CategoriesConfigurationProperties.builder()
-            .categories([:])
-            .build()
+        categories
     )
 
     def command = FeatureInputsCommand.builder()
@@ -99,7 +100,7 @@ class CategoryServiceTest extends Specification {
     categoryService.createCategoryInputs(command)
 
     then:
-    categories.each {1 * it.buildCategory(_) }
+    categories.each {1 * it.buildCategory(_)}
     1 * categoryValuesServiceClient.createCategoriesValues(_) >> []
   }
 }

@@ -1,7 +1,9 @@
 package com.silenteight.fab.dataprep.domain.category;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.fab.dataprep.infrastructure.grpc.CategoriesConfigurationProperties.CategoryDefinition;
 import com.silenteight.universaldatasource.api.library.category.v2.CategoryValueIn;
 
 import java.util.UUID;
@@ -11,12 +13,10 @@ public class SanctionCategory implements FabCategory {
 
   private static final String SANCTION_TEXT = "SAN!";
 
+  @Getter
+  private final CategoryDefinition categoryDefinition;
+  @Getter
   private final String categoryName;
-
-  @Override
-  public String getCategoryName() {
-    return "categories/" + categoryName;
-  }
 
   @Override
   public CategoryValueIn buildCategory(

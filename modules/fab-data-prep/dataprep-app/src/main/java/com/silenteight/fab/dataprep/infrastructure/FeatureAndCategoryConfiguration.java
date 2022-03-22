@@ -4,6 +4,7 @@ import com.silenteight.fab.dataprep.domain.category.CustomerTypeCategory;
 import com.silenteight.fab.dataprep.domain.category.FabCategory;
 import com.silenteight.fab.dataprep.domain.category.SanctionCategory;
 import com.silenteight.fab.dataprep.domain.feature.*;
+import com.silenteight.fab.dataprep.infrastructure.grpc.CategoriesConfigurationProperties;
 
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
@@ -21,6 +22,8 @@ import java.util.List;
 public class FeatureAndCategoryConfiguration {
 
   public static final TypeRef<List<String>> LIST_OF_STRINGS = new TypeRef<>() {};
+
+  private static final String CATEGORY_PREFIX = "categories/";
 
   @Bean
   ParseContext parseContext() {
@@ -88,13 +91,18 @@ public class FeatureAndCategoryConfiguration {
 
   @Bean
   @ConditionalOnProperty("feeding.categories.is_san.enabled")
-  FabCategory sanctionCategory() {
-    return new SanctionCategory("is_san");
+  FabCategory sanctionCategory(CategoriesConfigurationProperties configurationProperties) {
+    String categoryName = "is_san";
+    return new SanctionCategory(
+        configurationProperties.getCategories().get(categoryName), CATEGORY_PREFIX + categoryName);
   }
 
   @Bean
   @ConditionalOnProperty("feeding.categories.customerType.enabled")
-  FabCategory customerTypeCategory() {
-    return new CustomerTypeCategory("customerType");
+  FabCategory customerTypeCategory(CategoriesConfigurationProperties configurationProperties) {
+    String categoryName = "customerType";
+    return new CustomerTypeCategory(
+        configurationProperties.getCategories().get(categoryName), CATEGORY_PREFIX + categoryName
+    );
   }
 }

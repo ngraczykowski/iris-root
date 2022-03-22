@@ -6,14 +6,11 @@ import com.silenteight.fab.dataprep.domain.category.BuildCategoryCommand;
 import com.silenteight.fab.dataprep.domain.category.FabCategory;
 import com.silenteight.fab.dataprep.domain.feature.FeatureInputsCommand;
 import com.silenteight.fab.dataprep.domain.model.RegisteredAlert;
-import com.silenteight.fab.dataprep.infrastructure.grpc.CategoriesConfigurationProperties;
-import com.silenteight.fab.dataprep.infrastructure.grpc.CategoriesConfigurationProperties.CategoryDefinition;
 import com.silenteight.universaldatasource.api.library.category.v2.*;
 
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
@@ -28,17 +25,19 @@ class CategoryService {
   CategoryService(
       CategoryServiceClient categoryServiceClient,
       CategoryValuesServiceClient categoryValuesServiceClient,
-      List<FabCategory> categories,
-      CategoriesConfigurationProperties categoriesConfigurationProperties) {
+      List<FabCategory> categories) {
     this.categoryServiceClient = categoryServiceClient;
     this.categoryValuesServiceClient = categoryValuesServiceClient;
     this.categories = categories;
 
-    createCategories(categoriesConfigurationProperties.getCategories());
+    createCategories(categories);
   }
 
-  final void createCategories(Map<String, CategoryDefinition> categories) {
-    log.info("Creating categories {}", categories);
+  final void createCategories(List<FabCategory> categories) {
+    log.info("Creating categories {}", categories.stream()
+        .map(FabCategory::getCategoryName)
+        .collect(toList()));
+
     BatchCreateCategoriesIn batchCreateCategoriesIn = BatchCreateCategoriesIn.builder()
         .categories(getCategoryShareds(categories))
         .build();
@@ -46,16 +45,15 @@ class CategoryService {
   }
 
   private static List<CategoryShared> getCategoryShareds(
-      Map<String, CategoryDefinition> categories) {
-    return categories.entrySet()
-        .stream()
-        .filter(entry -> entry.getValue().isEnabled())
+      List<FabCategory> categories) {
+    return categories.stream()
         .map(entry -> CategoryShared.builder()
-            .name(entry.getKey())
-            .displayName(entry.getValue().getDisplayName())
-            .categoryType(CategoryTypeShared.valueOf(entry.getValue().getCategoryType()))
-            .allowedValues(entry.getValue().getAllowedValues())
-            .multiValue(entry.getValue().isMultiValue())
+            .name(entry.getCategoryName())
+            .displayName(entry.getCategoryDefinition().getDisplayName())
+            .categoryType(
+                CategoryTypeShared.valueOf(entry.getCategoryDefinition().getCategoryType()))
+            .allowedValues(entry.getCategoryDefinition().getAllowedValues())
+            .multiValue(entry.getCategoryDefinition().isMultiValue())
             .build())
         .collect(toList());
   }
