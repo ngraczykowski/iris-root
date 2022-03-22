@@ -1,0 +1,16 @@
+#-------------------------------------------------------------------------------------------------
+# Consul Service Discovery
+#-------------------------------------------------------------------------------------------------
+spring:
+  cloud:
+    consul:
+      enabled: true
+      config:
+        enabled: false
+      discovery:
+        enabled: true
+        register: false
+        register-health-check: false
+      service-registry:
+        auto-registration:
+          enabled: false

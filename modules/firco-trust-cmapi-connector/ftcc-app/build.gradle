@@ -89,6 +89,7 @@ dependencies {
 
   //Consul
   runtimeOnly libraries.spring_cloud_consul_discovery
+  runtimeOnly libraries.spring_cloud_starter_consul_config
 
   testImplementation libraries.silenteight_sep_base_testing
 

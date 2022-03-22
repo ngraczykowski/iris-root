@@ -61,6 +61,13 @@ spring:
   application:
     name: ftcc
 
+  ### Spring Cloud
+  cloud:
+    consul:
+      enabled: false
+      config:
+        enabled: false
+
   rabbitmq:
     host: ${ftcc.rabbitmq.host}
     port: ${ftcc.rabbitmq.port}
