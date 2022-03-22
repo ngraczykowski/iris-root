@@ -1,6 +1,8 @@
 package com.silenteight.connector.ftcc.callback.response;
 
+import com.silenteight.connector.ftcc.callback.response.domain.MessageEntity;
 import com.silenteight.connector.ftcc.callback.response.domain.MessageQuery;
+import com.silenteight.connector.ftcc.common.resource.MessageResource;
 import com.silenteight.proto.registration.api.v1.MessageBatchCompleted;
 import com.silenteight.recommendation.api.library.v1.AlertOut;
 import com.silenteight.recommendation.api.library.v1.RecommendationOut;
@@ -14,10 +16,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static java.util.UUID.randomUUID;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -40,30 +42,35 @@ class ResponseProcessorTest {
   @Test
   void receiving2SolvedAlerts() {
 
+    var collect =
+        IntStream.range(0, 2)
+            .mapToObj(alertId -> RecommendationOut
+                .builder()
+                .recommendationComment("PTP")
+                .alert(AlertOut.builder().id("messages/" + randomUUID()).build())
+                .build())
+            .collect(Collectors.toList());
     var responseProcessor = new ResponseProcessor(
-        responseCreator, recommendationSender, (analysisId) -> {
-      var collect =
-          IntStream.range(0, 2)
-              .mapToObj(alertId -> RecommendationOut
-                  .builder()
-                  .recommendationComment("PTP")
-                  .alert(AlertOut.builder().id("alerts/" + alertId).build())
-                  .build())
-              .collect(Collectors.toList());
-      return RecommendationsOut.builder()
-          .recommendations(collect)
-          .build();
-    }, messageRepository);
-    var uuid = UUID.randomUUID();
+        responseCreator, recommendationSender, (analysisId) -> RecommendationsOut.builder()
+        .recommendations(collect)
+        .build(), messageRepository);
+
+    when(messageRepository.findByBatchId(any())).thenReturn(
+        collect.stream()
+            .map(recommendationOut -> MessageEntity.builder().id(
+                MessageResource.fromResourceName(recommendationOut.getAlert().getId())).build())
+            .collect(
+                Collectors.toList()));
     var messageBatchCompleted =
         MessageBatchCompleted
             .newBuilder()
-            .setBatchId(uuid.toString())
-            .addAlertIds("alerts/1")
-            .addAlertIds("alerts/2")
+            .setBatchId(randomUUID().toString())
+            .addAlertIds("messages/1")
+            .addAlertIds("messages/2")
+            .setAnalysisId("analysis/1")
             .build();
 
     Assertions.assertAll(() -> responseProcessor.process(messageBatchCompleted));
-    verify(responseCreator, atLeast(2)).create(anyList(), any());
+    verify(responseCreator, atLeast(2)).create(any(), any());
   }
 }

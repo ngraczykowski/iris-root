@@ -8,7 +8,6 @@ import com.silenteight.connector.ftcc.callback.response.domain.MessageEntity;
 import com.silenteight.connector.ftcc.common.dto.input.NextStatusDto;
 import com.silenteight.connector.ftcc.common.dto.output.*;
 import com.silenteight.recommendation.api.library.v1.RecommendationOut;
-import com.silenteight.recommendation.api.library.v1.RecommendationsOut;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
@@ -29,12 +28,7 @@ class ResponseCreator {
 
   private final MapStatusUseCase mapStatusUseCase;
 
-  public ClientRequestDto create(
-      List<MessageEntity> messageEntities,
-      RecommendationsOut recommendations) {
-    // FIXME: get(0)
-    MessageEntity messageEntity = messageEntities.get(0);
-    RecommendationOut recommendation = recommendations.getRecommendations().get(0);
+  public ClientRequestDto create(MessageEntity messageEntity, RecommendationOut recommendation) {
     return mapToAlertDecision(messageEntity, recommendation);
   }
 

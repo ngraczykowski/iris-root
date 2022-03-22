@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static java.util.UUID.fromString;
 
@@ -38,12 +39,12 @@ class MessageQueryImpl implements MessageQuery {
   private final ObjectMapper objectMapper;
 
   @Override
-  public List<MessageEntity> findByBatchId(String batchId) {
-    return jdbcTemplate.query(SELECT_QUERY, Map.of("batchId", fromString(batchId)),
+  public List<MessageEntity> findByBatchId(UUID batchId) {
+    return jdbcTemplate.query(SELECT_QUERY, Map.of("batchId", batchId),
         (rs, rowNum) -> deserialize(batchId, rs));
   }
 
-  private MessageEntity deserialize(String batchId, ResultSet rs) throws SQLException {
+  private MessageEntity deserialize(UUID batchId, ResultSet rs) throws SQLException {
     return MessageEntity.builder()
         .id(fromString(rs.getString("message_id")))
         .batchId(batchId)

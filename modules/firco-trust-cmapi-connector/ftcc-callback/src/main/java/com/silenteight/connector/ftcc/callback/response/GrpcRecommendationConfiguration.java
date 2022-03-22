@@ -2,10 +2,7 @@ package com.silenteight.connector.ftcc.callback.response;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.recommendation.api.library.v1.RecommendationOut;
-import com.silenteight.recommendation.api.library.v1.RecommendationServiceClient;
-import com.silenteight.recommendation.api.library.v1.RecommendationsIn;
-import com.silenteight.recommendation.api.library.v1.RecommendationsOut;
+import com.silenteight.recommendation.api.library.v1.*;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +31,7 @@ class GrpcRecommendationConfiguration {
               .recommendedAt(OffsetDateTime.now())
               .recommendationComment("test comment")
               .recommendedAction("PTP")
+              .alert(AlertOut.builder().id("message/").build())
               .build())
           .collect(Collectors.toList());
       return RecommendationsOut.builder()

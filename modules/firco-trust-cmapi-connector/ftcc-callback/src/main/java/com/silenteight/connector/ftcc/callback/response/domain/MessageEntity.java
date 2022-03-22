@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class MessageEntity {
 
   private UUID id;
-  private String batchId;
+  private UUID batchId;
   private List<NextStatusEntity> nextStatuses;
   private StatusEntity currentStatus;
 
