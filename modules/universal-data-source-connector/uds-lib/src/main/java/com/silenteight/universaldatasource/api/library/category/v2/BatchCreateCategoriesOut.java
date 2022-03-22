@@ -1,6 +1,5 @@
 package com.silenteight.universaldatasource.api.library.category.v2;
 
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Value;
 
@@ -10,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Value
-@Builder(access = AccessLevel.PACKAGE)
+@Builder
 public class BatchCreateCategoriesOut {
 
   @Builder.Default
