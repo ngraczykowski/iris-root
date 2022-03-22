@@ -34,7 +34,6 @@ import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
 
 import java.io.InputStream;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +42,7 @@ import java.util.zip.ZipInputStream;
 
 import static com.silenteight.warehouse.report.ReportFixture.*;
 import static java.sql.Timestamp.valueOf;
+import static java.time.OffsetDateTime.parse;
 import static java.util.Set.of;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.*;
@@ -126,6 +126,31 @@ class ReportGenerationIT {
 
   @Test
   @WithMockUser(username = "user", authorities = COUNTRY_GROUP)
+  void shouldIncludeOnlyAlertsWithSpecificRecommendationDate() {
+    var payload = Map.of(PAYLOAD_KEY_COUNTRY, COUNTRY_PL);
+    storeData(DISCRIMINATOR_1, NAME_1, toLocalDateTime(TIMESTAMP_FROM).minusSeconds(1), payload);
+    storeData(DISCRIMINATOR_2, NAME_2, RECOMMENDATION_DATE, payload);
+    storeData(DISCRIMINATOR_3, NAME_3, toLocalDateTime(TIMESTAMP_TO).plusSeconds(1), payload);
+    when(countryPermissionService.getCountries(of(COUNTRY_GROUP)))
+        .thenReturn(of(COUNTRY_PL));
+
+    Long instanceId = createReport();
+    await()
+        .atMost(5, SECONDS)
+        .until(() -> isReportCreated(instanceId));
+    String reportContent = getReportContent(instanceId);
+
+    assertThat(reportContent)
+        .hasLineCount(2)
+        .contains(NAME_2);
+  }
+
+  private LocalDateTime toLocalDateTime(String dateTime) {
+    return parse(dateTime).toLocalDateTime();
+  }
+
+  @Test
+  @WithMockUser(username = "user", authorities = COUNTRY_GROUP)
   void shouldZipReportWhenHasMoreRowsThanRowsLimitParameter() {
     int givenRowsLimit = 1000;
     int givenReportRowsCount = 1200;
@@ -150,13 +175,13 @@ class ReportGenerationIT {
 
   @Test
   @WithMockUser(username = "user", authorities = COUNTRY_GROUP)
-  void shouldNotGenerateReportWhenNotConfigured() {
+  void shouldNotGenerateReportWhenReportConfigurationNotPresent() {
     when(countryPermissionService.getCountries(of(COUNTRY_GROUP)))
         .thenReturn(of(COUNTRY_PL));
 
     assertThatThrownBy(() -> createReportRestController.createReport(
-        OffsetDateTime.parse(TIMESTAMP_FROM),
-        OffsetDateTime.parse(TIMESTAMP_TO),
+        parse(TIMESTAMP_FROM),
+        parse(TIMESTAMP_TO),
         REPORT_TYPE,
         REPORT_NAME_NOT_CONF))
         .isInstanceOf(ReportNotAvailableException.class);
@@ -165,8 +190,8 @@ class ReportGenerationIT {
   @SneakyThrows
   private Long createReport() {
     ResponseEntity<Void> report = createReportRestController.createReport(
-        OffsetDateTime.parse(TIMESTAMP_FROM),
-        OffsetDateTime.parse(TIMESTAMP_TO),
+        parse(TIMESTAMP_FROM),
+        parse(TIMESTAMP_TO),
         REPORT_TYPE,
         REPORT_NAME);
 
@@ -183,7 +208,7 @@ class ReportGenerationIT {
 
   private boolean isReportCreated(Long reportId) {
     return Status.OK == reportStatusRestController.checkReportStatus(
-            REPORT_TYPE, REPORT_NAME, reportId).getBody()
+        REPORT_TYPE, REPORT_NAME, reportId).getBody()
         .getStatus();
   }
 

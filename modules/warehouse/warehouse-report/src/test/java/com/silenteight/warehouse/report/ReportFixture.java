@@ -26,8 +26,10 @@ public final class ReportFixture {
 
   public static final String DISCRIMINATOR_1 = "TEST[AAAGLOBAL186R1038]_81596ace";
   public static final String DISCRIMINATOR_2 = "TEST[AAAGLOBAL186R1038]_3218Arra";
+  public static final String DISCRIMINATOR_3 = "TEST[AAAGLOBAL186R1038]_1113ACca";
   public static final String NAME_1 = "alerts/123";
   public static final String NAME_2 = "alerts/456";
+  public static final String NAME_3 = "alerts/789";
   public static final LocalDateTime RECOMMENDATION_DATE =
       parse("2021-01-12T10:00:37.000Z").atZoneSameInstant(UTC).toLocalDateTime();
   public static final String PAYLOAD_KEY_COUNTRY = "country";

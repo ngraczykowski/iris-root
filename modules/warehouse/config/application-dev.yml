@@ -107,7 +107,7 @@ warehouse.reports.v2:
                (payload ->> 'id') AS "Alert Client ID",
                (payload ->> 'status') AS "Alert Status",
                discriminator AS "Alert S8 ID"
-        FROM warehouse_alert WHERE recommendation_date BETWEEN DATE '${from}' AND DATE '${to}'
+        FROM warehouse_alert WHERE recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
         AND (payload ->> 's8_lobCountryCode') IN (${countries})
     - name: AI_REASONING
       type: simulation
@@ -154,7 +154,7 @@ warehouse.reports.v2:
                (payload ->> 'status') AS "Alert Status",
                discriminator AS "S8 Alert ID"
         FROM warehouse_alert
-        WHERE (recommendation_date BETWEEN DATE '${from}' AND DATE '${to}')
+        WHERE (recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}')
         AND (payload ->> 's8_lobCountryCode') IN (${countries})
         AND (payload ->> 'analyst_decision') IN ('analyst_decision_false_positive', 'analyst_decision_true_positive')
     - name: ACCURACY
@@ -222,7 +222,7 @@ warehouse.reports.v2:
                count(CASE WHEN (payload ->> 'qa.level-0.state') = 'qa_decision_FAILED' THEN 1 END ) AS "QA decision False Positive",
                count(CASE WHEN (payload ->> 'analyst_decision') = 'analyst_decision_true_positive' THEN 1 END ) AS "Analyst decision True Positive",
                count(CASE WHEN (payload ->> 'analyst_decision') = 'analyst_decision_false_positive' THEN 1 END ) AS "Analyst decision False Positive"
-        FROM warehouse_alert WHERE recommendation_date BETWEEN DATE '${from}' AND DATE '${to}'
+        FROM warehouse_alert WHERE recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
         GROUP BY (payload ->> 'fvSignature'),
                (payload ->> 'policyId'),
                (payload ->> 'policy_title'),
@@ -336,7 +336,7 @@ warehouse.reports.v2:
                          payload ->> 'DN_CASE.ExtendedAttribute5' list_type
                   FROM warehouse_alert
                   WHERE payload ->> 'status' = 'LEARNING_COMPLETED'
-                        AND recommendation_date BETWEEN DATE '${from}' AND DATE '${to}'
+                        AND recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
                   GROUP BY payload ->> 's8_lobCountryCode',
                            payload ->> 'categories/hitType',
                            payload ->> 's8_recommendation',
@@ -442,7 +442,7 @@ warehouse.reports.v2:
         SUM(CASE WHEN payload ->> 's8_recommendation' IN ('ACTION_FALSE_POSITIVE', 'ACTION_POTENTIAL_TRUE_POSITIVE') THEN 1 END) AS count_alerts_solved,
         SUM(CASE WHEN payload ->> 's8_recommendation' IN ('ACTION_FALSE_POSITIVE', 'ACTION_POTENTIAL_TRUE_POSITIVE', 'ACTION_INVESTIGATE') THEN 1 END) AS count_alerts_received
         FROM warehouse_alert
-        WHERE recommendation_date BETWEEN DATE '${from}' AND DATE '${to}' AND payload ->> 's8_recommendation'
+        WHERE recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}' AND payload ->> 's8_recommendation'
         IN ('ACTION_FALSE_POSITIVE', 'ACTION_POTENTIAL_TRUE_POSITIVE', 'ACTION_INVESTIGATE')
         GROUP BY date
     - name: QA_OUTCOME
@@ -471,7 +471,7 @@ warehouse.reports.v2:
                wa.payload ->> 's8_lobCountryCode'           AS "Country LoB"
         FROM warehouse_alert wa
         WHERE
-               recommendation_date BETWEEN DATE '${from}' AND DATE '${to}' AND
+               recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}' AND
                wa.payload ->> 'qa.level-0.NEW.timestamp' IS NOT NULL
     - name: QA_SAMPLE
       type: production
@@ -485,6 +485,6 @@ warehouse.reports.v2:
                wa.payload ->> 's8_lobCountryCode'           AS "Country LoB"
         FROM warehouse_alert wa
         WHERE
-               recommendation_date BETWEEN DATE '${from}' AND DATE '${to}' AND
+               recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}' AND
                wa.payload ->> 'qa.level-0.NEW.timestamp' IS NOT NULL
 
