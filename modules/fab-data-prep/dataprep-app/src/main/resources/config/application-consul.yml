@@ -1,0 +1,18 @@
+#-------------------------------------------------------------------------------------------------
+# Consul Service Discovery
+#-------------------------------------------------------------------------------------------------
+spring:
+  cloud:
+    consul:
+      enabled: true
+      config:
+        enabled: false
+      discovery:
+        enabled: true
+        register: false
+        register-health-check: false
+        #server-list-query-tags:
+        #  ftcc: grpc
+      service-registry:
+        auto-registration:
+          enabled: false

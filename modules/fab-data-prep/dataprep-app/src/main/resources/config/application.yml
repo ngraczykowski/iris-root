@@ -2,6 +2,9 @@ serp.show-env: true
 
 server:
   port: 8082
+  servlet:
+    context-path: /rest/${spring.application.name}
+
 #TODO: Without that SilentEightImplicitNamingStrategy throws error
 spring:
   application:
@@ -13,6 +16,13 @@ spring:
     password: dev
     listener:
       type: simple
+
+  ### Spring Cloud
+  cloud:
+    consul:
+      enabled: false
+      config:
+        enabled: false
 
 
 amqp:

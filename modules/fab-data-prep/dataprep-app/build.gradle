@@ -30,6 +30,8 @@ dependencies {
   runtimeOnly libraries.grpc_brave_instrumentation
   runtimeOnly libraries.spring_cloud_starter_sleuth
   runtimeOnly libraries.spring_cloud_consul_discovery
+  runtimeOnly libraries.spring_cloud_starter_consul_config
+
 
   testImplementation libraries.spring_boot_test
   testImplementation libraries.spring_test

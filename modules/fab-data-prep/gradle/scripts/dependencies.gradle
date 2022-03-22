@@ -33,6 +33,7 @@ libraries.spring_boot_starter_web = [group: 'org.springframework.boot', name: 's
 libraries.spring_cloud_starter_sleuth = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth']
 libraries.spring_cloud_dependencies = [group: 'org.springframework.cloud', name: 'spring-cloud-dependencies']
 libraries.spring_cloud_consul_discovery = [group: 'org.springframework.cloud', name: 'spring-cloud-consul-discovery']
+libraries.spring_cloud_starter_consul_config = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-consul-config']
 
 libraries.hibernate_validator = [group: 'org.hibernate.validator', name:'hibernate-validator']
 libraries.jakarta_validation_api = [group: 'jakarta.validation', name: 'jakarta.validation-api']
