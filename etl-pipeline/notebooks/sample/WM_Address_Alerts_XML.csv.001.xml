@@ -254,3 +254,131 @@
     </matchRecord>
   </matchRecords>
 </alert>
+<?xml version="1.0" encoding="UTF-8" ?>
+<alert>
+  <headerInfo>
+    <uniqueCustomerId>R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480</uniqueCustomerId>
+    <datasetId>1044</datasetId>
+    <datasetName>R_US_Active_Address</datasetName>
+    <masterId>72951854</masterId>
+    <currentVersionId>122438658</currentVersionId>
+    <stopDescriptors>
+      <stopDescriptor>
+        <name>Joe Doe</name>
+      </stopDescriptor>
+    </stopDescriptors>
+    <firstVersionCreatedDt>2020-01-08T09:31:30.264-05:00</firstVersionCreatedDt>
+    <lastVersionUpdatedDt>2020-01-08T09:31:30.264-05:00</lastVersionUpdatedDt>
+    <masterVersion>412740c151535f0756e8dbec7440b726c7a3e135</masterVersion>
+    <inputVersionSample>R_US_Active_Address_A05003324172_2020-01-07-07.06.</inputVersionSample>
+  </headerInfo>
+  <inputRecordHist>
+    <inputRecord>
+      <version>412740c151535f0756e8dbec7440b726c7a3e135</version>
+      <createdDate>01/08/20</createdDate>
+      <field name="SOURCE_REF" isScreenable="false">
+        <value>R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480</value>
+        <sortOrder>1</sortOrder>
+      </field>
+      <field name="UNIQUE_KEY" isScreenable="false">
+        <value>A05003324172</value>
+        <sortOrder>2</sortOrder>
+      </field>
+      <field name="BARCODE" isScreenable="false">
+        <sortOrder>3</sortOrder>
+      </field>
+      <field name="ADDRESS_TYPE" isScreenable="false">
+        <value>Plating Address</value>
+        <sortOrder>4</sortOrder>
+      </field>
+      <field name="CARE_OF_TEXT" isScreenable="true">
+        <sortOrder>5</sortOrder>
+      </field>
+      <field name="ATTENTION_TO_TEXT" isScreenable="true">
+        <sortOrder>6</sortOrder>
+      </field>
+      <field name="ADDRESS1_LINE1" isScreenable="false">
+        <value>Joe Black &amp;</value>
+        <sortOrder>7</sortOrder>
+      </field>
+      <field name="ADDRESS1_LINE2" isScreenable="false">
+        <value>Jane Doe AA BBB</value>
+        <sortOrder>8</sortOrder>
+      </field>
+      <field name="ADDRESS1_LINE3" isScreenable="false">
+        <value>111 A 11TH ST AAA 1A</value>
+        <sortOrder>9</sortOrder>
+      </field>
+      <field name="ADDRESS1_LINE4" isScreenable="false">
+        <value>New Jersey NJ 10011</value>
+        <sortOrder>10</sortOrder>
+      </field>
+      <field name="ADDRESS1_LINE5" isScreenable="false">
+        <sortOrder>11</sortOrder>
+      </field>
+      <field name="ADDRESS1_LINE6" isScreenable="false">
+        <sortOrder>12</sortOrder>
+      </field>
+      <field name="CONCAT_ADDRESS" isScreenable="true">
+        <value>Joe Black &amp; Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ</value>
+        <sortOrder>13</sortOrder>
+      </field>
+      <field name="ADDRESS1_CITY" isScreenable="true">
+        <sortOrder>14</sortOrder>
+      </field>
+      <field name="ADDRESS1_STATE" isScreenable="true">
+        <sortOrder>15</sortOrder>
+      </field>
+      <field name="ADDRESS1_PROVINCE" isScreenable="true">
+        <sortOrder>16</sortOrder>
+      </field>
+      <field name="ADDRESS1_POSTALCODE" isScreenable="true">
+        <sortOrder>17</sortOrder>
+      </field>
+      <field name="ADDRESS1_ZIP5" isScreenable="true">
+        <sortOrder>18</sortOrder>
+      </field>
+      <field name="ADDRESS1_ZIP4" isScreenable="true">
+        <sortOrder>19</sortOrder>
+      </field>
+      <field name="ADDRESS1_COUNTRY" isScreenable="true">
+        <value>UNITED STATES OF AMERICA</value>
+        <sortOrder>20</sortOrder>
+      </field>
+      <field name="ADDRESS1_COUNTRYCODE" isScreenable="true">
+        <value>USA</value>
+        <sortOrder>21</sortOrder>
+      </field>
+      <field name="ADDRESS1_FOREIGNDOMESTICCODE" isScreenable="true">
+        <value>DOMESTIC</value>
+        <sortOrder>22</sortOrder>
+      </field>
+      <status>A</status>
+      <masterId>72951854</masterId>
+      <versionId>122438658</versionId>
+      <uniqueCustId>R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480</uniqueCustId>
+    </inputRecord>
+  </inputRecordHist>
+  <matchRecords>
+    <matchRecord>
+      <masterId>72951854</masterId>
+      <accountSeq>1</accountSeq>
+      <datasetId>1044</datasetId>
+      <uniqueCustomerId>R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480
+      </uniqueCustomerId>
+      <masterVersion>412740c151535f0756e8dbec7440b726c7a3e135</masterVersion>
+      <matchId>49159509</matchId>
+      <matchStatus>O</matchStatus>
+      <riskScore>-1.0</riskScore>
+      <inputVersionId>122438658</inputVersionId>
+      <matchType>GWL</matchType>
+      <entityId>908043</entityId>
+      <entityVersion>20150505194929</entityVersion>
+      <entity id="908049" version="20150505194929">
+        <name>Joe Ding</name>
+        <listId>15991</listId>
+        <listCode>-1003</listCode>
+        <entityType>03</entityType>
+        <createdDate>10/16/2018</createdDate>
+        <lastUpdateDate>04/19/2019</lastUpdateDate>
+        <source>CON</source>

@@ -7,7 +7,7 @@ from etl_pipeline.service.proto.etl_pipeline_pb2_grpc import EtlPipelineServiceS
 
 
 def load_alert():
-    with open("notebooks/sample/alert_in_payload_format.json", "r") as f:
+    with open("notebooks/sample/wm_address_in_payload_format.json", "r") as f:
         text = json.load(f)
         match1 = Match(match_id="0", match_name="matches/0")
         match2 = Match(match_id="1", match_name="matches/1")

@@ -13,12 +13,18 @@ from etl_pipeline.logger import get_logger
 from etl_pipeline.service.agent_router import AgentInputCreator
 from etl_pipeline.service.proto.api.etl_pipeline_pb2 import FAILURE
 from etl_pipeline.service.proto.etl_pipeline_pb2 import SUCCESS, UNKNOWN, EtlAlert, EtlMatch
-from pipelines.ms.wm_address_pipeline import MSPipeline
+from pipelines.ms.wm_address_pipeline import MSPipeline as WmAddressMSPipeline
+from pipelines.ms.wm_party_pipeline import MSPipeline as WmPartyMSPipeline
 
 engine = JsonProcessingEngine(pipeline_config)
-pipeline = MSPipeline(engine, pipeline_config)
+
 router = AgentInputCreator()
 logger = get_logger("ETL PIPELINE")
+
+pipelines = {
+    "R_US_Active_Address": WmAddressMSPipeline(engine, pipeline_config),
+    "R_US_Active_Party": WmPartyMSPipeline(engine, pipeline_config),
+}
 
 
 @dataclass
@@ -50,7 +56,7 @@ class EtlPipelineServiceServicer(object):
         ]
         future_payloads = [self.pool.submit(self.parse_alert, alert) for alert in alerts_to_parse]
         payloads = [future.result() for future in future_payloads]
-        # payloads = [self.parse_alert(alerts_to_parse[0])] debugging
+        # payloads = [self.parse_alert(alerts_to_parse[0])]  # debugging
         statuses = []
         logger.info("Payload parsed by pipeline")
         for alert, record in zip(alerts_to_parse, payloads):
@@ -80,9 +86,12 @@ class EtlPipelineServiceServicer(object):
         payload[cn.MATCH_IDS] = alert.matches
         status = SUCCESS
         try:
+
+            pipeline = pipelines[payload[cn.ALERT_FIELD]["headerInfo"]["datasetName"]]
             payload = pipeline.transform_standardized_to_cleansed(payload)
             payload = pipeline.transform_cleansed_to_application(payload)
-        except:
+        except Exception as e:
+            logger.error(e)
             status = UNKNOWN
         return [payload, status]
 

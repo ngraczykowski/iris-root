@@ -1,3 +1,6 @@
+from xml.etree import ElementTree
+
+
 class XmlListConfig(list):
     def __init__(self, aList):
         for element in aList:
@@ -63,16 +66,21 @@ class XmlDictConfig(dict):
             # good idea -- time will tell. It works for the way we are
             # currently doing XML configuration files...
             elif element.items():
-                self.update({element.tag: dict(element.items())})
+                dict_ = dict(element.items())
+                if element.text:
+                    dict_["S8_extracted_value"] = element.text
+                self.update({element.tag: dict_})
             # finally, if there are no child tags and no attributes, extract
             # the text
             else:
                 self.update({element.tag: element.text})
 
 
-# tree = ElementTree.parse(
-#     "notebooks/sample/WM_Address_Alerts_XML.csv.001.xml",
-#     parser=ElementTree.XMLParser(encoding="iso-8859-5"),
-# )
-# root = tree.getroot()
-# xmldict = XmlDictConfig(root)
+tree = ElementTree.parse(
+    "notebooks/sample/WM_Address_Alerts_XML.csv.001.xml",
+    parser=ElementTree.XMLParser(encoding="iso-8859-5"),
+)
+root = tree.getroot()
+xmldict = XmlDictConfig(root)
+
+print(xmldict)
