@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+
+  <changeSet id="adjudication-engine-analysis-1.17.0" author="wkeska">
+    <createTable tableName="ae_match_recommendation">
+      <column name="match_recommendation_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="analysis_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="match_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="recommended_action" type="VARCHAR(50)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="comment" type="TEXT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="ae_match_recommendation"
+        baseColumnNames="analysis_id"
+        constraintName="fk_ae_match_recommendation_analysis_id"
+        referencedTableName="ae_analysis"
+        referencedColumnNames="analysis_id"
+        onDelete="NO ACTION"
+        onUpdate="NO ACTION"/>
+    <addForeignKeyConstraint
+        baseTableName="ae_match_recommendation"
+        baseColumnNames="match_id"
+        constraintName="fk_ae_match_recommendation_match_id"
+        referencedTableName="ae_match"
+        referencedColumnNames="match_id"
+        onDelete="NO ACTION"
+        onUpdate="NO ACTION"/>
+    <createIndex
+        tableName="ae_match_recommendation"
+        indexName="ix_ae_match_recommendation_analysis_id">
+      <column name="analysis_id"/>
+    </createIndex>
+    <createIndex
+        tableName="ae_recommendation"
+        indexName="ix_ae_match_recommendation_match_id">
+      <column name="alert_id"/>
+    </createIndex>
+  </changeSet>
+</databaseChangeLog>
