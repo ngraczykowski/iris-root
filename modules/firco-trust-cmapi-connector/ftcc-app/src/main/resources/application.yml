@@ -42,8 +42,10 @@ ftcc:
  #-------------------------------------------------------------------------------------------------
   cmapi:
     callback:
-      endpoint: "http://localhost:8080/rest/ftcc/v1/dummy"
+      endpoint: "http://localhost:8080/rest/ftcc/callback"
       enabled: false
+      login: "user"
+      password: "password"
 
 grpc:
   client:

@@ -10,6 +10,7 @@ import com.silenteight.connector.ftcc.common.dto.output.*;
 import com.silenteight.recommendation.api.library.v1.RecommendationOut;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@EnableConfigurationProperties(RecommendationSenderProperties.class)
 @RequiredArgsConstructor
 class ResponseCreator {
 
@@ -27,6 +29,7 @@ class ResponseCreator {
   public static final String DATA_CENTER = "";
 
   private final MapStatusUseCase mapStatusUseCase;
+  private final RecommendationSenderProperties properties;
 
   public ClientRequestDto create(MessageEntity messageEntity, RecommendationOut recommendation) {
     return mapToAlertDecision(messageEntity, recommendation);
@@ -46,8 +49,8 @@ class ResponseCreator {
     decision.setAttachment(createAttachment(
         recommendation.getRecommendedAction(),
         recommendation.getRecommendationComment()));
-    /*decision.setUserLogin(alert.getUserLogin());*/
-    // decision.setUserPassword(alert.getUserPassword());
+    decision.setUserLogin(properties.getLogin());
+    decision.setUserPassword(properties.getPassword());
     setComment(recommendation.getRecommendationComment(), decision);
 
     var destinationStatus = mapStatusUseCase.mapStatus(

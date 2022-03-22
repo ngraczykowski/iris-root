@@ -12,6 +12,8 @@ public class RecommendationSenderProperties {
 
   private String endpoint;
   private boolean enabled = true;
+  private String login;
+  private String password;
   private Duration readTimeout = Duration.ofSeconds(10);
   private Duration connectionTimeout = Duration.ofSeconds(10);
 }

@@ -12,6 +12,9 @@ import java.time.OffsetDateTime;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.silenteight.connector.ftcc.common.resource.MessageResource.RESOURCE_NAME_PREFIX;
+import static java.util.UUID.randomUUID;
+
 @Configuration
 class GrpcRecommendationConfiguration {
 
@@ -31,7 +34,10 @@ class GrpcRecommendationConfiguration {
               .recommendedAt(OffsetDateTime.now())
               .recommendationComment("test comment")
               .recommendedAction("PTP")
-              .alert(AlertOut.builder().id("message/").build())
+              .alert(AlertOut
+                  .builder()
+                  .id(RESOURCE_NAME_PREFIX + randomUUID())
+                  .build())
               .build())
           .collect(Collectors.toList());
       return RecommendationsOut.builder()
