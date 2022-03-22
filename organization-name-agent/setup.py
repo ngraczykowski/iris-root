@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 install_require = [
-    "agent-base==0.10.0",
+    "agent-base==0.11.0",
     "agents-api==0.7.0.33",
     "aiohttp==3.7.4.post0",
     "data-source-api==0.18.0",
@@ -50,7 +50,7 @@ setup(
     classifiers=[
         "License :: Other/Proprietary License",
     ],
-    python_requires="==3.7.*",
+    python_requires=">=3.7.*",
     install_requires=install_require,
     extras_require={"tests": tests_require},
     setup_requires=[],

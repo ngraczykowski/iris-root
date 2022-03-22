@@ -81,9 +81,9 @@ class CompanyNameAgent(Agent):
 
     def resolve(self, ap_names: Sequence[str], mp_names: Sequence[str]) -> Result:
         try:
-            logger.info(f"Checking {ap_names} vs {mp_names}")
+            logger.debug(f"Checking {ap_names} vs {mp_names}")
             result = self._resolve(ap_names, mp_names)
-            logger.info(f"For {ap_names} vs {mp_names} solution: {result.solution}")
+            logger.debug(f"For {ap_names} vs {mp_names} solution: {result.solution}")
             return result
         except Exception as err:  # noqa
             logger.exception(f"for {ap_names} vs {mp_names}")

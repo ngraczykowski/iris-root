@@ -17,4 +17,4 @@ RUN --mount=type=secret,id=mysecret\
     --index-url="$(cat /run/secrets/mysecret)"
 
 EXPOSE 9090
-CMD ["python", "-m", "company_name.main", "-c", "/app/config", "--grpc", "-v"]
+ENTRYPOINT ["python", "-m", "company_name.main", "-c", "/app/config", "--grpc"]

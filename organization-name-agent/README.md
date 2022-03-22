@@ -23,7 +23,9 @@
 
 ## Installing
 
-Module needs python == 3.7. Tested only on python 3.7.
+Package needs python >= 3.7
+
+Package and dependencies zipped in .pyz file needs exactly python == 3.7
 
 
 * from PiPY (repo.silenteight.com/artifactory/api/pypi/pypi/simple):
