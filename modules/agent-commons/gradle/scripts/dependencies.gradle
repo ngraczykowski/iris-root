@@ -8,7 +8,7 @@ ext {
   s8consulGrpcRegistrationVersion = "1.0.0"
   s8agentsApiVersion = "0.21.0"
   s8dataSourceApiVersion = "0.18.0"
-  s8RabbitMqCommonSchemaVersion = "1.11.0-SNAPSHOT"
+  s8RabbitMqCommonSchemaVersion = "1.11.0"
 
   // TODO all of this should be specified in agent-dependencies-common (MI6-638)
   aspectjVersion = "1.9.7" //TODO use version from platform (MI6-638)
