@@ -5,8 +5,6 @@ plugins {
 
 dependencies {
   implementation project(":adjudication-engine-common")
-  implementation libraries.adjudication_engine_api
   implementation libraries.governance_solving_api
   implementation libraries.grpc_spring_boot_starter
-  implementation libraries.guava
 }
