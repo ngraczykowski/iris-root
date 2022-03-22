@@ -102,6 +102,19 @@ silenteight:
         registration-deadline: 1m
       universal-data-source:
         uds-deadline: 1m
+    categories:
+      - name: categories/apType
+        allowed-values:
+          - I
+          - C
+        display-name: Alerted Party Type
+        category-type: ENUMERATED
+      - name: categories/isDeny
+        allowed-values:
+          - 'YES'
+          - 'NO'
+        display-name: IsDeny
+        category-type: ENUMERATED
 serp:
   # GNS DB Configuration
   gns:
