@@ -7,6 +7,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.Map;
 
+import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.AGENT_REQUEST_EXCHANGE;
+import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.AGENT_RESPONSE_EXCHANGE;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @ConfigurationProperties("facade.amqp")
@@ -14,8 +16,6 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 @Data
 public class AgentFacadeProperties {
 
-  private static final String DEFAULT_AGENT_REQUEST_EXCHANGE = "agent.request";
-  private static final String DEFAULT_AGENT_RESPONSE_EXCHANGE = "agent.response";
 
   private String inboundExchangeName;
   private String inboundQueueName;
@@ -31,12 +31,12 @@ public class AgentFacadeProperties {
 
   String getInboundExchangeName() {
     return isNotEmpty(inboundExchangeName) ?
-           inboundExchangeName : DEFAULT_AGENT_REQUEST_EXCHANGE;
+           inboundExchangeName : AGENT_REQUEST_EXCHANGE;
   }
 
   String getOutboundExchangeName() {
     return isNotEmpty(outboundExchangeName) ?
-           outboundExchangeName : DEFAULT_AGENT_RESPONSE_EXCHANGE;
+           outboundExchangeName : AGENT_RESPONSE_EXCHANGE;
   }
 
   QueueItem getQueueDefinitionByFacadeName(String facadeName) {

@@ -16,6 +16,7 @@ dependencies {
   implementation project(":agent-starter")
   implementation project(":agent-messaging")
   implementation libraries.s8_datasource_api
+  implementation libraries.s8_rabbit_mq_common_schema
 
 
   // Dependencies for integration tests

@@ -8,6 +8,7 @@ ext {
   s8consulGrpcRegistrationVersion = "1.0.0"
   s8agentsApiVersion = "0.21.0"
   s8dataSourceApiVersion = "0.18.0"
+  s8RabbitMqCommonSchemaVersion = "1.11.0-SNAPSHOT"
 
   // TODO all of this should be specified in agent-dependencies-common (MI6-638)
   aspectjVersion = "1.9.7" //TODO use version from platform (MI6-638)
@@ -24,6 +25,7 @@ libraries.s8_commons_core = "com.silenteight.commons:silenteight-commons-core:$s
 libraries.consul_grpc_registration = "com.silenteight.commons:consul-grpc-registration:$s8consulGrpcRegistrationVersion"
 libraries.s8_agents_api = "com.silenteight.agent.api:agents-api:$s8agentsApiVersion"
 libraries.s8_datasource_api = "com.silenteight.sens.date-source-api:data-source-api:$s8dataSourceApiVersion"
+libraries.s8_rabbit_mq_common_schema = "com.silenteight.rabbitmqcommonschema:sear-rabbitmq-common-schema-definitions:$s8RabbitMqCommonSchemaVersion"
 
 // Spring
 libraries.spring_aop = "org.springframework:spring-aop"
