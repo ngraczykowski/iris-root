@@ -15,7 +15,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 import static java.time.ZoneOffset.UTC;
-import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
 @UtilityClass
 public class Timestamps {
@@ -77,10 +77,10 @@ public class Timestamps {
   }
 
   @NonNull
-  public String toStringFormatIsoLocalDate(@NonNull OffsetDateTime from) {
+  public String toStringFormatIsoLocalDateTime(@NonNull OffsetDateTime from) {
     return from
         .toLocalDateTime()
         .atZone(UTC)
-        .format(ISO_LOCAL_DATE);
+        .format(ISO_LOCAL_DATE_TIME);
   }
 }

@@ -84,7 +84,7 @@ warehouse.reports.v2:
                (wm.payload ->> 'feature_values_features/organizationName2') AS "Organization Name v2",
                (wm.payload ->> 'category_values_categories/companyNameSurrounding') AS "Company Name Surrounding",
                count(wm.payload ->> 'feature_vector_signature') AS "Hits Count"
-        FROM warehouse_alert wa JOIN warehouse_match wm ON wa.id = wm.alert_id where wa.recommendation_date BETWEEN DATE '${from}' AND DATE '${to}'
+        FROM warehouse_alert wa JOIN warehouse_match wm ON wa.id = wm.alert_id where wa.recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
         GROUP BY (wm.payload ->> 'feature_vector_signature'),
                (wm.payload ->> 'policy_title'),
                (wm.payload ->> 'policy'),
@@ -184,7 +184,7 @@ warehouse.reports.v2:
                (wa.payload ->> 'firco_analyst_decision') AS "Analyst Decision",
                wa.name AS "S8 Alert ID"
         from warehouse_alert wa JOIN warehouse_match wm ON wa.id = wm.alert_id 
-        WHERE wa.recommendation_date BETWEEN DATE '${from}' AND DATE '${to}'
+        WHERE wa.recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
     - name: AI_REASONING_MATCH_LEVEL
       type: production
       description: AI Reasoning (Match Level)
@@ -204,7 +204,7 @@ warehouse.reports.v2:
                         (wa.payload ->> 'delivery_status')        AS "Alert Delivery Status",
                         wm.name                                   AS "S8 Match ID"
         FROM warehouse_alert wa JOIN warehouse_match wm ON wa.id = wm.alert_id 
-        WHERE wa.recommendation_date BETWEEN DATE '${from}' AND DATE '${to}'
+        WHERE wa.recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
     - name: AI_REASONING_MATCH_LEVEL
       type: simulation
       description: AI Reasoning (Match Level)
@@ -243,7 +243,7 @@ warehouse.reports.v2:
                         (wa.payload ->> 'status')                       AS "Alert Status",
                         wa.name                                         AS "S8 Alert ID"
         FROM warehouse_alert wa JOIN warehouse_match wm ON wa.id = wm.alert_id 
-        WHERE wa.recommendation_date BETWEEN DATE '${from}' AND DATE '${to}'
+        WHERE wa.recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
             AND (wa.payload ->> 'firco_analyst_decision') IN ('analyst_decision_true_positive', 'analyst_decision_false_positive')
     - name: ACCURACY
       type: simulation

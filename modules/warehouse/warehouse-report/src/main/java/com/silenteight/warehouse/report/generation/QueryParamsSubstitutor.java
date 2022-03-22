@@ -6,7 +6,7 @@ import com.silenteight.warehouse.report.sql.dto.SqlExecutorDto;
 
 import java.util.*;
 
-import static com.silenteight.warehouse.common.time.Timestamps.toStringFormatIsoLocalDate;
+import static com.silenteight.warehouse.common.time.Timestamps.toStringFormatIsoLocalDateTime;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
@@ -26,9 +26,9 @@ class QueryParamsSubstitutor {
     Map<String, String> parameters = new HashMap<>();
 
     fetchDataRequest.getFrom()
-        .ifPresent(from -> parameters.put(PARAMETER_FROM, toStringFormatIsoLocalDate(from)));
+        .ifPresent(from -> parameters.put(PARAMETER_FROM, toStringFormatIsoLocalDateTime(from)));
     fetchDataRequest.getTo()
-        .ifPresent(to -> parameters.put(PARAMETER_TO, toStringFormatIsoLocalDate(to)));
+        .ifPresent(to -> parameters.put(PARAMETER_TO, toStringFormatIsoLocalDateTime(to)));
     parameters.put(PARAMETER_ANALYSIS_ID, fetchDataRequest.getAnalysisId());
     parameters.put(PARAMETER_COUNTRIES, toSqlList(fetchDataRequest.getDataAccessPermissions()));
 

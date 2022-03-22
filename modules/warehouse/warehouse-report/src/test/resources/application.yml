@@ -36,7 +36,7 @@ warehouse.reports.v2:
                name AS "Alert S8 Name",
                recommendation_date
         FROM warehouse_alert
-        WHERE recommendation_date BETWEEN DATE '${from}' AND DATE '${to}'
+        WHERE recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
         AND (payload ->> 'country') IN (${countries})
 
 logging:
