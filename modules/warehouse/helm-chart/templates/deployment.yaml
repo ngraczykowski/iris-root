@@ -143,6 +143,7 @@ spec:
             - name: 'WAREHOUSE_DB_USERNAME'
               value: {{ .Values.whDbUsername }}
             - name: 'WAREHOUSE_DB_PASSWORD'
+              value: {{ .Values.whDbPassword }}
       {{ end }}
       volumes:
         - name: "logback-config"
