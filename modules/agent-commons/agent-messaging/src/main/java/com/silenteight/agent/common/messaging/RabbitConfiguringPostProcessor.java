@@ -1,11 +1,8 @@
 package com.silenteight.agent.common.messaging;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
-import com.silenteight.agent.common.messaging.compression.Lz4CompressingPostProcessor;
-import com.silenteight.agent.common.messaging.compression.Lz4DecompressingPostProcessor;
-
+import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.rabbit.config.AbstractRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -14,12 +11,8 @@ import org.springframework.util.ErrorHandler;
 @RequiredArgsConstructor
 class RabbitConfiguringPostProcessor implements BeanPostProcessor {
 
-  private static final int FASTEST_COMPRESSION = 1;
-  private static final Lz4DecompressingPostProcessor
-      LZ4_DECOMPRESSING_POST_PROCESSOR = new Lz4DecompressingPostProcessor();
-
-  @Setter
-  private ErrorHandler errorHandler;
+  private final AgentMessagePostProcessors messagePostProcessors;
+  private final ErrorHandler errorHandler;
 
   @Override
   public Object postProcessBeforeInitialization(Object bean, String beanName) {
@@ -37,13 +30,23 @@ class RabbitConfiguringPostProcessor implements BeanPostProcessor {
       template.setReplyErrorHandler(errorHandler);
     }
 
-    template.addAfterReceivePostProcessors(LZ4_DECOMPRESSING_POST_PROCESSOR);
-    template.addBeforePublishPostProcessors(new Lz4CompressingPostProcessor(FASTEST_COMPRESSION));
+    template.addAfterReceivePostProcessors(getReceivePostProcessor());
+    template.addBeforePublishPostProcessors(getPublishPostProcessor());
   }
 
   private void configureContainerFactory(AbstractRabbitListenerContainerFactory<?> factory) {
     if (errorHandler != null) {
       factory.setErrorHandler(errorHandler);
     }
+
+    factory.setAfterReceivePostProcessors(getReceivePostProcessor());
+  }
+
+  private MessagePostProcessor getReceivePostProcessor() {
+    return messagePostProcessors.getReceivePostProcessor();
+  }
+
+  private MessagePostProcessor getPublishPostProcessor() {
+    return messagePostProcessors.getPublishPostProcessor();
   }
 }

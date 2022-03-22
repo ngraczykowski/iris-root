@@ -1,4 +1,4 @@
-package com.silenteight.agent.common.messaging.compression;
+package com.silenteight.agent.common.messaging;
 
 import org.junit.jupiter.api.Test;
 

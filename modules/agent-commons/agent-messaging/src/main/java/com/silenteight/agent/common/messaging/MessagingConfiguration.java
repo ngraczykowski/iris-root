@@ -59,8 +59,8 @@ public class MessagingConfiguration implements RabbitListenerConfigurer {
 
   @Bean
   RabbitConfiguringPostProcessor containerFactoryConfiguringPostProcessor() {
-    var rabbitConfigPostProcessor = new RabbitConfiguringPostProcessor();
-    rabbitConfigPostProcessor.setErrorHandler(
+    var rabbitConfigPostProcessor = new RabbitConfiguringPostProcessor(
+        new AgentMessagePostProcessors(),
         new CustomConditionalRejectingErrorHandler(new CustomExceptionStrategy()));
 
     return rabbitConfigPostProcessor;

@@ -1,4 +1,4 @@
-package com.silenteight.agent.common.messaging.compression;
+package com.silenteight.agent.common.messaging;
 
 import lombok.RequiredArgsConstructor;
 
@@ -12,10 +12,10 @@ import org.springframework.amqp.support.postprocessor.AbstractCompressingPostPro
 import java.io.IOException;
 import java.io.OutputStream;
 
-@RequiredArgsConstructor
-public class Lz4CompressingPostProcessor extends AbstractCompressingPostProcessor {
+import static com.silenteight.agent.common.messaging.AgentMessagePostProcessors.LZ4_ENCODING;
 
-  private static final String LZ4_ENCODING = "lz4";
+@RequiredArgsConstructor
+class Lz4CompressingPostProcessor extends AbstractCompressingPostProcessor {
 
   private static final LZ4Factory FACTORY = LZ4Factory.fastestInstance();
 
@@ -42,5 +42,10 @@ public class Lz4CompressingPostProcessor extends AbstractCompressingPostProcesso
   @Override
   protected String getEncoding() {
     return LZ4_ENCODING;
+  }
+
+  @Override
+  public int getOrder() {
+    return 1;
   }
 }
