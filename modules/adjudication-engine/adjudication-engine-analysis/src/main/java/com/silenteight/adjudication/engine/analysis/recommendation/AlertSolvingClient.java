@@ -3,6 +3,7 @@ package com.silenteight.adjudication.engine.analysis.recommendation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sep.base.aspects.metrics.Timed;
 import com.silenteight.solving.api.v1.AlertsSolvingGrpc.AlertsSolvingBlockingStub;
 import com.silenteight.solving.api.v1.BatchSolveAlertsRequest;
 import com.silenteight.solving.api.v1.BatchSolveAlertsResponse;
@@ -22,11 +23,12 @@ class AlertSolvingClient {
 
   private final Duration timeout;
 
+  @Timed
   public BatchSolveAlertsResponse batchSolveAlerts(BatchSolveAlertsRequest request) {
     var deadline = Deadline.after(timeout.toMillis(), TimeUnit.MILLISECONDS);
 
-    if (log.isTraceEnabled()) {
-      log.trace("Requesting alert solutions: deadline={}, request={}", deadline, request);
+    if (log.isDebugEnabled()) {
+      log.debug("Requesting alert solutions: deadline={}, request={}", deadline, request);
     }
 
     var response = stub
@@ -51,8 +53,8 @@ class AlertSolvingClient {
           .build();
     }
 
-    if (log.isTraceEnabled()) {
-      log.trace("Received alert solutions: response={}", response);
+    if (log.isDebugEnabled()) {
+      log.debug("Received alert solutionCount={}", response.getSolutionsCount());
     }
 
     return response;
