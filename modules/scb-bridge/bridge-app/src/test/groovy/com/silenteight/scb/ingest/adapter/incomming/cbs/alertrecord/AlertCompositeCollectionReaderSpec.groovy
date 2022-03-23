@@ -4,8 +4,10 @@ import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertmapper.AlertMapper
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord.InvalidAlert.Reason
+import com.silenteight.scb.ingest.adapter.incomming.cbs.metrics.CbsOracleMetrics
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertRecord
 
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import spock.lang.Specification
 
 class AlertCompositeCollectionReaderSpec extends Specification {
@@ -13,7 +15,7 @@ class AlertCompositeCollectionReaderSpec extends Specification {
   def alertMapper = Mock(AlertMapper)
   def databaseAlertRecordCompositeReader = Mock(DatabaseAlertRecordCompositeReader)
   def underTest = new AlertCompositeCollectionReader(
-      alertMapper, databaseAlertRecordCompositeReader, true)
+      alertMapper, databaseAlertRecordCompositeReader, true, cbsOracleMetrics())
 
   def fixtures = new Fixtures()
 
@@ -72,5 +74,11 @@ class AlertCompositeCollectionReaderSpec extends Specification {
 
     InvalidAlert invalidAlert = new InvalidAlert(
         systemId3, batchId, Reason.FAILED_TO_FETCH, alertIdContext)
+  }
+
+  static cbsOracleMetrics() {
+    def cbsOracleMetrics = new CbsOracleMetrics()
+    cbsOracleMetrics.bindTo(new SimpleMeterRegistry())
+    cbsOracleMetrics
   }
 }

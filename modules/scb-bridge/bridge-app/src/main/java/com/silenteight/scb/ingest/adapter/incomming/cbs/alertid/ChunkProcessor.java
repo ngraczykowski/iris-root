@@ -2,6 +2,9 @@ package com.silenteight.scb.ingest.adapter.incomming.cbs.alertid;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.lang3.time.StopWatch;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,6 +14,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @RequiredArgsConstructor
+@Slf4j
 class ChunkProcessor {
 
   private final Consumer<AlertIdCollection> consumer;
@@ -21,10 +25,20 @@ class ChunkProcessor {
     var processor = new Processor(context);
 
     String query = prepareQuery(context.getRecordsView());
+    var stopWatch = StopWatch.createStarted();
+    log.info("Executing query for {} ...", context);
+    int totalProcessed = 0;
     try (ResultSet resultSet = statement.executeQuery(query)) {
+      log.info("Query executed in: {}, processing ResultSet ...", stopWatch);
       while (resultSet.next()) {
         processor.process(resultSet);
+        totalProcessed++;
+        if (totalProcessed % ExternalAlertIdReader.MAX_CHUNK_SIZE == 0) {
+          log.info("Query processed {} records so far in {}", totalProcessed, stopWatch);
+        }
       }
+      log.info("Query finished, total records processed: {} executed in: {}",
+          totalProcessed, stopWatch);
     }
 
     processor.processRemaining();
@@ -56,6 +70,7 @@ class ChunkProcessor {
     }
 
     private void sendAlertIds() {
+      log.info("Publishing collected {} alerts to be processed", alertsToBeProcessed.size());
       consumer.accept(new AlertIdCollection(alertsToBeProcessed, context));
       alertsToBeProcessed.clear();
     }

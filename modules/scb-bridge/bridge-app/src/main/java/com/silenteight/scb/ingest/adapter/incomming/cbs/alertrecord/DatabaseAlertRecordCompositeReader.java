@@ -6,15 +6,20 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.domain.CbsHitDetails;
+import com.silenteight.scb.ingest.adapter.incomming.cbs.metrics.CbsOracleMetrics;
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertRecord;
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.DecisionRecord;
 
+import io.micrometer.core.instrument.Timer;
+import org.apache.commons.lang3.time.StopWatch;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
+import static java.lang.String.format;
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
@@ -28,6 +33,7 @@ class DatabaseAlertRecordCompositeReader implements AlertRecordCompositeReader {
   private final DatabaseAlertRecordReader alertRecordReader;
   private final DatabaseDecisionRecordReader decisionRecordReader;
   private final DatabaseCbsHitDetailsReader cbsHitDetailsReader;
+  private final CbsOracleMetrics cbsOracleMetrics;
 
   @Transactional(
       transactionManager = "externalTransactionManager",
@@ -88,14 +94,34 @@ class DatabaseAlertRecordCompositeReader implements AlertRecordCompositeReader {
 
   private List<CbsHitDetails> readCbsHitDetails(
       String dbRelationName, Collection<AlertId> alertIds) {
-    return cbsHitDetailsReader.read(dbRelationName, alertIds);
+    return timed(
+        cbsOracleMetrics.cbsHitDetailsReaderTimer(dbRelationName),
+        () -> cbsHitDetailsReader.read(dbRelationName, alertIds),
+        format("CbsHitDetails read from: %s for %s alerts", dbRelationName, alertIds.size()));
   }
 
   private List<DecisionRecord> readDecisions(String dbRelationName, Collection<String> systemIds) {
-    return decisionRecordReader.read(dbRelationName, systemIds);
+    return timed(
+        cbsOracleMetrics.decisionsReaderTimer(dbRelationName),
+        () -> decisionRecordReader.read(dbRelationName, systemIds),
+        format("DecisionRecord read from: %s for %s alerts", dbRelationName, systemIds.size()));
   }
 
   private List<AlertRecord> readAlertRecords(String dbRelationName, Collection<String> systemIds) {
-    return alertRecordReader.read(dbRelationName, systemIds);
+    return timed(
+        cbsOracleMetrics.recordReaderTimer(dbRelationName),
+        () -> alertRecordReader.read(dbRelationName, systemIds),
+        format("AlertRecord read from: %s for %s alerts", dbRelationName, systemIds.size()));
   }
+
+  private static <T> List<T> timed(
+      Timer timer,
+      Supplier<List<T>> supplier,
+      String logInfo) {
+    var stopWatch = StopWatch.createStarted();
+    var result = timer.record(supplier);
+    log.info("{} executed in: {}, result size: {}", logInfo, stopWatch, result.size());
+    return result;
+  }
+
 }

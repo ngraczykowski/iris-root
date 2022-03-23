@@ -8,11 +8,13 @@ import com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord.DatabaseAler
 import com.silenteight.scb.ingest.adapter.incomming.cbs.batch.ScbBridgeConfigProperties;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.domain.CbsHitDetails;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.domain.NeoFlag;
+import com.silenteight.scb.ingest.adapter.incomming.cbs.metrics.CbsOracleMetrics;
 import com.silenteight.scb.ingest.adapter.incomming.common.SyncTestInitializer;
 import com.silenteight.scb.ingest.adapter.incomming.common.batch.DateConverter;
 import com.silenteight.scb.ingest.adapter.incomming.common.config.SyncDataSourcesConfiguration;
 import com.silenteight.sep.base.testing.BaseJdbcTest;
 
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.assertj.core.api.AbstractListAssert;
 import org.assertj.core.api.ObjectAssert;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,8 +62,13 @@ class DatabaseAlertRecordCompositeReaderIT extends BaseJdbcTest {
 
   private DatabaseAlertRecordCompositeReader classUnderTest;
 
+  private CbsOracleMetrics cbsOracleMetrics;
+
   @BeforeEach
   void setUp() {
+    cbsOracleMetrics = new CbsOracleMetrics();
+    cbsOracleMetrics.bindTo(new SimpleMeterRegistry());
+
     JdbcTemplate jdbcTemplate = new JdbcTemplate(externalDataSource);
     jdbcTemplate.setQueryTimeout(1000);
     DecisionRecordRowMapper decisionMapper = new DecisionRecordRowMapper(
@@ -70,7 +77,8 @@ class DatabaseAlertRecordCompositeReaderIT extends BaseJdbcTest {
     classUnderTest = new DatabaseAlertRecordCompositeReader(
         new DatabaseAlertRecordReader(jdbcTemplate),
         new DatabaseDecisionRecordReader(jdbcTemplate, decisionMapper),
-        cbsHitDetailsReader);
+        cbsHitDetailsReader,
+        cbsOracleMetrics);
   }
 
   @Test

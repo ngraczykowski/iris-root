@@ -3,6 +3,7 @@ package com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.scb.ingest.adapter.incomming.cbs.batch.ScbBridgeConfigProperties;
+import com.silenteight.scb.ingest.adapter.incomming.cbs.metrics.CbsOracleMetrics;
 import com.silenteight.scb.ingest.adapter.incomming.common.batch.DateConverter;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,6 +19,7 @@ class AlertRecordCompositeReaderConfiguration {
 
   private final ScbBridgeConfigProperties configProperties;
   private final GnsSolutionMapper gnsSolutionMapper;
+  private final CbsOracleMetrics cbsOracleMetrics;
 
   @Bean
   DatabaseAlertRecordCompositeReader alertRecordCompositeReader(
@@ -29,7 +31,8 @@ class AlertRecordCompositeReaderConfiguration {
     return new DatabaseAlertRecordCompositeReader(
         new DatabaseAlertRecordReader(jdbcTemplate),
         new DatabaseDecisionRecordReader(jdbcTemplate, decisionRecordRowMapper()),
-        new DatabaseCbsHitDetailsReader(jdbcTemplate));
+        new DatabaseCbsHitDetailsReader(jdbcTemplate),
+        cbsOracleMetrics);
   }
 
   private DecisionRecordRowMapper decisionRecordRowMapper() {

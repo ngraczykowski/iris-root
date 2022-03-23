@@ -8,7 +8,6 @@ import com.silenteight.sep.base.common.entity.BaseEntity;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -28,7 +27,7 @@ public class RawAlert extends BaseEntity {
   @NonNull
   private String systemId;
 
-  @NotNull
+  @NonNull
   private String batchId;
 
   @NonNull

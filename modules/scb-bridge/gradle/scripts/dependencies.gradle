@@ -121,6 +121,7 @@ libraries.protobuf_java = [group: 'com.google.protobuf', name: 'protobuf-java', 
 libraries.protobuf_java_util = [group: 'com.google.protobuf', name: 'protobuf-java-util', version: googleProtobufVersion]
 libraries.xstream = [group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.19']
 libraries.vavr = [group: 'io.vavr', name: 'vavr', version: '0.10.4']
+libraries.micrometer_prometheus = [group: 'io.micrometer', name: 'micrometer-registry-prometheus']
 
 // Testing
 libraries.spring_test = [group: 'org.springframework', name: 'spring-test', version: springVersion]
@@ -214,6 +215,8 @@ dependencies {
   implementation libraries.json_path
   implementation libraries.xstream
   implementation libraries.vavr
+
+  implementation libraries.micrometer_prometheus
 
   testImplementation libraries.spock_spring
   testRuntimeOnly libraries.junit_platform_commons

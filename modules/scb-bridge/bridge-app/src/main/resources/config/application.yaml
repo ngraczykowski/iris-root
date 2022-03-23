@@ -11,6 +11,12 @@ grpc:
   server:
     port: 24221
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+
 spring:
   cloud:
     consul:

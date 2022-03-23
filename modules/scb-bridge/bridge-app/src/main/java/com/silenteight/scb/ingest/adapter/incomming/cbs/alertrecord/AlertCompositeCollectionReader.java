@@ -8,6 +8,9 @@ import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertmapper.AlertMapper;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertmapper.AlertMapper.Option;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord.InvalidAlert.Reason;
+import com.silenteight.scb.ingest.adapter.incomming.cbs.metrics.CbsOracleMetrics;
+
+import org.apache.commons.lang3.time.StopWatch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +27,7 @@ class AlertCompositeCollectionReader {
   private final AlertMapper alertMapper;
   private final DatabaseAlertRecordCompositeReader databaseAlertRecordCompositeReader;
   private final boolean processOnlyUnsolved;
+  private final CbsOracleMetrics cbsOracleMetrics;
 
   AlertCompositeCollection read(List<AlertId> alertIds, ScbAlertIdContext context) {
     var alertCollection = getAlertCollection(alertIds, context);
@@ -64,7 +68,15 @@ class AlertCompositeCollectionReader {
 
   private AlertRecordCompositeCollection getAlertCollection(
       List<AlertId> alertIds, ScbAlertIdContext context) {
-    return databaseAlertRecordCompositeReader.read(context, alertIds);
+    var stopWatch = StopWatch.createStarted();
+    var timer = cbsOracleMetrics.alertRecordCompositeCollectionReaderTimer(
+        context.getSourceView(), context.getHitDetailsView());
+    var result =
+        timer.record(() -> databaseAlertRecordCompositeReader.read(context, alertIds));
+    log.info("AlertRecordCompositeCollection has been read from sourceView: {}, "
+        + "cbsHitDetailsView: {}, alerts: {} executed in: {}", context.getSourceView(),
+        context.getHitDetailsView(), alertIds.size(), stopWatch);
+    return result;
   }
 
   private Option[] getMappingOptions(ScbAlertIdContext context) {
