@@ -7,6 +7,7 @@ import com.silenteight.payments.bridge.svb.learning.domain.AlertComposite;
 import com.silenteight.payments.bridge.svb.learning.job.etl.EtlJobProperties;
 import com.silenteight.payments.bridge.svb.learning.step.composite.AlertCompositeReaderFactory;
 
+import org.apache.commons.lang3.StringUtils;
 import org.intellij.lang.annotations.Language;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.Step;
@@ -39,6 +40,10 @@ class StoreInLearningEngineStepConfiguration {
       + " FROM pb_learning_alert"
       + " WHERE file_name=?";
 
+  @Language("PostgreSQL")
+  private static final String QUERY_WITHOUT_FILE_NAME = "SELECT learning_alert_id"
+      + " FROM pb_learning_alert";
+
   private final StepBuilderFactory stepBuilderFactory;
   private final AlertCompositeReaderFactory alertCompositeReaderFactory;
   private final EtlJobProperties properties;
@@ -51,8 +56,12 @@ class StoreInLearningEngineStepConfiguration {
   public AbstractItemStreamItemReader<AlertComposite> historicalReservationCompositeReader(
       @Value("#{stepExecution.jobExecution}") JobExecution jobExecution) {
     var fileName = jobExecution.getJobParameters().getString(FILE_NAME_PARAMETER);
+    if (StringUtils.isNotBlank(fileName)) {
+      return alertCompositeReaderFactory.createAlertCompositeReader(
+          QUERY, fileName, properties.getChunkSize());
+    }
     return alertCompositeReaderFactory.createAlertCompositeReader(
-        QUERY, fileName, properties.getChunkSize());
+        QUERY_WITHOUT_FILE_NAME, fileName, properties.getChunkSize());
   }
 
   @Bean
