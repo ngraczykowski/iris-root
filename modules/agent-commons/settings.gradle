@@ -13,3 +13,5 @@ include 'agent-messaging'
 include 'agent-metrics'
 include 'agent-monitoring'
 include 'agent-facade-core'
+include 'agent-logging'
+

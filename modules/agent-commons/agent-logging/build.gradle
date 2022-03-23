@@ -1,0 +1,18 @@
+plugins {
+  id "java-library"
+  id "groovy"
+  id "maven-publish"
+}
+
+description = "Agent Logging"
+
+dependencies {
+  implementation libraries.commons_lang3
+}
+
+sonarqube {
+  properties {
+    // Excludes files or folders from code coverage analysis, comma separated
+    property 'sonar.coverage.exclusions', "**/*.*"
+  }
+}
