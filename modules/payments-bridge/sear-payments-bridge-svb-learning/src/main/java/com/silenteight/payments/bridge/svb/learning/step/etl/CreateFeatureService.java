@@ -55,7 +55,6 @@ class CreateFeatureService {
         .matchName(registeredAlert.getMatchName(hit.getMatchId()))
         .nameAgentData(hit.getNameAgentData())
         .geoAgentData(hit.getGeoAgentData())
-        .identificationMismatchAgentData(hit.getIdentificationMismatchAgentData())
         .historicalAgentData(hit.getHistoricalAgentData())
         .build();
   }

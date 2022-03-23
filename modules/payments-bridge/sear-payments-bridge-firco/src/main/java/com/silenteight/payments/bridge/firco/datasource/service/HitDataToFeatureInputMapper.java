@@ -6,7 +6,6 @@ import com.silenteight.payments.bridge.common.dto.common.SolutionType;
 import com.silenteight.payments.bridge.datasource.agent.dto.FeatureInputStructured;
 import com.silenteight.payments.bridge.datasource.agent.dto.FeatureInputStructured.GeoAgentData;
 import com.silenteight.payments.bridge.datasource.agent.dto.FeatureInputStructured.HistoricalAgentData;
-import com.silenteight.payments.bridge.datasource.agent.dto.FeatureInputStructured.IdentificationMismatchAgentData;
 import com.silenteight.payments.bridge.datasource.agent.dto.FeatureInputStructured.NameAgentData;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
@@ -31,7 +30,6 @@ class HitDataToFeatureInputMapper {
         .matchName(matchName)
         .geoAgentData(getGeoAgentData())
         .nameAgentData(getNameAgentData())
-        .identificationMismatchAgentData(getIdentificationMismatchAgentData())
         .historicalAgentData(getHistoricalAgentData())
         .build();
   }
@@ -82,14 +80,6 @@ class HitDataToFeatureInputMapper {
         .alertedPartyNames(alertedPartyData.getNames())
         .watchlistPartyName(List.of(hitAndWlPartyData.getName()))
         .matchingTexts(hitAndWlPartyData.getAllMatchingTexts())
-        .build();
-  }
-
-  private IdentificationMismatchAgentData getIdentificationMismatchAgentData() {
-    return IdentificationMismatchAgentData.builder()
-        .alertedPartyMatchingField(getFieldValue())
-        .matchingText(getMatchingText())
-        .watchlistSearchCodes(setWatchlistSearchCodes())
         .build();
   }
 

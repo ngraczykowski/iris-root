@@ -19,10 +19,7 @@ public class FeatureInputStructured {
 
   NameAgentData nameAgentData;
 
-  IdentificationMismatchAgentData identificationMismatchAgentData;
-
   HistoricalAgentData historicalAgentData;
-
 
   @Value
   @Builder
@@ -44,18 +41,6 @@ public class FeatureInputStructured {
     String alertedPartyLocation;
 
     String watchListLocation;
-  }
-
-  @Value
-  @Builder
-  public static class IdentificationMismatchAgentData {
-
-    String alertedPartyMatchingField;
-
-    String matchingText;
-
-    List<String> watchlistSearchCodes;
-
   }
 
   @Value

@@ -26,9 +26,6 @@ public class AgentsUtils {
 
   public static final String GEO_FEATURE_NAME = FEATURE_PREFIX + "geo";
 
-  public static final String BANK_IDENTIFICATION_CODES_FEATURE_NAME =
-      FEATURE_PREFIX + "bankIdentificationCodes";
-
   public static final String NAME_FEATURE_NAME = FEATURE_PREFIX + "name";
 
   public static final String NAME_TEXT_FEATURE_NAME = FEATURE_PREFIX + "nameMatchedText";
