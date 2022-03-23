@@ -153,3 +153,29 @@ spring:
       #org.hibernate.flushMode: COMMIT
       org.hibernate.envers.audit_table_suffix: _audit
       org.hibernate.envers.store_data_at_delete: true
+
+# Management HTTP server
+management:
+  health:
+    mail:
+      enabled: false
+  info:
+    git:
+      mode: simple
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: [ "health", "info", "metrics", "prometheus", "loggers" ]
+    jmx:
+      exposure:
+        exclude: "*"
+  metrics:
+    tags:
+      application: ${spring.application.name}
