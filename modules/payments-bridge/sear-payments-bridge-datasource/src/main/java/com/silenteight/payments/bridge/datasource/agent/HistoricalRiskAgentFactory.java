@@ -41,8 +41,6 @@ abstract class HistoricalRiskAgentFactory extends BaseFeatureInputStructuredFact
     return StringUtils.isBlank(accountNumber) ? "N/A" : accountNumber.toUpperCase().trim();
   }
 
-  protected abstract String getFeatureName();
-
   protected abstract String getDiscriminator();
 
 }

@@ -28,6 +28,11 @@ class GeoAgentFactory extends BaseFeatureInputStructuredFactory {
     return AgentDataSourceUtils.createFeatureInput(GEO_FEATURE_NAME, locationFeatureInput);
   }
 
+  @Override
+  protected String getFeatureName() {
+    return GEO_FEATURE_NAME;
+  }
+
   private LocationFeatureInput getLocationFeatureInput(GeoAgentData geoAgentData) {
     var geoAgentRequest = createGeoAgentRequest(geoAgentData);
     return createLocationFeatureInputUseCase.create(geoAgentRequest);

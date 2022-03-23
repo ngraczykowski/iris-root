@@ -14,6 +14,7 @@ import java.util.List;
 
 import static com.silenteight.payments.bridge.common.app.AgentsUtils.NAME_TEXT_FEATURE;
 import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.createFeatureInput;
+import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.getFullFeatureName;
 
 @Service
 @Qualifier("nameMatchedText")
@@ -27,6 +28,11 @@ class NameMatchedTextFeatureExtractorService implements UnstructuredFeatureExtra
     var nameAgentUseCaseRequest = createNameAgentUseCaseRequest(hitComposite);
     var nameFeatureInput = createNameFeatureInputUseCase.createDefault(nameAgentUseCaseRequest);
     return createFeatureInput(NAME_TEXT_FEATURE, nameFeatureInput);
+  }
+
+  @Override
+  public String name() {
+    return getFullFeatureName(NAME_TEXT_FEATURE);
   }
 
   private static NameAgentRequest createNameAgentUseCaseRequest(HitComposite hitComposite) {

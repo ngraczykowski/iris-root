@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import static com.silenteight.payments.bridge.common.app.AgentsUtils.NAME_FEATURE;
 import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.createFeatureInput;
+import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.getFullFeatureName;
 
 @Service
 @Qualifier("name")
@@ -25,6 +26,11 @@ class NameFeatureExtractorService implements FeatureExtractor {
     var nameAgentUseCaseRequest = createNameAgentUseCaseRequest(etlHit);
     var nameFeatureInput = createNameFeatureInputUseCase.createDefault(nameAgentUseCaseRequest);
     return createFeatureInput(NAME_FEATURE, nameFeatureInput);
+  }
+
+  @Override
+  public String name() {
+    return getFullFeatureName(NAME_FEATURE);
   }
 
   private static NameAgentRequest createNameAgentUseCaseRequest(EtlHit etlHit) {

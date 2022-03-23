@@ -35,7 +35,6 @@ abstract class ContextualAgentFactory extends BaseFeatureInputUnstructuredFactor
         .build();
   }
 
-  protected abstract String getFeatureName();
 
   protected abstract String getDiscriminator();
 

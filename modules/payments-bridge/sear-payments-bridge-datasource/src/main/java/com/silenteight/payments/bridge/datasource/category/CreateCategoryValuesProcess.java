@@ -29,9 +29,9 @@ public class CreateCategoryValuesProcess {
       FeatureInputSpecification featureInputSpecification) {
 
     var categoryValues = categoryValuesStructured.stream()
-        .map(this::createStructuredCategoryValue)
+        .map((CategoryValueStructured categoryValueStructured) -> createStructuredCategoryValue(
+            categoryValueStructured, featureInputSpecification))
         .flatMap(List::stream)
-        .filter(featureInputSpecification::isSatisfy)
         .collect(toList());
 
     categoryValueRepository.save(categoryValues);
@@ -48,9 +48,9 @@ public class CreateCategoryValuesProcess {
       FeatureInputSpecification featureInputSpecification) {
 
     var categoryValues = categoryValueUnstructured.stream()
-        .map(this::createUnstructuredCategoryValue)
+        .map(categoryValueUnstructured1 -> createUnstructuredCategoryValue(
+            categoryValueUnstructured1, featureInputSpecification))
         .flatMap(List::stream)
-        .filter(featureInputSpecification::isSatisfy)
         .collect(toList());
 
     categoryValueRepository.save(categoryValues);
@@ -63,16 +63,22 @@ public class CreateCategoryValuesProcess {
   }
 
   private List<CategoryValue> createStructuredCategoryValue(
-      CategoryValueStructured categoryValueStructured) {
+      CategoryValueStructured categoryValueStructured,
+      final FeatureInputSpecification featureInputSpecification) {
     return this.categoryValueStructuredFactories.stream()
-        .map(ca -> ca.createCategoryValue(categoryValueStructured))
+        .flatMap(ca -> ca
+            .createCategoryValue(categoryValueStructured, featureInputSpecification)
+            .stream())
         .collect(toList());
   }
 
   private List<CategoryValue> createUnstructuredCategoryValue(
-      CategoryValueUnstructured categoryValueUnstructured) {
+      CategoryValueUnstructured categoryValueUnstructured,
+      final FeatureInputSpecification featureInputSpecification) {
     return this.categoryValueUnstructuredFactories.stream()
-        .map(ca -> ca.createCategoryValue(categoryValueUnstructured))
+        .flatMap(ca -> ca
+            .createCategoryValue(categoryValueUnstructured, featureInputSpecification)
+            .stream())
         .collect(toList());
   }
 

@@ -29,6 +29,11 @@ class OrganizationNameAgentFactory extends BaseFeatureInputStructuredFactory {
         ORGANIZATION_NAME_FEATURE_NAME, nameFeatureInput);
   }
 
+  @Override
+  protected String getFeatureName() {
+    return ORGANIZATION_NAME_FEATURE_NAME;
+  }
+
   private static NameAgentRequest createNameAgentUseCaseRequest(NameAgentData nameAgentData) {
     return NameAgentRequest.builder()
         .feature(ORGANIZATION_NAME_FEATURE_NAME)

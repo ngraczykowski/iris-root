@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static com.silenteight.payments.bridge.common.app.AgentsUtils.NAME_FEATURE_NAME;
 import static com.silenteight.payments.bridge.common.app.AgentsUtils.NAME_TEXT_FEATURE_NAME;
 
 @Component
@@ -28,7 +27,12 @@ class NameMatchedTextAgentFactory extends BaseFeatureInputUnstructuredFactory {
         featureInputUnstructured.getNameMatchedTextAgentData();
     var nameMatchedTextRequest = createNameAgentUseCaseRequest(nameMatchedTextAgentData);
     var nameFeatureInput = createNameFeatureInputUseCase.createDefault(nameMatchedTextRequest);
-    return AgentDataSourceUtils.createFeatureInput(NAME_FEATURE_NAME, nameFeatureInput);
+    return AgentDataSourceUtils.createFeatureInput(NAME_TEXT_FEATURE_NAME, nameFeatureInput);
+  }
+
+  @Override
+  protected String getFeatureName() {
+    return NAME_TEXT_FEATURE_NAME;
   }
 
   private static NameAgentRequest createNameAgentUseCaseRequest(

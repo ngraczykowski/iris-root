@@ -28,6 +28,11 @@ class IdentificationMismatchAgentFactory extends BaseFeatureInputStructuredFacto
         .build();
   }
 
+  @Override
+  protected String getFeatureName() {
+    return BANK_IDENTIFICATION_CODES_FEATURE_NAME;
+  }
+
   private static BankIdentificationCodesFeatureInput createBankIdentificationFeatureInput(
       IdentificationMismatchAgentData identificationMismatchAgentData) {
     return BankIdentificationCodesFeatureInput

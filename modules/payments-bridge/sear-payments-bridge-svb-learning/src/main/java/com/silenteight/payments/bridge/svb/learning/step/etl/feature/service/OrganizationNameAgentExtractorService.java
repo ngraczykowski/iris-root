@@ -30,6 +30,11 @@ class OrganizationNameAgentExtractorService implements FeatureExtractor {
     return createFeatureInput(ORGANIZATION_NAME_FEATURE, nameFeatureInput);
   }
 
+  @Override
+  public String name() {
+    return getFullFeatureName(ORGANIZATION_NAME_FEATURE);
+  }
+
   private static NameFeatureInput createNameFeatureInput(EtlHit etlHit) {
     return NameFeatureInput.newBuilder()
         .setFeature(getFullFeatureName(ORGANIZATION_NAME_FEATURE))

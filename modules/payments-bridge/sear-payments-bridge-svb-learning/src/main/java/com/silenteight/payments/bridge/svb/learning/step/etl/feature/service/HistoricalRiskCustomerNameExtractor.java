@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import static com.silenteight.payments.bridge.common.app.AgentsUtils.HISTORICAL_RISK_CUSTOMER_NAME_FEATURE;
 import static com.silenteight.payments.bridge.common.app.AgentsUtils.HISTORICAL_RISK_CUSTOMER_NAME_LEARNING_DISC;
+import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.getFullFeatureName;
 
 @Service
 @RequiredArgsConstructor
@@ -37,5 +38,10 @@ class HistoricalRiskCustomerNameExtractor extends HistoricalRiskAssessmentExtrac
   @Override
   protected String getDiscriminator() {
     return HISTORICAL_RISK_CUSTOMER_NAME_LEARNING_DISC;
+  }
+
+  @Override
+  public String name() {
+    return getFullFeatureName(HISTORICAL_RISK_CUSTOMER_NAME_FEATURE);
   }
 }

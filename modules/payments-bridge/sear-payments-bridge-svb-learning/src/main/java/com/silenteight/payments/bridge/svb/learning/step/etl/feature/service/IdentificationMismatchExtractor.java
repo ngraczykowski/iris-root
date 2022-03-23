@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import static com.silenteight.payments.bridge.common.app.AgentsUtils.BANK_IDENTIFICATION_CODES_FEATURE;
 import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.createFeatureInput;
+import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.getFullFeatureName;
 
 @Service
 @Qualifier("identificationMismatch")
@@ -21,6 +22,11 @@ class IdentificationMismatchExtractor implements FeatureExtractor {
         extractFeatureInput(etlHit);
     return createFeatureInput(
         BANK_IDENTIFICATION_CODES_FEATURE, bankIdentificationCodesFeatureInput);
+  }
+
+  @Override
+  public String name() {
+    return getFullFeatureName(BANK_IDENTIFICATION_CODES_FEATURE);
   }
 
   private static BankIdentificationCodesFeatureInput extractFeatureInput(EtlHit etlHit) {

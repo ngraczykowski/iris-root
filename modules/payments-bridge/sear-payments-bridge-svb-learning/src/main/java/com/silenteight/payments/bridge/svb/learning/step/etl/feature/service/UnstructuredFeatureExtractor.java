@@ -6,4 +6,6 @@ import com.silenteight.payments.bridge.svb.learning.domain.HitComposite;
 public interface UnstructuredFeatureExtractor {
 
   FeatureInput createFeatureInputs(HitComposite hitComposite);
+
+  String name();
 }

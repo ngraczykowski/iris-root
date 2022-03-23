@@ -32,9 +32,9 @@ public class CreateFeatureInputsProcess {
       FeatureInputSpecification featureInputSpecification) {
 
     var agentInputs = featureInputsStructured.stream()
-        .map(this::createFeatureInputStructured)
+        .map((FeatureInputStructured featureInputStructured) -> createFeatureInputStructured(
+            featureInputStructured, featureInputSpecification))
         .flatMap(List::stream)
-        .filter(featureInputSpecification::isSatisfy)
         .collect(Collectors.toList());
 
     saveAgentInputs(agentInputs);
@@ -51,24 +51,28 @@ public class CreateFeatureInputsProcess {
       FeatureInputSpecification featureInputSpecification) {
 
     var agentInputs = featureInputsUnstructured.stream()
-        .map(this::createFeatureInputUnstructured)
+        .map((FeatureInputUnstructured featureInputUnstructured) -> createFeatureInputUnstructured(
+            featureInputUnstructured, featureInputSpecification))
         .flatMap(List::stream)
-        .filter(featureInputSpecification::isSatisfy)
         .collect(Collectors.toList());
 
     saveAgentInputs(agentInputs);
   }
 
   private List<AgentInput> createFeatureInputStructured(
-      FeatureInputStructured featureInputStructured) {
+      FeatureInputStructured featureInputStructured,
+      FeatureInputSpecification featureInputSpecification) {
     return featureInputStructuredFactories.stream()
+        .filter(factory -> factory.shouldProcess(featureInputSpecification))
         .map(factory -> factory.createAgentInput(featureInputStructured))
         .collect(Collectors.toList());
   }
 
   private List<AgentInput> createFeatureInputUnstructured(
-      FeatureInputUnstructured featureInputUnstructured) {
+      FeatureInputUnstructured featureInputUnstructured,
+      FeatureInputSpecification featureInputSpecification) {
     return featureInputUnstructuredFactories.stream()
+        .filter(factory -> factory.shouldProcess(featureInputSpecification))
         .map(factory -> factory.createAgentInput(featureInputUnstructured))
         .collect(Collectors.toList());
   }

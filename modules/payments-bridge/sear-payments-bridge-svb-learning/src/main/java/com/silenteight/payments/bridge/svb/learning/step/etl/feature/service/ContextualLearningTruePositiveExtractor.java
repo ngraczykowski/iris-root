@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import static com.silenteight.payments.bridge.common.app.AgentsUtils.CONTEXTUAL_LEARNING_DISC_TP;
 import static com.silenteight.payments.bridge.common.app.AgentsUtils.CONTEXTUAL_LEARNING_FEATURE_NAME_TP;
 import static com.silenteight.payments.bridge.common.app.AgentsUtils.CONTEXTUAL_LEARNING_FEATURE_TP;
+import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.getFullFeatureName;
 
 @Service
 class ContextualLearningTruePositiveExtractor extends ContextualLearningFeatureExtractorService {
@@ -29,5 +30,10 @@ class ContextualLearningTruePositiveExtractor extends ContextualLearningFeatureE
   @Override
   protected String getDiscriminator() {
     return CONTEXTUAL_LEARNING_DISC_TP;
+  }
+
+  @Override
+  public String name() {
+    return getFullFeatureName(CONTEXTUAL_LEARNING_FEATURE_NAME_TP);
   }
 }

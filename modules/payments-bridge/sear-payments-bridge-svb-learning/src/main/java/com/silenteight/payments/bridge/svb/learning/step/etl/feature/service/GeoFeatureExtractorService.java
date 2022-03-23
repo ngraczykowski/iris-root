@@ -21,6 +21,11 @@ class GeoFeatureExtractorService implements FeatureExtractor {
     return createFeatureInput(GEO_FEATURE, locationFeatureInput);
   }
 
+  @Override
+  public String name() {
+    return getFullFeatureName(GEO_FEATURE);
+  }
+
   private static LocationFeatureInput createLocationFeatureInput(EtlHit etlHit) {
     return LocationFeatureInput
         .newBuilder()
