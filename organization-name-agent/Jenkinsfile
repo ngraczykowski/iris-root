@@ -142,6 +142,7 @@ pipeline {
                             usernameVariable: 'DEPLOY_USERNAME',
                             passwordVariable: 'DEPLOY_PASSWORD'
                             )]) {
+                                sh 'ulimit -l'
                                 sh './scripts/helm-chart-build.sh'
                             }
                     }
