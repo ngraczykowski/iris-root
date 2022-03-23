@@ -48,6 +48,11 @@ job "etl-pipeline" {
         destination = "local/config/agents/agents_input_WM_ADDRESS.yaml"
       }
 
+      template {
+        data        = file("../config/agents/agents_input_WM_Party.yaml")
+        destination = "local/config/agents/agents_input_WM_Party.yaml"
+      }
+
       config {
         image = "docker.repo.silenteight.com/etl-pipeline-service"
         mount {
