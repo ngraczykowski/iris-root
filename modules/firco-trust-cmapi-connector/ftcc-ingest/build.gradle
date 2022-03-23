@@ -18,11 +18,6 @@ dependencies {
   implementation libraries.core_bridge_registration_connector_proto
   implementation libraries.fab_cmap_connector_api
 
-  // Application Starters
-//  implementation libraries.spring_boot_starter_actuator
-//  implementation libraries.spring_boot_starter_logging
-//  implementation libraries.spring_boot_starter_undertow
-//  implementation libraries.spring_boot_starter_web
   implementation libraries.spring_security_core
   implementation libraries.spring_security_config
   implementation libraries.spring_security_web
@@ -39,18 +34,6 @@ dependencies {
   runtimeOnly libraries.jackson_module_afterburner
   runtimeOnly libraries.jackson_module_paranamer
   runtimeOnly libraries.jackson_module_parameter_names
-
-  // Database
-//  implementation libraries.spring_boot_starter_data_jpa
-//  implementation libraries.spring_boot_starter_jdbc
-//  implementation libraries.liquibase_core
-//  implementation libraries.hikari_cp
-//  runtimeOnly libraries.postgresql
-//  runtimeOnly libraries.liquibase_sessionlock
-
-  // Shedlock
-//  implementation libraries.shedlock_spring
-//  implementation libraries.shedlock_jdbc_provider
 
   implementation libraries.rest_assured
   implementation libraries.rest_assured_spring_mock_mvc

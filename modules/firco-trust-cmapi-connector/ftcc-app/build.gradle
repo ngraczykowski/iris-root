@@ -14,24 +14,6 @@ dependencies {
   implementation project(":ftcc-db-changelog")
   implementation project(":ftcc-ingest")
 
-  implementation libraries.silenteight_sep_base_common
-  implementation libraries.silenteight_commons_app
-
-  implementation libraries.commons_lang3
-  implementation libraries.hibernate_validator
-  // Utilities
-  implementation libraries.commons_lang3
-//  implementation libraries.commons_text
-//  implementation libraries.guava
-
-  // Logging
-//  runtimeOnly libraries.ecs_logging_core
-//  runtimeOnly libraries.logback_ecs_encoder
-
-  // Sentry
-//  runtimeOnly libraries.sentry_spring_boot_starter
-//  runtimeOnly libraries.sentry_logback
-
   // Base Libraries
   implementation libraries.silenteight_sep_base_common
   implementation libraries.silenteight_commons_app
@@ -41,13 +23,14 @@ dependencies {
   implementation libraries.recommendation_api_library
   implementation libraries.recommendation_internal_protos
 
+  // Utilities
+  implementation libraries.commons_lang3
+
   // Application Starters
-//  implementation libraries.spring_batch_starter
   implementation libraries.spring_boot_starter_actuator
   implementation libraries.spring_boot_starter_logging
   implementation libraries.spring_boot_starter_undertow
   implementation libraries.spring_boot_starter_web
-  implementation libraries.grpc_server_spring_boot_starter
 
   // Jackson
   implementation libraries.jackson_annotations
@@ -72,20 +55,13 @@ dependencies {
   // Messaging
   implementation libraries.amqp_client
   implementation libraries.lz4_java
-//  implementation libraries.spring_boot_starter_integration
-//  implementation libraries.spring_integration_amqp
-//  implementation libraries.spring_integration_core
-//  implementation libraries.spring_integration_http
   implementation libraries.sear_rabbitmq_common_schema
 
   // gRPC
   implementation libraries.grpc_api
   implementation libraries.grpc_stub
   implementation libraries.grpc_client_spring_boot_starter
-
-  // Shedlock
-//  implementation libraries.shedlock_spring
-//  implementation libraries.shedlock_jdbc_provider
+  implementation libraries.grpc_server_spring_boot_starter
 
   //Consul
   runtimeOnly libraries.spring_cloud_consul_discovery

@@ -4,17 +4,9 @@ ext {
   //***********************************
   // Silent Eight
   //***********************************
-  adjudicationEngineApiVersion = "0.8.0"
-  agentsApiVersion = "0.4.0"
-  agentsProtocolVersion = "0.14.0"
-  dataRetentionVersion = "0.3.0"
-  governanceApiVersion = "1.7.0"
-  learingEngineStoreApiVersion = "0.5.0"
   sepDependenciesVersion = "2.3.0"
   silenteightCommonsVersion = "2.1.0"
-  silenteightDataSourceApiVersion = "0.18.0"
   silenteightSepBaseVersion = "1.12.2"
-  warehouseProtocolVersion = "2.2.0"
   coreBridgeRegistrationConnectorVersion = "1.14.0"
   fabCmapConnectorApi = "1.0.0"
   recommendationApiLibraryVersion = "1.9.0"
@@ -23,7 +15,6 @@ ext {
   //***********************************
   // Others libraries
   //***********************************
-  shedlockVersion = "4.27.0"
   springBootVersion = "2.6.4"
   springCloudVersion = "2021.0.1"
 }
@@ -31,26 +22,12 @@ ext {
 // @formatter:off
 
 // Silent Eight
-libraries.adjudication_engine_api = [group: 'com.silenteight.adjudication.api', name: 'adjudication-api', version: adjudicationEngineApiVersion]
-libraries.consul_grpc_registration = [group: 'com.silenteight.commons', name: 'consul-grpc-registration', version: '1.0.0']
-libraries.data_source_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-api', version: silenteightDataSourceApiVersion]
-libraries.data_source_categories_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-categories-api', version: silenteightDataSourceApiVersion]
-libraries.data_source_comments_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-comments-api', version: silenteightDataSourceApiVersion]
-libraries.data_source_agentinput_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-agentinput-api', version: silenteightDataSourceApiVersion]
-libraries.governance_api = [group: 'com.silenteight.governance.api', name: 'se-governance-api', version: governanceApiVersion]
-libraries.governance_model_api = [group: 'com.silenteight.governance.api', name: 'se-model-api', version: governanceApiVersion]
-libraries.governance_solving_api = [group: 'com.silenteight.governance.api', name: 'se-solving-api', version: governanceApiVersion]
-libraries.learning_engine_store_api = [group: 'com.silenteight.learningengine.api', name: 'learning-store-api', version: learingEngineStoreApiVersion]
-libraries.agents_api = [group: 'com.silenteight.agent.api', name: 'agents-api', version: agentsApiVersion]
 libraries.sear_rabbitmq_common_schema = [group: 'com.silenteight.rabbitmqcommonschema', name: 'sear-rabbitmq-common-schema-definitions', version: '1.10.0']
 libraries.silenteight_commons_app = [group: 'com.silenteight.commons', name: 'silenteight-commons-app', version: silenteightCommonsVersion]
 libraries.silenteight_commons_core = [group: 'com.silenteight.commons', name: 'silenteight-commons-core', version: silenteightCommonsVersion]
 libraries.silenteight_sep_base_aspects = [group: 'com.silenteight.sep.base', name: 'sep-base-aspects', version: silenteightSepBaseVersion]
 libraries.silenteight_sep_base_common = [group: 'com.silenteight.sep.base', name: 'sep-base-common', version: silenteightSepBaseVersion]
 libraries.silenteight_sep_base_testing = [group: 'com.silenteight.sep.base', name: 'sep-base-testing', version: silenteightSepBaseVersion]
-libraries.silenteight_agents_protocol = [group: 'com.silenteight.agent.api', name: 'protocol-agents', version: agentsProtocolVersion]
-libraries.warehouse_data_api = [group: 'com.silenteight.warehouse.api', name: 'se-data-api', version: warehouseProtocolVersion]
-libraries.data_retention_api = [group: 'com.silenteight.sens.data-retention-api', name: 'data-retention-api', version: dataRetentionVersion]
 libraries.core_bridge_registration_connector_lib = [group: 'com.silenteight.registration.api.library', name: 'registration-lib', version: coreBridgeRegistrationConnectorVersion]
 libraries.core_bridge_registration_connector_proto = [group: 'com.silenteight.registration.api.library', name: 'registration-internal-protos', version: coreBridgeRegistrationConnectorVersion]
 libraries.fab_cmap_connector_api = [group: 'com.silenteight.fab', name: 'cmapi-connector-api', version: fabCmapConnectorApi]
@@ -103,11 +80,6 @@ libraries.spring_boot_starter_test = [group: 'org.springframework.boot', name: '
 libraries.spring_boot_starter_security = [group: 'org.springframework.boot', name: 'spring-boot-starter-security']
 libraries.spring_boot_test = [group: 'org.springframework.boot', name: 'spring-boot-test']
 libraries.spring_boot_test_autoconfigure = [group: 'org.springframework.boot', name: 'spring-boot-test-autoconfigure']
-
-libraries.spring_batch_core = [group: 'org.springframework.batch', name: 'spring-batch-core']
-libraries.spring_batch_infrastructure = [group: 'org.springframework.batch', name: 'spring-batch-infrastructure']
-libraries.spring_batch_starter = [group: 'org.springframework.boot', name: 'spring-boot-starter-batch']
-libraries.spring_batch_test = [group: 'org.springframework.batch', name: 'spring-batch-test']
 
 libraries.spring_cloud_consul_discovery = [group: 'org.springframework.cloud', name: 'spring-cloud-consul-discovery']
 libraries.spring_cloud_dependencies = [group: 'org.springframework.cloud', name: 'spring-cloud-dependencies']
@@ -228,8 +200,6 @@ libraries.micrometer_core = [group: 'io.micrometer', name: 'micrometer-core']
 libraries.micrometer_influx = [group: 'io.micrometer', name: 'micrometer-registry-influx']
 libraries.micrometer_prometheus = [group: 'io.micrometer', name: 'micrometer-registry-prometheus']
 libraries.opencsv = [group: 'com.opencsv', name: 'opencsv', version: '5.5.1']
-libraries.oracle = [group: 'com.oracle', name: 'ojdbc8']
-libraries.pebble = [group: 'io.pebbletemplates', name: 'pebble',version: '3.1.5']
 libraries.postgresql = [group: 'org.postgresql', name: 'postgresql']
 libraries.protobuf_java = [group: 'com.google.protobuf', name: 'protobuf-java']
 libraries.protobuf_java_util = [group: 'com.google.protobuf', name: 'protobuf-java-util']
@@ -237,9 +207,6 @@ libraries.pw_swift_core = [group: 'com.prowidesoftware', name: 'pw-swift-core', 
 libraries.sentry = [group: 'io.sentry', name: 'sentry']
 libraries.sentry_logback = [group: 'io.sentry', name: 'sentry-logback']
 libraries.sentry_spring_boot_starter = [group: 'io.sentry', name: 'sentry-spring-boot-starter']
-libraries.shedlock_core = [group: 'net.javacrumbs.shedlock', name: 'shedlock-core', version: shedlockVersion]
-libraries.shedlock_jdbc_provider = [group: 'net.javacrumbs.shedlock', name: 'shedlock-provider-jdbc-template', version: shedlockVersion]
-libraries.shedlock_spring = [group: 'net.javacrumbs.shedlock', name: 'shedlock-spring', version: shedlockVersion]
 libraries.snakeyaml = [group: 'org.yaml', name: 'snakeyaml']
 libraries.tomcat_embed_el = [group: 'org.apache.tomcat.embed', name: 'tomcat-embed-el']
 
@@ -260,7 +227,6 @@ libraries.test_containers = [group: 'org.testcontainers', name: 'testcontainers'
 libraries.test_containers_junit_jupiter = [group: 'org.testcontainers', name: 'junit-jupiter']
 libraries.test_containers_postgresql = [group: 'org.testcontainers', name: 'postgresql']
 libraries.test_containers_spock = [group: 'org.testcontainers', name: 'spock']
-libraries.test_greenmail = [group: 'com.icegreen', name: 'greenmail-junit5', version: '1.6.1']
 
 // @formatter:on
 

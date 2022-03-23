@@ -10,20 +10,7 @@ dependencies {
   implementation libraries.spring_boot_test
   implementation libraries.spring_boot_test_autoconfigure
 
-  implementation libraries.spring_boot_starter_undertow
-  implementation libraries.spring_boot_starter_web
-
-  implementation libraries.jakarta_validation_api
   implementation libraries.junit_jupiter_api
-
-  // Jackson
-  implementation libraries.jackson_annotations
-  implementation libraries.jackson_databind
-  runtimeOnly libraries.jackson_datatype_jdk8
-  runtimeOnly libraries.jackson_datatype_jsr310
-  runtimeOnly libraries.jackson_module_afterburner
-  runtimeOnly libraries.jackson_module_paranamer
-  runtimeOnly libraries.jackson_module_parameter_names
 
   implementation libraries.rest_assured
   implementation libraries.rest_assured_spring_mock_mvc
