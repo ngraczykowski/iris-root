@@ -33,7 +33,7 @@ public class RabbitCommonSchemaConfiguration {
       topicExchange(GOV_QA_EXCHANGE).durable(true).build(),
       topicExchange(GOV_EVENTS_EXCHANGE).durable(true).build(),
       directExchange(BRIDGE_LEARNING_ENGINE_IS_PEP_EXCHANGE).durable(true).build(),
-      directExchange(BRIDGE_LEARNING_ENGINE_MODEL_EXCHANGE).durable(true).build()
+      topicExchange(BRIDGE_LEARNING_ENGINE_MODEL_EXCHANGE).durable(true).build()
   };
 
   @Bean
