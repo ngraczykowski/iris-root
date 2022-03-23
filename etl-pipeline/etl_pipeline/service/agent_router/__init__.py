@@ -53,7 +53,7 @@ class AgentInputCreator:
     def produce_batch_create_agent_input_request(self, alert, payload):
         agent_inputs = []
         for match_id, match in zip(
-            payload[cn.MATCH_IDS], payload[cn.ALERT_FIELD][cn.MATCH_RECORDS]
+            payload[cn.MATCH_IDS], payload["watchlistParty"]["matchRecords"]
         ):
             feature_inputs = self.produce_feature_inputs(match)
             agent_input = AgentInput(
