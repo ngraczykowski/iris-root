@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.firco.datasource.service.process.agent;
+package com.silenteight.payments.bridge.firco.datasource.service;
 
 import lombok.RequiredArgsConstructor;
 

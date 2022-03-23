@@ -8,44 +8,31 @@ public class AgentsUtils {
 
   public static final String FEATURE_PREFIX = "features/";
 
-  public static final String HISTORICAL_RISK_CUSTOMER_NAME_FEATURE = "historicalRiskCustomerName";
-  // TODO: remove when decide that customer name will not be used
-  public static final String HISTORICAL_RISK_CUSTOMER_NAME_LEARNING_DISC = "hist_customer_name";
-
   public static final String HISTORICAL_RISK_ACCOUNT_NUMBER_FEATURE_TP =
-      "historicalRiskAccountNumberTP";
+      FEATURE_PREFIX + "historicalRiskAccountNumberTP";
   public static final String HISTORICAL_RISK_ACCOUNT_NUMBER_FEATURE_FP =
-      "historicalRiskAccountNumberFP";
+      FEATURE_PREFIX + "historicalRiskAccountNumberFP";
   public static final String HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC_FP =
       "hist_account_number_fp";
   public static final String HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC_TP =
       "hist_account_number_tp";
 
-  public static final String CONTEXTUAL_LEARNING_FEATURE_TP =
-      "contextualLearningNameTP";
-  public static final String CONTEXTUAL_LEARNING_FEATURE_FP =
-      "contextualLearningNameFP";
   public static final String CONTEXTUAL_LEARNING_FEATURE_NAME_TP =
-      FEATURE_PREFIX + CONTEXTUAL_LEARNING_FEATURE_TP;
+      FEATURE_PREFIX + "contextualLearningNameTP";
   public static final String CONTEXTUAL_LEARNING_FEATURE_NAME_FP =
-      FEATURE_PREFIX + CONTEXTUAL_LEARNING_FEATURE_FP;
+      FEATURE_PREFIX + "contextualLearningNameFP";
   public static final String CONTEXTUAL_LEARNING_DISC_TP = "hist_contextual_learning_name_tp";
   public static final String CONTEXTUAL_LEARNING_DISC_FP = "hist_contextual_learning_name_fp";
 
-  public static final String GEO_FEATURE = "geo";
   public static final String GEO_FEATURE_NAME = FEATURE_PREFIX + "geo";
 
-  public static final String BANK_IDENTIFICATION_CODES_FEATURE = "bankIdentificationCodes";
   public static final String BANK_IDENTIFICATION_CODES_FEATURE_NAME =
       FEATURE_PREFIX + "bankIdentificationCodes";
 
-  public static final String NAME_FEATURE = "name";
   public static final String NAME_FEATURE_NAME = FEATURE_PREFIX + "name";
 
-  public static final String NAME_TEXT_FEATURE = "nameMatchedText";
   public static final String NAME_TEXT_FEATURE_NAME = FEATURE_PREFIX + "nameMatchedText";
 
-  public static final String ORGANIZATION_NAME_FEATURE = "organizationName";
   public static final String ORGANIZATION_NAME_FEATURE_NAME = FEATURE_PREFIX + "organizationName";
 
 }

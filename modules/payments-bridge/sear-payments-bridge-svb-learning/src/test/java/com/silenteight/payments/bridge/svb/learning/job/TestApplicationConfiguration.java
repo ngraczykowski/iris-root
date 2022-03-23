@@ -6,7 +6,6 @@ import com.silenteight.datasource.agentinput.api.v1.AgentInputServiceGrpc;
 import com.silenteight.datasource.categories.api.v2.CategoryServiceGrpc;
 import com.silenteight.payments.bridge.ae.alertregistration.port.FindRegisteredAlertUseCase;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
-import com.silenteight.payments.bridge.agents.port.*;
 import com.silenteight.payments.bridge.data.retention.port.CreateAlertDataRetentionUseCase;
 import com.silenteight.payments.bridge.data.retention.port.CreateFileRetentionUseCase;
 import com.silenteight.payments.bridge.datasource.agent.CreateFeatureInputsProcess;
@@ -57,38 +56,8 @@ public class TestApplicationConfiguration {
   }
 
   @Bean
-  CompanyNameSurroundingUseCase companyNameSurroundingUseCase() {
-    return new CompanyNameSurroundingUseCaseMock();
-  }
-
-  @Bean
-  HistoricalRiskAssessmentFeatureUseCase historicalRiskAssessmentFeatureUseCase() {
-    return new HistoricalRiskAssessmentFeatureUseCaseMock();
-  }
-
-  @Bean
-  HistoricalRiskAssessmentUseCase historicalRiskAssessmentUseCase() {
-    return new HistoricalRiskAssessmentUseCaseMock();
-  }
-
-  @Bean
-  SpecificTerms2UseCase specificTerms2UseCase() {
-    return new SpecificTerms2UseCaseMock();
-  }
-
-  @Bean
-  SpecificTermsUseCase specificTermsUseCase() {
-    return new SpecificTermsUseCaseMock();
-  }
-
-  @Bean
   CreateAlertedPartyEntitiesUseCase createAlertedPartyEntitiesUseCase() {
     return new CreateAlertedPartyEntitiesUseCaseMock();
-  }
-
-  @Bean
-  NameAddressCrossmatchUseCase nameAddressCrossmatchUseCase() {
-    return new NameAddressCrossmatchUseCaseMock();
   }
 
   @Bean
@@ -121,16 +90,6 @@ public class TestApplicationConfiguration {
   @Bean
   IndexLearningUseCase indexLearningUseCase() {
     return new IndexLearningUseCaseMock();
-  }
-
-  @Bean
-  CreateNameFeatureInputUseCase createNameFeatureInputUseCase() {
-    return new CreateNameFeatureInputUseCaseMock();
-  }
-
-  @Bean
-  CreateContextualLearningFeatureInputUseCase createContextualLearningFeatureInputUseCase() {
-    return new CreateContextualLearningFeatureInputUseCaseMock();
   }
 
   @Bean

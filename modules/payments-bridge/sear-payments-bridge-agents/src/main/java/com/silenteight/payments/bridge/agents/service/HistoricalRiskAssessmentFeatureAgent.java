@@ -11,8 +11,6 @@ import com.silenteight.payments.bridge.common.app.LearningProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import static com.silenteight.payments.bridge.common.app.AgentsUtils.FEATURE_PREFIX;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -27,10 +25,8 @@ class HistoricalRiskAssessmentFeatureAgent implements HistoricalRiskAssessmentFe
   public HistoricalDecisionsFeatureInput invoke(
       HistoricalRiskAssessmentAgentFeatureRequest request) {
 
-    var featureName = getFeatureName(request.getFeature());
-
     return HistoricalDecisionsFeatureInput.newBuilder()
-        .setFeature(featureName)
+        .setFeature(request.getFeature())
         .setModelKey(createModelKey(request))
         .setDiscriminator(createDiscriminator(request.getDiscriminator()))
         .build();
@@ -81,9 +77,5 @@ class HistoricalRiskAssessmentFeatureAgent implements HistoricalRiskAssessmentFe
 
   private String getDiscriminatorValue(String discriminator) {
     return properties.getDiscriminatorPrefix() + "_" + discriminator;
-  }
-
-  private static String getFeatureName(String featureName) {
-    return FEATURE_PREFIX + featureName;
   }
 }

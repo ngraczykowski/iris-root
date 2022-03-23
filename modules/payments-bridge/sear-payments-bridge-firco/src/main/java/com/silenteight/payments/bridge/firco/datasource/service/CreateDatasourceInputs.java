@@ -5,8 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.common.model.AeAlert;
 import com.silenteight.payments.bridge.firco.datasource.port.CreateDatasourceInputsUseCase;
-import com.silenteight.payments.bridge.firco.datasource.service.process.agent.CreateFeatureInput;
-import com.silenteight.payments.bridge.firco.datasource.service.process.category.CreateCategoryValue;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
@@ -20,8 +18,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 class CreateDatasourceInputs implements CreateDatasourceInputsUseCase {
 
-  private final CreateCategoryValue createCategoryValue;
-  private final CreateFeatureInput createFeatureInput;
+  private final CreateCategoryValueProcess createCategoryValue;
+  private final CreateFeatureInputProcess createFeatureInput;
 
   @Override
   public void processStructured(AeAlert alert, List<HitData> hitsData) {

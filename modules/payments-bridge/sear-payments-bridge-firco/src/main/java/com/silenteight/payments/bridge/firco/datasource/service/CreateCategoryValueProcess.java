@@ -1,7 +1,6 @@
-package com.silenteight.payments.bridge.firco.datasource.service.process.category;
+package com.silenteight.payments.bridge.firco.datasource.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
 import com.silenteight.payments.bridge.common.exception.MatchNotFoundException;
@@ -24,15 +23,13 @@ import java.util.Map.Entry;
 import static com.silenteight.payments.bridge.firco.datasource.util.HitDataUtils.filterHitsData;
 import static java.util.stream.Collectors.toList;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
-class CreateCategoryValueProcess implements CreateCategoryValue {
+class CreateCategoryValueProcess {
 
   private final CreateCategoryValuesProcess createCategoryValues;
   private final CreateAlertedPartyEntitiesUseCase createAlertedPartyEntitiesUseCase;
 
-  @Override
   public void createStructuredCategoryValues(
       AeAlert alert, List<HitData> hitsData) {
     var alertName = alert.getAlertName();
@@ -47,7 +44,6 @@ class CreateCategoryValueProcess implements CreateCategoryValue {
     createCategoryValues.createStructuredCategoryValues(categoryValueModels);
   }
 
-  @Override
   public void createUnstructuredCategoryValues(
       AeAlert alert, Map<String, HitAndWatchlistPartyData> hitMap) {
 

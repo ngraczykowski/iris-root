@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.svb.learning.step.etl.feature.service;
+package com.silenteight.payments.bridge.svb.learning.step.etl;
 
 import lombok.RequiredArgsConstructor;
 
@@ -9,7 +9,6 @@ import com.silenteight.payments.bridge.datasource.agent.dto.FeatureInputStructur
 import com.silenteight.payments.bridge.datasource.agent.dto.FeatureInputUnstructured;
 import com.silenteight.payments.bridge.svb.learning.domain.EtlHit;
 import com.silenteight.payments.bridge.svb.learning.domain.HitComposite;
-import com.silenteight.payments.bridge.svb.learning.step.etl.feature.port.CreateFeatureUseCase;
 
 import org.springframework.stereotype.Service;
 
@@ -19,12 +18,11 @@ import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
-class CreateFeatureService implements CreateFeatureUseCase {
+class CreateFeatureService {
 
   private final CreateFeatureInputsProcess createFeatureInputsProcess;
 
-  @Override
-  public void createFeatureInputs(
+  void createFeatureInputs(
       List<EtlHit> etlHits, RegisterAlertResponse registeredAlert,
       FeatureInputSpecification featureInputSpecification) {
 
@@ -36,8 +34,7 @@ class CreateFeatureService implements CreateFeatureUseCase {
         featureInputsStructured, featureInputSpecification);
   }
 
-  @Override
-  public void createUnstructuredFeatureInputs(
+  void createUnstructuredFeatureInputs(
       final List<HitComposite> hitComposites,
       final RegisterAlertResponse registeredAlert,
       final FeatureInputSpecification featureInputSpecification

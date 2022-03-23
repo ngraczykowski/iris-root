@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.firco.datasource.service.process.agent;
+package com.silenteight.payments.bridge.firco.datasource.service;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,11 +21,10 @@ import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
-class CreateFeatureInputProcess implements CreateFeatureInput {
+class CreateFeatureInputProcess {
 
   private final CreateFeatureInputsProcess createFeatureInputsProcess;
 
-  @Override
   public void createStructuredFeatureInputs(AeAlert alert, List<HitData> hitsData) {
 
     var featureInputsStructured = handleMatches(alert, hitsData);
@@ -54,7 +53,6 @@ class CreateFeatureInputProcess implements CreateFeatureInput {
         .mapToFeatureInputStructured(alertName, matchName);
   }
 
-  @Override
   public void createUnstructuredFeatureInputs(
       AeAlert alert, Map<String, HitAndWatchlistPartyData> hitAndWatchlistPartyData) {
 

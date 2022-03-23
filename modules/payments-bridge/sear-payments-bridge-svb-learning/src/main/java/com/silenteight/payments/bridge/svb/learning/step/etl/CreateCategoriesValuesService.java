@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.svb.learning.step.etl.category.service;
+package com.silenteight.payments.bridge.svb.learning.step.etl;
 
 import lombok.RequiredArgsConstructor;
 
@@ -11,7 +11,6 @@ import com.silenteight.payments.bridge.datasource.category.dto.CategoryValueStru
 import com.silenteight.payments.bridge.datasource.category.dto.CategoryValueUnstructured;
 import com.silenteight.payments.bridge.svb.learning.domain.EtlHit;
 import com.silenteight.payments.bridge.svb.learning.domain.HitComposite;
-import com.silenteight.payments.bridge.svb.learning.step.etl.category.port.CreateCategoriesUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 
 import org.apache.commons.lang3.StringUtils;
@@ -23,12 +22,11 @@ import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
-class CreateCategoriesValuesService implements CreateCategoriesUseCase {
+class CreateCategoriesValuesService  {
 
   private final CreateCategoryValuesProcess createCategoryValues;
 
-  @Override
-  public void createCategoryValues(
+  void createCategoryValues(
       final List<EtlHit> etlHits, final RegisterAlertResponse registeredAlert,
       final FeatureInputSpecification featureInputSpecification) {
 
@@ -40,8 +38,7 @@ class CreateCategoriesValuesService implements CreateCategoriesUseCase {
         categoryValuesStructured, featureInputSpecification);
   }
 
-  @Override
-  public void createUnstructuredCategoryValues(
+  void createUnstructuredCategoryValues(
       List<HitComposite> hitComposites, RegisterAlertResponse registeredAlert,
       FeatureInputSpecification featureInputSpecification) {
 

@@ -6,9 +6,6 @@ import com.silenteight.payments.bridge.agents.port.CreateLocationFeatureInputUse
 
 import org.springframework.stereotype.Component;
 
-import static com.silenteight.payments.bridge.common.app.AgentsUtils.FEATURE_PREFIX;
-import static com.silenteight.payments.bridge.common.app.AgentsUtils.GEO_FEATURE;
-
 @Component
 class CreateLocationFeatureInput implements CreateLocationFeatureInputUseCase {
 
@@ -16,14 +13,9 @@ class CreateLocationFeatureInput implements CreateLocationFeatureInputUseCase {
   public LocationFeatureInput create(GeoAgentRequest request) {
 
     return LocationFeatureInput.newBuilder()
-        .setFeature(getFeatureName(GEO_FEATURE))
+        .setFeature(request.getFeature())
         .setAlertedPartyLocation(request.getAlertedPartyLocation())
         .setWatchlistLocation(request.getWatchlistLocation())
         .build();
   }
-
-  private static String getFeatureName(String featureName) {
-    return FEATURE_PREFIX + featureName;
-  }
-
 }

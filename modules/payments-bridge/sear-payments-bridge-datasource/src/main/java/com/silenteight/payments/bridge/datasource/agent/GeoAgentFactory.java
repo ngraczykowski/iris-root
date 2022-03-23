@@ -12,7 +12,6 @@ import com.silenteight.payments.bridge.datasource.agent.dto.FeatureInputStructur
 
 import org.springframework.stereotype.Component;
 
-import static com.silenteight.payments.bridge.common.app.AgentsUtils.GEO_FEATURE;
 import static com.silenteight.payments.bridge.common.app.AgentsUtils.GEO_FEATURE_NAME;
 
 @Component
@@ -40,7 +39,7 @@ class GeoAgentFactory extends BaseFeatureInputStructuredFactory {
 
   private static GeoAgentRequest createGeoAgentRequest(GeoAgentData geoAgentData) {
     return GeoAgentRequest.builder()
-        .feature(GEO_FEATURE)
+        .feature(GEO_FEATURE_NAME)
         .alertedPartyLocation(geoAgentData.getAlertedPartyLocation())
         .watchlistLocation(geoAgentData.getWatchListLocation())
         .build();

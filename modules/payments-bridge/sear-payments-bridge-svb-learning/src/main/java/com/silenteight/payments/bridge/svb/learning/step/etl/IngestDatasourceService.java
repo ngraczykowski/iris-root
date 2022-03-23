@@ -13,8 +13,6 @@ import com.silenteight.payments.bridge.svb.learning.domain.AlertComposite;
 import com.silenteight.payments.bridge.svb.learning.domain.AlertDetails;
 import com.silenteight.payments.bridge.svb.learning.domain.EtlHit;
 import com.silenteight.payments.bridge.svb.learning.domain.HitComposite;
-import com.silenteight.payments.bridge.svb.learning.step.etl.category.port.CreateCategoriesUseCase;
-import com.silenteight.payments.bridge.svb.learning.step.etl.feature.port.CreateFeatureUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.model.CreateAlertedPartyEntitiesRequest;
 import com.silenteight.payments.bridge.svb.oldetl.port.CreateAlertedPartyEntitiesUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
@@ -35,8 +33,8 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 public class IngestDatasourceService {
 
-  private final CreateFeatureUseCase createFeatureUseCase;
-  private final CreateCategoriesUseCase createCategoriesUseCase;
+  private final CreateFeatureService createFeatureService;
+  private final CreateCategoriesValuesService createCategoriesValuesService;
   private final MessageParserUseCase messageParserUseCase;
   private final CreateAlertedPartyEntitiesUseCase createAlertedPartyEntitiesUseCase;
 
@@ -56,13 +54,13 @@ public class IngestDatasourceService {
   private void processForUnstructuredTags(
       AlertComposite alertComposite, RegisterAlertResponse registeredAlert,
       FeatureInputSpecification featureInputSpecification) {
-    createFeatureUseCase.createUnstructuredFeatureInputs(
+    createFeatureService.createUnstructuredFeatureInputs(
         alertComposite.getHits(),
         registeredAlert,
         featureInputSpecification
     );
 
-    createCategoriesUseCase.createUnstructuredCategoryValues(
+    createCategoriesValuesService.createUnstructuredCategoryValues(
         alertComposite.getHits(), registeredAlert,
         featureInputSpecification);
   }
@@ -76,8 +74,8 @@ public class IngestDatasourceService {
       return;
     }
 
-    createFeatureUseCase.createFeatureInputs(etlHits, registeredAlert, featureInputSpecification);
-    createCategoriesUseCase.createCategoryValues(
+    createFeatureService.createFeatureInputs(etlHits, registeredAlert, featureInputSpecification);
+    createCategoriesValuesService.createCategoryValues(
         etlHits, registeredAlert, featureInputSpecification);
   }
 
