@@ -29,17 +29,10 @@ class WatchlistExtractor:
                 result.append(item)
         return result"""
 
-    def extract_dob(self, record):
-        result = []
-        dob = record.get("entity", {}).get("dobs", {}).get("dob")
+    def parse_dob_dict(self, dob):
         dmy = ["", "", ""]
+        result = []
         date_range = []
-        if isinstance(dob, str):
-            return [dob]
-        if isinstance(dob, list):
-            return dob
-        if dob is None:
-            return []
         for k, v in dob.items():
             if k.upper() == "Y":
                 dmy[-1] = v
@@ -54,19 +47,41 @@ class WatchlistExtractor:
                     result.append(v)
             else:
                 result.append(v)
+        return result, date_range, dmy
 
-        result.append("/".join(dmy))
-        if len(date_range) == 2:
-            result.extend(
-                [str(elem) for elem in range(int(date_range[0]), int(date_range[-1]) + 1)]
-            )
-        return result
+    def extract_dob(self, record):
+        result = []
+        entity = record.get("entity", {})
+        dobs = entity.get("dobs", [])
+        try:
+            dob = dobs[0]
+        except IndexError:
+            dob = {}
+
+        if isinstance(dob, str):
+            return [dob]
+        if isinstance(dob, list):
+            return dob
+        if dob is None:
+            return []
+        if isinstance(dob, dict):
+            result, date_range, dmy = self.parse_dob_dict(dob)
+            result.append("/".join(dmy))
+            if len(date_range) == 2:
+                result.extend(
+                    [str(elem) for elem in range(int(date_range[0]), int(date_range[-1]) + 1)]
+                )
+            return result
+        return ""
 
     def extract_nationality(self, record):
         result = []
         entry_list = []
         entry = record.get("entity", {}).get("nationalities", {})
-        entry_list.append(entry.get("nationality", ""))
+        try:
+            entry_list.append(entry.get("nationality", ""))
+        except AttributeError:
+            pass
         data_item_list = self.as_list(entry_list)
         for item in data_item_list:
             if type(item) is dict:
@@ -79,7 +94,10 @@ class WatchlistExtractor:
         result = []
         entry_list = []
         entry = record.get("entity", {}).get("citizenships", {})
-        entry_list.append(entry.get("citizenship", ""))
+        try:
+            entry_list.append(entry.get("citizenship", ""))
+        except AttributeError:
+            pass
         data_item_list = self.as_list(entry_list)
         for item in data_item_list:
             if type(item) is dict:
@@ -94,7 +112,11 @@ class WatchlistExtractor:
         entry = record.get("entity", {}).get(
             field1, {}
         )  # returning [] by get can cause error in next line
-        destination = entry.get(field2, "")
+        try:
+            destination = entry.get(field2, "")
+        except AttributeError:
+            destination = []
+            pass
         if isinstance(destination, list):
             entry_list.extend(destination)
         else:
@@ -163,7 +185,11 @@ class WatchlistExtractor:
         return {cn.WL_MATCHED_TOKENS: json.dumps(input_tokens)}
 
     def extract_country(self, match):
-        address = match.get("entity", {}).get("addresses", {}).get("address", {})
+        try:
+            address = match.get("entity", {}).get("addresses", {}).get("address")
+        except AttributeError:
+            address = match.get("entity", {}).get("addresses", {})
+
         if isinstance(address, dict):
             return address.get("country")
         elif isinstance(address, list):
@@ -173,7 +199,10 @@ class WatchlistExtractor:
             return "|".join(list(filter(lambda x: x is not None, countries)))
 
     def extract_country_name(self, match):
-        address = match.get("entity", {}).get("addresses", {}).get("address", {})
+        try:
+            address = match.get("entity", {}).get("addresses", {}).get("address")
+        except AttributeError:
+            address = match.get("entity", {}).get("addresses", {})
         if isinstance(address, dict):
             return address.get("countryName")
         elif isinstance(address, list):

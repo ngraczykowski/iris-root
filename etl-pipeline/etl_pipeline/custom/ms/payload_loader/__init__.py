@@ -54,7 +54,7 @@ class PayloadLoader:
         return dictionary_to_be_updated
 
     def jsonify(self, value):
-        if isinstance(value, str) and value.startswith("["):
+        if isinstance(value, str) and value.startswith("[") and value.endswith("]"):
             return json.loads(value)
         return value
 

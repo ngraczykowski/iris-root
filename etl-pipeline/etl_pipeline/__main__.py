@@ -79,7 +79,6 @@ class EtlPipelineServiceServicer(object):
     def parse_alert(self, alert):
         payload = alert.flat_payload
         payload = PayloadLoader().load_payload_from_json(payload)
-        payload = payload["alertPayload"]
 
         payload = {key: payload[key] for key in sorted(payload)}
 
@@ -87,7 +86,7 @@ class EtlPipelineServiceServicer(object):
         status = SUCCESS
         try:
 
-            pipeline = pipelines[payload[cn.ALERT_FIELD]["headerInfo"]["datasetName"]]
+            pipeline = pipelines[payload["alertedParty"]["headerInfo"]["datasetName"]]
             payload = pipeline.transform_standardized_to_cleansed(payload)
             payload = pipeline.transform_cleansed_to_application(payload)
         except Exception as e:

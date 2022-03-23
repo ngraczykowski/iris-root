@@ -24,9 +24,8 @@ class TestMSPipeline(unittest.TestCase):
             payload = json.loads(file.read())
         payload_json = {key: payload[key] for key in sorted(payload)}
         payload_json = PayloadLoader().load_payload_from_json(payload_json)
-        payload_json = payload_json["alertPayload"]
         payload_json["match_ids"] = [
-            i for i in range(len(payload_json[cn.ALERT_FIELD][cn.MATCH_RECORDS]))
+            i for i in range(len(payload_json["watchlistParty"][cn.MATCH_RECORDS]))
         ]
         payload = payload_json
         parsed_payloads = self.uut.transform_standardized_to_cleansed(payload)
@@ -34,14 +33,16 @@ class TestMSPipeline(unittest.TestCase):
         with open("tests/shared/parsed_payload.pkl", "rb") as f:
             reference_payloads = pickle.load(f)
         for payload, reference_payload in zip(parsed_payloads, reference_payloads):
-            for num in range(len(payload[cn.ALERT_FIELD][cn.MATCH_RECORDS])):
-                for key in payload[cn.ALERT_FIELD][cn.MATCH_RECORDS][num]:
+            for num in range(len(payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS])):
+                for key in payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num]:
                     try:
                         assert (
-                            payload[cn.ALERT_FIELD][cn.MATCH_RECORDS][num][key]
-                            == reference_payload[cn.ALERT_FIELD][cn.MATCH_RECORDS][num][key]
+                            payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
+                            == reference_payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
                         )
                     except AssertionError:
                         assert sorted(
-                            payload[cn.ALERT_FIELD][cn.MATCH_RECORDS][num][key]
-                        ) == sorted(reference_payload[cn.ALERT_FIELD][cn.MATCH_RECORDS][num][key])
+                            payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
+                        ) == sorted(
+                            reference_payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
+                        )

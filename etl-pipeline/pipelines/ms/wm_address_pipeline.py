@@ -20,38 +20,44 @@ class MSPipeline(ETLPipeline):
         for num, party in enumerate(parties):
             parties[num] = party["fields"]
 
-    def parse_input_records(self, payload):
-        for input_record in payload[cn.ALERT_FIELD][cn.INPUT_RECORD_HIST]:
+    def parse_input_records(self, input_records):
+        for input_record in input_records:
             input_record["INPUT_FIELD"] = {
-                i["name"]: InputRecordField(**i) for i in input_record["field"]
+                i["name"]: InputRecordField(**i) for i in input_record["fields"]
             }
 
     def connect_input_record_with_match_record(self, payload):
         new_payloads = []
-        for input_record in payload[cn.ALERT_FIELD][cn.INPUT_RECORD_HIST]:
-            for match_record in payload[cn.ALERT_FIELD][cn.MATCH_RECORDS]:
+        input_records = payload["alertedParty"]["inputRecordHist"]["inputRecords"]
+        match_records = payload["watchlistParty"]["matchRecords"]
+        for input_record in input_records:
+            for match_record in match_records:
+
                 if input_record["versionId"] == match_record["inputVersionId"]:
                     pair_payload = deepcopy(payload)
-                    for num, input_record_to_remove in enumerate(
-                        payload[cn.ALERT_FIELD][cn.INPUT_RECORD_HIST]
-                    ):
-                        if input_record["versionId"] != input_record_to_remove["versionId"]:
-                            pair_payload[cn.ALERT_FIELD][cn.INPUT_RECORD_HIST][num] = None
 
-                    for num, match_record_to_remove in enumerate(
-                        payload[cn.ALERT_FIELD][cn.MATCH_RECORDS]
-                    ):
+                    hit_input_records = pair_payload["alertedParty"]["inputRecordHist"][
+                        "inputRecords"
+                    ]
+                    hit_match_records = pair_payload["watchlistParty"]["matchRecords"]
+                    for num, input_record_to_remove in enumerate(hit_input_records):
+                        if input_record["versionId"] != input_record_to_remove["versionId"]:
+                            hit_input_records[num] = None
+
+                    for num, match_record_to_remove in enumerate(hit_match_records):
                         if (
                             match_record["inputVersionId"]
                             != match_record_to_remove["inputVersionId"]
                         ):
-                            pair_payload[cn.ALERT_FIELD][cn.MATCH_RECORDS][num] = None
+                            hit_match_records[num] = None
 
-                    pair_payload[cn.ALERT_FIELD][cn.INPUT_RECORD_HIST] = [
-                        elem for elem in pair_payload[cn.ALERT_FIELD][cn.INPUT_RECORD_HIST] if elem
+                    pair_payload["alertedParty"]["inputRecordHist"]["inputRecords"] = [
+                        elem
+                        for elem in pair_payload["alertedParty"]["inputRecordHist"]["inputRecords"]
+                        if elem
                     ]
-                    pair_payload[cn.ALERT_FIELD][cn.MATCH_RECORDS] = [
-                        elem for elem in pair_payload[cn.ALERT_FIELD][cn.MATCH_RECORDS] if elem
+                    pair_payload["watchlistParty"]["matchRecords"] = [
+                        elem for elem in pair_payload["watchlistParty"]["matchRecords"] if elem
                     ]
 
                     new_payloads.append(pair_payload)
@@ -59,15 +65,21 @@ class MSPipeline(ETLPipeline):
         return new_payloads
 
     def transform_standardized_to_cleansed(self, payloads):
-        parties = payloads[cn.SUPPLEMENTAL_INFO][cn.RELATED_PARTIES][cn.PARTIES]
-        self.flatten_parties(parties)
-        self.parse_input_records(payloads)
+        alerted_parties = payloads["alertedParty"]["supplementalInfo"][cn.RELATED_PARTIES][
+            cn.PARTIES
+        ]
+        accounts = payloads["alertedParty"]["supplementalInfo"][cn.RELATED_ACCOUNTS][  # noqa F841
+            cn.ACCOUNTS
+        ]
+        self.flatten_parties(alerted_parties)
+        input_records = payloads["alertedParty"]["inputRecordHist"]["inputRecords"]
+        self.parse_input_records(input_records)
 
         payloads = self.connect_input_record_with_match_record(payloads)
-
         for payload in payloads:
-            matches = payload[cn.ALERT_FIELD][cn.MATCH_RECORDS]
-            fields = payload[cn.ALERT_FIELD][cn.INPUT_RECORD_HIST][0]["INPUT_FIELD"]
+            matches = payload["watchlistParty"]["matchRecords"]
+            input_records = payload["alertedParty"]["inputRecordHist"]["inputRecords"]
+            fields = input_records[0]["INPUT_FIELD"]
             for match in matches:
                 WatchlistExtractor().update_match_with_wl_values(match)
                 match[cn.TRIGGERED_BY] = self.engine.set_trigger_reasons(
@@ -75,9 +87,9 @@ class MSPipeline(ETLPipeline):
                 )
                 self.engine.set_beneficiary_hits(match)
 
-            self.engine.connect_full_names(parties)
+            self.engine.connect_full_names(alerted_parties)
 
-            self.engine.collect_party_values_from_parties(parties, payload)
+            self.engine.collect_party_values_from_parties(alerted_parties, payload)
             self.engine.collect_party_values_from_parties_from_fields(fields, payload)
             payload[cn.ALL_CONNECTED_PARTY_TYPES] = payload[cn.ALL_PARTY_TYPES]
             names_source_cols = [
@@ -115,15 +127,14 @@ class MSPipeline(ETLPipeline):
                     elements = element.split(".")
                     if cn.MATCH_RECORDS in element:
                         value = match
-                        elements = elements[1:]
+                        elements = elements[2:]
                     else:
                         value = payload
-
                     for field_name in elements:
                         if field_name == "INPUT_FIELD":
                             try:
                                 value = value[0][field_name][elements[-1]].value
-                            except AttributeError:
+                            except (AttributeError, KeyError):
                                 value = None
                             break
                         try:
@@ -149,11 +160,10 @@ class MSPipeline(ETLPipeline):
         return parsed_agent_config, alert_config
 
     def transform_cleansed_to_application(self, payloads):
-
         for payload in payloads:
-            matches = payload[cn.ALERT_FIELD][cn.MATCH_RECORDS]
+            matches = payload["watchlistParty"]["matchRecords"]
             agent_config, yaml_conf = self.load_agent_config(
-                payload[cn.ALERT_FIELD]["headerInfo"]["datasetName"]
+                payload["alertedParty"]["headerInfo"]["datasetName"]
             )
             agent_input_prepended_agent_name_config = (
                 prepend_agent_name_to_ap_or_wl_or_aliases_key(agent_config)
