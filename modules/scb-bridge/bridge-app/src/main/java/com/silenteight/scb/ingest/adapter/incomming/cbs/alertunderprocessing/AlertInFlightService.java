@@ -14,7 +14,9 @@ import javax.validation.constraints.Size;
 public interface AlertInFlightService {
 
   void saveUniqueAlerts(
-      @Size(max = 10_000) Collection<AlertId> alerts, ScbAlertIdContext alertIdContext);
+      @Size(max = 10_000) Collection<AlertId> alerts,
+      String internalBatchId,
+      ScbAlertIdContext alertIdContext);
 
   void delete(@NonNull AlertId alertId);
 

@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertInFlightService;
 
+import java.util.UUID;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 
@@ -22,9 +23,20 @@ class AlertIdPublisher implements Consumer<AlertIdCollection> {
     if (log.isDebugEnabled())
       log.debug("Received alert IDs: {}", collection);
 
+    var internalBatchId = generateInternalBatchId();
+    //TODO: publish rabbit event
+
     var alertIdContext = toScbAlertIdContext(collection.getContext());
 
-    alertInFlightService.saveUniqueAlerts(collection.getAlertIds(), alertIdContext);
+    alertInFlightService.saveUniqueAlerts(
+        collection.getAlertIds(), internalBatchId, alertIdContext);
+    log.info(
+        "Collection of {} alerts has been saved with internalBatchId: {}", collection.getSize(),
+        internalBatchId);
+  }
+
+  private String generateInternalBatchId() {
+    return UUID.randomUUID().toString();
   }
 
   private static ScbAlertIdContext toScbAlertIdContext(AlertIdContext context) {

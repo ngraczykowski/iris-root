@@ -1,0 +1,21 @@
+databaseChangeLog:
+- changeSet:
+    id: 4.0.0-1
+    author: smrozowski
+    comment: Add internalBatchId column to scb_cbs_alert_under_processing table.
+    changes:
+      - addColumn:
+          tableName: scb_cbs_alert_under_processing
+          columns:
+            - column:
+                name: internal_batch_id
+                type: varchar(64)
+                constraints:
+                  nullable: false
+
+      - createIndex:
+          tableName: scb_cbs_alert_under_processing
+          columns:
+            - column:
+                name: internal_batch_id
+          indexName: idx_scb_cbs_alert_under_processing_internal_batch_id

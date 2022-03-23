@@ -6,4 +6,6 @@ databaseChangeLog:
   - include:
       file: db/changelog/changes/db.changelog-scb-bridge-3.0.0.yaml
   - include:
+      file: db/changelog/changes/db.changelog-scb-bridge-4.0.0.yaml
+  - include:
       file: db/changelog/changes/db.changelog-scb-bridge-5.0.0.yaml

@@ -35,8 +35,8 @@ class AlertUnderProcessingRepositoryIT extends BaseDataJpaTest {
   @Test
   void shouldStoreEntities() {
     // given
-    AlertUnderProcessing entity1 = createEntity("system_id_1", "batch_id_1");
-    AlertUnderProcessing entity2 = createEntity("system_id_2", "batch_id_2");
+    AlertUnderProcessing entity1 = createEntity("system_id_1", "batch_id_1", "internalBatchId_1");
+    AlertUnderProcessing entity2 = createEntity("system_id_2", "batch_id_2", "internalBatchId_1");
 
     // when
     persistEntities(entity1, entity2);
@@ -48,7 +48,7 @@ class AlertUnderProcessingRepositoryIT extends BaseDataJpaTest {
   @Test
   void shouldDeleteExpiredEntities() {
     // given
-    AlertUnderProcessing entity1 = createEntity("system_id_1", "batch_id_1");
+    AlertUnderProcessing entity1 = createEntity("system_id_1", "batch_id_1", "internalBatchId_1");
     persistEntities(entity1);
 
     //when
@@ -67,8 +67,8 @@ class AlertUnderProcessingRepositoryIT extends BaseDataJpaTest {
   @Test
   void shouldFetchOnlyExistingEntities() {
     // given
-    AlertUnderProcessing entity1 = createEntity("system_id_1", "batch_id_1");
-    AlertUnderProcessing entity2 = createEntity("system_id_2", "batch_id_2");
+    AlertUnderProcessing entity1 = createEntity("system_id_1", "batch_id_1", "internalBatchId_1");
+    AlertUnderProcessing entity2 = createEntity("system_id_2", "batch_id_2", "internalBatchId_1");
 
     persistEntities(entity1);
 
@@ -88,8 +88,8 @@ class AlertUnderProcessingRepositoryIT extends BaseDataJpaTest {
   @Test
   void shouldDeleteAlertBySystemIdAndBatchId() {
     //given
-    AlertUnderProcessing entity1 = createEntity("systemId_1", "batchId_1");
-    AlertUnderProcessing entity2 = createEntity("systemId_2", "batchId_1");
+    AlertUnderProcessing entity1 = createEntity("systemId_1", "batchId_1", "internalBatchId_1");
+    AlertUnderProcessing entity2 = createEntity("systemId_2", "batchId_1", "internalBatchId_1");
     persistEntities(entity1, entity2);
 
     //when
@@ -108,7 +108,7 @@ class AlertUnderProcessingRepositoryIT extends BaseDataJpaTest {
   @Test
   void shouldUpdateState() {
     //given
-    AlertUnderProcessing entity = createEntity("systemId_1", "batchId_1");
+    AlertUnderProcessing entity = createEntity("systemId_1", "batchId_1", "internalBatchId_1");
     persistEntities(entity);
 
     //when
@@ -125,7 +125,7 @@ class AlertUnderProcessingRepositoryIT extends BaseDataJpaTest {
   @Test
   void shouldUpdateStateAndError() {
     //given
-    AlertUnderProcessing entity = createEntity("systemId_1", "batchId_1");
+    AlertUnderProcessing entity = createEntity("systemId_1", "batchId_1", "internalBatchId_1");
     persistEntities(entity);
 
     //when
@@ -161,12 +161,14 @@ class AlertUnderProcessingRepositoryIT extends BaseDataJpaTest {
     entityManager.clear();
   }
 
-  private static AlertUnderProcessing createEntity(String systemId, String batchId) {
-    return new AlertUnderProcessing(systemId, batchId, ScbAlertIdContext.newBuilder().build());
+  private static AlertUnderProcessing createEntity(
+      String systemId, String batchId, String internalBatchId) {
+    return new AlertUnderProcessing(
+        systemId, batchId, internalBatchId, ScbAlertIdContext.newBuilder().build());
   }
 
-  @EntityScan(basePackages = "com.silenteight.customerbridge")
-  @EnableJpaRepositories(basePackages = "com.silenteight.customerbridge.cbs")
+  @EntityScan(basePackages = "com.silenteight.scb")
+  @EnableJpaRepositories(basePackages = "com.silenteight.scb")
   @Configuration
   static class TestConfiguration {
 

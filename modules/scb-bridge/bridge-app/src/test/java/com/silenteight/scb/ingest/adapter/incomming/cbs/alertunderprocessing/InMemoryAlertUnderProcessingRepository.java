@@ -47,7 +47,9 @@ class InMemoryAlertUnderProcessingRepository implements AlertUnderProcessingRepo
     deleteBySystemIdAndBatchId(systemId, batchId);
 
     store.add(
-        new AlertUnderProcessing(systemId, batchId, state, null, DEFAULT_PRIORITY, getPayload()));
+        new AlertUnderProcessing(
+            systemId, batchId, "5a209f6d-cb00-44e6-a603-2057bc63da4c", state, null,
+            DEFAULT_PRIORITY, getPayload()));
   }
 
   @Override
@@ -55,7 +57,9 @@ class InMemoryAlertUnderProcessingRepository implements AlertUnderProcessingRepo
     deleteBySystemIdAndBatchId(systemId, batchId);
 
     store.add(
-        new AlertUnderProcessing(systemId, batchId, state, error, DEFAULT_PRIORITY, getPayload()));
+        new AlertUnderProcessing(
+            systemId, batchId, "5a209f6d-cb00-44e6-a603-2057bc63da4c", state, error,
+            DEFAULT_PRIORITY, getPayload()));
   }
 
   @Override

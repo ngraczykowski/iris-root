@@ -14,7 +14,6 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.*;
 
 @RunWithoutTransactionManager
@@ -32,15 +31,18 @@ class AlertInFlightServiceIT {
   @Test
   void shouldStoreOnlyNewAlertsToBeProcessed() {
     // given
+    var internalBatchId = "5a209f6d-cb00-44e6-a603-2057bc63da4c";
     AlertId alertId1 = createAlertId("system_id_1");
     AlertId alertId2 = createAlertId("system_id_2");
     AlertId alertId3 = createAlertId("system_id_3");
     List<AlertId> alertsToBeSaved = asList(alertId1, alertId3);
     List<AlertId> alertIds = asList(alertId1, alertId2);
-    repository.saveAll(alertIds.stream().map(AlertInFlightServiceIT::toEntity).collect(toList()));
+    repository.saveAll(alertIds.stream()
+        .map(e -> toEntity(e, internalBatchId))
+        .toList());
 
     // when
-    classUnderTest.saveUniqueAlerts(alertsToBeSaved, alertIdContext);
+    classUnderTest.saveUniqueAlerts(alertsToBeSaved, internalBatchId, alertIdContext);
     Collection<AlertUnderProcessing> alertsUnderProcessing = repository.findAll();
 
     // then
@@ -54,12 +56,14 @@ class AlertInFlightServiceIT {
   @Test
   void shouldDeleteAlertsBySystemIdAndBatchId() {
     //given
+    var internalBatchId = "5a209f6d-cb00-44e6-a603-2057bc63da4c";
     AlertId alertId1 = createAlertId("system_id_1", "batch_id_1");
     AlertId alertId2 = createAlertId("system_id_1", "batch_id_2");
     AlertId alertId3 = createAlertId("system_id_3", "batch_id_1");
     List<AlertId> alertsToBeSaved = asList(alertId1, alertId2, alertId3);
-    repository.saveAll(
-        alertsToBeSaved.stream().map(AlertInFlightServiceIT::toEntity).collect(toList()));
+    repository.saveAll(alertsToBeSaved.stream()
+        .map(e -> toEntity(e, internalBatchId))
+        .toList());
 
     //when
     classUnderTest.delete(alertId3);
@@ -83,8 +87,9 @@ class AlertInFlightServiceIT {
   @Test
   void shouldUpdateState() {
     //given
+    var internalBatchId = "5a209f6d-cb00-44e6-a603-2057bc63da4c";
     AlertId alertId = createAlertId("system_id_1", "batch_id_1");
-    repository.saveAll(singletonList(toEntity(alertId)));
+    repository.saveAll(singletonList(toEntity(alertId, internalBatchId)));
 
     //when
     classUnderTest.update(alertId, State.ERROR);
@@ -100,8 +105,9 @@ class AlertInFlightServiceIT {
   @Test
   void shouldUpdateStateAndError() {
     //given
+    var internalBatchId = "5a209f6d-cb00-44e6-a603-2057bc63da4c";
     AlertId alertId = createAlertId("system_id_1", "batch_id_1");
-    repository.saveAll(singletonList(toEntity(alertId)));
+    repository.saveAll(singletonList(toEntity(alertId, internalBatchId)));
     String someTooLongError =
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ullamcorper tincidunt ipsum, "
             + "ullamcorper sagittis odio suscipit sit amet. Mauris hendrerit, nulla fringilla "
@@ -129,8 +135,9 @@ class AlertInFlightServiceIT {
     }
   }
 
-  private static AlertUnderProcessing toEntity(AlertId alertId) {
-    return new AlertUnderProcessing(alertId.getSystemId(), alertId.getBatchId(), alertIdContext);
+  private static AlertUnderProcessing toEntity(AlertId alertId, String internalBatchId) {
+    return new AlertUnderProcessing(
+        alertId.getSystemId(), alertId.getBatchId(), internalBatchId, alertIdContext);
   }
 
   private static AlertId createAlertId(String systemId) {

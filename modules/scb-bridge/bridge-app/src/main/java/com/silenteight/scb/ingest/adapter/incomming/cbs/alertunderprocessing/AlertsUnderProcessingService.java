@@ -26,13 +26,13 @@ class AlertsUnderProcessingService implements AlertInFlightService {
   @Override
   @Transactional(GnsSyncConstants.PRIMARY_TRANSACTION_MANAGER)
   public void saveUniqueAlerts(
-      Collection<AlertId> alerts, ScbAlertIdContext alertIdContext) {
+      Collection<AlertId> alerts, String internalBatchId, ScbAlertIdContext alertIdContext) {
     Collection<AlertId> alertsUnderProcessing = getAlertsUnderProcessing(alerts);
     List<AlertId> alertsToBeSaved = alerts
         .stream()
         .filter(a -> !alertsUnderProcessing.contains(a))
         .collect(toList());
-    saveAlertsToBeProcess(alertsToBeSaved, alertIdContext);
+    saveAlertsToBeProcess(alertsToBeSaved, internalBatchId, alertIdContext);
   }
 
   @Override
@@ -94,12 +94,20 @@ class AlertsUnderProcessingService implements AlertInFlightService {
         .collect(toList());
   }
 
-  private void saveAlertsToBeProcess(Collection<AlertId> alerts, ScbAlertIdContext alertIdContext) {
+  private void saveAlertsToBeProcess(
+      Collection<AlertId> alerts, String internalBatchId, ScbAlertIdContext alertIdContext) {
     alertUnderProcessingRepository
-        .saveAll(alerts.stream().map(a -> toEntity(a, alertIdContext)).collect(toList()));
+        .saveAll(alerts.stream()
+            .map(alert -> toEntity(alert, internalBatchId, alertIdContext))
+            .toList());
   }
 
-  private AlertUnderProcessing toEntity(AlertId alertId, ScbAlertIdContext scbAlertIdContext) {
-    return new AlertUnderProcessing(alertId.getSystemId(), alertId.getBatchId(), scbAlertIdContext);
+  private AlertUnderProcessing toEntity(
+      AlertId alertId, String internalBatchId, ScbAlertIdContext scbAlertIdContext) {
+    return new AlertUnderProcessing(
+        alertId.getSystemId(),
+        alertId.getBatchId(),
+        internalBatchId,
+        scbAlertIdContext);
   }
 }

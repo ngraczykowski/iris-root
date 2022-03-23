@@ -21,7 +21,7 @@ class AlertIdPublisherSpec extends Specification {
     objectUnderTest.accept(new AlertIdCollection(someAlertIds, context))
 
     then:
-    1 * alertInFlightService.saveUniqueAlerts(someAlertIds, _ as ScbAlertIdContext)
+    1 * alertInFlightService.saveUniqueAlerts(someAlertIds, _ as String, _ as ScbAlertIdContext)
   }
 
   def createAlertId(String systemId) {
