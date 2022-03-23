@@ -16,9 +16,6 @@ import com.silenteight.warehouse.report.storage.ReportStorage;
 import org.springframework.scheduling.annotation.Async;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -63,7 +60,6 @@ class GenerationService implements ReportGenerationService, ReportsRemoval {
       if (parsed.isZipped()) {
         reportPersistenceService.zippingSuccessful(request.getDomainId());
       }
-      deleteTempFile(parsed);
     });
   }
 
@@ -78,16 +74,6 @@ class GenerationService implements ReportGenerationService, ReportsRemoval {
         .reportId(request.getDomainId())
         .reportPath(reportFile.toPath())
         .build();
-  }
-
-  private static void deleteTempFile(ParsedFileDto parsed) {
-    Path path = parsed.getFile().toPath();
-    try {
-      boolean deleted = Files.deleteIfExists(path);
-      log.debug("File {} deleted={}", path, deleted);
-    } catch (IOException e) {
-      log.warn("Error while deleting temp file: {}", path);
-    }
   }
 
   private void doFail(Long id) {

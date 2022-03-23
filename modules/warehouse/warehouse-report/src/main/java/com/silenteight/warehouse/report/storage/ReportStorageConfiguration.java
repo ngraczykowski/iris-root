@@ -2,7 +2,6 @@ package com.silenteight.warehouse.report.storage;
 
 import com.silenteight.warehouse.report.persistence.ReportPersistenceService;
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,9 +15,6 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.S3Configuration;
 
 import java.net.URI;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
 import javax.validation.Valid;
 
 @Configuration
@@ -52,7 +48,7 @@ class ReportStorageConfiguration {
   @Bean
   S3CompatibleStorage reportStorageService(
       S3Client s3Client,
-      AsyncReportStorageChecker reportStorageChecker,
+      ReportStorageRequestStatusCheck reportStorageChecker,
       @Valid ReportStorageProperties properties) {
 
     return new S3CompatibleStorage(
@@ -60,15 +56,10 @@ class ReportStorageConfiguration {
   }
 
   @Bean
-  AsyncReportStorageChecker reportStorageChecker(
+  ReportStorageRequestStatusCheck reportStorageChecker(
       S3Client s3Client,
       ReportPersistenceService reportPersistenceService) {
 
-    ExecutorService threadPool = Executors.newFixedThreadPool(2, threadFactory());
-    return new AsyncReportStorageChecker(s3Client, threadPool, reportPersistenceService);
-  }
-
-  private ThreadFactory threadFactory() {
-    return new ThreadFactoryBuilder().setNameFormat("s3Waiters-%d").build();
+    return new ReportStorageRequestStatusCheck(s3Client, reportPersistenceService);
   }
 }
