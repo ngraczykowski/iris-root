@@ -86,8 +86,20 @@ class BackupMessageMigration {
 
     while (!toMigrate.isEmpty()) {
 
-      transactionTemplate.execute(
-          new BatchProcessWithinTransaction(Collections.unmodifiableList(toMigrate)));
+      try {
+        transactionTemplate.execute(
+            new BatchProcessWithinTransaction(Collections.unmodifiableList(toMigrate)));
+      } catch (MessageNotProcessedException messageNotProcessedException) {
+        Message message = messageNotProcessedException.getBrokenMessage();
+        log.warn(
+            "warehouse_message_backup migration: exception occurred during batch processing, "
+                + "transaction will be rolled back. "
+                + "message_id - {} migration status will be set to: false",
+            message.getId(), messageNotProcessedException);
+        message.markFailed();
+        transactionTemplate.executeWithoutResult(tr -> backupMessageQuery.update(message));
+      }
+
 
       elementsToProcess -= toMigrate.size();
       log.debug(
@@ -113,14 +125,7 @@ class BackupMessageMigration {
               message.markMigrated();
               backupMessageQuery.update(message);
             } catch (Exception ex) {
-              log.warn(
-                  "warehouse_message_backup migration: "
-                      + "exception occurred during batch processing, "
-                      + "transaction will be rollback - {} "
-                      + "message_id - {}", ex.getMessage(), message.getId());
-
-              message.markFailed();
-              backupMessageQuery.update(message);
+              throw new MessageNotProcessedException(ex, message);
             }
           });
     }

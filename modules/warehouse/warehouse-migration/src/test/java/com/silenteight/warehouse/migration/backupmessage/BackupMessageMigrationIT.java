@@ -74,12 +74,18 @@ class BackupMessageMigrationIT {
         "alerts/4ecdc38a-58ac-454d-bed7-baf04bfa61bd",
         "alerts/58485906-bdbc-4cce-8a7f-9aeb4213b2cb",
         "alerts/eeb7f088-1c42-494a-945f-bd5e484e8f90",
-        "alerts/30d1fef2-c011-4a38-acd5-3b7102f85793");
+        "alerts/30d1fef2-c011-4a38-acd5-3b7102f85793",
+        "alerts/48802",
+        "alerts/48803",
+        "alerts/48804"
+    );
 
     List<Message> messages = fetchMessages();
     assertThat(messages)
         .extracting(Message::isMigrated)
-        .containsOnlyOnce(false);
+        .doesNotContainNull()
+        .filteredOn(Boolean.FALSE::equals)
+        .hasSize(3);
     assertThat(messages)
         .extracting(Message::getMigratedAt)
         .isNotNull();
