@@ -1,6 +1,5 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.batch
 
-import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckGateway
 import com.silenteight.scb.ingest.adapter.incomming.common.domain.GnsSyncDeltaService
 import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertIngestService
 import com.silenteight.scb.ingest.adapter.incomming.common.model.ObjectId
@@ -17,7 +16,6 @@ class RecordCompositeWriterSpec extends Specification {
 
   def deltaService = Mock(GnsSyncDeltaService)
   def ingestService = Mock(BatchAlertIngestService)
-  def cbsAckGateway = Mock(CbsAckGateway)
   def deltaJobName = "DELTA_NAME"
 
   @Unroll
@@ -67,7 +65,11 @@ class RecordCompositeWriterSpec extends Specification {
   }
 
   def createRecordWriter() {
-    new RecordCompositeWriter(
-        deltaService, ingestService, cbsAckGateway, true, deltaJobName)
+    LearningRecordCompositeWriter.builder()
+        .deltaService(deltaService)
+        .ingestService(ingestService)
+        .useDelta(true)
+        .deltaJobName(deltaJobName)
+        .build();
   }
 }

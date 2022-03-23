@@ -172,7 +172,7 @@ serp:
               text: Risk Relevant
             - solution: ANALYST_FALSE_POSITIVE
               text: Risk Irrelevant - Activity in line with Business
-          ecm-view-name: ECM
+          ecm-view-name: fff_decisions_wl
 
         # Queuing Jobs Configuration
         queuing:

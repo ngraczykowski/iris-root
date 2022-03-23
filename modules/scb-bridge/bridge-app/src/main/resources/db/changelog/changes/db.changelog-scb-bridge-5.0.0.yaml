@@ -1,0 +1,36 @@
+databaseChangeLog:
+- changeSet:
+    id: 5.0.0-1
+    author: ngraczykowski
+    comment: Table for keeping learning alerts on watchlist level provided by ECM
+    changes:
+      - createTable:
+          tableName: fff_decisions_wl
+          columns:
+            - column:
+                name: system_id
+                type: text
+            - column:
+                name: batch_id
+                type: text
+            - column:
+                name: gns_batch_id
+                type: text
+            - column:
+                name: hit_unique_id
+                type: text
+            - column:
+                name: analyst_decision
+                type: text
+            - column:
+                name: analyst_actions
+                type: text
+            - column:
+                name: action_date
+                type: timestamp without time zone
+            - column:
+                name: analyst_comments
+                type: text
+            - column:
+                name: case_owner
+                type: text

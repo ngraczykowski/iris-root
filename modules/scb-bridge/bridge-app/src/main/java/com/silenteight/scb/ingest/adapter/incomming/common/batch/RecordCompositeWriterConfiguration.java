@@ -24,7 +24,7 @@ class RecordCompositeWriterConfiguration {
       GnsSyncDeltaService deltaService,
       BatchAlertIngestService ingestService) {
 
-    return RecordCompositeWriter.builder()
+    return LearningRecordCompositeWriter.builder()
         .useDelta(alertLevelLearningJobProperties.isUseDelta())
         .deltaService(deltaService)
         .ingestService(ingestService)
@@ -38,7 +38,7 @@ class RecordCompositeWriterConfiguration {
       GnsSyncDeltaService deltaService,
       BatchAlertIngestService ingestService) {
 
-    return RecordCompositeWriter.builder()
+    return LearningRecordCompositeWriter.builder()
         .useDelta(ecmBridgeLearningJobProperties.isUseDelta())
         .deltaService(deltaService)
         .ingestService(ingestService)

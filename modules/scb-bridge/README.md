@@ -38,3 +38,17 @@ eg: `DatabaseIntegrationTest`. So it's important to name test classes appropriat
 
 The Nomad deployment descriptor(the job file) `scb-bridge.nomad` contains job specification and all its requirements. 
 Nomad scheduler deployed on-premise will use this file to run scb-bridge artifact (jar).
+
+## Providing learning alert data by ECM (Hive)
+
+1) Login via ssh to the hive server
+2) cd to bin
+3) Execute these commands:
+* export EEL_TMP_DIR=/tmp
+* export EEL_PG_HOST=10.23.234.xx
+* export EEL_PG_PORT=6524
+* export EEL_PG_DBNAME=tsaas-1.40.0-BUILD.703
+* export EEL_PG_USERNAME=devadmin
+* export EEL_PG_PASS=Devadmin@123
+
+and then, run the script: bridge-dist/src/bash/export_ecm_learning.sh

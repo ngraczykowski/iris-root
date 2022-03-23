@@ -128,6 +128,12 @@ class EcmRecordCompositeReader extends BetterJdbcCursorItemReader<AlertComposite
   }
 
   @Override
+  protected void cleanupOnClose(Connection connection) throws Exception {
+    // do nothing
+    // externalSystemIdsReader manages the cursor on the close actions
+  }
+
+  @Override
   protected void openCursor(@NotNull Connection con) {
     // do nothing
     // externalSystemIdsReader manages the cursor on the open/update actions
