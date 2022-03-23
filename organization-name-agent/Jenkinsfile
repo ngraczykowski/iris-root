@@ -3,7 +3,14 @@ def utils = new com.silenteight.jenkins.ci.Utils()
 def jenkins = new com.silenteight.jenkins.ci.Jenkins()
 
 pipeline {
-    agent none
+    agent {
+      docker {
+          image 'docker.repo.silenteight.com/python-build-image:3.7-bullseye'
+          args '--volume $HOME/.cache/agent/pip:/home/jenkins/.cache/pip'
+          alwaysPull true
+          reuseNode true
+      }
+    }
     environment {
         PYPI_URL = credentials('pypi-readonly-url')
         TWINE_REPOSITORY_URL = 'https://repo.silenteight.com/artifactory/api/pypi/pypi'
@@ -20,13 +27,6 @@ pipeline {
 
     stages {
         stage('Build and publish package') {
-            agent {
-                docker {
-                    image 'docker.repo.silenteight.com/python-build-image:3.7-bullseye'
-                    args '--volume $HOME/.cache/agent/pip:/home/jenkins/.cache/pip'
-                    alwaysPull true
-                }
-            }
             stages {
                 stage('Prepare') {
                     steps {
@@ -118,7 +118,6 @@ pipeline {
             }
         }
         stage('Build and publish docker image') {
-            agent any
             stages {
                 stage('Build image') {
                     steps {
