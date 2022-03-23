@@ -2,11 +2,11 @@
   {
     "jobName": "sep-frontend",
     "projectId": "532",
-    "version": "sep-frontend-2.17.0.zip",
-    "artifact_name": "sep-frontend-2.17.0.zip",
+    "version": "sep-frontend-2.20.0.zip",
+    "artifact_name": "sep-frontend-2.20.0.zip",
     "branch": "v2.14.0",
     "nomadName": "sep_frontend",
-    "checksum": "sha256:f224836035a446df9ca5845de1bf353d745280556669192c11f014f8e7d53146",
+    "checksum": "sha256:ab53207e25d3caaab5e74ba14a18e70350edd312c38405bc04a4d470e96f066b",
     "repo": "https://gitlab.silenteight.com/sens/sep-front"
   },
   {
@@ -22,31 +22,31 @@
   {
     "jobName": "simulator",
     "projectId": "626",
-    "version": "simulator-app-1.11.0-exec.jar",
-    "artifact_name": "simulator-app-1.11.0-exec.jar",
-    "branch": "v1.11.0",
+    "version": "simulator-app-1.13.0-exec.jar",
+    "artifact_name": "simulator-app-1.13.0-exec.jar",
+    "branch": "v1.13.0",
     "nomadName": "simulator",
-    "checksum": "sha256:d6a541f2557340ac9d4ebdfffd8123c9f6d1dfef1456580a87bbbd707e61e6e8",
+    "checksum": "sha256:f05636b956fd2410bf6868930f17aa1194628705da159392d86a76d8149256f2",
     "repo": "https://gitlab.silenteight.com/sens/simulator"
   },
   {
     "jobName": "governance",
     "projectId": "576",
-    "version": "governance-app-4.7.0-exec.jar",
-    "artifact_name": "governance-app-4.7.0-exec.jar",
+    "version": "governance-app-4.9.0-exec.jar",
+    "artifact_name": "governance-app-4.9.0-exec.jar",
     "branch": "master",
     "nomadName": "governance",
-    "checksum": "sha256:13eeb23d18835a9345024b5cdb8907ec5483777dd7b625bd3fdeff4b607501e4",
+    "checksum": "sha256:5ef245058a50f4641c953a8926ab5d5bf6b9b8916e4337fead5ef73ca2e08efd",
     "repo": "https://gitlab.silenteight.com/sens/serp-governance"
   },
   {
     "jobName": "adjudication-engine",
     "projectId": "644",
-    "version": "adjudication-engine-app-1.13.3-exec.jar",
-    "artifact_name": "adjudication-engine-app-1.13.3-exec.jar",
-    "branch": "v1.13.3",
+    "version": "adjudication-engine-app-1.17.2-exec.jar",
+    "artifact_name": "adjudication-engine-app-1.17.2-exec.jar",
+    "branch": "v1.17.2",
     "nomadName": "adjudication_engine",
-    "checksum": "sha256:66178f8daa34bc404d43febc5a66551a74c7302019ff543cad7c8bd5e284f75d",
+    "checksum": "sha256:141669451a6da73d35b7b28dbb1b96393629152c4d77c5525565496dce2ca409",
     "repo": "https://gitlab.silenteight.com/sens/adjudication-engine"
   },
   {
