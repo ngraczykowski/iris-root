@@ -21,7 +21,7 @@ class S3CompatibleStorage implements ReportStorage {
   private final S3Client s3Client;
 
   @NonNull
-  private final AsyncReportStorageChecker reportStorageChecker;
+  private final ReportStorageRequestStatusCheck reportStorageRequestStatusCheck;
 
   @NonNull
   private final String bucketName;
@@ -35,7 +35,7 @@ class S3CompatibleStorage implements ReportStorage {
     var requestBody = RequestBody.fromFile(report.getReportPath());
 
     s3Client.putObject(putObjectRequest, requestBody);
-    reportStorageChecker.runStatusCheck(report.getReportName(), bucketName, report.getReportId());
+    reportStorageRequestStatusCheck.checkPersistenceStatus(report, bucketName);
   }
 
   @Override
