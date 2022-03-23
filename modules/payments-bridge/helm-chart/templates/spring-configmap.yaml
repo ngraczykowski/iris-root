@@ -35,6 +35,14 @@ data:
           percentiles: [ 0.5, 0.95 ]
       sear-learning:
         discriminator-prefix: {{ .Values.searLearning.discriminatorPrefix | quote }}
+      daily-reports-remove:
+        cron: {{ .Values.dailyReportsRemove.cron | quote }}
+        bucket: {{ .Values.dailyReportsRemove.bucket | quote }}
+        file-prefix: {{ .Values.dailyReportsRemove.filePrefix | quote }}
+        report-expiration-in-months: {{ .Values.dailyReportsRemove.reportExpirationInMonths }}
+      
+      
+      
     grpc:
       client:
         GLOBAL:

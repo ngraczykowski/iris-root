@@ -3,7 +3,7 @@ package com.silenteight.payments.bridge.svb.learning.step.delete;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.DeleteLearningFileRequest;
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.DeleteFileRequest;
 import com.silenteight.payments.bridge.common.resource.csv.file.provider.port.CsvFileResourceProvider;
 
 import org.springframework.batch.core.StepContribution;
@@ -34,7 +34,7 @@ public class DeleteFileTasklet implements Tasklet {
       var bucketName =
           contribution.getStepExecution().getJobParameters().getString(BUCKET_NAME_PARAMETER);
       log.info("Tasklet of deleting s3 file has been executed:{}", fileName);
-      resourceProvider.deleteLearningFile(DeleteLearningFileRequest.builder()
+      resourceProvider.deleteFile(DeleteFileRequest.builder()
           .bucket(bucketName)
           .object(fileName)
           .build());

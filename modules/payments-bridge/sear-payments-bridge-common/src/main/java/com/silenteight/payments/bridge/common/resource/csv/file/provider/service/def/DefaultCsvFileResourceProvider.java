@@ -3,9 +3,7 @@ package com.silenteight.payments.bridge.common.resource.csv.file.provider.servic
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.common.resource.csv.file.provider.exception.NoCsvFileResourceFound;
-import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.DeleteLearningFileRequest;
-import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.FileRequest;
-import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.ObjectPath;
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.*;
 import com.silenteight.payments.bridge.common.resource.csv.file.provider.port.CsvFileResourceProvider;
 
 import org.springframework.core.io.InputStreamResource;
@@ -17,6 +15,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -42,8 +41,8 @@ class DefaultCsvFileResourceProvider implements CsvFileResourceProvider {
   }
 
   @Override
-  public void deleteLearningFile(
-      DeleteLearningFileRequest deleteLearningFileRequest) {
+  public void deleteFile(
+      DeleteFileRequest deleteFileRequest) {
     log.info("Ignore file deletion with DefaultCsvFileResourceProvider implementation");
   }
 
@@ -62,5 +61,11 @@ class DefaultCsvFileResourceProvider implements CsvFileResourceProvider {
     }
 
     return List.of();
+  }
+
+  @Override
+  public List<FileDetails> getFilesListBasedOnPattern(
+      FilesListPatternRequest filesListPatternRequest) {
+    return Collections.emptyList();
   }
 }

@@ -33,6 +33,11 @@ pb:
     amount: 10
     cmapi-enabled: true
     learning-enabled: true
+  daily-reports-remove:
+    cron: "0 2 * * * *"
+    bucket: "sps-reports-dev-20211110115534833400000001"
+    file-prefix: "SVB_SEAR_DEV_ai_reasoning_alert_level"
+    report-expiration-in-months: 6
 
 environment:
   name: "TEST"

@@ -1,9 +1,7 @@
 
 package com.silenteight.payments.bridge.common.resource.csv.file.provider.port;
 
-import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.DeleteLearningFileRequest;
-import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.FileRequest;
-import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.ObjectPath;
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.*;
 
 import org.springframework.core.io.Resource;
 
@@ -13,7 +11,9 @@ public interface CsvFileResourceProvider {
 
   Resource getResource(FileRequest fileRequest);
 
-  void deleteLearningFile(DeleteLearningFileRequest deleteLearningFileRequest);
+  void deleteFile(DeleteFileRequest deleteFileRequest);
 
   List<ObjectPath> getFilesList();
+
+  List<FileDetails> getFilesListBasedOnPattern(FilesListPatternRequest filesListPatternRequest);
 }
