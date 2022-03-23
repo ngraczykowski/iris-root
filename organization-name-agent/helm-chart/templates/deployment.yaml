@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    app: {{ .Values.name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+      annotations:
+        deployment-tag: {{ randAlphaNum 5 | quote }}
+    spec:
+      volumes:
+        - name: application-config
+          secret:
+            secretName: organization-name-agent-config
+        {{ if .Values.reductionRulesSubpath }}
+        - name: reduction-rules
+          secret:
+            secretName: organization-name-agent-config
+        {{ end }}
+        {{ if .Values.namePreconditionsSubpath }}
+        - name: name-preconditions
+          secret:
+            secretName: organization-name-agent-config
+        {{ end }}
+        {{ if .Values.modelSubpath }}
+        - name: model
+          secret:
+            secretName: organization-name-agent-config
+        {{ end }}
+      containers:
+        - name: {{ .Values.name }}
+          volumeMounts:
+            - mountPath: "/app/config/application.yaml"
+              name: application-config
+              subPath: {{ .Values.applicationConfigSubpath }}
+            {{ if .Values.reductionRulesSubpath }}
+            - mountPath: "/app/config/reduction-rules.yaml"
+              name: reduction-rules
+              subPath: {{ .Values.reductionRulesSubpath }}
+            {{ end }}
+            {{ if .Values.namePreconditionsSubpath }}
+            - mountPath: "/app/config/name-preconditions.yaml"
+              name: name-preconditions
+              subPath: {{ .Values.namePreconditionsSubpath }}
+            {{ end }}
+            {{ if .Values.modelSubpath }}
+            - mountPath: "/app/config/model/model.bin"
+              name: model
+              subPath: {{ .Values.modelSubpath }}
+            {{ end }}
+          image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
+          {{ if .Values.args }}
+          args:
+          {{ range .Values.args }}
+          - {{ . }}
+          {{ end }}
+          {{ end }}
+          resources:
+            limits:
+              memory: {{ .Values.memoryLimit | quote }}
+            requests:
+              memory: {{ .Values.memoryRequest | quote }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          ports:
+            - containerPort: {{ .Values.ports.grpc }}
+              name: grpc

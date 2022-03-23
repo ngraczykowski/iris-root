@@ -7,6 +7,7 @@ pipeline {
     environment {
         PYPI_URL = credentials('pypi-readonly-url')
         TWINE_REPOSITORY_URL = 'https://repo.silenteight.com/artifactory/api/pypi/pypi'
+        ECR = '278875966478.dkr.ecr.us-east-1.amazonaws.com'
     }
     options {
         timeout(time: 1, unit: 'HOURS')   // just to be safe
@@ -34,7 +35,14 @@ pipeline {
                     steps {
                         sh './scripts/clean.sh'
                         sh './scripts/build.sh --index-url "${PYPI_URL}"'
-                        stash includes: "PACKAGE_VERSION", name: "PACKAGE_VERSION"
+                        script {
+                           env.VERSION = sh(
+                            returnStdout: true,
+                            script: '''#!/bin/bash
+                                grep ^current_version setup.cfg | awk '{ print $3 }'
+                            '''
+                           ).trim()
+                        }
                     }
                 }
                 stage('Test package') {
@@ -76,7 +84,9 @@ pipeline {
                         sshagent([env.JENKINS_SSH_NAME]) {
                             sh './scripts/release.sh --index-url ${PYPI_URL}'
                         }
-                        stash includes: "PACKAGE_VERSION", name: "PACKAGE_VERSION"
+                        script {
+                           env.VERSION = env.VERSION.replace('-dev', '')
+                        }
                         withCredentials([usernamePassword(
                             credentialsId: 'pypi-deployment-user',
                             usernameVariable: 'TWINE_USERNAME',
@@ -113,21 +123,48 @@ pipeline {
                         sh './scripts/build_image.sh'
                     }
                 }
-                stage('Push image') {
+                stage('Push image to S8 repo') {
                     when {
                         branch 'master'
                     }
                     steps {
-                        unstash "PACKAGE_VERSION"
                         sh './scripts/push_image.sh'
+                    }
+                }
+                stage('Helm') {
+                    when {
+                        branch 'master'
+                    }
+                    steps {
+                        withCredentials([
+                          usernamePassword(
+                            credentialsId: 'artifactory-deployment-user',
+                            usernameVariable: 'DEPLOY_USERNAME',
+                            passwordVariable: 'DEPLOY_PASSWORD'
+                            )]) {
+                                sh './scripts/helm-chart-build.sh'
+                            }
+                    }
+                }
+                stage('ECR') {
+                    when {
+                        branch 'master'
+                    }
+                    agent {
+                        label 'aws'
+                    }
+                    steps {
+                        sh """
+                          IMAGE_TAG=${env.VERSION}
+                          aws ecr get-login-password --region us-east-1 | skopeo login --username AWS --password-stdin ${ECR}
+                          skopeo copy docker://docker.repo.silenteight.com/organization-name-agent:${IMAGE_TAG} docker://${ECR}/organization-name-agent:${IMAGE_TAG}
+                          skopeo copy docker://docker.repo.silenteight.com/organization-name-agent:latest docker://${ECR}/organization-name-agent:latest
+                      """
                     }
                 }
             }
         }
-        stage('Deployment') {
-            agent {
-                label 'nomad'
-            }
+        stage('Zipped (.pyz) artifacts upload') {
             when {
                 anyOf {
                     branch 'master'
@@ -161,11 +198,6 @@ pipeline {
                         )
                     }
                 }
-                //stage('Deploy on nomad dev') {
-                //    steps {
-                //        sh './nomad/full/deploy.sh'
-                //    }
-                //}
             }
        }
     }

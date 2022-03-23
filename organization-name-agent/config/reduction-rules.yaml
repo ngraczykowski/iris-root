@@ -20,7 +20,7 @@ rules:
     solution: MATCH
     solution_probability: 0.8
 
-  - source: model/tsaas-logistic-regression-2021.07.12.bin
+  - source: model/model.bin
     solutions:
       - solution: NO_MATCH
         label: NO_MATCH
