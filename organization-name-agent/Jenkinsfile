@@ -144,7 +144,9 @@ pipeline {
                             )]) {
                                 sh '''
                                 ulimit -l
-                                ./scripts/helm-chart-build.sh
+                                helm repo add --username $DEPLOY_USERNAME --password $DEPLOY_PASSWORD s8helm https://repo.silenteight.com/artifactory/helm
+                                helm package --app-version $REPORT_VERSION helm-chart
+                                helm push-artifactory --skip-reindex organization-name-agent-*.tgz s8helm
                                 '''
                             }
                     }
