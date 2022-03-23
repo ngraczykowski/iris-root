@@ -6,7 +6,7 @@ pipeline {
     agent {
       docker {
           image 'docker.repo.silenteight.com/python-build-image:3.7-bullseye'
-          args '--volume $HOME/.cache/agent/pip:/home/jenkins/.cache/pip'
+          args '--volume $HOME/.cache/agent/pip:/home/jenkins/.cache/pip -v /var/run/docker.sock:/var/run/docker.sock --group-add 998'
           alwaysPull true
           reuseNode true
       }
