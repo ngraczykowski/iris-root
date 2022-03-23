@@ -12,7 +12,6 @@ import com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord.InvalidAlert
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Optional.empty;
@@ -33,44 +32,39 @@ class AlertCompositeCollectionReader {
 
     var alerts = alertCollection.getAlerts()
         .stream()
-        .map(a -> tryToParseAlerts(a, invalidAlerts, options))
+        .map(alertRecordComposite -> tryToParseAlerts(
+            alertRecordComposite, invalidAlerts, context, options))
         .filter(Optional::isPresent)
         .map(Optional::get)
-        .collect(Collectors.toList());
+        .toList();
 
     return new AlertCompositeCollection(alerts, invalidAlerts);
   }
 
   private Optional<ValidAlertComposite> tryToParseAlerts(
-      AlertRecordComposite readAlert, List<InvalidAlert> invalidAlerts, Option... options) {
+      AlertRecordComposite readAlert,
+      List<InvalidAlert> invalidAlerts,
+      ScbAlertIdContext context,
+      Option... options) {
     var alertId = readAlert.getAlertId();
 
     try {
       var alerts = alertMapper.fromAlertRecordComposite(readAlert, options);
-      return of(new ValidAlertComposite(alertId, alerts));
+      return of(new ValidAlertComposite(alertId, alerts, context));
     } catch (Exception ex) {
       log.error("Error when parsing an alert: systemId={}", alertId.getSystemId(), ex);
-      invalidAlerts.add(createDamagedAlert(alertId));
+      invalidAlerts.add(createDamagedAlert(alertId, context));
       return empty();
     }
   }
 
-  private InvalidAlert createDamagedAlert(AlertId alertId) {
-    return new InvalidAlert(alertId.getSystemId(), alertId.getBatchId(), Reason.DAMAGED);
+  private InvalidAlert createDamagedAlert(AlertId alertId, ScbAlertIdContext context) {
+    return new InvalidAlert(alertId.getSystemId(), alertId.getBatchId(), Reason.DAMAGED, context);
   }
 
   private AlertRecordCompositeCollection getAlertCollection(
       List<AlertId> alertIds, ScbAlertIdContext context) {
-
-    var sourceView = context.getSourceView();
-    var cbsHitDetailsView = context.getHitDetailsView();
-
-    if (cbsHitDetailsView.isEmpty()) {
-      return databaseAlertRecordCompositeReader.read(sourceView, alertIds);
-    }
-
-    return databaseAlertRecordCompositeReader.readWithCbsHitDetails(
-        sourceView, cbsHitDetailsView, alertIds);
+    return databaseAlertRecordCompositeReader.read(context, alertIds);
   }
 
   private Option[] getMappingOptions(ScbAlertIdContext context) {

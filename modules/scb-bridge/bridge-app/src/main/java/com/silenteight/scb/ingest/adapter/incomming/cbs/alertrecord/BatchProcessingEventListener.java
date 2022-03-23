@@ -7,8 +7,9 @@ import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertIdWithDetails;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertInFlightService;
+import com.silenteight.scb.ingest.adapter.incomming.cbs.batch.BatchReadEvent;
 
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 
 import java.util.List;
 import java.util.Map;
@@ -19,25 +20,32 @@ import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Slf4j
-class AlertProcessor {
+class BatchProcessingEventListener {
 
   private final AlertInFlightService alertInFlightService;
   private final AlertCompositeCollectionReader alertCompositeCollectionReader;
   private final AlertHandler alertHandler;
 
-  @Scheduled(fixedDelay = 1000, initialDelay = 2000)
-  void process() {
-    var alertIds = alertInFlightService.readChunk();
+  @RabbitListener(queues = "${amqp.ingest.incoming.batch-processing.queue-name}")
+  void subscribe(BatchReadEvent batchReadEvent) {
+    String internalBatchId = batchReadEvent.internalBatchId();
+    log.info("Received a BatchReadEvent with internalBatchId: {}", internalBatchId);
+
+    var alertIds = alertInFlightService.getAlertsFromBatch(internalBatchId);
 
     if (alertIds.isEmpty()) {
+      log.trace("No alerts were found for batch with internalBatchId: {}", internalBatchId);
       return;
     }
 
     log.info("Fetched alert ids: {}", alertIds.size());
 
-    groupAlertIdsByContext(alertIds).entrySet()
-        .parallelStream()
-        .forEach((e) -> processAlertsWithTheSameContext(e.getKey(), e.getValue()));
+    var alertCompositeCollections =
+        groupAlertIdsByContext(alertIds).entrySet()
+            .parallelStream()
+            .map(entry -> readAlertComposites(entry.getValue(), entry.getKey()))
+            .toList();
+    alertHandler.handleAlerts(internalBatchId, alertCompositeCollections);
   }
 
   private Map<ScbAlertIdContext, List<AlertId>> groupAlertIdsByContext(
@@ -46,12 +54,6 @@ class AlertProcessor {
         .collect(groupingBy(
             AlertIdWithDetails::getContext,
             mapping(AlertIdWithDetails::toAlertId, toList())));
-  }
-
-  private void processAlertsWithTheSameContext(ScbAlertIdContext context, List<AlertId> alertIds) {
-    var alertCompositeCollection = readAlertComposites(alertIds, context);
-
-    alertHandler.handleAlerts(context, alertCompositeCollection);
   }
 
   private AlertCompositeCollection readAlertComposites(

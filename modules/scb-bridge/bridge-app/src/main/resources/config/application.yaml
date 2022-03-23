@@ -215,6 +215,11 @@ serp:
 
 # AMQP
 amqp:
+  ingest:
+    incoming:
+      batch-processing:
+        exchange-name: batch-processing-exchange
+        queue-name: batch-processing-queue
   feeding:
     outgoing:
       match-feature-input-set-fed:

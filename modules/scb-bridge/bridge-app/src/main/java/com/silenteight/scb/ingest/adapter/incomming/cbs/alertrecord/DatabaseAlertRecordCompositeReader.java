@@ -3,6 +3,7 @@ package com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.domain.CbsHitDetails;
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertRecord;
@@ -28,42 +29,28 @@ class DatabaseAlertRecordCompositeReader implements AlertRecordCompositeReader {
   private final DatabaseDecisionRecordReader decisionRecordReader;
   private final DatabaseCbsHitDetailsReader cbsHitDetailsReader;
 
-  @Override
-  @Transactional(
-      transactionManager = "externalTransactionManager",
-      isolation = SERIALIZABLE,
-      readOnly = true)
-  public AlertRecordCompositeCollection readWithCbsHitDetails(
-      String dbRelationName, String cbsHitDetailsDbRelationName, List<AlertId> alertIds) {
-
-    return buildCollection(dbRelationName, cbsHitDetailsDbRelationName, alertIds);
-  }
-
   @Transactional(
       transactionManager = "externalTransactionManager",
       isolation = SERIALIZABLE,
       readOnly = true)
   @Override
-  public AlertRecordCompositeCollection read(String dbRelationName, List<AlertId> alertIds) {
-    return buildCollection(dbRelationName, null, alertIds);
-  }
-
-  private AlertRecordCompositeCollection buildCollection(
-      String dbRelationName,
-      @Nullable String cbsHitDetailsDbRelationName,
-      List<AlertId> alertIds) {
+  public AlertRecordCompositeCollection read(
+      ScbAlertIdContext scbAlertIdContext, List<AlertId> alertIds) {
+    String sourceView = scbAlertIdContext.getSourceView();
+    String cbsHitDetailsView = scbAlertIdContext.getHitDetailsView();
 
     Set<String> systemIds = alertIds.stream().map(AlertId::getSystemId).collect(toSet());
-    List<AlertRecord> alertRecords = readAlertRecords(dbRelationName, systemIds);
-    List<DecisionRecord> decisions = readDecisions(dbRelationName, systemIds);
+    List<AlertRecord> alertRecords = readAlertRecords(sourceView, systemIds);
+    List<DecisionRecord> decisions = readDecisions(sourceView, systemIds);
     Map<AlertRecord, List<CbsHitDetails>> hitDetails =
-        readHitDetails(cbsHitDetailsDbRelationName, alertRecords);
+        readHitDetails(cbsHitDetailsView, alertRecords);
 
     return new AlertRecordCompositeCollection(
         alertIds,
         alertRecords,
         decisions,
-        hitDetails
+        hitDetails,
+        scbAlertIdContext
     );
   }
 
@@ -76,7 +63,7 @@ class DatabaseAlertRecordCompositeReader implements AlertRecordCompositeReader {
     var alertIds = alertRecords.stream()
         .filter(r -> nonNull(r.getBatchId()))
         .map(this::toAlertId)
-        .collect(Collectors.toList());
+        .toList();
 
     var cbsHitDetails = readCbsHitDetails(cbsHitDetailsDbRelationName, alertIds);
     return alertRecords.stream().collect(toMap(
@@ -99,15 +86,16 @@ class DatabaseAlertRecordCompositeReader implements AlertRecordCompositeReader {
         .build();
   }
 
+  private List<CbsHitDetails> readCbsHitDetails(
+      String dbRelationName, Collection<AlertId> alertIds) {
+    return cbsHitDetailsReader.read(dbRelationName, alertIds);
+  }
+
   private List<DecisionRecord> readDecisions(String dbRelationName, Collection<String> systemIds) {
     return decisionRecordReader.read(dbRelationName, systemIds);
   }
 
   private List<AlertRecord> readAlertRecords(String dbRelationName, Collection<String> systemIds) {
     return alertRecordReader.read(dbRelationName, systemIds);
-  }
-
-  private List<CbsHitDetails> readCbsHitDetails(String dbRelationName, Collection<AlertId> ids) {
-    return cbsHitDetailsReader.read(dbRelationName, ids);
   }
 }

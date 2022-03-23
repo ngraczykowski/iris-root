@@ -16,7 +16,6 @@ import java.util.Collection;
 import java.util.List;
 
 import static java.lang.Math.min;
-import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 class AlertsUnderProcessingService implements AlertInFlightService {
@@ -31,7 +30,7 @@ class AlertsUnderProcessingService implements AlertInFlightService {
     List<AlertId> alertsToBeSaved = alerts
         .stream()
         .filter(a -> !alertsUnderProcessing.contains(a))
-        .collect(toList());
+        .toList();
     saveAlertsToBeProcess(alertsToBeSaved, internalBatchId, alertIdContext);
   }
 
@@ -65,11 +64,11 @@ class AlertsUnderProcessingService implements AlertInFlightService {
   }
 
   @Override
-  public List<AlertIdWithDetails> readChunk() {
-    return alertUnderProcessingRepository.findTop2000ByErrorIsNullOrderByPriorityDesc()
+  public List<AlertIdWithDetails> getAlertsFromBatch(String internalBatchId) {
+    return alertUnderProcessingRepository.findAllByInternalBatchId(internalBatchId)
         .stream()
         .map(this::getAlertIdWithDetails)
-        .collect(toList());
+        .toList();
   }
 
   private AlertIdWithDetails getAlertIdWithDetails(AlertUnderProcessing alert) {
@@ -86,12 +85,12 @@ class AlertsUnderProcessingService implements AlertInFlightService {
   }
 
   private Collection<AlertId> getAlertsUnderProcessing(Collection<AlertId> alerts) {
-    var systemIds = alerts.stream().map(AlertId::getSystemId).collect(toList());
+    var systemIds = alerts.stream().map(AlertId::getSystemId).toList();
     return alertUnderProcessingRepository
         .findAllBySystemIdIn(systemIds)
         .stream()
         .map(a -> AlertId.builder().systemId(a.getSystemId()).batchId(a.getBatchId()).build())
-        .collect(toList());
+        .toList();
   }
 
   private void saveAlertsToBeProcess(

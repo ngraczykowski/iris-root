@@ -27,5 +27,5 @@ public interface AlertInFlightService {
   void update(
       @NonNull AlertId alertId, @NonNull AlertUnderProcessing.State state, @NonNull String error);
 
-  List<AlertIdWithDetails> readChunk();
+  List<AlertIdWithDetails> getAlertsFromBatch(String internalBatchId);
 }

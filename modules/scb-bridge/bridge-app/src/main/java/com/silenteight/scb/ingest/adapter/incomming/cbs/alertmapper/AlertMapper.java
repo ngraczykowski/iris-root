@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.proto.serp.v1.alert.Alert.Flags;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord.AlertRecordComposite;
+import com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord.ValidAlertComposite;
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertRecord;
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.DecisionRecord;
 import com.silenteight.scb.ingest.adapter.incomming.common.batch.DateConverter;
@@ -159,6 +160,14 @@ public class AlertMapper {
     return flags;
   }
 
+  public List<Alert> fromValidAlertComposites(
+      List<ValidAlertComposite> validAlertComposites) {
+    return validAlertComposites.stream()
+        .map(ValidAlertComposite::getAlerts)
+        .flatMap(Collection::stream)
+        .toList();
+  }
+
   public List<Alert> fromAlertRecordComposite(
       @NonNull AlertRecordComposite alertRecordComposite, Option... options) {
     return ArrayUtils.contains(options, WATCHLIST_LEVEL) ?
@@ -176,7 +185,7 @@ public class AlertMapper {
     var alerts = suspects.stream()
         .map(s -> doMap(singletonList(s), alertRecordComposite, options))
         .filter(shouldAlertBeProcessed(options))
-        .collect(Collectors.toList());
+        .toList();
 
     if (alerts.isEmpty())
       log.warn(NO_NEW_MATCHES_WARNING, alertRecordComposite.getSystemId());
@@ -199,7 +208,6 @@ public class AlertMapper {
       Collection<Suspect> suspects,
       AlertRecordComposite alertRecordComposite,
       Option... options) {
-
     AlertRecord alertRecord = alertRecordComposite.getAlert();
     Optional<Decision> lastDecision = alertRecordComposite.getLastDecision();
     Instant filtered = dateConverter.convert(alertRecord.getFilteredString()).orElse(null);

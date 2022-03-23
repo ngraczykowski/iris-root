@@ -7,6 +7,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 
@@ -15,6 +16,7 @@ import static java.util.stream.Collectors.toList;
 class InMemoryAlertUnderProcessingRepository implements AlertUnderProcessingRepository {
 
   private static final int DEFAULT_PRIORITY = 1;
+  private static final String DEFAULT_INTERNAL_BATCH_ID = UUID.randomUUID().toString();
   private List<AlertUnderProcessing> store = new ArrayList<>();
 
   @Override
@@ -48,8 +50,13 @@ class InMemoryAlertUnderProcessingRepository implements AlertUnderProcessingRepo
 
     store.add(
         new AlertUnderProcessing(
-            systemId, batchId, "5a209f6d-cb00-44e6-a603-2057bc63da4c", state, null,
-            DEFAULT_PRIORITY, getPayload()));
+            systemId,
+            batchId,
+            DEFAULT_INTERNAL_BATCH_ID,
+            state,
+            null,
+            DEFAULT_PRIORITY,
+            getPayload()));
   }
 
   @Override
@@ -58,21 +65,29 @@ class InMemoryAlertUnderProcessingRepository implements AlertUnderProcessingRepo
 
     store.add(
         new AlertUnderProcessing(
-            systemId, batchId, "5a209f6d-cb00-44e6-a603-2057bc63da4c", state, error,
-            DEFAULT_PRIORITY, getPayload()));
+            systemId,
+            batchId,
+            DEFAULT_INTERNAL_BATCH_ID,
+            state,
+            error,
+            DEFAULT_PRIORITY,
+            getPayload()));
   }
 
   @Override
-  public Collection<AlertUnderProcessing> findTop2000ByErrorIsNullOrderByPriorityDesc() {
-    return List.of();
+  public Collection<AlertUnderProcessing> findAllByInternalBatchId(String internalBatchId) {
+    return store
+        .stream()
+        .filter(a -> a.getInternalBatchId().equals(internalBatchId))
+        .toList();
+  }
+
+  private byte[] getPayload() {
+    return ScbAlertIdContext.newBuilder().build().toByteArray();
   }
 
   @Nonnull
   private static Predicate<AlertUnderProcessing> matchPredicate(String systemId, String batchId) {
     return p -> p.getBatchId().equals(batchId) && p.getSystemId().equals(systemId);
-  }
-
-  private byte[] getPayload() {
-    return ScbAlertIdContext.newBuilder().build().toByteArray();
   }
 }

@@ -1,5 +1,6 @@
 package com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord;
 
+import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.domain.CbsHitDetails;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.domain.NeoFlag;
@@ -44,6 +45,8 @@ class AlertRecordCompositeCollectionTest {
     CbsHitDetails hitDetails12 = createHitDetails(alert1, 1);
     CbsHitDetails hitDetails21 = createHitDetails(alert2, 0);
 
+    ScbAlertIdContext context = createScbAlertIdContext("fff_records", "cbs_hit_details");
+
     // when
     var alertRecordComposite = new AlertRecordCompositeCollection(
         alertIds,
@@ -54,7 +57,8 @@ class AlertRecordCompositeCollectionTest {
             put(alert1, asList(hitDetails11, hitDetails12));
             put(alert2, singletonList(hitDetails21));
           }
-        });
+        },
+        context);
 
     // then
     assertThat(alertRecordComposite.getInvalidAlerts()).isEmpty();
@@ -69,51 +73,6 @@ class AlertRecordCompositeCollectionTest {
         .satisfies(alerts -> assertThat(alerts.get(2))
             .satisfies(a -> assertDecisions(a).containsExactly(decision3))
             .satisfies(a -> assertHitDetails(a).isEmpty()));
-  }
-
-  @Test
-  void shouldReturnFetchedAlertsAndAbsentSystemIds() {
-    // given
-    List<AlertId> alertIds = asList(
-        createAlertId("system-id-1", "batch-id-1"),
-        createAlertId("system-id-2", "batch-id-2"),
-        createAlertId("system-id-3", "batch-id-3"));
-
-    List<AlertRecord> alerts = singletonList(createAlertRecord("system-id-1", "batch-id-1"));
-
-    // when
-    var alertRecordComposite = new AlertRecordCompositeCollection(
-        alertIds, alerts, emptyList(), emptyMap());
-
-    // then
-    assertThat(alertRecordComposite.getInvalidSystemIdsWithReason(ABSENT))
-        .containsExactly("system-id-2", "system-id-3");
-    assertThat(alertRecordComposite.getInvalidSystemIdsWithReason(WRONG_BATCH_ID)).isEmpty();
-    assertThat(alertRecordComposite.getAlerts()).hasSize(1);
-  }
-
-  @Test
-  void shouldReturnFetchedAlertsAndSystemIdsWithDifferentBatchId() {
-    // given
-    List<AlertId> alertIds = asList(
-        createAlertId("system-id-1", "batch-id-1"),
-        createAlertId("system-id-2", "batch-id-2"),
-        createAlertId("system-id-3", "batch-id-3"));
-
-    List<AlertRecord> alerts = asList(
-        createAlertRecord("system-id-1", "batch-id-1"),
-        createAlertRecord("system-id-2", "batch-id-1"),
-        createAlertRecord("system-id-3", "batch-id-5"));
-
-    // when
-    var alertRecordComposite = new AlertRecordCompositeCollection(
-        alertIds, alerts, emptyList(), emptyMap());
-
-    // then
-    assertThat(alertRecordComposite.getInvalidSystemIdsWithReason(ABSENT)).isEmpty();
-    assertThat(alertRecordComposite.getInvalidSystemIdsWithReason(WRONG_BATCH_ID))
-        .containsExactly("system-id-2", "system-id-3");
-    assertThat(alertRecordComposite.getAlerts()).hasSize(1);
   }
 
   private static AlertId createAlertId(String systemId, String batchId) {
@@ -149,6 +108,14 @@ class AlertRecordCompositeCollectionTest {
         .build();
   }
 
+  private static ScbAlertIdContext createScbAlertIdContext(
+      String sourceView, String hitDetailsView) {
+    return ScbAlertIdContext.newBuilder()
+        .setSourceView(sourceView)
+        .setHitDetailsView(hitDetailsView)
+        .build();
+  }
+
   private static AbstractListAssert<?, List<?>, Object, ObjectAssert<Object>> assertDecisions(
       AlertRecordComposite actual) {
 
@@ -163,5 +130,54 @@ class AlertRecordCompositeCollectionTest {
     return assertThat(alert)
         .extracting(AlertRecordComposite::getCbsHitDetails)
         .asList();
+  }
+
+  @Test
+  void shouldReturnFetchedAlertsAndAbsentSystemIds() {
+    // given
+    List<AlertId> alertIds = asList(
+        createAlertId("system-id-1", "batch-id-1"),
+        createAlertId("system-id-2", "batch-id-2"),
+        createAlertId("system-id-3", "batch-id-3"));
+
+    ScbAlertIdContext context = createScbAlertIdContext("fff_records", "cbs_hit_details");
+
+    List<AlertRecord> alerts = singletonList(createAlertRecord("system-id-1", "batch-id-1"));
+
+    // when
+    var alertRecordComposite = new AlertRecordCompositeCollection(
+        alertIds, alerts, emptyList(), emptyMap(), context);
+
+    // then
+    assertThat(alertRecordComposite.getInvalidSystemIdsWithReason(ABSENT))
+        .containsExactly("system-id-2", "system-id-3");
+    assertThat(alertRecordComposite.getInvalidSystemIdsWithReason(WRONG_BATCH_ID)).isEmpty();
+    assertThat(alertRecordComposite.getAlerts()).hasSize(1);
+  }
+
+  @Test
+  void shouldReturnFetchedAlertsAndSystemIdsWithDifferentBatchId() {
+    // given
+    List<AlertId> alertIds = asList(
+        createAlertId("system-id-1", "batch-id-1"),
+        createAlertId("system-id-2", "batch-id-2"),
+        createAlertId("system-id-3", "batch-id-3"));
+
+    List<AlertRecord> alerts = asList(
+        createAlertRecord("system-id-1", "batch-id-1"),
+        createAlertRecord("system-id-2", "batch-id-1"),
+        createAlertRecord("system-id-3", "batch-id-5"));
+
+    ScbAlertIdContext context = createScbAlertIdContext("fff_records", "cbs_hit_details");
+
+    // when
+    var alertRecordComposite = new AlertRecordCompositeCollection(
+        alertIds, alerts, emptyList(), emptyMap(), context);
+
+    // then
+    assertThat(alertRecordComposite.getInvalidSystemIdsWithReason(ABSENT)).isEmpty();
+    assertThat(alertRecordComposite.getInvalidSystemIdsWithReason(WRONG_BATCH_ID))
+        .containsExactly("system-id-2", "system-id-3");
+    assertThat(alertRecordComposite.getAlerts()).hasSize(1);
   }
 }

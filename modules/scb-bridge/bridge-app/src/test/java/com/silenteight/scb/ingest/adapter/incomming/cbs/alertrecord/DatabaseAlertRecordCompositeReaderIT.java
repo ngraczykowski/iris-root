@@ -2,6 +2,7 @@ package com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord.DatabaseAlertRecordCompositeReaderIT.TestConfiguration;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.batch.ScbBridgeConfigProperties;
@@ -80,6 +81,7 @@ class DatabaseAlertRecordCompositeReaderIT extends BaseJdbcTest {
     AlertId alertId1 = AlertId.builder().batchId("batch-id-1").systemId("system-id-1").build();
     AlertId alertId2 = AlertId.builder().batchId("batch-id-2").systemId("system-id-2").build();
     AlertId alertId3 = AlertId.builder().batchId("batch-id-3").systemId("system-id-3").build();
+    ScbAlertIdContext context = createScbAlertIdContext("fff_records", "cbs_hit_details");
     doReturn(List.of(hitDetails1, hitDetails2))
         .when(cbsHitDetailsReader)
         .read("cbs_hit_details", List.of(alertId1, alertId2, alertId3));
@@ -93,7 +95,7 @@ class DatabaseAlertRecordCompositeReaderIT extends BaseJdbcTest {
 
     // when
     AlertRecordCompositeCollection compositeCollection =
-        classUnderTest.readWithCbsHitDetails("fff_records", "cbs_hit_details", alertIds);
+        classUnderTest.read(context, alertIds);
 
     // then
     assertThat(compositeCollection.getInvalidSystemIdsWithReason(ABSENT))
@@ -106,26 +108,12 @@ class DatabaseAlertRecordCompositeReaderIT extends BaseJdbcTest {
         .satisfies(a -> assertHitDetails(a.get(1)).containsExactly(hitDetails2));
   }
 
-  @Test
-  void shouldReadCompositeCollectionCorrectly() {
-    // given
-    List<AlertId> alertIds = asList(
-        createAlertId("system-id-1", "batch-id-1"),
-        createAlertId("system-id-2", "batch-id-7"),
-        createAlertId("system-id-3", "batch-id-3"),
-        createAlertId("system-id-4", "batch-id-4"),
-        createAlertId("system-id-5", "batch-id-5"));
-
-    // when
-    AlertRecordCompositeCollection compositeCollection =
-        classUnderTest.read("fff_records", alertIds);
-
-    // then
-    assertThat(compositeCollection.getInvalidSystemIdsWithReason(ABSENT))
-        .containsExactlyInAnyOrder("system-id-4", "system-id-5");
-    assertThat(compositeCollection.getInvalidSystemIdsWithReason(WRONG_BATCH_ID))
-        .containsExactlyInAnyOrder("system-id-2");
-    assertThat(compositeCollection.getAlerts()).hasSize(2);
+  private static ScbAlertIdContext createScbAlertIdContext(
+      String sourceView, String hitDetailsView) {
+    return ScbAlertIdContext.newBuilder()
+        .setSourceView(sourceView)
+        .setHitDetailsView(hitDetailsView)
+        .build();
   }
 
   private static AlertId createAlertId(String systemId, String batchId) {
@@ -150,6 +138,29 @@ class DatabaseAlertRecordCompositeReaderIT extends BaseJdbcTest {
     return assertThat(alert)
         .extracting(AlertRecordComposite::getCbsHitDetails)
         .asList();
+  }
+
+  @Test
+  void shouldReadCompositeCollectionCorrectly() {
+    // given
+    List<AlertId> alertIds = asList(
+        createAlertId("system-id-1", "batch-id-1"),
+        createAlertId("system-id-2", "batch-id-7"),
+        createAlertId("system-id-3", "batch-id-3"),
+        createAlertId("system-id-4", "batch-id-4"),
+        createAlertId("system-id-5", "batch-id-5"));
+    ScbAlertIdContext context = createScbAlertIdContext("fff_records", "");
+
+    // when
+    AlertRecordCompositeCollection compositeCollection =
+        classUnderTest.read(context, alertIds);
+
+    // then
+    assertThat(compositeCollection.getInvalidSystemIdsWithReason(ABSENT))
+        .containsExactlyInAnyOrder("system-id-4", "system-id-5");
+    assertThat(compositeCollection.getInvalidSystemIdsWithReason(WRONG_BATCH_ID))
+        .containsExactlyInAnyOrder("system-id-2");
+    assertThat(compositeCollection.getAlerts()).hasSize(2);
   }
 
   @Configuration

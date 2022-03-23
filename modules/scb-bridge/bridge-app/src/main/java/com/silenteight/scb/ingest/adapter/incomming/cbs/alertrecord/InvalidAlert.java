@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
+import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId;
 
 
@@ -13,6 +14,7 @@ public class InvalidAlert {
   String systemId;
   String batchId;
   Reason invalidityReason;
+  ScbAlertIdContext context;
 
   AlertId getAlertId() {
     return AlertId.builder()

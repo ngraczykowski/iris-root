@@ -2,6 +2,7 @@ package com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord;
 
 import lombok.Setter;
 
+import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId;
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertRecord;
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.DecisionRecord;
@@ -20,14 +21,8 @@ class FakeAlertRecordCompositeReader implements AlertRecordCompositeReader {
   private FakeReaderMode mode = FakeReaderMode.DUMMY;
 
   @Override
-  public AlertRecordCompositeCollection readWithCbsHitDetails(
-      String dbRelationName, String cbsHitDetailsDbRelationName, List<AlertId> alertIds) {
-    return fakeRead(alertIds);
-  }
-
-  @Override
   public AlertRecordCompositeCollection read(
-      String dbRelationName, List<AlertId> alertIds) {
+      ScbAlertIdContext context, List<AlertId> alertIds) {
     return fakeRead(alertIds);
   }
 
@@ -53,7 +48,8 @@ class FakeAlertRecordCompositeReader implements AlertRecordCompositeReader {
         alertIds,
         records,
         decisions,
-        emptyMap());
+        emptyMap(),
+        ScbAlertIdContext.newBuilder().build());
   }
 
   private static AlertRecord idToRecord(AlertId id) {

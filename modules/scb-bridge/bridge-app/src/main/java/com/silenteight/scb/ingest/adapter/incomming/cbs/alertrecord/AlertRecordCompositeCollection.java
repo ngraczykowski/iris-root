@@ -2,6 +2,7 @@ package com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord;
 
 import lombok.*;
 
+import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord.InvalidAlert.Reason;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.domain.CbsHitDetails;
@@ -31,7 +32,8 @@ public class AlertRecordCompositeCollection {
       List<AlertId> alertIds,
       List<AlertRecord> alertRecords,
       List<DecisionRecord> decisions,
-      Map<AlertRecord, List<CbsHitDetails>> hitDetails) {
+      Map<AlertRecord, List<CbsHitDetails>> hitDetails,
+      ScbAlertIdContext scbAlertIdContext) {
 
     Map<String, AlertRecord> groupedAlerts =
         alertRecords.stream().collect(toMap(AlertRecord::getSystemId, identity()));
@@ -45,9 +47,9 @@ public class AlertRecordCompositeCollection {
       AlertRecord alertRecord = groupedAlerts.getOrDefault(systemId, null);
 
       if (alertRecord == null) {
-        addInvalidAlert(systemId, batchId, Reason.ABSENT);
+        addInvalidAlert(systemId, batchId, Reason.ABSENT, scbAlertIdContext);
       } else if (!batchId.equals(alertRecord.getBatchId())) {
-        addInvalidAlert(systemId, batchId, Reason.WRONG_BATCH_ID);
+        addInvalidAlert(systemId, batchId, Reason.WRONG_BATCH_ID, scbAlertIdContext);
       } else {
         List<DecisionRecord> alertDecisions = groupedDecisions.getOrDefault(systemId, emptyList());
         List<CbsHitDetails> details = hitDetails.getOrDefault(alertRecord, emptyList());
@@ -56,8 +58,9 @@ public class AlertRecordCompositeCollection {
     }
   }
 
-  private void addInvalidAlert(String systemId, String batchId, Reason reason) {
-    invalidAlerts.add(new InvalidAlert(systemId, batchId, reason));
+  private void addInvalidAlert(
+      String systemId, String batchId, Reason reason, ScbAlertIdContext context) {
+    invalidAlerts.add(new InvalidAlert(systemId, batchId, reason, context));
   }
 
   private void addAlert(

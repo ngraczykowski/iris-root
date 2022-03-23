@@ -4,6 +4,7 @@ import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertIdWithDetails
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertInFlightService
+import com.silenteight.scb.ingest.adapter.incomming.cbs.batch.BatchReadEvent
 
 import spock.lang.Specification
 
@@ -12,23 +13,27 @@ class AlertProcessorSpec extends Specification {
   def alertInFlightService = Mock(AlertInFlightService)
   def alertCompositeCollectionReader = Mock(AlertCompositeCollectionReader)
   def alertHandler = Mock(AlertHandler)
-  def underTest = new AlertProcessor(
+  def underTest = new BatchProcessingEventListener(
       alertInFlightService, alertCompositeCollectionReader, alertHandler)
 
   def fixtures = new Fixtures()
 
   def 'should process alerts'() {
+    given:
+    BatchReadEvent batchReadEvent = new BatchReadEvent(UUID.randomUUID().toString());
+
     when:
-    underTest.process()
+    underTest.subscribe(batchReadEvent)
 
     then:
-    1 * alertInFlightService.readChunk() >> fixtures.chunkOfAlertIds
+    1 * alertInFlightService.getAlertsFromBatch(batchReadEvent.internalBatchId()) >>
+        fixtures.chunkOfAlertIds
     1 * alertCompositeCollectionReader.read([fixtures.alertId1], fixtures.alertIdContext1) >>
         fixtures.alertCompositeCollection
     1 * alertCompositeCollectionReader.read([fixtures.alertId2], fixtures.alertIdContext2) >>
         fixtures.alertCompositeCollection
-    1 * alertHandler.handleAlerts(fixtures.alertIdContext1, fixtures.alertCompositeCollection)
-    1 * alertHandler.handleAlerts(fixtures.alertIdContext2, fixtures.alertCompositeCollection)
+    1 * alertHandler
+        .handleAlerts(batchReadEvent.internalBatchId(), fixtures.alertCompositeCollections)
   }
 
   class Fixtures {
@@ -51,6 +56,9 @@ class AlertProcessorSpec extends Specification {
         alertId2.systemId, alertId2.batchId, alertIdContext2)
 
     AlertCompositeCollection alertCompositeCollection = new AlertCompositeCollection([], [])
+
+    List<AlertCompositeCollection> alertCompositeCollections = List
+        .of(alertCompositeCollection, alertCompositeCollection);
 
     List<AlertIdWithDetails> chunkOfAlertIds = [alertIdWithDetails1, alertIdWithDetails2]
   }

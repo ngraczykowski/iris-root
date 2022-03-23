@@ -18,10 +18,12 @@ class AlertReaderConfiguration {
   private final CbsAckGateway cbsAckGateway;
   private final DatabaseAlertRecordCompositeReader databaseAlertRecordCompositeReader;
   private final AlertReaderProperties alertReaderProperties;
+  private final ValidAlertCompositeMapper validAlertCompositeMapper;
+  private final InvalidAlertMapper invalidAlertMapper;
 
   @Bean
-  AlertProcessor newAlertRecordReader() {
-    return new AlertProcessor(
+  BatchProcessingEventListener newAlertRecordReader() {
+    return new BatchProcessingEventListener(
         alertInFlightService,
         alertRecordCompositeCollectionReader(),
         alertHandler());
@@ -41,6 +43,9 @@ class AlertReaderConfiguration {
   private AlertHandler alertHandler() {
     return new AlertHandler(
         alertInFlightService,
-        cbsAckGateway);
+        cbsAckGateway,
+        validAlertCompositeMapper,
+        invalidAlertMapper,
+        alertMapper);
   }
 }

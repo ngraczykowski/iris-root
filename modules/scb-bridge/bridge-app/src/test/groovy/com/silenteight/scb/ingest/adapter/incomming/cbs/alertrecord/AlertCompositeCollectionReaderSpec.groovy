@@ -1,10 +1,10 @@
 package com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord
 
+import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertmapper.AlertMapper
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord.InvalidAlert.Reason
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertRecord
-import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext
 
 import spock.lang.Specification
 
@@ -31,7 +31,7 @@ class AlertCompositeCollectionReaderSpec extends Specification {
     result.invalidAlerts.size() == 2
     result.validAlerts.size() == 1
 
-    1 * databaseAlertRecordCompositeReader.read(fixtures.alertIdContext.sourceView, alertIds) >>
+    1 * databaseAlertRecordCompositeReader.read(fixtures.alertIdContext, alertIds) >>
         alertRecords
     1 * alertMapper.fromAlertRecordComposite(fixtures.alertRecordComposite1, _) >> []
     1 * alertMapper.fromAlertRecordComposite(fixtures.alertRecordComposite2, _) >> {
@@ -70,6 +70,7 @@ class AlertCompositeCollectionReaderSpec extends Specification {
         .decisions([])
         .build()
 
-    InvalidAlert invalidAlert = new InvalidAlert(systemId3, batchId, Reason.FAILED_TO_FETCH)
+    InvalidAlert invalidAlert = new InvalidAlert(
+        systemId3, batchId, Reason.FAILED_TO_FETCH, alertIdContext)
   }
 }
