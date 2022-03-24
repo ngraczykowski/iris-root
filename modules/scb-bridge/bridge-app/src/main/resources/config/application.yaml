@@ -104,6 +104,8 @@ spring:
 silenteight:
   scb-bridge:
     grpc:
+      recommendation:
+        recommendation-deadline: 1m
       registration:
         registration-deadline: 1m
       universal-data-source:
@@ -230,3 +232,22 @@ amqp:
     outgoing:
       match-feature-input-set-fed:
         exchange-name: match-feature-input-set-fed-exchange
+
+  output-recommendation:
+    number-of-retries-dead-messages: 2
+    incoming:
+      notify-batch-completed:
+        exchange-name: core-bridge.notify-batch-completed-exchange
+        queue-name: scb-bridge.notify-batch-completed-queue
+        dead-letter-queue-name: scb-bridge.notify-batch-completed.dlq
+        dead-letter-queue-time-to-live-in-milliseconds: 30000
+        dead-letter-exchange-name: scb-bridge.notify-batch-completed.dlx
+      batch-error:
+        exchange-name: core-bridge.notify-batch-error-exchange
+        queue-name: scb-bridge.notify-batch-error-queue
+        dead-letter-queue-name: scb-bridge.notify-batch-error.dlq
+        dead-letter-queue-time-to-live-in-milliseconds: 30000
+        dead-letter-exchange-name: scb-bridge.notify-batch-error.dlx
+    outgoing:
+      recommendation-delivered:
+        exchange-name: core-bridge.recommendation-delivered-exchange

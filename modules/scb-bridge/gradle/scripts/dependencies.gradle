@@ -13,7 +13,8 @@ ext {
   silenteightSolversVersion = "2.7.0"
   silenteightSensWebappVersion = "1.28.3"
   silenteightSepFrontendVersion = "1.27.0"
-  coreBridgeRegistrationApiVersion = '1.17.0'
+  coreBridgeRegistrationApiVersion = '1.18.0'
+  coreBridgeRecommendationApiVersion = '1.11.0'
   universalDataSourceLibApiVersion = '1.4.0'
   silenteightDataSourceApiVersion = '0.18.0'
 
@@ -59,6 +60,8 @@ libraries.silenteight_serp_protocol_base = [group: 'com.silenteight.serp.protoco
 libraries.silenteight_serp_protocol_scb = [group: 'com.silenteight.serp.protocol', name: 'serp-protocol-scb', version: serpProtocolVersion]
 libraries.registration_api_library = [group: 'com.silenteight.registration.api.library', name: 'registration-lib', version: coreBridgeRegistrationApiVersion]
 libraries.registration_api_proto = [group: 'com.silenteight.registration.api.library', name: 'registration-internal-protos', version: coreBridgeRegistrationApiVersion]
+libraries.recommendation_api_library = [group: 'com.silenteight.recommendation.api.library', name: 'recommendation-lib', version: coreBridgeRecommendationApiVersion]
+libraries.recommendation_api_proto = [group: 'com.silenteight.recommendation.api.library', name: 'recommendation-internal-protos', version: coreBridgeRecommendationApiVersion]
 libraries.universal_datasource_api_library = [group: 'com.silenteight.universaldatasource.api.library', name: 'uds-lib', version: universalDataSourceLibApiVersion]
 libraries.data_source_agentinput_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-agentinput-api', version: silenteightDataSourceApiVersion]
 libraries.data_source_categories_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-categories-api', version: silenteightDataSourceApiVersion]
@@ -170,6 +173,8 @@ dependencies {
       "com.silenteight.sep:sep-dependencies:1.12.1")
   implementation libraries.registration_api_library
   implementation libraries.registration_api_proto
+  implementation libraries.recommendation_api_library
+  implementation libraries.recommendation_api_proto
   implementation libraries.universal_datasource_api_library
   implementation libraries.data_source_agentinput_api
   implementation libraries.data_source_categories_api
