@@ -33,6 +33,6 @@ public class SanctionCategory implements FabCategory {
   }
 
   private static String getValue(String systemId) {
-    return systemId.contains(SANCTION_TEXT) ? "True" : "False";
+    return systemId.contains(SANCTION_TEXT) ? "true" : "false";
   }
 }

@@ -26,7 +26,7 @@ class SanctionCategoryTest extends Specification {
     then:
     result.getName().startsWith('categories/is_san/values/')
     result.getMatch() == MATCH_NAME
-    result.getSingleValue() == 'False'
+    result.getSingleValue() == 'false'
   }
 
   @Unroll
@@ -43,9 +43,9 @@ class SanctionCategoryTest extends Specification {
 
     where:
     expected | systemId
-    'True'   | 'SAN!'
-    'True'   | '123SAN!123'
-    'False'  | 'SAN'
-    'False'  | 'SAN123!'
+    'true'   | 'SAN!'
+    'true'   | '123SAN!123'
+    'false'  | 'SAN'
+    'false'  | 'SAN123!'
   }
 }

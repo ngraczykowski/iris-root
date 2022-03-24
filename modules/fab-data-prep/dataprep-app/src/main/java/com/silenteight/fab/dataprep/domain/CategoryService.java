@@ -41,6 +41,9 @@ class CategoryService {
     BatchCreateCategoriesIn batchCreateCategoriesIn = BatchCreateCategoriesIn.builder()
         .categories(getCategoryShareds(categories))
         .build();
+
+    log.debug("Creating categories details: {}", batchCreateCategoriesIn);
+
     categoryServiceClient.createCategories(batchCreateCategoriesIn);
   }
 
@@ -86,6 +89,8 @@ class CategoryService {
     BatchCreateCategoryValuesIn categoryValuesIn = BatchCreateCategoryValuesIn.builder()
         .requests(requests)
         .build();
+
+    log.debug("Feed UDS: {}", categoryValuesIn);
 
     var categoryValuesOut = categoryValuesServiceClient.createCategoriesValues(categoryValuesIn);
 

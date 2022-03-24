@@ -96,7 +96,7 @@ feeding:
       enabled: true
       displayName: Sanction
       categoryType: ENUMERATED
-      allowedValues: [True, False]
+      allowedValues: [true, false]
       multiValue: false
     customerType:
       enabled: true
