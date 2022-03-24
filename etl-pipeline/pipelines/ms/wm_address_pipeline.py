@@ -23,9 +23,9 @@ class MSPipeline(ETLPipeline):
     def convert_raw_to_standardized(self, df):
         return df
 
-    def flatten_parties(self, parties):
-        for num, party in enumerate(parties):
-            parties[num] = party["fields"]
+    def flatten_fields(self, fields):
+        for num, party in enumerate(fields):
+            fields[num] = party["fields"]
 
     def parse_input_records(self, input_records):
         for input_record in input_records:
@@ -38,64 +38,49 @@ class MSPipeline(ETLPipeline):
         input_records = payload["alertedParty"]["inputRecordHist"]["inputRecords"]
         match_records = payload["watchlistParty"]["matchRecords"]
         for input_record in input_records:
-            for match_record in match_records:
-
+            for num, match_record in enumerate(match_records):
                 if input_record["versionId"] == match_record["inputVersionId"]:
                     pair_payload = deepcopy(payload)
-
-                    hit_input_records = pair_payload["alertedParty"]["inputRecordHist"][
-                        "inputRecords"
-                    ]
-                    hit_match_records = pair_payload["watchlistParty"]["matchRecords"]
-                    for num, input_record_to_remove in enumerate(hit_input_records):
-                        if input_record["versionId"] != input_record_to_remove["versionId"]:
-                            hit_input_records[num] = None
-
-                    for num, match_record_to_remove in enumerate(hit_match_records):
-                        if (
-                            match_record["inputVersionId"]
-                            != match_record_to_remove["inputVersionId"]
-                        ):
-                            hit_match_records[num] = None
-
                     pair_payload["alertedParty"]["inputRecordHist"]["inputRecords"] = [
-                        elem
-                        for elem in pair_payload["alertedParty"]["inputRecordHist"]["inputRecords"]
-                        if elem
+                        input_record
                     ]
-                    pair_payload["watchlistParty"]["matchRecords"] = [
-                        elem for elem in pair_payload["watchlistParty"]["matchRecords"] if elem
-                    ]
-
+                    pair_payload["watchlistParty"]["matchRecords"] = [match_record]
+                    pair_payload[cn.MATCH_IDS] = [pair_payload[cn.MATCH_IDS][num]]
                     new_payloads.append(pair_payload)
 
         return new_payloads
 
-    def transform_standardized_to_cleansed(self, payloads):
+    def get_parties(self, payload):
         try:
-            alerted_parties = payloads["alertedParty"]["supplementalInfo"][cn.RELATED_PARTIES][
+            alerted_parties = payload["alertedParty"]["supplementalInfo"][cn.RELATED_PARTIES][
                 cn.PARTIES
             ]
         except (KeyError, IndexError):
             logger.warning("No parties")
             alerted_parties = []
+        return alerted_parties
 
+    def get_accounts(self, payload):
         try:
-            accounts = payloads["alertedParty"]["supplementalInfo"][
-                cn.RELATED_ACCOUNTS
-            ][  # noqa F841
+            accounts = payload["alertedParty"]["supplementalInfo"][cn.RELATED_ACCOUNTS][
                 cn.ACCOUNTS
             ]
         except (KeyError, IndexError):
             logger.warning("No accounts")
-            accounts = []  # noqa F841
+            accounts = []
+        return accounts
+
+    def transform_standardized_to_cleansed(self, payloads):
+        alerted_parties = self.get_parties(payloads)
+        accounts = self.get_accounts(payloads)
 
         if alerted_parties:
-            self.flatten_parties(alerted_parties)
+            self.flatten_fields(alerted_parties)
+        if accounts:
+            self.flatten_fields(accounts)
 
         try:
             input_records = payloads["alertedParty"]["inputRecordHist"]["inputRecords"]
-
         except (KeyError, IndexError):
             logger.warning("No input_records")
             return {}
@@ -105,6 +90,8 @@ class MSPipeline(ETLPipeline):
         for payload in payloads:
             matches = payload["watchlistParty"]["matchRecords"]
             input_records = payload["alertedParty"]["inputRecordHist"]["inputRecords"]
+            alerted_parties = self.get_parties(payload)
+            accounts = self.get_accounts(payload)
             fields = input_records[0]["INPUT_FIELD"]
             for match in matches:
                 WatchlistExtractor().update_match_with_wl_values(match)
@@ -114,13 +101,16 @@ class MSPipeline(ETLPipeline):
                 self.engine.set_beneficiary_hits(match)
 
             self.engine.connect_full_names(alerted_parties)
+            self.engine.connect_full_names(accounts, ["firstName", "lastName"])
 
             self.engine.collect_party_values_from_parties(alerted_parties, payload)
+            self.engine.collect_party_values_from_accounts(accounts, payload)
             self.engine.collect_party_values_from_parties_from_fields(fields, payload)
             payload[cn.ALL_CONNECTED_PARTY_TYPES] = payload[cn.ALL_PARTY_TYPES]
             names_source_cols = [
                 cn.ALL_PARTY_NAMES,
                 cn.ALL_CONNECTED_PARTIES_NAMES,
+                cn.ALL_CONNECTED_ACCOUNT_NAMES,
             ]
 
             payload.update(

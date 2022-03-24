@@ -1,17 +1,17 @@
-dob_agent:
-  ap:
-  - ALL_PARTY_DOBS
-  wl:
-  - watchlistParty.matchRecords.WL_DOB
+# dob_agent:
+#   ap:
+#   - ALL_PARTY_DOBS
+#   wl:
+#   - watchlistParty.matchRecords.WL_DOB
 
-nationality_agent:
-  ap: []
-  wl:
-  - watchlistParty.matchRecords.WL_NATIONALITY
-  - watchlistParty.matchRecords.WL_POB
-  - watchlistParty.matchRecords.WL_CITIZENSHIP
-  - watchlistParty.matchRecords.WL_COUNTRY
-  - watchlistParty.matchRecords.WL_COUNTRYNAME
+# nationality_agent:
+#   ap: []
+#   wl:
+#   - watchlistParty.matchRecords.WL_NATIONALITY
+#   - watchlistParty.matchRecords.WL_POB
+#   - watchlistParty.matchRecords.WL_CITIZENSHIP
+#   - watchlistParty.matchRecords.WL_COUNTRY
+#   - watchlistParty.matchRecords.WL_COUNTRYNAME
 
 residency_agent:
   ap:

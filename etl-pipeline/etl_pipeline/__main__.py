@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from concurrent import futures
 from dataclasses import dataclass
 from typing import List
@@ -48,7 +50,7 @@ class EtlPipelineServiceServicer(object):
         try:
             etl_alerts = self.process_request(request)
         except Exception as e:
-            logger.error(f"RunEtl error: {e}")
+            logger.error(f"RunEtl error: {str(e)}")
             etl_alerts = []
         return etl__pipeline__pb2.RunEtlResponse(etl_alerts=etl_alerts)
 
@@ -62,13 +64,10 @@ class EtlPipelineServiceServicer(object):
             )
             for alert in request.alerts
         ]
-        future_payloads = [
-            self.pool.submit(self.parse_alert, alert, logger) for alert in alerts_to_parse
-        ]
+        future_payloads = [self.pool.submit(self.parse_alert, alert) for alert in alerts_to_parse]
         payloads = [future.result() for future in future_payloads]
         # payloads = [self.parse_alert(alerts_to_parse[0])]  # debugging
         statuses = []
-
         for alert, record in zip(alerts_to_parse, payloads):
             input_match_records, status, error = record
             if status != UNKNOWN:
@@ -77,10 +76,11 @@ class EtlPipelineServiceServicer(object):
                 )
                 for input_match_record in input_match_records:
                     logger.info("Trying upload from pipeline to UDS")
+
                     try:
                         self.add_to_datasource(alert, input_match_record)
                     except Exception as e:
-                        logger.error("Exception :" + str(e))
+                        logger.error(f"Exception {e}")
                         status = FAILURE
                         break
             else:
@@ -94,7 +94,7 @@ class EtlPipelineServiceServicer(object):
 
         return etl_alerts
 
-    def parse_alert(self, alert, logger):
+    def parse_alert(self, alert):
         payload = alert.flat_payload
         payload = PayloadLoader().load_payload_from_json(payload)
         payload = {key: payload[key] for key in sorted(payload)}
@@ -107,7 +107,6 @@ class EtlPipelineServiceServicer(object):
             payload = pipeline.transform_cleansed_to_application(payload)
             logger.debug("Transform cleansed to standardized - success")
         except Exception as e:
-            logger.error(e)
             error = str(e)
             status = UNKNOWN
         return [payload, status, error]

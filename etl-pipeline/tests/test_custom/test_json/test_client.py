@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import subprocess
 import time
 import unittest
@@ -16,12 +17,22 @@ from etl_pipeline.service.proto.etl_pipeline_pb2 import (
 from etl_pipeline.service.proto.etl_pipeline_pb2_grpc import EtlPipelineServiceStub
 
 
-def load_alert():
-    with open("notebooks/sample/wm_address_in_payload_format.json", "r") as f:
+def load_alert(filepath: str = "notebooks/sample/wm_address_in_payload_format.json"):
+    with open(filepath, "r") as f:
         text = json.load(f)
-        match1 = Match(match_id="0", match_name="mathes/0")
-        match2 = Match(match_id="1", match_name="matches/1")
-        alert = Alert(batch_id="1", alert_name="alerts/2", matches=[match1, match2])
+        matches = [
+            Match(match_id="0", match_name=f"alerts/2/matches/{num}")
+            for num, _ in enumerate(
+                set(
+                    [
+                        re.findall(r"matchRecords\[\d+\]", key)[0]
+                        for key in text
+                        if re.search(r"matchRecords\[\d+\]", key)
+                    ]
+                )
+            )
+        ]
+        alert = Alert(batch_id="1", alert_name="alerts/2", matches=matches)
         for key, value in text.items():
             alert.flat_payload[str(key)] = str(value)
     return alert
@@ -47,10 +58,28 @@ class TestGrpcServer(unittest.TestCase):
         for alert in response.etl_alerts:
             assert alert.etl_status == SUCCESS
 
+    def test_cross_input_match_records(self):
+        alert = load_alert(
+            "notebooks/sample/wm_address_in_payload_format_2_input_3_match_records.json"
+        )
+        channel = grpc.insecure_channel("localhost:9090")
+        stub = EtlPipelineServiceStub(channel)
+        response = stub.RunEtl(RunEtlRequest(alerts=[alert]))
+        for alert in response.etl_alerts:
+            assert alert.etl_status == SUCCESS
+
+    def test_wm_party(self):
+        alert = load_alert("notebooks/sample/wm_party_in_payload_format.json")
+        channel = grpc.insecure_channel("localhost:9090")
+        stub = EtlPipelineServiceStub(channel)
+        response = stub.RunEtl(RunEtlRequest(alerts=[alert]))
+        for alert in response.etl_alerts:
+            assert alert.etl_status == SUCCESS
+
     def test_wrong_alert_name(self):
         alert = load_alert()
         channel = grpc.insecure_channel("localhost:9090")
-        alert.alert_name = "2"
+        alert.matches[0].match_name = "2"
         stub = EtlPipelineServiceStub(channel)
         response = stub.RunEtl(RunEtlRequest(alerts=[alert]))
         assert response.etl_alerts[0].etl_status == FAILURE

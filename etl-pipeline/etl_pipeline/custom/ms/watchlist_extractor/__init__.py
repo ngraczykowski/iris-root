@@ -57,6 +57,8 @@ class WatchlistExtractor:
             dob = dobs[0]
         except IndexError:
             dob = {}
+        except KeyError:
+            dob = dobs
 
         if isinstance(dob, str):
             return [dob]

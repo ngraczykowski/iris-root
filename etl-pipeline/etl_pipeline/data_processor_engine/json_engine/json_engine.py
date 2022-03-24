@@ -43,16 +43,10 @@ COLLECTIVE_REPRESENTATION_MAP_FOR_PARTY = {
     cn.ALL_PARTY_RESIDENCY_COUNTRIES: "partyResidenceCountryCode",
 }
 
-COLLECTIVE_REPRESENTATION_MAP_FOR_FIELD = {
-    cn.ALL_PARTY_EMPLOYERS: cn.EMPLOYER,
-    cn.ALL_PARTY_COUNTRY: cn.COUNTRY,
-    cn.ALL_PARTY_COUNTRY1: cn.COUNTRY1,
-    cn.ALL_PARTY_ADDRESS1_COUNTRY: cn.ADDRESS1_COUNTRY,
-    cn.ALL_PARTY_COUNTRY1_CITIZENSHIP: cn.COUNTRY1_CITIZENSHIP,
-    cn.ALL_PARTY_COUNTRY2_CITIZENSHIP: cn.COUNTRY2_CITIZENSHIP,
-    cn.ALL_PARTY_COUNTRY_FORMATION1: cn.COUNTRY_FORMATION1,
-    cn.ALL_PARTY_COUNTRY_DOMICILE1: cn.COUNTRY_DOMICILE1,
-    cn.ALL_PARTY_COUNTRY_OF_INCORPORATION: cn.COUNTRY_OF_INCORPORATION,
+COLLECTIVE_REPRESENTATION_MAP_FOR_ACCOUNTS = {
+    cn.ALL_CONNECTED_ACCOUNT_NAMES: cn.CONNECTED_FULL_NAME,
+    cn.ALL_BRANCH_ACCOUNT_NUMBERS: "branchAccountNumber",
+    cn.ALL_BENEFICIARY_NAMES: "partyResidenceCountryCode",
 }
 
 COLLECTIVE_REPRESENTATION_MAP_FOR_FIELD = {
@@ -122,17 +116,10 @@ class JsonProcessingEngine(ProcessingEngine):
     def set_beneficiary_hits(self, payload):
         payload[cn.IS_BENEFICIARY_HIT] = cn.AD_BNFL_NM in payload[cn.TRIGGERED_BY]
 
-    def connect_full_names(self, parties):
+    def connect_full_names(self, parties, fields=[cn.PRTY_FST_NM, cn.PRTY_MDL_NM, cn.PRTY_LST_NM]):
         for party in parties:
             party[cn.CONNECTED_FULL_NAME] = " ".join(
-                [
-                    party.get(key, "")
-                    for key in [
-                        cn.PRTY_FST_NM,
-                        cn.PRTY_MDL_NM,
-                        cn.PRTY_LST_NM,
-                    ]
-                ]
+                [party.get(key, "") for key in fields]
             ).strip()
 
     def collect_party_values_from_parties(self, parties, payload):
@@ -146,7 +133,7 @@ class JsonProcessingEngine(ProcessingEngine):
         for (
             collective_field_name,
             field_name_to_collect,
-        ) in COLLECTIVE_REPRESENTATION_MAP_FOR_PARTY.items():
+        ) in COLLECTIVE_REPRESENTATION_MAP_FOR_ACCOUNTS.items():
             payload[collective_field_name] = [i.get(field_name_to_collect, "") for i in accounts]
 
     def load_raw_data(self, *args, **kwargs):
