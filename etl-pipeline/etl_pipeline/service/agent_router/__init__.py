@@ -92,7 +92,7 @@ class DobAgentFeatureInputProducer(Producer):
 
 
 class ResidencyAgentFeatureInputProducer(Producer):
-    feature_name = "features/residency"
+    feature_name = "features/residencyCountry"
 
     def produce_feature_input(self, payload):
         ap_parties = payload.get("ap_all_residencies_aggregated", [])

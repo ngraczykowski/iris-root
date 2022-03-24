@@ -9,7 +9,14 @@ from etl_pipeline.custom.ms.transformations import (
     prepend_agent_name_to_ap_or_wl_or_aliases_key,
 )
 from etl_pipeline.custom.ms.watchlist_extractor import WatchlistExtractor
+from etl_pipeline.logger import get_logger
 from etl_pipeline.pipeline import ETLPipeline
+
+logger = get_logger("ETL Pipeline")
+
+
+class PipelineError:
+    pass
 
 
 class MSPipeline(ETLPipeline):
@@ -65,16 +72,35 @@ class MSPipeline(ETLPipeline):
         return new_payloads
 
     def transform_standardized_to_cleansed(self, payloads):
-        alerted_parties = payloads["alertedParty"]["supplementalInfo"][cn.RELATED_PARTIES][
-            cn.PARTIES
-        ]
-        accounts = payloads["alertedParty"]["supplementalInfo"][cn.RELATED_ACCOUNTS][  # noqa F841
-            cn.ACCOUNTS
-        ]
-        self.flatten_parties(alerted_parties)
-        input_records = payloads["alertedParty"]["inputRecordHist"]["inputRecords"]
-        self.parse_input_records(input_records)
+        try:
+            alerted_parties = payloads["alertedParty"]["supplementalInfo"][cn.RELATED_PARTIES][
+                cn.PARTIES
+            ]
+        except (KeyError, IndexError):
+            logger.warning("No parties")
+            alerted_parties = []
 
+        try:
+            accounts = payloads["alertedParty"]["supplementalInfo"][
+                cn.RELATED_ACCOUNTS
+            ][  # noqa F841
+                cn.ACCOUNTS
+            ]
+        except (KeyError, IndexError):
+            logger.warning("No accounts")
+            accounts = []  # noqa F841
+
+        if alerted_parties:
+            self.flatten_parties(alerted_parties)
+
+        try:
+            input_records = payloads["alertedParty"]["inputRecordHist"]["inputRecords"]
+
+        except (KeyError, IndexError):
+            logger.warning("No input_records")
+            return {}
+
+        self.parse_input_records(input_records)
         payloads = self.connect_input_record_with_match_record(payloads)
         for payload in payloads:
             matches = payload["watchlistParty"]["matchRecords"]
@@ -118,32 +144,38 @@ class MSPipeline(ETLPipeline):
                 )
         return payloads
 
+    def parse_key(self, value, match, payload, new_config):
+        temp_dict = dict(value)
+        for new_key in temp_dict:
+            for element in temp_dict[new_key]:
+                elements = element.split(".")
+                if cn.MATCH_RECORDS in element:
+                    value = match
+                    elements = elements[2:]
+                else:
+                    value = payload
+                for field_name in elements:
+                    if field_name == "INPUT_FIELD":
+                        try:
+                            value = value[0][field_name][elements[-1]].value
+                        except (AttributeError, KeyError):
+                            value = None
+                        break
+                    try:
+                        value = value.get(field_name, None)
+                    except TypeError:
+                        key = PayloadLoader.LIST_ELEMENT_REGEX.sub("", field_name)
+                        ix = int(PayloadLoader.LIST_ELEMENT_REGEX.match(field_name).groups(0))
+                        value = value[key][ix]
+                new_config[elements[-1]] = value
+
     def get_key(self, payload, match, conf):
         new_config = {}
-        for key, value in dict(conf).items():
-            temp_dict = dict(value)
-            for new_key in temp_dict:
-                for element in temp_dict[new_key]:
-                    elements = element.split(".")
-                    if cn.MATCH_RECORDS in element:
-                        value = match
-                        elements = elements[2:]
-                    else:
-                        value = payload
-                    for field_name in elements:
-                        if field_name == "INPUT_FIELD":
-                            try:
-                                value = value[0][field_name][elements[-1]].value
-                            except (AttributeError, KeyError):
-                                value = None
-                            break
-                        try:
-                            value = value.get(field_name, None)
-                        except TypeError:
-                            key = PayloadLoader.LIST_ELEMENT_REGEX.sub("", field_name)
-                            ix = int(PayloadLoader.LIST_ELEMENT_REGEX.match(field_name).groups(0))
-                            value = value[key][ix]
-                    new_config[elements[-1]] = value
+        for _, value in dict(conf).items():
+            try:
+                self.parse_key(value, match, payload, new_config)
+            except:
+                logger.error(f"Field {value} does not exist in payload")
         return new_config
 
     def load_agent_config(self, alert_type="WM_ADDRESS"):
