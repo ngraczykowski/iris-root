@@ -14,17 +14,17 @@ from etl_pipeline.service.agent_router import AgentInputCreator
 from etl_pipeline.service.proto.api.etl_pipeline_pb2 import FAILURE
 from etl_pipeline.service.proto.etl_pipeline_pb2 import SUCCESS, UNKNOWN, EtlAlert, EtlMatch
 from pipelines.ms.wm_address_pipeline import MSPipeline as WmAddressMSPipeline
-from pipelines.ms.wm_party_pipeline import MSPipeline as WmPartyMSPipeline
 
 engine = JsonProcessingEngine(pipeline_config)
 
 router = AgentInputCreator()
-logger = get_logger("ETL PIPELINE")
+logger = get_logger("Message handler")
 
-pipelines = {
-    "R_US_Active_Address": WmAddressMSPipeline(engine, pipeline_config),
-    "R_US_Active_Party": WmPartyMSPipeline(engine, pipeline_config),
-}
+pipeline = WmAddressMSPipeline(engine, pipeline_config)
+
+
+class ParsingError:
+    pass
 
 
 @dataclass
@@ -45,6 +45,14 @@ class EtlPipelineServiceServicer(object):
     pool = futures.ProcessPoolExecutor(max_workers=1)
 
     def RunEtl(self, request: etl__pipeline__pb2.RunEtlRequest, context):
+        try:
+            etl_alerts = self.process_request(request)
+        except Exception as e:
+            logger.error(f"RunEtl error: {e}")
+            etl_alerts = []
+        return etl__pipeline__pb2.RunEtlResponse(etl_alerts=etl_alerts)
+
+    def process_request(self, request):
         alerts_to_parse = [
             AlertPayload(
                 batch_id=alert.batch_id,
@@ -54,45 +62,55 @@ class EtlPipelineServiceServicer(object):
             )
             for alert in request.alerts
         ]
-        future_payloads = [self.pool.submit(self.parse_alert, alert) for alert in alerts_to_parse]
+        future_payloads = [
+            self.pool.submit(self.parse_alert, alert, logger) for alert in alerts_to_parse
+        ]
         payloads = [future.result() for future in future_payloads]
         # payloads = [self.parse_alert(alerts_to_parse[0])]  # debugging
         statuses = []
-        logger.info("Payload parsed by pipeline")
+
         for alert, record in zip(alerts_to_parse, payloads):
-            input_match_records, status = record
-            for input_match_record in input_match_records:
-                logger.info("Trying upload from pipeline to UDS")
-                try:
-                    self.add_to_datasource(alert, input_match_record)
-                except Exception as e:
-                    logger.error("Exception :" + str(e))
-                    status = FAILURE
-                    break
+            input_match_records, status, error = record
+            if status != UNKNOWN:
+                logger.info(
+                    f"Batch {alert.batch_id}, Alert {alert.alert_name} parsed successfully"
+                )
+                for input_match_record in input_match_records:
+                    logger.info("Trying upload from pipeline to UDS")
+                    try:
+                        self.add_to_datasource(alert, input_match_record)
+                    except Exception as e:
+                        logger.error("Exception :" + str(e))
+                        status = FAILURE
+                        break
+            else:
+                logger.info(
+                    f"Batch {alert.batch_id}, Alert {alert.alert_name} - parsing error: {error}"
+                )
             statuses.append(status)
         etl_alerts = [
             self._parse_alert(alert, status) for alert, status in zip(alerts_to_parse, statuses)
         ]
-        response = etl__pipeline__pb2.RunEtlResponse(etl_alerts=etl_alerts)
-        return response
 
-    def parse_alert(self, alert):
+        return etl_alerts
+
+    def parse_alert(self, alert, logger):
         payload = alert.flat_payload
         payload = PayloadLoader().load_payload_from_json(payload)
-
         payload = {key: payload[key] for key in sorted(payload)}
-
         payload[cn.MATCH_IDS] = alert.matches
         status = SUCCESS
+        error = None
         try:
-
-            pipeline = pipelines[payload["alertedParty"]["headerInfo"]["datasetName"]]
             payload = pipeline.transform_standardized_to_cleansed(payload)
+            logger.debug("Transform standardized to cleansed - success")
             payload = pipeline.transform_cleansed_to_application(payload)
+            logger.debug("Transform cleansed to standardized - success")
         except Exception as e:
             logger.error(e)
+            error = str(e)
             status = UNKNOWN
-        return [payload, status]
+        return [payload, status, error]
 
     def _parse_alert(self, alert, status):
         etl_alert = EtlAlert(

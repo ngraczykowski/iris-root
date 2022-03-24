@@ -70,6 +70,11 @@ job "etl-pipeline" {
           source = "local/config/agents/agents_input_WM_ADDRESS.yaml"
           target = "/config/agents/agents_input_WM_ADDRESS.yaml"
         }
+        mount {
+          type   = "bind"
+          source = "local/config/agents/agents_input_WM_Party.yaml"
+          target = "/config/agents/agents_input_WM_Party.yaml"
+        }
         ports = [
           "grpc"
         ]
