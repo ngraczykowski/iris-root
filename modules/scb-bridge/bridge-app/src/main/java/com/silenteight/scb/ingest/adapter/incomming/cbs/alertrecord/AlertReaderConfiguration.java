@@ -6,6 +6,7 @@ import com.silenteight.scb.ingest.adapter.incomming.cbs.alertmapper.AlertMapper;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertInFlightService;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckGateway;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.metrics.CbsOracleMetrics;
+import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertIngestService;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,7 @@ class AlertReaderConfiguration {
   private final AlertReaderProperties alertReaderProperties;
   private final ValidAlertCompositeMapper validAlertCompositeMapper;
   private final InvalidAlertMapper invalidAlertMapper;
+  private final BatchAlertIngestService ingestService;
   private final CbsOracleMetrics cbsOracleMetrics;
 
   @Bean
@@ -49,6 +51,7 @@ class AlertReaderConfiguration {
         cbsAckGateway,
         validAlertCompositeMapper,
         invalidAlertMapper,
-        alertMapper);
+        alertMapper,
+        ingestService);
   }
 }

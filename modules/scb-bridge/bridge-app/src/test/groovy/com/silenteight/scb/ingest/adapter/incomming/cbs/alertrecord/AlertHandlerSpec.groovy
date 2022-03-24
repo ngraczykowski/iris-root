@@ -9,6 +9,7 @@ import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.Ale
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckAlert
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckGateway
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsOutput
+import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertIngestService
 import com.silenteight.scb.ingest.adapter.incomming.common.model.ObjectId
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert
 
@@ -21,6 +22,7 @@ class AlertHandlerSpec extends Specification {
   def validAlertCompositeMapper = Mock(ValidAlertCompositeMapper)
   def invalidAlertMapper = Mock(InvalidAlertMapper)
   def alertMapper = Mock(AlertMapper)
+  def ingestService = Mock(BatchAlertIngestService)
   def fixtures = new Fixtures()
 
   def underTest = new AlertHandler(
@@ -28,7 +30,8 @@ class AlertHandlerSpec extends Specification {
       cbsAckGateway,
       validAlertCompositeMapper,
       invalidAlertMapper,
-      alertMapper)
+      alertMapper,
+      ingestService)
 
   def 'should handle invalid alerts'() {
     given:
@@ -57,10 +60,11 @@ class AlertHandlerSpec extends Specification {
   def 'should handle valid alerts'() {
     given:
     def internalBatchId = UUID.randomUUID().toString();
-    def validAlerts = [
+    def alerts = [fixtures.alert1, fixtures.alert2]
+    def validAlertComposites = [
         fixtures.validAlertComposite1, fixtures.validAlertComposite2
     ]
-    def alertCompositeCollections = List.of(new AlertCompositeCollection(validAlerts, []))
+    def alertCompositeCollections = List.of(new AlertCompositeCollection(validAlertComposites, []))
 
     when:
     underTest
@@ -68,9 +72,11 @@ class AlertHandlerSpec extends Specification {
 
     then:
     1 * validAlertCompositeMapper.fromAlertCompositeCollections(alertCompositeCollections) >>
-        validAlerts
+        validAlertComposites
     1 * invalidAlertMapper.fromAlertCompositeCollections(alertCompositeCollections) >>
         Collections.emptyList()
+    1 * alertMapper.fromValidAlertComposites(validAlertComposites) >> alerts
+    1 * ingestService.ingestAlertsForRecommendation(internalBatchId, alerts)
     1 * cbsAckGateway.
         ackReadAlert({CbsAckAlert a -> a.alertExternalId == fixtures.alertId1.systemId}) >>
         new CbsOutput(state: CbsOutput.State.OK)

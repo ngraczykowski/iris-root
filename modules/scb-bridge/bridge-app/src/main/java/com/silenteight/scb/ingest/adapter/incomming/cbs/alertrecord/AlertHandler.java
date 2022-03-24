@@ -10,6 +10,7 @@ import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.Ale
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckAlert;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckGateway;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsOutput;
+import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertIngestService;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ class AlertHandler {
   private final ValidAlertCompositeMapper validAlertCompositeMapper;
   private final InvalidAlertMapper invalidAlertMapper;
   private final AlertMapper alertMapper;
+  private final BatchAlertIngestService ingestService;
 
   void handleAlerts(
       String internalBatchId, List<AlertCompositeCollection> alertCompositeCollections) {
@@ -36,7 +38,16 @@ class AlertHandler {
   private void handleValidAlerts(
       String internalBatchId, List<ValidAlertComposite> validAlertComposites) {
     registerAlerts(internalBatchId, validAlertComposites);
+    acknowledgeAlerts(validAlertComposites);
+  }
 
+  private void registerAlerts(
+      String internalBatchId, List<ValidAlertComposite> validAlertComposites) {
+    var alerts = alertMapper.fromValidAlertComposites(validAlertComposites);
+    ingestService.ingestAlertsForRecommendation(internalBatchId, alerts);
+  }
+
+  private void acknowledgeAlerts(List<ValidAlertComposite> validAlertComposites) {
     validAlertComposites.forEach(alertComposite -> {
       var alertId = alertComposite.getAlertId();
       var cbsOutput = ackAlert(
@@ -45,22 +56,12 @@ class AlertHandler {
           alertComposite.getContext().getWatchlistLevel());
 
       switch (cbsOutput.getState()) {
-        case OK:
-          alertInFlightService.delete(alertId);
-          break;
-        case TEMPORARY_FAILURE:
-          log.error("Temporary failure on ACK for alert={}, will retry again.", alertId);
-          break;
-        default:
-        case ERROR:
-          alertInFlightService.update(alertId, State.ERROR, "Fatal error on ACK");
+        case OK -> alertInFlightService.delete(alertId);
+        case TEMPORARY_FAILURE -> log.error(
+            "Temporary failure on ACK for alert={}, will retry again.", alertId);
+        default -> alertInFlightService.update(alertId, State.ERROR, "Fatal error on ACK");
       }
     });
-  }
-
-  private void registerAlerts(
-      String internalBatchId, List<ValidAlertComposite> validAlertComposites) {
-    var alerts = alertMapper.fromValidAlertComposites(validAlertComposites);
   }
 
   private CbsOutput ackAlert(String systemId, String batchId, boolean watchlistLevel) {

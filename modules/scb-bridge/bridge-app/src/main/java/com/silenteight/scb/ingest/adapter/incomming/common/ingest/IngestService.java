@@ -11,6 +11,7 @@ import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert.Fla
 import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match;
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRecommendationService;
 import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
+import com.silenteight.scb.ingest.domain.model.Batch.Priority;
 import com.silenteight.scb.ingest.domain.model.RegistrationResponse;
 import com.silenteight.scb.ingest.domain.model.RegistrationResponse.RegisteredAlertWithMatches;
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
@@ -49,45 +50,31 @@ class IngestService implements SingleAlertIngestService, BatchAlertIngestService
   public void ingestAlertsForLearn(@NonNull Stream<Alert> alertStream) {
     alertStream.collect(groupingBy(alert -> alert.details().getBatchId()))
         .forEach((batchId, alerts) -> {
-          var registrationResponse =
-              alertRegistrationFacade.registerLearningAlert(batchId, alerts);
+          var registrationResponse = alertRegistrationFacade.registerLearningAlert(batchId, alerts);
           alerts.forEach(alert -> {
             var flags = determineLearningFlags(alert);
-            send(alert, flags, registrationResponse);
+            publish(alert, flags, registrationResponse);
             ingestedLearningAlertsCounter++;
           });
         });
   }
 
   @Override
-  public void ingestAlertsForRecommendation(@NonNull Stream<Alert> alerts) {
-    //ALERT REGISTRATION IN CORE BRIDGE
-    RegistrationResponse registrationResponse = RegistrationResponse.builder().build();
-
-    filterAlerts(alerts).forEach(
-        alert -> send(alert, ALERT_RECOMMENDATION_FLAGS, registrationResponse));
-  }
-
-  private Stream<Alert> filterAlerts(Stream<Alert> alerts) {
-    return solvedAlertsProcessingEnabled ? alerts : alerts.filter(IngestService::hasNotBeenSolved);
-  }
-
-  private static boolean hasNotBeenSolved(Alert alert) {
-    return alert.matches().stream()
-        .anyMatch(Match::isNew);
+  public void ingestAlertsForRecommendation(
+      @NonNull String internalBatchId, @NonNull List<Alert> alerts) {
+    var registrationResponse =
+        alertRegistrationFacade.registerSolvingAlert(internalBatchId, alerts, Priority.MEDIUM);
+    alerts.forEach(alert -> publish(alert, ALERT_RECOMMENDATION_FLAGS, registrationResponse));
   }
 
   @LogContext
-  private void send(Alert alert, int flags, RegistrationResponse registrationResponse) {
+  private void publish(Alert alert, int flags, RegistrationResponse registrationResponse) {
     logAlert(alert.id().sourceId(), alert.id().discriminator());
 
     Alert ingestedAlert = updateIngestInfoForAlert(alert, flags);
     updateRegistrationInfoForAlert(ingestedAlert, registrationResponse);
-    listeners.forEach(listener -> listener.send(ingestedAlert));
 
-    log.info("Sending a batched alert, systemId={}", ingestedAlert.id().sourceId());
-
-    //UDS FEEDING
+    log.info("Publishing a batched alert, systemId={}", ingestedAlert.id().sourceId());
     ingestEventPublisher.publish(ingestedAlert);
   }
 

@@ -2,11 +2,11 @@ package com.silenteight.scb.ingest.adapter.incomming.common.ingest;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.model.ObjectId;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
-import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert.Flag;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertDetails;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match;
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRecommendationService;
 import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
+import com.silenteight.scb.ingest.domain.model.Batch.Priority;
 import com.silenteight.scb.ingest.domain.model.RegistrationResponse;
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
 import com.silenteight.sep.base.testing.messaging.MessageSenderSpyFactory;
@@ -20,6 +20,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 import static java.util.Collections.singleton;
@@ -79,13 +81,8 @@ class IngestServiceTest {
     ingestService.ingestAlertsForLearn(alerts);
 
     //then
-    checkAndAssertResults(Flag.LEARN.getValue());
     verify(alertRegistrationFacade).registerLearningAlert(any(), any());
     verify(ingestEventPublisher, times(2)).publish(any());
-  }
-
-  private void checkAndAssertResults(int learnFlags) {
-    verify(listener, times(2)).send(any());
   }
 
   private static Stream<Alert> createAlerts() {
@@ -121,7 +118,6 @@ class IngestServiceTest {
     ingestService.ingestAlertsForLearn(alerts);
 
     //then
-    checkAndAssertResults(Flag.LEARN.getValue() | Flag.PROCESS.getValue());
     verify(alertRegistrationFacade).registerLearningAlert(any(), any());
     verify(ingestEventPublisher, times(2)).publish(any());
   }
@@ -129,28 +125,30 @@ class IngestServiceTest {
   @Test
   void ingestAlertsForRecommendation() {
     //given
-    Stream<Alert> alerts = createAlerts();
+    List<Alert> alerts = createAlerts().toList();
+    String internalBatchId = UUID.randomUUID().toString();
+    when(alertRegistrationFacade.registerSolvingAlert(internalBatchId, alerts, Priority.MEDIUM))
+        .thenReturn(RegistrationResponse.builder().build());
 
     //when
-    ingestService.ingestAlertsForRecommendation(alerts);
+    ingestService.ingestAlertsForRecommendation(internalBatchId, alerts);
 
     //then
-    checkAndAssertResults(
-        Flag.RECOMMEND.getValue() | Flag.PROCESS.getValue() | Flag.ATTACH.getValue());
     verify(ingestEventPublisher, times(2)).publish(any());
   }
 
   @Test
   void ingestDenyAlertsForRecommendation() {
     //given
-    Stream<Alert> denyAlerts = createDenyAlerts();
+    String internalBatchId = UUID.randomUUID().toString();
+    List<Alert> denyAlerts = createDenyAlerts().toList();
+    when(alertRegistrationFacade.registerSolvingAlert(internalBatchId, denyAlerts, Priority.MEDIUM))
+        .thenReturn(RegistrationResponse.builder().build());
 
     //when
-    ingestService.ingestAlertsForRecommendation(denyAlerts);
+    ingestService.ingestAlertsForRecommendation(internalBatchId, denyAlerts);
 
     //then
-    checkAndAssertResults(
-        Flag.RECOMMEND.getValue() | Flag.PROCESS.getValue() | Flag.ATTACH.getValue());
     verify(ingestEventPublisher, times(2)).publish(any());
   }
 
@@ -180,14 +178,15 @@ class IngestServiceTest {
   @Test
   void ingestNonDenyAlertsForRecommendation() {
     //given
-    Stream<Alert> nonDenyAlerts = createNonDenyAlerts();
+    String internalBatchId = UUID.randomUUID().toString();
+    List<Alert> nonDenyAlerts = createNonDenyAlerts().toList();
+    when(alertRegistrationFacade.registerSolvingAlert(internalBatchId, nonDenyAlerts,
+        Priority.MEDIUM)).thenReturn(RegistrationResponse.builder().build());
 
     //when
-    ingestService.ingestAlertsForRecommendation(nonDenyAlerts);
+    ingestService.ingestAlertsForRecommendation(internalBatchId, nonDenyAlerts);
 
     //then
-    checkAndAssertResults(
-        Flag.RECOMMEND.getValue() | Flag.PROCESS.getValue() | Flag.ATTACH.getValue());
     verify(ingestEventPublisher, times(2)).publish(any());
   }
 
@@ -196,67 +195,37 @@ class IngestServiceTest {
   }
 
   @Test
-  void shouldDoNotIngestSolvedAlertsForRecommendation() {
-    //given
-    Match obsoleteMatch =
-        Match.builder().flags(Match.Flag.OBSOLETE.getValue()).build();
-    Match solvedMatch = Match.builder().flags(Match.Flag.SOLVED.getValue()).build();
-    ObjectId objectId = ObjectId.builder().sourceId("").discriminator("").build();
-
-    Stream<Alert> alerts = Stream.of(
-        Alert
-            .builder()
-            .id(objectId)
-            .matches(Collections.singletonList(obsoleteMatch))
-            .decisionGroup(DECISION_GROUP)
-            .details(AlertDetails.builder().batchId("batchId1").build())
-            .build(),
-        Alert
-            .builder()
-            .id(objectId)
-            .matches(Collections.singletonList(solvedMatch))
-            .decisionGroup(OTHER_DECISION_GROUP)
-            .details(AlertDetails.builder().batchId("batchId1").build())
-            .build());
-
-    //when
-    ingestService.ingestAlertsForRecommendation(alerts);
-
-    //then
-    verify(listener, never()).send(any());
-  }
-
-  @Test
   void shouldIngestSolvedAlertsForRecommendationWhenBacktestReportModeIsEnabled() {
     //given
+    String internalBatchId = UUID.randomUUID().toString();
     ingestProperties.setSolvedAlertsProcessingEnabled(true);
     createIngestService();
     Match obsoleteMatch = Match.builder().flags(Match.Flag.OBSOLETE.getValue()).build();
     Match solvedMatch = Match.builder().flags(Match.Flag.SOLVED.getValue()).build();
     ObjectId objectId = ObjectId.builder().sourceId("").discriminator("").build();
-
-    Stream<Alert> alerts = Stream.of(
-        Alert
-            .builder()
-            .id(objectId)
-            .matches(Collections.singletonList(obsoleteMatch))
-            .decisionGroup(DECISION_GROUP)
-            .details(AlertDetails.builder().batchId("batchId1").build())
-            .build(),
-        Alert
-            .builder()
-            .id(objectId)
-            .matches(Collections.singletonList(solvedMatch))
-            .decisionGroup(OTHER_DECISION_GROUP)
-            .details(AlertDetails.builder().batchId("batchId1").build())
-            .build());
+    List<Alert> alerts = Stream.of(
+            Alert
+                .builder()
+                .id(objectId)
+                .matches(Collections.singletonList(obsoleteMatch))
+                .decisionGroup(DECISION_GROUP)
+                .details(AlertDetails.builder().batchId("batchId1").build())
+                .build(),
+            Alert
+                .builder()
+                .id(objectId)
+                .matches(Collections.singletonList(solvedMatch))
+                .decisionGroup(OTHER_DECISION_GROUP)
+                .details(AlertDetails.builder().batchId("batchId1").build())
+                .build())
+        .toList();
+    when(alertRegistrationFacade.registerSolvingAlert(internalBatchId, alerts, Priority.MEDIUM))
+        .thenReturn(RegistrationResponse.builder().build());
 
     //when
-    ingestService.ingestAlertsForRecommendation(alerts);
+    ingestService.ingestAlertsForRecommendation(internalBatchId, alerts);
 
     //then
-    checkAndAssertResults(
-        Flag.RECOMMEND.getValue() | Flag.PROCESS.getValue() | Flag.ATTACH.getValue());
     verify(ingestEventPublisher, times(2)).publish(any());
   }
 }
