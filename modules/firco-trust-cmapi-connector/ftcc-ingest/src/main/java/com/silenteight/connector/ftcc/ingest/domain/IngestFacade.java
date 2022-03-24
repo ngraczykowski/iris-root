@@ -50,7 +50,7 @@ public class IngestFacade {
 
   private void registerBatch(RequestDto request, UUID batchId) {
     Batch batch = Batch.builder()
-        .batchId(batchId.toString())
+        .batchId(BatchResource.toResourceName(batchId))
         .alertsCount(request.getMessagesCount())
         .build();
     registrationApiClient.registerBatch(batch);
