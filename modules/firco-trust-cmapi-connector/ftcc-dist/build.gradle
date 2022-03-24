@@ -1,0 +1,64 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+  id "distribution"
+  id "maven-publish"
+}
+
+description = "Firco Trust CMAPI Connector Distribution"
+
+configurations {
+  dist
+}
+
+dependencies {
+  dist project(path: ":ftcc-app", configuration: "bootArchives")
+}
+
+def runScript(String name) {
+  copySpec {
+    from(file("src/bash/run.template.sh")) {
+      rename {
+        name
+      }
+      filter(
+          ReplaceTokens,
+          tokens: [jarfile: "ftcc-app-${project.version}-exec.jar".toString()],
+          beginToken: "@@",
+          endToken: "@@",
+      )
+      into("bin/")
+    }
+  }
+}
+
+distributions {
+  main {
+    distributionBaseName = "ftcc-dist"
+
+    contents {
+      from(configurations.dist) {
+        into "lib/"
+      }
+      with runScript("ftcc")
+    }
+  }
+}
+
+tasks.named("distTar") {
+  compression = Compression.BZIP2
+  archiveExtension = "tar.bz2"
+}
+
+tasks.withType(Zip) {
+  enabled = false
+}
+
+publishing {
+  publications {
+    distribution(MavenPublication) {
+      artifact distTar
+      artifactId "ftcc-dist"
+    }
+  }
+}
