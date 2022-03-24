@@ -11,9 +11,19 @@ import com.google.protobuf.util.JsonFormat;
 
 import static java.lang.String.format;
 
+/**
+ * @deprecated We should not map protos to struct anymore, because we are trying to get rid of proto
+ *     api dependencies in facade. Replaced by {@link StructReasonMapper}
+ */
+@Deprecated(forRemoval = true)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AgentReasonMapper {
 
+
+  /**
+   * @deprecated see {@link StructReasonMapper#toStruct(Structable)}
+   */
+  @Deprecated(forRemoval = true)
   public static <T extends MessageOrBuilder> Struct mapToStruct(T reason) {
     var structBuilder = Struct.newBuilder();
     return addToStructBuilder(reason, structBuilder).build();
@@ -31,6 +41,10 @@ public class AgentReasonMapper {
     return builder;
   }
 
+  /**
+   * @deprecated Moved to {@link StructReasonMapper#mapToStruct(String, String)}
+   */
+  @Deprecated(forRemoval = true)
   public static Struct mapToStruct(String fieldName, String value) {
     var structBuilder = Struct.newBuilder();
 
