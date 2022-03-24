@@ -33,7 +33,7 @@ class ChunkProcessor {
       while (resultSet.next()) {
         processor.process(resultSet);
         totalProcessed++;
-        if (totalProcessed % ExternalAlertIdReader.MAX_CHUNK_SIZE == 0) {
+        if (totalProcessed % context.getChunkSize() == 0) {
           log.info("Query processed {} records so far in {}", totalProcessed, stopWatch);
         }
       }
@@ -60,7 +60,7 @@ class ChunkProcessor {
     void process(ResultSet resultSet) throws SQLException {
       alertsToBeProcessed.add(map(resultSet));
 
-      if (alertsToBeProcessed.size() >= ExternalAlertIdReader.MAX_CHUNK_SIZE)
+      if (alertsToBeProcessed.size() >= context.getChunkSize())
         sendAlertIds();
     }
 

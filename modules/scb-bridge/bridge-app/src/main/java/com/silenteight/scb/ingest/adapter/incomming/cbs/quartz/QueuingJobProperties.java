@@ -35,4 +35,8 @@ public class QueuingJobProperties {
 
   @OracleRelationName
   private String recordsView;
+
+  @Min(1)
+  @Max(100_000)
+  private int chunkSize;
 }

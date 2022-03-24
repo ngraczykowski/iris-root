@@ -49,6 +49,7 @@ public class QueuingJobsLauncher {
         .priority(properties.getPriority())
         .recordsView(properties.getRecordsView())
         .watchlistLevel(properties.isWatchlistLevel())
+        .chunkSize(properties.getChunkSize())
         .build();
   }
 

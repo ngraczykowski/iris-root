@@ -6,3 +6,5 @@ serp:
       learning:
         alert.enabled: true
         ecm.enabled: true
+      queuing:
+        jobs:

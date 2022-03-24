@@ -21,8 +21,6 @@ public class ExternalAlertIdReader {
   private final JdbcTemplate jdbcTemplate;
   private final int timeout;
 
-  static final int MAX_CHUNK_SIZE = 1_000;
-
   public void read(AlertIdContext context) {
     try {
       jdbcTemplate.execute((ConnectionCallback<?>) con -> {
@@ -38,7 +36,7 @@ public class ExternalAlertIdReader {
   private void readInChunksAndSendForProcessing(
       Connection connection, AlertIdContext context) throws SQLException {
     try (Statement statement = connection.createStatement(TYPE_FORWARD_ONLY, CONCUR_READ_ONLY)) {
-      statement.setFetchSize(MAX_CHUNK_SIZE);
+      statement.setFetchSize(context.getChunkSize());
       statement.setQueryTimeout(timeout);
 
       chunkProcessor.process(statement, context);

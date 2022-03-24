@@ -20,6 +20,7 @@ class ChunkProcessorSpec extends Specification {
     def resultSetIdx = 0
     def context = AlertIdContext.builder()
         .recordsView('')
+        .chunkSize(1_000)
         .build()
 
     when:

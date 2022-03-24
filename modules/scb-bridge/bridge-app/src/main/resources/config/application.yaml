@@ -193,6 +193,7 @@ serp:
             priority: 10
             records-view: SENS_V_FFF_RECORDS_DENY
             watchlist-level: true
+            chunk-size: 1000
 
           - ack-records: true
             enabled: false
@@ -202,6 +203,7 @@ serp:
             priority: 1
             records-view: SENS_V_FFF_RECORDS_NON_DENY
             watchlist-level: true
+            chunk-size: 1000
 
           - ack-records: true
             enabled: false
@@ -211,6 +213,7 @@ serp:
             priority: 10
             records-view: SENS_V_FFF_RECORDS_DENY
             watchlist-level: false
+            chunk-size: 1000
 
           - ack-records: true
             enabled: false
@@ -220,6 +223,7 @@ serp:
             priority: 1
             records-view: SENS_V_FFF_RECORDS_NON_DENY
             watchlist-level: false
+            chunk-size: 1000
 
 # AMQP
 amqp:
