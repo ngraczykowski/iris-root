@@ -20,7 +20,9 @@ ae:
   comment-input:
     jdbc:
       missing-batch-size-select: 1024
-
+  match-recommendation:
+    flow:
+      enabled: false
   recommendation:
     jdbc:
       pending-alerts:

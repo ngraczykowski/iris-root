@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.adjudication.engine.analysis.matchrecommendation.MatchRecommendationFacade;
 import com.silenteight.adjudication.internal.v1.MatchesSolved;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.integration.dsl.IntegrationFlowAdapter;
 import org.springframework.integration.dsl.IntegrationFlowDefinition;
 import org.springframework.stereotype.Component;
@@ -14,8 +15,12 @@ import static com.silenteight.adjudication.engine.analysis.matchrecommendation.i
 import static com.silenteight.adjudication.engine.analysis.matchrecommendation.integration.MatchRecommendationChannels.MATCH_RECOMMENDATIONS_GENERATED_OUTBOUND_CHANNEL;
 
 @RequiredArgsConstructor
-@Component
 @Slf4j
+@Component
+@ConditionalOnProperty(
+    value = "ae.match-recommendation.flow.enabled",
+    havingValue = "true"
+)
 public class MatchesSolvedIntegrationFlow extends IntegrationFlowAdapter {
 
   private final MatchRecommendationFacade matchRecommendationFacade;
