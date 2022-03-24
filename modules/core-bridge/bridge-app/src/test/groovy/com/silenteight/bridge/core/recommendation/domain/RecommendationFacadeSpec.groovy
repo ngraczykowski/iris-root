@@ -63,4 +63,23 @@ class RecommendationFacadeSpec extends Specification {
         RecommendationFixtures.BATCH_WITH_ALERTS_DTO.alerts(), recommendations) >>
         RecommendationFixtures.BATCH_STATISTICS
   }
+
+  def 'should get recommendations by analysis name and alert names'() {
+    given:
+    def analysisName = RecommendationFixtures.ANALYSIS_NAME
+    def alertNames = [RecommendationFixtures.ALERT_NAME]
+    def command = RecommendationFixtures.GET_RECOMMENDATIONS_BY_ALERT_NAMES_RESPONSE_COMMAND
+    def recommendations = [RecommendationFixtures.RECOMMENDATION_WITH_METADATA]
+
+    when:
+    underTest.getRecommendationsResponse(command)
+
+    then:
+    1 * registrationService.getBatchWithAlerts(RecommendationFixtures.ANALYSIS_NAME) >>
+        RecommendationFixtures.BATCH_WITH_ALERTS_DTO
+    1 * recommendationRepository.findByAnalysisNameAndAlertNameIn(analysisName, alertNames) >> recommendations
+    1 * batchStatisticsService.createBatchStatistics(
+        RecommendationFixtures.BATCH_WITH_ALERTS_DTO.alerts(), recommendations) >>
+        RecommendationFixtures.BATCH_STATISTICS
+  }
 }

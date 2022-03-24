@@ -13,7 +13,6 @@ import com.silenteight.bridge.core.registration.domain.port.outgoing.*;
 import org.springframework.stereotype.Service;
 
 import java.util.EnumSet;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -73,7 +72,7 @@ class BatchService {
 
   void completeBatch(CompleteBatchCommand completeBatchCommand) {
     markBatchAsCompleted(completeBatchCommand.batch().id());
-    publishBatchCompleted(completeBatchCommand.batch(), completeBatchCommand.alertNames());
+    publishBatchCompleted(completeBatchCommand.batch());
   }
 
   void markBatchAsDelivered(String batchId) {
@@ -158,13 +157,12 @@ class BatchService {
     batchRepository.updateStatusToCompleted(batchId);
   }
 
-  private void publishBatchCompleted(Batch batch, List<String> alertNames) {
+  private void publishBatchCompleted(Batch batch) {
     eventPublisher.publish(
         BatchCompleted.builder()
             .id(batch.id())
             .analysisId(batch.analysisName())
             .batchMetadata(batch.batchMetadata())
-            .alertIds(alertNames)
             .build()
     );
   }

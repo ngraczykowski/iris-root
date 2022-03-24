@@ -102,7 +102,6 @@ class RecommendationReceivedFlowIntegrationSpec extends BaseSpecificationIT {
       with(messageBatchCompleted) {
         batchId == BATCH_ID_INPUT
         analysisId == analysisName
-        alertIdsCount == 1
         batchMetadata == METADATA
       }
     }

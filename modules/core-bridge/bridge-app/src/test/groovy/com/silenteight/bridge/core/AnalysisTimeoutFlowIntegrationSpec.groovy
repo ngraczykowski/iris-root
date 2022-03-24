@@ -3,7 +3,6 @@ package com.silenteight.bridge.core
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationWithMetadata
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendedAction
 import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RecommendationRepository
-import com.silenteight.bridge.core.registration.domain.model.Alert
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository
@@ -95,9 +94,8 @@ class AnalysisTimeoutFlowIntegrationSpec extends BaseSpecificationIT {
       and: 'BatchCompleted event was published'
       def messageBatchCompleted = (MessageBatchCompleted) rabbitTemplate.receiveAndConvert(
           AnalysisTimeoutFlowRabbitMqTestConfig.TEST_BATCH_COMPLETED_QUEUE_NAME, 1000L)
-      def alertNames = alerts.collect {it.name()}
 
-      verifyMessageBatchCompleted(messageBatchCompleted, batch.analysisName(), alertNames)
+      verifyMessageBatchCompleted(messageBatchCompleted, batch.analysisName())
     }
   }
 
@@ -137,7 +135,7 @@ class AnalysisTimeoutFlowIntegrationSpec extends BaseSpecificationIT {
       and: 'BatchCompleted event was published'
       def messageBatchCompleted = (MessageBatchCompleted) rabbitTemplate.receiveAndConvert(
           AnalysisTimeoutFlowRabbitMqTestConfig.TEST_BATCH_COMPLETED_QUEUE_NAME, 1000L)
-      verifyMessageBatchCompleted(messageBatchCompleted, batch.analysisName(), List.of())
+      verifyMessageBatchCompleted(messageBatchCompleted, batch.analysisName())
     }
   }
 
@@ -168,12 +166,10 @@ class AnalysisTimeoutFlowIntegrationSpec extends BaseSpecificationIT {
     }
   }
 
-  private def verifyMessageBatchCompleted(
-      MessageBatchCompleted message, String analysisName, List<String> alerts) {
+  private def verifyMessageBatchCompleted(MessageBatchCompleted message, String analysisName) {
     with(message) {
       it.batchId == batchId
       analysisId == analysisName
-      alertIdsList == alerts
       it.batchMetadata == batchMetadata
     }
   }

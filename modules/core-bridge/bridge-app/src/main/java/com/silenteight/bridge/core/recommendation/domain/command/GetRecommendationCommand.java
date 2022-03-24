@@ -1,3 +1,5 @@
 package com.silenteight.bridge.core.recommendation.domain.command;
 
-public record GetRecommendationCommand(String analysisName) {}
+import java.util.List;
+
+public record GetRecommendationCommand(String analysisName, List<String> alertNames) {}

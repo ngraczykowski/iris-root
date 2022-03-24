@@ -37,6 +37,15 @@ class JdbcRecommendationRepository implements RecommendationRepository {
         .toList();
   }
 
+  @Override
+  public List<RecommendationWithMetadata> findByAnalysisNameAndAlertNameIn(
+      String analysisName, List<String> alertNames) {
+    return crudRecommendationRepository.findByAnalysisNameAndAlertNameIn(analysisName, alertNames)
+        .stream()
+        .map(this::mapToRecommendationWithMetadata)
+        .toList();
+  }
+
   private RecommendationWithMetadata mapToRecommendationWithMetadata(RecommendationEntity entity) {
     return RecommendationWithMetadata.builder()
         .name(entity.name())

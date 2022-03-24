@@ -18,7 +18,6 @@ class RabbitEventMapper {
     return MessageBatchCompleted.newBuilder()
         .setBatchId(event.id())
         .setAnalysisId(event.analysisId())
-        .addAllAlertIds(event.alertIds())
         .setBatchMetadata(event.batchMetadata())
         .build();
   }

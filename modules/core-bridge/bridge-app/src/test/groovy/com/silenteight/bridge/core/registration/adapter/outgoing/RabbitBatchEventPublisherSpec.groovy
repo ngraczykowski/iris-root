@@ -61,14 +61,12 @@ class RabbitBatchEventPublisherSpec extends Specification {
     def batchCompleted = BatchCompleted.builder()
         .id('batchId')
         .analysisId('analysisName')
-        .alertIds(['firstAlertName', 'secondAlertName'])
         .batchMetadata('batchMetadata')
         .build()
 
     def messageBatchCompleted = MessageBatchCompleted.newBuilder()
         .setBatchId('batchId')
         .setAnalysisId('analysisName')
-        .addAllAlertIds(['firstAlertName', 'secondAlertName'])
         .setBatchMetadata('batchMetadata')
         .build()
 

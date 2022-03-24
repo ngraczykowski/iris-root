@@ -81,13 +81,14 @@ class RegistrationFacadeSpec extends Specification {
     def alertNames = ['firstAlertName', 'secondAlertName']
     def markAlertsAsRecommendedCommand = new MarkAlertsAsRecommendedCommand(
         RegistrationFixtures.ANALYSIS_NAME, alertNames)
-    def completeBatchCommand = new CompleteBatchCommand(RegistrationFixtures.BATCH, alertNames)
+    def completeBatchCommand = new CompleteBatchCommand(RegistrationFixtures.BATCH)
 
     when:
     underTest.markAlertsAsRecommended(markAlertsAsRecommendedCommand)
 
     then:
-    1 * batchService.findBatchByAnalysisName(RegistrationFixtures.ANALYSIS_NAME) >> RegistrationFixtures.BATCH
+    1 * batchService.findBatchByAnalysisName(RegistrationFixtures.ANALYSIS_NAME) >>
+        RegistrationFixtures.BATCH
     1 * alertService.updateStatusToRecommended(batch.id(), alertNames)
     1 * alertService.hasNoPendingAlerts(batch.id()) >> true
     1 * batchService.completeBatch(completeBatchCommand)
@@ -99,13 +100,14 @@ class RegistrationFacadeSpec extends Specification {
     def alertNames = ['firstAlertName', 'secondAlertName']
     def markAlertsAsRecommendedCommand = new MarkAlertsAsRecommendedCommand(
         RegistrationFixtures.ANALYSIS_NAME, alertNames)
-    def completeBatchCommand = new CompleteBatchCommand(RegistrationFixtures.BATCH, alertNames)
+    def completeBatchCommand = new CompleteBatchCommand(RegistrationFixtures.BATCH)
 
     when:
     underTest.markAlertsAsRecommended(markAlertsAsRecommendedCommand)
 
     then:
-    1 * batchService.findBatchByAnalysisName(RegistrationFixtures.ANALYSIS_NAME) >> RegistrationFixtures.BATCH
+    1 * batchService.findBatchByAnalysisName(RegistrationFixtures.ANALYSIS_NAME) >>
+        RegistrationFixtures.BATCH
     1 * alertService.updateStatusToRecommended(batch.id(), alertNames)
     1 * alertService.hasNoPendingAlerts(batch.id()) >> false
     0 * batchService.completeBatch(completeBatchCommand)
@@ -120,7 +122,8 @@ class RegistrationFacadeSpec extends Specification {
     underTest.markAlertsAsRecommended(command)
 
     then:
-    1 * batchService.findBatchByAnalysisName(notExistingAnalysisName) >> {throw new NoSuchElementException()}
+    1 * batchService.findBatchByAnalysisName(notExistingAnalysisName) >>
+        {throw new NoSuchElementException()}
     0 * alertService.updateStatusToRecommended(_ as String, _ as List<String>)
     0 * alertService.hasNoPendingAlerts(_ as String)
     0 * batchService.completeBatch(_ as CompleteBatchCommand)

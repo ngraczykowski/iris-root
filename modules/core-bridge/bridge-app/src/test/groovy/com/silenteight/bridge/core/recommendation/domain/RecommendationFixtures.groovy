@@ -38,7 +38,9 @@ class RecommendationFixtures {
 
   static def TIMED_OUT_RECOMMENDATIONS_COMMAND = new ProceedBatchTimeoutCommand(ANALYSIS_NAME, [ALERT_NAME])
 
-  static def GET_RECOMMENDATIONS_RESPONSE_COMMAND = new GetRecommendationCommand(ANALYSIS_NAME)
+  static def GET_RECOMMENDATIONS_RESPONSE_COMMAND = new GetRecommendationCommand(ANALYSIS_NAME, [])
+
+  static def GET_RECOMMENDATIONS_BY_ALERT_NAMES_RESPONSE_COMMAND = new GetRecommendationCommand(ANALYSIS_NAME, [ALERT_NAME])
 
   static def ERROR_ALERT_DTO = AlertWithMatchesDto.builder()
       .id(Fixtures.ALERT_ID)

@@ -97,7 +97,6 @@ class BatchTimeoutServiceSpec extends Specification {
         .id(batch.id())
         .analysisId(batch.analysisName())
         .batchMetadata(batch.batchMetadata())
-        .alertIds(List.of())
         .build()
     def command = new VerifyBatchTimeoutCommand(batchId)
 

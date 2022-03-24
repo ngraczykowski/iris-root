@@ -18,7 +18,7 @@ class RecommendationsDeliveredRabbitAmqpListenerSpec extends Specification {
     given:
     def message = RecommendationsDelivered.newBuilder()
         .setBatchId('batchId')
-        .addAllAlertIds(['firstAlertId', 'secondAlertId'])
+        .addAllAlertNames(['firstAlertName', 'secondAlertName'])
         .build()
 
     when:

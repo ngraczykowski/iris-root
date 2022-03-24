@@ -22,7 +22,8 @@ class RecommendationGrpcService extends RecommendationServiceGrpc.Recommendation
   @Override
   public void getRecommendations(
       RecommendationsRequest request, StreamObserver<RecommendationsResponse> responseObserver) {
-    var command = new GetRecommendationCommand(request.getAnalysisId());
+    var command =
+        new GetRecommendationCommand(request.getAnalysisId(), request.getAlertNamesList());
 
     log.info("Get recommendation response for analysis name {}", command.analysisName());
     responseObserver.onNext(recommendationFacade.getRecommendationsResponse(command));

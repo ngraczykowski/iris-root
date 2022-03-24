@@ -17,7 +17,6 @@ class RabbitEventMapperSpec extends Specification {
     def batchCompleted = BatchCompleted.builder()
         .id('batchId')
         .analysisId('analysisName')
-        .alertIds(['firstAlertName', 'secondAlertName'])
         .batchMetadata('batchMetadata')
         .build()
 
@@ -28,7 +27,6 @@ class RabbitEventMapperSpec extends Specification {
     with(result) {
       batchId == 'batchId'
       analysisId == 'analysisName'
-      alertIdsList.first() == 'firstAlertName'
       batchMetadata == 'batchMetadata'
     }
   }

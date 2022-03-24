@@ -106,3 +106,9 @@ class RegistrationGrpcServiceConfiguration {
   }
 }
 ```
+
+## Documentation
+
+In the `docs/` directory you can find a bit of the project documentation, such as:
+* [Use of Core Bridge Flow](docs/core-bridge-communication.adoc)
+* [Batch Expiration Check Feature](docs/batch_expiration.adoc)

@@ -52,7 +52,7 @@ public class RegistrationFacade {
     alertService.updateStatusToRecommended(batch.id(), command.alertNames());
 
     if (alertService.hasNoPendingAlerts(batch.id())) {
-      batchService.completeBatch(new CompleteBatchCommand(batch, command.alertNames()));
+      batchService.completeBatch(new CompleteBatchCommand(batch));
     }
   }
 

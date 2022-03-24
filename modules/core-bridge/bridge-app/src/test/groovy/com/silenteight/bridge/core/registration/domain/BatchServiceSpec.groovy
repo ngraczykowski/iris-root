@@ -174,13 +174,11 @@ class BatchServiceSpec extends Specification {
 
   def 'should update batch status as COMPLETED and publish message when batch exists'() {
     given:
-    def alertNames = ['firstAlertName', 'secondAlertName']
-    def command = new CompleteBatchCommand(RegistrationFixtures.BATCH, alertNames)
+    def command = new CompleteBatchCommand(RegistrationFixtures.BATCH)
     def batchCompleted = new BatchCompleted(
         Fixtures.BATCH_ID,
         RegistrationFixtures.ANALYSIS_NAME,
-        RegistrationFixtures.METADATA,
-        alertNames
+        RegistrationFixtures.METADATA
     )
 
     when:
