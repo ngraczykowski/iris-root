@@ -57,3 +57,4 @@ data/*
 agents/*
 .coverage*
 dependencies/*
+postgres_scripts/*

@@ -12,7 +12,9 @@ class AgentInputServiceServicer(object):
         created_agent_inputs = []
         context.set_code(grpc.StatusCode.OK)
         for agent_input in request.agent_inputs:
+
             if "alerts" not in agent_input.match:
+
                 context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
                 break
             created_agent_inputs.append(

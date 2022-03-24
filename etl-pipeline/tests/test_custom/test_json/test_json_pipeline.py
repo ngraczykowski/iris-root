@@ -32,6 +32,48 @@ class TestMSPipeline(unittest.TestCase):
         parsed_payloads = self.uut.transform_cleansed_to_application(parsed_payloads)
         with open("tests/shared/parsed_payload.pkl", "rb") as f:
             reference_payloads = pickle.load(f)
+
+        assert len(parsed_payloads) == 2
+        for i in parsed_payloads:
+            assert len(i["alertedParty"]["inputRecordHist"]) == 1
+            assert len(i["watchlistParty"]["matchRecords"]) == 1
+
+        for payload, reference_payload in zip(parsed_payloads, reference_payloads):
+            for num in range(len(payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS])):
+                for key in payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num]:
+                    try:
+                        assert (
+                            payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
+                            == reference_payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
+                        )
+                    except AssertionError:
+                        assert sorted(
+                            payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
+                        ) == sorted(
+                            reference_payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
+                        )
+
+    def test_pipeline_with_cross_payloads(self):
+        with open(
+            "notebooks/sample/wm_address_in_payload_format_2_input_3_match_records.json", "r"
+        ) as file:
+            payload = json.loads(file.read())
+        payload_json = {key: payload[key] for key in sorted(payload)}
+        payload_json = PayloadLoader().load_payload_from_json(payload_json)
+        payload_json["match_ids"] = [
+            i for i in range(len(payload_json["watchlistParty"][cn.MATCH_RECORDS]))
+        ]
+        payload = payload_json
+        parsed_payloads = self.uut.transform_standardized_to_cleansed(payload)
+        parsed_payloads = self.uut.transform_cleansed_to_application(parsed_payloads)
+        with open("tests/shared/parsed_payload_2_payload.pkl", "rb") as f:
+            reference_payloads = pickle.load(f)
+
+        assert len(parsed_payloads) == 3
+        for i in parsed_payloads:
+            assert len(i["alertedParty"]["inputRecordHist"]) == 1
+            assert len(i["watchlistParty"]["matchRecords"]) == 1
+
         for payload, reference_payload in zip(parsed_payloads, reference_payloads):
             for num in range(len(payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS])):
                 for key in payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num]:

@@ -1,6 +1,3 @@
-from xml.etree import ElementTree
-
-
 class XmlListConfig(list):
     def __init__(self, aList):
         for element in aList:
@@ -52,7 +49,6 @@ class XmlDictConfig(dict):
                     aDict = {element[0].tag: XmlListConfig(element)}
                 # if the tag has attributes, add those to the dict
                 if element.items():
-
                     aDict.update(dict(element.items()))
                 if element.tag == "field" and parent_element.tag == "inputRecord":
                     try:
@@ -74,13 +70,3 @@ class XmlDictConfig(dict):
             # the text
             else:
                 self.update({element.tag: element.text})
-
-
-tree = ElementTree.parse(
-    "notebooks/sample/WM_Address_Alerts_XML.csv.001.xml",
-    parser=ElementTree.XMLParser(encoding="iso-8859-5"),
-)
-root = tree.getroot()
-xmldict = XmlDictConfig(root)
-
-print(xmldict)

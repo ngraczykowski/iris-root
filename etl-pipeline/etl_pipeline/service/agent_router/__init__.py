@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import itertools
 from abc import ABC, abstractmethod
 
@@ -23,9 +25,9 @@ logger = get_logger("UPDATE TO DATA SOURCE")
 class AgentInputCreator:
     def __init__(self):
         self.producers = [
-            DobAgentFeatureInputProducer(),
+            # DobAgentFeatureInputProducer(),
             ResidencyAgentFeatureInputProducer(),
-            NationalityAgentFeatureInputProducer(),
+            # NationalityAgentFeatureInputProducer(),
         ]
         channel = grpc.insecure_channel(service_config.DATA_SOURCE_INPUT_ENDPOINT)
         self.stub = AgentInputServiceStub(channel)
@@ -52,13 +54,14 @@ class AgentInputCreator:
 
     def produce_batch_create_agent_input_request(self, alert, payload):
         agent_inputs = []
+
         for match_id, match in zip(
             payload[cn.MATCH_IDS], payload["watchlistParty"]["matchRecords"]
         ):
             feature_inputs = self.produce_feature_inputs(match)
             agent_input = AgentInput(
                 alert=alert.alert_name,
-                match=f"{alert.alert_name}/{match_id.match_name}",
+                match=f"{match_id.match_name}",
                 feature_inputs=feature_inputs,
             )
             logger.debug(agent_input)
@@ -66,6 +69,7 @@ class AgentInputCreator:
         return BatchCreateAgentInputsRequest(agent_inputs=agent_inputs)
 
     def upload_data_inputs(self, alert, payload):
+
         batch = self.produce_batch_create_agent_input_request(alert, payload)
         response = self.stub.BatchCreateAgentInputs(batch)
         logger.debug(response)
@@ -78,7 +82,7 @@ class Producer(ABC):
 
 
 class DobAgentFeatureInputProducer(Producer):
-    feature_name = "features/dob"
+    feature_name = "features/dateOfBirth"
 
     def produce_feature_input(self, payload):
 
@@ -107,11 +111,27 @@ class ResidencyAgentFeatureInputProducer(Producer):
 
 
 class NationalityAgentFeatureInputProducer(Producer):
-    feature_name = "features/residency"
+    feature_name = "features/geoNationality"
 
     def produce_feature_input(self, payload):
-        ap_parties = payload.get("ap_all_residencies_aggregated", [])
-        wl_parties = payload.get("wl_all_residencies_aggregated", [])
+        ap_parties = payload.get("ap_all_nationalities_aggregated", [])
+        wl_parties = payload.get("wl_all_nationalities_aggregated", [])
+        combinations = list(itertools.product(ap_parties, wl_parties))
+
+        return [
+            LocationFeatureInput(
+                feature=self.feature_name, alerted_party_location=ap, watchlist_location=wl
+            )
+            for ap, wl in combinations
+        ]
+
+
+class EmployerNameAgentFeatureInputProducer(Producer):
+    feature_name = "features/employer_name"
+
+    def produce_feature_input(self, payload):
+        ap_parties = payload.get("ap_all_employer_aggregated", [])
+        wl_parties = payload.get("wl_all_employer_aggregated", [])
         combinations = list(itertools.product(ap_parties, wl_parties))
 
         return [

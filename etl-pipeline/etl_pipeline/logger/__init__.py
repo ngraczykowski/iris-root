@@ -1,13 +1,24 @@
+# -*- coding: utf-8 -*-
+
 # Logger in line with good practice presented here # https://www.toptal.com/python/in-depth-python-logging
 
-
+import codecs
 import logging
 import os
+import platform
 import sys
+from io import UnsupportedOperation
 from logging.handlers import TimedRotatingFileHandler
 
 FORMATTER = logging.Formatter("%(asctime)s — %(name)s — %(levelname)s — %(message)s")
 LOG_FILE = "logs/my_app.log"
+PYTHON_VERSON = [3, 7, 0]
+try:
+    current_python_version = [int(i) for i in platform.python_version_tuple()]
+    if current_python_version < PYTHON_VERSON:
+        sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
+except UnsupportedOperation:
+    pass
 
 
 def get_console_handler():
