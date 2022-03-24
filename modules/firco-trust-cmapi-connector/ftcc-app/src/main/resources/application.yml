@@ -89,9 +89,10 @@ spring:
         retry:
           enabled: true
           multiplier: 2
-          max-attempts: 5
-          initial-interval: 500
-          max-interval: 4000
+          # NOTE (ppietrucha): 'max-attempts=0' - repeats endlessly
+          max-attempts: 10
+          initial-interval: 1000
+          max-interval: 30000
 
   #-------------------------------------------------------------------------------------------------
   # DATABASE

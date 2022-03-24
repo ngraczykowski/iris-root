@@ -4,6 +4,7 @@ import com.silenteight.commons.app.spring.ApplicationBuilderConfigurer;
 import com.silenteight.commons.app.spring.ConfigurableApplicationBuilder;
 import com.silenteight.commons.app.spring.DefaultSpringApplicationContextCallback;
 import com.silenteight.commons.app.spring.SpringApplicationTemplate;
+import com.silenteight.connector.ftcc.app.amqp.AmqpListenerModule;
 import com.silenteight.connector.ftcc.app.grpc.GrpcModule;
 import com.silenteight.connector.ftcc.callback.CallbackModule;
 import com.silenteight.connector.ftcc.common.integration.AmqpCommonModule;
@@ -13,12 +14,14 @@ import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.retry.annotation.EnableRetry;
 
 import static java.lang.System.getProperty;
 import static java.lang.System.setProperty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @EnableAutoConfiguration
+@EnableRetry
 @ComponentScan(basePackageClasses = {
     // Callback module
     CallbackModule.class,
@@ -26,7 +29,8 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     IngestModule.class,
     // Interface modules
     AmqpCommonModule.class,
-    GrpcModule.class
+    GrpcModule.class,
+    AmqpListenerModule.class
 })
 public class FtccApplication {
 

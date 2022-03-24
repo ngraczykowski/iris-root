@@ -1,5 +1,6 @@
 package com.silenteight.connector.ftcc.callback.response;
 
+import com.silenteight.connector.ftcc.callback.exception.NonRecoverableCallbackException;
 import com.silenteight.connector.ftcc.common.dto.output.AckDto;
 import com.silenteight.connector.ftcc.common.dto.output.ClientRequestDto;
 
@@ -12,7 +13,6 @@ import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import static org.mockito.Mockito.*;
@@ -51,6 +51,7 @@ class RecommendationSenderTest {
     when(restTemplate.postForEntity(properties.getEndpoint(), clientRequestDtoMock, AckDto.class))
         .thenReturn(new ResponseEntity<>(mockAck, HttpStatus.INTERNAL_SERVER_ERROR));
     Assertions.assertThrows(
-        HttpServerErrorException.class, () -> recommendationSender.send(clientRequestDtoMock));
+        NonRecoverableCallbackException.class,
+        () -> recommendationSender.send(clientRequestDtoMock));
   }
 }

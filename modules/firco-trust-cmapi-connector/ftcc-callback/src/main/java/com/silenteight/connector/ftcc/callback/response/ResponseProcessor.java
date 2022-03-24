@@ -11,7 +11,6 @@ import com.silenteight.connector.ftcc.common.resource.MessageResource;
 import com.silenteight.proto.registration.api.v1.MessageBatchCompleted;
 import com.silenteight.recommendation.api.library.v1.RecommendationOut;
 
-import com.google.protobuf.ByteString;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -20,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -35,16 +35,7 @@ public class ResponseProcessor {
   @Async
   public void process(MessageBatchCompleted messageBatchCompleted) {
     var analysisId = messageBatchCompleted.getAnalysisId();
-    // TODO: In recommendation-lib:1.9.0 alertIds will be removed !!!
-    var alertIds = messageBatchCompleted
-        .getAlertIdsList()
-        .asByteStringList()
-        .stream()
-        .map(ByteString::toStringUtf8)
-        .collect(Collectors.toList());
-    if (log.isDebugEnabled()) {
-      log.debug("BatchCompleted, alertIds: {}", alertIds);
-    }
+
     var messageEntityMap = map(messageQuery.findByBatchId(
         BatchResource.fromResourceName(messageBatchCompleted.getBatchId())));
     var recommendations = recommendationClientApi.recommendation(analysisId);
@@ -70,6 +61,6 @@ public class ResponseProcessor {
   @NotNull
   private static Map<UUID, MessageEntity> map(List<MessageEntity> list) {
     return list.stream()
-        .collect(Collectors.toMap(MessageEntity::getId, messageEntity -> messageEntity));
+        .collect(Collectors.toMap(MessageEntity::getId, Function.identity()));
   }
 }
