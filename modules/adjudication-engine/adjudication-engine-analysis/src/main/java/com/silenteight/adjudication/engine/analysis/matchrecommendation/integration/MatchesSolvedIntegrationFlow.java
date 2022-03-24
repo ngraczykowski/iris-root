@@ -10,8 +10,8 @@ import org.springframework.integration.dsl.IntegrationFlowAdapter;
 import org.springframework.integration.dsl.IntegrationFlowDefinition;
 import org.springframework.stereotype.Component;
 
+import static com.silenteight.adjudication.engine.analysis.matchrecommendation.integration.MatchRecommendationChannels.MATCHES_SOLVED_INBOUND_CHANNEL;
 import static com.silenteight.adjudication.engine.analysis.matchrecommendation.integration.MatchRecommendationChannels.MATCH_RECOMMENDATIONS_GENERATED_OUTBOUND_CHANNEL;
-import static com.silenteight.adjudication.engine.analysis.matchsolution.integration.MatchSolutionChannels.MATCHES_SOLVED_OUTBOUND_CHANNEL;
 
 @RequiredArgsConstructor
 @Component
@@ -22,7 +22,7 @@ public class MatchesSolvedIntegrationFlow extends IntegrationFlowAdapter {
 
   @Override
   protected IntegrationFlowDefinition<?> buildFlow() {
-    return from(MATCHES_SOLVED_OUTBOUND_CHANNEL)
+    return from(MATCHES_SOLVED_INBOUND_CHANNEL)
         .handle(MatchesSolved.class, (p, h) -> {
           log.debug("Received solved matches for generating match recommendation = {}", p);
           var matchRecommendation = matchRecommendationFacade.generateMatchRecommendation(p);

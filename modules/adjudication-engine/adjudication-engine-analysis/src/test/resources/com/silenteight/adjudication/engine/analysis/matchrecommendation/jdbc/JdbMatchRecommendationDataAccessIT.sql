@@ -20,5 +20,5 @@ VALUES (1, 321, now(), 'SOLUTION_NO_DECISION', '{}', '{}')
 ;
 
 -- ...and the recommendation in just the first analysis.
-INSERT INTO ae_match_recommendation (analysis_id, match_id, created_at, recommended_action, comment)
-VALUES (1, 321, now(), 'GO_HOME_MATE', 'some funny comment');
+INSERT INTO ae_match_recommendation (analysis_id, match_id, created_at, recommended_action, comment, alert_id)
+VALUES (1, 321, now(), 'GO_HOME_MATE', 'some funny comment', 321);

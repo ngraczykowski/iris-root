@@ -60,7 +60,7 @@ public class RecommendationFixture {
             toList()));
   }
 
-  static MatchContext createMatchContext() {
+  public static MatchContext createMatchContext() {
     var reason = new HashMap<String, Object>();
     reason.put("reason", "no_reason");
 

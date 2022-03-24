@@ -21,13 +21,15 @@ class SelectPendingMatchesQuery {
   private final JdbcTemplate jdbcTemplate;
   private static final PendingMatchMapper ROW_MAPPER = new PendingMatchMapper();
   @Language("PostgreSQL")
-  private static final String SQL = "SELECT ams.match_id, ams.solution, ams.match_context\n"
+  private static final String SQL =
+      "SELECT am.alert_id, ams.match_id, ams.solution, ams.match_context\n"
       + "FROM ae_match_solution ams\n"
+      + "    JOIN ae_match am ON am.match_id = ams.match_id\n"
       + "         LEFT JOIN ae_match_recommendation amr\n"
       + "                   ON ams.match_id = amr.match_id AND ams.analysis_id = amr.analysis_id\n"
       + "WHERE amr.match_recommendation_id IS NULL\n"
       + "AND ams.analysis_id = ?\n"
-      + "GROUP BY 1, 2, 3;";
+      + "GROUP BY 1, 2, 3, 4;";
 
   SelectPendingMatchesQuery(int fetchSize, DataSource dataSource) {
     if (fetchSize == 0) {
@@ -50,11 +52,13 @@ class SelectPendingMatchesQuery {
 
     @Override
     public PendingMatch mapRow(ResultSet rs, int rowNum) throws SQLException {
-      var matchId = rs.getObject(1, Long.class);
-      var matchSolution = rs.getString(2);
-      var matchContext = rs.getString(3);
+      var alertId = rs.getLong(1);
+      var matchId = rs.getLong(2);
+      var matchSolution = rs.getString(3);
+      var matchContext = rs.getString(4);
 
       return PendingMatch.builder()
+          .alertId(alertId)
           .matchId(matchId)
           .matchSolution(FeatureVectorSolution.valueOf(matchSolution))
           .matchContexts(readMatchContext(matchContext))
