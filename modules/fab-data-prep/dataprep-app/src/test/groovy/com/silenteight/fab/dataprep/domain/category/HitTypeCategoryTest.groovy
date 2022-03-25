@@ -13,20 +13,20 @@ import static com.silenteight.fab.dataprep.domain.Fixtures.MATCH_NAME
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 @ActiveProfiles("dev")
-class SanctionCategoryTest extends Specification {
+class HitTypeCategoryTest extends Specification {
 
   @Subject
   @Autowired
-  SanctionCategory underTest
+  HitTypeCategory underTest
 
   def 'featureInput should be created'() {
     when:
     def result = underTest.buildCategory(BUILD_CATEGORY_COMMAND)
 
     then:
-    result.getName().startsWith('categories/is_san/values/')
+    result.getName().startsWith('categories/hitType/values/')
     result.getMatch() == MATCH_NAME
-    result.getSingleValue() == 'false'
+    result.getSingleValue() == 'OTHER'
   }
 
   @Unroll
@@ -42,10 +42,11 @@ class SanctionCategoryTest extends Specification {
     result.getSingleValue() == expected
 
     where:
-    expected | systemId
-    'true'   | 'SAN!'
-    'true'   | '123SAN!123'
-    'false'  | 'SAN'
-    'false'  | 'SAN123!'
+    expected  | systemId
+    'SAN'     | 'SAN!'
+    'SAN'     | '123SAN!123'
+    'OTHER'   | 'SAN'
+    'OTHER'   | 'SAN123!'
+    'NO_DATA' | ''
   }
 }

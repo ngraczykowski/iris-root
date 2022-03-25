@@ -92,15 +92,15 @@ feeding:
     document-number-feature.enabled: true
     national-id-feature.enabled: true
   categories:
-    is_san:
+    hitType:
       enabled: true
-      displayName: Sanction
+      displayName: Risk Type
       categoryType: ENUMERATED
-      allowedValues: [true, false]
+      allowedValues: ["SAN", "OTHER", "NO_DATA"]
       multiValue: false
     customerType:
       enabled: true
       displayName: Customer Type
       categoryType: ENUMERATED
-      allowedValues: [I, C]
+      allowedValues: ["I", "C", "NO_DATA", "DATA_SOURCE_ERROR"]
       multiValue: false

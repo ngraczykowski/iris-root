@@ -2,7 +2,7 @@ package com.silenteight.fab.dataprep.infrastructure;
 
 import com.silenteight.fab.dataprep.domain.category.CustomerTypeCategory;
 import com.silenteight.fab.dataprep.domain.category.FabCategory;
-import com.silenteight.fab.dataprep.domain.category.SanctionCategory;
+import com.silenteight.fab.dataprep.domain.category.HitTypeCategory;
 import com.silenteight.fab.dataprep.domain.feature.*;
 import com.silenteight.fab.dataprep.infrastructure.grpc.CategoriesConfigurationProperties;
 
@@ -90,10 +90,10 @@ public class FeatureAndCategoryConfiguration {
   }
 
   @Bean
-  @ConditionalOnProperty("feeding.categories.is_san.enabled")
-  FabCategory sanctionCategory(CategoriesConfigurationProperties configurationProperties) {
-    String categoryName = "is_san";
-    return new SanctionCategory(
+  @ConditionalOnProperty("feeding.categories.hitType.enabled")
+  FabCategory hitTypeCategory(CategoriesConfigurationProperties configurationProperties) {
+    String categoryName = "hitType";
+    return new HitTypeCategory(
         configurationProperties.getCategories().get(categoryName), CATEGORY_PREFIX + categoryName);
   }
 

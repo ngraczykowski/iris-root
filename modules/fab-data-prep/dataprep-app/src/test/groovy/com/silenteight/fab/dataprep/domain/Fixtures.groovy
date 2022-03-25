@@ -26,7 +26,7 @@ class Fixtures {
       .salutation('MR')
       .name('OSAMA BIN LADIN')
       .shortName('BIN LADIN')
-      .customerType('I')
+      .customerType('Individual')
       .dob('30/8/1965')
       .dateOfEstablishment('10/20/2022')
       .gender('M')

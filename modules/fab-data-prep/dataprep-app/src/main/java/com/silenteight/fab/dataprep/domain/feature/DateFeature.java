@@ -48,9 +48,8 @@ public class DateFeature implements FabFeature {
     switch (parsedMessageData.getCustomerTypeAsEnum()) {
       case INDIVIDUAL:
         return EntityTypeOut.INDIVIDUAL;
-      case ORGANIZATION:
+      case CORPORATE:
         return EntityTypeOut.ORGANIZATION;
-      case ENTITY_TYPE_UNSPECIFIED:
       default:
         return EntityTypeOut.ENTITY_TYPE_UNSPECIFIED;
     }

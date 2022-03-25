@@ -10,9 +10,10 @@ import org.apache.commons.lang3.StringUtils;
 public class ParsedMessageData {
 
   public enum CustomerType {
-    ENTITY_TYPE_UNSPECIFIED,
+    NO_DATA,
+    DATA_SOURCE_ERROR,
     INDIVIDUAL,
-    ORGANIZATION
+    CORPORATE
   }
 
   String salutation;
@@ -47,11 +48,13 @@ public class ParsedMessageData {
   public CustomerType getCustomerTypeAsEnum() {
     String type = getCustomerType();
     if (StringUtils.isBlank(type)) {
-      return CustomerType.ENTITY_TYPE_UNSPECIFIED;
-    } else if ("I".equalsIgnoreCase(type)) {
+      return CustomerType.NO_DATA;
+    } else if ("Individual".equalsIgnoreCase(type)) {
       return CustomerType.INDIVIDUAL;
+    } else if ("Corporate".equalsIgnoreCase(type)) {
+      return CustomerType.CORPORATE;
     } else {
-      return CustomerType.ORGANIZATION;
+      return CustomerType.DATA_SOURCE_ERROR;
     }
   }
 }

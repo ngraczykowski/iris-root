@@ -17,7 +17,7 @@ class TestRequestGenerator {
         .salutation('MR')
         .name('OSAMA BIN LADIN')
         .shortName('BIN LADIN')
-        .customerType('I')
+        .customerType('Individual')
         .dob('30/8/1965')
         .dateOfEstablishment('10/20/2022')
         .gender('M')
@@ -140,7 +140,7 @@ class TestRequestGenerator {
             .name('')
             .shortName('')
             .dob('')
-            .customerType('C')
+            .customerType('Corporate')
             .swiftBic('123')
             .build())
     message2.set('$.Message.Hits[0].Hit.MatchingText', '')
@@ -162,7 +162,7 @@ class TestRequestGenerator {
     def message4 = getRawMessage(
         getParsedMessageData()
             .dob('30/8/1965')
-            .customerType('C')
+            .customerType('Corporate')
             .swiftBic('123')
             .build())
     message4.set('$.Message.Hits[0].Hit.HittedEntity.Names', [])
@@ -199,7 +199,7 @@ class TestRequestGenerator {
     def message9 = getRawMessage(
         getParsedMessageData()
             .dob('23/3/2023')
-            .customerType('C')
+            .customerType('Corporate')
             .build())
     message9.add(
         '$.Message.Hits[0].Hit.HittedEntity.DatesOfBirth',

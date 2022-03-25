@@ -21,11 +21,12 @@ class ParsedMessageDataTest extends Specification {
     result == expected
 
     where:
-    type | expected
-    'I'  | CustomerType.INDIVIDUAL
-    'i'  | CustomerType.INDIVIDUAL
-    'C'  | CustomerType.ORGANIZATION
-    'o'  | CustomerType.ORGANIZATION
-    ''   | CustomerType.ENTITY_TYPE_UNSPECIFIED
+    type         | expected
+    'Individual' | CustomerType.INDIVIDUAL
+    'individual' | CustomerType.INDIVIDUAL
+    'Corporate'  | CustomerType.CORPORATE
+    'corporate'  | CustomerType.CORPORATE
+    'unknown'    | CustomerType.DATA_SOURCE_ERROR
+    ''           | CustomerType.NO_DATA
   }
 }
