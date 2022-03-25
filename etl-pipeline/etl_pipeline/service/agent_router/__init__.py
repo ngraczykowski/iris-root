@@ -38,7 +38,7 @@ class AgentInputCreator:
         feature_inputs = []
         for producer in self.producers:
             feature_input = producer.produce_feature_input(payload)
-            logger.debug("Produced features", feature_input)
+            logger.debug(f"Produced features {feature_input}")
             if isinstance(feature_input, list):
 
                 for input_ in feature_input:
