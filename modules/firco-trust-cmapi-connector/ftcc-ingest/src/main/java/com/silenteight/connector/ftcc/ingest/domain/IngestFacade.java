@@ -10,12 +10,8 @@ import com.silenteight.connector.ftcc.ingest.domain.port.outgoing.DataPrepMessag
 import com.silenteight.connector.ftcc.ingest.domain.port.outgoing.RegistrationApiClient;
 import com.silenteight.proto.fab.api.v1.AlertMessageStored;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.UUID;
-
-import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 public class IngestFacade {
@@ -23,29 +19,17 @@ public class IngestFacade {
   @NonNull
   private final BatchIdGenerator batchIdGenerator;
   @NonNull
-  private final RequestService requestService;
-  @NonNull
-  private final MessageService messageService;
+  private final RequestStorage requestStorage;
   @NonNull
   private final RegistrationApiClient registrationApiClient;
   @NonNull
   private final DataPrepMessageGateway dataPrepMessageGateway;
 
-  @Transactional
   public void ingest(@NonNull RequestDto request) {
     UUID batchId = batchIdGenerator.generate();
-    List<UUID> messageIds = createRequestAndMessages(request, batchId);
+    RequestStore requestStore = requestStorage.store(request, batchId);
     registerBatch(request, batchId);
-    sendToDataPrep(batchId, messageIds);
-  }
-
-  private List<UUID> createRequestAndMessages(RequestDto request, UUID batchId) {
-    requestService.create(batchId);
-    return request
-        .getMessages()
-        .stream()
-        .map(message -> messageService.create(batchId, message))
-        .collect(toList());
+    sendToDataPrep(batchId, requestStore.getMessageIds());
   }
 
   private void registerBatch(RequestDto request, UUID batchId) {

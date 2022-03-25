@@ -17,17 +17,22 @@ class IngestDomainConfiguration {
 
   @Bean
   IngestFacade ingestFacade(
-      @NonNull RequestService requestService,
-      @NonNull MessageService messageService,
+      @NonNull RequestStorage requestStorage,
       @NonNull RegistrationApiClient registrationApiClient,
       @NonNull DataPrepMessageGateway dataPrepMessageGateway) {
 
     return new IngestFacade(
         new BatchIdGenerator(),
-        requestService,
-        messageService,
+        requestStorage,
         registrationApiClient,
         dataPrepMessageGateway);
+  }
+
+  @Bean
+  RequestStorage requestStorage(
+      @NonNull RequestService requestService, @NonNull MessageService messageService) {
+
+    return new RequestStorage(requestService, messageService);
   }
 
   @Bean
