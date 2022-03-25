@@ -253,30 +253,97 @@ warehouse.reports.v2:
         JOIN warehouse_match wm ON wa.id = wm.alert_id
         WHERE wsa.analysis_name = 'analysis/${analysisId}'
 
+    - name: ACCURACY_ALERT_LEVEL
+      type: production
+      description: Accuracy (Alert Level)
+      selectSqlQuery: >
+        SELECT wa.discriminator                                 AS "S8 Alert ID",
+               STRING_AGG(wm.payload ->> 'watchListId', ', ')   AS "Watchlist Hit IDs",
+               wa.payload ->> 'policy'                          AS "Policy ID",
+               wa.payload ->> 'policyTitle'                     AS "Policy Name",
+               wa.payload ->> 'step'                            AS "Step ID",
+               wa.payload ->> 'stepTitle'                       AS "Step Name",
+               STRING_AGG(wm.payload ->> 'fvSignature', ', ')   AS "Reasoning Branch IDs",
+               wa.payload ->> 'batchId'                         AS "Batch Id",
+               wa.payload ->> 'batchType'                       AS "Batch Type",
+               wa.payload ->> 'batchCountry'                    AS "Origin Country",
+               wa.payload ->> 'batchWatchList'                  AS "Watchlist Type",
+               wa.payload ->> 's8Recommendation'                AS "S8 Alert Resolution",
+               wa.payload ->> 'recommendationDate'              AS "S8 Resolution Timestamp",
+               wa.payload ->> 'comment'                         AS "S8 Alert Reason",
+               wa.payload ->> 'analystDecision'                 AS "Analyst Decision",
+               wa.payload ->> 'analystDecisionModifiedDateTime' AS "Analyst Decision Timestamp",
+               wa.payload ->> 'analystReason'                   AS "Analyst Reason"
+        FROM warehouse_alert wa
+                 JOIN warehouse_match wm ON wa.id = wm.alert_id
+        WHERE wa.recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
+          AND wa.payload ->> 'analystDecision' != ''
+        GROUP BY wa.discriminator,
+                 wa.payload ->> 'policy',
+                 wa.payload ->> 'policyTitle',
+                 wa.payload ->> 'step',
+                 wa.payload ->> 'stepTitle',
+                 wa.payload ->> 'batchId',
+                 wa.payload ->> 'batchType',
+                 wa.payload ->> 'batchCountry',
+                 wa.payload ->> 'batchWatchList',
+                 wa.payload ->> 's8Recommendation',
+                 wa.payload ->> 'recommendationDate',
+                 wa.payload ->> 'comment',
+                 wa.payload ->> 'analystDecision',
+                 wa.payload ->> 'analystDecisionModifiedDateTime',
+                 wa.payload ->> 'analystReason'
+
+    - name: ACCURACY_MATCH_LEVEL
+      type: production
+      description: Accuracy (Match Level)
+      selectSqlQuery: >
+        SELECT wa.discriminator                                 AS "S8 Alert ID",
+               wm.payload ->> 'watchListId'                     AS "Watchlist Hit ID",
+               wa.payload ->> 'policy'                          AS "Policy ID",
+               wa.payload ->> 'policyTitle'                     AS "Policy Name",
+               wa.payload ->> 'step'                            AS "Step ID",
+               wa.payload ->> 'stepTitle'                       AS "Step Name",
+               wm.payload ->> 'fvSignature'                     AS "Reasoning Branch ID",
+               wa.payload ->> 'batchId'                         AS "Batch Id",
+               wa.payload ->> 'batchType'                       AS "Batch Type",
+               wa.payload ->> 'batchCountry'                    AS "Origin Country",
+               wa.payload ->> 'batchWatchList'                  AS "Watchlist Type",
+               wa.payload ->> 's8Recommendation'                AS "S8 Hit Resolution",
+               wa.payload ->> 'recommendationDate'              AS "S8 Resolution Timestamp",
+               wa.payload ->> 's8Reason'                        AS "S8 Hit Reason",
+               wa.payload ->> 'analystDecision'                 AS "Analyst Decision",
+               wa.payload ->> 'analystDecisionModifiedDateTime' AS "Analyst Decision Timestamp",
+               wa.payload ->> 'analystReason'                   AS "Analyst Reason"
+        FROM warehouse_alert wa
+                 JOIN warehouse_match wm ON wa.id = wm.alert_id
+        WHERE wa.recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
+          AND wa.payload ->> 'analystDecision' != ''
+
     - name: ACCURACY_MATCH_LEVEL
       type: simulation
       description: Accuracy
       selectSqlQuery: >
-        SELECT prod.discriminator                                      AS "S8 Alert ID",
-               match.payload ->> 'watchListId'                         AS "Watchlist Hit ID",
-               sim.payload ->> 'match_reason:policy'                   AS "Policy ID",
-               sim.payload ->> 'match_reason:policy_title'             AS "Policy Name",
-               sim.payload ->> 'match_reason:step'                     AS "Step ID",
-               sim.payload ->> 'match_reason:step_title'               AS "Step Name",
-               sim.payload ->> 'match_reason:feature_vector_signature' AS "Reasoning Branch ID",
-               prod.payload ->> 'batchId'                              AS "Batch Id",
-               prod.payload ->> 'batchType'                            AS "Batch Type",
-               prod.payload ->> 'batchCountry'                         AS "Origin Country",
-               prod.payload ->> 'batchWatchList'                       AS "Watchlist Type",
-               sim.payload ->> 'recommendation_recommended_action'     AS "S8 Hit Resolution",
-               sim.payload ->> 'recommendation_create_time'            AS "S8 Resolution Timestamp",
-               sim.payload ->> 'recommendation_comment'                AS "S8 Hit Reason",
-               prod.payload ->> 'analyst_decision'                     AS "Analyst Decision",
-               prod.payload ->> 'DN_CASE.modifiedDateTime'             AS "Analyst Decision Timestamp",
-               prod.payload ->> 'lastCaseComment'                      AS "Analyst Reason"
-        FROM warehouse_simulation_alert sim
-                 JOIN warehouse_alert prod ON sim.name = prod.name
-                 JOIN warehouse_match match ON prod.id = match.alert_id
-        WHERE sim.analysis_name = 'analysis/${analysisId}'
-        AND prod.payload ->> 'analyst_decision' IN
+        SELECT wa.discriminator                                        AS "S8 Alert ID",
+               wm.payload ->> 'watchListId'                            AS "Watchlist Hit ID",
+               wsa.payload ->> 'match_reason:policy'                   AS "Policy ID",
+               wsa.payload ->> 'match_reason:policy_title'             AS "Policy Name",
+               wsa.payload ->> 'match_reason:step'                     AS "Step ID",
+               wsa.payload ->> 'match_reason:step_title'               AS "Step Name",
+               wsa.payload ->> 'match_reason:feature_vector_signature' AS "Reasoning Branch ID",
+               wa.payload ->> 'batchId'                                AS "Batch Id",
+               wa.payload ->> 'batchType'                              AS "Batch Type",
+               wa.payload ->> 'batchCountry'                           AS "Origin Country",
+               wa.payload ->> 'batchWatchList'                         AS "Watchlist Type",
+               wsa.payload ->> 'recommendation_recommended_action'     AS "S8 Hit Resolution",
+               wsa.payload ->> 'recommendation_create_time'            AS "S8 Resolution Timestamp",
+               wsa.payload ->> 'recommendation_comment'                AS "S8 Hit Reason",
+               wa.payload ->> 'analystDecision'                        AS "Analyst Decision",
+               wa.payload ->> 'analystDecisionModifiedDateTime'        AS "Analyst Decision Timestamp",
+               wa.payload ->> 'analystReason'                          AS "Analyst Reason"
+        FROM warehouse_simulation_alert wsa
+                 JOIN warehouse_alert wa ON wsa.name = wa.name
+                 JOIN warehouse_match wm ON wa.id = wm.alert_id
+        WHERE wsa.analysis_name = 'analysis/${analysisId}'
+          AND wa.payload ->> 'analyst_decision' IN
               ('ANALYST_FALSE_POSITIVE', 'ANALYST_TRUE_POSITIVE')
