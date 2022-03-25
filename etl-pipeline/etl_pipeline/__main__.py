@@ -6,15 +6,20 @@ from typing import List
 
 import grpc
 
-import etl_pipeline.service.proto.etl_pipeline_pb2 as etl__pipeline__pb2
+import etl_pipeline.service.proto.api.etl_pipeline_pb2 as etl__pipeline__pb2
 from etl_pipeline.config import columns_namespace as cn
 from etl_pipeline.config import pipeline_config, service_config
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.data_processor_engine.json_engine.json_engine import JsonProcessingEngine
 from etl_pipeline.logger import get_logger
 from etl_pipeline.service.agent_router import AgentInputCreator
-from etl_pipeline.service.proto.api.etl_pipeline_pb2 import FAILURE
-from etl_pipeline.service.proto.etl_pipeline_pb2 import SUCCESS, UNKNOWN, EtlAlert, EtlMatch
+from etl_pipeline.service.proto.api.etl_pipeline_pb2 import (
+    FAILURE,
+    SUCCESS,
+    UNKNOWN,
+    EtlAlert,
+    EtlMatch,
+)
 from pipelines.ms.wm_address_pipeline import MSPipeline as WmAddressMSPipeline
 
 engine = JsonProcessingEngine(pipeline_config)

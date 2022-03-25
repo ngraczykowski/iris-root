@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import etl_pipeline.service.proto.etl_pipeline_pb2 as etl__pipeline__pb2
+import etl_pipeline.service.proto.api.etl_pipeline_pb2 as etl__pipeline__pb2
 
 
 class EtlPipelineServiceStub(object):

@@ -7,14 +7,14 @@ import unittest
 
 import grpc
 
-from etl_pipeline.service.proto.etl_pipeline_pb2 import (
+from etl_pipeline.service.proto.api.etl_pipeline_pb2 import (
     FAILURE,
     SUCCESS,
     Alert,
     Match,
     RunEtlRequest,
 )
-from etl_pipeline.service.proto.etl_pipeline_pb2_grpc import EtlPipelineServiceStub
+from etl_pipeline.service.proto.api.etl_pipeline_pb2_grpc import EtlPipelineServiceStub
 
 
 def load_alert(filepath: str = "notebooks/sample/wm_address_in_payload_format.json"):
