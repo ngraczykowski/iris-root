@@ -1,0 +1,149 @@
+{
+  "agents/name/versions/1.0.0/configs/1": {
+    "agentId": "00abeb50-a957-4702-985f-ba37dc566c9c",
+    "features": [
+      "features/name"
+    ],
+    "featuresList": [
+      {
+        "name": "features/name",
+        "displayName": "Name"
+      }
+    ],
+    "responses": [
+      "EXACT_MATCH",
+      "STRONG_MATCH",
+      "MATCH",
+      "WEAK_MATCH",
+      "NO_MATCH",
+      "HQ_NO_MATCH",
+      "NO_DATA",
+      "INCONCLUSIVE"
+    ],
+    "configurations": [
+    ]
+  },
+  "agents/date/versions/1.0.0/configs/1": {
+    "agentId": "783d07ca-f95e-4e58-912c-372928254a37",
+    "features": [
+      "features/date"
+    ],
+    "featuresList": [
+      {
+        "name": "features/date",
+        "displayName": "Date of Birth / Incorporation"
+      }
+    ],
+    "responses": [
+      "EXACT",
+      "NEAR",
+      "OUT_OF_RANGE",
+      "NO_DATA",
+      "INCONCLUSIVE"
+    ],
+    "configurations": [
+    ]
+  },
+  "agents/document/versions/1.0.0/configs/1": {
+    "agentId": "f92cc53d-d418-4e30-988c-a00a167ebcf3",
+    "features": [
+      "features/passportNumberDocument",
+      "features/otherDocument",
+      "features/bic"
+    ],
+    "featuresList": [
+      {
+        "name": "features/passportNumberDocument",
+        "displayName": "Passport Number Document"
+      },
+      {
+        "name": "features/otherDocument",
+        "displayName": "Other Document"
+      },
+      {
+        "name": "features/bic",
+        "displayName": "BIC"
+      }
+    ],
+    "responses": [
+      "PERFECT_MATCH",
+      "DIGIT_MATCH",
+      "WEAK_DIGIT_MATCH",
+      "WEAK_MATCH",
+      "NO_MATCH",
+      "NO_DATA",
+      "INCONCLUSIVE"
+    ],
+    "configurations": [
+    ]
+  },
+  "agents/nationalId/versions/1.0.0/configs/1": {
+    "agentId": "96d59e74-ce9c-11eb-b8bc-0242ac130003",
+    "features": [
+      "features/nationalIdDocument"
+    ],
+    "featuresList": [
+      {
+        "name": "features/nationalIdDocument",
+        "displayName": "National ID"
+      }
+    ],
+    "responses": [
+      "PERFECT_MATCH",
+      "DIGIT_MATCH",
+      "WEAK_DIGIT_MATCH",
+      "WEAK_MATCH",
+      "NO_MATCH",
+      "NO_DATA",
+      "INCONCLUSIVE"
+    ],
+    "configurations": [
+    ]
+  },
+  "agents/gender/versions/1.0.0/configs/1": {
+    "agentId": "a4667189-1530-4ffa-a42f-bce4d7706428",
+    "features": [
+      "features/gender"
+    ],
+    "featuresList": [
+      {
+        "name": "features/gender",
+        "displayName": "Gender"
+      }
+    ],
+    "responses": [
+      "MATCH",
+      "NO_MATCH",
+      "NO_DATA",
+      "INCONCLUSIVE"
+    ],
+    "configurations": [
+    ]
+  },
+  "agents/country/versions/1.0.0/configs/1": {
+    "agentId": "6d53ff99-2578-4a9e-bfde-9966d4fd31ee",
+    "features": [
+      "features/nationalityCountry",
+      "features/otherCountry"
+    ],
+    "featuresList": [
+      {
+        "name": "features/nationalityCountry",
+        "displayName": "Nationality Country"
+      },
+      {
+        "name": "features/country",
+        "displayName": "Country"
+      }
+    ],
+    "responses": [
+      "MATCH",
+      "WEAK_MATCH",
+      "NO_MATCH",
+      "NO_DATA",
+      "INCONCLUSIVE"
+    ],
+    "configurations": [
+    ]
+  }
+}
