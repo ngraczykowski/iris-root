@@ -2,13 +2,16 @@ package com.silenteight.scb.ingest.adapter.incomming.cbs.alertid
 
 import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertInFlightService
+import com.silenteight.scb.ingest.domain.model.IngestBatchMessage
+import com.silenteight.scb.ingest.domain.port.outgoing.IngestBatchEventPublisher
 
 import spock.lang.Specification
 
 class AlertIdPublisherSpec extends Specification {
 
   def alertInFlightService = Mock(AlertInFlightService)
-  def objectUnderTest = new AlertIdPublisher(alertInFlightService)
+  def ingestBatchEventPublisher = Mock(IngestBatchEventPublisher)
+  def objectUnderTest = new AlertIdPublisher(alertInFlightService, ingestBatchEventPublisher)
 
   def 'should consume alertIdCollection'() {
     given:
@@ -22,6 +25,7 @@ class AlertIdPublisherSpec extends Specification {
 
     then:
     1 * alertInFlightService.saveUniqueAlerts(someAlertIds, _ as String, _ as ScbAlertIdContext)
+    1 * ingestBatchEventPublisher.publish(_ as IngestBatchMessage)
   }
 
   def createAlertId(String systemId) {

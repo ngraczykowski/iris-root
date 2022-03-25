@@ -37,7 +37,11 @@ spring:
     port: 24130
     username: serp
     password: serp
-
+    listener:
+      simple:
+        max-concurrency: 10
+        prefetch: 500
+        acknowledge-mode: auto
   batch:
     job:
       enabled: false

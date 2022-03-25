@@ -5,6 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertInFlightService;
+import com.silenteight.scb.ingest.adapter.incomming.cbs.batch.BatchReadEvent;
+import com.silenteight.scb.ingest.domain.model.Batch.Priority;
+import com.silenteight.scb.ingest.domain.model.IngestBatchMessage;
+import com.silenteight.scb.ingest.domain.port.outgoing.IngestBatchEventPublisher;
 
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -17,6 +21,7 @@ import static com.google.common.base.Strings.nullToEmpty;
 class AlertIdPublisher implements Consumer<AlertIdCollection> {
 
   private final AlertInFlightService alertInFlightService;
+  private final IngestBatchEventPublisher ingestBatchEventPublisher;
 
   @Override
   public void accept(@Nonnull AlertIdCollection collection) {
@@ -24,7 +29,6 @@ class AlertIdPublisher implements Consumer<AlertIdCollection> {
       log.debug("Received alert IDs: {}", collection);
 
     var internalBatchId = generateInternalBatchId();
-    //TODO: publish rabbit event
 
     var alertIdContext = toScbAlertIdContext(collection.getContext());
 
@@ -33,6 +37,11 @@ class AlertIdPublisher implements Consumer<AlertIdCollection> {
     log.info(
         "Collection of {} alerts has been saved with internalBatchId: {}", collection.getSize(),
         internalBatchId);
+    ingestBatchEventPublisher.publish(createIngestBatchMessage(internalBatchId));
+  }
+
+  private IngestBatchMessage createIngestBatchMessage(String internalBatchId) {
+    return new IngestBatchMessage(new BatchReadEvent(internalBatchId), Priority.MEDIUM);
   }
 
   private String generateInternalBatchId() {
