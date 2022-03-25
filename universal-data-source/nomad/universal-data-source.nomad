@@ -245,6 +245,7 @@ job "universal-data-source" {
           "-jar",
           "local/universal-data-source-app.jar",
           "--spring.config.additional-location=file:local/conf/",
+          "--spring.rabbitmq.virtual-host=/${var.namespace}"
         ]
       }
 
