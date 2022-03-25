@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum SolutionType {
+
   ERROR("-1"),
   UNKNOWN("0"),
   NAME("1"),
@@ -17,13 +18,4 @@ public enum SolutionType {
 
   @Getter
   private final String code;
-
-  public static SolutionType ofCode(String code) {
-    for (SolutionType solutionType : SolutionType.values()) {
-      if (solutionType.getCode().equals(code)) {
-        return solutionType;
-      }
-    }
-    return SolutionType.UNKNOWN;
-  }
 }

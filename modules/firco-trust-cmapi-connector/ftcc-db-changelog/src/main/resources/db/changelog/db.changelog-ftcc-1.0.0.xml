@@ -49,4 +49,10 @@
         initiallyDeferred="true"/>
   </changeSet>
 
+  <changeSet id="ftcc-1.0.0-2" author="mmastylo">
+    <dropIndex
+        tableName="ftcc_request"
+        indexName="ix_ftcc_request_batch_id"/>
+  </changeSet>
+
 </databaseChangeLog>
