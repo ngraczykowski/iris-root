@@ -10,6 +10,9 @@ dev_require = [
     "data-source-agentinput-api==0.21.0.5",
     "data-source-api==0.21.0.5",
     "python-Levenshtein==0.12.2",
+    "spark-manager==0.10.0.dev0",
+    "pandas>=1.1.5",
+    "numpy>=1.19.5",
 ]
 
 
