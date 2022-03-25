@@ -29,7 +29,7 @@ tests_require = [
 
 setup(
     name="etl_pipeline",
-    version="0.5.11-dev",
+    version="0.5.12-dev",
     description="ETL pipeline",
     author="Silent Eight Pte. Ltd.",
     author_email="support@silenteight.com",
