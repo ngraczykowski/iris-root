@@ -20,6 +20,7 @@ public class BatchCompletedHandler {
   private static final String QUEUE_NAME = "ftcc_batch completed_queue";
   public static final String DEFAULT_EXCHANGE = "notify-batch-completed-exchange";
   private final ResponseProcessor responseProcessor;
+  private final BatchCompletedService batchCompletedService;
 
   @RabbitListener(bindings = {
       @QueueBinding(
@@ -28,8 +29,11 @@ public class BatchCompletedHandler {
               + DEFAULT_EXCHANGE + "}"))
   })
   public void handle(MessageBatchCompleted messageBatchCompleted) {
-    log.info("BatchCompleted BatchID={} AnalysisId={} ", messageBatchCompleted.getBatchId(),
-        messageBatchCompleted.getAnalysisId());
+    String batchId = messageBatchCompleted.getBatchId();
+    String analysisId = messageBatchCompleted.getAnalysisId();
+    log.info("BatchCompleted BatchID={} AnalysisId={}", batchId, analysisId);
+
+    batchCompletedService.save(batchId, analysisId);
     responseProcessor.process(messageBatchCompleted);
   }
 }

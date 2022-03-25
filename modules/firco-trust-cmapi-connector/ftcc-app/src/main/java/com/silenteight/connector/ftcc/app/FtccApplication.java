@@ -15,6 +15,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.retry.annotation.EnableRetry;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import static java.lang.System.getProperty;
 import static java.lang.System.setProperty;
@@ -22,6 +23,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @EnableAutoConfiguration
 @EnableRetry
+@EnableAsync
 @ComponentScan(basePackageClasses = {
     // Callback module
     CallbackModule.class,

@@ -55,4 +55,25 @@
         indexName="ix_ftcc_request_batch_id"/>
   </changeSet>
 
+  <changeSet id="ftcc-1.0.0-3" author="ppietrucha">
+    <createIndex
+        tableName="ftcc_message"
+        indexName="ix_ftcc_message_batch_id">
+      <column name="batch_id"/>
+    </createIndex>
+
+    <createTable tableName="ftcc_batch_completed">
+      <column name="batch_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="analysis_id" type="varchar2">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addPrimaryKey tableName="ftcc_batch_completed" columnNames="batch_id,analysis_id"/>
+  </changeSet>
+
 </databaseChangeLog>
