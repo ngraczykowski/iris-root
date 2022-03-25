@@ -1,0 +1,22 @@
+name: scb-bridge-app
+image_tag: scb-bridge-app
+image_repo: scb-bridge-app
+ports:
+  http: 8080
+config:
+  name: scb-bridge-app
+  data:
+    - key: example-release-key
+      value: example-release-key-some-passowrd
+replicaCount: 1
+imagePullPolicy: Always
+livenessProbeHttpGetPath: "/rest/scb-bridge/management/health/livenessState"
+readinessProbeHttpGetPath: "/rest/scb-bridge/management/health/readinessState"
+grpc:
+  client:
+    adjudicationengine:
+      address: "dns:///adjudication-engine-service.default.svc.cluster.local:9090"
+    governance:
+      address: "dns:///governance-app-service.default.svc.cluster.local:9090"
+memoryLimit: 2048Mi
+memoryRequest: 512Mi

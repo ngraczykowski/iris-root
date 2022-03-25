@@ -27,8 +27,9 @@ gradleBuild(
         )
       ],
     additionalStages: {
-        //buildContainerImage()
+        buildContainerImage()
         awsECR()
+        helmChartRegistry()
         deployOnNomad()
     }
 )
