@@ -13,7 +13,22 @@ gradleBuild(
     includeBuildNumberInSnapshotVersion: true,
     archiveArtifactsPattern: '**/build/libs/*.jar, plugins/**/*.jar',
 
+    additionalParams: [
+      extendedChoice(
+        name: 'environments',
+        value: 'dev,lima,test,mike',
+        defaultValue: 'dev,lima,mike',
+        description: 'Environments to deploy to on Nomad',
+        multiSelectDelimiter: ',',
+        quoteValue: false,
+        saveJSONParameterToFile: false,
+        type: 'PT_MULTI_SELECT',
+        visibleItemCount: 10
+        )
+      ],
     additionalStages: {
-         deployOnNomad()
+        //buildContainerImage()
+        awsECR()
+        deployOnNomad()
     }
 )
