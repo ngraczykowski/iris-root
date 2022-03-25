@@ -1,0 +1,10 @@
+{
+  "agentConfigs": [
+    { "name": "agents/name/versions/1.0.0/configs/1" },
+    { "name": "agents/date/versions/1.0.0/configs/1" },
+    { "name": "agents/document/versions/1.0.0/configs/1" },
+    { "name": "agents/nationalId/versions/1.0.0/configs/1" },
+    { "name": "agents/gender/versions/1.0.0/configs/1" },
+    { "name": "agents/country/versions/1.0.0/configs/1" }
+  ]
+}
