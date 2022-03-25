@@ -42,11 +42,11 @@
   {
     "jobName": "adjudication-engine",
     "projectId": "644",
-    "version": "adjudication-engine-app-1.17.2-exec.jar",
-    "artifact_name": "adjudication-engine-app-1.17.2-exec.jar",
-    "branch": "v1.17.2",
+    "version": "1.17.5",
+    "artifact_name": "adjudication-engine-dist-1.17.5.tar.bz2",
+    "branch": "release-1.17",
     "nomadName": "adjudication_engine",
-    "checksum": "sha256:141669451a6da73d35b7b28dbb1b96393629152c4d77c5525565496dce2ca409",
+    "checksum": "sha256:e940fbd8845195f20fd12d1a6af948db263cb8d4669cd5ede8882c102bf8b56d",
     "repo": "https://gitlab.silenteight.com/sens/adjudication-engine"
   },
   {
