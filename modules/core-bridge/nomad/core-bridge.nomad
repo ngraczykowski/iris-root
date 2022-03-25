@@ -230,6 +230,7 @@ job "core-bridge" {
 
     task "core-bridge" {
       driver = "raw_exec"
+      kill_timeout = "30s"
 
       artifact {
         source = var.core_bridge_artifact
