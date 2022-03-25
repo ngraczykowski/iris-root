@@ -1,6 +1,6 @@
 package com.silenteight.agent.facade.exchange;
 
-import lombok.Value;
+import lombok.Getter;
 
 import org.junit.jupiter.api.Test;
 
@@ -27,6 +27,12 @@ class StructReasonMapperTest {
 
   private String expectedStructValue() {
     return "fields {\n"
+        + "  key: \"defaultValue\"\n"
+        + "  value {\n"
+        + "    number_value: 0.0\n"
+        + "  }\n"
+        + "}\n"
+        + "fields {\n"
         + "  key: \"listField\"\n"
         + "  value {\n"
         + "    list_value {\n"
@@ -56,9 +62,16 @@ class StructReasonMapperTest {
         + "}\n";
   }
 
-  @Value
+  @Getter
   static class TestStructable implements Structable {
 
+    TestStructable(String nullField, String valueField, List<Integer> listField) {
+      this.nullField = nullField;
+      this.valueField = valueField;
+      this.listField = listField;
+    }
+
+    int defaultValue;
     String nullField;
     String valueField;
     List<Integer> listField;

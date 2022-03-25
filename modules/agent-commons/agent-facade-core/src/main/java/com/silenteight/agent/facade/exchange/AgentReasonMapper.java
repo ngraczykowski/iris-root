@@ -34,7 +34,7 @@ public class AgentReasonMapper {
     try {
       JsonFormat
           .parser()
-          .merge(JsonFormat.printer().print(reason), builder);
+          .merge(JsonFormat.printer().includingDefaultValueFields().print(reason), builder);
     } catch (InvalidProtocolBufferException e) {
       throw new MappingException(reason.getClass(), e);
     }
