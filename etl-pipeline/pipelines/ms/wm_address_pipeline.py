@@ -165,7 +165,7 @@ class MSPipeline(ETLPipeline):
             try:
                 self.parse_key(value, match, payload, new_config)
             except:
-                logger.error(f"Field {value} does not exist in payload")
+                logger.warning(f"Field {value} does not exist in payload")
         return new_config
 
     def load_agent_config(self, alert_type="WM_ADDRESS"):

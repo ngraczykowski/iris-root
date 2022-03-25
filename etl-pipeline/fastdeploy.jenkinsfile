@@ -1,0 +1,34 @@
+@Library('pipeline-shared-library') _
+
+pipeline {
+    agent any
+    environment {
+        PIP_INDEX_URL = credentials('pypi-readonly-url')
+        TWINE_REPOSITORY_URL = 'https://repo.silenteight.com/artifactory/api/pypi/pypi'
+    }
+    options {
+        timeout(time: 1, unit: 'HOURS')   // just to be safe
+    }
+    parameters {
+        booleanParam(name: 'RELEASE', defaultValue: false, description: 'Release new version')
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                sh './scripts/build_only_service.sh'
+            }
+        }
+        stage('Publish docker image') {
+            steps {
+            sshagent([env.JENKINS_SSH_NAME]) {
+                sh './scripts/push_only_service.sh --index-url ${PIP_INDEX_URL}'
+            }}
+        }
+        stage('Deploy On Nomad mike') {
+          steps {
+              sh './nomad/deploy.sh'
+          }
+        }
+    }
+}

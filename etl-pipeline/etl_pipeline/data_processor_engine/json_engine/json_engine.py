@@ -116,10 +116,14 @@ class JsonProcessingEngine(ProcessingEngine):
     def set_beneficiary_hits(self, payload):
         payload[cn.IS_BENEFICIARY_HIT] = cn.AD_BNFL_NM in payload[cn.TRIGGERED_BY]
 
-    def connect_full_names(self, parties, fields=[cn.PRTY_FST_NM, cn.PRTY_MDL_NM, cn.PRTY_LST_NM]):
-        for party in parties:
+    def connect_full_names(self, values, fields=[cn.PRTY_FST_NM, cn.PRTY_MDL_NM, cn.PRTY_LST_NM]):
+        for party in values:
             party[cn.CONNECTED_FULL_NAME] = " ".join(
-                [party.get(key, "") for key in fields]
+                [
+                    party[field_name_to_collect]
+                    for field_name_to_collect in fields
+                    if party.get(field_name_to_collect, "")
+                ]
             ).strip()
 
     def collect_party_values_from_parties(self, parties, payload):
@@ -127,14 +131,18 @@ class JsonProcessingEngine(ProcessingEngine):
             collective_field_name,
             field_name_to_collect,
         ) in COLLECTIVE_REPRESENTATION_MAP_FOR_PARTY.items():
-            payload[collective_field_name] = [i.get(field_name_to_collect, "") for i in parties]
+            payload[collective_field_name] = [
+                i.get(field_name_to_collect) for i in parties if i.get(field_name_to_collect, "")
+            ]
 
     def collect_party_values_from_accounts(self, accounts, payload):
         for (
             collective_field_name,
             field_name_to_collect,
         ) in COLLECTIVE_REPRESENTATION_MAP_FOR_ACCOUNTS.items():
-            payload[collective_field_name] = [i.get(field_name_to_collect, "") for i in accounts]
+            payload[collective_field_name] = [
+                i.get(field_name_to_collect) for i in accounts if i.get(field_name_to_collect, "")
+            ]
 
     def load_raw_data(self, *args, **kwargs):
         return self.spark_instance.read_csv(*args, **kwargs)

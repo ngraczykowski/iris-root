@@ -65,6 +65,7 @@ class TestGrpcServer(unittest.TestCase):
         channel = grpc.insecure_channel("localhost:9090")
         stub = EtlPipelineServiceStub(channel)
         response = stub.RunEtl(RunEtlRequest(alerts=[alert]))
+
         for alert in response.etl_alerts:
             assert alert.etl_status == SUCCESS
 

@@ -163,19 +163,24 @@ class WatchlistExtractor:
             and "routingCode" in record["entity"]["routingCodes"]
         ):
             routing_codes = self.as_list(record["entity"]["routingCodes"]["routingCode"])
-            for routing_code in routing_codes:
-                key_name = "WL_ROUTING_CODE_" + routing_code.get(
-                    "@type", routing_code.get("type")
-                ).replace(" ", "_")
-                if key_name not in routing_codes_dict:
-                    routing_codes_dict[key_name] = []
-                routing_codes_dict[key_name].append(
-                    routing_code.get("#text", routing_code.get("text"))
-                )
+            if routing_codes:
+                if isinstance(routing_codes[0], dict):
+                    for routing_code in routing_codes:
+                        key_name = "WL_ROUTING_CODE_" + routing_code.get(
+                            "@type", routing_code.get("type")
+                        ).replace(" ", "_")
+                        if key_name not in routing_codes_dict:
+                            routing_codes_dict[key_name] = []
+                        routing_codes_dict[key_name].append(
+                            routing_code.get("#text", routing_code.get("text"))
+                        )
 
-        # Convert lists to JSON
-        for k, v in routing_codes_dict.items():
-            routing_codes_dict[k] = json.dumps(v)
+                    # Convert lists to JSON
+                    for k, v in routing_codes_dict.items():
+                        routing_codes_dict[k] = json.dumps(v)
+
+                if isinstance(routing_codes[0], list):
+                    routing_codes_dict = []
 
         return routing_codes_dict
 

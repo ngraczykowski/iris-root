@@ -12,6 +12,7 @@ from silenteight.datasource.agentinput.api.v1.agent_input_service_pb2 import (
 from silenteight.datasource.agentinput.api.v1.agent_input_service_pb2_grpc import (
     AgentInputServiceStub,
 )
+from silenteight.datasource.api.country.v1.country_pb2 import CountryFeatureInput
 from silenteight.datasource.api.date.v1.date_pb2 import DateFeatureInput
 from silenteight.datasource.api.location.v1.location_pb2 import LocationFeatureInput
 
@@ -26,7 +27,8 @@ class AgentInputCreator:
     def __init__(self):
         self.producers = [
             # DobAgentFeatureInputProducer(),
-            ResidencyAgentFeatureInputProducer(),
+            # GeoResidencyAgentFeatureInputProducer(),
+            CountryResidencyAgentFeatureInputProducer()
             # NationalityAgentFeatureInputProducer(),
         ]
         channel = grpc.insecure_channel(service_config.DATA_SOURCE_INPUT_ENDPOINT)
@@ -36,6 +38,7 @@ class AgentInputCreator:
         feature_inputs = []
         for producer in self.producers:
             feature_input = producer.produce_feature_input(payload)
+            logger.debug("Produced features", feature_input)
             if isinstance(feature_input, list):
 
                 for input_ in feature_input:
@@ -69,7 +72,6 @@ class AgentInputCreator:
         return BatchCreateAgentInputsRequest(agent_inputs=agent_inputs)
 
     def upload_data_inputs(self, alert, payload):
-
         batch = self.produce_batch_create_agent_input_request(alert, payload)
         response = self.stub.BatchCreateAgentInputs(batch)
         logger.debug(response)
@@ -95,12 +97,29 @@ class DobAgentFeatureInputProducer(Producer):
         )
 
 
-class ResidencyAgentFeatureInputProducer(Producer):
+class CountryResidencyAgentFeatureInputProducer(Producer):
     feature_name = "features/residencyCountry"
 
     def produce_feature_input(self, payload):
         ap_parties = payload.get("ap_all_residencies_aggregated", [])
         wl_parties = payload.get("wl_all_residencies_aggregated", [])
+        return CountryFeatureInput(
+            feature=self.feature_name,
+            alerted_party_countries=ap_parties,
+            watchlist_countries=wl_parties,
+        )
+
+
+class GeoResidencyAgentFeatureInputProducer(Producer):
+    feature_name = "features/residencyCountry"
+
+    def produce_feature_input(self, payload):
+        ap_parties = payload.get("ap_all_residencies_aggregated", [""])
+        wl_parties = payload.get("wl_all_residencies_aggregated", [""])
+        if not ap_parties:
+            ap_parties = [""]
+        if not wl_parties:
+            wl_parties = [""]
         combinations = list(itertools.product(ap_parties, wl_parties))
         return [
             LocationFeatureInput(
