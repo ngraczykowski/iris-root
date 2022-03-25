@@ -164,31 +164,94 @@ warehouse.reports.v2:
                  sim.payload ->> 'features/nationality:solution',
                  sim.payload ->> 'features/residency:solution'
 
+    - name: AI_REASONING
+      type: production
+      description: AI Reasoning (Alert Level)
+      selectSqlQuery: >
+        SELECT wa.discriminator                                 AS "S8 Alert ID",
+               STRING_AGG(wm.payload ->> 'watchListId', ', ')   AS "Watchlist Hit IDs",
+               (wa.payload ->> 'policyId')                      AS "Policy ID",
+               (wa.payload ->> 'policyTitle')                   AS "Policy Name",
+               (wa.payload ->> 'stepId')                        AS "Step ID",
+               (wa.payload ->> 'stepTitle')                     AS "Step Name",
+               STRING_AGG(wm.payload ->> 'fvSignature', ', ')   AS "Reasoning Branch IDs",
+               (wa.payload ->> 'batchId')                       AS "Batch ID",
+               (wa.payload ->> 'batchType')                     AS "Batch Type",
+               (wa.payload ->> 'batchCountry')                  AS "Origin Country",
+               (wa.payload ->> 'batchWatchList')                AS "Watchlist Type",
+               (wa.payload ->> 'sourceSystemIdentifier')        AS "Source System ID",
+               (wa.payload ->> 's8Recommendation')              AS "S8 Alert Resolution",
+               (wa.payload ->> 's8ReadTimestamp')               AS "S8 Read Timestamp",
+               (wa.payload ->> 'recommendationDate')            AS "S8 Resolution Timestamp",
+               (wa.payload ->> 'comment')                       AS "S8 Alert Reason"
+        FROM warehouse_alert wa
+        JOIN warehouse_match wm ON wa.id = wm.alert_id
+        WHERE wa.created_at BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
+        GROUP BY
+               wa.discriminator,
+               (wa.payload ->> 'policyId'),
+               (wa.payload ->> 'policyTitle'),
+               (wa.payload ->> 'stepId'),
+               (wa.payload ->> 'stepTitle'),
+               (wa.payload ->> 'batchId'),
+               (wa.payload ->> 'batchType'),
+               (wa.payload ->> 'batchCountry'),
+               (wa.payload ->> 'batchWatchList'),
+               (wa.payload ->> 'sourceSystemIdentifier'),
+               (wa.payload ->> 's8Recommendation'),
+               (wa.payload ->> 's8ReadTimestamp'),
+               (wa.payload ->> 'recommendationDate'),
+               (wa.payload ->> 'comment')
+
+    - name: AI_REASONING_MATCH_LEVEL
+      type: production
+      description: AI Reasoning (Match Level)
+      selectSqlQuery: >
+        SELECT wa.discriminator                            AS "S8 Alert ID",
+               (wm.payload ->> 'watchListId')              AS "Watchlist Hit ID",
+               (wa.payload ->> 'policyId')                 AS "Policy ID",
+               (wa.payload ->> 'policyTitle')              AS "Policy Name",
+               (wa.payload ->> 'stepId')                   AS "Step ID",
+               (wa.payload ->> 'stepTitle')                AS "Step Name",
+               (wa.payload ->> 'fvSignature')              AS "Reasoning Branch ID",
+               (wa.payload ->> 'batchId')                  AS "Batch ID",
+               (wa.payload ->> 'batchType')                AS "Batch Type",
+               (wa.payload ->> 'batchCountry')             AS "Origin Country",
+               (wa.payload ->> 'batchWatchList')           AS "Watchlist Type",
+               (wa.payload ->> 'sourceSystemIdentifier')   AS "Source System ID",
+               (wm.payload ->> 's8Recommendation')         AS "S8 Hit Resolution",
+               (wa.payload ->> 's8ReadTimestamp')          AS "S8 Read Timestamp",
+               (wa.payload ->> 'recommendationDate')       AS "S8 Resolution Timestamp",
+               (wm.payload ->> 's8Reason')                 AS "S8 Hit Reason",
+               (wa.payload ->> 's8Recommendation')         AS "S8 Alert Resolution"
+        FROM warehouse_alert wa
+        JOIN warehouse_match wm ON wa.id = wm.alert_id
+        WHERE wa.recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
+
     - name: AI_REASONING_MATCH_LEVEL
       type: simulation
       description: AI Reasoning
       selectSqlQuery: >
-        SELECT prod.discriminator                                      AS "S8 Alert ID",
-               match.payload ->> 'watchListId'                         AS "Watchlist Hit ID",
-               sim.payload ->> 'match_reason:policy'                   AS "Policy ID",
-               sim.payload ->> 'match_reason:policy_title'             AS "Policy Name",
-               sim.payload ->> 'match_reason:step'                     AS "Step ID",
-               sim.payload ->> 'match_reason:step_title'               AS "Step Name",
-               sim.payload ->> 'match_reason:feature_vector_signature' AS "Reasoning Branch ID",
-               prod.payload ->> 'batchId'                              AS "Batch ID",
-               prod.payload ->> 'batchType'                            AS "Batch Type",
-               prod.payload ->> 'batchCountry'                         AS "Origin Country",
-               prod.payload ->> 'batchWatchList'                       AS "Watchlist Type",
-               prod.payload ->> 'sourceSystemIdentifier'               AS "Source System ID",
-               sim.payload ->> 'recommendation_recommended_action'     AS "S8 Hit Resolution",
-               prod.payload ->> 's8_readTimestamp'                     AS "S8 Read Timestamp",
-               sim.payload ->> 'recommendation_create_time'            AS "S8 Resolution Timestamp",
-               sim.payload ->> 'recommendation_comment'                AS "S8 Hit Reason",
-               sim.payload ->> 'recommendation_recommended_action'     AS "S8 Alert Resolution"
-        FROM warehouse_simulation_alert sim
-                 JOIN warehouse_alert prod ON sim.name = prod.name
-                 JOIN warehouse_match match ON prod.id = match.alert_id
-        WHERE sim.analysis_name = 'analysis/${analysisId}'
+        SELECT wa.discriminator                                           AS "S8 Alert ID",
+               (wm.payload ->> 'watchListId')                             AS "Watchlist Hit ID",
+               (wsa.payload ->> 'match_reason:policy')                    AS "Policy ID",
+               (wsa.payload ->> 'match_reason:policy_title')              AS "Policy Name",
+               (wsa.payload ->> 'match_reason:step')                      AS "Step ID",
+               (wsa.payload ->> 'match_reason:step_title')                AS "Step Name",
+               (wsa.payload ->> 'match_reason:feature_vector_signature')  AS "Reasoning Branch ID",
+               (wa.payload ->> 'batchId')                                 AS "Batch ID",
+               (wa.payload ->> 'batchType')                               AS "Batch Type",
+               (wa.payload ->> 'batchCountry')                            AS "Origin Country",
+               (wa.payload ->> 'batchWatchList')                          AS "Watchlist Type",
+               (wa.payload ->> 'sourceSystemIdentifier')                  AS "Source System ID",
+               (wsa.payload ->> 'recommendation_recommended_action')      AS "S8 Hit Resolution",
+               (wa.payload ->> 's8ReadTimestamp')                         AS "S8 Read Timestamp",
+               (wsa.payload ->> 'recommendation_create_time')             AS "S8 Resolution Timestamp",
+               (wsa.payload ->> 'recommendation_comment')                 AS "S8 Hit Reason"
+        FROM warehouse_simulation_alert wsa
+        JOIN warehouse_alert wa ON wsa.name = wa.name
+        JOIN warehouse_match wm ON wa.id = wm.alert_id
+        WHERE wsa.analysis_name = 'analysis/${analysisId}'
 
     - name: ACCURACY_MATCH_LEVEL
       type: simulation
