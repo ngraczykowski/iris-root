@@ -9,7 +9,7 @@ gradleBuild(
     sonarEnabled: true,
     dependencyCheckEnabled: true,
     includeBuildNumberInSnapshotVersion: true,
-    additionalParams: [t
+    additionalParams: [
       extendedChoice(
         name: 'environments',
         value: 'dev,test,lima',
