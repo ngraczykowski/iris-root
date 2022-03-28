@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.adjudication.engine.alerts.alert.AlertLabelDataAccess;
 import com.silenteight.adjudication.engine.alerts.alert.domain.InsertLabelRequest;
 import com.silenteight.adjudication.engine.alerts.alert.domain.RemoveLabelsRequest;
-import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,26 +27,22 @@ class JdbcAlertLabelDataAccess implements AlertLabelDataAccess {
 
   @Override
   @Transactional
-  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
   public void insertLabels(@Nonnull List<InsertLabelRequest> requests) {
     insertAlertLabelsQuery.insert(requests);
   }
 
   @Override
   @Transactional
-  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
   public void removeLabels(RemoveLabelsRequest request) {
     deleteLabelsQuery.execute(request.getAlertIds(), request.getLabelNames());
   }
 
   @Override
-  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
   public long countByNameAndValue(String name, String value) {
     return countAlertLabelsByNameAndValueQuery.execute(name, value);
   }
 
   @Override
-  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
   public long countAlertsLearningInSolvingSet() {
     return countAlertLabelsSubsetInSet.execute(
         LABEL_NAME_SOURCE, LABEL_VALUE_LEARNING,
@@ -55,7 +50,6 @@ class JdbcAlertLabelDataAccess implements AlertLabelDataAccess {
   }
 
   @Override
-  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
   public long countAlertsSolvingInLearningSet() {
     return countAlertLabelsSubsetInSet.execute(
         LABEL_NAME_SOURCE, LABEL_VALUE_SOLVING,
