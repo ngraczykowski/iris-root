@@ -34,7 +34,9 @@ class ReceiveAgentExchangeResponseUseCase {
   private final FeatureIdsProvider featureIdsProvider;
   private final DeleteAgentExchangeGateway gateway;
 
-  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "agentresponse" })
+  @Timed(value = "ae.analysis.use_cases", extraTags = {
+      "package", "agentresponse" }, histogram = true,
+      percentiles = { 0.5, 0.95, 0.99 })
   Optional<MatchFeaturesUpdated> receiveAgentExchangeResponse(
       UUID agentExchangeRequestId, AgentExchangeResponse response) {
 

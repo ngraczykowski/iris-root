@@ -20,6 +20,7 @@ class HandleCommentInputsUpdatedUseCase {
 
   private final GenerateAndSaveRecommendationUseCase generateAndSaveRecommendationUseCase;
 
+  // Entry point
   List<RecommendationsGenerated> handleCommentInputsUpdated(
       CommentInputsUpdated commentInputsUpdated) {
 

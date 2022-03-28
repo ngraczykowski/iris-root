@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.engine.analysis.analysis.DatasetAlertsAdder;
 import com.silenteight.adjudication.engine.analysis.analysis.domain.AnalysisAlertChunk;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import com.google.common.base.Preconditions;
 
@@ -24,6 +25,7 @@ class JdbcDatasetAlertsAdder implements DatasetAlertsAdder {
   }
 
   @Override
+  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
   public int addAlertsFromDataset(
       long fromDatasetId, long toAnalysisId, ChunkHandler chunkHandler) {
 

@@ -21,7 +21,12 @@ class AddDatasetToAnalysisUseCase {
 
   private final AnalysisDatasetRepository repository;
 
-  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "analysis" })
+  @Timed(
+      value = "ae.analysis.use_cases",
+      extraTags = { "package", "analysis" },
+      histogram = true,
+      percentiles = { 0.5, 0.95, 0.99 }
+  )
   @Transactional
   List<AnalysisDatasetKey> batchAddDataset(String analysis, List<String> datasets) {
     long analysisId = ResourceName.create(analysis).getLong("analysis");

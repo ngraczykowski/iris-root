@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertRecommendation;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -15,12 +16,14 @@ class StreamAlertRecommendationsQuery {
 
   private final JdbcTemplate jdbcTemplate;
 
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   int execute(long analysisId, Consumer<AlertRecommendation> consumer) {
     return doExecute("SELECT *\n"
         + "FROM ae_alert_recommendation_query\n"
         + "WHERE analysis_id = ?", consumer, analysisId);
   }
 
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   int execute(long analysisId, long datasetId, Consumer<AlertRecommendation> consumer) {
     return doExecute("SELECT *\n"
         + "FROM ae_alert_recommendation_query aarq\n"

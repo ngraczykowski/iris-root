@@ -25,7 +25,12 @@ class AddAlertToAnalysisUseCase {
   private final AnalysisAlertRepository repository;
   private final ApplicationEventPublisher eventPublisher;
 
-  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "analysis" })
+  @Timed(
+      value = "ae.analysis.use_cases",
+      extraTags = { "package", "analysis" },
+      histogram = true,
+      percentiles = { 0.5, 0.95, 0.99 }
+  )
   @Transactional
   List<AnalysisAlert> batchAddAlert(String analysis, List<AnalysisAlert> alerts) {
     var analysisId = ResourceName.create(analysis).getLong("analysis");

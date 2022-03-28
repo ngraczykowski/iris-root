@@ -22,7 +22,12 @@ class FetchAllMissingCommentInputsUseCase {
   private final CommentInputClient commentInputClient;
   private final AlertCommentInputFacade alertCommentInputFacade;
 
-  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "commentinput" })
+  @Timed(
+      value = "ae.analysis.use_cases",
+      extraTags = { "package", "commentinput" },
+      histogram = true,
+      percentiles = { 0.5, 0.95, 0.99 }
+  )
   void fetchAllMissingCommentInputsValues(@NotNull String analysis) {
     var analysisId = ResourceName.create(analysis).getLong("analysis");
 

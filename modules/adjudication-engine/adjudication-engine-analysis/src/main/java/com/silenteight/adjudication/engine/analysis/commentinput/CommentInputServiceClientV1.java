@@ -7,6 +7,7 @@ import com.silenteight.adjudication.engine.comments.commentinput.CommentInputRes
 import com.silenteight.datasource.comments.api.v1.CommentInput;
 import com.silenteight.datasource.comments.api.v1.CommentInputServiceGrpc.CommentInputServiceBlockingStub;
 import com.silenteight.datasource.comments.api.v1.StreamCommentInputsRequest;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import com.google.common.collect.Lists;
 import io.grpc.Deadline;
@@ -28,6 +29,7 @@ class CommentInputServiceClientV1 implements CommentInputClient {
   private final Duration timeout;
 
   @Override
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true, extraTags = {"version", "v1"})
   public List<CommentInputResponse> getCommentInputsResponse(List<String> alerts) {
     var request = StreamCommentInputsRequest.newBuilder()
         .addAllAlerts(alerts)
@@ -36,6 +38,7 @@ class CommentInputServiceClientV1 implements CommentInputClient {
     return response.stream().map(CommentInputResponse::fromCommentInputV1).collect(toList());
   }
 
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true, extraTags = {"version", "v1"})
   List<CommentInput> getCommentInputs(@NotNull StreamCommentInputsRequest request) {
     var commentInputs = performRequest(request);
 

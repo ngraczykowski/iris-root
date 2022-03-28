@@ -23,7 +23,7 @@ class AlertSolvingClient {
 
   private final Duration timeout;
 
-  @Timed
+  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
   public BatchSolveAlertsResponse batchSolveAlerts(BatchSolveAlertsRequest request) {
     var deadline = Deadline.after(timeout.toMillis(), TimeUnit.MILLISECONDS);
 

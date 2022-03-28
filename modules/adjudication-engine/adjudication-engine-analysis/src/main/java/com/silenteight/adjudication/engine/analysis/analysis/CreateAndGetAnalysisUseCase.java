@@ -15,13 +15,16 @@ import org.springframework.stereotype.Service;
 @Slf4j
 class CreateAndGetAnalysisUseCase {
 
-  @NonNull
-  private final CreateAnalysisUseCase createAnalysisUseCase;
+  @NonNull private final CreateAnalysisUseCase createAnalysisUseCase;
 
-  @NonNull
-  private final GetAnalysisUseCase getAnalysisUseCase;
+  @NonNull private final GetAnalysisUseCase getAnalysisUseCase;
 
-  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "analysis" })
+  @Timed(
+      value = "ae.analysis.use_cases",
+      extraTags = { "package", "analysis" },
+      histogram = true,
+      percentiles = { 0.5, 0.95, 0.99 }
+  )
   Analysis createAndGetAnalysis(Analysis prototype) {
     var analysisName = createAnalysisUseCase.createAnalysis(prototype);
     var analysis = getAnalysisUseCase.getAnalysis(analysisName);

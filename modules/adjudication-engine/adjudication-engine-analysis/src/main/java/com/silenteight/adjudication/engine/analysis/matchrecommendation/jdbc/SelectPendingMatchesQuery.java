@@ -1,6 +1,7 @@
 package com.silenteight.adjudication.engine.analysis.matchrecommendation.jdbc;
 
 import com.silenteight.adjudication.engine.analysis.matchrecommendation.domain.PendingMatch;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
 import com.silenteight.solving.api.v1.FeatureVectorSolution;
 
@@ -42,6 +43,7 @@ class SelectPendingMatchesQuery {
     jdbcTemplate.setMaxRows(fetchSize);
   }
 
+  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
   List<PendingMatch> execute(long analysisId) {
     return jdbcTemplate.query(SQL, ROW_MAPPER, analysisId);
   }

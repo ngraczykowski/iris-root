@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.adjudication.api.v1.Analysis.Feature;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,7 @@ class CreateAnalysisUseCase {
   private final FeatureProvider featureProvider;
 
   @Transactional
+  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
   String createAnalysis(Analysis analysis) {
     return repository.save(createEntity(analysis)).getName();
   }

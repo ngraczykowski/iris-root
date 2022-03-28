@@ -12,7 +12,12 @@ class GenerateMatchCommentsUseCase {
   private final CommentFacade commentFacade;
   private final String templateName;
 
-  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "recommendation" })
+  @Timed(
+      value = "ae.analysis.use_cases",
+      extraTags = { "package", "recommendation" },
+      histogram = true,
+      percentiles = { 0.5, 0.95, 0.99 }
+  )
   String generateComments(AlertContext alertContext) {
     return commentFacade.generateComment(templateName, alertContext);
   }

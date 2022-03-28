@@ -18,7 +18,9 @@ class CreateMatchFeatureValuesUseCase {
 
   private final MatchFeatureValueDataAccess dataAccess;
 
-  @Timed(value = "ae.features.use_cases", extraTags = { "package", "matchfeaturevalue" })
+  @Timed(value = "ae.features.use_cases", extraTags = {
+      "package", "matchfeaturevalue" }, histogram = true,
+      percentiles = { 0.5, 0.95, 0.99 })
   @Transactional
   void createMatchFeatureValues(Collection<MatchFeatureValue> valueDtos) {
     int savedCount = dataAccess.saveAll(valueDtos);

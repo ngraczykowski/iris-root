@@ -2,6 +2,8 @@ package com.silenteight.adjudication.engine.analysis.analysis.jdbc;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.sep.base.aspects.metrics.Timed;
+
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +16,7 @@ class SelectAnalysisByPendingRecommendationMatches {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
 
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   List<Long> execute(List<Long> analysisIds) {
     var paramMap = Map.of("ids", analysisIds);
 

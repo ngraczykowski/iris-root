@@ -8,6 +8,7 @@ import com.silenteight.adjudication.engine.analysis.analysis.domain.AnalysisAler
 import com.silenteight.adjudication.engine.analysis.analysis.domain.AnalysisAlertChunk;
 import com.silenteight.adjudication.engine.common.jdbc.ChunkHandler;
 import com.silenteight.adjudication.engine.common.jdbc.JdbcCursorQueryTemplate;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.intellij.lang.annotations.Language;
 import org.springframework.jdbc.core.RowMapper;
@@ -52,6 +53,7 @@ class InsertAnalysisAlertsFromDatasetQuery {
   }
 
   @Transactional
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   int execute(long fromDatasetId, long toAnalysisId, DatasetAlertsAdder.ChunkHandler chunkHandler) {
     return queryTemplate.execute(ROW_MAPPER, new InternalChunkHandler(chunkHandler), ps -> {
       ps.setLong(1, toAnalysisId);

@@ -20,7 +20,12 @@ class AddDatasetAlertsToAnalysisUseCase {
   private final DatasetAlertsAdder datasetAlertsAdder;
   private final AnalysisAlertsAddedGateway gateway;
 
-  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "analysis" })
+  @Timed(
+      value = "ae.analysis.use_cases",
+      extraTags = { "package", "analysis" },
+      histogram = true,
+      percentiles = { 0.5, 0.95, 0.99 }
+  )
   int addDatasetAlerts(String analysis, String dataset) {
     long analysisId = ResourceName.create(analysis).getLong("analysis");
     long datasetId = ResourceName.create(dataset).getLong("datasets");

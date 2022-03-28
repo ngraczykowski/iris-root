@@ -15,7 +15,9 @@ class CreatePendingRecommendationsUseCase {
 
   private final PendingRecommendationDataAccess dataAccess;
 
-  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "pendingrecommendation" })
+  @Timed(value = "ae.analysis.use_cases", extraTags = {
+      "package", "pendingrecommendation" }, histogram = true,
+      percentiles = { 0.5, 0.95, 0.99 })
   @Transactional
   boolean createPendingRecommendations(long analysisId) {
     var pendingCount = dataAccess.createPendingRecommendations(analysisId);

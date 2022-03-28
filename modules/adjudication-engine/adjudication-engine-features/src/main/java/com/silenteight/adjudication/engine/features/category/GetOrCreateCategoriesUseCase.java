@@ -16,7 +16,12 @@ class GetOrCreateCategoriesUseCase {
   private final CreateUniqueCategoriesUseCase createUniqueCategoriesUseCase;
   private final GetCategoriesUseCase getCategoriesUseCase;
 
-  @Timed(value = "ae.features.use_cases", extraTags = { "package", "category" })
+  @Timed(
+      histogram = true,
+      percentiles = { 0.5, 0.95, 0.99 },
+      value = "ae.features.use_cases",
+      extraTags = { "package", "category" }
+  )
   List<CategoryDto> getOrCreateCategories(List<String> categories) {
     createUniqueCategoriesUseCase.createUniqueCategories(categories);
     return getCategoriesUseCase.getCategories(categories);

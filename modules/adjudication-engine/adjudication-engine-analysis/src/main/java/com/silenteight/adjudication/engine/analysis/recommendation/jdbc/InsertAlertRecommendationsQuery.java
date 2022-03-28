@@ -9,6 +9,7 @@ import com.silenteight.adjudication.engine.analysis.recommendation.jdbc.SelectPe
 import com.silenteight.adjudication.engine.analysis.recommendation.jdbc.SelectPendingAlertsQuery.MatchIdsArrayReadException;
 import com.silenteight.adjudication.engine.analysis.recommendation.transform.dto.AnalysisRecommendationContext;
 import com.silenteight.adjudication.engine.comments.comment.domain.MatchContext;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -36,7 +37,6 @@ import static java.util.Optional.ofNullable;
 @Slf4j
 class InsertAlertRecommendationsQuery {
 
-  private static final ObjectMapper MAPPER = JsonConversionHelper.INSTANCE.objectMapper();
   public static final String MATCH_CONTEXTS_COLUMN = "match_contexts";
   public static final String MATCH_IDS_COLUMN = "match_ids";
   public static final String RECOMMENDED_ACTION_COLUMN = "recommended_action";
@@ -44,7 +44,7 @@ class InsertAlertRecommendationsQuery {
   public static final String ALERT_ID_COLUMN = "alert_id";
   public static final String CREATED_AT_COLUMN = "created_at";
   public static final String COMMENT_COLUMN = "comment";
-
+  private static final ObjectMapper MAPPER = JsonConversionHelper.INSTANCE.objectMapper();
   private final SqlUpdate sql;
 
   InsertAlertRecommendationsQuery(JdbcTemplate jdbcTemplate) {
@@ -71,33 +71,6 @@ class InsertAlertRecommendationsQuery {
     sql.setReturnGeneratedKeys(true);
 
     sql.compile();
-  }
-
-  List<RecommendationResponse> execute(Collection<InsertRecommendationRequest> requests) {
-    List<RecommendationResponse> responses = new ArrayList<>();
-    requests.forEach(r -> update(r, responses::add));
-    return responses;
-  }
-
-  @SuppressWarnings("FeatureEnvy")
-  private void update(
-      InsertRecommendationRequest alertRecommendation,
-      Consumer<RecommendationResponse> consumer) {
-
-    var keyHolder = new GeneratedKeyHolder();
-    var paramMap =
-        Map.of(ALERT_ID_COLUMN, alertRecommendation.getAlertId(),
-            ANALYSIS_ID_COLUMN, alertRecommendation.getAnalysisId(),
-            RECOMMENDED_ACTION_COLUMN, alertRecommendation.getRecommendedAction(),
-            MATCH_IDS_COLUMN, alertRecommendation.getMatchIds(),
-            MATCH_CONTEXTS_COLUMN, writeMatchContexts(alertRecommendation.getMatchContexts()),
-            COMMENT_COLUMN, alertRecommendation.getComment());
-
-    sql.updateByNamedParam(paramMap, keyHolder);
-
-    ofNullable(keyHolder.getKeys())
-        .map(InsertAlertRecommendationsQuery::buildRecommendationResponse)
-        .ifPresent(consumer);
   }
 
   private static void debug(final String message, final Object... parameters) {
@@ -172,6 +145,34 @@ class InsertAlertRecommendationsQuery {
     } catch (JsonProcessingException e) {
       throw new MatchContextsJsonNodeWriteException(e);
     }
+  }
+
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
+  List<RecommendationResponse> execute(Collection<InsertRecommendationRequest> requests) {
+    List<RecommendationResponse> responses = new ArrayList<>();
+    requests.forEach(r -> update(r, responses::add));
+    return responses;
+  }
+
+  @SuppressWarnings("FeatureEnvy")
+  private void update(
+      InsertRecommendationRequest alertRecommendation,
+      Consumer<RecommendationResponse> consumer) {
+
+    var keyHolder = new GeneratedKeyHolder();
+    var paramMap =
+        Map.of(ALERT_ID_COLUMN, alertRecommendation.getAlertId(),
+            ANALYSIS_ID_COLUMN, alertRecommendation.getAnalysisId(),
+            RECOMMENDED_ACTION_COLUMN, alertRecommendation.getRecommendedAction(),
+            MATCH_IDS_COLUMN, alertRecommendation.getMatchIds(),
+            MATCH_CONTEXTS_COLUMN, writeMatchContexts(alertRecommendation.getMatchContexts()),
+            COMMENT_COLUMN, alertRecommendation.getComment());
+
+    sql.updateByNamedParam(paramMap, keyHolder);
+
+    ofNullable(keyHolder.getKeys())
+        .map(InsertAlertRecommendationsQuery::buildRecommendationResponse)
+        .ifPresent(consumer);
   }
 
   static class MatchContextsJsonNodeWriteException extends RuntimeException {

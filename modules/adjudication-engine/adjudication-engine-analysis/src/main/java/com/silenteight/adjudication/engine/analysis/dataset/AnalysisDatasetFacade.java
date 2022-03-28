@@ -17,7 +17,12 @@ public class AnalysisDatasetFacade {
   private final AddDatasetToAnalysisUseCase addDatasetToAnalysisUseCase;
   private final ListAnalysisDatasetUseCase listAnalysisDatasetUseCase;
 
-  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "analysis" })
+  @Timed(
+      value = "ae.analysis.use_cases",
+      extraTags = { "package", "analysis" },
+      histogram = true,
+      percentiles = { 0.5, 0.95, 0.99 }
+  )
   public List<AnalysisDataset> batchAddAndListDataset(String analysis, List<String> datasets) {
     datasets.forEach(
         dataset -> addDatasetAlertsToAnalysisUseCase.addDatasetAlerts(analysis, dataset));

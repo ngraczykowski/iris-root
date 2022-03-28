@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.adjudication.internal.v1.AnalysisAlertsAdded;
 import com.silenteight.adjudication.internal.v1.PendingRecommendations;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ class HandleAnalysisAlertsAddedUseCase {
 
   private final CreatePendingRecommendationsUseCase createPendingRecommendationsUseCase;
 
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   Optional<PendingRecommendations> handleAnalysisAlertsAdded(
       AnalysisAlertsAdded analysisAlertsAdded) {
 

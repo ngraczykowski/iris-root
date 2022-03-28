@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.PendingAlert;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.PendingAlerts;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
 import com.silenteight.solving.api.v1.FeatureVectorSolution;
 
@@ -37,6 +38,7 @@ class SelectPendingAlertsQuery {
     jdbcTemplate.setMaxRows(fetchSize);
   }
 
+  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
   PendingAlerts execute(long analysisId) {
     var pendingAlerts = jdbcTemplate.query(
         "SELECT aamsq.alert_id, aamsq.match_solutions, aamsq.match_ids, aamsq.match_contexts\n"

@@ -3,6 +3,7 @@ package com.silenteight.adjudication.engine.analysis.commentinput.jdbc;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sep.base.aspects.metrics.Timed;
 import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -40,6 +41,7 @@ class SelectCommentInputByAlertIdQuery {
         .constructMapType(LinkedHashMap.class, String.class, Object.class);
   }
 
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   Optional<Map<String, Object>> execute(long alertId) {
     var rows = jdbcTemplate.query(
         COMMENT_INPUT_VALUE, new SqlCommentInputExtractor(objectMapper), alertId);
@@ -49,11 +51,11 @@ class SelectCommentInputByAlertIdQuery {
   @RequiredArgsConstructor
   static class SqlCommentInputExtractor implements RowMapper<Map<String, Object>> {
 
-    private final ObjectMapper objectMapper;
     private static final MapType MAP_TYPE = JsonConversionHelper.INSTANCE
         .objectMapper()
         .getTypeFactory()
         .constructMapType(LinkedHashMap.class, String.class, Object.class);
+    private final ObjectMapper objectMapper;
 
     @Override
     public Map<String, Object> mapRow(ResultSet rs, int rowNum) throws SQLException {

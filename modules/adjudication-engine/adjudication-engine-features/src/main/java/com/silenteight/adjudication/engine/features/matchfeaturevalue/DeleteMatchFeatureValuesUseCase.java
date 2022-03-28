@@ -17,7 +17,9 @@ public class DeleteMatchFeatureValuesUseCase {
 
   private final MatchFeatureValueDataAccess dataAccess;
 
-  @Timed(value = "ae.features.use_cases", extraTags = { "package", "matchfeaturevalue" })
+  @Timed(value = "ae.features.use_cases", extraTags = {
+      "package", "matchfeaturevalue" }, histogram = true,
+      percentiles = { 0.5, 0.95, 0.99 })
   @Transactional
   public int deleteMatchFeatureValues(Collection<String> features) {
     return dataAccess.delete(features);

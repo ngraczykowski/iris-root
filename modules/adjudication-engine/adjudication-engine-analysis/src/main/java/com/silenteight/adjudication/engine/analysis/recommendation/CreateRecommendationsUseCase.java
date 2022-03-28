@@ -7,6 +7,7 @@ import com.silenteight.adjudication.api.v1.RecommendationsGenerated.Recommendati
 import com.silenteight.adjudication.engine.analysis.pendingrecommendation.PendingRecommendationFacade;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertSolution;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.InsertRecommendationRequest;
+import com.silenteight.adjudication.engine.analysis.recommendation.domain.RecommendationResponse;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.SaveRecommendationRequest;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
@@ -31,9 +32,10 @@ class CreateRecommendationsUseCase {
   List<RecommendationInfo> createRecommendations(
       SaveRecommendationRequest request) {
 
-    var recommendations =
+    List<InsertRecommendationRequest> recommendations =
         createInsertRequests(request.getAnalysisId(), request.getAlertSolutions());
-    var savedRecommendations = recommendationDataAccess.insertAlertRecommendation(recommendations);
+    List<RecommendationResponse> savedRecommendations =
+        recommendationDataAccess.insertAlertRecommendation(recommendations);
 
     pendingRecommendationFacade.removeSolvedPendingRecommendation();
 

@@ -3,6 +3,7 @@ package com.silenteight.adjudication.engine.analysis.analysis.jdbc;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.engine.analysis.analysis.domain.PolicyAndFeatureVectorElements;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -20,6 +21,7 @@ class SelectFeatureVectorElementsQuery {
 
   private final JdbcTemplate jdbcTemplate;
 
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   PolicyAndFeatureVectorElements execute(long analysisId) {
     return jdbcTemplate.queryForObject(
         "SELECT aa.policy, aafveq.category_names, aafveq.feature_names\n"
@@ -32,18 +34,18 @@ class SelectFeatureVectorElementsQuery {
   private static final class PolicyAndFeatureVectorElementsMapper
       implements RowMapper<PolicyAndFeatureVectorElements> {
 
+    private static String[] getFeatureElements(ResultSet rs, int columnIndex)
+        throws SQLException {
+
+      return (String[]) rs.getArray(columnIndex).getArray();
+    }
+
     @Override
     public PolicyAndFeatureVectorElements mapRow(ResultSet rs, int rowNum)
         throws SQLException {
 
       return new PolicyAndFeatureVectorElements(
           rs.getString(1), getFeatureElements(rs, 2), getFeatureElements(rs, 3));
-    }
-
-    private static String[] getFeatureElements(ResultSet rs, int columnIndex)
-        throws SQLException {
-
-      return (String[]) rs.getArray(columnIndex).getArray();
     }
   }
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.analysis.commentinput.domain.MissingCommentInputsResult;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -25,6 +26,7 @@ class SelectMissingAlertCommentInputQuery {
   private final JdbcTemplate jdbcTemplate;
   private final int maxRows;
 
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   Optional<MissingCommentInputsResult> execute(long analysisId) {
     this.jdbcTemplate.setMaxRows(maxRows);
 

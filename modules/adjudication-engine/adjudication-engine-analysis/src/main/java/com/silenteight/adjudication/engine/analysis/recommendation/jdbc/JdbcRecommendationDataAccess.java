@@ -7,6 +7,7 @@ import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertR
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.InsertRecommendationRequest;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.PendingAlerts;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.RecommendationResponse;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,12 +33,14 @@ class JdbcRecommendationDataAccess implements RecommendationDataAccess {
   }
 
   @Override
+  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
   public int streamAlertRecommendations(
       long analysisId, @Nonnull Consumer<AlertRecommendation> consumer) {
     return streamAlertRecommendationsQuery.execute(analysisId, consumer);
   }
 
   @Override
+  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
   public int streamAlertRecommendations(
       long analysisId, long datasetId, @Nonnull Consumer<AlertRecommendation> consumer) {
 
@@ -45,11 +48,13 @@ class JdbcRecommendationDataAccess implements RecommendationDataAccess {
   }
 
   @Override
+  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
   public AlertRecommendation getAlertRecommendation(long recommendationId) {
     return getAlertRecommendationQuery.execute(recommendationId);
   }
 
   @Override
+  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
   public List<RecommendationResponse> insertAlertRecommendation(
       @Nonnull Collection<InsertRecommendationRequest> alertRecommendation) {
     return insertAlertRecommendationsQuery.execute(alertRecommendation);
