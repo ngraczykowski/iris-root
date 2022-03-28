@@ -5,20 +5,17 @@ import com.silenteight.proto.fab.api.v1.AlertMessageStored
 
 import groovy.json.JsonSlurper
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
-import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
 
 import static com.silenteight.fab.dataprep.domain.Fixtures.*
 import static com.silenteight.sep.base.common.support.jackson.JsonConversionHelper.INSTANCE
 
-@SpringBootTest(webEnvironment = WebEnvironment.NONE)
-@ActiveProfiles("dev")
+@ContextConfiguration(classes = ParserConfiguration)
 class AlertParserTest extends Specification {
 
   @Autowired
-  private AlertParser underTest;
+  AlertParser underTest
 
   def "AlertDetails should be parsed"() {
     given:
@@ -33,6 +30,7 @@ class AlertParserTest extends Specification {
     then:
     parsedAlertMessage.getParsedMessageData().getGender() == "M";
     parsedAlertMessage.getSystemId() == 'TRAINING!60C2ED1B-58A1D68E-0326AE78-A8C7CC79'
+    parsedAlertMessage.getMessageId() == '00000004'
     parsedAlertMessage.hits.size() == 1
     parsedAlertMessage.hits.values().each {it ->
       def parser = new JsonSlurper();

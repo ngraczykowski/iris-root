@@ -6,12 +6,8 @@ import com.silenteight.fab.dataprep.domain.category.HitTypeCategory;
 import com.silenteight.fab.dataprep.domain.feature.*;
 import com.silenteight.fab.dataprep.infrastructure.grpc.CategoriesConfigurationProperties;
 
-import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.Option;
 import com.jayway.jsonpath.ParseContext;
 import com.jayway.jsonpath.TypeRef;
-import com.jayway.jsonpath.spi.json.JacksonJsonNodeJsonProvider;
-import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,16 +20,6 @@ public class FeatureAndCategoryConfiguration {
   public static final TypeRef<List<String>> LIST_OF_STRINGS = new TypeRef<>() {};
 
   private static final String CATEGORY_PREFIX = "categories/";
-
-  @Bean
-  ParseContext parseContext() {
-    return JsonPath.using(com.jayway.jsonpath.Configuration
-        .builder()
-        .options(Option.SUPPRESS_EXCEPTIONS, Option.ALWAYS_RETURN_LIST)
-        .mappingProvider(new JacksonMappingProvider())
-        .jsonProvider(new JacksonJsonNodeJsonProvider())
-        .build());
-  }
 
   @Bean
   @ConditionalOnProperty("feeding.features.gender-feature.enabled")

@@ -41,6 +41,7 @@ class RegistrationConverter {
         .batchName(parsedAlertMessage.getBatchName())
         .parsedMessageData(parsedAlertMessage.getParsedMessageData())
         .systemId(parsedAlertMessage.getSystemId())
+        .messageId(parsedAlertMessage.getMessageId())
         .matches(matches)
         .build();
   }

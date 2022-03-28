@@ -23,7 +23,7 @@ import javax.validation.constraints.NotNull;
 @Configuration
 @RequiredArgsConstructor
 @EnableConfigurationProperties(GrpcProperties.class)
-class UniversalDataSourceGrpcServiceConfiguration {
+public class UniversalDataSourceGrpcServiceConfiguration {
 
   @GrpcClient(KnownServices.UNIVERSAL_DATA_SOURCE)
   AgentInputServiceBlockingStub agentInputServiceBlockingStub;

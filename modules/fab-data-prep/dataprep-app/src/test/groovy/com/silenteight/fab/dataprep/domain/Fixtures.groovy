@@ -21,6 +21,7 @@ class Fixtures {
   static final String MESSAGE_NAME = 'messages/e525c926-a12a-11ec-97fc-3f5de86f02ac'
   static final String BATCH_NAME = 'batches/031dafde-a12b-11ec-8e04-2f2fd89dfc3f'
   static final String SYSTEM_ID = 'TRAINING!60C2ED1B-58A1D68E-0326AE78-A8C7CC79'
+  static final String MESSAGE_ID = '00000004'
 
   static ParsedMessageData PARSED_PAYLOAD = ParsedMessageData.builder()
       .salutation('MR')
@@ -53,7 +54,7 @@ class Fixtures {
       .lastUpdateTime('')
       .build()
 
-  private static URL HIT_URL = Resources.getResource("hit.json");
+  private static URL HIT_URL = Resources.getResource("hit.json")
 
   static Match MATCH = Match.builder()
       .hitName(UUID.randomUUID().toString())
@@ -67,25 +68,27 @@ class Fixtures {
       .payloads([INSTANCE.objectMapper().readTree('{}')])
       .build()
 
-  static String HIT = Resources.toString(HIT_URL, UTF_8);
+  static String HIT = Resources.toString(HIT_URL, UTF_8)
 
-  static String MESSAGE = Resources.toString(Resources.getResource("message.json"), UTF_8);
+  static String MESSAGE = Resources.toString(Resources.getResource("message.json"), UTF_8)
+
+  static RegisteredAlert REGISTERED_ALERT = RegisteredAlert.builder()
+      .batchName(BATCH_NAME)
+      .messageName(MESSAGE_NAME)
+      .alertName(ALERT_NAME)
+      .systemId(SYSTEM_ID)
+      .messageId(MESSAGE_ID)
+      .parsedMessageData(PARSED_PAYLOAD)
+      .matches([EMPTY_MATCH])
+      .build()
 
   static FeatureInputsCommand EMPTY_FEATURE_INPUTS_COMMAND = FeatureInputsCommand.builder()
-      .registeredAlert(
-          RegisteredAlert.builder()
-              .batchName(BATCH_NAME)
-              .messageName(MESSAGE_NAME)
-              .alertName(ALERT_NAME)
-              .systemId(SYSTEM_ID)
-              .parsedMessageData(PARSED_PAYLOAD)
-              .matches([EMPTY_MATCH])
-              .build())
+      .registeredAlert(REGISTERED_ALERT)
       .build()
 
   static BuildFeatureCommand EMPTY_BUILD_FEATURE_COMMAND = BuildFeatureCommand.builder()
-              .parsedMessageData(PARSED_PAYLOAD)
-              .match(EMPTY_MATCH).build()
+      .parsedMessageData(PARSED_PAYLOAD)
+      .match(EMPTY_MATCH).build()
 
   static BuildFeatureCommand BUILD_FEATURE_COMMAND = BuildFeatureCommand.builder()
       .parsedMessageData(PARSED_PAYLOAD)

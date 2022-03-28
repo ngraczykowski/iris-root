@@ -1,19 +1,21 @@
 package com.silenteight.fab.dataprep.domain.feature
 
+import com.silenteight.fab.dataprep.domain.ServiceTestConfig
 import com.silenteight.fab.dataprep.domain.model.RegisteredAlert.Match
 import com.silenteight.universaldatasource.api.library.bankidentificationcodes.v1.BankIdentificationCodesFeatureInputOut
 
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
+import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
 import spock.lang.Subject
 
 import static com.silenteight.fab.dataprep.domain.Fixtures.*
 import static com.silenteight.sep.base.common.support.jackson.JsonConversionHelper.INSTANCE
 
-@SpringBootTest(webEnvironment = WebEnvironment.NONE)
+@ContextConfiguration(classes = ServiceTestConfig,
+    initializers = ConfigDataApplicationContextInitializer)
 @ActiveProfiles("dev")
 class BicFeatureTest extends Specification {
 
@@ -36,14 +38,16 @@ class BicFeatureTest extends Specification {
         .build()
 
     where:
-    command                     | alertedParty | wlMatchingTest   | wlType | wlBicCodes | wlSearchCodes
-    EMPTY_BUILD_FEATURE_COMMAND | ''           | ''               | ''     | []         | []
-    BUILD_FEATURE_COMMAND       | ''           | 'YASIN RAHMAN'   | 'I'    | []         | []
+    command                     | alertedParty | wlMatchingTest | wlType | wlBicCodes |
+        wlSearchCodes
+    EMPTY_BUILD_FEATURE_COMMAND | ''           | ''             | ''     | []         | []
+    BUILD_FEATURE_COMMAND       | ''           | 'YASIN RAHMAN' | 'I'    | []         | []
   }
 
   def 'should be used first hit with bic code'() {
     given:
-    def hit1 = INSTANCE.objectMapper().readTree('''{
+    def hit1 = INSTANCE.objectMapper().readTree(
+        '''{
   "MatchingText": "hit-1",
   "HittedEntity": {
     "Codes": [
@@ -51,7 +55,8 @@ class BicFeatureTest extends Specification {
   "Type": "I"
   }
 }''')
-    def hit2 = INSTANCE.objectMapper().readTree('''{
+    def hit2 = INSTANCE.objectMapper().readTree(
+        '''{
   "MatchingText": "hit-2",
   "HittedEntity": {
     "Codes": [

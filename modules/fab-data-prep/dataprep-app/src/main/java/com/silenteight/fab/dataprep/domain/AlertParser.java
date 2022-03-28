@@ -36,6 +36,8 @@ public class AlertParser {
 
   private static final String SYSTEM_ID_PATH = "$.Message.SystemID";
 
+  private static final String MESSAGE_ID_PATH = "$.Message.MessageID";
+
   private static final String OFAC_ID_PATH = "$.HittedEntity.ID";
 
   private final ParseContext parseContext;
@@ -50,6 +52,7 @@ public class AlertParser {
         .messageName(message.getMessageName())
         .parsedMessageData(parseMessageData(documentContext))
         .systemId(getSystemId(documentContext))
+        .messageId(getMessageId(documentContext))
         .hits(getMatches(documentContext))
         .build();
   }
@@ -82,6 +85,12 @@ public class AlertParser {
 
   private static String getSystemId(DocumentContext documentContext) {
     return documentContext.read(SYSTEM_ID_PATH, LIST_OF_STRINGS).stream()
+        .findFirst()
+        .orElse(null);
+  }
+
+  private static String getMessageId(DocumentContext documentContext) {
+    return documentContext.read(MESSAGE_ID_PATH, LIST_OF_STRINGS).stream()
         .findFirst()
         .orElse(null);
   }

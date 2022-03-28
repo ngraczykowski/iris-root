@@ -6,9 +6,16 @@ plugins {
 
 description = "dataprep-app"
 
+configurations {
+  implementation.extendsFrom starterDatabase
+  runtimeOnly.extendsFrom starterDatabaseRuntime
+}
+
 apply from: "${rootProject.projectDir}/gradle/scripts/dependencies.gradle"
 
 dependencies {
+  implementation project(":dataprep-db-changelog")
+
   implementation libraries.silenteight_fab_cmapi_connector_api
   implementation libraries.silenteight_sep_base_common
   implementation libraries.universal_datasource_api_library
@@ -38,6 +45,12 @@ dependencies {
   runtimeOnly libraries.spring_cloud_consul_discovery
   runtimeOnly libraries.spring_cloud_starter_consul_config
 
+  implementation libraries.spring_boot_starter_data_jpa
+  implementation libraries.spring_boot_starter_jdbc
+  implementation libraries.liquibase_core
+  implementation libraries.hikari_cp
+  runtimeOnly libraries.postgresql
+  runtimeOnly libraries.liquibase_sessionlock
 
   testImplementation libraries.spring_boot_test
   testImplementation libraries.spring_test
@@ -50,6 +63,8 @@ dependencies {
   testImplementation libraries.mockito_junit_jupiter
   testImplementation libraries.testcontainers_rabbitmq
   testImplementation libraries.testcontainers_spock
+  testImplementation libraries.testcontainers_postgresql
+  testImplementation libraries.h2
   testRuntimeOnly libraries.junit_jupiter_engine
 }
 

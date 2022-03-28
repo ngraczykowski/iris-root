@@ -26,7 +26,7 @@ import javax.validation.constraints.NotNull;
 @EnableConfigurationProperties({
     CategoriesConfigurationProperties.class, GrpcCategoryProperties.class,
     GrpcCategoryValueProperties.class })
-class CategoriesGrpcServiceConfiguration {
+public class CategoriesGrpcServiceConfiguration {
 
   @GrpcClient(KnownServices.CATEGORY)
   private CategoryServiceBlockingStub categoryServiceBlockingStub;

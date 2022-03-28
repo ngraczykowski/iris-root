@@ -1,18 +1,20 @@
 package com.silenteight.fab.dataprep.domain.feature
 
+import com.silenteight.fab.dataprep.domain.ServiceTestConfig
 import com.silenteight.universaldatasource.api.library.name.v1.*
 
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
+import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
 import spock.lang.Subject
 
 import static com.silenteight.fab.dataprep.domain.Fixtures.BUILD_FEATURE_COMMAND
 import static java.util.stream.Collectors.toList
 
-@SpringBootTest(webEnvironment = WebEnvironment.NONE)
+@ContextConfiguration(classes = ServiceTestConfig,
+    initializers = ConfigDataApplicationContextInitializer)
 @ActiveProfiles("dev")
 class NameFeatureTest extends Specification {
 

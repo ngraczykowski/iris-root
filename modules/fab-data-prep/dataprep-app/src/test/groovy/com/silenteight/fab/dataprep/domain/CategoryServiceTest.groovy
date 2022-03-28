@@ -1,5 +1,6 @@
 package com.silenteight.fab.dataprep.domain
 
+import com.silenteight.fab.dataprep.BaseSpecificationIT
 import com.silenteight.fab.dataprep.domain.category.FabCategory
 import com.silenteight.fab.dataprep.domain.feature.FeatureInputsCommand
 import com.silenteight.fab.dataprep.domain.model.RegisteredAlert
@@ -9,14 +10,14 @@ import com.silenteight.universaldatasource.api.library.category.v2.*
 
 import org.spockframework.spring.SpringBean
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
+import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer
 import org.springframework.test.context.ActiveProfiles
-import spock.lang.Specification
+import org.springframework.test.context.ContextConfiguration
 
-@SpringBootTest(webEnvironment = WebEnvironment.NONE)
+@ContextConfiguration(classes = ServiceTestConfig,
+    initializers = ConfigDataApplicationContextInitializer)
 @ActiveProfiles("dev")
-class CategoryServiceTest extends Specification {
+class CategoryServiceTest extends BaseSpecificationIT {
 
   @Autowired
   CategoryService underTest
