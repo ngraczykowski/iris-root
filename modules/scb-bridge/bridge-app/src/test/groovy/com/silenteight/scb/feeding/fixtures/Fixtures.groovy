@@ -15,6 +15,7 @@ class Fixtures {
 
   static def ALERT_DETAILS = AlertDetails.builder()
       .batchId("batch-id")
+      .systemId("systemId")
       .alertName("alertName")
       .build()
 

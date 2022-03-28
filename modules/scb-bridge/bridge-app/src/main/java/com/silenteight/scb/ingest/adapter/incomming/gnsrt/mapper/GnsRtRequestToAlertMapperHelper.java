@@ -74,6 +74,7 @@ class GnsRtRequestToAlertMapperHelper {
         .batchId(nullToEmpty(trackingId))
         .unit(nullToEmpty(extractUnit(systemId)))
         .account(nullToEmpty(userBankId))
+        .systemId(systemId)
         .build();
   }
 

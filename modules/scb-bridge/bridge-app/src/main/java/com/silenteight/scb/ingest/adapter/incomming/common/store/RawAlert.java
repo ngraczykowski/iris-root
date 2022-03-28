@@ -2,7 +2,6 @@ package com.silenteight.scb.ingest.adapter.incomming.common.store;
 
 import lombok.*;
 
-import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId;
 import com.silenteight.sep.base.common.entity.BaseEntity;
 
 import org.hibernate.annotations.Type;
@@ -43,12 +42,13 @@ public class RawAlert extends BaseEntity {
   private byte[] payload;
 
   RawAlert(
-      @NonNull AlertId alertId,
+      @NonNull String systemId,
+      @NonNull String batchId,
       @NonNull String internalBatchId,
       @NonNull AlertType alertType,
       @NonNull byte[] payload) {
-    this.systemId = alertId.getSystemId();
-    this.batchId = alertId.getBatchId();
+    this.systemId = systemId;
+    this.batchId = batchId;
     this.internalBatchId = internalBatchId;
     this.alertType = alertType;
     this.payload = payload;

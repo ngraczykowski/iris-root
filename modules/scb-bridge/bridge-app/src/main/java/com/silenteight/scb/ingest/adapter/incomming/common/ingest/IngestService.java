@@ -8,12 +8,11 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.proto.serp.v1.recommendation.Recommendation;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert.Flag;
-import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match;
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRecommendationService;
+import com.silenteight.scb.ingest.adapter.incomming.common.util.AlertUpdater;
 import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
 import com.silenteight.scb.ingest.domain.model.Batch.Priority;
 import com.silenteight.scb.ingest.domain.model.RegistrationResponse;
-import com.silenteight.scb.ingest.domain.model.RegistrationResponse.RegisteredAlertWithMatches;
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
 import com.silenteight.sep.base.aspects.logging.LogContext;
 import com.silenteight.sep.base.common.messaging.MessageSender;
@@ -72,7 +71,7 @@ class IngestService implements SingleAlertIngestService, BatchAlertIngestService
     logAlert(alert.id().sourceId(), alert.id().discriminator());
 
     Alert ingestedAlert = updateIngestInfoForAlert(alert, flags);
-    updateRegistrationInfoForAlert(ingestedAlert, registrationResponse);
+    AlertUpdater.updatedWithRegistrationInfo(ingestedAlert, registrationResponse);
 
     log.info("Publishing a batched alert, systemId={}", ingestedAlert.id().sourceId());
     ingestEventPublisher.publish(ingestedAlert);
@@ -90,26 +89,6 @@ class IngestService implements SingleAlertIngestService, BatchAlertIngestService
         .flags(flags)
         .ingestedAt(ingestedAt)
         .build();
-  }
-
-  private static void updateRegistrationInfoForAlert(
-      Alert alert, RegistrationResponse registrationResponse) {
-    registrationResponse.getRegisteredAlertWithMatches().stream()
-        .peek(registeredAlertWithMatches -> alert
-            .details()
-            .setAlertName(registeredAlertWithMatches.getAlertName()))
-        .map(RegisteredAlertWithMatches::getRegisteredMatches)
-        .flatMap(Collection::stream)
-        .forEach(
-            registeredMatch -> updateRegistrationInfoForMatch(alert.matches(), registeredMatch));
-  }
-
-  private static void updateRegistrationInfoForMatch(
-      List<Match> matches, RegistrationResponse.RegisteredMatch registeredMatch) {
-    matches.stream()
-        .filter(match -> match.id().sourceId().equals(registeredMatch.getMatchId()))
-        .findFirst()
-        .ifPresent(match -> match.details().setMatchName(registeredMatch.getMatchName()));
   }
 
   private int determineLearningFlags(Alert alert) {

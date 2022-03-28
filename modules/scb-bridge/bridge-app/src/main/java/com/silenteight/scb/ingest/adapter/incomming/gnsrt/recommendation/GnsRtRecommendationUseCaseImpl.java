@@ -7,6 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.alertinfo.AlertInfoService;
+import com.silenteight.scb.ingest.adapter.incomming.common.store.RawAlertService;
+import com.silenteight.scb.ingest.adapter.incomming.common.util.AlertUpdater;
+import com.silenteight.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtRequestToAlertMapper;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtResponseMapper;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.request.GnsRtRecommendationRequest;
@@ -24,8 +27,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
-@RequiredArgsConstructor
 @Builder
+@RequiredArgsConstructor
 public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCase {
 
   private final GnsRtRequestToAlertMapper alertMapper;
@@ -35,24 +38,30 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
   private final RecommendationGatewayService recommendationService;
   private final AlertRegistrationFacade alertRegistrationFacade;
   private final IngestEventPublisher ingestEventPublisher;
+  private final RawAlertService rawAlertService;
 
   @Override
   public Mono<GnsRtRecommendationResponse> recommend(@NonNull GnsRtRecommendationRequest request) {
-    List<Alert> alerts = mapAlerts(request);
+    var alerts = mapAlerts(request);
     logGnsRtRequest(alerts);
 
-    // TODO: should we generate internalBatchId instead ?
+    var internalBatchId = InternalBatchIdGenerator.generate();
+    rawAlertService.store(internalBatchId, alerts);
 
-    String batchId = getBatchId(request);
-    RegistrationResponse registrationResponse =
-        alertRegistrationFacade.registerSolvingAlert(batchId, alerts, Priority.HIGH);
+    var registrationResponse =
+        alertRegistrationFacade.registerSolvingAlert(internalBatchId, alerts, Priority.HIGH);
 
     //feed uds
-    alerts.forEach(ingestEventPublisher::publish);
+    alerts.forEach(alert -> updateAndPublish(alert, registrationResponse));
 
     // TODO: wait for batch completed with batchId, then get the recommendations and use mapResponse
 
     return Mono.empty();
+  }
+
+  private void updateAndPublish(Alert alert, RegistrationResponse registrationResponse) {
+    AlertUpdater.updatedWithRegistrationInfo(alert, registrationResponse);
+    ingestEventPublisher.publish(alert);
   }
 
   private GnsRtRecommendationResponse mapResponse(
@@ -76,10 +85,6 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
     var gnsRtAlert = GnsRtAlertResolver.resolve(request, sourceId);
 
     return responseMapper.map(gnsRtAlert, recommendation);
-  }
-
-  private String getBatchId(GnsRtRecommendationRequest request) {
-    return request.getScreenCustomerNameRes().getHeader().getOriginationDetails().getTrackingId();
   }
 
   private List<Alert> mapAlerts(GnsRtRecommendationRequest request) {

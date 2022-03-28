@@ -1,7 +1,6 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.store
 
 import com.silenteight.scb.BaseDataJpaSpec
-import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId
 import com.silenteight.scb.ingest.adapter.incomming.common.SyncTestInitializer
 import com.silenteight.scb.ingest.adapter.incomming.common.store.RawAlert.AlertType
 
@@ -73,10 +72,8 @@ class RawAlertRepositorySpecIT extends BaseDataJpaSpec {
 
   private static RawAlert createEntity(String systemId, String batchId) {
     return new RawAlert(
-        AlertId.builder()
-            .batchId(batchId)
-            .systemId(systemId)
-            .build(),
+        systemId,
+        batchId,
         UUID.randomUUID().toString(),
         AlertType.LEARNING,
         "payload".getBytes())

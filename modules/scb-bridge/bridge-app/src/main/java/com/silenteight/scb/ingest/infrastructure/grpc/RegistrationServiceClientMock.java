@@ -4,8 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.registration.api.library.v1.*;
 
-import java.util.List;
-
 @Slf4j
 class RegistrationServiceClientMock implements RegistrationServiceClient {
 
@@ -28,17 +26,19 @@ class RegistrationServiceClientMock implements RegistrationServiceClient {
         request.getBatchId());
 
     return RegisterAlertsAndMatchesOut.builder()
-        .registeredAlertWithMatches(List.of(
-            RegisteredAlertWithMatchesOut.builder()
-                .alertId("someAlertId")
+        .registeredAlertWithMatches(request.getAlertsWithMatches().stream()
+            .map(alert -> RegisteredAlertWithMatchesOut.builder()
+                .alertId(alert.getAlertId())
                 .alertName("someAlertName")
                 .alertStatus(AlertStatusOut.SUCCESS)
-                .registeredMatches(List.of(
-                    RegisteredMatchOut.builder()
-                        .matchId("someRegisteredMatchId")
-                        .matchName("someRegisteredMatchName")
-                        .build()))
-                .build()))
+                .registeredMatches(alert.getMatches().stream()
+                    .map(match -> RegisteredMatchOut.builder()
+                        .matchId(match.getMatchId())
+                        .matchName("someMatchName")
+                        .build())
+                    .toList())
+                .build())
+            .toList())
         .build();
   }
 }

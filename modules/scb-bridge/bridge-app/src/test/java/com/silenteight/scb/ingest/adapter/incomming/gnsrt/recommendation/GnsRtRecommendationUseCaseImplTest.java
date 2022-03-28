@@ -1,10 +1,12 @@
 package com.silenteight.scb.ingest.adapter.incomming.gnsrt.recommendation;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.alertinfo.AlertInfoService;
+import com.silenteight.scb.ingest.adapter.incomming.common.store.RawAlertService;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtRequestToAlertMapper;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtResponseMapper;
 import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
 import com.silenteight.scb.ingest.domain.model.Batch.Priority;
+import com.silenteight.scb.ingest.domain.model.RegistrationResponse;
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -37,6 +39,8 @@ class GnsRtRecommendationUseCaseImplTest {
   private AlertRegistrationFacade registrationFacade;
   @Mock
   private IngestEventPublisher ingestEventPublisher;
+  @Mock
+  private RawAlertService rawAlertService;
 
   private GnsRtRecommendationUseCaseImpl underTest;
 
@@ -50,6 +54,7 @@ class GnsRtRecommendationUseCaseImplTest {
         .recommendationService(recommendationService)
         .alertRegistrationFacade(registrationFacade)
         .ingestEventPublisher(ingestEventPublisher)
+        .rawAlertService(rawAlertService)
         .build();
   }
 
@@ -57,6 +62,8 @@ class GnsRtRecommendationUseCaseImplTest {
   void shouldCallNextWithMappedResponse() {
     var alerts = of(fixtures.alert1);
     when(alertMapper.map(fixtures.requestForAlert1)).thenReturn(alerts);
+    when(registrationFacade.registerSolvingAlert(anyString(), eq(alerts), eq(Priority.HIGH)))
+        .thenReturn(RegistrationResponse.builder().build());
 
     var mono = underTest.recommend(fixtures.requestForAlert1);
 
@@ -64,7 +71,8 @@ class GnsRtRecommendationUseCaseImplTest {
         .create(mono)
         .verifyComplete();
 
-    verify(registrationFacade).registerSolvingAlert(fixtures.batchId, alerts, Priority.HIGH);
+    verify(rawAlertService).store(anyString(), eq(alerts));
+    verify(registrationFacade).registerSolvingAlert(anyString(), eq(alerts), eq(Priority.HIGH));
     verify(ingestEventPublisher).publish(any());
   }
 
@@ -72,6 +80,8 @@ class GnsRtRecommendationUseCaseImplTest {
   void shouldCallNextWithMappedResponseForMultipleAlertRequest() {
     var alerts = of(fixtures.alert1, fixtures.alert2);
     when(alertMapper.map(fixtures.requestForAlert1AndAlert2)).thenReturn(alerts);
+    when(registrationFacade.registerSolvingAlert(anyString(), eq(alerts), eq(Priority.HIGH)))
+        .thenReturn(RegistrationResponse.builder().build());
 
     var mono = underTest.recommend(fixtures.requestForAlert1AndAlert2);
 
@@ -79,7 +89,8 @@ class GnsRtRecommendationUseCaseImplTest {
         .create(mono)
         .verifyComplete();
 
-    verify(registrationFacade).registerSolvingAlert(fixtures.batchId, alerts, Priority.HIGH);
+    verify(rawAlertService).store(anyString(), eq(alerts));
+    verify(registrationFacade).registerSolvingAlert(anyString(), eq(alerts), eq(Priority.HIGH));
     verify(ingestEventPublisher, times(2)).publish(any());
   }
 }
