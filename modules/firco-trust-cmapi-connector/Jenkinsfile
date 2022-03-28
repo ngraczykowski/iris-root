@@ -1,25 +1,44 @@
 @Library('pipeline-shared-library') _
 
 gradleBuild(
-    jdkVersion: 'jdk-11',
-    sonarEnabled: true,
-    dependencyCheckEnabled: true,
-    includeBuildNumberInSnapshotVersion: true,
-    archiveArtifactsPattern: '**/build/libs/*-exec.jar',
-    additionalStages: {
-      stage('Minio') {
-        script {
-          def git = new com.silenteight.jenkins.ci.Git()
-          if (git.getGitBranch() == 'master') {
-            minio(
-                bucket: 'artifacts',
-                includes: 'ftcc-app/build/libs/ftcc-app*-exec.jar',
-                targetFolder: 'ftcc'
-            )
-          } else {
-            echo "Not on master branch, ignore upload to Minio"
-          }
+  jdkVersion: 'jdk-11',
+  sonarEnabled: true,
+  dependencyCheckEnabled: true,
+  includeBuildNumberInSnapshotVersion: true,
+  archiveArtifactsPattern: '**/build/libs/*-exec.jar',
+  additionalParams: [
+    extendedChoice(
+      name: 'environments',
+      value: 'dev,test,mike,lima,foxtrot',
+      defaultValue: 'foxtrot',
+      description: 'Environments to deploy to on Nomad',
+      multiSelectDelimiter: ',',
+      quoteValue: false,
+      saveJSONParameterToFile: false,
+      type: 'PT_MULTI_SELECT',
+      visibleItemCount: 10
+      ),
+    booleanParam(
+      name: 'forceDeploy',
+      defaultValue: false,
+      description: 'Deploy from other branches then master'
+    )
+  ],
+  additionalStages: {
+    stage('Minio') {
+      script {
+        def git = new com.silenteight.jenkins.ci.Git()
+        if (git.getGitBranch() == 'master') {
+          minio(
+              bucket: 'artifacts',
+              includes: 'ftcc-app/build/libs/ftcc-app*-exec.jar',
+              targetFolder: 'ftcc'
+          )
+        } else {
+          echo "Not on master branch, ignore upload to Minio"
         }
       }
     }
+    deployOnNomad()
+  }
 )
