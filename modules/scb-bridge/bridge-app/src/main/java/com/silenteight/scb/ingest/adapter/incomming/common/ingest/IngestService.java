@@ -24,11 +24,9 @@ import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 
 import static com.silenteight.sep.base.common.logging.LogContextUtils.logAlert;
-import static java.util.stream.Collectors.groupingBy;
 
 @Slf4j
 @Builder
@@ -46,21 +44,20 @@ class IngestService implements SingleAlertIngestService, BatchAlertIngestService
   private long ingestedLearningAlertsCounter;
 
   @Override
-  public void ingestAlertsForLearn(@NonNull Stream<Alert> alertStream) {
-    alertStream.collect(groupingBy(alert -> alert.details().getBatchId()))
-        .forEach((batchId, alerts) -> {
-          var registrationResponse = alertRegistrationFacade.registerLearningAlert(batchId, alerts);
-          alerts.forEach(alert -> {
-            var flags = determineLearningFlags(alert);
-            publish(alert, flags, registrationResponse);
-            ingestedLearningAlertsCounter++;
-          });
-        });
+  public void ingestAlertsForLearn(@NonNull String internalBatchId, @NonNull List<Alert> alerts) {
+    var registrationResponse =
+        alertRegistrationFacade.registerLearningAlert(internalBatchId, alerts);
+    alerts.forEach(alert -> {
+      var flags = determineLearningFlags(alert);
+      publish(alert, flags, registrationResponse);
+      ingestedLearningAlertsCounter++;
+    });
   }
 
   @Override
   public void ingestAlertsForRecommendation(
-      @NonNull String internalBatchId, @NonNull List<Alert> alerts,
+      @NonNull String internalBatchId,
+      @NonNull List<Alert> alerts,
       RegistrationAlertContext registrationAlertContext) {
     var registrationResponse =
         alertRegistrationFacade

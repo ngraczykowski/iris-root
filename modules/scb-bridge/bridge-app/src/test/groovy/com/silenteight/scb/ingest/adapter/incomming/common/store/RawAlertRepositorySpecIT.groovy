@@ -3,6 +3,7 @@ package com.silenteight.scb.ingest.adapter.incomming.common.store
 import com.silenteight.scb.BaseDataJpaSpec
 import com.silenteight.scb.ingest.adapter.incomming.common.SyncTestInitializer
 import com.silenteight.scb.ingest.adapter.incomming.common.store.RawAlert.AlertType
+import com.silenteight.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator
 
 import lombok.extern.slf4j.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
@@ -74,7 +75,7 @@ class RawAlertRepositorySpecIT extends BaseDataJpaSpec {
     return new RawAlert(
         systemId,
         batchId,
-        UUID.randomUUID().toString(),
+        InternalBatchIdGenerator.generate(),
         AlertType.LEARNING,
         "payload".getBytes())
   }

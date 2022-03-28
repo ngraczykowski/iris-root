@@ -2,12 +2,12 @@ package com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing;
 
 import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertUnderProcessing.State;
+import com.silenteight.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 
@@ -16,8 +16,8 @@ import static java.util.stream.Collectors.toList;
 class InMemoryAlertUnderProcessingRepository implements AlertUnderProcessingRepository {
 
   private static final int DEFAULT_PRIORITY = 1;
-  private static final String DEFAULT_INTERNAL_BATCH_ID = UUID.randomUUID().toString();
-  private List<AlertUnderProcessing> store = new ArrayList<>();
+  private static final String DEFAULT_INTERNAL_BATCH_ID = InternalBatchIdGenerator.generate();
+  private final List<AlertUnderProcessing> store = new ArrayList<>();
 
   @Override
   public Collection<AlertUnderProcessing> findAll() {

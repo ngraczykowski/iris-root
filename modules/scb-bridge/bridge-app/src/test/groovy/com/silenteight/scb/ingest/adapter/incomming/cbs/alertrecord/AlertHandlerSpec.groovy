@@ -12,6 +12,7 @@ import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsOutput
 import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertIngestService
 import com.silenteight.scb.ingest.adapter.incomming.common.model.ObjectId
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert
+import com.silenteight.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator
 import com.silenteight.scb.ingest.domain.model.RegistrationAlertContext
 
 import spock.lang.Specification
@@ -39,7 +40,7 @@ class AlertHandlerSpec extends Specification {
 
   def 'should handle invalid alerts'() {
     given:
-    def internalBatchId = UUID.randomUUID().toString();
+    def internalBatchId = InternalBatchIdGenerator.generate()
     def invalidAlerts = [
         fixtures.invalidAlertCausedByFatalError, fixtures.invalidAlertCausedByTemporaryError
     ]
@@ -63,7 +64,7 @@ class AlertHandlerSpec extends Specification {
 
   def 'should handle valid alerts'() {
     given:
-    def internalBatchId = UUID.randomUUID().toString()
+    def internalBatchId = InternalBatchIdGenerator.generate()
     def alertContext = new RegistrationAlertContext(MEDIUM, CBS)
     def alerts = [fixtures.alert1, fixtures.alert2]
     def validAlertComposites = [

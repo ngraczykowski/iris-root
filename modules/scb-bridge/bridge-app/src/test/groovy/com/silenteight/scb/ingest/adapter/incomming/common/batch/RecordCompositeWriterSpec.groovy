@@ -10,8 +10,6 @@ import io.micrometer.core.instrument.Tag
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import java.util.stream.Stream
-
 class RecordCompositeWriterSpec extends Specification {
 
   def deltaService = Mock(GnsSyncDeltaService)
@@ -25,7 +23,7 @@ class RecordCompositeWriterSpec extends Specification {
     createRecordWriter().write([])
 
     then:
-    1 * ingestService.ingestAlertsForLearn(_ as Stream)
+    1 * ingestService.ingestAlertsForLearn(_ as String, _ as List<Alert>)
     1 * deltaService.updateDelta(_ as Map, deltaJobName)
   }
 

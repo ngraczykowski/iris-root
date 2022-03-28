@@ -3,10 +3,9 @@ package com.silenteight.scb.ingest.adapter.incomming.common.batch;
 import lombok.experimental.SuperBuilder;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertIngestService;
-import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
+import com.silenteight.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 @SuperBuilder
 class LearningRecordCompositeWriter extends RecordCompositeWriter {
@@ -14,7 +13,9 @@ class LearningRecordCompositeWriter extends RecordCompositeWriter {
   private final BatchAlertIngestService ingestService;
 
   protected void writeAlerts(List<? extends AlertComposite> items) {
-    Stream<Alert> alerts = items.stream().map(AlertComposite::getAlert);
-    ingestService.ingestAlertsForLearn(alerts);
+    var alerts = items.stream()
+        .map(AlertComposite::getAlert)
+        .toList();
+    ingestService.ingestAlertsForLearn(InternalBatchIdGenerator.generate(), alerts);
   }
 }

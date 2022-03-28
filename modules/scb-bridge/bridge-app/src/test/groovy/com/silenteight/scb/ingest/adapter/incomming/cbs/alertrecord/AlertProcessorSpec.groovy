@@ -5,6 +5,7 @@ import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertIdWithDetails
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertInFlightService
 import com.silenteight.scb.ingest.adapter.incomming.cbs.batch.BatchReadEvent
+import com.silenteight.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator
 
 import spock.lang.Specification
 
@@ -20,7 +21,7 @@ class AlertProcessorSpec extends Specification {
 
   def 'should process alerts'() {
     given:
-    BatchReadEvent batchReadEvent = new BatchReadEvent(UUID.randomUUID().toString());
+    BatchReadEvent batchReadEvent = new BatchReadEvent(InternalBatchIdGenerator.generate())
 
     when:
     underTest.subscribe(batchReadEvent)
