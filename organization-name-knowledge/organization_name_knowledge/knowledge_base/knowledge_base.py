@@ -1,7 +1,8 @@
 import json
 import pathlib
-from importlib import resources
 from typing import List, Mapping, Set
+
+import importlib_resources
 
 from organization_name_knowledge.knowledge_base.common_terms import CommonTerms
 from organization_name_knowledge.knowledge_base.countries import Countries
@@ -17,9 +18,9 @@ class classproperty:
 
 
 class KnowledgeBase:
-    with resources.path("organization_name_knowledge", "resources") as path:
-        default_source_path: pathlib.Path = path
-
+    default_source_path: pathlib.Path = (
+        importlib_resources.files("organization_name_knowledge") / "resources"
+    )
     source_paths: List[pathlib.Path] = [default_source_path]
     _loaded = {}
 
