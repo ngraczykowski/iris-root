@@ -17,6 +17,15 @@ public record Batch(
   @Builder
   public Batch {}
 
+  public static Batch of(String batchId, Long alertCount, RegistrationAlertContext context) {
+    return Batch.builder()
+        .id(batchId)
+        .alertCount(alertCount)
+        .priority(context.priority())
+        .metadata(new BatchMetadata(context.alertSource()))
+        .build();
+  }
+
   @Getter
   @RequiredArgsConstructor
   public enum Priority {

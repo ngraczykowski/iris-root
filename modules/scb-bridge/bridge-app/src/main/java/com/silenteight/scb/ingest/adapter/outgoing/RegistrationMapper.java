@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+
 @Component
 @RequiredArgsConstructor
 class RegistrationMapper {
@@ -22,7 +24,7 @@ class RegistrationMapper {
     return RegisterBatchIn.builder()
         .batchId(batch.id())
         .alertCount(batch.alertCount())
-        .batchMetadata(converter.serializeFromObjectToJson(batch.metadata()))
+        .batchMetadata(converter.serializeFromObjectToJson(batch.metadata()).getOrElse(EMPTY))
         .batchPriority(batch.priority().getValue())
         .build();
   }
@@ -54,9 +56,15 @@ class RegistrationMapper {
   }
 
   private String getMetadata(AlertWithMatches alertWithMatches) {
-    return Optional.ofNullable(alertWithMatches.getMetadata())
-        .map(converter::serializeFromObjectToJson)
-        .orElse("");
+    if (isMetadataNull(alertWithMatches)) {
+      return EMPTY;
+    }
+    return converter.serializeFromObjectToJson(alertWithMatches.getMetadata())
+        .getOrElse(EMPTY);
+  }
+
+  private boolean isMetadataNull(AlertWithMatches alertWithMatches) {
+    return alertWithMatches.getMetadata() == null;
   }
 
   private MatchIn toMatchIn(Match match) {

@@ -12,8 +12,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
 
-import static org.apache.commons.lang3.StringUtils.EMPTY;
-
 @Slf4j
 @RequiredArgsConstructor
 public class PayloadConverter {
@@ -21,11 +19,10 @@ public class PayloadConverter {
   private final Validator validator;
   private final ObjectMapper objectMapper;
 
-  public <T> String serializeFromObjectToJson(T json) {
+  public <T> Try<String> serializeFromObjectToJson(T json) {
     return Try
         .of(() -> objectMapper.writeValueAsString(json))
-        .onFailure(e -> log.warn("Could not serialize object.", e))
-        .getOrElse(EMPTY);
+        .onFailure(e -> log.warn("Could not serialize object.", e));
   }
 
   public <T, X> T deserializeFromJsonToObject(X json, Class<T> clazz) {

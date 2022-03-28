@@ -3,10 +3,11 @@ package com.silenteight.scb.ingest.adapter.outgoing
 import com.silenteight.scb.ingest.adapter.incomming.cbs.batch.BatchReadEvent
 import com.silenteight.scb.ingest.domain.model.Batch.Priority
 import com.silenteight.scb.ingest.domain.model.IngestBatchMessage
+import com.silenteight.scb.ingest.domain.payload.PayloadConverter
 import com.silenteight.scb.ingest.infrastructure.amqp.AmqpIngestIncomingBatchProcessingProperties
 
 import com.fasterxml.jackson.core.JsonProcessingException
-import com.fasterxml.jackson.databind.ObjectMapper
+import io.vavr.control.Try
 import org.springframework.amqp.core.Message
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import spock.lang.Specification
@@ -20,13 +21,13 @@ class IngestBatchEventRabbitPublisherSpec extends Specification {
 
   def properties = new AmqpIngestIncomingBatchProcessingProperties("queueName", "exchangeName")
   def rabbitTemplate = Mock(RabbitTemplate)
-  def objectMapper = Mock(ObjectMapper)
+  def converter = Mock(PayloadConverter)
 
   @Subject
   def underTest = new IngestBatchEventRabbitPublisher(
       rabbitTemplate,
       properties,
-      objectMapper)
+      converter)
 
   def "should_publish_successfully"() {
     given:
@@ -36,7 +37,7 @@ class IngestBatchEventRabbitPublisherSpec extends Specification {
     underTest.publish(batchMessage);
 
     then:
-    1 * objectMapper.writeValueAsString(_) >> BATCH_READ_EVENT_JSON
+    1 * converter.serializeFromObjectToJson(_) >> Try.of(() -> BATCH_READ_EVENT_JSON)
     1 * rabbitTemplate.convertAndSend(properties.exchangeName(), EMPTY_ROUTING_KEY, _ as Message)
   }
 
@@ -48,7 +49,7 @@ class IngestBatchEventRabbitPublisherSpec extends Specification {
     underTest.publish(batchMessage);
 
     then:
-    1 * objectMapper.writeValueAsString(_) >> {throw new JsonProcessingException("test exception")}
+    1 * converter.serializeFromObjectToJson(_) >> {throw new JsonProcessingException("test exception")}
     0 * rabbitTemplate.convertAndSend(properties.exchangeName(), EMPTY_ROUTING_KEY, _ as Message)
   }
 }

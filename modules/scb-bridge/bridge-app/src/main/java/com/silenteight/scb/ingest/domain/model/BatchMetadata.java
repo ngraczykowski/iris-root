@@ -1,4 +1,4 @@
 package com.silenteight.scb.ingest.domain.model;
 
-public record BatchMetadata() {
+public record BatchMetadata(AlertSource alertSource) {
 }

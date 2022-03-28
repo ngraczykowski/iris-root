@@ -5,10 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.scb.ingest.domain.exceptons.IngestJsonMessageException;
 import com.silenteight.scb.ingest.domain.model.IngestBatchMessage;
+import com.silenteight.scb.ingest.domain.payload.PayloadConverter;
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestBatchEventPublisher;
 import com.silenteight.scb.ingest.infrastructure.amqp.AmqpIngestIncomingBatchProcessingProperties;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vavr.control.Try;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageBuilder;
@@ -25,7 +25,7 @@ class IngestBatchEventRabbitPublisher implements IngestBatchEventPublisher {
 
   private final RabbitTemplate rabbitTemplate;
   private final AmqpIngestIncomingBatchProcessingProperties amqpBatchProcessingProperties;
-  private final ObjectMapper objectMapper;
+  private final PayloadConverter converter;
 
   @Override
   public void publish(IngestBatchMessage batchMessage) {
@@ -45,8 +45,7 @@ class IngestBatchEventRabbitPublisher implements IngestBatchEventPublisher {
   }
 
   private Message createMessage(IngestBatchMessage batchMessage) {
-    var orderJson = Try.of(() -> objectMapper.writeValueAsString(batchMessage.event()))
-        .onFailure(e -> log.error("Encountered JSON mapping error"))
+    var orderJson = converter.serializeFromObjectToJson(batchMessage)
         .getOrElseThrow(IngestJsonMessageException::new);
     return MessageBuilder
         .withBody(orderJson.getBytes())

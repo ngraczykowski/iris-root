@@ -6,7 +6,7 @@ import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertDeta
 import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match;
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRecommendationService;
 import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
-import com.silenteight.scb.ingest.domain.model.Batch.Priority;
+import com.silenteight.scb.ingest.domain.model.RegistrationAlertContext;
 import com.silenteight.scb.ingest.domain.model.RegistrationResponse;
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
 import com.silenteight.sep.base.testing.messaging.MessageSenderSpyFactory;
@@ -20,10 +20,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import static com.silenteight.scb.ingest.domain.model.AlertSource.CBS;
+import static com.silenteight.scb.ingest.domain.model.Batch.Priority.MEDIUM;
 import static java.util.Collections.singleton;
 import static java.util.UUID.randomUUID;
 import static org.mockito.Mockito.*;
@@ -125,13 +126,15 @@ class IngestServiceTest {
   @Test
   void ingestAlertsForRecommendation() {
     //given
-    List<Alert> alerts = createAlerts().toList();
-    String internalBatchId = UUID.randomUUID().toString();
-    when(alertRegistrationFacade.registerSolvingAlert(internalBatchId, alerts, Priority.MEDIUM))
+    var alerts = createAlerts().toList();
+    var internalBatchId = UUID.randomUUID().toString();
+
+    var alertContext = new RegistrationAlertContext(MEDIUM, CBS);
+    when(alertRegistrationFacade.registerSolvingAlert(internalBatchId, alerts, alertContext))
         .thenReturn(RegistrationResponse.builder().build());
 
     //when
-    ingestService.ingestAlertsForRecommendation(internalBatchId, alerts);
+    ingestService.ingestAlertsForRecommendation(internalBatchId, alerts, alertContext);
 
     //then
     verify(ingestEventPublisher, times(2)).publish(any());
@@ -140,13 +143,14 @@ class IngestServiceTest {
   @Test
   void ingestDenyAlertsForRecommendation() {
     //given
-    String internalBatchId = UUID.randomUUID().toString();
-    List<Alert> denyAlerts = createDenyAlerts().toList();
-    when(alertRegistrationFacade.registerSolvingAlert(internalBatchId, denyAlerts, Priority.MEDIUM))
+    var internalBatchId = UUID.randomUUID().toString();
+    var denyAlerts = createDenyAlerts().toList();
+    var alertContext = new RegistrationAlertContext(MEDIUM, CBS);
+    when(alertRegistrationFacade.registerSolvingAlert(internalBatchId, denyAlerts, alertContext))
         .thenReturn(RegistrationResponse.builder().build());
 
     //when
-    ingestService.ingestAlertsForRecommendation(internalBatchId, denyAlerts);
+    ingestService.ingestAlertsForRecommendation(internalBatchId, denyAlerts, alertContext);
 
     //then
     verify(ingestEventPublisher, times(2)).publish(any());
@@ -178,13 +182,14 @@ class IngestServiceTest {
   @Test
   void ingestNonDenyAlertsForRecommendation() {
     //given
-    String internalBatchId = UUID.randomUUID().toString();
-    List<Alert> nonDenyAlerts = createNonDenyAlerts().toList();
-    when(alertRegistrationFacade.registerSolvingAlert(internalBatchId, nonDenyAlerts,
-        Priority.MEDIUM)).thenReturn(RegistrationResponse.builder().build());
+    var internalBatchId = UUID.randomUUID().toString();
+    var nonDenyAlerts = createNonDenyAlerts().toList();
+    var alertContext = new RegistrationAlertContext(MEDIUM, CBS);
+    when(alertRegistrationFacade.registerSolvingAlert(internalBatchId, nonDenyAlerts, alertContext))
+        .thenReturn(RegistrationResponse.builder().build());
 
     //when
-    ingestService.ingestAlertsForRecommendation(internalBatchId, nonDenyAlerts);
+    ingestService.ingestAlertsForRecommendation(internalBatchId, nonDenyAlerts, alertContext);
 
     //then
     verify(ingestEventPublisher, times(2)).publish(any());
@@ -197,13 +202,13 @@ class IngestServiceTest {
   @Test
   void shouldIngestSolvedAlertsForRecommendationWhenBacktestReportModeIsEnabled() {
     //given
-    String internalBatchId = UUID.randomUUID().toString();
+    var internalBatchId = UUID.randomUUID().toString();
     ingestProperties.setSolvedAlertsProcessingEnabled(true);
     createIngestService();
-    Match obsoleteMatch = Match.builder().flags(Match.Flag.OBSOLETE.getValue()).build();
-    Match solvedMatch = Match.builder().flags(Match.Flag.SOLVED.getValue()).build();
-    ObjectId objectId = ObjectId.builder().sourceId("").discriminator("").build();
-    List<Alert> alerts = Stream.of(
+    var obsoleteMatch = Match.builder().flags(Match.Flag.OBSOLETE.getValue()).build();
+    var solvedMatch = Match.builder().flags(Match.Flag.SOLVED.getValue()).build();
+    var objectId = ObjectId.builder().sourceId("").discriminator("").build();
+    var alerts = Stream.of(
             Alert
                 .builder()
                 .id(objectId)
@@ -219,11 +224,12 @@ class IngestServiceTest {
                 .details(AlertDetails.builder().batchId("batchId1").build())
                 .build())
         .toList();
-    when(alertRegistrationFacade.registerSolvingAlert(internalBatchId, alerts, Priority.MEDIUM))
+    var alertContext = new RegistrationAlertContext(MEDIUM, CBS);
+    when(alertRegistrationFacade.registerSolvingAlert(internalBatchId, alerts, alertContext))
         .thenReturn(RegistrationResponse.builder().build());
 
     //when
-    ingestService.ingestAlertsForRecommendation(internalBatchId, alerts);
+    ingestService.ingestAlertsForRecommendation(internalBatchId, alerts, alertContext);
 
     //then
     verify(ingestEventPublisher, times(2)).publish(any());

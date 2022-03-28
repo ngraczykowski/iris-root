@@ -16,7 +16,7 @@ import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.request.GnsRtRec
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtRecommendationResponse;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtResponseAlert;
 import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
-import com.silenteight.scb.ingest.domain.model.Batch.Priority;
+import com.silenteight.scb.ingest.domain.model.RegistrationAlertContext;
 import com.silenteight.scb.ingest.domain.model.RegistrationResponse;
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
 import com.silenteight.scb.outputrecommendation.domain.model.Recommendations;
@@ -25,6 +25,9 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.silenteight.scb.ingest.domain.model.AlertSource.GNS_RT;
+import static com.silenteight.scb.ingest.domain.model.Batch.Priority.HIGH;
 
 @Slf4j
 @Builder
@@ -48,8 +51,10 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
     var internalBatchId = InternalBatchIdGenerator.generate();
     rawAlertService.store(internalBatchId, alerts);
 
+    var registrationAlertContext = new RegistrationAlertContext(HIGH, GNS_RT);
     var registrationResponse =
-        alertRegistrationFacade.registerSolvingAlert(internalBatchId, alerts, Priority.HIGH);
+        alertRegistrationFacade
+            .registerSolvingAlert(internalBatchId, alerts, registrationAlertContext);
 
     //feed uds
     alerts.forEach(alert -> updateAndPublish(alert, registrationResponse));
