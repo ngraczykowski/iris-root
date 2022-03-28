@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.model.api.v1.SolvingModel;
 import com.silenteight.model.api.v1.SolvingModelServiceGrpc.SolvingModelServiceBlockingStub;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import com.google.protobuf.Empty;
 import com.google.protobuf.TextFormat;
@@ -22,6 +23,7 @@ class SolvingModelServiceClient {
 
   private final Duration timeout;
 
+  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
   SolvingModel getCurrentModel() {
     var deadline = Deadline.after(timeout.toMillis(), TimeUnit.MILLISECONDS);
     var request = Empty.newBuilder().build();

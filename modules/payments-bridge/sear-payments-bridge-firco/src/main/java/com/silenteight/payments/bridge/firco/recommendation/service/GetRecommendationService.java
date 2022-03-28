@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.payments.bridge.firco.recommendation.model.Recommendation;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationId;
 import com.silenteight.payments.bridge.firco.recommendation.port.GetRecommendationUseCase;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 import com.silenteight.sep.base.common.exception.EntityNotFoundException;
 
 import org.apache.commons.lang3.StringUtils;
@@ -19,6 +20,7 @@ class GetRecommendationService implements GetRecommendationUseCase {
   private final RecommendationRepository repository;
 
   @Override
+  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
   public Recommendation get(RecommendationId recommendation) {
     return repository
         .findById(recommendation.getId())

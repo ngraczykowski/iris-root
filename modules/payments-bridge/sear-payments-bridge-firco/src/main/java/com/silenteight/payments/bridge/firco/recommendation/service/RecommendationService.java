@@ -9,6 +9,7 @@ import com.silenteight.payments.bridge.firco.metrics.alert.AlertResolutionEndEve
 import com.silenteight.payments.bridge.firco.metrics.efficiency.EfficiencyMetricIncrementerPort;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationId;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationReason;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,6 +40,7 @@ class RecommendationService {
   private final ApplicationEventPublisher applicationEventPublisher;
 
   @Transactional
+  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
   RecommendationId createAdjudicationRecommendation(UUID alertId,
       RecommendationWithMetadata recommendation) {
     var id = DEFAULT_ID_GENERATOR.generateId();
@@ -54,6 +56,7 @@ class RecommendationService {
   }
 
   @Transactional
+  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
   RecommendationId createBridgeRecommendation(UUID alertId, RecommendationReason reason) {
     var id = DEFAULT_ID_GENERATOR.generateId();
     var entity = new RecommendationEntity(id, alertId, reason);

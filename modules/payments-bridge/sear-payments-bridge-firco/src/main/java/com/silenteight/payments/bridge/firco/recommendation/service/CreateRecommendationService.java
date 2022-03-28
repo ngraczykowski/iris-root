@@ -14,6 +14,7 @@ import com.silenteight.payments.bridge.firco.recommendation.port.CreateRecommend
 import com.silenteight.payments.bridge.firco.recommendation.port.IndexRecommendationPort;
 import com.silenteight.proto.payments.bridge.internal.v1.event.ResponseCompleted;
 import com.silenteight.sep.base.aspects.logging.LogContext;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.slf4j.MDC;
 import org.springframework.context.ApplicationEventPublisher;
@@ -43,6 +44,7 @@ class CreateRecommendationService implements CreateRecommendationUseCase {
   @Transactional
   @LogContext
   @Override
+  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
   public void create(BridgeSourcedRecommendation source) {
     var alertId = source.getAlertId();
     MDC.put("alertId", alertId.toString());

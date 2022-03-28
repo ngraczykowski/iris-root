@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.firco.recommendation.port.DeleteRecommendationUseCase;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ class DeleteRecommendationService implements DeleteRecommendationUseCase {
 
   @Override
   @Transactional
+  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
   public void delete(List<UUID> alertMessageIds) {
 
     log.info("Deleting recommendations: alertsCount={}, alerts={}",
