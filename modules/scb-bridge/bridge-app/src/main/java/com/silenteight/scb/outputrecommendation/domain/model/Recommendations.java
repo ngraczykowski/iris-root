@@ -19,7 +19,7 @@ public record Recommendations(
       List<Match> matches,
       String batchId,
       String name,
-      String recommendedAction,
+      RecommendedAction recommendedAction,
       String recommendedComment,
       String policyId,
       OffsetDateTime recommendedAt
@@ -56,4 +56,14 @@ public record Recommendations(
   public enum AlertStatus {
     UNKNOWN, FAILURE, SUCCESS
   }
+
+  public enum RecommendedAction {
+    ACTION_INVESTIGATE,
+    ACTION_INVESTIGATE_HINTED_FALSE_POSITIVE,
+    ACTION_INVESTIGATE_PARTIALLY_FALSE_POSITIVE,
+    ACTION_INVESTIGATE_HINTED_TRUE_POSITIVE,
+    ACTION_FALSE_POSITIVE,
+    ACTION_POTENTIAL_TRUE_POSITIVE
+  }
+
 }

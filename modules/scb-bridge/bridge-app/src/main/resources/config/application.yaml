@@ -165,6 +165,8 @@ serp:
         solution:
           states:
             ANALYST_NO_SOLUTION: [ 0 ]
+      gns-rt:
+        attach-qco-fields-to-response: true
       learning:
         #  Alert level Learning Job Configuration
         alert:

@@ -1,43 +1,49 @@
 package com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper;
 
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
-import com.silenteight.proto.serp.v1.recommendation.AlertRecommendation;
-import com.silenteight.proto.serp.v1.recommendation.Recommendation;
-import com.silenteight.proto.serp.v1.recommendation.RecommendedAction;
 import com.silenteight.scb.ingest.adapter.incomming.common.protocol.RecommendedActionUtils;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.request.GnsRtAlert;
-import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtResponseAlerts;
-import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtResponseAlerts.RecommendationEnum;
+import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtResponseAlert;
+import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtResponseAlert.RecommendationEnum;
+import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtResponseMatch;
+import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.Match;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
-import static com.silenteight.protocol.utils.MoreTimestamps.toOffsetDateTime;
+import static com.silenteight.scb.outputrecommendation.domain.model.Recommendations.Recommendation;
+import static com.silenteight.scb.outputrecommendation.domain.model.Recommendations.RecommendedAction;
 
+@AllArgsConstructor
 public class GnsRtResponseMapper {
 
-  public GnsRtResponseAlerts map(
-      @NonNull GnsRtAlert alert,
-      @NonNull AlertRecommendation alertRecommendation) {
+  private final GnsRtResponseMapperConfigurationProperties mapperConfigurationProperties;
 
-    Recommendation recommendation = alertRecommendation.getRecommendation();
-    String alertId = alertRecommendation.getAlertId().getSourceId();
+  public GnsRtResponseAlert map(
+      @NonNull GnsRtAlert gnsRtAlert,
+      @NonNull Recommendation recommendation) {
 
-    GnsRtResponseAlerts responseAlert = new GnsRtResponseAlerts();
-    responseAlert.setAlertId(alertId);
-    responseAlert.setComments(recommendation.getComment());
-    responseAlert.setRecommendationTimestamp(getRecommendationTimestamp(recommendation));
-    responseAlert.setRecommendation(map(recommendation.getAction()));
-    responseAlert.setWatchlistType(alert.getWatchlistType());
-    return responseAlert;
+    var responseAlertBuilder = GnsRtResponseAlert.builder()
+        .alertId(recommendation.alert().id())
+        .comments(recommendation.recommendedComment())
+        .recommendation(narrowRecommendationEnum(recommendation.recommendedAction()))
+        .recommendationTimestamp(recommendation.recommendedAt().toLocalDateTime())
+        .watchlistType(gnsRtAlert.getWatchlistType());
+
+    if (mapperConfigurationProperties.attachQcoFieldsToResponse()) {
+      responseAlertBuilder
+          .policyId(recommendation.policyId())
+          .matches(getRtResponseMatches(recommendation));
+    }
+    return responseAlertBuilder.build();
   }
 
-  private static LocalDateTime getRecommendationTimestamp(Recommendation recommendation) {
-    return toOffsetDateTime(recommendation.getCreatedAt()).toLocalDateTime();
-  }
-
-  private static RecommendationEnum map(RecommendedAction recommendedAction) {
-    return narrowRecommendationEnum(recommendedAction);
+  private List<GnsRtResponseMatch> getRtResponseMatches(Recommendation recommendation) {
+    return recommendation.matches()
+        .stream()
+        .map(GnsRtResponseMapper::gnsRtResponseMatch)
+        .toList();
   }
 
   private static RecommendationEnum narrowRecommendationEnum(
@@ -48,8 +54,16 @@ public class GnsRtResponseMapper {
       case ACTION_INVESTIGATE_PARTIALLY_FALSE_POSITIVE:
         return RecommendationEnum.INVESTIGATE;
       default:
-        String actionName = RecommendedActionUtils.nameWithoutPrefix(recommendedAction);
+        var actionName = RecommendedActionUtils.nameWithoutPrefix(recommendedAction);
         return RecommendationEnum.fromValue(actionName);
     }
+  }
+
+  private static GnsRtResponseMatch gnsRtResponseMatch(Match match) {
+    return GnsRtResponseMatch.builder()
+        .hitID(match.id())
+        .fvSignature(match.fvSignature())
+        .stepId(match.stepId())
+        .build();
   }
 }

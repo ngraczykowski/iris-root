@@ -6,10 +6,7 @@ import com.silenteight.recommendation.api.library.v1.*;
 import com.silenteight.scb.outputrecommendation.domain.model.BatchStatistics;
 import com.silenteight.scb.outputrecommendation.domain.model.BatchStatistics.RecommendationsStatistics;
 import com.silenteight.scb.outputrecommendation.domain.model.Recommendations;
-import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.Alert;
-import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.AlertStatus;
-import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.Match;
-import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.Recommendation;
+import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +38,7 @@ class RecommendationGrpcMapper {
             recommendation.getMatches().stream().map(RecommendationGrpcMapper::toMatch).toList())
         .batchId(recommendation.getBatchId())
         .name(recommendation.getName())
-        .recommendedAction(recommendation.getRecommendedAction())
+        .recommendedAction(RecommendedAction.valueOf(recommendation.getRecommendedAction()))
         .recommendedComment(recommendation.getRecommendationComment())
         .policyId(recommendation.getPolicyId())
         .recommendedAt(recommendation.getRecommendedAt())

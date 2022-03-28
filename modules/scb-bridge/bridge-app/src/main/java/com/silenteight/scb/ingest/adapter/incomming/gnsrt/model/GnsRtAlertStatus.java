@@ -13,7 +13,7 @@ public enum GnsRtAlertStatus {
   FALSE_MATCH("FALSE_MATCH"),
   ERROR("ERROR");
 
-  private String value;
+  private final String value;
 
   @JsonCreator
   public static GnsRtAlertStatus fromValue(String text) {

@@ -7,8 +7,8 @@ import lombok.NonNull;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.request.GnsRtAlert;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.request.GnsRtRecommendationRequest;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtRecommendationResponse;
-import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtResponseAlerts;
-import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtResponseAlerts.RecommendationEnum;
+import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtResponseAlert;
+import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtResponseAlert.RecommendationEnum;
 
 import reactor.core.publisher.Mono;
 
@@ -40,15 +40,15 @@ class MockedGnsRtRecommendationUseCase implements GnsRtRecommendationUseCase {
     return Mono.just(response);
   }
 
-  private static GnsRtResponseAlerts createAlertRecommendation(GnsRtAlert alert) {
-    GnsRtResponseAlerts responseAlert = new GnsRtResponseAlerts();
+  private static GnsRtResponseAlert createAlertRecommendation(GnsRtAlert alert) {
     String alertId = alert.getAlertId();
-    responseAlert.setAlertId(alertId);
-    responseAlert.setComments(COMMENT_TEMPLATE.replace("<system_id>", alertId));
-    responseAlert.setRecommendationTimestamp(LocalDateTime.now());
-    responseAlert.setRecommendation(RecommendationGenerator.generateRandomRecommendation());
-    responseAlert.setWatchlistType(alert.getWatchlistType());
-    return responseAlert;
+    return GnsRtResponseAlert.builder()
+        .alertId(alertId)
+        .comments(COMMENT_TEMPLATE.replace("<system_id>", alertId))
+        .recommendationTimestamp(LocalDateTime.now())
+        .recommendation(RecommendationGenerator.generateRandomRecommendation())
+        .watchlistType(alert.getWatchlistType())
+        .build();
   }
 
   private static void validate(GnsRtRecommendationRequest request) {

@@ -2,6 +2,7 @@ package com.silenteight.scb.outputrecommendation.adapter.outgoing
 
 import com.silenteight.recommendation.api.library.v1.*
 import com.silenteight.recommendation.api.library.v1.AlertOut.AlertStatus
+import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.RecommendedAction
 
 import java.time.OffsetDateTime
 
@@ -27,7 +28,7 @@ class GrpcAdapterFixtures {
   static String BATCH_ID = 'batchId'
   static String POLICY_ID = 'policyId'
   static String RECOMMENDATION_NAME = 'name'
-  static String RECOMMENDED_ACTION = 'recommendedAction'
+  static RecommendedAction RECOMMENDED_ACTION = RecommendedAction.ACTION_INVESTIGATE
   static String RECOMMENDATION_COMMENT = 'recommendationComment'
   static OffsetDateTime RECOMMENDED_AT = OffsetDateTime.now()
 
@@ -59,7 +60,7 @@ class GrpcAdapterFixtures {
           .batchId(BATCH_ID)
           .policyId(POLICY_ID)
           .name(RECOMMENDATION_NAME)
-          .recommendedAction(RECOMMENDED_ACTION)
+          .recommendedAction(RECOMMENDED_ACTION.toString())
           .recommendationComment(RECOMMENDATION_COMMENT)
           .recommendedAt(RECOMMENDED_AT)
           .alert(ALERT)

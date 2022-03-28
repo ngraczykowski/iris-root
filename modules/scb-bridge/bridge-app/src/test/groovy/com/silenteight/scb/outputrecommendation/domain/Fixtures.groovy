@@ -7,6 +7,7 @@ import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.Ale
 import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.AlertStatus
 import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.Match
 import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.Recommendation
+import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.RecommendedAction
 
 import java.time.OffsetDateTime
 
@@ -66,7 +67,7 @@ class Fixtures {
           .build()
 
   static String RECOMMENDATION_NAME = 'recommendationName'
-  static String RECOMMENDED_ACTION = 'FALSE_POSITIVE'
+  static RecommendedAction RECOMMENDED_ACTION = RecommendedAction.ACTION_FALSE_POSITIVE
   static String RECOMMENDED_COMMENT = 'recommendedComment'
   static String POLICY_ID = 'policyId'
   static OffsetDateTime RECOMMENDED_AT = OffsetDateTime.now()

@@ -1,5 +1,7 @@
 package com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -8,11 +10,13 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import javax.validation.constraints.NotNull;
 
 @Validated
 @Data
-public class GnsRtResponseAlerts {
+@Builder
+public class GnsRtResponseAlert {
 
   @JsonProperty("alertId")
   @NotNull
@@ -20,19 +24,29 @@ public class GnsRtResponseAlerts {
 
   @JsonProperty("comments")
   private String comments;
+
   @JsonProperty("recommendation")
   @NotNull
   private RecommendationEnum recommendation;
+
   @JsonProperty("recommendationTimestamp")
   @NotNull
   private LocalDateTime recommendationTimestamp;
+
   @JsonProperty("watchlistType")
   @NotNull
   private String watchlistType;
 
+  @JsonProperty("policyId")
+  private String policyId;
+
+  @JsonProperty("matches")
+  private List<GnsRtResponseMatch> matches;
+
   /**
    * The action Silent Eight is recommend to take for this alert.
    */
+  @AllArgsConstructor
   public enum RecommendationEnum {
     INVESTIGATE("INVESTIGATE"),
 
@@ -40,11 +54,7 @@ public class GnsRtResponseAlerts {
 
     POTENTIAL_TRUE_POSITIVE("POTENTIAL_TRUE_POSITIVE");
 
-    private String value;
-
-    RecommendationEnum(String value) {
-      this.value = value;
-    }
+    private final String value;
 
     @JsonCreator
     public static RecommendationEnum fromValue(String text) {
@@ -53,7 +63,8 @@ public class GnsRtResponseAlerts {
           return b;
         }
       }
-      return null;
+      throw new IllegalStateException(
+          "Can't find matching RecommendationEnum value for action: " + text);
     }
 
     @Override

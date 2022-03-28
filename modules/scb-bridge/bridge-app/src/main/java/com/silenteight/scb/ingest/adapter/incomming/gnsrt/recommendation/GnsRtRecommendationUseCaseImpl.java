@@ -11,12 +11,13 @@ import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtRequestToA
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtResponseMapper;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.request.GnsRtRecommendationRequest;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtRecommendationResponse;
+import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtResponseAlert;
 import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
 import com.silenteight.scb.ingest.domain.model.Batch.Priority;
 import com.silenteight.scb.ingest.domain.model.RegistrationResponse;
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
+import com.silenteight.scb.outputrecommendation.domain.model.Recommendations;
 
-import org.jetbrains.annotations.NotNull;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -40,16 +41,44 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
     List<Alert> alerts = mapAlerts(request);
     logGnsRtRequest(alerts);
 
+    // TODO: should we generate internalBatchId instead ?
+
     String batchId = getBatchId(request);
     RegistrationResponse registrationResponse =
         alertRegistrationFacade.registerSolvingAlert(batchId, alerts, Priority.HIGH);
 
     //feed uds
     alerts.forEach(ingestEventPublisher::publish);
+
+    // TODO: wait for batch completed with batchId, then get the recommendations and use mapResponse
+
     return Mono.empty();
   }
 
-  private String getBatchId(@NotNull GnsRtRecommendationRequest request) {
+  private GnsRtRecommendationResponse mapResponse(
+      GnsRtRecommendationRequest request, Recommendations recommendations) {
+
+    var alerts = recommendations
+        .recommendations()
+        .stream()
+        .map(recommendation -> map(request, recommendation))
+        .toList();
+
+    var response = new GnsRtRecommendationResponse();
+    response.getSilent8Response().setAlerts(alerts);
+    return response;
+  }
+
+  private GnsRtResponseAlert map(
+      GnsRtRecommendationRequest request, Recommendations.Recommendation recommendation) {
+
+    var sourceId = recommendation.alert().id();
+    var gnsRtAlert = GnsRtAlertResolver.resolve(request, sourceId);
+
+    return responseMapper.map(gnsRtAlert, recommendation);
+  }
+
+  private String getBatchId(GnsRtRecommendationRequest request) {
     return request.getScreenCustomerNameRes().getHeader().getOriginationDetails().getTrackingId();
   }
 

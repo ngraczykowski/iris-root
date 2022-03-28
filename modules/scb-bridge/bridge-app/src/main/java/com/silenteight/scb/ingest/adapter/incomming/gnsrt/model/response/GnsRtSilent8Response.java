@@ -15,5 +15,5 @@ public class GnsRtSilent8Response {
 
   @JsonProperty("alerts")
   @Valid
-  private List<GnsRtResponseAlerts> alerts = new ArrayList<>();
+  private List<GnsRtResponseAlert> alerts = new ArrayList<>();
 }
