@@ -1,12 +1,11 @@
 package com.silenteight.adjudication.engine.analysis.commentinput.jdbc;
 
-import com.silenteight.sep.base.aspects.metrics.Timed;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.analysis.commentinput.CommentInputDataAccess;
 import com.silenteight.adjudication.engine.analysis.commentinput.domain.MissingCommentInputsResult;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
