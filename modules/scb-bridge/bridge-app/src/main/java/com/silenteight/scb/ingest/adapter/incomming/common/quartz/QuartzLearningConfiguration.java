@@ -33,7 +33,7 @@ class QuartzLearningConfiguration {
 
   @Bean
   @ConditionalOnProperty(
-      prefix = "serp.scb.bridge.learning.alert",
+      prefix = "silenteight.scb-bridge.learning.alert",
       name = "enabled",
       havingValue = "true")
   Trigger scbAlertLevelLearningJobTrigger() {
@@ -45,7 +45,7 @@ class QuartzLearningConfiguration {
 
   @Bean
   @ConditionalOnProperty(
-      prefix = "serp.scb.bridge.learning.ecm",
+      prefix = "silenteight.scb-bridge.learning.ecm",
       name = "enabled",
       havingValue = "true")
   Trigger ecmLearningJobTrigger() {

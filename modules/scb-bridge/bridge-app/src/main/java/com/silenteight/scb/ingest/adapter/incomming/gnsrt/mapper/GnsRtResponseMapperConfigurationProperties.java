@@ -4,5 +4,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 
 @ConstructorBinding
-@ConfigurationProperties(prefix = "serp.scb.bridge.gns-rt")
+@ConfigurationProperties(prefix = "silenteight.scb-bridge.gns-rt")
 public record GnsRtResponseMapperConfigurationProperties(boolean attachQcoFieldsToResponse) {}

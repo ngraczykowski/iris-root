@@ -6,13 +6,10 @@ import com.silenteight.scb.ingest.adapter.incomming.common.validation.OracleRela
 
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.constraints.NotBlank;
-
 @Data
 @Validated
 class ScbBridgeLearningJobProperties {
 
-  @NotBlank
   private String cronExpression;
 
   private boolean enabled;

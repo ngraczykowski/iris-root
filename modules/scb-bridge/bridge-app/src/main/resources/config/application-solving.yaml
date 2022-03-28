@@ -1,0 +1,46 @@
+silenteight:
+  scb-bridge:
+    gns-rt:
+      enabled: true
+      attach-qco-fields-to-response: true
+    queuing:
+      jobs:
+        - ack-records: true
+          enabled: true
+          cron-expression: 0/30 * * * * ?
+          hit-details-view: ''
+          name: Watchlist-level queuing job (DENY)
+          priority: 10
+          records-view: SENS_V_FFF_RECORDS_DENY
+          watchlist-level: true
+          chunk-size: 1000
+
+        - ack-records: true
+          enabled: true
+          cron-expression: 3/30 * * * * ?
+          hit-details-view: ''
+          name: Watchlist-level queuing job (NON-DENY)
+          priority: 1
+          records-view: SENS_V_FFF_RECORDS_NON_DENY
+          watchlist-level: true
+          chunk-size: 1000
+
+        - ack-records: true
+          enabled: true
+          cron-expression: 5/30 * * * * ?
+          hit-details-view: ''
+          name: Alert-level queuing job (DENY)
+          priority: 10
+          records-view: SENS_V_FFF_RECORDS_DENY
+          watchlist-level: false
+          chunk-size: 1000
+
+        - ack-records: true
+          enabled: true
+          cron-expression: 7/30 * * * * ?
+          hit-details-view: ''
+          name: Alert-level queuing job (NON-DENY)
+          priority: 1
+          records-view: SENS_V_FFF_RECORDS_NON_DENY
+          watchlist-level: false
+          chunk-size: 1000

@@ -1,0 +1,19 @@
+silenteight:
+  scb-bridge:
+    learning:
+      alert:
+        enabled: true
+        cron-expression: 0 0 3 ? * SUN
+        db-relation-name: SENS_V_FFF_RECORDS
+        cbs-hits-details-helper-view-name:
+      ecm:
+        enabled: true
+        cron-expression: 0 0 9 ? * SUN
+        db-relation-name: SENS_V_FFF_RECORDS
+        cbs-hits-details-helper-view-name: ''
+        decisions:
+          - solution: ANALYST_TRUE_POSITIVE
+            text: Risk Relevant
+          - solution: ANALYST_FALSE_POSITIVE
+            text: Risk Irrelevant - Activity in line with Business
+        ecm-view-name: fff_decisions_wl

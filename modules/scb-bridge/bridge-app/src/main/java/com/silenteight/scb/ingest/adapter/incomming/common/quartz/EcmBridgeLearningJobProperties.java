@@ -9,9 +9,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
-import javax.validation.constraints.NotBlank;
 
-@ConfigurationProperties("serp.scb.bridge.learning.ecm")
+@ConfigurationProperties("silenteight.scb-bridge.learning.ecm")
 @Component
 @Data
 @Validated
@@ -19,7 +18,6 @@ public class EcmBridgeLearningJobProperties {
 
   private String deltaJobName = "ECM_LEARNING";
 
-  @NotBlank
   private String cronExpression;
 
   private boolean useDelta = true;

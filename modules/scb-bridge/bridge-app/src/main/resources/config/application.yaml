@@ -107,6 +107,11 @@ spring:
 
 silenteight:
   scb-bridge:
+    learning:
+      alert:
+        enabled: false
+      ecm:
+        enabled: false
     grpc:
       recommendation:
         recommendation-deadline: 1m
@@ -177,71 +182,6 @@ serp:
             - ACTION_INVESTIGATE_HINTED_TRUE_POSITIVE: Manual Investigation
             - ACTION_FALSE_POSITIVE: False Positive
             - ACTION_POTENTIAL_TRUE_POSITIVE: Potential True Positive
-      gns-rt:
-        attach-qco-fields-to-response: true
-      learning:
-        #  Alert level Learning Job Configuration
-        alert:
-          enabled: false
-          cron-expression: 0 0 3 ? * SUN
-          db-relation-name: SENS_V_FFF_RECORDS
-          cbs-hits-details-helper-view-name:
-
-        # ECM Learning Job Configuration
-        ecm:
-          enabled: false
-          cron-expression: 0 0 9 ? * SUN
-          db-relation-name: SENS_V_FFF_RECORDS
-          cbs-hits-details-helper-view-name: ''
-          decisions:
-            - solution: ANALYST_TRUE_POSITIVE
-              text: Risk Relevant
-            - solution: ANALYST_FALSE_POSITIVE
-              text: Risk Irrelevant - Activity in line with Business
-          ecm-view-name: fff_decisions_wl
-
-      # Queuing Jobs Configuration
-      queuing:
-        jobs:
-          - ack-records: true
-            enabled: false
-            cron-expression: 0/30 * * * * ?
-            hit-details-view: ''
-            name: Watchlist-level queuing job (DENY)
-            priority: 10
-            records-view: SENS_V_FFF_RECORDS_DENY
-            watchlist-level: true
-            chunk-size: 1000
-
-          - ack-records: true
-            enabled: false
-            cron-expression: 3/30 * * * * ?
-            hit-details-view: ''
-            name: Watchlist-level queuing job (NON-DENY)
-            priority: 1
-            records-view: SENS_V_FFF_RECORDS_NON_DENY
-            watchlist-level: true
-            chunk-size: 1000
-
-          - ack-records: true
-            enabled: false
-            cron-expression: 5/30 * * * * ?
-            hit-details-view: ''
-            name: Alert-level queuing job (DENY)
-            priority: 10
-            records-view: SENS_V_FFF_RECORDS_DENY
-            watchlist-level: false
-            chunk-size: 1000
-
-          - ack-records: true
-            enabled: false
-            cron-expression: 7/30 * * * * ?
-            hit-details-view: ''
-            name: Alert-level queuing job (NON-DENY)
-            priority: 1
-            records-view: SENS_V_FFF_RECORDS_NON_DENY
-            watchlist-level: false
-            chunk-size: 1000
 
 # AMQP
 amqp:

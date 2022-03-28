@@ -9,7 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import java.util.List;
 
 
-@ConfigurationProperties("serp.scb.bridge.queuing")
+@ConfigurationProperties("silenteight.scb-bridge.queuing")
 @Component
 @Data
 @Validated

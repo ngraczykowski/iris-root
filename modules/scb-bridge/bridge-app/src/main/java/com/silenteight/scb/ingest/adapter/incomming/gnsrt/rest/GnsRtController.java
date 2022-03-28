@@ -30,7 +30,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping("/v1/gnsrt/recommendation")
 @RequiredArgsConstructor
-@ConditionalOnProperty(value = "serp.scb.bridge.gns-rt.enabled", matchIfMissing = true)
+@ConditionalOnProperty(value = "silenteight.scb-bridge.gns-rt.enabled", havingValue = "true")
 public class GnsRtController {
 
   private final GnsRtRecommendationUseCase useCase;
