@@ -3,6 +3,7 @@ package com.silenteight.adjudication.engine.analysis.analysis.jdbc;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.engine.analysis.analysis.AnalysisDataAccess;
+import com.silenteight.adjudication.engine.analysis.analysis.domain.AnalysisAttachmentFlags;
 import com.silenteight.adjudication.engine.analysis.analysis.domain.PolicyAndFeatureVectorElements;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
@@ -15,6 +16,7 @@ import java.util.List;
 class JdbcAnalysisDataAccess implements AnalysisDataAccess {
 
   private final SelectAnalysisAgentConfigQuery selectAnalysisAgentConfigQuery;
+  private final SelectAnalysisAttachmentFlagsQuery selectAnalysisAttachmentFlagsQuery;
 
   private final SelectAnalysisByPendingRecommendationMatches
       selectAnalysisByPendingRecommendationMatches;
@@ -37,5 +39,11 @@ class JdbcAnalysisDataAccess implements AnalysisDataAccess {
   @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
   public PolicyAndFeatureVectorElements getPolicyAndFeatureVectorElements(long analysisId) {
     return selectFeatureVectorElementsQuery.execute(analysisId);
+  }
+
+  @Override
+  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
+  public AnalysisAttachmentFlags getAnalysisAttachmentFlags(long analysisId) {
+    return selectAnalysisAttachmentFlagsQuery.execute(analysisId);
   }
 }

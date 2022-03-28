@@ -22,9 +22,11 @@ public class AnalysisFixtures {
 
   static CreateAndGetAnalysisUseCase inMemoryAnalysisUseCase() {
     var repository = new InMemoryAnalysisRepository();
+    var analysisDataAccess = new InMemoryAnalysisDataAccess();
     var createAnalysisUseCase = new CreateAnalysisUseCase(
         repository.getRepository(), new FakeCategoryProvider(), new FakeFeatureProvider());
-    var getAnalysisUseCase = new GetAnalysisUseCase(repository.getQueryRepository());
+    var getAnalysisUseCase =
+        new GetAnalysisUseCase(repository.getQueryRepository(), analysisDataAccess);
 
     return new CreateAndGetAnalysisUseCase(createAnalysisUseCase, getAnalysisUseCase);
   }

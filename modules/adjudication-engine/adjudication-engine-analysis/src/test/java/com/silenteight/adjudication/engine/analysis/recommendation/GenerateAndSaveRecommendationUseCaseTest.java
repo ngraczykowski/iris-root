@@ -1,9 +1,8 @@
 package com.silenteight.adjudication.engine.analysis.recommendation;
 
-import com.silenteight.adjudication.api.v1.Analysis;
-import com.silenteight.adjudication.api.v1.Analysis.NotificationFlags;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
 import com.silenteight.adjudication.engine.analysis.analysis.AnalysisFacade;
+import com.silenteight.adjudication.engine.analysis.analysis.domain.AnalysisAttachmentFlags;
 import com.silenteight.adjudication.engine.analysis.commentinput.CommentInputDataAccess;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertSolution;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.GenerateCommentsResponse;
@@ -78,16 +77,13 @@ class GenerateAndSaveRecommendationUseCaseTest {
             RecommendationInfo.newBuilder().build()));
 
     String analysisName = "analysis/1";
-    when(analysisFacade.getAnalysis(analysisName)).thenReturn(Analysis.newBuilder()
-        .setNotificationFlags(NotificationFlags.newBuilder()
-            .setAttachMetadata(true)
-            .setAttachRecommendation(true)
-            .build())
-        .build());
+    when(analysisFacade.getAnalysisAttachmentFlags
+        (analysisName)).thenReturn(
+        new AnalysisAttachmentFlags(true, true));
     when(generateCommentsUseCase.generateComments(any())).thenReturn(
         new GenerateCommentsResponse(null));
     when(commentInputDataAccess.getCommentInputByAlertId(1)).thenReturn(
-        Optional.of(new HashMap<String, Object>()));
+        Optional.of(new HashMap<>()));
 
     var generated =
         generateAndSaveRecommendationUseCase.generateAndSaveRecommendations(analysisName);

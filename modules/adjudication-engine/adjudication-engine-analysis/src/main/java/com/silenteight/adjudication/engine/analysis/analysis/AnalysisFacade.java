@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.adjudication.api.v1.AnalysisAlert;
+import com.silenteight.adjudication.engine.analysis.analysis.domain.AnalysisAttachmentFlags;
 import com.silenteight.adjudication.engine.analysis.analysis.domain.PolicyAndFeatureVectorElements;
 
 import org.springframework.stereotype.Service;
@@ -45,6 +46,10 @@ public class AnalysisFacade {
 
   public Analysis getAnalysis(String analysisName) {
     return getAnalysisUseCase.getAnalysis(analysisName);
+  }
+
+  public AnalysisAttachmentFlags getAnalysisAttachmentFlags(String analysisName) {
+    return getAnalysisUseCase.getAnalysisAttachmentFlags(analysisName);
   }
 
   public List<String> findAnalysisByPendingMatches(List<String> matches) {

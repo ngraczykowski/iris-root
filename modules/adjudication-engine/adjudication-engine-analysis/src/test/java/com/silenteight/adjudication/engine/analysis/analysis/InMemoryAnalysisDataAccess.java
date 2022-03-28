@@ -1,5 +1,6 @@
 package com.silenteight.adjudication.engine.analysis.analysis;
 
+import com.silenteight.adjudication.engine.analysis.analysis.domain.AnalysisAttachmentFlags;
 import com.silenteight.adjudication.engine.analysis.analysis.domain.PolicyAndFeatureVectorElements;
 
 import java.util.List;
@@ -20,5 +21,11 @@ class InMemoryAnalysisDataAccess implements AnalysisDataAccess {
   public PolicyAndFeatureVectorElements getPolicyAndFeatureVectorElements(
       long analysisId) {
     return null;
+  }
+
+  @Override
+  public AnalysisAttachmentFlags getAnalysisAttachmentFlags(
+      long analysisId) {
+    return new AnalysisAttachmentFlags(true, true);
   }
 }

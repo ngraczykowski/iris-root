@@ -59,9 +59,7 @@ class GenerateRecommendationsUseCase {
       long analysisId
   ) {
     var recommendationInfos = new ArrayList<RecommendationInfo>();
-    var analysis = this.analysisFacade.getAnalysis(analysisName);
-    boolean shouldRecommendationBeAttached = shouldRecommendationBeAttached(analysis);
-    final boolean shouldMetadataAttached = isShouldMetadataAttached(analysis);
+    var analysisAttachmentFlags = this.analysisFacade.getAnalysisAttachmentFlags(analysisName);
     do {
       var pendingAlerts = recommendationDataAccess.selectPendingAlerts(analysisId);
       var request = createRequest(analysisId, pendingAlerts);
@@ -77,8 +75,8 @@ class GenerateRecommendationsUseCase {
 
       recommendationInfos.addAll(
           createRecommendationsUseCase.createRecommendations(
-              new SaveRecommendationRequest(analysisId, shouldMetadataAttached,
-                  shouldRecommendationBeAttached,
+              new SaveRecommendationRequest(analysisId, analysisAttachmentFlags.isAttachMetadata(),
+                  analysisAttachmentFlags.isAttachRecommendation(),
                   alertSolutions)));
 
       if (alertSolutions.isEmpty()) {

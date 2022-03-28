@@ -19,7 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
     JdbcAnalysisDataAccess.class,
     SelectAnalysisAgentConfigQuery.class,
     SelectAnalysisByPendingRecommendationMatches.class,
-    SelectFeatureVectorElementsQuery.class
+    SelectFeatureVectorElementsQuery.class,
+    SelectAnalysisAttachmentFlagsQuery.class
 })
 @Sql
 class JdbcAnalysisDataAccessIT extends BaseJdbcTest {

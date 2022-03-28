@@ -1,9 +1,8 @@
 package com.silenteight.adjudication.engine.analysis.recommendation;
 
-import com.silenteight.adjudication.api.v1.Analysis;
-import com.silenteight.adjudication.api.v1.Analysis.NotificationFlags;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
 import com.silenteight.adjudication.engine.analysis.analysis.AnalysisFacade;
+import com.silenteight.adjudication.engine.analysis.analysis.domain.AnalysisAttachmentFlags;
 import com.silenteight.adjudication.engine.analysis.commentinput.CommentInputDataAccess;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.GenerateCommentsResponse;
 import com.silenteight.adjudication.engine.governance.GovernanceFacade;
@@ -66,9 +65,8 @@ class GenerateRecommendationsUseCaseTest {
     when(commentInputDataAccess.getCommentInputByAlertId(1)).thenReturn(
         Optional.of(new HashMap<String, Object>()));
     final String analysisName = "analysis/1";
-    when(analysisFacade.getAnalysis(analysisName)).thenReturn(Analysis.newBuilder()
-        .setNotificationFlags(NotificationFlags.newBuilder()
-            .setAttachRecommendation(true).setAttachMetadata(true).build()).build());
+    when(analysisFacade.getAnalysisAttachmentFlags(analysisName)).thenReturn(
+        new AnalysisAttachmentFlags(true, true));
 
     when(createRecommendationsUseCase.createRecommendations(any())).thenReturn(
         List.of(RecommendationInfo
