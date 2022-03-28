@@ -18,7 +18,7 @@ class AlertMessageReceivedListener {
 
   @TransactionalEventListener
   @Transactional(propagation = Propagation.REQUIRES_NEW)
-  @Timed
+  @Timed(histogram = true, percentiles = { 0.5, 0.95, 0.99 })
   public void onReceived(FircoAlertMessage message) {
     service.queueUp(message);
   }

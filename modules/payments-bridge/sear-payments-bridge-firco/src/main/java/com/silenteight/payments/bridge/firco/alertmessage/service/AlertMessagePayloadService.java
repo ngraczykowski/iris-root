@@ -21,7 +21,7 @@ class AlertMessagePayloadService implements AlertMessagePayloadUseCase {
   private final ObjectMapper objectMapper;
 
   @Override
-  @Timed
+  @Timed(histogram = true, percentiles = { 0.5, 0.95, 0.99 })
   public AlertMessageDto findByAlertMessageId(UUID alertMessageId) {
     var payload = payloadRepository.findByAlertMessageId(alertMessageId)
         .orElseThrow(EntityNotFoundException::new);

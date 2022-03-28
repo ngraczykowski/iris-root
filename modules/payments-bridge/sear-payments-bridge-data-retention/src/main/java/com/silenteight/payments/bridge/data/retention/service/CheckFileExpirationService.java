@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.payments.bridge.data.retention.adapter.FileDataRetentionAccessPort;
 import com.silenteight.payments.bridge.data.retention.model.FilesExpiredEvent;
 import com.silenteight.payments.bridge.data.retention.port.CheckFileExpirationUseCase;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationEventPublisher;
@@ -25,6 +26,7 @@ class CheckFileExpirationService implements CheckFileExpirationUseCase {
   private final ApplicationEventPublisher applicationEventPublisher;
 
   @Override
+  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
   public void execute() {
     var expiredFiles = getExpiredFiles();
 

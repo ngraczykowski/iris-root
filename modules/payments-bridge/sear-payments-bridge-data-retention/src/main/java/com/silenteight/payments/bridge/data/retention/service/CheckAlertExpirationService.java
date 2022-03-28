@@ -7,6 +7,7 @@ import com.silenteight.payments.bridge.data.retention.adapter.AlertDataRetention
 import com.silenteight.payments.bridge.data.retention.model.DataType;
 import com.silenteight.payments.bridge.data.retention.port.CheckAlertExpirationUseCase;
 import com.silenteight.payments.bridge.data.retention.port.SendAlertsExpiredPort;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,7 @@ class CheckAlertExpirationService extends DataExpirationTemplate implements
 
   @Override
   @Transactional
+  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
   public void execute() {
     doExecute(properties.getAlertData().getExpiration(), DataType.ALERT_DATA);
   }

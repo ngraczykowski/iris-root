@@ -7,6 +7,7 @@ import com.silenteight.adjudication.api.v2.GetRecommendationRequest;
 import com.silenteight.adjudication.api.v2.RecommendationServiceGrpc.RecommendationServiceBlockingStub;
 import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
 import com.silenteight.payments.bridge.ae.recommendation.port.RecommendationClientPort;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import io.grpc.Deadline;
 
@@ -21,6 +22,7 @@ class RecommendationClient implements RecommendationClientPort {
 
   private final Duration timeout;
 
+  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
   public RecommendationWithMetadata receiveRecommendation(GetRecommendationRequest request) {
     var deadline = Deadline.after(timeout.toMillis(), TimeUnit.MILLISECONDS);
 

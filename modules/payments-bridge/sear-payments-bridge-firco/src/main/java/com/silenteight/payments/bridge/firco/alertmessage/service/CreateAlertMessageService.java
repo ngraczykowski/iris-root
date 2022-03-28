@@ -23,7 +23,7 @@ class CreateAlertMessageService implements CreateAlertMessageUseCase {
 
   @Transactional
   @Override
-  @Timed
+  @Timed(histogram = true, percentiles = {0.5, 0.95, 0.99})
   public void createAlertMessage(FircoAlertMessage message) {
     log.info("Creating alert [{}] from message: [{}]", message.getId(),
         message.getAlertMessage().getMessageID());

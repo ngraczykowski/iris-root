@@ -16,7 +16,7 @@ class UniversalDataSourceStep {
   private final EtlUseCase etlUseCase;
   private final TriggerAnalysisStep triggerAnalysisStep;
 
-  @Timed
+  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
   void invoke(Context ctx) {
     etlUseCase.process(ctx.getAeAlert());
     triggerAnalysisStep.invoke(ctx);

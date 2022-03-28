@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessageStatusUseCase;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
@@ -29,12 +30,14 @@ class AlertMessageStatusService implements AlertMessageStatusUseCase {
   @Setter
   private Clock clock = Clock.systemUTC();
 
-  AlertMessageStatusEntity findByAlertId(UUID alertMessageId) {
+  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
+  public AlertMessageStatusEntity findByAlertId(UUID alertMessageId) {
     return repository.findByAlertMessageId(alertMessageId)
         .orElseThrow(EntityNotFoundException::new);
   }
 
   @Override
+  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
   public AlertMessageStatus getStatus(UUID alertMessageId) {
     return findByAlertId(alertMessageId).getStatus();
   }
@@ -43,6 +46,7 @@ class AlertMessageStatusService implements AlertMessageStatusUseCase {
    * Transition alert to the required status.
    */
   @Transactional
+  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
   public boolean transitionAlertMessageStatus(
       UUID alertMessageId, AlertMessageStatus destinationStatus, DeliveryStatus delivery) {
 
@@ -70,6 +74,7 @@ class AlertMessageStatusService implements AlertMessageStatusUseCase {
   }
 
   @Transactional
+  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
   public void initState(UUID alertMessageId) {
     var entity = repository.findByAlertMessageId(alertMessageId);
     if (entity.isPresent()) {

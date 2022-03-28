@@ -9,6 +9,7 @@ import com.silenteight.payments.bridge.warehouse.index.model.learning.IndexMatch
 import com.silenteight.payments.bridge.warehouse.index.model.payload.WarehouseMatch;
 import com.silenteight.payments.bridge.warehouse.index.port.IndexAlertRegisteredUseCase;
 import com.silenteight.payments.bridge.warehouse.index.service.IndexedAlertBuilderFactory.AlertBuilder;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ class IndexAlertRegisteredService implements IndexAlertRegisteredUseCase {
   private final IndexAlertService indexService;
 
   @Override
+  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
   public void index(IndexAlertRegisteredRequest request) {
 
     var alertBuilder = payloadBuilderFactory.newBuilder()

@@ -21,7 +21,7 @@ class AlertMessageService implements AlertMessageUseCase {
 
   private final AlertMessageRepository alertMessageRepository;
 
-  @Timed
+  @Timed(histogram = true, percentiles = { 0.5, 0.95, 0.99 })
   public AlertData findByAlertMessageId(UUID alertMessageId) {
     var entity = alertMessageRepository.findById(alertMessageId)
         .orElseThrow(EntityNotFoundException::new);
@@ -44,6 +44,7 @@ class AlertMessageService implements AlertMessageUseCase {
 
   @Override
   @Transactional
+  @Timed(histogram = true, percentiles = { 0.5, 0.95, 0.99 })
   public void delete(List<UUID> alertMessageIds) {
 
     log.info("Deleting alert message: alertsCount={}, alerts={}",
@@ -56,6 +57,7 @@ class AlertMessageService implements AlertMessageUseCase {
   }
 
   @Override
+  @Timed(histogram = true, percentiles = { 0.5, 0.95, 0.99 })
   public long findReceivedAtTimeMilli(UUID alertMessageId) {
     var entity = alertMessageRepository
         .findAlertMessageEntitiesByIdProjected(alertMessageId)

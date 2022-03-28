@@ -1,6 +1,5 @@
 package com.silenteight.payments.bridge.firco.alertmessage.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
@@ -11,8 +10,11 @@ import com.silenteight.payments.bridge.firco.recommendation.port.CreateRecommend
 import com.silenteight.proto.payments.bridge.internal.v1.event.MessageStored;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
+
+import java.util.concurrent.atomic.AtomicLong;
 
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.STORED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus.NA;
@@ -20,7 +22,6 @@ import static com.silenteight.payments.bridge.firco.recommendation.model.Recomme
 
 @EnableConfigurationProperties(AlertMessageProperties.class)
 @Component
-@RequiredArgsConstructor
 @Slf4j
 class QueueUpAlertMessageService {
 
@@ -30,8 +31,22 @@ class QueueUpAlertMessageService {
 
   private final MessageStoredPublisherPort messageStoredPublisherPort;
   private final CreateRecommendationUseCase createRecommendationUseCase;
+  private final AtomicLong queueOverflowedGauge;
 
-  @Timed
+  QueueUpAlertMessageService(
+      AlertMessageStatusService statusService, AlertMessageStatusRepository repository,
+      AlertMessageProperties properties, MessageStoredPublisherPort messageStoredPublisherPort,
+      CreateRecommendationUseCase createRecommendationUseCase, final MeterRegistry meterRegistry) {
+    this.statusService = statusService;
+    this.repository = repository;
+    this.properties = properties;
+    this.messageStoredPublisherPort = messageStoredPublisherPort;
+    this.createRecommendationUseCase = createRecommendationUseCase;
+    this.queueOverflowedGauge =
+        meterRegistry.gauge("alert.status.queue.overflowed", new AtomicLong(0));
+  }
+
+  @Timed(histogram = true, percentiles = {0.5, 0.95, 0.99})
   void queueUp(FircoAlertMessage alert) {
     if (isQueueOverflowed()) {
       handleOverflow(alert);
@@ -43,7 +58,9 @@ class QueueUpAlertMessageService {
   }
 
   private boolean isQueueOverflowed() {
-    return repository.countAllByStatus(STORED) > properties.getStoredQueueLimit();
+    long currentNumber = repository.countAllByStatus(STORED);
+    this.queueOverflowedGauge.set(currentNumber);
+    return currentNumber > properties.getStoredQueueLimit();
   }
 
   private void handleOverflow(FircoAlertMessage alert) {

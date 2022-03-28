@@ -9,6 +9,7 @@ dependencies {
   implementation project(":sear-payments-bridge-agents")
 
   implementation libraries.silenteight_sep_base_common
+  implementation libraries.micrometer_prometheus
 
   // Datasource
   implementation libraries.data_source_api

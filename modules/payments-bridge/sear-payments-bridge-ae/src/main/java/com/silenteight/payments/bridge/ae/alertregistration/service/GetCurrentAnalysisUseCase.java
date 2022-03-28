@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.ae.alertregistration.port.AnalysisDataAccessPort;
 import com.silenteight.payments.bridge.ae.alertregistration.port.BuildCreateAnalysisRequestPort;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,8 @@ class GetCurrentAnalysisUseCase {
   private final CreateAnalysisService createAnalysisService;
   private final BuildCreateAnalysisRequestPort buildCreateAnalysisRequestPort;
 
-  String getOrCreateAnalysis() {
+  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
+  public String getOrCreateAnalysis() {
     return analysisDataAccessPort
         .findCurrentAnalysis()
         .orElseGet(this::createNewAnalysis);

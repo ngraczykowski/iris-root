@@ -11,6 +11,7 @@ import com.silenteight.payments.bridge.firco.dto.input.RequestHitDto;
 import com.silenteight.payments.bridge.warehouse.index.model.IndexAlertRegisteredRequest;
 import com.silenteight.payments.bridge.warehouse.index.model.learning.IndexMatch;
 import com.silenteight.payments.bridge.warehouse.index.port.IndexAlertRegisteredUseCase;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Component;
 
@@ -25,6 +26,7 @@ class IndexAlertRegisteredStep {
   private final AlertMessageStatusUseCase alertMessageStatusUseCase;
   private final IndexAlertRegisteredUseCase indexAlertRegisteredUseCase;
 
+  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
   void invoke(Context ctx) {
     var status = alertMessageStatusUseCase.getStatus(ctx.getAlertId());
     indexAlertRegisteredUseCase.index(

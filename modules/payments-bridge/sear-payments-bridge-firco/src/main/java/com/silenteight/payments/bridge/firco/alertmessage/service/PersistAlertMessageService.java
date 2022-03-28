@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -20,6 +21,7 @@ class PersistAlertMessageService {
   private final ObjectMapper objectMapper;
 
   @Transactional
+  @Timed(histogram = true, percentiles = { 0.5, 0.95, 0.99})
   public void createAlertMessage(FircoAlertMessage message) {
     messageRepository.save(new AlertMessageEntity(message));
     payloadRepository.save(convertToPayload(message));
