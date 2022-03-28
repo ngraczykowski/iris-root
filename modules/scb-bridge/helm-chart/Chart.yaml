@@ -1,6 +1,0 @@
-apiVersion: v1
-name: scb-bridge-app
-description: A Helm chart for SCB Bridge deployed in Kubernetes
-type: application
-version: "1.0.3"
-appVersion: "1.4.0"

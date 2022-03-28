@@ -11,13 +11,12 @@ gradleBuild(
     sonarDecorate: true,
     dependencyCheckEnabled: true,
     includeBuildNumberInSnapshotVersion: true,
-    archiveArtifactsPattern: '**/build/libs/*.jar, plugins/**/*.jar',
 
     additionalParams: [
       extendedChoice(
         name: 'environments',
-        value: 'dev,lima,test,mike',
-        defaultValue: 'dev,lima,mike',
+        value: 'dev,lima,test',
+        defaultValue: 'dev,lima',
         description: 'Environments to deploy to on Nomad',
         multiSelectDelimiter: ',',
         quoteValue: false,
@@ -27,9 +26,9 @@ gradleBuild(
         )
       ],
     additionalStages: {
-        buildContainerImage()
-        awsECR()
-        helmChartRegistry()
+        //buildContainerImage()
+        //awsECR()
+        //helmChartRegistry()
         deployOnNomad()
     }
 )
