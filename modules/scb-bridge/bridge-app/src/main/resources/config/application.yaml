@@ -165,6 +165,18 @@ serp:
         solution:
           states:
             ANALYST_NO_SOLUTION: [ 0 ]
+      cbs:
+        config:
+          ack-function-name: CBS_INTERFACE_PKG.F_CBS_S8_LOG_ACK
+          recom-function-name: CBS_INTERFACE_PKG.F_CBS_S8_LOG_RECOM
+        recommendation:
+          recommendation-values:
+            - ACTION_INVESTIGATE: Manual Investigation
+            - ACTION_INVESTIGATE_HINTED_FALSE_POSITIVE: Manual Investigation
+            - ACTION_INVESTIGATE_PARTIALLY_FALSE_POSITIVE: Manual Investigation
+            - ACTION_INVESTIGATE_HINTED_TRUE_POSITIVE: Manual Investigation
+            - ACTION_FALSE_POSITIVE: False Positive
+            - ACTION_POTENTIAL_TRUE_POSITIVE: Potential True Positive
       gns-rt:
         attach-qco-fields-to-response: true
       learning:

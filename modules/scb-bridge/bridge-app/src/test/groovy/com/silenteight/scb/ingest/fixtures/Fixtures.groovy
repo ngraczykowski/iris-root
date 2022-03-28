@@ -36,13 +36,8 @@ class Fixtures {
       .build()
 
   static AlertMetadata ALERT_METADATA = AlertMetadata.builder()
-      .currentVersionId("someCurrentVersionId")
-      .stopDescriptorNames(["firstStopDescriptorName", "secondStopDescriptorName"])
-      .datasetId("someDatasetId")
-      .datasetName("someDatasetBame")
-      .uniqueCustId("someUniqueCustId")
-      .masterId("someMasterId")
-      .busDate("someBusDate")
+      .watchlistId("watchlistId")
+      .discriminator("discriminator")
       .build()
 
   static def REGISTERED_ALERT_WITH_MATCHES = RegisteredAlertWithMatches.builder()

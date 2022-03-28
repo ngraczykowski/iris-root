@@ -1,4 +1,4 @@
-package com.silenteight.scb.ingest.adapter.incomming.cbs.gateway;
+package com.silenteight.scb.outputrecommendation.infrastructure;
 
 import lombok.Data;
 

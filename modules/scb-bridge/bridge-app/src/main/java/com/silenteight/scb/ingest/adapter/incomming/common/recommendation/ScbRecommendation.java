@@ -1,10 +1,7 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.recommendation;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import lombok.EqualsAndHashCode.Include;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
@@ -18,7 +15,9 @@ import static lombok.AccessLevel.PACKAGE;
 import static lombok.AccessLevel.PUBLIC;
 
 @Data
-@RequiredArgsConstructor(access = PACKAGE)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Setter(PACKAGE)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
@@ -39,15 +38,6 @@ class ScbRecommendation extends BaseEntity implements IdentifiableEntity {
   private String decision;
   private String comment;
   private OffsetDateTime recommendedAt;
-
-  ScbRecommendation(RecommendationDto recommendationDto) {
-    this.systemId = recommendationDto.getExternalId();
-    this.watchlistId = null;
-    this.discriminator = recommendationDto.getDiscriminator();
-    this.decision = recommendationDto.getDecision();
-    this.comment = recommendationDto.getComment();
-    this.recommendedAt = recommendationDto.getDate();
-  }
 
   RecommendationDto toRecommendationDto() {
     if (watchlistId != null)

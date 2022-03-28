@@ -3,10 +3,7 @@ package com.silenteight.scb.ingest.domain;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
-import com.silenteight.scb.ingest.domain.model.AlertErrorDescription;
-import com.silenteight.scb.ingest.domain.model.AlertStatus;
-import com.silenteight.scb.ingest.domain.model.AlertWithMatches;
-import com.silenteight.scb.ingest.domain.model.Match;
+import com.silenteight.scb.ingest.domain.model.*;
 
 import org.springframework.stereotype.Component;
 
@@ -26,6 +23,7 @@ class AlertWitchMatchesExtractor {
         .alertId(alert.id().sourceId())
         .status(AlertStatus.SUCCESS)
         .matches(matches)
+        .metadata(createMetadata(alert))
         .build();
   }
 
@@ -48,6 +46,13 @@ class AlertWitchMatchesExtractor {
   private Match toMatch(String matchId) {
     return Match.builder()
         .id(matchId)
+        .build();
+  }
+
+  private AlertMetadata createMetadata(Alert alert) {
+    return AlertMetadata.builder()
+        .discriminator(alert.id().discriminator())
+        .watchlistId(alert.details().getWatchlistId())
         .build();
   }
 }

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.proto.serp.scb.v1.ScbAlertDetails;
 import com.silenteight.proto.serp.v1.alert.Alert;
 import com.silenteight.scb.ingest.adapter.incomming.common.protocol.AlertWrapper;
+import com.silenteight.scb.outputrecommendation.adapter.outgoing.CbsRecommendationService;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 

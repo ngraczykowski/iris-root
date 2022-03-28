@@ -2,6 +2,7 @@ package com.silenteight.scb.ingest.domain
 
 import com.silenteight.scb.ingest.adapter.incomming.common.model.ObjectId
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertDetails
 import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match
 import com.silenteight.scb.ingest.domain.model.AlertErrorDescription
 import com.silenteight.scb.ingest.fixtures.Fixtures
@@ -28,6 +29,9 @@ class AlertWithMatchesExtractorSpec extends Specification {
     def alert = Alert.builder()
         .id(alertId)
         .matches(matches as List<Match>)
+        .details(AlertDetails.builder()
+            .watchlistId('watchlistId')
+            .build())
         .build()
 
     when:

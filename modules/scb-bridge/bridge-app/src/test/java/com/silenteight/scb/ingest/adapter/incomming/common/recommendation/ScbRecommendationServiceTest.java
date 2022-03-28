@@ -1,31 +1,25 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.recommendation;
 
-import com.silenteight.proto.serp.scb.v1.ScbAlertDetails;
-import com.silenteight.proto.serp.v1.alert.Alert;
-import com.silenteight.proto.serp.v1.common.ObjectId;
-import com.silenteight.proto.serp.v1.recommendation.AlertRecommendation;
-import com.silenteight.proto.serp.v1.recommendation.Recommendation;
-import com.silenteight.proto.serp.v1.recommendation.RecommendedAction;
+import com.silenteight.scb.ingest.domain.model.AlertMetadata;
+import com.silenteight.scb.ingest.domain.payload.PayloadConverter;
+import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.Alert;
+import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.Recommendation;
+import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.RecommendedAction;
 import com.silenteight.sep.base.testing.transaction.RunWithoutTransactionManager;
 
-import com.google.protobuf.Any;
-import com.google.protobuf.Timestamp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.Instant;
 import java.time.OffsetDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 
-import static com.silenteight.proto.serp.v1.recommendation.RecommendedAction.ACTION_FALSE_POSITIVE;
 import static java.util.Comparator.comparing;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -34,14 +28,17 @@ import static org.mockito.Mockito.*;
 @RunWithoutTransactionManager
 class ScbRecommendationServiceTest {
 
-  public static final String SYSTEM_ID = "systemId";
-  public static final String DISCRIMINATOR = "321";
+  private static final String SYSTEM_ID = "systemId";
+  private static final String DISCRIMINATOR = "321";
+  private static final String PAYLOAD = "payload";
   private ScbRecommendationRepository scbRecommendationRepository =
       new InMemoryScbRecommendationRepository();
   @Mock
   private DiscriminatorFetcher discriminatorFetcher;
   @Mock
   private ScbDiscriminatorMatcher scbDiscriminatorMatcher;
+  @Mock
+  private PayloadConverter payloadConverter;
 
   private Fixtures fixtures = new Fixtures();
   private ScbRecommendationService underTest;
@@ -51,18 +48,22 @@ class ScbRecommendationServiceTest {
     underTest = new ScbRecommendationService(
         scbRecommendationRepository,
         discriminatorFetcher,
-        scbDiscriminatorMatcher);
+        scbDiscriminatorMatcher,
+        payloadConverter);
   }
 
   @Test
   void shouldStoreToDatabaseAndTakeLatestWithSystemIdAndDiscriminator() {
     //given
+    AlertMetadata alertMetadata = new AlertMetadata(null, DISCRIMINATOR);
     when(discriminatorFetcher.fetch(anyString()))
         .thenReturn(Optional.of("321"));
+    when(payloadConverter.deserializeFromJsonToObject(PAYLOAD, AlertMetadata.class))
+        .thenReturn(alertMetadata);
 
     //when
-    underTest.saveRecommendation(fixtures.firstAlertRecommendation);
-    underTest.saveRecommendation(fixtures.secondAlertRecommendation);
+    underTest.saveRecommendation(fixtures.firstRecommendation);
+    underTest.saveRecommendation(fixtures.secondRecommendation);
 
     Optional<ScbRecommendation> currentRecommendation =
         underTest.findCurrentRecommendation(SYSTEM_ID);
@@ -73,22 +74,25 @@ class ScbRecommendationServiceTest {
     ScbRecommendation scbRecommendation = currentRecommendation.get();
 
     assertThat(scbRecommendation.getComment())
-        .isEqualTo(fixtures.secondRecommendation.getComment());
+        .isEqualTo(fixtures.secondRecommendation.recommendedComment());
     assertThat(scbRecommendation.getDecision())
-        .isEqualTo(fixtures.secondRecommendation.getAction().name());
+        .isEqualTo(fixtures.secondRecommendation.recommendedAction().name());
     assertThat(scbRecommendation.getSystemId())
         .isEqualTo(SYSTEM_ID);
     assertThat(scbRecommendation.getDiscriminator())
         .isEqualTo(DISCRIMINATOR);
-    assertThat(scbRecommendation.getRecommendedAt().toInstant().getEpochSecond())
-        .isEqualTo(fixtures.secondRecommendation.getCreatedAt().getSeconds());
+    assertThat(scbRecommendation.getRecommendedAt())
+        .isEqualTo(fixtures.secondRecommendation.recommendedAt());
   }
 
   @Test
   void shouldStoreToDatabaseAndFindCurrentOrLatestRecommendation() {
     //when
-    underTest.saveRecommendation(fixtures.firstAlertRecommendation);
-    underTest.saveRecommendation(fixtures.secondAlertRecommendation);
+    var alertMetadata = new AlertMetadata(null, DISCRIMINATOR);
+    when(payloadConverter.deserializeFromJsonToObject(PAYLOAD, AlertMetadata.class))
+        .thenReturn(alertMetadata);
+    underTest.saveRecommendation(fixtures.firstRecommendation);
+    underTest.saveRecommendation(fixtures.secondRecommendation);
 
     Optional<ScbRecommendation> currentRecommendation =
         underTest.findCurrentOrLatestRecommendation(SYSTEM_ID);
@@ -99,28 +103,31 @@ class ScbRecommendationServiceTest {
     ScbRecommendation scbRecommendation = currentRecommendation.get();
 
     assertThat(scbRecommendation.getComment())
-        .isEqualTo(fixtures.secondRecommendation.getComment());
+        .isEqualTo(fixtures.secondRecommendation.recommendedComment());
     assertThat(scbRecommendation.getDecision())
-        .isEqualTo(fixtures.secondRecommendation.getAction().name());
+        .isEqualTo(fixtures.secondRecommendation.recommendedAction().name());
     assertThat(scbRecommendation.getSystemId())
         .isEqualTo(SYSTEM_ID);
     assertThat(scbRecommendation.getDiscriminator())
         .isEqualTo(DISCRIMINATOR);
-    assertThat(scbRecommendation.getRecommendedAt().toInstant().getEpochSecond())
-        .isEqualTo(fixtures.secondRecommendation.getCreatedAt().getSeconds());
+    assertThat(scbRecommendation.getRecommendedAt())
+        .isEqualTo(fixtures.secondRecommendation.recommendedAt());
   }
 
   @Test
   void shouldStoreToDatabaseAndCheckIfRecommendationAlreadyExists() {
     //given
-    var alertRecommendation = fixtures.firstAlertRecommendation;
-    var alertId = alertRecommendation.getAlert().getId();
+    var alertMetadata = new AlertMetadata(null, DISCRIMINATOR);
+    when(payloadConverter.deserializeFromJsonToObject(PAYLOAD, AlertMetadata.class))
+        .thenReturn(alertMetadata);
+    var alertRecommendation = fixtures.firstRecommendation;
+    var alertId = alertRecommendation.alert().id();
     when(scbDiscriminatorMatcher.match(anyString(), anyString())).thenReturn(true);
 
     // when
     underTest.saveRecommendation(alertRecommendation);
     boolean result =
-        underTest.alertRecommendationExists(alertId.getSourceId(), alertId.getDiscriminator());
+        underTest.alertRecommendationExists(alertId, "");
 
     //then
     assertThat(result).isTrue();
@@ -128,53 +135,26 @@ class ScbRecommendationServiceTest {
 
   private static class Fixtures {
 
-    private static final Timestamp TIME_1 =
-        Timestamp.newBuilder().setSeconds(Instant.now().getEpochSecond()).build();
-    private static final Timestamp TIME_2 =
-        Timestamp
-            .newBuilder()
-            .setSeconds(Instant.now().plus(1, ChronoUnit.MINUTES).getEpochSecond())
-            .build();
-    private static final RecommendedAction RECOMMENDATION_ACTION = ACTION_FALSE_POSITIVE;
+    private static final OffsetDateTime TIME_1 = OffsetDateTime.now();
+    private static final OffsetDateTime TIME_2 = OffsetDateTime.now();
+    private static final RecommendedAction RECOMMENDATION_ACTION =
+        RecommendedAction.ACTION_FALSE_POSITIVE;
 
     Recommendation firstRecommendation = createRecommendation("comment_1", TIME_1);
     Recommendation secondRecommendation = createRecommendation("comment_2", TIME_2);
 
-    AlertRecommendation firstAlertRecommendation = createAlertRecommendation(
-        firstRecommendation,
-        "123");
-    AlertRecommendation secondAlertRecommendation = createAlertRecommendation(
-        secondRecommendation,
-        DISCRIMINATOR);
-
-    private static AlertRecommendation createAlertRecommendation(
-        Recommendation recommendation, String discriminator) {
-      ObjectId alertId = ObjectId
-          .newBuilder()
-          .setDiscriminator(discriminator)
-          .setSourceId(SYSTEM_ID)
-          .build();
-
-      ScbAlertDetails details = ScbAlertDetails.newBuilder().build();
-      Alert alert = Alert.newBuilder().setId(alertId).setDetails(Any.pack(details)).build();
-
-      return AlertRecommendation
-          .newBuilder()
-          .setRecommendation(recommendation)
-          .setAlert(alert)
-          .setAlertId(alertId)
-          .build();
-    }
-
     @Nonnull
-    private static Recommendation createRecommendation(String comment, Timestamp time) {
-      return Recommendation.newBuilder()
-          .setComment(comment)
-          .setAction(RECOMMENDATION_ACTION)
-          .setCreatedAt(time)
+    private static Recommendation createRecommendation(String comment, OffsetDateTime time) {
+      return Recommendation.builder()
+          .recommendedComment(comment)
+          .recommendedAction(RECOMMENDATION_ACTION)
+          .recommendedAt(time)
+          .alert(Alert.builder()
+              .id(SYSTEM_ID)
+              .metadata(PAYLOAD)
+              .build())
           .build();
     }
-
   }
 
   static class InMemoryScbRecommendationRepository implements ScbRecommendationRepository {

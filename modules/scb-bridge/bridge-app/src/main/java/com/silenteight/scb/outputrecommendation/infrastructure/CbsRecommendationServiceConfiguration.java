@@ -1,8 +1,12 @@
-package com.silenteight.scb.ingest.adapter.incomming.cbs.gateway;
+package com.silenteight.scb.outputrecommendation.infrastructure;
 
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.scb.ingest.adapter.incomming.cbs.batch.ScbBridgeConfigProperties;
+import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsConfigProperties;
+import com.silenteight.scb.ingest.domain.payload.PayloadConverter;
+import com.silenteight.scb.outputrecommendation.adapter.outgoing.CbsRecommendationGateway;
+import com.silenteight.scb.outputrecommendation.adapter.outgoing.CbsRecommendationService;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -25,9 +29,11 @@ public class CbsRecommendationServiceConfiguration {
 
   @Bean
   CbsRecommendationService cbsRecommendationService(
-      CbsRecommendationGateway cbsRecommendationGateway) {
+      CbsRecommendationGateway cbsRecommendationGateway, PayloadConverter payloadConverter) {
     return new CbsRecommendationService(
-        cbsRecommendationGateway, cbsRecommendationProperties.getRecommendationValues());
+        cbsRecommendationGateway,
+        cbsRecommendationProperties.getRecommendationValues(),
+        payloadConverter);
   }
 
   @Bean

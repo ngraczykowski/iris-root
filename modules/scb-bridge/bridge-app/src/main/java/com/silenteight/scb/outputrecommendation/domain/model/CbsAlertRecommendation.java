@@ -1,4 +1,4 @@
-package com.silenteight.scb.ingest.adapter.incomming.cbs.gateway;
+package com.silenteight.scb.outputrecommendation.domain.model;
 
 import lombok.Builder;
 import lombok.NonNull;
@@ -8,11 +8,11 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Value
 @Builder
-class CbsAlertRecommendation {
+public class CbsAlertRecommendation {
 
-  @NonNull 
+  @NonNull
   String alertExternalId;
-  @NonNull 
+  @NonNull
   String batchId;
   String hitWatchlistId;
   String hitRecommendedStatus;
@@ -20,7 +20,7 @@ class CbsAlertRecommendation {
   String listRecommendedStatus;
   String listRecommendedComments;
 
-  boolean isWatchlistLevel() {
+  public boolean isWatchlistLevel() {
     return isNotBlank(hitWatchlistId);
   }
 }

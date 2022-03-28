@@ -18,16 +18,14 @@ import javax.annotation.Nonnull;
 
 import static com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsOutput.State.TEMPORARY_FAILURE;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toList;
 
 @Slf4j
 public class CbsAckGateway extends CbsEventPublisher {
 
+  private static final String TEMPLATE_VARIABLE = ":ackFunctionName";
   private final String query;
   private final JdbcTemplate jdbcTemplate;
   private final SourceApplicationValues sourceApplicationValues;
-
-  private static final String TEMPLATE_VARIABLE = ":ackFunctionName";
 
   CbsAckGateway(
       @NonNull String ackFunctionName,
@@ -38,6 +36,14 @@ public class CbsAckGateway extends CbsEventPublisher {
     this.sourceApplicationValues = sourceApplicationValues;
   }
 
+  private static String prepareQuery(String ackFunctionName) {
+    return getQueryTemplate().replace(TEMPLATE_VARIABLE, ackFunctionName);
+  }
+
+  private static String getQueryTemplate() {
+    return String.format("SELECT %s(?, ?, ?) FROM dual", TEMPLATE_VARIABLE);
+  }
+
   @Timed(
       value = "serp.scb.bridge.oracle.procedure.ack-read-alerts.time",
       description = "Time taken to ack read alerts")
@@ -45,7 +51,7 @@ public class CbsAckGateway extends CbsEventPublisher {
   public List<CbsOutput> ackReadAlerts(@NonNull Set<CbsAckAlert> alerts) {
     return alerts.stream()
         .map(this::ackReadAlert)
-        .collect(toList());
+        .toList();
   }
 
   public CbsOutput ackReadAlert(@NonNull CbsAckAlert alert) {
@@ -81,13 +87,6 @@ public class CbsAckGateway extends CbsEventPublisher {
     logAndNotifyError(alert, exception);
   }
 
-  private void logAndNotifySuccess(CbsAckAlert alert, String result) {
-    log.info("CBS: Acknowledge function executed: status={}, systemId={}, batchId={}",
-        result, alert.getAlertExternalId(), alert.getBatchId());
-
-    notifyAckCalled(result, alert.isWatchlistLevel());
-  }
-
   private void logAndNotifyError(CbsAckAlert alert, Exception exception) {
     log.error("CBS: Cannot acknowledge: systemId={}, batchId={}",
         alert.getAlertExternalId(), alert.getBatchId(), exception);
@@ -95,12 +94,11 @@ public class CbsAckGateway extends CbsEventPublisher {
     notifyCbsCallFailed("ACK");
   }
 
-  @Nonnull
-  private Object[] createParameters(CbsAckAlert alert) {
-    return new Object[] {
-        sourceApplicationValues.getSourceApplicationValue(alert.isWatchlistLevel()),
-        alert.getAlertExternalId(),
-        alert.getBatchId() };
+  private void logAndNotifySuccess(CbsAckAlert alert, String result) {
+    log.info("CBS: Acknowledge function executed: status={}, systemId={}, batchId={}",
+        result, alert.getAlertExternalId(), alert.getBatchId());
+
+    notifyAckCalled(result, alert.isWatchlistLevel());
   }
 
   private void notifyAckCalled(String statusCode, boolean watchlistLevel) {
@@ -111,11 +109,11 @@ public class CbsAckGateway extends CbsEventPublisher {
         .build());
   }
 
-  private static String prepareQuery(String ackFunctionName) {
-    return getQueryTemplate().replace(TEMPLATE_VARIABLE, ackFunctionName);
-  }
-
-  private static String getQueryTemplate() {
-    return "SELECT " + TEMPLATE_VARIABLE + "(?, ?, ?) FROM dual";
+  @Nonnull
+  private Object[] createParameters(CbsAckAlert alert) {
+    return new Object[] {
+        sourceApplicationValues.getSourceApplicationValue(alert.isWatchlistLevel()),
+        alert.getAlertExternalId(),
+        alert.getBatchId() };
   }
 }

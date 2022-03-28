@@ -2,19 +2,16 @@ package com.silenteight.scb.ingest.adapter.incomming.common.recommendation;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.proto.serp.scb.v1.ScbAlertDetails;
-import com.silenteight.proto.serp.v1.common.ObjectId;
-import com.silenteight.proto.serp.v1.recommendation.AlertRecommendation;
-import com.silenteight.proto.serp.v1.recommendation.Recommendation;
-import com.silenteight.scb.ingest.adapter.incomming.common.protocol.AlertWrapper;
+import com.silenteight.scb.ingest.domain.model.AlertMetadata;
+import com.silenteight.scb.ingest.domain.payload.PayloadConverter;
+import com.silenteight.scb.outputrecommendation.domain.model.Recommendations;
+import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.Recommendation;
 
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
-import static com.google.common.base.Strings.emptyToNull;
-import static com.silenteight.protocol.utils.MoreTimestamps.toOffsetDateTime;
 import static com.silenteight.scb.ingest.adapter.incomming.common.domain.GnsSyncConstants.PRIMARY_TRANSACTION_MANAGER;
 
 @RequiredArgsConstructor
@@ -23,6 +20,7 @@ public class ScbRecommendationService {
   private final ScbRecommendationRepository scbRecommendationRepository;
   private final DiscriminatorFetcher discriminatorFetcher;
   private final ScbDiscriminatorMatcher scbDiscriminatorMatcher;
+  private final PayloadConverter payloadConverter;
 
   public Optional<ScbRecommendation> findCurrentRecommendation(String systemId) {
     return discriminatorFetcher
@@ -55,33 +53,29 @@ public class ScbRecommendationService {
   }
 
   @Transactional(PRIMARY_TRANSACTION_MANAGER)
-  public void saveRecommendations(List<AlertRecommendation> alertRecommendations) {
-    alertRecommendations.forEach(this::saveRecommendation);
+  public void saveRecommendations(List<Recommendations.Recommendation> recommendations) {
+    recommendations.forEach(this::saveRecommendation);
   }
 
   @Transactional(PRIMARY_TRANSACTION_MANAGER)
-  public void saveRecommendation(AlertRecommendation alertRecommendation) {
-    scbRecommendationRepository.save(toScbRecommendation(alertRecommendation));
+  public void saveRecommendation(Recommendation recommendation) {
+    scbRecommendationRepository.save(toScbRecommendation(recommendation));
   }
 
-  private static ScbRecommendation toScbRecommendation(AlertRecommendation alertRecommendation) {
-    ScbRecommendation scbRecommendation = new ScbRecommendation();
+  private ScbRecommendation toScbRecommendation(Recommendation recommendation) {
+    var alertMetadata = parseAlertMetadata(recommendation);
+    return ScbRecommendation.builder()
+        .systemId(recommendation.alert().id())
+        .decision(recommendation.recommendedAction().name())
+        .comment(recommendation.recommendedComment())
+        .recommendedAt(recommendation.recommendedAt())
+        .discriminator(alertMetadata.discriminator())
+        .watchlistId(alertMetadata.watchlistId())
+        .build();
+  }
 
-    ObjectId alertId = alertRecommendation.getAlertId();
-    scbRecommendation.setSystemId(alertId.getSourceId());
-    scbRecommendation.setDiscriminator(alertId.getDiscriminator());
-
-    Recommendation recommendation = alertRecommendation.getRecommendation();
-    scbRecommendation.setDecision(recommendation.getAction().name());
-    scbRecommendation.setComment(recommendation.getComment());
-    scbRecommendation.setRecommendedAt(toOffsetDateTime(recommendation.getCreatedAt()));
-
-    if (alertRecommendation.hasAlert()) {
-      AlertWrapper wrapper = new AlertWrapper(alertRecommendation.getAlert());
-      wrapper.unpackDetails(ScbAlertDetails.class)
-          .ifPresent(d -> scbRecommendation.setWatchlistId(emptyToNull(d.getWatchlistId())));
-    }
-
-    return scbRecommendation;
+  private AlertMetadata parseAlertMetadata(Recommendation recommendation) {
+    return payloadConverter.deserializeFromJsonToObject(
+        recommendation.alert().metadata(), AlertMetadata.class);
   }
 }

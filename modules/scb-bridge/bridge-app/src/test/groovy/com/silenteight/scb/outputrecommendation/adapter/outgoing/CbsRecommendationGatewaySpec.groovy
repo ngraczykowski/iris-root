@@ -1,7 +1,9 @@
-package com.silenteight.scb.ingest.adapter.incomming.cbs.gateway
+package com.silenteight.scb.outputrecommendation.adapter.outgoing
 
+import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.SourceApplicationValues
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.event.CbsCallFailedEvent
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.event.RecomCalledEvent
+import com.silenteight.scb.outputrecommendation.domain.model.CbsAlertRecommendation
 
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.jdbc.core.JdbcTemplate

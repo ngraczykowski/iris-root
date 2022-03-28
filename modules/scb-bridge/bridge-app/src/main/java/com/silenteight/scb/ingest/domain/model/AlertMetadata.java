@@ -1,22 +1,11 @@
 package com.silenteight.scb.ingest.domain.model;
 
 import lombok.Builder;
-import lombok.Value;
 
-import java.util.List;
+public record AlertMetadata(
+    String watchlistId,
+    String discriminator) {
 
-@Value
-@Builder
-public class AlertMetadata {
-
-  String currentVersionId;
-
-  @Builder.Default
-  List<String> stopDescriptorNames = List.of();
-
-  String datasetId;
-  String datasetName;
-  String uniqueCustId;
-  String masterId;
-  String busDate;
+  @Builder
+  public AlertMetadata {}
 }
