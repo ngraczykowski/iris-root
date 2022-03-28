@@ -11,6 +11,7 @@ These modules are:
 6. agent-dictionaries
 7. agent-monitoring
 8. file-reading-commons
+9. agent-facade-core
 
 ### agent-autoconfigure
 
@@ -283,6 +284,11 @@ File-reading-commons library is used in following projects:
 - linguistics
 - geo-agent
 - gender-agent
+
+### agent-facade-core
+
+Adds dependencies for agent to provide amqp facade.
+Further information about this library is provided in README.md file placed in agent-facade-core module.
 
 ### Building JARs
 

@@ -29,6 +29,8 @@ public class AgentFacadeProperties {
 
   private Map<String, QueueItem> queueDefinitions;
 
+  private int parallelism = 1;
+
   String getInboundExchangeName() {
     return isNotEmpty(inboundExchangeName) ?
            inboundExchangeName : AGENT_REQUEST_EXCHANGE;

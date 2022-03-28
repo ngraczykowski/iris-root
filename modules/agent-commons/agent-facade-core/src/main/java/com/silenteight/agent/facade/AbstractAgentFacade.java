@@ -4,17 +4,19 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.agent.facade.datasource.AmqpMessageToDataSourceRequestMapper;
 import com.silenteight.agent.facade.datasource.DataSourceClient;
+import com.silenteight.agent.facade.exchange.AgentFacadeProperties;
 import com.silenteight.agent.monitoring.Monitoring;
 import com.silenteight.agents.v1.api.exchange.AgentExchangeRequest;
 import com.silenteight.agents.v1.api.exchange.AgentExchangeResponse;
 import com.silenteight.agents.v1.api.exchange.AgentOutput;
 import com.silenteight.agents.v1.api.exchange.AgentOutput.Feature;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.List;
 
 import static com.silenteight.agent.facade.GrpcDeadlineHandler.checkRequestTimeout;
 import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
 
 @Slf4j
 public abstract class AbstractAgentFacade<DataSourceRequestT, AgentInputT extends AgentInput>
@@ -27,6 +29,8 @@ public abstract class AbstractAgentFacade<DataSourceRequestT, AgentInputT extend
   private final AmqpMessageToDataSourceRequestMapper<DataSourceRequestT>
       amqpMessageToDataSourceRequestMapper;
   protected final AgentErrorHandler errorHandler;
+  private AgentFacadeWorker<AgentInputT> worker =
+      new AgentFacadeWorker<>(this::getAgentResponsesForMatch, 1);
 
   protected AbstractAgentFacade(
       DataSourceClient<DataSourceRequestT, AgentInputT> dataSourceClient,
@@ -35,6 +39,18 @@ public abstract class AbstractAgentFacade<DataSourceRequestT, AgentInputT extend
     this.dataSourceClient = dataSourceClient;
     this.amqpMessageToDataSourceRequestMapper = amqpMessageToDataSourceRequestMapper;
     this.errorHandler = new AgentErrorHandler(monitoring);
+  }
+
+  /**
+   * the class is abstract thus dependency injection cannot be done in constructor without changing
+   * the implementation of child classes
+   * in order to preserve the client code, the injection is done via setter
+   */
+  @Autowired
+  public void configure(AgentFacadeProperties agentFacadeProperties) {
+    var parallelism = agentFacadeProperties.getParallelism();
+    log.info("Configuring Agent Facade parallelism to {}", parallelism);
+    worker = new AgentFacadeWorker<>(this::getAgentResponsesForMatch, parallelism);
   }
 
   @Override
@@ -53,9 +69,7 @@ public abstract class AbstractAgentFacade<DataSourceRequestT, AgentInputT extend
       return errorHandler.createErrorResponse(request, dataSourceException);
     }
 
-    List<AgentOutput> agentOutputs = agentsInput.stream()
-        .map(this::getAgentResponsesForMatch)
-        .collect(toList());
+    List<AgentOutput> agentOutputs = worker.process(agentsInput);
 
     logAgentOutputs(agentOutputs);
 
