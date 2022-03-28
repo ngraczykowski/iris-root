@@ -3,6 +3,7 @@ package com.silenteight.adjudication.engine.analysis.agentexchange.jdbc;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.engine.analysis.agentexchange.AgentExchangeDataAccess;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +18,7 @@ class JdbcAgentExchangeDataAccess implements AgentExchangeDataAccess {
   private final DeleteEmptyAgentExchangesQuery deleteEmptyAgentExchangesQuery;
 
   @Override
+  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
   public void removeAgentExchange(
       List<UUID> agentExchangeRequestId, List<Long> matchId, List<String> featuresIds) {
 

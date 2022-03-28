@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.analysis.agentexchange.AgentExchangeRequestMessageRepository;
 import com.silenteight.adjudication.engine.analysis.agentexchange.domain.AgentExchangeRequestMessage;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ class JpaAgentExchangeRequestMessageRepository implements AgentExchangeRequestMe
 
   @Transactional
   @Override
+  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
   public void save(AgentExchangeRequestMessage message) {
     if (log.isTraceEnabled()) {
       log.trace("Saving agent exchange request: message={}", message);
@@ -42,11 +44,9 @@ class JpaAgentExchangeRequestMessageRepository implements AgentExchangeRequestMe
 
   @Transactional
   @Override
+  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
   public void saveAll(List<AgentExchangeRequestMessage> messages) {
-    if (log.isDebugEnabled()) {
-      log.debug("Saving agent requests: messageCount={}", messages.size());
-    }
-
+    log.debug("Saving agent requests: messageCount={}", messages.size());
     messages.forEach(this::save);
   }
 }

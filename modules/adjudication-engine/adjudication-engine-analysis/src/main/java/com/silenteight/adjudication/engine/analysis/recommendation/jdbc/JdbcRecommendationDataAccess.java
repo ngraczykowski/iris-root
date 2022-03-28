@@ -28,6 +28,7 @@ class JdbcRecommendationDataAccess implements RecommendationDataAccess {
 
   @Override
   @Transactional(readOnly = true)
+  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
   public PendingAlerts selectPendingAlerts(long analysisId) {
     return selectPendingAlertsQuery.execute(analysisId);
   }

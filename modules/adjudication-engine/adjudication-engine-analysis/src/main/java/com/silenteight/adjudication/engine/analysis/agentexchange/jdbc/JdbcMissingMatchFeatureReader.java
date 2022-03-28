@@ -3,6 +3,7 @@ package com.silenteight.adjudication.engine.analysis.agentexchange.jdbc;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.analysis.agentexchange.MissingMatchFeatureReader;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import com.google.common.base.Preconditions;
 import org.springframework.transaction.annotation.Propagation;
@@ -26,6 +27,7 @@ class JdbcMissingMatchFeatureReader implements MissingMatchFeatureReader {
 
   @Transactional(propagation = Propagation.NEVER)
   @Override
+  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
   public int read(long analysisId, ChunkHandler chunkHandler) {
     return query.execute(analysisId, chunkHandler);
   }

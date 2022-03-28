@@ -9,6 +9,7 @@ import com.silenteight.adjudication.engine.analysis.agentexchange.domain.Missing
 import com.silenteight.adjudication.engine.analysis.agentexchange.domain.MissingMatchFeatureChunk;
 import com.silenteight.adjudication.engine.common.jdbc.ChunkHandler;
 import com.silenteight.adjudication.engine.common.jdbc.JdbcCursorQueryTemplate;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.intellij.lang.annotations.Language;
 import org.springframework.jdbc.core.RowMapper;
@@ -110,11 +111,13 @@ class SelectMissingMatchFeatureQuery {
     private final MissingMatchFeatureReader.ChunkHandler delegate;
 
     @Override
+    @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
     public void handle(List<? extends MissingMatchFeature> chunk) {
       delegate.handle(new MissingMatchFeatureChunk(chunk));
     }
 
     @Override
+    @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
     public void finished() {
       delegate.finished();
     }
