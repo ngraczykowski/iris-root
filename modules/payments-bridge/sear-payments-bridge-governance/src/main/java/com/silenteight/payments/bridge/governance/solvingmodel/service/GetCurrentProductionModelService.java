@@ -1,12 +1,11 @@
 package com.silenteight.payments.bridge.governance.solvingmodel.service;
 
-import com.silenteight.sep.base.aspects.metrics.Timed;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.governance.solvingmodel.model.AnalysisModel;
 import com.silenteight.payments.bridge.governance.solvingmodel.port.GetCurrentProductionModelUseCase;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
 
