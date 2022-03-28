@@ -50,6 +50,11 @@
   </changeSet>
 
   <changeSet id="ftcc-1.0.0-2" author="mmastylo">
+    <preConditions onFail="MARK_RAN">
+      <indexExists
+          tableName="ftcc_request"
+          indexName="ix_ftcc_request_batch_id"/>
+    </preConditions>
     <dropIndex
         tableName="ftcc_request"
         indexName="ix_ftcc_request_batch_id"/>
