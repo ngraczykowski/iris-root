@@ -180,3 +180,9 @@ management:
   metrics:
     tags:
       application: ${spring.application.name}
+
+#Sentry
+sentry:
+  dsn:
+  environment: unknown
+  traces-sample-rate: 0.0
