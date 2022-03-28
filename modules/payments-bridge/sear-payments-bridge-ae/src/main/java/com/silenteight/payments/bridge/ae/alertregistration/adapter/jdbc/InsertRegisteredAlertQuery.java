@@ -3,6 +3,7 @@ package com.silenteight.payments.bridge.ae.alertregistration.adapter.jdbc;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.ae.alertregistration.domain.SaveRegisteredAlertRequest;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.intellij.lang.annotations.Language;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -28,6 +29,7 @@ class InsertRegisteredAlertQuery {
 
   private final JdbcTemplate jdbcTemplate;
 
+  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
   long execute(SaveRegisteredAlertRequest alert) {
     var sql = createQuery();
     var keyHolder = new GeneratedKeyHolder();

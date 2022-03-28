@@ -11,6 +11,7 @@ import com.silenteight.payments.bridge.ae.alertregistration.domain.SaveRegistere
 import com.silenteight.payments.bridge.ae.alertregistration.port.AlertClientPort;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisteredAlertDataAccessPort;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,7 @@ class RegisterAlertService implements RegisterAlertUseCase {
   private final ApplicationEventPublisher applicationEventPublisher;
 
   @Override
+  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
   public RegisterAlertResponse register(RegisterAlertRequest request) {
     var response = alertClient.createAlert(request.toCreateAlertRequest());
     var alertName = response.getName();

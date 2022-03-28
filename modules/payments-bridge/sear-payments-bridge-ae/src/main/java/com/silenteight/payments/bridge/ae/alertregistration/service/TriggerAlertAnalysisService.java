@@ -8,6 +8,7 @@ import com.silenteight.adjudication.api.v1.BatchAddAlertsRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.TriggerAlertRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.port.AnalysisClientPort;
 import com.silenteight.payments.bridge.ae.alertregistration.port.TriggerAlertAnalysisUseCase;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ class TriggerAlertAnalysisService implements TriggerAlertAnalysisUseCase {
   private final AnalysisProvider analysisProvider;
 
   @Override
+  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
   public void triggerAlertAnalysis(TriggerAlertRequest triggerAlertRequest) {
     var analysisName = this.analysisProvider.currentAnalysis();
     log.info("Current analysis: {}", analysisName);

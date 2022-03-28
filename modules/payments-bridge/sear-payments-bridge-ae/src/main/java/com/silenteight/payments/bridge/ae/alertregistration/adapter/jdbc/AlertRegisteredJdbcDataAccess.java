@@ -3,6 +3,7 @@ package com.silenteight.payments.bridge.ae.alertregistration.adapter.jdbc;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredAlert;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredMatch;
 import com.silenteight.payments.bridge.ae.alertregistration.port.AlertRegisteredAccessPort;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,6 +46,7 @@ class AlertRegisteredJdbcDataAccess implements AlertRegisteredAccessPort {
         .constructCollectionType(ArrayList.class, RegisteredMatch.class);
   }
 
+  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
   public List<RegisteredAlert> findRegistered(List<String> systemIds) {
 
     return jdbcTemplate.query(SQL, Map.of("systemIds", systemIds),

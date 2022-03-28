@@ -37,7 +37,7 @@ class AnalysisProvider {
     currentAnalysisName.set(currentAnalysis);
   }
 
-  @Timed
+  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
   public String currentAnalysis() {
     var currentAnalysis = this.currentAnalysisName.get();
     if (StringUtils.isBlank(currentAnalysis)) {

@@ -3,6 +3,7 @@ package com.silenteight.payments.bridge.ae.alertregistration.adapter.jdbc;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.ae.alertregistration.domain.SaveRegisteredAlertRequest;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.intellij.lang.annotations.Language;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,6 +23,7 @@ class InsertMatchQuery {
   private static final String SQL =
       "INSERT INTO pb_registered_match(registered_alert_id, match_name, match_id) VALUES (?, ?, ?)";
 
+  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
   void execute(SaveRegisteredAlertRequest alert, long registeredAlertId) {
     var sql = createQuery();
     alert
