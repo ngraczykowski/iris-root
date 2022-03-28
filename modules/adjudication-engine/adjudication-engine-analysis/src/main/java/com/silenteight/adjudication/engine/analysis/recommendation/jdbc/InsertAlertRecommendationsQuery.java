@@ -19,7 +19,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SqlParameter;
-import org.springframework.jdbc.object.SqlUpdate;
+import org.springframework.jdbc.object.BatchSqlUpdate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 
 import java.sql.Array;
@@ -45,32 +45,10 @@ class InsertAlertRecommendationsQuery {
   public static final String CREATED_AT_COLUMN = "created_at";
   public static final String COMMENT_COLUMN = "comment";
   private static final ObjectMapper MAPPER = JsonConversionHelper.INSTANCE.objectMapper();
-  private final SqlUpdate sql;
+  private final JdbcTemplate jdbcTemplate;
 
   InsertAlertRecommendationsQuery(JdbcTemplate jdbcTemplate) {
-    sql = new SqlUpdate();
-
-    sql.setJdbcTemplate(jdbcTemplate);
-    sql.setSql(
-        "INSERT INTO ae_recommendation ("
-            + "analysis_id, alert_id, created_at, recommended_action, match_ids, "
-            + "match_contexts, comment"
-            + ")\n"
-            + "VALUES ("
-            + ":analysis_id, :alert_id, NOW(), :recommended_action, :match_ids, :match_contexts, "
-            + ":comment)\n"
-            + "ON CONFLICT DO NOTHING\n"
-            + "RETURNING recommendation_id, analysis_id, alert_id, created_at, "
-            + "recommended_action,match_ids,match_contexts::text, comment;");
-    sql.declareParameter(new SqlParameter(ALERT_ID_COLUMN, Types.BIGINT));
-    sql.declareParameter(new SqlParameter(ANALYSIS_ID_COLUMN, Types.BIGINT));
-    sql.declareParameter(new SqlParameter(RECOMMENDED_ACTION_COLUMN, Types.VARCHAR));
-    sql.declareParameter(new SqlParameter(MATCH_IDS_COLUMN, Types.ARRAY));
-    sql.declareParameter(new SqlParameter(MATCH_CONTEXTS_COLUMN, Types.OTHER));
-    sql.declareParameter(new SqlParameter(COMMENT_COLUMN, Types.VARCHAR));
-    sql.setReturnGeneratedKeys(true);
-
-    sql.compile();
+    this.jdbcTemplate = jdbcTemplate;
   }
 
   private static void debug(final String message, final Object... parameters) {
@@ -150,14 +128,16 @@ class InsertAlertRecommendationsQuery {
   @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   List<RecommendationResponse> execute(Collection<InsertRecommendationRequest> requests) {
     List<RecommendationResponse> responses = new ArrayList<>();
-    requests.forEach(r -> update(r, responses::add));
+    var sql = createQuery();
+    requests.forEach(r -> update(r, responses::add, sql));
+    sql.flush();
     return responses;
   }
 
   @SuppressWarnings("FeatureEnvy")
   private void update(
       InsertRecommendationRequest alertRecommendation,
-      Consumer<RecommendationResponse> consumer) {
+      Consumer<RecommendationResponse> consumer, BatchSqlUpdate sql) {
 
     var keyHolder = new GeneratedKeyHolder();
     var paramMap =
@@ -167,12 +147,39 @@ class InsertAlertRecommendationsQuery {
             MATCH_IDS_COLUMN, alertRecommendation.getMatchIds(),
             MATCH_CONTEXTS_COLUMN, writeMatchContexts(alertRecommendation.getMatchContexts()),
             COMMENT_COLUMN, alertRecommendation.getComment());
-
     sql.updateByNamedParam(paramMap, keyHolder);
 
     ofNullable(keyHolder.getKeys())
         .map(InsertAlertRecommendationsQuery::buildRecommendationResponse)
         .ifPresent(consumer);
+  }
+
+  private BatchSqlUpdate createQuery() {
+    var sql = new BatchSqlUpdate();
+
+    sql.setJdbcTemplate(jdbcTemplate);
+    sql.setSql(
+        "INSERT INTO ae_recommendation ("
+            + "analysis_id, alert_id, created_at, recommended_action, match_ids, "
+            + "match_contexts, comment"
+            + ")\n"
+            + "VALUES ("
+            + ":analysis_id, :alert_id, NOW(), :recommended_action, :match_ids, :match_contexts, "
+            + ":comment)\n"
+            + "ON CONFLICT DO NOTHING\n"
+            + "RETURNING recommendation_id, analysis_id, alert_id, created_at, "
+            + "recommended_action,match_ids,match_contexts::text, comment;");
+    sql.declareParameter(new SqlParameter(ALERT_ID_COLUMN, Types.BIGINT));
+    sql.declareParameter(new SqlParameter(ANALYSIS_ID_COLUMN, Types.BIGINT));
+    sql.declareParameter(new SqlParameter(RECOMMENDED_ACTION_COLUMN, Types.VARCHAR));
+    sql.declareParameter(new SqlParameter(MATCH_IDS_COLUMN, Types.ARRAY));
+    sql.declareParameter(new SqlParameter(MATCH_CONTEXTS_COLUMN, Types.OTHER));
+    sql.declareParameter(new SqlParameter(COMMENT_COLUMN, Types.VARCHAR));
+    sql.setReturnGeneratedKeys(true);
+
+    sql.compile();
+
+    return sql;
   }
 
   static class MatchContextsJsonNodeWriteException extends RuntimeException {
