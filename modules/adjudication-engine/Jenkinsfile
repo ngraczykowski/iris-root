@@ -9,11 +9,11 @@ gradleBuild(
     sonarEnabled: true,
     dependencyCheckEnabled: true,
     includeBuildNumberInSnapshotVersion: true,
-    additionalParams: [
+    additionalParams: [t
       extendedChoice(
         name: 'environments',
-        value: 'dev,test,mike,lima',
-        defaultValue: 'mike',
+        value: 'dev,test,lima',
+        defaultValue: 'tes',
         description: 'Environments to deploy to on Nomad',
         multiSelectDelimiter: ',',
         quoteValue: false,
