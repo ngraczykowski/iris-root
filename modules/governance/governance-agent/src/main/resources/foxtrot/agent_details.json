@@ -30,7 +30,7 @@
     ],
     "featuresList": [
       {
-        "name": "features/date",
+        "name": "features/dateOfBirth",
         "displayName": "Date of Birth / Incorporation"
       }
     ],
