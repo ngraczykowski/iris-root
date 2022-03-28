@@ -11,7 +11,6 @@ import com.silenteight.payments.bridge.ae.alertregistration.domain.SaveRegistere
 import com.silenteight.payments.bridge.ae.alertregistration.port.AlertClientPort;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisteredAlertDataAccessPort;
-import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -35,47 +34,7 @@ class RegisterAlertService implements RegisterAlertUseCase {
   private final RegisteredAlertDataAccessPort registeredAlertDataAccessPort;
   private final ApplicationEventPublisher applicationEventPublisher;
 
-  private static RegisterAlertResponse createRegisterAlertResponse(
-      String systemId, String alertName, List<Match> matches) {
-    return RegisterAlertResponse
-        .builder()
-        .systemId(systemId)
-        .alertName(alertName)
-        .matchResponses(matches
-            .stream()
-            .map(match -> RegisterMatchResponse
-                .builder()
-                .matchId(match.getMatchId())
-                .matchName(match.getName())
-                .build())
-            .collect(toList()))
-        .build();
-  }
-
-  private static boolean filter(Alert alert, Map<String, RegisterAlertRequest> alertRequestMap) {
-    var found = alertRequestMap.containsKey(alert.getAlertId());
-    if (!found) {
-      log.warn("Alert with id: {} not found in the created batch response. "
-          + "Skipping adding matches.", alert.getAlertId());
-    }
-    return found;
-  }
-
-  private static List<BatchCreateAlertMatchesRequest> createAlertMatchesRequests(
-      List<RegisterAlertRequest> registerAlertRequests,
-      BatchCreateAlertsResponse batchCreateAlertsResponse) {
-    var alertRequestsMap = registerAlertRequests.stream()
-        .collect(toMap(RegisterAlertRequest::getFkcoSystemId, Function.identity()));
-
-    return batchCreateAlertsResponse.getAlertsList().stream()
-        .filter(alert -> filter(alert, alertRequestsMap))
-        .map(alert -> alertRequestsMap.get(alert.getAlertId())
-            .toCreateMatchesRequest(alert.getName()))
-        .collect(toList());
-  }
-
   @Override
-  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
   public RegisterAlertResponse register(RegisterAlertRequest request) {
     var response = alertClient.createAlert(request.toCreateAlertRequest());
     var alertName = response.getName();
@@ -99,6 +58,23 @@ class RegisterAlertService implements RegisterAlertUseCase {
         .build()));
 
     return registerAlertResponse;
+  }
+
+  private static RegisterAlertResponse createRegisterAlertResponse(
+      String systemId, String alertName, List<Match> matches) {
+    return RegisterAlertResponse
+        .builder()
+        .systemId(systemId)
+        .alertName(alertName)
+        .matchResponses(matches
+            .stream()
+            .map(match -> RegisterMatchResponse
+                .builder()
+                .matchId(match.getMatchId())
+                .matchName(match.getName())
+                .build())
+            .collect(toList()))
+        .build();
   }
 
   @Override
@@ -155,6 +131,28 @@ class RegisterAlertService implements RegisterAlertUseCase {
             alertsMap.get(entry.getKey()).getAlertId(),
             entry.getKey(),
             entry.getValue()))
+        .collect(toList());
+  }
+
+  private static boolean filter(Alert alert, Map<String, RegisterAlertRequest> alertRequestMap) {
+    var found = alertRequestMap.containsKey(alert.getAlertId());
+    if (!found) {
+      log.warn("Alert with id: {} not found in the created batch response. "
+          + "Skipping adding matches.", alert.getAlertId());
+    }
+    return found;
+  }
+
+  private static List<BatchCreateAlertMatchesRequest> createAlertMatchesRequests(
+      List<RegisterAlertRequest> registerAlertRequests,
+      BatchCreateAlertsResponse batchCreateAlertsResponse) {
+    var alertRequestsMap = registerAlertRequests.stream()
+        .collect(toMap(RegisterAlertRequest::getFkcoSystemId, Function.identity()));
+
+    return batchCreateAlertsResponse.getAlertsList().stream()
+        .filter(alert -> filter(alert, alertRequestsMap))
+        .map(alert -> alertRequestsMap.get(alert.getAlertId())
+            .toCreateMatchesRequest(alert.getName()))
         .collect(toList());
   }
 

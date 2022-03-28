@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.ae.alertregistration.port.GetRegisteredAlertMessageIdUseCase;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisteredAlertDataAccessPort;
-import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
 
@@ -17,7 +16,6 @@ class GetRegisteredAlertMessageIdService implements GetRegisteredAlertMessageIdU
   private final RegisteredAlertDataAccessPort registeredAlertDataAccessPort;
 
   @Override
-  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
   public UUID getAlertMessageId(String alertName) {
     return registeredAlertDataAccessPort.getAlertMessageId(alertName);
   }

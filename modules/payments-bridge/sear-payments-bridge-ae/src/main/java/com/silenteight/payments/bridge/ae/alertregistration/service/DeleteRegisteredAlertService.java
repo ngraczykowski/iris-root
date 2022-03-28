@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.ae.alertregistration.port.DeleteRegisteredAlertUseCase;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisteredAlertDataAccessPort;
-import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
 
@@ -19,7 +18,6 @@ class DeleteRegisteredAlertService implements DeleteRegisteredAlertUseCase {
   private final RegisteredAlertDataAccessPort registeredAlertDataAccessPort;
 
   @Override
-  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
   public List<String> delete(List<String> alertNames) {
 
     log.info(

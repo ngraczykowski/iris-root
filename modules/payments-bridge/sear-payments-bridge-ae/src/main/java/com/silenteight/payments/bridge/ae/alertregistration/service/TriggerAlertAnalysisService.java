@@ -19,12 +19,13 @@ import java.util.stream.Collectors;
 @Slf4j
 class TriggerAlertAnalysisService implements TriggerAlertAnalysisUseCase {
 
-  private final GetCurrentAnalysisUseCase getCurrentAnalysisUseCase;
   private final AnalysisClientPort analysisClient;
+  private final AnalysisProvider analysisProvider;
 
   @Override
   public void triggerAlertAnalysis(TriggerAlertRequest triggerAlertRequest) {
-    var analysisName = getCurrentAnalysisUseCase.getOrCreateAnalysis();
+    var analysisName = this.analysisProvider.currentAnalysis();
+    log.info("Current analysis: {}", analysisName);
 
     analysisClient.addAlertToAnalysis(
         BatchAddAlertsRequest
