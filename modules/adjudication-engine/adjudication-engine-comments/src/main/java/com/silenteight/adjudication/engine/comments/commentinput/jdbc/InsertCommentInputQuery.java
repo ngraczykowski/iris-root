@@ -1,6 +1,7 @@
 package com.silenteight.adjudication.engine.comments.commentinput.jdbc;
 
 import com.silenteight.adjudication.engine.comments.commentinput.domain.InsertCommentInputRequest;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SqlParameter;
@@ -25,6 +26,7 @@ class InsertCommentInputQuery {
     sql.compile();
   }
 
+  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
   void insert(InsertCommentInputRequest request) {
     sql.update(request.getAlertId(), request.getValue().toString());
   }

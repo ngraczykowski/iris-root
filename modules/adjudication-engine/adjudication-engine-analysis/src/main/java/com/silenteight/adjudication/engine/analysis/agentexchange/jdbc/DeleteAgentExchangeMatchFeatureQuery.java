@@ -2,6 +2,8 @@ package com.silenteight.adjudication.engine.analysis.agentexchange.jdbc;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.sep.base.aspects.metrics.Timed;
+
 import org.intellij.lang.annotations.Language;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -36,6 +38,7 @@ class DeleteAgentExchangeMatchFeatureQuery {
   private final NamedParameterJdbcTemplate jdbcTemplate;
 
   @Transactional
+  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
   void execute(List<UUID> agentExchangeRequestId, List<Long> matchId, List<String> features) {
     var parameters = new MapSqlParameterSource(Map.of(
         "features", features,

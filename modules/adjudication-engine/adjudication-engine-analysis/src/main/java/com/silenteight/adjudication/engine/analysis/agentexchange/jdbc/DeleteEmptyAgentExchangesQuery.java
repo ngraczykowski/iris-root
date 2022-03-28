@@ -2,6 +2,8 @@ package com.silenteight.adjudication.engine.analysis.agentexchange.jdbc;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.sep.base.aspects.metrics.Timed;
+
 import org.intellij.lang.annotations.Language;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -27,6 +29,7 @@ class DeleteEmptyAgentExchangesQuery {
   private final JdbcTemplate jdbcTemplate;
 
   @Transactional
+  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
   int execute() {
     return jdbcTemplate.update(SQL);
   }

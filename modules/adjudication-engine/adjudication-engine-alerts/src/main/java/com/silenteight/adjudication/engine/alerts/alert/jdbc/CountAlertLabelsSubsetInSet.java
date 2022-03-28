@@ -3,6 +3,8 @@ package com.silenteight.adjudication.engine.alerts.alert.jdbc;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sep.base.aspects.metrics.Timed;
+
 import org.intellij.lang.annotations.Language;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -24,6 +26,7 @@ class CountAlertLabelsSubsetInSet {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
 
+  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
   long execute(String subsetName, String subsetValue, String name, String value) {
     var parameters = new MapSqlParameterSource(Map.of(
         "subsetName", subsetName,

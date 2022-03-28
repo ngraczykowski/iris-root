@@ -3,6 +3,8 @@ package com.silenteight.adjudication.engine.analysis.matchsolution.jdbc;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sep.base.aspects.metrics.Timed;
+
 import com.google.common.base.Splitter;
 import org.intellij.lang.annotations.Language;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -35,6 +37,7 @@ class AnalyzeLargeTablesQuery {
   private final JdbcTemplate jdbcTemplate;
 
   @Transactional
+  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
   void execute() {
     Splitter
         .on(';')

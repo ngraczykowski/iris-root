@@ -2,6 +2,8 @@ package com.silenteight.adjudication.engine.analysis.pendingrecommendation.jdbc;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.sep.base.aspects.metrics.Timed;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +13,7 @@ class RemovePendingRecommendationsQuery {
 
   private final JdbcTemplate jdbcTemplate;
 
+  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
   int execute() {
     // TODO(wkeska): Replace CTE with subselect (AEP-217)
     return jdbcTemplate.update(
