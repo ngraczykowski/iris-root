@@ -7,7 +7,7 @@ from etl_pipeline.config import pipeline_config
 from etl_pipeline.custom.ms.datatypes.field import InputRecordField  # noqa F401
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.data_processor_engine.json_engine.json_engine import JsonProcessingEngine
-from pipelines.ms.wm_address_pipeline import MSPipeline
+from pipelines.ms.ms_pipeline import MSPipeline
 
 ALERT_INTERNAL_ID = cn.ALERT_INTERNAL_ID
 TEST_PATH = "tests/shared/test_ms_pipeline/"
