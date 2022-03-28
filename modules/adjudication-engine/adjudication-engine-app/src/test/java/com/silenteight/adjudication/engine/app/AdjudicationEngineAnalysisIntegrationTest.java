@@ -36,6 +36,7 @@ import static org.awaitility.Awaitility.await;
 @EnableConfigurationProperties
 @ActiveProfiles({ "mockagents", "rabbitdeclare", "mockgovernance", "mockdatasource", "test" })
 @Tag("longrunning")
+@Disabled
 class AdjudicationEngineAnalysisIntegrationTest {
 
   @GrpcClient("ae")
