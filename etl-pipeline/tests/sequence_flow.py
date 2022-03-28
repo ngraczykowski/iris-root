@@ -2,8 +2,8 @@ import json
 
 import grpc
 
-from etl_pipeline.service.proto.etl_pipeline_pb2 import SUCCESS, Alert, Match, RunEtlRequest
-from etl_pipeline.service.proto.etl_pipeline_pb2_grpc import EtlPipelineServiceStub
+from etl_pipeline.service.proto.api.etl_pipeline_pb2 import SUCCESS, Alert, Match, RunEtlRequest
+from etl_pipeline.service.proto.api.etl_pipeline_pb2_grpc import EtlPipelineServiceStub
 
 
 def load_alert():
