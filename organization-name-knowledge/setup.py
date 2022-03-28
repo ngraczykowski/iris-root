@@ -27,6 +27,7 @@ setup(
     install_requires=[
         # Keep sorted alphabetically (case-insensitive)
         "fastapi==0.70.0",
+        "importlib-resources==5.2.2",
         "requests==2.26.0",
         "unidecode==1.2.0",
         "uvicorn==0.15.0",
