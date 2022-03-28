@@ -26,3 +26,8 @@ memoryRequest: 512Mi
 service:
   metadata:
     annotations: { }
+
+serviceMonitor:
+  path: /management/prometheus
+  scrapeInterval: 30s
+  namespaceSelector: default
