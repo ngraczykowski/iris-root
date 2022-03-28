@@ -24,6 +24,12 @@ dependencies {
   implementation libraries.vavr
   implementation libraries.json_path
   implementation libraries.jakarta_validation_api
+
+  // Sentry
+  implementation libraries.sentry
+  runtimeOnly libraries.sentry_spring_boot_starter
+  runtimeOnly libraries.sentry_logback
+
   runtimeOnly libraries.hibernate_validator
   runtimeOnly libraries.spring_boot_starter_undertow
   runtimeOnly libraries.spring_boot_starter_actuator

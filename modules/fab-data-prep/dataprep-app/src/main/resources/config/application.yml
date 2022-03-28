@@ -78,7 +78,13 @@ management:
         exclude: "*"
   metrics:
     tags:
-      application: ${spring.application.name}
+      application:
+
+#Sentry
+sentry:
+  dsn:
+  environment: unknown
+  traces-sample-rate: 0.0
 
 feeding:
   features:
