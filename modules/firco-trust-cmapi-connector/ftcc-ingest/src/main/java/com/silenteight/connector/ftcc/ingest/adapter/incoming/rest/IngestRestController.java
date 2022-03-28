@@ -23,6 +23,7 @@ class IngestRestController {
 
   @PostMapping("/v1/alert")
   public ResponseEntity<AckDto> alert(@RequestBody RequestDto request) {
+    log.info("Alert received");
     ingestFacade.ingest(request);
     return ResponseEntity.ok(AckDto.ok());
   }

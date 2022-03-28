@@ -2,6 +2,7 @@ package com.silenteight.connector.ftcc.ingest.domain;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.connector.ftcc.common.dto.input.RequestDto;
 
@@ -14,6 +15,7 @@ import java.util.UUID;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
+@Slf4j
 public class RequestStorage {
 
   @NonNull
@@ -23,6 +25,7 @@ public class RequestStorage {
 
   @Transactional
   public RequestStore store(@NonNull RequestDto request, @NonNull UUID batchId) {
+    log.info("Store request for batchId={}", batchId);
     requestService.create(batchId);
     List<UUID> messageIds = registerMessages(request.getMessages(), batchId);
 
@@ -35,6 +38,9 @@ public class RequestStorage {
     return messages
         .stream()
         .map(message -> messageService.create(batchId, message))
+        .peek(
+            messageUuid -> log.info(
+                "Stored message request for batchId={} messageId={}", batchId, messageUuid))
         .collect(toList());
   }
 }

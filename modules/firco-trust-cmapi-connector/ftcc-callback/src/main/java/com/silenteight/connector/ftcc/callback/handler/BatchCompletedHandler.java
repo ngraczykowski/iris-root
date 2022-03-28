@@ -31,7 +31,7 @@ public class BatchCompletedHandler {
   public void handle(MessageBatchCompleted messageBatchCompleted) {
     String batchId = messageBatchCompleted.getBatchId();
     String analysisId = messageBatchCompleted.getAnalysisId();
-    log.info("BatchCompleted BatchID={} AnalysisId={}", batchId, analysisId);
+    log.info("BatchCompleted received BatchID={} AnalysisId={}", batchId, analysisId);
 
     batchCompletedService.save(batchId, analysisId);
     responseProcessor.process(messageBatchCompleted);

@@ -2,6 +2,7 @@ package com.silenteight.connector.ftcc.ingest.domain;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.connector.ftcc.common.dto.input.RequestDto;
 import com.silenteight.connector.ftcc.common.resource.BatchResource;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
+@Slf4j
 public class IngestFacade {
 
   @NonNull
@@ -33,18 +35,29 @@ public class IngestFacade {
   }
 
   private void registerBatch(RequestDto request, UUID batchId) {
+    String batchName = BatchResource.toResourceName(batchId);
     Batch batch = Batch.builder()
-        .batchId(BatchResource.toResourceName(batchId))
+        .batchId(batchName)
         .alertsCount(request.getMessagesCount())
         .build();
     registrationApiClient.registerBatch(batch);
+    log.info("Registered batch={}", batchName);
   }
 
   private void sendToDataPrep(UUID batchId, List<UUID> messageIds) {
+    log.info("Preparation of data for sending to DataPrep, batchId={}", batchId);
     messageIds
         .stream()
         .map(messageId -> toAlertMessageStored(batchId, messageId))
+        .peek(this::logAlertMessageStored)
         .forEach(dataPrepMessageGateway::send);
+    log.info("Data has been sent to DataPrep, batchId={}", batchId);
+  }
+
+  private void logAlertMessageStored(AlertMessageStored alertMessageStored) {
+    if (log.isDebugEnabled()) {
+      log.debug("Sending data to DataPrep: {}", alertMessageStored);
+    }
   }
 
   private AlertMessageStored toAlertMessageStored(UUID batchId, UUID messageId) {
