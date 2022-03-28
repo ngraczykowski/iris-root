@@ -77,8 +77,7 @@ class GenerateAndSaveRecommendationUseCaseTest {
             RecommendationInfo.newBuilder().build()));
 
     String analysisName = "analysis/1";
-    when(analysisFacade.getAnalysisAttachmentFlags
-        (analysisName)).thenReturn(
+    when(analysisFacade.getAnalysisAttachmentFlags(analysisName)).thenReturn(
         new AnalysisAttachmentFlags(true, true));
     when(generateCommentsUseCase.generateComments(any())).thenReturn(
         new GenerateCommentsResponse(null));
