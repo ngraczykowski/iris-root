@@ -133,7 +133,7 @@ management:
         exclude: "*"
   metrics:
     tags:
-      application:
+      application: ${spring.application.name}
 
 #Sentry
 sentry:
