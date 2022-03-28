@@ -12,8 +12,8 @@ gradleBuild(
     additionalParams: [
       extendedChoice(
         name: 'environments',
-        value: 'dev,test,lima',
-        defaultValue: 'test',
+        value: 'dev,test,lima,mike',
+        defaultValue: '',
         description: 'Environments to deploy to on Nomad',
         multiSelectDelimiter: ',',
         quoteValue: false,
@@ -27,6 +27,5 @@ gradleBuild(
       buildContainerImage()
       awsECR()
       helmChartRegistry()
-      deployOnNomad()
     }
 )
