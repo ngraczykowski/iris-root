@@ -26,7 +26,7 @@ def add_EtlPipelineServiceServicer_to_server(servicer, server):
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     add_EtlPipelineServiceServicer_to_server(EtlPipelineServiceServicer(), server)
-    server.add_insecure_port(f"[::]:{service_config.ETL_SERVICE_PORT}")
+    server.add_insecure_port(f"{service_config.ETL_SERVICE_PORT}")
     server.start()
     server.wait_for_termination()
 
