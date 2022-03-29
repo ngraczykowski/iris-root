@@ -170,6 +170,7 @@ EXAMPLES = [
             "WL_ADDRESS2": ["FL;US"],
             "WL_MATCHED_TOKENS": '["Doe", "Traczos"]',
             "WL_DOCUMENT_NUMBER": "",
+            "WLP_TYPE": "I",
         },
     )
 ]
