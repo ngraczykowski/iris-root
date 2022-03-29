@@ -157,11 +157,11 @@ feeding:
       enabled: true
       displayName: Risk Type
       categoryType: ENUMERATED
-      allowedValues: ["SAN", "OTHER", "NO_DATA"]
+      allowedValues: ["SAN", "OTHER"]
       multiValue: false
     customerType:
       enabled: true
       displayName: Customer Type
       categoryType: ENUMERATED
-      allowedValues: ["I", "C", "NO_DATA", "DATA_SOURCE_ERROR"]
+      allowedValues: ["I", "C"]
       multiValue: false
