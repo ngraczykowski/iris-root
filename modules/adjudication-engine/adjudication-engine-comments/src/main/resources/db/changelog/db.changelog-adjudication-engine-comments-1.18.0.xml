@@ -16,4 +16,9 @@
     <sqlFile path="db/changelog/sql/create_document-agent.sql"/>
     <sqlFile path="db/changelog/sql/update_template_match_v4.sql"/>
   </changeSet>
+
+  <changeSet id="adjudication-engine-comments-1.18.0_2" author="wkeska">
+    <sqlFile path="db/changelog/sql/update_passport-agentv2.sql"/>
+    <sqlFile path="db/changelog/sql/update_document-agentv2.sql"/>
+  </changeSet>
 </databaseChangeLog>
