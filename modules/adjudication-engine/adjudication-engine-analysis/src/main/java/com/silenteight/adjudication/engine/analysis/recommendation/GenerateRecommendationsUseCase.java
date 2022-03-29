@@ -81,7 +81,7 @@ class GenerateRecommendationsUseCase {
       String analysisName,
       long analysisId
   ) {
-    var recommendationInfos = new ArrayList<RecommendationInfo>();
+    var recommendationInfos = new LinkedList<RecommendationInfo>();
     var analysisAttachmentFlags = this.analysisFacade.getAnalysisAttachmentFlags(analysisName);
 
     do {
