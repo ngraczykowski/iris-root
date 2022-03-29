@@ -43,8 +43,8 @@ public class CreateAnalysisRequestMapper {
   private NotificationFlags notificationFlags() {
     return NotificationFlags
         .newBuilder()
-        .setAttachMetadata(true)
-        .setAttachRecommendation(true)
+        .setAttachMetadata(false)
+        .setAttachRecommendation(false)
         .build();
   }
 
