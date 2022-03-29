@@ -105,7 +105,6 @@ class AdjudicationEngineAnalysisIntegrationTest {
   }
 
   @Test
-  @Disabled
   void shouldSaveRecommendationsWhenSecondAnalysisAdded() {
     createAnalysisWithDataset(datasetService, analysisService, alertService);
     var second =

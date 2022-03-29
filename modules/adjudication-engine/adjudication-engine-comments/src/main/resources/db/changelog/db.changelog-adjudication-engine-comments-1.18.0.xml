@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+  <changeSet id="adjudication-engine-comments-1.18.0_1" author="wkeska">
+    <sqlFile path="db/changelog/sql/create_template_nationality_agent.sql"/>
+    <sqlFile path="db/changelog/sql/create_country-agent.sql"/>
+    <sqlFile path="db/changelog/sql/create_residency-agent.sql"/>
+    <sqlFile path="db/changelog/sql/create_gender-agent.sql"/>
+    <sqlFile path="db/changelog/sql/create_national-id-agent.sql"/>
+    <sqlFile path="db/changelog/sql/create_date-agent.sql"/>
+    <sqlFile path="db/changelog/sql/create_passport-agent.sql"/>
+    <sqlFile path="db/changelog/sql/create_document-agent.sql"/>
+    <sqlFile path="db/changelog/sql/update_template_match_v4.sql"/>
+  </changeSet>
+</databaseChangeLog>
