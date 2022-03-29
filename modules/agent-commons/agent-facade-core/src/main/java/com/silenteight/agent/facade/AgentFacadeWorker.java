@@ -1,5 +1,6 @@
 package com.silenteight.agent.facade;
 
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,25 +12,21 @@ import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 
+@RequiredArgsConstructor
 @Slf4j
 class AgentFacadeWorker<T> {
 
   private final Function<T, AgentOutput> mapper;
-  private int parallelism;
-  private ExecutorService executorService;
+  private final int parallelism;
+  private final ExecutorService executorService;
 
   AgentFacadeWorker(
-      Function<T, AgentOutput> mapper) {
+      Function<T, AgentOutput> mapper, int parallelism) {
     this.mapper = mapper;
-    this.parallelism = 1;
+    this.parallelism = parallelism;
     this.executorService = new ForkJoinPool(parallelism);
   }
 
-  synchronized void setParallelism(int parallelism) {
-    this.parallelism = parallelism;
-    executorService.shutdown();
-    this.executorService = new ForkJoinPool(parallelism);
-  }
 
   List<AgentOutput> process(List<T> input) {
     if (parallelism == 1) {
