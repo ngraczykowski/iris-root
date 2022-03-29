@@ -11,4 +11,6 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 public class AlertMessagesProperties {
 
   String queueName;
+
+  String bindingKey;
 }

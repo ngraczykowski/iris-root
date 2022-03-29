@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.CONNECTOR_EVENT_EXCHANGE;
+import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.CONNECTOR_COMMAND_EXCHANGE;
 
 @Configuration
 @EnableConfigurationProperties({
@@ -20,12 +20,17 @@ class RabbitConfiguration {
   }
 
   @Bean
-  TopicExchange alertMessagesExchange() {
-    return new TopicExchange(CONNECTOR_EVENT_EXCHANGE);
+  DirectExchange alertMessagesExchange() {
+    return new DirectExchange(CONNECTOR_COMMAND_EXCHANGE);
   }
 
   @Bean
-  Binding feedingBinding(Queue alertMessagesQueue, TopicExchange alertMessagesExchange) {
-    return BindingBuilder.bind(alertMessagesQueue).to(alertMessagesExchange).with("#");
+  Binding feedingBinding(
+      Queue alertMessagesQueue, DirectExchange alertMessagesExchange,
+      AlertMessagesProperties alertMessagesProperties) {
+    return BindingBuilder
+        .bind(alertMessagesQueue)
+        .to(alertMessagesExchange)
+        .with(alertMessagesProperties.getBindingKey());
   }
 }
