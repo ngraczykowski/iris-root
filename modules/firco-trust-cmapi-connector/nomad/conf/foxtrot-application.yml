@@ -15,6 +15,11 @@ ftcc:
     port: {{ (index . 0).Port }}
 {{- end }}
 
+  core-bridge:
+    inbound:
+      batch-completed:
+        exchange: core-bridge.notify-batch-completed-exchange
+
 grpc:
   logging:
     enabled: true
@@ -34,3 +39,7 @@ spring:
     # NOTE(ahaczewski): Intentionally left empty.
     host:
     virtual-host: /{{ env "NOMAD_NAMESPACE" }}
+
+sentry:
+  dsn: https://8ea3594083e34e4492c8d1ae39563a4c@o1129201.ingest.sentry.io/6292852
+  environment: {{ env "NOMAD_NAMESPACE" }}
