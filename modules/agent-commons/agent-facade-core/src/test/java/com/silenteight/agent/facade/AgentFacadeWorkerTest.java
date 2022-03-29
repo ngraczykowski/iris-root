@@ -32,7 +32,8 @@ class AgentFacadeWorkerTest {
       await().until(() -> Duration.between(testStartTime, Instant.now()).toMillis() > 100);
       return AgentOutput.getDefaultInstance();
     };
-    var underTest = new AgentFacadeWorker<>(mapper, parallelism);
+    var underTest = new AgentFacadeWorker<>(mapper);
+    underTest.setParallelism(parallelism);
 
     var data = IntStream
         .range(0, parallelism * 2)
@@ -56,7 +57,8 @@ class AgentFacadeWorkerTest {
       await().until(() -> Duration.between(testStartTime, Instant.now()).toMillis() > 100);
       throw exception;
     };
-    var underTest = new AgentFacadeWorker<>(mapper, parallelism);
+    var underTest = new AgentFacadeWorker<>(mapper);
+    underTest.setParallelism(parallelism);
 
     var data = IntStream
         .range(0, parallelism * 2)
