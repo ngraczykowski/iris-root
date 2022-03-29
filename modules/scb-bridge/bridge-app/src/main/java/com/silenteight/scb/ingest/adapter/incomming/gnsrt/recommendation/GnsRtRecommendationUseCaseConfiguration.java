@@ -7,7 +7,8 @@ import com.silenteight.proto.serp.v1.api.ReactorRecommendationGatewayGrpc;
 import com.silenteight.proto.serp.v1.api.ReactorRecommendationGatewayGrpc.ReactorRecommendationGatewayStub;
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRecommendationService;
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.alertinfo.AlertInfoService;
-import com.silenteight.scb.ingest.adapter.incomming.common.store.RawAlertService;
+import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService;
+import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlertService;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtRequestToAlertMapper;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtResponseMapper;
 import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
@@ -30,6 +31,7 @@ class GnsRtRecommendationUseCaseConfiguration {
   private final IngestEventPublisher ingestEventPublisher;
   private final AlertRegistrationFacade alertRegistrationFacade;
   private final RawAlertService rawAlertService;
+  private final BatchInfoService batchInfoService;
   private final GnsRtRecommendationService gnsRtRecommendationService;
 
   @Setter(onMethod_ = @GrpcClient("gateway"))
@@ -46,6 +48,7 @@ class GnsRtRecommendationUseCaseConfiguration {
         .alertRegistrationFacade(alertRegistrationFacade)
         .ingestEventPublisher(ingestEventPublisher)
         .rawAlertService(rawAlertService)
+        .batchInfoService(batchInfoService)
         .gnsRtRecommendationService(gnsRtRecommendationService)
         .build();
   }

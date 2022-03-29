@@ -1,10 +1,10 @@
-package com.silenteight.scb.ingest.adapter.incomming.common.store;
+package com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert;
 
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
-import com.silenteight.scb.ingest.adapter.incomming.common.store.RawAlert.AlertType;
+import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlert.AlertType;
 import com.silenteight.scb.ingest.adapter.incomming.common.util.SerializationUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;

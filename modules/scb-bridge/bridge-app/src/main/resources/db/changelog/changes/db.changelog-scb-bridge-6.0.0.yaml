@@ -1,0 +1,51 @@
+databaseChangeLog:
+  - changeSet:
+      id: 6.0.0-1
+      author: mglowinski
+      comment: Table for keeping information about batches
+      changes:
+        - createTable:
+            tableName: scb_batch_info
+            columns:
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: scb_batch_info_pkey
+              - column:
+                  name: internal_batch_id
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: batch_source
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+
+              - addPrimaryKey:
+                tableName: scb_batch_info
+                columnNames: id
+                constraintName: pk_scb_batch_info
+
+        - createIndex:
+            tableName: scb_batch_info
+            columns:
+              - column:
+                  name: internal_batch_id
+            indexName: idx_scb_batch_info_internal_batch_id
+
+        - createIndex:
+            tableName: scb_batch_info
+            columns:
+              - column:
+                  name: batch_source
+            indexName: idx_scb_batch_info_batch_source

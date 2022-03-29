@@ -1,7 +1,10 @@
-package com.silenteight.scb.ingest.adapter.incomming.common.store
+package com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert
 
 import com.silenteight.scb.feeding.fixtures.Fixtures
-import com.silenteight.scb.ingest.adapter.incomming.common.store.RawAlert.AlertType
+import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlert
+import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlert.AlertType
+import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlertRepository
+import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlertService
 import com.silenteight.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator
 
 import spock.lang.Specification

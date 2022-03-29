@@ -7,7 +7,7 @@ import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match;
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRecommendationService;
 import com.silenteight.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator;
 import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
-import com.silenteight.scb.ingest.domain.model.RegistrationAlertContext;
+import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext;
 import com.silenteight.scb.ingest.domain.model.RegistrationResponse;
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
 import com.silenteight.sep.base.testing.messaging.MessageSenderSpyFactory;
@@ -22,8 +22,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.silenteight.scb.ingest.domain.model.AlertSource.CBS;
 import static com.silenteight.scb.ingest.domain.model.Batch.Priority.MEDIUM;
+import static com.silenteight.scb.ingest.domain.model.BatchSource.CBS;
 import static java.util.Collections.singleton;
 import static org.mockito.Mockito.*;
 
@@ -70,14 +70,14 @@ class IngestServiceTest {
     var alerts = createAlerts();
     when(scbRecommendationService.alertRecommendationExists(anyString(), anyString()))
         .thenReturn(true);
-    when(alertRegistrationFacade.registerLearningAlert(any(), any()))
+    when(alertRegistrationFacade.registerLearningAlerts(any(), any()))
         .thenReturn(RegistrationResponse.builder().build());
 
     //when
     ingestService.ingestAlertsForLearn(internalBatchId, alerts);
 
     //then
-    verify(alertRegistrationFacade).registerLearningAlert(any(), any());
+    verify(alertRegistrationFacade).registerLearningAlerts(any(), any());
     verify(ingestEventPublisher, times(2)).publish(any());
   }
 
@@ -109,14 +109,14 @@ class IngestServiceTest {
     var alerts = createAlerts();
     when(scbRecommendationService.alertRecommendationExists(anyString(), anyString()))
         .thenReturn(false);
-    when(alertRegistrationFacade.registerLearningAlert(any(), any()))
+    when(alertRegistrationFacade.registerLearningAlerts(any(), any()))
         .thenReturn(RegistrationResponse.builder().build());
 
     //when
     ingestService.ingestAlertsForLearn(internalBatchId, alerts);
 
     //then
-    verify(alertRegistrationFacade).registerLearningAlert(any(), any());
+    verify(alertRegistrationFacade).registerLearningAlerts(any(), any());
     verify(ingestEventPublisher, times(2)).publish(any());
   }
 
@@ -125,12 +125,12 @@ class IngestServiceTest {
     //given
     var alerts = createAlerts();
     var internalBatchId = InternalBatchIdGenerator.generate();
-    var alertContext = new RegistrationAlertContext(MEDIUM, CBS);
-    when(alertRegistrationFacade.registerSolvingAlert(internalBatchId, alerts, alertContext))
+    var batchContext = new RegistrationBatchContext(MEDIUM, CBS);
+    when(alertRegistrationFacade.registerSolvingAlerts(internalBatchId, alerts, batchContext))
         .thenReturn(RegistrationResponse.builder().build());
 
     //when
-    ingestService.ingestAlertsForRecommendation(internalBatchId, alerts, alertContext);
+    ingestService.ingestAlertsForRecommendation(internalBatchId, alerts, batchContext);
 
     //then
     verify(ingestEventPublisher, times(2)).publish(any());
@@ -141,12 +141,12 @@ class IngestServiceTest {
     //given
     var internalBatchId = InternalBatchIdGenerator.generate();
     var denyAlerts = createDenyAlerts().toList();
-    var alertContext = new RegistrationAlertContext(MEDIUM, CBS);
-    when(alertRegistrationFacade.registerSolvingAlert(internalBatchId, denyAlerts, alertContext))
+    var batchContext = new RegistrationBatchContext(MEDIUM, CBS);
+    when(alertRegistrationFacade.registerSolvingAlerts(internalBatchId, denyAlerts, batchContext))
         .thenReturn(RegistrationResponse.builder().build());
 
     //when
-    ingestService.ingestAlertsForRecommendation(internalBatchId, denyAlerts, alertContext);
+    ingestService.ingestAlertsForRecommendation(internalBatchId, denyAlerts, batchContext);
 
     //then
     verify(ingestEventPublisher, times(2)).publish(any());
@@ -180,12 +180,13 @@ class IngestServiceTest {
     //given
     var internalBatchId = InternalBatchIdGenerator.generate();
     var nonDenyAlerts = createNonDenyAlerts().toList();
-    var alertContext = new RegistrationAlertContext(MEDIUM, CBS);
-    when(alertRegistrationFacade.registerSolvingAlert(internalBatchId, nonDenyAlerts, alertContext))
+    var batchContext = new RegistrationBatchContext(MEDIUM, CBS);
+    when(
+        alertRegistrationFacade.registerSolvingAlerts(internalBatchId, nonDenyAlerts, batchContext))
         .thenReturn(RegistrationResponse.builder().build());
 
     //when
-    ingestService.ingestAlertsForRecommendation(internalBatchId, nonDenyAlerts, alertContext);
+    ingestService.ingestAlertsForRecommendation(internalBatchId, nonDenyAlerts, batchContext);
 
     //then
     verify(ingestEventPublisher, times(2)).publish(any());
@@ -220,12 +221,12 @@ class IngestServiceTest {
                 .details(AlertDetails.builder().batchId("batchId1").build())
                 .build())
         .toList();
-    var alertContext = new RegistrationAlertContext(MEDIUM, CBS);
-    when(alertRegistrationFacade.registerSolvingAlert(internalBatchId, alerts, alertContext))
+    var batchContext = new RegistrationBatchContext(MEDIUM, CBS);
+    when(alertRegistrationFacade.registerSolvingAlerts(internalBatchId, alerts, batchContext))
         .thenReturn(RegistrationResponse.builder().build());
 
     //when
-    ingestService.ingestAlertsForRecommendation(internalBatchId, alerts, alertContext);
+    ingestService.ingestAlertsForRecommendation(internalBatchId, alerts, batchContext);
 
     //then
     verify(ingestEventPublisher, times(2)).publish(any());

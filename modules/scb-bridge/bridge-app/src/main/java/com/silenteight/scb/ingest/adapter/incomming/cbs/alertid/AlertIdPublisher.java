@@ -6,11 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertInFlightService;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.batch.BatchReadEvent;
+import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService;
 import com.silenteight.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator;
 import com.silenteight.scb.ingest.domain.model.Batch.Priority;
+import com.silenteight.scb.ingest.domain.model.BatchSource;
 import com.silenteight.scb.ingest.domain.model.IngestBatchMessage;
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestBatchEventPublisher;
-
 
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
@@ -23,6 +24,7 @@ class AlertIdPublisher implements Consumer<AlertIdCollection> {
 
   private final AlertInFlightService alertInFlightService;
   private final IngestBatchEventPublisher ingestBatchEventPublisher;
+  private final BatchInfoService batchInfoService;
 
   @Override
   public void accept(@Nonnull AlertIdCollection collection) {
@@ -32,6 +34,7 @@ class AlertIdPublisher implements Consumer<AlertIdCollection> {
     var internalBatchId = InternalBatchIdGenerator.generate();
     var alertIdContext = toScbAlertIdContext(collection.getContext());
 
+    batchInfoService.store(internalBatchId, BatchSource.CBS);
     alertInFlightService.saveUniqueAlerts(
         collection.getAlertIds(), internalBatchId, alertIdContext);
     log.info(

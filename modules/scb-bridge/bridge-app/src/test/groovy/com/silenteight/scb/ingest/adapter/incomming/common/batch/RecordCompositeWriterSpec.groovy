@@ -5,6 +5,8 @@ import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertInge
 import com.silenteight.scb.ingest.adapter.incomming.common.model.ObjectId
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertDetails
+import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService
+import com.silenteight.scb.ingest.domain.model.BatchSource
 
 import io.micrometer.core.instrument.Tag
 import spock.lang.Specification
@@ -14,6 +16,7 @@ class RecordCompositeWriterSpec extends Specification {
 
   def deltaService = Mock(GnsSyncDeltaService)
   def ingestService = Mock(BatchAlertIngestService)
+  def batchInfoService = Mock(BatchInfoService)
   def deltaJobName = "DELTA_NAME"
 
   @Unroll
@@ -23,6 +26,7 @@ class RecordCompositeWriterSpec extends Specification {
     createRecordWriter().write([])
 
     then:
+    1 * batchInfoService.store(_ as String, BatchSource.LEARNING)
     1 * ingestService.ingestAlertsForLearn(_ as String, _ as List<Alert>)
     1 * deltaService.updateDelta(_ as Map, deltaJobName)
   }
@@ -68,6 +72,7 @@ class RecordCompositeWriterSpec extends Specification {
         .ingestService(ingestService)
         .useDelta(true)
         .deltaJobName(deltaJobName)
+        .batchInfoService(batchInfoService)
         .build();
   }
 }

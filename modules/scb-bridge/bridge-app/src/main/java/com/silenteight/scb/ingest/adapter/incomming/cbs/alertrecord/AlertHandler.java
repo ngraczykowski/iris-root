@@ -11,12 +11,12 @@ import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckAlert;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckGateway;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsOutput;
 import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertIngestService;
-import com.silenteight.scb.ingest.domain.model.RegistrationAlertContext;
+import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext;
 
 import java.util.List;
 
-import static com.silenteight.scb.ingest.domain.model.AlertSource.CBS;
 import static com.silenteight.scb.ingest.domain.model.Batch.Priority.MEDIUM;
+import static com.silenteight.scb.ingest.domain.model.BatchSource.CBS;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -48,8 +48,8 @@ class AlertHandler {
   private void registerAlerts(
       String internalBatchId, List<ValidAlertComposite> validAlertComposites) {
     var alerts = alertMapper.fromValidAlertComposites(validAlertComposites);
-    var registrationAlertContext = new RegistrationAlertContext(MEDIUM, CBS);
-    ingestService.ingestAlertsForRecommendation(internalBatchId, alerts, registrationAlertContext);
+    var registrationBatchContext = new RegistrationBatchContext(MEDIUM, CBS);
+    ingestService.ingestAlertsForRecommendation(internalBatchId, alerts, registrationBatchContext);
   }
 
   private void acknowledgeAlerts(List<ValidAlertComposite> validAlertComposites) {

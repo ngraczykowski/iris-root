@@ -17,12 +17,12 @@ public record Batch(
   @Builder
   public Batch {}
 
-  public static Batch of(String batchId, Long alertCount, RegistrationAlertContext context) {
+  public static Batch of(String batchId, Long alertCount, RegistrationBatchContext context) {
     return Batch.builder()
         .id(batchId)
         .alertCount(alertCount)
         .priority(context.priority())
-        .metadata(new BatchMetadata(context.alertSource()))
+        .metadata(new BatchMetadata(context.batchSource()))
         .build();
   }
 

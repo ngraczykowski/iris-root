@@ -11,7 +11,7 @@ import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert.Fla
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRecommendationService;
 import com.silenteight.scb.ingest.adapter.incomming.common.util.AlertUpdater;
 import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
-import com.silenteight.scb.ingest.domain.model.RegistrationAlertContext;
+import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext;
 import com.silenteight.scb.ingest.domain.model.RegistrationResponse;
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
 import com.silenteight.sep.base.aspects.logging.LogContext;
@@ -46,7 +46,7 @@ class IngestService implements SingleAlertIngestService, BatchAlertIngestService
   @Override
   public void ingestAlertsForLearn(@NonNull String internalBatchId, @NonNull List<Alert> alerts) {
     var registrationResponse =
-        alertRegistrationFacade.registerLearningAlert(internalBatchId, alerts);
+        alertRegistrationFacade.registerLearningAlerts(internalBatchId, alerts);
     alerts.forEach(alert -> {
       var flags = determineLearningFlags(alert);
       publish(alert, flags, registrationResponse);
@@ -58,10 +58,10 @@ class IngestService implements SingleAlertIngestService, BatchAlertIngestService
   public void ingestAlertsForRecommendation(
       @NonNull String internalBatchId,
       @NonNull List<Alert> alerts,
-      RegistrationAlertContext registrationAlertContext) {
+      RegistrationBatchContext registrationBatchContext) {
     var registrationResponse =
         alertRegistrationFacade
-            .registerSolvingAlert(internalBatchId, alerts, registrationAlertContext);
+            .registerSolvingAlerts(internalBatchId, alerts, registrationBatchContext);
     alerts.forEach(alert -> publish(alert, ALERT_RECOMMENDATION_FLAGS, registrationResponse));
   }
 

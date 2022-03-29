@@ -1,14 +1,15 @@
 package com.silenteight.scb.ingest.adapter.incomming.gnsrt.recommendation
 
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.alertinfo.AlertInfoService
-import com.silenteight.scb.ingest.adapter.incomming.common.store.RawAlertService
+import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService
+import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlertService
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtRequestToAlertMapper
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtResponseMapper
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtResponseAlert
 import com.silenteight.scb.ingest.domain.AlertRegistrationFacade
-import com.silenteight.scb.ingest.domain.model.AlertSource
 import com.silenteight.scb.ingest.domain.model.Batch.Priority
-import com.silenteight.scb.ingest.domain.model.RegistrationAlertContext
+import com.silenteight.scb.ingest.domain.model.BatchSource
+import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext
 import com.silenteight.scb.ingest.domain.model.RegistrationResponse
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher
 
@@ -41,6 +42,8 @@ class GnsRtRecommendationUseCaseImplSpec extends Specification {
 
   def rawAlertService = Mock(RawAlertService)
 
+  def batchInfoService = Mock(BatchInfoService)
+
   @Subject
   def underTest = GnsRtRecommendationUseCaseImpl.builder()
       .alertMapper(alertMapper)
@@ -52,6 +55,7 @@ class GnsRtRecommendationUseCaseImplSpec extends Specification {
       .ingestEventPublisher(ingestEventPublisher)
       .gnsRtRecommendationService(gnsRtRecommendationService)
       .rawAlertService(rawAlertService)
+      .batchInfoService(batchInfoService)
       .build()
 
   def 'should resolve GnsRtRecommendationRequest with 1 alert'() {
@@ -77,8 +81,9 @@ class GnsRtRecommendationUseCaseImplSpec extends Specification {
         .verifyComplete()
 
     1 * rawAlertService.store(_, fixtures.alerts)
-    1 * registrationFacade.registerSolvingAlert(
-        _, fixtures.alerts, new RegistrationAlertContext(Priority.HIGH, AlertSource.GNS_RT))
+    1 * batchInfoService.store(_, _ as BatchSource)
+    1 * registrationFacade.registerSolvingAlerts(
+        _, fixtures.alerts, new RegistrationBatchContext(Priority.HIGH, BatchSource.GNS_RT))
         >> RegistrationResponse.empty()
     1 * ingestEventPublisher.publish(_)
   }

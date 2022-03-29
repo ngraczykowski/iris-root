@@ -1,4 +1,4 @@
-package com.silenteight.scb.ingest.adapter.incomming.common.store;
+package com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert;
 
 import lombok.*;
 

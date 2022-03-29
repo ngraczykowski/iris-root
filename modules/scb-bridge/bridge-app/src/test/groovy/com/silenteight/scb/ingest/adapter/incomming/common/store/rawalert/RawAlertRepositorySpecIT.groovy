@@ -1,8 +1,8 @@
-package com.silenteight.scb.ingest.adapter.incomming.common.store
+package com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert
 
 import com.silenteight.scb.BaseDataJpaSpec
 import com.silenteight.scb.ingest.adapter.incomming.common.SyncTestInitializer
-import com.silenteight.scb.ingest.adapter.incomming.common.store.RawAlert.AlertType
+import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlert.AlertType
 import com.silenteight.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator
 
 import lombok.extern.slf4j.Slf4j

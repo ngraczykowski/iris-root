@@ -2,6 +2,8 @@ package com.silenteight.scb.ingest.adapter.incomming.cbs.alertid
 
 import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertInFlightService
+import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService
+import com.silenteight.scb.ingest.domain.model.BatchSource
 import com.silenteight.scb.ingest.domain.model.IngestBatchMessage
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestBatchEventPublisher
 
@@ -11,7 +13,9 @@ class AlertIdPublisherSpec extends Specification {
 
   def alertInFlightService = Mock(AlertInFlightService)
   def ingestBatchEventPublisher = Mock(IngestBatchEventPublisher)
-  def objectUnderTest = new AlertIdPublisher(alertInFlightService, ingestBatchEventPublisher)
+  def batchInfoService = Mock(BatchInfoService)
+  def objectUnderTest = new AlertIdPublisher(
+      alertInFlightService, ingestBatchEventPublisher, batchInfoService)
 
   def 'should consume alertIdCollection'() {
     given:
@@ -24,6 +28,7 @@ class AlertIdPublisherSpec extends Specification {
     objectUnderTest.accept(new AlertIdCollection(someAlertIds, context))
 
     then:
+    1 * batchInfoService.store(_ as String, BatchSource.CBS)
     1 * alertInFlightService.saveUniqueAlerts(someAlertIds, _ as String, _ as ScbAlertIdContext)
     1 * ingestBatchEventPublisher.publish(_ as IngestBatchMessage)
   }

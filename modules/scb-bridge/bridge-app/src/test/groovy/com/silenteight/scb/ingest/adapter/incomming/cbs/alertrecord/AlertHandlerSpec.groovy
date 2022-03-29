@@ -13,12 +13,12 @@ import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertInge
 import com.silenteight.scb.ingest.adapter.incomming.common.model.ObjectId
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert
 import com.silenteight.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator
-import com.silenteight.scb.ingest.domain.model.RegistrationAlertContext
+import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext
 
 import spock.lang.Specification
 
-import static com.silenteight.scb.ingest.domain.model.AlertSource.CBS
 import static com.silenteight.scb.ingest.domain.model.Batch.Priority.MEDIUM
+import static com.silenteight.scb.ingest.domain.model.BatchSource.CBS
 
 class AlertHandlerSpec extends Specification {
 
@@ -65,7 +65,7 @@ class AlertHandlerSpec extends Specification {
   def 'should handle valid alerts'() {
     given:
     def internalBatchId = InternalBatchIdGenerator.generate()
-    def alertContext = new RegistrationAlertContext(MEDIUM, CBS)
+    def batchContext = new RegistrationBatchContext(MEDIUM, CBS)
     def alerts = [fixtures.alert1, fixtures.alert2]
     def validAlertComposites = [
         fixtures.validAlertComposite1, fixtures.validAlertComposite2
@@ -82,7 +82,7 @@ class AlertHandlerSpec extends Specification {
     1 * invalidAlertMapper.fromAlertCompositeCollections(alertCompositeCollections) >>
         Collections.emptyList()
     1 * alertMapper.fromValidAlertComposites(validAlertComposites) >> alerts
-    1 * ingestService.ingestAlertsForRecommendation(internalBatchId, alerts, alertContext)
+    1 * ingestService.ingestAlertsForRecommendation(internalBatchId, alerts, batchContext)
     1 * cbsAckGateway.
         ackReadAlert({CbsAckAlert a -> a.alertExternalId == fixtures.alertId1.systemId}) >>
         new CbsOutput(state: CbsOutput.State.OK)
