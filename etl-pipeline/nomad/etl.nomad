@@ -1,7 +1,14 @@
+variable "etl_pipeline_artifact" {
+  type = string
+  description = "The name of file containing artifact"
+}
+
 variable "namespace" {
   type    = string
   default = "mike"
 }
+
+
 
 job "etl-pipeline" {
   type = "service"
@@ -25,7 +32,7 @@ job "etl-pipeline" {
       }
     }
     task "etl-pipeline" {
-      driver = "docker"
+      driver = "raw_exec"
 
       template {
         data        = "{{ key \"${var.namespace}/etl_service/secrets\" }}"
@@ -53,32 +60,28 @@ job "etl-pipeline" {
         destination = "local/config/agents/agents_input_WM_Party.yaml"
       }
 
-      config {
-        image = "docker.repo.silenteight.com/etl-pipeline-service"
-        mount {
-          type   = "bind"
-          source = "local/config/pipeline/pipeline.yaml"
-          target = "/config/pipeline/pipeline.yaml"
-        }
-        mount {
-          type   = "bind"
-          source = "local/config/service/service.yaml"
-          target = "/config/service/service.yaml"
-        }
-        mount {
-          type   = "bind"
-          source = "local/config/agents/agents_input_WM_ADDRESS.yaml"
-          target = "/config/agents/agents_input_WM_ADDRESS.yaml"
-        }
-        mount {
-          type   = "bind"
-          source = "local/config/agents/agents_input_WM_Party.yaml"
-          target = "/config/agents/agents_input_WM_Party.yaml"
-        }
-        ports = [
-          "grpc"
-        ]
+      template {
+        data        = file("./run_on_nomad.sh")
+        destination = "local/run_on_nomad.sh"
       }
+
+      artifact {
+        source = var.etl_pipeline_artifact
+        mode        = "dir"
+        destination = "local/app/"
+      }
+
+      config {
+        command = "bash"
+        args = [
+          "local/run_on_nomad.sh"]
+      }
+
+      constraint {
+            attribute = "${node.unique.name}"
+            value = "eu3"
+      }
+      
 
       service {
         name = "${var.namespace}-etl-pipeline"
