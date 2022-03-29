@@ -16,6 +16,7 @@ public final class RabbitConstants {
   public static final String BRIDGE_LEARNING_ENGINE_EXCHANGE = "bridge.historical";
   public static final String BRIDGE_LEARNING_ENGINE_IS_PEP_EXCHANGE = "bridge.ispep";
   public static final String BRIDGE_LEARNING_ENGINE_MODEL_EXCHANGE = "bridge.model";
+  public static final String CONNECTOR_COMMAND_EXCHANGE = "connector.command";
   public static final String CONNECTOR_EVENT_EXCHANGE = "connector.event";
   public static final String GOV_EVENT_EXCHANGE = "gov.event";
   public static final String GOV_EVENTS_EXCHANGE = "gov.events";
