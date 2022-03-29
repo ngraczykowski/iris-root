@@ -21,7 +21,7 @@ ext {
 // @formatter:off
 
 // Silent Eight
-libraries.sear_rabbitmq_common_schema = [group: 'com.silenteight.rabbitmqcommonschema', name: 'sear-rabbitmq-common-schema-definitions', version: '1.10.0']
+libraries.sear_rabbitmq_common_schema = [group: 'com.silenteight.rabbitmqcommonschema', name: 'sear-rabbitmq-common-schema-definitions', version: '1.13.0']
 libraries.silenteight_commons_app = [group: 'com.silenteight.commons', name: 'silenteight-commons-app', version: silenteightCommonsVersion]
 libraries.silenteight_commons_core = [group: 'com.silenteight.commons', name: 'silenteight-commons-core', version: silenteightCommonsVersion]
 libraries.silenteight_sep_base_aspects = [group: 'com.silenteight.sep.base', name: 'sep-base-aspects', version: silenteightSepBaseVersion]

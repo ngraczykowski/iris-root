@@ -19,10 +19,6 @@ class DataPrepProperties {
   @NestedConfigurationProperty
   private AmqpOutboundProperties outbound;
 
-  String outboundExchange() {
-    return outbound.getExchange();
-  }
-
   String outboundRoutingKey() {
     return outbound.getRoutingKey();
   }

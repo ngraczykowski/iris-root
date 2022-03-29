@@ -14,6 +14,7 @@ dependencies {
   implementation project(":ftcc-db-changelog")
 
   implementation libraries.silenteight_sep_base_common
+  implementation libraries.sear_rabbitmq_common_schema
   implementation libraries.core_bridge_registration_connector_lib
   implementation libraries.core_bridge_registration_connector_proto
   implementation libraries.fab_cmap_connector_api

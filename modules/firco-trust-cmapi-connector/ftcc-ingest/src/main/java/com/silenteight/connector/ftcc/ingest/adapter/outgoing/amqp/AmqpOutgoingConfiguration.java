@@ -16,6 +16,8 @@ import org.springframework.integration.gateway.GatewayProxyFactoryBean;
 
 import javax.validation.Valid;
 
+import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.CONNECTOR_COMMAND_EXCHANGE;
+
 @Configuration
 @RequiredArgsConstructor
 @EnableConfigurationProperties(DataPrepProperties.class)
@@ -29,23 +31,19 @@ public class AmqpOutgoingConfiguration {
   @Bean
   IntegrationFlow dataprepOutboundChannelToExchangeIntegrationFlow(
       @Valid DataPrepProperties properties) {
-
-    return createOutputFlow(
-        properties.outboundExchange(),
-        properties.outboundRoutingKey());
+    return createOutputFlow(properties.outboundRoutingKey());
   }
 
-  private IntegrationFlow createOutputFlow(String exchange, String routingKey) {
+  private IntegrationFlow createOutputFlow(String routingKey) {
     return flow -> flow
         .channel(DATA_PREP_OUTBOUND_CHANNEL)
-        .handle(creatOutboundAdapter(exchange, routingKey));
+        .handle(creatOutboundAdapter(routingKey));
   }
 
-  private AmqpBaseOutboundEndpointSpec<?, ?> creatOutboundAdapter(
-      String exchange, String routingKey) {
+  private AmqpBaseOutboundEndpointSpec<?, ?> creatOutboundAdapter(String routingKey) {
     return outboundFactory
         .outboundAdapter()
-        .exchangeName(exchange)
+        .exchangeName(CONNECTOR_COMMAND_EXCHANGE)
         .routingKey(routingKey);
   }
 

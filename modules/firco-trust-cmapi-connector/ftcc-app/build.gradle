@@ -55,7 +55,6 @@ dependencies {
   // Messaging
   implementation libraries.amqp_client
   implementation libraries.lz4_java
-  implementation libraries.sear_rabbitmq_common_schema
 
   // gRPC
   implementation libraries.grpc_api

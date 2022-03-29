@@ -10,7 +10,5 @@ import javax.validation.constraints.NotBlank;
 public class AmqpOutboundProperties {
 
   @NotBlank
-  String exchange;
-  @NotBlank
   String routingKey;
 }
