@@ -15,20 +15,6 @@ class WatchlistExtractor:
         else:
             return [x]
 
-    """def extract_dob(self, record):
-        result = []
-        entry_list = []
-        dobs = record.get("entity", {}).get("dobs", {})
-        for entry in dobs:
-            entry_list.append(dobs[entry])
-        # data_item_list = self.as_list(entry_list)
-        for item in entry_list:
-            if type(item) is dict:
-                result.append(item.get("#text", item.get("text")))
-            else:
-                result.append(item)
-        return result"""
-
     def parse_dob_dict(self, dob):
         dmy = ["", "", ""]
         result = []
@@ -149,10 +135,6 @@ class WatchlistExtractor:
                 result["WL_ADDRESS" + str(idx)] = item
                 idx += 1
 
-        # for k, v in result.items():
-        #     if isinstance(v, list):
-        #         result[k] = json.dumps(v)
-
         return result
 
     def extract_wl_routing_codes(self, record):
@@ -218,6 +200,18 @@ class WatchlistExtractor:
                 countries.append(elem.get("countryName"))
             return "|".join(list(filter(lambda x: x is not None, countries)))
 
+    def extract_wlp_type(self, wl_entitytype):
+        # entity_type_company = ['08', '09', '05', '06']
+        entity_type_ind = ["03"]
+        entity_type_pep = ["07"]
+        # entity_type_admin = ['01', '02']
+
+        entity_type_ind = entity_type_ind + entity_type_pep
+        value = "C"
+        if wl_entitytype in entity_type_ind:
+            value = "I"
+        return {"WLP_TYPE": value}
+
     def update_match_with_wl_values(self, match):
         wl_record_data = {
             "SRC_REF_KEY": match.get("uniqueCustomerId", ""),
@@ -237,6 +231,7 @@ class WatchlistExtractor:
         wl_record_data.update(self.extract_wl_addresses(match))
         wl_record_data.update(self.extract_wl_matched_tokens(match))
         wl_record_data.update(self.extract_wl_routing_codes(match))
+        wl_record_data.update(self.extract_wlp_type(wl_record_data["WL_ENTITYTYPE"]))
 
         try:
             wl_record_data["WL_DOCUMENT_NUMBER"] = self.extract_wl_data_by_path(
