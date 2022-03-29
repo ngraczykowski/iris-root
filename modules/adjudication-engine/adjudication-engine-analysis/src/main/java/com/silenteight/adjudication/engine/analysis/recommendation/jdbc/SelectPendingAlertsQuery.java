@@ -56,6 +56,7 @@ class SelectPendingAlertsQuery {
             + "          AND ar.analysis_id = ?)",
         ROW_MAPPER, analysisId, analysisId);
 
+    log.info("Pending alerts size: {}", pendingAlerts.size());
     return new PendingAlerts(pendingAlerts);
   }
 

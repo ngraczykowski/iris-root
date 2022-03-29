@@ -1,6 +1,5 @@
 package com.silenteight.adjudication.engine.analysis.recommendation;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.Analysis;
@@ -19,16 +18,18 @@ import com.silenteight.solving.api.v1.SolveAlertSolutionResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 import javax.annotation.Nonnull;
 
 import static java.util.stream.Collectors.toList;
 
 @SuppressWarnings("FeatureEnvy")
-@RequiredArgsConstructor
 @Service
 @Slf4j
 class GenerateRecommendationsUseCase {
@@ -39,6 +40,28 @@ class GenerateRecommendationsUseCase {
   private final GenerateCommentsUseCase generateCommentsUseCase;
   private final CommentInputDataAccess commentInputDataAccess;
   private final CreateRecommendationsUseCase createRecommendationsUseCase;
+  private final Counter invocationLoopCounter;
+  private final AtomicLong recommendationInfoSize;
+
+  GenerateRecommendationsUseCase(
+      final GovernanceFacade governanceFacade,
+      final RecommendationDataAccess recommendationDataAccess,
+      final AnalysisFacade analysisFacade,
+      final GenerateCommentsUseCase generateCommentsUseCase,
+      final CommentInputDataAccess commentInputDataAccess,
+      final CreateRecommendationsUseCase createRecommendationsUseCase,
+      final MeterRegistry meterRegistry
+  ) {
+    this.governanceFacade = governanceFacade;
+    this.recommendationDataAccess = recommendationDataAccess;
+    this.analysisFacade = analysisFacade;
+    this.generateCommentsUseCase = generateCommentsUseCase;
+    this.commentInputDataAccess = commentInputDataAccess;
+    this.createRecommendationsUseCase = createRecommendationsUseCase;
+    this.invocationLoopCounter = meterRegistry.counter("prepare.recommendation.info.invocation");
+    this.recommendationInfoSize =
+        meterRegistry.gauge("recommendation.info.size", new AtomicLong(0));
+  }
 
   @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "recommendation" })
   List<RecommendationInfo> generateRecommendations(String analysisName) {
@@ -60,7 +83,9 @@ class GenerateRecommendationsUseCase {
   ) {
     var recommendationInfos = new ArrayList<RecommendationInfo>();
     var analysisAttachmentFlags = this.analysisFacade.getAnalysisAttachmentFlags(analysisName);
+
     do {
+      this.invocationLoopCounter.increment();
       var pendingAlerts = recommendationDataAccess.selectPendingAlerts(analysisId);
       var request = createRequest(analysisId, pendingAlerts);
 
@@ -82,8 +107,10 @@ class GenerateRecommendationsUseCase {
       if (alertSolutions.isEmpty()) {
         log.info("No recommendations generated: analysis={}", analysisName);
       }
+
     } while (true);
 
+    this.recommendationInfoSize.set(recommendationInfos.size());
     return recommendationInfos;
   }
 

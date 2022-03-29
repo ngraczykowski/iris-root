@@ -12,6 +12,7 @@ import com.silenteight.solving.api.v1.BatchSolveAlertsResponse;
 import com.silenteight.solving.api.v1.SolveAlertSolutionResponse;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,7 +48,8 @@ class GenerateAndSaveRecommendationUseCaseTest {
   void setUp() {
     generateRecommendationsUseCase = new GenerateRecommendationsUseCase(
         client, new InMemoryRecommendationDataAccess(), analysisFacade, generateCommentsUseCase,
-        commentInputDataAccess, createRecommendationsUseCase);
+        commentInputDataAccess, createRecommendationsUseCase,
+        new SimpleMeterRegistry());
     generateAndSaveRecommendationUseCase = new GenerateAndSaveRecommendationUseCase(
         generateRecommendationsUseCase
     );
