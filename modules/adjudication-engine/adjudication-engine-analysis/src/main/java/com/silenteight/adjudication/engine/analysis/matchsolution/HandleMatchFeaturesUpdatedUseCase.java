@@ -1,5 +1,7 @@
 package com.silenteight.adjudication.engine.analysis.matchsolution;
 
+import com.silenteight.sep.base.aspects.metrics.Timed;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,6 +25,7 @@ class HandleMatchFeaturesUpdatedUseCase {
   private final AnalysisFacade analysisFacade;
   private final SolveAnalysisMatchesUseCase solveAnalysisMatchesUseCase;
 
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   List<MatchesSolved> handleMatchFeaturesUpdated(MatchFeaturesUpdated matchFeaturesUpdated) {
     var matches = matchFeaturesUpdated.getMatchesList();
     var analysis =

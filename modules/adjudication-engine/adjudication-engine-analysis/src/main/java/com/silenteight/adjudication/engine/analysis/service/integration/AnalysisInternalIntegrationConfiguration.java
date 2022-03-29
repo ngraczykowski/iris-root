@@ -23,13 +23,7 @@ class AnalysisInternalIntegrationConfiguration {
   IntegrationFlow matchesSolvedToRecommendationIntegrationFlow() {
     return from(MatchSolutionChannels.MATCHES_SOLVED_OUTBOUND_CHANNEL)
         .log(Level.TRACE, getClass().getName() + ".matchesSolvedToRecommendationIntegrationFlow")
-        .publishSubscribeChannel(subscription ->
-            subscription
-                .subscribe(
-                    subFlow -> subFlow.channel(MATCHES_SOLVED_INBOUND_CHANNEL))
-                .subscribe(
-                    subFlow -> subFlow.channel(MATCHES_SOLVED_RECOMMENDATION_INBOUND_CHANNEL))
-        )
+        .channel(RecommendationChannels.MATCHES_SOLVED_RECOMMENDATION_INBOUND_CHANNEL)
         .get();
   }
 
