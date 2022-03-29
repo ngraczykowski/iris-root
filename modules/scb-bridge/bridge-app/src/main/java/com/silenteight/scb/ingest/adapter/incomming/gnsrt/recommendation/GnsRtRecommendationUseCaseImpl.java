@@ -42,6 +42,7 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
   private final AlertRegistrationFacade alertRegistrationFacade;
   private final IngestEventPublisher ingestEventPublisher;
   private final RawAlertService rawAlertService;
+  private final GnsRtRecommendationService gnsRtRecommendationService;
 
   @Override
   public Mono<GnsRtRecommendationResponse> recommend(@NonNull GnsRtRecommendationRequest request) {
@@ -56,12 +57,14 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
         alertRegistrationFacade
             .registerSolvingAlert(internalBatchId, alerts, registrationAlertContext);
 
-    //feed uds
+    feedUds(alerts, registrationResponse);
+
+    return gnsRtRecommendationService.recommendationsMono(internalBatchId)
+        .map(recommendations -> mapResponse(request, recommendations));
+  }
+
+  private void feedUds(List<Alert> alerts, RegistrationResponse registrationResponse) {
     alerts.forEach(alert -> updateAndPublish(alert, registrationResponse));
-
-    // TODO: wait for batch completed with batchId, then get the recommendations and use mapResponse
-
-    return Mono.empty();
   }
 
   private void updateAndPublish(Alert alert, RegistrationResponse registrationResponse) {

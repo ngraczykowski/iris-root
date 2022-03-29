@@ -30,6 +30,7 @@ class GnsRtRecommendationUseCaseConfiguration {
   private final IngestEventPublisher ingestEventPublisher;
   private final AlertRegistrationFacade alertRegistrationFacade;
   private final RawAlertService rawAlertService;
+  private final GnsRtRecommendationService gnsRtRecommendationService;
 
   @Setter(onMethod_ = @GrpcClient("gateway"))
   private Channel gatewayChannel;
@@ -45,6 +46,7 @@ class GnsRtRecommendationUseCaseConfiguration {
         .alertRegistrationFacade(alertRegistrationFacade)
         .ingestEventPublisher(ingestEventPublisher)
         .rawAlertService(rawAlertService)
+        .gnsRtRecommendationService(gnsRtRecommendationService)
         .build();
   }
 
