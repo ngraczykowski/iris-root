@@ -271,7 +271,7 @@ job "firco-trust-cmapi-connector" {
           "-Djava.io.tmpdir=${meta.silenteight.home}/tmp",
           "-jar",
           "local/ftcc-app-${var.connector_artifact_version}-exec.jar",
-          "--spring.profiles.active=linux,consul",
+          "--spring.profiles.active=linux,consul,mockcallback",
           "--spring.config.additional-location=file:local/conf/",
         ]
       }
