@@ -1,11 +1,10 @@
 package com.silenteight.adjudication.engine.analysis.matchrecommendation;
 
-import com.silenteight.sep.base.aspects.metrics.Timed;
-
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.api.v3.MatchRecommendationsGenerated;
 import com.silenteight.adjudication.internal.v1.MatchesSolved;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
 

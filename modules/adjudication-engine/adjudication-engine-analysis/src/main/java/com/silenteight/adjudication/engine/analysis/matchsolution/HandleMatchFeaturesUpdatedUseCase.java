@@ -1,13 +1,12 @@
 package com.silenteight.adjudication.engine.analysis.matchsolution;
 
-import com.silenteight.sep.base.aspects.metrics.Timed;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.analysis.analysis.AnalysisFacade;
 import com.silenteight.adjudication.internal.v1.MatchFeaturesUpdated;
 import com.silenteight.adjudication.internal.v1.MatchesSolved;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
 
