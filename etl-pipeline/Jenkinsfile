@@ -14,56 +14,83 @@ pipeline {
     }
 
     stages {
-        stage('Build') {
-            steps {
-                sh './scripts/build.sh'
-            }
+         stage('Build') {
+             steps {
+                 sh './scripts/build.sh'
+             }
+         }
+         stage('Test') {
+             steps {
+                 sh './scripts/test.sh'
+             }
+         }
+         stage('Build and publish package') {
+             agent {
+                 docker {
+                     image 'docker.repo.silenteight.com/python-build-image:3.6-bullseye'
+                     args '--volume $HOME/.cache/agent/pip:/home/jenkins/.cache/pip'
+                     alwaysPull true
+                 }
+             }
+             stages {
+                 stage ('Build package') {
+                     steps {
+                         sh './scripts/clean.sh'
+                         sh './scripts/build_package.sh'
+                     }
+                 }
+                 stage('Publish package') {
+                     when {
+                             anyOf {
+                                 branch 'master'
+                                 branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
+                             }
+                             expression { return params.RELEASE }
+                         }
+                     steps {
+                         sh 'pip install --index-url "${PIP_INDEX_URL}" bump2version tox'
+                         sh 'git tag --delete $(git tag --list)'
+                         sshagent([env.JENKINS_SSH_NAME]) {
+                             sh './scripts/release.sh --index-url ${PIP_INDEX_URL}'
+                         }
+                         withCredentials([usernamePassword(
+                             credentialsId: 'pypi-deployment-user',
+                             usernameVariable: 'TWINE_USERNAME',
+                             passwordVariable: 'TWINE_PASSWORD',
+                         )]) {
+                             sh './scripts/publish.sh --index-url "${PIP_INDEX_URL}"'
+                         }
+                     }
+                 }
+                 stage ('Build dist') {
+                   steps {
+                     sh './scripts/build_dist.sh'
+                   }
+                 }
+                 stage('Publish dist') {
+                   when {
+                     anyOf {
+                       branch 'master'
+                       branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
+                     }
+                     expression { return params.RELEASE }
+                   }
+                   steps {
+                     rtUpload (
+                         serverId: "silenteight-repo-v2",
+                         spec: '''{
+      "files": [
+        {
+          "pattern": "dist/etl-pipeline-dist-*.tar.bz2",
+          "target": "python-dist-local/etl-pipeline/"
         }
-        stage('Test') {
-            steps {
-                sh './scripts/test.sh'
-            }
-        }
-        stage('Build and publish package') {
-            agent {
-                docker {
-                    image 'docker.repo.silenteight.com/python-build-image:3.7-bullseye'
-                    args '--volume $HOME/.cache/agent/pip:/home/jenkins/.cache/pip'
-                    alwaysPull true
-                }
-            }
-            stages {
-                stage ('Build package') {
-                    steps {
-                        sh './scripts/clean.sh'
-                        sh './scripts/build_package.sh'
-                    }
-                }
-                stage('Publish package') {
-                    when {
-                            anyOf {
-                                branch 'master'
-                                branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
-                            }
-                            expression { return params.RELEASE }
-                        }
-                    steps {
-                        sh 'pip install --index-url "${PIP_INDEX_URL}" bump2version tox'
-                        sh 'git tag --delete $(git tag --list)'
-                        sshagent([env.JENKINS_SSH_NAME]) {
-                            sh './scripts/release.sh --index-url ${PIP_INDEX_URL}'
-                        }
-                        withCredentials([usernamePassword(
-                            credentialsId: 'pypi-deployment-user',
-                            usernameVariable: 'TWINE_USERNAME',
-                            passwordVariable: 'TWINE_PASSWORD',
-                        )]) {
-                            sh './scripts/publish.sh --index-url "${PIP_INDEX_URL}"'
-                        }
-                    }
-                }
-            }
-        }
+     ]
+}'''
+                     )
+                   }
+                 }
+             }
+         }
         stage('Publish docker image') {
             when {
                 branch 'master'
@@ -78,7 +105,7 @@ pipeline {
               branch 'master'
           }
           steps {
-              sh './nomad/deploy.sh'    
+              sh './nomad/deploy.sh'
           }
         }
     }
