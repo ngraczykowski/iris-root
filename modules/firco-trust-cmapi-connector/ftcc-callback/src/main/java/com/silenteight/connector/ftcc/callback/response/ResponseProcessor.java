@@ -3,6 +3,8 @@ package com.silenteight.connector.ftcc.callback.response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.connector.ftcc.callback.outgoing.RecommendationsDeliveredEvent;
+import com.silenteight.connector.ftcc.callback.outgoing.RecommendationsDeliveredPublisher;
 import com.silenteight.connector.ftcc.callback.response.domain.MessageEntity;
 import com.silenteight.connector.ftcc.callback.response.domain.MessageQuery;
 import com.silenteight.connector.ftcc.common.dto.output.ClientRequestDto;
@@ -33,6 +35,7 @@ public class ResponseProcessor {
   private final RecommendationSender recommendationSender;
   private final RecommendationClientApi recommendationClientApi;
   private final MessageQuery messageQuery;
+  private final RecommendationsDeliveredPublisher recommendationsDeliveredPublisher;
 
   @Async
   public void process(MessageBatchCompleted messageBatchCompleted) {
@@ -52,6 +55,12 @@ public class ResponseProcessor {
         .map(recommendation -> createRequest(messageEntityMap, recommendation))
         .peek(clientRequestDto -> logClientRequestDto(clientRequestDto, analysisId))
         .forEach(recommendationSender::send);
+
+    recommendationsDeliveredPublisher.publish(RecommendationsDeliveredEvent
+        .builder()
+        .batchName(messageBatchCompleted.getBatchId())
+        .analysisName(analysisId)
+        .build());
   }
 
   private ClientRequestDto createRequest(

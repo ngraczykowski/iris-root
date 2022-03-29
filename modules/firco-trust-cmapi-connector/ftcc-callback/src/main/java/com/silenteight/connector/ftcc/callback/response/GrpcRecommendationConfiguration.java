@@ -55,7 +55,7 @@ class GrpcRecommendationConfiguration {
     public RecommendationsOut recommendation(String analysisId) {
       return recommendationServiceClient.getRecommendations(
           RecommendationsIn.builder()
-              .analysisId(analysisId)
+              .analysisName(analysisId)
               .build());
     }
   }

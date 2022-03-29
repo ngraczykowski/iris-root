@@ -37,9 +37,13 @@ ftcc:
     inbound:
       batch-completed:
         exchange: notify-batch-completed-exchange
- #-------------------------------------------------------------------------------------------------
- # CMAPI CALLBACK
- #-------------------------------------------------------------------------------------------------
+    outbound:
+      recommendations-delivered:
+        exchange: core-bridge.recommendation-delivered-exchange
+
+  #-------------------------------------------------------------------------------------------------
+  # CMAPI CALLBACK
+  #-------------------------------------------------------------------------------------------------
   cmapi:
     callback:
       endpoint: "http://localhost:8080/rest/ftcc/callback"

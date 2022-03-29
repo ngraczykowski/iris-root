@@ -1,5 +1,6 @@
 package com.silenteight.connector.ftcc.callback.response;
 
+import com.silenteight.connector.ftcc.callback.outgoing.RecommendationsDeliveredPublisher;
 import com.silenteight.connector.ftcc.callback.response.domain.MessageEntity;
 import com.silenteight.connector.ftcc.callback.response.domain.MessageQuery;
 import com.silenteight.connector.ftcc.common.resource.MessageResource;
@@ -33,6 +34,8 @@ class ResponseProcessorTest {
 
   @Mock
   MessageQuery messageRepository;
+  @Mock
+  RecommendationsDeliveredPublisher recommendationsDeliveredPublisher;
 
   @BeforeEach
   void setUp() {
@@ -53,7 +56,7 @@ class ResponseProcessorTest {
     var responseProcessor = new ResponseProcessor(
         responseCreator, recommendationSender, (analysisId) -> RecommendationsOut.builder()
         .recommendations(collect)
-        .build(), messageRepository);
+        .build(), messageRepository, recommendationsDeliveredPublisher);
 
     when(messageRepository.findByBatchId(any())).thenReturn(
         collect.stream()
