@@ -98,7 +98,7 @@ job "data-prep" {
       }
 
       template {
-        data        = file("./conf/application.yml")
+        data        = file("./conf/${var.namespace}-application.yml")
         destination = "local/conf/application.yml"
         change_mode = "restart"
       }
