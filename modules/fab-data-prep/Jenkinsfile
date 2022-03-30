@@ -6,20 +6,25 @@ gradleBuild(
     dependencyCheckEnabled: true,
     includeBuildNumberInSnapshotVersion: true,
     archiveArtifactsPattern: '**/build/libs/*-exec.jar',
+    additionalParams: [
+      extendedChoice(
+        name: 'environments',
+        value: 'dev,test,mike,lima,foxtrot',
+        defaultValue: 'foxtrot',
+        description: 'Environments to deploy to on Nomad',
+        multiSelectDelimiter: ',',
+        quoteValue: false,
+        saveJSONParameterToFile: false,
+        type: 'PT_MULTI_SELECT',
+        visibleItemCount: 10
+        ),
+      booleanParam(
+        name: 'forceDeploy',
+        defaultValue: false,
+        description: 'Deploy from other branches then master'
+      )
+    ],
     additionalStages: {
-      stage('Minio') {
-        script {
-          def git = new com.silenteight.jenkins.ci.Git()
-          if (git.getGitBranch() == 'master') {
-            minio(
-                bucket: 'artifacts',
-                includes: 'dataprep-app/build/libs/dataprep*-exec.jar',
-                targetFolder: 'dataprep'
-            )
-          } else {
-            echo "Not on master branch, ignore upload to Minio"
-          }
-        }
-      }
+      deployOnNomad()
     }
 )

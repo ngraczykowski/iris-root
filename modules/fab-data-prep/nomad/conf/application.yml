@@ -1,0 +1,40 @@
+server:
+  port: {{ env "NOMAD_PORT_http" }}
+
+grpc:
+  client:
+    registration:
+      address: discovery:/{{ env "NOMAD_NAMESPACE" }}-grpc-core-bridge
+      deadline: 1m
+    universal-data-source:
+      address: discovery:/{{ env "NOMAD_NAMESPACE" }}-universal-data-source
+      deadline: 1m
+    cm-api-connector:
+      address: discovery:/{{ env "NOMAD_NAMESPACE" }}-firco-trust-cmapi-connector
+      deadline: 1m
+    category:
+      address: discovery:/{{ env "NOMAD_NAMESPACE" }}-universal-data-source
+      deadline: 1m
+    category-value:
+      address: discovery:/{{ env "NOMAD_NAMESPACE" }}-universal-data-source
+      deadline: 1m
+
+spring:
+  rabbitmq:
+    addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
+      {{ if $index }},{{ end -}}
+      {{ $rabbit.Address }}:{{ $rabbit.Port -}}
+{{- end }}
+    # NOTE(ahaczewski): Intentionally left empty.
+    host:
+    virtual-host: /{{ env "NOMAD_NAMESPACE" }}
+
+amqp:
+  dataprep:
+    outgoing:
+      match-feature-input-set-fed:
+        exchange-name: core-bridge.match-feature-input-set-fed-exchange
+
+sentry:
+  dsn: https://aa92bf0fad8a49ac832d8749c7959e2a@o1129201.ingest.sentry.io/6292854
+  environment: {{ env "NOMAD_NAMESPACE" }}
