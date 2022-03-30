@@ -20,6 +20,13 @@ ftcc:
       batch-completed:
         exchange: core-bridge.notify-batch-completed-exchange
 
+#-------------------------------------------------------------------------------------------------
+# CMAPI CALLBACK
+#-------------------------------------------------------------------------------------------------
+  cmapi:
+    callback:
+      endpoint: http://localhost:{{ env "NOMAD_PORT_http" }}/rest/ftcc/callback
+
 grpc:
   logging:
     enabled: true
