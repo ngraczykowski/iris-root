@@ -49,8 +49,8 @@ spring:
       initialize-schema: never
 
   datasource:
-    password: cb
-    username: cb
+    password: scb
+    username: scb
     url: jdbc:postgresql://localhost:24291/scb_bridge
 
   jpa:
