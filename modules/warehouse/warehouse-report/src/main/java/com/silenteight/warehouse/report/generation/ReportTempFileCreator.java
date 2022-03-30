@@ -10,6 +10,9 @@ import com.silenteight.warehouse.report.name.ReportFileName;
 import com.silenteight.warehouse.report.name.ReportFileNameDto;
 import com.silenteight.warehouse.report.persistence.ReportFileExtension;
 
+import liquibase.util.csv.opencsv.CSVReader;
+import liquibase.util.csv.opencsv.CSVWriter;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.time.OffsetDateTime;
@@ -22,7 +25,6 @@ import static com.silenteight.warehouse.common.domain.ReportConstants.PRODUCTION
 import static com.silenteight.warehouse.common.domain.ReportConstants.SIMULATION;
 import static com.silenteight.warehouse.report.persistence.ReportFileExtension.*;
 import static java.lang.String.valueOf;
-import static java.nio.file.StandardOpenOption.APPEND;
 import static java.time.ZoneOffset.UTC;
 
 @AllArgsConstructor
@@ -39,11 +41,11 @@ class ReportTempFileCreator {
     File tempCsvFile = createTempFile(CSV);
     int rowsCount = 0;
     try (
-        OutputStream outputStream = Files.newOutputStream(tempCsvFile.toPath(), APPEND);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-      String line;
-      while ((line = reader.readLine()) != null) {
-        writeReportLine(outputStream, line);
+        CSVReader csvReader = new CSVReader(new InputStreamReader(inputStream));
+        CSVWriter csvWriter = new CSVWriter(new FileWriter(tempCsvFile))) {
+      String[] line;
+      while ((line = csvReader.readNext()) != null) {
+        csvWriter.writeNext(line);
         rowsCount++;
       }
     }
@@ -66,12 +68,15 @@ class ReportTempFileCreator {
     try (
         OutputStream fileOutputStream = Files.newOutputStream(destination.toPath());
         ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream);
-        BufferedReader reader = new BufferedReader(new FileReader(csvFile))) {
-      String header = reader.readLine();
+        BufferedReader reader = new BufferedReader(new FileReader(csvFile));
+        CSVReader csvReader = new CSVReader(reader);
+        CSVWriter csvWriter = new CSVWriter(new OutputStreamWriter(zipOutputStream))) {
+      String[] header = csvReader.readNext();
       for (int fileNumber = 1; reader.ready(); fileNumber++) {
         zipOutputStream.putNextEntry(
             new ZipEntry(fileNumber + "_" + generateFileName(request)));
-        writeSingleZipEntry(zipOutputStream, reader, rowsLimit, header);
+        writeSingleZipEntry(csvReader, csvWriter, rowsLimit, header);
+        csvWriter.flush();
         zipOutputStream.closeEntry();
       }
     }
@@ -80,20 +85,14 @@ class ReportTempFileCreator {
 
   @SneakyThrows
   private static void writeSingleZipEntry(
-      OutputStream outputStream, BufferedReader reader, int rowLimit, String header) {
-    writeReportLine(outputStream, header);
+      CSVReader csvReader, CSVWriter csvWriter, int rowLimit, String[] header) {
+    csvWriter.writeNext(header);
     int rowCounter = 1;
-    String line;
-    while (rowCounter <= rowLimit && (line = reader.readLine()) != null) {
-      writeReportLine(outputStream, line);
+    String[] line;
+    while (rowCounter <= rowLimit && (line = csvReader.readNext()) != null) {
+      csvWriter.writeNext(line);
       rowCounter++;
     }
-  }
-
-  @SneakyThrows
-  private static void writeReportLine(OutputStream outputStream, String line) {
-    outputStream.write(line.getBytes());
-    outputStream.write(System.lineSeparator().getBytes());
   }
 
   @SneakyThrows
