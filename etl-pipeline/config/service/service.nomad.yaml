@@ -2,4 +2,4 @@ DATA_SOURCE_INPUT_ENDPOINT: {{ range $index, $client := service (printf "%s-grpc
           {{ if $index }},{{ end -}}
           {{ $client.Address }}:{{ $client.Port -}}
       {{- end }}
-ETL_SERVICE_PORT: {{ env "NOMAD_ADDR_grpc" }}
+ETL_SERVICE_ADDR: {{ env "NOMAD_ADDR_grpc" }}
