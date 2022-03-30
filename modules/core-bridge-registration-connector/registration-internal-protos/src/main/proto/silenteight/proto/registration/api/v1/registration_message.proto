@@ -48,3 +48,8 @@ message MessageNotifyBatchTimedOut {
   string analysis_name = 1 [(google.api.field_behavior) = REQUIRED];
   repeated string alert_names = 2 [(google.api.field_behavior) = REQUIRED];
 }
+
+message MessageBatchDelivered {
+  string batch_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string analysis_name = 2 [(google.api.field_behavior) = OPTIONAL];
+}
