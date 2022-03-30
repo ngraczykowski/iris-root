@@ -1,6 +1,5 @@
 package com.silenteight.scb.ingest.adapter.incomming.gnsrt.recommendation
 
-import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.alertinfo.AlertInfoService
 import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService
 import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlertService
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtRequestToAlertMapper
@@ -28,12 +27,6 @@ class GnsRtRecommendationUseCaseImplSpec extends Specification {
 
   def responseMapper = Mock(GnsRtResponseMapper)
 
-  def alertInfoService = Mock(AlertInfoService)
-
-  def storeGnsRtRecommendationUseCase = Mock(StoreGnsRtRecommendationUseCase)
-
-  def recommendationService = Mock(RecommendationGatewayService)
-
   def registrationFacade = Mock(AlertRegistrationFacade)
 
   def ingestEventPublisher = Mock(IngestEventPublisher)
@@ -48,9 +41,6 @@ class GnsRtRecommendationUseCaseImplSpec extends Specification {
   def underTest = GnsRtRecommendationUseCaseImpl.builder()
       .alertMapper(alertMapper)
       .responseMapper(responseMapper)
-      .alertInfoService(alertInfoService)
-      .storeGnsRtRecommendationUseCase(storeGnsRtRecommendationUseCase)
-      .recommendationService(recommendationService)
       .alertRegistrationFacade(registrationFacade)
       .ingestEventPublisher(ingestEventPublisher)
       .gnsRtRecommendationService(gnsRtRecommendationService)

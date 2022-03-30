@@ -15,7 +15,6 @@ import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext;
 import com.silenteight.scb.ingest.domain.model.RegistrationResponse;
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
 import com.silenteight.sep.base.aspects.logging.LogContext;
-import com.silenteight.sep.base.common.messaging.MessageSender;
 import com.silenteight.sep.base.common.messaging.properties.MessagePropertiesProvider;
 
 import org.jetbrains.annotations.NotNull;
@@ -34,9 +33,7 @@ class IngestService implements SingleAlertIngestService, BatchAlertIngestService
 
   private static final int ALERT_RECOMMENDATION_FLAGS =
       Flag.RECOMMEND.getValue() | Flag.PROCESS.getValue() | Flag.ATTACH.getValue();
-  private final MessageSender sender;
   private final Collection<IngestServiceListener> listeners;
-  private final boolean solvedAlertsProcessingEnabled;
   private final ScbRecommendationService scbRecommendationService;
   private final AlertRegistrationFacade alertRegistrationFacade;
   private final IngestEventPublisher ingestEventPublisher;

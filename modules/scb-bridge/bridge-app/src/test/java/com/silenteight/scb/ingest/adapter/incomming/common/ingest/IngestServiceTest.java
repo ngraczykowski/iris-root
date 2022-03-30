@@ -10,7 +10,6 @@ import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
 import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext;
 import com.silenteight.scb.ingest.domain.model.RegistrationResponse;
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
-import com.silenteight.sep.base.testing.messaging.MessageSenderSpyFactory;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,15 +41,12 @@ class IngestServiceTest {
   @Mock
   private IngestEventPublisher ingestEventPublisher;
 
-  private MessageSenderSpyFactory senderFactory;
-
   private IngestProperties ingestProperties;
   private IngestService ingestService;
 
   @BeforeEach
   void setUp() {
     ingestProperties = new IngestProperties();
-    senderFactory = new MessageSenderSpyFactory();
     createIngestService();
   }
 
@@ -58,7 +54,6 @@ class IngestServiceTest {
     IngestConfiguration configuration =
         new IngestConfiguration(ingestProperties, alertRegistrationFacade, ingestEventPublisher);
     ingestService = configuration.ingestService(
-        senderFactory,
         singleton(listener),
         scbRecommendationService);
   }
@@ -200,7 +195,6 @@ class IngestServiceTest {
   void shouldIngestSolvedAlertsForRecommendationWhenBacktestReportModeIsEnabled() {
     //given
     var internalBatchId = InternalBatchIdGenerator.generate();
-    ingestProperties.setSolvedAlertsProcessingEnabled(true);
     createIngestService();
     var obsoleteMatch = Match.builder().flags(Match.Flag.OBSOLETE.getValue()).build();
     var solvedMatch = Match.builder().flags(Match.Flag.SOLVED.getValue()).build();

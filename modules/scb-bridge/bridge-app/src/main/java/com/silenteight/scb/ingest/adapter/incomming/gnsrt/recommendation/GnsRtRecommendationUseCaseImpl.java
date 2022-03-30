@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
-import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.alertinfo.AlertInfoService;
 import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService;
 import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlertService;
 import com.silenteight.scb.ingest.adapter.incomming.common.util.AlertUpdater;
@@ -37,9 +36,6 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
 
   private final GnsRtRequestToAlertMapper alertMapper;
   private final GnsRtResponseMapper responseMapper;
-  private final AlertInfoService alertInfoService;
-  private final StoreGnsRtRecommendationUseCase storeGnsRtRecommendationUseCase;
-  private final RecommendationGatewayService recommendationService;
   private final AlertRegistrationFacade alertRegistrationFacade;
   private final IngestEventPublisher ingestEventPublisher;
   private final RawAlertService rawAlertService;

@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 @Component
 @Data
 @Validated
+// TODO: probably we should respect that
 class GnsRtRecommendationProperties {
 
   private int deadlineInSeconds = 7;

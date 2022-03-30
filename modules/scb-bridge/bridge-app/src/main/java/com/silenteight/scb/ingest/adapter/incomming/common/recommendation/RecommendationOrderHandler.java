@@ -17,11 +17,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.silenteight.protocol.utils.MoreTimestamps.toOffsetDateTime;
-import static com.silenteight.scb.ingest.adapter.incomming.common.messaging.MessagingConstants.ALERT_ORDER_PRIORITY;
 
 @RequiredArgsConstructor
 @Slf4j
 class RecommendationOrderHandler {
+
+  public static final int ALERT_ORDER_PRIORITY = 10;
 
   private static final String TIMEOUT_EXCEPTION =
       "Recommendation for {} has not been provided within {} seconds";
