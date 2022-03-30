@@ -1,6 +1,5 @@
 package com.silenteight.fab.dataprep.adapter.outgoing
 
-
 import com.silenteight.fab.dataprep.domain.model.AlertErrorDescription
 import com.silenteight.fab.dataprep.domain.model.UdsFedEvent
 import com.silenteight.fab.dataprep.domain.model.UdsFedEvent.FedMatch

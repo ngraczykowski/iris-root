@@ -26,7 +26,7 @@ import static com.silenteight.fab.dataprep.domain.Fixtures.*
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 @ActiveProfiles("dev")
-@Import(DataPrepConfig.class)
+@Import(DataPrepConfig)
 class DataPrepIT extends BaseSpecificationIT {
 
   @Autowired
