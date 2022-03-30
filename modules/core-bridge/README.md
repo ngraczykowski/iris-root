@@ -1,41 +1,38 @@
 # Core Bridge
 
-Core Bridge application uses **Java 17**
+## Documentation
 
-## Application ports
+[Core Bridge Flow](https://whimsical.com/bridge-flow-v2-RpoCuxSMUszaXijf34na8y) diagram shows all steps needed for batch (and its all recommendations) to be completed and delivered to the client.  
 
-| Service  | Port    |
-|:---------|:--------|
-| HTTP     | 24805   | 
-| GRPC     | 24806   |
+In the `docs/` directory you can find a bit more detailed documentation, such as:
+* [Batch Expiration Check Feature](docs/batch_expiration.adoc)
 
-## Accessing services in Docker
+more info soon...
 
-Services are exposed on locally accessible port numbers. The table below shows how to access them.
+## Usage
 
-| Service    | URL                              | User    | Password  |
-|:-----------|:---------------------------------|:--------|:----------|
-| RabbitMQ   | http://localhost:5681/           | `dev`   | `dev`     |
+### Configuration
+Below you can find all configuration parameters that can be set to customize the Core Bridge.
 
-## Running tests in Gradle
+| name                           	| description                                                                     	                            | path                                                            	| type     	| env variable (can be set e.g. via Consul                      | default 	|
+|--------------------------------	|---------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------	|----------	|------------------------------------------------------------	|---------	|
+| Batch Expiration Check Enabled 	| Specifies whether batch should expire after the specified time. More info [here](docs/batch_expiration.adoc) 	| amqp.registration.outgoing.verify-batch-timeout.timeout-enabled 	| boolean  	| AMQP_REGISTRATION_OUTGOING_VERIFY_BATCH_TIMEOUT_ENABLED    	| true    	|
+| Batch Expiration Check Timeout 	| Specifies the time after which the batch should expire. More info [here](docs/batch_expiration.adoc)          | amqp.registration.outgoing.verify-batch-timeout.delay-time      	| duration 	| AMQP_REGISTRATION_OUTGOING_VERIFY_BATCH_TIMEOUT_DELAY_TIME 	| 60m     	|
 
-By default, build run all tests. However, some integration tests take too much time. In order to
-make work faster, we added the flag `-PunitTests` to run only unit tests. <br>
+There are two recommended ways of customizing the Core Bridge settings:
+* S8 Nomad environment:
+  * Add env variables to the Consul Key/Value according to your namespace. For example if your project is deployed on `mike` namespace you need to edit [these](http://10.8.0.1:8500/ui/dc1/kv/mike/core-bridge/secrets/edit) values.
+* On-premise environment:
+  * Overwrite values in application.yml file at the appropriate environment specific configuration project, e.g. `ms-sear-installer`.
 
-Example <br>
-`./gradlew clean build ` - run build with all tests <br>
-`./gradlew clean build -PunitTests` - run build only with unit tests
+> Important notice: Since all secrets (env variables) are loaded during the app startup you need to restart Core Bridge to notice changes.  
 
-This same works with command `test` <br>
-`./gradlew clean test ` - run all tests <br>
-`./gradlew clean test -PunitTests` - run only unit tests
+### Deployment
+Core Bridge application runs on **Java 17**
+#### Nomad
+Nowadays, Core Bridge supports deployment on the Nomad platform.
 
-Tests are considered as unit when they have a suffix `Spec` in their class name e.g. `MyServiceSpec`.
-On the other hand, tests are considered as integration when they have a suffix `IntegrationSpec` in their class name
-e.g. `DatabaseIntegrationTestIntegrationSpec`. 
-So it's important to name test classes appropriately.
-
-## gRPC Connectors
+### gRPC Connectors
 
 They are a convenient way to integrate with the Core Bridge when you don't want to waste your
 valuable time on implementing gRPC adapters.
@@ -79,7 +76,7 @@ class RecommendationGrpcServiceConfiguration {
 After that, the bean is ready to be used.
 Just call `RecommendationServiceClient recommendationServiceClient` to make a gRPC request.
 
-### Core Bridge Registration Connector
+#### Core Bridge Registration Connector
 
 Configuring the connector is analogous to the one mentioned before i.e. create a bean of `RegistrationServiceClient`
 by creating an instance of `RegistrationServiceGrpcAdapter`.
@@ -107,8 +104,37 @@ class RegistrationGrpcServiceConfiguration {
 }
 ```
 
-## Documentation
+## Development
+Core Bridge application uses **Java 17**
+### Application ports
 
-In the `docs/` directory you can find a bit of the project documentation, such as:
-* [Use of Core Bridge Flow](docs/core-bridge-communication.adoc)
-* [Batch Expiration Check Feature](docs/batch_expiration.adoc)
+| Service  | Port    |
+|:---------|:--------|
+| HTTP     | 24805   | 
+| GRPC     | 24806   |
+
+### Accessing services in Docker
+
+Services are exposed on locally accessible port numbers. The table below shows how to access them.
+
+| Service    | URL                              | User    | Password  |
+|:-----------|:---------------------------------|:--------|:----------|
+| RabbitMQ   | http://localhost:5681/           | `dev`   | `dev`     |
+
+### Running tests in Gradle
+
+By default, build run all tests. However, some integration tests take too much time. In order to
+make work faster, we added the flag `-PunitTests` to run only unit tests. <br>
+
+Example <br>
+`./gradlew clean build ` - run build with all tests <br>
+`./gradlew clean build -PunitTests` - run build only with unit tests
+
+This same works with command `test` <br>
+`./gradlew clean test ` - run all tests <br>
+`./gradlew clean test -PunitTests` - run only unit tests
+
+Tests are considered as unit when they have a suffix `Spec` in their class name e.g. `MyServiceSpec`.
+On the other hand, tests are considered as integration when they have a suffix `IntegrationSpec` in their class name
+e.g. `DatabaseIntegrationTestIntegrationSpec`.
+So it's important to name test classes appropriately.

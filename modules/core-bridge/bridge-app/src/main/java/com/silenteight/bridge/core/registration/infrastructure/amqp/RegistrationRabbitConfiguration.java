@@ -219,12 +219,13 @@ class RegistrationRabbitConfiguration {
       AmqpRegistrationIncomingVerifyBatchTimeoutProperties properties,
       AmqpRegistrationOutgoingVerifyBatchTimeoutProperties outgoingProperties
   ) {
-    if (outgoingProperties.timeoutEnabled() && properties.delayTime() == null) {
-      throw new IllegalStateException(
-          "Batch timeout handling is enabled, but delay time is not configured.");
+    if (outgoingProperties.timeoutEnabled() && outgoingProperties.delayTime() == null) {
+      throw new IllegalStateException("""
+          Batch timeout handling is enabled, but delay time is not configured.
+          More details can be found in the README file: Usage->Configuration.
+          """);
     }
     return QueueBuilder.durable(properties.delayedQueueName())
-        .ttl(Long.valueOf(properties.delayTime().toMillis()).intValue())
         .deadLetterExchange(properties.deadLetterExchangeName())
         .deadLetterRoutingKey(EMPTY_ROUTING_KEY)
         .build();

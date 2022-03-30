@@ -26,7 +26,11 @@ class VerifyBatchTimeoutRabbitPublisher implements VerifyBatchTimeoutPublisher {
 
       final var routingKey = "";
       final var message = createMessage(event);
-      rabbitTemplate.convertAndSend(properties.exchangeName(), routingKey, message);
+      rabbitTemplate.convertAndSend(properties.exchangeName(), routingKey, message, m -> {
+        m.getMessageProperties()
+            .setExpiration(String.valueOf(properties.delayTime().toMillis()));
+        return m;
+      });
     }
   }
 

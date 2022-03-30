@@ -60,7 +60,6 @@ amqp:
         dead-letter-queue-time-to-live-in-milliseconds: 30000
         dead-letter-exchange-name: core-bridge.recommendation-delivered.dlx
       verify-batch-timeout:
-        delay-time: 60m
         delayed-queue-name: core-bridge.verify-batch-timeout-delayed-queue
         queue-name: core-bridge.verify-batch-timeout-queue
         error-alerts-queue-name: core-bridge.error-alerts-verify-batch-timeout-queue
@@ -73,6 +72,7 @@ amqp:
         exchange-name: core-bridge.notify-batch-completed-exchange
       verify-batch-timeout:
         timeout-enabled: true
+        delay-time: 60m
         exchange-name: core-bridge.verify-batch-timeout-exchange
       notify-batch-timed-out:
         exchange-name: core-bridge.notify-batch-timed-out-exchange

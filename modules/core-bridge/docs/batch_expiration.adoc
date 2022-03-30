@@ -21,7 +21,7 @@ The default value is `false`.
 It defines batch TTL, meaning how much time is needed from batch registration until it gets timed out.
 
 The default value is 60 minutes, and it can be modified using the property:
-`amqp.registration.incoming.verify-batch-timeout.delay-time`.
+`amqp.registration.outgoing.verify-batch-timeout.delay-time`.
 Its value should be in a format of `java.time.Duration`.
 
 == Creating Manual Recommendations

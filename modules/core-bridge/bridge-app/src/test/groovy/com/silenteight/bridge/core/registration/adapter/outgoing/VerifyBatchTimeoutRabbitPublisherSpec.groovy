@@ -5,13 +5,17 @@ import com.silenteight.bridge.core.registration.domain.model.VerifyBatchTimeoutE
 import com.silenteight.bridge.core.registration.infrastructure.amqp.AmqpRegistrationOutgoingVerifyBatchTimeoutProperties
 import com.silenteight.proto.registration.api.v1.MessageVerifyBatchTimeout
 
+import org.springframework.amqp.core.MessagePostProcessor
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import spock.lang.Specification
 import spock.lang.Subject
 
+import java.time.Duration
+
 class VerifyBatchTimeoutRabbitPublisherSpec extends Specification {
 
-  def amqpProperties = new AmqpRegistrationOutgoingVerifyBatchTimeoutProperties(true, 'exchange')
+  def amqpProperties = new AmqpRegistrationOutgoingVerifyBatchTimeoutProperties(
+      true, Duration.ofSeconds(10), 'exchange')
   def rabbitTemplate = Mock(RabbitTemplate)
 
   @Subject
@@ -29,6 +33,7 @@ class VerifyBatchTimeoutRabbitPublisherSpec extends Specification {
     underTest.publish(event)
 
     then:
-    1 * rabbitTemplate.convertAndSend(amqpProperties.exchangeName(), '', message)
+    1 * rabbitTemplate
+        .convertAndSend(amqpProperties.exchangeName(), '', message, _ as MessagePostProcessor)
   }
 }
