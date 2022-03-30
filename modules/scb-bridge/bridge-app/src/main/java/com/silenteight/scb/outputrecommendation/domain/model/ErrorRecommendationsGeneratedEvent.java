@@ -5,7 +5,7 @@ import lombok.Builder;
 public record ErrorRecommendationsGeneratedEvent(
     String batchId,
     String errorDescription,
-    String batchMetadata,
+    BatchMetadata batchMetadata,
     BatchStatistics statistics
 ) {
 

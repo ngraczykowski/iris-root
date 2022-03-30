@@ -18,6 +18,7 @@ class RecommendationsProcessor {
 
   private static final List<String> EMPTY_ALERT_NAMES = List.of();
 
+  private final RecommendationsMapper recommendationsMapper;
   private final RecommendationApiClient recommendationApiClient;
   private final RecommendationPublisher recommendationPublisher;
   private final RecommendationDeliveredEventPublisher recommendationDeliveredEventPublisher;
@@ -27,10 +28,10 @@ class RecommendationsProcessor {
         recommendationApiClient.getRecommendations(command.analysisName(), command.alertNames());
 
     var recommendationsEvent =
-        RecommendationsMapper.toBatchCompletedRecommendationsEvent(command, recommendations);
+        recommendationsMapper.toBatchCompletedRecommendationsEvent(command, recommendations);
 
     var recommendationsDeliveredEvent =
-        RecommendationsMapper.toRecommendationsDeliveredEvent(
+        recommendationsMapper.toRecommendationsDeliveredEvent(
             command.batchId(), command.analysisName(), command.alertNames());
 
     recommendationPublisher.publishCompleted(recommendationsEvent);
@@ -39,10 +40,10 @@ class RecommendationsProcessor {
 
   void processBatchError(PrepareErrorRecommendationResponseCommand command) {
     var errorRecommendationsEvent =
-        RecommendationsMapper.toBatchErrorRecommendationsEvent(command);
+        recommendationsMapper.toBatchErrorRecommendationsEvent(command);
 
     var recommendationsDeliveredEvent =
-        RecommendationsMapper.toRecommendationsDeliveredEvent(
+        recommendationsMapper.toRecommendationsDeliveredEvent(
             command.batchId(), EMPTY_ANALYSIS_NAME, EMPTY_ALERT_NAMES);
 
     recommendationPublisher.publishError(errorRecommendationsEvent);

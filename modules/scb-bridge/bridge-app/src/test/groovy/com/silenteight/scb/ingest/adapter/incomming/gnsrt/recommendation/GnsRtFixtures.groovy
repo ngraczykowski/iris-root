@@ -23,13 +23,13 @@ class GnsRtFixtures {
 
   def gnsAlert = gnsAlert(alertId)
 
-  def gnsRtRecommendationRequest = gnsRtRecommendationRequest(gnsAlert)
+  def gnsRtRecommendationRequest = gnsRtRecommendationRequest([gnsAlert])
 
   static gnsAlert(ObjectId id) {
-    def alert = new GnsRtAlert()
-    alert.setAlertId(id.sourceId())
-    alert.setWatchlistType("AM")
-    alert
+    new GnsRtAlert(
+        alertId: id.sourceId(),
+        watchlistType: "AM"
+    )
   }
 
   static alert(ObjectId id) {
@@ -37,7 +37,7 @@ class GnsRtFixtures {
         .id(id)
         .build()
   }
-  
+
   def recommendation = Recommendation.builder()
       .alert(
           Recommendations.Alert.builder()
@@ -59,30 +59,17 @@ class GnsRtFixtures {
       .recommendations([recommendation])
       .build()
 
-  private static gnsRtRecommendationRequest(GnsRtAlert... alerts) {
-    def immediateResponseData = new ImmediateResponseData()
-    immediateResponseData.setAlerts(alerts as List)
-
-    def screenCustomerNameResInfo = new GnsRtScreenCustomerNameResInfo()
-    screenCustomerNameResInfo.setImmediateResponseData(immediateResponseData)
-
-    def screenCustomerNameResPayload = new GnsRtScreenCustomerNameResPayload()
-    screenCustomerNameResPayload.setScreenCustomerNameResInfo(screenCustomerNameResInfo)
-
-    def originationDetails = new GnsRtOriginationDetails()
-    originationDetails.setTrackingId(UUID.randomUUID().toString())
-
-    def screenCustomerNameResHeader = new GnsRtScreenCustomerNameResHeader()
-    screenCustomerNameResHeader.setOriginationDetails(originationDetails)
-
-    def screenCustomerNameRes = new GnsRtScreenCustomerNameRes()
-    screenCustomerNameRes.setScreenCustomerNameResPayload(screenCustomerNameResPayload)
-    screenCustomerNameRes.setHeader(screenCustomerNameResHeader)
-
-    def recommendationRequest = new GnsRtRecommendationRequest()
-    recommendationRequest.setScreenCustomerNameRes(screenCustomerNameRes)
-
-    recommendationRequest
+  private static gnsRtRecommendationRequest(alerts) {
+    new GnsRtRecommendationRequest(
+        screenCustomerNameRes: new GnsRtScreenCustomerNameRes(
+            screenCustomerNameResPayload: new GnsRtScreenCustomerNameResPayload(
+                screenCustomerNameResInfo: new GnsRtScreenCustomerNameResInfo(
+                    immediateResponseData: new ImmediateResponseData(
+                        alerts: alerts
+                    )
+                )
+            )
+        ))
   }
 
 }

@@ -22,7 +22,7 @@ public class BatchErrorRabbitAmqpListener {
       errorHandler = "outputRecommendationAmqpErrorHandler"
   )
   public void subscribe(MessageBatchError message) {
-    log.info("Batch error message received for batch with id: {}", message.getBatchId());
+    log.info("Received batch error message for batchId: {}", message.getBatchId());
     var command = batchMapper.fromBatchErrorMessage(message);
     outputRecommendationFacade.prepareErrorBatchRecommendations(command);
   }

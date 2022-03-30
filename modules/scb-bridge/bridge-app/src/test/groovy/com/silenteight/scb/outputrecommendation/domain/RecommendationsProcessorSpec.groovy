@@ -1,8 +1,7 @@
 package com.silenteight.scb.outputrecommendation.domain
 
-import com.silenteight.scb.outputrecommendation.domain.model.ErrorRecommendationsGeneratedEvent
-import com.silenteight.scb.outputrecommendation.domain.model.RecommendationsDeliveredEvent
-import com.silenteight.scb.outputrecommendation.domain.model.RecommendationsGeneratedEvent
+import com.silenteight.scb.ingest.domain.payload.PayloadConverter
+import com.silenteight.scb.outputrecommendation.domain.model.*
 import com.silenteight.scb.outputrecommendation.domain.port.outgoing.RecommendationApiClient
 import com.silenteight.scb.outputrecommendation.domain.port.outgoing.RecommendationDeliveredEventPublisher
 import com.silenteight.scb.outputrecommendation.domain.port.outgoing.RecommendationPublisher
@@ -12,16 +11,24 @@ import spock.lang.Subject
 
 class RecommendationsProcessorSpec extends Specification {
 
+  def payloadConverter = Mock(PayloadConverter)
+  def recommendationsMapper = new RecommendationsMapper(payloadConverter)
   def recommendationApiClient = Mock(RecommendationApiClient)
   def recommendationPublisher = Mock(RecommendationPublisher)
   def recommendationDeliveredEventPublisher = Mock(RecommendationDeliveredEventPublisher)
 
   @Subject
   def underTest = new RecommendationsProcessor(
+      recommendationsMapper,
       recommendationApiClient,
       recommendationPublisher,
       recommendationDeliveredEventPublisher
   )
+
+  def setup() {
+    payloadConverter.deserializeFromJsonToObject(Fixtures.BATCH_SERIALIZED_METADATA, BatchMetadata)
+        >> new BatchMetadata(BatchSource.GNS_RT)
+  }
 
   def 'should process batch completed'() {
     given:
@@ -38,8 +45,9 @@ class RecommendationsProcessorSpec extends Specification {
         batchId() == Fixtures.BATCH_ID
         analysisName() == Fixtures.ANALYSIS_NAME
         alertNames() == Fixtures.ALERT_IDS
-        batchMetadata() == Fixtures.BATCH_SERIALIZED_METADATA
-
+        with(batchMetadata()) {
+          batchSource() == Fixtures.BATCH_SOURCE
+        }
         with(statistics()) {
           totalProcessedCount() == Fixtures.TOTAL_PROCESSED_COUNT
           totalUnableToProcessCount() == Fixtures.TOTAL_UNABLE_TO_PROCESS_COUNT
@@ -100,7 +108,9 @@ class RecommendationsProcessorSpec extends Specification {
       with(event) {
         batchId() == Fixtures.BATCH_ID
         errorDescription() == Fixtures.ERROR_DESCRIPTION
-        batchMetadata() == Fixtures.BATCH_SERIALIZED_METADATA
+        with(batchMetadata()) {
+          batchSource() == Fixtures.BATCH_SOURCE
+        }
         with(statistics()) {
           totalProcessedCount() == 0
           totalUnableToProcessCount() == 0

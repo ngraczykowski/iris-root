@@ -1,5 +1,6 @@
 package com.silenteight.scb.outputrecommendation.domain
 
+import com.silenteight.scb.outputrecommendation.domain.model.BatchSource
 import com.silenteight.scb.outputrecommendation.domain.model.BatchStatistics
 import com.silenteight.scb.outputrecommendation.domain.model.BatchStatistics.RecommendationsStatistics
 import com.silenteight.scb.outputrecommendation.domain.model.Recommendations
@@ -14,19 +15,14 @@ import java.time.OffsetDateTime
 class Fixtures {
 
   static String BATCH_ID = 'batchId'
+  static BatchSource BATCH_SOURCE = BatchSource.GNS_RT
   static String ANALYSIS_NAME = 'analysisName'
   static List<String> ALERT_IDS = ['alertId1', 'alertId2']
 
   static String BATCH_SERIALIZED_METADATA =
-      '''{
-      "datasetId":"batchMetadataDatasetId",
-      "datasetName":"batchMetadataDatasetName",
-      "batchSendHistoryId":"batchMetadataBatchSendHistoryId",
-      "businessDate":"batchMetadataBusinessDate",
-      "transmissionDateTime":"batchMetadataTransmissionDateTime",
-      "totalNotified":1,
-      "totalReceivedFromDb":1
-      }'''
+      """{
+      "batchSource":"${BATCH_SOURCE}"
+      }"""
 
   static Integer TRUE_POSITIVE_COUNT = 1
   static Integer FALSE_POSITIVE_COUNT = 2
@@ -111,7 +107,7 @@ class Fixtures {
           'features/otherCountry'      : OTHER_COUNTRY_FEATURE_VALUE,
           'features/residencyCountry'  : RESIDENCY_COUNTRY_FEATURE_VALUE,
           'features/nationalIdDocument': NATIONAL_ID_FEATURE_VALUE,
-      ] as Map
+      ]
 
   static List<Match> MATCHES =
       [

@@ -23,7 +23,7 @@ class BatchCompletedRabbitAmqpListener {
   )
   public void subscribe(MessageBatchCompleted batchCompleted) {
     log.info(
-        "Received batch completed message for analysis id {} and batch id {}",
+        "Received batch completed message for analysisName: {} and batchId: {}",
         batchCompleted.getAnalysisName(), batchCompleted.getBatchId());
 
     var command = batchMapper.fromBatchCompletedMessage(batchCompleted);

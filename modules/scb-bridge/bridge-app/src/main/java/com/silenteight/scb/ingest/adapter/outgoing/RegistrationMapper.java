@@ -3,6 +3,7 @@ package com.silenteight.scb.ingest.adapter.outgoing;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.registration.api.library.v1.*;
+import com.silenteight.scb.ingest.domain.exceptons.IngestJsonMessageException;
 import com.silenteight.scb.ingest.domain.model.*;
 import com.silenteight.scb.ingest.domain.model.RegistrationResponse.RegisteredAlertWithMatches;
 import com.silenteight.scb.ingest.domain.model.RegistrationResponse.RegisteredMatch;
@@ -24,7 +25,9 @@ class RegistrationMapper {
     return RegisterBatchIn.builder()
         .batchId(batch.id())
         .alertCount(batch.alertCount())
-        .batchMetadata(converter.serializeFromObjectToJson(batch.metadata()).getOrElse(EMPTY))
+        .batchMetadata(
+            converter.serializeFromObjectToJson(batch.metadata())
+                .getOrElseThrow(IngestJsonMessageException::new))
         .batchPriority(batch.priority().getValue())
         .build();
   }

@@ -22,18 +22,42 @@ class RecommendationSender implements RecommendationPublisher {
 
   @Override
   public void publishCompleted(RecommendationsGeneratedEvent event) {
-
-    // TODO: code which checks if response should go to CBS or RT
-    cbsRecommendationService.recommend(event.recommendations());
-    gnsRtRecommendationService.recommend(event.recommendations());
-
-    // TODO: should below be called for RT or CBS only
+    notifyServicesAboutRecommendations(event);
     scbRecommendationService.saveRecommendations(event.recommendations());
   }
 
   @Override
   public void publishError(ErrorRecommendationsGeneratedEvent event) {
-    // TODO: code which checks if response should go to CBS or RT
-    gnsRtRecommendationService.batchFailed(event.batchId(), event.errorDescription());
+    notifyServicesAboutErrorRecommendations(event);
   }
+
+  private void notifyServicesAboutRecommendations(RecommendationsGeneratedEvent event) {
+    log.info(
+        "Notifying services about Recommendations generated for batchId: {}, batchMetadata: {}",
+        event.batchId(), event.batchMetadata());
+
+    var batchSource = event.batchMetadata().batchSource();
+    switch (batchSource) {
+      case CBS -> cbsRecommendationService.recommend(event.recommendations());
+      case GNS_RT -> gnsRtRecommendationService.recommend(event.recommendations());
+      default -> throw new IllegalStateException(
+          "Unrecognized BatchSource type " + batchSource + " in batchMetadata");
+    }
+  }
+
+  private void notifyServicesAboutErrorRecommendations(ErrorRecommendationsGeneratedEvent event) {
+    log.info(
+        "Notifying services about Error Recommendations for batchId: {}, event: {}",
+        event.batchId(), event);
+
+    var batchSource = event.batchMetadata().batchSource();
+    switch (batchSource) {
+      case CBS -> log.error("CBS path not yet implemented"); // TODO: implement
+      case GNS_RT -> gnsRtRecommendationService.batchFailed(
+          event.batchId(), event.errorDescription());
+      default -> throw new IllegalStateException(
+          "Unrecognized BatchSource type " + batchSource + " in batchMetadata");
+    }
+  }
+
 }

@@ -1,14 +1,20 @@
 package com.silenteight.scb.outputrecommendation.domain;
 
-import lombok.experimental.UtilityClass;
+import lombok.RequiredArgsConstructor;
 
+import com.silenteight.scb.ingest.domain.payload.PayloadConverter;
 import com.silenteight.scb.outputrecommendation.domain.model.*;
 import com.silenteight.scb.outputrecommendation.domain.model.BatchStatistics.RecommendationsStatistics;
 
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
-@UtilityClass
+@Component
+@RequiredArgsConstructor
 class RecommendationsMapper {
+
+  private final PayloadConverter converter;
 
   RecommendationsGeneratedEvent toBatchCompletedRecommendationsEvent(
       PrepareRecommendationResponseCommand command,
@@ -18,7 +24,8 @@ class RecommendationsMapper {
         .batchId(command.batchId())
         .analysisName(command.analysisName())
         .alertNames(command.alertNames())
-        .batchMetadata(command.batchMetadata())
+        .batchMetadata(
+            converter.deserializeFromJsonToObject(command.batchMetadata(), BatchMetadata.class))
         .statistics(recommendations.statistics())
         .recommendations(recommendations.recommendations())
         .build();
@@ -36,7 +43,8 @@ class RecommendationsMapper {
     return ErrorRecommendationsGeneratedEvent.builder()
         .batchId(command.batchId())
         .errorDescription(command.errorDescription())
-        .batchMetadata(command.batchMetadata())
+        .batchMetadata(
+            converter.deserializeFromJsonToObject(command.batchMetadata(), BatchMetadata.class))
         .statistics(createEmptyStatistics())
         .build();
   }
