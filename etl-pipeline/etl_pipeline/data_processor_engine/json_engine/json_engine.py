@@ -7,6 +7,7 @@ from fuzzywuzzy import fuzz
 from etl_pipeline.config import columns_namespace as cn
 from etl_pipeline.custom.ms.trigger_discovery.discoverer import TriggeredTokensDiscoverer
 from etl_pipeline.data_processor_engine.engine.engine import ProcessingEngine
+from etl_pipeline.logger import get_logger
 from etl_pipeline.pattern_json import (
     ACCT_NUM,
     ADDRESS_ID,
@@ -41,6 +42,7 @@ COLLECTIVE_REPRESENTATION_MAP_FOR_PARTY = {
     cn.ALL_PARTY_BIRTH_COUNTRIES: "partyCountryOfBirth",
     cn.ALL_PARTY_CITIZENSHIP_COUNTRIES: "partyPrimaryCitizenshipCountry",
     cn.ALL_PARTY_RESIDENCY_COUNTRIES: "partyResidenceCountryCode",
+    cn.ALL_GOVT_IDS: "partyGovtIdNumber",
 }
 
 COLLECTIVE_REPRESENTATION_MAP_FOR_ACCOUNTS = {
@@ -64,7 +66,11 @@ COLLECTIVE_REPRESENTATION_MAP_FOR_FIELD = {
     cn.ALL_PARTY1_COUNTRY_PEP: cn.PARTY1_COUNTRY_PEP,
     cn.ALL_PARTY1_NAME_ALIAS1: cn.PARTY1_NAME_ALIAS1,
     cn.ALL_CONCAT_NAMES: cn.CONCAT_NAME,
+    cn.ALL_PARTY1_GOVTID1_NUMBER: cn.PARTY1_GOVTID1_NUMBER,
+    cn.ALL_PARTY1_GOVTID2_NUMBER: cn.PARTY1_GOVTID2_NUMBER,
 }
+
+logger = get_logger("JSON ENGINE")
 
 
 class JsonProcessingEngine(ProcessingEngine):
@@ -301,11 +307,19 @@ class JsonProcessingEngine(ProcessingEngine):
         self, target_col, source_cols, mapper, return_array
     ):
         if len(source_cols) >= 2:
-            value = [mapper[valid_source_col] for valid_source_col in source_cols]
+            value = []
+            for valid_source_col in source_cols:
+                try:
+                    value.append(mapper[valid_source_col])
+                except KeyError:
+                    logger.warning(f"No field in payload named: {valid_source_col}")
         elif len(source_cols) == 1:
-            value = mapper[source_cols[0]]
-            if return_array:
-                value = [value]
+            try:
+                value = mapper[source_cols[0]]
+                if return_array:
+                    value = [value]
+            except KeyError:
+                logger.warning(f"No field in payload named: {source_cols}")
         else:
             value = None
             if return_array:

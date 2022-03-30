@@ -306,7 +306,13 @@ class MSPipeline(ETLPipeline):
                 self.engine.sql_to_merge_specific_columns_to_standardized(
                     agent_input_agg_col_config, match, config, False
                 )
-
+                match.update(
+                    {
+                        key: self.flatten(match.get(key))
+                        for key in match
+                        if key.endswith("_aggregated")
+                    }
+                )
                 self.remove_nulls_from_aggegated(match)
 
         return payloads

@@ -48,6 +48,7 @@ class TestEngine(unittest.TestCase):
         assert payload == {
             "all_connected_parties_names": [],
             "ALL_PARTY_TYPES": [],
+            "ALL_GOVT_IDS": [],
             "ALL_PARTY_NAMES": ["Shaolin kung fu master", "John, Doe Doe"],
             "ALL_TAX_IDS": ["1231413412312", "12097381208937"],
             "ALL_PARTY_DOBS": ["10/10/1969"],
