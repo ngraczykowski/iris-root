@@ -6,6 +6,8 @@ import lombok.Value;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Collections.emptyList;
+
 @Builder
 @Value
 public class WarehouseEvent {
@@ -20,7 +22,8 @@ public class WarehouseEvent {
     String alertName;
     String discriminator;
     String accessPermissionTag;
-    List<Match> matches;
+    @Builder.Default
+    List<Match> matches = emptyList();
     Map<String, String> payload;
   }
 

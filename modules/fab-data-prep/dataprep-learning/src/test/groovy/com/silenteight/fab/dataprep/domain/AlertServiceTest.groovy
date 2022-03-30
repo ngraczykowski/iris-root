@@ -1,20 +1,23 @@
 package com.silenteight.fab.dataprep.domain
 
 import com.silenteight.fab.dataprep.BaseSpecificationIT
-import com.silenteight.fab.dataprep.domain.model.RegisteredAlert
+import com.silenteight.fab.dataprep.domain.model.LearningData
 
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
-import org.springframework.test.context.ActiveProfiles
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration
+import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer
+import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.TestPropertySource
 import org.springframework.transaction.annotation.Transactional
 import spock.lang.Subject
 import spock.lang.Unroll
 
 import static com.silenteight.fab.dataprep.domain.Fixtures.*
 
-@SpringBootTest(webEnvironment = WebEnvironment.NONE)
-@ActiveProfiles("dev")
+@ContextConfiguration(classes = AlertService,
+    initializers = ConfigDataApplicationContextInitializer)
+@TestPropertySource("classpath:/data-test.properties")
+@EnableAutoConfiguration
 @Transactional
 class AlertServiceTest extends BaseSpecificationIT {
 
@@ -27,7 +30,7 @@ class AlertServiceTest extends BaseSpecificationIT {
 
   def 'alert should be stored in DB'() {
     when:
-    underTest.save(REGISTERED_ALERT)
+    underTest.save(LEARNING_DATA)
 
     then:
     alertRepository.findAll() == [AlertEntity.builder()
@@ -39,26 +42,16 @@ class AlertServiceTest extends BaseSpecificationIT {
   @Unroll
   def 'learning alert should be found in DB #alerName #systemId #messageId'() {
     given:
-    RegisteredAlert storedAegisteredAlert = RegisteredAlert.builder()
-        .batchName(BATCH_NAME)
-        .messageName(MESSAGE_NAME)
-        .alertName(ALERT_NAME)
-        .systemId(SYSTEM_ID)
-        .messageId(MESSAGE_ID)
-        .build()
+    underTest.save(LEARNING_DATA)
 
-    underTest.save(storedAegisteredAlert)
-
-    RegisteredAlert registeredAlert = RegisteredAlert.builder()
-        .batchName(BATCH_NAME)
-        .messageName(MESSAGE_NAME)
+    LearningData learningData = LearningData.builder()
         .alertName(alerName)
         .systemId(systemId)
         .messageId(messageId)
         .build()
 
     when:
-    boolean result = underTest.isLearningAlert(registeredAlert)
+    boolean result = underTest.isLearningAlert(learningData)
 
     then:
     result == expected

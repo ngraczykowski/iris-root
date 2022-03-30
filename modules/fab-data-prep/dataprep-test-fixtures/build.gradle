@@ -1,0 +1,31 @@
+plugins {
+  id "java-library"
+  id "groovy"
+}
+
+description = "dataprep-test-fixtures"
+
+configurations {
+  implementation.extendsFrom starterDatabase
+  runtimeOnly.extendsFrom starterDatabaseRuntime
+}
+
+apply from: "${rootProject.projectDir}/gradle/scripts/dependencies.gradle"
+
+dependencies {
+  api libraries.spring_boot_test
+  api libraries.spring_test
+
+  api libraries.groovy_all
+  api libraries.spock_core
+  api libraries.spock_spring
+  api libraries.junit_jupiter_api
+  api libraries.junit_jupiter_testcontainers
+  api libraries.mockito_core
+  api libraries.mockito_junit_jupiter
+  api libraries.spring_boot_test
+  api libraries.spring_test
+  api libraries.testcontainers_rabbitmq
+  api libraries.testcontainers_spock
+  api libraries.testcontainers_postgresql
+}

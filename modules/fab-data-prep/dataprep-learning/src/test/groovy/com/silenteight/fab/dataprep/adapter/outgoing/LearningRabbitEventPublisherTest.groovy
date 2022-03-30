@@ -14,7 +14,6 @@ import spock.lang.Subject
 import static com.silenteight.fab.dataprep.adapter.outgoing.LearningRabbitEventPublisher.EXCHANGE_NAME
 import static com.silenteight.fab.dataprep.adapter.outgoing.LearningRabbitEventPublisher.ROUTING_KEY
 import static com.silenteight.fab.dataprep.domain.Fixtures.ALERT_NAME
-import static com.silenteight.fab.dataprep.domain.Fixtures.MATCH_NAME
 
 class LearningRabbitEventPublisherTest extends Specification {
 
@@ -26,6 +25,7 @@ class LearningRabbitEventPublisherTest extends Specification {
   private static final String ALERT_PAYLOAD_VALUE = 'alert-value'
   private static final String MATCH_PAYLOAD_KEY = 'match-key'
   private static final String MATCH_PAYLOAD_VALUE = 'match-value'
+  private static final String MATCH_NAME = 'match-name'
 
   def rabbitTemplate = Mock(RabbitTemplate)
 

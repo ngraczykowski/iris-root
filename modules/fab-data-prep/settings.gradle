@@ -2,3 +2,6 @@ rootProject.name = 'fab-dataprep'
 include 'dataprep-app'
 include 'dataprep-db-changelog'
 include "dataprep-dist"
+include 'dataprep-learning'
+include 'dataprep-test-fixtures'
+

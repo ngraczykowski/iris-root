@@ -1,0 +1,37 @@
+plugins {
+  id "java-library"
+  id "groovy"
+}
+
+description = "dataprep-learning"
+
+configurations {
+  implementation.extendsFrom starterDatabase
+  runtimeOnly.extendsFrom starterDatabaseRuntime
+}
+
+apply from: "${rootProject.projectDir}/gradle/scripts/dependencies.gradle"
+
+dependencies {
+  implementation project(":dataprep-db-changelog")
+
+  api libraries.silenteight_sep_base_common
+  implementation libraries.silenteight_warehouse_api
+  api libraries.sear_rabbitmq_common_schema
+  api libraries.spring_boot_autoconfigure
+  api libraries.spring_boot_starter_amqp
+
+  implementation libraries.spring_boot_starter_data_jpa
+  implementation libraries.spring_boot_starter_jdbc
+  api libraries.jakarta_validation_api
+
+  implementation libraries.liquibase_core
+  implementation libraries.hikari_cp
+  runtimeOnly libraries.postgresql
+  runtimeOnly libraries.liquibase_sessionlock
+
+  runtimeOnly libraries.hibernate_validator
+
+  testImplementation project(':dataprep-test-fixtures')
+  testRuntimeOnly libraries.junit_jupiter_engine
+}
