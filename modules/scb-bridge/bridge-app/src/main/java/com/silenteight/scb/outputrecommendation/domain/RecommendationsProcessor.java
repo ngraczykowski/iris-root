@@ -24,15 +24,17 @@ class RecommendationsProcessor {
   private final RecommendationDeliveredEventPublisher recommendationDeliveredEventPublisher;
 
   void processBatchCompleted(PrepareRecommendationResponseCommand command) {
+
+    // Note, when alertNames is empty, it means to get all alerts within analysis with analysisName
     var recommendations =
-        recommendationApiClient.getRecommendations(command.analysisName(), command.alertNames());
+        recommendationApiClient.getRecommendations(command.analysisName(), EMPTY_ALERT_NAMES);
 
     var recommendationsEvent =
         recommendationsMapper.toBatchCompletedRecommendationsEvent(command, recommendations);
 
     var recommendationsDeliveredEvent =
         recommendationsMapper.toRecommendationsDeliveredEvent(
-            command.batchId(), command.analysisName(), command.alertNames());
+            command.batchId(), command.analysisName());
 
     recommendationPublisher.publishCompleted(recommendationsEvent);
     recommendationDeliveredEventPublisher.publish(recommendationsDeliveredEvent);
@@ -44,7 +46,7 @@ class RecommendationsProcessor {
 
     var recommendationsDeliveredEvent =
         recommendationsMapper.toRecommendationsDeliveredEvent(
-            command.batchId(), EMPTY_ANALYSIS_NAME, EMPTY_ALERT_NAMES);
+            command.batchId(), EMPTY_ANALYSIS_NAME);
 
     recommendationPublisher.publishError(errorRecommendationsEvent);
     recommendationDeliveredEventPublisher.publish(recommendationsDeliveredEvent);

@@ -38,13 +38,13 @@ class RecommendationsProcessorSpec extends Specification {
     underTest.processBatchCompleted(command)
 
     then:
-    1 * recommendationApiClient.getRecommendations(Fixtures.ANALYSIS_NAME, Fixtures.ALERT_IDS) >>
+    1 * recommendationApiClient.getRecommendations(Fixtures.ANALYSIS_NAME, []) >>
         Fixtures.RECOMMENDATIONS
     1 * recommendationPublisher.publishCompleted(_) >> {RecommendationsGeneratedEvent event ->
       with(event) {
         batchId() == Fixtures.BATCH_ID
         analysisName() == Fixtures.ANALYSIS_NAME
-        alertNames() == Fixtures.ALERT_IDS
+
         with(batchMetadata()) {
           batchSource() == Fixtures.BATCH_SOURCE
         }
@@ -91,7 +91,6 @@ class RecommendationsProcessorSpec extends Specification {
     1 * recommendationDeliveredEventPublisher.publish(_) >> {RecommendationsDeliveredEvent event ->
       with(event) {
         batchId() == Fixtures.BATCH_ID
-        alertNames() == Fixtures.ALERT_IDS
       }
     }
   }
@@ -128,7 +127,6 @@ class RecommendationsProcessorSpec extends Specification {
     1 * recommendationDeliveredEventPublisher.publish(_) >> {RecommendationsDeliveredEvent event ->
       with(event) {
         batchId() == Fixtures.BATCH_ID
-        alertNames().isEmpty()
       }
     }
   }

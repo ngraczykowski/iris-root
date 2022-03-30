@@ -8,8 +8,6 @@ import com.silenteight.scb.outputrecommendation.domain.model.BatchStatistics.Rec
 
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 @RequiredArgsConstructor
 class RecommendationsMapper {
@@ -23,7 +21,6 @@ class RecommendationsMapper {
     return RecommendationsGeneratedEvent.builder()
         .batchId(command.batchId())
         .analysisName(command.analysisName())
-        .alertNames(command.alertNames())
         .batchMetadata(
             converter.deserializeFromJsonToObject(command.batchMetadata(), BatchMetadata.class))
         .statistics(recommendations.statistics())
@@ -32,9 +29,9 @@ class RecommendationsMapper {
   }
 
   RecommendationsDeliveredEvent toRecommendationsDeliveredEvent(
-      String batchId, String analysisName, List<String> alertNames) {
+      String batchId, String analysisName) {
 
-    return new RecommendationsDeliveredEvent(batchId, analysisName, alertNames);
+    return new RecommendationsDeliveredEvent(batchId, analysisName);
   }
 
   ErrorRecommendationsGeneratedEvent toBatchErrorRecommendationsEvent(

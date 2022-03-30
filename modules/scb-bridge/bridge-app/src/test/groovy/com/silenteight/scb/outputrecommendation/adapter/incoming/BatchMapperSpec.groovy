@@ -26,7 +26,6 @@ class BatchMapperSpec extends Specification {
     with(command) {
       batchId() == Fixtures.BATCH_ID
       analysisName() == Fixtures.ANALYSIS_ID
-      alertNames() == []
       batchMetadata() == Fixtures.BATCH_METADATA
     }
   }

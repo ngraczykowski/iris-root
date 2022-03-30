@@ -9,7 +9,6 @@ import java.util.List;
 public record RecommendationsGeneratedEvent(
     String batchId,
     String analysisName,
-    List<String> alertNames,
     BatchMetadata batchMetadata,
     BatchStatistics statistics,
     List<Recommendation> recommendations

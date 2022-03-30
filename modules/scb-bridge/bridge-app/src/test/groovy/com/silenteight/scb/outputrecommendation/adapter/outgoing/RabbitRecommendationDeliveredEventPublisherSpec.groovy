@@ -20,12 +20,10 @@ class RabbitRecommendationDeliveredEventPublisherSpec extends Specification {
     given:
     def batchId = 'batchId'
     def analysisName = 'analysisName'
-    def alertIds = ['alertId1']
-    def event = new RecommendationsDeliveredEvent(batchId, analysisName, alertIds)
+    def event = new RecommendationsDeliveredEvent(batchId, analysisName)
     def recommendationsDelivered = BatchDelivered.newBuilder()
         .setBatchId(batchId)
         .setAnalysisName(analysisName)
-        .addAllAlertNames(alertIds)
         .build()
 
     when:

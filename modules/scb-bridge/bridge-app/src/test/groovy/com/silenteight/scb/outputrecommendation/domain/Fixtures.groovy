@@ -17,7 +17,6 @@ class Fixtures {
   static String BATCH_ID = 'batchId'
   static BatchSource BATCH_SOURCE = BatchSource.GNS_RT
   static String ANALYSIS_NAME = 'analysisName'
-  static List<String> ALERT_IDS = ['alertId1', 'alertId2']
 
   static String BATCH_SERIALIZED_METADATA =
       """{
@@ -51,7 +50,6 @@ class Fixtures {
       PrepareRecommendationResponseCommand.builder()
           .batchId(BATCH_ID)
           .analysisName(ANALYSIS_NAME)
-          .alertNames(ALERT_IDS)
           .batchMetadata(BATCH_SERIALIZED_METADATA)
           .build()
 

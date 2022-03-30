@@ -7,8 +7,6 @@ import com.silenteight.scb.outputrecommendation.domain.PrepareRecommendationResp
 
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 class BatchMapper {
 
@@ -17,8 +15,6 @@ class BatchMapper {
     return PrepareRecommendationResponseCommand.builder()
         .batchId(batchCompleted.getBatchId())
         .analysisName(batchCompleted.getAnalysisName())
-        // Note, when alertNames is empty, it means all alerts within analysis with analysisName
-        .alertNames(List.of())
         .batchMetadata(batchCompleted.getBatchMetadata())
         .build();
   }

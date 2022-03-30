@@ -25,7 +25,6 @@ class RabbitRecommendationDeliveredEventPublisher implements
     var message = BatchDelivered.newBuilder()
         .setBatchId(event.batchId())
         .setAnalysisName(event.analysisName())
-        .addAllAlertNames(event.alertNames())
         .build();
 
     log.info("Send recommendations delivered message for batchId: {}", event.batchId());
