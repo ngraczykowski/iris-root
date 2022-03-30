@@ -1,0 +1,55 @@
+dob_agent:
+  ap: []
+  wl:
+  - watchlistParty.matchRecords.WL_DOB # was: WL_DOB
+# document_agent:
+#   ap:
+#   - alert_partyIds_idNumber
+#   wl:
+#   - hit_ids_idNumber
+#   - hit_cs_1_data_points.possible_nric
+gender_agent:
+  ap: []
+  wl: []
+is_deny_agent:
+  ap: []
+  wl: []
+# name_agent:
+#   ap:
+#   - FRST_NM
+#   - LAST_NM
+#   - PRIN_OWN_NM
+#   - ORD_PLACR_NM
+#   - PARTY1_NAME_ALIAS1
+#   ap_aliases: []
+#   wl:
+#   - watchlistParty.matchRecords.WL_NAME # was: WL_NAME
+#   - watchlistParty.matchRecords.WL_ALIASES # was: WL_ALIASES
+#   wl_aliases: []
+national_id_agent:
+  ap: []
+  wl: []
+nationality_agent:
+  ap:
+  - ALL_PARTY_COUNTRY1_CITIZENSHIP # was: PARTY1_COUNTRY_CITIZENSHIP1
+  - ALL_PARTY_COUNTRY_DOMICILE1 # was: PARTY1_COUNTRY_DOMICILE1
+  - ALL_PRTY_RSDNC_CNTRY_CD # was: COUNTRYCODE
+  - ALL_PARTY_ADDRESS1_COUNTRY # was: PARTY1_ADDRESS1_COUNTRY
+  wl:
+  - watchlistParty.matchRecords.WL_NATIONALITY # was: WL_NATIONALITY
+  - watchlistParty.matchRecords.WL_POB # was: WL_POB
+  - watchlistParty.matchRecords.WL_CITIZENSHIP # was: WL_CITIZENSHIP
+  - watchlistParty.matchRecords.WL_COUNTRY # was: WL_COUNTRY
+  - watchlistParty.matchRecords.WL_COUNTRYNAME # was: WL_COUNTRY
+party_type_agent:
+  ap:
+  - WLP_TYPE
+  wl: []
+passport_agent:
+  ap: []
+  wl: []
+residency_agent:
+  ap:
+  - ALL_PARTY_COUNTRY_DOMICILE1 # was: PARTY1_COUNTRY_DOMICILE1
+  wl:
+  - watchlistParty.matchRecords.WL_COUNTRY # was: WL_COUNTRY

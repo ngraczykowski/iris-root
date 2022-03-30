@@ -183,7 +183,9 @@ class MSPipeline(ETLPipeline):
                 )
                 self.engine.set_beneficiary_hits(match)
 
-            self.engine.connect_full_names(alerted_parties)
+            self.engine.connect_full_names(
+                alerted_parties, [cn.PRTY_FST_NM, cn.PRTY_MDL_NM, cn.PRTY_LST_NM]
+            )
             self.engine.connect_full_names(accounts, ["firstName", "lastName"])
 
             self.engine.collect_party_values_from_parties(alerted_parties, payload)
@@ -193,7 +195,7 @@ class MSPipeline(ETLPipeline):
             names_source_cols = [
                 cn.ALL_PARTY_NAMES,
                 cn.ALL_CONNECTED_PARTIES_NAMES,
-                cn.ALL_CONNECTED_ACCOUNT_NAMES,
+                cn.ALL_CONNECTED_ACCOUNTS_NAMES,
             ]
 
             payload.update(

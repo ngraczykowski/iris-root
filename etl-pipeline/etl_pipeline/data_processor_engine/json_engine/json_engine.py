@@ -44,9 +44,9 @@ COLLECTIVE_REPRESENTATION_MAP_FOR_PARTY = {
 }
 
 COLLECTIVE_REPRESENTATION_MAP_FOR_ACCOUNTS = {
-    cn.ALL_CONNECTED_ACCOUNT_NAMES: cn.CONNECTED_FULL_NAME,
+    cn.ALL_CONNECTED_ACCOUNTS_NAMES: cn.CONNECTED_FULL_NAME,
     cn.ALL_BRANCH_ACCOUNT_NUMBERS: "branchAccountNumber",
-    cn.ALL_BENEFICIARY_NAMES: "partyResidenceCountryCode",
+    cn.ALL_BENEFICIARY_NAMES: "beneficiaryName",
 }
 
 COLLECTIVE_REPRESENTATION_MAP_FOR_FIELD = {
@@ -62,6 +62,7 @@ COLLECTIVE_REPRESENTATION_MAP_FOR_FIELD = {
     cn.ALL_PRTY_PRIM_CTZNSH_CNTRY: cn.PRTY_PRIM_CTZNSH_CNTRY,
     cn.ALL_PRTY_RSDNC_CNTRY_CD: cn.PRTY_RSDNC_CNTRY_CD,
     cn.ALL_PARTY1_COUNTRY_PEP: cn.PARTY1_COUNTRY_PEP,
+    cn.ALL_PARTY1_NAME_ALIAS1: cn.PARTY1_NAME_ALIAS1,
 }
 
 
@@ -120,12 +121,12 @@ class JsonProcessingEngine(ProcessingEngine):
         payload[cn.IS_BENEFICIARY_HIT] = cn.AD_BNFL_NM in payload[cn.TRIGGERED_BY]
 
     def connect_full_names(self, values, fields=[cn.PRTY_FST_NM, cn.PRTY_MDL_NM, cn.PRTY_LST_NM]):
-        for party in values:
-            party[cn.CONNECTED_FULL_NAME] = " ".join(
+        for value in values:
+            value[cn.CONNECTED_FULL_NAME] = " ".join(
                 [
-                    party[field_name_to_collect]
+                    value[field_name_to_collect]
                     for field_name_to_collect in fields
-                    if party.get(field_name_to_collect, "")
+                    if value.get(field_name_to_collect, "")
                 ]
             ).strip()
 

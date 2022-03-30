@@ -267,9 +267,9 @@ EXAMPLE_PARTIES_WITH_NAMES = [
         "partyName": "Shaolin kung fu master",
         "taxId": "1231413412312",
         "taxIdType": "AUS",
-        "PRTY_FST_NM": "Ultra",
-        "PRTY_MDL_NM": "Giga",
-        "PRTY_LST_NM": "Pole",
+        "partyFirstName": "Ultra",
+        "partyMiddleName": "Giga",
+        "partyLastName": "Pole",
     },
     {
         "accountBU": "US_VM_SS",

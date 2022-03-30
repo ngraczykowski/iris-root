@@ -1,8 +1,8 @@
-# dob_agent:
-#   ap:
-#   - ALL_PARTY_DOBS
-#   wl:
-#   - watchlistParty.matchRecords.WL_DOB
+dob_agent:
+  ap:
+  - ALL_PARTY_DOBS
+  wl:
+  - watchlistParty.matchRecords.WL_DOB
 
 # nationality_agent:
 #   ap: []
