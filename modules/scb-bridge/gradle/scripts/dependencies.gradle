@@ -125,6 +125,8 @@ libraries.protobuf_java_util = [group: 'com.google.protobuf', name: 'protobuf-ja
 libraries.xstream = [group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.19']
 libraries.vavr = [group: 'io.vavr', name: 'vavr', version: '0.10.4']
 libraries.micrometer_prometheus = [group: 'io.micrometer', name: 'micrometer-registry-prometheus']
+libraries.ecs_logging_core = [group: 'co.elastic.logging', name: 'ecs-logging-core', version: '1.0.1']
+libraries.logback_ecs_encoder = [group: 'co.elastic.logging', name: 'logback-ecs-encoder', version: libraries.ecs_logging_core.version]
 
 // Testing
 libraries.spring_test = [group: 'org.springframework', name: 'spring-test', version: springVersion]
@@ -215,6 +217,9 @@ dependencies {
   implementation libraries.silenteight_commons_core
   implementation libraries.registration_api_library
   implementation libraries.registration_api_proto
+
+  runtimeOnly libraries.ecs_logging_core
+  runtimeOnly libraries.logback_ecs_encoder
 
   implementation libraries.groovy_all
   implementation libraries.json_path
