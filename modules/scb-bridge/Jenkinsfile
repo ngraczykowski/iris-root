@@ -15,8 +15,8 @@ gradleBuild(
     additionalParams: [
       extendedChoice(
         name: 'environments',
-        value: 'dev,lima,test',
-        defaultValue: 'lima',
+        value: 'dev,lima',
+        defaultValue: '',
         description: 'Environments to deploy to on Nomad',
         multiSelectDelimiter: ',',
         quoteValue: false,

@@ -1,49 +1,49 @@
-server:
-  port: {{ env "NOMAD_PORT_http" }}
+silenteight:
+  bridge:
+    ### GRPC PROPERTIES
+    grpc:
+      port: {{ env "NOMAD_PORT_grpc" }}
+
+    ### HTTP PROPERTIES
+    http:
+      port: {{ env "NOMAD_PORT_http" }}
 
 grpc:
-  logging:
-    enabled: true
-  server:
-    port: {{ env "NOMAD_PORT_grpc" }}
   client:
-    GLOBAL:
-      enableKeepAlive: true
-      negotiation-type: PLAINTEXT
-    governance:
-      address: discovery:/{{ env "NOMAD_NAMESPACE" }}-scb-bridge
-# @formatter:off
+    governance.address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-governance
+    adjudication-engine.address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-adjudication-engine
 
-scb-bridge:
-  db:
-    name: {{ env "NOMAD_NAMESPACE" }}-scb-bridge
-{{- $nomad_namespace := env "NOMAD_NAMESPACE" -}}
-{{- with service (print $nomad_namespace "-scb-bridge-db") }}
-    host: {{ (index . 0).Address }}
-    port: {{ (index . 0).Port }}
-{{ end -}}
+  {{ $nomad_namespace := env "NOMAD_NAMESPACE" }}
+  {{ with service (print $nomad_namespace "-scb-bridge-db") }}
+spring.datasource.url: jdbc:postgresql://{{ (index . 0).Address }}:{{ (index . 0).Port }}/{{ env "NOMAD_NAMESPACE" }}-scb-bridge
+  {{ end -}}
 
 spring:
-  #-------------------------------------------------------------------------------------------------
-  # Consul Service Discovery
-  #-------------------------------------------------------------------------------------------------
-  cloud:
-    consul:
-      enabled: true
-      host: localhost
-      port: 8500
-      scheme: http
-      discovery:
-        enabled: true
-        register: false
-        register-health-check: false
-        catalog-services-watch:
-          enabled: true
-        server-list-query-tags:
-          datasource: grpc
-          governance: grpc
-      service-registry:
-        auto-registration:
-          enabled: false
+  rabbitmq:
+    addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
+      {{ if $index }},{{ end -}}
+      {{ $rabbit.Address }}:{{ $rabbit.Port -}}
+  {{- end }}
+# NOTE(ahaczewski): Intentionally left empty.
+host:
+virtual-host: /{{ env "NOMAD_NAMESPACE" }}
 
-# @formatter:on
+management:
+  endpoint:
+    health.show-details: always
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: ["health", "info", "liquibase", "metrics", "prometheus", "loggers"]
+
+### REGISTRATION
+registration:
+  analysis:
+    mock-recommendations-generation: false
+
+### SENTRY
+sentry:
+  dsn: https://5991989c7325495fbdeff0bd32ddbb1d@o1129201.ingest.sentry.io/6204134
+  environment: unknown
+  tracesSampleRate: 0

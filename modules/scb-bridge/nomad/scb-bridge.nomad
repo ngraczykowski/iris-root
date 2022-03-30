@@ -10,7 +10,7 @@ variable "scb_bridge_checksum" {
 
 variable "namespace" {
   type = string
-  default = "dev"
+  default = "lima"
 }
 
 variable "memory" {
@@ -30,8 +30,7 @@ variable "grpcui_tags" {
 locals {
   jvm_memory = ceil(var.memory * 0.7)
   perm_memory = ceil(var.memory * 0.2)
-  database_node_destination = "eu4"
-  ae_lima_destination = "eu2"
+  database_node_destination = "eu3"
   database_volume = "/srv/sep-cluster/postgres/${var.namespace}-scb-bridge"
 }
 
@@ -43,6 +42,10 @@ job "scb-bridge" {
   ]
 
   namespace = "${var.namespace}"
+
+  update {
+    auto_revert = true
+  }
 
   group "database" {
     count = 1
@@ -78,7 +81,6 @@ job "scb-bridge" {
 
       service {
         name = "${var.namespace}-scb-bridge-db"
-
         port = "tcp"
 
         check {
@@ -97,7 +99,7 @@ job "scb-bridge" {
     }
   }
 
-  group "adjudication-engine" {
+  group "scb-bridge" {
     count = 2
 
     network {
@@ -124,7 +126,7 @@ job "scb-bridge" {
       ], var.http_tags)
 
       check_restart {
-        limit = 5
+        limit = 3
         grace = "180s"
         ignore_warnings = true
       }
@@ -139,16 +141,28 @@ job "scb-bridge" {
       }
     }
 
-    # Dummy registration of a service required for Spring Consul Discovery.
-    # FIXME(ahaczewski): Remove when Consul Discovery can filter through results based on tags.
     service {
-      name = "${var.namespace}-grpc-scb-bridge"
+      name = "${var.namespace}-scb-bridge"
       port = "grpc"
       tags = [
         "grpc",
+        # FIXME(ahaczewski): Remove when Consul Discovery can filter through results based on tags
         "gRPC.port=${NOMAD_PORT_grpc}",
         "gRPC_port=${NOMAD_PORT_grpc}",
       ]
+    }
+
+    check_restart {
+      limit           = 3
+      grace           = "90s"
+      ignore_warnings = false
+    }
+
+    check {
+      name     = "gRPC Port Alive Check"
+      type     = "tcp"
+      interval = "30s"
+      timeout  = "10s"
     }
 
     service {
@@ -195,7 +209,7 @@ job "scb-bridge" {
       }
 
       resources {
-        cpu = 50
+        cpu    = 50
         memory = 100
       }
     }
@@ -239,26 +253,29 @@ job "scb-bridge" {
       }
 
       config {
-        command = "java"
-        args = [
+        command = "/srv/s8cluster/java17/bin/java"
+        args    = [
           format("-Xms%dm", local.jvm_memory),
           format("-Xmx%dm", local.jvm_memory),
-          format("-XX:MaxPermSize=%dm", local.perm_memory),
+          format("-XX:MaxMetaspaceSize=%dm", local.perm_memory),
           "-Dfile.encoding=UTF-8",
           "-Dsun.jnu.encoding=UTF-8",
           "-Djava.net.preferIPv4Stack=true",
           "-Djava.io.tmpdir=${meta.silenteight.home}/tmp",
           "-Dlogging.config=secrets/conf/logback.xml",
           "-jar",
-          "local/governance-app.jar",
-          "--spring.profiles.active=linux,governance,database,rabbitmq,messaging",
+          "local/scb-bridge.jar",
+          "--spring.profiles.active=linux",
           "--spring.config.additional-location=file:local/conf/",
+          "--server.servlet.context-path=/rest/scb-bridge",
+          "--spring.webflux.base-path=/rest/scb-bridge",
+          "--management.endpoints.web.base-path=/management",
           "--spring.rabbitmq.virtual-host=/${var.namespace}",
         ]
       }
 
       logs {
-        max_files = 10
+        max_files     = 10
         max_file_size = 20
       }
 
