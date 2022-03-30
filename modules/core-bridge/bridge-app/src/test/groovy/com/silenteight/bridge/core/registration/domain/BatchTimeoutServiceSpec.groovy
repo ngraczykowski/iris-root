@@ -88,10 +88,10 @@ class BatchTimeoutServiceSpec extends Specification {
     0 * batchEventPublisher.publish(_)
   }
 
-  def 'should mark batch as completed and publish batch completed when all alerts are erroneous'(){
+  def "should mark batch with status #status as completed and publish batch completed when all alerts are erroneous"() {
     given:
     def alertsCount = 10
-    def batch = createBatch(STORED, alertsCount)
+    def batch = createBatch(status, alertsCount)
     def batchId = batch.id()
     def expectedBatchCompletedEvent = BatchCompleted.builder()
         .id(batch.id())
@@ -109,12 +109,15 @@ class BatchTimeoutServiceSpec extends Specification {
 
     then:
     1 * batchEventPublisher.publish(expectedBatchCompletedEvent)
+
+    where:
+    status << [STORED, PROCESSING]
   }
 
-  def 'should ignore batch timeout when erroneous alerts are less than total alerts count'(){
+  def 'should ignore batch timeout when erroneous alerts are less than total alerts count'() {
     given:
     def alertsCount = 10
-    def batch = createBatch(STORED, alertsCount)
+    def batch = createBatch(status, alertsCount)
     def batchId = batch.id()
     def command = new VerifyBatchTimeoutCommand(batchId)
     def expectedBatchCompletedEvent = BatchCompleted.builder()
@@ -132,9 +135,12 @@ class BatchTimeoutServiceSpec extends Specification {
 
     then:
     0 * batchEventPublisher.publish(expectedBatchCompletedEvent)
+
+    where:
+    status << [STORED, PROCESSING]
   }
 
-  def 'should ignore batch timeout when it is not in STORED status'(){
+  def "should ignore batch timeout when it is in #status status"() {
     given:
     def alertsCount = 10
     def batch = createBatch(COMPLETED, alertsCount)
@@ -155,6 +161,9 @@ class BatchTimeoutServiceSpec extends Specification {
 
     then:
     0 * batchEventPublisher.publish(expectedBatchCompletedEvent)
+
+    where:
+    status << [ERROR, DELIVERED]
   }
 
   private static def createBatch(BatchStatus status, long alertsCount) {

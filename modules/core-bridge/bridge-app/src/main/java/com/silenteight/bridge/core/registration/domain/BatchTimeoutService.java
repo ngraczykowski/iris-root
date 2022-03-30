@@ -24,6 +24,8 @@ import java.util.function.Predicate;
 
 import static com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus.COMPLETED;
 import static com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus.DELIVERED;
+import static com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus.PROCESSING;
+import static com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus.STORED;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +33,7 @@ import static com.silenteight.bridge.core.registration.domain.model.Batch.BatchS
 class BatchTimeoutService {
 
   private static final EnumSet<BatchStatus> COMPLETION_STATUSES = EnumSet.of(COMPLETED, DELIVERED);
+  private static final EnumSet<BatchStatus> PENDING_STATUSES = EnumSet.of(STORED, PROCESSING);
 
   private final BatchRepository batchRepository;
   private final AlertRepository alertRepository;
@@ -47,7 +50,7 @@ class BatchTimeoutService {
   }
 
   void verifyBatchTimeoutForAllErroneousAlerts(VerifyBatchTimeoutCommand command) {
-    withExistingBatch(command, batch -> validateStatus(batch, isStored())
+    withExistingBatch(command, batch -> validateStatus(batch, isPending())
         .ifPresentOrElse(
             this::completeBatchIfAllAlertsAreErroneous,
             () -> logNotInStoredStatus(batch)
@@ -69,8 +72,8 @@ class BatchTimeoutService {
     return batch -> !COMPLETION_STATUSES.contains(batch.status());
   }
 
-  private Predicate<Batch> isStored() {
-    return batch -> BatchStatus.STORED == batch.status();
+  private Predicate<Batch> isPending() {
+    return batch -> PENDING_STATUSES.contains(batch.status());
   }
 
   private void completeBatchIfAllAlertsAreErroneous(Batch batch) {
