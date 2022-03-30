@@ -37,6 +37,8 @@ public final class ReportFixture {
   public static final String COUNTRY_US = "US";
   public static final String PAYLOAD_KEY_SIGNATURE = "fvSignature";
   public static final String PAYLOAD_VALUE_SIGNATURE = "9HzsNs1bv";
+  public static final String PAYLOAD_KEY_COMMENT = "comment";
+  public static final String PAYLOAD_VALUE_COMMENT_WITH_NEWLINE = "Comment \n with \n newline";
 
   public static final String COUNTRY_GROUP = "b4df80da-7309-4982-9c03-b14abf93d0b5";
   public static final UUID COUNTRY_GROUP_UUID = UUID.fromString(COUNTRY_GROUP);

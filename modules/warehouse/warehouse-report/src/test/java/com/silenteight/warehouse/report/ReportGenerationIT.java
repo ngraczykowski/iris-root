@@ -121,7 +121,37 @@ class ReportGenerationIT {
     thenReportInDbHasCorrectExtension(instanceId, "CSV");
     assertThat(reportContent)
         .hasLineCount(2)
-        .contains("9HzsNs1bv,PL,TEST[AAAGLOBAL186R1038]_81596ace,alerts/123,2021-01-12 10:00:37");
+        .contains(
+            "9HzsNs1bv",
+            "PL",
+            "TEST[AAAGLOBAL186R1038]_81596ace",
+            "alerts/123",
+            "2021-01-12 10:00:37");
+  }
+
+  @Test
+  @WithMockUser(username = "user", authorities = COUNTRY_GROUP)
+  void shouldGenerateReportWithNewlineCharsInPayload() {
+    storeData(DISCRIMINATOR_1, NAME_1, RECOMMENDATION_DATE, Map.of(
+        PAYLOAD_KEY_SIGNATURE, PAYLOAD_VALUE_SIGNATURE,
+        PAYLOAD_KEY_COUNTRY, COUNTRY_PL));
+    storeData(DISCRIMINATOR_2, NAME_2, RECOMMENDATION_DATE, Map.of(
+        PAYLOAD_KEY_COMMENT, PAYLOAD_VALUE_COMMENT_WITH_NEWLINE,
+        PAYLOAD_KEY_SIGNATURE, PAYLOAD_VALUE_SIGNATURE,
+        PAYLOAD_KEY_COUNTRY, COUNTRY_PL));
+    when(countryPermissionService.getCountries(of(COUNTRY_GROUP)))
+        .thenReturn(of(COUNTRY_PL));
+
+    Long instanceId = createReport();
+    await()
+        .atMost(5, SECONDS)
+        .until(() -> isReportCreated(instanceId));
+    String reportContent = getReportContent(instanceId);
+
+    thenReportInDbHasCorrectExtension(instanceId, "CSV");
+    assertThat(reportContent)
+        .hasLineCount(3)
+        .contains(NAME_1, NAME_2);
   }
 
   @Test
@@ -208,7 +238,7 @@ class ReportGenerationIT {
 
   private boolean isReportCreated(Long reportId) {
     return Status.OK == reportStatusRestController.checkReportStatus(
-        REPORT_TYPE, REPORT_NAME, reportId).getBody()
+            REPORT_TYPE, REPORT_NAME, reportId).getBody()
         .getStatus();
   }
 
