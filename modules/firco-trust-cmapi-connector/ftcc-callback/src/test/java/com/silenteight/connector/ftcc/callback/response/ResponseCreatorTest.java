@@ -44,6 +44,8 @@ class ResponseCreatorTest {
 
     var message = MessageEntity.builder()
         .messageID("MESSAGEID;)")
+        .businessUnit("")
+        .systemID("SYSTEMID")
         .unit("UNIT!")
         .currentStatus(StatusEntity.builder()
             .id("CurrentStatus ID")
@@ -68,7 +70,8 @@ class ResponseCreatorTest {
         .build();
 
     var clientRequestDto =
-        Assertions.assertDoesNotThrow(() -> responseCreator.create(message, recommendation));
+        Assertions.assertDoesNotThrow(() -> responseCreator.build(
+            List.of(responseCreator.buildMessageDto(message, recommendation))));
     Assertions.assertNotNull(clientRequestDto.getBody());
   }
 }

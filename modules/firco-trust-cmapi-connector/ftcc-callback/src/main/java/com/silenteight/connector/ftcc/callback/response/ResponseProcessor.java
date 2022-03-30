@@ -8,10 +8,12 @@ import com.silenteight.connector.ftcc.callback.outgoing.RecommendationsDelivered
 import com.silenteight.connector.ftcc.callback.response.domain.MessageEntity;
 import com.silenteight.connector.ftcc.callback.response.domain.MessageQuery;
 import com.silenteight.connector.ftcc.common.dto.output.ClientRequestDto;
+import com.silenteight.connector.ftcc.common.dto.output.ReceiveDecisionMessageDto;
 import com.silenteight.connector.ftcc.common.resource.BatchResource;
 import com.silenteight.connector.ftcc.common.resource.MessageResource;
 import com.silenteight.proto.registration.api.v1.MessageBatchCompleted;
 import com.silenteight.recommendation.api.library.v1.RecommendationOut;
+import com.silenteight.recommendation.api.library.v1.RecommendationsOut;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.scheduling.annotation.Async;
@@ -39,35 +41,46 @@ public class ResponseProcessor {
 
   @Async
   public void process(MessageBatchCompleted messageBatchCompleted) {
-    var analysisId = messageBatchCompleted.getAnalysisId();
-    var batchId = BatchResource.fromResourceName(messageBatchCompleted.getBatchId());
+    final var analysisName = messageBatchCompleted.getAnalysisId();
+    final var batchName = messageBatchCompleted.getBatchId();
 
-    log.info("Fetching Message from DB using batchId={}", batchId);
-    var messageEntityMap = map(messageQuery.findByBatchId(batchId));
+    log.info("Fetching Message from DB using batchName={}", batchName);
+    var messageEntityMap =
+        map(messageQuery.findByBatchId(BatchResource.fromResourceName(batchName)));
 
-    log.info("Requesting Recommendation using analysisId={}", analysisId);
-    var recommendations = recommendationClientApi.recommendation(analysisId);
+    log.info("Requesting Recommendation using analysisName={}", analysisName);
+    var recommendations = recommendationClientApi.recommendation(analysisName);
+    var responseDto = buildReuqest(analysisName, messageEntityMap, recommendations);
 
-    recommendations
-        .getRecommendations()
-        .stream()
-        .peek(recommendationOut -> logRecommendationOut(recommendationOut, analysisId))
-        .map(recommendation -> createRequest(messageEntityMap, recommendation))
-        .peek(clientRequestDto -> logClientRequestDto(clientRequestDto, analysisId))
-        .forEach(recommendationSender::send);
+    logClientRequestDto(responseDto, analysisName);
 
+    recommendationSender.send(responseDto);
     recommendationsDeliveredPublisher.publish(RecommendationsDeliveredEvent
         .builder()
-        .batchName(messageBatchCompleted.getBatchId())
-        .analysisName(analysisId)
+        .batchName(batchName)
+        .analysisName(analysisName)
         .build());
   }
 
-  private ClientRequestDto createRequest(
+  private ClientRequestDto buildReuqest(
+      String analysisName, Map<UUID, MessageEntity> messageEntityMap,
+      RecommendationsOut recommendations) {
+    var decisionMessageDtos = recommendations
+        .getRecommendations()
+        .stream()
+        .peek(recommendationOut -> logRecommendationOut(recommendationOut, analysisName))
+        .map(recommendation -> createMessageDto(messageEntityMap, recommendation))
+        .peek(clientRequestDto -> logReceiveDecisionMessageDto(clientRequestDto, analysisName))
+        .collect(Collectors.toList());
+
+    return responseCreator.build(decisionMessageDtos);
+  }
+
+  private ReceiveDecisionMessageDto createMessageDto(
       Map<UUID, MessageEntity> messageEntityMap, RecommendationOut recommendation) {
     var messageEntity = Optional.of(messageEntityMap.get(uuidFrom(recommendation)))
         .orElseThrow();
-    return responseCreator.create(messageEntity, recommendation);
+    return responseCreator.buildMessageDto(messageEntity, recommendation);
   }
 
   @NotNull
@@ -81,18 +94,28 @@ public class ResponseProcessor {
         .collect(Collectors.toMap(MessageEntity::getId, Function.identity()));
   }
 
-  private void logRecommendationOut(RecommendationOut recommendationOut, Object analysisId) {
+  private void logRecommendationOut(RecommendationOut recommendationOut, String analysisName) {
     if (log.isDebugEnabled()) {
       log.debug(
-          "RecommendationOut for analysisId={}{}{}", analysisId, lineSeparator(),
+          "RecommendationOut for analysisName={}{}{}", analysisName, lineSeparator(),
           recommendationOut);
     }
   }
 
-  private void logClientRequestDto(ClientRequestDto clientRequestDto, String analysisId) {
+  private void logReceiveDecisionMessageDto(
+      ReceiveDecisionMessageDto messageDto, String analysisName) {
     if (log.isDebugEnabled()) {
       log.debug(
-          "Generated ClientRequestDto for analysisId={}{}{}", analysisId, lineSeparator(),
+          "Generated ReceiveDecisionMessageDto for analysisName={}{}{}", analysisName,
+          lineSeparator(),
+          messageDto);
+    }
+  }
+
+  private void logClientRequestDto(ClientRequestDto clientRequestDto, String analysisName) {
+    if (log.isDebugEnabled()) {
+      log.debug(
+          "Generated ClientRequestDto for analysisName={}{}{}", analysisName, lineSeparator(),
           clientRequestDto);
     }
   }

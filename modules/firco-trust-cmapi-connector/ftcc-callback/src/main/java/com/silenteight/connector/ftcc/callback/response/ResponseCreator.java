@@ -31,11 +31,23 @@ class ResponseCreator {
   private final MapStatusUseCase mapStatusUseCase;
   private final RecommendationSenderProperties properties;
 
-  public ClientRequestDto create(MessageEntity messageEntity, RecommendationOut recommendation) {
+  public ClientRequestDto build(List<ReceiveDecisionMessageDto> messages) {
+    var receiveDecisionDto = new ReceiveDecisionDto();
+    receiveDecisionDto.setMessages(messages);
+    receiveDecisionDto.setAuthentication(
+        mapToAuthentication(properties.getLogin(), properties.getPassword()));
+
+    var clientRequestDto = new ClientRequestDto();
+    clientRequestDto.setReceiveDecisionDto(receiveDecisionDto);
+    return clientRequestDto;
+  }
+
+  public ReceiveDecisionMessageDto buildMessageDto(
+      MessageEntity messageEntity, RecommendationOut recommendation) {
     return mapToAlertDecision(messageEntity, recommendation);
   }
 
-  private ClientRequestDto mapToAlertDecision(
+  private ReceiveDecisionMessageDto mapToAlertDecision(
       MessageEntity messageEntity, RecommendationOut recommendation) {
 
     var decision = new AlertDecisionMessageDto();
@@ -49,8 +61,6 @@ class ResponseCreator {
     decision.setAttachment(createAttachment(
         recommendation.getRecommendedAction(),
         recommendation.getRecommendationComment()));
-    decision.setUserLogin(properties.getLogin());
-    decision.setUserPassword(properties.getPassword());
     setComment(recommendation.getRecommendationComment(), decision);
 
     var destinationStatus = mapStatusUseCase.mapStatus(
@@ -89,25 +99,16 @@ class ResponseCreator {
   }
 
 
-  private ClientRequestDto create(AlertDecisionMessageDto source) {
+  private static ReceiveDecisionMessageDto create(AlertDecisionMessageDto source) {
     var receiveDecisionMessageDto = new ReceiveDecisionMessageDto();
     receiveDecisionMessageDto.setDecisionMessage(source);
-
-    var receiveDecisionDto = new ReceiveDecisionDto();
-    receiveDecisionDto.setMessages(List.of(receiveDecisionMessageDto));
-    receiveDecisionDto.setAuthentication(mapToAuthentication(source));
-
-    var clientRequestDto = new ClientRequestDto();
-    clientRequestDto.setReceiveDecisionDto(receiveDecisionDto);
-    return clientRequestDto;
+    return receiveDecisionMessageDto;
   }
 
-  static FircoAuthenticationDto mapToAuthentication(AlertDecisionMessageDto source) {
+  private static FircoAuthenticationDto mapToAuthentication(String login, String password) {
     FircoAuthenticationDto authentication = new FircoAuthenticationDto();
-    authentication.setContinuityLogin(source.getUserLogin());
-    authentication.setContinuityPassword(source.getUserPassword());
-    authentication.setContinuityBusinessUnit(source.getBusinessUnit());
+    authentication.setContinuityLogin(login);
+    authentication.setContinuityPassword(password);
     return authentication;
   }
-
 }

@@ -29,11 +29,11 @@ public class BatchCompletedHandler {
               + DEFAULT_EXCHANGE + "}"))
   })
   public void handle(MessageBatchCompleted messageBatchCompleted) {
-    String batchId = messageBatchCompleted.getBatchId();
-    String analysisId = messageBatchCompleted.getAnalysisId();
-    log.info("BatchCompleted received BatchID={} AnalysisId={}", batchId, analysisId);
+    String batchName = messageBatchCompleted.getBatchId();
+    String analysisName = messageBatchCompleted.getAnalysisId();
+    log.info("BatchCompleted received batchName={} analysisName={}", batchName, analysisName);
 
-    batchCompletedService.save(batchId, analysisId);
+    batchCompletedService.save(batchName, analysisName);
     responseProcessor.process(messageBatchCompleted);
   }
 }

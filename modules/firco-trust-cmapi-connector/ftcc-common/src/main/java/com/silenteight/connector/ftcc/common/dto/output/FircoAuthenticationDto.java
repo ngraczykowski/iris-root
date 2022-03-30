@@ -34,8 +34,4 @@ public class FircoAuthenticationDto implements Serializable {
   @JsonProperty("TrustPassword")
   private String continuityPassword;
 
-  /**
-   * Always set to ROOT.
-   */
-  private String continuityBusinessUnit = "ROOT";
 }

@@ -74,6 +74,7 @@ class ResponseProcessorTest {
             .build();
 
     Assertions.assertAll(() -> responseProcessor.process(messageBatchCompleted));
-    verify(responseCreator, atLeast(2)).create(any(), any());
+    verify(responseCreator, atLeastOnce()).build(anyList());
+    verify(responseCreator, atLeast(2)).buildMessageDto(any(), any());
   }
 }
