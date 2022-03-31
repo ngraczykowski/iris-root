@@ -63,7 +63,7 @@ public class HitAndWatchlistPartyData {
         .watchlistName(name)
         .alertedPartyName(List.of(matchingText))
         .watchlistType(watchlistType)
-        .matchingTexts(allMatchingTexts)
+        .matchingTexts(List.of(allMatchingTexts.get(0)))
         .build();
   }
 

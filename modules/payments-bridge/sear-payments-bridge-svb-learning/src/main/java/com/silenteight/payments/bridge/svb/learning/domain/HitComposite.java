@@ -166,10 +166,10 @@ public class HitComposite {
 
   public NameMatchedTextAgent getNameMatchedTextAgent() {
     return NameMatchedTextAgent.builder()
-        .watchlistName(fkcoVNameMatchedText)
-        .alertedPartyName(getMatchedNames())
+        .watchlistName(fkcoVListMatchedName)
+        .alertedPartyName(List.of(fkcoVNameMatchedText))
         .watchlistType(getWatchlistType())
-        .matchingTexts(getMatchingTexts())
+        .matchingTexts(List.of(fkcoVNameMatchedText))
         .build();
   }
 
