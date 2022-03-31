@@ -17,4 +17,10 @@
         tableName="uds_category_value"/>
   </changeSet>
 
+  <changeSet id="universal-datasource-1.10.0-2" author="jgajewski">
+    <preConditions onFail="MARK_RAN"><tableExists tableName="uds_feature_mapper"/></preConditions>
+    <dropTable tableName="uds_feature_mapper"/>
+  </changeSet>
+
+
 </databaseChangeLog>
