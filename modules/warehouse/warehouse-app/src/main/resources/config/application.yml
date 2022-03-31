@@ -21,6 +21,9 @@ server:
 #---------------------------------------------------------------------------------------------------
 
 management:
+  health:
+    elasticsearch:
+      enabled: false
   endpoint:
     health.show-details: always
 
@@ -296,6 +299,8 @@ sep:
         - "VIEW_ALERTS_DATA"
       VIEW_SIMULATION_RESULT:
         - "LIST_SIMULATION_REPORTS"
+      STATISTICS:
+        - "POLICY_STATISTICS"
 
     rolePermissionsMappings:
       USER_ADMINISTRATOR:
@@ -303,11 +308,13 @@ sep:
         - "DOWNLOAD_USERS_REPORTS"
         - "MANAGE_USERS"
         - "VIEW_USERS"
+        - "STATISTICS"
       MODEL_TUNER:
         - "VIEW_SIMULATION_RESULT"
         - "DOWNLOAD_SIMULATION_REPORTS"
         - "DOWNLOAD_SOLVING_REPORTS"
         - "DASHBOARD"
+        - "STATISTICS"
       APPROVER:
         - "VIEW_SIMULATION_RESULT"
         - "DOWNLOAD_SIMULATION_REPORTS"
@@ -317,6 +324,7 @@ sep:
         - "VIEW_SIMULATION_RESULT"
         - "VIEW_QA_ALERTS"
         - "DASHBOARD"
+        - "STATISTICS"
       QA:
         - "VIEW_QA_ALERTS"
         - "MANAGE_QA_ALERT"
