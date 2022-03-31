@@ -268,9 +268,7 @@ class MSPipeline(ETLPipeline):
     def transform_cleansed_to_application(self, payloads):
         for payload in payloads:
             matches = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
-            agent_config, yaml_conf = self.alert_agents_config[
-                payload[cn.ALERTED_PARTY_FIELD][cn.HEADER_INFO][cn.DATASET_NAME]
-            ]
+            agent_config, yaml_conf = self.alert_agents_config["alert_type"]
             agent_input_prepended_agent_name_config = (
                 prepend_agent_name_to_ap_or_wl_or_aliases_key(agent_config)
             )

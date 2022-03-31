@@ -4,7 +4,6 @@ dob_agent:
   wl:
   - watchlistParty.matchRecords.WL_DOB
 
-
 document_agent:
   ap:
   - ALL_CONNECTED_TAX_IDS
@@ -14,15 +13,9 @@ document_agent:
   wl:
   - watchlistParty.matchRecords.WL_DOCUMENT_NUMBER
 
-employer_name_agent:
-  ap:
-  - ALL_PARTY1_EMPLOYERS
-  wl:
-  - watchlistParty.matchRecords.WL_NAME
-  - watchlistParty.matchRecords.WL_ALIASES
-
 name_agent:
   ap:
+  - ALL_CONCAT_NAMES
   - ALL_CONNECTED_PARTY_NAMES
   - ALL_CONNECTED_PARTIES_NAMES
   - ALL_CONNECTED_ACCOUNT_NAMES
@@ -30,6 +23,24 @@ name_agent:
   wl:
   - watchlistParty.matchRecords.WL_NAME
   - watchlistParty.matchRecords.WL_ALIASES
+
+nationality_agent:
+  ap:
+  - ALL_PARTY1_COUNTRY1_CITIZENSHIP
+  - ALL_PARTY1_COUNTRY_DOMICILE1
+  - ALL_PRTY_RSDNC_CNTRY_CD
+  - ALL_PARTY1_ADDRESS1_COUNTRY
+  - ALL_CONNECTED_PARTY_BIRTH_COUNTRIES
+  - ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES
+  - ALL_CONNECTED_PARTY_RESIDENCY_COUNTRIES
+  - ALL_CONNECTED_COUNTRY_OF_INCORPORATION
+  wl:
+  - watchlistParty.matchRecords.WL_NATIONALITY
+  - watchlistParty.matchRecords.WL_POB
+  - watchlistParty.matchRecords.WL_CITIZENSHIP
+  - watchlistParty.matchRecords.WL_COUNTRY
+  - watchlistParty.matchRecords.WL_COUNTRYNAME
+
 
 party_type_agent:
   ap:
@@ -48,25 +59,11 @@ pob_agent:
   - watchlistParty.matchRecords.WL_POB
   - watchlistParty.matchRecords.WL_NATIONALITY
 
-residency_agent:
-  ap:
-  - ALL_CONNECTED_PARTY_COUNTRY
-  - ALL_PRTY_PRIM_CTZNSH_CNTRY
-  - ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES
-  - ALL_PARTY1_COUNTRY2_CITIZENSHIP
-  - ALL_PRTY_RSDNC_CNTRY_CD
-  - ALL_PRTY_PRIM_CTZNSH_CNTRY
-  - ALL_PARTY1_COUNTRY_DOMICILE1
-  - ALL_PARTY1_COUNTRY_PEP
-  - ALL_PARTY1_COUNTRY_OF_INCORPORATION
-  wl:
-  - watchlistParty.matchRecords.WL_COUNTRY
-  - watchlistParty.matchRecords.WL_COUNTRYNAME
-
 santioned_country_agent:
   ap:
   - ALL_CONNECTED_PARTY_COUNTRY
   - ALL_PARTY1_ADDRESS1_COUNTRY
+  - ALL_PARTY1_COUNTRY
   - ALL_PARTY1_COUNTRY1
   - ALL_PARTY1_COUNTRY1_CITIZENSHIP
   - ALL_PARTY1_COUNTRY2_CITIZENSHIP
@@ -79,6 +76,22 @@ santioned_country_agent:
   - watchlistParty.matchRecords.WL_COUNTRYNAME
   - watchlistParty.matchRecords.WL_NAME
 
+residency_agent:
+  ap:
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ADDRESS1_COUNTRY
+  - ALL_PARTY1_COUNTRY_DOMICILE1
+  - ALL_CONNECTED_PARTY_COUNTRY
+  - ALL_PRTY_PRIM_CTZNSH_CNTRY
+  - ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES
+  - ALL_PARTY1_COUNTRY2_CITIZENSHIP
+  - ALL_PRTY_RSDNC_CNTRY_CD
+  - ALL_PRTY_PRIM_CTZNSH_CNTRY
+  - ALL_PARTY1_COUNTRY_DOMICILE1
+  - ALL_PARTY1_COUNTRY_PEP
+  - ALL_PARTY1_COUNTRY_OF_INCORPORATION
+  wl:
+  - watchlistParty.matchRecords.WL_COUNTRY
+  - watchlistParty.matchRecords.WL_COUNTRYNAME
 
 hit_type_agent:
   ap: []

@@ -56,6 +56,7 @@ class TestEngine(unittest.TestCase):
             "ALL_CONNECTED_PARTY_BIRTH_COUNTRIES": ["1341412312312", "13413401280"],
             "ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES": ["Arabian Emirates"],
             "ALL_CONNECTED_PARTY_RESIDENCY_COUNTRIES": [],
+            "ALL_CONNECTED_COUNTRY_OF_INCORPORATION": [],
         }
 
     def test_get_clean_names_from_concat_name(self):
