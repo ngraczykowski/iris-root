@@ -169,7 +169,7 @@ class AnalysisTimeoutFlowIntegrationSpec extends BaseSpecificationIT {
   private def verifyMessageBatchCompleted(MessageBatchCompleted message, String analysisName) {
     with(message) {
       it.batchId == batchId
-      analysisId == analysisName
+      it.analysisName == analysisName
       it.batchMetadata == batchMetadata
     }
   }

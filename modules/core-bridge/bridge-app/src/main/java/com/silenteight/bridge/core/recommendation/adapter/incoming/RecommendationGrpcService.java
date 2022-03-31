@@ -23,7 +23,7 @@ class RecommendationGrpcService extends RecommendationServiceGrpc.Recommendation
   public void getRecommendations(
       RecommendationsRequest request, StreamObserver<RecommendationsResponse> responseObserver) {
     var command =
-        new GetRecommendationCommand(request.getAnalysisId(), request.getAlertNamesList());
+        new GetRecommendationCommand(request.getAnalysisName(), request.getAlertNamesList());
 
     log.info("Get recommendation response for analysis name {}", command.analysisName());
     responseObserver.onNext(recommendationFacade.getRecommendationsResponse(command));

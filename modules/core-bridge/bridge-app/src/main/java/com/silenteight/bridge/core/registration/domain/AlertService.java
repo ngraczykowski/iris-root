@@ -7,6 +7,7 @@ import com.silenteight.bridge.core.registration.domain.command.RegisterAlertsCom
 import com.silenteight.bridge.core.registration.domain.command.RegisterAlertsCommand.AlertStatus;
 import com.silenteight.bridge.core.registration.domain.model.Alert;
 import com.silenteight.bridge.core.registration.domain.model.AlertWithMatches;
+import com.silenteight.bridge.core.registration.domain.model.Batch;
 import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRegistrationService;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository;
@@ -103,6 +104,20 @@ class AlertService {
     var pendingAlerts = alertRepository.countAllPendingAlerts(batchId);
     log.info("{} alerts left to be recommended for the batch id: {}", pendingAlerts, batchId);
     return pendingAlerts == 0;
+  }
+
+  void updateStatusToDelivered(String batchId, List<String> alertNames) {
+    if (CollectionUtils.isEmpty(alertNames)) {
+      log.info("Update all alerts status to DELIVERED for batchId: {}", batchId);
+      alertRepository.updateStatusToDelivered(batchId);
+    } else {
+      log.info("Update {} alerts status to DELIVERED for batchId: {}", alertNames.size(), batchId);
+      alertRepository.updateStatusToDelivered(batchId, alertNames);
+    }
+  }
+
+  boolean hasAllDeliveredAlerts(Batch batch) {
+    return batch.alertsCount() == alertRepository.countAllDeliveredAndErrorAlerts(batch.id());
   }
 
   private List<RegisterAlertsCommand.AlertWithMatches> filterOutExistingInDb(

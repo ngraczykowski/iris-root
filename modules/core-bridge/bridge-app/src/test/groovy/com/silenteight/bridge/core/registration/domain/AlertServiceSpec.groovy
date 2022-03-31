@@ -13,6 +13,7 @@ import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertReposi
 
 import spock.lang.Specification
 import spock.lang.Subject
+import spock.lang.Unroll
 
 import static com.silenteight.bridge.core.registration.domain.AlertServiceSpecHelper.buildAlert
 import static com.silenteight.bridge.core.registration.domain.AlertServiceSpecHelper.buildAlertToRegister
@@ -421,5 +422,27 @@ class AlertServiceSpec extends Specification {
     then:
     1 * alertRepository.countAllPendingAlerts(batchId) >> 1
     !result
+  }
+
+  @Unroll
+  def "should update alerts status to DELIVERED when alertNames #desc"() {
+    given:
+    def batchId = 'batchId'
+
+    when:
+    underTest.updateStatusToDelivered(batchId, alertNames)
+
+    then:
+    if (alertNames) {
+      1 * alertRepository.updateStatusToDelivered(batchId, alertNames)
+    } else {
+      1 * alertRepository.updateStatusToDelivered(batchId)
+    }
+
+    where:
+    alertNames || desc
+    null       || 'is null'
+    []         || 'is empty'
+    ['alert1'] || 'is not empty'
   }
 }

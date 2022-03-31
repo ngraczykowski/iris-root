@@ -4,10 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.bridge.core.registration.domain.command.*;
+import com.silenteight.bridge.core.registration.domain.model.Batch;
 import com.silenteight.bridge.core.registration.domain.model.BatchId;
 import com.silenteight.bridge.core.registration.domain.model.BatchWithAlerts;
 import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -61,8 +63,12 @@ public class RegistrationFacade {
     return alertService.registerAlertsAndMatches(command, batchPriority);
   }
 
-  public void markBatchAsDelivered(MarkBatchAsDeliveredCommand markBatchAsDeliveredCommand) {
-    batchService.markBatchAsDelivered(markBatchAsDeliveredCommand.batchId());
+  public void markAlertsAsDelivered(MarkAlertsAsDeliveredCommand command) {
+    var batch = batchService.findBatchByAnalysisName(command.analysisName());
+    alertService.updateStatusToDelivered(batch.id(), command.alertNames());
+    if (allAlertsAreDelivered(batch, command.alertNames())) {
+      batchService.markBatchAsDelivered(batch);
+    }
   }
 
   public void addAlertsToAnalysis(List<AddAlertToAnalysisCommand> addAlertToAnalysisCommands) {
@@ -75,5 +81,13 @@ public class RegistrationFacade {
 
   public void verifyBatchTimeoutForAllErroneousAlerts(VerifyBatchTimeoutCommand command) {
     batchTimeoutService.verifyBatchTimeoutForAllErroneousAlerts(command);
+  }
+
+  private boolean allAlertsAreDelivered(Batch batch, List<String> alertNames) {
+    if (CollectionUtils.isEmpty(alertNames)) {
+      return true;
+    } else {
+      return alertService.hasAllDeliveredAlerts(batch);
+    }
   }
 }

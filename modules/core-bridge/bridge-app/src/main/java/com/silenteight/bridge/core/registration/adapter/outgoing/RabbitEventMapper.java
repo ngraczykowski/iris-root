@@ -1,9 +1,11 @@
 package com.silenteight.bridge.core.registration.adapter.outgoing;
 
 import com.silenteight.bridge.core.registration.domain.model.BatchCompleted;
+import com.silenteight.bridge.core.registration.domain.model.BatchDelivered;
 import com.silenteight.bridge.core.registration.domain.model.BatchError;
 import com.silenteight.bridge.core.registration.domain.model.BatchTimedOut;
 import com.silenteight.proto.registration.api.v1.MessageBatchCompleted;
+import com.silenteight.proto.registration.api.v1.MessageBatchDelivered;
 import com.silenteight.proto.registration.api.v1.MessageBatchError;
 import com.silenteight.proto.registration.api.v1.MessageNotifyBatchTimedOut;
 
@@ -17,7 +19,7 @@ class RabbitEventMapper {
   MessageBatchCompleted toMessageBatchCompleted(BatchCompleted event) {
     return MessageBatchCompleted.newBuilder()
         .setBatchId(event.id())
-        .setAnalysisId(event.analysisId())
+        .setAnalysisName(event.analysisId())
         .setBatchMetadata(event.batchMetadata())
         .build();
   }
@@ -34,6 +36,13 @@ class RabbitEventMapper {
     return MessageNotifyBatchTimedOut.newBuilder()
         .setAnalysisName(event.analysisName())
         .addAllAlertNames(event.alertNames())
+        .build();
+  }
+
+  MessageBatchDelivered toMessageBatchDelivered(BatchDelivered event) {
+    return MessageBatchDelivered.newBuilder()
+        .setBatchId(event.batchId())
+        .setAnalysisName(event.analysisName())
         .build();
   }
 }

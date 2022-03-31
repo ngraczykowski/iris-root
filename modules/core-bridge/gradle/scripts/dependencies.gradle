@@ -4,8 +4,8 @@ ext {
   //***********************************
   // Silent Eight
   //***********************************
-  coreBridgeRecommendationApiVersion = '1.9.0'
-  coreBridgeRegistrationApiVersion = '1.17.0'
+  coreBridgeRecommendationApiVersion = '1.13.0'
+  coreBridgeRegistrationApiVersion = '1.19.0'
   governanceApiVersion = '1.10.0'
   governanceApiLibraryVersion = '1.0.0'
   adjudicationEngineApiVersion = '0.8.0'

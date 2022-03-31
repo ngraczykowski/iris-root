@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 
 @ConstructorBinding
-@ConfigurationProperties(prefix = "amqp.recommendation.outgoing.recommendation-received")
-public record RecommendationOutgoingRecommendationsReceivedConfigurationProperties(
+@ConfigurationProperties(prefix = "amqp.recommendation.outgoing.recommendation-stored")
+public record RecommendationOutgoingRecommendationsStoredConfigurationProperties(
     String exchangeName) {
 }

@@ -5,7 +5,7 @@ import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 
 @TestConfiguration
-class RecommendationReceivedFlowRabbitMqTestConfig {
+class RecommendationsStoredFlowRabbitMqTestConfig {
 
   static def TEST_BATCH_COMPLETED_QUEUE_NAME = "test-batch-completed-queue"
 

@@ -50,6 +50,17 @@ class JdbcAlertRepository implements AlertRepository {
   }
 
   @Override
+  public void updateStatusToDelivered(String batchId, List<String> alertNames) {
+    alertRepository.updateAlertsStatusByBatchIdAndNamesIn(
+        batchId, Status.DELIVERED.name(), alertNames);
+  }
+
+  @Override
+  public void updateStatusToDelivered(String batchId) {
+    alertRepository.updateAlertsStatusByBatchId(batchId, Status.DELIVERED.name());
+  }
+
+  @Override
   public List<AlertName> findNamesByBatchIdAndStatusIsRegisteredOrProcessing(String batchId) {
     return alertRepository.findNamesByBatchIdAndStatusIsRegisteredOrProcessing(batchId).stream()
         .map(mapper::toAlertName)
@@ -82,7 +93,14 @@ class JdbcAlertRepository implements AlertRepository {
 
   @Override
   public long countAllErroneousAlerts(String batchId) {
-    return alertRepository.countAllAlertsByBatchIdAndErrorStatus(batchId);
+    var statuses = Set.of(Status.ERROR.name());
+    return alertRepository.countAllAlertsByBatchIdAndStatusIn(batchId, statuses);
+  }
+
+  @Override
+  public long countAllDeliveredAndErrorAlerts(String batchId) {
+    var statuses = Set.of(Status.DELIVERED.name(), Status.ERROR.name());
+    return alertRepository.countAllAlertsByBatchIdAndStatusIn(batchId, statuses);
   }
 
   @Override

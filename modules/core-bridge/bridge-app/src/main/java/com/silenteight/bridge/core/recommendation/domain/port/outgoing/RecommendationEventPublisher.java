@@ -1,8 +1,8 @@
 package com.silenteight.bridge.core.recommendation.domain.port.outgoing;
 
-import com.silenteight.bridge.core.recommendation.domain.model.RecommendationsReceivedEvent;
+import com.silenteight.bridge.core.recommendation.domain.model.RecommendationsStoredEvent;
 
 public interface RecommendationEventPublisher {
 
-  void publish(RecommendationsReceivedEvent recommendationsReceivedEvent);
+  void publish(RecommendationsStoredEvent recommendationsStoredEvent);
 }

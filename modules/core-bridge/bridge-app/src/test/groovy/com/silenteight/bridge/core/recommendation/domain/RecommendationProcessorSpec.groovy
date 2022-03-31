@@ -1,7 +1,7 @@
 package com.silenteight.bridge.core.recommendation.domain
 
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationWithMetadata
-import com.silenteight.bridge.core.recommendation.domain.model.RecommendationsReceivedEvent
+import com.silenteight.bridge.core.recommendation.domain.model.RecommendationsStoredEvent
 import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RecommendationEventPublisher
 import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RecommendationRepository
 
@@ -30,7 +30,7 @@ class RecommendationProcessorSpec extends Specification {
     then:
     1 * recommendationRepository.findRecommendationAlertNamesByAnalysisName(analysisName) >> []
     1 * recommendationRepository.saveAll(_ as List<RecommendationWithMetadata>)
-    1 * eventPublisher.publish(_ as RecommendationsReceivedEvent)
+    1 * eventPublisher.publish(_ as RecommendationsStoredEvent)
   }
 
   def 'should proceed ready recommendations with existing duplicates in DB'() {
@@ -46,7 +46,7 @@ class RecommendationProcessorSpec extends Specification {
     1 * recommendationRepository.findRecommendationAlertNamesByAnalysisName(analysisName) >>
         existingRecommendationAlertNames
     1 * recommendationRepository.saveAll([])
-    1 * eventPublisher.publish(new RecommendationsReceivedEvent(analysisName, []))
+    1 * eventPublisher.publish(new RecommendationsStoredEvent(analysisName, []))
   }
 
   def 'should create timed out recommendations without existing duplicates in DB'() {
@@ -60,7 +60,7 @@ class RecommendationProcessorSpec extends Specification {
     then:
     1 * recommendationRepository.findRecommendationAlertNamesByAnalysisName(analysisName) >> []
     1 * recommendationRepository.saveAll(_ as List<RecommendationWithMetadata>)
-    1 * eventPublisher.publish(new RecommendationsReceivedEvent(analysisName, alertNames))
+    1 * eventPublisher.publish(new RecommendationsStoredEvent(analysisName, alertNames))
   }
 
   def 'should create timed out recommendations with existing duplicates in DB'() {
@@ -76,6 +76,6 @@ class RecommendationProcessorSpec extends Specification {
     1 * recommendationRepository.findRecommendationAlertNamesByAnalysisName(analysisName) >>
         existingRecommendationAlertNames
     1 * recommendationRepository.saveAll(_ as List<RecommendationWithMetadata>)
-    1 * eventPublisher.publish(new RecommendationsReceivedEvent(analysisName, ['alertName2']))
+    1 * eventPublisher.publish(new RecommendationsStoredEvent(analysisName, ['alertName2']))
   }
 }

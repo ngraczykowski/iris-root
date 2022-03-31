@@ -12,7 +12,7 @@ import java.util.Optional;
 @EnableConfigurationProperties({
     RecommendationIncomingRecommendationsGeneratedConfigurationProperties.class,
     RecommendationIncomingNotifyBatchTimeoutConfigurationProperties.class,
-    RecommendationOutgoingRecommendationsReceivedConfigurationProperties.class,
+    RecommendationOutgoingRecommendationsStoredConfigurationProperties.class,
     AmqpRecommendationProperties.class
 })
 class RecommendationRabbitConfiguration {
@@ -114,8 +114,8 @@ class RecommendationRabbitConfiguration {
   }
 
   @Bean
-  DirectExchange recommendationsReceivedExchange(
-      RecommendationOutgoingRecommendationsReceivedConfigurationProperties properties) {
+  DirectExchange recommendationsStoredExchange(
+      RecommendationOutgoingRecommendationsStoredConfigurationProperties properties) {
     return new DirectExchange(properties.exchangeName());
   }
 }

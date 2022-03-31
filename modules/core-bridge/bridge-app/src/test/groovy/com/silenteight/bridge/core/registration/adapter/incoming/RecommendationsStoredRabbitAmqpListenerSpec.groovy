@@ -7,12 +7,12 @@ import com.silenteight.proto.recommendation.api.v1.RecommendationsStored
 import spock.lang.Specification
 import spock.lang.Subject
 
-class RecommendationsReceivedRabbitAmqpListenerSpec extends Specification {
+class RecommendationsStoredRabbitAmqpListenerSpec extends Specification {
 
   def registrationFacade = Mock(RegistrationFacade)
 
   @Subject
-  def underTest = new RecommendationsReceivedRabbitAmqpListener(registrationFacade)
+  def underTest = new RecommendationsStoredRabbitAmqpListener(registrationFacade)
 
   def 'should call alertService and batchService with mapped dto'() {
     given:
@@ -22,7 +22,7 @@ class RecommendationsReceivedRabbitAmqpListenerSpec extends Specification {
         .build()
 
     when:
-    underTest.recommendationReceived(message)
+    underTest.recommendationsStored(message)
 
     then:
     1 * registrationFacade.markAlertsAsRecommended(_) >> {MarkAlertsAsRecommendedCommand command ->

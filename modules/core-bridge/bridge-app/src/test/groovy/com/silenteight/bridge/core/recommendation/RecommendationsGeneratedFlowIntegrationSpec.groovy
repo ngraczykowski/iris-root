@@ -31,7 +31,7 @@ class RecommendationsGeneratedFlowIntegrationSpec extends BaseSpecificationIT {
   @Autowired
   private RecommendationIncomingRecommendationsGeneratedConfigurationProperties properties
 
-  def "should store recommendations and publish RecommendationsReceivedEvent event when receive recommendations from AE"() {
+  def "should store recommendations and publish RecommendationsStored event when receive recommendations from AE"() {
     given:
     def analysisName = Fixtures.ANALYSIS_NAME
     def recommendationsGenerated = RecommendationsGenerated.newBuilder()
@@ -51,9 +51,9 @@ class RecommendationsGeneratedFlowIntegrationSpec extends BaseSpecificationIT {
       def recommendations = recommendationRepository.findByAnalysisName(analysisName)
       assert recommendations.size() == 1
 
-      def recommendationsReceived = (RecommendationsStored) rabbitTemplate.receiveAndConvert(
+      def recommendationsStored = (RecommendationsStored) rabbitTemplate.receiveAndConvert(
           RecommendationsGeneratedFlowRabbitMqTestConfig.TEST_QUEUE_NAME, 10000L)
-      with(recommendationsReceived) {
+      with(recommendationsStored) {
         analysisName == analysisName
         alertNamesCount == 1
       }

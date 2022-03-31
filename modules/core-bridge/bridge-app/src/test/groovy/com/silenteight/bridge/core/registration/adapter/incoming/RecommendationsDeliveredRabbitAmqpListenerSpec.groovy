@@ -1,7 +1,7 @@
 package com.silenteight.bridge.core.registration.adapter.incoming
 
-import com.silenteight.bridge.core.registration.domain.command.MarkBatchAsDeliveredCommand
 import com.silenteight.bridge.core.registration.domain.RegistrationFacade
+import com.silenteight.bridge.core.registration.domain.command.MarkAlertsAsDeliveredCommand
 import com.silenteight.proto.recommendation.api.v1.RecommendationsDelivered
 
 import spock.lang.Specification
@@ -18,15 +18,19 @@ class RecommendationsDeliveredRabbitAmqpListenerSpec extends Specification {
     given:
     def message = RecommendationsDelivered.newBuilder()
         .setBatchId('batchId')
+        .setAnalysisName('analysisName')
         .addAllAlertNames(['firstAlertName', 'secondAlertName'])
+        .build()
+    def command = MarkAlertsAsDeliveredCommand.builder()
+        .batchId(message.batchId)
+        .analysisName(message.analysisName)
+        .alertNames(message.getAlertNamesList())
         .build()
 
     when:
     underTest.recommendationDelivered(message)
 
     then:
-    1 * registrationFacade.markBatchAsDelivered(_) >> {MarkBatchAsDeliveredCommand command ->
-      assert command.batchId() == message.batchId
-    }
+    1 * registrationFacade.markAlertsAsDelivered(command)
   }
 }

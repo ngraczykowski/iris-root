@@ -61,7 +61,7 @@ class RegistrationAlertResponseMapper {
 
   private Status toStatus(AlertStatus status) {
     return switch (status) {
-      case REGISTERED, PROCESSING, RECOMMENDED -> Status.SUCCESS;
+      case REGISTERED, PROCESSING, RECOMMENDED, DELIVERED -> Status.SUCCESS;
       case ERROR -> Status.FAILURE;
     };
   }

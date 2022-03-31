@@ -13,7 +13,6 @@ import com.silenteight.bridge.core.registration.domain.port.outgoing.*;
 import org.springframework.stereotype.Service;
 
 import java.util.EnumSet;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Slf4j
@@ -75,12 +74,12 @@ class BatchService {
     publishBatchCompleted(completeBatchCommand.batch());
   }
 
-  void markBatchAsDelivered(String batchId) {
-    var batch = findBatch(batchId);
+  void markBatchAsDelivered(Batch batch) {
     validateBatchStatus(batch, ALLOWED_BATCH_STATUSES_FOR_MARKING_AS_DELIVERED);
 
-    log.info("Set batch status to DELIVERED with batch id: {}", batchId);
-    batchRepository.updateStatusToDelivered(batchId);
+    log.info("Set batch status to DELIVERED with batch id: {}", batch.id());
+    batchRepository.updateStatusToDelivered(batch.id());
+    publishBatchDelivered(batch);
   }
 
   private Batch validateBatchStatus(Batch batch, EnumSet<BatchStatus> allowedStatuses) {
@@ -92,15 +91,6 @@ class BatchService {
       throw new IllegalStateException(message);
     }
     return batch;
-  }
-
-  private Batch findBatch(String batchId) {
-    return batchRepository.findById(batchId)
-        .orElseThrow(() -> {
-          var message = String.format("No batch found for batch id: %s", batchId);
-          log.error(message);
-          return new NoSuchElementException(message);
-        });
   }
 
   private Batch logIfAlreadyExists(Batch batch) {
@@ -165,5 +155,9 @@ class BatchService {
             .batchMetadata(batch.batchMetadata())
             .build()
     );
+  }
+
+  private void publishBatchDelivered(Batch batch) {
+    eventPublisher.publish(new BatchDelivered(batch.id(), batch.analysisName()));
   }
 }

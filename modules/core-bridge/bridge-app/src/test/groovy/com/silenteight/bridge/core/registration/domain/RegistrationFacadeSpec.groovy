@@ -3,14 +3,15 @@ package com.silenteight.bridge.core.registration.domain
 import com.silenteight.bridge.core.Fixtures
 import com.silenteight.bridge.core.recommendation.domain.RecommendationFixtures
 import com.silenteight.bridge.core.registration.domain.command.CompleteBatchCommand
+import com.silenteight.bridge.core.registration.domain.command.MarkAlertsAsDeliveredCommand
 import com.silenteight.bridge.core.registration.domain.command.MarkAlertsAsRecommendedCommand
-import com.silenteight.bridge.core.registration.domain.command.MarkBatchAsDeliveredCommand
 import com.silenteight.bridge.core.registration.domain.command.VerifyBatchTimeoutCommand
 import com.silenteight.bridge.core.registration.domain.model.Alert
 import com.silenteight.bridge.core.registration.domain.model.BatchPriority
 
 import spock.lang.Specification
 import spock.lang.Subject
+import spock.lang.Unroll
 
 class RegistrationFacadeSpec extends Specification {
 
@@ -145,16 +146,57 @@ class RegistrationFacadeSpec extends Specification {
     result == RecommendationFixtures.BATCH_WITH_ALERTS
   }
 
-  def 'should call the markBatchAsDelivered method'() {
+  def 'markAlertsAsDelivered should call markBatchAsDelivered when alertNames were not provided'() {
     given:
-    def batchId = Fixtures.BATCH_ID
-    def markAlertsAsDeliveredCommand = new MarkBatchAsDeliveredCommand(batchId)
+    def batch = RegistrationFixtures.BATCH
+    def analysisName = 'analysis/1'
+    def markAlertsAsDeliveredCommand = MarkAlertsAsDeliveredCommand.builder()
+        .batchId(batch.id())
+        .analysisName(analysisName)
+        .alertNames(alertNames)
+        .build()
+
+    1 * batchService.findBatchByAnalysisName(analysisName) >> batch
 
     when:
-    underTest.markBatchAsDelivered(markAlertsAsDeliveredCommand)
+    underTest.markAlertsAsDelivered(markAlertsAsDeliveredCommand)
 
     then:
-    1 * batchService.markBatchAsDelivered(batchId)
+    1 * alertService.updateStatusToDelivered(batch.id(), alertNames)
+    1 * batchService.markBatchAsDelivered(batch)
+
+    where:
+    alertNames << [null, []]
+  }
+
+  @Unroll
+  def "markAlertsAsDelivered #should call markBatchAsDelivered when #when"() {
+    given:
+    def batch = RegistrationFixtures.BATCH
+    def analysisName = 'analysis/1'
+    def alertNames = ['alert1', 'alert2']
+    def markAlertsAsDeliveredCommand = MarkAlertsAsDeliveredCommand.builder()
+        .batchId(batch.id())
+        .analysisName(analysisName)
+        .alertNames(alertNames)
+        .build()
+
+    1 * batchService.findBatchByAnalysisName(analysisName) >> batch
+    1 * alertService.hasAllDeliveredAlerts(batch) >> hasAllDeliveredAlerts
+
+    when:
+    underTest.markAlertsAsDelivered(markAlertsAsDeliveredCommand)
+
+    then:
+    1 * alertService.updateStatusToDelivered(batch.id(), alertNames)
+    if (hasAllDeliveredAlerts) {
+      1 * batchService.markBatchAsDelivered(batch)
+    }
+
+    where:
+    hasAllDeliveredAlerts || should       || when
+    true                  || 'should'     || 'all alerts are delivered'
+    false                 || 'should not' || 'not all alerts are delivered'
   }
 
   def 'should call verify batch timeout'() {

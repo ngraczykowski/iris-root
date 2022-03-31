@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationMetadata;
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationWithMetadata;
-import com.silenteight.bridge.core.recommendation.domain.model.RecommendationsReceivedEvent;
+import com.silenteight.bridge.core.recommendation.domain.model.RecommendationsStoredEvent;
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendedAction;
 import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RecommendationEventPublisher;
 import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RecommendationRepository;
@@ -34,12 +34,13 @@ class RecommendationProcessor {
     var newRecommendations = filterOutExistingInDb(analysisName, receivedRecommendations);
 
     log.info(
-        "Received {} new recommendations from {} sent.",
+        "Received {} new recommendations from {} sent for analysis {}.",
         newRecommendations.size(),
-        receivedRecommendations.size());
+        receivedRecommendations.size(),
+        analysisName);
 
-    saveRecommendations(newRecommendations);
-    publishRecommendationsReceivedEvent(analysisName, newRecommendations);
+    saveRecommendations(analysisName, newRecommendations);
+    publishRecommendationsStoredEvent(analysisName, newRecommendations);
   }
 
   void createTimedOutRecommendations(String analysisName, List<String> alertNames) {
@@ -58,8 +59,8 @@ class RecommendationProcessor {
 
     var newRecommendations = filterOutExistingInDb(analysisName, createdRecommendations);
 
-    saveRecommendations(newRecommendations);
-    publishRecommendationsReceivedEvent(analysisName, newRecommendations);
+    saveRecommendations(analysisName, newRecommendations);
+    publishRecommendationsStoredEvent(analysisName, newRecommendations);
   }
 
   private String getAnalysisName(List<RecommendationWithMetadata> receivedRecommendations) {
@@ -84,18 +85,20 @@ class RecommendationProcessor {
     return recommendations;
   }
 
-  private void saveRecommendations(List<RecommendationWithMetadata> recommendations) {
+  private void saveRecommendations(
+      String analysisName, List<RecommendationWithMetadata> recommendations) {
     recommendationRepository.saveAll(recommendations);
-    log.info("{} recommendations saved in DB.", recommendations.size());
+    log.info(
+        "{} recommendations saved in DB for analysis {}", recommendations.size(), analysisName);
   }
 
-  private void publishRecommendationsReceivedEvent(
+  private void publishRecommendationsStoredEvent(
       String analysisName, List<RecommendationWithMetadata> recommendationsWithMetadata) {
 
     var alertNames = recommendationsWithMetadata.stream()
         .map(RecommendationWithMetadata::alertName)
         .toList();
 
-    eventPublisher.publish(new RecommendationsReceivedEvent(analysisName, alertNames));
+    eventPublisher.publish(new RecommendationsStoredEvent(analysisName, alertNames));
   }
 }

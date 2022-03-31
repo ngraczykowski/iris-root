@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.bridge.core.registration.domain.RegistrationFacade;
-import com.silenteight.bridge.core.registration.domain.command.MarkBatchAsDeliveredCommand;
+import com.silenteight.bridge.core.registration.domain.command.MarkAlertsAsDeliveredCommand;
 import com.silenteight.proto.recommendation.api.v1.RecommendationsDelivered;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -23,12 +23,17 @@ class RecommendationsDeliveredRabbitAmqpListener {
   )
   public void recommendationDelivered(RecommendationsDelivered recommendation) {
     log.info(
-        "Received RecommendationsDelivered amqp batch id={}", recommendation.getBatchId());
-    registrationFacade.markBatchAsDelivered(createMarkAlertsAsDeliveredCommand(recommendation));
+        "Received RecommendationsDelivered with batchId: {} and analysisName: {}",
+        recommendation.getBatchId(), recommendation.getAnalysisName());
+    registrationFacade.markAlertsAsDelivered(createMarkAlertsAsDeliveredCommand(recommendation));
   }
 
-  private MarkBatchAsDeliveredCommand createMarkAlertsAsDeliveredCommand(
+  private MarkAlertsAsDeliveredCommand createMarkAlertsAsDeliveredCommand(
       RecommendationsDelivered recommendation) {
-    return new MarkBatchAsDeliveredCommand(recommendation.getBatchId());
+    return MarkAlertsAsDeliveredCommand.builder()
+        .batchId(recommendation.getBatchId())
+        .analysisName(recommendation.getAnalysisName())
+        .alertNames(recommendation.getAlertNamesList())
+        .build();
   }
 }

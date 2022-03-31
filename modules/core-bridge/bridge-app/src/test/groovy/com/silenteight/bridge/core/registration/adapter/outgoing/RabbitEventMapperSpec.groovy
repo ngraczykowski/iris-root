@@ -26,7 +26,7 @@ class RabbitEventMapperSpec extends Specification {
     then:
     with(result) {
       batchId == 'batchId'
-      analysisId == 'analysisName'
+      analysisName == 'analysisName'
       batchMetadata == 'batchMetadata'
     }
   }

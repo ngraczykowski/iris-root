@@ -13,15 +13,15 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-class RecommendationsReceivedRabbitAmqpListener {
+class RecommendationsStoredRabbitAmqpListener {
 
   private final RegistrationFacade registrationFacade;
 
   @RabbitListener(
-      queues = "${amqp.registration.incoming.recommendation-received.queue-name}",
+      queues = "${amqp.registration.incoming.recommendation-stored.queue-name}",
       errorHandler = "registrationAmqpErrorHandler"
   )
-  public void recommendationReceived(RecommendationsStored recommendation) {
+  public void recommendationsStored(RecommendationsStored recommendation) {
     log.info(
         "Received RecommendationsStored amqp message for analysis name={}",
         recommendation.getAnalysisName());

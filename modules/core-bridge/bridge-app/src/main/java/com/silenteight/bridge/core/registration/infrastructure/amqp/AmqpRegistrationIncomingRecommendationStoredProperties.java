@@ -4,8 +4,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 
 @ConstructorBinding
-@ConfigurationProperties(prefix = "amqp.registration.incoming.recommendation-received")
-record AmqpRegistrationIncomingRecommendationReceivedProperties(
+@ConfigurationProperties(prefix = "amqp.registration.incoming.recommendation-stored")
+record AmqpRegistrationIncomingRecommendationStoredProperties(
     String queueName,
     String deadLetterQueueName,
     Integer deadLetterQueueTimeToLiveInMilliseconds,

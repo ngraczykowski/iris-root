@@ -189,47 +189,41 @@ class BatchServiceSpec extends Specification {
     1 * eventPublisher.publish(batchCompleted)
   }
 
-  def 'should update batch status as DELIVERED'() {
+  @Unroll
+  def 'should update batch with status #status to DELIVERED'() {
     given:
-    def batchId = Fixtures.BATCH_ID
-    def batch = RegistrationFixtures.batch(BatchStatus.COMPLETED)
+    def batch = RegistrationFixtures.batch(status)
 
     and:
-    batchRepository.findById(batchId) >> Optional.of(batch)
+    batchRepository.findById(batch.id()) >> Optional.of(batch)
 
     when:
-    underTest.markBatchAsDelivered(batchId)
+    underTest.markBatchAsDelivered(batch)
 
     then:
-    1 * batchRepository.updateStatusToDelivered(batchId)
+    1 * batchRepository.updateStatusToDelivered(batch.id())
+
+    where:
+    status << BatchService.ALLOWED_BATCH_STATUSES_FOR_MARKING_AS_DELIVERED
   }
 
-  def 'should not update batch status as DELIVERED when batch status is other than COMPLETED, ERROR or DELIVERED'() {
+  def 'should not update batch with status #status to DELIVERED'() {
     given:
-    def batchId = Fixtures.BATCH_ID
-    def batch = RegistrationFixtures.batch(BatchStatus.STORED)
+    def batch = RegistrationFixtures.batch(status as BatchStatus)
+
     and:
-    batchRepository.findById(batchId) >> Optional.of(batch)
+    batchRepository.findById(batch.id()) >> Optional.of(batch)
 
     when:
-    underTest.markBatchAsDelivered(batchId)
+    underTest.markBatchAsDelivered(batch)
 
     then:
-    0 * batchRepository.updateStatusToDelivered(batchId)
+    0 * batchRepository.updateStatusToDelivered(batch.id())
     thrown(IllegalStateException.class)
-  }
 
-  def 'should not update batch status as DELIVERED when batch not found by batch id'() {
-    given:
-    def batchId = UUID.randomUUID().toString()
-    and:
-    batchRepository.findById(batchId) >> Optional.empty()
-
-    when:
-    underTest.markBatchAsDelivered(batchId)
-
-    then:
-    0 * batchRepository.updateStatusToDelivered(batchId)
-    thrown(NoSuchElementException.class)
+    where:
+    status << BatchStatus.findAll {
+      !BatchService.ALLOWED_BATCH_STATUSES_FOR_MARKING_AS_DELIVERED.contains(it)
+    }
   }
 }

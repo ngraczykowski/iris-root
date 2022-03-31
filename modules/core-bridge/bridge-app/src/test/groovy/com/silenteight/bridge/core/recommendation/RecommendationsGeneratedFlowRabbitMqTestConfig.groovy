@@ -33,16 +33,16 @@ class RecommendationsGeneratedFlowRabbitMqTestConfig implements BeanPostProcesso
   }
 
   @Bean
-  Queue testRecommendationsReceivedQueue() {
+  Queue testRecommendationsStoredQueue() {
     return QueueBuilder.durable(TEST_QUEUE_NAME).build()
   }
 
   @Bean
   Binding testBinding(
-      DirectExchange recommendationsReceivedExchange, Queue testRecommendationsReceivedQueue) {
+      DirectExchange recommendationsStoredExchange, Queue testRecommendationsStoredQueue) {
     return BindingBuilder
-        .bind(testRecommendationsReceivedQueue)
-        .to(recommendationsReceivedExchange)
+        .bind(testRecommendationsStoredQueue)
+        .to(recommendationsStoredExchange)
         .with('')
   }
 }

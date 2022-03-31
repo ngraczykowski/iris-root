@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Configuration
 @EnableConfigurationProperties({
-    AmqpRegistrationIncomingRecommendationReceivedProperties.class,
+    AmqpRegistrationIncomingRecommendationStoredProperties.class,
     AmqpRegistrationIncomingRecommendationDeliveredProperties.class,
     AmqpRegistrationIncomingMatchFeatureInputSetFedProperties.class,
     AmqpRegistrationOutgoingNotifyBatchCompletedProperties.class,
@@ -23,7 +23,8 @@ import java.util.Optional;
     AmqpRegistrationOutgoingVerifyBatchTimeoutProperties.class,
     AmqpRegistrationIncomingVerifyBatchTimeoutProperties.class,
     AmqpRegistrationOutgoingNotifyBatchTimedOutProperties.class,
-    AmqpRegistrationProperties.class
+    AmqpRegistrationProperties.class,
+    AmqpRegistrationOutgoingNotifyBatchDeliveredProperties.class
 })
 class RegistrationRabbitConfiguration {
 
@@ -94,8 +95,8 @@ class RegistrationRabbitConfiguration {
   }
 
   @Bean
-  Queue recommendationsReceivedQueue(
-      AmqpRegistrationIncomingRecommendationReceivedProperties properties) {
+  Queue recommendationsStoredQueue(
+      AmqpRegistrationIncomingRecommendationStoredProperties properties) {
     return QueueBuilder.durable(properties.queueName())
         .deadLetterExchange(properties.deadLetterExchangeName())
         .deadLetterRoutingKey(properties.queueName())
@@ -112,8 +113,8 @@ class RegistrationRabbitConfiguration {
   }
 
   @Bean
-  Queue recommendationsReceivedDeadLetterQueue(
-      AmqpRegistrationIncomingRecommendationReceivedProperties properties) {
+  Queue recommendationsStoredDeadLetterQueue(
+      AmqpRegistrationIncomingRecommendationStoredProperties properties) {
     return QueueBuilder.durable(properties.deadLetterQueueName())
         .ttl(Optional.ofNullable(properties.deadLetterQueueTimeToLiveInMilliseconds())
             .orElse(DEFAULT_TTL_IN_MILLISECONDS))
@@ -132,8 +133,8 @@ class RegistrationRabbitConfiguration {
   }
 
   @Bean
-  DirectExchange recommendationsReceivedDeadLetterExchange(
-      AmqpRegistrationIncomingRecommendationReceivedProperties properties) {
+  DirectExchange recommendationsStoredDeadLetterExchange(
+      AmqpRegistrationIncomingRecommendationStoredProperties properties) {
     return new DirectExchange(properties.deadLetterExchangeName());
   }
 
@@ -144,12 +145,12 @@ class RegistrationRabbitConfiguration {
   }
 
   @Bean
-  Binding recommendationsReceivedBinding(
-      @Qualifier("recommendationsReceivedQueue") Queue queue,
-      DirectExchange recommendationsReceivedExchange) {
+  Binding recommendationsStoredBinding(
+      @Qualifier("recommendationsStoredQueue") Queue queue,
+      DirectExchange recommendationsStoredExchange) {
     return BindingBuilder
         .bind(queue)
-        .to(recommendationsReceivedExchange)
+        .to(recommendationsStoredExchange)
         .with(EMPTY_ROUTING_KEY);
   }
 
@@ -170,10 +171,10 @@ class RegistrationRabbitConfiguration {
   }
 
   @Bean
-  Binding recommendationsReceivedDeadLetterBinding(
-      @Qualifier("recommendationsReceivedDeadLetterQueue") Queue queue,
-      @Qualifier("recommendationsReceivedDeadLetterExchange") DirectExchange exchange,
-      AmqpRegistrationIncomingRecommendationReceivedProperties properties) {
+  Binding recommendationsStoredDeadLetterBinding(
+      @Qualifier("recommendationsStoredDeadLetterQueue") Queue queue,
+      @Qualifier("recommendationsStoredDeadLetterExchange") DirectExchange exchange,
+      AmqpRegistrationIncomingRecommendationStoredProperties properties) {
     return BindingBuilder
         .bind(queue)
         .to(exchange)
@@ -289,6 +290,12 @@ class RegistrationRabbitConfiguration {
   @Bean
   DirectExchange batchTimedOutExchange(
       AmqpRegistrationOutgoingNotifyBatchTimedOutProperties properties) {
+    return new DirectExchange(properties.exchangeName());
+  }
+
+  @Bean
+  DirectExchange batchDeliveredExchange(
+      AmqpRegistrationOutgoingNotifyBatchDeliveredProperties properties) {
     return new DirectExchange(properties.exchangeName());
   }
 }

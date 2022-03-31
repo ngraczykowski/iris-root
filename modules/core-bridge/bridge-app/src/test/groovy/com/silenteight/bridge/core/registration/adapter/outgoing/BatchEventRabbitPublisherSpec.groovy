@@ -1,12 +1,15 @@
 package com.silenteight.bridge.core.registration.adapter.outgoing
 
 import com.silenteight.bridge.core.registration.domain.model.BatchCompleted
+import com.silenteight.bridge.core.registration.domain.model.BatchDelivered
 import com.silenteight.bridge.core.registration.domain.model.BatchError
 import com.silenteight.bridge.core.registration.domain.model.BatchTimedOut
 import com.silenteight.bridge.core.registration.infrastructure.amqp.AmqpRegistrationOutgoingNotifyBatchCompletedProperties
+import com.silenteight.bridge.core.registration.infrastructure.amqp.AmqpRegistrationOutgoingNotifyBatchDeliveredProperties
 import com.silenteight.bridge.core.registration.infrastructure.amqp.AmqpRegistrationOutgoingNotifyBatchErrorProperties
 import com.silenteight.bridge.core.registration.infrastructure.amqp.AmqpRegistrationOutgoingNotifyBatchTimedOutProperties
 import com.silenteight.proto.registration.api.v1.MessageBatchCompleted
+import com.silenteight.proto.registration.api.v1.MessageBatchDelivered
 import com.silenteight.proto.registration.api.v1.MessageBatchError
 import com.silenteight.proto.registration.api.v1.MessageNotifyBatchTimedOut
 
@@ -14,7 +17,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate
 import spock.lang.Specification
 import spock.lang.Subject
 
-class RabbitBatchEventPublisherSpec extends Specification {
+class BatchEventRabbitPublisherSpec extends Specification {
 
   def mapper = Mock(RabbitEventMapper)
 
@@ -29,12 +32,15 @@ class RabbitBatchEventPublisherSpec extends Specification {
   def batchTimedOutProperties = new AmqpRegistrationOutgoingNotifyBatchTimedOutProperties(
       'timed-out-exchange')
 
+  def batchDeliveredProperties = new AmqpRegistrationOutgoingNotifyBatchDeliveredProperties(
+      'delivered-exchange')
+
   @Subject
   def underTest = new BatchEventRabbitPublisher(
       mapper, rabbitTemplate, batchErrorProperties, batchCompletedProperties,
-      batchTimedOutProperties)
+      batchTimedOutProperties, batchDeliveredProperties)
 
-  def 'notify error for batch'() {
+  def 'should notify error for batch'() {
     given:
     def batchError = BatchError.builder()
         .id('batchId')
@@ -56,7 +62,7 @@ class RabbitBatchEventPublisherSpec extends Specification {
     1 * rabbitTemplate.convertAndSend(batchErrorProperties.exchangeName(), "", messageBatchError)
   }
 
-  def 'notify batch completed'() {
+  def 'should notify batch completed'() {
     given:
     def batchCompleted = BatchCompleted.builder()
         .id('batchId')
@@ -66,7 +72,7 @@ class RabbitBatchEventPublisherSpec extends Specification {
 
     def messageBatchCompleted = MessageBatchCompleted.newBuilder()
         .setBatchId('batchId')
-        .setAnalysisId('analysisName')
+        .setAnalysisName('analysisName')
         .setBatchMetadata('batchMetadata')
         .build()
 
@@ -79,7 +85,7 @@ class RabbitBatchEventPublisherSpec extends Specification {
         .convertAndSend(batchCompletedProperties.exchangeName(), "", messageBatchCompleted)
   }
 
-  def 'notify batch timed out'() {
+  def 'should notify batch timed out'() {
     given:
     def analysisName = 'analysisName'
     def alertNames = ['firstAlertName', 'secondAlertName']
@@ -95,5 +101,23 @@ class RabbitBatchEventPublisherSpec extends Specification {
     then:
     1 * mapper.toMessageNotifyBatchTimedOut(event) >> message
     1 * rabbitTemplate.convertAndSend(batchTimedOutProperties.exchangeName(), "", message)
+  }
+
+  def 'should notify batch delivered'() {
+    given:
+    def batchId = 'batchId'
+    def analysisName = 'analysisName'
+    def event = new BatchDelivered(batchId, analysisName)
+    def message = MessageBatchDelivered.newBuilder()
+        .setBatchId(batchId)
+        .setAnalysisName(analysisName)
+        .build()
+
+    when:
+    underTest.publish(event)
+
+    then:
+    1 * mapper.toMessageBatchDelivered(event) >> message
+    1 * rabbitTemplate.convertAndSend(batchDeliveredProperties.exchangeName(), '', message)
   }
 }

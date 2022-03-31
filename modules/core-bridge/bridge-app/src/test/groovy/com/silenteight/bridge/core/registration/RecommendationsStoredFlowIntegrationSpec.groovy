@@ -1,7 +1,7 @@
 package com.silenteight.bridge.core.registration
 
 import com.silenteight.bridge.core.BaseSpecificationIT
-import com.silenteight.bridge.core.recommendation.infrastructure.amqp.RecommendationOutgoingRecommendationsReceivedConfigurationProperties
+import com.silenteight.bridge.core.recommendation.infrastructure.amqp.RecommendationOutgoingRecommendationsStoredConfigurationProperties
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository
@@ -27,10 +27,10 @@ import spock.util.concurrent.PollingConditions
         "grpc.client.inProcess.address=in-process:test",
         "registration.analysis.mock-recommendations-generation=false"
     ])
-@Import(RecommendationReceivedFlowRabbitMqTestConfig.class)
+@Import(RecommendationsStoredFlowRabbitMqTestConfig.class)
 @ActiveProfiles("test")
 @DirtiesContext
-class RecommendationReceivedFlowIntegrationSpec extends BaseSpecificationIT {
+class RecommendationsStoredFlowIntegrationSpec extends BaseSpecificationIT {
 
   @Autowired
   private RabbitTemplate rabbitTemplate
@@ -42,7 +42,7 @@ class RecommendationReceivedFlowIntegrationSpec extends BaseSpecificationIT {
   private AlertRepository alertRepository
 
   @Autowired
-  private RecommendationOutgoingRecommendationsReceivedConfigurationProperties properties
+  private RecommendationOutgoingRecommendationsStoredConfigurationProperties properties
 
   @GrpcClient("inProcess")
   private RegistrationServiceBlockingStub myService
@@ -55,7 +55,7 @@ class RecommendationReceivedFlowIntegrationSpec extends BaseSpecificationIT {
         }
         '''
 
-  def 'should send recommendationsReceived message and after it check that all alerts have status RECOMMENDED, batch has status COMPLETED and message MessageBatchCompleted is published'() {
+  def 'should send RecommendationsStored message and after it check that all alerts have status RECOMMENDED, batch has status COMPLETED and message MessageBatchCompleted is published'() {
     given:
     def registerBatchRequest = createRegisterBatchRequest()
 
@@ -69,19 +69,19 @@ class RecommendationReceivedFlowIntegrationSpec extends BaseSpecificationIT {
 
     myService.registerAlertsAndMatches(registerAlertsAndMatchesRequest)
 
-    and: 'prepare recommendations received message'
+    and: 'prepare recommendations stored message'
 
     def alertNames = alertRepository.findAllByBatchId(BATCH_ID_INPUT).stream()
         .map(alert -> alert.name())
         .toList()
 
     def analysisName = batchRepository.findById(BATCH_ID_INPUT).get().analysisName()
-    def recommendationsReceived = createRecommendationsReceived(analysisName, alertNames)
+    def recommendationsStored = createRecommendationsStored(analysisName, alertNames)
 
     def conditions = new PollingConditions(timeout: 10, initialDelay: 0.2, factor: 1.25)
 
     when:
-    rabbitTemplate.convertAndSend(properties.exchangeName(), "", recommendationsReceived)
+    rabbitTemplate.convertAndSend(properties.exchangeName(), "", recommendationsStored)
 
     then:
     noExceptionThrown()
@@ -97,11 +97,11 @@ class RecommendationReceivedFlowIntegrationSpec extends BaseSpecificationIT {
       assert batch.get().status() == BatchStatus.COMPLETED
 
       def messageBatchCompleted = (MessageBatchCompleted) rabbitTemplate.receiveAndConvert(
-          RecommendationReceivedFlowRabbitMqTestConfig.TEST_BATCH_COMPLETED_QUEUE_NAME, 10000L)
+          RecommendationsStoredFlowRabbitMqTestConfig.TEST_BATCH_COMPLETED_QUEUE_NAME, 10000L)
 
       with(messageBatchCompleted) {
         batchId == BATCH_ID_INPUT
-        analysisId == analysisName
+        it.analysisName == analysisName
         batchMetadata == METADATA
       }
     }
@@ -139,7 +139,7 @@ class RecommendationReceivedFlowIntegrationSpec extends BaseSpecificationIT {
         .build()
   }
 
-  private static RecommendationsStored createRecommendationsReceived(
+  private static RecommendationsStored createRecommendationsStored(
       String analysisName, List<String> alertNames) {
     RecommendationsStored.newBuilder()
         .setAnalysisName(analysisName)
