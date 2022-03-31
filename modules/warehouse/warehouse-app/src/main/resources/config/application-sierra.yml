@@ -59,11 +59,11 @@ warehouse.reports.v2:
       description: Reasoning Branch Scorer (Match Level)
       selectSqlQuery: >
         SELECT (wm.payload ->> 'feature_vector_signature') AS "Reasoning Branch ID",
-               (wm.payload ->> 'policy_title') AS "Policy Name",
                (wm.payload ->> 'policy') AS "Policy ID",
+               (wm.payload ->> 'policy_title') AS "Policy Name",
                (wm.payload ->> 'step') AS "Step ID",
                (wm.payload ->> 'step_title') AS "Step Name",
-               (wm.payload ->> 'solution') AS "S8 Alert Resolution",
+               (wm.payload ->> 'solution') AS "S8 Match Resolution",
                (wm.payload ->> 'category_values_categories/matchType') AS "Match Type",
                (wm.payload ->> 'feature_values_features/nameMatchedText') AS "Name",
                (wm.payload ->> 'feature_values_features/geo') AS "Geo",
@@ -75,7 +75,6 @@ warehouse.reports.v2:
                (wm.payload ->> 'category_values_categories/specificTerms2') AS "Specific Terms v2",
                (wm.payload ->> 'category_values_categories/messageStructure') AS "Message Structure",
                (wm.payload ->> 'category_values_categories/historicalRiskAssessment') AS "Historical Risk Assessment",
-               (wm.payload ->> 'feature_values_features/historicalRiskAccountNumber') AS "Historical Risk - Account Number",
                (wm.payload ->> 'feature_values_features/historicalRiskAccountNumberTP') AS "Historical Risk - Account Number - TP",
                (wm.payload ->> 'feature_values_features/historicalRiskAccountNumberFP') AS "Historical Risk - Account Number - FP",
                (wm.payload ->> 'feature_values_features/contextualLearningNameTP') AS "Contextual Learning - TP",
@@ -86,8 +85,8 @@ warehouse.reports.v2:
                count(wm.payload ->> 'feature_vector_signature') AS "Hits Count"
         FROM warehouse_alert wa JOIN warehouse_match wm ON wa.id = wm.alert_id where wa.recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
         GROUP BY (wm.payload ->> 'feature_vector_signature'),
-               (wm.payload ->> 'policy_title'),
                (wm.payload ->> 'policy'),
+               (wm.payload ->> 'policy_title'),
                (wm.payload ->> 'step'),
                (wm.payload ->> 'step_title'),
                (wm.payload ->> 'solution'),
@@ -102,7 +101,6 @@ warehouse.reports.v2:
                (wm.payload ->> 'category_values_categories/specificTerms2'),
                (wm.payload ->> 'category_values_categories/messageStructure'),
                (wm.payload ->> 'category_values_categories/historicalRiskAssessment'),
-               (wm.payload ->> 'feature_values_features/historicalRiskAccountNumber'),
                (wm.payload ->> 'feature_values_features/historicalRiskAccountNumberTP'),
                (wm.payload ->> 'feature_values_features/historicalRiskAccountNumberFP'),
                (wm.payload ->> 'feature_values_features/contextualLearningNameTP'),
@@ -115,8 +113,8 @@ warehouse.reports.v2:
       description: Reasoning Branch Scorer (Match Level)
       selectSqlQuery: >
         SELECT (wsa.payload ->> 'match_reason:feature_vector_signature')           AS "Reasoning Branch ID",
-               (wsa.payload ->> 'match_reason:policy_title')                       AS "Policy Name",
                (wsa.payload ->> 'match_reason:policy')                             AS "Policy ID",
+               (wsa.payload ->> 'match_reason:policy_title')                       AS "Policy Name",
                (wsa.payload ->> 'match_reason:step')                               AS "Step ID",
                (wsa.payload ->> 'match_reason:step_title')                         AS "Step Name",
                (wsa.payload ->> 'match_solution')                                  AS "S8 Match Resolution",
@@ -131,8 +129,6 @@ warehouse.reports.v2:
                (wsa.payload ->> 'categories/specificTerms2:value')                 AS "Specific Terms v2",
                (wsa.payload ->> 'categories/messageStructure:value')               AS "Message Structure",
                (wsa.payload ->> 'categories/historicalRiskAssessment:value')       AS "Historical Risk Assessment",
-               (wsa.payload ->>
-                'features/historicalRiskAccountNumber:solution')                   AS "Historical Risk - Account Number",
                (wsa.payload ->>
                 'features/historicalRiskAccountNumberTP:solution')                 AS "Historical Risk - Account Number - TP",
                (wsa.payload ->>
@@ -162,7 +158,6 @@ warehouse.reports.v2:
                  (wsa.payload ->> 'categories/specificTerms2:value'),
                  (wsa.payload ->> 'categories/messageStructure:value'),
                  (wsa.payload ->> 'categories/historicalRiskAssessment:value'),
-                 (wsa.payload ->> 'features/historicalRiskAccountNumber:solution'),
                  (wsa.payload ->> 'features/historicalRiskAccountNumberTP:solution'),
                  (wsa.payload ->> 'features/historicalRiskAccountNumberFP:solution'),
                  (wsa.payload ->> 'features/contextualLearningNameTP:solution'),
