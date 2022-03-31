@@ -3,6 +3,7 @@
 gradleBuild(
     jdkVersion: 'jdk-11',
     sonarEnabled: true,
+    checkStyleEnabled: false,
     archiveArtifactsPattern: '**/build/libs/*.jar, plugins/**/*.jar',
     includeBuildNumberInSnapshotVersion: true,
     additionalParams: [
