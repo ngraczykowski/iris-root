@@ -265,25 +265,12 @@ class MSPipeline(ETLPipeline):
                 logger.warning(f"Field {value} does not exist in payload")
         return new_config
 
-    def load_agent_config(self, alert_type="WM_ADDRESS"):
-        alert_config = self.alert_agents_config[alert_type]
-        parsed_agent_config = {}
-        for agent_name, agent_config in dict(alert_config).items():
-            particular_agent_config = dict(agent_config)
-            parsed_agent_config[agent_name] = {}
-            for new_key in particular_agent_config:
-                parsed_agent_config[agent_name][new_key] = []
-                for element in particular_agent_config[new_key]:
-                    elements = element.split(".")
-                    parsed_agent_config[agent_name][new_key].append(elements[-1])
-        return parsed_agent_config, alert_config
-
     def transform_cleansed_to_application(self, payloads):
         for payload in payloads:
             matches = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
-            agent_config, yaml_conf = self.load_agent_config(
+            agent_config, yaml_conf = self.alert_agents_config[
                 payload[cn.ALERTED_PARTY_FIELD][cn.HEADER_INFO][cn.DATASET_NAME]
-            )
+            ]
             agent_input_prepended_agent_name_config = (
                 prepend_agent_name_to_ap_or_wl_or_aliases_key(agent_config)
             )

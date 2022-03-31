@@ -25,12 +25,35 @@ DATASET_FILE_MAP = {
 }
 
 
+def load_agent_config(alert_type, alert_config):
+    parsed_agent_config = {}
+    for agent_name, agent_config in dict(alert_config).items():
+        particular_agent_config = dict(agent_config)
+        parsed_agent_config[agent_name] = {}
+        for new_key in particular_agent_config:
+            parsed_agent_config[agent_name][new_key] = []
+            for element in particular_agent_config[new_key]:
+                elements = element.split(".")
+                for element in elements:
+                    if element not in pipeline_config.cn.values():
+                        logger.warning(
+                            f"Field in agent configuration for {alert_type}: {element} is not registered field in pipeline.yaml"
+                        )
+                parsed_agent_config[agent_name][new_key].append(elements[-1])
+
+    return parsed_agent_config, alert_config
+
+
 def load_agent_configs():
     alert_agents_config = {
         alert_type: load_config(dataset_config_file, alert_type)
         for alert_type, dataset_config_file in DATASET_FILE_MAP.items()
     }
-
+    alert_agents_config = {
+        alert_type: load_agent_config(alert_type, config)
+        for alert_type, config in alert_agents_config.items()
+        if config
+    }
     return alert_agents_config
 
 

@@ -5,10 +5,10 @@ dob_agent:
 
 document_agent:
   ap:
-  - ALL_TAX_IDS
-  - ALL_GOVT_IDS
-  - PARTY1_GOVTID1_NUMBER
-  - PARTY1_GOVTID2_NUMBER
+  - ALL_CONNECTED_TAX_IDS
+  - ALL_CONNECTED_GOVT_IDS
+  - ALL_PARTY1_GOVTID1_NUMBER
+  - ALL_PARTY1_GOVTID2_NUMBER
   wl:
   - watchlistParty.matchRecords.WL_DOCUMENT_NUMBER
 
@@ -22,10 +22,10 @@ document_agent:
 
 name_agent:
   ap:
-  - ALL_PARTY_NAMES
+  - ALL_CONNECTED_PARTY_NAMES
   - ALL_CONNECTED_PARTIES_NAMES
-  - ALL_CONNECTED_ACCOUNTS_NAMES
-  - ALL_BENEFICIARY_NAMES
+  - ALL_CONNECTED_ACCOUNT_NAMES
+  - ALL_CONNECTED_ACCOUNT_BENEFICIARY_NAMES
   ap_aliases: []
   wl:
   - watchlistParty.matchRecords.WL_NAME
@@ -38,10 +38,10 @@ name_agent:
 
 nationality_agent:
   ap:
-  - ALL_PARTY_COUNTRY1_CITIZENSHIP
-  - ALL_PARTY_COUNTRY_DOMICILE1
+  - ALL_PARTY1_COUNTRY1_CITIZENSHIP
+  - ALL_PARTY1_COUNTRY_DOMICILE1
   - ALL_PRTY_RSDNC_CNTRY_CD
-  - ALL_PARTY_ADDRESS1_COUNTRY
+  - ALL_PARTY1_ADDRESS1_COUNTRY
   wl:
   - watchlistParty.matchRecords.WL_NATIONALITY
   - watchlistParty.matchRecords.WL_POB
@@ -60,6 +60,6 @@ nationality_agent:
 
 residency_agent:
   ap:
-  - ALL_PARTY_COUNTRY_DOMICILE1
+  - ALL_PARTY1_COUNTRY_DOMICILE1
   wl:
   - watchlistParty.matchRecords.WL_COUNTRY
