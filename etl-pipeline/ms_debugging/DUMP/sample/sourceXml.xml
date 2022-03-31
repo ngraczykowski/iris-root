@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-16" ?>
+<alert>
+    <headerInfo>
+        <uniqueCustomerId>R_RUS_Active_Address_2010-02-11-11.11</uniqueCustomerId>
+        <datasetId>1044</datasetId>
+        <datasetName>R_US_Active_Address</datasetName>
+        <masterId>637451852</masterId>
+        <currentVersionId>678175153</currentVersionId>
+        <stopDescriptors>
+            <stopDescriptor>
+                <name>JOHN DOE</name>
+            </stopDescriptor>
+            <stopDescriptor>
+                <name>DOE JOHN</name>
+            </stopDescriptor>
+        </stopDescriptors>
+        <firstVersionCreatedDt>2010-02-02T22: 24: 24.222+02: 20</firstVersionCreatedDt>
+        <lastVersionUpdatedDt>2010-02-02T22: 24: 24.222+02: 20</lastVersionUpdatedDt>
+        <masterVersion>a172863871263234234</masterVersion>
+        <inputVersionSample>R_RUS_Active_Address_2010-02-11-11.11</inputVersionSample>
+    </headerInfo>
+    <inputRecordHist>
+        <inputRecord>
+            <version>a1231231231241343454251234234</version>
+            <createdDate>01/05/10</createdDate>
+            <field name="SOURCE_REF" isScreenable="false">
+                <value>R_RUS_Active_Address_2010-02-11-11.11</value>
+                <sortOrder>1</sortOrder>
+            </field>
+            <field name="UNIQUE_KEY" isScreenable="false">
+                <value>ALA12321312305004514758</value>
+                <sortOrder>12</sortOrder>
+            </field>
+            <field name="ADDRESS1_COUNTRY" isScreenable="false">
+                <value>USA</value>
+                <sortOrder>12</sortOrder>
+            </field>
+            <status>X</status>
+            <masterId>1231231231241</masterId>
+            <versionId>123</versionId>
+            <uniqueCustId>R_RUS_Active_Address_2010-02-11-11.11</uniqueCustId>
+        </inputRecord>
+    </inputRecordHist>
+    <matchRecords>
+        <matchRecord>
+            <masterId>63745112123123852</masterId>
+            <accountSeq>12</accountSeq>
+            <datasetId>1233</datasetId>
+            <uniqueCustomerId>R_RUS_Active_Address_2010-02-11-11.11</uniqueCustomerId>
+            <masterVersion>a123123123123123123123</masterVersion>
+            <matchId>1</matchId>
+            <matchStatus>O</matchStatus>
+            <riskScore>-2.0</riskScore>
+            <inputVersionId>123</inputVersionId>
+            <matchType>XDC</matchType>
+            <entityId>123123123123</entityId>
+            <entityVersion>1231231423546356456345365</entityVersion>
+            <entity id="2134" version="1215342524314143">
+                <name>JOHNNY DOE</name>
+                <listId>213123</listId>
+                <listCode>EXE</listCode>
+                <entityType>0123</entityType>
+                <createdDate>10/02/1993</createdDate>
+                <lastUpdateDate>02/02/2004</lastUpdateDate>
+                <source>RBS</source>
+                <programs>
+                    <program type="US">UNITED STANES</program>
+                </programs>
+                <addresses>
+                    <address>
+                        <city>CHICAGO</city>
+                        <country>US</country>
+                        <countryName>UNITED STATES OF AMERICA</countryName>
+                    </address>
+                </addresses>
+            </entity>
+            <entityType>012</entityType>
+            <entityTextType>UPISD</entityTextType>
+            <sourceCode>RABS</sourceCode>
+            <stopDescriptors>
+                <stopDescriptor>
+                    <name>JOHNNY DOE</name>
+                    <totalMatchScore>0.33</totalMatchScore>
+                    <stopDescriptorDetail>
+                        <inputToken>doee</inputToken>
+                        <inputSynonym>null</inputSynonym>
+                        <sdToken>john</sdToken>
+                        <matchScore>2.0</matchScore>
+                    </stopDescriptorDetail>
+                    <stopDescriptorDetail>
+                        <inputToken>hense</inputToken>
+                        <inputSynonym>null</inputSynonym>
+                        <sdToken>denim</sdToken>
+                        <matchScore>0.123</matchScore>
+                    </stopDescriptorDetail>
+                </stopDescriptor>
+            </stopDescriptors>
+            <firstMatchedDate>01/05/10</firstMatchedDate>
+            <lastMatchedDate>01/05/10</lastMatchedDate>
+            <lastReviewDate>01/05/10</lastReviewDate>
+        </matchRecord>
+        <matchRecord>
+            <masterId>12312312432442524</masterId>
+            <accountSeq>12</accountSeq>
+            <datasetId>1111</datasetId>
+            <uniqueCustomerId>R_RUS_Active_Address_2010-02-11-11.11</uniqueCustomerId>
+            <masterVersion>asd123123343124141</masterVersion>
+            <matchId>2</matchId>
+            <matchStatus>O</matchStatus>
+            <riskScore>-3.0</riskScore>
+            <inputVersionId>123</inputVersionId>
+            <matchType>SSD</matchType>
+            <entityId>1232123</entityId>
+            <entityVersion>123123231213432423</entityVersion>
+            <entity id="12321" version="32131312313213">
+                <name>DOE DOE JOHN</name>
+                <listId>123</listId>
+                <listCode>EUS</listCode>
+                <entityType>02</entityType>
+                <createdDate>12/09/2010</createdDate>
+                <lastUpdateDate>08/31/2010</lastUpdateDate>
+                <source>EUS</source>
+                <dobs>
+                    <dob D="11" M="01" Y="1924">01/11/1924</dob>
+                </dobs>
+                <nationalities>
+                    <nationality ctryCode="US">CHIC</nationality>
+                </nationalities>
+                <aliases>
+                    <alias type="Alias">DONNY JOHN</alias>
+                </aliases>
+                <programs>
+                    <program type="PPK">UNITED STATES OF AMERICA</program>
+                </programs>
+                <titles>
+                    <title>PRESIDENT OF THE ACADEMY</title>
+                </titles>
+                <sdfs>
+                    <sdf name="EffectiveDate">09/01/2010</sdf>
+                    <sdf name="Legal_Basis">2010/1209 (OJ L333)</sdf>
+                    <sdf name="OriginalID">123143414</sdf>
+                </sdfs>
+                <otherIds>
+                    <childId>124134314</childId>
+                </otherIds>
+            </entity>
+            <entityType>04</entityType>
+            <entityTextType>UPIDDDD</entityTextType>
+            <sourceCode>EUS</sourceCode>
+            <stopDescriptors>
+                <stopDescriptor>
+                    <name>DOE DOE DOE</name>
+                    <totalMatchScore>0.22</totalMatchScore>
+                    <stopDescriptorDetail>
+                        <inputToken>doe</inputToken>
+                        <inputSynonym>null</inputSynonym>
+                        <sdToken>john</sdToken>
+                        <matchScore>2.0</matchScore>
+                    </stopDescriptorDetail>
+                    <stopDescriptorDetail>
+                        <inputToken>johnny</inputToken>
+                        <inputSynonym>syn</inputSynonym>
+                        <sdToken>doe</sdToken>
+                        <matchScore>0.223</matchScore>
+                    </stopDescriptorDetail>
+                </stopDescriptor>
+                <stopDescriptor>
+                    <name>JOHN JOHN DOE DOE DOE</name>
+                    <totalMatchScore>0.9999999999999</totalMatchScore>
+                    <stopDescriptorDetail>
+                        <inputToken>sude</inputToken>
+                        <inputSynonym>null</inputSynonym>
+                        <sdToken>zen</sdToken>
+                        <matchScore>0.25</matchScore>
+                    </stopDescriptorDetail>
+                    <stopDescriptorDetail>
+                        <inputToken>doe</inputToken>
+                        <inputSynonym>null</inputSynonym>
+                        <sdToken>doe</sdToken>
+                        <matchScore>3.0</matchScore>
+                    </stopDescriptorDetail>
+                </stopDescriptor>
+            </stopDescriptors>
+            <firstMatchedDate>01/05/20</firstMatchedDate>
+            <lastMatchedDate>01/05/20</lastMatchedDate>
+            <lastReviewDate>01/05/20</lastReviewDate>
+        </matchRecord>
+    </matchRecords>
+</alert>

@@ -313,7 +313,11 @@ class MSPipeline(ETLPipeline):
             record = []
         if not isinstance(record, list):
             record = [record]
-        return list(set([i for i in record]))
+        try:
+            return list(set([i for i in record]))
+        except:
+            logger.warning(f"{record} cannot be parsed")
+            return record
 
     def flatten(self, value):
         if value == []:
