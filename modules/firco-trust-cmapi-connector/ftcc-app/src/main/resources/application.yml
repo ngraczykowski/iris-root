@@ -50,6 +50,18 @@ ftcc:
       login: "user"
       password: "password"
 
+  #-------------------------------------------------------------------------------------------------
+  # Alert state
+  #-------------------------------------------------------------------------------------------------
+  alert.state:
+    mappings:
+      NEW:
+        - "PENDING"
+      SOLVED_FALSE_POSITIVE:
+        - "FALSE_POSITIVE"
+      SOLVED_TRUE_POSITIVE:
+        - "TRUE_POSITIVE"
+
 grpc:
   client:
     GLOBAL:
