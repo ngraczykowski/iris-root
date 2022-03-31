@@ -41,6 +41,7 @@ import com.silenteight.warehouse.retention.simulation.RetentionSimulationModule;
 import com.silenteight.warehouse.sampling.SamplingModule;
 import com.silenteight.warehouse.simulation.handler.SimulationMessageHandlerModule;
 import com.silenteight.warehouse.simulation.processing.SimulationProcessingModule;
+import com.silenteight.warehouse.statistics.StatisticsModule;
 
 import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -93,6 +94,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     RetentionProductionModule.class,
     RetentionSimulationModule.class,
     SqlExecutorModule.class,
+    StatisticsModule.class,
     StorageModule.class,
     TokenModule.class,
     TimeModule.class,

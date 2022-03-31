@@ -1,0 +1,10 @@
+spring.cloud.consul.enabled: false
+
+sep:
+  auth:
+    permissionMethodsMappings:
+      STATISTICS:
+        - "POLICY_STATISTICS"
+    rolePermissionsMappings:
+      MODEL_TUNER:
+        - "STATISTICS"
