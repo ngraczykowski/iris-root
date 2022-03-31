@@ -1,13 +1,13 @@
 dob_agent:
   ap:
-  - ALL_PARTY_DOBS
+  - ALL_CONNECTED_PARTY_DOBS
   wl:
   - watchlistParty.matchRecords.WL_DOB
 
 document_agent:
   ap:
-  - ALL_TAX_IDS
-  - ALL_GOVT_IDS
+  - ALL_CONNECTED_TAX_IDS
+  - ALL_CONNECTED_GOVT_IDS
   - ALL_PARTY1_GOVTID1_NUMBER
   - ALL_PARTY1_GOVTID2_NUMBER
   wl:

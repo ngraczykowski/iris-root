@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import itertools
 from abc import ABC, abstractmethod
 
@@ -16,11 +14,11 @@ from silenteight.datasource.api.country.v1.country_pb2 import CountryFeatureInpu
 from silenteight.datasource.api.date.v1.date_pb2 import DateFeatureInput
 from silenteight.datasource.api.location.v1.location_pb2 import LocationFeatureInput
 
-from etl_pipeline.config import columns_namespace as cn
-from etl_pipeline.config import service_config
+from etl_pipeline.config import pipeline_config, service_config
 from etl_pipeline.logger import get_logger
 
 logger = get_logger("UPDATE TO DATA SOURCE")
+cn = pipeline_config.cn
 
 
 class AgentInputCreator:
@@ -59,7 +57,7 @@ class AgentInputCreator:
         agent_inputs = []
 
         for match_id, match in zip(
-            payload[cn.MATCH_IDS], payload["watchlistParty"]["matchRecords"]
+            payload[cn.MATCH_IDS], payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
         ):
             feature_inputs = self.produce_feature_inputs(match)
             agent_input = AgentInput(

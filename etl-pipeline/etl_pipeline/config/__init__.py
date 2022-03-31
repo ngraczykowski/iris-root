@@ -5,10 +5,6 @@ from omegaconf import OmegaConf
 from etl_pipeline.logger import get_logger
 
 CONFIG_APP_DIR = os.environ["CONFIG_APP_DIR"]
-pipeline_config = OmegaConf.load(os.path.join(CONFIG_APP_DIR, "pipeline", "pipeline.yaml"))
-columns_namespace = pipeline_config.SPARK_DATAFRAME_COLUMNS
-pipeline_config = pipeline_config.PIPELINE
-service_config = OmegaConf.load(os.path.join(CONFIG_APP_DIR, "service", "service.yaml"))
 logger = get_logger("Loading Config")
 
 
@@ -29,7 +25,29 @@ DATASET_FILE_MAP = {
 }
 
 
-alert_agents_config = {
-    alert_type: load_config(dataset_config_file, alert_type)
-    for alert_type, dataset_config_file in DATASET_FILE_MAP.items()
-}
+def load_agent_configs():
+    alert_agents_config = {
+        alert_type: load_config(dataset_config_file, alert_type)
+        for alert_type, dataset_config_file in DATASET_FILE_MAP.items()
+    }
+
+    return alert_agents_config
+
+
+class Pipeline:
+    def __init__(self):
+        self.config = None
+        self.cn = None
+        self.load_configs()
+
+    def load_configs(self):
+        config = OmegaConf.load(os.path.join(CONFIG_APP_DIR, "pipeline", "pipeline.yaml"))
+        self.config = config.PIPELINE
+        self.cn = config.PAYLOAD_KEYS
+
+    def reload_pipeline_config(self):
+        self.load_configs()
+
+
+service_config = OmegaConf.load(os.path.join(CONFIG_APP_DIR, "service", "service.yaml"))
+pipeline_config = Pipeline()

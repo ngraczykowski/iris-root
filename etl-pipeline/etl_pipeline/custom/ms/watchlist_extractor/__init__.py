@@ -3,7 +3,9 @@ import json
 # from collections import OrderedDict
 import re
 
-from etl_pipeline.config import columns_namespace as cn
+from etl_pipeline.config import pipeline_config
+
+cn = pipeline_config.cn
 
 
 class WatchlistExtractor:
@@ -215,7 +217,7 @@ class WatchlistExtractor:
     def update_match_with_wl_values(self, match):
         wl_record_data = {
             "SRC_REF_KEY": match.get("uniqueCustomerId", ""),
-            "VERSION_ID": match.get("inputVersionId", ""),
+            "VERSION_ID": match.get(cn.MATCH_RECORD_VERSION_ID, ""),
             "ENTITY_ID": match.get("entityId", ""),
             "ENTITY_VERSION": match.get("entityVersion", ""),
             "WL_NAME": match.get("entity", {}).get("name", ""),

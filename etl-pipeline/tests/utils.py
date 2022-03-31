@@ -1,7 +1,9 @@
 import json
 import pickle
 
-from etl_pipeline.config import columns_namespace as cn
+from etl_pipeline.config import pipeline_config
+
+cn = pipeline_config.cn
 
 
 def compare_dataframe(dataframe_1, dataframe_2, unique_column=cn.ALERT_INTERNAL_ID):

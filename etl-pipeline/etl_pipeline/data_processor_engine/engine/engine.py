@@ -4,7 +4,7 @@ from typing import Dict
 
 from fuzzywuzzy import fuzz
 
-from etl_pipeline.config import columns_namespace as cn
+from etl_pipeline.config import pipeline_config
 from etl_pipeline.custom.ms.trigger_discovery.discoverer import TriggeredTokensDiscoverer
 from etl_pipeline.data_processor_engine.abstract_engine import Engine
 from etl_pipeline.pattern_json import (
@@ -33,6 +33,7 @@ from etl_pipeline.pattern_json import (
 )
 
 FUZZINESS = 81
+cn = pipeline_config.cn
 
 
 class ProcessingEngine(Engine):

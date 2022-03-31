@@ -1,9 +1,9 @@
 import pyspark.sql.functions as F
 
-from etl_pipeline.config import columns_namespace as cn
+from etl_pipeline.config import pipeline_config
 from etl_pipeline.custom.ms.config import JOINING_SEP
 
-# from etl_pipeline.custom.ms.transformations import prepare_df, store_and_read_df
+cn = pipeline_config.cn
 
 
 @F.udf()

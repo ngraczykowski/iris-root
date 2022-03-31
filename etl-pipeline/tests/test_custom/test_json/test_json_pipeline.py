@@ -2,12 +2,13 @@ import json
 import pickle
 import unittest
 
-from etl_pipeline.config import columns_namespace as cn
 from etl_pipeline.config import pipeline_config
 from etl_pipeline.custom.ms.datatypes.field import InputRecordField  # noqa F401
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.data_processor_engine.json_engine.json_engine import JsonProcessingEngine
 from pipelines.ms.ms_pipeline import MSPipeline
+
+cn = pipeline_config.cn
 
 ALERT_INTERNAL_ID = cn.ALERT_INTERNAL_ID
 TEST_PATH = "tests/shared/test_ms_pipeline/"
@@ -25,7 +26,7 @@ class TestMSPipeline(unittest.TestCase):
         payload_json = {key: payload[key] for key in sorted(payload)}
         payload_json = PayloadLoader().load_payload_from_json(payload_json)
         payload_json["match_ids"] = [
-            i for i in range(len(payload_json["watchlistParty"][cn.MATCH_RECORDS]))
+            i for i in range(len(payload_json[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]))
         ]
         payload = payload_json
         parsed_payloads = self.uut.transform_standardized_to_cleansed(payload)
@@ -35,8 +36,8 @@ class TestMSPipeline(unittest.TestCase):
 
         assert len(parsed_payloads) == 2
         for i in parsed_payloads:
-            assert len(i["alertedParty"]["inputRecordHist"]) == 1
-            assert len(i["watchlistParty"]["matchRecords"]) == 1
+            assert len(i[cn.ALERTED_PARTY_FIELD][cn.INPUT_RECORD_HIST]) == 1
+            assert len(i[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]) == 1
 
         for payload, reference_payload in zip(parsed_payloads, reference_payloads):
             for num in range(len(payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS])):
@@ -61,7 +62,7 @@ class TestMSPipeline(unittest.TestCase):
         payload_json = {key: payload[key] for key in sorted(payload)}
         payload_json = PayloadLoader().load_payload_from_json(payload_json)
         payload_json["match_ids"] = [
-            i for i in range(len(payload_json["watchlistParty"][cn.MATCH_RECORDS]))
+            i for i in range(len(payload_json[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]))
         ]
         payload = payload_json
         parsed_payloads = self.uut.transform_standardized_to_cleansed(payload)
@@ -71,8 +72,8 @@ class TestMSPipeline(unittest.TestCase):
 
         assert len(parsed_payloads) == 3
         for i in parsed_payloads:
-            assert len(i["alertedParty"]["inputRecordHist"]) == 1
-            assert len(i["watchlistParty"]["matchRecords"]) == 1
+            assert len(i[cn.ALERTED_PARTY_FIELD][cn.INPUT_RECORD_HIST]) == 1
+            assert len(i[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]) == 1
 
         for payload, reference_payload in zip(parsed_payloads, reference_payloads):
             for num in range(len(payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS])):

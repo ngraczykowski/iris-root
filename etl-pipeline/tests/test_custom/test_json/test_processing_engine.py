@@ -1,7 +1,6 @@
 import unittest
 from copy import deepcopy
 
-from etl_pipeline.config import columns_namespace as cn
 from etl_pipeline.config import pipeline_config
 from etl_pipeline.data_processor_engine.json_engine.json_engine import JsonProcessingEngine
 from tests.test_custom.constant import (
@@ -10,6 +9,8 @@ from tests.test_custom.constant import (
     EXAMPLE_PARTIES_WITH_NAMES,
     RESULT_FOR_EXAMPLE_FOR_TEST_SET_REF_KEY,
 )
+
+cn = pipeline_config.cn
 
 TEST_PATH = "tests/shared/test_ms_pipeline/"
 
@@ -21,7 +22,7 @@ class TestEngine(unittest.TestCase):
 
     def test_set_trigger_reasons(self):
         match = EXAMPLE_FOR_TEST_SET_REF_KEY
-        result = self.uut.set_trigger_reasons(match, pipeline_config.FUZZINESS_LEVEL)
+        result = self.uut.set_trigger_reasons(match, pipeline_config.config.FUZZINESS_LEVEL)
         self.assertEqual(sorted(result), sorted(RESULT_FOR_EXAMPLE_FOR_TEST_SET_REF_KEY))
 
     def test_set_beneficiary_hits(self):
@@ -46,15 +47,15 @@ class TestEngine(unittest.TestCase):
         parties = deepcopy(EXAMPLE_PARTIES)
         self.uut.collect_party_values_from_parties(parties, payload)
         assert payload == {
-            "all_connected_parties_names": [],
-            "ALL_PARTY_TYPES": [],
-            "ALL_GOVT_IDS": [],
-            "ALL_PARTY_NAMES": ["Shaolin kung fu master", "John, Doe Doe"],
-            "ALL_TAX_IDS": ["1231413412312", "12097381208937"],
-            "ALL_PARTY_DOBS": ["10/10/1969"],
-            "ALL_PARTY_BIRTH_COUNTRIES": ["1341412312312", "13413401280"],
-            "ALL_PARTY_CITIZENSHIP_COUNTRIES": ["Arabian Emirates"],
-            "ALL_PARTY_RESIDENCY_COUNTRIES": [],
+            "ALL_CONNECTED_PARTIES_NAMES": [],
+            "ALL_CONNECTED_PARTY_TYPES": [],
+            "ALL_CONNECTED_GOVT_IDS": [],
+            "ALL_CONNECTED_PARTY_NAMES": ["Shaolin kung fu master", "John, Doe Doe"],
+            "ALL_CONNECTED_TAX_IDS": ["1231413412312", "12097381208937"],
+            "ALL_CONNECTED_PARTY_DOBS": ["10/10/1969"],
+            "ALL_CONNECTED_PARTY_BIRTH_COUNTRIES": ["1341412312312", "13413401280"],
+            "ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES": ["Arabian Emirates"],
+            "ALL_CONNECTED_PARTY_RESIDENCY_COUNTRIES": [],
         }
 
     def test_get_clean_names_from_concat_name(self):
