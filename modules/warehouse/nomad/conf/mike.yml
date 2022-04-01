@@ -1,0 +1,166 @@
+server:
+  port: { { env "NOMAD_PORT_http" } }
+
+management:
+  health:
+    elasticsearch:
+      enabled: false
+
+spring:
+  rabbitmq:
+    addresses: { { range $index, $rabbit := service "amqp.rabbitmq" - } }
+      { { if $index } },{ { end - } }
+      { { $rabbit.Address } }:{{ $rabbit.Port -}}
+  {{- end }}
+# NOTE(ahaczewski): Intentionally left empty.
+    host:
+    virtual-host: /{{ env "NOMAD_NAMESPACE" }}
+  cloud:
+    consul:
+      enabled: true
+      host: localhost
+      port: 8500
+      scheme: http
+      discovery:
+        enabled: true
+        register: false
+        register-health-check: false
+        catalog-services-watch:
+          enabled: true
+      service-registry:
+        auto-registration:
+          enabled: false
+
+warehouse:
+  migration:
+    enabled: false
+  alert-level-security:
+    enabled: false
+  persistence:
+    alert:
+      recommendation-date-field: "recommendationDate"
+
+  db:
+    name: { { env "NOMAD_NAMESPACE" } }-warehouse
+  {{- $nomad_namespace := env "NOMAD_NAMESPACE" -}}
+  {{- with service (print $nomad_namespace "-warehouse-db") }}
+    host: { { (index . 0).Address } }
+    port: { { (index . 0).Port } }
+  { { end - } }
+
+  minio:
+    url: https://minio.silenteight.com
+  retention:
+    alert:
+      batch-size: 1000
+
+  sampling:
+    filters:
+      - name: alert_s8_recommendation
+        values: ACTION_FALSE_POSITIVE
+  task:
+    async:
+      execution:
+        pool:
+          core-size: 4
+          max-size: 16
+          queue-capacity: 50
+          thread-name-prefix: async-auth-aware-
+
+keycloak:
+  client-id: { { env "NOMAD_NAMESPACE" } }-frontend
+  adapter:
+    auth-server-url: https://auth.silenteight.com
+    realm: sens-webapp
+    public-client: false
+    confidential-port: 0
+    principal-attribute: preferred_username
+    ssl-required: external
+
+grpc:
+  logging:
+    enabled: true
+  server:
+    port: { { env "NOMAD_PORT_grpc" } }
+
+warehouse.report.statistics:
+  all-alerts-query:
+    SELECT count(*)
+    FROM warehouse_simulation_alert
+    WHERE analysis_name = ?
+  solved-alerts-query:
+    SELECT count(*)
+    FROM warehouse_simulation_alert
+    WHERE analysis_name = ?
+    AND (payload ->> 'recommendationRecommendedAction')
+    IN ('ACTION_FALSE_POSITIVE', 'ACTION_POTENTIAL_TRUE_POSITIVE')
+  ai-false-positive-query:
+    SELECT count(*)
+    FROM warehouse_simulation_alert wsa
+    JOIN warehouse_alert wa ON wsa.name = wa.name
+    WHERE wsa.analysis_name = ?
+    AND (wa.payload ->> 'analystDecision') IN ('ANALYST_FALSE_POSITIVE', 'ANALYST_TRUE_POSITIVE')
+    AND (wsa.payload ->> 'recommendationRecommendedAction') = 'ACTION_FALSE_POSITIVE'
+  analyst-false-positive-query:
+    SELECT count(*)
+    FROM warehouse_simulation_alert wsa
+    JOIN warehouse_alert wa ON wsa.name = wa.name
+    WHERE wsa.analysis_name = ?
+    AND (wa.payload ->> 'analystDecision') = 'ANALYST_FALSE_POSITIVE'
+    AND (wsa.payload ->> 'recommendationRecommendedAction') = 'ACTION_FALSE_POSITIVE'
+
+warehouse.report.zip:
+  enabled: true
+  rowsLimit: 10
+
+warehouse.reports.v2:
+  reports:
+    - name: RB_SCORER_MATCH_LEVEL
+      type: simulation
+      description: RB Scorer
+      selectSqlQuery: >
+
+    - name: RB_SCORER_MATCH_LEVEL
+      type: production
+      description: RB Scorer (Match Level)
+      selectSqlQuery: >
+
+    - name: AI_REASONING
+      type: production
+      description: AI Reasoning (Alert Level)
+      selectSqlQuery: >
+
+    - name: AI_REASONING_MATCH_LEVEL
+      type: production
+      description: AI Reasoning (Match Level)
+      selectSqlQuery: >
+
+    - name: AI_REASONING_MATCH_LEVEL
+      type: simulation
+      description: AI Reasoning
+      selectSqlQuery: >
+
+    - name: ACCURACY_ALERT_LEVEL
+      type: production
+      description: Accuracy (Alert Level)
+      selectSqlQuery: >
+
+    - name: ACCURACY_MATCH_LEVEL
+      type: production
+      description: Accuracy (Match Level)
+      selectSqlQuery: >
+
+    - name: ACCURACY_MATCH_LEVEL
+      type: simulation
+      description: Accuracy
+      selectSqlQuery: >
+
+    - name: METRICS_ALERT_LEVEL
+      type: production
+      description: Metrics (Alert Level)
+      selectSqlQuery: >
+
+    - name: METRICS_ALERT_LEVEL
+      type: simulation
+      description: Metrics
+      selectSqlQuery: >
