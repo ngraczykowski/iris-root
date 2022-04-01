@@ -18,9 +18,10 @@ dependencies {
   implementation libraries.fab_cmap_connector_api
   implementation libraries.recommendation_api_library
   implementation libraries.recommendation_internal_protos
-
   implementation libraries.opencsv
+  implementation libraries.spring_boot_starter_web
 
+  testRuntimeOnly libraries.hibernate_validator
   testImplementation project(":ftcc-common-testing")
   testImplementation libraries.silenteight_sep_base_testing
 }

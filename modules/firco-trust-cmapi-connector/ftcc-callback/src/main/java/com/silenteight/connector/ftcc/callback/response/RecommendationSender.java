@@ -8,24 +8,19 @@ import com.silenteight.connector.ftcc.callback.exception.RecoverableCallbackExce
 import com.silenteight.connector.ftcc.common.dto.output.AckDto;
 import com.silenteight.connector.ftcc.common.dto.output.ClientRequestDto;
 
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-@EnableConfigurationProperties(RecommendationSenderProperties.class)
 @RequiredArgsConstructor
-@Service
 @Slf4j
 class RecommendationSender {
 
   private final RestTemplate restTemplate;
-  private final RecommendationSenderProperties properties;
+  private final String endpoint;
 
   public void send(ClientRequestDto clientRequestDto) {
-    var endpoint = properties.getEndpoint();
     try {
       var responseEntity = restTemplate.postForEntity(endpoint, clientRequestDto, AckDto.class);
 

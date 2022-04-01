@@ -1,4 +1,4 @@
-package com.silenteight.connector.ftcc.ingest.adapter.incoming.rest;
+package com.silenteight.connector.ftcc.callback.incoming.rest;
 
 import lombok.extern.slf4j.Slf4j;
 

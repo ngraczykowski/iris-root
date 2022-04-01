@@ -22,4 +22,9 @@ class RecommendationSenderConfiguration {
         .setConnectTimeout(properties.getConnectionTimeout())
         .build();
   }
+
+  @Bean
+  RecommendationSender recommendationSender(RestTemplate restTemplate) {
+    return new RecommendationSender(restTemplate, properties.getEndpoint());
+  }
 }

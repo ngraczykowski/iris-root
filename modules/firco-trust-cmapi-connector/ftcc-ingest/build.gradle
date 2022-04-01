@@ -32,8 +32,8 @@ dependencies {
   runtimeOnly libraries.jackson_module_paranamer
   runtimeOnly libraries.jackson_module_parameter_names
 
-  implementation libraries.rest_assured
-  implementation libraries.rest_assured_spring_mock_mvc
+  testImplementation libraries.rest_assured
+  testImplementation libraries.rest_assured_spring_mock_mvc
 
   implementation libraries.hibernate_types
 
