@@ -1,6 +1,6 @@
 package com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord;
 
-import lombok.RequiredArgsConstructor;
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertmapper.AlertMapper;
@@ -11,6 +11,7 @@ import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckAlert;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckGateway;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsOutput;
 import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertIngestService;
+import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlertService;
 import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext;
 
 import java.util.List;
@@ -18,8 +19,8 @@ import java.util.List;
 import static com.silenteight.scb.ingest.domain.model.Batch.Priority.MEDIUM;
 import static com.silenteight.scb.ingest.domain.model.BatchSource.CBS;
 
-@RequiredArgsConstructor
 @Slf4j
+@Builder
 class AlertHandler {
 
   private final AlertInFlightService alertInFlightService;
@@ -28,6 +29,7 @@ class AlertHandler {
   private final InvalidAlertMapper invalidAlertMapper;
   private final AlertMapper alertMapper;
   private final BatchAlertIngestService ingestService;
+  private final RawAlertService rawAlertService;
 
   void handleAlerts(
       String internalBatchId, List<AlertCompositeCollection> alertCompositeCollections) {
@@ -41,6 +43,7 @@ class AlertHandler {
 
   private void handleValidAlerts(
       String internalBatchId, List<ValidAlertComposite> validAlertComposites) {
+    persistAlerts(internalBatchId, validAlertComposites);
     registerAlerts(internalBatchId, validAlertComposites);
     acknowledgeAlerts(validAlertComposites);
   }
@@ -67,6 +70,13 @@ class AlertHandler {
         default -> alertInFlightService.update(alertId, State.ERROR, "Fatal error on ACK");
       }
     });
+  }
+
+  private void persistAlerts(
+      String internalBatchId,
+      List<ValidAlertComposite> validAlertComposites) {
+    validAlertComposites.forEach(alertComposite ->
+        rawAlertService.store(internalBatchId, alertComposite.getAlerts()));
   }
 
   private CbsOutput ackAlert(String systemId, String batchId, boolean watchlistLevel) {

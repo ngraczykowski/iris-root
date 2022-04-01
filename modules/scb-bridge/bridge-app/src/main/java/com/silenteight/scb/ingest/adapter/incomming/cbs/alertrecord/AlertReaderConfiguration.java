@@ -7,6 +7,7 @@ import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.Ale
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckGateway;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.metrics.CbsOracleMetrics;
 import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertIngestService;
+import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlertService;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,7 @@ class AlertReaderConfiguration {
   private final ValidAlertCompositeMapper validAlertCompositeMapper;
   private final InvalidAlertMapper invalidAlertMapper;
   private final BatchAlertIngestService ingestService;
+  private final RawAlertService rawAlertService;
   private final CbsOracleMetrics cbsOracleMetrics;
 
   @Bean
@@ -46,12 +48,14 @@ class AlertReaderConfiguration {
   }
 
   private AlertHandler alertHandler() {
-    return new AlertHandler(
-        alertInFlightService,
-        cbsAckGateway,
-        validAlertCompositeMapper,
-        invalidAlertMapper,
-        alertMapper,
-        ingestService);
+    return AlertHandler.builder()
+        .alertInFlightService(alertInFlightService)
+        .cbsAckGateway(cbsAckGateway)
+        .validAlertCompositeMapper(validAlertCompositeMapper)
+        .invalidAlertMapper(invalidAlertMapper)
+        .alertMapper(alertMapper)
+        .ingestService(ingestService)
+        .rawAlertService(rawAlertService)
+        .build();
   }
 }

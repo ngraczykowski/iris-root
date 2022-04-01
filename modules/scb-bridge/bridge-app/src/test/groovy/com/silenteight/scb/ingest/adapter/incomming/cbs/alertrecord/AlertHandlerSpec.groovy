@@ -12,6 +12,7 @@ import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsOutput
 import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertIngestService
 import com.silenteight.scb.ingest.adapter.incomming.common.model.ObjectId
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert
+import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlertService
 import com.silenteight.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator
 import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext
 
@@ -28,15 +29,18 @@ class AlertHandlerSpec extends Specification {
   def invalidAlertMapper = Mock(InvalidAlertMapper)
   def alertMapper = Mock(AlertMapper)
   def ingestService = Mock(BatchAlertIngestService)
+  def rawAlertService = Mock(RawAlertService)
   def fixtures = new Fixtures()
 
-  def underTest = new AlertHandler(
-      alertInFlightService,
-      cbsAckGateway,
-      validAlertCompositeMapper,
-      invalidAlertMapper,
-      alertMapper,
-      ingestService)
+  def underTest =  AlertHandler.builder()
+      .alertInFlightService(alertInFlightService)
+      .cbsAckGateway(cbsAckGateway)
+      .validAlertCompositeMapper(validAlertCompositeMapper)
+      .invalidAlertMapper(invalidAlertMapper)
+      .alertMapper(alertMapper)
+      .ingestService(ingestService)
+      .rawAlertService(rawAlertService)
+      .build();
 
   def 'should handle invalid alerts'() {
     given:
@@ -60,6 +64,7 @@ class AlertHandlerSpec extends Specification {
         update(
             fixtures.invalidAlertCausedByFatalError.alertId, State.ERROR,
             fixtures.invalidAlertCausedByFatalError.getReasonMessage())
+    0 * rawAlertService.store(_, _)
   }
 
   def 'should handle valid alerts'() {
@@ -92,6 +97,8 @@ class AlertHandlerSpec extends Specification {
 
     1 * alertInFlightService.delete(fixtures.alertId1)
     1 * alertInFlightService.update(fixtures.alertId2, State.ERROR, "Fatal error on ACK")
+    1 * rawAlertService.store(internalBatchId, [ fixtures.alert1 ])
+    1 * rawAlertService.store(internalBatchId, [ fixtures.alert2 ])
   }
 
   class Fixtures {
