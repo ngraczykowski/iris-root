@@ -1,3 +1,4 @@
+import argparse
 from concurrent import futures
 
 import grpc
@@ -45,10 +46,21 @@ def add_AgentInputServiceServicer_to_server(servicer, server):
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     add_AgentInputServiceServicer_to_server(AgentInputServiceServicer(), server)
-    server.add_insecure_port("localhost:50052")
+    if args.ssl:
+        with open("tests/ssl/server-key.pem", "rb") as f:
+            private_key = f.read()
+        with open("tests/ssl/server.pem", "rb") as f:
+            certificate_chain = f.read()
+        server_credentials = grpc.ssl_server_credentials(((private_key, certificate_chain),))
+        server.add_secure_port("localhost:50052", server_credentials)
+    else:
+        server.add_insecure_port("localhost:50052")
     server.start()
     server.wait_for_termination()
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--ssl", action="store_true", required=False)
+    args = parser.parse_args()
     serve()

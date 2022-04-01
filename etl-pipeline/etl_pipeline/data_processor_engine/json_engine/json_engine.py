@@ -1,4 +1,5 @@
 import json
+import logging
 import re
 from typing import Dict
 
@@ -7,8 +8,8 @@ from fuzzywuzzy import fuzz
 from etl_pipeline.config import Pipeline, pipeline_config
 from etl_pipeline.custom.ms.trigger_discovery.discoverer import TriggeredTokensDiscoverer
 from etl_pipeline.data_processor_engine.engine.engine import ProcessingEngine
-from etl_pipeline.logger import get_logger
 
+logger = logging.getLogger("ETL pipeline")
 cn = pipeline_config.cn
 COLLECTIVE_REPRESENTATION_MAP_FOR_PARTY = {
     cn.ALL_CONNECTED_PARTIES_NAMES: cn.CONNECTED_FULL_NAME,
@@ -48,8 +49,6 @@ COLLECTIVE_REPRESENTATION_MAP_FOR_FIELD = {
     cn.ALL_PARTY1_GOVTID1_NUMBER: cn.PARTY1_GOVTID1_NUMBER,
     cn.ALL_PARTY1_GOVTID2_NUMBER: cn.PARTY1_GOVTID2_NUMBER,
 }
-
-logger = get_logger("JSON ENGINE")
 
 
 class JsonProcessingEngine(ProcessingEngine):

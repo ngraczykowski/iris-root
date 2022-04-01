@@ -1,3 +1,10 @@
 DATA_SOURCE_INPUT_ENDPOINT: localhost:50052
 ETL_SERVICE_PORT: 9090
 ETL_SERVICE_HOSTNAME: localhost
+LOGGING_PATH: logs/
+TLS_ETL_PRIVATE_KEY: tests/ssl/server-key.pem
+TLS_ETL_CHAIN_PUBLIC_KEY: tests/ssl/server.pem
+
+TLS_UDS_CA: tests/ssl/ca.pem
+TLS_UDS_PRIVATE_KEY: tests/ssl/server-key.pem
+TLS_UDS_CHAIN_PUBLIC_KEY: tests/ssl/server.pem

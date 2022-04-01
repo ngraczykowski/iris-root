@@ -1,4 +1,5 @@
 import itertools
+import logging
 from abc import ABC, abstractmethod
 
 import grpc
@@ -15,14 +16,13 @@ from silenteight.datasource.api.date.v1.date_pb2 import DateFeatureInput
 from silenteight.datasource.api.location.v1.location_pb2 import LocationFeatureInput
 
 from etl_pipeline.config import pipeline_config, service_config
-from etl_pipeline.logger import get_logger
 
-logger = get_logger("UPDATE TO DATA SOURCE")
+logger = logging.getLogger("ETL pipeline")
 cn = pipeline_config.cn
 
 
 class AgentInputCreator:
-    def __init__(self):
+    def initialize(self, ssl):
         self.producers = [
             # DobAgentFeatureInputProducer(),
             # GeoResidencyAgentFeatureInputProducer(),
@@ -30,6 +30,17 @@ class AgentInputCreator:
             # NationalityAgentFeatureInputProducer(),
         ]
         channel = grpc.insecure_channel(service_config.DATA_SOURCE_INPUT_ENDPOINT)
+        if ssl:
+            with open(service_config.TLS_UDS_CA, "rb") as f:
+                ca = f.read()
+            with open(service_config.TLS_UDS_PRIVATE_KEY, "rb") as f:
+                private_key = f.read()
+            with open(service_config.TLS_UDS_CHAIN_PUBLIC_KEY, "rb") as f:
+                certificate_chain = f.read()
+            server_credentials = grpc.ssl_channel_credentials(ca, private_key, certificate_chain)
+            channel = grpc.secure_channel(
+                service_config.DATA_SOURCE_INPUT_ENDPOINT, server_credentials
+            )
         self.stub = AgentInputServiceStub(channel)
 
     def produce_feature_inputs(self, payload):
@@ -38,7 +49,6 @@ class AgentInputCreator:
             feature_input = producer.produce_feature_input(payload)
             logger.debug(f"Produced features {feature_input}")
             if isinstance(feature_input, list):
-
                 for input_ in feature_input:
                     target = Any()
                     target.Pack(input_)

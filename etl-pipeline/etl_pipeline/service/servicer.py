@@ -1,3 +1,4 @@
+import logging
 from concurrent import futures
 from dataclasses import dataclass
 from typing import List
@@ -6,7 +7,6 @@ import etl_pipeline.service.proto.api.etl_pipeline_pb2 as etl__pipeline__pb2
 from etl_pipeline.config import pipeline_config
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.data_processor_engine.json_engine.json_engine import JsonProcessingEngine
-from etl_pipeline.logger import get_logger
 from etl_pipeline.service.agent_router import AgentInputCreator
 from etl_pipeline.service.proto.api.etl_pipeline_pb2 import (
     FAILURE,
@@ -22,9 +22,6 @@ cn = pipeline_config.cn
 
 class ParsingError:
     pass
-
-
-logger = get_logger("Servicer")
 
 
 @dataclass
@@ -43,19 +40,25 @@ class Match:
 
 engine = JsonProcessingEngine(pipeline_config)
 
-router = AgentInputCreator()
-logger = get_logger("Message handler")
 
 pipeline = WmAddressMSPipeline(engine, pipeline_config)
 
 
+logger = logging.getLogger("__main__")
+
+
 class EtlPipelineServiceServicer(object):
-    pool = futures.ProcessPoolExecutor(max_workers=1)
+    router = AgentInputCreator()  # cannot pass to __init__
+    pool = futures.ProcessPoolExecutor(max_workers=10)
+
+    def __init__(self, ssl) -> None:
+        EtlPipelineServiceServicer.router.initialize(ssl)
 
     def RunEtl(self, request: etl__pipeline__pb2.RunEtlRequest, context):
         try:
             etl_alerts = self.process_request(request)
         except Exception as e:
+
             logger.error(f"RunEtl error: {str(e)}")
             etl_alerts = []
         return etl__pipeline__pb2.RunEtlResponse(etl_alerts=etl_alerts)
@@ -126,5 +129,6 @@ class EtlPipelineServiceServicer(object):
         )
         return etl_alert
 
+    @classmethod
     def add_to_datasource(self, alert, payload):
-        router.upload_data_inputs(alert, payload)
+        EtlPipelineServiceServicer.router.upload_data_inputs(alert, payload)

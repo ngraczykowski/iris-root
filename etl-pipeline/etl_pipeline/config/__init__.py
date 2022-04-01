@@ -1,11 +1,10 @@
+import logging
 import os
 
 from omegaconf import OmegaConf
 
-from etl_pipeline.logger import get_logger
-
 CONFIG_APP_DIR = os.environ["CONFIG_APP_DIR"]
-logger = get_logger("Loading Config")
+logger = logging.getLogger("__main__")
 
 
 def load_agent_config(alert_config):

@@ -7,6 +7,7 @@ import unittest
 
 import grpc
 
+from etl_pipeline.config import service_config
 from etl_pipeline.service.proto.api.etl_pipeline_pb2 import (
     FAILURE,
     SUCCESS,
@@ -42,8 +43,10 @@ class TestGrpcServer(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         environment = os.environ.copy()
-        subprocess.Popen("scripts/start_services.sh", env=environment)
-        channel = grpc.insecure_channel("localhost:9090")
+        subprocess.Popen("scripts/start_services_ssl.sh", env=environment)
+        with open(service_config.TLS_UDS_CA, "rb") as f:
+            creds = grpc.ssl_channel_credentials(f.read())
+            channel = grpc.secure_channel("localhost:9090", creds)
         TestGrpcServer.stub = EtlPipelineServiceStub(channel)
         time.sleep(1)
 
@@ -51,6 +54,7 @@ class TestGrpcServer(unittest.TestCase):
     def tearDownClass(cls):
         process = subprocess.Popen("scripts/kill_services.sh")
         process.wait()
+        pass
 
     def test_ok_flow(self):
         alert = load_alert()
