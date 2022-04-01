@@ -44,9 +44,14 @@ class TestGrpcServer(unittest.TestCase):
     def setUpClass(cls):
         environment = os.environ.copy()
         subprocess.Popen("scripts/start_services_ssl.sh", env=environment)
-        with open(service_config.TLS_UDS_CA, "rb") as f:
-            creds = grpc.ssl_channel_credentials(f.read())
-            channel = grpc.secure_channel("localhost:9090", creds)
+        with open(service_config.GRPC_CLIENT_TLS_CA, "rb") as f:
+            ca = f.read()
+        with open(service_config.GRPC_CLIENT_TLS_PRIVATE_KEY, "rb") as f:
+            private_key = f.read()
+        with open(service_config.GRPC_CLIENT_TLS_PUBLIC_KEY_CHAIN, "rb") as f:
+            certificate_chain = f.read()
+        server_credentials = grpc.ssl_channel_credentials(ca, private_key, certificate_chain)
+        channel = grpc.secure_channel("localhost:9090", server_credentials)
         TestGrpcServer.stub = EtlPipelineServiceStub(channel)
         time.sleep(1)
 

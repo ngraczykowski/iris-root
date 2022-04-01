@@ -27,11 +27,15 @@ def serve(args):
 
     add_EtlPipelineServiceServicer_to_server(EtlPipelineServiceServicer(args.ssl), server)
     if args.ssl:
-        with open(service_config.TLS_ETL_PRIVATE_KEY, "rb") as f:
+        with open(service_config.GRPC_SERVER_TLS_PRIVATE_KEY, "rb") as f:
             private_key = f.read()
-        with open(service_config.TLS_ETL_CHAIN_PUBLIC_KEY, "rb") as f:
+        with open(service_config.GRPC_SERVER_TLS_PUBLIC_KEY_CHAIN, "rb") as f:
             certificate_chain = f.read()
-        server_credentials = grpc.ssl_server_credentials(((private_key, certificate_chain),))
+        with open(service_config.GRPC_SERVER_TLS_TRUSTED_CA, "rb") as f:
+            cert_list = f.read()
+        server_credentials = grpc.ssl_server_credentials(
+            ((private_key, certificate_chain),), cert_list, require_client_auth=True
+        )
         server.add_secure_port(
             f"{service_config.ETL_SERVICE_HOSTNAME}:{service_config.ETL_SERVICE_PORT}",
             server_credentials,

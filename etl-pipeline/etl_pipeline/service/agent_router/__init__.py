@@ -31,11 +31,11 @@ class AgentInputCreator:
         ]
         channel = grpc.insecure_channel(service_config.DATA_SOURCE_INPUT_ENDPOINT)
         if ssl:
-            with open(service_config.TLS_UDS_CA, "rb") as f:
+            with open(service_config.GRPC_CLIENT_TLS_CA, "rb") as f:
                 ca = f.read()
-            with open(service_config.TLS_UDS_PRIVATE_KEY, "rb") as f:
+            with open(service_config.GRPC_CLIENT_TLS_PRIVATE_KEY, "rb") as f:
                 private_key = f.read()
-            with open(service_config.TLS_UDS_CHAIN_PUBLIC_KEY, "rb") as f:
+            with open(service_config.GRPC_CLIENT_TLS_PUBLIC_KEY_CHAIN, "rb") as f:
                 certificate_chain = f.read()
             server_credentials = grpc.ssl_channel_credentials(ca, private_key, certificate_chain)
             channel = grpc.secure_channel(
