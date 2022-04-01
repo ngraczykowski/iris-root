@@ -20,5 +20,5 @@ Whimsical [HLD](https://whimsical.com/bridge-x5mk356DKDpj15vBzH4zn) diagram.
 ## Development
 
 - Java: **11**,
-- Spring Boot: **2.6.4**
+- Spring Boot: **2.6.6**
 
