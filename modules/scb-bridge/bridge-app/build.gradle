@@ -20,3 +20,6 @@ jar {
     attributes "Main-Class": "com.silenteight.scb.ScbBridgeApplication"
   }
 }
+dependencies {
+  implementation project(":bridge-qco")
+}

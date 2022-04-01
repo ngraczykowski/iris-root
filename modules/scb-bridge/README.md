@@ -73,3 +73,14 @@ Nomad scheduler deployed on-premise will use this file to run scb-bridge artifac
 * export EEL_PG_PASS=Devadmin@123
 
 and then, run the script: bridge-dist/src/bash/export_ecm_learning.sh
+
+## QCO module
+The QCO (Quality Control Operations) is a process where the bridge delivers recommendations to banking ECM system but with overloaded solution according to provided rules (configuration *.csv file).
+The configuration allows defining rule(s) to determine which the policy and step of alert/match should change solution for. It also defines the frequency (threshold) for given step which is the size of the alert/matches distribution for candidate selection.
+In order to trigger QCO sampling and solution overriding:
+
+The scb-bridge has to be run with qco profile.
+The configuration file has to be provided at the location defined in bridge-qco/src/main/resources/application-qco.yaml.
+
+The configuration allows defining rule to determine which the policy and step of alert we should change solution for.
+The configuration allows defining how frequent we should get alert to analyze as well.

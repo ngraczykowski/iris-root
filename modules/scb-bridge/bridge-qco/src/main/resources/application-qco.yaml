@@ -1,0 +1,5 @@
+silenteight:
+  qco:
+    config-file:
+      location: "classpath:config/qco_config_file.csv"
+      separator: "|"
