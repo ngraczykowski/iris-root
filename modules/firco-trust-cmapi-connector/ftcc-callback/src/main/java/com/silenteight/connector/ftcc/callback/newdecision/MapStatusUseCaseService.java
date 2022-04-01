@@ -3,9 +3,6 @@ package com.silenteight.connector.ftcc.callback.newdecision;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.connector.ftcc.callback.decision.DestinationStatus;
-import com.silenteight.connector.ftcc.callback.decision.MapStatusRequest;
-import com.silenteight.connector.ftcc.callback.decision.MapStatusUseCase;
 import com.silenteight.connector.ftcc.common.dto.input.StatusInfoDto;
 
 @RequiredArgsConstructor

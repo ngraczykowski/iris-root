@@ -2,8 +2,8 @@ package com.silenteight.connector.ftcc.callback.response;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.connector.ftcc.callback.decision.MapStatusRequest;
-import com.silenteight.connector.ftcc.callback.decision.MapStatusUseCase;
+import com.silenteight.connector.ftcc.callback.newdecision.MapStatusRequest;
+import com.silenteight.connector.ftcc.callback.newdecision.MapStatusUseCase;
 import com.silenteight.connector.ftcc.callback.response.domain.MessageEntity;
 import com.silenteight.connector.ftcc.common.dto.input.NextStatusDto;
 import com.silenteight.connector.ftcc.common.dto.output.*;

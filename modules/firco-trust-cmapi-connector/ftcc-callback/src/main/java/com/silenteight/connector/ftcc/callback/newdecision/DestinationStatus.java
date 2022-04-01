@@ -1,4 +1,4 @@
-package com.silenteight.connector.ftcc.callback.decision;
+package com.silenteight.connector.ftcc.callback.newdecision;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

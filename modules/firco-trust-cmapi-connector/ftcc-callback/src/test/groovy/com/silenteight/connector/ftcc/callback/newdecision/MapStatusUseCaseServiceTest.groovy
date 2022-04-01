@@ -1,7 +1,5 @@
 package com.silenteight.connector.ftcc.callback.newdecision
 
-import com.silenteight.connector.ftcc.callback.decision.DestinationStatus
-import com.silenteight.connector.ftcc.callback.decision.MapStatusRequest
 import com.silenteight.connector.ftcc.common.dto.input.StatusInfoDto
 
 import spock.lang.Specification

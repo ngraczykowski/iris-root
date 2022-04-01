@@ -1,7 +1,7 @@
 package com.silenteight.connector.ftcc.callback.response;
 
-import com.silenteight.connector.ftcc.callback.decision.DestinationStatus;
-import com.silenteight.connector.ftcc.callback.decision.MapStatusUseCase;
+import com.silenteight.connector.ftcc.callback.newdecision.DestinationStatus;
+import com.silenteight.connector.ftcc.callback.newdecision.MapStatusUseCase;
 import com.silenteight.connector.ftcc.callback.response.domain.MessageEntity;
 import com.silenteight.connector.ftcc.callback.response.domain.NextStatusEntity;
 import com.silenteight.connector.ftcc.callback.response.domain.StatusEntity;

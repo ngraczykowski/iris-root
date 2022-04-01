@@ -2,8 +2,8 @@ package com.silenteight.connector.ftcc.callback.response;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.connector.ftcc.callback.decision.MapStatusUseCase;
 import com.silenteight.connector.ftcc.callback.newdecision.DecisionConfigurationHolder;
+import com.silenteight.connector.ftcc.callback.newdecision.MapStatusUseCase;
 import com.silenteight.connector.ftcc.callback.newdecision.MapStatusUseCaseService;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
