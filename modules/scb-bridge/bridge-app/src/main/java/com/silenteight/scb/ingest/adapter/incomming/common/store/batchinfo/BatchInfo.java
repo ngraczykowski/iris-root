@@ -7,7 +7,6 @@ import com.silenteight.scb.ingest.domain.model.BatchStatus;
 import com.silenteight.sep.base.common.entity.BaseEntity;
 
 import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.envers.Audited;
 
 import java.time.OffsetDateTime;
 import javax.persistence.*;
@@ -43,6 +42,5 @@ public class BatchInfo extends BaseEntity {
   private Integer alertCount;
 
   @UpdateTimestamp
-  @Audited
   private OffsetDateTime modifiedAt;
 }
