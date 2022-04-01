@@ -2,7 +2,7 @@ import os
 import shutil
 from glob import glob
 
-from etl_pipeline.config import columns_namespace as cn
+from etl_pipeline.config import pipeline_config
 from etl_pipeline.custom.aia.config import (
     APPLICATION_DATA_DIR,
     CLEANSED_DATA_DIR,
@@ -15,6 +15,7 @@ from tests.shared import TEST_SHARED_DATA_REFERENCE_DIR
 from tests.utils import compare_dataframe
 
 REFERENCE_DIR = TEST_SHARED_DATA_REFERENCE_DIR
+cn = pipeline_config.cn
 
 
 ID_MAP = {

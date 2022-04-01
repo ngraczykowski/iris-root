@@ -1,66 +1,46 @@
 import json
+import logging
 import re
 from typing import Dict
 
 from fuzzywuzzy import fuzz
 
-from etl_pipeline.config import columns_namespace as cn
+from etl_pipeline.config import Pipeline, pipeline_config
 from etl_pipeline.custom.ms.trigger_discovery.discoverer import TriggeredTokensDiscoverer
 from etl_pipeline.data_processor_engine.engine.engine import ProcessingEngine
-from etl_pipeline.logger import get_logger
-from etl_pipeline.pattern_json import (
-    ACCT_NUM,
-    ADDRESS_ID,
-    ALERT_ID,
-    ALERTED_PARTY_NAME,
-    ALL_CONNECTED_PARTIES_NAMES,
-    ALL_PARTS_NAMES,
-    ALL_PARTY_DETAILS,
-    CONCAT_RESIDUE,
-    CONNECTED_FULL_NAME,
-    DOB_DT,
-    MERGING_PARTIES,
-    PARTIES,
-    PRTY_CNTRY_OF_BIRTH,
-    PRTY_FST_NM,
-    PRTY_LST_NM,
-    PRTY_MDL_NM,
-    PRTY_NM,
-    PRTY_PRIM_CTZNSH_CNTRY,
-    PRTY_RSDNC_CNTRY_CD,
-    PRTY_TYP,
-    SRC_REF_KEY,
-    SRC_SYS_ACCT_KEY,
-)
 
+logger = logging.getLogger("ETL pipeline")
+cn = pipeline_config.cn
 COLLECTIVE_REPRESENTATION_MAP_FOR_PARTY = {
     cn.ALL_CONNECTED_PARTIES_NAMES: cn.CONNECTED_FULL_NAME,
-    cn.ALL_PARTY_TYPES: "partyType",
-    cn.ALL_PARTY_NAMES: "partyName",
-    cn.ALL_TAX_IDS: "taxId",
-    cn.ALL_PARTY_DOBS: "dobDate",
-    cn.ALL_PARTY_BIRTH_COUNTRIES: "partyCountryOfBirth",
-    cn.ALL_PARTY_CITIZENSHIP_COUNTRIES: "partyPrimaryCitizenshipCountry",
-    cn.ALL_PARTY_RESIDENCY_COUNTRIES: "partyResidenceCountryCode",
-    cn.ALL_GOVT_IDS: "partyGovtIdNumber",
+    cn.ALL_CONNECTED_PARTY_TYPES: cn.PARTY_TYPE,
+    cn.ALL_CONNECTED_PARTY_NAMES: cn.PARTY_NAME,
+    cn.ALL_CONNECTED_TAX_IDS: cn.TAX_ID,
+    cn.ALL_CONNECTED_PARTY_DOBS: cn.DOB_DATE,
+    cn.ALL_CONNECTED_PARTY_BIRTH_COUNTRIES: cn.PARTY_COUNTRY_OF_BIRTH,
+    cn.ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES: cn.PARTY_PRIMARY_CITIZENSHIP_COUNTRY,
+    cn.ALL_CONNECTED_PARTY_RESIDENCY_COUNTRIES: cn.PARTY_RESIDENCE_COUNTRY_CODE,
+    cn.ALL_CONNECTED_COUNTRY_OF_INCORPORATION: cn.COUNTRY_OF_INCORPORATION,
+    cn.ALL_CONNECTED_GOVT_IDS: cn.PARTY_GOVT_ID_NUMBER,
 }
 
 COLLECTIVE_REPRESENTATION_MAP_FOR_ACCOUNTS = {
-    cn.ALL_CONNECTED_ACCOUNTS_NAMES: cn.CONNECTED_FULL_NAME,
-    cn.ALL_BRANCH_ACCOUNT_NUMBERS: "branchAccountNumber",
-    cn.ALL_BENEFICIARY_NAMES: "beneficiaryName",
+    cn.ALL_CONNECTED_ACCOUNT_NAMES: cn.CONNECTED_FULL_NAME,
+    cn.ALL_CONNECTED_ACCOUNT_BRANCH_ACCOUNT_NUMBERS: cn.BRANCH_ACCOUNT_NUMBER,
+    cn.ALL_CONNECTED_ACCOUNT_BENEFICIARY_NAMES: cn.BENEFICIARY_NAME,
 }
 
 COLLECTIVE_REPRESENTATION_MAP_FOR_FIELD = {
-    cn.ALL_PARTY_EMPLOYERS: cn.EMPLOYER,
-    cn.ALL_PARTY_COUNTRY: cn.COUNTRY,
-    cn.ALL_PARTY_COUNTRY1: cn.COUNTRY1,
-    cn.ALL_PARTY_ADDRESS1_COUNTRY: cn.ADDRESS1_COUNTRY,
-    cn.ALL_PARTY_COUNTRY1_CITIZENSHIP: cn.COUNTRY1_CITIZENSHIP,
-    cn.ALL_PARTY_COUNTRY2_CITIZENSHIP: cn.COUNTRY2_CITIZENSHIP,
-    cn.ALL_PARTY_COUNTRY_FORMATION1: cn.COUNTRY_FORMATION1,
-    cn.ALL_PARTY_COUNTRY_DOMICILE1: cn.COUNTRY_DOMICILE1,
-    cn.ALL_PARTY_COUNTRY_OF_INCORPORATION: cn.COUNTRY_OF_INCORPORATION,
+    cn.ALL_PARTY1_EMPLOYERS: cn.EMPLOYER,
+    cn.ALL_PARTY1_COUNTRY: cn.COUNTRY,
+    cn.ALL_PARTY1_COUNTRY1: cn.COUNTRY1,
+    cn.ALL_PARTY1_COUNTRY_OF_INCORPORATION: cn.COUNTRY_OF_INCORPORATION,
+    cn.ALL_PARTY1_ADDRESS1_COUNTRY: cn.ADDRESS1_COUNTRY,
+    cn.ALL_PARTY1_COUNTRY1_CITIZENSHIP: cn.COUNTRY1_CITIZENSHIP,
+    cn.ALL_PARTY1_COUNTRY2_CITIZENSHIP: cn.COUNTRY2_CITIZENSHIP,
+    cn.ALL_PARTY1_COUNTRY_FORMATION1: cn.COUNTRY_FORMATION1,
+    cn.ALL_PARTY1_COUNTRY_DOMICILE1: cn.COUNTRY_DOMICILE1,
+    cn.ALL_PARTY1_COUNTRY_OF_INCORPORATION: cn.COUNTRY_OF_INCORPORATION,
     cn.ALL_PRTY_PRIM_CTZNSH_CNTRY: cn.PRTY_PRIM_CTZNSH_CNTRY,
     cn.ALL_PRTY_RSDNC_CNTRY_CD: cn.PRTY_RSDNC_CNTRY_CD,
     cn.ALL_PARTY1_COUNTRY_PEP: cn.PARTY1_COUNTRY_PEP,
@@ -70,21 +50,15 @@ COLLECTIVE_REPRESENTATION_MAP_FOR_FIELD = {
     cn.ALL_PARTY1_GOVTID2_NUMBER: cn.PARTY1_GOVTID2_NUMBER,
 }
 
-logger = get_logger("JSON ENGINE")
-
 
 class JsonProcessingEngine(ProcessingEngine):
     REF_KEY_REGEX = r"(\d{4}-\d{2}-\d{2}-\d{2}.\d{2}.\d{2}.\d{6})"
     REF_KEY_REGEX_PYTHON = re.compile(REF_KEY_REGEX)
     discoverer = TriggeredTokensDiscoverer(fuzzy_threshold=1.0)
 
-    def __init__(self, pipeline_config=None):
-        self.pipeline_config = pipeline_config
-        JsonProcessingEngine.discoverer.fuzzy_threshold = pipeline_config.FUZZINESS_LEVEL
-
-    def set_ref_key(self, row):
-        match = self.REF_KEY_REGEX_PYTHON.match(row[SRC_REF_KEY])
-        row[SRC_SYS_ACCT_KEY] = match.group(1) if match else ""
+    def __init__(self, pipeline_config: Pipeline = None):
+        self.pipeline_config = pipeline_config.config
+        JsonProcessingEngine.discoverer.fuzzy_threshold = self.pipeline_config.FUZZINESS_LEVEL
 
     def extract_wl_matched_tokens(self, record):
         threshold = 0.66
@@ -172,44 +146,6 @@ class JsonProcessingEngine(ProcessingEngine):
     def load_data(self, *args, **kwargs):
         return self.spark_instance.read_delta(*args, **kwargs)
 
-    def merge_with_party_and_address_relationships(self, payload):
-        selected_parties_payload = [
-            party_item[field_name]
-            for party_item in payload[PARTIES]
-            for field_name in payload[MERGING_PARTIES]
-        ]
-        for party in selected_parties_payload:
-            party[CONNECTED_FULL_NAME] = " ".join(
-                [party[PRTY_FST_NM], party[PRTY_MDL_NM]], party[PRTY_LST_NM]
-            )
-
-        enhanced_df360_payload = {
-            ALERT_ID: payload[ALERT_ID],
-            ALERTED_PARTY_NAME: payload[ALERTED_PARTY_NAME],
-            ACCT_NUM: payload[ACCT_NUM],
-            cn.TRIGGERED_BY: payload[cn.TRIGGERED_BY],
-            SRC_SYS_ACCT_KEY: payload[SRC_SYS_ACCT_KEY],
-            ADDRESS_ID: payload[ADDRESS_ID],
-            ALL_PARTY_DETAILS: selected_parties_payload,
-            ALL_PARTS_NAMES: [party[PRTY_NM] for party in selected_parties_payload],
-            cn.ALL_PARTY_TYPES: [party[PRTY_TYP] for party in selected_parties_payload],
-            cn.ALL_PARTY_DOBS: [party[DOB_DT] for party in selected_parties_payload],
-            cn.ALL_PARTY_BIRTH_COUNTRIES: [
-                party[PRTY_CNTRY_OF_BIRTH] for party in selected_parties_payload
-            ],
-            cn.ALL_PARTY_CITIZENSHIP_COUNTRIES: [
-                party[PRTY_PRIM_CTZNSH_CNTRY] for party in selected_parties_payload
-            ],
-            cn.ALL_PARTY_RESIDENCY_COUNTRIES: [
-                party[PRTY_RSDNC_CNTRY_CD] for party in selected_parties_payload
-            ],
-            ALL_CONNECTED_PARTIES_NAMES: [
-                party[CONNECTED_FULL_NAME] for party in selected_parties_payload
-            ],
-        }
-
-        return enhanced_df360_payload
-
     @staticmethod
     def get_clean_names_from_concat_name(concat_field: str, source_fields: Dict[str, str]):
 
@@ -218,7 +154,7 @@ class JsonProcessingEngine(ProcessingEngine):
         concat_field_residue = concat_field
 
         if concat_field is None:
-            names[CONCAT_RESIDUE] = None
+            names[cn.CONCAT_RESIDUE] = None
         else:
             for key, value in source_fields.items():
                 if isinstance(value, list):
@@ -239,7 +175,7 @@ class JsonProcessingEngine(ProcessingEngine):
                         names[key] = value
                         distinct_names.append(value)
 
-            names[CONCAT_RESIDUE] = concat_field_residue
+            names[cn.CONCAT_RESIDUE] = concat_field_residue
 
         return names
 
@@ -253,20 +189,20 @@ class JsonProcessingEngine(ProcessingEngine):
         )
 
     def set_clean_names(self, payload):
-        names_source_cols = [cn.ALL_PARTY_NAMES, ALL_CONNECTED_PARTIES_NAMES]
+        names_source_cols = [cn.ALL_CONNECTED_PARTY_NAMES, cn.ALL_CONNECTED_PARTIES_NAMES]
         payload[cn.CLEANED_NAMES] = JsonProcessingEngine.get_clean_names_from_concat_name(
             cn.CONCAT_ADDRESS, *names_source_cols
         )
         return payload
 
     def set_concat_residue(self, payload):
-        payload[CONCAT_RESIDUE] = payload[cn.CLEANED_NAMES][CONCAT_RESIDUE]
+        payload[cn.CONCAT_RESIDUE] = payload[cn.CLEANED_NAMES][cn.CONCAT_RESIDUE]
         return payload
 
     def set_concat_address_no_change(self, payload):
         payload[cn.CONCAT_ADDRESS_NO_CHANGES] = None
-        if payload[CONCAT_RESIDUE] == payload[cn.CONCAT_ADDRESS]:
-            payload[cn.CONCAT_ADDRESS_NO_CHANGES] = payload[CONCAT_RESIDUE]
+        if payload[cn.CONCAT_RESIDUE] == payload[cn.CONCAT_ADDRESS]:
+            payload[cn.CONCAT_ADDRESS_NO_CHANGES] = payload[cn.CONCAT_RESIDUE]
         return payload
 
     @staticmethod
@@ -284,7 +220,7 @@ class JsonProcessingEngine(ProcessingEngine):
 
     def set_triggered_tokens_discovery(self, payload, match, fields):
         TRIGGERS_MAP = {
-            cn.ALL_PARTY_NAMES: payload[cn.ALL_PARTY_NAMES],
+            cn.ALL_CONNECTED_PARTY_NAMES: payload[cn.ALL_CONNECTED_PARTY_NAMES],
             cn.ADDRESS1_COUNTRY: self.get_field_value_name(fields, cn.ADDRESS1_COUNTRY),
             cn.ADDRESS1_LINE1: self.get_field_value_name(fields, cn.ADDRESS1_LINE1),
             cn.ADDRESS1_LINE2: self.get_field_value_name(fields, cn.ADDRESS1_LINE2),

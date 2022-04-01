@@ -1,4 +1,7 @@
-from etl_pipeline.config import columns_namespace as cn
+from etl_pipeline.config import pipeline_config
+
+cn = pipeline_config.cn
+
 
 EXAMPLES = [
     (
@@ -11,7 +14,7 @@ EXAMPLES = [
             "matchId": "49159509",
             "matchStatus": "O",
             "riskScore": "-1.0",
-            "inputVersionId": "122438658",
+            cn.MATCH_RECORD_VERSION_ID: "122438658",
             "matchType": "GWL",
             "entityId": "908043",
             "entityVersion": "20150505194929",
@@ -86,7 +89,7 @@ EXAMPLES = [
             "matchId": "49159509",
             "matchStatus": "O",
             "riskScore": "-1.0",
-            "inputVersionId": "122438658",
+            cn.MATCH_RECORD_VERSION_ID: "122438658",
             "matchType": "GWL",
             "entityId": "908043",
             "entityVersion": "20150505194929",

@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
-
 import itertools
+import logging
 from abc import ABC, abstractmethod
 
 import grpc
@@ -16,15 +15,14 @@ from silenteight.datasource.api.country.v1.country_pb2 import CountryFeatureInpu
 from silenteight.datasource.api.date.v1.date_pb2 import DateFeatureInput
 from silenteight.datasource.api.location.v1.location_pb2 import LocationFeatureInput
 
-from etl_pipeline.config import columns_namespace as cn
-from etl_pipeline.config import service_config
-from etl_pipeline.logger import get_logger
+from etl_pipeline.config import pipeline_config, service_config
 
-logger = get_logger("UPDATE TO DATA SOURCE")
+logger = logging.getLogger("ETL pipeline")
+cn = pipeline_config.cn
 
 
 class AgentInputCreator:
-    def __init__(self):
+    def initialize(self, ssl):
         self.producers = [
             # DobAgentFeatureInputProducer(),
             # GeoResidencyAgentFeatureInputProducer(),
@@ -32,6 +30,17 @@ class AgentInputCreator:
             # NationalityAgentFeatureInputProducer(),
         ]
         channel = grpc.insecure_channel(service_config.DATA_SOURCE_INPUT_ENDPOINT)
+        if ssl:
+            with open(service_config.GRPC_CLIENT_TLS_CA, "rb") as f:
+                ca = f.read()
+            with open(service_config.GRPC_CLIENT_TLS_PRIVATE_KEY, "rb") as f:
+                private_key = f.read()
+            with open(service_config.GRPC_CLIENT_TLS_PUBLIC_KEY_CHAIN, "rb") as f:
+                certificate_chain = f.read()
+            server_credentials = grpc.ssl_channel_credentials(ca, private_key, certificate_chain)
+            channel = grpc.secure_channel(
+                service_config.DATA_SOURCE_INPUT_ENDPOINT, server_credentials
+            )
         self.stub = AgentInputServiceStub(channel)
 
     def produce_feature_inputs(self, payload):
@@ -40,7 +49,6 @@ class AgentInputCreator:
             feature_input = producer.produce_feature_input(payload)
             logger.debug(f"Produced features {feature_input}")
             if isinstance(feature_input, list):
-
                 for input_ in feature_input:
                     target = Any()
                     target.Pack(input_)
@@ -59,7 +67,7 @@ class AgentInputCreator:
         agent_inputs = []
 
         for match_id, match in zip(
-            payload[cn.MATCH_IDS], payload["watchlistParty"]["matchRecords"]
+            payload[cn.MATCH_IDS], payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
         ):
             feature_inputs = self.produce_feature_inputs(match)
             agent_input = AgentInput(

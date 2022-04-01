@@ -7,7 +7,9 @@ import pyspark.sql.functions as F
 
 from etl_pipeline.agent_input_creator.config import AGENT_INPUT_AGG_COL_CONFIG, AGENT_INPUT_CONFIG
 from etl_pipeline.agent_input_creator.sql import sql_to_merge_specific_columns_to_standardized
-from etl_pipeline.config import columns_namespace as cn
+from etl_pipeline.config import pipeline_config
+
+cn = pipeline_config.cn
 
 
 def create_input_for_agents(

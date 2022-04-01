@@ -1,6 +1,8 @@
 from enum import Enum
 
-from etl_pipeline.config import columns_namespace as cn
+from etl_pipeline.config import pipeline_config
+
+cn = pipeline_config.cn
 
 MATCH_RECORDS = "match_ids"
 ALERT_ID = "alert_id"

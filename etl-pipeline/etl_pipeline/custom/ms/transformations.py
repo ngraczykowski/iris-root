@@ -13,12 +13,13 @@ from pyspark.sql.types import (
     TimestampType,
 )
 
-from etl_pipeline.config import columns_namespace as cn
 from etl_pipeline.config import pipeline_config
 from etl_pipeline.custom.ms.datatypes.status.sanctions import SanctionsStatus
 from etl_pipeline.pattern import AccountType
 
-loaded = pipeline_config
+cn = pipeline_config.cn
+
+loaded = pipeline_config.config
 TEMP_DIR_PATH = loaded["temp"]
 
 # INPUT_RECORD_COLUMNS = loaded["input-record-columns"]
@@ -49,15 +50,6 @@ def columns_to_schema(cols: List[str]) -> StructType:
     return StructType(fields)
 
 
-def enrich_with_date_column(df, datetime_column, date_column):
-    from pyspark.sql.types import DateType
-
-    df = df.withColumn(date_column, F.col(datetime_column).cast(DateType()))
-    cols = df.cn.copy()
-    cn.insert(cols.index(datetime_column) + 1, cols.pop(cols.index(date_column)))
-    return df.select(cols)
-
-
 # def custom_register_alerts_data_table(alerts_df):
 #     cols = [
 #         cn.ALERT_INTERNAL_ID,
@@ -78,7 +70,7 @@ def register_alerts_xml_table(df: pyspark.sql.dataframe):
     cols = [
         cn.ALERT_ID,
         "CURRENT_VERSION_ID",
-        "INPUT_RECORD_HIST",
+        "cn.INPUT_RECORD_HIST",
         "MATCH_RECORDS",
     ]
 
@@ -88,8 +80,8 @@ def register_alerts_xml_table(df: pyspark.sql.dataframe):
 
 
 @F.udf(returnType=MapType(StringType(), StringType()))
-def filter_record(input_record_hist, version_id):
-    for el in input_record_hist:
+def filter_record(version_id):
+    for el in cn.INPUT_RECORD_HIST:
         if el["VERSION_ID"] == version_id:
             return el
     return {}
@@ -117,7 +109,7 @@ def determine_analyst_decision(status):
 #             ad.{ID_COLUMN_NAME},
 #             ad.STATUS_DESC,
 #             ad.SRC_REF_KEY,
-#             axd.INPUT_RECORD_HIST,
+#             axd.cn.INPUT_RECORD_HIST,
 #             axd.MATCH_RECORDS,
 #             axd.CURRENT_VERSION_ID
 #         FROM alerts_data ad
@@ -147,7 +139,7 @@ def determine_analyst_decision(status):
 
 # def join_transformation(df_sanctions_360):
 #     df360 = df_sanctions_360.withColumn(
-#         "INPUT_RECORD", filter_record("INPUT_RECORD_HIST", F.col("MATCH_RECORD").VERSION_ID)
+#         "INPUT_RECORD", filter_record("cn.INPUT_RECORD_HIST", F.col("MATCH_RECORD").VERSION_ID)
 #     )
 
 #     for column in INPUT_RECORD_COLUMNS:

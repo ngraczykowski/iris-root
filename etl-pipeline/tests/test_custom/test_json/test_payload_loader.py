@@ -2,7 +2,10 @@ import json
 
 import pytest
 
+from etl_pipeline.config import pipeline_config
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
+
+cn = pipeline_config.cn
 
 
 def extract_dict_for_comparison(reference_payload, record):
@@ -98,7 +101,7 @@ def extract_dict_for_comparison(reference_payload, record):
                     "inputRecord": {
                         "version": "a1231231231241343454251234234",
                         "createdDate": "01/05/10",
-                        "fields": [
+                        cn.FIELDS: [
                             {
                                 "name": "SOURCE_REF",
                                 "isScreenable": "false",

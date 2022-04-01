@@ -1,3 +1,11 @@
 DATA_SOURCE_INPUT_ENDPOINT: localhost:50052
 ETL_SERVICE_PORT: 9090
 ETL_SERVICE_HOSTNAME: localhost
+LOGGING_PATH: logs/
+GRPC_SERVER_TLS_PRIVATE_KEY: tests/ssl/server-key.pem
+GRPC_SERVER_TLS_PUBLIC_KEY_CHAIN: tests/ssl/server.pem
+GRPC_SERVER_TLS_TRUSTED_CA:  tests/ssl/ca.pem
+
+GRPC_CLIENT_TLS_CA: tests/ssl/ca.pem
+GRPC_CLIENT_TLS_PRIVATE_KEY: tests/ssl/server-key.pem
+GRPC_CLIENT_TLS_PUBLIC_KEY_CHAIN: tests/ssl/server.pem

@@ -1,14 +1,40 @@
+import logging
+import os
 from copy import deepcopy
 
-from etl_pipeline.config import alert_agents_config
-from etl_pipeline.config import columns_namespace as cn
+import omegaconf
+
+from etl_pipeline.config import load_agent_configs, pipeline_config
 from etl_pipeline.custom.ms.datatypes.field import InputRecordField
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.custom.ms.watchlist_extractor import WatchlistExtractor
-from etl_pipeline.logger import get_logger
+from etl_pipeline.logger import get_console_handler, get_file_handler
 from etl_pipeline.pipeline import ETLPipeline
 
-logger = get_logger("ETL Pipeline")
+CONFIG_APP_DIR = os.environ["CONFIG_APP_DIR"]
+
+service_config = omegaconf.OmegaConf.load(os.path.join(CONFIG_APP_DIR, "service", "service.yaml"))
+
+
+FORMATTER = logging.Formatter("%(asctime)s — %(name)s — %(levelname)s — %(message)s")
+
+LOGGING_PATH = None
+
+try:
+    LOGGING_PATH = service_config.LOGGING_PATH
+except omegaconf.errors.ConfigAttributeError:
+    pass
+
+logger = logging.getLogger("MS pipeline")
+
+logger.setLevel(logging.DEBUG)
+if LOGGING_PATH:
+    logger.addHandler(get_file_handler("ms_pipeline.log"))
+logger.addHandler(get_console_handler())
+logger.propagate = False
+
+
+cn = pipeline_config.cn
 
 
 class PipelineError:
@@ -103,31 +129,41 @@ def prepend_agent_name_to_ap_or_wl_or_aliases_key(agent_input_config):
 
 
 class MSPipeline(ETLPipeline):
+    def __init__(self, engine, config=None):
+        super().__init__(engine, config.config)
+        self.alert_agents_config = load_agent_configs()
+
+    def reload_config(self):
+        self.alert_agents_config = load_agent_configs()
+
     def convert_raw_to_standardized(self, df):
         return df
 
     def flatten_fields(self, fields):
         for num, party in enumerate(fields):
-            fields[num] = party["fields"]
+            fields[num] = party[cn.FIELDS]
 
     def parse_input_records(self, input_records):
         for input_record in input_records:
-            input_record["INPUT_FIELD"] = {
-                i["name"]: InputRecordField(**i) for i in input_record["fields"]
+            input_record[cn.INPUT_FIELD] = {
+                i["name"]: InputRecordField(**i) for i in input_record[cn.FIELDS]
             }
 
     def connect_input_record_with_match_record(self, payload):
         new_payloads = []
-        input_records = payload["alertedParty"]["inputRecordHist"]["inputRecords"]
-        match_records = payload["watchlistParty"]["matchRecords"]
+        input_records = payload[cn.ALERTED_PARTY_FIELD][cn.INPUT_RECORD_HIST][cn.INPUT_RECORDS]
+        match_records = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
         for input_record in input_records:
             for num, match_record in enumerate(match_records):
-                if input_record["versionId"] == match_record["inputVersionId"]:
+                if (
+                    input_record[cn.INPUT_RECORD_VERSION_ID]
+                    == match_record[cn.MATCH_RECORD_VERSION_ID]
+                ):
                     pair_payload = deepcopy(payload)
-                    pair_payload["alertedParty"]["inputRecordHist"]["inputRecords"] = [
-                        input_record
-                    ]
-                    pair_payload["watchlistParty"]["matchRecords"] = [match_record]
+                    pair_payload[cn.ALERTED_PARTY_FIELD][cn.INPUT_RECORD_HIST][
+                        cn.INPUT_RECORDS
+                    ] = [input_record]
+                    pair_payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS] = [match_record]
                     pair_payload[cn.MATCH_IDS] = [pair_payload[cn.MATCH_IDS][num]]
                     new_payloads.append(pair_payload)
 
@@ -135,9 +171,9 @@ class MSPipeline(ETLPipeline):
 
     def get_parties(self, payload):
         try:
-            alerted_parties = payload["alertedParty"]["supplementalInfo"][cn.RELATED_PARTIES][
-                cn.PARTIES
-            ]
+            alerted_parties = payload[cn.ALERTED_PARTY_FIELD][cn.SUPPLEMENTAL_INFO][
+                cn.RELATED_PARTIES
+            ][cn.PARTIES]
         except (KeyError, IndexError):
             logger.warning("No parties")
             alerted_parties = []
@@ -145,7 +181,7 @@ class MSPipeline(ETLPipeline):
 
     def get_accounts(self, payload):
         try:
-            accounts = payload["alertedParty"]["supplementalInfo"][cn.RELATED_ACCOUNTS][
+            accounts = payload[cn.ALERTED_PARTY_FIELD][cn.SUPPLEMENTAL_INFO][cn.RELATED_ACCOUNTS][
                 cn.ACCOUNTS
             ]
         except (KeyError, IndexError):
@@ -163,7 +199,9 @@ class MSPipeline(ETLPipeline):
             self.flatten_fields(accounts)
 
         try:
-            input_records = payloads["alertedParty"]["inputRecordHist"]["inputRecords"]
+            input_records = payloads[cn.ALERTED_PARTY_FIELD][cn.INPUT_RECORD_HIST][
+                cn.INPUT_RECORDS
+            ]
         except (KeyError, IndexError):
             logger.warning("No input_records")
             return {}
@@ -171,11 +209,11 @@ class MSPipeline(ETLPipeline):
         self.parse_input_records(input_records)
         payloads = self.connect_input_record_with_match_record(payloads)
         for payload in payloads:
-            matches = payload["watchlistParty"]["matchRecords"]
-            input_records = payload["alertedParty"]["inputRecordHist"]["inputRecords"]
+            matches = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
+            input_records = payload[cn.ALERTED_PARTY_FIELD][cn.INPUT_RECORD_HIST][cn.INPUT_RECORDS]
             alerted_parties = self.get_parties(payload)
             accounts = self.get_accounts(payload)
-            fields = input_records[0]["INPUT_FIELD"]
+            fields = input_records[0][cn.INPUT_FIELD]
             for match in matches:
                 WatchlistExtractor().update_match_with_wl_values(match)
                 match[cn.TRIGGERED_BY] = self.engine.set_trigger_reasons(
@@ -186,16 +224,16 @@ class MSPipeline(ETLPipeline):
             self.engine.connect_full_names(
                 alerted_parties, [cn.PRTY_FST_NM, cn.PRTY_MDL_NM, cn.PRTY_LST_NM]
             )
-            self.engine.connect_full_names(accounts, ["firstName", "lastName"])
+            self.engine.connect_full_names(accounts, [cn.ACCOUNT_FIRST_NAME, cn.ACCOUNT_LAST_NAME])
 
             self.engine.collect_party_values_from_parties(alerted_parties, payload)
             self.engine.collect_party_values_from_accounts(accounts, payload)
             self.engine.collect_party_values_from_parties_from_fields(fields, payload)
-            payload[cn.ALL_CONNECTED_PARTY_TYPES] = payload[cn.ALL_PARTY_TYPES]
+            payload[cn.ALL_CONNECTED_PARTY_TYPES] = payload[cn.ALL_CONNECTED_PARTY_TYPES]
             names_source_cols = [
-                cn.ALL_PARTY_NAMES,
+                cn.ALL_CONNECTED_PARTY_NAMES,
                 cn.ALL_CONNECTED_PARTIES_NAMES,
-                cn.ALL_CONNECTED_ACCOUNTS_NAMES,
+                cn.ALL_CONNECTED_ACCOUNT_NAMES,
             ]
 
             payload.update(
@@ -230,7 +268,7 @@ class MSPipeline(ETLPipeline):
                 else:
                     value = payload
                 for field_name in elements:
-                    if field_name == "INPUT_FIELD":
+                    if field_name == cn.INPUT_FIELD:
                         try:
                             value = value[0][field_name][elements[-1]].value
                         except (AttributeError, KeyError):
@@ -253,25 +291,10 @@ class MSPipeline(ETLPipeline):
                 logger.warning(f"Field {value} does not exist in payload")
         return new_config
 
-    def load_agent_config(self, alert_type="WM_ADDRESS"):
-        alert_config = alert_agents_config[alert_type]
-        parsed_agent_config = {}
-        for agent_name, agent_config in dict(alert_config).items():
-            particular_agent_config = dict(agent_config)
-            parsed_agent_config[agent_name] = {}
-            for new_key in particular_agent_config:
-                parsed_agent_config[agent_name][new_key] = []
-                for element in particular_agent_config[new_key]:
-                    elements = element.split(".")
-                    parsed_agent_config[agent_name][new_key].append(elements[-1])
-        return parsed_agent_config, alert_config
-
     def transform_cleansed_to_application(self, payloads):
         for payload in payloads:
-            matches = payload["watchlistParty"]["matchRecords"]
-            agent_config, yaml_conf = self.load_agent_config(
-                payload["alertedParty"]["headerInfo"]["datasetName"]
-            )
+            matches = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
+            agent_config, yaml_conf = self.alert_agents_config["alert_type"]
             agent_input_prepended_agent_name_config = (
                 prepend_agent_name_to_ap_or_wl_or_aliases_key(agent_config)
             )
@@ -288,13 +311,6 @@ class MSPipeline(ETLPipeline):
                     config,
                     False,
                 )
-                match.update(
-                    {
-                        key: self.flatten(match.get(key))
-                        for key in match
-                        if key.endswith("_ap") or key.endswith("_wl")
-                    }
-                )
 
                 config.update(
                     {
@@ -308,7 +324,7 @@ class MSPipeline(ETLPipeline):
                 )
                 match.update(
                     {
-                        key: self.flatten(match.get(key))
+                        key: self.produce_unique_flatten_list(match.get(key, []))
                         for key in match
                         if key.endswith("_aggregated")
                     }
@@ -316,6 +332,14 @@ class MSPipeline(ETLPipeline):
                 self.remove_nulls_from_aggegated(match)
 
         return payloads
+
+    def produce_unique_flatten_list(self, record):
+        record = self.flatten(record)
+        if record is None:
+            record = []
+        if not isinstance(record, list):
+            record = [record]
+        return list(set([i for i in record]))
 
     def flatten(self, value):
         if value == []:

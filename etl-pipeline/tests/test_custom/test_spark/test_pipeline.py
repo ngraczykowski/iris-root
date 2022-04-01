@@ -5,11 +5,12 @@ from pyspark.sql.types import NullType
 from spark_manager.spark_client import SparkClient
 from spark_manager.spark_config import SPARK_CONF
 
-from etl_pipeline.config import columns_namespace as cn
 from etl_pipeline.config import pipeline_config
 from etl_pipeline.data_processor_engine.spark_engine import SparkProcessingEngine
 from pipelines.ms.spark_pipeline import MSPipeline
 from tests.utils import compare_dataframe
+
+cn = pipeline_config.cn
 
 ALERT_INTERNAL_ID = cn.ALERT_INTERNAL_ID
 TEST_PATH = "tests/shared/test_ms_pipeline/"
