@@ -30,7 +30,7 @@ public class MapStatusRequest {
   @Singular
   List<StatusInfoDto> nextStatuses;
 
-  Optional<StatusInfoDto> findNextStatus(String nextStatusName) {
+  public Optional<StatusInfoDto> findNextStatus(String nextStatusName) {
     return nextStatuses.stream()
         .filter(ns -> ns.getName().equals(nextStatusName))
         .findFirst();

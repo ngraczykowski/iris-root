@@ -1,6 +1,7 @@
 package com.silenteight.connector.ftcc.common.dto.input;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +17,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder(toBuilder = true)
 @JsonNaming(UpperCamelCaseStrategy.class)
 public class StatusInfoDto implements Serializable {
 

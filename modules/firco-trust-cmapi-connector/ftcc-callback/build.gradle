@@ -1,8 +1,9 @@
 plugins {
   id "java"
+  id "groovy"
 }
 
-description = "Firco Trust CMAPI Connector Egest"
+description = "Firco Trust CMAPI Connector - Callback"
 
 configurations {
   implementation.extendsFrom starterDatabase

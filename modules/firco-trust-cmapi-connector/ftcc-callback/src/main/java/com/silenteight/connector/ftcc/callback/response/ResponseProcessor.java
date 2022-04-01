@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.lang.System.lineSeparator;
 
@@ -69,18 +70,32 @@ public class ResponseProcessor {
         .getRecommendations()
         .stream()
         .peek(recommendationOut -> logRecommendationOut(recommendationOut, analysisName))
-        .map(recommendation -> createMessageDto(messageEntityMap, recommendation))
+        .flatMap(recommendation -> buildMessageHandleException(messageEntityMap, recommendation))
         .peek(clientRequestDto -> logReceiveDecisionMessageDto(clientRequestDto, analysisName))
         .collect(Collectors.toList());
 
     return responseCreator.build(decisionMessageDtos);
   }
 
+  private Stream<ReceiveDecisionMessageDto> buildMessageHandleException(
+      Map<UUID, MessageEntity> messageEntityMap, RecommendationOut recommendation) {
+    try {
+      return Stream.of(createMessageDto(messageEntityMap, recommendation));
+    } catch (ResponseMessageBuildingExceptoin e) {
+      return Stream.empty();
+    }
+  }
+
   private ReceiveDecisionMessageDto createMessageDto(
       Map<UUID, MessageEntity> messageEntityMap, RecommendationOut recommendation) {
     var messageEntity = Optional.of(messageEntityMap.get(uuidFrom(recommendation)))
         .orElseThrow();
-    return responseCreator.buildMessageDto(messageEntity, recommendation);
+    try {
+      return responseCreator.buildMessageDto(messageEntity, recommendation);
+    } catch (Exception e) {
+      log.error("Error while building MessageDto!!!", e);
+      throw new ResponseMessageBuildingExceptoin(e);
+    }
   }
 
   @NotNull

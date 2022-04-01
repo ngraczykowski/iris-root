@@ -2,6 +2,10 @@ package com.silenteight.connector.ftcc.callback.response;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.connector.ftcc.callback.decision.MapStatusUseCase;
+import com.silenteight.connector.ftcc.callback.newdecision.DecisionConfigurationHolder;
+import com.silenteight.connector.ftcc.callback.newdecision.MapStatusUseCaseService;
+
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -26,5 +30,10 @@ class RecommendationSenderConfiguration {
   @Bean
   RecommendationSender recommendationSender(RestTemplate restTemplate) {
     return new RecommendationSender(restTemplate, properties.getEndpoint());
+  }
+
+  @Bean
+  MapStatusUseCase mapStatusUseCase(DecisionConfigurationHolder configurationHolder) {
+    return new MapStatusUseCaseService(configurationHolder);
   }
 }
