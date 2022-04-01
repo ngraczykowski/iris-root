@@ -1,6 +1,6 @@
 ext {
   libraries = [:]
-  springBootVersion = "2.6.4"
+  springBootVersion = "2.6.6"
   springCloudVersion = "2021.0.1"
   sepDependenciesVersion = "2.5.0"
   silenteightSepBaseVersion = "1.14.0"

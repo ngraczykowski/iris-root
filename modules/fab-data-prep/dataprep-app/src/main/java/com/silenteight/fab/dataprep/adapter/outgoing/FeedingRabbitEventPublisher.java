@@ -36,7 +36,7 @@ class FeedingRabbitEventPublisher implements FeedingEventPublisher {
     rabbitTemplate.convertAndSend(properties.getExchangeName(), "", message);
   }
 
-  private Iterable<FedMatch> createFedMatches(List<UdsFedEvent.FedMatch> fedMatches) {
+  private static Iterable<FedMatch> createFedMatches(List<UdsFedEvent.FedMatch> fedMatches) {
     return fedMatches.stream()
         .map(fedMatch -> FedMatch.newBuilder()
             .setMatchId(fedMatch.getMatchId())

@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.Duration;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import static java.util.stream.Collectors.toList;
@@ -31,7 +32,7 @@ class RegistrationGrpcServiceConfiguration {
 
   @Bean
   @Profile("!dev")
-  RegistrationServiceClient registrationServiceClientGrpcApi(GrpcProperties grpcProperties) {
+  RegistrationServiceClient registrationServiceClientGrpcApi(@Valid GrpcProperties grpcProperties) {
     return new RegistrationServiceGrpcAdapter(
         registrationServiceBlockingStub, grpcProperties.getDeadline().getSeconds());
   }

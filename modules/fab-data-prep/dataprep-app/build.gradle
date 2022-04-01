@@ -1,7 +1,7 @@
 plugins {
   id "java"
   id "groovy"
-  id "org.springframework.boot" version "2.6.4"
+  id "org.springframework.boot" version "2.6.6"
 }
 
 description = "dataprep-app"

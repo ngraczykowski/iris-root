@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.Duration;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import static com.silenteight.fab.dataprep.infrastructure.grpc.KnownServices.CM_API_CONNECTOR;
@@ -28,8 +29,7 @@ class CmApiGrpcClientConfiguration {
 
   @Bean
   @Profile("!cmapiconnectormock")
-  AlertDetailsServiceClient alertsDetailsServiceClient(
-      GrpcProperties grpcProperties) {
+  AlertDetailsServiceClient alertsDetailsServiceClient(@Valid GrpcProperties grpcProperties) {
     return new AlertDetailsServiceClient(
         alertMessageDetailsServiceBlockingStub, grpcProperties.getDeadline());
   }

@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.Duration;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @Configuration
@@ -36,7 +37,8 @@ public class CategoriesGrpcServiceConfiguration {
 
   @Bean
   @Profile("!dev")
-  CategoryServiceClient categoryServiceClientApi(GrpcCategoryProperties grpcCategoryProperties) {
+  CategoryServiceClient categoryServiceClientApi(
+      @Valid GrpcCategoryProperties grpcCategoryProperties) {
     return new CategoryGrpcAdapter(
         categoryServiceBlockingStub, grpcCategoryProperties.getDeadline().getSeconds());
   }
@@ -50,7 +52,7 @@ public class CategoriesGrpcServiceConfiguration {
   @Bean
   @Profile("!dev")
   CategoryValuesServiceClient categoryValuesServiceClientApi(
-      GrpcCategoryValueProperties grpcCategoryValueProperties) {
+      @Valid GrpcCategoryValueProperties grpcCategoryValueProperties) {
     return new CategoryValuesGrpcAdapter(
         categoryValueServiceBlockingStub, grpcCategoryValueProperties.getDeadline().getSeconds());
   }

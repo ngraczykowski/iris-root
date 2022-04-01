@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.Duration;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @Configuration
@@ -30,7 +31,7 @@ public class UniversalDataSourceGrpcServiceConfiguration {
 
   @Bean
   @Profile("!dev")
-  AgentInputServiceClient agentInputServiceClient(GrpcProperties grpcProperties) {
+  AgentInputServiceClient agentInputServiceClient(@Valid GrpcProperties grpcProperties) {
     return new AgentInputServiceAdapter(
         agentInputServiceBlockingStub, grpcProperties.getDeadline().getSeconds());
   }
