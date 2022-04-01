@@ -17,6 +17,27 @@ Services are exposed on locally accessible port numbers. The table below shows h
 |:-----------|:-------------------------|:--------|:-----------|
 | RabbitMQ   | http://localhost:5681/   | `serp`  | `serp`     |
 
+## How to test
+
+### GNS-RT
+
+The simplest way to test GNS-RT locally is to send a JSON request using Postman:
+1. Generate new request using endpoint `http://localhost:24220/v1/gnsrt/system-id/random` (method `GET`)
+   1. It pulls one random record from Oracle DB and based on its data it generates a JSON request.
+   2. In addition, it modifies system_id, so there won't be any duplicates in scb_raw_alert table. 
+2. Copy generated request and send it to endpoint `http://localhost:24220/v1/gnsrt/recommendation` (method `POST`)
+   1. To paste the request go to `Body` section
+   2. Select `raw`
+   3. Change type to `JSON`
+
+#### Nomad
+
+You can also use Postman to send a request to SCB-Bridge that is deployed on `Nomad`.
+What you need to do is to:
+- Have access to Nomad by VPN
+- Change url in request to `http://10.8.0.2:<SCB_BRIDGE_PORT>/v1/gnsrt/recommendation`
+- `<SCB_BRIDGE_PORT>` after each restart SCB-Bridge can get a random port - it means you have to first check on Nomad what's the current Bridge port.
+
 ## Running tests in Gradle
 
 By default, build run all tests. However, some integration tests take too much time. In order to

@@ -9,7 +9,6 @@ import com.silenteight.scb.ingest.adapter.incomming.gnsrt.recommendation.GnsRtRe
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.recommendation.InvalidGnsRtRequestDataException;
 
 import io.grpc.StatusRuntimeException;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -30,7 +29,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping("/v1/gnsrt/recommendation")
 @RequiredArgsConstructor
-@ConditionalOnProperty(value = "silenteight.scb-bridge.gns-rt.enabled", havingValue = "true")
 public class GnsRtController {
 
   private final GnsRtRecommendationUseCase useCase;

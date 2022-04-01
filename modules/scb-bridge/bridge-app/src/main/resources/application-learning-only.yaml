@@ -1,8 +1,6 @@
 serp:
   scb:
     bridge:
-      gns-rt.enabled: false
-
       learning:
         alert.enabled: true
         ecm.enabled: true

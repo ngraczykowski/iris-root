@@ -9,4 +9,6 @@ public interface GnsRtRequestGenerator {
   GnsRtRecommendationRequest generateBySystemId(@NonNull String systemId);
 
   GnsRtRecommendationRequest generateByRecordId(@NonNull String recordId);
+
+  GnsRtRecommendationRequest generateWithRandomSystemId();
 }
