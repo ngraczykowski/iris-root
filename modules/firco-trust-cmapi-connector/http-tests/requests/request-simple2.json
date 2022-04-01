@@ -1,0 +1,426 @@
+{
+   "Header" : null,
+   "Body" : {
+      "msg_SendMessage" : {
+         "VersionTag" : "1",
+         "Authentication" : {
+            "UserLogin" : "login",
+            "UserPassword" : "",
+            "UserRealm" : ""
+         },
+         "Messages" : [
+            {
+               "Message" : {
+                  "Unit" : "TRAINING",
+                  "BusinessUnit" : "",
+                  "MessageID" : "00000004",
+                  "SystemID" : "TRAINING!60C2ED1B-58A1D68E-0326AE78-A8C7CC79",
+                  "Bypass" : "0",
+                  "Command" : "1",
+                  "ApplicationCode" : "FFF FEED",
+                  "CustomerInfo" : {
+                     "Account" : "",
+                     "City" : "35310MORDELLES",
+                     "Country" : "",
+                     "DateOfBirth" : "",
+                     "Name" : "YASIN RAHMAN",
+                     "PlaceOfBirth" : "",
+                     "State" : "",
+                     "UserData1" : "",
+                     "UserData2" : ""
+                  },
+                  "MessageData" : "MR;OSAMA BIN LADIN;BIN LADIN;Individual;30/8/1965;10/20/2022;M;;ADDAX TOWER;;ABU DHABI;ABU DHABI;IR;IR;IR;IR;WEALTH;LAWYER;AVB2833444;S93849384A;10/20/2020;FIRST ABU DHABI BANK;FAB_MOB;;ABC1234567;;ABC1234567;",
+                  "LastComment" : "",
+                  "LastOperator" : "patrick",
+                  "FilteredDate" : "2017/05/22 13:52:00",
+                  "CreatedDate" : "2018/08/27 09:46:39",
+                  "Priority" : "0",
+                  "Confidentiality" : "0",
+                  "Blocking" : "1",
+                  "NonBlocking" : "0",
+                  "BatchID" : "",
+                  "Hits" : [
+                     {
+                        "Hit" : {
+                           "MatchingText" : "YASIN RAHMAN",
+                           "Positions" : [
+                              {
+                                 "Position" : {
+                                    "PositionStart" : "11",
+                                    "PositionEnd" : "22"
+                                 }
+                              }
+                           ],
+                           "Score" : "1.0",
+                           "Tag" : "NAM",
+                           "SolutionType" : "1",
+                           "SynonymIndex" : "0",
+                           "RulesContext" : {
+                              "Type" : "1",
+                              "Priority" : "0",
+                              "Confidentiality" : "0",
+                              "Info" : "none"
+                           },
+                           "EntityText" : "YASIN, ABDUL RAHMAN",
+                           "HittedEntity" : {
+                              "ID" : "35cc7249-43b0-40d8-8c8f-c8b4c5d956f0",
+                              "IsException" : "0",
+                              "OfficialReferences" : [
+                                 {
+                                    "OfficialReference" : {
+                                       "Name" : "OSFI_2006/02/09"
+                                    }
+                                 }
+                              ],
+                              "Names" : [
+                                 {
+                                    "Name" : "YASIN, ABDUL RAHMAN"
+                                 },
+                                 {
+                                    "Name" : "YASIN, ABOUD"
+                                 },
+                                 {
+                                    "Name" : "TAHER, ABDUL RAHMAN SAID"
+                                 },
+                                 {
+                                    "Name" : "TAHA, ABDUL RAHMAN"
+                                 }
+                              ],
+                              "Addresses" : [
+                                 {
+                                    "Address" : {
+                                       "IsMain" : "1",
+                                       "PostalAddress" : "",
+                                       "Cities" : [
+                                          
+                                       ],
+                                       "States" : [
+                                          
+                                       ],
+                                       "Countries" : [
+                                          "UEA"
+                                       ]
+                                    }
+                                 }
+                              ],
+                              "Origin" : "OSFI",
+                              "Designation" : "BSIF",
+                              "Keywords" : [
+                                 {
+                                    "Keyword" : "none"
+                                 }
+                              ],
+                              "Type" : "I",
+                              "Codes" : [
+                                 
+                              ],
+                              "AdditionalInfo" : "none",
+                              "DatesOfBirth" : [
+                                 {
+                                    "DateOfBirth" : "10/04/60\nNATIONALITY: \nnone"
+                                 }
+                              ],
+                              "PlacesOfBirth" : [
+                                 {
+                                    "PlacesOfBirth" : "BLOOMINGTON, INDIANA, USA"
+                                 }
+                              ],
+                              "Hyperlinks" : [
+                                 {
+                                    "Hyperlink" : "none"
+                                 }
+                              ],
+                              "UserData1" : "",
+                              "UserData2" : "",
+                              "Nationality" : "",
+                              "IsPEP" : "0",
+                              "IsFEP" : "0",
+                              "HideOnlyIDs" : [
+                                 {
+                                    "HideOnlyID" : ""
+                                 }
+                              ],
+                              "HideIDs" : [
+                                 
+                              ],
+                              "HideOrigins" : [
+                                 
+                              ],
+                              "HideInTags" : [
+                                 
+                              ],
+                              "HideUnits" : [
+                                 
+                              ],
+                              "HideSenderReceivers" : [
+                                 
+                              ]
+                           }
+                        }
+                     }
+                  ],
+                  "Actions" : [
+                     {
+                        "Action" : {
+                           "DateTime" : "20170522135200",
+                           "Operator" : "FFFFEED",
+                           "Comment" : "Suspect(s) detected by FircoSoft Filter",
+                           "Status" : {
+                              "ID" : "0",
+                              "Name" : "NEW",
+                              "RoutingCode" : "0",
+                              "Checksum" : "ed10e9af8ecdee8e303f4c95783757c6"
+                           }
+                        }
+                     }
+                  ],
+                  "CurrentStatus" : {
+                     "ID" : "0",
+                     "Name" : "NEW",
+                     "RoutingCode" : "0",
+                     "Checksum" : "ed10e9af8ecdee8e303f4c95783757c6"
+                  },
+                  "NextStatuses" : [
+                     {
+                        "Status" : {
+                           "ID" : "4",
+                           "Name" : "Level 2-, FALSE1",
+                           "RoutingCode" : "12",
+                           "Checksum" : "dc44ae12825d619154b8a1dc8e09223b"
+                        }
+                     },
+                    {
+                      "Status" : {
+                        "ID" : "6",
+                        "Name" : "Level 2-, TRUE1",
+                        "RoutingCode" : "12",
+                        "Checksum" : "dc44ae12825d619154b8a1dc8e09223b"
+                      }
+                    },
+                    {
+                      "Status" : {
+                        "ID" : "8",
+                        "Name" : "Level 1-, SEAR_UNRESOLVED",
+                        "RoutingCode" : "12",
+                        "Checksum" : "dc44ae12825d619154b8a1dc8e09223b"
+                      }
+                    }
+                  ]
+               }
+            },
+           {
+             "Message" : {
+               "Unit" : "TRAINING",
+               "BusinessUnit" : "",
+               "MessageID" : "00000004",
+               "SystemID" : "TRAINING!60C2ED1B-58A1D68E-0326AE78-A8C7CC79",
+               "Bypass" : "0",
+               "Command" : "1",
+               "ApplicationCode" : "FFF FEED",
+               "CustomerInfo" : {
+                 "Account" : "",
+                 "City" : "35310MORDELLES",
+                 "Country" : "",
+                 "DateOfBirth" : "",
+                 "Name" : "YASIN RAHMAN",
+                 "PlaceOfBirth" : "",
+                 "State" : "",
+                 "UserData1" : "",
+                 "UserData2" : ""
+               },
+               "MessageData" : "MR;OSAMA BIN LADIN;BIN LADIN;Individual;30/8/1965;10/20/2022;M;;ADDAX TOWER;;ABU DHABI;ABU DHABI;IR;IR;IR;IR;WEALTH;LAWYER;AVB2833444;S93849384A;10/20/2020;FIRST ABU DHABI BANK;FAB_MOB;;ABC1234567;;ABC1234567;",
+               "LastComment" : "",
+               "LastOperator" : "patrick",
+               "FilteredDate" : "2017/05/22 13:52:00",
+               "CreatedDate" : "2018/08/27 09:46:39",
+               "Priority" : "0",
+               "Confidentiality" : "0",
+               "Blocking" : "1",
+               "NonBlocking" : "0",
+               "BatchID" : "",
+               "Hits" : [
+                 {
+                   "Hit" : {
+                     "MatchingText" : "YASIN RAHMAN",
+                     "Positions" : [
+                       {
+                         "Position" : {
+                           "PositionStart" : "11",
+                           "PositionEnd" : "22"
+                         }
+                       }
+                     ],
+                     "Score" : "1.0",
+                     "Tag" : "NAM",
+                     "SolutionType" : "1",
+                     "SynonymIndex" : "0",
+                     "RulesContext" : {
+                       "Type" : "1",
+                       "Priority" : "0",
+                       "Confidentiality" : "0",
+                       "Info" : "none"
+                     },
+                     "EntityText" : "YASIN, ABDUL RAHMAN",
+                     "HittedEntity" : {
+                       "ID" : "35cc7249-43b0-40d8-8c8f-c8b4c5d956f0",
+                       "IsException" : "0",
+                       "OfficialReferences" : [
+                         {
+                           "OfficialReference" : {
+                             "Name" : "OSFI_2006/02/09"
+                           }
+                         }
+                       ],
+                       "Names" : [
+                         {
+                           "Name" : "YASIN, ABDUL RAHMAN"
+                         },
+                         {
+                           "Name" : "YASIN, ABOUD"
+                         },
+                         {
+                           "Name" : "TAHER, ABDUL RAHMAN SAID"
+                         },
+                         {
+                           "Name" : "TAHA, ABDUL RAHMAN"
+                         }
+                       ],
+                       "Addresses" : [
+                         {
+                           "Address" : {
+                             "IsMain" : "1",
+                             "PostalAddress" : "",
+                             "Cities" : [
+
+                             ],
+                             "States" : [
+
+                             ],
+                             "Countries" : [
+                               "UEA"
+                             ]
+                           }
+                         }
+                       ],
+                       "Origin" : "OSFI",
+                       "Designation" : "BSIF",
+                       "Keywords" : [
+                         {
+                           "Keyword" : "none"
+                         }
+                       ],
+                       "Type" : "I",
+                       "Codes" : [
+
+                       ],
+                       "AdditionalInfo" : "none",
+                       "DatesOfBirth" : [
+                         {
+                           "DateOfBirth" : "10/04/60\nNATIONALITY: \nnone"
+                         }
+                       ],
+                       "PlacesOfBirth" : [
+                         {
+                           "PlacesOfBirth" : "BLOOMINGTON, INDIANA, USA"
+                         }
+                       ],
+                       "Hyperlinks" : [
+                         {
+                           "Hyperlink" : "none"
+                         }
+                       ],
+                       "UserData1" : "",
+                       "UserData2" : "",
+                       "Nationality" : "",
+                       "IsPEP" : "0",
+                       "IsFEP" : "0",
+                       "HideOnlyIDs" : [
+                         {
+                           "HideOnlyID" : ""
+                         }
+                       ],
+                       "HideIDs" : [
+
+                       ],
+                       "HideOrigins" : [
+
+                       ],
+                       "HideInTags" : [
+
+                       ],
+                       "HideUnits" : [
+
+                       ],
+                       "HideSenderReceivers" : [
+
+                       ]
+                     }
+                   }
+                 }
+               ],
+               "Actions" : [
+                 {
+                   "Action" : {
+                     "DateTime" : "20170522135200",
+                     "Operator" : "FFFFEED",
+                     "Comment" : "Suspect(s) detected by FircoSoft Filter",
+                     "Status" : {
+                       "ID" : "0",
+                       "Name" : "NEW",
+                       "RoutingCode" : "0",
+                       "Checksum" : "ed10e9af8ecdee8e303f4c95783757c6"
+                     }
+                   }
+                 },
+                 {
+                   "Action": {
+                     "DateTime": "20180827094707",
+                     "Operator": "patrick",
+                     "Comment": "",
+                     "Status": {
+                       "ID": "200",
+                       "Name": "COMMHUB",
+                       "RoutingCode": "12",
+                       "Checksum": "e185b730a2fa17693d8dd9846df5319b"
+                     }
+                   }
+                 }
+               ],
+               "CurrentStatus" : {
+                 "ID": "200",
+                 "Name": "COMMHUB",
+                 "RoutingCode": "12",
+                 "Checksum": "e185b730a2fa17693d8dd9846df5319b"
+               },
+               "NextStatuses" : [
+                 {
+                   "Status" : {
+                     "ID" : "4",
+                     "Name" : "Level 2-, FALSE1",
+                     "RoutingCode" : "12",
+                     "Checksum" : "dc44ae12825d619154b8a1dc8e09223b"
+                   }
+                 },
+                 {
+                   "Status" : {
+                     "ID" : "6",
+                     "Name" : "Level 2-, TRUE1",
+                     "RoutingCode" : "12",
+                     "Checksum" : "dc44ae12825d619154b8a1dc8e09223b"
+                   }
+                 },
+                 {
+                   "Status" : {
+                     "ID" : "8",
+                     "Name" : "Level 1-, SEAR_UNRESOLVED",
+                     "RoutingCode" : "12",
+                     "Checksum" : "dc44ae12825d619154b8a1dc8e09223b"
+                   }
+                 }
+               ]
+             }
+           }
+         ]
+      }
+   }
+}
