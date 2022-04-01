@@ -58,3 +58,5 @@ agents/*
 .coverage*
 dependencies/*
 postgres_scripts/*
+python-grpc-ssl/
+history.command

@@ -47,11 +47,17 @@ def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     add_AgentInputServiceServicer_to_server(AgentInputServiceServicer(), server)
     if args.ssl:
-        with open("tests/ssl/server-key.pem", "rb") as f:
+        with open("tests/ssl/ca.pem", "rb") as f:
+            list_cert = f.read()
+        with open("tests/ssl/uds-key.pem", "rb") as f:
             private_key = f.read()
-        with open("tests/ssl/server.pem", "rb") as f:
+        with open("tests/ssl/uds.pem", "rb") as f:
             certificate_chain = f.read()
-        server_credentials = grpc.ssl_server_credentials(((private_key, certificate_chain),))
+        server_credentials = grpc.ssl_server_credentials(
+            ((private_key, certificate_chain),),
+            root_certificates=list_cert,
+            require_client_auth=True,
+        )
         server.add_secure_port("localhost:50052", server_credentials)
     else:
         server.add_insecure_port("localhost:50052")
