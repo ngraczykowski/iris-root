@@ -2,7 +2,6 @@ package com.silenteight.agent.common.metrics;
 
 import com.silenteight.agent.common.metrics.micrometer.MicrometerRecorder;
 
-import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -18,8 +17,8 @@ public class MetricsConfiguration {
 
   @Bean
   public MicrometerRecorder micrometerRecorder(
-      MeterRegistry meterRegistry, @Value("${agents.commons.metrics.prefix}") String prefix) {
-    return new MicrometerRecorder(meterRegistry, prefix);
+      @Value("${agents.commons.metrics.prefix}") String prefix) {
+    return new MicrometerRecorder(prefix);
   }
 
   @Bean

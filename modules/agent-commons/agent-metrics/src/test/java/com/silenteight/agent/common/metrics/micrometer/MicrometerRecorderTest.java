@@ -25,7 +25,8 @@ class MicrometerRecorderTest {
   @BeforeEach
   void setUp() {
     registry = new SimpleMeterRegistry();
-    recorder = new MicrometerRecorder(registry, AGENT_PREFIX);
+    recorder = new MicrometerRecorder(AGENT_PREFIX);
+    recorder.bindTo(registry);
   }
 
   @Test

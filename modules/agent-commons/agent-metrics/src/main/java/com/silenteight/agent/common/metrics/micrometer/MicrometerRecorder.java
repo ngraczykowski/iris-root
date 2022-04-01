@@ -1,6 +1,5 @@
 package com.silenteight.agent.common.metrics.micrometer;
 
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import com.silenteight.agent.common.metrics.*;
@@ -15,8 +14,6 @@ import io.micrometer.core.lang.NonNull;
 import static com.silenteight.agent.common.metrics.micrometer.TagsMapper.map;
 import static java.lang.String.format;
 
-
-@AllArgsConstructor
 @NoArgsConstructor
 public class MicrometerRecorder implements MeterBinder, MetricsRecorder {
 
@@ -24,6 +21,10 @@ public class MicrometerRecorder implements MeterBinder, MetricsRecorder {
 
   private MeterRegistry registry;
   private String metricPrefix;
+
+  public MicrometerRecorder(String metricPrefix) {
+    this.metricPrefix = metricPrefix;
+  }
 
   @Override
   public void bindTo(@NonNull MeterRegistry registry) {
