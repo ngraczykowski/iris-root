@@ -74,11 +74,14 @@ def migrate_index(es_index, analysis_id):
 	cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 	cur.execute(CREATE_PARITION_TEMPLATE %(analysis_id, analysis_name));
 	rows = fetch_rows_for_simulation(es_index)
-	print("Starting migration for analysis_id: %s, there is rows: %s to be migrated" %(analysis_id, len(rows)))
+	print('Starting migration for analysis_id: %s, there is rows: %s to be migrated' %(analysis_id, len(rows)))
+	counter = 0
 	for row in rows:
 		migrate_row(row, analysis_name, cur)
+		counter = counter + 1
+		print('Percent of migrated rows for analysis: %s percent: %s' %(analysis_name, round((counter/len(rows)*100))), end="\r", flush=True)
 	conn.commit()
-	print("Migration for analysis_id: %s finished and number of rows: %s were migrated" %(analysis_id, len(rows)))
+	print('Migration for analysis_id: %s finished and number of rows: %s were migrated' %(analysis_id, len(rows)))
 
 def fetch_migrated_simulations():
 	cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
@@ -91,16 +94,19 @@ def was_partition_migrated(migrated_partitions, partition_to_migrate):
 	return any(partition['partition_name'] == partition_to_migrate for partition in migrated_partitions)
 
 if __name__ == '__main__':
+	print('Start fetching indices from ES')
 	response = requests.get(url = '%s/_cat/indices?format=json' %ES_ADDRESS, headers=AUTH_HEADER)
 	es_indicies = response.json()
+	print('Number of fetched indecies %s' %len(es_indicies))
 	migrated_simulations = fetch_migrated_simulations()
+	print('Number of migrated indecies %s' %len(migrated_simulations))
 	for es_index in es_indicies:
 		index_name = es_index['index']
 		if '_simulation_' in index_name:
 			analysis_id = index_name.split("_")[-1]
 			partition_name_to_migrate = '%s_%s' %(SIMULATION_TABLE_NAME, analysis_id)
 			if was_partition_migrated(migrated_simulations, partition_name_to_migrate):
-				print ("Partition %s exists in psql, migration is not needed" %partition_name_to_migrate)
+				print ('Partition %s exists in psql, migration is not needed' %partition_name_to_migrate)
 				continue
 			migrate_index(es_index, analysis_id)
 	print("All simulations were migrated")
