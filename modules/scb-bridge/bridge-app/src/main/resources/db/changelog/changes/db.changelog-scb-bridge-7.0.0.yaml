@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 7.0.0-1
+      author: ngraczykowski
+      comment: New columns with status and time of modification
+      changes:
+        - addColumn:
+            tableName: scb_batch_info
+            columns:
+              - column:
+                  name: batch_status
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: alert_count
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_at
+                  type: timestamp

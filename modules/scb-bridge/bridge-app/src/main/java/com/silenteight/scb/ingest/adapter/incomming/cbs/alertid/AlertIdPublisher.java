@@ -34,7 +34,7 @@ class AlertIdPublisher implements Consumer<AlertIdCollection> {
     var internalBatchId = InternalBatchIdGenerator.generate();
     var alertIdContext = toScbAlertIdContext(collection.getContext());
 
-    batchInfoService.store(internalBatchId, BatchSource.CBS);
+    batchInfoService.store(internalBatchId, BatchSource.CBS, collection.getSize());
     alertInFlightService.saveUniqueAlerts(
         collection.getAlertIds(), internalBatchId, alertIdContext);
     log.info(

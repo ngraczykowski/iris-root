@@ -4,10 +4,19 @@ import lombok.experimental.UtilityClass;
 
 import com.silenteight.scb.ingest.domain.model.BatchSource;
 
+import static com.silenteight.scb.ingest.domain.model.BatchStatus.REGISTERED;
+
 @UtilityClass
 public class BatchInfoMapper {
 
-  public BatchInfo toBatchInfoEntity(String internalBatchId, BatchSource batchSource) {
-    return new BatchInfo(internalBatchId, batchSource);
+  public BatchInfo toBatchInfoEntity(
+      String internalBatchId, BatchSource batchSource, int alertCount) {
+
+    return BatchInfo.builder()
+        .internalBatchId(internalBatchId)
+        .batchSource(batchSource)
+        .batchStatus(REGISTERED)
+        .alertCount(alertCount)
+        .build();
   }
 }

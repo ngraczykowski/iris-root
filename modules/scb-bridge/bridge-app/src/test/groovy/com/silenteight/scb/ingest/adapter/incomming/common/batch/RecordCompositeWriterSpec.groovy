@@ -26,7 +26,7 @@ class RecordCompositeWriterSpec extends Specification {
     createRecordWriter().write([])
 
     then:
-    1 * batchInfoService.store(_ as String, BatchSource.LEARNING)
+    1 * batchInfoService.store(_ as String, BatchSource.LEARNING, _)
     1 * ingestService.ingestAlertsForLearn(_ as String, _ as List<Alert>)
     1 * deltaService.updateDelta(_ as Map, deltaJobName)
   }

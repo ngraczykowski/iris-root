@@ -49,7 +49,7 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
 
     var internalBatchId = InternalBatchIdGenerator.generate();
     rawAlertService.store(internalBatchId, alerts);
-    batchInfoService.store(internalBatchId, GNS_RT);
+    batchInfoService.store(internalBatchId, GNS_RT, alerts.size());
 
     var registrationBatchContext = new RegistrationBatchContext(HIGH, GNS_RT);
     var registrationResponse =

@@ -45,7 +45,7 @@ class IngestBatchEventRabbitPublisher implements IngestBatchEventPublisher {
   }
 
   private Message createMessage(IngestBatchMessage batchMessage) {
-    var orderJson = converter.serializeFromObjectToJson(batchMessage)
+    var orderJson = converter.serializeFromObjectToJson(batchMessage.event())
         .getOrElseThrow(IngestJsonMessageException::new);
     return MessageBuilder
         .withBody(orderJson.getBytes())

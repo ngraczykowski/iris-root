@@ -1,10 +1,12 @@
 package com.silenteight.scb.outputrecommendation.adapter.incoming
 
-import com.silenteight.scb.outputrecommendation.domain.OutputRecommendationFacade
 import com.silenteight.proto.registration.api.v1.MessageBatchCompleted
+import com.silenteight.scb.outputrecommendation.domain.OutputRecommendationFacade
 
 import spock.lang.Specification
 import spock.lang.Subject
+
+import static com.silenteight.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator.generate
 
 class BatchCompletedRabbitAmqpListenerSpec extends Specification {
 
@@ -16,8 +18,9 @@ class BatchCompletedRabbitAmqpListenerSpec extends Specification {
 
   def "should call output recommendation facade with mapped command"() {
     given:
+    def batchId = generate()
     def message = MessageBatchCompleted.newBuilder()
-        .setBatchId("some-batch-id")
+        .setBatchId(batchId)
         .setAnalysisName("some-analysis-id")
         .setBatchMetadata("some-metadata")
         .build()

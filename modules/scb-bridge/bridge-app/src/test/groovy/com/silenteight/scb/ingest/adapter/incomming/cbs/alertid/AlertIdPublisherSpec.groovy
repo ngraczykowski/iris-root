@@ -28,7 +28,7 @@ class AlertIdPublisherSpec extends Specification {
     objectUnderTest.accept(new AlertIdCollection(someAlertIds, context))
 
     then:
-    1 * batchInfoService.store(_ as String, BatchSource.CBS)
+    1 * batchInfoService.store(_ as String, BatchSource.CBS, 2)
     1 * alertInFlightService.saveUniqueAlerts(someAlertIds, _ as String, _ as ScbAlertIdContext)
     1 * ingestBatchEventPublisher.publish(_ as IngestBatchMessage)
   }

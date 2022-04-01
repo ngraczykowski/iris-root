@@ -71,7 +71,7 @@ class GnsRtRecommendationUseCaseImplSpec extends Specification {
         .verifyComplete()
 
     1 * rawAlertService.store(_, fixtures.alerts)
-    1 * batchInfoService.store(_, _ as BatchSource)
+    1 * batchInfoService.store(_, _ as BatchSource, fixtures.alerts.size())
     1 * registrationFacade.registerSolvingAlerts(
         _, fixtures.alerts, new RegistrationBatchContext(Priority.HIGH, BatchSource.GNS_RT))
         >> RegistrationResponse.empty()

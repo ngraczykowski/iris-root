@@ -17,7 +17,7 @@ class LearningRecordCompositeWriter extends RecordCompositeWriter {
 
   protected void writeAlerts(List<? extends AlertComposite> items) {
     var internalBatchId = InternalBatchIdGenerator.generate();
-    batchInfoService.store(internalBatchId, BatchSource.LEARNING);
+    batchInfoService.store(internalBatchId, BatchSource.LEARNING, items.size());
     var alerts = items.stream()
         .map(AlertComposite::getAlert)
         .toList();
