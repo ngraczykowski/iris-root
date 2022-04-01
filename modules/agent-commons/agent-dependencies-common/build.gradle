@@ -31,7 +31,7 @@ ext {
   guavaVersion = "30.1.1-jre"
   jakartaElVersion = "3.0.3"
   jakartaMailVersion = "1.6.5"
-  netDevhGrpcSpringBootStarterVersion = "2.13.0.RELEASE"
+  netDevhGrpcSpringBootStarterVersion = "2.13.1.RELEASE"
   restAssuredVersion = "4.4.0"
   sentryVersion = "5.6.0"
 }
@@ -48,9 +48,9 @@ dependencies {
   api platform("io.micrometer:micrometer-bom:1.6.7")
   api platform("com.google.protobuf:protobuf-bom:3.17.3")
   api platform("org.spockframework:spock-bom:2.0-groovy-3.0")
-  api platform("org.springframework.boot:spring-boot-dependencies:2.5.7")
-  api platform("org.springframework.cloud:spring-cloud-dependencies:2020.0.5")
-  api platform("org.springframework.cloud:spring-cloud-consul-discovery:3.0.4")
+  api platform("org.springframework.boot:spring-boot-dependencies:2.6.6")
+  api platform("org.springframework.cloud:spring-cloud-dependencies:2021.0.1")
+  api platform("org.springframework.cloud:spring-cloud-consul-discovery:3.1.0")
   api platform("io.sentry:sentry-bom:$sentryVersion")
 
   // Keep each group sorted alphabetically.
