@@ -35,8 +35,8 @@ spring:
   # RABBITMQ
   rabbitmq:
     port: 24130
-    username: serp
-    password: serp
+    username: scb
+    password: scb
     listener:
       simple:
         max-concurrency: 10
@@ -188,12 +188,12 @@ amqp:
   ingest:
     incoming:
       batch-processing:
-        exchange-name: batch-processing-exchange
-        queue-name: batch-processing-queue
+        exchange-name: scb-bridge.batch-processing-exchange
+        queue-name: scb-bridge.batch-processing-queue
   feeding:
     outgoing:
       match-feature-input-set-fed:
-        exchange-name: match-feature-input-set-fed-exchange
+        exchange-name: core-bridge.match-feature-input-set-fed-exchange
 
   output-recommendation:
     number-of-retries-dead-messages: 2
