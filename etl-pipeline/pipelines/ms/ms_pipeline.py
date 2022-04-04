@@ -281,6 +281,9 @@ class MSPipeline(ETLPipeline):
 
             for match in matches:
                 config = self.get_key(payload, match, yaml_conf)
+                import pdb
+
+                pdb.set_trace()
                 self.engine.sql_to_merge_specific_columns_to_standardized(
                     agent_input_prepended_agent_name_config,
                     match,
@@ -292,7 +295,10 @@ class MSPipeline(ETLPipeline):
                     {
                         key: self.flatten(match.get(key))
                         for key in match
-                        if key.endswith("_ap") or key.endswith("_wl") or key.endswith("_name")
+                        if key.endswith("_ap")
+                        or key.endswith("_wl")
+                        or key.endswith("_name")
+                        or key.endswith("_aliases")
                     }
                 )
                 self.engine.sql_to_merge_specific_columns_to_standardized(
