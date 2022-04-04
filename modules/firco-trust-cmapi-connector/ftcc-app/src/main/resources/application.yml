@@ -57,6 +57,7 @@ ftcc:
     mappings:
       NEW:
         - "PENDING"
+        - "NEW"
       SOLVED_FALSE_POSITIVE:
         - "FALSE_POSITIVE"
       SOLVED_TRUE_POSITIVE:
