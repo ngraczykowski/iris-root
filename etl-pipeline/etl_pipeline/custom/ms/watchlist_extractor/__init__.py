@@ -91,21 +91,28 @@ class WatchlistExtractor:
         return result
 
     def extract_wl_data_by_path(self, record, field1, field2):
-        result = []
-        entry_list = []
         entry = record.get("entity", {}).get(
             field1, {}
         )  # returning [] by get can cause error in next line
         try:
             destination = entry.get(field2, "")
         except AttributeError:
-            destination = []
-            pass
+            if isinstance(entry, list):
+                results = [self.extract_single_array_element(dest[field2]) for dest in entry]
+                return results
+            else:
+                return []
+        return self.extract_single_array_element(destination)
+
+    def extract_single_array_element(self, destination):
+        result = []
+        entry_list = []
         if isinstance(destination, list):
             entry_list.extend(destination)
         else:
             entry_list.append(destination)
         data_item_list = self.as_list(entry_list)
+
         for item in data_item_list:
             if type(item) is dict:
                 result.append(item.get("#text", item.get("text")))

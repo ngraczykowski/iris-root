@@ -1,3 +1,0 @@
-[submodule "etl-pipeline-api"]
-	path = etl-pipeline-api
-	url = ../etl-pipeline-api

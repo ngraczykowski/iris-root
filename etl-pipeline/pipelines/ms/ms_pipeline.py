@@ -281,9 +281,7 @@ class MSPipeline(ETLPipeline):
 
             for match in matches:
                 config = self.get_key(payload, match, yaml_conf)
-                import pdb
 
-                pdb.set_trace()
                 self.engine.sql_to_merge_specific_columns_to_standardized(
                     agent_input_prepended_agent_name_config,
                     match,

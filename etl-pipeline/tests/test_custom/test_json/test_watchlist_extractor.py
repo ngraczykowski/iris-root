@@ -46,3 +46,12 @@ def test_watchlist_extractor(match_record, updated_match_record_with_wl_values):
 def test_extract_dob(match_record, updated_match_record_with_wl_values):
     result = WatchlistExtractor().extract_dob(match_record)
     assert result == updated_match_record_with_wl_values
+
+
+@pytest.mark.parametrize(
+    ("match_record", "updated_match_record_with_wl_values"),
+    [({"entity": {"aliases": [{"alias": "JJ", "type": "ok", "category": "nok"}]}}, [["JJ"]])],
+)
+def test_extract_alias(match_record, updated_match_record_with_wl_values):
+    result = WatchlistExtractor().extract_wl_data_by_path(match_record, "aliases", "alias")
+    assert result == updated_match_record_with_wl_values
