@@ -150,19 +150,19 @@ job "scb-bridge" {
         "gRPC.port=${NOMAD_PORT_grpc}",
         "gRPC_port=${NOMAD_PORT_grpc}",
       ]
-    }
 
-    check_restart {
-      limit           = 3
-      grace           = "90s"
-      ignore_warnings = false
-    }
+#     check_restart {
+#       limit           = 3
+#       grace           = "90s"
+#       ignore_warnings = false
+#     }
 
-    check {
-      name     = "gRPC Port Alive Check"
-      type     = "tcp"
-      interval = "30s"
-      timeout  = "10s"
+      check {
+        name     = "gRPC Port Alive Check"
+        type     = "tcp"
+        interval = "30s"
+        timeout  = "10s"
+      }
     }
 
     service {
