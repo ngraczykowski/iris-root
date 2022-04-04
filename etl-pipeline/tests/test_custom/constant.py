@@ -159,7 +159,7 @@ EXAMPLES = [
             "ENTITY_ID": "908043",
             "ENTITY_VERSION": "20150505194929",
             "WL_NAME": "Joe Ding",
-            "WL_DOB": ["MAY 6, 1981", "//"],
+            "WL_DOB": ["MAY 6, 1981", ""],
             "WL_ENTITYTYPE": "03",
             "WL_COUNTRY": None,
             "WL_COUNTRY_NAME": None,

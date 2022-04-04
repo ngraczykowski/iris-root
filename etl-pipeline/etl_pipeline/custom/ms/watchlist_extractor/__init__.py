@@ -28,7 +28,7 @@ class WatchlistExtractor:
                 dmy[1] = v
             elif k.upper() == "D":
                 dmy[0] = v
-            elif k == "S8_extracted_value":
+            elif k == "S8_extracted_value" or k == "dob":
                 if " TO " in v.upper():
                     date_range.extend(sorted(re.findall(r"\d\d\d\d", v), key=lambda x: int(x)))
                 else:
@@ -41,26 +41,20 @@ class WatchlistExtractor:
         result = []
         entity = record.get("entity", {})
         dobs = entity.get("dobs", [])
-        try:
-            dob = dobs[0]
-        except IndexError:
-            dob = {}
-        except KeyError:
-            dob = dobs
-
-        if isinstance(dob, str):
-            return [dob]
-        if isinstance(dob, list):
-            return dob
-        if dob is None:
+        if isinstance(dobs, str):
+            return [dobs]
+        if not dobs:
             return []
-        if isinstance(dob, dict):
-            result, date_range, dmy = self.parse_dob_dict(dob)
-            result.append("/".join(dmy))
-            if len(date_range) == 2:
-                result.extend(
-                    [str(elem) for elem in range(int(date_range[0]), int(date_range[-1]) + 1)]
-                )
+        if not isinstance(dobs, list):
+            dobs = [dobs]
+        if isinstance(dobs[0], dict):
+            for dob in dobs:
+                result, date_range, dmy = self.parse_dob_dict(dob)
+                result.append("/".join([str(i) for i in dmy if i]))
+                if len(date_range) == 2:
+                    result.extend(
+                        [str(elem) for elem in range(int(date_range[0]), int(date_range[-1]) + 1)]
+                    )
             return result
         return ""
 
@@ -97,21 +91,28 @@ class WatchlistExtractor:
         return result
 
     def extract_wl_data_by_path(self, record, field1, field2):
-        result = []
-        entry_list = []
         entry = record.get("entity", {}).get(
             field1, {}
         )  # returning [] by get can cause error in next line
         try:
             destination = entry.get(field2, "")
         except AttributeError:
-            destination = []
-            pass
+            if isinstance(entry, list):
+                results = [self.extract_single_array_element(dest[field2]) for dest in entry]
+                return results
+            else:
+                return []
+        return self.extract_single_array_element(destination)
+
+    def extract_single_array_element(self, destination):
+        result = []
+        entry_list = []
         if isinstance(destination, list):
             entry_list.extend(destination)
         else:
             entry_list.append(destination)
         data_item_list = self.as_list(entry_list)
+
         for item in data_item_list:
             if type(item) is dict:
                 result.append(item.get("#text", item.get("text")))

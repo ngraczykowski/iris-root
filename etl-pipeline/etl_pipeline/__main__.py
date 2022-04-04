@@ -5,7 +5,10 @@ import grpc
 
 import etl_pipeline.service.proto.api.etl_pipeline_pb2 as etl__pipeline__pb2
 from etl_pipeline.config import service_config
+from etl_pipeline.logger import get_logger
 from etl_pipeline.service.servicer import EtlPipelineServiceServicer
+
+logger = get_logger("main", "ms_pipeline.log")
 
 
 def add_EtlPipelineServiceServicer_to_server(servicer, server):

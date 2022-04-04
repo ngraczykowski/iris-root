@@ -17,7 +17,7 @@ from silenteight.datasource.api.location.v1.location_pb2 import LocationFeatureI
 
 from etl_pipeline.config import pipeline_config, service_config
 
-logger = logging.getLogger("ETL pipeline")
+logger = logging.getLogger("main").getChild("agent_input_creator")
 cn = pipeline_config.cn
 
 

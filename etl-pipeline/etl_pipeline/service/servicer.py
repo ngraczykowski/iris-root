@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import List
 
 import etl_pipeline.service.proto.api.etl_pipeline_pb2 as etl__pipeline__pb2
-from etl_pipeline.config import pipeline_config
+from etl_pipeline.config import pipeline_config, service_config
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.data_processor_engine.json_engine.json_engine import JsonProcessingEngine
 from etl_pipeline.service.agent_router import AgentInputCreator
@@ -44,12 +44,12 @@ engine = JsonProcessingEngine(pipeline_config)
 pipeline = WmAddressMSPipeline(engine, pipeline_config)
 
 
-logger = logging.getLogger("__main__")
+logger = logging.getLogger("main").getChild("servicer")
 
 
 class EtlPipelineServiceServicer(object):
     router = AgentInputCreator()  # cannot pass to __init__
-    pool = futures.ProcessPoolExecutor(max_workers=10)
+    pool = futures.ProcessPoolExecutor(max_workers=service_config.PROCESSES)
 
     def __init__(self, ssl) -> None:
         EtlPipelineServiceServicer.router.initialize(ssl)

@@ -51,18 +51,8 @@ job "etl-pipeline" {
       }
 
       template {
-        data        = file("../config/agents/agents_input_WM_ADDRESS.yaml")
-        destination = "local/config/agents/agents_input_WM_ADDRESS.yaml"
-      }
-
-      template {
-        data        = file("../config/agents/agents_input_ISG_Weekly_Account.yaml")
-        destination = "local/config/agents/agents_input_ISG_Weekly_Account.yaml"
-      }
-
-      template {
-        data        = file("../config/agents/agents_input_WM_Party.yaml")
-        destination = "local/config/agents/agents_input_WM_Party.yaml"
+        data        = file("../config/agents/agents.yaml")
+        destination = "local/config/agents/agents.yaml"
       }
 
       template {

@@ -20,6 +20,8 @@ name_agent:
   - ALL_CONNECTED_PARTIES_NAMES
   - ALL_CONNECTED_ACCOUNT_NAMES
   - ALL_CONNECTED_ACCOUNT_BENEFICIARY_NAMES
+  wl_aliases:
+  - ALL_CONNECTED_PARTY_NAMES
   wl:
   - watchlistParty.matchRecords.WL_NAME
   - watchlistParty.matchRecords.WL_ALIASES
@@ -94,5 +96,4 @@ residency_agent:
   - watchlistParty.matchRecords.WL_COUNTRYNAME
 
 hit_type_agent:
-  ap: []
-  wl: []
+  []

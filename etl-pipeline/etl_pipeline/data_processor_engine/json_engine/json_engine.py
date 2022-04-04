@@ -9,7 +9,7 @@ from etl_pipeline.config import Pipeline, pipeline_config
 from etl_pipeline.custom.ms.trigger_discovery.discoverer import TriggeredTokensDiscoverer
 from etl_pipeline.data_processor_engine.engine.engine import ProcessingEngine
 
-logger = logging.getLogger("ETL pipeline")
+logger = logging.getLogger("main").getChild("engine")
 cn = pipeline_config.cn
 COLLECTIVE_REPRESENTATION_MAP_FOR_PARTY = {
     cn.ALL_CONNECTED_PARTIES_NAMES: cn.CONNECTED_FULL_NAME,
