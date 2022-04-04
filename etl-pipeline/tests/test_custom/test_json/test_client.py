@@ -38,49 +38,55 @@ def load_alert(filepath: str = "notebooks/sample/wm_address_in_payload_format.js
     return alert
 
 
-class TestGrpcServer(unittest.TestCase):
+class BaseGrpcTestCase:
+    class TestGrpcServer(unittest.TestCase):
+        @classmethod
+        def tearDownClass(cls):
+            process = subprocess.Popen("scripts/kill_services.sh")
+            process.wait()
+
+        def test_ok_flow(self):
+            alert = load_alert()
+
+            response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[alert]))
+            for alert in response.etl_alerts:
+                assert alert.etl_status == SUCCESS
+
+        def test_cross_input_match_records(self):
+            alert = load_alert(
+                "notebooks/sample/wm_address_in_payload_format_2_input_3_match_records.json"
+            )
+            response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[alert]))
+
+            for alert in response.etl_alerts:
+                assert alert.etl_status == SUCCESS
+
+        def test_wm_party(self):
+            alert = load_alert("notebooks/sample/wm_party_in_payload_format.json")
+            response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[alert]))
+            for alert in response.etl_alerts:
+                assert alert.etl_status == SUCCESS
+
+        def test_wrong_alert_name(self):
+            alert = load_alert()
+            alert.matches[0].match_name = "2"
+            response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[alert]))
+            assert response.etl_alerts[0].etl_status == FAILURE
+
+        def test_empty_flow(self):
+
+            response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[]))
+            assert [i for i in response.etl_alerts] == []
+
+
+class TestGrpcServerWithoutSSL(BaseGrpcTestCase.TestGrpcServer):
+    stub = None
+
     @classmethod
     def setUpClass(cls):
+        cls.tearDownClass()
         environment = os.environ.copy()
         subprocess.Popen("scripts/start_services.sh", env=environment)
         channel = grpc.insecure_channel("localhost:9090")
-        TestGrpcServer.stub = EtlPipelineServiceStub(channel)
+        TestGrpcServerWithoutSSL.stub = EtlPipelineServiceStub(channel)
         time.sleep(1)
-
-    @classmethod
-    def tearDownClass(cls):
-        process = subprocess.Popen("scripts/kill_services.sh")
-        process.wait()
-
-    def test_ok_flow(self):
-        alert = load_alert()
-
-        response = TestGrpcServer.stub.RunEtl(RunEtlRequest(alerts=[alert]))
-        for alert in response.etl_alerts:
-            assert alert.etl_status == SUCCESS
-
-    def test_cross_input_match_records(self):
-        alert = load_alert(
-            "notebooks/sample/wm_address_in_payload_format_2_input_3_match_records.json"
-        )
-        response = TestGrpcServer.stub.RunEtl(RunEtlRequest(alerts=[alert]))
-
-        for alert in response.etl_alerts:
-            assert alert.etl_status == SUCCESS
-
-    def test_wm_party(self):
-        alert = load_alert("notebooks/sample/wm_party_in_payload_format.json")
-        response = TestGrpcServer.stub.RunEtl(RunEtlRequest(alerts=[alert]))
-        for alert in response.etl_alerts:
-            assert alert.etl_status == SUCCESS
-
-    def test_wrong_alert_name(self):
-        alert = load_alert()
-        alert.matches[0].match_name = "2"
-        response = TestGrpcServer.stub.RunEtl(RunEtlRequest(alerts=[alert]))
-        assert response.etl_alerts[0].etl_status == FAILURE
-
-    def test_empty_flow(self):
-
-        response = TestGrpcServer.stub.RunEtl(RunEtlRequest(alerts=[]))
-        assert [i for i in response.etl_alerts] == []
