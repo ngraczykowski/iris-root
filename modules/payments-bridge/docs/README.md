@@ -47,5 +47,7 @@ Historical decision
  - DIN20220103070716-46631-31678
  - DIN20220128012827-15302-320
 
+## Using additional CMAPI examples
+To use additional jsons during tests unzip docs/api/svb-examples/additional-examples.zip in default location.
 
 

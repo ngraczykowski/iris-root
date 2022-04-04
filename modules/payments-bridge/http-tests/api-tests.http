@@ -119,3 +119,903 @@ Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 < ../docs/api/hq-messages/GTEX-246c7acb-6b30-2bb9-1293-1c1b5fdae089.json
+
+### Post test alert 2022_03_24_1.json
+// 2022_03_24_1.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_1.json
+
+### Post test alert 2022_03_24_2.json
+// 2022_03_24_2.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_2.json
+
+### Post test alert 2022_03_24_3.json
+// 2022_03_24_3.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_3.json
+
+### Post test alert 2022_03_24_4.json
+// 2022_03_24_4.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_4.json
+
+### Post test alert 2022_03_24_5.json
+// 2022_03_24_5.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_5.json
+
+### Post test alert 2022_03_24_6.json
+// 2022_03_24_6.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_6.json
+
+### Post test alert 2022_03_24_7.json
+// 2022_03_24_7.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_7.json
+
+### Post test alert 2022_03_24_8.json
+// 2022_03_24_8.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_8.json
+
+### Post test alert 2022_03_24_9.json
+// 2022_03_24_9.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_9.json
+
+### Post test alert 2022_03_24_10.json
+// 2022_03_24_10.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_10.json
+
+### Post test alert 2022_03_24_11.json
+// 2022_03_24_11.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_11.json
+
+### Post test alert 2022_03_24_12.json
+// 2022_03_24_12.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_12.json
+
+### Post test alert 2022_03_24_13.json
+// 2022_03_24_13.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_13.json
+
+### Post test alert 2022_03_24_14.json
+// 2022_03_24_14.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_14.json
+
+### Post test alert 2022_03_24_15.json
+// 2022_03_24_15.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_15.json
+
+### Post test alert 2022_03_24_16.json
+// 2022_03_24_16.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_16.json
+
+### Post test alert 2022_03_24_17.json
+// 2022_03_24_17.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_17.json
+
+### Post test alert 2022_03_24_18.json
+// 2022_03_24_18.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_18.json
+
+### Post test alert 2022_03_24_19.json
+// 2022_03_24_19.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_19.json
+
+### Post test alert 2022_03_24_20.json
+// 2022_03_24_20.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_20.json
+
+### Post test alert 2022_03_24_21.json
+// 2022_03_24_21.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_21.json
+
+### Post test alert 2022_03_24_22.json
+// 2022_03_24_22.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_22.json
+
+### Post test alert 2022_03_24_23.json
+// 2022_03_24_23.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_23.json
+
+### Post test alert 2022_03_24_24.json
+// 2022_03_24_24.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_24.json
+
+### Post test alert 2022_03_24_25.json
+// 2022_03_24_25.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_25.json
+
+### Post test alert 2022_03_24_26.json
+// 2022_03_24_26.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_26.json
+
+### Post test alert 2022_03_24_27.json
+// 2022_03_24_27.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_27.json
+
+### Post test alert 2022_03_24_28.json
+// 2022_03_24_28.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_28.json
+
+### Post test alert 2022_03_24_29.json
+// 2022_03_24_29.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_29.json
+
+### Post test alert 2022_03_24_30.json
+// 2022_03_24_30.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_30.json
+
+### Post test alert 2022_03_24_31.json
+// 2022_03_24_31.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_31.json
+
+### Post test alert 2022_03_24_32.json
+// 2022_03_24_32.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_32.json
+
+### Post test alert 2022_03_24_33.json
+// 2022_03_24_33.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_33.json
+
+### Post test alert 2022_03_24_34.json
+// 2022_03_24_34.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_34.json
+
+### Post test alert 2022_03_24_35.json
+// 2022_03_24_35.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_35.json
+
+### Post test alert 2022_03_24_36.json
+// 2022_03_24_36.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_36.json
+
+### Post test alert 2022_03_24_37.json
+// 2022_03_24_37.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_37.json
+
+### Post test alert 2022_03_24_38.json
+// 2022_03_24_38.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_38.json
+
+### Post test alert 2022_03_24_39.json
+// 2022_03_24_39.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_39.json
+
+### Post test alert 2022_03_24_40.json
+// 2022_03_24_40.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_40.json
+
+### Post test alert 2022_03_24_41.json
+// 2022_03_24_41.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_41.json
+
+### Post test alert 2022_03_24_42.json
+// 2022_03_24_42.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_42.json
+
+### Post test alert 2022_03_24_43.json
+// 2022_03_24_43.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_43.json
+
+### Post test alert 2022_03_24_44.json
+// 2022_03_24_44.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_44.json
+
+### Post test alert 2022_03_24_45.json
+// 2022_03_24_45.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_45.json
+
+### Post test alert 2022_03_24_46.json
+// 2022_03_24_46.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_46.json
+
+### Post test alert 2022_03_24_47.json
+// 2022_03_24_47.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_47.json
+
+### Post test alert 2022_03_24_48.json
+// 2022_03_24_48.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_48.json
+
+### Post test alert 2022_03_24_49.json
+// 2022_03_24_49.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_49.json
+
+### Post test alert 2022_03_24_50.json
+// 2022_03_24_50.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_50.json
+
+### Post test alert 2022_03_24_51.json
+// 2022_03_24_51.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_51.json
+
+### Post test alert 2022_03_24_52.json
+// 2022_03_24_52.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_52.json
+
+### Post test alert 2022_03_24_53.json
+// 2022_03_24_53.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_53.json
+
+### Post test alert 2022_03_24_54.json
+// 2022_03_24_54.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_54.json
+
+### Post test alert 2022_03_24_55.json
+// 2022_03_24_55.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_55.json
+
+### Post test alert 2022_03_24_56.json
+// 2022_03_24_56.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_56.json
+
+### Post test alert 2022_03_24_57.json
+// 2022_03_24_57.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_57.json
+
+### Post test alert 2022_03_24_58.json
+// 2022_03_24_58.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_58.json
+
+### Post test alert 2022_03_24_59.json
+// 2022_03_24_59.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_59.json
+
+### Post test alert 2022_03_24_60.json
+// 2022_03_24_60.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_60.json
+
+### Post test alert 2022_03_24_61.json
+// 2022_03_24_61.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_61.json
+
+### Post test alert 2022_03_24_62.json
+// 2022_03_24_62.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_62.json
+
+### Post test alert 2022_03_24_63.json
+// 2022_03_24_63.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_63.json
+
+### Post test alert 2022_03_24_64.json
+// 2022_03_24_64.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_64.json
+
+### Post test alert 2022_03_24_65.json
+// 2022_03_24_65.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_65.json
+
+### Post test alert 2022_03_24_66.json
+// 2022_03_24_66.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_66.json
+
+### Post test alert 2022_03_24_67.json
+// 2022_03_24_67.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_67.json
+
+### Post test alert 2022_03_24_68.json
+// 2022_03_24_68.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_68.json
+
+### Post test alert 2022_03_24_69.json
+// 2022_03_24_69.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_69.json
+
+### Post test alert 2022_03_24_70.json
+// 2022_03_24_70.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_70.json
+
+### Post test alert 2022_03_24_71.json
+// 2022_03_24_71.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_71.json
+
+### Post test alert 2022_03_24_72.json
+// 2022_03_24_72.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_72.json
+
+### Post test alert 2022_03_24_73.json
+// 2022_03_24_73.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_73.json
+
+### Post test alert 2022_03_24_74.json
+// 2022_03_24_74.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_74.json
+
+### Post test alert 2022_03_24_75.json
+// 2022_03_24_75.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_75.json
+
+### Post test alert 2022_03_24_76.json
+// 2022_03_24_76.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_76.json
+
+### Post test alert 2022_03_24_77.json
+// 2022_03_24_77.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_77.json
+
+### Post test alert 2022_03_24_78.json
+// 2022_03_24_78.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_78.json
+
+### Post test alert 2022_03_24_79.json
+// 2022_03_24_79.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_79.json
+
+### Post test alert 2022_03_24_80.json
+// 2022_03_24_80.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_80.json
+
+### Post test alert 2022_03_24_81.json
+// 2022_03_24_81.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_81.json
+
+### Post test alert 2022_03_24_82.json
+// 2022_03_24_82.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_82.json
+
+### Post test alert 2022_03_24_83.json
+// 2022_03_24_83.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_83.json
+
+### Post test alert 2022_03_24_84.json
+// 2022_03_24_84.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_84.json
+
+### Post test alert 2022_03_24_85.json
+// 2022_03_24_85.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_85.json
+
+### Post test alert 2022_03_24_86.json
+// 2022_03_24_86.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_86.json
+
+### Post test alert 2022_03_24_87.json
+// 2022_03_24_87.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_87.json
+
+### Post test alert 2022_03_24_88.json
+// 2022_03_24_88.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_88.json
+
+### Post test alert 2022_03_24_89.json
+// 2022_03_24_89.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_89.json
+
+### Post test alert 2022_03_24_90.json
+// 2022_03_24_90.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_90.json
+
+### Post test alert 2022_03_24_91.json
+// 2022_03_24_91.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_91.json
+
+### Post test alert 2022_03_24_92.json
+// 2022_03_24_92.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_92.json
+
+### Post test alert 2022_03_24_93.json
+// 2022_03_24_93.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_93.json
+
+### Post test alert 2022_03_24_94.json
+// 2022_03_24_94.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_94.json
+
+### Post test alert 2022_03_24_95.json
+// 2022_03_24_95.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_95.json
+
+### Post test alert 2022_03_24_96.json
+// 2022_03_24_96.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_96.json
+
+### Post test alert 2022_03_24_97.json
+// 2022_03_24_97.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_97.json
+
+### Post test alert 2022_03_24_98.json
+// 2022_03_24_98.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_98.json
+
+### Post test alert 2022_03_24_99.json
+// 2022_03_24_99.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_99.json
+
+### Post test alert 2022_03_24_100.json
+// 2022_03_24_100.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/additional-examples/2022_03_24_100.json
