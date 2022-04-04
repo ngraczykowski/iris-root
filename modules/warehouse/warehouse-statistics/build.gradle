@@ -7,16 +7,20 @@ description = "Warehouse Statistics Data"
 
 configurations {
   implementation.extendsFrom starterCommon
+  implementation.extendsFrom starterDatabase
 
+  runtimeOnly.extendsFrom starterDatabaseRuntime
+
+  testImplementation.extendsFrom starterCommon
   testImplementation.extendsFrom starterSpringTest
 }
 
 dependencies {
   implementation project(":warehouse-common")
+  implementation project(":warehouse-db-changelog")
   implementation libraries.silenteight_sep_base_common
   implementation libraries.spring_security_config
 
   testImplementation project(":warehouse-common-testing")
-
   testFixturesImplementation testFixtures(project(':warehouse-common'))
 }
