@@ -19,7 +19,7 @@ import static java.util.List.of;
 @RequiredArgsConstructor
 public class DateFeature implements FabFeature {
 
-  static final String FEATURE_NAME = "features/dateOfBirth";
+  static final String FEATURE_NAME = "features/date";
   private static final String JSON_PATH = "$.HittedEntity.DatesOfBirth[*].DateOfBirth";
 
   private final ParseContext parseContext;
