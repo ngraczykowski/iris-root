@@ -1,23 +1,23 @@
 server:
-  port: { { env "NOMAD_PORT_http" } }
+  port: {{ env "NOMAD_PORT_http" }}
 
 grpc:
   server:
-    port: { { env "NOMAD_PORT_grpc" } }
+    port: {{ env "NOMAD_PORT_grpc" }}
   client:
     recommendation.address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-core-bridge
     registration.address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-core-bridge
     universal-data-source.address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-universal-data-source
 
 spring:
-  { { $nomad_namespace := env "NOMAD_NAMESPACE" } }
-    { { with service (print $nomad_namespace "-scb-bridge-db") } }
+  {{ $nomad_namespace := env "NOMAD_NAMESPACE" }}
+    {{ with service (print $nomad_namespace "-scb-bridge-db") }}
     datasource.url: jdbc:postgresql://{{ (index . 0).Address }}:{{ (index . 0).Port }}/{{ env "NOMAD_NAMESPACE" }}-scb-bridge
-    { { end - } }
+    {{ end -}}
     rabbitmq:
-      addresses: { { range $index, $rabbit := service "amqp.rabbitmq" - } }
-        { { if $index } },{ { end - } }
-        { { $rabbit.Address } }:{{ $rabbit.Port -}}
+      addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
+        {{ if $index }},{{ end -}}
+        {{ $rabbit.Address }}:{{ $rabbit.Port -}}
     {{- end }}
     # NOTE(ahaczewski): Intentionally left empty.
     host:
@@ -50,7 +50,7 @@ management:
     web:
       base-path: /management
       exposure:
-        include: [ "health", "info", "liquibase", "metrics", "prometheus", "loggers" ]
+        include: ["health", "info", "liquibase", "metrics", "prometheus", "loggers"]
 
 ### REGISTRATION
 registration:
