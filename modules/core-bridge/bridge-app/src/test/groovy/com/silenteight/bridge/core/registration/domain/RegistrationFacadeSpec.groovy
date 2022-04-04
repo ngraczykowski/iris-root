@@ -7,7 +7,9 @@ import com.silenteight.bridge.core.registration.domain.command.MarkAlertsAsDeliv
 import com.silenteight.bridge.core.registration.domain.command.MarkAlertsAsRecommendedCommand
 import com.silenteight.bridge.core.registration.domain.command.VerifyBatchTimeoutCommand
 import com.silenteight.bridge.core.registration.domain.model.Alert
-import com.silenteight.bridge.core.registration.domain.model.BatchPriority
+import com.silenteight.bridge.core.registration.domain.model.Batch
+import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
+import com.silenteight.bridge.core.registration.domain.model.BatchPriorityWithStatus
 
 import spock.lang.Specification
 import spock.lang.Subject
@@ -54,13 +56,13 @@ class RegistrationFacadeSpec extends Specification {
     given:
     def registerAlertsCommand = RegistrationFixtures.REGISTER_ALERTS_COMMAND
     def alert = Alert.builder().batchId('batch_id').build()
-    def batchPriority = new BatchPriority(RegistrationFixtures.BATCH_PRIORITY)
+    def batchPriority = new BatchPriorityWithStatus(RegistrationFixtures.BATCH_PRIORITY, BatchStatus.STORED)
 
     when:
     def response = underTest.registerAlertsAndMatches(registerAlertsCommand)
 
     then:
-    1 * batchService.findBatchPriority(registerAlertsCommand.batchId()) >> batchPriority
+    1 * batchService.findPendingBatch(registerAlertsCommand.batchId()) >> batchPriority
     1 * alertService.registerAlertsAndMatches(registerAlertsCommand, _ as Integer) >> [alert]
     response.size() == 1
   }
@@ -91,7 +93,7 @@ class RegistrationFacadeSpec extends Specification {
     1 * batchService.findBatchByAnalysisName(RegistrationFixtures.ANALYSIS_NAME) >>
         RegistrationFixtures.BATCH
     1 * alertService.updateStatusToRecommended(batch.id(), alertNames)
-    1 * alertService.hasNoPendingAlerts(batch.id()) >> true
+    1 * alertService.hasNoPendingAlerts(RegistrationFixtures.BATCH) >> true
     1 * batchService.completeBatch(completeBatchCommand)
   }
 
@@ -110,7 +112,7 @@ class RegistrationFacadeSpec extends Specification {
     1 * batchService.findBatchByAnalysisName(RegistrationFixtures.ANALYSIS_NAME) >>
         RegistrationFixtures.BATCH
     1 * alertService.updateStatusToRecommended(batch.id(), alertNames)
-    1 * alertService.hasNoPendingAlerts(batch.id()) >> false
+    1 * alertService.hasNoPendingAlerts(RegistrationFixtures.BATCH) >> false
     0 * batchService.completeBatch(completeBatchCommand)
   }
 
@@ -126,7 +128,7 @@ class RegistrationFacadeSpec extends Specification {
     1 * batchService.findBatchByAnalysisName(notExistingAnalysisName) >>
         {throw new NoSuchElementException()}
     0 * alertService.updateStatusToRecommended(_ as String, _ as List<String>)
-    0 * alertService.hasNoPendingAlerts(_ as String)
+    0 * alertService.hasNoPendingAlerts(_ as Batch)
     0 * batchService.completeBatch(_ as CompleteBatchCommand)
     thrown(NoSuchElementException.class)
   }

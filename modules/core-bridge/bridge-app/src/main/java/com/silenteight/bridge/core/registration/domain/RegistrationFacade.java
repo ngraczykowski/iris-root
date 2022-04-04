@@ -53,14 +53,15 @@ public class RegistrationFacade {
 
     alertService.updateStatusToRecommended(batch.id(), command.alertNames());
 
-    if (alertService.hasNoPendingAlerts(batch.id())) {
+    if (alertService.hasNoPendingAlerts(batch)) {
       batchService.completeBatch(new CompleteBatchCommand(batch));
     }
   }
 
   public List<RegistrationAlert> registerAlertsAndMatches(RegisterAlertsCommand command) {
-    var batchPriority = batchService.findBatchPriority(command.batchId()).priority();
-    return alertService.registerAlertsAndMatches(command, batchPriority);
+    var batch = batchService.findPendingBatch(command.batchId());
+
+    return alertService.registerAlertsAndMatches(command, batch.priority());
   }
 
   public void markAlertsAsDelivered(MarkAlertsAsDeliveredCommand command) {

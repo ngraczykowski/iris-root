@@ -95,6 +95,16 @@ class BatchTimeoutService {
     } else {
       log.info("No pending alerts found for batch with id: {}", batch.id());
     }
+
+    var batchAlertsCount = alertRepository.countAllAlerts(batch.id());
+
+    if (batchAlertsCount < batch.alertsCount()) {
+      batchRepository.updateStatusToCompleted(batch.id());
+      log.info(
+          "Batch {} marked as completed because less registered alerts number than alerts count",
+          batch.id());
+      batchEventPublisher.publish(buildBatchCompletedEvent(batch));
+    }
   }
 
   private List<String> getAlertNames(String batchId) {

@@ -21,14 +21,15 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
   @Query("""
       SELECT COUNT(status) 
       FROM core_bridge_alerts 
-      WHERE batch_id = :batchId AND NOT status = 'RECOMMENDED' AND NOT status = 'ERROR'""")
-  long countAllAlertsByBatchIdAndNotRecommendedAndNotErrorStatuses(String batchId);
-
-  @Query("""
-      SELECT COUNT(status) 
-      FROM core_bridge_alerts 
       WHERE batch_id = :batchId AND status IN(:statuses)""")
   long countAllAlertsByBatchIdAndStatusIn(String batchId, Set<String> statuses);
+
+  @Query("""
+      SELECT COUNT(status)
+      FROM core_bridge_alerts
+      WHERE batch_id = :batchId """)
+  long countAllAlertsByBatchId(String batchId);
+
 
   @Query("""
         SELECT name 

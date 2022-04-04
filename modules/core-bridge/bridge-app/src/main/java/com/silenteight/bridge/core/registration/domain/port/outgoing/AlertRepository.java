@@ -34,7 +34,9 @@ public interface AlertRepository {
 
   List<Alert> findAllByBatchIdAndNameIn(String batchId, List<String> alertNames);
 
-  long countAllPendingAlerts(String batchId);
+  long countAllAlerts(String batchId);
+
+  long countAllCompleted(String batchId);
 
   long countAllErroneousAlerts(String batchId);
 

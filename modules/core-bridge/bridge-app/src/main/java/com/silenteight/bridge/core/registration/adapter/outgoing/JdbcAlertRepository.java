@@ -87,8 +87,9 @@ class JdbcAlertRepository implements AlertRepository {
   }
 
   @Override
-  public long countAllPendingAlerts(String batchId) {
-    return alertRepository.countAllAlertsByBatchIdAndNotRecommendedAndNotErrorStatuses(batchId);
+  public long countAllCompleted(String batchId) {
+    return alertRepository.countAllAlertsByBatchIdAndStatusIn(
+        batchId, Set.of(Status.RECOMMENDED.name(), Status.ERROR.name(), Status.DELIVERED.name()));
   }
 
   @Override
@@ -108,5 +109,10 @@ class JdbcAlertRepository implements AlertRepository {
     return alertRepository.findAllByBatchIdAndNameIn(batchId, alertNames).stream()
         .map(mapper::toAlert)
         .toList();
+  }
+
+  @Override
+  public long countAllAlerts(String batchId) {
+    return alertRepository.countAllAlertsByBatchId(batchId);
   }
 }

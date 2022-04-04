@@ -1,10 +1,12 @@
 package com.silenteight.bridge.core.registration.domain
 
+import com.silenteight.bridge.core.Fixtures
 import com.silenteight.bridge.core.registration.domain.command.RegisterAlertsCommand
 import com.silenteight.bridge.core.registration.domain.command.RegisterAlertsCommand.AlertStatus
 import com.silenteight.bridge.core.registration.domain.command.RegisterAlertsCommand.AlertWithMatches
 import com.silenteight.bridge.core.registration.domain.model.Alert
 import com.silenteight.bridge.core.registration.domain.model.AlertsToRegister
+import com.silenteight.bridge.core.registration.domain.model.Batch
 import com.silenteight.bridge.core.registration.domain.model.RegisteredAlerts
 import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert
 import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert.Status
@@ -135,7 +137,8 @@ class AlertServiceSpec extends Specification {
     with(registrationAlertResponseMapper) {
       1 * fromAlertsToRegistrationAlerts(_ as List<Alert>) >> alerts
       1 * fromAlertsWithMatchesToRegistrationAlerts(
-          _ as List<com.silenteight.bridge.core.registration.domain.model.AlertWithMatches>) >> alreadyExistingAlerts
+          _ as List<com.silenteight.bridge.core.registration.domain.model.AlertWithMatches>) >>
+          alreadyExistingAlerts
     }
     1 * alertRegistrationService.registerAlerts(_ as AlertsToRegister) >> registeredAlerts
 
@@ -180,7 +183,8 @@ class AlertServiceSpec extends Specification {
     with(registrationAlertResponseMapper) {
       0 * fromAlertsToRegistrationAlerts(_ as List<Alert>)
       1 * fromAlertsWithMatchesToRegistrationAlerts(
-          _ as List<com.silenteight.bridge.core.registration.domain.model.AlertWithMatches>) >> alreadyExistingAlerts
+          _ as List<com.silenteight.bridge.core.registration.domain.model.AlertWithMatches>) >>
+          alreadyExistingAlerts
     }
     0 * alertRegistrationService.registerAlerts(_ as AlertsToRegister)
 
@@ -280,7 +284,8 @@ class AlertServiceSpec extends Specification {
 
     then:
     with(alertRepository) {
-      1 * findAllWithMatchesByBatchIdAndAlertIdsIn(_ as String, _ as List<String>) >> [registeredAlert]
+      1 * findAllWithMatchesByBatchIdAndAlertIdsIn(_ as String, _ as List<String>) >>
+          [registeredAlert]
       1 * saveAlerts(_ as List<Alert>)
     }
     with(alertMapper) {
@@ -324,7 +329,8 @@ class AlertServiceSpec extends Specification {
 
     then:
     with(alertRepository) {
-      1 * findAllWithMatchesByBatchIdAndAlertIdsIn(_ as String, _ as List<String>) >> [registeredAlert]
+      1 * findAllWithMatchesByBatchIdAndAlertIdsIn(_ as String, _ as List<String>) >>
+          [registeredAlert]
       1 * saveAlerts(_ as List<Alert>)
     }
     with(alertMapper) {
@@ -380,7 +386,8 @@ class AlertServiceSpec extends Specification {
     with(registrationAlertResponseMapper) {
       0 * fromAlertsToRegistrationAlerts(_ as List<Alert>)
       1 * fromAlertsWithMatchesToRegistrationAlerts(
-          _ as List<com.silenteight.bridge.core.registration.domain.model.AlertWithMatches>) >> alreadyExistingAlerts
+          _ as List<com.silenteight.bridge.core.registration.domain.model.AlertWithMatches>) >>
+          alreadyExistingAlerts
     }
     0 * alertRegistrationService.registerAlerts(_ as AlertsToRegister)
 
@@ -399,28 +406,31 @@ class AlertServiceSpec extends Specification {
     1 * alertRepository.updateStatusToRecommended(batchId, alertNames)
   }
 
-  def 'should check that all alerts in batch have status RECOMMENDED'() {
+  def 'should return true when all alerts in batch are in status RECOMMENDED, ERROR or DELIVERED'() {
     given:
-    def batchId = 'batchId'
+    def batch = Batch.builder()
+        .id('batchId')
+        .alertsCount(0)
+        .build()
 
     when:
-    def result = underTest.hasNoPendingAlerts(batchId)
+    def result = underTest.hasNoPendingAlerts(batch)
 
     then:
-    1 * alertRepository.countAllPendingAlerts(batchId) >> 0
+    1 * alertRepository.countAllCompleted(batch.id()) >> 0
     result
   }
 
 
-  def 'should check that not all alerts in batch have status RECOMMENDED'() {
+  def 'should return false when all alerts in batch are not in status DELIVERED, RECOMMENDED or ERROR'() {
     given:
-    def batchId = 'batchId'
+    def batchId = Fixtures.BATCH_ID
 
     when:
-    def result = underTest.hasNoPendingAlerts(batchId)
+    def result = underTest.hasNoPendingAlerts(RegistrationFixtures.BATCH)
 
     then:
-    1 * alertRepository.countAllPendingAlerts(batchId) >> 1
+    1 * alertRepository.countAllCompleted(batchId) >> 1
     !result
   }
 

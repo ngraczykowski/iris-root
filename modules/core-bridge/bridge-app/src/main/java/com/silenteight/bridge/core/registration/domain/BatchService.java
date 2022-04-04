@@ -50,9 +50,18 @@ class BatchService {
         .orElseThrow();
   }
 
-  BatchPriority findBatchPriority(String batchId) {
-    return batchRepository.findBatchPriorityById(batchId)
+  BatchPriorityWithStatus findPendingBatch(String batchId) {
+    var batchProjection = batchRepository.findBatchPriorityById(batchId)
         .orElseThrow();
+
+    var batch = Batch.builder()
+        .id(batchId)
+        .status(batchProjection.status())
+        .build();
+
+    validateBatchStatus(batch, ALLOWED_BATCH_STATUSES_FOR_REGISTRATION);
+
+    return batchProjection;
   }
 
   void notifyBatchError(NotifyBatchErrorCommand notifyBatchErrorCommand) {

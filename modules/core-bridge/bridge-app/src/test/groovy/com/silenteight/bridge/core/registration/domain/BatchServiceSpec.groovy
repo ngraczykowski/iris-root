@@ -133,17 +133,32 @@ class BatchServiceSpec extends Specification {
     result == RegistrationFixtures.BATCH
   }
 
-  def 'should find batch priority by analysis name'() {
+  def 'should find batch priority with status by batch id'() {
     given:
     def batchId = Fixtures.BATCH_ID
 
     when:
-    def result = underTest.findBatchPriority(batchId)
+    def result = underTest.findPendingBatch(batchId)
 
     then:
     1 * batchRepository.findBatchPriorityById(batchId) >>
-        Optional.of(new BatchPriority(RegistrationFixtures.BATCH_PRIORITY))
+        Optional.of(new BatchPriorityWithStatus(RegistrationFixtures.BATCH_PRIORITY, BatchStatus.STORED))
     result.priority() == RegistrationFixtures.BATCH_PRIORITY
+  }
+
+  def 'should throw exception for findPendingBatch method when batch is in incorrect status'() {
+    given:
+    def batchId = Fixtures.BATCH_ID
+
+    when:
+    underTest.findPendingBatch(batchId)
+
+    then:
+    1 * batchRepository.findBatchPriorityById(batchId) >>
+        Optional.of(new BatchPriorityWithStatus(RegistrationFixtures.BATCH_PRIORITY, BatchStatus.DELIVERED))
+
+    def exception = thrown(IllegalStateException)
+    exception.getMessage().contains("DELIVERED status is invalid, one of [STORED, PROCESSING] expected.")
   }
 
   def 'should find batch with policy projection by analysis name'() {

@@ -6,7 +6,7 @@ import com.silenteight.bridge.core.registration.adapter.outgoing.BatchEntity.Sta
 import com.silenteight.bridge.core.registration.domain.model.Batch;
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus;
 import com.silenteight.bridge.core.registration.domain.model.BatchIdWithPolicy;
-import com.silenteight.bridge.core.registration.domain.model.BatchPriority;
+import com.silenteight.bridge.core.registration.domain.model.BatchPriorityWithStatus;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository;
 
 import org.springframework.stereotype.Repository;
@@ -37,9 +37,10 @@ class JdbcBatchRepository implements BatchRepository {
   }
 
   @Override
-  public Optional<BatchPriority> findBatchPriorityById(String id) {
+  public Optional<BatchPriorityWithStatus> findBatchPriorityById(String id) {
     return crudBatchRepository.findPriorityByBatchId(id)
-        .map(projection -> new BatchPriority(projection.priority()));
+        .map(projection -> new BatchPriorityWithStatus(projection.priority(),
+            BatchStatus.valueOf(projection.status().name())));
   }
 
   @Override

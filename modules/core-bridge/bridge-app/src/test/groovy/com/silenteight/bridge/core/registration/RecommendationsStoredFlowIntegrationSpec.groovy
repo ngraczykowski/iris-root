@@ -110,7 +110,7 @@ class RecommendationsStoredFlowIntegrationSpec extends BaseSpecificationIT {
   private static RegisterBatchRequest createRegisterBatchRequest() {
     RegisterBatchRequest.newBuilder()
         .setBatchId(BATCH_ID_INPUT)
-        .setAlertCount(123)
+        .setAlertCount(1)
         .setBatchMetadata(METADATA)
         .build()
   }

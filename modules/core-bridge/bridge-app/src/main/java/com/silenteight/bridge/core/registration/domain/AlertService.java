@@ -100,10 +100,13 @@ class AlertService {
     alertRepository.updateStatusToRecommended(batchId, alertNames);
   }
 
-  boolean hasNoPendingAlerts(String batchId) {
-    var pendingAlerts = alertRepository.countAllPendingAlerts(batchId);
-    log.info("{} alerts left to be recommended for the batch id: {}", pendingAlerts, batchId);
-    return pendingAlerts == 0;
+  boolean hasNoPendingAlerts(Batch batch) {
+    var completedAlertsCount = alertRepository.countAllCompleted(batch.id());
+    log.info(
+        "{} alerts completed (RECOMMENDED, ERROR, DELIVERED), {} alerts count for batch with id {}",
+        completedAlertsCount, batch.alertsCount(), batch.id());
+
+    return completedAlertsCount == batch.alertsCount();
   }
 
   void updateStatusToDelivered(String batchId, List<String> alertNames) {
