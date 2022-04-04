@@ -1,6 +1,6 @@
 package com.silenteight.scb.outputrecommendation.adapter.outgoing
 
-import com.silenteight.proto.recommendation.api.v1.BatchDelivered
+import com.silenteight.proto.recommendation.api.v1.RecommendationsDelivered
 import com.silenteight.scb.outputrecommendation.domain.model.RecommendationsDeliveredEvent
 import com.silenteight.scb.outputrecommendation.infrastructure.amqp.OutputRecommendationDeliveredProperties
 
@@ -21,7 +21,7 @@ class RabbitRecommendationDeliveredEventPublisherSpec extends Specification {
     def batchId = 'batchId'
     def analysisName = 'analysisName'
     def event = new RecommendationsDeliveredEvent(batchId, analysisName)
-    def recommendationsDelivered = BatchDelivered.newBuilder()
+    def recommendationsDelivered = RecommendationsDelivered.newBuilder()
         .setBatchId(batchId)
         .setAnalysisName(analysisName)
         .build()

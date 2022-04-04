@@ -3,7 +3,7 @@ package com.silenteight.scb.outputrecommendation.adapter.outgoing;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.proto.recommendation.api.v1.BatchDelivered;
+import com.silenteight.proto.recommendation.api.v1.RecommendationsDelivered;
 import com.silenteight.scb.outputrecommendation.domain.model.RecommendationsDeliveredEvent;
 import com.silenteight.scb.outputrecommendation.domain.port.outgoing.RecommendationDeliveredEventPublisher;
 import com.silenteight.scb.outputrecommendation.infrastructure.amqp.OutputRecommendationDeliveredProperties;
@@ -22,7 +22,7 @@ class RabbitRecommendationDeliveredEventPublisher implements
 
   @Override
   public void publish(RecommendationsDeliveredEvent event) {
-    var message = BatchDelivered.newBuilder()
+    var message = RecommendationsDelivered.newBuilder()
         .setBatchId(event.batchId())
         .setAnalysisName(event.analysisName())
         .build();
