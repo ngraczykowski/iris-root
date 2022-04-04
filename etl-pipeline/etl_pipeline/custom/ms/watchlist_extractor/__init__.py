@@ -41,26 +41,20 @@ class WatchlistExtractor:
         result = []
         entity = record.get("entity", {})
         dobs = entity.get("dobs", [])
-        try:
-            dob = dobs[0]
-        except IndexError:
-            dob = {}
-        except KeyError:
-            dob = dobs
-
-        if isinstance(dob, str):
-            return [dob]
-        if isinstance(dob, list):
-            return dob
-        if dob is None:
+        if isinstance(dobs, str):
+            return [dobs]
+        if not dobs:
             return []
-        if isinstance(dob, dict):
-            result, date_range, dmy = self.parse_dob_dict(dob)
-            result.append("/".join(dmy))
-            if len(date_range) == 2:
-                result.extend(
-                    [str(elem) for elem in range(int(date_range[0]), int(date_range[-1]) + 1)]
-                )
+        if not isinstance(dobs, list):
+            dobs = [dobs]
+        if isinstance(dobs[0], dict):
+            for dob in dobs:
+                result, date_range, dmy = self.parse_dob_dict(dob)
+                result.append("/".join([str(i) for i in dmy if i]))
+                if len(date_range) == 2:
+                    result.extend(
+                        [str(elem) for elem in range(int(date_range[0]), int(date_range[-1]) + 1)]
+                    )
             return result
         return ""
 
