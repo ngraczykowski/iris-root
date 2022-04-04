@@ -3,7 +3,7 @@ variable "scb_bridge_artifact" {
   description = "The name of file containing SCB-Bridge artifact"
 }
 
-variable "scb_bridge_checksum" {
+variable "scb_bridge_artifact_checksum" {
   type = string
   description = "Artifact SHA256 checksum should be provided"
 }
