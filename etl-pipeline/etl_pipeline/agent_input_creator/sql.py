@@ -10,7 +10,7 @@ def sql_to_merge_specific_columns_to_standardized(
     aggregated: bool = False,
 ) -> List[str]:
     """Merge the customer specific columns into
-    standardized agent primary and alias input cn.
+    standardized agent primary and alias input column.
 
     Input:
     { 'name_agent': {'name_agent_ap': ['record_name', 'whatever_other_name'],

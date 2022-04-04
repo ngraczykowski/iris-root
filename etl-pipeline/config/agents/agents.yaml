@@ -94,5 +94,4 @@ residency_agent:
   - watchlistParty.matchRecords.WL_COUNTRYNAME
 
 hit_type_agent:
-  ap: []
-  wl: []
+  []

@@ -292,7 +292,7 @@ class MSPipeline(ETLPipeline):
                     {
                         key: self.flatten(match.get(key))
                         for key in match
-                        if key.endswith("_ap") or key.endswith("_wl")
+                        if key.endswith("_ap") or key.endswith("_wl") or key.endswith("_name")
                     }
                 )
                 self.engine.sql_to_merge_specific_columns_to_standardized(
