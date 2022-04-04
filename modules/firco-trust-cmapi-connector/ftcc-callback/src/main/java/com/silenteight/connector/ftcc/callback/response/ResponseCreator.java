@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.connector.ftcc.callback.newdecision.MapStatusRequest;
 import com.silenteight.connector.ftcc.callback.newdecision.MapStatusUseCase;
-import com.silenteight.connector.ftcc.callback.response.domain.MessageEntity;
 import com.silenteight.connector.ftcc.common.dto.input.NextStatusDto;
 import com.silenteight.connector.ftcc.common.dto.output.*;
+import com.silenteight.connector.ftcc.request.details.dto.MessageDetailsDto;
 import com.silenteight.recommendation.api.library.v1.RecommendationOut;
 
 import org.jetbrains.annotations.NotNull;
@@ -43,19 +43,20 @@ class ResponseCreator {
   }
 
   public ReceiveDecisionMessageDto buildMessageDto(
-      MessageEntity messageEntity, RecommendationOut recommendation) {
-    return mapToAlertDecision(messageEntity, recommendation);
+      MessageDetailsDto messageDetails, RecommendationOut recommendation) {
+
+    return mapToAlertDecision(messageDetails, recommendation);
   }
 
   private ReceiveDecisionMessageDto mapToAlertDecision(
-      MessageEntity messageEntity, RecommendationOut recommendation) {
+      MessageDetailsDto messageDetails, RecommendationOut recommendation) {
 
     var decision = new AlertDecisionMessageDto();
-    decision.setUnit(messageEntity.getUnit());
-    decision.setBusinessUnit(messageEntity.getBusinessUnit());
-    decision.setMessageID(messageEntity.getMessageID());
-    decision.setSystemID(messageEntity.getSystemID());
-    decision.setOperator(messageEntity.getLastOperator());
+    decision.setUnit(messageDetails.getUnit());
+    decision.setBusinessUnit(messageDetails.getBusinessUnit());
+    decision.setMessageID(messageDetails.getMessageID());
+    decision.setSystemID(messageDetails.getSystemID());
+    decision.setOperator(messageDetails.getLastOperator());
     decision.setActions(List.of());
     /*TODO: verify attachment*/
     decision.setAttachment(createAttachment(
@@ -66,12 +67,12 @@ class ResponseCreator {
     var destinationStatus = mapStatusUseCase.mapStatus(
         MapStatusRequest.builder()
             .dataCenter(DATA_CENTER)
-            .unit(messageEntity.getUnit())
-            .nextStatuses(messageEntity.nextStatusesDto()
+            .unit(messageDetails.getUnit())
+            .nextStatuses(messageDetails.nextStatusesDto()
                 .stream()
                 .map(NextStatusDto::getStatus)
                 .collect(Collectors.toList()))
-            .currentStatusName(messageEntity.getCurrentStatus().getName())
+            .currentStatusName(messageDetails.getCurrentStatus().getName())
             .recommendedAction(recommendation.getRecommendedAction())
             .build());
     decision.setStatus(destinationStatus.getStatus());

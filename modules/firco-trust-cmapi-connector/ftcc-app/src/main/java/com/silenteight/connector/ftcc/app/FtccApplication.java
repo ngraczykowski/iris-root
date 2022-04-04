@@ -5,6 +5,7 @@ import com.silenteight.connector.ftcc.app.grpc.GrpcModule;
 import com.silenteight.connector.ftcc.callback.CallbackModule;
 import com.silenteight.connector.ftcc.common.integration.AmqpCommonModule;
 import com.silenteight.connector.ftcc.ingest.IngestModule;
+import com.silenteight.connector.ftcc.request.RequestModule;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -16,10 +17,10 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableRetry
 @EnableAsync
 @ComponentScan(basePackageClasses = {
-    // Callback module
-    CallbackModule.class,
     // Domain modules
+    CallbackModule.class,
     IngestModule.class,
+    RequestModule.class,
     // Interface modules
     AmqpCommonModule.class,
     GrpcModule.class,

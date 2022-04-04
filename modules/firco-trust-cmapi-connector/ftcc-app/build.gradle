@@ -13,6 +13,7 @@ dependencies {
   implementation project(":ftcc-callback")
   implementation project(":ftcc-db-changelog")
   implementation project(":ftcc-ingest")
+  implementation project(":ftcc-request")
 
   // Base Libraries
   implementation libraries.silenteight_sep_base_common

@@ -16,16 +16,12 @@ public class MapStatusRequest {
 
   @NonNull
   String dataCenter;
-
   @NonNull
   String unit;
-
   @NonNull
   String currentStatusName;
-
   @NonNull
   String recommendedAction;
-
   @Singular
   List<StatusInfoDto> nextStatuses;
 

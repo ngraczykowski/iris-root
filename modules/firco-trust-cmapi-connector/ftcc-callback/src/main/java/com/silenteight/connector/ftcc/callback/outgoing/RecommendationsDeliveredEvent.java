@@ -10,6 +10,8 @@ import lombok.Value;
 @ToString
 public class RecommendationsDeliveredEvent {
 
-  @NonNull String analysisName;
-  @NonNull String batchName;
+  @NonNull
+  String analysisName;
+  @NonNull
+  String batchName;
 }

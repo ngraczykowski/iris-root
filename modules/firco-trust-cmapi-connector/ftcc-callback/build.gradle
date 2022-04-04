@@ -12,6 +12,7 @@ configurations {
 
 dependencies {
   implementation project(":ftcc-common")
+  implementation project(":ftcc-request")
 
   implementation libraries.silenteight_sep_base_common
   implementation libraries.core_bridge_registration_connector_lib

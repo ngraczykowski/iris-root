@@ -10,12 +10,12 @@ import java.util.Map;
 import static com.silenteight.proto.fab.api.v1.AlertMessageStored.State.STATE_UNSPECIFIED;
 
 @RequiredArgsConstructor
-public class AlertStateMapper {
+class AlertStateMapper {
 
   @NonNull
   private final Map<String, State> mappings;
 
-  public State map(@NonNull String state) {
-    return mappings.getOrDefault(state, STATE_UNSPECIFIED);
+  State map(@NonNull String status) {
+    return mappings.getOrDefault(status, STATE_UNSPECIFIED);
   }
 }

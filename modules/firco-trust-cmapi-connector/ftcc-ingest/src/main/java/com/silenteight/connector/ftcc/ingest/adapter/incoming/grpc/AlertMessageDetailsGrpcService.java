@@ -6,8 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.connector.ftcc.common.resource.BatchResource;
 import com.silenteight.connector.ftcc.common.resource.MessageResource;
-import com.silenteight.connector.ftcc.ingest.domain.MessageDetailsQuery;
-import com.silenteight.connector.ftcc.ingest.domain.dto.MessageDetailsDto;
+import com.silenteight.connector.ftcc.request.get.MessageByIdsQuery;
+import com.silenteight.connector.ftcc.request.get.dto.MessageDto;
 import com.silenteight.proto.fab.api.v1.*;
 
 import com.google.rpc.Status;
@@ -29,7 +29,7 @@ class AlertMessageDetailsGrpcService
       "Unhandled error occurred in Firco Trust CMAPI Connector while calling 'alertsDetails'.";
 
   @NonNull
-  private final MessageDetailsQuery messageDetailsQuery;
+  private final MessageByIdsQuery messageByIdsQuery;
 
   @Override
   public void alertsDetails(
@@ -37,7 +37,7 @@ class AlertMessageDetailsGrpcService
       StreamObserver<AlertMessagesDetailsResponse> responseObserver) {
 
     try {
-      Collection<MessageDetailsDto> messages = listMessages(request.getAlertsList());
+      Collection<MessageDto> messages = listMessages(request.getAlertsList());
       AlertMessagesDetailsResponse response = AlertMessagesDetailsResponse.newBuilder()
           .addAllAlerts(toAlertMessageDetails(messages))
           .build();
@@ -48,26 +48,26 @@ class AlertMessageDetailsGrpcService
     }
   }
 
-  private Collection<MessageDetailsDto> listMessages(List<AlertMessageHeader> headers) {
+  private Collection<MessageDto> listMessages(List<AlertMessageHeader> headers) {
     return headers
         .stream()
         .map(this::messageDetails)
         .collect(toList());
   }
 
-  private MessageDetailsDto messageDetails(AlertMessageHeader header) {
+  private MessageDto messageDetails(AlertMessageHeader header) {
     log.info(
         "Getting message details for batchName={} and messageName={}",
         header.getBatchName(),
         header.getMessageName());
 
-    return messageDetailsQuery.details(
+    return messageByIdsQuery.get(
         BatchResource.fromResourceName(header.getBatchName()),
         MessageResource.fromResourceName(header.getMessageName()));
   }
 
   private static List<AlertMessageDetails> toAlertMessageDetails(
-      Collection<MessageDetailsDto> messages) {
+      Collection<MessageDto> messages) {
 
     return messages
         .stream()
@@ -75,7 +75,7 @@ class AlertMessageDetailsGrpcService
         .collect(toList());
   }
 
-  private static AlertMessageDetails toAlertMessageDetails(MessageDetailsDto message) {
+  private static AlertMessageDetails toAlertMessageDetails(MessageDto message) {
     return AlertMessageDetails.newBuilder()
         .setMessageName(message.getMessageName())
         .setPayload(message.getPayload())

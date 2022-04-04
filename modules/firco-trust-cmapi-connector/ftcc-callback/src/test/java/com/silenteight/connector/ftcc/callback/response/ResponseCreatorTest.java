@@ -2,10 +2,10 @@ package com.silenteight.connector.ftcc.callback.response;
 
 import com.silenteight.connector.ftcc.callback.newdecision.DestinationStatus;
 import com.silenteight.connector.ftcc.callback.newdecision.MapStatusUseCase;
-import com.silenteight.connector.ftcc.callback.response.domain.MessageEntity;
-import com.silenteight.connector.ftcc.callback.response.domain.NextStatusEntity;
-import com.silenteight.connector.ftcc.callback.response.domain.StatusEntity;
 import com.silenteight.connector.ftcc.common.dto.input.StatusInfoDto;
+import com.silenteight.connector.ftcc.request.details.dto.MessageDetailsDto;
+import com.silenteight.connector.ftcc.request.details.dto.NextStatusDto;
+import com.silenteight.connector.ftcc.request.details.dto.StatusDto;
 import com.silenteight.recommendation.api.library.v1.AlertOut;
 import com.silenteight.recommendation.api.library.v1.RecommendationOut;
 
@@ -19,8 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.List;
 import java.util.UUID;
 
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith({ SpringExtension.class })
 class ResponseCreatorTest {
@@ -42,19 +41,19 @@ class ResponseCreatorTest {
 
     ResponseCreator responseCreator = new ResponseCreator(mapStatusUseCase, properties);
 
-    var message = MessageEntity.builder()
+    var message = MessageDetailsDto.builder()
         .messageID("MESSAGEID;)")
         .businessUnit("")
         .systemID("SYSTEMID")
         .unit("UNIT!")
-        .currentStatus(StatusEntity.builder()
+        .currentStatus(StatusDto.builder()
             .id("CurrentStatus ID")
             .checksum("CurrentStatus checksum")
             .name("CurrentStatus name")
             .routingCode("CurrentStatus Code")
             .build())
-        .nextStatuses(List.of(NextStatusEntity.builder()
-            .status(StatusEntity.builder()
+        .nextStatuses(List.of(NextStatusDto.builder()
+            .status(StatusDto.builder()
                 .id("Status ID")
                 .checksum("Status checksum")
                 .name("Status name")

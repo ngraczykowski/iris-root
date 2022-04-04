@@ -1,5 +1,6 @@
 package com.silenteight.connector.ftcc.callback.outgoing;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,7 +12,9 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 @Slf4j
 class RecommendationsDeliveredRabbitPublisher implements RecommendationsDeliveredPublisher {
 
+  @NonNull
   private final RabbitTemplate rabbitTemplate;
+  @NonNull
   private final RecommendationsDeliveredAmqpProperties properties;
 
   @Override
