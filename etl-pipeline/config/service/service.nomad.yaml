@@ -4,3 +4,4 @@ DATA_SOURCE_INPUT_ENDPOINT: {{ range $index, $client := service (printf "%s-grpc
       {{- end }}
 ETL_SERVICE_ADDR: {{ env "NOMAD_ADDR_grpc" }}
 SSL_CERTIFICATE: {{ env "NOMAD_ADDR_grpc" }}
+PROCESSES: 10
