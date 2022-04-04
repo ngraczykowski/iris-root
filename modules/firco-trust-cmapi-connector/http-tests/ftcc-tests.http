@@ -6,7 +6,7 @@ POST {{baseurl}}/rest/ftcc/v1/alert
 Accept: application/json
 Content-Type: application/json
 
-< ./requests/request-example-cmapi-trust.json
+< ./requests/request-simple.json
 
 ### Callback
 // @no-log
