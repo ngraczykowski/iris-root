@@ -73,7 +73,8 @@ job "scb-bridge" {
       config {
         image   = "postgres:10"
         ports   = [
-          "tcp"]
+          "tcp"
+        ]
         volumes = [
           "${local.database_volume}:/var/lib/postgresql/data"
         ]
@@ -81,6 +82,7 @@ job "scb-bridge" {
 
       service {
         name = "${var.namespace}-scb-bridge-db"
+
         port = "tcp"
 
         check {
@@ -100,7 +102,7 @@ job "scb-bridge" {
   }
 
   group "scb-bridge" {
-    count = 2
+    count = 1
 
     network {
       port "http" {
@@ -119,25 +121,25 @@ job "scb-bridge" {
         "traefik.enable=true",
         # Those 2 tags are required to gather metrics by prometheus
         "traefik.protocol=http",
-        "prometheus.metrics.path=/rest/ae/management/prometheus",
+        "prometheus.metrics.path=/rest/scb-bridge/management/prometheus",
         # FIXME(ahaczewski): Remove when Consul Discovery can filter through results based on tags.
         "gRPC.port=${NOMAD_PORT_grpc}",
         "gRPC_port=${NOMAD_PORT_grpc}",
       ], var.http_tags)
 
       check_restart {
-        limit = 3
+        limit = 5
         grace = "180s"
         ignore_warnings = true
       }
 
       check {
-        name = "SCB Bridge HTTP Health Check"
-        type = "http"
-        path = "/rest/scb-bridge/management/health"
-        method = "GET"
+        name     = "SCB Bridge HTTP Health Check"
+        type     = "http"
+        path     = "/rest/scb-bridge/management/health"
+        method   = "GET"
         interval = "30s"
-        timeout = "10s"
+        timeout  = "10s"
       }
     }
 
@@ -146,7 +148,7 @@ job "scb-bridge" {
       port = "grpc"
       tags = [
         "grpc",
-        # FIXME(ahaczewski): Remove when Consul Discovery can filter through results based on tags
+        # FIXME(ahaczewski): Remove when Consul Discovery can filter through results based on tags.
         "gRPC.port=${NOMAD_PORT_grpc}",
         "gRPC_port=${NOMAD_PORT_grpc}",
       ]
@@ -209,7 +211,7 @@ job "scb-bridge" {
       }
 
       resources {
-        cpu    = 50
+        cpu = 50
         memory = 100
       }
     }
@@ -223,29 +225,25 @@ job "scb-bridge" {
           checksum = "${var.scb_bridge_artifact_checksum}"
         }
         mode = "file"
-        destination = "local/scb-bridge-app.jar"
+        destination = "local/scb-bridge.jar"
       }
 
       template {
         data = "{{ key \"${var.namespace}/scb-bridge/secrets\" }}"
-        destination = "secrets/scb_bridge.env"
+        destination = "secrets/scb-bridge.env"
         env = true
       }
 
       template {
-        data = "{{ keyOrDefault \"${var.namespace}/scb-bridge/environment\" \"\" }}"
-        destination = "local/scb-bridge.env"
-        env = true
-      }
-
-      template {
-        data = file("./conf/application.yml")
-        destination = "local/conf/application.yml"
+        data = file("./conf/application.yaml")
+        destination = "local/conf/application.yaml"
+        change_mode = "restart"
       }
 
       template {
         data = file("./conf/logback.xml")
         destination = "secrets/conf/logback.xml"
+        change_mode = "noop"
       }
 
       env {
@@ -275,7 +273,7 @@ job "scb-bridge" {
       }
 
       logs {
-        max_files     = 10
+        max_files = 10
         max_file_size = 20
       }
 
@@ -318,5 +316,4 @@ job "scb-bridge" {
       }
     }
   }
-
 }
