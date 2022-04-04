@@ -94,8 +94,10 @@ public class AgentExchangeResponseAssert {
     }
 
     public FeatureSolutionAssert withNoErrorMessage() {
-      var errorMessage = featureSolution.getReason().getFieldsMap().get(ERROR_MESSAGE_FIELD);
-      assertThat(errorMessage).isNull();
+      var errorMessageValue =
+          featureSolution.getReason().getFieldsMap().get(ERROR_MESSAGE_FIELD);
+      var errorMessage = errorMessageValue == null ? null : errorMessageValue.getStringValue();
+      assertThat(errorMessage).isNullOrEmpty();
       return this;
     }
 
