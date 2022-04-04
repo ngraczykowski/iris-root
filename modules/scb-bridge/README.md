@@ -35,8 +35,9 @@ The simplest way to test GNS-RT locally is to send a JSON request using Postman:
 You can also use Postman to send a request to SCB-Bridge that is deployed on `Nomad`.
 What you need to do is to:
 - Have access to Nomad by VPN
-- Change url in request to `http://10.8.0.2:<SCB_BRIDGE_PORT>/v1/gnsrt/recommendation`
-- `<SCB_BRIDGE_PORT>` after each restart SCB-Bridge can get a random port - it means you have to first check on Nomad what's the current Bridge port.
+- Change url in request to `https://lima.silenteight.com/rest/scb-bridge/` + endpoint name eg:
+    - `https://lima.silenteight.com/rest/scb-bridge/v1/gnsrt/recommendation`
+    - `https://lima.silenteight.com/rest/scb-bridge/v1/gnsrt/system-id/random`
 
 ## Running tests in Gradle
 
