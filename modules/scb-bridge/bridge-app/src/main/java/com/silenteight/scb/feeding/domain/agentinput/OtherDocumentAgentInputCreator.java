@@ -42,8 +42,24 @@ public class OtherDocumentAgentInputCreator implements AgentInput {
 
   private List<String> getWlOtherDocuments(MatchedParty matchedParty) {
     List<String> documents = new ArrayList<>();
-    documents.addAll(matchedParty.wlBicCodes());
-    documents.addAll(matchedParty.wlSearchCodes());
+    documents.addAll(getWlBicCodes(matchedParty));
+    documents.addAll(getWlSearchCodes(matchedParty));
     return documents;
+  }
+
+  private List<String> getWlBicCodes(MatchedParty matchedParty) {
+    Collection<String> wlBicCodes = matchedParty.wlBicCodes();
+    if (CollectionUtils.isNotEmpty(wlBicCodes)) {
+      return new ArrayList<>(wlBicCodes);
+    }
+    return Collections.emptyList();
+  }
+
+  private List<String> getWlSearchCodes(MatchedParty matchedParty) {
+    Collection<String> wlSearchCodes = matchedParty.wlSearchCodes();
+    if (CollectionUtils.isNotEmpty(wlSearchCodes)) {
+      return new ArrayList<>(wlSearchCodes);
+    }
+    return Collections.emptyList();
   }
 }

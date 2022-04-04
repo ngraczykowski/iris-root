@@ -41,6 +41,8 @@ public class PassportNumberDocumentAgentInputCreator implements AgentInput {
   }
 
   private List<String> getWlPassportNumberDocuments(MatchedParty matchedParty) {
-    return Collections.singletonList(matchedParty.wlPassport());
+    List<String> wlPassportNumberDocuments = new ArrayList<>();
+    CollectionUtils.addIgnoreNull(wlPassportNumberDocuments, matchedParty.wlPassport());
+    return wlPassportNumberDocuments;
   }
 }

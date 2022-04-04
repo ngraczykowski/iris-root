@@ -55,7 +55,7 @@ public class NameAgentInputCreator implements AgentInput {
             .name(wlName.getName())
             .type(mapToNameTypeOut(wlName.getType()))
             .build())
-        .collect(Collectors.toList());
+        .toList();
   }
 
   private static NameTypeOut mapToNameTypeOut(WlNameType wlNameType) {

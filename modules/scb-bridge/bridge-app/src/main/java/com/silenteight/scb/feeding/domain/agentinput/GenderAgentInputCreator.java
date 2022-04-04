@@ -8,8 +8,9 @@ import com.silenteight.universaldatasource.api.library.Feature;
 import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputIn;
 import com.silenteight.universaldatasource.api.library.gender.v1.GenderFeatureInputOut;
 
-import java.util.Arrays;
-import java.util.Collections;
+import org.apache.commons.collections4.CollectionUtils;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class GenderAgentInputCreator implements AgentInput {
@@ -30,10 +31,15 @@ public class GenderAgentInputCreator implements AgentInput {
   }
 
   private List<String> getApGenders(AlertedParty alertedParty) {
-    return Arrays.asList(alertedParty.apGender(), alertedParty.apGenderFromName());
+    List<String> apGenders = new ArrayList<>();
+    CollectionUtils.addIgnoreNull(apGenders, alertedParty.apGender());
+    CollectionUtils.addIgnoreNull(apGenders, alertedParty.apGenderFromName());
+    return apGenders;
   }
 
   private List<String> getWlGenders(MatchedParty matchedParty) {
-    return Collections.singletonList(matchedParty.wlGender());
+    List<String> wlGenders = new ArrayList<>();
+    CollectionUtils.addIgnoreNull(wlGenders, matchedParty.wlGender());
+    return wlGenders;
   }
 }

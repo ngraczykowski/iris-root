@@ -34,7 +34,7 @@ public class ResidencyCountryAgentInputCreator implements AgentInput {
 
   private List<String> getApCountries(AlertedParty alertedParty) {
     List<String> apResidencyCountries = new ArrayList<>();
-    apResidencyCountries.add(alertedParty.apResidence());
+    CollectionUtils.addIgnoreNull(apResidencyCountries, alertedParty.apResidence());
     apResidencyCountries.addAll(getApResidenceSynonyms(alertedParty));
     apResidencyCountries.addAll(getApResidentialAddresses(alertedParty));
     return apResidencyCountries;
@@ -57,6 +57,8 @@ public class ResidencyCountryAgentInputCreator implements AgentInput {
   }
 
   private List<String> getWlCountries(MatchedParty matchedParty) {
-    return Collections.singletonList(matchedParty.wlResidence());
+    List<String> wlCountries = new ArrayList<>();
+    CollectionUtils.addIgnoreNull(wlCountries, matchedParty.wlResidence());
+    return wlCountries;
   }
 }

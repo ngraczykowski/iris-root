@@ -8,7 +8,9 @@ import com.silenteight.universaldatasource.api.library.Feature;
 import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputIn;
 import com.silenteight.universaldatasource.api.library.country.v1.CountryFeatureInputOut;
 
-import java.util.Collections;
+import org.apache.commons.collections4.CollectionUtils;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class NationalityCountryAgentInputCreator implements AgentInput {
@@ -29,10 +31,14 @@ public class NationalityCountryAgentInputCreator implements AgentInput {
   }
 
   private List<String> getApCountries(AlertedParty alertedParty) {
-    return Collections.singletonList(alertedParty.apNationality());
+    List<String> apCountries = new ArrayList<>();
+    CollectionUtils.addIgnoreNull(apCountries, alertedParty.apNationality());
+    return apCountries;
   }
 
   private List<String> getWlCountries(MatchedParty matchedParty) {
-    return Collections.singletonList(matchedParty.wlNationality());
+    List<String> wlCountries = new ArrayList<>();
+    CollectionUtils.addIgnoreNull(wlCountries, matchedParty.wlNationality());
+    return wlCountries;
   }
 }
