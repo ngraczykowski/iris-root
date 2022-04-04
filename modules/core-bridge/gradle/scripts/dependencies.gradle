@@ -65,6 +65,9 @@ libraries.liquibase = [group: 'org.liquibase', name: 'liquibase-core', version: 
 libraries.grpc_spring_boot_starter = [group: 'net.devh', name: 'grpc-spring-boot-starter', version: '2.13.0.RELEASE']
 libraries.grpc_brave_instrumentation = [group: 'io.zipkin.brave', name: 'brave-instrumentation-grpc', version: '5.13.2']
 
+// Monitoring
+libraries.micrometer_prometheus = [group: 'io.micrometer', name: 'micrometer-registry-prometheus', version: '1.8.4']
+
 // Testing
 libraries.groovy_all = [group: 'org.codehaus.groovy', name: 'groovy-all', version: groovyVersion]
 libraries.junit_jupiter_testcontainers = [group: 'org.testcontainers', name: 'junit-jupiter', version: testContainersVersion]
@@ -141,6 +144,7 @@ dependencies {
   implementation libraries.spring_rabbit
   implementation libraries.lz4_java
   implementation libraries.grpc_brave_instrumentation
+  implementation libraries.micrometer_prometheus
 
   testImplementation libraries.groovy_all
   testImplementation libraries.spock_core
