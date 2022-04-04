@@ -28,7 +28,7 @@ class WatchlistExtractor:
                 dmy[1] = v
             elif k.upper() == "D":
                 dmy[0] = v
-            elif k == "S8_extracted_value":
+            elif k == "S8_extracted_value" or k == "dob":
                 if " TO " in v.upper():
                     date_range.extend(sorted(re.findall(r"\d\d\d\d", v), key=lambda x: int(x)))
                 else:

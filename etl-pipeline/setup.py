@@ -30,4 +30,5 @@ setup(
         "pytest-runner>=5.1",
     ],
     tests_require=dev_require,
+    python_requires=">=3.6",
 )
