@@ -42,6 +42,7 @@ def get_logger(name, file=None):
         service_config = omegaconf.OmegaConf.load(
             os.path.join(CONFIG_APP_DIR, "service", "service.yaml")
         )
+        LOGGING_PATH = None
         try:
             LOGGING_PATH = service_config.LOGGING_PATH
         except omegaconf.errors.ConfigAttributeError:
