@@ -7,12 +7,12 @@ dev_require = [
     "lxml==4.7.1",
     "googleapis-common-protos==1.55.0",
     "data-source-agentinput-api==0.21.0.5",
-    "data-source-api==0.23.0.11",
+    "data-source-api==0.21.0.5",
 ]
 
 setup(
     name="etl_pipeline",
-    version="0.5.14-dev",
+    version="0.5.15-dev",
     description="ETL pipeline",
     author="Silent Eight Pte. Ltd.",
     author_email="support@silenteight.com",

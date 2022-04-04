@@ -39,11 +39,6 @@ pipeline {
                          sh './scripts/build_package.sh'
                      }
                  }
-                 stage ('Build dist') {
-                   steps {
-                     sh './scripts/build_dist.sh'
-                   }
-                 }
                  stage('Publish package') {
                      when {
                              anyOf {
@@ -66,6 +61,11 @@ pipeline {
                              sh './scripts/publish.sh --index-url "${PIP_INDEX_URL}"'
                          }
                      }
+                 }
+                 stage ('Build dist') {
+                   steps {
+                     sh './scripts/build_dist.sh'
+                   }
                  }
                  stage('Publish dist') {
                    when {

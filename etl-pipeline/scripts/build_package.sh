@@ -11,6 +11,3 @@ fi
 
 # wheel, for developing and PyPi
 python setup.py bdist_wheel
-artifact=$(basename -- "$(ls ./dist/etl-pipeline-*.whl)")
-version=$(ls -al "./dist/$artifact" | awk -F'etl-pipeline-|-py3-none-any.whl' '{print $2}')
-  

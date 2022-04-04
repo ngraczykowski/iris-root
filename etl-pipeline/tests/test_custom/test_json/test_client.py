@@ -89,4 +89,4 @@ class TestGrpcServerWithoutSSL(BaseGrpcTestCase.TestGrpcServer):
         subprocess.Popen("scripts/start_services.sh", env=environment)
         channel = grpc.insecure_channel("localhost:9090")
         TestGrpcServerWithoutSSL.stub = EtlPipelineServiceStub(channel)
-        time.sleep(1)
+        time.sleep(5)

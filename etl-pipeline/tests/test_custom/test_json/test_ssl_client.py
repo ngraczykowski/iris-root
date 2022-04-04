@@ -26,4 +26,4 @@ class TestSSLGrpcServer(BaseGrpcTestCase.TestGrpcServer):
         server_credentials = grpc.ssl_channel_credentials(ca, private_key, certificate_chain)
         channel = grpc.secure_channel("localhost:9090", server_credentials)
         TestSSLGrpcServer.stub = EtlPipelineServiceStub(channel)
-        time.sleep(1)
+        time.sleep(5)
