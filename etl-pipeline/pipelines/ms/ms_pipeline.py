@@ -1,37 +1,13 @@
 import logging
-import os
 from copy import deepcopy
-
-import omegaconf
 
 from etl_pipeline.config import load_agent_configs, pipeline_config
 from etl_pipeline.custom.ms.datatypes.field import InputRecordField
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.custom.ms.watchlist_extractor import WatchlistExtractor
-from etl_pipeline.logger import get_console_handler, get_file_handler
 from etl_pipeline.pipeline import ETLPipeline
 
-CONFIG_APP_DIR = os.environ["CONFIG_APP_DIR"]
-
-service_config = omegaconf.OmegaConf.load(os.path.join(CONFIG_APP_DIR, "service", "service.yaml"))
-
-
-FORMATTER = logging.Formatter("%(asctime)s — %(name)s — %(levelname)s — %(message)s")
-
-LOGGING_PATH = None
-
-try:
-    LOGGING_PATH = service_config.LOGGING_PATH
-except omegaconf.errors.ConfigAttributeError:
-    pass
-
-logger = logging.getLogger("MS pipeline")
-
-logger.setLevel(logging.DEBUG)
-if LOGGING_PATH:
-    logger.addHandler(get_file_handler("ms_pipeline.log"))
-logger.addHandler(get_console_handler())
-logger.propagate = False
+logger = logging.getLogger("main").getChild("etl_pipeline")
 
 
 cn = pipeline_config.cn

@@ -4,6 +4,9 @@ ENV PIP_INDEX_URL=$PIP_INDEX_URL
 
 RUN apt-get update  && apt-get install -y wget
 RUN apt install gcc -y
+ADD ./package_requirements.txt ./requirements.txt
+RUN pip install -r requirements.txt
+
 RUN mkdir /app
 WORKDIR /app
 ADD . /app/

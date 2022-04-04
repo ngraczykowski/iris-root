@@ -9,4 +9,3 @@ GRPC_SERVER_TLS_TRUSTED_CA:  tests/ssl/ca.pem
 GRPC_CLIENT_TLS_CA: tests/ssl/ca.pem
 GRPC_CLIENT_TLS_PRIVATE_KEY: tests/ssl/server-key.pem
 GRPC_CLIENT_TLS_PUBLIC_KEY_CHAIN: tests/ssl/server.pem
-

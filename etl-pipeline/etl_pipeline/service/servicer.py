@@ -44,7 +44,7 @@ engine = JsonProcessingEngine(pipeline_config)
 pipeline = WmAddressMSPipeline(engine, pipeline_config)
 
 
-logger = logging.getLogger("__main__")
+logger = logging.getLogger("main").getChild("servicer")
 
 
 class EtlPipelineServiceServicer(object):
