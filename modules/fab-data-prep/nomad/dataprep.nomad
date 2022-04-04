@@ -25,6 +25,8 @@ variable "http_tags" {
 locals {
   jvm_memory                = ceil(var.memory * 0.7)
   perm_memory               = ceil(var.memory * 0.2)
+  database_node_destination = "eu3"
+  database_volume           = "/srv/sep-cluster/postgres12/${var.namespace}-dataprep"
 }
 
 job "data-prep" {
@@ -38,6 +40,60 @@ job "data-prep" {
 
   update {
     auto_revert = true
+  }
+
+  group "database" {
+    count = 1
+
+    constraint {
+      attribute = "${node.unique.name}"
+      value     = "${local.database_node_destination}"
+    }
+
+    network {
+      port "tcp" {
+        to = 5432
+      }
+    }
+
+    task "postgres" {
+      driver = "docker"
+
+      template {
+        data        = "{{ key \"database/${var.namespace}-dataprep/secrets\" }}"
+        destination = "secrets/dataprep-db.env"
+        env         = true
+      }
+
+      config {
+        image = "postgres:12"
+        ports = [
+          "tcp"
+        ]
+        volumes = [
+          "${local.database_volume}:/var/lib/postgresql/data"
+        ]
+      }
+
+      service {
+        name = "${var.namespace}-dataprep-db"
+
+        port = "tcp"
+
+        check {
+          type     = "tcp"
+          interval = "30s"
+          timeout  = "5s"
+        }
+      }
+
+      resources {
+        cpu    = 1024
+        # MHz
+        memory = 1024
+        # MB
+      }
+    }
   }
 
   group "data-prep" {
