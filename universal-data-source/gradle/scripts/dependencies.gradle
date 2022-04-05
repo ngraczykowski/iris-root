@@ -1,6 +1,10 @@
 ext {
   libraries = [:]
 
+  shedlockVersion = "4.27.0"
+  springBootVersion = "2.6.6"
+  springCloudVersion = "2021.0.1"
+
   //***********************************
   // Silent Eight
   //***********************************
@@ -280,7 +284,10 @@ dependencies {
       "com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
   implementation platform("org.keycloak.bom:keycloak-adapter-bom:15.0.2")
   implementation platform("io.sentry:sentry-bom:5.6.0")
-
+  implementation platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
+  annotationProcessor platform(
+      "org.springframework.boot:spring-boot-dependencies:$springBootVersion")
+  implementation platform("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion")
   implementation platform("com.blazebit:blaze-persistence-bom:1.6.0")
   annotationProcessor platform("com.blazebit:blaze-persistence-bom:1.6.0")
 
