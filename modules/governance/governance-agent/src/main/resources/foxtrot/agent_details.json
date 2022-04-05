@@ -36,6 +36,7 @@
     ],
     "responses": [
       "EXACT",
+      "MATCH",
       "NEAR",
       "OUT_OF_RANGE",
       "NO_DATA",
