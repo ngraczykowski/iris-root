@@ -3,6 +3,7 @@ package com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.scb.ingest.adapter.incomming.common.domain.GnsSyncConstants;
 import com.silenteight.scb.ingest.domain.model.BatchSource;
 import com.silenteight.scb.ingest.domain.model.BatchStatus;
 
@@ -11,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-@Transactional
+@Transactional(GnsSyncConstants.PRIMARY_TRANSACTION_MANAGER)
 @RequiredArgsConstructor
 public class BatchInfoService {
 
