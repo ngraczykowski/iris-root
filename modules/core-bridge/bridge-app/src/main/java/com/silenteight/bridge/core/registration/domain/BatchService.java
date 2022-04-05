@@ -45,6 +45,11 @@ class BatchService {
         .orElseThrow();
   }
 
+  Batch findBatchById(String batchId) {
+    return batchRepository.findById(batchId)
+        .orElseThrow();
+  }
+
   BatchIdWithPolicy findBatchIdWithPolicyByAnalysisName(String analysisName) {
     return batchRepository.findBatchIdWithPolicyByAnalysisName(analysisName)
         .orElseThrow();

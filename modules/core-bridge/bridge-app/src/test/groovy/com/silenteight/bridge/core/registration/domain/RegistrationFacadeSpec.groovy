@@ -161,17 +161,55 @@ class RegistrationFacadeSpec extends Specification {
     result == RecommendationFixtures.ALERTS
   }
 
+  @Unroll
+  def "markAlertsAsDelivered should get batch by #desc"() {
+    given:
+    def markAlertsAsDeliveredCommand = MarkAlertsAsDeliveredCommand.builder()
+        .batchId(batchId)
+        .analysisName(analysisName)
+        .alertNames([])
+        .build()
+
+    when:
+    underTest.markAlertsAsDelivered(markAlertsAsDeliveredCommand)
+
+    then:
+    if (batchId) {
+      1 * batchService.findBatchById(batchId) >> RegistrationFixtures.BATCH
+    }
+    if (analysisName) {
+      1 * batchService.findBatchByAnalysisName(analysisName) >> RegistrationFixtures.BATCH
+    }
+    1 * alertService.updateStatusToDelivered(Fixtures.BATCH_ID, [])
+
+    where:
+    batchId           | analysisName                       || desc
+    Fixtures.BATCH_ID | null                               || 'batchId'
+    Fixtures.BATCH_ID | ''                                 || 'batchId'
+    null              | RegistrationFixtures.ANALYSIS_NAME || 'analysisName'
+    ''                | RegistrationFixtures.ANALYSIS_NAME || 'analysisName'
+  }
+
+  def 'markAlertsAsDelivered should throw exception when neither batchId nor analysisName were provided'() {
+    given:
+    def markAlertsAsDeliveredCommand = MarkAlertsAsDeliveredCommand.builder().build()
+
+    when:
+    underTest.markAlertsAsDelivered(markAlertsAsDeliveredCommand)
+
+    then:
+    thrown(IllegalStateException)
+  }
+
   def 'markAlertsAsDelivered should call markBatchAsDelivered when alertNames were not provided'() {
     given:
     def batch = RegistrationFixtures.BATCH
-    def analysisName = 'analysis/1'
     def markAlertsAsDeliveredCommand = MarkAlertsAsDeliveredCommand.builder()
         .batchId(batch.id())
-        .analysisName(analysisName)
         .alertNames(alertNames)
         .build()
 
-    1 * batchService.findBatchByAnalysisName(analysisName) >> batch
+    1 * batchService.findBatchById(batch.id()) >> batch
 
     when:
     underTest.markAlertsAsDelivered(markAlertsAsDeliveredCommand)
@@ -188,15 +226,13 @@ class RegistrationFacadeSpec extends Specification {
   def "markAlertsAsDelivered #should call markBatchAsDelivered when #when"() {
     given:
     def batch = RegistrationFixtures.BATCH
-    def analysisName = 'analysis/1'
     def alertNames = ['alert1', 'alert2']
     def markAlertsAsDeliveredCommand = MarkAlertsAsDeliveredCommand.builder()
         .batchId(batch.id())
-        .analysisName(analysisName)
         .alertNames(alertNames)
         .build()
 
-    1 * batchService.findBatchByAnalysisName(analysisName) >> batch
+    1 * batchService.findBatchById(batch.id()) >> batch
     1 * alertService.hasAllDeliveredAlerts(batch) >> hasAllDeliveredAlerts
 
     when:

@@ -109,7 +109,7 @@ class RecommendationCreatorMock {
         .map(matchName ->
             MatchMetadata.newBuilder()
                 .setMatch(matchName)
-                .setSolution("EXACT_MATCH")
+                .setSolution("SOLUTION_POTENTIAL_TRUE_POSITIVE")
                 .setReason(getReason())
                 .putAllCategories(Map.of("mockCategory", "someCategory"))
                 .putAllFeatures(Map.of("mockFeature", getMockFeatureMetadata()))

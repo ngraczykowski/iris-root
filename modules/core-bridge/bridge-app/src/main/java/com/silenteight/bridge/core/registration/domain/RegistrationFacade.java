@@ -11,6 +11,7 @@ import com.silenteight.bridge.core.registration.domain.model.BatchWithAlerts;
 import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -70,7 +71,7 @@ public class RegistrationFacade {
   }
 
   public void markAlertsAsDelivered(MarkAlertsAsDeliveredCommand command) {
-    var batch = batchService.findBatchByAnalysisName(command.analysisName());
+    var batch = getBatch(command);
     alertService.updateStatusToDelivered(batch.id(), command.alertNames());
     if (allAlertsAreDelivered(batch, command.alertNames())) {
       batchService.markBatchAsDelivered(batch);
@@ -94,6 +95,16 @@ public class RegistrationFacade {
       return true;
     } else {
       return alertService.hasAllDeliveredAlerts(batch);
+    }
+  }
+
+  private Batch getBatch(MarkAlertsAsDeliveredCommand command) {
+    if (StringUtils.isNotEmpty(command.batchId())) {
+      return batchService.findBatchById(command.batchId());
+    } else if (StringUtils.isNotEmpty(command.analysisName())) {
+      return batchService.findBatchByAnalysisName(command.analysisName());
+    } else {
+      throw new IllegalStateException("Either batchId or analysisName must be present.");
     }
   }
 }

@@ -133,6 +133,18 @@ class BatchServiceSpec extends Specification {
     result == RegistrationFixtures.BATCH
   }
 
+  def 'should find batch by id'() {
+    given:
+    def analysisName = Fixtures.BATCH_ID
+
+    when:
+    def result = underTest.findBatchById(analysisName)
+
+    then:
+    1 * batchRepository.findById(analysisName) >> Optional.of(RegistrationFixtures.BATCH)
+    result == RegistrationFixtures.BATCH
+  }
+
   def 'should find batch priority with status by batch id'() {
     given:
     def batchId = Fixtures.BATCH_ID
