@@ -26,6 +26,14 @@ public record Alert(
     AlertDetails details,
     Collection<Decision> decisions) {
 
+  public String logInfo() {
+    return String.format(
+        "Alert(batchId: %s, internalBatchId: %s, alertId: %s)",
+        details.getBatchId(),
+        details.getInternalBatchId(),
+        id().sourceId());
+  }
+
   @Builder(toBuilder = true)
   public Alert {}
 

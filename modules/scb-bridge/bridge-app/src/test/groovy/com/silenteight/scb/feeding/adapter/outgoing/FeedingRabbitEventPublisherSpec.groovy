@@ -23,7 +23,7 @@ class FeedingRabbitEventPublisherSpec extends Specification {
   def 'should publish MatchFeatureInputSetFed message'() {
     given:
     def event = UdsFedEvent.builder()
-        .batchId('batchId')
+        .internalBatchId("internalBatchId")
         .alertName('alertName')
         .errorDescription(AlertErrorDescription.NONE)
         .feedingStatus(Status.SUCCESS)
@@ -31,7 +31,7 @@ class FeedingRabbitEventPublisherSpec extends Specification {
         .build()
 
     def message = MessageAlertMatchesFeatureInputFed.newBuilder()
-        .setBatchId(event.batchId())
+        .setBatchId(event.internalBatchId())
         .setAlertName(event.alertName())
         .setAlertErrorDescription(event.errorDescription().getDescription())
         .setFeedingStatus(FeedingStatus.SUCCESS)

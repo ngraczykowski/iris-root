@@ -69,7 +69,7 @@ class IngestService implements SingleAlertIngestService, BatchAlertIngestService
     Alert ingestedAlert = updateIngestInfoForAlert(alert, flags);
     AlertUpdater.updatedWithRegistrationInfo(ingestedAlert, registrationResponse);
 
-    log.info("Publishing a batched alert, systemId={}", ingestedAlert.id().sourceId());
+    log.info("Publishing Alert Ingested for {}", alert.logInfo());
     ingestEventPublisher.publish(ingestedAlert);
   }
 
@@ -78,7 +78,7 @@ class IngestService implements SingleAlertIngestService, BatchAlertIngestService
     Instant ingestedAt = Instant.now();
 
     if (log.isTraceEnabled())
-      log.trace("Updating alert with ingest data: ingestedAt={}", ingestedAt);
+      log.trace("Updating {} with ingest data: ingestedAt: {}", alert.logInfo(), ingestedAt);
 
     return alert
         .toBuilder()
@@ -103,6 +103,7 @@ class IngestService implements SingleAlertIngestService, BatchAlertIngestService
         alert.id().discriminator());
   }
 
+  // TODO: this should be removed as is part of REST /recommendation endpoint
   @Override
   public Optional<Recommendation> ingestAlertAndTryToReceiveRecommendation(
       Alert alert, MessagePropertiesProvider propertiesProvider) {

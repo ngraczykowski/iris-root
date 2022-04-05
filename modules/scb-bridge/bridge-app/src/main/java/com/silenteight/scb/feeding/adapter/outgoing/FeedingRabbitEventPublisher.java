@@ -24,7 +24,7 @@ public class FeedingRabbitEventPublisher implements FeedingEventPublisher {
   @Override
   public void publish(UdsFedEvent event) {
     var message = MessageAlertMatchesFeatureInputFed.newBuilder()
-        .setBatchId(event.batchId())
+        .setBatchId(event.internalBatchId())
         .setAlertName(event.alertName())
         .setAlertErrorDescription(event.errorDescription().getDescription())
         .setFeedingStatus(FeedingStatus.valueOf(event.feedingStatus().name()))

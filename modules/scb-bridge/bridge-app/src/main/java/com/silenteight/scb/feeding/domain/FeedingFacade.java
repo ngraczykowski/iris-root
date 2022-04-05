@@ -40,18 +40,11 @@ public class FeedingFacade {
     Try.run(() -> registerCategoriesValuesForMatches(feedUdsCommand))
         .onFailure(e -> {
           var alert = feedUdsCommand.alert();
-          log.error(
-              "Failed to register categories values for batch id: {} and alert id: {}.",
-              alert.details().getBatchId(),
-              alert.id().sourceId(),
-              e);
+          log.error("Failed to register categories values for {}", alert.logInfo(), e);
         })
         .onSuccess(e -> {
           var alert = feedUdsCommand.alert();
-          log.info(
-              "Categories values for batch id: {} and alert id: {} created successfully.",
-              alert.details().getBatchId(),
-              alert.id().sourceId());
+          log.info("Categories values for {}", alert.logInfo());
         });
   }
 
@@ -76,11 +69,7 @@ public class FeedingFacade {
     Try.run(() -> registerAgentInputsForMatches(feedUdsCommand))
         .onFailure(e -> {
           Alert alert = feedUdsCommand.alert();
-          log.error(
-              "Failed to create feature inputs for batch id: {} and alert id: {}.",
-              alert.details().getBatchId(),
-              alert.id().sourceId(),
-              e);
+          log.error("Failed to create feature inputs for {}", alert.logInfo(), e);
           if (!alert.isLearnFlag()) {
             feedingEventPublisher.publish(
                 createUdsFedEvent(
@@ -89,10 +78,7 @@ public class FeedingFacade {
         })
         .onSuccess(e -> {
           Alert alert = feedUdsCommand.alert();
-          log.info(
-              "Feature inputs for batch id: {} and alert id: {} created successfully.",
-              alert.details().getBatchId(),
-              alert.id().sourceId());
+          log.info("Feature inputs for {} created successfully", alert.logInfo());
           if (!alert.isLearnFlag()) {
             feedingEventPublisher.publish(
                 createUdsFedEvent(alert, Status.SUCCESS, AlertErrorDescription.NONE));
@@ -120,7 +106,7 @@ public class FeedingFacade {
   private UdsFedEvent createUdsFedEvent(
       Alert alert, Status status, AlertErrorDescription errorDescription) {
     return UdsFedEvent.builder()
-        .batchId(alert.details().getBatchId())
+        .internalBatchId(alert.details().getInternalBatchId())
         .alertName(alert.details().getAlertName())
         .errorDescription(errorDescription)
         .feedingStatus(status)

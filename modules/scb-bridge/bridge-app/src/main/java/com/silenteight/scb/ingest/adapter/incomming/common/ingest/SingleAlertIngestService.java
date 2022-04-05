@@ -6,6 +6,7 @@ import com.silenteight.sep.base.common.messaging.properties.MessagePropertiesPro
 
 import java.util.Optional;
 
+// TODO: this should be removed as is part of REST /recommendation endpoint
 public interface SingleAlertIngestService {
 
   Optional<Recommendation> ingestAlertAndTryToReceiveRecommendation(

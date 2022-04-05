@@ -21,7 +21,9 @@ class GnsRtRequestToAlertMapperHelper {
 
   private static final String UNIT_SEPARATOR = "!";
 
-  Alert createAlert(GnsRtRecommendationRequest request, GnsRtAlert alert, List<Match> matches) {
+  Alert createAlert(
+      GnsRtRecommendationRequest request, GnsRtAlert alert,
+      String internalBatchId, List<Match> matches) {
     GnsRtScreenCustomerNameRes customerNameRes = request.getScreenCustomerNameRes();
 
     GnsRtScreenCustomerNameResInfo screenCustomerNameResInfo = customerNameRes
@@ -50,7 +52,7 @@ class GnsRtRequestToAlertMapperHelper {
         .receivedAt(Instant.now())
         .alertedParty(GnsRtAlertedPartyCreator.createAlertedParty(screenableData, recordId))
         .matches(matches)
-        .details(createDetails(alert.getAlertId(), userBankId, trackingId))
+        .details(createDetails(alert.getAlertId(), internalBatchId, userBankId, trackingId))
         .build();
   }
 
@@ -69,9 +71,14 @@ class GnsRtRequestToAlertMapperHelper {
     return String.valueOf(immediateResponseTimestamp.truncatedTo(ChronoUnit.SECONDS));
   }
 
-  private static AlertDetails createDetails(String systemId, String userBankId, String trackingId) {
+  private static AlertDetails createDetails(
+      String systemId,
+      String internalBatchId,
+      String userBankId,
+      String trackingId) {
     return AlertDetails.builder()
         .batchId(nullToEmpty(trackingId))
+        .internalBatchId(internalBatchId)
         .unit(nullToEmpty(extractUnit(systemId)))
         .account(nullToEmpty(userBankId))
         .systemId(systemId)

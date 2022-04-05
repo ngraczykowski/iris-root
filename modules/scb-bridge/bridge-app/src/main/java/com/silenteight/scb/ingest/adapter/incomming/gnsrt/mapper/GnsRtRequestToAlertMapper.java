@@ -34,7 +34,7 @@ public class GnsRtRequestToAlertMapper {
   private GnsRtRequestToAlertMapperHelper gnsRtRequestToAlertMapperHelper =
       new GnsRtRequestToAlertMapperHelper();
 
-  public List<Alert> map(GnsRtRecommendationRequest request) {
+  public List<Alert> map(GnsRtRecommendationRequest request, String internalBatchId) {
     GnsRtScreenCustomerNameResInfo screenCustomerNameResInfo = request
         .getScreenCustomerNameRes()
         .getScreenCustomerNameResPayload()
@@ -49,17 +49,20 @@ public class GnsRtRequestToAlertMapper {
         .getAlerts()
         .parallelStream()
         .filter(g -> g.getAlertStatus() == GnsRtAlertStatus.POTENTIAL_MATCH)
-        .map(alert -> createAlert(request, alert, screenableData))
+        .map(alert -> createAlert(request, alert, internalBatchId, screenableData))
         .collect(toList());
   }
 
   @Nonnull
   private Alert createAlert(
-      GnsRtRecommendationRequest request, GnsRtAlert alert, ScreenableData screenableData) {
+      GnsRtRecommendationRequest request,
+      GnsRtAlert alert,
+      String internalBatchId,
+      ScreenableData screenableData) {
     Collection<Suspect> suspects = extractSuspects(alert);
     List<Match> matches = makeMatches(suspects, screenableData);
 
-    return gnsRtRequestToAlertMapperHelper.createAlert(request, alert, matches);
+    return gnsRtRequestToAlertMapperHelper.createAlert(request, alert, internalBatchId, matches);
   }
 
   @Nonnull

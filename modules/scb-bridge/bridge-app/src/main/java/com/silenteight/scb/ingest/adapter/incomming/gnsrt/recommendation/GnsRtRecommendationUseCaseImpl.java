@@ -44,10 +44,11 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
 
   @Override
   public Mono<GnsRtRecommendationResponse> recommend(@NonNull GnsRtRecommendationRequest request) {
-    var alerts = mapAlerts(request);
-    logGnsRtRequest(alerts);
-
     var internalBatchId = InternalBatchIdGenerator.generate();
+
+    var alerts = mapAlerts(request, internalBatchId);
+    logGnsRtRequest(alerts, internalBatchId);
+
     rawAlertService.store(internalBatchId, alerts);
     batchInfoService.store(internalBatchId, GNS_RT, alerts.size());
 
@@ -71,17 +72,18 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
     ingestEventPublisher.publish(alert);
   }
 
-  private List<Alert> mapAlerts(GnsRtRecommendationRequest request) {
-    return alertMapper.map(request);
+  private List<Alert> mapAlerts(GnsRtRecommendationRequest request, String internalBatchId) {
+    return alertMapper.map(request, internalBatchId);
   }
 
-  private static void logGnsRtRequest(List<Alert> alerts) {
+  private static void logGnsRtRequest(List<Alert> alerts, String internalBatchId) {
     if (log.isInfoEnabled()) {
       String alertsMsg = alerts
           .stream()
           .map(GnsRtRecommendationUseCaseImpl::prepareAlertMessage)
           .collect(Collectors.joining(", "));
-      log.info("Received GNS-RT Request, alerts=[{}]", alertsMsg);
+      log.info("Received GNS-RT Request, internalBatchId: {}, alerts: [{}]", internalBatchId,
+          alertsMsg);
     }
   }
 

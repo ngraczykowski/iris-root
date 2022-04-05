@@ -9,6 +9,7 @@ import lombok.Setter;
 public class AlertDetails {
 
   private final String batchId;
+  private final String internalBatchId;
   private final String unit;
   private final String account;
   private final String systemId;

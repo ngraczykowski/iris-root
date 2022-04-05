@@ -5,7 +5,7 @@ import lombok.Builder;
 import java.util.List;
 
 public record UdsFedEvent(
-    String batchId,
+    String internalBatchId,
     String alertName,
     AlertErrorDescription errorDescription,
     Status feedingStatus,

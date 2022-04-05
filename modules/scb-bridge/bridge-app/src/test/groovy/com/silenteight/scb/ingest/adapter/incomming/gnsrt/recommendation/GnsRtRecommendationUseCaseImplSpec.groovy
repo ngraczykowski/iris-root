@@ -55,7 +55,7 @@ class GnsRtRecommendationUseCaseImplSpec extends Specification {
         .policyId("policyId")
         .build()
 
-    alertMapper.map(fixtures.gnsRtRecommendationRequest) >> fixtures.alerts
+    alertMapper.map(fixtures.gnsRtRecommendationRequest, _ as String) >> fixtures.alerts
     responseMapper.map(fixtures.gnsAlert, fixtures.recommendation) >> mappedAlert
     gnsRtRecommendationService.recommendationsMono(_ as String)
         >> Mono.just(fixtures.recommendations)

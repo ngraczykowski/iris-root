@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.scb.ingest.adapter.incomming.common.gender.GenderDetector;
 import com.silenteight.scb.ingest.adapter.incomming.common.hitdetails.HitDetailsParser;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
+import com.silenteight.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.GnsRtAlertStatus;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.request.GnsRtAlert;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.request.GnsRtRecommendationRequest;
@@ -54,6 +55,7 @@ class GnsRtRequestToAlertMapperTest {
     requestsWithAmountOfAlerts.put("Request22.json", 1);
   }
 
+  private String internalBatchId = InternalBatchIdGenerator.generate();
   private ObjectMapper objectMapper;
   private GnsRtRequestToAlertMapper gnsRtRequestToAlertMapper =
       new GnsRtRequestToAlertMapper(new HitDetailsParser(), new GenderDetector());
@@ -73,7 +75,8 @@ class GnsRtRequestToAlertMapperTest {
       List<GnsRtAlert> gnsRtAlerts = getAlerts(gnsRtRecommendationRequest);
 
       //when
-      List<Alert> alerts = gnsRtRequestToAlertMapper.map(gnsRtRecommendationRequest);
+      List<Alert> alerts =
+          gnsRtRequestToAlertMapper.map(gnsRtRecommendationRequest, internalBatchId);
 
       //then
       assertThat(alerts.size()).isEqualTo(amountOfAlerts);
@@ -120,13 +123,15 @@ class GnsRtRequestToAlertMapperTest {
     var gnsRtRecommendationRequest = createRequest("Request1.json");
 
     //when
-    List<Alert> alerts = gnsRtRequestToAlertMapper.map(gnsRtRecommendationRequest);
+    List<Alert> alerts = gnsRtRequestToAlertMapper.map(gnsRtRecommendationRequest, internalBatchId);
 
     //then
     assertThat(alerts).hasSize(1);
-    var alertId = alerts.get(0).id();
+    var alert = alerts.get(0);
+    var alertId = alert.id();
     assertThat(alertId.sourceId()).isEqualTo("IN_BTCH_DUDL!737FC9C1-BDE337AD-75A2086D-78C6F14C");
     assertThat(alertId.discriminator()).isEqualTo("2020-02-20T13:28:02Z");
+    assertThat(alert.details().getInternalBatchId()).isEqualTo(internalBatchId);
   }
 
   @Test
@@ -135,7 +140,7 @@ class GnsRtRequestToAlertMapperTest {
     GnsRtRecommendationRequest gnsRtRecommendationRequest = createRequest("Request1.json");
 
     //when
-    List<Alert> alerts = gnsRtRequestToAlertMapper.map(gnsRtRecommendationRequest);
+    List<Alert> alerts = gnsRtRequestToAlertMapper.map(gnsRtRecommendationRequest, internalBatchId);
 
     //then
     var matches = alerts.get(0).matches();
@@ -143,7 +148,7 @@ class GnsRtRequestToAlertMapperTest {
         .filter(m -> m.id().sourceId().equals("AS05305170"))
         .findFirst();
 
-    assertThat(match.isPresent());
+    assertThat(match.isPresent()).isTrue();
 
     var details = match.get().matchedParty();
 
@@ -157,7 +162,7 @@ class GnsRtRequestToAlertMapperTest {
     var gnsRtRecommendationRequest = createRequest("Request21.json");
 
     //when
-    var alerts = gnsRtRequestToAlertMapper.map(gnsRtRecommendationRequest);
+    var alerts = gnsRtRequestToAlertMapper.map(gnsRtRecommendationRequest, internalBatchId);
 
     //then
     var matches = alerts.get(0).matches();
@@ -165,7 +170,7 @@ class GnsRtRequestToAlertMapperTest {
         .filter(m -> m.id().sourceId().equals("AS05305170"))
         .findFirst();
 
-    assertThat(match.isPresent());
+    assertThat(match.isPresent()).isTrue();
 
     var details = match.get().matchedParty();
 
@@ -178,7 +183,7 @@ class GnsRtRequestToAlertMapperTest {
     var gnsRtRecommendationRequest = createRequest("Request22.json");
 
     //when
-    var alerts = gnsRtRequestToAlertMapper.map(gnsRtRecommendationRequest);
+    var alerts = gnsRtRequestToAlertMapper.map(gnsRtRecommendationRequest, internalBatchId);
 
     //then
     var matches = alerts.get(0).matches();
@@ -186,7 +191,7 @@ class GnsRtRequestToAlertMapperTest {
         .filter(m -> m.id().sourceId().equals("AS05305170"))
         .findFirst();
 
-    assertThat(match.isPresent());
+    assertThat(match.isPresent()).isTrue();
 
     var details = match.get().matchedParty();
 
