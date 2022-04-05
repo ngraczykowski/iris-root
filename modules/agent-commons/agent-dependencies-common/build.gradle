@@ -68,7 +68,7 @@ dependencies {
     api "com.google.code.findbugs:jsr305:3.0.2"
     api "com.google.guava:guava:$guavaVersion"
     api "com.orbitz.consul:consul-client:1.5.2"
-    api "com.salesforce.servicelibs:reactor-grpc-stub:1.2.3"
+    api "com.salesforce.servicelibs:reactor-grpc-stub:1.0.1"
     api "com.sun.mail:jakarta.mail:$jakartaMailVersion"
     api "com.tngtech.archunit:archunit-junit5:$archunitJunitVersion"
     api "com.thoughtworks.paranamer:paranamer:2.8"
