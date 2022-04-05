@@ -10,6 +10,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 class RegistrationServiceGrpcAdapterTest {
 
@@ -26,27 +31,15 @@ class RegistrationServiceGrpcAdapterTest {
     underTest = new RegistrationServiceGrpcAdapter(stub, 1L);
   }
 
-  @Test
-  @DisplayName("should register batch")
-  void shouldRegisterBatch() {
+  @MethodSource("registerBatchParameters")
+  @ParameterizedTest(name = "{index} should register batch with {2} in request.")
+  void shouldRegisterBatch(RegisterBatchIn request, EmptyOut expectedResponse, String description) {
     //when
     var response =
-        underTest.registerBatch(RegisterBatchInRequestFixtures.REGISTER_BATCH_IN);
+        underTest.registerBatch(request);
 
     //then
-    Assertions.assertEquals(response, EmptyOut.getInstance());
-  }
-
-  @Test
-  @DisplayName("should register batch with null priority")
-  void shouldRegisterBatchWithNullPriority() {
-    //when
-    var response =
-        underTest.registerBatch(
-            RegisterBatchInRequestFixtures.REGISTER_BATCH_IN_WITH_NULL_PRIORITY);
-
-    //then
-    Assertions.assertEquals(response, EmptyOut.getInstance());
+    Assertions.assertEquals(response, expectedResponse);
   }
 
   @Test
@@ -69,6 +62,27 @@ class RegistrationServiceGrpcAdapterTest {
     //then
     Assertions.assertEquals(response.getRegisteredAlertWithMatches().size(), 1);
     Assertions.assertEquals(response, RegisterAlertAndMatchesResponseFixtures.RESPONSE);
+  }
+
+  private static Stream<Arguments> registerBatchParameters() {
+    return Stream.of(
+        Arguments.of(
+            RegisterBatchInRequestFixtures.REGISTER_BATCH_IN,
+            EmptyOut.getInstance(),
+            "all fields filled"),
+        Arguments.of(
+            RegisterBatchInRequestFixtures.REGISTER_BATCH_IN_WITH_NULL_PRIORITY,
+            EmptyOut.getInstance(),
+            "null priority"),
+        Arguments.of(
+            RegisterBatchInRequestFixtures.REGISTER_BATCH_IN_WITH_NULL_LEARNING,
+            EmptyOut.getInstance(),
+            "null learning"),
+        Arguments.of(
+            RegisterBatchInRequestFixtures.REGISTER_BATCH_IN_WITH_NULL_LEARNING_AND_NULL_PRIORITY,
+            EmptyOut.getInstance(),
+            "null learning and null priority")
+    );
   }
 
   static class MockedRegistrationServiceGrpcServer extends RegistrationServiceImplBase {

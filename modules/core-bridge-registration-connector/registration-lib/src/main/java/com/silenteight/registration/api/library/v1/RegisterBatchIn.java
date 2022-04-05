@@ -12,14 +12,16 @@ import java.util.Optional;
 public class RegisterBatchIn {
 
   String batchId;
-  String batchMetadata;
   Long alertCount;
+  Boolean isLearning;
+  String batchMetadata;
   Integer batchPriority;
 
   RegisterBatchRequest toRegisterBatchRequest() {
     return RegisterBatchRequest.newBuilder()
         .setBatchId(batchId)
         .setAlertCount(alertCount)
+        .setIsLearning(Optional.ofNullable(isLearning).orElse(false))
         .setBatchMetadata(Optional.ofNullable(batchMetadata).orElse(""))
         .setBatchPriority(Optional.ofNullable(batchPriority).orElse(0))
         .build();

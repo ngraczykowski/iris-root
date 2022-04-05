@@ -41,6 +41,7 @@ message RegisterBatchRequest {
   int64 alert_count = 2 [(google.api.field_behavior) = REQUIRED];
   optional string batch_metadata = 3;
   optional int32 batch_priority = 4;
+  optional bool is_learning = 5;
 }
 
 message NotifyBatchErrorRequest {
