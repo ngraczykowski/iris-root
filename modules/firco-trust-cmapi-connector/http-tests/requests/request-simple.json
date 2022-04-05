@@ -115,10 +115,7 @@
                     ],
                     "OtherDocument": "12345",
                     "PassportNumber": "AVB2833444",
-                    "AdditionalInfo": [
-                      "M",
-                      "IR"
-                    ],
+                    "AdditionalInfo": "M",
                     "DatesOfBirth": [
                       {
                         "DateOfBirth": "30/8/1965"
