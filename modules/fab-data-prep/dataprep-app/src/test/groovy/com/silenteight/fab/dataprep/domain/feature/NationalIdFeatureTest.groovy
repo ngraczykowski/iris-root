@@ -1,7 +1,7 @@
 package com.silenteight.fab.dataprep.domain.feature
 
 import com.silenteight.fab.dataprep.domain.ServiceTestConfig
-import com.silenteight.universaldatasource.api.library.nationalid.v1.NationalIdFeatureInputOut
+import com.silenteight.universaldatasource.api.library.document.v1.DocumentFeatureInputOut
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer
@@ -27,17 +27,15 @@ class NationalIdFeatureTest extends Specification {
     def result = underTest.buildFeature(command)
 
     then:
-    result == NationalIdFeatureInputOut.builder()
+    result == DocumentFeatureInputOut.builder()
         .feature(NationalIdFeature.FEATURE_NAME)
-        .alertedPartyCountries(apCountries)
-        .watchlistCountries(wlCountries)
-        .alertedPartyDocumentNumbers(apDocumentNumbers)
-        .watchlistDocumentNumbers(wlDocumentNumbers)
+        .alertedPartyDocuments(alertedParty)
+        .watchlistDocuments(watchList)
         .build()
 
     where:
-    command                     | apCountries | wlCountries | apDocumentNumbers | wlDocumentNumbers
-    EMPTY_BUILD_FEATURE_COMMAND | ['IR']      | []          | ['S93849384A']    | []
-    BUILD_FEATURE_COMMAND       | ['IR']      | ['none']    | ['S93849384A']    | []
+    command                     | alertedParty                     | watchList
+    EMPTY_BUILD_FEATURE_COMMAND | ['S93849384A'] | []
+    BUILD_FEATURE_COMMAND       | ['S93849384A'] | []
   }
 }

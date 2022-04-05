@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.fab.dataprep.domain.model.ParsedMessageData;
 import com.silenteight.universaldatasource.api.library.Feature;
-import com.silenteight.universaldatasource.api.library.bankidentificationcodes.v1.BankIdentificationCodesFeatureInputOut;
+import com.silenteight.universaldatasource.api.library.document.v1.DocumentFeatureInputOut;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.jayway.jsonpath.ParseContext;
@@ -12,62 +12,32 @@ import com.jayway.jsonpath.ParseContext;
 import java.util.List;
 
 import static com.silenteight.fab.dataprep.infrastructure.FeatureAndCategoryConfiguration.LIST_OF_STRINGS;
+import static java.util.List.of;
 
 @RequiredArgsConstructor
 public class BicFeature implements FabFeature {
 
   static final String FEATURE_NAME = "features/bic";
-  private static final String MATCHING_TEXT_PATH = "$.MatchingText";
-  private static final String TYPE_PATH = "$.HittedEntity.Type";
   private static final String BIC_PATH = "$.HittedEntity.Codes[*]";    //TODO is it correct?
-  //TODO is it correct?
-  private static final String SEARCH_CODES_PATH = "$.HittedEntity.Codes[*]";
 
   private final ParseContext parseContext;
 
   @Override
   public Feature buildFeature(BuildFeatureCommand buildFeatureCommand) {
-    JsonNode payload = getBestJsonNode(buildFeatureCommand.getMatch().getPayloads());
-    return BankIdentificationCodesFeatureInputOut.builder()
+    return DocumentFeatureInputOut.builder()
         .feature(FEATURE_NAME)
-        .alertedPartyMatchingField(getAlertedPart(buildFeatureCommand.getParsedMessageData()))
-        .watchListMatchingText(getMatchingTexts(payload))
-        .watchlistType(getWatchlistType(payload))
-        .watchlistBicCodes(getWatchlistPart(payload))
-        .watchlistSearchCodes(getWatchlistSearchCodes(payload))
+        .alertedPartyDocuments(getAlertedPart(buildFeatureCommand.getParsedMessageData()))
+        .watchlistDocuments(
+            merge(buildFeatureCommand.getMatch().getPayloads(), this::getWatchlistPart))
         .build();
   }
 
-  private JsonNode getBestJsonNode(List<JsonNode> jsonNodes) {
-    return jsonNodes.stream()
-        .filter(jsonNode -> !getWatchlistPart(jsonNode).isEmpty())
-        .findFirst()
-        .orElseGet(() -> jsonNodes.get(0));
-  }
-
-  private static String getAlertedPart(ParsedMessageData parsedMessageData) {
-    return parsedMessageData.getSwiftBic();
+  private static List<String> getAlertedPart(ParsedMessageData parsedMessageData) {
+    return of(
+        parsedMessageData.getSwiftBic());
   }
 
   private List<String> getWatchlistPart(JsonNode jsonNode) {
     return parseContext.parse(jsonNode).read(BIC_PATH, LIST_OF_STRINGS);
-  }
-
-  private List<String> getWatchlistSearchCodes(JsonNode jsonNode) {
-    return parseContext.parse(jsonNode).read(SEARCH_CODES_PATH, LIST_OF_STRINGS);
-  }
-
-  private String getWatchlistType(JsonNode jsonNode) {
-    return parseContext.parse(jsonNode).read(TYPE_PATH, LIST_OF_STRINGS)
-        .stream()
-        .findFirst()
-        .orElse("");
-  }
-
-  private String getMatchingTexts(JsonNode jsonNode) {
-    return parseContext.parse(jsonNode).read(MATCHING_TEXT_PATH, LIST_OF_STRINGS)
-        .stream()
-        .findFirst()
-        .orElse("");
   }
 }

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.fab.dataprep.domain.model.ParsedMessageData;
 import com.silenteight.universaldatasource.api.library.Feature;
-import com.silenteight.universaldatasource.api.library.nationalid.v1.NationalIdFeatureInputOut;
+import com.silenteight.universaldatasource.api.library.document.v1.DocumentFeatureInputOut;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.jayway.jsonpath.ParseContext;
@@ -18,7 +18,6 @@ import static java.util.List.of;
 public class NationalIdFeature implements FabFeature {
 
   static final String FEATURE_NAME = "features/nationalIdDocument";
-  private static final String COUNTRY_JSON_PATH = "$.HittedEntity.AdditionalInfo";
   //TODO is it correct?
   private static final String DOCUMENT_JSON_PATH = "$.HittedEntity.Codes[*]";
 
@@ -26,30 +25,20 @@ public class NationalIdFeature implements FabFeature {
 
   @Override
   public Feature buildFeature(BuildFeatureCommand buildFeatureCommand) {
-    ParsedMessageData parsedMessageData = buildFeatureCommand.getParsedMessageData();
-    List<JsonNode> payloads = buildFeatureCommand.getMatch().getPayloads();
-    return NationalIdFeatureInputOut.builder()
+    return DocumentFeatureInputOut.builder()
         .feature(FEATURE_NAME)
-        .alertedPartyCountries(getAlertedPartCountry(parsedMessageData))
-        .watchlistCountries(merge(payloads, this::getWatchlistPartCountry))
-        .alertedPartyDocumentNumbers(getAlertedPartDocument(parsedMessageData))
-        .watchlistDocumentNumbers(merge(payloads, this::getWatchlistPartDocument))
+        .alertedPartyDocuments(getAlertedPart(buildFeatureCommand.getParsedMessageData()))
+        .watchlistDocuments(
+            merge(buildFeatureCommand.getMatch().getPayloads(), this::getWatchlistPart))
         .build();
   }
 
-  private static List<String> getAlertedPartCountry(ParsedMessageData parsedMessageData) {
-    return of(parsedMessageData.getCountryOfIncorporation());
+  private static List<String> getAlertedPart(ParsedMessageData parsedMessageData) {
+    return of(
+        parsedMessageData.getNationalId());
   }
 
-  List<String> getWatchlistPartCountry(JsonNode jsonNode) {
-    return parseContext.parse(jsonNode).read(COUNTRY_JSON_PATH, LIST_OF_STRINGS);
-  }
-
-  private static List<String> getAlertedPartDocument(ParsedMessageData parsedMessageData) {
-    return of(parsedMessageData.getNationalId());
-  }
-
-  List<String> getWatchlistPartDocument(JsonNode jsonNode) {
+  private List<String> getWatchlistPart(JsonNode jsonNode) {
     return parseContext.parse(jsonNode).read(DOCUMENT_JSON_PATH, LIST_OF_STRINGS);
   }
 }
