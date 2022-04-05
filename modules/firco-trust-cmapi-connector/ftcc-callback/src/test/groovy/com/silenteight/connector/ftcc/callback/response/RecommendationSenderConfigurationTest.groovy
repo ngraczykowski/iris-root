@@ -1,6 +1,6 @@
 package com.silenteight.connector.ftcc.callback.response
 
-import com.silenteight.connector.ftcc.callback.newdecision.DecisionConfiguration
+
 import com.silenteight.connector.ftcc.request.details.MessageDetailsQuery
 
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,7 +19,7 @@ import static java.time.temporal.ChronoUnit.SECONDS
 import static org.springframework.http.HttpStatus.BAD_REQUEST
 import static org.springframework.http.HttpStatus.OK
 
-@SpringBootTest(classes = [ResponseConfiguration.class, DecisionConfiguration.class, MessageDetailsQueryConfiguration.class])
+@SpringBootTest(classes = [ResponseConfiguration.class, MessageDetailsQueryConfiguration.class])
 @AutoConfigureWebClient
 class RecommendationSenderConfigurationTest extends Specification {
 
@@ -47,7 +47,7 @@ class RecommendationSenderConfigurationTest extends Specification {
   }
 }
 
-@SpringBootTest(classes = [ResponseConfiguration.class, DecisionConfiguration.class, MessageDetailsQueryConfiguration.class],
+@SpringBootTest(classes = [ResponseConfiguration.class, MessageDetailsQueryConfiguration.class],
     properties = "ftcc.cmapi.callback.keystorePath:")
 @AutoConfigureWebClient
 class RecommendationSenderConfigurationWithoutKeystorePathTest extends Specification {

@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableConfigurationProperties(DecisionConfigurationProperties.class)
-public class DecisionConfiguration {
+class DecisionConfiguration {
 
   @Bean
   DecisionConfigurationHandlerBeanFactory decisionConfigurationHandlerBeanFactory(
