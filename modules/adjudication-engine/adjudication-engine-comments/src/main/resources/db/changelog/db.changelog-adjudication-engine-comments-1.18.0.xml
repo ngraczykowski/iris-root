@@ -32,4 +32,13 @@
   <changeSet id="adjudication-engine-comments-1.18.0_4" author="jgajewski">
     <sqlFile path="db/changelog/sql/create_template_name_agent_v2.sql"/>
   </changeSet>
+
+  <changeSet id="adjudication-engine-comments-1.18.0_5" author="wkeska">
+    <insert tableName="ae_comment_template">
+      <column name="template_name" value="match.ftl"/>
+      <column name="created_at" valueDate="2022-04-05 18:19:26.000000"/>
+      <column name="revision" valueNumeric="5"/>
+      <column name="template" valueClobFile="templates/match.ftl"/>
+    </insert>
+  </changeSet>
 </databaseChangeLog>
