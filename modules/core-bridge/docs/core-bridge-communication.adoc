@@ -9,6 +9,7 @@ participant "Core Bridge" as co
 participant "Adjudication Engine" as ae
 participant "ETL" as etl
 participant "Universal Data Source" as uds
+participant "Warehouse" as warehouse
 
 cl-> cu: Push Alets
 
@@ -24,12 +25,10 @@ cu-> co: Notification of fed UDS with data from previously registered Alerts
 note across: "Solving Alerts"
 ...
 
-ae -> co:
+ae -> co: Recommedations Generated
 co-> cu: Notification 'Batch completed'
-ae -> co:
-co-> cu: Get Recommendations
 cl <- cu: Push Recommendations
 cu-> co: Recommendations delivered
-ae <- co:
+co-> warehouse: BatchDelivered
 @enduml
 -----

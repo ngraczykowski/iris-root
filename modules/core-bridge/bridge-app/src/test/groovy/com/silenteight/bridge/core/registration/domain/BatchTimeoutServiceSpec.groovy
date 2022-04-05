@@ -112,7 +112,7 @@ class BatchTimeoutServiceSpec extends Specification {
     def batchId = batch.id()
     def expectedBatchCompletedEvent = BatchCompleted.builder()
         .id(batch.id())
-        .analysisId(batch.analysisName())
+        .analysisName(batch.analysisName())
         .batchMetadata(batch.batchMetadata())
         .build()
     def command = new VerifyBatchTimeoutCommand(batchId)
@@ -139,7 +139,7 @@ class BatchTimeoutServiceSpec extends Specification {
     def command = new VerifyBatchTimeoutCommand(batchId)
     def expectedBatchCompletedEvent = BatchCompleted.builder()
         .id(batch.id())
-        .analysisId(batch.analysisName())
+        .analysisName(batch.analysisName())
         .batchMetadata(batch.batchMetadata())
         .build()
 
@@ -165,7 +165,7 @@ class BatchTimeoutServiceSpec extends Specification {
     def command = new VerifyBatchTimeoutCommand(batchId)
     def expectedBatchCompletedEvent = BatchCompleted.builder()
         .id(batch.id())
-        .analysisId(batch.analysisName())
+        .analysisName(batch.analysisName())
         .batchMetadata(batch.batchMetadata())
         .build()
 

@@ -66,7 +66,7 @@ class BatchEventRabbitPublisherSpec extends Specification {
     given:
     def batchCompleted = BatchCompleted.builder()
         .id('batchId')
-        .analysisId('analysisName')
+        .analysisName('analysisName')
         .batchMetadata('batchMetadata')
         .build()
 

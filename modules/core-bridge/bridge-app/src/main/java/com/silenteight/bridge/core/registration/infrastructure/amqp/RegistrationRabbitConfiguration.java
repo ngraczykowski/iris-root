@@ -24,7 +24,8 @@ import java.util.Optional;
     AmqpRegistrationIncomingVerifyBatchTimeoutProperties.class,
     AmqpRegistrationOutgoingNotifyBatchTimedOutProperties.class,
     AmqpRegistrationProperties.class,
-    AmqpRegistrationOutgoingNotifyBatchDeliveredProperties.class
+    AmqpRegistrationOutgoingNotifyBatchDeliveredProperties.class,
+    RegistrationVerifyBatchTimeoutProperties.class
 })
 class RegistrationRabbitConfiguration {
 
@@ -208,19 +209,19 @@ class RegistrationRabbitConfiguration {
   }
 
   @Bean
-  @ConditionalOnProperty("amqp.registration.outgoing.verify-batch-timeout.timeout-enabled")
+  @ConditionalOnProperty("registration.verify-batch-timeout.enabled")
   DirectExchange verifyBatchTimeoutExchange(
       AmqpRegistrationOutgoingVerifyBatchTimeoutProperties properties) {
     return new DirectExchange(properties.exchangeName());
   }
 
   @Bean
-  @ConditionalOnProperty("amqp.registration.outgoing.verify-batch-timeout.timeout-enabled")
+  @ConditionalOnProperty("registration.verify-batch-timeout.enabled")
   Queue verifyBatchTimeoutDelayedQueue(
       AmqpRegistrationIncomingVerifyBatchTimeoutProperties properties,
-      AmqpRegistrationOutgoingVerifyBatchTimeoutProperties outgoingProperties
+      RegistrationVerifyBatchTimeoutProperties timeoutProperties
   ) {
-    if (outgoingProperties.timeoutEnabled() && outgoingProperties.delayTime() == null) {
+    if (timeoutProperties.enabled() && timeoutProperties.delayTime() == null) {
       throw new IllegalStateException("""
           Batch timeout handling is enabled, but delay time is not configured.
           More details can be found in the README file: Usage->Configuration.
@@ -233,7 +234,7 @@ class RegistrationRabbitConfiguration {
   }
 
   @Bean
-  @ConditionalOnProperty("amqp.registration.outgoing.verify-batch-timeout.timeout-enabled")
+  @ConditionalOnProperty("registration.verify-batch-timeout.enabled")
   Binding verifyBatchTimeoutBinding(
       @Qualifier("verifyBatchTimeoutDelayedQueue") Queue queue,
       @Qualifier("verifyBatchTimeoutExchange") DirectExchange exchange) {

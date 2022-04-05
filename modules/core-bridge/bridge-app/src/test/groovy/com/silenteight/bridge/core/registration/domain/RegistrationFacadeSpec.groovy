@@ -148,6 +148,19 @@ class RegistrationFacadeSpec extends Specification {
     result == RecommendationFixtures.BATCH_WITH_ALERTS
   }
 
+  def 'should retrieve alerts with matches by batch id'() {
+    given:
+    def command = RegistrationFixtures.GET_ALERTS_WITH_MATCHES_COMMAND
+
+    when:
+    def result = underTest.getAlertsWithMatches(command)
+
+    then:
+    1 * alertService.getAlertsAndMatches(Fixtures.BATCH_ID) >> RecommendationFixtures.ALERTS
+
+    result == RecommendationFixtures.ALERTS
+  }
+
   def 'markAlertsAsDelivered should call markBatchAsDelivered when alertNames were not provided'() {
     given:
     def batch = RegistrationFixtures.BATCH

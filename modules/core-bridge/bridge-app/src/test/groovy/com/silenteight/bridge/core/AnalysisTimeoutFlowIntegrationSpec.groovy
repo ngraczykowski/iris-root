@@ -31,7 +31,7 @@ import static com.silenteight.proto.registration.api.v1.AlertStatus.SUCCESS
         "grpc.server.port=-1",
         "grpc.client.inProcess.address=in-process:test",
         "registration.analysis.mock-recommendations-generation=false",
-        "amqp.registration.outgoing.verify-batch-timeout.delay-time:2s"
+        "registration.verify-batch-timeout.delay-time:2s"
     ]
 )
 @ActiveProfiles("test")

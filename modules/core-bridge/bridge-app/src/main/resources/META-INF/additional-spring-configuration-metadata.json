@@ -86,11 +86,6 @@
       "description": "Exchange name for verify batch time out event."
     },
     {
-      "name": "amqp.registration.outgoing.verify-batch-timeout.delay-time",
-      "type": "java.time.Duration",
-      "description": "Batch TTL before it gets timed out."
-    },
-    {
       "name": "amqp.registration.outgoing.notify-batch-timed-out.exchange-name",
       "type": "java.lang.String",
       "description": "Exchange name for notify batch timed out event."
@@ -126,14 +121,59 @@
       "description": "Amount of retries for a message before it will be discarded."
     },
     {
-      "name": "amqp.registration.outgoing.verify-batch-timeout.timeout-enabled",
-      "type": "java.lang.Boolean",
-      "description": "Enable or disable batch timeout handling."
-    },
-    {
       "name": "amqp.registration.outgoing.notify-batch-delivered.exchange-name",
       "type": "java.lang.String",
       "description": "Exchange name for notify batch delivered event."
+    },
+    {
+      "name": "amqp.reports.outgoing.exchange-name",
+      "type": "java.lang.String",
+      "description": "Reports exchange name."
+    },
+    {
+      "name": "amqp.reports.outgoing.routing-key",
+      "type": "java.lang.String",
+      "description": "Reports routing key."
+    },
+    {
+      "name": "amqp.reports.incoming.batch-delivered.exchange-name",
+      "type": "java.lang.String",
+      "description": "Exchange for reports batch delivered events."
+    },
+    {
+      "name": "amqp.reports.incoming.batch-delivered.queue-name",
+      "type": "java.lang.String",
+      "description": "Queue for reports batch delivered events."
+    },
+    {
+      "name": "amqp.reports.incoming.batch-delivered.dead-letter-queue-name",
+      "type": "java.lang.String",
+      "description": "Dead letter queue name for reports batch delivered events."
+    },
+    {
+      "name": "amqp.reports.incoming.batch-delivered.dead-letter-queue-time-to-live-in-milliseconds",
+      "type": "java.lang.String",
+      "description": "Dead letter queue TTL for reports batch delivered events."
+    },
+    {
+      "name": "amqp.reports.incoming.batch-delivered.dead-letter-exchange-name",
+      "type": "java.lang.String",
+      "description": "Dead letter exchange for reports batch delivered events."
+    },
+    {
+      "name": "reports.enabled",
+      "type": "java.lang.String",
+      "description": "Enable reports to be send to warehouse."
+    },
+    {
+      "name": "registration.verify-batch-timeout.delay-time",
+      "type": "java.time.Duration",
+      "description": "Batch TTL before it gets timed out."
+    },
+    {
+      "name": "registration.verify-batch-timeout.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enable or disable batch timeout handling."
     }
   ]
 }

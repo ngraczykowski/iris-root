@@ -14,10 +14,11 @@ more info soon...
 ### Configuration
 Below you can find all configuration parameters that can be set to customize the Core Bridge.
 
-| name                           	| description                                                                     	                            | path                                                            	| type     	| env variable (can be set e.g. via Consul                      | default 	|
-|--------------------------------	|---------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------	|----------	|------------------------------------------------------------	|---------	|
-| Batch Expiration Check Enabled 	| Specifies whether batch should expire after the specified time. More info [here](docs/batch_expiration.adoc) 	| amqp.registration.outgoing.verify-batch-timeout.timeout-enabled 	| boolean  	| AMQP_REGISTRATION_OUTGOING_VERIFY_BATCH_TIMEOUT_ENABLED    	| true    	|
-| Batch Expiration Check Timeout 	| Specifies the time after which the batch should expire. More info [here](docs/batch_expiration.adoc)          | amqp.registration.outgoing.verify-batch-timeout.delay-time      	| duration 	| AMQP_REGISTRATION_OUTGOING_VERIFY_BATCH_TIMEOUT_DELAY_TIME 	| 60m     	|
+| name                           	 | description                                                                     	                           | path                                                            	 | type     	 | env variable (can be set e.g. via Consul       | default 	 |
+|----------------------------------|-------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------|------------|------------------------------------------------|-----------|
+| Batch Expiration Check Enabled 	 | Specifies whether batch should expire after the specified time. More info [here](docs/batch_expiration.adoc) 	 | registration.verify-batch-timeout.enabled 	                       | boolean  	 | REGISTRATION_VERIFY_BATCH_TIMEOUT_ENABLED    	 | true    	 |
+| Batch Expiration Check Timeout 	 | Specifies the time after which the batch should expire. More info [here](docs/batch_expiration.adoc)        | registration.verify-batch-timeout.delay-time      	               | duration 	 | REGISTRATION_VERIFY_BATCH_TIMEOUT_DELAY_TIME 	 | 60m     	 |
+| Warehouse reports                | Specifies whether core bridge should send reports to warehouse | reports.enabled                              | boolean    | REPORTS_ENABLED                                | true      |
 
 There are two recommended ways of customizing the Core Bridge settings:
 * S8 Nomad environment:

@@ -50,7 +50,7 @@ public class RecommendationFacade {
         batchStatistics);
   }
 
-  private List<RecommendationWithMetadata> getRecommendations(GetRecommendationCommand command) {
+  public List<RecommendationWithMetadata> getRecommendations(GetRecommendationCommand command) {
     if (CollectionUtils.isEmpty(command.alertNames())) {
       return recommendationRepository.findByAnalysisName(command.analysisName());
     }

@@ -101,7 +101,7 @@ class RecommendationsStoredFlowIntegrationSpec extends BaseSpecificationIT {
 
       with(messageBatchCompleted) {
         batchId == BATCH_ID_INPUT
-        it.analysisName == analysisName
+        analysisName == analysisName
         batchMetadata == METADATA
       }
     }

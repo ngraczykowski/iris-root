@@ -116,7 +116,7 @@ class BatchTimeoutService {
   private BatchCompleted buildBatchCompletedEvent(Batch batch) {
     return BatchCompleted.builder()
         .id(batch.id())
-        .analysisId(batch.analysisName())
+        .analysisName(batch.analysisName())
         .batchMetadata(batch.batchMetadata())
         .build();
   }

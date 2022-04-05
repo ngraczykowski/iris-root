@@ -10,6 +10,7 @@ ext {
   governanceApiLibraryVersion = '1.0.0'
   adjudicationEngineApiVersion = '0.8.0'
   adjudicationEngineApiLibraryVersion = '1.4.0'
+  warehouseApiVersion = "2.2.0"
   protobufSpringBootStarterVersion = '1.6.0'
 
   //***********************************
@@ -37,6 +38,7 @@ libraries.governance_model_api = [group: 'com.silenteight.governance.api', name:
 libraries.governance_model_api_library = [group: 'com.silenteight.governance.api.library', name: 'governance-lib', version: governanceApiLibraryVersion]
 libraries.adjudication_engine_api = [group: 'com.silenteight.adjudication.api', name: 'adjudication-api', version: adjudicationEngineApiVersion]
 libraries.adjudication_engine_api_library = [group: 'com.silenteight.adjudication.api.library', name: 'ae-lib', version: adjudicationEngineApiLibraryVersion]
+libraries.warehouse_api = [group: 'com.silenteight.warehouse.api', name: 'se-data-api', version: warehouseApiVersion]
 
 // Spring
 libraries.spring_aspects = [group: 'org.springframework', name: 'spring-aspects', version: springVersion]
@@ -94,6 +96,7 @@ libraries.sentry_logback = [group: 'io.sentry', name: 'sentry-logback', version:
 libraries.sentry_spring_boot_starter = [group: 'io.sentry', name: 'sentry-spring-boot-starter', version: sentryVersion]
 libraries.vavr = [group: 'io.vavr', name: 'vavr', version: '0.10.4']
 libraries.lz4_java = [group: 'org.lz4', name: 'lz4-java', version: '1.7.1']
+libraries.json_flattener = [group: 'com.github.wnameless', name: 'json-flattener', version: '0.7.1']
 
 configurations.all {
   exclude group: 'org.glassfish', module: 'javax.el'
@@ -117,6 +120,7 @@ dependencies {
   implementation libraries.governance_model_api_library
   implementation libraries.adjudication_engine_api
   implementation libraries.adjudication_engine_api_library
+  implementation libraries.warehouse_api
   implementation libraries.spring_aspects
   implementation libraries.spring_boot
   implementation libraries.spring_boot_actuator
@@ -136,6 +140,7 @@ dependencies {
   implementation libraries.postgresql
   implementation libraries.streamex
   implementation libraries.vavr
+  implementation libraries.json_flattener
   implementation libraries.liquibase
   runtimeOnly libraries.ecs_logging_core
   runtimeOnly libraries.logback_ecs_encoder

@@ -71,8 +71,6 @@ amqp:
       notify-batch-completed:
         exchange-name: core-bridge.notify-batch-completed-exchange
       verify-batch-timeout:
-        timeout-enabled: true
-        delay-time: 60m
         exchange-name: core-bridge.verify-batch-timeout-exchange
       notify-batch-timed-out:
         exchange-name: core-bridge.notify-batch-timed-out-exchange
@@ -96,6 +94,18 @@ amqp:
     outgoing:
       recommendation-stored:
         exchange-name: core-bridge.recommendation-stored-exchange
+  reports:
+    numberOfRetriesDeadMessages: 3
+    outgoing:
+      exchange-name: bridge.command
+      routing-key: command.index-request.production
+    incoming:
+      batch-delivered:
+        exchange-name: core-bridge.notify-batch-delivered-exchange
+        queue-name: core-bridge.reports-batch-delivered-queue
+        dead-letter-queue-name: core-bridge.reports-batch-delivered.dlq
+        dead-letter-queue-time-to-live-in-milliseconds: 10000
+        dead-letter-exchange-name: core-bridge.reports-batch-delivered.dlx
 
 ### SPRING
 spring:
@@ -156,6 +166,13 @@ registration:
   analysis:
     alert-ttl: 10m
     mock-recommendations-generation: true
+  verify-batch-timeout:
+    enabled: true
+    delay-time: 60m
+
+## REPORTS
+reports:
+  enabled: true
 
 ### SENTRY
 sentry:

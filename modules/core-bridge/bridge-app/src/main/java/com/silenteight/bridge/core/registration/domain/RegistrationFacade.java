@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.bridge.core.registration.domain.command.*;
+import com.silenteight.bridge.core.registration.domain.model.AlertWithMatches;
 import com.silenteight.bridge.core.registration.domain.model.Batch;
 import com.silenteight.bridge.core.registration.domain.model.BatchId;
 import com.silenteight.bridge.core.registration.domain.model.BatchWithAlerts;
@@ -26,6 +27,10 @@ public class RegistrationFacade {
 
   public BatchId register(RegisterBatchCommand registerBatchCommand) {
     return batchService.register(registerBatchCommand);
+  }
+
+  public List<AlertWithMatches> getAlertsWithMatches(GetAlertsWithMatchesCommand command) {
+    return alertService.getAlertsAndMatches(command.batchId());
   }
 
   public BatchWithAlerts getBatchWithAlerts(GetBatchWithAlertsCommand command) {

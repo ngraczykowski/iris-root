@@ -5,6 +5,7 @@ import com.silenteight.bridge.core.recommendation.domain.FixturesMatchMetaData
 import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand
 import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand.FedMatch
 import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand.FeedingStatus
+import com.silenteight.bridge.core.registration.domain.command.GetAlertsWithMatchesCommand
 import com.silenteight.bridge.core.registration.domain.command.NotifyBatchErrorCommand
 import com.silenteight.bridge.core.registration.domain.command.RegisterAlertsCommand
 import com.silenteight.bridge.core.registration.domain.command.RegisterAlertsCommand.AlertWithMatches
@@ -47,17 +48,23 @@ class RegistrationFixtures {
 
   static def REGISTER_BATCH_COMMAND = new RegisterBatchCommand(
       Fixtures.BATCH_ID, ALERTS_COUNT, METADATA, BATCH_PRIORITY)
+
   static def REGISTER_ALERTS_COMMAND = new RegisterAlertsCommand(
       Fixtures.BATCH_ID, ALERT_WITH_MATCHES)
+
   static def ADD_ALERT_TO_ANALYSIS_COMMAND = AddAlertToAnalysisCommand.builder()
       .batchId(Fixtures.BATCH_ID)
       .alertName('alertName')
       .feedingStatus(FeedingStatus.SUCCESS)
       .fedMatches([new FedMatch('matchName')])
       .build()
+
   static def NOTIFY_BATCH_ERROR_COMMAND = new NotifyBatchErrorCommand(
       Fixtures.BATCH_ID, ERROR_DESCRIPTION, METADATA)
+
   static def GET_BATCH_WITH_ALERTS_COMMAND = new GetBatchWithAlertsCommand(ANALYSIS_NAME)
+
+  static def GET_ALERTS_WITH_MATCHES_COMMAND = new GetAlertsWithMatchesCommand(Fixtures.BATCH_ID)
 
   static def BATCH_ERROR = new BatchError(Fixtures.BATCH_ID, METADATA, ERROR_DESCRIPTION)
 }
