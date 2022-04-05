@@ -8,6 +8,9 @@ grpc:
     universal-data-source:
       address: static://localhost:24805
       negotiation-type: PLAINTEXT
+    recommendation:
+      address: static://localhost:24806
+      negotiation-type: PLAINTEXT
   server:
     port: 24221
 
