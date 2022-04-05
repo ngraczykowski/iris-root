@@ -7,28 +7,20 @@ import com.silenteight.connector.ftcc.callback.outgoing.RecommendationsDelivered
 import com.silenteight.connector.ftcc.callback.outgoing.RecommendationsDeliveredPublisher;
 import com.silenteight.connector.ftcc.common.dto.output.ClientRequestDto;
 import com.silenteight.connector.ftcc.common.dto.output.ReceiveDecisionMessageDto;
-import com.silenteight.connector.ftcc.common.resource.BatchResource;
-import com.silenteight.connector.ftcc.common.resource.MessageResource;
-import com.silenteight.connector.ftcc.request.details.MessageDetailsQuery;
 import com.silenteight.connector.ftcc.request.details.dto.MessageDetailsDto;
 import com.silenteight.proto.registration.api.v1.MessageBatchCompleted;
 import com.silenteight.recommendation.api.library.v1.RecommendationOut;
 import com.silenteight.recommendation.api.library.v1.RecommendationsOut;
 
-import org.jetbrains.annotations.NotNull;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.lang.System.lineSeparator;
-import static java.util.Optional.of;
-import static java.util.stream.Collectors.toMap;
 
 @RequiredArgsConstructor
 @Component
@@ -38,7 +30,7 @@ public class ResponseProcessor {
   private final ResponseCreator responseCreator;
   private final RecommendationSender recommendationSender;
   private final RecommendationClientApi recommendationClientApi;
-  private final MessageDetailsQuery messageDetailsQuery;
+  private final MessageDetailsService messageDetailsService;
   private final RecommendationsDeliveredPublisher recommendationsDeliveredPublisher;
 
   @Async
@@ -47,12 +39,11 @@ public class ResponseProcessor {
     final var batchName = messageBatchCompleted.getBatchId();
 
     log.info("Fetching Message from DB using batchName={}", batchName);
-    var messageEntityMap =
-        map(messageDetailsQuery.details(BatchResource.fromResourceName(batchName)));
+    var messageEntityMap = messageDetailsService.messages(batchName);
 
     log.info("Requesting Recommendation using analysisName={}", analysisName);
     var recommendations = recommendationClientApi.recommendation(analysisName);
-    var responseDto = buildReuqest(analysisName, messageEntityMap, recommendations);
+    var responseDto = buildRequest(analysisName, messageEntityMap, recommendations);
 
     logClientRequestDto(responseDto, analysisName);
 
@@ -64,7 +55,7 @@ public class ResponseProcessor {
         .build());
   }
 
-  private ClientRequestDto buildReuqest(
+  private ClientRequestDto buildRequest(
       String analysisName,
       Map<UUID, MessageDetailsDto> messageDetailsMap,
       RecommendationsOut recommendations) {
@@ -91,21 +82,15 @@ public class ResponseProcessor {
 
   private ReceiveDecisionMessageDto createMessageDto(
       Map<UUID, MessageDetailsDto> messageDetailsMap, RecommendationOut recommendation) {
-
-    var messageDetails = of(messageDetailsMap.get(uuidFrom(recommendation))).orElseThrow();
-    return responseCreator.buildMessageDto(messageDetails, recommendation);
-  }
-
-  @NotNull
-  private static UUID uuidFrom(RecommendationOut recommendation) {
-    return MessageResource.fromResourceName(recommendation.getAlert().getId());
-  }
-
-  @NotNull
-  private static Map<UUID, MessageDetailsDto> map(List<MessageDetailsDto> list) {
-    return list
-        .stream()
-        .collect(toMap(MessageDetailsDto::getId, Function.identity()));
+    try {
+      var messageDetails = messageDetailsService.messageFrom(
+          messageDetailsMap,
+          recommendation.getAlert().getId());
+      return responseCreator.buildMessageDto(messageDetails, recommendation);
+    } catch (Exception e) {
+      log.error("Error while building MessageDto!!!", e);
+      throw new ResponseMessageBuildingExceptoin(e);
+    }
   }
 
   private static void logRecommendationOut(
@@ -120,7 +105,6 @@ public class ResponseProcessor {
 
   private static void logReceiveDecisionMessageDto(
       ReceiveDecisionMessageDto messageDto, String analysisName) {
-
     if (log.isDebugEnabled()) {
       log.debug(
           "Generated ReceiveDecisionMessageDto for analysisName={}{}{}", analysisName,

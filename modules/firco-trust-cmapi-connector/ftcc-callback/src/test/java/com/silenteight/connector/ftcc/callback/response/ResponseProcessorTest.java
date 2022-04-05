@@ -2,7 +2,6 @@ package com.silenteight.connector.ftcc.callback.response;
 
 import com.silenteight.connector.ftcc.callback.outgoing.RecommendationsDeliveredPublisher;
 import com.silenteight.connector.ftcc.common.resource.MessageResource;
-import com.silenteight.connector.ftcc.request.details.MessageDetailsQuery;
 import com.silenteight.connector.ftcc.request.details.dto.MessageDetailsDto;
 import com.silenteight.proto.registration.api.v1.MessageBatchCompleted;
 import com.silenteight.recommendation.api.library.v1.AlertOut;
@@ -16,10 +15,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.function.Function;
 import java.util.stream.IntStream;
 
 import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -32,7 +33,7 @@ class ResponseProcessorTest {
   @Mock
   ResponseCreator responseCreator;
   @Mock
-  MessageDetailsQuery messageDetailsQuery;
+  MessageDetailsService messageDetailsService;
   @Mock
   RecommendationsDeliveredPublisher recommendationsDeliveredPublisher;
 
@@ -54,15 +55,15 @@ class ResponseProcessorTest {
     var responseProcessor = new ResponseProcessor(
         responseCreator, recommendationSender, (analysisId) -> RecommendationsOut.builder()
         .recommendations(collect)
-        .build(), messageDetailsQuery, recommendationsDeliveredPublisher);
+        .build(), messageDetailsService, recommendationsDeliveredPublisher);
 
-    when(messageDetailsQuery.details(any())).thenReturn(
+    when(messageDetailsService.messages(any())).thenReturn(
         collect.stream()
             .map(recommendationOut -> MessageDetailsDto.builder()
                 .id(MessageResource.fromResourceName(
                     recommendationOut.getAlert().getId()))
                 .build())
-            .collect(toList()));
+            .collect(toMap(MessageDetailsDto::getId, Function.identity())));
     var messageBatchCompleted =
         MessageBatchCompleted.newBuilder()
             .setBatchId(randomUUID().toString())
