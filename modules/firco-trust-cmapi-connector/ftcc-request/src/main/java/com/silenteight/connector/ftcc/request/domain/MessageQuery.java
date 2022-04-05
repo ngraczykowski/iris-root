@@ -113,23 +113,15 @@ class MessageQuery implements MessageByIdsQuery, MessageDetailsQuery, MessageCur
     return jdbcTemplate.query(
         SELECT_CURRENT_STATUS_NAME_QUERY,
         Map.of("batchId", batchId, "messageId", messageId),
-        (ResultSet resultSet) -> this.deserializeCurrentStatusName(resultSet, batchId, messageId));
+        (ResultSet resultSet) -> this.readCurrentStatusName(resultSet, batchId, messageId));
   }
 
-  private String deserializeCurrentStatusName(
+  private String readCurrentStatusName(
       ResultSet resultSet, UUID batchId, UUID messageId) throws SQLException {
 
-    try {
-      if (!resultSet.next())
-        throw new MessageNotFoundException(batchId, messageId);
+    if (!resultSet.next())
+      throw new MessageNotFoundException(batchId, messageId);
 
-      var matchListType = objectMapper
-          .getTypeFactory()
-          .constructType(String.class);
-      return objectMapper.readValue(resultSet.getString("CurrentStatusName"), matchListType);
-    } catch (JsonProcessingException e) {
-      log.error("Error while parsing 'CurrentStatusName'", e);
-      throw new RuntimeException(e);
-    }
+    return resultSet.getString("CurrentStatusName");
   }
 }
