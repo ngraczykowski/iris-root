@@ -29,7 +29,7 @@ class OracleDatabaseGnsRtRequestGeneratorSpec extends Specification {
     then:
     result == someRequest
     1 * jdbcTemplate.query(
-        {String query -> query.contains("R.SYSTEM_ID =")}, _, _ as RowMapper) >> [someAlertRecord]
+        {String query -> query.contains("R.SYSTEM_ID =")}, _ as RowMapper, _) >> [someAlertRecord]
     1 * mapper.map([someAlertRecord]) >> someRequest
   }
 
@@ -40,7 +40,7 @@ class OracleDatabaseGnsRtRequestGeneratorSpec extends Specification {
     then:
     result == someRequest
     1 * jdbcTemplate.query(
-        {String query -> query.contains("R.RECORD_ID =")}, _, _ as RowMapper) >> [someAlertRecord]
+        {String query -> query.contains("R.RECORD_ID =")}, _ as RowMapper, _) >> [someAlertRecord]
     1 * mapper.map([someAlertRecord]) >> someRequest
   }
 
@@ -49,14 +49,27 @@ class OracleDatabaseGnsRtRequestGeneratorSpec extends Specification {
     objectUnderTest.generateBySystemId(someIdValue)
 
     then:
-    1 * jdbcTemplate.query(_ as String, _, _ as RowMapper) >> []
+    1 * jdbcTemplate.query(_ as String, _ as RowMapper, _) >> []
     thrown(EmptyResultDataAccessException)
 
     when: 'generate by recordId'
     objectUnderTest.generateByRecordId(someIdValue)
 
     then:
-    1 * jdbcTemplate.query(_ as String, _, _ as RowMapper) >> []
+    1 * jdbcTemplate.query(_ as String, _ as RowMapper, _) >> []
     thrown(EmptyResultDataAccessException)
+  }
+
+  def 'generate request with random system_id'() {
+    given:
+    def numOfAlerts = 1
+
+    when:
+    def result = objectUnderTest.generateWithRandomSystemId(numOfAlerts)
+
+    then:
+    result == someRequest
+    1 * jdbcTemplate.query(_ as String, _ as RowMapper, numOfAlerts) >> [someAlertRecord]
+    1 * mapper.map([someAlertRecord]) >> someRequest
   }
 }

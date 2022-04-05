@@ -26,7 +26,13 @@ public class GnsRtTestingHarnessController {
 
   @GetMapping(value = "/v1/gnsrt/system-id/random", produces = APPLICATION_JSON_VALUE)
   public ResponseEntity<GnsRtRecommendationRequest> getWithRandomGeneratedSystemId() {
-    return ResponseEntity.ok(gnsRtRequestGenerator.generateWithRandomSystemId());
+    return ResponseEntity.ok(gnsRtRequestGenerator.generateWithRandomSystemId(1));
+  }
+
+  @GetMapping(value = "/v1/gnsrt/system-id/random/{numOfAlerts}", produces = APPLICATION_JSON_VALUE)
+  public ResponseEntity<GnsRtRecommendationRequest> getWithMultipleAlerts(
+      @PathVariable int numOfAlerts) {
+    return ResponseEntity.ok(gnsRtRequestGenerator.generateWithRandomSystemId(numOfAlerts));
   }
 
   @GetMapping(value = "/v1/gnsrt/record-id/{recordId}", produces = APPLICATION_JSON_VALUE)

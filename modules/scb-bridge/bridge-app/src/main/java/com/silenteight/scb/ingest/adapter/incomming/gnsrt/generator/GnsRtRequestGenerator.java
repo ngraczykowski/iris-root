@@ -10,5 +10,5 @@ public interface GnsRtRequestGenerator {
 
   GnsRtRecommendationRequest generateByRecordId(@NonNull String recordId);
 
-  GnsRtRecommendationRequest generateWithRandomSystemId();
+  GnsRtRecommendationRequest generateWithRandomSystemId(int numOfAlerts);
 }

@@ -48,7 +48,7 @@ class OracleDatabaseGnsRtRequestGenerator implements GnsRtRequestGenerator {
       + "WHERE R.<filter_column> = ?";
 
   @Language("Oracle")
-  private static final String QUERY_ONE_ALERT_TEMPLATE = "SELECT * FROM (SELECT R.SYSTEM_ID,\n"
+  private static final String QUERY_RANDOM_ALERTS_TEMPLATE = "SELECT * FROM (SELECT R.SYSTEM_ID,\n"
       + "       R.BATCH_ID,\n"
       + "       R.CHAR_SEP,\n"
       + "       R.DB_ACCOUNT,\n"
@@ -67,7 +67,7 @@ class OracleDatabaseGnsRtRequestGenerator implements GnsRtRequestGenerator {
       + "       H.DETAILS\n"
       + "FROM FFF_RECORDS SAMPLE(1) R\n"
       + "         JOIN FFF_HITS_DETAILS H ON H.SYSTEM_ID = R.SYSTEM_ID)\n"
-      + "WHERE ROWNUM = 1";
+      + "WHERE ROWNUM <= ?";
 
   private final JdbcTemplate jdbcTemplate;
   private final GnsRtRequestMapper mapper;
@@ -83,24 +83,24 @@ class OracleDatabaseGnsRtRequestGenerator implements GnsRtRequestGenerator {
   }
 
   @Override
-  public GnsRtRecommendationRequest generateWithRandomSystemId() {
-    return mapper.map(fetchData());
+  public GnsRtRecommendationRequest generateWithRandomSystemId(int numOfAlerts) {
+    return mapper.map(fetchData(numOfAlerts));
   }
 
   private List<AlertRecord> fetchData(String filterColumn, String value) {
     var query = prepareQuery(filterColumn);
-    var alerts = jdbcTemplate.query(query, new Object[] { value }, ROW_MAPPER);
+    var alerts = jdbcTemplate.query(query, ROW_MAPPER, value);
     if (isEmpty(alerts))
       throw new EmptyResultDataAccessException(1);
 
     return alerts;
   }
 
-  private List<AlertRecord> fetchData() {
+  private List<AlertRecord> fetchData(int limit) {
     var alerts =
-        jdbcTemplate.query(QUERY_ONE_ALERT_TEMPLATE, ROW_MAPPER_WITH_RANDOM_SYSTEM_ID);
+        jdbcTemplate.query(QUERY_RANDOM_ALERTS_TEMPLATE, ROW_MAPPER_WITH_RANDOM_SYSTEM_ID, limit);
     if (isEmpty(alerts))
-      throw new EmptyResultDataAccessException(1);
+      throw new EmptyResultDataAccessException(limit);
 
     return alerts;
   }
