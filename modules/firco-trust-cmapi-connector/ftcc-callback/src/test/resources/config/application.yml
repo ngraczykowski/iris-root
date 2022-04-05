@@ -4,8 +4,12 @@ ftcc:
   #-------------------------------------------------------------------------------------------------
   cmapi:
     callback:
-      endpoint: "http://localhost:8080/rest/ftcc/callback"
-      login: "test"
-      password: "test"
+      endpoint: "https://client.badssl.com"
+      login: test
+      password: test
+      connectionTimeout: 10s
+      readTimeout: 10s
+      keystorePath: "classpath:mtls/badssl.com-client.p12"
+      keystorePassword: badssl.com
 
 

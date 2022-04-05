@@ -1,19 +1,32 @@
 package com.silenteight.connector.ftcc.callback.response;
 
-import lombok.Data;
+import lombok.Value;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConstructorBinding;
+import org.springframework.validation.annotation.Validated;
 
 import java.time.Duration;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
-@Data
+@Validated
+@Value
+@ConstructorBinding
 @ConfigurationProperties(prefix = "ftcc.cmapi.callback")
 public class RecommendationSenderProperties {
 
-  private String endpoint;
-  private boolean enabled = true;
-  private String login;
-  private String password;
-  private Duration readTimeout = Duration.ofSeconds(10);
-  private Duration connectionTimeout = Duration.ofSeconds(10);
+  @NotBlank
+  String endpoint;
+  @NotBlank
+  String login;
+  @NotBlank
+  String password;
+  @NotNull
+  Duration readTimeout;
+  @NotNull
+  Duration connectionTimeout;
+  String keystorePath;
+  String keystorePassword;
+
 }

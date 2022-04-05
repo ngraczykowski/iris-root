@@ -4,7 +4,6 @@ import com.silenteight.connector.ftcc.callback.CallbackModule;
 import com.silenteight.connector.ftcc.callback.handler.BatchCompletedHandler;
 import com.silenteight.connector.ftcc.callback.handler.BatchCompletedRepository;
 import com.silenteight.connector.ftcc.callback.handler.BatchCompletedService;
-import com.silenteight.connector.ftcc.request.details.MessageDetailsQuery;
 import com.silenteight.recommendation.api.library.v1.RecommendationServiceClient;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -18,9 +17,6 @@ class CallbackTestConfiguration {
 
   @MockBean
   RecommendationServiceClient recommendationServiceClient;
-
-  @MockBean
-  MessageDetailsQuery messageDetailsQuery;
 
   @MockBean
   RabbitTemplate rabbitTemplate;
