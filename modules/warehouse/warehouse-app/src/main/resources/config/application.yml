@@ -84,7 +84,7 @@ warehouse:
     migration:
       enabled: true
   partition:
-    scheduledCron: "*/10 * * * *"
+    scheduledCron: "0 */10 * * * *"
     size: 1500000
   indexer:
     production-batch-size: 200
