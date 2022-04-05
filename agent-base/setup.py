@@ -17,7 +17,7 @@ install_require = [
 ]
 
 tests_require = [
-    "black>=20.8b1",
+    "black==22.3.0",
     "flake8-bugbear>=20.11.1",
     "flake8-comprehensions>=3.3.0",
     "flake8-import-order",
@@ -27,7 +27,7 @@ tests_require = [
     "mypy==0.790",
     "pytest-asyncio",
     "pytest>=6.1.2",
-    "tox>=3.20.1",
+    "tox>=3.24.4",
 ]
 
 setup(

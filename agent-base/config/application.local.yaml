@@ -3,6 +3,9 @@ grpc:
     data-source:
       address: localhost:24803
       timeout: 5
+      client_ca: "tests/ssl_example/ca.pem"
+      client_private_key: "tests/ssl_example/client-key.pem"
+      client_public_key_chain: "tests/ssl_example/client.pem"
 
 rabbitmq:
   host: localhost
@@ -10,6 +13,10 @@ rabbitmq:
   login: dev
   password: dev
   virtualhost: /
+  tls:
+    client_ca: "tests/ssl_example/ca.pem"
+    client_private_key: "tests/ssl_example/client-key.pem"
+    client_public_key_chain: "tests/ssl_example/client.pem"
 
 consul:
   host: localhost
@@ -29,3 +36,6 @@ agent:
 
   grpc:
     port: 24804
+    server_ca: "tests/ssl_example/ca.pem"
+    server_private_key: "tests/ssl_example/server-key.pem"
+    server_public_key_chain: "tests/ssl_example/server.pem"

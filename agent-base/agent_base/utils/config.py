@@ -4,6 +4,8 @@ from typing import Any, Optional
 
 import yaml
 
+CONFIG_DIRS = (pathlib.Path("./config"),)
+
 
 class ConfigurationException(Exception):
     pass
@@ -12,7 +14,7 @@ class ConfigurationException(Exception):
 class Config:
     def __init__(
         self,
-        configuration_dirs=(pathlib.Path("./config"),),
+        configuration_dirs=CONFIG_DIRS,
         required: bool = False,
         env_configuration_dir_key: str = "AGENT_CONFIGURATION_DIR",
     ):

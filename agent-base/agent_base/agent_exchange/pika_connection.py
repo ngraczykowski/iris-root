@@ -1,5 +1,6 @@
 import logging
-from typing import Callable, Mapping
+import ssl
+from typing import Callable, Dict
 
 import aio_pika
 
@@ -9,27 +10,38 @@ from agent_base.agent.exception import AgentException
 class PikaConnection:
     def __init__(
         self,
-        messaging_configuration: Mapping,
-        connection_configuration: Mapping,
+        messaging_configuration: Dict,
+        connection_configuration: Dict,
         callback: Callable,
         max_requests_to_worker: int,
+        use_ssl: bool = False,
+        ssl_options: Dict = None,
     ):
         self.messaging_configuration = messaging_configuration
         self.connection_configuration = connection_configuration
         self.request_callback = callback
-        (
-            self.connection,
-            self.request_queue,
-            self.callback_exchange,
-            self.request_queue_tag,
-        ) = (None, None, None, None)
+        (self.connection, self.request_queue, self.callback_exchange, self.request_queue_tag,) = (
+            None,
+            None,
+            None,
+            None,
+        )
         self.logger = logging.getLogger("PikaConnection")
         self.max_requests_to_worker = max_requests_to_worker
+        self.ssl = use_ssl
 
     async def start(self) -> None:
-        self.connection: aio_pika.RobustConnection = await aio_pika.connect_robust(
-            **self.connection_configuration
-        )
+        ssl_options = self.connection_configuration.pop("tls", None)
+        if self.ssl and ssl_options:
+            self.connection: aio_pika.RobustConnection = await aio_pika.connect_robust(
+                **self.connection_configuration,
+                ssl=self.ssl,
+                ssl_options={**ssl_options, "cert_reqs": ssl.CERT_REQUIRED},
+            )
+        else:
+            self.connection: aio_pika.RobustConnection = await aio_pika.connect_robust(
+                **self.connection_configuration
+            )
         self.channel: aio_pika.Channel = await self.connection.channel()
         await self.channel.set_qos(prefetch_count=self.max_requests_to_worker)
 

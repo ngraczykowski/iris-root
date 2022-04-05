@@ -18,10 +18,11 @@ from silenteight.datasource.api.name.v1.name_pb2_grpc import (
 
 
 class DataSourceMock(NameInputServiceServicer):
-    def __init__(self, address, alerts=None, *args, **kwargs):
+    def __init__(self, address, alerts=None, ssl: bool = False, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.server = None
         self.address = address
+        self.ssl = ssl
         self.alerts: Dict[str, Dict[str, Any]] = alerts or {}
         self.logger = logging.getLogger("DataSourceMock")
 
@@ -66,7 +67,21 @@ class DataSourceMock(NameInputServiceServicer):
             raise Exception("Server already started")
         self.server = grpc.aio.server()
         add_NameInputServiceServicer_to_server(self, self.server)
-        self.server.add_insecure_port(self.address)
+        if self.ssl:
+            with open("tests/ssl_example/ca.pem", "rb") as f:
+                list_cert = f.read()
+            with open("tests/ssl_example/server-key.pem", "rb") as f:
+                private_key = f.read()
+            with open("tests/ssl_example/server.pem", "rb") as f:
+                certificate_chain = f.read()
+            server_credentials = grpc.ssl_server_credentials(
+                ((private_key, certificate_chain),),
+                root_certificates=list_cert,
+                require_client_auth=True,
+            )
+            self.server.add_secure_port(self.address, server_credentials)
+        else:
+            self.server.add_insecure_port(self.address)
         await self.server.start()
         asyncio.get_event_loop().create_task(self.server.wait_for_termination())
 

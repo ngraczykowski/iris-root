@@ -12,8 +12,11 @@ from agent_base.utils import Config
 
 
 class GrpcService(AgentService):
-    def __init__(self, config: Config, agent_servicer: AgentGrpcServicer, servicers=()):
+    def __init__(
+        self, config: Config, agent_servicer: AgentGrpcServicer, servicers=(), ssl: bool = False
+    ):
         super().__init__(config=config)
+        self.ssl = ssl
         self.logger = logging.getLogger("GrpcService")
         self.server = None
         self.agent_servicer = agent_servicer
@@ -39,9 +42,25 @@ class GrpcService(AgentService):
         self.server = grpc.aio.server()
         self._add_servicers()
         self._add_reflection()
-        self.server.add_insecure_port(
-            address=f"[::]:{self.config.application_config['agent']['grpc']['port']}"
-        )
+        grpc_config = self.config.application_config["agent"]["grpc"]
+        address = f"[::]:{grpc_config['port']}"
+
+        if self.ssl:
+            with open(grpc_config["server_ca"], "rb") as f:
+                list_cert = f.read()
+            with open(grpc_config["server_private_key"], "rb") as f:
+                private_key = f.read()
+            with open(grpc_config["server_public_key_chain"], "rb") as f:
+                certificate_chain = f.read()
+            server_credentials = grpc.ssl_server_credentials(
+                ((private_key, certificate_chain),),
+                root_certificates=list_cert,
+                require_client_auth=True,
+            )
+            self.server.add_secure_port(address, server_credentials)
+        else:
+            self.server.add_insecure_port(address=address)
+
         await self.server.start()
         asyncio.get_event_loop().create_task(self.server.wait_for_termination())
 

@@ -29,7 +29,7 @@ def agent_exchange(local_config):
         "agent_base.agent_exchange.agent_exchange.PikaConnection",
         wraps=MockPikaConnection,
     ):
-        yield AgentExchange(config=local_config, data_source=MockAgentDataSource())
+        yield AgentExchange(config=local_config, data_source=MockAgentDataSource(), ssl=True)
 
 
 def create_message(message: AgentExchangeRequest, routing_key="", timestamp=1, correlation_id=1):

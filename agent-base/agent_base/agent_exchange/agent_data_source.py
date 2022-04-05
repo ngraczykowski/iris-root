@@ -19,20 +19,30 @@ class AgentDataSource:
     I.e. in org name agent it is a NameInputServiceStub.BatchGetMatchNameInputs method
     """
 
-    def __init__(self, config: Config):
+    def __init__(self, config: Config, ssl: bool = False):
         assert config.application_config
         self.application_config = config.application_config
         self.address_service = AddressService(config.application_config)
+        self.ssl = ssl
         self.channel, self.channel_stream_method = None, None
         self.logger = logging.getLogger("AgentDataSource")
 
     async def start(self):
-        address = await self.address_service.get(
-            self.application_config["grpc"]["client"]["data-source"]["address"] or ""
-        )
+        data_source_config = self.application_config["grpc"]["client"]["data-source"]
+        address = await self.address_service.get(data_source_config["address"] or "")
         if not address:
             raise Exception("No address for data source")
         self.channel = grpc.aio.insecure_channel(address)
+        if self.ssl:
+            with open(data_source_config["client_ca"], "rb") as f:
+                ca = f.read()
+            with open(data_source_config["client_private_key"], "rb") as f:
+                private_key = f.read()
+            with open(data_source_config["client_public_key_chain"], "rb") as f:
+                certificate_chain = f.read()
+            server_credentials = grpc.ssl_channel_credentials(ca, private_key, certificate_chain)
+            self.channel = grpc.aio.secure_channel(address, server_credentials)
+
         self.channel_stream_method = None
 
     async def request(

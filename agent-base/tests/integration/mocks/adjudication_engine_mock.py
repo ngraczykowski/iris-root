@@ -18,16 +18,17 @@ class AdjudicationEngineMock:
         self._events: Dict[str, asyncio.Event] = {}
         self._responses = {}
         self._received = asyncio.Queue()
-        (
-            self._connection,
-            self._exchange,
-            self._callback_queue,
-            self._callback_queue_tag,
-        ) = (None, None, None, None)
+        (self._connection, self._exchange, self._callback_queue, self._callback_queue_tag,) = (
+            None,
+            None,
+            None,
+            None,
+        )
         self.consume_responses = consume_responses
         self.logger = logging.getLogger("AdjudicationEngineMock")
 
     async def start(self):
+        self.config["rabbitmq"].pop("tls", None)
         self._connection = await aio_pika.connect_robust(**self.config["rabbitmq"])
 
         channel: aio_pika.Channel = await self._connection.channel()

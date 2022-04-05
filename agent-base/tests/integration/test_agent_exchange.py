@@ -43,7 +43,7 @@ async def ae_mock(config):
 @pytest.fixture(autouse=True)
 async def data_source_mock(config):
     async with DataSourceMock(
-        address=config.application_config["grpc"]["client"]["data-source"]["address"]
+        address=config.application_config["grpc"]["client"]["data-source"]["address"], ssl=True
     ) as mock:
         yield mock
 
@@ -54,7 +54,7 @@ async def johnny_agent(config):
     runner = AgentRunner(config)
     await runner.start(
         agent,
-        services=[AgentExchange(config, JohnnyAgentDataSource(config))],
+        services=[AgentExchange(config, JohnnyAgentDataSource(config, ssl=True))],
     )
     try:
         yield agent
@@ -125,9 +125,7 @@ async def test_multiple_queries_with_different_times(
     (
         ({}, "NO_DATA"),
         (
-            {
-                "alerted_party_names": [],
-            },
+            {"alerted_party_names": []},
             "NO_DATA",
         ),
         ({"alerted_party_names": [], "watchlist_names": ["Johnny Depp"]}, "NO_DATA"),
@@ -140,9 +138,7 @@ async def test_multiple_queries_with_different_times(
             "MATCH",
         ),
         (
-            {
-                "alerted_party_names": ["Johnny"],
-            },
+            {"alerted_party_names": ["Johnny"]},
             "MATCH",
         ),
         (

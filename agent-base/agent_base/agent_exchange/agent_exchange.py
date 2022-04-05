@@ -32,10 +32,11 @@ class AgentExchange(AgentService):
     data_source_error_solution = AgentOutput.FeatureSolution(solution="DATA_SOURCE_ERROR")
     default_error_solution = AgentOutput.FeatureSolution(solution="AGENT_ERROR")
 
-    def __init__(self, config: Config, data_source: AgentDataSource):
+    def __init__(self, config: Config, data_source: AgentDataSource, ssl: bool = False):
         super().__init__(config)
         self.connections = []
         self.data_source = data_source
+        self.ssl = ssl
         self.logger = logging.getLogger("AgentExchange")
 
     async def start(self, *args, **kwargs) -> None:
@@ -161,7 +162,11 @@ class AgentExchange(AgentService):
         max_requests_to_worker = self.config.application_config["agent"]["processes"]
         for connection_config in self._prepare_connection_configurations():
             connection = PikaConnection(
-                messaging_config, connection_config, self.on_request, max_requests_to_worker
+                messaging_config,
+                connection_config,
+                self.on_request,
+                max_requests_to_worker,
+                self.ssl,
             )
 
             try:

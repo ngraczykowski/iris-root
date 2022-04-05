@@ -38,7 +38,7 @@ async def johnny_agent(config: Config):
     runner = AgentRunner(config)
     await runner.start(
         agent,
-        services=[GrpcService(config, agent_servicer=JohnnyAgentGrpcServicer())],
+        services=[GrpcService(config, agent_servicer=JohnnyAgentGrpcServicer(), ssl=True)],
     )
     try:
         yield agent
@@ -54,12 +54,26 @@ async def channel(config: Config):
 
 
 @pytest.fixture()
-async def stub(channel: grpc.aio.Channel):
-    return NameAgentStub(channel)
+async def secure_channel(config: Config):
+    with open("tests/ssl_example/ca.pem", "rb") as f:
+        ca = f.read()
+    with open("tests/ssl_example/client-key.pem", "rb") as f:
+        private_key = f.read()
+    with open("tests/ssl_example/client.pem", "rb") as f:
+        certificate_chain = f.read()
+    server_credentials = grpc.ssl_channel_credentials(ca, private_key, certificate_chain)
+    return grpc.aio.secure_channel(
+        f"localhost:{config.application_config['agent']['grpc']['port']}", server_credentials
+    )
 
 
-async def test_health_check(channel: grpc):
-    stub = HealthStub(channel)
+@pytest.fixture()
+async def stub(secure_channel: grpc.aio.Channel):
+    return NameAgentStub(secure_channel)
+
+
+async def test_health_check(secure_channel: grpc):
+    stub = HealthStub(secure_channel)
     result = await stub.Check(HealthCheckRequest())
     assert result
     assert result.status == HealthCheckResponse.SERVING
