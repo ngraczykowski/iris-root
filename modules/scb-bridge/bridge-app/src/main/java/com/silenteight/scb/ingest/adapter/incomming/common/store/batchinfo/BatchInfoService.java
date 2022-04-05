@@ -7,8 +7,7 @@ import com.silenteight.scb.ingest.domain.model.BatchSource;
 import com.silenteight.scb.ingest.domain.model.BatchStatus;
 
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
