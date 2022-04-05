@@ -22,6 +22,8 @@ import javax.persistence.Table;
 @Table
 class RequestEntity extends BaseEntity implements Serializable {
 
+  private static final long serialVersionUID = 7391298046030799466L;
+
   @Id
   @Column(name = "batch_id", updatable = false, nullable = false)
   @ToString.Include

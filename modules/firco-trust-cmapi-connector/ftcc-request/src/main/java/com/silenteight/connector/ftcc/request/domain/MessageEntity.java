@@ -31,6 +31,8 @@ import javax.persistence.Table;
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 class MessageEntity extends BaseEntity implements Serializable {
 
+  private static final long serialVersionUID = -1226461844382953065L;
+
   @Id
   @Column(name = "message_id", updatable = false, nullable = false)
   @ToString.Include
