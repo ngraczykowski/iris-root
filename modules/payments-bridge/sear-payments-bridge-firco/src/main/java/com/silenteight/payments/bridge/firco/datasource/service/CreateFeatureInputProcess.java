@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.common.exception.MatchNotFoundException;
 import com.silenteight.payments.bridge.common.model.AeAlert;
-import com.silenteight.payments.bridge.datasource.agent.CreateFeatureInputsProcess;
 import com.silenteight.payments.bridge.datasource.agent.dto.FeatureInputStructured;
 import com.silenteight.payments.bridge.datasource.agent.dto.FeatureInputUnstructured;
+import com.silenteight.payments.bridge.datasource.agent.port.CreateFeatureInputProcessUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
@@ -23,7 +23,7 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 class CreateFeatureInputProcess {
 
-  private final CreateFeatureInputsProcess createFeatureInputsProcess;
+  private final CreateFeatureInputProcessUseCase createFeatureInputsProcess;
 
   public void createStructuredFeatureInputs(AeAlert alert, List<HitData> hitsData) {
 

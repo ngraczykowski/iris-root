@@ -8,9 +8,9 @@ import com.silenteight.payments.bridge.ae.alertregistration.port.FindRegisteredA
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
 import com.silenteight.payments.bridge.data.retention.port.CreateAlertDataRetentionUseCase;
 import com.silenteight.payments.bridge.data.retention.port.CreateFileRetentionUseCase;
-import com.silenteight.payments.bridge.datasource.agent.CreateFeatureInputsProcess;
 import com.silenteight.payments.bridge.datasource.agent.FeatureInputRepository;
 import com.silenteight.payments.bridge.datasource.agent.infrastructure.CreateAgentInputsClient;
+import com.silenteight.payments.bridge.datasource.agent.port.CreateFeatureInputProcessUseCase;
 import com.silenteight.payments.bridge.datasource.category.CategoryValueRepository;
 import com.silenteight.payments.bridge.datasource.category.CreateCategoryValuesProcess;
 import com.silenteight.payments.bridge.datasource.category.infrastructure.CategoriesClient;
@@ -119,10 +119,9 @@ public class TestApplicationConfiguration {
   }
 
   @Bean
-  CreateFeatureInputsProcess createFeatureInputsProcess(
+  CreateFeatureInputProcessUseCase createFeatureInputsProcess(
       final FeatureInputRepository featureInputRepository) {
-    return new CreateFeatureInputsProcess(Collections.emptyList(), Collections.emptyList(),
-        featureInputRepository);
+    return new CreateFeatureInputProcessUseCaseMock();
   }
 
   @Bean

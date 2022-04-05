@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
 import com.silenteight.payments.bridge.datasource.FeatureInputSpecification;
-import com.silenteight.payments.bridge.datasource.agent.CreateFeatureInputsProcess;
 import com.silenteight.payments.bridge.datasource.agent.dto.FeatureInputStructured;
 import com.silenteight.payments.bridge.datasource.agent.dto.FeatureInputUnstructured;
+import com.silenteight.payments.bridge.datasource.agent.port.CreateFeatureInputProcessUseCase;
 import com.silenteight.payments.bridge.svb.learning.domain.EtlHit;
 import com.silenteight.payments.bridge.svb.learning.domain.HitComposite;
 
@@ -20,7 +20,7 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 class CreateFeatureService {
 
-  private final CreateFeatureInputsProcess createFeatureInputsProcess;
+  private final CreateFeatureInputProcessUseCase createFeatureInputsProcess;
 
   void createFeatureInputs(
       List<EtlHit> etlHits, RegisterAlertResponse registeredAlert,

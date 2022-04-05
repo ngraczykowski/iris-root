@@ -59,11 +59,13 @@ public class HitAndWatchlistPartyData {
   }
 
   public NameMatchedTextAgent getNameMatchedTextAgent() {
+    var alertedPartyName = allMatchingTexts.isEmpty() ? "" : allMatchingTexts.get(0);
+
     return NameMatchedTextAgent.builder()
         .watchlistName(name)
-        .alertedPartyName(List.of(matchingText))
+        .alertedPartyName(List.of(alertedPartyName))
         .watchlistType(watchlistType)
-        .matchingTexts(List.of(allMatchingTexts.get(0)))
+        .matchingTexts(allMatchingTexts)
         .build();
   }
 

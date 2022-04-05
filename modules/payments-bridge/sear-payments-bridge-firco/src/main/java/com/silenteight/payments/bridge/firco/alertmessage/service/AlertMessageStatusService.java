@@ -30,7 +30,7 @@ class AlertMessageStatusService implements AlertMessageStatusUseCase {
   @Setter
   private Clock clock = Clock.systemUTC();
 
-  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
+  //  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
   public AlertMessageStatusEntity findByAlertId(UUID alertMessageId) {
     return repository.findByAlertMessageId(alertMessageId)
         .orElseThrow(EntityNotFoundException::new);

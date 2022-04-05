@@ -7,6 +7,7 @@ import com.silenteight.payments.bridge.datasource.DefaultFeatureInputSpecificati
 import com.silenteight.payments.bridge.datasource.FeatureInputSpecification;
 import com.silenteight.payments.bridge.datasource.agent.dto.FeatureInputStructured;
 import com.silenteight.payments.bridge.datasource.agent.dto.FeatureInputUnstructured;
+import com.silenteight.payments.bridge.datasource.agent.port.CreateFeatureInputProcessUseCase;
 
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class CreateFeatureInputsProcess {
+class CreateFeatureInputsProcess implements CreateFeatureInputProcessUseCase {
 
   private final List<FeatureInputStructuredFactory> featureInputStructuredFactories;
   private final List<FeatureInputUnstructuredFactory> featureInputUnstructuredFactories;
