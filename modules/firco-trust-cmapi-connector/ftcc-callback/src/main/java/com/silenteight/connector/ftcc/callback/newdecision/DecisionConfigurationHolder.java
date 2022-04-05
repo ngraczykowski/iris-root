@@ -6,7 +6,7 @@ import lombok.NonNull;
 import java.util.List;
 
 @Getter
-public class DecisionConfigurationHolder {
+class DecisionConfigurationHolder {
 
   private final List<DecisionTransition> decisionTransitions;
 

@@ -7,12 +7,12 @@ import com.silenteight.connector.ftcc.common.dto.input.StatusInfoDto;
 
 @RequiredArgsConstructor
 @Slf4j
-public class MapStatusUseCaseService implements MapStatusUseCase {
+class DecisionMapperUseCaseService implements DecisionMapperUseCase {
 
   private final DecisionConfigurationHolder decisionConfigurationHolder;
 
   @Override
-  public DestinationStatus mapStatus(MapStatusRequest request) {
+  public DestinationStatus mapStatus(DecisionStatusRequest request) {
     var currentStatusName = request.getCurrentStatusName();
     var recommendation = request.getRecommendedAction();
 
@@ -39,8 +39,11 @@ public class MapStatusUseCaseService implements MapStatusUseCase {
         .equals(recommendation);
   }
 
-  private static StatusInfoDto buildStatus(MapStatusRequest request, String destinationState) {
-    var statusInfoDto = request.findNextStatus(destinationState).orElseThrow();
+  private static StatusInfoDto buildStatus(DecisionStatusRequest request, String destinationState) {
+    var statusInfoDto = request
+        .findNextStatus(destinationState)
+        .orElseThrow(() -> new IllegalStateException(
+            "No DestinationState='" + destinationState + "' don't meet NextStatuses"));
     return statusInfoDto.toBuilder().build();
   }
 

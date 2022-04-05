@@ -1,7 +1,7 @@
 package com.silenteight.connector.ftcc.callback.response;
 
+import com.silenteight.connector.ftcc.callback.newdecision.DecisionMapperUseCase;
 import com.silenteight.connector.ftcc.callback.newdecision.DestinationStatus;
-import com.silenteight.connector.ftcc.callback.newdecision.MapStatusUseCase;
 import com.silenteight.connector.ftcc.common.dto.input.StatusInfoDto;
 import com.silenteight.connector.ftcc.request.details.dto.MessageDetailsDto;
 import com.silenteight.connector.ftcc.request.details.dto.NextStatusDto;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.*;
 class ResponseCreatorTest {
 
   @Mock
-  private MapStatusUseCase mapStatusUseCase;
+  private DecisionMapperUseCase decisionMapperUseCase;
 
   @DisplayName("Minimal Data to create ClientRequestDto for callback")
   @Test
@@ -38,9 +38,9 @@ class ResponseCreatorTest {
         .status(new StatusInfoDto("12", "NAME", "CODE", "CHECKSUM"))
         .valid(true)
         .build();
-    when(mapStatusUseCase.mapStatus(any())).thenReturn(ds);
+    when(decisionMapperUseCase.mapStatus(any())).thenReturn(ds);
 
-    ResponseCreator responseCreator = new ResponseCreator(mapStatusUseCase, properties);
+    ResponseCreator responseCreator = new ResponseCreator(decisionMapperUseCase, properties);
 
     var message = MessageDetailsDto.builder()
         .messageID("MESSAGEID;)")

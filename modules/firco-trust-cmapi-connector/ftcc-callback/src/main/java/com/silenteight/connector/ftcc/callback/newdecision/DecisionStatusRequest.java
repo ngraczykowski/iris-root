@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Value
 @Builder
-public class MapStatusRequest {
+public class DecisionStatusRequest {
 
   @NonNull
   String dataCenter;

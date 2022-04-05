@@ -2,8 +2,8 @@ package com.silenteight.connector.ftcc.callback.response;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.connector.ftcc.callback.newdecision.MapStatusRequest;
-import com.silenteight.connector.ftcc.callback.newdecision.MapStatusUseCase;
+import com.silenteight.connector.ftcc.callback.newdecision.DecisionMapperUseCase;
+import com.silenteight.connector.ftcc.callback.newdecision.DecisionStatusRequest;
 import com.silenteight.connector.ftcc.common.dto.input.NextStatusDto;
 import com.silenteight.connector.ftcc.common.dto.output.*;
 import com.silenteight.connector.ftcc.request.details.dto.MessageDetailsDto;
@@ -28,7 +28,7 @@ class ResponseCreator {
   private static final int MAX_COMMENT_LENGTH = 1024;
   public static final String DATA_CENTER = "";
 
-  private final MapStatusUseCase mapStatusUseCase;
+  private final DecisionMapperUseCase decisionMapperUseCase;
   private final RecommendationSenderProperties properties;
 
   public ClientRequestDto build(List<ReceiveDecisionMessageDto> messages) {
@@ -64,8 +64,8 @@ class ResponseCreator {
         recommendation.getRecommendationComment()));
     setComment(recommendation.getRecommendationComment(), decision);
 
-    var destinationStatus = mapStatusUseCase.mapStatus(
-        MapStatusRequest.builder()
+    var destinationStatus = decisionMapperUseCase.mapStatus(
+        DecisionStatusRequest.builder()
             .dataCenter(DATA_CENTER)
             .unit(messageDetails.getUnit())
             .nextStatuses(messageDetails.nextStatusesDto()

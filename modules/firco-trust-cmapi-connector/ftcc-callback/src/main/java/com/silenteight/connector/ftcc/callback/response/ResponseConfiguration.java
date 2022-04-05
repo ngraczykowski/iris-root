@@ -3,9 +3,6 @@ package com.silenteight.connector.ftcc.callback.response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.connector.ftcc.callback.newdecision.DecisionConfigurationHolder;
-import com.silenteight.connector.ftcc.callback.newdecision.MapStatusUseCase;
-import com.silenteight.connector.ftcc.callback.newdecision.MapStatusUseCaseService;
 import com.silenteight.connector.ftcc.request.details.MessageDetailsQuery;
 
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
@@ -72,11 +69,6 @@ class ResponseConfiguration {
   @Bean
   RecommendationSender recommendationSender(RestTemplate restTemplate) {
     return new RecommendationSender(restTemplate, properties.getEndpoint());
-  }
-
-  @Bean
-  MapStatusUseCase mapStatusUseCase(DecisionConfigurationHolder configurationHolder) {
-    return new MapStatusUseCaseService(configurationHolder);
   }
 
   @Bean

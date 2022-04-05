@@ -14,4 +14,9 @@ public class DecisionConfiguration {
     return new DecisionConfigurationHandlerBeanFactory(
         decisionConfigurationProperties.resourceLocation);
   }
+
+  @Bean
+  DecisionMapperUseCase decisionMapperUseCase(DecisionConfigurationHolder configurationHolder) {
+    return new DecisionMapperUseCaseService(configurationHolder);
+  }
 }

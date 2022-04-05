@@ -4,7 +4,7 @@ import com.silenteight.connector.ftcc.common.dto.input.StatusInfoDto
 
 import spock.lang.Specification
 
-class MapStatusUseCaseServiceTest extends Specification {
+class DecisionMapperUseCaseServiceTest extends Specification {
 
   def "MapStatus {currentStatus} and {recommendation} should be {destinationStatus} or throw {exception}"() {
     given:
@@ -13,7 +13,7 @@ class MapStatusUseCaseServiceTest extends Specification {
         new DecisionTransition("NEW", "ACTION_POTENTIAL_TRUE_POSITIVE", "Level 2- TRUE1"),
         new DecisionTransition("NEW", "ACTION_INVESTIGATE", "Level 1- SEAR_UNRESOLVED"))
     def holder = new DecisionConfigurationHolder(decisions)
-    def ms = new MapStatusUseCaseService(holder)
+    def ms = new DecisionMapperUseCaseService(holder)
 
     def nextStatuses = List.of(
         new StatusInfoDto("1", "Level 2- FALSE1", "12", "checksum"),
@@ -25,7 +25,7 @@ class MapStatusUseCaseServiceTest extends Specification {
     when:
     try {
       status = ms.mapStatus(
-          MapStatusRequest.builder()
+          DecisionStatusRequest.builder()
               .dataCenter("DATA_CENTER")
               .unit("MESSAGEENTITY.GETUNIT")
               .nextStatuses(nextStatuses)
