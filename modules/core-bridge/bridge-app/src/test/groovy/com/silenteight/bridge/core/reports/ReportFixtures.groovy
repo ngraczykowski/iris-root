@@ -285,6 +285,7 @@ class ReportFixtures {
                   .setName(MATCH_ONE_NAME)
                   .setPayload(
                       Struct.newBuilder()
+                          .putFields('clientId', getValue(MATCH_DATA_ONE.id()))
                           .putFields('s8Recommendation', getValue(MATCH_DATA_ONE.recommendation()))
                           .putFields('s8Reason', getValue(MATCH_DATA_ONE.comment()))
                           .putFields('stepId', getValue(MATCH_DATA_ONE.stepId()))

@@ -39,6 +39,7 @@ class ReportsSenderServiceAdapter implements ReportsSenderService {
   private static final String ALERT_STATUS_KEY = "status";
   private static final String ALERT_ERROR_DESCRIPTION_KEY = "errorDescription";
 
+  private static final String MATCH_EXTERNAL_ID_KEY = "clientId";
   private static final String MATCH_STEP_ID_KEY = "stepId";
   private static final String MATCH_STEP_TITLE_KEY = "stepTitle";
   private static final String MATCH_FV_SIGNATURE_KEY = "fvSignature";
@@ -109,6 +110,7 @@ class ReportsSenderServiceAdapter implements ReportsSenderService {
 
   private Map<String, String> getMatchDataPayload(MatchData matchData) {
     var matchPayload = new HashMap<String, String>();
+    matchPayload.put(MATCH_EXTERNAL_ID_KEY, matchData.id());
     matchPayload.put(MATCH_RECOMMENDATION_KEY, matchData.recommendation());
     matchPayload.put(MATCH_RECOMMENDATION_COMMENT_KEY, matchData.comment());
     matchPayload.put(MATCH_STEP_ID_KEY, matchData.stepId());

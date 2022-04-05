@@ -6,6 +6,7 @@ import com.silenteight.bridge.core.recommendation.domain.RecommendationFacade;
 import com.silenteight.bridge.core.recommendation.domain.command.GetRecommendationCommand;
 import com.silenteight.bridge.core.recommendation.domain.model.FeatureMetadata;
 import com.silenteight.bridge.core.recommendation.domain.model.MatchMetadata;
+import com.silenteight.bridge.core.recommendation.domain.model.RecommendationMetadata;
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationWithMetadata;
 import com.silenteight.bridge.core.reports.domain.model.FeatureMetadataDto;
 import com.silenteight.bridge.core.reports.domain.model.MatchMetadataDto;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,11 +52,12 @@ class ReportsRecommendationServiceAdapter implements RecommendationService {
 
   private RecommendationMetadataDto getRecommendationMetadataDto(
       RecommendationWithMetadata recommendationWithMetadata) {
-    return new RecommendationMetadataDto(
-        recommendationWithMetadata.metadata().matchMetadata().stream()
+    return Optional.ofNullable(recommendationWithMetadata.metadata())
+        .map(RecommendationMetadata::matchMetadata)
+        .map(matchMetadata -> new RecommendationMetadataDto(matchMetadata.stream()
             .map(this::toMetadataDto)
-            .toList()
-    );
+            .toList()))
+        .orElseGet(() -> new RecommendationMetadataDto(List.of()));
   }
 
   private MatchMetadataDto toMetadataDto(MatchMetadata matchMetadata) {
