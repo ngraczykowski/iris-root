@@ -12,11 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 class JdbcMatchFeatureValueDataAccess implements MatchFeatureValueDataAccess {
 
   private final InsertMatchFeatureValueBatchQuery query;
-  private final DeleteMatchFeatureValueBatchQuery deleteQuery;
+  private final DeleteMatchFeatureValueBatchQuery deleteMatchFeatureValueQuery;
+  private final DeleteAgentExchangeMatchFeatureValueBatchQuery deleteAgentExchangeQuery;
 
   JdbcMatchFeatureValueDataAccess(JdbcTemplate template, NamedParameterJdbcTemplate namedTemplate) {
     query = new InsertMatchFeatureValueBatchQuery(template);
-    deleteQuery = new DeleteMatchFeatureValueBatchQuery(namedTemplate);
+    deleteMatchFeatureValueQuery = new DeleteMatchFeatureValueBatchQuery(namedTemplate);
+    deleteAgentExchangeQuery = new DeleteAgentExchangeMatchFeatureValueBatchQuery(namedTemplate);
   }
 
   @Transactional
@@ -28,6 +30,7 @@ class JdbcMatchFeatureValueDataAccess implements MatchFeatureValueDataAccess {
   @Transactional
   @Override
   public int delete(Iterable<String> features) {
-    return deleteQuery.execute(features);
+    deleteAgentExchangeQuery.execute(features);
+    return deleteMatchFeatureValueQuery.execute(features);
   }
 }

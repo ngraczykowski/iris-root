@@ -194,7 +194,7 @@ class AdjudicationEngineAnalysisIntegrationTest {
   private void assertGeneratedRecommendation(String analysisName) {
     var analysisId = ResourceName.create(analysisName).getLong("analysis");
     await()
-        .atMost(Duration.ofSeconds(180))
+        .atMost(Duration.ofSeconds(10))
         .until(() -> generatedRecommendationCount(
             jdbcTemplate,
             analysisId) > 0);
