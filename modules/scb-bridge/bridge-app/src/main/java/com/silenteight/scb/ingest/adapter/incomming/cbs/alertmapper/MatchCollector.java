@@ -14,7 +14,6 @@ import java.util.UUID;
 
 import static java.util.Comparator.comparing;
 import static java.util.Optional.ofNullable;
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
 
 class MatchCollector {
@@ -26,11 +25,11 @@ class MatchCollector {
       AlertContext alertContext) {
     List<Suspect> sorted = suspects.stream()
         .sorted(comparing(MatchCollector::getSuspectIndex))
-        .collect(toList());
+        .toList();
 
     return range(0, sorted.size())
         .mapToObj(i -> makeMatch(i, sorted.get(i), alertContext))
-        .collect(toList());
+        .toList();
   }
 
   private static int getSuspectIndex(Suspect suspect) {

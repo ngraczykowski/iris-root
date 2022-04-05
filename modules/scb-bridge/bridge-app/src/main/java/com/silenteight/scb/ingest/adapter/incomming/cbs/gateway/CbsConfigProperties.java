@@ -21,6 +21,9 @@ public class CbsConfigProperties {
   @NotBlank
   private String recomFunctionName = "CBS_INTERFACE_PKG.F_CBS_S8_LOG_RECOM";
 
+  @NotBlank
+  private String recomWithQcoFunctionName = "CBS_INTERFACE_PKG_V4.F_CBS_S8_LOG_RECOM";
+
   @NonNull
   private SourceApplicationValues sourceApplicationValues = new SourceApplicationValues();
 }

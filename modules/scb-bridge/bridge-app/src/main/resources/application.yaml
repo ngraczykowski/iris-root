@@ -110,6 +110,8 @@ spring:
 
 silenteight:
   scb-bridge:
+    cbs:
+      attach-qco-fields-to-recom: false
     learning:
       alert:
         enabled: false
@@ -177,6 +179,10 @@ serp:
         config:
           ack-function-name: CBS_INTERFACE_PKG.F_CBS_S8_LOG_ACK
           recom-function-name: CBS_INTERFACE_PKG.F_CBS_S8_LOG_RECOM
+          recom-function-with-qco-name: CBS_INTERFACE_PKG_V4.F_CBS_S8_LOG_RECOM
+          source-application-values:
+            - alert-level: S8ALERT
+            - watchlist-leve: S8HIT
         recommendation:
           recommendation-values:
             - ACTION_INVESTIGATE: Manual Investigation

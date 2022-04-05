@@ -53,6 +53,7 @@ class AlertWitchMatchesExtractor {
     return AlertMetadata.builder()
         .discriminator(alert.id().discriminator())
         .watchlistId(alert.details().getWatchlistId())
+        .systemId(alert.details().getSystemId())
         .build();
   }
 }

@@ -55,7 +55,7 @@ class ScbRecommendationServiceTest {
   @Test
   void shouldStoreToDatabaseAndTakeLatestWithSystemIdAndDiscriminator() {
     //given
-    AlertMetadata alertMetadata = new AlertMetadata(null, DISCRIMINATOR);
+    AlertMetadata alertMetadata = new AlertMetadata(null, DISCRIMINATOR, SYSTEM_ID);
     when(discriminatorFetcher.fetch(anyString()))
         .thenReturn(Optional.of("321"));
     when(payloadConverter.deserializeFromJsonToObject(PAYLOAD, AlertMetadata.class))
@@ -88,7 +88,7 @@ class ScbRecommendationServiceTest {
   @Test
   void shouldStoreToDatabaseAndFindCurrentOrLatestRecommendation() {
     //when
-    var alertMetadata = new AlertMetadata(null, DISCRIMINATOR);
+    var alertMetadata = new AlertMetadata(null, DISCRIMINATOR, SYSTEM_ID);
     when(payloadConverter.deserializeFromJsonToObject(PAYLOAD, AlertMetadata.class))
         .thenReturn(alertMetadata);
     underTest.saveRecommendation(fixtures.firstRecommendation);
@@ -117,7 +117,7 @@ class ScbRecommendationServiceTest {
   @Test
   void shouldStoreToDatabaseAndCheckIfRecommendationAlreadyExists() {
     //given
-    var alertMetadata = new AlertMetadata(null, DISCRIMINATOR);
+    var alertMetadata = new AlertMetadata(null, DISCRIMINATOR, SYSTEM_ID);
     when(payloadConverter.deserializeFromJsonToObject(PAYLOAD, AlertMetadata.class))
         .thenReturn(alertMetadata);
     var alertRecommendation = fixtures.firstRecommendation;

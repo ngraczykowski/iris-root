@@ -85,14 +85,14 @@ class IngestServiceTest {
                 .id(objectId)
                 .matches(Collections.singletonList(someMatch))
                 .decisionGroup(DECISION_GROUP)
-                .details(AlertDetails.builder().batchId("batchId1").build())
+                .details(AlertDetails.builder().systemId("system-id").batchId("batchId1").build())
                 .build(),
             Alert
                 .builder()
                 .id(objectId)
                 .matches(Collections.singletonList(someMatch))
                 .decisionGroup(OTHER_DECISION_GROUP)
-                .details(AlertDetails.builder().batchId("batchId1").build())
+                .details(AlertDetails.builder().systemId("system-id").batchId("batchId1").build())
                 .build())
         .toList();
   }

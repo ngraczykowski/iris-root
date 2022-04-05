@@ -65,7 +65,7 @@ public class ScbRecommendationService {
   private ScbRecommendation toScbRecommendation(Recommendation recommendation) {
     var alertMetadata = parseAlertMetadata(recommendation);
     return ScbRecommendation.builder()
-        .systemId(recommendation.alert().id())
+        .systemId(alertMetadata.systemId())
         .decision(recommendation.recommendedAction().name())
         .comment(recommendation.recommendedComment())
         .recommendedAt(recommendation.recommendedAt())

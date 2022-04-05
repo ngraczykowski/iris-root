@@ -1,7 +1,5 @@
 package com.silenteight.scb.outputrecommendation.adapter.outgoing
 
-import com.silenteight.scb.ingest.domain.model.AlertMetadata
-import com.silenteight.scb.ingest.domain.payload.PayloadConverter
 import com.silenteight.scb.outputrecommendation.domain.model.CbsAlertRecommendation
 import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.Alert
 import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.Recommendation
@@ -12,8 +10,8 @@ import spock.lang.Specification
 class CbsRecommendationServiceSpec extends Specification {
 
   def cbsRecommendationGateway = Mock(CbsRecommendationGateway)
-  def payloadConverter = Mock(PayloadConverter)
-  def recommendationValues = ['ACTION_FALSE_POSITIVE': 'False Positive']
+  def cbsRecommendationMapper = Mock(CbsRecommendationMapper)
+  def recommendedStatus = 'False Positive'
   def payload = 'payload'
   def alertId = 'alertId'
   def batchId = 'batchId'
@@ -22,7 +20,7 @@ class CbsRecommendationServiceSpec extends Specification {
 
   def 'should recommend alert only for watchlist level processing'() {
     when:
-    new CbsRecommendationService(cbsRecommendationGateway, [:], payloadConverter)
+    new CbsRecommendationService(cbsRecommendationGateway, cbsRecommendationMapper)
 
     then:
     0 * _
@@ -31,14 +29,15 @@ class CbsRecommendationServiceSpec extends Specification {
   def 'should send watchlist-level alert recommendation to cbs and use user-friendly status'() {
     given:
     def alertRecommendation = createRecommendation()
-    def alertMetadata = new AlertMetadata(watchlistId, 'discriminator')
+    def cbsAlertRecommendation = createCbsAlertRecommendation()
 
     when:
-    new CbsRecommendationService(cbsRecommendationGateway, recommendationValues, payloadConverter)
+    new CbsRecommendationService(cbsRecommendationGateway, cbsRecommendationMapper)
         .recommend([alertRecommendation])
 
     then:
-    2 * payloadConverter.deserializeFromJsonToObject(payload, AlertMetadata.class) >> alertMetadata
+    1 * cbsRecommendationMapper.getAlertsToBeRecommended([alertRecommendation]) >>
+        [cbsAlertRecommendation]
     1 * cbsRecommendationGateway.recommendAlerts(
         {
           it.size() == 1 && verifyCbsAlert(it.first())
@@ -46,7 +45,7 @@ class CbsRecommendationServiceSpec extends Specification {
   }
 
   def verifyCbsAlert(CbsAlertRecommendation cbsAlert) {
-    cbsAlert.hitRecommendedStatus == 'False Positive'
+    cbsAlert.hitRecommendedStatus == recommendedStatus
     cbsAlert.hitRecommendedComments == comment
     cbsAlert.alertExternalId == alertId
     cbsAlert.hitWatchlistId == watchlistId
@@ -56,14 +55,13 @@ class CbsRecommendationServiceSpec extends Specification {
   def 'should do not send alert-level alert recommendation to cbs'() {
     given:
     def alertRecommendation = createRecommendation()
-    def alertMetadata = new AlertMetadata(null, 'discriminator')
 
     when:
-    new CbsRecommendationService(cbsRecommendationGateway, [:], payloadConverter)
+    new CbsRecommendationService(cbsRecommendationGateway, cbsRecommendationMapper)
         .recommend([alertRecommendation])
 
     then:
-    1 * payloadConverter.deserializeFromJsonToObject(payload, AlertMetadata.class) >> alertMetadata
+    1 * cbsRecommendationMapper.getAlertsToBeRecommended([alertRecommendation]) >> []
     1 * cbsRecommendationGateway.recommendAlerts(
         {
           it.isEmpty()
@@ -83,6 +81,15 @@ class CbsRecommendationServiceSpec extends Specification {
         .batchId(batchId)
         .recommendedComment(comment)
         .recommendedAction(RecommendedAction.ACTION_FALSE_POSITIVE)
+        .build()
+  }
+
+  def createCbsAlertRecommendation() {
+    CbsAlertRecommendation.builder()
+        .alertExternalId(alertId)
+        .batchId(batchId)
+        .hitRecommendedComments(comment)
+        .hitRecommendedStatus(recommendedStatus)
         .build()
   }
 }

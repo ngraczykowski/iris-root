@@ -4,45 +4,22 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsEventPublisher;
-import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.SourceApplicationValues;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.event.RecomCalledEvent;
 import com.silenteight.scb.outputrecommendation.domain.model.CbsAlertRecommendation;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.SqlParameterValue;
-import org.springframework.jdbc.core.support.SqlLobValue;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Types;
 import java.util.List;
-import javax.annotation.Nonnull;
-
-import static java.util.Objects.requireNonNull;
 
 @Slf4j
 public class CbsRecommendationGateway extends CbsEventPublisher {
 
-  private static final String TEMPLATE_VARIABLE = ":recomFunctionName";
-  private final JdbcTemplate jdbcTemplate;
-  private final String query;
-  private final SourceApplicationValues sourceApplicationValues;
+  private final RecomFunctionExecutorService recomFunctionExecutorService;
 
   public CbsRecommendationGateway(
-      @NonNull String recomFunctionName,
-      @NonNull JdbcTemplate jdbcTemplate,
-      @NonNull SourceApplicationValues sourceApplicationValues) {
-    this.jdbcTemplate = jdbcTemplate;
-    this.query = prepareQuery(recomFunctionName);
-    this.sourceApplicationValues = sourceApplicationValues;
-  }
-
-  private static String prepareQuery(String recomFunctionName) {
-    return getQueryTemplate().replace(TEMPLATE_VARIABLE, recomFunctionName);
-  }
-
-  private static String getQueryTemplate() {
-    return String.format("SELECT %s(?, ?, ?, ?, ?, ?, ?, ?) FROM dual", TEMPLATE_VARIABLE);
+      @NonNull RecomFunctionExecutorService recomFunctionExecutorService) {
+    this.recomFunctionExecutorService = recomFunctionExecutorService;
   }
 
   @Transactional(value = "externalTransactionManager", readOnly = true)
@@ -55,7 +32,7 @@ public class CbsRecommendationGateway extends CbsEventPublisher {
       description = "Time taken to call recommend function")
   void recommendAlert(@NonNull CbsAlertRecommendation alertRecommendation) {
     try {
-      String statusCode = executeRecomFunction(alertRecommendation);
+      String statusCode = recomFunctionExecutorService.execute(alertRecommendation);
 
       log.info(
           "CBS: Recommendation function executed: status={}, systemId={}, hitWatchlistId={},"
@@ -74,30 +51,6 @@ public class CbsRecommendationGateway extends CbsEventPublisher {
           e);
       notifyCbsCallFailed("RECOM");
     }
-  }
-
-  private String executeRecomFunction(@NonNull CbsAlertRecommendation alertRecommendation) {
-    Object[] parameters = createParameters(alertRecommendation);
-
-    return requireNonNull(jdbcTemplate.queryForObject(query, parameters, String.class));
-  }
-
-  @Nonnull
-  private Object[] createParameters(CbsAlertRecommendation alertRecommendation) {
-    return new Object[] {
-        sourceApplicationValues.getSourceApplicationValue(alertRecommendation.isWatchlistLevel()),
-        alertRecommendation.getAlertExternalId(),
-        alertRecommendation.getBatchId(),
-        alertRecommendation.getHitWatchlistId(),
-        alertRecommendation.getHitRecommendedStatus(),
-        createClob(alertRecommendation.getHitRecommendedComments()),
-        alertRecommendation.getListRecommendedStatus(),
-        createClob(alertRecommendation.getListRecommendedComments())
-    };
-  }
-
-  private static SqlParameterValue createClob(String text) {
-    return new SqlParameterValue(Types.CLOB, new SqlLobValue(text));
   }
 
   private void notifyRecomCalled(String statusCode) {

@@ -12,7 +12,7 @@ import static java.util.Collections.emptyMap;
 @ConfigurationProperties("serp.scb.bridge.cbs.recommendation")
 @Component
 @Data
-class CbsRecommendationProperties {
+public class CbsRecommendationProperties {
 
   private Map<String, String> recommendationValues = emptyMap();
 }

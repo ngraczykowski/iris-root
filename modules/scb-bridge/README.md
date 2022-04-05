@@ -1,6 +1,6 @@
 # Scb Bridge
 
-SCB Bridge application uses **Java 17** 
+SCB Bridge application uses **Java 17**
 
 ## Application ports
 
@@ -22,18 +22,22 @@ Services are exposed on locally accessible port numbers. The table below shows h
 ### GNS-RT
 
 The simplest way to test GNS-RT locally is to send a JSON request using Postman:
-1. Generate new request using endpoint `http://localhost:24220/v1/gnsrt/system-id/random` (method `GET`)
-   1. It pulls one random record from Oracle DB and based on its data it generates a JSON request.
-   2. In addition, it modifies system_id, so there won't be any duplicates in scb_raw_alert table. 
-2. Copy generated request and send it to endpoint `http://localhost:24220/v1/gnsrt/recommendation` (method `POST`)
-   1. To paste the request go to `Body` section
-   2. Select `raw`
-   3. Change type to `JSON`
+
+1. Generate new request using endpoint `http://localhost:24220/v1/gnsrt/system-id/random` (
+   method `GET`)
+    1. It pulls one random record from Oracle DB and based on its data it generates a JSON request.
+    2. In addition, it modifies system_id, so there won't be any duplicates in scb_raw_alert table.
+2. Copy generated request and send it to endpoint `http://localhost:24220/v1/gnsrt/recommendation` (
+   method `POST`)
+    1. To paste the request go to `Body` section
+    2. Select `raw`
+    3. Change type to `JSON`
 
 #### Nomad
 
-You can also use Postman to send a request to SCB-Bridge that is deployed on `Nomad`.
-What you need to do is to:
+You can also use Postman to send a request to SCB-Bridge that is deployed on `Nomad`. What you need
+to do is to:
+
 - Have access to Nomad by VPN
 - Change url in request to `https://lima.silenteight.com/rest/scb-bridge/` + endpoint name eg:
     - `https://lima.silenteight.com/rest/scb-bridge/v1/gnsrt/recommendation`
@@ -58,14 +62,16 @@ eg: `DatabaseIntegrationTest`. So it's important to name test classes appropriat
 
 ## Nomad Deployment
 
-The Nomad deployment descriptor(the job file) `scb-bridge.nomad` contains job specification and all its requirements. 
-Nomad scheduler deployed on-premise will use this file to run scb-bridge artifact (jar).
+The Nomad deployment descriptor(the job file) `scb-bridge.nomad` contains job specification and all
+its requirements. Nomad scheduler deployed on-premise will use this file to run scb-bridge
+artifact (jar).
 
 ## Providing learning alert data by ECM (Hive)
 
 1) Login via ssh to the hive server
 2) cd to bin
 3) Execute these commands:
+
 * export EEL_TMP_DIR=/tmp
 * export EEL_PG_HOST=10.23.234.xx
 * export EEL_PG_PORT=6524
@@ -76,12 +82,46 @@ Nomad scheduler deployed on-premise will use this file to run scb-bridge artifac
 and then, run the script: bridge-dist/src/bash/export_ecm_learning.sh
 
 ## QCO module
-The QCO (Quality Control Operations) is a process where the bridge delivers recommendations to banking ECM system but with overloaded solution according to provided rules (configuration *.csv file).
-The configuration allows defining rule(s) to determine which the policy and step of alert/match should change solution for. It also defines the frequency (threshold) for given step which is the size of the alert/matches distribution for candidate selection.
-In order to trigger QCO sampling and solution overriding:
 
-The scb-bridge has to be run with qco profile.
-The configuration file has to be provided at the location defined in bridge-qco/src/main/resources/application-qco.yaml.
+The QCO (Quality Control Operations) is a process where the bridge delivers recommendations to
+banking ECM system but with overloaded solution according to provided rules (configuration *.csv
+file). The configuration allows defining rule(s) to determine which the policy and step of
+alert/match should change solution for. It also defines the frequency (threshold) for given step
+which is the size of the alert/matches distribution for candidate selection. In order to trigger QCO
+sampling and solution overriding:
 
-The configuration allows defining rule to determine which the policy and step of alert we should change solution for.
-The configuration allows defining how frequent we should get alert to analyze as well.
+The scb-bridge has to be run with qco profile. The configuration file has to be provided at the
+location defined in bridge-qco/src/main/resources/application-qco.yaml.
+
+The configuration allows defining rule to determine which the policy and step of alert we should
+change solution for. The configuration allows defining how frequent we should get alert to analyze
+as well.
+
+## EXTENDED VERSION OF RECOM FUNCTION WITH QCO PARAMETERS
+
+To enable recom function with qco parameters, we need to set property:
+```
+silenteight:
+  scb-bridge:
+    cbs:
+      attach-qco-fields-to-recom: true
+```
+
+Function signature:
+
+    FUNCTION F_CBS_S8_LOG_RECOM
+    (
+        P_SOURCE_APPLN                  IN VARCHAR2, 
+        P_SYSTEM_ID                     IN VARCHAR2, 
+        P_BATCH_ID                      IN VARCHAR2, 
+        P_HIT_WATCHLIST_ID              IN VARCHAR2, 
+        P_HIT_RECOMMENDED_STATUS        IN VARCHAR2, 
+        P_HIT_RECOMMENDED_COMMENTS      IN CLOB,
+        P_LIST_RECOMMENDED_STATUS       IN VARCHAR2, 
+        P_LIST_RECOMMENDED_COMMENTS     IN CLOB,
+        P_POLICY_ID                     IN VARCHAR2, 
+        P_HIT_ID                        IN VARCHAR2, 
+        P_STEP_ID                       IN VARCHAR2, 
+        P_FV_SIGNATURE                  IN VARCHAR2
+    )
+    RETURN VARCHAR2 AS PRAGMA AUTONOMOUS_TRANSACTION;

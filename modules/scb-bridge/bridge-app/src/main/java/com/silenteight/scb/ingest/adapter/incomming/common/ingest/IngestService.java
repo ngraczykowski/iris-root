@@ -99,7 +99,7 @@ class IngestService implements SingleAlertIngestService, BatchAlertIngestService
 
   private boolean shouldLearningAlertBeProcessed(Alert alert) {
     return !scbRecommendationService.alertRecommendationExists(
-        alert.id().sourceId(),
+        alert.details().getSystemId(),
         alert.id().discriminator());
   }
 
@@ -111,7 +111,7 @@ class IngestService implements SingleAlertIngestService, BatchAlertIngestService
 
     log.info(
         "Sending an ordered alert: systemId={} and waiting for recommendation",
-        alert.id().sourceId());
+        alert.details().getSystemId());
 
     return Optional.empty();
   }
