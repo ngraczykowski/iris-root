@@ -55,10 +55,10 @@ class RecommendationSender {
 
   private static RuntimeException mapToException(HttpServerErrorException exception) {
     switch (exception.getStatusCode()) {
-      case UNAUTHORIZED:
-      case FORBIDDEN:
+      //      4XX
       case REQUEST_TIMEOUT:
       case TOO_MANY_REQUESTS:
+      //        5XX
       case BAD_GATEWAY:
       case SERVICE_UNAVAILABLE:
       case GATEWAY_TIMEOUT:
