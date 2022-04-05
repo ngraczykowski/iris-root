@@ -10,4 +10,5 @@ if [[ -d venv ]]; then
 fi
 
 artifact=$(basename -- "$(ls ./dist/company_name-*.whl)")
-python -m tox --installpkg "./dist/$artifact" "$@"
+
+python3 -m tox --installpkg "./dist/$artifact" "$@"

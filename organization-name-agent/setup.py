@@ -10,7 +10,7 @@ install_require = [
     "grpcio==1.39.0",
     "grpcio-tools==1.39.0",
     "importlib_resources==5.2.2",
-    "organization-name-knowledge==0.5.0",
+    "organization-name-knowledge==0.9.0-dev",
     "phonetics==1.0.5",
     "psutil==5.9.0",
     "pydantic==1.9.0",
@@ -40,7 +40,7 @@ tests_require = [
 
 setup(
     name="company-name",
-    version="0.16.0-dev",
+    version="0.16.1-dev",
     description="",
     author="Silent Eight Pte. Ltd.",
     author_email="support@silenteight.com",
