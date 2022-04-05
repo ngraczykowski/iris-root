@@ -31,14 +31,16 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 public class AlertParser {
 
   private static final String HITS_PATH = "$.Message.Hits.*.Hit";
-
   private static final String MESSAGE_DATA_PATH = "$.Message.MessageData";
-
   private static final String SYSTEM_ID_PATH = "$.Message.SystemID";
-
   private static final String MESSAGE_ID_PATH = "$.Message.MessageID";
-
   private static final String OFAC_ID_PATH = "$.HittedEntity.ID";
+  private static final String CURRENT_STATUS_NAME = "$.Message.CurrentStatus.Name";
+  private static final String CURRENT_STATUS_CHECKSUM = "$.Message.CurrentStatus.Checksum";
+  private static final String CURRENT_ACTION_BY_CHECKSUM =
+      "$.Message.Actions[?(@.Action.Status.Checksum==\"%s\")].Action";
+  private static final String CURRENT_ACTION_DATE_TIME = CURRENT_ACTION_BY_CHECKSUM + ".DateTime";
+  private static final String CURRENT_ACTION_COMMENT = CURRENT_ACTION_BY_CHECKSUM + ".Comment";
 
   private final ParseContext parseContext;
 
@@ -53,6 +55,9 @@ public class AlertParser {
         .parsedMessageData(parseMessageData(documentContext))
         .systemId(getSystemId(documentContext))
         .messageId(getMessageId(documentContext))
+        .currentStatusName(getCurrentStatusName(documentContext))
+        .currentActionDateTime(getCurrentActionDateTime(documentContext))
+        .currentActionComment(getCurrentActionComment(documentContext))
         .hits(getMatches(documentContext))
         .build();
   }
@@ -78,21 +83,23 @@ public class AlertParser {
         .build();
   }
 
+  private static String getStringValue(DocumentContext documentContext, String jsonPath) {
+    return documentContext.read(jsonPath, LIST_OF_STRINGS).stream()
+        .findFirst()
+        .orElse(null);
+  }
+
   private static List<JsonNode> getHits(DocumentContext documentContext) {
     TypeRef<List<JsonNode>> typeRef = new TypeRef<>() {};
     return documentContext.read(HITS_PATH, typeRef);
   }
 
   private static String getSystemId(DocumentContext documentContext) {
-    return documentContext.read(SYSTEM_ID_PATH, LIST_OF_STRINGS).stream()
-        .findFirst()
-        .orElse(null);
+    return getStringValue(documentContext, SYSTEM_ID_PATH);
   }
 
   private static String getMessageId(DocumentContext documentContext) {
-    return documentContext.read(MESSAGE_ID_PATH, LIST_OF_STRINGS).stream()
-        .findFirst()
-        .orElse(null);
+    return getStringValue(documentContext, MESSAGE_ID_PATH);
   }
 
   Collection<List<JsonNode>> mergeHits(List<JsonNode> hits) {
@@ -106,5 +113,27 @@ public class AlertParser {
         .stream()
         .findFirst()
         .orElseGet(() -> UUID.randomUUID().toString());
+  }
+
+  private static String getCurrentStatusName(DocumentContext documentContext) {
+    return getStringValue(documentContext, CURRENT_STATUS_NAME);
+  }
+
+  private static String getCurrentActionStringValue(
+      DocumentContext documentContext,
+      String jsonPath) {
+    return documentContext.read(CURRENT_STATUS_CHECKSUM, LIST_OF_STRINGS).stream()
+        .findFirst()
+        .map(checksum -> getStringValue(documentContext,
+            String.format(jsonPath, checksum)))
+        .orElse(null);
+  }
+
+  private static String getCurrentActionDateTime(DocumentContext documentContext) {
+    return getCurrentActionStringValue(documentContext, CURRENT_ACTION_DATE_TIME);
+  }
+
+  private static String getCurrentActionComment(DocumentContext documentContext) {
+    return getCurrentActionStringValue(documentContext, CURRENT_ACTION_COMMENT);
   }
 }

@@ -9,6 +9,12 @@ import spock.lang.Subject
 
 import static Fixtures.ALERT_NAME
 import static Fixtures.LEARNING_DATA
+import static com.silenteight.fab.dataprep.domain.Fixtures.ACCESS_PERMISSION_TAG
+import static com.silenteight.fab.dataprep.domain.Fixtures.ANALYST_DATE_TIME
+import static com.silenteight.fab.dataprep.domain.Fixtures.ANALYST_DECISION
+import static com.silenteight.fab.dataprep.domain.Fixtures.ANALYST_REASON
+import static com.silenteight.fab.dataprep.domain.Fixtures.DISCRIMINATOR
+import static com.silenteight.fab.dataprep.domain.Fixtures.ORIGINAL_ANALYST_DECISION
 
 class LearningServiceTest extends Specification {
 
@@ -24,10 +30,20 @@ class LearningServiceTest extends Specification {
     then:
     1 * learningEventPublisher.publish(_) >> {WarehouseEvent event ->
       assert event.getRequestId() != null
-      assert event.getAlerts() == [Alert.builder()
-                                       .alertName(ALERT_NAME)
-                                       .matches([])
-                                       .build()]
+      assert event.getAlerts() == [
+          Alert.builder()
+              .alertName(ALERT_NAME)
+              .discriminator(DISCRIMINATOR)
+              .accessPermissionTag(ACCESS_PERMISSION_TAG)
+              .payload(
+                  ['warehouse_alert.payload -> originalAnalystDecision'        :
+                       ORIGINAL_ANALYST_DECISION,
+                   'warehouse_alert.payload -> analystDecision'                : ANALYST_DECISION,
+                   'warehouse_alert.payload -> analystDecisionModifiedDateTime': ANALYST_DATE_TIME,
+                   'warehouse_alert.payload -> analystReason'                  : ANALYST_REASON])
+              .matches([])
+              .build()
+      ]
     }
   }
 }

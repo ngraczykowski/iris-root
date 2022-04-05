@@ -12,6 +12,7 @@ import com.silenteight.fab.dataprep.domain.outgoing.FeedingEventPublisher
 
 import spock.lang.Specification
 import spock.lang.Subject
+import spock.lang.Unroll
 
 import static com.silenteight.fab.dataprep.domain.Fixtures.*
 
@@ -83,5 +84,42 @@ class FeedingFacadeSpec extends Specification {
     AlertStatus.SUCCESS | Status.SUCCESS | AlertErrorDescription.NONE
     AlertStatus.SUCCESS | Status.FAILURE | AlertErrorDescription.CREATE_FEATURE_INPUT
     AlertStatus.FAILURE | Status.FAILURE | AlertErrorDescription.EXTRACTION
+  }
+
+  @Unroll
+  def 'event should not be sent for learning data #status'() {
+    given:
+    def registeredAlert = RegisteredAlert.builder()
+        .batchName(BATCH_NAME)
+        .messageName(MESSAGE_NAME)
+        .alertName(ALERT_NAME)
+        .status(status)
+        .matches(
+            [
+                Match.builder()
+                    .hitName(HIT_NAME)
+                    .matchName(MATCH_NAME)
+                    .build()
+            ]
+        )
+        .build()
+
+    def featureInputsCommand = FeatureInputsCommand.builder()
+        .registeredAlert(registeredAlert)
+        .build()
+
+    when:
+    underTest.etlAndFeedUdsLearningData(registeredAlert)
+
+    then:
+    if (status == AlertStatus.SUCCESS) {
+      1 * feedingService.createFeatureInputs(featureInputsCommand)
+    } else {
+      0 * feedingService._
+    }
+    0 * feedingEventPublisher._
+
+    where:
+    status << AlertStatus.values()
   }
 }

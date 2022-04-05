@@ -10,9 +10,16 @@ public class LearningData {
 
   @NonNull
   String alertName;
+  @NonNull
+  String originalAnalystDecision;
+  @NonNull
   String analystDecision;
+  @NonNull
   String analystDecisionModifiedDateTime;
+  @NonNull
   String analystReason;
-  String systemId;
-  String messageId;
+  @NonNull
+  String discriminator;
+  @NonNull
+  String accessPermissionTag;
 }

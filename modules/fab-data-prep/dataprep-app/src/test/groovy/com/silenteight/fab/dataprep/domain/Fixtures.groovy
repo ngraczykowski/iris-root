@@ -3,9 +3,14 @@ package com.silenteight.fab.dataprep.domain
 import com.silenteight.fab.dataprep.domain.category.BuildCategoryCommand
 import com.silenteight.fab.dataprep.domain.feature.BuildFeatureCommand
 import com.silenteight.fab.dataprep.domain.feature.FeatureInputsCommand
+import com.silenteight.fab.dataprep.domain.model.AlertStatus
+import com.silenteight.fab.dataprep.domain.model.ParsedAlertMessage
+import com.silenteight.fab.dataprep.domain.model.ParsedAlertMessage.Hit
 import com.silenteight.fab.dataprep.domain.model.ParsedMessageData
 import com.silenteight.fab.dataprep.domain.model.RegisteredAlert
 import com.silenteight.fab.dataprep.domain.model.RegisteredAlert.Match
+import com.silenteight.proto.fab.api.v1.AlertMessageDetails
+import com.silenteight.proto.fab.api.v1.AlertMessagesDetailsResponse
 
 import com.google.common.io.Resources
 
@@ -22,6 +27,9 @@ class Fixtures {
   static final String BATCH_NAME = 'batches/031dafde-a12b-11ec-8e04-2f2fd89dfc3f'
   static final String SYSTEM_ID = 'TRAINING!60C2ED1B-58A1D68E-0326AE78-A8C7CC79'
   static final String MESSAGE_ID = '00000004'
+  static final String DISCRIMINATOR = "$SYSTEM_ID|$MESSAGE_ID"
+  static final String CURRENT_STATUS_NAME = "COMMHUB"
+  static final String CURRENT_ACTION_DATE_TIME = "20180827094707"
 
   static ParsedMessageData PARSED_PAYLOAD = ParsedMessageData.builder()
       .salutation('MR')
@@ -80,6 +88,7 @@ class Fixtures {
       .messageId(MESSAGE_ID)
       .parsedMessageData(PARSED_PAYLOAD)
       .matches([EMPTY_MATCH])
+      .status(AlertStatus.SUCCESS)
       .build()
 
   static FeatureInputsCommand EMPTY_FEATURE_INPUTS_COMMAND = FeatureInputsCommand.builder()
@@ -99,5 +108,31 @@ class Fixtures {
       .matchName(MATCH_NAME)
       .systemId(SYSTEM_ID)
       .parsedMessageData(PARSED_PAYLOAD)
+      .build()
+
+  static AlertMessageDetails ALERT_MESSAGE_DETAILS = AlertMessageDetails.newBuilder()
+      .setMessageName(MESSAGE_NAME)
+      .setPayload(MESSAGE)
+      .build()
+
+  static AlertMessagesDetailsResponse ALERT_MESSAGES_DETAILS_RESPONSE = AlertMessagesDetailsResponse
+      .newBuilder()
+      .addAlerts(ALERT_MESSAGE_DETAILS)
+      .build()
+
+  static ParsedAlertMessage PARSED_ALERT_MESSAGE = ParsedAlertMessage.builder()
+      .batchName(BATCH_NAME)
+      .messageName(MESSAGE_NAME)
+      .systemId(SYSTEM_ID)
+      .messageId(MESSAGE_ID)
+      .currentActionComment("")
+      .currentActionDateTime(CURRENT_ACTION_DATE_TIME)
+      .currentStatusName(CURRENT_STATUS_NAME)
+      .hits(
+          [
+              (HIT_ID): Hit.builder()
+                  .hitName(HIT_ID)
+                  .build()
+          ])
       .build()
 }

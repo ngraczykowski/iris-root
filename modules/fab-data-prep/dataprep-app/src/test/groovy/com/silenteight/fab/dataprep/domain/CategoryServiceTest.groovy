@@ -3,8 +3,6 @@ package com.silenteight.fab.dataprep.domain
 import com.silenteight.fab.dataprep.BaseSpecificationIT
 import com.silenteight.fab.dataprep.domain.category.FabCategory
 import com.silenteight.fab.dataprep.domain.feature.FeatureInputsCommand
-import com.silenteight.fab.dataprep.domain.model.RegisteredAlert
-import com.silenteight.fab.dataprep.domain.model.RegisteredAlert.Match
 import com.silenteight.fab.dataprep.infrastructure.grpc.CategoriesConfigurationProperties.CategoryDefinition
 import com.silenteight.universaldatasource.api.library.category.v2.*
 
@@ -13,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
+
+import static com.silenteight.fab.dataprep.domain.Fixtures.REGISTERED_ALERT
 
 @ContextConfiguration(classes = ServiceTestConfig,
     initializers = ConfigDataApplicationContextInitializer)
@@ -83,18 +83,7 @@ class CategoryServiceTest extends BaseSpecificationIT {
     )
 
     def command = FeatureInputsCommand.builder()
-        .registeredAlert(
-            RegisteredAlert.builder()
-                .batchName(Fixtures.BATCH_NAME)
-                .messageName(Fixtures.MESSAGE_NAME)
-                .alertName(Fixtures.ALERT_NAME)
-                .matches(
-                    [Match.builder()
-                         .hitName(Fixtures.HIT_NAME)
-                         .matchName(Fixtures.MATCH_NAME)
-                         .build()
-                    ])
-                .build())
+        .registeredAlert(REGISTERED_ALERT)
         .build()
 
     when:

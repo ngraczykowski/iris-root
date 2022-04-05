@@ -16,7 +16,7 @@ dependencies {
   implementation project(":dataprep-db-changelog")
 
   api libraries.silenteight_sep_base_common
-  implementation libraries.silenteight_warehouse_api
+  api libraries.silenteight_warehouse_api
   api libraries.sear_rabbitmq_common_schema
   api libraries.spring_boot_autoconfigure
   api libraries.spring_boot_starter_amqp

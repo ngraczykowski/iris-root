@@ -12,4 +12,6 @@ interface AlertRepository extends Repository<AlertEntity, Long> {
   AlertEntity save(AlertEntity alertEntity);
 
   Optional<AlertEntity> findByDiscriminator(String discriminator);
+
+  void deleteAll();
 }

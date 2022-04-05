@@ -178,3 +178,8 @@ feeding:
       categoryType: ENUMERATED
       allowedValues: ["I", "C", "NO_DATA", "DATA_SOURCE_ERROR"]
       multiValue: false
+
+  alert.state:
+    analystDecisions:
+      SOLVED_FALSE_POSITIVE: "analyst_decision_false_positive"
+      SOLVED_TRUE_POSITIVE: "analyst_decision_true_positive"

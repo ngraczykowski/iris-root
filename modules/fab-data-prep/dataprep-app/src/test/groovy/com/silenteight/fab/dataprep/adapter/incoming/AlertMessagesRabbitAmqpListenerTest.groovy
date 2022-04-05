@@ -1,7 +1,9 @@
 package com.silenteight.fab.dataprep.adapter.incoming
 
 import com.silenteight.fab.dataprep.BaseSpecificationIT
+import com.silenteight.fab.dataprep.domain.DataPrepFacade
 import com.silenteight.proto.fab.api.v1.AlertMessageStored
+import com.silenteight.proto.fab.api.v1.AlertMessageStored.State
 
 import org.spockframework.spring.SpringBean
 import org.springframework.amqp.rabbit.core.RabbitTemplate
@@ -26,7 +28,7 @@ class AlertMessagesRabbitAmqpListenerTest extends BaseSpecificationIT {
   private RabbitTemplate rabbitTemplate
 
   @SpringBean
-  AlertDetailsFacade alertDetailsFacade = Mock()
+  DataPrepFacade dataPrepFacade = Mock()
 
   @Value(QUEUE_NAME_PROPERTY)
   String queueName
@@ -37,10 +39,11 @@ class AlertMessagesRabbitAmqpListenerTest extends BaseSpecificationIT {
     def message = AlertMessageStored.newBuilder()
         .setBatchName(BATCH_NAME)
         .setMessageName(MESSAGE_NAME)
+        .setState(State.NEW)
         .build()
 
     def receivedMessage = null
-    1 * alertDetailsFacade.getAlertDetails(_) >> { AlertMessageStored msg ->
+    1 * dataPrepFacade.processAlert(_) >> { AlertMessageStored msg ->
       receivedMessage = msg
     }
 

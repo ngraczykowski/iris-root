@@ -2,11 +2,11 @@ package com.silenteight.fab.dataprep.domain
 
 import com.silenteight.fab.dataprep.domain.feature.FabFeature
 import com.silenteight.fab.dataprep.domain.feature.FeatureInputsCommand
-import com.silenteight.fab.dataprep.domain.model.RegisteredAlert
-import com.silenteight.fab.dataprep.domain.model.RegisteredAlert.Match
 import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputServiceClient
 
 import spock.lang.Specification
+
+import static com.silenteight.fab.dataprep.domain.Fixtures.REGISTERED_ALERT
 
 class FeedingServiceTest extends Specification {
 
@@ -32,18 +32,7 @@ class FeedingServiceTest extends Specification {
     def featureService = new FeedingService(features, agentInputServiceClient, categoryService)
 
     def command = FeatureInputsCommand.builder()
-        .registeredAlert(
-            RegisteredAlert.builder()
-                .batchName(Fixtures.BATCH_NAME)
-                .messageName(Fixtures.MESSAGE_NAME)
-                .alertName(Fixtures.ALERT_NAME)
-                .matches(
-                    [Match.builder()
-                         .hitName(Fixtures.HIT_NAME)
-                         .matchName(Fixtures.MATCH_NAME)
-                         .build()
-                    ])
-                .build())
+        .registeredAlert(REGISTERED_ALERT)
         .build()
 
     when:

@@ -20,20 +20,23 @@ class AlertParserTest extends Specification {
   def "AlertDetails should be parsed"() {
     given:
     def alertMessageDetails = AlertMessageDetails.newBuilder().setMessageName(MESSAGE_NAME)
-        .setPayload(MESSAGE).build();
+        .setPayload(MESSAGE).build()
     def alertMessageStored = AlertMessageStored.newBuilder().setBatchName(BATCH_NAME)
-        .setMessageName(MESSAGE_NAME).build();
+        .setMessageName(MESSAGE_NAME).build()
 
     when:
     def parsedAlertMessage = underTest.parse(alertMessageStored, alertMessageDetails)
 
     then:
-    parsedAlertMessage.getParsedMessageData().getGender() == "M";
+    parsedAlertMessage.getParsedMessageData().getGender() == "M"
     parsedAlertMessage.getSystemId() == 'TRAINING!60C2ED1B-58A1D68E-0326AE78-A8C7CC79'
     parsedAlertMessage.getMessageId() == '00000004'
+    parsedAlertMessage.getCurrentStatusName() == 'COMMHUB'
+    parsedAlertMessage.getCurrentActionDateTime() == '20180827094707'
+    parsedAlertMessage.getCurrentActionComment() == ''
     parsedAlertMessage.hits.size() == 1
     parsedAlertMessage.hits.values().each {it ->
-      def parser = new JsonSlurper();
+      def parser = new JsonSlurper()
       assert parser.parseText(it.getPayloads().first().toString()) == parser.parseText(HIT)
     }
   }

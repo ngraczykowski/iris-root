@@ -18,6 +18,7 @@ public class RegisteredAlert {
   String messageName;
   @NonNull
   String alertName;
+  @NonNull
   AlertStatus status;
   AlertErrorDescription errorDescription;
   ParsedMessageData parsedMessageData;

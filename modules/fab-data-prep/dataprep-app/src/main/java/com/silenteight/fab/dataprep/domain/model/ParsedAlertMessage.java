@@ -20,6 +20,9 @@ public class ParsedAlertMessage {
   ParsedMessageData parsedMessageData;
   String systemId;
   String messageId;
+  String currentStatusName;
+  String currentActionDateTime;
+  String currentActionComment;
   Map<String, Hit> hits;
 
   public Hit getHit(String hitName) {

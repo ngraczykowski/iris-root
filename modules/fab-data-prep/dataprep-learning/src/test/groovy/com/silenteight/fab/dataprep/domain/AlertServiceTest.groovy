@@ -1,7 +1,6 @@
 package com.silenteight.fab.dataprep.domain
 
 import com.silenteight.fab.dataprep.BaseSpecificationIT
-import com.silenteight.fab.dataprep.domain.model.LearningData
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -12,7 +11,8 @@ import org.springframework.transaction.annotation.Transactional
 import spock.lang.Subject
 import spock.lang.Unroll
 
-import static com.silenteight.fab.dataprep.domain.Fixtures.*
+import static com.silenteight.fab.dataprep.domain.Fixtures.ALERT_NAME
+import static com.silenteight.fab.dataprep.domain.Fixtures.DISCRIMINATOR
 
 @ContextConfiguration(classes = AlertService,
     initializers = ConfigDataApplicationContextInitializer)
@@ -30,37 +30,30 @@ class AlertServiceTest extends BaseSpecificationIT {
 
   def 'alert should be stored in DB'() {
     when:
-    underTest.save(LEARNING_DATA)
+    underTest.save(DISCRIMINATOR, ALERT_NAME)
 
     then:
     alertRepository.findAll() == [AlertEntity.builder()
                                       .alertName(ALERT_NAME)
-                                      .discriminator("$SYSTEM_ID|$MESSAGE_ID")
+                                      .discriminator(DISCRIMINATOR)
                                       .build()]
   }
 
   @Unroll
-  def 'learning alert should be found in DB #alerName #systemId #messageId'() {
+  def 'learning alert should be found in DB #alerName #discriminator'() {
     given:
-    underTest.save(LEARNING_DATA)
-
-    LearningData learningData = LearningData.builder()
-        .alertName(alerName)
-        .systemId(systemId)
-        .messageId(messageId)
-        .build()
+    underTest.save(discriminator, alerName)
 
     when:
-    boolean result = underTest.isLearningAlert(learningData)
+    def result = underTest.getAlertName(discriminator).get()
 
     then:
-    result == expected
+    result == alerName
 
     where:
-    expected | alerName   | systemId  | messageId
-    true     | ALERT_NAME | SYSTEM_ID | MESSAGE_ID
-    true     | ""         | SYSTEM_ID | MESSAGE_ID
-    false    | ALERT_NAME | ""        | MESSAGE_ID
-    false    | ALERT_NAME | SYSTEM_ID | ""
+    alerName   | discriminator
+    ALERT_NAME | DISCRIMINATOR
+    ""         | DISCRIMINATOR
+    ALERT_NAME | ""
   }
 }
