@@ -14,7 +14,7 @@
             "Unit": "TRAINING",
             "BusinessUnit": "",
             "MessageID": "00000004",
-            "SystemID": "TRAINING!60C2ED1B-58A1D68E-0326AE78-A8C7CC79",
+            "SystemID": "SAN!60C2ED1B-58A1D68E-0326AE78-A8C7CC79",
             "Bypass": "0",
             "Command": "1",
             "ApplicationCode": "FFF FEED",
@@ -29,7 +29,7 @@
               "UserData1": "",
               "UserData2": ""
             },
-            "MessageData": ";OSAMA BIN LADIN;;;30/8/1965;;M;ALBPPLPW;;;;;IR;;;;;;AVB2833444;12345;;;;;;;;",
+            "MessageData": ";OSAMA BIN LADIN;;INDIVIDUAL;30/8/1965;;M;ALBPPLPW;;;;;IR;;;;;;AVB2833444;12345;;;;;;;;",
             "LastComment": "",
             "LastOperator": "patrick",
             "FilteredDate": "2017/05/22 13:52:00",
@@ -172,7 +172,7 @@
             ],
             "CurrentStatus": {
               "ID": "0",
-              "Name": "NEW",
+              "Name": "PENDING",
               "RoutingCode": "0",
               "Checksum": "ed10e9af8ecdee8e303f4c95783757c6"
             },
