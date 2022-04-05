@@ -32,6 +32,6 @@ public record BatchWithAlertsDto(
   }
 
   public enum AlertStatus {
-    REGISTERED, PROCESSING, RECOMMENDED, ERROR
+    REGISTERED, PROCESSING, RECOMMENDED, ERROR, DELIVERED
   }
 }

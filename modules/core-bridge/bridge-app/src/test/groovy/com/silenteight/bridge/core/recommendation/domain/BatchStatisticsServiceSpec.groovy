@@ -18,6 +18,7 @@ class BatchStatisticsServiceSpec extends Specification {
     given:
     def alerts = [
         createAlertWithMatchesDtoWithStatus(AlertStatus.RECOMMENDED),
+        createAlertWithMatchesDtoWithStatus(AlertStatus.DELIVERED),
         createAlertWithMatchesDtoWithStatus(AlertStatus.ERROR),
         createAlertWithMatchesDtoWithStatus(AlertStatus.ERROR),
     ]
@@ -39,8 +40,8 @@ class BatchStatisticsServiceSpec extends Specification {
 
     then:
     with(result) {
-      totalProcessedCount() == 1
-      recommendedAlertsCount() == 1
+      totalProcessedCount() == 2
+      recommendedAlertsCount() == 2
       totalUnableToProcessCount() == 2
       with(recommendationsStats()) {
         truePositiveCount() == 3

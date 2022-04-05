@@ -25,8 +25,8 @@ class BatchStatisticsService {
       List<AlertWithMatchesDto> alerts, List<RecommendationWithMetadata> recommendations) {
 
     var statusCountMap = groupByStatusCount(alerts);
-    var recommendedAlertsCount = getAlertCountByStatus(statusCountMap, AlertStatus.RECOMMENDED);
-    var errorAlertsCount = getAlertCountByStatus(statusCountMap, AlertStatus.ERROR);
+    var recommendedAlertsCount = getRecommendedAlertsCount(statusCountMap);
+    var errorAlertsCount = getErrorAlertsCount(statusCountMap);
     var recommendationsStatistics =
         statisticsService.createRecommendationsStatistics(recommendations);
 
@@ -42,6 +42,15 @@ class BatchStatisticsService {
   private Map<AlertStatus, Long> groupByStatusCount(List<AlertWithMatchesDto> alerts) {
     return alerts.stream()
         .collect(Collectors.groupingBy(AlertWithMatchesDto::status, Collectors.counting()));
+  }
+
+  private int getRecommendedAlertsCount(Map<AlertStatus, Long> statusCountMap) {
+    return getAlertCountByStatus(statusCountMap, AlertStatus.RECOMMENDED)
+        + getAlertCountByStatus(statusCountMap, AlertStatus.DELIVERED);
+  }
+
+  private int getErrorAlertsCount(Map<AlertStatus, Long> statusCountMap) {
+    return getAlertCountByStatus(statusCountMap, AlertStatus.ERROR);
   }
 
   private int getAlertCountByStatus(Map<AlertStatus, Long> statusCountMap, AlertStatus status) {

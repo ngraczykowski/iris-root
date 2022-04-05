@@ -23,6 +23,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto.AlertStatus.DELIVERED;
 import static com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto.AlertStatus.ERROR;
 import static com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto.AlertStatus.RECOMMENDED;
 
@@ -96,12 +97,13 @@ class RecommendationMapper {
   }
 
   private AlertStatus toStatus(AlertWithMatchesDto alert) {
-    if (RECOMMENDED == alert.status()) {
+    if (RECOMMENDED == alert.status() || DELIVERED == alert.status()) {
       return AlertStatus.SUCCESS;
     } else if (ERROR == alert.status()) {
       return AlertStatus.FAILURE;
     } else {
-      throw new IllegalStateException("Alert status should be ERROR/RECOMMENDED at this point");
+      throw new IllegalStateException(
+          "Alert status should be ERROR/RECOMMENDED/DELIVERED at this point");
     }
   }
 
