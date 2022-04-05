@@ -50,7 +50,8 @@
     "features": [
       "features/passportNumberDocument",
       "features/otherDocument",
-      "features/bic"
+      "features/bic",
+      "features/nationalIdDocument"
     ],
     "featuresList": [
       {
@@ -64,26 +65,7 @@
       {
         "name": "features/bic",
         "displayName": "BIC"
-      }
-    ],
-    "responses": [
-      "PERFECT_MATCH",
-      "DIGIT_MATCH",
-      "WEAK_DIGIT_MATCH",
-      "WEAK_MATCH",
-      "NO_MATCH",
-      "NO_DATA",
-      "INCONCLUSIVE"
-    ],
-    "configurations": [
-    ]
-  },
-  "agents/nationalId/versions/1.0.0/configs/1": {
-    "agentId": "96d59e74-ce9c-11eb-b8bc-0242ac130003",
-    "features": [
-      "features/nationalIdDocument"
-    ],
-    "featuresList": [
+      },
       {
         "name": "features/nationalIdDocument",
         "displayName": "National ID"
