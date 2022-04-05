@@ -32,19 +32,19 @@ class MessageQuery implements MessageByIdsQuery, MessageDetailsQuery, MessageCur
 
   @Language("PostgreSQL")
   private static final String SELECT_DETAILS_QUERY = "SELECT fm.message_id,"
-      + "       fm.payload -> 'Message' -> 'Unit'         as Unit,"
-      + "       fm.payload -> 'Message' -> 'BusinessUnit' as BusinessUnit,"
-      + "       fm.payload -> 'Message' -> 'MessageID'    as MessageID,"
-      + "       fm.payload -> 'Message' -> 'SystemID'     as SystemID,"
-      + "       fm.payload -> 'Message' -> 'LastOperator' as LastOperator,"
-      + "       fm.payload -> 'Message' -> 'NextStatuses' as NextStatuses,"
-      + "       fm.payload -> 'Message' -> 'CurrentStatus' as CurrentStatus"
+      + "       fm.payload -> 'Message' ->> 'Unit'         as Unit,"
+      + "       fm.payload -> 'Message' ->> 'BusinessUnit' as BusinessUnit,"
+      + "       fm.payload -> 'Message' ->> 'MessageID'    as MessageID,"
+      + "       fm.payload -> 'Message' ->> 'SystemID'     as SystemID,"
+      + "       fm.payload -> 'Message' ->> 'LastOperator' as LastOperator,"
+      + "       fm.payload -> 'Message' ->> 'NextStatuses' as NextStatuses,"
+      + "       fm.payload -> 'Message' ->> 'CurrentStatus' as CurrentStatus"
       + " FROM ftcc_message fm"
       + " WHERE fm.batch_id=:batchId";
 
   @Language("PostgreSQL")
   private static final String SELECT_CURRENT_STATUS_NAME_QUERY = "SELECT"
-      + "       fm.payload -> 'Message' -> 'CurrentStatus' -> 'Name' as CurrentStatusName"
+      + "       fm.payload -> 'Message' -> 'CurrentStatus' ->> 'Name' as CurrentStatusName"
       + " FROM ftcc_message fm"
       + " WHERE fm.batch_id=:batchId"
       + "       AND fm.message_id=:messageId";
@@ -113,11 +113,16 @@ class MessageQuery implements MessageByIdsQuery, MessageDetailsQuery, MessageCur
     return jdbcTemplate.query(
         SELECT_CURRENT_STATUS_NAME_QUERY,
         Map.of("batchId", batchId, "messageId", messageId),
-        this::deserializeCurrentStatusName);
+        (ResultSet resultSet) -> this.deserializeCurrentStatusName(resultSet, batchId, messageId));
   }
 
-  private String deserializeCurrentStatusName(ResultSet resultSet) throws SQLException {
+  private String deserializeCurrentStatusName(
+      ResultSet resultSet, UUID batchId, UUID messageId) throws SQLException {
+
     try {
+      if (!resultSet.next())
+        throw new MessageNotFoundException(batchId, messageId);
+
       var matchListType = objectMapper
           .getTypeFactory()
           .constructType(String.class);
