@@ -2,6 +2,7 @@ package com.silenteight.simulator.management.details;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.simulator.management.details.dto.SimulationDetailsDto;
 
@@ -23,6 +24,7 @@ import static com.silenteight.simulator.management.domain.DomainConstants.SIMULA
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
+@Slf4j
 @RestController
 @RequestMapping(value = ROOT, produces = APPLICATION_JSON_VALUE)
 @AllArgsConstructor
@@ -40,6 +42,7 @@ class SimulationDetailsRestController {
           content = @Content())
   })
   public ResponseEntity<SimulationDetailsDto> get(@PathVariable UUID simulationId) {
+    log.info("Getting details simulation for simulationdId={}", simulationId);
     return ok(simulationQuery.get(simulationId));
   }
 }

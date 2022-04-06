@@ -6,10 +6,10 @@ import lombok.NonNull;
 import lombok.Value;
 
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
 import static java.util.List.of;
 
 @Value
@@ -32,12 +32,12 @@ public class AlertSelectionCriteriaDto {
 
   public String getDisplayRangeFrom() {
     return alertGenerationDate.getFrom()
-        .format(DateTimeFormatter.ISO_LOCAL_DATE);
+        .format(ISO_LOCAL_DATE);
   }
 
   public String getDisplayRangeTo() {
     return alertGenerationDate.getTo()
         .minus(1, ChronoUnit.SECONDS)
-        .format(DateTimeFormatter.ISO_LOCAL_DATE);
+        .format(ISO_LOCAL_DATE);
   }
 }

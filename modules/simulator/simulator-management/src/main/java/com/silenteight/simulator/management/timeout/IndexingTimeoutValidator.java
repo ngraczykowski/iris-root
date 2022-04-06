@@ -2,6 +2,7 @@ package com.silenteight.simulator.management.timeout;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.simulator.management.domain.dto.SimulationDto;
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 import static com.silenteight.simulator.management.timeout.TimeValidator.isTimeoutOnTime;
 
+@Slf4j
 @RequiredArgsConstructor
 class IndexingTimeoutValidator extends BaseSimulationTimeoutValidator {
 
@@ -33,6 +35,7 @@ class IndexingTimeoutValidator extends BaseSimulationTimeoutValidator {
 
   @Override
   public boolean valid(SimulationDto simulationDto) {
+    log.info("Validating simulation on indexing alerts, simulationId={}", simulationDto.getId());
     boolean result = timeoutOnIndexingProgress(simulationDto);
     doLog(result);
     return result;
