@@ -32,6 +32,7 @@ class PolicyStepsOrderRequestRestController {
   @GetMapping("/v1/policies/{id}/steps-order")
   @PreAuthorize("isAuthorized('LIST_STEPS_ORDER')")
   public ResponseEntity<List<UUID>> steps(@PathVariable UUID id) {
+    log.info("Listing steps for policyId={}", id);
     return ResponseEntity.ok(policyStepsOrderRequestQuery.listStepsOrder(id));
   }
 }

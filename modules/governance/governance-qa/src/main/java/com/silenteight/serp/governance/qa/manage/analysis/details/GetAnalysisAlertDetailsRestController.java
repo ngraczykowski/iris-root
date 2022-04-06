@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.qa.manage.analysis.details;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.qa.manage.analysis.details.dto.AlertAnalysisDetailsDto;
 
@@ -22,6 +23,7 @@ import static com.silenteight.serp.governance.qa.manage.domain.DomainConstants.Q
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
+@Slf4j
 @RestController
 @RequestMapping(value = ROOT, produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
@@ -41,6 +43,7 @@ class GetAnalysisAlertDetailsRestController {
           content = @Content)
   })
   public ResponseEntity<AlertAnalysisDetailsDto> details(@PathVariable String alertId) {
+    log.info("Getting AlertAnalysisDetailsDto dor alertId={}", alertId);
     return ok(detailsQuery.details(toResourceName(alertId)));
   }
 }

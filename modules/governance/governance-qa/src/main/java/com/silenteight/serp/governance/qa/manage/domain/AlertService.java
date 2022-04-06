@@ -21,6 +21,7 @@ public class AlertService {
 
   @Transactional
   public void eraseAlert(EraseAlertRequest request) {
+    log.info("EraseAlertRequest request received, request={}",request);
     Optional<Alert> alert = getAlert(request.getAlertId());
     if (alert.isEmpty())
       return;
@@ -28,6 +29,7 @@ public class AlertService {
     request.preAudit(auditingLogger::log);
     alertRepository.delete(alert.get());
     request.postAudit(auditingLogger::log);
+    log.debug("EraseAlertRequest request processed");
   }
 
   private Optional<Alert> getAlert(long alertId) {

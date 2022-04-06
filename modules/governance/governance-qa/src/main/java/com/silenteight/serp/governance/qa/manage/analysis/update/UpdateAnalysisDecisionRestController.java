@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.qa.manage.analysis.update;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.qa.manage.analysis.update.dto.UpdateAnalysisDecisionDto;
 import com.silenteight.serp.governance.qa.manage.domain.dto.UpdateDecisionRequest;
@@ -23,6 +24,7 @@ import static com.silenteight.serp.governance.qa.manage.domain.DomainConstants.Q
 import static java.time.OffsetDateTime.now;
 import static org.springframework.http.ResponseEntity.accepted;
 
+@Slf4j
 @RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
@@ -41,10 +43,11 @@ class UpdateAnalysisDecisionRestController {
       @ApiResponse(responseCode = BAD_REQUEST_STATUS, description = BAD_REQUEST_DESCRIPTION),
       @ApiResponse(responseCode = NOT_FOUND_STATUS, description = NOT_FOUND_DESCRIPTION)
   })
-  public ResponseEntity<Void> update(@PathVariable String alertId,
+  public ResponseEntity<Void> update(
+      @PathVariable String alertId,
       @RequestBody @Valid UpdateAnalysisDecisionDto updateAnalysisDecisionDto,
       Authentication authentication) {
-
+    log.info("UpdateAnalysisDecisionDto request received, request={}", updateAnalysisDecisionDto);
     useCase.activate(UpdateDecisionRequest.of(
         toResourceName(alertId),
         updateAnalysisDecisionDto.getState(),
@@ -53,6 +56,7 @@ class UpdateAnalysisDecisionRestController {
         authentication.getName(),
         now()
     ));
+    log.debug("UpdateAnalysisDecisionDto request processed");
     return accepted().build();
   }
 }

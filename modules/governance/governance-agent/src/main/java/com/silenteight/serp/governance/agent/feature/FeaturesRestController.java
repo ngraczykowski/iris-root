@@ -31,6 +31,7 @@ class FeaturesRestController {
   @GetMapping("/v1/features")
   @PreAuthorize("isAuthorized('LIST_FEATURES')")
   public ResponseEntity<FeaturesListDto> getFeaturesListDto() {
+    log.info("Listing features.");
     return ResponseEntity.ok().body(featuresProvider.getFeaturesListDto());
   }
 }

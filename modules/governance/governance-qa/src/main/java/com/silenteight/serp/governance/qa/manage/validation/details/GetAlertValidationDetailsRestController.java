@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.qa.manage.validation.details;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.qa.manage.validation.details.dto.AlertValidationDetailsDto;
 
@@ -22,6 +23,7 @@ import static com.silenteight.serp.governance.qa.manage.domain.DomainConstants.Q
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
+@Slf4j
 @RestController
 @RequestMapping(value = ROOT, produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
@@ -41,6 +43,7 @@ class GetAlertValidationDetailsRestController {
           content = @Content)
   })
   public ResponseEntity<AlertValidationDetailsDto> details(@PathVariable String alertId) {
+    log.info("Getting alert validatioan details for alertId={}", alertId);
     return ok(alertDetailsQuery.details(toResourceName(alertId)));
   }
 }

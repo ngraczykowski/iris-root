@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.changerequest.create;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.changerequest.create.dto.CreateChangeRequestDto;
 
@@ -22,6 +23,7 @@ import static com.silenteight.serp.governance.changerequest.domain.DomainConstan
 import static com.silenteight.serp.governance.common.web.rest.RestConstants.*;
 import static org.springframework.http.ResponseEntity.accepted;
 
+@Slf4j
 @RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
@@ -40,6 +42,7 @@ class CreateChangeRequestRestController {
   public ResponseEntity<Void> create(
       @RequestBody @Valid CreateChangeRequestDto dto, Authentication authentication) {
 
+    log.info("CreateChangeRequest request received, request={}", dto);
     CreateChangeRequestCommand command = CreateChangeRequestCommand.builder()
         .id(dto.getId())
         .modelName(dto.getModelName())
@@ -47,6 +50,7 @@ class CreateChangeRequestRestController {
         .creatorComment(dto.getComment())
         .build();
     createChangeRequestUseCase.activate(command);
+    log.debug("CreateChangeRequest request processed.");
     return accepted().build();
   }
 }

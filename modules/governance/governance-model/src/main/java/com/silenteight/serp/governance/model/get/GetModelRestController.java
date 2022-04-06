@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.model.get;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.model.domain.dto.ModelDto;
 
@@ -21,6 +22,7 @@ import static com.silenteight.serp.governance.model.domain.DomainConstants.SOLVI
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
+@Slf4j
 @RestController
 @RequestMapping(value = ROOT, produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
@@ -38,6 +40,7 @@ class GetModelRestController {
           content = @Content)
   })
   public ResponseEntity<ModelDto> get(@PathVariable UUID id) {
+    log.info("Getting model details for modelId={}", id);
     return ok(getModelDetailsQuery.get(id));
   }
 
@@ -49,6 +52,7 @@ class GetModelRestController {
           content = @Content)
   })
   public ResponseEntity<List<ModelDto>> getByPolicy(@RequestParam String policy) {
+    log.info("Listing models.");
     return ok(getModelDetailsQuery.getByPolicy(policy));
   }
 }

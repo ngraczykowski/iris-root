@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.policy.domain;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.auditing.bs.AuditingLogger;
 import com.silenteight.serp.governance.policy.domain.dto.*;
@@ -26,6 +27,7 @@ import static java.util.Set.of;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
 
+@Slf4j
 @RequiredArgsConstructor
 public class PolicyService {
 
@@ -115,12 +117,14 @@ public class PolicyService {
 
   @Transactional
   public void savePolicy(SavePolicyRequest savePolicyRequest) {
+    log.info("SavePolicyRequest request received, savePolicyRequest={}", savePolicyRequest);
     savePolicyRequest.preAudit(auditingLogger::log);
     Policy policy = policyRepository.getByPolicyId(savePolicyRequest.getPolicyId());
     policy.save();
     policy.setUpdatedBy(savePolicyRequest.getSavedBy());
     policyRepository.save(policy);
     savePolicyRequest.postAudit(auditingLogger::log);
+    log.debug("SavePolicyRequest request processed");
   }
 
   @Transactional
@@ -158,12 +162,14 @@ public class PolicyService {
 
   @Transactional
   public void updatePolicy(UpdatePolicyRequest updatePolicyRequest) {
+    log.info("UpdatePolicyRequest request received, updatePolicyRequest={}", updatePolicyRequest);
     updatePolicyRequest.preAudit(auditingLogger::log);
     Policy policy = policyRepository.getByPolicyId(updatePolicyRequest.getId());
     ofNullable(updatePolicyRequest.getPolicyName()).ifPresent(policy::setName);
     ofNullable(updatePolicyRequest.getDescription()).ifPresent(policy::setDescription);
     policy.setUpdatedBy(updatePolicyRequest.getUpdatedBy());
     updatePolicyRequest.postAudit(auditingLogger::log);
+    log.debug("UpdatePolicyRequest request processed");
   }
 
   @Transactional

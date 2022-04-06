@@ -44,7 +44,8 @@ class AddAttachmentsRestController {
       @PathVariable UUID changeRequestId,
       @RequestBody @Valid List<@Pattern(message = INVALID_ATTACHMENT_UUID_MSG,
               regexp = ATTACHMENTS_REGEXP) String> attachments) {
-    log.debug("Add attachments for changeRequest {} received, attachments {}",
+
+    log.info("Add attachments request for changeRequestId={} received, attachments={}",
         changeRequestId, attachments);
 
     addAttachmentsUseCase.addAttachments(changeRequestId, attachments);

@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.model.transfer.export;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.changerequest.approval.ModelApprovalQuery;
 import com.silenteight.serp.governance.changerequest.approval.dto.ModelApprovalDto;
@@ -19,6 +20,7 @@ import java.util.UUID;
 
 import static com.silenteight.serp.governance.model.transfer.TransferredModelChecksumCalculator.calculate;
 
+@Slf4j
 @RequiredArgsConstructor
 public class ExportModelUseCase {
 
@@ -29,15 +31,17 @@ public class ExportModelUseCase {
   @NonNull
   private final ExportPolicyUseCase exportPolicyUseCase;
 
-  public TransferredModelRootDto applyByName(@NonNull String modelName) {
-    return applyByName(ModelResource.fromResourceName(modelName));
+  public TransferredModelRootDto applyById(@NonNull String modelName) {
+    log.info("Export model by name, name={}", modelName);
+    return applyById(ModelResource.fromResourceName(modelName));
   }
 
   public TransferredModelRootDto applyByVersion(String version) {
-    return applyByName(modelDetailsQuery.getModelIdByVersion(version));
+    log.info("Export model by version, version={}", version);
+    return applyById(modelDetailsQuery.getModelIdByVersion(version));
   }
 
-  public TransferredModelRootDto applyByName(@NonNull UUID modelId) {
+  public TransferredModelRootDto applyById(@NonNull UUID modelId) {
     ModelDto model = modelDetailsQuery.get(modelId);
     return toTransferredRoot(model);
   }

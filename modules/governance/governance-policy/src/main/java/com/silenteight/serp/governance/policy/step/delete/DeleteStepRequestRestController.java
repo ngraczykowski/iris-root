@@ -21,6 +21,7 @@ import static com.silenteight.serp.governance.common.web.rest.RestConstants.NO_C
 import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT;
 import static com.silenteight.serp.governance.common.web.rest.RestConstants.SUCCESS_RESPONSE_DESCRIPTION;
 import static com.silenteight.serp.governance.policy.domain.DomainConstants.POLICY_ENDPOINT_TAG;
+import static org.springframework.http.ResponseEntity.*;
 
 @Slf4j
 @RestController
@@ -48,7 +49,6 @@ class DeleteStepRequestRestController {
     removeStepUseCase.activate(command);
 
     log.debug("Deleting step request processed.");
-    return ResponseEntity.noContent().build();
+    return noContent().build();
   }
-
 }

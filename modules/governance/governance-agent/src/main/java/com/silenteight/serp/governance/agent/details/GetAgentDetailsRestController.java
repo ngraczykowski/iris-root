@@ -1,6 +1,7 @@
 package com.silenteight.serp.governance.agent.details;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.agent.details.dto.AgentDetailsDto;
 
@@ -17,6 +18,7 @@ import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.ResponseEntity.ok;
 
+@Slf4j
 @RestController
 @RequestMapping(value = ROOT, produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
@@ -30,6 +32,7 @@ class GetAgentDetailsRestController {
   @GetMapping(AGENT_URL)
   @PreAuthorize("isAuthorized('LIST_AGENTS')")
   public ResponseEntity<AgentDetailsDto> getAgentDetails(@PathVariable String id) {
+    log.info("Getting details for agent, agentId={}", id);
     return ok(agentDetailsQuery.details(id));
   }
 }

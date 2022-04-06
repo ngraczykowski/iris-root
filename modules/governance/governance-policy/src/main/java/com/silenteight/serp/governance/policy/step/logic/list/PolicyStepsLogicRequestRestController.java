@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.policy.step.logic.list;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.policy.domain.dto.FeaturesLogicDto;
 
@@ -19,6 +20,7 @@ import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT
 import static com.silenteight.serp.governance.policy.domain.DomainConstants.POLICY_ENDPOINT_TAG;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
+@Slf4j
 @RestController
 @RequestMapping(value = ROOT, produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
@@ -31,6 +33,7 @@ class PolicyStepsLogicRequestRestController {
   @GetMapping("/v1/steps/{id}/logic")
   @PreAuthorize("isAuthorized('LIST_STEPS_LOGIC')")
   public ResponseEntity<FeaturesLogicDto> steps(@PathVariable UUID id) {
+    log.info("Getting feature logic for stepId={}", id);
     return ResponseEntity.ok(policyStepsLogicRequestQuery.listStepsFeaturesLogic(id));
   }
 }

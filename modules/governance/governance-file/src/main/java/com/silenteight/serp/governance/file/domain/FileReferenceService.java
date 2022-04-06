@@ -21,6 +21,8 @@ public class FileReferenceService {
   public FileReferenceDto saveFileReference(
       UUID fileId, String uploaderName, String originalFileName, Long fileSize, String mimeType) {
 
+    log.info("Saving file reference for fileName={}",originalFileName);
+
     FileReference fileReference = new FileReference(
         fileId, originalFileName, uploaderName, fileSize, mimeType);
     return repository.save(fileReference).toDto();
@@ -28,6 +30,7 @@ public class FileReferenceService {
 
   @Transactional
   public void deleteFileReference(String fileName) {
+    log.info("Deleting file reference for fileName={}",fileName);
     repository.deleteByFileId(FileResource.fromResourceName(fileName));
   }
 }

@@ -50,6 +50,7 @@ class ListVectorsRestController {
       @RequestParam @Min(0) int pageIndex,
       @RequestParam @Min(1) int pageSize) {
 
+    log.info(("listing feature vectors"));
     return ok()
         .header(HEADER_TOTAL_COUNT, valueOf(listVectorsQuery.count()))
         .body(findFeatureVectorsSolvedByDefaultPolicyUseCase.activate(
@@ -63,6 +64,7 @@ class ListVectorsRestController {
       @RequestParam @Min(0) int pageIndex,
       @RequestParam @Min(1) int pageSize) {
 
+    log.info("Listing feature vectors for stepName={}", stepName);
     String countAll = valueOf(listVectorsQuery.count());
     FeatureVectorsDto response = findFeatureVectorsSolvedByStepUseCase.activate(
         stepName, new Paging(pageIndex, pageSize));

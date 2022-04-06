@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.changerequest.cancel;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -22,6 +23,7 @@ import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT
 import static com.silenteight.serp.governance.common.web.rest.RestConstants.SUCCESS_RESPONSE_DESCRIPTION;
 import static org.springframework.http.ResponseEntity.noContent;
 
+@Slf4j
 @RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
@@ -39,11 +41,13 @@ class CancelChangeRequestRestController {
   public ResponseEntity<Void> cancel(
       @PathVariable UUID id, Authentication authentication) {
 
+    log.info("Cancel ChangeRequest request received, changeRequestId={}", id);
     CancelChangeRequestCommand command = CancelChangeRequestCommand.builder()
         .id(id)
         .cancellerUsername(authentication.getName())
         .build();
     cancelChangeRequestUseCase.activate(command);
+    log.debug("Cancel ChangeRequest request processed");
     return noContent().build();
   }
 }

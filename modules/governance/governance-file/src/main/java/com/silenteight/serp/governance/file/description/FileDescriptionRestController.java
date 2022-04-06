@@ -32,8 +32,7 @@ class FileDescriptionRestController {
   @GetMapping("/v1/files/{id}/description")
   @PreAuthorize("isAuthorized('LIST_ATTACHMENTS')")
   public ResponseEntity<FileReferenceDto> getFileDescription(@PathVariable String id) {
-
-    log.info("Description request for file with id {} received.", id);
+    log.info("Description request for file id={} received.", id);
     return ok().body(fileDescriptionQuery.get(id));
   }
 }

@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.changerequest.list;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.changerequest.domain.ChangeRequestState;
 import com.silenteight.serp.governance.changerequest.domain.dto.ChangeRequestDto;
@@ -22,6 +23,7 @@ import static java.util.Set.of;
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
+@Slf4j
 @RestController
 @RequestMapping(value = ROOT, produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
@@ -36,6 +38,7 @@ class ListChangeRequestRestController {
   public ResponseEntity<Collection<ChangeRequestDto>> list(
       @RequestParam ChangeRequestState... state) {
 
+    log.info("Listing change requests in states={}", of(state));
     return ok(changeRequestQuery.listByStates(of(state)));
   }
 }

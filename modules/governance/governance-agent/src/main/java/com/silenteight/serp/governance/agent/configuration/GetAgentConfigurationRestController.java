@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.agent.configuration;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.agent.domain.AgentsRegistry;
 
@@ -18,6 +19,7 @@ import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.ResponseEntity.ok;
 
+@Slf4j
 @RestController
 @RequestMapping(value = ROOT, produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
@@ -34,6 +36,7 @@ class GetAgentConfigurationRestController {
   public ResponseEntity<Object> listConfig(
       @PathVariable String id, @PathVariable String configurationId) {
 
+    log.info("Getting agent's configuration, agentId={}, configurationId={}", id, configurationId);
     Object configuration = agentsRegistry.getAgentConfigurationDetails(id, configurationId);
     return ok(configuration);
   }

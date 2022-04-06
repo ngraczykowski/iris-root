@@ -1,6 +1,7 @@
 package com.silenteight.serp.governance.policy.domain;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.policy.details.PolicyStepsCountQuery;
 import com.silenteight.serp.governance.policy.domain.dto.StepConfigurationDto;
@@ -24,6 +25,7 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
+@Slf4j
 @RequiredArgsConstructor
 class StepQuery implements
     PolicyStepsRequestQuery,
@@ -99,6 +101,7 @@ class StepQuery implements
 
   @Override
   public long getStepsCount(UUID policyId) {
+    log.info("Counting steps for policyId={}", policyId);
     return stepRepository.countStepsByPolicyId(policyRepository.getIdByPolicyId(policyId));
   }
 
