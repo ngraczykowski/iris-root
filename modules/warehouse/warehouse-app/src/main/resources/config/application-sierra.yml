@@ -3,7 +3,10 @@ warehouse:
     alert:
       labels:
       recommendation-date-field: "create_time"
-
+  alert:
+    migration:
+      enabled: true
+      batch-size: 1024
   indexer.diagnostic.enabled: true
   retention:
     alert:
