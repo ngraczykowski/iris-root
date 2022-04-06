@@ -60,6 +60,7 @@ dependencies {
 
   implementation libraries.grpc_api
   implementation libraries.grpc_stub
+  implementation libraries.grpc_census
 
   implementation libraries.protobuf_java_util
 
