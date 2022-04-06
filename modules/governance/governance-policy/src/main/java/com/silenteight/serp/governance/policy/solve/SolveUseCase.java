@@ -14,6 +14,7 @@ import com.silenteight.serp.governance.policy.solve.event.FeatureVectorEventStra
 import com.silenteight.solving.api.v1.*;
 import com.silenteight.solving.api.v1.FeatureVectorSolvedEvent.Builder;
 
+import com.google.protobuf.ListValue;
 import com.google.protobuf.Struct;
 import com.google.protobuf.Value;
 import org.jetbrains.annotations.NotNull;
@@ -44,6 +45,8 @@ public class SolveUseCase {
   private static final String POLICY_TITLE_REASON_FIELD = "policy_title";
   private static final String STEP_REASON_FIELD = "step";
   private static final String STEP_TITLE_REASON_FIELD = "step_title";
+  private static final String FEATURES_FIELD = "features";
+  private static final String CATEGORIES_FIELD = "categories";
 
   @NonNull
   private final StepsSupplierProvider stepsSupplierProvider;
@@ -189,6 +192,8 @@ public class SolveUseCase {
 
     reasonFields.put(STEP_REASON_FIELD, asStringValue(solveResponse.getStepName()));
     reasonFields.put(STEP_TITLE_REASON_FIELD, asStringValue(solveResponse.getStepTitle()));
+    reasonFields.put(CATEGORIES_FIELD, asListValue(solveResponse.getCategories()));
+    reasonFields.put(FEATURES_FIELD, asListValue(solveResponse.getFeatures()));
 
     responseBuilder.setReason(asReason(reasonFields));
 
@@ -202,6 +207,24 @@ public class SolveUseCase {
     return Value.newBuilder()
         .setStringValue(value)
         .build();
+  }
+
+  private static Value asListValue(List<String> values) {
+    return Value.newBuilder()
+        .setListValue(toListValue(values))
+        .build();
+  }
+
+  private static ListValue toListValue(List<String> values) {
+    return ListValue.newBuilder()
+        .addAllValues(toIterableValues(values))
+        .build();
+  }
+
+  private static Iterable<Value> toIterableValues(List<String> values) {
+    return values.stream()
+        .map(SolveUseCase::asStringValue)
+        .collect(toList());
   }
 
   private static Struct asReason(Map<String, Value> fields) {
