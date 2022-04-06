@@ -14,13 +14,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 
-import static java.util.Comparator.comparing;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -31,10 +27,13 @@ class ScbRecommendationServiceTest {
   private static final String SYSTEM_ID = "systemId";
   private static final String DISCRIMINATOR = "321";
   private static final String PAYLOAD = "payload";
-  private ScbRecommendationRepository scbRecommendationRepository =
-      new InMemoryScbRecommendationRepository();
+
+  @Mock
+  private ScbRecommendationRepository scbRecommendationRepository;
+
   @Mock
   private ScbDiscriminatorMatcher scbDiscriminatorMatcher;
+
   @Mock
   private PayloadConverter payloadConverter;
 
@@ -55,9 +54,14 @@ class ScbRecommendationServiceTest {
     var alertMetadata = new AlertMetadata(null, DISCRIMINATOR, SYSTEM_ID);
     when(payloadConverter.deserializeFromJsonToObject(PAYLOAD, AlertMetadata.class))
         .thenReturn(alertMetadata);
-    var alertRecommendation = fixtures.firstRecommendation;
+    var alertRecommendation = fixtures.recommendation;
     var alertId = alertRecommendation.alert().id();
     when(scbDiscriminatorMatcher.match(anyString(), anyString())).thenReturn(true);
+
+    var scbRecommendation = new ScbRecommendation();
+    scbRecommendation.setDiscriminator("");
+    when(scbRecommendationRepository.findFirstBySystemIdOrderByRecommendedAtDesc(
+        SYSTEM_ID)).thenReturn(Optional.of(scbRecommendation));
 
     // when
     underTest.saveRecommendation(alertRecommendation);
@@ -71,16 +75,14 @@ class ScbRecommendationServiceTest {
   private static class Fixtures {
 
     private static final OffsetDateTime TIME_1 = OffsetDateTime.now();
-    private static final RecommendedAction RECOMMENDATION_ACTION =
-        RecommendedAction.ACTION_FALSE_POSITIVE;
 
-    Recommendation firstRecommendation = createRecommendation("comment_1", TIME_1);
+    Recommendation recommendation = createRecommendation("comment_1", TIME_1);
 
     @Nonnull
     private static Recommendation createRecommendation(String comment, OffsetDateTime time) {
       return Recommendation.builder()
           .recommendedComment(comment)
-          .recommendedAction(RECOMMENDATION_ACTION)
+          .recommendedAction(RecommendedAction.ACTION_FALSE_POSITIVE)
           .recommendedAt(time)
           .alert(Alert.builder()
               .id(SYSTEM_ID)
@@ -90,27 +92,4 @@ class ScbRecommendationServiceTest {
     }
   }
 
-  static class InMemoryScbRecommendationRepository implements ScbRecommendationRepository {
-
-    private List<ScbRecommendation> inMemoryScbRecommendationRepository = new ArrayList<>();
-
-    @Override
-    public Collection<ScbRecommendation> findAll() {
-      return inMemoryScbRecommendationRepository;
-    }
-
-    @Override
-    public void save(ScbRecommendation scbRecommendation) {
-      inMemoryScbRecommendationRepository.add(scbRecommendation);
-    }
-
-    @Override
-    public Optional<ScbRecommendation> findFirstBySystemIdOrderByRecommendedAtDesc(
-        String systemId) {
-      return inMemoryScbRecommendationRepository
-          .stream()
-          .filter(s -> s.getSystemId().equals(systemId))
-          .max(comparing(ScbRecommendation::getRecommendedAt, OffsetDateTime::compareTo));
-    }
-  }
 }

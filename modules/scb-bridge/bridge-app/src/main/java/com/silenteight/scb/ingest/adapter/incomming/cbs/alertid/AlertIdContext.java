@@ -15,4 +15,6 @@ public class AlertIdContext {
   @NonNull
   private final String recordsView;
   private final int chunkSize;
+  private final int totalRecordsToRead;
+
 }

@@ -30,7 +30,7 @@ class ChunkProcessor {
     int totalProcessed = 0;
     try (ResultSet resultSet = statement.executeQuery(query)) {
       log.info("Query executed in: {}, processing ResultSet ...", stopWatch);
-      while (resultSet.next()) {
+      while (resultSet.next() && !numberToReadReached(context, totalProcessed)) {
         processor.process(resultSet);
         totalProcessed++;
         if (totalProcessed % context.getChunkSize() == 0) {
@@ -44,13 +44,17 @@ class ChunkProcessor {
     processor.processRemaining();
   }
 
+  private boolean numberToReadReached(AlertIdContext context, int totalProcessed) {
+    return context.getTotalRecordsToRead() > 0 && totalProcessed == context.getTotalRecordsToRead();
+  }
+
   private static String prepareQuery(String viewName) {
     return QUERY_PREFIX + viewName;
   }
 
   class Processor {
 
-    private AlertIdContext context;
+    private final AlertIdContext context;
     private final List<AlertId> alertsToBeProcessed = new ArrayList<>();
 
     Processor(AlertIdContext alertIdContext) {

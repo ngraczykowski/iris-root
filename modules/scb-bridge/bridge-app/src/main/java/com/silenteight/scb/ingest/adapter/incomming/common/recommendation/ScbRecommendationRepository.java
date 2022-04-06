@@ -1,15 +1,10 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.recommendation;
 
-import org.springframework.data.repository.Repository;
+import org.springframework.data.repository.CrudRepository;
 
-import java.util.Collection;
 import java.util.Optional;
 
-interface ScbRecommendationRepository extends Repository<ScbRecommendation, Long> {
-
-  Collection<ScbRecommendation> findAll();
-
-  void save(ScbRecommendation scbRecommendation);
+public interface ScbRecommendationRepository extends CrudRepository<ScbRecommendation, Long> {
 
   Optional<ScbRecommendation> findFirstBySystemIdOrderByRecommendedAtDesc(String systemId);
 }
