@@ -2,6 +2,7 @@ package com.silenteight.connector.ftcc.callback.response;
 
 import com.silenteight.connector.ftcc.common.dto.output.AckDto;
 import com.silenteight.connector.ftcc.common.dto.output.ClientRequestDto;
+import com.silenteight.connector.ftcc.request.details.MessageDetailsQuery;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 
@@ -38,6 +40,9 @@ class RecommendationSenderIT {
 
   @Autowired
   private RecommendationSenderProperties recommendationSenderProperties;
+
+  @MockBean
+  private MessageDetailsQuery messageDetailsQuery;
 
   @BeforeEach
   public void init() {

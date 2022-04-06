@@ -25,7 +25,7 @@ dependencies {
   implementation libraries.apache_http_client
 
   testRuntimeOnly libraries.hibernate_validator
-  testRuntimeOnly libraries.spock_spring
+  testImplementation libraries.spock_spring
   testImplementation project(":ftcc-common-testing")
   testImplementation libraries.silenteight_sep_base_testing
 }

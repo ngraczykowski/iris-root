@@ -1,13 +1,11 @@
 package com.silenteight.connector.ftcc.callback.response
 
-
 import com.silenteight.connector.ftcc.request.details.MessageDetailsQuery
 
+import org.spockframework.spring.SpringBean
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.context.annotation.Configuration
 import org.springframework.http.ResponseEntity
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
@@ -19,15 +17,18 @@ import static java.time.temporal.ChronoUnit.SECONDS
 import static org.springframework.http.HttpStatus.BAD_REQUEST
 import static org.springframework.http.HttpStatus.OK
 
-@SpringBootTest(classes = [ResponseConfiguration.class, MessageDetailsQueryConfiguration.class])
+@SpringBootTest(classes = ResponseConfiguration.class)
 @AutoConfigureWebClient
 class RecommendationSenderConfigurationTest extends Specification {
 
   @Autowired
-  private RecommendationSenderProperties recommendationSenderProperties;
+  private RecommendationSenderProperties recommendationSenderProperties
 
   @Autowired
-  private RestTemplate restTemplate;
+  private RestTemplate restTemplate
+
+  @SpringBean
+  private MessageDetailsQuery messageDetailsQuery  = Mock()
 
   def "RecommendationSender properties are read correctly"() {
     expect:
@@ -47,16 +48,19 @@ class RecommendationSenderConfigurationTest extends Specification {
   }
 }
 
-@SpringBootTest(classes = [ResponseConfiguration.class, MessageDetailsQueryConfiguration.class],
+@SpringBootTest(classes = ResponseConfiguration.class,
     properties = "ftcc.cmapi.callback.keystorePath:")
 @AutoConfigureWebClient
 class RecommendationSenderConfigurationWithoutKeystorePathTest extends Specification {
 
   @Autowired
-  private RecommendationSenderProperties recommendationSenderProperties;
+  private RecommendationSenderProperties recommendationSenderProperties
 
   @Autowired
-  private RestTemplate restTemplate;
+  private RestTemplate restTemplate
+
+  @SpringBean
+  private MessageDetailsQuery messageDetailsQuery = Mock()
 
   def "RecommendationSender properties are read correctly when keystorePath is not provided"() {
     expect:
@@ -76,11 +80,4 @@ class RecommendationSenderConfigurationWithoutKeystorePathTest extends Specifica
     def e = thrown(HttpClientErrorException)
     e.getStatusCode() == BAD_REQUEST
   }
-}
-
-@Configuration
-class MessageDetailsQueryConfiguration {
-
-  @MockBean
-  MessageDetailsQuery messageDetailsQuery;
 }
