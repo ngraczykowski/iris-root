@@ -28,7 +28,7 @@ class SimulationProgressControllerTest extends BaseRestControllerTest {
           .indexedAlerts(0)
           .build();
 
-  @TestWithRole(roles = { MODEL_TUNER })
+  @TestWithRole(roles = { MODEL_TUNER, APPROVER, AUDITOR })
   void its200_whenDownloadingAnalysisStatistics() {
     when(simulationProgressUseCase.activate(fromString("0609c84d-4e86-4244-8838-634f50c42951")))
         .thenReturn(ANALYSIS_STATISTIC_DTO);
@@ -39,7 +39,7 @@ class SimulationProgressControllerTest extends BaseRestControllerTest {
         .body("indexedAlerts", is(0));
   }
 
-  @TestWithRole(roles = { APPROVER, AUDITOR, QA, QA_ISSUE_MANAGER, USER_ADMINISTRATOR })
+  @TestWithRole(roles = { QA, QA_ISSUE_MANAGER, USER_ADMINISTRATOR })
   void its400whenNotPermittedRoleForStatistic() {
     get(ANALYSIS_PROGRESS_URL).statusCode(FORBIDDEN.value());
   }
