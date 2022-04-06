@@ -26,6 +26,10 @@ public class MultiFacadeRabbitBrokerTestConfiguration {
 
   @Bean
   Binding createOutExchangeBindings() {
+
+    // FIXME: for some reason rabbit broker configuration is not initialized before that test.
+    forceInitRabbitBrokerConfiguration();
+
     var binding = BindingBuilder
         .bind(facadeOutQueue())
         .to(outExchange())
@@ -49,4 +53,9 @@ public class MultiFacadeRabbitBrokerTestConfiguration {
     amqpAdmin.declareExchange(exchange);
     return exchange;
   }
+
+  private void forceInitRabbitBrokerConfiguration() {
+    new MultiQueueRabbitBrokerConfiguration(agentFacadeProperties, amqpAdmin).init();
+  }
+
 }
