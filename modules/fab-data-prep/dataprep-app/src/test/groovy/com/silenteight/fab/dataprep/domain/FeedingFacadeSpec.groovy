@@ -50,8 +50,8 @@ class FeedingFacadeSpec extends Specification {
         .build()
 
     def udsFedEvent = UdsFedEvent.builder()
-        .batchId(BATCH_NAME)
-        .alertId(ALERT_NAME)
+        .batchName(BATCH_NAME)
+        .alertName(ALERT_NAME)
         .errorDescription(errorDescription)
         .feedingStatus(feedingStatus)
         .fedMatches(

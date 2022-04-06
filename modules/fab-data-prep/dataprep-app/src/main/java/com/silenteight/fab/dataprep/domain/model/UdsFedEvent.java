@@ -9,8 +9,8 @@ import java.util.List;
 @Value
 public class UdsFedEvent {
 
-  String batchId;
-  String alertId;
+  String batchName;
+  String alertName;
   AlertErrorDescription errorDescription;
   Status feedingStatus;
   List<FedMatch> fedMatches;
@@ -18,7 +18,7 @@ public class UdsFedEvent {
   @Value
   public static class FedMatch {
 
-    String matchId;
+    String matchName;
   }
 
   public enum Status {

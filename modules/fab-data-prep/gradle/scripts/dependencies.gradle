@@ -6,7 +6,7 @@ ext {
   silenteightSepBaseVersion = "1.14.0"
   silenteightUniversalDataSourceApiVersion = '1.2.0'
   silenteightDataSourceApiVersion = '0.18.0'
-  coreBridgeRegistrationApiVersion = '1.14.0'
+  coreBridgeRegistrationApiVersion = '1.20.0'
   sentryVersion = '5.7.0'
   groovyVersion = '3.0.9'
   testContainersVersion = '1.16.2'

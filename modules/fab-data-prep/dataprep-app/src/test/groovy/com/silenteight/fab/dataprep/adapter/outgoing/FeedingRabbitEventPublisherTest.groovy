@@ -25,21 +25,21 @@ class FeedingRabbitEventPublisherTest extends Specification {
   def 'should publish MatchFeatureInputSetFed message'() {
     given:
     def event = UdsFedEvent.builder()
-        .batchId(BATCH_NAME)
-        .alertId(MESSAGE_NAME)
+        .batchName(BATCH_NAME)
+        .alertName(MESSAGE_NAME)
         .errorDescription(AlertErrorDescription.NONE)
         .feedingStatus(Status.SUCCESS)
         .fedMatches([new FedMatch(MATCH_NAME)])
         .build()
 
     def message = MessageAlertMatchesFeatureInputFed.newBuilder()
-        .setBatchId(event.getBatchId())
-        .setAlertId(event.getAlertId())
+        .setBatchId(event.getBatchName())
+        .setAlertName(event.getAlertName())
         .setAlertErrorDescription(event.getErrorDescription().getDescription())
         .setFeedingStatus(FeedingStatus.SUCCESS)
         .addAllFedMatches(
             [com.silenteight.proto.registration.api.v1.FedMatch.newBuilder()
-                 .setMatchId(event.getFedMatches().first().getMatchId())
+                 .setMatchName(event.getFedMatches().first().getMatchName())
                  .build()])
         .build()
 

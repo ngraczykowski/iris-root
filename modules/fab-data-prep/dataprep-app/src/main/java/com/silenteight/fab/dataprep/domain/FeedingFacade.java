@@ -69,8 +69,8 @@ public class FeedingFacade {
   private static UdsFedEvent createUdsFedEvent(
       RegisteredAlert registeredAlert, Status status, AlertErrorDescription errorDescription) {
     return UdsFedEvent.builder()
-        .batchId(registeredAlert.getBatchName())
-        .alertId(registeredAlert.getAlertName())
+        .batchName(registeredAlert.getBatchName())
+        .alertName(registeredAlert.getAlertName())
         .errorDescription(errorDescription)
         .feedingStatus(status)
         .fedMatches(createFedMatches(registeredAlert))

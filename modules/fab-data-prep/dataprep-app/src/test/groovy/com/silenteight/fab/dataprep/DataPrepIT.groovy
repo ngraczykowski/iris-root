@@ -122,9 +122,9 @@ class DataPrepIT extends BaseSpecificationIT {
     conditions.eventually {
       MessageAlertMatchesFeatureInputFed msg = coreBridgeListener.getMessages().last()
       assert msg.getFeedingStatus() == expectedStatus
-      assert msg.getAlertId() == ALERT_NAME
+      assert msg.getAlertName() == ALERT_NAME
       assert msg.getBatchId() == BATCH_NAME
-      assert msg.getFedMatchesList().first().getMatchId() == MATCH_NAME
+      assert msg.getFedMatchesList().first().getMatchName() == MATCH_NAME
     }
 
     where:
@@ -169,7 +169,7 @@ class DataPrepIT extends BaseSpecificationIT {
     conditions.eventually {
       MessageAlertMatchesFeatureInputFed msg = coreBridgeListener.getMessages().last()
       assert msg.getFeedingStatus() == FeedingStatus.FAILURE
-      assert msg.getAlertId() == ALERT_NAME
+      assert msg.getAlertName() == ALERT_NAME
       assert msg.getBatchId() == BATCH_NAME
     }
   }
