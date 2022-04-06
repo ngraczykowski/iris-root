@@ -20,7 +20,6 @@ class FileReferenceQuery implements FileDescriptionQuery {
   @Override
   public FileReferenceDto get(String id) {
     FileReference fileReference = repository.getFileReferenceByFileId(fromResourceName(id));
-
     log.debug("Description request for file with id {} processed.", id);
     return fileReference.toDto();
   }

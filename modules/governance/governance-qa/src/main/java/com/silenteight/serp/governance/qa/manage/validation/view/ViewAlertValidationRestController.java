@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.qa.manage.validation.view;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -14,12 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.silenteight.serp.governance.common.web.rest.RestConstants.*;
-import static com.silenteight.serp.governance.common.web.rest.RestConstants.NOT_FOUND_DESCRIPTION;
-import static com.silenteight.serp.governance.common.web.rest.RestConstants.NOT_FOUND_STATUS;
 import static com.silenteight.serp.governance.qa.manage.common.AlertResource.toResourceName;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.VALIDATION;
 import static com.silenteight.serp.governance.qa.manage.domain.DomainConstants.QA_ENDPOINT_TAG;
 
+@Slf4j
 @RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
@@ -38,6 +38,7 @@ class ViewAlertValidationRestController {
       @ApiResponse(responseCode = NOT_FOUND_STATUS, description = NOT_FOUND_DESCRIPTION)
   })
   public ResponseEntity<Void> view(@PathVariable String alertId) {
+    log.info("Viewing validation decision for alertID={}, alertId");
     viewAlertUseCase.activate(
         ViewDecisionCommand.builder()
             .alertName(toResourceName(alertId))

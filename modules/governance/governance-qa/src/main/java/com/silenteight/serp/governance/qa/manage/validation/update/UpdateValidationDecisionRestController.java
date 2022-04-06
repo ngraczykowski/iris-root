@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.qa.manage.validation.update;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.qa.manage.domain.dto.UpdateDecisionRequest;
 import com.silenteight.serp.governance.qa.manage.validation.update.dto.UpdateValidationDecisionDto;
@@ -17,14 +18,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 import static com.silenteight.serp.governance.common.web.rest.RestConstants.*;
-import static com.silenteight.serp.governance.common.web.rest.RestConstants.NOT_FOUND_DESCRIPTION;
-import static com.silenteight.serp.governance.common.web.rest.RestConstants.NOT_FOUND_STATUS;
 import static com.silenteight.serp.governance.qa.manage.common.AlertResource.toResourceName;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.VALIDATION;
 import static com.silenteight.serp.governance.qa.manage.domain.DomainConstants.QA_ENDPOINT_TAG;
 import static java.time.OffsetDateTime.now;
 import static org.springframework.http.ResponseEntity.accepted;
 
+@Slf4j
 @RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
@@ -48,6 +48,10 @@ class UpdateValidationDecisionRestController {
       @RequestBody @Valid UpdateValidationDecisionDto updateValidationDecisionDto,
       Authentication authentication) {
 
+    log.info(
+        "Update validation decision request received request={}",
+        updateValidationDecisionDto);
+
     UpdateDecisionRequest request = UpdateDecisionRequest.of(
         toResourceName(alertId),
         updateValidationDecisionDto.getState(),
@@ -57,6 +61,7 @@ class UpdateValidationDecisionRestController {
         now()
     );
     decisionUseCase.activate(request);
+    log.debug("Update validation decision request processed");
     return accepted().build();
   }
 }

@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.policy.step.details;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.policy.domain.dto.StepDto;
 
@@ -17,8 +18,10 @@ import java.util.UUID;
 
 import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT;
 import static com.silenteight.serp.governance.policy.domain.DomainConstants.POLICY_ENDPOINT_TAG;
+import static org.springframework.http.ResponseEntity.*;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
+@Slf4j
 @RestController
 @RequestMapping(value = ROOT, produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
@@ -31,6 +34,7 @@ class StepsDetailsRequestRestController {
   @GetMapping("/v1/steps/{id}")
   @PreAuthorize("isAuthorized('STEP_DETAILS')")
   public ResponseEntity<StepDto> steps(@PathVariable UUID id) {
-    return ResponseEntity.ok(stepRequestQuery.getStep(id));
+    log.info("Getting details for step, stepId={}", id);
+    return ok(stepRequestQuery.getStep(id));
   }
 }

@@ -69,8 +69,9 @@ public class AlertsGeneratorService {
 
     alertSamplingService.saveAlertDistribution(
         alertSamplingId, toAlertDistributionDtoList(distribution), createDecisionRequests.size());
-
+    log.debug("Publishing DecisionCreatedEvent");
     eventPublisher.publishEvent(DecisionCreatedEvent.of(createDecisionRequests));
+    log.debug("DecisionCreatedEvent published");
   }
 
   private static boolean canGenerateAlerts(long totalAlertsCount) {

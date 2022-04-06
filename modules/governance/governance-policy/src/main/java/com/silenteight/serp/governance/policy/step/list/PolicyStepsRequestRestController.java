@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.policy.step.list;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.policy.domain.dto.StepDto;
 import com.silenteight.serp.governance.policy.domain.dto.StepSearchCriteriaDto;
@@ -19,6 +20,7 @@ import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT
 import static com.silenteight.serp.governance.policy.domain.DomainConstants.POLICY_ENDPOINT_TAG;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
+@Slf4j
 @RestController
 @RequestMapping(value = ROOT, produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
@@ -31,6 +33,7 @@ class PolicyStepsRequestRestController {
   @GetMapping("/v1/policies/{id}/steps")
   @PreAuthorize("isAuthorized('LIST_STEPS')")
   public ResponseEntity<Collection<StepDto>> steps(@PathVariable UUID id) {
+    log.info("Listing steps for policy with poliicId={}", id);
     return ResponseEntity.ok(policyStepsRequestQuery.listSteps(id));
   }
 
@@ -39,6 +42,7 @@ class PolicyStepsRequestRestController {
   public ResponseEntity<Collection<StepDto>> stepsSearch(
       @PathVariable UUID id, @Valid @RequestBody StepSearchCriteriaDto criteria) {
 
+    log.info("Listing steps for policyId={} ans criteria={}", id, criteria);
     return ResponseEntity.ok(policyStepsRequestQuery.listFilteredSteps(id, criteria));
   }
 }

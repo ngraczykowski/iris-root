@@ -44,7 +44,7 @@ class DeleteAttachmentsRestController {
       @RequestParam(name = "file") @Valid
       @Pattern(message = INVALID_ATTACHMENT_UUID_MSG, regexp = ATTACHMENTS_REGEXP) String file) {
 
-    log.debug("Delete attachment for changeRequest {} received, attachmentId {}",
+    log.info("Delete attachment for changeRequestId={} received, attachmentId={}",
               changeRequestId, file);
 
     deleteAttachmentsUseCase.deleteAttachments(changeRequestId, file);

@@ -65,11 +65,13 @@ class SolvingModelGrpcService extends SolvingModelServiceGrpc.SolvingModelServic
 
   @Override
   public void getDefaultSolvingModel(Empty request, StreamObserver<SolvingModel> responseObserver) {
+    log.info("Getting default solving model");
     setSolvingModelOnResponseObserver(responseObserver, defaultModelQuery.getDefault());
   }
 
   @Override
   public void getSolvingModel(ModelRequest request, StreamObserver<SolvingModel> responseObserver) {
+    log.info("ModelRequest request received, request={}", request);
     setSolvingModelOnResponseObserver(
         responseObserver, solvingModelDetailsQuery.get(request.getModel()));
   }
@@ -78,6 +80,7 @@ class SolvingModelGrpcService extends SolvingModelServiceGrpc.SolvingModelServic
   public void importModel(
       ImportNewModelRequest request, StreamObserver<ImportNewModelResponse> responseObserver) {
 
+    log.info("ImportNewModelRequest request received, request={}", request);
     try {
       UUID modelId = importModelUseCase.apply(request.getModelJson().toStringUtf8());
       ImportNewModelResponse response = ImportNewModelResponse.newBuilder()
@@ -88,12 +91,14 @@ class SolvingModelGrpcService extends SolvingModelServiceGrpc.SolvingModelServic
     } catch (RuntimeException e) {
       handleException(responseObserver, e, INTERNAL_VALUE, IMPORT_MODEL_ERROR);
     }
+    log.debug("ImportNewModelRequest request processed.");
   }
 
   @Override
   public void useModel(
       UseModelRequest request, StreamObserver<Empty> responseObserver) {
 
+    log.info("UseModelRequest request received, request={}", request);
     try {
       useModelUseCase.apply(request.getModel());
       responseObserver.onNext(Empty.newBuilder().build());
@@ -101,6 +106,7 @@ class SolvingModelGrpcService extends SolvingModelServiceGrpc.SolvingModelServic
     } catch (RuntimeException e) {
       handleException(responseObserver, e, INTERNAL_VALUE, USE_MODEL_ERROR);
     }
+    log.debug("UseModelRequest request processed.");
   }
 
   private void setSolvingModelOnResponseObserver(
@@ -133,13 +139,17 @@ class SolvingModelGrpcService extends SolvingModelServiceGrpc.SolvingModelServic
   }
 
   @Override
-  public void exportModel(ExportModelRequest request,
-                          StreamObserver<ExportModelResponse> responseObserver) {
+  public void exportModel(
+      ExportModelRequest request,
+      StreamObserver<ExportModelResponse> responseObserver) {
+
+    log.info("ExportModelRequest request received, request={}", request);
+
     try {
       TransferredModelRootDto modelToExport;
       switch (request.getModelCase()) {
         case NAME:
-          modelToExport = exportModelUseCase.applyByName(request.getName());
+          modelToExport = exportModelUseCase.applyById(request.getName());
           break;
         case VERSION:
           modelToExport = exportModelUseCase.applyByVersion(request.getVersion());
@@ -152,6 +162,7 @@ class SolvingModelGrpcService extends SolvingModelServiceGrpc.SolvingModelServic
     } catch (RuntimeException e) {
       handleException(responseObserver, e, INTERNAL_VALUE, USE_MODEL_ERROR);
     }
+    log.debug("ExportModelRequest request processed.");
   }
 
   @NotNull
@@ -164,8 +175,11 @@ class SolvingModelGrpcService extends SolvingModelServiceGrpc.SolvingModelServic
   }
 
   @Override
-  public void modelDeployedOnProduction(ModelDeployedOnProductionRequest request,
-                                        StreamObserver<Empty> responseObserver) {
+  public void modelDeployedOnProduction(
+      ModelDeployedOnProductionRequest request,
+      StreamObserver<Empty> responseObserver) {
+
+    log.info("ModelDeployedOnProductionRequest request received, request={}", request);
     try {
       switch (request.getModelCase()) {
         case NAME:
@@ -183,5 +197,6 @@ class SolvingModelGrpcService extends SolvingModelServiceGrpc.SolvingModelServic
     } catch (RuntimeException e) {
       handleException(responseObserver, e, INTERNAL_VALUE, USE_MODEL_ERROR);
     }
+    log.debug("ModelDeployedOnProductionRequest request processed.");
   }
 }

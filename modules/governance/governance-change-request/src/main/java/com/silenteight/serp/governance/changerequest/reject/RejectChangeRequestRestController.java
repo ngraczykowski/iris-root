@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.changerequest.reject;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.changerequest.reject.dto.RejectChangeRequestDto;
 
@@ -20,6 +21,7 @@ import static com.silenteight.serp.governance.changerequest.domain.DomainConstan
 import static com.silenteight.serp.governance.common.web.rest.RestConstants.*;
 import static org.springframework.http.ResponseEntity.noContent;
 
+@Slf4j
 @RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
@@ -40,12 +42,16 @@ class RejectChangeRequestRestController {
       @Valid @RequestBody RejectChangeRequestDto request,
       Authentication authentication) {
 
+    log.info("RejectChangeRequest request received, changeRequestId={}", id);
+
     RejectChangeRequestCommand command = RejectChangeRequestCommand.builder()
         .id(id)
         .rejectorUsername(authentication.getName())
         .rejectorComment(request.getRejectorComment())
         .build();
     rejectChangeRequestUseCase.activate(command);
+
+    log.debug("RejectChangeRequest request processed.");
     return noContent().build();
   }
 }

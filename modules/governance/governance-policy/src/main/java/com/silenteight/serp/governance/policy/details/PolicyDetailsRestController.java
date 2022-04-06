@@ -21,6 +21,7 @@ import java.util.UUID;
 
 import static com.silenteight.serp.governance.common.web.rest.RestConstants.*;
 import static com.silenteight.serp.governance.policy.domain.DomainConstants.POLICY_ENDPOINT_TAG;
+import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
 @Slf4j
@@ -41,6 +42,7 @@ class PolicyDetailsRestController {
           content = @Content)
   })
   public ResponseEntity<PolicyDetailsDto> details(@PathVariable UUID id) {
-    return ResponseEntity.ok(policyDetailsUseCase.activate(id));
+    log.info("Getting details for policyId={}.", id);
+    return ok(policyDetailsUseCase.activate(id));
   }
 }

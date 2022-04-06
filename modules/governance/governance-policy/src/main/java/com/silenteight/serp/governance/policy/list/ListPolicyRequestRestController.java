@@ -35,12 +35,14 @@ public class ListPolicyRequestRestController {
   @GetMapping("/v1/policies")
   @PreAuthorize("isAuthorized('LIST_POLICIES')")
   public ResponseEntity<Collection<PolicyDto>> list() {
+    log.info("Listing all policies.");
     return ResponseEntity.ok(listPolicyRequestQuery.listAll());
   }
 
   @GetMapping(value = "/v1/policies", params = "state")
   @PreAuthorize("isAuthorized('LIST_POLICIES')")
   public ResponseEntity<Collection<PolicyDto>> list(@RequestParam PolicyState... state) {
+    log.info("Listing all policies in states={}", of(state));
     return ResponseEntity.ok(listPolicyRequestQuery.list(of(state)));
   }
 }

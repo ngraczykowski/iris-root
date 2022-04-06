@@ -35,11 +35,13 @@ class AlertsGenerator {
   public void generateAlertsIfNeeded() {
     OffsetDateTime startedAt = cronExecutionTimeProvider.executionTime();
     DateRangeDto dateRangeDto = dateRangeProvider.latestDateRange();
-    log.debug("Generating alerts audit started at {} for date-range[{}]",
+    log.info("Generating alerts audit started at {} for date-range[{}]",
               timeSource.now(), dateRangeDto);
+
     alertSamplingService.failLongRunningTasks(startedAt);
     if (assertCanBeStarted(dateRangeDto))
       tryGenerateAlerts(dateRangeDto, startedAt);
+
     log.debug("Generating alerts audit finished at {}", timeSource.now());
   }
 

@@ -23,5 +23,7 @@ class SendModelUsedOnProductionUseCase {
 
     SolvingModel solvingModel = solvingModelQuery.get(modelDto);
     messageGateway.send(solvingModel);
+
+    log.debug("Event message with a new model ({}). sent.", modelDto.getName());
   }
 }

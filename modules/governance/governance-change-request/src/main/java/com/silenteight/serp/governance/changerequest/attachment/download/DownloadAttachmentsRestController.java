@@ -54,7 +54,7 @@ class DownloadAttachmentsRestController {
       @RequestParam(name = "file") @Valid @Pattern(message = INVALID_ATTACHMENT_UUID_MSG,
           regexp = ATTACHMENTS_REGEXP) String file) {
 
-    log.debug("Download attachment for changeRequest {} received, file {}",
+    log.info("Download attachment for changeRequestId={} received, file={}",
         changeRequestId, file);
 
     FileWrapper fileWrapper = downloadAttachmentsUseCase.activate(file);

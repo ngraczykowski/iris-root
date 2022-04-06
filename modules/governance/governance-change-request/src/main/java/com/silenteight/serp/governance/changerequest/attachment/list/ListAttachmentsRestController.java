@@ -33,7 +33,7 @@ class ListAttachmentsRestController {
   @GetMapping("/v1/changeRequests/{changeRequestId}/attachments")
   @PreAuthorize("isAuthorized('LIST_ATTACHMENTS')")
   public ResponseEntity<List<String>> list(@PathVariable UUID changeRequestId) {
-    log.debug("List attachments for changeRequest {} received.", changeRequestId);
+    log.info("Listing attachments for changeRequestId={}.", changeRequestId);
 
     return ok(listAttachmentsQuery.list(changeRequestId));
   }

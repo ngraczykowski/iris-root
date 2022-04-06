@@ -29,7 +29,7 @@ class ExportModelRestControllerTest extends BaseRestControllerTest {
   @TestWithRole(roles = {})
   @Disabled("No one have permission to 'EXPORT_MODEL'")
   void its200_whenModelExported() {
-    given(exportModelUseCase.applyByName(MODEL_ID)).willReturn(transferredModelRoot());
+    given(exportModelUseCase.applyById(MODEL_ID)).willReturn(transferredModelRoot());
 
     get(EXPORT_MODEL_URL)
         .statusCode(OK.value())

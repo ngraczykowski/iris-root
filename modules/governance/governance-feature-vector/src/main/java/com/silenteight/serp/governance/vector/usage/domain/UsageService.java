@@ -19,7 +19,7 @@ public class UsageService {
         .orElseGet(() -> asFeatureVectorUsage(canonicalFeatureVector));
 
     log.debug("Feature vector (fv_signature={}) used {} times.",
-              canonicalFeatureVector.getVectorSignature(), count);
+        canonicalFeatureVector.getVectorSignature(), count);
     featureVectorUsage.markAsUsed(count);
     analyticsFeatureVectorUsageRepository.save(featureVectorUsage);
   }

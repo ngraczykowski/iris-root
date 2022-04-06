@@ -59,7 +59,7 @@ public class FileService {
 
   private UUID doSaveFile(MultipartFile file) throws IOException {
     UUID fileName = randomUUID();
-
+    log.info("Saving file with name, fileName={}", file.getOriginalFilename());
     StoreFileRequestDto storeFileRequestDto = StoreFileRequestDto
         .builder()
         .storageName(bucket)
@@ -69,6 +69,7 @@ public class FileService {
         .build();
 
     fileUploader.storeFile(storeFileRequestDto);
+    log.debug("File saved, fileName={}", file.getOriginalFilename());
     return fileName;
   }
 

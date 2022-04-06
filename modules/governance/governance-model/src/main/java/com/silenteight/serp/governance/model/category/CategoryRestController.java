@@ -29,6 +29,7 @@ class CategoryRestController {
   @GetMapping("/v1/categories")
   @PreAuthorize("isAuthorized('LIST_CATEGORIES')")
   public ResponseEntity<CategoriesListDto> list() {
+    log.info(("Listing categories."));
     CategoriesListDto result = new CategoriesListDto(registry.getAllCategories());
     return ok(result);
   }

@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.changerequest.details;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.changerequest.domain.dto.ChangeRequestDto;
 
@@ -20,6 +21,7 @@ import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
+@Slf4j
 @RestController
 @RequestMapping(value = ROOT, produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
@@ -32,6 +34,7 @@ class ChangeRequestDetailsRestController {
   @GetMapping(value = "/v1/changeRequests/{id}")
   @PreAuthorize("isAuthorized('GET_CHANGE_REQUEST')")
   public ResponseEntity<ChangeRequestDto> details(@PathVariable UUID id) {
+    log.info("Getting details for changeRequest, changeRequestId={}",id);
     return ok(changeRequestQuery.details(id));
   }
 }

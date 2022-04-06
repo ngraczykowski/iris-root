@@ -38,6 +38,7 @@ public class AlertSamplingService {
 
   @Transactional
   public void finish(Long id) {
+    log.info("Marking alert sampling with alertId={} as finished.", id);
     AlertSampling alertSampling = getAlertSampling(id);
     alertSampling.finished(timeSource.offsetDateTime());
     alertSamplingRepository.save(alertSampling);
@@ -46,6 +47,7 @@ public class AlertSamplingService {
 
   @Transactional
   public void markAsFailed(Long id) {
+    log.info("Marking alert sampling with alertId={} as failed.", id);
     AlertSampling alertSampling = getAlertSampling(id);
     alertSampling.failed();
     alertSamplingRepository.save(alertSampling);
