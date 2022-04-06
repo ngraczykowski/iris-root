@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.proto.serp.v1.recommendation.Recommendation;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert.Flag;
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRecommendationService;
@@ -15,25 +14,20 @@ import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext;
 import com.silenteight.scb.ingest.domain.model.RegistrationResponse;
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
 import com.silenteight.sep.base.aspects.logging.LogContext;
-import com.silenteight.sep.base.common.messaging.properties.MessagePropertiesProvider;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;
-import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
-import javax.annotation.Nonnull;
 
 import static com.silenteight.sep.base.common.logging.LogContextUtils.logAlert;
 
 @Slf4j
 @Builder
-class IngestService implements SingleAlertIngestService, BatchAlertIngestService {
+class IngestService implements BatchAlertIngestService {
 
   private static final int ALERT_RECOMMENDATION_FLAGS =
       Flag.RECOMMEND.getValue() | Flag.PROCESS.getValue() | Flag.ATTACH.getValue();
-  private final Collection<IngestServiceListener> listeners;
   private final ScbRecommendationService scbRecommendationService;
   private final AlertRegistrationFacade alertRegistrationFacade;
   private final IngestEventPublisher ingestEventPublisher;
@@ -97,30 +91,11 @@ class IngestService implements SingleAlertIngestService, BatchAlertIngestService
     return flags;
   }
 
+
   private boolean shouldLearningAlertBeProcessed(Alert alert) {
     return !scbRecommendationService.alertRecommendationExists(
         alert.details().getSystemId(),
         alert.id().discriminator());
   }
 
-  // TODO: this should be removed as is part of REST /recommendation endpoint
-  @Override
-  public Optional<Recommendation> ingestAlertAndTryToReceiveRecommendation(
-      Alert alert, MessagePropertiesProvider propertiesProvider) {
-    Alert ingestedAlert = updateAlertAndHandleListeners(alert);
-
-    log.info(
-        "Sending an ordered alert: systemId={} and waiting for recommendation",
-        alert.details().getSystemId());
-
-    return Optional.empty();
-  }
-
-  @Nonnull
-  private Alert updateAlertAndHandleListeners(Alert alert) {
-    Alert ingestedAlert = updateIngestInfoForAlert(alert, ALERT_RECOMMENDATION_FLAGS);
-
-    listeners.forEach(l -> l.send(ingestedAlert));
-    return ingestedAlert;
-  }
 }

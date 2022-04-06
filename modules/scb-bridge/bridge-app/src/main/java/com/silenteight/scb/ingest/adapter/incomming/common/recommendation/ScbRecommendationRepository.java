@@ -7,17 +7,6 @@ import java.util.Optional;
 
 interface ScbRecommendationRepository extends Repository<ScbRecommendation, Long> {
 
-  // @formatter:off
-  Optional<ScbRecommendation>
-      findFirstBySystemIdAndDiscriminatorAndWatchlistIdIsNullOrderByRecommendedAtDesc(
-      String systemId, String discriminator);
-  // @formatter:on
-
-  // @formatter:off
-  Optional<ScbRecommendation>
-      findFirstBySystemIdAndWatchlistIdIsNullOrderByRecommendedAtDesc(String systemId);
-  // @formatter:on
-
   Collection<ScbRecommendation> findAll();
 
   void save(ScbRecommendation scbRecommendation);

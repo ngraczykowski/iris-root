@@ -34,8 +34,6 @@ class ScbRecommendationServiceTest {
   private ScbRecommendationRepository scbRecommendationRepository =
       new InMemoryScbRecommendationRepository();
   @Mock
-  private DiscriminatorFetcher discriminatorFetcher;
-  @Mock
   private ScbDiscriminatorMatcher scbDiscriminatorMatcher;
   @Mock
   private PayloadConverter payloadConverter;
@@ -47,71 +45,8 @@ class ScbRecommendationServiceTest {
   void setUp() {
     underTest = new ScbRecommendationService(
         scbRecommendationRepository,
-        discriminatorFetcher,
         scbDiscriminatorMatcher,
         payloadConverter);
-  }
-
-  @Test
-  void shouldStoreToDatabaseAndTakeLatestWithSystemIdAndDiscriminator() {
-    //given
-    AlertMetadata alertMetadata = new AlertMetadata(null, DISCRIMINATOR, SYSTEM_ID);
-    when(discriminatorFetcher.fetch(anyString()))
-        .thenReturn(Optional.of("321"));
-    when(payloadConverter.deserializeFromJsonToObject(PAYLOAD, AlertMetadata.class))
-        .thenReturn(alertMetadata);
-
-    //when
-    underTest.saveRecommendation(fixtures.firstRecommendation);
-    underTest.saveRecommendation(fixtures.secondRecommendation);
-
-    Optional<ScbRecommendation> currentRecommendation =
-        underTest.findCurrentRecommendation(SYSTEM_ID);
-
-    //then
-    assertThat(currentRecommendation.isPresent()).isTrue();
-
-    ScbRecommendation scbRecommendation = currentRecommendation.get();
-
-    assertThat(scbRecommendation.getComment())
-        .isEqualTo(fixtures.secondRecommendation.recommendedComment());
-    assertThat(scbRecommendation.getDecision())
-        .isEqualTo(fixtures.secondRecommendation.recommendedAction().name());
-    assertThat(scbRecommendation.getSystemId())
-        .isEqualTo(SYSTEM_ID);
-    assertThat(scbRecommendation.getDiscriminator())
-        .isEqualTo(DISCRIMINATOR);
-    assertThat(scbRecommendation.getRecommendedAt())
-        .isEqualTo(fixtures.secondRecommendation.recommendedAt());
-  }
-
-  @Test
-  void shouldStoreToDatabaseAndFindCurrentOrLatestRecommendation() {
-    //when
-    var alertMetadata = new AlertMetadata(null, DISCRIMINATOR, SYSTEM_ID);
-    when(payloadConverter.deserializeFromJsonToObject(PAYLOAD, AlertMetadata.class))
-        .thenReturn(alertMetadata);
-    underTest.saveRecommendation(fixtures.firstRecommendation);
-    underTest.saveRecommendation(fixtures.secondRecommendation);
-
-    Optional<ScbRecommendation> currentRecommendation =
-        underTest.findCurrentOrLatestRecommendation(SYSTEM_ID);
-
-    //then
-    assertThat(currentRecommendation.isPresent()).isTrue();
-
-    ScbRecommendation scbRecommendation = currentRecommendation.get();
-
-    assertThat(scbRecommendation.getComment())
-        .isEqualTo(fixtures.secondRecommendation.recommendedComment());
-    assertThat(scbRecommendation.getDecision())
-        .isEqualTo(fixtures.secondRecommendation.recommendedAction().name());
-    assertThat(scbRecommendation.getSystemId())
-        .isEqualTo(SYSTEM_ID);
-    assertThat(scbRecommendation.getDiscriminator())
-        .isEqualTo(DISCRIMINATOR);
-    assertThat(scbRecommendation.getRecommendedAt())
-        .isEqualTo(fixtures.secondRecommendation.recommendedAt());
   }
 
   @Test
@@ -136,12 +71,10 @@ class ScbRecommendationServiceTest {
   private static class Fixtures {
 
     private static final OffsetDateTime TIME_1 = OffsetDateTime.now();
-    private static final OffsetDateTime TIME_2 = OffsetDateTime.now();
     private static final RecommendedAction RECOMMENDATION_ACTION =
         RecommendedAction.ACTION_FALSE_POSITIVE;
 
     Recommendation firstRecommendation = createRecommendation("comment_1", TIME_1);
-    Recommendation secondRecommendation = createRecommendation("comment_2", TIME_2);
 
     @Nonnull
     private static Recommendation createRecommendation(String comment, OffsetDateTime time) {
@@ -160,29 +93,6 @@ class ScbRecommendationServiceTest {
   static class InMemoryScbRecommendationRepository implements ScbRecommendationRepository {
 
     private List<ScbRecommendation> inMemoryScbRecommendationRepository = new ArrayList<>();
-
-    @Override
-    public Optional<ScbRecommendation>
-        findFirstBySystemIdAndDiscriminatorAndWatchlistIdIsNullOrderByRecommendedAtDesc(
-        String systemId, String discriminator) {
-      return inMemoryScbRecommendationRepository
-          .stream()
-          .filter(
-              s -> s.getSystemId().equals(systemId)
-                  && s.getDiscriminator().equals(discriminator)
-                  && s.getWatchlistId() == null)
-          .max(comparing(ScbRecommendation::getRecommendedAt, OffsetDateTime::compareTo));
-    }
-
-    @Override
-    public Optional<ScbRecommendation>
-        findFirstBySystemIdAndWatchlistIdIsNullOrderByRecommendedAtDesc(
-        String systemId) {
-      return inMemoryScbRecommendationRepository
-          .stream()
-          .filter(s -> s.getSystemId().equals(systemId) && s.getWatchlistId() == null)
-          .max(comparing(ScbRecommendation::getRecommendedAt, OffsetDateTime::compareTo));
-    }
 
     @Override
     public Collection<ScbRecommendation> findAll() {

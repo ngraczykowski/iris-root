@@ -102,50 +102,6 @@ class ScbRecommendationRepositoryIT extends BaseDataJpaTest {
     assertThat(scbRecommendationRepository.findAll()).containsExactlyInAnyOrderElementsOf(entities);
   }
 
-  @Test
-  void shouldFindAlertLevelRecommendations() {
-    ScbRecommendation entity1 = fixtures.alertLevelRecommendation11;
-    ScbRecommendation entity2 = fixtures.alertLevelRecommendation12;
-    persistEntity(entity1);
-    persistEntity(entity2);
-
-    assertThat(scbRecommendationRepository
-        .findFirstBySystemIdAndDiscriminatorAndWatchlistIdIsNullOrderByRecommendedAtDesc(
-            entity1.getSystemId(),
-            entity1.getDiscriminator()))
-        .hasValue(entity1);
-    assertThat(scbRecommendationRepository
-        .findFirstBySystemIdAndDiscriminatorAndWatchlistIdIsNullOrderByRecommendedAtDesc(
-            entity2.getSystemId(),
-            entity2.getDiscriminator()))
-        .hasValue(entity2);
-  }
-
-  @Test
-  void shouldNotFindWatchlistLevelRecommendation() {
-    ScbRecommendation entity = fixtures.watchlistLevelRecommendation1;
-    persistEntity(entity);
-
-    assertThat(scbRecommendationRepository
-        .findFirstBySystemIdAndDiscriminatorAndWatchlistIdIsNullOrderByRecommendedAtDesc(
-            entity.getSystemId(),
-            entity.getDiscriminator()))
-        .isEmpty();
-  }
-
-  @Test
-  void shouldFindLatestRecommendation() {
-    persistEntity(fixtures.middleRecommendation);
-    persistEntity(fixtures.newRecommendation);
-    persistEntity(fixtures.oldRecommendation);
-
-    assertThat(scbRecommendationRepository
-        .findFirstBySystemIdAndDiscriminatorAndWatchlistIdIsNullOrderByRecommendedAtDesc(
-            fixtures.newRecommendation.getSystemId(),
-            fixtures.newRecommendation.getDiscriminator()))
-        .hasValue(fixtures.newRecommendation);
-  }
-
   private static class Fixtures {
 
     ScbRecommendation simpleRecommendation = createEntity(
@@ -158,10 +114,6 @@ class ScbRecommendationRepositoryIT extends BaseDataJpaTest {
 
     ScbRecommendation watchlistLevelRecommendation1 = createEntity(
         "systemId3", "watchlistId3", "disc3");
-
-    ScbRecommendation oldRecommendation = createEntity("systemId4", "disc1", now().minusDays(5));
-    ScbRecommendation middleRecommendation = createEntity("systemId4", "disc1", now().minusDays(1));
-    ScbRecommendation newRecommendation = createEntity("systemId4", "disc1", now());
 
     private static ScbRecommendation createEntity(
         String systemId, String watchlistId, String discriminator) {

@@ -23,7 +23,6 @@ import java.util.stream.Stream;
 
 import static com.silenteight.scb.ingest.domain.model.Batch.Priority.MEDIUM;
 import static com.silenteight.scb.ingest.domain.model.BatchSource.CBS;
-import static java.util.Collections.singleton;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,28 +32,23 @@ class IngestServiceTest {
   private static final String OTHER_DECISION_GROUP = "other_decision_group";
 
   @Mock
-  private IngestServiceListener listener;
-  @Mock
   private ScbRecommendationService scbRecommendationService;
   @Mock
   private AlertRegistrationFacade alertRegistrationFacade;
   @Mock
   private IngestEventPublisher ingestEventPublisher;
 
-  private IngestProperties ingestProperties;
   private IngestService ingestService;
 
   @BeforeEach
   void setUp() {
-    ingestProperties = new IngestProperties();
     createIngestService();
   }
 
   private void createIngestService() {
     IngestConfiguration configuration =
-        new IngestConfiguration(ingestProperties, alertRegistrationFacade, ingestEventPublisher);
+        new IngestConfiguration(alertRegistrationFacade, ingestEventPublisher);
     ingestService = configuration.ingestService(
-        singleton(listener),
         scbRecommendationService);
   }
 

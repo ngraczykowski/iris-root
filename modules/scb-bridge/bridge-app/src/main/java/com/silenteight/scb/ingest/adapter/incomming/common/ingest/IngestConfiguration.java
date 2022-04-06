@@ -13,25 +13,20 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import java.util.Collection;
-
 @Configuration
 @EnableScheduling
 @RequiredArgsConstructor
 @Import(MessagingConfiguration.class)
 class IngestConfiguration {
 
-  private final IngestProperties properties;
   private final AlertRegistrationFacade alertRegistrationFacade;
   private final IngestEventPublisher ingestEventPublisher;
 
   @Bean
   IngestService ingestService(
-      Collection<IngestServiceListener> listeners,
       ScbRecommendationService scbRecommendationService) {
 
     return IngestService.builder()
-        .listeners(listeners)
         .scbRecommendationService(scbRecommendationService)
         .alertRegistrationFacade(alertRegistrationFacade)
         .ingestEventPublisher(ingestEventPublisher)

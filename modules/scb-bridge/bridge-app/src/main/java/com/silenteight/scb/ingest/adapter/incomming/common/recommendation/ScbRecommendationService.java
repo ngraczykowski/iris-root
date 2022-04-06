@@ -10,7 +10,6 @@ import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.Rec
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.silenteight.scb.ingest.adapter.incomming.common.domain.GnsSyncConstants.PRIMARY_TRANSACTION_MANAGER;
 
@@ -18,32 +17,8 @@ import static com.silenteight.scb.ingest.adapter.incomming.common.domain.GnsSync
 public class ScbRecommendationService {
 
   private final ScbRecommendationRepository scbRecommendationRepository;
-  private final DiscriminatorFetcher discriminatorFetcher;
   private final ScbDiscriminatorMatcher scbDiscriminatorMatcher;
   private final PayloadConverter payloadConverter;
-
-  public Optional<ScbRecommendation> findCurrentRecommendation(String systemId) {
-    return discriminatorFetcher
-        .fetch(systemId)
-        .flatMap(d -> findAlertRecommendationWithLatestDiscriminator(systemId, d));
-  }
-
-  private Optional<ScbRecommendation> findAlertRecommendationWithLatestDiscriminator(
-      String systemId, String discriminator) {
-
-    return scbRecommendationRepository
-        .findFirstBySystemIdAndDiscriminatorAndWatchlistIdIsNullOrderByRecommendedAtDesc(
-            systemId, discriminator);
-  }
-
-  public Optional<ScbRecommendation> findCurrentOrLatestRecommendation(String systemId) {
-    return findLatestAlertRecommendation(systemId);
-  }
-
-  private Optional<ScbRecommendation> findLatestAlertRecommendation(String systemId) {
-    return scbRecommendationRepository
-        .findFirstBySystemIdAndWatchlistIdIsNullOrderByRecommendedAtDesc(systemId);
-  }
 
   public boolean alertRecommendationExists(String systemId, String discriminator) {
     return scbRecommendationRepository.findFirstBySystemIdOrderByRecommendedAtDesc(systemId)

@@ -39,38 +39,4 @@ class ScbRecommendation extends BaseEntity implements IdentifiableEntity {
   private String comment;
   private OffsetDateTime recommendedAt;
 
-  RecommendationDto toRecommendationDto() {
-    if (watchlistId != null)
-      throw new WatchlistLevelConvertRecommendationException();
-
-    return RecommendationDto.builder()
-        .externalId(systemId)
-        .discriminator(discriminator)
-        .decision(decision)
-        .comment(comment)
-        .date(recommendedAt)
-        .build();
-  }
-
-  RecommendationDto toOutdatedRecommendationDto(String outdatedRecommendationMessage) {
-    if (watchlistId != null)
-      throw new WatchlistLevelConvertRecommendationException();
-
-    return RecommendationDto.builder()
-        .externalId(systemId)
-        .discriminator(discriminator)
-        .decision(decision)
-        .comment(outdatedRecommendationMessage + CONCATENATION_ELEMENT + comment)
-        .date(recommendedAt)
-        .build();
-  }
-
-  static class WatchlistLevelConvertRecommendationException extends IllegalStateException {
-
-    private static final long serialVersionUID = -3318395529881143331L;
-
-    WatchlistLevelConvertRecommendationException() {
-      super("Cannot create RecommendationDto from Watchlist level ScbRecommendation");
-    }
-  }
 }

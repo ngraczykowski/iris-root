@@ -20,11 +20,4 @@ public class RecommendationOrderProperties {
   @OracleRelationName
   private String cbsHitsDetailsHelperViewName;
 
-  private long timeout = 30000;
-
-  private boolean onDemandEnabled;
-
-  private String outdatedMessage =
-      "PLEASE NOTE: THE RISK EVENT DETAILS MAY HAVE BEEN UPDATED,"
-          + " PLEASE REVIEW ALL 'RISK EVENTS' ACCORDINGLY.";
 }
