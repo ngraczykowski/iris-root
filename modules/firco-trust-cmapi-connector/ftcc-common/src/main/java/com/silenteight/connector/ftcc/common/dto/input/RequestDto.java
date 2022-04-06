@@ -27,26 +27,11 @@ public class RequestDto implements Serializable {
   @Valid
   private RequestBodyDto body;
 
-  /*public UsernamePasswordAuthenticationToken getAuthenticationToken() {
-    var authentication = getAuthentication();
-
-    return new UsernamePasswordAuthenticationToken(
-        authentication.getUserLogin(), authentication.getUserPassword());
-  }
-*/
-  public String getAuthenticationRealm() {
-    return getAuthentication().getUserRealm();
-  }
-
   public long getMessagesCount() {
     return body.getMessagesCount();
   }
 
   public List<JsonNode> getMessages() {
     return body.getMessages();
-  }
-
-  public CaseManagerAuthenticationDto getAuthentication() {
-    return getBody().getCaseManagerAuthentication();
   }
 }

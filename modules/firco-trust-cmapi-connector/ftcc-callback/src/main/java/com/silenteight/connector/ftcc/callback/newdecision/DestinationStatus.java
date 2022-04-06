@@ -16,12 +16,4 @@ public class DestinationStatus {
   StatusInfoDto status;
 
   boolean valid;
-
-  static DestinationStatus createValid(StatusInfoDto status) {
-    return new DestinationStatus(status, true);
-  }
-
-  static DestinationStatus createInvalid(StatusInfoDto status) {
-    return new DestinationStatus(status, false);
-  }
 }

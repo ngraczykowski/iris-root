@@ -50,8 +50,8 @@ Configuration
 `java.lang.IllegalStateException: No 'DestinationState' in configuration for currentStatusName=COMMHUB and S8 recommendedAction=PTP`
 add to configuration (`ftcc.decision.resource-location`) entry:
 
-| SourceState | Recommendation | DestinationState                                                       |
-|-------------|----------------|------------------------------------------------------------------------|
+| SourceState | Recommendation | DestinationState                                                                           |
+|-------------|----------------|--------------------------------------------------------------------------------------------|
 | COMMHUB     | PTP            | `value from request: Body.msg_SendMessage.Messages[n].Message.NextStatuses[i].Status.Name` |
 
 ## Spring Profiles:

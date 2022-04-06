@@ -25,14 +25,6 @@ public class AckDto implements Serializable {
     return of(FaultCode.NONE, "OK");
   }
 
-  public static AckDto clientError(String message) {
-    return of(FaultCode.CLIENT, message);
-  }
-
-  public static AckDto serverError(String message) {
-    return of(FaultCode.SERVER, message);
-  }
-
   public static AckDto of(FaultCode faultCode, String faultString) {
     AckMessageDto messageDto =
         new AckMessageDto(faultCode.getCode(), faultString, "cmapi.send.message");
@@ -43,9 +35,7 @@ public class AckDto implements Serializable {
 
   @RequiredArgsConstructor
   public enum FaultCode {
-    NONE("0"),
-    CLIENT("soapenv:Client"),
-    SERVER("soapenv:Server");
+    NONE("0");
 
     @Getter
     private final String code;

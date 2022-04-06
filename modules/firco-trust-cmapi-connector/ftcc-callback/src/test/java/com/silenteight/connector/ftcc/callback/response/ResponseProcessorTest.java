@@ -8,7 +8,6 @@ import com.silenteight.recommendation.api.library.v1.AlertOut;
 import com.silenteight.recommendation.api.library.v1.RecommendationOut;
 import com.silenteight.recommendation.api.library.v1.RecommendationsOut;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,10 +21,9 @@ import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith({ SpringExtension.class })
+@ExtendWith(SpringExtension.class)
 class ResponseProcessorTest {
 
   @Mock
@@ -36,10 +34,6 @@ class ResponseProcessorTest {
   MessageDetailsService messageDetailsService;
   @Mock
   RecommendationsDeliveredPublisher recommendationsDeliveredPublisher;
-
-  @BeforeEach
-  void setUp() {
-  }
 
   @DisplayName("Receiving 2 solved alerts, should create 'ClientRequestDto' twice")
   @Test

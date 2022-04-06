@@ -9,16 +9,14 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.util.ResourceUtils;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.http.HttpStatus.OK;
 
-@Import({
-    IngestRestController.class
-})
+@Import(IngestRestController.class)
 class IngestRestControllerTest extends BaseRestControllerTest {
 
   private static final String INGEST_URL = "/v1/alert";
@@ -28,7 +26,7 @@ class IngestRestControllerTest extends BaseRestControllerTest {
 
   @Test
   void its200_whenAlertSent() throws IOException {
-    post(INGEST_URL, getResourceAsObject("requests/SendMessage.json"))
+    post(INGEST_URL, getResourceAsObject("classpath:requests/SendMessage.json"))
         .statusCode(OK.value())
         .body("Body.msg_Acknowledgement.faultcode", is("0"))
         .body("Body.msg_Acknowledgement.faultstring", is("OK"));
@@ -39,11 +37,6 @@ class IngestRestControllerTest extends BaseRestControllerTest {
     return JsonConversionHelper
         .INSTANCE
         .objectMapper()
-        .readValue(getResourceAsString(file), RequestDto.class);
-  }
-
-  private String getResourceAsString(String file) throws IOException {
-    InputStream inputStream = getClass().getClassLoader().getResourceAsStream(file);
-    return new String(inputStream.readAllBytes());
+        .readValue(ResourceUtils.getFile(file), RequestDto.class);
   }
 }

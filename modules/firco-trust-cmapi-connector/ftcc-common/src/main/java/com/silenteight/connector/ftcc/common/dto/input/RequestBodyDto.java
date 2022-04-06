@@ -27,10 +27,6 @@ public class RequestBodyDto implements Serializable {
   @Valid
   private RequestSendMessageDto sendMessageDto;
 
-  CaseManagerAuthenticationDto getCaseManagerAuthentication() {
-    return sendMessageDto.getAuthentication();
-  }
-
   long getMessagesCount() {
     return sendMessageDto.getMessagesCount();
   }
