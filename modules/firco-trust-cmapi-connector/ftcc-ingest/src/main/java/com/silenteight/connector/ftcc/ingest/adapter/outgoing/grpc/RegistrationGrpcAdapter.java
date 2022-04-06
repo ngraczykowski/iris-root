@@ -22,6 +22,8 @@ class RegistrationGrpcAdapter implements RegistrationApiClient {
     return RegisterBatchIn.builder()
         .batchId(batch.getBatchId())
         .alertCount(batch.getAlertsCount())
+        //.batchPriority() TODO @m.mastylo solving - 10, learning - 1
+        //.isLearning() TODO @m.mastylo
         .build();
   }
 }

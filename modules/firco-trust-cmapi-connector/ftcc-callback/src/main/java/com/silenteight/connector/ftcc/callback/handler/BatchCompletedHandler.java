@@ -30,7 +30,7 @@ public class BatchCompletedHandler {
   })
   public void handle(MessageBatchCompleted messageBatchCompleted) {
     String batchName = messageBatchCompleted.getBatchId();
-    String analysisName = messageBatchCompleted.getAnalysisId();
+    String analysisName = messageBatchCompleted.getAnalysisName();
     log.info("BatchCompleted received batchName={} analysisName={}", batchName, analysisName);
 
     batchCompletedService.save(batchName, analysisName);

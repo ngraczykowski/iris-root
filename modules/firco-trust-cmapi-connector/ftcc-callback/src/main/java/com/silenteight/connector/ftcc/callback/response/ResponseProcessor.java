@@ -35,7 +35,7 @@ public class ResponseProcessor {
 
   @Async
   public void process(MessageBatchCompleted messageBatchCompleted) {
-    final var analysisName = messageBatchCompleted.getAnalysisId();
+    final var analysisName = messageBatchCompleted.getAnalysisName();
     final var batchName = messageBatchCompleted.getBatchId();
 
     log.info("Fetching Message from DB using batchName={}", batchName);

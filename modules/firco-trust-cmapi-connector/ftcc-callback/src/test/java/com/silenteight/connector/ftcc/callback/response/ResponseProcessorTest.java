@@ -67,9 +67,7 @@ class ResponseProcessorTest {
     var messageBatchCompleted =
         MessageBatchCompleted.newBuilder()
             .setBatchId(randomUUID().toString())
-            .addAlertIds("messages/1")
-            .addAlertIds("messages/2")
-            .setAnalysisId("analysis/1")
+            .setAnalysisName("analysis/1")
             .build();
 
     assertAll(() -> responseProcessor.process(messageBatchCompleted));
