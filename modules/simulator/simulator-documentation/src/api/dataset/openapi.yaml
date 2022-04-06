@@ -60,6 +60,14 @@ components:
       type: string
       enum: [ ACTIVE, ARCHIVED ]
 
+    AlertType:
+      type: string
+      enum: [ SOLVING, LEARNING ]
+
+    AlertMatch:
+      type: string
+      enum: [ SINGLE, MULTI ]
+
     Dataset:
       type: object
       properties:
@@ -73,9 +81,14 @@ components:
           type: string
         state:
           $ref: '#/components/schemas/DatasetState'
+        alertType:
+          $ref: '#/components/schemas/AlertType'
+        alertMatch:
+          $ref: '#/components/schemas/AlertMatch'
         query:
           type: object
           $ref: '#/components/schemas/Query'
+        AlertType:
         alertsCount:
           type: number
         createdAt:
@@ -117,6 +130,8 @@ components:
         datasetName: 'New dataset'
         description: 'Dataset description'
         query:
+          useMultiHitAlerts: true
+          useLearningAlertsOnly: false
           alertGenerationDate:
             from: '2004-02-12T15:19:21Z'
             to: '2005-02-12T15:19:21Z'
@@ -127,7 +142,13 @@ components:
         alertGenerationDate:
           type: object
           $ref: '#components/schemas/RangeQuery'
+        useMultiHitAlerts:
+          type: boolean
+        useLearningAlertsOnly:
+          type: boolean
       example:
+        useMultiHitAlerts: true
+        useLearningAlertsOnly: false
         alertGenerationDate:
           from: '2004-02-12T15:19:21Z'
           to: '2005-02-12T15:19:21Z'
@@ -143,5 +164,4 @@ components:
       example:
         from: '2004-02-12T15:19:21Z'
         to: '2005-02-12T15:19:21Z'
-
 
