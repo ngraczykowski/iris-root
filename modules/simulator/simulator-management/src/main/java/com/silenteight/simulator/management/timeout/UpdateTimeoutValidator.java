@@ -2,6 +2,7 @@ package com.silenteight.simulator.management.timeout;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.simulator.management.domain.dto.SimulationDto;
@@ -11,6 +12,7 @@ import java.time.OffsetDateTime;
 
 import static com.silenteight.simulator.management.timeout.TimeValidator.isTimeoutOnTime;
 
+@Slf4j
 @RequiredArgsConstructor
 class UpdateTimeoutValidator extends BaseSimulationTimeoutValidator {
 
@@ -25,6 +27,7 @@ class UpdateTimeoutValidator extends BaseSimulationTimeoutValidator {
 
   @Override
   public boolean valid(SimulationDto simulationDto) {
+    log.info("Validating simulation on update time, simulationdId={}", simulationDto.getId());
     boolean result = checkLastUpdateTime(simulationDto);
     doLog(result);
     return result;

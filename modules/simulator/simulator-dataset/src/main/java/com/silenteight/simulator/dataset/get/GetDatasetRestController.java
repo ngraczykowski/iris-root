@@ -2,6 +2,7 @@ package com.silenteight.simulator.dataset.get;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.simulator.dataset.domain.DatasetQuery;
 import com.silenteight.simulator.dataset.dto.DatasetDto;
@@ -24,6 +25,7 @@ import static com.silenteight.simulator.dataset.domain.DomainConstants.DATASET_E
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
+@Slf4j
 @RestController
 @RequestMapping(value = ROOT, produces = APPLICATION_JSON_VALUE)
 @AllArgsConstructor
@@ -41,6 +43,7 @@ class GetDatasetRestController {
           content = @Content())
   })
   public ResponseEntity<DatasetDto> get(@PathVariable UUID datasetId) {
+    log.info("Getting dataset details for datasetId={}", datasetId);
     return ok(datasetQuery.get(datasetId));
   }
 }

@@ -2,6 +2,7 @@ package com.silenteight.simulator.management.list;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.simulator.management.domain.SimulationState;
 import com.silenteight.simulator.management.list.dto.SimulationListDto;
@@ -29,6 +30,7 @@ import static java.util.List.of;
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
+@Slf4j
 @RestController
 @RequestMapping(value = ROOT, produces = APPLICATION_JSON_VALUE)
 @AllArgsConstructor
@@ -50,7 +52,7 @@ class ListSimulationRestController {
   })
   public ResponseEntity<List<SimulationListDto>> listForStates(
       @RequestParam @Parameter(hidden = true) SimulationState... state) {
-
+    log.info("Listing simulation in states={}", of(state));
     return ok(simulationQuery.list(of(state)));
   }
 
@@ -58,6 +60,7 @@ class ListSimulationRestController {
   @PreAuthorize("isAuthorized('LIST_SIMULATIONS')")
   @Hidden
   public ResponseEntity<List<SimulationListDto>> listForModel(@RequestParam String model) {
-    return ok(simulationQuery.findByModels(List.of(model)));
+    log.info("Listing simulation with model={}", model);
+    return ok(simulationQuery.findByModels(of(model)));
   }
 }

@@ -27,6 +27,7 @@ class AnalysisTimeoutValidator extends BaseSimulationTimeoutValidator {
 
   @Override
   public boolean valid(SimulationDto simulationDto) {
+    log.info("Validating simulation on analysis level, simulationdId={}", simulationDto.getId());
     boolean result = timeoutOnSolvingProgress(simulationDto);
     doLog(result);
     return result;
