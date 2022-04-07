@@ -3,7 +3,7 @@ package com.silenteight.scb.feeding.domain;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.scb.feeding.domain.agentinput.AgentInputFactory;
+import com.silenteight.scb.feeding.domain.agent.input.AgentInputFactory;
 import com.silenteight.scb.feeding.domain.model.AlertErrorDescription;
 import com.silenteight.scb.feeding.domain.model.FeedUdsCommand;
 import com.silenteight.scb.feeding.domain.model.UdsFedEvent;

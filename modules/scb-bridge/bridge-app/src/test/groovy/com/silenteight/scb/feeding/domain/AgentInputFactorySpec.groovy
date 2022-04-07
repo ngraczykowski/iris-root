@@ -1,8 +1,8 @@
 package com.silenteight.scb.feeding.domain
 
 import com.silenteight.scb.feeding.domain.category.CategoryValue
-import com.silenteight.scb.feeding.domain.agentinput.AgentInputFactory
-import com.silenteight.scb.feeding.domain.agentinput.feature.FeatureFactory
+import com.silenteight.scb.feeding.domain.agent.input.AgentInputFactory
+import com.silenteight.scb.feeding.domain.agent.input.feature.FeatureFactory
 import com.silenteight.scb.feeding.fixtures.Fixtures
 import com.silenteight.universaldatasource.api.library.Feature
 

@@ -1,7 +1,7 @@
 package com.silenteight.scb.feeding.infrastructure;
 
-import com.silenteight.scb.feeding.domain.agentinput.*;
-import com.silenteight.scb.feeding.domain.agentinput.feature.*;
+import com.silenteight.scb.feeding.domain.agent.input.AgentInputFactory;
+import com.silenteight.scb.feeding.domain.agent.input.feature.*;
 import com.silenteight.scb.feeding.domain.category.CategoryValue;
 
 import org.springframework.context.annotation.Bean;

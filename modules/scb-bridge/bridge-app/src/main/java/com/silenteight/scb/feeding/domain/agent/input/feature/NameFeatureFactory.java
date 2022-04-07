@@ -1,4 +1,4 @@
-package com.silenteight.scb.feeding.domain.agentinput.feature;
+package com.silenteight.scb.feeding.domain.agent.input.feature;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.WlName;
 import com.silenteight.scb.ingest.adapter.incomming.common.WlNameType;

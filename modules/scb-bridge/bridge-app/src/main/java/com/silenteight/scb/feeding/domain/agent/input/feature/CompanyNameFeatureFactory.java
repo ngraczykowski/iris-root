@@ -1,4 +1,4 @@
-package com.silenteight.scb.feeding.domain.agentinput.feature;
+package com.silenteight.scb.feeding.domain.agent.input.feature;
 
 public class CompanyNameFeatureFactory extends NameFeatureFactory {
 

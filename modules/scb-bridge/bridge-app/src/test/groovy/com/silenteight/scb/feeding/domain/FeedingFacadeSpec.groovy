@@ -1,6 +1,6 @@
 package com.silenteight.scb.feeding.domain
 
-import com.silenteight.scb.feeding.domain.agentinput.AgentInputFactory
+import com.silenteight.scb.feeding.domain.agent.input.AgentInputFactory
 import com.silenteight.scb.feeding.domain.model.FeedUdsCommand
 import com.silenteight.scb.feeding.domain.port.outgoing.FeedingEventPublisher
 import com.silenteight.scb.feeding.domain.port.outgoing.UniversalDatasourceApiClient

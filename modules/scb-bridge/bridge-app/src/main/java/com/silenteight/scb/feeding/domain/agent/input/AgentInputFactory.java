@@ -1,6 +1,6 @@
-package com.silenteight.scb.feeding.domain.agentinput;
+package com.silenteight.scb.feeding.domain.agent.input;
 
-import com.silenteight.scb.feeding.domain.agentinput.feature.FeatureFactory;
+import com.silenteight.scb.feeding.domain.agent.input.feature.FeatureFactory;
 import com.silenteight.scb.feeding.domain.category.CategoryValue;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match;
