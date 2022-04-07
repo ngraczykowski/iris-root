@@ -51,6 +51,11 @@ job "etl-pipeline" {
       }
 
       template {
+        data        = file("../config/agents/features_and_categories.yaml")
+        destination = "local/config/agents/features_and_categories.yaml"
+      }
+
+      template {
         data        = file("../config/agents/agents.yaml")
         destination = "local/config/agents/agents.yaml"
       }

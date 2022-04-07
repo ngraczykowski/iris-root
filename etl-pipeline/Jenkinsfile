@@ -33,6 +33,33 @@ pipeline {
                  }
              }
              stages {
+                 stage ('Build dist') {
+                   steps {
+                     sh './scripts/build_dist.sh'
+                   }
+                 }
+                 stage('Publish dist') {
+                   when {
+                     anyOf {
+                       branch 'master'
+                       branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
+                     }
+                     expression { return params.RELEASE }
+                   }
+                   steps {
+                     rtUpload (
+                         serverId: "silenteight-repo-v2",
+                         spec: '''{
+      "files": [
+        {
+          "pattern": "dist/etl-pipeline-dist-*.tar.bz2",
+          "target": "python-dist-local/etl-pipeline/"
+        }
+     ]
+}'''
+                     )
+                   }
+                 }
                  stage ('Build package') {
                      steps {
                          sh './scripts/clean.sh'
@@ -61,33 +88,6 @@ pipeline {
                              sh './scripts/publish.sh --index-url "${PIP_INDEX_URL}"'
                          }
                      }
-                 }
-                 stage ('Build dist') {
-                   steps {
-                     sh './scripts/build_dist.sh'
-                   }
-                 }
-                 stage('Publish dist') {
-                   when {
-                     anyOf {
-                       branch 'master'
-                       branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
-                     }
-                     expression { return params.RELEASE }
-                   }
-                   steps {
-                     rtUpload (
-                         serverId: "silenteight-repo-v2",
-                         spec: '''{
-      "files": [
-        {
-          "pattern": "dist/etl-pipeline-dist-*.tar.bz2",
-          "target": "python-dist-local/etl-pipeline/"
-        }
-     ]
-}'''
-                     )
-                   }
                  }
              }
          }

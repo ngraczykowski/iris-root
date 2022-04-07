@@ -218,26 +218,9 @@ class JsonProcessingEngine(ProcessingEngine):
         matched_tokens = payload[cn.WL_MATCHED_TOKENS]
         return self.discoverer.discover(matched_tokens, dict_values)
 
-    def set_triggered_tokens_discovery(self, payload, match, fields):
-        TRIGGERS_MAP = {
-            cn.ALL_CONNECTED_PARTY_NAMES: payload[cn.ALL_CONNECTED_PARTY_NAMES],
-            cn.ADDRESS1_COUNTRY: self.get_field_value_name(fields, cn.ADDRESS1_COUNTRY),
-            cn.ADDRESS1_LINE1: self.get_field_value_name(fields, cn.ADDRESS1_LINE1),
-            cn.ADDRESS1_LINE2: self.get_field_value_name(fields, cn.ADDRESS1_LINE2),
-            cn.ADDRESS1_LINE3: self.get_field_value_name(fields, cn.ADDRESS1_LINE3),
-            cn.ADDRESS1_LINE4: self.get_field_value_name(fields, cn.ADDRESS1_LINE4),
-            cn.ADDRESS1_LINE5: self.get_field_value_name(fields, cn.ADDRESS1_LINE5),
-            cn.CONCAT_ADDRESS: self.get_field_value_name(fields, cn.CONCAT_ADDRESS),
-        }
+    def set_triggered_tokens_discovery(self, match, fields):
+        TRIGGERS_MAP = {field: fields[field].value for field in fields if fields[field]}
         return self.discoverer.discover(json.loads(match[cn.WL_MATCHED_TOKENS]), TRIGGERS_MAP)
-
-    def prepare_agent_mapper(self, payload, match):
-        agent_mapper = {
-            "all_party_dobs": payload[cn.ALL_PARTY_DOBS],
-            "WL_DOB": match["WL_DOB"],
-        }
-
-        return agent_mapper
 
     def merge_to_target_col_from_source_cols_sql_expression(
         self, target_col, source_cols, mapper, return_array
@@ -248,14 +231,18 @@ class JsonProcessingEngine(ProcessingEngine):
                 try:
                     value.append(mapper[valid_source_col])
                 except KeyError:
-                    logger.warning(f"No field in payload named: {valid_source_col}")
+                    logger.warning(
+                        f"No field in payload named: {valid_source_col}. Ignore for HIT TYPE AGENT"
+                    )
         elif len(source_cols) == 1:
             try:
                 value = mapper[source_cols[0]]
                 if return_array:
                     value = [value]
             except KeyError:
-                logger.warning(f"No field in payload named: {source_cols}")
+                logger.warning(
+                    f"No field in payload named: {source_cols}. Ignore for HIT TYPE AGENT"
+                )
         else:
             value = None
             if return_array:

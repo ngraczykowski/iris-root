@@ -2,6 +2,7 @@ import argparse
 from concurrent import futures
 
 import grpc
+import omegaconf
 
 import etl_pipeline.service.proto.api.etl_pipeline_pb2 as etl__pipeline__pb2
 from etl_pipeline.config import service_config
@@ -40,14 +41,14 @@ def serve(args):
             ((private_key, certificate_chain),), cert_list, require_client_auth=True
         )
         server.add_secure_port(
-            f"{service_config.ETL_SERVICE_HOSTNAME}:{service_config.ETL_SERVICE_PORT}",
+            f"{service_config.ETL_SERVICE_IP}:{service_config.ETL_SERVICE_PORT}",
             server_credentials,
         )
     else:
         try:
             address = service_config.ETL_SERVICE_ADDR
-        except:
-            address = f"{service_config.ETL_SERVICE_HOSTNAME}:{service_config.ETL_SERVICE_PORT}"
+        except omegaconf.errors.ConfigAttributeError:
+            address = f"{service_config.ETL_SERVICE_IP}:{service_config.ETL_SERVICE_PORT}"
         server.add_insecure_port(address)
     server.start()
     server.wait_for_termination()

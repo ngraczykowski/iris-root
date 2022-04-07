@@ -5,8 +5,10 @@ from etl_pipeline.config import load_agent_configs, pipeline_config
 from etl_pipeline.custom.ms.datatypes.field import InputRecordField
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.custom.ms.watchlist_extractor import WatchlistExtractor
+from etl_pipeline.logger import get_logger
 from etl_pipeline.pipeline import ETLPipeline
 
+logger = get_logger("main", "ms_pipeline.log")
 logger = logging.getLogger("main").getChild("etl_pipeline")
 
 
@@ -52,7 +54,11 @@ def create_agent_input_agg_col_config(agent_input_prepended_agent_name_config):
     def _get_ap_or_wl_agg_source_cols(level_1_value, party):
         source_cols = []
         for col in level_1_value.keys():
-            if col.endswith(f"_{party}") or col.endswith(f"_{party}_aliases"):
+            if (
+                col.endswith(f"_{party}")
+                or col.endswith(f"_{party}_aliases")
+                or col.startswith("hit")
+            ):
                 source_cols.append(col)
 
         return source_cols
@@ -63,7 +69,6 @@ def create_agent_input_agg_col_config(agent_input_prepended_agent_name_config):
         agent_type = agent_name.split("_agent", 1)[0]
         agent_ap_agg_col = f"""ap_all_{_generate_simple_plural(agent_type)}_aggregated"""
         agent_wl_agg_col = f"""wl_all_{_generate_simple_plural(agent_type)}_aggregated"""
-
         agent_ap_agg_source_cols = _get_ap_or_wl_agg_source_cols(config, "ap")
         agent_wl_agg_source_cols = _get_ap_or_wl_agg_source_cols(config, "wl")
 
@@ -228,9 +233,9 @@ class MSPipeline(ETLPipeline):
 
             payload.update({cn.CONCAT_ADDRESS_NO_CHANGES: concat_residue == concat_address})
             for match in matches:
-                match[cn.AP_TRIGGERS] = self.engine.set_triggered_tokens_discovery(
-                    payload, match, fields
-                )
+                match[cn.AP_TRIGGERS] = self.engine.set_triggered_tokens_discovery(match, fields)
+                self.set_up_party_type(payload, match)
+            self.set_up_party_type(payload, payload)
         return payloads
 
     def parse_key(self, value, match, payload, new_config):
@@ -242,6 +247,7 @@ class MSPipeline(ETLPipeline):
                     value = match
                     elements = elements[2:]
                 else:
+
                     value = payload
                 for field_name in elements:
                     if field_name == cn.INPUT_FIELD:
@@ -281,7 +287,6 @@ class MSPipeline(ETLPipeline):
 
             for match in matches:
                 config = self.get_key(payload, match, yaml_conf)
-
                 self.engine.sql_to_merge_specific_columns_to_standardized(
                     agent_input_prepended_agent_name_config,
                     match,
@@ -299,6 +304,14 @@ class MSPipeline(ETLPipeline):
                         or key.endswith("_aliases")
                     }
                 )
+                input_records = payload[cn.ALERTED_PARTY_FIELD][cn.INPUT_RECORD_HIST][
+                    cn.INPUT_RECORDS
+                ]
+                fields = input_records[0][cn.INPUT_FIELD]
+                self.handle_hit_type_agent(match, agent_config, fields)
+                self.select_ap_for_ap_id_tp_marked_agent(payload, match)
+                self.set_up_entity_type_match(match)
+
                 self.engine.sql_to_merge_specific_columns_to_standardized(
                     agent_input_agg_col_config, match, config, False
                 )
@@ -306,9 +319,15 @@ class MSPipeline(ETLPipeline):
                     {
                         key: self.produce_unique_flatten_list(match.get(key, []))
                         for key in match
-                        if key.endswith("_aggregated")
+                        if key.endswith("_aggregated") or key.startswith("hit_type_agent")
                     }
                 )
+
+                match["all_hit_type_aggregated"] = {
+                    key.split("_")[-1]: [i for i in match[key] if i]
+                    for key in match
+                    if key.startswith("hit")
+                }
                 self.remove_nulls_from_aggegated(match)
 
         return payloads
@@ -332,9 +351,48 @@ class MSPipeline(ETLPipeline):
 
     def remove_nulls_from_aggegated(self, match):
         for key in match:
-            if key.endswith("_aggregated"):
+            if key.endswith("_aggregated") or key.startswith("hit_type_agent"):
                 value = match[key]
                 if isinstance(value, list):
                     match.update({key: [i for i in match.get(key) if i]})
                 else:
                     match.update({key: [value] if value else []})
+
+    def handle_hit_type_agent(self, match, config, fields):
+        for key in config:
+            if key.startswith("hit"):
+                for feature in config[key]:
+                    match[key + "_" + feature] = self.collect_existing_fields(
+                        fields, config[key][feature]
+                    )
+
+    def collect_existing_fields(self, fields, requested_json_keys):
+        existing_fields = [field for field in requested_json_keys if fields.get(field, None)]
+        return existing_fields
+
+    def select_ap_for_ap_id_tp_marked_agent(self, payload, match):
+        dataset_name = payload[cn.ALERTED_PARTY_FIELD][cn.HEADER_INFO][cn.DATASET_NAME]
+        if dataset_name in ["R_Global_MultiParty_Daily", "R_Global_MultiParty_Wkly"]:
+            match["ap_id_tp_marked_agent_input"] = match["ap_id_tp_marked_agent_input"][0]
+        elif dataset_name in ["R_US_Active_Address", "R_US_Active_Party"]:
+            match["ap_id_tp_marked_agent_input"] = match["ap_id_tp_marked_agent_input"][1]
+        elif dataset_name in ["R_Global_MultiAccounts_Wkly", "R_Global_MultiAccounts_Daily"]:
+            match["ap_id_tp_marked_agent_input"] = match["ap_id_tp_marked_agent_input"][2]
+        if not match["ap_id_tp_marked_agent_input"]:
+            logger.warning("No input for ap_id_tp_marked_agent")
+            match["ap_id_tp_marked_agent_input"] = ""
+
+    def set_up_party_type(self, payload, match):
+        types = [i for i in payload[cn.ALL_CONNECTED_PARTY_TYPES] if i]
+        if not types:
+            match["AP_PARTY_TYPE"] = "UNKNOWN"
+        if "Individual" in types:
+            match["AP_PARTY_TYPE"] = "I"
+        else:
+            match["AP_PARTY_TYPE"] = "C"
+
+    def set_up_entity_type_match(self, match):
+        if match["AP_PARTY_TYPE"] == match["WLP_TYPE"]:
+            match["ENTITY_TYPE_MATCH"] = "Y"
+        else:
+            match["ENTITY_TYPE_MATCH"] = "N"

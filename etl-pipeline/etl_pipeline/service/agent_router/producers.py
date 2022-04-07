@@ -1,0 +1,338 @@
+import itertools
+from abc import ABC, abstractmethod
+from copy import deepcopy
+
+from silenteight.datasource.api.allowlist.v1.allow_list_pb2 import AllowListFeatureInput
+from silenteight.datasource.api.bankidentificationcodes.v1.bank_identification_codes_pb2 import (
+    BankIdentificationCodesFeatureInput,
+)
+from silenteight.datasource.api.country.v1.country_pb2 import CountryFeatureInput
+from silenteight.datasource.api.date.v1.date_pb2 import DateFeatureInput
+from silenteight.datasource.api.document.v1.document_pb2 import DocumentFeatureInput
+from silenteight.datasource.api.event.v1.event_pb2 import EventFeatureInput
+from silenteight.datasource.api.freetext.v1.freetext_pb2 import FreeTextFeatureInput
+from silenteight.datasource.api.gender.v1.gender_pb2 import GenderFeatureInput
+from silenteight.datasource.api.historicaldecisions.v2.historical_decisions_pb2 import (
+    AlertedParty,
+    Discriminator,
+    HistoricalDecisionsFeatureInput,
+    ModelKey,
+)
+from silenteight.datasource.api.location.v1.location_pb2 import LocationFeatureInput
+from silenteight.datasource.api.name.v1.name_pb2 import (
+    AlertedPartyName,
+    NameFeatureInput,
+    WatchlistName,
+)
+from silenteight.datasource.api.nationalid.v1.national_id_pb2 import NationalIdFeatureInput
+from silenteight.datasource.api.transaction.v1.transaction_pb2 import TransactionFeatureInput
+from silenteight.datasource.categories.api.v2.category_value_pb2 import CategoryValue
+
+
+class Producer(ABC):
+    def __init__(self, prefix, feature_name, field_maps):
+        self.feature_name = f"{prefix}/{feature_name}"
+        self.fields = field_maps
+
+    @abstractmethod
+    def produce_feature_input(self, payload):
+        pass
+
+
+class CountryFeatureInputProducer(Producer):
+    def produce_feature_input(self, payload):
+        fields = deepcopy(self.fields)
+        for input_key, payload_key in self.fields.items():
+            fields[input_key] = payload.get(payload_key, [])
+        return CountryFeatureInput(
+            feature=self.feature_name,
+            **fields,
+        )
+
+
+class DateFeatureInputProducer(Producer):
+    def produce_feature_input(self, payload):
+        fields = deepcopy(self.fields)
+        for input_key, payload_key in self.fields.items():
+            fields[input_key] = payload.get(payload_key, [])
+        return DateFeatureInput(
+            feature=self.feature_name,
+            alerted_party_type=DateFeatureInput.EntityType.INDIVIDUAL,
+            mode=DateFeatureInput.SeverityMode.NORMAL,
+            **fields,
+        )
+
+
+class DocumentFeatureInputProducer(Producer):
+    def produce_feature_input(self, payload):
+        fields = deepcopy(self.fields)
+        for input_key, payload_key in self.fields.items():
+            fields[input_key] = payload.get(payload_key, [])
+        return DocumentFeatureInput(
+            feature=self.feature_name,
+            **fields,
+        )
+
+
+class HistoricalDecisionsFeatureInputProducer(Producer):
+    def produce_feature_input(self, payload):
+        fields = deepcopy(self.fields)
+        for input_key, payload_key in self.fields.items():
+            fields[input_key] = payload.get(payload_key, [])
+        alerted_party = AlertedParty(id=str(fields["alerted_party"]))
+        disc = Discriminator(value=str(fields["discriminator"]))
+
+        return HistoricalDecisionsFeatureInput(
+            feature=self.feature_name,
+            model_key=ModelKey(alerted_party=alerted_party),
+            discriminator=disc,
+        )
+
+
+class LocationFeatureInputProducer(Producer):
+    def produce_feature_input(self, payload):
+        fields = deepcopy(self.fields)
+        for input_key, payload_key in self.fields.items():
+            fields[input_key] = payload.get(payload_key, [])
+        fields["alerted_party_location"] = " ".join(fields["alerted_party_location"])
+        fields["watchlist_location"] = " ".join(fields["watchlist_location"])
+        return LocationFeatureInput(
+            feature=self.feature_name,
+            **fields,
+        )
+
+
+class EmployerNameFeatureInputProducer(Producer):
+    def produce_feature_input(self, payload):
+        fields = deepcopy(self.fields)
+        for input_key, payload_key in self.fields.items():
+            fields[input_key] = payload.get(payload_key, [])
+
+        return NameFeatureInput(
+            feature=self.feature_name,
+            alerted_party_type=NameFeatureInput.EntityType.ENTITY_TYPE_UNSPECIFIED,
+            alerted_party_names=[
+                AlertedPartyName(name=str(i)) for i in fields["alerted_party_names"]
+            ],
+            watchlist_names=[
+                WatchlistName(name=str(i), type=WatchlistName.NameType.REGULAR)
+                for i in fields["watchlist_names"]
+            ],
+        )
+
+
+class NameFeatureInputProducer(Producer):
+    def produce_feature_input(self, payload):
+        fields = deepcopy(self.fields)
+        for input_key, payload_key in self.fields.items():
+            fields[input_key] = payload.get(payload_key, [])
+
+        return NameFeatureInput(
+            feature=self.feature_name,
+            alerted_party_type=NameFeatureInput.EntityType.ENTITY_TYPE_UNSPECIFIED,
+            alerted_party_names=[
+                AlertedPartyName(name=str(i)) for i in fields["alerted_party_names"]
+            ],
+            watchlist_names=[
+                WatchlistName(name=str(i), type=WatchlistName.NameType.REGULAR)
+                for i in fields["watchlist_names"]
+            ],
+        )
+
+
+class NationalityFeatureInputProducer(Producer):
+    def produce_feature_input(self, payload):
+        fields = deepcopy(self.fields)
+        for input_key, payload_key in self.fields.items():
+            fields[input_key] = payload.get(payload_key, [])
+        return LocationFeatureInput(
+            feature=self.feature_name,
+            **fields,
+        )
+
+
+class GeoResidencyAgentFeatureInputProducer(Producer):
+    def produce_feature_input(self, payload):
+        ap_parties = payload.get("ap_all_residencies_aggregated", [""])
+        wl_parties = payload.get("wl_all_residencies_aggregated", [""])
+        if not ap_parties:
+            ap_parties = [""]
+        if not wl_parties:
+            wl_parties = [""]
+        combinations = list(itertools.product(ap_parties, wl_parties))
+        return [
+            LocationFeatureInput(
+                feature=self.feature_name, alerted_party_location=ap, watchlist_location=wl
+            )
+            for ap, wl in combinations
+        ]
+
+
+# class NationalityAgentFeatureInputProducer(Producer):
+#     feature_name = "features/geoNationality"
+#
+#     def produce_feature_input(self, payload):
+#         ap_parties = payload.get("ap_all_nationalities_aggregated", [])
+#         wl_parties = payload.get("wl_all_nationalities_aggregated", [])
+#         combinations = list(itertools.product(ap_parties, wl_parties))
+#
+#         return [
+#             LocationFeatureInput(
+#                 feature=self.feature_name, alerted_party_location=ap, watchlist_location=wl
+#             )
+#             for ap, wl in combinations
+#         ]
+#
+
+
+# class EmployerNameAgentFeatureInputProducer(Producer):
+#     feature_name = "features/employer_name"
+#
+#     def produce_feature_input(self, payload):
+#         ap_parties = payload.get("ap_all_employer_aggregated", [])
+#         wl_parties = payload.get("wl_all_employer_aggregated", [])
+#         combinations = list(itertools.product(ap_parties, wl_parties))
+#
+#         return [
+#             LocationFeatureInput(
+#                 feature=self.feature_name, alerted_party_location=ap, watchlist_location=wl
+#             )
+#             for ap, wl in combinations
+#         ]
+#
+
+
+# The following entries have been generated automatically by proto_extractor.py
+
+
+class AllowListFeatureInputProducer(Producer):
+    feature_name = "features/allowlist"
+
+    def produce_feature_input(self, payload):
+        return AllowListFeatureInput(
+            feature=self.feature_name,
+            characteristics_values=[],
+            allow_list_name=[],
+        )
+
+
+class BankIdentificationCodesFeatureInputProducer(Producer):
+    feature_name = "features/bankidentificationcodes"
+
+    def produce_feature_input(self, payload):
+        return BankIdentificationCodesFeatureInput(
+            feature=self.feature_name,
+            alerted_party_matching_field=payload.get("ap_all_matching_field_aggregated", ""),
+            watchlist_matching_text=payload.get("wl_all_matching_text_aggregated", ""),
+            watchlist_type=payload.get("wl_all_type_aggregated", ""),
+            watchlist_search_codes=[
+                element for element in payload.get("wl_all_search_codes_aggregated", [])
+            ],
+            watchlist_bic_codes=[
+                element for element in payload.get("wl_all_bic_codes_aggregated", [])
+            ],
+        )
+
+
+class EventFeatureInputProducer(Producer):
+    feature_name = "features/event"
+
+    def produce_feature_input(self, payload):
+        return EventFeatureInput(
+            feature=self.feature_name,
+            alerted_party_dates=[
+                element for element in payload.get("ap_all_dates_aggregated", [])
+            ],
+            watchlist_events=[element for element in payload.get("wl_all_events_aggregated", [])],
+        )
+
+
+class FreeTextFeatureInputProducer(Producer):
+    feature_name = "features/freetext"
+
+    def produce_feature_input(self, payload):
+        return FreeTextFeatureInput(
+            feature=self.feature_name,
+            matched_name="",
+            matched_name_synonym="",
+            matched_type="",
+            matching_texts=[],
+            freetext="",
+        )
+
+
+class GenderFeatureInputProducer(Producer):
+    feature_name = "features/gender"
+
+    def produce_feature_input(self, payload):
+        return GenderFeatureInput(
+            feature=self.feature_name,
+            alerted_party_genders=[
+                element for element in payload.get("ap_all_genders_aggregated", [])
+            ],
+            watchlist_genders=[
+                element for element in payload.get("wl_all_genders_aggregated", [])
+            ],
+        )
+
+
+# class LocationFeatureInputProducer(Producer):
+#     feature_name = "features/location"
+#
+#     def produce_feature_input(self, payload):
+#         return LocationFeatureInput(
+#             feature=self.feature_name,
+#             alerted_party_location=payload.get("ap_all_location_aggregated", ""),
+#             watchlist_location=payload.get("wl_all_location_aggregated", ""),
+#         )
+
+#
+# class NameFeatureInputProducer(Producer):
+#     feature_name = "features/name"
+#
+#     def produce_feature_input(self, payload):
+#         return NameFeatureInput(
+#             feature=self.feature_name,
+#             alerted_party_type=NameFeatureInput.EntityType.ENTITY_TYPE_UNSPECIFIED,
+#             matching_texts=[],
+#         )
+
+
+class NationalIdFeatureInputProducer(Producer):
+    feature_name = "features/nationalid"
+
+    def produce_feature_input(self, payload):
+        return NationalIdFeatureInput(
+            feature=self.feature_name,
+            alerted_party_document_numbers=[
+                element for element in payload.get("ap_all_document_numbers_aggregated", [])
+            ],
+            watchlist_document_numbers=[
+                element for element in payload.get("wl_all_document_numbers_aggregated", [])
+            ],
+            alerted_party_countries=[
+                element for element in payload.get("ap_all_countries_aggregated", [])
+            ],
+            watchlist_countries=[
+                element for element in payload.get("wl_all_countries_aggregated", [])
+            ],
+        )
+
+
+class TransactionFeatureInputProducer(Producer):
+    feature_name = "features/transaction"
+
+    def produce_feature_input(self, payload):
+        return TransactionFeatureInput(
+            feature=self.feature_name,
+            transaction_messages=[],
+            watchlist_type=TransactionFeatureInput.WatchlistType.WATCHLIST_TYPE_UNSPECIFIED,
+            matching_texts=[],
+        )
+
+
+class CategoryProducer(Producer):
+    def produce_feature_input(self, payload, match_payload, alert, match_name):
+        fields = deepcopy(self.fields)
+        type = payload.get(fields["type"], "")
+        return CategoryValue(single_value=type, alert=alert, match=match_name)

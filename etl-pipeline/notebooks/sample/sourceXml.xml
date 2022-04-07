@@ -93,6 +93,13 @@
                         <sdToken>denim</sdToken>
                         <matchScore>0.123</matchScore>
                     </stopDescriptorDetail>
+                     <stopDescriptorDetail>
+                        <inputToken>john doe</inputToken>
+                        <inputSynonym>null</inputSynonym>
+                        <sdToken>denim</sdToken>
+                        <matchScore>0.123</matchScore>
+                    </stopDescriptorDetail>
+                    john doe,hense,doee -> ["john doe", "hense", "doee"]
                 </stopDescriptor>
             </stopDescriptors>
             <firstMatchedDate>01/05/10</firstMatchedDate>

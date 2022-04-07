@@ -29,10 +29,13 @@ class WatchlistExtractor:
             elif k.upper() == "D":
                 dmy[0] = v
             elif k == "S8_extracted_value" or k == "dob":
-                if " TO " in v.upper():
-                    date_range.extend(sorted(re.findall(r"\d\d\d\d", v), key=lambda x: int(x)))
-                else:
-                    result.append(v)
+                if isinstance(v, str):
+                    if " TO " in v.upper():
+                        date_range.extend(sorted(re.findall(r"\d\d\d\d", v), key=lambda x: int(x)))
+                    else:
+                        result.append(v)
+                if isinstance(v, dict):
+                    result.extend(self.parse_dob_dict(v))
             else:
                 result.append(v)
         return result, date_range, dmy
@@ -172,8 +175,9 @@ class WatchlistExtractor:
     def extract_wl_matched_tokens(self, payload):
         input_tokens = []
         for descriptor in payload.get("stopDescriptors", {}):
-            details = descriptor.get("stopDescriptorDetail", {})
-            input_tokens.append(details.get("inputToken", ""))
+            details = descriptor.get("stopDescriptorDetails", [])
+            for detail in details:
+                input_tokens.append(detail.get("inputToken", ""))
         return {cn.WL_MATCHED_TOKENS: json.dumps(input_tokens)}
 
     def extract_country(self, match):
