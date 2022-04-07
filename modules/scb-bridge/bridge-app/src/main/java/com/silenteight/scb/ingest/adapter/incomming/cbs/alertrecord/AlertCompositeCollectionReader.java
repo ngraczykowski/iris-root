@@ -29,7 +29,8 @@ class AlertCompositeCollectionReader {
   private final boolean processOnlyUnsolved;
   private final CbsOracleMetrics cbsOracleMetrics;
 
-  AlertCompositeCollection read(List<AlertId> alertIds, ScbAlertIdContext context) {
+  AlertCompositeCollection read(
+      List<AlertId> alertIds, String internalBatchId, ScbAlertIdContext context) {
     var alertCollection = getAlertCollection(alertIds, context);
     var options = getMappingOptions(context);
     var invalidAlerts = new ArrayList<>(alertCollection.getInvalidAlerts());
@@ -37,7 +38,7 @@ class AlertCompositeCollectionReader {
     var alerts = alertCollection.getAlerts()
         .stream()
         .map(alertRecordComposite -> tryToParseAlerts(
-            alertRecordComposite, invalidAlerts, context, options))
+            alertRecordComposite, invalidAlerts, internalBatchId, context, options))
         .filter(Optional::isPresent)
         .map(Optional::get)
         .toList();
@@ -48,12 +49,13 @@ class AlertCompositeCollectionReader {
   private Optional<ValidAlertComposite> tryToParseAlerts(
       AlertRecordComposite readAlert,
       List<InvalidAlert> invalidAlerts,
+      String internalBatchId,
       ScbAlertIdContext context,
       Option... options) {
     var alertId = readAlert.getAlertId();
 
     try {
-      var alerts = alertMapper.fromAlertRecordComposite(readAlert, options);
+      var alerts = alertMapper.fromAlertRecordComposite(readAlert, internalBatchId, options);
       return of(new ValidAlertComposite(alertId, alerts, context));
     } catch (Exception ex) {
       log.error("Error when parsing an alert: systemId={}", alertId.getSystemId(), ex);
@@ -74,7 +76,7 @@ class AlertCompositeCollectionReader {
     var result =
         timer.record(() -> databaseAlertRecordCompositeReader.read(context, alertIds));
     log.info("AlertRecordCompositeCollection has been read from sourceView: {}, "
-        + "cbsHitDetailsView: {}, alerts: {} executed in: {}", context.getSourceView(),
+            + "cbsHitDetailsView: {}, alerts: {} executed in: {}", context.getSourceView(),
         context.getHitDetailsView(), alertIds.size(), stopWatch);
     return result;
   }

@@ -21,7 +21,8 @@ class AlertProcessorSpec extends Specification {
 
   def 'should process alerts'() {
     given:
-    BatchReadEvent batchReadEvent = new BatchReadEvent(InternalBatchIdGenerator.generate())
+    def internalBatchId = InternalBatchIdGenerator.generate()
+    BatchReadEvent batchReadEvent = new BatchReadEvent(internalBatchId)
 
     when:
     underTest.subscribe(batchReadEvent)
@@ -29,9 +30,9 @@ class AlertProcessorSpec extends Specification {
     then:
     1 * alertInFlightService.getAlertsFromBatch(batchReadEvent.internalBatchId()) >>
         fixtures.chunkOfAlertIds
-    1 * alertCompositeCollectionReader.read([fixtures.alertId1], fixtures.alertIdContext1) >>
+    1 * alertCompositeCollectionReader.read([fixtures.alertId1], internalBatchId, fixtures.alertIdContext1) >>
         fixtures.alertCompositeCollection
-    1 * alertCompositeCollectionReader.read([fixtures.alertId2], fixtures.alertIdContext2) >>
+    1 * alertCompositeCollectionReader.read([fixtures.alertId2], internalBatchId, fixtures.alertIdContext2) >>
         fixtures.alertCompositeCollection
     1 * alertHandler
         .handleAlerts(batchReadEvent.internalBatchId(), fixtures.alertCompositeCollections)

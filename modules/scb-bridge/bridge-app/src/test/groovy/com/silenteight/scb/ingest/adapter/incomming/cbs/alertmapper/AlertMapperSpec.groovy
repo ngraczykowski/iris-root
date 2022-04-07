@@ -11,6 +11,7 @@ import com.silenteight.scb.ingest.adapter.incomming.common.hitdetails.model.Susp
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert
 import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision
 import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match
+import com.silenteight.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator
 
 import spock.lang.Specification
 
@@ -27,6 +28,7 @@ class AlertMapperSpec extends Specification {
 
   def 'should map alert level alert record composite into single alert'() {
     given:
+    def internalBatchId = InternalBatchIdGenerator.generate()
     def composite = AlertRecordComposite.builder()
         .alert(alertRecord)
         .cbsHitDetails(cbsHitDetails)
@@ -34,7 +36,8 @@ class AlertMapperSpec extends Specification {
         .build()
 
     when:
-    def result = objectUnderTest.fromAlertRecordComposite(composite, alertLevelOptions)
+    def result = objectUnderTest
+        .fromAlertRecordComposite(composite, internalBatchId, alertLevelOptions)
 
     then:
     1 * dateConverter.convert(alertRecord.filteredString) >> empty()
@@ -46,6 +49,7 @@ class AlertMapperSpec extends Specification {
 
   def 'should map watchlist level alert record composite into alerts'() {
     given:
+    def internalBatchId = InternalBatchIdGenerator.generate()
     def composite = AlertRecordComposite.builder()
         .alert(alertRecord)
         .cbsHitDetails(cbsHitDetails)
@@ -53,7 +57,8 @@ class AlertMapperSpec extends Specification {
         .build()
 
     when:
-    def result = objectUnderTest.fromAlertRecordComposite(composite, watchlistLevelOptions)
+    def result = objectUnderTest
+        .fromAlertRecordComposite(composite, internalBatchId, watchlistLevelOptions)
 
     then:
     2 * dateConverter.convert(alertRecord.filteredString) >> empty()
@@ -67,6 +72,7 @@ class AlertMapperSpec extends Specification {
 
   def 'should map watchlist level alert record composite into alerts and ignore solved hits'() {
     given:
+    def internalBatchId = InternalBatchIdGenerator.generate()
     def suspectWithNeoFlag1 = new Suspect(neoFlag: NeoFlag.NEW, ofacId: '1')
     def suspectWithNeoFlag2 = new Suspect(neoFlag: NeoFlag.NEW, ofacId: '2')
     def suspectWithoutNeoFlag = new Suspect(ofacId: '3')
@@ -78,7 +84,8 @@ class AlertMapperSpec extends Specification {
         .build()
 
     when:
-    def result = objectUnderTest.fromAlertRecordComposite(composite, watchlistLevelOptions)
+    def result = objectUnderTest
+        .fromAlertRecordComposite(composite, internalBatchId, watchlistLevelOptions)
 
     then:
     2 * dateConverter.convert(alertRecord.filteredString) >> empty()
@@ -92,6 +99,7 @@ class AlertMapperSpec extends Specification {
 
   def 'should map to damaged alert and do not request for recommendation'() {
     given:
+    def internalBatchId = InternalBatchIdGenerator.generate()
     def options = [Option.FOR_RECOMMENDATION, Option.ATTACH_ALERT] as Option[]
     def composite = AlertRecordComposite.builder()
         .alert(alertRecord)
@@ -100,7 +108,7 @@ class AlertMapperSpec extends Specification {
         .build()
 
     when:
-    def result = objectUnderTest.fromAlertRecordComposite(composite, options)
+    def result = objectUnderTest.fromAlertRecordComposite(composite, internalBatchId, options)
 
     then:
     1 * dateConverter.convert(alertRecord.filteredString) >> empty()
@@ -115,6 +123,7 @@ class AlertMapperSpec extends Specification {
 
   def 'should do not allow to map solved alert when ONLY_UNSOLVED was passed'() {
     given:
+    def internalBatchId = InternalBatchIdGenerator.generate()
     def onlyUnsolvedOptions = (defaultOptions + [Option.ONLY_UNSOLVED]) as Option[]
     def composite = AlertRecordComposite.builder()
         .alert(alertRecord)
@@ -123,7 +132,8 @@ class AlertMapperSpec extends Specification {
         .build()
 
     when:
-    def result = objectUnderTest.fromAlertRecordComposite(composite, onlyUnsolvedOptions)
+    def result = objectUnderTest
+        .fromAlertRecordComposite(composite, internalBatchId, onlyUnsolvedOptions)
 
     then:
     1 * dateConverter.convert(alertRecord.filteredString) >> empty()

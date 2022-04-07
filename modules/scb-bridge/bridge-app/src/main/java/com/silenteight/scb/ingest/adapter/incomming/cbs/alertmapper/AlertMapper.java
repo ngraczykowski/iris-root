@@ -108,10 +108,12 @@ public class AlertMapper {
     return composite.getLastResetDecisionDate().orElse(filtered);
   }
 
-  private static AlertDetails createDetails(AlertRecord alertRecord, String watchlistId) {
+  private static AlertDetails createDetails(
+      AlertRecord alertRecord, String watchlistId, String internalBatchId) {
     return AlertDetails
         .builder()
         .batchId(nullToEmpty(alertRecord.getBatchId()))
+        .internalBatchId(internalBatchId)
         .unit(nullToEmpty(alertRecord.getUnit()))
         .account(nullToEmpty(alertRecord.getDbAccount()))
         .systemId(alertRecord.getSystemId())
@@ -169,21 +171,22 @@ public class AlertMapper {
   }
 
   public List<Alert> fromAlertRecordComposite(
-      @NonNull AlertRecordComposite alertRecordComposite, Option... options) {
+      @NonNull AlertRecordComposite alertRecordComposite, String internalBatchId,
+      Option... options) {
     return ArrayUtils.contains(options, WATCHLIST_LEVEL) ?
-           mapAsWatchlistLevel(alertRecordComposite, options) :
-           mapAsAlertLevel(alertRecordComposite, options);
+           mapAsWatchlistLevel(alertRecordComposite, internalBatchId, options) :
+           mapAsAlertLevel(alertRecordComposite, internalBatchId, options);
   }
 
   private List<Alert> mapAsWatchlistLevel(
-      AlertRecordComposite alertRecordComposite, Option[] options) {
+      AlertRecordComposite alertRecordComposite, String internalBatchId, Option[] options) {
     var suspects = getSuspects(alertRecordComposite);
 
     if (ArrayUtils.contains(options, ONLY_UNSOLVED) && atLeastOneSuspectHasNeoFlag(suspects))
       suspects.removeIf(not(Suspect::hasNeoFlag));
 
     var alerts = suspects.stream()
-        .map(s -> doMap(singletonList(s), alertRecordComposite, options))
+        .map(s -> doMap(singletonList(s), alertRecordComposite, internalBatchId, options))
         .filter(shouldAlertBeProcessed(options))
         .toList();
 
@@ -193,9 +196,10 @@ public class AlertMapper {
     return alerts;
   }
 
-  private List<Alert> mapAsAlertLevel(AlertRecordComposite alertRecordComposite, Option[] options) {
+  private List<Alert> mapAsAlertLevel(
+      AlertRecordComposite alertRecordComposite, String internalBatchId, Option[] options) {
     var suspects = getSuspects(alertRecordComposite);
-    var alert = doMap(suspects, alertRecordComposite, options);
+    var alert = doMap(suspects, alertRecordComposite, internalBatchId, options);
 
     if (ArrayUtils.contains(options, ONLY_UNSOLVED) && hasOnlySolvedMatches(alert.matches())) {
       log.warn(NO_NEW_MATCHES_WARNING, alert.id().sourceId());
@@ -207,6 +211,7 @@ public class AlertMapper {
   private Alert doMap(
       Collection<Suspect> suspects,
       AlertRecordComposite alertRecordComposite,
+      String internalBatchId,
       Option... options) {
     AlertRecord alertRecord = alertRecordComposite.getAlert();
     Optional<Decision> lastDecision = alertRecordComposite.getLastDecision();
@@ -223,7 +228,7 @@ public class AlertMapper {
         .matches(matches)
         .alertedParty(makeAlertedParty(alertRecord, gnsParty))
         .decisionGroup(nullToEmpty(alertRecord.getUnit()))
-        .details(createDetails(alertRecord, watchlistId))
+        .details(createDetails(alertRecord, watchlistId, internalBatchId))
         .flags(getFlags(options))
         .generatedAt(filtered)
         .id(makeId(alertRecord.getSystemId(), watchlistId, discriminator))

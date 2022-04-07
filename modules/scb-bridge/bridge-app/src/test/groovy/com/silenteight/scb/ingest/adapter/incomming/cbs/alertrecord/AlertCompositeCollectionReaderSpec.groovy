@@ -6,6 +6,7 @@ import com.silenteight.scb.ingest.adapter.incomming.cbs.alertmapper.AlertMapper
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord.InvalidAlert.Reason
 import com.silenteight.scb.ingest.adapter.incomming.cbs.metrics.CbsOracleMetrics
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertRecord
+import com.silenteight.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator
 
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import spock.lang.Specification
@@ -21,13 +22,14 @@ class AlertCompositeCollectionReaderSpec extends Specification {
 
   def 'should read alert composites'() {
     given:
+    def internalBatchId = InternalBatchIdGenerator.generate()
     def alertIds = [fixtures.alertId1, fixtures.alertId2, fixtures.alertId3]
     def alertRecords = Mock(AlertRecordCompositeCollection)
     alertRecords.getAlerts() >> [fixtures.alertRecordComposite1, fixtures.alertRecordComposite2]
     alertRecords.getInvalidAlerts() >> [fixtures.invalidAlert]
 
     when:
-    def result = underTest.read(alertIds, fixtures.alertIdContext)
+    def result = underTest.read(alertIds, internalBatchId, fixtures.alertIdContext)
 
     then:
     result.invalidAlerts.size() == 2
@@ -35,10 +37,12 @@ class AlertCompositeCollectionReaderSpec extends Specification {
 
     1 * databaseAlertRecordCompositeReader.read(fixtures.alertIdContext, alertIds) >>
         alertRecords
-    1 * alertMapper.fromAlertRecordComposite(fixtures.alertRecordComposite1, _) >> []
-    1 * alertMapper.fromAlertRecordComposite(fixtures.alertRecordComposite2, _) >> {
-      throw new RuntimeException()
-    }
+    1 * alertMapper.fromAlertRecordComposite(fixtures.alertRecordComposite1, internalBatchId, _) >>
+        []
+    1 * alertMapper.fromAlertRecordComposite(fixtures.alertRecordComposite2, internalBatchId, _) >>
+        {
+          throw new RuntimeException()
+        }
   }
 
   class Fixtures {

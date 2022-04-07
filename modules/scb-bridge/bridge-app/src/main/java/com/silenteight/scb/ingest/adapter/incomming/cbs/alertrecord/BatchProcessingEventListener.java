@@ -43,7 +43,7 @@ class BatchProcessingEventListener {
     var alertCompositeCollections =
         groupAlertIdsByContext(alertIds).entrySet()
             .parallelStream()
-            .map(entry -> readAlertComposites(entry.getValue(), entry.getKey()))
+            .map(entry -> readAlertComposites(entry.getValue(), internalBatchId, entry.getKey()))
             .toList();
     alertHandler.handleAlerts(internalBatchId, alertCompositeCollections);
   }
@@ -57,7 +57,7 @@ class BatchProcessingEventListener {
   }
 
   private AlertCompositeCollection readAlertComposites(
-      List<AlertId> alertIds, ScbAlertIdContext context) {
-    return alertCompositeCollectionReader.read(alertIds, context);
+      List<AlertId> alertIds, String internalBatchId, ScbAlertIdContext context) {
+    return alertCompositeCollectionReader.read(alertIds, internalBatchId, context);
   }
 }
