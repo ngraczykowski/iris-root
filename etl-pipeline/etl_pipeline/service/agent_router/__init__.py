@@ -35,7 +35,6 @@ from etl_pipeline.service.agent_router.producers import (  # noqa F401;
     HistoricalDecisionsFeatureInputProducer,
     LocationFeatureInputProducer,
     NameFeatureInputProducer,
-    NationalityFeatureInputProducer,
 )
 
 logger = logging.getLogger("main").getChild("agent_input_creator")
@@ -68,7 +67,7 @@ class AgentInputCreator:
         self.ssl = ssl
         self.producers = []
         date_input_config = OmegaConf.load(
-            os.path.join("config", "agents/features_and_categories.yaml")
+            os.path.join(os.environ["CONFIG_APP_DIR"], "agents/features_and_categories.yaml")
         )
         self.category_producers = []
         for feature, params in date_input_config.items():
@@ -116,6 +115,7 @@ class AgentInputCreator:
                 )
                 break
             except grpc._channel._InactiveRpcError:
+
                 logger.error("No UDS response. Waiting 10s and try again")
                 time.sleep(10)
                 channel = self.initiate_channel(

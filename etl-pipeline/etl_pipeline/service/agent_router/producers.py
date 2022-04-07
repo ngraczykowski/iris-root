@@ -80,7 +80,7 @@ class HistoricalDecisionsFeatureInputProducer(Producer):
         for input_key, payload_key in self.fields.items():
             fields[input_key] = payload.get(payload_key, [])
         alerted_party = AlertedParty(id=str(fields["alerted_party"]))
-        disc = Discriminator(value=str(fields["discriminator"]))
+        disc = Discriminator(value=str(self.fields["discriminator"]))
 
         return HistoricalDecisionsFeatureInput(
             feature=self.feature_name,
@@ -93,9 +93,10 @@ class LocationFeatureInputProducer(Producer):
     def produce_feature_input(self, payload):
         fields = deepcopy(self.fields)
         for input_key, payload_key in self.fields.items():
-            fields[input_key] = payload.get(payload_key, [])
-        fields["alerted_party_location"] = " ".join(fields["alerted_party_location"])
-        fields["watchlist_location"] = " ".join(fields["watchlist_location"])
+            fields[input_key] = " ".join(
+                [i for i in payload.get(payload_key, []) if i and i != "None"]
+            )
+
         return LocationFeatureInput(
             feature=self.feature_name,
             **fields,
@@ -140,15 +141,15 @@ class NameFeatureInputProducer(Producer):
         )
 
 
-class NationalityFeatureInputProducer(Producer):
-    def produce_feature_input(self, payload):
-        fields = deepcopy(self.fields)
-        for input_key, payload_key in self.fields.items():
-            fields[input_key] = payload.get(payload_key, [])
-        return LocationFeatureInput(
-            feature=self.feature_name,
-            **fields,
-        )
+# class NationalityFeatureInputProducer(Producer):
+#     def produce_feature_input(self, payload):
+#         fields = dict(deepcopy(self.fields))
+#         for input_key, payload_key in self.fields.items():
+#             fields[input_key] = [i for i in payload.get(payload_key, [] if i])
+#         return LocationFeatureInput(
+#             feature=self.feature_name,
+#             **fields,
+#         )
 
 
 class GeoResidencyAgentFeatureInputProducer(Producer):
@@ -334,5 +335,5 @@ class TransactionFeatureInputProducer(Producer):
 class CategoryProducer(Producer):
     def produce_feature_input(self, payload, match_payload, alert, match_name):
         fields = deepcopy(self.fields)
-        type = payload.get(fields["type"], "")
+        type = match_payload.get(fields["type"], "")
         return CategoryValue(single_value=type, alert=alert, match=match_name)
