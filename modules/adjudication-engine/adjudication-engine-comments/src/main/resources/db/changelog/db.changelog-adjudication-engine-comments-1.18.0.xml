@@ -23,13 +23,6 @@
   </changeSet>
 
   <changeSet id="adjudication-engine-comments-1.18.0_3" author="jgajewski">
-    <sqlFile path="db/changelog/sql/update_template_contextual_agent_fp_v3.sql"/>
-    <sqlFile path="db/changelog/sql/update_template_contextual_agent_tp_v3.sql"/>
-    <sqlFile path="db/changelog/sql/update_template_historical_agent_fp_v3.sql"/>
-    <sqlFile path="db/changelog/sql/update_template_historical_agent_tp_v3.sql"/>
-  </changeSet>
-
-  <changeSet id="adjudication-engine-comments-1.18.0_4" author="jgajewski">
     <sqlFile path="db/changelog/sql/create_template_name_agent_v2.sql"/>
   </changeSet>
 
