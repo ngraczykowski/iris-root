@@ -5,6 +5,7 @@ import lombok.NonNull;
 import lombok.Value;
 
 import java.util.Date;
+import java.util.Map;
 
 @Value
 @Builder
@@ -27,5 +28,5 @@ public class AlertDto {
 
   // This is a json consider other type to store it in better way
   @NonNull
-  String payload;
+  Map<String, String> payload;
 }
