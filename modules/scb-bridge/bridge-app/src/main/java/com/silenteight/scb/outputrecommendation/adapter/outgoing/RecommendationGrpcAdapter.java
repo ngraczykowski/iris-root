@@ -24,6 +24,7 @@ class RecommendationGrpcAdapter implements RecommendationApiClient {
     return Try
         .of(() -> recommendationServiceClient.getRecommendations(
             RecommendationGrpcMapper.toRequest(analysisName, alertNames)))
+        .peek(response -> log.info("Received recommendation {}", response))
         .map(RecommendationGrpcMapper::toResponse)
         .onSuccess(recommendations -> log.info("Received {} recommendations for analysis {}.",
             recommendations.recommendations().size(), analysisName))
