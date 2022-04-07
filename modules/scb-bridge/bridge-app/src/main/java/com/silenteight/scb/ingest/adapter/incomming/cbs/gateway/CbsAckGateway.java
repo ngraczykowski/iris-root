@@ -12,8 +12,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLTransientException;
-import java.util.List;
-import java.util.Set;
 import javax.annotation.Nonnull;
 
 import static com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsOutput.State.TEMPORARY_FAILURE;
@@ -45,15 +43,9 @@ public class CbsAckGateway extends CbsEventPublisher {
   }
 
   @Timed(
-      value = "serp.scb.bridge.oracle.procedure.ack-read-alerts.time",
-      description = "Time taken to ack read alerts")
+      value = "serp.scb.bridge.oracle.procedure.ack-read-alert.time",
+      description = "Time taken to ack read alert")
   @Transactional(value = "externalTransactionManager", readOnly = true)
-  public List<CbsOutput> ackReadAlerts(@NonNull Set<CbsAckAlert> alerts) {
-    return alerts.stream()
-        .map(this::ackReadAlert)
-        .toList();
-  }
-
   public CbsOutput ackReadAlert(@NonNull CbsAckAlert alert) {
     CbsOutput cbsOutput = new CbsOutput();
 

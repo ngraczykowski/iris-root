@@ -28,16 +28,15 @@ class CbsAckGatewaySpec extends Specification {
   }
 
   @Unroll
-  def "should ackRecords and return OK if no error, watchlistLevel: #watchlistLevel"() {
+  def "should ackRecord and return OK if no error, watchlistLevel: #watchlistLevel"() {
     given:
     def someAlert = createAlert(watchlistLevel)
 
     when:
-    def result = objectUnderTest.ackReadAlerts([someAlert] as Set)
+    def result = objectUnderTest.ackReadAlert(someAlert)
 
     then:
-    result.size() == 1
-    result.first().state == State.OK
+    result.state == State.OK
     1 * jdbcTemplate.queryForObject(
         expectedQuery(),
         {Object[] p -> p.length == 3 &&
@@ -55,14 +54,13 @@ class CbsAckGatewaySpec extends Specification {
 
   def "should ackAlerts and return fatal exception"() {
     given:
-    def someAlerts = [someAckAlert] as Set
+    def someAlert = createAlert(false)
 
     when:
-    def result = objectUnderTest.ackReadAlerts(someAlerts)
+    def result = objectUnderTest.ackReadAlert(someAlert)
 
     then:
-    result.size() == 1
-    result.first().state == State.ERROR
+    result.state == State.ERROR
     1 * jdbcTemplate.queryForObject(expectedQuery(), _ as Object[], String.class) >>
         {throw Mock(NonTransientDataAccessException)}
     1 * eventPublisher.publishEvent({CbsCallFailedEvent ev -> ev.functionType == 'ACK'})
@@ -70,14 +68,13 @@ class CbsAckGatewaySpec extends Specification {
 
   def "should ackAlerts and return non-fatal exception when TransientDataAccessException"() {
     given:
-    def someAlerts = [someAckAlert] as Set
+    def someAlert = createAlert(false)
 
     when:
-    def result = objectUnderTest.ackReadAlerts(someAlerts)
+    def result = objectUnderTest.ackReadAlert(someAlert)
 
     then:
-    result.size() == 1
-    result.first().state == State.TEMPORARY_FAILURE
+    result.state == State.TEMPORARY_FAILURE
     1 * jdbcTemplate.queryForObject(expectedQuery(), _ as Object[], String.class) >>
         {throw Mock(TransientDataAccessException)}
     1 * eventPublisher.publishEvent({CbsCallFailedEvent ev -> ev.functionType == 'ACK'})
@@ -85,14 +82,13 @@ class CbsAckGatewaySpec extends Specification {
 
   def "should ackAlerts and return non-fatal exception when caused by SQLTransientException"() {
     given:
-    def someAlerts = [someAckAlert] as Set
+    def someAlert = createAlert(false)
 
     when:
-    def result = objectUnderTest.ackReadAlerts(someAlerts)
+    def result = objectUnderTest.ackReadAlert(someAlert)
 
     then:
-    result.size() == 1
-    result.first().state == State.TEMPORARY_FAILURE
+    result.state == State.TEMPORARY_FAILURE
     1 * jdbcTemplate.queryForObject(expectedQuery(), _ as Object[], String.class) >>
         {throw new CannotGetJdbcConnectionException("Mock", Mock(SQLTransientException))}
     1 * eventPublisher.publishEvent({CbsCallFailedEvent ev -> ev.functionType == 'ACK'})
@@ -105,6 +101,4 @@ class CbsAckGatewaySpec extends Specification {
   def createAlert(watchlistLevel) {
     new CbsAckAlert('alertExternalId', 'batchId', watchlistLevel)
   }
-
-  def someAckAlert = createAlert(false)
 }
