@@ -1,6 +1,6 @@
 package com.silenteight.scb.feeding.infrastructure;
 
-import com.silenteight.scb.feeding.domain.agentinput.*;
+import com.silenteight.scb.feeding.domain.featureinput.*;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,48 +9,48 @@ import org.springframework.context.annotation.Configuration;
 public class AgentInputConfiguration {
 
   @Bean
-  NameAgentInputCreator nameAgentInputCreator() {
-    return new NameAgentInputCreator();
+  NameFeatureInputFactory nameFeatureInputFactory() {
+    return new NameFeatureInputFactory();
   }
 
   @Bean
-  DateAgentInputCreator dateAgentInputCreator() {
-    return new DateAgentInputCreator();
+  DateFeatureInputFactory dateFeatureInputFactory() {
+    return new DateFeatureInputFactory();
   }
 
   @Bean
-  GenderAgentInputCreator genderAgentInputCreator() {
-    return new GenderAgentInputCreator();
+  GenderFeatureInputFactory genderFeatureInputFactory() {
+    return new GenderFeatureInputFactory();
   }
 
   @Bean
-  NationalIdAgentInputCreator nationalIdDocumentAgentInputCreator() {
-    return new NationalIdAgentInputCreator();
+  NationalIdFeatureInputFactory nationalIdFeatureInputFactory() {
+    return new NationalIdFeatureInputFactory();
   }
 
   @Bean
-  DocumentNumberAgentInputCreator otherDocumentAgentInputCreator() {
-    return new DocumentNumberAgentInputCreator();
+  DocumentNumberFeatureInputFactory otherDocumentFeatureInputFactory() {
+    return new DocumentNumberFeatureInputFactory();
   }
 
   @Bean
-  PassportNumberDocumentAgentInputCreator passportNumberDocumentAgentInputCreator() {
-    return new PassportNumberDocumentAgentInputCreator();
+  PassportNumberDocumentFeatureInputFactory passportNumberDocumentFeatureInputFactory() {
+    return new PassportNumberDocumentFeatureInputFactory();
   }
 
   @Bean
-  NationalityAgentInputCreator nationalityAgentInputCreator() {
-    return new NationalityAgentInputCreator();
+  NationalityFeatureInputFactory nationalityFeatureInputFactory() {
+    return new NationalityFeatureInputFactory();
   }
 
   @Bean
-  CountryAgentInputCreator countryAgentInputCreator() {
-    return new CountryAgentInputCreator();
+  CountryFeatureInputFactory countryAgentInputCreator() {
+    return new CountryFeatureInputFactory();
   }
 
   // TODO: uncomment once uds-lib will provide api for registering companyName feature inputs
   //  @Bean
-  //  CompanyNameAgentInputCreator companyNameAgentInputCreator() {
-  //    return new CompanyNameAgentInputCreator();
+  //  CompanyNameFeatureInputFactory companyNameFeatureInputFactory() {
+  //    return new CompanyNameFeatureInputFactory();
   //  }
 }

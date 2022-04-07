@@ -1,11 +1,10 @@
-package com.silenteight.scb.feeding.domain.agentinput;
+package com.silenteight.scb.feeding.domain.featureinput;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertedParty;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.match.MatchedParty;
 import com.silenteight.universaldatasource.api.library.Feature;
-import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputIn;
 import com.silenteight.universaldatasource.api.library.date.v1.DateFeatureInputOut;
 import com.silenteight.universaldatasource.api.library.date.v1.EntityTypeOut;
 import com.silenteight.universaldatasource.api.library.date.v1.SeverityModeOut;
@@ -15,22 +14,17 @@ import org.apache.commons.collections4.CollectionUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DateAgentInputCreator implements AgentInput {
+public class DateFeatureInputFactory implements FeatureInputFactory {
 
   @Override
-  public AgentInputIn<Feature> createAgentInput(Alert alert, Match match) {
-    return AgentInputIn.builder()
-        .alert(alert.details().getAlertName())
-        .match(match.details().getMatchName())
-        .featureInputs(List.of(
-            DateFeatureInputOut.builder()
+  public Feature create(Alert alert, Match match) {
+    return DateFeatureInputOut.builder()
                 .feature("features/date")
                 .alertedPartyDates(getAlertedPartyDates(alert.alertedParty()))
                 .watchlistDates(getWatchlistDates(match.matchedParty()))
                 .alertedPartyType(determineApType(match.matchedParty().apType()))
                 .mode(SeverityModeOut.NORMAL)
-                .build()))
-        .build();
+                .build();
   }
 
   private List<String> getAlertedPartyDates(AlertedParty alertedParty) {

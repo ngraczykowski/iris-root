@@ -1,4 +1,4 @@
-package com.silenteight.scb.feeding.domain.agentinput;
+package com.silenteight.scb.feeding.domain.featureinput;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.WlName;
 import com.silenteight.scb.ingest.adapter.incomming.common.WlNameType;
@@ -7,7 +7,6 @@ import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertedPa
 import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.match.MatchedParty;
 import com.silenteight.universaldatasource.api.library.Feature;
-import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputIn;
 import com.silenteight.universaldatasource.api.library.name.v1.*;
 
 import org.apache.commons.lang3.StringUtils;
@@ -18,27 +17,21 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class NameAgentInputCreator implements AgentInput {
+public class NameFeatureInputFactory implements FeatureInputFactory {
 
   @Override
-  public AgentInputIn<Feature> createAgentInput(Alert alert, Match match) {
+  public Feature create(Alert alert, Match match) {
     Set<String> apNames =
         getApNameValues(alert.alertedParty(), match.details().getMatchedApNames());
     Set<WlName> wlNames = getWlNameValues(match.matchedParty());
 
-    return AgentInputIn.builder()
-        .alert(alert.details().getAlertName())
-        .match(match.details().getMatchName())
-        .featureInputs(List.of(
-            NameFeatureInputOut.builder()
+    return NameFeatureInputOut.builder()
                 .feature(getFeatureName())
                 .alertedPartyNames(createAlertedPartyNames(apNames))
                 .watchlistNames(createWatchlistNames(wlNames))
                 .alertedPartyType(determineApType(match.matchedParty().apType()))
                 .matchingTexts(match.details().getMatchingTexts().stream().toList())
-                .build()
-        ))
-        .build();
+                .build();
   }
 
   private static List<AlertedPartyNameOut> createAlertedPartyNames(Set<String> apNames) {

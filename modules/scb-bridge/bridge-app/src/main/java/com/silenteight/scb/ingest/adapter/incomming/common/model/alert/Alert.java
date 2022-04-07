@@ -45,6 +45,10 @@ public record Alert(
     return (flags & Flag.LEARN.getValue()) != 0;
   }
 
+  public String getName() {
+    return details.getAlertName();
+  }
+
   public enum State {
     STATE_CORRECT,
     STATE_INVALID,

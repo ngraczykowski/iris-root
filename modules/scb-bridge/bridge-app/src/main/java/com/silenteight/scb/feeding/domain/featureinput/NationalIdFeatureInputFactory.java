@@ -1,11 +1,10 @@
-package com.silenteight.scb.feeding.domain.agentinput;
+package com.silenteight.scb.feeding.domain.featureinput;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertedParty;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.match.MatchedParty;
 import com.silenteight.universaldatasource.api.library.Feature;
-import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputIn;
 import com.silenteight.universaldatasource.api.library.nationalid.v1.NationalIdFeatureInputOut;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -13,23 +12,17 @@ import org.apache.commons.collections4.CollectionUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NationalIdAgentInputCreator implements AgentInput {
+public class NationalIdFeatureInputFactory implements FeatureInputFactory {
 
   @Override
-  public AgentInputIn<Feature> createAgentInput(Alert alert, Match match) {
-    return AgentInputIn.builder()
-        .alert(alert.details().getAlertName())
-        .match(match.details().getMatchName())
-        .featureInputs(List.of(
-            NationalIdFeatureInputOut.builder()
+  public Feature create(Alert alert, Match match) {
+    return NationalIdFeatureInputOut.builder()
                 .feature("features/nationalId")
                 .alertedPartyDocumentNumbers(alert.alertedParty().apDocNationalIds())
                 .watchlistDocumentNumbers(match.matchedParty().wlNationalIds())
                 .alertedPartyCountries(getApCountries(alert.alertedParty()))
                 .watchlistCountries(getWlCountries(match.matchedParty()))
-                .build()
-        ))
-        .build();
+                .build();
   }
 
   private List<String> getApCountries(AlertedParty alertedParty) {

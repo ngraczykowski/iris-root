@@ -27,6 +27,10 @@ public record Match(
     return 0 != (flags & Flag.SOLVED.value);
   }
 
+  public String getName() {
+    return details.getMatchName();
+  }
+
   public enum Flag {
     NONE(0),
     OBSOLETE(1),

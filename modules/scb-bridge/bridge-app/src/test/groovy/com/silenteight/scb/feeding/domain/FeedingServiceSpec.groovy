@@ -1,8 +1,9 @@
 package com.silenteight.scb.feeding.domain
 
-import com.silenteight.scb.feeding.domain.agentinput.AgentInput
 import com.silenteight.scb.feeding.domain.category.CategoryValue
+import com.silenteight.scb.feeding.domain.featureinput.FeatureInputFactory
 import com.silenteight.scb.feeding.fixtures.Fixtures
+import com.silenteight.universaldatasource.api.library.Feature
 
 import spock.lang.Specification
 
@@ -18,43 +19,40 @@ class FeedingServiceSpec extends Specification {
 
   def "should create agent inputs"() {
     given:
-    def agentInputs = [
-        Mock(AgentInput),
-        Mock(AgentInput)
-    ]
-    def categoryValues = [
-        Mock(CategoryValue),
-        Mock(CategoryValue)
-    ]
-
-    def featureService = new FeedingService(agentInputs, categoryValues)
-    def alert = Fixtures.LEARNING_ALERT
-    def match = Fixtures.MATCH
+      def alert = Fixtures.LEARNING_ALERT
+      def match = Fixtures.MATCH
+      def featureInputFactory = Mock(FeatureInputFactory)
+      def agentInputs = [featureInputFactory, featureInputFactory]
+      def categoryValues = [
+          Mock(CategoryValue),
+          Mock(CategoryValue)
+      ]
+      def feedingService = new FeedingService(agentInputs, categoryValues)
 
     when:
-    featureService.createAgentInputIns(alert, match)
+      feedingService.createAgentInputIns(alert, match)
 
     then:
-    agentInputs.each {1 * it.createAgentInput(alert, match)}
+      agentInputs.each {1 * it.create(alert, match) >> Mock(Feature)}
   }
 
   def "should create category values"() {
     given:
     def agentInputs = [
-        Mock(AgentInput),
-        Mock(AgentInput)
+        Mock(FeatureInputFactory),
+        Mock(FeatureInputFactory)
     ]
     def categoryValues = [
         Mock(CategoryValue),
         Mock(CategoryValue)
     ]
 
-    def featureService = new FeedingService(agentInputs, categoryValues)
+    def feedingService = new FeedingService(agentInputs, categoryValues)
     def alert = Fixtures.LEARNING_ALERT
     def match = Fixtures.MATCH
 
     when:
-    featureService.createCategoryValuesIns(alert, match)
+    feedingService.createCategoryValuesIns(alert, match)
 
     then:
     categoryValues.each {1 * it.createCategoryValuesIn(alert, match)}
