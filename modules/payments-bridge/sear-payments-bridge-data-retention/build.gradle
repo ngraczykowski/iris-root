@@ -9,7 +9,13 @@ dependencies {
   implementation libraries.spring_boot
   implementation libraries.data_retention_api
   implementation libraries.spring_jdbc
+  implementation libraries.spring_batch_starter
 
   testImplementation libraries.silenteight_sep_base_testing
   testImplementation project(":sear-payments-bridge-testing")
+
+  testImplementation libraries.spring_batch_test
+
+  testImplementation libraries.spock_core
+  testImplementation libraries.spock_spring
 }

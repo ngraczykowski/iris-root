@@ -1,0 +1,10 @@
+INSERT INTO public.pb_alert_data_retention (alert_name, alert_time, created_at, alert_data_removed_at, pii_removed_at) VALUES ('alerts/99', '2019-04-29 11:52:45.000000', '2022-04-06 13:55:11.414322', null, null);
+INSERT INTO public.pb_alert_data_retention (alert_name, alert_time, created_at, alert_data_removed_at, pii_removed_at) VALUES ('alerts/98', '2019-04-29 11:52:45.000000', '2022-04-06 13:55:11.377677', null, null);
+INSERT INTO public.pb_alert_data_retention (alert_name, alert_time, created_at, alert_data_removed_at, pii_removed_at) VALUES ('alerts/97', '2019-04-29 11:52:45.000000', '2022-04-06 13:55:11.339896', null, null);
+INSERT INTO public.pb_alert_data_retention (alert_name, alert_time, created_at, alert_data_removed_at, pii_removed_at) VALUES ('alerts/96', '2019-04-29 11:52:45.000000', '2022-04-06 13:55:11.254264', null, null);
+INSERT INTO public.pb_alert_data_retention (alert_name, alert_time, created_at, alert_data_removed_at, pii_removed_at) VALUES ('alerts/95', '2019-04-29 11:52:45.000000', '2022-04-06 13:55:11.138564', null, null);
+INSERT INTO public.pb_alert_data_retention (alert_name, alert_time, created_at, alert_data_removed_at, pii_removed_at) VALUES ('alerts/94', '2019-04-29 11:52:45.000000', '2022-04-06 13:55:11.054054', null, null);
+INSERT INTO public.pb_alert_data_retention (alert_name, alert_time, created_at, alert_data_removed_at, pii_removed_at) VALUES ('alerts/93', '2019-04-29 11:52:45.000000', '2022-04-06 13:55:10.962672', null, null);
+INSERT INTO public.pb_alert_data_retention (alert_name, alert_time, created_at, alert_data_removed_at, pii_removed_at) VALUES ('alerts/92', '2019-04-29 11:52:45.000000', '2022-04-06 13:55:10.865266', null, null);
+INSERT INTO public.pb_alert_data_retention (alert_name, alert_time, created_at, alert_data_removed_at, pii_removed_at) VALUES ('alerts/91', '2019-04-29 11:52:45.000000', '2022-04-06 13:55:10.779387', null, null);
+INSERT INTO public.pb_alert_data_retention (alert_name, alert_time, created_at, alert_data_removed_at, pii_removed_at) VALUES ('alerts/90', '2019-04-29 11:52:45.000000', '2022-04-06 13:55:10.691085', null, null);

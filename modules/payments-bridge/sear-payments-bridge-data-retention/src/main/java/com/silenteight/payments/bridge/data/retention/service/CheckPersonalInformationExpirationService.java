@@ -35,7 +35,8 @@ class CheckPersonalInformationExpirationService extends DataExpirationTemplate i
   @Override
   @Transactional
   public void execute() {
-    doExecute(properties.getPersonalInformation().getExpiration(), DataType.PERSONAL_INFORMATION);
+    var personalInformation = properties.getPersonalInformation();
+    doExecute(personalInformation.getExpiration(), DataType.PERSONAL_INFORMATION);
   }
 
   protected void sendMessage(List<String> alertNames) {

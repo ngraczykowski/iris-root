@@ -25,7 +25,8 @@ public class AlertDataRetentionDataAccess implements AlertDataRetentionAccessPor
   }
 
   @Override
-  public List<String> findAlertNameByAlertTimeBefore(OffsetDateTime dateTime, DataType dataType) {
+  public List<String> findAlertNameByAlertTimeBefore(
+      OffsetDateTime dateTime, DataType dataType) {
     return findAlertDataRetention.findAlertTimeBefore(dateTime, dataType);
   }
 

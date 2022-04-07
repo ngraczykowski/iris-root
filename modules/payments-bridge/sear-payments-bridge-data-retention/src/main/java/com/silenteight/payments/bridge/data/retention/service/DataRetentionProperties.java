@@ -27,17 +27,26 @@ class DataRetentionProperties {
   static class AlertData {
     @NotNull
     Duration expiration = Duration.ofHours(48);
+
+    @NotNull
+    int chunkSize = 1000;
   }
 
   @Data
   static class PersonalInformation {
     @NotNull
     Duration expiration = Duration.ofDays(151);
+
+    @NotNull
+    int chunkSize = 1000;
   }
 
   @Data
   static class File {
     @NotNull
     Duration expiration = Duration.ofDays(151);
+
+    @NotNull
+    int chunkSize = 1000;
   }
 }
