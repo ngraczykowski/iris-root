@@ -3,6 +3,7 @@ package com.silenteight.connector.ftcc.callback.response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.connector.ftcc.callback.exception.NonRecoverableCallbackException;
 import com.silenteight.connector.ftcc.callback.outgoing.RecommendationsDeliveredEvent;
 import com.silenteight.connector.ftcc.callback.outgoing.RecommendationsDeliveredPublisher;
 import com.silenteight.connector.ftcc.common.dto.output.ClientRequestDto;
@@ -67,7 +68,13 @@ public class ResponseProcessor {
         .flatMap(recommendation -> buildMessageHandleException(messageDetailsMap, recommendation))
         .peek(clientRequestDto -> logReceiveDecisionMessageDto(clientRequestDto, analysisName))
         .collect(Collectors.toList());
-
+    if (decisionMessageDtos.isEmpty()) {
+      log.error(
+          "Empty ReceiveDecisionMessage, CallbackRequestDto won't be generated, analysisName={}",
+          analysisName);
+      throw new NonRecoverableCallbackException(
+          "Empty ReceiveDecisionMessage, analysisName=" + analysisName);
+    }
     return responseCreator.build(decisionMessageDtos);
   }
 

@@ -1,6 +1,8 @@
 package com.silenteight.connector.ftcc.callback.response;
 
+import com.silenteight.connector.ftcc.callback.exception.NonRecoverableCallbackException;
 import com.silenteight.connector.ftcc.callback.outgoing.RecommendationsDeliveredPublisher;
+import com.silenteight.connector.ftcc.common.resource.BatchResource;
 import com.silenteight.connector.ftcc.common.resource.MessageResource;
 import com.silenteight.connector.ftcc.request.details.dto.MessageDetailsDto;
 import com.silenteight.proto.registration.api.v1.MessageBatchCompleted;
@@ -20,7 +22,9 @@ import java.util.stream.IntStream;
 import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
@@ -67,5 +71,37 @@ class ResponseProcessorTest {
     assertAll(() -> responseProcessor.process(messageBatchCompleted));
     verify(responseCreator, atLeastOnce()).build(anyList());
     verify(responseCreator, atLeast(2)).buildMessageDto(any(), any());
+  }
+
+  @DisplayName("When could not build CallbackRequestDto should throw NonRecoverable...Exception")
+  @Test
+  void testWithRandomDataShouldThrowExceptionWhileGeneratingCallbackResponse() {
+    var collect =
+        IntStream.range(0, 2)
+            .mapToObj(alertId -> RecommendationOut
+                .builder()
+                .recommendationComment("PTP")
+                .alert(AlertOut.builder().id("messages/" + randomUUID()).build())
+                .build())
+            .collect(toList());
+
+    var responseProcessor = new ResponseProcessor(
+        responseCreator, recommendationSender, (analysisId) -> RecommendationsOut.builder()
+        .recommendations(collect)
+        .build(), messageDetailsService, recommendationsDeliveredPublisher);
+
+    when(responseCreator.buildMessageDto(any(), any())).thenThrow(
+        ResponseMessageBuildingExceptoin.class);
+
+    var messageBatchCompleted =
+        MessageBatchCompleted.newBuilder()
+            .setBatchId(BatchResource.toResourceName(randomUUID()))
+            .setAnalysisName("analysis/1")
+            .build();
+
+    String message = assertThrows(
+        NonRecoverableCallbackException.class,
+        () -> responseProcessor.process(messageBatchCompleted)).getMessage();
+    assertThat(message).contains("analysis/1");
   }
 }
