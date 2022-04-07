@@ -20,7 +20,7 @@ class TestMSPipeline(unittest.TestCase):
         self.spark_engine = JsonProcessingEngine(pipeline_config)
         self.uut = MSPipeline(self.spark_engine, config=pipeline_config)
 
-    def test_pipeline(self):
+    def test_pipeline(self):  # noqa C901
         with open("notebooks/sample/wm_address_in_payload_format.json", "r") as file:
             payload = json.loads(file.read())
         payload_json = {key: payload[key] for key in sorted(payload)}
@@ -48,11 +48,25 @@ class TestMSPipeline(unittest.TestCase):
                             == reference_payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
                         )
                     except AssertionError:
-                        assert sorted(
-                            payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
-                        ) == sorted(
-                            reference_payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
-                        )
+                        try:
+                            assert sorted(
+                                payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
+                            ) == sorted(
+                                reference_payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
+                            )
+                        except:
+                            if isinstance(
+                                payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key], dict
+                            ) and isinstance(
+                                reference_payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key],
+                                dict,
+                            ):
+                                reference = reference_payload[cn.WATCHLIST_PARTY][
+                                    cn.MATCH_RECORDS
+                                ][num][key]
+                                tested = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
+                                for new_key in tested:
+                                    assert tested[new_key] == reference[new_key]
 
     def test_pipeline_with_cross_payloads(self):
         with open(
@@ -84,8 +98,22 @@ class TestMSPipeline(unittest.TestCase):
                             == reference_payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
                         )
                     except AssertionError:
-                        assert sorted(
-                            payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
-                        ) == sorted(
-                            reference_payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
-                        )
+                        try:
+                            assert sorted(
+                                payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
+                            ) == sorted(
+                                reference_payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
+                            )
+                        except:
+                            if isinstance(
+                                payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key], dict
+                            ) and isinstance(
+                                reference_payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key],
+                                dict,
+                            ):
+                                reference = reference_payload[cn.WATCHLIST_PARTY][
+                                    cn.MATCH_RECORDS
+                                ][num][key]
+                                tested = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
+                                for new_key in tested:
+                                    assert tested[new_key] == reference[new_key]

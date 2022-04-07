@@ -89,7 +89,7 @@ EXAMPLES = [
             "matchId": "49159509",
             "matchStatus": "O",
             "riskScore": "-1.0",
-            cn.MATCH_RECORD_VERSION_ID: "122438658",
+            "inputVersionId": "122438658",
             "matchType": "GWL",
             "entityId": "908043",
             "entityVersion": "20150505194929",
@@ -171,9 +171,9 @@ EXAMPLES = [
             "WL_CITY": ["ATLANTA"],
             "WL_POSTALCODE": ["11111"],
             "WL_ADDRESS2": ["FL;US"],
-            "WL_MATCHED_TOKENS": '["Doe", "Traczos"]',
-            "WL_DOCUMENT_NUMBER": "",
+            "WL_MATCHED_TOKENS": "[]",
             "WLP_TYPE": "I",
+            "WL_DOCUMENT_NUMBER": "",
         },
     )
 ]

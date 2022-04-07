@@ -40,7 +40,14 @@ def test_watchlist_extractor(match_record, updated_match_record_with_wl_values):
             {"entity": {"dobs": {"dob": "2010-10-02"}}},
             ["2010-10-02", ""],
         ),
-        ({"entity": {"dobs": {"Y": 2010, "M": 10, "D": 2}}}, ["2/10/2010"]),
+        (
+            {"entity": {"dobs": {"dob": "2010-10-02"}}},
+            ["2010-10-02", ""],
+        ),
+        (
+            {"entity": {"dobs": {"dob": {"Y": 2010, "M": 10, "D": 2, "dob": "2010-10-02"}}}},
+            [["2010-10-02"], [], [2, 10, 2010], ""],
+        ),
     ],
 )
 def test_extract_dob(match_record, updated_match_record_with_wl_values):

@@ -10,6 +10,7 @@ from tests.test_custom.test_json.test_client import BaseGrpcTestCase
 
 
 class TestSSLGrpcServer(BaseGrpcTestCase.TestGrpcServer):
+
     stub = None
 
     @classmethod
@@ -26,4 +27,4 @@ class TestSSLGrpcServer(BaseGrpcTestCase.TestGrpcServer):
         server_credentials = grpc.ssl_channel_credentials(ca, private_key, certificate_chain)
         channel = grpc.secure_channel("localhost:9090", server_credentials)
         TestSSLGrpcServer.stub = EtlPipelineServiceStub(channel)
-        time.sleep(5)
+        time.sleep(BaseGrpcTestCase.TestGrpcServer.TIMEOUT)

@@ -40,6 +40,8 @@ def load_alert(filepath: str = "notebooks/sample/wm_address_in_payload_format.js
 
 class BaseGrpcTestCase:
     class TestGrpcServer(unittest.TestCase):
+        TIMEOUT = 3
+
         @classmethod
         def tearDownClass(cls):
             process = subprocess.Popen("scripts/kill_services.sh")
@@ -80,6 +82,7 @@ class BaseGrpcTestCase:
 
 
 class TestGrpcServerWithoutSSL(BaseGrpcTestCase.TestGrpcServer):
+
     stub = None
 
     @classmethod
@@ -89,4 +92,4 @@ class TestGrpcServerWithoutSSL(BaseGrpcTestCase.TestGrpcServer):
         subprocess.Popen("scripts/start_services.sh", env=environment)
         channel = grpc.insecure_channel("localhost:9090")
         TestGrpcServerWithoutSSL.stub = EtlPipelineServiceStub(channel)
-        time.sleep(5)
+        time.sleep(BaseGrpcTestCase.TestGrpcServer.TIMEOUT)
