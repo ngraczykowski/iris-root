@@ -45,6 +45,14 @@ Configuration
 | NEW         | ACTION_POTENTIAL_TRUE_POSITIVE | "Level 2-, TRUE1"           |
 | NEW         | ACTION_INVESTIGATE             | "Level 1-, SEAR_UNRESOLVED" |
 
+### Alert state mappings `ftcc.alert.state.mappings`
+
+- `ftcc.alert.state.mappings` - defines alert states (NEW, SOLVED_FALSE_POSITIVE, SOLVED_TRUE_POSITIVE)
+  with list of corresponding statuses from message json (Message -> CurrentStatus -> Name). Alert state
+  should map to one of the enum values from `AlertMessageStored.State` from Connector API. If mapper
+  does not find state for given message status it returns `STATE_UNSPECIFIED` state which postpones
+  request processing.
+
 #### Troubleshooting
 
 `java.lang.IllegalStateException: No 'DestinationState' in configuration for currentStatusName=COMMHUB and S8 recommendedAction=PTP`
