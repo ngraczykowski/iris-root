@@ -33,7 +33,11 @@ public class FeedingService {
 
   List<AgentInputIn<Feature>> createAgentInputIns(Alert alert, Match match) {
     return featureInputFactories.stream()
-        .map(factory -> create(alert.getName(), match.getName(), factory.create(alert, match)))
+        .map(factory -> AgentInputIn.builder()
+                    .alert(alert.getName())
+                    .match(match.getName())
+                    .featureInputs(List.of(factory.create(alert, match)))
+            .build())
         .toList();
   }
 
@@ -41,12 +45,5 @@ public class FeedingService {
     return categoryValues.stream()
         .map(categoryValue -> categoryValue.createCategoryValuesIn(alert, match))
         .toList();
-  }
-
-  private AgentInputIn<Feature> create(String alertName, String matchName, Feature feature) {
-    return AgentInputIn.builder()
-        .alert(alertName)
-        .match(matchName)
-        .featureInputs(List.of(feature)).build();
   }
 }
