@@ -8,6 +8,8 @@ dev_require = [
     "googleapis-common-protos==1.55.0",
     "data-source-agentinput-api==0.21.0.5",
     "data-source-api==0.21.0.5",
+    "python-consul2==0.1.5",
+    "data-source-categories-api==0.23.0.11",
 ]
 
 setup(
