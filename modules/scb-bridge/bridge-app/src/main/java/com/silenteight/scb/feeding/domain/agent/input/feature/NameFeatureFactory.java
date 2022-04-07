@@ -82,6 +82,7 @@ public class NameFeatureFactory implements FeatureFactory {
 
     return apValues
         .stream()
+        .filter(StringUtils::isNotEmpty)
         .map(StringUtils::normalizeSpace)
         .collect(Collectors.toSet());
   }
