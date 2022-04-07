@@ -1,17 +1,18 @@
 package com.silenteight.scb.feeding.domain
 
 import com.silenteight.scb.feeding.domain.category.CategoryValue
-import com.silenteight.scb.feeding.domain.featureinput.FeatureInputFactory
+import com.silenteight.scb.feeding.domain.agentinput.AgentInputFactory
+import com.silenteight.scb.feeding.domain.agentinput.feature.FeatureFactory
 import com.silenteight.scb.feeding.fixtures.Fixtures
 import com.silenteight.universaldatasource.api.library.Feature
 
 import spock.lang.Specification
 
-class FeedingServiceSpec extends Specification {
+class AgentInputFactorySpec extends Specification {
 
   def "should fail when no features were initialized"() {
     when:
-    new FeedingService([], [])
+    new AgentInputFactory([], [])
 
     then:
     thrown(IllegalStateException)
@@ -21,13 +22,13 @@ class FeedingServiceSpec extends Specification {
     given:
       def alert = Fixtures.LEARNING_ALERT
       def match = Fixtures.MATCH
-      def featureInputFactory = Mock(FeatureInputFactory)
+      def featureInputFactory = Mock(FeatureFactory)
       def agentInputs = [featureInputFactory, featureInputFactory]
       def categoryValues = [
           Mock(CategoryValue),
           Mock(CategoryValue)
       ]
-      def feedingService = new FeedingService(agentInputs, categoryValues)
+      def feedingService = new AgentInputFactory(agentInputs, categoryValues)
 
     when:
       feedingService.createAgentInputIns(alert, match)
@@ -39,15 +40,15 @@ class FeedingServiceSpec extends Specification {
   def "should create category values"() {
     given:
     def agentInputs = [
-        Mock(FeatureInputFactory),
-        Mock(FeatureInputFactory)
+        Mock(FeatureFactory),
+        Mock(FeatureFactory)
     ]
     def categoryValues = [
         Mock(CategoryValue),
         Mock(CategoryValue)
     ]
 
-    def feedingService = new FeedingService(agentInputs, categoryValues)
+    def feedingService = new AgentInputFactory(agentInputs, categoryValues)
     def alert = Fixtures.LEARNING_ALERT
     def match = Fixtures.MATCH
 

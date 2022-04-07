@@ -1,51 +1,62 @@
 package com.silenteight.scb.feeding.infrastructure;
 
-import com.silenteight.scb.feeding.domain.featureinput.*;
+import com.silenteight.scb.feeding.domain.agentinput.*;
+import com.silenteight.scb.feeding.domain.agentinput.feature.*;
+import com.silenteight.scb.feeding.domain.category.CategoryValue;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 @Configuration
 public class AgentInputConfiguration {
 
   @Bean
-  NameFeatureInputFactory nameFeatureInputFactory() {
-    return new NameFeatureInputFactory();
+  AgentInputFactory agentInputFactory(
+      List<FeatureFactory> featureInputFactories,
+      List<CategoryValue> categoryValues) {
+    return new AgentInputFactory(featureInputFactories, categoryValues);
   }
 
   @Bean
-  DateFeatureInputFactory dateFeatureInputFactory() {
-    return new DateFeatureInputFactory();
+  NameFeatureFactory nameFeatureInputFactory() {
+    return new NameFeatureFactory();
   }
 
   @Bean
-  GenderFeatureInputFactory genderFeatureInputFactory() {
-    return new GenderFeatureInputFactory();
+  DateFeatureFactory dateFeatureInputFactory() {
+    return new DateFeatureFactory();
   }
 
   @Bean
-  NationalIdFeatureInputFactory nationalIdFeatureInputFactory() {
-    return new NationalIdFeatureInputFactory();
+  GenderFeatureFactory genderFeatureInputFactory() {
+    return new GenderFeatureFactory();
   }
 
   @Bean
-  DocumentNumberFeatureInputFactory otherDocumentFeatureInputFactory() {
-    return new DocumentNumberFeatureInputFactory();
+  NationalIdFeatureFactory nationalIdFeatureInputFactory() {
+    return new NationalIdFeatureFactory();
   }
 
   @Bean
-  PassportNumberDocumentFeatureInputFactory passportNumberDocumentFeatureInputFactory() {
-    return new PassportNumberDocumentFeatureInputFactory();
+  DocumentNumberFeatureFactory otherDocumentFeatureInputFactory() {
+    return new DocumentNumberFeatureFactory();
   }
 
   @Bean
-  NationalityFeatureInputFactory nationalityFeatureInputFactory() {
-    return new NationalityFeatureInputFactory();
+  PassportNumberDocumentFeatureFactory passportNumberDocumentFeatureInputFactory() {
+    return new PassportNumberDocumentFeatureFactory();
   }
 
   @Bean
-  CountryFeatureInputFactory countryAgentInputCreator() {
-    return new CountryFeatureInputFactory();
+  NationalityFeatureFactory nationalityFeatureInputFactory() {
+    return new NationalityFeatureFactory();
+  }
+
+  @Bean
+  CountryFeatureFactory countryAgentInputCreator() {
+    return new CountryFeatureFactory();
   }
 
   // TODO: uncomment once uds-lib will provide api for registering companyName feature inputs

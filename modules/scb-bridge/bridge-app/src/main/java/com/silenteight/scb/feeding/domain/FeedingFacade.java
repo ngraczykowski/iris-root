@@ -3,6 +3,7 @@ package com.silenteight.scb.feeding.domain;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.scb.feeding.domain.agentinput.AgentInputFactory;
 import com.silenteight.scb.feeding.domain.model.AlertErrorDescription;
 import com.silenteight.scb.feeding.domain.model.FeedUdsCommand;
 import com.silenteight.scb.feeding.domain.model.UdsFedEvent;
@@ -27,7 +28,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FeedingFacade {
 
-  private final FeedingService feedingService;
+  private final AgentInputFactory agentInputFactory;
   private final UniversalDatasourceApiClient universalDatasourceApiClient;
   private final FeedingEventPublisher feedingEventPublisher;
 
@@ -52,7 +53,7 @@ public class FeedingFacade {
     var alert = feedUdsCommand.alert();
     alert.matches().forEach(match -> {
       var createCategoryValuesIns =
-          feedingService.createCategoryValuesIns(alert, match);
+          agentInputFactory.createCategoryValuesIns(alert, match);
       registerCategoriesValues(createCategoryValuesIns);
     });
   }
@@ -90,7 +91,7 @@ public class FeedingFacade {
     Alert alert = feedUdsCommand.alert();
     alert.matches().forEach(match -> {
       var agentInputIns =
-          feedingService.createAgentInputIns(alert, match);
+          agentInputFactory.createAgentInputIns(alert, match);
       registerAgentInputs(agentInputIns);
     });
   }

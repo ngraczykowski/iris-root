@@ -1,4 +1,4 @@
-package com.silenteight.scb.feeding.domain.featureinput;
+package com.silenteight.scb.feeding.domain.agentinput.feature;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.WlName;
 import com.silenteight.scb.ingest.adapter.incomming.common.WlNameType;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class NameFeatureInputFactory implements FeatureInputFactory {
+public class NameFeatureFactory implements FeatureFactory {
 
   @Override
   public Feature create(Alert alert, Match match) {

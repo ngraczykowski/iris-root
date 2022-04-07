@@ -1,4 +1,4 @@
-package com.silenteight.scb.feeding.domain.featureinput;
+package com.silenteight.scb.feeding.domain.agentinput.feature;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertedParty;
@@ -14,7 +14,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DateFeatureInputFactory implements FeatureInputFactory {
+public class DateFeatureFactory implements FeatureFactory {
 
   @Override
   public Feature create(Alert alert, Match match) {

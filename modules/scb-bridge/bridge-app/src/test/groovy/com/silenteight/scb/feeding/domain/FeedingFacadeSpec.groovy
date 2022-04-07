@@ -1,17 +1,17 @@
 package com.silenteight.scb.feeding.domain
 
+import com.silenteight.scb.feeding.domain.agentinput.AgentInputFactory
 import com.silenteight.scb.feeding.domain.model.FeedUdsCommand
 import com.silenteight.scb.feeding.domain.port.outgoing.FeedingEventPublisher
 import com.silenteight.scb.feeding.domain.port.outgoing.UniversalDatasourceApiClient
 import com.silenteight.scb.feeding.fixtures.Fixtures
-import com.silenteight.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator
 
 import spock.lang.Specification
 import spock.lang.Subject
 
 class FeedingFacadeSpec extends Specification {
 
-  def feedingService = Mock(FeedingService)
+  def feedingService = Mock(AgentInputFactory)
   def universalDatasourceApiClient = Mock(UniversalDatasourceApiClient)
   def feedingEventPublisher = Mock(FeedingEventPublisher)
 

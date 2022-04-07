@@ -1,4 +1,4 @@
-package com.silenteight.scb.feeding.domain.featureinput;
+package com.silenteight.scb.feeding.domain.agentinput.feature;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertedParty;
@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class CountryFeatureInputFactory implements FeatureInputFactory {
+public class CountryFeatureFactory implements FeatureFactory {
 
   @Override
   public Feature create(Alert alert, Match match) {

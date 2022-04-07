@@ -1,9 +1,9 @@
-package com.silenteight.scb.feeding.domain.featureinput;
+package com.silenteight.scb.feeding.domain.agentinput.feature;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match;
 import com.silenteight.universaldatasource.api.library.Feature;
 
-public interface FeatureInputFactory {
+public interface FeatureFactory {
   Feature create(Alert alert, Match match);
 }

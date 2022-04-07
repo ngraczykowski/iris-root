@@ -1,24 +1,21 @@
-package com.silenteight.scb.feeding.domain;
+package com.silenteight.scb.feeding.domain.agentinput;
 
+import com.silenteight.scb.feeding.domain.agentinput.feature.FeatureFactory;
 import com.silenteight.scb.feeding.domain.category.CategoryValue;
-import com.silenteight.scb.feeding.domain.featureinput.FeatureInputFactory;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match;
 import com.silenteight.universaldatasource.api.library.Feature;
 import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputIn;
 import com.silenteight.universaldatasource.api.library.category.v2.CreateCategoryValuesIn;
 
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 
-@Service
-public class FeedingService {
+public class AgentInputFactory {
 
-  private final List<FeatureInputFactory> featureInputFactories;
+  private final List<FeatureFactory> featureInputFactories;
   private final List<CategoryValue> categoryValues;
 
-  FeedingService(List<FeatureInputFactory> featureInputFactories,
+  public AgentInputFactory(List<FeatureFactory> featureInputFactories,
       List<CategoryValue> categoryValues) {
     
     if (featureInputFactories.isEmpty()) {
@@ -31,7 +28,7 @@ public class FeedingService {
     this.categoryValues = categoryValues;
   }
 
-  List<AgentInputIn<Feature>> createAgentInputIns(Alert alert, Match match) {
+  public List<AgentInputIn<Feature>> createAgentInputIns(Alert alert, Match match) {
     return featureInputFactories.stream()
         .map(factory -> AgentInputIn.builder()
                     .alert(alert.getName())
@@ -41,7 +38,7 @@ public class FeedingService {
         .toList();
   }
 
-  List<CreateCategoryValuesIn> createCategoryValuesIns(Alert alert, Match match) {
+  public List<CreateCategoryValuesIn> createCategoryValuesIns(Alert alert, Match match) {
     return categoryValues.stream()
         .map(categoryValue -> categoryValue.createCategoryValuesIn(alert, match))
         .toList();
