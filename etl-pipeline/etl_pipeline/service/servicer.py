@@ -73,9 +73,9 @@ class EtlPipelineServiceServicer(object):
             )
             for alert in request.alerts
         ]
-        future_payloads = [self.pool.submit(self.parse_alert, alert) for alert in alerts_to_parse]
-        payloads = [future.result() for future in future_payloads]
-        # payloads = [self.parse_alert(alerts_to_parse[0])]  # debugging
+        # future_payloads = [self.pool.submit(self.parse_alert, alert) for alert in alerts_to_parse]
+        # payloads = [future.result() for future in future_payloads]
+        payloads = [self.parse_alert(alerts_to_parse[0])]  # debugging
         statuses = []
         for alert, record in zip(alerts_to_parse, payloads):
             input_match_records, status, error = record

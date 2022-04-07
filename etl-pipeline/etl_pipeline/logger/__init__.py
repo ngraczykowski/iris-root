@@ -1,3 +1,4 @@
+# import codecs
 import logging
 import os
 import sys
@@ -30,7 +31,9 @@ def get_console_handler():
 
 def get_file_handler(filename="etl_pipeline.log"):
     os.makedirs(os.path.dirname(LOGGING_PATH), exist_ok=True)
-    file_handler = TimedRotatingFileHandler(os.path.join(LOGGING_PATH, filename), when="midnight")
+    file_handler = TimedRotatingFileHandler(
+        os.path.join(LOGGING_PATH, filename), encoding="utf8", when="midnight"
+    )
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(FORMATTER)
     return file_handler
@@ -39,9 +42,11 @@ def get_file_handler(filename="etl_pipeline.log"):
 def get_logger(name, file=None):
     logger = logging.getLogger(name)
     if file:
-        service_config = omegaconf.OmegaConf.load(
-            os.path.join(CONFIG_APP_DIR, "service", "service.yaml")
-        )
+        # if sys.stdout.encoding == "ANSI_X3.4-1968":
+        #     codecs.getwriter("utf-8")(sys.stdout.detach())
+        # service_config = omegaconf.OmegaConf.load(
+        #     os.path.join(CONFIG_APP_DIR, "service", "service.yaml")
+        # )
         LOGGING_PATH = None
         try:
             LOGGING_PATH = service_config.LOGGING_PATH
