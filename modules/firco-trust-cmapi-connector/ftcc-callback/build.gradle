@@ -24,6 +24,7 @@ dependencies {
   implementation libraries.spring_boot_starter_web
   implementation libraries.apache_http_client
 
+  implementation libraries.hibernate_types
   testRuntimeOnly libraries.hibernate_validator
   testImplementation libraries.spock_spring
   testImplementation project(":ftcc-common-testing")

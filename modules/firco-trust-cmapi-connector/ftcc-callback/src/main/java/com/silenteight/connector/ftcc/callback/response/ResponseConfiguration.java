@@ -9,10 +9,12 @@ import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,6 +30,8 @@ import static org.springframework.util.ResourceUtils.getFile;
 
 @Slf4j
 @Configuration
+@EnableJpaRepositories
+@EntityScan
 @EnableConfigurationProperties(RecommendationSenderProperties.class)
 @RequiredArgsConstructor
 class ResponseConfiguration {
@@ -67,8 +71,15 @@ class ResponseConfiguration {
   }
 
   @Bean
-  RecommendationSender recommendationSender(RestTemplate restTemplate) {
-    return new RecommendationSender(restTemplate, properties.getEndpoint());
+  CallbackRequestService callbackRequestService(
+      CallbackRequestRepository callbackRequestRepository) {
+    return new CallbackRequestService(callbackRequestRepository);
+  }
+
+  @Bean
+  RecommendationSender recommendationSender(
+      RestTemplate restTemplate, CallbackRequestService callbackRequestService) {
+    return new RecommendationSender(restTemplate, properties.getEndpoint(), callbackRequestService);
   }
 
   @Bean

@@ -81,4 +81,22 @@
     <addPrimaryKey tableName="ftcc_batch_completed" columnNames="batch_id,analysis_id"/>
   </changeSet>
 
+  <changeSet id="ftcc-1.0.0-4" author="ppietrucha">
+    <createTable tableName="ftcc_callback_request">
+      <column name="id" type="bigint" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="batch_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="endpoint" type="varchar"/>
+      <column name="payload" type="JSONB"/>
+      <column name="response" type="JSONB"/>
+      <column name="code" type="number"/>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
 </databaseChangeLog>

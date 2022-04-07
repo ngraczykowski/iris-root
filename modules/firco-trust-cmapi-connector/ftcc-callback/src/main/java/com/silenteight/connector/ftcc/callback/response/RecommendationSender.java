@@ -8,6 +8,7 @@ import com.silenteight.connector.ftcc.callback.exception.RecoverableCallbackExce
 import com.silenteight.connector.ftcc.common.dto.output.AckDto;
 import com.silenteight.connector.ftcc.common.dto.output.ClientRequestDto;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientException;
@@ -19,17 +20,20 @@ class RecommendationSender {
 
   private final RestTemplate restTemplate;
   private final String endpoint;
+  private final CallbackRequestService callbackRequestService;
 
-  public void send(ClientRequestDto clientRequestDto) {
+  public void send(String batchName, ClientRequestDto clientRequestDto) {
     try {
       var responseEntity = restTemplate.postForEntity(endpoint, clientRequestDto, AckDto.class);
 
       if (responseEntity.getStatusCodeValue() < 400) {
+        saveCallback(batchName, clientRequestDto, responseEntity);
         if (log.isDebugEnabled()) {
           log.debug("Sent the decision to [{}] and received the response [{}]",
               endpoint, responseEntity.getStatusCode());
         }
       } else {
+        saveCallback(batchName, clientRequestDto, responseEntity);
         log.warn("Received an error code [{}] when sending the decision for the alert to [{}]",
             responseEntity.getStatusCode(), endpoint);
         throw new HttpServerErrorException(responseEntity.getStatusCode());
@@ -45,6 +49,12 @@ class RecommendationSender {
       logException(endpoint, exception);
       throw new NonRecoverableCallbackException(exception);
     }
+  }
+
+  private void saveCallback(
+      String batchName, ClientRequestDto clientRequestDto, ResponseEntity<AckDto> responseEntity) {
+    callbackRequestService.save(batchName, clientRequestDto, endpoint, responseEntity.getBody(),
+        responseEntity.getStatusCodeValue());
   }
 
   private static void logException(String endpoint, Exception exception) {

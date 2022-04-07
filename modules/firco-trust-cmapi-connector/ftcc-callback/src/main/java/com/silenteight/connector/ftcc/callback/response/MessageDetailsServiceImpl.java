@@ -21,7 +21,7 @@ import static java.util.stream.Collectors.toMap;
 
 @RequiredArgsConstructor
 @Slf4j
-public class MessageDetailsServiceImpl implements MessageDetailsService {
+class MessageDetailsServiceImpl implements MessageDetailsService {
 
   private final MessageDetailsQuery messageDetailsQuery;
 

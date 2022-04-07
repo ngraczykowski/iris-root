@@ -28,7 +28,10 @@ class RecommendationSenderConfigurationTest extends Specification {
   private RestTemplate restTemplate
 
   @SpringBean
-  private MessageDetailsQuery messageDetailsQuery  = Mock()
+  private MessageDetailsQuery messageDetailsQuery = Mock()
+
+  @SpringBean
+  private CallbackRequestRepository callbackRequestRepository = Mock()
 
   def "RecommendationSender properties are read correctly"() {
     expect:
@@ -61,6 +64,9 @@ class RecommendationSenderConfigurationWithoutKeystorePathTest extends Specifica
 
   @SpringBean
   private MessageDetailsQuery messageDetailsQuery = Mock()
+
+  @SpringBean
+  private CallbackRequestRepository callbackRequestRepository = Mock()
 
   def "RecommendationSender properties are read correctly when keystorePath is not provided"() {
     expect:

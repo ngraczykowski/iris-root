@@ -2,6 +2,7 @@ package com.silenteight.connector.ftcc.callback.response;
 
 import com.silenteight.connector.ftcc.common.dto.output.AckDto;
 import com.silenteight.connector.ftcc.common.dto.output.ClientRequestDto;
+import com.silenteight.connector.ftcc.common.resource.BatchResource;
 import com.silenteight.connector.ftcc.request.details.MessageDetailsQuery;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -16,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.UUID;
 
 import static com.silenteight.sep.base.common.support.jackson.JsonConversionHelper.INSTANCE;
 import static org.springframework.http.HttpMethod.POST;
@@ -41,8 +43,14 @@ class RecommendationSenderIT {
   @Autowired
   private RecommendationSenderProperties recommendationSenderProperties;
 
+  @Autowired
+  private CallbackRequestService callbackRequestService;
+
   @MockBean
   private MessageDetailsQuery messageDetailsQuery;
+
+  @MockBean
+  private CallbackRequestRepository callbackRequestRepository;
 
   @BeforeEach
   public void init() {
@@ -59,6 +67,6 @@ class RecommendationSenderIT {
             .contentType(APPLICATION_JSON)
             .body(INSTANCE.objectMapper().writeValueAsString(AckDto.ok()))
         );
-    classUnderTest.send(new ClientRequestDto());
+    classUnderTest.send(BatchResource.toResourceName(UUID.randomUUID()), new ClientRequestDto());
   }
 }

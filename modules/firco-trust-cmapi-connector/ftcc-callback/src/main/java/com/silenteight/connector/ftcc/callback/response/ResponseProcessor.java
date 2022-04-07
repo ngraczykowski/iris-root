@@ -47,7 +47,7 @@ public class ResponseProcessor {
 
     logClientRequestDto(responseDto, analysisName);
 
-    recommendationSender.send(responseDto);
+    recommendationSender.send(batchName, responseDto);
     recommendationsDeliveredPublisher.publish(RecommendationsDeliveredEvent
         .builder()
         .batchName(batchName)
