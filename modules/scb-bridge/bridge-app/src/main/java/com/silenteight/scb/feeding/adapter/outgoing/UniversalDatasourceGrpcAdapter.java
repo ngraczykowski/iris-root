@@ -29,20 +29,20 @@ class UniversalDatasourceGrpcAdapter implements UniversalDatasourceApiClient {
   @Retryable(value = UniversalDataSourceLibraryRuntimeException.class)
   public void registerCategories(BatchCreateCategoriesIn categories) {
     categoryServiceClient.createCategories(categories);
-    log.info("Categories has been registered in Universal Datasource.");
+    log.debug("Categories has been registered in Universal Datasource.");
   }
 
   @Override
   @Retryable(value = UniversalDataSourceLibraryRuntimeException.class)
   public void registerCategoryValues(BatchCreateCategoryValuesIn categoryValuesIn) {
     categoryValuesServiceClient.createCategoriesValues(categoryValuesIn);
-    log.info("Categories Values have been registered in Universal Datasource.");
+    log.debug("Categories Values have been registered in Universal Datasource.");
   }
 
   @Override
   @Retryable(value = UniversalDataSourceLibraryRuntimeException.class)
   public <T extends Feature> void registerAgentInputs(BatchCreateAgentInputsIn<T> agentInputs) {
     agentInputServiceClient.createBatchCreateAgentInputs(agentInputs);
-    log.info("Agent inputs has been registered in Universal Datasource.");
+    log.debug("Agent inputs has been registered in Universal Datasource.");
   }
 }

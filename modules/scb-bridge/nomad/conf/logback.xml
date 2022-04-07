@@ -70,4 +70,27 @@
     <appender-ref ref="ASYNC_CONSOLE"/>
     <appender-ref ref="ASYNC_STASH"/>
   </root>
+
+  <logger
+      name="com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputServiceAdapter"
+      level="warn"
+      additivity="false">
+    <appender-ref ref="ASYNC_CONSOLE"/>
+    <appender-ref ref="ASYNC_STASH"/>
+  </logger>
+
+  <logger name="com.silenteight.universaldatasource.api.library.category.v2.CategoryGrpcAdapter"
+          level="warn"
+          additivity="false">
+    <appender-ref ref="ASYNC_CONSOLE"/>
+    <appender-ref ref="ASYNC_STASH"/>
+  </logger>
+
+  <logger
+      name="com.silenteight.universaldatasource.api.library.category.v2.CategoryValuesGrpcAdapter"
+      level="warn"
+      additivity="false">
+    <appender-ref ref="ASYNC_CONSOLE"/>
+    <appender-ref ref="ASYNC_STASH"/>
+  </logger>
 </configuration>

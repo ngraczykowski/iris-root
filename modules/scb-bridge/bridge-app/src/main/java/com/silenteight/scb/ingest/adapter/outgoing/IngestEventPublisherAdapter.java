@@ -21,6 +21,5 @@ class IngestEventPublisherAdapter implements IngestEventPublisher {
   public void publish(Alert alert) {
     AlertIngested alertIngested = new AlertIngested(alert);
     applicationEventPublisher.publishEvent(alertIngested);
-    log.info("Alert Ingested published for {}", alert.logInfo());
   }
 }
