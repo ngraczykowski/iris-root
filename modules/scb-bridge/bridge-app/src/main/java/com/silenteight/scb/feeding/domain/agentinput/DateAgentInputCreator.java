@@ -24,7 +24,7 @@ public class DateAgentInputCreator implements AgentInput {
         .match(match.details().getMatchName())
         .featureInputs(List.of(
             DateFeatureInputOut.builder()
-                .feature("features/dateOfBirth")
+                .feature("features/date")
                 .alertedPartyDates(getAlertedPartyDates(alert.alertedParty()))
                 .watchlistDates(getWatchlistDates(match.matchedParty()))
                 .alertedPartyType(determineApType(match.matchedParty().apType()))

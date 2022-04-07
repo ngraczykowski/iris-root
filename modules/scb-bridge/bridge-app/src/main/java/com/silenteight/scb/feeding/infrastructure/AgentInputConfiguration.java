@@ -24,18 +24,13 @@ public class AgentInputConfiguration {
   }
 
   @Bean
-  NationalIdDocumentAgentInputCreator nationalIdDocumentAgentInputCreator() {
-    return new NationalIdDocumentAgentInputCreator();
+  NationalIdAgentInputCreator nationalIdDocumentAgentInputCreator() {
+    return new NationalIdAgentInputCreator();
   }
 
   @Bean
-  NationalityCountryAgentInputCreator nationalityCountryAgentInputCreator() {
-    return new NationalityCountryAgentInputCreator();
-  }
-
-  @Bean
-  OtherDocumentAgentInputCreator otherDocumentAgentInputCreator() {
-    return new OtherDocumentAgentInputCreator();
+  DocumentNumberAgentInputCreator otherDocumentAgentInputCreator() {
+    return new DocumentNumberAgentInputCreator();
   }
 
   @Bean
@@ -44,7 +39,18 @@ public class AgentInputConfiguration {
   }
 
   @Bean
-  ResidencyCountryAgentInputCreator residencyCountryAgentInputCreator() {
-    return new ResidencyCountryAgentInputCreator();
+  NationalityAgentInputCreator nationalityAgentInputCreator() {
+    return new NationalityAgentInputCreator();
   }
+
+  @Bean
+  CountryAgentInputCreator countryAgentInputCreator() {
+    return new CountryAgentInputCreator();
+  }
+
+  // TODO: uncomment once uds-lib will provide api for registering companyName feature inputs
+  //  @Bean
+  //  CompanyNameAgentInputCreator companyNameAgentInputCreator() {
+  //    return new CompanyNameAgentInputCreator();
+  //  }
 }

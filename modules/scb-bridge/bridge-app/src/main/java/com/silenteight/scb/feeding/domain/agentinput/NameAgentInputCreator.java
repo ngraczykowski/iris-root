@@ -31,7 +31,7 @@ public class NameAgentInputCreator implements AgentInput {
         .match(match.details().getMatchName())
         .featureInputs(List.of(
             NameFeatureInputOut.builder()
-                .feature("features/name")
+                .feature(getFeatureName())
                 .alertedPartyNames(createAlertedPartyNames(apNames))
                 .watchlistNames(createWatchlistNames(wlNames))
                 .alertedPartyType(determineApType(match.matchedParty().apType()))
@@ -99,5 +99,9 @@ public class NameAgentInputCreator implements AgentInput {
         .stream()
         .map(name -> new WlName(name.name(), WlNameType.valueOf(name.type())))
         .collect(Collectors.toSet());
+  }
+
+  protected String getFeatureName() {
+    return "features/name";
   }
 }

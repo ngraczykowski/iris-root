@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class ResidencyCountryAgentInputCreator implements AgentInput {
+public class CountryAgentInputCreator implements AgentInput {
 
   @Override
   public AgentInputIn<Feature> createAgentInput(Alert alert, Match match) {
@@ -24,7 +24,7 @@ public class ResidencyCountryAgentInputCreator implements AgentInput {
         .match(match.details().getMatchName())
         .featureInputs(List.of(
             CountryFeatureInputOut.builder()
-                .feature("features/residencyCountry")
+                .feature("features/country")
                 .alertedPartyCountries(getApCountries(alert.alertedParty()))
                 .watchlistCountries(getWlCountries(match.matchedParty()))
                 .build()

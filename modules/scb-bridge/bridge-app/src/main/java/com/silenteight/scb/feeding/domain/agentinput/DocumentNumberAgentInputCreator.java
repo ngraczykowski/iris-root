@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class OtherDocumentAgentInputCreator implements AgentInput {
+public class DocumentNumberAgentInputCreator implements AgentInput {
 
   @Override
   public AgentInputIn<Feature> createAgentInput(Alert alert, Match match) {
@@ -24,7 +24,7 @@ public class OtherDocumentAgentInputCreator implements AgentInput {
         .match(match.details().getMatchName())
         .featureInputs(List.of(
             DocumentFeatureInputOut.builder()
-                .feature("features/otherDocument")
+                .feature("features/document")
                 .alertedPartyDocuments(getApOtherDocuments(alert.alertedParty()))
                 .watchlistDocuments(getWlOtherDocuments(match.matchedParty()))
                 .build()

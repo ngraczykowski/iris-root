@@ -24,7 +24,7 @@ public class PassportNumberDocumentAgentInputCreator implements AgentInput {
         .match(match.details().getMatchName())
         .featureInputs(List.of(
             DocumentFeatureInputOut.builder()
-                .feature("features/passportNumberDocument")
+                .feature("features/passport")
                 .alertedPartyDocuments(getApPassportNumberDocuments(alert.alertedParty()))
                 .watchlistDocuments(getWlPassportNumberDocuments(match.matchedParty()))
                 .build()
