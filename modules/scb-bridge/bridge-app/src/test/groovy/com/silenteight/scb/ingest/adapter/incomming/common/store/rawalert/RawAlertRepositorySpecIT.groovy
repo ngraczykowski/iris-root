@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.context.annotation.Configuration
-import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import org.springframework.test.context.ContextConfiguration
 
@@ -34,7 +33,7 @@ class RawAlertRepositorySpecIT extends BaseDataJpaSpec {
     assertStoredSuccessfully(entity1, entity2)
   }
 
-  def 'should not allow to persist entities with same pair of (systemId, batchId)'() {
+  def 'should allow to persist entities with same pair of (systemId, batchId)'() {
     given:
     def entity1 = createEntity("system_id_1", "batch_id_1")
     def entity2 = createEntity("system_id_1", "batch_id_1")
@@ -43,8 +42,7 @@ class RawAlertRepositorySpecIT extends BaseDataJpaSpec {
     persistEntities(entity1, entity2)
 
     then:
-    def e = thrown(DataIntegrityViolationException)
-    e.message.contains("ConstraintViolationException")
+    assertStoredSuccessfully(entity1, entity2)
   }
 
   private void assertStoredSuccessfully(RawAlert[] expectedEntities) {

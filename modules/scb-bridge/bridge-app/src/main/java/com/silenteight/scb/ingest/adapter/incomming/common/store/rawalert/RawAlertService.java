@@ -17,9 +17,9 @@ public class RawAlertService {
   private final RawAlertRepository repository;
 
   public void store(String internalBatchId, List<Alert> alert) {
-    repository.saveAll(RawAlertMapper.toRawAlertEntities(alert, internalBatchId));
     log.info(
-        "Raw alerts have been stored with internalBatchId: {} and alertSize: {}",
-        internalBatchId, alert.size());
+        "Saving Raw alerts with internalBatchId: {} and alertSize: {}", internalBatchId,
+        alert.size());
+    repository.saveAll(RawAlertMapper.toRawAlertEntities(alert, internalBatchId));
   }
 }

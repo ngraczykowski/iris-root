@@ -14,8 +14,11 @@ class AlertIdPublisherSpec extends Specification {
   def alertInFlightService = Mock(AlertInFlightService)
   def ingestBatchEventPublisher = Mock(IngestBatchEventPublisher)
   def batchInfoService = Mock(BatchInfoService)
-  def objectUnderTest = new AlertIdPublisher(
-      alertInFlightService, ingestBatchEventPublisher, batchInfoService)
+  def objectUnderTest = AlertIdPublisher.builder()
+      .alertInFlightService(alertInFlightService)
+      .ingestBatchEventPublisher(ingestBatchEventPublisher)
+      .batchInfoService(batchInfoService)
+      .build()
 
   def 'should consume alertIdCollection'() {
     given:
@@ -28,8 +31,9 @@ class AlertIdPublisherSpec extends Specification {
     objectUnderTest.accept(new AlertIdCollection(someAlertIds, context))
 
     then:
-    1 * batchInfoService.store(_ as String, BatchSource.CBS, 2)
     1 * alertInFlightService.saveUniqueAlerts(someAlertIds, _ as String, _ as ScbAlertIdContext)
+        >> 2
+    1 * batchInfoService.store(_ as String, BatchSource.CBS, 2)
     1 * ingestBatchEventPublisher.publish(_ as IngestBatchMessage)
   }
 

@@ -24,7 +24,7 @@ class AlertsUnderProcessingService implements AlertInFlightService {
 
   @Override
   @Transactional(GnsSyncConstants.PRIMARY_TRANSACTION_MANAGER)
-  public void saveUniqueAlerts(
+  public int saveUniqueAlerts(
       Collection<AlertId> alerts, String internalBatchId, ScbAlertIdContext alertIdContext) {
     Collection<AlertId> alertsUnderProcessing = getAlertsUnderProcessing(alerts);
     List<AlertId> alertsToBeSaved = alerts
@@ -32,6 +32,7 @@ class AlertsUnderProcessingService implements AlertInFlightService {
         .filter(a -> !alertsUnderProcessing.contains(a))
         .toList();
     saveAlertsToBeProcess(alertsToBeSaved, internalBatchId, alertIdContext);
+    return alertsToBeSaved.size();
   }
 
   @Override

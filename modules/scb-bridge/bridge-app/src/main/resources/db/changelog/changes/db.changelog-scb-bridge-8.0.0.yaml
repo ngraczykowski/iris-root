@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 8.0.0-1
+      author: wzegarowski
+      comment: Removing uniq constraint for scb_raw_alert table
+      changes:
+        - dropIndex:
+            tableName: scb_raw_alert
+            indexName: idx_scb_raw_alert_system_id_batch_id
+
+        - createIndex:
+            tableName: scb_raw_alert
+            columns:
+              - column:
+                  name: system_id
+              - column:
+                  name: batch_id
+            indexName: idx_scb_raw_alert_system_id_batch_id

@@ -14,6 +14,8 @@ import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertInge
 import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlertService;
 import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext;
 
+import org.apache.commons.lang3.time.StopWatch;
+
 import java.util.List;
 
 import static com.silenteight.scb.ingest.domain.model.Batch.Priority.MEDIUM;
@@ -43,9 +45,20 @@ class AlertHandler {
 
   private void handleValidAlerts(
       String internalBatchId, List<ValidAlertComposite> validAlertComposites) {
+    var stopWatch = StopWatch.createStarted();
     persistAlerts(internalBatchId, validAlertComposites);
+    log.info("Alerts have been persisted for internalBatchId: {} executed in: {}",
+        internalBatchId, stopWatch);
+
+    stopWatch.reset();
     registerAlerts(internalBatchId, validAlertComposites);
+    log.info("Alerts have been registered for internalBatchId: {} executed in: {}",
+        internalBatchId, stopWatch);
+
+    stopWatch.reset();
     acknowledgeAlerts(validAlertComposites);
+    log.info("Alerts have been acknowledged for internalBatchId: {} executed in: {}",
+        internalBatchId, stopWatch);
   }
 
   private void registerAlerts(

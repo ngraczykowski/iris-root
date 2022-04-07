@@ -1,5 +1,6 @@
 package com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord;
 
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -8,7 +9,11 @@ import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertIdWithDetails;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertInFlightService;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.batch.BatchReadEvent;
+import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService;
+import com.silenteight.scb.ingest.domain.model.BatchStatus;
 
+import io.vavr.control.Try;
+import org.apache.commons.lang3.time.StopWatch;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 
 import java.util.List;
@@ -19,26 +24,41 @@ import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
+@Builder
 @Slf4j
 class BatchProcessingEventListener {
 
   private final AlertInFlightService alertInFlightService;
   private final AlertCompositeCollectionReader alertCompositeCollectionReader;
   private final AlertHandler alertHandler;
+  private final BatchInfoService batchInfoService;
 
-  @RabbitListener(queues = "${amqp.ingest.incoming.batch-processing.queue-name}")
+  @RabbitListener(queues = "${amqp.ingest.incoming.batch-processing.queue-name}", concurrency = "1")
   void subscribe(BatchReadEvent batchReadEvent) {
-    String internalBatchId = batchReadEvent.internalBatchId();
-    log.info("Received a BatchReadEvent with internalBatchId: {}", internalBatchId);
+    log.info("Received: {}", batchReadEvent);
 
+    var internalBatchId = batchReadEvent.internalBatchId();
+    var stopWatch = StopWatch.createStarted();
+
+    Try.run(() -> processInternalBatch(internalBatchId))
+        .onSuccess(__ -> batchInfoService.changeStatus(internalBatchId, BatchStatus.PROCESSING))
+        .onFailure(e -> {
+          batchInfoService.changeStatus(internalBatchId, BatchStatus.ERROR);
+          log.error(
+              "Error occurred while handling batch with internalBatchId: {}", internalBatchId, e);
+        })
+        .andFinally(() -> log.info("Processing: {}, executed in: {}", batchReadEvent, stopWatch));
+  }
+
+  private void processInternalBatch(String internalBatchId) {
     var alertIds = alertInFlightService.getAlertsFromBatch(internalBatchId);
 
     if (alertIds.isEmpty()) {
-      log.trace("No alerts were found for batch with internalBatchId: {}", internalBatchId);
-      return;
+      throw new IllegalStateException(
+          "No alerts were found for batch with internalBatchId: " + internalBatchId);
     }
 
-    log.info("Fetched alert ids: {}", alertIds.size());
+    log.info("Fetched alert ids: {} for internalBatchId: {}", alertIds.size(), internalBatchId);
 
     var alertCompositeCollections =
         groupAlertIdsByContext(alertIds).entrySet()

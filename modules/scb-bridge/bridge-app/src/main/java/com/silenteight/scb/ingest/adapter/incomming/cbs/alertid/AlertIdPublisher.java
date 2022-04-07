@@ -34,13 +34,19 @@ class AlertIdPublisher implements Consumer<AlertIdCollection> {
     var internalBatchId = InternalBatchIdGenerator.generate();
     var alertIdContext = toScbAlertIdContext(collection.getContext());
 
-    batchInfoService.store(internalBatchId, BatchSource.CBS, collection.getSize());
-    alertInFlightService.saveUniqueAlerts(
+    var savedUniqueAlerts = alertInFlightService.saveUniqueAlerts(
         collection.getAlertIds(), internalBatchId, alertIdContext);
-    log.info(
-        "Collection of {} alerts has been saved with internalBatchId: {}", collection.getSize(),
-        internalBatchId);
-    ingestBatchEventPublisher.publish(createIngestBatchMessage(internalBatchId));
+    if (savedUniqueAlerts == 0) {
+      log.info("No unique alerts have been persisted (existing: {}) in this batch, this batch"
+          + " will not be registered", collection.getSize());
+    } else {
+      batchInfoService.store(internalBatchId, BatchSource.CBS, savedUniqueAlerts);
+      log.info(
+          "Collection of: unique: {}, existing: {} alerts has been saved with internalBatchId: {}",
+          savedUniqueAlerts, collection.getSize(), internalBatchId);
+      ingestBatchEventPublisher.publish(createIngestBatchMessage(internalBatchId));
+    }
+
   }
 
   private IngestBatchMessage createIngestBatchMessage(String internalBatchId) {

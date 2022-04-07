@@ -7,6 +7,7 @@ import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.Ale
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckGateway;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.metrics.CbsOracleMetrics;
 import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertIngestService;
+import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService;
 import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlertService;
 
 import org.springframework.context.annotation.Bean;
@@ -26,13 +27,16 @@ class AlertReaderConfiguration {
   private final BatchAlertIngestService ingestService;
   private final RawAlertService rawAlertService;
   private final CbsOracleMetrics cbsOracleMetrics;
+  private final BatchInfoService batchInfoService;
 
   @Bean
-  BatchProcessingEventListener newAlertRecordReader() {
-    return new BatchProcessingEventListener(
-        alertInFlightService,
-        alertRecordCompositeCollectionReader(),
-        alertHandler());
+  BatchProcessingEventListener batchProcessingEventListener() {
+    return BatchProcessingEventListener.builder()
+        .alertInFlightService(alertInFlightService)
+        .alertHandler(alertHandler())
+        .alertCompositeCollectionReader(alertRecordCompositeCollectionReader())
+        .batchInfoService(batchInfoService)
+        .build();
   }
 
   private AlertCompositeCollectionReader alertRecordCompositeCollectionReader() {

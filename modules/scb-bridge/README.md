@@ -19,6 +19,21 @@ Services are exposed on locally accessible port numbers. The table below shows h
 
 ## How to test
 
+### CBS
+
+POST json
+
+```json
+{
+    "totalRecordsToRead":1
+}
+```
+
+to `/v1/cbs/test` endpoint.
+
+Locally it is: `http://localhost:24220/v1/cbs/test`
+Nomad: `https://lima.silenteight.com/rest/scb-bridge/v1/cbs/test`
+
 ### GNS-RT
 
 The simplest way to test GNS-RT locally is to send a JSON request using Postman:

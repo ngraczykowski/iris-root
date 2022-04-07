@@ -5,6 +5,7 @@ import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertIdWithDetails
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertInFlightService
 import com.silenteight.scb.ingest.adapter.incomming.cbs.batch.BatchReadEvent
+import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService
 import com.silenteight.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator
 
 import spock.lang.Specification
@@ -14,8 +15,14 @@ class AlertProcessorSpec extends Specification {
   def alertInFlightService = Mock(AlertInFlightService)
   def alertCompositeCollectionReader = Mock(AlertCompositeCollectionReader)
   def alertHandler = Mock(AlertHandler)
-  def underTest = new BatchProcessingEventListener(
-      alertInFlightService, alertCompositeCollectionReader, alertHandler)
+  def batchInfoService = Mock(BatchInfoService)
+
+  def underTest = BatchProcessingEventListener.builder()
+      .alertHandler(alertHandler)
+      .alertInFlightService(alertInFlightService)
+      .alertCompositeCollectionReader(alertCompositeCollectionReader)
+      .batchInfoService(batchInfoService)
+      .build()
 
   def fixtures = new Fixtures()
 
@@ -52,15 +59,22 @@ class AlertProcessorSpec extends Specification {
         .batchId('batchId-2')
         .build()
 
-    AlertIdWithDetails alertIdWithDetails1 = new AlertIdWithDetails(
-        alertId1.systemId, alertId1.batchId, alertIdContext1)
-    AlertIdWithDetails alertIdWithDetails2 = new AlertIdWithDetails(
-        alertId2.systemId, alertId2.batchId, alertIdContext2)
+    AlertIdWithDetails alertIdWithDetails1 = AlertIdWithDetails.builder()
+        .systemId(alertId1.systemId)
+        .batchId(alertId1.batchId)
+        .context(alertIdContext1)
+        .build()
+
+    AlertIdWithDetails alertIdWithDetails2 = AlertIdWithDetails.builder()
+        .systemId(alertId2.systemId)
+        .batchId(alertId2.batchId)
+        .context(alertIdContext2)
+        .build()
 
     AlertCompositeCollection alertCompositeCollection = new AlertCompositeCollection([], [])
 
-    List<AlertCompositeCollection> alertCompositeCollections = List
-        .of(alertCompositeCollection, alertCompositeCollection);
+    List<AlertCompositeCollection> alertCompositeCollections = [alertCompositeCollection,
+                                                                alertCompositeCollection]
 
     List<AlertIdWithDetails> chunkOfAlertIds = [alertIdWithDetails1, alertIdWithDetails2]
   }
