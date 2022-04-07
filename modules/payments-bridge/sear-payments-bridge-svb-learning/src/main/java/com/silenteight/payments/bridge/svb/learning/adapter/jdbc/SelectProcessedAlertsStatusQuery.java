@@ -67,7 +67,7 @@ class SelectProcessedAlertsStatusQuery {
                 .builder()
                 .failedAlerts(rs.getInt("failed_count"))
                 .successfulAlerts(rs.getInt("succes_count"))
-                .fileName(rs.getString("file_name"))
+                .fileName(fileName)
                 .errors(readAlertErrorsMapper(rs))
                 .build());
 
