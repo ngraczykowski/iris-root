@@ -3,10 +3,10 @@ package com.silenteight.warehouse.indexer.alert;
 import com.silenteight.warehouse.indexer.alert.dto.AlertDto;
 
 import com.google.common.collect.ImmutableListMultimap;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -30,30 +30,37 @@ class AlertPostgresRepositoryTest {
   private static final String TIME_TO_STRING = "2021-06-30T00:00:01Z";
   private static final int LIMIT = 2;
   private static final String TEST_1 =
-      "SELECT * FROM warehouse_alert WHERE name is NOT NULL AND created_at BETWEEN ? AND ?AND name"
+      "SELECT * FROM warehouse_alert WHERE name IS NOT NULL AND created_at BETWEEN ? AND ?AND name"
           + " IN (?,?) ORDER BY RANDOM() LIMIT ?";
   private static final String TEST_2 =
-      "SELECT * FROM warehouse_alert WHERE name is NOT NULL AND created_at BETWEEN ? AND ? ORDER BY"
+      "SELECT * FROM warehouse_alert WHERE name IS NOT NULL AND created_at BETWEEN ? AND ? ORDER BY"
           + " RANDOM() LIMIT ?";
   private static final String TEST_3 =
-      "SELECT * FROM warehouse_alert WHERE name is NOT NULL AND created_at BETWEEN ? AND ?AND"
+      "SELECT * FROM warehouse_alert WHERE name IS NOT NULL AND created_at BETWEEN ? AND ?AND"
           + " payload->>? = ? AND payload->>? in (?,?) ORDER BY RANDOM() LIMIT ?";
   private static final String TEST_4 =
-      "SELECT * FROM warehouse_alert WHERE name is NOT NULL AND created_at BETWEEN ? AND ?AND name"
+      "SELECT * FROM warehouse_alert WHERE name IS NOT NULL AND created_at BETWEEN ? AND ?AND name"
           + " IN (?,?)AND payload->>? = ? AND payload->>? in (?,?) ORDER BY RANDOM() LIMIT ?";
   private static final String TEST_5 =
       "SELECT * FROM warehouse_alert WHERE created_at BETWEEN ? AND ?AND payload->>? = ? AND"
           + " payload->>? in (?,?)";
 
   @Mock
-  JdbcTemplate jdbcTemplateMock;
+  private JdbcTemplate jdbcTemplateMock;
 
-  @InjectMocks
+  private AlertDtoRowMapper alertDtoRowMapper = new AlertDtoRowMapper();
+
   private AlertPostgresRepository repository;
 
+  @BeforeEach
+  void setUp() {
+    repository = new AlertPostgresRepository(jdbcTemplateMock, alertDtoRowMapper);
+  }
+
   @Test
-  void fetchWithoutFilters_sqlWithoutAlertNaneAndWithoutAdditionalClauses() {
+  void fetchWithoutRFilters_sqlWithoutAlertNaneAndWithoutAdditionalClauses() {
     // When
+    repository = new AlertPostgresRepository(jdbcTemplateMock, alertDtoRowMapper);
     repository.fetchRandomAlerts(
         CREATED_AT, TIME_FROM_STRING, TIME_TO_STRING, LIMIT,
         ImmutableListMultimap.of(),
@@ -62,7 +69,7 @@ class AlertPostgresRepositoryTest {
     // Then
     verify(jdbcTemplateMock).query(
         eq(TEST_2),
-        ArgumentMatchers.<RowMapper<AlertDto>>any(), eq(TIME_FROM),
+        eq(alertDtoRowMapper), eq(TIME_FROM),
         eq(TIME_TO), eq(LIMIT));
   }
 
@@ -76,7 +83,7 @@ class AlertPostgresRepositoryTest {
     // Then
     verify(jdbcTemplateMock).query(
         eq(TEST_1),
-        ArgumentMatchers.<RowMapper<AlertDto>>any(), eq(TIME_FROM),
+        eq(alertDtoRowMapper), eq(TIME_FROM),
         eq(TIME_TO), eq("alertName"), eq("alertName2"), eq(LIMIT));
   }
 
@@ -92,7 +99,7 @@ class AlertPostgresRepositoryTest {
     // Then
     verify(jdbcTemplateMock).query(
         eq(TEST_3),
-        ArgumentMatchers.<RowMapper<AlertDto>>any(), eq(TIME_FROM),
+        eq(alertDtoRowMapper), eq(TIME_FROM),
         eq(TIME_TO), eq("propertyName"), eq("value1"), eq("propertyName2"),
         eq("value1"), eq("value2"), eq(LIMIT));
   }
@@ -109,10 +116,11 @@ class AlertPostgresRepositoryTest {
     // Then
     verify(jdbcTemplateMock).query(
         eq(TEST_4),
-        ArgumentMatchers.<RowMapper<AlertDto>>any(), eq(TIME_FROM),
+        eq(alertDtoRowMapper), eq(TIME_FROM),
         eq(TIME_TO), eq("alertName"), eq("alertName2"), eq("propertyName"),
         eq("value1"), eq("propertyName2"), eq("value1"), eq("value2"),
         eq(LIMIT));
+
   }
 
   @Test

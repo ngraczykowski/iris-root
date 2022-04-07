@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import static com.silenteight.warehouse.indexer.alert.AlertColumnName.RECOMMENDATION_DATE;
@@ -37,7 +38,7 @@ class RandomPostgresSearchAlertQueryServiceTest {
       .createdAt(
           Date.from(Instant.now()))
       .recommendationDate(Date.from(Instant.now()))
-      .payload("{}")
+      .payload(Map.of())
       .build();
 
   private static final AlertSearchCriteria.AlertSearchCriteriaBuilder BUILDER = AlertSearchCriteria

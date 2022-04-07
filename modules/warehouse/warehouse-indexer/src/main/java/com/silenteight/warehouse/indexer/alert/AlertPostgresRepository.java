@@ -37,11 +37,11 @@ import static com.silenteight.warehouse.common.time.Timestamps.toSqlTimestamp;
 @Slf4j
 public final class AlertPostgresRepository implements AlertRepository {
 
-  public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-  public static final String PAYLOAD_COLUMN_NAME = "payload";
+  private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+  private static final String PAYLOAD_COLUMN_NAME = "payload";
   @Language("PostgreSQL")
   private static final String FETCH =
-      "SELECT * FROM warehouse_alert WHERE name is NOT NULL AND %s BETWEEN ? AND ?%s%s ORDER BY"
+      "SELECT * FROM warehouse_alert WHERE name IS NOT NULL AND %s BETWEEN ? AND ?%s%s ORDER BY"
           + " RANDOM() LIMIT ?";
   @Language("PostgreSQL")
   private static final String GROUP_BY =
@@ -52,6 +52,10 @@ public final class AlertPostgresRepository implements AlertRepository {
   @Valid
   @NonNull
   private JdbcTemplate jdbcTemplate;
+
+  @Valid
+  @NonNull
+  private AlertDtoRowMapper mapper;
 
   @Override
   public List<AlertDto> fetchRandomAlerts(
@@ -69,8 +73,7 @@ public final class AlertPostgresRepository implements AlertRepository {
             Optional.of(limit));
 
     log.debug("Querying jdbctemplate with sql {} with parameters {}", sql, jdbcParameters);
-    return jdbcTemplate.query(sql, (rs, rowNum) -> getAlertDto(rs),
-        jdbcParameters.toArray(new Object[0]));
+    return jdbcTemplate.query(sql, mapper, jdbcParameters.toArray(new Object[0]));
   }
 
 
@@ -176,17 +179,5 @@ public final class AlertPostgresRepository implements AlertRepository {
       return String.format(
           "payload->>? in (%s)", createJdbTemplateIndicators(values.size()));
     }
-  }
-
-  private static AlertDto getAlertDto(ResultSet rs) throws SQLException {
-    return AlertDto
-        .builder()
-        .id(rs.getLong("id"))
-        .name(rs.getString("name"))
-        .discriminator(rs.getString("discriminator"))
-        .recommendationDate(rs.getTimestamp("recommendation_date"))
-        .createdAt(rs.getTimestamp(AlertColumnName.CREATED_AT.getName()))
-        .payload(rs.getString("payload"))
-        .build();
   }
 }
