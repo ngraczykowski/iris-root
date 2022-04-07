@@ -11,7 +11,7 @@ mkdir -p  $WHEELDIR
 
 # optional if there is a problem with pip
 curl https://bootstrap.pypa.io/pip/3.6/get-pip.py | python - 
-pip wheel etl_pipeline -w $WHEELDIR --no-cache-dir
+pip wheel . -w $WHEELDIR --no-cache-dir
 python setup.py bdist_wheel
 rm $WHEELDIR/etl*
 artifact=$(basename -- "$(ls ./dist/etl_pipeline-*.whl)")
