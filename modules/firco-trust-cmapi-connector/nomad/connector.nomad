@@ -37,11 +37,6 @@ variable "grpcui_tags" {
   default = []
 }
 
-variable "node_destination" {
-  type    = string
-  default = "eu3"
-}
-
 locals {
   jvm_memory                = ceil(var.memory * 0.7)
   perm_memory               = ceil(var.memory * 0.2)
@@ -119,14 +114,8 @@ job "firco-trust-cmapi-connector" {
   group "firco-trust-cmapi-connector" {
     count = 1
 
-    constraint {
-      attribute = "${node.unique.name}"
-      value     = var.node_destination
-    }
-
     network {
       port "http" {
-        static = var.firco_connector_http_port
       }
       port "grpc" {
       }
