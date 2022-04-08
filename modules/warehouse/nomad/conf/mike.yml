@@ -198,16 +198,72 @@ warehouse.reports.v2:
       type: production
       description: Accuracy (Alert Level)
       selectSqlQuery: >
+        SELECT wa.name                                          AS "S8 Alert ID",
+               wa.payload ->> 'clientId'                        AS "Client Alert ID",
+               STRING_AGG(wm.payload ->> 'clientId', ', ')      AS "Client Match IDs",
+               wa.payload ->> 'policy'                          AS "Policy ID",
+               wa.payload ->> 'policyTitle'                     AS "Policy Name",
+               wm.payload ->> 'step'                            AS "Step ID",
+               wm.payload ->> 'stepTitle'                       AS "Step Name",
+               STRING_AGG(wm.payload ->> 'fvSignature', ', ')   AS "Reasoning Branch IDs",
+               wa.payload ->> 's8Recommendation'                AS "S8 Alert Resolution",
+               wa.payload ->> 'recommendationDate'              AS "S8 Resolution Timestamp",
+               wa.payload ->> 'comment'                         AS "S8 Alert Reason",
+               wa.payload ->> 'analystDecision'                 AS "Analyst Decision",
+               wa.payload ->> 'analystDecisionModifiedDateTime' AS "Analyst Decision Timestamp",
+               wa.payload ->> 'analystReason'                   AS "Analyst Reason"
+        FROM warehouse_alert wa
+          JOIN warehouse_match wm ON wa.id = wm.alert_id
+        WHERE wa.recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
+          AND wa.payload ->> 'analystDecision' != ''
+        GROUP BY wa.name,
+                 wa.payload ->> 'clientId',
+                 wa.payload ->> 'policy',
+                 wa.payload ->> 'policyTitle',
+                 wm.payload ->> 'step',
+                 wm.payload ->> 'stepTitle',
+                 wa.payload ->> 's8Recommendation',
+                 wa.payload ->> 'recommendationDate',
+                 wa.payload ->> 'comment',
+                 wa.payload ->> 'analystDecision',
+                 wa.payload ->> 'analystDecisionModifiedDateTime',
+                 wa.payload ->> 'analystReason'
 
-    - name: ACCURACY_MATCH_LEVEL
-      type: production
-      description: Accuracy (Match Level)
-      selectSqlQuery: >
-
-    - name: ACCURACY_MATCH_LEVEL
+    - name: ACCURACY_ALERT_LEVEL
       type: simulation
       description: Accuracy
       selectSqlQuery: >
+        SELECT wa.name                                                                     AS "S8 Alert ID",
+               wsa.payload ->> 'clientId'                                                  AS "Client Alert ID",
+               STRING_AGG(wm.payload ->> 'clientId', ', ')                                 AS "Client Match IDs",
+               wsa.payload ->> 'match_reason:policy'                                       AS "Policy ID",
+               wsa.payload ->> 'match_reason:policy_title'                                 AS "Policy Name",
+               wsa.payload ->> 'match_reason:step'                                         AS "Step ID",
+               wsa.payload ->> 'match_reason:step_title'                                   AS "Step Name",
+               STRING_AGG(wsa.payload ->> 'match_reason:feature_vector_signature', ', ')   AS "Reasoning Branch IDs",
+               wsa.payload ->> 'recommendation_recommended_action'                         AS "S8 Alert Resolution",
+               wsa.payload ->> 'recommendation_create_time'                                AS "S8 Resolution Timestamp",
+               wsa.payload ->> 'recommendation_comment'                                    AS "S8 Alert Reason",
+               wa.payload ->> 'analystDecision'                                            AS "Analyst Decision",
+               wa.payload ->> 'analystDecisionModifiedDateTime'                            AS "Analyst Decision Timestamp",
+               wa.payload ->> 'analystReason'                                              AS "Analyst Reason"
+        FROM warehouse_simulation_alert wsa
+          JOIN warehouse_alert wa ON wsa.name = wa.name
+          JOIN warehouse_match wm ON wa.id = wm.alert_id
+        WHERE wsa.analysis_name = 'analysis/${analysisId}'
+          AND wa.payload ->> 'analyst_decision' IN ('ANALYST_FALSE_POSITIVE', 'ANALYST_TRUE_POSITIVE')
+        GROUP BY wa.name,
+                 wsa.payload ->> 'clientId',
+                 wsa.payload ->> 'match_reason:policy',
+                 wsa.payload ->> 'match_reason:policy_title',
+                 wsa.payload ->> 'match_reason:step',
+                 wsa.payload ->> 'match_reason:step_title',
+                 wsa.payload ->> 'recommendation_recommended_action',
+                 wsa.payload ->> 'recommendation_create_time',
+                 wsa.payload ->> 'recommendation_comment',
+                 wa.payload ->> 'analystDecision',
+                 wa.payload ->> 'analystDecisionModifiedDateTime',
+                 wa.payload ->> 'analystReason'
 
     - name: METRICS_ALERT_LEVEL
       type: production
