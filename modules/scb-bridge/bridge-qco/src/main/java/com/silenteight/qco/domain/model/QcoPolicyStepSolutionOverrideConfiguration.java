@@ -1,10 +1,14 @@
 package com.silenteight.qco.domain.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class QcoPolicyStepSolutionOverrideConfiguration {
 
   @JsonProperty(index = 0)

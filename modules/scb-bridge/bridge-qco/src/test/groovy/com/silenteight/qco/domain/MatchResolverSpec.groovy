@@ -27,7 +27,7 @@ class MatchResolverSpec extends Specification {
     def result = underTest.overrideSolutionMatch(command)
 
     then:
-    assert result.changed() == true
+    result.changed() == true
     1 * matchRegister.register(_)
   }
 
@@ -41,7 +41,7 @@ class MatchResolverSpec extends Specification {
     def result = underTest.overrideSolutionMatch(command)
 
     then:
-    assert result.changed() == false
+    result.changed() == false
     0 * matchRegister.register(_)
   }
 }

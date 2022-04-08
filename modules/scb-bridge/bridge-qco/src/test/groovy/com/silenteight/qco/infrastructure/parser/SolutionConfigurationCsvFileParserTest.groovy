@@ -23,10 +23,10 @@ class SolutionConfigurationCsvFileParserTest extends Specification {
     then:
     assert result.size() == 1
     def configResult = result.get(0)
-    assert configResult.getPolicyId() == 'policies/3f1432f4-8828-478e-a6b4-8803ba80be2b'
-    assert configResult.getStepId() == 'steps/5ca9d972-695b-4550-a383-b09311ff42e4'
-    assert configResult.getMatchThreshold() == 500
-    assert configResult.getSolution() == 'FALSE:POSITIVE'
-    assert configResult.getSolutionOverride() == 'Manual:Investigation'
+    configResult.getPolicyId() == 'policies/3f1432f4-8828-478e-a6b4-8803ba80be2b'
+    configResult.getStepId() == 'steps/5ca9d972-695b-4550-a383-b09311ff42e4'
+    configResult.getMatchThreshold() == 500
+    configResult.getSolution() == 'FALSE:POSITIVE'
+    configResult.getSolutionOverride() == 'Manual:Investigation'
   }
 }

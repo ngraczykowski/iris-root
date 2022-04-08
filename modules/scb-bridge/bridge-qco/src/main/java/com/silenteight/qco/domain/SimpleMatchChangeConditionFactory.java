@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.qco.domain.model.ChangeCondition;
-import com.silenteight.qco.domain.model.QcoConfigurationHolder;
 
 import org.springframework.stereotype.Component;
 
