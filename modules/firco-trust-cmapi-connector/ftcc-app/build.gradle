@@ -67,6 +67,9 @@ dependencies {
   runtimeOnly libraries.spring_cloud_consul_discovery
   runtimeOnly libraries.spring_cloud_starter_consul_config
 
+  //Prometheus
+  runtimeOnly libraries.micrometer_prometheus
+
   //Sentry
   runtimeOnly libraries.sentry_spring_boot_starter
   runtimeOnly libraries.sentry_logback
