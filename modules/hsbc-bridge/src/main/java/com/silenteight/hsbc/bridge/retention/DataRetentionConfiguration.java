@@ -20,12 +20,22 @@ class DataRetentionConfiguration {
   private final AlertRetentionSender alertRetentionMessageSender;
   private final DataCleaner alertDataCleaner;
   private final DataCleaner matchDataCleaner;
-
   private final DataRetentionProperties properties;
   private final TaskScheduler taskScheduler;
 
   @EventListener(ApplicationStartedEvent.class)
   public void applicationStarted() {
+    log.debug(
+        "Data retention properties: "
+            + "alertsExpiredEnabled={}, "
+            + "alertsExpiredDuration={} days, "
+            + "personalInformationExpiredEnabled={}, "
+            + "personalInformationExpiredDuration={} days",
+        properties.getAlertsExpired().isEnabled(),
+        properties.getAlertsExpired().getDuration().toDays(),
+        properties.getPersonalInformationExpired().isEnabled(),
+        properties.getPersonalInformationExpired().getDuration().toDays());
+
     var isPersonalInfoExpired = properties.getPersonalInformationExpired().isEnabled();
     var isAlertsExpired = properties.getAlertsExpired().isEnabled();
     if (isPersonalInfoExpired ^ isAlertsExpired) {
@@ -46,7 +56,7 @@ class DataRetentionConfiguration {
   }
 
   private void schedulePayloadRetentionJob(Duration duration, DataRetentionType type) {
-    log.debug("Registering payload cleaner job, rate={}", properties.getRate());
+    log.debug("Registering payload cleaner job, day rate={}", properties.getRate().toDays());
 
     taskScheduler.scheduleAtFixedRate(
         getPayloadRetentionJob(duration, type)::process, properties.getRate());
