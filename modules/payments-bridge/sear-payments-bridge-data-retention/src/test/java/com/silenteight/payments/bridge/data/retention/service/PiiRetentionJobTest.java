@@ -1,6 +1,6 @@
 package com.silenteight.payments.bridge.data.retention.service;
 
-import com.silenteight.payments.bridge.data.retention.SendAlertExpiredPortMock;
+import com.silenteight.payments.bridge.data.retention.SendPersonalInformationExpiredMock;
 import com.silenteight.payments.bridge.data.retention.TestApplicationConfiguration;
 import com.silenteight.payments.bridge.testing.BaseBatchTest;
 
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 
-import static com.silenteight.payments.bridge.data.retention.service.DataRetentionConstants.SEND_ALERTS_EXPIRED_STEP_NAME;
+import static com.silenteight.payments.bridge.data.retention.service.DataRetentionConstants.SEND_REMOVE_PII_STEP_NAME;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 
@@ -29,24 +29,25 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TES
     excludeFilters =
     @ComponentScan.Filter(
         type = FilterType.ASSIGNABLE_TYPE,
-        value = PiiRetentionJobConfiguration.class))
-class AlertRetentionJobTest extends BaseBatchTest {
+        value = AlertRetentionJobConfiguration.class))
+class PiiRetentionJobTest extends BaseBatchTest {
 
   @Autowired
-  private SendAlertExpiredPortMock sendAlertsExpiredPort;
+  private SendPersonalInformationExpiredMock sendPersonalInformationExpired;
   @Autowired
   private JdbcTemplate jdbcTemplate;
 
   @Test
+  @Transactional(propagation = Propagation.NOT_SUPPORTED)
   @Sql(scripts = "ShouldSendExpiredAlerts.sql")
   @Sql(scripts = "TruncateJobData.sql", executionPhase = AFTER_TEST_METHOD)
-  @Transactional(propagation = Propagation.NOT_SUPPORTED)
-  public void shouldSendAlertExpiredAndSaveAlertsStatus() {
-    var alertsExpiredStep = createStepExecution(SEND_ALERTS_EXPIRED_STEP_NAME).get();
+  public void shouldSendRemovePiiAndSaveAlertsStatus() {
+    var alertsExpiredStep = createStepExecution(SEND_REMOVE_PII_STEP_NAME).get();
     assertThat(alertsExpiredStep.getReadCount()).isEqualTo(10);
-    assertThat(sendAlertsExpiredPort.getAlertsExpiredCount()).isEqualTo(10);
+    assertThat(sendPersonalInformationExpired.getPiiExpiredCount()).isEqualTo(10);
     assertThat(jdbcTemplate.queryForObject(
-        "SELECT count(*) FROM pb_alert_data_retention WHERE alert_data_removed_at IS NOT NULL ",
+        "SELECT count(*) FROM pb_alert_data_retention "
+            + "WHERE pb_alert_data_retention.pii_removed_at IS NOT NULL ",
         Integer.class)).isEqualTo(10);
   }
 

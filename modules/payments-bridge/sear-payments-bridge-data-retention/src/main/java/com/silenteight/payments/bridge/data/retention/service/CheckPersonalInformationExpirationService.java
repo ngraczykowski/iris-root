@@ -1,51 +1,36 @@
 package com.silenteight.payments.bridge.data.retention.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.dataretention.api.v1.PersonalInformationExpired;
-import com.silenteight.payments.bridge.data.retention.adapter.AlertDataRetentionAccessPort;
-import com.silenteight.payments.bridge.data.retention.model.DataType;
+import com.silenteight.payments.bridge.common.event.TriggerBatchJobEvent;
 import com.silenteight.payments.bridge.data.retention.port.CheckPersonalInformationExpirationUseCase;
-import com.silenteight.payments.bridge.data.retention.port.SendPersonalInformationExpiredPort;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import static com.silenteight.payments.bridge.data.retention.service.DataRetentionConstants.SEND_REMOVE_PII_JOB_NAME;
 
 @Service
-@EnableConfigurationProperties(DataRetentionProperties.class)
+@RequiredArgsConstructor
 @Slf4j
-class CheckPersonalInformationExpirationService extends DataExpirationTemplate implements
-    CheckPersonalInformationExpirationUseCase {
+class CheckPersonalInformationExpirationService
+    implements CheckPersonalInformationExpirationUseCase {
 
-  private final DataRetentionProperties properties;
-  private final SendPersonalInformationExpiredPort sendPersonalInformationExpiredPort;
+  private final ApplicationEventPublisher applicationEventPublisher;
 
-  public CheckPersonalInformationExpirationService(
-      DataRetentionProperties properties,
-      AlertDataRetentionAccessPort alertDataRetentionAccessPort,
-      SendPersonalInformationExpiredPort sendPersonalInformationExpiredPort) {
-    super(alertDataRetentionAccessPort);
-    this.properties = properties;
-    this.sendPersonalInformationExpiredPort = sendPersonalInformationExpiredPort;
-  }
-
-  @Override
-  @Transactional
+  @Async
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   public void execute() {
-    var personalInformation = properties.getPersonalInformation();
-    doExecute(personalInformation.getExpiration(), DataType.PERSONAL_INFORMATION);
-  }
-
-  protected void sendMessage(List<String> alertNames) {
-    log.info("The personal identifiable information data of the following alerts is being "
-        + "requested to be deleted in accordance with the retention policy: [{}]", alertNames);
-    sendPersonalInformationExpiredPort.send(
-        PersonalInformationExpired.newBuilder()
-            .addAllAlerts(alertNames)
-            .build());
+    var triggerEvent = TriggerBatchJobEvent
+        .builder()
+        .jobName(SEND_REMOVE_PII_JOB_NAME)
+        .parameters(new JobParameters())
+        .build();
+    applicationEventPublisher.publishEvent(triggerEvent);
   }
 
 }

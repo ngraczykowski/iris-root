@@ -6,7 +6,7 @@ import com.silenteight.payments.bridge.data.retention.port.SendPersonalInformati
 import java.util.LinkedList;
 import java.util.List;
 
-class SendPersonalInformationExpiredMock implements SendPersonalInformationExpiredPort {
+public class SendPersonalInformationExpiredMock implements SendPersonalInformationExpiredPort {
 
   private final List<PersonalInformationExpired> personalInformationExpiredList =
       new LinkedList<>();
@@ -15,5 +15,13 @@ class SendPersonalInformationExpiredMock implements SendPersonalInformationExpir
   public void send(
       PersonalInformationExpired personalInformationExpired) {
     personalInformationExpiredList.add(personalInformationExpired);
+  }
+
+  public int getPiiExpiredCount() {
+    return (int) personalInformationExpiredList
+        .stream()
+        .map(PersonalInformationExpired::getAlertsList)
+        .mapToLong(List::size)
+        .sum();
   }
 }
