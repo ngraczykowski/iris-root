@@ -38,7 +38,12 @@ class SendResponseService implements SendResponseUseCase {
 
   @LogContext
   @Override
-  @Timed(value = "pb.firco.use_cases", extraTags = { "package", "callback" })
+  @Timed(
+      value = "pb.firco.use_cases",
+      extraTags = { "package", "callback" },
+      histogram = true,
+      percentiles = { 0.5, 0.95, 0.99 }
+  )
   public void send(ResponseCompleted responseCompleted) {
     var alertId = ResourceName.create(responseCompleted.getAlert()).getUuid("alerts");
     MDC.put("alertId", alertId.toString());

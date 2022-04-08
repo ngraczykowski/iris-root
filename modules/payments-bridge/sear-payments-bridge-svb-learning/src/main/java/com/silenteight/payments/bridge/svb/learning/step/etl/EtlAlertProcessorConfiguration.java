@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.ae.alertregistration.port.FindRegisteredAlertUseCase;
 
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +32,7 @@ class EtlAlertProcessorConfiguration {
     return new EtlAlertProcessor(
         findRegisteredAlertUseCase, processRegisteredService, processUnregisteredService,
         eventPublisher,
-        stepExecution.getJobExecution().getJobId(), fileName);
+        stepExecution.getJobExecution().getJobId(), fileName,
+        new SimpleMeterRegistry());
   }
 }

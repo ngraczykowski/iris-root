@@ -10,10 +10,12 @@ import com.silenteight.payments.bridge.svb.learning.domain.AlertComposite;
 import com.silenteight.payments.bridge.svb.learning.step.etl.LearningProcessedAlert.LearningProcessedAlertBuilder;
 import com.silenteight.payments.bridge.svb.oldetl.model.UnsupportedMessageException;
 
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static com.silenteight.payments.bridge.svb.learning.domain.AlertProcessingResult.FAILED;
 import static com.silenteight.payments.bridge.svb.learning.domain.AlertProcessingResult.SUCCESSFUL;
@@ -28,12 +30,35 @@ class EtlAlertProcessor implements ItemProcessor<AlertComposite, LearningProcess
   private final ApplicationEventPublisher eventPublisher;
   private final Long jobId;
   private final String fileName;
+  private final AtomicLong learningProcessGuage;
+  private final AtomicLong registeredAlertsProcessGuage;
+
+  EtlAlertProcessor(
+      FindRegisteredAlertUseCase findRegisteredAlertUseCase,
+      ProcessRegisteredService processRegisteredService,
+      ProcessUnregisteredService processUnregisteredService,
+      ApplicationEventPublisher eventPublisher, Long jobId,
+      final String fileName,
+      MeterRegistry meterRegistry
+  ) {
+    this.findRegisteredAlertUseCase = findRegisteredAlertUseCase;
+    this.processRegisteredService = processRegisteredService;
+    this.processUnregisteredService = processUnregisteredService;
+    this.eventPublisher = eventPublisher;
+    this.jobId = jobId;
+    this.fileName = fileName;
+    this.learningProcessGuage = meterRegistry.gauge("learning.alert.hits.size", new AtomicLong(0L));
+    this.registeredAlertsProcessGuage =
+        meterRegistry.gauge("learning.registered.alerts.size", new AtomicLong(0L));
+  }
 
   @Override
   public LearningProcessedAlert process(AlertComposite alertComposite) {
+    this.learningProcessGuage.set(alertComposite.getHits().size());
     var solvingRegistered =
         findRegisteredAlertUseCase.find(List.of(alertComposite.toFindRegisterAlertRequest()));
 
+    this.registeredAlertsProcessGuage.set(solvingRegistered.size());
     if (solvingRegistered.isEmpty()) {
       return processUnregistered(alertComposite);
     }

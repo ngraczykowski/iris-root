@@ -9,6 +9,7 @@ import com.silenteight.payments.bridge.firco.alertmessage.port.OutdatedAlertMess
 import com.silenteight.payments.bridge.firco.recommendation.model.BridgeSourcedRecommendation;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationReason;
 import com.silenteight.payments.bridge.firco.recommendation.port.CreateRecommendationUseCase;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -30,6 +31,7 @@ class OutdatedAlertMessagesService implements OutdatedAlertMessagesUseCase {
   private Clock clock = Clock.systemUTC();
 
   @Override
+  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
   public boolean process(int chunkSize) {
     var outdatedAlerts = repository.findOutdated(chunkSize, decisionObsoleteSince());
     outdatedAlerts.forEach(this::transitionToOutdated);
