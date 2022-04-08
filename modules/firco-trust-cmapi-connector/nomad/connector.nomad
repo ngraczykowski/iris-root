@@ -39,7 +39,7 @@ variable "grpcui_tags" {
 
 variable "node_destination" {
   type    = string
-  default = "eu4"
+  default = "eu3"
 }
 
 locals {
