@@ -121,7 +121,7 @@ job "firco-trust-cmapi-connector" {
 
     constraint {
       attribute = "${node.unique.name}"
-      value     = "${local.database_node_destination}"
+      value     = var.node_destination
     }
 
     network {

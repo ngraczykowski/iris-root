@@ -29,7 +29,7 @@
               "UserData1": "",
               "UserData2": ""
             },
-            "MessageData": ";OSAMA BIN LADIN;;individual;30/8/1965;;M;NBIQIQBAXXX;;;;;IR;IR;IR;IR;;;AVB2833444;784012345678901;;;;;;;;",
+            "MessageData": ";OSAMA BIN LADIN;;INDIVIDUAL;30/8/1965;;M;NBIQIQBAXXX;;;;;IR;IR;IR;IR;;;AVB2833444;784012345678901;;;;;;;;",
             "LastComment": "",
             "LastOperator": "patrick",
             "FilteredDate": "2017/05/22 13:52:00",
@@ -40,6 +40,1041 @@
             "NonBlocking": "0",
             "BatchID": "",
             "Hits": [
+              {
+                "Hit": {
+                  "MatchingText": "OSAMA BIN LADIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "11",
+                        "PositionEnd": "22"
+                      }
+                    }
+                  ],
+                  "Score": "1.0",
+                  "Tag": "NAM",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "YASIN, ABDUL RAHMAN",
+                  "HittedEntity": {
+                    "ID": "35cc7249-43b0-40d8-8c8f-c8b4c5d956f1",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "OSFI_2006/02/09"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "OSAMA BIN LADIN"
+                      },
+                      {
+                        "Name": "YASIN, ABOUD"
+                      },
+                      {
+                        "Name": "TAHER, ABDUL RAHMAN SAID"
+                      },
+                      {
+                        "Name": "TAHA, ABDUL RAHMAN"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                            "IR"
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "OSFI",
+                    "Designation": "BSIF",
+                    "Keywords": [
+                      {
+                        "Keyword": "none"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                      "NBIQIQBAXXX",
+                      "S93849384A",
+                      "784012345678901"
+                    ],
+                    "OtherDocument": "784012345678901",
+                    "PassportNumber": "AVB2833444",
+                    "AdditionalInfo": "M, IR",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "30/8/1965"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "BLOOMINGTON, INDIANA, USA"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "OSAMA BIN LADIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "11",
+                        "PositionEnd": "22"
+                      }
+                    }
+                  ],
+                  "Score": "1.0",
+                  "Tag": "NAM",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "YASIN, ABDUL RAHMAN",
+                  "HittedEntity": {
+                    "ID": "35cc7249-43b0-40d8-8c8f-c8b4c5d956f2",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "OSFI_2006/02/09"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "OSAMA BIN LADIN"
+                      },
+                      {
+                        "Name": "YASIN, ABOUD"
+                      },
+                      {
+                        "Name": "TAHER, ABDUL RAHMAN SAID"
+                      },
+                      {
+                        "Name": "TAHA, ABDUL RAHMAN"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                            "IR"
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "OSFI",
+                    "Designation": "BSIF",
+                    "Keywords": [
+                      {
+                        "Keyword": "none"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                      "NBIQIQBAXXX",
+                      "S93849384A",
+                      "784012345678901"
+                    ],
+                    "OtherDocument": "784012345678901",
+                    "PassportNumber": "AVB2833444",
+                    "AdditionalInfo": "M, IR",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "30/8/1965"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "BLOOMINGTON, INDIANA, USA"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "OSAMA BIN LADIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "11",
+                        "PositionEnd": "22"
+                      }
+                    }
+                  ],
+                  "Score": "1.0",
+                  "Tag": "NAM",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "YASIN, ABDUL RAHMAN",
+                  "HittedEntity": {
+                    "ID": "35cc7249-43b0-40d8-8c8f-c8b4c5d956f3",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "OSFI_2006/02/09"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "OSAMA BIN LADIN"
+                      },
+                      {
+                        "Name": "YASIN, ABOUD"
+                      },
+                      {
+                        "Name": "TAHER, ABDUL RAHMAN SAID"
+                      },
+                      {
+                        "Name": "TAHA, ABDUL RAHMAN"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                            "IR"
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "OSFI",
+                    "Designation": "BSIF",
+                    "Keywords": [
+                      {
+                        "Keyword": "none"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                      "NBIQIQBAXXX",
+                      "S93849384A",
+                      "784012345678901"
+                    ],
+                    "OtherDocument": "784012345678901",
+                    "PassportNumber": "AVB2833444",
+                    "AdditionalInfo": "M, IR",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "30/8/1965"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "BLOOMINGTON, INDIANA, USA"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "OSAMA BIN LADIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "11",
+                        "PositionEnd": "22"
+                      }
+                    }
+                  ],
+                  "Score": "1.0",
+                  "Tag": "NAM",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "YASIN, ABDUL RAHMAN",
+                  "HittedEntity": {
+                    "ID": "35cc7249-43b0-40d8-8c8f-c8b4c5d956f4",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "OSFI_2006/02/09"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "OSAMA BIN LADIN"
+                      },
+                      {
+                        "Name": "YASIN, ABOUD"
+                      },
+                      {
+                        "Name": "TAHER, ABDUL RAHMAN SAID"
+                      },
+                      {
+                        "Name": "TAHA, ABDUL RAHMAN"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                            "IR"
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "OSFI",
+                    "Designation": "BSIF",
+                    "Keywords": [
+                      {
+                        "Keyword": "none"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                      "NBIQIQBAXXX",
+                      "S93849384A",
+                      "784012345678901"
+                    ],
+                    "OtherDocument": "784012345678901",
+                    "PassportNumber": "AVB2833444",
+                    "AdditionalInfo": "M, IR",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "30/8/1965"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "BLOOMINGTON, INDIANA, USA"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "OSAMA BIN LADIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "11",
+                        "PositionEnd": "22"
+                      }
+                    }
+                  ],
+                  "Score": "1.0",
+                  "Tag": "NAM",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "YASIN, ABDUL RAHMAN",
+                  "HittedEntity": {
+                    "ID": "35cc7249-43b0-40d8-8c8f-c8b4c5d956f5",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "OSFI_2006/02/09"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "OSAMA BIN LADIN"
+                      },
+                      {
+                        "Name": "YASIN, ABOUD"
+                      },
+                      {
+                        "Name": "TAHER, ABDUL RAHMAN SAID"
+                      },
+                      {
+                        "Name": "TAHA, ABDUL RAHMAN"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                            "IR"
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "OSFI",
+                    "Designation": "BSIF",
+                    "Keywords": [
+                      {
+                        "Keyword": "none"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                      "NBIQIQBAXXX",
+                      "S93849384A",
+                      "784012345678901"
+                    ],
+                    "OtherDocument": "784012345678901",
+                    "PassportNumber": "AVB2833444",
+                    "AdditionalInfo": "M, IR",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "30/8/1965"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "BLOOMINGTON, INDIANA, USA"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "OSAMA BIN LADIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "11",
+                        "PositionEnd": "22"
+                      }
+                    }
+                  ],
+                  "Score": "1.0",
+                  "Tag": "NAM",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "YASIN, ABDUL RAHMAN",
+                  "HittedEntity": {
+                    "ID": "35cc7249-43b0-40d8-8c8f-c8b4c5d956f6",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "OSFI_2006/02/09"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "OSAMA BIN LADIN"
+                      },
+                      {
+                        "Name": "YASIN, ABOUD"
+                      },
+                      {
+                        "Name": "TAHER, ABDUL RAHMAN SAID"
+                      },
+                      {
+                        "Name": "TAHA, ABDUL RAHMAN"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                            "IR"
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "OSFI",
+                    "Designation": "BSIF",
+                    "Keywords": [
+                      {
+                        "Keyword": "none"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                      "NBIQIQBAXXX",
+                      "S93849384A",
+                      "784012345678901"
+                    ],
+                    "OtherDocument": "784012345678901",
+                    "PassportNumber": "AVB2833444",
+                    "AdditionalInfo": "M, IR",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "30/8/1965"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "BLOOMINGTON, INDIANA, USA"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "OSAMA BIN LADIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "11",
+                        "PositionEnd": "22"
+                      }
+                    }
+                  ],
+                  "Score": "1.0",
+                  "Tag": "NAM",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "YASIN, ABDUL RAHMAN",
+                  "HittedEntity": {
+                    "ID": "35cc7249-43b0-40d8-8c8f-c8b4c5d956f7",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "OSFI_2006/02/09"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "OSAMA BIN LADIN"
+                      },
+                      {
+                        "Name": "YASIN, ABOUD"
+                      },
+                      {
+                        "Name": "TAHER, ABDUL RAHMAN SAID"
+                      },
+                      {
+                        "Name": "TAHA, ABDUL RAHMAN"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                            "IR"
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "OSFI",
+                    "Designation": "BSIF",
+                    "Keywords": [
+                      {
+                        "Keyword": "none"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                      "NBIQIQBAXXX",
+                      "S93849384A",
+                      "784012345678901"
+                    ],
+                    "OtherDocument": "784012345678901",
+                    "PassportNumber": "AVB2833444",
+                    "AdditionalInfo": "M, IR",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "30/8/1965"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "BLOOMINGTON, INDIANA, USA"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "OSAMA BIN LADIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "11",
+                        "PositionEnd": "22"
+                      }
+                    }
+                  ],
+                  "Score": "1.0",
+                  "Tag": "NAM",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "YASIN, ABDUL RAHMAN",
+                  "HittedEntity": {
+                    "ID": "35cc7249-43b0-40d8-8c8f-c8b4c5d956f8",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "OSFI_2006/02/09"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "OSAMA BIN LADIN"
+                      },
+                      {
+                        "Name": "YASIN, ABOUD"
+                      },
+                      {
+                        "Name": "TAHER, ABDUL RAHMAN SAID"
+                      },
+                      {
+                        "Name": "TAHA, ABDUL RAHMAN"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                            "IR"
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "OSFI",
+                    "Designation": "BSIF",
+                    "Keywords": [
+                      {
+                        "Keyword": "none"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                      "NBIQIQBAXXX",
+                      "S93849384A",
+                      "784012345678901"
+                    ],
+                    "OtherDocument": "784012345678901",
+                    "PassportNumber": "AVB2833444",
+                    "AdditionalInfo": "M, IR",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "30/8/1965"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "BLOOMINGTON, INDIANA, USA"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "OSAMA BIN LADIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "11",
+                        "PositionEnd": "22"
+                      }
+                    }
+                  ],
+                  "Score": "1.0",
+                  "Tag": "NAM",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "YASIN, ABDUL RAHMAN",
+                  "HittedEntity": {
+                    "ID": "35cc7249-43b0-40d8-8c8f-c8b4c5d956f9",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "OSFI_2006/02/09"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "OSAMA BIN LADIN"
+                      },
+                      {
+                        "Name": "YASIN, ABOUD"
+                      },
+                      {
+                        "Name": "TAHER, ABDUL RAHMAN SAID"
+                      },
+                      {
+                        "Name": "TAHA, ABDUL RAHMAN"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                            "IR"
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "OSFI",
+                    "Designation": "BSIF",
+                    "Keywords": [
+                      {
+                        "Keyword": "none"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                      "NBIQIQBAXXX",
+                      "S93849384A",
+                      "784012345678901"
+                    ],
+                    "OtherDocument": "784012345678901",
+                    "PassportNumber": "AVB2833444",
+                    "AdditionalInfo": "M, IR",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "30/8/1965"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "BLOOMINGTON, INDIANA, USA"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
               {
                 "Hit": {
                   "MatchingText": "OSAMA BIN LADIN",
@@ -173,7 +1208,7 @@
             ],
             "CurrentStatus": {
               "ID": "0",
-              "Name": "PENDING",
+              "Name": "NEW",
               "RoutingCode": "0",
               "Checksum": "ed10e9af8ecdee8e303f4c95783757c6"
             },
