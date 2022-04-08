@@ -22,22 +22,22 @@ class RecommendationRepositoryIntegrationSpec extends BaseSpecificationIT {
 
   def "should save and get recommendation from database"() {
     given:
-    def recommendations = [FIXTURES.RECOMMENDATION_WITH_METADATA]
+    def recommendations = [Fixtures.RECOMMENDATION_WITH_METADATA]
 
     when:
     recommendationRepository.saveAll(recommendations)
 
     then:
-    def recommendation = recommendationRepository.findByAnalysisName(FIXTURES.ANALYSIS_NAME)
+    def recommendation = recommendationRepository.findByAnalysisName(Fixtures.ANALYSIS_NAME)
     recommendation.size() == 1
     with(recommendation.first()) {
       name() == "someRecommendationName"
-      analysisName() == FIXTURES.ANALYSIS_NAME
-      metadata() == FIXTURES.RECOMMENDATION_METADATA
+      analysisName() == Fixtures.ANALYSIS_NAME
+      metadata() == Fixtures.RECOMMENDATION_METADATA
     }
   }
 
-  private static class FIXTURES {
+  private static class Fixtures {
 
     static ANALYSIS_NAME = "analysisName"
     static RECOMMENDATION_DATE = "2021-12-30T10:09:37.631749580+01:00"

@@ -17,7 +17,7 @@ import java.util.stream.Collectors
 
 class ReportFixtures {
 
-  static def BATCH_ID = 'batchID'
+  static def BATCH_ID = 'batchId'
   static def ANALYSIS_NAME = 'analysisName'
 
   static def MATCH_ONE_ID = '21312217'
@@ -285,7 +285,7 @@ class ReportFixtures {
                   .setName(MATCH_ONE_NAME)
                   .setPayload(
                       Struct.newBuilder()
-                          .putFields('clientId', getValue(MATCH_DATA_ONE.id()))
+                          .putFields('clientMatchId', getValue(MATCH_DATA_ONE.id()))
                           .putFields('s8Recommendation', getValue(MATCH_DATA_ONE.recommendation()))
                           .putFields('s8Reason', getValue(MATCH_DATA_ONE.comment()))
                           .putFields('stepId', getValue(MATCH_DATA_ONE.stepId()))
