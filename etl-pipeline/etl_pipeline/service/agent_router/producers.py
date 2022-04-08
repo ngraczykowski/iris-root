@@ -141,17 +141,6 @@ class NameFeatureInputProducer(Producer):
         )
 
 
-# class NationalityFeatureInputProducer(Producer):
-#     def produce_feature_input(self, payload):
-#         fields = dict(deepcopy(self.fields))
-#         for input_key, payload_key in self.fields.items():
-#             fields[input_key] = [i for i in payload.get(payload_key, [] if i])
-#         return LocationFeatureInput(
-#             feature=self.feature_name,
-#             **fields,
-#         )
-
-
 class GeoResidencyAgentFeatureInputProducer(Producer):
     def produce_feature_input(self, payload):
         ap_parties = payload.get("ap_all_residencies_aggregated", [""])
@@ -169,134 +158,26 @@ class GeoResidencyAgentFeatureInputProducer(Producer):
         ]
 
 
-# class NationalityAgentFeatureInputProducer(Producer):
-#     feature_name = "features/geoNationality"
-#
-#     def produce_feature_input(self, payload):
-#         ap_parties = payload.get("ap_all_nationalities_aggregated", [])
-#         wl_parties = payload.get("wl_all_nationalities_aggregated", [])
-#         combinations = list(itertools.product(ap_parties, wl_parties))
-#
-#         return [
-#             LocationFeatureInput(
-#                 feature=self.feature_name, alerted_party_location=ap, watchlist_location=wl
-#             )
-#             for ap, wl in combinations
-#         ]
-#
+class CategoryProducer(Producer):
+    def produce_feature_input(self, payload, match_payload, alert, match_name):
+        fields = deepcopy(self.fields)
+        type = match_payload.get(fields["type"], "")
+        return CategoryValue(single_value=type, alert=alert, match=match_name)
 
 
-# class EmployerNameAgentFeatureInputProducer(Producer):
-#     feature_name = "features/employer_name"
-#
-#     def produce_feature_input(self, payload):
-#         ap_parties = payload.get("ap_all_employer_aggregated", [])
-#         wl_parties = payload.get("wl_all_employer_aggregated", [])
-#         combinations = list(itertools.product(ap_parties, wl_parties))
-#
-#         return [
-#             LocationFeatureInput(
-#                 feature=self.feature_name, alerted_party_location=ap, watchlist_location=wl
-#             )
-#             for ap, wl in combinations
-#         ]
-#
+# Legacy producers
 
 
-# The following entries have been generated automatically by proto_extractor.py
-
-
-class AllowListFeatureInputProducer(Producer):
-    feature_name = "features/allowlist"
+class TransactionFeatureInputProducer(Producer):
+    feature_name = "features/transaction"
 
     def produce_feature_input(self, payload):
-        return AllowListFeatureInput(
+        return TransactionFeatureInput(
             feature=self.feature_name,
-            characteristics_values=[],
-            allow_list_name=[],
-        )
-
-
-class BankIdentificationCodesFeatureInputProducer(Producer):
-    feature_name = "features/bankidentificationcodes"
-
-    def produce_feature_input(self, payload):
-        return BankIdentificationCodesFeatureInput(
-            feature=self.feature_name,
-            alerted_party_matching_field=payload.get("ap_all_matching_field_aggregated", ""),
-            watchlist_matching_text=payload.get("wl_all_matching_text_aggregated", ""),
-            watchlist_type=payload.get("wl_all_type_aggregated", ""),
-            watchlist_search_codes=[
-                element for element in payload.get("wl_all_search_codes_aggregated", [])
-            ],
-            watchlist_bic_codes=[
-                element for element in payload.get("wl_all_bic_codes_aggregated", [])
-            ],
-        )
-
-
-class EventFeatureInputProducer(Producer):
-    feature_name = "features/event"
-
-    def produce_feature_input(self, payload):
-        return EventFeatureInput(
-            feature=self.feature_name,
-            alerted_party_dates=[
-                element for element in payload.get("ap_all_dates_aggregated", [])
-            ],
-            watchlist_events=[element for element in payload.get("wl_all_events_aggregated", [])],
-        )
-
-
-class FreeTextFeatureInputProducer(Producer):
-    feature_name = "features/freetext"
-
-    def produce_feature_input(self, payload):
-        return FreeTextFeatureInput(
-            feature=self.feature_name,
-            matched_name="",
-            matched_name_synonym="",
-            matched_type="",
+            transaction_messages=[],
+            watchlist_type=TransactionFeatureInput.WatchlistType.WATCHLIST_TYPE_UNSPECIFIED,
             matching_texts=[],
-            freetext="",
         )
-
-
-class GenderFeatureInputProducer(Producer):
-    feature_name = "features/gender"
-
-    def produce_feature_input(self, payload):
-        return GenderFeatureInput(
-            feature=self.feature_name,
-            alerted_party_genders=[
-                element for element in payload.get("ap_all_genders_aggregated", [])
-            ],
-            watchlist_genders=[
-                element for element in payload.get("wl_all_genders_aggregated", [])
-            ],
-        )
-
-
-# class LocationFeatureInputProducer(Producer):
-#     feature_name = "features/location"
-#
-#     def produce_feature_input(self, payload):
-#         return LocationFeatureInput(
-#             feature=self.feature_name,
-#             alerted_party_location=payload.get("ap_all_location_aggregated", ""),
-#             watchlist_location=payload.get("wl_all_location_aggregated", ""),
-#         )
-
-#
-# class NameFeatureInputProducer(Producer):
-#     feature_name = "features/name"
-#
-#     def produce_feature_input(self, payload):
-#         return NameFeatureInput(
-#             feature=self.feature_name,
-#             alerted_party_type=NameFeatureInput.EntityType.ENTITY_TYPE_UNSPECIFIED,
-#             matching_texts=[],
-#         )
 
 
 class NationalIdFeatureInputProducer(Producer):
@@ -320,20 +201,72 @@ class NationalIdFeatureInputProducer(Producer):
         )
 
 
-class TransactionFeatureInputProducer(Producer):
-    feature_name = "features/transaction"
+class GenderFeatureInputProducer(Producer):
+    feature_name = "features/gender"
 
     def produce_feature_input(self, payload):
-        return TransactionFeatureInput(
+        return GenderFeatureInput(
             feature=self.feature_name,
-            transaction_messages=[],
-            watchlist_type=TransactionFeatureInput.WatchlistType.WATCHLIST_TYPE_UNSPECIFIED,
-            matching_texts=[],
+            alerted_party_genders=[
+                element for element in payload.get("ap_all_genders_aggregated", [])
+            ],
+            watchlist_genders=[
+                element for element in payload.get("wl_all_genders_aggregated", [])
+            ],
         )
 
 
-class CategoryProducer(Producer):
-    def produce_feature_input(self, payload, match_payload, alert, match_name):
-        fields = deepcopy(self.fields)
-        type = match_payload.get(fields["type"], "")
-        return CategoryValue(single_value=type, alert=alert, match=match_name)
+class FreeTextFeatureInputProducer(Producer):
+    feature_name = "features/freetext"
+
+    def produce_feature_input(self, payload):
+        return FreeTextFeatureInput(
+            feature=self.feature_name,
+            matched_name="",
+            matched_name_synonym="",
+            matched_type="",
+            matching_texts=[],
+            freetext="",
+        )
+
+
+class EventFeatureInputProducer(Producer):
+    feature_name = "features/event"
+
+    def produce_feature_input(self, payload):
+        return EventFeatureInput(
+            feature=self.feature_name,
+            alerted_party_dates=[
+                element for element in payload.get("ap_all_dates_aggregated", [])
+            ],
+            watchlist_events=[element for element in payload.get("wl_all_events_aggregated", [])],
+        )
+
+
+class BankIdentificationCodesFeatureInputProducer(Producer):
+    feature_name = "features/bankidentificationcodes"
+
+    def produce_feature_input(self, payload):
+        return BankIdentificationCodesFeatureInput(
+            feature=self.feature_name,
+            alerted_party_matching_field=payload.get("ap_all_matching_field_aggregated", ""),
+            watchlist_matching_text=payload.get("wl_all_matching_text_aggregated", ""),
+            watchlist_type=payload.get("wl_all_type_aggregated", ""),
+            watchlist_search_codes=[
+                element for element in payload.get("wl_all_search_codes_aggregated", [])
+            ],
+            watchlist_bic_codes=[
+                element for element in payload.get("wl_all_bic_codes_aggregated", [])
+            ],
+        )
+
+
+class AllowListFeatureInputProducer(Producer):
+    feature_name = "features/allowlist"
+
+    def produce_feature_input(self, payload):
+        return AllowListFeatureInput(
+            feature=self.feature_name,
+            characteristics_values=[],
+            allow_list_name=[],
+        )
