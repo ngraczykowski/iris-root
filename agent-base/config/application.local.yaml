@@ -14,9 +14,9 @@ rabbitmq:
   password: dev
   virtualhost: /
   tls:
-    client_ca: "tests/ssl_example/ca.pem"
-    client_private_key: "tests/ssl_example/client-key.pem"
-    client_public_key_chain: "tests/ssl_example/client.pem"
+    ca_certs: "tests/ssl_example/ca.pem"
+    keyfile: "tests/ssl_example/client-key.pem"
+    certfile: "tests/ssl_example/client.pem"
 
 consul:
   host: localhost

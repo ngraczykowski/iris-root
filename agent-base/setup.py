@@ -11,6 +11,7 @@ install_require = [
     "grpcio-reflection",
     "grpcio-tools",
     "lz4",
+    "pika==1.2.0",
     "protocol-agents",
     "python-consul2",
     "pyyaml",

@@ -28,8 +28,11 @@ class AdjudicationEngineMock:
         self.logger = logging.getLogger("AdjudicationEngineMock")
 
     async def start(self):
-        self.config["rabbitmq"].pop("tls", None)
-        self._connection = await aio_pika.connect_robust(**self.config["rabbitmq"])
+        connection_configuration = self.config["rabbitmq"].copy()
+        connection_configuration.pop("tls", None)
+        self._connection: aio_pika.RobustConnection = await aio_pika.connect_robust(
+            **connection_configuration
+        )
 
         channel: aio_pika.Channel = await self._connection.channel()
         self._exchange = await channel.get_exchange(
