@@ -6,6 +6,8 @@
                         dbchangelog-3.10.xsd">
 
   <changeSet id="universal-datasource-1.9.0-1" author="jgajewski">
+    <preConditions onFail="MARK_RAN"><tableExists tableName="fail_on_purpose"/></preConditions>
+    <comment>There might not be a public schema, therefore this changeSet should not be run any more. This table is dropped properly in changelog-1.10.0</comment>
     <dropTable schemaName="public"
                tableName="uds_feature_mapper"/>
   </changeSet>
