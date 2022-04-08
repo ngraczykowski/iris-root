@@ -129,16 +129,70 @@ warehouse.reports.v2:
       type: production
       description: AI Reasoning (Alert Level)
       selectSqlQuery: >
+        SELECT wa.name                                          AS "S8 Alert ID",
+               wa.payload ->> 'clientId'                        AS "Client Alert ID",
+               STRING_AGG(wm.payload ->> 'clientMatchId', ', ') AS "Client Match IDs",
+               STRING_AGG(wm.payload ->> 'watchListId', ', ')   AS "Watchlist Match IDs",
+               wa.payload ->> 'policyId'                        AS "Policy ID",
+               wa.payload ->> 'policyTitle'                     AS "Policy Name",
+               wm.payload ->> 'stepId'                          AS "Step ID",
+               wm.payload ->> 'stepTitle'                       AS "Step Name",
+               STRING_AGG(wm.payload ->> 'fvSignature', ', ')   AS "Reasoning Branch IDs",
+               wa.payload ->> 's8Recommendation'                AS "S8 Alert Resolution",
+               wa.payload ->> 'recommendationDate'              AS "S8 Resolution Timestamp",
+               wa.payload ->> 'comment'                         AS "S8 Alert Reason"
+        FROM warehouse_alert wa
+                 JOIN warehouse_match wm ON wa.id = wm.alert_id
+        WHERE wa.created_at BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
+        GROUP BY wa.name,
+                 wa.payload ->> 'clientId',
+                 wa.payload ->> 'policyId',
+                 wa.payload ->> 'policyTitle',
+                 wm.payload ->> 'stepId',
+                 wm.payload ->> 'stepTitle',
+                 wa.payload ->> 's8Recommendation',
+                 wa.payload ->> 'recommendationDate',
+                 wa.payload ->> 'comment'
 
     - name: AI_REASONING_MATCH_LEVEL
       type: production
       description: AI Reasoning (Match Level)
       selectSqlQuery: >
+        SELECT wa.name                             AS "S8 Alert ID",
+               wa.payload ->> 'clientId'           AS "Client Alert ID",
+               wm.payload ->> 'clientMatchId'      AS "Client Match ID",
+               wa.payload ->> 'policyId'           AS "Policy ID",
+               wa.payload ->> 'policyTitle'        AS "Policy Name",
+               wm.payload ->> 'stepId'             AS "Step ID",
+               wm.payload ->> 'stepTitle'          AS "Step Name",
+               wm.payload ->> 'fvSignature'        AS "Reasoning Branch ID",
+               wm.payload ->> 's8Recommendation'   AS "S8 Match Resolution",
+               wa.payload ->> 'recommendationDate' AS "S8 Resolution Timestamp",
+               wm.payload ->> 's8Reason'           AS "S8 Match Reason",
+               wa.payload ->> 's8Recommendation'   AS "S8 Alert Resolution"
+        FROM warehouse_alert wa
+                 JOIN warehouse_match wm ON wa.id = wm.alert_id
+        WHERE wa.recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
 
     - name: AI_REASONING_MATCH_LEVEL
       type: simulation
       description: AI Reasoning
       selectSqlQuery: >
+        SELECT wa.name                                                 AS "S8 Alert ID",
+               wa.payload ->> 'clientId'                               AS "Client Alert ID",
+               wm.payload ->> 'clientMatchId'                          AS "Client Match ID",
+               wsa.payload ->> 'match_reason:policy'                   AS "Policy ID",
+               wsa.payload ->> 'match_reason:policy_title'             AS "Policy Name",
+               wsa.payload ->> 'match_reason:step'                     AS "Step ID",
+               wsa.payload ->> 'match_reason:step_title'               AS "Step Name",
+               wsa.payload ->> 'match_reason:feature_vector_signature' AS "Reasoning Branch ID",
+               wsa.payload ->> 'recommendation_recommended_action'     AS "S8 Match Resolution",
+               wsa.payload ->> 'recommendation_create_time'            AS "S8 Resolution Timestamp",
+               wsa.payload ->> 'recommendation_comment'                AS "S8 Match Reason"
+        FROM warehouse_simulation_alert wsa
+                 JOIN warehouse_alert wa ON wsa.name = wa.name
+                 JOIN warehouse_match wm ON wa.id = wm.alert_id
+        WHERE wsa.analysis_name = 'analysis/${analysisId}'
 
     - name: ACCURACY_ALERT_LEVEL
       type: production
