@@ -185,12 +185,12 @@ serp:
             - watchlist-leve: S8HIT
         recommendation:
           recommendation-values:
-            - ACTION_INVESTIGATE: Manual Investigation
-            - ACTION_INVESTIGATE_HINTED_FALSE_POSITIVE: Manual Investigation
-            - ACTION_INVESTIGATE_PARTIALLY_FALSE_POSITIVE: Manual Investigation
-            - ACTION_INVESTIGATE_HINTED_TRUE_POSITIVE: Manual Investigation
-            - ACTION_FALSE_POSITIVE: False Positive
-            - ACTION_POTENTIAL_TRUE_POSITIVE: Potential True Positive
+            ACTION_INVESTIGATE: Manual Investigation
+            ACTION_INVESTIGATE_HINTED_FALSE_POSITIVE: Manual Investigation
+            ACTION_INVESTIGATE_PARTIALLY_FALSE_POSITIVE: Manual Investigation
+            ACTION_INVESTIGATE_HINTED_TRUE_POSITIVE: Manual Investigation
+            ACTION_FALSE_POSITIVE: False Positive
+            ACTION_POTENTIAL_TRUE_POSITIVE: Potential True Positive
 
 # AMQP
 amqp:
