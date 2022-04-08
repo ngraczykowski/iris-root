@@ -27,7 +27,7 @@ variable "http_tags" {
   default = []
 }
 
-variable "connector_bridge_http_port" {
+variable "firco_connector_http_port" {
   type = number
   default = 30844
 }
@@ -126,7 +126,7 @@ job "firco-trust-cmapi-connector" {
 
     network {
       port "http" {
-        static = var.hsbc_bridge_http_port
+        static = var.firco_connector_http_port
       }
       port "grpc" {
       }
