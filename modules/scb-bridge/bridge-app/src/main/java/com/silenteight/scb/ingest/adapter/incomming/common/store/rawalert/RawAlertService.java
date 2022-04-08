@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 
+import org.apache.commons.lang3.time.StopWatch;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,9 +18,9 @@ public class RawAlertService {
   private final RawAlertRepository repository;
 
   public void store(String internalBatchId, List<Alert> alert) {
-    log.info(
-        "Saving Raw alerts with internalBatchId: {} and alertSize: {}", internalBatchId,
-        alert.size());
+    var stopWatch = StopWatch.createStarted();
+    log.info("Saving {} Raw Alerts with internalBatchId: {}", alert.size(), internalBatchId);
     repository.saveAll(RawAlertMapper.toRawAlertEntities(alert, internalBatchId));
+    log.info("{} Raw Alerts saved in {}", alert.size(), stopWatch);
   }
 }

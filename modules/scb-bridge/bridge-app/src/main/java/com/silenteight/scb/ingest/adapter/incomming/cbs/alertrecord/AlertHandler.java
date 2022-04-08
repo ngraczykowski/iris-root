@@ -50,12 +50,12 @@ class AlertHandler {
     log.info("Alerts have been persisted for internalBatchId: {} executed in: {}",
         internalBatchId, stopWatch);
 
-    stopWatch.reset();
+    stopWatch = StopWatch.createStarted();
     registerAlerts(internalBatchId, validAlertComposites);
     log.info("Alerts have been registered for internalBatchId: {} executed in: {}",
         internalBatchId, stopWatch);
 
-    stopWatch.reset();
+    stopWatch = StopWatch.createStarted();
     acknowledgeAlerts(validAlertComposites);
     log.info("Alerts have been acknowledged for internalBatchId: {} executed in: {}",
         internalBatchId, stopWatch);

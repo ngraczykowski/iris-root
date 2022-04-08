@@ -36,7 +36,9 @@ class RegistrationGrpcAdapter implements RegistrationApiClient {
   @Retryable(value = RegistrationLibraryException.class)
   public RegistrationResponse registerAlertsAndMatches(RegistrationRequest request) {
     StopWatch stopWatch = StopWatch.createStarted();
-    log.info("Registering Alert And Matches in Core Bridge with batchId: {}", request.getBatchId());
+    log.info("Registering {} Alert And Matches in Core Bridge with batchId: {}",
+        request.getAlertsWithMatches().size(),
+        request.getBatchId());
     var alertWithMatchesIn = registrationMapper.toRegisterAlertsAndMatchesIn(request);
     var registerAlertsAndMatchesOut =
         registrationServiceClient.registerAlertsAndMatches(alertWithMatchesIn);

@@ -38,6 +38,8 @@ class IngestService implements BatchAlertIngestService {
   public void ingestAlertsForLearn(@NonNull String internalBatchId, @NonNull List<Alert> alerts) {
     var registrationResponse =
         alertRegistrationFacade.registerLearningAlerts(internalBatchId, alerts);
+    log.info("Publishing {} Alerts for Ingested for Learn for internalBatchId: {}", alerts.size(),
+        internalBatchId);
     alerts.forEach(alert -> {
       var flags = determineLearningFlags(alert);
       publish(alert, flags, registrationResponse);
@@ -53,6 +55,8 @@ class IngestService implements BatchAlertIngestService {
     var registrationResponse =
         alertRegistrationFacade
             .registerSolvingAlerts(internalBatchId, alerts, registrationBatchContext);
+    log.info("Publishing {} Alerts for Ingested for Recommendation for internalBatchId: {}",
+        alerts.size(), internalBatchId);
     alerts.forEach(alert -> publish(alert, ALERT_RECOMMENDATION_FLAGS, registrationResponse));
   }
 
@@ -63,7 +67,6 @@ class IngestService implements BatchAlertIngestService {
     Alert ingestedAlert = updateIngestInfoForAlert(alert, flags);
     AlertUpdater.updatedWithRegistrationInfo(ingestedAlert, registrationResponse);
 
-    log.info("Publishing Alert Ingested for {}", alert.logInfo());
     ingestEventPublisher.publish(ingestedAlert);
   }
 

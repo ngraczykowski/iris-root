@@ -23,7 +23,7 @@ class FeedingListener {
   @EventListener
   public void subscribe(AlertIngested alertIngested) {
     Alert alert = alertIngested.alert();
-    log.info("Alert and matches received for {}", alert.logInfo());
+    log.info("Alert received: {}", alert.logInfo());
     FeedUdsCommand feedUdsCommand = new FeedUdsCommand(alert);
     feedingFacade.feedUds(feedUdsCommand);
   }
