@@ -13,7 +13,7 @@ import javax.validation.Valid;
 @Data
 @Validated
 @ConfigurationProperties(prefix = "ftcc.data-prep")
-class DataPrepProperties {
+public class DataPrepProperties {
 
   @Valid
   @NestedConfigurationProperty

@@ -1,0 +1,4 @@
+ftcc:
+  data-prep:
+    outbound:
+      routing-key: alert.message

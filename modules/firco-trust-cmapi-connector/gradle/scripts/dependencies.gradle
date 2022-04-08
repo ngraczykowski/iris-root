@@ -231,6 +231,7 @@ libraries.spock_spring = [group: 'org.spockframework', name: 'spock-spring']
 libraries.test_containers = [group: 'org.testcontainers', name: 'testcontainers']
 libraries.test_containers_junit_jupiter = [group: 'org.testcontainers', name: 'junit-jupiter']
 libraries.test_containers_postgresql = [group: 'org.testcontainers', name: 'postgresql']
+libraries.test_containers_rabbitmq = [group: 'org.testcontainers', name: 'rabbitmq']
 libraries.test_containers_spock = [group: 'org.testcontainers', name: 'spock']
 
 // @formatter:on

@@ -1,5 +1,6 @@
 plugins {
   id "java"
+  id "groovy"
 }
 
 description = "Firco Trust CMAPI Connector Ingest"
@@ -28,11 +29,12 @@ dependencies {
   runtimeOnly libraries.jackson_module_paranamer
   runtimeOnly libraries.jackson_module_parameter_names
 
-  testImplementation libraries.rest_assured
-  testImplementation libraries.rest_assured_spring_mock_mvc
-
   testImplementation project(":ftcc-common-testing")
   testImplementation libraries.silenteight_sep_base_testing
 
   aspect libraries.silenteight_sep_base_aspects
+
+  testRuntimeOnly libraries.tomcat_embed_el
+  testRuntimeOnly libraries.spock_spring
+  testRuntimeOnly libraries.hibernate_validator
 }
