@@ -25,10 +25,9 @@ class SolvingBatchRegistrationService implements BatchRegistrationService {
       List<Alert> alerts,
       RegistrationBatchContext registrationBatchContext) {
 
-    log.info("Registration of solving batch {}", internalBatchId);
+    log.info("Registering Solving Batch");
     var alertCount = (long) alerts.size();
     var batch = Batch.of(internalBatchId, alertCount, registrationBatchContext);
     registrationApiClient.registerBatch(batch);
-    log.info("Registered of solving batch {} with {} alerts", internalBatchId, alertCount);
   }
 }

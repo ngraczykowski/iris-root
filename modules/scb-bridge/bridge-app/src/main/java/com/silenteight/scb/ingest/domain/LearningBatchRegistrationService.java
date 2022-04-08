@@ -25,10 +25,9 @@ class LearningBatchRegistrationService implements BatchRegistrationService {
       List<Alert> alerts,
       RegistrationBatchContext registrationBatchContext) {
 
-    log.info("Registration of learning batch {}", internalBatchId);
-    Long alertCount = (long) alerts.size();
-    Batch batch = new Batch(internalBatchId, alertCount, registrationBatchContext.priority());
+    log.info("Registering Learning Batch");
+    var alertCount = (long) alerts.size();
+    var batch = Batch.of(internalBatchId, alertCount, registrationBatchContext);
     registrationApiClient.registerBatch(batch);
-    log.info("Registered of learning batch {} with {} alerts", internalBatchId, alertCount);
   }
 }

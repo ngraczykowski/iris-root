@@ -10,10 +10,6 @@ public record Batch(
     Priority priority,
     BatchMetadata metadata) {
 
-  public Batch(String id, Long alertCount, Priority priority) {
-    this(id, alertCount, priority, null);
-  }
-
   @Builder
   public Batch {}
 

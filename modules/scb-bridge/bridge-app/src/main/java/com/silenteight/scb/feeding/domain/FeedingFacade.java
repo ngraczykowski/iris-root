@@ -19,6 +19,7 @@ import com.silenteight.universaldatasource.api.library.category.v2.BatchCreateCa
 import com.silenteight.universaldatasource.api.library.category.v2.CreateCategoryValuesIn;
 
 import io.vavr.control.Try;
+import org.apache.commons.lang3.time.StopWatch;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,6 +39,7 @@ public class FeedingFacade {
   }
 
   private void registerCategoriesValuesInUds(FeedUdsCommand feedUdsCommand) {
+    StopWatch stopWatch = StopWatch.createStarted();
     Try.run(() -> registerCategoriesValuesForMatches(feedUdsCommand))
         .onFailure(e -> {
           var alert = feedUdsCommand.alert();
@@ -45,7 +47,8 @@ public class FeedingFacade {
         })
         .onSuccess(e -> {
           var alert = feedUdsCommand.alert();
-          log.info("Categories values for {}", alert.logInfo());
+          log.info("Categories values have been registered for {}, executed in: {}",
+              alert.logInfo(), stopWatch);
         });
   }
 
@@ -67,6 +70,7 @@ public class FeedingFacade {
   }
 
   private void registerAgentInputsInUds(FeedUdsCommand feedUdsCommand) {
+    StopWatch stopWatch = StopWatch.createStarted();
     Try.run(() -> registerAgentInputsForMatches(feedUdsCommand))
         .onFailure(e -> {
           Alert alert = feedUdsCommand.alert();
@@ -79,7 +83,8 @@ public class FeedingFacade {
         })
         .onSuccess(e -> {
           Alert alert = feedUdsCommand.alert();
-          log.info("Feature inputs for {} created successfully", alert.logInfo());
+          log.info("Feature inputs for {} created successfully, executed in: {}", alert.logInfo(),
+              stopWatch);
           if (!alert.isLearnFlag()) {
             feedingEventPublisher.publish(
                 createUdsFedEvent(alert, Status.SUCCESS, AlertErrorDescription.NONE));
