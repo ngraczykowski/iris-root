@@ -16,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
-import org.springframework.integration.test.context.SpringIntegrationTest
 
 import javax.validation.Valid
 
@@ -24,19 +23,19 @@ import static com.silenteight.proto.fab.api.v1.AlertMessageStored.State.*
 import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.CONNECTOR_COMMAND_EXCHANGE
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE, classes = [
-    DataPrepAmqpIntegrationFlowConfiguration.class,
-    IntegrationConfiguration.class,
-    MessagingConfiguration.class,
-    IntegrationAutoConfiguration.class,
-    RabbitAutoConfiguration.class,
-    DataPrepMessageGatewayTestConfig.class])
+    DataPrepAmqpIntegrationFlowConfiguration,
+    IntegrationConfiguration,
+    MessagingConfiguration,
+    IntegrationAutoConfiguration,
+    RabbitAutoConfiguration,
+    DataPrepMessageGatewayTestConfig])
 class DataPrepMessageGatewayTest extends BaseRabbitMQSpecificationIT {
 
   @Autowired
-  private DataPrepMessageGateway underTest;
+  private DataPrepMessageGateway underTest
 
   @Autowired
-  private RabbitTemplate rabbitTemplate;
+  private RabbitTemplate rabbitTemplate
 
   def "When sending 2 messages priority is respected"() {
     given:
@@ -69,19 +68,19 @@ class DataPrepMessageGatewayTest extends BaseRabbitMQSpecificationIT {
   }
 
   private int getPriority(Message message) {
-    return message.messageProperties.getHeader('priority');
+    return message.messageProperties.getHeader('priority')
   }
 }
 
-@EnableConfigurationProperties(DataPrepProperties.class)
+@EnableConfigurationProperties(DataPrepProperties)
 @TestConfiguration
 class DataPrepMessageGatewayTestConfig {
 
-  static final QUEUE_NAME_PROPERTY = "alert.messages";
+  static final QUEUE_NAME_PROPERTY = "alert.messages"
 
   @Bean
   Queue alertMessagesQueue() {
-    return QueueBuilder.durable(QUEUE_NAME_PROPERTY).maxPriority(10).build();
+    return QueueBuilder.durable(QUEUE_NAME_PROPERTY).maxPriority(10).build()
   }
 
   @Bean

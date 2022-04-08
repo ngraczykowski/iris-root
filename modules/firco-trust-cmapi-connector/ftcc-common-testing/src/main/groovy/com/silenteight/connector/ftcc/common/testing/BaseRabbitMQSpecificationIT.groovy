@@ -10,16 +10,16 @@ import spock.lang.Specification
 @Testcontainers
 class BaseRabbitMQSpecificationIT extends Specification {
 
-  static RabbitMQContainer rabbitMqContainer = new RabbitMQContainer("rabbitmq:3.9.11-management")
+  private static final RabbitMQContainer RABBIT_MQ_CONTAINER = new RabbitMQContainer("rabbitmq:3.9.11-management")
 
   @Shared
-  public RabbitMQContainer RABBITMQ_CONTAINER = rabbitMqContainer
+  private RabbitMQContainer lifecycleHelper = RABBIT_MQ_CONTAINER;
 
   @DynamicPropertySource
   private static void overrideProperties(DynamicPropertyRegistry registry) {
-    registry.add("spring.rabbitmq.host", rabbitMqContainer::getHost)
-    registry.add("spring.rabbitmq.port", rabbitMqContainer::getAmqpPort)
-    registry.add("spring.rabbitmq.username", rabbitMqContainer::getAdminUsername)
-    registry.add("spring.rabbitmq.password", rabbitMqContainer::getAdminPassword)
+    registry.add("spring.rabbitmq.host", RABBIT_MQ_CONTAINER::getHost)
+    registry.add("spring.rabbitmq.port", RABBIT_MQ_CONTAINER::getAmqpPort)
+    registry.add("spring.rabbitmq.username", RABBIT_MQ_CONTAINER::getAdminUsername)
+    registry.add("spring.rabbitmq.password", RABBIT_MQ_CONTAINER::getAdminPassword)
   }
 }
