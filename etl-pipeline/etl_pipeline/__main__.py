@@ -1,4 +1,7 @@
 import argparse
+import asyncio
+import contextlib
+import functools
 from concurrent import futures
 
 import grpc
@@ -26,8 +29,8 @@ def add_EtlPipelineServiceServicer_to_server(servicer, server):
     server.add_generic_rpc_handlers((generic_handler,))
 
 
-def serve(args):
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+async def serve(args):
+    server = grpc.aio.server(futures.ThreadPoolExecutor(max_workers=10))
 
     add_EtlPipelineServiceServicer_to_server(EtlPipelineServiceServicer(args.ssl), server)
     if args.ssl:
@@ -50,12 +53,31 @@ def serve(args):
         except omegaconf.errors.ConfigAttributeError:
             address = f"{service_config.ETL_SERVICE_IP}:{service_config.ETL_SERVICE_PORT}"
         server.add_insecure_port(address)
-    server.start()
-    server.wait_for_termination()
+    await server.start()
+    asyncio.get_event_loop().create_task(server.wait_for_termination())
+
+
+def run(start_callback, end_callback):
+    loop = asyncio.get_event_loop()
+    try:
+        loop.run_until_complete(start_callback())
+        loop.run_forever()
+    finally:
+        tasks = asyncio.gather(*asyncio.all_tasks(loop))
+        tasks.cancel()
+        with contextlib.suppress(asyncio.CancelledError):
+            loop.run_until_complete(tasks)
+            loop.run_until_complete(loop.shutdown_asyncgens())
+            loop.run_until_complete(end_callback())
+    loop.close()
+
+
+async def stop():
+    pass
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--ssl", action="store_true", required=False)
     args = parser.parse_args()
-    serve(args)
+    run(functools.partial(serve, args), stop)

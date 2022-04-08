@@ -3,10 +3,12 @@ import os
 import re
 import subprocess
 import time
-import unittest
 
 import grpc
+import pytest
+from aiounittest import AsyncTestCase
 
+from etl_pipeline.config import service_config
 from etl_pipeline.service.proto.api.etl_pipeline_pb2 import (
     FAILURE,
     SUCCESS,
@@ -39,21 +41,27 @@ def load_alert(filepath: str = "notebooks/sample/wm_address_in_payload_format.js
 
 
 class BaseGrpcTestCase:
-    class TestGrpcServer(unittest.TestCase):
+    @pytest.mark.asyncio
+    class TestGrpcServer(AsyncTestCase):
         TIMEOUT = 3
 
         @classmethod
         def tearDownClass(cls):
+            try:
+                os.remove("tests/categories.txt")
+            except FileNotFoundError:
+                pass
             process = subprocess.Popen("scripts/kill_services.sh")
             process.wait()
 
-        def test_ok_flow(self):
+        @pytest.mark.asyncio
+        async def test_ok_flow(self):
             alert = load_alert()
-
             response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[alert]))
             for alert in response.etl_alerts:
                 assert alert.etl_status == SUCCESS
 
+        @pytest.mark.asyncio
         def test_cross_input_match_records(self):
             alert = load_alert(
                 "notebooks/sample/wm_address_in_payload_format_2_input_3_match_records.json"
@@ -63,20 +71,22 @@ class BaseGrpcTestCase:
             for alert in response.etl_alerts:
                 assert alert.etl_status == SUCCESS
 
+        @pytest.mark.asyncio
         def test_wm_party(self):
             alert = load_alert("notebooks/sample/wm_party_in_payload_format.json")
             response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[alert]))
             for alert in response.etl_alerts:
                 assert alert.etl_status == SUCCESS
 
+        @pytest.mark.asyncio
         def test_wrong_alert_name(self):
             alert = load_alert()
             alert.matches[0].match_name = "2"
             response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[alert]))
             assert response.etl_alerts[0].etl_status == FAILURE
 
+        @pytest.mark.asyncio
         def test_empty_flow(self):
-
             response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[]))
             assert [i for i in response.etl_alerts] == []
 
@@ -90,6 +100,8 @@ class TestGrpcServerWithoutSSL(BaseGrpcTestCase.TestGrpcServer):
         cls.tearDownClass()
         environment = os.environ.copy()
         subprocess.Popen("scripts/start_services.sh", env=environment)
-        channel = grpc.insecure_channel("localhost:9090")
+        channel = grpc.insecure_channel(
+            f"{service_config.ETL_SERVICE_IP}:{service_config.ETL_SERVICE_PORT}"
+        )
         TestGrpcServerWithoutSSL.stub = EtlPipelineServiceStub(channel)
         time.sleep(BaseGrpcTestCase.TestGrpcServer.TIMEOUT)
