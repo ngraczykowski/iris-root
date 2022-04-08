@@ -116,14 +116,126 @@ warehouse.report.zip:
 warehouse.reports.v2:
   reports:
     - name: RB_SCORER_MATCH_LEVEL
-      type: simulation
-      description: RB Scorer
-      selectSqlQuery: >
-
-    - name: RB_SCORER_MATCH_LEVEL
       type: production
       description: RB Scorer (Match Level)
       selectSqlQuery: >
+        
+        WITH tmp_match_count AS (
+          SELECT alert_id        AS alert_id,
+                 COUNT(alert_id) AS hit_count
+          FROM warehouse_match
+          GROUP BY alert_id
+        )
+
+        SELECT wa.payload ->> 'policyId'                      AS "Policy ID",
+               wa.payload ->> 'policyTitle'                   AS "Policy Name",
+               wa.payload ->> 'stepId'                        AS "Step ID",
+               wa.payload ->> 'stepTitle'                     AS "Step Name",
+               wm.payload ->> 'fvSignature'                   AS "Reasoning Branch ID",
+               wm.payload ->> 's8Recommendation'              AS "S8 Match Resolution",
+               COUNT(wm.payload ->> 'fvSignature')            AS "Total Matches Count",
+               COUNT(*) FILTER ( WHERE hit_count = 1 )        AS "Single Matches Count",
+               wm.payload ->> 'categories/customerType'       AS "Customer Type",
+               wm.payload ->> 'features/name'                 AS "Name",
+               wm.payload ->> 'features/dateOfBirth'          AS "Date of Birth / Incorporation",
+               wm.payload ->> 'features/document'             AS "Document",
+               wm.payload ->> 'features/geoResidencies'       AS "Geo Residencies",
+               wm.payload ->> 'features/geoPlaceOfBirth'      AS "Geo Place of Birth",
+               wm.payload ->> 'features/geoNationality'       AS "Geo Nationality",
+               wm.payload ->> 'features/isApIdTpMarked'       AS "True Case - Alerted ID",
+               wm.payload ->> 'features/isApNameTpMarked'     AS "True Case - Alerted Party Name",
+               wm.payload ->> 'features/isTokensTpMarked'     AS "True Case - Matched Tokens",
+               wm.payload ->> 'features/geoSanctioned'        AS "Geo Sanctioned Country",
+               wm.payload ->> 'features/companyName'          AS "Company Name",
+               wm.payload ->> 'categories/hitType'            AS "Risk Type",
+               wm.payload ->> 'categories/entitiesTypesMatch' AS "Entities Types Match",
+               wm.payload ->> 'features/employerName'         AS "Employer Name"
+        FROM warehouse_alert wa
+                 JOIN warehouse_match wm ON wa.id = wm.alert_id
+                 JOIN tmp_match_count tmc ON tmc.alert_id = wa.id
+        GROUP BY wa.payload ->> 'policyId',
+                 wa.payload ->> 'policyTitle',
+                 wa.payload ->> 'stepId',
+                 wa.payload ->> 'stepTitle',
+                 wm.payload ->> 's8Recommendation',
+                 wm.payload ->> 'fvSignature',
+                 wm.payload ->> 'categories/customerType',
+                 wm.payload ->> 'features/name',
+                 wm.payload ->> 'features/dateOfBirth',
+                 wm.payload ->> 'features/document',
+                 wm.payload ->> 'features/geoResidencies',
+                 wm.payload ->> 'features/geoPlaceOfBirth',
+                 wm.payload ->> 'features/geoNationality',
+                 wm.payload ->> 'features/isApIdTpMarked',
+                 wm.payload ->> 'features/isApNameTpMarked',
+                 wm.payload ->> 'features/isTokensTpMarked',
+                 wm.payload ->> 'features/geoSanctioned',
+                 wm.payload ->> 'features/companyName',
+                 wm.payload ->> 'categories/hitType',
+                 wm.payload ->> 'categories/entitiesTypesMatch',
+                 wm.payload ->> 'features/employerName';
+
+    - name: RB_SCORER_MATCH_LEVEL
+      type: simulation
+      description: RB Scorer
+      selectSqlQuery: >
+        
+        WITH tmp_match_count AS (
+          SELECT alert_id        AS alert_id,
+                 COUNT(alert_id) AS hit_count
+          FROM warehouse_match
+          GROUP BY alert_id
+        )
+        
+        SELECT wsa.payload ->> 'match_reason:policy'                               AS "Policy ID",
+               wsa.payload ->> 'match_reason:policy_title'                         AS "Policy Name",
+               wsa.payload ->> 'match_reason:step'                                 AS "Step ID",
+               wsa.payload ->> 'match_reason:step_title'                           AS "Step Name",
+               wsa.payload ->> 'match_reason:feature_vector_signature'             AS "Reasoning Branch ID",
+               wsa.payload ->> 'recommendation_recommended_action'                 AS "S8 Match Resolution",
+               COUNT((wsa.payload ->> 'match_reason:feature_vector_signature'))    AS "Total Matches Count",
+               COUNT(*) FILTER ( WHERE hit_count = 1 )                             AS "Single Matches Count",
+               wm.payload ->> 'categories/customerType'                            AS "Customer Type",
+               wsa.payload ->> 'features/name'                                     AS "Name",
+               wsa.payload ->> 'features/dateOfBirth'                              AS "Date of Birth / Incorporation",
+               wsa.payload ->> 'features/document'                                 AS "Document",
+               wsa.payload ->> 'features/geoResidencies'                           AS "Geo Residencies",
+               wsa.payload ->> 'features/geoPlaceOfBirth'                          AS "Geo Place of Birth",
+               wsa.payload ->> 'features/geoNationality'                           AS "Geo Nationality",
+               wsa.payload ->> 'features/isApIdTpMarked'                           AS "True Case - Alerted ID",
+               wsa.payload ->> 'features/isApNameTpMarked'                         AS "True Case - Alerted Party Name",
+               wsa.payload ->> 'features/isTokensTpMarked'                         AS "True Case - Matched Tokens",
+               wsa.payload ->> 'features/geoSanctioned'                            AS "Geo Sanctioned Country",
+               wsa.payload ->> 'features/companyName'                              AS "Company Name",
+               wsa.payload ->> 'categories/hitType'                                AS "Risk Type",
+               wsa.payload ->> 'categories/entitiesTypesMatch'                     AS "Entities Types Match",
+               wsa.payload ->> 'features/employerName'                             AS "Employer Name"
+        FROM warehouse_simulation_alert wsa
+          JOIN warehouse_alert wa on wa.name = wsa.name
+          JOIN warehouse_match wm ON wa.id = wm.alert_id
+          JOIN tmp_match_count tmc ON tmc.alert_id = wa.id
+        WHERE wsa.analysis_name = 'analysis/${analysisId}'
+        GROUP BY wsa.payload ->> 'match_reason:policy',
+                 wsa.payload ->> 'match_reason:policy_title',
+                 wsa.payload ->> 'match_reason:step',
+                 wsa.payload ->> 'match_reason:step_title',
+                 wsa.payload ->> 'match_reason:feature_vector_signature',
+                 wsa.payload ->> 'recommendation_recommended_action',
+                 wm.payload ->> 'categories/customerType',
+                 wsa.payload ->> 'features/name',
+                 wsa.payload ->> 'features/dateOfBirth',
+                 wsa.payload ->> 'features/document',
+                 wsa.payload ->> 'features/geoResidencies',
+                 wsa.payload ->> 'features/geoPlaceOfBirth',
+                 wsa.payload ->> 'features/geoNationality',
+                 wsa.payload ->> 'features/isApIdTpMarked',
+                 wsa.payload ->> 'features/isApNameTpMarked',
+                 wsa.payload ->> 'features/isTokensTpMarked',
+                 wsa.payload ->> 'features/geoSanctioned',
+                 wsa.payload ->> 'features/companyName',
+                 wsa.payload ->> 'categories/hitType',
+                 wsa.payload ->> 'categories/entitiesTypesMatch',
+                 wsa.payload ->> 'features/employerName'
 
     - name: AI_REASONING
       type: production
