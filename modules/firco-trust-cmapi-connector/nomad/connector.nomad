@@ -27,9 +27,19 @@ variable "http_tags" {
   default = []
 }
 
+variable "connector_bridge_http_port" {
+  type = number
+  default = 30844
+}
+
 variable "grpcui_tags" {
   type    = list(string)
   default = []
+}
+
+variable "node_destination" {
+  type    = string
+  default = "eu4"
 }
 
 locals {
@@ -109,8 +119,14 @@ job "firco-trust-cmapi-connector" {
   group "firco-trust-cmapi-connector" {
     count = 1
 
+    constraint {
+      attribute = "${node.unique.name}"
+      value     = "${local.database_node_destination}"
+    }
+
     network {
       port "http" {
+        static = var.hsbc_bridge_http_port
       }
       port "grpc" {
       }
