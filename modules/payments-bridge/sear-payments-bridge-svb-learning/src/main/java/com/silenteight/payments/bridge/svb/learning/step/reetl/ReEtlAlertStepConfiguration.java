@@ -16,7 +16,6 @@ import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.listener.JobParameterExecutionContextCopyListener;
-import org.springframework.batch.core.step.skip.AlwaysSkipItemSkipPolicy;
 import org.springframework.batch.item.support.AbstractItemStreamItemReader;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -46,7 +45,7 @@ class ReEtlAlertStepConfiguration {
 
   @Language("PostgreSQL")
   private static final String QUERY_WITH_OUT_FILE_NAME = "SELECT learning_alert_id"
-          + " FROM pb_learning_alert";
+      + " FROM pb_learning_alert";
 
   @Bean
   @StepScope
@@ -88,7 +87,7 @@ class ReEtlAlertStepConfiguration {
         .retry(IOException.class)
         .retryLimit(properties.getRetryLimit())
         .backOffPolicy(this.backoffPolicy(properties))
-        .skipPolicy(new AlwaysSkipItemSkipPolicy())
+        .skipPolicy(new ReetlSkipPolicy())
         .build();
   }
 

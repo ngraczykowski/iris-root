@@ -13,7 +13,6 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.listener.JobParameterExecutionContextCopyListener;
-import org.springframework.batch.core.step.skip.AlwaysSkipItemSkipPolicy;
 import org.springframework.batch.item.support.AbstractItemStreamItemReader;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -37,7 +36,6 @@ class StoreInLearningEngineContextualStepConfiguration {
   private static final String QUERY = "SELECT learning_alert_id"
       + " FROM pb_learning_alert"
       + " WHERE file_name=?";
-
 
 
   @Language("PostgreSQL")
@@ -79,7 +77,7 @@ class StoreInLearningEngineContextualStepConfiguration {
         .retry(IOException.class)
         .retryLimit(properties.getRetryLimit())
         .backOffPolicy(backoffPolicy())
-        .skipPolicy(new AlwaysSkipItemSkipPolicy())
+        .skipPolicy(new StoreInLearningEngineSkipPolicy())
         .build();
   }
 

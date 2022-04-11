@@ -33,7 +33,6 @@ public class StoreCsvFileStepConfiguration {
   private final FlatFileItemReader<LearningCsvRowEntity> storeCsvFileStepItemReader;
   private final JpaWriterFactory jpaWriterFactory;
   private final StoreCsvFileStepProcessor storeCsvFileStepProcessor;
-  private final StoreSkipPolicy storeSkipPolicy;
 
   @Bean
   Step storeCsvFileStep() {
@@ -49,7 +48,7 @@ public class StoreCsvFileStepConfiguration {
         .retry(IOException.class)
         .retryLimit(storeCsvJobProperties.getRetryLimit())
         .backOffPolicy(backoffPolicy())
-        .skipPolicy(storeSkipPolicy)
+        .skipPolicy(new StoreSkipPolicy())
         .build();
   }
 
