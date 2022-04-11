@@ -1,5 +1,6 @@
 import logging
 import ssl
+import time
 from typing import Callable, Dict
 
 import aio_pika
@@ -156,10 +157,25 @@ class PikaConnection:
             self.logger.warning(f"{err!r} on {message}")
             message.nack()
             return
-
-        await self.callback_exchange.publish(
-            routing_key="",
-            message=response_message,
-        )
+        if self.ssl:
+            self.channel.basic_publish(
+                exchange=self.messaging_configuration["response"]["exchange"],
+                routing_key="",
+                body=response_message.body,
+                properties=pika.BasicProperties(
+                    content_encoding="lz4",
+                    content_type="application/x-protobuf",
+                    delivery_mode=message.delivery_mode,
+                    headers=message.headers,
+                    priority=message.priority,
+                    timestamp=int(time.time()),
+                    type="silenteight.agents.v1.api.exchange.AgentExchangeResponse",
+                ),
+            )
+        else:
+            await self.callback_exchange.publish(
+                routing_key="",
+                message=response_message,
+            )
         message.ack()
         self.logger.debug(f"acknowledged {message.message_id}")
