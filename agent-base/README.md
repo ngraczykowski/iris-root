@@ -59,7 +59,7 @@ Api protos can be found [here](https://gitlab.silenteight.com/ro/agents-api/-/tr
 ### Deployment
 
 Deployment is not currently included in this package.
-Sample deployment scripts can be found in [company name agent](https://gitlab.silenteight.com/mcieslak/miscellaneous).
+Sample deployment scripts can be found in [company name agent](https://gitlab.silenteight.com/data-science/organization-name-agent).
 
 
 ## Implementation
