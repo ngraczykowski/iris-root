@@ -1,0 +1,6 @@
+master:
+  - dev
+  - lima
+  - test
+release-*:
+  - mike
