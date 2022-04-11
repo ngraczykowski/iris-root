@@ -3,6 +3,7 @@ import os
 import time
 
 import grpc
+from black import asyncio
 from google.protobuf.any_pb2 import Any
 from omegaconf import OmegaConf
 from silenteight.datasource.agentinput.api.v1.agent_input_pb2 import AgentInput, FeatureInput
@@ -116,12 +117,12 @@ class AgentInputCreator:
                 break
             except grpc._channel._InactiveRpcError:
 
-                logger.error("No UDS response. Waiting 10s and try again")
-                time.sleep(10)
+                logger.error("No UDS response. Waiting 1s and try again")
+                time.sleep(1)
                 channel = self.initiate_channel(
                     service_config.DATA_SOURCE_INPUT_ENDPOINT, self.ssl
                 )
-            logger.info("Categories created")
+        logger.info(f"Categories created: {categories}")
 
     def produce_feature_inputs(self, payload):
         feature_inputs = []
@@ -191,11 +192,19 @@ class AgentInputCreator:
                 all_category_values_requests.extend(category_values_requests)
         return all_category_values_requests
 
-    def upload_data_inputs(self, alert, payload):
+    async def send_features(self, alert, payload):
         batch = self.produce_batch_create_agent_input_request(alert, payload)
         response = self.agent_input_stub.BatchCreateAgentInputs(batch)
+        logger.debug(f"{response}")
+
+    async def send_categories(self, alert, payload):
         batch = self.produce_batch_create_agent_input_category_request(alert, payload)
         response = self.category_input_stub.BatchCreateCategoryValues(
             BatchCreateCategoryValuesRequest(requests=batch)
         )
         logger.debug(f"{response}")
+
+    async def upload_data_inputs(self, alert, payload):
+        logger.debug("Uploading features")
+        tasks = [self.send_features(alert, payload), self.send_categories(alert, payload)]
+        await asyncio.gather(*tasks)

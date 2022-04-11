@@ -104,12 +104,10 @@ service_config = OmegaConf.load(os.path.join(CONFIG_APP_DIR, "service", "service
 for key in service_config:
     try:
         if service_config[key].startswith("discovery:///"):
+
             service_config[key] = ConsulServiceConfig().get_service(service_config[key])
     except AttributeError:
         continue
-# try:
-#     service_config = ConsulServiceConfig()
-# except ConsulServiceError:
-#     pass
+
 
 pipeline_config = Pipeline()

@@ -1,7 +1,10 @@
+import asyncio
 import logging
 from concurrent import futures
 from dataclasses import dataclass
 from typing import List
+
+import omegaconf
 
 import etl_pipeline.service.proto.api.etl_pipeline_pb2 as etl__pipeline__pb2
 from etl_pipeline.config import pipeline_config, service_config
@@ -47,6 +50,12 @@ pipeline = WmAddressMSPipeline(engine, pipeline_config)
 logger = logging.getLogger("main").getChild("servicer")
 
 
+try:
+    PROCESSES = service_config.PROCESSES
+except omegaconf.errors.ConfigAttributeError:
+    PROCESSES = 10
+
+
 class EtlPipelineServiceServicer(object):
     router = AgentInputCreator()  # cannot pass to __init__
     pool = futures.ProcessPoolExecutor(max_workers=service_config.PROCESSES)
@@ -54,16 +63,35 @@ class EtlPipelineServiceServicer(object):
     def __init__(self, ssl) -> None:
         EtlPipelineServiceServicer.router.initialize(ssl)
 
-    def RunEtl(self, request: etl__pipeline__pb2.RunEtlRequest, context):
+    async def RunEtl(self, request: etl__pipeline__pb2.RunEtlRequest, context):
         try:
-            etl_alerts = self.process_request(request)
+            etl_alerts = await self.process_request(request)
         except Exception as e:
 
             logger.error(f"RunEtl error: {str(e)}")
             etl_alerts = []
         return etl__pipeline__pb2.RunEtlResponse(etl_alerts=etl_alerts)
 
-    def process_request(self, request):
+    async def upload_to_data_source(self, alert, record):
+        input_match_records, status, error = record
+        if status != UNKNOWN:
+            logger.info(f"Batch {alert.batch_id}, Alert {alert.alert_name} parsed successfully")
+            for input_match_record in input_match_records:
+                logger.info("Trying upload from pipeline to UDS")
+
+                try:
+                    await self.add_to_datasource(alert, input_match_record)
+                except Exception as e:
+                    logger.error(f"Exception {e}")
+                    status = FAILURE
+                    break
+        else:
+            logger.info(
+                f"Batch {alert.batch_id}, Alert {alert.alert_name} - parsing error: {error}"
+            )
+        return alert, status
+
+    async def process_request(self, request):
         alerts_to_parse = [
             AlertPayload(
                 batch_id=alert.batch_id,
@@ -73,34 +101,14 @@ class EtlPipelineServiceServicer(object):
             )
             for alert in request.alerts
         ]
-        # future_payloads = [self.pool.submit(self.parse_alert, alert) for alert in alerts_to_parse]
-        # payloads = [future.result() for future in future_payloads]
-        payloads = [self.parse_alert(alerts_to_parse[0])]  # debugging
+        future_payloads = [self.pool.submit(self.parse_alert, alert) for alert in alerts_to_parse]
+        payloads = [future.result() for future in future_payloads]
+        # payloads = [self.parse_alert(alerts_to_parse[0])]  # debugging
         statuses = []
         for alert, record in zip(alerts_to_parse, payloads):
-            input_match_records, status, error = record
-            if status != UNKNOWN:
-                logger.info(
-                    f"Batch {alert.batch_id}, Alert {alert.alert_name} parsed successfully"
-                )
-                for input_match_record in input_match_records:
-                    logger.info("Trying upload from pipeline to UDS")
-
-                    try:
-                        self.add_to_datasource(alert, input_match_record)
-                    except Exception as e:
-                        logger.error(f"Exception {e}")
-                        status = FAILURE
-                        break
-            else:
-                logger.info(
-                    f"Batch {alert.batch_id}, Alert {alert.alert_name} - parsing error: {error}"
-                )
-            statuses.append(status)
-        etl_alerts = [
-            self._parse_alert(alert, status) for alert, status in zip(alerts_to_parse, statuses)
-        ]
-
+            statuses.append(self.upload_to_data_source(alert, record))
+        all_data = await asyncio.gather(*statuses)
+        etl_alerts = [self._parse_alert(alert, status) for alert, status in all_data]
         return etl_alerts
 
     def parse_alert(self, alert):
@@ -130,5 +138,5 @@ class EtlPipelineServiceServicer(object):
         return etl_alert
 
     @classmethod
-    def add_to_datasource(self, alert, payload):
-        EtlPipelineServiceServicer.router.upload_data_inputs(alert, payload)
+    async def add_to_datasource(self, alert, payload):
+        await EtlPipelineServiceServicer.router.upload_data_inputs(alert, payload)

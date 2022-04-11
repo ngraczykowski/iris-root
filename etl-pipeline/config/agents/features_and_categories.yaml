@@ -57,7 +57,7 @@ customerType:
     - "I"
     - "UNKNOWN"
     - "C"
-  category_type: ANY_STRING
+  category_type: ENUMERATED
 
 entitiesTypesMatch:
   feature_type: categories
@@ -66,9 +66,9 @@ entitiesTypesMatch:
     type: ENTITY_TYPE_MATCH
   display_name: "Entity Type Match"
   allowed_values: 
-    - "Y"
-    - "N"
-  category_type: ANY_STRING
+    - Y
+    - N
+  category_type: ENUMERATED
 
 geoNationality:
  feature_type: features
@@ -106,3 +106,19 @@ companyName:
  fields:
    alerted_party_names: ap_all_company_names_aggregated
    watchlist_names: wl_all_company_names
+
+alertType:
+  feature_type: categories
+  producer_type: CategoryProducer
+  fields:
+    type: datasetType
+  display_name: "Dataset / alert type"
+  allowed_values: 
+    - ISG_Weekly_Party
+    - ISG_Daily_Party
+    - WM_Address
+    - WM_Party
+    - ISG_Daily_Account
+    - ISG_Weekly_Account
+  category_type: ENUMERATED
+

@@ -1,2 +1,0 @@
-categories/customerType
-categories/entitiesTypesMatch

@@ -15,6 +15,16 @@ logger = logging.getLogger("main").getChild("etl_pipeline")
 cn = pipeline_config.cn
 
 
+CUSTOMER_S8_MAP = {
+    "R_Global_MultiParty_Wkly": "ISG_Weekly_Party",
+    "R_Global_MultiParty_Daily": "ISG_Daily_Party",
+    "R_US_Active_Address": "WM_Address",
+    "R_US_Active_Party": "WM_Party",
+    "R_Global_MultiAccounts_Daily": "ISG_Daily_Account",
+    "R_Global_MultiAccounts_Wkly": "ISG_Weekly_Account",
+}
+
+
 class PipelineError:
     pass
 
@@ -236,6 +246,7 @@ class MSPipeline(ETLPipeline):
                 match[cn.AP_TRIGGERS] = self.engine.set_triggered_tokens_discovery(match, fields)
                 self.set_up_party_type(payload, match)
             self.set_up_party_type(payload, payload)
+            self.set_up_dataset_type_match(payload, match)
         return payloads
 
     def parse_key(self, value, match, payload, new_config):
@@ -396,3 +407,8 @@ class MSPipeline(ETLPipeline):
             match["ENTITY_TYPE_MATCH"] = "Y"
         else:
             match["ENTITY_TYPE_MATCH"] = "N"
+
+    def set_up_dataset_type_match(self, payload, match):
+        match[cn.DATASET_TYPE] = CUSTOMER_S8_MAP.get(
+            payload[cn.ALERTED_PARTY_FIELD][cn.HEADER_INFO][cn.DATASET_NAME], ""
+        )
