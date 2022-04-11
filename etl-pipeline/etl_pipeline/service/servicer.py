@@ -92,6 +92,9 @@ class EtlPipelineServiceServicer(object):
         return alert, status
 
     async def process_request(self, request):
+        for alert in request.alerts:
+            logger.debug(f"Received {alert.alert_name}")
+
         alerts_to_parse = [
             AlertPayload(
                 batch_id=alert.batch_id,
@@ -101,17 +104,23 @@ class EtlPipelineServiceServicer(object):
             )
             for alert in request.alerts
         ]
+        logger.debug(f"Number of alerts {len(alerts_to_parse)}")
         future_payloads = [self.pool.submit(self.parse_alert, alert) for alert in alerts_to_parse]
         payloads = [future.result() for future in future_payloads]
+        logger.debug(f"Collected parsed payloads {len(alerts_to_parse)}")
         # payloads = [self.parse_alert(alerts_to_parse[0])]  # debugging
         statuses = []
         for alert, record in zip(alerts_to_parse, payloads):
+            logger.debug(f"Collected parsed payloads {len(alerts_to_parse)}")
             statuses.append(self.upload_to_data_source(alert, record))
         all_data = await asyncio.gather(*statuses)
         etl_alerts = [self._parse_alert(alert, status) for alert, status in all_data]
+        logger.debug(f"ETL results number: {len(etl_alerts)}")
+        logger.debug(f"ETL results: {etl_alerts}")
         return etl_alerts
 
     def parse_alert(self, alert):
+        logger.debug(f"Starting parse for {alert.alert_name}")
         payload = alert.flat_payload
         payload = PayloadLoader().load_payload_from_json(payload)
         payload = {key: payload[key] for key in sorted(payload)}
@@ -120,6 +129,7 @@ class EtlPipelineServiceServicer(object):
         error = None
         try:
             payload = pipeline.transform_standardized_to_cleansed(payload)
+            logger.debug(f"Number of records (input_record vs match pairs): {len(payload)}")
             logger.debug("Transform standardized to cleansed - success")
             payload = pipeline.transform_cleansed_to_application(payload)
             logger.debug("Transform cleansed to standardized - success")

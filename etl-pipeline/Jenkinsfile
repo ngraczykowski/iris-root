@@ -14,16 +14,16 @@ pipeline {
     }
 
     stages {
-         stage('Build') {
-             steps {
-                 sh './scripts/build.sh'
-             }
-         }
-         stage('Test') {
-             steps {
-                 sh './scripts/test.sh'
-             }
-         }
+        //  stage('Build') {
+        //      steps {
+        //          sh './scripts/build.sh'
+        //      }
+        //  }
+        //  stage('Test') {
+        //      steps {
+        //          sh './scripts/test.sh'
+        //      }
+        //  }
          stage('Build and publish package') {
              agent {
                  docker {
@@ -39,13 +39,13 @@ pipeline {
                    }
                  }
                  stage('Publish dist') {
-                   when {
-                     anyOf {
-                       branch 'master'
-                       branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
-                     }
-                     expression { return params.RELEASE }
-                   }
+                //    when {
+                //      anyOf {
+                //        branch 'master'
+                //        branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
+                //      }
+                //      expression { return params.RELEASE }
+                //    }
                    steps {
                      rtUpload (
                          serverId: "silenteight-repo-v2",
@@ -60,12 +60,12 @@ pipeline {
                      )
                    }
                  }
-                 stage ('Build package') {
-                     steps {
-                         sh './scripts/clean.sh'
-                         sh './scripts/build_package.sh'
-                     }
-                 }
+                //  stage ('Build package') {
+                //      steps {
+                //          sh './scripts/clean.sh'
+                //          sh './scripts/build_package.sh'
+                //      }
+                //  }
                  stage('Publish package') {
                      when {
                              anyOf {
@@ -91,19 +91,19 @@ pipeline {
                  }
              }
          }
-        stage('Publish docker image') {
-            when {
-                branch 'master'
-            }
-            steps {
-            sshagent([env.JENKINS_SSH_NAME]) {
-                sh './scripts/push.sh --index-url ${PIP_INDEX_URL}'
-            }}
-        }
+        // stage('Publish docker image') {
+        //     when {
+        //         branch 'master'
+        //     }
+        //     steps {
+        //     sshagent([env.JENKINS_SSH_NAME]) {
+        //         sh './scripts/push.sh --index-url ${PIP_INDEX_URL}'
+        //     }}
+        // }
         stage('Deploy On Nomad mike') {
-          when {
-              branch 'master'
-          }
+        //   when {
+        //       branch 'master'
+        //   }
           steps {
               sh './nomad/deploy.sh'
           }

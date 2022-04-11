@@ -88,7 +88,7 @@ class AgentInputCreator:
                         field_maps=params["fields"],
                     )
                 )
-
+        logger.debug(f"Connecting to UDS via {service_config.DATA_SOURCE_INPUT_ENDPOINT}")
         channel = self.initiate_channel(service_config.DATA_SOURCE_INPUT_ENDPOINT, ssl)
         self.agent_input_stub = AgentInputServiceStub(channel)
         channel = self.initiate_channel(service_config.DATA_SOURCE_INPUT_ENDPOINT, ssl)
