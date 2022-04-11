@@ -16,13 +16,19 @@ public class AlertUpdater {
 
   public void updatedWithRegistrationInfo(Alert alert, RegistrationResponse registrationResponse) {
     registrationResponse.getRegisteredAlertWithMatches().stream()
-        .peek(registeredAlertWithMatches -> alert
-            .details()
-            .setAlertName(registeredAlertWithMatches.getAlertName()))
+        .peek(registeredAlertWithMatches ->
+            updateAlertWithRegistrationInfo(alert, registeredAlertWithMatches))
         .map(RegisteredAlertWithMatches::getRegisteredMatches)
         .flatMap(Collection::stream)
         .forEach(
             registeredMatch -> updateMatchWithRegistrationInfo(alert.matches(), registeredMatch));
+  }
+
+  private void updateAlertWithRegistrationInfo(
+      Alert alert, RegistrationResponse.RegisteredAlertWithMatches registeredAlertWithMatches) {
+    if (registeredAlertWithMatches.getAlertId().equals(alert.id().sourceId())) {
+      alert.details().setAlertName(registeredAlertWithMatches.getAlertName());
+    }
   }
 
   private void updateMatchWithRegistrationInfo(
