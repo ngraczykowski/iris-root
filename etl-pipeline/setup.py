@@ -14,7 +14,7 @@ dev_require = [
 
 setup(
     name="etl_pipeline",
-    version="0.5.17-dev",
+    version="0.5.18-dev",
     description="ETL pipeline",
     author="Silent Eight Pte. Ltd.",
     author_email="support@silenteight.com",
