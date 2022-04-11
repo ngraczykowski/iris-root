@@ -22,10 +22,7 @@ class FindAlertIdSetJdbcDataAccess implements FindAlertIdSetAccessPort {
       "SELECT pam.alert_message_id, pam.system_id, pam.message_id \n"
           + "FROM pb_alert_message pam\n"
           + "JOIN pb_alert_message_status pams ON pam.alert_message_id = pams.alert_message_id\n"
-          + "WHERE pam.system_id IN (:systemIds)\n"
-          + "AND pams.accepted_at IS NULL\n"
-          + "AND pams.recommended_at IS NULL\n"
-          + "AND pams.rejected_at IS NULL\n";
+          + "WHERE pam.system_id IN (:systemIds)\n";
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
 

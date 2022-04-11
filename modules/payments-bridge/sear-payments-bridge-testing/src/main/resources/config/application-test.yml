@@ -38,6 +38,11 @@ pb:
     bucket: "sps-reports-dev-20211110115534833400000001"
     file-prefix: "SVB_SEAR_DEV_ai_reasoning_alert_level"
     report-expiration-in-months: 6
+  data-retention:
+    alert-data:
+      cron: "*/5 * * * * *"
+    personal-information:
+      cron: "*/5 * * * * *"
 
 environment:
   name: "TEST"

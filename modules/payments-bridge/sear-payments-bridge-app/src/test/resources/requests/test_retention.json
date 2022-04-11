@@ -1,0 +1,1086 @@
+{
+  "Header": null,
+  "Body": {
+    "msg_SendMessage": {
+      "VersionTag": "1",
+      "Authentication": {
+        "UserLogin": "CASE_MGR_API_USER_S8",
+        "UserPassword": "8JzH+aVV3cZjBOWUnitlB092cNzC28y+",
+        "UserRealm": ""
+      },
+      "Messages": [
+        {
+          "Message": {
+            "Unit": "US",
+            "BusinessUnit": "ROOT",
+            "MessageID": "CD2A3CF3-CEB3-3C45-E053-1B186C0A11F3",
+            "SystemID": "DIN20211006143716-00004-14787",
+            "Bypass": "0",
+            "Command": "1",
+            "BusinessType": "CTR",
+            "MessageType": "INTL103",
+            "IOIndicator": "O",
+            "SenderReference": "20212790003700",
+            "Currency": "USD",
+            "Amount": "10.0000",
+            "ApplicationCode": "GFX",
+            "ToApplication": "",
+            "MessageFormat": "ALL",
+            "SenderCode": "SVBKUS60",
+            "ReceiverCode": "SCBLUS33",
+            "ApplicationPriority": "0",
+            "CutoffTime": "",
+            "NormalizedAmount": "",
+            "MessageData": "[FIRCOSOFT     X] SVB BE MUX FILTER\n[APPLI         X] GFX\n[UNIT          X] US\n[REFERENCE     X] 20212790003700\n[TYPE          X] INTL 103 O\n[VALUEDATE      ] 2021\/10\/06\n[AMOUNT         ] USD 10.0000\n[INSPMTAMT      ] USD 10.00\n[SENDER         ] SVBKUS60\n[ORIGINATOR     ] AC\n20123456\n1\/ORIG NAME\n2\/ADDRESS LINE 1\n3\/US\/ADDRESS\nUS\n[ORGBANK        ] AC\nSVBKGB2L\nSILICON VALLEY BANK\nFLOOR 8\n14-18 FINSBURY SQUARE\nLONDON EC2A 1BR\nUS\n[DBTACCOFF      ] 001\n[DBTACCTYP      ] DDA\n[DBTACCNUM      ] 3300828942\n[INSBANK        ] AC\n3300828942\nADDR LINE 1 2000007429\n3003 TASMAN DR\nATTN: ED SALMON\nSANTA CLARA, CA 95054\nUS\n[RECEIVER       ] SCBLUS33\n[BENE           ] AC\n123456\nBNF NAME\nADDRESS\n[BENEBANK       ] NWBKGB2L\n[FXRATE        X] 1.000000\n[TRANCD         ] INTLPC\n[CHARGESCD      ] SHA\n",
+            "LastComment": "send to s8",
+            "LastOperator": "rramacha",
+            "ValueDate": "2021\/10\/06",
+            "FilteredDate": "2001\/10\/06 14:37:17",
+            "RelatedReference": "",
+            "CreatedDate": "2021\/10\/06 14:37:16",
+            "Priority": "0",
+            "Confidentiality": "0",
+            "Blocking": "5",
+            "NonBlocking": "0",
+            "CopyService": "",
+            "Hits": [
+              {
+                "Hit": {
+                  "MatchingText": "LINE",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "307",
+                        "PositionEnd": "310"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "ORIGINATOR",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "Line-Up",
+                  "HittedEntity": {
+                    "ID": "SIBIE194",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2020-06-25"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "Line-Up"
+                      },
+                      {
+                        "Name": "Line UP Digital Agency"
+                      },
+                      {
+                        "Name": "Line-Up"
+                      },
+                      {
+                        "Name": "Line UP Digital Agency"
+                      },
+                      {
+                        "Name": "Line-Up"
+                      },
+                      {
+                        "Name": "Line UP Digital Agency"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                            {
+                              "City": "Simferopol"
+                            },
+                            {
+                              "City": "Simferopol"
+                            },
+                            {
+                              "City": "Simferopol"
+                            }
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                            {
+                              "Country": "Crimea"
+                            },
+                            {
+                              "Country": "CRIMEA"
+                            },
+                            {
+                              "Country": "CRIMEE"
+                            },
+                            {
+                              "Country": "KRIMIA"
+                            },
+                            {
+                              "Country": "KRYM"
+                            },
+                            {
+                              "Country": "QIRIM"
+                            },
+                            {
+                              "Country": "Crimea"
+                            },
+                            {
+                              "Country": "CRIMEA"
+                            },
+                            {
+                              "Country": "CRIMEE"
+                            },
+                            {
+                              "Country": "KRIMIA"
+                            },
+                            {
+                              "Country": "KRYM"
+                            },
+                            {
+                              "Country": "QIRIM"
+                            },
+                            {
+                              "Country": "Crimea"
+                            },
+                            {
+                              "Country": "CRIMEA"
+                            },
+                            {
+                              "Country": "CRIMEE"
+                            },
+                            {
+                              "Country": "KRIMIA"
+                            },
+                            {
+                              "Country": "KRYM"
+                            },
+                            {
+                              "Country": "QIRIM"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "SVB_INTERNAL",
+                    "Designation": "SANCTIONS",
+                    "Keywords": [
+                      {
+                        "Keyword": "none"
+                      }
+                    ],
+                    "Type": "C",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "Additional Info: Refer to Sanctions Operations. SVB client Mission Barns, Inc. sent multiple payments to Konstiantyn Zhuravskyi who owns Line-up, a company which appears to be located in Simferopol, Crimea. Refer to Global Sanctions Compliance.",
+                    "DatesOfBirth": [
+                    ],
+                    "PlacesOfBirth": [
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "SANTA",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "588",
+                        "PositionEnd": "592"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "INSBANK",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "SANDA-M, OOO",
+                  "HittedEntity": {
+                    "ID": "AS06285026",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2020-05-14 15:11:05 EUE"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "SANDA-M, OOO"
+                      },
+                      {
+                        "Name": "??? '?????-?'"
+                      },
+                      {
+                        "Name": "SANDA-M, OOO"
+                      },
+                      {
+                        "Name": "??? '?????-?'"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "UL. SUVOROVA, D. 12A, POM. 15, ET. 2, 424003",
+                          "Cities": [
+                            {
+                              "City": "YOSHKAR-OLA"
+                            },
+                            {
+                              "City": "YOSHKAR-OLA"
+                            }
+                          ],
+                          "States": [
+                            {
+                              "State": "MARIY- EL REPUBLIC"
+                            },
+                            {
+                              "State": "MARIY- EL REPUBLIC"
+                            }
+                          ],
+                          "Countries": [
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "FEDERATION DE RUSSIE"
+                            },
+                            {
+                              "Country": "ROSSIYA"
+                            },
+                            {
+                              "Country": "ROSSIYSKAYA FEDERATSIYA"
+                            },
+                            {
+                              "Country": "RUSIA"
+                            },
+                            {
+                              "Country": "RUSSIA"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "RUSSIE"
+                            },
+                            {
+                              "Country": "RUSSISCHE FODERATION"
+                            },
+                            {
+                              "Country": "RUSSLAND"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "FEDERATION DE RUSSIE"
+                            },
+                            {
+                              "Country": "ROSSIYA"
+                            },
+                            {
+                              "Country": "ROSSIYSKAYA FEDERATSIYA"
+                            },
+                            {
+                              "Country": "RUSIA"
+                            },
+                            {
+                              "Country": "RUSSIA"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "RUSSIE"
+                            },
+                            {
+                              "Country": "RUSSISCHE FODERATION"
+                            },
+                            {
+                              "Country": "RUSSLAND"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "EU_ENH",
+                    "Designation": "UKRAINE",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:EU_ENHANCEMENT"
+                      },
+                      {
+                        "Keyword": "SC:OWNERSHIP_50_100"
+                      }
+                    ],
+                    "Type": "C",
+                    "Codes": [
+                      {
+                        "Code": {
+                          "Name": "1021200782690",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "1215081033",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "1021200782690",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "1215081033",
+                          "Type": "NationalID"
+                        }
+                      }
+                    ],
+                    "AdditionalInfo": "List ID: 1170 \/ Create Date: 05\/05\/2020 16:30:02 \/ Last Update Date: 05\/06\/2020 12:27:06 \/ Org_PID: 7439 \/ Program: UKRAINE \/ NATIONAL NO: 1021200782690 OtherInfo: Reg. Number Issued 12\/29\/2002; 1215081033 OtherInfo: INN Number \/ OtherInformation: 100% Subsidiary of Mariyskiy Mashinostroitelnyy Zavod AO which is 55% subsidiary of CONCERN ALMAZ-ANTEY (EU). \/ OwnershipPercent: 100.00; SourceLink: https:\/\/egrul.nalog.ru\/index.html (INN: 1215081033); https:\/\/pro.fira.ru\/search\/companies\/card\/index.html?code=1231324#!198; https:\/\/www.marimmz.ru\/?q=node\/2239",
+                    "DatesOfBirth": [
+                    ],
+                    "PlacesOfBirth": [
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "163515",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "SANTA",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "588",
+                        "PositionEnd": "592"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "INSBANK",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "SANDA-M, OOO",
+                  "HittedEntity": {
+                    "ID": "AS06285086",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2020-05-14 15:25:31 HME"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "SANDA-M, OOO"
+                      },
+                      {
+                        "Name": "??? '?????-?'"
+                      },
+                      {
+                        "Name": "SANDA-M, OOO"
+                      },
+                      {
+                        "Name": "??? '?????-?'"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "UL. SUVOROVA, D. 12A, POM. 15, ET. 2, 424003",
+                          "Cities": [
+                            {
+                              "City": "YOSHKAR-OLA"
+                            },
+                            {
+                              "City": "YOSHKAR-OLA"
+                            }
+                          ],
+                          "States": [
+                            {
+                              "State": "MARIY- EL REPUBLIC"
+                            },
+                            {
+                              "State": "MARIY- EL REPUBLIC"
+                            }
+                          ],
+                          "Countries": [
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "FEDERATION DE RUSSIE"
+                            },
+                            {
+                              "Country": "ROSSIYA"
+                            },
+                            {
+                              "Country": "ROSSIYSKAYA FEDERATSIYA"
+                            },
+                            {
+                              "Country": "RUSIA"
+                            },
+                            {
+                              "Country": "RUSSIA"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "RUSSIE"
+                            },
+                            {
+                              "Country": "RUSSISCHE FODERATION"
+                            },
+                            {
+                              "Country": "RUSSLAND"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "FEDERATION DE RUSSIE"
+                            },
+                            {
+                              "Country": "ROSSIYA"
+                            },
+                            {
+                              "Country": "ROSSIYSKAYA FEDERATSIYA"
+                            },
+                            {
+                              "Country": "RUSIA"
+                            },
+                            {
+                              "Country": "RUSSIA"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "RUSSIE"
+                            },
+                            {
+                              "Country": "RUSSISCHE FODERATION"
+                            },
+                            {
+                              "Country": "RUSSLAND"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "GB_HMT_ENH",
+                    "Designation": "UKRAINE_SOVEREIGNTY",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:HM_TREASURY"
+                      },
+                      {
+                        "Keyword": "SC:OWNERSHIP_50_100"
+                      }
+                    ],
+                    "Type": "C",
+                    "Codes": [
+                      {
+                        "Code": {
+                          "Name": "1021200782690",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "1215081033",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "1021200782690",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "1215081033",
+                          "Type": "NationalID"
+                        }
+                      }
+                    ],
+                    "AdditionalInfo": "List ID: 1130 \/ Create Date: 05\/05\/2020 16:45:05 \/ Last Update Date: 05\/06\/2020 12:26:51 \/ Org_PID: 13076 \/ Program: UKRAINE (SOVEREIGNTY) \/ NATIONAL NO: 1021200782690 OtherInfo: Reg. Number Issued 12\/29\/2002; 1215081033 OtherInfo: INN Number \/ OtherInformation: 100% Subsidiary of Mariyskiy Mashinostroitelnyy Zavod AO which is 55% subsidiary of JOINT-STOCK COMPANY CONCERN ALMAZ-ANTEY (HMT). \/ OwnershipPercent: 100.00; SourceLink: https:\/\/egrul.nalog.ru\/index.html (INN: 1215081033); https:\/\/pro.fira.ru\/search\/companies\/card\/index.html?code=1231324#!198; https:\/\/www.marimmz.ru\/?q=node\/2239",
+                    "DatesOfBirth": [
+                    ],
+                    "PlacesOfBirth": [
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "163515",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "SANTA",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "588",
+                        "PositionEnd": "592"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "INSBANK",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "SANDA-M, OOO",
+                  "HittedEntity": {
+                    "ID": "AS06188474",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2020-05-13 14:27:53 TFP"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "SANDA-M, OOO"
+                      },
+                      {
+                        "Name": "??? '?????-?'"
+                      },
+                      {
+                        "Name": "SANDA-M, OOO"
+                      },
+                      {
+                        "Name": "??? '?????-?'"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "UL. SUVOROVA, D. 12A, POM. 15, ET. 2, 424003",
+                          "Cities": [
+                            {
+                              "City": "YOSHKAR-OLA"
+                            },
+                            {
+                              "City": "YOSHKAR-OLA"
+                            }
+                          ],
+                          "States": [
+                            {
+                              "State": "MARIY-EL REPUBLIC"
+                            },
+                            {
+                              "State": "MARIY-EL REPUBLIC"
+                            }
+                          ],
+                          "Countries": [
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "FEDERATION DE RUSSIE"
+                            },
+                            {
+                              "Country": "ROSSIYA"
+                            },
+                            {
+                              "Country": "ROSSIYSKAYA FEDERATSIYA"
+                            },
+                            {
+                              "Country": "RUSIA"
+                            },
+                            {
+                              "Country": "RUSSIA"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "RUSSIE"
+                            },
+                            {
+                              "Country": "RUSSISCHE FODERATION"
+                            },
+                            {
+                              "Country": "RUSSLAND"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "FEDERATION DE RUSSIE"
+                            },
+                            {
+                              "Country": "ROSSIYA"
+                            },
+                            {
+                              "Country": "ROSSIYSKAYA FEDERATSIYA"
+                            },
+                            {
+                              "Country": "RUSIA"
+                            },
+                            {
+                              "Country": "RUSSIA"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "RUSSIE"
+                            },
+                            {
+                              "Country": "RUSSISCHE FODERATION"
+                            },
+                            {
+                              "Country": "RUSSLAND"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "US_OFAC_ENH_RESEARCH",
+                    "Designation": "UKRAINEEO13661",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:OFAC"
+                      },
+                      {
+                        "Keyword": "SC:OWNERSHIP_50_100"
+                      }
+                    ],
+                    "Type": "C",
+                    "Codes": [
+                      {
+                        "Code": {
+                          "Name": "1021200782690",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "1215081033",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "1021200782690",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "1215081033",
+                          "Type": "NationalID"
+                        }
+                      }
+                    ],
+                    "AdditionalInfo": "List ID: 1072 \/ Create Date: 10\/25\/2018 11:21:49 \/ Last Update Date: 05\/06\/2020 12:27:22 \/ Org_PID: 16865 \/ Program: UKRAINE-EO13661 \/ NATIONAL NO: 1021200782690 OtherInfo: Reg. Number Issued 12\/29\/2002; 1215081033 OtherInfo: INN Number \/ OtherInformation: 100% Subsidiary of Mariyskiy Mashinostroitelnyy Zavod AO which is 55% subsidiary of JOINT-STOCK COMPANY CONCERN ALMAZ-ANTEY (SDN). \/ OwnershipPercent: 100.00; SourceLink: https:\/\/egrul.nalog.ru\/index.html (INN: 1215081033); https:\/\/pro.fira.ru\/search\/companies\/card\/index.html?code=1231324#!198; https:\/\/www.marimmz.ru\/?q=node\/2239",
+                    "DatesOfBirth": [
+                    ],
+                    "PlacesOfBirth": [
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "163515",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "LINE",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "539",
+                        "PositionEnd": "542"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "INSBANK",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "Line-Up",
+                  "HittedEntity": {
+                    "ID": "SIBIE194",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2020-06-25"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "Line-Up"
+                      },
+                      {
+                        "Name": "Line UP Digital Agency"
+                      },
+                      {
+                        "Name": "Line-Up"
+                      },
+                      {
+                        "Name": "Line UP Digital Agency"
+                      },
+                      {
+                        "Name": "Line-Up"
+                      },
+                      {
+                        "Name": "Line UP Digital Agency"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                            {
+                              "City": "Simferopol"
+                            },
+                            {
+                              "City": "Simferopol"
+                            },
+                            {
+                              "City": "Simferopol"
+                            }
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                            {
+                              "Country": "Crimea"
+                            },
+                            {
+                              "Country": "CRIMEA"
+                            },
+                            {
+                              "Country": "CRIMEE"
+                            },
+                            {
+                              "Country": "KRIMIA"
+                            },
+                            {
+                              "Country": "KRYM"
+                            },
+                            {
+                              "Country": "QIRIM"
+                            },
+                            {
+                              "Country": "Crimea"
+                            },
+                            {
+                              "Country": "CRIMEA"
+                            },
+                            {
+                              "Country": "CRIMEE"
+                            },
+                            {
+                              "Country": "KRIMIA"
+                            },
+                            {
+                              "Country": "KRYM"
+                            },
+                            {
+                              "Country": "QIRIM"
+                            },
+                            {
+                              "Country": "Crimea"
+                            },
+                            {
+                              "Country": "CRIMEA"
+                            },
+                            {
+                              "Country": "CRIMEE"
+                            },
+                            {
+                              "Country": "KRIMIA"
+                            },
+                            {
+                              "Country": "KRYM"
+                            },
+                            {
+                              "Country": "QIRIM"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "SVB_INTERNAL",
+                    "Designation": "SANCTIONS",
+                    "Keywords": [
+                      {
+                        "Keyword": "none"
+                      }
+                    ],
+                    "Type": "C",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "Additional Info: Refer to Sanctions Operations. SVB client Mission Barns, Inc. sent multiple payments to Konstiantyn Zhuravskyi who owns Line-up, a company which appears to be located in Simferopol, Crimea. Refer to Global Sanctions Compliance.",
+                    "DatesOfBirth": [
+                    ],
+                    "PlacesOfBirth": [
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              }
+            ],
+            "Actions": [
+              {
+                "Action": {
+                  "DateTime": "20211006143717",
+                  "Operator": "Filter Engine",
+                  "Comment": "Stop: 5, Nonblocking: 0",
+                  "Status": {
+                    "ID": "-1000",
+                    "Name": "N\/A",
+                    "RoutingCode": "-1",
+                    "Checksum": "7163dc6253aa3c4467fdcb2ad60600df"
+                  }
+                }
+              },
+              {
+                "Action": {
+                  "DateTime": "20211006143718",
+                  "Operator": "Stripping Engine",
+                  "Comment": "Stop: 5, Nonblocking: 0",
+                  "Status": {
+                    "ID": "-2",
+                    "Name": "NO HIT",
+                    "RoutingCode": "-2",
+                    "Checksum": "1080a07f679004254edcc4854e8f66a7"
+                  }
+                }
+              },
+              {
+                "Action": {
+                  "DateTime": "20211006181416",
+                  "Operator": "rramacha",
+                  "Comment": "rramacha opened this message",
+                  "Status": {
+                    "ID": "-1000",
+                    "Name": "N\/A",
+                    "RoutingCode": "-1",
+                    "Checksum": "7163dc6253aa3c4467fdcb2ad60600df"
+                  }
+                }
+              },
+              {
+                "Action": {
+                  "DateTime": "20211006181450",
+                  "Operator": "rramacha",
+                  "Comment": "send to s8",
+                  "Status": {
+                    "ID": "223",
+                    "Name": "FILTER_S8",
+                    "RoutingCode": "12",
+                    "Checksum": "6a905528e3b9126041bbfe8f59cfe07b"
+                  }
+                }
+              },
+              {
+                "Action": {
+                  "DateTime": "20211006181538",
+                  "Operator": "rramacha",
+                  "Comment": "rramacha opened this message",
+                  "Status": {
+                    "ID": "-1000",
+                    "Name": "N\/A",
+                    "RoutingCode": "-1",
+                    "Checksum": "7163dc6253aa3c4467fdcb2ad60600df"
+                  }
+                }
+              }
+            ],
+            "CurrentStatus": {
+              "ID": "223",
+              "Name": "FILTER_S8",
+              "RoutingCode": "12",
+              "Checksum": "6a905528e3b9126041bbfe8f59cfe07b"
+            },
+            "NextStatuses": [
+              {
+                "Status": {
+                  "ID": "225",
+                  "Name": "S8_ADJ",
+                  "RoutingCode": "12",
+                  "Checksum": "0d14589062b13cbce8cf38f9eb7a22a7"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

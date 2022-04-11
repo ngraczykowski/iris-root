@@ -24,6 +24,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -82,6 +83,8 @@ class PaymentsBridgeApplicationIT {
   MockDatasourceService mockDatasourceService;
   @Autowired
   MockWarehouseService mockWarehouseService;
+  @Autowired
+  JdbcTemplate jdbcTemplate;
 
   @BeforeAll
   static void beforeAll() {
@@ -124,6 +127,42 @@ class PaymentsBridgeApplicationIT {
         .conditionEvaluationListener(new ConditionEvaluationLogger(log::info))
         .atMost(Duration.ofSeconds(10))
         .until(() -> paymentsBridgeEventsListener.containsRegisteredAlert(alertId));
+  }
+
+
+  @Test
+  void shouldRemoveAlertRetention() {
+    var alertId = createAlert("test_retention.json");
+    await()
+        .conditionEvaluationListener(new ConditionEvaluationLogger(log::info))
+        .atMost(Duration.ofSeconds(10))
+        .until(() -> paymentsBridgeEventsListener.containsRegisteredAlert(alertId));
+
+    await()
+        .conditionEvaluationListener(new ConditionEvaluationLogger(log::info))
+        .atMost(Duration.ofSeconds(10))
+        .until(() -> isAlertRemoved(alertId));
+
+    assertThat(jdbcTemplate.queryForObject(
+        String.format(
+            "SELECT count(*) from pb_alert_message_payload WHERE alert_message_id = '%s'", alertId),
+        Integer.class)).isEqualTo(0);
+
+    assertThat(jdbcTemplate.queryForObject(
+        String.format(
+            "SELECT count(*) from pb_alert_message_status WHERE alert_message_id = '%s'", alertId),
+        Integer.class)).isEqualTo(0);
+
+    assertThat(jdbcTemplate.queryForObject(
+        String.format("SELECT count(*) from pb_recommendation WHERE alert_id = '%s'", alertId),
+        Integer.class)).isEqualTo(0);
+  }
+
+  private Boolean isAlertRemoved(UUID alertId) {
+    return jdbcTemplate.queryForObject(
+        String.format(
+            "SELECT count(*) from pb_alert_message WHERE alert_message_id = '%s'", alertId),
+        Integer.class) == 0;
   }
 
   @Test
