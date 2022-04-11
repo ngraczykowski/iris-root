@@ -1,0 +1,15 @@
+plugins {
+  id "java-library"
+}
+
+dependencies {
+  implementation project(":adjudication-engine-common")
+
+  implementation libraries.guava
+
+  // Enable aspects
+  aspect libraries.silenteight_sep_base_aspects
+  compileOnly libraries.spring_tx
+
+  testImplementation libraries.protobuf_java_util
+}

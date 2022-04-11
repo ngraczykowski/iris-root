@@ -19,6 +19,7 @@ dependencies {
   implementation project(":adjudication-engine-mock-agents")
   implementation project(":adjudication-engine-mock-datasource")
   implementation project(":adjudication-engine-mock-governance")
+  implementation project(":adjudication-engine-solving")
 
   implementation libraries.spring_cloud_consul_discovery
   implementation libraries.spring_cloud_starter_consul_config

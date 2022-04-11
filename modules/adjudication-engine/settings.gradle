@@ -14,6 +14,7 @@ include "adjudication-engine-metrics"
 include "adjudication-engine-mock-agents"
 include "adjudication-engine-mock-datasource"
 include "adjudication-engine-mock-governance"
+include "adjudication-engine-solving"
 include "proto-adjudication-engine-internal-protos"
 include 'adjudication-engine-governance'
 
