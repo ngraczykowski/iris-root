@@ -163,13 +163,13 @@ serp:
   # GNS DB Configuration
   gns:
     db:
-      password: 'CyevM34juNlBO'
       connection-init-query: SELECT 1 FROM DUAL
       auto-commit: false
       url: jdbc:oracle:thin:@${serp.gns.db.host}:${serp.gns.db.port}/${serp.gns.db.service.name}
       service:
         name: ORCLCDB
-      user: LC_GNS_WEB_SIT_01
+      user: CBS_USER                    #LC_GNS_WEB_SIT_01
+      password: '2sZQYt99OFw66iIGhrIXw' #'CyevM34juNlBO'
       port: 1521
       host: oracle.silenteight.com
       isolate-internal-queries: true
