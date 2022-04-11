@@ -1,9 +1,9 @@
+import asyncio
 import logging
 import os
 import time
 
 import grpc
-from black import asyncio
 from google.protobuf.any_pb2 import Any
 from omegaconf import OmegaConf
 from silenteight.datasource.agentinput.api.v1.agent_input_pb2 import AgentInput, FeatureInput
