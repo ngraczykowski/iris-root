@@ -41,7 +41,13 @@ message RegisterBatchRequest {
   int64 alert_count = 2 [(google.api.field_behavior) = REQUIRED];
   optional string batch_metadata = 3;
   optional int32 batch_priority = 4;
-  optional bool is_learning = 5;
+
+  // Boolean flag to mark the batch as solving or simulation.
+  // Core-Bridge doesn't perform any simulation,
+  // i.e. an analysis is not created and alerts are not added to the analysis.
+  // false (default value) - solving batch
+  // true - simulation batch
+  optional bool is_simulation = 5;
 }
 
 message NotifyBatchErrorRequest {

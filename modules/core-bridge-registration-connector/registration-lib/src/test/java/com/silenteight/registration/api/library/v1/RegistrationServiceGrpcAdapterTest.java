@@ -75,13 +75,13 @@ class RegistrationServiceGrpcAdapterTest {
             EmptyOut.getInstance(),
             "null priority"),
         Arguments.of(
-            RegisterBatchInRequestFixtures.REGISTER_BATCH_IN_WITH_NULL_LEARNING,
+            RegisterBatchInRequestFixtures.REGISTER_BATCH_IN_WITH_NULL_SIMULATION,
             EmptyOut.getInstance(),
-            "null learning"),
+            "null simulation flag"),
         Arguments.of(
-            RegisterBatchInRequestFixtures.REGISTER_BATCH_IN_WITH_NULL_LEARNING_AND_NULL_PRIORITY,
+            RegisterBatchInRequestFixtures.REGISTER_BATCH_IN_WITH_NULL_SIMULATION_AND_NULL_PRIORITY,
             EmptyOut.getInstance(),
-            "null learning and null priority")
+            "null simulation flag and null priority")
     );
   }
 

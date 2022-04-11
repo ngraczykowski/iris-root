@@ -13,7 +13,7 @@ public class RegisterBatchIn {
 
   String batchId;
   Long alertCount;
-  Boolean isLearning;
+  Boolean isSimulation;
   String batchMetadata;
   Integer batchPriority;
 
@@ -21,7 +21,7 @@ public class RegisterBatchIn {
     return RegisterBatchRequest.newBuilder()
         .setBatchId(batchId)
         .setAlertCount(alertCount)
-        .setIsLearning(Optional.ofNullable(isLearning).orElse(false))
+        .setIsSimulation(Optional.ofNullable(isSimulation).orElse(false))
         .setBatchMetadata(Optional.ofNullable(batchMetadata).orElse(""))
         .setBatchPriority(Optional.ofNullable(batchPriority).orElse(0))
         .build();
