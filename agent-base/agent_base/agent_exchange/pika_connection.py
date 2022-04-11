@@ -1,6 +1,5 @@
 import logging
 import ssl
-import time
 from typing import Callable, Dict
 
 import aio_pika
@@ -88,7 +87,9 @@ class PikaConnection:
                     raise
 
             self.callback_exchange = self.channel.exchange_declare(
-                self.messaging_configuration["response"]["exchange"]
+                self.messaging_configuration["response"]["exchange"],
+                exchange_type=pika.adapters.blocking_connection.ExchangeType.topic.value,
+                durable=True,
             )
             self.request_queue_tag = self.channel.basic_consume(
                 queue=queue_name, on_message_callback=self.on_request, auto_ack=False
@@ -163,13 +164,13 @@ class PikaConnection:
                 routing_key="",
                 body=response_message.body,
                 properties=pika.BasicProperties(
-                    content_encoding="lz4",
-                    content_type="application/x-protobuf",
-                    delivery_mode=message.delivery_mode,
-                    headers=message.headers,
-                    priority=message.priority,
-                    timestamp=int(time.time()),
-                    type="silenteight.agents.v1.api.exchange.AgentExchangeResponse",
+                    content_encoding=response_message.content_encoding,
+                    content_type=response_message.content_type,
+                    delivery_mode=response_message.delivery_mode,
+                    headers=response_message.headers,
+                    priority=response_message.priority,
+                    timestamp=response_message.timestamp,
+                    type=response_message.type,
                 ),
             )
         else:
