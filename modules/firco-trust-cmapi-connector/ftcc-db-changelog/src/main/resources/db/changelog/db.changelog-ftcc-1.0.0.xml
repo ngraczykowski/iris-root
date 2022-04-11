@@ -99,4 +99,8 @@
     </createTable>
   </changeSet>
 
+  <changeSet id="ftcc-1.0.0-5" author="ppietrucha">
+    <sqlFile path="db/changelog/sql/ftcc_batch_duration_view.sql"/>
+  </changeSet>
+
 </databaseChangeLog>
