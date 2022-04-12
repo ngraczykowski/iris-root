@@ -5,6 +5,8 @@ import lombok.Value;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import java.util.Map;
+
 @Value
 @Builder
 public class InsertRecommendationRequest {
@@ -23,6 +25,8 @@ public class InsertRecommendationRequest {
 
   String comment;
 
+  Map<String, String> matchComments;
+
   public static InsertRecommendationRequest fromAlertSolution(
       long analysisId, AlertSolution alertSolution) {
     return InsertRecommendationRequest
@@ -33,6 +37,7 @@ public class InsertRecommendationRequest {
         .matchContexts(alertSolution.getMatchContexts())
         .matchIds(alertSolution.getMatchIds())
         .comment(alertSolution.getComment())
+        .matchComments(alertSolution.getMatchComments())
         .build();
   }
 }

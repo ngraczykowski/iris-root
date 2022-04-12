@@ -27,16 +27,22 @@ class AlertRecommendationMapper implements RowMapper<AlertRecommendation> {
       .objectMapper()
       .getTypeFactory()
       .constructMapType(LinkedHashMap.class, String.class, Object.class);
+  private static final MapType STRING_MAP_TYPE = JsonConversionHelper.INSTANCE
+      .objectMapper()
+      .getTypeFactory()
+      .constructMapType(LinkedHashMap.class, String.class, Object.class);
 
   @SuppressWarnings("FeatureEnvy")
   @Override
   public AlertRecommendation mapRow(ResultSet rs, int rowNum) throws SQLException {
     MatchContext[] matches;
     Map<String, Object> commentInput;
+    Map<String, String> matchComments;
 
     try {
       commentInput = OBJECT_MAPPER.readValue(rs.getString(6), MAP_TYPE);
       matches = OBJECT_MAPPER.readValue(rs.getString(8), MatchContext[].class);
+      matchComments = OBJECT_MAPPER.readValue(rs.getString("match_comments"), STRING_MAP_TYPE);
     } catch (JsonProcessingException e) {
       throw new DataRetrievalFailureException("Failed to parse JSON values", e);
     }
@@ -56,6 +62,7 @@ class AlertRecommendationMapper implements RowMapper<AlertRecommendation> {
         .alertContext(alertContext)
         .matchIds((long[]) ArrayUtils.toPrimitive(rs.getArray(9).getArray()))
         .comment(rs.getString("comment"))
+        .matchComments(matchComments)
         .build();
   }
 }

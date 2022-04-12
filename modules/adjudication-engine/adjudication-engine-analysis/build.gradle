@@ -27,6 +27,7 @@ dependencies {
 
   implementation libraries.silenteight_sep_base_aspects
 
+  implementation libraries.postgresql
   implementation libraries.grpc_spring_boot_starter
   implementation libraries.spring_data_jpa
   implementation libraries.silenteight_sep_base_common

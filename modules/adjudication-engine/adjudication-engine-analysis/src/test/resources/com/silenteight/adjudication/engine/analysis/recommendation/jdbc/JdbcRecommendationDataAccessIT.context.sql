@@ -8,8 +8,8 @@ VALUES (1, 2, NOW())
      , (1, 1, NOW());
 
 INSERT INTO ae_recommendation (analysis_id, alert_id, created_at, recommended_action,
-                               match_ids, match_contexts)
-VALUES (1, 2, NOW(), 'TO_THE_MOON', ARRAY []::integer[], '[]'),
+                               match_ids, match_contexts, match_comments)
+VALUES (1, 2, NOW(), 'TO_THE_MOON', ARRAY []::integer[], '[]', '{}'),
        (1, 1, NOW(), 'TO_THE_MOON', ARRAY []::integer[], '[
          {
            "matchId": "GSN00067068"
@@ -17,7 +17,7 @@ VALUES (1, 2, NOW(), 'TO_THE_MOON', ARRAY []::integer[], '[]'),
          {
            "matchId": "DB00051992"
          }
-       ]');
+       ]', '{"GSN00067068": "comment", "GSN00067068": "comment"}');
 
 INSERT INTO ae_match
 VALUES (1, 1, NOW(), 'GSN00067068', 1);

@@ -13,6 +13,7 @@ import com.silenteight.sep.base.aspects.metrics.Timed;
 import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.lang3.ArrayUtils;
@@ -44,6 +45,7 @@ class InsertAlertRecommendationsQuery {
   public static final String ALERT_ID_COLUMN = "alert_id";
   public static final String CREATED_AT_COLUMN = "created_at";
   public static final String COMMENT_COLUMN = "comment";
+  public static final String MATCH_COMMENTS_COLUMN = "match_comments";
   private static final ObjectMapper MAPPER = JsonConversionHelper.INSTANCE.objectMapper();
   private final JdbcTemplate jdbcTemplate;
 
@@ -70,6 +72,20 @@ class InsertAlertRecommendationsQuery {
     }
   }
 
+  private static Map<String, String> readMatchComments(String matchComments) {
+    if (StringUtils.isBlank(matchComments)) {
+      debug("Match matchComments is empty!");
+      return Map.of("", "");
+    }
+
+    try {
+      var typeRef = new TypeReference<HashMap<String, String>>() {};
+      return MAPPER.readValue(matchComments, typeRef);
+    } catch (JsonProcessingException e) {
+      throw new MatchContextsJsonNodeReadException(e);
+    }
+  }
+
   @SuppressWarnings("FeatureEnvy")
   private static RecommendationResponse buildRecommendationResponse(Map<String, Object> it) {
     var analysisId = (long) it.get(ANALYSIS_ID_COLUMN);
@@ -80,11 +96,12 @@ class InsertAlertRecommendationsQuery {
     var createdAt = (Timestamp) it.get(CREATED_AT_COLUMN);
     var recommendedAction = (String) it.get(RECOMMENDED_ACTION_COLUMN);
     var comment = (String) it.get(COMMENT_COLUMN);
+    var matchComments = readMatchComments(it.get(MATCH_COMMENTS_COLUMN).toString());
     var recommendationMetadata =
         transferToRecommendationMetaData(
             new AnalysisRecommendationContext(Arrays.asList(objectNodes), analysisId,
                 recommendationId,
-                alertId, matchIds));
+                alertId, matchIds, matchComments));
     var recommendation = Recommendation
         .newBuilder()
         .setAlert("alerts/" + alertId)
@@ -125,6 +142,14 @@ class InsertAlertRecommendationsQuery {
     }
   }
 
+  private static String writeMatchComments(Map<String, String> comments) {
+    try {
+      return MAPPER.writeValueAsString(comments);
+    } catch (JsonProcessingException e) {
+      throw new MatchCommentsJsonNodeWriteException(e);
+    }
+  }
+
   @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   List<RecommendationResponse> execute(Collection<InsertRecommendationRequest> requests) {
     List<RecommendationResponse> responses = new ArrayList<>();
@@ -146,7 +171,8 @@ class InsertAlertRecommendationsQuery {
             RECOMMENDED_ACTION_COLUMN, alertRecommendation.getRecommendedAction(),
             MATCH_IDS_COLUMN, alertRecommendation.getMatchIds(),
             MATCH_CONTEXTS_COLUMN, writeMatchContexts(alertRecommendation.getMatchContexts()),
-            COMMENT_COLUMN, alertRecommendation.getComment());
+            COMMENT_COLUMN, alertRecommendation.getComment(),
+            MATCH_COMMENTS_COLUMN, writeMatchComments(alertRecommendation.getMatchComments()));
     sql.updateByNamedParam(paramMap, keyHolder);
 
     ofNullable(keyHolder.getKeys())
@@ -160,21 +186,24 @@ class InsertAlertRecommendationsQuery {
     sql.setJdbcTemplate(jdbcTemplate);
     sql.setSql(
         "INSERT INTO ae_recommendation ("
-            + "analysis_id, alert_id, created_at, recommended_action, match_ids, "
-            + "match_contexts, comment"
+            + "analysis_id, alert_id, created_at, recommended_action, match_ids,\n"
+            + "                               "
+            + "match_contexts, comment, match_comments"
             + ")\n"
             + "VALUES ("
-            + ":analysis_id, :alert_id, NOW(), :recommended_action, :match_ids, :match_contexts, "
-            + ":comment)\n"
+            + ":analysis_id, :alert_id, now(), :recommended_action, :match_ids, :match_contexts, "
+            + ":comment,\n"
+            + "        :match_comments)\n"
             + "ON CONFLICT DO NOTHING\n"
             + "RETURNING recommendation_id, analysis_id, alert_id, created_at, "
-            + "recommended_action,match_ids,match_contexts::text, comment;");
+            + "recommended_action,match_ids,match_contexts::text, comment, match_comments;");
     sql.declareParameter(new SqlParameter(ALERT_ID_COLUMN, Types.BIGINT));
     sql.declareParameter(new SqlParameter(ANALYSIS_ID_COLUMN, Types.BIGINT));
     sql.declareParameter(new SqlParameter(RECOMMENDED_ACTION_COLUMN, Types.VARCHAR));
     sql.declareParameter(new SqlParameter(MATCH_IDS_COLUMN, Types.ARRAY));
     sql.declareParameter(new SqlParameter(MATCH_CONTEXTS_COLUMN, Types.OTHER));
     sql.declareParameter(new SqlParameter(COMMENT_COLUMN, Types.VARCHAR));
+    sql.declareParameter(new SqlParameter(MATCH_COMMENTS_COLUMN, Types.OTHER));
     sql.setReturnGeneratedKeys(true);
 
     sql.compile();
@@ -187,6 +216,15 @@ class InsertAlertRecommendationsQuery {
     private static final long serialVersionUID = 2343279004526563617L;
 
     MatchContextsJsonNodeWriteException(Throwable cause) {
+      super(cause);
+    }
+  }
+
+  static class MatchCommentsJsonNodeWriteException extends RuntimeException {
+
+    private static final long serialVersionUID = -478919687305591932L;
+
+    MatchCommentsJsonNodeWriteException(Throwable cause) {
       super(cause);
     }
   }

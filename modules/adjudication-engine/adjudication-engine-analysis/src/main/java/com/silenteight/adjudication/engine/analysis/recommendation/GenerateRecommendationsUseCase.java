@@ -156,13 +156,20 @@ class GenerateRecommendationsUseCase {
     var pendingAlert = getPendingAlert(alerts, alertId);
     var comment =
         generateComment(response.getAlertSolution(), alertId, pendingAlert.getMatchContexts());
+    var matchComments = generateMatchComments(pendingAlert.getMatchContexts());
+
     return AlertSolution.builder()
         .alertId(alertId)
         .recommendedAction(response.getAlertSolution())
         .matchIds(pendingAlert.getMatchIds())
         .matchContexts(pendingAlert.getMatchContexts())
         .comment(comment)
+        .matchComments(matchComments)
         .build();
+  }
+
+  private Map<String, String> generateMatchComments(ObjectNode[] matchContexts) {
+    return generateCommentsUseCase.generateMatchComments(generateMatchContexts(matchContexts));
   }
 
   private static void debug(final String message, final Object... parameters) {

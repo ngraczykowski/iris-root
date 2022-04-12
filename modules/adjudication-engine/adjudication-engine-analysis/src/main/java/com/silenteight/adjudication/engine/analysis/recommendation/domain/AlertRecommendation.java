@@ -47,6 +47,8 @@ public class AlertRecommendation {
 
   String comment;
 
+  Map<String, String> matchComments;
+
   public Recommendation toRecommendation() {
     return Recommendation
         .newBuilder()
@@ -62,7 +64,7 @@ public class AlertRecommendation {
     var matches = alertContext.getMatches();
     return AlertMetaDataTransformer.transferToRecommendationMetaData(
         new AnalysisRecommendationContext(
-            matches, analysisId, recommendationId, alertId, matchIds));
+            matches, analysisId, recommendationId, alertId, matchIds, matchComments));
   }
 
   public RecommendationWithMetadata toRecommendationWithMetadata() {

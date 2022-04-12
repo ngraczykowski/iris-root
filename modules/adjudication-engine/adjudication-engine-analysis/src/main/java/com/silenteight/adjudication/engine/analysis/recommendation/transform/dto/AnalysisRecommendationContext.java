@@ -5,6 +5,7 @@ import lombok.Value;
 import com.silenteight.adjudication.engine.comments.comment.domain.MatchContext;
 
 import java.util.List;
+import java.util.Map;
 
 @Value
 public class AnalysisRecommendationContext {
@@ -14,4 +15,5 @@ public class AnalysisRecommendationContext {
   long recommendationId;
   long alertId;
   long[] matchIds;
+  Map<String, String> matchComments;
 }

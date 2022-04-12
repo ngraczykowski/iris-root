@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
@@ -30,6 +31,7 @@ public class RecommendationFixture {
         .alertContext(createAlertContext())
         .matchIds(LongStream.range(1, 5).toArray())
         .comment("")
+        .matchComments(Map.of("123", "comment"))
         .build();
   }
 
@@ -47,7 +49,8 @@ public class RecommendationFixture {
         .matchContexts(new ObjectNode[] {
             MAPPER.convertValue(createMatchContext(), ObjectNode.class)
         })
-        .comment("")
+        .comment("comment")
+        .matchComments(Map.of("123", "matchcomment"))
         .build();
   }
 

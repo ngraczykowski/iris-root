@@ -4,14 +4,11 @@ import com.silenteight.adjudication.api.v1.RecommendationsGenerated.Recommendati
 import com.silenteight.adjudication.engine.analysis.analysis.AnalysisFacade;
 import com.silenteight.adjudication.engine.analysis.analysis.domain.AnalysisAttachmentFlags;
 import com.silenteight.adjudication.engine.analysis.commentinput.CommentInputDataAccess;
-import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertSolution;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.GenerateCommentsResponse;
-import com.silenteight.adjudication.engine.analysis.recommendation.domain.SaveRecommendationRequest;
 import com.silenteight.adjudication.engine.governance.GovernanceFacade;
 import com.silenteight.solving.api.v1.BatchSolveAlertsResponse;
 import com.silenteight.solving.api.v1.SolveAlertSolutionResponse;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -67,14 +64,7 @@ class GenerateAndSaveRecommendationUseCaseTest {
 
     when(analysisFacade.getAnalysisStrategy(1)).thenReturn("strategies");
 
-    when(createRecommendationsUseCase.createRecommendations(new SaveRecommendationRequest(
-        1L,
-        true, true, List.of(AlertSolution.builder()
-        .alertId(1)
-        .recommendedAction("solved")
-        .matchIds(new long[] { 11 })
-        .matchContexts(new ObjectNode[] {})
-        .build()))))
+    when(createRecommendationsUseCase.createRecommendations(any()))
         .thenReturn(List.of(
             RecommendationInfo.newBuilder().build()));
 

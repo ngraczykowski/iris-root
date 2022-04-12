@@ -81,6 +81,12 @@ class JdbcRecommendationDataAccessIT extends BaseJdbcTest {
         recommendationDataAccess.insertAlertRecommendation(List.of(createInsertRequest()));
     assertThat(result.size()).isEqualTo(1);
     assertThat(result.get(0).getAlertId()).isEqualTo(1);
+
+    var first = result.get(0);
+    assertThat(first.getAlertId()).isEqualTo(1);
+    assertThat(first.getRecommendation().getRecommendationComment()).isEqualTo("comment");
+    assertThat(first.getMetaData().getMatchesList().get(0).getMatchComment()).isEqualTo(
+        "matchcomment");
   }
 
   @Test
@@ -89,7 +95,7 @@ class JdbcRecommendationDataAccessIT extends BaseJdbcTest {
     recommendationDataAccess.insertAlertRecommendation(List.of(createInsertRequest()));
     recommendationDataAccess.insertAlertRecommendation(List.of(createInsertRequest()));
     assertThat(jdbcTemplate.queryForObject(
-        "SELECT COUNT(*) FROM ae_recommendation",
+        "SELECT count(*) FROM ae_recommendation",
         Integer.class)).isEqualTo(1);
   }
 

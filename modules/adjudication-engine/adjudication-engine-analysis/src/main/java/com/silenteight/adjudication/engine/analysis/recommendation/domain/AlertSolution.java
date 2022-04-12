@@ -5,6 +5,8 @@ import lombok.Value;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import java.util.Map;
+
 @Value
 @Builder
 public class AlertSolution {
@@ -18,4 +20,6 @@ public class AlertSolution {
   ObjectNode[] matchContexts;
 
   String comment;
+
+  Map<String, String> matchComments;
 }

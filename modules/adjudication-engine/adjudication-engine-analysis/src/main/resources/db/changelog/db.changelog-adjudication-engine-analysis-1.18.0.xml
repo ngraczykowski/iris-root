@@ -32,4 +32,18 @@
                              referencedColumnNames="alert_id"
                              onDelete="CASCADE"/>
   </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.18.0_2" author="wkeska">
+    <addColumn tableName="ae_recommendation">
+      <column name="match_comments" type="JSONB"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.18.0_3" author="wkeska">
+    <dropView viewName="ae_alert_recommendation_query"/>
+
+    <createView
+        viewName="ae_alert_recommendation_query"
+        path="db/changelog/sql/view_ae_alert_recommendation_query_v4.sql"/>
+  </changeSet>
 </databaseChangeLog>

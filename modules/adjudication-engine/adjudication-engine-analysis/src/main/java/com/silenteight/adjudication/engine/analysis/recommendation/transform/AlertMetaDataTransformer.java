@@ -35,7 +35,8 @@ public final class AlertMetaDataTransformer {
         .setAlert("alerts/" + alertId);
 
     for (int i = 0; i < matches.size(); i++) {
-      builder.addMatches(convertMatchMetadata(matches.get(i), context.getMatchIds()[i], alertId));
+      builder.addMatches(convertMatchMetadata(matches.get(i), context.getMatchIds()[i], alertId,
+          context.getMatchComments()));
     }
 
     return builder.build();
@@ -43,11 +44,13 @@ public final class AlertMetaDataTransformer {
 
 
   private static MatchMetadata convertMatchMetadata(
-      MatchContext context, long matchId, long alertId) {
+      MatchContext context, long matchId, long alertId, Map<String, String> matchComments) {
 
     var reasonStructBuilder = createStructBuilderFromMatchContext(
         context.getReason(),
         "Cannot convert match reason to Struct");
+
+    var matchComment = matchComments.getOrDefault(context.getMatchId(), "");
 
     return MatchMetadata
         .newBuilder()
@@ -56,6 +59,7 @@ public final class AlertMetaDataTransformer {
         .putAllFeatures(convertFeaturesMap(context.getFeatures()))
         .setReason(reasonStructBuilder)
         .setSolution(context.getSolution())
+        .setMatchComment(matchComment)
         .build();
   }
 
