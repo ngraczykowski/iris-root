@@ -114,11 +114,9 @@ alertType:
     type: datasetType
   display_name: "Dataset / alert type"
   allowed_values: 
-    - ISG_Weekly_Party
-    - ISG_Daily_Party
-    - WM_Address
-    - WM_Party
-    - ISG_Daily_Account
-    - ISG_Weekly_Account
+    - ISG_PARTY
+    - WM_ADDRESS
+    - WM_PARTY
+    - ISG_ACCOUNT
   category_type: ENUMERATED
 
