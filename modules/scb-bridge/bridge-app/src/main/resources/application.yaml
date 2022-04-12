@@ -117,7 +117,7 @@ silenteight:
     db:
       host: localhost
       port: 24291
-      schema:
+      schema: public
       name: scb_bridge
       username: scb
       password: scb
