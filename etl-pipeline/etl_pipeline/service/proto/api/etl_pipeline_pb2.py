@@ -3,7 +3,6 @@
 # source: etl_pipeline.proto
 """Generated protocol buffer code."""
 from google.protobuf import descriptor as _descriptor
-from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
@@ -17,24 +16,510 @@ _sym_db = _symbol_database.Default()
 from google.api import annotations_pb2 as google_dot_api_dot_annotations__pb2
 from google.api import field_behavior_pb2 as google_dot_api_dot_field__behavior__pb2
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
-    b'\n\x12\x65tl_pipeline.proto\x12*silenteight.datascience.etlpipeline.v1.api\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/api/field_behavior.proto"W\n\rRunEtlRequest\x12\x46\n\x06\x61lerts\x18\x01 \x03(\x0b\x32\x31.silenteight.datascience.etlpipeline.v1.api.AlertB\x03\xe0\x41\x02"\x93\x02\n\x05\x41lert\x12\x15\n\x08\x62\x61tch_id\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x17\n\nalert_name\x18\x02 \x01(\tB\x03\xe0\x41\x02\x12G\n\x07matches\x18\x03 \x03(\x0b\x32\x31.silenteight.datascience.etlpipeline.v1.api.MatchB\x03\xe0\x41\x02\x12]\n\x0c\x66lat_payload\x18\x04 \x03(\x0b\x32\x42.silenteight.datascience.etlpipeline.v1.api.Alert.FlatPayloadEntryB\x03\xe0\x41\x02\x1a\x32\n\x10\x46latPayloadEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01"7\n\x05Match\x12\x15\n\x08match_id\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x17\n\nmatch_name\x18\x02 \x01(\tB\x03\xe0\x41\x02"_\n\x0eRunEtlResponse\x12M\n\netl_alerts\x18\x01 \x03(\x0b\x32\x34.silenteight.datascience.etlpipeline.v1.api.EtlAlertB\x03\xe0\x41\x02"\xda\x01\n\x08\x45tlAlert\x12\x15\n\x08\x62\x61tch_id\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x17\n\nalert_name\x18\x02 \x01(\tB\x03\xe0\x41\x02\x12N\n\netl_status\x18\x03 \x01(\x0e\x32\x35.silenteight.datascience.etlpipeline.v1.api.EtlStatusB\x03\xe0\x41\x02\x12N\n\x0b\x65tl_matches\x18\x04 \x03(\x0b\x32\x34.silenteight.datascience.etlpipeline.v1.api.EtlMatchB\x03\xe0\x41\x02"#\n\x08\x45tlMatch\x12\x17\n\nmatch_name\x18\x01 \x01(\tB\x03\xe0\x41\x02*2\n\tEtlStatus\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x0b\n\x07\x46\x41ILURE\x10\x01\x12\x0b\n\x07SUCCESS\x10\x02\x32\xb6\x01\n\x12\x45tlPipelineService\x12\x9f\x01\n\x06RunEtl\x12\x39.silenteight.datascience.etlpipeline.v1.api.RunEtlRequest\x1a:.silenteight.datascience.etlpipeline.v1.api.RunEtlResponse"\x1e\x82\xd3\xe4\x93\x02\x18"\x0e/v1/etl:runEtl:\x06runEtlBG\n.com.silenteight.datascience.etlpipeline.v1.apiB\x13\x45tlPipelineApiProtoP\x01\x62\x06proto3'
+DESCRIPTOR = _descriptor.FileDescriptor(
+    name="etl_pipeline.proto",
+    package="silenteight.datascience.etlpipeline.v1.api",
+    syntax="proto3",
+    serialized_options=b"\n.com.silenteight.datascience.etlpipeline.v1.apiB\023EtlPipelineApiProtoP\001",
+    create_key=_descriptor._internal_create_key,
+    serialized_pb=b'\n\x12\x65tl_pipeline.proto\x12*silenteight.datascience.etlpipeline.v1.api\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/api/field_behavior.proto"W\n\rRunEtlRequest\x12\x46\n\x06\x61lerts\x18\x01 \x03(\x0b\x32\x31.silenteight.datascience.etlpipeline.v1.api.AlertB\x03\xe0\x41\x02"\x93\x02\n\x05\x41lert\x12\x15\n\x08\x62\x61tch_id\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x17\n\nalert_name\x18\x02 \x01(\tB\x03\xe0\x41\x02\x12G\n\x07matches\x18\x03 \x03(\x0b\x32\x31.silenteight.datascience.etlpipeline.v1.api.MatchB\x03\xe0\x41\x02\x12]\n\x0c\x66lat_payload\x18\x04 \x03(\x0b\x32\x42.silenteight.datascience.etlpipeline.v1.api.Alert.FlatPayloadEntryB\x03\xe0\x41\x02\x1a\x32\n\x10\x46latPayloadEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01"7\n\x05Match\x12\x15\n\x08match_id\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x17\n\nmatch_name\x18\x02 \x01(\tB\x03\xe0\x41\x02"_\n\x0eRunEtlResponse\x12M\n\netl_alerts\x18\x01 \x03(\x0b\x32\x34.silenteight.datascience.etlpipeline.v1.api.EtlAlertB\x03\xe0\x41\x02"\xda\x01\n\x08\x45tlAlert\x12\x15\n\x08\x62\x61tch_id\x18\x01 \x01(\tB\x03\xe0\x41\x02\x12\x17\n\nalert_name\x18\x02 \x01(\tB\x03\xe0\x41\x02\x12N\n\netl_status\x18\x03 \x01(\x0e\x32\x35.silenteight.datascience.etlpipeline.v1.api.EtlStatusB\x03\xe0\x41\x02\x12N\n\x0b\x65tl_matches\x18\x04 \x03(\x0b\x32\x34.silenteight.datascience.etlpipeline.v1.api.EtlMatchB\x03\xe0\x41\x02"#\n\x08\x45tlMatch\x12\x17\n\nmatch_name\x18\x01 \x01(\tB\x03\xe0\x41\x02*%\n\tEtlStatus\x12\x0b\n\x07\x46\x41ILURE\x10\x00\x12\x0b\n\x07SUCCESS\x10\x01\x32\xb6\x01\n\x12\x45tlPipelineService\x12\x9f\x01\n\x06RunEtl\x12\x39.silenteight.datascience.etlpipeline.v1.api.RunEtlRequest\x1a:.silenteight.datascience.etlpipeline.v1.api.RunEtlResponse"\x1e\x82\xd3\xe4\x93\x02\x18"\x0e/v1/etl:runEtl:\x06runEtlBG\n.com.silenteight.datascience.etlpipeline.v1.apiB\x13\x45tlPipelineApiProtoP\x01\x62\x06proto3',
+    dependencies=[
+        google_dot_api_dot_annotations__pb2.DESCRIPTOR,
+        google_dot_api_dot_field__behavior__pb2.DESCRIPTOR,
+    ],
 )
 
-_ETLSTATUS = DESCRIPTOR.enum_types_by_name["EtlStatus"]
+_ETLSTATUS = _descriptor.EnumDescriptor(
+    name="EtlStatus",
+    full_name="silenteight.datascience.etlpipeline.v1.api.EtlStatus",
+    filename=None,
+    file=DESCRIPTOR,
+    create_key=_descriptor._internal_create_key,
+    values=[
+        _descriptor.EnumValueDescriptor(
+            name="FAILURE",
+            index=0,
+            number=0,
+            serialized_options=None,
+            type=None,
+            create_key=_descriptor._internal_create_key,
+        ),
+        _descriptor.EnumValueDescriptor(
+            name="SUCCESS",
+            index=1,
+            number=1,
+            serialized_options=None,
+            type=None,
+            create_key=_descriptor._internal_create_key,
+        ),
+    ],
+    containing_type=None,
+    serialized_options=None,
+    serialized_start=908,
+    serialized_end=945,
+)
+_sym_db.RegisterEnumDescriptor(_ETLSTATUS)
+
 EtlStatus = enum_type_wrapper.EnumTypeWrapper(_ETLSTATUS)
-UNKNOWN = 0
-FAILURE = 1
-SUCCESS = 2
+FAILURE = 0
+SUCCESS = 1
 
 
-_RUNETLREQUEST = DESCRIPTOR.message_types_by_name["RunEtlRequest"]
-_ALERT = DESCRIPTOR.message_types_by_name["Alert"]
-_ALERT_FLATPAYLOADENTRY = _ALERT.nested_types_by_name["FlatPayloadEntry"]
-_MATCH = DESCRIPTOR.message_types_by_name["Match"]
-_RUNETLRESPONSE = DESCRIPTOR.message_types_by_name["RunEtlResponse"]
-_ETLALERT = DESCRIPTOR.message_types_by_name["EtlAlert"]
-_ETLMATCH = DESCRIPTOR.message_types_by_name["EtlMatch"]
+_RUNETLREQUEST = _descriptor.Descriptor(
+    name="RunEtlRequest",
+    full_name="silenteight.datascience.etlpipeline.v1.api.RunEtlRequest",
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    create_key=_descriptor._internal_create_key,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name="alerts",
+            full_name="silenteight.datascience.etlpipeline.v1.api.RunEtlRequest.alerts",
+            index=0,
+            number=1,
+            type=11,
+            cpp_type=10,
+            label=3,
+            has_default_value=False,
+            default_value=[],
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=b"\340A\002",
+            file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
+        ),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax="proto3",
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=129,
+    serialized_end=216,
+)
+
+
+_ALERT_FLATPAYLOADENTRY = _descriptor.Descriptor(
+    name="FlatPayloadEntry",
+    full_name="silenteight.datascience.etlpipeline.v1.api.Alert.FlatPayloadEntry",
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    create_key=_descriptor._internal_create_key,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name="key",
+            full_name="silenteight.datascience.etlpipeline.v1.api.Alert.FlatPayloadEntry.key",
+            index=0,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=b"".decode("utf-8"),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
+        ),
+        _descriptor.FieldDescriptor(
+            name="value",
+            full_name="silenteight.datascience.etlpipeline.v1.api.Alert.FlatPayloadEntry.value",
+            index=1,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=b"".decode("utf-8"),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
+        ),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=b"8\001",
+    is_extendable=False,
+    syntax="proto3",
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=444,
+    serialized_end=494,
+)
+
+_ALERT = _descriptor.Descriptor(
+    name="Alert",
+    full_name="silenteight.datascience.etlpipeline.v1.api.Alert",
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    create_key=_descriptor._internal_create_key,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name="batch_id",
+            full_name="silenteight.datascience.etlpipeline.v1.api.Alert.batch_id",
+            index=0,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=b"".decode("utf-8"),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=b"\340A\002",
+            file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
+        ),
+        _descriptor.FieldDescriptor(
+            name="alert_name",
+            full_name="silenteight.datascience.etlpipeline.v1.api.Alert.alert_name",
+            index=1,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=b"".decode("utf-8"),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=b"\340A\002",
+            file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
+        ),
+        _descriptor.FieldDescriptor(
+            name="matches",
+            full_name="silenteight.datascience.etlpipeline.v1.api.Alert.matches",
+            index=2,
+            number=3,
+            type=11,
+            cpp_type=10,
+            label=3,
+            has_default_value=False,
+            default_value=[],
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=b"\340A\002",
+            file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
+        ),
+        _descriptor.FieldDescriptor(
+            name="flat_payload",
+            full_name="silenteight.datascience.etlpipeline.v1.api.Alert.flat_payload",
+            index=3,
+            number=4,
+            type=11,
+            cpp_type=10,
+            label=3,
+            has_default_value=False,
+            default_value=[],
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=b"\340A\002",
+            file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
+        ),
+    ],
+    extensions=[],
+    nested_types=[
+        _ALERT_FLATPAYLOADENTRY,
+    ],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax="proto3",
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=219,
+    serialized_end=494,
+)
+
+
+_MATCH = _descriptor.Descriptor(
+    name="Match",
+    full_name="silenteight.datascience.etlpipeline.v1.api.Match",
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    create_key=_descriptor._internal_create_key,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name="match_id",
+            full_name="silenteight.datascience.etlpipeline.v1.api.Match.match_id",
+            index=0,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=b"".decode("utf-8"),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=b"\340A\002",
+            file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
+        ),
+        _descriptor.FieldDescriptor(
+            name="match_name",
+            full_name="silenteight.datascience.etlpipeline.v1.api.Match.match_name",
+            index=1,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=b"".decode("utf-8"),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=b"\340A\002",
+            file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
+        ),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax="proto3",
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=496,
+    serialized_end=551,
+)
+
+
+_RUNETLRESPONSE = _descriptor.Descriptor(
+    name="RunEtlResponse",
+    full_name="silenteight.datascience.etlpipeline.v1.api.RunEtlResponse",
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    create_key=_descriptor._internal_create_key,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name="etl_alerts",
+            full_name="silenteight.datascience.etlpipeline.v1.api.RunEtlResponse.etl_alerts",
+            index=0,
+            number=1,
+            type=11,
+            cpp_type=10,
+            label=3,
+            has_default_value=False,
+            default_value=[],
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=b"\340A\002",
+            file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
+        ),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax="proto3",
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=553,
+    serialized_end=648,
+)
+
+
+_ETLALERT = _descriptor.Descriptor(
+    name="EtlAlert",
+    full_name="silenteight.datascience.etlpipeline.v1.api.EtlAlert",
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    create_key=_descriptor._internal_create_key,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name="batch_id",
+            full_name="silenteight.datascience.etlpipeline.v1.api.EtlAlert.batch_id",
+            index=0,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=b"".decode("utf-8"),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=b"\340A\002",
+            file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
+        ),
+        _descriptor.FieldDescriptor(
+            name="alert_name",
+            full_name="silenteight.datascience.etlpipeline.v1.api.EtlAlert.alert_name",
+            index=1,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=b"".decode("utf-8"),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=b"\340A\002",
+            file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
+        ),
+        _descriptor.FieldDescriptor(
+            name="etl_status",
+            full_name="silenteight.datascience.etlpipeline.v1.api.EtlAlert.etl_status",
+            index=2,
+            number=3,
+            type=14,
+            cpp_type=8,
+            label=1,
+            has_default_value=False,
+            default_value=0,
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=b"\340A\002",
+            file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
+        ),
+        _descriptor.FieldDescriptor(
+            name="etl_matches",
+            full_name="silenteight.datascience.etlpipeline.v1.api.EtlAlert.etl_matches",
+            index=3,
+            number=4,
+            type=11,
+            cpp_type=10,
+            label=3,
+            has_default_value=False,
+            default_value=[],
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=b"\340A\002",
+            file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
+        ),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax="proto3",
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=651,
+    serialized_end=869,
+)
+
+
+_ETLMATCH = _descriptor.Descriptor(
+    name="EtlMatch",
+    full_name="silenteight.datascience.etlpipeline.v1.api.EtlMatch",
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    create_key=_descriptor._internal_create_key,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name="match_name",
+            full_name="silenteight.datascience.etlpipeline.v1.api.EtlMatch.match_name",
+            index=0,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=b"".decode("utf-8"),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=b"\340A\002",
+            file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
+        ),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax="proto3",
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=871,
+    serialized_end=906,
+)
+
+_RUNETLREQUEST.fields_by_name["alerts"].message_type = _ALERT
+_ALERT_FLATPAYLOADENTRY.containing_type = _ALERT
+_ALERT.fields_by_name["matches"].message_type = _MATCH
+_ALERT.fields_by_name["flat_payload"].message_type = _ALERT_FLATPAYLOADENTRY
+_RUNETLRESPONSE.fields_by_name["etl_alerts"].message_type = _ETLALERT
+_ETLALERT.fields_by_name["etl_status"].enum_type = _ETLSTATUS
+_ETLALERT.fields_by_name["etl_matches"].message_type = _ETLMATCH
+DESCRIPTOR.message_types_by_name["RunEtlRequest"] = _RUNETLREQUEST
+DESCRIPTOR.message_types_by_name["Alert"] = _ALERT
+DESCRIPTOR.message_types_by_name["Match"] = _MATCH
+DESCRIPTOR.message_types_by_name["RunEtlResponse"] = _RUNETLRESPONSE
+DESCRIPTOR.message_types_by_name["EtlAlert"] = _ETLALERT
+DESCRIPTOR.message_types_by_name["EtlMatch"] = _ETLMATCH
+DESCRIPTOR.enum_types_by_name["EtlStatus"] = _ETLSTATUS
+_sym_db.RegisterFileDescriptor(DESCRIPTOR)
+
 RunEtlRequest = _reflection.GeneratedProtocolMessageType(
     "RunEtlRequest",
     (_message.Message,),
@@ -111,61 +596,47 @@ EtlMatch = _reflection.GeneratedProtocolMessageType(
 )
 _sym_db.RegisterMessage(EtlMatch)
 
-_ETLPIPELINESERVICE = DESCRIPTOR.services_by_name["EtlPipelineService"]
-if _descriptor._USE_C_DESCRIPTORS == False:
 
-    DESCRIPTOR._options = None
-    DESCRIPTOR._serialized_options = (
-        b"\n.com.silenteight.datascience.etlpipeline.v1.apiB\023EtlPipelineApiProtoP\001"
-    )
-    _RUNETLREQUEST.fields_by_name["alerts"]._options = None
-    _RUNETLREQUEST.fields_by_name["alerts"]._serialized_options = b"\340A\002"
-    _ALERT_FLATPAYLOADENTRY._options = None
-    _ALERT_FLATPAYLOADENTRY._serialized_options = b"8\001"
-    _ALERT.fields_by_name["batch_id"]._options = None
-    _ALERT.fields_by_name["batch_id"]._serialized_options = b"\340A\002"
-    _ALERT.fields_by_name["alert_name"]._options = None
-    _ALERT.fields_by_name["alert_name"]._serialized_options = b"\340A\002"
-    _ALERT.fields_by_name["matches"]._options = None
-    _ALERT.fields_by_name["matches"]._serialized_options = b"\340A\002"
-    _ALERT.fields_by_name["flat_payload"]._options = None
-    _ALERT.fields_by_name["flat_payload"]._serialized_options = b"\340A\002"
-    _MATCH.fields_by_name["match_id"]._options = None
-    _MATCH.fields_by_name["match_id"]._serialized_options = b"\340A\002"
-    _MATCH.fields_by_name["match_name"]._options = None
-    _MATCH.fields_by_name["match_name"]._serialized_options = b"\340A\002"
-    _RUNETLRESPONSE.fields_by_name["etl_alerts"]._options = None
-    _RUNETLRESPONSE.fields_by_name["etl_alerts"]._serialized_options = b"\340A\002"
-    _ETLALERT.fields_by_name["batch_id"]._options = None
-    _ETLALERT.fields_by_name["batch_id"]._serialized_options = b"\340A\002"
-    _ETLALERT.fields_by_name["alert_name"]._options = None
-    _ETLALERT.fields_by_name["alert_name"]._serialized_options = b"\340A\002"
-    _ETLALERT.fields_by_name["etl_status"]._options = None
-    _ETLALERT.fields_by_name["etl_status"]._serialized_options = b"\340A\002"
-    _ETLALERT.fields_by_name["etl_matches"]._options = None
-    _ETLALERT.fields_by_name["etl_matches"]._serialized_options = b"\340A\002"
-    _ETLMATCH.fields_by_name["match_name"]._options = None
-    _ETLMATCH.fields_by_name["match_name"]._serialized_options = b"\340A\002"
-    _ETLPIPELINESERVICE.methods_by_name["RunEtl"]._options = None
-    _ETLPIPELINESERVICE.methods_by_name[
-        "RunEtl"
-    ]._serialized_options = b'\202\323\344\223\002\030"\016/v1/etl:runEtl:\006runEtl'
-    _ETLSTATUS._serialized_start = 908
-    _ETLSTATUS._serialized_end = 958
-    _RUNETLREQUEST._serialized_start = 129
-    _RUNETLREQUEST._serialized_end = 216
-    _ALERT._serialized_start = 219
-    _ALERT._serialized_end = 494
-    _ALERT_FLATPAYLOADENTRY._serialized_start = 444
-    _ALERT_FLATPAYLOADENTRY._serialized_end = 494
-    _MATCH._serialized_start = 496
-    _MATCH._serialized_end = 551
-    _RUNETLRESPONSE._serialized_start = 553
-    _RUNETLRESPONSE._serialized_end = 648
-    _ETLALERT._serialized_start = 651
-    _ETLALERT._serialized_end = 869
-    _ETLMATCH._serialized_start = 871
-    _ETLMATCH._serialized_end = 906
-    _ETLPIPELINESERVICE._serialized_start = 961
-    _ETLPIPELINESERVICE._serialized_end = 1143
+DESCRIPTOR._options = None
+_RUNETLREQUEST.fields_by_name["alerts"]._options = None
+_ALERT_FLATPAYLOADENTRY._options = None
+_ALERT.fields_by_name["batch_id"]._options = None
+_ALERT.fields_by_name["alert_name"]._options = None
+_ALERT.fields_by_name["matches"]._options = None
+_ALERT.fields_by_name["flat_payload"]._options = None
+_MATCH.fields_by_name["match_id"]._options = None
+_MATCH.fields_by_name["match_name"]._options = None
+_RUNETLRESPONSE.fields_by_name["etl_alerts"]._options = None
+_ETLALERT.fields_by_name["batch_id"]._options = None
+_ETLALERT.fields_by_name["alert_name"]._options = None
+_ETLALERT.fields_by_name["etl_status"]._options = None
+_ETLALERT.fields_by_name["etl_matches"]._options = None
+_ETLMATCH.fields_by_name["match_name"]._options = None
+
+_ETLPIPELINESERVICE = _descriptor.ServiceDescriptor(
+    name="EtlPipelineService",
+    full_name="silenteight.datascience.etlpipeline.v1.api.EtlPipelineService",
+    file=DESCRIPTOR,
+    index=0,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+    serialized_start=948,
+    serialized_end=1130,
+    methods=[
+        _descriptor.MethodDescriptor(
+            name="RunEtl",
+            full_name="silenteight.datascience.etlpipeline.v1.api.EtlPipelineService.RunEtl",
+            index=0,
+            containing_service=None,
+            input_type=_RUNETLREQUEST,
+            output_type=_RUNETLRESPONSE,
+            serialized_options=b'\202\323\344\223\002\030"\016/v1/etl:runEtl:\006runEtl',
+            create_key=_descriptor._internal_create_key,
+        ),
+    ],
+)
+_sym_db.RegisterServiceDescriptor(_ETLPIPELINESERVICE)
+
+DESCRIPTOR.services_by_name["EtlPipelineService"] = _ETLPIPELINESERVICE
+
 # @@protoc_insertion_point(module_scope)

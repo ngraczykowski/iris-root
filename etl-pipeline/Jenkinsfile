@@ -39,13 +39,13 @@ pipeline {
                    }
                  }
                  stage('Publish dist') {
-                //    when {
-                //      anyOf {
-                //        branch 'master'
-                //        branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
-                //      }
-                //      expression { return params.RELEASE }
-                //    }
+                   when {
+                     anyOf {
+                       branch 'master'
+                       branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
+                     }
+                     expression { return params.RELEASE }
+                   }
                    steps {
                      rtUpload (
                          serverId: "silenteight-repo-v2",
