@@ -95,10 +95,10 @@ geoSanctioned:
 
 geoResidencies:
   feature_type: features
-  producer_type: CountryFeatureInputProducer
+  producer_type: LocationFeatureInputProducer
   fields:
-    alerted_party_countries: ap_all_residencies_aggregated
-    watchlist_countries: wl_all_residencies_aggregated
+    alerted_party_location: ap_all_residencies_aggregated
+    watchlist_location: wl_all_residencies_aggregated
 
 companyName:
  feature_type: features
