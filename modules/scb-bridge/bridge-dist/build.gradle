@@ -23,7 +23,7 @@ def runScript(String name) {
       }
       filter(
           ReplaceTokens,
-          tokens: [jarfile: "${name}-${project.version}.jar".toString()],
+          tokens: [jarfile: "${name}-${project.version}-exec.jar".toString()],
           beginToken: "@@",
           endToken: "@@",
       )
