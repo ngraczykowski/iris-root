@@ -7,22 +7,28 @@ import com.silenteight.sep.usermanagement.api.user.UserQuery;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.validation.Valid;
+
 @Configuration
 class UserRolesConfiguration {
 
   @Bean
-  UserRolesRetriever userRolesRetriever(UserQuery userQuery, RolesProperties rolesProperties) {
+  UserRolesRetriever userRolesRetriever(
+      UserQuery userQuery, @Valid RolesProperties rolesProperties) {
+
     return new UserRolesRetriever(
         userQuery, rolesProperties.getRolesScope(), rolesProperties.getCountryGroupsScope());
   }
 
   @Bean
-  ListRolesUseCase listRoleUseCase(RolesQuery rolesQuery, RolesProperties rolesProperties) {
+  ListRolesUseCase listRoleUseCase(RolesQuery rolesQuery, @Valid RolesProperties rolesProperties) {
     return new ListRolesUseCase(rolesQuery, rolesProperties.getRolesScope());
   }
 
   @Bean
-  UserRolesValidator userRolesValidator(UserQuery userQuery, RolesProperties rolesProperties) {
+  UserRolesValidator userRolesValidator(
+      UserQuery userQuery, @Valid RolesProperties rolesProperties) {
+
     return new UserRolesValidator(userQuery, rolesProperties.getRolesScope());
   }
 }
