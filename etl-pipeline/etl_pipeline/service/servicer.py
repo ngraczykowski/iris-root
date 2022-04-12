@@ -11,13 +11,7 @@ from etl_pipeline.config import pipeline_config, service_config
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.data_processor_engine.json_engine.json_engine import JsonProcessingEngine
 from etl_pipeline.service.agent_router import AgentInputCreator
-from etl_pipeline.service.proto.api.etl_pipeline_pb2 import (
-    FAILURE,
-    SUCCESS,
-    UNKNOWN,
-    EtlAlert,
-    EtlMatch,
-)
+from etl_pipeline.service.proto.api.etl_pipeline_pb2 import FAILURE, SUCCESS, EtlAlert, EtlMatch
 from pipelines.ms.ms_pipeline import MSPipeline as WmAddressMSPipeline
 
 cn = pipeline_config.cn
@@ -74,7 +68,7 @@ class EtlPipelineServiceServicer(object):
 
     async def upload_to_data_source(self, alert, record):
         input_match_records, status, error = record
-        if status != UNKNOWN:
+        if status != FAILURE:
             logger.info(f"Batch {alert.batch_id}, Alert {alert.alert_name} parsed successfully")
             for input_match_record in input_match_records:
                 logger.info("Trying upload from pipeline to UDS")
@@ -135,7 +129,7 @@ class EtlPipelineServiceServicer(object):
             logger.debug("Transform cleansed to standardized - success")
         except Exception as e:
             error = str(e)
-            status = UNKNOWN
+            status = FAILURE
         return [payload, status, error]
 
     def _parse_alert(self, alert, status):
