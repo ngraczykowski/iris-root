@@ -4,7 +4,7 @@ import lombok.experimental.UtilityClass;
 
 import com.silenteight.scb.ingest.domain.model.BatchSource;
 
-import static com.silenteight.scb.ingest.domain.model.BatchStatus.REGISTERED;
+import static com.silenteight.scb.ingest.domain.model.BatchStatus.QUEUED;
 
 @UtilityClass
 public class BatchInfoMapper {
@@ -15,7 +15,7 @@ public class BatchInfoMapper {
     return BatchInfo.builder()
         .internalBatchId(internalBatchId)
         .batchSource(batchSource)
-        .batchStatus(REGISTERED)
+        .batchStatus(QUEUED)
         .alertCount(alertCount)
         .build();
   }

@@ -28,10 +28,11 @@ public record Alert(
 
   public String logInfo() {
     return String.format(
-        "Alert(batchId: %s, internalBatchId: %s, alertId: %s)",
+        "Alert(alertId: %s, numOfMatches: %d, batchId: %s, internalBatchId: %s)",
+        id.sourceId(),
+        getMatchesCount(),
         details.getBatchId(),
-        details.getInternalBatchId(),
-        id().sourceId());
+        details.getInternalBatchId());
   }
 
   @Builder(toBuilder = true)

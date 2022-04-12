@@ -13,7 +13,7 @@ import org.springframework.test.context.ContextConfiguration
 
 import static com.silenteight.scb.ingest.domain.model.BatchSource.GNS_RT
 import static com.silenteight.scb.ingest.domain.model.BatchStatus.COMPLETED
-import static com.silenteight.scb.ingest.domain.model.BatchStatus.REGISTERED
+import static com.silenteight.scb.ingest.domain.model.BatchStatus.QUEUED
 
 @ContextConfiguration(
     classes = TestConfiguration,
@@ -72,7 +72,7 @@ class BatchInfoRepositorySpecIT extends BaseDataJpaSpec {
     return BatchInfo.builder()
         .internalBatchId(InternalBatchIdGenerator.generate())
         .batchSource(GNS_RT)
-        .batchStatus(REGISTERED)
+        .batchStatus(QUEUED)
         .alertCount(2)
         .build();
   }

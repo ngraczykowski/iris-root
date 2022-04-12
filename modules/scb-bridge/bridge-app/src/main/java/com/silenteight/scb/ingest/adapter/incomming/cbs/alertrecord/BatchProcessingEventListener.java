@@ -41,7 +41,7 @@ class BatchProcessingEventListener {
     var stopWatch = StopWatch.createStarted();
 
     Try.run(() -> processInternalBatch(internalBatchId))
-        .onSuccess(__ -> batchInfoService.changeStatus(internalBatchId, BatchStatus.PROCESSING))
+        .onSuccess(__ -> batchInfoService.changeStatus(internalBatchId, BatchStatus.REGISTERED))
         .onFailure(e -> {
           batchInfoService.changeStatus(internalBatchId, BatchStatus.ERROR);
           log.error(

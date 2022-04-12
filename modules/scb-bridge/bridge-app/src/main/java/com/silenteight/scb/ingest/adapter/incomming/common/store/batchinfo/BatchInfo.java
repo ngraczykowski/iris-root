@@ -43,4 +43,6 @@ public class BatchInfo extends BaseEntity {
 
   @UpdateTimestamp
   private OffsetDateTime modifiedAt;
+
+  // TODO: it would be quite useful to have String error here, like its in AlertUnderProcessing
 }
