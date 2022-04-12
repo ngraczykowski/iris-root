@@ -62,6 +62,8 @@ class PikaConnection:
                 self.request_queue = self.channel.queue_declare(
                     self.messaging_configuration["request"].get("queue-name"),
                     passive=True,
+                    durable=self.messaging_configuration["request"].get("queue-durable"),
+                    arguments=self.messaging_configuration["request"].get("queue-arguments"),
                 )
 
             except pika.adapters.blocking_connection.exceptions.ChannelClosed as err:
@@ -75,10 +77,11 @@ class PikaConnection:
 
                     self.request_queue = channel.queue_declare(
                         queue=queue_name,
-                        durable=True,
+                        durable=self.messaging_configuration["request"].get("queue-durable"),
+                        arguments=self.messaging_configuration["request"].get("queue-arguments"),
                     )
 
-                    self.channel.queue_bind(
+                    channel.queue_bind(
                         queue=queue_name,
                         exchange=self.messaging_configuration["request"]["exchange"],
                         routing_key=self.messaging_configuration["request"].get("routing-key"),
@@ -86,10 +89,10 @@ class PikaConnection:
                 else:
                     raise
 
+            response_exchange_conf = self.messaging_configuration["response"]
             self.callback_exchange = self.channel.exchange_declare(
-                self.messaging_configuration["response"]["exchange"],
-                exchange_type=pika.adapters.blocking_connection.ExchangeType.topic.value,
-                durable=True,
+                response_exchange_conf["exchange"],
+                passive=True,
             )
             self.request_queue_tag = self.channel.basic_consume(
                 queue=queue_name, on_message_callback=self.on_request, auto_ack=False
@@ -161,7 +164,7 @@ class PikaConnection:
         if self.ssl:
             self.channel.basic_publish(
                 exchange=self.messaging_configuration["response"]["exchange"],
-                routing_key="",
+                routing_key=self.messaging_configuration["response"]["exchange-routing-key"],
                 body=response_message.body,
                 properties=pika.BasicProperties(
                     content_encoding=response_message.content_encoding,

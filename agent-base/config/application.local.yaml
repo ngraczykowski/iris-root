@@ -30,9 +30,14 @@ agent:
       exchange: 'agent.request'
       routing-key: 'agents.EXAMPLE.versions.1_0_0.configs.1'
       queue-name: 'agent.EXAMPLE-requests'
+      queue-durable: true
+      queue-arguments:
+        "x-dead-letter-exchange": "companyname-agent-dead-letter-exchange"
+        "x-dead-letter-routing-key": "companyname-agent-dead-letter-key"
 
     response:
       exchange: 'agent.response'
+      exchange-routing-key: ""
 
   grpc:
     port: 24804
