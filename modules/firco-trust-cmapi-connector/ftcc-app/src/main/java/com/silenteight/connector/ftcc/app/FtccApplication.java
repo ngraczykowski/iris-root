@@ -13,9 +13,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.scheduling.annotation.EnableAsync;
 
+import static org.springframework.context.annotation.AdviceMode.ASPECTJ;
+
 @EnableAutoConfiguration
 @EnableRetry
-@EnableAsync
+@EnableAsync(mode = ASPECTJ)
 @ComponentScan(basePackageClasses = {
     // Domain modules
     CallbackModule.class,
