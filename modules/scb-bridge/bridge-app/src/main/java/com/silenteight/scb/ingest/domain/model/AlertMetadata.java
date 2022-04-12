@@ -5,7 +5,8 @@ import lombok.Builder;
 public record AlertMetadata(
     String watchlistId,
     String discriminator,
-    String systemId) {
+    String systemId,
+    String batchId) {
 
   @Builder
   public AlertMetadata {}

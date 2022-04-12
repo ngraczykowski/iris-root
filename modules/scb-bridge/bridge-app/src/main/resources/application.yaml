@@ -158,6 +158,7 @@ silenteight:
           hit-details-view: ''
           name: Watchlist-level queuing job (DENY)
           priority: 10
+          chunk-size: 1000
           records-view: SENS_V_FFF_RECORDS_DENY
           watchlist-level: true
 
@@ -167,6 +168,7 @@ silenteight:
           hit-details-view: ''
           name: Watchlist-level queuing job (NON-DENY)
           priority: 1
+          chunk-size: 1000
           records-view: SENS_V_FFF_RECORDS_NON_DENY
           watchlist-level: true
 

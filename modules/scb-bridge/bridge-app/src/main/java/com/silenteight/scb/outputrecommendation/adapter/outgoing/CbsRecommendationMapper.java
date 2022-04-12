@@ -48,10 +48,10 @@ public class CbsRecommendationMapper {
   }
 
   private CbsAlertRecommendation mapAlertRecommendation(Recommendation recommendation) {
-    AlertMetadata alertMetadata = parseAlertMetadata(recommendation.alert());
+    var alertMetadata = parseAlertMetadata(recommendation.alert());
     CbsAlertRecommendationBuilder builder = CbsAlertRecommendation.builder()
         .alertExternalId(alertMetadata.systemId())
-        .batchId(recommendation.batchId())
+        .batchId(alertMetadata.batchId())
         .hitWatchlistId(alertMetadata.watchlistId())
         .hitRecommendedStatus(getRecommendationValue(recommendation.recommendedAction()))
         .hitRecommendedComments(recommendation.recommendedComment());

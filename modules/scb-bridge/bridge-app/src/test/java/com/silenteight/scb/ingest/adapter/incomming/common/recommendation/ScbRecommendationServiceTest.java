@@ -25,6 +25,7 @@ import static org.mockito.Mockito.*;
 class ScbRecommendationServiceTest {
 
   private static final String SYSTEM_ID = "systemId";
+  private static final String BATCH_ID = "batchId";
   private static final String DISCRIMINATOR = "321";
   private static final String PAYLOAD = "payload";
 
@@ -51,7 +52,7 @@ class ScbRecommendationServiceTest {
   @Test
   void shouldStoreToDatabaseAndCheckIfRecommendationAlreadyExists() {
     //given
-    var alertMetadata = new AlertMetadata(null, DISCRIMINATOR, SYSTEM_ID);
+    var alertMetadata = new AlertMetadata(null, DISCRIMINATOR, SYSTEM_ID, BATCH_ID);
     when(payloadConverter.deserializeFromJsonToObject(PAYLOAD, AlertMetadata.class))
         .thenReturn(alertMetadata);
     var alertRecommendation = fixtures.recommendation;

@@ -54,6 +54,7 @@ class AlertWitchMatchesExtractor {
         .discriminator(alert.id().discriminator())
         .watchlistId(alert.details().getWatchlistId())
         .systemId(alert.details().getSystemId())
+        .batchId(alert.details().getBatchId())
         .build();
   }
 }
