@@ -116,6 +116,34 @@ public class KeycloakSsoRoleMapperIntegrationTest extends BaseKeycloakIntegratio
   }
 
   @Test
+  void shouldReturnRoleMappingsWithEmptyRolesAndAttributes() {
+    //given
+    IdentityProviderResource idpResource =
+        getRealm().identityProviders().get(IDENTITY_PROVIDER_NAME);
+    //and
+    IdentityProviderMapperRepresentation mapper = new IdentityProviderMapperRepresentation();
+    mapper.setIdentityProviderAlias(IDENTITY_PROVIDER_NAME);
+    mapper.setIdentityProviderMapper(SAML_ADVANCED_ROLE_IDP_MAPPER);
+    mapper.setName("Legacy mapper name");
+    mapper.setConfig(Map.of(
+        "syncMode", "FORCE",
+        "are.attribute.values.regex", ""));
+
+    //and
+    idpResource.addMapper(mapper);
+
+    //when
+    RoleMappingDto dto = underTest.listDefaultIdpMappings().get(0);
+
+    //then
+    assertNotNull(dto.getId());
+    assertEquals(mapper.getName(), dto.getName());
+    assertEquals(mapper.getIdentityProviderAlias(), dto.getProviderAlias());
+    assertThat(dto.getSsoAttributes()).isEmpty();
+    assertThat(dto.getRolesDto().getRoles()).isEmpty();
+  }
+
+  @Test
   void shouldNotCreateMappingWhenAlreadyExists() {
     //given
     CreateRoleMappingDto mappingAddedTwice = createRoleMappingDto("existingMapping");

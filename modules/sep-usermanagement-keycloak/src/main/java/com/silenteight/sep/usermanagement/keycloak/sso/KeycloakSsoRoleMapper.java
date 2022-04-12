@@ -28,19 +28,27 @@ import javax.ws.rs.NotFoundException;
 import static com.silenteight.sep.usermanagement.keycloak.logging.LogMarkers.USER_MANAGEMENT;
 import static com.silenteight.sep.usermanagement.keycloak.sso.KeycloakMapperFinder.findKeycloakMappersBySharedId;
 import static com.silenteight.sep.usermanagement.keycloak.sso.KeycloakRoleMapperTypes.SAML_ADVANCED_ROLE_IDP_MAPPER;
-import static com.silenteight.sep.usermanagement.keycloak.sso.SsoMappingNameResolver.*;
+import static com.silenteight.sep.usermanagement.keycloak.sso.SsoMappingNameResolver.build;
+import static com.silenteight.sep.usermanagement.keycloak.sso.SsoMappingNameResolver.extractId;
+import static com.silenteight.sep.usermanagement.keycloak.sso.SsoMappingNameResolver.extractSharedName;
+import static com.silenteight.sep.usermanagement.keycloak.sso.SsoMappingNameResolver.isLegacyName;
 import static java.util.Collections.emptySet;
 import static java.util.Comparator.comparing;
 import static java.util.List.of;
+import static java.util.Optional.empty;
 import static java.util.Optional.ofNullable;
-import static java.util.UUID.*;
-import static java.util.stream.Collectors.*;
+import static java.util.UUID.fromString;
+import static java.util.UUID.randomUUID;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @RequiredArgsConstructor
 public class KeycloakSsoRoleMapper implements IdentityProviderRoleMapper {
 
   private static final String DEFAULT_SYNC_MODE = "FORCE";
+  private static final String ATTRIBUTES = "attributes";
+  private static final String ROLE = "role";
 
   @NonNull
   private final IdentityProvidersResource identityProvidersResource;
@@ -130,8 +138,8 @@ public class KeycloakSsoRoleMapper implements IdentityProviderRoleMapper {
     keycloakMappers.stream()
         .map(IdentityProviderMapperRepresentation::getConfig)
         .forEach(config -> {
-          dto.addSsoAttributes(attrsFromString(config.get("attributes")));
-          dto.addTargetRole(config.get("role"));
+          addAttributesToRoleMappingDto(dto, config.get(ATTRIBUTES));
+          addRoleToRoleMappingDto(dto, config.get(ROLE));
         });
 
     return dto;
@@ -160,8 +168,8 @@ public class KeycloakSsoRoleMapper implements IdentityProviderRoleMapper {
     mapper.setConfig(Map.of(
         "syncMode", DEFAULT_SYNC_MODE,
         "are.attribute.values.regex", "",
-        "attributes", attrsToString(ssoAttributes),
-        "role", targetRole));
+        ATTRIBUTES, attrsToString(ssoAttributes),
+        ROLE, targetRole));
     return mapper;
   }
 
@@ -178,6 +186,14 @@ public class KeycloakSsoRoleMapper implements IdentityProviderRoleMapper {
     return getProviderByName(idp.getAlias());
   }
 
+  private void addAttributesToRoleMappingDto(RoleMappingDto dto, String attributes) {
+    dto.addSsoAttributes(attrsFromString(attributes));
+  }
+
+  private static void addRoleToRoleMappingDto(RoleMappingDto dto, String role) {
+    ofNullable(role).ifPresent(dto::addTargetRole);
+  }
+
   private String attrsToString(Set<SsoAttributeDto> ssoAttributes) {
     try {
       return sepUserManagementKeycloakObjectMapper.writeValueAsString(ssoAttributes);
@@ -189,12 +205,18 @@ public class KeycloakSsoRoleMapper implements IdentityProviderRoleMapper {
   }
 
   private Set<SsoAttributeDto> attrsFromString(String attributes) {
+    return ofNullable(attributes)
+        .map(this::extractAttributes)
+        .orElse(emptySet());
+  }
+
+  private Set<SsoAttributeDto> extractAttributes(String attributes) {
     try {
-      return sepUserManagementKeycloakObjectMapper
-          .readValue(attributes, new TypeReference<>() {});
+      return sepUserManagementKeycloakObjectMapper.readValue(attributes, new TypeReference<>() {});
     } catch (JsonProcessingException e) {
       log.error(USER_MANAGEMENT,
           "Could not convert keycloak SSO attributes to SsoAttribute collection.", e);
+
       return emptySet();
     }
   }
@@ -210,7 +232,7 @@ public class KeycloakSsoRoleMapper implements IdentityProviderRoleMapper {
     try {
       return Optional.of(idpResource.getMapperById(mappingId.toString()));
     } catch (NotFoundException e) {
-      return Optional.empty();
+      return empty();
     }
   }
 
