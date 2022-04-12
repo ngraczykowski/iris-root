@@ -4,6 +4,8 @@ databaseChangeLog:
     author: wzegarowski
     comment: DB schema for Spring Batch 4.3.4
     changes:
+      # must set default schema as per https://github.com/liquibase/liquibase/issues/2234
+      - sql: SET SEARCH_PATH TO ${database.defaultSchemaName}
       - sqlFile:
           path: db/changelog/changes/spring-batch-4.3.4-schema-postgresql.sql
 

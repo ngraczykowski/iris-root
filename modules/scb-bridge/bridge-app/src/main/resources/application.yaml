@@ -52,9 +52,13 @@ spring:
       initialize-schema: never
 
   datasource:
-    password: scb
-    username: scb
-    url: jdbc:postgresql://localhost:24291/scb_bridge
+    url: jdbc:postgresql://${silenteight.scb-bridge.db.host}:${silenteight.scb-bridge.db.port}/${silenteight.scb-bridge.db.name}?currentSchema=${silenteight.scb-bridge.db.schema:public}
+    username: ${silenteight.scb-bridge.db.username}
+    password: ${silenteight.scb-bridge.db.password}
+    initialization-mode: never
+
+  liquibase:
+    default-schema: ${silenteight.scb-bridge.db.schema:public}
 
   jpa:
     database: POSTGRESQL
@@ -110,6 +114,13 @@ spring:
 
 silenteight:
   scb-bridge:
+    db:
+      host: localhost
+      port: 24291
+      schema:
+      name: scb_bridge
+      username: scb
+      password: scb
     cbs:
       attach-qco-fields-to-recom: false
     learning:
