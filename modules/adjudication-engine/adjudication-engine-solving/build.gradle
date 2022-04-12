@@ -4,8 +4,20 @@ plugins {
 
 dependencies {
   implementation project(":adjudication-engine-common")
+  implementation project(":proto-adjudication-engine-internal-protos")
 
   implementation libraries.guava
+
+  // Sentry
+  runtimeOnly libraries.sentry_spring_boot_starter
+  runtimeOnly libraries.sentry_logback
+
+  // Messaging
+  implementation libraries.amqp_client
+  implementation libraries.lz4_java
+  implementation libraries.spring_boot_starter_integration
+  implementation libraries.spring_integration_amqp
+  implementation libraries.spring_integration_core
 
   // Enable aspects
   aspect libraries.silenteight_sep_base_aspects
