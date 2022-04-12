@@ -16,6 +16,7 @@ ext {
   silenteightCommonsVersion = "2.1.0"
   silenteightSepBaseVersion = "1.12.2"
   dataRetentionVersion = "0.3.0"
+  hazelcastVersion = "5.1.1"
 }
 
 // @formatter:off
@@ -158,6 +159,7 @@ libraries.grpc_client_spring_boot_starter = [group: 'net.devh', name: 'grpc-clie
 libraries.grpc_stub = [group: 'io.grpc', name: 'grpc-stub']
 libraries.grpc_testing = [group: 'io.grpc', name: 'grpc-testing']
 libraries.guava = [group: 'com.google.guava', name: 'guava']
+libraries.hazelcast = [group: 'com.hazelcast', name: 'hazelcast',version:"$hazelcastVersion"]
 libraries.hibernate_core = [group: 'org.hibernate', name: 'hibernate-core']
 libraries.hibernate_envers = [group: 'org.hibernate', name: 'hibernate-envers']
 libraries.hibernate_jcache = [group: 'org.hibernate', name: 'hibernate-jcache']

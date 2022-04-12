@@ -7,6 +7,7 @@ dependencies {
   implementation project(":proto-adjudication-engine-internal-protos")
 
   implementation libraries.guava
+  implementation libraries.hazelcast
 
   // Sentry
   runtimeOnly libraries.sentry_spring_boot_starter

@@ -25,6 +25,10 @@ class ReceivedAlert {
   @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   void onReceivedAlert(AnalysisAlertsAdded message) {
     log.info("Received alert message with alerts count {}", message.getAnalysisAlertsCount());
+    // Get alerts matches and features
+    // Transform to InMemoryObject and store in memory (TTL)
+    // Send Tracking Event
+    // Send Matches to Agent (event tracking on each send)
   }
 
 }
