@@ -4,18 +4,21 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sens.webapp.role.validate.RoleAssignmentValidator;
-import com.silenteight.sens.webapp.user.list.ListUsersWithRoleUseCase;
+import com.silenteight.sep.usermanagement.api.user.UserQuery;
 
 @RequiredArgsConstructor
 class UserRolesValidator implements RoleAssignmentValidator {
 
   @NonNull
-  private final ListUsersWithRoleUseCase listUsersWithRoleUseCase;
+  private final UserQuery userQuery;
+
+  @NonNull
+  private final String roleScope;
 
   @Override
   public boolean isAssigned(@NonNull String roleName) {
-    return !listUsersWithRoleUseCase
-        .apply(roleName)
+    return !userQuery
+        .listAll(roleName, roleScope)
         .isEmpty();
   }
 }

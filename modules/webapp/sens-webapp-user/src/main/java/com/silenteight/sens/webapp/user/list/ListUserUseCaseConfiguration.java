@@ -21,6 +21,6 @@ class ListUserUseCaseConfiguration {
   ListUsersWithRoleUseCase listUsersInRoleUseCase(
       UserQuery userQuery, @Valid RolesProperties rolesProperties) {
 
-    return new ListUsersWithRoleUseCase(userQuery, rolesProperties.getCountryGroupsScope());
+    return new ListUsersWithRoleUseCase(userQuery, rolesProperties.getRolesScope());
   }
 }

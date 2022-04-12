@@ -12,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static com.silenteight.sens.webapp.user.list.ListUsersWithRoleUseCaseFixtures.COUNTRY_GROUPS_NAME;
-import static com.silenteight.sens.webapp.user.list.ListUsersWithRoleUseCaseFixtures.COUNTRY_GROUPS_SCOPE;
+import static com.silenteight.sens.webapp.user.list.ListUsersWithRoleUseCaseFixtures.ROLES_SCOPE;
 import static com.silenteight.sens.webapp.user.list.ListUsersWithRoleUseCaseFixtures.USER_LIST_DTO;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
@@ -31,7 +31,7 @@ class ListUsersWithRoleUseCaseTest {
 
   @BeforeEach
   void setUp() {
-    given(rolesProperties.getCountryGroupsScope()).willReturn(COUNTRY_GROUPS_SCOPE);
+    given(rolesProperties.getRolesScope()).willReturn(ROLES_SCOPE);
     underTest =
         new ListUserUseCaseConfiguration().listUsersInRoleUseCase(userQuery, rolesProperties);
   }
@@ -39,7 +39,7 @@ class ListUsersWithRoleUseCaseTest {
   @Test
   void shouldListUsersWithRole() {
     // given
-    when(userQuery.listAll(COUNTRY_GROUPS_NAME, COUNTRY_GROUPS_SCOPE))
+    when(userQuery.listAll(COUNTRY_GROUPS_NAME, ROLES_SCOPE))
         .thenReturn(of(USER_LIST_DTO));
 
     // when

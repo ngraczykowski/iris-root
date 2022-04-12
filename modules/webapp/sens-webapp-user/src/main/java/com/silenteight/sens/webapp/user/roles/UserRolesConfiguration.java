@@ -1,7 +1,6 @@
 package com.silenteight.sens.webapp.user.roles;
 
 import com.silenteight.sens.webapp.user.config.RolesProperties;
-import com.silenteight.sens.webapp.user.list.ListUsersWithRoleUseCase;
 import com.silenteight.sep.usermanagement.api.role.RolesQuery;
 import com.silenteight.sep.usermanagement.api.user.UserQuery;
 
@@ -23,7 +22,7 @@ class UserRolesConfiguration {
   }
 
   @Bean
-  UserRolesValidator userRolesValidator(ListUsersWithRoleUseCase listUsersWithRoleUseCase) {
-    return new UserRolesValidator(listUsersWithRoleUseCase);
+  UserRolesValidator userRolesValidator(UserQuery userQuery, RolesProperties rolesProperties) {
+    return new UserRolesValidator(userQuery, rolesProperties.getRolesScope());
   }
 }
