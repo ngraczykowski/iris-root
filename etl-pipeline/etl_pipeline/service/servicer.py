@@ -11,13 +11,7 @@ from etl_pipeline.config import pipeline_config, service_config
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.data_processor_engine.json_engine.json_engine import JsonProcessingEngine
 from etl_pipeline.service.agent_router import AgentInputCreator
-from etl_pipeline.service.proto.api.etl_pipeline_pb2 import (
-    FAILURE,
-    SUCCESS,
-    UNKNOWN,
-    EtlAlert,
-    EtlMatch,
-)
+from etl_pipeline.service.proto.api.etl_pipeline_pb2 import FAILURE, SUCCESS, EtlAlert, EtlMatch
 from pipelines.ms.ms_pipeline import MSPipeline as WmAddressMSPipeline
 
 cn = pipeline_config.cn
@@ -74,7 +68,7 @@ class EtlPipelineServiceServicer(object):
 
     async def upload_to_data_source(self, alert, record):
         input_match_records, status, error = record
-        if status != UNKNOWN:
+        if status != FAILURE:
             logger.info(f"Batch {alert.batch_id}, Alert {alert.alert_name} parsed successfully")
             for input_match_record in input_match_records:
                 logger.info("Trying upload from pipeline to UDS")
@@ -92,6 +86,9 @@ class EtlPipelineServiceServicer(object):
         return alert, status
 
     async def process_request(self, request):
+        for alert in request.alerts:
+            logger.debug(f"Received {alert.alert_name}")
+
         alerts_to_parse = [
             AlertPayload(
                 batch_id=alert.batch_id,
@@ -101,17 +98,23 @@ class EtlPipelineServiceServicer(object):
             )
             for alert in request.alerts
         ]
+        logger.debug(f"Number of alerts {len(alerts_to_parse)}")
         future_payloads = [self.pool.submit(self.parse_alert, alert) for alert in alerts_to_parse]
         payloads = [future.result() for future in future_payloads]
+        logger.debug(f"Collected parsed payloads {len(alerts_to_parse)}")
         # payloads = [self.parse_alert(alerts_to_parse[0])]  # debugging
         statuses = []
         for alert, record in zip(alerts_to_parse, payloads):
+            logger.debug(f"Collected parsed payloads {len(alerts_to_parse)}")
             statuses.append(self.upload_to_data_source(alert, record))
         all_data = await asyncio.gather(*statuses)
         etl_alerts = [self._parse_alert(alert, status) for alert, status in all_data]
+        logger.debug(f"ETL results number: {len(etl_alerts)}")
+        logger.debug(f"ETL results: {etl_alerts}")
         return etl_alerts
 
     def parse_alert(self, alert):
+        logger.debug(f"Starting parse for {alert.alert_name}")
         payload = alert.flat_payload
         payload = PayloadLoader().load_payload_from_json(payload)
         payload = {key: payload[key] for key in sorted(payload)}
@@ -120,12 +123,13 @@ class EtlPipelineServiceServicer(object):
         error = None
         try:
             payload = pipeline.transform_standardized_to_cleansed(payload)
+            logger.debug(f"Number of records (input_record vs match pairs): {len(payload)}")
             logger.debug("Transform standardized to cleansed - success")
             payload = pipeline.transform_cleansed_to_application(payload)
             logger.debug("Transform cleansed to standardized - success")
         except Exception as e:
             error = str(e)
-            status = UNKNOWN
+            status = FAILURE
         return [payload, status, error]
 
     def _parse_alert(self, alert, status):

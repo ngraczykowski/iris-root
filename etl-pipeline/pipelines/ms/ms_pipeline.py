@@ -16,12 +16,12 @@ cn = pipeline_config.cn
 
 
 CUSTOMER_S8_MAP = {
-    "R_Global_MultiParty_Wkly": "ISG_Weekly_Party",
-    "R_Global_MultiParty_Daily": "ISG_Daily_Party",
-    "R_US_Active_Address": "WM_Address",
-    "R_US_Active_Party": "WM_Party",
-    "R_Global_MultiAccounts_Daily": "ISG_Daily_Account",
-    "R_Global_MultiAccounts_Wkly": "ISG_Weekly_Account",
+    "R_Global_MultiParty_Wkly": "ISG_PARTY",
+    "R_Global_MultiParty_Daily": "ISG_PARTY",
+    "R_US_Active_Address": "WM_ADDRESS",
+    "R_US_Active_Party": "WM_PARTY",
+    "R_Global_MultiAccounts_Daily": "ISG_ACCOUNT",
+    "R_Global_MultiAccounts_Wkly": "ISG_ACCOUNT",
 }
 
 
