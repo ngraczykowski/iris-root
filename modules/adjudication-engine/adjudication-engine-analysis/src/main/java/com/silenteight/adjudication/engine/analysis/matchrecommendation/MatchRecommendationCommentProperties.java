@@ -12,5 +12,9 @@ class MatchRecommendationCommentProperties {
 
   private static final String DEFAULT_TEMPLATE_NAME = "alert";
 
+  private static final String DEFAULT_MATCH_TEMPLATE_NAME = "match";
+
   private String templateName = DEFAULT_TEMPLATE_NAME;
+
+  private String matchTemplateName = DEFAULT_TEMPLATE_NAME;
 }

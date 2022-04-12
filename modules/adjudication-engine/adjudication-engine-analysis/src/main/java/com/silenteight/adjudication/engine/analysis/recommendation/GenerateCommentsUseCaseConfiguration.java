@@ -17,6 +17,7 @@ class GenerateCommentsUseCaseConfiguration {
 
   @Bean
   GenerateCommentsUseCase generateCommentsUseCase(CommentFacade commentFacade) {
-    return new GenerateCommentsUseCase(commentFacade, properties.getTemplateName());
+    return new GenerateCommentsUseCase(
+        commentFacade, properties.getTemplateName(), properties.getMatchTemplateName());
   }
 }

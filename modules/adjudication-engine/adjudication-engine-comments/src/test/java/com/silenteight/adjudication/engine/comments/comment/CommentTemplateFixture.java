@@ -31,9 +31,11 @@ class CommentTemplateFixture {
     var freemarkerTemplateEngine = new FreemarkerTemplateEngine(freemarker);
 
     var registry = new TemplateEngineRegistry(of(freemarkerTemplateEngine, pebbleTemplateEngine));
-    var useCase = new GenerateCommentUseCase(registry);
+    var alertCommentUseCase = new GenerateAlertCommentUseCase(registry);
 
-    return new CommentFacade(useCase);
+    var matchCommentUseCase = new GenerateMatchCommentUseCase(registry);
+
+    return new CommentFacade(alertCommentUseCase, matchCommentUseCase);
   }
 
   static CommentTemplate commentTemplate(String name, String payload) {

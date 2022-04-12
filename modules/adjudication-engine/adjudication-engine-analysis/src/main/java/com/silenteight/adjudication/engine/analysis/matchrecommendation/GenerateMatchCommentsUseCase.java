@@ -11,6 +11,7 @@ class GenerateMatchCommentsUseCase {
 
   private final CommentFacade commentFacade;
   private final String templateName;
+  private final String matchTemplateName;
 
   @Timed(
       value = "ae.analysis.use_cases",
@@ -19,6 +20,7 @@ class GenerateMatchCommentsUseCase {
       percentiles = { 0.5, 0.95, 0.99 }
   )
   String generateComments(AlertContext alertContext) {
-    return commentFacade.generateComment(templateName, alertContext);
+    return commentFacade
+        .generateComment(templateName, alertContext);
   }
 }

@@ -17,6 +17,7 @@ class GenerateMatchCommentsUseCaseConfiguration {
 
   @Bean
   GenerateMatchCommentsUseCase generateMatchCommentsUseCase(CommentFacade commentFacade) {
-    return new GenerateMatchCommentsUseCase(commentFacade, properties.getTemplateName());
+    return new GenerateMatchCommentsUseCase(
+        commentFacade, properties.getTemplateName(), properties.getMatchTemplateName());
   }
 }

@@ -20,7 +20,7 @@ import static com.silenteight.adjudication.engine.comments.comment.TestUtils.rea
 import static org.assertj.core.api.Assertions.*;
 
 @Slf4j
-class GenerateCommentUseCaseTest {
+class GenerateAlertCommentUseCaseTest {
 
   private final InMemoryCommentTemplateRepository repo =
       new InMemoryCommentTemplateRepository();
@@ -38,7 +38,7 @@ class GenerateCommentUseCaseTest {
   }
 
   @Test
-  void shouldGenerateDefaultComment() {
+  void shouldGenerateDefaultAlertComment() {
     var context = createAlertContext();
 
     var evaluated = facade.generateComment("alert", context);
@@ -145,10 +145,12 @@ class GenerateCommentUseCaseTest {
       var context = createAlertContext();
 
       repo.save(commentTemplate("main.peb", readFile("pebble/main.peb")));
-      assertThat(facade.generateComment("main", context)).isEqualTo("This is pebble template.");
+      assertThat(facade.generateComment("main", context)).isEqualTo(
+          "This is pebble template.");
 
       repo.save(commentTemplate("main.ftl", readFile("freemarker/main.ftl")));
-      assertThat(facade.generateComment("main", context)).isEqualTo("This is freemarker template.");
+      assertThat(facade.generateComment("main", context)).isEqualTo(
+          "This is freemarker template.");
     }
   }
 }

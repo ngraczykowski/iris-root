@@ -12,6 +12,7 @@ class GenerateCommentsUseCase {
 
   private final CommentFacade commentFacade;
   private final String templateName;
+  private final String matchTemplateName;
 
   @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "recommendation" })
   GenerateCommentsResponse generateComments(GenerateCommentsRequest request) {

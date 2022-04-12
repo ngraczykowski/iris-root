@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.comments.comment.domain.AlertContext;
+import com.silenteight.adjudication.engine.comments.comment.domain.MatchContext;
 import com.silenteight.adjudication.engine.common.protobuf.ObjectToMapConverter;
 
 import com.mitchellbosecke.pebble.PebbleEngine;
@@ -37,6 +38,21 @@ class PebbleTemplateEngine implements TemplateEngineWithCache {
     }
 
     var templateContext = ObjectToMapConverter.convert(alertContext);
+
+    return evaluateTemplate(templateName, templateContext);
+  }
+
+  @Override
+  public String generateComment(
+      String templateName,
+      MatchContext matchContext) {
+    if (log.isDebugEnabled()) {
+      log.debug("Generating comment (Pebble): templateName={}, matchId={}"
+              + ", matchSolution={}",
+          templateName, matchContext.getMatchId(), matchContext.getSolution());
+    }
+
+    var templateContext = ObjectToMapConverter.convert(matchContext);
 
     return evaluateTemplate(templateName, templateContext);
   }
