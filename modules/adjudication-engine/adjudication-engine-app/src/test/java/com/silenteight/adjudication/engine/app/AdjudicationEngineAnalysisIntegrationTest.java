@@ -4,12 +4,13 @@ import com.silenteight.adjudication.api.v1.AlertServiceGrpc.AlertServiceBlocking
 import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceBlockingStub;
 import com.silenteight.adjudication.api.v1.DatasetServiceGrpc.DatasetServiceBlockingStub;
 import com.silenteight.adjudication.api.v1.StreamRecommendationsRequest;
+import com.silenteight.adjudication.engine.alerts.alert.AlertFacade;
+import com.silenteight.adjudication.engine.analysis.pii.PiiFacade;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
 
 import net.devh.boot.grpc.client.inject.GrpcClient;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -36,7 +37,6 @@ import static org.awaitility.Awaitility.await;
 @EnableConfigurationProperties
 @ActiveProfiles({ "mockagents", "rabbitdeclare", "mockgovernance", "mockdatasource", "test" })
 @Tag("longrunning")
-@Disabled
 class AdjudicationEngineAnalysisIntegrationTest {
 
   @GrpcClient("ae")
@@ -54,6 +54,13 @@ class AdjudicationEngineAnalysisIntegrationTest {
   @Autowired
   private JdbcTemplate jdbcTemplate;
 
+  @Autowired
+  private AlertFacade alertFacade;
+
+  @Autowired
+  private PiiFacade piiFacade;
+
+
   @Test
   void shouldSolveAlerts() {
     var analysisDataset = createAnalysisWithDataset(datasetService, analysisService, alertService);
@@ -64,7 +71,6 @@ class AdjudicationEngineAnalysisIntegrationTest {
   }
 
   @Test
-  @Disabled
   void shouldSaveRecommendations() {
     var analysisDataset = createAnalysisWithDataset(datasetService, analysisService, alertService);
     var savedAnalysis = analysisDataset.getAnalysis();
@@ -75,16 +81,7 @@ class AdjudicationEngineAnalysisIntegrationTest {
 
   @Test
   void shouldSolveOneAlert() {
-    var analysis =
-        createAnalysisWithDataset(datasetService, analysisService, alertService).getAnalysis();
-    var alert = createAlert(alertService, "alert3");
-    createMatch(alertService, alert.getName(), "match3");
-    addAlert(analysisService, analysis.getName(), alert.getName());
-
-    assertThat(getAnalysis(analysisService, analysis.getName()).getAlertCount()).isEqualTo(3);
-
-    var analysisId = ResourceName.create(analysis.getName()).getLong("analysis");
-    assertSolvedAlerts(analysisId, 3);
+    solveAlert();
   }
 
   @Test
@@ -154,7 +151,6 @@ class AdjudicationEngineAnalysisIntegrationTest {
   }
 
   @Test
-  @Disabled
   void checkAlertsCountInAnalysisWithSameAlertInTwoDatasets() {
     var analysis = createAnalysis(analysisService, createAnalysisFixture());
     var alert = createAlert(alertService, "1");
@@ -171,6 +167,55 @@ class AdjudicationEngineAnalysisIntegrationTest {
 
     assertThat(savedAnalysis.getAlertCount()).isEqualTo(1);
     assertThat(savedAnalysis.getPendingAlerts()).isEqualTo(0);
+  }
+
+  @Test
+  void shouldRemoveExpiredAlerts() {
+    long alertId = solveAlert();
+    alertFacade.deleteAlerts(List.of(alertId));
+
+    assertThat(
+        jdbcTemplate.queryForObject(
+            "SELECT count(*) FROM ae_alert WHERE alert_id = " + alertId,
+            Integer.class)).isEqualTo(0);
+  }
+
+  @Test
+  void shouldRemovePiiAlerts() {
+    long alertId = solveAlert();
+    piiFacade.removePii(List.of("alerts/" + alertId));
+
+    assertThat(
+        jdbcTemplate.queryForObject(
+            "SELECT match_contexts FROM ae_recommendation WHERE alert_id = " + alertId,
+            String.class)).isEqualTo("[]");
+
+    assertThat(
+        jdbcTemplate.queryForObject(
+            "SELECT value FROM ae_alert_comment_input WHERE alert_id = " + alertId,
+            String.class)).isEqualTo("{}");
+
+    assertThat(
+        jdbcTemplate.queryForObject(
+            "SELECT comment FROM ae_recommendation WHERE alert_id = " + alertId,
+            String.class)).isEqualTo("");
+  }
+
+  private long solveAlert() {
+    var analysis =
+        createAnalysisWithDataset(datasetService, analysisService, alertService).getAnalysis();
+    var alert = createAlert(alertService, "alert3");
+    createMatch(alertService, alert.getName(), "match3");
+    addAlert(analysisService, analysis.getName(), alert.getName());
+
+    assertThat(getAnalysis(analysisService, analysis.getName()).getAlertCount()).isEqualTo(3);
+
+    var analysisId = ResourceName.create(analysis.getName()).getLong("analysis");
+    assertSolvedAlerts(analysisId, 3);
+
+    assertGeneratedRecommendation(analysisId, 3);
+
+    return ResourceName.create(alert.getName()).getLong("alerts");
   }
 
   private void assertSolvedAlerts(long analysisId, int solvedCount) {

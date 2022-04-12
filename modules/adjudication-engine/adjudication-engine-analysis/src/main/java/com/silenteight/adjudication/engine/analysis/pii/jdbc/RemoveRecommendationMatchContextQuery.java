@@ -17,7 +17,8 @@ class RemoveRecommendationMatchContextQuery {
 
   private static final String SQL =
       "UPDATE ae_recommendation\n"
-          + "SET match_contexts = '[]'\n"
+          + "SET match_contexts = '[]', "
+          + "comment = ''\n"
           + "WHERE alert_id IN (:alertIds)";
 
   private final NamedParameterJdbcTemplate namedJdbcTemplate;

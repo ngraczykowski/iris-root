@@ -51,5 +51,8 @@ class JdbcPiiDataAccessIT extends BaseJdbcTest {
   void shouldRemoveRecommendationMatchContext() {
     assertThat(jdbcTemplate.queryForObject("SELECT match_contexts FROM ae_recommendation",
         String.class)).isEqualTo("[]");
+
+    assertThat(jdbcTemplate.queryForObject("SELECT comment FROM ae_recommendation",
+        String.class)).isEqualTo("");
   }
 }
