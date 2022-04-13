@@ -250,6 +250,8 @@ warehouse.reports.v2:
                wm.payload ->> 'stepId'                          AS "Step ID",
                wm.payload ->> 'stepTitle'                       AS "Step Name",
                STRING_AGG(wm.payload ->> 'fvSignature', ', ')   AS "Reasoning Branch IDs",
+               wa.payload ->> 'datasetId'                       AS "Batch ID",
+               wa.payload ->> 'datasetName'                     AS "Batch Type",
                wa.payload ->> 's8Recommendation'                AS "S8 Alert Resolution",
                wa.payload ->> 'recommendationDate'              AS "S8 Resolution Timestamp",
                wa.payload ->> 'comment'                         AS "S8 Alert Reason"
@@ -262,6 +264,8 @@ warehouse.reports.v2:
                  wa.payload ->> 'policyTitle',
                  wm.payload ->> 'stepId',
                  wm.payload ->> 'stepTitle',
+                 wa.payload ->> 'datasetId',
+                 wa.payload ->> 'datasetName',
                  wa.payload ->> 's8Recommendation',
                  wa.payload ->> 'recommendationDate',
                  wa.payload ->> 'comment'
@@ -278,6 +282,8 @@ warehouse.reports.v2:
                wm.payload ->> 'stepId'             AS "Step ID",
                wm.payload ->> 'stepTitle'          AS "Step Name",
                wm.payload ->> 'fvSignature'        AS "Reasoning Branch ID",
+               wa.payload ->> 'datasetId'          AS "Batch ID",
+               wa.payload ->> 'datasetName'        AS "Batch Type",
                wm.payload ->> 's8Recommendation'   AS "S8 Match Resolution",
                wa.payload ->> 'recommendationDate' AS "S8 Resolution Timestamp",
                wm.payload ->> 's8Reason'           AS "S8 Match Reason",
@@ -298,6 +304,8 @@ warehouse.reports.v2:
                wsa.payload ->> 'match_reason:step'                     AS "Step ID",
                wsa.payload ->> 'match_reason:step_title'               AS "Step Name",
                wsa.payload ->> 'match_reason:feature_vector_signature' AS "Reasoning Branch ID",
+               wsa.payload ->> 'datasetId'                             AS "Batch ID",
+               wsa.payload ->> 'datasetName'                           AS "Batch Type",
                wsa.payload ->> 'recommendation_recommended_action'     AS "S8 Match Resolution",
                wsa.payload ->> 'recommendation_create_time'            AS "S8 Resolution Timestamp",
                wsa.payload ->> 'recommendation_comment'                AS "S8 Match Reason"
@@ -318,6 +326,8 @@ warehouse.reports.v2:
                wm.payload ->> 'step'                            AS "Step ID",
                wm.payload ->> 'stepTitle'                       AS "Step Name",
                STRING_AGG(wm.payload ->> 'fvSignature', ', ')   AS "Reasoning Branch IDs",
+               wa.payload ->> 'datasetId'                       AS "Batch ID",
+               wa.payload ->> 'datasetName'                     AS "Batch Type",
                wa.payload ->> 's8Recommendation'                AS "S8 Alert Resolution",
                wa.payload ->> 'recommendationDate'              AS "S8 Resolution Timestamp",
                wa.payload ->> 'comment'                         AS "S8 Alert Reason",
@@ -334,6 +344,8 @@ warehouse.reports.v2:
                  wa.payload ->> 'policyTitle',
                  wm.payload ->> 'step',
                  wm.payload ->> 'stepTitle',
+                 wa.payload ->> 'datasetId',
+                 wa.payload ->> 'datasetName',
                  wa.payload ->> 's8Recommendation',
                  wa.payload ->> 'recommendationDate',
                  wa.payload ->> 'comment',
@@ -353,6 +365,8 @@ warehouse.reports.v2:
                wsa.payload ->> 'match_reason:step'                                         AS "Step ID",
                wsa.payload ->> 'match_reason:step_title'                                   AS "Step Name",
                STRING_AGG(wsa.payload ->> 'match_reason:feature_vector_signature', ', ')   AS "Reasoning Branch IDs",
+               wsa.payload ->> 'datasetId'                                                 AS "Batch ID",
+               wsa.payload ->> 'datasetName'                                               AS "Batch Type",
                wsa.payload ->> 'recommendation_recommended_action'                         AS "S8 Alert Resolution",
                wsa.payload ->> 'recommendation_create_time'                                AS "S8 Resolution Timestamp",
                wsa.payload ->> 'recommendation_comment'                                    AS "S8 Alert Reason",
@@ -370,6 +384,8 @@ warehouse.reports.v2:
                  wsa.payload ->> 'match_reason:policy_title',
                  wsa.payload ->> 'match_reason:step',
                  wsa.payload ->> 'match_reason:step_title',
+                 wsa.payload ->> 'datasetId',
+                 wsa.payload ->> 'datasetName',
                  wsa.payload ->> 'recommendation_recommended_action',
                  wsa.payload ->> 'recommendation_create_time',
                  wsa.payload ->> 'recommendation_comment',
@@ -385,17 +401,20 @@ warehouse.reports.v2:
             SELECT payload ->> 's8Recommendation' recommendation,
                    payload ->> 'analystDecision'  analyst_decision,
                    payload ->> 'batchWatchList'   list_type,
-                   recommendation_date            recommendation_date
+                   payload ->> 'datasetId'        batch_id,
+                   payload ->> 'datasetName'      batch_type
             FROM warehouse_alert
             WHERE recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
             GROUP BY payload ->> 's8Recommendation',
                      payload ->> 'analystDecision',
                      payload ->> 'batchWatchList',
-                     recommendation_date
+                     payload ->> 'datasetId',
+                     payload ->> 'datasetName'
         ),
              grouped AS (
-                 SELECT TO_CHAR(main.recommendation_date, 'MM-YYYY')                      g_date,
-                        main.list_type                                                    g_list_type,
+                 SELECT main.list_type                                                    g_list_type,
+                        main.batch_id                                                     g_batch_id,
+                        main.batch_type                                                   g_batch_type,
                         COUNT(*)                                                          g_total,
                         COUNT(*)
                         FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE') g_total_true_positive,
@@ -414,11 +433,12 @@ warehouse.reports.v2:
                             AND analyst_decision IN ('analyst_decision_true_positive',
                                                      'analyst_decision_false_positive'))  g_total_fp_and_a
                  FROM main
-                 GROUP BY 1, 2
+                 GROUP BY 1, 2, 3
              )
 
-        SELECT g_date                                                                                  AS "Date (MM-YYYY)",
-               g_list_type                                                                             AS "Watchlist Type",
+        SELECT g_list_type                                                                             AS "Risk Type",
+               g_batch_id                                                                              AS "Batch Id",
+               g_batch_type                                                                            AS "Batch Type",
                (g_total_true_positive + g_total_false_positive)                                        AS "# of S8 Solved as FP or PTP",
                g_total                                                                                 AS "# of S8 Total Alerts Processed",
                ROUND(((g_total_true_positive::decimal + g_total_false_positive::decimal) /
@@ -450,18 +470,21 @@ warehouse.reports.v2:
             SELECT wsa.payload ->> 'recommendation_recommended_action' recommendation,
                    wsa.payload ->> 'analystDecision'                   analyst_decision,
                    wsa.payload ->> 'batchWatchList'                    list_type,
-                   wsa.created_at                                      created_date
+                   wsa.payload ->> 'datasetId'                         batch_id,
+                   wsa.payload ->> 'datasetName'                       batch_type
             FROM warehouse_simulation_alert wsa
             WHERE wsa.payload ->> 'status' = 'LEARNING_COMPLETED'
               AND wsa.analysis_name = 'analysis/${analysisId}'
             GROUP BY wsa.payload ->> 'recommendation_recommended_action',
                      wsa.payload ->> 'analystDecision',
                      wsa.payload ->> 'batchWatchList',
-                     wsa.created_at
+                     wsa.payload ->> 'datasetId',                         
+                     wsa.payload ->> 'datasetName'
         ),
              grouped AS (
-                 SELECT TO_CHAR(main.created_date, 'MM-YYYY')                                       g_date,
-                        main.list_type                                                              g_list_type,
+                 SELECT main.list_type                                                              g_list_type,
+                        main.batch_id                                                               g_batch_id,
+                        main.batch_type                                                             g_batch_type,
                         COUNT(*)                                                                    g_total,
                         COUNT(*)
                         FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE')           g_total_true_positive,
@@ -482,11 +505,12 @@ warehouse.reports.v2:
                                 AND analyst_decision IN ('analyst_decision_false_positive', 
                                                          'analyst_decision_true_positive'))         g_total_fp_and_a
                  FROM main
-                 GROUP BY 1, 2
+                 GROUP BY 1, 2, 3
              )
 
-        SELECT g_date                                                                                                                       AS "Date (MM-YYYY)",
-               g_list_type                                                                                                                  AS "Watchlist Type",
+        SELECT g_list_type                                                                                                                  AS "Risk Type",
+               g_batch_id                                                                                                                   AS "Batch Id",
+               g_batch_type                                                                                                                 AS "Batch Type",
                (g_total_true_positive + g_total_false_positive)                                                                             AS "# of S8 Solved as FP or PTP",
                g_total                                                                                                                      AS "# of S8 Total Alerts Processed",
                ROUND(((g_total_true_positive::decimal + g_total_false_positive::decimal) /GREATEST(g_total, 1)) * 100,3)                    AS "Efficiency [%]",
