@@ -165,7 +165,7 @@ class MSPipeline(ETLPipeline):
             alerted_parties = payload[cn.ALERTED_PARTY_FIELD][cn.SUPPLEMENTAL_INFO][
                 cn.RELATED_PARTIES
             ][cn.PARTIES]
-        except (KeyError, IndexError):
+        except (KeyError, IndexError, TypeError):
             logger.warning("No parties")
             alerted_parties = []
         return alerted_parties
@@ -175,7 +175,7 @@ class MSPipeline(ETLPipeline):
             accounts = payload[cn.ALERTED_PARTY_FIELD][cn.SUPPLEMENTAL_INFO][cn.RELATED_ACCOUNTS][
                 cn.ACCOUNTS
             ]
-        except (KeyError, IndexError):
+        except (KeyError, IndexError, TypeError):
             logger.warning("No accounts")
             accounts = []
         return accounts
