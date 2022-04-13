@@ -20,7 +20,7 @@ import static java.util.List.of;
 public class DocumentNumberFeature implements FabFeature {
 
   static final String FEATURE_NAME = "features/otherDocument";
-  private static final String JSON_PATH = "$.HittedEntity.OtherDocument";    //TODO is it correct?
+  private static final String JSON_PATH = "$.HittedEntity.Codes[*].Code.Name";
 
   private final ParseContext parseContext;
 

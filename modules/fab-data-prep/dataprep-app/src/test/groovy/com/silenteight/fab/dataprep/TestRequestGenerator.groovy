@@ -132,7 +132,7 @@ class TestRequestGenerator {
     def message0 = getRawMessage(getParsedMessageData().build())
 
     def message1 = getRawMessage(getParsedMessageData().build())
-    message1.set('$.Message.Hits[0].Hit.HittedEntity.AdditionalInfo', '12345667890')
+    message1.set('$.Message.Hits[0].Hit.HittedEntity.AdditionalInfo', 'Nationality: 12345667890')
     message1.set('$.Message.SystemID', 'SAN!60C2ED1B-58A1D68E-0326AE78-A8C7CC79')
 
     def message2 = getRawMessage(
@@ -174,7 +174,7 @@ class TestRequestGenerator {
             .country('PL')
             .build())
     message5.set('$.Message.Hits[0].Hit.HittedEntity.Names', [])
-    message5.add('$.Message.Hits[0].Hit.HittedEntity.Addresses[0].Address.Countries', 'pl')
+    message5.set('$.Message.Hits[0].Hit.HittedEntity.Addresses[0].Address.Countries[0].Country', 'pl')
 
     def message6 = getRawMessage(
         getParsedMessageData()
@@ -194,7 +194,7 @@ class TestRequestGenerator {
     message8.add(
         '$.Message.Hits[0].Hit.HittedEntity.Addresses',
         message8.read('$.Message.Hits[0].Hit.HittedEntity.Addresses[0]'))
-    message8.add('$.Message.Hits[0].Hit.HittedEntity.Addresses[1].Address.Countries', 'pl')
+    message8.set('$.Message.Hits[0].Hit.HittedEntity.Addresses[1].Address.Countries[0].Country', 'pl')
 
     def message9 = getRawMessage(
         getParsedMessageData()
@@ -316,6 +316,7 @@ class TestRequestGenerator {
       message.set(
           '$.Message.Hits[0].Hit.HittedEntity.DatesOfBirth[0].DateOfBirth',
           dates.shuffled().first())
+      message.set('$.Message.Hits[0].Hit.HittedEntity.Addresses[0].Address.Countries[0].Country', 'pl')
 
       messages << message
     }

@@ -36,6 +36,6 @@ class BicFeatureTest extends Specification {
     where:
     command                     | alertedParty | watchList
     EMPTY_BUILD_FEATURE_COMMAND | ['']         | []
-    BUILD_FEATURE_COMMAND       | ['']         | []
+    BUILD_FEATURE_COMMAND       | ['']         | ['RDBAIQBB']
   }
 }

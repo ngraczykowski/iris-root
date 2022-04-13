@@ -34,8 +34,8 @@ class NationalIdFeatureTest extends Specification {
         .build()
 
     where:
-    command                     | alertedParty                     | watchList
+    command                     | alertedParty   | watchList
     EMPTY_BUILD_FEATURE_COMMAND | ['S93849384A'] | []
-    BUILD_FEATURE_COMMAND       | ['S93849384A'] | []
+    BUILD_FEATURE_COMMAND       | ['S93849384A'] | ['210225511433']
   }
 }

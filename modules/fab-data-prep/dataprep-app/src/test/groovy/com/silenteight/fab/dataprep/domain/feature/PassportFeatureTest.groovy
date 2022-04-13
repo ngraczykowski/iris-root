@@ -1,15 +1,12 @@
 package com.silenteight.fab.dataprep.domain.feature
 
-
 import com.silenteight.fab.dataprep.domain.ServiceTestConfig
 import com.silenteight.universaldatasource.api.library.document.v1.DocumentFeatureInputOut
 
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import spock.lang.Specification
 import spock.lang.Subject
 
@@ -39,6 +36,6 @@ class PassportFeatureTest extends Specification {
     where:
     command                     | alertedParty   | watchList
     EMPTY_BUILD_FEATURE_COMMAND | ['AVB2833444'] | []
-    BUILD_FEATURE_COMMAND       | ['AVB2833444'] | []
+    BUILD_FEATURE_COMMAND       | ['AVB2833444'] | ['E2548653']
   }
 }

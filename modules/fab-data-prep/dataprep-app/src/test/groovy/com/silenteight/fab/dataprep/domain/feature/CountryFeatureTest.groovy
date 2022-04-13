@@ -37,7 +37,8 @@ class CountryFeatureTest extends Specification {
     where:
     command                     | alertedParty             | watchList
     EMPTY_BUILD_FEATURE_COMMAND | ['IR', 'IR', 'IR', 'IR'] | []
-    BUILD_FEATURE_COMMAND       | ['IR', 'IR', 'IR', 'IR'] | ['UEA']
+    BUILD_FEATURE_COMMAND       | ['IR', 'IR', 'IR', 'IR'] |
+        ['SINGAPORE', 'REPUBLIC OF SINGAPORE', 'REPUBLIK SINGAPURA']
   }
 
   def 'countries should be extracted correctly'() {
@@ -48,7 +49,14 @@ class CountryFeatureTest extends Specification {
   "Addresses": [
     {
       "Address": {
-        "Countries": ["a", "b"]
+        "Countries": [
+          {
+            "Country": "a"
+          },
+          {
+            "Country": "b"
+          }
+        ]
       }
     },
     {
@@ -58,7 +66,11 @@ class CountryFeatureTest extends Specification {
     },
     {
       "Address": {
-        "Countries": ["c"]
+        "Countries": [
+          {
+            "Country": "c"
+          }
+        ]
       }
     }
   ]

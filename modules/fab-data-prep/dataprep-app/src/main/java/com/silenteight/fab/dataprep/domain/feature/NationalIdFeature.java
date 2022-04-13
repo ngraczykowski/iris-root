@@ -18,8 +18,9 @@ import static java.util.List.of;
 public class NationalIdFeature implements FabFeature {
 
   static final String FEATURE_NAME = "features/nationalIdDocument";
-  //TODO is it correct?
-  private static final String DOCUMENT_JSON_PATH = "$.HittedEntity.Codes[*]";
+
+  private static final String JSON_PATH =
+      "$.HittedEntity.Codes[?(@.Code.Type==\"NationalID\")].Code.Name";
 
   private final ParseContext parseContext;
 
@@ -39,6 +40,6 @@ public class NationalIdFeature implements FabFeature {
   }
 
   private List<String> getWatchlistPart(JsonNode jsonNode) {
-    return parseContext.parse(jsonNode).read(DOCUMENT_JSON_PATH, LIST_OF_STRINGS);
+    return parseContext.parse(jsonNode).read(JSON_PATH, LIST_OF_STRINGS);
   }
 }

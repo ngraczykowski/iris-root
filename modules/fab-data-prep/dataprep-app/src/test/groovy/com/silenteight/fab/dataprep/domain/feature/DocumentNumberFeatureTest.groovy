@@ -36,6 +36,7 @@ class DocumentNumberFeatureTest extends Specification {
     where:
     command                     | alertedParty                     | watchList
     EMPTY_BUILD_FEATURE_COMMAND | ['', 'AVB2833444', 'S93849384A'] | []
-    BUILD_FEATURE_COMMAND       | ['', 'AVB2833444', 'S93849384A'] | []
+    BUILD_FEATURE_COMMAND       | ['', 'AVB2833444', 'S93849384A'] |
+        ['E2548653', 'RDBAIQBB', '01TG031000', '210225511433']
   }
 }

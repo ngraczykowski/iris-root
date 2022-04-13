@@ -85,7 +85,15 @@
                   "States": [
                   ],
                   "Countries": [
-                    "UEA"
+                    {
+                      "Country": "SINGAPORE"
+                    },
+                    {
+                      "Country": "REPUBLIC OF SINGAPORE"
+                    },
+                    {
+                      "Country": "REPUBLIK SINGAPURA"
+                    }
                   ]
                 }
               }
@@ -99,8 +107,32 @@
             ],
             "Type": "I",
             "Codes": [
+              {
+                "Code": {
+                  "Name": "E2548653",
+                  "Type": "Passport"
+                }
+              },
+              {
+                "Code": {
+                  "Name": "RDBAIQBB",
+                  "Type": "Bic"
+                }
+              },
+              {
+                "Code": {
+                  "Name": "01TG031000",
+                  "Type": "SearchCode"
+                }
+              },
+              {
+                "Code": {
+                  "Name": "210225511433",
+                  "Type": "NationalID"
+                }
+              }
             ],
-            "AdditionalInfo": "none",
+            "AdditionalInfo": "List ID: 1054 / Create Date: 08/14/2013 14:42:14 / Last Update Date: 1/07/2015 15:43:20 / Program INTERPOL NOTICES / Nationality: INDIA / Gender: MALE / OtherInformation WANTED BY THE JUDICIAL AUTHORITIES OF INDIA FOR PROSECUTION / TO SERVE A SENTENCE / LanguagesSpoken: TAMIL",
             "DatesOfBirth": [
               {
                 "DateOfBirth": "10\/04\/60\nNATIONALITY: \nnone"

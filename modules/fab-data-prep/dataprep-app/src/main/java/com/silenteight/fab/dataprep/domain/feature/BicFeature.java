@@ -18,7 +18,7 @@ import static java.util.List.of;
 public class BicFeature implements FabFeature {
 
   static final String FEATURE_NAME = "features/bic";
-  private static final String BIC_PATH = "$.HittedEntity.Codes[*]";    //TODO is it correct?
+  private static final String BIC_PATH = "$.HittedEntity.Codes[?(@.Code.Type==\"Bic\")].Code.Name";
 
   private final ParseContext parseContext;
 

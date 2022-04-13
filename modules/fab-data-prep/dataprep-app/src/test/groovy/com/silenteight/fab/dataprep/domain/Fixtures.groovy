@@ -13,8 +13,11 @@ import com.silenteight.proto.fab.api.v1.AlertMessageDetails
 import com.silenteight.proto.fab.api.v1.AlertMessagesDetailsResponse
 
 import com.google.common.io.Resources
+import groovy.json.JsonSlurper
 
 import static com.silenteight.sep.base.common.support.jackson.JsonConversionHelper.INSTANCE
+import static groovy.json.JsonOutput.prettyPrint
+import static groovy.json.JsonOutput.toJson
 import static java.nio.charset.StandardCharsets.UTF_8
 
 class Fixtures {
@@ -62,12 +65,14 @@ class Fixtures {
       .lastUpdateTime('')
       .build()
 
-  private static URL HIT_URL = Resources.getResource("hit.json")
+  static String MESSAGE = Resources.toString(Resources.getResource("message.json"), UTF_8)
+
+  static String HIT = prettyPrint(toJson(new JsonSlurper().parseText(MESSAGE).Message.Hits[0].Hit))
 
   static Match MATCH = Match.builder()
       .hitName(UUID.randomUUID().toString())
       .matchName(MATCH_NAME)
-      .payloads([INSTANCE.objectMapper().readTree(HIT_URL)])
+      .payloads([INSTANCE.objectMapper().readTree(HIT)])
       .build()
 
   static Match EMPTY_MATCH = Match.builder()
@@ -75,10 +80,6 @@ class Fixtures {
       .matchName(MATCH_NAME)
       .payloads([INSTANCE.objectMapper().readTree('{}')])
       .build()
-
-  static String HIT = Resources.toString(HIT_URL, UTF_8)
-
-  static String MESSAGE = Resources.toString(Resources.getResource("message.json"), UTF_8)
 
   static RegisteredAlert REGISTERED_ALERT = RegisteredAlert.builder()
       .batchName(BATCH_NAME)

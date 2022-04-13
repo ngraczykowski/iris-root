@@ -18,7 +18,8 @@ import static java.util.List.of;
 public class CountryFeature implements FabFeature {
 
   static final String FEATURE_NAME = "features/country";
-  private static final String JSON_PATH = "$.HittedEntity.Addresses[*].Address.Countries[*]";
+  private static final String JSON_PATH =
+      "$.HittedEntity.Addresses[*].Address.Countries[*].Country";
 
   private final ParseContext parseContext;
 

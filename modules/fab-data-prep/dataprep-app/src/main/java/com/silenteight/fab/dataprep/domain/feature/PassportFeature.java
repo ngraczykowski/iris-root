@@ -18,7 +18,8 @@ import static java.util.List.of;
 public class PassportFeature implements FabFeature {
 
   static final String FEATURE_NAME = "features/passportNumberDocument";
-  private static final String JSON_PATH = "$.HittedEntity.PassportNumber";    //TODO is it correct?
+  private static final String JSON_PATH =
+      "$.HittedEntity.Codes[?(@.Code.Type==\"Passport\")].Code.Name";
 
   private final ParseContext parseContext;
 
