@@ -90,6 +90,24 @@ class BaseGrpcTestCase:
                 assert alert.etl_status == SUCCESS
 
         @pytest.mark.asyncio
+        def test_empty_supplemental_info(self):
+            alert = load_alert("notebooks/sample/wm_party_payload_without_supplemental_info.json")
+            response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[alert]))
+
+            for alert in response.etl_alerts:
+                assert alert.etl_status == SUCCESS
+
+        @pytest.mark.asyncio
+        def test_partial_supplemental_info(self):
+            alert = load_alert(
+                "notebooks/sample/wm_party_payload_with_partial_supplemental_info.json"
+            )
+            response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[alert]))
+
+            for alert in response.etl_alerts:
+                assert alert.etl_status == SUCCESS
+
+        @pytest.mark.asyncio
         def test_wm_party(self):
             alert = load_alert("notebooks/sample/wm_party_in_payload_format.json")
             response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[alert]))
