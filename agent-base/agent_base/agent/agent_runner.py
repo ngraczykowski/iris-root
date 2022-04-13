@@ -3,6 +3,7 @@ import concurrent.futures
 import contextlib
 import functools
 import logging
+import sys
 from typing import List
 
 from agent_base.agent.agent import Agent
@@ -30,6 +31,7 @@ class AgentRunner:
     def __init__(self, config: Config):
         self.application_config = config.application_config
         self.logger = logging.getLogger("runner")
+        self.logger.addHandler(logging.StreamHandler(sys.stdout))
         self.pool = None
         self.running = []
 

@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import ssl
+import sys
 from typing import Callable, Dict
 
 import aio_pika
@@ -28,6 +29,8 @@ class PikaConnection:
             None,
         )
         self.logger = logging.getLogger("PikaConnection")
+        c_handler = logging.StreamHandler(sys.stdout)
+        self.logger.addHandler(c_handler)
         self.max_requests_to_worker = max_requests_to_worker
         self.ssl = use_ssl
 

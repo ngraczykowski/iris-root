@@ -2,6 +2,7 @@ import asyncio
 import collections
 import logging
 import os
+import sys
 import time
 from typing import Any, AsyncGenerator, Dict, Generator, Tuple
 
@@ -38,6 +39,8 @@ class AgentExchange(AgentService):
         self.data_source = data_source
         self.ssl = ssl
         self.logger = logging.getLogger("AgentExchange")
+        c_handler = logging.StreamHandler(sys.stdout)
+        self.logger.addHandler(c_handler)
 
     async def start(self, *args, **kwargs) -> None:
         self.logger.debug("Starting agent exchange")
