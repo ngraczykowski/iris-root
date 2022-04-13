@@ -111,6 +111,10 @@ def main():
         action="store_true",
         help="Increase verbosity for debug purpose",
     )
+    parser.add_argument(
+        "--ssl",
+        action="store_true",
+    )
     args = parser.parse_args()
 
     logging.basicConfig(
@@ -122,7 +126,7 @@ def main():
     AgentRunner(config).run(
         JohnnyAgent(config),
         services=[
-            AgentExchange(config, JohnnyAgentDataSource(config, ssl=True)),
+            AgentExchange(config, JohnnyAgentDataSource(config, ssl=args.ssl), ssl=args.ssl),
             GrpcService(config, agent_servicer=JohnnyAgentGrpcServicer()),
         ],
     )

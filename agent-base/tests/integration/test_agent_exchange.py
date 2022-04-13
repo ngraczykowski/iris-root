@@ -54,7 +54,7 @@ async def johnny_agent(config):
     runner = AgentRunner(config)
     await runner.start(
         agent,
-        services=[AgentExchange(config, JohnnyAgentDataSource(config, ssl=True))],
+        services=[AgentExchange(config, JohnnyAgentDataSource(config))],
     )
     try:
         yield agent

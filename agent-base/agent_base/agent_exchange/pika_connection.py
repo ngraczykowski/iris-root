@@ -1,4 +1,3 @@
-import asyncio
 import logging
 import ssl
 import sys
@@ -103,7 +102,11 @@ class PikaConnection:
                 # internal=response_exchange_conf["exchange-auto-delete"],
             )
             self.request_queue_tag = self.channel.basic_consume(
-                queue=queue_name, on_message_callback=self.on_request_ssl, auto_ack=False
+                queue=queue_name,
+                on_message_callback=lambda ch, method, properties, body: self.on_message_callback(
+                    ch, method, properties, body
+                ),
+                auto_ack=False,
             )
             self.channel.start_consuming()
 
@@ -176,7 +179,7 @@ class PikaConnection:
         message.ack()
         self.logger.debug(f"acknowledged {message.message_id}")
 
-    def on_request_ssl(self, channel, method, properties, body):
+    async def on_message_callback(self, channel, method, properties, body):
         self.logger.debug(f"received properties {properties}")
         try:
             message = aio_pika.Message(
@@ -192,26 +195,54 @@ class PikaConnection:
 
         self.logger.debug(f"received {message}")
         try:
-            response_message = asyncio.run(self.request_callback(message))
+            response_message = await self.request_callback(message)
         except Exception as err:
             self.logger.warning(f"{err!r} on {message}")
             channel.basic_nack(delivery_tag=method.delivery_tag)
             return
 
-        self.channel.basic_publish(
-            exchange=self.messaging_configuration["response"]["exchange"],
-            routing_key=self.messaging_configuration["response"]["exchange-routing-key"],
-            body=response_message.body,
-            properties=pika.BasicProperties(
-                content_encoding=response_message.content_encoding,
-                content_type=response_message.content_type,
-                delivery_mode=response_message.delivery_mode,
-                headers=response_message.headers,
-                priority=response_message.priority,
-                timestamp=response_message.timestamp,
-                type=response_message.type,
-            ),
-        )
+        # TODO when you know which one works, remove non necessary one from below try-excepts
+        _published = False
+        try:
+            self.channel.basic_publish(
+                exchange=self.messaging_configuration["response"]["exchange"],
+                routing_key=self.messaging_configuration["response"]["exchange-routing-key"],
+                body=response_message.body,
+                properties=pika.BasicProperties(
+                    content_encoding=response_message.content_encoding,
+                    content_type=response_message.content_type,
+                    delivery_mode=response_message.delivery_mode,
+                    headers=response_message.headers,
+                    priority=response_message.priority,
+                    timestamp=response_message.timestamp,
+                    type=response_message.type,
+                ),
+            )
+            _published = True
+            self.logger.info("Published using self.channel")
+        except Exception:
+            self.logger.error("Error publishing using self.channel")
+
+        try:
+            if not _published:
+                channel.basic_publish(
+                    exchange=self.messaging_configuration["response"]["exchange"],
+                    routing_key=self.messaging_configuration["response"]["exchange-routing-key"],
+                    body=response_message.body,
+                    properties=pika.BasicProperties(
+                        content_encoding=response_message.content_encoding,
+                        content_type=response_message.content_type,
+                        delivery_mode=response_message.delivery_mode,
+                        headers=response_message.headers,
+                        priority=response_message.priority,
+                        timestamp=response_message.timestamp,
+                        type=response_message.type,
+                    ),
+                )
+                self.logger.info("Published using channel from callback")
+        except Exception:
+            self.logger.error("Error publishing using channel from callback")
+
         try:
             self.channel.basic_ack(delivery_tag=method.delivery_tag)
         except Exception:
