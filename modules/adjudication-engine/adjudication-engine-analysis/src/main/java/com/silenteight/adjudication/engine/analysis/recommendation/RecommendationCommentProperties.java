@@ -17,4 +17,6 @@ class RecommendationCommentProperties {
   private String templateName = DEFAULT_TEMPLATE_NAME;
 
   private String matchTemplateName = DEFAULT_MATCH_TEMPLATE_NAME;
+
+  private boolean shouldGenerateMatchComment = false;
 }
