@@ -31,6 +31,15 @@ def run_pipeline(uut, file_path, reference_file_path):
     return parsed_payloads, reference_payloads
 
 
+def check_no_dict_type(ref, tested):
+    if type(ref) != type(tested):
+        raise AssertionError("Wrong Type")
+    if isinstance(ref, str):
+        ref = ref.strip()
+        tested = tested.strip()
+    assert tested == ref
+
+
 def check_payload(parsed_payloads, reference_payloads):
     for payload, reference_payload in zip(parsed_payloads, reference_payloads):
         for num in range(len(payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS])):
@@ -48,18 +57,20 @@ def check_payload(parsed_payloads, reference_payloads):
                             reference_payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
                         )
                     except:
-                        if isinstance(
-                            payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key], dict
-                        ) and isinstance(
-                            reference_payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key],
-                            dict,
-                        ):
+                        if isinstance(payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]):
                             reference = reference_payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][
                                 num
                             ][key]
                             tested = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
                             for new_key in tested:
                                 assert tested[new_key] == reference[new_key]
+                        else:
+                            ref = reference_payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
+                            tested = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
+                            try:
+                                check_no_dict_type(ref, tested)
+                            except AssertionError:
+                                raise AssertionError(f"Tested {tested} ref {ref} key: {key}")
 
 
 def assert_length_and_content_match(requested_length, parsed_payloads, reference_payloads):
