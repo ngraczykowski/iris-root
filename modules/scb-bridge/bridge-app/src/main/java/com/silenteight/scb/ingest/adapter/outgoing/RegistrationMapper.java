@@ -25,6 +25,7 @@ class RegistrationMapper {
     return RegisterBatchIn.builder()
         .batchId(batch.id())
         .alertCount(batch.alertCount())
+        .isSimulation(batch.source() == BatchSource.LEARNING)
         .batchMetadata(
             converter.serializeFromObjectToJson(batch.metadata())
                 .getOrElseThrow(IngestJsonMessageException::new))

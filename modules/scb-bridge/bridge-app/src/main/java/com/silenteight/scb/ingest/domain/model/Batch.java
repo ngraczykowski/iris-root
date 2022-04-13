@@ -8,6 +8,7 @@ public record Batch(
     String id,
     Long alertCount,
     Priority priority,
+    BatchSource source,
     BatchMetadata metadata) {
 
   @Builder
@@ -18,6 +19,7 @@ public record Batch(
         .id(batchId)
         .alertCount(alertCount)
         .priority(context.priority())
+        .source(context.batchSource())
         .metadata(new BatchMetadata(context.batchSource()))
         .build();
   }
