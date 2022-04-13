@@ -16,9 +16,11 @@ class RecommendationsProcessorSpec extends Specification {
   def recommendationApiClient = Mock(RecommendationApiClient)
   def recommendationPublisher = Mock(RecommendationPublisher)
   def recommendationDeliveredEventPublisher = Mock(RecommendationDeliveredEventPublisher)
+  def qcoRecommendationService = Mock(QcoRecommendationService)
 
   @Subject
   def underTest = new RecommendationsProcessor(
+      qcoRecommendationService,
       recommendationsMapper,
       recommendationApiClient,
       recommendationPublisher,
@@ -40,6 +42,7 @@ class RecommendationsProcessorSpec extends Specification {
     then:
     1 * recommendationApiClient.getRecommendations(Fixtures.ANALYSIS_NAME, []) >>
         Fixtures.RECOMMENDATIONS
+    1 * qcoRecommendationService.process(_) >> {RecommendationsGeneratedEvent result -> result}
     1 * recommendationPublisher.publishCompleted(_) >> {RecommendationsGeneratedEvent event ->
       with(event) {
         batchId() == Fixtures.BATCH_ID

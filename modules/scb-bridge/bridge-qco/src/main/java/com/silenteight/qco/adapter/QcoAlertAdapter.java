@@ -16,6 +16,6 @@ public class QcoAlertAdapter {
   public QcoRecommendationAlert extractAndProcessRecommendationAlert(QcoRecommendationAlert alert) {
     //TODO: call processMatch in loop
     var matchSolution = matchProcessor.processMatch(null);
-    return new QcoRecommendationAlert();
+    return QcoRecommendationAlert.builder().build();
   }
 }

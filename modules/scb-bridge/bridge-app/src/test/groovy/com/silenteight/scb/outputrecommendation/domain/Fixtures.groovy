@@ -67,10 +67,12 @@ class Fixtures {
   static OffsetDateTime RECOMMENDED_AT = OffsetDateTime.now()
 
   static String ALERT_ID = 'alertId'
+  static String ALERT_NAME = 'alertName'
   static AlertStatus ALERT_STATUS = AlertStatus.SUCCESS
   static String ALERT_ERROR_MESSAGE = 'errorMessage'
 
   static String MATCH_ID = 'matchId'
+  static String MATCH_NAME = 'matchName'
   static String MATCH_RECOMMENDED_ACTION = 'recommendedAction'
   static String MATCH_RECOMMENDED_COMMENT = 'recommendedComment'
   static String MATCH_STEP_ID = 'stepId'
@@ -111,6 +113,7 @@ class Fixtures {
       [
           Match.builder()
               .id(MATCH_ID)
+              .name(MATCH_NAME)
               .recommendedAction(MATCH_RECOMMENDED_ACTION)
               .recommendedComment(MATCH_RECOMMENDED_COMMENT)
               .stepId(MATCH_STEP_ID)
@@ -121,6 +124,7 @@ class Fixtures {
 
   static Alert ALERT = Alert.builder()
       .id(ALERT_ID)
+      .name(ALERT_NAME)
       .status(ALERT_STATUS)
       .metadata(ALERT_SERIALIZED_METADATA)
       .errorMessage(ALERT_ERROR_MESSAGE)

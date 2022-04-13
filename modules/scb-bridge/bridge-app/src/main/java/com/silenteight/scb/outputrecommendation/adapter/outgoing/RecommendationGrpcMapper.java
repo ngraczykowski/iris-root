@@ -48,6 +48,7 @@ class RecommendationGrpcMapper {
   private Alert toAlert(AlertOut alert) {
     return Alert.builder()
         .id(alert.getId())
+        .name("") // TODO: set alert name once Recommendation Connector is updated.
         .status(AlertStatus.valueOf(alert.getStatus().name()))
         .metadata(alert.getMetadata())
         .errorMessage(alert.getErrorMessage())
@@ -57,6 +58,7 @@ class RecommendationGrpcMapper {
   private Match toMatch(MatchOut match) {
     return Match.builder()
         .id(match.getId())
+        .name("") // TODO: set match name once Recommendation Connector is updated.
         .recommendedAction(match.getRecommendedAction())
         .recommendedComment(match.getRecommendationComment())
         .stepId(match.getStepId())

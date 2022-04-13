@@ -17,7 +17,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import javax.sql.DataSource;
 
 @RequiredArgsConstructor
-@EnableConfigurationProperties(CbsRecommendationProperties.class)
+@EnableConfigurationProperties({
+    CbsRecommendationProperties.class, QcoRecommendationProperties.class })
 @Configuration
 public class CbsRecommendationServiceConfiguration {
 

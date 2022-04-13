@@ -14,6 +14,6 @@ public record RecommendationsGeneratedEvent(
     List<Recommendation> recommendations
 ) {
 
-  @Builder
+  @Builder(toBuilder = true)
   public RecommendationsGeneratedEvent {}
 }

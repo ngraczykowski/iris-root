@@ -18,6 +18,7 @@ class RecommendationsProcessor {
 
   private static final List<String> EMPTY_ALERT_NAMES = List.of();
 
+  private final QcoRecommendationService qcoRecommendationService;
   private final RecommendationsMapper recommendationsMapper;
   private final RecommendationApiClient recommendationApiClient;
   private final RecommendationPublisher recommendationPublisher;
@@ -36,7 +37,8 @@ class RecommendationsProcessor {
         recommendationsMapper.toRecommendationsDeliveredEvent(
             command.batchId(), command.analysisName());
 
-    recommendationPublisher.publishCompleted(recommendationsEvent);
+    var qcoUpdatedRecommendations = qcoRecommendationService.process(recommendationsEvent);
+    recommendationPublisher.publishCompleted(qcoUpdatedRecommendations);
     recommendationDeliveredEventPublisher.publish(recommendationsDeliveredEvent);
   }
 

@@ -172,6 +172,9 @@ silenteight:
           records-view: SENS_V_FFF_RECORDS_NON_DENY
           watchlist-level: true
 
+  qco:
+    enabled: false
+
 serp:
   # GNS DB Configuration
   gns:

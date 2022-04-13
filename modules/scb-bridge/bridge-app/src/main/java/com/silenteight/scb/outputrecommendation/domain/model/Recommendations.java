@@ -25,12 +25,13 @@ public record Recommendations(
       OffsetDateTime recommendedAt
   ) {
 
-    @Builder
+    @Builder(toBuilder = true)
     public Recommendation {}
   }
 
   public static record Alert(
       String id,
+      String name,
       AlertStatus status,
       String metadata,
       String errorMessage
@@ -42,6 +43,7 @@ public record Recommendations(
 
   public static record Match(
       String id,
+      String name,
       String recommendedAction,
       String recommendedComment,
       String stepId,
@@ -49,7 +51,7 @@ public record Recommendations(
       Map<String, String> features
   ) {
 
-    @Builder
+    @Builder(toBuilder = true)
     public Match {}
   }
 
