@@ -40,7 +40,10 @@ class RecommendationProcessor {
         analysisName);
 
     saveRecommendations(analysisName, newRecommendations);
-    publishRecommendationsStoredEvent(analysisName, newRecommendations);
+    eventPublisher.publish(new RecommendationsStoredEvent(
+        analysisName,
+        getAlertNames(newRecommendations),
+        false));
   }
 
   void createTimedOutRecommendations(String analysisName, List<String> alertNames) {
@@ -60,7 +63,10 @@ class RecommendationProcessor {
     var newRecommendations = filterOutExistingInDb(analysisName, createdRecommendations);
 
     saveRecommendations(analysisName, newRecommendations);
-    publishRecommendationsStoredEvent(analysisName, newRecommendations);
+    eventPublisher.publish(new RecommendationsStoredEvent(
+        analysisName,
+        getAlertNames(newRecommendations),
+        true));
   }
 
   private String getAnalysisName(List<RecommendationWithMetadata> receivedRecommendations) {
@@ -92,13 +98,9 @@ class RecommendationProcessor {
         "{} recommendations saved in DB for analysis {}", recommendations.size(), analysisName);
   }
 
-  private void publishRecommendationsStoredEvent(
-      String analysisName, List<RecommendationWithMetadata> recommendationsWithMetadata) {
-
-    var alertNames = recommendationsWithMetadata.stream()
+  private List<String> getAlertNames(List<RecommendationWithMetadata> recommendation) {
+    return recommendation.stream()
         .map(RecommendationWithMetadata::alertName)
         .toList();
-
-    eventPublisher.publish(new RecommendationsStoredEvent(analysisName, alertNames));
   }
 }

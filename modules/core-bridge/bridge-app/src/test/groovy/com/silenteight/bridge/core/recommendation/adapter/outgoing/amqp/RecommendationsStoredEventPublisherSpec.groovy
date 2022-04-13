@@ -21,7 +21,7 @@ class RecommendationsStoredEventPublisherSpec extends Specification {
     given:
     def analysisName = "analysis"
     def alertNames = ["alert/1"]
-    def event = new RecommendationsStoredEvent(analysisName, alertNames)
+    def event = new RecommendationsStoredEvent(analysisName, alertNames, false)
     def message = RecommendationsStored.newBuilder()
         .setAnalysisName(analysisName)
         .addAllAlertNames(alertNames)

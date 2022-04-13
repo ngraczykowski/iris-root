@@ -13,9 +13,6 @@ import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchReposi
 
 import spock.lang.Specification
 import spock.lang.Subject
-import spock.lang.Unroll
-
-import java.util.stream.IntStream
 
 import static com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus.*
 
@@ -28,32 +25,23 @@ class BatchTimeoutServiceSpec extends Specification {
   @Subject
   def underTest = new BatchTimeoutService(batchRepository, alertRepository, batchEventPublisher)
 
-  @Unroll
-  def "#desc"() {
-    def batch = createBatch(PROCESSING, alertsCount)
+  def "should publish BatchTimedOut event for batch with pending alerts"() {
+    given:
+    def batch = createBatch(PROCESSING, 10)
     def command = new VerifyBatchTimeoutCommand(batch.id())
-    def alertNames = IntStream.range(0, pendingAlerts)
-        .collect({it -> "alert" + it})
+    def alertNames = ['alert1', 'alert2', 'alert3']
 
     1 * batchRepository.findById(batch.id()) >> Optional.of(batch)
     1 * alertRepository.findNamesByBatchIdAndStatusIsRegisteredOrProcessing(batch.id()) >>
         alertNames.collect {new AlertName(it)}
-    1 * alertRepository.countAllAlerts(batch.id()) >> registeredAlerts
 
     when:
     underTest.verifyBatchTimeout(command)
 
     then:
-    batchTimedOut * batchEventPublisher.publish(new BatchTimedOut(batch.analysisName(), alertNames))
-    batchCompleted * batchEventPublisher.publish(
-        new BatchCompleted(batch.id(), batch.analysisName(), batch.batchMetadata()))
-
-    where:
-    desc                                                                                                                                      | pendingAlerts | alertsCount | registeredAlerts | batchTimedOut | batchCompleted
-    "Should not send TimedOut event when no pending alerts, should not mark batch as completed when quantity of alerts = alertsCount"         | 0             | 10          | 10               | 0            | 0
-    "Should send TimedOut event when pending alerts are present, should not mark batch as completed when quantity of alerts = alertsCount"    | 3             | 10          | 10               | 1            | 0
-    "Should send TimedOut event when pending alerts are present, should mark batch as completed when quantity of alerts < alertsCount"        | 3             | 10          | 3                | 1            | 1
-    "Should not send TimedOut event when no pending alerts, should not mark batch as completed when quantity of alerts < alertsCount"         | 0             | 10          | 3                | 0            | 1
+    1 * batchEventPublisher.publish(new BatchTimedOut(batch.analysisName(), alertNames))
+    0 * batchEventPublisher
+        .publish(new BatchCompleted(batch.id(), batch.analysisName(), batch.batchMetadata()))
   }
 
   def "should ignore batch due to its status #status"() {
@@ -87,7 +75,7 @@ class BatchTimeoutServiceSpec extends Specification {
     0 * batchEventPublisher._
   }
 
-  def "should not publish message when no pending alerts were found"() {
+  def "should not publish BatchTimedOut message when no pending alerts were found, should publish BatchCompleted message when number of registered alert is lower that alerts count"() {
     given:
     def batch = createBatch(PROCESSING, 10)
     def command = new VerifyBatchTimeoutCommand(batch.id())
@@ -102,6 +90,24 @@ class BatchTimeoutServiceSpec extends Specification {
     then:
     0 * batchEventPublisher.publish(BatchTimedOut)
     1 * batchEventPublisher
+        .publish(new BatchCompleted(batch.id(), batch.analysisName(), batch.batchMetadata()))
+  }
+
+  def "should not publish BatchTimedOut and BatchCompleted messages"() {
+    given:
+    def batch = createBatch(PROCESSING, 10)
+    def command = new VerifyBatchTimeoutCommand(batch.id())
+
+    1 * batchRepository.findById(batch.id()) >> Optional.of(batch)
+    1 * alertRepository.findNamesByBatchIdAndStatusIsRegisteredOrProcessing(batch.id()) >> []
+    1 * alertRepository.countAllAlerts(batch.id()) >> 10
+
+    when:
+    underTest.verifyBatchTimeout(command)
+
+    then:
+    0 * batchEventPublisher.publish(BatchTimedOut)
+    0 * batchEventPublisher
         .publish(new BatchCompleted(batch.id(), batch.analysisName(), batch.batchMetadata()))
   }
 

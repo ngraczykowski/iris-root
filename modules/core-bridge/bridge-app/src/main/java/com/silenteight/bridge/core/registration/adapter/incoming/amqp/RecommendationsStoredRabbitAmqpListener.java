@@ -33,6 +33,7 @@ class RecommendationsStoredRabbitAmqpListener {
       RecommendationsStored recommendation) {
     return new MarkAlertsAsRecommendedCommand(
         recommendation.getAnalysisName(),
-        recommendation.getAlertNamesList());
+        recommendation.getAlertNamesList(),
+        recommendation.getIsTimedOut());
   }
 }

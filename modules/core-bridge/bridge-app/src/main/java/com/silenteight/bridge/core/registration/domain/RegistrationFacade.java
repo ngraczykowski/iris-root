@@ -59,7 +59,8 @@ public class RegistrationFacade {
 
     alertService.updateStatusToRecommended(batch.id(), command.alertNames());
 
-    if (alertService.hasNoPendingAlerts(batch)) {
+    if (alertService.hasNoPendingAlerts(batch) || command.isTimedOut()) {
+      log.info("Completing batch, without pending alerts, with id: {}", batch.id());
       batchService.completeBatch(new CompleteBatchCommand(batch));
     }
   }

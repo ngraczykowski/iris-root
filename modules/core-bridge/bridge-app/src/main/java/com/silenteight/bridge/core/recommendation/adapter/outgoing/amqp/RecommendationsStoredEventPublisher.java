@@ -24,6 +24,7 @@ class RecommendationsStoredEventPublisher implements RecommendationEventPublishe
     var message = RecommendationsStored.newBuilder()
         .setAnalysisName(event.analysisName())
         .addAllAlertNames(event.alertNames())
+        .setIsTimedOut(event.isTimedOut())
         .build();
 
     log.info(
