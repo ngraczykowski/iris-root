@@ -12,11 +12,11 @@ class RecommendationCommentProperties {
 
   private static final String DEFAULT_TEMPLATE_NAME = "alert";
 
-  private static final String DEFAULT_MATCH_TEMPLATE_NAME = "match";
+  private static final String DEFAULT_MATCH_TEMPLATE_NAME = "match-template";
 
   private String templateName = DEFAULT_TEMPLATE_NAME;
 
   private String matchTemplateName = DEFAULT_MATCH_TEMPLATE_NAME;
 
-  private boolean shouldGenerateMatchComment = false;
+  private boolean shouldGenerateMatchComment = true;
 }

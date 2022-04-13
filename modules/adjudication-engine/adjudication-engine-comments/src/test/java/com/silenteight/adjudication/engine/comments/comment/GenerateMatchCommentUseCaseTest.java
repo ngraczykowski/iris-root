@@ -98,4 +98,20 @@ class GenerateMatchCommentUseCaseTest {
       assertThat(evaluated.get("match-1")).isEqualTo(output);
     }
   }
+
+  @Nested
+  class FreemarkerTest {
+
+    @Test
+    void shouldGenerateCommentFromFreemarkerTemplate() {
+      repo.save(commentTemplate("deps/matchftl.ftl", readFile("freemarker/deps/matchftl.ftl")));
+      repo.save(
+          commentTemplate("freemarker-match.ftl", readFile("freemarker/freemarker-match.ftl")));
+      var context = createAlertContext();
+
+      var evaluated = facade.generateMatchComments("freemarker-match", context.getMatches());
+
+      assertThat(evaluated.get("123")).isEqualTo("The Match ID: 123");
+    }
+  }
 }
