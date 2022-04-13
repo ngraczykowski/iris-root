@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import ssl
 from typing import Callable, Dict
@@ -51,11 +52,10 @@ class PikaConnection:
                 port=connection_configuration["port"],
                 credentials=credentials,
                 virtual_host=connection_configuration["virtualhost"],
-                heartbeat=600,
-                blocked_connection_timeout=300,
             )
             rabbit = pika.BlockingConnection(connection_params)
             self.channel: pika.adapters.blocking_connection.BlockingChannel = rabbit.channel()
+            self.channel.basic_qos(prefetch_count=self.max_requests_to_worker)
             queue_name = self.messaging_configuration["request"].get("queue-name", "")
 
             try:
@@ -93,10 +93,16 @@ class PikaConnection:
             self.callback_exchange = self.channel.exchange_declare(
                 response_exchange_conf["exchange"],
                 passive=True,
+                # NOT sure if below needed as passive=True, so it's just checking if exchange exist
+                # auto_delete=response_exchange_conf["exchange-auto-delete"],
+                # durable=response_exchange_conf["exchange-durable"],
+                # exchange_type=response_exchange_conf["exchange-type"],
+                # internal=response_exchange_conf["exchange-auto-delete"],
             )
             self.request_queue_tag = self.channel.basic_consume(
-                queue=queue_name, on_message_callback=self.on_request, auto_ack=False
+                queue=queue_name, on_message_callback=self.on_request_ssl, auto_ack=False
             )
+            self.channel.start_consuming()
 
         else:
             self.connection: aio_pika.RobustConnection = await aio_pika.connect_robust(
@@ -150,7 +156,6 @@ class PikaConnection:
 
     async def on_request(self, message: aio_pika.IncomingMessage) -> None:
         self.logger.debug(f"received {message}")
-
         try:
             response_message = await self.request_callback(message)
         except AgentException as err:
@@ -161,25 +166,57 @@ class PikaConnection:
             self.logger.warning(f"{err!r} on {message}")
             message.nack()
             return
-        if self.ssl:
-            self.channel.basic_publish(
-                exchange=self.messaging_configuration["response"]["exchange"],
-                routing_key=self.messaging_configuration["response"]["exchange-routing-key"],
-                body=response_message.body,
-                properties=pika.BasicProperties(
-                    content_encoding=response_message.content_encoding,
-                    content_type=response_message.content_type,
-                    delivery_mode=response_message.delivery_mode,
-                    headers=response_message.headers,
-                    priority=response_message.priority,
-                    timestamp=response_message.timestamp,
-                    type=response_message.type,
-                ),
-            )
-        else:
-            await self.callback_exchange.publish(
-                routing_key="",
-                message=response_message,
-            )
+        await self.callback_exchange.publish(
+            routing_key="",
+            message=response_message,
+        )
         message.ack()
         self.logger.debug(f"acknowledged {message.message_id}")
+
+    def on_request_ssl(self, channel, method, properties, body):
+        self.logger.debug(f"received properties {properties}")
+        try:
+            message = aio_pika.Message(
+                body=body,
+                delivery_mode=pika.spec.PERSISTENT_DELIVERY_MODE,
+                headers=properties.headers,
+                priority=properties.priority,
+                content_encoding=properties.content_encoding,
+            )
+        except AttributeError as error:
+            self.logger.error(f"Error when parsing message: {error}")
+            return
+
+        self.logger.debug(f"received {message}")
+        try:
+            response_message = asyncio.run(self.request_callback(message))
+        except Exception as err:
+            self.logger.warning(f"{err!r} on {message}")
+            channel.basic_nack(delivery_tag=method.delivery_tag)
+            return
+
+        self.channel.basic_publish(
+            exchange=self.messaging_configuration["response"]["exchange"],
+            routing_key=self.messaging_configuration["response"]["exchange-routing-key"],
+            body=response_message.body,
+            properties=pika.BasicProperties(
+                content_encoding=response_message.content_encoding,
+                content_type=response_message.content_type,
+                delivery_mode=response_message.delivery_mode,
+                headers=response_message.headers,
+                priority=response_message.priority,
+                timestamp=response_message.timestamp,
+                type=response_message.type,
+            ),
+        )
+        try:
+            self.channel.basic_ack(delivery_tag=method.delivery_tag)
+        except Exception:
+            self.logger.error("Error when ACK using self.channel")
+
+        try:
+            channel.basic_ack(delivery_tag=method.delivery_tag)
+        except Exception:
+            self.logger.error("Error when ACK using channel from callback args")
+
+        self.logger.debug(f"acknowledged {response_message.headers}")

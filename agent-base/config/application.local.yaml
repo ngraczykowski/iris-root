@@ -32,12 +32,17 @@ agent:
       queue-name: 'agent.EXAMPLE-requests'
       queue-durable: true
       queue-arguments:
-        "x-dead-letter-exchange": "companyname-agent-dead-letter-exchange"
-        "x-dead-letter-routing-key": "companyname-agent-dead-letter-key"
+        x-dead-letter-exchange: "companyname-agent-dead-letter-exchange"
+        x-dead-letter-routing-key: "companyname-agent-dead-letter-key"
 
     response:
       exchange: 'agent.response'
       exchange-routing-key: ""
+#      exchange-durable: true
+#      exchange-type: topic
+#      exchange-auto-delete: false
+#      exchange-internal: false
+
 
   grpc:
     port: 24804
