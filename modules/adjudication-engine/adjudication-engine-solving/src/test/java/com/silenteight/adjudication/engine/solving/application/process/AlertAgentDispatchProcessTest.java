@@ -19,18 +19,19 @@ import java.util.List;
 import java.util.Set;
 
 @ExtendWith(MockitoExtension.class)
-class BojkaBajkaIBraworkaTest {
+class AlertAgentDispatchProcessTest {
 
   @Mock
   private MatchFeaturesFacade matchFeaturesFacade;
-  private BojkaBajkaIBraworka bajkaIBraworka;
+  private AlertAgentDispatchProcess alertAgentDispatchProcess;
   private AlertSolvingRepository alertSolvingRepository = new InMemoryAlertSolvingRepository();
 
   @BeforeEach
   void setUp() {
     var matchesPublisher = new MatchesPublisher();
-    bajkaIBraworka =
-        new BojkaBajkaIBraworka(matchesPublisher, matchFeaturesFacade, alertSolvingRepository);
+    alertAgentDispatchProcess =
+        new AlertAgentDispatchProcess(
+            matchesPublisher, matchFeaturesFacade, alertSolvingRepository);
   }
 
   @Test
@@ -66,7 +67,7 @@ class BojkaBajkaIBraworkaTest {
                 "agents/name/versions/1.0.0/configs/1"),
             new MatchFeatureDao(4, 7, 1000, "features/nameMatchedText",
                 "agents/name/versions/1.0.0/configs/1")));
-    bajkaIBraworka.handle(AnalysisAlertsAdded
+    alertAgentDispatchProcess.handle(AnalysisAlertsAdded
         .newBuilder()
         .addAnalysisAlerts("analysis/1/alerts/1")
         .addAnalysisAlerts("analysis/1/alerts/2")

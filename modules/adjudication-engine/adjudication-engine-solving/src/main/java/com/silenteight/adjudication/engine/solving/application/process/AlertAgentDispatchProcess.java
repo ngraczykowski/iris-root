@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 
 @RequiredArgsConstructor
 @Slf4j
-public class BojkaBajkaIBraworka {
+public class AlertAgentDispatchProcess {
 
   private final MatchesPublisher matchesPublisher;
   private final MatchFeaturesFacade matchFeaturesFacade;

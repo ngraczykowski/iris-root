@@ -13,12 +13,13 @@ import org.springframework.context.annotation.Configuration;
 class ProcessConfiguration {
 
   @Bean
-  BojkaBajkaIBraworka bojkaBajkaIBraworka(
+  AlertAgentDispatchProcess alertAgentDispatcherProcess(
       MatchesPublisher matchesPublisher,
       MatchFeaturesFacade matchFeaturesFacade,
       AlertSolvingRepository alertSolvingRepository
   ) {
-    return new BojkaBajkaIBraworka(matchesPublisher, matchFeaturesFacade, alertSolvingRepository);
+    return new AlertAgentDispatchProcess(
+        matchesPublisher, matchFeaturesFacade, alertSolvingRepository);
   }
 
 

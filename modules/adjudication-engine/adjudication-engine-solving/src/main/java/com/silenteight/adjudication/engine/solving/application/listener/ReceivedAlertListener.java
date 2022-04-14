@@ -3,7 +3,7 @@ package com.silenteight.adjudication.engine.solving.listener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.adjudication.engine.solving.application.process.BojkaBajkaIBraworka;
+import com.silenteight.adjudication.engine.solving.application.process.AlertAgentDispatchProcess;
 import com.silenteight.adjudication.internal.v1.AnalysisAlertsAdded;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 class ReceivedAlertListener {
 
-  private final BojkaBajkaIBraworka bojkaBajkaIBraworka;
+  private final AlertAgentDispatchProcess bojkaBajkaIBraworka;
 
   @RabbitListener(autoStartup = "true",
       bindings = @QueueBinding(value =
