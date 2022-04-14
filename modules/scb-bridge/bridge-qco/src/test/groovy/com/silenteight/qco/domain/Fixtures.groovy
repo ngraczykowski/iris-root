@@ -9,9 +9,18 @@ class Fixtures {
 
   static CHANGE_CONDITION = new ChangeCondition("policyId", "stepId", "solution")
   static UNEXPECTED_CHANGE_CONDITION = new ChangeCondition("policyId1", "stepId", "solution")
-  static QCO_PARAM_1 = new QcoParams(1,"solution 2")
-  static QCO_PARAM_2 = new QcoParams(2,"solution 2")
-  static QCO_RECOMMENDATION_MATCH = new QcoRecommendationMatch("policyId", "stepId", "solution")
+  static QCO_PARAM_1 = new QcoParams(1, "solution 2")
+  static QCO_RECOMMENDATION_MATCH = QcoRecommendationMatch.builder()
+      .batchId("batchId")
+      .policyId("policyId")
+      .stepId("stepId")
+      .solution("solution")
+      .comment("comment")
+      .matchName("matchName")
+      .alertId("alertId")
+      .alertName("alertName")
+      .build()
+  static QCO_PARAM_2 = new QcoParams(2, "solution 2")
   static QCO_CONFIGURATION_1 =
       new QcoPolicyStepSolutionOverrideConfiguration(
           "policyId", "stepId", 3, "solution", "override")

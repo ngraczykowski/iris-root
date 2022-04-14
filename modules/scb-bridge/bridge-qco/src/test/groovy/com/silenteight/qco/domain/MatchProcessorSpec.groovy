@@ -15,7 +15,7 @@ class MatchProcessorSpec extends Specification {
 
   def changeConditionFactory = Mock(SimpleMatchChangeConditionFactory)
   def counter = Mock(QcoCounter)
-  def resolver = Mock(QueueMatchResolver)
+  def resolver = Mock(MatchOverridingResolver)
 
   @Subject
   def underTest = new MatchProcessor(changeConditionFactory, counter, resolver)
@@ -30,7 +30,7 @@ class MatchProcessorSpec extends Specification {
     then:
     1 * changeConditionFactory.createChangeCondition(_, _, _) >> CHANGE_CONDITION
     1 * counter.increaseAndCheckOverflow(_) >> false
-    1 * resolver.overrideSolutionMatch(_) >> {arguments ->
+    1 * resolver.overrideSolutionInMatch(_) >> {arguments ->
       {
         def command = arguments[0]
         assert command instanceof ResolverCommand
@@ -49,7 +49,7 @@ class MatchProcessorSpec extends Specification {
     then:
     1 * changeConditionFactory.createChangeCondition(_, _, _) >> CHANGE_CONDITION
     1 * counter.increaseAndCheckOverflow(_) >> true
-    1 * resolver.overrideSolutionMatch(_) >> {arguments ->
+    1 * resolver.overrideSolutionInMatch(_) >> {arguments ->
       {
         def command = arguments[0]
         assert command instanceof ResolverCommand
@@ -68,7 +68,7 @@ class MatchProcessorSpec extends Specification {
     then:
     1 * changeConditionFactory.createChangeCondition(_, _, _) >> NO_CONDITION_FULFILLED
     0 * counter.increaseAndCheckOverflow(_)
-    1 * resolver.overrideSolutionMatch(_) >> {arguments ->
+    1 * resolver.overrideSolutionInMatch(_) >> {arguments ->
       {
         def command = arguments[0]
         assert command instanceof ResolverCommand

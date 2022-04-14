@@ -11,4 +11,12 @@ apply from: "${rootProject.projectDir}/gradle/scripts/dependencies.gradle"
 
 dependencies {
   implementation libraries.jackson_dataformat_csv
+  implementation libraries.warehouse_api
+  testImplementation libraries.spock_spring
+  testImplementation libraries.testcontainers
+  testImplementation libraries.testcontainers_postgresql
+  testImplementation libraries.testcontainers_spock
+  testImplementation libraries.postgresql
+  testImplementation libraries.liquibase_core
+  testImplementation libraries.testcontainers_rabbitmq
 }

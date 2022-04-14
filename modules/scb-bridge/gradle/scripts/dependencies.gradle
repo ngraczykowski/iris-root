@@ -17,6 +17,7 @@ ext {
   coreBridgeRecommendationApiVersion = '1.13.0'
   universalDataSourceLibApiVersion = '1.4.0'
   silenteightDataSourceApiVersion = '0.18.0'
+  warehouseApiVersion = "2.2.0"
 
   springBootVersion = '2.5.10'
   springCloudVersion = '3.0.1'
@@ -48,6 +49,7 @@ ext {
   groovyVersion = '3.0.9'
   junitPlatformCommonsVersion = '1.8.1'
   spockSpringVersion = '2.1-groovy-3.0'
+  testContainersVersion = '1.16.3'
 }
 
 // @formatter:off
@@ -66,6 +68,7 @@ libraries.recommendation_api_proto = [group: 'com.silenteight.recommendation.api
 libraries.universal_datasource_api_library = [group: 'com.silenteight.universaldatasource.api.library', name: 'uds-lib', version: universalDataSourceLibApiVersion]
 libraries.data_source_agentinput_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-agentinput-api', version: silenteightDataSourceApiVersion]
 libraries.data_source_categories_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-categories-api', version: silenteightDataSourceApiVersion]
+libraries.warehouse_api = [group: 'com.silenteight.warehouse.api', name: 'se-data-api', version: warehouseApiVersion]
 
 // Spring
 libraries.spring_aspects = [group: 'org.springframework', name: 'spring-aspects', version: springVersion]
@@ -136,8 +139,10 @@ libraries.groovy_all = [group: 'org.codehaus.groovy', name: 'groovy-all', versio
 libraries.json_path = [group: 'com.jayway.jsonpath', name: 'json-path']
 libraries.junit_platform_commons = [group: 'org.junit.platform', name: 'junit-platform-commons', version: junitPlatformCommonsVersion]
 libraries.spock_spring = [group: 'org.spockframework', name: 'spock-spring', version: spockSpringVersion]
-libraries.test_containers = [group: 'org.testcontainers', name: 'testcontainers', version: '1.15.1']
-
+libraries.testcontainers = [group: 'org.testcontainers', name: 'testcontainers', version: testContainersVersion]
+libraries.testcontainers_postgresql = [group: 'org.testcontainers', name: 'postgresql', version: testContainersVersion]
+libraries.testcontainers_rabbitmq = [group: 'org.testcontainers', name: 'rabbitmq', version: testContainersVersion]
+libraries.testcontainers_spock = [group: 'org.testcontainers', name: 'spock', version: testContainersVersion]
 // @formatter:on
 
 configurations.all {
@@ -232,7 +237,7 @@ dependencies {
 
   testImplementation libraries.spock_spring
   testRuntimeOnly libraries.junit_platform_commons
-  testImplementation libraries.test_containers
+  testImplementation libraries.testcontainers
 }
 
 configurations {

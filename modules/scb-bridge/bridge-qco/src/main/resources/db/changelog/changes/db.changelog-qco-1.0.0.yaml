@@ -1,0 +1,77 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1.0.0-1
+      author: ngraczykowski
+      changes:
+        - createTable:
+            tableName: qco_overridden_recommendation
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: qco_overridden_recommendation_pk
+              - column:
+                  name: batch_id
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: alert_id
+                  type: varchar(250)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: alert_name
+                  type: varchar(250)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: match_name
+                  type: varchar(250)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: policy_id
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: step_id
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: comment
+                  type: text
+              - column:
+                  name: source_solution
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: target_solution
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+
+        - createIndex:
+            tableName: qco_overridden_recommendation
+            columns:
+              - column:
+                  name: batch_id
+            indexName: qco_overridden_recommendation_batch_id_idx
+        - createIndex:
+            tableName: qco_overridden_recommendation
+            columns:
+              - column:
+                  name: alert_id
+            indexName: qco_overridden_recommendation_alert_id_idx

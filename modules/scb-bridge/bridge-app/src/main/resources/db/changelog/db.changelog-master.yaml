@@ -15,3 +15,5 @@ databaseChangeLog:
       file: db/changelog/changes/db.changelog-scb-bridge-7.0.0.yaml
   - include:
       file: db/changelog/changes/db.changelog-scb-bridge-8.0.0.yaml
+  - include:
+      file: db/changelog/changes/db.changelog-qco-1.0.0.yaml

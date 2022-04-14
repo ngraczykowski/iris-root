@@ -4,5 +4,5 @@ import com.silenteight.qco.domain.model.MatchSolution;
 import com.silenteight.qco.domain.model.ResolverCommand;
 
 interface MatchResolver {
-  MatchSolution overrideSolutionMatch(ResolverCommand command);
+  MatchSolution overrideSolutionInMatch(ResolverCommand command);
 }
