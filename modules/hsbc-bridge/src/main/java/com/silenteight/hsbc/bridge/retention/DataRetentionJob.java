@@ -21,30 +21,31 @@ class DataRetentionJob {
 
   @Transactional
   void process() {
-    log.info("Broadcasting messages has been started.");
+    var expirationDate = getExpireDate();
+    log.info("Broadcasting messages has been started with expiration date: {}", expirationDate);
 
-    broadcastMessage();
+    broadcastMessage(expirationDate);
 
     log.info("Broadcasting messages has been finished.");
 
     log.info("\nData cleaning has been started.");
 
-    cleanAlertData();
-    cleanMatchData();
+    cleanAlertData(expirationDate);
+    cleanMatchData(expirationDate);
 
     log.info("Data cleaning has been finished.");
   }
 
-  private void broadcastMessage() {
-    alertRetentionMessageSender.send(getExpireDate(), chunkSize, type);
+  private void broadcastMessage(OffsetDateTime expirationDate) {
+    alertRetentionMessageSender.send(expirationDate, chunkSize, type);
   }
 
-  private void cleanAlertData() {
-    alertDataCleaner.clean(getExpireDate());
+  private void cleanAlertData(OffsetDateTime expirationDate) {
+    alertDataCleaner.clean(expirationDate);
   }
 
-  private void cleanMatchData() {
-    matchDataCleaner.clean(getExpireDate());
+  private void cleanMatchData(OffsetDateTime expirationDate) {
+    matchDataCleaner.clean(expirationDate);
   }
 
   private OffsetDateTime getExpireDate() {

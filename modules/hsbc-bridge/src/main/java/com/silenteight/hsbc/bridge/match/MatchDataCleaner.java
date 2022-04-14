@@ -18,6 +18,8 @@ class MatchDataCleaner implements DataCleaner {
   @Override
   @Transactional
   public void clean(OffsetDateTime expireDate) {
+    log.info(
+        "Cleaning matches payload for matches with alert_time before (exclusive): {}", expireDate);
     var cleanedMatchesPayloadCount = payloadRepository.deletePayloadByAlertTimeBefore(expireDate);
     log.debug("Cleaned matches payload count: {}", cleanedMatchesPayloadCount);
   }

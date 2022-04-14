@@ -25,7 +25,7 @@ class DataRetentionConfiguration {
 
   @EventListener(ApplicationStartedEvent.class)
   public void applicationStarted() {
-    log.debug(
+    log.info(
         "Data retention properties: "
             + "alertsExpiredEnabled={}, "
             + "alertsExpiredDuration={} days, "

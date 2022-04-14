@@ -26,6 +26,8 @@ class AlertRetentionMessageSender implements AlertRetentionSender {
   @Override
   @Transactional(readOnly = true)
   public void send(OffsetDateTime expireDate, int chunkSize, DataRetentionType type) {
+    log.info(
+        "Querying for expired alerts with alert_time before (exclusive) {}", expireDate);
     var counter = new AtomicInteger(0);
     try (
         var alertEntityStream = alertRepository.findAlertEntityNamesByAlertTimeBefore(expireDate)

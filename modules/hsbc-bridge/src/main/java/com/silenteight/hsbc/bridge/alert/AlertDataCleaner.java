@@ -18,6 +18,8 @@ class AlertDataCleaner implements DataCleaner {
   @Override
   @Transactional
   public void clean(OffsetDateTime expireDate) {
+    log.info(
+        "Cleaning alerts payload for alerts with alert_time before (exclusive): {}", expireDate);
     var cleanedAlertsPayloadCount = payloadRepository.deletePayloadByAlertTimeBefore(expireDate);
     log.debug("Cleaned alerts payload count: {}", cleanedAlertsPayloadCount);
   }
