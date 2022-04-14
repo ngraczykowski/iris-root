@@ -1,5 +1,6 @@
-package com.silenteight.adjudication.engine.solving.application.listener;
+package com.silenteight.adjudication.engine.solving.listener;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.solving.application.process.BojkaBajkaIBraworka;
@@ -15,30 +16,21 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 class ReceivedAlertListener {
 
   private final BojkaBajkaIBraworka bojkaBajkaIBraworka;
 
-  ReceivedAlertListener(BojkaBajkaIBraworka bojkaBajkaIBraworka) {
-    this.bojkaBajkaIBraworka = bojkaBajkaIBraworka;
-  }
-
-  @RabbitListener(
-      autoStartup = "true",
-      bindings = @QueueBinding(value = @Queue(name = "ae.solving-received-alert"),
-      exchange = @Exchange(name = "ae.event.internal", type = ExchangeTypes.TOPIC),
-      key = "ae.event.analysis-alerts-added"))
+  @RabbitListener(autoStartup = "true",
+      bindings = @QueueBinding(value =
+      @Queue(name = "ae.solving-received-alert"), exchange = @Exchange(
+          name = "ae.event.internal",
+          type = ExchangeTypes.TOPIC), key = "ae.event.analysis-alerts-added")
+  )
   @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   void onReceivedAlert(AnalysisAlertsAdded message) {
     log.info("Received alert message with alerts count {}", message.getAnalysisAlertsCount());
-
-    // Get alerts matches and features
-    // Transform to InMemoryObject and store in memory (TTL)
-    // Send Tracking Event
-    // Send Matches to Agent (event tracking on each send)
-
     this.bojkaBajkaIBraworka.handle(message);
-
   }
 
 }

@@ -1,41 +1,74 @@
 package com.silenteight.adjudication.engine.solving.application.process;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.adjudication.engine.solving.application.publisher.MatchesPublisher;
+import com.silenteight.adjudication.engine.solving.data.MatchFeaturesFacade;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolving;
-import com.silenteight.adjudication.engine.solving.domain.AlertSolvingFactory;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
+import com.silenteight.adjudication.engine.solving.domain.MatchFeature;
+import com.silenteight.adjudication.internal.v1.AnalysisAlertsAdded;
+import com.silenteight.sep.base.aspects.metrics.Timed;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import javax.annotation.Nonnull;
 
 @RequiredArgsConstructor
+@Slf4j
 public class BojkaBajkaIBraworka {
-  // Get alerts matches and features
-  // Transform to InMemoryObject and store in memory (TTL)
 
-  private final AlertSolvingFactory alertSolvingFactory;
-  private final AlertSolvingRepository alertSolvingRepository;
   private final MatchesPublisher matchesPublisher;
+  private final MatchFeaturesFacade matchFeaturesFacade;
+  private final AlertSolvingRepository alertSolvingRepository;
 
-  public void handle(
-      final Object o
-  ) {
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
+  public void handle(final AnalysisAlertsAdded message) {
+    Map<Long, List<MatchFeature>> alertMatchesFeatures = fetchAlertMatchesFeatures(message);
+    var pendingAlerts = message.getAnalysisAlertsList()
+        .stream()
+        .map(s -> ResourceName.create(s).getLong("alerts"))
+        .map(alertId -> new AlertSolving(alertId).addMatchesFeatures(
+            alertMatchesFeatures.get(alertId)))
+        .collect(Collectors.toList());
 
-    final AlertSolving alertSolvingModel = this.alertSolvingFactory.create(null);
-
-    if (!alertSolvingModel.isEmpty()) {
-
-      alertSolvingModel.updateFeatureMatches(null);
-
-      this.alertSolvingRepository.save(alertSolvingModel);
-      // I don't know that the same method should indicate about completeness ????
-      if (alertSolvingModel.areAlertMatchesSolved()) {
-
-        // Verify if timout reached and update status ??
-        // Send recommendation notification to topic (two listeners storing, sending cmapi)
-
-        this.matchesPublisher.publish(null);
-      }
+    pendingAlerts.forEach(alertSolving -> {
+      this.alertSolvingRepository.save(alertSolving);
+      // TODO map and send to agents - rememeber about routing key and priority.
+      matchesPublisher.publish(null);
+    });
+    if (log.isDebugEnabled()) {
+      log.debug("AnalysisAlertsAdded mapped to AlertsSolving done");
     }
+  }
+
+  @Nonnull
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
+  private Map<Long, List<MatchFeature>> fetchAlertMatchesFeatures(AnalysisAlertsAdded message) {
+    Set<Long> analysis = new HashSet<>();
+    Set<Long> alerts = new HashSet<>();
+
+    message.getAnalysisAlertsList().forEach(s -> {
+      var analysisId = ResourceName.create(s).getLong("analysis");
+      var alertId = ResourceName.create(s).getLong("alerts");
+      analysis.add(analysisId);
+      alerts.add(alertId);
+    });
+    log.info("Getting data fro analysis {} alerts {}", analysis, alerts);
+    var features = matchFeaturesFacade.findAnalysisFeatures(analysis, alerts);
+
+    if (log.isTraceEnabled()) {
+      log.trace("Found features: {}", features);
+    }
+    return features
+        .stream()
+        .map(dao -> MatchFeature.from(dao))
+        .collect(Collectors.groupingBy(MatchFeature::getAlertId));
   }
 
 }

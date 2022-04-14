@@ -3,7 +3,7 @@ package com.silenteight.adjudication.engine.solving.application.process;
 import com.silenteight.adjudication.engine.solving.application.publisher.GovernancePublisher;
 import com.silenteight.adjudication.engine.solving.application.publisher.MatchesPublisher;
 import com.silenteight.adjudication.engine.solving.application.publisher.RecommendationPublisher;
-import com.silenteight.adjudication.engine.solving.domain.AlertSolvingFactory;
+import com.silenteight.adjudication.engine.solving.data.MatchFeaturesFacade;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
 
 import org.springframework.context.annotation.Bean;
@@ -14,14 +14,11 @@ class ProcessConfiguration {
 
   @Bean
   BojkaBajkaIBraworka bojkaBajkaIBraworka(
-      AlertSolvingRepository alertSolvingRepository,
-      AlertSolvingFactory alertSolvingFactory,
-      MatchesPublisher matchesPublisher
+      MatchesPublisher matchesPublisher,
+      MatchFeaturesFacade matchFeaturesFacade,
+      AlertSolvingRepository alertSolvingRepository
   ) {
-    return new BojkaBajkaIBraworka(
-        alertSolvingFactory, alertSolvingRepository,
-        matchesPublisher
-    );
+    return new BojkaBajkaIBraworka(matchesPublisher, matchFeaturesFacade, alertSolvingRepository);
   }
 
 

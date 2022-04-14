@@ -1,17 +1,21 @@
 package com.silenteight.adjudication.engine.solving.domain;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.silenteight.adjudication.engine.solving.domain.event.FeatureMatchesUpdated;
 import com.silenteight.adjudication.engine.solving.domain.event.MatchFeatureValuesUpdated;
 import com.silenteight.adjudication.engine.solving.domain.event.MatchesUpdated;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
 
+@Slf4j
 public class AlertSolving {
 
+  private final Map<Long, MatchFeatures> matchesFeatures = new HashMap<>();
   private final transient List<DomainEvent> domainEvents = new LinkedList<>();
-
   private final long id;
+  private final LocalDateTime solvingCreatetime = LocalDateTime.now();
 
   public AlertSolving(final long id) {
     this.id = id;
@@ -28,6 +32,16 @@ public class AlertSolving {
 
   public long id() {
     return this.id;
+  }
+
+  public AlertSolving addMatchesFeatures(List<MatchFeature> matchesFeatures) {
+    matchesFeatures.forEach(matchFeature -> {
+      var features = this.matchesFeatures.getOrDefault(
+          matchFeature.getMatchId(), new MatchFeatures(matchFeature.getMatchId()));
+      features.addFeature(matchFeature);
+      this.matchesFeatures.putIfAbsent(matchFeature.getMatchId(), features);
+    });
+    return this;
   }
 
   public AlertSolving updateMatches(Object object) {
@@ -85,5 +99,13 @@ public class AlertSolving {
 
     this.checkIsCompleted();
     return this;
+  }
+
+  @Override
+  public String toString() {
+    return "AlertSolving{" +
+        "id=" + id +
+        ", solvingCreatetime=" + solvingCreatetime +
+        '}';
   }
 }
