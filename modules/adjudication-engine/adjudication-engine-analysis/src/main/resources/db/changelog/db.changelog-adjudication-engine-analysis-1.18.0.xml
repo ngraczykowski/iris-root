@@ -46,4 +46,18 @@
         viewName="ae_alert_recommendation_query"
         path="db/changelog/sql/view_ae_alert_recommendation_query_v4.sql"/>
   </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.18.0_4" author="wkeska">
+    <preConditions onFail="MARK_RAN">
+      <foreignKeyConstraintExists foreignKeyName="fk_ae_match_recommendation_alert_id"/>
+    </preConditions>
+
+    <dropForeignKeyConstraint baseTableName="ae_match_recommendation" constraintName="fk_ae_match_recommendation_alert_id"/>
+    <addForeignKeyConstraint baseTableName="ae_match_recommendation"
+                             baseColumnNames="alert_id"
+                             constraintName="fk_ae_match_recommendation_alert_id"
+                             referencedTableName="ae_alert"
+                             referencedColumnNames="alert_id"
+                             onDelete="CASCADE"/>
+  </changeSet>
 </databaseChangeLog>

@@ -5,16 +5,16 @@ import lombok.NoArgsConstructor;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
-class AmqpDefaults {
+public class AmqpDefaults {
 
   private static final String PREFIX = "ae.";
   private static final String COMMAND_PREFIX = PREFIX + "command.";
   private static final String EVENT_PREFIX = PREFIX + "event.";
 
-  static final String EVENT_EXCHANGE_NAME = PREFIX + "event";
+  public static final String EVENT_EXCHANGE_NAME = PREFIX + "event";
   static final String RECOMMENDATIONS_GENERATED_ROUTING_KEY =
       EVENT_PREFIX + "recommendations-generated";
-  static final String MATCH_RECOMMENDATIONS_GENERATED_ROUTING_KEY =
+  public static final String MATCH_RECOMMENDATIONS_GENERATED_ROUTING_KEY =
       EVENT_PREFIX + "match-recommendations-generated";
   static final String DATASET_EXPIRED_ROUTING_KEY =
       EVENT_PREFIX + "datasets-expired";

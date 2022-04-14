@@ -26,6 +26,7 @@ import java.util.List;
 
 import static com.silenteight.adjudication.engine.app.IntegrationTestFixture.*;
 import static com.silenteight.adjudication.engine.app.MatchSolutionTestDataAccess.solvedMatchesCount;
+import static com.silenteight.adjudication.engine.app.RecommendationTestDataAccess.generatedMatchRecommendationCount;
 import static com.silenteight.adjudication.engine.app.RecommendationTestDataAccess.generatedRecommendationCount;
 import static org.assertj.core.api.Assertions.*;
 import static org.awaitility.Awaitility.await;
@@ -77,6 +78,15 @@ class AdjudicationEngineAnalysisIntegrationTest {
     var analysisId = ResourceName.create(savedAnalysis.getName()).getLong("analysis");
 
     assertGeneratedRecommendation(analysisId, 2);
+  }
+
+  @Test
+  void shouldSaveMatchRecommendations() {
+    var analysisDataset = createAnalysisWithDataset(datasetService, analysisService, alertService);
+    var savedAnalysis = analysisDataset.getAnalysis();
+    var analysisId = ResourceName.create(savedAnalysis.getName()).getLong("analysis");
+
+    assertGeneratedMatchRecommendation(analysisId, 2);
   }
 
   @Test
@@ -220,7 +230,7 @@ class AdjudicationEngineAnalysisIntegrationTest {
 
   private void assertSolvedAlerts(long analysisId, int solvedCount) {
     await()
-        .atMost(Duration.ofSeconds(180))
+        .atMost(Duration.ofSeconds(10))
         .until(() -> solvedMatchesCount(jdbcTemplate, analysisId) >= solvedCount);
 
     assertThat(solvedMatchesCount(jdbcTemplate, analysisId))
@@ -229,10 +239,19 @@ class AdjudicationEngineAnalysisIntegrationTest {
 
   private void assertGeneratedRecommendation(long analysisId, int recommendationCount) {
     await()
-        .atMost(Duration.ofSeconds(180))
+        .atMost(Duration.ofSeconds(10))
         .until(() -> generatedRecommendationCount(jdbcTemplate, analysisId) > 0);
 
     assertThat(generatedRecommendationCount(jdbcTemplate, analysisId))
+        .isEqualTo(recommendationCount);
+  }
+
+  private void assertGeneratedMatchRecommendation(long analysisId, int recommendationCount) {
+    await()
+        .atMost(Duration.ofSeconds(10))
+        .until(() -> generatedMatchRecommendationCount(jdbcTemplate, analysisId) > 0);
+
+    assertThat(generatedMatchRecommendationCount(jdbcTemplate, analysisId))
         .isEqualTo(recommendationCount);
   }
 

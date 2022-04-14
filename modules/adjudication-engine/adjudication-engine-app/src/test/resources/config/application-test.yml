@@ -70,3 +70,8 @@ grpc:
       address: in-process:test
     datasource:
       address: in-process:test
+
+ae:
+  match-recommendation:
+    flow:
+      enabled: true
