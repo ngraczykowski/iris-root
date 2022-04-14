@@ -4,7 +4,6 @@ import com.silenteight.adjudication.engine.solving.domain.event.FeatureMatchesUp
 import com.silenteight.adjudication.engine.solving.domain.event.MatchFeatureValuesUpdated;
 import com.silenteight.adjudication.engine.solving.domain.event.MatchesUpdated;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -46,20 +45,31 @@ public class AlertSolving {
 
   public AlertSolving updateFeatureMatches(Object o) {
     // TODO
-    this.domainEvents.add(new FeatureMatchesUpdated());
+    this.domainEvents.add(new FeatureMatchesUpdated(null));
 
     this.checkIsCompleted();
     return this;
   }
 
+  /**
+   * Clear pending events
+   *
+   * @return {@link AlertSolving}
+   */
   public AlertSolving clear() {
     this.domainEvents.clear();
 
     return this;
   }
 
+  /**
+   * Fetch pending events <br/>
+   * <strong>Events hasn't order, because is doesn't matter</strong>
+   *
+   * @return copy list of pending {@link DomainEvent} events
+   */
   public List<DomainEvent> pendingEvents() {
-    return Collections.unmodifiableList(this.domainEvents);
+    return new LinkedList<>(this.domainEvents);
   }
 
   private void checkIsCompleted() {

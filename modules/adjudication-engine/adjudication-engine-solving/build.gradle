@@ -8,6 +8,11 @@ dependencies {
 
   implementation libraries.guava
   implementation libraries.hazelcast
+  implementation libraries.jackson_databind
+  implementation libraries.jackson_annotations
+  implementation libraries.jackson_datatype_jsr310
+  implementation libraries.jackson_dataformat_xml
+  implementation libraries.jackson_datatype_jdk8
 
   // Sentry
   runtimeOnly libraries.sentry_spring_boot_starter
@@ -25,4 +30,9 @@ dependencies {
   compileOnly libraries.spring_tx
 
   testImplementation libraries.protobuf_java_util
+
+  testImplementation libraries.hibernate_validator
+
+  testImplementation libraries.silenteight_sep_base_testing
+
 }

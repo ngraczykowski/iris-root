@@ -1,35 +1,17 @@
 package com.silenteight.adjudication.engine.solving.domain.event;
 
-import com.silenteight.adjudication.engine.solving.domain.DomainEvent;
-
 import java.time.Instant;
 import java.util.UUID;
 
-public class FeatureMatchesUpdated implements DomainEvent {
+public class FeatureMatchesUpdated extends DomainBase {
 
-  private final Instant occurredOn;
+  public static final String EVENT_TYPE = "feature.matches.updated";
 
   public FeatureMatchesUpdated() {
-    this.occurredOn = Instant.now();
+    super(EVENT_TYPE, null, null, null);
   }
 
-  @Override
-  public Instant occurredOn() {
-    return this.occurredOn;
-  }
-
-  @Override
-  public UUID id() {
-    return null;
-  }
-
-  @Override
-  public UUID alertSolvingId() {
-    return null;
-  }
-
-  @Override
-  public String payload() {
-    return null;
+  public FeatureMatchesUpdated(final Long alertSolvingId) {
+    super(EVENT_TYPE, Instant.now(), UUID.randomUUID(), alertSolvingId);
   }
 }
