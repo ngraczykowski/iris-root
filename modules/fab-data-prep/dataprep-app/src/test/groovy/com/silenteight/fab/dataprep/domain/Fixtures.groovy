@@ -3,6 +3,8 @@ package com.silenteight.fab.dataprep.domain
 import com.silenteight.fab.dataprep.domain.category.BuildCategoryCommand
 import com.silenteight.fab.dataprep.domain.feature.BuildFeatureCommand
 import com.silenteight.fab.dataprep.domain.feature.FeatureInputsCommand
+import com.silenteight.fab.dataprep.domain.model.AlertItem
+import com.silenteight.fab.dataprep.domain.model.AlertState
 import com.silenteight.fab.dataprep.domain.model.AlertStatus
 import com.silenteight.fab.dataprep.domain.model.ParsedAlertMessage
 import com.silenteight.fab.dataprep.domain.model.ParsedAlertMessage.Hit
@@ -25,7 +27,6 @@ class Fixtures {
   static final String MATCH_NAME = 'alerts/1/matches/1'
   static final String ALERT_NAME = 'alerts/1'
   static final String HIT_ID = 'd0bd7272-a12a-11ec-9ee7-7bf12518d571'
-  static final String HIT_NAME = "hits/$HIT_ID"
   static final String MESSAGE_NAME = 'messages/e525c926-a12a-11ec-97fc-3f5de86f02ac'
   static final String BATCH_NAME = 'batches/031dafde-a12b-11ec-8e04-2f2fd89dfc3f'
   static final String SYSTEM_ID = 'TRAINING!60C2ED1B-58A1D68E-0326AE78-A8C7CC79'
@@ -70,23 +71,20 @@ class Fixtures {
   static String HIT = prettyPrint(toJson(new JsonSlurper().parseText(MESSAGE).Message.Hits[0].Hit))
 
   static Match MATCH = Match.builder()
-      .hitName(UUID.randomUUID().toString())
       .matchName(MATCH_NAME)
       .payloads([INSTANCE.objectMapper().readTree(HIT)])
       .build()
 
   static Match EMPTY_MATCH = Match.builder()
-      .hitName(UUID.randomUUID().toString())
       .matchName(MATCH_NAME)
       .payloads([INSTANCE.objectMapper().readTree('{}')])
       .build()
 
   static RegisteredAlert REGISTERED_ALERT = RegisteredAlert.builder()
       .batchName(BATCH_NAME)
-      .messageName(MESSAGE_NAME)
       .alertName(ALERT_NAME)
       .systemId(SYSTEM_ID)
-      .messageId(MESSAGE_ID)
+      .discriminator(DISCRIMINATOR)
       .parsedMessageData(PARSED_PAYLOAD)
       .matches([EMPTY_MATCH])
       .status(AlertStatus.SUCCESS)
@@ -129,11 +127,27 @@ class Fixtures {
       .currentActionComment("")
       .currentActionDateTime(CURRENT_ACTION_DATE_TIME)
       .currentStatusName(CURRENT_STATUS_NAME)
+      .parsedMessageData(PARSED_PAYLOAD)
       .hits(
           [
               (HIT_ID): Hit.builder()
                   .hitName(HIT_ID)
+                  .payloads([INSTANCE.objectMapper().readTree('{}')])
                   .build()
           ])
+      .build()
+
+  static ALERT_ITEM = AlertItem.builder()
+      .alertName(ALERT_NAME)
+      .discriminator(DISCRIMINATOR)
+      .state(AlertState.REGISTERED)
+      .matchNames([MATCH_NAME])
+      .build()
+
+  static ALERT_ITEM_IN_UDS = AlertItem.builder()
+      .alertName(ALERT_NAME)
+      .discriminator(DISCRIMINATOR)
+      .state(AlertState.IN_UDS)
+      .matchNames([MATCH_NAME])
       .build()
 }

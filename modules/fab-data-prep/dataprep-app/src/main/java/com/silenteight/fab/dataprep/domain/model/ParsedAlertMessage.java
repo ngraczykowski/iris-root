@@ -17,6 +17,7 @@ public class ParsedAlertMessage {
   String batchName;
   @NonNull
   String messageName;
+  @NonNull
   ParsedMessageData parsedMessageData;
   String systemId;
   String messageId;
@@ -29,15 +30,21 @@ public class ParsedAlertMessage {
     return hits.get(hitName);
   }
 
+  public String getDiscriminator() {
+    return systemId + "|" + messageId;
+  }
+
   @Value
   @Builder
   public static class Hit {
 
+    @NonNull
     String hitName;
 
     /**
      * Payloads with same ofacId
      */
+    @NonNull
     List<JsonNode> payloads;
   }
 }

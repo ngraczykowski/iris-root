@@ -25,9 +25,8 @@ import static java.util.stream.Collectors.toList;
 public class FeedingFacade {
 
   private static final String SUCCESS_MESSAGE =
-      "Feature inputs for batch: {} and alert: {} (Origin alert message: {}) created successfully.";
-  private static final String FAILURE_MESSAGE =
-      "Failed to create feature inputs for batch: {} and alert: {} (Origin alert message: {}).";
+      "Feature inputs for batch: {} and alert: {} "
+          + "(Origin alert discriminator: {}) created successfully.";
   private final FeedingService feedingService;
   private final FeedingEventPublisher feedingEventPublisher;
 
@@ -45,19 +44,18 @@ public class FeedingFacade {
     }
 
     Try.run(() -> feedingService.createFeatureInputs(createFeatureInputsCommand(registeredAlert)))
-        .onFailure(e -> {
-          log.error(
-              FAILURE_MESSAGE, registeredAlert.getBatchName(), registeredAlert.getAlertName(),
-              registeredAlert.getMessageName(), e);
-          feedingEventPublisher.publish(
-              createUdsFedEvent(registeredAlert, FAILURE, CREATE_FEATURE_INPUT));
-        })
         .onSuccess(e -> {
           log.info(
               SUCCESS_MESSAGE, registeredAlert.getBatchName(), registeredAlert.getAlertName(),
-              registeredAlert.getMessageName());
+              registeredAlert.getDiscriminator());
           feedingEventPublisher.publish(createUdsFedEvent(registeredAlert, SUCCESS, NONE));
-        });
+        })
+        .get();
+  }
+
+  public void notifyAboutError(String batchName, String alertName) {
+    feedingEventPublisher.publish(
+        createUdsFedEventWithoutMatches(batchName, alertName));
   }
 
   private static FeatureInputsCommand createFeatureInputsCommand(RegisteredAlert registeredAlert) {
@@ -81,5 +79,15 @@ public class FeedingFacade {
     return registeredAlert.getMatches().stream()
         .map(match -> new FedMatch(match.getMatchName()))
         .collect(toList());
+  }
+
+  private static UdsFedEvent createUdsFedEventWithoutMatches(
+      String batchName, String alertName) {
+    return UdsFedEvent.builder()
+        .batchName(batchName)
+        .alertName(alertName)
+        .errorDescription(AlertErrorDescription.CREATE_FEATURE_INPUT)
+        .feedingStatus(Status.FAILURE)
+        .build();
   }
 }

@@ -28,6 +28,13 @@ spring:
     password: dev
     listener:
       type: simple
+      simple:
+        retry:
+          enabled: true
+          initial-interval: ${dataprep.rabbitmq.retry.initial-interval:3000}
+          max-attempts: 3
+          max-interval: 10000
+          multiplier: ${dataprep.rabbitmq.retry.multiplier:1.5}
 
   ### Spring Cloud
   cloud:
@@ -183,3 +190,5 @@ feeding:
     analystDecisions:
       SOLVED_FALSE_POSITIVE: "analyst_decision_false_positive"
       SOLVED_TRUE_POSITIVE: "analyst_decision_true_positive"
+
+  learning.dataRetentionDuration: 3m

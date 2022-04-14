@@ -6,3 +6,9 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+dataprep:
+  rabbitmq:
+    retry:
+      initial-interval: 100
+      multiplier: 1

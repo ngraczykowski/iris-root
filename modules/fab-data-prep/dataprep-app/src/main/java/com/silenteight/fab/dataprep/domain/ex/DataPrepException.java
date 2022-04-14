@@ -7,4 +7,8 @@ public class DataPrepException extends RuntimeException {
   public DataPrepException(String msg) {
     super(msg);
   }
+
+  public DataPrepException(Throwable e) {
+    super(e);
+  }
 }

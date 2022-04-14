@@ -1,17 +1,26 @@
 package com.silenteight.fab.dataprep.domain;
 
-import org.springframework.data.repository.Repository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 
-interface AlertRepository extends Repository<AlertEntity, Long> {
+@Repository
+interface AlertRepository extends CrudRepository<AlertEntity, Long>, AlertRepositoryExt {
 
-  Collection<AlertEntity> findAll();
+  @Modifying(clearAutomatically = true)
+  @Query("update AlertEntity set state = :state"
+      + " where discriminator = :discriminator and createdAt > :createdAfter")
+  void updateState(
+      @Param("discriminator") String discriminator,
+      @Param("state") AlertEntity.State state,
+      @Param("createdAfter") OffsetDateTime createdAfter);
 
-  AlertEntity save(AlertEntity alertEntity);
-
-  Optional<AlertEntity> findByDiscriminator(String discriminator);
-
-  void deleteAll();
+  Optional<AlertEntity> findByDiscriminatorAndCreatedAtAfter(
+      String discriminator,
+      OffsetDateTime createdAt);
 }

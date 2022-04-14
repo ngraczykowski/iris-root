@@ -10,4 +10,6 @@ configurations {
 
 dependencies {
   implementation libraries.liquibase_sessionlock
+
+  runtimeOnly 'com.mattbertolini:liquibase-slf4j:4.1.0'
 }

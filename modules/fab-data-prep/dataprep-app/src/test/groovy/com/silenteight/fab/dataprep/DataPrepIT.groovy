@@ -62,6 +62,11 @@ class DataPrepIT extends BaseSpecificationIT {
   @Autowired
   AlertService alertService
 
+  def setupSpec() {
+    startPostgresql()
+    startRabbitmq()
+  }
+
   def cleanup() {
     coreBridgeListener.clear()
     warehouseListener.clear()
@@ -124,7 +129,9 @@ class DataPrepIT extends BaseSpecificationIT {
       assert msg.getFeedingStatus() == expectedStatus
       assert msg.getAlertName() == ALERT_NAME
       assert msg.getBatchId() == BATCH_NAME
-      assert msg.getFedMatchesList().first().getMatchName() == MATCH_NAME
+      if (expectedStatus == FeedingStatus.SUCCESS) {
+        assert msg.getFedMatchesList().first().getMatchName() == MATCH_NAME
+      }
     }
 
     where:

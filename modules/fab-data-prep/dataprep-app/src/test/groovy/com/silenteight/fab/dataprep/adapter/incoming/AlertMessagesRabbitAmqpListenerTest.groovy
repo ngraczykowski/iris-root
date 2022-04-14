@@ -33,14 +33,26 @@ class AlertMessagesRabbitAmqpListenerTest extends BaseSpecificationIT {
   @Value(QUEUE_NAME_PROPERTY)
   String queueName
 
+  def solvingMessage = AlertMessageStored.newBuilder()
+      .setBatchName(BATCH_NAME)
+      .setMessageName(MESSAGE_NAME)
+      .setState(State.NEW)
+      .build()
+
+  def learningMessage = AlertMessageStored.newBuilder()
+      .setBatchName(BATCH_NAME)
+      .setMessageName(MESSAGE_NAME)
+      .setState(State.SOLVED_TRUE_POSITIVE)
+      .build()
+
+  def setupSpec() {
+    startRabbitmq()
+    startPostgresql()   //TODO this shouldn't be needed
+  }
+
   def "verify that MessageAlertStored event is sent over rabbitMQ"() {
     given:
     def conditions = new PollingConditions(timeout: 5, initialDelay: 0.2, factor: 1.25)
-    def message = AlertMessageStored.newBuilder()
-        .setBatchName(BATCH_NAME)
-        .setMessageName(MESSAGE_NAME)
-        .setState(State.NEW)
-        .build()
 
     def receivedMessage = null
     1 * dataPrepFacade.processAlert(_) >> { AlertMessageStored msg ->
@@ -48,12 +60,62 @@ class AlertMessagesRabbitAmqpListenerTest extends BaseSpecificationIT {
     }
 
     when: 'send message to queue'
-    rabbitTemplate.convertAndSend(queueName, message)
+    rabbitTemplate.convertAndSend(queueName, solvingMessage)
 
     then: 'message is received'
     noExceptionThrown()
     conditions.eventually {
-      assert receivedMessage == message
+      assert receivedMessage == solvingMessage
+    }
+  }
+
+  def 'learningMessage should be retried'() {
+    given:
+    def conditions = new PollingConditions(timeout: 5, initialDelay: 0.2, factor: 1.25)
+
+    def counter = 0
+    dataPrepFacade.processAlert(_) >> {
+      counter++
+      throw new RuntimeException()
+    }
+
+    boolean failedCalled = false
+    1 * dataPrepFacade.processAlertFailed(_) >> {
+      failedCalled = true
+    }
+
+    when: 'send message to queue'
+    rabbitTemplate.convertAndSend(queueName, learningMessage)
+
+    then: 'message is retried'
+    conditions.eventually {
+      assert counter == 3
+      assert failedCalled
+    }
+  }
+
+  def 'solvingMessage should not be retried'() {
+    given:
+    def conditions = new PollingConditions(timeout: 5, initialDelay: 0.2, factor: 1.25)
+
+    def counter = 0
+    1 * dataPrepFacade.processAlert(_) >> {
+      counter++
+      throw new RuntimeException()
+    }
+
+    boolean failedCalled = false
+    dataPrepFacade.processAlertFailed(_) >> {
+      failedCalled = true
+    }
+
+    when: 'send message to queue'
+    rabbitTemplate.convertAndSend(queueName, solvingMessage)
+
+    then: 'message is retried'
+    conditions.eventually {
+      assert counter == 1
+      assert failedCalled
     }
   }
 }

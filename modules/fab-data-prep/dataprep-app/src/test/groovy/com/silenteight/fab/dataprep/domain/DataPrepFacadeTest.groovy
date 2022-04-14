@@ -2,6 +2,8 @@ package com.silenteight.fab.dataprep.domain
 
 import com.silenteight.fab.dataprep.adapter.incoming.AlertDetailsFacade
 import com.silenteight.fab.dataprep.domain.ex.DataPrepException
+import com.silenteight.fab.dataprep.domain.model.AlertErrorDescription
+import com.silenteight.fab.dataprep.domain.model.AlertState
 import com.silenteight.fab.dataprep.domain.model.LearningData
 import com.silenteight.proto.fab.api.v1.AlertMessageStored
 import com.silenteight.proto.fab.api.v1.AlertMessageStored.State
@@ -17,7 +19,8 @@ import spock.lang.Unroll
 
 import static com.silenteight.fab.dataprep.domain.Fixtures.*
 
-@ContextConfiguration(classes = [DataPrepFacade, DataPrepConfiguration],
+@ContextConfiguration(classes = [DataPrepFacade, DataPrepConfiguration, LearningUseCase,
+    SolvingUseCase],
     initializers = ConfigDataApplicationContextInitializer)
 @ActiveProfiles("dev")
 class DataPrepFacadeTest extends Specification {
@@ -57,7 +60,8 @@ class DataPrepFacadeTest extends Specification {
 
     then:
     thrown(DataPrepException)
-    0 * alertDetailsFacade._
+    1 * alertDetailsFacade.getAlertDetails(message) >> ALERT_MESSAGES_DETAILS_RESPONSE
+    1 * alertParser.parse(message, ALERT_MESSAGE_DETAILS) >> PARSED_ALERT_MESSAGE
     0 * registrationService._
     0 * feedingFacade._
     0 * alertService._
@@ -78,26 +82,38 @@ class DataPrepFacadeTest extends Specification {
         [REGISTERED_ALERT]
     1 * feedingFacade.etlAndFeedUds(REGISTERED_ALERT)
     0 * feedingFacade._
-    1 * alertService.save(DISCRIMINATOR, ALERT_NAME)
+    1 * alertService.save(DISCRIMINATOR, ALERT_NAME, [MATCH_NAME])
+    1 * alertService.setAlertState(DISCRIMINATOR, AlertState.IN_UDS)
     0 * learningService._
   }
 
-  def 'error during registration should be handled'() {
+  def 'learning, registered but not in UDS should be retried'() {
     given:
-    def message = alertMessageStoredBuilder.build()
+    def message = alertMessageStoredBuilder
+        .setState(State.SOLVED_TRUE_POSITIVE)
+        .build()
 
     when:
     underTest.processAlert(message)
 
     then:
-    1 * alertDetailsFacade.getAlertDetails(message) >> {
-      throw new RuntimeException()
-    }
-    1 * registrationService.registerFailedAlerts(*_) >> [REGISTERED_ALERT]
-    1 * feedingFacade.etlAndFeedUds(REGISTERED_ALERT)
-    0 * feedingFacade._
+    1 * alertDetailsFacade.getAlertDetails(message) >> ALERT_MESSAGES_DETAILS_RESPONSE
+    1 * alertParser.parse(message, ALERT_MESSAGE_DETAILS) >> PARSED_ALERT_MESSAGE
+    0 * registrationService._
+    1 * feedingFacade.etlAndFeedUdsLearningData(REGISTERED_ALERT)
+    2 * alertService.getAlertItem(DISCRIMINATOR) >> Optional.of(ALERT_ITEM)
+    1 * alertService.setAlertState(DISCRIMINATOR, AlertState.IN_UDS)
     0 * alertService._
-    0 * learningService._
+    1 * learningService.feedWarehouse(
+        LearningData.builder()
+            .alertName(ALERT_NAME)
+            .discriminator(DISCRIMINATOR)
+            .analystDecision('analyst_decision_true_positive')
+            .accessPermissionTag('AE')
+            .analystReason("")
+            .analystDecisionModifiedDateTime("20180827094707")
+            .originalAnalystDecision("COMMHUB")
+            .build())
   }
 
   def 'learning and already registered data should not be sent to UDS'() {
@@ -114,7 +130,7 @@ class DataPrepFacadeTest extends Specification {
     1 * alertParser.parse(message, ALERT_MESSAGE_DETAILS) >> PARSED_ALERT_MESSAGE
     0 * registrationService._
     0 * feedingFacade._
-    2 * alertService.getAlertName(DISCRIMINATOR) >> Optional.of(ALERT_NAME)
+    2 * alertService.getAlertItem(DISCRIMINATOR) >> Optional.of(ALERT_ITEM_IN_UDS)
     0 * alertService._
     1 * learningService.feedWarehouse(
         LearningData.builder()
@@ -145,8 +161,9 @@ class DataPrepFacadeTest extends Specification {
         [REGISTERED_ALERT]
     1 * feedingFacade.etlAndFeedUdsLearningData(REGISTERED_ALERT)
     0 * feedingFacade._
-    2 * alertService.getAlertName(DISCRIMINATOR) >>> [Optional.empty(), Optional.of(ALERT_NAME)]
-    1 * alertService.save(DISCRIMINATOR, ALERT_NAME)
+    2 * alertService.getAlertItem(DISCRIMINATOR) >>> [Optional.empty(), Optional.of(ALERT_ITEM)]
+    1 * alertService.save(DISCRIMINATOR, ALERT_NAME, [MATCH_NAME])
+    1 * alertService.setAlertState(DISCRIMINATOR, AlertState.IN_UDS)
     1 * learningService.feedWarehouse(
         LearningData.builder()
             .alertName(ALERT_NAME)
@@ -162,5 +179,46 @@ class DataPrepFacadeTest extends Specification {
     state                       | analystDecision
     State.SOLVED_TRUE_POSITIVE  | 'analyst_decision_true_positive'
     State.SOLVED_FALSE_POSITIVE | 'analyst_decision_false_positive'
+  }
+
+  def 'error during registration should be handled'() {
+    given:
+    def message = alertMessageStoredBuilder
+        .setState(State.NEW)
+        .build()
+
+    when:
+    underTest.processAlertFailed(message)
+
+    then:
+    1 * alertDetailsFacade.getAlertDetails(message) >> ALERT_MESSAGES_DETAILS_RESPONSE
+    1 * alertParser.parse(message, ALERT_MESSAGE_DETAILS) >> PARSED_ALERT_MESSAGE
+    1 * registrationService
+        .registerFailedAlerts(
+            [MESSAGE_NAME], BATCH_NAME, DISCRIMINATOR, AlertErrorDescription.EXTRACTION) >>
+        [REGISTERED_ALERT]
+    1 * feedingFacade.notifyAboutError(BATCH_NAME, ALERT_NAME)
+    0 * feedingFacade._
+    1 * alertService.getAlertItem(DISCRIMINATOR) >> Optional.empty()
+    0 * learningService._
+  }
+
+  def 'error during feeding UDS should be handled'() {
+    given:
+    def message = alertMessageStoredBuilder
+        .setState(State.NEW)
+        .build()
+
+    when:
+    underTest.processAlertFailed(message)
+
+    then:
+    1 * alertDetailsFacade.getAlertDetails(message) >> ALERT_MESSAGES_DETAILS_RESPONSE
+    1 * alertParser.parse(message, ALERT_MESSAGE_DETAILS) >> PARSED_ALERT_MESSAGE
+    0 * registrationService._
+    1 * feedingFacade.notifyAboutError(BATCH_NAME, ALERT_NAME)
+    0 * feedingFacade._
+    1 * alertService.getAlertItem(DISCRIMINATOR) >> Optional.of(ALERT_ITEM)
+    0 * learningService._
   }
 }

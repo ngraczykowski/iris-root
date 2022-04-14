@@ -2,7 +2,6 @@ package com.silenteight.fab.dataprep.domain
 
 import com.silenteight.fab.dataprep.domain.model.AlertErrorDescription
 import com.silenteight.fab.dataprep.domain.model.ParsedAlertMessage
-import com.silenteight.fab.dataprep.domain.model.ParsedAlertMessage.Hit
 import com.silenteight.fab.dataprep.domain.model.RegisteredAlert
 import com.silenteight.registration.api.library.v1.*
 
@@ -29,12 +28,8 @@ class RegistrationServiceTest extends Specification {
         .batchName(BATCH_NAME)
         .messageName(MESSAGE_NAME)
         .systemId(systemId)
-        .hits(
-            [
-                (HIT_ID): Hit.builder()
-                    .hitName(HIT_ID)
-                    .build()
-            ])
+        .parsedMessageData(PARSED_PAYLOAD)
+        .hits(PARSED_ALERT_MESSAGE.hits)
         .build()
     ]
     def request = RegisterAlertsAndMatchesIn.builder()
@@ -107,7 +102,7 @@ class RegistrationServiceTest extends Specification {
 
     when:
     List<RegisteredAlert> registeredAlerts = underTest
-        .registerFailedAlerts(alerts, BATCH_NAME, AlertErrorDescription.EXTRACTION)
+        .registerFailedAlerts(alerts, BATCH_NAME, DISCRIMINATOR, AlertErrorDescription.EXTRACTION)
 
     then:
     registeredAlerts.each {

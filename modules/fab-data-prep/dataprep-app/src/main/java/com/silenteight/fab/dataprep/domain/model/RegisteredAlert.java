@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+
 @Value
 @Builder
 public class RegisteredAlert {
@@ -15,23 +17,22 @@ public class RegisteredAlert {
   @NonNull
   String batchName;
   @NonNull
-  String messageName;
-  @NonNull
   String alertName;
   @NonNull
-  AlertStatus status;
+  @Builder.Default
+  AlertStatus status = AlertStatus.SUCCESS;
   AlertErrorDescription errorDescription;
   ParsedMessageData parsedMessageData;
   String systemId;
-  String messageId;
-  List<Match> matches;
+  @NonNull
+  String discriminator;
+  @Builder.Default
+  List<Match> matches = emptyList();
 
   @Value
   @Builder
   public static class Match {
 
-    @NonNull
-    String hitName;
     @NonNull
     String matchName;
     List<JsonNode> payloads;

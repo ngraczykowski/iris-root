@@ -2,15 +2,13 @@ package com.silenteight.fab.dataprep.domain;
 
 import lombok.experimental.UtilityClass;
 
-import com.silenteight.fab.dataprep.domain.model.AlertErrorDescription;
-import com.silenteight.fab.dataprep.domain.model.AlertStatus;
-import com.silenteight.fab.dataprep.domain.model.ParsedAlertMessage;
+import com.silenteight.fab.dataprep.domain.model.*;
 import com.silenteight.fab.dataprep.domain.model.ParsedAlertMessage.Hit;
-import com.silenteight.fab.dataprep.domain.model.RegisteredAlert;
 import com.silenteight.fab.dataprep.domain.model.RegisteredAlert.Match;
 import com.silenteight.registration.api.library.v1.*;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import static java.util.Collections.emptyList;
@@ -34,14 +32,36 @@ class RegistrationConverter {
         .getRegisteredMatches()
         .stream()
         .map(registeredMatchOut -> convert(
-            registeredMatchOut, parsedAlertMessage.getHit(registeredMatchOut.getMatchId())))
+            registeredMatchOut.getMatchName(),
+            parsedAlertMessage.getHit(registeredMatchOut.getMatchId())))
         .collect(toList());
 
     return createRegisteredAlertBuilder(registeredAlertWithMatchesOut)
         .batchName(parsedAlertMessage.getBatchName())
         .parsedMessageData(parsedAlertMessage.getParsedMessageData())
         .systemId(parsedAlertMessage.getSystemId())
-        .messageId(parsedAlertMessage.getMessageId())
+        .discriminator(parsedAlertMessage.getDiscriminator())
+        .matches(matches)
+        .build();
+  }
+
+  static RegisteredAlert convert(
+      AlertItem alertItem,
+      ParsedAlertMessage parsedAlertMessage) {
+    Iterator<Hit> hitIterator = parsedAlertMessage.getHits().values().iterator();
+    List<Match> matches = alertItem
+        .getMatchNames()
+        .stream()
+        .map(matchName -> convert(matchName, hitIterator.next()))
+        .collect(toList());
+
+    return RegisteredAlert
+        .builder()
+        .alertName(alertItem.getAlertName())
+        .batchName(parsedAlertMessage.getBatchName())
+        .parsedMessageData(parsedAlertMessage.getParsedMessageData())
+        .systemId(parsedAlertMessage.getSystemId())
+        .discriminator(parsedAlertMessage.getDiscriminator())
         .matches(matches)
         .build();
   }
@@ -49,12 +69,14 @@ class RegistrationConverter {
   static RegisteredAlert createFailedRegisteredAlert(
       RegisteredAlertWithMatchesOut registeredAlertWithMatchesOut,
       String batchName,
+      String discriminator,
       AlertErrorDescription errorDescription) {
 
     return createRegisteredAlertBuilder(registeredAlertWithMatchesOut)
         .batchName(batchName)
         .errorDescription(errorDescription)
         .matches(emptyList())
+        .discriminator(discriminator)
         .build();
   }
 
@@ -63,16 +85,14 @@ class RegistrationConverter {
 
     return RegisteredAlert
         .builder()
-        .messageName(registeredAlertWithMatchesOut.getAlertId())
         .alertName(registeredAlertWithMatchesOut.getAlertName())
         .status(AlertStatus.valueOf(registeredAlertWithMatchesOut.getAlertStatus().name()));
   }
 
-  static Match convert(RegisteredMatchOut registeredMatchOut, Hit hit) {
+  static Match convert(String matchName, Hit hit) {
     return Match
         .builder()
-        .hitName(registeredMatchOut.getMatchId())
-        .matchName(registeredMatchOut.getMatchName())
+        .matchName(matchName)
         .payloads(hit.getPayloads())
         .build();
   }

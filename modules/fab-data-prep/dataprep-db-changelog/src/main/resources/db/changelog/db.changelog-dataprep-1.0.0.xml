@@ -21,4 +21,45 @@
     </createTable>
   </changeSet>
 
+  <changeSet id="dataprep-1.0.0-2" author="wwatroba">
+    <dropTable tableName="dataprep_alert"/>
+  </changeSet>
+
+  <changeSet id="dataprep-1.0.0-3" author="wwatroba">
+    <createTable tableName="dataprep_alert">
+      <column name="discriminator" type="${type.text}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="alert_name" type="${type.text}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="state" type="varchar(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="match_names" type="${type.text}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <modifySql dbms="postgresql">
+      <append value=" PARTITION BY RANGE (created_at);"/>
+    </modifySql>
+  </changeSet>
+
+  <changeSet id="dataprep-1.0.0-4" author="wwatroba">
+    <createIndex
+        tableName="dataprep_alert"
+        indexName="ix_dataprep_alert_discriminator">
+      <column name="discriminator"/>
+    </createIndex>
+
+    <createIndex
+        tableName="dataprep_alert"
+        indexName="ix_dataprep_alert_created_at">
+      <column name="created_at"/>
+    </createIndex>
+  </changeSet>
+
 </databaseChangeLog>
