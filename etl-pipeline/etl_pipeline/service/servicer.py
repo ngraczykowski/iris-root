@@ -57,13 +57,35 @@ class EtlPipelineServiceServicer(object):
     def __init__(self, ssl) -> None:
         EtlPipelineServiceServicer.router.initialize(ssl)
 
+    def set_failure_forall(self, alerts):
+        return [self._parse_alert(alert, status) for alert, status in alerts]
+
     async def RunEtl(self, request: etl__pipeline__pb2.RunEtlRequest, context):
         try:
-            etl_alerts = await self.process_request(request)
-        except Exception as e:
+            for alert in request.alerts:
+                logger.debug(f"Received {alert.alert_name}")
 
+            alerts_to_parse = [
+                AlertPayload(
+                    batch_id=alert.batch_id,
+                    alert_name=alert.alert_name,
+                    flat_payload={
+                        key: alert.flat_payload[key] for key in sorted(alert.flat_payload)
+                    },
+                    matches=[Match(match.match_id, match.match_name) for match in alert.matches],
+                )
+                for alert in request.alerts
+            ]
+            logger.debug(f"Number of alerts {len(alerts_to_parse)}")
+            etl_alerts = await self.process_request(alerts_to_parse)
+        except Exception as e:
             logger.error(f"RunEtl error: {str(e)}")
             etl_alerts = []
+        if len(etl_alerts) != len(request.alerts):
+            try:
+                etl_alerts = self.set_failure_forall(alerts_to_parse)
+            except Exception as e:
+                logger.error(f"{str(e)} Something wrong with alerts structure. Send empty list")
         return etl__pipeline__pb2.RunEtlResponse(etl_alerts=etl_alerts)
 
     async def upload_to_data_source(self, alert, record):
@@ -72,7 +94,6 @@ class EtlPipelineServiceServicer(object):
             logger.info(f"Batch {alert.batch_id}, Alert {alert.alert_name} parsed successfully")
             for input_match_record in input_match_records:
                 logger.info("Trying upload from pipeline to UDS")
-
                 try:
                     await self.add_to_datasource(alert, input_match_record)
                 except Exception as e:
@@ -85,24 +106,12 @@ class EtlPipelineServiceServicer(object):
             )
         return alert, status
 
-    async def process_request(self, request):
-        for alert in request.alerts:
-            logger.debug(f"Received {alert.alert_name}")
+    async def process_request(self, alerts_to_parse):
 
-        alerts_to_parse = [
-            AlertPayload(
-                batch_id=alert.batch_id,
-                alert_name=alert.alert_name,
-                flat_payload={key: alert.flat_payload[key] for key in sorted(alert.flat_payload)},
-                matches=[Match(match.match_id, match.match_name) for match in alert.matches],
-            )
-            for alert in request.alerts
-        ]
-        logger.debug(f"Number of alerts {len(alerts_to_parse)}")
         future_payloads = [self.pool.submit(self.parse_alert, alert) for alert in alerts_to_parse]
         payloads = [future.result() for future in future_payloads]
         logger.debug(f"Collected parsed payloads {len(alerts_to_parse)}")
-        # payloads = [self.parse_alert(alerts_to_parse[0])]  # debugging
+        payloads = [self.parse_alert(alert) for alert in alerts_to_parse]  # debugging
         statuses = []
         for alert, record in zip(alerts_to_parse, payloads):
             logger.debug(f"Collected parsed payloads {len(alerts_to_parse)}")
@@ -114,19 +123,19 @@ class EtlPipelineServiceServicer(object):
         return etl_alerts
 
     def parse_alert(self, alert):
-        logger.debug(f"Starting parse for {alert.alert_name}")
-        payload = alert.flat_payload
-        payload = PayloadLoader().load_payload_from_json(payload)
-        payload = {key: payload[key] for key in sorted(payload)}
-        payload[cn.MATCH_IDS] = alert.matches
         status = SUCCESS
         error = None
         try:
+            logger.debug(f"Starting parse for {alert.alert_name}")
+            payload = alert.flat_payload
+            payload = PayloadLoader().load_payload_from_json(payload)
+            payload = {key: payload[key] for key in sorted(payload)}
+            payload[cn.MATCH_IDS] = alert.matches
             payload = pipeline.transform_standardized_to_cleansed(payload)
             logger.debug(f"Number of records (input_record vs match pairs): {len(payload)}")
-            logger.debug("Transform standardized to cleansed - success")
+            logger.debug("{alert.alert_name} - Transform standardized to cleansed - success")
             payload = pipeline.transform_cleansed_to_application(payload)
-            logger.debug("Transform cleansed to standardized - success")
+            logger.debug("{alert.alert_name} - Transform cleansed to application - success")
         except Exception as e:
             error = str(e)
             status = FAILURE

@@ -69,12 +69,14 @@ class BaseGrpcTestCase:
 
             alerts[0].matches[0].match_name = "test"
             alerts[9].matches[0].match_name = "test"
+            alerts[8].flat_payload["alertedParty.test"] = "test"
             counter = 0
             response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=alerts))
-            for num, alert in enumerate(response.etl_alerts):
+            assert len(alerts) == len(response.etl_alerts)
+            for alert in response.etl_alerts:
                 try:
                     assert alert.etl_status == SUCCESS
-                except:
+                except AssertionError:
                     assert alert.etl_status == FAILURE
                     counter += 1
             assert counter == 2

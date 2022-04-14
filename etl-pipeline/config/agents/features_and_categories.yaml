@@ -120,3 +120,8 @@ alertType:
     - ISG_ACCOUNT
   category_type: ENUMERATED
 
+# hitType:
+#  feature_type: features
+#  producer_type: HitTypeFeatureInputProducer
+#  fields:
+#    hit_types: ap_all_company_names_aggregated

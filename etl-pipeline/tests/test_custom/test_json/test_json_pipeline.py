@@ -57,7 +57,9 @@ def check_payload(parsed_payloads, reference_payloads):
                             reference_payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
                         )
                     except:
-                        if isinstance(payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]):
+                        if isinstance(
+                            payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key], dict
+                        ):
                             reference = reference_payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][
                                 num
                             ][key]
