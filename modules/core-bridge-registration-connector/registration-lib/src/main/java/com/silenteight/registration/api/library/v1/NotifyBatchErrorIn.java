@@ -14,12 +14,14 @@ public class NotifyBatchErrorIn {
   String batchId;
   String batchMetadata;
   String errorDescription;
+  boolean isSimulation;
 
   NotifyBatchErrorRequest toNotifyBatchErrorRequest() {
     return NotifyBatchErrorRequest.newBuilder()
         .setBatchId(batchId)
         .setErrorDescription(Optional.ofNullable(errorDescription).orElse(""))
         .setBatchMetadata(Optional.ofNullable(batchMetadata).orElse(""))
+        .setIsSimulation(isSimulation)
         .build();
   }
 }

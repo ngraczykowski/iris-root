@@ -32,10 +32,6 @@ message MessageBatchCompleted {
   string batch_id = 1 [(google.api.field_behavior) = REQUIRED];
   string analysis_name = 2 [(google.api.field_behavior) = REQUIRED];
   optional string batch_metadata = 3;
-
-  // If set to true, this flag indicates that alerts are present in the system,
-  // no recommendations are generated and alerts are ready to be simulated
-  bool is_simulation = 4 [(google.api.field_behavior) = OPTIONAL];
 }
 
 message MessageBatchError {
