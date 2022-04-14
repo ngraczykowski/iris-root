@@ -366,40 +366,43 @@ warehouse.reports.v2:
       description: Metrics
       selectSqlQuery: >
         WITH main AS (
-          SELECT payload ->> 's8_lobCountryCode'          country,
-                 payload ->> 'categories/hitType'         risk_type,
-                 payload ->> 's8_recommendation'          recommendation,
-                 payload ->> 'qa.level-0.state'           qa_decision,
-                 payload ->> 'DN_CASE.ExtendedAttribute5' list_type
-          FROM warehouse_alert
-          WHERE payload ->> 'status' = 'LEARNING_COMPLETED'
-                AND recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
-          GROUP BY payload ->> 's8_lobCountryCode',
-                   payload ->> 'categories/hitType',
-                   payload ->> 's8_recommendation',
-                   payload ->> 'qa.level-0.state',
-                   payload ->> 'DN_CASE.ExtendedAttribute5'
+            SELECT payload ->> 's8_lobCountryCode'          country,
+                   payload ->> 'categories/hitType'         risk_type,
+                   payload ->> 's8_recommendation'          recommendation,
+                   payload ->> 'qa.level-0.state'           qa_decision,
+                   payload ->> 'analyst_decision'           analyst_decision,
+                   payload ->> 'DN_CASE.ExtendedAttribute5' list_type,
+                   COUNT(*)                                 alert_count
+            FROM warehouse_alert
+            WHERE payload ->> 'status' = 'LEARNING_COMPLETED'
+              AND recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
+            GROUP BY payload ->> 's8_lobCountryCode',
+                     payload ->> 'categories/hitType',
+                     payload ->> 's8_recommendation',
+                     payload ->> 'qa.level-0.state',
+                     payload ->> 'analyst_decision',
+                     payload ->> 'DN_CASE.ExtendedAttribute5'
         ),
-          grouped AS (
-                   SELECT main.country                                                      g_country,
-                          main.list_type                                                    g_list_type,
-                          main.risk_type                                                    g_risk_type,
-                          COUNT(*)                                                          g_total,
-                          COUNT(*)
-                          FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE') g_total_true_positive,
-                          COUNT(*)
-                          FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE')          g_total_false_positive,
-                          COUNT(*) FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE'
-                              AND qa_decision = 'PASSED')                                   g_total_ptp_and_qa_passed,
-                          COUNT(*) FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE'
-                              AND qa_decision IN ('FAILED', 'PASSED') )                     g_total_ptp_and_qa,
-                          COUNT(*) FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE'
-                              AND qa_decision = 'PASSED')                                   g_total_fp_and_qa_passed,
-                          COUNT(*) FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE'
-                              AND qa_decision IN ('FAILED', 'PASSED'))                      g_total_fp_and_qa
-                   FROM main
-                   GROUP BY 1, 2, 3
-               )
+             grouped AS (
+                 SELECT main.country                                                              g_country,
+                        main.list_type                                                            g_list_type,
+                        main.risk_type                                                            g_risk_type,
+                        SUM(main.alert_count)                                                     g_total,
+                        SUM(main.alert_count)
+                        FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE')         g_total_true_positive,
+                        SUM(main.alert_count)
+                        FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE')                  g_total_false_positive,
+                        SUM(main.alert_count) FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE'
+                            AND analyst_decision = 'analyst_decision_true_positive')              g_total_ptp_and_analyst_ptp,
+                        SUM(main.alert_count) FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE'
+                            AND analyst_decision IN ('analyst_decision_false_positive', 'analyst_decision_true_positive') )  g_total_ptp_and_analyst,
+                        SUM(main.alert_count) FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE'
+                            AND qa_decision = 'PASSED')                                           g_total_fp_and_qa_passed,
+                        SUM(main.alert_count) FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE'
+                            AND qa_decision IN ('FAILED', 'PASSED'))                              g_total_fp_and_qa
+                 FROM main
+                 GROUP BY 1, 2, 3
+             )
 
         SELECT g_country as "Country LoB",
                g_risk_type as "Risk Type",
@@ -409,10 +412,10 @@ warehouse.reports.v2:
                ROUND(((g_total_true_positive::decimal + g_total_false_positive::decimal) / GREATEST(g_total, 1)) * 100,3) as "Efficiency",
                g_total_fp_and_qa_passed as "# of S8 Solved as FP and Analyst Solved as FP",
                (g_total_fp_and_qa - g_total_fp_and_qa_passed) as "# of S8 Solved as FP and Analyst Solved as TP",
-               CASE WHEN g_total_fp_and_qa = 0 THEN 'n/a' ELSE CAST (ROUND((g_total_fp_and_qa_passed::decimal / GREATEST(g_total_fp_and_qa::decimal, 1)) * 100, 3) as varchar) END as "FP Effectiveness",
-               (g_total_ptp_and_qa - g_total_ptp_and_qa_passed) as "# of S8 Solved as PTP and Analyst Solved as FP",
-               g_total_ptp_and_qa_passed as "# of S8 Solved as PTP and Analyst Solved as TP",
-               CASE WHEN g_total_ptp_and_qa = 0 THEN 'n/a' ELSE CAST (ROUND((g_total_ptp_and_qa_passed::decimal / GREATEST(g_total_ptp_and_qa::decimal, 1)) * 100, 3) as varchar) END as "PTP Effectiveness"
+               CASE WHEN g_total_fp_and_qa IS NULL THEN 'n/a' ELSE CAST (ROUND((g_total_fp_and_qa_passed::decimal / GREATEST(g_total_fp_and_qa::decimal, 1)) * 100, 3) as varchar) END as "FP Effectiveness",
+               (g_total_ptp_and_analyst - g_total_ptp_and_analyst_ptp) as "# of S8 Solved as PTP and Analyst Solved as FP",
+               g_total_ptp_and_analyst_ptp as "# of S8 Solved as PTP and Analyst Solved as TP",
+               CASE WHEN g_total_ptp_and_analyst IS NULL THEN 'n/a' ELSE CAST (ROUND((g_total_ptp_and_analyst_ptp::decimal / GREATEST(g_total_ptp_and_analyst::decimal, 1)) * 100, 3) as varchar) END as "PTP Effectiveness"
         FROM grouped
         ORDER BY g_country
     - name: METRICS
@@ -420,11 +423,13 @@ warehouse.reports.v2:
       description: Metrics
       selectSqlQuery: >
         WITH main AS (
-          SELECT wa.payload ->> 's8_lobCountryCode'                     country,
+          SELECT wa.payload ->> 's8_lobCountryCode'                         country,
                      wa.payload ->> 'categories/hitType'                    risk_type,
                      wa.payload ->> 'DN_CASE.ExtendedAttribute5'            list_type,
                      wsa.payload ->> 'recommendation_recommended_action'    recommendation,
-                     wsa.payload ->> 'qa.level-0.state'                     qa_decision
+                     wa.payload ->> 'analyst_decision'                      analyst_decision,
+                     wa.payload ->> 'qa.level-0.state'                      qa_decision,
+                     COUNT(*)                                               alert_count
               FROM warehouse_simulation_alert wsa
                        JOIN warehouse_alert wa ON wsa.name = wa.name
               WHERE wsa.analysis_name = 'analysis/${analysisId}'
@@ -432,25 +437,26 @@ warehouse.reports.v2:
                        wa.payload ->> 'categories/hitType',
                        wa.payload ->> 'DN_CASE.ExtendedAttribute5',
                        wsa.payload ->> 'recommendation_recommended_action',
-                       wsa.payload ->> 'qa.level-0.state'
+                       wa.payload ->> 'analyst_decision',
+                       wa.payload ->> 'qa.level-0.state'
         ),
              grouped AS (
-                      SELECT main.country                                                      g_country,
-                             main.list_type                                                    g_list_type,
-                             main.risk_type                                                    g_risk_type,
-                             COUNT(*)                                                          g_total,
-                             COUNT(*)
-                             FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE') g_total_true_positive,
-                             COUNT(*)
-                             FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE')          g_total_false_positive,
-                             COUNT(*) FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE'
-                                 AND qa_decision = 'PASSED')                                   g_total_ptp_and_qa_passed,
-                             COUNT(*) FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE'
-                                 AND qa_decision IN ('FAILED', 'PASSED') )                     g_total_ptp_and_qa,
-                             COUNT(*) FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE'
-                                 AND qa_decision = 'PASSED')                                   g_total_fp_and_qa_passed,
-                             COUNT(*) FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE'
-                                 AND qa_decision IN ('FAILED', 'PASSED'))                      g_total_fp_and_qa
+                      SELECT main.country                                                                 g_country,
+                             main.list_type                                                               g_list_type,
+                             main.risk_type                                                               g_risk_type,
+                             SUM(main.alert_count)                                                        g_total,
+                             SUM(main.alert_count)
+                             FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE')            g_total_true_positive,
+                             SUM(main.alert_count)
+                             FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE')                     g_total_false_positive,
+                             SUM(main.alert_count) FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE'
+                                 AND analyst_decision = 'analyst_decision_true_positive')                 g_total_ptp_and_analyst_ptp,
+                             SUM(main.alert_count) FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE'
+                                 AND analyst_decision IN ('analyst_decision_false_positive', 'analyst_decision_true_positive') )  g_total_ptp_and_analyst,
+                             SUM(main.alert_count) FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE'
+                                 AND qa_decision = 'PASSED')                                              g_total_fp_and_qa_passed,
+                             SUM(main.alert_count) FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE'
+                                 AND qa_decision IN ('FAILED', 'PASSED'))                                 g_total_fp_and_qa
                       FROM main
                       GROUP BY 1, 2, 3
                   )
@@ -462,10 +468,10 @@ warehouse.reports.v2:
                ROUND(((g_total_true_positive::decimal + g_total_false_positive::decimal) / GREATEST(g_total, 1)) * 100,3) as "Efficiency",
                g_total_fp_and_qa_passed as "# of S8 Solved as FP and Analyst Solved as FP",
                (g_total_fp_and_qa - g_total_fp_and_qa_passed) as "# of S8 Solved as FP and Analyst Solved as TP",
-               CASE WHEN g_total_fp_and_qa = 0 THEN 'n/a' ELSE CAST (ROUND((g_total_fp_and_qa_passed::decimal / GREATEST(g_total_fp_and_qa::decimal, 1)) * 100, 3) as varchar) END as "FP Effectiveness",
-               (g_total_ptp_and_qa - g_total_ptp_and_qa_passed) as "# of S8 Solved as PTP and Analyst Solved as FP",
-               g_total_ptp_and_qa_passed as "# of S8 Solved as PTP and Analyst Solved as TP",
-               CASE WHEN g_total_ptp_and_qa = 0 THEN 'n/a' ELSE CAST (ROUND((g_total_ptp_and_qa_passed::decimal / GREATEST(g_total_ptp_and_qa::decimal, 1)) * 100, 3) as varchar) END as "PTP Effectiveness"
+               CASE WHEN g_total_fp_and_qa IS NULL THEN 'n/a' ELSE CAST (ROUND((g_total_fp_and_qa_passed::decimal / GREATEST(g_total_fp_and_qa::decimal, 1)) * 100, 3) as varchar) END as "FP Effectiveness",
+               (g_total_ptp_and_analyst - g_total_ptp_and_analyst_ptp) as "# of S8 Solved as PTP and Analyst Solved as FP",
+               g_total_ptp_and_analyst_ptp as "# of S8 Solved as PTP and Analyst Solved as TP",
+               CASE WHEN g_total_ptp_and_analyst IS NULL THEN 'n/a' ELSE CAST (ROUND((g_total_ptp_and_analyst_ptp::decimal / GREATEST(g_total_ptp_and_analyst::decimal, 1)) * 100, 3) as varchar) END as "PTP Effectiveness"
         FROM grouped
         ORDER BY g_country
     - name: BILLING
