@@ -9,7 +9,7 @@ class Fixtures {
 
   static CHANGE_CONDITION = new ChangeCondition("policyId", "stepId", "solution")
   static UNEXPECTED_CHANGE_CONDITION = new ChangeCondition("policyId1", "stepId", "solution")
-  static QCO_PARAM_1 = new QcoParams(1, "solution 2")
+  static QCO_PARAM_1 = new QcoParams(1, "overridden_solution")
   static QCO_RECOMMENDATION_MATCH = QcoRecommendationMatch.builder()
       .batchId("batchId")
       .policyId("policyId")

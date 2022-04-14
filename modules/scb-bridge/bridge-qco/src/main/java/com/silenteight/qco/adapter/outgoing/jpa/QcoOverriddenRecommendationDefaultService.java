@@ -16,7 +16,7 @@ import static com.silenteight.qco.adapter.outgoing.jpa.QcoOverriddenRecommendati
 @Slf4j
 @Service
 @RequiredArgsConstructor
-class QcoOverriddenRecommendationServiceImpl implements QcoOverriddenRecommendationService {
+class QcoOverriddenRecommendationDefaultService implements QcoOverriddenRecommendationService {
 
   private final QcoOverriddenRecommendationJpaRepository recommendationRepository;
 

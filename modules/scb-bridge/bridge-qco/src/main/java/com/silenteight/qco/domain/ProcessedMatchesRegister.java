@@ -19,7 +19,6 @@ class ProcessedMatchesRegister {
   private final QcoOverriddenRecommendationService recommendationService;
   private final QcoWarehouseReportAdapter reportsSenderAdapter;
 
-  //TODO:add implementation Async Handler Error
   @Async
   public void register(QcoRecommendationMatch match, MatchSolution matchSolution) {
     recommendationService.storeQcoOverriddenRecommendation(match, matchSolution);
