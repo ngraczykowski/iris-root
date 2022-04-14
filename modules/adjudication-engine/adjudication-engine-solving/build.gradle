@@ -6,6 +6,7 @@ dependencies {
   implementation project(":adjudication-engine-common")
   implementation project(":proto-adjudication-engine-internal-protos")
 
+  implementation libraries.agents_api
   implementation libraries.guava
   implementation libraries.hazelcast
   implementation libraries.jackson_databind

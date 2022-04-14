@@ -2,23 +2,28 @@ package com.silenteight.adjudication.engine.solving.domain;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.adjudication.engine.solving.domain.event.FeatureMatchesUpdated;
 import com.silenteight.adjudication.engine.solving.domain.event.MatchFeatureValuesUpdated;
 import com.silenteight.adjudication.engine.solving.domain.event.MatchesUpdated;
+import com.silenteight.agents.v1.api.exchange.AgentExchangeRequest;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class AlertSolving {
 
-  private final Map<Long, MatchFeatures> matchesFeatures = new HashMap<>();
+  //<agent_config,set<features> // Which agent supports specific feature
+  private final Map<String, Set<String>> agentFeatures = new HashMap<>();
+  private final Map<Long, Match> matches = new HashMap<>();
   private final transient List<DomainEvent> domainEvents = new LinkedList<>();
-  private final long id;
+  private final long alertId;
   private final LocalDateTime solvingCreatetime = LocalDateTime.now();
 
-  public AlertSolving(final long id) {
-    this.id = id;
+  public AlertSolving(final long alertId) {
+    this.alertId = alertId;
   }
 
   public static AlertSolving empty() {
@@ -27,21 +32,54 @@ public class AlertSolving {
 
   public boolean isEmpty() {
     // TODO refactor when data
-    return this.id == 0;
+    return this.alertId == 0;
   }
 
   public long id() {
-    return this.id;
+    return this.alertId;
   }
 
   public AlertSolving addMatchesFeatures(List<MatchFeature> matchesFeatures) {
     matchesFeatures.forEach(matchFeature -> {
-      var features = this.matchesFeatures.getOrDefault(
-          matchFeature.getMatchId(), new MatchFeatures(matchFeature.getMatchId()));
+      var features = this.matches.getOrDefault(
+          matchFeature.getMatchId(), new Match(matchFeature.getMatchId()));
       features.addFeature(matchFeature);
-      this.matchesFeatures.putIfAbsent(matchFeature.getMatchId(), features);
+      this.matches.putIfAbsent(matchFeature.getMatchId(), features);
+
+      var agentFeatures =
+          this.agentFeatures.getOrDefault(matchFeature.getAgentConfig(), new HashSet<>());
+      agentFeatures.add(matchFeature.getFeature());
+      this.agentFeatures.put(matchFeature.getAgentConfig(), agentFeatures);
     });
     return this;
+  }
+
+
+  private Set<String> getAllMatchesNames() {
+    return this.matches
+        .keySet()
+        .stream()
+        .map(matchId -> ResourceName
+            .create("")
+            .add("alerts", String.valueOf(this.alertId))
+            .add("matches", String.valueOf(matchId))
+            .getPath())
+        .collect(
+            Collectors.toSet());
+  }
+
+  public List<AgentExchangeRequest> toRequests() {
+    if (log.isDebugEnabled()) {
+      log.debug("Dispatch matches features {} to agents", agentFeatures.keySet());
+    }
+    return this.agentFeatures.entrySet().stream().map(entry ->
+        AgentExchangeRequest
+            .newBuilder()
+            .addAllFeatures(entry.getValue())
+            .addAllMatches(getAllMatchesNames())
+            .build()
+    ).collect(Collectors.toList());
+
   }
 
   public AlertSolving updateMatches(Object object) {
@@ -104,7 +142,7 @@ public class AlertSolving {
   @Override
   public String toString() {
     return "AlertSolving{" +
-        "id=" + id +
+        "id=" + alertId +
         ", solvingCreatetime=" + solvingCreatetime +
         '}';
   }

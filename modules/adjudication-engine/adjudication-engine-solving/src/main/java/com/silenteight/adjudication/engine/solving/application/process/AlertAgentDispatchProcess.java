@@ -40,7 +40,10 @@ public class AlertAgentDispatchProcess {
     pendingAlerts.forEach(alertSolving -> {
       this.alertSolvingRepository.save(alertSolving);
       // TODO map and send to agents - rememeber about routing key and priority.
-      matchesPublisher.publish(null);
+      alertSolving
+          .toRequests()
+          .stream()
+          .forEach(agentExchangeRequest -> matchesPublisher.publish(agentExchangeRequest));
     });
     if (log.isDebugEnabled()) {
       log.debug("AnalysisAlertsAdded mapped to AlertsSolving done");

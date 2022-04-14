@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 import java.util.List;
 import java.util.Set;
@@ -22,13 +23,15 @@ import java.util.Set;
 class AlertAgentDispatchProcessTest {
 
   @Mock
+  private RabbitTemplate rabbitTemplate;
+  @Mock
   private MatchFeaturesFacade matchFeaturesFacade;
   private AlertAgentDispatchProcess alertAgentDispatchProcess;
   private AlertSolvingRepository alertSolvingRepository = new InMemoryAlertSolvingRepository();
 
   @BeforeEach
   void setUp() {
-    var matchesPublisher = new MatchesPublisher();
+    var matchesPublisher = new MatchesPublisher(rabbitTemplate);
     alertAgentDispatchProcess =
         new AlertAgentDispatchProcess(
             matchesPublisher, matchFeaturesFacade, alertSolvingRepository);
@@ -77,22 +80,22 @@ class AlertAgentDispatchProcessTest {
 
     Assertions
         .assertThat(alertSolvingRepository.get(1L))
-        .extracting("matchesFeatures")
+        .extracting("matches")
         .asInstanceOf(InstanceOfAssertFactories.MAP)
         .containsOnlyKeys(1L);
     Assertions
         .assertThat(alertSolvingRepository.get(2L))
-        .extracting("matchesFeatures")
+        .extracting("matches")
         .asInstanceOf(InstanceOfAssertFactories.MAP)
         .containsOnlyKeys(2L, 3L);
     Assertions
         .assertThat(alertSolvingRepository.get(3L))
-        .extracting("matchesFeatures")
+        .extracting("matches")
         .asInstanceOf(InstanceOfAssertFactories.MAP)
         .containsOnlyKeys(4L, 5L, 6L);
     Assertions
         .assertThat(alertSolvingRepository.get(4L))
-        .extracting("matchesFeatures")
+        .extracting("matches")
         .asInstanceOf(InstanceOfAssertFactories.MAP)
         .containsOnlyKeys(7L);
   }
