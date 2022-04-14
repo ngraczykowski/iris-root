@@ -96,7 +96,9 @@
                           "States": [
                           ],
                           "Countries": [
-                            "IR"
+                            {
+                              "Country": "IR"
+                            }
                           ]
                         }
                       }
@@ -110,13 +112,32 @@
                     ],
                     "Type": "I",
                     "Codes": [
-                      "NBIQIQBAXXX",
-                      "S93849384A",
-                      "784012345678901"
+                      {
+                        "Code": {
+                          "Name": "AVB2833444",
+                          "Type": "Passport"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "NBIQIQBAXXX",
+                          "Type": "Bic"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "01TG031000",
+                          "Type": "SearchCode"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "784012345678901",
+                          "Type": "NationalID"
+                        }
+                      }
                     ],
-                    "OtherDocument": "784012345678901",
-                    "PassportNumber": "AVB2833444",
-                    "AdditionalInfo": "M, IR",
+                    "AdditionalInfo": "List ID: 1054 / Create Date: 08/14/2013 14:42:14 / Last Update Date: 1/07/2015 15:43:20 / Program: INTERPOL NOTICES / Nationality: IRAN / Gender: MALE / OtherInformation: WANTED BY THE JUDICIAL AUTHORITIES OF INDIA FOR PROSECUTION / TO SERVE A SENTENCE / LanguagesSpoken: TAMIL",
                     "DatesOfBirth": [
                       {
                         "DateOfBirth": "30/8/1965"
@@ -211,7 +232,9 @@
                           "States": [
                           ],
                           "Countries": [
-                            "IR"
+                            {
+                              "Country": "IR"
+                            }
                           ]
                         }
                       }
@@ -225,13 +248,32 @@
                     ],
                     "Type": "I",
                     "Codes": [
-                      "NBIQIQBAXXX",
-                      "S93849384A",
-                      "784012345678901"
+                      {
+                        "Code": {
+                          "Name": "AVB2833444",
+                          "Type": "Passport"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "NBIQIQBAXXX",
+                          "Type": "Bic"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "01TG031000",
+                          "Type": "SearchCode"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "784012345678901",
+                          "Type": "NationalID"
+                        }
+                      }
                     ],
-                    "OtherDocument": "784012345678901",
-                    "PassportNumber": "AVB2833444",
-                    "AdditionalInfo": "M, IR",
+                    "AdditionalInfo": "List ID: 1054 / Create Date: 08/14/2013 14:42:14 / Last Update Date: 1/07/2015 15:43:20 / Program: INTERPOL NOTICES / Nationality: IRAN / Gender: MALE / OtherInformation: WANTED BY THE JUDICIAL AUTHORITIES OF INDIA FOR PROSECUTION / TO SERVE A SENTENCE / LanguagesSpoken: TAMIL",
                     "DatesOfBirth": [
                       {
                         "DateOfBirth": "30/8/1965"
@@ -326,7 +368,9 @@
                           "States": [
                           ],
                           "Countries": [
-                            "IR"
+                            {
+                              "Country": "IR"
+                            }
                           ]
                         }
                       }
@@ -340,13 +384,32 @@
                     ],
                     "Type": "I",
                     "Codes": [
-                      "NBIQIQBAXXX",
-                      "S93849384A",
-                      "784012345678901"
+                      {
+                        "Code": {
+                          "Name": "AVB2833444",
+                          "Type": "Passport"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "NBIQIQBAXXX",
+                          "Type": "Bic"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "01TG031000",
+                          "Type": "SearchCode"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "784012345678901",
+                          "Type": "NationalID"
+                        }
+                      }
                     ],
-                    "OtherDocument": "784012345678901",
-                    "PassportNumber": "AVB2833444",
-                    "AdditionalInfo": "M, IR",
+                    "AdditionalInfo": "List ID: 1054 / Create Date: 08/14/2013 14:42:14 / Last Update Date: 1/07/2015 15:43:20 / Program: INTERPOL NOTICES / Nationality: IRAN / Gender: MALE / OtherInformation: WANTED BY THE JUDICIAL AUTHORITIES OF INDIA FOR PROSECUTION / TO SERVE A SENTENCE / LanguagesSpoken: TAMIL",
                     "DatesOfBirth": [
                       {
                         "DateOfBirth": "30/8/1965"
@@ -441,7 +504,9 @@
                           "States": [
                           ],
                           "Countries": [
-                            "IR"
+                            {
+                              "Country": "IR"
+                            }
                           ]
                         }
                       }
@@ -455,13 +520,32 @@
                     ],
                     "Type": "I",
                     "Codes": [
-                      "NBIQIQBAXXX",
-                      "S93849384A",
-                      "784012345678901"
+                      {
+                        "Code": {
+                          "Name": "AVB2833444",
+                          "Type": "Passport"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "NBIQIQBAXXX",
+                          "Type": "Bic"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "01TG031000",
+                          "Type": "SearchCode"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "784012345678901",
+                          "Type": "NationalID"
+                        }
+                      }
                     ],
-                    "OtherDocument": "784012345678901",
-                    "PassportNumber": "AVB2833444",
-                    "AdditionalInfo": "M, IR",
+                    "AdditionalInfo": "List ID: 1054 / Create Date: 08/14/2013 14:42:14 / Last Update Date: 1/07/2015 15:43:20 / Program: INTERPOL NOTICES / Nationality: IRAN / Gender: MALE / OtherInformation: WANTED BY THE JUDICIAL AUTHORITIES OF INDIA FOR PROSECUTION / TO SERVE A SENTENCE / LanguagesSpoken: TAMIL",
                     "DatesOfBirth": [
                       {
                         "DateOfBirth": "30/8/1965"
@@ -556,7 +640,9 @@
                           "States": [
                           ],
                           "Countries": [
-                            "IR"
+                            {
+                              "Country": "IR"
+                            }
                           ]
                         }
                       }
@@ -570,13 +656,32 @@
                     ],
                     "Type": "I",
                     "Codes": [
-                      "NBIQIQBAXXX",
-                      "S93849384A",
-                      "784012345678901"
+                      {
+                        "Code": {
+                          "Name": "AVB2833444",
+                          "Type": "Passport"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "NBIQIQBAXXX",
+                          "Type": "Bic"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "01TG031000",
+                          "Type": "SearchCode"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "784012345678901",
+                          "Type": "NationalID"
+                        }
+                      }
                     ],
-                    "OtherDocument": "784012345678901",
-                    "PassportNumber": "AVB2833444",
-                    "AdditionalInfo": "M, IR",
+                    "AdditionalInfo": "List ID: 1054 / Create Date: 08/14/2013 14:42:14 / Last Update Date: 1/07/2015 15:43:20 / Program: INTERPOL NOTICES / Nationality: IRAN / Gender: MALE / OtherInformation: WANTED BY THE JUDICIAL AUTHORITIES OF INDIA FOR PROSECUTION / TO SERVE A SENTENCE / LanguagesSpoken: TAMIL",
                     "DatesOfBirth": [
                       {
                         "DateOfBirth": "30/8/1965"
@@ -671,7 +776,9 @@
                           "States": [
                           ],
                           "Countries": [
-                            "IR"
+                            {
+                              "Country": "IR"
+                            }
                           ]
                         }
                       }
@@ -685,13 +792,32 @@
                     ],
                     "Type": "I",
                     "Codes": [
-                      "NBIQIQBAXXX",
-                      "S93849384A",
-                      "784012345678901"
+                      {
+                        "Code": {
+                          "Name": "AVB2833444",
+                          "Type": "Passport"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "NBIQIQBAXXX",
+                          "Type": "Bic"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "01TG031000",
+                          "Type": "SearchCode"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "784012345678901",
+                          "Type": "NationalID"
+                        }
+                      }
                     ],
-                    "OtherDocument": "784012345678901",
-                    "PassportNumber": "AVB2833444",
-                    "AdditionalInfo": "M, IR",
+                    "AdditionalInfo": "List ID: 1054 / Create Date: 08/14/2013 14:42:14 / Last Update Date: 1/07/2015 15:43:20 / Program: INTERPOL NOTICES / Nationality: IRAN / Gender: MALE / OtherInformation: WANTED BY THE JUDICIAL AUTHORITIES OF INDIA FOR PROSECUTION / TO SERVE A SENTENCE / LanguagesSpoken: TAMIL",
                     "DatesOfBirth": [
                       {
                         "DateOfBirth": "30/8/1965"
@@ -786,7 +912,9 @@
                           "States": [
                           ],
                           "Countries": [
-                            "IR"
+                            {
+                              "Country": "IR"
+                            }
                           ]
                         }
                       }
@@ -800,13 +928,32 @@
                     ],
                     "Type": "I",
                     "Codes": [
-                      "NBIQIQBAXXX",
-                      "S93849384A",
-                      "784012345678901"
+                      {
+                        "Code": {
+                          "Name": "AVB2833444",
+                          "Type": "Passport"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "NBIQIQBAXXX",
+                          "Type": "Bic"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "01TG031000",
+                          "Type": "SearchCode"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "784012345678901",
+                          "Type": "NationalID"
+                        }
+                      }
                     ],
-                    "OtherDocument": "784012345678901",
-                    "PassportNumber": "AVB2833444",
-                    "AdditionalInfo": "M, IR",
+                    "AdditionalInfo": "List ID: 1054 / Create Date: 08/14/2013 14:42:14 / Last Update Date: 1/07/2015 15:43:20 / Program: INTERPOL NOTICES / Nationality: IRAN / Gender: MALE / OtherInformation: WANTED BY THE JUDICIAL AUTHORITIES OF INDIA FOR PROSECUTION / TO SERVE A SENTENCE / LanguagesSpoken: TAMIL",
                     "DatesOfBirth": [
                       {
                         "DateOfBirth": "30/8/1965"
@@ -901,7 +1048,9 @@
                           "States": [
                           ],
                           "Countries": [
-                            "IR"
+                            {
+                              "Country": "IR"
+                            }
                           ]
                         }
                       }
@@ -915,13 +1064,32 @@
                     ],
                     "Type": "I",
                     "Codes": [
-                      "NBIQIQBAXXX",
-                      "S93849384A",
-                      "784012345678901"
+                      {
+                        "Code": {
+                          "Name": "AVB2833444",
+                          "Type": "Passport"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "NBIQIQBAXXX",
+                          "Type": "Bic"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "01TG031000",
+                          "Type": "SearchCode"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "784012345678901",
+                          "Type": "NationalID"
+                        }
+                      }
                     ],
-                    "OtherDocument": "784012345678901",
-                    "PassportNumber": "AVB2833444",
-                    "AdditionalInfo": "M, IR",
+                    "AdditionalInfo": "List ID: 1054 / Create Date: 08/14/2013 14:42:14 / Last Update Date: 1/07/2015 15:43:20 / Program: INTERPOL NOTICES / Nationality: IRAN / Gender: MALE / OtherInformation: WANTED BY THE JUDICIAL AUTHORITIES OF INDIA FOR PROSECUTION / TO SERVE A SENTENCE / LanguagesSpoken: TAMIL",
                     "DatesOfBirth": [
                       {
                         "DateOfBirth": "30/8/1965"
@@ -1016,7 +1184,9 @@
                           "States": [
                           ],
                           "Countries": [
-                            "IR"
+                            {
+                              "Country": "IR"
+                            }
                           ]
                         }
                       }
@@ -1030,13 +1200,32 @@
                     ],
                     "Type": "I",
                     "Codes": [
-                      "NBIQIQBAXXX",
-                      "S93849384A",
-                      "784012345678901"
+                      {
+                        "Code": {
+                          "Name": "AVB2833444",
+                          "Type": "Passport"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "NBIQIQBAXXX",
+                          "Type": "Bic"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "01TG031000",
+                          "Type": "SearchCode"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "784012345678901",
+                          "Type": "NationalID"
+                        }
+                      }
                     ],
-                    "OtherDocument": "784012345678901",
-                    "PassportNumber": "AVB2833444",
-                    "AdditionalInfo": "M, IR",
+                    "AdditionalInfo": "List ID: 1054 / Create Date: 08/14/2013 14:42:14 / Last Update Date: 1/07/2015 15:43:20 / Program: INTERPOL NOTICES / Nationality: IRAN / Gender: MALE / OtherInformation: WANTED BY THE JUDICIAL AUTHORITIES OF INDIA FOR PROSECUTION / TO SERVE A SENTENCE / LanguagesSpoken: TAMIL",
                     "DatesOfBirth": [
                       {
                         "DateOfBirth": "30/8/1965"
@@ -1131,7 +1320,9 @@
                           "States": [
                           ],
                           "Countries": [
-                            "IR"
+                            {
+                              "Country": "IR"
+                            }
                           ]
                         }
                       }
@@ -1145,13 +1336,32 @@
                     ],
                     "Type": "I",
                     "Codes": [
-                      "NBIQIQBAXXX",
-                      "S93849384A",
-                      "784012345678901"
+                      {
+                        "Code": {
+                          "Name": "AVB2833444",
+                          "Type": "Passport"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "NBIQIQBAXXX",
+                          "Type": "Bic"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "01TG031000",
+                          "Type": "SearchCode"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "784012345678901",
+                          "Type": "NationalID"
+                        }
+                      }
                     ],
-                    "OtherDocument": "784012345678901",
-                    "PassportNumber": "AVB2833444",
-                    "AdditionalInfo": "M, IR",
+                    "AdditionalInfo": "List ID: 1054 / Create Date: 08/14/2013 14:42:14 / Last Update Date: 1/07/2015 15:43:20 / Program: INTERPOL NOTICES / Nationality: IRAN / Gender: MALE / OtherInformation: WANTED BY THE JUDICIAL AUTHORITIES OF INDIA FOR PROSECUTION / TO SERVE A SENTENCE / LanguagesSpoken: TAMIL",
                     "DatesOfBirth": [
                       {
                         "DateOfBirth": "30/8/1965"
