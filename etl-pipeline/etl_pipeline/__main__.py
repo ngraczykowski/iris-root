@@ -63,7 +63,7 @@ def run(start_callback, end_callback):
         loop.run_until_complete(start_callback())
         loop.run_forever()
     finally:
-        tasks = asyncio.gather(*asyncio.all_tasks(loop))
+        tasks = asyncio.gather(*asyncio.Task.all_tasks(loop))
         tasks.cancel()
         with contextlib.suppress(asyncio.CancelledError):
             loop.run_until_complete(tasks)

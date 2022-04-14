@@ -1,11 +1,24 @@
 import json
-
-# from collections import OrderedDict
+import logging
 import re
 
 from etl_pipeline.config import pipeline_config
 
 cn = pipeline_config.cn
+
+logger = logging.getLogger("main").getChild("extractor")
+
+
+def safe_field_extractor(func):
+    def wrap(*args, **kwargs):
+        try:
+            result = func(*args, **kwargs)
+        except Exception as e:
+            logger.error(e)
+            result = ""
+        return result
+
+    return wrap
 
 
 class WatchlistExtractor:
@@ -40,6 +53,7 @@ class WatchlistExtractor:
                 result.append(v)
         return result, date_range, dmy
 
+    @safe_field_extractor
     def extract_dob(self, record):
         result = []
         entity = record.get("entity", {})
@@ -61,6 +75,7 @@ class WatchlistExtractor:
             return result
         return ""
 
+    @safe_field_extractor
     def extract_nationality(self, record):
         result = []
         entry_list = []
@@ -77,6 +92,7 @@ class WatchlistExtractor:
                 result.append(item)
         return result
 
+    @safe_field_extractor
     def extract_citizenships(self, record):
         result = []
         entry_list = []
@@ -93,6 +109,7 @@ class WatchlistExtractor:
                 result.append(item)
         return result
 
+    @safe_field_extractor
     def extract_wl_data_by_path(self, record, field1, field2):
         entry = record.get("entity", {}).get(
             field1, {}
@@ -107,6 +124,7 @@ class WatchlistExtractor:
                 return []
         return self.extract_single_array_element(destination)
 
+    @safe_field_extractor
     def extract_single_array_element(self, destination):
         result = []
         entry_list = []
@@ -123,6 +141,7 @@ class WatchlistExtractor:
                 result.append(item)
         return result
 
+    @safe_field_extractor
     def extract_wl_addresses(self, record):
         result = {}
         addresses = []
@@ -143,6 +162,7 @@ class WatchlistExtractor:
 
         return result
 
+    @safe_field_extractor
     def extract_wl_routing_codes(self, record):
         routing_codes_dict = {}
         if (
@@ -172,14 +192,17 @@ class WatchlistExtractor:
 
         return routing_codes_dict
 
+    @safe_field_extractor
     def extract_wl_matched_tokens(self, payload):
         input_tokens = []
-        for descriptor in payload.get("stopDescriptors", {}):
+        for descriptor in payload.get("stopDescriptors", []):
             details = descriptor.get("stopDescriptorDetails", [])
             for detail in details:
                 input_tokens.append(detail.get("inputToken", ""))
+
         return {cn.WL_MATCHED_TOKENS: json.dumps(input_tokens)}
 
+    @safe_field_extractor
     def extract_country(self, match):
         try:
             address = match.get("entity", {}).get("addresses", {}).get("address")
@@ -194,6 +217,7 @@ class WatchlistExtractor:
                 countries.append(elem.get("country"))
             return "|".join(list(filter(lambda x: x is not None, countries)))
 
+    @safe_field_extractor
     def extract_country_name(self, match):
         try:
             address = match.get("entity", {}).get("addresses", {}).get("address")
@@ -207,6 +231,7 @@ class WatchlistExtractor:
                 countries.append(elem.get("countryName"))
             return "|".join(list(filter(lambda x: x is not None, countries)))
 
+    @safe_field_extractor
     def extract_wlp_type(self, wl_entitytype):
         # entity_type_company = ['08', '09', '05', '06']
         entity_type_ind = ["03"]
@@ -219,6 +244,7 @@ class WatchlistExtractor:
             value = "I"
         return {"WLP_TYPE": value}
 
+    @safe_field_extractor
     def update_match_with_wl_values(self, match):
         wl_record_data = {
             "SRC_REF_KEY": match.get("uniqueCustomerId", ""),

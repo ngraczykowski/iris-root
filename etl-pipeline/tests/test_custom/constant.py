@@ -58,22 +58,26 @@ EXAMPLES = [
                 {
                     "name": "Joe Doe",
                     "totalMatchScore": "0.9230769230769231",
-                    "stopDescriptorDetail": {
-                        "inputToken": "Doe",
-                        "inputSynonym": "null",
-                        "sdToken": "Doe",
-                        "matchScore": "0.8571428571428572",
-                    },
+                    "stopDescriptorDetails": [
+                        {
+                            "inputToken": "Doe",
+                            "inputSynonym": "null",
+                            "sdToken": "Doe",
+                            "matchScore": "0.8571428571428572",
+                        }
+                    ],
                 },
                 {
                     "name": "Janusz Tracz Doe",
                     "totalMatchScore": "0.9230769230769231",
-                    "stopDescriptorDetail": {
-                        "inputToken": "Traczos",
-                        "inputSynonym": "null",
-                        "sdToken": "Traczos",
-                        "matchScore": "0.8571428571428572",
-                    },
+                    "stopDescriptorDetails": [
+                        {
+                            "inputToken": "Traczos",
+                            "inputSynonym": "null",
+                            "sdToken": "Traczos",
+                            "matchScore": "0.8571428571428572",
+                        }
+                    ],
                 },
             ],
             "firstMatchedDate": "01/08/20",
@@ -133,22 +137,26 @@ EXAMPLES = [
                 {
                     "name": "Joe Doe",
                     "totalMatchScore": "0.9230769230769231",
-                    "stopDescriptorDetail": {
-                        "inputToken": "Doe",
-                        "inputSynonym": "null",
-                        "sdToken": "Doe",
-                        "matchScore": "0.8571428571428572",
-                    },
+                    "stopDescriptorDetails": [
+                        {
+                            "inputToken": "Doe",
+                            "inputSynonym": "null",
+                            "sdToken": "Doe",
+                            "matchScore": "0.8571428571428572",
+                        }
+                    ],
                 },
                 {
                     "name": "Janusz Tracz Doe",
                     "totalMatchScore": "0.9230769230769231",
-                    "stopDescriptorDetail": {
-                        "inputToken": "Traczos",
-                        "inputSynonym": "null",
-                        "sdToken": "Traczos",
-                        "matchScore": "0.8571428571428572",
-                    },
+                    "stopDescriptorDetails": [
+                        {
+                            "inputToken": "Traczos",
+                            "inputSynonym": "null",
+                            "sdToken": "Traczos",
+                            "matchScore": "0.8571428571428572",
+                        }
+                    ],
                 },
             ],
             "firstMatchedDate": "01/08/20",
@@ -171,7 +179,7 @@ EXAMPLES = [
             "WL_CITY": ["ATLANTA"],
             "WL_POSTALCODE": ["11111"],
             "WL_ADDRESS2": ["FL;US"],
-            "WL_MATCHED_TOKENS": "[]",
+            "WL_MATCHED_TOKENS": r'["Doe", "Traczos"]',
             "WLP_TYPE": "I",
             "WL_DOCUMENT_NUMBER": "",
         },
@@ -285,4 +293,148 @@ EXAMPLE_PARTIES_WITH_NAMES = [
         "taxId": "12097381208937",
         "taxIdType": "SSH",
     },
+]
+
+
+EXAMPLES_WITH_INVALID_OUTPUT = [
+    (
+        {
+            "masterId": "72951854",
+            "accountSeq": "1",
+            "datasetId": "1044",
+            "uniqueCustomerId": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480\n      ",
+            "masterVersion": "412740c151535f0756e8dbec7440b726c7a3e135",
+            "matchId": "49159509",
+            "matchStatus": "O",
+            "riskScore": "-1.0",
+            cn.MATCH_RECORD_VERSION_ID: "122438658",
+            "matchType": "GWL",
+            "entityId": "908043",
+            "entityVersion": "20150505194929",
+            "entity": {
+                "id": "908049",
+                "version": "20150505194929",
+                "name": "Joe Ding",
+                "listId": "15991",
+                "listCode": "-1003",
+                "entityType": "03",
+                "createdDate": [],
+                "source": "CON",
+                "dobs": [{"dob": "MAY 6, 1981"}],
+                "ids": None,
+                "programs": {"program": "j"},
+                "sdfs": "any",
+                "addresses": "dummy text",
+            },
+            "entityType": "03",
+            "entityTextType": "UPID",
+            "sourceCode": "CON",
+            "stopDescriptors": [
+                {
+                    "name": "Joe Doe",
+                    "totalMatchScore": "0.9230769230769231",
+                    "stopDescriptorDetails": [
+                        {
+                            "inputToken": "Doe",
+                            "inputSynonym": "null",
+                            "sdToken": "Doe",
+                            "matchScore": "0.8571428571428572",
+                        }
+                    ],
+                },
+                {
+                    "name": "Janusz Tracz Doe",
+                    "totalMatchScore": "0.9230769230769231",
+                    "stopDescriptorDetails": [
+                        {
+                            "inputToken": "Traczos",
+                            "inputSynonym": "null",
+                            "sdToken": "Traczos",
+                            "matchScore": "0.8571428571428572",
+                        }
+                    ],
+                },
+            ],
+            "firstMatchedDate": "01/08/20",
+            "lastMatchedDate": "01/08/20",
+            "lastReviewDate": "01/08/20",
+        },
+        {
+            "masterId": "72951854",
+            "accountSeq": "1",
+            "datasetId": "1044",
+            "uniqueCustomerId": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480\n      ",
+            "masterVersion": "412740c151535f0756e8dbec7440b726c7a3e135",
+            "matchId": "49159509",
+            "matchStatus": "O",
+            "riskScore": "-1.0",
+            "inputVersionId": "122438658",
+            "matchType": "GWL",
+            "entityId": "908043",
+            "entityVersion": "20150505194929",
+            "entity": {
+                "id": "908049",
+                "version": "20150505194929",
+                "name": "Joe Ding",
+                "listId": "15991",
+                "listCode": "-1003",
+                "entityType": "03",
+                "createdDate": [],
+                "source": "CON",
+                "dobs": [{"dob": "MAY 6, 1981"}],
+                "ids": None,
+                "programs": {"program": "j"},
+                "sdfs": "any",
+                "addresses": "dummy text",
+            },
+            "entityType": "03",
+            "entityTextType": "UPID",
+            "sourceCode": "CON",
+            "stopDescriptors": [
+                {
+                    "name": "Joe Doe",
+                    "totalMatchScore": "0.9230769230769231",
+                    "stopDescriptorDetails": [
+                        {
+                            "inputToken": "Doe",
+                            "inputSynonym": "null",
+                            "sdToken": "Doe",
+                            "matchScore": "0.8571428571428572",
+                        }
+                    ],
+                },
+                {
+                    "name": "Janusz Tracz Doe",
+                    "totalMatchScore": "0.9230769230769231",
+                    "stopDescriptorDetails": [
+                        {
+                            "inputToken": "Traczos",
+                            "inputSynonym": "null",
+                            "sdToken": "Traczos",
+                            "matchScore": "0.8571428571428572",
+                        }
+                    ],
+                },
+            ],
+            "firstMatchedDate": "01/08/20",
+            "lastMatchedDate": "01/08/20",
+            "lastReviewDate": "01/08/20",
+            "SRC_REF_KEY": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480\n      ",
+            "VERSION_ID": "122438658",
+            "ENTITY_ID": "908043",
+            "ENTITY_VERSION": "20150505194929",
+            "WL_NAME": "Joe Ding",
+            "WL_DOB": ["MAY 6, 1981", ""],
+            "WL_ENTITYTYPE": "03",
+            "WL_COUNTRY": None,
+            "WL_COUNTRY_NAME": None,
+            "WL_NATIONALITY": [""],
+            "WL_CITIZENSHIP": [""],
+            "WL_POB": [""],
+            "WL_ALIASES": [""],
+            "WL_MATCHED_TOKENS": r'["Doe", "Traczos"]',
+            "WLP_TYPE": "I",
+            "WL_DOCUMENT_NUMBER": "",
+        },
+    )
 ]

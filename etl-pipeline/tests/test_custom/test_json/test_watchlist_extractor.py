@@ -1,12 +1,12 @@
 import pytest
 
 from etl_pipeline.custom.ms.watchlist_extractor import WatchlistExtractor
-from tests.test_custom.constant import EXAMPLES
+from tests.test_custom.constant import EXAMPLES, EXAMPLES_WITH_INVALID_OUTPUT
 
 
 @pytest.mark.parametrize(
     ("match_record", "updated_match_record_with_wl_values"),
-    EXAMPLES,
+    EXAMPLES + EXAMPLES_WITH_INVALID_OUTPUT,
 )
 def test_watchlist_extractor(match_record, updated_match_record_with_wl_values):
     WatchlistExtractor().update_match_with_wl_values(match_record)

@@ -165,6 +165,14 @@ class CategoryProducer(Producer):
         return CategoryValue(single_value=type, alert=alert, match=match_name)
 
 
+class HitTypeFeatureProducer(Producer):
+    def produce_feature_input(self, payload):
+        fields = deepcopy(self.fields)
+        for input_key, payload_key in self.fields.items():
+            fields[input_key] = payload.get(payload_key, [])
+        return NameFeatureInput(feature=self.feature_name, hit_type=fields["hit_type"])
+
+
 # Legacy producers
 
 
