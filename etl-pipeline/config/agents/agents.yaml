@@ -76,7 +76,6 @@ pob_agent:
   wl:
   - watchlistParty.matchRecords.WL_COUNTRY
   - watchlistParty.matchRecords.WL_COUNTRYNAME
-  - watchlistParty.matchRecords.WL_NAME
   - watchlistParty.matchRecords.WL_POB
   - watchlistParty.matchRecords.WL_NATIONALITY
 
