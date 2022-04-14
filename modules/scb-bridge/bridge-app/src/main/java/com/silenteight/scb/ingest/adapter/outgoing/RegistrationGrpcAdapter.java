@@ -11,6 +11,7 @@ import com.silenteight.scb.ingest.domain.model.RegistrationResponse;
 import com.silenteight.scb.ingest.domain.port.outgoing.RegistrationApiClient;
 
 import org.apache.commons.lang3.time.StopWatch;
+import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +24,11 @@ class RegistrationGrpcAdapter implements RegistrationApiClient {
   private final RegistrationServiceClient registrationServiceClient;
 
   @Override
-  @Retryable(value = RegistrationLibraryException.class)
+  @Retryable(value = RegistrationLibraryException.class,
+      maxAttemptsExpression = "${grpc.client.retry.max-attempts}",
+      backoff = @Backoff(
+          multiplierExpression = "${grpc.client.retry.multiplier}",
+          delayExpression = "${grpc.client.retry.delay-in-milliseconds}"))
   public void registerBatch(Batch batch) {
     StopWatch stopWatch = StopWatch.createStarted();
     log.info("Registering Batch: {} in Core Bridge", batch);
@@ -33,7 +38,11 @@ class RegistrationGrpcAdapter implements RegistrationApiClient {
   }
 
   @Override
-  @Retryable(value = RegistrationLibraryException.class)
+  @Retryable(value = RegistrationLibraryException.class,
+      maxAttemptsExpression = "${grpc.client.retry.max-attempts}",
+      backoff = @Backoff(
+          multiplierExpression = "${grpc.client.retry.multiplier}",
+          delayExpression = "${grpc.client.retry.delay-in-milliseconds}"))
   public RegistrationResponse registerAlertsAndMatches(RegistrationRequest request) {
     StopWatch stopWatch = StopWatch.createStarted();
     log.info("Registering {} Alert And Matches in Core Bridge with batchId: {}",

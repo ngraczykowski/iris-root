@@ -48,20 +48,6 @@ spring:
           auto-registration:
             enabled: false
 
-management:
-  endpoint:
-    health.show-details: always
-  endpoints:
-    web:
-      base-path: /management
-      exposure:
-        include: ["health", "info", "liquibase", "metrics", "prometheus", "loggers"]
-
-### REGISTRATION
-registration:
-  analysis:
-    mock-recommendations-generation: false
-
 ### SENTRY
 sentry:
   dsn: https://5991989c7325495fbdeff0bd32ddbb1d@o1129201.ingest.sentry.io/6204134

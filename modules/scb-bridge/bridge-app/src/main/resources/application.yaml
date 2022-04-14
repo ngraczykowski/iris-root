@@ -2,23 +2,31 @@ server:
   port: 24220
 grpc:
   client:
-    registration:
-      address: static://localhost:24806
-      negotiation-type: PLAINTEXT
-    universal-data-source:
-      address: static://localhost:24805
-      negotiation-type: PLAINTEXT
-    recommendation:
-      address: static://localhost:24806
+    registration.address: static://localhost:24806
+    universal-data-source.address: static://localhost:24805
+    recommendation.address: static://localhost:24806
+    retry:
+      delay-in-milliseconds: 2500
+      multiplier: 2
+      max-attempts: 3
+    GLOBAL:
       negotiation-type: PLAINTEXT
   server:
     port: 24221
 
 management:
+  endpoint:
+    health.show-details: always
   endpoints:
     web:
+      base-path: /management
       exposure:
-        include: health,info,prometheus
+        include: [ "health", "info", "liquibase", "metrics", "prometheus", "loggers"]
+    loggers:
+      sensitive: false
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
 spring:
   cloud:
