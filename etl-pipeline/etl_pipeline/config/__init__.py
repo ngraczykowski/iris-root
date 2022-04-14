@@ -1,8 +1,11 @@
+import glob
 import logging
 import os
 
 import consul
-from omegaconf import OmegaConf
+from omegaconf import OmegaConf, dictconfig
+
+import etl_pipeline
 
 CONFIG_APP_DIR = os.environ["CONFIG_APP_DIR"]
 logger = logging.getLogger("main")
@@ -76,6 +79,9 @@ def load_agent_configs():
     alert_agents_config = {
         "alert_type": OmegaConf.load(os.path.join(CONFIG_APP_DIR, "agents", "agents.yaml"))
     }
+
+    validate_agents_fields(alert_agents_config)
+
     alert_agents_config = {
         alert_type: load_agent_config(config)
         for alert_type, config in alert_agents_config.items()
@@ -97,6 +103,66 @@ class Pipeline:
 
     def reload_pipeline_config(self):
         self.load_configs()
+
+
+def get_fields(dict_):
+    raw_fields = []
+
+    # extract all the fields
+    for key in dict_:
+
+        if isinstance(dict_[key], dictconfig.DictConfig):
+            new_fields = get_fields(dict_[key])
+            raw_fields.extend(new_fields)
+        else:
+            raw_fields.extend(dict_[key])
+
+    raw_fields_no_duplicates = list(set(raw_fields))
+
+    fields = [
+        i.split(".")[-1]
+        for i in raw_fields_no_duplicates
+        if "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD" not in i
+    ]
+
+    return fields
+
+
+def check_fields_in_files(fields, file_patterns):
+    files = []
+    for file_pattern in file_patterns:
+        files.extend(glob.glob(file_pattern, recursive=True))
+    for file in files:
+        with open(file, "r", encoding="utf-8") as f:
+            text = f.read()
+
+        # check which fields are present in the file
+        fields_present = [x for x in fields if x in text]
+        if fields_present:
+            logger.debug(
+                f"{len(fields_present)} field(s) found in {file}, removing it/them from the list..."
+            )
+            fields = list(set(fields) - set(fields_present))
+        else:
+            logger.debug(f"No fields found in {file}")
+
+    # return the fields that have not been found in any file
+    return fields
+
+
+def validate_agents_fields(alert_agents_config):
+    etl_pipeline_dir = os.path.dirname(etl_pipeline.__file__)
+    dirs = [etl_pipeline_dir, etl_pipeline_dir.replace("etl_pipeline", "pipelines")]
+
+    file_patterns = [f"{dir}/**/*.py" for dir in dirs]
+    fields = get_fields(alert_agents_config["alert_type"])
+    fields_not_found = check_fields_in_files(fields, file_patterns)
+
+    if fields_not_found:
+        logger.warning("The following fields have not been found in any file:")
+        logger.warning(fields_not_found)
+    else:
+        logger.info("All the fields have been found in some file.")
 
 
 service_config = OmegaConf.load(os.path.join(CONFIG_APP_DIR, "service", "service.yaml"))
