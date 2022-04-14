@@ -1,4 +1,3 @@
-import itertools
 from abc import ABC, abstractmethod
 from copy import deepcopy
 
@@ -67,7 +66,9 @@ class DocumentFeatureInputProducer(Producer):
     def produce_feature_input(self, payload):
         fields = deepcopy(self.fields)
         for input_key, payload_key in self.fields.items():
-            fields[input_key] = payload.get(payload_key, [])
+            fields[input_key] = [
+                i for i in payload.get(payload_key, []) if i is not None and i != "None"
+            ]
         return DocumentFeatureInput(
             feature=self.feature_name,
             **fields,
@@ -103,25 +104,6 @@ class LocationFeatureInputProducer(Producer):
         )
 
 
-class EmployerNameFeatureInputProducer(Producer):
-    def produce_feature_input(self, payload):
-        fields = deepcopy(self.fields)
-        for input_key, payload_key in self.fields.items():
-            fields[input_key] = payload.get(payload_key, [])
-
-        return NameFeatureInput(
-            feature=self.feature_name,
-            alerted_party_type=NameFeatureInput.EntityType.ENTITY_TYPE_UNSPECIFIED,
-            alerted_party_names=[
-                AlertedPartyName(name=str(i)) for i in fields["alerted_party_names"]
-            ],
-            watchlist_names=[
-                WatchlistName(name=str(i), type=WatchlistName.NameType.REGULAR)
-                for i in fields["watchlist_names"]
-            ],
-        )
-
-
 class NameFeatureInputProducer(Producer):
     def produce_feature_input(self, payload):
         fields = deepcopy(self.fields)
@@ -141,23 +123,6 @@ class NameFeatureInputProducer(Producer):
         )
 
 
-class GeoResidencyAgentFeatureInputProducer(Producer):
-    def produce_feature_input(self, payload):
-        ap_parties = payload.get("ap_all_residencies_aggregated", [""])
-        wl_parties = payload.get("wl_all_residencies_aggregated", [""])
-        if not ap_parties:
-            ap_parties = [""]
-        if not wl_parties:
-            wl_parties = [""]
-        combinations = list(itertools.product(ap_parties, wl_parties))
-        return [
-            LocationFeatureInput(
-                feature=self.feature_name, alerted_party_location=ap, watchlist_location=wl
-            )
-            for ap, wl in combinations
-        ]
-
-
 class CategoryProducer(Producer):
     def produce_feature_input(self, payload, match_payload, alert, match_name):
         fields = deepcopy(self.fields)
@@ -174,8 +139,6 @@ class HitTypeFeatureProducer(Producer):
 
 
 # Legacy producers
-
-
 class TransactionFeatureInputProducer(Producer):
     feature_name = "features/transaction"
 

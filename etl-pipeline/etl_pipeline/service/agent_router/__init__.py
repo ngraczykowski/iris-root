@@ -32,7 +32,6 @@ from etl_pipeline.service.agent_router.producers import (  # noqa F401;
     CountryFeatureInputProducer,
     DateFeatureInputProducer,
     DocumentFeatureInputProducer,
-    EmployerNameFeatureInputProducer,
     HistoricalDecisionsFeatureInputProducer,
     LocationFeatureInputProducer,
     NameFeatureInputProducer,
