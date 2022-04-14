@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.solving.listener;
+package com.silenteight.adjudication.engine.solving.application.listener;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,11 +12,16 @@ import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@ConditionalOnProperty(
+    value = "ae.solving.enabled",
+    havingValue = "true"
+)
 class ReceivedAlertListener {
 
   private final AlertAgentDispatchProcess bojkaBajkaIBraworka;

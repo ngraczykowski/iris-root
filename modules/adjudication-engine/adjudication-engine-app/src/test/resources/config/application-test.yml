@@ -75,3 +75,5 @@ ae:
   match-recommendation:
     flow:
       enabled: true
+  solving:
+    enabled: true
