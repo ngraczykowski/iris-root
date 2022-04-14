@@ -191,4 +191,4 @@ feeding:
       SOLVED_FALSE_POSITIVE: "analyst_decision_false_positive"
       SOLVED_TRUE_POSITIVE: "analyst_decision_true_positive"
 
-  learning.dataRetentionDuration: 3m
+  learning.dataRetentionDuration: 90d
