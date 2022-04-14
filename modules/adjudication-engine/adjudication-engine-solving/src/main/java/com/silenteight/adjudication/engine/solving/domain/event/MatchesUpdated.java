@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public class MatchesUpdated extends DomainBase {
 
-  public static final String EVENT_TYPE = "feature.matches.updated";
+  public static final String EVENT_TYPE = "matches.updated";
 
   public MatchesUpdated() {
     super(EVENT_TYPE, null, null, null);
