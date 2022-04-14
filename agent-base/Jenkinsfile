@@ -1,0 +1,109 @@
+@Library('pipeline-shared-library') _
+def utils = new com.silenteight.jenkins.ci.Utils()
+def jenkins = new com.silenteight.jenkins.ci.Jenkins()
+
+
+pipeline {
+    agent {
+        label 'ec2-agent'
+    }
+    environment {
+        PYPI_URL = credentials('pypi-readonly-url')
+        TWINE_REPOSITORY_URL = 'https://repo.silenteight.com/artifactory/api/pypi/pypi'
+    }
+    options {
+        timeout(time: 1, unit: 'HOURS')   // just to be safe
+    }
+    parameters {
+        booleanParam(name: 'RELEASE', defaultValue: false, description: 'Release new version')
+    }
+
+    stages {
+        stage('Build and publish package') {
+            agent {
+                docker {
+                    image 'docker.repo.silenteight.com/python-build-image:3.7-bullseye'
+                    args '--volume $HOME/.cache/agent/pip:/home/jenkins/.cache/pip'
+                    reuseNode true
+                }
+            }
+            stages {
+                stage('Prepare') {
+                    steps {
+                        sh 'pip install --index-url "${PYPI_URL}" --requirement requirements.txt'
+                    }
+                }
+                stage('Build package') {
+                    steps {
+                        sh './scripts/clean.sh'
+                        sh './scripts/build.sh --index-url "${PYPI_URL}"'
+                    }
+                }
+                stage('Test package') {
+                    steps {
+                        sh 'pip install --index-url "${PYPI_URL}" tox'
+                        sh './scripts/test.sh --index-url "${PYPI_URL}"'
+                    }
+                }
+                stage('Publish package') {
+                    when {
+                        anyOf {
+                            branch 'master'
+                            branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
+                        }
+                    }
+                    steps {
+                        withCredentials([usernamePassword(
+                            credentialsId: 'pypi-deployment-user',
+                            usernameVariable: 'TWINE_USERNAME',
+                            passwordVariable: 'TWINE_PASSWORD',
+                        )]) {
+                            sh './scripts/publish.sh --index-url "${PYPI_URL}"'
+                        }
+                    }
+                }
+                stage('Release package') {
+                    when {
+                        allOf {
+                            anyOf {
+                                branch 'master'
+                                branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
+                            }
+                            expression { return params.RELEASE }
+                        }
+                    }
+                    steps {
+                        sh 'pip install --index-url "${PYPI_URL}" bump2version tox'
+                        sh 'git tag --delete $(git tag --list)'
+                        sshagent([env.JENKINS_SSH_NAME]) {
+                            sh './scripts/release.sh --index-url ${PYPI_URL}'
+                        }
+                        script {
+                           env.VERSION = env.VERSION.replace('-dev', '')
+                        }
+                        withCredentials([usernamePassword(
+                            credentialsId: 'pypi-deployment-user',
+                            usernameVariable: 'TWINE_USERNAME',
+                            passwordVariable: 'TWINE_PASSWORD',
+                        )]) {
+                            sh './scripts/publish.sh --index-url "${PYPI_URL}"'
+                        }
+                    }
+                }
+            }
+            post {
+                always {
+                    junit testResults: '.tox/flake8-report.xml, .tox/mypy-report.xml, .tox/pytest-report.xml',
+                          allowEmptyResults: true
+                    archiveArtifacts artifacts: 'dist/*', fingerprint: true
+                }
+                success {
+                    publishCoverage adapters: [istanbulCoberturaAdapter('.tox/coverage-report.xml')],
+                                    failNoReports: false
+                    stash includes: 'dist/*', name: 'artifacts'
+                }
+            }
+        }
+    }
+}
+
