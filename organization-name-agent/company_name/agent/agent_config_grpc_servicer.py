@@ -1,4 +1,5 @@
 import logging
+import sys
 
 from agent_base.grpc_service.servicer import GrpcServicer
 from agent_base.utils import Config
@@ -19,7 +20,7 @@ from company_name.solution.scores_reduction import FeatureRule, ModelRule, Model
 from company_name.solution.sklearn_model import SklearnModel
 
 logger = logging.getLogger(__name__)
-c_handler = logging.StreamHandler()
+c_handler = logging.StreamHandler(sys.stdout)
 c_handler.setLevel(logging.DEBUG)
 
 

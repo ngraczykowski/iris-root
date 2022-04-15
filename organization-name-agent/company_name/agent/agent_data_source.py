@@ -1,3 +1,6 @@
+import logging
+import sys
+
 from agent_base.agent_exchange.agent_data_source import AgentDataSource
 from silenteight.agents.v1.api.exchange.exchange_pb2 import AgentExchangeRequest
 from silenteight.datasource.api.name.v1.name_pb2 import (
@@ -6,6 +9,10 @@ from silenteight.datasource.api.name.v1.name_pb2 import (
     NameFeatureInput,
 )
 from silenteight.datasource.api.name.v1.name_pb2_grpc import NameInputServiceStub
+
+logger = logging.getLogger(__name__)
+c_handler = logging.StreamHandler(sys.stdout)
+c_handler.setLevel(logging.DEBUG)
 
 
 class CompanyNameAgentDataSource(AgentDataSource):
@@ -21,6 +28,7 @@ class CompanyNameAgentDataSource(AgentDataSource):
         )
 
     def parse_response(self, response: BatchGetMatchNameInputsResponse):
+        logger.debug(f"Response name inputs len: {len(response.name_inputs)}")
         for name_input in response.name_inputs:
             match = name_input.match
             for feature_input in name_input.name_feature_inputs:

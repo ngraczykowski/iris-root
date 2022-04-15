@@ -11,24 +11,21 @@ company_name_agent_config_path="$scriptdir/../dist/${company_name_agent_config}"
 set -x
 
 
-for d in nomad/*/; do
-  cd "$d"
-  name=$(basename -- "$d")
+cd nomad
 
-  if [ -f "company-name-agent.nomad" ]; then
-    echo "Processing $name"
-  else
-    echo "No nomad file in $name, ignoring"
-    cd -
-    continue
-  fi
-
+if [ -f "company-name-agent.nomad" ]; then
+  echo "Processing nomad"
   rm -rf artifacts/
   mkdir -p artifacts/
 
   cp "$company_name_agent_artifact_path" artifacts/
   cp "$company_name_agent_config_path" artifacts/
 
-  tar -cvjSf ../"company-name-agent-nomad-${name}-${company_name_agent_version}.tar.bz2" -- *
+  tar -cvjSf ../"company-name-agent-nomad-${company_name_agent_version}.tar.bz2" -- *
   cd -
-done
+else
+  echo "No nomad file in nomad directory, ignoring"
+  cd -
+fi
+
+

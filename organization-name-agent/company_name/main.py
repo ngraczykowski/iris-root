@@ -19,11 +19,12 @@ def run(
     start_agent_exchange,
     start_grpc_service,
     additional_knowledge_dir,
+    use_ssl,
 ):
     config = Config(configuration_dirs=configuration_dirs, required=True)
 
-    sentry_config = config.application_config["sentry"]
-    if sentry_config["turn_on"]:
+    sentry_config = config.application_config.get("sentry", None)
+    if sentry_config:
         sentry_sdk.init(
             traces_sample_rate=0.0,  # hard set to 0 to not increase usage cost
             release=f"organization-name-agent@{sentry_config['release']}",
@@ -35,8 +36,7 @@ def run(
     if start_agent_exchange:
         services.append(
             CompanyNameAgentExchange(
-                config,
-                data_source=CompanyNameAgentDataSource(config),
+                config, data_source=CompanyNameAgentDataSource(config, ssl=use_ssl), ssl=use_ssl
             )
         )
 
@@ -48,6 +48,7 @@ def run(
                 config,
                 agent_servicer=CompanyNameAgentGrpcServicer(),
                 servicers=(CompanyNameAgentConfigServicer(agent),),
+                ssl=use_ssl,
             )
         )
 
@@ -89,6 +90,11 @@ def main():
         action="store_true",
         help="Increase verbosity for debug purpose",
     )
+    parser.add_argument(
+        "--ssl",
+        action="store_true",
+        help="Use ssl in grpc service and to connect with UDS & rabbitMQ",
+    )
     args = parser.parse_args()
     # if not args.grpc and not args.agent_exchange:
     #     parser.error("No services to run")
@@ -103,6 +109,7 @@ def main():
         start_grpc_service=args.grpc,
         start_agent_exchange=args.agent_exchange,
         additional_knowledge_dir=args.knowledge,
+        use_ssl=args.ssl,
     )
 
 

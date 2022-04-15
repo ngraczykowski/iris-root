@@ -9,7 +9,7 @@ def loadValuesYaml(key){
 
 pipeline {
     agent {
-        label 'ec2-agent-test'
+        label 'ec2-agent'
     }
     environment {
         PYPI_URL = credentials('pypi-readonly-url')
@@ -105,24 +105,24 @@ pipeline {
                         }
                     }
                 }
-//                 stage('Prepare nomad artifacts') {
-//                     steps {
-//                         sh './nomad/prepare.sh'
-//                     }
-//                 }
+                stage('Prepare nomad artifacts') {
+                    steps {
+                        sh './nomad/prepare.sh'
+                    }
+                }
             }
-//             post {
-//                 always {
-//                     junit testResults: '.tox/flake8-report.xml, .tox/mypy-report.xml, .tox/pytest-report.xml',
-//                           allowEmptyResults: true
-//                     archiveArtifacts artifacts: 'dist/*, nomad/*.tar.bz2', fingerprint: true
-//                 }
-//                 success {
-//                     publishCoverage adapters: [istanbulCoberturaAdapter('.tox/coverage-report.xml')],
-//                                     failNoReports: false
-//                     stash includes: 'dist/*, nomad/*/artifacts/*', name: 'artifacts'
-//                 }
-//             }
+            post {
+                always {
+                    junit testResults: '.tox/flake8-report.xml, .tox/mypy-report.xml, .tox/pytest-report.xml',
+                          allowEmptyResults: true
+                    archiveArtifacts artifacts: 'dist/*, nomad/*.tar.bz2', fingerprint: true
+                }
+                success {
+                    publishCoverage adapters: [istanbulCoberturaAdapter('.tox/coverage-report.xml')],
+                                    failNoReports: false
+                    stash includes: 'dist/*, nomad/artifacts/*', name: 'artifacts'
+                }
+            }
         }
         stage('Build and publish docker image') {
             stages {
@@ -139,7 +139,13 @@ pipeline {
                 }
                 stage('Helm') {
                     when {
-                        branch 'master'
+                        allOf {
+                            anyOf {
+                                branch 'master'
+                                branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
+                            }
+                            expression { return params.RELEASE }
+                        }
                     }
                     steps {
                         withCredentials([
@@ -158,7 +164,13 @@ pipeline {
                 }
                 stage('ECR') {
                     when {
-                        branch 'master'
+                        allOf {
+                            anyOf {
+                                branch 'master'
+                                branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
+                            }
+                            expression { return params.RELEASE }
+                        }
                     }
                     agent {
                         label 'aws'
@@ -173,42 +185,49 @@ pipeline {
                 }
             }
         }
-//         stage('Zipped (.pyz) artifacts upload') {
-//             when {
-//                 anyOf {
-//                     branch 'master'
-//                     tag pattern: '^v(\\d+(\\.\\d+)*)\$', comparator: 'REGEXP'
-//                 }
-//             }
-//             stages {
-//                 stage('Upload artifacts') {
-//                     steps {
-//                         sh './scripts/clean.sh'
-//                         unstash 'artifacts'
-//                         rtServer (
-//                             id: "silenteight-repo",
-//                             url: "https://repo.silenteight.com/artifactory",
-//                             credentialsId: "artifactory-deployment-user"
-//                         )
-//                         rtUpload (
-//                             serverId: 'silenteight-repo',
-//                             spec: '''{
-//                                 "files": [
-//                                     {
-//                                       "pattern": "dist/*.pyz",
-//                                       "target": "dist-public-local/organization-name-agent/"
-//                                     },
-//                                     {
-//                                       "pattern": "dist/*.tgz",
-//                                       "target": "dist-public-local/organization-name-agent/"
-//                                     }
-//                                 ]
-//                             }''',
-//                         )
+        stage('Zipped (.pyz) artifacts upload') {
+            agent any
+            when {
+                anyOf {
+                    branch 'master'
+                    tag pattern: '^v(\\d+(\\.\\d+)*)\$', comparator: 'REGEXP'
+                }
+            }
+            stages {
+                stage('Upload artifacts') {
+                    steps {
+                        sh './scripts/clean.sh'
+                        unstash 'artifacts'
+                        rtServer (
+                            id: "silenteight-repo",
+                            url: "https://repo.silenteight.com/artifactory",
+                            credentialsId: "artifactory-deployment-user"
+                        )
+                        rtUpload (
+                            serverId: 'silenteight-repo',
+                            spec: '''{
+                                "files": [
+                                    {
+                                      "pattern": "dist/*.pyz",
+                                      "target": "dist-public-local/organization-name-agent/"
+                                    },
+                                    {
+                                      "pattern": "dist/*.tgz",
+                                      "target": "dist-public-local/organization-name-agent/"
+                                    }
+                                ]
+                            }''',
+                        )
+                    }
+                }
+//             stage('Deploy on nomad') {
+//                steps {
+//                         sh './nomad/deploy.sh'
 //                     }
 //                 }
-//             }
-//        }
+
+            }
+       }
     }
 }
 
