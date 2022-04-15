@@ -8,6 +8,8 @@ import com.silenteight.connector.ftcc.common.dto.input.RequestDto;
 import com.silenteight.connector.ftcc.common.dto.output.AckDto;
 import com.silenteight.connector.ftcc.ingest.domain.IngestFacade;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,11 +23,14 @@ class IngestRestController {
   @NonNull
   private final IngestFacade ingestFacade;
 
+  @NonNull
+  private final ObjectMapper objectMapper;
+
   @PostMapping("/v1/alert")
-  public ResponseEntity<AckDto> alert(@RequestBody RequestDto request) {
+  public ResponseEntity<AckDto> alert(@RequestBody String request) throws JsonProcessingException {
     log.info("Alert received");
     log.info("Received request body:\n{}", request);
-    ingestFacade.ingest(request);
+    ingestFacade.ingest(objectMapper.readValue(request, RequestDto.class));
     return ResponseEntity.ok(AckDto.ok());
   }
 }
