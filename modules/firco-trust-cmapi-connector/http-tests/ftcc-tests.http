@@ -6,7 +6,7 @@ POST {{baseurl}}/rest/ftcc/v1/alert
 Accept: application/json
 Content-Type: application/json
 
-< ./requests/request-simple.json
+< ./requests/SendMessage.json
 
 ### Callback
 // @no-log
