@@ -1,0 +1,604 @@
+####################################################################################################
+# Solution Discrepancy AMQP Configuration
+####################################################################################################
+serp:
+  db:
+    host: localhost
+    port: 24292
+    schema: public
+    name: governance
+    user: governance
+    password: governance
+    url: jdbc:postgresql://${serp.db.host}:${serp.db.port}/${serp.db.name}?currentSchema=${serp.db.schema}
+    connections:
+      min: 1
+      max: 10
+  notifier:
+    integration:
+      inbound-queue-name: ${serp.governance.messaging.broker.notification.queue-name}
+      outbound-exchange-name:
+      outbound-routing-key: notifier.send-mail
+      mail:
+        inbound-queue-name: ${serp.governance.messaging.broker.notification-send-mail.queue-name}
+  governance:
+    agent:
+      agent-configuration-source: classpath:agent_configs.json
+      agent-details-source: classpath:agent_details.json
+    integration:
+      solution-discrepancy:
+        inbound-queue-name: ${serp.governance.messaging.broker.solution-discrepancy.queue-name}
+        outbound-exchange-name: ${serp.governance.messaging.exchange.notification}
+        reasoning-branches-disabled-routing-key: notification.reasoning-branches-disabled
+    messaging:
+      exchange:
+        analytics: feature-vector
+        model: gov.model
+        notification: notification
+        solution-discrepancy: learning
+        gov-events: gov.events
+        gov-event: gov.event
+      broker:
+        analytics:
+          queue-name: governance.analytics
+          routing-key: feature-vector.solved
+        ingest:
+          queue-name: gov.feature-vector.ingest
+          routing-key: command.index-request.production
+        model-export:
+          routing-key: event.model-promoted.production
+        model-in-use:
+          routing-key: event.model-in-use.production
+        models-archived:
+          queue-name: gov.models-archived
+          routing-key: event.models-archived
+        gov-events:
+          routing-key: '#'
+        qa-retention-personal-information-expired:
+          queue-name: gov.retention.personal-information-expired
+          routing-key: retention.personal-information-expired
+        qa-retention-alerts-expired:
+          queue-name: gov.retention.alerts-expired
+          routing-key: retention.personal-information-expired
+        notification:
+          queue-name: notifier.incoming-event
+          routing-key: notification.*
+        notification-send-mail:
+          queue-name: notifier.send-mail
+          routing-key: notifier.send-mail
+        solution-discrepancy:
+          queue-name: governance.solution-discrepancy
+          routing-key: learning.discrepancy-detected
+        to-remove:
+          bindings: []
+          exchanges: []
+
+    feature-vector:
+      integration:
+        request:
+          exchange: ${serp.governance.messaging.exchange.analytics}
+          routing-key: ${serp.governance.messaging.broker.analytics.routing-key}
+        receive:
+          queue-name: ${serp.governance.messaging.broker.analytics.queue-name}
+
+    ingest:
+      integration:
+        receive:
+          queue-name: ${serp.governance.messaging.broker.ingest.queue-name}
+
+    qa:
+      integration:
+        request:
+          exchange: gov.events
+          routingKey: event.qa-alert
+      retention:
+        personal-information-expired:
+          integration:
+            receive:
+              queue-name: ${serp.governance.messaging.broker.qa-retention-personal-information-expired.queue-name}
+        alerts-expired:
+          integration:
+            receive:
+              queue-name: ${serp.governance.messaging.broker.qa-retention-alerts-expired.queue-name}
+
+    model:
+      categorySource: classpath:categories.json
+      modelTransfer: LOCAL
+      archive:
+        integration:
+          request:
+            exchange: ${serp.governance.messaging.exchange.model}
+            routingKey: ${serp.governance.messaging.broker.models-archived.routing-key}
+          receive:
+            queue-name: ${serp.governance.messaging.broker.models-archived.queue-name}
+
+      export:
+        integration:
+          request:
+            exchange: ${serp.governance.messaging.exchange.model}
+            routingKey: ${serp.governance.messaging.broker.model-export.routing-key}
+      send-in-use:
+        integration:
+          request:
+            exchange: ${serp.governance.messaging.exchange.model}
+            routingKey: ${serp.governance.messaging.broker.model-in-use.routing-key}
+
+  rabbitmq:
+    host: localhost
+    port: 24130
+    user: governance
+    password: governance
+    vhost: /
+    encryption:
+      enabled: false
+      key.seed: change_me_please
+      key.salt: change_me_please
+      key.size: 256
+      mac.size: 112
+      nonce:
+        size: 96
+        header: encryption-nonce
+
+  messaging:
+    error-queue:
+      enabled: true
+    concurrency: 4
+    prefetch: 25
+    encryption:
+      enabled: ${serp.rabbitmq.encryption.enabled}
+      key-seed: ${serp.rabbitmq.encryption.key.seed}
+      salt: ${serp.rabbitmq.encryption.key.salt}
+      key-size-in-bits: ${serp.rabbitmq.encryption.key.size}
+      mac-size-in-bits: ${serp.rabbitmq.encryption.mac.size}
+      nonce-size-in-bits: ${serp.rabbitmq.encryption.nonce.size}
+      nonce-header: ${serp.rabbitmq.encryption.nonce.header}
+####################################################################################################
+# Defaults (overridden by environment variables or arguments)
+####################################################################################################
+
+#---------------------------------------------------------------------------------------------------
+# SERVER
+#---------------------------------------------------------------------------------------------------
+serp.web.threads.io: 4
+serp.web.threads.worker: 16
+serp.server.protocol: http
+
+#---------------------------------------------------------------------------------------------------
+# GENERAL
+#---------------------------------------------------------------------------------------------------
+serp.execution.threads: 8
+serp.execution.threads.max: 16
+serp.execution.queue: 10000
+
+serp.scheduling.threads: 2
+
+# XXX(ahaczewski): Temporarily set to true, until we're sure customer correctly configured SERP.
+serp.show-env: true
+
+#---------------------------------------------------------------------------------------------------
+# SERVICE DISCOVERY
+#---------------------------------------------------------------------------------------------------
+serp.consul.discovery.enabled: false
+
+#---------------------------------------------------------------------------------------------------
+# mTLS - enabled by default
+#---------------------------------------------------------------------------------------------------
+serp.tls.enabled: false
+serp.consul.traefik.passTLSCert: ${serp.tls.enabled}
+serp.consul.traefik.entryPoints: unprotectedGateway
+
+####################################################################################################
+# CONFIGURATION
+####################################################################################################
+
+#---------------------------------------------------------------------------------------------------
+# SERVER
+#---------------------------------------------------------------------------------------------------
+# Embedded server configuration
+server:
+  port: 24204
+  forward-headers-strategy: native
+  undertow:
+    io-threads: ${serp.web.threads.io}
+    worker-threads: ${serp.web.threads.worker}
+
+  servlet:
+    context-path: /rest/${spring.application.name}
+
+  error:
+    include-exception: true
+    include-stacktrace: never
+
+#---------------------------------------------------------------------------------------------------
+# MANAGEMENT
+#---------------------------------------------------------------------------------------------------
+
+# Management HTTP server
+management:
+  health:
+    mail:
+      enabled: false
+  info:
+    git:
+      mode: simple
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: [ "health", "info", "metrics", "prometheus", "loggers" ]
+    jmx:
+      exposure:
+        exclude: "*"
+
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+#---------------------------------------------------------------------------------------------------
+# GENERAL
+#---------------------------------------------------------------------------------------------------
+spring:
+  application:
+    name: governance
+  # AOP configuration - disabled due to AspectJ compile-time weaving use
+  aop:
+    auto: false
+
+  datasource:
+    # Postgres database
+    type: com.zaxxer.hikari.HikariDataSource
+    url: ${serp.db.url}
+    username: ${serp.db.user}
+    password: ${serp.db.password}
+    initialization-mode: never
+
+    # Hikari pool configuration
+    hikari:
+      pool-name: Database-Pool
+      minimum-idle: ${serp.db.connections.min}
+      maximum-pool-size: ${serp.db.connections.max}
+      auto-commit: false
+      schema: ${serp.db.schema}
+      isolate-internal-queries: true
+      # NOTE(ahaczewski): Forces HikariCP to commit the transaction after opening fresh connection.
+      #  Without it, the connection transaction is left in OPEN state instead of IDLE, because
+      #  just before HikariCP runs `SET SESSION search_path TO '${serp.db.schema}'` which begins
+      #  transaction. Thus, with that query as workaround, we force the transaction commit.
+      connection-init-sql: SELECT 1
+      data-source-properties:
+        ApplicationName: SERP (${spring.application.name})
+
+  # Database migrations
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    default-schema: ${serp.db.schema}
+    contexts: default
+
+  # Spring Data JPA
+  jpa:
+    database-platform: com.silenteight.sep.base.common.support.hibernate.FixedPostgreSql95Dialect
+    database: POSTGRESQL
+    show-sql: false
+    open-in-view: false
+
+    hibernate:
+      ddl-auto: none
+      use-new-id-generator-mappings: true
+
+    properties:
+      hibernate.cache.use_query_cache: false
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.generate_statistics: false
+      hibernate.jdbc.lob.non_contextual_creation: true
+      hibernate.jdbc.time_zone: UTC
+      hibernate.temp.use_jdbc_metadata_defaults: false
+      org.hibernate.envers.audit_table_suffix: _audit
+      org.hibernate.envers.store_data_at_delete: true
+
+  # Task execution and scheduling
+  task:
+    execution:
+      pool:
+        core-size: ${serp.execution.threads}
+        max-size: ${serp.execution.threads.max}
+        queue-capacity: ${serp.execution.queue}
+        keep-alive: 10s
+      thread-name-prefix: pool-task-
+
+    scheduling:
+      pool.size: ${serp.scheduling.threads}
+      thread-name-prefix: pool-scheduling-
+
+  main:
+    banner-mode: 'off'
+
+  groovy:
+    template:
+      check-template-location: false
+
+  cloud:
+    consul:
+      config:
+        enabled: false
+      enabled: false
+    service-registry:
+      enabled: false
+      auto-registration:
+        enabled: false
+
+  rabbitmq:
+    # virtual-host:
+    # addresses: ${serp.rabbitmq.addresses}
+    host: ${serp.rabbitmq.host}
+    port: ${serp.rabbitmq.port}
+    username: ${serp.rabbitmq.user}
+    password: ${serp.rabbitmq.password}
+    virtual-host: ${serp.rabbitmq.vhost}
+    ssl:
+      enabled: false
+    listener:
+      type: simple
+      direct:
+        consumers-per-queue: ${serp.messaging.concurrency}
+        prefetch: ${serp.messaging.prefetch}
+      simple:
+        concurrency: 1
+        max-concurrency: ${serp.messaging.concurrency}
+        prefetch: ${serp.messaging.prefetch}
+
+  servlet:
+    multipart.max-file-size: 20MB
+    multipart.max-request-size: 20MB
+
+grpc:
+  server:
+    port: 24205
+  client:
+    GLOBAL:
+      enableKeepAlive: true
+      negotiationType: PLAINTEXT
+
+    governance:
+      address: static://localhost:24205
+
+    reco:
+      address: static://localhost:24207
+
+    pipeline:
+      address: static://localhost:24203
+
+    gateway:
+      address: static://localhost:24201
+
+    name-agent:
+      address: static://localhost:24301
+
+    document-number-agent:
+      address: static://localhost:24309
+
+    document-comparer-agent:
+      address: static://localhost:24307
+
+    gender-agent:
+      address: static://localhost:24311
+
+    country-agent:
+      address: static://localhost:24315
+
+    date-agent:
+      address: static://localhost:24313
+
+
+serp.governance:
+  cors:
+    allowed-origins-patterns: "*"
+    allowed-methods: "*"
+    allowed-headers: "*"
+    exposed-headers: "Authorization,Link,X-Total-Count"
+    allow-credentials: true
+    max-age: 1800
+
+  policy-step-solution:
+    hinted-enabled: false
+
+sep.auth:
+  permissionMethodsMappings:
+    CANCEL_APPROVAL_TICKET:
+      - "CANCEL_CHANGE_REQUEST"
+      - "GET_CHANGE_REQUEST"
+    APPROVE_APPROVAL_TICKET:
+      - "APPROVE_CHANGE_REQUEST"
+      - "GET_CHANGE_REQUEST"
+    REJECT_APPROVAL_TICKET:
+      - "REJECT_CHANGE_REQUEST"
+      - "GET_CHANGE_REQUEST"
+    PROMOTE_MODEL_AS_CHANGE_REQUEST:
+      - "CREATE_CHANGE_REQUEST"
+    VIEW_APPROVAL_QUEUE:
+      - "LIST_CHANGE_REQUESTS"
+      - "GET_CHANGE_REQUEST"
+      - "LIST_ATTACHMENTS"
+      - "DOWNLOAD_ATTACHMENTS"
+    VIEW_POLICIES:
+      - "LIST_POLICIES"
+      - "LIST_STEPS_LOGIC"
+      - "LIST_STEPS_ORDER"
+      - "LIST_STEPS"
+      - "LIST_STEP_FEATURE_VECTORS"
+      - "LIST_AGENTS"
+      - "LIST_CATEGORIES"
+      - "LIST_FEATURES"
+      - "STEP_DETAILS"
+    IMPORT_POLICY:
+      - "IMPORT_POLICY"
+      - "IMPORT_POLICY_FROM_RBS"
+    MANAGE_POLICY:
+      - "EDIT_POLICY"
+      - "CLONE_POLICY"
+      - "CREATE_POLICY"
+      - "DELETE_POLICY"
+    MANAGE_STEPS:
+      - "EDIT_STEPS_LOGIC"
+      - "CREATE_STEP"
+      - "EDIT_STEP"
+      - "REMOVE_STEP"
+      - "CLONE_STEP"
+    MANAGE_QA_ALERT:
+      - "ALERTS_ANALYSIS"
+      - "LIST_POLICIES"
+      - "ALERTS_ANALYSIS_DECISION"
+    DASHBOARD:
+      - "LIST_POLICIES"
+      - "LIST_MODELS"
+    VIEW_AI_SUGGESTIONS:
+      - "LIST_POLICIES"
+      - "EDIT_POLICY"
+      - "LIST_STEPS_LOGIC"
+      - "LIST_STEPS_ORDER"
+      - "LIST_STEPS"
+      - "LIST_STEP_FEATURE_VECTORS"
+      - "LIST_AGENTS"
+      - "LIST_CATEGORIES"
+    MANAGE_AI_SUGGESTION:
+      - "IMPORT_POLICY"
+    VIEW_REASONING_BRANCHES:
+      - "LIST_VECTORS"
+    VIEW_QA_ALERTS:
+      - "ALERTS_ANALYSIS"
+    VIEW_QA_VERIFICATION:
+      - "ALERTS_VALIDATION"
+      - "ALERTS_ANALYSIS"
+    MANAGE_QA_VERIFICATION:
+      - "ALERTS_VALIDATION"
+      - "LIST_POLICIES"
+      - "ALERTS_VALIDATION_DECISION"
+    MANAGE_SIMULATION:
+      - "CREATE_MODEL"
+    ADD_ATTACHMENT_TO_APPROVAL_TICKET:
+      - "UPLOAD_ATTACHMENTS"
+      - "REMOVE_ATTACHMENTS"
+  rolePermissionsMappings:
+    APPROVER:
+      - "VIEW_POLICIES"
+      - "VIEW_APPROVAL_QUEUE"
+      - "APPROVE_APPROVAL_TICKET"
+      - "REJECT_APPROVAL_TICKET"
+      - "DASHBOARD"
+      - "VIEW_REASONING_BRANCHES"
+      - "ADD_ATTACHMENT_TO_APPROVAL_TICKET"
+    MODEL_TUNER:
+      - "MANAGE_POLICY"
+      - "VIEW_POLICIES"
+      - "IMPORT_POLICY"
+      - "MANAGE_STEPS"
+      - "MANAGE_SIMULATION"
+      - "PROMOTE_MODEL_AS_CHANGE_REQUEST"
+      - "VIEW_APPROVAL_QUEUE"
+      - "CANCEL_APPROVAL_TICKET"
+      - "DASHBOARD"
+      - "VIEW_AI_SUGGESTIONS"
+      - "MANAGE_AI_SUGGESTION"
+      - "VIEW_REASONING_BRANCHES"
+      - "ADD_ATTACHMENT_TO_APPROVAL_TICKET"
+    AUDITOR:
+      - "VIEW_POLICIES"
+      - "VIEW_APPROVAL_QUEUE"
+      - "VIEW_QA_ALERTS"
+      - "VIEW_QA_VERIFICATION"
+      - "DASHBOARD"
+      - "VIEW_AI_SUGGESTIONS"
+      - "VIEW_REASONING_BRANCHES"
+    QA:
+      - "VIEW_POLICIES"
+      - "VIEW_QA_ALERTS"
+      - "MANAGE_QA_ALERT"
+      - "DASHBOARD"
+    QA_ISSUE_MANAGER:
+      - "MANAGE_POLICY"
+      - "VIEW_POLICIES"
+      - "MANAGE_STEPS"
+      - "VIEW_QA_VERIFICATION"
+      - "MANAGE_QA_VERIFICATION"
+      - "DASHBOARD"
+      - "VIEW_REASONING_BRANCHES"
+
+serp.governance.qa:
+  sampling:
+    schedule:
+      enabled: true
+      audit-cron: 0 0 1 * * ?
+      alert-generator-cron: 0 0 1 1 * ?
+    generator:
+      sample-count: 454
+      grouping-fields:
+        - alert_extendedAttribute5
+      filters:
+        - field: alert_s8_recommendation
+          values:
+            - ACTION_FALSE_POSITIVE
+  retention:
+    personal-information:
+      batch-size: 200
+    alert:
+      batch-size: 200
+  viewing:
+    max-state-reset-delay-ms: 45000
+
+serp.governance.featurevector:
+  ingest:
+    repackager:
+      fvSignatureKey: feature_vector_signature
+      feature-or-category-regex: ^(categories\/(\w)+)$|^(features\/(\w)+\:solution)$
+      prefix-and-suffix-regex: ^(features\/)|^(categories\/)|(:solution)$
+  event:
+    strategy: INGEST #[INGEST,SOLVE]
+
+serp.governance.grpc:
+  client:
+    timeout: 30s
+
+serp.governance.files:
+  validation:
+    max-file-name-length: 255
+    max-file-size-in-bytes: 20971520
+    max-number-files-to-upload: 20
+    allowed-types:
+      - image/jpeg
+      - image/png
+      - image/gif
+      - image/svg+xml
+      - application/pdf
+      - application/x-tika-msoffice
+      - application/x-tika-ooxml
+      - application/x-tika-msoffice
+      - text/plain
+    allowed-characters-for-file-name: ^[.a-zA-Z0-9-()#_\s]*$
+  default-bucket: attachments
+
+serp.governance.rbs.import:
+  solutions:
+    - "FALSE_POSITIVE"
+    - "HINTED_FALSE_POSITIVE"
+    - "POTENTIAL_TRUE_POSITIVE"
+    - "HINTED_POTENTIAL_TRUE_POSITIVE"
+
+sep.filestorage:
+  minio:
+    url: http://localhost:9000
+    access-key: admin
+    private-key: admin123
+    region: s3_region
+
+# Spring Integration
+integration:
+  start-delay-seconds: 15
+  poll-period-millis: 1000
+
+sentry:
+  environment: unknown
+  traces-sample-rate: 0

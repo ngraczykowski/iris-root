@@ -1,0 +1,67 @@
+= HLD #26
+
+- Reference ticket: TBA
+- Reason: We want to present the process of preparing, approving and deployment of steps configuration on a pre-prod and prod environment.
+
+Policy state:
+
+ - Draft -> Draft
+ - Saved -> Ready (-> Ready for simulation)
+ - Used -> Used for solving -> Used for solving on this environment
+ - Archived -> Archived
+
+INFO:
+ - backend_value -> frontend_value (-> frontend_value_in the future) -> tooltip/explanation
+
+For policies used in production, we should have a separate flag, because we can have a policy used in production and at the same time use it in this specific environment.
+Prod: boolean -> Used on production -> Used for solving in production
+
+== Deployment process
+[plantuml,preparing-approving-deployment-steps-on-prod,svg]
+-----
+@startuml
+header Deployment process
+
+
+box "Pre-Prod"
+    participant serp as "SERP"
+end box
+
+actor bo as "Business Operator"
+
+actor a as "Approver"
+
+box "Prod"
+    participant prodserp as "SERP"
+end box
+
+alt Creating or importing Policy
+bo -> serp : Create policy step (DRAFT)
+bo -> serp : Save policy Step (Ready)
+else
+bo -> serp : Import policy step (Ready)
+end alt
+
+...
+
+bo -> serp : Send Policy to the Approver
+serp -> a : A new Policy to approve
+a -> serp : Eyeballing on the Policy and/or simulation results
+a -> serp : Approve Policy (Promoted)
+
+serp -> serp : SERP use promoted policy\non a pre-prod env
+
+...
+
+bo -> serp : Export policy (any policy) or use imported policy
+serp -> bo : **policy.json**
+
+bo -> prodserp : Import **policy.json** on the prod env (Ready)
+bo -> prodserp : Send Policy to the Approver
+prodserp -> a : A new Policy to approve
+a -> prodserp : Approve a new policy (Promoted)
+
+prodserp -> prodserp : SERP use promoted policy\non a prod env
+
+@enduml
+-----

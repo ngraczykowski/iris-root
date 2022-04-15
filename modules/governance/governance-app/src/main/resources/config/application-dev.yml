@@ -1,0 +1,84 @@
+# Spring `dev` profile configuration
+serp:
+  show-env: true
+  rabbitmq:
+    host: localhost
+    port: 24160
+    user: dev
+    password: dev
+    vhost: /
+
+logging:
+  level:
+    ROOT: DEBUG
+    com.silenteight.sep: DEBUG
+    com.silenteight.serp: DEBUG
+    com.silenteight.solvers: INFO
+    io.opencensus: INFO
+    io.netty: INFO
+    io.grpc.netty: INFO
+    org.quartz.core.JobRunShell: DEBUG
+
+server:
+  error:
+    include-stacktrace: on_param
+
+spring:
+  jpa:
+    show-sql: true
+
+    hibernate:
+      ddl-auto: validate
+
+    properties:
+      hibernate.generate_statistics: true
+
+  jackson:
+    serialization:
+      indent-output: true
+  liquibase:
+    contexts: hsbc
+
+serp.governance.qa:
+  sampling:
+    schedule:
+      enabled: true
+      audit-cron: 0/30 * * * * ?
+      alert-generator-cron: 0 0 1 1 * ?
+    generator:
+      sample-count: 454
+      grouping-fields:
+        - alert_extendedAttribute5
+      filters:
+        - field: alert_s8_recommendation
+          values:
+            - ACTION_FALSE_POSITIVE
+  viewing:
+    max-state-reset-delay-ms: 45000
+serp.governance.files:
+  validation:
+    max-file-name-length: 255
+    max-file-size-in-bytes: 20971520
+    max-number-files-to-upload: 20
+    allowed-types:
+      - image/jpeg
+      - image/png
+      - image/gif
+      - image/svg+xml
+      - application/pdf
+      - application/x-tika-msoffice
+      - application/x-tika-ooxml
+      - application/x-tika-msoffice
+      - text/plain
+    allowed-characters-for-file-name: ^[.a-zA-Z0-9-()#_\s]*$
+  default-bucket: attachments
+
+springdoc:
+  show-actuator: true
+  api-docs:
+    enabled: true
+    path: /openapi/api-docs
+  swagger-ui:
+    enabled: true
+    path: /openapi/
+    url: ${server.servlet.context-path}/openapi/api-docs/

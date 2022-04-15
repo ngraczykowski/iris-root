@@ -1,0 +1,11 @@
+[id="webapp-hld-steps"]
+= Steps
+
+include::2020-12-02_translate_dt.json_to_steps.json.adoc[leveloffset=+1]
+include::2020-12-01_importing-steps.adoc[leveloffset=+1]
+include::2020-12-01_solving-with-steps.adoc[leveloffset=+1]
+include::2020-11-21_gov-reaction-on-discrepancy.adoc[leveloffset=+1]
+include::2020-11-21_rbs_report_with_steps.adoc[leveloffset=+1]
+
+
+

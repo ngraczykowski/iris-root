@@ -1,0 +1,101 @@
+plugins {
+  id "java"
+  id "groovy"
+  id "maven-publish"
+  id "io.freefair.aspectj.post-compile-weaving"
+  id "org.springframework.boot"
+  id "com.google.cloud.tools.jib"
+}
+
+description = "Governance Application"
+
+configurations {
+  implementation.extendsFrom starterCommon
+  implementation.extendsFrom starterGrpc
+  implementation.extendsFrom starterSpringApp
+  implementation.extendsFrom starterMessaging
+  implementation.extendsFrom starterIntegration
+
+  implementation.extendsFrom starterDatabase
+  runtimeOnly.extendsFrom starterDatabaseRuntime
+
+  testImplementation.extendsFrom starterSpringTest
+  testImplementation.extendsFrom starterSpockTest
+}
+
+dependencies {
+  implementation project(":governance-agent")
+  implementation project(":governance-change-request")
+  implementation project(":governance-common-web")
+  implementation project(":governance-common-web-testing")
+  implementation project(":governance-db-changelog")
+  implementation project(":governance-feature-vector")
+  implementation project(":governance-file")
+  implementation project(":governance-model")
+  implementation project(":governance-policy")
+  implementation project(":governance-qa")
+  implementation project(":governance-strategy")
+
+  implementation libraries.silenteight_audit_bs
+  implementation libraries.silenteight_commons_app
+  implementation libraries.silenteight_filestorage_minio
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.silenteight_sep_base_testing
+  implementation libraries.silenteight_serp_protocol_base
+
+  implementation libraries.spring_boot_starter_actuator
+  implementation libraries.spring_boot_starter_undertow
+  implementation libraries.spring_boot_starter_web
+
+  implementation libraries.spring_context_support
+  implementation libraries.spring_security_config
+  implementation libraries.spring_security_web
+  implementation libraries.spring_cloud_consul_discovery
+  implementation libraries.spring_cloud_starter_consul_config
+
+  implementation libraries.commons_lang3
+
+  implementation libraries.protobuf_java_util
+  implementation libraries.grpc_api
+  implementation libraries.grpc_stub
+
+  implementation libraries.jaxb_api
+
+  // ANO: jackson_module_kotlin can be removed once spring and or jackson is bumped
+  // kotlin is required by minio
+  // https://stackoverflow.com/questions/67630048/springboot-2-5-0-for-jackson-kotlin-classes-support-please-add-com-fasterxml-ja
+  implementation libraries.jackson_module_kotlin
+
+  implementation libraries.jakarta_inject
+  implementation libraries.jakarta_mail
+
+  implementation libraries.protobuf_java_util
+
+  implementation libraries.querydsl_jpa
+  implementation libraries.ecs_logging_core
+
+  //Sentry
+  runtimeOnly libraries.sentry_spring_boot_starter
+  //having this at runtime ensure sending all ERROR level logs to Sentry
+  runtimeOnly libraries.sentry_logback
+
+  annotationProcessor libraries.querydsl_apt_jpa
+  annotationProcessor libraries.jakarta_persistence_api
+  annotationProcessor libraries.jakarta_annotation_api
+  annotationProcessor libraries.spring_boot_configuration_processor
+
+  testImplementation libraries.spock_spring
+  testImplementation libraries.spring_integration_test
+
+  testImplementation libraries.rest_assured_spring_mock_mvc
+
+  aspect libraries.silenteight_sep_base_aspects
+}
+
+publishing {
+  publications {
+    bootJava(MavenPublication) {
+      artifact bootJar
+    }
+  }
+}

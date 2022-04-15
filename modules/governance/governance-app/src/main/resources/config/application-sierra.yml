@@ -1,0 +1,27 @@
+# Spring `sierra` profile configuration
+# Use this profile for Sierra client custom configuration.
+
+serp:
+  governance:
+    agent:
+      agent-configuration-source: classpath:sierra/agent_configs.json
+      agent-details-source: classpath:sierra/agent_details.json
+
+    featurevector.event.strategy: SOLVE
+
+    qa.sampling.schedule.enabled: false
+
+    messaging:
+      broker:
+        to-remove:
+          bindings:
+            - queue-name: gov.feature-vector.ingest
+              exchange: bridge.command
+              routing-key: command.index-request.production
+
+    model:
+      modelTransfer: LOCAL
+
+sentry:
+  environment: sierra
+  traces-sample-rate: 0

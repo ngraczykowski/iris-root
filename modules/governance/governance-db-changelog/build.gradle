@@ -1,0 +1,9 @@
+plugins {
+  id "java"
+}
+
+description = "Governance DB Changelog"
+
+dependencies {
+  implementation libraries.liquibase_sessionlock
+}

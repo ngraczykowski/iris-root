@@ -1,0 +1,5 @@
+serp:
+  governance:
+    agent:
+      agentConfigurationSource: classpath:test_agent_configs.json
+      agentDetailsSource: classpath:test_agent_details.json

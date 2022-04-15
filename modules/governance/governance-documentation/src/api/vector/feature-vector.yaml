@@ -1,0 +1,118 @@
+openapi: 3.0.1
+info:
+  title: Feature Vectors
+  description: Listing feature vectors
+  version: 0.1.0
+
+
+servers:
+  - url: '{environment}/rest/governance/api/v1'
+    variables:
+      environment:
+        enum:
+          - http://localhost:24204
+          - https://localhost:24111
+        default: http://localhost:24204
+
+paths:
+
+  /api/v1/vectors:
+    get:
+      parameters:
+        - name: pageSize
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: pageIndex
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: stepName
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: default response
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/FeatureVectorsDto"
+          headers:
+            X-Total-Items:
+              explode: false
+              description: Total items count
+              schema:
+                type: integer
+              style: simple
+
+  /api/v1/vectors:search:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  feature:
+                    type: string
+                  values:
+                    type: array
+                    items:
+                      type: string
+      responses:
+        200:
+          description: default response
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/FeatureVectorsDto"
+          headers:
+            X-Total-Items:
+              explode: false
+              description: Total items count
+              schema:
+                type: integer
+              style: simple
+
+components:
+  schemas:
+    PagingDto:
+      type: object
+      properties:
+        pageIndex:
+          minimum: 0
+          type: integer
+          format: int32
+        pageSize:
+          minimum: 1
+          type: integer
+          format: int32
+    FeatureVectorDto:
+      type: object
+      properties:
+        signature:
+          type: string
+        usageCount:
+          type: integer
+          format: int64
+        values:
+          type: array
+          items:
+            type: string
+    FeatureVectorsDto:
+      type: object
+      properties:
+        columns:
+          type: array
+          items:
+            type: string
+        featureVectors:
+          type: array
+          items:
+            "$ref": "#/components/schemas/FeatureVectorDto"

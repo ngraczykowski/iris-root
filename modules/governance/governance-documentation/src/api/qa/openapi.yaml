@@ -1,0 +1,426 @@
+openapi: 3.0.3
+info:
+  title: QA Alerts Process
+  description: Quality Assurance process over alerts
+  version: 0.1.0
+
+servers:
+  - url: '{environment}/rest/governance/api/v1'
+    variables:
+      environment:
+        enum:
+          - http://localhost:24204
+          - https://localhost:24111
+        default: http://localhost:24204
+
+tags:
+  - name: qa
+    description: QA endpoints
+  - name: validation
+    description: QA validation endpoints
+
+paths:
+  /qa/0:
+    get:
+      tags:
+        - qa
+      parameters:
+        - in: query
+          name: state
+          required: true
+          description: QA Alerts State filter
+          explode: false
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/QaAlertState'
+          examples:
+            queue:
+              summary: Queue
+              value: ["NEW", "VIEWING"]
+            archive:
+              summary: Archive
+              value: ["FAILED", "PASSED"]
+        - in: query
+          name: pageSize
+          required: true
+          description: Pagination limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - in: query
+          name: pageToken
+          required: false
+          description: Show QA Alerts that follow the provided alertName
+          schema:
+            $ref: '#/components/schemas/AlertName'
+      responses:
+        200:
+          description: A list of QA Alerts sorted by creation time ascending (oldest on top)
+          headers:
+            X-Total-Items:
+              schema:
+                type: integer
+                description: Total items count
+            Next-Page-Token:
+              schema:
+                type: string
+                description: To retrieve next page this should be set in a `pageToken` param in the request.
+                example: alerts/998bbb9d-db03-49a5-ba4c-e8f069154964
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QaAlerts'
+              examples:
+                queue:
+                  summary: Queue -> New and viewing state
+                  value:
+                    [
+                      {
+                        'alertName': 'alerts/c01e5d49-a72d-4e6a-b634-265165916c9a',
+                        'state': 'NEW',
+                        'decisionBy': '',
+                        'decisionAt': '',
+                        'decisionComment': '',
+                        'addedAt': '2004-02-12T15:19:21Z'
+                      },
+                      {
+                        'alertName': 'alerts/998bbb9d-db03-49a5-ba4c-e8f069154964',
+                        'state': 'VIEWING',
+                        'decisionBy': '',
+                        'decisionAt': '',
+                        'decisionComment': '',
+                        'addedAt': '2004-01-12T16:19:21Z'
+                      }
+                    ]
+                archive:
+                  summary: Archive -> Passed and Failed state
+                  value:
+                    [
+                      {
+                        'alertName': 'alerts/25603ed9-31ec-44bf-8263-f0ff6ddcc3d6',
+                        'state': 'PASSED',
+                        'decisionBy': 'user',
+                        'decisionAt': '2005-01-11T15:19:21Z',
+                        'decisionComment': 'comment',
+                        'addedAt': '2004-01-11T15:19:21Z'
+                      },
+                      {
+                        'alertName': 'alerts/3ed92560-ec31-bf44-6382-ddcc3d6f0ff6',
+                        'state': 'FAILED',
+                        'decisionBy': 'user',
+                        'decisionAt': '2005-01-11T15:19:21Z',
+                        'decisionComment': 'comment',
+                        'addedAt': '2004-01-11T16:19:21Z'
+                      }
+                    ]
+
+  /qa/0/alerts/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        description: Alert Id
+        schema:
+          $ref: '#/components/schemas/AlertId'
+    get:
+      tags:
+        - qa
+      responses:
+        200:
+          description: QA Alert
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QaAlert'
+              examples:
+                new:
+                  summary: New QA Alert
+                  value:
+                    {
+                      'alertName': 'alerts/c01e5d49-a72d-4e6a-b634-265165916c9a',
+                      'state': 'NEW',
+                      'decisionBy': '',
+                      'decisionAt': '',
+                      'decisionComment': '',
+                      'addedAt': '2004-01-11T15:19:21Z'
+                    }
+                passed:
+                  summary: Closed QA Alert
+                  value:
+                    {
+                      'alertName': 'alerts/c01e5d49-a72d-4e6a-b634-265165916c9a',
+                      'state': 'PASSED',
+                      'decisionBy': 'johnnybravo',
+                      'decisionAt': '2004-01-12T16:19:21Z',
+                      'decisionComment': 'Oh mama',
+                      'addedAt': '2004-01-11T16:19:21Z'
+                    }
+
+    patch:
+      tags:
+        - qa
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QaAlertDecisionDto'
+      description: Quality Assurance Passed/Failed
+      responses:
+        202:
+          description: Accepted
+        409:
+          description: Already solved
+
+  /qa/0/alerts/{id}:viewing:
+    post:
+      tags:
+        - qa
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Alert Id
+          schema:
+            $ref: '#/components/schemas/AlertId'
+      description: Heartbeat
+      responses:
+        202:
+          description: Accepted
+        409:
+          description: The alert is not in a `NEW` state anymore. Someone already solves this QA alert. Client should stop sending heartbeats.
+
+  /qa/1:
+    get:
+      tags:
+        - validation
+      parameters:
+        - in: query
+          name: state
+          required: true
+          description: QA Alerts State filter
+          explode: false
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/QaAlertState'
+          examples:
+            queue:
+              summary: Queue
+              value: ["NEW", "VIEWING"]
+            archive:
+              summary: Archive
+              value: ["FAILED", "PASSED"]
+        - in: query
+          name: limit
+          required: true
+          description: Pagination limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - in: query
+          name: id
+          required: false
+          description: Show QA Alerts that follow the provided alertName
+          schema:
+            $ref: '#/components/schemas/AlertId'
+      responses:
+        200:
+          description: A list of QA Alerts sorted by creation time ascending (oldest on top)
+          headers:
+            X-Total-Items:
+              schema:
+                type: integer
+                description: Total items count
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QaAlerts'
+              examples:
+                queue:
+                  summary: Queue -> New and viewing state
+                  value:
+                    [
+                      {
+                        'alertName': 'alerts/c01e5d49-a72d-4e6a-b634-265165916c9a',
+                        'state': 'NEW',
+                        'decisionBy': '',
+                        'decisionAt': '',
+                        'decisionComment': '',
+                        'addedAt': '2004-02-12T15:19:21Z'
+                      },
+                      {
+                        'alertName': 'alerts/998bbb9d-db03-49a5-ba4c-e8f069154964',
+                        'state': 'VIEWING',
+                        'decisionBy': '',
+                        'decisionAt': '',
+                        'decisionComment': '',
+                        'addedAt': '2004-01-12T16:19:21Z'
+                      }
+                    ]
+                archive:
+                  summary: Archive -> Passed and Failed state
+                  value:
+                    [
+                      {
+                        'alertName': 'alerts/25603ed9-31ec-44bf-8263-f0ff6ddcc3d6',
+                        'state': 'PASSED',
+                        'decisionBy': 'user',
+                        'decisionAt': '2005-01-11T15:19:21Z',
+                        'decisionComment': 'comment',
+                        'addedAt': '2004-01-11T15:19:21Z'
+                      },
+                      {
+                        'alertName': 'alerts/3ed92560-ec31-bf44-6382-ddcc3d6f0ff6',
+                        'state': 'FAILED',
+                        'decisionBy': 'user',
+                        'decisionAt': '2005-01-11T16:19:21Z',
+                        'decisionComment': 'comment',
+                        'addedAt': '2004-01-11T15:19:21Z'
+                      }
+                    ]
+
+  /qa/1/alerts/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        description: Alert Id
+        schema:
+          $ref: '#/components/schemas/AlertId'
+    get:
+      tags:
+        - validation
+      responses:
+        200:
+          description: QA Alert Validation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QaAlert'
+              examples:
+                new:
+                  summary: New QA Alert
+                  value:
+                    {
+                      'alertName': 'alerts/c01e5d49-a72d-4e6a-b634-265165916c9a',
+                      'state': 'NEW',
+                      'decisionBy': '',
+                      'decisionAt': '',
+                      'decisionComment': '',
+                      'addedAt': '2004-01-11T15:19:21Z'
+                    }
+                passed:
+                  summary: Closed QA Alert
+                  value:
+                    {
+                      'alertName': 'alerts/c01e5d49-a72d-4e6a-b634-265165916c9a',
+                      'state': 'PASSED',
+                      'decisionBy': 'johnnybravo',
+                      'decisionAt': '2004-01-12T15:19:21Z',
+                      'decisionComment': 'Oh mama',
+                      'addedAt': '2004-01-11T15:19:21Z'
+                    }
+
+    patch:
+      tags:
+        - validation
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Alert Id
+          schema:
+            $ref: '#/components/schemas/AlertId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QaAlertDecisionDto'
+      description: Quality Assurance Passed/Failed
+      responses:
+        202:
+          description: Accepted
+        409:
+          description: Already solved
+
+  /qa/1/alerts/{id}:viewing:
+    post:
+      tags:
+        - validation
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Alert Id
+          schema:
+            $ref: '#/components/schemas/AlertId'
+      description: Heartbeat
+      responses:
+        202:
+          description: Accepted
+        409:
+          description: The alert is not in a `NEW` state anymore. Someone already solves this QA alert. Client should stop sending heartbeats.
+
+components:
+  schemas:
+    QaAlerts:
+      type: array
+      items:
+        $ref: '#/components/schemas/QaAlert'
+
+    QaAlert:
+      type: object
+      properties:
+        alertName:
+          description: Alert resource name
+          $ref: '#/components/schemas/AlertName'
+        state:
+          description: Alert state. When FAILED or PASSED then QA Alerts -> Closed -> QA Decision and QA Alerts -> Reviewed -> QA Analyst Decision
+          $ref: '#/components/schemas/QaAlertState'
+        decisionBy:
+          description: QA Alerts -> Closed -> Reviewed, QA Alerts -> Reviewed -> QA Analyst
+          type: string
+        decisionAt:
+          description: QA Alerts -> Closed -> Reviewed, QA Alerts -> Reviewed -> Review date
+          type: string
+        decisionComment:
+          description: QA Alerts -> Reviewed -> Decision Comment
+          type: string
+        addedAt:
+          type: string
+
+    QaAlertDecisionDto:
+      type: object
+      description: Request to send
+      properties:
+        decision:
+          $ref: '#/components/schemas/QaAlertDecision'
+        comment:
+          type: string
+      example:
+        {
+          'decision': 'FAILED',
+          'comment': 'Oh mama'
+        }
+
+    QaAlertState:
+      type: string
+      description: NEW -> To Review, VIEWING -> In Progress, FAILED,PASSED -> Closed Tab
+      enum: [ NEW, VIEWING, FAILED, PASSED ]
+
+    AlertName:
+      type: string
+      description: Name of the alert in from `alerts/alertId` where alertId is String generated by S8 system.
+      example: 'alerts/c01e5d49-a72d-4e6a-b634-265165916c9a'
+
+    AlertId:
+      type: string
+      description: The string postfix from `AlertName` field.
+      example: 'c01e5d49-a72d-4e6a-b634-265165916c9a'

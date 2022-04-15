@@ -1,0 +1,28 @@
+= HLD #28
+
+- Reference ticket: https://silent8.atlassian.net/browse/WEB-1738
+- Reason: Alerts identifiers in process of feeding QA alerts in Governance
+
+== Alerts identifiers flow
+[plantuml,alerts,svg]
+-----
+@startuml
+header Alerts identifiers flow in QA processing
+
+participant "Adjudication Engine" as ae
+participant "Bridge" as brd
+participant "Warehouse" as wh
+participant "Governance" as gov
+participant "Simulator" as sim
+
+autonumber
+
+brd -> wh : ingestRecommendation(discriminator)
+ae -> brd : alertName
+brd -> wh : ProducionDataIndexRequest(discriminator,alertName)
+wh -> gov : AlertsSampleResponse(alertName)
+gov -> wh : QADataIndexRequest(alertName)
+sim -> wh : SimulationDataIndexRequest(alertName)
+
+@enduml
+-----

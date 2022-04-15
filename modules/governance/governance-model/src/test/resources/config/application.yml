@@ -1,0 +1,29 @@
+serp:
+  governance:
+    agent:
+      agentConfigurationSource: classpath:test_agent_configs.json
+      agentDetailsSource: classpath:test_agent_details.json
+
+    model:
+      categorySource: classpath:test_categories.json
+      modelTransfer: LOCAL
+
+      archive:
+        integration:
+          request:
+            exchange: gov.model
+            routingKey: event.models-archived
+          receive:
+            queue-name: gov.models-archived
+
+      export:
+        integration:
+          request:
+            exchange: gov.model
+            routingKey: event.model-promoted.production
+
+      send-in-use:
+        integration:
+          request:
+            exchange: gov.model
+            routingKey: event.model-in-use.production

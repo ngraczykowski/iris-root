@@ -1,0 +1,606 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="serp-governance-4.0.0-1" author="mmastylo">
+    <createTable tableName="governance_policy">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="policy_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="VARCHAR(80)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_by" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP"/>
+      <column name="version" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="governance_policy"
+        indexName="ix_governance_policy_policy_id">
+      <column name="policy_id"/>
+    </createIndex>
+
+    <createTable tableName="governance_policy_step">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="step_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="solution" type="VARCHAR(80)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="VARCHAR(80)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="${type.text}"/>
+      <column name="type" type="VARCHAR(80)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="policy_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP"/>
+    </createTable>
+
+    <createIndex
+        tableName="governance_policy_step"
+        indexName="ix_governance_policy_step_step_id">
+      <column name="step_id"/>
+    </createIndex>
+
+    <addForeignKeyConstraint
+        baseTableName="governance_policy_step"
+        baseColumnNames="policy_id"
+        constraintName="fk_governance_policy_step_policy_id"
+        referencedTableName="governance_policy"
+        referencedColumnNames="id"
+        onUpdate="CASCADE"
+        onDelete="CASCADE"/>
+
+    <createTable tableName="governance_policy_step_feature_logic">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="count" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="step_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP"/>
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="governance_policy_step_feature_logic"
+        baseColumnNames="step_id"
+        constraintName="fk_governance_policy_step_feature_logic_step_id"
+        referencedTableName="governance_policy_step"
+        referencedColumnNames="id"
+        onUpdate="CASCADE"
+        onDelete="CASCADE"/>
+
+    <createTable tableName="governance_policy_step_match_condition">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="VARCHAR(80)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="feature_logic_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP"/>
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="governance_policy_step_match_condition"
+        baseColumnNames="feature_logic_id"
+        constraintName="fk_governance_policy_step_match_condition_feature_logic_id"
+        referencedTableName="governance_policy_step_feature_logic"
+        referencedColumnNames="id"
+        onUpdate="CASCADE"
+        onDelete="CASCADE"/>
+
+    <createTable tableName="governance_policy_step_feature_values">
+      <column name="feature_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="value" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="governance_policy_step_feature_values"
+        baseColumnNames="feature_id"
+        constraintName="fk_governance_policy_step_feature_values_feature_id"
+        referencedTableName="governance_policy_step_match_condition"
+        referencedColumnNames="id"
+        onUpdate="CASCADE"
+        onDelete="CASCADE"/>
+  </changeSet>
+
+  <changeSet id="serp-governance-4.0.0-2" author="mmastylo">
+    <addColumn tableName="governance_policy_step">
+      <column name="sort_order" type="INTEGER" defaultValueNumeric="0">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="serp-governance-4.0.0-3" author="kdzieciol">
+    <addColumn tableName="governance_policy">
+      <column name="state" type="VARCHAR(12)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="${type.text}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="serp-governance-4.0.0-4" author="kdzieciol">
+    <addColumn tableName="governance_policy_step_match_condition">
+      <column name="condition" type="VARCHAR(8)">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="serp-governance-4.0.0-5" author="anowicki">
+    <createTable tableName="governance_analytics_feature_vector">
+      <column name="feature_vector_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="vector_signature" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="names" type="TEXT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="values" type="TEXT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="governance_analytics_feature_vector"
+        indexName="ix_governance_analytics_feature_vector_vector_signature"
+        unique="true">
+      <column name="vector_signature"/>
+    </createIndex>
+
+    <createIndex
+        tableName="governance_analytics_feature_vector"
+        indexName="ix_governance_analytics_feature_vector_names">
+      <column name="names"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="serp-governance-4.0.0-6" author="anowicki">
+    <createTable tableName="governance_analytics_feature_vector_usage">
+      <column name="usage_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="vector_signature" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="version" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="usage_count" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="governance_analytics_feature_vector_usage"
+        indexName="ix_governance_analytics_feature_vector_usage_vector_signature"
+        unique="true">
+      <column name="vector_signature"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="serp-governance-4.0.0-7" author="kdzieciol">
+    <addColumn tableName="governance_policy_step">
+      <column name="created_by" type="VARCHAR(64)" defaultValue="migration">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_by" type="VARCHAR(64)" defaultValue="migration">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="serp-governance-4.0.0-8" author="kdzieciol">
+    <addUniqueConstraint tableName="governance_policy_step" columnNames="step_id"/>
+  </changeSet>
+
+  <changeSet id="serp-governance-4.0.0-9" author="mmastylo">
+    <createTable tableName="governance_model">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="model_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="policy_name" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP"/>
+      <column name="version" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="governance_model"
+        indexName="ix_governance_model_model_id">
+      <column name="model_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="serp-governance-4.0.0-10" author="mmastylo">
+    <addUniqueConstraint tableName="governance_model" columnNames="model_id"/>
+  </changeSet>
+
+  <changeSet id="serp-governance-4.0.0-11" author="mmastylo">
+    <createTable tableName="governance_change_request">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="change_request_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="model_name" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="state" type="VARCHAR(16)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="creator_comment" type="TEXT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="decided_by" type="VARCHAR(64)"/>
+      <column name="decider_comment" type="TEXT"/>
+      <column name="decided_at" type="TIMESTAMP"/>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP"/>
+      <column name="version" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="governance_change_request"
+        indexName="ix_governance_change_request_change_request_id">
+      <column name="change_request_id"/>
+    </createIndex>
+
+    <addUniqueConstraint tableName="governance_change_request" columnNames="change_request_id"/>
+  </changeSet>
+
+  <changeSet id="serp-governance-4.0.0-12" author="tbiedrzycki">
+    <dropIndex indexName="ix_governance_policy_policy_id" tableName="governance_policy"/>
+    <createIndex
+        tableName="governance_policy"
+        indexName="ix_governance_policy_policy_id"
+        unique="true">
+      <column name="policy_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="serp-governance-4.0.0-13" author="mmastylo">
+    <createTable tableName="governance_qa_alert">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="alert_name" type="VARCHAR(80)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="governance_qa_decision">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP"/>
+      <column name="version" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="alert_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="level" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="state" type="VARCHAR(16)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="decided_by" type="VARCHAR(64)"/>
+      <column name="decided_at" type="TIMESTAMP"/>
+      <column name="comment" type="TEXT"/>
+    </createTable>
+
+    <createIndex
+        tableName="governance_qa_decision"
+        indexName="ix_governance_qa_decision_alert_id">
+      <column name="alert_id"/>
+    </createIndex>
+
+    <addForeignKeyConstraint
+        baseTableName="governance_qa_decision"
+        baseColumnNames="alert_id"
+        constraintName="fk_governance_qa_decision_alert_id"
+        referencedTableName="governance_qa_alert"
+        referencedColumnNames="id"
+        onUpdate="CASCADE"
+        onDelete="CASCADE"/>
+  </changeSet>
+  <changeSet id="serp-governance-4.0.0-14" author="tbiedrzycki">
+    <createTable tableName="governance_qa_alert_sampling">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" unique="true"/>
+      </column>
+      <column name="alerts_count" type="INT">
+        <constraints nullable="true"/>
+      </column>
+      <column name="started_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="finished_at" type="TIMESTAMP">
+        <constraints nullable="true"/>
+      </column>
+      <column name="range_from" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="range_to" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="alerts_distribution" type="TEXT">
+        <constraints nullable="true"/>
+      </column>
+      <column name="state" type="VARCHAR(25)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP"/>
+      <column name="version" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addUniqueConstraint
+        tableName="governance_qa_alert_sampling"
+        columnNames="range_from,range_to,started_at"
+        constraintName="uq_governance_qa_alert_sampling_range_from_range_to_started_at"/>
+  </changeSet>
+  <changeSet id="serp-governance-4.0.0-15" author="tbiedrzycki">
+    <dropUniqueConstraint tableName="governance_qa_alert"
+                          uniqueColumns="alert_name"
+                          constraintName="governance_qa_alert_alert_name_key"/>
+    <renameColumn oldColumnName="alert_name"
+                  newColumnName="discriminator"
+                  tableName="governance_qa_alert"/>
+    <modifyDataType tableName="governance_qa_alert"
+                    columnName="discriminator"
+                    newDataType="VARCHAR(120)"/>
+    <addUniqueConstraint
+        tableName="governance_qa_alert"
+        columnNames="discriminator"
+        constraintName="uq_governance_qa_discriminator"/>
+    <createIndex
+        tableName="governance_qa_alert"
+        indexName="ix_governance_qa_alert_discriminator">
+      <column name="discriminator"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="serp-governance-4.0.0-16" author="kdzieciol">
+    <addColumn tableName="governance_model">
+      <column name="model_version" type="VARCHAR(16)"/>
+    </addColumn>
+    <comment>
+      Update model_version to have an unique value before we put constrains.
+    </comment>
+    <sql splitStatements="true" endDelimiter=";" stripComments="true">
+      UPDATE governance_model SET model_version = id WHERE model_version is NULL;
+    </sql>
+    <addNotNullConstraint tableName="governance_model" columnName="model_version"/>
+    <addUniqueConstraint tableName="governance_model" columnNames="model_version"/>
+    <createIndex
+        tableName="governance_model"
+        indexName="ix_governance_governance_model_model_version">
+      <column name="model_version"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="serp-governance-4.0.0-17" author="rpajdak">
+    <createTable tableName="governance_file">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="file_id" type="${type.uuid}">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="original_name" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="uploader_name" type="VARCHAR(64)"/>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="size" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="mime_type" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="governance_file"
+        indexName="ix_governance_file_file_id">
+      <column name="file_id"/>
+    </createIndex>
+
+    <createTable tableName="governance_change_request_attachment">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="change_request_id" type="${type.uuid}">
+        <constraints nullable="false" unique="false"/>
+      </column>
+      <column name="file_name" type="VARCHAR(64)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="governance_change_request_attachment"
+        indexName="ix_governance_change_request_attachment_file_name">
+      <column name="file_name"/>
+    </createIndex>
+
+    <createIndex
+        tableName="governance_change_request_attachment"
+        indexName="ix_governance_change_request_attachment_change_request_id">
+      <column name="change_request_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet id="serp-governance-4.0.0-18" author="rpajdak">
+    <modifyDataType tableName="governance_file"
+                    columnName="original_name"
+                    newDataType="VARCHAR(255)"/>
+  </changeSet>
+  <changeSet id="serp-governance-4.0.0-19" author="wkeska">
+    <sqlFile path="sql/update_geo_agent_error_value.sql"
+             relativeToChangelogFile="true"/>
+  </changeSet>
+  <changeSet id="serp-governance-4.0.0-20" author="tbiedrzycki">
+    <dropUniqueConstraint
+        tableName="governance_qa_alert"
+        constraintName="uq_governance_qa_discriminator"/>
+    <dropIndex
+        tableName="governance_qa_alert"
+        indexName="ix_governance_qa_alert_discriminator" />
+    <renameColumn oldColumnName="discriminator"
+                  newColumnName="alert_name"
+                  tableName="governance_qa_alert"/>
+    <addUniqueConstraint
+        tableName="governance_qa_alert"
+        columnNames="alert_name"
+        constraintName="uq_governance_qa_alert_name"/>
+    <createIndex
+        tableName="governance_qa_alert"
+        indexName="ix_governance_qa_alert_alert_name">
+      <column name="alert_name"/>
+    </createIndex>
+  </changeSet>
+  <changeSet id="serp-governance-4.0.0-21" author="tbiedrzycki" context="hsbc">
+    <preConditions onFail="MARK_RAN">
+      <tableExists tableName="hsbc_bridge_alert" />
+    </preConditions>
+    <comment>
+      Update values for alert_names in governance_qa_alert. Migration from the alert discriminator to alertName.
+    </comment>
+    <sql splitStatements="true" endDelimiter=";" stripComments="true">
+      UPDATE governance_qa_alert gqa
+      SET alert_name = hba.name
+      FROM hsbc_bridge_alert hba
+      WHERE hba.discriminator = gqa.alert_name;
+    </sql>
+  </changeSet>
+  <changeSet id="serp-governance-4.0.0-22" author="dsniezek">
+    <comment>
+      Extends length of governance_policy_step.name to 150
+    </comment>
+    <modifyDataType tableName="governance_policy_step"
+                    columnName="name"
+                    newDataType="VARCHAR(150)"/>
+  </changeSet>
+  <changeSet id="serp-governance-4.0.0-23" author="dsniezek">
+    <comment>
+      Extends length of governance_model.policy_name to 80(align with governance_policy.name)
+    </comment>
+    <modifyDataType tableName="governance_model"
+                    columnName="policy_name"
+                    newDataType="VARCHAR(80)"/>
+  </changeSet>
+  <changeSet id="serp-governance-4.0.0-24" author="dsniezek">
+    <comment>
+      Fix duplicated governance_policy_step.sort_order
+    </comment>
+    <sql>
+      UPDATE governance_policy_step ps
+      SET sort_order = v_governance_policy_step.new_sort_order - 1 FROM
+        (
+          SELECT vps.id,
+          row_number() over (PARTITION BY policy_id ORDER BY sort_order, vps.id) AS new_sort_order,
+          vps.sort_order
+          FROM governance_policy_step vps ORDER BY vps.id
+        ) AS v_governance_policy_step
+      WHERE ps.id = v_governance_policy_step.id;
+    </sql>
+    <rollback/>
+  </changeSet>
+  <changeSet id="serp-governance-4.0.0-25" author="dsniezek">
+    <comment>
+      Add unique index on governance_policy_step(policy_id, sort_order)
+    </comment>
+    <addUniqueConstraint tableName="governance_policy_step" columnNames="policy_id,sort_order" initiallyDeferred="true"/>
+  </changeSet>
+</databaseChangeLog>

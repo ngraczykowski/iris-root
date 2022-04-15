@@ -1,0 +1,19 @@
+@startuml
+title Authorization and Authentication components
+
+actor :User:
+
+package "SERP" {
+backend as [Backend Service]
+[Frontend]
+[Keycloak]
+database KeycloakDB
+}
+
+User -- Frontend
+Frontend - Keycloak
+User -- Keycloak
+Keycloak -- KeycloakDB
+Frontend -- backend
+@enduml
+

@@ -1,0 +1,9 @@
+spring:
+  rabbitmq:
+    addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
+      {{ if $index }},{{ end -}}
+      {{ $rabbit.Address }}:{{ $rabbit.Port -}}
+{{- end }}
+    # NOTE(ahaczewski): Intentionally left empty.
+    host:
+    virtual-host: /{{ env "NOMAD_NAMESPACE" }}

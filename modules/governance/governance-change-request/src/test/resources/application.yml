@@ -1,0 +1,23 @@
+serp.governance.files:
+  validation:
+    max-file-name-length: 255
+    max-file-size-in-bytes: 20971520
+    max-number-file-to-upload: 20
+    allowed-types:
+      - image/jpeg
+      - image/png
+      - image/gif
+      - image/svg+xml
+      - application/pdf
+      - application/x-tika-msoffice
+      - application/x-tika-ooxml
+      - application/x-tika-msoffice
+      - text/plain
+    allowed-characters-for-file-name: ^[.a-zA-Z0-9-()#_\s]*$
+  default-bucket: attachments
+sep.filestorage:
+  minio:
+    url: http://localhost:9000
+    access-key: admin
+    private-key: admin123
+    region: s3_test_region

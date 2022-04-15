@@ -1,0 +1,354 @@
+{
+  "agents/name/versions/1.0.0/configs/1": {
+    "agentId": "1697c58c-9a7a-4489-b315-b7c419182ceb",
+    "features": [
+      "features/name"
+    ],
+    "featuresList": [
+      {
+        "name": "features/name",
+        "displayName": "Name"
+      }
+    ],
+    "responses": [
+      "EXACT_MATCH",
+      "STRONG_MATCH",
+      "MATCH",
+      "WEAK_MATCH",
+      "NO_MATCH",
+      "HQ_NO_MATCH",
+      "NO_DATA",
+      "INCONCLUSIVE"
+    ],
+    "configurations": [
+      {
+        "name": "date-entity-normal",
+        "configFile": "file:local/conf/agents/configurations/date-enty-normal.yml"
+      }
+    ]},
+  "agents/date/versions/1.0.0/configs/1": {
+    "agentId": "7bfdc601-06d3-4aa2-a13e-015e2bc8f72f",
+    "features": [
+      "features/dateOfBirth"
+    ],
+    "featuresList": [
+      {
+        "name": "features/dateOfBirth",
+        "displayName": "Date of Birth / Incorporation"
+      }
+    ],
+    "responses": [
+      "EXACT",
+      "NEAR",
+      "OUT_OF_RANGE",
+      "NO_DATA",
+      "INCONCLUSIVE"
+    ],
+    "configurations": [
+      {
+        "name": "date-entity-normal",
+        "configFile": "file:local/conf/agents/configurations/date-enty-normal.yml"
+      }
+    ]
+  },
+  "agents/document/versions/1.0.0/configs/1": {
+    "agentId": "13807c0f-1b88-4043-a32c-dc45b1a9068c",
+    "features": [
+      "features/passportNumberDocument",
+      "features/otherDocument"
+    ],
+    "featuresList": [
+      {
+        "name": "features/passportNumberDocument",
+        "displayName": "Passport Number Document"
+      },
+      {
+        "name": "features/otherDocument",
+        "displayName": "Other Document"
+      }
+    ],
+    "responses": [
+      "PERFECT_MATCH",
+      "DIGIT_MATCH",
+      "WEAK_DIGIT_MATCH",
+      "WEAK_MATCH",
+      "NO_MATCH",
+      "NO_DATA",
+      "INCONCLUSIVE"
+    ],
+    "configurations": [
+      {
+        "name": "date-entity-normal",
+        "configFile": "file:local/conf/agents/configurations/date-enty-normal.yml"
+      }
+    ]
+  },
+  "agents/nationalId/versions/1.0.0/configs/1": {
+    "agentId": "96d59e74-ce9c-11eb-b8bc-0242ac130003",
+    "features": [
+      "features/nationalIdDocument"
+    ],
+    "featuresList": [
+      {
+        "name": "features/nationalIdDocument",
+        "displayName": "National Id Document"
+      }
+    ],
+    "responses": [
+      "PERFECT_MATCH",
+      "DIGIT_MATCH",
+      "WEAK_DIGIT_MATCH",
+      "WEAK_MATCH",
+      "NO_MATCH",
+      "NO_DATA",
+      "INCONCLUSIVE"
+    ],
+    "configurations": [
+      {
+        "name": "date-entity-normal",
+        "configFile": "file:local/conf/agents/configurations/date-enty-normal.yml"
+      }
+    ]
+  },
+  "agents/gender/versions/1.0.0/configs/1": {
+    "agentId": "bf5a2cdd-e797-428d-9657-85a3b241c9ba",
+    "features": [
+      "features/gender"
+    ],
+    "featuresList": [
+      {
+        "name": "features/gender",
+        "displayName": "Gender"
+      }
+    ],
+    "responses": [
+      "MATCH",
+      "NO_MATCH",
+      "NO_DATA",
+      "INCONCLUSIVE"
+    ],
+    "configurations": [
+      {
+        "name": "date-entity-normal",
+        "configFile": "file:local/conf/agents/configurations/date-enty-normal.yml"
+      }
+    ]
+  },
+  "agents/country/versions/1.0.0/configs/1": {
+    "agentId": "6d53ff99-2578-4a9e-bfde-9966d4fd31ee",
+    "features": [
+      "features/residencyCountry",
+      "features/registrationCountry",
+      "features/incorporationCountry",
+      "features/nationalityCountry",
+      "features/otherCountry"
+    ],
+    "featuresList": [
+      {
+        "name": "features/residencyCountry",
+        "displayName": "Residency Country"
+      },
+      {
+        "name": "features/registrationCountry",
+        "displayName": "Registration Country"
+      },
+      {
+        "name": "features/incorporationCountry",
+        "displayName": "Incorporation Country"
+      },
+      {
+        "name": "features/nationalityCountry",
+        "displayName": "Nationality Country"
+      },
+      {
+        "name": "features/otherCountry",
+        "displayName": "Other Country"
+      }
+    ],
+    "responses": [
+      "MATCH",
+      "WEAK_MATCH",
+      "NO_MATCH",
+      "NO_DATA",
+      "INCONCLUSIVE"
+    ],
+    "configurations": [
+      {
+        "name": "date-entity-normal",
+        "configFile": "file:local/conf/agents/configurations/date-enty-normal.yml"
+      }
+    ]
+  },
+  "agents/historicalDecisions/versions/1.0.0/configs/1": {
+    "agentId": "6ca7f680-8a1b-44f4-8bfb-5aa62f8e543d",
+    "features": [
+      "features/isTpMarked",
+      "features/isApTpMarked",
+      "features/isCaseTpMarked"
+    ],
+    "featuresList": [
+      {
+        "name": "features/isTpMarked",
+        "displayName": "True Case - Watchlist"
+      },
+      {
+        "name": "features/isApTpMarked",
+        "displayName": "True Case - Alerted Party "
+      },
+      {
+        "name": "features/isCaseTpMarked",
+        "displayName": "True Case - Historical"
+      }
+    ],
+    "responses": [
+      "TRUE_POSITIVE",
+      "NOT_TRUE_POSITIVE",
+      "NO_DATA"
+    ],
+    "configurations": [
+      {
+        "name": "date-entity-normal",
+        "configFile": "file:local/conf/agents/configurations/date-enty-normal.yml"
+      }
+    ]
+  },
+  "agents/invalidAlert/versions/1.0.0/configs/1": {
+    "agentId": "cdf2ffda-2011-4dd9-9d56-e8740becda35",
+    "features": [
+      "features/invalidAlert"
+    ],
+    "featuresList": [
+      {
+        "name": "features/invalidAlert",
+        "displayName": "Invalid Alert"
+      }
+    ],
+    "responses": [
+      "FI",
+      "YES",
+      "NO",
+      "NO_DATA"
+    ],
+    "configurations": [
+      {
+        "name": "date-entity-normal",
+        "configFile": "file:local/conf/agents/configurations/date-enty-normal.yml"
+      }
+    ]
+  },
+  "agents/allowList/versions/1.0.0/configs/1": {
+    "agentId": "1b6b5c3b-0fed-4c59-bbdd-bbc1affe177c",
+    "features": [
+      "features/commonNames",
+      "features/commonAp",
+      "features/commonMp"
+    ],
+    "featuresList": [
+      {
+        "name": "features/commonNames",
+        "displayName": "Common Name"
+      },
+      {
+        "name": "features/commonAp",
+        "displayName": "Common Alerted Party"
+      },
+      {
+        "name": "features/commonMp",
+        "displayName": "Common Watchlist Party"
+      }
+    ],
+    "responses": [
+      "YES",
+      "NO",
+      "NO_DATA"
+    ],
+    "configurations": [
+      {
+        "name": "date-entity-normal",
+        "configFile": "file:local/conf/agents/configurations/date-enty-normal.yml"
+      }
+    ]
+  },
+  "agents/geo/versions/1.0.0/configs/1": {
+    "agentId": "fd46923f-f68f-4b79-9d63-1621f081cfd0",
+    "features": [
+      "features/geoResidencies",
+      "features/geoPlaceOfBirth"
+    ],
+    "featuresList": [
+      {
+        "name": "features/geoResidencies",
+        "displayName": "Geo Residencies"
+      },
+      {
+        "name": "features/geoPlaceOfBirth",
+        "displayName": "Geo Place of Birth"
+      }
+    ],
+    "responses": [
+      "CITY_MATCH",
+      "COUNTRY_WEAK_MATCH",
+      "CITY_NO_MATCH",
+      "COUNTRY_MATCH",
+      "COUNTRY_NO_MATCH",
+      "STATE_MATCH",
+      "STATE_NO_MATCH",
+      "NO_DATA",
+      "INCONCLUSIVE"
+    ],
+    "configurations": [
+      {
+        "name": "date-entity-normal",
+        "configFile": "file:local/conf/agents/configurations/date-enty-normal.yml"
+      }
+    ]
+  },
+  "agents/ispep/versions/1.0.0/configs/1": {
+    "agentId": "84b322ed-018e-4bff-9518-12376f536e63",
+    "features": [
+      "features/isPep"
+    ],
+    "featuresList": [
+      {
+        "name": "features/isPep",
+        "displayName": "PEP"
+      }
+    ],
+    "responses": [
+      "INCONCLUSIVE",
+      "NOT_PEP_ANYMORE",
+      "NOT_PEP_HISTORICAL",
+      "NOT_PEP_PROCEDURAL",
+      "NO_DATA"
+    ],
+    "configurations": [
+      {
+        "name": "date-entity-normal",
+        "configFile": "file:local/conf/agents/configurations/date-enty-normal.yml"
+      }
+    ]
+  },
+  "agents/logicalDiscountingDob/versions/1.0.0/configs/1": {
+    "agentId": "f4a4911e-f57d-4a34-a6a6-b3e47e242a80",
+    "features": [
+      "features/logicalDiscountingDob"
+    ],
+    "featuresList": [
+      {
+        "name": "features/logicalDiscountingDob",
+        "displayName": "Logical Discounting"
+      }
+    ],
+    "responses": [
+      "IMBOSSIBLE",
+      "UNLIKELY",
+      "INCONCLUSIVE"
+    ],
+    "configurations": [
+      {
+        "name": "date-entity-normal",
+        "configFile": "file:local/conf/agents/configurations/date-enty-normal.yml"
+      }
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+# settings used in development process to allow testing with swagger without keycloak or any other
+# authorization server
+
+# basic auth settings
+sep.auth.basic.users:
+  - username: bo
+    password: bodev
+    roles:
+      - MODEL_TUNER
+  - username: ap
+    password: apdev
+    roles:
+      - APPROVER
+  - username: su
+    password: sudev
+    roles:
+      - APPROVER
+      - AUDITOR
+      - MODEL_TUNER
+      - QA
+      - QA_ISSUE_MANAGER

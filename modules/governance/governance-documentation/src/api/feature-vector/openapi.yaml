@@ -1,0 +1,177 @@
+openapi: 3.0.3
+info:
+  title: Feature Vectors
+  description: An api providing a Feature Vectors list
+  version: 1.0.0
+
+servers:
+  - url: '{environment}/rest/governance/api/v1'
+    variables:
+      environment:
+        enum:
+          - http://localhost:24204
+          - https://localhost:24111
+        default: http://localhost:24204
+
+paths:
+  /vectors:
+    get:
+      tags:
+        - feature vectors
+      description: 'Return a list of feature vectors'
+      parameters:
+      - in: query
+        name: offset
+        schema:
+          type: integer
+        description: The number of items to skip before starting to collect the result set.
+      - in: query
+        name: limit
+        schema:
+          type: integer
+        description: The numbers of items to return.
+      - in: query
+        name: stepName
+        schema:
+          type: string
+        description: Filter vectors to present only those which are solved by specific step
+      responses:
+        200:
+          description: 'A list of feature vectors'
+          headers:
+            X-Total-Count:
+              explode: false
+              schema:
+                description: Total items count
+                type: integer
+              style: simple
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VectorsListDto'
+
+  /vectors:search:
+    post:
+      tags:
+        - feature vectors
+      description: 'Return a list of feature vectors'
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set.
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  feature:
+                    type: string
+                  values:
+                    type: array
+                    items:
+                      type: string
+      responses:
+        200:
+          description: 'A list of feature vectors'
+          headers:
+            X-Total-Count:
+              explode: false
+              schema:
+                description: Total filtered items count
+                type: integer
+              style: simple
+            X-Total-Count-All:
+              explode: false
+              schema:
+                description: Total items count regardless of any filters
+                type: integer
+              style: simple
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VectorsListDto'
+
+  /vectors/statistics:
+    get:
+      tags:
+        - feature vectors
+      parameters:
+        - in: query
+          name: signature
+          required: true
+          description: FeatureVector Signature
+          schema:
+            type: string
+          example: rJoE7bSu1N0zEnhud4TxhgjdG/4=
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatisticsDto'
+
+components:
+  schemas:
+
+    VectorsListDto:
+      type: object
+      properties:
+        columns:
+          $ref: '#/components/schemas/ColumnsList'
+        featureVectors:
+          $ref: '#/components/schemas/FeatureVectorsList'
+
+    ColumnsList:
+      type: array
+      items:
+        type: string
+      example:
+        [
+          'features/name',
+          'features/dob',
+          'features/nationality',
+          'features/residency'
+        ]
+
+    FeatureVectorsList:
+      type: array
+      items:
+        $ref: '#/components/schemas/FeatureVector'
+
+    FeatureVector:
+      type: object
+      properties:
+        signature:
+          type: string
+        matchesCount:
+          type: long
+        values:
+          type: array
+          items:
+            type: string
+      example:
+        {
+          "signature": "rJoE7bSu1N0zEnhud4TxhgjdG/4=",
+          "matchesCount": 2344,
+          "values": [ "NO_MATCH", "MATCH", "NO_MATCH", "NO_MATCH" ]
+        }
+    StatisticsDto:
+      type: object
+      properties:
+        matchesCount:
+          type: integer
+      example:
+        {
+          'matchesCount': 3453
+        }

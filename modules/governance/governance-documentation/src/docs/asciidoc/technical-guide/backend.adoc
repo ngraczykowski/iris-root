@@ -1,0 +1,12 @@
+[id="rest-{context}"]
+
+= BACKEND
+
+Here you can find some useful information for developing {productname} BACKEND.
+
+In our code we "depth-first" code/methods organization:
+
+image::technical-guide/images/depth-first-example.png[DepthFirstExample]
+
+We don’t have all public methods first, and then all private, but we have a public method and then private methods that are used in this public method, in the order they appear in the code.
+Next another public method with corresponding private methods, and so on.

@@ -1,0 +1,98 @@
+= HLD #27
+
+== Governance - transfer a model from sim to prod
+
+- Reference ticket: TBA
+- Reason: We need to have a mechanism to transfer a model from the simulation environment to the production environment
+
+== Diagram
+[plantuml,governance-transfarter-model,svg]
+-----
+@startuml
+header Governance - transfer a model from sim to prod
+
+box "Simulation env"
+participant Governance as sg
+participant Bridge as sb
+endbox
+
+participant "HSBC env tools" as hsbc
+
+box "Verification env"
+participant Bridge as vb
+participant Governance as vg
+endbox
+
+box "Production env"
+participant Bridge as pb
+participant Governance as pg
+endbox
+
+autonumber
+
+sg -> sg : Change Request approved
+sg -> sb : Model promoted message
+note over sg,sb
+**modelName**: //models/9d471a6d-5cd1-41bc-ba32-a6a03d198f06//
+end note
+
+sb -> hsbc : New model available
+hsbc -> sb : Get a model
+sb -> sg : Get a model (GRPC call with model name)
+sg -> sb : New model serialized to json
+sb -> hsbc : New model serialized to json
+hsbc -> vb : Update model
+vb -> hsbc : Get model json
+hsbc -> vb : A new model json
+vb -> vg : Import new model
+note over vb, vg
+**model**:
+{
+  "modelName": "models/9d471a6d-5cd1-41bc-ba32-a6a03d198f06",
+  "change_request_id": "uuid",
+  "approved_by": "name",
+  "approved_at": "date",
+  "policy":{
+      "metadata": {
+        "exportedAt": "2021-01-18 08:55:04.000"
+      },
+      "policy": {
+        "policyId": "eb42e5bb-e13b-4e51-b403-960f1a253a4d",
+        "policyName": "Solid rules",
+        "policyDescription": ""
+        "steps": [
+          {
+            "solution": "SOLUTION_POTENTIAL_TRUE_POSITIVE",
+            "stepId": "04ec7296-d6b4-45d7-8c89-49b0a90cc92b",
+            "stepName": "Name, DOB, doc and nat id match",
+            "stepDescription": "When any combination of DOC number is PERFECT_MATCH or DIGIT_MATCH but National ID is NOT a NO_MATCH, NAME is WEAK_MATCH or above and DOB is EXACT, then PTP. This will ensure using at least 3 factors to reflect PTP",
+            "stepType": "BUSINESS_LOGIC",
+            "featuresLogic": [
+              {
+                "toFulfill": 4,
+                "matchConditions": [
+...
+  "strategy": ...,
+  "agentsConfigSet": ...
+}
+end note
+vg -> vg : Set policy state to `IN_USE`
+vg ---> vb : Properly imported
+
+...HSBC will make some tests on the verification environment...
+
+hsbc -> pb : Update model
+pb -> hsbc : Get model json
+hsbc -> pb : A new model json
+pb -> pg : Import new model
+pg -> pg : Set policy state to `IN_USE`
+pg ---> pb : Properly imported
+pb -> hsbc : Successfully imported
+hsbc -> sb : Successfully deployed model on a prod
+sb -> sg : Model applied on a prod
+note over sb, sg
+**modelName**: //models/9d471a6d-5cd1-41bc-ba32-a6a03d198f06//
+end note
+
+@enduml
+-----

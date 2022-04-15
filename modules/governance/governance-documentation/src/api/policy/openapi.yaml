@@ -1,0 +1,679 @@
+openapi: 3.0.3
+info:
+  title: Policy versions and steps
+  description: Policy versions and policy steps API
+  version: 0.3.0
+
+servers:
+  - url: '{environment}/rest/governance/api/v1'
+    variables:
+      environment:
+        enum:
+          - http://localhost:24204
+          - https://localhost:24111
+        default: http://localhost:24204
+
+tags:
+  - name: policies
+    description: Endpoints related to policies
+  - name: steps
+    description: Endpoints related to policies
+  - name: steps logic
+    description: Endpoints related to steps logic
+  - name: feature vectors
+    description: Endpoints related to steps feature vectors statistics
+
+paths:
+  /policies?state={state}:
+    get:
+      tags:
+        - policies
+      description: Returns a list of all policies versions
+      parameters:
+        - in: query
+          name: state
+          required: true
+          description: 'Policy state'
+          schema:
+            $ref: '#/components/schemas/PolicyState'
+      responses:
+        200:
+          description: List of policies versions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Policy'
+
+  /policies:
+    post:
+      tags:
+        - policies
+      description: Create a new policy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PolicyCreation'
+      responses:
+        201:
+          description: Created
+
+  /policies/{id}:
+    patch:
+      tags:
+        - policies
+      description: Edit policy
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Policy Id'
+          example: '1944820f-621d-4e2c-a6db-94c3e214df6b'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PolicyEdit'
+      responses:
+        200:
+          description: Saved
+
+  /policies/import:
+    post:
+      tags:
+        - policies
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                filename:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+            example:
+              {
+                "metadata": {
+                  "exportedAt": "2019-09-16 19:39:50.574"
+                },
+                "policy": {
+                  policyName: "policy_name",
+                  "steps": [
+                    {
+                      "solution": "SOLUTION_FALSE_POSITIVE",
+                      "step-name": "branchId=1",
+                      "featureslogic": [
+                        {
+                          "count": 2,
+                          "features": {
+                            "apType": [ "I" ],
+                            "nameAgent": [ "HQ_NO_MATCH" ]
+                          }
+                        },
+                        {
+                          "count": 2,
+                          "features": {
+                            "genderAgent": [ "NO_DATA" ],
+                            "dateAgent": [ "NO_DATA" ],
+                            "nationalIdAgent": [ "NO_DATA" ],
+                            "passportAgent": [ "NO_DATA" ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+
+      responses:
+        201:
+          description: Created
+
+  /policies/{id}/policies/clone/{newId}:
+    post:
+      tags:
+        - policies
+      description: Clone policy
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 'Policy Id'
+          example: '511f8ceb-1ab2-4edd-80d3-de7d9f3074f4'
+        - name: newId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 'New policy Id'
+          example: '19a6435d-159f-485e-b256-212798b056a6'
+      responses:
+        202:
+          description: OK
+
+  /policies/{id}/steps:
+    get:
+      tags:
+        - steps
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Policy Id'
+          example: '1944820f-621d-4e2c-a6db-94c3e214df6b'
+      description: 'Return all steps for specific policy'
+      responses:
+        200:
+          description: 'A list of step''s logic'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Step'
+
+    post:
+      tags:
+        - steps
+      description: 'Create a new step'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Step'
+      responses:
+        201:
+          description: Created
+
+  /policies/{id}/steps/search:
+    get:
+      tags:
+        - steps
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: 'Policy Id'
+        example: '1944820f-621d-4e2c-a6db-94c3e214df6b'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StepSearchCriteria"
+      description: 'Return all/filtered steps for specific policy'
+      responses:
+        200:
+          description: 'A list of filtered step''s logic'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Step'
+
+  /policies/{id}/steps-order:
+    get:
+      tags:
+        - steps
+      description: 'Return an ordered list of steps'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Policy Id'
+          example: 'ea4e4a8a-1704-4b30-b9c6-0cdc26628ec1'
+      responses:
+        200:
+          description: 'A list of ordered steps ids'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+              example:
+                [
+                  '527c7c51-c59a-4b9a-ac51-df245ee479f8',
+                  '7c51527c-c59a-4b9a-ac51-e479f8df245e'
+                ]
+
+    put:
+      tags:
+        - steps
+      description: 'Set an order of steps for policy'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Policy Id'
+          example: '7206df2b-5ba4-4c51-abc7-f073fe25340b'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+            example: ['1cc1e744-de09-4c5a-a5b5-35a02cc56381', 'b07e57c5-51b1-4650-9273-28e226866b10']
+
+      responses:
+        202:
+          description: OK
+
+  /steps/{id}:
+    patch:
+      tags:
+        - steps
+      description: 'Edit step'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Step Id'
+          example: '32400575-cc51-4663-a810-7888ee9f82ce'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StepEdit'
+      responses:
+        200:
+          description: Saved
+
+    delete:
+      tags:
+        - steps
+      description: 'Remove step'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Step Id'
+          example: '32400575-cc51-4663-a810-7888ee9f82ce'
+      responses:
+        200:
+          description: Deleted
+
+  /steps:
+    get:
+      tags:
+        - steps
+      description: Return a list of steps filtered by the Step name
+      parameters:
+        - in: query
+          name: name
+          required: true
+          schema:
+            type: array
+            minItems: 1
+            maxItems: 50
+            items:
+              type: string
+          style: form
+          explode: false
+          description: The step resource name
+          example: 'steps/32400575-cc51-4663-a810-7888ee9f82ce'
+      responses:
+        200:
+          description: A list of steps
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Step'
+
+  /policies/{policyId}/steps/{stepId}/clone/steps/{newStepId}:
+    post:
+      tags:
+        - steps
+      description: Clone step
+      parameters:
+        - name: policyId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 'Policy Id'
+          example: '511f8ceb-1ab2-4edd-80d3-de7d9f3074f4'
+        - name: stepId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 'Step Id'
+          example: 'cb8d13ef-9b9e-4cf5-bc76-928d06847f34'
+        - name: newStepId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 'New step Id'
+          example: '18453962-8c97-4b94-8bbf-4a03482ce5d8'
+      responses:
+        202:
+          description: OK
+
+  /steps/{id}/logic:
+    get:
+      tags:
+        - steps logic
+      description: 'Return a step logic'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Step Id'
+          example: '32400575-cc51-4663-a810-7888ee9f82ce'
+      responses:
+        200:
+          description: 'Step logic'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeatureLogicList'
+
+    put:
+      tags:
+        - steps logic
+      description: 'Set a step logic'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Step Id'
+          example: '3be8b7f5-62b5-4e7a-ab2e-bd9444efbf24'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeatureLogicList'
+      responses:
+        202:
+          description: OK
+
+  /steps/{id}/vectors:
+    get:
+      tags:
+        - feature vectors
+      description: 'Return a list of feature vectors'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Step Id'
+          example: '091ab92d-a48b-4b77-af67-3db69e4e1ac9'
+      responses:
+        200:
+          description: 'A list of feature vectors'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FeatureVector'
+
+components:
+  schemas:
+
+    StepType:
+      type: string
+      enum: [ NARROW, BUSINESS_LOGIC ]
+
+    PolicyState:
+      type: string
+      enum: [ PROPOSAL, DISCARDED, DRAFT, SAVED, IN_USE, TO_BE_USED, OBSOLETE, ARCHIVED ]
+
+    Policy:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        policyName:
+          type: string
+        description:
+          type: string
+        state:
+          $ref: '#/components/schemas/PolicyState'
+        prod:
+          type: boolean
+        updatedAt:
+          type: string
+        updatedBy:
+          type: string
+        createdAt:
+          type: string
+        createdBy:
+          type: string
+      example:
+        id: 'c9fc3fc3-383d-484d-bb91-2966a0e5b846'
+        name: 'policies/c9fc3fc3-383d-484d-bb91-2966a0e5b846'
+        policyName: 'New Prod policy'
+        state: 'draft'
+        updatedAt: '2004-02-12T15:19:21Z'
+        updatedBy: 'UserName'
+        createdAt: '2004-02-15T15:19:21Z'
+        createdBy: 'UserName2'
+
+    PolicyCreation:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        basePolicy:
+          type: string
+      example:
+        id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+        name: 'New Prod policy'
+        basePolicy: 'a9912ff3-9d26-4481-8f35-cb130124df69'
+
+    PolicyEdit:
+      type: object
+      required:
+        - name
+        - description
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        state:
+          type: string
+      example:
+        name: 'New Prod policy'
+        description: 'Policy description'
+        state: 'SAVED'
+
+    Step:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          description: Step resource name
+        title:
+          type: string
+          description: Human readible step name
+        description:
+          type: string
+        solution:
+          type: string
+        type:
+          $ref: '#/components/schemas/StepType'
+      example:
+        {
+          id: 'd55619c0-74c8-4ea8-8c6d-036d3db6f069',
+          name: 'New step',
+          description: 'Step description',
+          solution: 'FALSE_POSITIVE',
+          type: 'NARROW'
+        }
+
+    ConditionSearchCriteria:
+      type: object
+      properties:
+        name:
+          type: string
+        values:
+          type: array
+          items:
+            type: string
+      example:
+        {
+          "name": "features/dob",
+          "values": [ "PERFECT_MATCH", "DIGIT_MATCH" ]
+        }
+
+    StepSearchCriteria:
+      type: object
+      properties:
+        conditions:
+          type: array
+          items:
+            $ref: "#/components/schemas/ConditionSearchCriteria"
+      example:
+        {
+          "conditions": [
+            {
+              "name": "features/dob",
+              "values": [ "PERFECT_MATCH", "DIGIT_MATCH" ]
+            }
+          ]
+        }
+
+    StepEdit:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        solution:
+          type: string
+      example:
+        name: 'New step'
+        description: 'Step description'
+        solution: 'FALSE_POSITIVE'
+
+    FeatureLogicList:
+      type: object
+      properties:
+        featuresLogic:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeatureLogic'
+      example:
+        {
+          'featuresLogic': [
+            {
+              count: 2,
+              features: [
+                {
+                  name: 'apType',
+                  value: [ "I" ]
+                },
+                {
+                  name: 'nameAgent',
+                  value: [ "HQ_NO_MATCH", "NO_MATCH" ]
+                }
+              ]
+            },
+            {
+              count: 3,
+              features: [
+                {
+                  name: 'genderAgent',
+                  value: [ "NO_DATA", "NO_MATCH" ]
+                },
+                {
+                  name: 'dateAgent',
+                  value: [ "NO_MATCH" ]
+                },
+                {
+                  name: 'nationalIdAgent',
+                  value: [ "NO_DATA","NO_MATCH" ]
+                },
+                {
+                  name: 'passportAgent',
+                  value: [ "NO_MATCH" ]
+                }
+              ]
+            }
+          ]
+        }
+
+    FeatureLogic:
+      type: object
+      properties:
+        count:
+          type: integer
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/MatchCondition'
+      example:
+        {
+          count: 2,
+          features: [
+            {
+              name: 'apType',
+              condition: 'is',
+              value: [ "I" ],
+            },
+            {
+              name: 'nameAgent',
+              condition: 'is_not',
+              value: [ "HQ_NO_MATCH", "NO_MATCH" ]
+            }
+          ]
+        }
+
+    MatchCondition:
+      type: object
+      properties:
+        name:
+          type: string
+        condition:
+          type: string
+        value:
+          type: array
+          items:
+            type: string

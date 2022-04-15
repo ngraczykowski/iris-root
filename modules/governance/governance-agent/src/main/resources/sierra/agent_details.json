@@ -1,0 +1,169 @@
+{
+  "agents/name/versions/1.0.0/configs/1": {
+    "agentId": "1697c58c-9a7a-4489-b315-b7c419182ceb",
+    "features": [
+      "features/name",
+      "features/nameMatchedText"
+    ],
+    "featuresList": [
+      {
+        "name": "features/name",
+        "displayName": "Name"
+      },
+      {
+        "name": "features/nameMatchedText",
+        "displayName": "Name Matched Text"
+      }
+    ],
+    "responses": [
+      "EXACT_MATCH",
+      "STRONG_MATCH",
+      "MATCH",
+      "WEAK_MATCH",
+      "NO_MATCH",
+      "HQ_NO_MATCH",
+      "NO_DATA",
+      "INCONCLUSIVE",
+      "DATA_SOURCE_ERROR"
+    ],
+    "configurations": []
+  },
+  "agents/geo/versions/1.0.0/configs/1": {
+    "agentId": "fd46923f-f68f-4b79-9d63-1621f081cfd0",
+    "features": [
+      "features/geo"
+    ],
+    "featuresList": [
+      {
+        "name": "features/geo",
+        "displayName": "Geo"
+      }
+    ],
+    "responses": [
+      "CITY_MATCH",
+      "CITY_NO_MATCH",
+      "COUNTRY_MATCH",
+      "COUNTRY_NO_MATCH",
+      "COUNTRY_WEAK_MATCH",
+      "STATE_MATCH",
+      "STATE_NO_MATCH",
+      "NO_DATA",
+      "INCONCLUSIVE",
+      "AGENT_ERROR"
+    ],
+    "configurations": []
+  },
+  "agents/geo/versions/2.0.0/configs/1": {
+    "agentId": "fd46923f-f68f-4b79-9d63-1621f081cfd0",
+    "features": [
+      "features/geo2"
+    ],
+    "featuresList": [
+      {
+        "name": "features/geo2",
+        "displayName": "Geo v2"
+      }
+    ],
+    "responses": [
+      "CITY_MATCH",
+      "CITY_NO_MATCH",
+      "COUNTRY_MATCH",
+      "COUNTRY_NO_MATCH",
+      "COUNTRY_WEAK_MATCH",
+      "STATE_MATCH",
+      "STATE_NO_MATCH",
+      "NO_DATA",
+      "INCONCLUSIVE",
+      "AGENT_ERROR"
+    ],
+    "configurations": []
+  },
+  "agents/companyName/versions/1.0.0/configs/1": {
+    "agentId": "080101a1-ef44-4f4b-ab1d-cfdbc2acbe9e",
+    "features": [
+      "features/organizationName"
+    ],
+    "featuresList": [
+      {
+        "name": "features/organizationName",
+        "displayName": "Organization Name"
+      }
+    ],
+    "responses": [
+      "MATCH",
+      "INCONCLUSIVE",
+      "NO_MATCH",
+      "NO_DATA",
+      "AGENT_ERROR"
+    ],
+    "configurations": []
+  },
+  "agents/companyName/versions/2.0.0/configs/1": {
+    "agentId": "080101a1-ef44-4f4b-ab1d-cfdbc2acbe9e",
+    "features": [
+      "features/organizationName2"
+    ],
+    "featuresList": [
+      {
+        "name": "features/organizationName2",
+        "displayName": "Organization Name v2"
+      }
+    ],
+    "responses": [
+      "MATCH",
+      "INCONCLUSIVE",
+      "NO_MATCH",
+      "NO_DATA",
+      "AGENT_ERROR"
+    ],
+    "configurations": []
+  },
+  "agents/historicaldecisions/versions/1.0.0/configs/1": {
+    "agentId": "de21c7f8-9cb9-4414-ae4a-d3ed605613c2",
+    "features": [
+      "features/historicalRiskCustomerName",
+      "features/historicalRiskAccountNumber"
+    ],
+    "featuresList": [
+      {
+        "name": "features/historicalRiskCustomerName",
+        "displayName": "Historical Risk - Customer Name"
+      },
+      {
+        "name": "features/historicalRiskAccountNumber",
+        "displayName": "Historical Risk - Account Number"
+      }
+    ],
+    "responses": [
+      "TRUE_POSITIVE",
+      "NOT_TRUE_POSITIVE",
+      "NO_DATA",
+      "DATA_SOURCE_ERROR"
+    ],
+    "configurations": []
+  },
+  "agents/historicaldecisions/versions/2.0.0/configs/1": {
+    "agentId": "f3f14f58-eb7c-4b3d-b170-f15753093926",
+    "features": [
+      "features/historicalRiskAccountNumberTP",
+      "features/historicalRiskAccountNumberFP"
+    ],
+    "featuresList": [
+      {
+        "name": "features/historicalRiskAccountNumberTP",
+        "displayName": "Historical Risk - Account Number - TP"
+      },
+      {
+        "name": "features/historicalRiskAccountNumberFP",
+        "displayName": "Historical Risk - Account Number - FP"
+      }
+    ],
+    "responses": [
+      "TRUE_POSITIVE",
+      "NOT_TRUE_POSITIVE",
+      "NO_DATA",
+      "DATA_SOURCE_ERROR"
+    ],
+    "configurations": []
+  }
+}

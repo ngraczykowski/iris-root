@@ -1,0 +1,54 @@
+version: "3.5"
+
+services:
+  postgres:
+    image: postgres:12
+    restart: unless-stopped
+    ports:
+      - "${POSTGRES_PORT:-24292}:5432"
+    environment:
+      POSTGRES_DB: "${POSTGRES_DB:-governance}"
+      POSTGRES_USER: "${POSTGRES_USER:-governance}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-governance}"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - postgres-storage:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 512M
+  minio:
+    image: minio/minio:RELEASE.2021-03-10T05-11-33Z
+    container_name: governance-minio
+    volumes:
+      - minio-fs:/data1
+    ports:
+      - 9000:9000
+    expose:
+      - "9000"
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: admin123
+    command: server /data1
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+  createbuckets:
+    image: minio/mc
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc config host add myminio http://minio:9000 admin admin123;
+      /usr/bin/mc mb --ignore-existing myminio/attachments;
+      exit 0;
+      "
+volumes:
+  postgres-storage:
+  minio-fs:
+networks:
+  default:

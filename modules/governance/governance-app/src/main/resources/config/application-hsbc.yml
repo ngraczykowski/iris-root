@@ -1,0 +1,82 @@
+grpc:
+  client:
+    governance:
+      address: discovery:///grpc-governance
+      negotiation-type: TLS
+
+    reco:
+      address: discovery:///grpc-reco
+      negotiation-type: TLS
+
+    pipeline:
+      address: discovery:///grpc-pipeline
+      negotiation-type: TLS
+
+    gateway:
+      address: discovery:///grpc-gateway
+      negotiation-type: TLS
+
+    name-agent:
+      address: discovery:///grpc-name-agent
+      negotiation-type: TLS
+
+    document-number-agent:
+      address: discovery:///grpc-document-number-agent
+      negotiation-type: TLS
+
+    document-comparer-agent:
+      address: discovery:///grpc-document-comparer-agent
+      negotiation-type: TLS
+
+    gender-agent:
+      address: discovery:///grpc-gender-agent
+      negotiation-type: TLS
+
+    country-agent:
+      address: discovery:///grpc-country-agent
+      negotiation-type: TLS
+
+    date-agent:
+      address: discovery:///grpc-date-agent
+      negotiation-type: TLS
+
+    warehouse:
+      address: discovery:///grpc-warehouse
+      negotiation-type: TLS
+
+keycloak:
+  client-id: frontend
+  adapter:
+    auth-server-url: {{ key "sear/external_url" }}/auth
+    realm: sens-webapp
+    public-client: false
+    confidential-port: 0
+    principal-attribute: preferred_username
+    ssl-required: external
+
+serp:
+  governance.qa:
+    sampling:
+      schedule:
+        enabled: true
+        audit-cron: 0 0 2/6 * * ?
+        alert-generator-cron: 0 0 2 ? * MON-FRI *
+      generator:
+        sample-count: 400
+        grouping-fields:
+          - alert_extendedAttribute5
+        filters:
+          - field: alert_s8_recommendation
+            values:
+              - ACTION_FALSE_POSITIVE
+    viewing:
+      max-state-reset-delay-ms: 45000
+
+serp.governance.featurevector:
+  ingest:
+    repackager:
+      fvSignatureKey: feature_vector_signature
+      feature-or-category-regex: ^(categories\/(\w)+)$|^(features\/(\w)+\:solution)$
+      prefix-and-suffix-regex: (:solution)$
+  event:
+    strategy: INGEST

@@ -1,0 +1,18 @@
+= HLD #28
+
+== Governance - Change requests
+
+- Reference ticket: TBA
+- Reason: Clients want to have a two steps verification when applying a new model on a production.
+So we provide a maker-checker process that will allow approving models which should go on production.
+
+== Diagram
+
+[plantuml,governance-change-requests,svg]
+-----
+@startuml
+header Governance - Change requests
+
+
+@enduml
+-----

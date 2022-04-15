@@ -1,0 +1,24 @@
+serp:
+  consul:
+    discovery:
+      enabled: true
+    enabled: true
+    config.enabled: ${serp.consul.enabled}
+    host: localhost
+    protocol: http
+    instance: ${spring.application.name}-${HOSTNAME:localhost}
+
+spring:
+  cloud:
+    consul:
+      enabled: true
+      scheme: ${serp.consul.protocol}
+      host: ${serp.consul.host}
+      port: ${serp.consul.port:24120}
+
+      config:
+        enabled: ${serp.consul.config.enabled}
+        prefix: config/serp
+        defaultContext: serp
+        name: serp-${spring.application.name}
+        format: FILES

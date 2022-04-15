@@ -1,0 +1,28 @@
+plugins {
+    id "java-library"
+}
+
+description = "Serp Governance Common Web"
+
+dependencies {
+  // API dependencies
+  api libraries.jakarta_validation_api
+  api libraries.javax_annotation_api
+  api libraries.silenteight_sep_base_common
+  api libraries.sentry
+  api libraries.springdoc_data_rest
+
+  // General dependencies
+  implementation libraries.silenteight_audit_bs
+  implementation libraries.silenteight_commons_core
+  implementation libraries.silenteight_rabbit_mq_common_schema
+  implementation libraries.spring_boot_actuator
+
+  implementation libraries.spring_security_config
+  implementation libraries.spring_security_web
+
+  implementation libraries.spring_webmvc
+
+  implementation libraries.springdoc_ui
+  implementation libraries.springdoc_security
+}

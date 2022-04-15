@@ -1,0 +1,235 @@
+openapi: 3.0.3
+info:
+  title: Solving model
+  description: Solving model manipulation
+  version: 0.1.1
+servers:
+  - url: '{environment}/rest/governance/api/v1'
+    variables:
+      environment:
+        enum:
+          - http://localhost:24204
+          - https://localhost:24111
+        default: http://localhost:24204
+
+paths:
+  /solvingModels?policy={policyName}:
+    get:
+      tags:
+        - now
+      description: Returns a solving model with the policy
+      parameters:
+        - name: policyName
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/PolicyName'
+      responses:
+        200:
+          description: Solving model details list. This endpoint returns a list of policies to be in line with the REST rules, but you can be sure that there will be always a single value on that list that will match the requested policyName.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SolvingModelDto'
+        204:
+          description: No solving model found for provided policyName
+        500:
+          description: In case of containing multiple values in the database for a combination of policyName.
+
+
+  /solvingModels:
+    post:
+      tags:
+        - now
+      description: Create a solving model
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSolvingModelRequest'
+      responses:
+        201:
+          description: Solving model created
+        409:
+          description: Solving model with provided policy already exists
+
+
+  /solvingModels/{id}:
+    get:
+      tags:
+        - now
+      description: Returns a solving model details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Model details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SolvingModelDto'
+
+
+  /solvingModels?policy={policyName}&strategy={strategyName}&configurationSet={configurationSetName}:
+    get:
+      tags:
+        - later
+      description: Returns a solving model with the policy
+      parameters:
+        - name: policyName
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/PolicyName'
+        - name: strategyName
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/StrategyName'
+        - name: configurationSetName
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/ConfigurationSetName'
+      responses:
+        200:
+          description: Solving model details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SolvingModelDto'
+        204:
+          description: No solving model found for provided policyName
+        500:
+          description: In case of containing multiple values in the database for a combination of policyName, strategy and configuratonSet.
+
+
+  /solvingModels?state={state}:
+    get:
+      tags:
+        - import
+      description: If solving model is available to export endpoint will redirect user to the specific endpoint.
+      parameters:
+        - name: state
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/SolvingModelState'
+      responses:
+        200:
+          description: A list of solving models to apply on a production
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: solvingModels/45178734-a7d8-4e2f-a0b8-80c5951fb333
+        204:
+          description: No solving models to export
+
+
+  /solvingModels/{id}/export:
+    get:
+      tags:
+        - import
+      description: Returns the model json file
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Json file with model
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelConfiguration'
+        404:
+          description: No model with provided Id
+
+
+  /solvingModels/import:
+    get:
+      tags:
+        - import
+      description: Creates a model with provided configuration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelConfiguration'
+      responses:
+        201:
+          description: Created model
+
+
+components:
+  schemas:
+    ModelState:
+      type: string
+      enum:
+        - READY
+        - PRODUCTION_PENDING
+        - IN_USE
+        - OBSOLETE
+      description: In `PRODUCTION_PENDING` and `IN_USE` state we can have at most 1 model.
+
+    SolvingModelDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Model Id
+        name:
+          type: string
+          description: Model resource name
+        policy:
+          type: string
+          description: Policy resource name
+      example:
+        id: '45178734-a7d8-4e2f-a0b8-80c5951fb333'
+        name: 'solvingModels/45178734-a7d8-4e2f-a0b8-80c5951fb333'
+        policy: 'policies/51a1177b-6a21-4ff1-b77b-71df8dd3725a'
+
+
+    CreateSolvingModelRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Model Id
+        policy:
+          type: string
+          description: Policy resource name
+      example:
+        id: '45178734-a7d8-4e2f-a0b8-80c5951fb333'
+        policy: 'policies/51a1177b-6a21-4ff1-b77b-71df8dd3725a'
+
+
+    PolicyName:
+      type: string
+      example: 'policies/51a1177b-6a21-4ff1-b77b-71df8dd3725a'
+
+    StrategyName:
+      type: string
+      example: 'strategies/51a1177b-6a21-4ff1-b77b-71df8dd3725a'
+
+    ConfigurationSetName:
+      type: string
+      example: 'configurationSets/51a1177b-6a21-4ff1-b77b-71df8dd3725a'
+
+
+    ModelConfiguration:
+      type: object
+

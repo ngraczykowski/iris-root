@@ -1,0 +1,20 @@
+spring:
+  cloud:
+    consul:
+      discovery:
+        enabled: true
+        register: false
+        register-health-check: false
+
+        catalog-services-watch:
+          enabled: true
+
+    service-registry:
+      auto-registration:
+        enabled: false
+
+grpc:
+  client:
+    warehouse:
+      timeout: 10s
+

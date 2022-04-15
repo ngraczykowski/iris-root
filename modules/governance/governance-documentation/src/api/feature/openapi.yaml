@@ -1,0 +1,53 @@
+openapi: 3.0.3
+info:
+  title: Features
+  description: List of all features
+  version: 0.1.0
+
+servers:
+  - url: '{environment}/rest/governance/api/v1'
+    variables:
+      environment:
+        enum:
+          - http://localhost:24204
+          - https://localhost:24111
+        default: http://localhost:24204
+
+paths:
+  /features:
+    get:
+      tags:
+        - features
+      description: Returns a list of all features
+      responses:
+        200:
+          description: List of features
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FeaturesListDto'
+components:
+  schemas:
+    FeatureDto:
+      type: object
+      properties:
+        name:
+          type: string
+        displayName:
+          type: string
+        agentConfig:
+          type: string
+        solutions:
+          type: array
+          items:
+            type: string
+
+    FeaturesListDto:
+      type: object
+      properties:
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeatureDto'

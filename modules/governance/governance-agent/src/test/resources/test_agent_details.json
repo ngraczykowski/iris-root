@@ -1,0 +1,65 @@
+{
+  "agents/nameAgent/versions/1.0.0/config/1": {
+    "agentId": "a9fbb313-b9f8-4792-99ad-6fdd74b9e629",
+    "features": [
+      "features/name"
+    ],
+    "responses": [
+      "STRONG_MATCH",
+      "MATCH",
+      "WEAK_MATCH",
+      "NO_MATCH",
+      "EXACT_MATCH",
+      "HQ_NO_MATCH",
+      "NO_DATA"
+    ]},
+  "agents/dateAgent/versions/1.0.0/config/1": {
+    "agentId": "98cfd77c-41ac-4882-ab2a-d766891b92f7",
+    "features": [
+      "features/dob"
+    ],
+    "responses": [
+      "EXACT",
+      "NEAR",
+      "OUT_OF_RANGE",
+      "NO_DATA"
+    ]},
+  "agents/documentAgent/versions/1.0.0/config/1": {
+    "agentId": "",
+    "features": [
+      "features/document",
+      "features/nationalId",
+      "features/passport"
+    ],
+    "responses": [
+      "PERFECT_MATCH",
+      "DIGIT_MATCH",
+      "WEAK_DIGIT_MATCH",
+      "WEAK_MATCH",
+      "NO_MATCH",
+      "NO_DATA"
+    ]},
+  "agents/genderAgent/versions/1.0.0/config/1": {
+    "agentId": "",
+    "features": [
+      "features/gender"
+    ],
+    "responses": [
+      "MATCH",
+      "NO_MATCH",
+      "NO_DATA"
+    ]},
+  "agents/countryAgent/versions/1.0.0/config/1": {
+    "agentId": "",
+    "features": [
+      "features/residency",
+      "features/nationality"
+    ],
+    "responses": [
+      "MATCH",
+      "WEAK_MATCH",
+      "NO_MATCH",
+      "NO_DATA"
+    ]
+  }
+}
