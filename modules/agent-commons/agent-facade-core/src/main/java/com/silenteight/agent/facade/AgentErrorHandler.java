@@ -3,6 +3,7 @@ package com.silenteight.agent.facade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.agent.facade.exchange.StructReasonMapper;
 import com.silenteight.agent.monitoring.Monitoring;
 import com.silenteight.agents.v1.api.exchange.AgentExchangeRequest;
 import com.silenteight.agents.v1.api.exchange.AgentExchangeResponse;
@@ -10,9 +11,7 @@ import com.silenteight.agents.v1.api.exchange.AgentOutput;
 import com.silenteight.agents.v1.api.exchange.AgentOutput.Feature;
 import com.silenteight.agents.v1.api.exchange.AgentOutput.FeatureSolution;
 
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Struct;
-import com.google.protobuf.util.JsonFormat;
 
 import static java.lang.String.format;
 import static java.lang.String.join;
@@ -38,8 +37,8 @@ public class AgentErrorHandler {
     for (String matchId : request.getMatchesList()) {
       var agentOutputBuilder = AgentOutput.newBuilder().setMatch(matchId);
       for (String feature : request.getFeaturesList()) {
-        FeatureSolution featureSolution =
-            buildErrorFeatureSolution(getSolution(exception), exception);
+        var solution = getSolution(exception);
+        FeatureSolution featureSolution = fromExceptionMessage(solution, exception);
         agentOutputBuilder.addFeatures(Feature.newBuilder()
             .setFeature(feature)
             .setFeatureSolution(featureSolution)
@@ -67,14 +66,9 @@ public class AgentErrorHandler {
     return DATA_SOURCE_ERROR;
   }
 
-  public FeatureSolution buildErrorFeatureSolution(String solution, Exception exception) {
-    monitoring.captureException(exception);
-    var reason = buildErrorMessage(exception.getMessage());
-
-    return FeatureSolution.newBuilder()
-        .setSolution(solution)
-        .setReason(reason)
-        .build();
+  private static Struct buildErrorMessage(String errorMessage) {
+    return StructReasonMapper.mapToStruct(
+        ERROR_MESSAGE_FIELD, errorMessage == null ? "" : errorMessage);
   }
 
   public FeatureSolution buildNoDataSolution() {
@@ -83,17 +77,15 @@ public class AgentErrorHandler {
         .build();
   }
 
-  private static Struct.Builder buildErrorMessage(String errorMessage) {
+  private static FeatureSolution fromExceptionMessage(
+      String solution, Exception exception) {
+    var reason = buildErrorMessage(exception.getMessage());
 
-    Struct.Builder builder = Struct.newBuilder();
-    try {
-      String errorMessageField = "{ \"" + ERROR_MESSAGE_FIELD + "\": \"" + errorMessage + "\" }";
-      JsonFormat
-          .parser()
-          .merge(errorMessageField, builder);
-    } catch (InvalidProtocolBufferException e) {
-      throw new RuntimeException(e);
-    }
-    return builder;
+    return FeatureSolution.newBuilder().setSolution(solution).setReason(reason).build();
+  }
+
+  public FeatureSolution buildErrorFeatureSolution(String solution, Exception exception) {
+    monitoring.captureException(exception);
+    return fromExceptionMessage(solution, exception);
   }
 }
