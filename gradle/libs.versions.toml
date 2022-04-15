@@ -1,0 +1,311 @@
+[versions]
+#-----------------------------------
+# Silent Eight
+#-----------------------------------
+adjudication-engine-api = "0.8.0"
+agents-api = "0.4.0"
+agents-protocol = "0.14.0"
+data-retention = "0.3.0"
+governance-api = "1.7.0"
+learing-engine-store-api = "0.5.0"
+silenteight-commons = "2.1.0"
+silenteight-data-source-api = "0.18.0"
+silenteight-sep-base = "1.12.2"
+warehouse-protocol = "2.2.0"
+
+#-----------------------------------
+# Platforms
+#-----------------------------------
+platform-awssdk = "2.17.169"
+platform-keycloak-adapter = "15.0.2"
+platform-reactor = "2020.0.13"
+platform-sentry = "5.7.3"
+platform-sep = "2.5.0"
+platform-spring-boot = "2.6.6"
+platform-spring-cloud = "2021.0.1"
+
+#-----------------------------------
+# Others libraries
+#-----------------------------------
+aspectj = "1.9.9.1"
+shedlock = "4.27.0"
+jackson = "2.13.0"
+
+#-----------------------------------
+# Plugins
+#-----------------------------------
+plugin-aspectj = "5.3.0"
+plugin-jib = "3.1.4"
+plugin-nebula-resolution = "7.8.7"
+plugin-sonarqube = "2.8"
+
+[libraries]
+#\[group:\s*'([^']+)',\s*name:\s*'([^']+)'(,[^]]*)?]
+#{ group = "$1", name = "$2"$3 }
+
+#version: '([^']+)'
+#version = "$1"
+
+#version: ([\w]+)
+#version.ref = "$1"
+
+#([^\s])([A-Z])([^\s])
+#$1-\l$2$3
+
+#groovy-core = { module = "org.codehaus.groovy:groovy", version.ref = "groovy" }
+#groovy-json = { module = "org.codehaus.groovy:groovy-json", version.ref = "groovy" }
+#groovy-nio = { module = "org.codehaus.groovy:groovy-nio", version.ref = "groovy" }
+#commons-lang3 = { group = "org.apache.commons", name = "commons-lang3", version = { strictly = "[3.8, 4.0[", prefer="3.9" } }
+
+# Silent Eight
+adjudication-engine-api = { group = "com.silenteight.adjudication.api", name = "adjudication-api", version.ref = "adjudication-engine-api" }
+consul-grpc-registration = { group = "com.silenteight.commons", name = "consul-grpc-registration", version = "1.0.0" }
+data-source-api = { group = "com.silenteight.sens.date-source-api", name = "data-source-api", version.ref = "silenteight-data-source-api" }
+data-source-categories-api = { group = "com.silenteight.sens.date-source-api", name = "data-source-categories-api", version.ref = "silenteight-data-source-api" }
+data-source-comments-api = { group = "com.silenteight.sens.date-source-api", name = "data-source-comments-api", version.ref = "silenteight-data-source-api" }
+data-source-agentinput-api = { group = "com.silenteight.sens.date-source-api", name = "data-source-agentinput-api", version.ref = "silenteight-data-source-api" }
+governance-api = { group = "com.silenteight.governance.api", name = "se-governance-api", version.ref = "governance-api" }
+governance-model-api = { group = "com.silenteight.governance.api", name = "se-model-api", version.ref = "governance-api" }
+governance-solving-api = { group = "com.silenteight.governance.api", name = "se-solving-api", version.ref = "governance-api" }
+learning-engine-store-api = { group = "com.silenteight.learningengine.api", name = "learning-store-api", version.ref = "learing-engine-store-api" }
+agents-api = { group = "com.silenteight.agent.api", name = "agents-api", version.ref = "agents-api" }
+sear-rabbitmq-common-schema = { group = "com.silenteight.rabbitmqcommonschema", name = "sear-rabbitmq-common-schema-definitions", version = "1.9.0" }
+silenteight-commons-app = { group = "com.silenteight.commons", name = "silenteight-commons-app", version.ref = "silenteight-commons" }
+silenteight-commons-core = { group = "com.silenteight.commons", name = "silenteight-commons-core", version.ref = "silenteight-commons" }
+silenteight-sep-base-aspects = { group = "com.silenteight.sep.base", name = "sep-base-aspects", version.ref = "silenteight-sep-base" }
+silenteight-sep-base-common = { group = "com.silenteight.sep.base", name = "sep-base-common", version.ref = "silenteight-sep-base" }
+silenteight-sep-base-testing = { group = "com.silenteight.sep.base", name = "sep-base-testing", version.ref = "silenteight-sep-base" }
+silenteight-agents-protocol = { group = "com.silenteight.agent.api", name = "protocol-agents", version.ref = "agents-protocol" }
+warehouse-data-api = { group = "com.silenteight.warehouse.api", name = "se-data-api", version.ref = "warehouse-protocol" }
+data-retention-api = { group = "com.silenteight.sens.data-retention-api", name = "data-retention-api", version.ref = "data-retention" }
+
+# Platforms
+platform-awssdk = { module = "software.amazon.awssdk:bom", version.ref = "platform-awssdk" }
+platform-keycloak-adapter = { module = "org.keycloak.bom:keycloak-adapter-bom", version.ref = "platform-keycloak-adapter" }
+platform-reactor = { module = "io.projectreactor:reactor-bom", version.ref = "platform-reactor" }
+platform-sentry = { module = "io.sentry:sentry-bom", version.ref = "platform-sentry" }
+platform-sep = { module = "com.silenteight.sep:sep-dependencies", version.ref = "platform-sep" }
+platform-spring-boot = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "platform-spring-boot" }
+platform-spring-cloud = { module = "org.springframework.cloud:spring-cloud-dependencies", version.ref = "platform-spring-cloud" }
+
+# Spring
+spring-aop = { group = "org.springframework", name = "spring-aop" }
+spring-aspects = { group = "org.springframework", name = "spring-aspects" }
+spring-beans = { group = "org.springframework", name = "spring-beans" }
+spring-context = { group = "org.springframework", name = "spring-context" }
+spring-context-support = { group = "org.springframework", name = "spring-context-support" }
+spring-core = { group = "org.springframework", name = "spring-core" }
+spring-expression = { group = "org.springframework", name = "spring-expression" }
+spring-instrument = { group = "org.springframework", name = "spring-instrument" }
+spring-jdbc = { group = "org.springframework", name = "spring-jdbc" }
+spring-messaging = { group = "org.springframework", name = "spring-messaging" }
+spring-orm = { group = "org.springframework", name = "spring-orm" }
+spring-retry = { group = "org.springframework.retry", name = "spring-retry" }
+spring-test = { group = "org.springframework", name = "spring-test" }
+spring-tx = { group = "org.springframework", name = "spring-tx" }
+spring-web = { group = "org.springframework", name = "spring-web" }
+spring-webmvc = { group = "org.springframework", name = "spring-webmvc" }
+spring-webflux = { group = "org.springframework", name = "spring-webflux" }
+
+spring-amqp = { group = "org.springframework.amqp", name = "spring-amqp" }
+spring-amqp-rabbit = { group = "org.springframework.amqp", name = "spring-rabbit" }
+spring-amqp-rabbit-test = { group = "org.springframework.amqp", name = "spring-rabbit-test" }
+spring-amqp-rabbit-junit = { group = "org.springframework.amqp", name = "spring-rabbit-junit" }
+
+spring-boot = { group = "org.springframework.boot", name = "spring-boot" }
+spring-boot-actuator = { group = "org.springframework.boot", name = "spring-boot-actuator" }
+spring-boot-autoconfigure = { group = "org.springframework.boot", name = "spring-boot-autoconfigure" }
+spring-boot-autoconfigure-processor = { group = "org.springframework.boot", name = "spring-boot-autoconfigure-processor" }
+spring-boot-configuration-processor = { group = "org.springframework.boot", name = "spring-boot-configuration-processor" }
+spring-boot-starter-actuator = { group = "org.springframework.boot", name = "spring-boot-starter-actuator" }
+spring-boot-starter-amqp = { group = "org.springframework.boot", name = "spring-boot-starter-amqp" }
+spring-boot-starter-data-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }
+spring-boot-starter-elasticsearch = { group = "org.springframework.boot", name = "spring-boot-starter-data-elasticsearch" }
+spring-boot-starter-integration = { group = "org.springframework.boot", name = "spring-boot-starter-integration" }
+spring-boot-starter-jdbc = { group = "org.springframework.boot", name = "spring-boot-starter-jdbc" }
+spring-boot-starter-logging = { group = "org.springframework.boot", name = "spring-boot-starter-logging" }
+spring-boot-starter-mail = { group = "org.springframework.boot", name = "spring-boot-starter-mail" }
+spring-boot-starter-oauth2-client = { group = "org.springframework.boot", name = "spring-boot-starter-oauth2-client" }
+spring-boot-starter-quartz = { group = "org.springframework.boot", name = "spring-boot-starter-quartz" }
+spring-boot-starter-undertow = { group = "org.springframework.boot", name = "spring-boot-starter-undertow" }
+spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web" }
+spring-boot-starter-webflux = { group = "org.springframework.boot", name = "spring-boot-starter-webflux" }
+spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
+spring-boot-starter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security" }
+spring-boot-test = { group = "org.springframework.boot", name = "spring-boot-test" }
+spring-boot-test-autoconfigure = { group = "org.springframework.boot", name = "spring-boot-test-autoconfigure" }
+
+spring-batch-core = { group = "org.springframework.batch", name = "spring-batch-core" }
+spring-batch-infrastructure = { group = "org.springframework.batch", name = "spring-batch-infrastructure" }
+spring-batch-starter = { group = "org.springframework.boot", name = "spring-boot-starter-batch" }
+spring-batch-test = { group = "org.springframework.batch", name = "spring-batch-test" }
+
+spring-cloud-consul-discovery = { group = "org.springframework.cloud", name = "spring-cloud-consul-discovery" }
+spring-cloud-dependencies = { group = "org.springframework.cloud", name = "spring-cloud-dependencies" }
+spring-cloud-starter-consul = { group = "org.springframework.cloud", name = "spring-cloud-starter-consul" }
+spring-cloud-starter-consul-config = { group = "org.springframework.cloud", name = "spring-cloud-starter-consul-config" }
+spring-cloud-starter-gateway = { group = "org.springframework.cloud", name = "spring-cloud-starter-gateway" }
+spring-cloud-starter-sleuth = { group = "org.springframework.cloud", name = "spring-cloud-starter-sleuth" }
+spring-cloud-test-support = { group = "org.springframework.cloud", name = "spring-cloud-test-support" }
+
+spring-data-commons = { group = "org.springframework.data", name = "spring-data-commons" }
+spring-data-jpa = { group = "org.springframework.data", name = "spring-data-jpa" }
+spring-data-elasticsearch = { group = "org.springframework.data", name = "spring-data-elasticsearch" }
+
+spring-integration-amqp = { group = "org.springframework.integration", name = "spring-integration-amqp" }
+spring-integration-core = { group = "org.springframework.integration", name = "spring-integration-core" }
+spring-integration-http = { group = "org.springframework.integration", name = "spring-integration-http" }
+spring-integration-mail = { group = "org.springframework.integration", name = "spring-integration-mail" }
+spring-integration-test = { group = "org.springframework.integration", name = "spring-integration-test" }
+
+spring-security-acl = { group = "org.springframework.security", name = "spring-security-acl" }
+spring-security-aspects = { group = "org.springframework.security", name = "spring-security-aspects" }
+spring-security-cas = { group = "org.springframework.security", name = "spring-security-cas" }
+spring-security-config = { group = "org.springframework.security", name = "spring-security-config" }
+spring-security-core = { group = "org.springframework.security", name = "spring-security-core" }
+spring-security-test = { group = "org.springframework.security", name = "spring-security-test" }
+spring-security-web = { group = "org.springframework.security", name = "spring-security-web" }
+
+# Project Reactor
+reactor-adapter = { group = "io.projectreactor.addons", name = "reactor-adapter" }
+reactor-bom = { group = "io.projectreactor", name = "reactor-bom" }
+reactor-core = { group = "io.projectreactor", name = "reactor-core" }
+reactor-extra = { group = "io.projectreactor.addons", name = "reactor-extra" }
+reactor-rabbitmq = { group = "io.projectreactor.rabbitmq", name = "reactor-rabbitmq" }
+reactor-test = { group = "io.projectreactor", name = "reactor-test" }
+
+# APIs
+jsr305 = { group = "com.google.code.findbugs", name = "jsr305" }
+jetbrains-annotations = { group = "org.jetbrains", name = "annotations" }
+slf4j-api = { group = "org.slf4j", name = "slf4j-api" }
+
+# Others
+amqp-client = { group = "com.rabbitmq", name = "amqp-client" }
+antlr4 = { group = "org.antlr", name = "antlr4" }
+antlr4-runtime = { group = "org.antlr", name = "antlr4-runtime" }
+aspectjrt = { group = "org.aspectj", name = "aspectjrt", version.ref = "aspectj" }
+aspectjtools = { group = "org.aspectj", name = "aspectjtools", version.ref = "aspectj" }
+aspectjweaver = { group = "org.aspectj", name = "aspectjweaver" }
+aws-apache-client = { group = "software.amazon.awssdk", name = "apache-client" }
+aws-auth = { group = "software.amazon.awssdk", name = "auth" }
+aws-s3 = { group = "software.amazon.awssdk", name = "s3" }
+aws-ses = { group = "software.amazon.awssdk", name = "ses" }
+bouncycastle-bcmail = { group = "org.bouncycastle", name = "bcmail-jdk15on" }
+bouncycastle-bcpg = { group = "org.bouncycastle", name = "bcpg-jdk15on" }
+bouncycastle-bcpkix = { group = "org.bouncycastle", name = "bcpkix-jdk15on" }
+bouncycastle-bcprov = { group = "org.bouncycastle", name = "bcprov-jdk15on" }
+bouncycastle-bcprov-ext = { group = "org.bouncycastle", name = "bcprov-ext-jdk15on" }
+brave-instrumentation-grpc = { group = "io.zipkin.brave", name = "brave-instrumentation-grpc" }
+caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine" }
+caffeine-jcache = { group = "com.github.ben-manes.caffeine", name = "jcache" }
+commons-collections = { group = "org.apache.commons", name = "commons-collections4" }
+commons-lang3 = { group = "org.apache.commons", name = "commons-lang3" }
+commons-text = { group = "org.apache.commons", name = "commons-text" }
+ecs-logging-core = { group = "co.elastic.logging", name = "ecs-logging-core" }
+fastutil = { group = "it.unimi.dsi", name = "fastutil" }
+feign-slf4j = { group = "io.github.openfeign", name = "feign-slf4j" }
+freemarker = { group = "org.freemarker", name = "freemarker" }
+grpc-api = { group = "io.grpc", name = "grpc-api" }
+grpc-auth = { group = "io.grpc", name = "grpc-auth" }
+grpc-client-spring-boot-starter = { group = "net.devh", name = "grpc-client-spring-boot-starter" }
+grpc-context = { group = "io.grpc", name = "grpc-context" }
+grpc-core = { group = "io.grpc", name = "grpc-core" }
+grpc-netty = { group = "io.grpc", name = "grpc-netty" }
+grpc-protobuf = { group = "io.grpc", name = "grpc-protobuf" }
+grpc-server-spring-boot-starter = { group = "net.devh", name = "grpc-server-spring-boot-starter" }
+grpc-services = { group = "io.grpc", name = "grpc-services" }
+grpc-spring-boot-starter = { group = "net.devh", name = "grpc-spring-boot-starter" }
+grpc-stub = { group = "io.grpc", name = "grpc-stub" }
+grpc-testing = { group = "io.grpc", name = "grpc-testing" }
+guava = { group = "com.google.guava", name = "guava" }
+hibernate-core = { group = "org.hibernate", name = "hibernate-core" }
+hibernate-envers = { group = "org.hibernate", name = "hibernate-envers" }
+hibernate-jcache = { group = "org.hibernate", name = "hibernate-jcache" }
+hibernate-types = { group = "com.vladmihalcea", name = "hibernate-types-52", version = "2.11.1" }
+hibernate-validator = { group = "org.hibernate.validator", name = "hibernate-validator" }
+hikari-cp = { group = "com.zaxxer", name = "HikariCP" }
+jackson-annotations = { group = "com.fasterxml.jackson.core", name = "jackson-annotations", version.ref = "jackson" }
+jackson-databind = { group = "com.fasterxml.jackson.core", name = "jackson-databind", version.ref = "jackson" }
+jackson-dataformat-csv = { group = "com.fasterxml.jackson.dataformat", name = "jackson-dataformat-csv", version.ref = "jackson" }
+jackson-dataformat-xml = { group = "com.fasterxml.jackson.dataformat", name = "jackson-dataformat-xml", version.ref = "jackson" }
+jackson-datatype-jdk8 = { group = "com.fasterxml.jackson.datatype", name = "jackson-datatype-jdk8" }
+jackson-datatype-jsr310 = { group = "com.fasterxml.jackson.datatype", name = "jackson-datatype-jsr310" }
+jackson-module-afterburner = { group = "com.fasterxml.jackson.module", name = "jackson-module-afterburner" }
+jackson-module-parameter-names = { group = "com.fasterxml.jackson.module", name = "jackson-module-parameter-names" }
+jackson-module-paranamer = { group = "com.fasterxml.jackson.module", name = "jackson-module-paranamer" }
+jakarta-annotation-api = { group = "jakarta.annotation", name = "jakarta.annotation-api" }
+jakarta-el = { group = "org.glassfish", name = "jakarta.el" }
+jakarta-inject = { group = "jakarta.inject", name = "jakarta.inject-api" }
+jakarta-mail = { group = "com.sun.mail", name = "jakarta.mail" }
+jakarta-mail-api = { group = "jakarta.mail", name = "jakarta.mail-api" }
+jakarta-persistence-api = { group = "jakarta.persistence", name = "jakarta.persistence-api" }
+jakarta-servlet-api = { group = "jakarta.servlet", name = "jakarta.servlet-api" }
+jakarta-transaction-api = { group = "jakarta.transaction", name = "jakarta.transaction-api" }
+jakarta-validation-api = { group = "jakarta.validation", name = "jakarta.validation-api" }
+javax-cache-api = { group = "javax.cache", name = "cache-api" }
+javax-mail = { group = "javax.mail", name = "mail", version = "1.4.1" }
+jaxb-api = { group = "jakarta.xml.bind", name = "jakarta.xml.bind-api" }
+jjwt = { group = "io.jsonwebtoken", name = "jjwt" }
+keycloak-spring-boot-starter = { group = "org.keycloak", name = "keycloak-spring-boot-starter" }
+liquibase-core = { group = "org.liquibase", name = "liquibase-core", version = "3.10.3" }
+liquibase-sessionlock = { group = "com.github.blagerweij", name = "liquibase-sessionlock", version = "1.4.0" }
+logback-access = { group = "ch.qos.logback", name = "logback-access" }
+logback-classic = { group = "ch.qos.logback", name = "logback-classic" }
+logback-ecs-encoder = { group = "co.elastic.logging", name = "logback-ecs-encoder" }
+logstash-logback-encoder = { group = "net.logstash.logback", name = "logstash-logback-encoder", version = "6.6" }
+lz4-java = { group = "org.lz4", name = "lz4-java" }
+micrometer-core = { group = "io.micrometer", name = "micrometer-core" }
+micrometer-influx = { group = "io.micrometer", name = "micrometer-registry-influx" }
+micrometer-prometheus = { group = "io.micrometer", name = "micrometer-registry-prometheus" }
+opencsv = { group = "com.opencsv", name = "opencsv", version = "5.5.1" }
+oracle = { group = "com.oracle", name = "ojdbc8" }
+pebble = { group = "io.pebbletemplates", name = "pebble", version = "3.1.5" }
+postgresql = { group = "org.postgresql", name = "postgresql" }
+protobuf-java = { group = "com.google.protobuf", name = "protobuf-java" }
+protobuf-java-util = { group = "com.google.protobuf", name = "protobuf-java-util" }
+pw-swift-core = { group = "com.prowidesoftware", name = "pw-swift-core", version = "SRU2021-9.2.12" }
+sentry = { group = "io.sentry", name = "sentry" }
+sentry-logback = { group = "io.sentry", name = "sentry-logback" }
+sentry-spring-boot-starter = { group = "io.sentry", name = "sentry-spring-boot-starter" }
+shedlock-core = { group = "net.javacrumbs.shedlock", name = "shedlock-core", version.ref = "shedlock" }
+shedlock-jdbc-provider = { group = "net.javacrumbs.shedlock", name = "shedlock-provider-jdbc-template", version.ref = "shedlock" }
+shedlock-spring = { group = "net.javacrumbs.shedlock", name = "shedlock-spring", version.ref = "shedlock" }
+snakeyaml = { group = "org.yaml", name = "snakeyaml" }
+tomcat-embed-el = { group = "org.apache.tomcat.embed", name = "tomcat-embed-el" }
+
+# Testing
+assertj-core = { group = "org.assertj", name = "assertj-core" }
+assertj-json = { group = "com.revinate", name = "assertj-json" }
+awaitility = { group = "org.awaitility", name = "awaitility", version = "4.2.0" }
+hamcrest = { group = "org.hamcrest", name = "hamcrest" }
+json-path = { group = "com.jayway.jsonpath", name = "json-path" }
+junit-jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api" }
+junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine" }
+objenesis = { group = "org.objenesis", name = "objenesis" }
+rabbitmq-mock = { group = "com.github.fridujo", name = "rabbitmq-mock", version = "1.1.1" }
+spock-core = { group = "org.spockframework", name = "spock-core" }
+spock-spring = { group = "org.spockframework", name = "spock-spring" }
+test-containers = { group = "org.testcontainers", name = "testcontainers" }
+test-containers-junit-jupiter = { group = "org.testcontainers", name = "junit-jupiter" }
+test-containers-postgresql = { group = "org.testcontainers", name = "postgresql" }
+test-containers-spock = { group = "org.testcontainers", name = "spock" }
+test-greenmail = { group = "com.icegreen", name = "greenmail-junit5", version = "1.6.1" }
+
+# Plugins (keep in sync with [plugins])
+plugin-aspectj = { module = "io.freefair.aspectj:io.freefair.aspectj.gradle.plugin", version.ref = "plugin-aspectj" }
+plugin-jib = { module = "com.google.cloud.tools.jib:com.google.cloud.tools.jib.gradle.plugin", version.ref = "plugin-jib" }
+plugin-nebula-resolution = { module = "nebula.resolution-rules:nebula.resolution-rules.gradle.plugin", version.ref = "plugin-nebula-resolution" }
+plugin-sonarqube = { module = "org.sonarqube:org.sonarqube.gradle.plugin", version.ref = "plugin-sonarqube" }
+plugin-spring-boot = { module = "org.springframework.boot:org.springframework.boot.gradle.plugin", version.ref = "platform-spring-boot" }
+
+[bundles]
+#groovy = ["groovy-core", "groovy-json", "groovy-nio"]
+
+[plugins]
+#jmh = { id = "me.champeau.jmh", version = "0.6.5" }
+
+aspectj = { id = "io.freefair.aspectj", version.ref = "plugin-aspectj" }
+jib = { id = "com.google.cloud.tools.jib", version.ref = "plugin-jib" }
+nebula-resolution = { id = "nebula.resolution-rules", version.ref = "plugin-nebula-resolution" }
+sonarqube = { id = "org.sonarqube", version.ref = "plugin-sonarqube" }
+spring-boot = { id = "org.springframework.boot", version.ref = "platform-spring-boot" }

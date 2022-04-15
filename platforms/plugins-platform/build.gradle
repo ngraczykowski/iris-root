@@ -1,0 +1,15 @@
+plugins {
+  id('java-platform')
+}
+
+group = 'com.silenteight.sear.platform'
+
+dependencies {
+  constraints {
+    api(libs.plugin.aspectj)
+    api(libs.plugin.jib)
+    api(libs.plugin.nebula.resolution)
+    api(libs.plugin.sonarqube)
+    api(libs.plugin.spring.boot)
+  }
+}

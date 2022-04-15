@@ -1,0 +1,11 @@
+tasks.register('clean') { task ->
+  task.group = 'build'
+  task.description = 'Deletes the build directory'
+
+  gradle.includedBuilds().each { IncludedBuild build ->
+    build.projectDir.listFiles().each {
+      if (it.directory && !it.name.startsWith('.'))
+        task.dependsOn(build.task(":${it.name}:clean"))
+    }
+  }
+}

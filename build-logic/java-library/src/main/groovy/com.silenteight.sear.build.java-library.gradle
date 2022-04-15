@@ -1,0 +1,4 @@
+plugins {
+  id('com.silenteight.sear.build.java-base')
+  id('java-library')
+}

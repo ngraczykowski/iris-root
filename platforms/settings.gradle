@@ -1,0 +1,13 @@
+dependencyResolutionManagement {
+  versionCatalogs {
+    libs {
+      from(files("../gradle/libs.versions.toml"))
+    }
+  }
+}
+
+rootProject.name = 'sear-platforms'
+
+include('product-platform')
+include('test-platform')
+include('plugins-platform')

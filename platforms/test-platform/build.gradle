@@ -1,0 +1,18 @@
+plugins {
+  id('java-platform')
+}
+
+group = 'com.silenteight.sear.platform'
+
+javaPlatform.allowDependencies()
+
+dependencies {
+  api(platform(libs.platform.spring.boot))
+  api(platform('org.junit:junit-bom:5.7.1'))
+
+  constraints {
+    api(libs.awaitility)
+    api(libs.rabbitmq.mock)
+    api(libs.test.greenmail)
+  }
+}

@@ -1,0 +1,6 @@
+rootProject.name = 'sear-root'
+
+includeBuild('platforms')
+includeBuild('build-logic')
+
+includeBuild('modules')

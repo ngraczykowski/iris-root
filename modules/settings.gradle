@@ -1,0 +1,18 @@
+includeBuild('../platforms')
+includeBuild('../build-logic')
+
+dependencyResolutionManagement {
+  versionCatalogs {
+    libs {
+      from(files("../gradle/libs.versions.toml"))
+    }
+
+    // TODO(ahaczewski): Generate this based on includes.
+    //sear {
+    //}
+  }
+}
+
+rootProject.name = 'sear-modules'
+
+include('app')

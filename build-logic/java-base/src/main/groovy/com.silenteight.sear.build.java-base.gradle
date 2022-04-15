@@ -1,0 +1,49 @@
+plugins {
+  id('java')
+  id('com.silenteight.sear.build.jacoco')
+}
+
+group = 'com.silenteight.sear'
+
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(17)
+  }
+}
+
+dependencies {
+  implementation(platform('com.silenteight.sear.platform:product-platform'))
+  annotationProcessor(platform('com.silenteight.sear.platform:product-platform'))
+
+  implementation(libs.slf4j.api)
+  //implementation(libs.silenteight.sep.base.common)
+
+  testImplementation(platform('com.silenteight.sear.platform:test-platform'))
+
+  testImplementation(libs.junit.jupiter.api)
+  testImplementation(libs.assertj.core)
+  //testImplementation(libs.silenteight.sep.base.testing)
+  testRuntimeOnly(libs.junit.jupiter.engine)
+}
+
+tasks.named("test") {
+  useJUnitPlatform()
+}
+
+configurations.all {
+  resolutionStrategy {
+//    dependencySubstitution {
+//      substitute module("org.glassfish:javax.el") using module(
+//          "org.apache.tomcat.embed:tomcat-embed-el:9.0.55") because "Tomcat is a kitty"
+//      substitute module("org.glassfish:jakarta.el") using module(
+//          "org.apache.tomcat.embed:tomcat-embed-el:9.0.55") because "Tomcat is a kitty"
+//    }
+
+    cacheChangingModulesFor 0, 'seconds'
+    failOnVersionConflict()
+    preferProjectModules()
+
+    force libs.aspectjrt
+    force libs.aspectjtools
+  }
+}

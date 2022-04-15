@@ -1,0 +1,15 @@
+includeBuild('../platforms')
+
+dependencyResolutionManagement {
+  versionCatalogs {
+    libs {
+      from(files("../gradle/libs.versions.toml"))
+    }
+  }
+}
+
+rootProject.name = 'sear-build-logic'
+
+include('java-base')
+include('java-library')
+include('spring-boot-application')
