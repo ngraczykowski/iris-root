@@ -21,7 +21,7 @@ import static java.util.Arrays.asList;
 class MockAlertsSolvingGrpc extends AlertsSolvingGrpc.AlertsSolvingImplBase {
 
   private final List<String> availableSolutions =
-      asList("MATCH", "NO_MATCH", "NO_DECISION", "NO_DATA");
+      asList("Manual Investigation");
 
   @Override
   public void batchSolveAlerts(

@@ -75,5 +75,12 @@ ae:
   match-recommendation:
     flow:
       enabled: true
+    comment:
+      templateName: alert-test
+      matchTemplateName: match-template-test
   solving:
-    enabled: true
+    enabled: false
+  recommendation:
+    comment:
+      templateName: alert-test
+      matchTemplateName: match-template-test

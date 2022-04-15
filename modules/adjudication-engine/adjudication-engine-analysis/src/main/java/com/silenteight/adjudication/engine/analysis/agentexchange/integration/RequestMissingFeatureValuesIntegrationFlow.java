@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 @ConditionalOnProperty(
-    value = "ae.analysis.agent-exchange.enabled",
-    havingValue = "true",
+    value = "ae.solving.enabled",
+    havingValue = "false",
     matchIfMissing = true
 )
 class RequestMissingFeatureValuesIntegrationFlow extends IntegrationFlowAdapter {

@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.adjudication.engine.analysis.agentexchange.AgentExchangeFacade;
 import com.silenteight.adjudication.internal.v1.AgentResponseStored;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.integration.dsl.IntegrationFlowAdapter;
 import org.springframework.integration.dsl.IntegrationFlowDefinition;
 import org.springframework.messaging.MessageHeaders;
@@ -16,6 +17,10 @@ import static com.silenteight.adjudication.engine.analysis.agentexchange.integra
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@ConditionalOnProperty(
+    value = "ae.solving.enabled",
+    havingValue = "true"
+)
 class ReceiveDeleteAgentExchangeIntegrationFlow extends IntegrationFlowAdapter {
 
   private final AgentExchangeFacade agentExchangeFacade;
