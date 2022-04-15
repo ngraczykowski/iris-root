@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 @Slf4j
 public class AlertAgentDispatchProcess {
 
+  private final AgentExchangeAlertSolvingMapper agentExchnageRequestMapper;
   private final MatchesPublisher matchesPublisher;
   private final MatchFeaturesFacade matchFeaturesFacade;
   private final AlertSolvingRepository alertSolvingRepository;
@@ -39,11 +40,8 @@ public class AlertAgentDispatchProcess {
 
     pendingAlerts.forEach(alertSolving -> {
       this.alertSolvingRepository.save(alertSolving);
-      // TODO map and send to agents - rememeber about routing key and priority.
-      alertSolving
-          .toRequests()
-          .stream()
-          .forEach(agentExchangeRequest -> matchesPublisher.publish(agentExchangeRequest));
+      this.agentExchnageRequestMapper.from(alertSolving)
+          .forEach(matchesPublisher::publish);
     });
     if (log.isDebugEnabled()) {
       log.debug("AnalysisAlertsAdded mapped to AlertsSolving done");
@@ -70,7 +68,7 @@ public class AlertAgentDispatchProcess {
     }
     return features
         .stream()
-        .map(dao -> MatchFeature.from(dao))
+        .map(MatchFeature::from)
         .collect(Collectors.groupingBy(MatchFeature::getAlertId));
   }
 

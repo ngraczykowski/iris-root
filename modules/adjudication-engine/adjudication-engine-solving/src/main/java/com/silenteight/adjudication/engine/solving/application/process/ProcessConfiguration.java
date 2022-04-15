@@ -14,11 +14,12 @@ class ProcessConfiguration {
 
   @Bean
   AlertAgentDispatchProcess alertAgentDispatcherProcess(
+      AgentExchangeAlertSolvingMapper agentExchnageRequestMapper,
       MatchesPublisher matchesPublisher,
       MatchFeaturesFacade matchFeaturesFacade,
       AlertSolvingRepository alertSolvingRepository
   ) {
-    return new AlertAgentDispatchProcess(
+    return new AlertAgentDispatchProcess(agentExchnageRequestMapper,
         matchesPublisher, matchFeaturesFacade, alertSolvingRepository);
   }
 

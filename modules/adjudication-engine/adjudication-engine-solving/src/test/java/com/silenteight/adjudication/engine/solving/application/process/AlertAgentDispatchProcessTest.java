@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Set;
@@ -26,7 +27,10 @@ class AlertAgentDispatchProcessTest {
   private RabbitTemplate rabbitTemplate;
   @Mock
   private MatchFeaturesFacade matchFeaturesFacade;
+  @Autowired
   private AlertAgentDispatchProcess alertAgentDispatchProcess;
+  private AgentExchangeAlertSolvingMapper agentExchnageRequestMapper =
+      new AgentExchangeAlertSolvingMapper();
   private AlertSolvingRepository alertSolvingRepository = new InMemoryAlertSolvingRepository();
 
   @BeforeEach
@@ -34,7 +38,8 @@ class AlertAgentDispatchProcessTest {
     var matchesPublisher = new MatchesPublisher(rabbitTemplate);
     alertAgentDispatchProcess =
         new AlertAgentDispatchProcess(
-            matchesPublisher, matchFeaturesFacade, alertSolvingRepository);
+            agentExchnageRequestMapper, matchesPublisher, matchFeaturesFacade,
+            alertSolvingRepository);
   }
 
   @Test

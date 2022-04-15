@@ -5,19 +5,23 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.adjudication.engine.solving.data.MatchFeatureDao;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.intellij.lang.annotations.Language;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @RequiredArgsConstructor
 @Component
 class SelectAnalysisFeaturesQuery {
 
+  @Language("PostgreSQL")
   private static final String QUERY =
       "SELECT aacf.feature,aaf.agent_config_feature_id,am.match_id,am.alert_id,aacf.agent_config"
           + " FROM ae_analysis aaa\n"
@@ -26,15 +30,20 @@ class SelectAnalysisFeaturesQuery {
           + " JOIN ae_match am ON am.alert_id =aaa2.alert_id\n"
           + " JOIN ae_agent_config_feature aacf ON "
           + " aaf.agent_config_feature_id = aacf.agent_config_feature_id\n"
-          + " WHERE aaa.analysis_id IN (?) AND aaa2.alert_id IN (?)";
+          + " WHERE aaa.analysis_id IN (:analysis) AND aaa2.alert_id IN (:alerts)";
   private static final FeaturesRowMapper ROW_MAPPER = new FeaturesRowMapper();
 
 
-  private final JdbcTemplate jdbcTemplate;
+  private final NamedParameterJdbcTemplate jdbcTemplate;
 
   @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   public List<MatchFeatureDao> findAlertAnalysisFeatures(Set<Long> analysis, Set<Long> alerts) {
-    return jdbcTemplate.query(QUERY, ROW_MAPPER, analysis, alerts);
+
+    var parameters = new MapSqlParameterSource(Map.of(
+        "analysis", analysis,
+        "alerts", alerts
+    ));
+    return jdbcTemplate.query(QUERY, parameters, ROW_MAPPER);
   }
 
   private static final class FeaturesRowMapper

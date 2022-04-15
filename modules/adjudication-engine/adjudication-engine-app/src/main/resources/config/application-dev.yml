@@ -18,16 +18,23 @@ logging:
     org.springframework.jdbc.core.JdbcTemplate: DEBUG
 
 management:
+  endpoint:
+    health.show-details: always
+
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: [ "health", "info", "liquibase", "metrics", "prometheus", "loggers", "threaddump", "heapdump" ]
+    loggers:
+      sensitive: false
+
+  metrics:
+    tags:
+      application: ${spring.application.name}
   info:
     git:
       mode: full
-
-  endpoints:
-    enabled-by-default: true
-
-    web:
-      exposure:
-        include: "*"
 
 server:
   error:
@@ -53,23 +60,4 @@ spring:
 grpc:
   logging:
     enabled: true
-#---------------------------------------------------------------------------------------------------
-# MANAGEMENT
-#---------------------------------------------------------------------------------------------------
 
-# Management HTTP server
-management:
-  endpoint:
-    health.show-details: always
-
-  endpoints:
-    web:
-      base-path: /management
-      exposure:
-        include: [ "health", "info", "liquibase", "metrics", "prometheus", "loggers", "threaddump", "heapdump" ]
-    loggers:
-      sensitive: false
-
-  metrics:
-    tags:
-      application: ${spring.application.name}

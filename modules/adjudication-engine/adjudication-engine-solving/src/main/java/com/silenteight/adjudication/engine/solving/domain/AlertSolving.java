@@ -6,7 +6,6 @@ import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.adjudication.engine.solving.domain.event.FeatureMatchesUpdated;
 import com.silenteight.adjudication.engine.solving.domain.event.MatchFeatureValuesUpdated;
 import com.silenteight.adjudication.engine.solving.domain.event.MatchesUpdated;
-import com.silenteight.agents.v1.api.exchange.AgentExchangeRequest;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -55,7 +54,7 @@ public class AlertSolving {
   }
 
 
-  private Set<String> getAllMatchesNames() {
+  public Set<String> getAllMatchesNames() {
     return this.matches
         .keySet()
         .stream()
@@ -68,18 +67,8 @@ public class AlertSolving {
             Collectors.toSet());
   }
 
-  public List<AgentExchangeRequest> toRequests() {
-    if (log.isDebugEnabled()) {
-      log.debug("Dispatch matches features {} to agents", agentFeatures.keySet());
-    }
-    return this.agentFeatures.entrySet().stream().map(entry ->
-        AgentExchangeRequest
-            .newBuilder()
-            .addAllFeatures(entry.getValue())
-            .addAllMatches(getAllMatchesNames())
-            .build()
-    ).collect(Collectors.toList());
-
+  public Map<String, Set<String>> getAgentFeatures() {
+    return agentFeatures;
   }
 
   public AlertSolving updateMatches(Object object) {

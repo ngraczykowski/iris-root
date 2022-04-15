@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 )
 class ReceivedAlertListener {
 
-  private final AlertAgentDispatchProcess bojkaBajkaIBraworka;
+  private final AlertAgentDispatchProcess alertAgentDispatchProcess;
 
   @RabbitListener(autoStartup = "true",
       bindings = @QueueBinding(value =
@@ -35,7 +35,7 @@ class ReceivedAlertListener {
   @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   void onReceivedAlert(AnalysisAlertsAdded message) {
     log.info("Received alert message with alerts count {}", message.getAnalysisAlertsCount());
-    this.bojkaBajkaIBraworka.handle(message);
+    this.alertAgentDispatchProcess.handle(message);
   }
 
 }
