@@ -48,8 +48,7 @@ class FakeAlertRecordCompositeReader implements AlertRecordCompositeReader {
         alertIds,
         records,
         decisions,
-        emptyMap(),
-        ScbAlertIdContext.newBuilder().build());
+        emptyMap());
   }
 
   private static AlertRecord idToRecord(AlertId id) {

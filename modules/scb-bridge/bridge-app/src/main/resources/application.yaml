@@ -80,8 +80,8 @@ spring:
     properties:
       hibernate:
         jdbc:
-          fetch_size: 10
-          batch_size: 10
+          fetch_size: ${serp.scb.bridge.config.chunk-size}
+          batch_size: ${serp.scb.bridge.config.chunk-size}
         order_inserts: true
         order_updates: true
 
@@ -153,7 +153,6 @@ silenteight:
           - 'NO'
         display-name: IsDeny
         category-type: ENUMERATED
-
     # Queuing Jobs Configuration
     queuing:
       jobs:
@@ -176,6 +175,9 @@ silenteight:
           chunk-size: 1000
           records-view: SENS_V_FFF_RECORDS_NON_DENY
           watchlist-level: true
+    alert-processor:
+      fixed-delay: 1000
+      initial-delay: 2000
 
   qco:
     enabled: false
@@ -231,11 +233,6 @@ serp:
 
 # AMQP
 amqp:
-  ingest:
-    incoming:
-      batch-processing:
-        exchange-name: scb-bridge.batch-processing-exchange
-        queue-name: scb-bridge.batch-processing-queue
   feeding:
     outgoing:
       match-feature-input-set-fed:

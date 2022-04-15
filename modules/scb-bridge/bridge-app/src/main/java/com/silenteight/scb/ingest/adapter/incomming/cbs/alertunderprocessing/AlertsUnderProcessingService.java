@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static java.lang.Math.min;
+import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 class AlertsUnderProcessingService implements AlertInFlightService {
@@ -24,15 +25,13 @@ class AlertsUnderProcessingService implements AlertInFlightService {
 
   @Override
   @Transactional(GnsSyncConstants.PRIMARY_TRANSACTION_MANAGER)
-  public int saveUniqueAlerts(
-      Collection<AlertId> alerts, String internalBatchId, ScbAlertIdContext alertIdContext) {
+  public void saveUniqueAlerts(Collection<AlertId> alerts, ScbAlertIdContext alertIdContext) {
     Collection<AlertId> alertsUnderProcessing = getAlertsUnderProcessing(alerts);
     List<AlertId> alertsToBeSaved = alerts
         .stream()
         .filter(a -> !alertsUnderProcessing.contains(a))
         .toList();
-    saveAlertsToBeProcess(alertsToBeSaved, internalBatchId, alertIdContext);
-    return alertsToBeSaved.size();
+    saveAlertsToBeProcess(alertsToBeSaved, alertIdContext);
   }
 
   @Override
@@ -65,11 +64,11 @@ class AlertsUnderProcessingService implements AlertInFlightService {
   }
 
   @Override
-  public List<AlertIdWithDetails> getAlertsFromBatch(String internalBatchId) {
-    return alertUnderProcessingRepository.findAllByInternalBatchId(internalBatchId)
+  public List<AlertIdWithDetails> readChunk() {
+    return alertUnderProcessingRepository.findTop2000ByErrorIsNullOrderByPriorityDesc()
         .stream()
         .map(this::getAlertIdWithDetails)
-        .toList();
+        .collect(toList());
   }
 
   private AlertIdWithDetails getAlertIdWithDetails(AlertUnderProcessing alert) {
@@ -94,20 +93,17 @@ class AlertsUnderProcessingService implements AlertInFlightService {
         .toList();
   }
 
-  private void saveAlertsToBeProcess(
-      Collection<AlertId> alerts, String internalBatchId, ScbAlertIdContext alertIdContext) {
+  private void saveAlertsToBeProcess(Collection<AlertId> alerts, ScbAlertIdContext alertIdContext) {
     alertUnderProcessingRepository
         .saveAll(alerts.stream()
-            .map(alert -> toEntity(alert, internalBatchId, alertIdContext))
+            .map(alert -> toEntity(alert, alertIdContext))
             .toList());
   }
 
-  private AlertUnderProcessing toEntity(
-      AlertId alertId, String internalBatchId, ScbAlertIdContext scbAlertIdContext) {
+  private AlertUnderProcessing toEntity(AlertId alertId, ScbAlertIdContext scbAlertIdContext) {
     return new AlertUnderProcessing(
         alertId.getSystemId(),
         alertId.getBatchId(),
-        internalBatchId,
         scbAlertIdContext);
   }
 }

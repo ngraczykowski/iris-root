@@ -31,38 +31,48 @@ class AlertInFlightServiceIT {
   @Test
   void shouldStoreOnlyNewAlertsToBeProcessed() {
     // given
-    var internalBatchId = "5a209f6d-cb00-44e6-a603-2057bc63da4c";
     AlertId alertId1 = createAlertId("system_id_1");
     AlertId alertId2 = createAlertId("system_id_2");
     AlertId alertId3 = createAlertId("system_id_3");
     List<AlertId> alertsToBeSaved = asList(alertId1, alertId3);
     List<AlertId> alertIds = asList(alertId1, alertId2);
     repository.saveAll(alertIds.stream()
-        .map(e -> toEntity(e, internalBatchId))
+        .map(AlertInFlightServiceIT::toEntity)
         .toList());
 
     // when
-    classUnderTest.saveUniqueAlerts(alertsToBeSaved, internalBatchId, alertIdContext);
+    classUnderTest.saveUniqueAlerts(alertsToBeSaved, alertIdContext);
     Collection<AlertUnderProcessing> alertsUnderProcessing = repository.findAll();
 
     // then
-    assertThat(alertsUnderProcessing.size()).isEqualTo(3);
+    assertThat(alertsUnderProcessing).hasSize(3);
     Assertions.assertThat(alertsUnderProcessing)
         .extracting(AlertUnderProcessing::getSystemId)
         .containsExactlyInAnyOrder(
             alertId1.getSystemId(), alertId2.getSystemId(), alertId3.getSystemId());
   }
 
+  private static AlertUnderProcessing toEntity(AlertId alertId) {
+    return new AlertUnderProcessing(alertId.getSystemId(), alertId.getBatchId(), alertIdContext);
+  }
+
+  private static AlertId createAlertId(String systemId) {
+    return createAlertId(systemId, "some_batch_id");
+  }
+
+  private static AlertId createAlertId(String systemId, String batchId) {
+    return AlertId.builder().systemId(systemId).batchId(batchId).build();
+  }
+
   @Test
   void shouldDeleteAlertsBySystemIdAndBatchId() {
     //given
-    var internalBatchId = "5a209f6d-cb00-44e6-a603-2057bc63da4c";
     AlertId alertId1 = createAlertId("system_id_1", "batch_id_1");
     AlertId alertId2 = createAlertId("system_id_1", "batch_id_2");
     AlertId alertId3 = createAlertId("system_id_3", "batch_id_1");
     List<AlertId> alertsToBeSaved = asList(alertId1, alertId2, alertId3);
     repository.saveAll(alertsToBeSaved.stream()
-        .map(e -> toEntity(e, internalBatchId))
+        .map(AlertInFlightServiceIT::toEntity)
         .toList());
 
     //when
@@ -87,16 +97,15 @@ class AlertInFlightServiceIT {
   @Test
   void shouldUpdateState() {
     //given
-    var internalBatchId = "5a209f6d-cb00-44e6-a603-2057bc63da4c";
     AlertId alertId = createAlertId("system_id_1", "batch_id_1");
-    repository.saveAll(singletonList(toEntity(alertId, internalBatchId)));
+    repository.saveAll(singletonList(toEntity(alertId)));
 
     //when
     classUnderTest.update(alertId, State.ERROR);
 
     //then
     Collection<AlertUnderProcessing> results = repository.findAll();
-    assertThat(results.size()).isEqualTo(1);
+    assertThat(results).hasSize(1);
     for (AlertUnderProcessing alertUnderProcessing : results) {
       assertThat(alertUnderProcessing.getState()).isEqualTo(State.ERROR);
     }
@@ -105,9 +114,8 @@ class AlertInFlightServiceIT {
   @Test
   void shouldUpdateStateAndError() {
     //given
-    var internalBatchId = "5a209f6d-cb00-44e6-a603-2057bc63da4c";
     AlertId alertId = createAlertId("system_id_1", "batch_id_1");
-    repository.saveAll(singletonList(toEntity(alertId, internalBatchId)));
+    repository.saveAll(singletonList(toEntity(alertId)));
     String someTooLongError =
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ullamcorper tincidunt ipsum, "
             + "ullamcorper sagittis odio suscipit sit amet. Mauris hendrerit, nulla fringilla "
@@ -128,23 +136,10 @@ class AlertInFlightServiceIT {
 
     //then
     Collection<AlertUnderProcessing> results = repository.findAll();
-    assertThat(results.size()).isEqualTo(1);
+    assertThat(results).hasSize(1);
     for (AlertUnderProcessing alertUnderProcessing : results) {
       assertThat(alertUnderProcessing.getState()).isEqualTo(State.ERROR);
-      assertThat(alertUnderProcessing.getError().length()).isEqualTo(1000);
+      assertThat(alertUnderProcessing.getError()).hasSize(1000);
     }
-  }
-
-  private static AlertUnderProcessing toEntity(AlertId alertId, String internalBatchId) {
-    return new AlertUnderProcessing(
-        alertId.getSystemId(), alertId.getBatchId(), internalBatchId, alertIdContext);
-  }
-
-  private static AlertId createAlertId(String systemId) {
-    return createAlertId(systemId, "some_batch_id");
-  }
-
-  private static AlertId createAlertId(String systemId, String batchId) {
-    return AlertId.builder().systemId(systemId).batchId(batchId).build();
   }
 }

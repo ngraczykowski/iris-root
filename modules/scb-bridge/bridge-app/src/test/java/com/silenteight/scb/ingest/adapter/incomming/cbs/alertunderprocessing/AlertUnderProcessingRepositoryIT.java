@@ -35,109 +35,14 @@ class AlertUnderProcessingRepositoryIT extends BaseDataJpaTest {
   @Test
   void shouldStoreEntities() {
     // given
-    AlertUnderProcessing entity1 = createEntity("system_id_1", "batch_id_1", "internalBatchId_1");
-    AlertUnderProcessing entity2 = createEntity("system_id_2", "batch_id_2", "internalBatchId_1");
+    AlertUnderProcessing entity1 = createEntity("system_id_1", "batch_id_1");
+    AlertUnderProcessing entity2 = createEntity("system_id_2", "batch_id_2");
 
     // when
     persistEntities(entity1, entity2);
 
     // then
     assertStoredSuccessfully(entity1, entity2);
-  }
-
-  @Test
-  void shouldDeleteExpiredEntities() {
-    // given
-    AlertUnderProcessing entity1 = createEntity("system_id_1", "batch_id_1", "internalBatchId_1");
-    persistEntities(entity1);
-
-    //when
-    alertUnderProcessingRepository.deleteByCreatedAtBefore(OffsetDateTime.now().minusDays(1));
-
-    //then
-    assertThat(alertUnderProcessingRepository.findAll()).hasSize(1);
-
-    //when
-    alertUnderProcessingRepository.deleteByCreatedAtBefore(OffsetDateTime.now());
-
-    //then
-    assertThat(alertUnderProcessingRepository.findAll()).isEmpty();
-  }
-
-  @Test
-  void shouldFetchOnlyExistingEntities() {
-    // given
-    AlertUnderProcessing entity1 = createEntity("system_id_1", "batch_id_1", "internalBatchId_1");
-    AlertUnderProcessing entity2 = createEntity("system_id_2", "batch_id_2", "internalBatchId_1");
-
-    persistEntities(entity1);
-
-    // when
-    List<AlertUnderProcessing> allBySystemIdIn =
-        (List<AlertUnderProcessing>) alertUnderProcessingRepository.findAllBySystemIdIn(
-            asList(entity1.getSystemId(), entity2.getSystemId()));
-
-    // then
-    Assertions.assertThat(allBySystemIdIn)
-        .hasSize(1)
-        .first()
-        .satisfies(a -> assertThat(a.getSystemId()).isEqualTo(entity1.getSystemId()))
-        .satisfies(a -> assertThat(a.getBatchId()).isEqualTo(entity1.getBatchId()));
-  }
-
-  @Test
-  void shouldDeleteAlertBySystemIdAndBatchId() {
-    //given
-    AlertUnderProcessing entity1 = createEntity("systemId_1", "batchId_1", "internalBatchId_1");
-    AlertUnderProcessing entity2 = createEntity("systemId_2", "batchId_1", "internalBatchId_1");
-    persistEntities(entity1, entity2);
-
-    //when
-    alertUnderProcessingRepository.deleteBySystemIdAndBatchId("systemId_1", "batchId_1");
-
-    //then
-    assertThat(alertUnderProcessingRepository.findAll()).hasSize(1);
-
-    //when
-    alertUnderProcessingRepository.deleteBySystemIdAndBatchId("systemId_2", "batchId_1");
-
-    //then
-    assertThat(alertUnderProcessingRepository.findAll()).isEmpty();
-  }
-
-  @Test
-  void shouldUpdateState() {
-    //given
-    AlertUnderProcessing entity = createEntity("systemId_1", "batchId_1", "internalBatchId_1");
-    persistEntities(entity);
-
-    //when
-    alertUnderProcessingRepository.update(entity.getSystemId(), entity.getBatchId(), ERROR);
-
-    //then
-    Collection<AlertUnderProcessing> results = alertUnderProcessingRepository.findAll();
-    Assertions.assertThat(results).hasSize(1);
-    for (AlertUnderProcessing entry : results) {
-      assertThat(entry.getState()).isEqualTo(ERROR);
-    }
-  }
-
-  @Test
-  void shouldUpdateStateAndError() {
-    //given
-    AlertUnderProcessing entity = createEntity("systemId_1", "batchId_1", "internalBatchId_1");
-    persistEntities(entity);
-
-    //when
-    alertUnderProcessingRepository.update(entity.getSystemId(), entity.getBatchId(), ERROR, "text");
-
-    //then
-    Collection<AlertUnderProcessing> results = alertUnderProcessingRepository.findAll();
-    Assertions.assertThat(results).hasSize(1);
-    for (AlertUnderProcessing entry : results) {
-      assertThat(entry.getState()).isEqualTo(ERROR);
-      assertThat(entry.getError()).isEqualTo("text");
-    }
   }
 
   private void assertStoredSuccessfully(AlertUnderProcessing... expectedEntities) {
@@ -161,10 +66,103 @@ class AlertUnderProcessingRepositoryIT extends BaseDataJpaTest {
     entityManager.clear();
   }
 
-  private static AlertUnderProcessing createEntity(
-      String systemId, String batchId, String internalBatchId) {
-    return new AlertUnderProcessing(
-        systemId, batchId, internalBatchId, ScbAlertIdContext.newBuilder().build());
+  private static AlertUnderProcessing createEntity(String systemId, String batchId) {
+    return new AlertUnderProcessing(systemId, batchId, ScbAlertIdContext.newBuilder().build());
+  }
+
+  @Test
+  void shouldDeleteExpiredEntities() {
+    // given
+    AlertUnderProcessing entity1 = createEntity("system_id_1", "batch_id_1");
+    persistEntities(entity1);
+
+    //when
+    alertUnderProcessingRepository.deleteByCreatedAtBefore(OffsetDateTime.now().minusDays(1));
+
+    //then
+    assertThat(alertUnderProcessingRepository.findAll()).hasSize(1);
+
+    //when
+    alertUnderProcessingRepository.deleteByCreatedAtBefore(OffsetDateTime.now());
+
+    //then
+    assertThat(alertUnderProcessingRepository.findAll()).isEmpty();
+  }
+
+  @Test
+  void shouldFetchOnlyExistingEntities() {
+    // given
+    AlertUnderProcessing entity1 = createEntity("system_id_1", "batch_id_1");
+    AlertUnderProcessing entity2 = createEntity("system_id_2", "batch_id_2");
+
+    persistEntities(entity1);
+
+    // when
+    List<AlertUnderProcessing> allBySystemIdIn =
+        (List<AlertUnderProcessing>) alertUnderProcessingRepository.findAllBySystemIdIn(
+            asList(entity1.getSystemId(), entity2.getSystemId()));
+
+    // then
+    Assertions.assertThat(allBySystemIdIn)
+        .hasSize(1)
+        .first()
+        .satisfies(a -> assertThat(a.getSystemId()).isEqualTo(entity1.getSystemId()))
+        .satisfies(a -> assertThat(a.getBatchId()).isEqualTo(entity1.getBatchId()));
+  }
+
+  @Test
+  void shouldDeleteAlertBySystemIdAndBatchId() {
+    //given
+    AlertUnderProcessing entity1 = createEntity("systemId_1", "batchId_1");
+    AlertUnderProcessing entity2 = createEntity("systemId_2", "batchId_1");
+    persistEntities(entity1, entity2);
+
+    //when
+    alertUnderProcessingRepository.deleteBySystemIdAndBatchId("systemId_1", "batchId_1");
+
+    //then
+    assertThat(alertUnderProcessingRepository.findAll()).hasSize(1);
+
+    //when
+    alertUnderProcessingRepository.deleteBySystemIdAndBatchId("systemId_2", "batchId_1");
+
+    //then
+    assertThat(alertUnderProcessingRepository.findAll()).isEmpty();
+  }
+
+  @Test
+  void shouldUpdateState() {
+    //given
+    AlertUnderProcessing entity = createEntity("systemId_1", "batchId_1");
+    persistEntities(entity);
+
+    //when
+    alertUnderProcessingRepository.update(entity.getSystemId(), entity.getBatchId(), ERROR);
+
+    //then
+    Collection<AlertUnderProcessing> results = alertUnderProcessingRepository.findAll();
+    Assertions.assertThat(results).hasSize(1);
+    for (AlertUnderProcessing entry : results) {
+      assertThat(entry.getState()).isEqualTo(ERROR);
+    }
+  }
+
+  @Test
+  void shouldUpdateStateAndError() {
+    //given
+    AlertUnderProcessing entity = createEntity("systemId_1", "batchId_1");
+    persistEntities(entity);
+
+    //when
+    alertUnderProcessingRepository.update(entity.getSystemId(), entity.getBatchId(), ERROR, "text");
+
+    //then
+    Collection<AlertUnderProcessing> results = alertUnderProcessingRepository.findAll();
+    Assertions.assertThat(results).hasSize(1);
+    for (AlertUnderProcessing entry : results) {
+      assertThat(entry.getState()).isEqualTo(ERROR);
+      assertThat(entry.getError()).isEqualTo("text");
+    }
   }
 
   @EntityScan(basePackages = "com.silenteight.scb")

@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 9.0.0-1
+      author: mglowinski
+      comment: Remove internalBatchId column from scb_cbs_alert_under_processing table.
+      changes:
+        - dropIndex:
+            tableName: scb_cbs_alert_under_processing
+            indexName: idx_scb_cbs_alert_under_processing_internal_batch_id
+
+        - dropColumn:
+            tableName: scb_cbs_alert_under_processing
+            columnName: internal_batch_id

@@ -22,7 +22,6 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.validation.ValidationException;
 
-import static java.util.stream.Collectors.toList;
 import static org.springframework.transaction.annotation.Isolation.SERIALIZABLE;
 
 @Slf4j
@@ -52,7 +51,7 @@ class DatabaseDecisionRecordReader implements DecisionRecordReader {
         .map(ids -> getDecisionRecords(dbRelationName, ids))
         .flatMap(Collection::stream)
         .filter(Objects::nonNull)
-        .collect(toList());
+        .toList();
   }
 
   @Nonnull

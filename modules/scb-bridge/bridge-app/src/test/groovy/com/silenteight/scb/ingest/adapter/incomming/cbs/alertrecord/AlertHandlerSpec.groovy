@@ -25,18 +25,14 @@ class AlertHandlerSpec extends Specification {
 
   def alertInFlightService = Mock(AlertInFlightService)
   def cbsAckGateway = Mock(CbsAckGateway)
-  def validAlertCompositeMapper = Mock(ValidAlertCompositeMapper)
-  def invalidAlertMapper = Mock(InvalidAlertMapper)
   def alertMapper = Mock(AlertMapper)
   def ingestService = Mock(BatchAlertIngestService)
   def rawAlertService = Mock(RawAlertService)
   def fixtures = new Fixtures()
 
-  def underTest =  AlertHandler.builder()
+  def underTest = AlertHandler.builder()
       .alertInFlightService(alertInFlightService)
       .cbsAckGateway(cbsAckGateway)
-      .validAlertCompositeMapper(validAlertCompositeMapper)
-      .invalidAlertMapper(invalidAlertMapper)
       .alertMapper(alertMapper)
       .ingestService(ingestService)
       .rawAlertService(rawAlertService)
@@ -45,20 +41,17 @@ class AlertHandlerSpec extends Specification {
   def 'should handle invalid alerts'() {
     given:
     def internalBatchId = InternalBatchIdGenerator.generate()
+    def alertIdContext = ScbAlertIdContext.newBuilder().setWatchlistLevel(true).build()
     def invalidAlerts = [
         fixtures.invalidAlertCausedByFatalError, fixtures.invalidAlertCausedByTemporaryError
     ]
-    def alertCompositeCollections = List.of(new AlertCompositeCollection([], invalidAlerts))
+    def alertCompositeCollection = new AlertCompositeCollection([], invalidAlerts)
 
     when:
     underTest
-        .handleAlerts(internalBatchId, alertCompositeCollections)
+        .handleAlerts(internalBatchId, alertIdContext, alertCompositeCollection)
 
     then:
-    1 * validAlertCompositeMapper.fromAlertCompositeCollections(alertCompositeCollections) >>
-        Collections.emptyList()
-    1 * invalidAlertMapper.fromAlertCompositeCollections(alertCompositeCollections) >>
-        invalidAlerts
     1 * cbsAckGateway.ackReadAlert(_ as CbsAckAlert)
     1 * alertInFlightService.
         update(
@@ -70,22 +63,19 @@ class AlertHandlerSpec extends Specification {
   def 'should handle valid alerts'() {
     given:
     def internalBatchId = InternalBatchIdGenerator.generate()
+    def alertIdContext = ScbAlertIdContext.newBuilder().setWatchlistLevel(true).build()
     def batchContext = new RegistrationBatchContext(MEDIUM, CBS)
     def alerts = [fixtures.alert1, fixtures.alert2]
     def validAlertComposites = [
         fixtures.validAlertComposite1, fixtures.validAlertComposite2
     ]
-    def alertCompositeCollections = List.of(new AlertCompositeCollection(validAlertComposites, []))
+    def alertCompositeCollection = new AlertCompositeCollection(validAlertComposites, [])
 
     when:
     underTest
-        .handleAlerts(internalBatchId, alertCompositeCollections)
+        .handleAlerts(internalBatchId, alertIdContext, alertCompositeCollection)
 
     then:
-    1 * validAlertCompositeMapper.fromAlertCompositeCollections(alertCompositeCollections) >>
-        validAlertComposites
-    1 * invalidAlertMapper.fromAlertCompositeCollections(alertCompositeCollections) >>
-        Collections.emptyList()
     1 * alertMapper.fromValidAlertComposites(validAlertComposites) >> alerts
     1 * ingestService.ingestAlertsForRecommendation(internalBatchId, alerts, batchContext)
     1 * cbsAckGateway.
@@ -97,8 +87,8 @@ class AlertHandlerSpec extends Specification {
 
     1 * alertInFlightService.delete(fixtures.alertId1)
     1 * alertInFlightService.update(fixtures.alertId2, State.ERROR, "Fatal error on ACK")
-    1 * rawAlertService.store(internalBatchId, [ fixtures.alert1 ])
-    1 * rawAlertService.store(internalBatchId, [ fixtures.alert2 ])
+    1 * rawAlertService.store(internalBatchId, [fixtures.alert1])
+    1 * rawAlertService.store(internalBatchId, [fixtures.alert2])
   }
 
   class Fixtures {
@@ -108,10 +98,9 @@ class AlertHandlerSpec extends Specification {
 
     ScbAlertIdContext alertIdContext = ScbAlertIdContext.newBuilder().setSourceView('test').build()
 
-    InvalidAlert invalidAlertCausedByFatalError = new InvalidAlert(
-        someId1, someId1, Reason.ABSENT, alertIdContext)
+    InvalidAlert invalidAlertCausedByFatalError = new InvalidAlert(someId1, someId1, Reason.ABSENT)
     InvalidAlert invalidAlertCausedByTemporaryError = new InvalidAlert(
-        someId2, someId2, Reason.TEMPORARILY_UNAVAILABLE, alertIdContext)
+        someId2, someId2, Reason.TEMPORARILY_UNAVAILABLE)
 
     AlertId alertId1 = new AlertId(someId1, someId2)
     AlertId alertId2 = new AlertId(someId2, someId1)
@@ -119,9 +108,7 @@ class AlertHandlerSpec extends Specification {
     Alert alert1 = Alert.builder().id(ObjectId.builder().build()).build()
     Alert alert2 = Alert.builder().id(ObjectId.builder().build()).build()
 
-    ValidAlertComposite validAlertComposite1 = new ValidAlertComposite(
-        alertId1, [alert1], alertIdContext)
-    ValidAlertComposite validAlertComposite2 = new ValidAlertComposite(
-        alertId2, [alert2], alertIdContext)
+    ValidAlertComposite validAlertComposite1 = new ValidAlertComposite(alertId1, [alert1])
+    ValidAlertComposite validAlertComposite2 = new ValidAlertComposite(alertId2, [alert2])
   }
 }

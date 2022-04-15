@@ -31,9 +31,6 @@ public class AlertUnderProcessing extends BaseEntity {
   private String batchId;
 
   @NonNull
-  private String internalBatchId;
-
-  @NonNull
   @Enumerated(EnumType.STRING)
   private State state = State.IN_PROGRESS;
 
@@ -48,11 +45,9 @@ public class AlertUnderProcessing extends BaseEntity {
   @Type(type = "org.hibernate.type.BinaryType")
   private byte[] payload;
 
-  public AlertUnderProcessing(
-      String systemId, String batchId, String internalBatchId, ScbAlertIdContext alertIdContext) {
+  public AlertUnderProcessing(String systemId, String batchId, ScbAlertIdContext alertIdContext) {
     this.systemId = systemId;
     this.batchId = batchId;
-    this.internalBatchId = internalBatchId;
     this.priority = alertIdContext.getPriority();
     this.payload = alertIdContext.toByteArray();
   }

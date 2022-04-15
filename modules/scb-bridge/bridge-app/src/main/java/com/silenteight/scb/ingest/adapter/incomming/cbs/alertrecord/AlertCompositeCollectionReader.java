@@ -30,7 +30,7 @@ class AlertCompositeCollectionReader {
   private final CbsOracleMetrics cbsOracleMetrics;
 
   AlertCompositeCollection read(
-      List<AlertId> alertIds, String internalBatchId, ScbAlertIdContext context) {
+      String internalBatchId, ScbAlertIdContext context, List<AlertId> alertIds) {
     var alertCollection = getAlertCollection(alertIds, context);
     var options = getMappingOptions(context);
     var invalidAlerts = new ArrayList<>(alertCollection.getInvalidAlerts());
@@ -38,7 +38,7 @@ class AlertCompositeCollectionReader {
     var alerts = alertCollection.getAlerts()
         .stream()
         .map(alertRecordComposite -> tryToParseAlerts(
-            alertRecordComposite, invalidAlerts, internalBatchId, context, options))
+            alertRecordComposite, invalidAlerts, internalBatchId, options))
         .filter(Optional::isPresent)
         .map(Optional::get)
         .toList();
@@ -50,22 +50,21 @@ class AlertCompositeCollectionReader {
       AlertRecordComposite readAlert,
       List<InvalidAlert> invalidAlerts,
       String internalBatchId,
-      ScbAlertIdContext context,
       Option... options) {
     var alertId = readAlert.getAlertId();
 
     try {
       var alerts = alertMapper.fromAlertRecordComposite(readAlert, internalBatchId, options);
-      return of(new ValidAlertComposite(alertId, alerts, context));
+      return of(new ValidAlertComposite(alertId, alerts));
     } catch (Exception ex) {
       log.error("Error when parsing an alert: systemId={}", alertId.getSystemId(), ex);
-      invalidAlerts.add(createDamagedAlert(alertId, context));
+      invalidAlerts.add(createDamagedAlert(alertId));
       return empty();
     }
   }
 
-  private InvalidAlert createDamagedAlert(AlertId alertId, ScbAlertIdContext context) {
-    return new InvalidAlert(alertId.getSystemId(), alertId.getBatchId(), Reason.DAMAGED, context);
+  private InvalidAlert createDamagedAlert(AlertId alertId) {
+    return new InvalidAlert(alertId.getSystemId(), alertId.getBatchId(), Reason.DAMAGED);
   }
 
   private AlertRecordCompositeCollection getAlertCollection(

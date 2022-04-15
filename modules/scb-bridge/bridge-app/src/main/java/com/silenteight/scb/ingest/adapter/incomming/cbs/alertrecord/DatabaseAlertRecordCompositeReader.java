@@ -55,8 +55,7 @@ class DatabaseAlertRecordCompositeReader implements AlertRecordCompositeReader {
         alertIds,
         alertRecords,
         decisions,
-        hitDetails,
-        scbAlertIdContext
+        hitDetails
     );
   }
 

@@ -43,5 +43,5 @@ interface AlertUnderProcessingRepository
       @Param("error") String error
   );
 
-  Collection<AlertUnderProcessing> findAllByInternalBatchId(String internalBatchId);
+  Collection<AlertUnderProcessing> findTop2000ByErrorIsNullOrderByPriorityDesc();
 }

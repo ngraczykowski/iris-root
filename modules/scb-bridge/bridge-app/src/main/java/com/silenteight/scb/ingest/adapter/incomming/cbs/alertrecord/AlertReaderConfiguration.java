@@ -22,16 +22,14 @@ class AlertReaderConfiguration {
   private final CbsAckGateway cbsAckGateway;
   private final DatabaseAlertRecordCompositeReader databaseAlertRecordCompositeReader;
   private final AlertReaderProperties alertReaderProperties;
-  private final ValidAlertCompositeMapper validAlertCompositeMapper;
-  private final InvalidAlertMapper invalidAlertMapper;
   private final BatchAlertIngestService ingestService;
   private final RawAlertService rawAlertService;
   private final CbsOracleMetrics cbsOracleMetrics;
   private final BatchInfoService batchInfoService;
 
   @Bean
-  BatchProcessingEventListener batchProcessingEventListener() {
-    return BatchProcessingEventListener.builder()
+  AlertProcessor alertProcessor() {
+    return AlertProcessor.builder()
         .alertInFlightService(alertInFlightService)
         .alertHandler(alertHandler())
         .alertCompositeCollectionReader(alertRecordCompositeCollectionReader())
@@ -55,8 +53,6 @@ class AlertReaderConfiguration {
     return AlertHandler.builder()
         .alertInFlightService(alertInFlightService)
         .cbsAckGateway(cbsAckGateway)
-        .validAlertCompositeMapper(validAlertCompositeMapper)
-        .invalidAlertMapper(invalidAlertMapper)
         .alertMapper(alertMapper)
         .ingestService(ingestService)
         .rawAlertService(rawAlertService)

@@ -2,7 +2,6 @@ package com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing;
 
 import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertUnderProcessing.State;
-import com.silenteight.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -16,7 +15,6 @@ import static java.util.stream.Collectors.toList;
 class InMemoryAlertUnderProcessingRepository implements AlertUnderProcessingRepository {
 
   private static final int DEFAULT_PRIORITY = 1;
-  private static final String DEFAULT_INTERNAL_BATCH_ID = InternalBatchIdGenerator.generate();
   private final List<AlertUnderProcessing> store = new ArrayList<>();
 
   @Override
@@ -52,7 +50,6 @@ class InMemoryAlertUnderProcessingRepository implements AlertUnderProcessingRepo
         new AlertUnderProcessing(
             systemId,
             batchId,
-            DEFAULT_INTERNAL_BATCH_ID,
             state,
             null,
             DEFAULT_PRIORITY,
@@ -67,7 +64,6 @@ class InMemoryAlertUnderProcessingRepository implements AlertUnderProcessingRepo
         new AlertUnderProcessing(
             systemId,
             batchId,
-            DEFAULT_INTERNAL_BATCH_ID,
             state,
             error,
             DEFAULT_PRIORITY,
@@ -75,11 +71,8 @@ class InMemoryAlertUnderProcessingRepository implements AlertUnderProcessingRepo
   }
 
   @Override
-  public Collection<AlertUnderProcessing> findAllByInternalBatchId(String internalBatchId) {
-    return store
-        .stream()
-        .filter(a -> a.getInternalBatchId().equals(internalBatchId))
-        .toList();
+  public Collection<AlertUnderProcessing> findTop2000ByErrorIsNullOrderByPriorityDesc() {
+    return List.of();
   }
 
   private byte[] getPayload() {

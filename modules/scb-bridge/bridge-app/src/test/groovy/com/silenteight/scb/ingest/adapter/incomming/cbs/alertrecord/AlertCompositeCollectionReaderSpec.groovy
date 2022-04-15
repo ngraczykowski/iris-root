@@ -29,7 +29,7 @@ class AlertCompositeCollectionReaderSpec extends Specification {
     alertRecords.getInvalidAlerts() >> [fixtures.invalidAlert]
 
     when:
-    def result = underTest.read(alertIds, internalBatchId, fixtures.alertIdContext)
+    def result = underTest.read(internalBatchId, fixtures.alertIdContext, alertIds)
 
     then:
     result.invalidAlerts.size() == 2
@@ -76,8 +76,7 @@ class AlertCompositeCollectionReaderSpec extends Specification {
         .decisions([])
         .build()
 
-    InvalidAlert invalidAlert = new InvalidAlert(
-        systemId3, batchId, Reason.FAILED_TO_FETCH, alertIdContext)
+    InvalidAlert invalidAlert = new InvalidAlert(systemId3, batchId, Reason.FAILED_TO_FETCH)
   }
 
   static cbsOracleMetrics() {

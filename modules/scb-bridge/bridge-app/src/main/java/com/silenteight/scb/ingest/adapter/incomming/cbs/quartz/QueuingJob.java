@@ -12,7 +12,6 @@ import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.springframework.stereotype.Component;
 
-
 @Component
 @RequiredArgsConstructor
 @DisallowConcurrentExecution

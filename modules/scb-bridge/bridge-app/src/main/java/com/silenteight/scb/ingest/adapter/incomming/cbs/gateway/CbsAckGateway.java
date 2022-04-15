@@ -106,6 +106,7 @@ public class CbsAckGateway extends CbsEventPublisher {
     return new Object[] {
         sourceApplicationValues.getSourceApplicationValue(alert.isWatchlistLevel()),
         alert.getAlertExternalId(),
-        alert.getBatchId() };
+        alert.getBatchId()
+    };
   }
 }

@@ -17,9 +17,8 @@ import java.util.function.Consumer;
 @Slf4j
 class ChunkProcessor {
 
-  private final Consumer<AlertIdCollection> consumer;
-
   private static final String QUERY_PREFIX = "SELECT SYSTEM_ID, BATCH_ID FROM ";
+  private final Consumer<AlertIdCollection> consumer;
 
   void process(Statement statement, AlertIdContext context) throws SQLException {
     var processor = new Processor(context);
@@ -68,11 +67,6 @@ class ChunkProcessor {
         sendAlertIds();
     }
 
-    void processRemaining() {
-      if (!alertsToBeProcessed.isEmpty())
-        sendAlertIds();
-    }
-
     private void sendAlertIds() {
       log.info("Publishing collected {} alerts to be processed", alertsToBeProcessed.size());
       consumer.accept(new AlertIdCollection(alertsToBeProcessed, context));
@@ -84,6 +78,11 @@ class ChunkProcessor {
           .systemId(resultSet.getString("SYSTEM_ID"))
           .batchId(resultSet.getString("BATCH_ID"))
           .build();
+    }
+
+    void processRemaining() {
+      if (!alertsToBeProcessed.isEmpty())
+        sendAlertIds();
     }
   }
 }

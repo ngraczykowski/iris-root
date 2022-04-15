@@ -3,6 +3,7 @@ package com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertmapper.AlertMapper;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertInFlightService;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertUnderProcessing;
@@ -27,24 +28,22 @@ class AlertHandler {
 
   private final AlertInFlightService alertInFlightService;
   private final CbsAckGateway cbsAckGateway;
-  private final ValidAlertCompositeMapper validAlertCompositeMapper;
-  private final InvalidAlertMapper invalidAlertMapper;
   private final AlertMapper alertMapper;
   private final BatchAlertIngestService ingestService;
   private final RawAlertService rawAlertService;
 
   void handleAlerts(
-      String internalBatchId, List<AlertCompositeCollection> alertCompositeCollections) {
-    var validAlertComposites =
-        validAlertCompositeMapper.fromAlertCompositeCollections(alertCompositeCollections);
-    var invalidAlerts =
-        invalidAlertMapper.fromAlertCompositeCollections(alertCompositeCollections);
-    handleValidAlerts(internalBatchId, validAlertComposites);
-    handleInvalidAlerts(invalidAlerts);
+      String internalBatchId,
+      ScbAlertIdContext context,
+      AlertCompositeCollection alertCompositeCollection) {
+    handleValidAlerts(internalBatchId, context, alertCompositeCollection.getValidAlerts());
+    handleInvalidAlerts(context, alertCompositeCollection.getInvalidAlerts());
   }
 
   private void handleValidAlerts(
-      String internalBatchId, List<ValidAlertComposite> validAlertComposites) {
+      String internalBatchId,
+      ScbAlertIdContext context,
+      List<ValidAlertComposite> validAlertComposites) {
     var stopWatch = StopWatch.createStarted();
     persistAlerts(internalBatchId, validAlertComposites);
     log.info("Alerts have been persisted for internalBatchId: {} executed in: {}",
@@ -56,7 +55,7 @@ class AlertHandler {
         internalBatchId, stopWatch);
 
     stopWatch = StopWatch.createStarted();
-    acknowledgeAlerts(validAlertComposites);
+    acknowledgeAlerts(context, validAlertComposites);
     log.info("Alerts have been acknowledged for internalBatchId: {} executed in: {}",
         internalBatchId, stopWatch);
   }
@@ -68,13 +67,14 @@ class AlertHandler {
     ingestService.ingestAlertsForRecommendation(internalBatchId, alerts, registrationBatchContext);
   }
 
-  private void acknowledgeAlerts(List<ValidAlertComposite> validAlertComposites) {
+  private void acknowledgeAlerts(
+      ScbAlertIdContext context, List<ValidAlertComposite> validAlertComposites) {
     validAlertComposites.forEach(alertComposite -> {
       var alertId = alertComposite.getAlertId();
       var cbsOutput = ackAlert(
           alertId.getSystemId(),
           alertId.getBatchId(),
-          alertComposite.getContext().getWatchlistLevel());
+          context.getWatchlistLevel());
 
       switch (cbsOutput.getState()) {
         case OK -> alertInFlightService.delete(alertId);
@@ -83,13 +83,6 @@ class AlertHandler {
         default -> alertInFlightService.update(alertId, State.ERROR, "Fatal error on ACK");
       }
     });
-  }
-
-  private void persistAlerts(
-      String internalBatchId,
-      List<ValidAlertComposite> validAlertComposites) {
-    validAlertComposites.forEach(alertComposite ->
-        rawAlertService.store(internalBatchId, alertComposite.getAlerts()));
   }
 
   private CbsOutput ackAlert(String systemId, String batchId, boolean watchlistLevel) {
@@ -101,11 +94,18 @@ class AlertHandler {
             .build());
   }
 
-  private void handleInvalidAlerts(List<InvalidAlert> invalidAlerts) {
+  private void persistAlerts(
+      String internalBatchId,
+      List<ValidAlertComposite> validAlertComposites) {
+    validAlertComposites.forEach(alertComposite ->
+        rawAlertService.store(internalBatchId, alertComposite.getAlerts()));
+  }
+
+  private void handleInvalidAlerts(ScbAlertIdContext contex, List<InvalidAlert> invalidAlerts) {
     invalidAlerts.forEach(alert -> {
       if (alert.hasReasonCausedByFatalError()) {
         log.warn("Fatal error occurred on alert={}, marked with ERROR state.", alert.getAlertId());
-        ackAlert(alert.getSystemId(), alert.getBatchId(), alert.getContext().getWatchlistLevel());
+        ackAlert(alert.getSystemId(), alert.getBatchId(), contex.getWatchlistLevel());
         alertInFlightService.update(
             alert.getAlertId(), AlertUnderProcessing.State.ERROR, alert.getReasonMessage());
       } else {

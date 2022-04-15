@@ -13,10 +13,8 @@ import javax.validation.constraints.Size;
 
 public interface AlertInFlightService {
 
-  int saveUniqueAlerts(
-      @Size(max = 10_000) Collection<AlertId> alerts,
-      String internalBatchId,
-      ScbAlertIdContext alertIdContext);
+  void saveUniqueAlerts(
+      @Size(max = 10_000) Collection<AlertId> alerts, ScbAlertIdContext alertIdContext);
 
   void delete(@NonNull AlertId alertId);
 
@@ -27,5 +25,5 @@ public interface AlertInFlightService {
   void update(
       @NonNull AlertId alertId, @NonNull AlertUnderProcessing.State state, @NonNull String error);
 
-  List<AlertIdWithDetails> getAlertsFromBatch(String internalBatchId);
+  List<AlertIdWithDetails> readChunk();
 }
