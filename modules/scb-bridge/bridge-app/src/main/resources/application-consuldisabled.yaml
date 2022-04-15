@@ -1,2 +1,0 @@
-# Disable consul for local development
-spring.cloud.consul.enabled: false

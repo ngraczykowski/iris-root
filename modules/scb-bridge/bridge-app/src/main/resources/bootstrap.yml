@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: scb-bridge
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      scheme: http
+      config:
+        enabled: false

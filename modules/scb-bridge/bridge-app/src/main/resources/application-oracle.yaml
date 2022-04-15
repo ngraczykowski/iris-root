@@ -1,0 +1,18 @@
+# Once application is deployed this config should be placed in
+# Consul/KV
+# Key: config/scb-bridge/data
+# Value: the content of this file
+# it may be done via UI, or via CMD:
+#consul kv put config/scb-bridge/data - <<EOF
+# ...
+#EOF
+# Note, to enable reading configuration by the application from Consul, `consul` spring profile has to be activated
+serp:
+  gns:
+    db:
+      service:
+        name: ORCLCDB
+      user: LC_GNS_WEB_SIT_01
+      password: 'CyevM34juNlBO'
+      port: 1521
+      host: oracle.silenteight.com

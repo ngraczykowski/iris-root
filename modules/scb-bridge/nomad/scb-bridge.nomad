@@ -263,11 +263,9 @@ job "scb-bridge" {
           "-Dlogging.config=secrets/conf/logback.xml",
           "-jar",
           "local/scb-bridge.jar",
-          "--spring.profiles.active=linux",
+          "--spring.profiles.active=consul",
+          "--spring.cloud.consul.config.prefix=${var.namespace}/config",
           "--spring.config.additional-location=file:local/conf/",
-          "--server.servlet.context-path=/rest/scb-bridge",
-          "--spring.webflux.base-path=/rest/scb-bridge",
-          "--management.endpoints.web.base-path=/management",
           "--spring.rabbitmq.virtual-host=/${var.namespace}",
         ]
       }

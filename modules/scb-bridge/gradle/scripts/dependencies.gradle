@@ -89,6 +89,7 @@ libraries.spring_batch_core = [group: 'org.springframework.batch', name: 'spring
 libraries.spring_integration_core = [group: 'org.springframework.integration', name: 'spring-integration-core', version: springIntegrationVersion]
 libraries.spring_integration_amqp = [group: 'org.springframework.integration', name: 'spring-integration-amqp', version: springIntegrationVersion]
 
+libraries.spring_cloud_starter_bootstrap = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: springCloudVersion]
 libraries.spring_cloud_starter_consul_config = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-consul-config', version: springCloudVersion]
 libraries.spring_cloud_starter_consul_discovery = [group: 'org.springframework.cloud', name: 'spring-cloud-consul-discovery', version: springCloudVersion]
 libraries.spring_cloud_starter_sleuth = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth']
@@ -206,6 +207,8 @@ dependencies {
   implementation libraries.spring_boot_starter_undertow
   implementation libraries.spring_boot_starter_validation
   implementation libraries.spring_boot_starter_web
+
+  implementation libraries.spring_cloud_starter_bootstrap
   implementation libraries.spring_cloud_starter_consul_config
   implementation libraries.spring_cloud_starter_consul_discovery
   implementation libraries.spring_cloud_starter_sleuth

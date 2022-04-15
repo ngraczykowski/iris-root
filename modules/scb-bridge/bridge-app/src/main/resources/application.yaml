@@ -1,5 +1,7 @@
 server:
   port: 24220
+  servlet.context-path: /rest/${spring.application.name}
+
 grpc:
   client:
     registration.address: static://localhost:24806
@@ -29,13 +31,11 @@ management:
       application: ${spring.application.name}
 
 spring:
+  webflux:
+    base-path: /rest/${spring.application.name}
   cloud:
     consul:
-      config:
-        enabled: false
       enabled: false
-      host: localhost
-      port: 8500
       discovery:
         enabled: true
         register: false
@@ -43,7 +43,7 @@ spring:
       service-registry:
         auto-registration:
           enabled: false
-  # RABBITMQ
+
   rabbitmq:
     port: 24130
     username: scb
@@ -84,9 +84,6 @@ spring:
           batch_size: 10
         order_inserts: true
         order_updates: true
-
-  application:
-    name: scb-bridge
 
   quartz:
     properties:
@@ -190,12 +187,6 @@ serp:
       connection-init-query: SELECT 1 FROM DUAL
       auto-commit: false
       url: jdbc:oracle:thin:@${serp.gns.db.host}:${serp.gns.db.port}/${serp.gns.db.service.name}
-      service:
-        name: ORCLCDB
-      user: LC_GNS_WEB_SIT_01
-      password: 'CyevM34juNlBO'
-      port: 1521
-      host: oracle.silenteight.com
       isolate-internal-queries: true
       connections:
         min: 1

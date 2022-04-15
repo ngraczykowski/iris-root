@@ -2,6 +2,12 @@
 
 SCB Bridge application uses **Java 17**
 
+# Local run
+
+To start an app locally:
+- run `docker-compose up -d`
+- start class `ScbBridgeApplication` with profile `oracle`
+
 ## Application ports
 
 | Service  | Port  |
@@ -13,9 +19,24 @@ SCB Bridge application uses **Java 17**
 
 Services are exposed on locally accessible port numbers. The table below shows how to access them.
 
-| Service    | URL                      | User    | Password   |
-|:-----------|:-------------------------|:--------|:-----------|
-| RabbitMQ   | http://localhost:5681/   | `serp`  | `serp`     |
+| Service  | URL                       | User   | Password |
+|:---------|:--------------------------|:-------|:---------|
+| RabbitMQ | http://localhost:5681/    | `serp` | `serp`   |
+| Consul   | http://localhost:8500/ui/ |        |          |
+
+## Externalizing configuration
+
+Configuration (yaml file) can be placed in Consul under key `config/scb-bridge/data`.
+
+To enable locally getting configuration from Consul activate profile `consule`. You would want to have Consul running locally as well, you may start it with the help of attached `docker-compose` file.
+If you don't want to use Consul, start the application with `oracle` profile, so it knows where to connect.
+
+Keep in mind that `consule` profile will be activated on client's environment, and our test envs as well.
+
+This configuration scheme:
+- will be the primary way of configuring `scb-bridge` with the business related settings like Oracle location, Jobs settings, etc. 
+- will be changed/tweaked by scb
+- after a config change in Consul, `scb-bridge` needs to be restarted in order the new config to be applied
 
 ## How to test
 
@@ -29,20 +50,20 @@ POST json
 }
 ```
 
-to `/v1/cbs/test` endpoint.
+to `/rest/scb-bridge/v1/cbs/test` endpoint.
 
-Locally it is: `http://localhost:24220/v1/cbs/test`
-Nomad: `https://lima.silenteight.com/rest/scb-bridge/v1/cbs/test`
+- locally: `http://localhost:24220/rest/scb-bridge/v1/cbs/test`
+- `lima` test env: `https://lima.silenteight.com/rest/scb-bridge/v1/cbs/test`
 
 ### GNS-RT
 
 The simplest way to test GNS-RT locally is to send a JSON request using Postman:
 
-1. Generate new request using endpoint `http://localhost:24220/v1/gnsrt/system-id/random` (
+1. Generate new request using endpoint `http://localhost:24220/rest/scb-bridge/v1/gnsrt/system-id/random` (
    method `GET`)
     1. It pulls one random record from Oracle DB and based on its data it generates a JSON request.
     2. In addition, it modifies system_id, so there won't be any duplicates in scb_raw_alert table.
-2. Copy generated request and send it to endpoint `http://localhost:24220/v1/gnsrt/recommendation` (
+2. Copy generated request and send it to endpoint `http://localhost:24220/rest/scb-bridge/v1/gnsrt/recommendation` (
    method `POST`)
     1. To paste the request go to `Body` section
     2. Select `raw`
@@ -80,6 +101,7 @@ eg: `DatabaseIntegrationTest`. So it's important to name test classes appropriat
 The Nomad deployment descriptor(the job file) `scb-bridge.nomad` contains job specification and all
 its requirements. Nomad scheduler deployed on-premise will use this file to run scb-bridge
 artifact (jar).
+
 
 ## Providing learning alert data by ECM (Hive)
 

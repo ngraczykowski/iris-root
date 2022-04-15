@@ -1,0 +1,9 @@
+spring:
+  cloud:
+    consul:
+      config:
+        enabled: true
+        # this is the prefix of the key in Consul under which the configuration will be looked for
+        # in this case it is config/scb-bridge/data
+        prefix: config
+        format: YAML

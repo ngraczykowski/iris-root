@@ -2,10 +2,6 @@ logging:
   level:
     com.silenteight.qco: DEBUG
 spring:
-  cloud:
-    consul:
-      config:
-        enabled: false
   jpa:
     hibernate:
       ddl-auto: none
