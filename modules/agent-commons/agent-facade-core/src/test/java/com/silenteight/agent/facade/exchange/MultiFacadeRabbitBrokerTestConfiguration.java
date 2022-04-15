@@ -13,11 +13,13 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.DependsOn;
 
 @ConditionalOnProperty({ "agent.facade.enabled", "facade.amqp.multi-queues.enabled" })
 @TestConfiguration
 @EnableConfigurationProperties(AgentFacadeProperties.class)
 @RequiredArgsConstructor
+@DependsOn("multiQueueRabbitBrokerConfiguration")
 public class MultiFacadeRabbitBrokerTestConfiguration {
 
   static final String TEST_FACADE_OUT_QUEUE = "agent.outQueue";
@@ -26,10 +28,6 @@ public class MultiFacadeRabbitBrokerTestConfiguration {
 
   @Bean
   Binding createOutExchangeBindings() {
-
-    // FIXME: for some reason rabbit broker configuration is not initialized before that test.
-    forceInitRabbitBrokerConfiguration();
-
     var binding = BindingBuilder
         .bind(facadeOutQueue())
         .to(outExchange())
@@ -52,10 +50,6 @@ public class MultiFacadeRabbitBrokerTestConfiguration {
         .build();
     amqpAdmin.declareExchange(exchange);
     return exchange;
-  }
-
-  private void forceInitRabbitBrokerConfiguration() {
-    new MultiQueueRabbitBrokerConfiguration(agentFacadeProperties, amqpAdmin).init();
   }
 
 }
