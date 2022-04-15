@@ -76,4 +76,4 @@ ae:
     flow:
       enabled: true
   solving:
-    enabled: false
+    enabled: true

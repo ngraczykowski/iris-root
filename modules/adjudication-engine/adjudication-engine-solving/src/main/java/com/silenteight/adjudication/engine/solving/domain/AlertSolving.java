@@ -135,6 +135,4 @@ public class AlertSolving {
         ", solvingCreatetime=" + solvingCreatetime +
         '}';
   }
-
-
 }
