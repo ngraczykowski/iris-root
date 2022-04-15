@@ -234,14 +234,11 @@ class DataPrepIT extends BaseSpecificationIT {
           .setPayload(
               Struct.newBuilder()
                   .putAllFields(
-                      ['warehouse_alert.payload -> analystDecision'                : createValue(
+                      ['analystDecision'                : createValue(
                           'analyst_decision_true_positive'),
-                       'warehouse_alert.payload -> originalAnalystDecision'        : createValue(
-                           CURRENT_STATUS_NAME),
-                       'warehouse_alert.payload -> analystDecisionModifiedDateTime': createValue(
-                           CURRENT_ACTION_DATE_TIME),
-                       'warehouse_alert.payload -> analystReason'                  : createValue(
-                           '')])
+                       'originalAnalystDecision'        : createValue(CURRENT_STATUS_NAME),
+                       'analystDecisionModifiedDateTime': createValue(CURRENT_ACTION_DATE_TIME),
+                       'analystReason'                  : createValue('')])
                   .build())
           .build()
     }

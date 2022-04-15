@@ -36,11 +36,10 @@ class LearningServiceTest extends Specification {
               .discriminator(DISCRIMINATOR)
               .accessPermissionTag(ACCESS_PERMISSION_TAG)
               .payload(
-                  ['warehouse_alert.payload -> originalAnalystDecision'        :
-                       ORIGINAL_ANALYST_DECISION,
-                   'warehouse_alert.payload -> analystDecision'                : ANALYST_DECISION,
-                   'warehouse_alert.payload -> analystDecisionModifiedDateTime': ANALYST_DATE_TIME,
-                   'warehouse_alert.payload -> analystReason'                  : ANALYST_REASON])
+                  ['originalAnalystDecision'        : ORIGINAL_ANALYST_DECISION,
+                   'analystDecision'                : ANALYST_DECISION,
+                   'analystDecisionModifiedDateTime': ANALYST_DATE_TIME,
+                   'analystReason'                  : ANALYST_REASON])
               .matches([])
               .build()
       ]

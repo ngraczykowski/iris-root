@@ -18,12 +18,11 @@ import static java.util.UUID.randomUUID;
 @RequiredArgsConstructor
 public class LearningService {
 
-  private static final String PREFIX = "warehouse_alert.payload -> ";
-  private static final String ANALYST_DECISION = PREFIX + "analystDecision";
-  private static final String ORIGINAL_ANALYST_DECISION = PREFIX + "originalAnalystDecision";
+  private static final String ANALYST_DECISION = "analystDecision";
+  private static final String ORIGINAL_ANALYST_DECISION = "originalAnalystDecision";
   private static final String ANALYST_DECISION_MODIFIED_DATE_TIME =
-      PREFIX + "analystDecisionModifiedDateTime";
-  private static final String ANALYST_REASON = PREFIX + "analystReason";
+      "analystDecisionModifiedDateTime";
+  private static final String ANALYST_REASON = "analystReason";
 
   private final LearningEventPublisher learningEventPublisher;
 
