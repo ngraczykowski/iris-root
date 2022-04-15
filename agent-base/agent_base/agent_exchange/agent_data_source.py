@@ -1,4 +1,5 @@
 import logging
+import sys
 from typing import Any, AsyncGenerator, Generator, Tuple
 
 import grpc
@@ -26,6 +27,7 @@ class AgentDataSource:
         self.ssl = ssl
         self.channel, self.channel_stream_method = None, None
         self.logger = logging.getLogger("AgentDataSource")
+        self.logger.addHandler(logging.StreamHandler(sys.stdout))
 
     async def start(self):
         data_source_config = self.application_config["grpc"]["client"]["data-source"]
@@ -54,7 +56,6 @@ class AgentDataSource:
                 timeout=self.application_config["grpc"]["client"]["data-source"].get("timeout"),
             ):
                 # https://www.python.org/dev/peps/pep-0525/#asynchronous-yield-from
-                self.logger.info(f"Response name input len: {len(response.name_inputs)}")
                 for parsed in self.parse_response(response):
                     yield parsed
         except grpc.RpcError as err:
