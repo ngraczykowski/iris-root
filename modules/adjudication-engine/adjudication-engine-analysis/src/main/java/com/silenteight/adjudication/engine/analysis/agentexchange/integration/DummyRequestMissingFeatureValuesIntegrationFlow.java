@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @ConditionalOnProperty(
-    value = "ae.analysis.agent-exchange.enabled",
-    havingValue = "false"
+    value = "ae.solving.enabled",
+    havingValue = "true"
 )
 class DummyRequestMissingFeatureValuesIntegrationFlow extends IntegrationFlowAdapter {
 
