@@ -59,9 +59,8 @@ public class AgentInputConfiguration {
     return new CountryFeatureFactory();
   }
 
-  // TODO: uncomment once uds-lib will provide api for registering companyName feature inputs
-  //  @Bean
-  //  CompanyNameFeatureInputFactory companyNameFeatureInputFactory() {
-  //    return new CompanyNameFeatureInputFactory();
-  //  }
+  @Bean
+  CompanyNameFeatureFactory companyNameFeatureFactory() {
+      return new CompanyNameFeatureFactory();
+  }
 }

@@ -1,4 +1,4 @@
-package com.silenteight.scb.ingest.adapter.incomming.common.quartz;
+ package com.silenteight.scb.ingest.adapter.incomming.common.quartz;
 
 import lombok.Data;
 
