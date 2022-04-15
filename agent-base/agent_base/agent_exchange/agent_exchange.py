@@ -39,8 +39,7 @@ class AgentExchange(AgentService):
         self.data_source = data_source
         self.ssl = ssl
         self.logger = logging.getLogger("AgentExchange")
-        c_handler = logging.StreamHandler(sys.stdout)
-        self.logger.addHandler(c_handler)
+        self.logger.addHandler(logging.StreamHandler(sys.stdout))
 
     async def start(self, *args, **kwargs) -> None:
         self.logger.debug("Starting agent exchange")
@@ -76,9 +75,9 @@ class AgentExchange(AgentService):
                 raise MessageFormatException(body)
 
         request: AgentExchangeRequest = AgentExchangeRequest.FromString(body)
-        self.logger.info(f"Before request {message.headers}")
+        self.logger.info(f"Before request: {message.headers.get('correlationId', '')}")
         response: AgentExchangeResponse = await self.process(request)
-        self.logger.info(f"After request {message.headers}")
+        self.logger.info(f"After request: {message.headers.get('correlationId', '')}")
 
         response_body = lz4.frame.compress(
             response.SerializeToString(),

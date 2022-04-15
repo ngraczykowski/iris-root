@@ -3,6 +3,9 @@ grpc:
     data-source:
       address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-hsbc-bridge
       timeout: 10
+      client_ca: "tests/ssl_example/ca.pem"
+      client_private_key: "tests/ssl_example/client-key.pem"
+      client_public_key_chain: "tests/ssl_example/client.pem"
 
 rabbitmq:
   addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
@@ -10,6 +13,13 @@ rabbitmq:
       {{ $rabbit.Address }}:{{ $rabbit.Port -}}
   {{- end }}
   virtualhost: /{{ env "NOMAD_NAMESPACE" }}
+  login: dev
+  password: dev
+  tls:
+    cafile: "tests/ssl_example/ca.pem"
+    keyfile: "tests/ssl_example/client-key.pem"
+    certfile: "tests/ssl_example/client.pem"
+    verify: 1
 
 consul:
   host: localhost
@@ -23,9 +33,17 @@ agent:
       exchange: 'agent.request'
       routing-key: 'agents.EXAMPLE.versions.1_0_0.configs.1'
       queue-name: 'agent.EXAMPLE-requests'
+      queue-durable: true
+      queue-arguments:
+        x-dead-letter-exchange: "companyname-agent-dead-letter-exchange"
+        x-dead-letter-routing-key: "companyname-agent-dead-letter-key"
 
     response:
       exchange: 'agent.response'
+      routing-key: ""
 
   grpc:
     port: {{ env "NOMAD_PORT_grpc" }}
+    server_ca: "tests/ssl_example/ca.pem"
+    server_private_key: "tests/ssl_example/server-key.pem"
+    server_public_key_chain: "tests/ssl_example/server.pem"

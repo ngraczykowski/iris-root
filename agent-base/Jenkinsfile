@@ -2,7 +2,6 @@
 def utils = new com.silenteight.jenkins.ci.Utils()
 def jenkins = new com.silenteight.jenkins.ci.Jenkins()
 
-
 pipeline {
     agent {
         label 'ec2-agent'

@@ -126,7 +126,7 @@ def main():
     AgentRunner(config).run(
         JohnnyAgent(config),
         services=[
-            AgentExchange(config, JohnnyAgentDataSource(config, ssl=args.ssl), ssl=args.ssl),
+            AgentExchange(config, JohnnyAgentDataSource(config, ssl=args.ssl), args.ssl),
             GrpcService(config, agent_servicer=JohnnyAgentGrpcServicer()),
         ],
     )

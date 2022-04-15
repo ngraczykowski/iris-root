@@ -43,7 +43,7 @@ async def ae_mock(config):
 @pytest.fixture(autouse=True)
 async def data_source_mock(config):
     async with DataSourceMock(
-        address=config.application_config["grpc"]["client"]["data-source"]["address"], ssl=True
+        address=config.application_config["grpc"]["client"]["data-source"]["address"],
     ) as mock:
         yield mock
 
