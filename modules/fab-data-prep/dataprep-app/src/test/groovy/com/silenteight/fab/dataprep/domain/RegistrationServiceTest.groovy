@@ -38,6 +38,7 @@ class RegistrationServiceTest extends Specification {
             [AlertWithMatchesIn.builder()
                  .alertId(MESSAGE_NAME)
                  .status(AlertStatusIn.SUCCESS)
+                 .metadata('{}')
                  .matches(
                      [MatchIn.builder()
                           .matchId(HIT_ID)

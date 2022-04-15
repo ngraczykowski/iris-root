@@ -102,6 +102,7 @@ class RegistrationConverter {
         .builder()
         .status(AlertStatusIn.SUCCESS)
         .alertId(parsedAlertMessage.getMessageName())
+        .metadata("{}")
         .matches(parsedAlertMessage
             .getHits()
             .values()
