@@ -12,11 +12,9 @@ import static org.assertj.core.api.Assertions.*;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class DummyControllerTest {
 
-  @LocalServerPort
-  private int port;
+  @LocalServerPort private int port;
 
-  @Autowired
-  private TestRestTemplate restTemplate;
+  @Autowired private TestRestTemplate restTemplate;
 
   @Test
   void dummyReturnsMessage() {
