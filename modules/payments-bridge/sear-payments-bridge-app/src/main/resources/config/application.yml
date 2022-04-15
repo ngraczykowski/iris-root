@@ -276,8 +276,8 @@ spring:
     # Hikari pool configuration
     hikari:
       pool-name: Database-Pool
-      minimum-idle: ${pb.db.connections.min:1}
-      maximum-pool-size: ${pb.db.connections.max:25}
+      minimum-idle: ${pb.db.connections.min:10}
+      maximum-pool-size: ${pb.db.connections.max:100}
       auto-commit: false
       schema: ${pb.db.schema:public}
       isolate-internal-queries: true
