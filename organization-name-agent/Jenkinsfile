@@ -220,12 +220,19 @@ pipeline {
                         )
                     }
                 }
-//             stage('Deploy on nomad') {
-//                steps {
-//                         sh './nomad/deploy.sh'
-//                     }
-//                 }
-
+                stage('Deploy on nomad') {
+                    when {
+                        anyOf {
+                            branch 'master'
+                            tag pattern: '^v(\\d+(\\.\\d+)*)\$', comparator: 'REGEXP'
+                        }
+                    }
+                    steps {
+                            sh './nomad/deploy.sh'  //mike
+                            sh './nomad/deploy.sh -var="namespace=lima"'  //lima
+                         }
+                    }
+                }
             }
        }
     }
