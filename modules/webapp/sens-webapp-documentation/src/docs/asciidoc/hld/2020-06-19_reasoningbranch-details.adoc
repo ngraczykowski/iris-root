@@ -1,0 +1,67 @@
+= HLD #10
+
+- Reference ticket: *https://youtrack.silenteight.com/issue/WA-832[WA-832]*
+- Reason: As a Model Tuner or Approver I want to be able to see the Reasoning Branch Details for the RB selected on a list
+
+[plantuml,bo-a-gets-reasoning-branch-details,svg]
+-----
+@startuml
+header Get Reasoning Branch Details
+
+actor BOA as "Model Tuner or Approver"
+
+box "WebApp Frontend" #MintCream
+    participant Frontend as "RB Browser"
+end box
+
+box "WebApp Backend" #LightGreen
+    participant Backend as "WebApp"
+end box
+
+box "Governance" #LightBlue
+    participant G as "Governance"
+end box
+
+BOA -> Frontend : Select Reasoning Branch
+
+activate Frontend
+Frontend -> Backend : Fetch Reasoning Branch Feature Values
+note over Frontend, Backend
+    * Reasoning Branch ID (DT ID + FV ID)
+end note
+
+activate Backend
+Backend <-> G : Fetch Reasoning Branch Feature Values
+note over Backend, G
+    * Feature Value
+end note
+
+Backend -> Frontend : Reasoning Branch Feature Values
+deactivate Backend
+
+Frontend -> Backend : Fetch Feature Names
+activate Backend
+note over Frontend, Backend
+    * Feature Vector ID
+end note
+
+Backend <-> G : Fetch Feature Names
+note over Backend, G
+    * Feature Name
+end note
+
+Backend -> Frontend : Feature Names
+deactivate Backend
+
+Frontend -> BOA: Reasoning Branch Details
+deactivate Frontend
+note over Frontend, BOA
+    * Reasoning Branch ID
+    * Solution
+    * Status
+    * Last update
+    * Features
+end note
+
+@enduml
+-----

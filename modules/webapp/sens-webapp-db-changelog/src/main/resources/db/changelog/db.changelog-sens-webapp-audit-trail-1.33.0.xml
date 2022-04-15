@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="audit-trail-1.33.0-1" author="mmastylo">
+    <createTable tableName="webapp_audit_log">
+      <column name="event_id" type="${uuid.type}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="correlation_id" type="${uuid.type}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="timestamp" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="type" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="principal" type="VARCHAR(64)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="entity_id" type="VARCHAR(256)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="entity_class" type="VARCHAR(256)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="entity_action" type="VARCHAR(64)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="details" type="${type.text}">
+        <constraints nullable="true"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+</databaseChangeLog>

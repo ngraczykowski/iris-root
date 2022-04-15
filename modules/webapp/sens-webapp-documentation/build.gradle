@@ -1,0 +1,23 @@
+plugins {
+  id "base"
+  id "maven-publish"
+  id 'com.silenteight.gradle.asciidoctor' version '1.7.0'
+}
+
+ext {
+  serpOptInstallerVersion = "1.22.0"
+  generatedAsciidocSourcesDir = "$buildDir/generated/sources/asciidoc"
+}
+
+description = "Sens WebApp Documentation"
+
+asciidoctorConfig {
+  includeSources = {
+    include "release-notes.adoc"
+    include "webapp-guide.adoc"
+    include "test-cases.adoc"
+    include "adrs/*.adoc"
+  }
+  publishAttributes = ["serp-opt-installer-version": serpOptInstallerVersion]
+  additionalAsciidoctorjAttributes = ["serp-opt-installer-version": serpOptInstallerVersion]
+}

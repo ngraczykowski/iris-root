@@ -1,0 +1,11 @@
+plugins {
+  id "java"
+  id "maven-publish"
+}
+
+description = "SENS WebApp Notification"
+
+dependencies {
+  implementation project(":sens-webapp-common")
+}
+

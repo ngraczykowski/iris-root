@@ -1,0 +1,52 @@
+[id="accounts-{context}"]
+
+= Surveillance Optimization Accounts Report
+
+Follow this procedure to get the Surveillance Optimization Accounts Report.
+
+//========================================================================================
+.Prerequisites
+
+* You have installed all the Platform services.
+
+//========================================================================================
+.Procedure
+
+//========================================================================================
+
+. Change the current working directory to the Platform installation directory:
++
+[listing,indent=0]
+[subs=+quotes]
+----
+    $ cd _<installation-directory>_
+----
++
+//------------------------------------------------------------------------------
+. Run the following command:
++
+[listing,indent=0]
+[subs=+quotes]
+----
+    $ bin/serp report accounts --output-dir _<OUTPUT_DIR_PATH>_
+----
++
+
+[NOTE]
+====
+`--output-dir` option can be ommited.
+
+The default `_<OUTPUT_DIR_PATH>_` value is "SERP_HOME/data/reports/".
+
+Report name will be automatically generated.
+====
+
++
+. Verify that the output is correct.
+Example output with expected response looks like this:
++
+----
+Surveillance Optimization Accounts has been saved in <OUTPUT_DIR_PATH>
+----
++
+. The report can be found in a `_<OUTPUT_DIR_PATH>_`.

@@ -1,0 +1,21 @@
+name: webapp-app
+image_tag: webapp-app
+image_repo: webapp-app
+args: ["--logging.config=file:/etc/logback.xml"]
+ports:
+  http: 24410
+  management: 8081
+config:
+  name: webapp
+  data:
+    - key: example-release-key
+      value: example-release-key-some-passowrd
+replicaCount: 1
+imagePullPolicy: Always
+memoryLimit: 2048Mi
+memoryRequest: 512Mi
+
+sentry:
+  dsn: "https://6515087ac8ed4d2e9992e7eccaac9829@o1129201.ingest.sentry.io/6172830"
+  environment: unknown
+  tracesSampleRate: 0

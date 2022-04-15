@@ -1,0 +1,20 @@
+keycloak:
+  users-list-filter:
+    realm-role-filter.roles:
+      - 'valid-sso-role'
+    attribute-filter.attributes:
+      - name: origin
+        value: SENS
+
+logging:
+  config: file:/etc/logback.xml
+
+sens:
+  webapp:
+    roles:
+      country-groups-scope: elasticsearch-sso
+      default-country-group-role: business_user
+
+sentry:
+  environment: sierra
+  traces-sample-rate: 0

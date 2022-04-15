@@ -1,0 +1,38 @@
+= HLD #19
+
+- Reference ticket: *TBD*
+- Reason: As a BO, I want to import the configuration of steps.
+
+[plantuml,importing-steps,svg]
+-----
+@startuml
+
+box "REST"
+    participant API
+end box
+
+box "Governance" #LightBlue
+    participant backend as "Governance"
+    database db as "Governance DB"
+end box
+
+API -> backend : Import steps - create new policy based on configuration.
+backend -> backend : Create a new policy with steps.
+note over API, db
+For the sake of simplicity, before we will introduce the simulator,
+we can assume that for solving we will use the newest policy stored in the database.
+end note
+
+backend -> db : Save the new policy.
+
+====
+
+API -> backend : Import steps - create new policy based on configuration,\nbut copy the exceptions (Steps created by CB)
+backend -> db : Read exceptions from current policy.
+backend -> backend : Create a new policy with new steps and current exceptions.
+backend -> db : Save the new policy.
+
+backend -> backend : Send event to reload the configuration
+
+@enduml
+-----

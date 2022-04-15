@@ -1,0 +1,48 @@
+[id="remove-saml-{context}"]
+
+= Remove the SAML Configuration
+
+
+Follow this procedure to remove a SAML configuration from the SENS WebApp Auth Server.
+
+Removing SAML configuration from the SENS WebApp Auth Server will disable the ability to Single Sign-On to Sens WebApp.
+
+//========================================================================================
+.Prerequisites
+
+* You have installed all the Platform services.
+* SAML configuration imported to the SENS WebApp Auth Server, see <<import-saml-{context}>>.
+
+//========================================================================================
+.Procedure
+
+//========================================================================================
+
+. Change the current working directory to the Platform installation directory:
++
+[listing,indent=0]
+[subs=+quotes]
+----
+    $ cd _<installation-directory>_
+----
++
+//------------------------------------------------------------------------------
+. Run the following command:
++
+[listing,indent=0]
+[subs=+quotes]
+----
+    $ bin/serp saml remove
+----
++
+
+. Confirm operation.
++
+
+. Example output with expected response looks like this:
++
+[listing,indent=0]
+[subs=+quotes]
+----
+    Removed SAML configuration from the SENS WebApp Auth Server.
+----

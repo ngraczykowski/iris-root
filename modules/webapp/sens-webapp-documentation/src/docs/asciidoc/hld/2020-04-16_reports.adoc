@@ -1,0 +1,214 @@
+= HLD #4
+
+- Reference ticket: *https://youtrack.silenteight.com/issue/WA-602[WA-602]*
+- Reason: As a Model Tuner or Auditor I want to generate report on-demand,
+          so I can download it once the report will be ready.
+
+== User flow
+
+[plantuml,request-report-on-demand,svg]
+-----
+@startuml
+header User flow
+
+title  Generate report **on-demand**
+
+actor User
+participant Reports_UI as "Reports UI" order 10
+participant Web_App as "WebApp" order 20
+database Web_App_DB  as "WebApp Database" order 30
+participant Reporter order 40
+database SERP_DB as "SERP Database" order 50
+
+box "Web App"
+participant Reports_UI
+participant Web_App
+participant Web_App_DB
+end box
+
+box "Reporter [SERP]"
+participant Reporter
+participant SERP_DB
+end box
+
+User -> Reports_UI: Define report parameters
+
+User -> Reports_UI: Generate report on-demand
+
+Reports_UI -> Web_App: Generate report
+activate Web_App
+activate Web_App
+activate Web_App
+note over Reports_UI, Web_App
+    * user's meta data
+    * report parameters
+end note
+
+Web_App -> Web_App: Generate unique report id (UUID)
+
+alt Report Scheduled
+
+    Web_App -> Reporter: Request report
+    note over Web_App, Reporter
+        * correlation report id
+        * report parameters
+        * no user's meta data
+    end note
+
+    activate Reporter
+
+    Reporter <-> SERP_DB: Store report data
+    note over Reporter, SERP_DB
+        * report id
+        * correlation report id (UUID)
+        * report type
+        * created at
+        * report parameters
+        * status (QUEUE)
+    end note
+
+    Reporter -[#green]> Web_App: Scheduled report result
+
+    deactivate Reporter
+
+    Web_App <-> Web_App_DB: Store report request
+    note over Web_App, Web_App_DB
+        * unique report id (UUID)
+        * report type
+        * created by
+        * created at
+        * report parameters
+    end note
+
+    Web_App --[#green]> Reports_UI: Return success
+    deactivate Web_App
+
+    Reports_UI -[#green]> User: Display success message
+
+else Report Can't Be Scheduled
+
+    Web_App -> Reporter: Request report
+    note over Web_App, Reporter
+        * report parameters
+    end note
+
+    activate Reporter
+
+    Reporter --[#red]> Web_App: Report failed result
+
+    deactivate Reporter
+
+    Web_App --[#red]> Reports_UI: Failed response
+
+    deactivate Web_App
+
+    Reports_UI -[#red]> User: Display error message
+
+else Reporter Not Available
+
+    Web_App <-->x Reporter: Request report
+    note over Web_App, Reporter
+        Timeout
+    end note
+
+    Web_App --[#red]> Reports_UI: Timeout response
+
+    deactivate Web_App
+
+    Reports_UI -[#red]> User: Display error message
+end
+@enduml
+-----
+
+== Reporter flow
+
+[plantuml,generate-report-on-demand,svg]
+-----
+@startuml
+header Reporter flow
+
+title  Generate report **on-demand**
+
+participant Reporter order 10
+database SERP_DB as "SERP Database" order 20
+participant RabbitMQ as "Rabbit MQ" order 30
+database Data_Sources as "Data Source" order 40
+database HDD order 50
+
+box "Reporter [SERP]"
+participant Reporter
+participant SERP_DB
+end box
+
+loop scheduler fetch reports to generation
+
+    Reporter <-> SERP_DB: Fetch report requests waiting for generation
+    note over Reporter, SERP_DB
+        Fetch report requests in QUEUE state.
+        Apply any limitations and constraints (e.g. 5 concurrent reports).
+    end note
+
+    activate Reporter #LightBlue
+
+    Reporter -> RabbitMQ: Publish event to generate a report
+    note over Reporter, RabbitMQ
+        Event contains all required data to start report generation
+    end note
+
+    deactivate Reporter
+end
+
+|||
+
+loop listen on report generation events
+    Reporter <-> RabbitMQ: Listen and fetch report generation event(s)
+    activate Reporter
+
+    Reporter <-> SERP_DB: Update report state
+    note over Reporter, SERP_DB
+        QUEUE -> IN PROGRESS
+    end note
+
+    activate Reporter #Salmon
+
+    Reporter <-> Data_Sources: Fetch required report data
+    note over Reporter, Data_Sources
+        Data can come from different Data Sources, e.g.:
+        * Warehouse DB (preferably via Warehouse API)
+        * SERP DB
+        * other APIs (e.g. Keycloak)
+    end note
+
+    alt Report Generated Successfully
+
+        Reporter -[#green]> Reporter: Generate report data
+        note over Reporter: Apply report core business logic
+
+        Reporter -> Reporter: Create report file
+
+        Reporter <-> HDD: Store report
+
+        Reporter <-> SERP_DB: Update report entity
+        note over Reporter, SERP_DB
+            * generated at
+            * status: IN PROGRESS -> DONE
+            * path to report stored on HDD
+        end note
+
+    else Report Can't Be Generated
+
+        Reporter -[#red]>x Reporter: Generate report data
+
+        Reporter <-> SERP_DB: Update report entity
+        note over Reporter, SERP_DB
+            * status: IN PROGRESS -> ERROR
+            * error message
+        end note
+
+        deactivate Reporter
+    end
+end
+
+deactivate Reporter
+@enduml
+-----

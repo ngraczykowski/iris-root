@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="report-1.25.0-1" author="mastylom">
+    <createTable tableName="webapp_report_metadata">
+      <column name="report_metadata_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="report_name" type="VARCHAR(64)"/>
+      <column name="start_time" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addUniqueConstraint
+        tableName="webapp_report_metadata"
+        columnNames="report_name"
+        constraintName="uq_report_metadata_report_name" />
+
+    <createIndex
+        tableName="webapp_report_metadata"
+        indexName="ix_report_metadata_report_name">
+      <column name="report_name"/>
+    </createIndex>
+  </changeSet>
+
+</databaseChangeLog>

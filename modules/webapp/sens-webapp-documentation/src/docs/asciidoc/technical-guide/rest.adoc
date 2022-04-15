@@ -1,0 +1,31 @@
+[id="rest-{context}"]
+
+= REST
+
+Here you can find some useful information for developing {productname} REST API endpoints.
+
+. Manage invalid resource id:
++
+Let's assume we have following REST API endpoint:
++
+[listing,indent=0]
+[subs=+quotes]
+----
+    $ GET rest/resource/{resource-id}
+----
++
+If we expect resource id to be a number but string is provided then *400 BAD_REQUEST*
+response code should be returned.
+//------------------------------------------------------------------------------
+. Manage invalid query parameter:
++
+Let's assume we have following REST API endpoint:
++
+[listing,indent=0]
+[subs=+quotes]
+----
+    $ GET rest/resource/verb?queryParam={param}
+----
++
+If we expect query parameter to be a number but string is provided then *400 BAD_REQUEST*
+response code should be returned.

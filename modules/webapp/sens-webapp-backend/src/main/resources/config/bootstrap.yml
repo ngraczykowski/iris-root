@@ -1,0 +1,44 @@
+####################################################################################################
+# Defaults (overridden by environment variables or arguments)
+####################################################################################################
+
+sens.webapp.consul.enabled: false
+sens.webapp.protocol: http
+sens.webapp.consul.config.enabled: ${sens.webapp.consul.enabled}
+sens.webapp.consul.discovery.enabled: ${sens.webapp.consul.enabled}
+
+sens.webapp.consul.traefik.passTLSCert: false
+sens.webapp.consul.traefik.entryPoints: gateway,unprotectedGateway
+
+sens.webapp.keystore.password: LZKH70td5n
+sens.webapp.truststore.password: ${sens.webapp.keystore.password}
+
+####################################################################################################
+# CONFIGURATION
+####################################################################################################
+
+#---------------------------------------------------------------------------------------------------
+# CLOUD
+#---------------------------------------------------------------------------------------------------
+spring:
+  application:
+    name: webapp
+
+  cloud:
+    service-registry:
+      enabled: ${sens.webapp.consul.enabled}
+
+    auto-registration:
+      enabled: ${sens.webapp.consul.enabled}
+
+    consul:
+      enabled: ${sens.webapp.consul.enabled}
+      config:
+        enabled: ${sens.webapp.consul.config.enabled}
+        watch:
+          # NOTE(ahaczewski): Disabled due to stupid-long timeouts in current implementation.
+          #  Do not enable.
+          enabled: false
+
+      discovery:
+        enabled: ${sens.webapp.consul.discovery.enabled}

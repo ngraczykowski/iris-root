@@ -1,0 +1,67 @@
+[id="export-saml-{context}"]
+
+= Exporting the SAML Configuration
+
+Follow this procedure to export a SAML configuration from SENS WebApp Auth Server to import it back to Identity Provider.
+
+To make an SSO configuration work, the imported configuration needs to be exported as a SAML description and imported to Identity Provider.
+
+//========================================================================================
+.Prerequisites
+
+* You have installed all the Platform services.
+* SAML configuration imported to the SENS WebApp Auth Server, see <<import-saml-{context}>>.
+
+
+//========================================================================================
+.Procedure
+
+//========================================================================================
+
+. Change the current working directory to the Platform installation directory:
++
+[listing,indent=0]
+[subs=+quotes]
+----
+    $ cd _<installation-directory>_
+----
++
+
+//------------------------------------------------------------------------------
+. Run the following command, provide a path where to save xml file:
++
+[listing,indent=0]
+[subs=+quotes]
+----
+    $ bin/serp saml export _<export-file-path>_
+----
++
+
+. Verify that the output is correct.
+Example output with expected response looks like this:
++
+[listing,indent=0]
+[subs=+quotes]
+----
+    Entity descriptor exported successfully and saved as file: _<export-file-path>_
+----
++
+
+[NOTE]
+====
+If the file already exists, you will be asked to override it.
+
+If you not provide _<export-file-path>_ the descriptor will be saved in a working directory with a _<saml-descriptor-{timestamp}.xml>_ filename.
+====
++
+
+. Verify that the file is available under path returned to the output and contains a valid descriptor.
+This descriptor file contains cryptographic keys used for signing and encryption of SAML communication.
+
++
+
+. Send this descriptor to the team responsible for WebSSO and ask them to upload it to Identity Provider.
+This will result in Identity Provider trusting SENS WebApp.
++
+
+. After upload of the descriptor file to Identity Provider verify that you are able to login to SENS WebApp using SAML.

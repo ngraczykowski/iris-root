@@ -1,0 +1,76 @@
+= HLD #11
+
+- Reference ticket: *https://youtrack.silenteight.com/issue/WA-826*
+- Reason: As a Model Tuner I want to see list of archived alerts that disabled Reasoning Branch
+
+
+[plantuml,bo-gets-list-of-discrepant-branches,svg]
+-----
+@startuml
+header List discrepant branches
+
+actor "Model Tuner"
+
+box "WebApp Frontend" #MintCream
+    participant Frontend as "CB Dashboard GUI"
+end box
+
+box "WebApp Backend" #LightGreen
+    participant Backend as "WebApp"
+end box
+
+box "Circuit Breaker" #LightBlue
+    participant CB as "Circuit Breaker" order 48
+end box
+
+"Model Tuner" -> Frontend : Select CB Dashboard
+"Model Tuner" -> Frontend : Select "Archived" tab
+
+Frontend -> Backend : Fetch Archived Discrepant Branches
+activate Backend
+Backend <-> CB : Fetch Archived Discrepant Branches
+note over Backend, CB
+    * RB ID
+    * Date when the RB was disabled
+end note
+
+Backend -> Frontend : Archived Discrepant Branches list
+deactivate Backend
+Frontend->"Model Tuner": Archived Discrepant Branches list
+
+"Model Tuner" -> Frontend : Click on a Discrepant Branch
+Frontend -> Backend : Get Discrepancy IDs by Discrepant Branch ID
+activate Backend
+Backend <-> CB : Fetch Discrepancy IDs by Discrepant Branch ID
+Backend -> Frontend : Discrepancy IDs
+deactivate Backend
+
+Frontend ->> Frontend : Select a subset of Discrepancy IDs representing the 1st page
+
+Frontend -> Backend : Get page of Archived Discrepancies by Discrepancy IDs
+activate Backend
+Backend <-> CB : Get Discrepancies by Ids
+note over Backend, CB
+    * Alert ID
+    * AI Comment
+    * AI Comment Date
+    * Analyst Comment
+    * Analyst Comment Date
+end note
+Backend -> Frontend : Archived Discrepancy list
+deactivate Backend
+Frontend->"Model Tuner": First page of Discrepancy list
+
+"Model Tuner" -> Frontend : Click to display another page of Discrepancies
+Frontend ->> Frontend : Select a subset of Discrepancy IDs representing the selected page
+
+Frontend -> Backend : Get another page of Discrepancies by Discrepancy IDs
+activate Backend
+Backend <-> CB : Get Discrepancies by Ids
+
+Backend -> Frontend : Archived Discrepancy list
+deactivate Backend
+Frontend->"Model Tuner": Another page of Archived Discrepancy list
+
+@enduml
+-----

@@ -1,0 +1,36 @@
+[id="webapp-guide"]
+= {productname} Guide
+Silent Eight Pte._Ltd.
+:context: webapp-configuration
+:productname: Silent Eight Name Screening Web Application
+:doctype: article
+:toc: left
+:sectnums:
+:sectnumlevels: 4
+:toclevels: 4
+:xrefstyle: full
+
+[abstract]
+This manual explains how to configure {productname}.
+
+{productname} allows manipulating Reasoning Branches, managing Users and downloading reports.
+This guide containing only base configuration required to be able to use the Web Application.
+
+.Work In Progress
+[CAUTION]
+====
+This manual is a work-in-progress, still unfinished.
+It may be missing crucial steps, or contain erroneous procedures and/or information.
+
+If you found something is not working as depicted in this manual, please report it to the
+link:mailto:support@silenteight.com?subject=SERP%20Installation%20Guide[Silent Eight Support].
+====
+
+
+include::guide/cli/managing-users.adoc[leveloffset=+1]
+
+include::guide/scb/cli/integrating-saml.adoc[leveloffset=+1]
+
+include::guide/cli/reports.adoc[leveloffset=+1]
+
+include::guide/webapp-tls-configuration/webapp-tls-configuration.adoc[leveloffset=+1]

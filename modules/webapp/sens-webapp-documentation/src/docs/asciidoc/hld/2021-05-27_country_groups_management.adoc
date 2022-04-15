@@ -1,0 +1,140 @@
+= HLD #26
+
+- Reference ticket: TBA
+- Reason: We want to manage a list of countries for a user, from which the user can see alerts or work at QA of those alerts.
+
+== Creating Allowed Country Groups
+[plantuml,creating-allowed-country-groups,svg]
+-----
+@startuml
+header Creating allowed country groups
+
+actor User
+
+participant Frontend as fe
+participant Warehouse as wh
+database "Warehouse DB" as db
+participant "Elastic Search" as es
+
+autonumber
+User -> fe: Create the Country Group
+fe -> wh: Create the Country Group
+note over fe, wh
+  **POST /countryGroups**
+  id: c0c2b1c4-7faf-4255-bf95-f9f8bbcb674b
+  title: Asia without China
+end note
+wh -> db: Store id and title
+wh -> fe: Stored
+
+...
+autonumber
+User -> fe: Set countries in the Country Group
+fe -> wh: Set countries in the Country Group
+note over fe, wh
+  **PUT /countryGroups/{id}/countries**
+  ["af", "ba", "bg", "bt"]
+end note
+wh -> db : assert the country group exists
+wh -> es : create filter for a role (role == country group)
+note over wh, es
+  If the User will log in into the Kibana with the role, Elastic Search will automatically add a filter to the query and returns only those data which the User can see.
+end note
+
+@enduml
+-----
+
+== Set Country Groups for a user
+[plantuml,set-country-groups-for-a-user,svg]
+-----
+@startuml
+header Set Country Groups for a user
+
+actor User
+
+participant Frontend as fe
+participant Webapp as wa
+participant Keycloak as k
+
+autonumber
+User -> fe: Set Country Groups for a user
+fe -> wa: Set Country Groups for a user
+note over wa, k
+  **PATCH /users/{username}**
+  {
+    "countryGroups": [
+      "c4f5577a-d3d3-4b94-9dee-736d7e97ac6e",
+      "c0c2b1c4-7faf-4255-bf95-f9f8bbcb674b"
+    ]
+  }
+end note
+wa -> k: Set roles (role == country group) \nfor a specific user in a Kibana client.
+note over wa, k
+
+end note
+
+@enduml
+-----
+
+== Fetch data
+[plantuml,fetch-data,svg]
+-----
+@startuml
+title Fetch data
+
+actor User
+participant Frontend as fe
+participant Keycloak as kc
+participant Warehouse as wh
+participant "Elastic Search" as es
+
+autonumber
+
+User -> fe: Login
+fe -> kc: Redirect user to the Keycloak
+kc -> User: Login page
+User -> kc: Type user and password
+kc -> fe: Authenticate user - send token with all roles (all clients)
+...
+User -> fe: Fetch data
+fe -> wh: Fetch data
+wh -> wh: Create an Elastic client in the user context (user's auth token)
+wh -> es: Fetch data from the Elastic with the newly created client
+es -> es: Check user's roles in token and filter data
+es -> wh: Requested fields
+wh -> fe: Requested fields
+
+@enduml
+-----
+
+
+== Generating reports
+[plantuml,generating-reports,svg]
+-----
+@startuml
+title Generating Reports
+
+actor User
+participant Frontend as fe
+participant Keycloak as kc
+participant Warehouse as wh
+participant Kibana as kb
+
+autonumber
+
+User -> fe: Login
+fe -> kc: Redirect user to the Keycloak
+kc -> User: Login page
+User -> kc: Type user and password
+kc -> fe: Authenticate user - send token with all roles (all clients)
+...
+User -> fe: Download report
+fe -> wh: Download report
+wh -> wh: Create a Kibana client in the user context (user's auth token)
+wh -> kb: Download report with the Kibana client
+kb -> kb: Check user's roles in token and filter data
+kb -> wh: Report
+wh -> fe: Report
+
+@enduml
+-----

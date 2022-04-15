@@ -1,0 +1,26 @@
+:release_version: 1.19.0
+:issue_url: https://youtrack.silenteight.com/issue/
+
+= Release {release_version}
+
+- STATUS: *RELEASED*
+- Release date: *03.06.2020*
+- https://gitlab.silenteight.com/sens/sens-webapp/-/tags/v1.17.0[Web App 1.17.0 tag]
+- https://gitlab.silenteight.com/sens/sens-webapp/-/tags/v1.18.0[Web App 1.18.0 tag]
+- https://gitlab.silenteight.com/sens/sens-webapp/-/tags/v{release_version}[Web App {release_version} tag]
+
+- https://repo.silenteight.com/ui/repos/tree/General/libs-release-local%2Fcom%2Fsilenteight%2Fsens%2Fwebapp%2Fsens-webapp-backend%2F{release_version}[Jars in Artifactory]
+- https://gitlab.silenteight.com/sens/sens-webapp/commit/2ae7fe02e0b5968276c9a343173e54c2f37fe2fa[WebApp version bump commit]
+- https://gitlab.silenteight.com/sens/serp/-/merge_requests/1479[SERP master MR]
+
+:leveloffset: +1
+
+// --------------------------------------------------------------------
+
+:table-name: New features
+include::./templates/changelog-table-header.adoc[]
+
+|{issue_url}WA-616[WA-616], {issue_url}WA-617[WA-617]
+|Model Tuner can suggest changes in the Reasoning Branch solution, and the Approver can Accept or Reject those suggestions.
+
+include::./templates/changelog-table-footer.adoc[]

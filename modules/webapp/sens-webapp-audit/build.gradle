@@ -1,0 +1,26 @@
+plugins {
+  id "java-library"
+  id "maven-publish"
+}
+
+description = "SENS WebApp Audit"
+
+configurations {
+  implementation.extendsFrom starterDatabase
+  runtimeOnly.extendsFrom starterDatabaseRuntime
+
+  testImplementation.extendsFrom starterDataJpaTest
+}
+
+dependencies {
+  implementation project(":sens-webapp-audit-api")
+  implementation project(":sens-webapp-common")
+  implementation project(":sens-webapp-report")
+
+  implementation libraries.silenteight_audit_bs
+  implementation libraries.silenteight_audit_bs_api
+
+  implementation libraries.jakarta_servlet_api
+
+  api libraries.spring_security_core
+}

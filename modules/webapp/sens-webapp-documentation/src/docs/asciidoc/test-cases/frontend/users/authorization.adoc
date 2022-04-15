@@ -1,0 +1,30 @@
+= Authorization
+
+:testCasesName: User Management authorization
+include::../../templates/test-cases-table-header.adoc[]
+
+|{counter:case-number}
+|Login as non-admin user
+|You are not able to see User Management tab
+
+|{counter:case-number}
+|Login as admin user
+|You are able to see User Management tab
+
+|{counter:case-number}
+|Login as admin user and click User Management tab
+|In the table you're able to see all users, including their details: Username, Display name, Roles, Origin
+
+|{counter:case-number}
+|Login as admin user, click User Management tab and use search box on the right to search for users
+|Finding should be performed using Username and Display name fields, highlighting matching part in the process
+
+|{counter:case-number}
+|Login as admin user, click User Management tab and click "Add new user" button
+|You should see Add New User dialog with Username, Display name, Password and Role inputs
+
+|{counter:case-number}
+|Login as admin user, click User Management tab, click "Add new user" button and click "Cancel" button
+|You should see users lists with no changes and no reload
+
+include::../../templates/test-cases-table-footer.adoc[]

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="audit-trail-1.0.0-1" author="mmastylo">
+    <createTable tableName="webapp_audit_revision">
+      <column name="audit_revision_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="timestamp" type="BIGINT"/>
+      <column name="user_name" type="VARCHAR(64)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="audit-trail-1.0.0-2" author="mmastylo">
+    <createTable tableName="webapp_user_audit">
+      <column name="user_id" type="BIGINT">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="rev" type="BIGINT">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="user_name" type="VARCHAR(64)"/>
+      <column name="hashed_password" type="VARCHAR(64)"/>
+      <column name="hashed_password_mod" type="BOOLEAN"/>
+      <column name="roles" type="${type.json}"/>
+      <column name="active" type="BOOLEAN"/>
+      
+      <column name="super_user" type="BOOLEAN"/>
+      <column name="revtype" type="TINYINT"/>
+      <column name="created_at" type="TIMESTAMP"/>
+      <column name="updated_at" type="TIMESTAMP"/>
+      <column name="version" type="INTEGER"/>
+    </createTable>
+
+    <addForeignKeyConstraint baseTableName="webapp_user_audit"
+                             baseColumnNames="rev"
+                             constraintName="fk_webapp_user_audit_rev"
+                             referencedTableName="webapp_audit_revision"
+                             referencedColumnNames="audit_revision_id"
+                             onDelete="NO ACTION"
+                             onUpdate="NO ACTION"/>
+
+    <createIndex tableName="webapp_user_audit" indexName="ix_webapp_user_audit_rev">
+      <column name="rev"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="audit-trail-1.0.0-3" author="mmastylo">
+    <addColumn tableName="webapp_user_audit">
+      <column name="deleted_at" type="TIMESTAMP"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="audit-trail-1.0.0-4" author="mmastylo">
+    <addColumn tableName="webapp_user_audit">
+      <column name="display_name" type="VARCHAR(64)"/>
+    </addColumn>
+  </changeSet>
+
+</databaseChangeLog>

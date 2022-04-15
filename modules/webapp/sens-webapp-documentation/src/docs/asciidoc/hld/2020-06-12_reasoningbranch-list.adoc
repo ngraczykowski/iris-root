@@ -1,0 +1,96 @@
+= HLD #7
+
+- Reference ticket: *https://youtrack.silenteight.com/issue/WA-831[WA-831]*
+- Reason: As a Model Tuner or Approver I want to be able to list all Reasoning Branches
+
+[plantuml,bo-a-gets-list-of-reasoning-branches,svg]
+-----
+@startuml
+header List Reasoning Branches
+
+actor BOA as "Model Tuner or Approver"
+
+box "WebApp Frontend" #MintCream
+    participant Frontend as "RB Browser"
+end box
+
+box "WebApp Backend" #LightGreen
+    participant Backend as "WebApp"
+    database WebAppDB as "WebApp Database"
+end box
+
+box "Governance" #LightBlue
+    participant G as "Governance"
+end box
+
+BOA -> Frontend : Select RB Browser
+
+note over Frontend
+Two simultaneous connections:
+* Reasoning Branches and Bulk Changes
+* Pending Changes
+end note
+
+activate Frontend
+Frontend -> Backend : Fetch Reasoning Branches Page
+note over Frontend, Backend
+    * Filters (AI Solution, Active)
+    * Paging
+end note
+
+activate Frontend #LightGray
+activate Backend
+Backend <-> G : Fetch Reasoning Branches Page
+note over Backend, G
+    * Reasoning Branch ID (DT ID + FV ID)
+    * Solution
+    * Active
+    * Last Update
+
+    * Total
+end note
+
+Backend -> Frontend : Reasoning Branches Page
+deactivate Backend
+
+Frontend -> Backend : Fetch Bulk Change IDs
+activate Backend
+note over Frontend, Backend
+    * Reasoning Branch IDs
+end note
+
+Backend <-> G : Fetch Bulk Change IDs
+note over Backend, G
+    * Bulk Change ID
+end note
+
+Backend -> Frontend : Bulk Change IDs
+deactivate Backend
+deactivate Frontend
+
+
+Frontend -> Backend : Fetch Pending Change Requests
+activate Backend
+activate Frontend#LightGray
+Backend <-> WebAppDB : Fetch Pending Change Requests
+note over Backend, WebAppDB
+    * Change Request ID
+    * Bulk Change ID
+end note
+
+Backend -> Frontend : Pending Change Requests
+deactivate Backend
+deactivate Frontend
+
+Frontend -> BOA: Reasoning Branches list
+deactivate Frontend
+note over Frontend, BOA
+    * Reasoning Branch ID
+    * Solution
+    * Status
+    * Change Request ID
+    * Last update
+end note
+
+@enduml
+-----

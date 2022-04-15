@@ -1,0 +1,101 @@
+import com.github.jengelman.gradle.plugins.shadow.transformers.PropertiesFileTransformer
+
+plugins {
+  id "java"
+  id "maven-publish"
+  id 'com.github.johnrengelman.shadow' version '5.0.0'
+}
+
+description = "SENS WebApp SCB Report"
+
+configurations {
+  pluginJar
+  compile.extendsFrom pluginJar
+}
+
+// Use pluginJar configuration to define dependencies which should be included inside plugin JAR
+dependencies {
+  implementation libraries.silenteight_sep_usermanagement_api
+  implementation libraries.bouncycastle_bcprov
+  implementation libraries.commons_lang3
+  implementation libraries.jjwt
+
+  implementation libraries.spring_boot_starter_actuator
+  implementation libraries.spring_boot_starter_undertow
+  implementation libraries.spring_boot_starter_web
+
+  implementation libraries.spring_security_web
+  implementation libraries.spring_security_config
+  implementation libraries.spring_security_cas
+
+  implementation libraries.hibernate_envers
+
+  implementation project(":sens-webapp-backend")
+  implementation project(":sens-webapp-common")
+  implementation project(":sens-webapp-db-changelog")
+  implementation project(":sens-webapp-logging")
+  implementation project(":sens-webapp-report")
+  implementation project(":sens-webapp-user")
+
+  implementation libraries.silenteight_audit_bs
+
+  implementation libraries.springdoc_ui
+  implementation libraries.springdoc_data_rest
+  implementation libraries.springdoc_security
+
+  implementation libraries.spring_cloud_starter_consul_config
+  implementation libraries.freemarker
+
+  implementation libraries.protobuf_java_util
+
+  implementation libraries.vavr
+  implementation libraries.cronutils
+
+  testImplementation project(":sens-webapp-db-changelog")
+  testImplementation libraries.silenteight_sep_base_testing
+  testImplementation libraries.rest_assured
+  testImplementation libraries.rest_assured_spring_mock_mvc
+}
+
+shadowJar {
+  archiveClassifier = 'plugin'
+
+  mergeServiceFiles()
+
+  append "META-INF/spring.handlers"
+  append "META-INF/spring.schemas"
+
+  configurations = [project.configurations.pluginJar]
+
+  transform(PropertiesFileTransformer) {
+    paths = ["META-INF/spring.factories"]
+    mergeStrategy = "append"
+  }
+}
+
+tasks.register("makePlugin", Copy).configure {
+  from shadowJar
+  into "$rootProject.projectDir/plugin/webapp"
+}
+
+tasks.register("deletePlugin", Delete).configure {
+  delete fileTree("${rootProject.projectDir}/plugin/webapp") {
+    include "$project.name-*.jar"
+  }
+}
+
+tasks.named(JavaBasePlugin.BUILD_TASK_NAME).configure {
+  dependsOn tasks.named("makePlugin")
+}
+
+tasks.named(BasePlugin.CLEAN_TASK_NAME).configure {
+  dependsOn tasks.named("deletePlugin")
+}
+
+publishing {
+  publications {
+    shadow(MavenPublication) {publication ->
+      from project.shadow.component(publication)
+    }
+  }
+}

@@ -1,0 +1,342 @@
+####################################################################################################
+# Defaults (overridden by environment variables or arguments)
+####################################################################################################
+
+sens.webapp.db.host: localhost
+sens.webapp.db.port: ${POSTGRES_PORT:24480}
+sens.webapp.db.schema: public
+sens.webapp.db.name: ${POSTGRES_DB:sens}
+sens.webapp.db.user: ${POSTGRES_USER:sens}
+sens.webapp.db.password: ${POSTGRES_PASSWORD:sens}
+sens.webapp.db.url: jdbc:postgresql://${sens.webapp.db.host}:${sens.webapp.db.port}/${sens.webapp.db.name}?currentSchema=${sens.webapp.db.schema}
+
+sens.webapp.db.connections.min: 1
+sens.webapp.db.connections.max: 10
+
+sens.webapp.grpc.timeout: PT7S
+
+sens.chrome-extension.auth-url: ${SENS_CHROME_EXTENSION_AUTH_URL}
+sens.chrome-extension.recommendation-url: ${SENS_CHROME_EXTENSION_RECOMMENDATION_URL}
+sens.chrome-extension.open-record-url-pattern: ${SENS_CHROME_EXTENSION_OPEN_RECORD_URL_PATTERN}
+sens.chrome-extension.solution-url-pattern: ${SENS_CHROME_EXTENSION_SOLUTION_URL_PATTERN}
+sens.chrome-extension.hits-url-pattern: ${SENS_CHROME_EXTENSION_HITS_URL_PATTERN}
+sens.chrome-extension.log-level: debug
+sens.chrome-extension.comment-length-threshold: 1024
+sens.chrome-extension.refresh-interval-in-ms: 1000
+
+sens.webapp.rabbitmq.host: localhost
+sens.webapp.rabbitmq.port: 24130
+sens.webapp.rabbitmq.user: serp
+sens.webapp.rabbitmq.password: serp
+
+sens.webapp.messaging.concurrency: 4
+sens.webapp.messaging.prefetch: 25
+
+sens.webapp.external.apps.reporting-ui.url: http://localhost:24400/kibana/
+
+####################################################################################################
+info:
+  component: "SENS Web App REST API"
+
+spring:
+  application:
+    name: webapp
+
+  aop:
+    proxy-target-class: true
+
+  jackson.serialization.write_dates_as_timestamps: false
+
+  cache.cache-names:
+    - aclCache
+
+  datasource:
+    # Postgres database
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.postgresql.Driver
+    url: ${sens.webapp.db.url}
+    username: ${sens.webapp.db.user}
+    password: ${sens.webapp.db.password}
+    initialization-mode: never
+
+    # Hikari pool configuration
+    hikari:
+      pool-name: Database-Pool
+      minimum-idle: ${sens.webapp.db.connections.min}
+      maximum-pool-size: ${sens.webapp.db.connections.max}
+      auto-commit: false
+      schema: ${sens.webapp.db.schema}
+      isolate-internal-queries: true
+      connection-init-sql: SELECT 1
+      data-source-properties:
+        ApplicationName: SENS WebApp
+
+  # Database migrations
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    default-schema: ${sens.webapp.db.schema}
+    contexts: default
+
+  # Spring Data JPA
+  jpa:
+    database-platform: com.silenteight.sep.base.common.support.hibernate.FixedPostgreSql95Dialect
+    database: POSTGRESQL
+    show-sql: false
+    open-in-view: false
+
+    hibernate:
+      ddl-auto: none
+      use-new-id-generator-mappings: true
+
+    properties:
+      hibernate.cache.use_query_cache: false
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.generate_statistics: false
+      hibernate.jdbc.lob.non_contextual_creation: true
+      hibernate.jdbc.time_zone: UTC
+      hibernate.temp.use_jdbc_metadata_defaults: false
+      org.hibernate.envers.audit_table_suffix: _audit
+      org.hibernate.envers.store_data_at_delete: true
+
+  rabbitmq:
+    # virtual-host:
+    # addresses: ${serp.rabbitmq.addresses}
+    host: ${sens.webapp.rabbitmq.host}
+    port: ${sens.webapp.rabbitmq.port}
+    username: ${sens.webapp.rabbitmq.user}
+    password: ${sens.webapp.rabbitmq.password}
+    listener:
+      type: simple
+      direct:
+        consumers-per-queue: ${sens.webapp.messaging.concurrency}
+        prefetch: ${sens.webapp.messaging.prefetch}
+      simple:
+        concurrency: 1
+        max-concurrency: ${sens.webapp.messaging.concurrency}
+        prefetch: ${sens.webapp.messaging.prefetch}
+  # Spring Integration
+  integration:
+    start-delay-seconds: 15
+    poll-period-millis: 1000
+
+  # Spring Cloud
+  cloud:
+    consul:
+      config:
+        enabled: false
+      enabled: false
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+grpc:
+  client:
+    GLOBAL:
+      negotiationType: PLAINTEXT
+      enableKeepAlive: true
+
+    governance:
+      address: static://localhost:24205
+
+    reco:
+      address: static://localhost:24207
+
+    circuit-breaker:
+      address: static://localhost:24213
+
+sens.webapp.external.apps:
+  reportingUrl: ${sens.webapp.external.apps.reporting-ui.url}
+
+sens.webapp.messaging:
+  broker:
+    audit-log:
+      queue-name: webapp.audit-log
+      routing-key: event.audit-log
+
+  circuit-breaker.discrepancy:
+    exchange: discrepancy
+    route:
+      archive: discrepancy.archive
+
+sens.webapp.change-request.max-closed: 30
+sens.webapp.discrepant-branches.max-archived: 10
+
+sens:
+  grpc:
+    timeout: ${sens.webapp.grpc.timeout}
+
+server:
+  port: 24410
+  servlet:
+    context-path: /rest/${spring.application.name}
+
+# Management HTTP server
+management:
+  health:
+    mail:
+      enabled: false
+  info:
+    git:
+      mode: simple
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: [ "health", "info", "metrics", "prometheus", "loggers" ]
+    jmx:
+      exposure:
+        exclude: "*"
+  metrics:
+    tags:
+      application: ${spring.application.name}
+security.basic:
+  enabled: false
+
+serp:
+  messaging:
+    error-queue:
+      enabled: true
+####################################################################################################
+sens.web:
+  cors:
+    allowed-origins-patterns: "*"
+    allowed-methods: "*"
+    allowed-headers: "*"
+    exposed-headers: "Authorization,Link,X-Total-Count"
+    allow-credentials: true
+    max-age: 1800
+
+  #   # Colors palette for AI Solutions
+  #   ## Color code
+  #   Colors below are divided into four main groups one for each solution:
+  #   - The red color is related to a negative situation. That's why it should be used only for a dangerous alert like "True positive."
+  #   - The blue color is neutral and associated with information. That's why it should be used in the case when Analyst must do additional investigation.
+  #   - The green color occurs to something positive. That's why it should be used only when the alert is a "False positive," which means it is not a threat.
+  #   - Gray is a neutral color which distinguishes itself from red, blue, and green. Therefore, it should be used only in a situation when there is no solution yet.
+  #   ## Color variants
+  #   For each set use first color to describe the main solution. Use other shades from the particular set for additional solutions in that group.
+  #   ## Colors
+  #   ### Negative like "True positive"
+  #   ai-solution-negative-1  — Red
+  #   ai-solution-negative-2 — Orange
+  #   ai-solution-negative-3 — Amber
+  #   ### Information like "Further investigation needed"
+  #   ai-solution-info-1 — purple
+  #   ai-solution-info-2 — Indigo
+  #   ai-solution-info-3  — Blue
+  #   ### Positive like "False Positive"
+  #   ai-solution-positive-1 — Green
+  #   ai-solution-positive-2 — Light Green
+  #   ai-solution-positive-3 — Teal
+  #   ### Neutral like "No Decision"
+  #   ai-solution-unset-1 — Gray
+
+  api.frontEnd.decisionsConfiguration:
+    - key: "NO_DECISION"
+      label: "NO_DECISION"
+      className: "ai-solution-unset-1"
+    - key: "FALSE_POSITIVE"
+      label: "FALSE_POSITIVE"
+      className: "ai-solution-positive-1"
+    - key: "HINTED_FALSE_POSITIVE"
+      label: "HINTED_FALSE_POSITIVE"
+      className: "ai-solution-info-1"
+    - key: "HINTED_POTENTIAL_TRUE_POSITIVE"
+      label: "HINTED_POTENTIAL_TRUE_POSITIVE"
+      className: "ai-solution-info-2"
+    - key: "POTENTIAL_TRUE_POSITIVE"
+      label: "POTENTIAL_TRUE_POSITIVE"
+      className: "ai-solution-negative-1"
+
+sens.webapp.roles:
+  roles-scope: ${keycloak.frontend-client-id}
+  country-groups-scope: "kibana"
+  default-country-group-role: "warehouse_business_user_dev"
+
+# Authorization
+sep.auth:
+  permissionMethodsMappings:
+    MANAGE_USERS:
+      - "CREATE_USER"
+      - "EDIT_USER"
+      - "REMOVE_USER"
+      - "LIST_ROLES"
+      - "RESET_USER_PASSWORD"
+    SYNC_ANALYSTS:
+      - "SYNC_ANALYSTS"
+    VIEW_USERS:
+      - "LIST_USERS"
+    DOWNLOAD_AUDIT_REPORTS:
+      - "GENERATE_REPORT"
+    DOWNLOAD_USERS_REPORTS:
+      - "GENERATE_REPORT"
+    REPORTING_UI:
+      - "REDIRECT_TO_REPORTING"
+    MANAGE_ROLES:
+      - "CREATE_ROLE"
+      - "DELETE_ROLE"
+      - "LIST_ROLES"
+      - "EDIT_ROLE"
+      - "LIST_PERMISSIONS"
+    MANAGE_SSO_MAPPING:
+      - "LIST_IDENTITY_PROVIDERS"
+      - "DELETE_SSO_MAPPING"
+      - "LIST_SSO_MAPPINGS"
+      - "CREATE_SS0_MAPPING"
+  rolePermissionsMappings:
+    APPROVER:
+      - "DOWNLOAD_SOLVING_REPORTS"
+      - "REPORTING_UI"
+    AUDITOR:
+      - "DOWNLOAD_AUDIT_REPORTS"
+      - "DOWNLOAD_USERS_REPORTS"
+      - "REPORTING_UI"
+    USER_ADMINISTRATOR:
+      - "DOWNLOAD_AUDIT_REPORTS"
+      - "DOWNLOAD_USERS_REPORTS"
+      - "MANAGE_USERS"
+      - "VIEW_USERS"
+      - "SYNC_ANALYSTS"
+      - "MANAGE_ROLES"
+      - "MANAGE_SSO_MAPPING"
+    MODEL_TUNER:
+      - "DOWNLOAD_SOLVING_REPORTS"
+      - "REPORTING_UI"
+    QA:
+      - "REPORTING_UI"
+
+# Notifications
+sens.webapp.notification.enabled: true
+
+# Audit log
+sens.webapp.audit-log:
+  inbound:
+    queue-name: ${sens.webapp.messaging.broker.audit-log.queue-name}
+
+# Keycloak
+keycloak:
+  frontend-client-id: frontend
+  client-id: ${keycloak.frontend-client-id}
+  hide-users-with-roles: [ ]
+  adapter:
+    auth-server-url: https://auth.silenteight.com
+    realm: sens-webapp
+    creadentials:
+
+    publicClient: false
+    confidentialPort: 0
+    principalAttribute: preferred_username
+    sslRequired: external
+
+sentry:
+  environment: unknown
+  traces-sample-rate: 0

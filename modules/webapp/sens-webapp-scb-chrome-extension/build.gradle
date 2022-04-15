@@ -1,0 +1,70 @@
+import com.github.jengelman.gradle.plugins.shadow.transformers.PropertiesFileTransformer
+
+plugins {
+  id "java"
+  id "maven-publish"
+  id 'com.github.johnrengelman.shadow' version '5.0.0'
+}
+
+description = "SENS WebApp SCB Chrome Extension"
+
+configurations {
+  pluginJar
+  compile.extendsFrom pluginJar
+}
+
+// Use pluginJar configuration to define dependencies which should be included inside plugin JAR
+dependencies {
+  implementation libraries.hibernate_validator
+  implementation libraries.spring_boot_starter_actuator
+  implementation libraries.spring_boot_starter_undertow
+  implementation libraries.spring_boot_starter_web
+
+  implementation project(":sens-webapp-common")
+
+  testImplementation libraries.rest_assured
+  testImplementation libraries.rest_assured_spring_mock_mvc
+}
+
+shadowJar {
+  archiveClassifier = 'plugin'
+
+  mergeServiceFiles()
+
+  append "META-INF/spring.handlers"
+  append "META-INF/spring.schemas"
+
+  configurations = [project.configurations.pluginJar]
+
+  transform(PropertiesFileTransformer) {
+    paths = ["META-INF/spring.factories"]
+    mergeStrategy = "append"
+  }
+}
+
+tasks.register("makePlugin", Copy).configure {
+  from shadowJar
+  into "$rootProject.projectDir/plugin/webapp"
+}
+
+tasks.register("deletePlugin", Delete).configure {
+  delete fileTree("${rootProject.projectDir}/plugin/webapp") {
+    include "$project.name-*.jar"
+  }
+}
+
+tasks.named(JavaBasePlugin.BUILD_TASK_NAME).configure {
+  dependsOn tasks.named("makePlugin")
+}
+
+tasks.named(BasePlugin.CLEAN_TASK_NAME).configure {
+  dependsOn tasks.named("deletePlugin")
+}
+
+publishing {
+  publications {
+    shadow(MavenPublication) {publication ->
+      from project.shadow.component(publication)
+    }
+  }
+}

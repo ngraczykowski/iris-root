@@ -1,0 +1,27 @@
+@Library('pipeline-shared-library@master') _
+
+gradleBuild(
+    jdkVersion: 'jdk-11',
+    sonarEnabled: true,
+    dependencyCheckEnabled: true,
+    includeBuildNumberInSnapshotVersion: true,
+    additionalParams: [
+    extendedChoice(
+      name: 'environments',
+      value: 'dev,dev2,lima,foxtrot,mike',
+      defaultValue: 'mike',
+      description: 'Environments to deploy to on Nomad',
+      multiSelectDelimiter: ',',
+      quoteValue: false,
+      saveJSONParameterToFile: false,
+      type: 'PT_MULTI_SELECT',
+      visibleItemCount: 10
+      )
+    ],
+    additionalStages: {
+      buildContainerImage()
+      awsECR()
+      helmChartRegistry()
+      deployOnNomad()
+    }
+)

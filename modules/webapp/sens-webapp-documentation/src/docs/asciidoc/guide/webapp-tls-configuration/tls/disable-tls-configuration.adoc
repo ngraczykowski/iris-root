@@ -1,0 +1,74 @@
+[id="disable-tls-configuration-webapp-tls-configuration"]
+= Disable TLS Configuration
+
+Disable TLS configuration to start Caddy web server listening for HTTP requests without TLS encryption.
+
+.Prerequisites
+
+- SERP is installed and configured.
+
+.Procedure
+
+. Open configuration file: [filename]`_<installation-directory>_/conf/settings.toml` in editor.
+
+- Change TLS configuration settings and configure them to empty values to disable TLS:
++
+[listing,indent=0]
+[subs=+quotes]
+----
+    caddy.tls.cert=""
+    caddy.tls.key=""
+----
++
+[NOTE]
+====
+If the setting line starts with `\#` it means it is commented, ignored and the default value is used.
+To change the value, you must remove leading `#` character.
+====
+
+- Update WebApp configuration with a host name or IP address.
++
+[listing,indent=0]
+[subs=+quotes]
+----
+    webapp.url="http://_<hostname or server-ip>_:24410/"
+    webapp.auth_url="http://_<hostname or server-ip>_:24491/auth/realms/sens-webapp/protocol/openid-connect/token"
+----
+
+- Save configuration file.
+
+. Reload SERP to restart services
++
+[listing,indent=0]
+[subs=+quotes]
+----
+    $ cd <installation-directory>
+    $ bin/serp reload
+----
+
+.Verification
+. Find Caddy port using the command:
++
+[listing,indent=0,subs=+quotes]
+----
+    $ cd _<installation-directory>_
+    $ bin/serp config show --format=toml | grep "caddy.port"
+    #caddy.port="24100"
+----
++
+[NOTE]
+====
+The default Caddy port is 24100.
+====
+
+. Run the command:
++
+[listing,indent=0,subs=+quotes]
+----
+    $ curl -v -k http://localhost:__<caddy-port>__/
+----
+It should print web page content.
+
+. Open web page in the browser: `http://_<server-ip>_:__<caddy-port>__/`.
++
+You should see SENS UI.

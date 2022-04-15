@@ -1,0 +1,53 @@
+= Create
+
+Create a SENS WebApp user.
+
+.Command for creating new user.
+[source,bash]
+----
+./bin/serp user create -u <user_name> -d <display_name> -r <role>
+----
+
+:testCasesName: Create
+include::../templates/test-cases-table-header.adoc[]
+
+|{counter:case-number} |execute the command with:
+
+* user name (length min 3 and max 30 characters)
+* display name (length min 3 and max 50 characters)
+* role (one of: `Admin`, `Auditor`, `Analyst`, `Approver`, `Model Tuner`)
+
+|You will be asked to provide a password and confirm it.
+Verify that the user was created successfully in the WebApp.
+
+|{counter:case-number} |execute the command with:
+
+* user name (length min 3 and max 30 characters)
+* display name (length min 3 and max 50 characters)
+* role (one of: `Admin`,  `Auditor`, `Analyst`, `Approver`, `Model Tuner`)
+* add --password <password> to the command line |No prompt for the password.
+Verify that the user was created successfully in the WebApp.
+
+|{counter:case-number} |execute the command as in 1, but:
+
+* set user name below 3 chars |Verify you will get an error with valid information.
+
+|{counter:case-number} |execute the command as in 1, but:
+
+* set user name above 30 chars |Verify you will get an error with valid information.
+
+|{counter:case-number} |execute the command as in 1, but:
+
+* set display name below 3 chars |Verify you will get an error with valid information.
+
+|{counter:case-number} |execute the command as in 1, but:
+
+* set display name above 50 chars |Verify you will get an error with valid information.
+
+|{counter:case-number} |execute the command as in 1, but:
+
+* set a role that doesn't exist |Verify you will get an error with valid information.
+
+|{counter:case-number} |execute the command as in 1, but when prompted for the password confirmation type a different one |Verify you will get an error with valid information.
+
+include::../templates/test-cases-table-footer.adoc[]

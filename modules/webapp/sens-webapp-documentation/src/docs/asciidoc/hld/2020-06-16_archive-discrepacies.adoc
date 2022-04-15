@@ -1,0 +1,46 @@
+= HLD #9
+
+- Reference ticket: *https://youtrack.silenteight.com/issue/WA-824[WA-824]*
+- Reason: As a Model Tuner I can archive all discrepancies related to selected RB
+
+
+[plantuml,bo-archives-discrepancies,svg]
+-----
+@startuml
+header Archive selected discrepancies
+
+actor "Model Tuner"
+
+box "WebApp Frontend" #MintCream
+    participant Frontend as "CB Dashboard GUI"
+end box
+
+box "WebApp Backend" #LightGreen
+    participant Backend as "WebApp"
+end box
+
+box "RabbitMQ"
+    queue Queue
+end box
+
+"Model Tuner" -> Frontend : Archive selected Discrepancies
+
+Frontend -> Backend : Archive Discrepancies by Discrepancy IDs
+note over Frontend, Backend
+    * list of Discrepancy IDs
+end note
+
+activate Backend
+Backend -> Queue : Archive Discrepancies command
+note over Backend, Queue
+     * list of Discrepancy IDs
+end note
+
+Backend -> Frontend : Command Accepted response
+deactivate Backend
+Frontend->"Model Tuner": Inform that request has been accepted
+
+
+@enduml
+
+-----

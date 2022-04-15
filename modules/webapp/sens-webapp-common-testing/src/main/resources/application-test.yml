@@ -1,0 +1,52 @@
+spring.cloud.consul.enabled: false
+
+sep.auth:
+  permissionMethodsMappings:
+    MANAGE_USERS:
+      - "CREATE_USER"
+      - "EDIT_USER"
+      - "REMOVE_USER"
+      - "LIST_ROLES"
+      - "RESET_USER_PASSWORD"
+    SYNC_ANALYSTS:
+      - "SYNC_ANALYSTS"
+    VIEW_USERS:
+      - "LIST_USERS"
+    DOWNLOAD_AUDIT_REPORTS:
+      - "GENERATE_REPORT"
+    DOWNLOAD_USERS_REPORTS:
+      - "GENERATE_REPORT"
+    REPORTING_UI:
+      - "REDIRECT_TO_REPORTING"
+    MANAGE_ROLES:
+      - "CREATE_ROLE"
+      - "DELETE_ROLE"
+      - "LIST_ROLES"
+      - "EDIT_ROLE"
+      - "LIST_PERMISSIONS"
+    MANAGE_SSO_MAPPING:
+      - "LIST_IDENTITY_PROVIDERS"
+      - "DELETE_SSO_MAPPING"
+      - "LIST_SSO_MAPPINGS"
+      - "CREATE_SS0_MAPPING"
+  rolePermissionsMappings:
+    APPROVER:
+      - "DOWNLOAD_SOLVING_REPORTS"
+      - "REPORTING_UI"
+    AUDITOR:
+      - "DOWNLOAD_AUDIT_REPORTS"
+      - "DOWNLOAD_USERS_REPORTS"
+      - "REPORTING_UI"
+    USER_ADMINISTRATOR:
+      - "DOWNLOAD_AUDIT_REPORTS"
+      - "DOWNLOAD_USERS_REPORTS"
+      - "MANAGE_USERS"
+      - "VIEW_USERS"
+      - "SYNC_ANALYSTS"
+      - "MANAGE_ROLES"
+      - "MANAGE_SSO_MAPPING"
+    MODEL_TUNER:
+      - "DOWNLOAD_SOLVING_REPORTS"
+      - "REPORTING_UI"
+    QA:
+      - "REPORTING_UI"

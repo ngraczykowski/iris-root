@@ -1,0 +1,677 @@
+openapi: 3.0.3
+info:
+  title: User Management
+  description: User Management API
+  version: 1.1.0
+
+servers:
+  - url: '{environment}/rest/webapp/api/{version}'
+    variables:
+      environment:
+        enum:
+          - http://localhost:24204
+          - https://localhost:24111
+        default: http://localhost:24160
+
+paths:
+  /v1/users:
+    get:
+      description: Get list of users.
+      parameters:
+        - in: query
+          description: Filter users by country groups they're in.
+          required: false
+          name: countryGroups
+          explode: false
+          style: form
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+            example: [ c4f5577a-d3d3-4b94-9dee-736d7e97ac6e, c0c2b1c4-7faf-4255-bf95-f9f8bbcb674b ]
+      responses:
+        200:
+          description: A list users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+
+    post:
+      description: Create user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+      responses:
+        201:
+          description: Created.
+
+  /v1/users/{username}:
+    parameters:
+      - in: path
+        name: username
+        required: true
+        description: Usermname of the edited user.
+        schema:
+          type: string
+          example: johnnybravo
+    get:
+      description: Get user details.
+      responses:
+        200:
+          description: A user details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+    patch:
+      description: Edit user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditUser'
+      responses:
+        204:
+          description: Saved.
+
+    delete:
+      description: Remove user.
+      responses:
+        204:
+          description: User removed.
+
+  /v1/users/{username}/password/reset:
+    patch:
+      description: Reset user password.
+      parameters:
+        - in: path
+          name: username
+          required: true
+          description: Usermname of the edited user.
+          schema:
+            type: string
+            example: johnnybravo
+      responses:
+        200:
+          description: Temporary password.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  temporaryPassword:
+                    type: string
+                    example: TfP5ATaZRpYe2p
+
+  /v1/roles:
+    get:
+      deprecated: true
+      tags:
+        - roles
+      description: List of available roles.
+      responses:
+        200:
+          description: List of available roles.
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  type: string
+                example: [ "Administrator", "Analyst", "Approver", "Auditor", "Business Operator" ]
+
+  /v2/roles:
+    get:
+      tags:
+        - roles
+      description: List of available roles.
+      responses:
+        200:
+          description: List of available roles.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoleDto'
+    post:
+      tags:
+        - roles
+      description: Create new role.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRoleRequest'
+      responses:
+        201:
+          description: Created.
+    patch:
+      tags:
+        - roles
+      description: Edit role.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Role id.
+          example: '1944820f-621d-4e2c-a6db-94c3e214df6b'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditRoleRequest'
+      responses:
+        200:
+          description: Saved.
+
+  /v2/roles/{id}:
+    get:
+      tags:
+        - roles
+      description: Returns a role details.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Role id.
+          example: '2eb233aa-5434-468f-8dec-6dcdb0146c4c'
+      responses:
+        200:
+          description: Role details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleDetailsDto'
+    delete:
+      tags:
+        - roles
+      description: Remove role.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Role id.
+          example: '2dcb085b-2de7-4bce-b402-59cda2e007cc'
+      responses:
+        204:
+          description: Role removed.
+        422:
+          description: Role can't be removed because it has assigned users.
+
+    put:
+      tags:
+        - roles
+      description: Update role with permissions.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Role id.
+          example: '2dcb085b-2de7-4bce-b402-59cda2e007cc'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+            example: [ '1cc1e744-de09-4c5a-a5b5-35a02cc56381', 'b07e57c5-51b1-4650-9273-28e226866b10' ]
+      responses:
+        202:
+          description: OK.
+
+  /v1/users/pageable:
+    get:
+      description: Deprecated yet used api.
+      parameters:
+        - in: query
+          name: page
+          required: true
+          description: Page.
+          schema:
+            type: integer
+            minimum: 0
+          example: 0
+        - in: query
+          name: size
+          required: true
+          description: Page size
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 10000
+          example: 9999
+      responses:
+        '200':
+          description: A list users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersPageable'
+
+  /permissions:
+    get:
+      tags:
+        - permissions
+      description: Return list of permission groups
+      responses:
+        200:
+          description: List of permission groups.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PermissionDto'
+
+  /identityProviders:
+    get:
+      tags:
+        - mapping
+      description: Return list of identity providers.
+      responses:
+        200:
+          description: List of identity providers.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IdentityProviderDto'
+
+  /sso/mappings:
+    get:
+      tags:
+        - mapping
+      description: Return list of SSO's mapping.
+      responses:
+        200:
+          description: List of SSO's mapping.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SsoMappingDto'
+    post:
+      tags:
+        - mapping
+      description: Create new sso mapping.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSsoMappingDto'
+      responses:
+        201:
+          description: Created Sso Mapping.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SsoMappingDto'
+
+  /sso/mappings/{id}:
+    get:
+      tags:
+        - mapping
+      description: Return details of sso mapping.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: SSO Mapping name.
+          example: 'Sso name'
+      responses:
+        200:
+          description: Details of SSO Mapping.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SsoMappingDto'
+    delete:
+      tags:
+        - mapping
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: SSO Mapping name.
+          example: '2dcb085b-2de7-4bce-b402-59cda2e007cc'
+      description: Delete SSO Mapping
+      responses:
+        204:
+          description: SSO Mapping removed.
+
+components:
+  schemas:
+    Users:
+      type: array
+      items:
+        type: object
+        properties:
+          userName:
+            type: string
+            example: johnnybravo
+          displayName:
+            type: string
+            example: Johnny Bravo
+          roles:
+            type: array
+            items:
+              type: string
+            example: [ "Administrator", "Analyst", "Approver", "Auditor", "Business Operator" ]
+          countryGroups:
+            type: array
+            items:
+              type: string
+              format: uuid
+            example: [ "c4f5577a-d3d3-4b94-9dee-736d7e97ac6e", "c0c2b1c4-7faf-4255-bf95-f9f8bbcb674b" ]
+          lockedAt:
+            type: string
+            example: 2021-02-16T15:15:15.263Z
+
+    User:
+      type: object
+      properties:
+        userName:
+          type: string
+          example: johnnybravo
+        displayName:
+          type: string
+          example: Johnny Bravo
+        roles:
+          type: array
+          items:
+            type: string
+          example: [ "Administrator", "Analyst", "Approver", "Auditor", "Business Operator" ]
+        countryGroups:
+          type: array
+          items:
+            type: string
+            format: uuid
+          example: [ "c4f5577a-d3d3-4b94-9dee-736d7e97ac6e", "c0c2b1c4-7faf-4255-bf95-f9f8bbcb674b" ]
+        lastLoginAt:
+          type: string
+          example: 2021-02-16T15:15:15.263Z
+        createdAt:
+          type: string
+          example: 2021-02-16T15:15:15.263Z
+        lockedAt:
+          type: string
+          example: 2021-02-16T15:15:15.263Z
+        origin:
+          type: string
+
+    CreateUser:
+      type: object
+      properties:
+        userName:
+          type: string
+          example: johnnybravo
+        displayName:
+          type: string
+          example: Johnny Bravo
+        password:
+          type: string
+          example: TfP5ATaZRpYe2p
+        roles:
+          type: array
+          items:
+            type: string
+          example: [ "Administrator", "Analyst", "Approver", "Auditor", "Business Operator" ]
+        countryGroups:
+          type: array
+          items:
+            type: string
+            format: uuid
+          example: [ "c4f5577a-d3d3-4b94-9dee-736d7e97ac6e", "c0c2b1c4-7faf-4255-bf95-f9f8bbcb674b" ]
+
+    EditUser:
+      type: object
+      properties:
+        displayName:
+          type: string
+          example: Johnny Bravo
+          nullable: true
+        roles:
+          type: array
+          items:
+            type: string
+          example: [ "Administrator", "Analyst", "Approver", "Auditor", "Business Operator" ]
+          nullable: true
+        countryGroups:
+          type: array
+          items:
+            type: string
+            format: uuid
+          example: [ "c4f5577a-d3d3-4b94-9dee-736d7e97ac6e", "c0c2b1c4-7faf-4255-bf95-f9f8bbcb674b" ]
+        locked:
+          type: boolean
+          example: false
+          nullable: true
+
+    UsersPageable:
+      type: object
+      example:
+        {
+          "content": [
+            {
+              "userName": "johnnybravo",
+              "displayName": "Johny Bravo",
+              "roles": [
+                  "Administrator",
+                  "Analyst",
+                  "Approver",
+                  "Auditor",
+                  "Business Operator"
+              ],
+              "lastLoginAt": "2021-05-24T11:28:33.858Z",
+              "createdAt": "2021-02-16T15:15:15.263Z",
+              "lockedAt": null,
+              "origin": "SENS"
+            }
+          ],
+          "pageable": {
+            "sort": {
+              "sorted": false,
+              "unsorted": true,
+              "empty": true
+            },
+            "pageNumber": 0,
+            "pageSize": 2000,
+            "offset": 0,
+            "paged": true,
+            "unpaged": false
+          },
+          "last": true,
+          "totalElements": 1,
+          "totalPages": 1,
+          "first": true,
+          "sort": {
+            "sorted": false,
+            "unsorted": true,
+            "empty": true
+          },
+          "number": 0,
+          "numberOfElements": 1,
+          "size": 2000,
+          "empty": false
+        }
+
+    CreateRoleRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+      example:
+        id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+        name: 'New role name'
+        description: 'New role description'
+
+    EditRoleRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+      example:
+        id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+        name: 'Role new name'
+        description: 'Role new description'
+
+    RoleDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+      example:
+        id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+        name: 'Role name'
+        description: 'Role description'
+
+    RoleDetailsDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        permissions:
+          type: array
+          items:
+            type: string
+            format: uuid
+          example: [ c4f5577a-d3d3-4b94-9dee-736d7e97ac6e, c0c2b1c4-7faf-4255-bf95-f9f8bbcb674b ]
+        createdAt:
+          type: string
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+        updatedBy:
+          type: string
+      example:
+        id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+        name: 'Role name'
+        description: 'Role description'
+        createdAt: '2004-02-12T15:09:21Z'
+        createdBy: 'UserName'
+        updatedAt: '2004-02-13T09:19:21Z'
+        updatedBy: 'UserName'
+
+    PermissionDto:
+      type: object
+      properties:
+        id:
+          type: string
+        group:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+      example:
+        id: 'ebfd0874-2816-4a4a-b361-43a7e7b2dbff'
+        group: 'Governance'
+        name: 'Import policy'
+        description: 'Permission that lets user to import policy'
+
+    IdentityProviderDto:
+      type: object
+      properties:
+        alias:
+          type: string
+        displayName:
+          type: string
+        internalId:
+          type: string
+        enabled:
+          type: boolean
+      example:
+        alias: 'saml'
+        displayName: 'Saml idp'
+        internalId: '8bd5f27f-adc6-4664-a047-f19e6e29288e'
+        enabled: 'true'
+
+    SsoMappingDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+        attributes:
+          $ref: '#/components/schemas/AttributeToRoleDto'
+      example:
+        id: 'f90222c9-80c9-499a-8a2b-8aa793434f00'
+        name: 'SSO mapping name'
+        roles: [ 'Administrator', 'Analyst', 'Approver', 'Auditor', 'Business Operator' ]
+        attributeToRole: {
+          key: 'Logic key',
+          value: 'Logic value'
+        }
+
+    AttributeToRoleDto:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+      example:
+        key: 'Logic key'
+        value: 'Logic value'
+
+    CreateSsoMappingDto:
+      type: object
+      properties:
+        name:
+          type: string
+        attributeToRoleDtoList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeToRoleDto'
+        roles:
+          type: array
+          items:
+            type: string
+      example:
+        name: 'SSO mapping name'
+        roles: [ 'Administrator', 'Analyst', 'Approver', 'Auditor', 'Business Operator' ]
+        attributeToRole: {
+          key: 'Logic key',
+          value: 'Logic value'
+        }

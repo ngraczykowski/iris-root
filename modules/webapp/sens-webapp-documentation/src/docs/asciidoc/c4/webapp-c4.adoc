@@ -1,0 +1,68 @@
+= WebApp C4 diagram
+
+- Created at: *08.11.2021*
+
+:relfileprefix: ../
+
+== C4 diagram
+
+[plantuml, c4, svg]
+-----
+@startuml
+!include <c4/C4_Container>
+
+title WebApp
+
+Container_Ext(keycloak, "Keycloak", "Java")
+Container_Ext(frontend, "Frontend", "Angular")
+ContainerDb_Ext(db, Database, "PostgreSQL")
+
+Container(webapp, WebApp, Java)
+
+Rel(frontend, webapp, " ", https)
+Rel(webapp, keycloak, " ", https)
+Rel(webapp, db, " ")
+
+@enduml
+-----
+
+== Frontend - WebApp
+
+https://gitlab.silenteight.com/sens/sens-webapp/-/tree/master/sens-webapp-documentation/src/api[WebApp API]
+
+[plantuml, frontend-webapp, svg]
+-----
+@startuml
+!include <c4/C4_Container>
+
+title Frontend - WebApp
+
+Container_Ext(frontend, "Frontend", "Angular")
+
+Container(webapp, WebApp, Java)
+
+Rel(frontend, webapp, User management, https)
+Rel(frontend, webapp, External applications management, https)
+
+@enduml
+-----
+
+== Keycloak - WebApp
+
+
+[plantuml, keycloak-webapp, svg]
+-----
+@startuml
+!include <c4/C4_Container>
+
+title Keycloak - WebApp
+
+Container_Ext(keycloak, "Keycloak", "Java")
+
+Container(webapp, WebApp, Java)
+
+Rel(webapp, keycloak, User management, https)
+
+@enduml
+-----
+

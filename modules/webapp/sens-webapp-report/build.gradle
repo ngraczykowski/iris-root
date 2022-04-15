@@ -1,0 +1,22 @@
+plugins {
+  id "java"
+  id "maven-publish"
+}
+
+description = "SENS WebApp Report"
+
+dependencies {
+  implementation project(":sens-webapp-audit-api")
+  implementation project(":sens-webapp-common")
+
+  implementation libraries.commons_lang3
+  implementation libraries.commons_io
+  implementation libraries.hibernate_validator
+  implementation libraries.spring_security_web
+  implementation libraries.jakarta_servlet_api
+  implementation libraries.vavr
+
+  testImplementation libraries.rest_assured
+  testImplementation libraries.rest_assured_spring_mock_mvc
+  testImplementation libraries.spring_security_test
+}

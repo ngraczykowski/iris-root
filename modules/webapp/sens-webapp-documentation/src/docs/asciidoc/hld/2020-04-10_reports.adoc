@@ -1,0 +1,120 @@
+= HLD 1
+
+- Created at: *10.04.2020*
+- Reference ticket: *https://youtrack.silenteight.com/issue/WA-602[WA-602]*
+- Reason: As a Model Tuner or Auditor I want to generate report on-demand,
+          so I can download it once the report will be ready.
+
+[plantuml, sequence-diagram, svg]
+-----
+@startuml
+header User flow
+
+title  Generate report **on-demand**
+
+actor User
+participant Reports_UI as "Reports UI" order 10
+participant Web_App as "WebApp" order 20
+database Web_App_DB  as "WebApp Database" order 30
+participant Reporter order 40
+database SERP_DB as "SERP Database" order 50
+
+box "Web App"
+participant Reports_UI
+participant Web_App
+participant Web_App_DB
+end box
+
+box "Reporter [SERP]"
+participant Reporter
+participant SERP_DB
+end box
+
+User -> Reports_UI: Define report parameters
+
+User -> Reports_UI: Generate report on-demand
+
+Reports_UI -> Web_App: Generate report
+activate Web_App
+activate Web_App
+activate Web_App
+note over Reports_UI, Web_App
+    * user's meta data
+    * report parameters
+end note
+
+Web_App -> Web_App: Generate unique report id (UUID)
+
+alt Report Scheduled
+
+    Web_App -> Reporter: Request report
+    note over Web_App, Reporter
+        * correlation report id
+        * report parameters
+        * no user's meta data
+    end note
+
+    activate Reporter
+
+    Reporter <-> SERP_DB: Store report data
+    note over Reporter, SERP_DB
+        * report id
+        * correlation report id (UUID)
+        * report type
+        * created at
+        * report parameters
+        * status (QUEUE)
+    end note
+
+    Reporter -[#green]> Web_App: Scheduled report result
+
+    deactivate Reporter
+
+    Web_App <-> Web_App_DB: Store report request
+    note over Web_App, Web_App_DB
+        * unique report id (UUID)
+        * report type
+        * created by
+        * created at
+        * report parameters
+    end note
+
+    Web_App --[#green]> Reports_UI: Return success
+    deactivate Web_App
+
+    Reports_UI -[#green]> User: Display success message
+
+else Report Can't Be Scheduled
+
+    Web_App -> Reporter: Request report
+    note over Web_App, Reporter
+        * report parameters
+    end note
+
+    activate Reporter
+
+    Reporter --[#red]> Web_App: Report failed result
+
+    deactivate Reporter
+
+    Web_App --[#red]> Reports_UI: Failed response
+
+    deactivate Web_App
+
+    Reports_UI -[#red]> User: Display error message
+
+else Reporter Not Available
+
+    Web_App <-->x Reporter: Request report
+    note over Web_App, Reporter
+        Timeout
+    end note
+
+    Web_App --[#red]> Reports_UI: Timeout response
+
+    deactivate Web_App
+
+    Reports_UI -[#red]> User: Display error message
+end
+@enduml
+-----

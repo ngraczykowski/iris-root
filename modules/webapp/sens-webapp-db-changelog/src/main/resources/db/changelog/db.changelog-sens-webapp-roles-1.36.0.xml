@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="roles-1.36.0-1" author="mmastylo">
+    <createTable tableName="webapp_role">
+      <column name="role_id" type="${uuid.type}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="VARCHAR(80)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="${type.text}"/>
+      <column name="created_by" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_by" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP"/>
+    </createTable>
+
+    <createTable tableName="webapp_role_permission_id">
+      <column name="role_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="permission_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="webapp_role_permission_id"
+        baseColumnNames="role_id"
+        constraintName="fk_webapp_role_role_id"
+        referencedTableName="webapp_role"
+        referencedColumnNames="role_id"
+        onDelete="CASCADE"
+        onUpdate="CASCADE"
+        deferrable="true"
+        initiallyDeferred="true"/>
+
+    <addForeignKeyConstraint
+        baseTableName="webapp_role_permission_id"
+        baseColumnNames="permission_id"
+        constraintName="fk_webapp_permission_permission_id"
+        referencedTableName="webapp_permission"
+        referencedColumnNames="permission_id"
+        onDelete="CASCADE"
+        onUpdate="CASCADE"
+        deferrable="true"
+        initiallyDeferred="true"/>
+  </changeSet>
+
+</databaseChangeLog>

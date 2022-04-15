@@ -1,0 +1,22 @@
+= Reports
+
+:testCasesName: Reports
+include::../templates/test-cases-table-header.adoc[]
+
+|{counter:case-number}
+|Login as non-Auditor user
+|You are not able to see Reports tab
+
+|{counter:case-number}
+|Login as Auditor role user
+|You are able to see Reports tab
+
+|{counter:case-number}
+|Login as Auditor role user and go to `Reports` tab
+|You are able to see `Security Matrix` report panel with short description and `Generate report` button below
+
+|{counter:case-number}
+|Login as Auditor role user, go to `Reports` tab and click `Generate report` button in `Security Matrix` report panel
+|`security-matrix-report.csv` file is downloaded and contains some outdated sens roles/authorities data
+
+include::../templates/test-cases-table-footer.adoc[]

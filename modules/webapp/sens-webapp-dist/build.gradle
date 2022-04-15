@@ -1,0 +1,64 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+  id "distribution"
+  id "maven-publish"
+}
+
+description = "Sens Webapp Distribution"
+
+configurations {
+  dist
+}
+
+dependencies {
+  dist project(path: ":sens-webapp-backend", configuration: "bootArchives")
+}
+
+def runScript(String name) {
+  copySpec {
+    from(file("src/bash/run.template.sh")) {
+      rename {
+        name
+      }
+      filter(
+          ReplaceTokens,
+          tokens: [jarfile: "${name}-backend-${project.version}-exec.jar".toString()],
+          beginToken: "@@",
+          endToken: "@@",
+      )
+      into("bin/")
+    }
+  }
+}
+
+distributions {
+  main {
+    distributionBaseName = "sens-webapp-dist"
+
+    contents {
+      from(configurations.dist) {
+        into "lib/"
+      }
+      with runScript("sens-webapp")
+    }
+  }
+}
+
+tasks.named("distTar") {
+  compression = Compression.BZIP2
+  archiveExtension = "tar.bz2"
+}
+
+tasks.withType(Zip) {
+  enabled = false
+}
+
+publishing {
+  publications {
+    distribution(MavenPublication) {
+      artifact distTar
+      artifactId "sens-webapp-dist"
+    }
+  }
+}

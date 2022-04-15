@@ -1,0 +1,79 @@
+= Edit User
+
+Cases here assume you're logged in as admin user and are in the "Edit User Profile" dialog.
+
+:testCasesName: Edit User
+include::../../templates/test-cases-table-header.adoc[]
+
+|{counter:case-number}
+|Do not change anything and click `Apply Changes` button
+|There are no changes in the user profile
+
+|{counter:case-number}
+|Change `Display Name` to any correct display name, change roles and click `Cancel` button
+|There are no changes in the user profile
+
+|{counter:case-number}
+|Change `Display Name` and set the correct display name, click `Apply Changes` button
+|Users list should be refreshed, and edited user `Display Name` should be changed
+
+|{counter:case-number}
+|Change `Display Name` to incorrect display name
+|`Apply Changes` button should be disabled
+
+|{counter:case-number}
+|Remove value from `Display Name` and leave it empty, click `Apply Changes` button
+|Users list should be refreshed and edited user `Display Name` should be empty
+
+|{counter:case-number}
+|Click `Reset password` button
+|The `Reset password` button should be hidden and a new temporary password should be visible.
+
+|{counter:case-number}
+|Click `Reset password` button and write down a temporary password.
+Log in as an edited user.
+As a password set a temporary password and click `Log In`
+|The user should see a new dialog window to write a new password.
+
+|{counter:case-number}
+|Follow steps from the previous test case.
+Fill new password fields with an incorrect password and click `Log in`.
+|User should not be able to log in to the application.
+Information about rules should be visible.
+
+|{counter:case-number}
+|Follow steps from the previous test case.
+Fill new password fields with a correct password and click `Log in`.
+|The user should be logged in to the application.
+
+|{counter:case-number}
+|Follow steps from the previous test case.
+Log out from the application and try to log in again as an edited user.
+|The user should be able to log in to the application using a new password.
+
+|{counter:case-number}
+|Click `Reset password` button and click `Apply Changes`.
+Open `Edit User Profile` dialog for the same user and `Reset password` again.
+Try to log in as this user.
+|The user can log in only using the secondary password.
+
+|{counter:case-number}
+|Change `Roles` and click `Apply Changes` button
+|Users list should be refreshed, and edited user's `Roles` should be changed
+
+|{counter:case-number}
+|Unchecked all `Roles` and click `Apply Changes` button
+|Users list should be refreshed, and edited user's 'Roles' should be empty
+
+|{counter:case-number}
+|Set one role that is not `Admin` and click `Apply Changes` button.
+Open `Edit User Profile` dialog for the same user and add an `Admin` role.
+|Other roles should be unchecked and other `Roles` check buttons should be disabled.
+
+|{counter:case-number}
+|Set one role that is not `Admin` and click `Apply Changes` button.
+Open `Edit User Profile` dialog for the same user and add an `Admin` role and click `Apply Changes`.
+|Users list should be refreshed, and edited user should have only an `Admin` role.
+
+include::../../templates/test-cases-table-footer.adoc[]
+

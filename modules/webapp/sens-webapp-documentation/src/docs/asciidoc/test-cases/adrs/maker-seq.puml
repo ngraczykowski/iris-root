@@ -1,0 +1,66 @@
+@startuml
+
+
+header Prw
+
+actor Maker
+
+participant Frontend as "RB Scorer GUI"
+participant Backend as "WebApp"
+database WebAppDB as "WebApp Database"
+database RBScorerReport as "RB Scorer Report"
+participant Governance
+
+Backend -> WebAppDB: Create dummy workflow
+
+Maker <-> RBScorerReport : Copy desired RB ids
+Maker -> Frontend : Input DT id
+Maker -> Frontend : Input RB ids
+
+
+loop until at least one of: Enablement, Solution change and comment provided
+   Maker -> Frontend : Input RB Solution or Enablement change
+   Maker -> Frontend : Input change comment
+end
+Maker -> Frontend: Click "Apply" button
+Frontend -> Backend: Apply bulk change
+note over Frontend, Backend
+* DT id, RB ids, comment, new solution
+and/or enablement
+end note
+Backend -> Governance : Fetch all feature vector/branch ids for selected DT
+alt DT exists
+    Governance --> Backend: DT's feature vector ids
+    Backend -> Backend : Perform validation
+    note right
+    * feature vector with id does exist -> OK
+    * feature vector with id doesn't exist -> Failure
+    end note
+
+    alt validation has passed
+        Backend -> WebAppDB : Create new bulk change record
+        note over Backend, WebAppDB
+            * list of rb ids
+            * maker username
+            * maker comment
+            * creation date
+            * workflow id = dummy workflow id
+        end note
+
+        Backend --> Frontend: Change request successfully\n created result
+        Frontend --> Maker : Inform about success
+    else validation has failed
+    Backend --> Frontend: RB ids validation failure result
+    note over Backend, Frontend
+        * failure cause for each failed branch id
+    end note
+    Frontend --> Maker : Inform about failure
+
+    end
+    else DT doesn't exist
+    Governance --> Backend : DT doesn't exist
+    Backend --> Frontend: DT id validation failure result
+    Frontend --> Maker : Inform about failure
+end
+
+@enduml

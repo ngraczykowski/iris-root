@@ -1,0 +1,8 @@
+= Pre-requisites
+
+* SERP with Web App ({requiredSerpVersion}). +
+    Web App starts as a dependency service next to other SERP platform services.
+* SERP OPT installer ({requiredOptVersion}). +
+    OPT installer contains infrastructure services required to run Web App, such as:
+** Keycloak: authentication and authorization server
+** Caddy server: a web server that serves Web App UI and is used as a reverse proxy for Keycloak and Web App API

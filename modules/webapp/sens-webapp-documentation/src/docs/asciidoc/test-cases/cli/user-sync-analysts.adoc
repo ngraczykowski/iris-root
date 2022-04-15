@@ -1,0 +1,18 @@
+= Sync Analysts
+
+Synchronize external users with an analyst role.
+
+.Command for syncing analysts.
+[source,bash]
+----
+./bin/serp user sync-analysts
+----
+
+:testCasesName: Sync analysts
+include::../templates/test-cases-table-header.adoc[]
+
+|{counter:case-number} |execute the command
+
+|Verify that the users were created successfully in the WebApp.
+
+include::../templates/test-cases-table-footer.adoc[]

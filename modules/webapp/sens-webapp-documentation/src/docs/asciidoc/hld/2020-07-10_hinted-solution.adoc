@@ -1,0 +1,46 @@
+= HLD #10
+
+- Reference ticket: *https://youtrack.silenteight.com/issue/WA-936[WA-936]*
+- Reason: As a Model Tuner I want to be able to select a Hinted Solution if "hinted" feature is turned on in the Governance
+
+[plantuml,bo-selects-solution,svg]
+-----
+@startuml
+header Get Available Solutions
+
+actor BO as "Model Tuner"
+
+box "WebApp Frontend" #MintCream
+    participant Frontend as "Solution dropdown\nlist"
+end box
+
+box "WebApp Backend" #LightGreen
+    participant Backend as "WebApp"
+end box
+
+box "Governance" #LightBlue
+    participant G as "Governance"
+end box
+
+BO -> Frontend : Expand Solution dropdown list
+
+activate Frontend
+Frontend -> Backend : Fetch available solutions
+
+activate Backend
+Backend <-> G : Fetch available solutions
+note over Backend, G
+    * Solution name
+end note
+
+Backend -> Frontend : Available solutions
+deactivate Backend
+
+Frontend -> BO: Available solutions
+deactivate Frontend
+note over Frontend, BO
+    * Solution name
+end note
+
+@enduml
+-----

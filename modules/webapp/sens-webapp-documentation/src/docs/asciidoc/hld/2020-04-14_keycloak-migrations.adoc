@@ -1,0 +1,49 @@
+= HLD #3
+
+- Reference ticket: https://youtrack.silenteight.com/issue/WA-593[WA-593]
+
+[plantuml,sequence-diagram,svg]
+-----
+@startuml
+header Keycloak migrations flow
+
+actor Developer as "Developer\nor Deployer"
+participant WebApp
+participant Keycloak
+database MigrationsDir as "Migration directory or \nclasspath resource"
+database AppProperties as "Application properties"
+
+== Configuration/Bootstrapping ==
+Developer -> MigrationsDir : Define ordered config migrations as .json or .json.ftl templates, with policy for each
+
+Developer -> AppProperties : Configure
+note over Developer, AppProperties
+    * first user credentials
+    * template parameters
+    * keycloak instance address
+    * migrations location
+end note
+
+Developer -> Keycloak : Launch
+activate Keycloak
+
+Developer -> WebApp : Launch
+activate WebApp
+
+== WebApp is starting ==
+
+WebApp <-> MigrationsDir : Read templates and config migration files
+WebApp <-> AppProperties : Read configuration
+WebApp -> WebApp : Fill templates
+WebApp -> Keycloak : Check if realm exists
+Keycloak -->> WebApp
+
+alt realm exists
+WebApp -> Keycloak : Perform full realm import with first file
+Keycloak -->> WebApp
+end
+WebApp -> Keycloak : Apply subsequent partial imports (migrations) taking policy under consideration
+Keycloak -->> WebApp
+== WebApp is running ==
+@enduml
+-----

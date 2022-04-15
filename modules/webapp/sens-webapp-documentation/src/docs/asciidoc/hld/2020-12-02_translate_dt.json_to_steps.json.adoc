@@ -1,0 +1,101 @@
+= HLD #19
+
+- Reference ticket: *TBD*
+- Reason: As a BO, I want translate dt.json to steps.
+
+[plantuml,translate-dt-to-steps,svg]
+-----
+@startuml
+
+actor boa as "Model Tuner"
+
+box "SERP CLI" #LightBlue
+    database cli as "SERP CLI"
+end box
+
+boa -> cli : Translate dt.json to steps.json
+
+cli -> cli : Read dt.json and transform to steps.json
+note over cli
+It will be almost 1:1 translation
+end note
+
+cli -> boa : Save steps.json file
+
+@enduml
+-----
+
+.dt.json
+[source,json]
+{
+  "metadata": {
+    "exportedAt": "2019-09-16 19:39:50.574"
+  },
+  "modelSchema": {
+    "features": [
+      "apType",
+      "isDeny",
+      "nameAgent",
+      "dateAgent",
+      "nationalIdAgent",
+      "passportAgent",
+      "documentAgent",
+      "genderAgent",
+      "nationalityAgent",
+      "residencyAgent"
+    ]
+  },
+  "decisionTree": {
+    "decisionTreeId": 1,
+    "decisionTreeName": "migrated_from_v2_9_to_serp",
+    "branches": [
+      {
+        "branchId": 1,
+        "matchGroupId": 0,
+        "solution": "FALSE_POSITIVE",
+        "enabled": true,
+        "featureValues": [
+          "I",
+          "NO",
+          "HQ_NO_MATCH",
+          "NO_DATA",
+          "NO_DATA",
+          "NO_DATA",
+          "NO_DATA",
+          "INCONCLUSIVE",
+          "MATCH",
+          "MATCH"
+        ],
+        "remarks": "S1"
+      }
+    ]
+  }
+}
+
+
+.steps.json
+[source,json]
+{
+  "metadata": {
+    "exportedAt": "2019-09-16 19:39:50.574"
+  },
+  "policy": {
+    "policy_name": "policy_name",
+    "steps": [
+      {
+        "solution": "FALSE_POSITIVE",
+        "step-name": "branchId=1",
+        "step-policy-required": {
+          "apType":"I",
+        }
+        "step-policy-optional-count": 2,
+        "step-policy-optional": {
+          "nameAgent":"HQ_NO_MATCH"
+          "dateAgent":"NO_DATA",
+          "nationalIdAgent":"NO_DATA",
+          "passportAgent":"NO_DATA"
+        }
+      }
+    ]
+  }
+}
