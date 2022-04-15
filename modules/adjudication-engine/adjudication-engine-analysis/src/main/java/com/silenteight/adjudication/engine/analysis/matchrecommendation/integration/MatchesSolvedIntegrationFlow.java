@@ -35,8 +35,11 @@ public class MatchesSolvedIntegrationFlow {
     log.debug("Received solved matches for generating match reommendation = {}", matchesSolved);
     var matchRecommendation = matchRecommendationFacade.generateMatchRecommendation(matchesSolved);
     if (matchRecommendation.isEmpty()) {
+      log.info("MatchesSolvedIntegrationFlow matchRecommendation empty");
       return;
     }
+    log.info(
+        "Sending matches recommendation for analysis:{}", matchRecommendation.get().getAnalysis());
     var message = new Message(matchRecommendation.get().toByteArray());
     rabbitTemplate.send(EVENT_EXCHANGE_NAME, MATCH_RECOMMENDATIONS_GENERATED_ROUTING_KEY, message);
   }
