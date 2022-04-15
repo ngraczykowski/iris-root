@@ -1,0 +1,167 @@
+openapi: 3.0.3
+info:
+  title: Dataset
+  description: Dataset for simulation
+  version: 0.1.0
+servers:
+  - url: '{environment}/rest/simulator/api/v1'
+    variables:
+      environment:
+        enum:
+          - http://localhost:24160
+          - https://localhost:24111
+        default: http://localhost:24160
+
+
+paths:
+  /datasets:
+    get:
+      description: Returns a list of datasets
+      responses:
+        200:
+          description: List of datasets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dataset'
+    post:
+      description: Create a new dataset
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDatasetRequest'
+      responses:
+        201:
+          description: Created
+
+  /datasetets/{datasetId}:
+    get:
+      description: Dataset with specific id
+
+  /datasets/{id}:archive:
+    post:
+      description: Archive a dataset
+      parameters:
+        - in: query
+          name: id
+          required: true
+          description: 'Dataset id'
+      responses:
+        202:
+          description: Ok
+
+components:
+  schemas:
+
+    DatasetState:
+      type: string
+      enum: [ ACTIVE, ARCHIVED ]
+
+    AlertType:
+      type: string
+      enum: [ SOLVING, LEARNING ]
+
+    AlertMatch:
+      type: string
+      enum: [ SINGLE, MULTI ]
+
+    Dataset:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        datasetName:
+          type: string
+        description:
+          type: string
+        state:
+          $ref: '#/components/schemas/DatasetState'
+        alertType:
+          $ref: '#/components/schemas/AlertType'
+        alertMatch:
+          $ref: '#/components/schemas/AlertMatch'
+        query:
+          type: object
+          $ref: '#/components/schemas/Query'
+        AlertType:
+        alertsCount:
+          type: number
+        createdAt:
+          type: string
+        createdBy:
+          type: string
+      example:
+        id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+        name: 'datasets/a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+        datasetName: 'Dataset name'
+        description: 'Dataset description'
+        query:
+          alertGenerationDate:
+            from: '2004-02-12T15:19:21Z'
+            to: '2005-02-12T15:19:21Z'
+        alertsCount: 75303
+        createdAt: '2004-02-15T15:19:21Z'
+        createdBy: 'UserName2'
+
+
+    CreateDatasetRequest:
+      type: object
+      required:
+        - id
+        - name
+        - query
+      properties:
+        id:
+          type: string
+        datasetName:
+          type: string
+        description:
+          type: string
+        query:
+          type: object
+          $ref: '#/components/schemas/Query'
+      example:
+        id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+        datasetName: 'New dataset'
+        description: 'Dataset description'
+        query:
+          useMultiHitAlerts: true
+          useLearningAlertsOnly: false
+          alertGenerationDate:
+            from: '2004-02-12T15:19:21Z'
+            to: '2005-02-12T15:19:21Z'
+
+    Query:
+      type: object
+      properties:
+        alertGenerationDate:
+          type: object
+          $ref: '#components/schemas/RangeQuery'
+        useMultiHitAlerts:
+          type: boolean
+        useLearningAlertsOnly:
+          type: boolean
+      example:
+        useMultiHitAlerts: true
+        useLearningAlertsOnly: false
+        alertGenerationDate:
+          from: '2004-02-12T15:19:21Z'
+          to: '2005-02-12T15:19:21Z'
+
+
+    RangeQuery:
+      type: object
+      properties:
+        from:
+          type: string
+        to:
+          type: string
+      example:
+        from: '2004-02-12T15:19:21Z'
+        to: '2005-02-12T15:19:21Z'
+

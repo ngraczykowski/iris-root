@@ -1,0 +1,5 @@
+simulator:
+  simulation:
+    timeout:
+      cron: "0 0/10 * * * ?"
+      duration-time: PT1H

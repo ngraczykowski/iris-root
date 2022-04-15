@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="simulator-1.0.0-1" author="anowicki">
+    <createTable tableName="simulator_simulation">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="simulation_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="TEXT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="TEXT"/>
+      <column name="model_name" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="analysis_name" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="state" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="started_at" type="TIMESTAMP"/>
+      <column name="finished_at" type="TIMESTAMP"/>
+    </createTable>
+
+    <createIndex
+        tableName="simulator_simulation"
+        indexName="ix_simulator_simulation_id"
+        unique="true">
+      <column name="simulation_id"/>
+    </createIndex>
+
+    <createTable tableName="simulator_simulation_dataset_name">
+      <column name="simulation_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="dataset_name" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="simulator_simulation_dataset_name"
+        baseColumnNames="simulation_id"
+        constraintName="fk_simulator_simulation_simulation_id"
+        referencedTableName="simulator_simulation"
+        referencedColumnNames="simulation_id"
+        onDelete="CASCADE"
+        onUpdate="CASCADE"
+        deferrable="true"
+        initiallyDeferred="true"/>
+  </changeSet>
+
+  <changeSet id="simulator-1.0.0-2" author="mmastylo">
+    <createTable tableName="simulator_dataset">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="dataset_name" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_by" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="initial_alert_count" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="TEXT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="TEXT"/>
+      <column name="state" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="generation_date_from" type="TIMESTAMP"/>
+      <column name="generation_date_to" type="TIMESTAMP"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="simulator-1.0.0-3" author="mmastylo">
+    <addColumn tableName="simulator_dataset">
+      <column name="dataset_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+
+    <renameColumn
+        tableName="simulator_dataset"
+        oldColumnName="dataset_name"
+        newColumnName="external_resource_name"/>
+  </changeSet>
+
+  <changeSet id="simulator-1.0.0-4" author="plewandowski">
+    <addColumn tableName="simulator_dataset">
+      <column name="countries" type="TEXT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="simulator-1.0.0-5" author="mmastylo">
+    <createTable tableName="simulator_indexed_alert">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="analysis_name" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="operation" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="alert_count" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="simulator_indexed_alert"
+        indexName="ix_simulator_indexed_alert_analysis_name">
+      <column name="analysis_name"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="simulator-1.0.0-6" author="mmastylo">
+    <createIndex
+        tableName="simulator_simulation_dataset_name"
+        indexName="ix_simulator_simulation_dataset_name_simulation_id">
+      <column name="simulation_id"/>
+    </createIndex>
+
+    <createIndex
+        tableName="simulator_simulation_dataset_name"
+        indexName="ix_simulator_simulation_dataset_name_dataset_name">
+      <column name="dataset_name"/>
+    </createIndex>
+
+    <createIndex
+        tableName="simulator_dataset"
+        indexName="ix_simulator_dataset_external_resource_name">
+      <column name="external_resource_name"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="simulator-1.0.0-7" author="mmastylo">
+    <addColumn tableName="simulator_indexed_alert">
+      <column name="request_id" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+
+    <renameColumn
+        tableName="simulator_indexed_alert"
+        oldColumnName="operation"
+        newColumnName="state"/>
+
+    <createIndex
+        tableName="simulator_indexed_alert"
+        indexName="ix_simulator_indexed_alert_request_id">
+      <column name="request_id"/>
+    </createIndex>
+  </changeSet>
+
+</databaseChangeLog>

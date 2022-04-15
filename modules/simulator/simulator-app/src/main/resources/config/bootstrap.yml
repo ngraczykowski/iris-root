@@ -1,0 +1,30 @@
+####################################################################################################
+# Defaults (overridden by environment variables or arguments)
+####################################################################################################
+
+simulator.consul.enabled: false
+simulator.consul.config.enabled: ${simulator.consul.enabled}
+
+# Symmetric key used to encrypt and decrypt secrets
+simulator.config.secret: change_me_to_secret_key
+
+####################################################################################################
+# CONFIGURATION
+####################################################################################################
+
+#---------------------------------------------------------------------------------------------------
+# CLOUD
+#---------------------------------------------------------------------------------------------------
+spring:
+  cloud:
+    consul:
+      enabled: ${simulator.consul.enabled}
+      config:
+        enabled: ${simulator.consul.config.enabled}
+        watch:
+          # NOTE(ahaczewski): Disabled due to stupid-long timeouts in current implementation.
+          #  Do not enable.
+          enabled: false
+
+encrypt:
+  key: ${simulator.config.secret}

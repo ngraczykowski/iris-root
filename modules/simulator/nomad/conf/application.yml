@@ -1,0 +1,60 @@
+server:
+  port: {{ env "NOMAD_PORT_http" }}
+
+spring:
+  rabbitmq:
+    addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
+      {{ if $index }},{{ end -}}
+      {{ $rabbit.Address }}:{{ $rabbit.Port -}}
+{{- end }}
+    # NOTE(ahaczewski): Intentionally left empty.
+    host:
+    virtual-host: /{{ env "NOMAD_NAMESPACE" }}
+  #-------------------------------------------------------------------------------------------------
+  # Consul Service Discovery
+  #-------------------------------------------------------------------------------------------------
+  cloud:
+    consul:
+      enabled: true
+      host: localhost
+      port: 8500
+      scheme: http
+      discovery:
+        enabled: true
+        register: false
+        register-health-check: false
+        catalog-services-watch:
+          enabled: true
+    service-registry:
+      auto-registration:
+        enabled: false
+
+simulator:
+  db:
+    name: {{ env "NOMAD_NAMESPACE" }}-simulator
+{{- $nomad_namespace := env "NOMAD_NAMESPACE" -}}
+{{- with service (print $nomad_namespace "-simulator-db") }}
+    host: {{ (index . 0).Address }}
+    port: {{ (index . 0).Port }}
+{{ end -}}
+
+simulator.consul.enabled: true
+simulator.consul.config.enabled: false
+
+grpc:
+  client:
+    adjudicationengine:
+      address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-adjudication-engine
+
+    governance:
+      address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-governance
+
+keycloak:
+  client-id: {{ env "NOMAD_NAMESPACE" }}-frontend
+  adapter:
+    auth-server-url: https://auth.silenteight.com
+    realm: sens-webapp
+    public-client: false
+    confidential-port: 0
+    principal-attribute: preferred_username
+    ssl-required: external

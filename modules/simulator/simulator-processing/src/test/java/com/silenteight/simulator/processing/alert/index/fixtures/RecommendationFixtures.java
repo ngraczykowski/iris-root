@@ -1,0 +1,141 @@
+package com.silenteight.simulator.processing.alert.index.fixtures;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+import com.silenteight.adjudication.api.v1.Recommendation;
+import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
+import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
+import com.silenteight.adjudication.api.v2.RecommendationMetadata;
+import com.silenteight.adjudication.api.v2.RecommendationMetadata.FeatureMetadata;
+import com.silenteight.adjudication.api.v2.RecommendationMetadata.MatchMetadata;
+import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
+
+import com.google.protobuf.Struct;
+import com.google.protobuf.Timestamp;
+import com.google.protobuf.Value;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
+import java.util.stream.IntStream;
+
+import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class RecommendationFixtures {
+
+  public static final String REQUEST_ID = "b4708d8c-4832-6fde-8dc0-d17b4708d8ca";
+  public static final String ANALYSIS_NAME = "analysis/01256804-1ce1-4d52-94d4-d1876910f272";
+  public static final String RECOMMENDATION_NAME =
+      "recommendations/d17b4708-6fde-8dc0-4832-d17b4708d8ca";
+  public static final String RECOMMENDATION_METADATA_NAME = RECOMMENDATION_NAME + "/metadata";
+  public static final String ALERT_NAME = "alerts/de1afe98-0b58-4941-9791-4e081f9b8139";
+  public static final Timestamp RECOMMENDATION_CREATE_TIME = Timestamp.newBuilder()
+      .setSeconds(1622505601)
+      .setNanos(0)
+      .build();
+  public static final String RECOMMENDED_ACTION = "FALSE_POSITIVE";
+  public static final String RECOMMENDATION_COMMENT = "This is not that person";
+  public static final String MATCH_NAME = "matches/a9b45451-6fde-4832-8dc0-d17b4708d8ca";
+  public static final String FEATURE_SOLUTION = "FALSE_POSITIVE";
+  public static final String MATCH_SOLUTION = "FALSE_POSITIVE";
+
+  public static final Recommendation RECOMMENDATION =
+      Recommendation.newBuilder()
+          .setName(RECOMMENDATION_NAME)
+          .setAlert(ALERT_NAME)
+          .setCreateTime(RECOMMENDATION_CREATE_TIME)
+          .setRecommendedAction(RECOMMENDED_ACTION)
+          .setRecommendationComment(RECOMMENDATION_COMMENT)
+          .build();
+
+  public static final RecommendationInfo RECOMMENDATION_INFO =
+      RecommendationInfo.newBuilder()
+          .setAlert(ALERT_NAME)
+          .setRecommendation(RECOMMENDATION_NAME)
+          .build();
+
+  public static final RecommendationsGenerated REQUEST =
+      RecommendationsGenerated.newBuilder()
+          .setAnalysis(ANALYSIS_NAME)
+          .addAllRecommendationInfos(singletonList(RECOMMENDATION_INFO))
+          .build();
+
+  private static final List<RecommendationInfo> RECOMMENDATIONS_LIST = IntStream
+      .range(0, 10)
+      .boxed()
+      .map(v -> RECOMMENDATION_INFO)
+      .collect(toList());
+
+  public static final RecommendationsGenerated MULTIPLE_ALERTS_REQUEST = RecommendationsGenerated
+      .newBuilder()
+      .setAnalysis(ANALYSIS_NAME)
+      .addAllRecommendationInfos(RECOMMENDATIONS_LIST)
+      .build();
+
+  public static final Struct FEATURE_REASON =
+      Struct.newBuilder()
+          .putAllFields(
+              Map.of("reason-1", Value.newBuilder()
+                  .setStringValue("This is reason")
+                  .build()))
+          .build();
+
+  public static final FeatureMetadata FEATURE_METADATA =
+      FeatureMetadata.newBuilder()
+          .setAgentConfig("agent-config")
+          .setSolution(FEATURE_SOLUTION)
+          .setReason(FEATURE_REASON)
+          .build();
+
+  public static final MatchMetadata MATCH_METADATA =
+      MatchMetadata.newBuilder()
+          .setMatch(MATCH_NAME)
+          .setSolution(MATCH_SOLUTION)
+          .putAllCategories(Map.of("category-1", "category-value-1"))
+          .putAllFeatures(Map.of("feature-name", FEATURE_METADATA))
+          .build();
+
+  public static final RecommendationMetadata METADATA =
+      RecommendationMetadata.newBuilder()
+          .setName(RECOMMENDATION_METADATA_NAME)
+          .setAlert(ALERT_NAME)
+          .addMatches(MATCH_METADATA)
+          .build();
+
+  public static final RecommendationWithMetadata RECOMMENDATION_WITH_METADATA =
+      RecommendationWithMetadata.newBuilder()
+          .setRecommendation(RECOMMENDATION)
+          .setMetadata(METADATA)
+          .build();
+
+  public static final List<RecommendationWithMetadata> RECOMMENDATION_WITH_METADATA_LIST
+      = IntStream
+      .range(0, 10)
+      .boxed()
+      .map(v -> RECOMMENDATION_WITH_METADATA)
+      .collect(toList());
+
+  public static class RecommendationWithMetaDataIterator
+      implements Iterator<RecommendationWithMetadata> {
+
+    Stack<RecommendationWithMetadata> recommendations;
+
+    public RecommendationWithMetaDataIterator(Stack<RecommendationWithMetadata> recommendations) {
+      this.recommendations = recommendations;
+    }
+
+    @Override
+    public boolean hasNext() {
+      return !recommendations.isEmpty();
+    }
+
+    @Override
+    public RecommendationWithMetadata next() {
+      return recommendations.pop();
+    }
+  }
+}

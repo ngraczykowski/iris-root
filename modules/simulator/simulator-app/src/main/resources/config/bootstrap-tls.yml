@@ -1,0 +1,22 @@
+####################################################################################################
+# Defaults (overridden by environment variables or arguments)
+####################################################################################################
+
+simulator.keystore.path: ${serp.home}/cert/${spring.application.name}/${spring.application.name}-keystore.p12
+simulator.keystore.password: LZKH70td5n
+simulator.truststore.path: ${simulator.home}/cert/truststore.p12
+simulator.truststore.password: ${simulator.keystore.password}
+
+####################################################################################################
+# CONFIGURATION
+####################################################################################################
+
+spring:
+  cloud:
+    consul:
+      tls:
+        key-store-instance-type: PKCS12
+        key-store-path: ${simulator.truststore.path}
+        key-store-password: ${simulator.truststore.password}
+        certificate-path: ${simulator.keystore.path}
+        certificate-password: ${simulator.keystore.password}

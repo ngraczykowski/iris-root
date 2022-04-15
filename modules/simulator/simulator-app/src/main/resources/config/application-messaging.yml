@@ -1,0 +1,38 @@
+simulator:
+  messaging:
+    broker:
+      recommendations:
+        queue-name: sim.recommendations
+        routing-key: ae.event.recommendations-generated
+      index-response:
+        queue-name: sim.index-response.simulation
+        routing-key: event.index-response.simulation
+      dataset-expired:
+        queue-name: sim.dataset-expired
+        routing-key: ae.event.datasets-expired
+      models-archived:
+        queue-name: sim.models-archived
+        routing-key: event.models-archived
+
+  model-archiving:
+    models-archived-inbound:
+      queue-name: ${simulator.messaging.broker.models-archived.queue-name}
+
+  retention:
+    dataset-expired-inbound:
+      queue-name: ${simulator.messaging.broker.dataset-expired.queue-name}
+    simulation-expired-outbound:
+      exchange: sim.command
+      routing-key: command.analysis-expired
+
+  processing:
+    alert:
+      recommendations-inbound:
+        queue-name: ${simulator.messaging.broker.recommendations.queue-name}
+      recommendations-outbound:
+        exchange: sim.command
+        routing-key: command.index-request.simulation
+      ack-messages-inbound:
+        queue-name: ${simulator.messaging.broker.index-response.queue-name}
+    feed:
+      batch-size: 100

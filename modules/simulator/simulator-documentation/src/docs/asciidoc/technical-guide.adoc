@@ -1,0 +1,14 @@
+[id="simulator-technical-guide"]
+= {productname} Technical Guide
+Silent Eight Pte._Ltd.
+:context: simulator-technical-guide
+:productname: Silent Eight Simulator
+:doctype: article
+:toc: left
+:sectnums:
+:sectnumlevels: 4
+:toclevels: 4
+:xrefstyle: full
+
+[abstract]
+This manual explains how to develop {productname}.

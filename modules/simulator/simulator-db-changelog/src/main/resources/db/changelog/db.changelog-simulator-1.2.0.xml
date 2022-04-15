@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="simulator-1.2.0-1" author="mmastylo">
+    <update tableName="simulator_dataset">
+      <column name="state" value="ACTIVE"/>
+      <where>state = 'CURRENT'</where>
+    </update>
+  </changeSet>
+
+  <changeSet id="simulator-1.2.0-2" author="tbiedrzycki">
+    <createIndex
+        tableName="simulator_dataset"
+        indexName="ix_simulator_dataset_dataset_id"
+        unique="true">
+      <column name="dataset_id"/>
+    </createIndex>
+  </changeSet>
+
+</databaseChangeLog>

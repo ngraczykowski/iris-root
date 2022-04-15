@@ -1,0 +1,9 @@
+simulator:
+  dataset:
+    create:
+      labels:
+        - name: matchQuantity
+          values: ['single']
+sentry:
+  environment: sierra
+  traces-sample-rate: 0

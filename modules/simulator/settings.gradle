@@ -1,0 +1,13 @@
+rootProject.name = 'simulator'
+
+include 'simulator-app'
+include 'simulator-common-web'
+include 'simulator-common-web-testing'
+include 'simulator-dataset'
+include 'simulator-db-changelog'
+include 'simulator-dist'
+include 'simulator-documentation'
+include 'simulator-management'
+include 'simulator-model'
+include 'simulator-processing'
+include 'simulator-retention'

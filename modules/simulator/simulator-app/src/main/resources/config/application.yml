@@ -1,0 +1,301 @@
+####################################################################################################
+# Defaults (overridden by environment variables or arguments)
+####################################################################################################
+
+simulator.db.host: localhost
+simulator.db.port: 24293
+simulator.db.schema: public
+simulator.db.name: simulator
+simulator.db.user: simulator
+simulator.db.password: simulator
+simulator.db.url: jdbc:postgresql://${simulator.db.host}:${simulator.db.port}/${simulator.db.name}?currentSchema=${simulator.db.schema}
+
+#---------------------------------------------------------------------------------------------------
+# SERVER
+#---------------------------------------------------------------------------------------------------
+
+server:
+  port: 24890
+  forward-headers-strategy: native
+  undertow:
+    io-threads: 4
+    worker-threads: 16
+
+  servlet:
+    context-path: /rest/${spring.application.name}
+
+  error:
+    include-exception: true
+    include-stacktrace: never
+
+#---------------------------------------------------------------------------------------------------
+# MANAGEMENT
+#---------------------------------------------------------------------------------------------------
+
+management:
+  health:
+    mail:
+      enabled: false
+  info:
+    git:
+      mode: simple
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: [ "health", "info", "metrics", "prometheus", "loggers" ]
+    jmx:
+      exposure:
+        exclude: "*"
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+#---------------------------------------------------------------------------------------------------
+# GENERAL
+#---------------------------------------------------------------------------------------------------
+
+spring:
+  application:
+    name: simulator
+  # AOP configuration - disabled due to AspectJ compile-time weaving use
+  aop:
+    auto: false
+
+  #-------------------------------------------------------------------------------------------------
+  # CONSUL SERVICE DISCOVERY
+  #-------------------------------------------------------------------------------------------------
+  cloud:
+    consul:
+      config:
+        enabled: false
+      enabled: false
+
+  #-------------------------------------------------------------------------------------------------
+  # DATABASE
+  #-------------------------------------------------------------------------------------------------
+  datasource:
+    # Postgres database
+    type: com.zaxxer.hikari.HikariDataSource
+    url: ${simulator.db.url}
+    username: ${simulator.db.user}
+    password: ${simulator.db.password}
+    initialization-mode: never
+
+    # Hikari pool configuration
+    hikari:
+      pool-name: Database-Pool
+      minimum-idle: 1
+      maximum-pool-size: 10
+      auto-commit: false
+      schema: ${simulator.db.schema}
+      isolate-internal-queries: true
+      # NOTE(ahaczewski): Forces HikariCP to commit the transaction after opening fresh connection.
+      #  Without it, the connection transaction is left in OPEN state instead of IDLE, because
+      #  just before HikariCP runs `SET SESSION search_path TO '${simulator.db.schema}'` which begins
+      #  transaction. Thus, with that query as workaround, we force the transaction commit.
+      connection-init-sql: SELECT 1
+      data-source-properties:
+        ApplicationName: ${spring.application.name}
+
+  # Database migrations
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    default-schema: ${simulator.db.schema}
+    contexts: default
+
+  # Spring Data JPA
+  jpa:
+    database-platform: com.silenteight.sep.base.common.support.hibernate.FixedPostgreSql95Dialect
+    database: POSTGRESQL
+    show-sql: false
+    open-in-view: false
+
+    hibernate:
+      ddl-auto: none
+      use-new-id-generator-mappings: true
+
+    properties:
+      hibernate.cache.use_query_cache: false
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.generate_statistics: false
+      hibernate.jdbc.lob.non_contextual_creation: true
+      hibernate.jdbc.time_zone: UTC
+      hibernate.temp.use_jdbc_metadata_defaults: false
+      org.hibernate.envers.audit_table_suffix: _audit
+      org.hibernate.envers.store_data_at_delete: true
+
+  #-------------------------------------------------------------------------------------------------
+  # MESSAGING
+  #-------------------------------------------------------------------------------------------------
+  rabbitmq:
+    host: localhost
+    port: 24160
+    username: dev
+    password: dev
+    virtual-host: /
+
+    ssl:
+      enabled: false
+
+    listener:
+      type: simple
+      direct:
+        consumers-per-queue: 2
+        prefetch: 10
+      simple:
+        concurrency: 1
+        max-concurrency: 2
+        prefetch: 10
+
+  # Task execution and scheduling
+  task:
+    execution:
+      pool:
+        core-size: 8
+        max-size: 16
+        queue-capacity: 10000
+        keep-alive: 10s
+      thread-name-prefix: pool-task-
+
+    scheduling:
+      pool.size: 2
+      thread-name-prefix: pool-scheduling-
+
+  main:
+    banner-mode: 'off'
+
+  groovy:
+    template:
+      check-template-location: false
+
+  servlet:
+    multipart.max-file-size: 10MB
+    multipart.max-request-size: 10MB
+
+#---------------------------------------------------------------------------------------------------
+# gRPC CONFIGURATION
+#---------------------------------------------------------------------------------------------------
+
+grpc:
+  client:
+    GLOBAL:
+      enableKeepAlive: true
+      negotiationType: PLAINTEXT
+
+    adjudicationengine:
+      address: static://localhost:24801
+
+    governance:
+      address: static://localhost:24205
+
+simulator:
+  #-------------------------------------------------------------------------------------------------
+  # WEB CONFIGURATION
+  #-------------------------------------------------------------------------------------------------
+  web:
+    cors:
+      allowed-origins-patterns: "*"
+      allowed-methods: "*"
+      allowed-headers: "*"
+      exposed-headers: "Authorization,Link,X-Total-Count"
+      allow-credentials: true
+      max-age: 1800
+
+  #-------------------------------------------------------------------------------------------------
+  # DATASET CONFIGURATION
+  #-------------------------------------------------------------------------------------------------
+  dataset:
+    create:
+      labels: []
+
+  #-------------------------------------------------------------------------------------------------
+  # SIMULATION TIMEOUT
+  #-------------------------------------------------------------------------------------------------
+  simulation:
+    timeout:
+      cron: "0 0/10 * * * ?"
+      duration-time: PT1H
+
+#---------------------------------------------------------------------------------------------------
+# SEP BASE CONFIGURATION
+#---------------------------------------------------------------------------------------------------
+
+serp:
+  show-env: true
+
+  messaging:
+    error-queue:
+      enabled: true
+
+#---------------------------------------------------------------------------------------------------
+# REST API AUTH
+#---------------------------------------------------------------------------------------------------
+
+sep.auth:
+  permissionMethodsMappings:
+    MANAGE_SIMULATION:
+      - "CANCEL_SIMULATION"
+      - "CREATE_SIMULATION"
+      - "LIST_DATASETS"
+    VIEW_SIMULATIONS:
+      - "LIST_SIMULATIONS"
+      - "LIST_DATASETS"
+      - "VIEW_SIMULATION_PROGRESS"
+    VIEW_SIMULATION_RESULT:
+      - "VIEW_SIMULATION"
+      - "SIMULATION_STATISTICS"
+      - "LIST_DATASETS"
+    DOWNLOAD_SIMULATION_REPORTS:
+      - "CREATE_SIMULATION_REPORT"
+    ARCHIVE_DATASET:
+      - "ARCHIVE_DATASET"
+    CREATE_DATASET:
+      - "CREATE_DATASET"
+    VIEW_DATASETS:
+      - "LIST_DATASETS"
+    DASHBOARD:
+      - "LIST_SIMULATIONS"
+      - "SIMULATION_STATISTICS"
+      - "LIST_DATASETS"
+      - "VIEW_SIMULATION"
+    VIEW_AI_SUGGESTIONS:
+      - "CREATE_SIMULATION"
+      - "LIST_DATASETS"
+
+  rolePermissionsMappings:
+    MODEL_TUNER:
+      - "MANAGE_SIMULATION"
+      - "VIEW_SIMULATIONS"
+      - "VIEW_SIMULATION_RESULT"
+      - "DOWNLOAD_SIMULATION_REPORTS"
+      - "ARCHIVE_DATASET"
+      - "CREATE_DATASET"
+      - "VIEW_DATASETS"
+      - "DASHBOARD"
+      - "VIEW_AI_SUGGESTIONS"
+    APPROVER:
+      - "VIEW_SIMULATIONS"
+      - "VIEW_SIMULATION_RESULT"
+      - "DOWNLOAD_SIMULATION_REPORTS"
+      - "VIEW_DATASETS"
+      - "DASHBOARD"
+    AUDITOR:
+      - "VIEW_SIMULATIONS"
+      - "VIEW_DATASETS"
+      - "DASHBOARD"
+      - "VIEW_AI_SUGGESTIONS"
+      - "VIEW_SIMULATION_RESULT"
+    QA:
+      - "DASHBOARD"
+    QA_ISSUE_MANAGER:
+      - "DASHBOARD"
+
+sentry:
+  environment: unknown
+  traces-sample-rate: 0

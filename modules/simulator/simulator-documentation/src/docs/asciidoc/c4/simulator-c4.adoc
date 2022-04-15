@@ -1,0 +1,124 @@
+= Simulator C4 diagram
+
+- Created at: *04.11.2021*
+
+:relfileprefix: ../
+
+== C4 diagram
+
+[plantuml, c4, svg]
+-----
+@startuml
+!include <c4/C4_Container>
+
+title Simulator
+
+Container_Ext(ae, "Adjudication Engine", "Java")
+Container_Ext(gov, "Governance", "Java")
+Container_Ext(wh, "Warehouse", "Java")
+Container_Ext(frontend, "Frontend", "Angular")
+ContainerDb_Ext(db, Database, "PostgreSQL")
+
+Container(sim, Simulator, Java)
+
+Rel(frontend, sim, " ", https)
+Rel(sim, db, " ")
+Rel(sim, ae, " ", gRPC)
+Rel(sim, gov, " ", gRPC)
+Rel(sim, wh, " ", AMQP)
+Rel_U(wh, sim, " ", AMQP)
+
+@enduml
+-----
+
+== Frontend - Simulator
+
+https://gitlab.silenteight.com/sens/simulator/-/tree/master/simulator-documentation/src/api[Simulator API]
+
+[plantuml, frontend-simulator, svg]
+-----
+@startuml
+!include <c4/C4_Container>
+
+title Frontend - Simulator
+
+Container_Ext(frontend, "Frontend", "Angular")
+
+Container(sim, Simulator, Java)
+
+Rel(frontend, sim, Dataset management, https)
+Rel(frontend, sim, Simulation management, https)
+
+@enduml
+-----
+
+== Adjudication Engine - Simulator
+
+Creating datasets, creating and running analysis, informing about generated recommendations
+
+[plantuml, ae-simulator, svg]
+-----
+@startuml
+!include <c4/C4_Container>
+
+title Adjudication Engine - Simulator
+
+Container_Ext(ae, Adjudication Engine, "Java")
+ContainerDb_Ext(mb, "Message Broker", "RabbitMQ")
+Container(sim, Simulator, Java)
+
+Rel(ae, mb, Recommendations generated information, AMQP)
+Rel(mb, sim, Recommendations generated information, AMQP)
+Rel(ae, mb, Datasets expired information, AMQP)
+Rel(mb, sim, Datasets expired information, AMQP)
+Rel(sim, ae, Create dataset, gRPC)
+Rel(sim, ae, Create analysis, gRPC)
+Rel(sim, ae, Get recommendations with metadata, gRPC)
+Rel(sim, ae, Check analysis status, gRPC)
+
+@enduml
+-----
+
+== Governance - Simulator
+
+Get model
+
+[plantuml, gov-simulator, svg]
+-----
+@startuml
+!include <c4/C4_Container>
+
+title Governance - Simulator
+
+Container_Ext(gov, Governance, "Java")
+Container(sim, Simulator, Java)
+
+Rel(sim, gov, Get model, gRPC)
+
+@enduml
+-----
+
+== Warehouse - Simulator
+
+Feed process
+
+[plantuml, wh-simulator, svg]
+-----
+@startuml
+!include <c4/C4_Container>
+
+title Warehouse - Simulator
+
+Container(sim, Simulator, Java)
+ContainerDb_Ext(mb, "Message Broker", "RabbitMQ")
+Container_Ext(wh, Warehouse, "Java")
+
+Rel(sim, mb, Feed request, AMQP)
+Rel(mb, wh, Feed request, AMQP)
+Rel(sim, mb, Analysis expired information, AMQP)
+Rel(mb, wh, Analysis expired information, AMQP)
+Rel(wh, mb, Feed response, AMQP)
+Rel(mb, sim, Feed response, AMQP)
+
+@enduml
+-----

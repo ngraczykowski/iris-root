@@ -1,0 +1,55 @@
+plugins {
+  id "java"
+}
+
+description = "Simulator Dataset"
+
+configurations {
+  implementation.extendsFrom starterCommon
+  implementation.extendsFrom starterSpringApp
+
+  implementation.extendsFrom starterDatabase
+  runtimeOnly.extendsFrom starterDatabaseRuntime
+
+  implementation.extendsFrom starterGrpcClient
+
+  testImplementation.extendsFrom starterSpringTest
+}
+
+dependencies {
+  implementation project(":simulator-common-web")
+  implementation project(":simulator-db-changelog")
+
+  implementation libraries.silenteight_adjudication_api
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.silenteight_sep_base_testing
+  implementation libraries.silenteight_serp_protocol_base
+  implementation libraries.silenteight_audit_bs
+
+  implementation libraries.spring_boot_starter_undertow
+  implementation libraries.spring_boot_starter_web
+
+  implementation libraries.spring_context_support
+  implementation libraries.spring_security_config
+  implementation libraries.spring_security_web
+
+  implementation libraries.commons_lang3
+
+  implementation libraries.jaxb_api
+  implementation libraries.jakarta_inject
+
+  implementation libraries.grpc_api
+  implementation libraries.grpc_stub
+
+  implementation libraries.protobuf_java_util
+
+  testImplementation project(":simulator-common-web-testing")
+
+  testImplementation libraries.spock_spring
+  testImplementation libraries.spring_integration_test
+  testImplementation libraries.rest_assured_spring_mock_mvc
+
+  testImplementation libraries.spring_security_test
+
+  aspect libraries.silenteight_sep_base_aspects
+}
