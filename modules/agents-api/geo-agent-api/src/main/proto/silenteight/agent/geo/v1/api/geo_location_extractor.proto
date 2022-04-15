@@ -3,6 +3,7 @@ syntax = "proto3";
 package silenteight.agent.geo.v1.api;
 
 import public "silenteight/agent/geo/v1/api/common.proto";
+import "google/api/field_behavior.proto";
 
 option java_package = "com.silenteight.proto.agent.geo.v1.api";
 option java_outer_classname = "GeoLocationExtractorApiProto";
@@ -16,11 +17,11 @@ service GeoLocationExtractor {
 
 message ExtractLocationRequest {
     // Location string
-    string value = 1;
+    string value = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message ExtractLocationResponse {
     // List of extracted locations
-    repeated IdentifiedLocation identified_locations = 1;
-    string error_message = 3;
+    repeated IdentifiedLocation identified_locations = 1 [(google.api.field_behavior) = REQUIRED];
+    string error_message = 3 [(google.api.field_behavior) = OPTIONAL];
 }

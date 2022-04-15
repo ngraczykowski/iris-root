@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package silenteight.agent.allowlist.v1.api;
 
+import "google/api/field_behavior.proto";
+
 option java_package = "com.silenteight.proto.agent.allowlist.v1.api";
 option java_outer_classname = "AllowListAgentApiProto";
 option java_multiple_files = true;
@@ -13,31 +15,31 @@ service AllowListAgent {
 }
 
 message VerifyRequest {
-  repeated string characteristics_value = 1;
-  repeated string allow_list_name = 2;
+  repeated string characteristics_value = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated string allow_list_name = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
 message VerifyResponse {
-  string solution = 1;
-  AllowListReason reason = 2;
+  string solution = 1 [(google.api.field_behavior) = REQUIRED];
+  AllowListReason reason = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
 message AllowListReason {
-  repeated MatchedCharacteristic matched_characteristics = 1;
-  Configuration configuration = 2;
+  repeated MatchedCharacteristic matched_characteristics = 1 [(google.api.field_behavior) = REQUIRED];
+  Configuration configuration = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
 message MatchedCharacteristic {
-  string characteristic_value = 1;
-  string solution = 2;
-  uint32 false_positive_count = 3;
-  uint32 true_positive_count = 4;
+  string characteristic_value = 1 [(google.api.field_behavior) = REQUIRED];
+  string solution = 2 [(google.api.field_behavior) = REQUIRED];
+  uint32 false_positive_count = 3 [(google.api.field_behavior) = REQUIRED];
+  uint32 true_positive_count = 4 [(google.api.field_behavior) = REQUIRED];
   // false positive by true positive ratio
-  double ratio = 5;
+  double ratio = 5 [(google.api.field_behavior) = REQUIRED];
 }
 
 message Configuration {
-  string allow_list_name = 1;
-  uint32 min_false_positive_count = 2;
-  double min_ratio = 3;
+  string allow_list_name = 1 [(google.api.field_behavior) = REQUIRED];
+  uint32 min_false_positive_count = 2 [(google.api.field_behavior) = REQUIRED];
+  double min_ratio = 3 [(google.api.field_behavior) = REQUIRED];
 }

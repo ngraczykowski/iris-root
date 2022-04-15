@@ -3,6 +3,7 @@ syntax = "proto3";
 package silenteight.agent.geo.v1.api;
 
 import public "silenteight/agent/geo/v1/api/common.proto";
+import "google/api/field_behavior.proto";
 
 option java_package = "com.silenteight.proto.agent.geo.v1.api";
 option java_outer_classname = "GeoLocationAgentApiProto";
@@ -18,25 +19,25 @@ service GeoLocationAgent {
 }
 
 message BatchCompareLocationsRequest {
-  repeated CompareLocationsRequest requests = 1;
+  repeated CompareLocationsRequest requests = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message BatchCompareLocationsResponse {
-  repeated CompareLocationsResponse responses = 1;
+  repeated CompareLocationsResponse responses = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message CompareLocationsRequest {
-  string alerted_party_location = 1;
-  string watchlist_party_location = 2;
+  string alerted_party_location = 1 [(google.api.field_behavior) = REQUIRED];
+  string watchlist_party_location = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
 message CompareLocationsResponse {
-  string solution = 1;
-  GeoComparerReason reason = 2;
-  IdentifiedLocations identified_inputs = 3;
+  string solution = 1 [(google.api.field_behavior) = REQUIRED];
+  GeoComparerReason reason = 2 [(google.api.field_behavior) = REQUIRED];
+  IdentifiedLocations identified_inputs = 3 [(google.api.field_behavior) = REQUIRED];
 }
 
 message IdentifiedLocations {
-  repeated IdentifiedLocation alerted_party_identified_locations = 1;
-  repeated IdentifiedLocation watchlist_party_identified_locations = 2;
+  repeated IdentifiedLocation alerted_party_identified_locations = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated IdentifiedLocation watchlist_party_identified_locations = 2 [(google.api.field_behavior) = REQUIRED];
 }

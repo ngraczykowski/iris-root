@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package silenteight.agent.country.v1.api;
 
+import "google/api/field_behavior.proto";
+
 option java_package = "com.silenteight.proto.agent.country.v1.api";
 option java_outer_classname = "CountryAgentApiProto";
 option java_multiple_files = true;
@@ -17,35 +19,35 @@ service CountryAgent {
 
 message CompareCountriesRequest {
   // Alerted countries values
-  repeated string alerted_values = 1;
+  repeated string alerted_values = 1 [(google.api.field_behavior) = REQUIRED];
   // Matched countries to compare
-  repeated string matched_values = 2;
+  repeated string matched_values = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
 message CompareCountriesResponse {
-  string result = 1;
+  string result = 1 [(google.api.field_behavior) = REQUIRED];
   // Reason of the most matching countries
-  CompareCountriesReason reason = 2;
+  CompareCountriesReason reason = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
 message CompareCountriesReason {
-  string customer_value = 1;
-  repeated string watchlist_values = 2;
-  repeated string matched_values = 3;
-  repeated string customer_values = 4;
-  string error_message = 5;
+  string customer_value = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated string watchlist_values = 2 [(google.api.field_behavior) = REQUIRED];
+  repeated string matched_values = 3 [(google.api.field_behavior) = REQUIRED];
+  repeated string customer_values = 4[(google.api.field_behavior) = REQUIRED];
+  string error_message = 5 [(google.api.field_behavior) = OPTIONAL];
 }
 
 message ExtractCountriesRequest {
   // Input values
-  repeated string values = 1;
+  repeated string values = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message ExtractCountriesResponse {
-  repeated ExtractedCountry results = 1;
+  repeated ExtractedCountry results = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message ExtractedCountry {
-  string original_value = 1;
-  repeated string extracted_values = 2;
+  string original_value = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated string extracted_values = 2 [(google.api.field_behavior) = REQUIRED];
 }

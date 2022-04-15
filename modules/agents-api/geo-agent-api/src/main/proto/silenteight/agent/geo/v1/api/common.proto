@@ -10,15 +10,15 @@ option java_outer_classname = "GeoCommonProto";
 option java_multiple_files = true;
 
 message Location {
-  string name = 1;
-  LocationType type = 2;
-  uint32 id = 3;
-  string code = 4;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  LocationType type = 2 [(google.api.field_behavior) = REQUIRED];
+  uint32 id = 3 [(google.api.field_behavior) = REQUIRED];
+  string code = 4 [(google.api.field_behavior) = REQUIRED];
   // A reference id to the parent location.
-  uint32 parent_id = 5;
-  google.protobuf.Any details = 6;
+  uint32 parent_id = 5 [(google.api.field_behavior) = OPTIONAL];
+  google.protobuf.Any details = 6 [(google.api.field_behavior) = OPTIONAL];
   // Whether location was provided explicitly, not derived
-  bool explicitly_provided = 7;
+  bool explicitly_provided = 7 [(google.api.field_behavior) = REQUIRED];
   // The list of locations (cities or states) the location was derived from
   repeated uint32 derived_from = 10 [(google.api.field_behavior) = OPTIONAL];
 
@@ -47,19 +47,19 @@ enum LocationType {
 }
 
 message GeoComparerReason {
-  repeated GeoComparerResult geo_compare_results = 1;
+  repeated GeoComparerResult geo_compare_results = 1 [(google.api.field_behavior) = REQUIRED];
 
   message GeoComparerResult {
     // country, city, state, etc...
-    LocationType type = 1;
+    LocationType type = 1 [(google.api.field_behavior) = REQUIRED];
     // original input
-    string alerted_party_value = 2;
+    string alerted_party_value = 2 [(google.api.field_behavior) = REQUIRED];
     // original input
-    string watchlist_party_value = 3;
+    string watchlist_party_value = 3 [(google.api.field_behavior) = REQUIRED];
     // do AP value and WP value match?
-    MatchType match_type = 4;
+    MatchType match_type = 4 [(google.api.field_behavior) = REQUIRED];
 
-    string error_message = 5;
+    string error_message = 5 [(google.api.field_behavior) = OPTIONAL];
     // Distance in kilometers, present only when type is city, otherwise empty.
     int32 distance = 6 [(google.api.field_behavior) = OPTIONAL];
   }
@@ -72,9 +72,9 @@ message GeoComparerReason {
 }
 
 message IdentifiedLocation {
-  string original_input = 1;
+  string original_input = 1 [(google.api.field_behavior) = REQUIRED];
   // input identified as...
-  Location location = 2;
+  Location location = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
 message Coordinates {
