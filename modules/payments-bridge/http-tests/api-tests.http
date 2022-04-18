@@ -23,6 +23,9 @@ Accept: application/json
 Authorization: Bearer {{access_token}}
 
 ### Post an alert for solving
+### Number of hits: 7
+### Result: ACTION_FALSE_POSITIVE
+### Comment: False Positive hits: Match AS06336342(ORIGINATOR, #1): Alerted Party's name (ADDR LINE 1 2000109817) does not match Watchlist Party name (STS AO). Alerted party location/countries (CA, US, SAN FRANCISCO) does not match location/country (RUSSIAN FEDERATION, MOSCOW). Alerted party's address is a crossmatch to watchlist party name. Match AS06336994(ORIGINATOR, #2): Alerted Party's name (ADDR LINE 1 2000109817) does not match Watchlist Party name (STS AO). Alerted party location/countries (CA, US, SAN FRANCISCO) does not match location/country (RUSSIAN FEDERATION, MOSCOW). Alerted party's address is a crossmatch to watchlist party name. Match AS06337077(ORIGINATOR, #3): Alerted Party's name (ADDR LINE 1 2000109817) does not match Watchlist Party name (STS AO). Alerted party location/countries (CA, US, SAN FRANCISCO) does not match location/country (RUSSIAN FEDERATION, MOSCOW). Alerted party's address is a crossmatch to watchlist party name. Match SIBIE194(ORIGINATOR, #4): Alerted Party's name (ADDR LINE 1 2000109817) does not match Watchlist Party name (Line-Up). Alerted party location/countries (CA, US, SAN FRANCISCO) does not match location/country (UA, RU, Simferopol, Crimea).
 // @no-log
 // @no-cookie-jar
 POST {{baseurl}}/rest/pb/alert
@@ -33,6 +36,9 @@ Authorization: Bearer {{access_token}}
 < ../docs/api/hq-messages/0b28ab3a-354d-8b2e-ddd0-a34581a10765.json
 
 ### Post an alert for solving
+### Number of hits: 1
+### Result: null
+### Comment: null. Recommendation reason - DAMAGED
 // @no-log
 // @no-cookie-jar
 POST {{baseurl}}/rest/pb/alert
@@ -43,6 +49,9 @@ Authorization: Bearer {{access_token}}
 < ../docs/api/private-examples/FP_based_on_CROSSMATCH_reco_from_crossmatch_agent_sierra.json
 
 ### Post the SVB alert 2021-10-01_1837_osama_bin_laden for solving
+### Number of hits: 13 (too much)
+### Result: null
+### Comment: null. Recommendation reason - OUTDATED
 // @no-log
 // @no-cookie-jar
 POST {{baseurl}}/rest/pb/alert
@@ -53,6 +62,9 @@ Authorization: Bearer {{access_token}}
 < ../docs/api/svb-examples/2021-10-01_1837_osama_bin_laden.json
 
 ### Post the SVB alert 2021-10-04-1851_saddam_hussain for solving
+### Number of hits: 16 (too much)
+### Result: null
+### Comment: null. Recommendation reason - OUTDATED
 // @no-log
 // @no-cookie-jar
 POST {{baseurl}}/rest/pb/alert
@@ -63,6 +75,9 @@ Authorization: Bearer {{access_token}}
 < ../docs/api/svb-examples/2021-10-04-1851_saddam_hussain.json
 
 ### Post the SVB alert 2021_10_08-1754_uat_firco_alert for solving
+### Number of hits: 5
+### Result: ACTION_FALSE_POSITIVE
+### Comment: False Positive hits: Match SIBIE194(ORIGINATOR, #1): Alerted Party's name (ORIG NAME) does not match Watchlist Party name (Line-Up). Alerted party location/countries (US) does not match location/country (UA, RU). Alerted party's address is a crossmatch to watchlist party name. Match AS06285026(INSBANK, #2): Alerted Party's name (ADDR LINE 1 2000007429) does not match Watchlist Party name (SANDA-M, OOO). Alerted party location/countries (CA, US, CU, SANTA CLARA) does not match location/country (RUSSIAN FEDERATION, OLA). Alerted party's address is a crossmatch to watchlist party name. Match AS06285086(INSBANK, #3): Alerted Party's name (ADDR LINE 1 2000007429) does not match Watchlist Party name (SANDA-M, OOO). Alerted party location/countries (CA, US, CU, SANTA CLARA) does not match location/country (RUSSIAN FEDERATION, OLA). Alerted party's address is a crossmatch to watchlist party name. Match AS06188474(INSBANK, #4): Alerted Party's name (ADDR LINE 1 2000007429) does not match Watchlist Party name (SANDA-M, OOO). Alerted party location/countries (CA, US, CU, SANTA CLARA) does not match location/country (RUSSIAN FEDERATION, OLA). Alerted party's address is a crossmatch to watchlist party name. Match SIBIE194(INSBANK, #5): Alerted Party's name (ADDR LINE 1 2000007429) does not match Watchlist Party name (Line-Up). Alerted party location/countries (CA, US, CU, SANTA CLARA) does not match location/country (UA, RU, Simferopol, Crimea).
 // @no-log
 // @no-cookie-jar
 POST {{baseurl}}/rest/pb/alert
@@ -73,6 +88,9 @@ Authorization: Bearer {{access_token}}
 < ../docs/api/svb-examples/2021-10-08-1754_uat_firco_alert.json
 
 ### Post the SVB alert 2021-10-17-0201_saddam_hussain_two_hits for solving
+### Number of hits: 2
+### Result: ACTION_INVESTIGATE
+### Comment: Manual Investigation hits: Match AS00495156(50K, #1) Match AS00307517(50K, #2)
 // @no-log
 // @no-cookie-jar
 POST {{baseurl}}/rest/pb/alert
@@ -83,6 +101,9 @@ Authorization: Bearer {{access_token}}
 < ../docs/api/svb-examples/2021-10-17-0201_saddam_hussain_two-2_hits.json
 
 ### Post the SVB alert 2021-10-17-0201_saddam_hussain-1_hit for solving
+### Number of hits: 1
+### Result: ACTION_INVESTIGATE
+### Comment: Manual Investigation hits: Match AS00307517(50K, #1)
 // @no-log
 // @no-cookie-jar
 POST {{baseurl}}/rest/pb/alert
@@ -93,6 +114,9 @@ Authorization: Bearer {{access_token}}
 < ../docs/api/svb-examples/2021-10-17-0201_saddam_hussain_two-1_hit.json
 
 ### Post the SVB alert GFX for solving
+### Number of hits: 3
+### Result: ACTION_FALSE_POSITIVE
+### Comment: False Positive hits: Match AS06336342(BENE, #1): Alerted Party's name (CANON) does not match Watchlist Party name (STS AO). Match AS06336994(BENE, #2): Alerted Party's name (CANON) does not match Watchlist Party name (STS AO). Match AS06337077(BENE, #3): Alerted Party's name (CANON) does not match Watchlist Party name (STS AO).
 // @no-log
 // @no-cookie-jar
 POST {{baseurl}}/rest/pb/alert
@@ -103,15 +127,22 @@ Authorization: Bearer {{access_token}}
 < ../docs/api/svb-examples/2021-10-21-0905_sovremennye_tekhnologii-3_hits.json
 
 ### Post the SVB alert GFX for solving
+### Number of hits: 3
+### Result: ACTION_FALSE_POSITIVE
+### Comment: False Positive hits: Match AS06337077(BENE, #3): Alerted Party's name (CANON) does not match Watchlist Party name (STS AO).
 // @no-log
 // @no-cookie-jar
 POST {{baseurl}}/rest/pb/alert
 Accept: application/json
 Content-Type: application/json
+Authorization: Bearer {{access_token}}
 
 < ../docs/api/svb-examples/2021-10-21-0905_x_non_blocking_hit.json
 
 ### Post broken alert
+### Number of hits: 9
+### Result: ACTION_INVESTIGATE
+### Comment: S8 recommended action: Manual Investigation hits: Match AS06344973(50, #1) Match AS06311180(44E, #2) Match AS06193650(46A, #3) Match AS00513735(46A, #4) Match AS00083399(78, #5) Match AS00119774(78, #6) Match AS00120009(78, #7) Match AS00121645(78, #8) Match AS00513735(78, #9)
 // GTEX-246c7acb-6b30-2bb9-1293-1c1b5fdae089.json
 POST {{baseurl}}/rest/pb/alert
 Accept: application/json
@@ -121,6 +152,9 @@ Authorization: Bearer {{access_token}}
 < ../docs/api/hq-messages/GTEX-246c7acb-6b30-2bb9-1293-1c1b5fdae089.json
 
 ### Post test alert 2022_03_24_1.json
+### Number of hits: 5
+### Result: ACTION_INVESTIGATE
+### Comment: S8 recommended action: Manual Investigation hits: Match AS00052278(ORIGINATOR, #1) Match AS00052276(ORIGINATOR, #2) Match AS00052274(ORIGINATOR, #3) Match AS00048462(ORIGINATOR, #4) Match AS00048458(ORIGINATOR, #5)
 // 2022_03_24_1.json
 POST {{baseurl}}/rest/pb/alert
 Accept: application/json
@@ -130,6 +164,9 @@ Authorization: Bearer {{access_token}}
 < ../docs/api/svb-examples/additional-examples/2022_03_24_1.json
 
 ### Post test alert 2022_03_24_2.json
+### Number of hits: 5
+### Result: ACTION_INVESTIGATE
+### Comment: S8 recommended action: Manual Investigation Manual Investigation hits: Match AS00052278(ORIGINATOR, #1) Match AS00052276(ORIGINATOR, #2) Match AS00052274(ORIGINATOR, #3) Match AS00048462(ORIGINATOR, #4) Match AS00048458(ORIGINATOR, #5)
 // 2022_03_24_2.json
 POST {{baseurl}}/rest/pb/alert
 Accept: application/json
@@ -139,6 +176,9 @@ Authorization: Bearer {{access_token}}
 < ../docs/api/svb-examples/additional-examples/2022_03_24_2.json
 
 ### Post test alert 2022_03_24_3.json
+### Number of hits: 2
+### Result: ACTION_INVESTIGATE
+### Comment: S8 recommended action: Manual Investigation Manual Investigation hits: Match AS00010013(ORIGINATOR, #1) Match AS00010013(ADDENDAINF, #2)
 // 2022_03_24_3.json
 POST {{baseurl}}/rest/pb/alert
 Accept: application/json
@@ -148,6 +188,9 @@ Authorization: Bearer {{access_token}}
 < ../docs/api/svb-examples/additional-examples/2022_03_24_3.json
 
 ### Post test alert 2022_03_24_4.json
+### Number of hits: 2
+### Result: ACTION_INVESTIGATE
+### Comment: S8 recommended action: Manual Investigation Manual Investigation hits: Match AS00010013(ORIGINATOR, #1) Match AS00010013(ADDENDAINF, #2)
 // 2022_03_24_4.json
 POST {{baseurl}}/rest/pb/alert
 Accept: application/json
@@ -157,6 +200,9 @@ Authorization: Bearer {{access_token}}
 < ../docs/api/svb-examples/additional-examples/2022_03_24_4.json
 
 ### Post test alert 2022_03_24_5.json
+### Number of hits: 1
+### Result: ACTION_INVESTIGATE
+### Comment: S8 recommended action: Manual Investigation Manual Investigation hits: Match AS00010013(ORIGINATOR, #1)
 // 2022_03_24_5.json
 POST {{baseurl}}/rest/pb/alert
 Accept: application/json
@@ -166,6 +212,9 @@ Authorization: Bearer {{access_token}}
 < ../docs/api/svb-examples/additional-examples/2022_03_24_5.json
 
 ### Post test alert 2022_03_24_6.json
+### Number of hits: 1
+### Result: ACTION_INVESTIGATE
+### Comment: S8 recommended action: Manual Investigation Manual Investigation hits: Match AS00010013(ORIGINATOR, #1)
 // 2022_03_24_6.json
 POST {{baseurl}}/rest/pb/alert
 Accept: application/json
@@ -175,6 +224,9 @@ Authorization: Bearer {{access_token}}
 < ../docs/api/svb-examples/additional-examples/2022_03_24_6.json
 
 ### Post test alert 2022_03_24_7.json
+### Number of hits: 2
+### Result: ACTION_INVESTIGATE
+### Comment: S8 recommended action: Manual Investigation Manual Investigation hits: Match AS00010013(ORIGINATOR, #1) Match AS00010013(ADDENDAINF, #2)
 // 2022_03_24_7.json
 POST {{baseurl}}/rest/pb/alert
 Accept: application/json
@@ -184,6 +236,9 @@ Authorization: Bearer {{access_token}}
 < ../docs/api/svb-examples/additional-examples/2022_03_24_7.json
 
 ### Post test alert 2022_03_24_8.json
+### Number of hits: 1
+### Result: ACTION_INVESTIGATE
+### Comment: S8 recommended action: Manual Investigation Manual Investigation hits: Match AS00010013(ORIGINATOR, #1)
 // 2022_03_24_8.json
 POST {{baseurl}}/rest/pb/alert
 Accept: application/json
@@ -193,6 +248,9 @@ Authorization: Bearer {{access_token}}
 < ../docs/api/svb-examples/additional-examples/2022_03_24_8.json
 
 ### Post test alert 2022_03_24_9.json
+### Number of hits: 5
+### Result: ACTION_INVESTIGATE
+### Comment: S8 recommended action: Manual Investigation Manual Investigation hits: Match AS00048458(ORIGINATOR, #1) Match AS00052274(ORIGINATOR, #2) Match AS00052276(ORIGINATOR, #3) Match AS00048462(ORIGINATOR, #4) Match AS00052278(ORIGINATOR, #5)
 // 2022_03_24_9.json
 POST {{baseurl}}/rest/pb/alert
 Accept: application/json
@@ -202,6 +260,9 @@ Authorization: Bearer {{access_token}}
 < ../docs/api/svb-examples/additional-examples/2022_03_24_9.json
 
 ### Post test alert 2022_03_24_10.json
+### Number of hits: 5
+### Result: ACTION_INVESTIGATE
+### Comment: S8 recommended action: Manual Investigation Manual Investigation hits: Match AS00048458(ORIGINATOR, #1) Match AS00052274(ORIGINATOR, #2) Match AS00052276(ORIGINATOR, #3) Match AS00048462(ORIGINATOR, #4) Match AS00052278(ORIGINATOR, #5)
 // 2022_03_24_10.json
 POST {{baseurl}}/rest/pb/alert
 Accept: application/json

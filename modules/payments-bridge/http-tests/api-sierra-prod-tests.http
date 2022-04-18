@@ -16,6 +16,9 @@ client_id={{client-id}}&client_secret={{client-secret}}&grant_type=client_creden
 %}
 
 ### Post the SVB alert DIN20220103070716-46631-31678
+### Number of hits: 1
+### Recomendation action: ACTION_FALSE_POSITIVE
+### Comment: False Positive hits: Match SIZADA4355(BENE, #1): Alerted Party's name (OLEKSANDR CHERNOV) does not match Watchlist Party name (CHERNOVE).
 // @no-log
 // @no-cookie-jar
 POST {{baseurl}}/rest/pb/alert
@@ -26,6 +29,9 @@ Authorization: Bearer {{access_token}}
 < ../docs/api/sierra-prod-examples/DIN20220103070716-46631-31678.json
 
 ### Post the SVB alert DIN20220201144950-27041-2604.json
+### Number of hits: 1
+### Recomendation action: false positive (on preprod -ACTION_POTENTIAL_TRUE_POSITIVE)
+### Comment: Potential True Positive hits: Match AS06323198(ORIGINATOR, #1): .
 // @no-log
 // @no-cookie-jar
 POST {{baseurl}}/rest/pb/alert
@@ -36,6 +42,9 @@ Authorization: Bearer {{access_token}}
 < ../docs/api/sierra-prod-examples/DIN20220201144950-27041-2604.json
 
 ### Post the SVB alert DIN20220201150155-27715-2601.json
+### Number of hits: 2
+### Recomendation action: ACTION_POTENTIAL_TRUE_POSITIVE
+### Comment: Potential True Positive hits: Match AS06323198(ORIGINATOR, #1): .False Positive hits: Match AS06323198(BENE, #2): Alerted Party's name (TC LATIN AMERICA REAL ESTATE FUND I) does not match Watchlist Party name (AL-AMER REAL ESTATE DEVELOPMENT AND INVESTMENT LLC). Alerted party location/countries (MY, GEORGE TOWN) does not match location/country (SYRIAN ARAB REPUBLIC, DAMASCUS).
 // @no-log
 // @no-cookie-jar
 POST {{baseurl}}/rest/pb/alert
@@ -46,6 +55,9 @@ Authorization: Bearer {{access_token}}
 < ../docs/api/sierra-prod-examples/DIN20220201150155-27715-2601.json
 
 ### Post the SVB alert DIN20220128012827-15302-320
+### Number of hits: 1
+### Recomendation action: ACTION_FALSE_POSITIVE
+### Comment: False Positive hits: Match AS00836419(ORIGINATOR, #1): Alerted party location/countries (ES) does not match location/country (CHINA, HONG KONG).
 // @no-log
 // @no-cookie-jar
 POST {{baseurl}}/rest/pb/alert
@@ -56,6 +68,9 @@ Authorization: Bearer {{access_token}}
 < ../docs/api/sierra-prod-examples/DIN20220128012827-15302-320.json
 
 ### Post the SVB alert DIN20220201160123-16626-323.json
+### Number of hits: 1
+### Recomendation action: ACTION_INVESTIGATE
+### Comment: Manual Investigation hits: Match AS06383945(70, #1)
 // @no-log
 // @no-cookie-jar
 POST {{baseurl}}/rest/pb/alert
@@ -67,6 +82,9 @@ Authorization: Bearer {{access_token}}
 
 
 ### Post the SVB alert DIN20220201162748-11235-2609.json
+### Number of hits: 1
+### Recomendation action: ACTION_INVESTIGATE
+### Comment: Manual Investigation hits: Match AS06189844(79, #1)
 // @no-log
 // @no-cookie-jar
 POST {{baseurl}}/rest/pb/alert
@@ -77,6 +95,9 @@ Authorization: Bearer {{access_token}}
 < ../docs/api/sierra-prod-examples/DIN20220201162748-11235-2609.json
 
 ### Post the SVB alert DIN20220201160606-28992-317
+### Number of hits: 1
+### Recomendation action:
+### Comment:
 // @no-log
 // @no-cookie-jar
 POST {{baseurl}}/rest/pb/alert
@@ -87,6 +108,9 @@ Authorization: Bearer {{access_token}}
 < ../docs/api/sierra-prod-examples/DIN20220201160606-28992-317
 
 ### Post the SVB alert DIN20220201164114-31155-314.json
+### Number of hits: 1
+### Recomendation action: ACTION_FALSE_POSITIVE
+### Comment: False Positive hits: Match AS00555442(ORGBANK, #1): Alerted party location/countries (GB) does not match location/country (CUBA, LA, US).
 // @no-log
 // @no-cookie-jar
 POST {{baseurl}}/rest/pb/alert
