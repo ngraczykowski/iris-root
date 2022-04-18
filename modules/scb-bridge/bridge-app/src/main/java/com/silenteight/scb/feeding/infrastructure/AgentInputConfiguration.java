@@ -61,6 +61,6 @@ public class AgentInputConfiguration {
 
   @Bean
   CompanyNameFeatureFactory companyNameFeatureFactory() {
-      return new CompanyNameFeatureFactory();
+    return new CompanyNameFeatureFactory();
   }
 }
