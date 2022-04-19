@@ -6,7 +6,7 @@ import com.silenteight.scb.outputrecommendation.domain.model.BatchMetadata
 import com.silenteight.scb.outputrecommendation.domain.model.BatchSource
 import com.silenteight.scb.outputrecommendation.domain.model.RecommendationsGeneratedEvent
 import com.silenteight.scb.outputrecommendation.infrastructure.QcoRecommendationProperties
-import com.silenteight.scb.qco.QcoFacade
+import com.silenteight.scb.outputrecommendation.infrastructure.QcoRecommendationProvider
 
 import spock.lang.Specification
 
@@ -14,8 +14,8 @@ class QcoRecommendationServiceSpec extends Specification {
 
   private static QCO_RECOMMENDATION = "qcoRecommendationAction"
   def qcoProperties = new QcoRecommendationProperties(true)
-  def qcoFacade = Mock(QcoFacade)
-  def underTest = new QcoRecommendationService(qcoProperties, qcoFacade)
+  def qcoRecommendationProvider = Mock(QcoRecommendationProvider)
+  def underTest = new QcoRecommendationService(qcoProperties, qcoRecommendationProvider)
 
   def "should run QCO process when qco is enabled and batch is from CBS"() {
     given:
@@ -27,7 +27,7 @@ class QcoRecommendationServiceSpec extends Specification {
     def result = underTest.process(recommendationsEvent)
 
     then:
-    numOfRecommendations * qcoFacade.process(_ as QcoRecommendationAlert) >> qcoFacadeResponse
+    numOfRecommendations * qcoRecommendationProvider.process(_ as QcoRecommendationAlert) >> qcoFacadeResponse
     def recommendations = result.recommendations()
     def matches = recommendations.first().matches()
     with(matches.first()) {
@@ -45,14 +45,14 @@ class QcoRecommendationServiceSpec extends Specification {
     def result = underTest.process(recommendationsEvent)
 
     then:
-    0 * qcoFacade.process(_ as QcoRecommendationAlert)
+    0 * qcoRecommendationProvider.process(_ as QcoRecommendationAlert)
     result == recommendationsEvent
   }
 
   def "should return unchanged recommendations when QCO throws error"() {
     given:
     def recommendationsEvent = CBS_RECOMMENDATIONS_EVENT
-    qcoFacade.process(_ as QcoRecommendationAlert) >> {throw new RuntimeException()}
+    qcoRecommendationProvider.process(_ as QcoRecommendationAlert) >> {throw new RuntimeException()}
 
     when:
     def result = underTest.process(recommendationsEvent)

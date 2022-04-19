@@ -1,13 +1,13 @@
-package com.silenteight.scb.qco;
+package com.silenteight.scb.outputrecommendation.infrastructure;
 
 import com.silenteight.qco.domain.model.QcoRecommendationAlert;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 @ConditionalOnProperty(value = "silenteight.scb-bridge.qco.enabled", havingValue = "false")
-class QcoFacadeMock implements QcoFacade {
+public class QcoRecommendationMockProvider implements QcoRecommendationProvider {
 
   @Override
   public QcoRecommendationAlert process(QcoRecommendationAlert alert) {

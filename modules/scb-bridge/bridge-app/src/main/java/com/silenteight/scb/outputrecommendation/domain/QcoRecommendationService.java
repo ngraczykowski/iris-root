@@ -9,7 +9,7 @@ import com.silenteight.scb.outputrecommendation.domain.model.BatchSource;
 import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.Recommendation;
 import com.silenteight.scb.outputrecommendation.domain.model.RecommendationsGeneratedEvent;
 import com.silenteight.scb.outputrecommendation.infrastructure.QcoRecommendationProperties;
-import com.silenteight.scb.qco.QcoFacade;
+import com.silenteight.scb.outputrecommendation.infrastructure.QcoRecommendationProvider;
 
 import io.vavr.control.Try;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ import java.util.List;
 class QcoRecommendationService {
 
   private final QcoRecommendationProperties qcoProperties;
-  private final QcoFacade qcoFacade;
+  private final QcoRecommendationProvider qcoRecommendationProvider;
 
   RecommendationsGeneratedEvent process(RecommendationsGeneratedEvent recommendationsEvent) {
     if (!isQcoAllowed(recommendationsEvent)) {
@@ -53,7 +53,7 @@ class QcoRecommendationService {
 
   private Recommendation updateRecommendation(Recommendation recommendation) {
     var qcoRecommendationAlert = QcoRecommendationAlertMapper.map(recommendation);
-    var responseQcoRecommendation = qcoFacade.process(qcoRecommendationAlert);
+    var responseQcoRecommendation = qcoRecommendationProvider.process(qcoRecommendationAlert);
     return overrideMatches(recommendation, responseQcoRecommendation);
   }
 

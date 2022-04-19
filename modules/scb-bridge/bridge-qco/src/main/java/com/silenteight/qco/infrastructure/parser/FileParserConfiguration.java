@@ -28,11 +28,10 @@ class FileParserConfiguration {
   }
 
   @Bean
-  CsvStreamParser<QcoPolicyStepSolutionOverrideConfiguration> csvStreamParser(CsvMapper csvMapper) {
-    return new CsvStreamParser<>(csvMapper, properties.separator());
+  CsvStreamParser<QcoPolicyStepSolutionOverrideConfiguration> csvStreamParser() {
+    return new CsvStreamParser<>(csvMapper(), properties.separator());
   }
 
-  @Bean
   CsvMapper csvMapper() {
     CsvMapper mapper = new CsvMapper();
     mapper.enable(TRIM_SPACES);

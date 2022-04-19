@@ -1,8 +1,8 @@
-package com.silenteight.scb.qco;
+package com.silenteight.scb.outputrecommendation.infrastructure;
 
 import com.silenteight.qco.domain.model.QcoRecommendationAlert;
 
-public interface QcoFacade {
+public interface QcoRecommendationProvider {
 
   QcoRecommendationAlert process(QcoRecommendationAlert alert);
 }

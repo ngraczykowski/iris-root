@@ -1,10 +1,10 @@
-package com.silenteight.qco.domain;
+package com.silenteight.qco;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.qco.domain.QcoAlertService;
 import com.silenteight.qco.domain.model.QcoRecommendationAlert;
-import com.silenteight.scb.qco.QcoFacade;
 
 import io.vavr.control.Try;
 import org.springframework.stereotype.Component;
@@ -12,11 +12,10 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class QcoDefaultFacade implements QcoFacade {
+public class QcoFacade {
 
   private final QcoAlertService qcoAlertService;
 
-  @Override
   public QcoRecommendationAlert process(QcoRecommendationAlert alert) {
     return Try.of(() -> qcoAlertService.extractAndProcessRecommendationAlert(alert))
         .onFailure(e ->

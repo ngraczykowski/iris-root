@@ -12,11 +12,11 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-class QcoAlertService {
+public class QcoAlertService {
 
   private final MatchProcessor matchProcessor;
 
-  QcoRecommendationAlert extractAndProcessRecommendationAlert(QcoRecommendationAlert alert) {
+  public QcoRecommendationAlert extractAndProcessRecommendationAlert(QcoRecommendationAlert alert) {
     return alert.toBuilder()
         .matches(updateQcoMatchesData(alert))
         .build();
