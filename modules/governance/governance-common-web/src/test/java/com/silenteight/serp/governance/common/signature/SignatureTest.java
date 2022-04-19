@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.common.signature;
 
 import com.google.protobuf.ByteString;
 import org.junit.jupiter.api.Test;
+
 import static org.assertj.core.api.Assertions.*;
 
 class SignatureTest {

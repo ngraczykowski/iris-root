@@ -1,42 +1,33 @@
 plugins {
-  id "java"
+  id "com.silenteight.iris.build.java-library"
   id "java-test-fixtures"
 }
 
 description = "Governance Quality Assurance Alerts"
 
-configurations {
-  implementation.extendsFrom starterCommon
-  implementation.extendsFrom starterJackson
-  implementation.extendsFrom starterGrpc
-  implementation.extendsFrom starterDatabase
-  implementation.extendsFrom starterGrpcClient
-  implementation.extendsFrom starterJackson
-
-  runtimeOnly.extendsFrom starterDatabaseRuntime
-
-  testImplementation.extendsFrom starterSpringTest
-}
-
 dependencies {
-  implementation libraries.cronutils
+  implementation libs.commons.collections
+  implementation libs.cronutils
 
-  implementation libraries.silenteight_audit_bs
-  implementation libraries.silenteight_data_retention_api
-  implementation libraries.silenteight_sep_base_common
-  implementation libraries.silenteight_sep_base_testing
-  implementation libraries.silenteight_serp_protocol_base
-  implementation libraries.silenteight_warehouse_sampling_api
-  implementation libraries.silenteight_warehouse_data_api
+  implementation libs.silenteight.audit.bs
+  implementation libs.silenteight.data.retention.api
+  implementation libs.silenteight.sep.base.common
+  implementation libs.silenteight.sep.base.testing
+  implementation libs.silenteight.serp.protocol.base
+  implementation libs.warehouse.sampling.api
+  implementation libs.warehouse.data.api
 
-  implementation libraries.spring_webmvc
-  implementation libraries.spring_security_config
+  implementation libs.spring.webmvc
+  implementation libs.spring.data.jpa
+  implementation libs.spring.security.config
+  implementation libs.grpc.client.spring.boot.starter
+  implementation libs.grpc.server.spring.boot.starter
 
   implementation project(":governance-db-changelog")
   implementation project(":governance-common-web")
 
-  testImplementation libraries.rest_assured_spring_mock_mvc
-  testImplementation libraries.spring_security_test
+  testImplementation libs.rest.assured.spring.mock.mvc
+  testImplementation libs.spring.security.test
 
   testImplementation project(":governance-common-web-testing")
 }

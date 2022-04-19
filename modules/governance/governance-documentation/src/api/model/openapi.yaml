@@ -232,4 +232,3 @@ components:
 
     ModelConfiguration:
       type: object
-

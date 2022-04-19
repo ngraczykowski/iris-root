@@ -20,4 +20,3 @@ class TestSamplingGeneratorConfiguration {
     return new DecisionCreatedHandler(sendAlertMessageUseCase);
   }
 }
-

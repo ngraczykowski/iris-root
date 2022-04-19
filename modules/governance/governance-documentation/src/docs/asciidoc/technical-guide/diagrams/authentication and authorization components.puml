@@ -16,4 +16,3 @@ User -- Keycloak
 Keycloak -- KeycloakDB
 Frontend -- backend
 @enduml
-

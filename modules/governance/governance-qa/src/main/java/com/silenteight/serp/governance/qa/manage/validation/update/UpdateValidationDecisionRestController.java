@@ -65,4 +65,3 @@ class UpdateValidationDecisionRestController {
     return accepted().build();
   }
 }
-

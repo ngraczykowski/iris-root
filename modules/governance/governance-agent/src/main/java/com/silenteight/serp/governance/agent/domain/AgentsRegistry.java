@@ -83,4 +83,3 @@ public class AgentsRegistry {
         .findFirst().orElseThrow(() -> new UnreachableAgentException(id));
   }
 }
-

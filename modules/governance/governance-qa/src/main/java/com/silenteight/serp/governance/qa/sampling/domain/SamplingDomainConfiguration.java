@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories
 @EnableTransactionManagement
 public class SamplingDomainConfiguration {
-  
+
   @Bean
   AlertSamplingByStateQuery alertSamplingQuery(AlertSamplingRepository alertSamplingRepository) {
     return new AlertSamplingByStateQuery(alertSamplingRepository);

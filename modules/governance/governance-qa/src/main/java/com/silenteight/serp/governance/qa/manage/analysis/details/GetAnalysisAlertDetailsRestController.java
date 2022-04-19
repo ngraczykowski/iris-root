@@ -47,4 +47,3 @@ class GetAnalysisAlertDetailsRestController {
     return ok(detailsQuery.details(toResourceName(alertId)));
   }
 }
-

@@ -11,5 +11,3 @@
   <include file="db/changelog/db.changelog-auditing.xml"/>
 
 </databaseChangeLog>
-
-

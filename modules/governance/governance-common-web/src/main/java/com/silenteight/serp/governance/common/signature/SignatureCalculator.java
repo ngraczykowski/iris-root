@@ -39,4 +39,3 @@ public class SignatureCalculator {
     return digest.digest();
   }
 }
-

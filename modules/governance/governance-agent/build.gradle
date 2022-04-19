@@ -1,40 +1,29 @@
 plugins {
-  id "java"
+  id "com.silenteight.iris.build.java-library"
   id "java-test-fixtures"
 }
 
 description = "Governance Agent"
 
-configurations {
-  implementation.extendsFrom starterCommon
-  implementation.extendsFrom starterJackson
-  implementation.extendsFrom starterGrpc
-  implementation.extendsFrom starterMessaging
-  implementation.extendsFrom starterDatabase
-  runtimeOnly.extendsFrom starterDatabaseRuntime
-
-  testImplementation.extendsFrom starterSpringTest
-}
-
 dependencies {
-  implementation libraries.silenteight_sep_base_common
-  implementation libraries.silenteight_sep_base_testing
-  implementation libraries.silenteight_serp_protocol_base
+  implementation libs.silenteight.sep.base.common
+  implementation libs.silenteight.sep.base.testing
+  implementation libs.silenteight.serp.protocol.base
 
-  implementation libraries.silenteight_model_api
+  implementation libs.governance.model.api
 
-  implementation libraries.silenteight_audit_bs
+  implementation libs.silenteight.audit.bs
 
   implementation project(":governance-db-changelog")
   implementation project(":governance-common-web")
   implementation project(":governance-common-web-testing")
 
-  implementation libraries.spring_webmvc
-  implementation libraries.spring_security_config
+  implementation libs.spring.webmvc
+  implementation libs.spring.security.config
 
-  implementation libraries.grpc_api
-  implementation libraries.grpc_stub
+  implementation libs.grpc.api
+  implementation libs.grpc.stub
 
-  testImplementation libraries.rest_assured_spring_mock_mvc
-  testImplementation libraries.spring_security_test
+  testImplementation libs.rest.assured.spring.mock.mvc
+  testImplementation libs.spring.security.test
 }

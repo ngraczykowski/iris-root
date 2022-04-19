@@ -47,4 +47,3 @@ class ViewAlertValidationRestController {
     return ResponseEntity.accepted().build();
   }
 }
-

@@ -1,34 +1,27 @@
 plugins {
-  id "java"
+  id "com.silenteight.iris.build.java-library"
   id "java-test-fixtures"
 }
 
 description = "Governance Change Request"
 
-configurations {
-  implementation.extendsFrom starterCommon
-  implementation.extendsFrom starterJackson
-  implementation.extendsFrom starterDatabase
-  runtimeOnly.extendsFrom starterDatabaseRuntime
-
-  testImplementation.extendsFrom starterSpringTest
-}
-
 dependencies {
-  implementation libraries.silenteight_sep_base_common
-  implementation libraries.silenteight_sep_base_testing
-  implementation libraries.silenteight_file_storage_api
-  implementation libraries.silenteight_audit_bs
+  implementation libs.silenteight.sep.auth
+  implementation libs.silenteight.sep.base.common
+  implementation libs.silenteight.sep.base.testing
+  implementation libs.silenteight.filestorage.api
+  implementation libs.silenteight.audit.bs
 
   implementation project(":governance-db-changelog")
   implementation project(":governance-common-web")
   implementation project(":governance-file")
 
-  implementation libraries.spring_webmvc
-  implementation libraries.spring_security_config
+  implementation libs.spring.data.jpa
+  implementation libs.spring.webmvc
+  implementation libs.spring.security.config
 
   testImplementation project(":governance-common-web-testing")
-  testImplementation libraries.rest_assured_spring_mock_mvc
-  testImplementation libraries.spring_security_test
-  testImplementation libraries.silenteight_filestorage_minio
+  testImplementation libs.rest.assured.spring.mock.mvc
+  testImplementation libs.spring.security.test
+  testImplementation libs.silenteight.filestorage.minio
 }

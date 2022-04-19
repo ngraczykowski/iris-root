@@ -35,7 +35,7 @@ Sometimes there is a need to block all endpoints (HSBC on a prod env).
 To do this, you can run the application with a `no-rest-api` profile.
 All endpoints will be available with a basic-auth, but there will be no user available to log in.
 
-With this profile, the application doesn't require Keycloak's adapter properties to boot. 
+With this profile, the application doesn't require Keycloak's adapter properties to boot.
 
 ## Development Setup
 
@@ -55,7 +55,7 @@ Start database service using the command:
 > The above command runs `docker-compose` in compatibility mode (the `--compatibility` argument).
 > This is required to limit the amount of memory to services, otherwise it would be impossible to start all the services on regular developer's computer.
 
-### Starting RabbitMQ 
+### Starting RabbitMQ
 Governance uses RabbitMQ message broker to communicate with other components.
 
 To start RabbitMQ, follow the steps:
@@ -63,9 +63,9 @@ To start RabbitMQ, follow the steps:
 1. Clone [Common Docker Infrastructure]:
 
        git clone https://gitlab.silenteight.com/sens/common-docker-infrastructure
-       
+
 1. Start docker-compose. It is sufficient to start just the rabbitmq service.
-    
+
        docker-compose up -d rabbitmq
 
 ### Using Swagger UI
@@ -94,14 +94,19 @@ sep.auth.basic.users:
 Policy example is available in the `helpers/policy/example/solid-steps.json` file.
 This example reflects solid steps created by Victor.
 
-You can run `Governance - development environment` configuration and use [Swagger](http://localhost:24204/rest/governance/openapi/swagger-ui/index.html?configUrl=/rest/governance/openapi/api-docs/swagger-config#/import-policy-rest-controller/importPolicy) to make a test call.
+You can run `Governance - development environment` configuration and
+use [Swagger](http://localhost:24204/rest/governance/openapi/swagger-ui/index.html?configUrl=/rest/governance/openapi/api-docs/swagger-config#/import-policy-rest-controller/importPolicy)
+to make a test call.
 You have to use `/api/v1/policies/import` endpoint and JSON file as an input.
-In the `development environment`, you have configured basic auth with an user (`bo`) and password (`bodev`). 
+In the `development environment`, you have configured basic auth with an user (`bo`) and
+password (`bodev`).
 
-The policy is imported in `in_use` state, which means it will be used to solve any request made by GRPC API.
+The policy is imported in `in_use` state, which means it will be used to solve any request made by
+GRPC API.
 
 You can import a policy from JSON file with or without UUIDs in steps and in the policy.
-If you provide UUIDs in the `policyId` and the `stepId` fields, then those ids will be used when saving the policy in the database, otherwise, those ids will be generated.
+If you provide UUIDs in the `policyId` and the `stepId` fields, then those ids will be used when
+saving the policy in the database, otherwise, those ids will be generated.
 
 ### Solve Feature Vector GRPC call
 

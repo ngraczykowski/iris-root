@@ -70,4 +70,3 @@ class ListAlertAnalysisRestController {
     return list.get(list.size() - 1).getAddedAt();
   }
 }
-

@@ -1,32 +1,24 @@
 plugins {
-  id "java"
+  id "com.silenteight.iris.build.java-library"
 }
 
 description = "Governance Files"
 
-configurations {
-  implementation.extendsFrom starterCommon
-  implementation.extendsFrom starterJackson
-  implementation.extendsFrom starterDatabase
-
-  runtimeOnly.extendsFrom starterDatabaseRuntime
-
-  testImplementation.extendsFrom starterSpringTest
-}
-
 dependencies {
-  implementation libraries.silenteight_sep_base_common
-  implementation libraries.silenteight_sep_base_testing
+  implementation libs.silenteight.sep.base.common
+  implementation libs.silenteight.sep.base.testing
 
-  implementation libraries.silenteight_audit_bs
-  implementation libraries.silenteight_file_storage_api
+  implementation libs.silenteight.sep.auth
+  implementation libs.silenteight.audit.bs
+  implementation libs.silenteight.filestorage.api
   implementation project(":governance-db-changelog")
   implementation project(":governance-common-web")
 
-  implementation libraries.spring_webmvc
-  implementation libraries.spring_security_config
-  implementation libraries.tika_core
+  implementation libs.spring.data.jpa
+  implementation libs.spring.webmvc
+  implementation libs.spring.security.config
+  implementation libs.tika.core
   testImplementation project(":governance-common-web-testing")
-  testImplementation libraries.rest_assured_spring_mock_mvc
-  testImplementation libraries.spring_security_test
+  testImplementation libs.rest.assured.spring.mock.mvc
+  testImplementation libs.spring.security.test
 }

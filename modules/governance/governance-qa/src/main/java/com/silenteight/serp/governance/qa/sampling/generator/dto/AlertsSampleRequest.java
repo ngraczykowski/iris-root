@@ -57,7 +57,7 @@ public class AlertsSampleRequest {
 
   private List<Filter> collectFilters() {
     List<Filter> filters = new ArrayList<>();
-    filters.addAll(defaultFilters); 
+    filters.addAll(defaultFilters);
     filters.addAll(toFilters(distributions));
     return filters;
   }

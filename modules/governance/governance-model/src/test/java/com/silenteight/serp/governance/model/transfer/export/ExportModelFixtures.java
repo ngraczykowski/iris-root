@@ -134,7 +134,7 @@ final class ExportModelFixtures {
   private static TransferredStepDto getTransferredStepDto(
       UUID id, String name, String desc, StepType type,
       List<TransferredFeatureLogicDto> featureLogics) {
-    
+
     TransferredStepDto firstStep = new TransferredStepDto();
     firstStep.setStepId(id);
     firstStep.setName(name);

@@ -60,4 +60,3 @@ class UpdateAnalysisDecisionRestController {
     return accepted().build();
   }
 }
-

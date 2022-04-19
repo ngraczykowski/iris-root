@@ -51,4 +51,3 @@ public class FeatureVectorsDto {
     List<String> values = of();
   }
 }
-

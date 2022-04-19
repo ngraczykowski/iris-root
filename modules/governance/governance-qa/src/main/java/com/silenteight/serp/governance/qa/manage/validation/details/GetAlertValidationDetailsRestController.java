@@ -47,4 +47,3 @@ class GetAlertValidationDetailsRestController {
     return ok(alertDetailsQuery.details(toResourceName(alertId)));
   }
 }
-

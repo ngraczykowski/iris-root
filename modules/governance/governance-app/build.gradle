@@ -1,27 +1,10 @@
 plugins {
-  id "java"
   id "groovy"
-  id "maven-publish"
-  id "io.freefair.aspectj.post-compile-weaving"
-  id "org.springframework.boot"
   id "com.google.cloud.tools.jib"
+  id "com.silenteight.iris.build.spring-boot-application"
 }
 
 description = "Governance Application"
-
-configurations {
-  implementation.extendsFrom starterCommon
-  implementation.extendsFrom starterGrpc
-  implementation.extendsFrom starterSpringApp
-  implementation.extendsFrom starterMessaging
-  implementation.extendsFrom starterIntegration
-
-  implementation.extendsFrom starterDatabase
-  runtimeOnly.extendsFrom starterDatabaseRuntime
-
-  testImplementation.extendsFrom starterSpringTest
-  testImplementation.extendsFrom starterSpockTest
-}
 
 dependencies {
   implementation project(":governance-agent")
@@ -36,60 +19,67 @@ dependencies {
   implementation project(":governance-qa")
   implementation project(":governance-strategy")
 
-  implementation libraries.silenteight_audit_bs
-  implementation libraries.silenteight_commons_app
-  implementation libraries.silenteight_filestorage_minio
-  implementation libraries.silenteight_sep_base_common
-  implementation libraries.silenteight_sep_base_testing
-  implementation libraries.silenteight_serp_protocol_base
+  implementation libs.commons.collections
 
-  implementation libraries.spring_boot_starter_actuator
-  implementation libraries.spring_boot_starter_undertow
-  implementation libraries.spring_boot_starter_web
+  implementation libs.silenteight.audit.bs
+  implementation libs.silenteight.commons.app
+  implementation libs.silenteight.filestorage.minio
+  implementation libs.silenteight.sep.base.common
+  implementation libs.silenteight.sep.base.testing
+  implementation libs.silenteight.serp.protocol.base
 
-  implementation libraries.spring_context_support
-  implementation libraries.spring_security_config
-  implementation libraries.spring_security_web
-  implementation libraries.spring_cloud_consul_discovery
-  implementation libraries.spring_cloud_starter_consul_config
+  implementation libs.spring.boot.starter.actuator
+  implementation libs.spring.boot.starter.undertow
+  implementation libs.spring.boot.starter.web
 
-  implementation libraries.commons_lang3
+  implementation libs.spring.context.support
+  implementation libs.spring.security.config
+  implementation libs.spring.security.web
+  implementation libs.spring.cloud.consul.discovery
+  implementation libs.spring.cloud.starter.consul.config
+  implementation libs.spring.integration.mail
 
-  implementation libraries.protobuf_java_util
-  implementation libraries.grpc_api
-  implementation libraries.grpc_stub
+  implementation libs.commons.lang3
 
-  implementation libraries.jaxb_api
+  implementation libs.protobuf.java.util
+  implementation libs.grpc.api
+  implementation libs.grpc.stub
 
-  // ANO: jackson_module_kotlin can be removed once spring and or jackson is bumped
+  implementation libs.jaxb.api
+
+  // ANO: jackson.module.kotlin can be removed once spring and or jackson is bumped
   // kotlin is required by minio
   // https://stackoverflow.com/questions/67630048/springboot-2-5-0-for-jackson-kotlin-classes-support-please-add-com-fasterxml-ja
-  implementation libraries.jackson_module_kotlin
+  implementation libs.jackson.module.kotlin
 
-  implementation libraries.jakarta_inject
-  implementation libraries.jakarta_mail
+  implementation libs.jakarta.inject
+  implementation libs.jakarta.mail
 
-  implementation libraries.protobuf_java_util
+  implementation libs.protobuf.java.util
 
-  implementation libraries.querydsl_jpa
-  implementation libraries.ecs_logging_core
+  implementation libs.querydsl.jpa
+  implementation libs.ecs.logging.core
 
   //Sentry
-  runtimeOnly libraries.sentry_spring_boot_starter
+  runtimeOnly libs.sentry.spring.boot.starter
   //having this at runtime ensure sending all ERROR level logs to Sentry
-  runtimeOnly libraries.sentry_logback
+  runtimeOnly libs.sentry.logback
 
-  annotationProcessor libraries.querydsl_apt_jpa
-  annotationProcessor libraries.jakarta_persistence_api
-  annotationProcessor libraries.jakarta_annotation_api
-  annotationProcessor libraries.spring_boot_configuration_processor
+  annotationProcessor(libs.querydsl.apt.jpa) {
+    artifact {
+      classifier = 'jpa'
+    }
+  }
+  annotationProcessor libs.jakarta.persistence.api
+  annotationProcessor libs.jakarta.annotation.api
+  annotationProcessor libs.spring.boot.configuration.processor
 
-  testImplementation libraries.spock_spring
-  testImplementation libraries.spring_integration_test
+  testImplementation libs.spock.spring
+  testImplementation libs.spring.integration.test
 
-  testImplementation libraries.rest_assured_spring_mock_mvc
+  testImplementation libs.rest.assured.spring.mock.mvc
 
-  aspect libraries.silenteight_sep_base_aspects
+  aspect libs.silenteight.sep.base.aspects
 }
 
 publishing {

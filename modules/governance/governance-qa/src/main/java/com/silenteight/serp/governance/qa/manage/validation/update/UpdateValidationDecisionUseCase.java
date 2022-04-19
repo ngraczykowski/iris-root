@@ -16,4 +16,3 @@ class UpdateValidationDecisionUseCase {
     decisionService.updateDecision(request);
   }
 }
-

@@ -89,5 +89,3 @@ class CloneStepRestControllerTest extends BaseRestControllerTest {
         .body(containsString(exception.getMessage()));
   }
 }
-
-

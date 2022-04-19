@@ -47,7 +47,8 @@ grpc:
 keycloak:
   client-id: frontend
   adapter:
-    auth-server-url: {{ key "sear/external_url" }}/auth
+    # FIXME(ahaczewski): Why Nomad key expansion is here?
+    #auth-server-url: {{ key "sear/external_url" }}/auth
     realm: sens-webapp
     public-client: false
     confidential-port: 0

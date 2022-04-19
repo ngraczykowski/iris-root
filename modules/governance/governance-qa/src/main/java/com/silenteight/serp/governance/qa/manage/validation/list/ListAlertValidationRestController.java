@@ -71,4 +71,3 @@ class ListAlertValidationRestController {
     return list.get(list.size() - 1).getAddedAt();
   }
 }
-

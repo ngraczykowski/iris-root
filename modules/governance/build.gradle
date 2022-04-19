@@ -1,42 +1,40 @@
 plugins {
-  id "maven-publish"
-  id "org.sonarqube" version "3.1"
-  id "com.silenteight.gradle.convention" version "1.21.3"
-  id "com.silenteight.gradle.release" version "1.4.0"
-  id "com.silenteight.gradle.wrapper" version "1.1.0"
-  id "com.silenteight.gradle.testreportspublisher" version "1.2.0"
-  id "io.freefair.aspectj" version "5.3.0" apply false
-  id "nebula.resolution-rules" version "9.0.0"
+  //id "maven-publish"
+  //id "org.sonarqube" version "3.1"
+  //id "com.silenteight.gradle.convention" version "1.21.3"
+  //id "com.silenteight.gradle.release" version "1.4.0"
+  //id "com.silenteight.gradle.wrapper" version "1.1.0"
+  //id "com.silenteight.gradle.testreportspublisher" version "1.2.0"
+//  id "io.freefair.aspectj" version "5.3.0" apply false
+  //id "nebula.resolution-rules" version "9.0.0"
   // Spring boot plugin version should be same as Spring version in sep-dependencies
-  id "org.springframework.boot" version "2.5.7" apply false
+  //id "org.springframework.boot" version "2.5.7" apply false
+
   id "com.google.cloud.tools.jib" version "3.1.4" apply false
+
+  alias(libs.plugins.freefair.aspectj.weaving) apply false
 }
 
-projectSetup {
-  javaVersion = JavaVersion.VERSION_11
-}
+//projectSetup {
+//  javaVersion = JavaVersion.VERSION_11
+//}
 
-ext {
-  gradleScriptDir = "${rootProject.projectDir}/gradle/scripts"
-}
-
-apply from: "${gradleScriptDir}/resolutionRules.gradle"
-apply from: "${gradleScriptDir}/ide.gradle"
+//ext {
+//  gradleScriptDir = "${rootProject.projectDir}/gradle/scripts"
+//}
 
 subprojects {Project subproject ->
   pluginManager.withPlugin("java") {
-    subproject.apply from: "${gradleScriptDir}/dependencies.gradle"
-
     subproject.pluginManager.apply "io.freefair.aspectj.post-compile-weaving"
 
     subproject.dependencies {
-      implementation libraries.jaxb_api
-      annotationProcessor libraries.spring_boot_configuration_processor
+      implementation libs.jaxb.api
+      annotationProcessor libs.spring.boot.configuration.processor
     }
 
-    subproject.aspectj {
-      version = libraries.aspectjtools.version
-    }
+//    subproject.aspectj {
+//      version = libs.aspectjtools.version
+//    }
 
     subproject.tasks.named(JavaPlugin.COMPILE_JAVA_TASK_NAME).configure {JavaCompile java ->
       def processResources = project.tasks.named(JavaPlugin.PROCESS_RESOURCES_TASK_NAME)

@@ -43,4 +43,3 @@ class DistributionProvider {
         .build();
   }
 }
-
