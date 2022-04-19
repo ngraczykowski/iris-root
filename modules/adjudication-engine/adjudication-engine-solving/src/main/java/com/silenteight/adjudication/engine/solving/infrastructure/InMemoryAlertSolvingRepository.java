@@ -9,6 +9,7 @@ import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import com.hazelcast.map.IMap;
 
+import java.util.Map.Entry;
 import java.util.function.Supplier;
 
 @Slf4j
@@ -37,6 +38,19 @@ class InMemoryAlertSolvingRepository implements AlertSolvingRepository {
       this.eventStore.publish(alertSolvingModel.pendingEvents());
       alertSolvingModel.clear();
       return alertSolvingModel;
+    });
+  }
+
+  public void updateMatchFeatureValue(
+      long alertId, long matchId, String featureName, String featureValue) {
+    this.map.executeOnKey(alertId, new FeatureUpdateProcessor() {
+      @Override
+      public Boolean process(Entry<Long, AlertSolving> entry) {
+        log.debug("Updating feature matchId:{}, featureName:{}, featureValue{}", matchId,
+            featureName, featureValue);
+        entry.getValue().updateMatchFeatureValue(matchId, featureName, featureValue);
+        return true;
+      }
     });
   }
 

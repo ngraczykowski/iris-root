@@ -74,6 +74,10 @@ public class AlertSolving {
     return agentFeatures;
   }
 
+  public void updateMatchFeatureValue(long matchId, String featureName, String featureValue) {
+    this.matches.get(matchId).getFeatures().get(featureName).updateFeatureValue(featureValue);
+  }
+
   public AlertSolving updateMatches(Object object) {
     // TODO
     this.domainEvents.add(new MatchesUpdated(this));
