@@ -34,7 +34,7 @@ class MatchResolverSpec extends Specification {
     1 * configurationHolder.getConfiguration() >> qcoConfigurations
     result.changed()
     result.comment().startsWith(prefix)
-    'overridden_solution' == result.solution()
+    result.solution() == Fixtures.QCO_SOLUTION
     1 * matchRegister.register(_, _)
   }
 
@@ -49,7 +49,7 @@ class MatchResolverSpec extends Specification {
 
     then:
     !result.changed()
-    'solution' == result.solution()
+    result.solution() == Fixtures.SOLUTION
     !result.comment().startsWith(prefix)
     0 * matchRegister.register(_)
   }
@@ -67,7 +67,7 @@ class MatchResolverSpec extends Specification {
     then:
     1 * configurationHolder.getConfiguration() >> qcoConfigurations
     !result.changed()
-    'solution' == result.solution()
+    result.solution() == Fixtures.SOLUTION
     !result.comment().startsWith(prefix)
     0 * matchRegister.register(_)
   }

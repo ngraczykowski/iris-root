@@ -127,12 +127,17 @@ alert/match should change solution for. It also defines the frequency (threshold
 which is the size of the alert/matches distribution for candidate selection. In order to trigger QCO
 sampling and solution overriding:
 
-The scb-bridge has to be run with qco profile. The configuration file has to be provided at the
-location defined in bridge-qco/src/main/resources/application-qco.yaml.
+The configuration file has to be provided at the 
+location defined in `bridge-qco/src/main/resources/application.yml`.
 
 The configuration allows defining rule to determine which the policy and step of alert we should
 change solution for. The configuration allows defining how frequent we should get alert to analyze
 as well.
+
+### How to enable QCO
+
+The QCO process can be enabled by setting property
+`silenteight.scb-bridge.qco.enabled` to `true` 
 
 ## EXTENDED VERSION OF RECOM FUNCTION WITH QCO PARAMETERS
 

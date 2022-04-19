@@ -11,7 +11,7 @@ public record QcoRecommendationAlert(
     String policyId,
     List<QcoMatchData> matches) {
 
-  @Builder
+  @Builder(toBuilder = true)
   public QcoRecommendationAlert {}
 
   public static record QcoMatchData(
@@ -21,7 +21,7 @@ public record QcoRecommendationAlert(
       String stepId
   ) {
 
-    @Builder
+    @Builder(toBuilder = true)
     public QcoMatchData {}
   }
 }

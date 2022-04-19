@@ -1,12 +1,10 @@
-package com.silenteight.qco.adapter
+package com.silenteight.qco.domain
 
 import com.silenteight.qco.ContainersSpecificationIT
 import com.silenteight.qco.QcoDbConfiguration
 import com.silenteight.qco.QcoIntegrationTestConfiguration
-import com.silenteight.qco.adapter.incoming.QcoAlertAdapter
 import com.silenteight.qco.adapter.outgoing.jpa.QcoOverriddenRecommendation
 import com.silenteight.qco.adapter.outgoing.jpa.QcoOverriddenRecommendationJpaRepository
-import com.silenteight.qco.domain.model.QcoRecommendationAlert
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
@@ -18,19 +16,20 @@ import org.springframework.test.context.ActiveProfiles
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import(value = [QcoIntegrationTestConfiguration.class, QcoDbConfiguration.class])
-class QcoAlertAdapterSpecIT extends ContainersSpecificationIT {
+class QcoAlertServiceSpecIT extends ContainersSpecificationIT {
 
   @Autowired
-  private QcoAlertAdapter qcoAlertAdapter;
+  private QcoAlertService qcoAlertService;
 
   @Autowired
   private QcoOverriddenRecommendationJpaRepository repository
 
   def "ExtractAndProcessRecommendationAlert"() {
     given:
+    def qcoRecommendationAlert = Fixtures.QCO_RECOMMENDATION_ALERT
+
     when:
-    def result = qcoAlertAdapter.extractAndProcessRecommendationAlert(
-        QcoRecommendationAlert.builder().build())
+    def result = qcoAlertService.extractAndProcessRecommendationAlert(qcoRecommendationAlert)
 
     then:
     result != null
@@ -38,7 +37,7 @@ class QcoAlertAdapterSpecIT extends ContainersSpecificationIT {
     def allResults = repository.findAll()
     allResults.size() == 1
     QcoOverriddenRecommendation savedEntity = allResults[0]
-    savedEntity.getSourceSolution() == 'FALSE:POSITIVE'
-    savedEntity.getTargetSolution() == 'Manual:Investigation'
+    savedEntity.getSourceSolution() == Fixtures.SOLUTION
+    savedEntity.getTargetSolution() == Fixtures.QCO_SOLUTION
   }
 }

@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableAsync
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = { "com.silenteight.scb", "com.silenteight.qco" })
 @EnableJpaRepositories(basePackages = "com.silenteight.scb",
     basePackageClasses = QcoOverriddenRecommendationJpaRepository.class)
 @EntityScan(basePackages = "com.silenteight.scb",
