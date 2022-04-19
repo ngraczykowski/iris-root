@@ -2,7 +2,7 @@ grpc:
   client:
     data-source:
       address: localhost:24803
-      timeout: 10
+      timeout: 5
       client_ca: "tests/ssl_example/ca.pem"
       client_private_key: "tests/ssl_example/client-key.pem"
       client_public_key_chain: "tests/ssl_example/client.pem"
@@ -38,7 +38,7 @@ agent:
 
     response:
       exchange: 'agent.response'
-      exchange-routing-key: ""
+      routing-key: ""
 
   grpc:
     port: 9090
