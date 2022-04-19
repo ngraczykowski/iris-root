@@ -96,7 +96,9 @@ class ReportsSenderServiceAdapter implements ReportsSenderService {
             .orElse(EMPTY_STRING)
     );
 
-    alertPayload.putAll(Maps.transformValues(alertData.metadata(), Object::toString));
+    if (alertData.metadata() != null) {
+      alertPayload.putAll(Maps.transformValues(alertData.metadata(), Object::toString));
+    }
     return alertPayload;
   }
 

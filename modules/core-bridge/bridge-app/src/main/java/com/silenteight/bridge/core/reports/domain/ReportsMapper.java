@@ -10,6 +10,7 @@ import com.silenteight.bridge.core.reports.domain.model.Report.AlertData.AlertDa
 import com.silenteight.bridge.core.reports.domain.model.Report.MatchData;
 
 import com.github.wnameless.json.flattener.JsonFlattener;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -67,8 +68,11 @@ class ReportsMapper {
         .id(alert.id())
         .name(alert.name())
         .errorDescription(alert.errorDescription())
-        .status(alert.status())
-        .metadata(flatten(alert.metadata()));
+        .status(alert.status());
+
+    Optional.ofNullable(alert.metadata())
+        .filter(StringUtils::isNotBlank)
+        .ifPresent(metadata -> alertDataBuilder.metadata(flatten(metadata)));
 
     Optional.ofNullable(recommendation)
         .ifPresent(recommendationWithMetadataDto ->

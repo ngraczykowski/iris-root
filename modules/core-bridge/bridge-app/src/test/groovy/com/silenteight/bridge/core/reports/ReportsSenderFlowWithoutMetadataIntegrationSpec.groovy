@@ -24,16 +24,15 @@ import spock.util.concurrent.PollingConditions
         "grpc.server.inProcessName=test",
         "grpc.server.port=-1",
         "grpc.client.inProcess.address=in-process:test"
-    ]
-)
+    ])
 @Import(ReportsSenderFlowRabbitMqTestConfig.class)
 @ActiveProfiles("test")
 @DirtiesContext
-class ReportsSenderFlowIntegrationSpec extends BaseSpecificationIT {
+class ReportsSenderFlowWithoutMetadataIntegrationSpec extends BaseSpecificationIT {
 
   @SpringBean
   RegistrationService registrationService = Stub {
-    getAlertsWithMatches(ReportFixtures.BATCH_ID) >> [ReportFixtures.ALERT_ONE]
+    getAlertsWithMatches(ReportFixtures.BATCH_ID) >> [ReportFixtures.ALERT_ONE_WITHOUT_METADATA]
   }
 
   @SpringBean
@@ -74,7 +73,7 @@ class ReportsSenderFlowIntegrationSpec extends BaseSpecificationIT {
 
       with(productionDataIndexRequest) {
         it.analysisName == ReportFixtures.ANALYSIS_NAME
-        it.alertsList.containsAll(ReportFixtures.WAREHOUSE_ALERT)
+        it.alertsList.containsAll(ReportFixtures.WAREHOUSE_ALERT_WITHOUT_METADATA)
       }
     }
   }
