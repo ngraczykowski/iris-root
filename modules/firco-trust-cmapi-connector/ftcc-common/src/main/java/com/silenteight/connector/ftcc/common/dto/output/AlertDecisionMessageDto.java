@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies.UpperCamelCaseStr
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -41,8 +40,6 @@ public class AlertDecisionMessageDto implements Serializable {
 
   @JsonInclude(Include.NON_NULL)
   private AttachmentDto attachment;
-
-  private List<AlertDecisionActionDto> actions;
 
   private String userLogin;
 

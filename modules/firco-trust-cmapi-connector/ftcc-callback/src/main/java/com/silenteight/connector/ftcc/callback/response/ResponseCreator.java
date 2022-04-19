@@ -27,6 +27,7 @@ class ResponseCreator {
   private static final String COMMENT_CUT_MSG = "\n\n=== See attachment for full comments ===";
   private static final int MAX_COMMENT_LENGTH = 1024;
   public static final String DATA_CENTER = "";
+  public static final String OPERATOR = "S8 SEAR";
 
   private final DecisionMapperUseCase decisionMapperUseCase;
   private final RecommendationSenderProperties properties;
@@ -56,8 +57,7 @@ class ResponseCreator {
     decision.setBusinessUnit(messageDetails.getBusinessUnit());
     decision.setMessageID(messageDetails.getMessageID());
     decision.setSystemID(messageDetails.getSystemID());
-    decision.setOperator(messageDetails.getLastOperator());
-    decision.setActions(List.of());
+    decision.setOperator(OPERATOR);
     /*TODO: verify attachment*/
     decision.setAttachment(createAttachment(
         recommendation.getRecommendedAction(),
