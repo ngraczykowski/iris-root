@@ -18,8 +18,9 @@ import com.google.protobuf.Value;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
-import java.time.OffsetDateTime;
 import java.util.*;
+
+import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
 @Slf4j
 @Component
@@ -91,8 +92,7 @@ class ReportsSenderServiceAdapter implements ReportsSenderService {
     alertPayload.put(
         ALERT_RECOMMENDATION_DATE_KEY,
         Optional.ofNullable(alertData.recommendedAt())
-            .map(OffsetDateTime::toEpochSecond)
-            .map(aLong -> Long.toString(aLong))
+            .map(ISO_OFFSET_DATE_TIME::format)
             .orElse(EMPTY_STRING)
     );
 

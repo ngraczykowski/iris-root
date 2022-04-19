@@ -15,6 +15,8 @@ import java.time.ZoneOffset
 import java.util.Map.Entry
 import java.util.stream.Collectors
 
+import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME
+
 class ReportFixtures {
 
   static def BATCH_ID = 'batchId'
@@ -299,7 +301,7 @@ class ReportFixtures {
       .build()
 
   private static Value getValue(OffsetDateTime value) {
-    Value.newBuilder().setStringValue(String.valueOf(value.toEpochSecond())).build()
+    Value.newBuilder().setStringValue(ISO_OFFSET_DATE_TIME.format(value)).build()
   }
 
   private static Value getValue(String value) {
