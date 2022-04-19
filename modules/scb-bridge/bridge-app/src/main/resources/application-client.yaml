@@ -1,0 +1,66 @@
+# Once application is deployed this config should be placed in Consul/Key/Value
+# Key: config/scb-bridge/data
+# Value: the content of this file
+#
+# It may be done via UI, or via CMD:
+#consul kv put config/scb-bridge/data - <<EOF
+# CONTENT_OF_THIS_FILE
+#EOF
+#
+# To enable reading configuration from Consul by the application, `consul` spring profile has to be activated.
+# It is done by default by Nomad on Test and Client environment.
+#
+
+serp:
+  gns:
+    db:
+      service:
+        name: ORCLCDB
+      user: LC_GNS_WEB_SIT_01
+      password: 'CyevM34juNlBO'
+      port: 1521
+      host: oracle.silenteight.com
+
+silenteight:
+  scb-bridge:
+
+    learning:
+      alert:
+        enabled: false
+        cron-expression: 0 0 3 ? * SUN
+        db-relation-name: SENS_V_FFF_RECORDS
+        cbs-hits-details-helper-view-name:
+
+      ecm:
+        enabled: false
+        cron-expression: 0 0 9 ? * SUN
+        db-relation-name: SENS_V_FFF_RECORDS
+        cbs-hits-details-helper-view-name: ''
+        decisions:
+          - solution: ANALYST_TRUE_POSITIVE
+            text: Risk Relevant
+          - solution: ANALYST_FALSE_POSITIVE
+            text: Risk Irrelevant - Activity in line with Business
+        ecm-view-name: ECM
+
+    queuing:
+      jobs:
+        - enabled: false
+          ack-records: true
+          cron-expression: 0/30 * * * * ?
+          hit-details-view: ''
+          name: Watchlist-level queuing job (DENY)
+          priority: 10
+          chunk-size: 1000
+          records-view: SENS_V_FFF_RECORDS_DENY
+          watchlist-level: true
+
+        - enabled: false
+          ack-records: true
+          cron-expression: 3/30 * * * * ?
+          hit-details-view: ''
+          name: Watchlist-level queuing job (NON-DENY)
+          priority: 1
+          chunk-size: 1000
+          records-view: SENS_V_FFF_RECORDS_NON_DENY
+          watchlist-level: true

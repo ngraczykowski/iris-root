@@ -6,7 +6,7 @@ SCB Bridge application uses **Java 17**
 
 To start an app locally:
 - run `docker-compose up -d`
-- start class `ScbBridgeApplication` with profile `oracle`
+- start class `ScbBridgeApplication` with profile `client`
 
 ## Application ports
 
@@ -28,15 +28,18 @@ Services are exposed on locally accessible port numbers. The table below shows h
 
 Configuration (yaml file) can be placed in Consul under key `config/scb-bridge/data`.
 
-To enable locally getting configuration from Consul activate profile `consule`. You would want to have Consul running locally as well, you may start it with the help of attached `docker-compose` file.
-If you don't want to use Consul, start the application with `oracle` profile, so it knows where to connect.
-
-Keep in mind that `consule` profile will be activated on client's environment, and our test envs as well.
-
 This configuration scheme:
-- will be the primary way of configuring `scb-bridge` with the business related settings like Oracle location, Jobs settings, etc. 
+- will be the primary way of configuring `scb-bridge` with the business related settings like Oracle location, Jobs settings, etc.
 - will be changed/tweaked by scb
 - after a config change in Consul, `scb-bridge` needs to be restarted in order the new config to be applied
+- 
+### Local run
+
+To enable locally getting configuration from Consul activate profile `consule`. You would want to have Consul running locally as well, you may start it with the help of attached `docker-compose` file.
+
+If you don't want to use Consul, start the application with `client` profile, so it has some sane values how to behave locally.
+
+Keep in mind that `consule` profile will be activated on client's environment, and our test envs as well.
 
 ## How to test
 

@@ -129,10 +129,8 @@ silenteight:
     cbs:
       attach-qco-fields-to-recom: false
     learning:
-      alert:
-        enabled: false
-      ecm:
-        enabled: false
+      alert.enabled: false
+      ecm.enabled: false
     grpc:
       recommendation:
         recommendation-deadline: 1m
@@ -153,28 +151,7 @@ silenteight:
           - 'NO'
         display-name: IsDeny
         category-type: ENUMERATED
-    # Queuing Jobs Configuration
-    queuing:
-      jobs:
-        - ack-records: true
-          enabled: false
-          cron-expression: 0/30 * * * * ?
-          hit-details-view: ''
-          name: Watchlist-level queuing job (DENY)
-          priority: 10
-          chunk-size: 1000
-          records-view: SENS_V_FFF_RECORDS_DENY
-          watchlist-level: true
 
-        - ack-records: true
-          enabled: false
-          cron-expression: 3/30 * * * * ?
-          hit-details-view: ''
-          name: Watchlist-level queuing job (NON-DENY)
-          priority: 1
-          chunk-size: 1000
-          records-view: SENS_V_FFF_RECORDS_NON_DENY
-          watchlist-level: true
     alert-processor:
       fixed-delay: 1000
       initial-delay: 2000
@@ -218,7 +195,7 @@ serp:
         config:
           ack-function-name: CBS_INTERFACE_PKG.F_CBS_S8_LOG_ACK
           recom-function-name: CBS_INTERFACE_PKG.F_CBS_S8_LOG_RECOM
-          recom-function-with-qco-name: CBS_INTERFACE_PKG_V4.F_CBS_S8_LOG_RECOM
+          recom-with-qco-function-name: CBS_INTERFACE_PKG_V4.F_CBS_S8_LOG_RECOM
           source-application-values:
             - alert-level: S8ALERT
             - watchlist-leve: S8HIT

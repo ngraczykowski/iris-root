@@ -179,8 +179,9 @@ dependencies {
     exclude group: 'org.springframework'
   }
   implementation platform("com.silenteight.sep:sep-dependencies:1.12.1")
-  annotationProcessor platform(
-      "com.silenteight.sep:sep-dependencies:1.12.1")
+  annotationProcessor platform("com.silenteight.sep:sep-dependencies:1.12.1")
+  annotationProcessor libraries.spring_boot_configuration_processor
+
   implementation libraries.registration_api_library
   implementation libraries.registration_api_proto
   implementation libraries.recommendation_api_library
