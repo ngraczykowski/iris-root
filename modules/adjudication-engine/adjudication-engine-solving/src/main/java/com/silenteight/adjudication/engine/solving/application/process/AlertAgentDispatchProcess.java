@@ -36,10 +36,10 @@ public class AlertAgentDispatchProcess {
         .map(s -> ResourceName.create(s).getLong("alerts"))
         .map(alertId -> new AlertSolving(alertId).addMatchesFeatures(
             alertMatchesFeatures.get(alertId)))
+          .map(this.alertSolvingRepository::save)
         .collect(Collectors.toList());
 
     pendingAlerts.forEach(alertSolving -> {
-      this.alertSolvingRepository.save(alertSolving);
       this.agentExchnageRequestMapper.from(alertSolving)
           .forEach(matchesPublisher::publish);
     });

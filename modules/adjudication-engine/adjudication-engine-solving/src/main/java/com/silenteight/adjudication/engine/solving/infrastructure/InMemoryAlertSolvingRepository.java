@@ -28,30 +28,40 @@ class InMemoryAlertSolvingRepository implements AlertSolvingRepository {
 
   @Override
   @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
-  public void save(final AlertSolving alertSolvingModel) {
+  public AlertSolving save(final AlertSolving alertSolvingModel) {
     final long key = alertSolvingModel.id();
     log.debug("Adding AlertSolvingModel to key:{}", key);
 
-    this.executeInLock(key, () -> {
+    return this.executeInLock(key, () -> {
       this.map.set(key, alertSolvingModel);
       this.eventStore.publish(alertSolvingModel.pendingEvents());
       alertSolvingModel.clear();
-      return null;
+      return alertSolvingModel;
     });
   }
 
   private <T> T executeInLock(final Long key, final Supplier<T> action) {
-    if (this.map.tryLock(key)) {
-      try {
-        return action.get();
-      } finally {
-        if (this.map.isLocked(key)) {
-          this.map.forceUnlock(key);
-        }
+
+    if (!this.map.tryLock(key)) {
+      throw new LockAlertSolvingKeyException(key);
+    }
+
+    try {
+      return action.get();
+    } finally {
+      if (this.map.isLocked(key)) {
+        this.map.forceUnlock(key);
       }
     }
-    // TODO: return null or throw exception.
-    return null;
+  }
+
+  private static final class LockAlertSolvingKeyException extends RuntimeException {
+
+    private static final long serialVersionUID = 1L;
+
+    LockAlertSolvingKeyException(Long key) {
+      super("Could lock key : " + key);
+    }
   }
 
 }

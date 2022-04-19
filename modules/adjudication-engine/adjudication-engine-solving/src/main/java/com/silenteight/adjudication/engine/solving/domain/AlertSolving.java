@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.adjudication.engine.solving.domain.event.FeatureMatchesUpdated;
+import com.silenteight.adjudication.engine.solving.domain.event.MatchFeatureUpdated;
 import com.silenteight.adjudication.engine.solving.domain.event.MatchFeatureValuesUpdated;
 import com.silenteight.adjudication.engine.solving.domain.event.MatchesUpdated;
 
@@ -50,6 +51,8 @@ public class AlertSolving {
       agentFeatures.add(matchFeature.getFeature());
       this.agentFeatures.put(matchFeature.getAgentConfig(), agentFeatures);
     });
+    // event
+    this.domainEvents.add(new MatchFeatureUpdated(this));
     return this;
   }
 
@@ -73,7 +76,7 @@ public class AlertSolving {
 
   public AlertSolving updateMatches(Object object) {
     // TODO
-    this.domainEvents.add(new MatchesUpdated());
+    this.domainEvents.add(new MatchesUpdated(this));
     this.checkIsCompleted();
     return this;
   }
@@ -86,7 +89,7 @@ public class AlertSolving {
 
   public AlertSolving updateFeatureMatches(Object o) {
     // TODO
-    this.domainEvents.add(new FeatureMatchesUpdated(null));
+    this.domainEvents.add(new FeatureMatchesUpdated(this));
 
     this.checkIsCompleted();
     return this;
@@ -122,7 +125,7 @@ public class AlertSolving {
   }
 
   public AlertSolving updateMatchFeatureValues(Object o) {
-    this.domainEvents.add(new MatchFeatureValuesUpdated());
+    this.domainEvents.add(new MatchFeatureValuesUpdated(this));
 
     this.checkIsCompleted();
     return this;

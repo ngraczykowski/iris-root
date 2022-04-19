@@ -16,7 +16,9 @@ class InMemoryAlertSolvingRepository implements AlertSolvingRepository {
   }
 
   @Override
-  public void save(AlertSolving model) {
+  public AlertSolving save(AlertSolving model) {
     alertSolvings.put(model.id(), model);
+
+    return model;
   }
 }

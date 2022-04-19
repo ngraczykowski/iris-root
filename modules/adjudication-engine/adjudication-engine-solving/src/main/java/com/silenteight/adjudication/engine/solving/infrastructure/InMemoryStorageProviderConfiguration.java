@@ -64,7 +64,7 @@ class InMemoryStorageProviderConfiguration {
             "test",
             "test"
         );
-    final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
+    final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(6);
     final EventStore eventStore =
         new EventStore(rabbitTemplate, eventStoreConfigurationProperties, hazelcastInstance,
             scheduledExecutorService

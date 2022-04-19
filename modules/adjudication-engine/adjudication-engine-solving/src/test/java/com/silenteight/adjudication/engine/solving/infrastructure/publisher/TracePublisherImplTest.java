@@ -1,6 +1,7 @@
 package com.silenteight.adjudication.engine.solving.infrastructure.publisher;
 
 import com.silenteight.adjudication.engine.solving.application.publisher.TracePublisher;
+import com.silenteight.adjudication.engine.solving.domain.AlertSolving;
 import com.silenteight.adjudication.engine.solving.domain.TraceEvent;
 import com.silenteight.adjudication.engine.solving.domain.event.FeatureMatchesUpdated;
 import com.silenteight.adjudication.engine.solving.domain.event.MatchFeatureValuesUpdated;
@@ -76,9 +77,10 @@ class TracePublisherImplTest {
 
   private static Stream<Arguments> testData() {
     return Stream.of(
-        Arguments.of(new FeatureMatchesUpdated(1L), FeatureMatchesUpdated.class),
-        Arguments.of(new MatchesUpdated(2L), MatchesUpdated.class),
-        Arguments.of(new MatchFeatureValuesUpdated(20L), MatchFeatureValuesUpdated.class)
+        Arguments.of(new FeatureMatchesUpdated(new AlertSolving(1L)), FeatureMatchesUpdated.class),
+        Arguments.of(new MatchesUpdated(new AlertSolving(2L)), MatchesUpdated.class),
+        Arguments.of(
+            new MatchFeatureValuesUpdated(new AlertSolving(20L)), MatchFeatureValuesUpdated.class)
     );
   }
 

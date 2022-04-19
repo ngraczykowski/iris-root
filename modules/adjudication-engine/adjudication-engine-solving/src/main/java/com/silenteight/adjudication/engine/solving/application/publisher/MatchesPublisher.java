@@ -21,6 +21,7 @@ public class MatchesPublisher {
     // TODO map and send to agents - remember about routing key and priority.
     log.info("Sending agent requests for {}", message.getRequestId());
     var routing = makeRoutingKey(message.getAgentConfig());
+
     rabbitTemplate.convertAndSend(
         AGENT_REQUEST_EXCHANGE_NAME, routing, message.getAgentExchangeRequest(), request -> {
           //add headers
@@ -29,6 +30,8 @@ public class MatchesPublisher {
           request.getMessageProperties().setHeader(AGENT_CONFIG_HEADER, message.getAgentConfig());
           return request;
         });
+
+    //    this.auditLOg
 
     if (log.isDebugEnabled()) {
       log.debug(

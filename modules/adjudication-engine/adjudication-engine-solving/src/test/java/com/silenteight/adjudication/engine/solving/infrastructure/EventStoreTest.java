@@ -1,5 +1,6 @@
 package com.silenteight.adjudication.engine.solving.infrastructure;
 
+import com.silenteight.adjudication.engine.solving.domain.AlertSolving;
 import com.silenteight.adjudication.engine.solving.domain.DomainEvent;
 import com.silenteight.adjudication.engine.solving.domain.event.FeatureMatchesUpdated;
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
@@ -38,8 +39,8 @@ import java.util.concurrent.Executors;
 public class EventStoreTest {
 
   private static final String TEST_QUEUE = "ae.event.store.queue";
-  private static final ObjectMapper OBJECT_MAPPER =
-      new ObjectMapper().registerModule(new JavaTimeModule());
+  private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
+      .registerModule(new JavaTimeModule());
   private EventStore eventStore;
 
   @Autowired
@@ -51,8 +52,8 @@ public class EventStoreTest {
   @Test
   @DisplayName("Check message can be send without errors")
   public void checkMessageCanBeSendWithoutErrors() throws IOException {
-
-    this.eventStore.publish(List.of(new FeatureMatchesUpdated(1L)));
+    var event = new FeatureMatchesUpdated(new AlertSolving(1L));
+    this.eventStore.publish(List.of(event));
 
     final DomainEvent domainEvent1 = obtainMessage();
     Assertions.assertNotNull(domainEvent1);
