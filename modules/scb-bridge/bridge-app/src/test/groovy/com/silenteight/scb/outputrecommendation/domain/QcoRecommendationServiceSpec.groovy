@@ -6,7 +6,7 @@ import com.silenteight.scb.outputrecommendation.domain.model.BatchMetadata
 import com.silenteight.scb.outputrecommendation.domain.model.BatchSource
 import com.silenteight.scb.outputrecommendation.domain.model.RecommendationsGeneratedEvent
 import com.silenteight.scb.outputrecommendation.infrastructure.QcoRecommendationProperties
-import com.silenteight.qco.domain.QcoFacade
+import com.silenteight.scb.qco.QcoFacade
 
 import spock.lang.Specification
 
