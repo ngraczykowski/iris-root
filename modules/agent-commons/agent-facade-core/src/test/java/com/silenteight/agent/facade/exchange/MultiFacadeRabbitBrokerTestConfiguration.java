@@ -13,9 +13,11 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.DependsOn;
 
-@ConditionalOnProperty({ "agent.facade.enabled", "facade.amqp.multi-queues.enabled" })
+@Conditional(AtLeastOneFacadeEnabledCondition.class)
+@ConditionalOnProperty("facade.amqp.multi-queues.enabled")
 @TestConfiguration
 @EnableConfigurationProperties(AgentFacadeProperties.class)
 @RequiredArgsConstructor

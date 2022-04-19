@@ -4,14 +4,13 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.agent.monitoring.Monitoring;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
-
 
 @Configuration
 @RequiredArgsConstructor
-@ConditionalOnProperty("agent.facade.enabled")
+@Conditional(AtLeastOneFacadeEnabledCondition.class)
 class AgentFacadeConfiguration {
 
   public static final String INBOUND_CHANNEL_NAME = "inboundChannel";

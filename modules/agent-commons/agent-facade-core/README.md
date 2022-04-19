@@ -4,7 +4,8 @@
 
 Each agent should be run with the following settings to make use of the Facade:
 1. Spring Boot profiles: `dev,rabbitmq-declare`.
-2. Property `*.agent.facade.enabled` set to `true` in `bootstrap.properties` in **the agent project.**
+2. Property (or at least one in multi-facade components) `*.agent.facade.enabled` set to `true`
+in `bootstrap.properties` in **the agent project.**
 
 ## Testing
 

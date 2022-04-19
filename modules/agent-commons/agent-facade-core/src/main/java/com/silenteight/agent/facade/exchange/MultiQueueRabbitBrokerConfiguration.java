@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.*;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
@@ -12,7 +13,8 @@ import javax.annotation.PostConstruct;
 
 @Configuration
 @RequiredArgsConstructor
-@ConditionalOnProperty({ "agent.facade.enabled", "facade.amqp.multi-queues.enabled" })
+@Conditional(AtLeastOneFacadeEnabledCondition.class)
+@ConditionalOnProperty("facade.amqp.multi-queues.enabled")
 @EnableConfigurationProperties(AgentFacadeProperties.class)
 @Profile("rabbitmq-declare")
 class MultiQueueRabbitBrokerConfiguration {

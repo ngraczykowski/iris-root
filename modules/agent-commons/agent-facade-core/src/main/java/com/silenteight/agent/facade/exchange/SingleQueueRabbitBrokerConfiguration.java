@@ -7,12 +7,14 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
 @RequiredArgsConstructor
-@ConditionalOnProperty({ "agent.facade.enabled", "facade.amqp.inboundExchangeName" })
+@Conditional(AtLeastOneFacadeEnabledCondition.class)
+@ConditionalOnProperty("facade.amqp.inboundExchangeName")
 @EnableConfigurationProperties(AgentFacadeProperties.class)
 @Profile("rabbitmq-declare")
 class SingleQueueRabbitBrokerConfiguration {

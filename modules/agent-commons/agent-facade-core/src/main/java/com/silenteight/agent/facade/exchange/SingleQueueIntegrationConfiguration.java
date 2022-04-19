@@ -11,6 +11,7 @@ import com.silenteight.agents.v1.api.exchange.AgentExchangeResponse;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.IntegrationFlows;
@@ -21,7 +22,8 @@ import static org.springframework.integration.IntegrationMessageHeaderAccessor.C
 
 @Configuration
 @RequiredArgsConstructor
-@ConditionalOnProperty({"agent.facade.enabled", "facade.amqp.inboundExchangeName"})
+@Conditional(AtLeastOneFacadeEnabledCondition.class)
+@ConditionalOnProperty("facade.amqp.inboundExchangeName")
 @EnableConfigurationProperties(AgentFacadeProperties.class)
 class SingleQueueIntegrationConfiguration {
 
