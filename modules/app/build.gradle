@@ -1,5 +1,5 @@
 plugins {
-  id('com.silenteight.sear.build.spring-boot-application')
+  id('com.silenteight.iris.build.spring-boot-application')
 }
 
 group = "${group}.app"

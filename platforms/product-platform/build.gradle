@@ -2,7 +2,7 @@ plugins {
   id('java-platform')
 }
 
-group = 'com.silenteight.sear.platform'
+group = 'com.silenteight.iris.platform'
 
 javaPlatform.allowDependencies()
 
@@ -21,40 +21,41 @@ dependencies {
 
     // Silent Eight
     api(libs.adjudication.engine.api)
+    api(libs.agents.api)
     api(libs.consul.grpc.registration)
+    api(libs.data.retention.api)
+    api(libs.data.source.agentinput.api)
     api(libs.data.source.api)
     api(libs.data.source.categories.api)
     api(libs.data.source.comments.api)
-    api(libs.data.source.agentinput.api)
     api(libs.governance.api)
     api(libs.governance.model.api)
     api(libs.governance.solving.api)
     api(libs.learning.engine.store.api)
-    api(libs.agents.api)
     api(libs.sear.rabbitmq.common.schema)
+    api(libs.silenteight.agents.protocol)
     api(libs.silenteight.commons.app)
     api(libs.silenteight.commons.core)
     api(libs.silenteight.sep.base.aspects)
     api(libs.silenteight.sep.base.common)
     api(libs.silenteight.sep.base.testing)
-    api(libs.silenteight.agents.protocol)
     api(libs.warehouse.data.api)
-    api(libs.data.retention.api)
 
     // Other
-    api(libs.opencsv)
-    api(libs.pw.swift.core)
-    api(libs.logstash.logback.encoder)
-    api(libs.liquibase.sessionlock)
-    api(libs.liquibase.core)
-    api(libs.javax.mail)
-    api(libs.hibernate.types)
     api(libs.aspectjrt)
     api(libs.aspectjtools)
-    api(libs.pebble)
+    api(libs.hibernate.types)
     api(libs.jackson.annotations)
     api(libs.jackson.databind)
     api(libs.jackson.dataformat.csv)
     api(libs.jackson.dataformat.xml)
+    api(libs.javax.mail)
+    api(libs.liquibase.core)
+    api(libs.liquibase.sessionlock)
+    api(libs.logstash.logback.encoder)
+    api(libs.opencsv)
+    api(libs.pebble)
+    api(libs.pw.swift.core)
+    api(libs.tika.core)
   }
 }

@@ -1,4 +1,4 @@
-rootProject.name = 'sear-root'
+rootProject.name = 'iris-root'
 
 includeBuild('platforms')
 includeBuild('build-logic')

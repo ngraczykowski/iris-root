@@ -6,7 +6,7 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = 'sear-platforms'
+rootProject.name = 'iris-platforms'
 
 include('product-platform')
 include('test-platform')

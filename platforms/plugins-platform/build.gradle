@@ -2,7 +2,7 @@ plugins {
   id('java-platform')
 }
 
-group = 'com.silenteight.sear.platform'
+group = 'com.silenteight.iris.platform'
 
 dependencies {
   constraints {
@@ -11,5 +11,7 @@ dependencies {
     api(libs.plugin.nebula.resolution)
     api(libs.plugin.sonarqube)
     api(libs.plugin.spring.boot)
+    api(libs.plugin.freefair.aspectj)
+    api(libs.plugin.freefair.aspectj.weaving)
   }
 }

@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-  implementation(platform('com.silenteight.sear.platform:plugins-platform'))
+  implementation(platform('com.silenteight.iris.platform:plugins-platform'))
 
   implementation(project(':java-base'))
 }

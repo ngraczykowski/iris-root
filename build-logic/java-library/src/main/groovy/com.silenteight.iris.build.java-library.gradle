@@ -1,0 +1,4 @@
+plugins {
+  id('com.silenteight.iris.build.java-base')
+  id('java-library')
+}

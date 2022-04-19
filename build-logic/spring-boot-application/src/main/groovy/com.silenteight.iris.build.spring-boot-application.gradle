@@ -1,17 +1,13 @@
 plugins {
-  id('com.silenteight.sear.build.java-base')
+  id('com.silenteight.iris.build.java-base')
   id('org.springframework.boot')
+  id('maven-publish')
 }
 
 dependencies {
   implementation(libs.spring.boot.starter.web)
-  //implementation(libs.spring.boot.starter.undertow)
 
   testImplementation(libs.spring.test)
   testImplementation(libs.spring.boot.test)
   testImplementation(libs.spring.boot.test.autoconfigure)
-}
-
-configurations.all {
-  //exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
 }

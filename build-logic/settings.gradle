@@ -8,7 +8,7 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = 'sear-build-logic'
+rootProject.name = 'iris-build-logic'
 
 include('java-base')
 include('java-library')

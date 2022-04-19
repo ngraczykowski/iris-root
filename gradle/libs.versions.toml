@@ -6,38 +6,57 @@ adjudication-engine-api = "0.8.0"
 agents-api = "0.4.0"
 agents-protocol = "0.14.0"
 data-retention = "0.3.0"
-governance-api = "1.7.0"
+governance-api = "1.10.0"
 learing-engine-store-api = "0.5.0"
+serp-protocol = "0.27.0"
+silenteight-audit-bs = "1.3.0"
+silenteight-audit-bs-api = "0.1.0"
 silenteight-commons = "2.1.0"
+silenteight-data-retention-api = "0.0.1"
 silenteight-data-source-api = "0.18.0"
+silenteight-filestorage-api = "1.3.0"
+silenteight-filestorage-minio = "1.6.0"
+silenteight-sep-auth = "1.21.0"
 silenteight-sep-base = "1.12.2"
-warehouse-protocol = "2.2.0"
+warehouse-protocol = "2.3.0"
 
 #-----------------------------------
 # Platforms
 #-----------------------------------
 platform-awssdk = "2.17.169"
-platform-keycloak-adapter = "15.0.2"
+platform-junit5 = "5.8.2"
+platform-keycloak-adapter = "17.0.1"
 platform-reactor = "2020.0.13"
 platform-sentry = "5.7.3"
 platform-sep = "2.5.0"
+platform-spock = "2.1-groovy-3.0"
 platform-spring-boot = "2.6.6"
 platform-spring-cloud = "2021.0.1"
+platform-test-containers = "1.17.1"
 
 #-----------------------------------
 # Others libraries
 #-----------------------------------
 aspectj = "1.9.9.1"
-shedlock = "4.27.0"
 jackson = "2.13.0"
+lombok = "1.18.24"
+shedlock = "4.27.0"
+springdoc = "1.6.7"
+spotbugs = "4.6.0"
+
+#-----------------------------------
+# Testing
+#-----------------------------------
+mockito = "4.4.0"
 
 #-----------------------------------
 # Plugins
 #-----------------------------------
 plugin-aspectj = "5.3.0"
 plugin-jib = "3.1.4"
-plugin-nebula-resolution = "7.8.7"
-plugin-sonarqube = "2.8"
+plugin-nebula-resolution = "9.0.0"
+plugin-sonarqube = "3.3"
+plugin-freefair-aspectj = "6.4.1"
 
 [libraries]
 #\[group:\s*'([^']+)',\s*name:\s*'([^']+)'(,[^]]*)?]
@@ -59,34 +78,48 @@ plugin-sonarqube = "2.8"
 
 # Silent Eight
 adjudication-engine-api = { group = "com.silenteight.adjudication.api", name = "adjudication-api", version.ref = "adjudication-engine-api" }
+agents-api = { group = "com.silenteight.agent.api", name = "agents-api", version.ref = "agents-api" }
 consul-grpc-registration = { group = "com.silenteight.commons", name = "consul-grpc-registration", version = "1.0.0" }
+data-retention-api = { group = "com.silenteight.sens.data-retention-api", name = "data-retention-api", version.ref = "data-retention" }
+data-source-agentinput-api = { group = "com.silenteight.sens.date-source-api", name = "data-source-agentinput-api", version.ref = "silenteight-data-source-api" }
 data-source-api = { group = "com.silenteight.sens.date-source-api", name = "data-source-api", version.ref = "silenteight-data-source-api" }
 data-source-categories-api = { group = "com.silenteight.sens.date-source-api", name = "data-source-categories-api", version.ref = "silenteight-data-source-api" }
 data-source-comments-api = { group = "com.silenteight.sens.date-source-api", name = "data-source-comments-api", version.ref = "silenteight-data-source-api" }
-data-source-agentinput-api = { group = "com.silenteight.sens.date-source-api", name = "data-source-agentinput-api", version.ref = "silenteight-data-source-api" }
 governance-api = { group = "com.silenteight.governance.api", name = "se-governance-api", version.ref = "governance-api" }
 governance-model-api = { group = "com.silenteight.governance.api", name = "se-model-api", version.ref = "governance-api" }
 governance-solving-api = { group = "com.silenteight.governance.api", name = "se-solving-api", version.ref = "governance-api" }
 learning-engine-store-api = { group = "com.silenteight.learningengine.api", name = "learning-store-api", version.ref = "learing-engine-store-api" }
-agents-api = { group = "com.silenteight.agent.api", name = "agents-api", version.ref = "agents-api" }
 sear-rabbitmq-common-schema = { group = "com.silenteight.rabbitmqcommonschema", name = "sear-rabbitmq-common-schema-definitions", version = "1.9.0" }
+silenteight-agents-protocol = { group = "com.silenteight.agent.api", name = "protocol-agents", version.ref = "agents-protocol" }
+silenteight-audit-bs = { group = "com.silenteight.auditing.bs", name = "silenteight-audit-bs", version.ref = "silenteight-audit-bs" }
+silenteight-audit-bs-api = { group = "com.silenteight.sens.audit-bs-api", name = "audit-bs-api", version.ref = "silenteight-audit-bs-api" }
 silenteight-commons-app = { group = "com.silenteight.commons", name = "silenteight-commons-app", version.ref = "silenteight-commons" }
 silenteight-commons-core = { group = "com.silenteight.commons", name = "silenteight-commons-core", version.ref = "silenteight-commons" }
+silenteight-data-retention-api = { group = "com.silenteight.sens.data-retention-api", name = "data-retention-api", version.ref = "silenteight-data-retention-api" }
+silenteight-filestorage-api = { group = "com.silenteight.sep.filestorage.api", name = "sep-filestorage-api", version.ref = "silenteight-filestorage-api" }
+silenteight-filestorage-minio = { group = "com.silenteight.sep.filestorage-minio", name = "sep-filestorage-minio", version.ref = "silenteight-filestorage-minio" }
+silenteight-sep-auth = { group = "com.silenteight.sep.auth", name = "sep-auth", version.ref = "silenteight-sep-auth" }
 silenteight-sep-base-aspects = { group = "com.silenteight.sep.base", name = "sep-base-aspects", version.ref = "silenteight-sep-base" }
 silenteight-sep-base-common = { group = "com.silenteight.sep.base", name = "sep-base-common", version.ref = "silenteight-sep-base" }
 silenteight-sep-base-testing = { group = "com.silenteight.sep.base", name = "sep-base-testing", version.ref = "silenteight-sep-base" }
-silenteight-agents-protocol = { group = "com.silenteight.agent.api", name = "protocol-agents", version.ref = "agents-protocol" }
+silenteight-serp-protocol-agent = { group = "com.silenteight.serp.protocol", name = "serp-protocol-agent", version.ref = "serp-protocol" }
+silenteight-serp-protocol-base = { group = "com.silenteight.serp.protocol", name = "serp-protocol-base", version.ref = "serp-protocol" }
+silenteight-serp-protocol-ns = { group = "com.silenteight.serp.protocol", name = "serp-protocol-ns", version.ref = "serp-protocol" }
+silenteight-serp-protocol-scb = { group = "com.silenteight.serp.protocol", name = "serp-protocol-scb", version.ref = "serp-protocol" }
 warehouse-data-api = { group = "com.silenteight.warehouse.api", name = "se-data-api", version.ref = "warehouse-protocol" }
-data-retention-api = { group = "com.silenteight.sens.data-retention-api", name = "data-retention-api", version.ref = "data-retention" }
+warehouse-sampling-api = { group = "com.silenteight.warehouse.api", name = "se-sampling-alerts-api", version.ref = "warehouse-protocol" }
 
 # Platforms
 platform-awssdk = { module = "software.amazon.awssdk:bom", version.ref = "platform-awssdk" }
+platform-junit5 = { module = "org.junit:junit-bom", version.ref = "platform-junit5" }
 platform-keycloak-adapter = { module = "org.keycloak.bom:keycloak-adapter-bom", version.ref = "platform-keycloak-adapter" }
 platform-reactor = { module = "io.projectreactor:reactor-bom", version.ref = "platform-reactor" }
 platform-sentry = { module = "io.sentry:sentry-bom", version.ref = "platform-sentry" }
 platform-sep = { module = "com.silenteight.sep:sep-dependencies", version.ref = "platform-sep" }
+platform-spock = { module = "org.spockframework:spock-bom", version.ref = "platform-spock" }
 platform-spring-boot = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "platform-spring-boot" }
 platform-spring-cloud = { module = "org.springframework.cloud:spring-cloud-dependencies", version.ref = "platform-spring-cloud" }
+platform-test-containers = { module = "org.testcontainers:testcontainers-bom ", version.ref = "platform-test-containers" }
 
 # Spring
 spring-aop = { group = "org.springframework", name = "spring-aop" }
@@ -122,6 +155,7 @@ spring-boot-starter-amqp = { group = "org.springframework.boot", name = "spring-
 spring-boot-starter-data-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }
 spring-boot-starter-elasticsearch = { group = "org.springframework.boot", name = "spring-boot-starter-data-elasticsearch" }
 spring-boot-starter-integration = { group = "org.springframework.boot", name = "spring-boot-starter-integration" }
+spring-boot-starter-jetty = { group = "org.springframework.boot", name = "spring-boot-starter-jetty" }
 spring-boot-starter-jdbc = { group = "org.springframework.boot", name = "spring-boot-starter-jdbc" }
 spring-boot-starter-logging = { group = "org.springframework.boot", name = "spring-boot-starter-logging" }
 spring-boot-starter-mail = { group = "org.springframework.boot", name = "spring-boot-starter-mail" }
@@ -174,10 +208,19 @@ reactor-extra = { group = "io.projectreactor.addons", name = "reactor-extra" }
 reactor-rabbitmq = { group = "io.projectreactor.rabbitmq", name = "reactor-rabbitmq" }
 reactor-test = { group = "io.projectreactor", name = "reactor-test" }
 
+# OpenAPI & Swagger
+springdoc-ui = { group = "org.springdoc", name = "springdoc-openapi-ui", version.ref = "springdoc" }
+springdoc-data-rest = { group = "org.springdoc", name = "springdoc-openapi-data-rest", version.ref = "springdoc" }
+springdoc-security = { group = "org.springdoc", name = "springdoc-openapi-security", version.ref = "springdoc" }
+
 # APIs
 jsr305 = { group = "com.google.code.findbugs", name = "jsr305" }
 jetbrains-annotations = { group = "org.jetbrains", name = "annotations" }
 slf4j-api = { group = "org.slf4j", name = "slf4j-api" }
+spotbugs-annotations = { group = "com.github.spotbugs", name = "spotbugs-annotations", version.ref = "spotbugs" }
+
+# Lombok
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 
 # Others
 amqp-client = { group = "com.rabbitmq", name = "amqp-client" }
@@ -199,8 +242,11 @@ brave-instrumentation-grpc = { group = "io.zipkin.brave", name = "brave-instrume
 caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine" }
 caffeine-jcache = { group = "com.github.ben-manes.caffeine", name = "jcache" }
 commons-collections = { group = "org.apache.commons", name = "commons-collections4" }
+commons-io = { group = "commons-io", name = "commons-io", version = "2.11.0" }
+commons-csv = { group = "org.apache.commons", name = "commons-csv", version = "1.9.0" }
 commons-lang3 = { group = "org.apache.commons", name = "commons-lang3" }
 commons-text = { group = "org.apache.commons", name = "commons-text" }
+cronutils = { group = 'com.cronutils', name = 'cron-utils', version = '9.1.5' }
 ecs-logging-core = { group = "co.elastic.logging", name = "ecs-logging-core" }
 fastutil = { group = "it.unimi.dsi", name = "fastutil" }
 feign-slf4j = { group = "io.github.openfeign", name = "feign-slf4j" }
@@ -231,6 +277,7 @@ jackson-dataformat-xml = { group = "com.fasterxml.jackson.dataformat", name = "j
 jackson-datatype-jdk8 = { group = "com.fasterxml.jackson.datatype", name = "jackson-datatype-jdk8" }
 jackson-datatype-jsr310 = { group = "com.fasterxml.jackson.datatype", name = "jackson-datatype-jsr310" }
 jackson-module-afterburner = { group = "com.fasterxml.jackson.module", name = "jackson-module-afterburner" }
+jackson-module-kotlin = { group = "com.fasterxml.jackson.module", name = "jackson-module-kotlin" }
 jackson-module-parameter-names = { group = "com.fasterxml.jackson.module", name = "jackson-module-parameter-names" }
 jackson-module-paranamer = { group = "com.fasterxml.jackson.module", name = "jackson-module-paranamer" }
 jakarta-annotation-api = { group = "jakarta.annotation", name = "jakarta.annotation-api" }
@@ -264,6 +311,8 @@ postgresql = { group = "org.postgresql", name = "postgresql" }
 protobuf-java = { group = "com.google.protobuf", name = "protobuf-java" }
 protobuf-java-util = { group = "com.google.protobuf", name = "protobuf-java-util" }
 pw-swift-core = { group = "com.prowidesoftware", name = "pw-swift-core", version = "SRU2021-9.2.12" }
+querydsl-apt-jpa = { group = "com.querydsl", name = "querydsl-apt" }
+querydsl-jpa = { group = "com.querydsl", name = "querydsl-jpa" }
 sentry = { group = "io.sentry", name = "sentry" }
 sentry-logback = { group = "io.sentry", name = "sentry-logback" }
 sentry-spring-boot-starter = { group = "io.sentry", name = "sentry-spring-boot-starter" }
@@ -272,6 +321,7 @@ shedlock-jdbc-provider = { group = "net.javacrumbs.shedlock", name = "shedlock-p
 shedlock-spring = { group = "net.javacrumbs.shedlock", name = "shedlock-spring", version.ref = "shedlock" }
 snakeyaml = { group = "org.yaml", name = "snakeyaml" }
 tomcat-embed-el = { group = "org.apache.tomcat.embed", name = "tomcat-embed-el" }
+tika-core = { group = "org.apache.tika", name = "tika-core", version = "2.1.0" }
 
 # Testing
 assertj-core = { group = "org.assertj", name = "assertj-core" }
@@ -280,12 +330,20 @@ awaitility = { group = "org.awaitility", name = "awaitility", version = "4.2.0" 
 hamcrest = { group = "org.hamcrest", name = "hamcrest" }
 json-path = { group = "com.jayway.jsonpath", name = "json-path" }
 junit-jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api" }
+junit-jupiter-params = { group = "org.junit.jupiter", name = "junit-jupiter-params" }
+junit-jupiter-migrationsupport = { group = "org.junit.jupiter", name = "junit-jupiter-migrationsupport" }
 junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine" }
+junit-vintage-engine = { group = "org.junit.vintage", name = "junit-vintage-engine" }
 objenesis = { group = "org.objenesis", name = "objenesis" }
 rabbitmq-mock = { group = "com.github.fridujo", name = "rabbitmq-mock", version = "1.1.1" }
+mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
+mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version.ref = "mockito" }
+rest-assured = { group = "io.rest-assured", name = "rest-assured" }
+rest-assured-spring-mock-mvc = { group = "io.rest-assured", name = "spring-mock-mvc" }
 spock-core = { group = "org.spockframework", name = "spock-core" }
 spock-spring = { group = "org.spockframework", name = "spock-spring" }
 test-containers = { group = "org.testcontainers", name = "testcontainers" }
+test-containers-elasticsearch = { group = "org.testcontainers", name = "elasticsearch" }
 test-containers-junit-jupiter = { group = "org.testcontainers", name = "junit-jupiter" }
 test-containers-postgresql = { group = "org.testcontainers", name = "postgresql" }
 test-containers-spock = { group = "org.testcontainers", name = "spock" }
@@ -297,6 +355,8 @@ plugin-jib = { module = "com.google.cloud.tools.jib:com.google.cloud.tools.jib.g
 plugin-nebula-resolution = { module = "nebula.resolution-rules:nebula.resolution-rules.gradle.plugin", version.ref = "plugin-nebula-resolution" }
 plugin-sonarqube = { module = "org.sonarqube:org.sonarqube.gradle.plugin", version.ref = "plugin-sonarqube" }
 plugin-spring-boot = { module = "org.springframework.boot:org.springframework.boot.gradle.plugin", version.ref = "platform-spring-boot" }
+plugin-freefair-aspectj = { module = "io.freefair.aspectj:io.freefair.aspectj.gradle.plugin", version.ref = "plugin-freefair-aspectj" }
+plugin-freefair-aspectj-weaving = { module = "io.freefair.aspectj.post-compile-weaving:io.freefair.aspectj.post-compile-weaving.gradle.plugin", version.ref = "plugin-freefair-aspectj" }
 
 [bundles]
 #groovy = ["groovy-core", "groovy-json", "groovy-nio"]
@@ -309,3 +369,5 @@ jib = { id = "com.google.cloud.tools.jib", version.ref = "plugin-jib" }
 nebula-resolution = { id = "nebula.resolution-rules", version.ref = "plugin-nebula-resolution" }
 sonarqube = { id = "org.sonarqube", version.ref = "plugin-sonarqube" }
 spring-boot = { id = "org.springframework.boot", version.ref = "platform-spring-boot" }
+freefair-aspectj = { id = "io.freefair.aspectj", version.ref = "plugin-freefair-aspectj" }
+freefair-aspectj-weaving = { id = "io.freefair.aspectj.post-compile-weaving", version.ref = "plugin-freefair-aspectj" }

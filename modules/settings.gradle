@@ -13,6 +13,10 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = 'sear-modules'
+rootProject.name = 'iris-modules'
 
 include('app')
+
+includeBuild('governance')
+//includeBuild('simulator')
+//includeBuild('webapp')

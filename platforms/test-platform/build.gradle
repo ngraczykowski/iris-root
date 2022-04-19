@@ -2,16 +2,21 @@ plugins {
   id('java-platform')
 }
 
-group = 'com.silenteight.sear.platform'
+group = 'com.silenteight.iris.platform'
 
 javaPlatform.allowDependencies()
 
 dependencies {
+  // NOTE(ahaczewski): Keep this order!
+  api(platform(libs.platform.test.containers))
+  api(platform(libs.platform.spock))
+  api(platform(libs.platform.junit5))
   api(platform(libs.platform.spring.boot))
-  api(platform('org.junit:junit-bom:5.7.1'))
 
   constraints {
     api(libs.awaitility)
+    api(libs.mockito.core)
+    api(libs.mockito.junit.jupiter)
     api(libs.rabbitmq.mock)
     api(libs.test.greenmail)
   }
