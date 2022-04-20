@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    app: {{ .Values.name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+      annotations:
+        deployment-tag: {{ randAlphaNum 5 | quote }}
+    spec:
+      volumes:
+        - name: application-config
+          secret:
+            secretName: hit-type-agent-config
+      containers:
+        - name: {{ .Values.name }}
+          volumeMounts:
+            - mountPath: "/app/config/application.yaml"
+              name: application-config
+              subPath: {{ .Values.applicationConfigSubpath }}
+          image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
+          {{ if .Values.args }}
+          args:
+          {{ range .Values.args }}
+          - {{ . }}
+          {{ end }}
+          {{ end }}
+          resources:
+            limits:
+              memory: {{ .Values.memoryLimit | quote }}
+            requests:
+              memory: {{ .Values.memoryRequest | quote }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          ports:
+            - containerPort: {{ .Values.ports.grpc }}
+              name: grpc
