@@ -127,6 +127,12 @@ pipeline {
         stage('Build and publish docker image') {
             stages {
                 stage('Build and push image') {
+                    when {
+                        anyOf {
+                            branch 'master'
+                            branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
+                        }
+                    }
                     steps {
                         withCredentials([usernamePassword(
                              credentialsId: 'pypi-deployment-user',
