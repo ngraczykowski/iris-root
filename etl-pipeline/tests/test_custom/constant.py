@@ -181,7 +181,7 @@ EXAMPLES = [
             "WL_ADDRESS2": ["FL;US"],
             "WL_MATCHED_TOKENS": r'["Doe", "Traczos"]',
             "WLP_TYPE": "I",
-            "WL_DOCUMENT_NUMBER": "",
+            "WL_DOCUMENT_NUMBER": [],
         },
     )
 ]
@@ -434,7 +434,7 @@ EXAMPLES_WITH_INVALID_OUTPUT = [
             "WL_ALIASES": [""],
             "WL_MATCHED_TOKENS": r'["Doe", "Traczos"]',
             "WLP_TYPE": "I",
-            "WL_DOCUMENT_NUMBER": "",
+            "WL_DOCUMENT_NUMBER": [],
         },
     )
 ]

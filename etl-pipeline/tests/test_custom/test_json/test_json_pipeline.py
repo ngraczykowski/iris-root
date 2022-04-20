@@ -1,10 +1,13 @@
 import json
 import pickle
 
+import pandas as pd
 import pytest
 
 from etl_pipeline.config import pipeline_config
-from etl_pipeline.custom.ms.datatypes.field import InputRecordField  # noqa F401
+from etl_pipeline.custom.ms.datatypes.field import (  # noqa F401; required for unpickling
+    InputRecordField,
+)
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.data_processor_engine.json_engine.json_engine import JsonProcessingEngine
 from pipelines.ms.ms_pipeline import MSPipeline
@@ -15,7 +18,7 @@ ALERT_INTERNAL_ID = cn.ALERT_INTERNAL_ID
 TEST_PATH = "tests/shared/test_ms_pipeline/"
 
 
-def run_pipeline(uut, file_path, reference_file_path):
+def run_pipeline(uut, file_path):
     with open(file_path, "r") as file:
         payload = json.loads(file.read())
     payload_json = {key: payload[key] for key in sorted(payload)}
@@ -26,9 +29,7 @@ def run_pipeline(uut, file_path, reference_file_path):
     payload = payload_json
     parsed_payloads = uut.transform_standardized_to_cleansed(payload)
     parsed_payloads = uut.transform_cleansed_to_application(parsed_payloads)
-    with open(reference_file_path, "rb") as f:
-        reference_payloads = pickle.load(f)
-    return parsed_payloads, reference_payloads
+    return parsed_payloads
 
 
 def check_no_dict_type(ref, tested):
@@ -40,47 +41,60 @@ def check_no_dict_type(ref, tested):
     assert tested == ref
 
 
-def check_payload(parsed_payloads, reference_payloads):
-    for payload, reference_payload in zip(parsed_payloads, reference_payloads):
-        for num in range(len(payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS])):
-            for key in payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num]:
-                try:
-                    assert (
-                        payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
-                        == reference_payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
-                    )
-                except AssertionError:
-                    try:
-                        assert sorted(
-                            payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
-                        ) == sorted(
-                            reference_payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
-                        )
-                    except:
-                        if isinstance(
-                            payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key], dict
-                        ):
-                            reference = reference_payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][
-                                num
-                            ][key]
-                            tested = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
-                            for new_key in tested:
-                                assert tested[new_key] == reference[new_key]
-                        else:
-                            ref = reference_payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
-                            tested = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][num][key]
-                            try:
-                                check_no_dict_type(ref, tested)
-                            except AssertionError:
-                                raise AssertionError(f"Tested {tested} ref {ref} key: {key}")
+def flatten(value):
+    if value == []:
+        return value
+    if isinstance(value, list):
+        if isinstance(value[0], list):
+            return flatten(value[0]) + flatten(value[1:])
+        return value[:1] + flatten(value[1:])
+    return value
 
 
-def assert_length_and_content_match(requested_length, parsed_payloads, reference_payloads):
+def remove_nulls_from_aggegated(match):
+    return [i for i in match if i]
+
+
+def assert_list(tested, reference):
+    assert sorted(tested) == sorted(reference)
+
+
+def check_payload(out_payload, reference_file):
+    out_payload = pd.DataFrame(
+        [match for payload in out_payload for match in payload["watchlistParty"]["matchRecords"]]
+    )
+    with open(reference_file, "rb") as f:
+        reference_payloads = pickle.load(f)
+
+    reference_payload = pd.DataFrame(
+        [
+            match
+            for payload in reference_payloads
+            for match in payload["watchlistParty"]["matchRecords"]
+        ]
+    )
+    for cols in out_payload.columns:
+        try:
+            pd.testing.assert_series_equal(out_payload[cols], reference_payload[cols])
+        except (AssertionError, TypeError):
+            if isinstance(out_payload[cols].values[0], list):
+                reference = remove_nulls_from_aggegated(
+                    flatten([i for i in reference_payload[cols].values])
+                )
+                output = remove_nulls_from_aggegated(
+                    flatten([i for i in out_payload[cols].values])
+                )
+                assert_list(output, reference)
+            else:
+                assert output == reference
+
+
+def assert_length_and_content_match(requested_length, parsed_payloads, reference_file):
     assert len(parsed_payloads) == requested_length
     for i in parsed_payloads:
         assert len(i[cn.ALERTED_PARTY_FIELD][cn.INPUT_RECORD_HIST]) == 1
         assert len(i[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]) == 1
-    check_payload(parsed_payloads, reference_payloads)
+    check_payload(parsed_payloads, reference_file)
 
 
 @pytest.mark.parametrize(
@@ -111,5 +125,5 @@ def assert_length_and_content_match(requested_length, parsed_payloads, reference
 def test_pipeline(payload_file, reference_file, reference_length):
     json_engine = JsonProcessingEngine(pipeline_config)
     uut = MSPipeline(json_engine, config=pipeline_config)
-    parsed_payloads, reference_payloads = run_pipeline(uut, payload_file, reference_file)
-    assert_length_and_content_match(reference_length, parsed_payloads, reference_payloads)
+    parsed_payloads = run_pipeline(uut, payload_file)
+    assert_length_and_content_match(reference_length, parsed_payloads, reference_file)

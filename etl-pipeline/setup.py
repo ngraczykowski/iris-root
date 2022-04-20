@@ -7,10 +7,12 @@ dev_require = [
     "lxml==4.7.1",
     "googleapis-common-protos==1.55.0",
     "data-source-agentinput-api==0.21.0.5",
-    "data-source-api==0.21.0.5",
+    "data-source-api>=0.23.0.12",
     "python-consul2==0.1.5",
     "data-source-categories-api==0.23.0.11",
 ]
+
+tests_require = ["pandas==1.1.5"]
 
 setup(
     name="etl_pipeline",
@@ -26,7 +28,7 @@ setup(
     packages=find_packages(exclude=("tests",)),
     install_requires=dev_require,
     extras_require={
-        "tests": dev_require,
+        "tests": dev_require + tests_require,
     },
     setup_requires=[
         "pytest-runner>=5.1",

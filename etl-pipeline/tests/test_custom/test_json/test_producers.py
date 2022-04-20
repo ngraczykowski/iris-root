@@ -8,6 +8,11 @@ from silenteight.datasource.api.historicaldecisions.v2.historical_decisions_pb2 
     HistoricalDecisionsFeatureInput,
     ModelKey,
 )
+from silenteight.datasource.api.hittype.v1.hit_type_pb2 import (
+    HitTypeFeatureInput,
+    StringList,
+    TokensMap,
+)
 from silenteight.datasource.api.location.v1.location_pb2 import LocationFeatureInput
 from silenteight.datasource.api.name.v1.name_pb2 import (
     AlertedPartyName,
@@ -22,6 +27,7 @@ from etl_pipeline.service.agent_router.producers import (
     DateFeatureInputProducer,
     DocumentFeatureInputProducer,
     HistoricalDecisionsFeatureInputProducer,
+    HitTypeFeatureInputProducer,
     LocationFeatureInputProducer,
     NameFeatureInputProducer,
 )
@@ -388,3 +394,52 @@ def test_produce_category_producer(initialization_params, payload_fields, refere
         alert=reference_fields["alert"],
         match=reference_fields["match"],
     )
+
+
+@pytest.mark.parametrize(
+    ["initialization_params", "payload_fields"],
+    [
+        (
+            {
+                "prefix": "",
+                "feature_name": "test",
+                "field_maps": {
+                    "normal_trigger_categories": "field_with_normal_triggers_categories",
+                    "trigger_categories": "field_with_trigger_categories",
+                    "triggered_tokens": "fields_with_triggered_tokens",
+                },
+            },
+            {
+                "field_with_normal_triggers_categories": [],
+                "field_with_trigger_categories": [{"name": ["test"]}],
+                "fields_with_triggered_tokens": {"Doe": {"Field": ["Another" "test"]}},
+            },
+        ),
+    ],
+)
+def test_produce_hit_type_input(initialization_params, payload_fields):
+    producer = HitTypeFeatureInputProducer(**initialization_params)
+    result = producer.produce_feature_input(payload_fields)
+    reference_dict = {}
+    for type_ in payload_fields["field_with_trigger_categories"][0]:
+        reference_dict[type_] = StringList(
+            tokens=payload_fields["field_with_trigger_categories"][0][type_]
+        )
+
+    for analyzed_token in payload_fields["fields_with_triggered_tokens"]:
+
+        map_of_tokens = {}
+        for found_token, list_of_fields in payload_fields["fields_with_triggered_tokens"].items():
+            tokens = StringList(tokens=list_of_fields)
+            map_of_tokens[found_token] = tokens
+
+        payload_fields["fields_with_triggered_tokens"][analyzed_token] = TokensMap(
+            tokens_map=map_of_tokens
+        )
+    expected_result = HitTypeFeatureInput(
+        feature=f"/{initialization_params['feature_name']}",
+        normal_trigger_categories=payload_fields["field_with_normal_triggers_categories"],
+        trigger_categories=reference_dict,
+        triggered_tokens=payload_fields["fields_with_triggered_tokens"],
+    )
+    assert result == expected_result
