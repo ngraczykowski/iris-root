@@ -1,3 +1,4 @@
+import logging
 from abc import ABC, abstractmethod
 from copy import deepcopy
 
@@ -31,6 +32,8 @@ from silenteight.datasource.api.name.v1.name_pb2 import (
 from silenteight.datasource.api.nationalid.v1.national_id_pb2 import NationalIdFeatureInput
 from silenteight.datasource.api.transaction.v1.transaction_pb2 import TransactionFeatureInput
 from silenteight.datasource.categories.api.v2.category_value_pb2 import CategoryValue
+
+logger = logging.getLogger("main").getChild("agent_input_creator")
 
 
 class Producer(ABC):
@@ -146,13 +149,14 @@ class HitTypeFeatureInputProducer(Producer):
     def produce_feature_input(self, payload):
         fields = deepcopy(dict(self.fields))
         payload = deepcopy(dict(payload))
+        logger.debug(f"Fields: {fields}, payload: {payload}")
 
         for input_key, payload_key in self.fields.items():
             fields[input_key] = payload.get(payload_key, [])
-        for analyzed_token in fields["triggered_tokens"]:
+        for analyzed_token, map_ in fields["triggered_tokens"].items():
 
             map_of_tokens = {}
-            for found_token, list_of_fields in fields["triggered_tokens"].items():
+            for found_token, list_of_fields in map_.items():
                 tokens = StringList(tokens=list_of_fields)
                 map_of_tokens[found_token] = tokens
 

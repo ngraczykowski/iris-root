@@ -412,7 +412,25 @@ def test_produce_category_producer(initialization_params, payload_fields, refere
             {
                 "field_with_normal_triggers_categories": [],
                 "field_with_trigger_categories": [{"name": ["test"]}],
-                "fields_with_triggered_tokens": {"Doe": {"Field": ["Another" "test"]}},
+                "fields_with_triggered_tokens": {"Doe": {"Field": ["Another", "test"]}},
+            },
+        ),
+        (
+            {
+                "prefix": "",
+                "feature_name": "test",
+                "field_maps": {
+                    "normal_trigger_categories": "field_with_normal_triggers_categories",
+                    "trigger_categories": "field_with_trigger_categories",
+                    "triggered_tokens": "fields_with_triggered_tokens",
+                },
+            },
+            {
+                "field_with_normal_triggers_categories": ["name"],
+                "fields_with_triggered_tokens": {"doe": {}, "johnny": {}, "sude": {}},
+                "field_with_trigger_categories": [
+                    {"name": [], "country": ["ADDRESS1_COUNTRY"], "job": [], "other": []}
+                ],
             },
         ),
     ],
@@ -429,7 +447,9 @@ def test_produce_hit_type_input(initialization_params, payload_fields):
     for analyzed_token in payload_fields["fields_with_triggered_tokens"]:
 
         map_of_tokens = {}
-        for found_token, list_of_fields in payload_fields["fields_with_triggered_tokens"].items():
+        for found_token, list_of_fields in payload_fields["fields_with_triggered_tokens"][
+            analyzed_token
+        ].items():
             tokens = StringList(tokens=list_of_fields)
             map_of_tokens[found_token] = tokens
 
