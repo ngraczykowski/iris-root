@@ -9,7 +9,6 @@ import spock.lang.Specification
 import spock.lang.Subject
 
 import static com.silenteight.fab.dataprep.domain.Fixtures.*
-import static com.silenteight.fab.dataprep.domain.model.AlertStatus.FAILURE
 import static com.silenteight.fab.dataprep.domain.model.AlertStatus.SUCCESS
 
 class RegistrationServiceTest extends Specification {
@@ -85,7 +84,7 @@ class RegistrationServiceTest extends Specification {
         .alertsWithMatches(
             [AlertWithMatchesIn.builder()
                  .alertId(MESSAGE_NAME)
-                 .status(AlertStatusIn.FAILURE)
+                 .status(AlertStatusIn.SUCCESS)
                  .errorDescription(AlertErrorDescription.EXTRACTION.getDescription())
                  .matches([])
                  .build()])
@@ -96,7 +95,7 @@ class RegistrationServiceTest extends Specification {
                 RegisteredAlertWithMatchesOut.builder()
                     .alertId(MESSAGE_NAME)
                     .alertName(ALERT_NAME)
-                    .alertStatus(AlertStatusOut.FAILURE)
+                    .alertStatus(AlertStatusOut.SUCCESS)
                     .registeredMatches([])
                     .build()
             ]).build()
@@ -109,7 +108,7 @@ class RegistrationServiceTest extends Specification {
     registeredAlerts.each {
       assert it.getAlertName() == ALERT_NAME
       assert it.getBatchName() == BATCH_NAME
-      assert it.getStatus() == FAILURE
+      assert it.getStatus() == SUCCESS
       assert it.getMatches() == []
     }
     1 * registrationServiceClient.registerAlertsAndMatches(request) >> response
