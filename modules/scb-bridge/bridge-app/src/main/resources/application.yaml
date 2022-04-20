@@ -156,8 +156,8 @@ silenteight:
       fixed-delay: 1000
       initial-delay: 2000
 
-    qco:
-      enabled: true
+  qco:
+    enabled: false
 
 serp:
   # GNS DB Configuration

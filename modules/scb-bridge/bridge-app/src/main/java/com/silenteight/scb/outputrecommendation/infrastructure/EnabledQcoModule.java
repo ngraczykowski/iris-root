@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
-@ConditionalOnProperty(value = "silenteight.scb-bridge.qco.enabled", havingValue = "true")
+@ConditionalOnProperty(value = "silenteight.qco.enabled", havingValue = "true")
 @EnableJpaRepositories(basePackages = "com.silenteight.scb",
     basePackageClasses = QcoOverriddenRecommendationJpaRepository.class)
 @EntityScan(basePackages = "com.silenteight.scb",

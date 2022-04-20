@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConditionalOnProperty(value = "silenteight.scb-bridge.qco.enabled", havingValue = "false")
+@ConditionalOnProperty(value = "silenteight.qco.enabled", havingValue = "false")
 public class QcoRecommendationMockProvider implements QcoRecommendationProvider {
 
   @Override

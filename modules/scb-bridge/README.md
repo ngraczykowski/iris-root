@@ -140,7 +140,7 @@ as well.
 ### How to enable QCO
 
 The QCO process can be enabled by setting property
-`silenteight.scb-bridge.qco.enabled` to `true` 
+`silenteight.qco.enabled` to `true` 
 
 ## EXTENDED VERSION OF RECOM FUNCTION WITH QCO PARAMETERS
 

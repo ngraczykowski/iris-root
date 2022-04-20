@@ -64,3 +64,13 @@ silenteight:
           chunk-size: 1000
           records-view: SENS_V_FFF_RECORDS_NON_DENY
           watchlist-level: true
+  qco:
+    enabled: true
+    comments-prefix: "QCO Automation – FP Overridden to MI"
+    config-file:
+      location: "classpath:config/qco_config_file.csv"
+      separator: "|"
+amqp:
+  report:
+    exchange-name: bridge.command
+    routing-key: command.index-request.production
