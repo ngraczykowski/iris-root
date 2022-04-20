@@ -135,7 +135,6 @@ def commonCompilerArgs = [
     "-Xlint:overloads",
     "-Xlint:overrides",
     "-Xlint:path",
-    "-Xlint:processing",
     "-Xlint:serial",
     "-Xlint:static",
     "-Xlint:try",
