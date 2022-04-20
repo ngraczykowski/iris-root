@@ -1,4 +1,6 @@
 import argparse
+import os
+import pickle
 from concurrent import futures
 
 import grpc
@@ -21,6 +23,10 @@ class AgentInputServiceServicer(object):
                     name=agent_input.name, match=agent_input.match
                 )
             )
+        if context.code() == grpc.StatusCode.OK:
+            os.makedirs("/tmp/", exist_ok=True)
+            with open("/tmp/request.pkl", "wb") as f:
+                pickle.dump(request, f)
         return input__service__pb2.BatchCreateAgentInputsResponse(
             created_agent_inputs=created_agent_inputs
         )

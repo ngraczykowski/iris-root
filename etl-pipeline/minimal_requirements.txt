@@ -4,7 +4,7 @@ black==22.3.0
 certifi==2021.5.30
 click==8.0.4
 data-source-agentinput-api==0.21.0.5
-data-source-api==0.21.0.5
+data-source-api>=0.23.0.12
 dataclasses==0.8
 distlib==0.3.4
 entrypoints==0.3

@@ -135,18 +135,10 @@ def check_fields_in_files(fields, file_patterns):
     for file in files:
         with open(file, "r", encoding="utf-8") as f:
             text = f.read()
-
-        # check which fields are present in the file
-        fields_present = [x for x in fields if x in text]
+        fields_present = [field for field in fields if field in text]
         if fields_present:
-            logger.debug(
-                f"{len(fields_present)} field(s) found in {file}, removing it/them from the list..."
-            )
             fields = list(set(fields) - set(fields_present))
-        else:
-            logger.debug(f"No fields found in {file}")
-
-    # return the fields that have not been found in any file
+    logger.debug(f"Check if transformation exist for those fields {fields}")
     return fields
 
 

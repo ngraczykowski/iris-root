@@ -17,6 +17,11 @@ from silenteight.datasource.api.historicaldecisions.v2.historical_decisions_pb2 
     HistoricalDecisionsFeatureInput,
     ModelKey,
 )
+from silenteight.datasource.api.hittype.v1.hit_type_pb2 import (
+    HitTypeFeatureInput,
+    StringList,
+    TokensMap,
+)
 from silenteight.datasource.api.location.v1.location_pb2 import LocationFeatureInput
 from silenteight.datasource.api.name.v1.name_pb2 import (
     AlertedPartyName,
@@ -41,6 +46,7 @@ class Producer(ABC):
 class CountryFeatureInputProducer(Producer):
     def produce_feature_input(self, payload):
         fields = deepcopy(self.fields)
+        payload = deepcopy(payload)
         for input_key, payload_key in self.fields.items():
             fields[input_key] = payload.get(payload_key, [])
         return CountryFeatureInput(
@@ -52,6 +58,7 @@ class CountryFeatureInputProducer(Producer):
 class DateFeatureInputProducer(Producer):
     def produce_feature_input(self, payload):
         fields = deepcopy(self.fields)
+        payload = deepcopy(payload)
         for input_key, payload_key in self.fields.items():
             fields[input_key] = payload.get(payload_key, [])
         return DateFeatureInput(
@@ -65,6 +72,7 @@ class DateFeatureInputProducer(Producer):
 class DocumentFeatureInputProducer(Producer):
     def produce_feature_input(self, payload):
         fields = deepcopy(self.fields)
+        payload = deepcopy(payload)
         for input_key, payload_key in self.fields.items():
             fields[input_key] = [
                 i for i in payload.get(payload_key, []) if i is not None and i != "None"
@@ -78,6 +86,7 @@ class DocumentFeatureInputProducer(Producer):
 class HistoricalDecisionsFeatureInputProducer(Producer):
     def produce_feature_input(self, payload):
         fields = deepcopy(self.fields)
+        payload = deepcopy(payload)
         for input_key, payload_key in self.fields.items():
             fields[input_key] = payload.get(payload_key, [])
         alerted_party = AlertedParty(id=str(fields["alerted_party"]))
@@ -93,6 +102,7 @@ class HistoricalDecisionsFeatureInputProducer(Producer):
 class LocationFeatureInputProducer(Producer):
     def produce_feature_input(self, payload):
         fields = deepcopy(self.fields)
+        payload = deepcopy(payload)
         for input_key, payload_key in self.fields.items():
             fields[input_key] = " ".join(
                 [i for i in payload.get(payload_key, []) if i and i != "None"]
@@ -107,6 +117,7 @@ class LocationFeatureInputProducer(Producer):
 class NameFeatureInputProducer(Producer):
     def produce_feature_input(self, payload):
         fields = deepcopy(self.fields)
+        payload = deepcopy(payload)
         for input_key, payload_key in self.fields.items():
             fields[input_key] = payload.get(payload_key, [])
 
@@ -126,16 +137,32 @@ class NameFeatureInputProducer(Producer):
 class CategoryProducer(Producer):
     def produce_feature_input(self, payload, match_payload, alert, match_name):
         fields = deepcopy(self.fields)
+        payload = deepcopy(payload)
         type = match_payload.get(fields["type"], "")
         return CategoryValue(single_value=type, alert=alert, match=match_name)
 
 
-class HitTypeFeatureProducer(Producer):
+class HitTypeFeatureInputProducer(Producer):
     def produce_feature_input(self, payload):
-        fields = deepcopy(self.fields)
+        fields = deepcopy(dict(self.fields))
+        payload = deepcopy(dict(payload))
+
         for input_key, payload_key in self.fields.items():
             fields[input_key] = payload.get(payload_key, [])
-        return NameFeatureInput(feature=self.feature_name, hit_type=fields["hit_type"])
+        for analyzed_token in fields["triggered_tokens"]:
+
+            map_of_tokens = {}
+            for found_token, list_of_fields in fields["triggered_tokens"].items():
+                tokens = StringList(tokens=list_of_fields)
+                map_of_tokens[found_token] = tokens
+
+            fields["triggered_tokens"][analyzed_token] = TokensMap(tokens_map=map_of_tokens)
+        fields["trigger_categories"] = deepcopy(dict(fields["trigger_categories"][0]))
+        for category in fields["trigger_categories"]:
+            fields["trigger_categories"][category] = StringList(
+                tokens=list(fields["trigger_categories"][category])
+            )
+        return HitTypeFeatureInput(feature=self.feature_name, **fields)
 
 
 # Legacy producers

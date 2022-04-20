@@ -105,7 +105,7 @@ companyName:
  producer_type: NameFeatureInputProducer
  fields:
    alerted_party_names: ap_all_company_names_aggregated
-   watchlist_names: wl_all_company_names
+   watchlist_names: wl_all_company_names_aggregated
 
 alertType:
   feature_type: categories
@@ -120,8 +120,13 @@ alertType:
     - ISG_ACCOUNT
   category_type: ENUMERATED
 
-# hitType:
-#  feature_type: features
-#  producer_type: HitTypeFeatureInputProducer
-#  fields:
-#    hit_types: ap_all_company_names_aggregated
+hitType:
+ feature_type: features
+ producer_type: HitTypeFeatureInputProducer
+ fields:
+  normal_trigger_categories:
+     - name
+  trigger_categories: all_hit_type_aggregated 
+  triggered_tokens: AP_TRIGGERS
+
+   

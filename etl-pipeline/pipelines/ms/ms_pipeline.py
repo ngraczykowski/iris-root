@@ -220,7 +220,6 @@ class MSPipeline(ETLPipeline):
             self.engine.collect_party_values_from_parties(alerted_parties, payload)
             self.engine.collect_party_values_from_accounts(accounts, payload)
             self.engine.collect_party_values_from_parties_from_fields(fields, payload)
-            payload[cn.ALL_CONNECTED_PARTY_TYPES] = payload[cn.ALL_CONNECTED_PARTY_TYPES]
             names_source_cols = [
                 cn.ALL_CONNECTED_PARTY_NAMES,
                 cn.ALL_CONNECTED_PARTIES_NAMES,
