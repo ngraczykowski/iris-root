@@ -1,6 +1,7 @@
 package com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.WlName;
 import com.silenteight.scb.ingest.adapter.incomming.common.gender.GenderDetector;
@@ -14,6 +15,8 @@ import com.silenteight.scb.ingest.adapter.incomming.common.util.AlertParserUtils
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.GnsRtAlertStatus;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.request.*;
 
+import org.apache.commons.lang3.time.StopWatch;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -26,6 +29,7 @@ import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
+@Slf4j
 @RequiredArgsConstructor
 public class GnsRtRequestToAlertMapper {
 
@@ -45,12 +49,16 @@ public class GnsRtRequestToAlertMapper {
 
     ScreenableData screenableData = screenCustomerNameResInfo.getScreenableData();
 
-    return immediateResponseData
+    var stopWatch = StopWatch.createStarted();
+    List<Alert> collect = immediateResponseData
         .getAlerts()
         .parallelStream()
         .filter(g -> g.getAlertStatus() == GnsRtAlertStatus.POTENTIAL_MATCH)
         .map(alert -> createAlert(request, alert, internalBatchId, screenableData))
         .collect(toList());
+    log.info("Create alerts time: {}", stopWatch);
+
+    return collect;
   }
 
   @Nonnull

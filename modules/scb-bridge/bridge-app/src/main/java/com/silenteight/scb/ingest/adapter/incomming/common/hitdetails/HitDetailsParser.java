@@ -11,6 +11,8 @@ import com.silenteight.scb.ingest.adapter.incomming.common.hitdetails.lexer.Lexe
 import com.silenteight.scb.ingest.adapter.incomming.common.hitdetails.model.HitDetails;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.request.GnsRtHit;
 
+import org.apache.commons.lang3.time.StopWatch;
+
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Base64.Decoder;
@@ -50,8 +52,10 @@ public class HitDetailsParser {
     try {
       HitDetailsBuilder hitDetailsBuilder = new HitDetailsBuilder(config);
       ElementCollector elementCollector = new ElementCollector(hitDetailsBuilder);
+      var stopWatch = StopWatch.createStarted();
       Lexer lexer = new Lexer(elementCollector);
       lexer.lex(text);
+      log.info("Lexer time: {}", stopWatch);
       return hitDetailsBuilder.build();
     } catch (Exception e) {
       throw new ParserException(e);
