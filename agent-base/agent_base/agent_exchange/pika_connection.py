@@ -34,7 +34,12 @@ class PikaConnection:
         connection_configuration = self.connection_configuration.copy()
         ssl_options = connection_configuration.pop("tls", None)
 
-        if self.ssl and ssl_options:
+        if self.ssl:
+            if not ssl_options:
+                raise ValueError(
+                    "No ssl connection parameters in config "
+                    "- add 'rabbitmq.tls' section to application.yaml"
+                )
             url = "".join(
                 map(
                     str,
@@ -83,7 +88,7 @@ class PikaConnection:
                 await self.channel.close()
                 channel: aio_pika.Channel = await self.connection.channel()
 
-                self.request_queue = await channel.declare_queue(
+                self.request_queue: aio_pika.queue.Queue = await channel.declare_queue(
                     name=self.messaging_configuration["request"].get("queue-name", ""),
                     durable=self.messaging_configuration["request"].get("queue-durable", True),
                     arguments=self.messaging_configuration["request"].get("queue-arguments", None),

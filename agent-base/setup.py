@@ -4,7 +4,7 @@ install_require = [
     "agents-api==0.7.0.33",
     "aio_pika==7.1.2",
     "aiohttp==3.7.4.post0",
-    "data-source-api==0.18.0",
+    "data-source-api>=0.18.0",
     "googleapis-common-protos==1.53.0",
     "grpcio==1.39.0",
     "grpcio-health-checking==1.39.0",

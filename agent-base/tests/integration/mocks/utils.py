@@ -36,7 +36,7 @@ def run_agent_in_process():
 
 def run_data_source_mock(config, alerts):
     loop = asyncio.get_event_loop()
-    mock = DataSourceMock(config["grpc"]["client"]["data-source"]["address"], ssl=True)
+    mock = DataSourceMock(config["grpc"]["client"]["data-source"]["address"])
     mock.alerts = alerts
     loop.create_task(mock.start())
     try:
