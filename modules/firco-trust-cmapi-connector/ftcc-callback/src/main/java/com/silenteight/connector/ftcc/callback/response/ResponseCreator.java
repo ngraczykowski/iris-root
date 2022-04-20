@@ -93,10 +93,10 @@ class ResponseCreator {
   }
 
   @NotNull
-  private static AttachmentDto createAttachment(String contents, String comment) {
+  private static AttachmentDto createAttachment(String solution, String comment) {
     var encodedComment =
         Base64.getEncoder().encodeToString(comment.getBytes(StandardCharsets.UTF_8));
-    return new AttachmentDto(ATTACHMENT_COMMENT_NAME, contents, encodedComment);
+    return new AttachmentDto(ATTACHMENT_COMMENT_NAME, encodedComment, solution);
   }
 
 
