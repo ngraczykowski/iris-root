@@ -11,24 +11,21 @@ hit_type_agent_config_path="$scriptdir/../dist/${hit_type_agent_config}"
 set -x
 
 
-for d in nomad/*/; do
-  cd "$d"
-  name=$(basename -- "$d")
+cd nomad
 
-  if [ -f "hit-type-agent.nomad" ]; then
-    echo "Processing $name"
-  else
-    echo "No nomad file in $name, ignoring"
-    cd -
-    continue
-  fi
-
+if [ -f "hit-type-agent.nomad" ]; then
+  echo "Processing nomad"
   rm -rf artifacts/
   mkdir -p artifacts/
 
   cp "$hit_type_agent_artifact_path" artifacts/
   cp "$hit_type_agent_config_path" artifacts/
 
-  tar -cvjSf ../"hit-type-agent-nomad-${name}-${hit_type_agent_version}.tar.bz2" -- *
+  tar -cvjSf ../"hit-type-agent-nomad-${hit_type_agent_version}.tar.bz2" -- *
   cd -
-done
+else
+  echo "No nomad file in nomad directory, ignoring"
+  cd -
+fi
+
+

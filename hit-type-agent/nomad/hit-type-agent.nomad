@@ -20,7 +20,7 @@ variable "hit_type_agent_config" {
 
 variable "namespace" {
   type = string
-  default = "dev"
+  default = "mike"
 }
 
 job "hit-type-agent" {
@@ -147,7 +147,7 @@ job "hit-type-agent" {
       config {
         image = "python:3.7"
         command = "python"
-        args = ["/app/hit_type-${var.hit_type_agent_version}.pyz", "-c", "/app/config", "--grpc", "--agent-exchange", "-v"]
+        args = ["/app/hit_type-${var.hit_type_agent_version}.pyz", "-c", "/app/config", "--grpc", "-v"]
         network_mode = "host"
         volumes = ["local:/app"]
       }
