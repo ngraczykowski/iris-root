@@ -5,6 +5,8 @@ import com.silenteight.bridge.core.registration.domain.command.CompleteBatchComm
 import com.silenteight.bridge.core.registration.domain.model.*
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.port.outgoing.*
+import com.silenteight.bridge.core.registration.domain.strategy.BatchRegistrationStrategy
+import com.silenteight.bridge.core.registration.domain.strategy.BatchStrategyFactory
 
 import spock.lang.Specification
 import spock.lang.Subject
@@ -13,14 +15,12 @@ import spock.lang.Unroll
 class BatchServiceSpec extends Specification {
 
   def eventPublisher = Mock(BatchEventPublisher)
-  def analysisService = Mock(AnalysisService)
   def batchRepository = Mock(BatchRepository)
-  def modelService = Mock(DefaultModelService)
-  def verifyBatchTimeoutPublisher = Mock(VerifyBatchTimeoutPublisher)
+  def batchStrategyFactory = Mock(BatchStrategyFactory)
+  def batchRegistrationStrategy = Mock(BatchRegistrationStrategy)
 
   @Subject
-  def underTest = new BatchService(
-      eventPublisher, analysisService, batchRepository, modelService, verifyBatchTimeoutPublisher)
+  def underTest = new BatchService(eventPublisher, batchRepository, batchStrategyFactory)
 
   def 'should register batch'() {
     given:
@@ -37,11 +37,8 @@ class BatchServiceSpec extends Specification {
     batchIdDto.id() == batchId
 
     and:
-    1 * modelService.getForSolving() >> DefaultModel.builder().build()
-    1 * analysisService.create(_ as DefaultModel) >>
-        new Analysis(RegistrationFixtures.ANALYSIS_NAME)
-    1 * batchRepository.create(_ as Batch) >> RegistrationFixtures.BATCH
-    1 * verifyBatchTimeoutPublisher.publish(new VerifyBatchTimeoutEvent(batchId))
+    1 * batchStrategyFactory.getStrategyForRegistration(registerBatchCommand) >> batchRegistrationStrategy
+    1 * batchRegistrationStrategy.register(registerBatchCommand) >> RegistrationFixtures.BATCH
   }
 
   def 'should return batch if already exists'() {
@@ -60,9 +57,8 @@ class BatchServiceSpec extends Specification {
     batchIdDto.id() == batchId
 
     and:
-    0 * modelService.getForSolving()
-    0 * analysisService.create(_ as DefaultModel)
-    0 * batchRepository.create(_ as Batch)
+    0 * batchStrategyFactory.getStrategyForRegistration(registerBatchCommand)
+    0 * batchRegistrationStrategy.register(registerBatchCommand)
   }
 
   @Unroll
@@ -107,6 +103,7 @@ class BatchServiceSpec extends Specification {
     def batchId = Fixtures.BATCH_ID
     def errorDescription = RegistrationFixtures.ERROR_DESCRIPTION
     def metadata = RegistrationFixtures.METADATA
+    def isSimulation = true
 
     and:
     batchRepository.findById(batchId) >> Optional.empty()
@@ -115,7 +112,7 @@ class BatchServiceSpec extends Specification {
     underTest.notifyBatchError(RegistrationFixtures.NOTIFY_BATCH_ERROR_COMMAND)
 
     then:
-    1 * batchRepository.create(_ as Batch) >> Batch.error(batchId, errorDescription, metadata)
+    1 * batchRepository.create(_ as Batch) >> Batch.error(batchId, errorDescription, metadata, isSimulation)
     1 * eventPublisher.publish(RegistrationFixtures.BATCH_ERROR)
     0 * batchRepository.updateStatusAndErrorDescription(batchId, BatchStatus.ERROR)
   }

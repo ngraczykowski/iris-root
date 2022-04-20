@@ -4,7 +4,9 @@ import lombok.Builder;
 
 public record BatchError(String id,
                          String batchMetadata,
-                         String errorDescription) {
+                         String errorDescription,
+                         boolean isSimulation
+) {
 
   @Builder
   public BatchError {}

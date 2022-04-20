@@ -9,7 +9,8 @@ public record Batch(String id,
                     BatchStatus status,
                     String errorDescription,
                     String batchMetadata,
-                    Integer batchPriority
+                    Integer batchPriority,
+                    boolean isSimulation
 ) {
 
   private static final Integer BATCH_ERROR_PRIORITY = 0;
@@ -20,7 +21,8 @@ public record Batch(String id,
   @Builder
   public Batch {}
 
-  public static Batch error(String id, String errorDescription, String batchMetadata) {
+  public static Batch error(
+      String id, String errorDescription, String batchMetadata, boolean isSimulation) {
     return new Batch(
         id,
         BATCH_ERROR_ANALYSIS_NAME,
@@ -29,7 +31,8 @@ public record Batch(String id,
         BatchStatus.ERROR,
         errorDescription,
         batchMetadata,
-        BATCH_ERROR_PRIORITY);
+        BATCH_ERROR_PRIORITY,
+        isSimulation);
   }
 
   public enum BatchStatus {

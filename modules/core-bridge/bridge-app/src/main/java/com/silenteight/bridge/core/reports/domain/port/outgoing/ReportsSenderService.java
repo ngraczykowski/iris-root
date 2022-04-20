@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface ReportsSenderService {
 
-  void send(List<Report> reports);
+  void send(String analysisName, List<Report> reports);
 }

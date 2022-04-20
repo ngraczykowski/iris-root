@@ -68,6 +68,8 @@ amqp:
     outgoing:
       notify-batch-error:
         exchange-name: core-bridge.notify-batch-error-exchange
+        solving-batch-routing-key: solving
+        simulation-batch-routing-key: simulation
       notify-batch-completed:
         exchange-name: core-bridge.notify-batch-completed-exchange
       verify-batch-timeout:

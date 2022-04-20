@@ -227,3 +227,24 @@ databaseChangeLog:
             tableName: core_bridge_batches
             columnName: priority
             defaultNullValue: "0"
+  - changeSet:
+      id: 1.0.0-3
+      author: klipiec
+      changes:
+        - dropNotNullConstraint:
+            tableName: core_bridge_batches
+            columnName: analysis_name
+        - dropNotNullConstraint:
+            tableName: core_bridge_batches
+            columnName: policy_name
+        - addColumn:
+            tableName: core_bridge_batches
+            columns:
+              - column:
+                  name: is_simulation
+                  type: boolean
+        - addNotNullConstraint:
+            constraintName: core_bridge_batches_non_null_batch_is_simulation
+            tableName: core_bridge_batches
+            columnName: is_simulation
+            defaultNullValue: "false"

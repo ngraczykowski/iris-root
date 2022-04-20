@@ -21,7 +21,7 @@ class ReportsSenderServiceAdapterSpec extends Specification {
 
   def 'should map reports and send them to rabbitmq'() {
     when:
-    underTest.send([ReportFixtures.REPORT_ONE])
+    underTest.send(ReportFixtures.ANALYSIS_NAME, [ReportFixtures.REPORT_ONE])
 
     then:
     1 * rabbitTemplate.convertAndSend(exchangeName, routingKey, {

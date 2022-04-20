@@ -31,9 +31,13 @@ class BatchEventRabbitPublisher implements BatchEventPublisher {
   @Override
   public void publish(BatchError event) {
     var message = mapper.toMessageBatchError(event);
+    var routingKey = event.isSimulation() ? batchErrorProperties.simulationBatchRoutingKey()
+                                          : batchErrorProperties.solvingBatchRoutingKey();
 
-    log.info("Send batch error notification for batch with id: {}", event.id());
-    rabbitTemplate.convertAndSend(batchErrorProperties.exchangeName(), "", message);
+    log.info(
+        "Send batch error notification for batch with id: {}, solving: {}", event.id(),
+        !event.isSimulation());
+    rabbitTemplate.convertAndSend(batchErrorProperties.exchangeName(), routingKey, message);
   }
 
   @Override

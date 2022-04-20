@@ -46,6 +46,16 @@
       "description": "Exchange name for notify batch error stored event."
     },
     {
+      "name": "amqp.registration.outgoing.notify-batch-error.solving-batch-routing-key",
+      "type": "java.lang.String",
+      "description": "Routing key for notify batch error in solving use case."
+    },
+    {
+      "name": "amqp.registration.outgoing.notify-batch-error.simulation-batch-routing-key",
+      "type": "java.lang.String",
+      "description": "Routing key for notify batch error in simulation use case."
+    },
+    {
       "name": "amqp.registration.outgoing.notify-batch-completed.exchange-name",
       "type": "java.lang.String",
       "description": "Exchange name for notify batch completed event."

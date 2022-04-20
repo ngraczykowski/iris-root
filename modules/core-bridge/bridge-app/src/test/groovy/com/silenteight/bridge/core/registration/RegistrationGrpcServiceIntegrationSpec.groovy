@@ -6,6 +6,7 @@ import com.silenteight.bridge.core.registration.domain.model.Batch
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository
+import com.silenteight.bridge.core.registration.infrastructure.amqp.AmqpRegistrationOutgoingNotifyBatchErrorProperties
 import com.silenteight.proto.registration.api.v1.*
 import com.silenteight.proto.registration.api.v1.RegistrationServiceGrpc.RegistrationServiceBlockingStub
 
@@ -22,7 +23,6 @@ import org.springframework.test.context.ActiveProfiles
     webEnvironment = WebEnvironment.NONE,
     properties = [
         "grpc.server.inProcessName=test",
-        "grpc.server.port=-1",
         "grpc.client.inProcess.address=in-process:test"
     ]
 )
@@ -43,7 +43,7 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
   @GrpcClient("inProcess")
   private RegistrationServiceBlockingStub myService
 
-  def 'should register batch'() {
+  def 'should register batch for #scenario'() {
     given:
     def batchId = UUID.randomUUID().toString()
     def alertsSize = 123
@@ -59,6 +59,7 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
         .setBatchPriority(priority)
         .setAlertCount(alertsSize)
         .setBatchMetadata(metadata)
+        .setIsSimulation(isSimulation)
         .build()
 
     when:
@@ -71,16 +72,22 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
     with(batch) {
       isPresent()
       with(get()) {
-        !analysisName().empty
-        BatchStatus.STORED == status()
-        alertsCount() == alertsSize
-        batchMetadata() == metadata
-        batchPriority() == priority
+        it.analysisName()?.empty == analysisNameCheck
+        it.status() == batchStatus
+        it.alertsCount() == alertsSize
+        it.batchMetadata() == metadata
+        it.batchPriority() == priority
+        it.isSimulation() == isSimulation
       }
     }
+
+    where:
+    isSimulation | batchStatus        | analysisNameCheck | scenario
+    false        | BatchStatus.STORED | false             | 'solving'
+    true         | BatchStatus.STORED | null              | 'simulation'
   }
 
-  def 'should notify batch error'() {
+  def 'should notify batch error for #scenario'() {
     given:
     def id = UUID.randomUUID().toString()
     def error = 'error occurred'
@@ -90,6 +97,7 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
         .setBatchId(id)
         .setErrorDescription(error)
         .setBatchMetadata(metadata)
+        .setIsSimulation(isSimulation)
         .build()
 
     when:
@@ -103,11 +111,12 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
     with(batch) {
       isPresent()
       with(get()) {
-        analysisName().empty
-        BatchStatus.ERROR == status()
-        errorDescription() == error
-        alertsCount() == 0
-        batchMetadata() == metadata
+        it.analysisName().empty
+        it.status() == batchStatus
+        it.errorDescription() == error
+        it.alertsCount() == 0
+        it.batchMetadata() == metadata
+        it.isSimulation() == isSimulation
       }
     }
 
@@ -121,6 +130,11 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
       errorDescription == error
       batchMetadata == metadata
     }
+
+    where:
+    isSimulation | batchStatus       | scenario
+    false        | BatchStatus.ERROR | 'solving'
+    true         | BatchStatus.ERROR | 'simulation'
   }
 
   def 'should register alerts with matches'() {

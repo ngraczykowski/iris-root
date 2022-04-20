@@ -23,7 +23,6 @@ import spock.util.concurrent.PollingConditions
     webEnvironment = WebEnvironment.NONE,
     properties = [
         "grpc.server.inProcessName=test",
-        "grpc.server.port=-1",
         "grpc.client.inProcess.address=in-process:test",
         "registration.analysis.mock-recommendations-generation=false"
     ])

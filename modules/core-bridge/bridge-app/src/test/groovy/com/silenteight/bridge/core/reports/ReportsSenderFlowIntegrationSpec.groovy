@@ -14,21 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.context.annotation.Import
-import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ActiveProfiles
 import spock.util.concurrent.PollingConditions
 
-@SpringBootTest(
-    webEnvironment = WebEnvironment.NONE,
-    properties = [
-        "grpc.server.inProcessName=test",
-        "grpc.server.port=-1",
-        "grpc.client.inProcess.address=in-process:test"
-    ]
-)
-@Import(ReportsSenderFlowRabbitMqTestConfig.class)
 @ActiveProfiles("test")
-@DirtiesContext
+@Import(ReportsSenderFlowRabbitMqTestConfig.class)
+@SpringBootTest(webEnvironment = WebEnvironment.NONE)
 class ReportsSenderFlowIntegrationSpec extends BaseSpecificationIT {
 
   @SpringBean

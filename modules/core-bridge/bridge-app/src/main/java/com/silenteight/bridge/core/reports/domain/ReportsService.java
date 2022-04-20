@@ -12,6 +12,7 @@ import com.silenteight.bridge.core.reports.domain.port.outgoing.ReportsSenderSer
 
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -33,15 +34,14 @@ class ReportsService {
         .map(alert -> toReport(batchId, alert, alertNameToRecommendation.get(alert.name())))
         .toList();
 
-    reportsSenderService.send(reports);
+    reportsSenderService.send(analysisName, reports);
     log.info("Sent reports for batch {} (analysis [{}])", batchId, analysisName);
   }
 
   private Report toReport(
       String batchId, AlertWithMatchesDto alert, RecommendationWithMetadataDto recommendation) {
-    if ("ERROR".equals(alert.status())) {
-      return reportsMapper.toErroneousReport(batchId, alert);
-    }
-    return reportsMapper.toReport(batchId, alert, recommendation);
+    return Optional.ofNullable(recommendation)
+        .map(rec -> reportsMapper.toReport(batchId, alert, recommendation))
+        .orElseGet(() -> reportsMapper.toErroneousReport(batchId, alert));
   }
 }

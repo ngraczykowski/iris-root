@@ -8,7 +8,9 @@ import com.silenteight.bridge.core.registration.domain.command.NotifyBatchErrorC
 import com.silenteight.bridge.core.registration.domain.command.RegisterBatchCommand;
 import com.silenteight.bridge.core.registration.domain.model.*;
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus;
-import com.silenteight.bridge.core.registration.domain.port.outgoing.*;
+import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchEventPublisher;
+import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository;
+import com.silenteight.bridge.core.registration.domain.strategy.BatchStrategyFactory;
 
 import org.springframework.stereotype.Service;
 
@@ -26,10 +28,8 @@ class BatchService {
       EnumSet.of(BatchStatus.STORED, BatchStatus.PROCESSING);
 
   private final BatchEventPublisher eventPublisher;
-  private final AnalysisService analysisService;
   private final BatchRepository batchRepository;
-  private final DefaultModelService defaultModelService;
-  private final VerifyBatchTimeoutPublisher verifyBatchTimeoutPublisher;
+  private final BatchStrategyFactory batchStrategyFactory;
 
   BatchId register(RegisterBatchCommand registerBatchCommand) {
     return batchRepository.findById(registerBatchCommand.id())
@@ -113,25 +113,9 @@ class BatchService {
   }
 
   private Optional<Batch> registerNew(RegisterBatchCommand registerBatchCommand) {
-    log.info("Registering new batch with id: {}", registerBatchCommand.id());
-
-    var defaultModel = defaultModelService.getForSolving();
-    var analysis = analysisService.create(defaultModel);
-    var batch = Batch.builder()
-        .id(registerBatchCommand.id())
-        .analysisName(analysis.name())
-        .policyName(defaultModel.policyName())
-        .alertsCount(registerBatchCommand.alertCount())
-        .batchMetadata(registerBatchCommand.batchMetadata())
-        .status(BatchStatus.STORED)
-        .batchPriority(registerBatchCommand.batchPriority())
-        .build();
-
-    var createdBatch = batchRepository.create(batch);
-
-    verifyBatchTimeoutPublisher.publish(new VerifyBatchTimeoutEvent(createdBatch.id()));
-
-    return Optional.of(createdBatch);
+    return Optional.of(batchStrategyFactory
+        .getStrategyForRegistration(registerBatchCommand)
+        .register(registerBatchCommand));
   }
 
   private void markBatchAsError(NotifyBatchErrorCommand notifyBatchErrorCommand) {
@@ -151,7 +135,8 @@ class BatchService {
     batchRepository.create(Batch.error(
         notifyBatchErrorCommand.id(),
         notifyBatchErrorCommand.errorDescription(),
-        notifyBatchErrorCommand.batchMetadata()));
+        notifyBatchErrorCommand.batchMetadata(),
+        notifyBatchErrorCommand.isSimulation()));
 
     log.info("New batch registered as error with id: {}", notifyBatchErrorCommand.id());
   }

@@ -18,9 +18,7 @@ class BaseSpecificationIT extends Specification {
   static PostgreSQLContainer postgresqlContainer = new PostgreSQLContainer("postgres:12")
 
   static RabbitMQContainer rabbitMqContainer = new RabbitMQContainer("rabbitmq:3.8.16-management")
-
-  static String getGrpcPortForTest() {return new ServerSocket(0).getLocalPort()}
-
+  
   @Shared
   @SuppressWarnings('unused')
   public PostgreSQLContainer POSTGRES_SQL_CONTAINER = postgresqlContainer
@@ -40,6 +38,6 @@ class BaseSpecificationIT extends Specification {
     registry.add("spring.rabbitmq.username", rabbitMqContainer::getAdminUsername)
     registry.add("spring.rabbitmq.password", rabbitMqContainer::getAdminPassword)
 
-    registry.add("silenteight.bridge.grpc.port", BaseSpecificationIT::getGrpcPortForTest)
+    registry.add("silenteight.bridge.grpc.port", () -> "-1")
   }
 }

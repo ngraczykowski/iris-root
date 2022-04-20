@@ -70,6 +70,7 @@ class JdbcBatchRepository implements BatchRepository {
         .priority(batch.batchPriority())
         .status(Status.valueOf(batch.status().name()))
         .errorDescription(batch.errorDescription())
+        .isSimulation(batch.isSimulation())
         .batchMetadata(batch.batchMetadata())
         .build();
     crudBatchRepository.save(batchEntity);
@@ -85,6 +86,7 @@ class JdbcBatchRepository implements BatchRepository {
         .batchPriority(batchEntity.priority())
         .status(BatchStatus.valueOf(batchEntity.status().name()))
         .errorDescription(batchEntity.errorDescription())
+        .isSimulation(batchEntity.isSimulation())
         .batchMetadata(batchEntity.batchMetadata())
         .build();
   }

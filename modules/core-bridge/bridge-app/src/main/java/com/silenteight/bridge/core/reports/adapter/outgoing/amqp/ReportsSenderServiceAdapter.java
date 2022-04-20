@@ -51,15 +51,14 @@ class ReportsSenderServiceAdapter implements ReportsSenderService {
   private final ReportsOutgoingConfigurationProperties properties;
 
   @Override
-  public void send(List<Report> reports) {
-    var request = getRequest(reports);
+  public void send(String analysisName, List<Report> reports) {
+    var request = getRequest(analysisName, reports);
     rabbitTemplate.convertAndSend(properties.exchangeName(), properties.routingKey(), request);
   }
 
-  private ProductionDataIndexRequest getRequest(List<Report> reports) {
-    var analysisName = reports.stream().findAny().map(Report::analysisName);
+  private ProductionDataIndexRequest getRequest(String analysisName, List<Report> reports) {
     return ProductionDataIndexRequest.newBuilder()
-        .setAnalysisName(analysisName.orElse(EMPTY_STRING))
+        .setAnalysisName(getOptionalValueOrEmptyString(analysisName))
         .addAllAlerts(reports.stream()
             .map(this::toAlert)
             .toList())
@@ -68,7 +67,7 @@ class ReportsSenderServiceAdapter implements ReportsSenderService {
 
   private Alert toAlert(Report report) {
     return Alert.newBuilder()
-        .setName(report.alertData().name())
+        .setName(getOptionalValueOrEmptyString(report.alertData().name()))
         .setDiscriminator(report.alertData().id())
         .setAccessPermissionTag("") // TODO add correct value
         .setPayload(toStruct(getAlertDataPayload(report.batchId(), report.alertData())))
@@ -121,6 +120,11 @@ class ReportsSenderServiceAdapter implements ReportsSenderService {
     matchPayload.putAll(matchData.categories());
     matchPayload.putAll(matchData.features());
     return matchPayload;
+  }
+
+  private String getOptionalValueOrEmptyString(String value) {
+    return Optional.ofNullable(value)
+        .orElse(EMPTY_STRING);
   }
 
   private static Struct toStruct(Map<String, String> source) {

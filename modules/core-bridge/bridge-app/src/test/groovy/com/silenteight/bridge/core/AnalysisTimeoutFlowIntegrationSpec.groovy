@@ -28,7 +28,6 @@ import static com.silenteight.proto.registration.api.v1.AlertStatus.SUCCESS
     webEnvironment = WebEnvironment.NONE,
     properties = [
         "grpc.server.inProcessName=test",
-        "grpc.server.port=-1",
         "grpc.client.inProcess.address=in-process:test",
         "registration.analysis.mock-recommendations-generation=false",
         "registration.verify-batch-timeout.delay-time:2s"

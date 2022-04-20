@@ -2,15 +2,10 @@ package com.silenteight.bridge.core.registration.domain
 
 import com.silenteight.bridge.core.Fixtures
 import com.silenteight.bridge.core.recommendation.domain.FixturesMatchMetaData
-import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand
+import com.silenteight.bridge.core.registration.domain.command.*
 import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand.FedMatch
 import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand.FeedingStatus
-import com.silenteight.bridge.core.registration.domain.command.GetAlertsWithMatchesCommand
-import com.silenteight.bridge.core.registration.domain.command.NotifyBatchErrorCommand
-import com.silenteight.bridge.core.registration.domain.command.RegisterAlertsCommand
 import com.silenteight.bridge.core.registration.domain.command.RegisterAlertsCommand.AlertWithMatches
-import com.silenteight.bridge.core.registration.domain.command.GetBatchWithAlertsCommand
-import com.silenteight.bridge.core.registration.domain.command.RegisterBatchCommand
 import com.silenteight.bridge.core.registration.domain.model.Batch
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.model.BatchError
@@ -39,6 +34,10 @@ class RegistrationFixtures {
   static def BATCH = BATCH_BUILDER
       .build()
 
+  static def SIMULATION_BATCH = BATCH_BUILDER
+      .isSimulation(true)
+      .build()
+
   static Batch batch(BatchStatus status) {
     return BATCH_BUILDER.status(status).build()
   }
@@ -47,7 +46,10 @@ class RegistrationFixtures {
   static def BATCH_ID_WITH_POLICY_PROJECTION = new BatchIdWithPolicy(Fixtures.BATCH_ID, POLICY_NAME)
 
   static def REGISTER_BATCH_COMMAND = new RegisterBatchCommand(
-      Fixtures.BATCH_ID, ALERTS_COUNT, METADATA, BATCH_PRIORITY)
+      Fixtures.BATCH_ID, ALERTS_COUNT, METADATA, BATCH_PRIORITY, false)
+
+  static def REGISTER_SIMULATION_BATCH_COMMAND = new RegisterBatchCommand(
+      Fixtures.BATCH_ID, ALERTS_COUNT, METADATA, BATCH_PRIORITY, true)
 
   static def REGISTER_ALERTS_COMMAND = new RegisterAlertsCommand(
       Fixtures.BATCH_ID, ALERT_WITH_MATCHES)
@@ -60,11 +62,11 @@ class RegistrationFixtures {
       .build()
 
   static def NOTIFY_BATCH_ERROR_COMMAND = new NotifyBatchErrorCommand(
-      Fixtures.BATCH_ID, ERROR_DESCRIPTION, METADATA)
+      Fixtures.BATCH_ID, ERROR_DESCRIPTION, METADATA, false)
 
   static def GET_BATCH_WITH_ALERTS_COMMAND = new GetBatchWithAlertsCommand(ANALYSIS_NAME)
 
   static def GET_ALERTS_WITH_MATCHES_COMMAND = new GetAlertsWithMatchesCommand(Fixtures.BATCH_ID)
 
-  static def BATCH_ERROR = new BatchError(Fixtures.BATCH_ID, METADATA, ERROR_DESCRIPTION)
+  static def BATCH_ERROR = new BatchError(Fixtures.BATCH_ID, METADATA, ERROR_DESCRIPTION, false)
 }

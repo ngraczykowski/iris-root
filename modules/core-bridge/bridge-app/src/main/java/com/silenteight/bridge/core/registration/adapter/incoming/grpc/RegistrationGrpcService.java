@@ -27,9 +27,10 @@ class RegistrationGrpcService extends RegistrationServiceGrpc.RegistrationServic
         request.getBatchId(),
         request.getAlertCount(),
         request.getBatchMetadata(),
-        request.getBatchPriority()
+        request.getBatchPriority(),
+        request.getIsSimulation()
     ));
-    log.info("New batch registered with id: {}", batchId);
+    log.info("New batch registered with id: {}, solving: {}", batchId, !request.getIsSimulation());
     responseObserver.onNext(Empty.getDefaultInstance());
     responseObserver.onCompleted();
   }
@@ -41,7 +42,9 @@ class RegistrationGrpcService extends RegistrationServiceGrpc.RegistrationServic
     registrationFacade.notifyBatchError(new NotifyBatchErrorCommand(
         request.getBatchId(),
         request.getErrorDescription(),
-        request.getBatchMetadata()));
+        request.getBatchMetadata(),
+        request.getIsSimulation()
+    ));
 
     responseObserver.onNext(Empty.getDefaultInstance());
     responseObserver.onCompleted();

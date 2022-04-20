@@ -1,9 +1,6 @@
 package com.silenteight.bridge.core.registration.adapter.outgoing.amqp;
 
-import com.silenteight.bridge.core.registration.domain.model.BatchCompleted;
-import com.silenteight.bridge.core.registration.domain.model.BatchDelivered;
-import com.silenteight.bridge.core.registration.domain.model.BatchError;
-import com.silenteight.bridge.core.registration.domain.model.BatchTimedOut;
+import com.silenteight.bridge.core.registration.domain.model.*;
 import com.silenteight.proto.registration.api.v1.MessageBatchCompleted;
 import com.silenteight.proto.registration.api.v1.MessageBatchDelivered;
 import com.silenteight.proto.registration.api.v1.MessageBatchError;

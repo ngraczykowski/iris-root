@@ -19,6 +19,7 @@ record BatchEntity(@Id long id,
                    String policyName,
                    String errorDescription,
                    String batchMetadata,
+                   boolean isSimulation,
                    @CreatedDate Instant createdAt,
                    @LastModifiedDate Instant updatedAt) {
 

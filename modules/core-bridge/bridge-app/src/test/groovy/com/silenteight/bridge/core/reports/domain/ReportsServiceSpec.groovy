@@ -35,7 +35,7 @@ class ReportsServiceSpec extends Specification {
     1 * registrationService.getAlertsWithMatches(ReportFixtures.BATCH_ID) >> [ReportFixtures.ALERT_ONE, ReportFixtures.ALERT_TWO]
     1 * recommendationService.getRecommendations(ReportFixtures.ANALYSIS_NAME) >> ReportFixtures.RECOMMENDATIONS_WITH_METADATA
     2 * reportsMapper.toReport(_, _, _) >>> [ReportFixtures.REPORT_ONE, ReportFixtures.REPORT_TWO]
-    1 * reportSenderService.send(ReportFixtures.REPORTS)
+    1 * reportSenderService.send(ReportFixtures.ANALYSIS_NAME, ReportFixtures.REPORTS)
   }
 
   def 'should send ERROR reports for the given analysis'() {
@@ -50,6 +50,6 @@ class ReportsServiceSpec extends Specification {
     1 * registrationService.getAlertsWithMatches(ReportFixtures.BATCH_ID) >> [ReportFixtures.ALERT_ONE_WITH_ERROR_STATUS]
     1 * recommendationService.getRecommendations(ReportFixtures.ANALYSIS_NAME) >> []
     1 * reportsMapper.toErroneousReport(_, _) >>> [ReportFixtures.ERROR_REPORT_ONE]
-    1 * reportSenderService.send(ReportFixtures.ERRONEOUS_REPORTS)
+    1 * reportSenderService.send(ReportFixtures.ANALYSIS_NAME, ReportFixtures.ERRONEOUS_REPORTS)
   }
 }

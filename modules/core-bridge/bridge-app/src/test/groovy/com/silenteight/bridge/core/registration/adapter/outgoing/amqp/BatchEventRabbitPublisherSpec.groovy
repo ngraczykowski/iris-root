@@ -24,7 +24,8 @@ class BatchEventRabbitPublisherSpec extends Specification {
   def rabbitTemplate = Mock(RabbitTemplate)
 
   def batchErrorProperties =
-      new AmqpRegistrationOutgoingNotifyBatchErrorProperties('error-exchange')
+      new AmqpRegistrationOutgoingNotifyBatchErrorProperties(
+          'error-exchange', 'solving-routing-key', 'sim-routing-key')
 
   def batchCompletedProperties =
       new AmqpRegistrationOutgoingNotifyBatchCompletedProperties('completed-exchange')
@@ -40,12 +41,13 @@ class BatchEventRabbitPublisherSpec extends Specification {
       mapper, rabbitTemplate, batchErrorProperties, batchCompletedProperties,
       batchTimedOutProperties, batchDeliveredProperties)
 
-  def 'should notify error for batch'() {
+  def 'should notify error for batch for #scenario'() {
     given:
     def batchError = BatchError.builder()
         .id('batchId')
         .errorDescription('Failed to register batch in Core Bridge Registration')
         .batchMetadata('batchMetadata')
+        .isSimulation(isSimulation)
         .build()
 
     def messageBatchError = MessageBatchError.newBuilder()
@@ -59,7 +61,12 @@ class BatchEventRabbitPublisherSpec extends Specification {
 
     then:
     1 * mapper.toMessageBatchError(batchError) >> messageBatchError
-    1 * rabbitTemplate.convertAndSend(batchErrorProperties.exchangeName(), "", messageBatchError)
+    1 * rabbitTemplate.convertAndSend(batchErrorProperties.exchangeName(), routingKey, messageBatchError)
+
+    where:
+    scenario     | isSimulation | routingKey
+    'simulation' | true         | 'sim-routing-key'
+    'solving'    | false        | 'solving-routing-key'
   }
 
   def 'should notify batch completed'() {
