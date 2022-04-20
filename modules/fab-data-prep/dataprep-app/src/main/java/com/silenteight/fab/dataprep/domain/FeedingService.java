@@ -49,7 +49,11 @@ class FeedingService {
                 .build())
         .collect(toList());
 
-    feedUds(agentInputs);
+    if (agentInputs.isEmpty()) {
+      log.debug("AgentInputs list is empty");
+    } else {
+      feedUds(agentInputs);
+    }
 
     categoryService.createCategoryInputs(featureInputsCommand);
   }

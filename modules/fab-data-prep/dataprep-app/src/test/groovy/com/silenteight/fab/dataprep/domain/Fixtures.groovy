@@ -90,6 +90,16 @@ class Fixtures {
       .status(AlertStatus.SUCCESS)
       .build()
 
+  static RegisteredAlert REGISTERED_ALERT_WITHOUT_MATCHES = RegisteredAlert.builder()
+      .batchName(BATCH_NAME)
+      .alertName(ALERT_NAME)
+      .systemId(SYSTEM_ID)
+      .discriminator(DISCRIMINATOR)
+      .parsedMessageData(PARSED_PAYLOAD)
+      .matches([])
+      .status(AlertStatus.SUCCESS)
+      .build()
+
   static FeatureInputsCommand EMPTY_FEATURE_INPUTS_COMMAND = FeatureInputsCommand.builder()
       .registeredAlert(REGISTERED_ALERT)
       .build()

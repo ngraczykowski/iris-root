@@ -7,6 +7,7 @@ import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputS
 import spock.lang.Specification
 
 import static com.silenteight.fab.dataprep.domain.Fixtures.REGISTERED_ALERT
+import static com.silenteight.fab.dataprep.domain.Fixtures.REGISTERED_ALERT_WITHOUT_MATCHES
 
 class FeedingServiceTest extends Specification {
 
@@ -42,5 +43,21 @@ class FeedingServiceTest extends Specification {
     features.each {1 * it.buildFeature(_) }
     1 * agentInputServiceClient.createBatchCreateAgentInputs(_) >> []
     1 * categoryService.createCategoryInputs(command)
+  }
+
+  def 'empty list should not be sent to UDS'() {
+    given:
+    def features = [Mock(FabFeature)]
+    def featureService = new FeedingService(features, agentInputServiceClient, categoryService)
+
+    def command = FeatureInputsCommand.builder()
+        .registeredAlert(REGISTERED_ALERT_WITHOUT_MATCHES)
+        .build()
+
+    when:
+    featureService.createFeatureInputs(command)
+
+    then:
+    0 * agentInputServiceClient._
   }
 }
