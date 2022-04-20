@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -79,10 +80,11 @@ public class BaseRestControllerTest {
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> messageConverters) {
+      //Support for @RequestBody String(Order matters)
+      messageConverters.add(new StringHttpMessageConverter());
       ObjectMapper mapper = new ObjectMapper()
           .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
           .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
       messageConverters.add(new MappingJackson2HttpMessageConverter(mapper));
     }
   }

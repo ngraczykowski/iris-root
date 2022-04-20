@@ -11,5 +11,5 @@ dependencies {
   api libraries.sentry
 
   // General dependencies
-  implementation libraries.silenteight_commons_core
+  api libraries.silenteight_commons_core
 }
