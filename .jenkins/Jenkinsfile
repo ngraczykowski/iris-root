@@ -1,0 +1,19 @@
+@Library('pipeline-shared-library@master') _
+
+pipeline {
+  agent any
+  options {
+    gitLabConnection(env.GITLAB_CONNECTION_NAME)
+    skipDefaultCheckout(true)
+  }
+  tools {
+    jdk 'jdk-17'
+  }
+  stages {
+    stage('Checkout') {
+      steps {
+        ciCheckout
+      }
+    }
+  }
+}
