@@ -10,7 +10,8 @@ public record QcoRecommendationMatch(
     String matchName,
     String stepId,
     String comment,
-    String solution) {
+    String solution,
+    boolean onlyMark) {
 
   @Builder
   public QcoRecommendationMatch {}

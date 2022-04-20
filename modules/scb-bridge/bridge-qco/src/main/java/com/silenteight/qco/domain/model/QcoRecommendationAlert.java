@@ -9,16 +9,20 @@ public record QcoRecommendationAlert(
     String alertId,
     String alertName,
     String policyId,
-    List<QcoMatchData> matches) {
+    List<QcoMatchData> matches,
+    boolean onlyMark) {
 
   @Builder(toBuilder = true)
   public QcoRecommendationAlert {}
 
   public static record QcoMatchData(
+      String id,
       String name,
       String recommendation,
       String comment,
-      String stepId
+      String stepId,
+      String fvSignature,
+      boolean qcoMarked
   ) {
 
     @Builder(toBuilder = true)

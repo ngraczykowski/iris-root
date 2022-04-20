@@ -48,7 +48,8 @@ public record Recommendations(
       String recommendedComment,
       String stepId,
       String fvSignature,
-      Map<String, String> features
+      Map<String, String> features,
+      String qaSampled
   ) {
 
     @Builder(toBuilder = true)

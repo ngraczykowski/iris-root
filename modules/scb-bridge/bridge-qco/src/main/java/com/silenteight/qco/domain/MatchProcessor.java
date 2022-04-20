@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
 import static com.silenteight.qco.domain.model.ResolverAction.NOT_CHANGE;
+import static com.silenteight.qco.domain.model.ResolverAction.ONLY_MARK;
 import static com.silenteight.qco.domain.model.ResolverAction.OVERRIDE;
 
 @Slf4j
@@ -24,7 +25,7 @@ public class MatchProcessor {
     log.debug("The processing of {} was started.", match.toString());
     var changeCondition = changeConditionFactory
         .createChangeCondition(match.policyId(), match.stepId(), match.solution());
-    var resolverAction = determineResolverAction(changeCondition);
+    var resolverAction = determineResolverAction(changeCondition, match.onlyMark());
     log.debug("QCO module determined ResolverAction={} for matchName={}",
         resolverAction.name(), match.matchName());
     var resolverCommand = new ResolverCommand(match, changeCondition, resolverAction);
@@ -39,5 +40,14 @@ public class MatchProcessor {
     }
     boolean overflowed = counter.increaseAndCheckOverflow(changeCondition);
     return overflowed ? OVERRIDE : NOT_CHANGE;
+  }
+
+  @NotNull
+  private ResolverAction determineResolverAction(ChangeCondition changeCondition, boolean mark) {
+    ResolverAction resolverAction = determineResolverAction(changeCondition);
+    if (mark && OVERRIDE == resolverAction) {
+      return ONLY_MARK;
+    }
+    return resolverAction;
   }
 }

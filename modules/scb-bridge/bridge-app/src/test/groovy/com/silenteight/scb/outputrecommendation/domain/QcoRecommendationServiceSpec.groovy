@@ -7,7 +7,6 @@ import com.silenteight.scb.outputrecommendation.domain.model.BatchSource
 import com.silenteight.scb.outputrecommendation.domain.model.RecommendationsGeneratedEvent
 import com.silenteight.scb.outputrecommendation.infrastructure.QcoRecommendationProperties
 import com.silenteight.scb.outputrecommendation.infrastructure.QcoRecommendationProvider
-
 import spock.lang.Specification
 
 class QcoRecommendationServiceSpec extends Specification {
@@ -34,19 +33,29 @@ class QcoRecommendationServiceSpec extends Specification {
       name() == Fixtures.MATCH_NAME
       recommendedComment() == Fixtures.MATCH_RECOMMENDED_COMMENT
       recommendedAction() == QCO_RECOMMENDATION
+      qaSampled()
     }
   }
 
-  def "should not run QCO process when batch is not CBS"() {
+  def "should run QCO process when batch is not CBS"() {
     given:
     def recommendationsEvent = GNS_RT_RECOMMENDATIONS_EVENT
+    def numOfRecommendations = recommendationsEvent.recommendations().size()
+    def qcoFacadeResponse = QCO_RECOMMENDATIONS_ALERT
 
     when:
     def result = underTest.process(recommendationsEvent)
 
     then:
-    0 * qcoRecommendationProvider.process(_ as QcoRecommendationAlert)
-    result == recommendationsEvent
+    numOfRecommendations * qcoRecommendationProvider.process(_ as QcoRecommendationAlert) >> qcoFacadeResponse
+    def recommendations = result.recommendations()
+    def matches = recommendations.first().matches()
+    with(matches.first()) {
+      name() == Fixtures.MATCH_NAME
+      recommendedComment() == Fixtures.MATCH_RECOMMENDED_COMMENT
+      recommendedAction() == QCO_RECOMMENDATION
+      qaSampled()
+    }
   }
 
   def "should return unchanged recommendations when QCO throws error"() {
@@ -89,6 +98,7 @@ class QcoRecommendationServiceSpec extends Specification {
                       .stepId(Fixtures.MATCH_STEP_ID)
                       .comment(Fixtures.MATCH_RECOMMENDED_COMMENT)
                       .recommendation(QCO_RECOMMENDATION)
+                      .qcoMarked(true)
                       .build()))
           .build()
 }

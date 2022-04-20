@@ -33,7 +33,7 @@ public class QcoAlertService {
     var qcoRecommendationMatch = QcoAlertMapper.toQcoRecommendationMatch(matchData, alert);
     var matchSolution = matchProcessor.processMatch(qcoRecommendationMatch);
 
-    if (matchSolution.changed()) {
+    if (matchSolution.qcoMarked()) {
       return overrideRecommendation(matchData, matchSolution);
     }
     return matchData;
@@ -43,6 +43,7 @@ public class QcoAlertService {
     return matchData.toBuilder()
         .recommendation(matchSolution.solution())
         .comment(matchSolution.comment())
+        .qcoMarked(matchSolution.qcoMarked())
         .build();
   }
 }

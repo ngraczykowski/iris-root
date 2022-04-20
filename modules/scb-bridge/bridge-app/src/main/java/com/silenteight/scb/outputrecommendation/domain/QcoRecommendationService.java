@@ -3,7 +3,6 @@ package com.silenteight.scb.outputrecommendation.domain;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.qco.domain.model.QcoRecommendationAlert;
 import com.silenteight.scb.outputrecommendation.domain.model.BatchMetadata;
 import com.silenteight.scb.outputrecommendation.domain.model.BatchSource;
 import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.Recommendation;
@@ -14,8 +13,6 @@ import com.silenteight.scb.outputrecommendation.infrastructure.QcoRecommendation
 import io.vavr.control.Try;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -25,50 +22,37 @@ class QcoRecommendationService {
   private final QcoRecommendationProvider qcoRecommendationProvider;
 
   RecommendationsGeneratedEvent process(RecommendationsGeneratedEvent recommendationsEvent) {
-    if (!isQcoAllowed(recommendationsEvent)) {
+    if (!isQcoAllowed()) {
       return recommendationsEvent;
     }
 
-    return Try.of(() -> updateWithQco(recommendationsEvent))
+    return Try.of(() -> updateMatches(recommendationsEvent))
         .onFailure(e -> log.error(
             "Failed to update recommendations with QCO, batchId: {}",
             recommendationsEvent.batchId(), e))
         .getOrElse(recommendationsEvent);
   }
 
-  private RecommendationsGeneratedEvent updateWithQco(
-      RecommendationsGeneratedEvent recommendationsEvent) {
-    var updatedRecommendations = updateRecommendations(recommendationsEvent.recommendations());
-
-    return recommendationsEvent.toBuilder()
-        .recommendations(updatedRecommendations)
+  private RecommendationsGeneratedEvent updateMatches(RecommendationsGeneratedEvent event) {
+    boolean onlyMark = isOnlyMark(event.batchMetadata());
+    return event.toBuilder()
+        .recommendations(event.recommendations().stream()
+            .map(recommendation -> updateRecommendation(recommendation, onlyMark))
+            .toList())
         .build();
   }
 
-  private List<Recommendation> updateRecommendations(List<Recommendation> recommendations) {
-    return recommendations.stream()
-        .map(this::updateRecommendation)
-        .toList();
-  }
-
-  private Recommendation updateRecommendation(Recommendation recommendation) {
-    var qcoRecommendationAlert = QcoRecommendationAlertMapper.map(recommendation);
+  private Recommendation updateRecommendation(Recommendation recommendation, boolean onlyMark) {
+    var qcoRecommendationAlert = QcoRecommendationAlertMapper.map(recommendation, onlyMark);
     var responseQcoRecommendation = qcoRecommendationProvider.process(qcoRecommendationAlert);
-    return overrideMatches(recommendation, responseQcoRecommendation);
+    return MatchOverrider.overrideMatches(recommendation, responseQcoRecommendation);
   }
 
-  private Recommendation overrideMatches(
-      Recommendation recommendation, QcoRecommendationAlert qcoRecommendationAlert) {
-    return recommendation.toBuilder()
-        .matches(MatchOverrider.override(recommendation.matches(), qcoRecommendationAlert))
-        .build();
+  private boolean isQcoAllowed() {
+    return qcoProperties.enabled();
   }
 
-  private boolean isQcoAllowed(RecommendationsGeneratedEvent event) {
-    return qcoProperties.enabled() && isCbsBatch(event.batchMetadata());
-  }
-
-  private boolean isCbsBatch(BatchMetadata batchMetadata) {
-    return batchMetadata.batchSource() == BatchSource.CBS;
+  private boolean isOnlyMark(BatchMetadata batchMetadata) {
+    return batchMetadata.batchSource() == BatchSource.GNS_RT;
   }
 }

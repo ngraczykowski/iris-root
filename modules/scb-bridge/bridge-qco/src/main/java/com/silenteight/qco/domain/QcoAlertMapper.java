@@ -20,6 +20,7 @@ class QcoAlertMapper {
         .stepId(match.stepId())
         .solution(match.recommendation())
         .comment(match.comment())
+        .onlyMark(alert.onlyMark())
         .build();
   }
 }
