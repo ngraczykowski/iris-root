@@ -46,7 +46,7 @@ agent:
     server_private_key: "tests/ssl_example/server-key.pem"
     server_public_key_chain: "tests/ssl_example/server.pem"
 
-sentry:
-  environment: unknown
-  release: unknown
-  sample_rate: 1.0
+#sentry:
+#  environment: unknown
+#  release: unknown
+#  sample_rate: 1.0

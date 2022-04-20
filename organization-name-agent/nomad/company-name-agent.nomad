@@ -20,7 +20,7 @@ variable "company_name_agent_config" {
 
 variable "namespace" {
   type = string
-  default = "mike"
+  default = "dev"
 }
 
 job "company-name-agent" {

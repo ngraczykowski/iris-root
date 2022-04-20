@@ -3,4 +3,4 @@ name: organization-name-agent
 description: A Helm chart for Organization Name agent deployed in Kubernetes
 type: application
 version: "1.0.8"
-appVersion: "0.16.1-dev"
+appVersion: "0.16.0"

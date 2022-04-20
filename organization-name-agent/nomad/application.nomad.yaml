@@ -34,6 +34,7 @@ agent:
 
     response:
       exchange: 'agent.response'
+      routing-key: ""
 
   grpc:
     port: {{ env "NOMAD_PORT_grpc" }}
@@ -41,7 +42,7 @@ agent:
     server_private_key: {{ env "meta.silenteight.home" }}/cert/company-name-agent/company-name-agent-key.pem
     server_public_key_chain: {{ env "meta.silenteight.home" }}/cert/company-name-agent/company-name-agent-chain.pem
 
-sentry:
-  environment: mike
-  release: 0.16.0-dev
-  sample_rate: 1.0
+#sentry:
+#  environment: unknown
+#  release: unknown
+#  sample_rate: 1.0

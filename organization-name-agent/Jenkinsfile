@@ -234,8 +234,8 @@ pipeline {
                         }
                     }
                     steps {
-                        sh './nomad/deploy.sh'  //mike
-                        sh './nomad/deploy.sh -var="namespace=lima"'  //lima
+                        sh './nomad/deploy.sh -var="namespace=mike"'
+                        sh './nomad/deploy.sh -var="namespace=lima"'
                     }
                 }
             }
