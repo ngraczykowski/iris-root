@@ -53,7 +53,7 @@ mockito = "4.4.0"
 # Plugins
 #-----------------------------------
 plugin-aspectj = "5.3.0"
-plugin-jib = "3.1.4"
+plugin-jib = "3.2.1"
 plugin-nebula-resolution = "9.0.0"
 plugin-sonarqube = "3.3"
 plugin-freefair-aspectj = "6.4.1"
