@@ -121,12 +121,12 @@ alertType:
   category_type: ENUMERATED
 
 hitType:
- feature_type: features
- producer_type: HitTypeFeatureInputProducer
- fields:
-  normal_trigger_categories:
-     - name
-  trigger_categories: all_hit_type_aggregated 
-  triggered_tokens: AP_TRIGGERS
+  feature_type: features
+  producer_type: HitTypeFeatureInputProducer
+  fields:
+    normal_trigger_categories:
+      - name
+    trigger_categories: all_hit_type_aggregated 
+    triggered_tokens: AP_TRIGGERS
 
    

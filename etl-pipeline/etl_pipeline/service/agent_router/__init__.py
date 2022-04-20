@@ -127,35 +127,41 @@ class AgentInputCreator:
     def produce_feature_inputs(self, payload):
         feature_inputs = []
         for producer in self.producers:
-            feature_input = producer.produce_feature_input(payload)
-            logger.debug(f"Produced features {str(feature_input)}")
-            if isinstance(feature_input, list):
-                for input_ in feature_input:
+            try:
+                feature_input = producer.produce_feature_input(payload)
+                logger.debug(f"Produced features {str(feature_input)}")
+                if isinstance(feature_input, list):
+                    for input_ in feature_input:
+                        target = Any()
+                        target.Pack(input_)
+                        feature_inputs.append(
+                            FeatureInput(feature=producer.feature_name, agent_feature_input=target)
+                        )
+                else:
                     target = Any()
-                    target.Pack(input_)
+                    target.Pack(feature_input)
                     feature_inputs.append(
                         FeatureInput(feature=producer.feature_name, agent_feature_input=target)
                     )
-            else:
-                target = Any()
-                target.Pack(feature_input)
-                feature_inputs.append(
-                    FeatureInput(feature=producer.feature_name, agent_feature_input=target)
-                )
+            except:
+                logger.error(f"Cannot parse features for {producer.feature_name}")
         return feature_inputs
 
     def produce_categories_inputs(self, payload, match_payload, alert, match_name):
         category_matches = []
         for producer in self.category_producers:
-            category_value = producer.produce_feature_input(
-                payload, match_payload, alert, match_name
-            )
-            logger.debug(f"Produced features {str(category_value)}")
-            category_matches.append(
-                CreateCategoryValuesRequest(
-                    category=producer.feature_name, category_values=[category_value]
+            try:
+                category_value = producer.produce_feature_input(
+                    payload, match_payload, alert, match_name
                 )
-            )
+                logger.debug(f"Produced features {str(category_value)}")
+                category_matches.append(
+                    CreateCategoryValuesRequest(
+                        category=producer.feature_name, category_values=[category_value]
+                    )
+                )
+            except:
+                logger.error(f"Cannot parse features for {producer.feature_name}")
         return category_matches
 
     def produce_batch_create_agent_input_request(self, alert, payload):
