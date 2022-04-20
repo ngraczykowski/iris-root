@@ -21,8 +21,8 @@ class HitTypeAgent(Agent):
         try:
             logger.debug(
                 f"Checking normal trigger categories: {normal_trigger_categories},"
-                "\n trigger categories: {trigger_categories},"
-                "\n trigger tokens: {triggered_tokens}"
+                f"\n trigger categories: {trigger_categories},"
+                f"\n trigger tokens: {triggered_tokens}"
             )
             if not normal_trigger_categories or not trigger_categories or not triggered_tokens:
                 return Result(Solution.NO_DATA)
