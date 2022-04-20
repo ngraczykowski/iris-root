@@ -6,9 +6,9 @@ grpc:
           {{ $client.Address }}:{{ $client.Port -}}
       {{- end }}
       timeout: 10
-      client_ca: {{ env "meta.silenteight.home" }}/cert/chain.pem
-      client_private_key: {{ env "meta.silenteight.home" }}/cert/hit-type-agent/hit-type-agent-key.pem
-      client_public_key_chain: {{ env "meta.silenteight.home" }}/cert/hit-type-agent/hit-type-agent-chain.pem
+      # client_ca: {{ env "meta.silenteight.home" }}/cert/chain.pem
+      # client_private_key: {{ env "meta.silenteight.home" }}/cert/hit-type-agent/hit-type-agent-key.pem
+      # client_public_key_chain: {{ env "meta.silenteight.home" }}/cert/hit-type-agent/hit-type-agent-chain.pem
 
 rabbitmq:
   addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
@@ -16,10 +16,10 @@ rabbitmq:
       {{ $rabbit.Address }}:{{ $rabbit.Port -}}
   {{- end }}
   virtualhost: /{{ env "NOMAD_NAMESPACE" }}
-  tls:
-    ca_certs: "tests/ssl_example/ca.pem"
-    keyfile: "tests/ssl_example/client-key.pem"
-    certfile: "tests/ssl_example/client.pem"
+  # tls:
+  #   ca_certs: "tests/ssl_example/ca.pem"
+  #   keyfile: "tests/ssl_example/client-key.pem"
+  #   certfile: "tests/ssl_example/client.pem"
 
 consul:
   host: localhost
@@ -37,11 +37,11 @@ agent:
 
   grpc:
     port: {{ env "NOMAD_PORT_grpc" }}
-    server_ca: {{ env "meta.silenteight.home" }}/cert/chain.pem
-    server_private_key: {{ env "meta.silenteight.home" }}/cert/hit-type-agent/hit-type-agent-key.pem
-    server_public_key_chain: {{ env "meta.silenteight.home" }}/cert/hit-type-agent/hit-type-agent-chain.pem
+    # server_ca: {{ env "meta.silenteight.home" }}/cert/chain.pem
+    # server_private_key: {{ env "meta.silenteight.home" }}/cert/hit-type-agent/hit-type-agent-key.pem
+    # server_public_key_chain: {{ env "meta.silenteight.home" }}/cert/hit-type-agent/hit-type-agent-chain.pem
 
-sentry:
-  environment: mike
-  release: 0.16.0-dev
-  sample_rate: 1.0
+# sentry:
+#   environment: mike
+#   release: 0.16.0-dev
+#   sample_rate: 1.0
