@@ -93,4 +93,12 @@
     <appender-ref ref="ASYNC_CONSOLE"/>
     <appender-ref ref="ASYNC_STASH"/>
   </logger>
+
+  <logger
+      name="com.silenteight.qco"
+      level="error"
+      additivity="false">
+    <appender-ref ref="ASYNC_CONSOLE"/>
+    <appender-ref ref="ASYNC_STASH"/>
+  </logger>
 </configuration>
