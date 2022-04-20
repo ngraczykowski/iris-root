@@ -58,11 +58,8 @@ class ResponseCreator {
     decision.setMessageID(messageDetails.getMessageID());
     decision.setSystemID(messageDetails.getSystemID());
     decision.setOperator(OPERATOR);
-    /*TODO: verify attachment*/
-    decision.setAttachment(createAttachment(
-        recommendation.getRecommendedAction(),
-        recommendation.getRecommendationComment()));
     setComment(recommendation.getRecommendationComment(), decision);
+    setAttachment(recommendation, decision);
 
     var destinationStatus = decisionMapperUseCase.mapStatus(
         DecisionStatusRequest.builder()
@@ -78,6 +75,13 @@ class ResponseCreator {
     decision.setStatus(destinationStatus.getStatus());
 
     return create(decision);
+  }
+
+  private void setAttachment(RecommendationOut recommendation, AlertDecisionMessageDto decision) {
+    if (recommendation.getRecommendationComment().length() > MAX_COMMENT_LENGTH)
+      decision.setAttachment(createAttachment(
+          recommendation.getRecommendedAction(),
+          recommendation.getRecommendationComment()));
   }
 
   private void setComment(String comment, AlertDecisionMessageDto messageDetails) {
