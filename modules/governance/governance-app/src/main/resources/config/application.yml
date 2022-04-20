@@ -355,6 +355,12 @@ spring:
     multipart.max-file-size: 20MB
     multipart.max-request-size: 20MB
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:24491/auth/realms/sens-webapp
+
 grpc:
   server:
     port: 24205
