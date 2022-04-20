@@ -16,7 +16,7 @@ silenteight-data-retention-api = "0.0.1"
 silenteight-data-source-api = "0.18.0"
 silenteight-filestorage-api = "1.3.0"
 silenteight-filestorage-minio = "1.6.0"
-silenteight-sep-auth = "1.21.0"
+silenteight-sep-auth = "1.22.0"
 silenteight-sep-base = "1.12.2"
 warehouse-protocol = "2.3.0"
 

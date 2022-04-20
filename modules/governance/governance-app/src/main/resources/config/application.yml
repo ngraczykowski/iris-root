@@ -526,6 +526,9 @@ sep.auth:
       - "MANAGE_QA_VERIFICATION"
       - "DASHBOARD"
       - "VIEW_REASONING_BRANCHES"
+  permit-all-urls:
+    - "/management/**"
+    - "/openapi/**"
 
 serp.governance.qa:
   sampling:
