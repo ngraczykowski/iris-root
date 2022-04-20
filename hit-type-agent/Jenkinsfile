@@ -168,27 +168,27 @@ pipeline {
                             }
                     }
                 }
-                stage('ECR') {
-                    when {
-                        allOf {
-                            anyOf {
-                                branch 'master'
-                                branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
-                            }
-                            expression { return params.RELEASE }
-                        }
-                    }
-                    agent {
-                        label 'aws'
-                    }
-                    steps {
-                        sh """
-                          aws ecr get-login-password --region us-east-1 | skopeo login --username AWS --password-stdin ${ECR}
-                          skopeo copy docker://docker.repo.silenteight.com/hit-type-agent:${VERSION} docker://${ECR}/hit-type-agent:${VERSION}
-                          skopeo copy docker://docker.repo.silenteight.com/hit-type-agent:${VERSION} docker://${ECR}/hit-type-agent:latest
-                      """
-                    }
-                }
+                // stage('ECR') {
+                //     when {
+                //         allOf {
+                //             anyOf {
+                //                 branch 'master'
+                //                 branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
+                //             }
+                //             expression { return params.RELEASE }
+                //         }
+                //     }
+                //     agent {
+                //         label 'aws'
+                //     }
+                //     steps {
+                //         sh """
+                //           aws ecr get-login-password --region us-east-1 | skopeo login --username AWS --password-stdin ${ECR}
+                //           skopeo copy docker://docker.repo.silenteight.com/hit-type-agent:${VERSION} docker://${ECR}/hit-type-agent:${VERSION}
+                //           skopeo copy docker://docker.repo.silenteight.com/hit-type-agent:${VERSION} docker://${ECR}/hit-type-agent:latest
+                //       """
+                //     }
+                // }
             }
         }
         stage('Zipped (.pyz) artifacts upload') {
