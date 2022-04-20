@@ -41,7 +41,7 @@ Basic versions of comment templates are added to `ae_comment_template` table in 
 
 The comment templates can be updated in 2 ways:
 - directly in database (table `ae_comment_template`);
-- indirectly by calling the rest API (`/rest/ae/comment/template/add`).
+- indirectly by calling the rest API (endpoint `/rest/ae/comment/template`).
 
 In both cases you have to remember to set proper values of:
 - `templateName` - usually it is a file name of a template with extension `.ftl` or `.peb`;
@@ -54,7 +54,7 @@ In both cases you have to remember to set proper values of:
 An example http request updating comment template is available in:
 `adjudication-engine/doc/comment/add-comment-template.http`
 
-> NOTE: If the request sent to rest API (`/rest/ae/comment/template/add`) will have the same
+> NOTE: If the request sent to rest API (endpoint `/rest/ae/comment/template`) will have the same
 > `templateName` as an existing one in database then the next available `revision` will be used
 > for that request.
 

@@ -28,42 +28,29 @@ class CommentTemplateServiceTest {
   @Test
   void testAddTemplate() {
     // Given
-    Optional<CommentTemplate> beforeTemplate =
-        repo.findFirstByTemplateNameOrderByRevisionDesc(TEMPLATE_NAME);
-    assertThat(beforeTemplate).isNotPresent();
+    assertThat(repo.findFirstByTemplateNameOrderByRevisionDesc(TEMPLATE_NAME)).isNotPresent();
 
     // When
-    CommentTemplateDto templateDto = new CommentTemplateDto(TEMPLATE_NAME, REVISION, TEMPLATE);
-    testee.save(templateDto);
+    testee.save(new CommentTemplateDto(TEMPLATE_NAME, REVISION, TEMPLATE));
 
     // Then
-    CommentTemplate afterTemplate =
-        repo.findFirstByTemplateNameOrderByRevisionDesc(TEMPLATE_NAME).get();
-    assertThat(afterTemplate.getTemplateName()).isEqualTo(TEMPLATE_NAME);
-    assertThat(afterTemplate.getRevision()).isEqualTo(REVISION);
-    assertThat(afterTemplate.getTemplate()).isEqualTo(TEMPLATE);
+    var afterTemplate = repo.findFirstByTemplateNameOrderByRevisionDesc(TEMPLATE_NAME);
+    assertTemplate(TEMPLATE_NAME, REVISION, TEMPLATE, afterTemplate);
   }
 
   @Test
   void testUpdateTemplate() {
     // Given
-    CommentTemplateDto templateDto = new CommentTemplateDto(TEMPLATE_NAME, REVISION, TEMPLATE);
-    testee.save(templateDto);
-    Optional<CommentTemplate> beforeTemplate =
-        repo.findFirstByTemplateNameOrderByRevisionDesc(TEMPLATE_NAME);
-    assertThat(beforeTemplate).isPresent();
+    testee.save(new CommentTemplateDto(TEMPLATE_NAME, REVISION, TEMPLATE));
+    var beforeTemplate = repo.findFirstByTemplateNameOrderByRevisionDesc(TEMPLATE_NAME);
+    assertTemplate(TEMPLATE_NAME, REVISION, TEMPLATE, beforeTemplate);
 
     // When
-    CommentTemplateDto newTemplateDto =
-        new CommentTemplateDto(TEMPLATE_NAME, INCREASED_REVISION, TEMPLATE);
-    testee.save(newTemplateDto);
+    testee.save(new CommentTemplateDto(TEMPLATE_NAME, INCREASED_REVISION, TEMPLATE));
 
     // Then
-    CommentTemplate afterTemplate =
-        repo.findFirstByTemplateNameOrderByRevisionDesc(TEMPLATE_NAME).get();
-    assertThat(afterTemplate.getTemplateName()).isEqualTo(TEMPLATE_NAME);
-    assertThat(afterTemplate.getRevision()).isEqualTo(INCREASED_REVISION);
-    assertThat(afterTemplate.getTemplate()).isEqualTo(TEMPLATE);
+    var afterTemplate = repo.findFirstByTemplateNameOrderByRevisionDesc(TEMPLATE_NAME);
+    assertTemplate(TEMPLATE_NAME, INCREASED_REVISION, TEMPLATE, afterTemplate);
   }
 
   @Test
@@ -71,18 +58,26 @@ class CommentTemplateServiceTest {
     // Given
     CommentTemplateDto templateDto = new CommentTemplateDto(TEMPLATE_NAME, REVISION, TEMPLATE);
     testee.save(templateDto);
-    Optional<CommentTemplate> beforeTemplate =
-        repo.findFirstByTemplateNameOrderByRevisionDesc(TEMPLATE_NAME);
-    assertThat(beforeTemplate).isPresent();
+    var beforeTemplate = repo.findFirstByTemplateNameOrderByRevisionDesc(TEMPLATE_NAME);
+    assertTemplate(TEMPLATE_NAME, REVISION, TEMPLATE, beforeTemplate);
 
     // When
     testee.save(templateDto);
 
     // Then
-    CommentTemplate afterTemplate =
-        repo.findFirstByTemplateNameOrderByRevisionDesc(TEMPLATE_NAME).get();
-    assertThat(afterTemplate.getTemplateName()).isEqualTo(TEMPLATE_NAME);
-    assertThat(afterTemplate.getRevision()).isEqualTo(INCREASED_REVISION);
-    assertThat(afterTemplate.getTemplate()).isEqualTo(TEMPLATE);
+    var afterTemplate = repo.findFirstByTemplateNameOrderByRevisionDesc(TEMPLATE_NAME);
+    assertTemplate(TEMPLATE_NAME, INCREASED_REVISION, TEMPLATE, afterTemplate);
+  }
+
+  private void assertTemplate(
+      String templateName, int revision, String template,
+      Optional<CommentTemplate> optionalTemplate) {
+
+    assertThat(optionalTemplate).isPresent();
+    assertThat(optionalTemplate.get())
+        .isNotNull()
+        .hasFieldOrPropertyWithValue("templateName", templateName)
+        .hasFieldOrPropertyWithValue("revision", revision)
+        .hasFieldOrPropertyWithValue("template", template);
   }
 }

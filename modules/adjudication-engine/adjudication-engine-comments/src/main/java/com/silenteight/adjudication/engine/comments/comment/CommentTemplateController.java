@@ -19,7 +19,7 @@ public class CommentTemplateController {
 
   private final CommentTemplateService commentTemplateService;
 
-  @PostMapping("/comment/template/add")
+  @PostMapping("/comment/template")
   public ResponseEntity<Void> addTemplate(@Valid @RequestBody CommentTemplateDto commentTemplate) {
     commentTemplateService.save(commentTemplate);
     return ResponseEntity.ok().build();

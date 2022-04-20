@@ -1,5 +1,5 @@
 ### Adds a new version of match.ftl file to ae_comment_template table in db
-POST {{baseUrl}}/rest/ae/comment/template/add
+POST {{baseUrl}}/rest/ae/comment/template
 Accept: application/json
 Content-Type: application/json
 
