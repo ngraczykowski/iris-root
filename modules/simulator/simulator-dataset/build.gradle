@@ -29,6 +29,7 @@ dependencies {
 
   implementation libs.grpc.api
   implementation libs.grpc.stub
+  implementation libs.grpc.client.spring.boot.starter
 
   implementation libs.protobuf.java.util
 

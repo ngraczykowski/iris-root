@@ -10,7 +10,6 @@ import com.silenteight.simulator.common.integration.AmqpCommonModule;
 import com.silenteight.simulator.common.time.TimeModule;
 import com.silenteight.simulator.common.web.WebModule;
 import com.silenteight.simulator.dataset.DatasetModule;
-import com.silenteight.simulator.grpc.GrpcModule;
 import com.silenteight.simulator.management.ManagementModule;
 import com.silenteight.simulator.model.ModelModule;
 import com.silenteight.simulator.processing.ProcessingModule;
@@ -28,22 +27,22 @@ import static java.lang.System.setProperty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @EnableAutoConfiguration
-@ComponentScan(basePackageClasses = {
-    // NOTE(ahaczewski): Keep list of modules alphabetically sorted within section.
-    // Domain modules
-    DatasetModule.class,
-    ManagementModule.class,
-    ModelModule.class,
-    ProcessingModule.class,
-    RetentionModule.class,
-    // Interface modules
-    AmqpCommonModule.class,
-    AuthenticationModule.class,
-    AuthorizationModule.class,
-    GrpcModule.class,
-    TimeModule.class,
-    WebModule.class,
-})
+@ComponentScan(
+    basePackageClasses = {
+      // NOTE(ahaczewski): Keep list of modules alphabetically sorted within section.
+      // Domain modules
+      DatasetModule.class,
+      ManagementModule.class,
+      ModelModule.class,
+      ProcessingModule.class,
+      RetentionModule.class,
+      // Interface modules
+      AmqpCommonModule.class,
+      AuthenticationModule.class,
+      AuthorizationModule.class,
+      TimeModule.class,
+      WebModule.class,
+    })
 @EnableIntegration
 @EnableIntegrationManagement
 public class SimulatorApplication {
@@ -83,14 +82,12 @@ public class SimulatorApplication {
 
     @Override
     public ConfigurableApplicationBuilder configure(ConfigurableApplicationBuilder builder) {
-      return builder
-          .bootstrapProperties("spring.application.name=simulator");
+      return builder.bootstrapProperties("spring.application.name=simulator");
     }
 
     @Override
     public SpringApplicationBuilder customize(SpringApplicationBuilder springBuilder) {
-      return springBuilder
-          .bannerMode(Mode.OFF);
+      return springBuilder.bannerMode(Mode.OFF);
     }
   }
 }

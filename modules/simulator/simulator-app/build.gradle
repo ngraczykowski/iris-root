@@ -56,6 +56,9 @@ dependencies {
   //having this at runtime ensure sending all ERROR level logs to Sentry
   runtimeOnly libs.sentry.logback
 
+  runtimeOnly libs.hikari.cp
+  runtimeOnly libs.postgresql
+
   testImplementation project(":simulator-common-web-testing")
 
   testImplementation libs.spock.spring

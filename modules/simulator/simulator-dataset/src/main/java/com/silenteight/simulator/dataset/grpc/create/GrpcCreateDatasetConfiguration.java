@@ -1,22 +1,23 @@
 package com.silenteight.simulator.dataset.grpc.create;
 
+import lombok.Setter;
+
 import com.silenteight.adjudication.api.v1.DatasetServiceGrpc;
 
 import io.grpc.Channel;
-import org.springframework.beans.factory.annotation.Qualifier;
+import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 class GrpcCreateDatasetConfiguration {
 
-  @Bean
-  GrpcCreateDatasetService grpcCreateDatasetService(
-      @Qualifier("adjudication-engine") Channel channel) {
+  @Setter(onMethod_ = @GrpcClient("adjudicationengine"))
+  private Channel adjudicationEngineChannel;
 
+  @Bean
+  GrpcCreateDatasetService grpcCreateDatasetService() {
     return new GrpcCreateDatasetService(
-        DatasetServiceGrpc
-            .newBlockingStub(channel)
-            .withWaitForReady());
+        DatasetServiceGrpc.newBlockingStub(adjudicationEngineChannel).withWaitForReady());
   }
 }
