@@ -87,7 +87,7 @@ public class FeedingFacade {
         .batchName(batchName)
         .alertName(alertName)
         .errorDescription(AlertErrorDescription.CREATE_FEATURE_INPUT)
-        .feedingStatus(SUCCESS)
+        .feedingStatus(Status.FAILURE)
         .build();
   }
 }

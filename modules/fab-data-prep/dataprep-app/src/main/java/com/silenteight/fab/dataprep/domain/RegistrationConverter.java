@@ -116,7 +116,7 @@ class RegistrationConverter {
       AlertErrorDescription errorDescription) {
     return AlertWithMatchesIn
         .builder()
-        .status(AlertStatusIn.SUCCESS)
+        .status(AlertStatusIn.FAILURE)
         .errorDescription(errorDescription.getDescription())
         .alertId(alertName)
         .matches(emptyList())
