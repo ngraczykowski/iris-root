@@ -7,11 +7,13 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.model.api.v1.AlertsDistributionServiceProto.AlertsDistributionRequest;
 import com.silenteight.model.api.v1.AlertsDistributionServiceProto.AlertsDistributionResponse;
 import com.silenteight.model.api.v1.DistributionAlertsServiceGrpc.DistributionAlertsServiceImplBase;
+import com.silenteight.warehouse.indexer.alert.GroupingFieldNotFoundException;
 
 import com.google.rpc.Status;
 import io.grpc.stub.StreamObserver;
 
 import static com.google.rpc.Code.INTERNAL_VALUE;
+import static com.google.rpc.Code.INVALID_ARGUMENT_VALUE;
 import static io.grpc.protobuf.StatusProto.toStatusRuntimeException;
 
 @RequiredArgsConstructor
@@ -34,6 +36,9 @@ public class DistributionAlertGrpcService extends DistributionAlertsServiceImplB
       responseObserver.onNext(response);
       responseObserver.onCompleted();
       log.debug("Alerts distribution request processed, response={}", response);
+    } catch (GroupingFieldNotFoundException e) {
+      handleException(
+          responseObserver, e, INVALID_ARGUMENT_VALUE, "Grouping field not found in database.");
     } catch (RuntimeException e) {
       handleException(
           responseObserver, e, INTERNAL_VALUE, "Getting alerts distribution response failed.");

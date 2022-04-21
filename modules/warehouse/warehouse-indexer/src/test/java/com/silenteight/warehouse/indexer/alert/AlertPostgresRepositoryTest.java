@@ -42,8 +42,8 @@ class AlertPostgresRepositoryTest {
       "SELECT * FROM warehouse_alert WHERE name IS NOT NULL AND created_at BETWEEN ? AND ?AND name"
           + " IN (?,?)AND payload->>? = ? AND payload->>? in (?,?) ORDER BY RANDOM() LIMIT ?";
   private static final String TEST_5 =
-      "SELECT * FROM warehouse_alert WHERE created_at BETWEEN ? AND ?AND payload->>? = ? AND"
-          + " payload->>? in (?,?)";
+      "SELECT payload ->> '%s' AS \"0\", payload ->> '%s' AS \"1\" FROM warehouse_alert "
+          + "WHERE created_at BETWEEN ? AND ?AND payload->>? = ? AND payload->>? in (?,?)";
 
   @Mock
   private JdbcTemplate jdbcTemplateMock;
@@ -125,6 +125,8 @@ class AlertPostgresRepositoryTest {
 
   @Test
   void fetchGroupedByWithFilters_sqlContainsFiltersAndGroupByFields() {
+    String givenGroupName = "group1";
+    String givenGroupName2 = "group2";
     // When
     repository.fetchGroupedAlerts(
         CREATED_AT,
@@ -132,11 +134,11 @@ class AlertPostgresRepositoryTest {
         OffsetDateTime.ofInstant(Instant.ofEpochMilli(TIME_TO.getTime()), ZoneId.of("UTC")),
         ImmutableListMultimap.of(
             "propertyName", List.of("value1"), "propertyName2",
-            List.of("value1", "value2")), List.of("group1", "group2"));
+            List.of("value1", "value2")), List.of(givenGroupName, givenGroupName2));
 
     // Then
     verify(jdbcTemplateMock).query(
-        eq(TEST_5),
+        eq(String.format(TEST_5, givenGroupName, givenGroupName2)),
         ArgumentMatchers.<RowMapper<AlertDto>>any(), any(),
         any(), eq("propertyName"),
         eq("value1"), eq("propertyName2"), eq("value1"), eq("value2"));

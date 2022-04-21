@@ -3,6 +3,7 @@ package com.silenteight.warehouse.indexer.query.grouping;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
+import com.silenteight.warehouse.indexer.alert.GroupingFieldNotFoundException;
 import com.silenteight.warehouse.indexer.query.common.QueryFilter;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse.Row;
 
@@ -102,12 +103,9 @@ abstract class GroupingQueryServiceTest {
         .to(parse(PROCESSING_TIMESTAMP_4))
         .build();
 
-    FetchGroupedDataResponse response = provideServiceForTest().generate(request);
-
-    assertThat(response.getRows()).hasSize(1);
-    Row row = response.getRows().get(0);
-    String notExistingVey = row.getValueOrDefault(NOT_EXISTING_KEY, NOT_EXISTING_VALUE);
-    assertThat(notExistingVey).isEqualTo(NOT_EXISTING_VALUE);
+    assertThatThrownBy(() -> provideServiceForTest().generate(request))
+        .isInstanceOf(GroupingFieldNotFoundException.class)
+        .hasMessage("Grouping field %s not found in database", NOT_EXISTING_KEY);
   }
 
   @Test
@@ -151,7 +149,7 @@ abstract class GroupingQueryServiceTest {
 
   @Test
   void shouldReturnEmptyResultIfAtLeastOneFilterFieldNotPresentInIndex() {
-    insertRow(DOCUMENT_ID_2, MAPPED_ALERT_6, PROCESSING_TIMESTAMP_4, ALERT_NAME_6);
+    insertRow(DOCUMENT_ID_2, MAPPED_ALERT_7, PROCESSING_TIMESTAMP_4, ALERT_NAME_6);
 
     FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest.builder()
         .fields(of(STATUS_KEY))
