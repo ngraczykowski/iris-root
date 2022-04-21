@@ -23,11 +23,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 class ResponseCreator {
 
-  private static final String ATTACHMENT_COMMENT_NAME = "attachment.txt";
   private static final String COMMENT_CUT_MSG = "\n\n=== See attachment for full comments ===";
   private static final int MAX_COMMENT_LENGTH = 1024;
   public static final String DATA_CENTER = "";
   public static final String OPERATOR = "S8 SEAR";
+  private static final String COMMENT_FILE_EXTENSION = ".txt";
 
   private final DecisionMapperUseCase decisionMapperUseCase;
   private final RecommendationSenderProperties properties;
@@ -59,7 +59,7 @@ class ResponseCreator {
     decision.setSystemID(messageDetails.getSystemID());
     decision.setOperator(OPERATOR);
     setComment(recommendation.getRecommendationComment(), decision);
-    setAttachment(recommendation, decision);
+    setAttachment(messageDetails.getMessageID(), recommendation, decision);
 
     var destinationStatus = decisionMapperUseCase.mapStatus(
         DecisionStatusRequest.builder()
@@ -77,9 +77,13 @@ class ResponseCreator {
     return create(decision);
   }
 
-  private void setAttachment(RecommendationOut recommendation, AlertDecisionMessageDto decision) {
+  private void setAttachment(
+      String messageID,
+      RecommendationOut recommendation,
+      AlertDecisionMessageDto decision) {
     if (recommendation.getRecommendationComment().length() > MAX_COMMENT_LENGTH)
       decision.setAttachment(createAttachment(
+          messageID,
           recommendation.getRecommendedAction(),
           recommendation.getRecommendationComment()));
   }
@@ -97,10 +101,16 @@ class ResponseCreator {
   }
 
   @NotNull
-  private static AttachmentDto createAttachment(String solution, String comment) {
+  private static AttachmentDto createAttachment(
+      String messageID, String solution, String comment) {
     var encodedComment =
         Base64.getEncoder().encodeToString(comment.getBytes(StandardCharsets.UTF_8));
-    return new AttachmentDto(ATTACHMENT_COMMENT_NAME, encodedComment, solution);
+    return new AttachmentDto(getFileneme(messageID), encodedComment, solution);
+  }
+
+  @NotNull
+  private static String getFileneme(String messageID) {
+    return messageID + COMMENT_FILE_EXTENSION;
   }
 
 
