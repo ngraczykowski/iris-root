@@ -1,15 +1,11 @@
 plugins {
-  id "java"
+  id "com.silenteight.iris.build.java-library"
 }
 
 description = "Simulator DB Changelog"
 
-configurations {
-  implementation.extendsFrom starterDatabase
-}
-
 dependencies {
-  implementation libraries.silenteight_audit_bs
+  implementation libs.silenteight.audit.bs
 
-  implementation libraries.liquibase_sessionlock
+  implementation libs.liquibase.sessionlock
 }

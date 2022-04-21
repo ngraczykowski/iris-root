@@ -1,3 +1,14 @@
+includeBuild('../../platforms')
+includeBuild('../../build-logic')
+
+dependencyResolutionManagement {
+  versionCatalogs {
+    libs {
+      from(files("../../gradle/libs.versions.toml"))
+    }
+  }
+}
+
 rootProject.name = 'simulator'
 
 include 'simulator-app'

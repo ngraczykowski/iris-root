@@ -1,33 +1,24 @@
 plugins {
-  id "java"
+  id "com.silenteight.iris.build.java-library"
 }
 
 description = "Simulator Model"
-
-configurations {
-  implementation.extendsFrom starterCommon
-  implementation.extendsFrom starterSpringApp
-  implmenetation.extendsFrom starterJackson
-  implementation.extendsFrom starterMessaging
-
-  testImplementation.extendsFrom starterSpringTest
-}
 
 dependencies {
   implementation project(":simulator-common-web")
   implementation project(":simulator-management")
 
-  implementation libraries.silenteight_model_api
+  implementation libs.governance.model.api
 
-  implementation libraries.silenteight_sep_base_common
+  implementation libs.silenteight.sep.base.common
 
-  implementation libraries.spring_boot_starter_web
-  implementation libraries.spring_boot_starter_undertow
-  implementation libraries.commons_lang3
+  implementation libs.spring.boot.starter.web
+  implementation libs.spring.boot.starter.undertow
+  implementation libs.commons.lang3
 
-  aspect libraries.silenteight_sep_base_aspects
+  aspect libs.silenteight.sep.base.aspects
 
   testImplementation project(":simulator-common-web-testing")
 
-  testImplementation libraries.silenteight_sep_base_testing
+  testImplementation libs.silenteight.sep.base.testing
 }

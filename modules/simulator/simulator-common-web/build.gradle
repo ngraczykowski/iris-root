@@ -1,27 +1,27 @@
 plugins {
-  id "java-library"
+  id "com.silenteight.iris.build.java-library"
 }
 
 description = "Simulator Common Web"
 
 dependencies {
   // API dependencies
-  api libraries.jakarta_validation_api
-  api libraries.silenteight_sep_base_common
-  api libraries.sentry
-  api libraries.springdoc_data_rest
+  api libs.jakarta.validation.api
+  api libs.silenteight.sep.base.common
+  api libs.sentry
+  api libs.springdoc.data.rest
 
   // General dependencies
-  implementation libraries.silenteight_audit_bs
-  implementation libraries.silenteight_commons_core
-  implementation libraries.silenteight_rabbit_mq_common_schema
+  implementation libs.silenteight.audit.bs
+  implementation libs.silenteight.commons.core
+  implementation libs.sear.rabbitmq.common.schema
 
-  implementation libraries.spring_boot_actuator
-  implementation libraries.spring_security_config
-  implementation libraries.spring_security_web
+  implementation libs.spring.boot.actuator
+  implementation libs.spring.security.config
+  implementation libs.spring.security.web
 
-  implementation libraries.spring_webmvc
+  implementation libs.spring.webmvc
 
-  implementation libraries.springdoc_ui
-  implementation libraries.springdoc_security
+  implementation libs.springdoc.ui
+  implementation libs.springdoc.security
 }

@@ -53,6 +53,7 @@ mockito = "4.4.0"
 # Plugins
 #-----------------------------------
 plugin-aspectj = "5.3.0"
+plugin-intellij = "1.1.4"
 plugin-jib = "3.2.1"
 plugin-nebula-resolution = "9.0.0"
 plugin-sonarqube = "3.3"
@@ -253,6 +254,7 @@ feign-slf4j = { group = "io.github.openfeign", name = "feign-slf4j" }
 freemarker = { group = "org.freemarker", name = "freemarker" }
 grpc-api = { group = "io.grpc", name = "grpc-api" }
 grpc-auth = { group = "io.grpc", name = "grpc-auth" }
+grpc-census = { group = "io.grpc", name = "grpc-census" }
 grpc-client-spring-boot-starter = { group = "net.devh", name = "grpc-client-spring-boot-starter" }
 grpc-context = { group = "io.grpc", name = "grpc-context" }
 grpc-core = { group = "io.grpc", name = "grpc-core" }
@@ -294,12 +296,12 @@ javax-mail = { group = "javax.mail", name = "mail", version = "1.4.1" }
 jaxb-api = { group = "jakarta.xml.bind", name = "jakarta.xml.bind-api" }
 jjwt = { group = "io.jsonwebtoken", name = "jjwt" }
 keycloak-spring-boot-starter = { group = "org.keycloak", name = "keycloak-spring-boot-starter" }
-liquibase-core = { group = "org.liquibase", name = "liquibase-core", version = "3.10.3" }
-liquibase-sessionlock = { group = "com.github.blagerweij", name = "liquibase-sessionlock", version = "1.4.0" }
+liquibase-core = { group = "org.liquibase", name = "liquibase-core" }
+liquibase-sessionlock = { group = "com.github.blagerweij", name = "liquibase-sessionlock", version = "1.5.1" }
 logback-access = { group = "ch.qos.logback", name = "logback-access" }
 logback-classic = { group = "ch.qos.logback", name = "logback-classic" }
 logback-ecs-encoder = { group = "co.elastic.logging", name = "logback-ecs-encoder" }
-logstash-logback-encoder = { group = "net.logstash.logback", name = "logstash-logback-encoder", version = "6.6" }
+logstash-logback-encoder = { group = "net.logstash.logback", name = "logstash-logback-encoder", version = "7.1.1" }
 lz4-java = { group = "org.lz4", name = "lz4-java" }
 micrometer-core = { group = "io.micrometer", name = "micrometer-core" }
 micrometer-influx = { group = "io.micrometer", name = "micrometer-registry-influx" }
@@ -351,6 +353,7 @@ test-greenmail = { group = "com.icegreen", name = "greenmail-junit5", version = 
 
 # Plugins (keep in sync with [plugins])
 plugin-aspectj = { module = "io.freefair.aspectj:io.freefair.aspectj.gradle.plugin", version.ref = "plugin-aspectj" }
+plugin-intellij = { module = "org.jetbrains.gradle.plugin.idea-ext:org.jetbrains.gradle.plugin.idea-ext.gradle.plugin", version.ref = "plugin-intellij" }
 plugin-jib = { module = "com.google.cloud.tools.jib:com.google.cloud.tools.jib.gradle.plugin", version.ref = "plugin-jib" }
 plugin-nebula-resolution = { module = "nebula.resolution-rules:nebula.resolution-rules.gradle.plugin", version.ref = "plugin-nebula-resolution" }
 plugin-sonarqube = { module = "org.sonarqube:org.sonarqube.gradle.plugin", version.ref = "plugin-sonarqube" }
@@ -365,6 +368,7 @@ plugin-freefair-aspectj-weaving = { module = "io.freefair.aspectj.post-compile-w
 #jmh = { id = "me.champeau.jmh", version = "0.6.5" }
 
 aspectj = { id = "io.freefair.aspectj", version.ref = "plugin-aspectj" }
+intellij = { id = "org.jetbrains.gradle.plugin.idea-ext", version.ref = "plugin-intellij" }
 jib = { id = "com.google.cloud.tools.jib", version.ref = "plugin-jib" }
 nebula-resolution = { id = "nebula.resolution-rules", version.ref = "plugin-nebula-resolution" }
 sonarqube = { id = "org.sonarqube", version.ref = "plugin-sonarqube" }
