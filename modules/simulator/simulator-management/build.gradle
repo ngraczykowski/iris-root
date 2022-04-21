@@ -16,8 +16,10 @@ dependencies {
   implementation libs.silenteight.sep.auth
   implementation libs.silenteight.audit.bs
 
+  implementation libs.hibernate.validator
   implementation libs.spring.boot.starter.web
   implementation libs.spring.boot.starter.undertow
+  implementation libs.spring.data.jpa
   implementation libs.spring.security.config
   implementation libs.spring.security.web
   implementation libs.commons.lang3

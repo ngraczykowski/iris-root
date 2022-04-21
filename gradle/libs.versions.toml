@@ -247,7 +247,7 @@ commons-io = { group = "commons-io", name = "commons-io", version = "2.11.0" }
 commons-csv = { group = "org.apache.commons", name = "commons-csv", version = "1.9.0" }
 commons-lang3 = { group = "org.apache.commons", name = "commons-lang3" }
 commons-text = { group = "org.apache.commons", name = "commons-text" }
-cronutils = { group = 'com.cronutils', name = 'cron-utils', version = '9.1.5' }
+cronutils = { group = 'com.cronutils', name = 'cron-utils', version = '9.1.6' }
 ecs-logging-core = { group = "co.elastic.logging", name = "ecs-logging-core" }
 fastutil = { group = "it.unimi.dsi", name = "fastutil" }
 feign-slf4j = { group = "io.github.openfeign", name = "feign-slf4j" }

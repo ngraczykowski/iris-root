@@ -15,6 +15,7 @@ dependencies {
   implementation project(":simulator-processing")
   implementation project(":simulator-retention")
 
+  implementation libs.silenteight.sep.auth
   implementation libs.silenteight.audit.bs
   implementation libs.silenteight.sep.base.common
   implementation libs.silenteight.commons.app
@@ -46,6 +47,7 @@ dependencies {
   implementation libs.grpc.api
   implementation libs.grpc.stub
   implementation libs.grpc.census
+  implementation libs.grpc.client.spring.boot.starter
 
   implementation libs.protobuf.java.util
 
