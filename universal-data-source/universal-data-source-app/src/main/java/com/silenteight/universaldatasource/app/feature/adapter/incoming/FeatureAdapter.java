@@ -1,7 +1,6 @@
 package com.silenteight.universaldatasource.app.feature.adapter.incoming;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.datasource.agentinput.api.v1.BatchCreateAgentInputsRequest;
 import com.silenteight.datasource.agentinput.api.v1.BatchCreateAgentInputsResponse;
@@ -32,6 +31,9 @@ import com.silenteight.datasource.api.gender.v1.GenderFeatureInput;
 import com.silenteight.datasource.api.historicaldecisions.v1.BatchGetMatchHistoricalDecisionsInputsRequest;
 import com.silenteight.datasource.api.historicaldecisions.v1.BatchGetMatchHistoricalDecisionsInputsResponse;
 import com.silenteight.datasource.api.historicaldecisions.v1.HistoricalDecisionsInput.HistoricalDecisionsFeatureInput;
+import com.silenteight.datasource.api.hittype.v1.BatchGetMatchHitTypeInputsRequest;
+import com.silenteight.datasource.api.hittype.v1.BatchGetMatchHitTypeInputsResponse;
+import com.silenteight.datasource.api.hittype.v1.HitTypeFeatureInput;
 import com.silenteight.datasource.api.location.v1.BatchGetMatchLocationInputsRequest;
 import com.silenteight.datasource.api.location.v1.BatchGetMatchLocationInputsResponse;
 import com.silenteight.datasource.api.location.v1.LocationFeatureInput;
@@ -55,7 +57,6 @@ import javax.validation.Valid;
 
 @Component
 @RequiredArgsConstructor
-@Slf4j
 class FeatureAdapter {
 
   private static final String LOCATION_FEATURE_INPUT =
@@ -74,6 +75,8 @@ class FeatureAdapter {
   private static final String TRANSACTION_INPUT = TransactionFeatureInput.class.getCanonicalName();
   private static final String BANK_IDENTIFICATION_CODES_INPUT =
       BankIdentificationCodesFeatureInput.class.getCanonicalName();
+  private static final String HIT_TYPE_INPUT =
+      HitTypeFeatureInput.class.getCanonicalName();
 
   private final BatchGetFeatureInputUseCase getUseCase;
   private final BatchCreateMatchFeaturesUseCase addUseCase;
@@ -279,5 +282,21 @@ class FeatureAdapter {
         featureRequest,
         batch -> onNext.accept(
             batch.castResponse(BatchGetMatchHistoricalDecisionsInputsResponse.class)));
+  }
+
+  public void batchGetMatchHitTypeInputs(
+      @Valid BatchGetMatchHitTypeInputsRequest request,
+      Consumer<BatchGetMatchHitTypeInputsResponse> onNext) {
+
+    var featureRequest = BatchFeatureRequest.builder()
+        .agentInputType(HIT_TYPE_INPUT)
+        .matches(request.getMatchesList())
+        .features(request.getFeaturesList())
+        .build();
+
+    getUseCase.batchGetFeatureInput(
+        featureRequest,
+        batch -> onNext.accept(
+            batch.castResponse(BatchGetMatchHitTypeInputsResponse.class)));
   }
 }

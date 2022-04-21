@@ -8,6 +8,9 @@ import com.silenteight.datasource.api.freetext.v1.FreeTextInputServiceGrpc.FreeT
 import com.silenteight.datasource.api.historicaldecisions.v2.BatchGetMatchHistoricalDecisionsInputsRequest;
 import com.silenteight.datasource.api.historicaldecisions.v2.BatchGetMatchHistoricalDecisionsInputsResponse;
 import com.silenteight.datasource.api.historicaldecisions.v2.HistoricalDecisionsInputServiceGrpc.HistoricalDecisionsInputServiceBlockingStub;
+import com.silenteight.datasource.api.hittype.v1.BatchGetMatchHitTypeInputsRequest;
+import com.silenteight.datasource.api.hittype.v1.BatchGetMatchHitTypeInputsResponse;
+import com.silenteight.datasource.api.hittype.v1.HitTypeInputServiceGrpc.HitTypeInputServiceBlockingStub;
 import com.silenteight.datasource.api.ispep.v2.BatchGetMatchIsPepInputsRequest;
 import com.silenteight.datasource.api.ispep.v2.BatchGetMatchIsPepInputsResponse;
 import com.silenteight.datasource.api.ispep.v2.IsPepInputServiceGrpc.IsPepInputServiceBlockingStub;
@@ -63,6 +66,9 @@ class FeatureInputServiceIT {
 
   @GrpcClient("uds")
   private HistoricalDecisionsInputServiceBlockingStub historicalDecisionsInputServiceBlockingStub;
+
+  @GrpcClient("uds")
+  private HitTypeInputServiceBlockingStub hitTypeInputServiceBlockingStub;
 
   @Autowired
   private JdbcTemplate jdbcTemplate;
@@ -231,6 +237,46 @@ class FeatureInputServiceIT {
                 .build());
 
     assertHistoricalDecisionFeature(response);
+  }
+
+  @Test
+  @Sql("adapter/outgoing/jdbc/populate_feature_inputs.sql")
+  @Sql(scripts = "adapter/outgoing/jdbc/truncate_feature_inputs.sql",
+      executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  void shouldGetHitTypeFeature() {
+
+    var response =
+        hitTypeInputServiceBlockingStub.batchGetMatchHitTypeInputs(
+            BatchGetMatchHitTypeInputsRequest.newBuilder()
+                .addMatches("alerts/12/matches/12")
+                .addFeatures("features/hitType")
+                .build());
+
+    assertHitTypeFeature(response);
+  }
+
+  private static void assertHitTypeFeature(
+      Iterator<BatchGetMatchHitTypeInputsResponse> responseIterator) {
+
+    var response = responseIterator.next();
+    assertThat(response.getHitTypeInputsCount()).isEqualTo(1);
+
+    assertThat(response.getHitTypeInputsList().stream()
+        .filter(f -> f.getMatch().equals("alerts/12/matches/12"))
+        .count()).isEqualTo(1);
+
+    var hitTypeFeatureInputsList =
+        response
+            .getHitTypeInputsList()
+            .get(0)
+            .getHitTypeFeatureInputsList();
+
+    assertThat(hitTypeFeatureInputsList.stream()
+        .filter(featureInput -> featureInput.getNormalTriggerCategoriesList().contains("name"))
+        .filter(featureInput -> featureInput.getTriggerCategoriesMap().containsKey("job"))
+        .filter(featureInput -> featureInput.getTriggerCategoriesMap().keySet().size() == 4)
+        .filter(featureInput -> featureInput.getTriggeredTokensMap().containsKey("sude"))
+        .count()).isEqualTo(1);
   }
 
   @Test

@@ -39,6 +39,11 @@ VALUES ('alerts/1', 'alerts/1/matches/0', 'features/name', 'com.silenteight.data
   "feature": "features/historicalRiskAccountNumber",
   "model_key": {"alerted_party" : {"id": "123"}},
   "discriminator": {"value": "1234"}
-}');
+}'),
+('alerts/12', 'alerts/12/matches/12', 'features/hitType', 'com.silenteight.datasource.api.hittype.v1.HitTypeFeatureInput', '{
+"feature": "features/hitType",
+ "triggeredTokens": {"doe": {}, "sude": {}, "johnny": {}},
+  "triggerCategories": {"job": {}, "name": {}, "other": {}, "country": {"tokens": ["ADDRESS1_COUNTRY"]}},
+  "normalTriggerCategories": ["name"]}');
 
 

@@ -25,5 +25,6 @@
   <constraint-mapping>META-INF/validation/feature/name-feature-validation.xml</constraint-mapping>
   <constraint-mapping>META-INF/validation/feature/national-id-feature-validation.xml</constraint-mapping>
   <constraint-mapping>META-INF/validation/feature/transaction-feature-validation.xml</constraint-mapping>
+  <constraint-mapping>META-INF/validation/feature/hit-type-validation.xml</constraint-mapping>
 
 </validation-config>
