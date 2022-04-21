@@ -359,7 +359,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:24491/auth/realms/sens-webapp
+          issuer-uri: https://auth.silenteight.com/auth/realms/sens-webapp
 
 grpc:
   server:
