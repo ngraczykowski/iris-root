@@ -1,8 +1,8 @@
-package com.silenteight.warehouse.test.flows.simulation;
+package com.silenteight.warehouse.test.flows.simulation.v1;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.warehouse.test.client.gateway.SimulationIndexClientGateway;
+import com.silenteight.warehouse.test.client.gateway.SimulationV1IndexClientGateway;
 import com.silenteight.warehouse.test.generator.DataReader;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,23 +15,23 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 @Slf4j
 @Configuration
-class SimulationTestFlowConfiguration {
+class SimulationV1TestFlowConfiguration {
 
-  @Value("${test.flows.simulation.data-source}")
+  @Value("${test.flows.simulation.v1.data-source}")
   private Resource resourceFile;
 
-  @Value("${test.flows.simulation.alert-count-in-analysis}")
+  @Value("${test.flows.simulation.v1.alert-count-in-analysis}")
   private Integer alertCount;
 
   @Bean
   @Autowired
-  @ConditionalOnProperty(value = "test.flows.simulation.enabled", havingValue = "true")
+  @ConditionalOnProperty(value = "test.flows.simulation.v1.enabled", havingValue = "true")
   SimulationIndexClient simulationIndexClient(
-      SimulationIndexClientGateway simulationIndexClientGateway, JdbcTemplate jdbcTemplate) {
+      SimulationV1IndexClientGateway simulationV1IndexClientGateway, JdbcTemplate jdbcTemplate) {
 
     log.info("SimulationIndexClient created");
     AlertGenerator alertGenerator = new AlertGenerator(new DataReader(resourceFile), jdbcTemplate);
 
-    return new SimulationIndexClient(simulationIndexClientGateway, alertGenerator, alertCount);
+    return new SimulationIndexClient(simulationV1IndexClientGateway, alertGenerator, alertCount);
   }
 }

@@ -51,9 +51,9 @@ public class IndexerClientConfiguration {
   }
 
   @Bean
-  GatewayProxyFactoryBean simulationIndexClientGateway() {
+  GatewayProxyFactoryBean simulationV1IndexClientGateway() {
     GatewayProxyFactoryBean factoryBean =
-        new GatewayProxyFactoryBean(SimulationIndexClientGateway.class);
+        new GatewayProxyFactoryBean(SimulationV1IndexClientGateway.class);
     factoryBean.setDefaultRequestChannel(new DirectChannel());
     factoryBean.setDefaultRequestChannelName(SIMULATION_INDEXING_OUTBOUND_CHANNEL);
     return factoryBean;

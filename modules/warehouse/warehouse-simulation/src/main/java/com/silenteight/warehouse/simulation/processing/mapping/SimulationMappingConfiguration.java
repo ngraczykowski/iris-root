@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 class SimulationMappingConfiguration {
 
   @Bean
-  SimulationAlertMappingService simulationAlertMappingService() {
-    return new SimulationAlertMappingService(
+  SimulationAlertV1MappingService simulationAlertMappingService() {
+    return new SimulationAlertV1MappingService(
         new PayloadConverter(new ObjectMapper()));
   }
 }

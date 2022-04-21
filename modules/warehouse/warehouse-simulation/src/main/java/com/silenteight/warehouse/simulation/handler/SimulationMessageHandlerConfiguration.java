@@ -49,10 +49,10 @@ public class SimulationMessageHandlerConfiguration {
 
   @Bean
   SimulationRequestCommandIntegrationFlowAdapter simulationRequestCommandIntegrationFlowAdapter(
-      SimulationIndexRequestCommandHandler simulationIndexRequestCommandHandler) {
+      SimulationRequestV1CommandHandler simulationRequestV1CommandHandler) {
 
     return new SimulationRequestCommandIntegrationFlowAdapter(
-        simulationIndexRequestCommandHandler,
+        simulationRequestV1CommandHandler,
         SIMULATION_INDEXING_INBOUND_CHANNEL,
         SIMULATION_INDEXED_OUTBOUND_CHANNEL);
   }

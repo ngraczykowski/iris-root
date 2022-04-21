@@ -12,7 +12,7 @@ import org.springframework.integration.dsl.IntegrationFlowDefinition;
 class SimulationRequestCommandIntegrationFlowAdapter extends IntegrationFlowAdapter {
 
   @NonNull
-  private final SimulationIndexRequestCommandHandler simulationIndexRequestCommandHandler;
+  private final SimulationRequestV1CommandHandler simulationRequestV1CommandHandler;
 
   @NonNull
   private final String inboundChannel;
@@ -25,7 +25,7 @@ class SimulationRequestCommandIntegrationFlowAdapter extends IntegrationFlowAdap
     return from(inboundChannel)
         .handle(
             SimulationDataIndexRequest.class,
-            (payload, headers) -> simulationIndexRequestCommandHandler.handle(payload))
+            (payload, headers) -> simulationRequestV1CommandHandler.handle(payload))
         .channel(outboundChannel);
   }
 }

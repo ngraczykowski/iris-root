@@ -167,9 +167,10 @@ test:
       data-source: classpath:data/production.csv
 
     simulation:
-      enabled: false
-      alert-count-in-analysis: 1000
-      data-source: classpath:data/simulation.csv
+      v1:
+        enabled: false
+        alert-count-in-analysis: 10
+        data-source: classpath:data/simulation_v1.csv
 
     analysis-expired:
       enabled: false

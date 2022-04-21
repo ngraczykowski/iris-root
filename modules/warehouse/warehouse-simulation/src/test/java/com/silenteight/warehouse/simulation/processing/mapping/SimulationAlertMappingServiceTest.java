@@ -21,8 +21,8 @@ class SimulationAlertMappingServiceTest {
 
   private final ObjectMapper objectMapper = new ObjectMapper();
   private final PayloadConverter payloadConverter = new PayloadConverter(objectMapper);
-  private final SimulationAlertMappingService underTest =
-      new SimulationAlertMappingService(payloadConverter);
+  private final SimulationAlertV1MappingService underTest =
+      new SimulationAlertV1MappingService(payloadConverter);
 
   @Test
   void shouldReturnTheSameAmountOfAlerts() {

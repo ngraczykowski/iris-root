@@ -1,10 +1,10 @@
-package com.silenteight.warehouse.test.flows.simulation;
+package com.silenteight.warehouse.test.flows.simulation.v1;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.data.api.v1.SimulationDataIndexRequest;
-import com.silenteight.warehouse.test.client.gateway.SimulationIndexClientGateway;
+import com.silenteight.warehouse.test.client.gateway.SimulationV1IndexClientGateway;
 
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -14,7 +14,7 @@ import static java.util.UUID.randomUUID;
 @RequiredArgsConstructor
 public class SimulationIndexClient {
 
-  private final SimulationIndexClientGateway simulationIndexClientGateway;
+  private final SimulationV1IndexClientGateway simulationV1IndexClientGateway;
   private final AlertGenerator alertGenerator;
   private final Integer alertCount;
 
@@ -28,7 +28,7 @@ public class SimulationIndexClient {
         .setAnalysisName(analysisName)
         .addAllAlerts(alertGenerator.generateSimulationAlerts(alertCount)).build();
 
-    simulationIndexClientGateway.indexRequest(request);
+    simulationV1IndexClientGateway.indexRequest(request);
     log.info("Simulation msg sent, requestId={}, analysis={}", requestId, analysisName);
   }
 }
