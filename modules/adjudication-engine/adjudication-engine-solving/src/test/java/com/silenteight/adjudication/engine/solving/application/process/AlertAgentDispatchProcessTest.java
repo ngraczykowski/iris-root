@@ -1,6 +1,6 @@
 package com.silenteight.adjudication.engine.solving.application.process;
 
-import com.silenteight.adjudication.engine.solving.application.publisher.MatchesPublisher;
+import com.silenteight.adjudication.engine.solving.application.publisher.AgentsMatchPublisher;
 import com.silenteight.adjudication.engine.solving.data.MatchFeatureDao;
 import com.silenteight.adjudication.engine.solving.data.MatchFeaturesFacade;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
@@ -35,7 +35,7 @@ class AlertAgentDispatchProcessTest {
 
   @BeforeEach
   void setUp() {
-    var matchesPublisher = new MatchesPublisher(rabbitTemplate);
+    var matchesPublisher = new AgentsMatchPublisher(rabbitTemplate);
     alertAgentDispatchProcess =
         new AlertAgentDispatchProcess(
             agentExchnageRequestMapper, matchesPublisher, matchFeaturesFacade,
@@ -49,32 +49,32 @@ class AlertAgentDispatchProcessTest {
             Set.of(1L, 2L),
             Set.of(1L, 2L, 3L, 4L)))
         .thenReturn(List.of(
-            new MatchFeatureDao(1, 1, 1, "features/name",
-                "agents/name/versions/1.0.0/configs/1"),
-            new MatchFeatureDao(1, 1, 1000, "features/nameMatchedText",
-                "agents/name/versions/1.0.0/configs/1"),
-            new MatchFeatureDao(2, 2, 1, "features/name",
-                "agents/name/versions/1.0.0/configs/1"),
-            new MatchFeatureDao(2, 2, 1000, "features/nameMatchedText",
-                "agents/name/versions/1.0.0/configs/1"),
-            new MatchFeatureDao(2, 3, 1, "features/name",
-                "agents/name/versions/1.0.0/configs/1"),
-            new MatchFeatureDao(2, 3, 1000, "features/nameMatchedText",
-                "agents/name/versions/1.0.0/configs/1"),
-            new MatchFeatureDao(3, 4, 1, "features/name",
-                "agents/name/versions/1.0.0/configs/1"),
-            new MatchFeatureDao(3, 5, 1, "features/name",
-                "agents/name/versions/1.0.0/configs/1"),
-            new MatchFeatureDao(3, 5, 1000, "features/nameMatchedText",
-                "agents/name/versions/1.0.0/configs/1"),
-            new MatchFeatureDao(3, 6, 1, "features/name",
-                "agents/name/versions/1.0.0/configs/1"),
-            new MatchFeatureDao(3, 6, 1000, "features/nameMatchedText",
-                "agents/name/versions/1.0.0/configs/1"),
-            new MatchFeatureDao(4, 7, 1, "features/name",
-                "agents/name/versions/1.0.0/configs/1"),
-            new MatchFeatureDao(4, 7, 1000, "features/nameMatchedText",
-                "agents/name/versions/1.0.0/configs/1")));
+            new MatchFeatureDao(1, 1, 1, 1, "features/name",
+                "agents/name/versions/1.0.0/configs/1", "policy", "strategy"),
+            new MatchFeatureDao(1, 1, 1, 1000, "features/nameMatchedText",
+                "agents/name/versions/1.0.0/configs/1", "policy", "strategy"),
+            new MatchFeatureDao(1, 2, 2, 1, "features/name",
+                "agents/name/versions/1.0.0/configs/1", "policy", "strategy"),
+            new MatchFeatureDao(1, 2, 2, 1000, "features/nameMatchedText",
+                "agents/name/versions/1.0.0/configs/1", "policy", "strategy"),
+            new MatchFeatureDao(1, 2, 3, 1, "features/name",
+                "agents/name/versions/1.0.0/configs/1", "policy", "strategy"),
+            new MatchFeatureDao(1, 2, 3, 1000, "features/nameMatchedText",
+                "agents/name/versions/1.0.0/configs/1", "policy", "strategy"),
+            new MatchFeatureDao(1, 3, 4, 1, "features/name",
+                "agents/name/versions/1.0.0/configs/1", "policy", "strategy"),
+            new MatchFeatureDao(1, 3, 5, 1, "features/name",
+                "agents/name/versions/1.0.0/configs/1", "policy", "strategy"),
+            new MatchFeatureDao(1, 3, 5, 1000, "features/nameMatchedText",
+                "agents/name/versions/1.0.0/configs/1", "policy", "strategy"),
+            new MatchFeatureDao(1, 3, 6, 1, "features/name",
+                "agents/name/versions/1.0.0/configs/1", "policy", "strategy"),
+            new MatchFeatureDao(1, 3, 6, 1000, "features/nameMatchedText",
+                "agents/name/versions/1.0.0/configs/1", "policy", "strategy"),
+            new MatchFeatureDao(1, 4, 7, 1, "features/name",
+                "agents/name/versions/1.0.0/configs/1", "policy", "strategy"),
+            new MatchFeatureDao(1, 4, 7, 1000, "features/nameMatchedText",
+                "agents/name/versions/1.0.0/configs/1", "policy", "strategy")));
     alertAgentDispatchProcess.handle(AnalysisAlertsAdded
         .newBuilder()
         .addAnalysisAlerts("analysis/1/alerts/1")

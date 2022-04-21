@@ -23,14 +23,23 @@ class SelectAnalysisFeaturesQuery {
 
   @Language("PostgreSQL")
   private static final String QUERY =
-      "SELECT aacf.feature,aaf.agent_config_feature_id,am.match_id,am.alert_id,aacf.agent_config"
-          + " FROM ae_analysis aaa\n"
-          + " JOIN ae_analysis_feature aaf ON aaa.analysis_id=aaf.analysis_id\n"
-          + " JOIN ae_analysis_alert aaa2 ON aaa.analysis_id = aaa2.analysis_id\n"
-          + " JOIN ae_match am ON am.alert_id =aaa2.alert_id\n"
-          + " JOIN ae_agent_config_feature aacf ON "
-          + " aaf.agent_config_feature_id = aacf.agent_config_feature_id\n"
-          + " WHERE aaa.analysis_id IN (:analysis) AND aaa2.alert_id IN (:alerts)";
+      "SELECT aacf.feature,\n"
+          + "       aaf.agent_config_feature_id,\n"
+          + "       am.match_id,\n"
+          + "       am.alert_id,\n"
+          + "       aacf.agent_config,\n"
+          + "       aaa.policy,\n"
+          + "       aaa.strategy,\n"
+          + "       aaa.analysis_id\n"
+          + "FROM ae_analysis aaa\n"
+          + "         JOIN ae_analysis_feature aaf ON aaa.analysis_id = aaf.analysis_id\n"
+          + "         JOIN ae_analysis_alert aaa2 ON aaa.analysis_id = aaa2.analysis_id\n"
+          + "         JOIN ae_match am ON am.alert_id = aaa2.alert_id\n"
+          + "         JOIN ae_agent_config_feature aacf\n"
+          + "              ON "
+          + "aaf.agent_config_feature_id = aacf.agent_config_feature_id\n"
+          + "WHERE aaa.analysis_id IN (:analysis)\n"
+          + "  AND aaa2.alert_id IN (:alerts)";
   private static final FeaturesRowMapper ROW_MAPPER = new FeaturesRowMapper();
 
 
@@ -56,7 +65,11 @@ class SelectAnalysisFeaturesQuery {
       var matchId = rs.getLong(3);
       var alertId = rs.getLong(4);
       var agentConfig = rs.getString(5);
-      return new MatchFeatureDao(alertId, matchId, featureConfigId, feature, agentConfig);
+      var policy = rs.getString(6);
+      var strategy = rs.getString(7);
+      var analysisId = rs.getLong(8);
+      return new MatchFeatureDao(analysisId,
+          alertId, matchId, featureConfigId, feature, agentConfig, policy, strategy);
     }
   }
 }

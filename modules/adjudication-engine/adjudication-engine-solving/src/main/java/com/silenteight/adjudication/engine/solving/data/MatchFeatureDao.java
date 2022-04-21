@@ -5,9 +5,12 @@ import lombok.Value;
 @Value
 public class MatchFeatureDao {
 
-  private final long alertId;
-  private final long matchId;
-  private final long agentConfigFeatureId;
-  private final String feature;
-  private final String agentConfig;
+  long analysisId;
+  long alertId;
+  long matchId;
+  long agentConfigFeatureId;
+  String feature;
+  String agentConfig;
+  String policy;
+  String strategy;
 }

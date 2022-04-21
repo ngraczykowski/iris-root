@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class MatchesPublisher {
+public class AgentsMatchPublisher {
 
   static final String AGENT_REQUEST_EXCHANGE_NAME = "agent.request";
   public static final String AGENT_CONFIG_HEADER = "agentConfig";

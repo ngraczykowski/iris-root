@@ -74,6 +74,11 @@ public class ResourceName {
     return this;
   }
 
+  public ResourceName add(@NonNull String name, Long value) {
+    pathTokens.put(name, String.valueOf(value));
+    return this;
+  }
+
   public String get(@NonNull String name) {
     if (pathTokens.containsKey(name))
       return pathTokens.get(name);

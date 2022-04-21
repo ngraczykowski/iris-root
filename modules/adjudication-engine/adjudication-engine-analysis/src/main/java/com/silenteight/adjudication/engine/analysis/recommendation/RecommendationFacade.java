@@ -4,13 +4,17 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.Recommendation;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
+import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
 import com.silenteight.adjudication.api.v2.RecommendationMetadata;
 import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
+import com.silenteight.adjudication.engine.analysis.recommendation.domain.SaveRecommendationRequest;
 import com.silenteight.adjudication.internal.v1.CommentInputsUpdated;
 import com.silenteight.adjudication.internal.v1.MatchesSolved;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +32,9 @@ public class RecommendationFacade {
 
   private final StreamRecommendationsUseCase streamRecommendationsUseCase;
 
-  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
+  private final CreateRecommendationsUseCase createRecommendationsUseCase;
+
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   public List<RecommendationsGenerated> handleCommentInputsUpdated(
       CommentInputsUpdated commentInputsUpdated) {
 
@@ -68,5 +74,11 @@ public class RecommendationFacade {
 
     streamRecommendationsUseCase.streamRecommendationsWithMetadata(
         analysisOrDataset, consumer);
+  }
+
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
+  public List<RecommendationInfo> createRecommendations(SaveRecommendationRequest request) {
+    return createRecommendationsUseCase.createRecommendations(request);
   }
 }

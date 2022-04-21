@@ -77,10 +77,15 @@ class TracePublisherImplTest {
 
   private static Stream<Arguments> testData() {
     return Stream.of(
-        Arguments.of(new FeatureMatchesUpdated(new AlertSolving(1L)), FeatureMatchesUpdated.class),
-        Arguments.of(new MatchesUpdated(new AlertSolving(2L)), MatchesUpdated.class),
         Arguments.of(
-            new MatchFeatureValuesUpdated(new AlertSolving(20L)), MatchFeatureValuesUpdated.class)
+            new FeatureMatchesUpdated(new AlertSolving(1L, "policy", "strategy", 1)),
+            FeatureMatchesUpdated.class),
+        Arguments.of(
+            new MatchesUpdated(new AlertSolving(2L, "policy", "strategy", 1)),
+            MatchesUpdated.class),
+        Arguments.of(
+            new MatchFeatureValuesUpdated(new AlertSolving(20L, "policy", "strategy", 1)),
+            MatchFeatureValuesUpdated.class)
     );
   }
 

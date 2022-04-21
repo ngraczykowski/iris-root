@@ -5,10 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.solving.domain.AlertSolving;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
+import com.silenteight.adjudication.engine.solving.domain.FeatureSolution;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import com.hazelcast.map.IMap;
 
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.function.Supplier;
 
@@ -35,21 +37,33 @@ class InMemoryAlertSolvingRepository implements AlertSolvingRepository {
 
     return this.executeInLock(key, () -> {
       this.map.set(key, alertSolvingModel);
-      this.eventStore.publish(alertSolvingModel.pendingEvents());
-      alertSolvingModel.clear();
+      //      this.eventStore.publish(alertSolvingModel.pendingEvents());
+      //      alertSolvingModel.clear();
       return alertSolvingModel;
     });
   }
 
-  public void updateMatchFeatureValue(
-      long alertId, long matchId, String featureName, String featureValue) {
-    this.map.executeOnKey(alertId, new FeatureUpdateProcessor() {
+  public AlertSolving updateMatchFeatureValue(
+      long alertId, long matchId, List<FeatureSolution> featureSolutions) {
+    return this.map.executeOnKey(alertId, new AlertSolvingProcessor() {
       @Override
-      public Boolean process(Entry<Long, AlertSolving> entry) {
-        log.debug("Updating feature matchId:{}, featureName:{}, featureValue{}", matchId,
-            featureName, featureValue);
-        entry.getValue().updateMatchFeatureValue(matchId, featureName, featureValue);
-        return true;
+      public AlertSolving process(Entry<Long, AlertSolving> entry) {
+        log.debug("Updating features matchId:{}, foeatures: {}", matchId, featureSolutions);
+        entry.setValue(entry.getValue().updateMatchFeatureValues(matchId, featureSolutions));
+        return entry.getValue();
+      }
+    });
+  }
+
+  @Override
+  public AlertSolving updateMatchSolution(
+      long alertId, long matchId, String matchSolution, String reason) {
+    return this.map.executeOnKey(alertId, new AlertSolvingProcessor() {
+      @Override
+      public AlertSolving process(Entry<Long, AlertSolving> entry) {
+        log.debug("Updating match solution matchId:{}, solution: {}", matchId, matchSolution);
+        entry.setValue(entry.getValue().updateMatchSolution(matchId, matchSolution, reason));
+        return entry.getValue();
       }
     });
   }

@@ -7,9 +7,13 @@ import com.silenteight.solving.api.v1.*;
 import com.silenteight.solving.api.v1.BatchSolveFeaturesResponse.Builder;
 
 import com.google.protobuf.ByteString;
+import com.google.protobuf.Struct;
+import com.google.protobuf.Value;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.context.annotation.Profile;
+
+import java.util.Map;
 
 @GrpcService
 @Profile("mockgovernance")
@@ -29,6 +33,10 @@ class MockPolicyStepsSolvingGrpc extends PolicyStepsSolvingGrpc.PolicyStepsSolvi
           mockFeatureVectorSolutionReduction.solveFeatureVector(feature.getFeatureValueList());
       builder.addSolutions(SolutionResponse.newBuilder()
           .setFeatureVectorSolution(solution)
+          .setReason(Struct
+              .newBuilder()
+              .putAllFields(Map.of("reason", Value.newBuilder().setStringValue("bo tak").build()))
+              .build())
           .setStepId(Uuid.newBuilder()
               .setValue(ByteString.copyFromUtf8("1"))
               .build())

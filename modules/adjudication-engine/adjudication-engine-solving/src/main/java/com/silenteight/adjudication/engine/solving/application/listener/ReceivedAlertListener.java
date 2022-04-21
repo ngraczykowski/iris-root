@@ -35,9 +35,6 @@ class ReceivedAlertListener {
   @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   void onReceivedAlert(AnalysisAlertsAdded message) {
 
-    //    () -> this.trace
-
-
     log.info("Received alert message with alerts count {}", message.getAnalysisAlertsCount());
     this.alertAgentDispatchProcess.handle(message);
   }

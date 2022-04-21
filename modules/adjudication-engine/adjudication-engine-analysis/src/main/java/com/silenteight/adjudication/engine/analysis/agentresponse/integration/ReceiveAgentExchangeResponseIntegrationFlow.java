@@ -7,6 +7,7 @@ import com.silenteight.adjudication.engine.analysis.agentresponse.AgentResponseF
 import com.silenteight.adjudication.engine.common.integration.NoCorrelationIdException;
 import com.silenteight.agents.v1.api.exchange.AgentExchangeResponse;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.integration.dsl.IntegrationFlowAdapter;
 import org.springframework.integration.dsl.IntegrationFlowDefinition;
 import org.springframework.messaging.MessageHeaders;
@@ -21,6 +22,11 @@ import static org.springframework.integration.IntegrationMessageHeaderAccessor.C
 @RequiredArgsConstructor
 @Component
 @Slf4j
+@ConditionalOnProperty(
+    value = "ae.solving.enabled",
+    havingValue = "false",
+    matchIfMissing = true
+)
 class ReceiveAgentExchangeResponseIntegrationFlow extends IntegrationFlowAdapter {
 
   private final AgentResponseFacade facade;

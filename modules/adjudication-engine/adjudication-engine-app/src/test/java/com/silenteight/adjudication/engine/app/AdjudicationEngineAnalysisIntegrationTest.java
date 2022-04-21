@@ -239,7 +239,7 @@ class AdjudicationEngineAnalysisIntegrationTest {
 
   private void assertGeneratedRecommendation(long analysisId, int recommendationCount) {
     await()
-        .atMost(Duration.ofSeconds(10))
+        .atMost(Duration.ofSeconds(15))
         .until(() -> generatedRecommendationCount(jdbcTemplate, analysisId) > 0);
 
     assertThat(generatedRecommendationCount(jdbcTemplate, analysisId))

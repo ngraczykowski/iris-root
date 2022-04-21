@@ -36,31 +36,28 @@ class AlertRecommendationMapper implements RowMapper<AlertRecommendation> {
   @Override
   public AlertRecommendation mapRow(ResultSet rs, int rowNum) throws SQLException {
     MatchContext[] matches;
-    Map<String, Object> commentInput;
     Map<String, String> matchComments;
 
     try {
-      commentInput = OBJECT_MAPPER.readValue(rs.getString(6), MAP_TYPE);
-      matches = OBJECT_MAPPER.readValue(rs.getString(8), MatchContext[].class);
+      matches = OBJECT_MAPPER.readValue(rs.getString("match_contexts"), MatchContext[].class);
       matchComments = OBJECT_MAPPER.readValue(rs.getString("match_comments"), STRING_MAP_TYPE);
     } catch (JsonProcessingException e) {
       throw new DataRetrievalFailureException("Failed to parse JSON values", e);
     }
 
     var alertContext = AlertContext.builder()
-        .alertId(rs.getString(5))
-        .commentInput(commentInput)
-        .recommendedAction(rs.getString(7))
+        .alertId(rs.getString("client_alert_identifier"))
+        .recommendedAction(rs.getString("recommended_action"))
         .matches(List.of(matches))
         .build();
 
     return AlertRecommendation.builder()
-        .alertId(rs.getLong(1))
-        .analysisId(rs.getLong(2))
-        .recommendationId(rs.getLong(3))
-        .createdTime(rs.getTimestamp(4))
+        .alertId(rs.getLong("alert_id"))
+        .analysisId(rs.getLong("analysis_id"))
+        .recommendationId(rs.getLong("recommendation_id"))
+        .createdTime(rs.getTimestamp("created_at"))
         .alertContext(alertContext)
-        .matchIds((long[]) ArrayUtils.toPrimitive(rs.getArray(9).getArray()))
+        .matchIds((long[]) ArrayUtils.toPrimitive(rs.getArray("match_ids").getArray()))
         .comment(rs.getString("comment"))
         .matchComments(matchComments)
         .build();

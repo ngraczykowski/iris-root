@@ -52,7 +52,7 @@ public class EventStoreTest {
   @Test
   @DisplayName("Check message can be send without errors")
   public void checkMessageCanBeSendWithoutErrors() throws IOException {
-    var event = new FeatureMatchesUpdated(new AlertSolving(1L));
+    var event = new FeatureMatchesUpdated(new AlertSolving(1L, "policy", "strategy", 1));
     this.eventStore.publish(List.of(event));
 
     final DomainEvent domainEvent1 = obtainMessage();

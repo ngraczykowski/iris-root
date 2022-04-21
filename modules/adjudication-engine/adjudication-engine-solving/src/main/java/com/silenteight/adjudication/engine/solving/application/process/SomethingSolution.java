@@ -2,7 +2,7 @@ package com.silenteight.adjudication.engine.solving.application.process;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.adjudication.engine.solving.application.publisher.GovernancePublisher;
+import com.silenteight.adjudication.engine.solving.application.publisher.GovernanceMatchPublisher;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolving;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
 
@@ -11,9 +11,10 @@ import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository
 @RequiredArgsConstructor
 public class SomethingSolution {
 
-  private final GovernancePublisher governanceProvider;
+  private final GovernanceMatchPublisher governanceProvider;
   private final AlertSolvingRepository alertSolvingRepository;
 
+  //TODO Governence resolved alert
   public void updateResolution(Object o) {
     final AlertSolving alertSolvingModel = this.alertSolvingRepository.get(null);
     if (!alertSolvingModel.isEmpty()) {
@@ -21,10 +22,11 @@ public class SomethingSolution {
       alertSolvingModel.updateMatches(null);
       this.alertSolvingRepository.save(alertSolvingModel);
 
-      if (alertSolvingModel.areAlertMatchesSolved()) {
-
-        governanceProvider.send(null);
-      }
+      // Generate comments ???????
+      //      if (alertSolvingModel.isAlertMatchSolved()) {
+      //
+      //        governanceProvider.send(null);
+      //      }
 
     }
   }

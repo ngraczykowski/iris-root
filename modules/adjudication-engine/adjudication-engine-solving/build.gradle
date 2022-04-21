@@ -4,6 +4,9 @@ plugins {
 
 dependencies {
   implementation project(":adjudication-engine-common")
+  implementation project(":adjudication-engine-comments")
+  implementation project(":adjudication-engine-governance")
+  implementation project(":adjudication-engine-analysis")
   implementation project(":proto-adjudication-engine-internal-protos")
 
   implementation libraries.agents_api
@@ -15,6 +18,8 @@ dependencies {
   implementation libraries.jackson_dataformat_xml
   implementation libraries.jackson_datatype_jdk8
   implementation libraries.spring_data_jpa
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.adjudication_engine_api
 
   // Sentry
   runtimeOnly libraries.sentry_spring_boot_starter
@@ -30,6 +35,12 @@ dependencies {
   // Enable aspects
   aspect libraries.silenteight_sep_base_aspects
   compileOnly libraries.spring_tx
+
+  //Agents
+  implementation libraries.agents_api
+
+  //Governance
+  implementation libraries.governance_solving_api
 
   testImplementation project(":adjudication-engine-testing")
   testImplementation libraries.protobuf_java_util

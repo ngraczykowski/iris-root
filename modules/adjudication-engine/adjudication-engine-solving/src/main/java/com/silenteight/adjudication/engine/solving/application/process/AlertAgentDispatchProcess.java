@@ -4,7 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
-import com.silenteight.adjudication.engine.solving.application.publisher.MatchesPublisher;
+import com.silenteight.adjudication.engine.solving.application.publisher.AgentsMatchPublisher;
+import com.silenteight.adjudication.engine.solving.data.MatchFeatureDao;
 import com.silenteight.adjudication.engine.solving.data.MatchFeaturesFacade;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolving;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
@@ -14,7 +15,6 @@ import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
@@ -24,19 +24,30 @@ import javax.annotation.Nonnull;
 public class AlertAgentDispatchProcess {
 
   private final AgentExchangeAlertSolvingMapper agentExchnageRequestMapper;
-  private final MatchesPublisher matchesPublisher;
+  private final AgentsMatchPublisher matchesPublisher;
   private final MatchFeaturesFacade matchFeaturesFacade;
   private final AlertSolvingRepository alertSolvingRepository;
 
   @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   public void handle(final AnalysisAlertsAdded message) {
-    Map<Long, List<MatchFeature>> alertMatchesFeatures = fetchAlertMatchesFeatures(message);
+    var alerts = fetchAlertMatchesFeatures(message);
+
+    var alertMatchFeatures = alerts
+        .stream()
+        .map(MatchFeature::from)
+        .collect(Collectors.groupingBy(MatchFeature::getAlertId));
+
     var pendingAlerts = message.getAnalysisAlertsList()
         .stream()
         .map(s -> ResourceName.create(s).getLong("alerts"))
-        .map(alertId -> new AlertSolving(alertId).addMatchesFeatures(
-            alertMatchesFeatures.get(alertId)))
-          .map(this.alertSolvingRepository::save)
+        .map(alertId -> {
+          // TODO: get specific strategy and policy for alert
+          var firstAlert = alerts.stream().findFirst().get();
+          return new AlertSolving(alertId, firstAlert.getPolicy(),
+              firstAlert.getStrategy(), firstAlert.getAnalysisId()).addMatchesFeatures(
+              alertMatchFeatures.get(alertId));
+        })
+        .map(this.alertSolvingRepository::save)
         .collect(Collectors.toList());
 
     pendingAlerts.forEach(alertSolving -> {
@@ -50,7 +61,7 @@ public class AlertAgentDispatchProcess {
 
   @Nonnull
   @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
-  private Map<Long, List<MatchFeature>> fetchAlertMatchesFeatures(AnalysisAlertsAdded message) {
+  private List<MatchFeatureDao> fetchAlertMatchesFeatures(AnalysisAlertsAdded message) {
     Set<Long> analysis = new HashSet<>();
     Set<Long> alerts = new HashSet<>();
 
@@ -66,10 +77,7 @@ public class AlertAgentDispatchProcess {
     if (log.isTraceEnabled()) {
       log.trace("Found features: {}", features);
     }
-    return features
-        .stream()
-        .map(MatchFeature::from)
-        .collect(Collectors.groupingBy(MatchFeature::getAlertId));
+    return features;
   }
 
 }
