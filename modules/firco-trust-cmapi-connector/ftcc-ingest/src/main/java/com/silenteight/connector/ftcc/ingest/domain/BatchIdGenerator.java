@@ -4,9 +4,9 @@ import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
 
-class BatchIdGenerator {
+public class BatchIdGenerator {
 
-  UUID generate() {
+  public UUID generate() {
     return randomUUID();
   }
 }

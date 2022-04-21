@@ -15,12 +15,9 @@ import com.silenteight.connector.ftcc.request.store.RequestStorage;
 import com.silenteight.connector.ftcc.request.store.dto.RequestStoreDto;
 import com.silenteight.proto.fab.api.v1.AlertMessageStored.State;
 
-import org.slf4j.MDC;
-
 import java.util.List;
 import java.util.UUID;
 
-import static com.silenteight.connector.ftcc.common.MdcParams.BATCH_NAME;
 import static com.silenteight.proto.fab.api.v1.AlertMessageStored.State.NEW;
 
 @RequiredArgsConstructor
@@ -31,8 +28,6 @@ public class IngestFacade {
   static final int LEARNING_PRIORITY = 4;
 
   @NonNull
-  private final BatchIdGenerator batchIdGenerator;
-  @NonNull
   private final RequestStorage requestStorage;
   @NonNull
   private final RegistrationApiClient registrationApiClient;
@@ -41,16 +36,10 @@ public class IngestFacade {
   @NonNull
   private final DataPrepMessageGateway dataPrepMessageGateway;
 
-  public void ingest(@NonNull RequestDto request) {
-    UUID batchId = batchIdGenerator.generate();
-    MDC.put(BATCH_NAME, batchId.toString());
-    try {
-      RequestStoreDto requestStore = requestStorage.store(request, batchId);
-      registerBatch(request, batchId);
-      sendToDataPrep(batchId, requestStore.getMessageIds());
-    } finally {
-      MDC.remove(BATCH_NAME);
-    }
+  public void ingest(@NonNull RequestDto request, UUID batchId) {
+    RequestStoreDto requestStore = requestStorage.store(request, batchId);
+    registerBatch(request, batchId);
+    sendToDataPrep(batchId, requestStore.getMessageIds());
   }
 
   private void registerBatch(RequestDto request, UUID batchId) {

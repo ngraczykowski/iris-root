@@ -23,7 +23,6 @@ class IngestDomainConfiguration {
       @NonNull DataPrepMessageGateway dataPrepMessageGateway) {
 
     return new IngestFacade(
-        new BatchIdGenerator(),
         requestStorage,
         registrationApiClient,
         alertStateEvaluator,

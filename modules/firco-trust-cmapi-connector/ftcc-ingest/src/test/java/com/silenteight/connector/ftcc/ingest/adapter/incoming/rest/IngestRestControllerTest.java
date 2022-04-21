@@ -1,6 +1,7 @@
 package com.silenteight.connector.ftcc.ingest.adapter.incoming.rest;
 
 import com.silenteight.connector.ftcc.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.connector.ftcc.ingest.domain.BatchIdGenerator;
 import com.silenteight.connector.ftcc.ingest.domain.IngestFacade;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +16,7 @@ import java.io.IOException;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.OK;
 
 @Import(IngestRestController.class)
@@ -28,8 +30,12 @@ class IngestRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private ObjectMapper objectMapper;
 
+  @MockBean
+  private BatchIdGenerator batchIdGenerator;
+
   @Test
   void its200_whenAlertSent() throws IOException {
+    when(batchIdGenerator.generate()).thenCallRealMethod();
     post(INGEST_URL, readFile("classpath:requests/SendMessage.json"))
         .status(OK)
         .body("Body.msg_Acknowledgement.faultcode", is("0"))

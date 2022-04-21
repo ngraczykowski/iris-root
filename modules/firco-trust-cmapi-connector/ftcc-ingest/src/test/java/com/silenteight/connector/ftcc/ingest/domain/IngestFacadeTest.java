@@ -35,8 +35,6 @@ class IngestFacadeTest {
   private IngestFacade underTest;
 
   @Mock
-  private BatchIdGenerator batchIdGenerator;
-  @Mock
   private RequestStorage requestStorage;
   @Mock
   private RegistrationApiClient registrationApiClient;
@@ -49,14 +47,13 @@ class IngestFacadeTest {
   void shouldIngest() {
     // given
     RequestDto requestDto = makeRequestDto();
-    when(batchIdGenerator.generate()).thenReturn(BATCH_ID);
     when(requestStorage.store(requestDto, BATCH_ID)).thenReturn(REQUEST_STORE);
     when(alertStateEvaluator.evaluate(BATCH_ID, MESSAGE_ID_1)).thenReturn(SOLVED_FALSE_POSITIVE);
     when(alertStateEvaluator.evaluate(BATCH_ID, MESSAGE_ID_2)).thenReturn(SOLVED_TRUE_POSITIVE);
     when(alertStateEvaluator.evaluate(BATCH_ID, MESSAGE_ID_3)).thenReturn(NEW);
 
     // when
-    underTest.ingest(requestDto);
+    underTest.ingest(requestDto, BATCH_ID);
 
     // then
     Batch batch = Batch.builder()
