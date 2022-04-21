@@ -11,6 +11,7 @@ import com.silenteight.proto.fab.api.v1.AlertMessageStored.State;
 import com.google.common.base.Stopwatch;
 import com.google.protobuf.InvalidProtocolBufferException;
 import io.vavr.control.Try;
+import org.slf4j.MDC;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +26,7 @@ class AlertMessagesRabbitAmqpListener {
 
   public static final String QUEUE_NAME_PROPERTY =
       "${amqp.dataprep.incoming.alert-message.queue-name}";
+  private static final String BATCH_NAME = "batchName";
 
   private final DataPrepFacade dataPrepFacade;
 
@@ -39,6 +41,7 @@ class AlertMessagesRabbitAmqpListener {
     Stopwatch stopwatch = Stopwatch.createStarted();
     boolean isLastTry = isLastTry(msg);
     AlertMessageStored message = AlertMessageStored.parseFrom(msg.getBody());
+    MDC.put(BATCH_NAME, message.getBatchName());
 
     log.info(
         "Received a message with: batch: {}, alert message: {}", message.getBatchName(),
@@ -53,12 +56,14 @@ class AlertMessagesRabbitAmqpListener {
             log.error("Failed to process message, error occurred, retrying...", e);
             throw new DataPrepException(e);
           }
+        })
+        .andFinally(() -> {
+          long alertMessageHandlingDuration = stopwatch.elapsed(TimeUnit.MILLISECONDS);
+          log.info(
+              "Batch: {}, alert message: {} handled in {} millis", message.getBatchName(),
+              message.getMessageName(), alertMessageHandlingDuration);
+          MDC.remove(BATCH_NAME);
         });
-
-    long alertMessageHandlingDuration = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-    log.info(
-        "Batch: {}, alert message: {} handled in {} millis", message.getBatchName(),
-        message.getMessageName(), alertMessageHandlingDuration);
   }
 
   private boolean isLastTry(Message msg) {
