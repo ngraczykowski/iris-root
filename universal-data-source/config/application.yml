@@ -56,20 +56,6 @@ uds:
       geo2: geo
       organizationName2: organizationName
 
-  #---------------------------------------------------------------------------------------------------
-  # AVAILABLE CATEGORIES
-  #---------------------------------------------------------------------------------------------------
-  category:
-    available:
-      - categories/crossmatch
-      - categories/specificTerms
-      - categories/specificTerms2
-      - categories/historicalRiskAssessment
-      - categories/watchlistType
-      - categories/matchType
-      - categories/companyNameSurrounding
-      - categories/messageStructure
-
 spring:
   #-------------------------------------------------------------------------------------------------
   # MULTI-THREADING

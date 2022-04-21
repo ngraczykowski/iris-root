@@ -46,12 +46,17 @@ class ListAvailableCategoriesService implements ListAvailableCategoriesUseCase {
   }
 
   private List<Category> filterCategories(List<Category> allCategories) {
+    var availableCategories = properties.getAvailable();
+    if (availableCategories.isEmpty()) {
+      return allCategories;
+
+    }
     return allCategories.stream()
-        .filter(this::isContainsCategory)
+        .filter(category -> containsCategory(availableCategories, category))
         .collect(toList());
   }
 
-  private boolean isContainsCategory(Category category) {
-    return properties.getAvailable().contains(category.getName());
+  private boolean containsCategory(List<String> availableCategories, Category category) {
+    return availableCategories.contains(category.getName());
   }
 }
