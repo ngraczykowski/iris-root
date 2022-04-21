@@ -4,8 +4,11 @@ repos:
     rev: v4.2.0
     hooks:
       - id: check-json
+        # NOTE(ahaczewski): Helm and Nomad .json files might actually be Go templates.
+        #  Test resources can contain on purpose broken JSON files.
         exclude: (helm-chart/templates/|nomad/|test/resources/com/silenteight/)
       - id: check-yaml
+        # NOTE(ahaczewski): Helm and Nomad .json files might actually be Go templates.
         exclude: (helm-chart/templates/|nomad/)
       - id: check-toml
       - id: check-merge-conflict
