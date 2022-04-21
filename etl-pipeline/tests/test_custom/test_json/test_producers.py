@@ -404,13 +404,12 @@ def test_produce_category_producer(initialization_params, payload_fields, refere
                 "prefix": "",
                 "feature_name": "test",
                 "field_maps": {
-                    "normal_trigger_categories": "field_with_normal_triggers_categories",
+                    "normal_trigger_categories": ["name"],
                     "trigger_categories": "field_with_trigger_categories",
                     "triggered_tokens": "fields_with_triggered_tokens",
                 },
             },
             {
-                "field_with_normal_triggers_categories": [],
                 "field_with_trigger_categories": [{"name": ["test"]}],
                 "fields_with_triggered_tokens": {"Doe": {"Field": ["Another", "test"]}},
             },
@@ -420,13 +419,29 @@ def test_produce_category_producer(initialization_params, payload_fields, refere
                 "prefix": "",
                 "feature_name": "test",
                 "field_maps": {
-                    "normal_trigger_categories": "field_with_normal_triggers_categories",
+                    "normal_trigger_categories": ["name"],
                     "trigger_categories": "field_with_trigger_categories",
                     "triggered_tokens": "fields_with_triggered_tokens",
                 },
             },
             {
-                "field_with_normal_triggers_categories": ["name"],
+                "fields_with_triggered_tokens": {"doe": {}, "johnny": {}, "sude": {}},
+                "field_with_trigger_categories": [
+                    {"name": [], "country": ["ADDRESS1_COUNTRY"], "job": [], "other": []}
+                ],
+            },
+        ),
+        (
+            {
+                "prefix": "",
+                "feature_name": "test",
+                "field_maps": {
+                    "normal_trigger_categories": ["name", "country"],
+                    "trigger_categories": "field_with_trigger_categories",
+                    "triggered_tokens": "fields_with_triggered_tokens",
+                },
+            },
+            {
                 "fields_with_triggered_tokens": {"doe": {}, "johnny": {}, "sude": {}},
                 "field_with_trigger_categories": [
                     {"name": [], "country": ["ADDRESS1_COUNTRY"], "job": [], "other": []}
@@ -458,7 +473,7 @@ def test_produce_hit_type_input(initialization_params, payload_fields):
         )
     expected_result = HitTypeFeatureInput(
         feature=f"/{initialization_params['feature_name']}",
-        normal_trigger_categories=payload_fields["field_with_normal_triggers_categories"],
+        normal_trigger_categories=initialization_params["field_maps"]["normal_trigger_categories"],
         trigger_categories=reference_dict,
         triggered_tokens=payload_fields["fields_with_triggered_tokens"],
     )
