@@ -19,7 +19,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.OK;
 
-@Import(IngestRestController.class)
+@Import({ IngestRestController.class, RestConfiguration.class})
 class IngestRestControllerTest extends BaseRestControllerTest {
 
   private static final String INGEST_URL = "/v1/alert";
