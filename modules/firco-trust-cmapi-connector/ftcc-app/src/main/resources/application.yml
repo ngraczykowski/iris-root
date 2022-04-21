@@ -79,6 +79,8 @@ grpc:
   server:
     port: 8081
 
+logging.pattern.level: "%mdc"
+
 spring:
   application:
     name: ftcc

@@ -13,6 +13,7 @@ import com.silenteight.proto.registration.api.v1.MessageBatchCompleted;
 import com.silenteight.recommendation.api.library.v1.RecommendationOut;
 import com.silenteight.recommendation.api.library.v1.RecommendationsOut;
 
+import org.slf4j.MDC;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +22,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.silenteight.connector.ftcc.common.MdcParams.BATCH_NAME;
 import static java.lang.System.lineSeparator;
 
 @RequiredArgsConstructor
@@ -38,22 +40,26 @@ public class ResponseProcessor {
   public void process(MessageBatchCompleted messageBatchCompleted) {
     final var analysisName = messageBatchCompleted.getAnalysisName();
     final var batchName = messageBatchCompleted.getBatchId();
+    MDC.put(BATCH_NAME, batchName);
+    try {
+      log.info("Fetching Message from DB using batchName={}", batchName);
+      var messageEntityMap = messageDetailsService.messages(batchName);
 
-    log.info("Fetching Message from DB using batchName={}", batchName);
-    var messageEntityMap = messageDetailsService.messages(batchName);
+      log.info("Requesting Recommendation using analysisName={}", analysisName);
+      var recommendations = recommendationClientApi.recommendation(analysisName);
+      var responseDto = buildRequest(analysisName, messageEntityMap, recommendations);
 
-    log.info("Requesting Recommendation using analysisName={}", analysisName);
-    var recommendations = recommendationClientApi.recommendation(analysisName);
-    var responseDto = buildRequest(analysisName, messageEntityMap, recommendations);
+      logClientRequestDto(responseDto, analysisName);
 
-    logClientRequestDto(responseDto, analysisName);
-
-    recommendationSender.send(batchName, responseDto);
-    recommendationsDeliveredPublisher.publish(RecommendationsDeliveredEvent
-        .builder()
-        .batchName(batchName)
-        .analysisName(analysisName)
-        .build());
+      recommendationSender.send(batchName, responseDto);
+      recommendationsDeliveredPublisher.publish(RecommendationsDeliveredEvent
+          .builder()
+          .batchName(batchName)
+          .analysisName(analysisName)
+          .build());
+    } finally {
+      MDC.remove(BATCH_NAME);
+    }
   }
 
   private ClientRequestDto buildRequest(

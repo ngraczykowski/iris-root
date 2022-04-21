@@ -12,11 +12,13 @@ import com.silenteight.proto.fab.api.v1.*;
 
 import com.google.rpc.Status;
 import io.grpc.stub.StreamObserver;
+import org.slf4j.MDC;
 
 import java.util.Collection;
 import java.util.List;
 
 import static com.google.rpc.Code.INTERNAL_VALUE;
+import static com.silenteight.connector.ftcc.common.MdcParams.BATCH_NAME;
 import static io.grpc.protobuf.StatusProto.toStatusRuntimeException;
 import static java.util.stream.Collectors.toList;
 
@@ -56,14 +58,19 @@ class AlertMessageDetailsGrpcService
   }
 
   private MessageDto messageDetails(AlertMessageHeader header) {
-    log.info(
-        "Getting message details for batchName={} and messageName={}",
-        header.getBatchName(),
-        header.getMessageName());
+    MDC.put(BATCH_NAME, header.getBatchName());
+    try {
+      log.info(
+          "Getting message details for batchName={} and messageName={}",
+          header.getBatchName(),
+          header.getMessageName());
 
-    return messageByIdsQuery.get(
-        BatchResource.fromResourceName(header.getBatchName()),
-        MessageResource.fromResourceName(header.getMessageName()));
+      return messageByIdsQuery.get(
+          BatchResource.fromResourceName(header.getBatchName()),
+          MessageResource.fromResourceName(header.getMessageName()));
+    } finally {
+      MDC.remove(BATCH_NAME);
+    }
   }
 
   private static List<AlertMessageDetails> toAlertMessageDetails(

@@ -15,9 +15,12 @@ import com.silenteight.connector.ftcc.request.store.RequestStorage;
 import com.silenteight.connector.ftcc.request.store.dto.RequestStoreDto;
 import com.silenteight.proto.fab.api.v1.AlertMessageStored.State;
 
+import org.slf4j.MDC;
+
 import java.util.List;
 import java.util.UUID;
 
+import static com.silenteight.connector.ftcc.common.MdcParams.BATCH_NAME;
 import static com.silenteight.proto.fab.api.v1.AlertMessageStored.State.NEW;
 
 @RequiredArgsConstructor
@@ -40,9 +43,14 @@ public class IngestFacade {
 
   public void ingest(@NonNull RequestDto request) {
     UUID batchId = batchIdGenerator.generate();
-    RequestStoreDto requestStore = requestStorage.store(request, batchId);
-    registerBatch(request, batchId);
-    sendToDataPrep(batchId, requestStore.getMessageIds());
+    MDC.put(BATCH_NAME, batchId.toString());
+    try {
+      RequestStoreDto requestStore = requestStorage.store(request, batchId);
+      registerBatch(request, batchId);
+      sendToDataPrep(batchId, requestStore.getMessageIds());
+    } finally {
+      MDC.remove(BATCH_NAME);
+    }
   }
 
   private void registerBatch(RequestDto request, UUID batchId) {
