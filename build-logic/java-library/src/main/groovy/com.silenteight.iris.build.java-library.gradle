@@ -2,3 +2,8 @@ plugins {
   id('com.silenteight.iris.build.java-base')
   id('java-library')
 }
+
+jar {
+  preserveFileTimestamps false
+  reproducibleFileOrder true
+}

@@ -32,49 +32,57 @@ dependencies {
 
   testImplementation(platform('com.silenteight.iris.platform:test-platform'))
   testImplementation(libs.assertj.core)
-  testImplementation(libs.junit.jupiter.api)
   testImplementation(libs.junit.jupiter.migrationsupport)
   testImplementation(libs.junit.jupiter.params)
   testImplementation(libs.mockito.core)
   testImplementation(libs.mockito.junit.jupiter)
-  testRuntimeOnly(libs.junit.jupiter.engine)
 }
 
-tasks.named('test') {
-  useJUnitPlatform()
+testing {
+  suites {
+    test(JvmTestSuite) {
+      useJUnitJupiter(libs.versions.platform.junit5.get())
 
-  systemProperty('file.encoding', 'UTF-8')
-  systemProperty('sun.jnu.encoding', 'UTF-8')
-  systemProperty('user.language', 'en')
-  systemProperty('user.timezone', 'UTC')
-  systemProperty('java.awt.headless', 'true')
+      targets {
+        all {
+          testTask.configure {
+            systemProperty('file.encoding', 'UTF-8')
+            systemProperty('sun.jnu.encoding', 'UTF-8')
+            systemProperty('user.language', 'en')
+            systemProperty('user.timezone', 'UTC')
+            systemProperty('java.awt.headless', 'true')
 
-  testLogging {
-    exceptionFormat = TestExceptionFormat.FULL
+            testLogging {
+              exceptionFormat = TestExceptionFormat.FULL
+            }
+
+            // When using Java 9, Groovy (Spock) accesses illegal APIs. Open them here.
+            jvmArgs(
+                '--add-opens', 'java.base/java.io=ALL-UNNAMED',
+                '--add-opens', 'java.base/java.lang.invoke=ALL-UNNAMED',
+                '--add-opens', 'java.base/java.lang.reflect=ALL-UNNAMED',
+                '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
+                '--add-opens', 'java.base/java.nio.charset=ALL-UNNAMED',
+                '--add-opens', 'java.base/java.nio=ALL-UNNAMED',
+                '--add-opens', 'java.base/java.security=ALL-UNNAMED',
+                '--add-opens', 'java.base/java.text=ALL-UNNAMED',
+                '--add-opens', 'java.base/java.time.chrono=ALL-UNNAMED',
+                '--add-opens', 'java.base/java.time.format=ALL-UNNAMED',
+                '--add-opens', 'java.base/java.time=ALL-UNNAMED',
+                '--add-opens', 'java.base/java.util.concurrent.atomic=ALL-UNNAMED',
+                '--add-opens', 'java.base/java.util.function=ALL-UNNAMED',
+                '--add-opens', 'java.base/java.util.regex=ALL-UNNAMED',
+                '--add-opens', 'java.base/java.util.stream=ALL-UNNAMED',
+                '--add-opens', 'java.base/java.util=ALL-UNNAMED',
+                '--add-opens', 'java.base/sun.nio.cs=ALL-UNNAMED',
+                '--add-opens', 'java.sql/java.sql=ALL-UNNAMED',
+                '--add-opens', 'java.sql/javax.sql=ALL-UNNAMED',
+            )
+          }
+        }
+      }
+    }
   }
-
-  // When using Java 9, Groovy (Spock) accesses illegal APIs. Open them here.
-  jvmArgs(
-      '--add-opens', 'java.base/java.io=ALL-UNNAMED',
-      '--add-opens', 'java.base/java.lang.invoke=ALL-UNNAMED',
-      '--add-opens', 'java.base/java.lang.reflect=ALL-UNNAMED',
-      '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
-      '--add-opens', 'java.base/java.nio.charset=ALL-UNNAMED',
-      '--add-opens', 'java.base/java.nio=ALL-UNNAMED',
-      '--add-opens', 'java.base/java.security=ALL-UNNAMED',
-      '--add-opens', 'java.base/java.text=ALL-UNNAMED',
-      '--add-opens', 'java.base/java.time.chrono=ALL-UNNAMED',
-      '--add-opens', 'java.base/java.time.format=ALL-UNNAMED',
-      '--add-opens', 'java.base/java.time=ALL-UNNAMED',
-      '--add-opens', 'java.base/java.util.concurrent.atomic=ALL-UNNAMED',
-      '--add-opens', 'java.base/java.util.function=ALL-UNNAMED',
-      '--add-opens', 'java.base/java.util.regex=ALL-UNNAMED',
-      '--add-opens', 'java.base/java.util.stream=ALL-UNNAMED',
-      '--add-opens', 'java.base/java.util=ALL-UNNAMED',
-      '--add-opens', 'java.base/sun.nio.cs=ALL-UNNAMED',
-      '--add-opens', 'java.sql/java.sql=ALL-UNNAMED',
-      '--add-opens', 'java.sql/javax.sql=ALL-UNNAMED',
-  )
 }
 
 configurations.all {
@@ -94,33 +102,6 @@ configurations.all {
     force libs.aspectjtools
   }
 }
-
-//allprojects {
-//  apply plugin: 'idea'
-//
-//  idea {
-//    module {
-//      [
-//          '.gradle',
-//          'build',
-//          'cert',
-//          'data',
-//          'html',
-//          'lib',
-//          'log',
-//          'opt',
-//          'plugin',
-//          'python',
-//          'run',
-//          'tmp',
-//      ].each {
-//        excludeDirs += file("$projectDir/$it")
-//      }
-//      outputDir file("${buildDir}/idea/production/${delegate.name}")
-//      testOutputDir file("${buildDir}/idea/test/${delegate.name}")
-//    }
-//  }
-//}
 
 def commonCompilerArgs = [
     '-parameters',
