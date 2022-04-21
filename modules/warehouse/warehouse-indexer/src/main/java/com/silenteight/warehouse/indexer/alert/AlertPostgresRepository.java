@@ -8,9 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.warehouse.indexer.alert.dto.AlertDto;
 import com.silenteight.warehouse.indexer.alert.dto.AlertGroupingDto;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ListMultimap;
@@ -37,15 +34,16 @@ import static com.silenteight.warehouse.common.time.Timestamps.toSqlTimestamp;
 @Slf4j
 public final class AlertPostgresRepository implements AlertRepository {
 
-  private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-  private static final String PAYLOAD_COLUMN_NAME = "payload";
   @Language("PostgreSQL")
   private static final String FETCH =
       "SELECT * FROM warehouse_alert WHERE name IS NOT NULL AND %s BETWEEN ? AND ?%s%s ORDER BY"
           + " RANDOM() LIMIT ?";
   @Language("PostgreSQL")
   private static final String GROUP_BY =
-      "SELECT * FROM warehouse_alert WHERE %s BETWEEN ? AND ?%s";
+      "SELECT %s FROM warehouse_alert WHERE %s BETWEEN ? AND ?%s";
+  @Language("PostgreSQL")
+  private static final String CHECK_IF_KEY_EXISTS =
+      "SELECT exists(select 1 FROM warehouse_alert WHERE (payload->?) is not null)";
   private static final String ALERT_NAME_FILTER = "AND name IN (%s)";
   private static final String JDBC_TEMPLATE_PARAMETER_INDICATOR = "?,";
 
@@ -76,15 +74,16 @@ public final class AlertPostgresRepository implements AlertRepository {
     return jdbcTemplate.query(sql, mapper, jdbcParameters.toArray(new Object[0]));
   }
 
-
   @Override
   public List<AlertGroupingDto> fetchGroupedAlerts(
       AlertColumnName alertColumnName, OffsetDateTime timeFrom, OffsetDateTime timeTo,
       ListMultimap<String, List<String>> filters, List<String> groupByFields) {
+    verifyGroupByFields(groupByFields);
     String payloadFilters = getPayloadFilters(filters);
 
     String sql = String.format(
         GROUP_BY,
+        getSelectColumns(groupByFields),
         alertColumnName.getName(),
         payloadFilters);
 
@@ -116,16 +115,14 @@ public final class AlertPostgresRepository implements AlertRepository {
 
   private Map<String, String> getFieldsValueMap(ResultSet rs, List<String> fields) {
     try {
-      JsonNode node = OBJECT_MAPPER.readTree(rs.getString(PAYLOAD_COLUMN_NAME));
       ImmutableMap.Builder<String, String> mapBuilder = ImmutableMap.builder();
       for (String field : fields) {
-        if (node.has(field)) {
-          mapBuilder.put(field, node.get(field).textValue());
-        }
+        Optional.ofNullable(rs.getString(String.valueOf(fields.indexOf(field))))
+            .ifPresent(value -> mapBuilder.put(field, value));
       }
       return mapBuilder.build();
-    } catch (JsonProcessingException | SQLException e) {
-      throw new IllegalStateException("Payload from alert table can not be processed", e);
+    } catch (SQLException e) {
+      throw new IllegalStateException("Error while precessing alert table result set", e);
     }
   }
 
@@ -158,6 +155,15 @@ public final class AlertPostgresRepository implements AlertRepository {
     return StringUtils.chop(JDBC_TEMPLATE_PARAMETER_INDICATOR.repeat(indicatorsCount));
   }
 
+  private void verifyGroupByFields(List<String> groupByFields) {
+    for (String field : groupByFields) {
+      Boolean exists = jdbcTemplate.queryForObject(CHECK_IF_KEY_EXISTS, Boolean.TYPE, field);
+      if (Boolean.FALSE.equals(exists)) {
+        throw new GroupingFieldNotFoundException(field);
+      }
+    }
+  }
+
   private static String getPayloadFilters(ListMultimap<String, List<String>> filters) {
     if (filters.isEmpty()) {
       return "";
@@ -179,5 +185,14 @@ public final class AlertPostgresRepository implements AlertRepository {
       return String.format(
           "payload->>? in (%s)", createJdbTemplateIndicators(values.size()));
     }
+  }
+
+  private static String getSelectColumns(List<String> fields) {
+    return fields.stream()
+        .map(field -> String.format(
+            "payload ->> '%s' AS \"%s\"",
+            field,
+            fields.indexOf(field)))
+        .collect(Collectors.joining(", "));
   }
 }
