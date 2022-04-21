@@ -152,6 +152,8 @@ class HitTypeFeatureInputProducer(Producer):
         logger.debug(f"Fields: {fields}, payload: {payload}")
 
         for input_key, payload_key in self.fields.items():
+            if input_key == "normal_trigger_categories":
+                continue
             fields[input_key] = payload.get(payload_key, [])
         for analyzed_token, map_ in fields["triggered_tokens"].items():
 
