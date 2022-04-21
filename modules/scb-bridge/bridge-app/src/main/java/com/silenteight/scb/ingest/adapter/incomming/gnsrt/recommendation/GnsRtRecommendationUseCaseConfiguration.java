@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService;
 import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlertService;
+import com.silenteight.scb.ingest.adapter.incomming.common.trafficmanagement.TrafficManager;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtRequestToAlertMapper;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtResponseMapper;
 import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
@@ -24,6 +25,7 @@ class GnsRtRecommendationUseCaseConfiguration {
   private final RawAlertService rawAlertService;
   private final BatchInfoService batchInfoService;
   private final GnsRtRecommendationService gnsRtRecommendationService;
+  private final TrafficManager trafficManager;
 
   @Bean
   GnsRtRecommendationUseCase gnsRtRecommendationUseCase() {
@@ -35,6 +37,7 @@ class GnsRtRecommendationUseCaseConfiguration {
         .rawAlertService(rawAlertService)
         .batchInfoService(batchInfoService)
         .gnsRtRecommendationService(gnsRtRecommendationService)
+        .trafficManager(trafficManager)
         .build();
   }
 

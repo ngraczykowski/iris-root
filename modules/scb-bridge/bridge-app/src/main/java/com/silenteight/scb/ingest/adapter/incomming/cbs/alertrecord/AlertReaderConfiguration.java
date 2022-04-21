@@ -9,6 +9,7 @@ import com.silenteight.scb.ingest.adapter.incomming.cbs.metrics.CbsOracleMetrics
 import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertIngestService;
 import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService;
 import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlertService;
+import com.silenteight.scb.ingest.adapter.incomming.common.trafficmanagement.TrafficManager;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +27,7 @@ class AlertReaderConfiguration {
   private final RawAlertService rawAlertService;
   private final CbsOracleMetrics cbsOracleMetrics;
   private final BatchInfoService batchInfoService;
+  private final TrafficManager trafficManager;
 
   @Bean
   AlertProcessor alertProcessor() {
@@ -34,6 +36,7 @@ class AlertReaderConfiguration {
         .alertHandler(alertHandler())
         .alertCompositeCollectionReader(alertRecordCompositeCollectionReader())
         .batchInfoService(batchInfoService)
+        .trafficManager(trafficManager)
         .build();
   }
 

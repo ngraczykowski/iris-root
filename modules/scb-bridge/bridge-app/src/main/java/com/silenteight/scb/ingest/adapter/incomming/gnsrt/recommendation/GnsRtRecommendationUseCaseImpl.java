@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService;
 import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlertService;
+import com.silenteight.scb.ingest.adapter.incomming.common.trafficmanagement.TrafficManager;
 import com.silenteight.scb.ingest.adapter.incomming.common.util.AlertUpdater;
 import com.silenteight.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtRequestToAlertMapper;
@@ -41,9 +42,11 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
   private final RawAlertService rawAlertService;
   private final BatchInfoService batchInfoService;
   private final GnsRtRecommendationService gnsRtRecommendationService;
+  private final TrafficManager trafficManager;
 
   @Override
   public Mono<GnsRtRecommendationResponse> recommend(@NonNull GnsRtRecommendationRequest request) {
+    trafficManager.activateRtSemaphore();
     var internalBatchId = InternalBatchIdGenerator.generate();
 
     var alerts = mapAlerts(request, internalBatchId);

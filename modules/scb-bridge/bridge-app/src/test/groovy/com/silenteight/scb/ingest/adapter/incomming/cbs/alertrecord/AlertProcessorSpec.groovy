@@ -5,6 +5,7 @@ import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertIdWithDetails
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertInFlightService
 import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService
+import com.silenteight.scb.ingest.adapter.incomming.common.trafficmanagement.TrafficManager
 
 import spock.lang.Specification
 
@@ -14,12 +15,14 @@ class AlertProcessorSpec extends Specification {
   def alertCompositeCollectionReader = Mock(AlertCompositeCollectionReader)
   def alertHandler = Mock(AlertHandler)
   def batchInfoService = Mock(BatchInfoService)
+  def trafficManager = Mock(TrafficManager)
 
   def underTest = AlertProcessor.builder()
       .alertHandler(alertHandler)
       .alertInFlightService(alertInFlightService)
       .alertCompositeCollectionReader(alertCompositeCollectionReader)
       .batchInfoService(batchInfoService)
+      .trafficManager(trafficManager)
       .build()
 
   def fixtures = new Fixtures()
@@ -29,6 +32,7 @@ class AlertProcessorSpec extends Specification {
     underTest.process()
 
     then:
+    1 * trafficManager.holdPeriodicAlertProcessing() >> false
     1 * alertInFlightService.readChunk() >> fixtures.chunkOfAlertIds
     1 * alertCompositeCollectionReader
         .read(_ as String, fixtures.alertIdContext1, [fixtures.alertId1]) >>
@@ -40,6 +44,15 @@ class AlertProcessorSpec extends Specification {
         .handleAlerts(_ as String, fixtures.alertIdContext1, fixtures.alertCompositeCollection)
     1 * alertHandler
         .handleAlerts(_ as String, fixtures.alertIdContext2, fixtures.alertCompositeCollection)
+  }
+
+  def "Should not process alerts when batch traffic is paused"(){
+    when:
+    underTest.process()
+
+    then:
+    1 * trafficManager.holdPeriodicAlertProcessing() >> true
+    0 * _
   }
 
   class Fixtures {

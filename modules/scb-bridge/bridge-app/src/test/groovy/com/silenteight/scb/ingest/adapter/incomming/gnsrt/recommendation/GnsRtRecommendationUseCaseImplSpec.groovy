@@ -2,6 +2,7 @@ package com.silenteight.scb.ingest.adapter.incomming.gnsrt.recommendation
 
 import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService
 import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlertService
+import com.silenteight.scb.ingest.adapter.incomming.common.trafficmanagement.TrafficManager
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtRequestToAlertMapper
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtResponseMapper
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtResponseAlert
@@ -37,6 +38,8 @@ class GnsRtRecommendationUseCaseImplSpec extends Specification {
 
   def batchInfoService = Mock(BatchInfoService)
 
+  def trafficManager = Mock(TrafficManager)
+
   @Subject
   def underTest = GnsRtRecommendationUseCaseImpl.builder()
       .alertMapper(alertMapper)
@@ -46,6 +49,7 @@ class GnsRtRecommendationUseCaseImplSpec extends Specification {
       .gnsRtRecommendationService(gnsRtRecommendationService)
       .rawAlertService(rawAlertService)
       .batchInfoService(batchInfoService)
+      .trafficManager(trafficManager)
       .build()
 
   def 'should resolve GnsRtRecommendationRequest with 1 alert'() {
@@ -70,6 +74,7 @@ class GnsRtRecommendationUseCaseImplSpec extends Specification {
             r -> assertThat(r.getSilent8Response().getAlerts()).containsExactly(mappedAlert))
         .verifyComplete()
 
+    1 * trafficManager.activateRtSemaphore()
     1 * rawAlertService.store(_, fixtures.alerts)
     1 * batchInfoService.store(_, _ as BatchSource, fixtures.alerts.size())
     1 * registrationFacade.registerSolvingAlerts(

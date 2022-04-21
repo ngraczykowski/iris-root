@@ -9,6 +9,7 @@ import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertIdWithDetails;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertInFlightService;
 import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService;
+import com.silenteight.scb.ingest.adapter.incomming.common.trafficmanagement.TrafficManager;
 import com.silenteight.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator;
 import com.silenteight.scb.ingest.domain.model.BatchSource;
 import com.silenteight.scb.ingest.domain.model.BatchStatus;
@@ -33,10 +34,16 @@ class AlertProcessor {
   private final AlertCompositeCollectionReader alertCompositeCollectionReader;
   private final AlertHandler alertHandler;
   private final BatchInfoService batchInfoService;
+  private final TrafficManager trafficManager;
 
   @Scheduled(fixedDelayString = "${silenteight.scb-bridge.alert-processor.fixed-delay}",
       initialDelayString = "${silenteight.scb-bridge.alert-processor.initial-delay}")
   void process() {
+    if (trafficManager.holdPeriodicAlertProcessing()) {
+      log.trace("Alert processor on hold");
+      return;
+    }
+
     var alertIds = alertInFlightService.readChunk();
     if (alertIds.isEmpty()) {
       return;
