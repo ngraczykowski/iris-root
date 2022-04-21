@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.data.api.v1.SimulationDataIndexRequest;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
-import com.silenteight.warehouse.test.client.gateway.SimulationIndexClientGateway;
+import com.silenteight.warehouse.test.client.gateway.SimulationV1IndexClientGateway;
 import com.silenteight.warehouse.test.client.listener.sim.IndexedSimEventListener;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -47,7 +47,7 @@ class SimulationIT {
   private IndexedSimEventListener indexedSimEventListener;
 
   @Autowired
-  private SimulationIndexClientGateway simulationIndexClientGateway;
+  private SimulationV1IndexClientGateway simulationV1IndexClientGateway;
 
   @BeforeEach
   void init() {
@@ -55,7 +55,7 @@ class SimulationIT {
   }
 
   @Test
-  void shouldReturnConfirmationWhenSimulationDataIndexRequested() {
+  void shouldReturnConfirmationWhenSimulationDataIndexV1Requested() {
     String requestId = UUID.randomUUID().toString();
     SimulationDataIndexRequest request = SimulationDataIndexRequest.newBuilder()
         .setRequestId(requestId)
@@ -63,7 +63,7 @@ class SimulationIT {
         .addAllAlerts(of(ALERT_SIM_1))
         .build();
 
-    simulationIndexClientGateway.indexRequest(request);
+    simulationV1IndexClientGateway.indexRequest(request);
 
     await()
         .atMost(TIMEOUT, SECONDS)

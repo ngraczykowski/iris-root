@@ -8,7 +8,7 @@ import com.silenteight.warehouse.report.statistics.simulation.dto.SimulationStat
 import com.silenteight.warehouse.report.statistics.simulation.dto.SimulationStatisticsDto.EffectivenessDto;
 import com.silenteight.warehouse.report.statistics.simulation.dto.SimulationStatisticsDto.EfficiencyDto;
 import com.silenteight.warehouse.report.statistics.simulation.query.StatisticsQuery;
-import com.silenteight.warehouse.simulation.processing.SimulationAlertIndexUseCase;
+import com.silenteight.warehouse.simulation.processing.SimulationAlertV1UseCase;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ class SimulationStatisticsIT {
   private PersistenceService persistenceService;
 
   @Autowired
-  private SimulationAlertIndexUseCase simulationAlertIndexUseCase;
+  private SimulationAlertV1UseCase simulationAlertV1UseCase;
 
   @Test
   void shouldCountStatistics() {
@@ -47,7 +47,7 @@ class SimulationStatisticsIT {
     persistenceService.insert(ALERT_1);
     persistenceService.insert(ALERT_2);
     persistenceService.insert(ALERT_3);
-    simulationAlertIndexUseCase.handle(SIM_INDEX_REQUEST_1);
+    simulationAlertV1UseCase.handle(SIM_INDEX_REQUEST_1);
 
     // when
     SimulationStatisticsDto statistics = statisticsQuery.getStatistics(ANALYSIS_ID_1);

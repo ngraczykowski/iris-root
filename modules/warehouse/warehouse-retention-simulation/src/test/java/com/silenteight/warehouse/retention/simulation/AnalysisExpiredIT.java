@@ -7,7 +7,7 @@ import com.silenteight.dataretention.api.v1.AnalysisExpired;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
 import com.silenteight.warehouse.test.client.gateway.AnalysisExpiredClientGateway;
-import com.silenteight.warehouse.test.client.gateway.SimulationIndexClientGateway;
+import com.silenteight.warehouse.test.client.gateway.SimulationV1IndexClientGateway;
 import com.silenteight.warehouse.test.client.listener.sim.IndexedSimEventListener;
 
 import org.junit.jupiter.api.AfterEach;
@@ -45,7 +45,7 @@ class AnalysisExpiredIT {
   @Autowired
   private AnalysisExpiredClientGateway analysisExpiredClientGateway;
   @Autowired
-  private SimulationIndexClientGateway simulationIndexClientGateway;
+  private SimulationV1IndexClientGateway simulationV1IndexClientGateway;
   @Autowired
   private IndexedSimEventListener indexedSimEventListener;
   @Autowired
@@ -60,7 +60,7 @@ class AnalysisExpiredIT {
   @Test
   void shouldRemoveAnalysisWhenAnalysisExpiredReceived() {
     // given
-    simulationIndexClientGateway.indexRequest(SIMULATION_DATA_INDEX_REQUEST);
+    simulationV1IndexClientGateway.indexRequest(SIMULATION_DATA_INDEX_REQUEST);
     await()
         .atMost(TIMEOUT, SECONDS)
         .until(() -> this.indexedSimEventListener.hasAnyEvent());
@@ -81,7 +81,7 @@ class AnalysisExpiredIT {
   @Test
   void shouldHandleNonExistingAnalysisGracefully() {
     // given
-    simulationIndexClientGateway.indexRequest(SIMULATION_DATA_INDEX_REQUEST);
+    simulationV1IndexClientGateway.indexRequest(SIMULATION_DATA_INDEX_REQUEST);
     await()
         .atMost(TIMEOUT, SECONDS)
         .until(() -> this.indexedSimEventListener.hasAnyEvent());

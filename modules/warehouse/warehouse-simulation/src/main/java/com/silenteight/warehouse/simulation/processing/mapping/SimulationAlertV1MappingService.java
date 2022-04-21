@@ -15,7 +15,7 @@ import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @RequiredArgsConstructor
-public class SimulationAlertMappingService {
+public class SimulationAlertV1MappingService {
 
   private static final int NO_MATCH_ALERT = 0;
 
