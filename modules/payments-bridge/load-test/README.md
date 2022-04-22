@@ -24,10 +24,13 @@ Example how to test locally:
 TBT_DUMP_RESPONSE=0 TBT_REQUEST_FILES_DIR=../docs/api/hq-messages locust -H http://localhost:24602/rest/pb -u 1 -r 1
 ```
 
-To test in on preprod or dev environment you need to pass a token:
+To test in on `preprod` or `dev` environment you need to pass a token:
 
 
 ```
+# 1 with CLIENT_SECRET -> getting TOKEN 
+TBT_DUMP_RESPONSE=0 TBT_REQUEST_FILES_DIR=../docs/api/hq-messages CLIENT_SECRET=XXXXX locust -H https://sierra-dev.silent8.cloud/rest/pb -u 1 -r 1
+# 2. or with TOKEN (this ovveride CLIENT_SECRET processing)
 TBT_DUMP_RESPONSE=0 TBT_REQUEST_FILES_DIR=../docs/api/hq-messages TOKEN=eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIyaE5ZMTF4OHNETWczc09uNnVZVkl3LThxdXM2aEJ2Q2NES2pXUXYwOFNZIn0.eyJleHAiOjE2NDg4MDkwMTMsImlhdCI6MTY0ODgwODcxMywianRpIjoiNzY1M2RiMzAtMmQ3Mi00ZTVmLWE0YjAtMGM2OGU4YzhjNWZhIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLnNpbGVudDguY2xvdWQvcmVhbG1zL3NpZXJyYSIsInN1YiI6IjFhMTUxYjdlLTJjM2UtNGRmMi1iMDZhLWIzYWY5NjRhYjJiOSIsInR5cCI6IkJlYXJlciIsImF6cCI6InNpZXJyYS1kZXYtYXBpIiwiYWNyIjoiMSIsInJlc291cmNlX2FjY2VzcyI6eyJzaWVycmEtZGV2LWFwaSI6eyJyb2xlcyI6WyJ3cml0ZV9hbGVydCJdfX0sInNjb3BlIjoicHJvZmlsZSBjbWFwaSIsImNsaWVudElkIjoic2llcnJhLWRldi1hcGkiLCJjbGllbnRIb3N0IjoiMTAuMTAwLjEuMTYxIiwicm9sZXMiOlsid3JpdGVfYWxlcnQiXSwicHJlZmVycmVkX3VzZXJuYW1lIjoic2VydmljZS1hY2NvdW50LXNpZXJyYS1kZXYtYXBpIiwiY2xpZW50QWRkcmVzcyI6IjEwLjEwMC4xLjE2MSJ9.FjbJfCXl7P2O9DxXszA7yJEMiEvJv8YU1oK63j10dIeXZaXR4AYVYMp0AFRjuaRZDUkASQT42D215YrTP7oxIVCmchcJTiMNtArayWsvQuijb5UpijGWE8krxBMkVii9_Z2LJsXK1imrk5-2wsvkfcpngnTWfRUOQhH42-QiScr5HXNJ9lC_gfcEzMOmWbEGIG7wATWAa01mpKCQuOo_ZuqWNYC43-C_uNk1w0Kce63AFNISRyiS0NdopKrI-mx0vLr1lwjHwGcoLfdUhzvZNYTaOQ9BahRmv48UbElXWC71RoJBLa3seMuZ0c0zcvDBxWJECrErG4wXjBq_OrbUyQ locust -H https://sierra-dev.silent8.cloud/rest/pb -u 1 -r 1
 TBT_DUMP_RESPONSE=0 TBT_REQUEST_FILES_DIR=../docs/api/hq-messages TOKEN=XXXXX locust -H https://sierra-preprod.silent8.cloud/rest/pb -u 1 -r 1
 ```
