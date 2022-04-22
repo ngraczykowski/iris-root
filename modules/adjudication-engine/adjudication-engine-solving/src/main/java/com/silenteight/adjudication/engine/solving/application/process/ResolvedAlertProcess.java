@@ -12,6 +12,7 @@ import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectN
 import com.silenteight.adjudication.engine.solving.application.publisher.RecommendationPublisher;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolving;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 import com.silenteight.solving.api.v1.BatchSolveAlertsResponse;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -32,6 +33,7 @@ public class ResolvedAlertProcess {
   private static final String COMMENT_TEMPLATE = "alert";
 
 
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   public void generateRecommendation(long alertId, BatchSolveAlertsResponse solvedAlert) {
 
     final AlertSolving alertSolvingModel = this.alertSolvingRepository.get(alertId);
