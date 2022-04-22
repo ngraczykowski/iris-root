@@ -1,5 +1,19 @@
+includeBuild('../../platforms')
+includeBuild('../../build-logic')
+
+dependencyResolutionManagement {
+  versionCatalogs {
+    libs {
+      from(files("../../gradle/libs.versions.toml"))
+    }
+
+    doNotUseLibs {
+      from(files("../../gradle/doNotUseLibs.versions.toml"))
+    }
+  }
+}
+
 rootProject.name = 'webapp'
-gradle.ext.sepDependenciesVersion = '2.2.1'
 
 include 'sens-webapp-audit'
 include 'sens-webapp-audit-api'

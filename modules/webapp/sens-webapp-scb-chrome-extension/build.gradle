@@ -1,29 +1,28 @@
 import com.github.jengelman.gradle.plugins.shadow.transformers.PropertiesFileTransformer
 
 plugins {
-  id "java"
-  id "maven-publish"
+  id "com.silenteight.iris.build.java-library"
   id 'com.github.johnrengelman.shadow' version '5.0.0'
+  id 'maven-publish'
 }
 
 description = "SENS WebApp SCB Chrome Extension"
 
 configurations {
   pluginJar
-  compile.extendsFrom pluginJar
 }
 
 // Use pluginJar configuration to define dependencies which should be included inside plugin JAR
 dependencies {
-  implementation libraries.hibernate_validator
-  implementation libraries.spring_boot_starter_actuator
-  implementation libraries.spring_boot_starter_undertow
-  implementation libraries.spring_boot_starter_web
+  implementation libs.hibernate.validator
+  implementation libs.spring.boot.starter.actuator
+  implementation libs.spring.boot.starter.undertow
+  implementation libs.spring.boot.starter.web
 
   implementation project(":sens-webapp-common")
 
-  testImplementation libraries.rest_assured
-  testImplementation libraries.rest_assured_spring_mock_mvc
+  testImplementation libs.rest.assured
+  testImplementation libs.rest.assured.spring.mock.mvc
 }
 
 shadowJar {

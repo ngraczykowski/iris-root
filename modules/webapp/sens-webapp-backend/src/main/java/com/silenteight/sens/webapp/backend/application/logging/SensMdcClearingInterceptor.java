@@ -18,8 +18,8 @@ class SensMdcClearingInterceptor extends HandlerInterceptorAdapter {
 
   @Override
   public void postHandle(
-      HttpServletRequest request, 
-      HttpServletResponse response, 
+      HttpServletRequest request,
+      HttpServletResponse response,
       Object handler,
       ModelAndView modelAndView) {
     log.trace(INTERNAL, "Clearing MDC after request");

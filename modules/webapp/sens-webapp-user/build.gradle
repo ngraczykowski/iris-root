@@ -1,18 +1,8 @@
 plugins {
-  id "java"
-  id "maven-publish"
+  id "com.silenteight.iris.build.java-library"
 }
 
 description = "SENS WebApp User"
-
-configurations {
-  implementation.extendsFrom starterSpring
-
-  implementation.extendsFrom starterDatabase
-  runtimeOnly.extendsFrom starterDatabaseRuntime
-
-  testImplementation.extendsFrom starterDataJpaTest
-}
 
 dependencies {
   implementation project(":sens-webapp-audit-api")
@@ -21,13 +11,13 @@ dependencies {
   implementation project(":sens-webapp-report")
   implementation project(":sens-webapp-role")
 
-  implementation libraries.silenteight_audit_bs
-  implementation libraries.silenteight_sep_usermanagement_api
+  implementation libs.guava
+  implementation libs.silenteight.audit.bs
+  implementation libs.silenteight.sep.usermanagement.api
 
-  implementation libraries.vavr
+  implementation doNotUseLibs.vavr
 
   testImplementation project(":sens-webapp-db-changelog")
-  testImplementation libraries.rest_assured_spring_mock_mvc
-  testImplementation libraries.spring_security_test
+  testImplementation libs.rest.assured.spring.mock.mvc
+  testImplementation libs.spring.security.test
 }
-

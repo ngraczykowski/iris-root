@@ -18,6 +18,8 @@ silenteight-filestorage-api = "1.3.0"
 silenteight-filestorage-minio = "1.6.0"
 silenteight-sep-auth = "1.22.0"
 silenteight-sep-base = "1.12.2"
+silenteight-sep-sermanagement-api = "1.16.0"
+silenteight-sep-sermanagement-keycloak = "1.35.0"
 warehouse-protocol = "2.3.0"
 
 #-----------------------------------
@@ -103,6 +105,8 @@ silenteight-sep-auth = { group = "com.silenteight.sep.auth", name = "sep-auth", 
 silenteight-sep-base-aspects = { group = "com.silenteight.sep.base", name = "sep-base-aspects", version.ref = "silenteight-sep-base" }
 silenteight-sep-base-common = { group = "com.silenteight.sep.base", name = "sep-base-common", version.ref = "silenteight-sep-base" }
 silenteight-sep-base-testing = { group = "com.silenteight.sep.base", name = "sep-base-testing", version.ref = "silenteight-sep-base" }
+silenteight-sep-usermanagement-api = { group = "com.silenteight.sep.usermanagement", name = "sep-usermanagement-api", version.ref = "silenteight-sep-sermanagement-api" }
+silenteight-sep-usermanagement-keycloak = { group = "com.silenteight.sep.usermanagement", name = "sep-usermanagement-keycloak", version.ref = "silenteight-sep-sermanagement-keycloak" }
 silenteight-serp-protocol-agent = { group = "com.silenteight.serp.protocol", name = "serp-protocol-agent", version.ref = "serp-protocol" }
 silenteight-serp-protocol-base = { group = "com.silenteight.serp.protocol", name = "serp-protocol-base", version.ref = "serp-protocol" }
 silenteight-serp-protocol-ns = { group = "com.silenteight.serp.protocol", name = "serp-protocol-ns", version.ref = "serp-protocol" }
@@ -347,6 +351,7 @@ spock-spring = { group = "org.spockframework", name = "spock-spring" }
 test-containers = { group = "org.testcontainers", name = "testcontainers" }
 test-containers-elasticsearch = { group = "org.testcontainers", name = "elasticsearch" }
 test-containers-junit-jupiter = { group = "org.testcontainers", name = "junit-jupiter" }
+test-containers-oracle-xe = { group = "org.testcontainers", name = "oracle-xe" }
 test-containers-postgresql = { group = "org.testcontainers", name = "postgresql" }
 test-containers-spock = { group = "org.testcontainers", name = "spock" }
 test-greenmail = { group = "com.icegreen", name = "greenmail-junit5", version = "1.6.1" }

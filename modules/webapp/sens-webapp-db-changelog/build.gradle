@@ -1,10 +1,9 @@
 plugins {
-  id "java"
-  id "maven-publish"
+  id "com.silenteight.iris.build.java-library"
 }
 
 description = "SENS WebApp DB Changelog"
 
 dependencies {
-  implementation libraries.liquibase_sessionlock
+  implementation libs.liquibase.sessionlock
 }

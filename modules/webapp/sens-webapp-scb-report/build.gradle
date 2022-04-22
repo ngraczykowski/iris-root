@@ -1,34 +1,33 @@
 import com.github.jengelman.gradle.plugins.shadow.transformers.PropertiesFileTransformer
 
 plugins {
-  id "java"
-  id "maven-publish"
+  id "com.silenteight.iris.build.java-library"
   id 'com.github.johnrengelman.shadow' version '5.0.0'
+  id 'maven-publish'
 }
 
 description = "SENS WebApp SCB Report"
 
 configurations {
   pluginJar
-  compile.extendsFrom pluginJar
 }
 
 // Use pluginJar configuration to define dependencies which should be included inside plugin JAR
 dependencies {
-  implementation libraries.silenteight_sep_usermanagement_api
-  implementation libraries.bouncycastle_bcprov
-  implementation libraries.commons_lang3
-  implementation libraries.jjwt
+  implementation libs.silenteight.sep.usermanagement.api
+  implementation libs.bouncycastle.bcprov
+  implementation libs.commons.lang3
+  implementation libs.jjwt
 
-  implementation libraries.spring_boot_starter_actuator
-  implementation libraries.spring_boot_starter_undertow
-  implementation libraries.spring_boot_starter_web
+  implementation libs.spring.boot.starter.actuator
+  implementation libs.spring.boot.starter.undertow
+  implementation libs.spring.boot.starter.web
 
-  implementation libraries.spring_security_web
-  implementation libraries.spring_security_config
-  implementation libraries.spring_security_cas
+  implementation libs.spring.security.web
+  implementation libs.spring.security.config
+  implementation libs.spring.security.cas
 
-  implementation libraries.hibernate_envers
+  implementation libs.hibernate.envers
 
   implementation project(":sens-webapp-backend")
   implementation project(":sens-webapp-common")
@@ -37,24 +36,24 @@ dependencies {
   implementation project(":sens-webapp-report")
   implementation project(":sens-webapp-user")
 
-  implementation libraries.silenteight_audit_bs
+  implementation libs.silenteight.audit.bs
 
-  implementation libraries.springdoc_ui
-  implementation libraries.springdoc_data_rest
-  implementation libraries.springdoc_security
+  implementation libs.springdoc.ui
+  implementation libs.springdoc.data.rest
+  implementation libs.springdoc.security
 
-  implementation libraries.spring_cloud_starter_consul_config
-  implementation libraries.freemarker
+  implementation libs.spring.cloud.starter.consul.config
+  implementation libs.freemarker
 
-  implementation libraries.protobuf_java_util
+  implementation libs.protobuf.java.util
 
-  implementation libraries.vavr
-  implementation libraries.cronutils
+  implementation doNotUseLibs.vavr
+  implementation libs.cronutils
 
   testImplementation project(":sens-webapp-db-changelog")
-  testImplementation libraries.silenteight_sep_base_testing
-  testImplementation libraries.rest_assured
-  testImplementation libraries.rest_assured_spring_mock_mvc
+  testImplementation libs.silenteight.sep.base.testing
+  testImplementation libs.rest.assured
+  testImplementation libs.rest.assured.spring.mock.mvc
 }
 
 shadowJar {

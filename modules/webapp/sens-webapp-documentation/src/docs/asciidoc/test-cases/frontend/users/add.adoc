@@ -22,4 +22,3 @@ include::../../templates/test-cases-table-header.adoc[]
 |You are presented with related red text message below username fields and user has not been created.
 
 include::../../templates/test-cases-table-footer.adoc[]
-

@@ -8,7 +8,7 @@ dependencyResolutionManagement {
     }
 
     // TODO(ahaczewski): Generate this based on includes.
-    //sear {
+    //iris {
     //}
   }
 }
@@ -19,4 +19,4 @@ include('app')
 
 includeBuild('governance')
 includeBuild('simulator')
-//includeBuild('webapp')
+includeBuild('webapp')

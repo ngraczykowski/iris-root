@@ -76,4 +76,3 @@ Open `Edit User Profile` dialog for the same user and add an `Admin` role and cl
 |Users list should be refreshed, and edited user should have only an `Admin` role.
 
 include::../../templates/test-cases-table-footer.adoc[]
-

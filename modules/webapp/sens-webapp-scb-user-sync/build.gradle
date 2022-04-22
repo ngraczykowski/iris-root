@@ -1,32 +1,29 @@
 import com.github.jengelman.gradle.plugins.shadow.transformers.PropertiesFileTransformer
 
 plugins {
-  id "java"
-  id "maven-publish"
+  id "com.silenteight.iris.build.java-library"
   id 'com.github.johnrengelman.shadow' version '5.0.0'
+  id 'maven-publish'
 }
 
 description = "SENS WebApp User Sync"
 
 configurations {
-  implementation.extendsFrom starterDatabase
-  runtimeOnly.extendsFrom starterDatabaseRuntime
   pluginJar
-  compile.extendsFrom pluginJar
 }
 
 //If a new dependency is required then it has be added here and in the sens-webapp-backend/build.gradle
 //or it could be included in built shadow JAR by using pluginJar configuration.
 dependencies {
-  implementation libraries.silenteight_sep_usermanagement_api
-  implementation libraries.jakarta_validation_api
+  implementation libs.silenteight.sep.usermanagement.api
+  implementation libs.jakarta.validation.api
 
-  implementation libraries.spring_boot_autoconfigure
-  implementation libraries.spring_boot_starter_undertow
+  implementation libs.spring.boot.autoconfigure
+  implementation libs.spring.boot.starter.undertow
 
-  implementation libraries.spring_security_web
-  implementation libraries.spring_security_config
-  implementation libraries.spring_security_cas
+  implementation libs.spring.security.web
+  implementation libs.spring.security.config
+  implementation libs.spring.security.cas
 
   implementation project(":sens-webapp-audit-api")
   implementation project(":sens-webapp-backend")
@@ -34,13 +31,13 @@ dependencies {
   implementation project(":sens-webapp-logging")
   implementation project(":sens-webapp-user")
 
-  implementation libraries.springdoc_security
+  implementation libs.springdoc.security
 
-  implementation libraries.oracle
+  implementation libs.oracle
 
-  implementation libraries.vavr
+  implementation doNotUseLibs.vavr
 
-  testImplementation libraries.rest_assured_spring_mock_mvc
+  testImplementation libs.rest.assured.spring.mock.mvc
 }
 
 shadowJar {

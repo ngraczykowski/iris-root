@@ -1,12 +1,11 @@
 plugins {
-  id 'java-library'
-  id "maven-publish"
+  id "com.silenteight.iris.build.java-library"
 }
 
 description = "SENS WebApp Logging"
 
 dependencies {
-  implementation libraries.logback_classic
-  implementation libraries.streamex
-  implementation libraries.commons_lang3
+  implementation libs.logback.classic
+  implementation doNotUseLibs.streamex
+  implementation libs.commons.lang3
 }

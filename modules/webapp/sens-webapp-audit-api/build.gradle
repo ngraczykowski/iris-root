@@ -1,10 +1,9 @@
 plugins {
-  id "java-library"
-  id "maven-publish"
+  id "com.silenteight.iris.build.java-library"
 }
 
 description = "SENS WebApp Audit API"
 
 dependencies {
-  api libraries.spring_security_core
+  api libs.spring.security.core
 }

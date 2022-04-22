@@ -1,20 +1,15 @@
 plugins {
-  id "java"
-  id "maven-publish"
+  id "com.silenteight.iris.build.java-library"
 }
 
 description = "SENS WebApp SSO"
-
-configurations {
-  implementation.extendsFrom starterSpring
-}
 
 dependencies {
   implementation project(":sens-webapp-audit-api")
   implementation project(":sens-webapp-common")
   implementation project(":sens-webapp-logging")
-  implementation libraries.silenteight_sep_usermanagement_api
+  implementation libs.silenteight.sep.usermanagement.api
 
-  testImplementation libraries.rest_assured_spring_mock_mvc
-  testImplementation libraries.spring_security_test
+  testImplementation libs.rest.assured.spring.mock.mvc
+  testImplementation libs.spring.security.test
 }

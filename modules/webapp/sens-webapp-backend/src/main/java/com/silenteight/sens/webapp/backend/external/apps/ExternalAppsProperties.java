@@ -15,5 +15,3 @@ class ExternalAppsProperties {
 
   private final String reportingUrl;
 }
-
-

@@ -82,4 +82,3 @@ spec:
         - name: "logback-config"
           configMap:
             name: {{ .Values.name }}-logback-configmap
-

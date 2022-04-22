@@ -45,9 +45,7 @@ public class RemoveUserUseCase {
     userRemover.remove(username);
     auditTracer.save(
         new UserRemovedEvent(
-            username, 
-            RemoveUserCommand.class.getName(),
-            new RemovedUserDetails(command, roles)));
+            username, RemoveUserCommand.class.getName(), new RemovedUserDetails(command, roles)));
   }
 
   private void verifyOrigin(String username, String expectedOrigin) {

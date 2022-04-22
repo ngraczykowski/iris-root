@@ -1,6 +1,5 @@
 plugins {
   id "base"
-  id "maven-publish"
   id 'com.silenteight.gradle.asciidoctor' version '1.7.0'
 }
 

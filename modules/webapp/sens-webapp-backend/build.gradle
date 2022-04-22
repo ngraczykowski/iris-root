@@ -1,24 +1,9 @@
 plugins {
-  id "java"
-  id "io.freefair.aspectj.post-compile-weaving"
-  id "maven-publish"
-  id "org.springframework.boot"
   id "com.google.cloud.tools.jib"
+  id "com.silenteight.iris.build.spring-boot-application"
 }
 
 description = "SENS WebApp Backend"
-
-configurations {
-  implementation.extendsFrom starterSpringApp
-  implementation.extendsFrom starterJackson
-
-  implementation.extendsFrom starterDatabase
-  runtimeOnly.extendsFrom starterDatabaseRuntime
-
-  implementation.extendsFrom starterGrpcClient
-
-  testImplementation.extendsFrom starterDataJpaTest
-}
 
 dependencies {
   implementation project(":sens-webapp-audit")
@@ -34,50 +19,64 @@ dependencies {
   implementation project(":sens-webapp-sso")
   implementation project(":sens-webapp-user")
 
-  implementation libraries.silenteight_commons_app
-  implementation libraries.silenteight_sep_usermanagement_api
-  implementation libraries.silenteight_sep_usermanagement_keycloak
+  implementation libs.silenteight.commons.app
+  implementation libs.silenteight.commons.core
+  implementation libs.silenteight.sep.auth
+  implementation libs.silenteight.sep.usermanagement.api
+  implementation libs.silenteight.sep.usermanagement.keycloak
 
-  implementation libraries.bouncycastle_bcprov
-  implementation libraries.commons_lang3
-  implementation libraries.jjwt
+  implementation libs.bouncycastle.bcprov
+  implementation libs.commons.lang3
+  implementation libs.jjwt
 
-  implementation libraries.hibernate_envers
-  implementation libraries.hibernate_validator
+  implementation libs.hibernate.envers
+  implementation libs.hibernate.validator
 
-  implementation libraries.spring_boot_starter_actuator
-  implementation libraries.spring_boot_starter_undertow
-  implementation libraries.spring_boot_starter_web
+  implementation libs.spring.boot.starter.actuator
+  implementation libs.spring.boot.starter.undertow
+  implementation libs.spring.boot.starter.web
 
-  implementation libraries.spring_security_web
-  implementation libraries.spring_security_config
-  implementation libraries.spring_security_cas
+  implementation libs.spring.data.jpa
 
-  implementation libraries.springdoc_ui
-  implementation libraries.springdoc_data_rest
-  implementation libraries.springdoc_security
+  implementation libs.spring.security.web
+  implementation libs.spring.security.config
+  implementation libs.spring.security.cas
 
-  implementation libraries.spring_cloud_consul_discovery
-  implementation libraries.spring_cloud_starter_consul_config
-  implementation libraries.freemarker
+  implementation libs.springdoc.ui
+  implementation libs.springdoc.data.rest
+  implementation libs.springdoc.security
 
-  implementation libraries.protobuf_java_util
+  implementation libs.spring.cloud.consul.discovery
+  implementation libs.spring.cloud.starter.consul.config
+  implementation libs.freemarker
+
+  implementation libs.protobuf.java.util
+
+  implementation libs.grpc.protobuf
+  implementation libs.grpc.stub
+  implementation libs.grpc.client.spring.boot.starter
 
   // Oracle is used by plugins to allow connecting to Oracle DB
-  implementation libraries.oracle
+  implementation libs.oracle
 
-  implementation libraries.vavr
-  implementation libraries.cronutils
+  implementation libs.hikari.cp
+  runtimeOnly libs.liquibase.core
+  runtimeOnly libs.liquibase.sessionlock
+
+  implementation doNotUseLibs.vavr
+  implementation libs.cronutils
 
   //Sentry
-  runtimeOnly libraries.sentry_spring_boot_starter
+  runtimeOnly libs.sentry.spring.boot.starter
   //having this at runtime ensure sending all ERROR level logs to Sentry
-  runtimeOnly libraries.sentry_logback
+  runtimeOnly libs.sentry.logback
+
+  runtimeOnly libs.postgresql
 
   testImplementation project(":sens-webapp-db-changelog")
-  testImplementation libraries.rest_assured
-  testImplementation libraries.rest_assured_spring_mock_mvc
-  testImplementation libraries.spring_security_test
+  testImplementation libs.rest.assured
+  testImplementation libs.rest.assured.spring.mock.mvc
+  testImplementation libs.spring.security.test
 }
 
 jar {

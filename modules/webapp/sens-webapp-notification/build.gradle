@@ -1,6 +1,5 @@
 plugins {
-  id "java"
-  id "maven-publish"
+  id "com.silenteight.iris.build.java-library"
 }
 
 description = "SENS WebApp Notification"
@@ -8,4 +7,3 @@ description = "SENS WebApp Notification"
 dependencies {
   implementation project(":sens-webapp-common")
 }
-
