@@ -1,0 +1,6 @@
+branches:
+  master:
+    - dev
+    - lima
+  release-1.10:
+    - mike
