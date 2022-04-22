@@ -12,7 +12,7 @@ gradleBuild(
     additionalParams: [
       extendedChoice(
             name: 'environments',
-            value: 'dev,lima,test',
+            value: 'dev,lima,test,mike,foxtrot',
             defaultValue: '',
             description: 'Environments to deploy to on Nomad',
             multiSelectDelimiter: ',',
