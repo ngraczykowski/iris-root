@@ -2,11 +2,13 @@ package com.silenteight.fab.dataprep.domain.model;
 
 import lombok.Builder;
 import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 
 import org.apache.commons.lang3.StringUtils;
 
 @Value
 @Builder
+@Jacksonized
 public class ParsedMessageData {
 
   public enum CustomerType {

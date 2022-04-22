@@ -1,5 +1,7 @@
 package com.silenteight.fab.dataprep.domain;
 
+import com.silenteight.fab.dataprep.domain.tokenizer.MessageDataTokenizer;
+
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.ParseContext;
 import com.jayway.jsonpath.spi.json.JacksonJsonNodeJsonProvider;

@@ -74,6 +74,7 @@ libraries.sentry_spring_boot_starter = [group: 'io.sentry', name: 'sentry-spring
 
 libraries.vavr = [group: 'io.vavr', name: 'vavr', version: '0.10.4']
 libraries.json_path = [group: 'com.jayway.jsonpath', name: 'json-path', version: '2.7.0']
+libraries.jackson_csv = [group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-csv', version: '2.13.2']
 
 dependencies {
   implementation platform("com.silenteight.sep:sep-dependencies:$sepDependenciesVersion")

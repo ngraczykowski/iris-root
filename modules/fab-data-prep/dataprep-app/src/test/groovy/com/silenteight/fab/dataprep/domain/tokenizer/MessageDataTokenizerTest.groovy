@@ -1,12 +1,17 @@
-package com.silenteight.fab.dataprep.domain
+package com.silenteight.fab.dataprep.domain.tokenizer
 
+import groovy.util.logging.Slf4j
 import spock.lang.Specification
 
+@Slf4j
 class MessageDataTokenizerTest extends Specification {
+
+  def tokenizer = new MessageDataTokenizer()
 
   def "should correct parse payload #payload"() {
     when:
-    def result = new MessageDataTokenizer().convert(payload)
+    def result = tokenizer.convert(payload)
+
     then:
     result.getSalutation() == expected[0]
     result.getName() == expected[1]
@@ -45,12 +50,29 @@ class MessageDataTokenizerTest extends Specification {
 
   def "should throws exception when can't payload #payload"() {
     when:
-    new MessageDataTokenizer().convert(payload)
+    tokenizer.convert(payload)
+
     then:
     thrown(IllegalArgumentException)
 
     where:
-    payload << ["", ";".repeat(MessageDataTokenizer.NUMBER_OF_SEGMENTS - 2)]
+    payload << ["", ";".repeat(MessageDataTokenizer.NUMBER_OF_SEGMENTS - 3)]
   }
 
+  def 'payload without shortName should be accepted'() {
+    given:
+    def payload = 'Mr.;ISLAMIC MOVEMENT OF UZBEKISTAN CAAO;Individial;01/01/1970;;;;FGB SCRAMBLE NAME-2 | FGB SCRAMBLE OVERSEA.ADDRESS;  | FGB SCRAMBLE STREET ; FGB SCRAMBLE COUNTRY;;IN;IN;AE;;RETAIL;;G1010101;784198148613635;;;T24CONV;1-4LFY;7110041;;7110041;20/04/2022'
+
+    when:
+    def result = tokenizer.convert(payload)
+    log.info("$result")
+
+    then:
+    result.getSalutation() == 'Mr.'
+    result.getCustomerType() == 'Individial'
+    result.getCustomerSegment() == 'RETAIL'
+    result.getDob() == '01/01/1970'
+    result.getLastUpdateTime() == '20/04/2022'
+    result.getCountry() == 'IN'
+  }
 }

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.fab.dataprep.domain.model.ParsedAlertMessage;
 import com.silenteight.fab.dataprep.domain.model.ParsedAlertMessage.Hit;
 import com.silenteight.fab.dataprep.domain.model.ParsedMessageData;
+import com.silenteight.fab.dataprep.domain.tokenizer.MessageDataTokenizer;
 import com.silenteight.proto.fab.api.v1.AlertMessageDetails;
 import com.silenteight.proto.fab.api.v1.AlertMessageStored;
 
