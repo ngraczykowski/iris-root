@@ -226,8 +226,9 @@ warehouse.reports.v2:
                wm.name                                                   AS "S8 Match ID"
         FROM warehouse_alert wa
                  JOIN warehouse_match wm ON wa.id = wm.alert_id
-                 JOIN warehouse_simulation_alert wsa ON wa.name = wsa.name
-        WHERE wsa.analysis_name = 'analysis/${analysisId}'
+                 FULL JOIN warehouse_simulation_alert wsa ON wa.name = wsa.name
+        WHERE wsa.analysis_name = 'analysis/${analysisId}' 
+                 AND (position(wa.name in wm.name)>0 or wm.name is null)
     - name: ACCURACY
       type: production
       description: Accuracy (Alert Level)
