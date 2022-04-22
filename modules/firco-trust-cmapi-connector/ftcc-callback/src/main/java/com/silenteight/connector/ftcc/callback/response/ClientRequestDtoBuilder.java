@@ -10,6 +10,8 @@ import com.silenteight.connector.ftcc.request.details.dto.MessageDetailsDto;
 import com.silenteight.recommendation.api.library.v1.RecommendationOut;
 import com.silenteight.recommendation.api.library.v1.RecommendationsOut;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Map;
 import java.util.UUID;
 
@@ -18,6 +20,7 @@ import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @RequiredArgsConstructor
+@Component
 public class ClientRequestDtoBuilder {
 
   private static final String ERROR_GENERATING_CLIENT_REQUEST =
