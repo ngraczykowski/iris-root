@@ -3,6 +3,7 @@ package com.silenteight.fab.dataprep
 import com.silenteight.data.api.v2.Alert
 import com.silenteight.data.api.v2.ProductionDataIndexRequest
 import com.silenteight.fab.dataprep.DataPrepConfig.CoreBridgeListener
+import com.silenteight.fab.dataprep.DataPrepConfig.DlqListener
 import com.silenteight.fab.dataprep.DataPrepConfig.WarehouseListener
 import com.silenteight.fab.dataprep.adapter.incoming.AlertDetailsFacade
 import com.silenteight.fab.dataprep.domain.AlertService
@@ -43,6 +44,9 @@ class DataPrepIT extends BaseSpecificationIT {
 
   @Autowired
   CoreBridgeListener coreBridgeListener
+
+  @Autowired
+  DlqListener dlqListener
 
   @Autowired
   WarehouseListener warehouseListener
@@ -178,6 +182,8 @@ class DataPrepIT extends BaseSpecificationIT {
       assert msg.getFeedingStatus() == FeedingStatus.FAILURE
       assert msg.getAlertName() == ALERT_NAME
       assert msg.getBatchId() == BATCH_NAME
+      AlertMessageStored msgDlq = dlqListener.getMessages().last()
+      assert msgDlq == fedMessage
     }
   }
 

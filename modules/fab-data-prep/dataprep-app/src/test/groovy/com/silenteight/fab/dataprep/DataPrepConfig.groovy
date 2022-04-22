@@ -2,6 +2,7 @@ package com.silenteight.fab.dataprep
 
 import com.silenteight.data.api.v2.ProductionDataIndexRequest
 import com.silenteight.fab.dataprep.infrastructure.amqp.AmqpFeedingOutgoingMatchFeatureInputSetFedProperties
+import com.silenteight.proto.fab.api.v1.AlertMessageStored
 import com.silenteight.proto.registration.api.v1.MessageAlertMatchesFeatureInputFed
 
 import groovy.util.logging.Slf4j
@@ -19,6 +20,8 @@ class DataPrepConfig {
 
   static final String MATCH_FEATURE_INPUT_FED_QUEUE = 'match-feature-input-fed'
   static final String WAREHOUSE_QUEUE = 'warehouse-input-fed'
+  static final String DLQ_NAME_PROPERTY =
+      '${amqp.dataprep.incoming.alert-message.dead-letter-queue-name}'
 
   @Bean
   Queue testMatchFeatureInputFedQueue() {
@@ -63,6 +66,11 @@ class DataPrepConfig {
     new WarehouseListener()
   }
 
+  @Bean
+  DlqListener dlqListener() {
+    new DlqListener()
+  }
+
   @Slf4j
   class CoreBridgeListener {
 
@@ -87,6 +95,22 @@ class DataPrepConfig {
     @RabbitListener(queues = WAREHOUSE_QUEUE)
     void subscribe(Message msg) {
       ProductionDataIndexRequest message = ProductionDataIndexRequest.parseFrom(msg.getBody())
+      log.info("Received new message $message")
+      messages << message
+    }
+
+    def clear() {
+      messages.clear()
+    }
+  }
+
+  @Slf4j
+  class DlqListener {
+
+    List<AlertMessageStored> messages = []
+
+    @RabbitListener(queues = DLQ_NAME_PROPERTY)
+    void subscribe(AlertMessageStored message) {
       log.info("Received new message $message")
       messages << message
     }

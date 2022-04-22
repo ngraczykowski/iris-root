@@ -82,8 +82,44 @@ class DataPrepFacadeTest extends Specification {
         [REGISTERED_ALERT]
     1 * feedingFacade.etlAndFeedUds(REGISTERED_ALERT)
     0 * feedingFacade._
+    1 * alertService.getAlertItem(DISCRIMINATOR) >> Optional.empty()
     1 * alertService.save(DISCRIMINATOR, ALERT_NAME, [MATCH_NAME])
     1 * alertService.setAlertState(DISCRIMINATOR, AlertState.IN_UDS)
+    0 * learningService._
+  }
+
+  def 'solving, registered but not in UDS should be retried'() {
+    given:
+    def message = alertMessageStoredBuilder.build()
+
+    when:
+    underTest.processAlert(message)
+
+    then:
+    1 * alertDetailsFacade.getAlertDetails(message) >> ALERT_MESSAGES_DETAILS_RESPONSE
+    1 * alertParser.parse(message, ALERT_MESSAGE_DETAILS) >> PARSED_ALERT_MESSAGE
+    0 * registrationService._
+    1 * feedingFacade.etlAndFeedUds(REGISTERED_ALERT)
+    1 * alertService.getAlertItem(DISCRIMINATOR) >> Optional.of(ALERT_ITEM)
+    1 * alertService.setAlertState(DISCRIMINATOR, AlertState.IN_UDS)
+    0 * alertService._
+    0 * learningService._
+  }
+
+  def 'solving and already registered data should not be sent to UDS'() {
+    given:
+    def message = alertMessageStoredBuilder.build()
+
+    when:
+    underTest.processAlert(message)
+
+    then:
+    1 * alertDetailsFacade.getAlertDetails(message) >> ALERT_MESSAGES_DETAILS_RESPONSE
+    1 * alertParser.parse(message, ALERT_MESSAGE_DETAILS) >> PARSED_ALERT_MESSAGE
+    0 * registrationService._
+    0 * feedingFacade._
+    1 * alertService.getAlertItem(DISCRIMINATOR) >> Optional.of(ALERT_ITEM_IN_UDS)
+    0 * alertService._
     0 * learningService._
   }
 

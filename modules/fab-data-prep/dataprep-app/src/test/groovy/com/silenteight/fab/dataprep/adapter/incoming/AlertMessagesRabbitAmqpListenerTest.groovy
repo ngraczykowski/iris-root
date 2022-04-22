@@ -94,12 +94,12 @@ class AlertMessagesRabbitAmqpListenerTest extends BaseSpecificationIT {
     }
   }
 
-  def 'solvingMessage should not be retried'() {
+  def 'solvingMessage should be retried'() {
     given:
     def conditions = new PollingConditions(timeout: 5, initialDelay: 0.2, factor: 1.25)
 
     def counter = 0
-    1 * dataPrepFacade.processAlert(_) >> {
+    3 * dataPrepFacade.processAlert(_) >> {
       counter++
       throw new RuntimeException()
     }
@@ -114,7 +114,7 @@ class AlertMessagesRabbitAmqpListenerTest extends BaseSpecificationIT {
 
     then: 'message is retried'
     conditions.eventually {
-      assert counter == 1
+      assert counter == 3
       assert failedCalled
     }
   }

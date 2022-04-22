@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.fab.dataprep.domain.DataPrepFacade;
-import com.silenteight.fab.dataprep.domain.ex.DataPrepException;
 import com.silenteight.proto.fab.api.v1.AlertMessageStored;
-import com.silenteight.proto.fab.api.v1.AlertMessageStored.State;
 
 import com.google.common.base.Stopwatch;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -49,12 +47,11 @@ class AlertMessagesRabbitAmqpListener {
 
     Try.run(() -> dataPrepFacade.processAlert(message))
         .onFailure(e -> {
-          if (isLastTry || message.getState() == State.NEW) {
+          if (isLastTry) {
             dataPrepFacade.processAlertFailed(message);
             log.error("Failed to process message, error occurred", e);
           } else {
             log.error("Failed to process message, error occurred, retrying...", e);
-            throw new DataPrepException(e);
           }
         })
         .andFinally(() -> {
@@ -63,7 +60,8 @@ class AlertMessagesRabbitAmqpListener {
               "Batch: {}, alert message: {} handled in {} millis", message.getBatchName(),
               message.getMessageName(), alertMessageHandlingDuration);
           MDC.remove(BATCH_NAME);
-        });
+        })
+        .get();
   }
 
   private boolean isLastTry(Message msg) {

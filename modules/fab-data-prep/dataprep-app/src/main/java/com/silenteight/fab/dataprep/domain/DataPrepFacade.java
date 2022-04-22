@@ -38,12 +38,8 @@ public class DataPrepFacade {
   private final SolvingUseCase solvingUseCase;
 
   public void processAlert(AlertMessageStored message) {
-    Try.of(() -> getExtractedAlerts(message))
-        .onSuccess(extractedAlerts -> processAlert(extractedAlerts, message.getState()))
-        .onFailure(e -> {
-          log.warn("Unable to parse message", e);
-          failedToParseMessage(message);
-        });
+    Map<String, ParsedAlertMessage> extractedAlerts = getExtractedAlerts(message);
+    processAlert(extractedAlerts, message.getState());
   }
 
   private void processAlert(Map<String, ParsedAlertMessage> extractedAlerts, State state) {
@@ -67,17 +63,20 @@ public class DataPrepFacade {
 
   public void processAlertFailed(AlertMessageStored message) {
     log.debug("Process alert failed: {}", message);
-    Map<String, ParsedAlertMessage> extractedAlerts = getExtractedAlerts(message);
-
-    extractedAlerts.forEach((messageName, value) -> {
-      var discriminator = value.getDiscriminator();
-      var batchName = value.getBatchName();
-      alertService.getAlertItem(discriminator)
-          .map(AlertItem::getAlertName)
-          .map(List::of)
-          .orElseGet(() -> registerFailedAlert(messageName, batchName, discriminator))
-          .forEach(alertName -> feedingFacade.notifyAboutError(batchName, alertName));
-    });
+    Try.of(() -> getExtractedAlerts(message))
+        .onSuccess(extractedAlerts -> extractedAlerts.forEach((messageName, value) -> {
+          var discriminator = value.getDiscriminator();
+          var batchName = value.getBatchName();
+          alertService.getAlertItem(discriminator)
+              .map(AlertItem::getAlertName)
+              .map(List::of)
+              .orElseGet(() -> registerFailedAlert(messageName, batchName, discriminator))
+              .forEach(alertName -> feedingFacade.notifyAboutError(batchName, alertName));
+        }))
+        .onFailure(e -> {
+          log.warn("Unable to parse message", e);
+          failedToParseMessage(message);
+        });
   }
 
   private List<String> registerFailedAlert(

@@ -1,33 +1,35 @@
 package com.silenteight.fab.dataprep.domain;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.fab.dataprep.domain.ex.DataPrepException;
 import com.silenteight.fab.dataprep.domain.model.*;
-import com.silenteight.fab.dataprep.domain.model.RegisteredAlert.Match;
 
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static com.silenteight.fab.dataprep.domain.RegistrationConverter.convert;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
-@RequiredArgsConstructor
 @Service
-class LearningUseCase {
+class LearningUseCase extends BaseUseCase {
 
   private static final String ACCESS_PERMISSION_TAG = "AE";
 
-  private final AlertService alertService;
   private final LearningService learningService;
   private final FeedingFacade feedingFacade;
-  private final RegistrationService registrationService;
+
+  public LearningUseCase(
+      AlertService alertService,
+      RegistrationService registrationService,
+      FeedingFacade feedingFacade,
+      LearningService learningService) {
+    super(alertService, registrationService);
+    this.feedingFacade = feedingFacade;
+    this.learningService = learningService;
+  }
 
   void handle(LearningRequest learningRequest) {
     registerLearningAlert(
@@ -53,42 +55,13 @@ class LearningUseCase {
   }
 
   private void registerNewLearningAlerts(Map<String, ParsedAlertMessage> extractedAlerts) {
-    List<RegisteredAlert> registeredNotInUdsAlerts = new LinkedList<>();
-    Map<String, ParsedAlertMessage> alertsToRegister = new HashMap<>();
-
-    extractedAlerts.forEach((messageName, parsedAlertMessage) -> alertService
-        .getAlertItem(parsedAlertMessage.getDiscriminator())
-        .ifPresentOrElse(
-            alertItem -> {
-              if (alertItem.getState() == AlertState.REGISTERED) {
-                registeredNotInUdsAlerts.add(convert(alertItem, parsedAlertMessage));
-              }
-            },
-            () -> alertsToRegister.put(messageName, parsedAlertMessage)));
-
-    if (!alertsToRegister.isEmpty()) {
-      log.debug("Registering learning data, count: {}", alertsToRegister.size());
-      registrationService.registerAlertsAndMatches(alertsToRegister)
-          .forEach(registeredAlert -> {
-            saveAlertItem(registeredAlert);
-            registeredNotInUdsAlerts.add(registeredAlert);
-          });
-    }
+    List<RegisteredAlert> registeredNotInUdsAlerts = registerNewAlerts(extractedAlerts);
 
     registeredNotInUdsAlerts.forEach(registeredAlert -> {
       var discriminator = registeredAlert.getDiscriminator();
       feedingFacade.etlAndFeedUdsLearningData(registeredAlert);
       alertService.setAlertState(discriminator, AlertState.IN_UDS);
     });
-  }
-
-  private void saveAlertItem(RegisteredAlert registeredAlert) {
-    List<String> matchNames = registeredAlert.getMatches()
-        .stream()
-        .map(Match::getMatchName)
-        .collect(toList());
-    var discriminator = registeredAlert.getDiscriminator();
-    alertService.save(discriminator, registeredAlert.getAlertName(), matchNames);
   }
 
   private static LearningData getLearningData(
