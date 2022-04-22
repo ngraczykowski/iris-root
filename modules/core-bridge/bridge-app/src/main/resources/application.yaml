@@ -72,6 +72,8 @@ amqp:
         simulation-batch-routing-key: simulation
       notify-batch-completed:
         exchange-name: core-bridge.notify-batch-completed-exchange
+        solving-batch-routing-key: solving
+        simulation-batch-routing-key: simulation
       verify-batch-timeout:
         exchange-name: core-bridge.verify-batch-timeout-exchange
       notify-batch-timed-out:

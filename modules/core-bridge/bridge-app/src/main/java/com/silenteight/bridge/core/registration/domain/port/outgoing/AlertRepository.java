@@ -16,6 +16,8 @@ public interface AlertRepository {
 
   void updateStatusToProcessing(String batchId, List<String> alertNames);
 
+  void updateStatusToUdsFed(String batchId, List<String> alertNames);
+
   void updateStatusToError(
       String batchId, Map<String, Set<String>> errorDescriptionsWithAlertNames);
 
@@ -41,4 +43,6 @@ public interface AlertRepository {
   long countAllErroneousAlerts(String batchId);
 
   long countAllDeliveredAndErrorAlerts(String batchId);
+
+  long countAllUdsFedAndErrorAlerts(String batchId);
 }

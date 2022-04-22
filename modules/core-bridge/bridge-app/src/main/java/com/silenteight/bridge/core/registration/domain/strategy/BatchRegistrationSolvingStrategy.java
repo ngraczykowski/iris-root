@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-class BatchSolvingRegistrationStrategy implements BatchRegistrationStrategy {
+class BatchRegistrationSolvingStrategy implements BatchRegistrationStrategy {
 
   private final AnalysisService analysisService;
   private final DefaultModelService defaultModelService;

@@ -27,6 +27,6 @@ record AlertEntity(@Id long id,
   AlertEntity {}
 
   enum Status {
-    REGISTERED, PROCESSING, RECOMMENDED, ERROR, DELIVERED
+    REGISTERED, UDS_FED, PROCESSING, RECOMMENDED, ERROR, DELIVERED
   }
 }

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-class BatchSimulationRegistrationStrategy implements BatchRegistrationStrategy {
+class BatchRegistrationSimulationStrategy implements BatchRegistrationStrategy {
 
   private final BatchRepository batchRepository;
 

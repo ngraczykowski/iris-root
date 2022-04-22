@@ -3,10 +3,7 @@ package com.silenteight.bridge.core.registration.adapter.outgoing.amqp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.bridge.core.registration.domain.model.BatchCompleted;
-import com.silenteight.bridge.core.registration.domain.model.BatchDelivered;
-import com.silenteight.bridge.core.registration.domain.model.BatchError;
-import com.silenteight.bridge.core.registration.domain.model.BatchTimedOut;
+import com.silenteight.bridge.core.registration.domain.model.*;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchEventPublisher;
 import com.silenteight.bridge.core.registration.infrastructure.amqp.AmqpRegistrationOutgoingNotifyBatchCompletedProperties;
 import com.silenteight.bridge.core.registration.infrastructure.amqp.AmqpRegistrationOutgoingNotifyBatchDeliveredProperties;
@@ -41,11 +38,25 @@ class BatchEventRabbitPublisher implements BatchEventPublisher {
   }
 
   @Override
-  public void publish(BatchCompleted event) {
+  public void publish(SolvingBatchCompleted event) {
     var message = mapper.toMessageBatchCompleted(event);
 
-    log.info("Send batch completed notification for batch with id: {}", event.id());
-    rabbitTemplate.convertAndSend(batchCompletedProperties.exchangeName(), "", message);
+    log.info("Send solving batch completed notification for batch with id: {}", event.id());
+    rabbitTemplate.convertAndSend(
+        batchCompletedProperties.exchangeName(),
+        batchCompletedProperties.solvingBatchRoutingKey(),
+        message);
+  }
+
+  @Override
+  public void publish(SimulationBatchCompleted event) {
+    var message = mapper.toMessageBatchCompleted(event);
+
+    log.info("Send simulation batch completed notification for batch with id: {}", event.id());
+    rabbitTemplate.convertAndSend(
+        batchCompletedProperties.exchangeName(),
+        batchCompletedProperties.simulationBatchRoutingKey(),
+        message);
   }
 
   @Override

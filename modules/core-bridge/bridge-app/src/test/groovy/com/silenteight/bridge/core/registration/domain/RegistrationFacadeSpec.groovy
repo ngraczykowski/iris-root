@@ -2,7 +2,6 @@ package com.silenteight.bridge.core.registration.domain
 
 import com.silenteight.bridge.core.Fixtures
 import com.silenteight.bridge.core.recommendation.domain.RecommendationFixtures
-import com.silenteight.bridge.core.registration.domain.command.CompleteBatchCommand
 import com.silenteight.bridge.core.registration.domain.command.MarkAlertsAsDeliveredCommand
 import com.silenteight.bridge.core.registration.domain.command.MarkAlertsAsRecommendedCommand
 import com.silenteight.bridge.core.registration.domain.command.VerifyBatchTimeoutCommand
@@ -19,12 +18,11 @@ class RegistrationFacadeSpec extends Specification {
 
   def batchService = Mock(BatchService)
   def alertService = Mock(AlertService)
-  def alertAnalysisService = Mock(AlertAnalysisService)
+  def udsFedAlertsService = Mock(UdsFedAlertsService)
   def batchTimeoutService = Mock(BatchTimeoutService)
 
   @Subject
-  def underTest = new RegistrationFacade(
-      batchService, alertService, alertAnalysisService, batchTimeoutService)
+  def underTest = new RegistrationFacade(batchService, alertService, udsFedAlertsService, batchTimeoutService)
 
   def 'should call register batch method'() {
     given:
@@ -67,24 +65,24 @@ class RegistrationFacadeSpec extends Specification {
     response.size() == 1
   }
 
-  def 'should call add alerts to analysis'() {
+  def 'should call process UDS fed alerts'() {
     given:
-    def commands = [RegistrationFixtures.ADD_ALERT_TO_ANALYSIS_COMMAND]
+    def commands = [RegistrationFixtures.PROCESS_UDS_FED_ALERTS_COMMAND]
 
     when:
-    underTest.addAlertsToAnalysis(commands)
+    underTest.processUdsFedAlerts(commands)
 
     then:
-    1 * alertAnalysisService.addAlertsToAnalysis(commands)
+    1 * udsFedAlertsService.processUdsFedAlerts(commands)
   }
 
   def 'should complete batch if there is no pending alerts for the given batch'() {
     given:
-    def batch = RegistrationFixtures.BATCH_ID_PROJECTION
+    def batchId = RegistrationFixtures.BATCH_ID_PROJECTION
     def alertNames = ['firstAlertName', 'secondAlertName']
     def markAlertsAsRecommendedCommand = new MarkAlertsAsRecommendedCommand(
         RegistrationFixtures.ANALYSIS_NAME, alertNames, false)
-    def completeBatchCommand = new CompleteBatchCommand(RegistrationFixtures.BATCH)
+    def batch = RegistrationFixtures.BATCH
 
     when:
     underTest.markAlertsAsRecommended(markAlertsAsRecommendedCommand)
@@ -92,18 +90,18 @@ class RegistrationFacadeSpec extends Specification {
     then:
     1 * batchService.findBatchByAnalysisName(RegistrationFixtures.ANALYSIS_NAME) >>
         RegistrationFixtures.BATCH
-    1 * alertService.updateStatusToRecommended(batch.id(), alertNames)
+    1 * alertService.updateStatusToRecommended(batchId.id(), alertNames)
     1 * alertService.hasNoPendingAlerts(RegistrationFixtures.BATCH) >> true
-    1 * batchService.completeBatch(completeBatchCommand)
+    1 * batchService.completeSolvingBatch(batch)
   }
 
   def 'should complete batch if there are pending alerts for the given batch, but batch is timed out'() {
     given:
-    def batch = RegistrationFixtures.BATCH_ID_PROJECTION
+    def batchId = RegistrationFixtures.BATCH_ID_PROJECTION
     def alertNames = ['firstAlertName', 'secondAlertName']
     def markAlertsAsRecommendedCommand = new MarkAlertsAsRecommendedCommand(
         RegistrationFixtures.ANALYSIS_NAME, alertNames, true)
-    def completeBatchCommand = new CompleteBatchCommand(RegistrationFixtures.BATCH)
+    def batch = RegistrationFixtures.BATCH
 
     when:
     underTest.markAlertsAsRecommended(markAlertsAsRecommendedCommand)
@@ -111,18 +109,18 @@ class RegistrationFacadeSpec extends Specification {
     then:
     1 * batchService.findBatchByAnalysisName(RegistrationFixtures.ANALYSIS_NAME) >>
         RegistrationFixtures.BATCH
-    1 * alertService.updateStatusToRecommended(batch.id(), alertNames)
+    1 * alertService.updateStatusToRecommended(batchId.id(), alertNames)
     1 * alertService.hasNoPendingAlerts(RegistrationFixtures.BATCH) >> false
-    1 * batchService.completeBatch(completeBatchCommand)
+    1 * batchService.completeSolvingBatch(batch)
   }
 
   def 'should not complete batch if there are pending alerts for the given batch'() {
     given:
-    def batch = RegistrationFixtures.BATCH_ID_PROJECTION
+    def batchId = RegistrationFixtures.BATCH_ID_PROJECTION
     def alertNames = ['firstAlertName', 'secondAlertName']
     def markAlertsAsRecommendedCommand = new MarkAlertsAsRecommendedCommand(
         RegistrationFixtures.ANALYSIS_NAME, alertNames, false)
-    def completeBatchCommand = new CompleteBatchCommand(RegistrationFixtures.BATCH)
+    def batch = RegistrationFixtures.BATCH
 
     when:
     underTest.markAlertsAsRecommended(markAlertsAsRecommendedCommand)
@@ -130,9 +128,9 @@ class RegistrationFacadeSpec extends Specification {
     then:
     1 * batchService.findBatchByAnalysisName(RegistrationFixtures.ANALYSIS_NAME) >>
         RegistrationFixtures.BATCH
-    1 * alertService.updateStatusToRecommended(batch.id(), alertNames)
+    1 * alertService.updateStatusToRecommended(batchId.id(), alertNames)
     1 * alertService.hasNoPendingAlerts(RegistrationFixtures.BATCH) >> false
-    0 * batchService.completeBatch(completeBatchCommand)
+    0 * batchService.completeSolvingBatch(batch)
   }
 
   def 'should throw NoSuchElementException when batch not found by analysisName'() {
@@ -148,7 +146,7 @@ class RegistrationFacadeSpec extends Specification {
         {throw new NoSuchElementException()}
     0 * alertService.updateStatusToRecommended(_ as String, _ as List<String>)
     0 * alertService.hasNoPendingAlerts(_ as Batch)
-    0 * batchService.completeBatch(_ as CompleteBatchCommand)
+    0 * batchService.completeSolvingBatch(_ as Batch)
     thrown(NoSuchElementException.class)
   }
 

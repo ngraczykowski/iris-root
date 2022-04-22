@@ -51,6 +51,7 @@ class RegistrationAlertResponseMapperSpec extends Specification {
     AlertStatus.REGISTERED  | Status.SUCCESS
     AlertStatus.PROCESSING  | Status.SUCCESS
     AlertStatus.RECOMMENDED | Status.SUCCESS
+    AlertStatus.UDS_FED     | Status.SUCCESS
     AlertStatus.ERROR       | Status.FAILURE
   }
 
@@ -90,6 +91,7 @@ class RegistrationAlertResponseMapperSpec extends Specification {
     AlertStatus.REGISTERED  | Status.SUCCESS
     AlertStatus.PROCESSING  | Status.SUCCESS
     AlertStatus.RECOMMENDED | Status.SUCCESS
+    AlertStatus.UDS_FED     | Status.SUCCESS
     AlertStatus.ERROR       | Status.FAILURE
   }
 }

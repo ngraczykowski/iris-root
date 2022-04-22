@@ -5,4 +5,8 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 
 @ConstructorBinding
 @ConfigurationProperties(prefix = "amqp.registration.outgoing.notify-batch-completed")
-public record AmqpRegistrationOutgoingNotifyBatchCompletedProperties(String exchangeName) {}
+public record AmqpRegistrationOutgoingNotifyBatchCompletedProperties(
+    String exchangeName,
+    String solvingBatchRoutingKey,
+    String simulationBatchRoutingKey
+) {}

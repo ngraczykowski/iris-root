@@ -1,5 +1,7 @@
 package com.silenteight.bridge.core.registration
 
+import com.silenteight.bridge.core.registration.infrastructure.amqp.AmqpRegistrationOutgoingNotifyBatchCompletedProperties
+
 import org.springframework.amqp.core.*
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
@@ -16,10 +18,12 @@ class RecommendationsStoredFlowRabbitMqTestConfig {
 
   @Bean
   Binding testBatchCompletedBinding(
-      DirectExchange batchCompletedExchange, Queue testBatchCompletedQueue) {
+      AmqpRegistrationOutgoingNotifyBatchCompletedProperties properties,
+      DirectExchange batchCompletedExchange,
+      Queue testBatchCompletedQueue) {
     return BindingBuilder
         .bind(testBatchCompletedQueue)
         .to(batchCompletedExchange)
-        .with('')
+        .with(properties.solvingBatchRoutingKey())
   }
 }

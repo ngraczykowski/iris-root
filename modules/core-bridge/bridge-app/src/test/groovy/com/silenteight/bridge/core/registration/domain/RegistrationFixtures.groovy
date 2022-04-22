@@ -3,8 +3,8 @@ package com.silenteight.bridge.core.registration.domain
 import com.silenteight.bridge.core.Fixtures
 import com.silenteight.bridge.core.recommendation.domain.FixturesMatchMetaData
 import com.silenteight.bridge.core.registration.domain.command.*
-import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand.FedMatch
-import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand.FeedingStatus
+import com.silenteight.bridge.core.registration.domain.command.ProcessUdsFedAlertsCommand.FedMatch
+import com.silenteight.bridge.core.registration.domain.command.ProcessUdsFedAlertsCommand.FeedingStatus
 import com.silenteight.bridge.core.registration.domain.command.RegisterAlertsCommand.AlertWithMatches
 import com.silenteight.bridge.core.registration.domain.model.Batch
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
@@ -20,6 +20,7 @@ class RegistrationFixtures {
   static def METADATA = "batchMetadata"
   static def BATCH_PRIORITY = 1
   static def ERROR_DESCRIPTION = "error occurred"
+  static def IS_SIMULATION = false
 
   static def ALERT_WITH_MATCHES = [AlertWithMatches.builder().build()]
 
@@ -30,6 +31,7 @@ class RegistrationFixtures {
           .policyName(POLICY_NAME)
           .alertsCount(ALERTS_COUNT)
           .batchMetadata(METADATA)
+          .isSimulation(IS_SIMULATION)
 
   static def BATCH = BATCH_BUILDER
       .build()
@@ -54,7 +56,7 @@ class RegistrationFixtures {
   static def REGISTER_ALERTS_COMMAND = new RegisterAlertsCommand(
       Fixtures.BATCH_ID, ALERT_WITH_MATCHES)
 
-  static def ADD_ALERT_TO_ANALYSIS_COMMAND = AddAlertToAnalysisCommand.builder()
+  static def PROCESS_UDS_FED_ALERTS_COMMAND = ProcessUdsFedAlertsCommand.builder()
       .batchId(Fixtures.BATCH_ID)
       .alertName('alertName')
       .feedingStatus(FeedingStatus.SUCCESS)

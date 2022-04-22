@@ -1,36 +1,30 @@
 package com.silenteight.bridge.core.registration.domain
 
-import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand
-import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand.FedMatch
-import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand.FeedingStatus
+import com.silenteight.bridge.core.registration.domain.command.ProcessUdsFedAlertsCommand
+import com.silenteight.bridge.core.registration.domain.command.ProcessUdsFedAlertsCommand.FedMatch
+import com.silenteight.bridge.core.registration.domain.command.ProcessUdsFedAlertsCommand.FeedingStatus
 import com.silenteight.bridge.core.registration.domain.model.Alert
 import com.silenteight.bridge.core.registration.domain.model.Batch
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.model.Match
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository
-import com.silenteight.bridge.core.registration.domain.port.outgoing.AnalysisService
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository
-import com.silenteight.bridge.core.registration.infrastructure.RegistrationAnalysisProperties
+import com.silenteight.bridge.core.registration.domain.strategy.BatchStrategyFactory
+import com.silenteight.bridge.core.registration.domain.strategy.UdsFedAlertsProcessorStrategy
 
 import spock.lang.Specification
 import spock.lang.Subject
 import spock.lang.Unroll
 
-import java.time.Duration
-
-class AlertAnalysisServiceSpec extends Specification {
+class UdsFedAlertsServiceSpec extends Specification {
 
   def batchRepository = Mock(BatchRepository)
-  def analysisService = Mock(AnalysisService)
-  def analysisProperties = new RegistrationAnalysisProperties(Duration.ofMinutes(10), false)
   def alertRepository = Mock(AlertRepository)
+  def batchStrategyFactory = Mock(BatchStrategyFactory)
+  def udsFedAlertsProcessorStrategy = Mock(UdsFedAlertsProcessorStrategy)
 
   @Subject
-  def underTest = new AlertAnalysisService(
-      batchRepository,
-      analysisService,
-      analysisProperties,
-      alertRepository)
+  def underTest = new UdsFedAlertsService(batchRepository, alertRepository, batchStrategyFactory)
 
   def 'should process 1 success alert and 1 failed alert'() {
     given:
@@ -41,14 +35,14 @@ class AlertAnalysisServiceSpec extends Specification {
         batch.id(), 'alert_2', ['match_3'], 'Failed to flatten alert payload.')
 
     def commands = [
-        AddAlertToAnalysisCommand.builder()
+        ProcessUdsFedAlertsCommand.builder()
             .batchId(batch.id())
             .alertName(succeededAlert.name())
             .errorDescription(succeededAlert.errorDescription())
             .feedingStatus(FeedingStatus.SUCCESS)
             .fedMatches([new FedMatch('match_1'), new FedMatch('match_2')])
             .build(),
-        AddAlertToAnalysisCommand.builder()
+        ProcessUdsFedAlertsCommand.builder()
             .batchId(batch.id())
             .alertName(failedAlert.name())
             .errorDescription(failedAlert.errorDescription())
@@ -58,17 +52,18 @@ class AlertAnalysisServiceSpec extends Specification {
     ]
 
     when:
-    underTest.addAlertsToAnalysis(commands)
+    underTest.processUdsFedAlerts(commands)
 
     then:
     with(batchRepository) {
       1 * findById(batch.id()) >> Optional.of(batch)
       1 * updateStatus(batch.id(), BatchStatus.PROCESSING)
     }
-    1 * analysisService.addAlertsToAnalysis(batch.analysisName(), [succeededAlert.name()], _)
+    1 * batchStrategyFactory.getStrategyForUdsFedAlertsProcessor(batch) >> udsFedAlertsProcessorStrategy
+    1 * udsFedAlertsProcessorStrategy.processUdsFedAlerts(batch, _ as List<String>)
     with(alertRepository) {
-      1 * updateStatusToProcessing(batch.id(), [succeededAlert.name()])
-      1 * updateStatusToError(batch.id(), Map.of('Failed to flatten alert payload.', [failedAlert.name()] as Set<String>))
+      1 * updateStatusToError(
+          batch.id(), Map.of('Failed to flatten alert payload.', [failedAlert.name()] as Set<String>))
     }
     0 * _
   }
@@ -78,7 +73,7 @@ class AlertAnalysisServiceSpec extends Specification {
     given:
     def batch = createBatchWithStatus('batch1', batchStatus)
     def commands = [
-        AddAlertToAnalysisCommand.builder()
+        ProcessUdsFedAlertsCommand.builder()
             .batchId(batch.id())
             .alertName('alerts/1')
             .errorDescription('')
@@ -87,7 +82,7 @@ class AlertAnalysisServiceSpec extends Specification {
     ]
 
     when:
-    underTest.addAlertsToAnalysis(commands)
+    underTest.processUdsFedAlerts(commands)
 
     then:
     1 * batchRepository.findById(batch.id()) >> Optional.of(batch)

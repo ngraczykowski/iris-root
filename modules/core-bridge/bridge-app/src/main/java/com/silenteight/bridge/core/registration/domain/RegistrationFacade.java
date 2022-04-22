@@ -23,7 +23,7 @@ public class RegistrationFacade {
 
   private final BatchService batchService;
   private final AlertService alertService;
-  private final AlertAnalysisService alertAnalysisService;
+  private final UdsFedAlertsService udsFedAlertsService;
   private final BatchTimeoutService batchTimeoutService;
 
   public BatchId register(RegisterBatchCommand registerBatchCommand) {
@@ -61,7 +61,7 @@ public class RegistrationFacade {
 
     if (alertService.hasNoPendingAlerts(batch) || command.isTimedOut()) {
       log.info("Completing batch, without pending alerts, with id: {}", batch.id());
-      batchService.completeBatch(new CompleteBatchCommand(batch));
+      batchService.completeSolvingBatch(batch);
     }
   }
 
@@ -79,8 +79,8 @@ public class RegistrationFacade {
     }
   }
 
-  public void addAlertsToAnalysis(List<AddAlertToAnalysisCommand> addAlertToAnalysisCommands) {
-    alertAnalysisService.addAlertsToAnalysis(addAlertToAnalysisCommands);
+  public void processUdsFedAlerts(List<ProcessUdsFedAlertsCommand> processUdsFedAlertsCommands) {
+    udsFedAlertsService.processUdsFedAlerts(processUdsFedAlertsCommands);
   }
 
   public void verifyBatchTimeout(VerifyBatchTimeoutCommand command) {

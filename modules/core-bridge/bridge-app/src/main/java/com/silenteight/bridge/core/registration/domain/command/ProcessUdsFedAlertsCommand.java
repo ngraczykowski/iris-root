@@ -4,7 +4,7 @@ import lombok.Builder;
 
 import java.util.List;
 
-public record AddAlertToAnalysisCommand(
+public record ProcessUdsFedAlertsCommand(
     String batchId,
     String alertName,
     String errorDescription,
@@ -13,7 +13,7 @@ public record AddAlertToAnalysisCommand(
 ) {
 
   @Builder
-  public AddAlertToAnalysisCommand {}
+  public ProcessUdsFedAlertsCommand {}
 
   public enum FeedingStatus {
     SUCCESS, FAILURE

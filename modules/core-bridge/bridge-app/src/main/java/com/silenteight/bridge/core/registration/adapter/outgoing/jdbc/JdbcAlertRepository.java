@@ -42,6 +42,12 @@ class JdbcAlertRepository implements AlertRepository {
   }
 
   @Override
+  public void updateStatusToUdsFed(String batchId, List<String> alertNames) {
+    alertRepository.updateAlertsStatusByBatchIdAndIdsIn(
+        batchId, Status.UDS_FED.name(), alertNames);
+  }
+
+  @Override
   public void updateStatusToError(
       String batchId, Map<String, Set<String>> errorDescriptionsWithAlertNames) {
     errorDescriptionsWithAlertNames.forEach((errorDescription, alertNames) ->
@@ -101,6 +107,12 @@ class JdbcAlertRepository implements AlertRepository {
   @Override
   public long countAllDeliveredAndErrorAlerts(String batchId) {
     var statuses = Set.of(Status.DELIVERED.name(), Status.ERROR.name());
+    return alertRepository.countAllAlertsByBatchIdAndStatusIn(batchId, statuses);
+  }
+
+  @Override
+  public long countAllUdsFedAndErrorAlerts(String batchId) {
+    var statuses = Set.of(Status.UDS_FED.name(), Status.ERROR.name());
     return alertRepository.countAllAlertsByBatchIdAndStatusIn(batchId, statuses);
   }
 

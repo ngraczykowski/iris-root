@@ -8,12 +8,12 @@ import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchReposi
 import spock.lang.Specification
 import spock.lang.Subject
 
-class BatchSimulationRegistrationStrategySpec extends Specification {
+class BatchRegistrationSimulationStrategySpec extends Specification {
 
   def batchRepository = Mock(BatchRepository)
 
   @Subject
-  def underTest = new BatchSimulationRegistrationStrategy(batchRepository)
+  def underTest = new BatchRegistrationSimulationStrategy(batchRepository)
 
   def 'should register simulation batch'() {
 

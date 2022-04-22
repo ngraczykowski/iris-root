@@ -34,8 +34,14 @@ class ReportsService {
         .map(alert -> toReport(batchId, alert, alertNameToRecommendation.get(alert.name())))
         .toList();
 
-    reportsSenderService.send(analysisName, reports);
-    log.info("Sent reports for batch {} (analysis [{}])", batchId, analysisName);
+    if (reports.isEmpty()) {
+      log.info(
+          "Reports for batch {} (analysis [{}]) are empty and will not be sent.",
+          batchId, analysisName);
+    } else {
+      reportsSenderService.send(analysisName, reports);
+      log.info("Sent reports for batch {} (analysis [{}])", batchId, analysisName);
+    }
   }
 
   private Report toReport(

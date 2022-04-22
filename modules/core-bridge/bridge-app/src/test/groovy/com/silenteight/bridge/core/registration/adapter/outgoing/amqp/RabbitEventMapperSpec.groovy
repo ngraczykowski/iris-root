@@ -1,8 +1,9 @@
 package com.silenteight.bridge.core.registration.adapter.outgoing.amqp
 
-import com.silenteight.bridge.core.registration.domain.model.BatchCompleted
 import com.silenteight.bridge.core.registration.domain.model.BatchError
 import com.silenteight.bridge.core.registration.domain.model.BatchTimedOut
+import com.silenteight.bridge.core.registration.domain.model.SimulationBatchCompleted
+import com.silenteight.bridge.core.registration.domain.model.SolvingBatchCompleted
 
 import spock.lang.Specification
 import spock.lang.Subject
@@ -12,16 +13,35 @@ class RabbitEventMapperSpec extends Specification {
   @Subject
   def underTest = new RabbitEventMapper()
 
-  def 'should map to message batch completed'() {
+  def 'should map from solving batch completed event to message batch completed'() {
     given:
-    def batchCompleted = BatchCompleted.builder()
+    def solvingBatchCompleted = SolvingBatchCompleted.builder()
         .id('batchId')
         .analysisName('analysisName')
         .batchMetadata('batchMetadata')
         .build()
 
     when:
-    def result = underTest.toMessageBatchCompleted(batchCompleted)
+    def result = underTest.toMessageBatchCompleted(solvingBatchCompleted)
+
+    then:
+    with(result) {
+      batchId == 'batchId'
+      analysisName == 'analysisName'
+      batchMetadata == 'batchMetadata'
+    }
+  }
+
+  def 'should map from simulation batch completed event to message batch completed'() {
+    given:
+    def simulationBatchCompleted = SimulationBatchCompleted.builder()
+        .id('batchId')
+        .analysisName('analysisName')
+        .batchMetadata('batchMetadata')
+        .build()
+
+    when:
+    def result = underTest.toMessageBatchCompleted(simulationBatchCompleted)
 
     then:
     with(result) {

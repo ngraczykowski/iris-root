@@ -3,7 +3,6 @@ package com.silenteight.bridge.core.registration.domain;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.bridge.core.registration.domain.command.CompleteBatchCommand;
 import com.silenteight.bridge.core.registration.domain.command.NotifyBatchErrorCommand;
 import com.silenteight.bridge.core.registration.domain.command.RegisterBatchCommand;
 import com.silenteight.bridge.core.registration.domain.model.*;
@@ -83,22 +82,22 @@ class BatchService {
     );
   }
 
-  void completeBatch(CompleteBatchCommand completeBatchCommand) {
-    markBatchAsCompleted(completeBatchCommand.batch().id());
-    publishBatchCompleted(completeBatchCommand.batch());
+  void completeSolvingBatch(Batch batch) {
+    markSolvingBatchAsCompleted(batch.id());
+    publishSolvingBatchCompleted(batch);
   }
 
   void markBatchAsDelivered(Batch batch) {
     validateBatchStatus(batch, ALLOWED_BATCH_STATUSES_FOR_MARKING_AS_DELIVERED);
 
-    log.info("Set batch status to DELIVERED with batch id: {}", batch.id());
+    log.info("Set solving batch status to DELIVERED with batch id: {}", batch.id());
     batchRepository.updateStatusToDelivered(batch.id());
     publishBatchDelivered(batch);
   }
 
   private Batch validateBatchStatus(Batch batch, EnumSet<BatchStatus> allowedStatuses) {
     if (!allowedStatuses.contains(batch.status())) {
-      var message = String.format("Batch with batchId: %s failed due to status validation. "
+      var message = String.format("Batch with batch id: %s failed due to status validation. "
               + "%s status is invalid, one of %s expected.",
           batch.id(), batch.status(), allowedStatuses);
       log.error(message);
@@ -108,7 +107,7 @@ class BatchService {
   }
 
   private Batch logIfAlreadyExists(Batch batch) {
-    log.info("Batch for the given id: {} already exists.", batch.id());
+    log.info("Batch for the given batch id: {} already exists.", batch.id());
     return batch;
   }
 
@@ -119,7 +118,7 @@ class BatchService {
   }
 
   private void markBatchAsError(NotifyBatchErrorCommand notifyBatchErrorCommand) {
-    log.info("Set batch status to ERROR with id: {} and set error description: {}",
+    log.info("Set batch status to ERROR with batch id: {} and set error description: {}",
         notifyBatchErrorCommand.id(), notifyBatchErrorCommand.errorDescription());
 
     batchRepository.updateStatusAndErrorDescription(
@@ -138,17 +137,17 @@ class BatchService {
         notifyBatchErrorCommand.batchMetadata(),
         notifyBatchErrorCommand.isSimulation()));
 
-    log.info("New batch registered as error with id: {}", notifyBatchErrorCommand.id());
+    log.info("New batch registered as error with batch id: {}", notifyBatchErrorCommand.id());
   }
 
-  private void markBatchAsCompleted(String batchId) {
-    log.info("Set batch status to COMPLETED with batch id: {}", batchId);
+  private void markSolvingBatchAsCompleted(String batchId) {
+    log.info("Set solving batch status to COMPLETED with batch id: {}", batchId);
     batchRepository.updateStatusToCompleted(batchId);
   }
 
-  private void publishBatchCompleted(Batch batch) {
+  private void publishSolvingBatchCompleted(Batch batch) {
     eventPublisher.publish(
-        BatchCompleted.builder()
+        SolvingBatchCompleted.builder()
             .id(batch.id())
             .analysisName(batch.analysisName())
             .batchMetadata(batch.batchMetadata())

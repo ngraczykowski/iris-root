@@ -1,7 +1,6 @@
 package com.silenteight.bridge.core.registration.domain
 
 import com.silenteight.bridge.core.Fixtures
-import com.silenteight.bridge.core.registration.domain.command.CompleteBatchCommand
 import com.silenteight.bridge.core.registration.domain.model.*
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.port.outgoing.*
@@ -198,18 +197,18 @@ class BatchServiceSpec extends Specification {
 
   def 'should update batch status as COMPLETED and publish message when batch exists'() {
     given:
-    def command = new CompleteBatchCommand(RegistrationFixtures.BATCH)
-    def batchCompleted = new BatchCompleted(
+    def batch = RegistrationFixtures.BATCH
+    def batchCompleted = new SolvingBatchCompleted(
         Fixtures.BATCH_ID,
         RegistrationFixtures.ANALYSIS_NAME,
         RegistrationFixtures.METADATA
     )
 
     when:
-    underTest.completeBatch(command)
+    underTest.completeSolvingBatch(batch)
 
     then:
-    1 * batchRepository.updateStatusToCompleted(command.batch().id())
+    1 * batchRepository.updateStatusToCompleted(batch.id())
     1 * eventPublisher.publish(batchCompleted)
   }
 

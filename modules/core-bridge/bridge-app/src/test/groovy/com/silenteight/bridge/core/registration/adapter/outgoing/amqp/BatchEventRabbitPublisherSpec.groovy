@@ -1,9 +1,6 @@
 package com.silenteight.bridge.core.registration.adapter.outgoing.amqp
 
-import com.silenteight.bridge.core.registration.domain.model.BatchCompleted
-import com.silenteight.bridge.core.registration.domain.model.BatchDelivered
-import com.silenteight.bridge.core.registration.domain.model.BatchError
-import com.silenteight.bridge.core.registration.domain.model.BatchTimedOut
+import com.silenteight.bridge.core.registration.domain.model.*
 import com.silenteight.bridge.core.registration.infrastructure.amqp.AmqpRegistrationOutgoingNotifyBatchCompletedProperties
 import com.silenteight.bridge.core.registration.infrastructure.amqp.AmqpRegistrationOutgoingNotifyBatchDeliveredProperties
 import com.silenteight.bridge.core.registration.infrastructure.amqp.AmqpRegistrationOutgoingNotifyBatchErrorProperties
@@ -28,7 +25,10 @@ class BatchEventRabbitPublisherSpec extends Specification {
           'error-exchange', 'solving-routing-key', 'sim-routing-key')
 
   def batchCompletedProperties =
-      new AmqpRegistrationOutgoingNotifyBatchCompletedProperties('completed-exchange')
+      new AmqpRegistrationOutgoingNotifyBatchCompletedProperties(
+          'completed-exchange',
+          'completed-solving-routing-key',
+          'completed-simulation-routing-key')
 
   def batchTimedOutProperties = new AmqpRegistrationOutgoingNotifyBatchTimedOutProperties(
       'timed-out-exchange')
@@ -69,9 +69,9 @@ class BatchEventRabbitPublisherSpec extends Specification {
     'solving'    | false        | 'solving-routing-key'
   }
 
-  def 'should notify batch completed'() {
+  def 'should notify batch completed for solving batch'() {
     given:
-    def batchCompleted = BatchCompleted.builder()
+    def batchCompleted = SolvingBatchCompleted.builder()
         .id('batchId')
         .analysisName('analysisName')
         .batchMetadata('batchMetadata')
@@ -88,8 +88,35 @@ class BatchEventRabbitPublisherSpec extends Specification {
 
     then:
     1 * mapper.toMessageBatchCompleted(batchCompleted) >> messageBatchCompleted
-    1 * rabbitTemplate
-        .convertAndSend(batchCompletedProperties.exchangeName(), "", messageBatchCompleted)
+    1 * rabbitTemplate.convertAndSend(
+        batchCompletedProperties.exchangeName(),
+        batchCompletedProperties.solvingBatchRoutingKey(),
+        messageBatchCompleted)
+  }
+
+  def 'should notify batch completed for simulation batch'() {
+    given:
+    def batchCompleted = SimulationBatchCompleted.builder()
+        .id('batchId')
+        .analysisName('analysisName')
+        .batchMetadata('batchMetadata')
+        .build()
+
+    def messageBatchCompleted = MessageBatchCompleted.newBuilder()
+        .setBatchId('batchId')
+        .setAnalysisName('analysisName')
+        .setBatchMetadata('batchMetadata')
+        .build()
+
+    when:
+    underTest.publish(batchCompleted)
+
+    then:
+    1 * mapper.toMessageBatchCompleted(batchCompleted) >> messageBatchCompleted
+    1 * rabbitTemplate.convertAndSend(
+        batchCompletedProperties.exchangeName(),
+        batchCompletedProperties.simulationBatchRoutingKey(),
+        messageBatchCompleted)
   }
 
   def 'should notify batch timed out'() {

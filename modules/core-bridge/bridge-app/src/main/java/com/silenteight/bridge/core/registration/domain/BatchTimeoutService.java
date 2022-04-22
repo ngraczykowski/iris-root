@@ -7,8 +7,8 @@ import com.silenteight.bridge.core.registration.domain.command.VerifyBatchTimeou
 import com.silenteight.bridge.core.registration.domain.model.AlertName;
 import com.silenteight.bridge.core.registration.domain.model.Batch;
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus;
-import com.silenteight.bridge.core.registration.domain.model.BatchCompleted;
 import com.silenteight.bridge.core.registration.domain.model.BatchTimedOut;
+import com.silenteight.bridge.core.registration.domain.model.SolvingBatchCompleted;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchEventPublisher;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository;
@@ -82,7 +82,7 @@ class BatchTimeoutService {
     if (erroneousAlerts == batch.alertsCount()) {
       batchRepository.updateStatusToCompleted(batchId);
       log.info("Batch [{}] marked as completed because all alerts are erroneous", batchId);
-      batchEventPublisher.publish(buildBatchCompletedEvent(batch));
+      batchEventPublisher.publish(buildSolvingBatchCompletedEvent(batch));
     }
   }
 
@@ -102,7 +102,7 @@ class BatchTimeoutService {
         log.info(
             "Batch {} marked as completed because less registered alerts number than alerts count",
             batch.id());
-        batchEventPublisher.publish(buildBatchCompletedEvent(batch));
+        batchEventPublisher.publish(buildSolvingBatchCompletedEvent(batch));
       }
     }
   }
@@ -113,8 +113,8 @@ class BatchTimeoutService {
         .toList();
   }
 
-  private BatchCompleted buildBatchCompletedEvent(Batch batch) {
-    return BatchCompleted.builder()
+  private SolvingBatchCompleted buildSolvingBatchCompletedEvent(Batch batch) {
+    return SolvingBatchCompleted.builder()
         .id(batch.id())
         .analysisName(batch.analysisName())
         .batchMetadata(batch.batchMetadata())

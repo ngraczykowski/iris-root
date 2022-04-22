@@ -3,21 +3,19 @@ package com.silenteight.bridge.core.registration.domain;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand;
-import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand.FeedingStatus;
+import com.silenteight.bridge.core.registration.domain.command.ProcessUdsFedAlertsCommand;
+import com.silenteight.bridge.core.registration.domain.command.ProcessUdsFedAlertsCommand.FeedingStatus;
 import com.silenteight.bridge.core.registration.domain.model.Batch;
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository;
-import com.silenteight.bridge.core.registration.domain.port.outgoing.AnalysisService;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository;
+import com.silenteight.bridge.core.registration.domain.strategy.BatchStrategyFactory;
 import com.silenteight.bridge.core.registration.infrastructure.RegistrationAnalysisProperties;
 
-import com.google.protobuf.Timestamp;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 
-import java.time.OffsetDateTime;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
@@ -31,31 +29,30 @@ import static com.silenteight.bridge.core.registration.domain.model.Batch.BatchS
 @Service
 @EnableConfigurationProperties(RegistrationAnalysisProperties.class)
 @RequiredArgsConstructor
-class AlertAnalysisService {
+class UdsFedAlertsService {
 
   private static final Set<BatchStatus> PROCESSABLE_BATCH_STATUSES = EnumSet.of(STORED, PROCESSING);
 
   private final BatchRepository batchRepository;
-  private final AnalysisService analysisService;
-  private final RegistrationAnalysisProperties analysisProperties;
   private final AlertRepository alertRepository;
+  private final BatchStrategyFactory batchStrategyFactory;
 
-  void addAlertsToAnalysis(List<AddAlertToAnalysisCommand> commands) {
+  void processUdsFedAlerts(List<ProcessUdsFedAlertsCommand> commands) {
     groupByBatchId(commands).forEach(this::processBatchAlerts);
   }
 
-  private Map<String, List<AddAlertToAnalysisCommand>> groupByBatchId(
-      List<AddAlertToAnalysisCommand> commands) {
+  private Map<String, List<ProcessUdsFedAlertsCommand>> groupByBatchId(
+      List<ProcessUdsFedAlertsCommand> commands) {
     return commands.stream()
-        .collect(Collectors.groupingBy(AddAlertToAnalysisCommand::batchId));
+        .collect(Collectors.groupingBy(ProcessUdsFedAlertsCommand::batchId));
   }
 
-  private void processBatchAlerts(String batchId, List<AddAlertToAnalysisCommand> commands) {
+  private void processBatchAlerts(String batchId, List<ProcessUdsFedAlertsCommand> commands) {
     batchRepository.findById(batchId)
         .filter(this::hasProcessableStatus)
         .map(this::setStatusToProcessing)
         .ifPresentOrElse(
-            batch -> addBatchAlertsToAnalysis(batch, commands),
+            batch -> handleCommandsWithAlertsToAnalysis(batch, commands),
             () -> logBatchError(batchId)
         );
   }
@@ -80,7 +77,8 @@ class AlertAnalysisService {
     return batch;
   }
 
-  private void addBatchAlertsToAnalysis(Batch batch, List<AddAlertToAnalysisCommand> commands) {
+  private void handleCommandsWithAlertsToAnalysis(
+      Batch batch, List<ProcessUdsFedAlertsCommand> commands) {
     final var failedAlerts = getFailedCommands(commands);
     if (CollectionUtils.isNotEmpty(failedAlerts)) {
       handleCommandsWithFailedAlerts(batch, failedAlerts);
@@ -93,38 +91,30 @@ class AlertAnalysisService {
   }
 
   private void handleCommandsWithSucceededAlerts(
-      Batch batch, List<AddAlertToAnalysisCommand> commands) {
+      Batch batch, List<ProcessUdsFedAlertsCommand> commands) {
     final var alertNames = extractAlertNamesFromCommands(commands);
-    alertRepository.updateStatusToProcessing(batch.id(), alertNames);
-    addAlertsToAnalysis(batch, alertNames);
+    batchStrategyFactory.getStrategyForUdsFedAlertsProcessor(batch)
+        .processUdsFedAlerts(batch, alertNames);
   }
 
   private void handleCommandsWithFailedAlerts(
-      Batch batch, List<AddAlertToAnalysisCommand> commands) {
+      Batch batch, List<ProcessUdsFedAlertsCommand> commands) {
     var errorDescriptionsWithAlertNames =
         extractErrorDescriptionsWithAlertNamesFromCommands(commands);
     alertRepository.updateStatusToError(batch.id(), errorDescriptionsWithAlertNames);
   }
 
-  private void addAlertsToAnalysis(Batch batch, List<String> alertNames) {
-    analysisService.addAlertsToAnalysis(
-        batch.analysisName(),
-        alertNames,
-        getAlertDeadlineTime()
-    );
-  }
-
-  private List<AddAlertToAnalysisCommand> getSucceededCommands(
-      List<AddAlertToAnalysisCommand> commands) {
+  private List<ProcessUdsFedAlertsCommand> getSucceededCommands(
+      List<ProcessUdsFedAlertsCommand> commands) {
     return commands.stream()
-        .filter(command -> FeedingStatus.SUCCESS.equals(command.feedingStatus()))
+        .filter(command -> FeedingStatus.SUCCESS == command.feedingStatus())
         .toList();
   }
 
-  private List<AddAlertToAnalysisCommand> getFailedCommands(
-      List<AddAlertToAnalysisCommand> commands) {
+  private List<ProcessUdsFedAlertsCommand> getFailedCommands(
+      List<ProcessUdsFedAlertsCommand> commands) {
     return commands.stream()
-        .filter(command -> FeedingStatus.FAILURE.equals(command.feedingStatus()))
+        .filter(command -> FeedingStatus.FAILURE == command.feedingStatus())
         .toList();
   }
 
@@ -132,27 +122,18 @@ class AlertAnalysisService {
     log.error("Batch with id {} was either not found or has incorrect status", batchId);
   }
 
-  private Timestamp getAlertDeadlineTime() {
-    var alertTtl = analysisProperties.alertTtl();
-    var offsetDateTime = OffsetDateTime.now().plusSeconds(alertTtl.getSeconds());
-    return Timestamp.newBuilder()
-        .setSeconds(offsetDateTime.toEpochSecond())
-        .setNanos(offsetDateTime.getNano())
-        .build();
-  }
-
-  private List<String> extractAlertNamesFromCommands(List<AddAlertToAnalysisCommand> commands) {
+  private List<String> extractAlertNamesFromCommands(List<ProcessUdsFedAlertsCommand> commands) {
     return commands.stream()
-        .map(AddAlertToAnalysisCommand::alertName)
+        .map(ProcessUdsFedAlertsCommand::alertName)
         .toList();
   }
 
   private Map<String, Set<String>> extractErrorDescriptionsWithAlertNamesFromCommands(
-      List<AddAlertToAnalysisCommand> commands) {
+      List<ProcessUdsFedAlertsCommand> commands) {
     return commands.stream()
         .collect(Collectors.groupingBy(
-                AddAlertToAnalysisCommand::errorDescription,
-                Collectors.mapping(AddAlertToAnalysisCommand::alertName, Collectors.toSet())
+                ProcessUdsFedAlertsCommand::errorDescription,
+                Collectors.mapping(ProcessUdsFedAlertsCommand::alertName, Collectors.toSet())
             )
         );
   }

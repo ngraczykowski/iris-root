@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.bridge.core.registration.domain.RegistrationFacade;
-import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand;
-import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand.FedMatch;
-import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand.FeedingStatus;
+import com.silenteight.bridge.core.registration.domain.command.ProcessUdsFedAlertsCommand;
+import com.silenteight.bridge.core.registration.domain.command.ProcessUdsFedAlertsCommand.FedMatch;
+import com.silenteight.bridge.core.registration.domain.command.ProcessUdsFedAlertsCommand.FeedingStatus;
 import com.silenteight.proto.registration.api.v1.MessageAlertMatchesFeatureInputFed;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -27,15 +27,15 @@ class AlertMatchesFeatureInputFedReceivedAmqpListener {
       errorHandler = "registrationAmqpErrorHandler"
   )
   public void matchFeatureInputSetFed(List<MessageAlertMatchesFeatureInputFed> messages) {
-    log.info("Received {} messages with alerts. Trying to add them to analysis", messages.size());
+    log.info("Received {} messages with alerts fed in UDS.", messages.size());
     var commands = messages.stream()
         .map(this::createCommand)
         .toList();
-    registrationFacade.addAlertsToAnalysis(commands);
+    registrationFacade.processUdsFedAlerts(commands);
   }
 
-  private AddAlertToAnalysisCommand createCommand(MessageAlertMatchesFeatureInputFed message) {
-    return AddAlertToAnalysisCommand.builder()
+  private ProcessUdsFedAlertsCommand createCommand(MessageAlertMatchesFeatureInputFed message) {
+    return ProcessUdsFedAlertsCommand.builder()
         .batchId(message.getBatchId())
         .alertName(message.getAlertName())
         .errorDescription(message.getAlertErrorDescription())

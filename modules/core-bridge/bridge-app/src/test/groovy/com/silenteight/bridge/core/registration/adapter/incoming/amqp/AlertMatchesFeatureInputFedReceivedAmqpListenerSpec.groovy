@@ -1,8 +1,8 @@
 package com.silenteight.bridge.core.registration.adapter.incoming.amqp
 
 import com.silenteight.bridge.core.registration.domain.RegistrationFacade
-import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand
-import com.silenteight.bridge.core.registration.domain.command.AddAlertToAnalysisCommand.FeedingStatus
+import com.silenteight.bridge.core.registration.domain.command.ProcessUdsFedAlertsCommand
+import com.silenteight.bridge.core.registration.domain.command.ProcessUdsFedAlertsCommand.FeedingStatus
 import com.silenteight.proto.registration.api.v1.FedMatch
 import com.silenteight.proto.registration.api.v1.MessageAlertMatchesFeatureInputFed
 
@@ -33,14 +33,14 @@ class AlertMatchesFeatureInputFedReceivedAmqpListenerSpec extends Specification 
             .build()
     ]
 
-    def expectedCommand = AddAlertToAnalysisCommand.builder()
+    def expectedCommand = ProcessUdsFedAlertsCommand.builder()
         .batchId(messages.first().batchId)
         .alertName(messages.first().alertName)
         .errorDescription('')
         .feedingStatus(FeedingStatus.SUCCESS)
         .fedMatches(
             [
-                new AddAlertToAnalysisCommand.FedMatch(
+                new ProcessUdsFedAlertsCommand.FedMatch(
                     messages.first().getFedMatchesList().first().matchName)
             ])
         .build()
@@ -49,6 +49,6 @@ class AlertMatchesFeatureInputFedReceivedAmqpListenerSpec extends Specification 
     underTest.matchFeatureInputSetFed(messages)
 
     then:
-    1 * registrationFacade.addAlertsToAnalysis([expectedCommand])
+    1 * registrationFacade.processUdsFedAlerts([expectedCommand])
   }
 }

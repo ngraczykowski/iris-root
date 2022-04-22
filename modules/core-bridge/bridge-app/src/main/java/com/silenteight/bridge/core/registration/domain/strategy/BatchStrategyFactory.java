@@ -1,6 +1,7 @@
 package com.silenteight.bridge.core.registration.domain.strategy;
 
 import com.silenteight.bridge.core.registration.domain.command.RegisterBatchCommand;
+import com.silenteight.bridge.core.registration.domain.model.Batch;
 
 import org.springframework.stereotype.Component;
 
@@ -14,13 +15,22 @@ import java.util.stream.Collectors;
 public class BatchStrategyFactory {
 
   private final Map<BatchStrategyName, BatchRegistrationStrategy> registrationBatchStrategies;
+  private final Map<BatchStrategyName, UdsFedAlertsProcessorStrategy>
+      udsFedAlertsProcessorStrategies;
 
-  public BatchStrategyFactory(Set<BatchRegistrationStrategy> batchRegistrationStrategySet) {
+  public BatchStrategyFactory(
+      Set<BatchRegistrationStrategy> batchRegistrationStrategySet,
+      Set<UdsFedAlertsProcessorStrategy> alertAnalysisStrategySet) {
     registrationBatchStrategies = toMap(batchRegistrationStrategySet);
+    udsFedAlertsProcessorStrategies = toMap(alertAnalysisStrategySet);
   }
 
   public BatchRegistrationStrategy getStrategyForRegistration(RegisterBatchCommand command) {
     return getSolvingOrSimulationStrategy(registrationBatchStrategies, command.isSimulation());
+  }
+
+  public UdsFedAlertsProcessorStrategy getStrategyForUdsFedAlertsProcessor(Batch batch) {
+    return getSolvingOrSimulationStrategy(udsFedAlertsProcessorStrategies, batch.isSimulation());
   }
 
   private <T extends BatchStrategyNameProvider> Map<BatchStrategyName, T> toMap(Set<T> strategies) {

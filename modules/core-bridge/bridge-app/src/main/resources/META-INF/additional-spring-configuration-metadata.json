@@ -61,6 +61,16 @@
       "description": "Exchange name for notify batch completed event."
     },
     {
+      "name": "amqp.registration.outgoing.notify-batch-completed.solving-batch-routing-key",
+      "type": "java.lang.String",
+      "description": "Routing key for notify solving batch completed event."
+    },
+    {
+      "name": "amqp.registration.outgoing.notify-batch-completed.simulation-batch-routing-key",
+      "type": "java.lang.String",
+      "description": "Routing key for notify simulation batch completed event."
+    },
+    {
       "name": "amqp.recommendation.incoming.notify-batch-timeout.exchange-name",
       "type": "java.lang.String",
       "description": "Exchange name for notify batch timeout event."

@@ -5,7 +5,7 @@ import com.silenteight.bridge.core.registration.domain.command.VerifyBatchTimeou
 import com.silenteight.bridge.core.registration.domain.model.AlertName
 import com.silenteight.bridge.core.registration.domain.model.Batch
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
-import com.silenteight.bridge.core.registration.domain.model.BatchCompleted
+import com.silenteight.bridge.core.registration.domain.model.SolvingBatchCompleted
 import com.silenteight.bridge.core.registration.domain.model.BatchTimedOut
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchEventPublisher
@@ -41,7 +41,7 @@ class BatchTimeoutServiceSpec extends Specification {
     then:
     1 * batchEventPublisher.publish(new BatchTimedOut(batch.analysisName(), alertNames))
     0 * batchEventPublisher
-        .publish(new BatchCompleted(batch.id(), batch.analysisName(), batch.batchMetadata()))
+        .publish(new SolvingBatchCompleted(batch.id(), batch.analysisName(), batch.batchMetadata()))
   }
 
   def "should ignore batch due to its status #status"() {
@@ -90,7 +90,7 @@ class BatchTimeoutServiceSpec extends Specification {
     then:
     0 * batchEventPublisher.publish(BatchTimedOut)
     1 * batchEventPublisher
-        .publish(new BatchCompleted(batch.id(), batch.analysisName(), batch.batchMetadata()))
+        .publish(new SolvingBatchCompleted(batch.id(), batch.analysisName(), batch.batchMetadata()))
   }
 
   def "should not publish BatchTimedOut and BatchCompleted messages"() {
@@ -108,7 +108,7 @@ class BatchTimeoutServiceSpec extends Specification {
     then:
     0 * batchEventPublisher.publish(BatchTimedOut)
     0 * batchEventPublisher
-        .publish(new BatchCompleted(batch.id(), batch.analysisName(), batch.batchMetadata()))
+        .publish(new SolvingBatchCompleted(batch.id(), batch.analysisName(), batch.batchMetadata()))
   }
 
   def "should mark batch with status #status as completed and publish batch completed when all alerts are erroneous"() {
@@ -116,7 +116,7 @@ class BatchTimeoutServiceSpec extends Specification {
     def alertsCount = 10
     def batch = createBatch(status, alertsCount)
     def batchId = batch.id()
-    def expectedBatchCompletedEvent = BatchCompleted.builder()
+    def expectedBatchCompletedEvent = SolvingBatchCompleted.builder()
         .id(batch.id())
         .analysisName(batch.analysisName())
         .batchMetadata(batch.batchMetadata())
@@ -143,7 +143,7 @@ class BatchTimeoutServiceSpec extends Specification {
     def batch = createBatch(status, alertsCount)
     def batchId = batch.id()
     def command = new VerifyBatchTimeoutCommand(batchId)
-    def expectedBatchCompletedEvent = BatchCompleted.builder()
+    def expectedBatchCompletedEvent = SolvingBatchCompleted.builder()
         .id(batch.id())
         .analysisName(batch.analysisName())
         .batchMetadata(batch.batchMetadata())
@@ -169,7 +169,7 @@ class BatchTimeoutServiceSpec extends Specification {
     def batch = createBatch(COMPLETED, alertsCount)
     def batchId = batch.id()
     def command = new VerifyBatchTimeoutCommand(batchId)
-    def expectedBatchCompletedEvent = BatchCompleted.builder()
+    def expectedBatchCompletedEvent = SolvingBatchCompleted.builder()
         .id(batch.id())
         .analysisName(batch.analysisName())
         .batchMetadata(batch.batchMetadata())

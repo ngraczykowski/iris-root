@@ -13,10 +13,18 @@ import java.util.Optional;
 @Component
 class RabbitEventMapper {
 
-  MessageBatchCompleted toMessageBatchCompleted(BatchCompleted event) {
+  MessageBatchCompleted toMessageBatchCompleted(SolvingBatchCompleted event) {
     return MessageBatchCompleted.newBuilder()
         .setBatchId(event.id())
         .setAnalysisName(event.analysisName())
+        .setBatchMetadata(event.batchMetadata())
+        .build();
+  }
+
+  MessageBatchCompleted toMessageBatchCompleted(SimulationBatchCompleted event) {
+    return MessageBatchCompleted.newBuilder()
+        .setBatchId(event.id())
+        .setAnalysisName(Optional.ofNullable(event.analysisName()).orElse(""))
         .setBatchMetadata(event.batchMetadata())
         .build();
   }

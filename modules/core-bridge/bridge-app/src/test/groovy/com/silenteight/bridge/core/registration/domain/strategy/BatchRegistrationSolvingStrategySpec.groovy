@@ -14,7 +14,7 @@ import com.silenteight.bridge.core.registration.domain.port.outgoing.VerifyBatch
 import spock.lang.Specification
 import spock.lang.Subject
 
-class BatchSolvingRegistrationStrategySpec extends Specification {
+class BatchRegistrationSolvingStrategySpec extends Specification {
 
   def analysisService = Mock(AnalysisService)
   def modelService = Mock(DefaultModelService)
@@ -22,7 +22,7 @@ class BatchSolvingRegistrationStrategySpec extends Specification {
   def verifyBatchTimeoutPublisher = Mock(VerifyBatchTimeoutPublisher)
 
   @Subject
-  def underTest = new BatchSolvingRegistrationStrategy(
+  def underTest = new BatchRegistrationSolvingStrategy(
       analysisService, modelService, batchRepository, verifyBatchTimeoutPublisher)
 
   def 'should register solving batch'() {
