@@ -1,7 +1,6 @@
 keycloak:
   client-id: frontend
   adapter:
-    auth-server-url: {{ key "sear/external_url" }}/auth
     realm: mike
     public-client: false
     confidential-port: 0
