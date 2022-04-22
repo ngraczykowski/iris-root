@@ -53,11 +53,9 @@ public class DataPrepAmqpIntegrationFlowConfiguration {
   }
 
   private static AlertMessage logMessage(AlertMessage message, MessageHeaders headers) {
-    if (log.isDebugEnabled()) {
-      log.debug("Sending alert message: batchName={}, messageName={}, state={}",
-          message.getBatchName(), message.getMessageName(), message.getState());
-    }
-
+    log.debug(
+        "Sending alert message: batchName={}, messageName={}, state={}", message.getBatchName(),
+        message.getMessageName(), message.getState());
     return message;
   }
 

@@ -63,8 +63,7 @@ public class IngestFacade {
   }
 
   private void logAlertMessageStored(AlertMessage alertMessage) {
-    if (log.isDebugEnabled())
-      log.debug("Sending data to DataPrep: {}", alertMessage);
+    log.debug("Sending data to DataPrep: {}", alertMessage);
   }
 
   private AlertMessage toAlertMessage(UUID batchId, UUID messageId) {
@@ -78,9 +77,7 @@ public class IngestFacade {
   }
 
   private State evaluateAlertState(UUID batchId, UUID messageId) {
-    if (log.isDebugEnabled())
-      log.debug("Evaluating state for message: batchId={}, messageId={}", batchId, messageId);
-
+    log.debug("Evaluating state for message: batchId={}, messageId={}", batchId, messageId);
     return alertStateEvaluator.evaluate(batchId, messageId);
   }
 

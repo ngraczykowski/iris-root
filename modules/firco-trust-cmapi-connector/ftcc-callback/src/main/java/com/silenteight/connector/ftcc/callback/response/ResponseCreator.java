@@ -18,6 +18,8 @@ import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
+
 @Component
 @EnableConfigurationProperties(RecommendationSenderProperties.class)
 @RequiredArgsConstructor
@@ -52,6 +54,11 @@ class ResponseCreator {
 
   private ReceiveDecisionMessageDto mapToAlertDecision(
       MessageDetailsDto messageDetails, RecommendationOut recommendation) {
+    //TODO remove defaults when https://silent8.atlassian.net/browse/ALL-737 will be implemented
+    String recommendationComment =
+        defaultIfBlank(recommendation.getRecommendationComment(), "Manual Investigation");
+    String recommendationAction =
+        defaultIfBlank(recommendation.getRecommendedAction(), "ACTION_INVESTIGATE");
 
     var decision = new AlertDecisionMessageDto();
     decision.setUnit(messageDetails.getUnit());
@@ -59,8 +66,10 @@ class ResponseCreator {
     decision.setMessageID(messageDetails.getMessageID());
     decision.setSystemID(messageDetails.getSystemID());
     decision.setOperator(OPERATOR);
-    setComment(recommendation.getRecommendationComment(), decision);
-    setAttachment(messageDetails.getMessageID(), recommendation, decision);
+    setComment(recommendationComment, decision);
+    setAttachment(
+        messageDetails.getMessageID(), recommendationAction, recommendationComment,
+        decision);
 
     var destinationStatus = decisionMapperUseCase.mapStatus(
         DecisionStatusRequest.builder()
@@ -71,7 +80,7 @@ class ResponseCreator {
                 .map(NextStatusDto::getStatus)
                 .collect(Collectors.toList()))
             .currentStatusName(messageDetails.getCurrentStatus().getName())
-            .recommendedAction(recommendation.getRecommendedAction())
+            .recommendedAction(recommendationAction)
             .build());
     decision.setStatus(destinationStatus.getStatus());
 
@@ -79,14 +88,14 @@ class ResponseCreator {
   }
 
   private void setAttachment(
-      String messageID,
-      RecommendationOut recommendation,
+      String messageID, String recommendedAction, String recommendationComment,
       AlertDecisionMessageDto decision) {
-    if (recommendation.getRecommendationComment().length() > MAX_COMMENT_LENGTH)
+    if (recommendationComment.length() > MAX_COMMENT_LENGTH) {
       decision.setAttachment(createAttachment(
           messageID,
-          recommendation.getRecommendedAction(),
-          recommendation.getRecommendationComment()));
+          recommendedAction,
+          recommendationComment));
+    }
   }
 
   private void setComment(String comment, AlertDecisionMessageDto messageDetails) {

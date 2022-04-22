@@ -60,21 +60,15 @@ public class ClientRequestDtoBuilder {
 
   private static void log(
       RecommendationOut recommendationOut, String batchName, String analysisName) {
-    if (log.isDebugEnabled()) {
-      log.debug(
-          "RecommendationOut for batchName={}, analysisName={}{}{}", batchName, analysisName,
-          lineSeparator(),
-          recommendationOut);
-    }
+    log.debug(
+        "RecommendationOut for batchName={}, analysisName={}{}{}", batchName, analysisName,
+        lineSeparator(), recommendationOut);
   }
 
   private static void log(
       ReceiveDecisionMessageDto messageDto, String batchName, String analysisName) {
-    if (log.isDebugEnabled()) {
-      log.debug(
-          "Generated ReceiveDecisionMessageDto for batchName={}, analysisName={}{}{}", batchName,
-          analysisName,
-          lineSeparator(), messageDto);
-    }
+    log.debug(
+        "Generated ReceiveDecisionMessageDto for batchName={}, analysisName={}{}{}", batchName,
+        analysisName, lineSeparator(), messageDto);
   }
 }

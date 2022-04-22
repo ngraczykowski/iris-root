@@ -19,6 +19,7 @@ import static java.lang.System.lineSeparator;
 @Component
 @Slf4j
 public class ResponseProcessor {
+
   private final ClientRequestDtoBuilder clientRequestDtoBuilder;
   private final RecommendationSender recommendationSender;
   private final RecommendationClientApi recommendationClientApi;
@@ -49,10 +50,8 @@ public class ResponseProcessor {
   }
 
   private static void logClientRequestDto(ClientRequestDto clientRequestDto, String analysisName) {
-    if (log.isDebugEnabled()) {
-      log.debug(
-          "Generated ClientRequestDto for analysisName={}{}{}", analysisName, lineSeparator(),
-          clientRequestDto);
-    }
+    log.debug(
+        "Generated ClientRequestDto for analysisName={}{}{}", analysisName, lineSeparator(),
+        clientRequestDto);
   }
 }

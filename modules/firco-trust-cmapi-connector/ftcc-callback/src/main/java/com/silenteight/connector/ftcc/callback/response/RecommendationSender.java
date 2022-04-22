@@ -28,10 +28,9 @@ class RecommendationSender {
 
       if (responseEntity.getStatusCodeValue() < 400) {
         saveCallback(batchName, clientRequestDto, responseEntity);
-        if (log.isDebugEnabled()) {
-          log.debug("Sent the decision to [{}] and received the response [{}]",
-              endpoint, responseEntity.getStatusCode());
-        }
+        log.debug(
+            "Sent the decision for batch={} to {} and received the response {}", batchName,
+            endpoint, responseEntity.getStatusCode());
       } else {
         saveCallback(batchName, clientRequestDto, responseEntity);
         log.warn("Received an error code [{}] when sending the decision for the alert to [{}]",
@@ -68,7 +67,7 @@ class RecommendationSender {
       //      4XX
       case REQUEST_TIMEOUT:
       case TOO_MANY_REQUESTS:
-      //        5XX
+        //        5XX
       case BAD_GATEWAY:
       case SERVICE_UNAVAILABLE:
       case GATEWAY_TIMEOUT:
