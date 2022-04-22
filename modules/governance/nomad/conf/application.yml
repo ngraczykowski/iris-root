@@ -13,16 +13,6 @@ grpc:
     warehouse:
       address: discovery:/{{ env "NOMAD_NAMESPACE" }}-warehouse
 
-keycloak:
-  client-id: {{ env "NOMAD_NAMESPACE" }}-frontend
-  adapter:
-    auth-server-url: https://auth.silenteight.com
-    realm: sens-webapp
-    public-client: false
-    confidential-port: 0
-    principal-attribute: preferred_username
-    ssl-required: external
-
 serp:
   governance:
     modelTransfer: LOCAL
@@ -65,7 +55,11 @@ spring:
       service-registry:
         auto-registration:
           enabled: false
-
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://auth.silenteight.com/auth/realms/sens-webapp
 serp.governance.featurevector:
   ingest:
     repackager:
