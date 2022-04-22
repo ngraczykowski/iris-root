@@ -6,7 +6,7 @@ import grpc
 
 from etl_pipeline.config import service_config
 from etl_pipeline.service.proto.api.etl_pipeline_pb2_grpc import EtlPipelineServiceStub
-from tests.test_custom.test_json.test_client import BaseGrpcTestCase
+from tests.test_custom.test_json.test_integration.test_client import BaseGrpcTestCase
 
 
 class TestSSLGrpcServer(BaseGrpcTestCase.TestGrpcServer):
