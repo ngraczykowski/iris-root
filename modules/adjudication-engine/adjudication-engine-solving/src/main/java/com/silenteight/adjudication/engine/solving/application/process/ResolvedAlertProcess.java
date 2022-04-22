@@ -54,7 +54,7 @@ public class ResolvedAlertProcess {
     var comment = commentFacade.generateComment(COMMENT_TEMPLATE, alertContext);
 
     var saveRequest =
-        new SaveRecommendationRequest(alertSolvingModel.getAnalysisId(), true, true, List.of(
+        new SaveRecommendationRequest(alertSolvingModel.getAnalysisId(), true, true, true, List.of(
             AlertSolution
                 .builder()
                 .alertId(alertSolvingModel.getAlertId())

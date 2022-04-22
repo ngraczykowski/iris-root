@@ -1,6 +1,7 @@
 package com.silenteight.adjudication.engine.analysis.pendingrecommendation.integration;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.analysis.pendingrecommendation.PendingRecommendationFacade;
 import com.silenteight.adjudication.internal.v1.AnalysisAlertsAdded;
@@ -11,15 +12,15 @@ import org.springframework.integration.dsl.IntegrationFlowDefinition;
 import org.springframework.stereotype.Component;
 
 import static com.silenteight.adjudication.engine.analysis.pendingrecommendation.integration.PendingRecommendationChannels.ADDED_ANALYSIS_ALERTS_INBOUND_CHANNEL;
-import static com.silenteight.adjudication.engine.analysis.pendingrecommendation.integration.PendingRecommendationChannels.PENDING_RECOMMENDATIONS_OUTBOUND_CHANNEL;
 
 @RequiredArgsConstructor
 @Component
 @ConditionalOnProperty(
     value = "ae.solving.enabled",
-    havingValue = "false"
+    havingValue = "true"
 )
-public class AnalysisAlertsAddedToPendingRecommendationsIntegrationFlow extends
+@Slf4j
+public class DummyAnalysisAlertsAddedToPendingRecommendationsIntegrationFlow extends
     IntegrationFlowAdapter {
 
   private final PendingRecommendationFacade facade;
@@ -27,8 +28,11 @@ public class AnalysisAlertsAddedToPendingRecommendationsIntegrationFlow extends
   @Override
   protected IntegrationFlowDefinition<?> buildFlow() {
     return from(ADDED_ANALYSIS_ALERTS_INBOUND_CHANNEL)
-        .handle(AnalysisAlertsAdded.class, (payload, headers) ->
-            facade.handleAnalysisAlertsAdded(payload).orElse(null))
-        .channel(PENDING_RECOMMENDATIONS_OUTBOUND_CHANNEL);
+        .handle(AnalysisAlertsAdded.class, (payload, headers) -> {
+          log.debug(
+              "New solving turn off using "
+                  + "AnalysisAlertsAddedToPendingRecommendationsIntegrationFlow");
+          return null;
+        });
   }
 }

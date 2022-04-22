@@ -23,6 +23,7 @@ class DummyCommentInputIntegrationFlow extends IntegrationFlowAdapter {
   protected IntegrationFlowDefinition<?> buildFlow() {
     return from(COMMENT_INPUT_PENDING_RECOMMENDATIONS_INBOUND_CHANNEL)
         .handle(PendingRecommendations.class, (payload, headers) -> {
+          log.debug("New solving turn off {} DummyCommentInputIntegrationFlow");
           return null;
         });
   }

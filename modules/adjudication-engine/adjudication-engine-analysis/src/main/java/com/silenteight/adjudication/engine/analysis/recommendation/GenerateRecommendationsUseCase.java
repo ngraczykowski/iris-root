@@ -101,7 +101,7 @@ class GenerateRecommendationsUseCase {
       recommendationInfos.addAll(
           createRecommendationsUseCase.createRecommendations(
               new SaveRecommendationRequest(analysisId, analysisAttachmentFlags.isAttachMetadata(),
-                  analysisAttachmentFlags.isAttachRecommendation(),
+                  analysisAttachmentFlags.isAttachRecommendation(),false,
                   alertSolutions)));
 
       if (alertSolutions.isEmpty()) {

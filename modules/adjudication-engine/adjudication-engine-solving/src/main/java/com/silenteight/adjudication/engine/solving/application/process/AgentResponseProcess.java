@@ -28,6 +28,7 @@ public class AgentResponseProcess {
   private final AlertSolvingRepository alertSolvingRepository;
 
   private final ProtoMessageToObjectNodeConverter converter;
+
   @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   public void processMatches(final AgentExchangeResponse agentResponse) {
 

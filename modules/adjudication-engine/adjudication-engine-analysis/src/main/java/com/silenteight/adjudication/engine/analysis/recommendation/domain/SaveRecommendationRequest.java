@@ -13,5 +13,7 @@ public class SaveRecommendationRequest {
 
   boolean shouldRecommendationAttach;
 
+  boolean ignoreRemoveSolvedPendingRecommendation;
+
   List<AlertSolution> alertSolutions;
 }

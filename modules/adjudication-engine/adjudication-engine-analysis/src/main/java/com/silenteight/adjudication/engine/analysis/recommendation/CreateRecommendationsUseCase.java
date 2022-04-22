@@ -36,9 +36,10 @@ class CreateRecommendationsUseCase {
         createInsertRequests(request.getAnalysisId(), request.getAlertSolutions());
     List<RecommendationResponse> savedRecommendations =
         recommendationDataAccess.insertAlertRecommendation(recommendations);
-
-    pendingRecommendationFacade.removeSolvedPendingRecommendation();
-
+    // TODO this should not be invoked on new solving engine
+    if (!request.isIgnoreRemoveSolvedPendingRecommendation()) {
+      pendingRecommendationFacade.removeSolvedPendingRecommendation();
+    }
     debug("Saved recommendations: analysis=analysis/{}, recommendationCount={}",
         request.getAnalysisId(), recommendations.size());
 
