@@ -1,0 +1,180 @@
+{
+  "agents/name/versions/1.0.0/configs/1": {
+    "agentId": "1697c58c-9a7a-4489-b315-b7c419182ceb",
+    "features": [
+      "features/name"
+    ],
+    "featuresList": [
+      {
+        "name": "features/name",
+        "displayName": "Name"
+      }
+    ],
+    "responses": [
+      "EXACT_MATCH",
+      "STRONG_MATCH",
+      "MATCH",
+      "WEAK_MATCH",
+      "NO_MATCH",
+      "HQ_NO_MATCH",
+      "NO_DATA",
+      "INCONCLUSIVE"
+    ],
+    "configurations": []
+  },
+  "agents/date/versions/1.0.0/configs/1": {
+    "agentId": "7bfdc601-06d3-4aa2-a13e-015e2bc8f72f",
+    "features": [
+      "features/dateOfBirth"
+    ],
+    "featuresList": [
+      {
+        "name": "features/dateOfBirth",
+        "displayName": "Date of Birth"
+      }
+    ],
+    "responses": [
+      "EXACT",
+      "NEAR",
+      "OUT_OF_RANGE",
+      "NO_DATA",
+      "INCONCLUSIVE"
+    ],
+    "configurations": []
+  },
+  "agents/document/versions/1.0.0/configs/1": {
+    "agentId": "13807c0f-1b88-4043-a32c-dc45b1a9068c",
+    "features": [
+      "features/document"
+    ],
+    "featuresList": [
+      {
+        "name": "features/document",
+        "displayName": "Document"
+      }
+    ],
+    "responses": [
+      "PERFECT_MATCH",
+      "DIGIT_MATCH",
+      "WEAK_DIGIT_MATCH",
+      "WEAK_MATCH",
+      "NO_MATCH",
+      "NO_DATA",
+      "INCONCLUSIVE"
+    ],
+    "configurations": []
+  },
+  "agents/companyName/versions/1.0.0/configs/1": {
+    "agentId": "080101a1-ef44-4f4b-ab1d-cfdbc2acbe9e",
+    "features": [
+      "features/companyName",
+      "features/employerName"
+    ],
+    "featuresList": [
+      {
+        "name": "features/companyName",
+        "displayName": "Company Name"
+      },
+      {
+        "name": "features/employerName",
+        "displayName": "Employer Name"
+      }
+    ],
+    "responses": [
+      "MATCH",
+      "INCONCLUSIVE",
+      "NO_MATCH",
+      "NO_DATA",
+      "AGENT_ERROR"
+    ],
+    "configurations": []
+  },
+  "agents/geo/versions/1.0.0/configs/1": {
+    "agentId": "fd46923f-f68f-4b79-9d63-1621f081cfd0",
+    "features": [
+      "features/geoResidencies",
+      "features/geoPlaceOfBirth",
+      "features/geoNationality",
+      "features/geoSanctioned"
+    ],
+    "featuresList": [
+      {
+        "name": "features/geoResidencies",
+        "displayName": "Geo Residencies"
+      },
+      {
+        "name": "features/geoPlaceOfBirth",
+        "displayName": "Geo Place of Birth"
+      },
+      {
+        "name": "features/geoNationality",
+        "displayName": "Geo Nationality"
+      },
+      {
+        "name": "features/geoSanctioned",
+        "displayName": "Geo Sanctioned Country"
+      }
+    ],
+    "responses": [
+      "CITY_MATCH",
+      "COUNTRY_WEAK_MATCH",
+      "CITY_NO_MATCH",
+      "COUNTRY_MATCH",
+      "COUNTRY_NO_MATCH",
+      "STATE_MATCH",
+      "STATE_NO_MATCH",
+      "NO_DATA",
+      "INCONCLUSIVE"
+    ],
+    "configurations": []
+  },
+  "agents/historicalDecisions/versions/1.0.0/configs/1": {
+    "agentId": "6ca7f680-8a1b-44f4-8bfb-5aa62f8e543d",
+    "features": [
+      "features/isTokensTpMarked",
+      "features/isApNameTpMarked",
+      "features/isApIdTpMarked"
+    ],
+    "featuresList": [
+      {
+        "name": "features/isTokensTpMarked",
+        "displayName": "True Case - Matched Tokens"
+      },
+      {
+        "name": "features/isApNameTpMarked",
+        "displayName": "True Case - Alerted Party Name"
+      },
+      {
+        "name": "features/isApIdTpMarked",
+        "displayName": "True Case - Alerted ID"
+      }
+    ],
+    "responses": [
+      "YES",
+      "NO",
+      "NO_DATA"
+    ],
+    "configurations": []
+  },
+  "agents/hitType/versions/1.0.0/configs/1": {
+    "agentId": "tyb7f680-841b-aaf4-vvfb-5cc62f8e543e",
+    "features": [
+      "features/hitType"
+    ],
+    "featuresList": [
+      {
+        "name": "features/hitType",
+        "displayName": "Hit Type"
+      }
+    ],
+    "responses": [
+      "NORMAL",
+      "SCATTER",
+      "ENTITY_TYPE_MISMATCH",
+      "INCONCLUSIVE",
+      "NO_DATA",
+      "AGENT_ERROR"
+    ],
+    "configurations": []
+  }
+}

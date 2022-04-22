@@ -1,0 +1,34 @@
+keycloak:
+  client-id: frontend
+  adapter:
+    auth-server-url: {{ key "sear/external_url" }}/auth
+    realm: mike
+    public-client: false
+    confidential-port: 0
+    principal-attribute: preferred_username
+    ssl-required: external
+
+serp:
+  governance:
+    modelTransfer: LOCAL
+    agent:
+      agent-configuration-source: classpath:mike/agent_configs.json
+      agent-details-source: classpath:mike/agent_details.json
+    files.default-bucket: attachments
+    qa:
+      sampling:
+        schedule:
+          enabled: true
+          audit-cron: 0 0 2/6 * * ?
+          alert-generator-cron: 0 0 2 ? * MON-FRI *
+        generator:
+          sample-count: 400
+          grouping-fields:
+            - alert_extendedAttribute5
+          filters:
+            - field: alert_s8_recommendation
+              values:
+                - ACTION_FALSE_POSITIVE
+      viewing:
+        max-state-reset-delay-ms: 45000
+
