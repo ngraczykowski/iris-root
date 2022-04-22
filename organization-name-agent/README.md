@@ -9,9 +9,9 @@
 - [Configuration](#configuration)
   - [Config files](#config)
 - [Implementation](#implementation)
-  - [Pair solutions reduction](#pair-solutions-reduction)
-  - [Scores reduction](#scores-reduction)
-  - [Comparing](#comparing)
+  - [Name Parsing](#name-parsing)
+  - [Comparing Names](#comparing)
+  - [Solution Reduction](#solution-reduction)
 
 - [Tests](#tests)
 
@@ -23,10 +23,7 @@
 
 ## Installing
 
-Package needs python >= 3.7
-
-Package and dependencies zipped in .pyz file needs exactly python == 3.7
-
+Package needs Python >= 3.7. Package and dependencies zipped in .pyz file needs exactly Python == 3.7
 
 * from PiPY (repo.silenteight.com/artifactory/api/pypi/pypi/simple):
 
@@ -164,97 +161,146 @@ Currently there is no way to use different configuration in one running agent.
 
 # Implementation
 
-Given two sets of names, resolving it consists of few steps:
-  * each name from each set is parsed
-  * pair of names are created as cartesian product of sets
-  * each pair is compared
-  * each pair of comparison scores are reduced into single solution
-  * pair solutions are reduced into one solution
-  
-For each pair, the _solution_probability_ values are based on scores computed by [Comparing](#comparing), and produced by: 
-- Logistic Regression model, that predicts a probabilities for solutions, based on corresponding _predict_proba_ values for features (scores)
-- Rules defined in _reduction-rules.yaml_ - i.e. if some feature's score is above threshold, return specified _solution_probability_
+* Introduction
+* Name Parsing
+* Comparing Names
+  * Comparison Algorithm Details
+* Solution Reduction
+  * Minimal Solution from Name Preconditions
+  * Reduction Rules
+  * Final Reduction
 
-Both model and rules have specified thresholds for score values, if any of them met, 
-returns corresponding _solution_ and _solution_probability_. 
 
-<a name="pair-solutions-reduction"/>
+## Introduction
 
-## Pair solutions reduction
+Given two lists of names the agent approaches resolution in a few steps. The agent is given a set of names that generated the alerts, the alerting party (```ap_names```), and a set of names on the watchlist that were matched against by at least one of the ```ap_names```, the watchlist party (```wl_names```) and returns a solution for each pair of names in the Cartesian product of ```ap_names``` and ```wl_names```. The solution can be one of ```MATCH```, ```NO_MATCH```, or ```INCONCLUSIVE```.
 
-List of pair solutions is sorted and the best solution is chosen.
-Sorting is done by comparing solution (in order defined in `company_name/solution/solution.py`),
-and if solution is the same, by comparing solution probability. Sample sorted pair solutions:
-```python
-[
-    PairResult(solution=<Solution.MATCH: 'MATCH'>, solution_probability=1, names=('HP, INC', 'HP CO.')),
-    PairResult(solution=<Solution.MATCH: 'MATCH'>, solution_probability=0.8, names=('HP, INC', 'HEWLETT-PACKARD COMPANY')),
-    PairResult(solution=<Solution.NO_MATCH: 'NO_MATCH'>, solution_probability=0.9809527625612637, names=('HP, INC', 'GOOGLE')),
-]
+The following example will be used to illustrate the high-level process:
+
+```
+ap_names = {"Alphabet Inc.", "Bank Iowa"} 
+wl_names= {"Bank of China", "Gazprom"}
 ```
 
-<a name="scores-reduction"/>
+**NOTE:** There are more attributes and output associated with each of these steps, however, for clarity, only the pertinent information is presented here. Comprehensive details and examples of output will be provided in the corresponding sections.
 
-## Scores reduction
 
-Reducing scores from comparison into single solution, for example MATCH / INCONCLUSIVE / NO_MATCH.
+* The first step is parsing the names into ```NameInformation``` objects found in the organization-name-knowledge package.
+	* Example ```Alphabet Inc.```:
+	  * ```source="alphabet inc"```
+	  * ```common_prefixes=""```
+	  * ```base="alphabet"```
+	  * ```common_suffixes=""```
+	  * ```legal="inc"```
+	  * ```countries=""```
+	  * ```parenthesis=""```
+	  * ```other=""```
 
-### Setting minimal solution from names preconditions
-If any name from compared pair does not meet the conditions specified in [config file](#config),
-the pair will never end as NO_MATCH - the minimal possible solution will be INCONCLUSIVE. 
+* The second step is to produce the Cartesian product of name pairs using ```ap_names``` and ```wl_names```:
+	* Example:
+	  * ```("Alphabet Inc.", "Bank of China")```
+	  * ```("Alphabet Inc.", "Gazprom") ```
+	  * ```("Bank Iowa", "Bank of China") ```
+	  * ```("Bank Iowa", "Gazprom") ```
 
-### Reducing by rules
+* The third step is to compare each pair of names. This is accomplished by producing a feature vector comprised of outputs from various algorithms. 
+	* Example ```("Bank Iowa", "Bank of China")```
+	  * ```parenthesis_match = 0```
+	  * ```abbreviation = 0 ```
+	  * ```fuzzy_on_base = 0.6316```
+	  * ```fuzzy_on_suffix = 0 ```
+	  * ```fuzzy = 0.6316```
+	  * ```partial_fuzzy = 0.7692```
+	  * ```sorted_fuzzy = 0.6364```
+	  * ```legal_terms = 0```
+	  * ```tokenization = 0.3333```
+	  * ```absolute_tokenization = 1```
+	  * ```blacklisted = 0```
+	  * ```country = 0```
+	  * ```phonetics_on_base = 0.6667```
+	  * ```phonetics = 0.6667```
+	  * ```potential_subsidiary = 0```
+	  * ```token_inclusion = 0```
+	  * ```first_token = 1```
 
-Reducing algorithm is defined in [config file](#config), reduction-rules.yaml. There are two type of rules:
-  * basic feature rule
-    ```yaml
-    - feature: blacklisted
-      threshold: 1
-      solution: MATCH
-    ```
-    in which one score, if over defined threshold, determine solution.
-    Solution probability can also be defined in rule as _solution_probability_ value, default is 1.
-    
+* The fourth step is to reduce each pair to a solution and the solution probability (agent's confidence in the solution).
+	* Example:
+	  * ```("Alphabet Inc.", "Bank of China") = (solution="NO_MATCH", solution_probability=0.9567)```
+	  * ```("Alphabet Inc.", "Gazprom") = (solution="NO_MATCH", solution_probability=0.9878)```
+	  * ```("Bank Iowa", "Bank of China") = (solution="MATCH", solution_probability=1)```
+	  * ```("Bank Iowa", "Gazprom") = (solution="NO_MATCH", solution_probability=0.9858)```
 
-  * model rule
-    ```yaml
-      - source: model/tsaas-logistic-regression-2021.07.12.bin
-        solutions:
-          - solution: NO_MATCH
-            label: NO_MATCH
-            threshold: 0.9
-          - solution: MATCH
-            label: MATCH
-            threshold: 0
-    ```
-    Source is always relative to config directory and contains a model - currently only sklearn models are supported.
-    Model can be binary or multi-class. Solution probability is taken from model probability.
-    The model probability for ```MATCH``` or ```NO_MATCH``` must be met for that solution to be returned and the solutions are applied in the order they appear in the config file.
+* The final step is to reduce all solutions to a single solution. This is done by selecting the pair solution with the highest solution probability with preference given to pairs determined to be a match. A ```MATCH``` with any solution probability will be preferred to a ```NO_MATCH``` with high solution probability.
+	* Example:
+	  * Solution for
+	    ```
+	    ap_names = {"Alphabet Inc.", "Bank Iowa"} 
+	    wl_names= {"Bank of China", "Gazprom"}
+	    ```
+	    is ```MATCH``` with ```solution_probability=1```
 
-  The order that rules are written in the config file are the order the rules are applied to a name pair. For example, in the default config file in this repo the rules are, in order:
-  
-  1. If ```blacklisted == 1```, then ```MATCH``` with solution probability 1
-  2. Else, if ```token_inclusion==1``` , then ```MATCH``` with solution probability 1
-  3. Else, if ```partial_fuzzy==1``` , then ```MATCH``` with solution probability 1
-  4. Else, if ```first_token==1``` , then ```MATCH``` with solution probability 1
-  5. Else, if ```abbreviation>=0.9```, then ```MATCH``` with solution probability 0.8
-  6. Else, if ```model(alerted_party_name, wle_name)[1] >= 0.93```, then ```NO_MATCH``` with solution probability equal to the ```NO_MATCH``` likelihood (i.e. ```model(alerted_party_name, wle_name)[1]```)
-  7. Else, if ```model(alerted_party_name, wle_name)[0] >= 0.0```, then ```MATCH``` with solution probability equal to the ```MATCH``` likelihood
-  8. Else, ```INCONCLUSIVE```
-  
-  **NOTE:** It is possible to set the thresholds of the model ```MATCH```/```NO_MATCH``` likelihoods so that ```INCONCLUSIVE``` is returned if neither condition is met. For example, if the threshold for ```NO_MATCH``` is set to 0.85 and the threshold for ```MATCH``` is set to 0.2, then if the model returns a likelihood of 0.83 for ```NO_MATCH``` and a likelihood of 0.17 for ```MATCH```, then neither condition is met and the result will be ```INCONCLUSIVE```.
-  
-  All solutions used must be defined in `company_name/solution/solution.py` - but not all defined there needs to be used.
-  If rules will not be comprehensive, the default solution is INCONCLUSIVE.
+In the sections that follow, more detail will be given to each of the steps and algorithms employed by the agent to arrive at solutions.
 
-## Comparing
+
+<a name="name-parsing"/>
+
+## Name Parsing
+
+Name parsing is performed by the organization-name-knowledge package. This package utilizes rules-based parser to extract components from a given name and package them into a ```NameInformation``` object for use by the organization name agent. Detail on the parsing mechanism will not be given here, rather, only a brief description of what is in each component will be given. It is recommended to review the documentation in the organization-name-knowledge package.
+
+```NameInformation``` has several attributes:
+
+  * ```source``` contains the original name
+  * ```common_prefixes``` contains words commonly seen at the beginning of names
+  * ```base``` contains the words remaining after removing prefixes, legal terms, and suffixes
+  * ```common_suffixes``` contains words commonly seen at the end of names that are not legal identifiers
+  * ```legal``` contains common legal terms and abbreviations (e.g. 'corporation', 'ltd', etc.)
+  * ```countries``` contains any country names found in the name
+  * ```parenthesis``` contains words found in parenthesis
+  * ```other``` contains other terms not found above
+
+For each attribute, the original, unmodified string and the lower-cased string with some punctuation removed are stored. The cleaned string is often the one used in the compare step. For additional information regarding how this information is parsed, please see the organization-name-knowledge package.
+
+<a name="comparing"/>
+
+## Comparing Names
+
+With the names parsed and the Cartesian product of combinations determined, each pair is now compared by the agent. This is done using a collection of algorithms that return numeric values. The output from all of these algorithms is referred to as the **feature vector** for the name pair. At this point, no decisions are made by the agent.
+
+#### Examples of Output
+The first example uses one of the pairs above. The second example uses two names that produce more results for all of the features to illustrate what each of the algorithms produce.
 
 ```python
 from company_name.compare import compare
-compare("SNM INC.", "THE SOME NAME MANUFACTURING (PRIVATE) LIMITED (FRANCE) FUNDED IN 1917 (SNM)")
-```
 
-```
+
+compare("Bank Iowa", "Bank of China")
+
+parenthesis_match                Score(status='NO_DATA', value=0, compared=((), ()))
+abbreviation                     Score(status='OK', value=0, compared=(('Bank Iowa',), ('Bank of China',)))
+fuzzy_on_base                    Score(status='OK', value=0.6316, compared=(('Bank Iowa',), ('Bank of China',)))
+fuzzy_on_suffix                  Score(status='NO_DATA', value=0.0, compared=((), ()))
+fuzzy                            Score(status='OK', value=0.6316, compared=(('Bank Iowa',), ('Bank of China',)))
+partial_fuzzy                    Score(status='OK', value=0.7692, compared=(('Bank Iowa',), ('Bank of China',)))
+sorted_fuzzy                     Score(status='OK', value=0.6364, compared=(('Bank Iowa',), ('Bank of China',)))
+legal_terms                      Score(status='NO_DATA', value=0, compared=((), ()))
+tokenization                     Score(status='OK', value=0.3333, compared=(('Bank', 'Iowa'), ('Bank', 'of', 'China')))
+absolute_tokenization            Score(status='OK', value=1, compared=(('Bank', 'Iowa'), ('Bank', 'of', 'China')))
+blacklisted                      Score(status='OK', value=0.0, compared=((), ()))
+country                          Score(status='NO_DATA', value=0.0, compared=((), ()))
+phonetics_on_base                Score(status='OK', value=0.6667, compared=(('PNK (Bank Iowa)',), ('PNKFXN (Bank of China',)))
+phonetics                        Score(status='OK', value=0.6667, compared=(('PNK (Bank Iowa)',), ('PNKFXN (Bank of China',)))
+potential_subsidiary             Score(status='NO_DATA', value=0.0, compared=((), ()))
+token_inclusion                  Score(status='NOT_APPLICABLE', value=0.0, compared=((), ()))
+first_token                      Score(status='OK', value=1.0, compared=(('Bank',), ('Bank',)))
+
+
+################################
+################################
+
+
+compare("SNM INC.", "THE SOME NAME MANUFACTURING (PRIVATE) LIMITED (FRANCE) FUNDED IN 1917 (SNM)")
+
 parenthesis_match                Score(status='OK', value=1.0, compared=((), ('SNM',)))
 abbreviation                     Score(status='OK', value=1, compared=(('SNM',), ('THE SOME NAME MANUFACTURING',)))
 fuzzy_on_base                    Score(status='OK', value=0.55, compared=(('SNM',), ('SOME NAME',)))
@@ -274,36 +320,42 @@ token_inclusion                  Score(status='OK', value=0.0, compared=(('SNM',
 first_token                      Score(status='OK', value=0.0, compared=(('SNM',), ('SOME',)))
 ```
 
-Most scores are computed on cleared names - lowercase and without national characters.
+### Comparison Algorithm Details
+Most scores are computed on cleaned names - lowercase and without national characters.
 
 * **parenthesis_match**
   ```
   "HP, INC" vs "SOME NAME (HP)"
   Score(status=<ScoreStatus.OK: 'OK'>, value=1.0, compared=((), ('HP',)))
   ```
-  possible values: 0 or 1
+  Possible Values: 0 or 1
   
-  compared: prefixes + base + suffixes with one of parenthesis value
+  Compared: prefixes + base + suffixes with one of parenthesis value
 
-  algorithm: exactly the same after clearing
-  
+  Algorithm: The algorithm checks if there are strings of characters contained in parenthesis in both names. It then checks if the cleaned name (without legal identifiers) appears in the string enclosed by parenthesis in the other. If either cleaned name is contained within the enclosed string then a 1 is returned. In the example above, the empty string is contained in 'HP'
+
 
 * **abbreviation**
   ```
   "HP, INC" vs "HEWLETT-PACKARD COMPANY"
   Score(status=<ScoreStatus.OK: 'OK'>, value=1, compared=(('HP',), ('HEWLETT-PACKARD',)))
   ```
-  possible values: between 0 and 1
+  Possible Values: between 0 and 1
   
-  compared: base (assumed abbreviation) with prefixes + base + optionally suffixes + optionally legal (assumed source of abbreviation)
+  Compared: base (assumed abbreviation) with prefixes + base + optionally suffixes + optionally legal (assumed source of abbreviation)
   
-  algorithm: checking possible matches, traversing from left to right side of source and abbreviation simultaneously -
+  Algorithm: checking possible matches, traversing from left to right side of source and abbreviation simultaneously -
   acceptable non-obvious operations are:
     * using more letters from one word (but only consecutive ones)
+      * Example: "picture" -> "pic"
     * skipping weak words
-    * skipping suffixes and legals from the end, if they don't appear in abbreviation (but base words are obligatory)
+      * Example: "Imaginary Name of the Western Group" -> "INWG"
+    * dropping suffixes and legals from the end, if they don't appear in abbreviation (but base words are obligatory)
+      * Example: If abbreviation is "XYZ" then "Inc" is dropped from "Xxx Yyy Zzz Inc"
     * digit as possible multiplication of next letter
+      * Example: "AI2" -> "AII"
     * treading hyphenated words as one or two
+      * Example: "Hewlett-Packard" is treated as "Hewlett Packard" and ["Hewlett","Packard"]
 
   
 * **fuzzy_on_base**, **fuzzy_on_suffix**, **fuzzy**
@@ -312,11 +364,14 @@ Most scores are computed on cleared names - lowercase and without national chara
   fuzzy_on_base        Score(status='OK', value=0.64, compared=(('Indonesia North',), ('North Indonesia',)))
   fuzzy_on_suffix      Score(status='OK', value=1.0, compared=(('Industries',), ('Industries',)))
   ```
-  possible value: between 0 and 1
+  Possible Value: between 0 and 1
   
-  compared: base / suffixes / prefixes + base + suffixes
+  Compared: base / suffixes / prefixes + base + suffixes
   
-  algorithm: ratio from rapidfuzz library with removed spaces (using levenshtein distance)
+  Algorithm: ratio from rapidfuzz library with removed spaces (using Levenshtein distance)
+    * fuzzy: calculates the Levenshtein distance ratio between the two names without removing tokens
+    * fuzzy_on_base: calculates the Levenshtein distance ratio between two names without legal identifiers
+    * fuzzy_on_suffix: valculates the Levenshtein distance ratio between the suffixes of the two names
 
   
 * **partial_fuzzy**, **sorted_fuzzy**
@@ -325,47 +380,48 @@ Most scores are computed on cleared names - lowercase and without national chara
   partial_fuzzy        Score(status='OK', value=0.88, compared=(('Indonesia North Industries',), ('North Indonesia Industries',)))
   sorted_fuzzy         Score(status='OK', value=1.0, compared=(('Indonesia North Industries',), ('North Indonesia Industries',)))
   ```
-  possible value: between 0 and 1
+  Possible Value: between 0 and 1
   
-  compared: prefixes + base + suffixes
+  Compared: prefixes + base + suffixes
   
-  algorithm: partial ratio / sorted ratio from rapidfuzz library with removed spaces (using levenshtein distance)
+  Algorithm: partial ratio / sorted ratio from rapidfuzz library with removed spaces (using Levenshtein distance)
+    * partial_fuzzy: returns the maximum Levenshtein distance ratio found by computing the Levenshtein distance ratios for the shorter name against all substrings of equal length in the longer name
+    * sorted_fuzzy: sorts the tokens alphabetically then calculates the Levenshtein distance ratio
 
   
 * **legal_terms**
   ```
   Score(status='OK', value=0.75, compared=(('private', 'limited'), ('ltd',)))
   ```
-  possible value: between 0 and 1
+  Possible Value: between 0 and 1
   
-  compared: legal
+  Compared: legal
   
-  algorithm: match combined legal terms meaning
+  Algorithm: match combined legal terms meaning
     (or, if meaning not available in datasource, exact legal terms after expanding the abbreviation) -
     order is not taken into consideration
   
-
   
 * **absolute_tokenization**
   ```
   Score(status='OK', value=3, compared=(('THE', 'EMBASSY', 'OF', 'THE', 'REPUBLIC', 'OF', 'ANGOLA', 'IN', 'THE', 'REPUBLIC', 'OF', 'KENYA'), ('EMBASSY', 'OF', 'THE', 'REPUBLIC', 'OF', 'ANGOLA')))
   ```
-  possible value: non negative integers
+  Possible Value: positive integers
   
-  compared: prefixes + base + suffixes
+  Compared: prefixes + base + suffixes
   
-  algorithm: number of common tokens, without weak words
+  Algorithm: number of tokens present in both names, without weak words
 
   
 * **tokenization**
   ```
   Score(status='OK', value=0.5, compared=(('THE', 'EMBASSY', 'OF', 'THE', 'REPUBLIC', 'OF', 'ANGOLA', 'IN', 'THE', 'REPUBLIC', 'OF', 'KENYA'), ('EMBASSY', 'OF', 'THE', 'REPUBLIC', 'OF', 'ANGOLA')))
   ```
-  possible value: between 0 and 1
+  Possible Value: between 0 and 1
   
-  compared: prefixes + base + suffixes
+  Compared: prefixes + base + suffixes
   
-  algorithm: ratio of common tokens, without weak words
+  Algorithm: ratio of tokens present in both names, without weak words
 
   
 * **blacklisted**
@@ -374,11 +430,11 @@ Most scores are computed on cleared names - lowercase and without national chara
   Score(status=<ScoreStatus.OK: 'OK'>, value=1.0, compared=(('gazprom',), ()))
   ```
   
-  possible value: 0 or 1
+  Possible Value: 0 or 1
   
-  compared: cleared input on alerted party side
+  Compared: cleaned input on alerted party side
   
-  algorithm: search for defined words (does not need exact word, for example "gazprom" works for "gazprombank")
+  Algorithm: search for defined words (does not need exact word, for example "gazprom" works for "gazprombank")
 
 
 * **country**
@@ -387,11 +443,12 @@ Most scores are computed on cleared names - lowercase and without national chara
   Score(status=<ScoreStatus.OK: 'OK'>, value=1.0, compared=(('CHINA',), ("THE PEOPLE'S REPUBLIC OF CHINA",)))
   ```
   
-  possible value: between 0 and 1
+  Possible Value: between 0 and 1
   
-  compared: countries
+  Compared: countries
   
-  algorithm: match countries without taking their order into consideration
+  Algorithm: match countries without taking their order into consideration
+
 
 * **phonetics_on_base**, **phonetics**
   ```
@@ -401,11 +458,11 @@ Most scores are computed on cleared names - lowercase and without national chara
   phonetics:
     Score(status=<ScoreStatus.OK: 'OK'>, value=0.83, compared=(('ANSMTMPRTKSPRT (John Smith import & export)',), ('ANSMTMPKSP (Jon Smit imp & exp)',)))
   ```
-  possible value: between 0 and 1
+  Possible Value: between 0 and 1
   
-  compared: base / prefixes + base + suffixes, original (not cleaned)
+  Compared: base / prefixes + base + suffixes, original (not cleaned)
   
-  algorithm: dmetaphone (from library phonetics, which do not support e.g. chinese or arabic)
+  Algorithm: dmetaphone (from library phonetics, which do not support e.g. chinese or arabic) Double Metaphone is a phonetic algorithm that reduces a word to a combination of 12 consonant sounds. If there is ambiguity in the pronunciations, then two tokens are returned. Double Metaphone uses a set of rules to remove characters from a word before mapping the remaining characters to one of the 12 consonant sounds.
   
 
 * **token_inclusion**
@@ -413,11 +470,12 @@ Most scores are computed on cleared names - lowercase and without national chara
   "The Walt Disney Company" vs "Disney"
    Score(status=<ScoreStatus.OK: 'OK'>, value=1.0, compared=(('The', 'Walt', 'Disney'), ('Disney',)))
   ```
-  possible value: 0 or 1
+  Possible Value: 0 or 1
   
-  compared: prefixes + base + suffixes
+  Compared: prefixes + base + suffixes
   
-  algorithm: if exactly one word on exactly one side, check if this token also appears at other side
+  Algorithm: if exactly one word in exactly one of the names, check if this token also appears in the other name
+
 
 * **first_token**
   ```
@@ -425,11 +483,90 @@ Most scores are computed on cleared names - lowercase and without national chara
    Score(status='OK', value=1.0, compared=((Allstate',), ('Allstate',)))
   
   ```
-  possible value: 0 or 1
+  Possible Value: 0 or 1
 
-  compared: first token of base
+  Compared: first token of base
 
-  algorithm: exactly the same after clearing
+  Algorithm: Check if the first token of both cleaned names is the same
+
+<a name="solution-reduction"/>
+## Solution Reduction
+The feature vectors that were computed in the previous step are now used to produce a solution (```MATCH```/```NO_MATCH```/```INCONCLUSIVE```/etc.) for each of the name pairs. Solutions for each pair are produced using a set of rules defined in the ```reduction-rules.yaml``` config file.
+
+### Minimal Solution from Name Preconditions
+If either name in the pair does not meet the conditions defined in the ```name-preconditions.yaml``` config file, the pair will be solved as ```INCONCLUSIVE``` rather than ```NO_MATCH```.
+
+### Reduction Rules
+The rules are applied in the order they appear in the ```reduction-rules.yaml``` config file. There are two types of rules; a basic feature rule and a model rule.
+
+* basic feature rule
+    ```yaml
+    - feature: blacklist
+      threshold: 1
+      solution: MATCH
+    - feature: abbreviation
+      threshold: 0.9
+      solution: MATCH
+      solution_probability: 0.8
+    ```
+   The rule allows the feature to be specified, the threshold required to apply the solution, and, if defined, return the probability for the specified solution. In the case where ```solution_probability``` is not defined, the probability is set to be the value for that feature. In the blacklist rule, the returned soltuion probability would be 1, for example.
+
+* model rule
+    ```yaml
+      - source: model/some-sklearn-model.bin
+        solutions:
+          - solution: NO_MATCH
+            label: NO_MATCH
+            threshold: 0.85
+          - solution: MATCH
+            label: MATCH
+            threshold: 0.15
+    ```
+    The rule uses the model found in the file specified in ```source```. The feature vector for the name pair is provided to the model and one of the specified solutions are applied. In the above rule, the first solution that is checked is the ```NO_MATCH```, the model probability for the ```NO_MATCH``` class is compared against the threshold, if the threshold is not surpassed then the next solution is applied. For this rule, the ```solution_probability``` is equal to the model probability for the class whose threshold is met. I.e. if the ```MATCH``` probability is 0.34, then ```solution_probability = 0.34``` and the solution is ```MATCH```.
+
+The source is always relative to config directory and contains a model - currently only sklearn models are supported.
+    The model can be binary or multi-class. ```solution_probability``` is taken from model probability.
+    The model probability for ```MATCH``` or ```NO_MATCH``` must be met for that solution to be returned and the solutions are applied in the order they appear in the config file.
+
+  The order that rules are written in the config file are the order the rules are applied to a name pair. For example, in the default config file in this repo the rules are, in order:
+  
+  1. If ```blacklisted == 1```, then ```MATCH``` with solution probability 1
+  2. Else, if ```token_inclusion==1``` , then ```MATCH``` with solution probability 1
+  3. Else, if ```partial_fuzzy==1``` , then ```MATCH``` with solution probability 1
+  4. Else, if ```first_token==1``` , then ```MATCH``` with solution probability 1
+  5. Else, if ```abbreviation>=0.9```, then ```MATCH``` with solution probability 0.8
+  6. Else, if ```model(alerted_party_name, wl_name)[1] >= 0.85```, then ```NO_MATCH``` with solution probability equal to the ```NO_MATCH``` likelihood (i.e. ```model(alerted_party_name, wl_name)[1]```)
+  7. Else, if ```model(alerted_party_name, wl_name)[0] >= 0.15```, then ```MATCH``` with solution probability equal to the ```MATCH``` likelihood
+  8. Else, ```INCONCLUSIVE```
+  
+  **NOTE:** It is possible to set the thresholds of the model ```MATCH```/```NO_MATCH``` likelihoods so that ```INCONCLUSIVE``` is returned if neither condition is met. For example, if the threshold for ```NO_MATCH``` is set to 0.85 and the threshold for ```MATCH``` is set to 0.2, then if the model returns a likelihood of 0.83 for ```NO_MATCH``` and a likelihood of 0.17 for ```MATCH```, then neither condition is met and the result will be ```INCONCLUSIVE```.
+  
+  All solutions used must be defined in `company_name/solution/solution.py` - but not all defined there needs to be used.
+  If rules will not be comprehensive, the default solution is INCONCLUSIVE.
+
+Consider an example using one of the pairs from the running example. Values are taken from the output in the Comparison Algorithms example.
+  * Example ```("Bank Iowa", "Bank of China")```:
+    1. ```blacklisted = 0``` and the condition **is not** met, so the next rule is applied
+    2. ```token_inclusion = 0``` and the condition **is not** met, so the next rule is applied
+    3. ```partial_fuzzy = 0.7692``` and the condition **is not** met, so the next rule is applied
+    4. ```first_token = 1``` and the condition **is** met, so the solution is ```MATCH``` with ```solution_probability = 1``` as defined in the rule
+
+For the sake of completion, the model rule will be considered in isolation in the context of the above example. The model output for the example pair, ```("Bank Iowa", "Bank of China")``` is ```model_probs = [0.3002, 0.6998]```. The first value is the model probability that the pair is a match and the second is the probability that the pair is not a match. Applying the model rule above:
+  1. ```model_probs[1] = 0.6998``` and the condition **is not** met, so the next part of the model rule is applied
+  2. ```model_probs[0] = 0.3002``` and the condition **is** met, so the solution would be ```MATCH``` with ```solution_probability = 0.3002```
+
+### Final Reduction
+Once a solution and solution probability has been determined for each of the name pairs, they are grouped by solution and sorted by probability. In the running example, the ```MATCH``` pair is returned as it is the only name pair that was determined to be a ```MATCH``` based on the rules in the ```reduction-rules.yaml``` file.
+
+  * Example:
+    * ```("Bank Iowa", "Bank of China") = (solution="MATCH", solution_probability=1)```
+    * ```("Alphabet Inc.", "Gazprom") = (solution="NO_MATCH", solution_probability=0.9878)```
+    * ```("Bank Iowa", "Gazprom") = (solution="NO_MATCH", solution_probability=0.9858)```
+    * ```("Alphabet Inc.", "Bank of China") = (solution="NO_MATCH", solution_probability=0.9567)```
+
+And so the ultimate solution returned by an agent given ```ap_names``` and ```wl_names``` would be ```MATCH``` with probability 1 for ```("Bank Iowa", "Bank of China")```
+
+
 
 <a name="tests"/>
 
