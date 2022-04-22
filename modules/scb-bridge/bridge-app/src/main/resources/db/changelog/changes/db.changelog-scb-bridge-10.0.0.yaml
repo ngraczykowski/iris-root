@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 10.0.0-1
+      author: smrozowski
+      comment: Remove unused scb_cbs_hits_details_helper table.
+      changes:
+        - dropTable:
+            tableName: scb_cbs_hits_details_helper
