@@ -8,6 +8,7 @@ import com.silenteight.adjudication.engine.solving.application.publisher.Governa
 import com.silenteight.adjudication.engine.solving.application.publisher.dto.AlertSolutionRequest;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolving;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -16,6 +17,7 @@ public class GovernanceMatchResponseProcess {
   private final GovernanceAlertPublisher governanceAlertPublisher;
   private final AlertSolvingRepository alertSolvingRepository;
 
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   public void processAlert(final MatchSolutionResponse matchSolutionResponse) {
 
     long alertId = matchSolutionResponse.getAlertId();
