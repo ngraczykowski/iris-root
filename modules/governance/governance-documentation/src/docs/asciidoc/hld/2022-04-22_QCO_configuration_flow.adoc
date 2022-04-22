@@ -76,17 +76,19 @@ q -> cb : Update QCO settings
 @enduml
 -----
 
+=== Requirements
+
 Customer Bridge will receive messages with any updates related to the production policy.
 Customer Bridge *MUST* add a queue to gov.events exchange to receive this information.
 
-Scenario 1:
+=== Scenario 1
 
 . All components down
 . Customer Bridge is up
 . No message on a queue
 . Customer Bridge works, but no alerts will be taken to QCO
 
-Scenario 2:
+=== Scenario 2
 
 . All components down
 . Gov and Front is up
@@ -94,7 +96,7 @@ Scenario 2:
 . Customer Bridge is up
 . Customer Bridge reads the configuration and applies it to alerts
 
-Scenario 3.
+=== Scenario 3
 
 . All components up
 . User change QCO settings
