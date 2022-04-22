@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 install_require = [
-    "agents-api==0.7.0.33",
+    "agents-api>=0.27.0",
     "aio_pika==7.1.2",
     "aiohttp==3.7.4.post0",
     "data-source-api>=0.18.0",
@@ -11,7 +11,7 @@ install_require = [
     "grpcio-reflection==1.39.0",
     "grpcio-tools==1.39.0",
     "lz4==3.1.3",
-    "protocol-agents==0.18.0.90",
+    "name-agent-api>=0.27.0",
     "python-consul2==0.1.5",
     "pyyaml==5.4.1",
 ]
