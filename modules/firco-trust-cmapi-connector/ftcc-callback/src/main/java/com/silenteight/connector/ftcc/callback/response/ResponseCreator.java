@@ -23,7 +23,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 class ResponseCreator {
 
-  private static final String COMMENT_CUT_MSG = "\n\nPlease find the attachment for review comments";
+  private static final String COMMENT_CUT_MSG =
+      "\n\nPlease find the attachment for review comments";
   private static final int MAX_COMMENT_LENGTH = 1024;
   public static final String DATA_CENTER = "";
   public static final String OPERATOR = "S8 SEAR";
