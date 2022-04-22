@@ -60,3 +60,4 @@ dependencies/*
 postgres_scripts/*
 python-grpc-ssl/
 history.command
+error.log

@@ -85,6 +85,7 @@ def check_payload(out_payload, reference_file):
                     flatten([i for i in out_payload[cols].values])
                 )
                 assert_list(output, reference)
+
             else:
                 assert output == reference
 

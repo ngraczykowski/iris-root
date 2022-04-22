@@ -137,13 +137,17 @@ class MSPipeline(ETLPipeline):
     def parse_input_records(self, input_records):
         for input_record in input_records:
             input_record[cn.INPUT_FIELD] = {
-                i["name"]: InputRecordField(**i) for i in input_record[cn.FIELDS]
+                i["name"]: InputRecordField(**i) for i in input_record.get(cn.FIELDS, [])
             }
 
     def connect_input_record_with_match_record(self, payload):
         new_payloads = []
-        input_records = payload[cn.ALERTED_PARTY_FIELD][cn.INPUT_RECORD_HIST][cn.INPUT_RECORDS]
-        match_records = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
+        input_records = (
+            payload.get(cn.ALERTED_PARTY_FIELD, {})
+            .get(cn.INPUT_RECORD_HIST, {})
+            .get(cn.INPUT_RECORDS, [])
+        )
+        match_records = payload.get(cn.WATCHLIST_PARTY, {}).get(cn.MATCH_RECORDS, [])
         for input_record in input_records:
             for num, match_record in enumerate(match_records):
                 if (
@@ -157,7 +161,8 @@ class MSPipeline(ETLPipeline):
                     pair_payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS] = [match_record]
                     pair_payload[cn.MATCH_IDS] = [pair_payload[cn.MATCH_IDS][num]]
                     new_payloads.append(pair_payload)
-
+        if not new_payloads:
+            logger.warning("No input vs match pairs")
         return new_payloads
 
     def get_parties(self, payload):
@@ -199,6 +204,7 @@ class MSPipeline(ETLPipeline):
 
         self.parse_input_records(input_records)
         payloads = self.connect_input_record_with_match_record(payloads)
+
         for payload in payloads:
             matches = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
             input_records = payload[cn.ALERTED_PARTY_FIELD][cn.INPUT_RECORD_HIST][cn.INPUT_RECORDS]
@@ -216,7 +222,6 @@ class MSPipeline(ETLPipeline):
                 alerted_parties, [cn.PRTY_FST_NM, cn.PRTY_MDL_NM, cn.PRTY_LST_NM]
             )
             self.engine.connect_full_names(accounts, [cn.ACCOUNT_FIRST_NAME, cn.ACCOUNT_LAST_NAME])
-
             self.engine.collect_party_values_from_parties(alerted_parties, payload)
             self.engine.collect_party_values_from_accounts(accounts, payload)
             self.engine.collect_party_values_from_parties_from_fields(fields, payload)
