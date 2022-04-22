@@ -44,6 +44,10 @@ dependencies {
   implementation libs.protobuf.java.util
   implementation libs.grpc.api
   implementation libs.grpc.stub
+  implementation libs.grpc.protobuf
+  implementation libs.grpc.census
+  implementation libs.consul.grpc.registration
+  implementation libs.grpc.server.spring.boot.starter
 
   implementation libs.jaxb.api
 
