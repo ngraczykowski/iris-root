@@ -6,7 +6,7 @@ import com.silenteight.adjudication.engine.solving.domain.*;
 import com.silenteight.adjudication.engine.solving.infrastructure.configuration.HazelcastConfigurationProperties;
 import com.silenteight.adjudication.engine.solving.infrastructure.configuration.HazelcastConfigurationProperties.AsyncBackup;
 
-import com.hazelcast.config.*;
+import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
@@ -44,25 +44,10 @@ class InMemoryStorageProviderConfiguration {
         new HazelcastConfigurationProperties();
     final AsyncBackup asyncBackup = new AsyncBackup();
     hazelcastConfigurationProperties.setAsyncBackup(asyncBackup);
-    //    hazelcastConfigurationProperties.setTtl(Duration.ofSeconds(30));
     hazelcastConfigurationProperties.setEnableReadBackup(true);
 
-    EvictionConfig evictionConfig = new EvictionConfig()
-        .setMaxSizePolicy(MaxSizePolicy.PER_NODE)
-        .setEvictionPolicy(EvictionPolicy.LRU);
-
-    hazelcastInstance.getConfig()
-        .addMapConfig(new MapConfig()
-            .setName(ALERT_MAP)
-            .setMaxIdleSeconds(3600)
-            .setEvictionConfig(evictionConfig)
-            .setAsyncBackupCount(
-                hazelcastConfigurationProperties.getAsyncBackup().getMinAsyncBackups())
-            .setReadBackupData(hazelcastConfigurationProperties.isEnableReadBackup()));
-    //            .setTimeToLiveSeconds(hazelcastConfigurationProperties.getTtl().toSecondsPart()));
     final IMap<Long, AlertSolving> map = hazelcastInstance.getMap(ALERT_MAP);
     log.info("Registering Entry Eviction listener");
-    map.addEntryListener(new InMemoryAlertStorageEventListener(), true);
     //TODO make it bean - and move configuration to properties
     final EventStoreConfigurationProperties eventStoreConfigurationProperties =
         new EventStoreConfigurationProperties(
@@ -89,15 +74,8 @@ class InMemoryStorageProviderConfiguration {
     hazelcastConfigurationProperties.setAsyncBackup(asyncBackup);
     hazelcastConfigurationProperties.setEnableReadBackup(true);
 
-    hazelcastInstance.getConfig()
-        .addMapConfig(new MapConfig()
-            .setName(MATCH_FEATURES_MAP)
-            .setAsyncBackupCount(
-                hazelcastConfigurationProperties.getAsyncBackup().getMinAsyncBackups())
-            .setReadBackupData(hazelcastConfigurationProperties.isEnableReadBackup()));
     final IMap<MatchFeatureKey, MatchFeature> map = hazelcastInstance.getMap(MATCH_FEATURES_MAP);
     log.info("Registering Entry Eviction listener for {}", MATCH_FEATURES_MAP);
-    map.addEntryListener(new InMemoryAlertStorageEventListener(), true);
 
     return new InMemoryMatchFeaturesRepository(map);
   }
