@@ -1,13 +1,28 @@
 plugins {
-  id('com.silenteight.iris.build.java-base')
-  id('org.springframework.boot')
-  id('maven-publish')
+  id 'com.silenteight.iris.build.java-base'
+  id 'org.springframework.boot'
+  id 'maven-publish'
 }
 
 dependencies {
-  implementation(libs.spring.boot.starter.web)
+  implementation libs.spring.boot.starter.web
 
-  testImplementation(libs.spring.test)
-  testImplementation(libs.spring.boot.test)
-  testImplementation(libs.spring.boot.test.autoconfigure)
+  testImplementation libs.spring.test
+  testImplementation libs.spring.boot.test
+  testImplementation libs.spring.boot.test.autoconfigure
+}
+
+// Generates Class-Path in .jar manifest
+jar {
+  doFirst {
+    manifest {
+      def runtimeClasspath = configurations.runtimeClasspath
+
+      if (!runtimeClasspath.isEmpty()) {
+        def classPathJars = runtimeClasspath.collect {it.getName()}.join(" ")
+
+        attributes "Class-Path": classPathJars
+      }
+    }
+  }
 }

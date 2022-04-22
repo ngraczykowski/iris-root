@@ -2,6 +2,12 @@
 <project version="4">
   <component name="ExternalDependencies">
     <plugin id="CheckStyle-IDEA" />
-    <plugin id="google-java-format" />
+    <plugin id="Lombook Plugin" />
+    <plugin id="com.intellij.grpc" />
+    <plugin id="com.intellij.spring.boot" />
+    <plugin id="com.intellij.spring.data" />
+    <plugin id="google-java-format" min-version="1.15.0.0" />
+    <plugin id="idea.plugin.protoeditor" />
+    <plugin id="org.editorconfig.editorconfigjetbrains" />
   </component>
 </project>

@@ -9,7 +9,7 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = 'serp-governance'
+rootProject.name = 'governance'
 
 include 'governance-agent'
 include 'governance-app'

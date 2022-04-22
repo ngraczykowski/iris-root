@@ -1,7 +1,7 @@
 plugins {
-  id('base')
-  id('jacoco-report-aggregation')
-  id('test-report-aggregation')
+  id 'base'
+  id 'jacoco-report-aggregation'
+  id 'test-report-aggregation'
 }
 
 reporting {

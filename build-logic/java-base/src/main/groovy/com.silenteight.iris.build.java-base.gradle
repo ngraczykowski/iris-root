@@ -1,8 +1,8 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
 plugins {
-  id('java')
-  id('com.silenteight.iris.build.jacoco')
+  id 'java'
+  id 'com.silenteight.iris.build.jacoco'
 }
 
 group = 'com.silenteight.iris'
@@ -15,27 +15,27 @@ java {
 }
 
 dependencies {
-  implementation(platform('com.silenteight.iris.platform:product-platform'))
-  annotationProcessor(platform('com.silenteight.iris.platform:product-platform'))
-  implementation(libs.aspectjrt)
-  implementation(libs.slf4j.api)
+  implementation platform('com.silenteight.iris.platform:product-platform')
+  annotationProcessor platform('com.silenteight.iris.platform:product-platform')
+  implementation libs.aspectjrt
+  implementation libs.slf4j.api
 
   // APIs
-  compileOnly(libs.jsr305, libs.jetbrains.annotations, libs.spotbugs.annotations)
-  testCompileOnly(libs.jsr305, libs.jetbrains.annotations, libs.spotbugs.annotations)
+  compileOnly libs.jsr305, libs.jetbrains.annotations, libs.spotbugs.annotations
+  testCompileOnly libs.jsr305, libs.jetbrains.annotations, libs.spotbugs.annotations
 
   // Lombok
-  compileOnly(libs.lombok)
-  testCompileOnly(libs.lombok)
-  annotationProcessor(libs.lombok)
-  testAnnotationProcessor(libs.lombok)
+  compileOnly libs.lombok
+  testCompileOnly libs.lombok
+  annotationProcessor libs.lombok
+  testAnnotationProcessor libs.lombok
 
-  testImplementation(platform('com.silenteight.iris.platform:test-platform'))
-  testImplementation(libs.assertj.core)
-  testImplementation(libs.junit.jupiter.migrationsupport)
-  testImplementation(libs.junit.jupiter.params)
-  testImplementation(libs.mockito.core)
-  testImplementation(libs.mockito.junit.jupiter)
+  testImplementation platform('com.silenteight.iris.platform:test-platform')
+  testImplementation libs.assertj.core
+  testImplementation libs.junit.jupiter.migrationsupport
+  testImplementation libs.junit.jupiter.params
+  testImplementation libs.mockito.core
+  testImplementation libs.mockito.junit.jupiter
 }
 
 testing {
@@ -101,6 +101,10 @@ configurations.all {
     force libs.aspectjrt
     force libs.aspectjtools
   }
+}
+
+tasks.named(JavaPlugin.COMPILE_JAVA_TASK_NAME) {
+  dependsOn tasks.named(JavaPlugin.PROCESS_RESOURCES_TASK_NAME)
 }
 
 def commonCompilerArgs = [
