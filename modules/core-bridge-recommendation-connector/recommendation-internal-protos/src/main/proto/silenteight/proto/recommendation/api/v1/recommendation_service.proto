@@ -49,6 +49,7 @@ message Alert {
   AlertStatus status = 2 [(google.api.field_behavior) = REQUIRED];
   string metadata = 3 [(google.api.field_behavior) = REQUIRED];
   string error_message = 4;
+  string name = 5  [(google.api.field_behavior) = REQUIRED];
 
   enum AlertStatus {
     UNKNOWN = 0;
@@ -64,6 +65,7 @@ message Match {
   string stepId = 4 [(google.api.field_behavior) = REQUIRED];
   string fvSignature = 5 [(google.api.field_behavior) = REQUIRED];
   google.protobuf.Struct features = 6 [(google.api.field_behavior) = REQUIRED];
+  string name = 7 [(google.api.field_behavior) = REQUIRED];
 }
 
 message Statistics {
