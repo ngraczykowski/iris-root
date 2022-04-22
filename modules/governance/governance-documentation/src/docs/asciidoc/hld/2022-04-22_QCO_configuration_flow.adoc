@@ -1,0 +1,104 @@
+= HLD #29
+
+- Reference ticket: https://silent8.atlassian.net/browse/WEB-2281
+- Reason: QA Counter Web Configuration
+
+== QCO configuration
+[plantuml,qco_configuration,svg]
+-----
+@startuml
+header QCO configuration
+
+actor "User" as u
+participant "Frontend" as f
+participant "Governance" as gov
+database "GovDB" as db
+queue Queue as q
+participant "Customer Bridge" as cb
+
+autonumber
+
+u -> f : Set the QCO configuration for a production policy
+f -> gov : QCO configuration
+gov -> db : Store the QCO configuration
+gov -> q : QCO configuration update event
+note over gov, q
+{
+    policyName: policies/UUID1
+    qa_configuration:
+    [
+        {
+            stepName: policies/UUID1/steps/UUID2
+            qa_count: 100,
+        },
+        {
+            stepName: policies/UUID1/steps/UUID3
+            qa_count: 10,
+        },
+    ]
+}
+end note
+q -> cb : Update QCO settings
+
+====
+autonumber
+
+u -> f : Set the QCO configuration for non production policy
+f -> gov : QCO configuration
+gov -> db : Store the QCO configuration
+
+====
+autonumber
+
+u -> f : Promote policy on a production
+f -> gov : Promote policy
+gov -> db : Read QCO configuration
+gov -> q : QCO configuration update event
+note over gov, q
+{
+    policyName: policies/UUID1
+    qa_configuration:
+    [
+        {
+            stepName: policies/UUID1/steps/UUID2
+            qa_count: 100,
+        },
+        {
+            stepName: policies/UUID1/steps/UUID3
+            qa_count: 10,
+        },
+    ]
+}
+end note
+q -> cb : Update QCO settings
+
+
+@enduml
+-----
+
+Customer Bridge will receive messages with any updates related to the production policy.
+Customer Bridge *MUST* add a queue to gov.events exchange to receive this information.
+
+Scenario 1:
+
+. All components down
+. Customer Bridge is up
+. No message on a queue
+. Customer Bridge works, but no alerts will be taken to QCO
+
+Scenario 2:
+
+. All components down
+. Gov and Front is up
+. User change QCO settings
+. Customer Bridge is up
+. Customer Bridge reads the configuration and applies it to alerts
+
+Scenario 3.
+
+. All components up
+. User change QCO settings
+. Customer Bridge reads the configuration and applies it to alerts
+
+
+
