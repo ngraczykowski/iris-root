@@ -1,5 +1,5 @@
-agent-base==0.20.0dev0
-agents-api==0.7.0.33
+agent-base==0.20.0
+agents-api>=0.27.0
 aio-pika==7.1.2
 aiohttp==3.7.4.post0
 aiormq==6.2.3
@@ -38,7 +38,6 @@ pamqp==3.1.0
 platformdirs==2.5.2
 pluggy==1.0.0
 protobuf==3.17.3
-protocol-agents==0.18.0.90
 psutil==5.9.0
 py==1.11.0
 pycodestyle==2.8.0
