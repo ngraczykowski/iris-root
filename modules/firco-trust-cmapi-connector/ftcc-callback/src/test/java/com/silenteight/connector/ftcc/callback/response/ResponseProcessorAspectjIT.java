@@ -14,7 +14,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import static java.util.UUID.randomUUID;
-import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestPropertySource("classpath:/data-test.properties")
@@ -33,10 +32,9 @@ class ResponseProcessorAspectjIT extends BaseDataJpaTest {
         .setAnalysisName("analysis/1")
         .build();
 
-    String message = assertThrows(
+    assertThrows(
         NonRecoverableCallbackException.class,
         () -> underTest.process(messageBatchCompleted)).getMessage();
-    assertThat(message).contains("analysis/1");
   }
 }
 

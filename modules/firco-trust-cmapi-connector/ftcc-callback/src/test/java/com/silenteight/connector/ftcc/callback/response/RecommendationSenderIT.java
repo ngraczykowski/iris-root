@@ -52,6 +52,9 @@ class RecommendationSenderIT {
   @MockBean
   private CallbackRequestRepository callbackRequestRepository;
 
+  @MockBean
+  private ResponseProcessor responseProcessor;
+
   @BeforeEach
   public void init() {
     mockServer = MockRestServiceServer.createServer(restTemplate);

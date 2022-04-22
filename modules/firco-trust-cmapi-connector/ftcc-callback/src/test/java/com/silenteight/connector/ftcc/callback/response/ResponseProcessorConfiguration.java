@@ -75,15 +75,20 @@ final class ResponseProcessorConfiguration {
               Duration.ofSeconds(10), Duration.ofSeconds(10), "/path", "pass"));
     }
 
+    @Bean
+    ClientRequestDtoBuilder callbackRequestBuilder(
+        ResponseCreator responseCreator, MessageDetailsService messageDetailsService) {
+      return new ClientRequestDtoBuilder(responseCreator, messageDetailsService);
+    }
 
     @Bean
     ResponseProcessor responseProcessor(
-        ResponseCreator responseCreator, RecommendationSender recommendationSender,
+        ClientRequestDtoBuilder clientRequestDtoBuilder, RecommendationSender recommendationSender,
         RecommendationClientApi recommendationClientApi,
-        MessageDetailsService messageDetailsService,
         RecommendationsDeliveredPublisher recommendationsDeliveredPublisher) {
-      return new ResponseProcessor(responseCreator, recommendationSender, recommendationClientApi,
-          messageDetailsService, recommendationsDeliveredPublisher);
+      return new ResponseProcessor(
+          clientRequestDtoBuilder, recommendationSender, recommendationClientApi,
+          recommendationsDeliveredPublisher);
     }
 
     @Bean
