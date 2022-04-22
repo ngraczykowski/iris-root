@@ -13,6 +13,7 @@ import com.silenteight.adjudication.engine.solving.domain.FeatureSolution;
 import com.silenteight.agents.v1.api.exchange.AgentExchangeResponse;
 import com.silenteight.agents.v1.api.exchange.AgentOutput;
 import com.silenteight.agents.v1.api.exchange.AgentOutput.Feature;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import com.google.protobuf.Struct;
 
@@ -27,7 +28,7 @@ public class AgentResponseProcess {
   private final AlertSolvingRepository alertSolvingRepository;
 
   private final ProtoMessageToObjectNodeConverter converter;
-
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   public void processMatches(final AgentExchangeResponse agentResponse) {
 
     for (AgentOutput agentOutput : agentResponse.getAgentOutputsList()) {
