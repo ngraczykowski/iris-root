@@ -5,6 +5,7 @@ pipeline {
   options {
     gitLabConnection(env.GITLAB_CONNECTION_NAME)
     skipDefaultCheckout(true)
+    ansiColor('xterm')
   }
   tools {
     jdk 'jdk-17'
@@ -17,10 +18,22 @@ pipeline {
     }
     stage('Build') {
       steps {
-        withGradle {
-          sh '''
-              ./gradlew clean package
-          '''
+        withCredentials(
+            [usernamePassword(
+                credentialsId: 'artifactory-deployment-user',
+                usernameVariable: 'repoDeploymentUser',
+                passwordVariable: 'repoDeploymentPassword'),
+             usernamePassword(
+                 credentialsId: 'artifactory-user',
+                 usernameVariable: 'S8_REPO_USER',
+                 passwordVariable: 'S8_REPO_PASSWORD'),]) {
+          withGradle {
+            sh '''./gradlew \
+              -Dsilenteight.repoDeploymentUser=$repoDeploymentUser \
+              -Dsilenteight.repoDeploymentPassword=$repoDeploymentPassword \
+              clean build package
+            '''
+          }
         }
       }
     }
