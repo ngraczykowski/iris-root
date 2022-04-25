@@ -5,23 +5,38 @@ plugins {
 description = "Simulator Common Web"
 
 dependencies {
-  // API dependencies
   api libs.jakarta.validation.api
-  api libs.silenteight.sep.base.common
-  api libs.sentry
-  api libs.springdoc.data.rest
+  api libs.hibernate.validator
 
-  // General dependencies
-  implementation libs.silenteight.audit.bs
-  implementation libs.silenteight.commons.core
+  api libs.jakarta.persistence.api
+  api libs.spring.data.jpa
+  api libs.spring.jdbc
+  api libs.spring.tx
+
+  implementation libs.sentry
+
+  api libs.spring.amqp
+  api libs.spring.core
+  api libs.spring.context
+  api libs.guava
+
+  api libs.jakarta.servlet.api
+  api libs.spring.web
+  api libs.spring.webmvc
+
+  api libs.spring.security.config
+  api libs.spring.security.core
+  api libs.spring.security.web
+
+  api libs.silenteight.sep.base.common
+  api libs.silenteight.commons.core
+
   implementation libs.sear.rabbitmq.common.schema
 
-  implementation libs.spring.boot.actuator
-  implementation libs.spring.security.config
-  implementation libs.spring.security.web
+  api libs.silenteight.audit.bs.api
+  implementation libs.silenteight.audit.bs
 
-  implementation libs.spring.webmvc
-
+  api libs.springdoc.data.rest
   implementation libs.springdoc.ui
   implementation libs.springdoc.security
 }

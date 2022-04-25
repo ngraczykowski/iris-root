@@ -5,53 +5,75 @@ plugins {
 description = "Simulator Common Web Testing"
 
 dependencies {
+  api project(":simulator-common-web")
+
   api libs.junit.jupiter.api
+
   api libs.silenteight.sep.auth
   api libs.silenteight.sep.base.testing
-  api libs.spring.test
+
   api libs.spring.boot.test
-  api libs.spring.boot.test.autoconfigure
-  api libs.test.containers
-  api libs.reactor.test
-
-  implementation project(":simulator-common-web")
-
-  implementation libs.spring.jdbc
-  implementation libs.spring.test
-  implementation libs.spring.tx
-
-  implementation libs.spring.boot
-  implementation libs.spring.boot.autoconfigure
-  implementation libs.spring.boot.test
+  api libs.spring.security.test
+  api libs.spring.test
   implementation libs.spring.boot.test.autoconfigure
 
-  implementation libs.spring.boot.starter.web
-  implementation libs.spring.boot.starter.undertow
+  api libs.spock.core
+  api libs.spock.spring
 
-  implementation libs.spring.security.web
-  implementation libs.spring.security.config
-  implementation libs.spring.security.cas
+  api libs.rest.assured
+  api libs.rest.assured.spring.mock.mvc
 
-  implementation libs.junit.jupiter.api
+  api libs.test.containers
+  api libs.test.containers.elasticsearch
+  api libs.test.containers.junit.jupiter
+  api libs.test.containers.postgresql
+  api libs.test.containers.spock
 
-  implementation libs.test.containers
-  implementation libs.test.containers.elasticsearch
-  implementation libs.test.containers.junit.jupiter
-  implementation libs.test.containers.postgresql
-  implementation libs.test.containers.spock
+  api libs.reactor.test
 
-  implementation libs.protobuf.java.util
+//  implementation libs.spring.jdbc
+//  implementation libs.spring.test
+//  implementation libs.spring.tx
+//
+//  implementation libs.spring.boot
+//  implementation libs.spring.boot.autoconfigure
+//  implementation libs.spring.boot.test
+//  implementation libs.spring.boot.test.autoconfigure
+//
+
+  api libs.grpc.testing
+  api libs.protobuf.java.util
+  implementation libs.grpc.client.spring.boot.starter
+  implementation libs.grpc.server.spring.boot.starter
 
   implementation libs.bouncycastle.bcprov
+  implementation libs.spring.boot.starter.data.jpa
+  implementation libs.spring.boot.starter.web
 
-  implementation libs.reactor.test
+  implementation libs.liquibase.core
+  implementation libs.liquibase.sessionlock
+  implementation libs.postgresql
 
-  implementation libs.spring.amqp
-
-  implementation libs.rest.assured
-  implementation libs.rest.assured.spring.mock.mvc
-
-  implementation libs.rest.assured
-  implementation libs.rest.assured.spring.mock.mvc
-  implementation libs.spring.security.test
+//
+//  implementation libs.spring.security.web
+//  implementation libs.spring.security.config
+//  implementation libs.spring.security.cas
+//
+//  implementation libs.junit.jupiter.api
+//
+//  implementation libs.test.containers
+//
+//  api libs.protobuf.java.util
+//  implementation libs.grpc.client.spring.boot.starter
+//
+//  implementation libs.bouncycastle.bcprov
+//
+//  implementation libs.reactor.test
+//
+//  implementation libs.spring.amqp
+//
+//
+//  implementation libs.rest.assured
+//  implementation libs.rest.assured.spring.mock.mvc
+//  implementation libs.spring.security.test
 }
