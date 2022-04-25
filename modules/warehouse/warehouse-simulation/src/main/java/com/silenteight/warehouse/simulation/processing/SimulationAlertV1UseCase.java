@@ -48,7 +48,7 @@ public class SimulationAlertV1UseCase implements SimulationRequestV1CommandHandl
     partition(request.getAlertsList(), simulationAlertsBatchSize).stream()
         .map((List<Alert> alerts) -> simulationAlertV1MappingService.mapFields(alerts,
             request.getAnalysisName()))
-        .forEach(simulationAlertInsertService::insert);
+        .forEach(simulationAlertInsertService::insertNonMigrated);
 
     log.debug("v1.SimulationDataIndexRequest processed, requestId={}", request.getRequestId());
 

@@ -3,8 +3,6 @@ package com.silenteight.warehouse.test.client.listener.sim;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.data.api.v1.DataIndexResponse;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -36,11 +34,11 @@ See below for further details:
 public class IndexedSimEventListener {
 
   @NonNull
-  private final List<DataIndexResponse> responses = new CopyOnWriteArrayList<>();
+  private final List<String> responses = new CopyOnWriteArrayList<>();
 
-  void onEvent(DataIndexResponse dataIndexResponse) {
-    log.info("DataIndexResponse received : {}", dataIndexResponse);
-    responses.add(dataIndexResponse);
+  void onEvent(String requestId) {
+    log.info("DataIndexResponse received : {}", requestId);
+    responses.add(requestId);
   }
 
   public void clear() {
@@ -55,13 +53,13 @@ public class IndexedSimEventListener {
     return responses.size() >= count;
   }
 
-  public Optional<DataIndexResponse> getLastEvent() {
+  public Optional<String> getLastEventId() {
     if (!hasAnyEvent()) {
       return empty();
     }
 
     int size = responses.size();
-    DataIndexResponse lastElement = responses.get(size - 1);
+    String lastElement = responses.get(size - 1);
     return of(lastElement);
   }
 }

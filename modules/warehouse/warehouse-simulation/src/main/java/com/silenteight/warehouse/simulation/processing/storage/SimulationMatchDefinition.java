@@ -3,20 +3,15 @@ package com.silenteight.warehouse.simulation.processing.storage;
 import lombok.NonNull;
 import lombok.Value;
 
-import java.util.List;
-import javax.annotation.Nullable;
-
 @Value
-public class SimulationAlertDefinition {
+public class SimulationMatchDefinition {
 
   @NonNull
   String analysisName;
   @NonNull
   String alertName;
   @NonNull
-  String payload;
+  String matchName;
   @NonNull
-  List<SimulationMatchDefinition> matches;
-  @Nullable
-  Boolean migrated;
+  String payload;
 }

@@ -4,7 +4,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
-
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.ExchangeBuilder;
 import org.springframework.amqp.core.TopicExchange;
@@ -54,6 +53,15 @@ public class IndexerClientConfiguration {
   GatewayProxyFactoryBean simulationV1IndexClientGateway() {
     GatewayProxyFactoryBean factoryBean =
         new GatewayProxyFactoryBean(SimulationV1IndexClientGateway.class);
+    factoryBean.setDefaultRequestChannel(new DirectChannel());
+    factoryBean.setDefaultRequestChannelName(SIMULATION_INDEXING_OUTBOUND_CHANNEL);
+    return factoryBean;
+  }
+
+  @Bean
+  GatewayProxyFactoryBean simulationV2IndexClientGateway() {
+    GatewayProxyFactoryBean factoryBean =
+        new GatewayProxyFactoryBean(SimulationV2IndexClientGateway.class);
     factoryBean.setDefaultRequestChannel(new DirectChannel());
     factoryBean.setDefaultRequestChannelName(SIMULATION_INDEXING_OUTBOUND_CHANNEL);
     return factoryBean;

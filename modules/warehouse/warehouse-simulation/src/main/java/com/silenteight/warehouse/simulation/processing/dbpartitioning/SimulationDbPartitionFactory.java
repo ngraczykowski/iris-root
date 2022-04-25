@@ -14,8 +14,11 @@ import static java.lang.String.format;
 @RequiredArgsConstructor
 public class SimulationDbPartitionFactory {
 
-  private static final String SQL_CREATE_PARTITION =
+  private static final String SQL_CREATE_ALERT_PARTITION =
       "CREATE TABLE IF NOT EXISTS %s PARTITION OF warehouse_simulation_alert FOR VALUES IN ('%s')";
+
+  private static final String SQL_CREATE_MATCH_PARTITION =
+      "CREATE TABLE IF NOT EXISTS %s PARTITION OF warehouse_simulation_match FOR VALUES IN ('%s')";
 
   @NonNull
   private final PartitioningSimulationNamingStrategy partitioningSimulationNamingStrategy;
@@ -24,11 +27,15 @@ public class SimulationDbPartitionFactory {
   private final JdbcTemplate jdbcTemplate;
 
   @Transactional
-  public String createDbPartition(String analysis) {
-    String partitionName = partitioningSimulationNamingStrategy.getPartitionName(getId(analysis));
-    String sql = format(SQL_CREATE_PARTITION, partitionName, analysis);
-    jdbcTemplate.execute(sql);
+  public void createDbPartition(String analysis) {
+    String alertPartitionName =
+        partitioningSimulationNamingStrategy.getPartitionName(getId(analysis));
+    String alertSql = format(SQL_CREATE_ALERT_PARTITION, alertPartitionName, analysis);
+    jdbcTemplate.execute(alertSql);
 
-    return partitionName;
+    String matchPartitionName =
+        partitioningSimulationNamingStrategy.getMatchPartitionName(getId(analysis));
+    String matchSql = format(SQL_CREATE_MATCH_PARTITION, matchPartitionName, analysis);
+    jdbcTemplate.execute(matchSql);
   }
 }
