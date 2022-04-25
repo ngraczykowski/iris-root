@@ -18,7 +18,6 @@ dependencies {
   implementation project(":governance-db-changelog")
   implementation project(":governance-change-request")
   implementation project(":governance-common-web")
-  implementation project(":governance-common-web-testing")
   implementation project(":governance-strategy")
   implementation project(":governance-policy")
 
@@ -30,6 +29,7 @@ dependencies {
   implementation libs.grpc.stub
   implementation libs.grpc.server.spring.boot.starter
 
+  testImplementation project(":governance-common-web-testing")
   testImplementation(testFixtures(project(":governance-agent")))
   testImplementation(testFixtures(project(":governance-change-request")))
   testImplementation(testFixtures(project(":governance-policy")))
