@@ -48,7 +48,7 @@ class AlertMessagesRabbitAmqpListener {
     Try.run(() -> dataPrepFacade.processAlert(message))
         .onFailure(e -> {
           if (isLastTry) {
-            dataPrepFacade.processAlertFailed(message);
+            dataPrepFacade.processAlertFailed(message, e);
             log.error("Failed to process message, error occurred", e);
           } else {
             log.error("Failed to process message, error occurred, retrying...", e);

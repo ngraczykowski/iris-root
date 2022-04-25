@@ -1,5 +1,7 @@
 package com.silenteight.fab.dataprep.domain.tokenizer
 
+import com.silenteight.fab.dataprep.domain.ex.DataPrepException
+
 import groovy.util.logging.Slf4j
 import spock.lang.Specification
 
@@ -53,7 +55,7 @@ class MessageDataTokenizerTest extends Specification {
     tokenizer.convert(payload)
 
     then:
-    thrown(IllegalArgumentException)
+    thrown(DataPrepException)
 
     where:
     payload << ["", ";".repeat(MessageDataTokenizer.NUMBER_OF_SEGMENTS - 3)]

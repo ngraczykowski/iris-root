@@ -7,6 +7,8 @@ import com.silenteight.fab.dataprep.DataPrepConfig.DlqListener
 import com.silenteight.fab.dataprep.DataPrepConfig.WarehouseListener
 import com.silenteight.fab.dataprep.adapter.incoming.AlertDetailsFacade
 import com.silenteight.fab.dataprep.domain.AlertService
+import com.silenteight.fab.dataprep.domain.feature.BuildFeatureCommand
+import com.silenteight.fab.dataprep.domain.feature.FabFeature
 import com.silenteight.proto.fab.api.v1.AlertMessageDetails
 import com.silenteight.proto.fab.api.v1.AlertMessageStored
 import com.silenteight.proto.fab.api.v1.AlertMessageStored.State
@@ -18,6 +20,7 @@ import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputS
 
 import com.google.protobuf.Struct
 import org.spockframework.spring.SpringBean
+import org.spockframework.spring.SpringSpy
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -62,6 +65,9 @@ class DataPrepIT extends BaseSpecificationIT {
 
   @SpringBean
   AgentInputServiceClient agentInputServiceClient = Mock()
+
+  @SpringSpy(name = "genderFeature")
+  FabFeature genderFeature
 
   @Autowired
   AlertService alertService
@@ -116,12 +122,13 @@ class DataPrepIT extends BaseSpecificationIT {
               .build()
         }
 
-    agentInputServiceClient.createBatchCreateAgentInputs(_) >> {
+    agentInputServiceClient.createBatchCreateAgentInputs(_) >> []
+
+    genderFeature.buildFeature(_) >> { BuildFeatureCommand command ->
       if (expectedStatus == FeedingStatus.FAILURE) {
         throw new RuntimeException()
-      } else {
-        []
-      }
+      } else
+        return callRealMethod()
     }
 
     when: 'send fedMessage to queue'
@@ -135,6 +142,8 @@ class DataPrepIT extends BaseSpecificationIT {
       assert msg.getBatchId() == BATCH_NAME
       if (expectedStatus == FeedingStatus.SUCCESS) {
         assert msg.getFedMatchesList().first().getMatchName() == MATCH_NAME
+      } else {
+        assert msg.getAlertErrorDescription().contains('GenderFeature')
       }
     }
 

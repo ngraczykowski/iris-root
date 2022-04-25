@@ -2,7 +2,6 @@ package com.silenteight.fab.dataprep.domain
 
 import com.silenteight.fab.dataprep.adapter.incoming.AlertDetailsFacade
 import com.silenteight.fab.dataprep.domain.ex.DataPrepException
-import com.silenteight.fab.dataprep.domain.model.AlertErrorDescription
 import com.silenteight.fab.dataprep.domain.model.AlertState
 import com.silenteight.fab.dataprep.domain.model.LearningData
 import com.silenteight.proto.fab.api.v1.AlertMessageStored
@@ -18,6 +17,7 @@ import spock.lang.Subject
 import spock.lang.Unroll
 
 import static com.silenteight.fab.dataprep.domain.Fixtures.*
+import static com.silenteight.fab.dataprep.domain.model.AlertErrorDescription.GETTING_FROM_DB
 
 @ContextConfiguration(classes = [DataPrepFacade, DataPrepConfiguration, LearningUseCase,
     SolvingUseCase],
@@ -224,16 +224,16 @@ class DataPrepFacadeTest extends Specification {
         .build()
 
     when:
-    underTest.processAlertFailed(message)
+    underTest.processAlertFailed(message, new DataPrepException(GETTING_FROM_DB.getDescription()))
 
     then:
     1 * alertDetailsFacade.getAlertDetails(message) >> ALERT_MESSAGES_DETAILS_RESPONSE
     1 * alertParser.parse(message, ALERT_MESSAGE_DETAILS) >> PARSED_ALERT_MESSAGE
     1 * registrationService
         .registerFailedAlerts(
-            [MESSAGE_NAME], BATCH_NAME, DISCRIMINATOR, AlertErrorDescription.EXTRACTION) >>
+            [MESSAGE_NAME], BATCH_NAME, DISCRIMINATOR, GETTING_FROM_DB) >>
         [REGISTERED_ALERT]
-    1 * feedingFacade.notifyAboutError(BATCH_NAME, ALERT_NAME)
+    1 * feedingFacade.notifyAboutError(BATCH_NAME, ALERT_NAME, GETTING_FROM_DB)
     0 * feedingFacade._
     1 * alertService.getAlertItem(DISCRIMINATOR) >> Optional.empty()
     0 * learningService._
@@ -246,13 +246,13 @@ class DataPrepFacadeTest extends Specification {
         .build()
 
     when:
-    underTest.processAlertFailed(message)
+    underTest.processAlertFailed(message, new DataPrepException(GETTING_FROM_DB.getDescription()))
 
     then:
     1 * alertDetailsFacade.getAlertDetails(message) >> ALERT_MESSAGES_DETAILS_RESPONSE
     1 * alertParser.parse(message, ALERT_MESSAGE_DETAILS) >> PARSED_ALERT_MESSAGE
     0 * registrationService._
-    1 * feedingFacade.notifyAboutError(BATCH_NAME, ALERT_NAME)
+    1 * feedingFacade.notifyAboutError(BATCH_NAME, ALERT_NAME, GETTING_FROM_DB)
     0 * feedingFacade._
     1 * alertService.getAlertItem(DISCRIMINATOR) >> Optional.of(ALERT_ITEM)
     0 * learningService._

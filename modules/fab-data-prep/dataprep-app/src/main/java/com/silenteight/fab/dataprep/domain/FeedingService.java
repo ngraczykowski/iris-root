@@ -2,9 +2,11 @@ package com.silenteight.fab.dataprep.domain;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.fab.dataprep.domain.ex.DataPrepException;
 import com.silenteight.fab.dataprep.domain.feature.BuildFeatureCommand;
 import com.silenteight.fab.dataprep.domain.feature.FabFeature;
 import com.silenteight.fab.dataprep.domain.feature.FeatureInputsCommand;
+import com.silenteight.fab.dataprep.domain.model.ParsedMessageData;
 import com.silenteight.fab.dataprep.domain.model.RegisteredAlert;
 import com.silenteight.universaldatasource.api.library.Feature;
 import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputIn;
@@ -52,21 +54,43 @@ class FeedingService {
     if (agentInputs.isEmpty()) {
       log.debug("AgentInputs list is empty");
     } else {
-      feedUds(agentInputs);
+      try {
+        feedUds(agentInputs);
+      } catch (Exception e) {
+        throw new DataPrepException("Unable to feed UDS", e);
+      }
     }
 
-    categoryService.createCategoryInputs(featureInputsCommand);
+    try {
+      categoryService.createCategoryInputs(featureInputsCommand);
+    } catch (Exception e) {
+      throw new DataPrepException("Unable to create category input", e);
+    }
   }
 
   private List<Feature> buildFeatures(
       RegisteredAlert registeredAlert, RegisteredAlert.Match match) {
     return features.stream()
-        .map(feature -> feature.buildFeature(BuildFeatureCommand
-            .builder()
-            .parsedMessageData(registeredAlert.getParsedMessageData())
-            .match(match)
-            .build()))
+        .map(feature -> buildFeature(feature, registeredAlert.getParsedMessageData(), match))
         .collect(toList());
+  }
+
+  private Feature buildFeature(
+      FabFeature fabFeature,
+      ParsedMessageData parsedMessageData,
+      RegisteredAlert.Match match) {
+    try {
+      return fabFeature.buildFeature(BuildFeatureCommand
+          .builder()
+          .parsedMessageData(parsedMessageData)
+          .match(match)
+          .build());
+    } catch (Exception e) {
+      throw new DataPrepException(
+          "Failed to extract alerts and matches for feature: " + fabFeature
+              .getClass()
+              .getSimpleName(), e);
+    }
   }
 
   void feedUds(List<AgentInputIn<Feature>> agentInputs) {

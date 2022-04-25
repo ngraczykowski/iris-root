@@ -53,9 +53,12 @@ public class FeedingFacade {
         .get();
   }
 
-  public void notifyAboutError(String batchName, String alertName) {
+  public void notifyAboutError(
+      String batchName,
+      String alertName,
+      AlertErrorDescription errorDescription) {
     feedingEventPublisher.publish(
-        createUdsFedEventWithoutMatches(batchName, alertName));
+        createUdsFedEventWithoutMatches(batchName, alertName, errorDescription));
   }
 
   private static FeatureInputsCommand createFeatureInputsCommand(RegisteredAlert registeredAlert) {
@@ -82,11 +85,11 @@ public class FeedingFacade {
   }
 
   private static UdsFedEvent createUdsFedEventWithoutMatches(
-      String batchName, String alertName) {
+      String batchName, String alertName, AlertErrorDescription errorDescription) {
     return UdsFedEvent.builder()
         .batchName(batchName)
         .alertName(alertName)
-        .errorDescription(AlertErrorDescription.CREATE_FEATURE_INPUT)
+        .errorDescription(errorDescription)
         .feedingStatus(Status.FAILURE)
         .build();
   }

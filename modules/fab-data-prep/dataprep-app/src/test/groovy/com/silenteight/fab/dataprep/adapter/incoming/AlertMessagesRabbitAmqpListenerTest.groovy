@@ -80,7 +80,7 @@ class AlertMessagesRabbitAmqpListenerTest extends BaseSpecificationIT {
     }
 
     boolean failedCalled = false
-    1 * dataPrepFacade.processAlertFailed(_) >> {
+    1 * dataPrepFacade.processAlertFailed(*_) >> {
       failedCalled = true
     }
 
@@ -105,7 +105,7 @@ class AlertMessagesRabbitAmqpListenerTest extends BaseSpecificationIT {
     }
 
     boolean failedCalled = false
-    dataPrepFacade.processAlertFailed(_) >> {
+    dataPrepFacade.processAlertFailed(*_) >> {
       failedCalled = true
     }
 

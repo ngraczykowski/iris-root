@@ -31,7 +31,7 @@ public class MessageDataTokenizer implements Converter<String, ParsedMessageData
           .with(schema)
           .readValue(source);
     } catch (JsonProcessingException e) {
-      throw new DataPrepException(e);
+      throw new DataPrepException("Unable to parse MessageData", e);
     }
   }
 
@@ -41,7 +41,7 @@ public class MessageDataTokenizer implements Converter<String, ParsedMessageData
     } else if (numberOfSegments == NUMBER_OF_SEGMENTS - 1) {
       return new WithoutShortNameTokenizerConfiguration();
     } else {
-      throw new IllegalArgumentException(
+      throw new DataPrepException(
           "Alert payload should contains " + NUMBER_OF_SEGMENTS + " segments separated with "
               + SEPARATOR);
     }

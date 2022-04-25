@@ -1,17 +1,21 @@
 package com.silenteight.fab.dataprep.domain.model;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.Value;
 
-@RequiredArgsConstructor
-public enum AlertErrorDescription {
-  EXTRACTION("Failed to extract alerts and matches."),
-  CREATE_FEATURE_INPUT("Failed to create feature inputs."),
-  FLATTEN("Failed to flatten alert payload."),
-  GETTING_FROM_EXTERNAL_DB("Failed to get customer Alerts from the external db."),
-  GETTING_FROM_DB("Failed to get raw alerts from the internal db."),
-  MISSING("Alert was missing."),
-  NONE("");
-  @Getter
-  private final String description;
+@Value
+public class AlertErrorDescription {
+
+  public static final AlertErrorDescription EXTRACTION =
+      new AlertErrorDescription("Failed to extract alerts and matches.");
+
+  public static final AlertErrorDescription CREATE_FEATURE_INPUT =
+      new AlertErrorDescription("Failed to create feature inputs.");
+
+  public static final AlertErrorDescription GETTING_FROM_DB =
+      new AlertErrorDescription("Failed to get alert from the internal db.");
+
+  public static final AlertErrorDescription NONE =
+      new AlertErrorDescription("");
+
+  String description;
 }
