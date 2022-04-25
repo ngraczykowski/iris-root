@@ -126,6 +126,12 @@ spring:
         enabled: false
       enabled: false
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://auth.silenteight.com/auth/realms/sens-webapp
+
 springdoc:
   api-docs:
     enabled: false

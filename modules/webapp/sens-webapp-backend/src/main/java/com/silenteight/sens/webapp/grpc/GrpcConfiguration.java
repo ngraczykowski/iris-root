@@ -1,27 +1,28 @@
 package com.silenteight.sens.webapp.grpc;
 
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+
+import com.silenteight.proto.serp.v1.governance.BranchSolutionGrpc.BranchSolutionBlockingStub;
 
 import io.grpc.*;
 import net.devh.boot.grpc.client.inject.GrpcClient;
+import net.devh.boot.grpc.client.inject.GrpcClientBean;
 import net.devh.boot.grpc.client.interceptor.GrpcGlobalClientInterceptor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.integration.channel.DirectChannel;
 
 @Configuration
 @EnableConfigurationProperties(GrpcConfigurationProperties.class)
 class GrpcConfiguration {
 
-  @Bean("governance")
-  @GrpcClient("governance")
-  Channel governanceChannel(Channel governanceChannel) {
-    return governanceChannel;
-  }
+  @Setter(onMethod_ = @GrpcClient("circuit-breaker"))
+  private Channel circuitBreakerChannel;
 
   @Bean("circuit-breaker")
-  @GrpcClient("circuit-breaker")
-  Channel circuitBreakerChannel(Channel circuitBreakerChannel) {
+  Channel circuitBreakerChannel() {
     return circuitBreakerChannel;
   }
 

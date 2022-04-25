@@ -77,6 +77,8 @@ dependencies {
   testImplementation libs.rest.assured
   testImplementation libs.rest.assured.spring.mock.mvc
   testImplementation libs.spring.security.test
+
+  aspect libs.silenteight.sep.base.aspects
 }
 
 jar {
