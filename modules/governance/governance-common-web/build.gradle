@@ -13,6 +13,7 @@ dependencies {
   api libs.sentry
   api libs.springdoc.data.rest
   api libs.hibernate.validator
+  api libs.spring.data.jpa
 
   // General dependencies
   implementation libs.silenteight.sep.auth

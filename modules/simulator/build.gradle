@@ -1,4 +1,6 @@
 plugins {
+  id('com.silenteight.iris.build.root-build')
+
   alias(libs.plugins.jib) apply false
   alias(libs.plugins.freefair.aspectj.weaving) apply false
 }
@@ -31,7 +33,7 @@ subprojects {Project subproject ->
             image = "gcr.io/distroless/java17-debian11:" + imageTag
           }
           to {
-            image = "docker.repo.silenteight.com/simulator/${subproject.name}:${version}"
+            image = "docker.repo.silenteight.com/iris/${subproject.name}:${version}"
             if ("$version".contains("-BUILD") || "$version".endsWith("-SNAPSHOT")) {
               tags = ["snapshot"]
             } else {

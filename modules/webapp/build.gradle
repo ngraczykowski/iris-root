@@ -1,5 +1,6 @@
 plugins {
-  //id 'java-base'
+  id('com.silenteight.iris.build.root-build')
+
   alias(libs.plugins.jib) apply false
   alias(libs.plugins.freefair.aspectj.weaving) apply false
 }
@@ -14,9 +15,9 @@ subprojects {Project project ->
   }
 }
 
-//tasks.named(BasePlugin.CLEAN_TASK_NAME).configure {
-//  dependsOn tasks.named("deleteWebappPlugins")
-//}
+tasks.named(BasePlugin.CLEAN_TASK_NAME).configure {
+  dependsOn tasks.named("deleteWebappPlugins")
+}
 
 tasks.register("deleteWebappPlugins", Delete).configure {
   delete fileTree("${rootProject.projectDir}/plugin/webapp") {
@@ -39,7 +40,7 @@ configure(subprojects - project(":sens-webapp-common-testing")) {Project subproj
             image = "gcr.io/distroless/java-debian10:11" + imageSuffix
           }
           to {
-            image = "docker.repo.silenteight.com/webapp/webapp-app:${version}"
+            image = "docker.repo.silenteight.com/iris/webapp-app:${version}"
             if (!"$version".endsWith("-SNAPSHOT"))
               tags = ["latest"]
           }

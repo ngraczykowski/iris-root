@@ -1,0 +1,31 @@
+tasks.register('build') {Task task ->
+  task.group = BasePlugin.BUILD_GROUP
+  task.description = 'Builds all subprojects'
+
+  subprojects {Project subproject ->
+    task.dependsOn subproject.tasks.named('build')
+
+  }
+}
+
+tasks.register(BasePlugin.CLEAN_TASK_NAME) {Task task ->
+  task.group = BasePlugin.BUILD_GROUP
+  task.description = 'Cleans all subprojects'
+
+  subprojects {Project subproject ->
+    task.dependsOn subproject.tasks.named(BasePlugin.CLEAN_TASK_NAME)
+  }
+}
+
+tasks.register('package') {Task task ->
+  task.group = BasePlugin.BUILD_GROUP
+  task.description = 'Package subprojects'
+
+  subprojects {Project subproject ->
+    if (subproject.pluginManager.hasPlugin('com.google.cloud.tools.jib'))
+      task.dependsOn subproject.tasks.named('jib')
+
+    if (subproject.pluginManager.hasPlugin('distribution'))
+      task.dependsOn subproject.tasks.named('distTar')
+  }
+}

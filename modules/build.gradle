@@ -2,19 +2,27 @@ tasks.register(BasePlugin.CLEAN_TASK_NAME) {Task task ->
   task.group = BasePlugin.BUILD_GROUP
   task.description = 'Cleans all modules'
 
-  task.dependsOn gradle.includedBuild('modules').task(':clean')
+  dependOnModulesTask(task, BasePlugin.CLEAN_TASK_NAME)
 }
 
 tasks.register('build') {Task task ->
   task.group = BasePlugin.BUILD_GROUP
   task.description = 'Builds all modules'
 
-  task.dependsOn gradle.includedBuild('modules').task(':build')
+  dependOnModulesTask(task, 'build')
 }
 
 tasks.register('package') {Task task ->
   task.group = BasePlugin.BUILD_GROUP
   task.description = 'Packages all modules'
 
-  task.dependsOn gradle.includedBuild('modules').task(':package')
+  dependOnModulesTask(task, 'package')
+}
+
+private void dependOnModulesTask(Task delegate, String taskName) {
+  gradle.includedBuilds().each {IncludedBuild build ->
+    if (build.projectDir.parentFile == project.projectDir) {
+      delegate.dependsOn build.task(":${taskName}")
+    }
+  }
 }

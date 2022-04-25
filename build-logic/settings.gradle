@@ -13,4 +13,5 @@ rootProject.name = 'iris-build-logic'
 include('java-base')
 include('java-library')
 include('report-aggregation')
+include('root-build')
 include('spring-boot-application')

@@ -29,7 +29,7 @@ dependencies {
   implementation libs.silenteight.serp.protocol.base
 
   implementation libs.spring.boot.starter.actuator
-  implementation libs.spring.boot.starter.undertow
+
   implementation libs.spring.boot.starter.web
 
   implementation libs.spring.context.support
