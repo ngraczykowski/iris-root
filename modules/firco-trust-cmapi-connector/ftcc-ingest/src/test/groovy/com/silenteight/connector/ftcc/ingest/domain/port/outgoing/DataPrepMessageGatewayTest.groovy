@@ -1,6 +1,6 @@
 package com.silenteight.connector.ftcc.ingest.domain.port.outgoing
 
-import com.silenteight.connector.ftcc.common.testing.BaseRabbitMQSpecificationIT
+import com.silenteight.connector.ftcc.common.testing.BaseSpecificationIT
 import com.silenteight.connector.ftcc.ingest.adapter.outgoing.amqp.DataPrepAmqpIntegrationFlowConfiguration
 import com.silenteight.connector.ftcc.ingest.adapter.outgoing.amqp.DataPrepProperties
 import com.silenteight.sep.base.common.messaging.IntegrationConfiguration
@@ -29,13 +29,17 @@ import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.CON
     IntegrationAutoConfiguration,
     RabbitAutoConfiguration,
     DataPrepMessageGatewayTestConfig])
-class DataPrepMessageGatewayTest extends BaseRabbitMQSpecificationIT {
+class DataPrepMessageGatewayTest extends BaseSpecificationIT {
 
   @Autowired
   private DataPrepMessageGateway underTest
 
   @Autowired
   private RabbitTemplate rabbitTemplate
+
+  def setupSpec() {
+    startRabbitmq()
+  }
 
   def "When sending 2 messages priority is respected"() {
     given:

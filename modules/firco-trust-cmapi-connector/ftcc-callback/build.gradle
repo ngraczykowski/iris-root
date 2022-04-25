@@ -17,7 +17,7 @@ dependencies {
   implementation libraries.silenteight_sep_base_common
   implementation libraries.core_bridge_registration_connector_lib
   implementation libraries.core_bridge_registration_connector_proto
-  implementation libraries.fab_cmap_connector_api
+  implementation libraries.fab_cmapi_connector_api
   implementation libraries.recommendation_api_library
   implementation libraries.recommendation_internal_protos
   implementation libraries.opencsv

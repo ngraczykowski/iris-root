@@ -2,3 +2,5 @@ ftcc:
   data-prep:
     outbound:
       routing-key: alert.message
+
+logging.pattern.level: "%mdc"

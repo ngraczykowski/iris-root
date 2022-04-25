@@ -29,7 +29,7 @@ libraries.silenteight_sep_base_common = [group: 'com.silenteight.sep.base', name
 libraries.silenteight_sep_base_testing = [group: 'com.silenteight.sep.base', name: 'sep-base-testing', version: silenteightSepBaseVersion]
 libraries.core_bridge_registration_connector_lib = [group: 'com.silenteight.registration.api.library', name: 'registration-lib', version: coreBridgeRegistrationConnectorVersion]
 libraries.core_bridge_registration_connector_proto = [group: 'com.silenteight.registration.api.library', name: 'registration-internal-protos', version: coreBridgeRegistrationConnectorVersion]
-libraries.fab_cmap_connector_api = [group: 'com.silenteight.fab', name: 'cmapi-connector-api', version: fabCmapConnectorApi]
+libraries.fab_cmapi_connector_api = [group: 'com.silenteight.fab', name: 'cmapi-connector-api', version: fabCmapConnectorApi]
 libraries.recommendation_api_library = [group: 'com.silenteight.recommendation.api.library', name: 'recommendation-lib', version: recommendationApiLibraryVersion]
 libraries.recommendation_internal_protos = [group: 'com.silenteight.recommendation.api.library', name: 'recommendation-internal-protos', version: recommendationApiLibraryVersion]
 
@@ -233,6 +233,8 @@ libraries.test_containers_junit_jupiter = [group: 'org.testcontainers', name: 'j
 libraries.test_containers_postgresql = [group: 'org.testcontainers', name: 'postgresql']
 libraries.test_containers_rabbitmq = [group: 'org.testcontainers', name: 'rabbitmq']
 libraries.test_containers_spock = [group: 'org.testcontainers', name: 'spock']
+libraries.groovy_wslite = [group: 'com.github.groovy-wslite', name: 'groovy-wslite', version: '1.1.3']
+libraries.jsonassert = [group: 'org.skyscreamer', name: 'jsonassert', version: '1.5.0']
 
 // @formatter:on
 

@@ -23,6 +23,8 @@ dependencies {
   implementation libraries.core_bridge_registration_connector_proto
   implementation libraries.recommendation_api_library
   implementation libraries.recommendation_internal_protos
+  implementation libraries.sear_rabbitmq_common_schema
+  implementation libraries.fab_cmapi_connector_api
 
   // Utilities
   implementation libraries.commons_lang3
@@ -75,6 +77,9 @@ dependencies {
   runtimeOnly libraries.sentry_logback
 
   testImplementation libraries.silenteight_sep_base_testing
+  testImplementation project(":ftcc-common-testing")
+  testImplementation libraries.groovy_wslite
+  testImplementation libraries.jsonassert
 
   aspect libraries.silenteight_sep_base_aspects
 }

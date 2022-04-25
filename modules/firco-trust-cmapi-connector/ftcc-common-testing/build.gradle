@@ -17,5 +17,7 @@ dependencies {
   api libraries.rest_assured_spring_mock_mvc
 
   api libraries.test_containers_rabbitmq
+  api libraries.test_containers_postgresql
   api libraries.test_containers_spock
+  api libraries.spock_spring
 }
