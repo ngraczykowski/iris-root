@@ -31,16 +31,6 @@ dependencies {
 
   api libs.reactor.test
 
-//  implementation libs.spring.jdbc
-//  implementation libs.spring.test
-//  implementation libs.spring.tx
-//
-//  implementation libs.spring.boot
-//  implementation libs.spring.boot.autoconfigure
-//  implementation libs.spring.boot.test
-//  implementation libs.spring.boot.test.autoconfigure
-//
-
   api libs.grpc.testing
   api libs.protobuf.java.util
   implementation libs.grpc.client.spring.boot.starter
@@ -53,27 +43,4 @@ dependencies {
   implementation libs.liquibase.core
   implementation libs.liquibase.sessionlock
   implementation libs.postgresql
-
-//
-//  implementation libs.spring.security.web
-//  implementation libs.spring.security.config
-//  implementation libs.spring.security.cas
-//
-//  implementation libs.junit.jupiter.api
-//
-//  implementation libs.test.containers
-//
-//  api libs.protobuf.java.util
-//  implementation libs.grpc.client.spring.boot.starter
-//
-//  implementation libs.bouncycastle.bcprov
-//
-//  implementation libs.reactor.test
-//
-//  implementation libs.spring.amqp
-//
-//
-//  implementation libs.rest.assured
-//  implementation libs.rest.assured.spring.mock.mvc
-//  implementation libs.spring.security.test
 }

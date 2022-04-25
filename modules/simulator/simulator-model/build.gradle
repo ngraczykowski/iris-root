@@ -10,15 +10,7 @@ dependencies {
 
   implementation libs.governance.model.api
 
-  implementation libs.silenteight.sep.base.common
-
-  implementation libs.spring.boot.starter.web
-  implementation libs.spring.boot.starter.undertow
-  implementation libs.commons.lang3
-
   aspect libs.silenteight.sep.base.aspects
 
   testImplementation project(":simulator-common-web-testing")
-
-  testImplementation libs.silenteight.sep.base.testing
 }

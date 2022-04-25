@@ -6,6 +6,4 @@ description = "Simulator DB Changelog"
 
 dependencies {
   implementation libs.silenteight.audit.bs
-
-  implementation libs.liquibase.sessionlock
 }

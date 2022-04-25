@@ -16,58 +16,32 @@ dependencies {
   implementation project(":simulator-retention")
 
   implementation libs.silenteight.sep.auth
-  implementation libs.silenteight.audit.bs
-  implementation libs.silenteight.sep.base.common
-  implementation libs.silenteight.commons.app
-  implementation libs.silenteight.sep.base.testing
-  implementation libs.silenteight.serp.protocol.base
 
   implementation libs.spring.boot.starter.actuator
-  implementation libs.spring.boot.starter.undertow
   implementation libs.spring.boot.starter.web
-
-  implementation libs.spring.context.support
-  implementation libs.spring.security.config
-  implementation libs.spring.security.web
-  implementation libs.spring.cloud.consul.discovery
-  implementation libs.spring.cloud.starter.consul.config
-
-  implementation libs.commons.lang3
-
-  implementation libs.ecs.logging.core
 
   // mmastylo: jackson.module.kotlin can be removed once spring and or jackson is bumped
   // kotlin is required by minio
   // https://stackoverflow.com/questions/67630048/springboot-2-5-0-for-jackson-kotlin-classes-support-please-add-com-fasterxml-ja
   implementation libs.jackson.module.kotlin
 
-  implementation libs.jaxb.api
-  implementation libs.jakarta.inject
-
   implementation libs.grpc.api
   implementation libs.grpc.stub
   implementation libs.grpc.census
-  implementation libs.grpc.client.spring.boot.starter
-
-  implementation libs.protobuf.java.util
+  implementation libs.grpc.spring.boot.starter
 
   //Sentry
   runtimeOnly libs.sentry.spring.boot.starter
-  //having this at runtime ensure sending all ERROR level logs to Sentry
   runtimeOnly libs.sentry.logback
 
   runtimeOnly libs.hikari.cp
   runtimeOnly libs.postgresql
 
+  aspect libs.silenteight.sep.base.aspects
+
   testImplementation project(":simulator-common-web-testing")
 
-  testImplementation libs.spock.spring
   testImplementation libs.spring.integration.test
-  testImplementation libs.rest.assured.spring.mock.mvc
-
-  testImplementation libs.spring.security.test
-
-  aspect libs.silenteight.sep.base.aspects
 }
 
 publishing {

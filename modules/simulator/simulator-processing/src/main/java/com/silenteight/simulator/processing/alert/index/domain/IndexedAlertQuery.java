@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.silenteight.simulator.processing.alert.index.domain.State.ACKED;
+import static java.util.List.of;
 import static java.util.stream.Collectors.toList;
-import static org.testcontainers.shaded.com.google.common.collect.ImmutableList.of;
 
 @Slf4j
 @RequiredArgsConstructor
