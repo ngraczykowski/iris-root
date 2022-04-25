@@ -1,5 +1,5 @@
 server:
-  port: { { env "NOMAD_PORT_http" } }
+  port: {{ env "NOMAD_PORT_http" }}
 
 management:
   health:
@@ -8,10 +8,10 @@ management:
 
 spring:
   rabbitmq:
-    addresses: { { range $index, $rabbit := service "amqp.rabbitmq" - } }
-      { { if $index } },{ { end - } }
-      { { $rabbit.Address } }:{{ $rabbit.Port -}}
-  {{- end }}
+    addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
+      {{ if $index }},{{ end -}}
+      {{ $rabbit.Address }}:{{ $rabbit.Port -}}
+{{- end }}
 # NOTE(ahaczewski): Intentionally left empty.
     host:
     virtual-host: /{{ env "NOMAD_NAMESPACE" }}
@@ -41,12 +41,12 @@ warehouse:
       recommendation-date-field: "recommendationDate"
 
   db:
-    name: { { env "NOMAD_NAMESPACE" } }-warehouse
+    name: {{ env "NOMAD_NAMESPACE" }}-warehouse
   {{- $nomad_namespace := env "NOMAD_NAMESPACE" -}}
   {{- with service (print $nomad_namespace "-warehouse-db") }}
-    host: { { (index . 0).Address } }
-    port: { { (index . 0).Port } }
-  { { end - } }
+    host: {{ (index . 0).Address }}
+    port: {{ (index . 0).Port }}
+  {{ end -}}
 
   minio:
     url: https://minio.silenteight.com
@@ -68,7 +68,7 @@ warehouse:
           thread-name-prefix: async-auth-aware-
 
 keycloak:
-  client-id: { { env "NOMAD_NAMESPACE" } }-frontend
+  client-id: {{ env "NOMAD_NAMESPACE" }}-frontend
   adapter:
     auth-server-url: https://auth.silenteight.com
     realm: sens-webapp
@@ -81,7 +81,7 @@ grpc:
   logging:
     enabled: true
   server:
-    port: { { env "NOMAD_PORT_grpc" } }
+    port: {{ env "NOMAD_PORT_grpc" }}
 
 warehouse.report.statistics:
   all-alerts-query:
