@@ -17,6 +17,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -29,7 +30,7 @@ import static org.assertj.core.api.Assertions.*;
 @AutoConfigureDataJpa
 @ActiveProfiles("jpa-test")
 @Transactional
-class SimulationStorageTest {
+class SimulationAlertInsertServiceTest {
 
   private static final String ANALYSIS_NAME = "storageTest";
   private static final String PAYLOAD = "{}";
@@ -48,7 +49,9 @@ class SimulationStorageTest {
     SimulationAlertDefinition definition = new SimulationAlertDefinition(
         ANALYSIS_NAME,
         Values.ALERT_NAME,
-        PAYLOAD
+        PAYLOAD,
+        Collections.emptyList(),
+        false
     );
 
     simulationDbPartitionFactory.createDbPartition(ANALYSIS_NAME);
@@ -61,16 +64,18 @@ class SimulationStorageTest {
     assertThat(firstResult.getName()).isEqualTo(Values.ALERT_NAME);
     assertThat(firstResult.getAnalysisName()).isEqualTo(ANALYSIS_NAME);
     assertThat(firstResult.getPayload()).contains(PAYLOAD);
+    assertThat(firstResult.getMigrated()).isFalse();
   }
 
   private List<SimulationAlertEntity> getAllEntries() {
     return jdbcTemplate.query(
-        "SELECT name, analysis_name, payload FROM warehouse_simulation_alert "
+        "SELECT name, analysis_name, payload, migrated FROM warehouse_simulation_alert "
             + "WHERE analysis_name = '" + ANALYSIS_NAME + "'", (rs, i) ->
             new SimulationAlertEntity(
                 rs.getString("name"),
                 rs.getString("analysis_name"),
-                rs.getString("payload")
+                rs.getString("payload"),
+                rs.getBoolean("migrated")
             ));
   }
 
@@ -81,5 +86,6 @@ class SimulationStorageTest {
     String name;
     String analysisName;
     String payload;
+    Boolean migrated;
   }
 }

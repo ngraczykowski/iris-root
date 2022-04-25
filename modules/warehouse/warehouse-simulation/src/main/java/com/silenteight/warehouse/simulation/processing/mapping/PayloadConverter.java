@@ -24,12 +24,12 @@ public class PayloadConverter {
 
   private final ObjectMapper objectMapper;
 
-  public String convertPayload(Struct payload) {
+  String convertPayload(Struct payload) {
     Map<String, String> mapPayload = flattenPayload(payload);
     return convertPayloadToString(mapPayload);
   }
 
-  public String convertPayloadToString(Map<String, String> payload) {
+  private String convertPayloadToString(Map<String, String> payload) {
     try {
       return objectMapper.writeValueAsString(payload);
     } catch (JsonProcessingException e) {

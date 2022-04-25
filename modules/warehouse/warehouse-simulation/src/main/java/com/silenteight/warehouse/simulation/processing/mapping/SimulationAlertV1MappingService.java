@@ -10,6 +10,7 @@ import com.silenteight.warehouse.simulation.processing.storage.SimulationAlertDe
 import java.util.List;
 import java.util.Objects;
 
+import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
 
@@ -38,10 +39,9 @@ public class SimulationAlertV1MappingService {
 
       String payload = payloadConverter.convertPayload(alert.getPayload());
 
-      return new SimulationAlertDefinition(analysisName, alertName, payload);
+      return new SimulationAlertDefinition(analysisName, alertName, payload, emptyList(), null);
     } catch (RuntimeException e) {
-      log.warn("Storing production data in simulation index failed. "
-          + "This alert will not be stored, alertName=" + alertName, e);
+      log.warn("Mapping simulation alert failed, alertName=" + alertName, e);
       return null;
     }
   }

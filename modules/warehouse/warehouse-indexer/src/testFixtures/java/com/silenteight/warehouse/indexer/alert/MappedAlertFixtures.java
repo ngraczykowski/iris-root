@@ -85,6 +85,7 @@ public class MappedAlertFixtures {
     public static final String PROCESSING_TIMESTAMP_5 = "2019-06-18T12:10:31.098Z";
     public static final String PROCESSING_TIMESTAMP_6 = "2020-06-18T12:10:31.098Z";
     public static final String ALERT_NAME = "alerts/123";
+    public static final String MATCH_NAME = "alerts/123/matches/234";
     public static final String ANALYST_DECISION_FP = "analyst_decision_false_positive";
     public static final String ANALYST_DECISION_TP = "analyst_decision_true_positive";
     public static final String ANALYST_DECISION_UNKNOWN = "analyst_decision_unknown";

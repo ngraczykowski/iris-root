@@ -14,4 +14,10 @@ class SimulationStorageConfiguration {
       NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
     return new SimulationAlertInsertService(namedParameterJdbcTemplate);
   }
+
+  @Bean
+  SimulationMatchInsertService simulationMatchInsertService(
+      NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+    return new SimulationMatchInsertService(namedParameterJdbcTemplate);
+  }
 }
