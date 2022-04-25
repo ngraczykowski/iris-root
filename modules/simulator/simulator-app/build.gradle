@@ -20,17 +20,11 @@ dependencies {
   implementation libs.spring.boot.starter.actuator
   implementation libs.spring.boot.starter.web
 
-  // mmastylo: jackson.module.kotlin can be removed once spring and or jackson is bumped
-  // kotlin is required by minio
-  // https://stackoverflow.com/questions/67630048/springboot-2-5-0-for-jackson-kotlin-classes-support-please-add-com-fasterxml-ja
-  implementation libs.jackson.module.kotlin
-
   implementation libs.grpc.api
   implementation libs.grpc.stub
   implementation libs.grpc.census
   implementation libs.grpc.spring.boot.starter
 
-  //Sentry
   runtimeOnly libs.sentry.spring.boot.starter
   runtimeOnly libs.sentry.logback
 
