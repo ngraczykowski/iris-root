@@ -7,7 +7,7 @@ import com.silenteight.scb.ingest.domain.model.RegistrationResponse.RegisteredMa
 
 class Fixtures {
 
-  static BatchMetadata BATCH_METADATA = new BatchMetadata()
+  static BatchMetadata BATCH_METADATA = new BatchMetadata(BatchSource.CBS)
 
   static def BATCH = Batch.builder()
       .id('batchId')

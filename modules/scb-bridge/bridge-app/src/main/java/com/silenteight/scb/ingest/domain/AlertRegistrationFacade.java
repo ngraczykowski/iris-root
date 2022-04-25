@@ -10,29 +10,19 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static com.silenteight.scb.ingest.domain.model.Batch.Priority.LOW;
-import static com.silenteight.scb.ingest.domain.model.BatchSource.LEARNING;
-
 @Component
 @RequiredArgsConstructor
 public class AlertRegistrationFacade {
 
-  private final BatchRegistrationService learningBatchRegistrationService;
-  private final AlertRegistrationService learningAlertRegistrationService;
-  private final BatchRegistrationService solvingBatchRegistrationService;
-  private final AlertRegistrationService solvingAlertRegistrationService;
+  private final BatchRegistrationService batchRegistrationService;
+  private final AlertRegistrationService alertRegistrationService;
 
-  public RegistrationResponse registerLearningAlerts(String internalBatchId, List<Alert> alerts) {
-    var registrationBatchContext = new RegistrationBatchContext(LOW, LEARNING);
-    learningBatchRegistrationService.register(internalBatchId, alerts, registrationBatchContext);
-    return learningAlertRegistrationService.registerAlertsAndMatches(internalBatchId, alerts);
-  }
-
-  public RegistrationResponse registerSolvingAlerts(
+  public RegistrationResponse registerAlerts(
       String internalBatchId,
       List<Alert> alerts,
       RegistrationBatchContext registrationBatchContext) {
-    solvingBatchRegistrationService.register(internalBatchId, alerts, registrationBatchContext);
-    return solvingAlertRegistrationService.registerAlertsAndMatches(internalBatchId, alerts);
+    batchRegistrationService.register(internalBatchId, alerts, registrationBatchContext);
+    return alertRegistrationService.registerAlertsAndMatches(internalBatchId, alerts);
   }
+
 }

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRecommendationService;
 import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
+import com.silenteight.scb.reports.domain.port.outgoing.ReportsSenderService;
 import com.silenteight.sep.base.common.messaging.MessagingConfiguration;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -19,17 +20,18 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @Import(MessagingConfiguration.class)
 class IngestConfiguration {
 
+  private final ScbRecommendationService scbRecommendationService;
   private final AlertRegistrationFacade alertRegistrationFacade;
   private final IngestEventPublisher ingestEventPublisher;
+  private final ReportsSenderService reportsSenderService;
 
   @Bean
-  IngestService ingestService(
-      ScbRecommendationService scbRecommendationService) {
-
+  IngestService ingestService() {
     return IngestService.builder()
         .scbRecommendationService(scbRecommendationService)
         .alertRegistrationFacade(alertRegistrationFacade)
         .ingestEventPublisher(ingestEventPublisher)
+        .reportsSenderService(reportsSenderService)
         .build();
   }
 

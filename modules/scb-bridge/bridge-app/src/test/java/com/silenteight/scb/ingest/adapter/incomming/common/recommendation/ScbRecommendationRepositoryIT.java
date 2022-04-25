@@ -132,6 +132,7 @@ class ScbRecommendationRepositoryIT extends BaseDataJpaTest {
 
       ScbRecommendation entity = new ScbRecommendation();
       entity.setSystemId(systemId);
+      entity.setAlertName("alertName");
       entity.setDiscriminator(discriminator);
       entity.setDecision("decision");
       entity.setComment("comment");

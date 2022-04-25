@@ -8,34 +8,45 @@ import com.silenteight.scb.ingest.domain.model.RegistrationResponse;
 import com.silenteight.scb.ingest.domain.model.RegistrationResponse.RegisteredAlertWithMatches;
 import com.silenteight.scb.ingest.domain.model.RegistrationResponse.RegisteredMatch;
 
-import java.util.Collection;
 import java.util.List;
 
 @UtilityClass
 public class AlertUpdater {
 
-  public void updatedWithRegistrationInfo(Alert alert, RegistrationResponse registrationResponse) {
-    registrationResponse.getRegisteredAlertWithMatches().stream()
-        .peek(registeredAlertWithMatches ->
-            updateAlertWithRegistrationInfo(alert, registeredAlertWithMatches))
-        .map(RegisteredAlertWithMatches::getRegisteredMatches)
-        .flatMap(Collection::stream)
-        .forEach(
-            registeredMatch -> updateMatchWithRegistrationInfo(alert.matches(), registeredMatch));
+  public void updateWithRegistrationResponse(
+      List<Alert> alerts,
+      RegistrationResponse registrationResponse) {
+    alerts.forEach(alert -> updateWithRegistrationResponse(alert, registrationResponse));
   }
 
-  private void updateAlertWithRegistrationInfo(
-      Alert alert, RegistrationResponse.RegisteredAlertWithMatches registeredAlertWithMatches) {
-    if (registeredAlertWithMatches.getAlertId().equals(alert.id().sourceId())) {
-      alert.details().setAlertName(registeredAlertWithMatches.getAlertName());
-    }
+  public void updateWithRegistrationResponse(Alert alert,
+      RegistrationResponse registrationResponse) {
+    var rawm = requireRegisteredAlertWithMatches(alert, registrationResponse);
+    alert.details().setAlertName(rawm.getAlertName());
+
+    alert.matches().forEach(match ->
+        match.details().setMatchName(requireRegisteredMatch(match, rawm).getMatchName()));
   }
 
-  private void updateMatchWithRegistrationInfo(
-      List<Match> matches, RegisteredMatch registeredMatch) {
-    matches.stream()
-        .filter(match -> match.id().sourceId().equals(registeredMatch.getMatchId()))
+  private RegisteredAlertWithMatches requireRegisteredAlertWithMatches(
+      Alert alert, RegistrationResponse registrationResponse) {
+    return registrationResponse.getRegisteredAlertWithMatches()
+        .stream()
+        .filter(awm -> awm.getAlertId().equals(alert.id().sourceId()))
         .findFirst()
-        .ifPresent(match -> match.details().setMatchName(registeredMatch.getMatchName()));
+        .orElseThrow(
+            () -> new IllegalStateException(
+                "Missing alert with id: " + alert.id().sourceId() + " in registration response"));
   }
+
+  private RegisteredMatch requireRegisteredMatch(
+      Match match, RegisteredAlertWithMatches registeredAlertWithMatches) {
+    return registeredAlertWithMatches.getRegisteredMatches()
+        .stream()
+        .filter(registeredMatch -> match.id().sourceId().equals(registeredMatch.getMatchId()))
+        .findFirst()
+        .orElseThrow(() -> new IllegalStateException(
+            "Missing match with id: " + match.id().sourceId() + " in registration response"));
+  }
+
 }

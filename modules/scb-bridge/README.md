@@ -35,11 +35,11 @@ This configuration scheme:
 - 
 ### Local run
 
-To enable locally getting configuration from Consul activate profile `consule`. You would want to have Consul running locally as well, you may start it with the help of attached `docker-compose` file.
+To enable locally getting configuration from Consul activate profile `consul`. You would want to have Consul running locally as well, you may start it with the help of attached `docker-compose` file.
 
 If you don't want to use Consul, start the application with `client` profile, so it has some sane values how to behave locally.
 
-Keep in mind that `consule` profile will be activated on client's environment, and our test envs as well.
+Keep in mind that `consul` profile will be activated on client's environment, and our test envs as well.
 
 ## How to test
 

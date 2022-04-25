@@ -76,7 +76,3 @@ silenteight:
     config-file:
       location: "classpath:config/qco_config_file.csv"
       separator: "|"
-amqp:
-  report:
-    exchange-name: bridge.command
-    routing-key: command.index-request.production

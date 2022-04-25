@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: 11.0.0-1
+      author: wzegarowski
+      comment: Add column AlertName
+      changes:
+        - addColumn:
+            tableName: scb_recommendation
+            columns:
+              - column:
+                  name: alert_name
+                  type: varchar(128)
+                  constraints:
+                    nullable: false
+

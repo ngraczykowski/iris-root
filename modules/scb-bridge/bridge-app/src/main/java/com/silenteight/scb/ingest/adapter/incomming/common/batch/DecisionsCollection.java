@@ -8,8 +8,8 @@ import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decisi
 import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision.AnalystSolution;
 
 import java.time.Instant;
-import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 
@@ -20,7 +20,7 @@ public class DecisionsCollection {
 
   @NonNull
   @Getter
-  private final Collection<Decision> decisions;
+  private final List<Decision> decisions;
 
   public int size() {
     return decisions.size();

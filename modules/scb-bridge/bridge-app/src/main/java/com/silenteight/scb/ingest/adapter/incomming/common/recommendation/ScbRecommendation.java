@@ -4,7 +4,8 @@ import lombok.*;
 import lombok.EqualsAndHashCode.Include;
 
 import com.silenteight.sep.base.common.entity.BaseEntity;
-import com.silenteight.sep.base.common.entity.IdentifiableEntity;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.OffsetDateTime;
 import javax.annotation.Nullable;
@@ -22,7 +23,7 @@ import static lombok.AccessLevel.PUBLIC;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
 @Table(name = "ScbRecommendation")
-class ScbRecommendation extends BaseEntity implements IdentifiableEntity {
+public class ScbRecommendation extends BaseEntity {
 
   public static final String CONCATENATION_ELEMENT = " - ";
   @Id
@@ -32,6 +33,7 @@ class ScbRecommendation extends BaseEntity implements IdentifiableEntity {
   @Include
   private Long id;
   private String systemId;
+  private String alertName;
   @Nullable
   private String watchlistId;
   private String discriminator;
@@ -39,4 +41,11 @@ class ScbRecommendation extends BaseEntity implements IdentifiableEntity {
   private String comment;
   private OffsetDateTime recommendedAt;
 
+  public String requireAlertName() {
+    if (StringUtils.isBlank(alertName)) {
+      throw new IllegalStateException(
+          "AlertName on Recommendation: " + this + " must not be empty");
+    }
+    return alertName;
+  }
 }

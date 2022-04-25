@@ -3,9 +3,11 @@ package com.silenteight.scb.ingest.adapter.incomming.common.model.alert;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Builder
+@ToString
 public class AlertDetails {
 
   private final String batchId;

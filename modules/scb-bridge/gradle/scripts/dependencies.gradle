@@ -189,6 +189,7 @@ dependencies {
   implementation libraries.universal_datasource_api_library
   implementation libraries.data_source_agentinput_api
   implementation libraries.data_source_categories_api
+  implementation libraries.warehouse_api
   implementation libraries.spring_boot_starter_jpa
   implementation libraries.oracle
   implementation libraries.grpc_client_spring_boot_starter

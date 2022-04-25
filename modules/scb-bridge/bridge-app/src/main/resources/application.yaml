@@ -233,3 +233,8 @@ amqp:
     outgoing:
       recommendation-delivered:
         exchange-name: core-bridge.recommendation-delivered-exchange
+
+  reports:
+    outgoing:
+      exchange-name: bridge.command
+      routing-key: command.index-request.production

@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static java.util.Collections.singleton;
 import static java.util.Collections.singletonList;
 
 @Slf4j
@@ -53,7 +52,7 @@ class EcmAlertCompositeRowProcessor extends BaseAlertCompositeRowProcessor {
     var lastDecision = decisions.stream()
         .max(Comparator.comparing(Decision::createdAt))
         .orElseThrow(() -> new IllegalStateException("ECM decision does not exist"));
-    var decisionCollection = new DecisionsCollection(singleton(lastDecision));
+    var decisionCollection = new DecisionsCollection(List.of(lastDecision));
 
     return createRecordToAlertMapper(alertRecord, decisionCollection, WATCHLIST_LEVEL);
   }

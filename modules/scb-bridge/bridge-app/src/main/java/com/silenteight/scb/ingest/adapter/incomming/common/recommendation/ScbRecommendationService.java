@@ -10,6 +10,7 @@ import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.Rec
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.silenteight.scb.ingest.adapter.incomming.common.domain.GnsSyncConstants.PRIMARY_TRANSACTION_MANAGER;
 
@@ -20,11 +21,9 @@ public class ScbRecommendationService {
   private final ScbDiscriminatorMatcher scbDiscriminatorMatcher;
   private final PayloadConverter payloadConverter;
 
-  public boolean alertRecommendationExists(String systemId, String discriminator) {
+  public Optional<ScbRecommendation> alertRecommendation(String systemId, String discriminator) {
     return scbRecommendationRepository.findFirstBySystemIdOrderByRecommendedAtDesc(systemId)
-        .map(ScbRecommendation::getDiscriminator)
-        .filter(d -> scbDiscriminatorMatcher.match(discriminator, d))
-        .isPresent();
+        .filter(r -> scbDiscriminatorMatcher.match(discriminator, r.getDiscriminator()));
   }
 
   @Transactional(PRIMARY_TRANSACTION_MANAGER)
@@ -41,6 +40,7 @@ public class ScbRecommendationService {
     var alertMetadata = parseAlertMetadata(recommendation);
     return ScbRecommendation.builder()
         .systemId(alertMetadata.systemId())
+        .alertName(recommendation.alert().name())
         .decision(recommendation.recommendedAction().name())
         .comment(recommendation.recommendedComment())
         .recommendedAt(recommendation.recommendedAt())

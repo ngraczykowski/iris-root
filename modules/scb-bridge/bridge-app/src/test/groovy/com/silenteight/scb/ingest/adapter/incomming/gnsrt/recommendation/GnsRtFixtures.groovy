@@ -2,6 +2,7 @@ package com.silenteight.scb.ingest.adapter.incomming.gnsrt.recommendation
 
 import com.silenteight.scb.ingest.adapter.incomming.common.model.ObjectId
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertDetails
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.request.*
 import com.silenteight.scb.outputrecommendation.domain.model.Recommendations
 import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.AlertStatus
@@ -35,6 +36,8 @@ class GnsRtFixtures {
   static alert(ObjectId id) {
     Alert.builder()
         .id(id)
+        .details(AlertDetails.builder().build())
+        .matches([])
         .build()
   }
 

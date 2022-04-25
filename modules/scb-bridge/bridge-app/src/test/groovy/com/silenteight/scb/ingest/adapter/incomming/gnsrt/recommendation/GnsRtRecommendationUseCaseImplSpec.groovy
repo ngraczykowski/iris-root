@@ -10,7 +10,6 @@ import com.silenteight.scb.ingest.domain.AlertRegistrationFacade
 import com.silenteight.scb.ingest.domain.model.Batch.Priority
 import com.silenteight.scb.ingest.domain.model.BatchSource
 import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext
-import com.silenteight.scb.ingest.domain.model.RegistrationResponse
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher
 
 import reactor.core.publisher.Mono
@@ -18,6 +17,7 @@ import reactor.test.StepVerifier
 import spock.lang.Specification
 import spock.lang.Subject
 
+import static com.silenteight.scb.ingest.domain.Fixtures.registrationResponse
 import static org.assertj.core.api.Assertions.assertThat
 
 class GnsRtRecommendationUseCaseImplSpec extends Specification {
@@ -77,9 +77,9 @@ class GnsRtRecommendationUseCaseImplSpec extends Specification {
     1 * trafficManager.activateRtSemaphore()
     1 * rawAlertService.store(_, fixtures.alerts)
     1 * batchInfoService.store(_, _ as BatchSource, fixtures.alerts.size())
-    1 * registrationFacade.registerSolvingAlerts(
+    1 * registrationFacade.registerAlerts(
         _, fixtures.alerts, new RegistrationBatchContext(Priority.HIGH, BatchSource.GNS_RT))
-        >> RegistrationResponse.empty()
+        >> registrationResponse(fixtures.alerts)
     1 * ingestEventPublisher.publish(_)
   }
 

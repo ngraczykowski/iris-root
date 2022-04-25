@@ -18,7 +18,6 @@ import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtRe
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtResponseAlert;
 import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
 import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext;
-import com.silenteight.scb.ingest.domain.model.RegistrationResponse;
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
 import com.silenteight.scb.outputrecommendation.domain.model.Recommendations;
 
@@ -58,21 +57,18 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
     var registrationBatchContext = new RegistrationBatchContext(HIGH, GNS_RT);
     var registrationResponse =
         alertRegistrationFacade
-            .registerSolvingAlerts(internalBatchId, alerts, registrationBatchContext);
+            .registerAlerts(internalBatchId, alerts, registrationBatchContext);
 
-    feedUds(alerts, registrationResponse);
+    AlertUpdater.updateWithRegistrationResponse(alerts, registrationResponse);
+
+    feedUds(alerts);
 
     return gnsRtRecommendationService.recommendationsMono(internalBatchId)
         .map(recommendations -> mapResponse(request, recommendations));
   }
 
-  private void feedUds(List<Alert> alerts, RegistrationResponse registrationResponse) {
-    alerts.forEach(alert -> updateAndPublish(alert, registrationResponse));
-  }
-
-  private void updateAndPublish(Alert alert, RegistrationResponse registrationResponse) {
-    AlertUpdater.updatedWithRegistrationInfo(alert, registrationResponse);
-    ingestEventPublisher.publish(alert);
+  private void feedUds(List<Alert> alerts) {
+    alerts.forEach(ingestEventPublisher::publish);
   }
 
   private List<Alert> mapAlerts(GnsRtRecommendationRequest request, String internalBatchId) {

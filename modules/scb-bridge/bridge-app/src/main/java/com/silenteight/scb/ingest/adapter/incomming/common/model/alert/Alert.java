@@ -8,7 +8,6 @@ import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decisi
 import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match;
 
 import java.time.Instant;
-import java.util.Collection;
 import java.util.List;
 
 public record Alert(
@@ -24,19 +23,30 @@ public record Alert(
     AlertedParty alertedParty,
     List<Match> matches,
     AlertDetails details,
-    Collection<Decision> decisions) {
+    List<Decision> decisions) {
 
   public String logInfo() {
     return String.format(
-        "Alert(alertId: %s, numOfMatches: %d, batchId: %s, internalBatchId: %s)",
+        "Alert(alertId: %s, discriminator: %s, numOfMatches: %d, numOfDecisions: %d, batchId: %s, "
+            + "internalBatchId: %s)",
         id.sourceId(),
+        id.discriminator(),
         getMatchesCount(),
+        getDecisionsCount(),
         details.getBatchId(),
         details.getInternalBatchId());
   }
 
   @Builder(toBuilder = true)
   public Alert {}
+
+  public int getDecisionsCount() {
+    return decisions != null ? decisions.size() : 0;
+  }
+
+  public boolean hasDecision() {
+    return getDecisionsCount() > 0;
+  }
 
   public int getMatchesCount() {
     return matches != null ? matches.size() : 0;

@@ -66,11 +66,11 @@ class ScbRecommendationServiceTest {
 
     // when
     underTest.saveRecommendation(alertRecommendation);
-    boolean result =
-        underTest.alertRecommendationExists(alertId, "");
+    Optional<ScbRecommendation> result =
+        underTest.alertRecommendation(alertId, "");
 
     //then
-    assertThat(result).isTrue();
+    assertThat(result).isPresent();
   }
 
   private static class Fixtures {
