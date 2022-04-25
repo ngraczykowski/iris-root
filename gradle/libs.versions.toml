@@ -40,11 +40,14 @@ platform-test-containers = "1.17.1"
 # Others libraries
 #-----------------------------------
 aspectj = "1.9.9.1"
+grpc = "1.45.1"
+grpc-starter = "2.13.1.RELEASE"
 jackson = "2.13.0"
 lombok = "1.18.24"
+protobuf = "3.20.1"
 shedlock = "4.27.0"
-springdoc = "1.6.7"
 spotbugs = "4.6.0"
+springdoc = "1.6.7"
 
 #-----------------------------------
 # Testing
@@ -255,19 +258,19 @@ ecs-logging-core = { group = "co.elastic.logging", name = "ecs-logging-core" }
 fastutil = { group = "it.unimi.dsi", name = "fastutil" }
 feign-slf4j = { group = "io.github.openfeign", name = "feign-slf4j" }
 freemarker = { group = "org.freemarker", name = "freemarker" }
-grpc-api = { group = "io.grpc", name = "grpc-api" }
-grpc-auth = { group = "io.grpc", name = "grpc-auth" }
-grpc-census = { group = "io.grpc", name = "grpc-census" }
-grpc-client-spring-boot-starter = { group = "net.devh", name = "grpc-client-spring-boot-starter" }
-grpc-context = { group = "io.grpc", name = "grpc-context" }
-grpc-core = { group = "io.grpc", name = "grpc-core" }
-grpc-netty = { group = "io.grpc", name = "grpc-netty" }
-grpc-protobuf = { group = "io.grpc", name = "grpc-protobuf" }
-grpc-server-spring-boot-starter = { group = "net.devh", name = "grpc-server-spring-boot-starter" }
-grpc-services = { group = "io.grpc", name = "grpc-services" }
-grpc-spring-boot-starter = { group = "net.devh", name = "grpc-spring-boot-starter" }
-grpc-stub = { group = "io.grpc", name = "grpc-stub" }
-grpc-testing = { group = "io.grpc", name = "grpc-testing" }
+grpc-api = { group = "io.grpc", name = "grpc-api", version.ref = "grpc" }
+grpc-auth = { group = "io.grpc", name = "grpc-auth", version.ref = "grpc" }
+grpc-census = { group = "io.grpc", name = "grpc-census", version.ref = "grpc" }
+grpc-client-spring-boot-starter = { group = "net.devh", name = "grpc-client-spring-boot-starter", version.ref = "grpc-starter" }
+grpc-context = { group = "io.grpc", name = "grpc-context", version.ref = "grpc" }
+grpc-core = { group = "io.grpc", name = "grpc-core", version.ref = "grpc" }
+grpc-netty = { group = "io.grpc", name = "grpc-netty", version.ref = "grpc" }
+grpc-protobuf = { group = "io.grpc", name = "grpc-protobuf", version.ref = "grpc" }
+grpc-server-spring-boot-starter = { group = "net.devh", name = "grpc-server-spring-boot-starter", version.ref = "grpc-starter" }
+grpc-services = { group = "io.grpc", name = "grpc-services", version.ref = "grpc" }
+grpc-spring-boot-starter = { group = "net.devh", name = "grpc-spring-boot-starter", version.ref = "grpc-starter" }
+grpc-stub = { group = "io.grpc", name = "grpc-stub", version.ref = "grpc" }
+grpc-testing = { group = "io.grpc", name = "grpc-testing", version.ref = "grpc" }
 guava = { group = "com.google.guava", name = "guava" }
 hibernate-core = { group = "org.hibernate", name = "hibernate-core" }
 hibernate-envers = { group = "org.hibernate", name = "hibernate-envers" }
@@ -313,8 +316,8 @@ opencsv = { group = "com.opencsv", name = "opencsv", version = "5.5.1" }
 oracle = { group = "com.oracle", name = "ojdbc8" }
 pebble = { group = "io.pebbletemplates", name = "pebble", version = "3.1.5" }
 postgresql = { group = "org.postgresql", name = "postgresql" }
-protobuf-java = { group = "com.google.protobuf", name = "protobuf-java" }
-protobuf-java-util = { group = "com.google.protobuf", name = "protobuf-java-util" }
+protobuf-java = { group = "com.google.protobuf", name = "protobuf-java", version.ref = "protobuf" }
+protobuf-java-util = { group = "com.google.protobuf", name = "protobuf-java-util", version.ref = "protobuf" }
 pw-swift-core = { group = "com.prowidesoftware", name = "pw-swift-core", version = "SRU2021-9.2.12" }
 querydsl-apt-jpa = { group = "com.querydsl", name = "querydsl-apt" }
 querydsl-jpa = { group = "com.querydsl", name = "querydsl-jpa" }
