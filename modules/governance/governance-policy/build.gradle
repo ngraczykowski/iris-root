@@ -31,4 +31,6 @@ dependencies {
 
   testImplementation libs.rest.assured.spring.mock.mvc
   testImplementation libs.spring.security.test
+
+  testFixturesImplementation libs.aspectjrt
 }

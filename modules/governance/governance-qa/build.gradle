@@ -30,4 +30,6 @@ dependencies {
   testImplementation libs.spring.security.test
 
   testImplementation project(":governance-common-web-testing")
+
+  testFixturesImplementation libs.aspectjrt
 }

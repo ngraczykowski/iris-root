@@ -24,4 +24,6 @@ dependencies {
   testImplementation libs.rest.assured.spring.mock.mvc
   testImplementation libs.spring.security.test
   testImplementation libs.silenteight.filestorage.minio
+
+  testFixturesImplementation libs.aspectjrt
 }

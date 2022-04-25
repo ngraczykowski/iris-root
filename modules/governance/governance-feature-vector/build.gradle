@@ -24,4 +24,6 @@ dependencies {
 
   testImplementation(testFixtures(project(":governance-policy")))
   testImplementation libs.rest.assured.spring.mock.mvc
+
+  testFixturesImplementation libs.aspectjrt
 }
