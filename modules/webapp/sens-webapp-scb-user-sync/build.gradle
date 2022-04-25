@@ -19,7 +19,7 @@ dependencies {
   implementation libs.jakarta.validation.api
 
   implementation libs.spring.boot.autoconfigure
-  implementation libs.spring.boot.starter.undertow
+
 
   implementation libs.spring.security.web
   implementation libs.spring.security.config
