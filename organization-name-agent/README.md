@@ -60,7 +60,7 @@ optional arguments:
 ```
 Sample configuration is prepared in repository main folder under `config`.
 
-For local run simply copy `config/application.local.yaml` into `config/application.yaml` - and prepare rabbitmq queues in your system (for example using https://gitlab.silenteight.com/sens/common-docker-infrastructure).
+For local run simply fill params in `config/application.yaml` - and prepare rabbitmq queues in your system (for example using https://gitlab.silenteight.com/sens/common-docker-infrastructure).
 
 ### running agent without installation
 
