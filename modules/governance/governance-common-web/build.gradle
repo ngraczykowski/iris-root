@@ -6,6 +6,7 @@ description = "Serp Governance Common Web"
 
 dependencies {
   // API dependencies
+  api libs.commons.io
   api libs.jakarta.validation.api
   api libs.jakarta.annotation.api
   api libs.silenteight.sep.base.common
