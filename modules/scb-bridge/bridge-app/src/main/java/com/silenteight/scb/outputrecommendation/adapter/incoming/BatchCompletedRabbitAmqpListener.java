@@ -18,7 +18,7 @@ class BatchCompletedRabbitAmqpListener {
   private final OutputRecommendationFacade outputRecommendationFacade;
 
   @RabbitListener(
-      queues = "${amqp.output-recommendation.incoming.notify-batch-completed.queue-name}",
+      queues = "${amqp.output-recommendation.incoming.notify-batch-completed.solving.queue-name}",
       errorHandler = "outputRecommendationAmqpErrorHandler"
   )
   public void subscribe(MessageBatchCompleted batchCompleted) {

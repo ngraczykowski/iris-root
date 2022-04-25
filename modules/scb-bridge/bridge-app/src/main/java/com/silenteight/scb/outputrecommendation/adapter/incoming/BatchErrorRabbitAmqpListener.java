@@ -18,7 +18,7 @@ public class BatchErrorRabbitAmqpListener {
   private final OutputRecommendationFacade outputRecommendationFacade;
 
   @RabbitListener(
-      queues = "${amqp.output-recommendation.incoming.batch-error.queue-name}",
+      queues = "${amqp.output-recommendation.incoming.batch-error.solving.queue-name}",
       errorHandler = "outputRecommendationAmqpErrorHandler"
   )
   public void subscribe(MessageBatchError message) {

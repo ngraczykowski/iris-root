@@ -7,5 +7,5 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties({
     ReportsOutgoingConfigurationProperties.class
 })
-class ReportConfiguration {
+class WarehouseReportConfiguration {
 }
