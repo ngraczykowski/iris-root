@@ -1,7 +1,9 @@
 @Library('pipeline-shared-library@master') _
 
 pipeline {
-  agent any
+  agent {
+    label 'ec2-agent'
+  }
   options {
     gitLabConnection(env.GITLAB_CONNECTION_NAME)
     skipDefaultCheckout(true)
