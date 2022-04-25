@@ -31,6 +31,7 @@ pipeline {
             sh '''./gradlew \
               -Dsilenteight.repoDeploymentUser=$repoDeploymentUser \
               -Dsilenteight.repoDeploymentPassword=$repoDeploymentPassword \
+              -Djib.console=plain \
               clean build package
             '''
           }
