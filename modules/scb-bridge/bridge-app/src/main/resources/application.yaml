@@ -219,17 +219,21 @@ amqp:
     number-of-retries-dead-messages: 2
     incoming:
       notify-batch-completed:
-        exchange-name: core-bridge.notify-batch-completed-exchange
-        queue-name: scb-bridge.notify-batch-completed-queue
-        dead-letter-queue-name: scb-bridge.notify-batch-completed.dlq
-        dead-letter-queue-time-to-live-in-milliseconds: 30000
-        dead-letter-exchange-name: scb-bridge.notify-batch-completed.dlx
+        solving:
+          exchange-name: core-bridge.notify-batch-completed-exchange
+          queue-name: scb-bridge.notify-batch-completed-queue
+          dead-letter-queue-name: scb-bridge.notify-batch-completed.dlq
+          dead-letter-queue-time-to-live-in-milliseconds: 30000
+          dead-letter-exchange-name: scb-bridge.notify-batch-completed.dlx
+          batch-routing-key: solving
       batch-error:
-        exchange-name: core-bridge.notify-batch-error-exchange
-        queue-name: scb-bridge.notify-batch-error-queue
-        dead-letter-queue-name: scb-bridge.notify-batch-error.dlq
-        dead-letter-queue-time-to-live-in-milliseconds: 30000
-        dead-letter-exchange-name: scb-bridge.notify-batch-error.dlx
+        solving:
+          exchange-name: core-bridge.notify-batch-error-exchange
+          queue-name: scb-bridge.notify-batch-error-queue
+          dead-letter-queue-name: scb-bridge.notify-batch-error.dlq
+          dead-letter-queue-time-to-live-in-milliseconds: 30000
+          dead-letter-exchange-name: scb-bridge.notify-batch-error.dlx
+          batch-routing-key: solving
     outgoing:
       recommendation-delivered:
         exchange-name: core-bridge.recommendation-delivered-exchange

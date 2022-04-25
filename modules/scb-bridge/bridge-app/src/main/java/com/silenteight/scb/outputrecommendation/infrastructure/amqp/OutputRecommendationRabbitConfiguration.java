@@ -23,6 +23,8 @@ class OutputRecommendationRabbitConfiguration {
   private static final String X_DEAD_LETTER_EXCHANGE = "x-dead-letter-exchange";
   private static final String X_DEAD_LETTER_ROUTING_KEY = "x-dead-letter-routing-key";
 
+  // batch completed
+
   @Bean
   Queue batchCompletedQueue(OutputNotifyBatchCompletedRabbitProperties properties) {
     return QueueBuilder.durable(properties.queueName())
@@ -36,7 +38,10 @@ class OutputRecommendationRabbitConfiguration {
       @Qualifier("batchCompletedQueue") Queue queue,
       OutputNotifyBatchCompletedRabbitProperties properties) {
     DirectExchange exchange = new DirectExchange(properties.exchangeName());
-    return BindingBuilder.bind(queue).to(exchange).with(EMPTY_ROUTING_KEY);
+    return BindingBuilder
+        .bind(queue)
+        .to(exchange)
+        .with(properties.batchRoutingKey());
   }
 
   @Bean
@@ -61,16 +66,37 @@ class OutputRecommendationRabbitConfiguration {
       @Qualifier("batchCompletedDeadLetterQueue") Queue queue,
       @Qualifier("batchCompletedDeadLetterExchange") DirectExchange exchange,
       OutputNotifyBatchCompletedRabbitProperties properties) {
-    return BindingBuilder.bind(queue).to(exchange).with(properties.queueName());
+    return BindingBuilder
+        .bind(queue)
+        .to(exchange)
+        .with(properties.queueName());
   }
+
+  // batch error
 
   @Bean
   Queue batchErrorQueue(
       OutputBatchErrorRabbitProperties properties) {
     return QueueBuilder.durable(properties.queueName())
         .withArgument(X_DEAD_LETTER_EXCHANGE, properties.deadLetterExchangeName())
-        .withArgument(X_DEAD_LETTER_ROUTING_KEY, properties.deadLetterQueueName())
+        .withArgument(X_DEAD_LETTER_ROUTING_KEY, properties.queueName())
         .build();
+  }
+
+  @Bean
+  Binding batchErrorBinding(
+      @Qualifier("batchErrorQueue") Queue queue, OutputBatchErrorRabbitProperties properties) {
+    DirectExchange exchange = new DirectExchange(properties.exchangeName());
+    return BindingBuilder
+        .bind(queue)
+        .to(exchange)
+        .with(properties.batchRoutingKey());
+  }
+
+  @Bean
+  DirectExchange batchErrorDeadLetterExchange(
+      OutputBatchErrorRabbitProperties properties) {
+    return new DirectExchange(properties.deadLetterExchangeName());
   }
 
   @Bean
@@ -86,23 +112,13 @@ class OutputRecommendationRabbitConfiguration {
   }
 
   @Bean
-  DirectExchange batchErrorDeadLetterExchange(
-      OutputBatchErrorRabbitProperties properties) {
-    return new DirectExchange(properties.deadLetterExchangeName());
-  }
-
-  @Bean
-  Binding batchErrorBinding(
-      @Qualifier("batchErrorQueue") Queue queue, OutputBatchErrorRabbitProperties properties) {
-    DirectExchange exchange = new DirectExchange(properties.exchangeName());
-    return BindingBuilder.bind(queue).to(exchange).with(EMPTY_ROUTING_KEY);
-  }
-
-  @Bean
   Binding batchErrorDeadLetterBinding(
       @Qualifier("batchErrorDeadLetterQueue") Queue queue,
       @Qualifier("batchErrorDeadLetterExchange") DirectExchange exchange,
       OutputBatchErrorRabbitProperties properties) {
-    return BindingBuilder.bind(queue).to(exchange).with(properties.deadLetterQueueName());
+    return BindingBuilder
+        .bind(queue)
+        .to(exchange)
+        .with(properties.queueName());
   }
 }

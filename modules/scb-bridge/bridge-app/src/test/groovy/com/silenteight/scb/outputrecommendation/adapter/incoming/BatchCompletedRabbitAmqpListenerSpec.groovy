@@ -2,13 +2,12 @@ package com.silenteight.scb.outputrecommendation.adapter.incoming
 
 import com.silenteight.proto.registration.api.v1.MessageBatchCompleted
 import com.silenteight.scb.outputrecommendation.domain.OutputRecommendationFacade
+import com.silenteight.scb.outputrecommendation.domain.PrepareRecommendationResponseCommand
 
 import spock.lang.Specification
 import spock.lang.Subject
 
-import static com.silenteight.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator.generate
-
-class BatchCompletedRabbitAmqpListenerSpec extends Specification {
+class BatchCompletedRabbitAmpqListenerSpec extends Specification {
 
   def outputRecommendationFacade = Mock(OutputRecommendationFacade)
   def mapper = Mock(BatchMapper)
@@ -18,17 +17,22 @@ class BatchCompletedRabbitAmqpListenerSpec extends Specification {
 
   def "should call output recommendation facade with mapped command"() {
     given:
-    def batchId = generate()
     def message = MessageBatchCompleted.newBuilder()
-        .setBatchId(batchId)
-        .setAnalysisName("some-analysis-id")
+        .setBatchId("some-batch-id")
+        .setAnalysisName("some-analysis-name")
         .setBatchMetadata("some-metadata")
         .build()
+    def expectedCommand = PrepareRecommendationResponseCommand.builder()
+        .batchId(message.batchId)
+        .analysisName(message.analysisName)
+        .batchMetadata(message.batchMetadata)
+        .build()
+    1 * mapper.fromBatchCompletedMessage(message) >> expectedCommand
 
     when:
     underTest.subscribe(message)
 
     then:
-    1 * outputRecommendationFacade.prepareCompletedBatchRecommendations(_)
+    1 * outputRecommendationFacade.prepareCompletedBatchRecommendations(expectedCommand)
   }
 }

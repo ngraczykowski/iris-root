@@ -4,11 +4,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 
 @ConstructorBinding
-@ConfigurationProperties(prefix = "amqp.output-recommendation.incoming.batch-error")
+@ConfigurationProperties(prefix = "amqp.output-recommendation.incoming.batch-error.solving")
 public record OutputBatchErrorRabbitProperties(
     String exchangeName,
     String queueName,
     String deadLetterQueueName,
     Integer deadLetterQueueTimeToLiveInMilliseconds,
-    String deadLetterExchangeName) {
+    String deadLetterExchangeName,
+    String batchRoutingKey) {
 }
