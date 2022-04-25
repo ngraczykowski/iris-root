@@ -12,30 +12,13 @@ dependencies {
   implementation libs.adjudication.engine.api
   implementation libs.governance.model.api
 
-  implementation libs.silenteight.sep.base.common
-  implementation libs.silenteight.sep.auth
   implementation libs.silenteight.audit.bs
-
-  implementation libs.hibernate.validator
-  implementation libs.spring.boot.starter.web
-  implementation libs.spring.boot.starter.undertow
-  implementation libs.spring.data.jpa
-  implementation libs.spring.security.config
-  implementation libs.spring.security.web
-  implementation libs.commons.lang3
 
   implementation libs.grpc.api
   implementation libs.grpc.stub
-  implementation libs.grpc.client.spring.boot.starter
-
-  implementation libs.protobuf.java.util
+  implementation libs.grpc.spring.boot.starter
 
   aspect libs.silenteight.sep.base.aspects
 
   testImplementation project(":simulator-common-web-testing")
-
-  testImplementation libs.silenteight.sep.base.testing
-
-  testImplementation libs.spring.security.test
-  testImplementation libs.rest.assured.spring.mock.mvc
 }
