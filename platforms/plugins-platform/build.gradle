@@ -6,7 +6,6 @@ group = 'com.silenteight.iris.platform'
 
 dependencies {
   constraints {
-    api(libs.plugin.aspectj)
     api(libs.plugin.jib)
     api(libs.plugin.nebula.resolution)
     api(libs.plugin.sonarqube)
