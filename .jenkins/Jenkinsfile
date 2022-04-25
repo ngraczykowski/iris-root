@@ -39,6 +39,23 @@ pipeline {
           }
         }
       }
+      post {
+        always {
+          discoverGitReferenceBuild()
+          junit allowEmptyResults: true, testResults: '**/build/test-results/test/TEST-*.xml'
+          jacoco()
+
+          recordIssues enabledForFailure: true, tools: [java(), javaDoc()]
+          recordIssues enabledForFailure: true, tool: checkStyle(
+              pattern: '**/build/reports/checkstyle/main.xml, **/build/reports/checkstyle/test.xml')
+          recordIssues enabledForFailure: true, tool: taskScanner(
+              includePattern: '**/*.java, **/*.groovy',
+              ignoreCase: true,
+              highTags: 'HACK',
+              normalTags: 'TODO, FIXME',
+              lowTags: 'XXX')
+        }
+      }
     }
   }
 }
