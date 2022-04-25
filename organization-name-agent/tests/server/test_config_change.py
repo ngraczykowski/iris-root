@@ -1,4 +1,3 @@
-import pathlib
 import subprocess
 import time
 
@@ -23,22 +22,20 @@ from company_name.agent.config_service.organization_name_agent_config_pb2 import
 from company_name.agent.config_service.organization_name_agent_config_pb2_grpc import (
     OrganizationNameAgentConfigStub,
 )
-from tests.server.test_grpc import kill_process_on_the_port, kill_recursive, wait_for_server
+from tests.server.test_grpc import wait_for_server
+from tests.server.utils import kill_process_on_the_port, kill_recursive
 
 ESTIMATED_TIMEOUT = 0.5
-PORT = Config().load_yaml_config("application.local.yaml")["agent"]["grpc"]["port"]
+PORT = Config().load_yaml_config("application.yaml")["agent"]["grpc"]["port"]
 GRPC_ADDRESS = f"localhost:{PORT}"
 
 
 @pytest.fixture
 def run_service():
-    config_path = pathlib.Path("./config/application.yaml")
-    config_path.symlink_to("application.local.yaml")  # link to file from the same dir
     kill_process_on_the_port(PORT)
     server_process = subprocess.Popen("python -m company_name.main -v --grpc".split())
     wait_for_server(GRPC_ADDRESS)
     yield
-    config_path.unlink()
     kill_recursive(server_process.pid)
     time.sleep(ESTIMATED_TIMEOUT)
 
