@@ -15,5 +15,14 @@ pipeline {
         ciCheckout()
       }
     }
+    stage('Build') {
+      steps {
+        withGradle {
+          sh '''
+              ./gradlew clean package
+          '''
+        }
+      }
+    }
   }
 }
