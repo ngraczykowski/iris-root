@@ -117,8 +117,13 @@ class ReportsSenderServiceAdapter implements ReportsSenderService {
     matchPayload.put(MATCH_STEP_ID_KEY, matchData.stepId());
     matchPayload.put(MATCH_STEP_TITLE_KEY, matchData.stepTitle());
     matchPayload.put(MATCH_FV_SIGNATURE_KEY, matchData.fvSignature());
-    matchPayload.putAll(matchData.categories());
-    matchPayload.putAll(matchData.features());
+
+    Optional.ofNullable(matchData.categories())
+        .ifPresent(matchPayload::putAll);
+
+    Optional.ofNullable(matchData.features())
+        .ifPresent(matchPayload::putAll);
+
     return matchPayload;
   }
 
