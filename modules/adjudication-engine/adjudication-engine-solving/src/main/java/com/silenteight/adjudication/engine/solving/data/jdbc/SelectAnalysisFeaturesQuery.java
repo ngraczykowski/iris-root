@@ -30,14 +30,19 @@ class SelectAnalysisFeaturesQuery {
           + "       aacf.agent_config,\n"
           + "       aaa.policy,\n"
           + "       aaa.strategy,\n"
-          + "       aaa.analysis_id\n"
-          + "FROM ae_analysis aaa\n"
+          + "       aaa.analysis_id,\n"
+          + "       amfv.value,\n"
+          + "       amfv.reason,\n"
+          + "       am.client_match_identifier\n"
+          +
+          "FROM ae_analysis aaa\n"
           + "         JOIN ae_analysis_feature aaf ON aaa.analysis_id = aaf.analysis_id\n"
           + "         JOIN ae_analysis_alert aaa2 ON aaa.analysis_id = aaa2.analysis_id\n"
           + "         JOIN ae_match am ON am.alert_id = aaa2.alert_id\n"
           + "         JOIN ae_agent_config_feature aacf\n"
           + "              ON "
           + "aaf.agent_config_feature_id = aacf.agent_config_feature_id\n"
+          + "        LEFT JOIN ae_match_feature_value amfv ON am.match_id = amfv.match_id\n"
           + "WHERE aaa.analysis_id IN (:analysis)\n"
           + "  AND aaa2.alert_id IN (:alerts)";
   private static final FeaturesRowMapper ROW_MAPPER = new FeaturesRowMapper();
@@ -60,16 +65,32 @@ class SelectAnalysisFeaturesQuery {
 
     @Override
     public MatchFeatureDao mapRow(ResultSet rs, int rowNum) throws SQLException {
-      var feature = rs.getString(1);
-      var featureConfigId = rs.getLong(2);
-      var matchId = rs.getLong(3);
-      var alertId = rs.getLong(4);
-      var agentConfig = rs.getString(5);
-      var policy = rs.getString(6);
-      var strategy = rs.getString(7);
-      var analysisId = rs.getLong(8);
-      return new MatchFeatureDao(analysisId,
-          alertId, matchId, featureConfigId, feature, agentConfig, policy, strategy);
+      var feature = rs.getString("feature");
+      var featureConfigId = rs.getLong("agent_config_feature_id");
+      var matchId = rs.getLong("match_id");
+      var alertId = rs.getLong("alert_id");
+      var agentConfig = rs.getString("agent_config");
+      var policy = rs.getString("policy");
+      var strategy = rs.getString("strategy");
+      var analysisId = rs.getLong("analysis_id");
+      var featureValue = rs.getString("value");
+      var featureReason = rs.getString("reason");
+      var clientMatchId = rs.getString("client_match_identifier");
+
+      return MatchFeatureDao
+          .builder()
+          .analysisId(analysisId)
+          .alertId(alertId)
+          .matchId(matchId)
+          .agentConfigFeatureId(featureConfigId)
+          .feature(feature)
+          .agentConfig(agentConfig)
+          .policy(policy)
+          .strategy(strategy)
+          .featureValue(featureValue)
+          .featureReason(featureReason)
+          .clientMatchId(clientMatchId)
+          .build();
     }
   }
 }

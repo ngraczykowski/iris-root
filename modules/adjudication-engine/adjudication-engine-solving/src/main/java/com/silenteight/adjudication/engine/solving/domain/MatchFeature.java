@@ -17,17 +17,22 @@ public class MatchFeature implements Serializable {
   private final long agentConfigFeatureId;
   private final String feature;
   private final String agentConfig;
+  private final String clientMatchId;
   private String featureValue;
   private String reason;
 
   public static MatchFeature from(MatchFeatureDao dao) {
     // TODO: I'm note sure if we should replace . ian / inside agent config to send via rabbit
-    return new MatchFeature(dao.getAlertId(), dao.getMatchId(), dao.getAgentConfigFeatureId(),
-        dao.getFeature(), dao.getAgentConfig());
+    var match = new MatchFeature(dao.getAlertId(), dao.getMatchId(), dao.getAgentConfigFeatureId(),
+        dao.getFeature(), dao.getAgentConfig(), dao.getClientMatchId());
+
+    match.updateFeatureValue(dao.getFeatureValue(), dao.getFeatureReason());
+
+    return match;
   }
 
   public static MatchFeature empty() {
-    return new MatchFeature(0L, 0L, 0L, "", "");
+    return new MatchFeature(0L, 0L, 0L, "", "", "");
   }
 
   public void updateFeatureValue(String featureValue, String reason) {

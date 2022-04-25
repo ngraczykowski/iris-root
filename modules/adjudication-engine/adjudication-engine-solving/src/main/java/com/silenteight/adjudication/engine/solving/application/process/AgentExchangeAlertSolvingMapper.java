@@ -11,6 +11,7 @@ import org.springframework.util.AlternativeJdkIdGenerator;
 import org.springframework.util.IdGenerator;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -26,15 +27,23 @@ class AgentExchangeAlertSolvingMapper {
     }
     // TODO add priority
     return agentFeatures.entrySet().stream().map(entry ->
-        AgentExchangeRequestMessage.builder().agentExchangeRequest(
+        getFeatureExchanges(entry.getValue(), entry.getKey(), alertSolving)
+    ).flatMap(List::stream).collect(Collectors.toList());
+  }
+
+  private List<AgentExchangeRequestMessage> getFeatureExchanges(
+      Set<String> featureNames, String agentConfig, AlertSolving alertSolving) {
+    return featureNames
+        .stream()
+        .map(featureName -> AgentExchangeRequestMessage.builder().agentExchangeRequest(
                 AgentExchangeRequest
                     .newBuilder()
-                    .addAllFeatures(entry.getValue())
-                    .addAllMatches(alertSolving.getAllMatchesNames())
+                    .addAllFeatures(List.of(featureName))
+                    .addAllMatches(alertSolving.getAllMatchesNames(featureName))
                     .build())
-            .agentConfig(entry.getKey())
+            .agentConfig(agentConfig)
             .requestId(idGenerator.generateId())
-            .priority(1).build()
-    ).collect(Collectors.toList());
+            .priority(1).build())
+        .collect(Collectors.toList());
   }
 }

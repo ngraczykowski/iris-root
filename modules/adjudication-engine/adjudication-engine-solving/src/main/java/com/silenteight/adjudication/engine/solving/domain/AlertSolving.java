@@ -55,7 +55,8 @@ public class AlertSolving implements Serializable {
   public AlertSolving addMatchesFeatures(List<MatchFeature> matchesFeatures) {
     matchesFeatures.forEach(matchFeature -> {
       var features = this.matches.getOrDefault(
-          matchFeature.getMatchId(), new Match(matchFeature.getMatchId()));
+          matchFeature.getMatchId(),
+          new Match(matchFeature.getMatchId(), matchFeature.getClientMatchId()));
       features.addFeature(matchFeature);
       this.matches.putIfAbsent(matchFeature.getMatchId(), features);
 
@@ -70,10 +71,11 @@ public class AlertSolving implements Serializable {
   }
 
 
-  public Set<String> getAllMatchesNames() {
+  public Set<String> getAllMatchesNames(String featureName) {
     return this.matches
         .keySet()
         .stream()
+        .filter(key -> !matches.get(key).hasSolvedFeature(featureName))
         .map(matchId -> ResourceName
             .create("")
             .add("alerts", String.valueOf(this.alertId))

@@ -44,7 +44,7 @@ class AlertSolvingAlertContextMapper {
 
     return MatchContext
         .builder()
-        .matchId(match.getMatchName())
+        .matchId(match.getClientMatchId())
         .solution(match.getSolution())
         .reason(converter.convertJsonToMap(match.getReason()).orElse(Map.of()))
         .features(mapFeatures(match.getFeatures()))

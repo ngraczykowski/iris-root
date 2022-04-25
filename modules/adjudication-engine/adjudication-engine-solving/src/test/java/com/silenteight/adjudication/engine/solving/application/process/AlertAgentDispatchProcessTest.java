@@ -49,32 +49,150 @@ class AlertAgentDispatchProcessTest {
             Set.of(1L, 2L),
             Set.of(1L, 2L, 3L, 4L)))
         .thenReturn(List.of(
-            new MatchFeatureDao(1, 1, 1, 1, "features/name",
-                "agents/name/versions/1.0.0/configs/1", "policy", "strategy"),
-            new MatchFeatureDao(1, 1, 1, 1000, "features/nameMatchedText",
-                "agents/name/versions/1.0.0/configs/1", "policy", "strategy"),
-            new MatchFeatureDao(1, 2, 2, 1, "features/name",
-                "agents/name/versions/1.0.0/configs/1", "policy", "strategy"),
-            new MatchFeatureDao(1, 2, 2, 1000, "features/nameMatchedText",
-                "agents/name/versions/1.0.0/configs/1", "policy", "strategy"),
-            new MatchFeatureDao(1, 2, 3, 1, "features/name",
-                "agents/name/versions/1.0.0/configs/1", "policy", "strategy"),
-            new MatchFeatureDao(1, 2, 3, 1000, "features/nameMatchedText",
-                "agents/name/versions/1.0.0/configs/1", "policy", "strategy"),
-            new MatchFeatureDao(1, 3, 4, 1, "features/name",
-                "agents/name/versions/1.0.0/configs/1", "policy", "strategy"),
-            new MatchFeatureDao(1, 3, 5, 1, "features/name",
-                "agents/name/versions/1.0.0/configs/1", "policy", "strategy"),
-            new MatchFeatureDao(1, 3, 5, 1000, "features/nameMatchedText",
-                "agents/name/versions/1.0.0/configs/1", "policy", "strategy"),
-            new MatchFeatureDao(1, 3, 6, 1, "features/name",
-                "agents/name/versions/1.0.0/configs/1", "policy", "strategy"),
-            new MatchFeatureDao(1, 3, 6, 1000, "features/nameMatchedText",
-                "agents/name/versions/1.0.0/configs/1", "policy", "strategy"),
-            new MatchFeatureDao(1, 4, 7, 1, "features/name",
-                "agents/name/versions/1.0.0/configs/1", "policy", "strategy"),
-            new MatchFeatureDao(1, 4, 7, 1000, "features/nameMatchedText",
-                "agents/name/versions/1.0.0/configs/1", "policy", "strategy")));
+            MatchFeatureDao
+                .builder()
+                .analysisId(1)
+                .alertId(1)
+                .matchId(1)
+                .agentConfigFeatureId(1000)
+                .agentConfig("agents/nameMatchedText/versions/1.0.0/configs/1")
+                .feature("features/nameMatchedText")
+                .featureValue("NO_MATCH")
+                .clientMatchId("AS00727328(BENE, #1)")
+                .featureReason("")
+                .build(),
+            MatchFeatureDao
+                .builder()
+                .analysisId(1)
+                .alertId(2)
+                .matchId(2)
+                .agentConfigFeatureId(1)
+                .agentConfig("agents/name/versions/1.0.0/configs/1")
+                .feature("features/name")
+                .featureValue("NO_MATCH")
+                .clientMatchId("AS00727328(BENE, #1)")
+                .featureReason("")
+                .build(),
+            MatchFeatureDao
+                .builder()
+                .analysisId(1)
+                .alertId(2)
+                .matchId(2)
+                .agentConfigFeatureId(1000)
+                .agentConfig("agents/nameMatchedText/versions/1.0.0/configs/1")
+                .feature("features/nameMatchedText")
+                .featureValue("NO_MATCH")
+                .clientMatchId("AS00727328(BENE, #1)")
+                .featureReason("")
+                .build(),
+            MatchFeatureDao
+                .builder()
+                .analysisId(1)
+                .alertId(2)
+                .matchId(3)
+                .agentConfigFeatureId(1000)
+                .agentConfig("agents/nameMatchedText/versions/1.0.0/configs/1")
+                .feature("features/nameMatchedText")
+                .featureValue("NO_MATCH")
+                .clientMatchId("AS00727328(BENE, #1)")
+                .featureReason("")
+                .build(),
+            MatchFeatureDao
+                .builder()
+                .analysisId(1)
+                .alertId(2)
+                .matchId(3)
+                .agentConfigFeatureId(1)
+                .agentConfig("agents/name/versions/1.0.0/configs/1")
+                .feature("features/name")
+                .featureValue("NO_MATCH")
+                .clientMatchId("AS00727328(BENE, #1)")
+                .featureReason("")
+                .build(),
+            MatchFeatureDao
+                .builder()
+                .analysisId(1)
+                .alertId(3)
+                .matchId(4)
+                .agentConfigFeatureId(1)
+                .agentConfig("agents/name/versions/1.0.0/configs/1")
+                .feature("features/name")
+                .featureValue("NO_MATCH")
+                .clientMatchId("AS00727328(BENE, #1)")
+                .featureReason("")
+                .build(),
+            MatchFeatureDao
+                .builder()
+                .analysisId(1)
+                .alertId(3)
+                .matchId(5)
+                .agentConfigFeatureId(1000)
+                .agentConfig("agents/nameMatchedText/versions/1.0.0/configs/1")
+                .feature("features/nameMatchedText")
+                .featureValue("NO_MATCH")
+                .clientMatchId("AS00727328(BENE, #1)")
+                .featureReason("")
+                .build(),
+            MatchFeatureDao
+                .builder()
+                .analysisId(1)
+                .alertId(3)
+                .matchId(5)
+                .agentConfigFeatureId(1)
+                .agentConfig("agents/name/versions/1.0.0/configs/1")
+                .feature("features/name")
+                .featureValue("NO_MATCH")
+                .clientMatchId("AS00727328(BENE, #1)")
+                .featureReason("")
+                .build(),
+            MatchFeatureDao
+                .builder()
+                .analysisId(1)
+                .alertId(3)
+                .matchId(6)
+                .agentConfigFeatureId(1000)
+                .agentConfig("agents/nameMatchedText/versions/1.0.0/configs/1")
+                .feature("features/nameMatchedText")
+                .featureValue("NO_MATCH")
+                .clientMatchId("AS00727328(BENE, #1)")
+                .featureReason("")
+                .build(),
+            MatchFeatureDao
+                .builder()
+                .analysisId(1)
+                .alertId(3)
+                .matchId(6)
+                .agentConfigFeatureId(1)
+                .agentConfig("agents/name/versions/1.0.0/configs/1")
+                .feature("features/name")
+                .featureValue("NO_MATCH")
+                .clientMatchId("AS00727328(BENE, #1)")
+                .featureReason("")
+                .build(),
+            MatchFeatureDao
+                .builder()
+                .analysisId(1)
+                .alertId(4)
+                .matchId(7)
+                .agentConfigFeatureId(1)
+                .agentConfig("agents/name/versions/1.0.0/configs/1")
+                .feature("features/name")
+                .featureValue("NO_MATCH")
+                .clientMatchId("AS00727328(BENE, #1)")
+                .featureReason("")
+                .build(),
+            MatchFeatureDao
+                .builder()
+                .analysisId(1)
+                .alertId(4)
+                .matchId(7)
+                .agentConfigFeatureId(1000)
+                .feature("features/nameMatchedText")
+                .agentConfig("agents/nameMatchedText/versions/1.0.0/configs/1")
+                .featureValue("NO_MATCH")
+                .clientMatchId("AS00727328(BENE, #1)")
+                .featureReason("")
+                .build()));
     alertAgentDispatchProcess.handle(AnalysisAlertsAdded
         .newBuilder()
         .addAnalysisAlerts("analysis/1/alerts/1")

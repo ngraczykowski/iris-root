@@ -2,6 +2,7 @@ package com.silenteight.adjudication.engine.solving.domain;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 
@@ -11,10 +12,12 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @Getter
+@Slf4j
 public class Match implements Serializable {
 
   private static final long serialVersionUID = 4207894003659221746L;
   private final long matchId;
+  private final String clientMatchId;
   private final Map<String, MatchFeature> features = new HashMap<>();
   String solution = null;
   String reason;
@@ -35,6 +38,14 @@ public class Match implements Serializable {
 
   boolean isSolved() {
     return solution != null;
+  }
+
+  boolean hasSolvedFeature(String featureName) {
+    if (!features.containsKey(featureName)) {
+      log.warn("[Solving] There is no feature {} request for match {}", featureName, this.matchId);
+      return true;
+    }
+    return features.get(featureName).hasValue();
   }
 
   public String getMatchName() {

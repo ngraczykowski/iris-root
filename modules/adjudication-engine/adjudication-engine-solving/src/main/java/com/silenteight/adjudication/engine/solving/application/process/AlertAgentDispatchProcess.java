@@ -71,7 +71,7 @@ public class AlertAgentDispatchProcess {
       analysis.add(analysisId);
       alerts.add(alertId);
     });
-    log.info("Getting data fro analysis {} alerts {}", analysis, alerts);
+    log.info("Getting data from analysis {} for {} alerts", analysis, alerts.size());
     var features = matchFeaturesFacade.findAnalysisFeatures(analysis, alerts);
 
     if (log.isTraceEnabled()) {
