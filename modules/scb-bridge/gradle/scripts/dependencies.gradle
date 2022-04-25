@@ -13,11 +13,11 @@ ext {
   silenteightSolversVersion = "2.7.0"
   silenteightSensWebappVersion = "1.28.3"
   silenteightSepFrontendVersion = "1.27.0"
-  coreBridgeRegistrationApiVersion = '1.22.0'
-  coreBridgeRecommendationApiVersion = '1.13.0'
+  coreBridgeRegistrationApiVersion = '1.23.0'
+  coreBridgeRecommendationApiVersion = '1.15.0'
   universalDataSourceLibApiVersion = '1.4.0'
-  silenteightDataSourceApiVersion = '0.18.0'
-  warehouseApiVersion = "2.2.0"
+  silenteightDataSourceApiVersion = '0.23.0'
+  warehouseApiVersion = "2.3.0"
 
   springBootVersion = '2.5.10'
   springCloudVersion = '3.0.1'
