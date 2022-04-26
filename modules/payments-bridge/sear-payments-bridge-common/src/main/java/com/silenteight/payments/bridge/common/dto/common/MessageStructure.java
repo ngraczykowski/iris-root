@@ -3,6 +3,7 @@ package com.silenteight.payments.bridge.common.dto.common;
 import lombok.Getter;
 
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -15,6 +16,8 @@ public enum MessageStructure {
   UNSUPPORTED(TAG_70, TAG_INSMN),
   UNSTRUCTURED();
 
+  private static final Pattern COMPILED_PATTERN_UNSUPPORTED_TAG =
+      Pattern.compile("[A-Za-z\\d]*");
   @Getter private final List<String> tags;
 
   MessageStructure(String... tags) {
@@ -22,6 +25,10 @@ public enum MessageStructure {
   }
 
   public static MessageStructure ofTag(String tag) {
+
+    if (!COMPILED_PATTERN_UNSUPPORTED_TAG.matcher(tag).matches())
+      return UNSUPPORTED;
+
     return Stream
         .of(MessageStructure.values())
         .filter(ms -> ms.tags.contains(tag))

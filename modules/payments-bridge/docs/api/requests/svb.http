@@ -13,6 +13,13 @@ Content-Type: application/json
 < ../svb-examples/2021-10-04-1851_saddam_hussain.json
 
 ###
+// 2022-04-25_unsupported_tag.json
+POST http://localhost:24602/rest/pb/alert
+Content-Type: application/json
+
+< ../svb-examples/2022-04-25_unsupported_tag.json
+
+###
 // 2021_10_08-1754_uat_firco_alert.json
 POST http://localhost:24602/rest/pb/alert
 Content-Type: application/json
