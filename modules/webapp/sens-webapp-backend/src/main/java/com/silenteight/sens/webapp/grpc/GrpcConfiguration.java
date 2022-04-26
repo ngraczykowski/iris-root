@@ -18,14 +18,6 @@ import org.springframework.integration.channel.DirectChannel;
 @EnableConfigurationProperties(GrpcConfigurationProperties.class)
 class GrpcConfiguration {
 
-  @Setter(onMethod_ = @GrpcClient("circuit-breaker"))
-  private Channel circuitBreakerChannel;
-
-  @Bean("circuit-breaker")
-  Channel circuitBreakerChannel() {
-    return circuitBreakerChannel;
-  }
-
   @SuppressWarnings({ "unused", "squid:S3985" })
   @RequiredArgsConstructor
   @GrpcGlobalClientInterceptor
