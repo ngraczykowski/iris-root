@@ -40,7 +40,7 @@ ftcc:
   core-bridge:
     inbound:
       batch-completed:
-        exchange: notify-batch-completed-exchange
+        exchange: core-bridge.notify-batch-completed-exchange
     outbound:
       recommendations-delivered:
         exchange: core-bridge.recommendation-delivered-exchange

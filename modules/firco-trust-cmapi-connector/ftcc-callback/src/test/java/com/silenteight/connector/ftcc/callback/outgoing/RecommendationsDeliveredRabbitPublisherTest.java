@@ -28,6 +28,7 @@ class RecommendationsDeliveredRabbitPublisherTest {
     Assertions.assertDoesNotThrow(() -> RecommendationsDeliveredEvent.builder()
         .analysisName(analysisName)
         .batchName(batchName)
+        .alertType("solving")
         .build());
   }
 
@@ -40,9 +41,10 @@ class RecommendationsDeliveredRabbitPublisherTest {
         () -> recommendationsDeliveredPublisher.publish(RecommendationsDeliveredEvent.builder()
             .analysisName("analysis/1")
             .batchName("batches/" + randomUUID())
+            .alertType("solving")
             .build()));
     verify(rabbitTemplate, times(1)).convertAndSend(
-        eq("rabbit-exchange"), eq(""), any(RecommendationsDelivered.class));
+        eq("rabbit-exchange"), eq("solving"), any(RecommendationsDelivered.class));
   }
 
   private RecommendationsDeliveredRabbitPublisher recommendationPublisher() {

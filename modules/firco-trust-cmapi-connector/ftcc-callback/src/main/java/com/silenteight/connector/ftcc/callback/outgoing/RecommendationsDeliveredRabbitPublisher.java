@@ -20,7 +20,8 @@ class RecommendationsDeliveredRabbitPublisher implements RecommendationsDelivere
   @Override
   public void publish(RecommendationsDeliveredEvent event) {
     log.info("Sending RecommendationDelivered with {}", event);
-    rabbitTemplate.convertAndSend(properties.getExchange(), "", recommendationsDelivered(event));
+    rabbitTemplate.convertAndSend(
+        properties.getExchange(), event.getAlertType(), recommendationsDelivered(event));
   }
 
   private static RecommendationsDelivered recommendationsDelivered(

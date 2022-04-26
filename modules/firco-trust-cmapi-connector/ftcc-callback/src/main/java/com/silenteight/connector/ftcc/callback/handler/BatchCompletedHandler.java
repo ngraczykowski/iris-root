@@ -11,9 +11,11 @@ import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
 import static com.silenteight.connector.ftcc.common.MdcParams.BATCH_NAME;
+import static org.springframework.amqp.support.AmqpHeaders.RECEIVED_ROUTING_KEY;
 
 @Component
 @RequiredArgsConstructor
@@ -22,25 +24,29 @@ public class BatchCompletedHandler {
 
   private static final String QUEUE_NAME = "ftcc_batch completed_queue";
   public static final String DEFAULT_EXCHANGE = "notify-batch-completed-exchange";
-  private static final String EXCHANGE =
-      "${ftcc.core-bridge.inbound.batch-completed.exchange:" + DEFAULT_EXCHANGE + "}";
-  public static final String DEFAULT_ROUTING_KEY = "solving";
-  private static final String ROUTING_KEY =
-      "${ftcc.core-bridge.inbound.batch-completed.routing-key:" + DEFAULT_ROUTING_KEY + "}";
   private final ResponseProcessor responseProcessor;
   private final BatchCompletedService batchCompletedService;
 
   @RabbitListener(bindings = {
-      @QueueBinding(value = @Queue(QUEUE_NAME), exchange = @Exchange(EXCHANGE), key = ROUTING_KEY)})
-  public void handle(MessageBatchCompleted messageBatchCompleted) {
+      @QueueBinding(
+          value = @Queue(QUEUE_NAME),
+          key = { "solving", "simulation" },
+          exchange = @Exchange("${ftcc.core-bridge.inbound.batch-completed.exchange:"
+              + DEFAULT_EXCHANGE + "}"))
+  })
+  public void handle(
+      MessageBatchCompleted messageBatchCompleted,
+      @Header(RECEIVED_ROUTING_KEY) String alertType) {
     String batchName = messageBatchCompleted.getBatchId();
     String analysisName = messageBatchCompleted.getAnalysisName();
     MDC.put(BATCH_NAME, batchName);
     try {
-      log.info("BatchCompleted received batchName={} analysisName={}", batchName, analysisName);
+      log.info(
+          "BatchCompleted received batchName={} analysisName={} alertType={}", batchName,
+          analysisName, alertType);
 
       batchCompletedService.save(batchName, analysisName);
-      responseProcessor.process(messageBatchCompleted);
+      responseProcessor.process(messageBatchCompleted, alertType);
     } finally {
       MDC.remove(BATCH_NAME);
     }

@@ -14,4 +14,6 @@ public class RecommendationsDeliveredEvent {
   String analysisName;
   @NonNull
   String batchName;
+  @NonNull
+  String alertType;
 }

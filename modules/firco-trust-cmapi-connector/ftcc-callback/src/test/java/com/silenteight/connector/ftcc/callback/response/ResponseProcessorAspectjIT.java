@@ -34,7 +34,7 @@ class ResponseProcessorAspectjIT extends BaseDataJpaTest {
 
     assertThrows(
         NonRecoverableCallbackException.class,
-        () -> underTest.process(messageBatchCompleted)).getMessage();
+        () -> underTest.process(messageBatchCompleted, "solving")).getMessage();
   }
 }
 
