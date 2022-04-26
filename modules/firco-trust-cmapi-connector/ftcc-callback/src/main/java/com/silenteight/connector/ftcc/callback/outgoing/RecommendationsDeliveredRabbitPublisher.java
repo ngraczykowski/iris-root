@@ -21,7 +21,7 @@ class RecommendationsDeliveredRabbitPublisher implements RecommendationsDelivere
   public void publish(RecommendationsDeliveredEvent event) {
     log.info("Sending RecommendationDelivered with {}", event);
     rabbitTemplate.convertAndSend(
-        properties.getExchange(), event.getAlertType(), recommendationsDelivered(event));
+        properties.getExchange(), "", recommendationsDelivered(event));
   }
 
   private static RecommendationsDelivered recommendationsDelivered(
