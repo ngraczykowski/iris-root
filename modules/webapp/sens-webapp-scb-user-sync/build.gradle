@@ -37,6 +37,7 @@ dependencies {
   implementation libs.oracle
 
   implementation doNotUseLibs.vavr
+  implementation libs.hikari.cp
 
   testImplementation libs.rest.assured.spring.mock.mvc
 }

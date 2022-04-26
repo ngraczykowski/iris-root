@@ -60,4 +60,10 @@ dependencies {
   implementation libs.rest.assured
   implementation libs.rest.assured.spring.mock.mvc
   implementation libs.spring.security.test
+
+  implementation libs.spring.boot.starter.data.jpa
+  implementation libs.postgresql
+  implementation libs.liquibase.core
+
+  implementation libs.hibernate.validator
 }
