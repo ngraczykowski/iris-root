@@ -13,7 +13,6 @@ import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,7 +27,6 @@ class CreateRecommendationsUseCase {
   private final PendingRecommendationFacade pendingRecommendationFacade;
 
   @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "recommendation" })
-  @Transactional
   List<RecommendationInfo> createRecommendations(
       SaveRecommendationRequest request) {
 

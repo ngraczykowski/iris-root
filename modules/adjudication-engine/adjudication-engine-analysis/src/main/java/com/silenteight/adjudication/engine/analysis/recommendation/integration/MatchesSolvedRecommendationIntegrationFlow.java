@@ -1,29 +1,41 @@
 package com.silenteight.adjudication.engine.analysis.recommendation.integration;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.adjudication.engine.analysis.matchsolution.dto.MatchesSolvedEvent;
 import com.silenteight.adjudication.engine.analysis.recommendation.RecommendationFacade;
-import com.silenteight.adjudication.internal.v1.MatchesSolved;
 
-import org.springframework.integration.dsl.IntegrationFlowAdapter;
-import org.springframework.integration.dsl.IntegrationFlowDefinition;
-import org.springframework.integration.handler.LoggingHandler.Level;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+
+import static com.silenteight.adjudication.engine.analysis.service.integration.AmqpDefaults.EVENT_EXCHANGE_NAME;
+import static com.silenteight.adjudication.engine.analysis.service.integration.AmqpDefaults.RECOMMENDATIONS_GENERATED_ROUTING_KEY;
 
 @RequiredArgsConstructor
 @Component
-class MatchesSolvedRecommendationIntegrationFlow extends IntegrationFlowAdapter {
+@Slf4j
+class MatchesSolvedRecommendationIntegrationFlow {
 
   private final RecommendationFacade facade;
+  private final RabbitTemplate rabbitTemplate;
 
-  @Override
-  protected IntegrationFlowDefinition<?> buildFlow() {
-    return from(RecommendationChannels.MATCHES_SOLVED_RECOMMENDATION_INBOUND_CHANNEL)
-        .handle(
-            MatchesSolved.class,
-            (payload, headers) -> facade.handleMatchesSolved(payload).orElse(null))
-        .log(Level.TRACE, getClass().getName())
-        .channel(RecommendationChannels.RECOMMENDATIONS_GENERATED_OUTBOUND_CHANNEL);
-
+  @Async
+  @EventListener
+  public void receiveSolvedMatches(MatchesSolvedEvent event) {
+    var matchesSolved = event.getMatchesSolved();
+    log.debug("Received solved matches for generating recommendation = {}", matchesSolved);
+    var recommendation = facade.handleMatchesSolved(matchesSolved);
+    if (recommendation.isEmpty()) {
+      log.info("MatchesSolvedRecommendationIntegrationFlow recommendation empty");
+      return;
+    }
+    log.info(
+        "Sending recommendation for analysis:{}", recommendation.get().getAnalysis());
+    var message = new Message(recommendation.get().toByteArray());
+    rabbitTemplate.send(EVENT_EXCHANGE_NAME, RECOMMENDATIONS_GENERATED_ROUTING_KEY, message);
   }
 }

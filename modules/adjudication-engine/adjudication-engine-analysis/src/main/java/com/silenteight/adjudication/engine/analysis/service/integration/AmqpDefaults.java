@@ -12,7 +12,7 @@ public class AmqpDefaults {
   private static final String EVENT_PREFIX = PREFIX + "event.";
 
   public static final String EVENT_EXCHANGE_NAME = PREFIX + "event";
-  static final String RECOMMENDATIONS_GENERATED_ROUTING_KEY =
+  public static final String RECOMMENDATIONS_GENERATED_ROUTING_KEY =
       EVENT_PREFIX + "recommendations-generated";
   public static final String MATCH_RECOMMENDATIONS_GENERATED_ROUTING_KEY =
       EVENT_PREFIX + "match-recommendations-generated";

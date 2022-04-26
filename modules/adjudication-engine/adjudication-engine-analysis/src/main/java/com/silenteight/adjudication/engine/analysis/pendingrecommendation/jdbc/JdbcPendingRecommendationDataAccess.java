@@ -6,6 +6,8 @@ import com.silenteight.adjudication.engine.analysis.pendingrecommendation.Pendin
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Repository
@@ -23,6 +25,7 @@ class JdbcPendingRecommendationDataAccess implements PendingRecommendationDataAc
   }
 
   @Override
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   public int removeSolvedPendingRecommendations() {
     return removePendingRecommendationsQuery.execute();

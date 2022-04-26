@@ -10,6 +10,7 @@ import com.silenteight.adjudication.engine.analysis.recommendation.domain.Recomm
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
@@ -56,6 +57,7 @@ class JdbcRecommendationDataAccess implements RecommendationDataAccess {
 
   @Override
   @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public List<RecommendationResponse> insertAlertRecommendation(
       @Nonnull Collection<InsertRecommendationRequest> alertRecommendation) {
     return insertAlertRecommendationsQuery.execute(alertRecommendation);
