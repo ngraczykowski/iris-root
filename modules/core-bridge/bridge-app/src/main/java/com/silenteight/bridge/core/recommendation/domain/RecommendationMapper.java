@@ -93,6 +93,7 @@ class RecommendationMapper {
         .setStatus(toStatus(alert))
         .setMetadata(Optional.ofNullable(alert.metadata()).orElse(EMPTY_STRING))
         .setErrorMessage(Optional.ofNullable(alert.errorDescription()).orElse(EMPTY_STRING))
+        .setName(Optional.ofNullable(alert.name()).orElse(EMPTY_STRING))
         .build();
   }
 
@@ -130,6 +131,7 @@ class RecommendationMapper {
         .setFvSignature(
             matchMetadata.reason().getOrDefault(FV_SIGNATURE_KEY, DEFAULT_SIGNATURE))
         .setFeatures(getFeatures(matchMetadata))
+        .setName(Optional.ofNullable(matchMetadata.match()).orElse(EMPTY_STRING))
         .build();
   }
 

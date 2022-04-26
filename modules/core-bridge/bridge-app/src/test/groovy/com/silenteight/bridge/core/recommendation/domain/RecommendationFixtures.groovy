@@ -33,14 +33,19 @@ class RecommendationFixtures {
   static def RECOMMENDATION_ACTION = 'recommendation_action'
   static def RECOMMENDATION_COMMENT = 'recommendation_comment'
   static def ERROR_DESCRIPTION = 'error occurred'
+  static def FIRST_METADATA_MATCH_NAME = 'alerts/1/matches/1'
+  static def SECOND_METADATA_MATCH_NAME = 'alerts/1/matches/2'
 
-  static def READY_RECOMMENDATIONS_COMMAND = new ProceedReadyRecommendationsCommand([RECOMMENDATION_WITH_METADATA])
+  static def READY_RECOMMENDATIONS_COMMAND = new ProceedReadyRecommendationsCommand(
+      [RECOMMENDATION_WITH_METADATA])
 
-  static def TIMED_OUT_RECOMMENDATIONS_COMMAND = new ProceedBatchTimeoutCommand(ANALYSIS_NAME, [ALERT_NAME])
+  static def TIMED_OUT_RECOMMENDATIONS_COMMAND = new ProceedBatchTimeoutCommand(
+      ANALYSIS_NAME, [ALERT_NAME])
 
   static def GET_RECOMMENDATIONS_RESPONSE_COMMAND = new GetRecommendationCommand(ANALYSIS_NAME, [])
 
-  static def GET_RECOMMENDATIONS_BY_ALERT_NAMES_RESPONSE_COMMAND = new GetRecommendationCommand(ANALYSIS_NAME, [ALERT_NAME])
+  static def GET_RECOMMENDATIONS_BY_ALERT_NAMES_RESPONSE_COMMAND = new GetRecommendationCommand(
+      ANALYSIS_NAME, [ALERT_NAME])
 
   static def ERROR_ALERT_DTO = AlertWithMatchesDto.builder()
       .id(Fixtures.ALERT_ID)
@@ -127,6 +132,7 @@ class RecommendationFixtures {
       .setStatus(AlertStatus.SUCCESS)
       .setMetadata(METADATA)
       .setErrorMessage('')
+      .setName(ALERT_NAME)
       .build()
 
   static def ERRONEOUS_ALERT_RECOMMENDATION = Alert
@@ -153,6 +159,7 @@ class RecommendationFixtures {
                       .build())
               .build()
       )
+      .setName(FIRST_METADATA_MATCH_NAME)
       .build()
 
   static def SECOND_MATCH_RECOMMENDATION = Match
@@ -170,6 +177,7 @@ class RecommendationFixtures {
                       .setStringValue(FixturesMatchMetaData.SECOND_METADATA_FEATURE_SOLUTION)
                       .build())
               .build())
+      .setName(SECOND_METADATA_MATCH_NAME)
       .build()
 
   static def RECOMMENDATION = Recommendation.newBuilder()
