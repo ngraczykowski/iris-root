@@ -1,31 +1,33 @@
+tasks.register('clean') {Task task ->
+  task.group = 'build'
+  task.description = 'Deletes the build directory in all subprojects.'
+
+  subprojects {Project subproject ->
+    task.dependsOn subproject.tasks.named('clean')
+  }
+}
+
 tasks.register('build') {Task task ->
-  task.group = BasePlugin.BUILD_GROUP
-  task.description = 'Builds all subprojects'
+  task.group = 'build'
+  task.description = 'Builds all subprojects.'
 
   subprojects {Project subproject ->
     task.dependsOn subproject.tasks.named('build')
-
   }
 }
 
-tasks.register(BasePlugin.CLEAN_TASK_NAME) {Task task ->
-  task.group = BasePlugin.BUILD_GROUP
-  task.description = 'Cleans all subprojects'
-
-  subprojects {Project subproject ->
-    task.dependsOn subproject.tasks.named(BasePlugin.CLEAN_TASK_NAME)
-  }
-}
-
-tasks.register('package') {Task task ->
-  task.group = BasePlugin.BUILD_GROUP
-  task.description = 'Package subprojects'
+tasks.register('publish') {Task task ->
+  task.group = 'publishing'
+  task.description = 'Publishes all publications produced by all subprojects.'
 
   subprojects {Project subproject ->
     if (subproject.pluginManager.hasPlugin('com.google.cloud.tools.jib'))
       task.dependsOn subproject.tasks.named('jib')
 
     if (subproject.pluginManager.hasPlugin('distribution'))
-      task.dependsOn subproject.tasks.named('distTar')
+      task.dependsOn subproject.tasks.named('publish')
+
+    if (subproject.pluginManager.hasPlugin('com.silenteight.iris.build.spring-boot-application'))
+      task.dependsOn subproject.tasks.named('publish')
   }
 }

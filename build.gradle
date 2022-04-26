@@ -1,20 +1,20 @@
-tasks.register(BasePlugin.CLEAN_TASK_NAME) {Task task ->
-  task.group = BasePlugin.BUILD_GROUP
-  task.description = 'Cleans all modules'
+tasks.register('clean') {Task task ->
+  task.group = 'build'
+  task.description = 'Deletes the build directory in all modules.'
 
   task.dependsOn gradle.includedBuild('modules').task(':clean')
 }
 
 tasks.register('build') {Task task ->
-  task.group = BasePlugin.BUILD_GROUP
-  task.description = 'Builds all modules'
+  task.group = 'build'
+  task.description = 'Builds all modules.'
 
   task.dependsOn gradle.includedBuild('modules').task(':build')
 }
 
-tasks.register('package') {Task task ->
-  task.group = BasePlugin.BUILD_GROUP
-  task.description = 'Packages all modules'
+tasks.register('publish') {Task task ->
+  task.group = 'publishing'
+  task.description = 'Publishes all publications produced by all modules.'
 
-  task.dependsOn gradle.includedBuild('modules').task(':package')
+  task.dependsOn gradle.includedBuild('modules').task(':publish')
 }
