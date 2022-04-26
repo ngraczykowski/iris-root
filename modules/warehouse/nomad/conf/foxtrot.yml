@@ -67,10 +67,10 @@ warehouse:
           thread-name-prefix: async-auth-aware-
 
 keycloak:
-  client-id: {{ env "NOMAD_NAMESPACE" }}-frontend
+  client-id: frontend
   adapter:
     auth-server-url: https://auth.silenteight.com
-    realm: sens-webapp
+    realm: { { env "NOMAD_NAMESPACE" } }
     public-client: false
     confidential-port: 0
     principal-attribute: preferred_username
