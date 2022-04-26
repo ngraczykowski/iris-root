@@ -3,14 +3,14 @@ package com.silenteight.simulator.management.domain;
 import com.silenteight.auditing.bs.AuditingLogger;
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
-import com.silenteight.simulator.dataset.DatasetModule;
 import com.silenteight.simulator.management.ManagementModule;
 import com.silenteight.simulator.management.create.AnalysisService;
-import com.silenteight.simulator.management.create.TestAnalysisService;
+import com.silenteight.simulator.management.create.CreateSimulationUseCase;
+import com.silenteight.simulator.management.create.ModelService;
 import com.silenteight.simulator.management.progress.IndexedAlertProvider;
+import com.silenteight.simulator.management.progress.SimulationProgressUseCase;
 
-import io.grpc.Channel;
-import org.mockito.Mockito;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -19,31 +19,23 @@ import static com.silenteight.simulator.management.SimulationFixtures.PROCESSING
 import static java.time.Instant.parse;
 
 @Configuration
-@ComponentScan(basePackageClasses = {
-    DatasetModule.class,
-    ManagementModule.class
-})
+@ComponentScan(basePackageClasses = ManagementModule.class)
 public class SimulationTestConfiguration {
 
-  @Bean
-  AuditingLogger auditingLogger() {
-    return Mockito.mock(AuditingLogger.class);
-  }
+  @MockBean
+  AuditingLogger auditingLogger;
 
-  @Bean("adjudication-engine")
-  Channel adjudicationEngineChannel() {
-    return Mockito.mock(Channel.class);
-  }
+  @MockBean(name = "grpcModelService")
+  ModelService grpcModelService;
 
-  @Bean("governance")
-  Channel governanceChannel() {
-    return Mockito.mock(Channel.class);
-  }
+  @MockBean(name = "grpcAnalysisService")
+  AnalysisService grpcAnalysisService;
 
-  @Bean
-  AnalysisService analysisService() {
-    return new TestAnalysisService();
-  }
+  @MockBean
+  CreateSimulationUseCase createSimulationUseCase;
+
+  @MockBean
+  SimulationProgressUseCase simulationProgressUseCase;
 
   @Bean
   IndexedAlertProvider indexedAlertProvider() {

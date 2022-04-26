@@ -1,11 +1,10 @@
 package com.silenteight.simulator.management.grpc;
 
-import lombok.Setter;
+import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceBlockingStub;
+import com.silenteight.model.api.v1.SolvingModelServiceGrpc.SolvingModelServiceBlockingStub;
+import com.silenteight.simulator.management.create.AnalysisService;
+import com.silenteight.simulator.management.create.ModelService;
 
-import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc;
-import com.silenteight.model.api.v1.SolvingModelServiceGrpc;
-
-import io.grpc.Channel;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,21 +12,19 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 class GrpcSimulationConfiguration {
 
-  @Setter(onMethod_ = @GrpcClient("governance"))
-  private Channel governanceChannel;
+  @GrpcClient("governance")
+  private SolvingModelServiceBlockingStub solvingModelServiceBlockingStub;
 
-  @Setter(onMethod_ = @GrpcClient("adjudicationengine"))
-  private Channel adjudicationEngineChannel;
+  @GrpcClient("adjudicationengine")
+  private AnalysisServiceBlockingStub analysisServiceBlockingStub;
 
   @Bean
-  GrpcModelService grpcModelService() {
-    return new GrpcModelService(
-        SolvingModelServiceGrpc.newBlockingStub(governanceChannel).withWaitForReady());
+  ModelService grpcModelService() {
+    return new GrpcModelService(solvingModelServiceBlockingStub.withWaitForReady());
   }
 
   @Bean
-  GrpcAnalysisService grpcAnalysisService() {
-    return new GrpcAnalysisService(
-        AnalysisServiceGrpc.newBlockingStub(adjudicationEngineChannel).withWaitForReady());
+  AnalysisService grpcAnalysisService() {
+    return new GrpcAnalysisService(analysisServiceBlockingStub.withWaitForReady());
   }
 }

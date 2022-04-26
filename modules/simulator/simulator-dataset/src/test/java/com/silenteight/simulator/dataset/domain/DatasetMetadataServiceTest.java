@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.*;
 
 @Transactional
 @TestPropertySource("classpath:/data-test.properties")
-@ContextConfiguration(classes = { DatasetTestConfiguration.class })
+@ContextConfiguration(classes = DatasetConfiguration.class)
 class DatasetMetadataServiceTest extends BaseDataJpaTest {
 
   @Autowired

@@ -1,11 +1,12 @@
 package com.silenteight.simulator.management.domain;
 
+import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
-import com.silenteight.simulator.dataset.domain.DatasetMetadataService;
 import com.silenteight.simulator.management.domain.exception.SimulationNotFoundException;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,17 +19,17 @@ import static org.assertj.core.api.Assertions.*;
 
 @Transactional
 @TestPropertySource("classpath:/data-test.properties")
-@ContextConfiguration(classes = { SimulationTestConfiguration.class })
+@ContextConfiguration(classes = { SimulationConfiguration.class })
 class SimulationServiceTest extends BaseDataJpaTest {
 
   @Autowired
   SimulationService underTest;
 
   @Autowired
-  DatasetMetadataService datasetMetadataService;
-
-  @Autowired
   SimulationRepository simulationRepository;
+
+  @MockBean
+  TimeSource timeSource;
 
   @Test
   void shouldCreateSimulation() {
