@@ -34,7 +34,7 @@ pipeline {
               -Dsilenteight.repoDeploymentUser=$repoDeploymentUser \
               -Dsilenteight.repoDeploymentPassword=$repoDeploymentPassword \
               -Djib.console=plain \
-              clean build package
+              clean build publish
             '''
           }
         }
