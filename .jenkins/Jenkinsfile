@@ -53,13 +53,18 @@ pipeline {
       }
     }
     stage('Publish') {
+      when {branch 'master'}
       steps {
         withGradle {
           withCredentials(
               [usernamePassword(
-                  credentialsId: 'artifactory-deployment-user',
-                  usernameVariable: 'repoDeploymentUser',
-                  passwordVariable: 'repoDeploymentPassword')]) {
+                  credentialsId: 'artifactory-user',
+                  usernameVariable: 'S8_REPO_USER',
+                  passwordVariable: 'S8_REPO_PASSWORD'),
+               usernamePassword(
+                   credentialsId: 'artifactory-deployment-user',
+                   usernameVariable: 'repoDeploymentUser',
+                   passwordVariable: 'repoDeploymentPassword')]) {
             sh '''./gradlew \
               -Dsilenteight.repoDeploymentUser=$repoDeploymentUser \
               -Dsilenteight.repoDeploymentPassword=$repoDeploymentPassword \
