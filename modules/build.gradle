@@ -21,6 +21,8 @@ tasks.register('publish') {Task task ->
 
 private void dependOnModulesTask(Task delegate, String taskName) {
   gradle.includedBuilds().each {IncludedBuild build ->
+    // NOTE(ahaczewski): This check ensures only builds included from current - the "modules"
+    //  - directory are depended on.
     if (build.projectDir.parentFile == project.projectDir) {
       delegate.dependsOn build.task(":${taskName}")
     }
