@@ -32,20 +32,6 @@ pipeline {
               clean build
             '''
           }
-
-          withCredentials(
-              [usernamePassword(
-                  credentialsId: 'artifactory-deployment-user',
-                  usernameVariable: 'repoDeploymentUser',
-                  passwordVariable: 'repoDeploymentPassword')]) {
-            sh '''./gradlew \
-              -Dsilenteight.repoDeploymentUser=$repoDeploymentUser \
-              -Dsilenteight.repoDeploymentPassword=$repoDeploymentPassword \
-              -Djib.console=plain \
-              -Pversion=$(./scripts/get-version.sh) \
-              publish
-            '''
-          }
         }
       }
       post {
@@ -63,6 +49,25 @@ pipeline {
               highTags: 'HACK',
               normalTags: 'TODO, FIXME',
               lowTags: 'XXX')
+        }
+      }
+    }
+    stage('Publish') {
+      steps {
+        withGradle {
+          withCredentials(
+              [usernamePassword(
+                  credentialsId: 'artifactory-deployment-user',
+                  usernameVariable: 'repoDeploymentUser',
+                  passwordVariable: 'repoDeploymentPassword')]) {
+            sh '''./gradlew \
+              -Dsilenteight.repoDeploymentUser=$repoDeploymentUser \
+              -Dsilenteight.repoDeploymentPassword=$repoDeploymentPassword \
+              -Djib.console=plain \
+              -Pversion=$(./scripts/get-version.sh) \
+              publish
+            '''
+          }
         }
       }
     }
