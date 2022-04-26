@@ -2,7 +2,8 @@ import com.github.jengelman.gradle.plugins.shadow.transformers.PropertiesFileTra
 
 plugins {
   id "com.silenteight.iris.build.java-library"
-  id 'com.github.johnrengelman.shadow' version '5.0.0'
+  //TODO probably remove see https://silenteight.slack.com/archives/CQJC6T3ST/p1650969734375289
+  id 'com.github.johnrengelman.shadow' version '7.1.2'
   id 'maven-publish'
 }
 

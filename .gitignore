@@ -38,3 +38,7 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### Plugins ###
+### Should be removed see https://silenteight.slack.com/archives/CQJC6T3ST/p1650969734375289###
+plugin/
