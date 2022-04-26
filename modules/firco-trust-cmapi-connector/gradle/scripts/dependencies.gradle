@@ -7,7 +7,7 @@ ext {
   sepDependenciesVersion = "2.3.0"
   silenteightCommonsVersion = "2.1.0"
   silenteightSepBaseVersion = "1.14.0"
-  coreBridgeRegistrationConnectorVersion = "1.20.0"
+  coreBridgeRegistrationConnectorVersion = "1.23.0"
   fabCmapConnectorApi = "1.1.0"
   recommendationApiLibraryVersion = "1.15.0"
   //***********************************

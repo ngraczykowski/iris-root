@@ -23,7 +23,7 @@ class RegistrationGrpcAdapter implements RegistrationApiClient {
         .batchId(batch.getBatchId())
         .alertCount(batch.getAlertsCount())
         //.batchPriority() TODO @m.mastylo solving - 10, learning - 1
-        //.isLearning() TODO @m.mastylo
+        //.isSimulation() TODO @m.mastylo
         .build();
   }
 }

@@ -47,7 +47,7 @@ class RegistrationGrpcAdapterTest {
         .setAlertCount(BATCH.getAlertsCount())
         .setBatchMetadata("")
         .setBatchPriority(0)
-        .setIsLearning(false)
+        .setIsSimulation(false)
         .build());
   }
 }
