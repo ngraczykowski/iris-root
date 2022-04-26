@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.Dataset;
 import com.silenteight.adjudication.api.v1.FilteredAlerts;
-import com.silenteight.adjudication.api.v1.FilteredAlerts.AlertTimeRange;
 import com.silenteight.adjudication.api.v1.FilteredAlerts.LabelValues;
 import com.silenteight.adjudication.api.v1.NamedAlerts;
 import com.silenteight.adjudication.engine.common.protobuf.TimestampConverter;
@@ -36,6 +35,8 @@ class CreateDatasetUseCase {
   private final DatasetRepository datasetRepository;
   @NonNull
   private final DatasetAlertRepository datasetAlertRepository;
+  private final DatasetAlertDataAccess datasetAlertDataAccess;
+
 
   @Timed(value = "ae.dataset.use_cases", extraTags = { "package", "dataset" })
   @Transactional
@@ -61,8 +62,7 @@ class CreateDatasetUseCase {
     var dataset = datasetRepository.save(DatasetEntity.builder().build());
 
     createFilteredDatasetAlerts(
-        dataset.getId(), filteredAlerts.getLabelsFilter().getLabelsMap(),
-        filteredAlerts.getAlertTimeRange());
+        dataset.getId(), filteredAlerts);
     var alertCount = datasetAlertRepository.countByIdDatasetId(dataset.getId());
 
     return Dataset
@@ -73,18 +73,30 @@ class CreateDatasetUseCase {
         .build();
   }
 
-  private void createFilteredDatasetAlerts(
-      long datasetId, Map<String, LabelValues> labels, AlertTimeRange alertTimeRange) {
+  private void createFilteredDatasetAlerts(long datasetId, FilteredAlerts filteredAlerts) {
+
+    var labels = filteredAlerts.getLabelsFilter().getLabelsMap();
+    var alertTimeRange = filteredAlerts.getAlertTimeRange();
+    var matchQuantity = filteredAlerts.getMatchQuantity();
+
     var startDate = toOffsetDateTime(alertTimeRange.getStartTime());
     var endDate = toOffsetDateTime(alertTimeRange.getEndTime());
     var labelsValues = toLabelValueList(labels);
     log.info("Create filtered dataset alerts - DataSetId: {}, Labels: {} datetime "
-            + "range from {} to {}", datasetId, labels, startDate, endDate);
-    datasetAlertRepository.createFilteredDataset(
-        datasetId,
-        labelsValues,
-        startDate,
-        endDate);
+        + "range from {} to {}", datasetId, labels, startDate, endDate);
+
+    switch (matchQuantity) {
+      case ALL:
+        datasetAlertRepository.createFilteredDataset(datasetId,
+            labelsValues, startDate, endDate);
+        break;
+      case SINGLE:
+        datasetAlertDataAccess.createSingleMatchFilteredDataset(datasetId,
+            labelsValues, startDate, endDate);
+        break;
+      default:
+        throw new IllegalArgumentException("Dataset match quantity was not defined");
+    }
   }
 
   private static List<String> toLabelValueList(Map<String, LabelValues> labels) {
