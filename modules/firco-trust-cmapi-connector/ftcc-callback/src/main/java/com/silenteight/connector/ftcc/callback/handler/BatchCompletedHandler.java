@@ -22,15 +22,16 @@ public class BatchCompletedHandler {
 
   private static final String QUEUE_NAME = "ftcc_batch completed_queue";
   public static final String DEFAULT_EXCHANGE = "notify-batch-completed-exchange";
+  private static final String EXCHANGE =
+      "${ftcc.core-bridge.inbound.batch-completed.exchange:" + DEFAULT_EXCHANGE + "}";
+  public static final String DEFAULT_ROUTING_KEY = "solving";
+  private static final String ROUTING_KEY =
+      "${ftcc.core-bridge.inbound.batch-completed.routing-key:" + DEFAULT_ROUTING_KEY + "}";
   private final ResponseProcessor responseProcessor;
   private final BatchCompletedService batchCompletedService;
 
   @RabbitListener(bindings = {
-      @QueueBinding(
-          value = @Queue(QUEUE_NAME),
-          exchange = @Exchange("${ftcc.core-bridge.inbound.batch-completed.exchange:"
-              + DEFAULT_EXCHANGE + "}"))
-  })
+      @QueueBinding(value = @Queue(QUEUE_NAME), exchange = @Exchange(EXCHANGE), key = ROUTING_KEY)})
   public void handle(MessageBatchCompleted messageBatchCompleted) {
     String batchName = messageBatchCompleted.getBatchId();
     String analysisName = messageBatchCompleted.getAnalysisName();
