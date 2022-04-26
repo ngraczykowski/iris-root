@@ -1,6 +1,7 @@
 package com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing;
 
 import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext;
+import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertUnderProcessingRepositoryIT.TestConfiguration;
 import com.silenteight.scb.ingest.adapter.incomming.common.SyncTestInitializer;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
@@ -98,8 +99,8 @@ class AlertUnderProcessingRepositoryIT extends BaseDataJpaTest {
     persistEntities(entity1);
 
     // when
-    List<AlertUnderProcessing> allBySystemIdIn =
-        (List<AlertUnderProcessing>) alertUnderProcessingRepository.findAllBySystemIdIn(
+    List<AlertId> allBySystemIdIn =
+        (List<AlertId>) alertUnderProcessingRepository.findAllBySystemIdIn(
             asList(entity1.getSystemId(), entity2.getSystemId()));
 
     // then

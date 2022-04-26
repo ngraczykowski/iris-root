@@ -47,7 +47,7 @@ public class AlertRecordComposite {
   }
 
   public AlertId getAlertId() {
-    return AlertId.builder().systemId(alert.getSystemId()).batchId(alert.getBatchId()).build();
+    return new AlertId(alert.getSystemId(), alert.getBatchId());
   }
 
   public String getSystemId() {

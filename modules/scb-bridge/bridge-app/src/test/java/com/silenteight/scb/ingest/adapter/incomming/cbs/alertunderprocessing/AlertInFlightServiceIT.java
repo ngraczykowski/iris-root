@@ -61,7 +61,7 @@ class AlertInFlightServiceIT {
   }
 
   private static AlertId createAlertId(String systemId, String batchId) {
-    return AlertId.builder().systemId(systemId).batchId(batchId).build();
+    return new AlertId(systemId, batchId);
   }
 
   @Test
@@ -101,13 +101,13 @@ class AlertInFlightServiceIT {
     repository.saveAll(singletonList(toEntity(alertId)));
 
     //when
-    classUnderTest.update(alertId, State.ERROR);
+    classUnderTest.ack(alertId);
 
     //then
     Collection<AlertUnderProcessing> results = repository.findAll();
     assertThat(results).hasSize(1);
     for (AlertUnderProcessing alertUnderProcessing : results) {
-      assertThat(alertUnderProcessing.getState()).isEqualTo(State.ERROR);
+      assertThat(alertUnderProcessing.getState()).isEqualTo(State.ACK);
     }
   }
 
@@ -132,7 +132,7 @@ class AlertInFlightServiceIT {
             + " ut tristique nisl amet.";
 
     //when
-    classUnderTest.update(alertId, State.ERROR, someTooLongError);
+    classUnderTest.error(alertId, someTooLongError);
 
     //then
     Collection<AlertUnderProcessing> results = repository.findAll();

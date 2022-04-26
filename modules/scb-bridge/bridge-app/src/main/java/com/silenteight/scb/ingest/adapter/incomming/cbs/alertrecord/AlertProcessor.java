@@ -48,6 +48,7 @@ class AlertProcessor {
     if (alertIds.isEmpty()) {
       return;
     }
+
     groupAlertIdsByContext(alertIds).entrySet()
         .parallelStream()
         .forEach(entry -> processAlertsWithTheSameContext(entry.getKey(), entry.getValue()));

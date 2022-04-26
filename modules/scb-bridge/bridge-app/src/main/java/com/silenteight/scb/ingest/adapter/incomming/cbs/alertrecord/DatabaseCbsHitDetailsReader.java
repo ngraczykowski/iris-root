@@ -41,6 +41,6 @@ class DatabaseCbsHitDetailsReader implements CbsHitDetailsReader {
   }
 
   private AlertId toAlertId(CbsHitDetails r) {
-    return AlertId.builder().batchId(r.getBatchId()).systemId(r.getSystemId()).build();
+    return new AlertId(r.getSystemId(), r.getBatchId());
   }
 }

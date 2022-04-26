@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: 12.0.0-1
+      author: mglowinski
+      comment: Add index to scb_cbs_alert_under_processing table.
+      changes:
+        - createIndex:
+            tableName: scb_cbs_alert_under_processing
+            columns:
+              - column:
+                  name: state
+            indexName: idx_scb_cbs_alert_under_processing_state

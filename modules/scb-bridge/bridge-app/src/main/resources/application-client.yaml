@@ -23,7 +23,6 @@ serp:
 
 silenteight:
   scb-bridge:
-
     learning:
       alert:
         enabled: false
@@ -66,6 +65,10 @@ silenteight:
           watchlist-level: true
 
     traffic-manager:
+      load-management:
+        enabled: false
+        max-load-threshold: 10000
+        fair-load-threshold: 5000
       semaphore:
         enabled: false
         timer: 10s

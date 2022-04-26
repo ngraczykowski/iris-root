@@ -22,6 +22,6 @@ class EnabledQcoModule {
 
   @Bean
   public QcoRecommendationProvider qcoRecommendationProvider(QcoFacade qcoFacade) {
-    return alert -> qcoFacade.process(alert);
+    return qcoFacade::process;
   }
 }

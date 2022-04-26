@@ -6,8 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertmapper.AlertMapper;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertInFlightService;
-import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertUnderProcessing;
-import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertUnderProcessing.State;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckAlert;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckGateway;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsOutput;
@@ -77,10 +75,10 @@ class AlertHandler {
           context.getWatchlistLevel());
 
       switch (cbsOutput.getState()) {
-        case OK -> alertInFlightService.delete(alertId);
+        case OK -> alertInFlightService.ack(alertId);
         case TEMPORARY_FAILURE -> log.error(
             "Temporary failure on ACK for alert={}, will retry again.", alertId);
-        default -> alertInFlightService.update(alertId, State.ERROR, "Fatal error on ACK");
+        default -> alertInFlightService.error(alertId, "Fatal error on ACK");
       }
     });
   }
@@ -106,8 +104,7 @@ class AlertHandler {
       if (alert.hasReasonCausedByFatalError()) {
         log.warn("Fatal error occurred on alert={}, marked with ERROR state.", alert.getAlertId());
         ackAlert(alert.getSystemId(), alert.getBatchId(), contex.getWatchlistLevel());
-        alertInFlightService.update(
-            alert.getAlertId(), AlertUnderProcessing.State.ERROR, alert.getReasonMessage());
+        alertInFlightService.error(alert.getAlertId(), alert.getReasonMessage());
       } else {
         log.warn("Temporary problem occurred on alert={}, will retry again.", alert.getAlertId());
       }

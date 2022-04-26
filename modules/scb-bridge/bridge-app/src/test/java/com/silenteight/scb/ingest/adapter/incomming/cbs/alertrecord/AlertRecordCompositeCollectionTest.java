@@ -72,10 +72,7 @@ class AlertRecordCompositeCollectionTest {
   }
 
   private static AlertId createAlertId(String systemId, String batchId) {
-    return AlertId.builder()
-        .systemId(systemId)
-        .batchId(batchId)
-        .build();
+    return new AlertId(systemId, batchId);
   }
 
   private static AlertRecord createAlertRecord(String systemId, String batchId) {

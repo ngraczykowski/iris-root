@@ -25,10 +25,7 @@ class AlertIdPublisherSpec extends Specification {
   }
 
   def createAlertId(String systemId) {
-    AlertId.builder()
-        .systemId(systemId)
-        .batchId('batchId')
-        .build()
+    new AlertId(systemId, 'batchId')
   }
 
   def createContext() {

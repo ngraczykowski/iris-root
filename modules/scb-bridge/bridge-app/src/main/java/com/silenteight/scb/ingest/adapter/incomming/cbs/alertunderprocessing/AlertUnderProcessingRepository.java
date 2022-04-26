@@ -1,5 +1,6 @@
 package com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing;
 
+import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertUnderProcessing.AlertUnderProcessingKey;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertUnderProcessing.State;
 
@@ -16,7 +17,12 @@ interface AlertUnderProcessingRepository
 
   Collection<AlertUnderProcessing> findAll();
 
-  Collection<AlertUnderProcessing> findAllBySystemIdIn(Collection<String> systemIds);
+  @Query(
+      "SELECT new com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId("
+          + "aup.systemId, aup.batchId) "
+          + "FROM AlertUnderProcessing aup "
+          + "WHERE aup.systemId IN ?1")
+  Collection<AlertId> findAllBySystemIdIn(Collection<String> systemIds);
 
   void saveAll(Iterable<AlertUnderProcessing> entities);
 
@@ -43,5 +49,8 @@ interface AlertUnderProcessingRepository
       @Param("error") String error
   );
 
-  Collection<AlertUnderProcessing> findTop2000ByErrorIsNullOrderByPriorityDesc();
+  Collection<AlertUnderProcessing> findTop2000ByStateOrderByPriorityDesc(
+      AlertUnderProcessing.State state);
+
+  long countByState(AlertUnderProcessing.State state);
 }

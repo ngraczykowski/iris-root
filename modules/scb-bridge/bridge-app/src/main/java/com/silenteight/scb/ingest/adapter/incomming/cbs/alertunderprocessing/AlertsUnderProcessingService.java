@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertIdWithDetails;
+import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertUnderProcessing.State;
 import com.silenteight.scb.ingest.adapter.incomming.common.domain.GnsSyncConstants;
 
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -16,7 +17,6 @@ import java.util.Collection;
 import java.util.List;
 
 import static java.lang.Math.min;
-import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 class AlertsUnderProcessingService implements AlertInFlightService {
@@ -27,8 +27,7 @@ class AlertsUnderProcessingService implements AlertInFlightService {
   @Transactional(GnsSyncConstants.PRIMARY_TRANSACTION_MANAGER)
   public void saveUniqueAlerts(Collection<AlertId> alerts, ScbAlertIdContext alertIdContext) {
     Collection<AlertId> alertsUnderProcessing = getAlertsUnderProcessing(alerts);
-    List<AlertId> alertsToBeSaved = alerts
-        .stream()
+    List<AlertId> alertsToBeSaved = alerts.stream()
         .filter(a -> !alertsUnderProcessing.contains(a))
         .toList();
     saveAlertsToBeProcess(alertsToBeSaved, alertIdContext);
@@ -49,26 +48,36 @@ class AlertsUnderProcessingService implements AlertInFlightService {
 
   @Override
   @Transactional(GnsSyncConstants.PRIMARY_TRANSACTION_MANAGER)
-  public void update(@NonNull AlertId alertId, @NonNull AlertUnderProcessing.State state) {
-    alertUnderProcessingRepository.update(alertId.getSystemId(), alertId.getBatchId(), state);
+  public void deleteAlerts(List<AlertId> alertIds) {
+    alertIds.forEach(this::delete);
   }
 
   @Override
   @Transactional(GnsSyncConstants.PRIMARY_TRANSACTION_MANAGER)
-  public void update(
-      @NonNull AlertId alertId, @NonNull AlertUnderProcessing.State state, @NonNull String error) {
+  public void ack(@NonNull AlertId alertId) {
+    alertUnderProcessingRepository.update(alertId.getSystemId(), alertId.getBatchId(), State.ACK);
+  }
+
+  @Override
+  @Transactional(GnsSyncConstants.PRIMARY_TRANSACTION_MANAGER)
+  public void error(@NonNull AlertId alertId, @NonNull String error) {
     String trimmedError = error.substring(0, min(error.length(), 1000));
 
     alertUnderProcessingRepository.update(
-        alertId.getSystemId(), alertId.getBatchId(), state, trimmedError);
+        alertId.getSystemId(), alertId.getBatchId(), State.ERROR, trimmedError);
   }
 
   @Override
   public List<AlertIdWithDetails> readChunk() {
-    return alertUnderProcessingRepository.findTop2000ByErrorIsNullOrderByPriorityDesc()
+    return alertUnderProcessingRepository.findTop2000ByStateOrderByPriorityDesc(State.IN_PROGRESS)
         .stream()
         .map(this::getAlertIdWithDetails)
-        .collect(toList());
+        .toList();
+  }
+
+  @Override
+  public long getAckAlertsCount() {
+    return alertUnderProcessingRepository.countByState(State.ACK);
   }
 
   private AlertIdWithDetails getAlertIdWithDetails(AlertUnderProcessing alert) {
@@ -86,11 +95,7 @@ class AlertsUnderProcessingService implements AlertInFlightService {
 
   private Collection<AlertId> getAlertsUnderProcessing(Collection<AlertId> alerts) {
     var systemIds = alerts.stream().map(AlertId::getSystemId).toList();
-    return alertUnderProcessingRepository
-        .findAllBySystemIdIn(systemIds)
-        .stream()
-        .map(a -> AlertId.builder().systemId(a.getSystemId()).batchId(a.getBatchId()).build())
-        .toList();
+    return alertUnderProcessingRepository.findAllBySystemIdIn(systemIds);
   }
 
   private void saveAlertsToBeProcess(Collection<AlertId> alerts, ScbAlertIdContext alertIdContext) {

@@ -5,10 +5,10 @@ import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertmapper.AlertMapper
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord.InvalidAlert.Reason
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertInFlightService
-import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertUnderProcessing.State
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckAlert
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckGateway
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsOutput
+import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsOutput.State
 import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertIngestService
 import com.silenteight.scb.ingest.adapter.incomming.common.model.ObjectId
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert
@@ -53,10 +53,9 @@ class AlertHandlerSpec extends Specification {
 
     then:
     1 * cbsAckGateway.ackReadAlert(_ as CbsAckAlert)
-    1 * alertInFlightService.
-        update(
-            fixtures.invalidAlertCausedByFatalError.alertId, State.ERROR,
-            fixtures.invalidAlertCausedByFatalError.getReasonMessage())
+    1 * alertInFlightService.error(
+        fixtures.invalidAlertCausedByFatalError.alertId,
+        fixtures.invalidAlertCausedByFatalError.getReasonMessage())
     0 * rawAlertService.store(_, _)
   }
 
@@ -80,13 +79,13 @@ class AlertHandlerSpec extends Specification {
     1 * ingestService.ingestAlertsForRecommendation(internalBatchId, alerts, batchContext)
     1 * cbsAckGateway.
         ackReadAlert({CbsAckAlert a -> a.alertExternalId == fixtures.alertId1.systemId}) >>
-        new CbsOutput(state: CbsOutput.State.OK)
+        new CbsOutput(state: State.OK)
     1 * cbsAckGateway.
         ackReadAlert({CbsAckAlert a -> a.alertExternalId == fixtures.alertId2.systemId}) >>
-        new CbsOutput(state: CbsOutput.State.ERROR)
+        new CbsOutput(state: State.ERROR)
 
-    1 * alertInFlightService.delete(fixtures.alertId1)
-    1 * alertInFlightService.update(fixtures.alertId2, State.ERROR, "Fatal error on ACK")
+    1 * alertInFlightService.ack(fixtures.alertId1)
+    1 * alertInFlightService.error(fixtures.alertId2, "Fatal error on ACK")
     1 * rawAlertService.store(internalBatchId, [fixtures.alert1])
     1 * rawAlertService.store(internalBatchId, [fixtures.alert2])
   }
@@ -95,8 +94,6 @@ class AlertHandlerSpec extends Specification {
 
     String someId1 = 'testId-1'
     String someId2 = 'testId-2'
-
-    ScbAlertIdContext alertIdContext = ScbAlertIdContext.newBuilder().setSourceView('test').build()
 
     InvalidAlert invalidAlertCausedByFatalError = new InvalidAlert(someId1, someId1, Reason.ABSENT)
     InvalidAlert invalidAlertCausedByTemporaryError = new InvalidAlert(

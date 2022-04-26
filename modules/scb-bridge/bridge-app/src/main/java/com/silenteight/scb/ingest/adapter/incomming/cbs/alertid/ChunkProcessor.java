@@ -74,10 +74,7 @@ class ChunkProcessor {
     }
 
     private AlertId map(@NonNull ResultSet resultSet) throws SQLException {
-      return AlertId.builder()
-          .systemId(resultSet.getString("SYSTEM_ID"))
-          .batchId(resultSet.getString("BATCH_ID"))
-          .build();
+      return new AlertId(resultSet.getString("SYSTEM_ID"), resultSet.getString("BATCH_ID"));
     }
 
     void processRemaining() {

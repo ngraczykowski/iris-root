@@ -12,4 +12,3 @@ databaseChangeLog:
                   type: varchar(128)
                   constraints:
                     nullable: false
-

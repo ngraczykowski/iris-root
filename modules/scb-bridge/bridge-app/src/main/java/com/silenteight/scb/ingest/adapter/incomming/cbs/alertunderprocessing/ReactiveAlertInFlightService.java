@@ -38,7 +38,7 @@ public class ReactiveAlertInFlightService {
     return Mono.defer(() -> Mono
         .fromRunnable(() -> {
           try {
-            delegate.update(alertId, state, error);
+            delegate.error(alertId, error);
             if (log.isDebugEnabled())
               log.debug("Updated alert under processing: alertId={}, state={}", alertId, state);
           } catch (Exception e) {

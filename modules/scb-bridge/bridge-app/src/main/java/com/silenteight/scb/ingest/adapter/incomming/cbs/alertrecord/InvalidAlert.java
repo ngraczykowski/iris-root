@@ -15,10 +15,7 @@ public class InvalidAlert {
   Reason invalidityReason;
 
   AlertId getAlertId() {
-    return AlertId.builder()
-        .systemId(systemId)
-        .batchId(batchId)
-        .build();
+    return new AlertId(systemId, batchId);
   }
 
   String getReasonMessage() {

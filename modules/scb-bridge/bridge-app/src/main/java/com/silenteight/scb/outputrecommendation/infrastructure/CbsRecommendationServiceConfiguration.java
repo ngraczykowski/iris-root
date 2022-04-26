@@ -2,6 +2,7 @@ package com.silenteight.scb.outputrecommendation.infrastructure;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertInFlightService;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.batch.ScbBridgeConfigProperties;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsConfigProperties;
 import com.silenteight.scb.outputrecommendation.adapter.outgoing.*;
@@ -25,6 +26,7 @@ public class CbsRecommendationServiceConfiguration {
   private final ScbBridgeConfigProperties scbBridgeConfigProperties;
   private final CbsConfigProperties cbsConfigProperties;
   private final ApplicationEventPublisher eventPublisher;
+  private final AlertInFlightService alertInFlightService;
 
   @Bean
   CbsRecommendationService cbsRecommendationService(
@@ -32,7 +34,8 @@ public class CbsRecommendationServiceConfiguration {
       CbsRecommendationMapper cbsRecommendationMapper) {
     return new CbsRecommendationService(
         cbsRecommendationGateway,
-        cbsRecommendationMapper);
+        cbsRecommendationMapper,
+        alertInFlightService);
   }
 
   @Bean

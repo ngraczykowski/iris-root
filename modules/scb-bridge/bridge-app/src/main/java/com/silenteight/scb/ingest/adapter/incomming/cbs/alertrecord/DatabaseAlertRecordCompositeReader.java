@@ -85,10 +85,7 @@ class DatabaseAlertRecordCompositeReader implements AlertRecordCompositeReader {
   }
 
   private AlertId toAlertId(AlertRecord r) {
-    return AlertId.builder()
-        .batchId(r.getBatchId())
-        .systemId(r.getSystemId())
-        .build();
+    return new AlertId(r.getSystemId(), r.getBatchId());
   }
 
   private List<CbsHitDetails> readCbsHitDetails(

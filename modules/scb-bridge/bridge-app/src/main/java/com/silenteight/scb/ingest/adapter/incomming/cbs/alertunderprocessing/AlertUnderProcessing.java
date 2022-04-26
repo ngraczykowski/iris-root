@@ -54,6 +54,7 @@ public class AlertUnderProcessing extends BaseEntity {
 
   public enum State {
     IN_PROGRESS,
+    ACK,
     ERROR
   }
 

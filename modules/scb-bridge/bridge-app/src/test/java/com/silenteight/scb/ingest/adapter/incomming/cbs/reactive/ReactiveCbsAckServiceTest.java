@@ -51,6 +51,23 @@ class ReactiveCbsAckServiceTest {
         .verify();
   }
 
+  private AckAlertRequest mockRequest(String systemId, String batchId) {
+    return AckAlertRequest
+        .builder()
+        .alertId(new AlertId(systemId, batchId))
+        .build();
+  }
+
+  private static CbsAckAlert alertWithSystemId(String systemId) {
+    return argThat(new SingleCbsAckAlertArgumentMatcher(systemId));
+  }
+
+  private static CbsOutput createCbsOutput(State state) {
+    CbsOutput cbsOutput = new CbsOutput();
+    cbsOutput.setState(state);
+    return cbsOutput;
+  }
+
   @RepeatedTest(10)
   void givenMultipleAlerts_keepsOrdering() {
     // Given
@@ -112,23 +129,6 @@ class ReactiveCbsAckServiceTest {
         .assertNext(result -> assertThat(result.getState()).isEqualTo(State.TEMPORARY_FAILURE))
         .expectComplete()
         .verify();
-  }
-
-  private AckAlertRequest mockRequest(String systemId, String batchId) {
-    return AckAlertRequest
-        .builder()
-        .alertId(AlertId.builder().systemId(systemId).batchId(batchId).build())
-        .build();
-  }
-
-  private static CbsAckAlert alertWithSystemId(String systemId) {
-    return argThat(new SingleCbsAckAlertArgumentMatcher(systemId));
-  }
-
-  private static CbsOutput createCbsOutput(State state) {
-    CbsOutput cbsOutput = new CbsOutput();
-    cbsOutput.setState(state);
-    return cbsOutput;
   }
 
   @RequiredArgsConstructor

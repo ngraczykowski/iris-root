@@ -12,6 +12,7 @@ public class TrafficManager {
 
   private final TimeSemaphore timeSemaphore;
   private final GnsRtSemaphoreProperties semaphoreProperties;
+  private final CbsAlertsLoadManagementService loadManagementService;
 
   public void activateRtSemaphore() {
     if (!semaphoreProperties.enabled()) {
@@ -22,7 +23,6 @@ public class TrafficManager {
   }
 
   public boolean holdPeriodicAlertProcessing() {
-    // TODO: add load management check - ALFA-207
-    return timeSemaphore.isActive();
+    return timeSemaphore.isActive() || !loadManagementService.isReadyToLoad();
   }
 }

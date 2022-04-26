@@ -22,9 +22,6 @@ public class AlertIdWithDetails {
   ScbAlertIdContext context;
 
   public AlertId toAlertId() {
-    return AlertId.builder()
-        .systemId(systemId)
-        .batchId(batchId)
-        .build();
+    return new AlertId(systemId, batchId);
   }
 }

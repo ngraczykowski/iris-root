@@ -1,6 +1,7 @@
 package com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing;
 
 import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext;
+import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertUnderProcessing.State;
 
 import java.time.OffsetDateTime;
@@ -23,8 +24,11 @@ class InMemoryAlertUnderProcessingRepository implements AlertUnderProcessingRepo
   }
 
   @Override
-  public Collection<AlertUnderProcessing> findAllBySystemIdIn(Collection<String> systemIds) {
-    return store.stream().filter(a -> systemIds.contains(a.getSystemId())).collect(toList());
+  public Collection<AlertId> findAllBySystemIdIn(Collection<String> systemIds) {
+    return store.stream()
+        .filter(a -> systemIds.contains(a.getSystemId()))
+        .map(a -> new AlertId(a.getSystemId(), a.getBatchId()))
+        .collect(toList());
   }
 
   @Override
@@ -71,8 +75,16 @@ class InMemoryAlertUnderProcessingRepository implements AlertUnderProcessingRepo
   }
 
   @Override
-  public Collection<AlertUnderProcessing> findTop2000ByErrorIsNullOrderByPriorityDesc() {
+  public Collection<AlertUnderProcessing> findTop2000ByStateOrderByPriorityDesc(
+      AlertUnderProcessing.State state) {
     return List.of();
+  }
+
+  @Override
+  public long countByState(AlertUnderProcessing.State state) {
+    return store.stream()
+        .filter(alertUnderProcessing -> state.equals(alertUnderProcessing.getState()))
+        .count();
   }
 
   private byte[] getPayload() {

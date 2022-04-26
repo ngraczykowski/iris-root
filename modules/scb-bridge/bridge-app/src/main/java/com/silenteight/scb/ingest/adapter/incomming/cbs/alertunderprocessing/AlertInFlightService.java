@@ -20,10 +20,13 @@ public interface AlertInFlightService {
 
   void deleteExpired(@NonNull OffsetDateTime expireDate);
 
-  void update(@NonNull AlertId alertId, @NonNull AlertUnderProcessing.State state);
+  void deleteAlerts(List<AlertId> alertIds);
 
-  void update(
-      @NonNull AlertId alertId, @NonNull AlertUnderProcessing.State state, @NonNull String error);
+  void ack(@NonNull AlertId alertId);
+
+  void error(@NonNull AlertId alertId, @NonNull String error);
 
   List<AlertIdWithDetails> readChunk();
+
+  long getAckAlertsCount();
 }

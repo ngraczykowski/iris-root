@@ -60,14 +60,8 @@ class AlertProcessorSpec extends Specification {
     ScbAlertIdContext alertIdContext1 = ScbAlertIdContext.newBuilder().setPriority(1).build()
     ScbAlertIdContext alertIdContext2 = ScbAlertIdContext.newBuilder().setPriority(10).build()
 
-    AlertId alertId1 = AlertId.builder()
-        .systemId('systemId-1')
-        .batchId('batchId-1')
-        .build()
-    AlertId alertId2 = AlertId.builder()
-        .systemId('systemId-2')
-        .batchId('batchId-2')
-        .build()
+    AlertId alertId1 = new AlertId('systemId-1', 'batchId-1')
+    AlertId alertId2 = new AlertId('systemId-2', 'batchId-2')
 
     AlertIdWithDetails alertIdWithDetails1 = AlertIdWithDetails.builder()
         .systemId(alertId1.systemId)

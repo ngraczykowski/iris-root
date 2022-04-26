@@ -73,12 +73,30 @@ class DatabaseCbsHitDetailsReaderIT extends BaseJdbcTest {
     assertThat(result).isEmpty();
   }
 
+  private List<CbsHitDetails> read(String view, List<AlertId> alertIds) {
+    return reader.read(view, alertIds);
+  }
+
   @Test
   void shouldReadSingleEntryCorrectly() {
     assertSingleEntryFoundCorrectly(fixtures.withoutNeoFlag);
     assertSingleEntryFoundCorrectly(fixtures.newNeoFlag);
     assertSingleEntryFoundCorrectly(fixtures.existingNeoFlag);
     assertSingleEntryFoundCorrectly(fixtures.obsoleteNeoFlag);
+  }
+
+  private void assertSingleEntryFoundCorrectly(CbsHitDetails expected) {
+    var alertId = new AlertId(expected.getSystemId(), expected.getBatchId());
+    assertFoundEntries(fixtures.existingView, List.of(alertId))
+        .hasSize(1)
+        .first()
+        .isEqualTo(expected);
+  }
+
+  private ListAssert<CbsHitDetails> assertFoundEntries(
+      String existingView, List<AlertId> alertIds) {
+
+    return assertThat(read(existingView, alertIds));
   }
 
   @Test
@@ -93,30 +111,9 @@ class DatabaseCbsHitDetailsReaderIT extends BaseJdbcTest {
         .containsExactly(fixtures.hit1, fixtures.hit2, fixtures.hit3);
   }
 
-  private void assertSingleEntryFoundCorrectly(CbsHitDetails expected) {
-    var alertId = AlertId.builder()
-        .batchId(expected.getBatchId())
-        .systemId(expected.getSystemId())
-        .build();
-    assertFoundEntries(fixtures.existingView, List.of(alertId))
-        .hasSize(1)
-        .first()
-        .isEqualTo(expected);
-  }
-
-  private ListAssert<CbsHitDetails> assertFoundEntries(
-      String existingView, List<AlertId> alertIds) {
-
-    return assertThat(read(existingView, alertIds));
-  }
-
-  private List<CbsHitDetails> read(String view, List<AlertId> alertIds) {
-    return reader.read(view, alertIds);
-  }
-
   private static class Fixtures {
 
-    AlertId alertId = AlertId.builder().batchId("batchId").systemId("systemId").build();
+    AlertId alertId = new AlertId("systemId", "batchId");
     String existingView = "gns.cbs_hit_details_test_view";
     String notExistingView = "gns.not_existing_view";
     String viewWithSqlInjection = "gns.not_existing_view WHERE 1=1 OR ";
@@ -187,10 +184,7 @@ class DatabaseCbsHitDetailsReaderIT extends BaseJdbcTest {
         .hitNeoFlag(NeoFlag.OBSOLETE)
         .build();
 
-    AlertId multiHitAlertId = AlertId.builder()
-        .batchId(multiHitBatchId)
-        .systemId(multiHitSystemId)
-        .build();
+    AlertId multiHitAlertId = new AlertId(multiHitSystemId, multiHitBatchId);
   }
 
   @Configuration

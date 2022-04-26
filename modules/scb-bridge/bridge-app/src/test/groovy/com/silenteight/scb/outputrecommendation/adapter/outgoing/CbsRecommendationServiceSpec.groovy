@@ -1,5 +1,7 @@
 package com.silenteight.scb.outputrecommendation.adapter.outgoing
 
+import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId
+import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertInFlightService
 import com.silenteight.scb.outputrecommendation.domain.model.CbsAlertRecommendation
 import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.Alert
 import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.Recommendation
@@ -11,6 +13,7 @@ class CbsRecommendationServiceSpec extends Specification {
 
   def cbsRecommendationGateway = Mock(CbsRecommendationGateway)
   def cbsRecommendationMapper = Mock(CbsRecommendationMapper)
+  def alertInFlightService = Mock(AlertInFlightService)
   def recommendedStatus = 'False Positive'
   def payload = 'payload'
   def alertId = 'alertId'
@@ -20,7 +23,8 @@ class CbsRecommendationServiceSpec extends Specification {
 
   def 'should recommend alert only for watchlist level processing'() {
     when:
-    new CbsRecommendationService(cbsRecommendationGateway, cbsRecommendationMapper)
+    new CbsRecommendationService(
+        cbsRecommendationGateway, cbsRecommendationMapper, alertInFlightService)
 
     then:
     0 * _
@@ -32,7 +36,8 @@ class CbsRecommendationServiceSpec extends Specification {
     def cbsAlertRecommendation = createCbsAlertRecommendation()
 
     when:
-    new CbsRecommendationService(cbsRecommendationGateway, cbsRecommendationMapper)
+    new CbsRecommendationService(
+        cbsRecommendationGateway, cbsRecommendationMapper, alertInFlightService)
         .recommend([alertRecommendation])
 
     then:
@@ -42,6 +47,7 @@ class CbsRecommendationServiceSpec extends Specification {
         {
           it.size() == 1 && verifyCbsAlert(it.first())
         })
+    1 * alertInFlightService.deleteAlerts(_ as List<AlertId>)
   }
 
   def verifyCbsAlert(CbsAlertRecommendation cbsAlert) {
@@ -57,7 +63,8 @@ class CbsRecommendationServiceSpec extends Specification {
     def alertRecommendation = createRecommendation()
 
     when:
-    new CbsRecommendationService(cbsRecommendationGateway, cbsRecommendationMapper)
+    new CbsRecommendationService(
+        cbsRecommendationGateway, cbsRecommendationMapper, alertInFlightService)
         .recommend([alertRecommendation])
 
     then:
@@ -66,6 +73,7 @@ class CbsRecommendationServiceSpec extends Specification {
         {
           it.isEmpty()
         })
+    1 * alertInFlightService.deleteAlerts(_ as List<AlertId>)
   }
 
   def createAlert() {

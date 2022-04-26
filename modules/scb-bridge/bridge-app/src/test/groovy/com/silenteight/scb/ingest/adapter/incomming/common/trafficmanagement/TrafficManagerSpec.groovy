@@ -8,8 +8,9 @@ class TrafficManagerSpec extends Specification {
 
   private static Duration DURATION = Duration.ofSeconds(10)
   def timeSemaphore = Mock(TimeSemaphore)
+  def loadManagementService = Mock(CbsAlertsLoadManagementService)
   def semaphoreProperties = new GnsRtSemaphoreProperties(true, DURATION)
-  def underTest = new TrafficManager(timeSemaphore, semaphoreProperties)
+  def underTest = new TrafficManager(timeSemaphore, semaphoreProperties, loadManagementService)
 
   def "Should return true when semaphore is active"() {
     given:
@@ -33,7 +34,7 @@ class TrafficManagerSpec extends Specification {
   def "Should not activate real time semaphore when it is disabled"() {
     given:
     semaphoreProperties = new GnsRtSemaphoreProperties(false, DURATION)
-    underTest = new TrafficManager(timeSemaphore, semaphoreProperties)
+    underTest = new TrafficManager(timeSemaphore, semaphoreProperties, loadManagementService)
 
     when:
     underTest.activateRtSemaphore()

@@ -86,9 +86,9 @@ class DatabaseAlertRecordCompositeReaderIT extends BaseJdbcTest {
     // given
     CbsHitDetails hitDetails1 = createCbsHitDetails("system-id-1", "batch-id-1");
     CbsHitDetails hitDetails2 = createCbsHitDetails("system-id-3", "batch-id-3");
-    AlertId alertId1 = AlertId.builder().batchId("batch-id-1").systemId("system-id-1").build();
-    AlertId alertId2 = AlertId.builder().batchId("batch-id-2").systemId("system-id-2").build();
-    AlertId alertId3 = AlertId.builder().batchId("batch-id-3").systemId("system-id-3").build();
+    AlertId alertId1 = new AlertId("system-id-1", "batch-id-1");
+    AlertId alertId2 = new AlertId("system-id-2", "batch-id-2");
+    AlertId alertId3 = new AlertId("system-id-3", "batch-id-3");
     ScbAlertIdContext context = createScbAlertIdContext("fff_records", "cbs_hit_details");
     doReturn(List.of(hitDetails1, hitDetails2))
         .when(cbsHitDetailsReader)
@@ -125,10 +125,7 @@ class DatabaseAlertRecordCompositeReaderIT extends BaseJdbcTest {
   }
 
   private static AlertId createAlertId(String systemId, String batchId) {
-    return AlertId.builder()
-        .systemId(systemId)
-        .batchId(batchId)
-        .build();
+    return new AlertId(systemId, batchId);
   }
 
   private static CbsHitDetails createCbsHitDetails(String systemId, String batchId) {

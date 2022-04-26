@@ -19,10 +19,7 @@ class AlertsUnderProcessingServiceSpec extends Specification {
 
   def 'should delete alert under processing'() {
     given:
-    def alertId = AlertId.builder()
-        .batchId('batchId')
-        .systemId('systemId')
-        .build()
+    def alertId = new AlertId('systemId', 'batchId')
 
     when:
     objectUnderTest.delete(alertId)
