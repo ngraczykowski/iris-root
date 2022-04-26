@@ -20,21 +20,30 @@ pipeline {
     }
     stage('Build') {
       steps {
-        withCredentials(
-            [usernamePassword(
-                credentialsId: 'artifactory-deployment-user',
-                usernameVariable: 'repoDeploymentUser',
-                passwordVariable: 'repoDeploymentPassword'),
-             usernamePassword(
-                 credentialsId: 'artifactory-user',
-                 usernameVariable: 'S8_REPO_USER',
-                 passwordVariable: 'S8_REPO_PASSWORD'),]) {
-          withGradle {
+        withGradle {
+          withCredentials(
+              [usernamePassword(
+                  credentialsId: 'artifactory-user',
+                  usernameVariable: 'S8_REPO_USER',
+                  passwordVariable: 'S8_REPO_PASSWORD')]) {
+            sh '''
+              ./gradlew \
+              -Pversion=$(./scripts/get-version.sh) \
+              clean build
+            '''
+          }
+
+          withCredentials(
+              [usernamePassword(
+                  credentialsId: 'artifactory-deployment-user',
+                  usernameVariable: 'repoDeploymentUser',
+                  passwordVariable: 'repoDeploymentPassword')]) {
             sh '''./gradlew \
               -Dsilenteight.repoDeploymentUser=$repoDeploymentUser \
               -Dsilenteight.repoDeploymentPassword=$repoDeploymentPassword \
               -Djib.console=plain \
-              clean build publish
+              -Pversion=$(./scripts/get-version.sh) \
+              publish
             '''
           }
         }
