@@ -2,7 +2,7 @@ import logging
 import sys
 
 from agent_base.grpc_service.servicer import GrpcServicer
-from agent_base.utils import Config
+from agent_base.utils.config import ConfigurationException
 
 from company_name.agent.agent import CompanyNameAgent
 from company_name.agent.config_service.organization_name_agent_config_pb2 import (
@@ -106,17 +106,24 @@ class CompanyNameAgentConfigServicer(OrganizationNameAgentConfigServicer, GrpcSe
             ).solutions
 
         if request.model_path:
-            model_path = request.model_path
+            source = request.model_path
+            try:
+                model_file_path = self.agent.config.get_config_path(source, required=True)
+                model = SklearnModel(model_file_path)
+            except ConfigurationException:
+                raise
         else:
-            model_path = next(
+            model_rule = next(
                 rule for rule in self.agent.reduction.rules if isinstance(rule, ModelRule)
-            ).source
+            )
+            source = model_rule.source
+            model = model_rule.model
 
         if request.model_path or request.model_solution_rules:
             model_rule = ModelRule(
-                source=model_path,
+                source=source,
                 solutions=model_solution_rules,
-                model=SklearnModel(path=Config().get_config_path(model_path, required=True)),
+                model=model,
             )
             self.agent.reduction.rules = [
                 rule for rule in self.agent.reduction.rules if isinstance(rule, FeatureRule)
