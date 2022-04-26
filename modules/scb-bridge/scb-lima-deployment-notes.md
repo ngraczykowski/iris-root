@@ -69,8 +69,12 @@ inside `additionalStages`) defined in [Jenkinsfile](./Jenkinsfile).
 
 To release project's artefact to Minio, go
 to [scb-bridge jenkins job](https://jenkins.silenteight.com/view/all/job/sens/job/sens%252Fscb-bridge/job/master/)
-and click `Build with Parameters`. Select `release` checkbox and do not select any `env`. The build
-will eventually fail, but it will copy the artefacts to Minio.
+and click `Build with Parameters`. Do one of the following:
+
+- Select `release` checkbox and do not select any `env`. The build will eventually fail, but it will
+  copy the artefacts to Minio.
+- No not select `release` but choose lima `env` - in that case, artifact will be copied to Minio and
+  Nomad deployment will be attempted.
 
 Be careful when selecting `env` as it should deploy to the selected environment the current version
 which may not be compatible with other services, that's why it is safer to deploy via Nomad
@@ -92,11 +96,12 @@ like [scb-bridge nomad directory](https://gitlab.silenteight.com/sens/scb-bridge
 Special attention deserves `version.vars` file which lists versions of components' artifacts that
 needs to be deployed. The available versions can be checked
 in [Minio](https://console.minio.silenteight.com/object-browser/artifacts), just enter the directory
-that corresponds to the component and check artefacts inside. Keep in mind that only artefacts
-with `-exec.jar` suffix (and not `-BUILD...`) are available as candidates to be deployed by Nomad.
+that corresponds to the component and check artefacts inside. Only artefacts with `-exec.jar` suffix
+are available as candidates to be deployed by Nomad.
 
 If you have a problem with artifact's checksum during Nomad deployment, you can copy the checksum
-from Nomad error log and put it into `version.vars` and repeat the deployment process.
+from Nomad error log (visible in Nomad UI) and put it into `version.vars` and repeat the deployment
+process.
 
 Artefacts are downloaded by Nomad from Minio, so they must be there, and they are put there by
 Jenkins as explained in above section.
@@ -111,7 +116,8 @@ When jenkins builds this branch it will invoke `bin/deploy-all.sh` script which 
 there Nomad Jobs to `lima`. The script just invokes each service's `deploy.sh` which basically
 do `nomad job run`.
 
-Just push your changes to that branch and deployment will happen.
+Just push your changes to that branch and deployment will happen
+via [Jenkins job](https://jenkins.silenteight.com/job/scb/job/scb%2Fscb-nomad-lima-deployment/view/change-requests/).
 
 Our current branch: `feature/ALFA-91/add-bridge-deployment-configuration`
 
@@ -239,7 +245,7 @@ Can access virtual hosts: `/lima`
           auto-registration:
             enabled: false
   ```
-  
+
 # Useful links
 
 - [Into to Nomad](https://drive.google.com/file/d/1aZSuwcLeBYiUe93CGzNDbRaFQ0m8HbVG/view?usp=sharing)

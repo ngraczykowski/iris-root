@@ -5,6 +5,7 @@ SCB Bridge application uses **Java 17**
 # Local run
 
 To start an app locally:
+
 - run `docker-compose up -d`
 - start class `ScbBridgeApplication` with profile `client`
 
@@ -29,17 +30,24 @@ Services are exposed on locally accessible port numbers. The table below shows h
 Configuration (yaml file) can be placed in Consul under key `config/scb-bridge/data`.
 
 This configuration scheme:
-- will be the primary way of configuring `scb-bridge` with the business related settings like Oracle location, Jobs settings, etc.
+
+- will be the primary way of configuring `scb-bridge` with the business related settings like Oracle
+  location, Jobs settings, etc.
 - will be changed/tweaked by scb
-- after a config change in Consul, `scb-bridge` needs to be restarted in order the new config to be applied
-- 
+- after a config change in Consul, `scb-bridge` needs to be restarted in order the new config to be
+  applied
+
 ### Local run
 
-To enable locally getting configuration from Consul activate profile `consul`. You would want to have Consul running locally as well, you may start it with the help of attached `docker-compose` file.
+To enable locally getting configuration from Consul activate profile `consul`. You would want to
+have Consul running locally as well, you may start it with the help of attached `docker-compose`
+file.
 
-If you don't want to use Consul, start the application with `client` profile, so it has some sane values how to behave locally.
+If you don't want to use Consul, start the application with `client` profile, so it has some sane
+values how to behave locally.
 
-Keep in mind that `consul` profile will be activated on client's environment, and our test envs as well.
+Keep in mind that `consul` profile will be activated on client's environment, and our test envs as
+well.
 
 ## How to test
 
@@ -49,7 +57,7 @@ POST json
 
 ```json
 {
-    "totalRecordsToRead":1
+  "totalRecordsToRead": 1
 }
 ```
 
@@ -58,15 +66,31 @@ to `/rest/scb-bridge/v1/cbs/test` endpoint.
 - locally: `http://localhost:24220/rest/scb-bridge/v1/cbs/test`
 - `lima` test env: `https://lima.silenteight.com/rest/scb-bridge/v1/cbs/test`
 
+You can specify more options in this endpoint, otherwise following defaults will be used
+
+```json
+{
+  "ackRecords": true,
+  "hitDetailsView": "",
+  "priority": 10,
+  "watchlistLevel": true,
+  "recordsView": "SENS_V_FFF_RECORDS_DENY",
+  "chunkSize": 1000,
+  "totalRecordsToRead": 1
+}
+```
+
 ### GNS-RT
 
 The simplest way to test GNS-RT locally is to send a JSON request using Postman:
 
-1. Generate new request using endpoint `http://localhost:24220/rest/scb-bridge/v1/gnsrt/system-id/random` (
+1. Generate new request using
+   endpoint `http://localhost:24220/rest/scb-bridge/v1/gnsrt/system-id/random` (
    method `GET`)
     1. It pulls one random record from Oracle DB and based on its data it generates a JSON request.
     2. In addition, it modifies system_id, so there won't be any duplicates in scb_raw_alert table.
-2. Copy generated request and send it to endpoint `http://localhost:24220/rest/scb-bridge/v1/gnsrt/recommendation` (
+2. Copy generated request and send it to
+   endpoint `http://localhost:24220/rest/scb-bridge/v1/gnsrt/recommendation` (
    method `POST`)
     1. To paste the request go to `Body` section
     2. Select `raw`
@@ -105,7 +129,6 @@ The Nomad deployment descriptor(the job file) `scb-bridge.nomad` contains job sp
 its requirements. Nomad scheduler deployed on-premise will use this file to run scb-bridge
 artifact (jar).
 
-
 ## Providing learning alert data by ECM (Hive)
 
 1) Login via ssh to the hive server
@@ -130,8 +153,8 @@ alert/match should change solution for. It also defines the frequency (threshold
 which is the size of the alert/matches distribution for candidate selection. In order to trigger QCO
 sampling and solution overriding:
 
-The configuration file has to be provided at the 
-location defined in `bridge-qco/src/main/resources/application.yml`.
+The configuration file has to be provided at the location defined
+in `bridge-qco/src/main/resources/application.yml`.
 
 The configuration allows defining rule to determine which the policy and step of alert we should
 change solution for. The configuration allows defining how frequent we should get alert to analyze
@@ -140,11 +163,12 @@ as well.
 ### How to enable QCO
 
 The QCO process can be enabled by setting property
-`silenteight.qco.enabled` to `true` 
+`silenteight.qco.enabled` to `true`
 
 ## EXTENDED VERSION OF RECOM FUNCTION WITH QCO PARAMETERS
 
 To enable recom function with qco parameters, we need to set property:
+
 ```
 silenteight:
   scb-bridge:
