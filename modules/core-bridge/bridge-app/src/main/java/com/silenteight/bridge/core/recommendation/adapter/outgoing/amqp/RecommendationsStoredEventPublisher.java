@@ -28,7 +28,7 @@ class RecommendationsStoredEventPublisher implements RecommendationEventPublishe
         .build();
 
     log.info(
-        "Send RecommendationsStoredEvent with {} alerts for analysis name: {}",
+        "Send RecommendationsStoredEvent with [{}] alerts for analysis name [{}].",
         event.alertNames().size(),
         event.analysisName());
 

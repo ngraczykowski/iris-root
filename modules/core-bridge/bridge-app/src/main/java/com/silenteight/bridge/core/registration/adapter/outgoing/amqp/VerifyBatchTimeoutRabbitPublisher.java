@@ -24,7 +24,7 @@ class VerifyBatchTimeoutRabbitPublisher implements VerifyBatchTimeoutPublisher {
   @Override
   public void publish(VerifyBatchTimeoutEvent event) {
     if (registrationVerifyBatchTimeoutProperties.enabled()) {
-      log.info("Send verify batch timeout notification. Batch id: {}", event.batchId());
+      log.info("Send verify batch timeout notification for batch id [{}].", event.batchId());
 
       final var routingKey = "";
       final var message = createMessage(event);

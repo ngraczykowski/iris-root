@@ -23,7 +23,7 @@ class RecommendationsStoredRabbitAmqpListener {
   )
   public void recommendationsStored(RecommendationsStored recommendation) {
     log.info(
-        "Received RecommendationsStored amqp message for analysis name={}",
+        "Received RecommendationsStored amqp message for analysis name [{}].",
         recommendation.getAnalysisName());
     registrationFacade.markAlertsAsRecommended(
         createMarkAlertsAsRecommendedCommand(recommendation));

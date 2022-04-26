@@ -24,13 +24,13 @@ class AnalysisServiceClientMock implements AnalysisServiceClient {
 
   @Override
   public AnalysisDatasetOut addDataset(AddDatasetIn request) {
-    log.info("MOCK: Add dataset");
+    log.info("MOCK: Add dataset.");
     return null;
   }
 
   @Override
   public CreateAnalysisOut createAnalysis(CreateAnalysisIn request) {
-    log.info("MOCK: Create analysis");
+    log.info("MOCK: Create analysis.");
     return CreateAnalysisOut.builder()
         .name("analysis_name" + UUID.randomUUID())
         .policy("analysis_policy")
@@ -40,13 +40,16 @@ class AnalysisServiceClientMock implements AnalysisServiceClient {
 
   @Override
   public GetAnalysisOut getAnalysis(String analysis) {
-    log.info("MOCK: Get analysis");
+    log.info("MOCK: Get analysis.");
     return null;
   }
 
   @Override
   public AddAlertsToAnalysisOut addAlertsToAnalysis(AddAlertsToAnalysisIn request) {
-    log.info("MOCK: Add alerts to analysis: " + request);
+    log.info(
+        "MOCK: Add [{}] alerts to analysis [{}].",
+        request.getAlerts().size(),
+        request.getAnalysisName());
     if (registrationAnalysisProperties.mockRecommendationsGeneration()) {
       publishRecommendationsGeneratedEvent(request);
     }

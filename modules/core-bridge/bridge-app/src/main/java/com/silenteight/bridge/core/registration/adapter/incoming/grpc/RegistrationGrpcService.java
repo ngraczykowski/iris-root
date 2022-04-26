@@ -22,7 +22,7 @@ class RegistrationGrpcService extends RegistrationServiceGrpc.RegistrationServic
 
   @Override
   public void registerBatch(RegisterBatchRequest request, StreamObserver<Empty> responseObserver) {
-    log.info("Register batch request received: {}", request);
+    log.info("Register batch request received for batch with id [{}].", request.getBatchId());
     var batchId = registrationFacade.register(new RegisterBatchCommand(
         request.getBatchId(),
         request.getAlertCount(),
@@ -30,7 +30,9 @@ class RegistrationGrpcService extends RegistrationServiceGrpc.RegistrationServic
         request.getBatchPriority(),
         request.getIsSimulation()
     ));
-    log.info("New batch registered with id: {}, solving: {}", batchId, !request.getIsSimulation());
+    log.info(
+        "New batch registered with id [{}], solving [{}].",
+        batchId, !request.getIsSimulation());
     responseObserver.onNext(Empty.getDefaultInstance());
     responseObserver.onCompleted();
   }
@@ -38,7 +40,7 @@ class RegistrationGrpcService extends RegistrationServiceGrpc.RegistrationServic
   @Override
   public void notifyBatchError(
       NotifyBatchErrorRequest request, StreamObserver<Empty> responseObserver) {
-    log.info("NotifyBatchError request received: {}", request);
+    log.info("NotifyBatchError request received for batch with id [{}].", request.getBatchId());
     registrationFacade.notifyBatchError(new NotifyBatchErrorCommand(
         request.getBatchId(),
         request.getErrorDescription(),
@@ -56,11 +58,11 @@ class RegistrationGrpcService extends RegistrationServiceGrpc.RegistrationServic
       StreamObserver<RegisterAlertsAndMatchesResponse> responseObserver) {
     var batchId = request.getBatchId();
     var alertCount = request.getAlertsWithMatchesCount();
-    log.info("Register alerts and matches request received for batchId: {}, alertCount: {}",
+    log.info("Register alerts and matches request received for batch id [{}], alert count [{}].",
         batchId, alertCount);
     var registerAlertsCommand = mapper.toRegisterAlertsCommand(request);
     var alerts = registrationFacade.registerAlertsAndMatches(registerAlertsCommand);
-    log.info("Register alerts and matches request completed for batchId: {}", batchId);
+    log.info("Register alerts and matches request completed for batch id [{}].", batchId);
 
     var registerAlertsAndMatchesResponse = mapper.toRegisterAlertsAndMatchesResponse(alerts);
 

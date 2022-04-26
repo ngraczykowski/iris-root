@@ -54,13 +54,13 @@ public class RegistrationFacade {
     var batch = batchService.findBatchByAnalysisName(command.analysisName());
 
     log.info(
-        "Batch for given analysis name {}, has batch id: {}.",
+        "Batch for given analysis name [{}], has batch id [{}].",
         command.analysisName(), batch.id());
 
     alertService.updateStatusToRecommended(batch.id(), command.alertNames());
 
     if (alertService.hasNoPendingAlerts(batch) || command.isTimedOut()) {
-      log.info("Completing batch, without pending alerts, with id: {}", batch.id());
+      log.info("Completing batch, without pending alerts, with id [{}]", batch.id());
       batchService.completeSolvingBatch(batch);
     }
   }

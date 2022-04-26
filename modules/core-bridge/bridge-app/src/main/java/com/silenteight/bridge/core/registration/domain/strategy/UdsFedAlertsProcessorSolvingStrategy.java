@@ -3,6 +3,7 @@ package com.silenteight.bridge.core.registration.domain.strategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.bridge.core.registration.domain.model.AlertStatus;
 import com.silenteight.bridge.core.registration.domain.model.Batch;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AnalysisService;
@@ -27,7 +28,7 @@ class UdsFedAlertsProcessorSolvingStrategy implements UdsFedAlertsProcessorStrat
 
   @Override
   public void processUdsFedAlerts(Batch batch, List<String> alertNames) {
-    log.info("UDS fed alerts are being processed for solving batch with batch id: {}", batch.id());
+    log.info("UDS fed alerts are being processed for solving batch with id [{}].", batch.id());
     updateAlertsStatus(batch.id(), alertNames);
     analysisService.addAlertsToAnalysis(
         batch.analysisName(),
@@ -37,7 +38,8 @@ class UdsFedAlertsProcessorSolvingStrategy implements UdsFedAlertsProcessorStrat
   }
 
   private void updateAlertsStatus(String batchId, List<String> alertNames) {
-    log.info("Set {} alerts status to PROCESSING for batch id: {}", alertNames.size(), batchId);
+    log.info("Set [{}] alerts status to [{}] for batch id [{}].",
+        alertNames.size(), AlertStatus.PROCESSING, batchId);
     alertRepository.updateStatusToProcessing(batchId, alertNames);
   }
 

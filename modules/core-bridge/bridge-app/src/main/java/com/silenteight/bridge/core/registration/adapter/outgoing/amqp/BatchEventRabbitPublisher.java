@@ -32,7 +32,7 @@ class BatchEventRabbitPublisher implements BatchEventPublisher {
                                           : batchErrorProperties.solvingBatchRoutingKey();
 
     log.info(
-        "Send batch error notification for batch with id: {}, solving: {}", event.id(),
+        "Send batch error notification for batch with id [{}], solving [{}].", event.id(),
         !event.isSimulation());
     rabbitTemplate.convertAndSend(batchErrorProperties.exchangeName(), routingKey, message);
   }
@@ -41,7 +41,7 @@ class BatchEventRabbitPublisher implements BatchEventPublisher {
   public void publish(SolvingBatchCompleted event) {
     var message = mapper.toMessageBatchCompleted(event);
 
-    log.info("Send solving batch completed notification for batch with id: {}", event.id());
+    log.info("Send solving batch completed notification for batch with id [{}].", event.id());
     rabbitTemplate.convertAndSend(
         batchCompletedProperties.exchangeName(),
         batchCompletedProperties.solvingBatchRoutingKey(),
@@ -52,7 +52,7 @@ class BatchEventRabbitPublisher implements BatchEventPublisher {
   public void publish(SimulationBatchCompleted event) {
     var message = mapper.toMessageBatchCompleted(event);
 
-    log.info("Send simulation batch completed notification for batch with id: {}", event.id());
+    log.info("Send simulation batch completed notification for batch with id [{}].", event.id());
     rabbitTemplate.convertAndSend(
         batchCompletedProperties.exchangeName(),
         batchCompletedProperties.simulationBatchRoutingKey(),
@@ -64,8 +64,10 @@ class BatchEventRabbitPublisher implements BatchEventPublisher {
     var message = mapper.toMessageNotifyBatchTimedOut(event);
 
     log.info(
-        "Send batch timed out notification for batch with analysisName: {}, alertNamesCount: {}",
-        event.analysisName(), event.alertNames().size());
+        "Send batch timed out notification for batch with analysis name [{}], "
+            + "alert names count [{}].",
+        event.analysisName(),
+        event.alertNames().size());
     rabbitTemplate.convertAndSend(batchTimedOutProperties.exchangeName(), "", message);
   }
 
@@ -74,7 +76,8 @@ class BatchEventRabbitPublisher implements BatchEventPublisher {
     var message = mapper.toMessageBatchDelivered(event);
 
     log.info(
-        "Send batch delivered for batch with id: {} and analysis name: {}", message.getBatchId(),
+        "Send batch delivered for batch with id [{}] and analysis name [{}].",
+        message.getBatchId(),
         message.getAnalysisName());
 
     rabbitTemplate.convertAndSend(batchDeliveredProperties.exchangeName(), "", message);

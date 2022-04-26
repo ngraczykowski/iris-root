@@ -19,7 +19,7 @@ class BatchRegistrationSimulationStrategy implements BatchRegistrationStrategy {
 
   @Override
   public Batch register(RegisterBatchCommand registerBatchCommand) {
-    log.info("Registering new simulation batch with id: {}", registerBatchCommand.id());
+    log.info("Registering new simulation batch with id [{}].", registerBatchCommand.id());
 
     var batch = Batch.builder()
         .id(registerBatchCommand.id())

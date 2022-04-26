@@ -23,7 +23,8 @@ class NotifyBatchTimeoutRabbitAmqpListener {
   )
   public void subscribe(MessageNotifyBatchTimedOut message) {
     log.info(
-        "Received NotifyBatchTimedOut amqp message for analysis={}", message.getAnalysisName());
+        "Received NotifyBatchTimedOut amqp message for analysis name [{}].",
+        message.getAnalysisName());
 
     recommendationFacade.proceedBatchTimeout(
         new ProceedBatchTimeoutCommand(message.getAnalysisName(), message.getAlertNamesList()));

@@ -25,7 +25,7 @@ class RecommendationGrpcService extends RecommendationServiceGrpc.Recommendation
     var command =
         new GetRecommendationCommand(request.getAnalysisName(), request.getAlertNamesList());
 
-    log.info("Get recommendation response for analysis name {}", command.analysisName());
+    log.info("Get recommendation response for analysis name [{}].", command.analysisName());
     responseObserver.onNext(recommendationFacade.getRecommendationsResponse(command));
     responseObserver.onCompleted();
   }

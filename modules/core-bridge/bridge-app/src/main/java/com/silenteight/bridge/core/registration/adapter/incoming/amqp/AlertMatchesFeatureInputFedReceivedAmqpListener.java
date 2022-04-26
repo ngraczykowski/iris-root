@@ -27,7 +27,7 @@ class AlertMatchesFeatureInputFedReceivedAmqpListener {
       errorHandler = "registrationAmqpErrorHandler"
   )
   public void matchFeatureInputSetFed(List<MessageAlertMatchesFeatureInputFed> messages) {
-    log.info("Received {} messages with alerts fed in UDS.", messages.size());
+    log.info("Received [{}] messages with alerts fed in UDS.", messages.size());
     var commands = messages.stream()
         .map(this::createCommand)
         .toList();

@@ -22,7 +22,7 @@ class VerifyBatchTimeoutAmqpListener {
       errorHandler = "registrationAmqpErrorHandler")
   void verifyBatchTimeout(MessageVerifyBatchTimeout message) {
     log.info("Received a message that batch with id [{}] is timed out. "
-        + "Proceeding to verify whether it is still processing", message.getBatchId());
+        + "Proceeding to verify whether it is still processing.", message.getBatchId());
 
     var command = new VerifyBatchTimeoutCommand(message.getBatchId());
     registrationFacade.verifyBatchTimeout(command);

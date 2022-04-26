@@ -36,11 +36,11 @@ class ReportsService {
 
     if (reports.isEmpty()) {
       log.info(
-          "Reports for batch {} (analysis [{}]) are empty and will not be sent.",
+          "Reports for batch [{}] (analysis [{}]) are empty and will not be sent.",
           batchId, analysisName);
     } else {
       reportsSenderService.send(analysisName, reports);
-      log.info("Sent reports for batch {} (analysis [{}])", batchId, analysisName);
+      log.info("Sent reports for batch [{}] (analysis [{}])", batchId, analysisName);
     }
   }
 

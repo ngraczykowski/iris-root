@@ -25,7 +25,8 @@ class RecommendationsRabbitAmqpListener {
   public void subscribe(RecommendationsGenerated recommendations) {
     var analysisName = recommendations.getAnalysis();
     log.info(
-        "Received RecommendationsGenerated amqp message for analysis={} with {} recommendations.",
+        "Received RecommendationsGenerated amqp message for analysis name [{}] "
+            + "with [{}] recommendations.",
         analysisName, recommendations.getRecommendationInfosList().size());
 
     var recommendationsWithMetadata = recommendations.getRecommendationInfosList().stream()

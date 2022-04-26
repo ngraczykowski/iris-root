@@ -90,15 +90,16 @@ class BatchService {
   void markBatchAsDelivered(Batch batch) {
     validateBatchStatus(batch, ALLOWED_BATCH_STATUSES_FOR_MARKING_AS_DELIVERED);
 
-    log.info("Set solving batch status to DELIVERED with batch id: {}", batch.id());
+    log.info(
+        "Set solving batch status to [{}] with batch id [{}].", BatchStatus.DELIVERED, batch.id());
     batchRepository.updateStatusToDelivered(batch.id());
     publishBatchDelivered(batch);
   }
 
   private Batch validateBatchStatus(Batch batch, EnumSet<BatchStatus> allowedStatuses) {
     if (!allowedStatuses.contains(batch.status())) {
-      var message = String.format("Batch with batch id: %s failed due to status validation. "
-              + "%s status is invalid, one of %s expected.",
+      var message = String.format("Batch with batch id [%s] failed due to status validation."
+              + " [%s] status is invalid, one of %s expected.",
           batch.id(), batch.status(), allowedStatuses);
       log.error(message);
       throw new IllegalStateException(message);
@@ -107,7 +108,7 @@ class BatchService {
   }
 
   private Batch logIfAlreadyExists(Batch batch) {
-    log.info("Batch for the given batch id: {} already exists.", batch.id());
+    log.info("Batch for the given batch id [{}] already exists.", batch.id());
     return batch;
   }
 
@@ -118,8 +119,9 @@ class BatchService {
   }
 
   private void markBatchAsError(NotifyBatchErrorCommand notifyBatchErrorCommand) {
-    log.info("Set batch status to ERROR with batch id: {} and set error description: {}",
-        notifyBatchErrorCommand.id(), notifyBatchErrorCommand.errorDescription());
+    log.info("Set batch status to [{}] with batch id [{}] and set error description [{}].",
+        BatchStatus.ERROR, notifyBatchErrorCommand.id(),
+        notifyBatchErrorCommand.errorDescription());
 
     batchRepository.updateStatusAndErrorDescription(
         notifyBatchErrorCommand.id(),
@@ -128,8 +130,11 @@ class BatchService {
   }
 
   private void registerNewAsError(NotifyBatchErrorCommand notifyBatchErrorCommand) {
-    log.info("Registering new batch as ERROR with id: {} and error description: {}",
-        notifyBatchErrorCommand.id(), notifyBatchErrorCommand.errorDescription());
+    log.info(
+        "Registering new batch as [{}] with id [{}] and error description [{}].",
+        BatchStatus.ERROR,
+        notifyBatchErrorCommand.id(),
+        notifyBatchErrorCommand.errorDescription());
 
     batchRepository.create(Batch.error(
         notifyBatchErrorCommand.id(),
@@ -137,11 +142,12 @@ class BatchService {
         notifyBatchErrorCommand.batchMetadata(),
         notifyBatchErrorCommand.isSimulation()));
 
-    log.info("New batch registered as error with batch id: {}", notifyBatchErrorCommand.id());
+    log.info("New batch registered as error with batch id [{}].", notifyBatchErrorCommand.id());
   }
 
   private void markSolvingBatchAsCompleted(String batchId) {
-    log.info("Set solving batch status to COMPLETED with batch id: {}", batchId);
+    log.info(
+        "Set solving batch status to [{}] with batch id [{}].", BatchStatus.COMPLETED, batchId);
     batchRepository.updateStatusToCompleted(batchId);
   }
 

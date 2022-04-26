@@ -24,7 +24,7 @@ class BatchDeliveredAmqpListener {
       errorHandler = "reportsAmqpErrorHandler"
   )
   public void batchDelivered(MessageBatchDelivered message) {
-    log.info("Received BatchDelivered (reports) message for batch {}", message.getBatchId());
+    log.info("Received BatchDelivered (reports) message for batch id [{}].", message.getBatchId());
     var command = new SendReportsCommand(message.getBatchId(), message.getAnalysisName());
     reportsFacade.sendReports(command);
   }

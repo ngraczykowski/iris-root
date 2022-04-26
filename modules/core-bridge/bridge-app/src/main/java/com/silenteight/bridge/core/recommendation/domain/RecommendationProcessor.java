@@ -34,7 +34,7 @@ class RecommendationProcessor {
     var newRecommendations = filterOutExistingInDb(analysisName, receivedRecommendations);
 
     log.info(
-        "Received {} new recommendations from {} sent for analysis {}.",
+        "Received [{}] new recommendations from [{}] sent for analysis [{}].",
         newRecommendations.size(),
         receivedRecommendations.size(),
         analysisName);
@@ -95,7 +95,9 @@ class RecommendationProcessor {
       String analysisName, List<RecommendationWithMetadata> recommendations) {
     recommendationRepository.saveAll(recommendations);
     log.info(
-        "{} recommendations saved in DB for analysis {}", recommendations.size(), analysisName);
+        "[{}] recommendations saved in DB for analysis [{}]",
+        recommendations.size(),
+        analysisName);
   }
 
   private List<String> getAlertNames(List<RecommendationWithMetadata> recommendation) {

@@ -62,8 +62,8 @@ class UdsFedAlertsService {
       return true;
     }
     log.error(
-        "Adding alerts to analysis failed for the batch: {}. "
-            + "Expected batch status: {}, got {}",
+        "Adding alerts to analysis failed for the batch id [{}]. "
+            + "Expected batch status [{}], got [{}].",
         batch.id(),
         PROCESSABLE_BATCH_STATUSES,
         batch.status());
@@ -119,7 +119,7 @@ class UdsFedAlertsService {
   }
 
   private void logBatchError(String batchId) {
-    log.error("Batch with id {} was either not found or has incorrect status", batchId);
+    log.error("Batch with id [{}] was either not found or has incorrect status.", batchId);
   }
 
   private List<String> extractAlertNamesFromCommands(List<ProcessUdsFedAlertsCommand> commands) {

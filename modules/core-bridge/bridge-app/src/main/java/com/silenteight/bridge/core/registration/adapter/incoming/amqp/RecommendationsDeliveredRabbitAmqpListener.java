@@ -23,7 +23,7 @@ class RecommendationsDeliveredRabbitAmqpListener {
   )
   public void recommendationDelivered(RecommendationsDelivered recommendation) {
     log.info(
-        "Received RecommendationsDelivered with batchId: {} and analysisName: {}",
+        "Received RecommendationsDelivered with batch id [{}] and analysis name [{}].",
         recommendation.getBatchId(), recommendation.getAnalysisName());
     registrationFacade.markAlertsAsDelivered(createMarkAlertsAsDeliveredCommand(recommendation));
   }

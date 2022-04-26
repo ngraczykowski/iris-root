@@ -32,7 +32,7 @@ public record BatchStatistics(Integer totalProcessedCount,
       if (sumOfRecommendations != totalProcessedCount) {
         log.error(
             "Batch statistics creation failed. "
-                + "TotalProcessedCount: {} is not equal to sum of recommendations: {}.",
+                + "TotalProcessedCount [{}] is not equal to sum of recommendations [{}].",
             totalProcessedCount, sumOfRecommendations);
       }
     }

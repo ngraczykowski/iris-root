@@ -81,27 +81,30 @@ class BatchTimeoutService {
     var erroneousAlerts = alertRepository.countAllErroneousAlerts(batchId);
     if (erroneousAlerts == batch.alertsCount()) {
       batchRepository.updateStatusToCompleted(batchId);
-      log.info("Batch [{}] marked as completed because all alerts are erroneous", batchId);
+      log.info("Batch [{}] marked as completed because all alerts are erroneous.", batchId);
       batchEventPublisher.publish(buildSolvingBatchCompletedEvent(batch));
     }
   }
 
   private void notifyBatchTimedOut(Batch batch) {
-    log.info("Batch with id [{}] is timed out", batch.id());
+    log.info("Batch with id [{}] is timed out.", batch.id());
     var alertNames = getAlertNames(batch.id());
     if (CollectionUtils.isNotEmpty(alertNames)) {
       var event = new BatchTimedOut(batch.analysisName(), alertNames);
       batchEventPublisher.publish(event);
     } else {
-      log.info("No pending alerts found for batch with id: {}", batch.id());
+      log.info("No pending alerts found for batch with id [{}].", batch.id());
 
       var batchAlertsCount = alertRepository.countAllAlerts(batch.id());
 
       if (batchAlertsCount < batch.alertsCount()) {
         batchRepository.updateStatusToCompleted(batch.id());
         log.info(
-            "Batch {} marked as completed because less registered alerts number than alerts count",
-            batch.id());
+            "Batch [{}] marked as completed because less registered alerts number [{}]"
+                + "than alerts count [{}].",
+            batch.id(),
+            batchAlertsCount,
+            batch.alertsCount());
         batchEventPublisher.publish(buildSolvingBatchCompletedEvent(batch));
       }
     }
@@ -123,16 +126,17 @@ class BatchTimeoutService {
 
   private void logBatchIsAlreadyCompleted(Batch batch) {
     log.info(
-        "Ignoring batch with id [{}] because it is already completed with status: {}", batch.id(),
+        "Ignoring batch with id [{}] because it is already completed with status [{}].",
+        batch.id(),
         batch.status());
   }
 
   private void logNotInStoredStatus(Batch batch) {
-    log.info("Ignoring batch with id [{}] because it is not in STORED status: {}",
+    log.info("Ignoring batch with id [{}] because it is not in STORED status [{}].",
         batch.id(), batch.status());
   }
 
   private void logBatchDoesNotExist(VerifyBatchTimeoutCommand command) {
-    log.warn("Ignoring batch with id [{}]. It does not exist", command.batchId());
+    log.warn("Ignoring batch with id [{}]. It does not exist.", command.batchId());
   }
 }

@@ -42,9 +42,9 @@ class AnalysisServiceAdapter implements AnalysisService {
         .features(getFeatures(defaultModel.features()))
         .notificationFlags(getNotificationFlags())
         .build();
-    log.info("Creating analysis: {}", createAnalysisIn);
+    log.info("Creating analysis [{}].", createAnalysisIn);
     var analysis = analysisServiceClient.createAnalysis(createAnalysisIn);
-    log.info("Analysis created: {}", analysis);
+    log.info("Analysis [{}] created.", analysis);
     return new Analysis(analysis.getName());
   }
 
@@ -56,7 +56,7 @@ class AnalysisServiceAdapter implements AnalysisService {
           delayExpression = "${grpc.client.retry.delay-in-milliseconds}"))
   public void addAlertsToAnalysis(
       String analysisName, List<String> alertNames, Timestamp alertDeadlineTime) {
-    log.info("Adding {} alerts to analysis {}", alertNames.size(), analysisName);
+    log.info("Adding [{}] alerts to analysis [{}].", alertNames.size(), analysisName);
     var addAlertsToAnalysisIn = AddAlertsToAnalysisIn.builder()
         .analysisName(analysisName)
         .alerts(createAlerts(alertNames, alertDeadlineTime))

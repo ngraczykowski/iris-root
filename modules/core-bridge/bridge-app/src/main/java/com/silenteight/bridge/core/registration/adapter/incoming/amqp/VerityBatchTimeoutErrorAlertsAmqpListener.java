@@ -22,7 +22,7 @@ class VerityBatchTimeoutErrorAlertsAmqpListener {
       errorHandler = "registrationAmqpErrorHandler")
   void verifyBatchTimeoutAlerts(MessageVerifyBatchTimeout message) {
     log.info("Received a message that batch with id [{}] is timed out. "
-        + "Proceeding to verify whether all alerts are erroneous", message.getBatchId());
+        + "Proceeding to verify whether all alerts are erroneous.", message.getBatchId());
 
     var command = new VerifyBatchTimeoutCommand(message.getBatchId());
     registrationFacade.verifyBatchTimeoutForAllErroneousAlerts(command);

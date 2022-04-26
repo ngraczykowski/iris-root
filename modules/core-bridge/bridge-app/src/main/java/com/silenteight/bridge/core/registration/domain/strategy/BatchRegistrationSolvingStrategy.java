@@ -33,7 +33,7 @@ class BatchRegistrationSolvingStrategy implements BatchRegistrationStrategy {
 
   @Override
   public Batch register(RegisterBatchCommand registerBatchCommand) {
-    log.info("Registering new solving batch with id: {}", registerBatchCommand.id());
+    log.info("Registering new solving batch with id [{}].", registerBatchCommand.id());
 
     var defaultModel = defaultModelService.getForSolving();
     var analysis = analysisService.create(defaultModel);

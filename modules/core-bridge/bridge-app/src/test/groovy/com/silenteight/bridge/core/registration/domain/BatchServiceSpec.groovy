@@ -166,7 +166,7 @@ class BatchServiceSpec extends Specification {
         Optional.of(new BatchPriorityWithStatus(RegistrationFixtures.BATCH_PRIORITY, BatchStatus.DELIVERED))
 
     def exception = thrown(IllegalStateException)
-    exception.getMessage().contains("DELIVERED status is invalid, one of [STORED, PROCESSING] expected.")
+    exception.getMessage().contains("[DELIVERED] status is invalid, one of [STORED, PROCESSING] expected.")
   }
 
   def 'should find batch with policy projection by analysis name'() {

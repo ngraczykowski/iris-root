@@ -43,7 +43,7 @@ class JdbcConverterConfiguration extends AbstractJdbcConfiguration {
 
       Try.run(() -> jsonObject.setValue(OBJECT_MAPPER.writeValueAsString(source)))
           .onFailure(
-              e -> log.error("Could not write RecommendationMetadata object to database", e));
+              e -> log.error("Could not write RecommendationMetadata object to database.", e));
       return jsonObject;
     }
   }
@@ -58,7 +58,7 @@ class JdbcConverterConfiguration extends AbstractJdbcConfiguration {
 
       return Try.of(() -> OBJECT_MAPPER.readValue(source, RecommendationMetadata.class))
           .onFailure(
-              e -> log.error("Could not read RecommendationMetadata object from database", e))
+              e -> log.error("Could not read RecommendationMetadata object from database.", e))
           .getOrNull();
     }
   }

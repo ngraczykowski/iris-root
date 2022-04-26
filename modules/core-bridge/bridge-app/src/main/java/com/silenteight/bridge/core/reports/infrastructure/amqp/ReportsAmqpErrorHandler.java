@@ -28,11 +28,11 @@ class ReportsAmqpErrorHandler implements RabbitListenerErrorHandler {
         value -> {
           var numberOfRetries = amqpRecommendationProperties.numberOfRetriesDeadMessages();
           if (value < numberOfRetries) {
-            log.info("Retry {} of {}", value, numberOfRetries);
+            log.info("Retry [{}] of [{}].", value, numberOfRetries);
             throw exception;
           } else {
             var messageProperties = amqpMessage.getMessageProperties();
-            log.info("Retries exhausted for message type: {} from queue: {}",
+            log.info("Retries exhausted for message type [{}] from queue [{}].",
                 messageProperties.getType(), messageProperties.getConsumerQueue());
           }
         }, () -> {
