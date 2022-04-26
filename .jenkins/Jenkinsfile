@@ -65,13 +65,17 @@ pipeline {
                    credentialsId: 'artifactory-deployment-user',
                    usernameVariable: 'repoDeploymentUser',
                    passwordVariable: 'repoDeploymentPassword')]) {
-            sh '''./gradlew \
-              -Dsilenteight.repoDeploymentUser=$repoDeploymentUser \
-              -Dsilenteight.repoDeploymentPassword=$repoDeploymentPassword \
-              -Djib.console=plain \
-              -Pversion=$(./scripts/get-version.sh) \
-              publish
-            '''
+            withDockerRegistry(
+                url: 'https://docker.repo.silenteight.com',
+                credentialsId: 'artifactory-deployment-user') {
+              sh '''./gradlew \
+                -Dsilenteight.repoDeploymentUser=$repoDeploymentUser \
+                -Dsilenteight.repoDeploymentPassword=$repoDeploymentPassword \
+                -Djib.console=plain \
+                -Pversion=$(./scripts/get-version.sh) \
+                publish
+              '''
+            }
           }
         }
       }
