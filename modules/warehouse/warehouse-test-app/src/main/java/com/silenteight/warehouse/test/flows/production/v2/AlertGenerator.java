@@ -3,6 +3,7 @@ package com.silenteight.warehouse.test.flows.production.v2;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.data.api.v2.Alert;
+import com.silenteight.data.api.v2.Match;
 import com.silenteight.warehouse.test.generator.DataReader;
 
 import com.google.protobuf.Struct;
@@ -10,9 +11,12 @@ import com.google.protobuf.Struct.Builder;
 import com.google.protobuf.Value;
 
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toMap;
@@ -22,20 +26,46 @@ class AlertGenerator {
 
   private static final String SEMICOLON = ";";
   private static final String COMMA = ",";
+  private static final Integer MAX_MATCH_COUNT = 5;
 
   private final Random random = new SecureRandom();
-  private final DataReader dataReader;
+  private final DataReader alertDataReader;
+  private final DataReader matchDataReader;
 
-  Alert generateProduction() {
+  Alert generateProductionAlert() {
+    String alertName = getRandomAlertName();
+
+    List<Match> matches = IntStream.range(0, random.nextInt(MAX_MATCH_COUNT) + 1)
+        .mapToObj(i -> generateProductionMatch(alertName))
+        .collect(Collectors.toList());
+
     return Alert.newBuilder()
         .setDiscriminator(getRandomDiscriminator())
-        .setName(getRandomAlertName())
-        .setPayload(convertMapToPayload(generateRandomPayload()))
+        .setName(alertName)
+        .setPayload(convertMapToPayload(generateAlertPayload()))
+        .addAllMatches(matches)
         .build();
   }
 
-  private Map<String, String> generateRandomPayload() {
-    return dataReader.getLines()
+  Match generateProductionMatch(String alertName) {
+    String matchName = getRandomMatchName(alertName);
+
+    return Match.newBuilder()
+        .setName(matchName)
+        .setDiscriminator(matchName)
+        .setPayload(convertMapToPayload(generateMatchPayload()))
+        .build();
+  }
+
+  private Map<String, String> generateAlertPayload() {
+    return alertDataReader.getLines()
+        .stream()
+        .map(line -> line.split(SEMICOLON))
+        .collect(toMap(fieldName -> fieldName[0], values -> getValue(values[1])));
+  }
+
+  private Map<String, String> generateMatchPayload() {
+    return matchDataReader.getLines()
         .stream()
         .map(line -> line.split(SEMICOLON))
         .collect(toMap(fieldName -> fieldName[0], values -> getValue(values[1])));
@@ -62,7 +92,11 @@ class AlertGenerator {
   }
 
   private String getRandomAlertName() {
-    return "alerts/" + randomUUID();
+    return String.join("/", "alerts", randomUUID().toString());
+  }
+
+  private String getRandomMatchName(String alertName) {
+    return String.join("/",alertName, "matches", randomUUID().toString());
   }
 
   private String getRandomValue(String... allowedValues) {

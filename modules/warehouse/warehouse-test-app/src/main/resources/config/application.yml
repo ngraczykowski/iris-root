@@ -162,15 +162,22 @@ test:
 
   flows:
     production:
-      enabled: false
-      alert-count: 10
-      data-source: classpath:data/production.csv
+      v2:
+        enabled: false
+        alert-count: 10
+        alert-data-source: classpath:data/production_v2_alert.csv
+        match-data-source: classpath:data/production_v2_match.csv
 
     simulation:
       v1:
         enabled: false
         alert-count-in-analysis: 10
         data-source: classpath:data/simulation_v1.csv
+      v2:
+        enabled: false
+        alert-count-in-analysis: 10
+        alert-data-source: classpath:data/simulation_v2_alert.csv
+        match-data-source: classpath:data/simulation_v2_match.csv
 
     analysis-expired:
       enabled: false
