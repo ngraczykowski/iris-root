@@ -22,7 +22,8 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 class ScbDiscriminatorMatcher {
 
   private static final int TIME_RANGE_IN_SECONDS = 60;
-  private static final DateTimeFormatter FORMATTER = ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
+  private static final DateTimeFormatter FORMATTER =
+      ofPattern("[yyyy-MM-dd'T'HH:mm:ss'Z'][yyyy-MM-dd'T'HH:mm:ss.SSS'Z']");
 
   boolean match(@NonNull String value1, @NonNull String value2) {
     if (value1.equals(value2))
