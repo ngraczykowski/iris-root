@@ -39,7 +39,7 @@ public class ProductionIndexClient {
     return IntStream
         .range(0, alertCount)
         .boxed()
-        .map(i -> alertGenerator.generateProduction())
+        .map(i -> alertGenerator.generateProductionAlert())
         .collect(toList());
   }
 }

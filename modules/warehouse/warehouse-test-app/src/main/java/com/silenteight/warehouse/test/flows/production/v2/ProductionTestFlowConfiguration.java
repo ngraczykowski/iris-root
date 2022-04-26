@@ -15,19 +15,24 @@ import org.springframework.core.io.Resource;
 @Configuration
 class ProductionTestFlowConfiguration {
 
-  @Value("${test.flows.production.data-source}")
-  private Resource productionResourceFile;
+  @Value("${test.flows.production.v2.alert-data-source}")
+  private Resource alertDataSource;
 
-  @Value("${test.flows.production.alert-count}")
+  @Value("${test.flows.production.v2.match-data-source}")
+  private Resource matchDataSource;
+
+  @Value("${test.flows.production.v2.alert-count}")
   private Integer alertCount;
 
   @Bean
-  @ConditionalOnProperty(value = "test.flows.production.enabled", havingValue = "true")
+  @ConditionalOnProperty(value = "test.flows.production.v2.enabled", havingValue = "true")
   ProductionIndexClient productionIndexClient(
       ProductionIndexClientGateway productionIndexClientGateway) {
 
     log.info("ProductionIndexClient created");
-    AlertGenerator alertGenerator = new AlertGenerator(new DataReader(productionResourceFile));
+    AlertGenerator alertGenerator = new AlertGenerator(
+        new DataReader(alertDataSource),
+        new DataReader(matchDataSource));
 
     return new ProductionIndexClient(productionIndexClientGateway, alertGenerator, alertCount);
   }
