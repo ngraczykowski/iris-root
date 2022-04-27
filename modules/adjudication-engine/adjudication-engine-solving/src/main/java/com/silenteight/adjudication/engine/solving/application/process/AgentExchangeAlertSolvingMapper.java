@@ -44,6 +44,7 @@ class AgentExchangeAlertSolvingMapper {
             .agentConfig(agentConfig)
             .requestId(idGenerator.generateId())
             .priority(1).build())
+        .filter(featureName -> featureName.getAgentExchangeRequest().getMatchesCount() > 0)
         .collect(Collectors.toList());
   }
 }
