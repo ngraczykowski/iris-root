@@ -14,21 +14,18 @@ import spock.lang.Unroll
 class UdsFedAlertsProcessorSimulationStrategySpec extends Specification {
 
   def alertRepository = Mock(AlertRepository)
-  def batchRepository = Mock(BatchRepository)
-  def eventPublisher = Mock(BatchEventPublisher)
 
   @Subject
-  def underTest = new UdsFedAlertsProcessorSimulationStrategy(alertRepository, batchRepository, eventPublisher)
+  def underTest = new UdsFedAlertsProcessorSimulationStrategy(alertRepository)
 
-  @Unroll
-  def "should process UDS fed alerts #desc for SIMULATION batch"() {
+  def "should process UDS fed alerts for SIMULATION batch"() {
     given:
     def alertNames = ['alertName1, alertName2']
     def batch = Batch.builder()
         .id('batchId')
-        .status(BatchStatus.COMPLETED)
+        .status(BatchStatus.PROCESSING)
         .analysisName("analysisName")
-        .alertsCount(batchAlertsCount)
+        .alertsCount(10)
         .isSimulation(true)
         .build()
 
@@ -37,18 +34,7 @@ class UdsFedAlertsProcessorSimulationStrategySpec extends Specification {
 
     then:
     1 * alertRepository.updateStatusToUdsFed(batch.id(), alertNames)
-    1 * alertRepository.countAllUdsFedAndErrorAlerts(batch.id()) >> dbAlertsCount
-    if (shouldCompleteBatch) {
-      1 * batchRepository.updateStatusToCompleted(batch.id())
-      1 * eventPublisher.publish(_ as SimulationBatchCompleted)
-    }
     0 * _
-
-    where:
-    batchAlertsCount | dbAlertsCount | shouldCompleteBatch | desc
-    2                | 2             | true                | 'and mark batch as COMPLETED'
-    2                | 1             | false               | 'and do not mark as COMPLETED because batchAlertsCount != dbAlertsCount'
-    1                | 2             | false               | 'and do not mark as COMPLETED because batchAlertsCount != dbAlertsCount'
   }
 
   def 'should get strategy name'() {

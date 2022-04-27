@@ -36,6 +36,8 @@ class UdsFedAlertsService {
   private final BatchRepository batchRepository;
   private final AlertRepository alertRepository;
   private final BatchStrategyFactory batchStrategyFactory;
+  private final AlertService alertService;
+  private final BatchService batchService;
 
   void processUdsFedAlerts(List<ProcessUdsFedAlertsCommand> commands) {
     groupByBatchId(commands).forEach(this::processBatchAlerts);
@@ -52,7 +54,7 @@ class UdsFedAlertsService {
         .filter(this::hasProcessableStatus)
         .map(this::setStatusToProcessing)
         .ifPresentOrElse(
-            batch -> handleCommandsWithAlertsToAnalysis(batch, commands),
+            batch -> processUdsFedAlerts(batch, commands),
             () -> logBatchError(batchId)
         );
   }
@@ -77,7 +79,7 @@ class UdsFedAlertsService {
     return batch;
   }
 
-  private void handleCommandsWithAlertsToAnalysis(
+  private void processUdsFedAlerts(
       Batch batch, List<ProcessUdsFedAlertsCommand> commands) {
     final var failedAlerts = getFailedCommands(commands);
     if (CollectionUtils.isNotEmpty(failedAlerts)) {
@@ -87,6 +89,10 @@ class UdsFedAlertsService {
     final var succeededAlerts = getSucceededCommands(commands);
     if (CollectionUtils.isNotEmpty(succeededAlerts)) {
       handleCommandsWithSucceededAlerts(batch, succeededAlerts);
+    }
+
+    if (alertService.hasNoPendingAlerts(batch)) {
+      batchService.completeBatch(batch);
     }
   }
 

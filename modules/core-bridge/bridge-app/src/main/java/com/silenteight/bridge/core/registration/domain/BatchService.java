@@ -82,9 +82,8 @@ class BatchService {
     );
   }
 
-  void completeSolvingBatch(Batch batch) {
-    markSolvingBatchAsCompleted(batch.id());
-    publishSolvingBatchCompleted(batch);
+  void completeBatch(Batch batch) {
+    batchStrategyFactory.getStrategyForCompletion(batch).completeBatch(batch);
   }
 
   void markBatchAsDelivered(Batch batch) {
@@ -143,22 +142,6 @@ class BatchService {
         notifyBatchErrorCommand.isSimulation()));
 
     log.info("New batch registered as error with batch id [{}].", notifyBatchErrorCommand.id());
-  }
-
-  private void markSolvingBatchAsCompleted(String batchId) {
-    log.info(
-        "Set solving batch status to [{}] with batch id [{}].", BatchStatus.COMPLETED, batchId);
-    batchRepository.updateStatusToCompleted(batchId);
-  }
-
-  private void publishSolvingBatchCompleted(Batch batch) {
-    eventPublisher.publish(
-        SolvingBatchCompleted.builder()
-            .id(batch.id())
-            .analysisName(batch.analysisName())
-            .batchMetadata(batch.batchMetadata())
-            .build()
-    );
   }
 
   private void publishBatchDelivered(Batch batch) {

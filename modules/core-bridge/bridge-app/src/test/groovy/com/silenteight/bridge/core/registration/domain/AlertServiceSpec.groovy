@@ -12,6 +12,8 @@ import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert
 import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert.Status
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRegistrationService
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository
+import com.silenteight.bridge.core.registration.domain.strategy.BatchStrategyFactory
+import com.silenteight.bridge.core.registration.domain.strategy.PendingAlertsStrategy
 
 import spock.lang.Specification
 import spock.lang.Subject
@@ -28,13 +30,16 @@ class AlertServiceSpec extends Specification {
   def alertRepository = Mock(AlertRepository)
   def alertRegistrationService = Mock(AlertRegistrationService)
   def registrationAlertResponseMapper = Mock(RegistrationAlertResponseMapper)
+  def batchStrategyFactory = Mock(BatchStrategyFactory)
+
 
   @Subject
   def underTest = new AlertService(
       alertMapper,
       alertRepository,
       alertRegistrationService,
-      registrationAlertResponseMapper
+      registrationAlertResponseMapper,
+      batchStrategyFactory
   )
 
   def 'two unregistered successful alerts: should save both alerts and matches'() {
@@ -412,26 +417,33 @@ class AlertServiceSpec extends Specification {
         .id('batchId')
         .alertsCount(0)
         .build()
+    def pendingAlertsStrategy = Mock(PendingAlertsStrategy)
 
     when:
-    def result = underTest.hasNoPendingAlerts(batch)
+    def hasNoPendingAlerts = underTest.hasNoPendingAlerts(batch)
 
     then:
-    1 * alertRepository.countAllCompleted(batch.id()) >> 0
-    result
+    1 * batchStrategyFactory.getStrategyForPendingAlerts(batch) >> pendingAlertsStrategy
+    1 * pendingAlertsStrategy.hasNoPendingAlerts(batch) >> true
+    hasNoPendingAlerts
   }
 
 
   def 'should return false when all alerts in batch are not in status DELIVERED, RECOMMENDED or ERROR'() {
     given:
-    def batchId = Fixtures.BATCH_ID
+    def batch = Batch.builder()
+        .id('batchId')
+        .alertsCount(0)
+        .build()
+    def pendingAlertsStrategy = Mock(PendingAlertsStrategy)
 
     when:
-    def result = underTest.hasNoPendingAlerts(RegistrationFixtures.BATCH)
+    def hasNoPendingAlerts = underTest.hasNoPendingAlerts(batch)
 
     then:
-    1 * alertRepository.countAllCompleted(batchId) >> 1
-    !result
+    1 * batchStrategyFactory.getStrategyForPendingAlerts(batch) >> pendingAlertsStrategy
+    1 * pendingAlertsStrategy.hasNoPendingAlerts(batch) >> false
+    !hasNoPendingAlerts
   }
 
   @Unroll

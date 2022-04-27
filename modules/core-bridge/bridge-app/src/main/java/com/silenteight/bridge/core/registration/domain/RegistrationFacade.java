@@ -61,7 +61,7 @@ public class RegistrationFacade {
 
     if (alertService.hasNoPendingAlerts(batch) || command.isTimedOut()) {
       log.info("Completing batch, without pending alerts, with id [{}]", batch.id());
-      batchService.completeSolvingBatch(batch);
+      batchService.completeBatch(batch);
     }
   }
 

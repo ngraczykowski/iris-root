@@ -92,7 +92,7 @@ class RegistrationFacadeSpec extends Specification {
         RegistrationFixtures.BATCH
     1 * alertService.updateStatusToRecommended(batchId.id(), alertNames)
     1 * alertService.hasNoPendingAlerts(RegistrationFixtures.BATCH) >> true
-    1 * batchService.completeSolvingBatch(batch)
+    1 * batchService.completeBatch(batch)
   }
 
   def 'should complete batch if there are pending alerts for the given batch, but batch is timed out'() {
@@ -111,7 +111,7 @@ class RegistrationFacadeSpec extends Specification {
         RegistrationFixtures.BATCH
     1 * alertService.updateStatusToRecommended(batchId.id(), alertNames)
     1 * alertService.hasNoPendingAlerts(RegistrationFixtures.BATCH) >> false
-    1 * batchService.completeSolvingBatch(batch)
+    1 * batchService.completeBatch(batch)
   }
 
   def 'should not complete batch if there are pending alerts for the given batch'() {
@@ -130,7 +130,7 @@ class RegistrationFacadeSpec extends Specification {
         RegistrationFixtures.BATCH
     1 * alertService.updateStatusToRecommended(batchId.id(), alertNames)
     1 * alertService.hasNoPendingAlerts(RegistrationFixtures.BATCH) >> false
-    0 * batchService.completeSolvingBatch(batch)
+    0 * batchService.completeBatch(batch)
   }
 
   def 'should throw NoSuchElementException when batch not found by analysisName'() {
@@ -146,7 +146,7 @@ class RegistrationFacadeSpec extends Specification {
         {throw new NoSuchElementException()}
     0 * alertService.updateStatusToRecommended(_ as String, _ as List<String>)
     0 * alertService.hasNoPendingAlerts(_ as Batch)
-    0 * batchService.completeSolvingBatch(_ as Batch)
+    0 * batchService.completeBatch(_ as Batch)
     thrown(NoSuchElementException.class)
   }
 

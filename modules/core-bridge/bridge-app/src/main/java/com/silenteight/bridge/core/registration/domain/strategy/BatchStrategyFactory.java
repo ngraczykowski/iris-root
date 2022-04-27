@@ -18,11 +18,19 @@ public class BatchStrategyFactory {
   private final Map<BatchStrategyName, UdsFedAlertsProcessorStrategy>
       udsFedAlertsProcessorStrategies;
 
+  private final Map<BatchStrategyName, BatchCompletionStrategy> batchCompletionStrategies;
+  private final Map<BatchStrategyName, PendingAlertsStrategy> pendingAlertsStrategies;
+
   public BatchStrategyFactory(
       Set<BatchRegistrationStrategy> batchRegistrationStrategySet,
-      Set<UdsFedAlertsProcessorStrategy> alertAnalysisStrategySet) {
+      Set<UdsFedAlertsProcessorStrategy> alertAnalysisStrategySet,
+      Set<BatchCompletionStrategy> batchCompletionStrategySet,
+      Set<PendingAlertsStrategy> pendingAlertsStrategySet
+  ) {
     registrationBatchStrategies = toMap(batchRegistrationStrategySet);
     udsFedAlertsProcessorStrategies = toMap(alertAnalysisStrategySet);
+    batchCompletionStrategies = toMap(batchCompletionStrategySet);
+    pendingAlertsStrategies = toMap(pendingAlertsStrategySet);
   }
 
   public BatchRegistrationStrategy getStrategyForRegistration(RegisterBatchCommand command) {
@@ -31,6 +39,14 @@ public class BatchStrategyFactory {
 
   public UdsFedAlertsProcessorStrategy getStrategyForUdsFedAlertsProcessor(Batch batch) {
     return getSolvingOrSimulationStrategy(udsFedAlertsProcessorStrategies, batch.isSimulation());
+  }
+
+  public BatchCompletionStrategy getStrategyForCompletion(Batch batch) {
+    return getSolvingOrSimulationStrategy(batchCompletionStrategies, batch.isSimulation());
+  }
+
+  public PendingAlertsStrategy getStrategyForPendingAlerts(Batch batch) {
+    return getSolvingOrSimulationStrategy(pendingAlertsStrategies, batch.isSimulation());
   }
 
   private <T extends BatchStrategyNameProvider> Map<BatchStrategyName, T> toMap(Set<T> strategies) {

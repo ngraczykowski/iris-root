@@ -22,11 +22,13 @@ class UdsFedAlertsServiceSpec extends Specification {
   def alertRepository = Mock(AlertRepository)
   def batchStrategyFactory = Mock(BatchStrategyFactory)
   def udsFedAlertsProcessorStrategy = Mock(UdsFedAlertsProcessorStrategy)
+  def batchService = Mock(BatchService)
+  def alertService = Mock(AlertService)
 
   @Subject
-  def underTest = new UdsFedAlertsService(batchRepository, alertRepository, batchStrategyFactory)
+  def underTest = new UdsFedAlertsService(batchRepository, alertRepository, batchStrategyFactory, alertService, batchService)
 
-  def 'should process 1 success alert and 1 failed alert'() {
+  def 'should process 1 success alert and 1 failed alert and #desc'() {
     given:
     def batch = createBatchWithStatus('batch_1', BatchStatus.STORED)
     def succeededAlert = createAlert(
@@ -65,7 +67,16 @@ class UdsFedAlertsServiceSpec extends Specification {
       1 * updateStatusToError(
           batch.id(), Map.of('Failed to flatten alert payload.', [failedAlert.name()] as Set<String>))
     }
+    1 * alertService.hasNoPendingAlerts(batch) >> hasNoPendingAlerts
+    if (hasNoPendingAlerts) {
+      1 * batchService.completeBatch(batch)
+    }
     0 * _
+
+    where:
+    hasNoPendingAlerts | desc
+    true               | "should complete Batch"
+    false              | "should not complete Batch"
   }
 
   @Unroll

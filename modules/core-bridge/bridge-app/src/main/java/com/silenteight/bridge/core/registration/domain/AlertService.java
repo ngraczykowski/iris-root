@@ -7,13 +7,12 @@ import com.silenteight.bridge.core.registration.domain.command.RegisterAlertsCom
 import com.silenteight.bridge.core.registration.domain.model.*;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRegistrationService;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository;
+import com.silenteight.bridge.core.registration.domain.strategy.BatchStrategyFactory;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -25,6 +24,7 @@ class AlertService {
   private final AlertRepository alertRepository;
   private final AlertRegistrationService alertRegistrationService;
   private final RegistrationAlertResponseMapper registrationAlertResponseMapper;
+  private final BatchStrategyFactory batchStrategyFactory;
 
   List<AlertWithMatches> getAlertsAndMatches(String batchId) {
     return alertRepository.findAllWithMatchesByBatchId(batchId);
@@ -96,13 +96,7 @@ class AlertService {
   }
 
   boolean hasNoPendingAlerts(Batch batch) {
-    var completedAlertsCount = alertRepository.countAllCompleted(batch.id());
-    log.info(
-        "[{}] alerts completed ([{}], [{}], [{}]), [{}] alerts count for batch with id [{}].",
-        completedAlertsCount, AlertStatus.RECOMMENDED, AlertStatus.ERROR, AlertStatus.DELIVERED,
-        batch.alertsCount(), batch.id());
-
-    return completedAlertsCount == batch.alertsCount();
+    return batchStrategyFactory.getStrategyForPendingAlerts(batch).hasNoPendingAlerts(batch);
   }
 
   void updateStatusToDelivered(String batchId, List<String> alertNames) {

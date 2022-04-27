@@ -4,6 +4,7 @@ import com.silenteight.bridge.core.Fixtures
 import com.silenteight.bridge.core.registration.domain.model.*
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.port.outgoing.*
+import com.silenteight.bridge.core.registration.domain.strategy.BatchCompletionStrategy
 import com.silenteight.bridge.core.registration.domain.strategy.BatchRegistrationStrategy
 import com.silenteight.bridge.core.registration.domain.strategy.BatchStrategyFactory
 
@@ -195,21 +196,17 @@ class BatchServiceSpec extends Specification {
     thrown(NoSuchElementException.class)
   }
 
-  def 'should update batch status as COMPLETED and publish message when batch exists'() {
+  def 'should completed batch when batch exists'() {
     given:
     def batch = RegistrationFixtures.BATCH
-    def batchCompleted = new SolvingBatchCompleted(
-        Fixtures.BATCH_ID,
-        RegistrationFixtures.ANALYSIS_NAME,
-        RegistrationFixtures.METADATA
-    )
+    def batchCompletionStrategy = Mock(BatchCompletionStrategy)
 
     when:
-    underTest.completeSolvingBatch(batch)
+    underTest.completeBatch(batch)
 
     then:
-    1 * batchRepository.updateStatusToCompleted(batch.id())
-    1 * eventPublisher.publish(batchCompleted)
+    1 * batchStrategyFactory.getStrategyForCompletion(batch) >> batchCompletionStrategy
+    1 * batchCompletionStrategy.completeBatch(batch)
   }
 
   @Unroll

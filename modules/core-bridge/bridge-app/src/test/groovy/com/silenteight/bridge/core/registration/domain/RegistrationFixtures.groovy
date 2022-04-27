@@ -24,7 +24,7 @@ class RegistrationFixtures {
 
   static def ALERT_WITH_MATCHES = [AlertWithMatches.builder().build()]
 
-  private static def BATCH_BUILDER =
+  public static def BATCH_BUILDER =
       Batch.builder()
           .id(Fixtures.BATCH_ID)
           .analysisName(ANALYSIS_NAME)
