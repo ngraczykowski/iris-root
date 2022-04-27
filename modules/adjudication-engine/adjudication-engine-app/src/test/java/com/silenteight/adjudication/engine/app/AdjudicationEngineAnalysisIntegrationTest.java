@@ -61,7 +61,7 @@ class AdjudicationEngineAnalysisIntegrationTest {
   @Autowired
   private PiiFacade piiFacade;
 
-  private static final int SOLVING_AWAIT_TIME = 15;
+  private static final int SOLVING_AWAIT_TIME = 20;
 
 
   @Test
