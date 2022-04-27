@@ -1,9 +1,9 @@
 branches:
   master:
-    - bravo
-    - hotel
-    - sierra
-  release-*:
-    - mike
-    - siempre
     - dev
+    - lima
+    - test
+  release-*:
+    - dev
+    - lima
+    - test
