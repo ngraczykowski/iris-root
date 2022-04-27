@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="GovernanceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-    <option name="ACTIVE_PROFILES" value="linux,governance,database,rabbitmq,messaging" />
+    <option name="ACTIVE_PROFILES" value="linux,dev,governance,database,rabbitmq,messaging" />
     <module name="governance.governance-app.main" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.silenteight.serp.governance.GovernanceApplication" />
     <extension name="com.egoshard.intellij.k8s-runtime-config-plugin">

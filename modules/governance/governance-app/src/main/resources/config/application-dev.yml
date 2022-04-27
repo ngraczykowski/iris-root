@@ -3,10 +3,17 @@ serp:
   show-env: true
   rabbitmq:
     host: localhost
-    port: 24160
+    port: 5672
     user: dev
     password: dev
     vhost: /
+  db:
+    host: localhost
+    port: 5432
+    schema: public
+    name: iris
+    user: iris
+    password: iris
 
 logging:
   level:
@@ -73,12 +80,14 @@ serp.governance.files:
     allowed-characters-for-file-name: ^[.a-zA-Z0-9-()#_\s]*$
   default-bucket: attachments
 
-springdoc:
-  show-actuator: true
-  api-docs:
-    enabled: true
-    path: /openapi/api-docs
-  swagger-ui:
-    enabled: true
-    path: /openapi/
-    url: ${server.servlet.context-path}/openapi/api-docs/
+# TODO uncomment and fix error:
+# Parameter 1 of method auditingLogger in com.silenteight.auditing.bs.AuditingConfiguration required a bean of type 'com.silenteight.auditing.bs.amqp.AuditDataMessageGateway' that could not be found.
+#springdoc:
+#  show-actuator: true
+#  api-docs:
+#    enabled: true
+#    path: /openapi/api-docs
+#  swagger-ui:
+#    enabled: true
+#    path: /openapi/
+#    url: ${server.servlet.context-path}/openapi/api-docs/
