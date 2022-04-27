@@ -1,0 +1,12 @@
+ALERT_INTERNAL_ID,USER_NOTE_TEXT,CREATE_DATE,BUS_DT
+"10004564","True Hit. Stop descriptor JOHN DOE is in name. MS client Doe, John B .Alert is on JOHN B DOE in USA. which is related with the alerted individual. Hence escalating for further review.","2020-01-01-01.10.10.000000",20200104
+"10004564","Alert action : True hit 
+Reason for Escalation :True Hit basis name and DOB 
+Match ID:All
+Stop Descriptor:JOHN DOE 
+Restricted entity :JOHN B DOE  DOB 1933/05/ 05
+MS Client:JOHN B DOE DOB May 05 , 1933
+Source of information: 3D","2020-01-04-03.10.10.000000",20200105
+"10004564","TH on JOHN B DOE. Case CI-1009044 reviewed. According to an article in the U.S. Fed News, dated January 1, 2019, Doe, along with Jan Kowalski and Will Smith will pay $100,000 to resolve allegations that from January 2010 through October 2017 they knowingly solicited and charged patients cash out-of-pocket for Suboxone treatment instead of billing their treatment to MassHealth. Since the branch does not wish to maintain the relationship with the Client, account #100-100001 and 100-100002 will be red flagged. John B. Doe will be added to GCL to prevent future relationships with the Firm.","2020-01-13-08.10.10.000000",20200114
+10004565,Adjusted alert for FP without Employer,2020-01-13-08.10.10.000000,20200114
+10004566,Adjusted alert for FP with Employer,2020-01-13-08.10.10.000000,20200114

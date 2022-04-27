@@ -91,13 +91,13 @@ def load_agent_configs():
 
 
 class Pipeline:
-    def __init__(self):
+    def __init__(self, filename=os.path.join(CONFIG_APP_DIR, "pipeline", "pipeline.yaml")):
         self.config = None
         self.cn = None
-        self.load_configs()
+        self.load_configs(filename)
 
-    def load_configs(self):
-        config = OmegaConf.load(os.path.join(CONFIG_APP_DIR, "pipeline", "pipeline.yaml"))
+    def load_configs(self, filename):
+        config = OmegaConf.load(filename)
         self.config = config.PIPELINE
         self.cn = config.PAYLOAD_KEYS
 

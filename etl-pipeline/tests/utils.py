@@ -26,7 +26,7 @@ def load_pickle(filename):
 
 
 def load_xml(filename):
-    with open(filename, "r") as f:
+    with open(filename, "r", encoding="utf-8") as f:
         return f.read()
 
 

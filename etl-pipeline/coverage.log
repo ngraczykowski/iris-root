@@ -1,0 +1,63 @@
+Name                                                            Stmts   Miss Branch BrPart  Cover   Missing
+-----------------------------------------------------------------------------------------------------------
+etl_pipeline/__init__.py                                            0      0      0      0   100%
+etl_pipeline/__main__.py                                           54      8      4      1    84%   66-72, 76, 79->exit
+etl_pipeline/agent_input_creator/__init__.py                        0      0      0      0   100%
+etl_pipeline/agent_input_creator/config.py                         10     10      0      0     0%   1-16
+etl_pipeline/agent_input_creator/input_creator.py                  32     32      8      0     0%   1-106
+etl_pipeline/agent_input_creator/sql.py                            12     12      8      0     0%   1-52
+etl_pipeline/config/__init__.py                                   123     34     56      3    76%   20-27, 30-33, 36-50, 53-56, 106, 157, 170-171, 180
+etl_pipeline/custom/__init__.py                                     0      0      0      0   100%
+etl_pipeline/custom/aia/__init__.py                                 0      0      0      0   100%
+etl_pipeline/custom/aia/config.py                                  12     12      0      0     0%   1-246
+etl_pipeline/custom/aia/preprocessors/__init__.py                   2      2      0      0     0%   2-3
+etl_pipeline/custom/aia/preprocessors/note_preprocessor.py         10     10      3      0     0%   1-38
+etl_pipeline/custom/aia/preprocessors/status_preprocessor.py        8      8      3      0     0%   1-46
+etl_pipeline/custom/aia/transformations.py                         36     36      0      0     0%   1-111
+etl_pipeline/custom/aia/xml_pipeline.py                            36     36      4      0     0%   1-79
+etl_pipeline/custom/ms/__init__.py                                  0      0      0      0   100%
+etl_pipeline/custom/ms/config.py                                   18     18      2      0     0%   1-255
+etl_pipeline/custom/ms/datatypes/__init__.py                        0      0      0      0   100%
+etl_pipeline/custom/ms/datatypes/field.py                           9      2      4      0    69%   12-13
+etl_pipeline/custom/ms/datatypes/status/__init__.py                 0      0      0      0   100%
+etl_pipeline/custom/ms/datatypes/status/analyst_solution.py         6      6      2      0     0%   1-8
+etl_pipeline/custom/ms/datatypes/status/nns.py                     13     13      8      0     0%   1-18
+etl_pipeline/custom/ms/datatypes/status/sanctions.py               11     11      6      0     0%   1-16
+etl_pipeline/custom/ms/payload_loader/__init__.py                  85      5     34      2    94%   21-22, 78, 88-91
+etl_pipeline/custom/ms/preprocessors/__init__.py                    2      2      0      0     0%   2-3
+etl_pipeline/custom/ms/preprocessors/note_preprocessor.py          14     14      0      0     0%   1-30
+etl_pipeline/custom/ms/preprocessors/status_preprocessor.py         9      9      3      0     0%   1-48
+etl_pipeline/custom/ms/transformations.py                         159    159     63      0     0%   1-483
+etl_pipeline/custom/ms/trigger_discovery/__init__.py                0      0      0      0   100%
+etl_pipeline/custom/ms/trigger_discovery/discoverer.py             49     15     44      2    69%   29-30, 34, 67-80
+etl_pipeline/custom/ms/watchlist_extractor/__init__.py            193     34    104     15    78%   16-18, 27, 47, 53, 62, 64, 72, 76, 85-86, 90, 102-103, 107, 132, 139, 156->158, 160-161, 173-191, 243->245, 271-272
+etl_pipeline/custom/ms/xml_pipeline.py                             36     36      4      0     0%   1-79
+etl_pipeline/data_processor_engine/__init__.py                      0      0      0      0   100%
+etl_pipeline/data_processor_engine/abstract_engine.py              12      5      2      0    64%   6, 9, 12, 15, 18
+etl_pipeline/data_processor_engine/engine/__init__.py               0      0      0      0   100%
+etl_pipeline/data_processor_engine/engine/engine.py                99     66     38      0    26%   44, 47-48, 52-66, 69, 72, 75, 78, 83, 86, 89-124, 129-157, 161-164, 167-171, 174-175, 178-181, 185, 188-194, 201
+etl_pipeline/data_processor_engine/json_engine/__init__.py          0      0      0      0   100%
+etl_pipeline/data_processor_engine/json_engine/json_engine.py     143     38     64      4    75%   64-82, 92, 133, 136, 139, 144, 147, 157, 184-187, 192-196, 199-200, 203-206, 210, 213-219, 239-241, 247
+etl_pipeline/data_processor_engine/spark_engine/__init__.py         1      1      0      0     0%   1
+etl_pipeline/data_processor_engine/spark_engine/spark.py          138    138     24      0     0%   1-444
+etl_pipeline/logger/__init__.py                                    46      7      4      2    82%   23-24, 30-31, 57-58, 61->63, 67
+etl_pipeline/pattern.py                                             4      4      2      0     0%   1-6
+etl_pipeline/pattern_json.py                                      113      0      2      0   100%
+etl_pipeline/pipeline.py                                           23     12      2      0    52%   13, 16, 19, 22-50
+etl_pipeline/service/__init__.py                                    0      0      0      0   100%
+etl_pipeline/service/agent_router/__init__.py                     122     52     28      1    55%   83->74, 118-122, 128-148, 151-165, 168-182, 185-199, 202-204, 207-211, 214-216
+etl_pipeline/service/agent_router/producers.py                    122      8     68      0    92%   46, 179, 191, 212, 227, 241, 254, 272
+etl_pipeline/service/proto/__init__.py                              0      0      0      0   100%
+etl_pipeline/service/proto/api/__init__.py                          0      0      0      0   100%
+etl_pipeline/service/proto/api/etl_pipeline_pb2.py                 68      0      0      0   100%
+etl_pipeline/service/proto/api/etl_pipeline_pb2_grpc.py            19      7      6      0    72%   29-31, 35-45, 65
+etl_pipeline/service/servicer.py                                  104     56     32      2    44%   49-50, 61, 81-89, 92-107, 111->exit, 112-123, 126-142, 145-151, 155
+etl_pipeline/xml_parser/__init__.py                                 1      0      0      0   100%
+etl_pipeline/xml_parser/xml_exploration.py                         60     48     26      0    16%   13-19, 23-35, 39-51, 55-60, 64-70, 74-79
+etl_pipeline/xml_parser/xml_extractor.py                           54      0     30      0   100%
+etl_pipeline/xml_spark_spark/__init__.py                            1      1      0      0     0%   1
+etl_pipeline/xml_spark_spark/config.py                              4      4      0      0     0%   1-6
+etl_pipeline/xml_spark_spark/xml_exploration.py                    60     60     26      0     0%   1-79
+etl_pipeline/xml_spark_spark/xml_pipeline.py                       76     76     20      0     0%   3-267
+-----------------------------------------------------------------------------------------------------------
+TOTAL                                                            2209   1107    734     32    50%
