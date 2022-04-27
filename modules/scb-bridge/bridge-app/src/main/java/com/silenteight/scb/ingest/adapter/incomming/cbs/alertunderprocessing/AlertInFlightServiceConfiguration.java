@@ -16,8 +16,4 @@ class AlertInFlightServiceConfiguration {
     return new AlertsUnderProcessingService(alertUnderProcessingRepository);
   }
 
-  @Bean
-  ReactiveAlertInFlightService reactiveAlertInFlightService() {
-    return new ReactiveAlertInFlightService(alertInFlightService());
-  }
 }
