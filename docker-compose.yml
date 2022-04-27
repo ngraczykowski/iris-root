@@ -1,0 +1,51 @@
+version: "3.5"
+
+services:
+  postgres:
+    image: docker.io/library/postgres:12
+    restart: unless-stopped
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    environment:
+      POSTGRES_DB: "${POSTGRES_DB:-iris}"
+      POSTGRES_USER: "${POSTGRES_USER:-iris}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-iris}"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - postgres-storage:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 1G
+  rabbitmq:
+    image: docker.io/library/rabbitmq:3.8.16-management
+    restart: unless-stopped
+    ports:
+      - "${RABBITMQ_AMQP_PORT:-5672}:5672"
+      - "${RABBITMQ_MANAGEMENT_PORT:-15672}:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: "${RABBITMQ_USER:-dev}"
+      RABBITMQ_DEFAULT_PASS: "${RABBITMQ_PASSWORD:-dev}"
+      RABBITMQ_VM_MEMORY_HIGH_WATERMARK: "${RABBITMQ_MEMORY:-1024MiB}"
+      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: >-
+        -rabbitmq_management path_prefix "/rabbitmq"
+        -rabbitmq_management load_definitions "/etc/rabbitmq/definitions.json"
+        +sbwt none +sbwtdcpu none +sbwtdio none
+      RABBITMQ_IO_THREAD_POOL_SIZE: 6
+      RABBITMQ_MAX_NUMBER_OF_PROCESSES: 131072
+    volumes:
+      - rabbitmq-storage:/var/lib/rabbitmq
+      - ./docker-compose/rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins:ro
+      - ./docker-compose/rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
+    deploy:
+      resources:
+        limits:
+          memory: 1280M
+        reservations:
+          memory: 1280M
+
+volumes:
+  rabbitmq-storage:
+  postgres-storage:
