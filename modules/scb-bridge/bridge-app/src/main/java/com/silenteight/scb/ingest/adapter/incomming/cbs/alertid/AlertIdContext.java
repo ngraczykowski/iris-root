@@ -14,7 +14,5 @@ public class AlertIdContext {
   private final boolean watchlistLevel;
   @NonNull
   private final String recordsView;
-  private final int chunkSize;
-  private final int totalRecordsToRead;
 
 }

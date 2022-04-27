@@ -3,7 +3,7 @@ package com.silenteight.scb.ingest.adapter.incomming.cbs.quartz;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertIdContext;
+import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertIdReaderContext;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.ExternalAlertIdReader;
 
 import org.quartz.DisallowConcurrentExecution;
@@ -24,14 +24,14 @@ public class QueuingJob implements Job {
   public void execute(JobExecutionContext jobExecutionContext) {
     JobDataMap jobDataMap = jobExecutionContext.getJobDetail().getJobDataMap();
 
-    externalAlertIdReader.read(getAlertIdContext(jobDataMap));
+    externalAlertIdReader.read(context(jobDataMap));
 
     if (log.isDebugEnabled())
       log.debug(
           "Queuing job: {} has been finished.", jobDataMap.getString(QueuingJobConstants.NAME));
   }
 
-  private static AlertIdContext getAlertIdContext(JobDataMap jobDataMap) {
-    return (AlertIdContext) jobDataMap.get(QueuingJobConstants.CONTEXT);
+  private static AlertIdReaderContext context(JobDataMap jobDataMap) {
+    return (AlertIdReaderContext) jobDataMap.get(QueuingJobConstants.CONTEXT);
   }
 }

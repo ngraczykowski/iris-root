@@ -15,13 +15,17 @@ class ChunkProcessorSpec extends Specification {
   @Unroll
   def 'should process #foundRecords and send #numberOfChunks chunks'() {
     given:
+
     def resultSet = Mock(ResultSet)
     def statement = Mock(Statement)
     def resultSetIdx = 0
-    def context = AlertIdContext.builder()
-        .recordsView('')
-        .chunkSize(1_000)
-        .build()
+    def context =
+        AlertIdReaderContext.builder()
+            .alertIdContext(AlertIdContext.builder()
+                    .recordsView('')
+                    .build())
+            .chunkSize(1_000)
+            .build()
 
     when:
     objectUnderTest.process(statement, context)

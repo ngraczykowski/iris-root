@@ -51,7 +51,16 @@ well.
 
 ## How to test
 
+Use following urls to access testing endpoints on specific environments:
+
+| Environment | Url                             |
+|:------------|:--------------------------------|
+| Local       | `http://localhost:24220/`       |
+| `lima`      | `https://lima.silenteight.com/` |
+
 ### CBS
+
+#### Simulating invoking Queueing Job
 
 POST json
 
@@ -61,22 +70,45 @@ POST json
 }
 ```
 
-to `/rest/scb-bridge/v1/cbs/test` endpoint.
-
-- locally: `http://localhost:24220/rest/scb-bridge/v1/cbs/test`
-- `lima` test env: `https://lima.silenteight.com/rest/scb-bridge/v1/cbs/test`
-
-You can specify more options in this endpoint, otherwise following defaults will be used
+to `/rest/scb-bridge/v1/cbs/test/invokeQueueingJob` endpoint. You can specify more options,
+otherwise following defaults will be used
 
 ```json
 {
-  "ackRecords": true,
-  "hitDetailsView": "",
-  "priority": 10,
-  "watchlistLevel": true,
-  "recordsView": "SENS_V_FFF_RECORDS_DENY",
-  "chunkSize": 1000,
-  "totalRecordsToRead": 1
+  "alertIdContext": {
+    "ackRecords": true,
+    "hitDetailsView": "",
+    "priority": 10,
+    "watchlistLevel": true,
+    "recordsView": "SENS_V_FFF_RECORDS_DENY"
+  },
+  "chunkSize": 1000
+}
+
+```
+
+#### Simulating processing of single alert
+
+POST json
+
+```json
+{
+  "systemId": "SYSTEM_ID"
+}
+```
+
+to `/rest/scb-bridge/v1/cbs/test/queueAlert` endpoint. You can specify more options, otherwise
+following defaults will be used
+
+```json
+{
+  "alertIdContext": {
+    "ackRecords": true,
+    "hitDetailsView": "",
+    "priority": 10,
+    "watchlistLevel": true,
+    "recordsView": "SENS_V_FFF_RECORDS_DENY"
+  }
 }
 ```
 

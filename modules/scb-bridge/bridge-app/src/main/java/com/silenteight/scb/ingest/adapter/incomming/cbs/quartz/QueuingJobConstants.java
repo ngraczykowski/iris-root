@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class QueuingJobConstants {
 
-  public static final String CONTEXT = "alertIdContext";
+  public static final String CONTEXT = "context";
+
   public static final String NAME = "name";
 }

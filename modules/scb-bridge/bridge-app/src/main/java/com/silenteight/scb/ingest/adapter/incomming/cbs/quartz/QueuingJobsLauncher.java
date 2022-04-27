@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertIdContext;
+import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertIdReaderContext;
 
 import org.quartz.*;
 
@@ -42,14 +43,20 @@ public class QueuingJobsLauncher {
     return jobDataMap;
   }
 
-  private static AlertIdContext createContext(QueuingJobProperties properties) {
+  private static AlertIdReaderContext createContext(QueuingJobProperties properties) {
+    return AlertIdReaderContext.builder()
+        .alertIdContext(alertIdContext(properties))
+        .chunkSize(properties.getChunkSize())
+        .build();
+  }
+
+  private static AlertIdContext alertIdContext(QueuingJobProperties properties) {
     return AlertIdContext.builder()
         .ackRecords(properties.isAckRecords())
         .hitDetailsView(properties.getHitDetailsView())
         .priority(properties.getPriority())
         .recordsView(properties.getRecordsView())
         .watchlistLevel(properties.isWatchlistLevel())
-        .chunkSize(properties.getChunkSize())
         .build();
   }
 

@@ -1,9 +1,10 @@
 package com.silenteight.scb.ingest.adapter.incomming.cbs.rest;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertIdContext;
+import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertIdReaderContext;
+import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.TestingHarnessService;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.quartz.QueuingJob;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.quartz.QueuingJobConstants;
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRecommendationRepository;
@@ -23,7 +24,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping("/v1/cbs/test")
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Slf4j
 public class CbsTestingHarnessController {
 
@@ -32,24 +33,45 @@ public class CbsTestingHarnessController {
   private final RawAlertRepository rawAlertRepository;
   private final ScbRecommendationRepository scbRecommendationRepository;
   private final Scheduler scheduler;
+  private final TestingHarnessService testHarnessService;
 
-  @PostMapping(consumes = APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> invoke(@Valid @RequestBody CbsInvokeQueueingJobRequest request) throws
+  @PostMapping(path = "/invokeQueueingJob", consumes = APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> invokeQueueingJob(
+      @Valid @RequestBody CbsInvokeQueueingJobRequest request) throws
       SchedulerException {
 
+    log.info("Request: {}", request);
+
     cleanup();
-    scheduleJob(request.toAlertIdContext());
+    scheduleJob(AlertIdReaderContext.builder()
+        .alertIdContext(request.getAlertIdContext().toAlertIdContext())
+        .chunkSize(request.getChunkSize())
+        .totalRecordsToRead(request.getTotalRecordsToRead())
+        .build());
 
     return ResponseEntity.ok().build();
   }
 
-  private void scheduleJob(AlertIdContext alertIdContext) throws SchedulerException {
+  @PostMapping(path = "/queueAlert", consumes = APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> queueAlert(@Valid @RequestBody CbsQueueAlertRequest request) {
+
+    log.info("Request: {}", request);
+
+    cleanup();
+    testHarnessService.queueAlert(
+        request.getAlertIdContext().toAlertIdContext(),
+        request.getSystemId());
+
+    return ResponseEntity.ok().build();
+  }
+
+  private void scheduleJob(AlertIdReaderContext alertIdReaderContext) throws SchedulerException {
     JobDetail jobDetail = JobBuilder
         .newJob(QueuingJob.class)
-        .setJobData(createQueuingJobDataMap(alertIdContext))
+        .setJobData(createQueuingJobDataMap(alertIdReaderContext))
         .build();
 
-    log.info("Scheduling test job for execution by: {}", alertIdContext);
+    log.info("Scheduling test job for execution by: {}", alertIdReaderContext);
     scheduler.scheduleJob(jobDetail, runOnceTrigger());
   }
 
@@ -65,9 +87,11 @@ public class CbsTestingHarnessController {
     return TriggerBuilder.newTrigger().build();
   }
 
-  private static JobDataMap createQueuingJobDataMap(AlertIdContext alertIdContext) {
+  private static JobDataMap createQueuingJobDataMap(AlertIdReaderContext alertIdReaderContext) {
     return new JobDataMap(
-        Map.of(QueuingJobConstants.CONTEXT, alertIdContext, QueuingJobConstants.NAME, JOB_NAME));
+        Map.of(
+            QueuingJobConstants.CONTEXT, alertIdReaderContext, QueuingJobConstants.NAME,
+            JOB_NAME));
   }
 
 }
