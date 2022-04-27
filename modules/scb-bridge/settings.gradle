@@ -3,4 +3,5 @@ rootProject.name = 'scb-bridge'
 include('bridge-app')
 include('bridge-dist')
 include('bridge-qco')
+include 'bridge-qco-internal-protos'
 

@@ -10,6 +10,7 @@ description = "bridge-qco"
 apply from: "${rootProject.projectDir}/gradle/scripts/dependencies.gradle"
 
 dependencies {
+  implementation project(":bridge-qco-internal-protos")
   implementation libraries.jackson_dataformat_csv
   implementation libraries.warehouse_api
   testImplementation libraries.spock_spring

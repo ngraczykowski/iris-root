@@ -1,5 +1,7 @@
 package com.silenteight.qco.domain
 
+import com.silenteight.proto.qco.api.v1.QcoMatch
+import com.silenteight.proto.qco.api.v1.QcoRecommendation
 import com.silenteight.qco.domain.model.*
 import com.silenteight.qco.domain.model.QcoRecommendationAlert.QcoMatchData
 
@@ -9,12 +11,15 @@ class Fixtures {
   static ALERT_ID = "alertId"
   static BATCH_ID = "batchId"
   static POLICY_ID = "policyId"
+  static MATCH_ID = "matchId"
   static MATCH_NAME = "matchName"
+  static FV_SIGNATURE = "fvSignature"
   static STEP_ID = "stepId"
   static SOLUTION = "FALSE:POSITIVE"
   static QCO_SOLUTION = "Manual:Investigation"
   static COMMENT = "comment"
   static QCO_COMMENT = "qcoComment"
+  static QCO_MARKED = false
 
   static CHANGE_CONDITION = new ChangeCondition("policyId", "stepId", "solution")
   static UNEXPECTED_CHANGE_CONDITION = new ChangeCondition("policyId1", "stepId", "solution")
@@ -43,10 +48,13 @@ class Fixtures {
 
   static MATCH_SOLUTION = new MatchSolution(QCO_SOLUTION, QCO_COMMENT, true)
   static QCO_MATCH_DATA = QcoMatchData.builder()
+      .id(MATCH_ID)
       .name(MATCH_NAME)
       .stepId(STEP_ID)
       .recommendation(SOLUTION)
+      .fvSignature(FV_SIGNATURE)
       .comment(COMMENT)
+      .qcoMarked(QCO_MARKED)
       .build()
 
   static QCO_RECOMMENDATION_ALERT = QcoRecommendationAlert.builder()
@@ -55,5 +63,24 @@ class Fixtures {
       .policyId(POLICY_ID)
       .alertId(ALERT_ID)
       .matches([QCO_MATCH_DATA])
+      .build()
+
+  static QCO_MATCH_PROTO = QcoMatch.newBuilder()
+      .setMatchId(MATCH_ID)
+      .setMatchName(MATCH_NAME)
+      .setRecommendation(SOLUTION)
+      .setComment(COMMENT)
+      .setFvSignature(FV_SIGNATURE)
+      .setStepId(STEP_ID)
+      .setQcoMarked(QCO_MARKED)
+      .build()
+
+  static QCO_RECOMMENDATION_PROTO = QcoRecommendation.newBuilder()
+      .setBatchId(BATCH_ID)
+      .setAlertId(ALERT_ID)
+      .setAlertName(ALERT_NAME)
+      .setPolicyId(POLICY_ID)
+      .addAllMatches([QCO_MATCH_PROTO])
+      .setOnlyMark(QCO_MARKED)
       .build()
 }
