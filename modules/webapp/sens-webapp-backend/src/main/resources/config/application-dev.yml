@@ -3,7 +3,6 @@ logging:
     com.silenteight: DEBUG
     org.springframework: INFO
 
-
 keycloak:
   public-client: true
   frontend-client-id: frontend
@@ -21,8 +20,16 @@ keycloak:
 
 sens:
   webapp:
+    db:
+      host: localhost
+      port: 5432
+      schema: public
+      name: iris
+      user: iris
+      password: iris
+      url: jdbc:postgresql://${sens.webapp.db.host}:${sens.webapp.db.port}/${sens.webapp.db.name}?currentSchema=${sens.webapp.db.schema}
     rabbitmq:
       host: localhost
-      port: 24160
+      port: 5672
       user: dev
       password: dev
