@@ -54,6 +54,7 @@ uds:
   feature:
     mapping:
       geo2: geo
+      geo3: geo
       organizationName2: organizationName
 
 spring:

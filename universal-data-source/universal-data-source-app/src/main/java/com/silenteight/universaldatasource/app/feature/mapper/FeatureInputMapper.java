@@ -31,14 +31,18 @@ public class FeatureInputMapper {
         .collect(Collectors.toList());
   }
 
-  public String mapByValue(final String feature) {
+  public String mapByValue(final String feature, List<String> requestedFeatures) {
     for (final Entry<String, String> entry : this.featureInputMapping.entrySet()) {
-      if (entry.getValue().equalsIgnoreCase(feature)) {
+      if (isFeatureMappingValid(feature, requestedFeatures, entry)) {
         return entry.getKey();
       }
     }
-
     return feature;
+  }
+
+  private boolean isFeatureMappingValid(
+      String feature, List<String> requestedFeatures, Entry<String, String> entry) {
+    return entry.getValue().equalsIgnoreCase(feature) && requestedFeatures.contains(entry.getKey());
   }
 
   private Map<String, String> featureMapping(
