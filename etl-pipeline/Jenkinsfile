@@ -14,41 +14,49 @@ pipeline {
     }
 
     stages {
-         stage('Build') {
-             steps {
-                 sh './scripts/build.sh'
-             }
-         }
-         stage('Test') {
-             steps {
-                 sh './scripts/test.sh'
-             }
-         }
-         stage('Build and publish package') {
-             agent {
-                 docker {
-                     image 'docker.repo.silenteight.com/python-build-image:3.6-bullseye'
-                     args '--volume $HOME/.cache/agent/pip:/home/jenkins/.cache/pip'
-                     alwaysPull true
-                 }
-             }
-             stages {
-                 stage ('Build dist') {
-                   steps {
-                     sh './scripts/build_dist.sh'
-                   }
-                 }
-                 stage('Publish dist') {
-                   when {
-                     anyOf {
-                       branch 'master'
-                       branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
-                     }
-                     expression { return params.RELEASE }
-                   }
-                   steps {
-                     rtUpload (
-                         serverId: "silenteight-repo-v2",
+        stage('Build and publish package') {
+            agent {
+                docker {
+                    image 'docker.repo.silenteight.com/python-build-image:3.6-bullseye'
+                    args '--volume $HOME/.cache/agent/pip:/home/jenkins/.cache/pip'
+                    alwaysPull true
+                }
+            }
+
+            stages {
+                stage('Prepare') {
+                    steps {
+                        sh 'pip install --index-url "${PIP_INDEX_URL}" --requirement requirements.txt'
+                    }
+                }
+                stage ('Build package') {
+                    steps {
+                        sh './scripts/clean.sh'
+                        sh './scripts/build_package.sh'
+                    }
+                }
+                stage('Test') {
+                    steps {
+                        sh 'pip install --index-url "${PIP_INDEX_URL}" tox'
+                        sh './scripts/test.sh --index-url "${PIP_INDEX_URL}"'
+                    }
+                }
+                stage ('Build dist') {
+                    steps {
+                        sh './scripts/build_dist.sh'
+                    }
+                }
+                stage('Publish dist') {
+                    when {
+                        anyOf {
+                            branch 'master'
+                            branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
+                        }
+                        expression { return params.RELEASE }
+                    }
+                    steps {
+                        rtUpload (
+                         serverId: 'silenteight-repo-v2',
                          spec: '''{
       "files": [
         {
@@ -58,56 +66,56 @@ pipeline {
      ]
 }'''
                      )
-                   }
-                 }
-                 stage ('Build package') {
-                     steps {
-                         sh './scripts/clean.sh'
-                         sh './scripts/build_package.sh'
-                     }
-                 }
-                 stage('Publish package') {
-                     when {
-                             anyOf {
-                                 branch 'master'
-                                 branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
-                             }
-                             expression { return params.RELEASE }
-                         }
-                     steps {
-                         sh 'pip install --index-url "${PIP_INDEX_URL}" bump2version tox'
-                         sh 'git tag --delete $(git tag --list)'
-                         sshagent([env.JENKINS_SSH_NAME]) {
-                             sh './scripts/release.sh --index-url ${PIP_INDEX_URL}'
-                         }
-                         withCredentials([usernamePassword(
+                    }
+                }
+
+                stage('Publish package') {
+                    when {
+                        anyOf {
+                            branch 'master'
+                            branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
+                        }
+                        expression { return params.RELEASE }
+                    }
+                    steps {
+                        sh 'pip install --index-url "${PIP_INDEX_URL}" bump2version tox'
+                        sh 'git tag --delete $(git tag --list)'
+                        sshagent([env.JENKINS_SSH_NAME]) {
+                            sh './scripts/release.sh --index-url ${PIP_INDEX_URL}'
+                        }
+                        withCredentials([usernamePassword(
                              credentialsId: 'pypi-deployment-user',
                              usernameVariable: 'TWINE_USERNAME',
                              passwordVariable: 'TWINE_PASSWORD',
                          )]) {
-                             sh './scripts/publish.sh --index-url "${PIP_INDEX_URL}"'
+                            sh './scripts/publish.sh --index-url "${PIP_INDEX_URL}"'
                          }
-                     }
-                 }
-             }
-         }
+                    }
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                sh './scripts/build.sh'
+            }
+        }
         stage('Publish docker image') {
             when {
                 branch 'master'
             }
             steps {
-            sshagent([env.JENKINS_SSH_NAME]) {
-                sh './scripts/push.sh --index-url ${PIP_INDEX_URL}'
+                sshagent([env.JENKINS_SSH_NAME]) {
+                    sh './scripts/push.sh --index-url ${PIP_INDEX_URL}'
             }}
-        }
+            }
         stage('Deploy On Nomad mike') {
-          when {
-              branch 'master'
-          }
-          steps {
-            sh './nomad/deploy.sh'
-          }
+            when {
+                branch 'master'
+            }
+            steps {
+                sh './nomad/deploy.sh'
+            }
+        }
         }
     }
-}
 

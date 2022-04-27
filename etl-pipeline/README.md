@@ -95,10 +95,10 @@ Before this flat payload is fed into ETL pipeline, the instance of `PayloadLoade
 `CONFIG_APP_DIR=etl_service/config python etl_pipeline`
 
 2. You can launch data source service stub via:
-`python tests/test_custom/data_source_stub.py`
+`python tests/test_json/data_source_stub.py`
 
 3. You can now send request as shown in:
-`pytest ./tests/test_custom/test_client.py`
+`pytest ./tests/test_json/test_client.py`
 
 
 

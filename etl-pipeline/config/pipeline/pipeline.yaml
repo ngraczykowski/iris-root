@@ -38,7 +38,7 @@ PAYLOAD_KEYS:
   ALERT_INTERNAL_ID: &ALERT_INTERNAL_ID ALERT_INTERNAL_ID
   ALL_CONNECTED_ACCOUNT_BENEFICIARY_NAMES: &ALL_CONNECTED_ACCOUNT_BENEFICIARY_NAMES ALL_CONNECTED_ACCOUNT_BENEFICIARY_NAMES
   ALL_CONNECTED_ACCOUNT_BRANCH_ACCOUNT_NUMBERS: &ALL_CONNECTED_ACCOUNT_BRANCH_ACCOUNT_NUMBERS ALL_CONNECTED_ACCOUNT_BRANCH_ACCOUNT_NUMBERS
-  ALL_CONCAT_NAMES: &ALL_CONCAT_NAMES ALL_CONCAT_NAMES
+  ALL_CONCAT_NAMES: &ALL_CONCAT_NAME ALL_CONCAT_NAMES
   ALL_CONNECTED_ACCOUNT_NAMES: &ALL_CONNECTED_ACCOUNT_NAMES ALL_CONNECTED_ACCOUNT_NAMES
   ALL_CONNECTED_PARTIES_NAMES: &ALL_CONNECTED_PARTIES_NAMES ALL_CONNECTED_PARTIES_NAMES
   ALL_CONNECTED_PARTY_TYPES: &ALL_CONNECTED_PARTY_TYPES ALL_CONNECTED_PARTY_TYPES
@@ -188,25 +188,25 @@ PAYLOAD_KEYS:
     - *PRTY_RSDNC_CNTRY_CD
 
 PIPELINE: 
-  output-paths: output-paths
+  FUZZINESS_LEVEL: 0.8
+  ISG_ACCOUNT_COLS_TO_CONVERT_FROM_JSON: [*WL_NATIONALITY]
+  PARTY_AND_ADDRESS_RELATIONSHIP_INPUT_PATH: tests/shared/Party_And_Address_Relationship.csv
+  WM_ACCOUNTS_IN_SCOPE_INPUT_PATH: tests/shared/WM/WM_Account_In_Scope.csv
+  WM_ADDRESS_COLS_TO_CONVERT_FROM_JSON: [*WL_NATIONALITY]
+  WM_PARTIES_IN_SCOPE_INPUT_PATH: tests/shared/WM/WM_Parties_In_Scope.csv
+  alert-type: "alert-type"
   alerts-data: alerts-data
   alerts-notes: alerts-notes
   alerts-xml-data: alerts-xml-data
-  temp: /tmp
-  sanctions-360: sanctions-360
-  input-record-columns: input-record-columns
-  id-column-name: id-column-name
-  WM_ACCOUNTS_IN_SCOPE_INPUT_PATH: ms-name-screening-poc/test-data/Sanctions/WM/WM_Account_In_Scope.csv
-  WM_PARTIES_IN_SCOPE_INPUT_PATH: ms-name-screening-poc/test-data/Sanctions/WM/WM_Parties_In_Scope.csv
+  alerts: alerts
+  decision-tree: decision-tree
   df360-input-path: df360-input-path
   df360-output-path: df360-output-path
-  FUZZINESS_LEVEL: 0.8
-  PARTY_AND_ADDRESS_RELATIONSHIP_INPUT_PATH: tests/shared/Party_And_Address_Relationship.csv
-  decision-tree: decision-tree
-  alerts: alerts
-  alert-type: "alert-type"
-  WM_ADDRESS_COLS_TO_CONVERT_FROM_JSON: [*WL_NATIONALITY]
-  ISG_ACCOUNT_COLS_TO_CONVERT_FROM_JSON: [*WL_NATIONALITY]
+  id-column-name: id-column-name
+  input-record-columns: input-record-columns
+  output-paths: output-paths
+  sanctions-360: sanctions-360
+  temp: /tmp
   
   
   

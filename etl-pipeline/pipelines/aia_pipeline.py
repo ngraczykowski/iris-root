@@ -1,7 +1,6 @@
 import os
 import re
 
-from etl_pipeline.agent_input_creator.input_creator import create_input_for_agents
 from etl_pipeline.custom.aia.config import (
     ALERT_NOTES_FILE_NAME,
     ALERTS_FILE_NAME,
@@ -13,6 +12,7 @@ from etl_pipeline.custom.aia.config import (
 from etl_pipeline.custom.aia.transformations import custom_transform
 from etl_pipeline.custom.aia.xml_pipeline import AIAXMLPipeline
 from etl_pipeline.pipeline import ETLPipeline
+from etl_pipeline.xml_spark.agent_input_creator.input_creator import create_input_for_agents
 
 
 class AIAPipeline(ETLPipeline):
