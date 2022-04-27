@@ -1,15 +1,16 @@
 import os
 import unittest
 
+from spark_etl_pipeline.data_processor_engine.spark_engine.spark import SparkProcessingEngine
+from test_spark.utils import compare_dataframe
+
 from etl_pipeline.config import Pipeline
-from etl_pipeline.data_processor_engine.spark_engine.spark import SparkProcessingEngine
-from tests.utils import compare_dataframe
 
 pipeline_config = Pipeline("config/pipeline/spark-pipeline.yaml")
 cn = pipeline_config.cn
 ALERT_ID, ALERT_INTERNAL_ID = cn.ALERT_ID, cn.ALERT_INTERNAL_ID
 
-TEST_PATH = "tests/shared/test_ms_pipeline/"
+TEST_PATH = "test_spark/shared/test_ms_pipeline/"
 
 
 def load_input_and_reference_data(func, spark_instance):

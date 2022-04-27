@@ -1,0 +1,7 @@
+{"commitInfo":{"timestamp":1646134649704,"operation":"WRITE","operationParameters":{"mode":"Overwrite","partitionBy":"[]"},"readVersion":1,"isBlindAppend":false,"operationMetrics":{"numFiles":"3","numOutputBytes":"58126","numOutputRows":"2"},"userMetadata":""}}
+{"add":{"path":"part-00000-716d6bf4-ac99-4ebf-810b-f578c7279545-c000.snappy.parquet","partitionValues":{},"size":9431,"modificationTime":1646134649291,"dataChange":true}}
+{"add":{"path":"part-00069-89f4e77d-5528-4a4c-9281-9a1aa490b948-c000.snappy.parquet","partitionValues":{},"size":23613,"modificationTime":1646134649299,"dataChange":true}}
+{"add":{"path":"part-00128-86b3de5f-703d-4086-bf3a-90cb3d6f002b-c000.snappy.parquet","partitionValues":{},"size":25082,"modificationTime":1646134649295,"dataChange":true}}
+{"remove":{"path":"part-00069-51578fd9-4473-4476-88ab-998dccb578ed-c000.snappy.parquet","deletionTimestamp":1646134649704,"dataChange":true,"extendedFileMetadata":true,"partitionValues":{},"size":23613}}
+{"remove":{"path":"part-00000-edc7a88c-ae6f-4cba-b0d8-159e322668b1-c000.snappy.parquet","deletionTimestamp":1646134649704,"dataChange":true,"extendedFileMetadata":true,"partitionValues":{},"size":9431}}
+{"remove":{"path":"part-00128-b90a75ef-f2b3-467b-af7b-5d7dadfebac8-c000.snappy.parquet","deletionTimestamp":1646134649704,"dataChange":true,"extendedFileMetadata":true,"partitionValues":{},"size":25082}}

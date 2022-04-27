@@ -1,10 +1,10 @@
 from abc import ABC
 
-from etl_pipeline.data_processor_engine.engine.engine import Engine, ProcessingEngine
+from etl_pipeline.data_processor_engine.engine.engine import ProcessingEngine
 
 
 class ETLPipeline(ABC):
-    def __init__(self, engine: Engine, config=None):
+    def __init__(self, engine: ProcessingEngine, config=None):
         self.engine: ProcessingEngine = engine
         self.engine.pipeline_config = config
         self.pipeline_config = config

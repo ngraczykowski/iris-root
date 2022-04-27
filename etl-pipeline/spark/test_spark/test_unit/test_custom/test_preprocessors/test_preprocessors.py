@@ -2,10 +2,10 @@ import json
 import os
 from typing import Dict
 
-from etl_pipeline.custom.aia.preprocessors.note_preprocessor import add_note_stage
-from etl_pipeline.custom.aia.preprocessors.status_preprocessor import add_status_stage
-from etl_pipeline.data_processor_engine.spark_engine import SparkProcessingEngine
-from tests.shared import TEST_SHARED_DATA_REFERENCE_DIR
+from spark_etl_pipeline.custom.aia.preprocessors.note_preprocessor import add_note_stage
+from spark_etl_pipeline.custom.aia.preprocessors.status_preprocessor import add_status_stage
+from spark_etl_pipeline.data_processor_engine.spark_engine import SparkProcessingEngine
+from test_spark.shared import TEST_SHARED_DATA_REFERENCE_DIR
 
 spark_engine = SparkProcessingEngine()
 spark_instance = spark_engine.spark_instance
@@ -45,7 +45,7 @@ def test_status_preprocessor():
 
 def _read_json(file_name: str) -> Dict:
     file_path = os.path.join(
-        "tests/test_spark/test_unit/test_custom/test_preprocessors/resources/", file_name
+        "test_spark/test_unit/test_custom/test_preprocessors/resources/", file_name
     )
     with open(file_path, "r") as file:
         data = json.load(file)

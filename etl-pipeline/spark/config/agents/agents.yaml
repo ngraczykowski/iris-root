@@ -1,0 +1,167 @@
+dob_agent:
+  ap:
+  - ALL_CONNECTED_PARTY_DOBS
+  wl:
+  - watchlistParty.matchRecords.WL_DOB
+
+document_agent:
+  ap:
+  - ALL_CONNECTED_TAX_IDS
+  - ALL_CONNECTED_GOVT_IDS
+  - ALL_PARTY1_GOVTID1_NUMBER
+  - ALL_PARTY1_GOVTID2_NUMBER
+  wl:
+  - watchlistParty.matchRecords.WL_DOCUMENT_NUMBER
+
+company_name_agent:
+  ap:
+  - ALL_CONCAT_NAMES
+  - ALL_CONNECTED_PARTY_NAMES
+  - ALL_CONNECTED_PARTIES_NAMES
+  - ALL_CONNECTED_ACCOUNT_NAMES
+  - ALL_CONNECTED_ACCOUNT_BENEFICIARY_NAMES
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL
+  wl:
+  - watchlistParty.matchRecords.WL_NAME
+
+name_agent:
+  ap:
+  - ALL_CONCAT_NAMES
+  - ALL_CONNECTED_PARTY_NAMES
+  - ALL_CONNECTED_PARTIES_NAMES
+  - ALL_CONNECTED_ACCOUNT_NAMES
+  - ALL_CONNECTED_ACCOUNT_BENEFICIARY_NAMES
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL
+  wl:
+  - watchlistParty.matchRecords.WL_NAME
+
+employer_name_agent:
+  ap:
+  - ALL_PARTY1_EMPLOYERS
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ORGANIZATION_NAME
+  wl:
+  - watchlistParty.matchRecords.WL_NAME
+  - watchlistParty.matchRecords.WL_ALIASES
+
+nationality_agent:
+  ap:
+  - ALL_PARTY1_COUNTRY1_CITIZENSHIP
+  - ALL_PARTY1_COUNTRY_DOMICILE1
+  - ALL_PRTY_RSDNC_CNTRY_CD
+  - ALL_PARTY1_ADDRESS1_COUNTRY
+  - ALL_CONNECTED_PARTY_BIRTH_COUNTRIES
+  - ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES
+  - ALL_CONNECTED_PARTY_RESIDENCY_COUNTRIES
+  - ALL_CONNECTED_COUNTRY_OF_INCORPORATION
+  wl:
+  - watchlistParty.matchRecords.WL_NATIONALITY
+  - watchlistParty.matchRecords.WL_POB
+  - watchlistParty.matchRecords.WL_CITIZENSHIP
+  - watchlistParty.matchRecords.WL_COUNTRY
+  - watchlistParty.matchRecords.WL_COUNTRYNAME
+
+
+party_type_agent:
+  ap:
+  - ALL_CONNECTED_PARTY_TYPES
+  wl:
+  - watchlistParty.matchRecords.WLP_TYPE
+
+pob_agent:
+  ap:
+  - ALL_CONNECTED_PARTY_BIRTH_COUNTRIES
+  - ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES
+  - ALL_CONNECTED_COUNTRY_OF_INCORPORATION
+    
+  wl:
+  - watchlistParty.matchRecords.WL_COUNTRY
+  - watchlistParty.matchRecords.WL_COUNTRYNAME
+  - watchlistParty.matchRecords.WL_POB
+  - watchlistParty.matchRecords.WL_NATIONALITY
+
+santioned_country_agent:
+  ap:
+  - ALL_CONNECTED_PARTY_BIRTH_COUNTRIES
+  - ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES
+  - ALL_CONNECTED_COUNTRY_OF_INCORPORATION 
+  - ALL_PARTY1_ADDRESS1_COUNTRY
+  - ALL_PARTY1_COUNTRY
+  - ALL_PARTY1_COUNTRY1
+  - ALL_PARTY1_COUNTRY1_CITIZENSHIP
+  - ALL_PARTY1_COUNTRY2_CITIZENSHIP
+  - ALL_PARTY1_COUNTRY_DOMICILE1
+  - ALL_PARTY1_COUNTRY_FORMATION1
+  - ALL_PARTY1_COUNTRY_OF_INCORPORATION
+  - ALL_PRTY_PRIM_CTZNSH_CNTRY
+  wl:
+  - watchlistParty.matchRecords.WL_COUNTRY
+  - watchlistParty.matchRecords.WL_COUNTRYNAME
+  - watchlistParty.matchRecords.WL_NAME
+
+residency_agent:
+  ap:
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ADDRESS1_COUNTRY
+  - ALL_PARTY1_COUNTRY_DOMICILE1
+  - ALL_CONNECTED_PARTY_BIRTH_COUNTRIES
+  - ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES
+  - ALL_CONNECTED_COUNTRY_OF_INCORPORATION
+  - ALL_PRTY_PRIM_CTZNSH_CNTRY
+  - ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES
+  - ALL_PARTY1_COUNTRY2_CITIZENSHIP
+  - ALL_PRTY_RSDNC_CNTRY_CD
+  - ALL_PRTY_PRIM_CTZNSH_CNTRY
+  - ALL_PARTY1_COUNTRY_DOMICILE1
+  - ALL_PARTY1_COUNTRY_PEP
+  - ALL_PARTY1_COUNTRY_OF_INCORPORATION
+  wl:
+  - watchlistParty.matchRecords.WL_COUNTRY
+  - watchlistParty.matchRecords.WL_COUNTRYNAME
+
+hit_type_agent:
+  name:
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.CONCAT_NAME
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS1
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS2
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS3
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS4
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL
+  country:
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ADDRESS1_COUNTRY
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_DOMICILE1
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_FORMATION1
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PRTY_PRIM_CTZNSH_CNTRY
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY2_CITIZENSHIP
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PRTY_RSDNC_CNTRY_CD
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_DOMICILE1
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_PEP
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_OF_INCORPORATION
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ADDRESS1_COUNTRY
+  job:
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_EMPLOYER
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ORGANIZATION_NAME
+  other:
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_POSITION_TITLE
+ 
+matched_tokens_tp_marked_agent:
+  input:
+  - watchlistParty.matchRecords.WL_MATCHED_TOKENS
+
+ap_name_tp_marked_agent:
+  input:
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL 
+
+# should be analysed with if any([...]) logic
+ap_id_tp_marked_agent:
+  input:
+# ISG_Party
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ID
+# WM_Party / WM_Address
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.UNIQUE_KEY
+# ISG_Account
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ACCOUNTNUMBER
+
+is_entity_match_agent:
+  ap:
+  - AP_PARTY_TYPE
+  wl:
+  - watchlistParty.matchRecords.WLP_TYPE

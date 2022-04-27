@@ -2,17 +2,18 @@ import os
 import shutil
 from glob import glob
 
-from etl_pipeline.config import pipeline_config
-from etl_pipeline.custom.aia.config import (
+from spark_etl_pipeline.custom.aia.config import (
     APPLICATION_DATA_DIR,
     CLEANSED_DATA_DIR,
     RAW_DATA_DIR,
     STANDARDIZED_DATA_DIR,
 )
-from etl_pipeline.data_processor_engine.spark_engine import SparkProcessingEngine
+from spark_etl_pipeline.data_processor_engine.spark_engine import SparkProcessingEngine
+from test_spark.shared import TEST_SHARED_DATA_REFERENCE_DIR
+from test_spark.utils import compare_dataframe
+
+from etl_pipeline.config import pipeline_config
 from pipelines.aia_pipeline import AIAPipeline
-from tests.shared import TEST_SHARED_DATA_REFERENCE_DIR
-from tests.utils import compare_dataframe
 
 REFERENCE_DIR = TEST_SHARED_DATA_REFERENCE_DIR
 cn = pipeline_config.cn
@@ -41,7 +42,7 @@ def clean_up():
 
 
 def compare_created_data_with_reference_data(reference, unique_column=cn.ALERT_INTERNAL_ID):
-    rel_path = os.path.relpath(os.path.dirname(reference), "tests/shared/reference")
+    rel_path = os.path.relpath(os.path.dirname(reference), "test_spark/shared/reference")
     filename = os.path.basename(reference)
     reference_dataframe = spark.read_delta(os.path.join("data", rel_path, filename))
     if not os.path.exists(os.path.join("data", rel_path, filename)):

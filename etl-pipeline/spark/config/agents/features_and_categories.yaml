@@ -1,0 +1,132 @@
+name:
+ feature_type: features
+ producer_type: NameFeatureInputProducer
+ fields:
+   alerted_party_names: ap_all_names_aggregated
+   watchlist_names: wl_all_names_aggregated
+
+dateOfBirth:
+  feature_type: features
+  producer_type: DateFeatureInputProducer
+  fields:
+    alerted_party_dates: ap_all_dobs_aggregated
+    watchlist_dates: wl_all_dobs_aggregated
+
+document:
+  feature_type: features
+  producer_type: DocumentFeatureInputProducer
+  fields:
+    alerted_party_documents: ap_all_documents_aggregated
+    watchlist_documents: wl_all_documents_aggregated
+
+employerName:
+  feature_type: features
+  producer_type: NameFeatureInputProducer
+  fields:
+    alerted_party_names: ap_all_employer_names_aggregated
+    watchlist_names: wl_all_employer_names_aggregated
+
+isApNameTpMarked:
+  feature_type: features
+  producer_type: HistoricalDecisionsFeatureInputProducer
+  fields:
+    alerted_party: ap_name_tp_marked_agent_input
+    discriminator:  mike_ap_name_tp_marked
+
+isApIdTpMarked:
+  feature_type: features
+  producer_type: HistoricalDecisionsFeatureInputProducer
+  fields:
+    alerted_party: ap_id_tp_marked_agent_input
+    discriminator: mike_ap_id_tp_marked
+
+isTokensTpMarked:
+  feature_type: features
+  producer_type: HistoricalDecisionsFeatureInputProducer
+  fields:
+    alerted_party: matched_tokens_tp_marked_agent_input
+    discriminator: mike_tokens_tp_marked
+
+customerType:
+  feature_type: categories
+  producer_type: CategoryProducer
+  fields:
+    type: AP_PARTY_TYPE
+  display_name: "Customer Type"
+  allowed_values: 
+    - "I"
+    - "UNKNOWN"
+    - "C"
+  category_type: ENUMERATED
+
+entitiesTypesMatch:
+  feature_type: categories
+  producer_type: CategoryProducer
+  fields:
+    type: ENTITY_TYPE_MATCH
+  display_name: "Entity Type Match"
+  allowed_values: 
+    - Y
+    - N
+  category_type: ENUMERATED
+
+geoNationality:
+ feature_type: features
+ producer_type: LocationFeatureInputProducer
+ fields:
+   alerted_party_location: ap_all_nationalities_aggregated
+   watchlist_location: wl_all_nationalities_aggregated
+
+
+geoPlaceOfBirth:
+ feature_type: features
+ producer_type: LocationFeatureInputProducer
+ fields:
+   alerted_party_location: ap_all_pobs_aggregated
+   watchlist_location: wl_all_pobs_aggregated
+
+
+geoSanctioned:
+ feature_type: features
+ producer_type: LocationFeatureInputProducer
+ fields:
+   alerted_party_location: ap_all_sanctioned_countries_aggregated
+   watchlist_location: wl_all_sanctioned_countries_aggregated
+
+geoResidencies:
+  feature_type: features
+  producer_type: LocationFeatureInputProducer
+  fields:
+    alerted_party_location: ap_all_residencies_aggregated
+    watchlist_location: wl_all_residencies_aggregated
+
+companyName:
+ feature_type: features
+ producer_type: NameFeatureInputProducer
+ fields:
+   alerted_party_names: ap_all_company_names_aggregated
+   watchlist_names: wl_all_company_names_aggregated
+
+alertType:
+  feature_type: categories
+  producer_type: CategoryProducer
+  fields:
+    type: datasetType
+  display_name: "Dataset / alert type"
+  allowed_values: 
+    - ISG_PARTY
+    - WM_ADDRESS
+    - WM_PARTY
+    - ISG_ACCOUNT
+  category_type: ENUMERATED
+
+hitType:
+  feature_type: features
+  producer_type: HitTypeFeatureInputProducer
+  fields:
+    normal_trigger_categories:
+      - name
+    trigger_categories: all_hit_type_aggregated 
+    triggered_tokens: AP_TRIGGERS
+
+   

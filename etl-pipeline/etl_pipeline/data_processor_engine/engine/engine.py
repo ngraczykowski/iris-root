@@ -6,7 +6,6 @@ from fuzzywuzzy import fuzz
 
 from etl_pipeline.config import pipeline_config
 from etl_pipeline.custom.ms.trigger_discovery.discoverer import TriggeredTokensDiscoverer
-from etl_pipeline.data_processor_engine.abstract_engine import Engine
 from etl_pipeline.pattern_json import (
     ACCT_NUM,
     ADDRESS_ID,
@@ -36,7 +35,7 @@ FUZZINESS = 81
 cn = pipeline_config.cn
 
 
-class ProcessingEngine(Engine):
+class ProcessingEngine:
     REF_KEY_REGEX = r"(\d{4}-\d{2}-\d{2}-\d{2}.\d{2}.\d{2}.\d{6})"
     REF_KEY_REGEX_PYTHON = re.compile(REF_KEY_REGEX)
 
