@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="SimulatorApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-    <option name="ACTIVE_PROFILES" />
+    <option name="ACTIVE_PROFILES" value="swagger,messaging,debug,dev" />
     <module name="simulator.simulator-app.main" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.silenteight.simulator.SimulatorApplication" />
     <extension name="com.egoshard.intellij.k8s-runtime-config-plugin">

@@ -1,0 +1,13 @@
+simulator:
+  db:
+    host: localhost
+    port: 5432
+    schema: public
+    name: iris
+    user: iris
+    password: iris
+  rabbitmq:
+    host: localhost
+    port: 5672
+    user: dev
+    password: dev

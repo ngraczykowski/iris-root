@@ -29,6 +29,8 @@ dependencies {
   runtimeOnly libs.sentry.logback
 
   runtimeOnly libs.hikari.cp
+  runtimeOnly libs.liquibase.core
+  runtimeOnly libs.liquibase.sessionlock
   runtimeOnly libs.postgresql
 
   aspect libs.silenteight.sep.base.aspects
