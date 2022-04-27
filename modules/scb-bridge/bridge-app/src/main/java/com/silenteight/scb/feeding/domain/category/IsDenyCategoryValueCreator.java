@@ -6,9 +6,8 @@ import com.silenteight.universaldatasource.api.library.category.v2.CategoryValue
 import com.silenteight.universaldatasource.api.library.category.v2.CreateCategoryValuesIn;
 
 import java.util.Collections;
-import javax.annotation.Nullable;
 
-import static com.google.common.base.Strings.nullToEmpty;
+import static com.silenteight.scb.feeding.domain.category.DenyCategoryParser.isDenyYesNo;
 
 public class IsDenyCategoryValueCreator implements CategoryValue {
 
@@ -24,14 +23,7 @@ public class IsDenyCategoryValueCreator implements CategoryValue {
     return CategoryValueIn.builder()
         .alert(alert.details().getAlertName())
         .match(match.details().getMatchName())
-        .singleValue(determineIsDeny(alert.details().getUnit()))
+        .singleValue(isDenyYesNo(alert.details().getUnit()))
         .build();
-  }
-
-  private String determineIsDeny(@Nullable String unit) {
-    var value = "NO";
-    if (nullToEmpty(unit).contains("DENY"))
-      value = "YES";
-    return value;
   }
 }

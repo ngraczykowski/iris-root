@@ -34,6 +34,7 @@ public class NationalIdFeatureFactory implements FeatureFactory {
   private List<String> getWlCountries(MatchedParty matchedParty) {
     List<String> wlCountries = new ArrayList<>();
     CollectionUtils.addIgnoreNull(wlCountries, matchedParty.wlDesignation());
+    CollectionUtils.addIgnoreNull(wlCountries, matchedParty.wlCountry());
     return wlCountries;
   }
 }

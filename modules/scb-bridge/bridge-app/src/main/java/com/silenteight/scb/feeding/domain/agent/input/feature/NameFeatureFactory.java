@@ -21,17 +21,16 @@ public class NameFeatureFactory implements FeatureFactory {
 
   @Override
   public Feature create(Alert alert, Match match) {
-    Set<String> apNames =
-        getApNameValues(alert.alertedParty(), match.details().getMatchedApNames());
-    Set<WlName> wlNames = getWlNameValues(match.matchedParty());
+    Set<String> apNames = getApNameValues(alert.alertedParty(), match);
+    Set<WlName> wlNames = getWlNameValues(alert.alertedParty(), match.matchedParty());
 
     return NameFeatureInputOut.builder()
-                .feature(getFeatureName())
-                .alertedPartyNames(createAlertedPartyNames(apNames))
-                .watchlistNames(createWatchlistNames(wlNames))
-                .alertedPartyType(determineApType(match.matchedParty().apType()))
-                .matchingTexts(match.details().getMatchingTexts().stream().toList())
-                .build();
+        .feature(getFeatureName())
+        .alertedPartyNames(createAlertedPartyNames(apNames))
+        .watchlistNames(createWatchlistNames(wlNames))
+        .alertedPartyType(determineApType(match.matchedParty().apType()))
+        .matchingTexts(match.details().getMatchingTexts().stream().toList())
+        .build();
   }
 
   private static List<AlertedPartyNameOut> createAlertedPartyNames(Set<String> apNames) {
@@ -68,10 +67,9 @@ public class NameFeatureFactory implements FeatureFactory {
     }
   }
 
-  private static Set<String> getApNameValues(
-      AlertedParty alertedParty, Collection<String> matchedNames) {
+  private static Set<String> getApNameValues(AlertedParty alertedParty, Match match) {
+    Collection<String> matchedNames = match.details().getMatchedApNames();
     List<String> apValues = new ArrayList<>();
-
     if (!matchedNames.isEmpty()) {
       apValues.addAll(matchedNames);
     } else {
@@ -79,7 +77,10 @@ public class NameFeatureFactory implements FeatureFactory {
       apValues.removeAll(alertedParty.apNameSynonyms());
       apValues.addAll(alertedParty.apNameSynonyms());
     }
-
+    var originalCnNames = alertedParty.apOriginalCnNames();
+    if (!originalCnNames.isEmpty() && !match.matchedParty().wlOriginalCnNames().isEmpty()) {
+      apValues.addAll(originalCnNames);
+    }
     return apValues
         .stream()
         .filter(StringUtils::isNotEmpty)
@@ -87,12 +88,18 @@ public class NameFeatureFactory implements FeatureFactory {
         .collect(Collectors.toSet());
   }
 
-  private static Set<WlName> getWlNameValues(MatchedParty matchedParty) {
-    return matchedParty
+  private static Set<WlName> getWlNameValues(AlertedParty alertedParty, MatchedParty matchedParty) {
+    var wlNames = matchedParty
         .wlNames()
         .stream()
         .map(name -> new WlName(name.name(), WlNameType.valueOf(name.type())))
         .collect(Collectors.toSet());
+    if (!alertedParty.apOriginalCnNames().isEmpty()) {
+      matchedParty.wlOriginalCnNames().stream()
+          .map(name -> new WlName(name.name(), WlNameType.valueOf(name.type())))
+          .forEach(wlNames::add);
+    }
+    return wlNames;
   }
 
   protected String getFeatureName() {

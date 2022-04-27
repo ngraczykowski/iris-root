@@ -7,24 +7,27 @@ import com.silenteight.scb.ingest.adapter.incomming.common.model.match.MatchedPa
 import com.silenteight.universaldatasource.api.library.Feature;
 import com.silenteight.universaldatasource.api.library.date.v1.DateFeatureInputOut;
 import com.silenteight.universaldatasource.api.library.date.v1.EntityTypeOut;
-import com.silenteight.universaldatasource.api.library.date.v1.SeverityModeOut;
 
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.silenteight.scb.feeding.domain.category.DenyCategoryParser.isDeny;
+import static com.silenteight.universaldatasource.api.library.date.v1.SeverityModeOut.NORMAL;
+import static com.silenteight.universaldatasource.api.library.date.v1.SeverityModeOut.STRICT;
+
 public class DateFeatureFactory implements FeatureFactory {
 
   @Override
   public Feature create(Alert alert, Match match) {
     return DateFeatureInputOut.builder()
-                .feature("features/date")
-                .alertedPartyDates(getAlertedPartyDates(alert.alertedParty()))
-                .watchlistDates(getWatchlistDates(match.matchedParty()))
-                .alertedPartyType(determineApType(match.matchedParty().apType()))
-                .mode(SeverityModeOut.NORMAL)
-                .build();
+        .feature("features/date")
+        .alertedPartyDates(getAlertedPartyDates(alert.alertedParty()))
+        .watchlistDates(getWatchlistDates(match.matchedParty()))
+        .alertedPartyType(determineApType(match.matchedParty().apType()))
+        .mode(isDeny(alert.details().getUnit()) ? STRICT : NORMAL)
+        .build();
   }
 
   private List<String> getAlertedPartyDates(AlertedParty alertedParty) {
