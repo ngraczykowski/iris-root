@@ -1,14 +1,14 @@
 package com.silenteight.sens.webapp.sso.create.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sens.webapp.sso.list.dto.AttributeToRoleDto;
 
 import java.util.List;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import static com.silenteight.sens.webapp.sso.domain.DomainConstants.SSO_MAPPING_FIELD_MAX_LENGTH;
@@ -16,17 +16,17 @@ import static com.silenteight.sens.webapp.sso.domain.DomainConstants.SSO_MAPPING
 
 @Data
 @NoArgsConstructor
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class CreateSsoMappingDto {
 
-  @NonNull
+  @NotNull
   @Size(min = SSO_MAPPING_FIELD_MIN_LENGTH, max = SSO_MAPPING_FIELD_MAX_LENGTH)
   private String name;
 
-  @NonNull
+  @NotNull
   @Valid
   private List<AttributeToRoleDto> attributes;
 
-  @NonNull
+  @NotNull
   private List<String> roles;
 }

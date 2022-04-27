@@ -29,7 +29,6 @@ public class CreateUserDto {
   private String password;
 
   @NonNull
-  @Size(min = USER_FIELD_MIN_LENGTH, max = USER_FIELD_MAX_LENGTH)
   private String displayName;
 
   @Builder.Default
