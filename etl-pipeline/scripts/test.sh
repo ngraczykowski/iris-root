@@ -1,4 +1,15 @@
 #!/usr/bin/env bash
 set -eu -o pipefail
 
-docker-compose -f docker/test/docker-compose-test.yaml run test_jupyter_playground scripts/test_on_docker.sh
+scriptdir="$(cd -- "$(dirname -- "${0}")" && pwd -P)"
+basedir="$(cd -- "$scriptdir"/.. && pwd -P)"
+cd "$basedir"
+
+if [[ -d venv ]]; then
+  source venv/bin/activate
+fi
+
+
+artifact=$(basename -- "$(ls ./dist/etl_pipeline-*.whl)")
+
+python3 -m tox --installpkg "./dist/$artifact" "$@"
