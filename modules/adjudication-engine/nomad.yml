@@ -1,6 +1,9 @@
-master:
-  - dev
-  - lima
-  - test
-release-*:
-  - mike
+branches:
+  master:
+    - bravo
+    - hotel
+    - sierra
+  release-*:
+    - mike
+    - siempre
+    - dev
