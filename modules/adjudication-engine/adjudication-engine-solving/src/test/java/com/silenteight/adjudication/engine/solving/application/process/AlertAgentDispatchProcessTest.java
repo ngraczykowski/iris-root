@@ -1,6 +1,7 @@
 package com.silenteight.adjudication.engine.solving.application.process;
 
 import com.silenteight.adjudication.engine.solving.application.publisher.AgentsMatchPublisher;
+import com.silenteight.adjudication.engine.solving.application.publisher.ReadyMatchFeatureVectorPublisher;
 import com.silenteight.adjudication.engine.solving.data.MatchFeatureDao;
 import com.silenteight.adjudication.engine.solving.data.MatchFeaturesFacade;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
@@ -27,6 +28,8 @@ class AlertAgentDispatchProcessTest {
   private RabbitTemplate rabbitTemplate;
   @Mock
   private MatchFeaturesFacade matchFeaturesFacade;
+  @Mock
+  private ReadyMatchFeatureVectorPublisher governanceProvider;
   @Autowired
   private AlertAgentDispatchProcess alertAgentDispatchProcess;
   private AgentExchangeAlertSolvingMapper agentExchnageRequestMapper =
@@ -39,7 +42,7 @@ class AlertAgentDispatchProcessTest {
     alertAgentDispatchProcess =
         new AlertAgentDispatchProcess(
             agentExchnageRequestMapper, matchesPublisher, matchFeaturesFacade,
-            alertSolvingRepository);
+            alertSolvingRepository, governanceProvider);
   }
 
   @Test

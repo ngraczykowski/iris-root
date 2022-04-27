@@ -19,14 +19,14 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 @Slf4j
-public class GovernanceMatchPublisher {
+public class ReadyMatchFeatureVectorPublisher {
 
   private final IQueue<MatchSolutionRequest> sendQueue;
   private final GovernanceFacade governanceFacade;
   private final GovernanceMatchResponseProcess governanceMatchResponseProcess;
   private final ProtoMessageToObjectNodeConverter converter;
 
-  public GovernanceMatchPublisher(
+  public ReadyMatchFeatureVectorPublisher(
       final GovernanceFacade governanceFacade,
       final HazelcastInstance hazelcastInstance,
       final ExecutorService executorService,

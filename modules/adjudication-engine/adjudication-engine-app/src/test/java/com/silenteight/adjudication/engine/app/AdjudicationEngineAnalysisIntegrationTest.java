@@ -230,7 +230,7 @@ class AdjudicationEngineAnalysisIntegrationTest {
 
   private void assertSolvedAlerts(long analysisId, int solvedCount) {
     await()
-        .atMost(Duration.ofSeconds(10))
+        .atMost(Duration.ofSeconds(15))
         .until(() -> solvedMatchesCount(jdbcTemplate, analysisId) >= solvedCount);
 
     assertThat(solvedMatchesCount(jdbcTemplate, analysisId))
@@ -248,8 +248,9 @@ class AdjudicationEngineAnalysisIntegrationTest {
 
   private void assertGeneratedMatchRecommendation(long analysisId, int recommendationCount) {
     await()
-        .atMost(Duration.ofSeconds(10))
-        .until(() -> generatedMatchRecommendationCount(jdbcTemplate, analysisId) > 0);
+        .atMost(Duration.ofSeconds(15))
+        .until(() -> generatedMatchRecommendationCount(jdbcTemplate, analysisId)
+            >= recommendationCount);
 
     assertThat(generatedMatchRecommendationCount(jdbcTemplate, analysisId))
         .isEqualTo(recommendationCount);
@@ -258,7 +259,7 @@ class AdjudicationEngineAnalysisIntegrationTest {
   private void assertGeneratedRecommendation(String analysisName) {
     var analysisId = ResourceName.create(analysisName).getLong("analysis");
     await()
-        .atMost(Duration.ofSeconds(10))
+        .atMost(Duration.ofSeconds(15))
         .until(() -> generatedRecommendationCount(
             jdbcTemplate,
             analysisId) > 0);

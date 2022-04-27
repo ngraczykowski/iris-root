@@ -15,13 +15,13 @@ import java.util.concurrent.Executors;
 class PublisherConfiguration {
 
   @Bean
-  GovernanceMatchPublisher governancePublisher(
+  ReadyMatchFeatureVectorPublisher governancePublisher(
       GovernanceFacade governanceFacade,
       HazelcastInstance hazelcastInstance,
       GovernanceMatchResponseProcess governanceMatchResponseProcess,
       ProtoMessageToObjectNodeConverter converter) {
     final ExecutorService scheduledExecutorService = Executors.newFixedThreadPool(15);
-    return new GovernanceMatchPublisher(
+    return new ReadyMatchFeatureVectorPublisher(
         governanceFacade, hazelcastInstance, scheduledExecutorService,
         governanceMatchResponseProcess, converter);
   }

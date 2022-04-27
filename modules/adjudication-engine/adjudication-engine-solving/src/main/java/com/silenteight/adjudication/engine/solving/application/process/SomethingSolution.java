@@ -2,7 +2,7 @@ package com.silenteight.adjudication.engine.solving.application.process;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.adjudication.engine.solving.application.publisher.GovernanceMatchPublisher;
+import com.silenteight.adjudication.engine.solving.application.publisher.ReadyMatchFeatureVectorPublisher;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolving;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
 
@@ -11,7 +11,7 @@ import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository
 @RequiredArgsConstructor
 public class SomethingSolution {
 
-  private final GovernanceMatchPublisher governanceProvider;
+  private final ReadyMatchFeatureVectorPublisher governanceProvider;
   private final AlertSolvingRepository alertSolvingRepository;
 
   //TODO Governence resolved alert

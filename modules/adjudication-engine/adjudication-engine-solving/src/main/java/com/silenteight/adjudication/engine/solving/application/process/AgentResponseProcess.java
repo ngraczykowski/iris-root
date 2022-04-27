@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectNodeConverter;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
-import com.silenteight.adjudication.engine.solving.application.publisher.GovernanceMatchPublisher;
+import com.silenteight.adjudication.engine.solving.application.publisher.ReadyMatchFeatureVectorPublisher;
 import com.silenteight.adjudication.engine.solving.application.publisher.dto.MatchSolutionRequest;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolving;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class AgentResponseProcess {
 
-  private final GovernanceMatchPublisher governanceProvider;
+  private final ReadyMatchFeatureVectorPublisher governanceProvider;
   private final AlertSolvingRepository alertSolvingRepository;
 
   private final ProtoMessageToObjectNodeConverter converter;
