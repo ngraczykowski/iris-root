@@ -1,9 +1,5 @@
 branches:
   master:
     - dev
-    - lima
-    - test
   release-*:
     - dev
-    - lima
-    - test
