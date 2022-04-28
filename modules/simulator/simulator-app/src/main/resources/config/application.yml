@@ -178,6 +178,12 @@ spring:
     multipart.max-file-size: 10MB
     multipart.max-request-size: 10MB
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://auth.silenteight.com/auth/realms/sens-webapp
+
 #---------------------------------------------------------------------------------------------------
 # gRPC CONFIGURATION
 #---------------------------------------------------------------------------------------------------
@@ -295,6 +301,8 @@ sep.auth:
       - "DASHBOARD"
     QA_ISSUE_MANAGER:
       - "DASHBOARD"
+  permit-all-urls:
+      - "/management/**"
 
 sentry:
   environment: unknown

@@ -1,22 +1,19 @@
 package com.silenteight.simulator.processing.alert.index.grpc;
 
-import com.silenteight.adjudication.api.v2.RecommendationServiceGrpc;
+import com.silenteight.adjudication.api.v2.RecommendationServiceGrpc.RecommendationServiceBlockingStub;
 
-import io.grpc.Channel;
-import org.springframework.beans.factory.annotation.Qualifier;
+import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 class GrpcAlertIndexConfiguration {
 
-  @Bean
-  GrpcRecommendationService grpcRecommendationService(
-      @Qualifier("adjudication-engine") Channel channel) {
+  @GrpcClient("adjudication-engine")
+  private RecommendationServiceBlockingStub recommendationServiceBlockingStub;
 
-    return new GrpcRecommendationService(
-        RecommendationServiceGrpc
-            .newBlockingStub(channel)
-            .withWaitForReady());
+  @Bean
+  GrpcRecommendationService grpcRecommendationService() {
+    return new GrpcRecommendationService(recommendationServiceBlockingStub.withWaitForReady());
   }
 }

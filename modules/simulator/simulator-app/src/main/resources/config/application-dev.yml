@@ -11,3 +11,15 @@ simulator:
     port: 5672
     user: dev
     password: dev
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://localhost:8080/auth/realms/master
+
+sep.auth:
+  permit-all-urls:
+    - "/management/**"
+    - "/openapi/**"
