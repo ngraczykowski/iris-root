@@ -175,16 +175,27 @@ warehouse.reports.v2:
       type: production
       description: AI Reasoning (Alert Level)
       selectSqlQuery: >
-        SELECT DISTINCT (wm.payload ->> 'policy') AS "Policy ID",
-               (wm.payload ->> 'policy_title') AS "Policy Name",
-               (wa.payload ->> 'recommended_action') AS "S8 Alert Resolution",
-               recommendation_date AS "S8 Alert Resolution Timestamp (UTC)",
+        SELECT wm.policyId                               AS "Policy ID",
+               wm.policyName                             AS "Policy Name",
+               wm.stepIds                                AS "Step IDs",
+               wm.stepNames                              AS "Step Names",
+               (wa.payload ->> 'recommended_action')     AS "S8 Alert Resolution",
+               recommendation_date                       AS "S8 Alert Resolution Timestamp (UTC)",
                (wa.payload ->> 'recommendation_comment') AS "S8 Alert Comment",
-               (wa.payload ->> 'firco_system_id') AS "Client Alert ID",
-               (wa.payload ->> 'status') AS "Alert Status",
+               (wa.payload ->> 'firco_system_id')        AS "Client Alert ID",
+               (wa.payload ->> 'status')                 AS "Alert Status",
                (wa.payload ->> 'firco_analyst_decision') AS "Analyst Decision",
-               wa.name AS "S8 Alert ID"
-        from warehouse_alert wa JOIN warehouse_match wm ON wa.id = wm.alert_id 
+               wa.name                                   AS "S8 Alert ID"
+        FROM warehouse_alert wa
+                 FULL JOIN (
+            SELECT DISTINCT alert_id,
+                            STRING_AGG(payload ->> 'step', ', ') AS stepIds,
+                            STRING_AGG(payload ->> 'step_title', ', ') AS stepNames,
+                            (payload ->> 'policy')                     AS policyId,
+                            (payload ->> 'policy_title')               AS policyName
+            FROM warehouse_match
+            GROUP BY alert_id, (payload ->> 'policy'), (payload ->> 'policy_title')
+        ) AS wm ON alert_id = wa.id
         WHERE wa.recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
     - name: AI_REASONING_MATCH_LEVEL
       type: production
