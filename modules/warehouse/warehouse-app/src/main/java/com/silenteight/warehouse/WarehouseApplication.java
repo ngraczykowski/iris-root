@@ -10,17 +10,13 @@ import com.silenteight.sep.auth.token.TokenModule;
 import com.silenteight.warehouse.alert.rest.RestAlertModule;
 import com.silenteight.warehouse.backup.BackupModule;
 import com.silenteight.warehouse.common.domain.DomainModule;
-import com.silenteight.warehouse.common.elastic.ElasticsearchRestClientModule;
 import com.silenteight.warehouse.common.integration.AmqpCommonModule;
-import com.silenteight.warehouse.common.opendistro.OpendistroModule;
 import com.silenteight.warehouse.common.time.TimeModule;
 import com.silenteight.warehouse.common.web.WebModule;
 import com.silenteight.warehouse.indexer.alert.AlertModule;
 import com.silenteight.warehouse.indexer.match.MatchModule;
 import com.silenteight.warehouse.indexer.query.QueryAlertModule;
 import com.silenteight.warehouse.management.ManagementModule;
-import com.silenteight.warehouse.migration.backupmessage.BackupMigrationModule;
-import com.silenteight.warehouse.migration.country.CountryMigrationModule;
 import com.silenteight.warehouse.production.persistence.ProductionPersistenceModule;
 import com.silenteight.warehouse.qa.handler.QaMessageHandlerModule;
 import com.silenteight.warehouse.qa.processing.QaProcessingModule;
@@ -61,9 +57,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     // Domain modules
     AlertModule.class,
     AvailableReportsModule.class,
-    BackupMigrationModule.class,
     BackupModule.class,
-    CountryMigrationModule.class,
     DomainModule.class,
     ReportCreateModule.class,
     ReportDownloadModule.class,
@@ -84,8 +78,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     AmqpCommonModule.class,
     AuthenticationModule.class,
     AuthorizationModule.class,
-    ElasticsearchRestClientModule.class,
-    OpendistroModule.class,
     QaMessageHandlerModule.class,
     QaProcessingModule.class,
     ReportFileNameModule.class,
