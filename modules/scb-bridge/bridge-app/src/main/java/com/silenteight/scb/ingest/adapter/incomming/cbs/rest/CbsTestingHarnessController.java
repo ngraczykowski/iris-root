@@ -35,14 +35,24 @@ public class CbsTestingHarnessController {
   private final Scheduler scheduler;
   private final TestingHarnessService testHarnessService;
 
+  @PostMapping(path = "/cleanup")
+  public ResponseEntity<?> cleanup() {
+
+    log.info("Deleting all Raw Alerts");
+    rawAlertRepository.deleteAll();
+
+    log.info("Deleting all Recommendations");
+    scbRecommendationRepository.deleteAll();
+
+    return ResponseEntity.ok().build();
+  }
+
   @PostMapping(path = "/invokeQueueingJob", consumes = APPLICATION_JSON_VALUE)
   public ResponseEntity<?> invokeQueueingJob(
       @Valid @RequestBody CbsInvokeQueueingJobRequest request) throws
       SchedulerException {
 
     log.info("Request: {}", request);
-
-    cleanup();
     scheduleJob(AlertIdReaderContext.builder()
         .alertIdContext(request.getAlertIdContext().toAlertIdContext())
         .chunkSize(request.getChunkSize())
@@ -56,8 +66,6 @@ public class CbsTestingHarnessController {
   public ResponseEntity<?> queueAlert(@Valid @RequestBody CbsQueueAlertRequest request) {
 
     log.info("Request: {}", request);
-
-    cleanup();
     testHarnessService.queueAlert(
         request.getAlertIdContext().toAlertIdContext(),
         request.getSystemId());
@@ -73,14 +81,6 @@ public class CbsTestingHarnessController {
 
     log.info("Scheduling test job for execution by: {}", alertIdReaderContext);
     scheduler.scheduleJob(jobDetail, runOnceTrigger());
-  }
-
-  private void cleanup() {
-    log.info("Deleting all Raw Alerts");
-    rawAlertRepository.deleteAll();
-
-    log.info("Deleting all Recommendations");
-    scbRecommendationRepository.deleteAll();
   }
 
   private static Trigger runOnceTrigger() {

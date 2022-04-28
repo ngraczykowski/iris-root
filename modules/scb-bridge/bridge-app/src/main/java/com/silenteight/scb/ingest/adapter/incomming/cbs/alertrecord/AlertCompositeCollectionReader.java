@@ -35,6 +35,9 @@ class AlertCompositeCollectionReader {
     var options = getMappingOptions(context);
     var invalidAlerts = new ArrayList<>(alertCollection.getInvalidAlerts());
 
+    log.info("Parsing {} alerts", alertIds.size());
+    var stopWatch = StopWatch.createStarted();
+
     var alerts = alertCollection.getAlerts()
         .stream()
         .map(alertRecordComposite -> tryToParseAlerts(
@@ -42,6 +45,10 @@ class AlertCompositeCollectionReader {
         .filter(Optional::isPresent)
         .map(Optional::get)
         .toList();
+
+    log.info("Parsing done in: {}. Valid alerts: {}, Invalid alerts: {}", stopWatch,
+        alerts.size(),
+        invalidAlerts.size());
 
     return new AlertCompositeCollection(alerts, invalidAlerts);
   }
