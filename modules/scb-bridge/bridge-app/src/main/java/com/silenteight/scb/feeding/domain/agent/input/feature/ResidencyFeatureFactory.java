@@ -14,12 +14,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class CountryFeatureFactory implements FeatureFactory {
+public class ResidencyFeatureFactory implements FeatureFactory {
 
   @Override
   public Feature create(Alert alert, Match match) {
     return CountryFeatureInputOut.builder()
-        .feature("features/country")
+        .feature("features/residency")
         .alertedPartyCountries(getApCountries(alert.alertedParty()))
         .watchlistCountries(getWlCountries(match.matchedParty()))
         .build();

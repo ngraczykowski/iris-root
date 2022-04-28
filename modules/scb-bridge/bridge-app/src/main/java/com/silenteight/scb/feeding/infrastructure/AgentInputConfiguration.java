@@ -55,8 +55,8 @@ public class AgentInputConfiguration {
   }
 
   @Bean
-  CountryFeatureFactory countryAgentInputCreator() {
-    return new CountryFeatureFactory();
+  ResidencyFeatureFactory residencyAgentInputCreator() {
+    return new ResidencyFeatureFactory();
   }
 
   @Bean
