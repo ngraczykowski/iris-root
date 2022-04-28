@@ -51,4 +51,8 @@ public class Match implements Serializable {
   public String getMatchName() {
     return ResourceName.create("").add("matches", matchId).getPath();
   }
+
+  public void updateCommentInput() {
+    // TODO: implement it!
+  }
 }

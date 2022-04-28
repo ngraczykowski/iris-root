@@ -34,6 +34,14 @@ public class ResourceName {
     return tokenized;
   }
 
+  public long analysisId() {
+    return this.getLong("analysis");
+  }
+
+  public long alertId() {
+    return this.getLong("alerts");
+  }
+
   public String getPath() {
     return Joiner.on(DELIMITER).withKeyValueSeparator(DELIMITER).join(pathTokens);
   }

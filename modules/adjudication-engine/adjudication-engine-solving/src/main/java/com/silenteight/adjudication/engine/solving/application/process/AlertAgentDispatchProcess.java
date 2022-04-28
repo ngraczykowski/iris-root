@@ -26,11 +26,12 @@ import javax.annotation.Nonnull;
 @Slf4j
 public class AlertAgentDispatchProcess {
 
-  private final AgentExchangeAlertSolvingMapper agentExchnageRequestMapper;
+  private final AgentExchangeAlertSolvingMapper agentExchangeRequestMapper;
   private final AgentsMatchPublisher matchesPublisher;
   private final MatchFeaturesFacade matchFeaturesFacade;
   private final AlertSolvingRepository alertSolvingRepository;
   private final ReadyMatchFeatureVectorPublisher readyMatchFeatureVectorPublisher;
+  private final CommentInputResolveProcess commentInputResolveProcess;
 
   @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   public void handle(final AnalysisAlertsAdded message) {
@@ -54,11 +55,14 @@ public class AlertAgentDispatchProcess {
         .collect(Collectors.toList());
 
     pendingAlerts.forEach(alertSolving -> {
-      this.agentExchnageRequestMapper.from(alertSolving)
+      // it sucks because is still blocking
+      this.agentExchangeRequestMapper.from(alertSolving)
           .forEach(matchesPublisher::publish);
+      this.commentInputResolveProcess.resolve(alertSolving.getAlertName());
     });
 
     solveReadyMatches(pendingAlerts);
+
 
     if (log.isDebugEnabled()) {
       log.debug("AnalysisAlertsAdded mapped to AlertsSolving done");

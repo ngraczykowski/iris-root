@@ -27,12 +27,14 @@ class AlertSolvingAlertContextMapper {
 
   private final ProtoMessageToObjectNodeConverter converter;
 
-  public AlertContext mapSolvingAlert(AlertSolving alertSolving, String recommendedAction) {
+  public AlertContext mapSolvingAlert(AlertSolving alertSolving, String recommendedAction,
+      Map<String, Object> commentInputs) {
     return AlertContext
         .builder()
         .alertId(alertSolving.getAlertName())
         .recommendedAction(recommendedAction)
         .matches(mapMatches(alertSolving.getMatches()))
+        .commentInput(commentInputs)
         .build();
   }
 

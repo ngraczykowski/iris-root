@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
+import com.silenteight.adjudication.engine.solving.domain.command.UpdateCommentInput;
 import com.silenteight.adjudication.engine.solving.domain.event.FeatureMatchesUpdated;
 import com.silenteight.adjudication.engine.solving.domain.event.MatchFeatureUpdated;
 import com.silenteight.adjudication.engine.solving.domain.event.MatchesUpdated;
@@ -208,5 +209,12 @@ public class AlertSolving implements Serializable {
   public long[] getMatchIds() {
     var matchIds = matches.keySet().toArray(Long[]::new);
     return Arrays.stream(matchIds).mapToLong(Long::longValue).toArray();
+  }
+
+  public AlertSolving updateCommentInput(UpdateCommentInput command) {
+
+
+
+    return this;
   }
 }

@@ -10,7 +10,6 @@ import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import com.hazelcast.map.IMap;
 
-import java.util.Map;
 import java.util.function.Supplier;
 
 @Slf4j
@@ -25,22 +24,6 @@ class InMemoryMatchFeaturesRepository implements MatchFeaturesRepository {
   public MatchFeature get(MatchFeatureKey key) {
     log.debug("Getting MatchFeature alertId:{}", key.getAlertId());
     return this.executeInLock(key, () -> map.getOrDefault(key, MatchFeature.empty()));
-  }
-
-  @Override
-  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
-  public void save(MatchFeatureKey key, MatchFeature matchFeature) {
-    log.debug("Adding AlertSolvingModel to key:{}", key);
-
-    this.executeInLock(key, () -> {
-      this.map.set(key, matchFeature);
-      return null;
-    });
-  }
-
-  @Override
-  public void saveAll(Map<MatchFeatureKey, MatchFeature> alertMatchesFeatures) {
-    map.putAll(alertMatchesFeatures);
   }
 
   private <T> T executeInLock(final MatchFeatureKey key, final Supplier<T> action) {

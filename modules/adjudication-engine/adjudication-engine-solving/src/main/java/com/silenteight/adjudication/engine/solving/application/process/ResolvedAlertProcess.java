@@ -12,6 +12,7 @@ import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectN
 import com.silenteight.adjudication.engine.solving.application.publisher.RecommendationPublisher;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolving;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
+import com.silenteight.adjudication.engine.solving.domain.comment.CommentInputClientRepository;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 import com.silenteight.solving.api.v1.BatchSolveAlertsResponse;
 
@@ -19,19 +20,20 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import javax.annotation.Nonnull;
 
 @RequiredArgsConstructor
 public class ResolvedAlertProcess {
 
+  private static final String COMMENT_TEMPLATE = "alert";
   private final RecommendationPublisher recommendationPublisher;
   private final AlertSolvingRepository alertSolvingRepository;
   private final AlertSolvingAlertContextMapper alertSolvingAlertContextMapper;
   private final CommentFacade commentFacade;
   private final RecommendationFacade recommendationFacade;
   private final ProtoMessageToObjectNodeConverter converter;
-  private static final String COMMENT_TEMPLATE = "alert";
-
+  private final CommentInputClientRepository commentInputClientRepository;
 
   @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   public void generateRecommendation(long alertId, BatchSolveAlertsResponse solvedAlert) {
@@ -48,9 +50,12 @@ public class ResolvedAlertProcess {
     }
 
     var recommendedAction = alertSolution.get().getAlertSolution();
+    final Map<String, Object> commentsInputs = this.fetchCommentInputs(alertId);
     var alertContext = alertSolvingAlertContextMapper.mapSolvingAlert(
         alertSolvingModel,
-        recommendedAction);
+        recommendedAction,
+        commentsInputs
+    );
     var comment = commentFacade.generateComment(COMMENT_TEMPLATE, alertContext);
 
     var saveRequest =
@@ -67,6 +72,11 @@ public class ResolvedAlertProcess {
     var recommendations = recommendationFacade.createRecommendations(saveRequest);
 
     sendRecommendationNotification(alertSolvingModel, recommendations);
+  }
+
+  private Map<String, Object> fetchCommentInputs(long alertId) {
+    return this.commentInputClientRepository.get(alertId);
+
   }
 
   private void sendRecommendationNotification(
@@ -91,7 +101,8 @@ public class ResolvedAlertProcess {
   private ObjectNode[] createMatchContexts(List<MatchContext> matchContexts) {
     return matchContexts
         .stream()
-        .map(match -> converter.convert(match).get())
+        .map(converter::convert)
+        .map(Objects::nonNull)
         .toArray(ObjectNode[]::new);
   }
 }

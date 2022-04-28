@@ -36,13 +36,16 @@ class AlertAgentDispatchProcessTest {
       new AgentExchangeAlertSolvingMapper();
   private AlertSolvingRepository alertSolvingRepository = new InMemoryAlertSolvingRepository();
 
+  @Mock
+  private CommentInputResolveProcess commentInputResolveProcess;
+
   @BeforeEach
   void setUp() {
     var matchesPublisher = new AgentsMatchPublisher(rabbitTemplate);
     alertAgentDispatchProcess =
         new AlertAgentDispatchProcess(
             agentExchnageRequestMapper, matchesPublisher, matchFeaturesFacade,
-            alertSolvingRepository, governanceProvider);
+            alertSolvingRepository, governanceProvider, commentInputResolveProcess);
   }
 
   @Test

@@ -13,12 +13,18 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AgentsMatchPublisher {
 
-  static final String AGENT_REQUEST_EXCHANGE_NAME = "agent.request";
   public static final String AGENT_CONFIG_HEADER = "agentConfig";
+  static final String AGENT_REQUEST_EXCHANGE_NAME = "agent.request";
   private final RabbitTemplate rabbitTemplate;
 
-  public void publish(AgentExchangeRequestMessage message) {
+  private static String makeRoutingKey(String routingKey) {
+    return routingKey.replace('.', '_').replace('/', '.');
+  }
+
+  public void publish(
+      AgentExchangeRequestMessage message) {
     // TODO map and send to agents - remember about routing key and priority.
+    // TODO make windowing
     log.info("Sending agent requests for {}", message.getRequestId());
     var routing = makeRoutingKey(message.getAgentConfig());
 
@@ -38,9 +44,5 @@ public class AgentsMatchPublisher {
           "Sent agent requests for {} matches to following agent: {}", message.getMatchesCount(),
           message.getAgentConfig());
     }
-  }
-
-  private static String makeRoutingKey(String routingKey) {
-    return routingKey.replace('.', '_').replace('/', '.');
   }
 }

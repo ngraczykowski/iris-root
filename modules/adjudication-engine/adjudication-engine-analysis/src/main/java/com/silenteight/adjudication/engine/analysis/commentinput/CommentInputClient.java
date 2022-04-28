@@ -4,7 +4,7 @@ import com.silenteight.adjudication.engine.comments.commentinput.CommentInputRes
 
 import java.util.List;
 
-interface CommentInputClient {
+public interface CommentInputClient {
 
   List<CommentInputResponse> getCommentInputsResponse(List<String> alerts);
 }

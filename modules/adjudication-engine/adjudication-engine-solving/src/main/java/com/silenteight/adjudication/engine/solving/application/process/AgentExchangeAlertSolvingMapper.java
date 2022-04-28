@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Slf4j
 class AgentExchangeAlertSolvingMapper {
 
-  private IdGenerator idGenerator = new AlternativeJdkIdGenerator();
+  private final IdGenerator idGenerator = new AlternativeJdkIdGenerator();
 
   public List<AgentExchangeRequestMessage> from(AlertSolving alertSolving) {
     var agentFeatures = alertSolving.getAgentFeatures();
