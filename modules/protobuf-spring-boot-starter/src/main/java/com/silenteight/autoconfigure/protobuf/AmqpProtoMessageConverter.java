@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Builder
-class AmqpProtoMessageConverter extends AbstractMessageConverter {
+public class AmqpProtoMessageConverter extends AbstractMessageConverter {
 
   private static final String CONTENT_TYPE = "application/x-protobuf";
 
