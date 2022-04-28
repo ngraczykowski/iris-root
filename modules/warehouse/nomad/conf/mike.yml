@@ -402,7 +402,8 @@ warehouse.reports.v2:
                    payload ->> 'analystDecision'  analyst_decision,
                    payload ->> 'batchWatchList'   list_type,
                    payload ->> 'datasetId'        batch_id,
-                   payload ->> 'datasetName'      batch_type
+                   payload ->> 'datasetName'      batch_type,
+                   COUNT(*)                       alert_count
             FROM warehouse_alert
             WHERE recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
             GROUP BY payload ->> 's8Recommendation',
@@ -415,52 +416,60 @@ warehouse.reports.v2:
                  SELECT main.list_type                                                    g_list_type,
                         main.batch_id                                                     g_batch_id,
                         main.batch_type                                                   g_batch_type,
-                        COUNT(*)                                                          g_total,
-                        COUNT(*)
+                        SUM(main.alert_count)                                             g_total,
+                        SUM(main.alert_count)
                         FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE') g_total_true_positive,
-                        COUNT(*)
-                        FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE')          g_total_false_positive,
-                        COUNT(*) FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE'
-                            AND analyst_decision =
-                                'analyst_decision_true_positive')                         g_total_ptp_and_a_passed,
-                        COUNT(*) FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE'
-                            AND analyst_decision IN ('analyst_decision_true_positive',
-                                                     'analyst_decision_false_positive') ) g_total_ptp_and_a,
-                        COUNT(*) FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE'
-                            AND analyst_decision =
-                                'analyst_decision_false_positive')                        g_total_fp_and_a_passed,
-                        COUNT(*) FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE'
-                            AND analyst_decision IN ('analyst_decision_true_positive',
-                                                     'analyst_decision_false_positive'))  g_total_fp_and_a
+                        COALESCE(SUM(main.alert_count)
+                                 FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE'),
+                                 0)                                                       g_total_false_positive,
+                        COALESCE(SUM(main.alert_count)
+                                 FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE'
+                                     AND analyst_decision =
+                                         'analyst_decision_true_positive'),
+                                 0)                                                       g_total_ptp_and_a_passed,
+                        COALESCE(SUM(main.alert_count)
+                                 FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE'
+                                     AND analyst_decision IN ('analyst_decision_true_positive',
+                                                              'analyst_decision_false_positive') ),
+                                 0)                                                       g_total_ptp_and_a,
+                        COALESCE(SUM(main.alert_count)
+                                 FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE'
+                                     AND analyst_decision =
+                                         'analyst_decision_false_positive'),
+                                 0)                                                       g_total_fp_and_a_passed,
+                        COALESCE(SUM(main.alert_count)
+                                 FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE'
+                                     AND analyst_decision IN ('analyst_decision_true_positive',
+                                                              'analyst_decision_false_positive')),
+                                 0)                                                       g_total_fp_and_a
                  FROM main
                  GROUP BY 1, 2, 3
              )
 
-        SELECT g_list_type                                                                             AS "Risk Type",
-               g_batch_id                                                                              AS "Batch Id",
-               g_batch_type                                                                            AS "Batch Type",
-               (g_total_true_positive + g_total_false_positive)                                        AS "# of S8 Solved as FP or PTP",
-               g_total                                                                                 AS "# of S8 Total Alerts Processed",
+        SELECT g_list_type                                      AS "Risk Type",
+               g_batch_id                                       AS "Batch Id",
+               g_batch_type                                     AS "Batch Type",
+               (g_total_true_positive + g_total_false_positive) AS "# of S8 Solved as FP or PTP",
+               g_total                                          AS "# of S8 Total Alerts Processed",
                ROUND(((g_total_true_positive::decimal + g_total_false_positive::decimal) /
                       GREATEST(g_total, 1)) * 100,
-                     3)                                                                                AS "Efficiency [%]",
-               g_total_fp_and_a_passed                                                                 AS "# of S8 Solved as FP and Analyst Solved as FP",
-               (g_total_fp_and_a - g_total_fp_and_a_passed)                                            AS "# of S8 Solved as FP and Analyst Solved as TP",
+                     3)                                         AS "Efficiency [%]",
+               g_total_fp_and_a_passed                          AS "# of S8 Solved as FP and Analyst Solved as FP",
+               (g_total_fp_and_a - g_total_fp_and_a_passed)     AS "# of S8 Solved as FP and Analyst Solved as TP",
                CASE
                    WHEN g_total_fp_and_a = 0 THEN 'n/a'
                    ELSE CAST(ROUND(
                                (g_total_fp_and_a_passed::decimal / GREATEST(g_total_fp_and_a::decimal, 1)) *
                                100,
-                               3) AS varchar) END                                                      AS "FP Effectiveness [%]",
-               g_total_ptp_and_a_passed                                                                AS "# of S8 Solved as PTP and Analyst Solved as TP",
-               (g_total_ptp_and_a - g_total_ptp_and_a_passed)                                          AS "# of S8 Solved as PTP and Analyst Solved as FP",
+                               3) AS varchar) END               AS "FP Effectiveness [%]",
+               g_total_ptp_and_a_passed                         AS "# of S8 Solved as PTP and Analyst Solved as TP",
+               (g_total_ptp_and_a - g_total_ptp_and_a_passed)   AS "# of S8 Solved as PTP and Analyst Solved as FP",
                CASE
                    WHEN g_total_ptp_and_a = 0 THEN 'n/a'
                    ELSE CAST(ROUND((g_total_ptp_and_a_passed::decimal /
                                     GREATEST(g_total_ptp_and_a::decimal, 1)) * 100,
-                                   3) AS varchar) END                                                  AS "PTP Effectiveness[%]"
-        FROM grouped
-        ORDER BY g_date 
+                                   3) AS varchar) END           AS "PTP Effectiveness[%]"
+        FROM grouped 
 
     - name: METRICS_ALERT_LEVEL
       type: simulation
@@ -468,61 +477,75 @@ warehouse.reports.v2:
       selectSqlQuery: >
         WITH main AS (
             SELECT wsa.payload ->> 'recommendation_recommended_action' recommendation,
-                   wsa.payload ->> 'analystDecision'                   analyst_decision,
-                   wsa.payload ->> 'batchWatchList'                    list_type,
-                   wsa.payload ->> 'datasetId'                         batch_id,
-                   wsa.payload ->> 'datasetName'                       batch_type
+                   wa.payload ->> 'analystDecision'                    analyst_decision,
+                   wa.payload ->> 'batchWatchList'                     list_type,
+                   wa.payload ->> 'datasetId'                          batch_id,
+                   wa.payload ->> 'datasetName'                        batch_type,
+                   COUNT(*)                                            alert_count
             FROM warehouse_simulation_alert wsa
-            WHERE wsa.payload ->> 'status' = 'LEARNING_COMPLETED'
-              AND wsa.analysis_name = 'analysis/${analysisId}'
+                     JOIN warehouse_alert wa ON wsa.name = wa.name
+            WHERE wsa.analysis_name = 'analysis/${analysisId}'
             GROUP BY wsa.payload ->> 'recommendation_recommended_action',
-                     wsa.payload ->> 'analystDecision',
-                     wsa.payload ->> 'batchWatchList',
-                     wsa.payload ->> 'datasetId',                         
-                     wsa.payload ->> 'datasetName'
+                     wa.payload ->> 'analystDecision',
+                     wa.payload ->> 'batchWatchList',
+                     wa.payload ->> 'datasetId',
+                     wa.payload ->> 'datasetName'
         ),
              grouped AS (
-                 SELECT main.list_type                                                              g_list_type,
-                        main.batch_id                                                               g_batch_id,
-                        main.batch_type                                                             g_batch_type,
-                        COUNT(*)                                                                    g_total,
-                        COUNT(*)
-                        FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE')           g_total_true_positive,
-                        COUNT(*)
-                        FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE')                    g_total_false_positive,
-                        COUNT(*) FILTER ( 
-                              WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE'
-                                AND analyst_decision = 'analyst_decision_true_positive')            g_total_ptp_and_a_passed,
-                        COUNT(*) FILTER ( 
-                              WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE'
-                                AND analyst_decision IN ('analyst_decision_false_positive', 
-                                                         'analyst_decision_true_positive') )        g_total_ptp_and_a,
-                        COUNT(*) FILTER ( 
-                              WHERE recommendation = 'ACTION_FALSE_POSITIVE'
-                               AND analyst_decision = 'analyst_decision_false_positive')            g_total_fp_and_a_passed,
-                        COUNT(*) FILTER ( 
-                              WHERE recommendation = 'ACTION_FALSE_POSITIVE'
-                                AND analyst_decision IN ('analyst_decision_false_positive', 
-                                                         'analyst_decision_true_positive'))         g_total_fp_and_a
+                 SELECT main.list_type                                                    g_list_type,
+                        main.batch_id                                                     g_batch_id,
+                        main.batch_type                                                   g_batch_type,
+                        SUM(main.alert_count)                                             g_total,
+                        SUM(main.alert_count)
+                        FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE') g_total_true_positive,
+                        COALESCE(SUM(main.alert_count)
+                                 FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE'),
+                                 0)                                                       g_total_false_positive,
+                        COALESCE(SUM(main.alert_count)
+                                 FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE'
+                                     AND analyst_decision =
+                                         'analyst_decision_true_positive'),
+                                 0)                                                       g_total_ptp_and_a_passed,
+                        COALESCE(SUM(main.alert_count)
+                                 FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE'
+                                     AND analyst_decision IN ('analyst_decision_true_positive',
+                                                              'analyst_decision_false_positive') ),
+                                 0)                                                       g_total_ptp_and_a,
+                        COALESCE(SUM(main.alert_count)
+                                 FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE'
+                                     AND analyst_decision =
+                                         'analyst_decision_false_positive'),
+                                 0)                                                       g_total_fp_and_a_passed,
+                        COALESCE(SUM(main.alert_count)
+                                 FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE'
+                                     AND analyst_decision IN ('analyst_decision_true_positive',
+                                                              'analyst_decision_false_positive')),
+                                 0)                                                       g_total_fp_and_a
                  FROM main
                  GROUP BY 1, 2, 3
              )
 
-        SELECT g_list_type                                                                                                                  AS "Risk Type",
-               g_batch_id                                                                                                                   AS "Batch Id",
-               g_batch_type                                                                                                                 AS "Batch Type",
-               (g_total_true_positive + g_total_false_positive)                                                                             AS "# of S8 Solved as FP or PTP",
-               g_total                                                                                                                      AS "# of S8 Total Alerts Processed",
-               ROUND(((g_total_true_positive::decimal + g_total_false_positive::decimal) /GREATEST(g_total, 1)) * 100,3)                    AS "Efficiency [%]",
-               g_total_fp_and_a_passed                                                                                                      AS "# of S8 Solved as FP and Analyst Solved as FP",
-               (g_total_fp_and_a - g_total_fp_and_a_passed)                                                                                 AS "# of S8 Solved as FP and Analyst Solved as TP",
+        SELECT g_list_type                                      AS "Risk Type",
+               g_batch_id                                       AS "Batch Id",
+               g_batch_type                                     AS "Batch Type",
+               (g_total_true_positive + g_total_false_positive) AS "# of S8 Solved as FP or PTP",
+               g_total                                          AS "# of S8 Total Alerts Processed",
+               ROUND(((g_total_true_positive::decimal + g_total_false_positive::decimal) /
+                      GREATEST(g_total, 1)) * 100,
+                     3)                                         AS "Efficiency [%]",
+               g_total_fp_and_a_passed                          AS "# of S8 Solved as FP and Analyst Solved as FP",
+               (g_total_fp_and_a - g_total_fp_and_a_passed)     AS "# of S8 Solved as FP and Analyst Solved as TP",
                CASE
                    WHEN g_total_fp_and_a = 0 THEN 'n/a'
-                   ELSE CAST(ROUND((g_total_fp_and_a_passed::decimal / GREATEST(g_total_fp_and_a::decimal, 1)) * 100,3) AS varchar) END     AS "FP Effectiveness",
-               g_total_ptp_and_a_passed                                                                                                     AS "# of S8 Solved as PTP and Analyst Solved as TP",
-               (g_total_ptp_and_a - g_total_ptp_and_a_passed)                                                                               AS "# of S8 Solved as PTP and Analyst Solved as FP",
+                   ELSE CAST(ROUND(
+                               (g_total_fp_and_a_passed::decimal / GREATEST(g_total_fp_and_a::decimal, 1)) *
+                               100,
+                               3) AS varchar) END               AS "FP Effectiveness [%]",
+               g_total_ptp_and_a_passed                         AS "# of S8 Solved as PTP and Analyst Solved as TP",
+               (g_total_ptp_and_a - g_total_ptp_and_a_passed)   AS "# of S8 Solved as PTP and Analyst Solved as FP",
                CASE
                    WHEN g_total_ptp_and_a = 0 THEN 'n/a'
-                   ELSE CAST(ROUND((g_total_ptp_and_a_passed::decimal / GREATEST(g_total_ptp_and_a::decimal, 1)) * 100,3) AS varchar) END   AS "PTP Effectiveness"
+                   ELSE CAST(ROUND((g_total_ptp_and_a_passed::decimal /
+                                    GREATEST(g_total_ptp_and_a::decimal, 1)) * 100,
+                                   3) AS varchar) END           AS "PTP Effectiveness[%]"
         FROM grouped
-        ORDER BY g_date
