@@ -62,11 +62,14 @@ services:
       DB_USER: "${POSTGRES_USER:-iris}"
       DB_PASSWORD: "${POSTGRES_PASSWORD:-iris}"
       DB_SCHEMA: keycloak
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: admin
+      KEYCLOAK_USER: keycloak
+      KEYCLOAK_PASSWORD: keycloak
       PROXY_ADDRESS_FORWARDING: "true"
+      KEYCLOAK_IMPORT: "/opt/jboss/keycloak/imports/Dev-realm.json -Dkeycloak.profile.feature.upload_scripts=enabled"
     ports:
       - "8080:8080"
+    volumes:
+      - ./docker-compose/keycloak/imports:/opt/jboss/keycloak/imports
     depends_on:
       - postgres
     deploy:
