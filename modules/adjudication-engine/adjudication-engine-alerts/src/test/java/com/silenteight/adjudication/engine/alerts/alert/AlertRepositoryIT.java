@@ -9,8 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
+import java.util.stream.Stream;
+import javax.annotation.Nonnull;
 
 import static com.silenteight.adjudication.engine.alerts.alert.AlertFixtures.randomAlertEntity;
+import static java.util.stream.StreamSupport.stream;
 import static org.assertj.core.api.Assertions.*;
 
 @ContextConfiguration(classes = RepositoryTestConfiguration.class)
@@ -33,7 +36,7 @@ class AlertRepositoryIT extends BaseDataJpaTest {
   void savesAlertToRepository() {
     var alert = randomAlertEntity();
 
-    alert = repository.save(alert);
+    alert = getStream(repository.saveAll(List.of(alert))).findFirst().get();
     entityManager.flush();
     entityManager.clear();
 
@@ -50,7 +53,7 @@ class AlertRepositoryIT extends BaseDataJpaTest {
   void deleteAlertFromRepository() {
     var alert = randomAlertEntity();
 
-    alert = repository.save(alert);
+    alert = getStream(repository.saveAll(List.of(alert))).findFirst().get();
     entityManager.flush();
 
     int deletedAlertCount = repository.deleteAllByIdIn(List.of(alert.getId()));
@@ -64,5 +67,10 @@ class AlertRepositoryIT extends BaseDataJpaTest {
   private void checkIfAlertIsNotInDatabase(long alertId) {
     var foundAlert = entityManager.find(AlertEntity.class, alertId);
     Assertions.assertNull(foundAlert);
+  }
+
+  @Nonnull
+  private static <T> Stream<T> getStream(Iterable<T> m) {
+    return stream(m.spliterator(), false);
   }
 }

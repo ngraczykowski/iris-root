@@ -6,9 +6,8 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 interface AlertRepository extends Repository<AlertEntity, Long> {
-
   @Nonnull
-  AlertEntity save(AlertEntity alertEntity);
+  Iterable<AlertEntity> saveAll(Iterable<AlertEntity> alertEntities);
 
   int deleteAllByIdIn(List<Long> alertIds);
 }
