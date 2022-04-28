@@ -225,24 +225,24 @@ dependencies {
   implementation libraries.silenteight_sep_base_aspects
   implementation libraries.silenteight_serp_protocol_base
   implementation libraries.silenteight_serp_protocol_scb
-  implementation libraries.silenteight_sep_base_testing
   implementation libraries.silenteight_commons_core
   implementation libraries.registration_api_library
   implementation libraries.registration_api_proto
 
-  runtimeOnly libraries.ecs_logging_core
-  runtimeOnly libraries.logback_ecs_encoder
-
-  implementation libraries.groovy_all
+  implementation libraries.micrometer_prometheus
   implementation libraries.json_path
   implementation libraries.xstream
   implementation libraries.vavr
 
-  implementation libraries.micrometer_prometheus
+  runtimeOnly libraries.ecs_logging_core
+  runtimeOnly libraries.logback_ecs_encoder
 
+  testImplementation libraries.silenteight_sep_base_testing
+  testImplementation libraries.groovy_all
   testImplementation libraries.spock_spring
-  testRuntimeOnly libraries.junit_platform_commons
   testImplementation libraries.testcontainers
+
+  testRuntimeOnly libraries.junit_platform_commons
 }
 
 configurations {
