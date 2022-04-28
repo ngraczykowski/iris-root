@@ -114,7 +114,7 @@ warehouse.report.zip:
 
 warehouse.reports.v2:
   reports:
-    - name: RB_SCORER_MATCH_LEVEL
+    - name: RB_SCORER
       type: production
       description: RB Scorer (Match Level)
       selectSqlQuery: >
@@ -166,7 +166,7 @@ warehouse.reports.v2:
                  wa.payload ->> 'features/nationalityCountry:solution',
                  wa.payload ->> 'features/country:solution'                   
 
-    - name: RB_SCORER_MATCH_LEVEL
+    - name: RB_SCORER
       type: simulation
       description: RB Scorer
       selectSqlQuery: >
@@ -220,7 +220,7 @@ warehouse.reports.v2:
                  wsa.payload ->> 'features/nationalityCountry:solution',
                  wsa.payload ->> 'features/country:solution'              
 
-    - name: AI_REASONING_ALERT_LEVEL
+    - name: AI_REASONING
       type: production
       description: AI Reasoning (Alert Level)
       selectSqlQuery: >
@@ -247,7 +247,7 @@ warehouse.reports.v2:
                  wa.payload ->> 'recommendationDate',
                  wa.payload ->> 'comment'
 
-    - name: AI_REASONING_ALERT_LEVEL
+    - name: AI_REASONING
       type: simulation
       description: AI Reasoning
       selectSqlQuery: >
@@ -318,7 +318,7 @@ warehouse.reports.v2:
                  JOIN warehouse_match wm ON wa.id = wm.alert_id
         WHERE wsa.analysis_name = 'analysis/${analysisId}'
 
-    - name: ACCURACY_ALERT_LEVEL
+    - name: ACCURACY
       type: production
       description: Accuracy (Alert Level)
       selectSqlQuery: >
@@ -352,7 +352,7 @@ warehouse.reports.v2:
                  wa.payload ->> 'analystDecisionModifiedDateTime',
                  wa.payload ->> 'analystReason'
 
-    - name: ACCURACY_ALERT_LEVEL
+    - name: ACCURACY
       type: simulation
       description: Accuracy
       selectSqlQuery: >
