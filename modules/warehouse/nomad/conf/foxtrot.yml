@@ -70,7 +70,7 @@ keycloak:
   client-id: frontend
   adapter:
     auth-server-url: https://auth.silenteight.com
-    realm: { { env "NOMAD_NAMESPACE" } }
+    realm: {{ env "NOMAD_NAMESPACE" }}
     public-client: false
     confidential-port: 0
     principal-attribute: preferred_username
