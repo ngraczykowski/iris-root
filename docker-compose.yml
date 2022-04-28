@@ -1,8 +1,7 @@
-version: "3.5"
-
 services:
   postgres:
-    image: docker.io/library/postgres:12
+    container_name: iris_postgres
+    image: postgres:12
     restart: unless-stopped
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
@@ -13,14 +12,18 @@ services:
       PGDATA: "/var/lib/postgresql/data/pgdata"
     volumes:
       - postgres-storage:/var/lib/postgresql/data
+      - ./docker-compose/postgres:/docker-entrypoint-initdb.d
     deploy:
       resources:
         limits:
           memory: 1G
         reservations:
           memory: 1G
+
   rabbitmq:
-    image: docker.io/library/rabbitmq:3.8.16-management
+    #TODO update to newest one version
+    image: rabbitmq:3.8.16-management
+    container_name: iris_rabbitmq
     restart: unless-stopped
     ports:
       - "${RABBITMQ_AMQP_PORT:-5672}:5672"
@@ -45,6 +48,33 @@ services:
           memory: 1280M
         reservations:
           memory: 1280M
+
+  keycloak:
+    #TODO move to no legacy version
+    #TODO after test move installers/nomads to this version(or newest one)
+    image: quay.io/keycloak/keycloak:18.0.0-legacy
+    container_name: iris_keycloak
+    restart: unless-stopped
+    environment:
+      DB_VENDOR: postgres
+      DB_ADDR: postgres
+      DB_DATABASE: "${POSTGRES_DB:-iris}"
+      DB_USER: "${POSTGRES_USER:-iris}"
+      DB_PASSWORD: "${POSTGRES_PASSWORD:-iris}"
+      DB_SCHEMA: keycloak
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      PROXY_ADDRESS_FORWARDING: "true"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 1G
 
 volumes:
   rabbitmq-storage:
