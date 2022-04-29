@@ -35,6 +35,7 @@ message CompareLocationsResponse {
   string solution = 1 [(google.api.field_behavior) = REQUIRED];
   GeoComparerReason reason = 2 [(google.api.field_behavior) = REQUIRED];
   IdentifiedLocations identified_inputs = 3 [(google.api.field_behavior) = REQUIRED];
+  IdentifiedLocations skipped_inputs = 4 [(google.api.field_behavior) = OPTIONAL];
 }
 
 message IdentifiedLocations {
