@@ -9,7 +9,6 @@ import com.silenteight.agent.facade.AgentFacade;
 import com.silenteight.agents.v1.api.exchange.AgentExchangeRequest;
 import com.silenteight.agents.v1.api.exchange.AgentExchangeResponse;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
@@ -26,8 +25,7 @@ import static org.springframework.integration.IntegrationMessageHeaderAccessor.C
 
 @Configuration
 @RequiredArgsConstructor
-@Conditional(AtLeastOneFacadeEnabledCondition.class)
-@ConditionalOnProperty("facade.amqp.multi-queues.enabled")
+@Conditional(MultiFacadeEnabledCondition.class)
 @EnableConfigurationProperties(AgentFacadeProperties.class)
 @Slf4j
 class MultiQueueIntegrationConfiguration {

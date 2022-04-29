@@ -43,13 +43,7 @@ facade.amqp.deadLetterQueueName
 facade.amqp.deadLetterRoutingKey
 ```
 
-2. Enable multi-queue by adding:
-
-```
-facade.amqp.multi-queues.enabled=true
-```
-
-3. Define queue definitions per each facade you would like to handle.
+2. Define queue definitions per each facade you would like to handle.
 
 Assuming that you want to provide AMQP and integration flow configurations for the following facades:
 
@@ -86,7 +80,6 @@ public class SecondFacadeAmqp extends AbstractAgentFacade<SecondInputsRequest, S
 you need to provide following configuration:
 
 ```
-facade.amqp.multi-queues.enabled=true
 facade.amqp.queueDefinitions[first].inbound-exchange-name=<first-facade-inbound-exchange-name>
 facade.amqp.queueDefinitions[first].inbound-queue-name=<first-facade-inbound-queue-name>
 facade.amqp.queueDefinitions[first].inbound-routing-key=<first-facade-inbound-routing-key>

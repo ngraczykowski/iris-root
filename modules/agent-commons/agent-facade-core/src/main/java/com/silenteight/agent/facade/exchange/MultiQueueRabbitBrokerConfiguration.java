@@ -2,8 +2,15 @@ package com.silenteight.agent.facade.exchange;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.amqp.core.*;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.Exchange;
+import org.springframework.amqp.core.ExchangeBuilder;
+import org.springframework.amqp.core.FanoutExchange;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.QueueBuilder;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
@@ -13,8 +20,7 @@ import javax.annotation.PostConstruct;
 
 @Configuration
 @RequiredArgsConstructor
-@Conditional(AtLeastOneFacadeEnabledCondition.class)
-@ConditionalOnProperty("facade.amqp.multi-queues.enabled")
+@Conditional(MultiFacadeEnabledCondition.class)
 @EnableConfigurationProperties(AgentFacadeProperties.class)
 @Profile("rabbitmq-declare")
 class MultiQueueRabbitBrokerConfiguration {

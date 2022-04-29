@@ -31,7 +31,7 @@ class AtLeastOneFacadeEnabledCondition implements Condition {
         .anyMatch(property -> parseBoolean(environment.getProperty(property)));
   }
 
-  private Stream<String> getAllProperties(Environment environment) {
+  static Stream<String> getAllProperties(Environment environment) {
     MutablePropertySources sources = ((AbstractEnvironment) environment).getPropertySources();
 
     return StreamSupport

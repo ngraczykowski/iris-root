@@ -9,13 +9,12 @@ import org.springframework.amqp.core.Exchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 
-@ConditionalOnProperty
-    (name = "facade.amqp.multi-queues.enabled", havingValue = "false", matchIfMissing = true)
+@Conditional(SingleFacadeEnabledCondition.class)
 @TestConfiguration
 @EnableConfigurationProperties(AgentFacadeProperties.class)
 @RequiredArgsConstructor
