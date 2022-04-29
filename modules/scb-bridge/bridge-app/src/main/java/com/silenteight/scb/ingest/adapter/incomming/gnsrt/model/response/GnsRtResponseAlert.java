@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import org.springframework.validation.annotation.Validated;
@@ -37,9 +39,11 @@ public class GnsRtResponseAlert {
   @NotNull
   private String watchlistType;
 
+  @JsonInclude(Include.NON_NULL)
   @JsonProperty("policyId")
   private String policyId;
 
+  @JsonInclude(Include.NON_EMPTY)
   @JsonProperty("matches")
   private List<GnsRtResponseMatch> matches;
 
