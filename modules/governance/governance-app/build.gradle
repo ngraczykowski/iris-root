@@ -21,7 +21,6 @@ dependencies {
 
   implementation libs.commons.collections
 
-  implementation libs.silenteight.audit.bs
   implementation libs.silenteight.commons.app
   implementation libs.silenteight.filestorage.minio
   implementation libs.silenteight.sep.base.common

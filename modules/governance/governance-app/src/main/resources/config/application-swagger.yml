@@ -1,0 +1,11 @@
+# TODO uncomment and fix error:
+# Parameter 1 of method auditingLogger in com.silenteight.auditing.bs.AuditingConfiguration required a bean of type 'com.silenteight.auditing.bs.amqp.AuditDataMessageGateway' that could not be found.
+#springdoc:
+#  show-actuator: true
+#  api-docs:
+#    enabled: true
+#    path: /openapi/api-docs
+#  swagger-ui:
+#    enabled: true
+#    path: /openapi/
+#    url: /openapi/api-docs/

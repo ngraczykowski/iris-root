@@ -31,6 +31,11 @@ server:
     include-stacktrace: on_param
 
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/auth/realms/Dev
   jpa:
     show-sql: true
 
@@ -80,14 +85,7 @@ serp.governance.files:
     allowed-characters-for-file-name: ^[.a-zA-Z0-9-()#_\s]*$
   default-bucket: attachments
 
-# TODO uncomment and fix error:
-# Parameter 1 of method auditingLogger in com.silenteight.auditing.bs.AuditingConfiguration required a bean of type 'com.silenteight.auditing.bs.amqp.AuditDataMessageGateway' that could not be found.
-#springdoc:
-#  show-actuator: true
-#  api-docs:
-#    enabled: true
-#    path: /openapi/api-docs
-#  swagger-ui:
-#    enabled: true
-#    path: /openapi/
-#    url: ${server.servlet.context-path}/openapi/api-docs/
+sep.auth:
+  permit-all-urls:
+    - "/management/**"
+    - "/openapi/**"

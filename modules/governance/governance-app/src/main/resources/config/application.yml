@@ -534,7 +534,6 @@ sep.auth:
       - "VIEW_REASONING_BRANCHES"
   permit-all-urls:
     - "/management/**"
-    - "/openapi/**"
 
 serp.governance.qa:
   sampling:

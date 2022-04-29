@@ -9,7 +9,6 @@ dependencies {
   implementation libs.commons.collections
   implementation libs.cronutils
 
-  implementation libs.silenteight.audit.bs
   implementation libs.silenteight.data.retention.api
   implementation libs.silenteight.sep.base.common
   implementation libs.silenteight.sep.base.testing

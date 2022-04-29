@@ -13,8 +13,6 @@ dependencies {
 
   implementation libs.governance.solving.api
 
-  implementation libs.silenteight.audit.bs
-
   implementation project(":governance-db-changelog")
   implementation project(":governance-common-web")
   implementation project(":governance-common-web-testing")
