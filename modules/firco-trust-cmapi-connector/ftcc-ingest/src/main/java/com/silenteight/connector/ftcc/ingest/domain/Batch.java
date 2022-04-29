@@ -11,4 +11,5 @@ public class Batch {
   @NonNull
   String batchId;
   long alertsCount;
+  boolean isSimulation;
 }

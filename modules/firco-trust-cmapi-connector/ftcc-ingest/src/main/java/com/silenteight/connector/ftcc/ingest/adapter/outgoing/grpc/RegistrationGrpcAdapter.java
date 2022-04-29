@@ -11,6 +11,9 @@ import com.silenteight.registration.api.library.v1.RegistrationServiceClient;
 @RequiredArgsConstructor
 class RegistrationGrpcAdapter implements RegistrationApiClient {
 
+  private static final int SOLVING_PRIORITY = 10;
+  private static final int LEARNING_PRIORITY = 1;
+
   @NonNull
   private final RegistrationServiceClient registrationServiceClient;
 
@@ -22,8 +25,12 @@ class RegistrationGrpcAdapter implements RegistrationApiClient {
     return RegisterBatchIn.builder()
         .batchId(batch.getBatchId())
         .alertCount(batch.getAlertsCount())
-        //.batchPriority() TODO @m.mastylo solving - 10, learning - 1
-        //.isSimulation() TODO @m.mastylo
+        .batchPriority(evaluatePriority(batch.isSimulation()))
+        .isSimulation(batch.isSimulation())
         .build();
+  }
+
+  private static int evaluatePriority(boolean isSimulation) {
+    return isSimulation ? LEARNING_PRIORITY : SOLVING_PRIORITY;
   }
 }

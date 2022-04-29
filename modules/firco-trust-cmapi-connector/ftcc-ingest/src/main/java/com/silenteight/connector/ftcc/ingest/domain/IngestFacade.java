@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.silenteight.proto.fab.api.v1.AlertMessageStored.State.NEW;
+import static java.lang.Boolean.FALSE;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -38,18 +39,20 @@ public class IngestFacade {
 
   public void ingest(@NonNull RequestDto request, UUID batchId) {
     RequestStoreDto requestStore = requestStorage.store(request, batchId);
-    registerBatch(request, batchId);
+    registerBatch(request, batchId, requestStore.getMessageIds());
     sendToDataPrep(batchId, requestStore.getMessageIds());
   }
 
-  private void registerBatch(RequestDto request, UUID batchId) {
+  private void registerBatch(RequestDto request, UUID batchId, List<UUID> messageIds) {
     String batchName = BatchResource.toResourceName(batchId);
+    boolean isSolving = isSolvingBatch(batchId, messageIds);
     Batch batch = Batch.builder()
         .batchId(batchName)
         .alertsCount(request.getMessagesCount())
+        .isSimulation(!isSolving)
         .build();
     registrationApiClient.registerBatch(batch);
-    log.info("Registered batch={}", batchName);
+    log.info("Registered batch={}", batch);
   }
 
   private void sendToDataPrep(UUID batchId, List<UUID> messageIds) {
@@ -83,5 +86,12 @@ public class IngestFacade {
 
   private static int evaluatePriority(State state) {
     return state == NEW ? SOLVING_PRIORITY : LEARNING_PRIORITY;
+  }
+
+  private boolean isSolvingBatch(UUID batchId, List<UUID> messageIds) {
+    return messageIds.stream()
+        .findFirst()
+        .map(messageId -> evaluateAlertState(batchId, messageId) == NEW)
+        .orElse(FALSE);
   }
 }

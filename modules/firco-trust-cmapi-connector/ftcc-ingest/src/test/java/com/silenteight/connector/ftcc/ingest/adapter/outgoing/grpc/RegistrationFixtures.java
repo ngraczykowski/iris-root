@@ -12,5 +12,6 @@ final class RegistrationFixtures {
   static final Batch BATCH = Batch.builder()
       .batchId(BATCH_ID)
       .alertsCount(2L)
+      .isSimulation(false)
       .build();
 }

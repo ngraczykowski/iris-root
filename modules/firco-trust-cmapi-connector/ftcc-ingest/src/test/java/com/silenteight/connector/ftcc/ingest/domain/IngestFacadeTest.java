@@ -59,6 +59,7 @@ class IngestFacadeTest {
     Batch batch = Batch.builder()
         .batchId(BATCH_NAME_PREFIX + BATCH_ID)
         .alertsCount(requestDto.getMessagesCount())
+        .isSimulation(true)
         .build();
     verify(registrationApiClient).registerBatch(batch);
     var alertMessageCaptor = forClass(AlertMessage.class);

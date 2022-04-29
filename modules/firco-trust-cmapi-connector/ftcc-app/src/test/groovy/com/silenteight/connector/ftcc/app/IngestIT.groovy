@@ -2,10 +2,10 @@ package com.silenteight.connector.ftcc.app
 
 import com.silenteight.connector.ftcc.app.IngestConfiguration.DataPrepListener
 import com.silenteight.connector.ftcc.common.testing.BaseSpecificationIT
-import com.silenteight.connector.ftcc.ingest.domain.Batch
-import com.silenteight.connector.ftcc.ingest.domain.port.outgoing.RegistrationApiClient
 import com.silenteight.proto.fab.api.v1.AlertMessageStored
 import com.silenteight.proto.fab.api.v1.AlertMessageStored.State
+import com.silenteight.registration.api.library.v1.RegisterBatchIn
+import com.silenteight.registration.api.library.v1.RegistrationServiceClient
 
 import com.google.common.io.Resources
 import groovy.json.JsonSlurper
@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
+import spock.lang.Unroll
 import spock.util.concurrent.PollingConditions
 import wslite.rest.RESTClient
 
@@ -37,7 +38,7 @@ class IngestIT extends BaseSpecificationIT {
   String contextPath
 
   @SpringBean
-  RegistrationApiClient registrationApiClient = Mock()
+  RegistrationServiceClient registrationServiceClient = Mock()
 
   @Autowired
   DataPrepListener dataPrepListener
@@ -51,7 +52,8 @@ class IngestIT extends BaseSpecificationIT {
     dataPrepListener.clear()
   }
 
-  def 'simple solving request'() {
+  @Unroll
+  def 'simple solving request #request'() {
     given:
     def conditions = new PollingConditions(timeout: 5, initialDelay: 0.2, factor: 1.25)
     def batchName
@@ -59,17 +61,20 @@ class IngestIT extends BaseSpecificationIT {
     when:
     RESTClient client = new RESTClient("http://localhost:$port$contextPath")
     def response = client.post(path: "/v1/alert") {
-      json(jsonSlurper.parseText(Resources.getResource('request.json').text))
+      json(jsonSlurper.parseText(Resources.getResource(request).text))
     }
 
     then:
-    1 * registrationApiClient.registerBatch(_) >> {Batch batch ->
-      assert batch.getBatchId() != null
-      assert batch.getAlertsCount() == 1
+    1 * registrationServiceClient.registerBatch(_) >> {RegisterBatchIn batch ->
       batchName = batch.getBatchId()
+      assert batch.getBatchId() != null
+      assert batch.getAlertCount() == 1
+      assert batch.getIsSimulation() == isSimulation
+      assert batch.getBatchPriority() == batchPriority
     }
     response.getStatusCode() == 200
-    assertEquals('''{
+    assertEquals(
+        '''{
   "Header": null,
   "Body": {
     "msg_Acknowledgement": {
@@ -83,8 +88,13 @@ class IngestIT extends BaseSpecificationIT {
     conditions.eventually {
       AlertMessageStored msg = dataPrepListener.getMessages().last()
       assert msg.getBatchName() == batchName
-      assert msg.getState() == State.NEW
+      assert msg.getState() == alertState
       assert msg.getMessageName() != null
     }
+
+    where:
+    request                 | isSimulation | batchPriority | alertState
+    'solving-request.json'  | false        | 10            | State.NEW
+    'learning-request.json' | true         | 1             | State.SOLVED_TRUE_POSITIVE
   }
 }
