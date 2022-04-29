@@ -6,6 +6,9 @@ import com.silenteight.simulator.dataset.create.CreateDatasetRequest;
 import com.silenteight.simulator.dataset.domain.exception.DatasetNotFoundException;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
@@ -15,7 +18,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Stream;
 
+import static com.silenteight.simulator.dataset.domain.AlertMatch.MULTI;
+import static com.silenteight.simulator.dataset.domain.AlertMatch.SINGLE;
 import static com.silenteight.simulator.dataset.domain.DatasetState.ACTIVE;
 import static com.silenteight.simulator.dataset.domain.DatasetState.ARCHIVED;
 import static com.silenteight.simulator.dataset.domain.DatasetState.EXPIRED;
@@ -33,10 +39,12 @@ class DatasetMetadataServiceTest extends BaseDataJpaTest {
   @Autowired
   DatasetEntityRepository repository;
 
-  @Test
-  void createMetadata() {
+  @ParameterizedTest
+  @MethodSource("getCreateDataSetRequestList")
+  void createMetadata(
+      CreateDatasetRequest request, AlertMatch expectedAlertMatchLevel) {
     // when
-    underTest.createMetadata(makeCreateDatasetRequest(), DATASET);
+    underTest.createMetadata(request, DATASET);
 
     // then
     Optional<DatasetEntity> datasetOpt = repository.findByDatasetId(ID_1);
@@ -44,6 +52,7 @@ class DatasetMetadataServiceTest extends BaseDataJpaTest {
     DatasetEntity dataset = datasetOpt.get();
     assertThat(dataset.getDatasetId()).isEqualTo(ID_1);
     assertThat(dataset.getState()).isEqualTo(ACTIVE);
+    assertThat(dataset.getAlertMatch()).isEqualTo(expectedAlertMatchLevel);
     assertThat(dataset.getExternalResourceName()).isEqualTo(EXTERNAL_RESOURCE_NAME);
   }
 
@@ -93,15 +102,24 @@ class DatasetMetadataServiceTest extends BaseDataJpaTest {
     assertThat(savedDataset.getState()).isEqualTo(EXPIRED);
   }
 
-  private static CreateDatasetRequest makeCreateDatasetRequest() {
+  private static Stream<Arguments> getCreateDataSetRequestList() {
+    return Stream.of(
+        Arguments.of(makeCreateDatasetRequest(true), MULTI),
+        Arguments.of(
+            makeCreateDatasetRequest(false), SINGLE)
+    );
+  }
+
+  private static CreateDatasetRequest makeCreateDatasetRequest(boolean useMultiHitAlerts) {
+
     return CreateDatasetRequest.builder()
         .id(ID_1)
         .datasetName(DATASET_NAME)
         .description(DESCRIPTION)
         .rangeFrom(FROM)
         .rangeTo(TO)
-        .labels(LABELS)
         .createdBy(CREATED_BY)
+        .useMultiHitAlerts(useMultiHitAlerts)
         .build();
   }
 
@@ -117,6 +135,7 @@ class DatasetMetadataServiceTest extends BaseDataJpaTest {
         .generationDateFrom(FROM)
         .generationDateTo(TO)
         .labels(JsonConversionHelper.INSTANCE.serializeToString(LABELS))
+        .alertMatch(MULTI)
         .build();
 
     return repository.save(datasetEntity);

@@ -10,6 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
 import static com.silenteight.simulator.common.testing.rest.TestRoles.*;
+import static com.silenteight.simulator.dataset.domain.AlertMatch.MULTI;
 import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -46,6 +47,7 @@ class GetDatasetRestControllerTest extends BaseRestControllerTest {
         .body("query.alertGenerationDate.to", is(TO_AS_STRING))
         .body("query.displayRangeFrom", is(DISPLAY_RANGE_FROM))
         .body("query.displayRangeTo", is(DISPLAY_RANGE_TO))
+        .body("alertMatch", is(MULTI.name()))
         .body("createdAt", notNullValue())
         .body("createdBy", is(CREATED_BY));
   }

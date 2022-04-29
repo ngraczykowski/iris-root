@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
+import com.silenteight.simulator.dataset.domain.AlertMatch;
 import com.silenteight.simulator.dataset.domain.DatasetState;
 
 import java.time.OffsetDateTime;
@@ -29,4 +30,6 @@ public class DatasetDto {
   OffsetDateTime createdAt;
   @NonNull
   String createdBy;
+  @NonNull
+  AlertMatch alertMatch;
 }

@@ -19,4 +19,8 @@ public class CreateDatasetRequestDto {
   private String description;
   @NonNull
   private AlertSelectionCriteriaDto query;
+
+  public boolean useMultiHitAlerts() {
+    return query.getUseMultiHitAlerts();
+  }
 }

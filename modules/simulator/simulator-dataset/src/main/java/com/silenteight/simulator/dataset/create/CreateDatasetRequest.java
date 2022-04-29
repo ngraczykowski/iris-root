@@ -41,6 +41,7 @@ public class CreateDatasetRequest implements AuditableRequest {
   List<DatasetLabel> labels = new ArrayList<>();
   @Builder.Default
   UUID correlationId = randomUUID();
+  boolean useMultiHitAlerts;
 
   @Override
   public void preAudit(Consumer<AuditDataDto> logger) {
@@ -68,9 +69,5 @@ public class CreateDatasetRequest implements AuditableRequest {
 
   void addCountries(List<String> countries) {
     labels.add(new DatasetLabel(COUNTRY, countries));
-  }
-
-  void addLabels(List<DatasetLabel> labels) {
-    this.labels.addAll(labels);
   }
 }

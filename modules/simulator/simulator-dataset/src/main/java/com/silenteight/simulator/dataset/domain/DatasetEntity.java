@@ -90,6 +90,11 @@ class DatasetEntity extends BaseEntity implements Serializable {
   @Column(name = "labels")
   private String labels;
 
+  @ToString.Include
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private AlertMatch alertMatch;
+
   void archive() {
     assertInState(ACTIVE);
     this.state = ARCHIVED;
@@ -115,6 +120,7 @@ class DatasetEntity extends BaseEntity implements Serializable {
         .query(toQuery())
         .createdAt(getCreatedAt())
         .createdBy(getCreatedBy())
+        .alertMatch(getAlertMatch())
         .build();
   }
 

@@ -22,7 +22,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.silenteight.adjudication.api.v1.FilteredAlerts.MatchQuantity.ALL;
 import static com.silenteight.protocol.utils.MoreTimestamps.toTimestamp;
+import static com.silenteight.simulator.dataset.domain.AlertMatch.MULTI;
 import static com.silenteight.simulator.dataset.domain.DatasetState.ACTIVE;
 import static java.time.ZoneOffset.UTC;
 import static java.util.UUID.fromString;
@@ -58,11 +60,9 @@ public final class DatasetFixtures {
   public static final String ARCHIVED_BY = "jdoe";
   public static final String COUNTRY_LABEL = "country";
   public static final List<String> COUNTRIES = List.of("PL", "RU", "DE");
-  private static final String MATCH_QUANTITY_LABEL = "matchQuantity";
   private static final List<String> MATCH_QUANTITIES = List.of("single");
-  public static final List<DatasetLabel> LABELS = List.of(
-      new DatasetLabel(COUNTRY_LABEL, COUNTRIES),
-      new DatasetLabel(MATCH_QUANTITY_LABEL, MATCH_QUANTITIES));
+  public static final List<DatasetLabel> LABELS =
+      List.of(new DatasetLabel(COUNTRY_LABEL, COUNTRIES));
 
   public static final CreateDatasetRequestDto CREATE_DATASET_REQUEST_DTO = createDatasetRequestDto()
       .build();
@@ -83,6 +83,7 @@ public final class DatasetFixtures {
       .query(selectionCriteria(FROM, TO, COUNTRIES))
       .createdAt(CREATED_AT)
       .createdBy(CREATED_BY)
+      .alertMatch(MULTI)
       .build();
 
   public static final Dataset DATASET =
@@ -124,15 +125,9 @@ public final class DatasetFixtures {
           .addAllValue(COUNTRIES)
           .build();
 
-  private static final LabelValues MATCH_QUANTITY_LABEL_VALUES =
-      LabelValues.newBuilder()
-          .addAllValue(MATCH_QUANTITIES)
-          .build();
-
   private static final Map<String, LabelValues> LABELS_MAP =
       Map.of(
-          COUNTRY_LABEL, COUNTRY_LABEL_VALUES,
-          MATCH_QUANTITY_LABEL, MATCH_QUANTITY_LABEL_VALUES);
+          COUNTRY_LABEL, COUNTRY_LABEL_VALUES);
 
   private static final LabelsFilter LABELS_FILTER =
       LabelsFilter.newBuilder()
@@ -143,6 +138,7 @@ public final class DatasetFixtures {
       FilteredAlerts.newBuilder()
           .setAlertTimeRange(ALERT_TIME_RANGE)
           .setLabelsFilter(LABELS_FILTER)
+          .setMatchQuantity(ALL)
           .build();
 
   public static final ArchiveDatasetRequest ARCHIVE_DATASET_REQUEST =

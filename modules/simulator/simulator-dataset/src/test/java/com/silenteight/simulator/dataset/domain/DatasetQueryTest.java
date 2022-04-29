@@ -134,6 +134,7 @@ class DatasetQueryTest extends BaseDataJpaTest {
         .state(state)
         .generationDateFrom(FROM)
         .generationDateTo(TO)
+        .alertMatch(AlertMatch.MULTI)
         .labels(JsonConversionHelper.INSTANCE.serializeToString(LABELS))
         .build();
   }

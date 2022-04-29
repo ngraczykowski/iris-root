@@ -25,4 +25,10 @@
       </column>
     </addColumn>
   </changeSet>
+  <changeSet id="simulator-1.5.0-3" author="rpajdak">
+    <addColumn tableName="simulator_dataset">
+      <column name="alert_match" type="VARCHAR(24)" defaultValue="SINGLE">
+      </column>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

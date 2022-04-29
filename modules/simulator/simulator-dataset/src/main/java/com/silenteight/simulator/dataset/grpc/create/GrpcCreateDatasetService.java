@@ -10,6 +10,7 @@ import com.silenteight.adjudication.api.v1.FilteredAlerts;
 import com.silenteight.adjudication.api.v1.FilteredAlerts.AlertTimeRange;
 import com.silenteight.adjudication.api.v1.FilteredAlerts.LabelValues;
 import com.silenteight.adjudication.api.v1.FilteredAlerts.LabelsFilter;
+import com.silenteight.adjudication.api.v1.FilteredAlerts.MatchQuantity;
 import com.silenteight.simulator.dataset.create.CreateDatasetRequest;
 import com.silenteight.simulator.dataset.create.CreateDatasetService;
 import com.silenteight.simulator.dataset.create.DatasetLabel;
@@ -17,6 +18,8 @@ import com.silenteight.simulator.dataset.create.DatasetLabel;
 import java.util.List;
 import java.util.Map;
 
+import static com.silenteight.adjudication.api.v1.FilteredAlerts.MatchQuantity.ALL;
+import static com.silenteight.adjudication.api.v1.FilteredAlerts.MatchQuantity.SINGLE;
 import static com.silenteight.protocol.utils.MoreTimestamps.toTimestamp;
 import static java.util.stream.Collectors.toMap;
 
@@ -44,6 +47,7 @@ class GrpcCreateDatasetService implements CreateDatasetService {
 
   private static FilteredAlerts toFilteredAlerts(CreateDatasetRequest request) {
     return FilteredAlerts.newBuilder()
+        .setMatchQuantity(setMatchQuantity(request))
         .setAlertTimeRange(toAlertTimeRange(request))
         .setLabelsFilter(toLabelsFilter(request.getLabels()))
         .build();
@@ -72,5 +76,9 @@ class GrpcCreateDatasetService implements CreateDatasetService {
     return LabelValues.newBuilder()
         .addAllValue(values)
         .build();
+  }
+
+  private static MatchQuantity setMatchQuantity(CreateDatasetRequest request) {
+    return request.isUseMultiHitAlerts() ? ALL : SINGLE;
   }
 }

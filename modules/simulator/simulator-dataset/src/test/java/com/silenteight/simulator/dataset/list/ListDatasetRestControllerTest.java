@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 import static com.silenteight.simulator.common.testing.rest.TestRoles.*;
+import static com.silenteight.simulator.dataset.domain.AlertMatch.MULTI;
 import static com.silenteight.simulator.dataset.domain.DatasetState.ACTIVE;
 import static com.silenteight.simulator.dataset.domain.DatasetState.ARCHIVED;
 import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.*;
@@ -48,6 +49,7 @@ class ListDatasetRestControllerTest extends BaseRestControllerTest {
         .body("[0].query.alertGenerationDate.to", is(TO_AS_STRING))
         .body("[0].query.displayRangeFrom", is(DISPLAY_RANGE_FROM))
         .body("[0].query.displayRangeTo", is(DISPLAY_RANGE_TO))
+        .body("[0].alertMatch", is(MULTI.name()))
         .body("[0].createdAt", notNullValue())
         .body("[0].createdBy", is(CREATED_BY));
   }
@@ -65,6 +67,7 @@ class ListDatasetRestControllerTest extends BaseRestControllerTest {
         .body("[0].state", is(STATE.toString()))
         .body("[0].alertsCount", is((int) ALERTS_COUNT))
         .body("[0].query", notNullValue())
+        .body("[0].alertMatch", is(MULTI.name()))
         .body("[0].createdAt", notNullValue())
         .body("[0].createdBy", is(CREATED_BY));
   }

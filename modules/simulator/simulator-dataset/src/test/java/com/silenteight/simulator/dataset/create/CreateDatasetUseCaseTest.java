@@ -38,13 +38,15 @@ class CreateDatasetUseCaseTest {
   @BeforeEach
   void setUp() {
     underTest = new CreateDatasetUseCase(
-        createDatasetService, datasetMetadataService, LABELS, auditingLogger);
+        createDatasetService,
+        datasetMetadataService,
+        auditingLogger);
   }
 
   @Test
   void createDataset() {
     // given
-    CreateDatasetRequest request = makeCreateDatasetRequest();
+    CreateDatasetRequest request = makeCreateDatasetRequest(true, true);
     when(createDatasetService.createDataset(request)).thenReturn(DATASET);
 
     // when
@@ -63,7 +65,7 @@ class CreateDatasetUseCaseTest {
   @Test
   void throwExceptionIfDatasetIsEmpty() {
     // given
-    CreateDatasetRequest request = makeCreateDatasetRequest();
+    CreateDatasetRequest request = makeCreateDatasetRequest(true, true);
     when(createDatasetService.createDataset(request)).thenReturn(EMPTY_DATASET);
 
     // then
@@ -73,7 +75,9 @@ class CreateDatasetUseCaseTest {
     verifyNoInteractions(datasetMetadataService);
   }
 
-  private static CreateDatasetRequest makeCreateDatasetRequest() {
+  private static CreateDatasetRequest makeCreateDatasetRequest(
+      boolean useLearningAlertsOnly, boolean useMultiHitAlerts) {
+
     return CreateDatasetRequest.builder()
         .id(ID_1)
         .datasetName(DATASET_NAME)
@@ -81,6 +85,7 @@ class CreateDatasetUseCaseTest {
         .rangeFrom(FROM)
         .rangeTo(TO)
         .createdBy(CREATED_BY)
+        .useMultiHitAlerts(useMultiHitAlerts)
         .build();
   }
 

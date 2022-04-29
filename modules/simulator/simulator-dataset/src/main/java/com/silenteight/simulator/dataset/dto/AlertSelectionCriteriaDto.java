@@ -6,10 +6,10 @@ import lombok.NonNull;
 import lombok.Value;
 
 import java.time.OffsetDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
+import static java.time.temporal.ChronoUnit.SECONDS;
 import static java.util.List.of;
 
 @Value
@@ -18,6 +18,10 @@ public class AlertSelectionCriteriaDto {
 
   @NonNull
   RangeQueryDto alertGenerationDate;
+
+  boolean useMultiHitAlerts;
+
+  boolean useLearningAlertsOnly;
 
   @Default
   List<String> countries = of();
@@ -37,7 +41,11 @@ public class AlertSelectionCriteriaDto {
 
   public String getDisplayRangeTo() {
     return alertGenerationDate.getTo()
-        .minus(1, ChronoUnit.SECONDS)
+        .minus(1, SECONDS)
         .format(ISO_LOCAL_DATE);
+  }
+
+  public boolean getUseMultiHitAlerts() {
+    return useMultiHitAlerts;
   }
 }

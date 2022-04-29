@@ -16,6 +16,8 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
 
+import static com.silenteight.simulator.dataset.domain.AlertMatch.MULTI;
+import static com.silenteight.simulator.dataset.domain.AlertMatch.SINGLE;
 import static com.silenteight.simulator.dataset.domain.DatasetState.ACTIVE;
 import static java.util.stream.Collectors.toList;
 
@@ -38,6 +40,7 @@ public class DatasetMetadataService {
         .generationDateFrom(request.getRangeFrom())
         .generationDateTo(request.getRangeTo())
         .labels(JsonConversionHelper.INSTANCE.serializeToString(request.getLabels()))
+        .alertMatch(setAlertMatch(request.isUseMultiHitAlerts()))
         .build();
     repository.save(datasetEntity);
     log.debug("Created Metadata DatasetEntity={}", datasetEntity);
@@ -79,5 +82,9 @@ public class DatasetMetadataService {
     return repository
         .findByDatasetId(datasetId)
         .orElseThrow(() -> new DatasetNotFoundException(datasetId));
+  }
+
+  private static AlertMatch setAlertMatch(boolean useMultiHitAlerts) {
+    return useMultiHitAlerts ? MULTI : SINGLE;
   }
 }

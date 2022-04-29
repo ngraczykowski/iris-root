@@ -40,6 +40,19 @@ paths:
   /datasetets/{datasetId}:
     get:
       description: Dataset with specific id
+      parameters:
+        - in: query
+          name: id
+          required: true
+          description: 'Dataset id'
+      responses:
+        200:
+          description: Dataset details
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Dataset'
 
   /datasets/{id}:archive:
     post:
@@ -88,7 +101,6 @@ components:
         query:
           type: object
           $ref: '#/components/schemas/Query'
-        AlertType:
         alertsCount:
           type: number
         createdAt:
@@ -107,7 +119,8 @@ components:
         alertsCount: 75303
         createdAt: '2004-02-15T15:19:21Z'
         createdBy: 'UserName2'
-
+        alertType: SOLVING
+        alertMatch: SINGLE
 
     CreateDatasetRequest:
       type: object
