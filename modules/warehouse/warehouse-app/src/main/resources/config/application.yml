@@ -41,6 +41,11 @@ management:
       application: ${spring.application.name}
 
 warehouse:
+  statistics:
+    daily:
+      scheduled-cron: "0 0 1 * * *"
+      recalculation-period: 20
+      recommendation-enabled: false
   web:
     cors:
       allowed-origins-patterns: "*"

@@ -38,6 +38,13 @@ spring:
           enabled: false
 
 warehouse:
+  common:
+    recommendation:
+      values:
+        ACTION_POTENTIAL_TRUE_POSITIVE: [ "ACTION_POTENTIAL_TRUE_POSITIVE" ]
+        ACTION_FALSE_POSITIVE: [ "ACTION_FALSE_POSITIVE", "ACTION_INVESTIGATE_PARTIALLY_FALSE_POSITIVE" ]
+        ACTION_MANUAL_INVESTIGATION: [ "ACTION_MANUAL_INVESTIGATION", "MANUAL_INVESTIGATION","ACTION_INVESTIGATE" ]
+      recommendation-field-name: "s8_recommendation"
   country:
     migration:
       enabled: false

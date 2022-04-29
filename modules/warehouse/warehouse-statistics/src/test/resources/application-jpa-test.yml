@@ -47,3 +47,17 @@ spring:
       hibernate.order_updates: true
       org.hibernate.envers.audit_table_suffix: _audit
       org.hibernate.envers.store_data_at_delete: true
+
+warehouse:
+  statistics:
+    daily:
+      scheduled-cron: "0 0 1 * * *"
+      recalculation-period: 20
+      recommendation-enabled: true
+  common:
+    recommendation:
+      values:
+        ACTION_POTENTIAL_TRUE_POSITIVE: [ "ACTION_POTENTIAL_TRUE_POSITIVE" ]
+        ACTION_FALSE_POSITIVE: [ "ACTION_FALSE_POSITIVE", "ACTION_INVESTIGATE_PARTIALLY_FALSE_POSITIVE" ]
+        ACTION_MANUAL_INVESTIGATION: [ "ACTION_MANUAL_INVESTIGATION", "MANUAL_INVESTIGATION","ACTION_INVESTIGATE" ]
+      recommendation-field-name: "s8_recommendation"

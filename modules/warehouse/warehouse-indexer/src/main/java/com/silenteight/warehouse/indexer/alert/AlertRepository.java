@@ -5,6 +5,7 @@ import com.silenteight.warehouse.indexer.alert.dto.AlertGroupingDto;
 
 import com.google.common.collect.ListMultimap;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -59,4 +60,19 @@ public interface AlertRepository {
   List<AlertGroupingDto> fetchGroupedAlerts(
       AlertColumnName alertColumnName, OffsetDateTime timeFrom, OffsetDateTime timeTo,
       ListMultimap<String, List<String>> filters, List<String> groupByFields);
+
+  /**
+   * Fetches alerts with recommendation date between desired values.
+   *
+   * @param timeFrom
+   *     time from
+   * @param timeTo
+   *     time to
+   */
+  List<AlertDto> fetchAlerts(OffsetDateTime timeFrom, OffsetDateTime timeTo);
+
+  /**
+   * Gest local date for the first alert in storage.
+   */
+  LocalDate getEarliestAlertLocaDate();
 }
