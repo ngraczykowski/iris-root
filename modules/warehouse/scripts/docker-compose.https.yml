@@ -1,16 +1,6 @@
 version: '3'
 
 services:
-  odfe-node1:
-    environment:
-      - opendistro_security.ssl.http.enabled=true
-  odfe-node2:
-    environment:
-      - opendistro_security.ssl.http.enabled=true
-  kibana:
-    environment:
-      ELASTICSEARCH_URL: https://odfe-node1:9200
-      ELASTICSEARCH_HOSTS: https://odfe-node1:9200
   minio:
     volumes:
       - ./minio/private.key:/root/.minio/certs/private.key:ro
