@@ -319,6 +319,8 @@ sep.auth:
       - "REPORTING_UI"
     QA:
       - "REPORTING_UI"
+  permit-all-urls:
+      - "/management/**"
 
 # Notifications
 sens.webapp.notification.enabled: true

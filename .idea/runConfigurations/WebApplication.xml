@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="WebApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <option name="ACTIVE_PROFILES" value="dev,debug,swagger,keycloak" />
+    <module name="webapp.sens-webapp-backend.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.silenteight.sens.webapp.backend.WebApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

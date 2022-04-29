@@ -8,8 +8,8 @@ keycloak:
   frontend-client-id: frontend
   client-id: ${keycloak.frontend-client-id}
   adapter:
-    auth-server-url: http://localhost:24491/auth
-    realm: sens-webapp
+    auth-server-url: http://localhost:8080/auth
+    realm: Dev
     public-client: false
     confidential-port: 0
     principal-attribute: preferred_username
@@ -17,6 +17,18 @@ keycloak:
     credentials:
       secret: <your-secret>
     resource: backend
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/auth/realms/Dev
+
+sep.auth:
+  permit-all-urls:
+    - "/management/**"
+    - "/openapi/**"
 
 sens:
   webapp:
