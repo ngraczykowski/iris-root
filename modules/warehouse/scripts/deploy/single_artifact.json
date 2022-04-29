@@ -1,12 +1,12 @@
 [
   {
-    "jobName":"name-agent",
-    "projectId": "434",
-    "artifact_name": "name-agent-dist-3.22.0.tar.bz2",
-    "version":"3.22.0",
-    "branch":"v3.22.0",
-    "nomadName":"name_agent",
-    "checksum":"sha256:b38f2dd6389cea64b6a5bd40c52042927147307ba4714e229cb8190c3984aa0b",
-    "repo":"https://gitlab.silenteight.com/ro/linguistics-agent-engine"
+    "jobName": "sep-frontend",
+    "projectId": "532",
+    "version": "sep-frontend-hotel-2.21.0-d0edb25.zip",
+    "artifact_name": "sep-frontend-hotel-2.21.0-d0edb25.zip",
+    "branch": "master",
+    "nomadName": "sep_frontend",
+    "checksum": "sha256:83adc2c7b031a5204c6534b181df3023b92d0409944605ee7831af7e6f477258",
+    "repo": "https://gitlab.silenteight.com/sens/sep-front"
   }
 ]
