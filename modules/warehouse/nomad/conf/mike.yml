@@ -127,29 +127,30 @@ warehouse.reports.v2:
           GROUP BY alert_id
         )
 
-        SELECT wa.payload ->> 'policyId'                      AS "Policy ID",
-               wa.payload ->> 'policyTitle'                   AS "Policy Name",
-               wa.payload ->> 'stepId'                        AS "Step ID",
-               wa.payload ->> 'stepTitle'                     AS "Step Name",
-               wm.payload ->> 'fvSignature'                   AS "Reasoning Branch ID",
-               wm.payload ->> 's8Recommendation'              AS "S8 Match Resolution",
-               COUNT(wm.payload ->> 'fvSignature')            AS "Total Matches Count",
-               COUNT(*) FILTER ( WHERE hit_count = 1 )        AS "Single Matches Count",
-               wm.payload ->> 'categories/customerType'       AS "Customer Type",
-               wm.payload ->> 'features/name:solution'                 AS "Name",
-               wm.payload ->> 'features/dateOfBirth:solution'          AS "Date of Birth / Incorporation",
-               wm.payload ->> 'features/document:solution'             AS "Document",
-               wm.payload ->> 'features/geoResidencies:solution'       AS "Geo Residencies",
-               wm.payload ->> 'features/geoPlaceOfBirth:solution'      AS "Geo Place of Birth",
-               wm.payload ->> 'features/geoNationality:solution'       AS "Geo Nationality",
-               wm.payload ->> 'features/isApIdTpMarked:solution'       AS "True Case - Alerted ID",
-               wm.payload ->> 'features/isApNameTpMarked:solution'     AS "True Case - Alerted Party Name",
-               wm.payload ->> 'features/isTokensTpMarked:solution'     AS "True Case - Matched Tokens",
-               wm.payload ->> 'features/geoSanctioned:solution'        AS "Geo Sanctioned Country",
-               wm.payload ->> 'features/companyName:solution'          AS "Company Name",
-               wm.payload ->> 'categories/hitType'            AS "Risk Type",
-               wm.payload ->> 'categories/entitiesTypesMatch' AS "Entities Types Match",
-               wm.payload ->> 'features/employerName:solution'         AS "Employer Name"
+        SELECT wa.payload ->> 'policyId'                           AS "Policy ID",
+               wa.payload ->> 'policyTitle'                        AS "Policy Name",
+               wa.payload ->> 'stepId'                             AS "Step ID",
+               wa.payload ->> 'stepTitle'                          AS "Step Name",
+               wm.payload ->> 'fvSignature'                        AS "Reasoning Branch ID",
+               wm.payload ->> 's8Recommendation'                   AS "S8 Match Resolution",
+               COUNT(wm.payload ->> 'fvSignature')                 AS "Total Matches Count",
+               COUNT(*) FILTER ( WHERE hit_count = 1 )             AS "Single Matches Count",
+               wm.payload ->> 'categories/customerType'            AS "Customer Type",
+               wm.payload ->> 'features/name:solution'             AS "Name",
+               wm.payload ->> 'features/dateOfBirth:solution'      AS "Date of Birth / Incorporation",
+               wm.payload ->> 'features/document:solution'         AS "Document",
+               wm.payload ->> 'features/geoResidencies:solution'   AS "Geo Residencies",
+               wm.payload ->> 'features/geoPlaceOfBirth:solution'  AS "Geo Place of Birth",
+               wm.payload ->> 'features/geoNationality:solution'   AS "Geo Nationality",
+               wm.payload ->> 'features/isApIdTpMarked:solution'   AS "True Case - Alerted ID",
+               wm.payload ->> 'features/isApNameTpMarked:solution' AS "True Case - Alerted Party Name",
+               wm.payload ->> 'features/isTokensTpMarked:solution' AS "True Case - Matched Tokens",
+               wm.payload ->> 'features/geoSanctioned:solution'    AS "Geo Sanctioned Country",
+               wm.payload ->> 'features/companyName:solution'      AS "Company Name",
+               wm.payload ->> 'categories/alertType'               AS "Dataset Type",
+               wm.payload ->> 'categories/hitType'                 AS "Risk Type",
+               wm.payload ->> 'categories/entitiesTypesMatch'      AS "Entities Types Match",
+               wm.payload ->> 'features/employerName:solution'     AS "Employer Name"
         FROM warehouse_alert wa
                  JOIN warehouse_match wm ON wa.id = wm.alert_id
                  JOIN tmp_match_count tmc ON tmc.alert_id = wa.id
@@ -171,6 +172,7 @@ warehouse.reports.v2:
                  wm.payload ->> 'features/isTokensTpMarked:solution',
                  wm.payload ->> 'features/geoSanctioned:solution',
                  wm.payload ->> 'features/companyName:solution',
+                 wm.payload ->> 'categories/alertType',
                  wm.payload ->> 'categories/hitType',
                  wm.payload ->> 'categories/entitiesTypesMatch',
                  wm.payload ->> 'features/employerName:solution'
@@ -187,33 +189,34 @@ warehouse.reports.v2:
           GROUP BY alert_id
         )
         
-        SELECT wsa.payload ->> 'match_reason:policy'                               AS "Policy ID",
-               wsa.payload ->> 'match_reason:policy_title'                         AS "Policy Name",
-               wsa.payload ->> 'match_reason:step'                                 AS "Step ID",
-               wsa.payload ->> 'match_reason:step_title'                           AS "Step Name",
-               wsa.payload ->> 'match_reason:feature_vector_signature'             AS "Reasoning Branch ID",
-               wsa.payload ->> 'recommendation_recommended_action'                 AS "S8 Match Resolution",
-               COUNT((wsa.payload ->> 'match_reason:feature_vector_signature'))    AS "Total Matches Count",
-               COUNT(*) FILTER ( WHERE hit_count = 1 )                             AS "Single Matches Count",
-               wm.payload ->> 'categories/customerType'                            AS "Customer Type",
-               wsa.payload ->> 'features/name:solution'                                     AS "Name",
-               wsa.payload ->> 'features/dateOfBirth:solution'                              AS "Date of Birth / Incorporation",
-               wsa.payload ->> 'features/document:solution'                                 AS "Document",
-               wsa.payload ->> 'features/geoResidencies:solution'                           AS "Geo Residencies",
-               wsa.payload ->> 'features/geoPlaceOfBirth:solution'                          AS "Geo Place of Birth",
-               wsa.payload ->> 'features/geoNationality:solution'                           AS "Geo Nationality",
-               wsa.payload ->> 'features/isApIdTpMarked:solution'                           AS "True Case - Alerted ID",
-               wsa.payload ->> 'features/isApNameTpMarked:solution'                         AS "True Case - Alerted Party Name",
-               wsa.payload ->> 'features/isTokensTpMarked:solution'                         AS "True Case - Matched Tokens",
-               wsa.payload ->> 'features/geoSanctioned:solution'                            AS "Geo Sanctioned Country",
-               wsa.payload ->> 'features/companyName:solution'                              AS "Company Name",
-               wsa.payload ->> 'categories/hitType'                                AS "Risk Type",
-               wsa.payload ->> 'categories/entitiesTypesMatch'                     AS "Entities Types Match",
-               wsa.payload ->> 'features/employerName:solution'                             AS "Employer Name"
+        SELECT wsa.payload ->> 'match_reason:policy'                            AS "Policy ID",
+               wsa.payload ->> 'match_reason:policy_title'                      AS "Policy Name",
+               wsa.payload ->> 'match_reason:step'                              AS "Step ID",
+               wsa.payload ->> 'match_reason:step_title'                        AS "Step Name",
+               wsa.payload ->> 'match_reason:feature_vector_signature'          AS "Reasoning Branch ID",
+               wsa.payload ->> 'recommendation_recommended_action'              AS "S8 Match Resolution",
+               COUNT((wsa.payload ->> 'match_reason:feature_vector_signature')) AS "Total Matches Count",
+               COUNT(*) FILTER ( WHERE hit_count = 1 )                          AS "Single Matches Count",
+               wm.payload ->> 'categories/customerType'                         AS "Customer Type",
+               wsa.payload ->> 'features/name:solution'                         AS "Name",
+               wsa.payload ->> 'features/dateOfBirth:solution'                  AS "Date of Birth / Incorporation",
+               wsa.payload ->> 'features/document:solution'                     AS "Document",
+               wsa.payload ->> 'features/geoResidencies:solution'               AS "Geo Residencies",
+               wsa.payload ->> 'features/geoPlaceOfBirth:solution'              AS "Geo Place of Birth",
+               wsa.payload ->> 'features/geoNationality:solution'               AS "Geo Nationality",
+               wsa.payload ->> 'features/isApIdTpMarked:solution'               AS "True Case - Alerted ID",
+               wsa.payload ->> 'features/isApNameTpMarked:solution'             AS "True Case - Alerted Party Name",
+               wsa.payload ->> 'features/isTokensTpMarked:solution'             AS "True Case - Matched Tokens",
+               wsa.payload ->> 'features/geoSanctioned:solution'                AS "Geo Sanctioned Country",
+               wsa.payload ->> 'features/companyName:solution'                  AS "Company Name",
+               wsa.payload ->> 'categories/alertType'                           AS "Dataset Type",
+               wsa.payload ->> 'categories/hitType'                             AS "Risk Type",
+               wsa.payload ->> 'categories/entitiesTypesMatch'                  AS "Entities Types Match",
+               wsa.payload ->> 'features/employerName:solution'                 AS "Employer Name"
         FROM warehouse_simulation_alert wsa
-          JOIN warehouse_alert wa on wa.name = wsa.name
-          JOIN warehouse_match wm ON wa.id = wm.alert_id
-          JOIN tmp_match_count tmc ON tmc.alert_id = wa.id
+                 JOIN warehouse_alert wa ON wa.name = wsa.name
+                 JOIN warehouse_match wm ON wa.id = wm.alert_id
+                 JOIN tmp_match_count tmc ON tmc.alert_id = wa.id
         WHERE wsa.analysis_name = 'analysis/${analysisId}'
         GROUP BY wsa.payload ->> 'match_reason:policy',
                  wsa.payload ->> 'match_reason:policy_title',
@@ -233,6 +236,7 @@ warehouse.reports.v2:
                  wsa.payload ->> 'features/isTokensTpMarked:solution',
                  wsa.payload ->> 'features/geoSanctioned:solution',
                  wsa.payload ->> 'features/companyName:solution',
+                 wsa.payload ->> 'categories/alertType',
                  wsa.payload ->> 'categories/hitType',
                  wsa.payload ->> 'categories/entitiesTypesMatch',
                  wsa.payload ->> 'features/employerName:solution'
