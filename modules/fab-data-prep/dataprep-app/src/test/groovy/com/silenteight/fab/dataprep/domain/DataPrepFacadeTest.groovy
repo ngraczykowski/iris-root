@@ -3,6 +3,7 @@ package com.silenteight.fab.dataprep.domain
 import com.silenteight.fab.dataprep.adapter.incoming.AlertDetailsFacade
 import com.silenteight.fab.dataprep.domain.ex.DataPrepException
 import com.silenteight.fab.dataprep.domain.model.AlertState
+import com.silenteight.fab.dataprep.domain.model.CreateAlertItem
 import com.silenteight.fab.dataprep.domain.model.LearningData
 import com.silenteight.proto.fab.api.v1.AlertMessageStored
 import com.silenteight.proto.fab.api.v1.AlertMessageStored.State
@@ -83,7 +84,13 @@ class DataPrepFacadeTest extends Specification {
     1 * feedingFacade.etlAndFeedUds(REGISTERED_ALERT)
     0 * feedingFacade._
     1 * alertService.getAlertItem(DISCRIMINATOR) >> Optional.empty()
-    1 * alertService.save(DISCRIMINATOR, ALERT_NAME, [MATCH_NAME])
+    1 * alertService.save(
+        CreateAlertItem.builder()
+            .discriminator(DISCRIMINATOR)
+            .alertName(ALERT_NAME)
+            .messageName(MESSAGE_NAME)
+            .matchNames([MATCH_NAME])
+            .build())
     1 * alertService.setAlertState(DISCRIMINATOR, AlertState.IN_UDS)
     0 * learningService._
   }
@@ -143,7 +150,7 @@ class DataPrepFacadeTest extends Specification {
     1 * learningService.feedWarehouse(
         LearningData.builder()
             .alertName(ALERT_NAME)
-            .discriminator(DISCRIMINATOR)
+            .discriminator(MESSAGE_NAME)
             .analystDecision('analyst_decision_true_positive')
             .accessPermissionTag('AE')
             .analystReason("")
@@ -171,7 +178,7 @@ class DataPrepFacadeTest extends Specification {
     1 * learningService.feedWarehouse(
         LearningData.builder()
             .alertName(ALERT_NAME)
-            .discriminator(DISCRIMINATOR)
+            .discriminator(MESSAGE_NAME)
             .analystDecision('analyst_decision_true_positive')
             .accessPermissionTag('AE')
             .analystReason("")
@@ -198,12 +205,18 @@ class DataPrepFacadeTest extends Specification {
     1 * feedingFacade.etlAndFeedUdsLearningData(REGISTERED_ALERT)
     0 * feedingFacade._
     2 * alertService.getAlertItem(DISCRIMINATOR) >>> [Optional.empty(), Optional.of(ALERT_ITEM)]
-    1 * alertService.save(DISCRIMINATOR, ALERT_NAME, [MATCH_NAME])
+    1 * alertService.save(
+        CreateAlertItem.builder()
+            .discriminator(DISCRIMINATOR)
+            .alertName(ALERT_NAME)
+            .messageName(MESSAGE_NAME)
+            .matchNames([MATCH_NAME])
+            .build())
     1 * alertService.setAlertState(DISCRIMINATOR, AlertState.IN_UDS)
     1 * learningService.feedWarehouse(
         LearningData.builder()
             .alertName(ALERT_NAME)
-            .discriminator(DISCRIMINATOR)
+            .discriminator(MESSAGE_NAME)
             .analystDecision(analystDecision)
             .accessPermissionTag('AE')
             .analystReason("")

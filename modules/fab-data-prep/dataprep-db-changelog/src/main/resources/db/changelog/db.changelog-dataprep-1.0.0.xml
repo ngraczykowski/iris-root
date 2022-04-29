@@ -62,4 +62,12 @@
     </createIndex>
   </changeSet>
 
+  <changeSet id="dataprep-1.0.0-5" author="wwatroba">
+    <addColumn tableName="dataprep_alert">
+      <column name="message_name" type="${type.text}" valueComputed="discriminator">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>

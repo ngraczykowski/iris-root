@@ -33,6 +33,9 @@ class AlertEntity extends BaseEntity implements Serializable {
   @Column(nullable = false, updatable = false, name = "alert_name")
   private String alertName;
 
+  @Column(nullable = false, updatable = false, name = "message_name")
+  private String messageName;
+
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private State state;

@@ -38,6 +38,7 @@ class RegistrationConverter {
 
     return createRegisteredAlertBuilder(registeredAlertWithMatchesOut)
         .batchName(parsedAlertMessage.getBatchName())
+        .messageName(parsedAlertMessage.getMessageName())
         .parsedMessageData(parsedAlertMessage.getParsedMessageData())
         .systemId(parsedAlertMessage.getSystemId())
         .discriminator(parsedAlertMessage.getDiscriminator())
@@ -58,6 +59,7 @@ class RegistrationConverter {
     return RegisteredAlert
         .builder()
         .alertName(alertItem.getAlertName())
+        .messageName(alertItem.getMessageName())
         .batchName(parsedAlertMessage.getBatchName())
         .parsedMessageData(parsedAlertMessage.getParsedMessageData())
         .systemId(parsedAlertMessage.getSystemId())
@@ -74,6 +76,7 @@ class RegistrationConverter {
 
     return createRegisteredAlertBuilder(registeredAlertWithMatchesOut)
         .batchName(batchName)
+        .messageName(registeredAlertWithMatchesOut.getAlertId())
         .errorDescription(errorDescription)
         .matches(emptyList())
         .discriminator(discriminator)
@@ -112,13 +115,13 @@ class RegistrationConverter {
   }
 
   static AlertWithMatchesIn createFailedAlertWithMatchesIn(
-      String alertName,
+      String messageName,
       AlertErrorDescription errorDescription) {
     return AlertWithMatchesIn
         .builder()
         .status(AlertStatusIn.FAILURE)
         .errorDescription(errorDescription.getDescription())
-        .alertId(alertName)
+        .alertId(messageName)
         .matches(emptyList())
         .build();
   }

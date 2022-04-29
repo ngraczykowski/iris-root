@@ -3,6 +3,7 @@ package com.silenteight.fab.dataprep.domain
 import com.silenteight.fab.dataprep.BaseSpecificationIT
 import com.silenteight.fab.dataprep.domain.model.AlertItem
 import com.silenteight.fab.dataprep.domain.model.AlertState
+import com.silenteight.fab.dataprep.domain.model.CreateAlertItem
 
 import org.hibernate.Session
 import org.hibernate.tuple.ValueGenerator
@@ -66,12 +67,19 @@ class AlertServiceTest extends BaseSpecificationIT {
 
   def 'alert should be stored in DB'() {
     when:
-    underTest.save(DISCRIMINATOR, ALERT_NAME, [MATCH_NAME])
+    underTest.save(
+        CreateAlertItem.builder()
+            .discriminator(DISCRIMINATOR)
+            .alertName(ALERT_NAME)
+            .messageName(MESSAGE_NAME)
+            .matchNames([MATCH_NAME])
+            .build())
     def result = underTest.getAlertItem(DISCRIMINATOR).get()
 
     then:
     result == AlertItem.builder()
         .alertName(ALERT_NAME)
+        .messageName(MESSAGE_NAME)
         .discriminator(DISCRIMINATOR)
         .state(AlertState.REGISTERED)
         .matchNames([MATCH_NAME])
@@ -81,7 +89,13 @@ class AlertServiceTest extends BaseSpecificationIT {
   @Unroll
   def 'learning alert should be found in DB #alerName #discriminator'() {
     given:
-    underTest.save(discriminator, alerName, [])
+    underTest.save(
+        CreateAlertItem.builder()
+            .discriminator(discriminator)
+            .alertName(alerName)
+            .messageName(MESSAGE_NAME)
+            .matchNames([])
+            .build())
 
     when:
     def result = underTest.getAlertItem(discriminator).get().getAlertName()
@@ -105,7 +119,13 @@ class AlertServiceTest extends BaseSpecificationIT {
 
   def 'state should be updated'() {
     given:
-    underTest.save(DISCRIMINATOR, ALERT_NAME, [])
+    underTest.save(
+        CreateAlertItem.builder()
+            .discriminator(DISCRIMINATOR)
+            .alertName(ALERT_NAME)
+            .messageName(MESSAGE_NAME)
+            .matchNames([])
+            .build())
 
     when:
     underTest.setAlertState(DISCRIMINATOR, AlertState.IN_UDS)
@@ -122,13 +142,25 @@ class AlertServiceTest extends BaseSpecificationIT {
 
     when: 'partition for current month is created'
     underTest.createPartitions()
-    underTest.save('alert-1', ALERT_NAME, [])
+    underTest.save(
+        CreateAlertItem.builder()
+            .discriminator('alert-1')
+            .alertName(ALERT_NAME)
+            .messageName(MESSAGE_NAME)
+            .matchNames([])
+            .build())
     testEntityManager.flush()
 
     and: 'partition for next month is created'
     clock.fixedInstant = Instant.parse('2010-02-02T00:00:00.00Z')
     SettableValueGenerator.fixedOffsetDateTime = OffsetDateTime.now(clock)
-    underTest.save('alert-2', ALERT_NAME, [])
+    underTest.save(
+        CreateAlertItem.builder()
+            .discriminator('alert-2')
+            .alertName(ALERT_NAME)
+            .messageName(MESSAGE_NAME)
+            .matchNames([])
+            .build())
     testEntityManager.flush()
 
     then:

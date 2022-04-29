@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.fab.dataprep.domain.model.AlertState;
+import com.silenteight.fab.dataprep.domain.model.CreateAlertItem;
 import com.silenteight.fab.dataprep.domain.model.ParsedAlertMessage;
 import com.silenteight.fab.dataprep.domain.model.RegisteredAlert;
 import com.silenteight.fab.dataprep.domain.model.RegisteredAlert.Match;
@@ -56,6 +57,12 @@ abstract class BaseUseCase {
         .map(Match::getMatchName)
         .collect(toList());
     var discriminator = registeredAlert.getDiscriminator();
-    alertService.save(discriminator, registeredAlert.getAlertName(), matchNames);
+    CreateAlertItem createAlertItem = CreateAlertItem.builder()
+        .discriminator(discriminator)
+        .alertName(registeredAlert.getAlertName())
+        .messageName(registeredAlert.getMessageName())
+        .matchNames(matchNames)
+        .build();
+    alertService.save(createAlertItem);
   }
 }

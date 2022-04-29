@@ -83,6 +83,7 @@ class Fixtures {
   static RegisteredAlert REGISTERED_ALERT = RegisteredAlert.builder()
       .batchName(BATCH_NAME)
       .alertName(ALERT_NAME)
+      .messageName(MESSAGE_NAME)
       .systemId(SYSTEM_ID)
       .discriminator(DISCRIMINATOR)
       .parsedMessageData(PARSED_PAYLOAD)
@@ -93,6 +94,7 @@ class Fixtures {
   static RegisteredAlert REGISTERED_ALERT_WITHOUT_MATCHES = RegisteredAlert.builder()
       .batchName(BATCH_NAME)
       .alertName(ALERT_NAME)
+      .messageName(MESSAGE_NAME)
       .systemId(SYSTEM_ID)
       .discriminator(DISCRIMINATOR)
       .parsedMessageData(PARSED_PAYLOAD)
@@ -149,6 +151,7 @@ class Fixtures {
 
   static ALERT_ITEM = AlertItem.builder()
       .alertName(ALERT_NAME)
+      .messageName(MESSAGE_NAME)
       .discriminator(DISCRIMINATOR)
       .state(AlertState.REGISTERED)
       .matchNames([MATCH_NAME])
@@ -156,6 +159,7 @@ class Fixtures {
 
   static ALERT_ITEM_IN_UDS = AlertItem.builder()
       .alertName(ALERT_NAME)
+      .messageName(MESSAGE_NAME)
       .discriminator(DISCRIMINATOR)
       .state(AlertState.IN_UDS)
       .matchNames([MATCH_NAME])

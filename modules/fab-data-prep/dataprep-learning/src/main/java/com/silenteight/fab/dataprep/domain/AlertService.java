@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.fab.dataprep.domain.AlertEntity.State;
 import com.silenteight.fab.dataprep.domain.model.AlertItem;
 import com.silenteight.fab.dataprep.domain.model.AlertState;
+import com.silenteight.fab.dataprep.domain.model.CreateAlertItem;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Clock;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import javax.annotation.PostConstruct;
 
@@ -39,18 +39,20 @@ public class AlertService {
     return alertRepository.findByDiscriminatorAndCreatedAtAfter(discriminator, createdAfter)
         .map(entity -> AlertItem.builder()
             .alertName(entity.getAlertName())
+            .messageName(entity.getMessageName())
             .discriminator(entity.getDiscriminator())
             .state(AlertState.valueOf(entity.getState().name()))
             .matchNames(new ArrayList<>(entity.getMatchNames()))
             .build());
   }
 
-  public void save(String discriminator, String alertName, List<String> matchNames) {
+  public void save(CreateAlertItem createAlertItem) {
     AlertEntity alertEntity = AlertEntity.builder()
-        .discriminator(discriminator)
-        .alertName(alertName)
+        .discriminator(createAlertItem.getDiscriminator())
+        .alertName(createAlertItem.getAlertName())
+        .messageName(createAlertItem.getMessageName())
         .state(State.REGISTERED)
-        .matchNames(matchNames)
+        .matchNames(createAlertItem.getMatchNames())
         .build();
 
     log.debug("Saving: {}", alertEntity);

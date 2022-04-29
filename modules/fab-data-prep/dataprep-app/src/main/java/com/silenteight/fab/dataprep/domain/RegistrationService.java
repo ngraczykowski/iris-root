@@ -52,7 +52,7 @@ public class RegistrationService {
   }
 
   public List<RegisteredAlert> registerFailedAlerts(
-      List<String> alerts,
+      List<String> messageNames,
       String batchName,
       String discriminator,
       AlertErrorDescription errorDescription) {
@@ -60,9 +60,9 @@ public class RegistrationService {
         .builder()
         .batchId(batchName)
         .alertsWithMatches(
-            alerts
+            messageNames
                 .stream()
-                .map(alertName -> createFailedAlertWithMatchesIn(alertName, errorDescription))
+                .map(messageName -> createFailedAlertWithMatchesIn(messageName, errorDescription))
                 .collect(toList()))
         .build();
     RegisterAlertsAndMatchesOut result =

@@ -32,6 +32,7 @@ class FeedingFacadeSpec extends Specification {
     def registeredAlert = RegisteredAlert.builder()
         .batchName(BATCH_NAME)
         .alertName(ALERT_NAME)
+        .messageName(MESSAGE_NAME)
         .status(status)
         .errorDescription(errorDescription)
         .discriminator(DISCRIMINATOR)
@@ -93,6 +94,7 @@ class FeedingFacadeSpec extends Specification {
     def registeredAlert = RegisteredAlert.builder()
         .batchName(BATCH_NAME)
         .alertName(ALERT_NAME)
+        .messageName(MESSAGE_NAME)
         .discriminator(DISCRIMINATOR)
         .status(status)
         .matches(

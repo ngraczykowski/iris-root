@@ -19,6 +19,8 @@ public class RegisteredAlert {
   @NonNull
   String alertName;
   @NonNull
+  String messageName;
+  @NonNull
   @Builder.Default
   AlertStatus status = AlertStatus.SUCCESS;
   AlertErrorDescription errorDescription;

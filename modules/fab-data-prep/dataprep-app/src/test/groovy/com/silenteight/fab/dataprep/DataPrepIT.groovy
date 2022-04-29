@@ -245,7 +245,7 @@ class DataPrepIT extends BaseSpecificationIT {
       assert msg.getAlertsList().first() == Alert.newBuilder()
           .setAccessPermissionTag('AE')
           .setName(ALERT_NAME)
-          .setDiscriminator(DISCRIMINATOR)
+          .setDiscriminator(MESSAGE_NAME)
           .setPayload(
               Struct.newBuilder()
                   .putAllFields(

@@ -46,10 +46,13 @@ class LearningUseCase extends BaseUseCase {
         .stream()
         .map(parsedAlertMessage -> {
           var discriminator = parsedAlertMessage.getDiscriminator();
-          String alertName = alertService.getAlertItem(discriminator)
-              .map(AlertItem::getAlertName)
+          AlertItem alertItem = alertService.getAlertItem(discriminator)
               .orElseThrow(() -> new DataPrepException("Alert not found"));
-          return getLearningData(alertName, discriminator, analystDecision, parsedAlertMessage);
+          return getLearningData(
+              alertItem.getAlertName(),
+              alertItem.getMessageName(),
+              analystDecision,
+              parsedAlertMessage);
         })
         .collect(toList());
   }

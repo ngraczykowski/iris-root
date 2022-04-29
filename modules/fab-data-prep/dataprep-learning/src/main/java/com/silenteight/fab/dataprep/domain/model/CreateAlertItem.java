@@ -8,7 +8,7 @@ import java.util.List;
 
 @Value
 @Builder
-public class AlertItem {
+public class CreateAlertItem {
 
   @NonNull
   String discriminator;
@@ -16,8 +16,6 @@ public class AlertItem {
   String alertName;
   @NonNull
   String messageName;
-  @NonNull
-  AlertState state;
   @NonNull
   List<String> matchNames;
 }

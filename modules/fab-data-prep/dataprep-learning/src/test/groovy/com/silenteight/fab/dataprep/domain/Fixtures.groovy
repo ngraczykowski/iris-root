@@ -14,6 +14,7 @@ class Fixtures {
   static final String ANALYST_DATE_TIME = "20180827094707"
   static final String ANALYST_REASON = "reason"
   static final String MATCH_NAME = 'alerts/1/matches/1'
+  static final String MESSAGE_NAME = 'message/1'
 
   static final LearningData LEARNING_DATA = LearningData.builder()
       .alertName(ALERT_NAME)
