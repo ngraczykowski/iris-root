@@ -22,8 +22,8 @@ class RecommendationSender implements RecommendationPublisher {
 
   @Override
   public void publishCompleted(RecommendationsGeneratedEvent event) {
-    notifyServicesAboutRecommendations(event);
     scbRecommendationService.saveRecommendations(event.recommendations());
+    notifyServicesAboutRecommendations(event);
   }
 
   @Override

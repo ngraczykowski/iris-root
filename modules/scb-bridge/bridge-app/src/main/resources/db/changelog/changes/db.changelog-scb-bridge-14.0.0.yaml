@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: 14.0.0-1
+      author: smrozowski
+      comment: Add column with recommendation status.
+      changes:
+        - addColumn:
+            tableName: scb_recommendation
+            columns:
+              - column:
+                  name: recom_status
+                  type: varchar(10)

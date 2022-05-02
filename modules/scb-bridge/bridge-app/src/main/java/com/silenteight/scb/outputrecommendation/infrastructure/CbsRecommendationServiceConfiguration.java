@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertInFlightService;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.batch.ScbBridgeConfigProperties;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsConfigProperties;
+import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRecommendationService;
 import com.silenteight.scb.outputrecommendation.adapter.outgoing.*;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -69,8 +70,9 @@ public class CbsRecommendationServiceConfiguration {
 
   @Bean
   CbsRecommendationGateway cbsRecommendationGateway(
-      RecomFunctionExecutorService recomFunctionExecutorService) {
-    CbsRecommendationGateway gateway = new CbsRecommendationGateway(recomFunctionExecutorService);
+      RecomFunctionExecutorService recomFunctionExecutorService,
+      ScbRecommendationService recommendationService) {
+    var gateway = new CbsRecommendationGateway(recomFunctionExecutorService, recommendationService);
     gateway.setEventPublisher(eventPublisher);
     return gateway;
   }

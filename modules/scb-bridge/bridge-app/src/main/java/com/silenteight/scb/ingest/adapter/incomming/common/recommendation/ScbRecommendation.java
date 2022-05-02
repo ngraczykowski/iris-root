@@ -40,6 +40,8 @@ public class ScbRecommendation extends BaseEntity {
   private String decision;
   private String comment;
   private OffsetDateTime recommendedAt;
+  @Nullable
+  private String recomStatus;
 
   public String requireAlertName() {
     if (StringUtils.isBlank(alertName)) {

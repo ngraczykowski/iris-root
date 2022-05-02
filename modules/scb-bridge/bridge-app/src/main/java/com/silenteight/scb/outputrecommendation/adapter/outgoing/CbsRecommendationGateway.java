@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsEventPublisher;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.event.RecomCalledEvent;
+import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRecommendationService;
 import com.silenteight.scb.outputrecommendation.domain.model.CbsAlertRecommendation;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
@@ -15,11 +16,15 @@ import java.util.List;
 @Slf4j
 public class CbsRecommendationGateway extends CbsEventPublisher {
 
+  private static final String RECOMMENDATION_FAILED = "FAILED";
   private final RecomFunctionExecutorService recomFunctionExecutorService;
+  private final ScbRecommendationService recommendationService;
 
   public CbsRecommendationGateway(
-      @NonNull RecomFunctionExecutorService recomFunctionExecutorService) {
+      @NonNull RecomFunctionExecutorService recomFunctionExecutorService,
+      ScbRecommendationService recommendationService) {
     this.recomFunctionExecutorService = recomFunctionExecutorService;
+    this.recommendationService = recommendationService;
   }
 
   @Transactional(value = "externalTransactionManager", readOnly = true)
@@ -43,6 +48,10 @@ public class CbsRecommendationGateway extends CbsEventPublisher {
           alertRecommendation.getBatchId());
 
       notifyRecomCalled(statusCode);
+      recommendationService.updateRecomStatus(
+          alertRecommendation.getAlertExternalId(),
+          alertRecommendation.getHitWatchlistId(),
+          statusCode);
     } catch (Exception e) {
       log.error(
           "CBS: Cannot recommend given: systemId={}, batchId={}",
@@ -50,6 +59,10 @@ public class CbsRecommendationGateway extends CbsEventPublisher {
           alertRecommendation.getBatchId(),
           e);
       notifyCbsCallFailed("RECOM");
+      recommendationService.updateRecomStatus(
+          alertRecommendation.getAlertExternalId(),
+          alertRecommendation.getHitWatchlistId(),
+          RECOMMENDATION_FAILED);
     }
   }
 

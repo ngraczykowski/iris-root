@@ -13,4 +13,12 @@ public interface ScbRecommendationRepository extends CrudRepository<ScbRecommend
   @Modifying
   @Query("DELETE FROM ScbRecommendation")
   void deleteAll();
+
+  @Modifying
+  @Query(value =
+      "UPDATE scb_recommendation SET recom_status = :status "
+          + "WHERE scb_recommendation_id = (SELECT scb_recommendation_id "
+          + "FROM scb_recommendation WHERE system_id = :systemId AND watchlist_id = :watchlistId "
+          + "ORDER BY created_at DESC LIMIT 1)", nativeQuery = true)
+  void updateRecomStatus(String systemId, String watchlistId, String status);
 }

@@ -27,6 +27,11 @@ public class ScbRecommendationService {
   }
 
   @Transactional(PRIMARY_TRANSACTION_MANAGER)
+  public void updateRecomStatus(String systemId, String watchlistId, String status) {
+    scbRecommendationRepository.updateRecomStatus(systemId, watchlistId, status);
+  }
+
+  @Transactional(PRIMARY_TRANSACTION_MANAGER)
   public void saveRecommendations(List<Recommendations.Recommendation> recommendations) {
     recommendations.forEach(this::saveRecommendation);
   }
