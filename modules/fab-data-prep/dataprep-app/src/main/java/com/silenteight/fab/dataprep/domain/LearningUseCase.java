@@ -62,7 +62,7 @@ class LearningUseCase extends BaseUseCase {
 
     registeredNotInUdsAlerts.forEach(registeredAlert -> {
       var discriminator = registeredAlert.getDiscriminator();
-      feedingFacade.etlAndFeedUdsLearningData(registeredAlert);
+      feedingFacade.etlAndFeedUds(registeredAlert);
       alertService.setAlertState(discriminator, AlertState.IN_UDS);
     });
   }

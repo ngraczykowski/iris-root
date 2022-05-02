@@ -1,7 +1,6 @@
 package com.silenteight.fab.dataprep
 
 import com.silenteight.data.api.v2.Alert
-import com.silenteight.data.api.v2.ProductionDataIndexRequest
 import com.silenteight.fab.dataprep.DataPrepConfig.CoreBridgeListener
 import com.silenteight.fab.dataprep.DataPrepConfig.DlqListener
 import com.silenteight.fab.dataprep.DataPrepConfig.WarehouseListener
@@ -240,8 +239,12 @@ class DataPrepIT extends BaseSpecificationIT {
 
     then: 'output fedMessage is received'
     conditions.eventually {
-      assert coreBridgeListener.getMessages().isEmpty()
-      ProductionDataIndexRequest msg = warehouseListener.getMessages().last()
+      def msg = coreBridgeListener.getMessages().last()
+      assert msg.getFeedingStatus() == FeedingStatus.SUCCESS
+      assert msg.getAlertName() == ALERT_NAME
+      assert msg.getBatchId() == BATCH_NAME
+
+      msg = warehouseListener.getMessages().last()
       assert msg.getAlertsList().first() == Alert.newBuilder()
           .setAccessPermissionTag('AE')
           .setName(ALERT_NAME)

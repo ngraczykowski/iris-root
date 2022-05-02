@@ -5,21 +5,18 @@ import lombok.*;
 import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.sep.base.common.support.hibernate.StringListConverter;
 
-import java.io.Serializable;
 import java.util.List;
 import javax.persistence.*;
 
 @Data
 @Setter(AccessLevel.PRIVATE)
 @Builder
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Table
-class AlertEntity extends BaseEntity implements Serializable {
-
-  private static final long serialVersionUID = 2247309026523028000L;
+class AlertEntity extends BaseEntity {
 
   enum State {
     REGISTERED, IN_UDS

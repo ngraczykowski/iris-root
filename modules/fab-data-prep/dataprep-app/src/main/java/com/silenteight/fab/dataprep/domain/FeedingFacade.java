@@ -30,12 +30,6 @@ public class FeedingFacade {
   private final FeedingService feedingService;
   private final FeedingEventPublisher feedingEventPublisher;
 
-  public void etlAndFeedUdsLearningData(RegisteredAlert registeredAlert) {
-    if (registeredAlert.getStatus() == AlertStatus.SUCCESS) {
-      feedingService.createFeatureInputs(createFeatureInputsCommand(registeredAlert));
-    }
-  }
-
   public void etlAndFeedUds(RegisteredAlert registeredAlert) {
     if (registeredAlert.getStatus() == AlertStatus.FAILURE) {
       feedingEventPublisher.publish(createUdsFedEvent(registeredAlert, FAILURE,

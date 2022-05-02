@@ -143,7 +143,7 @@ class DataPrepFacadeTest extends Specification {
     1 * alertDetailsFacade.getAlertDetails(message) >> ALERT_MESSAGES_DETAILS_RESPONSE
     1 * alertParser.parse(message, ALERT_MESSAGE_DETAILS) >> PARSED_ALERT_MESSAGE
     0 * registrationService._
-    1 * feedingFacade.etlAndFeedUdsLearningData(REGISTERED_ALERT)
+    1 * feedingFacade.etlAndFeedUds(REGISTERED_ALERT)
     2 * alertService.getAlertItem(DISCRIMINATOR) >> Optional.of(ALERT_ITEM)
     1 * alertService.setAlertState(DISCRIMINATOR, AlertState.IN_UDS)
     0 * alertService._
@@ -202,7 +202,7 @@ class DataPrepFacadeTest extends Specification {
     1 * alertParser.parse(message, ALERT_MESSAGE_DETAILS) >> PARSED_ALERT_MESSAGE
     1 * registrationService.registerAlertsAndMatches([(MESSAGE_NAME): PARSED_ALERT_MESSAGE]) >>
         [REGISTERED_ALERT]
-    1 * feedingFacade.etlAndFeedUdsLearningData(REGISTERED_ALERT)
+    1 * feedingFacade.etlAndFeedUds(REGISTERED_ALERT)
     0 * feedingFacade._
     2 * alertService.getAlertItem(DISCRIMINATOR) >>> [Optional.empty(), Optional.of(ALERT_ITEM)]
     1 * alertService.save(
