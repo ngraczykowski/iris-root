@@ -1,0 +1,98 @@
+databaseChangeLog:
+  - changeSet:
+      id: 13.0.0-1
+      author: wzegarowski
+      comment: Drop raw_alerts table
+      changes:
+        - dropTable:
+            tableName: scb_raw_alert
+
+  - changeSet:
+      id: 13.0.0-2
+      author: wzegarowski
+      comment: Recreate raw_alerts table with partitioning
+      changes:
+        - createTable:
+            tableName: scb_raw_alert
+            columns:
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: id
+                  type: varchar(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: internal_batch_id
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: system_id
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: batch_id
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: alert_type
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: payload
+                  type: bytea
+                  constraints:
+                    nullable: false
+
+              - addPrimaryKey:
+                tableName: scb_raw_alert
+                columnNames: id
+                constraintName: pk_scb_raw_alert
+
+        - modifySql:
+            dbms: postgresql
+            append:
+              value: ' PARTITION BY RANGE (created_at);'
+
+  - changeSet:
+      id: 13.0.0-3
+      author: wzegarowski
+      comment: Add indexes to scb_raw_alert table
+      changes:
+
+        - createIndex:
+            tableName: scb_raw_alert
+            columns:
+              - column:
+                  name: created_at
+            indexName: idx_scb_raw_alert_created_at
+
+        - createIndex:
+            tableName: scb_raw_alert
+            columns:
+              - column:
+                  name: system_id
+              - column:
+                  name: batch_id
+            indexName: idx_scb_raw_alert_system_id_batch_id
+
+        - createIndex:
+            tableName: scb_raw_alert
+            columns:
+              - column:
+                  name: internal_batch_id
+            indexName: idx_scb_raw_alert_internal_batch_id
+
+        - createIndex:
+            tableName: scb_raw_alert
+            columns:
+              - column:
+                  name: alert_type
+            indexName: idx_scb_raw_alert_alert_type

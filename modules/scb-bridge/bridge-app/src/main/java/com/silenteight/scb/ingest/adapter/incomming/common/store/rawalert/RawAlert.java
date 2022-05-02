@@ -6,9 +6,8 @@ import com.silenteight.sep.base.common.entity.BaseEntity;
 
 import org.hibernate.annotations.Type;
 
+import java.util.UUID;
 import javax.persistence.*;
-
-import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
 @Setter(AccessLevel.NONE)
@@ -19,9 +18,9 @@ import static javax.persistence.GenerationType.IDENTITY;
 public class RawAlert extends BaseEntity {
 
   @Id
-  @Column(name = "id", insertable = false, updatable = false, nullable = false)
-  @GeneratedValue(strategy = IDENTITY)
-  private Long id;
+  @GeneratedValue
+  @Column(updatable = false, nullable = false)
+  private UUID id;
 
   @NonNull
   private String systemId;

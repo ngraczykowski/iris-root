@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import org.springframework.test.context.ContextConfiguration
 
+import java.time.OffsetDateTime
+
 @ContextConfiguration(
     classes = TestConfiguration,
     initializers = SyncTestInitializer)
@@ -19,7 +21,11 @@ import org.springframework.test.context.ContextConfiguration
 class RawAlertRepositorySpecIT extends BaseDataJpaSpec {
 
   @Autowired
-  private RawAlertRepository rawAlertRepository;
+  private RawAlertRepository rawAlertRepository
+
+  def setup() {
+    rawAlertRepository.createPartition(OffsetDateTime.now())
+  }
 
   def 'should persist entities'() {
     given:
@@ -66,6 +72,7 @@ class RawAlertRepositorySpecIT extends BaseDataJpaSpec {
   private void persistEntities(RawAlert[] entities) {
     rawAlertRepository.saveAll(entities as List)
 
+    entityManager.flush()
     entityManager.clear() // so entities are not cached
   }
 

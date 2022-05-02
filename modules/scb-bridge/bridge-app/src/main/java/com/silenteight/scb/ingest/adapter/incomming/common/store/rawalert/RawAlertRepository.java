@@ -4,7 +4,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-public interface RawAlertRepository extends CrudRepository<RawAlert, Long> {
+import java.util.UUID;
+
+public interface RawAlertRepository extends CrudRepository<RawAlert, UUID>, RawAlertRepositoryExt {
 
   @Modifying
   @Query("DELETE FROM RawAlert")
