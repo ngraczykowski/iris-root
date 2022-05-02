@@ -1,0 +1,149 @@
+# String to partially override spring.fullname template (will maintain the release name)
+nameOverride: ""
+# String to fully override spring.fullname template
+fullnameOverride: ""
+# Kubernetes Cluster Domain
+clusterDomain: cluster.local
+# Add labels to all the deployed resources
+commonLabels: {}
+# Add annotations to all the deployed resources
+commonAnnotations: {}
+
+replicaCount: 1
+
+image:
+  # The image with Spring Boot application to run.
+  repository: ""
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+spring:
+  # Overrides HTTP context path name. Defaults to `spring.fullname`.
+  webPath: ""
+
+  # List of additional arguments to pass to Spring application.
+  args: []
+  # - --spring.profiles.active=debug
+
+  # Configuration files to put to config map and expose to Spring application.
+  configFiles: {}
+  # application.yaml: |-
+  #   logging.level.com.silenteight=DEBUG
+
+  # List of secrets to expose as files to Spring application.
+  # These will be pulled in to Spring configuration using `configtree`.
+  # See: https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.external-config.files.configtree
+  secrets: []
+  # - secretName: my-precious
+  #   prefixPath: my/precious
+  #   items:
+  #     - key: username
+  #       path: userName
+  # In the example above, the secret values from `my-precious` secret will be accessible
+  # in Spring as `my.precious.<key>`.
+  # For when `items` is specified, the mapping between secret key and the file is added.
+  # The example above will mount `username` as `userName`, and Spring will see the value
+  # as `my.precious.userName`.
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  # Determines how the Service is exposed. Valid options are ExternalName, ClusterIP, NodePort, and LoadBalancer.
+  type: ClusterIP
+  http:
+    port: 8080
+  grpc:
+    enabled: true
+    port: 9090
+
+containerPorts:
+  http:
+    port: 8080
+  management:
+    port: 8081
+  grpc:
+    enabled: true
+    port: 9090
+
+startupProbe:
+  enabled: true
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 6
+
+livenessProbe:
+  enabled: true
+  periodSeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 3
+
+readinessProbe:
+  enabled: true
+  periodSeconds: 10
+  timeoutSeconds: 1
+  successThreshold: 1
+  failureThreshold: 3
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

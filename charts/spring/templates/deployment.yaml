@@ -1,0 +1,130 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "spring.fullname" . }}
+  labels:
+    {{- include "spring.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "spring.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        fluentbit.io/parser: spring-logback-json
+        {{- with .Values.podAnnotations }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "spring.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.image.pullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "spring.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ include "spring.fullname" . }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.containerPorts.http.port }}
+              protocol: TCP
+            - name: management
+              containerPort: {{ .Values.containerPorts.management.port }}
+              protocol: TCP
+            {{- if .Values.containerPorts.grpc.enabled }}
+            - name: grpc
+              containerPort: {{ .Values.containerPorts.grpc.port }}
+              protocol: TCP
+            {{- end }}
+          {{- if .Values.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /management/health/liveness
+              port: management
+            initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /management/health/liveness
+              port: management
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /management/health/readiness
+              port: management
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          {{- end }}
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          args:
+            - --spring.application.name={{ include "spring.fullname" . }}
+            - --server.servlet.context-path=/rest/{{ include "spring.webPath" . }}
+            - --spring.webflux.base-path=/rest/{{ include "spring.webPath" . }}
+            - --spring.config.additional-location=file:/etc/spring/config/,optional:file:/spring/secrets.yml
+            - --logging.config=file:/etc/spring/config/logback.xml
+            - --server.port={{ .Values.containerPorts.http.port }}
+            - --management.server.port={{ .Values.containerPorts.management.port }}
+            - --management.server.base-path=/management
+            {{- if .Values.containerPorts.grpc.enabled }}
+            - --grpc.server.port={{ .Values.containerPorts.grpc.port }}
+            {{- end }}
+            {{- if .Values.spring.args }}
+              {{- toYaml .Values.spring.args | nindent 12 }}
+            {{- end }}
+          volumeMounts:
+            - name: config
+              mountPath: "/etc/spring/config"
+              readOnly: true
+            {{- range $index, $secret := .Values.spring.secrets }}
+            - name: secret-{{ $index }}
+              mountPath: {{ printf "%s/%s" "/etc/spring/secrets/" (default $secret.prefixPath "") | trimSuffix "/" | quote }}
+              readOnly: true
+            {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "spring.fullname" . }}
+        {{- range $index, $secret := .Values.spring.secrets }}
+        - name: secret-{{ $index }}
+          secret:
+            secretName: {{ $secret.secretName }}
+            {{- with $secret.items }}
+            items:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -28,7 +28,7 @@
       <column name="hashed_password_mod" type="BOOLEAN"/>
       <column name="roles" type="${type.json}"/>
       <column name="active" type="BOOLEAN"/>
-      
+
       <column name="super_user" type="BOOLEAN"/>
       <column name="revtype" type="TINYINT"/>
       <column name="created_at" type="TIMESTAMP"/>

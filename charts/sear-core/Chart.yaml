@@ -1,0 +1,8 @@
+apiVersion: v2
+name: sear-core
+version: "1.0.0"
+dependencies:
+  - name: spring
+    alias: uds
+    version: "1.0.0"
+    repository: "file://../spring"

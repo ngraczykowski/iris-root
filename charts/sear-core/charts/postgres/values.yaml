@@ -1,0 +1,11 @@
+nameOverride: ""
+fullnameOverride: ""
+
+# Required.
+teamId: ""
+
+volume:
+  size: 50Gi
+
+postgresql:
+  version: "12"

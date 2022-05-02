@@ -9,7 +9,7 @@ repos:
         exclude: (helm-chart/templates/|nomad/|test/resources/com/silenteight/)
       - id: check-yaml
         # NOTE(ahaczewski): Helm and Nomad .json files might actually be Go templates.
-        exclude: (helm-chart/templates/|nomad/)
+        exclude: (helm-chart/templates/|nomad/|^charts/)
       - id: check-toml
       - id: check-merge-conflict
       - id: end-of-file-fixer

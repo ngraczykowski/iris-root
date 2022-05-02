@@ -1,0 +1,25 @@
+uds:
+  nameOverride: universal-data-source
+  image:
+    repository: registry.dev.s8ops.com/uds/universal-data-source-app
+    tag: "1.9.0"
+  spring:
+    webPath: uds
+    args:
+      - --spring.profiles.active=dev
+    configFiles:
+      application.yaml: |
+        spring:
+          rabbitmq:
+            host: rabbitmq
+
+          autoconfigure:
+            exclude: net.devh.boot.grpc.client.autoconfigure.GrpcClientHealthAutoConfiguration
+
+          datasource:
+            url: jdbc:postgresql://sear-core-test-postgres:5432/uds?sslmode=require&sslfactory=org.postgresql.ssl.NonValidatingFactory
+    secrets:
+      - secretName: sear-core-test-rabbitmq-default-user
+        prefixPath: spring/rabbitmq
+      - secretName: uds.sear-core-test-postgres.credentials.postgresql.acid.zalan.do
+        prefixPath: spring/datasource
