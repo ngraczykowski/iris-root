@@ -20,10 +20,14 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Clock;
+import java.time.Duration;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static java.time.OffsetDateTime.now;
 import static java.util.UUID.fromString;
 
 @RequiredArgsConstructor
@@ -55,13 +59,25 @@ class MessageQuery implements MessageByIdsQuery, MessageDetailsQuery, MessageCur
   private final NamedParameterJdbcTemplate jdbcTemplate;
   @NonNull
   private final ObjectMapper objectMapper;
+  @NonNull
+  private final Clock clock;
+  @NonNull
+  private final Duration dataRetentionDuration;
 
   @Override
   public MessageDto get(@NonNull UUID batchId, @NonNull UUID messageId) {
+    OffsetDateTime createdAfter = evaluateCreatedAfter();
+    if (log.isDebugEnabled())
+      log.debug("Getting message with createAfter={}", createdAfter);
+
     return messageRepository
-        .findByBatchIdAndMessageId(batchId, messageId)
+        .findByBatchIdAndMessageIdAndCreatedAtAfter(batchId, messageId, createdAfter)
         .map(MessageEntity::toDto)
         .orElseThrow(() -> new MessageNotFoundException(batchId, messageId));
+  }
+
+  private OffsetDateTime evaluateCreatedAfter() {
+    return now(clock).minus(dataRetentionDuration);
   }
 
   @Override

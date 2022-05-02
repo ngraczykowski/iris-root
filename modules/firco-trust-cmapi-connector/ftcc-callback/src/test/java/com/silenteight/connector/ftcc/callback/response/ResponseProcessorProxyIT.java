@@ -1,6 +1,7 @@
 package com.silenteight.connector.ftcc.callback.response;
 
 import com.silenteight.connector.ftcc.callback.response.ResponseProcessorConfiguration.TestConfigProxy;
+import com.silenteight.connector.ftcc.common.database.partition.DatabasePartitionConfiguration;
 import com.silenteight.connector.ftcc.common.resource.BatchResource;
 import com.silenteight.proto.registration.api.v1.MessageBatchCompleted;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
@@ -17,10 +18,11 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @TestPropertySource("classpath:/data-test.properties")
 @ActiveProfiles("mockcorebridge")
-@ContextConfiguration(classes = TestConfigProxy.class)
+@ContextConfiguration(classes = { TestConfigProxy.class, DatabasePartitionConfiguration.class })
 class ResponseProcessorProxyIT extends BaseDataJpaTest {
 
-  @Autowired private ResponseProcessor underTest;
+  @Autowired
+  private ResponseProcessor underTest;
 
   @DisplayName("Remove this!!! Show only differences between Proxy and AspectJ async mode.")
   @Test

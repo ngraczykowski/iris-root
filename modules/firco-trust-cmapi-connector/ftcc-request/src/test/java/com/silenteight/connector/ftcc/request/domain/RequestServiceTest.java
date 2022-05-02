@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static com.silenteight.connector.ftcc.request.domain.RequestFixtures.BATCH_ID;
 import static org.assertj.core.api.Assertions.*;
 
 @Transactional
@@ -27,12 +28,12 @@ class RequestServiceTest extends BaseDataJpaTest {
   @Test
   void shouldCreateMessage() {
     // when
-    underTest.create(RequestFixtures.BATCH_ID);
+    underTest.create(BATCH_ID);
 
     // then
-    Optional<RequestEntity> requestOpt = requestRepository.findByBatchId(RequestFixtures.BATCH_ID);
+    Optional<RequestEntity> requestOpt = requestRepository.findByBatchId(BATCH_ID);
     Assertions.assertThat(requestOpt).isPresent();
     RequestEntity request = requestOpt.get();
-    assertThat(request.getBatchId()).isEqualTo(RequestFixtures.BATCH_ID);
+    assertThat(request.getBatchId()).isEqualTo(BATCH_ID);
   }
 }

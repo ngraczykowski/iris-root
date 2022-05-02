@@ -103,4 +103,131 @@
     <sqlFile path="db/changelog/sql/ftcc_batch_duration_view.sql"/>
   </changeSet>
 
+  <changeSet id="ftcc-1.0.0-6" author="mmastylo">
+    <dropView viewName="ftcc_batch_duration_view"/>
+
+    <dropTable tableName="ftcc_message"/>
+    <dropTable tableName="ftcc_request"/>
+    <dropTable tableName="ftcc_batch_completed"/>
+    <dropTable tableName="ftcc_callback_request"/>
+  </changeSet>
+
+  <changeSet id="ftcc-1.0.0-7" author="mmastylo">
+    <createTable tableName="ftcc_request">
+      <column name="batch_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <modifySql dbms="postgresql">
+      <append value=" PARTITION BY RANGE (created_at);"/>
+    </modifySql>
+  </changeSet>
+
+  <changeSet id="ftcc-1.0.0-8" author="mmastylo">
+    <createTable tableName="ftcc_message">
+      <column name="message_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="batch_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="payload" type="JSONB">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <modifySql dbms="postgresql">
+      <append value=" PARTITION BY RANGE (created_at);"/>
+    </modifySql>
+  </changeSet>
+
+  <changeSet id="ftcc-1.0.0-9" author="mmastylo">
+    <createTable tableName="ftcc_batch_completed">
+      <column name="batch_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="analysis_id" type="varchar2">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <modifySql dbms="postgresql">
+      <append value=" PARTITION BY RANGE (created_at);"/>
+    </modifySql>
+  </changeSet>
+
+  <changeSet id="ftcc-1.0.0-10" author="mmastylo">
+    <createTable tableName="ftcc_callback_request">
+      <column name="id" type="bigint" autoIncrement="true">
+        <constraints nullable="false"/>
+      </column>
+      <column name="batch_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="endpoint" type="varchar"/>
+      <column name="payload" type="JSONB"/>
+      <column name="response" type="JSONB"/>
+      <column name="code" type="number"/>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <modifySql dbms="postgresql">
+      <append value=" PARTITION BY RANGE (created_at);"/>
+    </modifySql>
+  </changeSet>
+
+  <changeSet id="ftcc-1.0.0-11" author="mmastylo">
+    <createIndex
+        tableName="ftcc_request"
+        indexName="ix_ftcc_request_batch_id">
+      <column name="batch_id"/>
+    </createIndex>
+
+    <createIndex
+        tableName="ftcc_message"
+        indexName="ix_ftcc_message_message_id">
+      <column name="message_id"/>
+    </createIndex>
+
+    <createIndex
+        tableName="ftcc_message"
+        indexName="ix_ftcc_message_batch_id">
+      <column name="batch_id"/>
+    </createIndex>
+
+    <createIndex
+        tableName="ftcc_batch_completed"
+        indexName="ix_ftcc_batch_completed_batch_id">
+      <column name="batch_id"/>
+    </createIndex>
+
+    <createIndex
+        tableName="ftcc_batch_completed"
+        indexName="ix_ftcc_batch_completed_analysis_id">
+      <column name="analysis_id"/>
+    </createIndex>
+
+    <createIndex
+        tableName="ftcc_callback_request"
+        indexName="ix_ftcc_callback_request_batch_id">
+      <column name="batch_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="ftcc-1.0.0-12" author="mmastylo">
+    <sqlFile path="db/changelog/sql/ftcc_batch_duration_view.sql"/>
+  </changeSet>
+
 </databaseChangeLog>

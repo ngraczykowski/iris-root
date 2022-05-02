@@ -1,8 +1,10 @@
 package com.silenteight.connector.ftcc.callback.response;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.connector.ftcc.common.database.partition.PartitionCreator;
 import com.silenteight.connector.ftcc.request.details.MessageDetailsQuery;
 
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
@@ -21,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.File;
 import java.io.InputStream;
 import java.security.KeyStore;
+import java.time.Clock;
 import javax.validation.Valid;
 
 import static java.nio.file.Files.newInputStream;
@@ -72,8 +75,11 @@ class ResponseConfiguration {
 
   @Bean
   CallbackRequestService callbackRequestService(
-      CallbackRequestRepository callbackRequestRepository) {
-    return new CallbackRequestService(callbackRequestRepository);
+      @NonNull CallbackRequestRepository callbackRequestRepository,
+      @NonNull PartitionCreator partitionCreator,
+      @NonNull Clock clock) {
+
+    return new CallbackRequestService(callbackRequestRepository, partitionCreator, clock);
   }
 
   @Bean

@@ -3,6 +3,7 @@ package com.silenteight.connector.ftcc.app;
 import com.silenteight.connector.ftcc.app.amqp.AmqpListenerModule;
 import com.silenteight.connector.ftcc.app.grpc.GrpcModule;
 import com.silenteight.connector.ftcc.callback.CallbackModule;
+import com.silenteight.connector.ftcc.common.database.DatabaseModule;
 import com.silenteight.connector.ftcc.common.integration.AmqpCommonModule;
 import com.silenteight.connector.ftcc.ingest.IngestModule;
 import com.silenteight.connector.ftcc.request.RequestModule;
@@ -25,8 +26,9 @@ import static org.springframework.context.annotation.AdviceMode.ASPECTJ;
     RequestModule.class,
     // Interface modules
     AmqpCommonModule.class,
-    GrpcModule.class,
-    AmqpListenerModule.class
+    AmqpListenerModule.class,
+    DatabaseModule.class,
+    GrpcModule.class
 })
 public class FtccApplication {
 

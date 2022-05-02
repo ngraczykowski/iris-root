@@ -29,5 +29,4 @@ class CallbackTestConfiguration {
 
   @MockBean
   BatchCompletedRepository batchCompletedRepository;
-
 }

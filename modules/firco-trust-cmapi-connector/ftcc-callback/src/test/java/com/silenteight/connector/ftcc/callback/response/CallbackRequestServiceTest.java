@@ -1,5 +1,7 @@
 package com.silenteight.connector.ftcc.callback.response;
 
+import com.silenteight.connector.ftcc.common.database.partition.DatabasePartitionConfiguration;
+import com.silenteight.connector.ftcc.common.database.partition.PartitionCreator;
 import com.silenteight.connector.ftcc.common.dto.output.ClientRequestDto;
 import com.silenteight.connector.ftcc.common.dto.output.FircoAuthenticationDto;
 import com.silenteight.connector.ftcc.common.dto.output.ReceiveDecisionDto;
@@ -18,6 +20,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.Clock;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,7 +30,8 @@ import static org.mockito.Mockito.*;
 
 @Transactional
 @TestPropertySource("classpath:/data-test.properties")
-@ContextConfiguration(classes = ResponseConfiguration.class)
+@ContextConfiguration(
+    classes = { ResponseConfiguration.class, DatabasePartitionConfiguration.class })
 class CallbackRequestServiceTest extends BaseDataJpaTest {
 
   @MockBean
@@ -40,10 +44,17 @@ class CallbackRequestServiceTest extends BaseDataJpaTest {
   @Autowired
   private CallbackRequestRepository callbackRequestRepository;
 
+  @Autowired
+  private PartitionCreator partitionCreator;
+
+  @Autowired
+  private Clock clock;
+
   @DisplayName("Save 2 callback request details, should be stored in DB")
   @Test
   void verifyStoreCallbackDetails() {
-    var callbackRequestService = new CallbackRequestService(callbackRequestRepository);
+    var callbackRequestService = new CallbackRequestService(
+        callbackRequestRepository, partitionCreator, clock);
     var batchName = BatchResource.toResourceName(UUID.randomUUID());
     var clientRequestDto = buildClientRequestDto();
 
@@ -62,7 +73,8 @@ class CallbackRequestServiceTest extends BaseDataJpaTest {
   @DisplayName("When exception occurred, there should be no side effect")
   @Test
   void exceptionShouldProcessWithoutStorage() {
-    var callbackRequestService = new CallbackRequestService(this.callbackRequestRepository);
+    var callbackRequestService = new CallbackRequestService(
+        callbackRequestRepository, partitionCreator, clock);
     var batchName = BatchResource.toResourceName(UUID.randomUUID());
     var clientRequestDto = buildClientRequestDto();
 

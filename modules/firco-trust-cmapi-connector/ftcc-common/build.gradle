@@ -1,5 +1,6 @@
 plugins {
   id "java-library"
+  id "groovy"
 }
 
 description = "Firco Trust CMAPI Connector Common"
@@ -12,4 +13,7 @@ dependencies {
 
   // General dependencies
   api libraries.silenteight_commons_core
+
+  // Spock
+  testImplementation libraries.spock_spring
 }

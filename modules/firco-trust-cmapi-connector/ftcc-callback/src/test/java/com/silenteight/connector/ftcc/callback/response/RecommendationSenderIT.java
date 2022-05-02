@@ -1,5 +1,6 @@
 package com.silenteight.connector.ftcc.callback.response;
 
+import com.silenteight.connector.ftcc.common.database.partition.PartitionCreator;
 import com.silenteight.connector.ftcc.common.dto.output.AckDto;
 import com.silenteight.connector.ftcc.common.dto.output.ClientRequestDto;
 import com.silenteight.connector.ftcc.common.resource.BatchResource;
@@ -51,6 +52,9 @@ class RecommendationSenderIT {
 
   @MockBean
   private CallbackRequestRepository callbackRequestRepository;
+
+  @MockBean
+  private PartitionCreator partitionCreator;
 
   @MockBean
   private ResponseProcessor responseProcessor;

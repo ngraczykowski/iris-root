@@ -1,5 +1,6 @@
 package com.silenteight.connector.ftcc.callback.response
 
+import com.silenteight.connector.ftcc.common.database.partition.PartitionCreator
 import com.silenteight.connector.ftcc.request.details.MessageDetailsQuery
 
 import org.spockframework.spring.SpringBean
@@ -17,7 +18,7 @@ import static java.time.temporal.ChronoUnit.SECONDS
 import static org.springframework.http.HttpStatus.BAD_REQUEST
 import static org.springframework.http.HttpStatus.OK
 
-@SpringBootTest(classes = ResponseConfiguration.class)
+@SpringBootTest(classes = [ ResponseConfiguration, ResponseTestConfiguration ])
 @AutoConfigureWebClient
 class RecommendationSenderConfigurationTest extends Specification {
 
@@ -32,6 +33,9 @@ class RecommendationSenderConfigurationTest extends Specification {
 
   @SpringBean
   private CallbackRequestRepository callbackRequestRepository = Mock()
+
+  @SpringBean
+  private PartitionCreator partitionCreator = Mock()
 
   def "RecommendationSender properties are read correctly"() {
     expect:
@@ -51,7 +55,7 @@ class RecommendationSenderConfigurationTest extends Specification {
   }
 }
 
-@SpringBootTest(classes = ResponseConfiguration.class,
+@SpringBootTest(classes = [ ResponseConfiguration, ResponseTestConfiguration ],
     properties = "ftcc.cmapi.callback.keystorePath:")
 @AutoConfigureWebClient
 class RecommendationSenderConfigurationWithoutKeystorePathTest extends Specification {
@@ -67,6 +71,9 @@ class RecommendationSenderConfigurationWithoutKeystorePathTest extends Specifica
 
   @SpringBean
   private CallbackRequestRepository callbackRequestRepository = Mock()
+
+  @SpringBean
+  private PartitionCreator partitionCreator = Mock()
 
   def "RecommendationSender properties are read correctly when keystorePath is not provided"() {
     expect:

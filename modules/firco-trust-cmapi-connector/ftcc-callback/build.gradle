@@ -7,6 +7,7 @@ description = "Firco Trust CMAPI Connector - Callback"
 
 configurations {
   implementation.extendsFrom starterDatabase
+
   runtimeOnly.extendsFrom starterDatabaseRuntime
 }
 
@@ -26,7 +27,8 @@ dependencies {
 
   implementation libraries.hibernate_types
   testRuntimeOnly libraries.hibernate_validator
-  testImplementation libraries.spock_spring
+
   testImplementation project(":ftcc-common-testing")
+  testImplementation libraries.spock_spring
   testImplementation libraries.silenteight_sep_base_testing
 }

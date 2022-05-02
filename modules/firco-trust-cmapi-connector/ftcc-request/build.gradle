@@ -15,9 +15,9 @@ dependencies {
 
   implementation libraries.silenteight_sep_base_common
 
+  implementation libraries.jakarta_annotation_api
   implementation libraries.jakarta_validation_api
 
-  // Jackson
   implementation libraries.jackson_annotations
   implementation libraries.jackson_databind
   runtimeOnly libraries.jackson_datatype_jdk8
@@ -30,6 +30,8 @@ dependencies {
 
   testImplementation project(":ftcc-common-testing")
   testImplementation libraries.silenteight_sep_base_testing
+
+  testRuntimeOnly libraries.hibernate_validator
 
   aspect libraries.silenteight_sep_base_aspects
 }

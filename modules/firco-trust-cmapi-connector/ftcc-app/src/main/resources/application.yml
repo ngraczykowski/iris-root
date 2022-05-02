@@ -44,6 +44,12 @@ ftcc:
     outbound:
       recommendations-delivered:
         exchange: core-bridge.recommendation-delivered-exchange
+  #-------------------------------------------------------------------------------------------------
+  # Retention
+  #-------------------------------------------------------------------------------------------------
+  retention:
+    request:
+      data-retention-duration: 90d
 
   #-------------------------------------------------------------------------------------------------
   # CMAPI CALLBACK
