@@ -19,12 +19,6 @@ spring:
     password: ${warehouse.db.password}
     initialization-mode: never
 
-  elasticsearch:
-    rest:
-      username: technicaluser
-      password: technicaluser
-      uris: http://localhost:9201,http://localhost:9200
-
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.xml
     default-schema: ${warehouse.db.schema:public}

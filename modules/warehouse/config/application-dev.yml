@@ -14,12 +14,6 @@ spring:
     password: dev
     virtual-host: /
 
-  elasticsearch:
-    rest:
-      username: technicaluser
-      password: technicaluser
-      uris: http://localhost:9201,http://localhost:9200
-
   jpa:
     show-sql: true
     hibernate:
