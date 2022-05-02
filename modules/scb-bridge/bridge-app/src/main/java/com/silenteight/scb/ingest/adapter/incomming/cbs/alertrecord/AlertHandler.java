@@ -10,6 +10,7 @@ import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckAlert;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckGateway;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsOutput;
 import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertIngestService;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlertService;
 import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext;
 
@@ -43,12 +44,18 @@ class AlertHandler {
       ScbAlertIdContext context,
       List<ValidAlertComposite> validAlertComposites) {
     var stopWatch = StopWatch.createStarted();
-    persistAlerts(internalBatchId, validAlertComposites);
+    var alerts = alertMapper.fromValidAlertComposites(validAlertComposites);
+    if (alerts.isEmpty()) {
+      log.info("No valid alerts to handle");
+      return;
+    }
+
+    persistAlerts(internalBatchId, alerts);
     log.info("Alerts have been persisted for internalBatchId: {} executed in: {}",
         internalBatchId, stopWatch);
 
     stopWatch = StopWatch.createStarted();
-    registerAlerts(internalBatchId, validAlertComposites);
+    registerAlerts(internalBatchId, alerts);
     log.info("Alerts have been registered for internalBatchId: {} executed in: {}",
         internalBatchId, stopWatch);
 
@@ -58,9 +65,11 @@ class AlertHandler {
         internalBatchId, stopWatch);
   }
 
-  private void registerAlerts(
-      String internalBatchId, List<ValidAlertComposite> validAlertComposites) {
-    var alerts = alertMapper.fromValidAlertComposites(validAlertComposites);
+  private void persistAlerts(String internalBatchId, List<Alert> alerts) {
+    rawAlertService.store(internalBatchId, alerts);
+  }
+
+  private void registerAlerts(String internalBatchId, List<Alert> alerts) {
     var registrationBatchContext = new RegistrationBatchContext(MEDIUM, CBS);
     ingestService.ingestAlertsForRecommendation(internalBatchId, alerts, registrationBatchContext);
   }
@@ -90,13 +99,6 @@ class AlertHandler {
             .batchId(batchId)
             .watchlistLevel(watchlistLevel)
             .build());
-  }
-
-  private void persistAlerts(
-      String internalBatchId,
-      List<ValidAlertComposite> validAlertComposites) {
-    validAlertComposites.forEach(alertComposite ->
-        rawAlertService.store(internalBatchId, alertComposite.getAlerts()));
   }
 
   private void handleInvalidAlerts(ScbAlertIdContext contex, List<InvalidAlert> invalidAlerts) {

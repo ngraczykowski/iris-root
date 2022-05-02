@@ -87,34 +87,11 @@ class IngestService implements BatchAlertIngestService {
     ingestedLearningAlertsCounter += alerts.size();
   }
 
-  private void updateAlertNameFromRecommendation(List<Alert> alerts) {
-    // For Alerts which have just been sent to core-bridge, we already have AlertName populated as
-    // it is sent in the Registration Response.
-
-    // For Alerts which have not been sent to core-bridge (because they have already been
-    // registered) we take AlertName from Recommendation.
-    alerts.forEach(alert -> alert.details().setAlertName(recommendation(alert).requireAlertName()));
-  }
-
-  private void sendReportsToWarehouse(List<Alert> alerts) {
-    reportsSenderService.send(ReportMapper.toReports(alerts));
-  }
-
-  @Override
-  public void ingestAlertsForRecommendation(
-      @NonNull String internalBatchId,
-      @NonNull List<Alert> alerts,
-      RegistrationBatchContext registrationBatchContext) {
-    registerAndPublish(internalBatchId, alerts, ALERT_RECOMMENDATION_FLAGS,
-        registrationBatchContext);
-  }
-
   private void registerAndPublish(
       String internalBatchId,
       List<Alert> alerts,
       int flags,
       RegistrationBatchContext batchContext) {
-
     log.info("Registering {} alerts for {} for internalBatchId: {}",
         alerts.size(), batchContext, internalBatchId);
 
@@ -151,10 +128,32 @@ class IngestService implements BatchAlertIngestService {
         .build();
   }
 
+  private void updateAlertNameFromRecommendation(List<Alert> alerts) {
+    // For Alerts which have just been sent to core-bridge, we already have AlertName populated as
+    // it is sent in the Registration Response.
+
+    // For Alerts which have not been sent to core-bridge (because they have already been
+    // registered) we take AlertName from Recommendation.
+    alerts.forEach(alert -> alert.details().setAlertName(recommendation(alert).requireAlertName()));
+  }
+
   private ScbRecommendation recommendation(Alert alert) {
     return maybeRecommendation(alert)
         .orElseThrow(() -> new IllegalStateException(
             "Recommendation for " + alert.logInfo() + " does not exist"));
+  }
+
+  private void sendReportsToWarehouse(List<Alert> alerts) {
+    reportsSenderService.send(ReportMapper.toReports(alerts));
+  }
+
+  @Override
+  public void ingestAlertsForRecommendation(
+      @NonNull String internalBatchId,
+      @NonNull List<Alert> alerts,
+      RegistrationBatchContext registrationBatchContext) {
+    registerAndPublish(
+        internalBatchId, alerts, ALERT_RECOMMENDATION_FLAGS, registrationBatchContext);
   }
 
   private boolean hasRecommendation(Alert alert) {

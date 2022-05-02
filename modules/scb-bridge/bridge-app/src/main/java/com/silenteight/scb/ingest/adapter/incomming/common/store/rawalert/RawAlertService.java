@@ -29,14 +29,14 @@ public class RawAlertService {
     }
   }
 
-  public void store(String internalBatchId, List<Alert> alert) {
-    log.info("Saving {} Raw Alerts with internalBatchId: {}", alert.size(), internalBatchId);
-    repository.saveAll(RawAlertMapper.toRawAlertEntities(alert, internalBatchId));
-  }
-
   public void createPartitions() {
     var currentDateTime = OffsetDateTime.now();
     repository.createPartition(currentDateTime);
     repository.createPartition(currentDateTime.plusMonths(1));
+  }
+
+  public void store(String internalBatchId, List<Alert> alert) {
+    log.info("Saving {} Raw Alerts with internalBatchId: {}", alert.size(), internalBatchId);
+    repository.saveAll(RawAlertMapper.toRawAlertEntities(alert, internalBatchId));
   }
 }

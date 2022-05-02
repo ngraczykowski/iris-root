@@ -52,6 +52,7 @@ class AlertHandlerSpec extends Specification {
         .handleAlerts(internalBatchId, alertIdContext, alertCompositeCollection)
 
     then:
+    1 * alertMapper.fromValidAlertComposites([]) >> []
     1 * cbsAckGateway.ackReadAlert(_ as CbsAckAlert)
     1 * alertInFlightService.error(
         fixtures.invalidAlertCausedByFatalError.alertId,
@@ -86,8 +87,7 @@ class AlertHandlerSpec extends Specification {
 
     1 * alertInFlightService.ack(fixtures.alertId1)
     1 * alertInFlightService.error(fixtures.alertId2, "Fatal error on ACK")
-    1 * rawAlertService.store(internalBatchId, [fixtures.alert1])
-    1 * rawAlertService.store(internalBatchId, [fixtures.alert2])
+    1 * rawAlertService.store(internalBatchId, [fixtures.alert1, fixtures.alert2])
   }
 
   class Fixtures {

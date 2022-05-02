@@ -162,8 +162,7 @@ public class AlertMapper {
     return flags;
   }
 
-  public List<Alert> fromValidAlertComposites(
-      List<ValidAlertComposite> validAlertComposites) {
+  public List<Alert> fromValidAlertComposites(List<ValidAlertComposite> validAlertComposites) {
     return validAlertComposites.stream()
         .map(ValidAlertComposite::getAlerts)
         .flatMap(Collection::stream)
