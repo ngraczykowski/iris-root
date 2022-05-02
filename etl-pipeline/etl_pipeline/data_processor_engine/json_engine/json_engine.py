@@ -265,6 +265,7 @@ class JsonProcessingEngine(ProcessingEngine):
 
     def collect_party_values_from_parties_from_fields(self, fields, payload):
         for connected_key, value in COLLECTIVE_REPRESENTATION_MAP_FOR_FIELD.items():
+            logger.debug(f"{connected_key}, {value}, {self.get_field_value_name(fields, value)}")
             payload[connected_key] = self.get_field_value_name(fields, value)
 
     def get_field_value_name(self, fields, name):

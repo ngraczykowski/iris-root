@@ -56,7 +56,17 @@ def remove_nulls_from_aggegated(match):
 
 
 def assert_list(tested, reference):
-    assert sorted(tested) == sorted(reference)
+    try:
+        assert sorted(tested) == sorted(reference)
+    except TypeError:
+        assert_compare_list_of_dict_of_list(tested, reference)
+
+
+def assert_compare_list_of_dict_of_list(tested, reference):
+    assert len(tested) == len(reference)
+    for tested_element, reference_element in zip(tested, reference):
+        for key in tested_element:
+            assert sorted(tested_element[key]) == sorted(reference_element[key])
 
 
 def check_payload(out_payload, reference_file):
