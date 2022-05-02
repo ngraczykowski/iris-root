@@ -22,9 +22,8 @@ Additionally, there are two more `application.yml`:
 Before you can run Warehouse, you need to have a few infrastructural services running:
 
 1. RabbitMQ - the message broker for communicating between components and with outside services.
-2. ElasticSearch - NoSQL database optimized for searches
-3. MinIO - a S3 compliant reportStorage service
-4. PostgreSQL - SQL database
+2. MinIO - a S3 compliant reportStorage service
+3. PostgreSQL - SQL database
 
 ### Starting RabbitMQ 
 To start RabbitMQ, follow the steps:
@@ -37,7 +36,7 @@ To start RabbitMQ, follow the steps:
     
        docker-compose up -d rabbitmq
 
-### Starting ElasticSearch, Kibana, MinIO and PostgreSQL
+### Starting Kibana, MinIO and PostgreSQL
 To start the services run:
 
         ./scripts/run-services.sh
@@ -45,24 +44,10 @@ To start the services run:
 If you need to run services with TLS enabled:
 
         ./scripts/run-service-https.sh
-
-**Note**: Elasticsearch requires that you configured `vm.max_map_count=262144` in `/etc/sysctl.conf`
   
 ## Testing
-
-### Initializing ElasticSearch
-If you wish to play with ElasticSearch:
-
-1.  You need to pre-create tenants and generate some reports.
-    You may want to use the following convenience script:
-    
-            ./scripts/init.sh
-    
-    or in the case of https setup:
-    
-            ./scripts/init-https.sh
  
-2.  Deliver some test data to the application. 
+1.  Deliver some test data to the application. 
     For the local testing purpose you can start via Intellij/RunConfiguration:
     
     -   `WarehouseTestApplication (Sim)` to generate random data for simulation flow.
@@ -87,7 +72,7 @@ Swagger UI is accessible via [http](http://localhost:24900/rest/warehouse/openap
 2. Remove initialization of TestContainers by commenting/ removing ContextConfiguration initializers:
 
         @ContextConfiguration(initializers = {
-        //    OpendistroElasticContainerInitializer.class,
+        //    PostgresTestInitializer.class,
         })
         
 3. Activate local profile which provides connection setup for local environment.
@@ -107,10 +92,8 @@ Swagger UI is accessible via [http](http://localhost:24900/rest/warehouse/openap
 There is a test truststore in `./scripts`. You can re-create it by following the steps below:
 
         cd scripts
-        keytool -import -file es/root-ca.pem -alias esCA -keystore myTrustStore
         keytool -import -file minio/public.crt -alias minioCA -keystore myTrustStore
-        
-This creates a truststore with a root-ca that is used by default in Opendistro docker.
+
 The path to truststore and password needs to be provided via environment variables as explained below.
 
 #### SSL setup
