@@ -2,8 +2,6 @@ server:
   port: {{ env "NOMAD_PORT_http" }}
 
 grpc:
-  server:
-    port: {{ env "NOMAD_PORT_grpc" }}
   client:
     recommendation.address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-core-bridge
     registration.address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-core-bridge

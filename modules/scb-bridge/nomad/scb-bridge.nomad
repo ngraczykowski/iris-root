@@ -22,16 +22,11 @@ variable "http_tags" {
   default = []
 }
 
-variable "grpcui_tags" {
-  type = list(string)
-  default = []
-}
-
 locals {
   jvm_memory = ceil(var.memory * 0.7)
   perm_memory = ceil(var.memory * 0.2)
   database_node_destination = "eu3"
-  database_volume = "/srv/sep-cluster/postgres/${var.namespace}-scb-bridge"
+  database_volume = "/srv/sep-cluster/postgres12/${var.namespace}-scb-bridge"
 }
 
 job "scb-bridge" {
@@ -71,7 +66,7 @@ job "scb-bridge" {
       }
 
       config {
-        image   = "postgres:10"
+        image   = "postgres:12"
         ports   = [
           "tcp"
         ]
@@ -140,79 +135,6 @@ job "scb-bridge" {
         method   = "GET"
         interval = "30s"
         timeout  = "10s"
-      }
-    }
-
-    service {
-      name = "${var.namespace}-scb-bridge"
-      port = "grpc"
-      tags = [
-        "grpc",
-        # FIXME(ahaczewski): Remove when Consul Discovery can filter through results based on tags.
-        "gRPC.port=${NOMAD_PORT_grpc}",
-        "gRPC_port=${NOMAD_PORT_grpc}",
-      ]
-
-#     check_restart {
-#       limit           = 3
-#       grace           = "90s"
-#       ignore_warnings = false
-#     }
-
-      check {
-        name     = "gRPC Port Alive Check"
-        type     = "tcp"
-        interval = "30s"
-        timeout  = "10s"
-      }
-    }
-
-    service {
-      name = "${var.namespace}-grpcui-scb-bridge"
-      port = "grpcui"
-      tags = concat([
-        "grpcui",
-        "traefik.enable=true",
-        "traefik.protocol=http",
-      ], var.grpcui_tags)
-    }
-
-    task "grpcui" {
-      driver = "raw_exec"
-
-      lifecycle {
-        hook = "poststart"
-        sidecar = true
-      }
-
-      restart {
-        interval = "5m"
-        attempts = 10
-        delay = "20s"
-        mode = "delay"
-      }
-
-      artifact {
-        source = "https://github.com/fullstorydev/grpcui/releases/download/v1.1.0/grpcui_1.1.0_linux_x86_64.tar.gz"
-        options {
-          checksum = "sha256:41b9b606a025561f7df892e78a8ac1819597ed74d2300183797ab8caa7b290a6"
-        }
-      }
-
-      config {
-        command = "grpcui"
-        args = [
-          "-plaintext",
-          "-bind=${NOMAD_IP_grpcui}",
-          "-port=${NOMAD_PORT_grpcui}",
-          "-open-browser=false",
-          "${NOMAD_ADDR_grpc}"
-        ]
-      }
-
-      resources {
-        cpu = 50
-        memory = 100
       }
     }
 
