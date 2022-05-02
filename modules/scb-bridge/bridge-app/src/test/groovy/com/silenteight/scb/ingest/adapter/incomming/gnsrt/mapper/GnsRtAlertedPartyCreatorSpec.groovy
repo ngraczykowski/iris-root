@@ -15,7 +15,7 @@ class GnsRtAlertedPartyCreatorSpec extends Specification {
       customerIdentificationNo: 'customerIdentificationNo',
       customerStatus: 'Customer status',
       dateOfBirthOrRegistration: '1999-01-01',
-      fullLegalName: 'mr John Smith',
+      fullLegalName: 'Mr John Smith',
       gender: 'M',
       nationalityAll: 'SG 1',
       registeredOrResidentialAddressCountry: 'AB',
@@ -150,7 +150,7 @@ class GnsRtAlertedPartyCreatorSpec extends Specification {
         customerIdentificationNo: 'customerIdentificationNo',
         clientType: 'I',
         fullLegalName: 'John Smith',
-        alternateName1: 'mr John Smith',
+        alternateName1: 'Mr John Smith',
     )
 
     when:

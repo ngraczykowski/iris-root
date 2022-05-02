@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.regex.Pattern.compile;
@@ -17,21 +16,21 @@ import static java.util.regex.Pattern.compile;
 public class TitleGenderDetector {
 
   private static final Pattern SPLIT_PARTS_PATTERN = compile(",\\s*");
-
-  private static final Pattern MALE_PREFIX_PATTERN = compile("^(mr)\\W.*");
-  private static final Pattern FEMALE_PREFIX_PATTERN = compile("^(mrs|ms|miss)\\W.*");
-
-  private static final Pattern MALE_RELATION_PATTERN = compile("(^|.*\\s)(s/o|h/o)\\W.*");
-  private static final Pattern FEMALE_RELATION_PATTERN = compile("(^|.*\\s)(d/o|w/o)\\W.*");
+  private static final Pattern MALE_PREFIX_PATTERN = compile("^(Mr)\\W.*");
+  private static final Pattern FEMALE_PREFIX_PATTERN =
+      compile("^(mrs|MRS|Mrs|Ms|miss|MISS|Miss)\\W.*");
+  private static final Pattern MALE_RELATION_PATTERN =
+      compile("(^|.*\\s)(s/o|S/o|S/O|s/O|h/o|H/o|H/O|h/O)\\W.*");
+  private static final Pattern FEMALE_RELATION_PATTERN =
+      compile("(^|.*\\s)(d/o|D/o|D/O|d/O|w/o|W/o|W/O|w/O)\\W.*");
 
   public static Gender detect(@NonNull List<String> names) {
     List<Gender> genders = names
         .stream()
         .filter(StringUtils::isNotBlank)
-        .map(String::toLowerCase)
         .flatMap(TitleGenderDetector::splitNameParts)
         .map(TitleGenderDetector::detectGenderForNamePart)
-        .collect(Collectors.toList());
+        .toList();
     return reduceGenders(genders);
   }
 

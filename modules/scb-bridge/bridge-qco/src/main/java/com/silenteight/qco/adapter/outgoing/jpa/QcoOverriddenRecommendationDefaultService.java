@@ -8,8 +8,7 @@ import com.silenteight.qco.domain.model.QcoRecommendationMatch;
 import com.silenteight.qco.domain.port.outgoing.QcoOverriddenRecommendationService;
 
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.silenteight.qco.adapter.outgoing.jpa.QcoOverriddenRecommendationMapper.toQcoOverriddenRecommendation;
 
@@ -20,7 +19,7 @@ class QcoOverriddenRecommendationDefaultService implements QcoOverriddenRecommen
 
   private final QcoOverriddenRecommendationJpaRepository recommendationRepository;
 
-  @Transactional
+  @Transactional("transactionManager")
   @Override
   public void storeQcoOverriddenRecommendation(
       QcoRecommendationMatch match, MatchSolution matchSolution) {
