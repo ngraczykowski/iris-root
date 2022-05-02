@@ -138,6 +138,11 @@ to do is to:
     - `https://lima.silenteight.com/rest/scb-bridge/v1/gnsrt/recommendation`
     - `https://lima.silenteight.com/rest/scb-bridge/v1/gnsrt/system-id/random`
 
+## Test script
+
+For your convenience you may use [testing script](scripts/smoke-tests.sh) which issues gns-rt 
+random requests and logs the responses.
+
 ## Running tests in Gradle
 
 By default, build run all tests. However, some integration tests take too much time. In order to
