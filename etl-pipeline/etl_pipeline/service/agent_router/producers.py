@@ -33,7 +33,7 @@ from silenteight.datasource.api.nationalid.v1.national_id_pb2 import NationalIdF
 from silenteight.datasource.api.transaction.v1.transaction_pb2 import TransactionFeatureInput
 from silenteight.datasource.categories.api.v2.category_value_pb2 import CategoryValue
 
-logger = logging.getLogger("main").getChild("agent_input_creator")
+logger = logging.getLogger("main").getChild("producers")
 
 
 class Producer(ABC):
