@@ -15,7 +15,6 @@ import com.jayway.jsonpath.ParseContext;
 import com.jayway.jsonpath.TypeRef;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -70,16 +69,17 @@ public class AlertParser {
 
   private Map<String, Hit> getMatches(DocumentContext documentContext) {
     List<JsonNode> hits = getHits(documentContext);
-    Collection<List<JsonNode>> mergedHits = mergeHits(hits);
+    Map<String, List<JsonNode>> mergedHits = mergeHits(hits);
     return mergedHits
+        .entrySet()
         .stream()
-        .map(AlertParser::convert)
+        .map(entry -> convert(entry.getKey(), entry.getValue()))
         .collect(toMap(Hit::getHitName, identity()));
   }
 
-  private static Hit convert(List<JsonNode> jsonNodes) {
+  private static Hit convert(String ofacId, List<JsonNode> jsonNodes) {
     return Hit.builder()
-        .hitName(UUID.randomUUID().toString())
+        .hitName(ofacId)
         .payloads(jsonNodes)
         .build();
   }
@@ -103,10 +103,9 @@ public class AlertParser {
     return getStringValue(documentContext, MESSAGE_ID_PATH);
   }
 
-  Collection<List<JsonNode>> mergeHits(List<JsonNode> hits) {
+  Map<String, List<JsonNode>> mergeHits(List<JsonNode> hits) {
     return hits.stream()
-        .collect(groupingBy(this::getOfacId, toList()))
-        .values();
+        .collect(groupingBy(this::getOfacId, toList()));
   }
 
   private String getOfacId(JsonNode hit) {

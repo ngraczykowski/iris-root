@@ -19,6 +19,7 @@ class AlertParserTest extends Specification {
 
   def "AlertDetails should be parsed"() {
     given:
+    def parser = new JsonSlurper()
     def alertMessageDetails = AlertMessageDetails.newBuilder().setMessageName(MESSAGE_NAME)
         .setPayload(MESSAGE).build()
     def alertMessageStored = AlertMessageStored.newBuilder().setBatchName(BATCH_NAME)
@@ -36,7 +37,7 @@ class AlertParserTest extends Specification {
     parsedAlertMessage.getCurrentActionComment() == ''
     parsedAlertMessage.hits.size() == 1
     parsedAlertMessage.hits.values().each {it ->
-      def parser = new JsonSlurper()
+      assert it.getHitName() == 'PSY0003'
       assert parser.parseText(it.getPayloads().first().toString()) == parser.parseText(HIT)
     }
   }
@@ -105,7 +106,7 @@ class AlertParserTest extends Specification {
     def hits = [hit1, hit2, hit3, hit4, hit5, hit6]
 
     when:
-    def result = underTest.mergeHits(hits)
+    def result = underTest.mergeHits(hits).values()
 
     then:
     result as Set == [[hit2], [hit4], [hit5], [hit1, hit3, hit6]] as Set
