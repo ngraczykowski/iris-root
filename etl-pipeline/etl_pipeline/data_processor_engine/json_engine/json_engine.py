@@ -232,9 +232,7 @@ class JsonProcessingEngine(ProcessingEngine):
                 try:
                     value.append(mapper[valid_source_col])
                 except KeyError:
-                    logger.warning(
-                        f"No field in payload named: {valid_source_col}. Ignore for HIT TYPE AGENT"
-                    )
+                    logger.warning(f"No field in payload named: {valid_source_col}.")
         elif len(source_cols) == 1:
             try:
                 value = mapper[source_cols[0]]

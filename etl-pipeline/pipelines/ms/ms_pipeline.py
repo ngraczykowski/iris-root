@@ -5,10 +5,8 @@ from etl_pipeline.config import load_agent_configs, pipeline_config
 from etl_pipeline.custom.ms.datatypes.field import InputRecordField
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.custom.ms.watchlist_extractor import WatchlistExtractor
-from etl_pipeline.logger import get_logger
 from etl_pipeline.pipeline import ETLPipeline
 
-logger = get_logger("main", "ms_pipeline.log")
 logger = logging.getLogger("main").getChild("etl_pipeline")
 
 

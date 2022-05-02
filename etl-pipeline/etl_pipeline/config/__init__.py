@@ -80,6 +80,7 @@ def load_agent_configs():
         "alert_type": OmegaConf.load(os.path.join(CONFIG_APP_DIR, "agents", "agents.yaml"))
     }
 
+    check_for_duplicate_fields(alert_agents_config)
     validate_agents_fields(alert_agents_config)
 
     alert_agents_config = {
@@ -103,6 +104,20 @@ class Pipeline:
 
     def reload_pipeline_config(self):
         self.load_configs()
+
+
+def check_duplicates_for_agent_configuration(agent_name, agent_config):
+    for category in agent_config.keys():
+        for field in set(agent_config[category]):
+            if agent_config[category].count(field) > 1:
+                logger.warning(
+                    f"The following field in agents.yaml appears more than once: {agent_name} -> {category} -> {field}"
+                )
+
+
+def check_for_duplicate_fields(alert_agents_config):
+    for agent in alert_agents_config["alert_type"]:
+        check_duplicates_for_agent_configuration(agent, alert_agents_config["alert_type"][agent])
 
 
 def get_fields(dict_):
@@ -138,7 +153,8 @@ def check_fields_in_files(fields, file_patterns):
         fields_present = [field for field in fields if field in text]
         if fields_present:
             fields = list(set(fields) - set(fields_present))
-    logger.debug(f"Check if transformation exist for those fields {fields}")
+    if fields:
+        logger.debug(f"Check if transformation exist for those fields {fields}")
     return fields
 
 
@@ -153,8 +169,6 @@ def validate_agents_fields(alert_agents_config):
     if fields_not_found:
         logger.warning("The following fields have not been found in any file:")
         logger.warning(fields_not_found)
-    else:
-        logger.info("All the fields have been found in some file.")
 
 
 service_config = OmegaConf.load(os.path.join(CONFIG_APP_DIR, "service", "service.yaml"))
