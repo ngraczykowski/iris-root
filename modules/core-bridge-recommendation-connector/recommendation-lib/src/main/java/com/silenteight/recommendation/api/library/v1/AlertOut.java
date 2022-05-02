@@ -13,6 +13,7 @@ public class AlertOut {
   String metadata;
   AlertStatus status;
   String errorMessage;
+  String name;
 
   public enum AlertStatus {
     UNKNOWN, FAILURE, SUCCESS
@@ -24,6 +25,7 @@ public class AlertOut {
         .metadata(alert.getMetadata())
         .status(AlertStatus.valueOf(alert.getStatus().name()))
         .errorMessage(alert.getErrorMessage())
+        .name(alert.getName())
         .build();
   }
 }

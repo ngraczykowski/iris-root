@@ -17,6 +17,7 @@ public class MatchOut {
   String stepId;
   String fvSignature;
   Map<String, String> features;
+  String name;
 
   static MatchOut createFrom(Match match) {
     return MatchOut.builder()
@@ -26,6 +27,7 @@ public class MatchOut {
         .stepId(match.getStepId())
         .fvSignature(match.getFvSignature())
         .features(StructMapperUtil.toMap(match.getFeatures()))
+        .name(match.getName())
         .build();
   }
 }
