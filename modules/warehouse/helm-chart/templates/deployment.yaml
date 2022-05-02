@@ -113,16 +113,6 @@ spec:
             - containerPort: {{ .Values.ports.management }}
               name: management
       initContainers:
-        - name: warehouse-es-init
-          image: {{ .Values.esInitDockerImage }}
-          imagePullPolicy: {{ .Values.imagePullPolicy }}
-          env:
-            - name: 'ES_URL'
-              value: {{ .Values.elasticUrl }}
-            - name: 'ES_USERNAME'
-              value: {{ .Values.elasticRestUsername }}
-            - name: 'ES_PASSWORD'
-              value:  {{ .Values.elasticRestPassword }}
       {{ if .Values.migration.sim.enabled }}
         - name: warehouse-sim-migration
           image: {{ .Values.migration.sim.image }}
