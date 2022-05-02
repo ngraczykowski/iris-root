@@ -1,0 +1,154 @@
+openapi: 3.0.3
+info:
+  title: Policy statistics
+  description: Policy statistics API
+  version: 1.0.0
+
+servers:
+  - url: '{environment}/rest/warehouse/api/v1'
+    variables:
+      environment:
+        enum:
+          - http://localhost:24291
+          - https://localhost:24111
+        default: http://localhost:24291
+
+paths:
+  /statistics/{policyId}/policyStatistics:
+    get:
+      description: Get statistics of policy from selected dates range.
+      parameters:
+        - in: path
+          name: policyId
+          required: true
+          description: Policy ID.
+          example: a234-2234-234234-134
+          schema:
+            type: string
+        - in: query
+          name: from
+          description: Start date of statistics.
+          required: true
+          explode: false
+          example: 2020-10-15T01:00:00.000Z
+          schema:
+            type: string
+        - in: query
+          name: to
+          description: End date of statistics.
+          required: true
+          explode: false
+          example: 2021-10-27T08:00:00.000Z
+          schema:
+            type: string
+      responses:
+        200:
+          description: Policy statistics object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolicyStatistics'
+
+  /statistics/{policyId}/policyDailyStatistics:
+    get:
+      description: Get daily statistics of policy from selected dates range.
+      parameters:
+        - in: path
+          name: policyId
+          required: true
+          description: Policy id.
+          example: a234-2234-234234-134
+          schema:
+            type: string
+        - in: query
+          name: from
+          description: Start date of statistics.
+          required: true
+          explode: false
+          example: 2020-10-15T01:00:00.000Z
+          schema:
+            type: string
+        - in: query
+          name: to
+          description: End date of statistics.
+          required: true
+          explode: false
+          example: 2021-10-27T08:00:00.000Z
+          schema:
+            type: string
+      responses:
+        200:
+          description: List of objects with daily statistics.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolicyDailyStatisticsList'
+
+components:
+  schemas:
+    PolicyStatistics:
+      type: object
+      properties:
+        avgEffectivenessPercent:
+          type: number
+          example: 90
+        avgEfficiencyPercent:
+          type: number
+          example: 55
+        avgResolutionPerDay:
+          type: number
+          example: 234200
+        totalAlerts:
+          type: number
+          example: 526
+        falsePositive:
+          type: number
+          example: 26
+        falsePositivePercent:
+          type: number
+          example: 92
+        potentialTruePositive:
+          type: number
+          example: 14
+        potentialTruePositivePercent:
+          type: number
+          example: 25
+        manualInvestigation:
+          type: number
+          example: 385
+        manualInvestigationPercent:
+          type: number
+          example: 38
+    
+    PolicyDailyStatisticsList:
+      type: array
+      items:
+        $ref: '#/components/PolicyDailyStatistics'
+
+    PolicyDailyStatistics:
+      type: object
+      properties:
+        day:
+          type: string
+          example: 2020-10-15T01:00:00.000Z
+        alertsCount:
+          type: number
+          example: 150
+        falsePositiveCount:
+          type: number
+          example: 45
+        potentialTruePositiveCount:
+          type: number
+          example: 15
+        manualInvestigationCount:
+          type: number
+          example: 60
+        efficiencyPercent:
+          type: number
+          example: 70
+        effectivenessPercent:
+          type: number
+          example: 99
+
+
+        
