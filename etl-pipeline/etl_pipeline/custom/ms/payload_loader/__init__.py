@@ -59,8 +59,9 @@ class PayloadLoader:
         return value
 
     def remove_array_bracket_and_get_index_of_element(self, string):
-        return self.LIST_TYPE_REGEX.sub("", string), int(
-            self.LIST_TYPE_REGEX.search(string).groups()[0]
+        return (
+            self.LIST_TYPE_REGEX.sub("", string),
+            int(self.LIST_TYPE_REGEX.search(string).groups()[0]),
         )
 
     def create_dict_with_array_value(self, new_key, extracted_value):

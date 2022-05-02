@@ -143,12 +143,14 @@ def test_produce_document_feature_input_producer(
                 "feature_name": "employerName",
                 "field_maps": {
                     "alerted_party_names": "ap_payload_employer_names",
+                    "alerted_party_type": "ap_type",
                     "watchlist_names": "wl_payload_employer_names",
                 },
             },
             {
                 "ap_payload_employer_names": ["Tech Ltd.", None, "Bingo"],
                 "wl_payload_employer_names": ["Soft Pte."],
+                "ap_type": "I",
             },
             {
                 "feature": "features/employerName",
@@ -169,7 +171,7 @@ def test_produce_employer_name_feature_input_producer(
     result = producer.produce_feature_input(payload_fields)
     assert result == NameFeatureInput(
         feature=reference_fields["feature"],
-        alerted_party_type=NameFeatureInput.EntityType.ENTITY_TYPE_UNSPECIFIED,
+        alerted_party_type=NameFeatureInput.EntityType.INDIVIDUAL,
         alerted_party_names=reference_fields["ap"],
         watchlist_names=reference_fields["wl"],
     )
@@ -311,9 +313,14 @@ def test_produce_location_feature_input_producer(
                 "field_maps": {
                     "alerted_party_names": "ap_payload_names",
                     "watchlist_names": "wl_payload_names",
+                    "alerted_party_type": "ap_type",
                 },
             },
-            {"ap_payload_names": ["John Smith"], "wl_payload_names": ["Smith Joe"]},
+            {
+                "ap_payload_names": ["John Smith"],
+                "wl_payload_names": ["Smith Joe"],
+                "ap_type": "C",
+            },
             {
                 "feature": "/",
                 "ap": [AlertedPartyName(name="John Smith")],
@@ -327,9 +334,10 @@ def test_produce_location_feature_input_producer(
                 "field_maps": {
                     "alerted_party_names": "ap_payload_names",
                     "watchlist_names": "wl_payload_names",
+                    "alerted_party_type": "ap_type",
                 },
             },
-            {"ap_payload_names": [""], "wl_payload_names": []},
+            {"ap_payload_names": [""], "wl_payload_names": [], "ap_type": "C"},
             {"feature": "features/name", "ap": [AlertedPartyName(name="")], "wl": []},
         ),
         (
@@ -338,10 +346,11 @@ def test_produce_location_feature_input_producer(
                 "feature_name": "last_name",
                 "field_maps": {
                     "alerted_party_names": "ap_payload_names",
+                    "alerted_party_type": "ap_type",
                     "watchlist_names": "wl_payload_names",
                 },
             },
-            {"ap_payload_names": [None], "wl_payload_names": ["Jim"]},
+            {"ap_payload_names": [None], "wl_payload_names": ["Jim"], "ap_type": "UNKNOWN"},
             {
                 "feature": "features/last_name",
                 "ap": [AlertedPartyName(name="None")],
@@ -357,7 +366,7 @@ def test_produce_name_feature_input_producer(
     result = producer.produce_feature_input(payload_fields)
     assert result == NameFeatureInput(
         feature=reference_fields["feature"],
-        alerted_party_type=NameFeatureInput.EntityType.ENTITY_TYPE_UNSPECIFIED,
+        alerted_party_type=NameFeatureInputProducer.AP_TYPE_MAPPING.get(payload_fields["ap_type"]),
         alerted_party_names=reference_fields["ap"],
         watchlist_names=reference_fields["wl"],
     )
