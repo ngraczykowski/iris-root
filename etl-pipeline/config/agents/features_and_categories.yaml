@@ -4,6 +4,7 @@ name:
  fields:
    alerted_party_names: ap_all_names_aggregated
    watchlist_names: wl_all_names_aggregated
+   alerted_party_type: AP_PARTY_TYPE
 
 dateOfBirth:
   feature_type: features
@@ -25,6 +26,7 @@ employerName:
   fields:
     alerted_party_names: ap_all_employer_names_aggregated
     watchlist_names: wl_all_employer_names_aggregated
+    alerted_party_type: AP_PARTY_TYPE
 
 isApNameTpMarked:
   feature_type: features
@@ -106,6 +108,7 @@ companyName:
  fields:
    alerted_party_names: ap_all_company_names_aggregated
    watchlist_names: wl_all_company_names_aggregated
+   alerted_party_type: AP_PARTY_TYPE
 
 alertType:
   feature_type: categories

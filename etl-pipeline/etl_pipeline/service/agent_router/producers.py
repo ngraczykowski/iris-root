@@ -118,6 +118,12 @@ class LocationFeatureInputProducer(Producer):
 
 
 class NameFeatureInputProducer(Producer):
+    AP_TYPE_MAPPING = {
+        "I": NameFeatureInput.EntityType.INDIVIDUAL,
+        "C": NameFeatureInput.EntityType.ORGANIZATION,
+        "UNKNOWN": NameFeatureInput.EntityType.ENTITY_TYPE_UNSPECIFIED,
+    }
+
     def produce_feature_input(self, payload):
         fields = deepcopy(self.fields)
         payload = deepcopy(payload)
@@ -126,7 +132,9 @@ class NameFeatureInputProducer(Producer):
 
         return NameFeatureInput(
             feature=self.feature_name,
-            alerted_party_type=NameFeatureInput.EntityType.ENTITY_TYPE_UNSPECIFIED,
+            alerted_party_type=NameFeatureInputProducer.AP_TYPE_MAPPING.get(
+                fields["alerted_party_type"], NameFeatureInput.EntityType.ENTITY_TYPE_UNSPECIFIED
+            ),
             alerted_party_names=[
                 AlertedPartyName(name=str(i)) for i in fields["alerted_party_names"]
             ],
