@@ -59,7 +59,7 @@ class RecommendationSender {
   private static void logException(String endpoint, Exception exception) {
     log.warn(
         "Unable to send the decision to [{}] due to the exception [{}: {}]",
-        endpoint, exception.getClass().getName(), exception.getLocalizedMessage());
+        endpoint, exception.getClass().getName(), exception.getLocalizedMessage(), exception);
   }
 
   private static RuntimeException mapToException(HttpServerErrorException exception) {

@@ -24,6 +24,15 @@ class BaseSpecificationIT extends Specification {
     RABBITMQ_CONTAINER.start()
   }
 
+  def stopPostgresql() {
+    POSTGRESQL_CONTAINER.stop()
+  }
+
+  def stopRabbitmq() {
+    RABBITMQ_CONTAINER.stop()
+  }
+
+
   @DynamicPropertySource
   private static void overrideProperties(DynamicPropertyRegistry registry) {
     if (RABBITMQ_CONTAINER.isRunning()) {

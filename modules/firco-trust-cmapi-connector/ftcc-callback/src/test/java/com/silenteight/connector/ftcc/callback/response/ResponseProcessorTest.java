@@ -43,7 +43,7 @@ class ResponseProcessorTest {
         .setAnalysisName(ANALYSIS_NAME)
         .build();
 
-    assertAll(() -> underTest.process(messageBatchCompleted, "solving"));
+    assertAll(() -> underTest.process(messageBatchCompleted));
     verify(clientRequestDtoBuilder, times(1)).build(eq(BATCH_NAME), eq(ANALYSIS_NAME), any());
   }
 }

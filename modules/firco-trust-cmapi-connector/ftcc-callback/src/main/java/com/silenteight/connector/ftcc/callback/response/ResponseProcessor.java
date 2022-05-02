@@ -26,7 +26,7 @@ public class ResponseProcessor {
   private final RecommendationsDeliveredPublisher recommendationsDeliveredPublisher;
 
   @Async
-  public void process(MessageBatchCompleted messageBatchCompleted, String alertType) {
+  public void process(MessageBatchCompleted messageBatchCompleted) {
     final var analysisName = messageBatchCompleted.getAnalysisName();
     final var batchName = messageBatchCompleted.getBatchId();
     MDC.put(BATCH_NAME, batchName);
@@ -43,7 +43,6 @@ public class ResponseProcessor {
           .builder()
           .batchName(batchName)
           .analysisName(analysisName)
-          .alertType(alertType)
           .build());
     } finally {
       MDC.remove(BATCH_NAME);

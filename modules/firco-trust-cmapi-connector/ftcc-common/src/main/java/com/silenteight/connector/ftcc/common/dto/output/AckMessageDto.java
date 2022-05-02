@@ -1,26 +1,23 @@
 package com.silenteight.connector.ftcc.common.dto.output;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import lombok.Builder;
+import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.Serializable;
-
-@RequiredArgsConstructor
-@Getter
-@ToString
-class AckMessageDto implements Serializable {
-
-  private static final long serialVersionUID = -9036091619375056784L;
+@Value
+@Builder
+@Jacksonized
+class AckMessageDto {
 
   @JsonProperty("faultcode")
-  private final String faultCode;
+  String faultCode;
 
   @JsonProperty("faultstring")
-  private final String faultString;
+  String faultString;
 
   @JsonProperty("faultactor")
-  private final String faultActor;
+  @Builder.Default
+  String faultActor = "cmapi.send.message";
 }

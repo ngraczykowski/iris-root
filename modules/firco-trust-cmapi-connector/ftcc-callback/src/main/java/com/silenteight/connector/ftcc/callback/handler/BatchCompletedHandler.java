@@ -24,13 +24,15 @@ public class BatchCompletedHandler {
 
   private static final String QUEUE_NAME = "ftcc_batch completed_queue";
   public static final String DEFAULT_EXCHANGE = "notify-batch-completed-exchange";
+  private static final String SOLVING_TYPE = "solving";
+  private static final String SIMULATION_TYPE = "simulation";
   private final ResponseProcessor responseProcessor;
   private final BatchCompletedService batchCompletedService;
 
   @RabbitListener(bindings = {
       @QueueBinding(
           value = @Queue(QUEUE_NAME),
-          key = { "solving", "simulation" },
+          key = { SOLVING_TYPE, SIMULATION_TYPE },
           exchange = @Exchange("${ftcc.core-bridge.inbound.batch-completed.exchange:"
               + DEFAULT_EXCHANGE + "}"))
   })
@@ -45,8 +47,12 @@ public class BatchCompletedHandler {
           "BatchCompleted received batchName={} analysisName={} alertType={}", batchName,
           analysisName, alertType);
 
-      batchCompletedService.save(batchName, analysisName);
-      responseProcessor.process(messageBatchCompleted, alertType);
+      if (SOLVING_TYPE.equals(alertType)) {
+        batchCompletedService.save(batchName, analysisName);
+        responseProcessor.process(messageBatchCompleted);
+      } else {
+        log.info("AlertType={}, message will be ignored", alertType);
+      }
     } finally {
       MDC.remove(BATCH_NAME);
     }

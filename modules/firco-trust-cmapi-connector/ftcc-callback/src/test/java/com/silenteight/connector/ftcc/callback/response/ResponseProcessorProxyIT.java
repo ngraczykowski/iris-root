@@ -34,7 +34,7 @@ class ResponseProcessorProxyIT extends BaseDataJpaTest {
         .build();
 
     // NOTE: expected NonRecoverableCallbackException.class but isn't
-    assertDoesNotThrow(() -> underTest.process(messageBatchCompleted, "solving"));
+    assertDoesNotThrow(() -> underTest.process(messageBatchCompleted));
   }
 }
 

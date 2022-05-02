@@ -80,6 +80,7 @@ dependencies {
   testImplementation project(":ftcc-common-testing")
   testImplementation libraries.groovy_wslite
   testImplementation libraries.jsonassert
+  testImplementation libraries.wiremock
 
   aspect libraries.silenteight_sep_base_aspects
 }
