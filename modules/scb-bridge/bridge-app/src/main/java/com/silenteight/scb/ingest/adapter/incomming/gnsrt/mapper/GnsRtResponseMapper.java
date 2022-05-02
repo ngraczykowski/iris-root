@@ -64,6 +64,7 @@ public class GnsRtResponseMapper {
         .hitID(match.id())
         .fvSignature(match.fvSignature())
         .stepId(match.stepId())
+        .qaSampled(match.qaSampled())
         .build();
   }
 }

@@ -35,6 +35,7 @@ class RecommendationGrpcAdapterSpec extends Specification {
 
       with(alert()) {
         id() == GrpcAdapterFixtures.ALERT_ID
+        name() == GrpcAdapterFixtures.ALERT_NAME
         status().name() == GrpcAdapterFixtures.ALERT_STATUS.name()
         metadata() == GrpcAdapterFixtures.ALERT_METADATA
         errorMessage() == GrpcAdapterFixtures.ERROR_MESSAGE
@@ -42,6 +43,7 @@ class RecommendationGrpcAdapterSpec extends Specification {
 
       with(matches().first()) {
         id() == GrpcAdapterFixtures.MATCH_ID
+        name() == GrpcAdapterFixtures.MATCH_NAME
         recommendedAction() == GrpcAdapterFixtures.MATCH_RECOMMENDED_ACTION
         recommendedComment() == GrpcAdapterFixtures.MATCH_RECOMMENDATION_COMMENT
         stepId() == GrpcAdapterFixtures.STEP_ID

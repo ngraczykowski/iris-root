@@ -12,6 +12,7 @@ class GrpcAdapterFixtures {
   static List<String> ALERT_IDS = ['alertId1', 'alertId2']
 
   static String MATCH_ID = 'matchId'
+  static String MATCH_NAME = 'matchName'
   static String MATCH_RECOMMENDED_ACTION = 'matchRecommendedAction'
   static String MATCH_RECOMMENDATION_COMMENT = 'matchRecommendationComment'
   static String STEP_ID = 'stepId'
@@ -21,6 +22,7 @@ class GrpcAdapterFixtures {
   static Map<String, String> FEATURES = [featureKey: FEATURE_VALUE] as Map
 
   static String ALERT_ID = 'alertId'
+  static String ALERT_NAME = 'alertName'
   static String ALERT_METADATA = 'alertMetadata'
   static AlertStatus ALERT_STATUS = AlertStatus.SUCCESS
   static String ERROR_MESSAGE = 'errorMessage'
@@ -40,6 +42,7 @@ class GrpcAdapterFixtures {
   static List<MatchOut> MATCHES = [
       MatchOut.builder()
           .id(MATCH_ID)
+          .name(MATCH_NAME)
           .recommendedAction(MATCH_RECOMMENDED_ACTION)
           .recommendationComment(MATCH_RECOMMENDATION_COMMENT)
           .stepId(STEP_ID)
@@ -50,6 +53,7 @@ class GrpcAdapterFixtures {
 
   static AlertOut ALERT = AlertOut.builder()
       .id(ALERT_ID)
+      .name(ALERT_NAME)
       .metadata(ALERT_METADATA)
       .status(ALERT_STATUS)
       .errorMessage(ERROR_MESSAGE)
