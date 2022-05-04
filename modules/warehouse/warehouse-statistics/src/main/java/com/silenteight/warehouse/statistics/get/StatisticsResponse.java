@@ -1,15 +1,14 @@
-package com.silenteight.warehouse.statistics.controller;
+package com.silenteight.warehouse.statistics.get;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Builder
 @Getter
-final class PolicyStatisticsResponse {
+final class StatisticsResponse {
 
   private double avgEffectivenessPercent;
   private double avgEfficiencyPercent;
-  private int avgResolutionPerDay;
   private int totalAlerts;
   private int falsePositive;
   private double falsePositivePercent;
@@ -17,4 +16,5 @@ final class PolicyStatisticsResponse {
   private double potentialTruePositivePercent;
   private int manualInvestigation;
   private double manualInvestigationPercent;
+
 }

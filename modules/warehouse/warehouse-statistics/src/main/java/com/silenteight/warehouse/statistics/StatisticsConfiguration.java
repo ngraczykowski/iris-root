@@ -8,7 +8,7 @@ import com.silenteight.warehouse.statistics.Annotations.Daily;
 import com.silenteight.warehouse.statistics.aggregators.AlertAggregator;
 import com.silenteight.warehouse.statistics.computers.AlertRecommendationComputer;
 import com.silenteight.warehouse.statistics.extractors.AlertDataExtractor;
-import com.silenteight.warehouse.statistics.model.DailyPolicyStatisticsRepository;
+import com.silenteight.warehouse.statistics.get.DailyRecommendationStatisticsRepository;
 import com.silenteight.warehouse.statistics.persistance.DailyRecommendationPersistence;
 import com.silenteight.warehouse.statistics.properties.DailyStatisticsProperties;
 
@@ -42,7 +42,7 @@ public class StatisticsConfiguration {
 
   @Bean
   DailyRecommendationPersistence dailyRecommendationPersistance(
-      DailyPolicyStatisticsRepository repository) {
+      DailyRecommendationStatisticsRepository repository) {
     return new DailyRecommendationPersistence(repository);
   }
 

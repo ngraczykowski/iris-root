@@ -18,10 +18,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- * Collect data based on the last LocalDate from {@code DailyPolicyStatistics}
+ * Collect data based on the last LocalDate from {@code DailyRecommendationStatistics}
  *
- * <p>If there is no data in {@code DailyPolicyStatistics} table as the reference point the first
- * model is taken from {@code DataExtractor}
+ * <p>If there is no data in {@code DailyRecommendationStatistics} table as the reference point the
+ * first model is taken from {@code DataExtractor}
  *
  * <p>Historical data used by aggregator can be changed as data provided also sends updates to our
  * system. Because of that we can not calculate only data for current period, but we also need to
