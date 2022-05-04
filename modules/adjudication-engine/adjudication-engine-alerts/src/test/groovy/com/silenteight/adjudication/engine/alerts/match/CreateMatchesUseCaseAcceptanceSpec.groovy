@@ -5,6 +5,8 @@ import com.silenteight.adjudication.api.v1.Match.Builder
 
 import spock.lang.Specification
 
+import java.util.stream.Collectors
+
 import static com.silenteight.adjudication.engine.alerts.match.MatchFixtures.inMemoryMatchFacade
 import static java.util.Collections.emptyList
 
@@ -45,20 +47,21 @@ class CreateMatchesUseCaseAcceptanceSpec extends Specification {
         .build()
 
     when:
-    def matches = facade.createMatches([newAlertMatches])
+    def matches = facade.createMatches([newAlertMatches]).stream().map(m -> m.toMatch()).collect(
+        Collectors.toList())
 
     then:
     matches.size() == 2
     verifyAll(matches[0]) {
       name =~ "alerts/123/matches/\\d+"
       matchId == "match 1"
-      index == 1
+      index == 0
       labelsMap == [label: "value"]
     }
     verifyAll(matches[1]) {
       name =~ "alerts/123/matches/\\d+"
       matchId == "match 2"
-      index == 2
+      index == 0
       labelsMap == [another: "value"]
     }
   }
@@ -75,8 +78,8 @@ class CreateMatchesUseCaseAcceptanceSpec extends Specification {
     def matches = facade.createMatches([newAlertMatches])
 
     then:
-    matches[0].index == 1
-    matches[1].index == 2
+    matches[0].sortIndex == 0
+    matches[1].sortIndex == 0
   }
 
   def "should check latest sort index and set correct indexes in new matches"() {
@@ -97,8 +100,8 @@ class CreateMatchesUseCaseAcceptanceSpec extends Specification {
     def matches = facade.createMatches([newAlertMatches])
 
     then:
-    matches[0].index == 3
-    matches[1].index == 4
+    matches[0].sortIndex == 0
+    matches[1].sortIndex == 0
   }
 
   private static Builder match(String matchId) {

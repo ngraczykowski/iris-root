@@ -4,7 +4,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.Match;
-import com.silenteight.adjudication.engine.alerts.match.MatchRepository.LatestSortIndex;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
@@ -12,15 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 
 import static com.google.common.collect.Lists.partition;
-import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toUnmodifiableList;
 import static java.util.stream.StreamSupport.stream;
 
@@ -37,49 +33,23 @@ class CreateMatchesUseCase {
 
   @Timed(value = "ae.alerts.use_cases", extraTags = { "package", "match" })
   @Transactional
-  List<Match> createMatches(Iterable<NewAlertMatches> newAlertMatches) {
-    var latestSortIndexes = collectLatestSortIndexes(newAlertMatches);
+  List<MatchEntity> createMatches(Iterable<NewAlertMatches> newAlertMatches) {
 
     var matchesToSave = getStream(newAlertMatches)
-        .flatMap(am -> createAlertMatches(latestSortIndexes, am))
+        .flatMap(CreateMatchesUseCase::createAlertMatches)
         .collect(toUnmodifiableList());
 
     return saveAllMatches(matchesToSave);
   }
 
-  @Nonnull
-  private Map<Long, Integer> collectLatestSortIndexes(Iterable<NewAlertMatches> newAlertMatches) {
-    var alertIds = getDistinctAlertIds(newAlertMatches);
-
-    return partition(alertIds, FETCH_LATEST_INDEXES_PARTITION_SIZE)
-        .stream()
-        .flatMap(l -> repository.findLatestSortIndexByAlertIds(alertIds))
-        .collect(toMap(LatestSortIndex::getAlertId, LatestSortIndex::getSortIndex));
-  }
-
-  @Nonnull
-  private static List<Long> getDistinctAlertIds(Iterable<NewAlertMatches> newAlertMatches) {
-    return getStream(newAlertMatches)
-        .map(a -> getAlertId(a.getParentAlert()))
-        .distinct()
-        .collect(toUnmodifiableList());
-  }
-
-  private static Stream<MatchEntity> createAlertMatches(
-      Map<Long, Integer> latestSortIndexes, NewAlertMatches newAlertMatches) {
+  private static Stream<MatchEntity> createAlertMatches(NewAlertMatches newAlertMatches) {
 
     var alertId = getAlertId(newAlertMatches.getParentAlert());
-    var lastSortIndex = latestSortIndexes.getOrDefault(alertId, 0);
     var matches = newAlertMatches.getMatches();
 
     validateMatchIndexes(matches);
 
-    return IntStream.range(0, matches.size())
-        .mapToObj(i -> {
-          var match = matches.get(i);
-          var sortIndex = match.getIndex() != 0 ? match.getIndex() : lastSortIndex + i + 1;
-          return createEntity(alertId, match, sortIndex);
-        });
+    return matches.stream().map(item -> createEntity(alertId, item));
   }
 
   private static void validateMatchIndexes(List<Match> matches) {
@@ -97,21 +67,20 @@ class CreateMatchesUseCase {
     }
   }
 
-  private static MatchEntity createEntity(long alertId, Match match, int sortIndex) {
+  private static MatchEntity createEntity(long alertId, Match match) {
     return MatchEntity.builder()
         .alertId(alertId)
         .clientMatchIdentifier(match.getMatchId())
         .labels(match.getLabelsMap())
-        .sortIndex(sortIndex)
+        .sortIndex(0)
         .build();
   }
 
   @Nonnull
-  private List<Match> saveAllMatches(List<MatchEntity> matchesToSave) {
+  private List<MatchEntity> saveAllMatches(List<MatchEntity> matchesToSave) {
     return partition(matchesToSave, SAVE_PARTITION_SIZE)
         .stream()
         .flatMap(entities -> getStream(repository.saveAll(entities)))
-        .map(MatchEntity::toMatch)
         .collect(toUnmodifiableList());
   }
 

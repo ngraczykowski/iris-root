@@ -30,7 +30,7 @@ public class AlertFacade {
 
   @Nonnull
   @Transactional
-  public List<Alert> createAlerts(List<Alert> alerts) {
+  public List<Alert> createAlerts(Iterable<Alert> alerts) {
     var newAlerts = createAlertsUseCase.createAlerts(alerts);
 
     log.info(

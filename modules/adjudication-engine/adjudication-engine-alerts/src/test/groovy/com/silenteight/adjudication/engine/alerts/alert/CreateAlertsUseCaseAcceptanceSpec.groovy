@@ -6,11 +6,8 @@ import com.silenteight.adjudication.api.v1.Alert.Builder
 import com.google.protobuf.util.Timestamps
 import spock.lang.Specification
 
-import java.time.Instant
-
 import static com.silenteight.adjudication.engine.alerts.alert.AlertFixtures.getRandomAlertId
 import static com.silenteight.adjudication.engine.alerts.alert.AlertFixtures.inMemoryAlertFacade
-import static com.silenteight.adjudication.engine.common.protobuf.TimestampConverter.fromInstant
 
 class CreateAlertsUseCaseAcceptanceSpec extends Specification {
 
@@ -55,6 +52,17 @@ class CreateAlertsUseCaseAcceptanceSpec extends Specification {
     3213          || 10
   }
 
+  def "for input alert with no alert_time, alert_time matches create_time"() {
+    when:
+    def inputAlert = alert().build()
+    def createdAlert = facade.createAlerts([inputAlert]).first()
+
+    then:
+    with(createdAlert) {
+      alertTime == createTime
+    }
+  }
+
   def "creates alerts in batch"() {
     given:
     def alert1 = alert().build()
@@ -70,9 +78,6 @@ class CreateAlertsUseCaseAcceptanceSpec extends Specification {
   }
 
   private static Builder alert() {
-    def now= Instant.now()
     Alert.newBuilder().setAlertId(getRandomAlertId())
-        .setAlertTime(fromInstant(now))
-        .setCreateTime(fromInstant(now))
   }
 }

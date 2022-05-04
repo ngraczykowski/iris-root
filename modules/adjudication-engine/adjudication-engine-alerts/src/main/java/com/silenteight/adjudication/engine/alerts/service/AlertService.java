@@ -5,12 +5,14 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.*;
 import com.silenteight.adjudication.engine.alerts.alert.AlertFacade;
+import com.silenteight.adjudication.engine.alerts.match.MatchEntity;
 import com.silenteight.adjudication.engine.alerts.match.MatchFacade;
 import com.silenteight.adjudication.engine.alerts.match.NewAlertMatches;
 
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import static java.util.stream.Collectors.toUnmodifiableList;
@@ -39,7 +41,12 @@ class AlertService {
         .match(request.getMatch())
         .build();
 
-    return matchFacade.createMatches(List.of(newAlertMatches)).get(0);
+    return matchFacade
+        .createMatches(List.of(newAlertMatches))
+        .stream()
+        .map(MatchEntity::toMatch)
+        .findFirst()
+        .get();
   }
 
   BatchAddLabelsResponse addLabels(BatchAddLabelsRequest request) {
@@ -63,7 +70,7 @@ class AlertService {
     var matches = matchFacade.createMatches(List.of(newAlertMatches));
 
     return BatchCreateAlertMatchesResponse.newBuilder()
-        .addAllMatches(matches)
+        .addAllMatches(matches.stream().map(MatchEntity::toMatch).collect(Collectors.toList()))
         .build();
   }
 
@@ -81,7 +88,7 @@ class AlertService {
     var matches = matchFacade.createMatches(newAlertMatchesList);
 
     return BatchCreateMatchesResponse.newBuilder()
-        .addAllMatches(matches)
+        .addAllMatches(matches.stream().map(MatchEntity::toMatch).collect(Collectors.toList()))
         .build();
   }
 }

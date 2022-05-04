@@ -4,9 +4,9 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class MatchFixtures {
+public class MatchFixtures {
 
-  static MatchFacade inMemoryMatchFacade() {
+  public static MatchFacade inMemoryMatchFacade() {
     var matchRepository = new InMemoryMatchRepository();
 
     var createMatchesUseCase = new CreateMatchesUseCase(matchRepository);

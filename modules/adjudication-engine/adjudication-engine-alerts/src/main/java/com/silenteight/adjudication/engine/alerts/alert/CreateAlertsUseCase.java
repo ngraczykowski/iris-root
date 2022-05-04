@@ -4,19 +4,21 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.Alert;
+import com.silenteight.adjudication.api.v1.Match;
+import com.silenteight.adjudication.engine.alerts.match.MatchEntity;
+import com.silenteight.adjudication.engine.alerts.match.MatchFacade;
+import com.silenteight.adjudication.engine.alerts.match.NewAlertMatches;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import javax.annotation.Nonnull;
 
-import static com.google.common.collect.Lists.partition;
 import static com.silenteight.adjudication.engine.common.protobuf.TimestampConverter.toOffsetDateTime;
-import static java.util.stream.Collectors.toUnmodifiableList;
-import static java.util.stream.StreamSupport.stream;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Service
@@ -25,22 +27,35 @@ class CreateAlertsUseCase {
   private static final int MAX_PRIORITY = 10;
   private static final int MIN_PRIORITY = 1;
   private static final int DEFAULT_PRIORITY = 5;
-  private static final int SAVE_PARTITION_SIZE = 1_024;
 
   @NonNull
   private final AlertRepository repository;
+  private final MatchFacade matchFacade;
 
   @Timed(value = "ae.alerts.use_cases", extraTags = { "package", "alert" })
-  List<Alert> createAlerts(List<Alert> alerts) {
-    return partition(alerts, SAVE_PARTITION_SIZE).stream()
-        .map(CreateAlertsUseCase::createEntities)
-        .flatMap(entities -> getStream(repository.saveAll(entities)))
-        .map(AlertEntity::toAlert)
-        .collect(toUnmodifiableList());
-  }
+  @Transactional
+  List<Alert> createAlerts(Iterable<Alert> alerts) {
+    var savedAlerts = new ArrayList<AlertEntity>();
+    var newAlertMatches = new ArrayList<NewAlertMatches>();
 
-  private static List<AlertEntity> createEntities(List<Alert> alerts) {
-    return alerts.stream().map(CreateAlertsUseCase::createEntity).collect(Collectors.toList());
+    for (var alert : alerts) {
+      var savedAlert = repository.save(createEntity(alert));
+      savedAlerts.add(savedAlert);
+      newAlertMatches.add(createAlertMatches(savedAlert.getId(), alert.getMatchesList()));
+    }
+
+    var savedMatches = matchFacade.createMatches(newAlertMatches);
+    var alertMatches = savedMatches.stream().collect(groupingBy(MatchEntity::getAlertId));
+
+    return savedAlerts
+        .stream()
+        .map(alert -> alert.toAlert(
+            alertMatches
+                .getOrDefault(alert.getId(), List.of())
+                .stream()
+                .map(MatchEntity::toMatch)
+                .collect(toList())))
+        .collect(toList());
   }
 
   private static AlertEntity createEntity(Alert alert) {
@@ -63,8 +78,7 @@ class CreateAlertsUseCase {
     return builder.build();
   }
 
-  @Nonnull
-  private static <T> Stream<T> getStream(Iterable<T> m) {
-    return stream(m.spliterator(), false);
+  private static NewAlertMatches createAlertMatches(Long alertId, List<Match> matches) {
+    return NewAlertMatches.builder().matches(matches).parentAlert("alerts/" + alertId).build();
   }
 }

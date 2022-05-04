@@ -9,6 +9,7 @@ import java.time.OffsetDateTime;
 import java.util.Locale;
 import java.util.UUID;
 
+import static com.silenteight.adjudication.engine.alerts.match.MatchFixtures.inMemoryMatchFacade;
 import static java.util.concurrent.ThreadLocalRandom.current;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -22,7 +23,7 @@ public class AlertFixtures {
     var alertRepository = new InMemoryAlertRepository();
     var alertLabelDataAccess = new InMemoryAlertLabelDataAccess();
 
-    var createAlertsUseCase = new CreateAlertsUseCase(alertRepository);
+    var createAlertsUseCase = new CreateAlertsUseCase(alertRepository, inMemoryMatchFacade());
     var addAlertLabels = new AddLabelsUseCase(alertLabelDataAccess);
     var removeAlertLabels = new RemoveLabelUseCase(alertLabelDataAccess);
     var deleteAlerts = new DeleteAlertsUseCase(alertRepository);

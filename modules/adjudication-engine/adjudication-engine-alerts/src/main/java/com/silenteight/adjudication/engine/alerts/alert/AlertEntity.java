@@ -5,12 +5,14 @@ import lombok.Builder.Default;
 import lombok.EqualsAndHashCode.Include;
 
 import com.silenteight.adjudication.api.v1.Alert;
+import com.silenteight.adjudication.api.v1.Match;
 import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
 
 import org.hibernate.annotations.Fetch;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Map;
 import javax.persistence.*;
 
@@ -63,7 +65,7 @@ class AlertEntity extends BaseEntity implements IdentifiableEntity {
     }
   }
 
-  Alert toAlert() {
+  Alert toAlert(List<Match> matches) {
     return Alert
         .newBuilder()
         .setName("alerts/" + getId())
@@ -72,6 +74,7 @@ class AlertEntity extends BaseEntity implements IdentifiableEntity {
         .setAlertTime(fromOffsetDateTime(getAlertedAt()))
         .setPriority(getPriority())
         .putAllLabels(getLabels())
+        .addAllMatches(matches)
         .build();
   }
 }

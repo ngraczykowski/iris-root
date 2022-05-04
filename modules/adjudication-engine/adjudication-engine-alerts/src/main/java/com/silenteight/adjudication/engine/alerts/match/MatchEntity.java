@@ -14,6 +14,7 @@ import java.util.Map;
 import javax.persistence.*;
 
 import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.AUTO;
 import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.*;
 import static org.hibernate.annotations.FetchMode.SUBSELECT;
@@ -25,7 +26,7 @@ import static org.hibernate.annotations.FetchMode.SUBSELECT;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity(name = "Match")
 @Builder(access = PACKAGE)
-class MatchEntity extends BaseEntity implements IdentifiableEntity {
+public class MatchEntity extends BaseEntity implements IdentifiableEntity {
 
   @Id
   @Column(name = "match_id", insertable = false, updatable = false, nullable = false)
@@ -44,6 +45,7 @@ class MatchEntity extends BaseEntity implements IdentifiableEntity {
   private String clientMatchIdentifier;
 
   @Column(updatable = false)
+  @GeneratedValue(strategy = AUTO)
   @NonNull
   private Integer sortIndex;
 
@@ -55,7 +57,7 @@ class MatchEntity extends BaseEntity implements IdentifiableEntity {
   @Singular
   private Map<String, String> labels;
 
-  Match toMatch() {
+  public Match toMatch() {
     return Match.newBuilder()
         .setName("alerts/" + getAlertId() + "/matches/" + getId())
         .setMatchId(getClientMatchIdentifier())
