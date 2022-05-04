@@ -42,6 +42,12 @@ silenteight:
             text: Risk Irrelevant - Activity in line with Business
         ecm-view-name: ECM
 
+    solving:
+      alert-processor:
+        fixed-delay: 1000
+        initial-delay: 2000
+        read-chunk-size: 100
+
     queuing:
       jobs:
         - enabled: false

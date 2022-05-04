@@ -36,8 +36,8 @@ class AlertProcessor {
   private final BatchInfoService batchInfoService;
   private final TrafficManager trafficManager;
 
-  @Scheduled(fixedDelayString = "${silenteight.scb-bridge.alert-processor.fixed-delay}",
-      initialDelayString = "${silenteight.scb-bridge.alert-processor.initial-delay}")
+  @Scheduled(fixedDelayString = "${silenteight.scb-bridge.solving.alert-processor.fixed-delay}",
+      initialDelayString = "${silenteight.scb-bridge.solving.alert-processor.initial-delay}")
   void process() {
     if (trafficManager.holdPeriodicAlertProcessing()) {
       log.trace("Alert processor on hold");

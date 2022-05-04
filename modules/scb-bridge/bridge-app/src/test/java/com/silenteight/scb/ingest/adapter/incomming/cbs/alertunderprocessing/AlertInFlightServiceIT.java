@@ -21,11 +21,13 @@ class AlertInFlightServiceIT {
 
   private static ScbAlertIdContext alertIdContext = ScbAlertIdContext.newBuilder().build();
   private AlertUnderProcessingRepository repository = new InMemoryAlertUnderProcessingRepository();
+  private AlertUnderProcessingProperties alertUnderProcessingProperties =
+      new AlertUnderProcessingProperties(100);
   private AlertInFlightService classUnderTest;
 
   @BeforeEach
   void setUp() {
-    classUnderTest = new AlertsUnderProcessingService(repository);
+    classUnderTest = new AlertsUnderProcessingService(repository, alertUnderProcessingProperties);
   }
 
   @Test

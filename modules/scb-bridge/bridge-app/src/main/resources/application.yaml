@@ -23,7 +23,7 @@ management:
     web:
       base-path: /management
       exposure:
-        include: [ "health", "info", "liquibase", "metrics", "prometheus", "loggers"]
+        include: [ "health", "info", "liquibase", "metrics", "prometheus", "loggers" ]
     loggers:
       sensitive: false
   metrics:
@@ -151,10 +151,6 @@ silenteight:
           - 'NO'
         display-name: IsDeny
         category-type: ENUMERATED
-
-    alert-processor:
-      fixed-delay: 1000
-      initial-delay: 2000
 
   qco:
     enabled: false

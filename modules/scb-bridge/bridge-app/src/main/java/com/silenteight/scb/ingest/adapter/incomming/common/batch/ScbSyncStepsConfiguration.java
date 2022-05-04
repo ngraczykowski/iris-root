@@ -54,6 +54,14 @@ class ScbSyncStepsConfiguration {
         .build();
   }
 
+  @Bean
+  public Step collectRecordsAlertLevelLearning(
+      RecordCompositeReader learningAlertLevelRecordCompositeReader,
+      RecordCompositeWriter scbLearningAlertLevelRecordCompositeWriter) {
+    return createCollectRecordsStep(
+        learningAlertLevelRecordCompositeReader, scbLearningAlertLevelRecordCompositeWriter);
+  }
+
   private Step createCollectRecordsStep(
       RecordCompositeReader reader, RecordCompositeWriter writer) {
     return createStep("collectRecordsStep")
@@ -67,13 +75,5 @@ class ScbSyncStepsConfiguration {
   @Bean
   MeteringAlertCompositeProcessor meteringAlertCompositeProcessor() {
     return new MeteringAlertCompositeProcessor();
-  }
-
-  @Bean
-  public Step collectRecordsAlertLevelLearning(
-      RecordCompositeReader learningAlertLevelRecordCompositeReader,
-      RecordCompositeWriter scbLearningAlertLevelRecordCompositeWriter) {
-    return createCollectRecordsStep(
-        learningAlertLevelRecordCompositeReader, scbLearningAlertLevelRecordCompositeWriter);
   }
 }

@@ -29,7 +29,8 @@ class ExternalSystemIdsReaderFactoryConfigurationTest {
     scbBridgeConfigProperties.setQueryTimeout(1);
 
     externalSystemIdsReaderFactoryConfiguration =
-        new ExternalSystemIdsReaderFactoryConfiguration(scbBridgeConfigProperties,
+        new ExternalSystemIdsReaderFactoryConfiguration(
+            scbBridgeConfigProperties,
             alertLevelLearningJobProperties);
   }
 

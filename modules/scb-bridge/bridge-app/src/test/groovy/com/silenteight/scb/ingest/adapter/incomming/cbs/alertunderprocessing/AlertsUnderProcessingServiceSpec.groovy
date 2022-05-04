@@ -10,7 +10,8 @@ import java.time.OffsetDateTime
 class AlertsUnderProcessingServiceSpec extends Specification {
 
   def repository = Mock(AlertUnderProcessingRepository)
-  def objectUnderTest = new AlertsUnderProcessingService(repository)
+  def alertUnderProcessingProperties = new AlertUnderProcessingProperties(100)
+  def objectUnderTest = new AlertsUnderProcessingService(repository, alertUnderProcessingProperties)
   def cleanTransactionManagerCacheExtension = new CleanTransactionManagerCacheExtension()
 
   def setup() {

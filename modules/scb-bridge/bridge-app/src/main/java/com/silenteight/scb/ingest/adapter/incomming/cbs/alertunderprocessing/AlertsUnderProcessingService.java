@@ -22,6 +22,7 @@ import static java.lang.Math.min;
 class AlertsUnderProcessingService implements AlertInFlightService {
 
   private final AlertUnderProcessingRepository alertUnderProcessingRepository;
+  private final AlertUnderProcessingProperties alertUnderProcessingProperties;
 
   @Override
   @Transactional(GnsSyncConstants.PRIMARY_TRANSACTION_MANAGER)
@@ -69,7 +70,8 @@ class AlertsUnderProcessingService implements AlertInFlightService {
 
   @Override
   public List<AlertIdWithDetails> readChunk() {
-    return alertUnderProcessingRepository.findTop2000ByStateOrderByPriorityDesc(State.IN_PROGRESS)
+    return alertUnderProcessingRepository.findTopNByStateOrderByPriorityDesc(
+            State.IN_PROGRESS, alertUnderProcessingProperties.readChunkSize())
         .stream()
         .map(this::getAlertIdWithDetails)
         .toList();

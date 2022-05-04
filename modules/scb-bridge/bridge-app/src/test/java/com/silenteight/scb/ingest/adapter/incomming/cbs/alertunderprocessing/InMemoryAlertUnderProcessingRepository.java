@@ -75,8 +75,8 @@ class InMemoryAlertUnderProcessingRepository implements AlertUnderProcessingRepo
   }
 
   @Override
-  public Collection<AlertUnderProcessing> findTop2000ByStateOrderByPriorityDesc(
-      AlertUnderProcessing.State state) {
+  public Collection<AlertUnderProcessing> findTopNByStateOrderByPriorityDesc(
+      AlertUnderProcessing.State state, int limit) {
     return List.of();
   }
 

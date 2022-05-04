@@ -49,8 +49,12 @@ interface AlertUnderProcessingRepository
       @Param("error") String error
   );
 
-  Collection<AlertUnderProcessing> findTop2000ByStateOrderByPriorityDesc(
-      AlertUnderProcessing.State state);
+  @Query(value = "SELECT * FROM SCB_CBS_ALERT_UNDER_PROCESSING "
+      + "WHERE state = :#{#state.name()} "
+      + "ORDER BY priority DESC "
+      + "LIMIT :limit", nativeQuery = true)
+  Collection<AlertUnderProcessing> findTopNByStateOrderByPriorityDesc(
+      @Param("state") AlertUnderProcessing.State state, int limit);
 
   long countByState(AlertUnderProcessing.State state);
 }

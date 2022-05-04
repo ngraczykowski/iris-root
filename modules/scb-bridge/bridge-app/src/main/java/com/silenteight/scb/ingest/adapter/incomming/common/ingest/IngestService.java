@@ -65,7 +65,6 @@ class IngestService implements BatchAlertIngestService {
       String internalBatchId,
       List<Alert> alertsWithoutDecisions,
       List<Alert> alertsWithDecisionAndWithoutRecommendation) {
-
     if (alertsWithoutDecisions.isEmpty() && alertsWithDecisionAndWithoutRecommendation.isEmpty()) {
       log.info(
           "No learning alerts to register for internalBatchId: {} - skipping", internalBatchId);
@@ -92,9 +91,6 @@ class IngestService implements BatchAlertIngestService {
       List<Alert> alerts,
       int flags,
       RegistrationBatchContext batchContext) {
-    log.info("Registering {} alerts for {} for internalBatchId: {}",
-        alerts.size(), batchContext, internalBatchId);
-
     var registrationResponse =
         alertRegistrationFacade.registerAlerts(internalBatchId, alerts, batchContext);
 
