@@ -33,6 +33,8 @@ class JdbcRecommendationDataAccessIT extends BaseJdbcTest {
 
   @Autowired
   JdbcRecommendationDataAccess recommendationDataAccess;
+  @Autowired
+  InsertAlertRecommendationsQuery insertAlertRecommendationsQuery;
 
   @Autowired
   JdbcTemplate jdbcTemplate;
@@ -75,10 +77,10 @@ class JdbcRecommendationDataAccessIT extends BaseJdbcTest {
   }
 
   @Test
-  @Sql
+  @Sql(scripts = { "JdbcRecommendationDataAccessIT.shouldInsertAlertRecommendation.sql" })
   void shouldInsertAlertRecommendation() {
     var result =
-        recommendationDataAccess.insertAlertRecommendation(List.of(createInsertRequest()));
+        insertAlertRecommendationsQuery.execute(List.of(createInsertRequest()));
     assertThat(result.size()).isEqualTo(1);
     assertThat(result.get(0).getAlertId()).isEqualTo(1);
 
@@ -92,8 +94,8 @@ class JdbcRecommendationDataAccessIT extends BaseJdbcTest {
   @Test
   @Sql(scripts = { "JdbcRecommendationDataAccessIT.shouldInsertAlertRecommendation.sql" })
   void shouldNotInsertAlertRecommendation() {
-    recommendationDataAccess.insertAlertRecommendation(List.of(createInsertRequest()));
-    recommendationDataAccess.insertAlertRecommendation(List.of(createInsertRequest()));
+    insertAlertRecommendationsQuery.execute(List.of(createInsertRequest()));
+    insertAlertRecommendationsQuery.execute(List.of(createInsertRequest()));
     assertThat(jdbcTemplate.queryForObject(
         "SELECT count(*) FROM ae_recommendation",
         Integer.class)).isEqualTo(1);

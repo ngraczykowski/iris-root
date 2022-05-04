@@ -2,7 +2,6 @@ package com.silenteight.adjudication.engine.analysis.recommendation;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
 import com.silenteight.adjudication.engine.analysis.analysis.AnalysisFacade;
 import com.silenteight.adjudication.engine.analysis.commentinput.CommentInputDataAccess;
@@ -114,15 +113,6 @@ class GenerateRecommendationsUseCase {
     return recommendationInfos;
   }
 
-  private static boolean isShouldMetadataAttached(Analysis analysis) {
-    return analysis != null && analysis.getNotificationFlags().getAttachMetadata();
-  }
-
-  private static boolean shouldRecommendationBeAttached(Analysis analysis) {
-    return analysis != null && analysis.getNotificationFlags().getAttachRecommendation();
-  }
-
-
   @NotNull
   private List<AlertSolution> createAlertSolutions(
       PendingAlerts alerts, BatchSolveAlertsResponse response) {
@@ -165,6 +155,7 @@ class GenerateRecommendationsUseCase {
         .matchContexts(pendingAlert.getMatchContexts())
         .comment(comment)
         .matchComments(matchComments)
+        .alertLabels(pendingAlert.getAlertLabels())
         .build();
   }
 

@@ -23,6 +23,8 @@ public class InsertRecommendationRequest {
 
   ObjectNode[] matchContexts;
 
+  ObjectNode alertLabels;
+
   String comment;
 
   Map<String, String> matchComments;
@@ -35,6 +37,7 @@ public class InsertRecommendationRequest {
         .recommendedAction(alertSolution.getRecommendedAction())
         .analysisId(analysisId)
         .matchContexts(alertSolution.getMatchContexts())
+        .alertLabels(alertSolution.getAlertLabels())
         .matchIds(alertSolution.getMatchIds())
         .comment(alertSolution.getComment())
         .matchComments(alertSolution.getMatchComments())

@@ -29,3 +29,6 @@ VALUES (1, 1, NOW(), 'SOLUTION_NO_DECISION', '{}', '{}'),
 INSERT INTO ae_alert_comment_input (alert_id, created_at, value)
 VALUES (1, NOW(), '{}'),
        (2, NOW(), '{}');
+
+-- .. Additionally labels
+INSERT INTO ae_alert_labels (alert_id, name, value) VALUES (1, 'name', 'value');

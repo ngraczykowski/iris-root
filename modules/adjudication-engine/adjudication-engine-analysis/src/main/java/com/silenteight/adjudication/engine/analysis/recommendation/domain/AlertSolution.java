@@ -22,4 +22,6 @@ public class AlertSolution {
   String comment;
 
   Map<String, String> matchComments;
+
+  ObjectNode alertLabels;
 }

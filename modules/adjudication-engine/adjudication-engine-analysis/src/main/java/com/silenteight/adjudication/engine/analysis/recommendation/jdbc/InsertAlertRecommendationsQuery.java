@@ -46,6 +46,7 @@ class InsertAlertRecommendationsQuery {
   public static final String CREATED_AT_COLUMN = "created_at";
   public static final String COMMENT_COLUMN = "comment";
   public static final String MATCH_COMMENTS_COLUMN = "match_comments";
+  public static final String ALERT_LABELS_COLUMN = "alert_labels";
   private static final ObjectMapper MAPPER = JsonConversionHelper.INSTANCE.objectMapper();
   private final JdbcTemplate jdbcTemplate;
 
@@ -72,15 +73,15 @@ class InsertAlertRecommendationsQuery {
     }
   }
 
-  private static Map<String, String> readMatchComments(String matchComments) {
-    if (StringUtils.isBlank(matchComments)) {
-      debug("Match matchComments is empty!");
+  private static Map<String, String> readMap(String value) {
+    if (StringUtils.isBlank(value)) {
+      debug("Value in reading recommendation is empty!");
       return Map.of("", "");
     }
 
     try {
       var typeRef = new TypeReference<HashMap<String, String>>() {};
-      return MAPPER.readValue(matchComments, typeRef);
+      return MAPPER.readValue(value, typeRef);
     } catch (JsonProcessingException e) {
       throw new MatchContextsJsonNodeReadException(e);
     }
@@ -96,12 +97,13 @@ class InsertAlertRecommendationsQuery {
     var createdAt = (Timestamp) it.get(CREATED_AT_COLUMN);
     var recommendedAction = (String) it.get(RECOMMENDED_ACTION_COLUMN);
     var comment = (String) it.get(COMMENT_COLUMN);
-    var matchComments = readMatchComments(it.get(MATCH_COMMENTS_COLUMN).toString());
+    var matchComments = readMap(it.get(MATCH_COMMENTS_COLUMN).toString());
+    var alertLabels = readMap(it.get(ALERT_LABELS_COLUMN).toString());
     var recommendationMetadata =
         transferToRecommendationMetaData(
             new AnalysisRecommendationContext(Arrays.asList(objectNodes), analysisId,
                 recommendationId,
-                alertId, matchIds, matchComments));
+                alertId, matchIds, matchComments, alertLabels));
     var recommendation = Recommendation
         .newBuilder()
         .setAlert("alerts/" + alertId)
@@ -134,9 +136,17 @@ class InsertAlertRecommendationsQuery {
     }
   }
 
-  private static String writeMatchContexts(ObjectNode[] matchContexts) {
+  private static String writeMatchContext(ObjectNode[] matchContexts) {
     try {
       return MAPPER.writeValueAsString(matchContexts);
+    } catch (JsonProcessingException e) {
+      throw new MatchContextsJsonNodeWriteException(e);
+    }
+  }
+
+  private static String writeAlertLabels(ObjectNode alertLabels) {
+    try {
+      return MAPPER.writeValueAsString(alertLabels);
     } catch (JsonProcessingException e) {
       throw new MatchContextsJsonNodeWriteException(e);
     }
@@ -170,9 +180,10 @@ class InsertAlertRecommendationsQuery {
             ANALYSIS_ID_COLUMN, alertRecommendation.getAnalysisId(),
             RECOMMENDED_ACTION_COLUMN, alertRecommendation.getRecommendedAction(),
             MATCH_IDS_COLUMN, alertRecommendation.getMatchIds(),
-            MATCH_CONTEXTS_COLUMN, writeMatchContexts(alertRecommendation.getMatchContexts()),
+            MATCH_CONTEXTS_COLUMN, writeMatchContext(alertRecommendation.getMatchContexts()),
             COMMENT_COLUMN, alertRecommendation.getComment(),
-            MATCH_COMMENTS_COLUMN, writeMatchComments(alertRecommendation.getMatchComments()));
+            MATCH_COMMENTS_COLUMN, writeMatchComments(alertRecommendation.getMatchComments()),
+            ALERT_LABELS_COLUMN, writeAlertLabels(alertRecommendation.getAlertLabels()));
     sql.updateByNamedParam(paramMap, keyHolder);
 
     ofNullable(keyHolder.getKeys())
@@ -188,15 +199,16 @@ class InsertAlertRecommendationsQuery {
         "INSERT INTO ae_recommendation ("
             + "analysis_id, alert_id, created_at, recommended_action, match_ids,\n"
             + "                               "
-            + "match_contexts, comment, match_comments"
+            + "match_contexts, comment, match_comments, alert_labels"
             + ")\n"
             + "VALUES ("
             + ":analysis_id, :alert_id, now(), :recommended_action, :match_ids, :match_contexts, "
             + ":comment,\n"
-            + "        :match_comments)\n"
+            + "        :match_comments, :alert_labels)\n"
             + "ON CONFLICT DO NOTHING\n"
             + "RETURNING recommendation_id, analysis_id, alert_id, created_at, "
-            + "recommended_action,match_ids,match_contexts::text, comment, match_comments;");
+            + "recommended_action,match_ids,match_contexts::text, comment, \n"
+            + "    match_comments, alert_labels;");
     sql.declareParameter(new SqlParameter(ALERT_ID_COLUMN, Types.BIGINT));
     sql.declareParameter(new SqlParameter(ANALYSIS_ID_COLUMN, Types.BIGINT));
     sql.declareParameter(new SqlParameter(RECOMMENDED_ACTION_COLUMN, Types.VARCHAR));
@@ -204,6 +216,7 @@ class InsertAlertRecommendationsQuery {
     sql.declareParameter(new SqlParameter(MATCH_CONTEXTS_COLUMN, Types.OTHER));
     sql.declareParameter(new SqlParameter(COMMENT_COLUMN, Types.VARCHAR));
     sql.declareParameter(new SqlParameter(MATCH_COMMENTS_COLUMN, Types.OTHER));
+    sql.declareParameter(new SqlParameter(ALERT_LABELS_COLUMN, Types.OTHER));
     sql.setReturnGeneratedKeys(true);
 
     sql.compile();

@@ -30,6 +30,7 @@ public final class AlertMetaDataTransformer {
     var analysisId = context.getAnalysisId();
     var alertId = context.getAlertId();
     var builder = RecommendationMetadata.newBuilder()
+        .putAllLabels(context.getAlertLabels())
         .setName("analysis/" + analysisId + "/recommendations/" + context.getRecommendationId()
             + "/metadata")
         .setAlert("alerts/" + alertId);

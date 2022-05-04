@@ -32,6 +32,7 @@ public class RecommendationFixture {
         .matchIds(LongStream.range(1, 5).toArray())
         .comment("")
         .matchComments(Map.of("123", "comment"))
+        .alertLabels(Map.of("label", "label"))
         .build();
   }
 
@@ -49,6 +50,8 @@ public class RecommendationFixture {
         .matchContexts(new ObjectNode[] {
             MAPPER.convertValue(createMatchContext(), ObjectNode.class)
         })
+        .alertLabels(
+            MAPPER.convertValue(Map.of("name", "value", "name2", "value2"), ObjectNode.class))
         .comment("comment")
         .matchComments(Map.of("123", "matchcomment"))
         .build();

@@ -16,4 +16,5 @@ public class AnalysisRecommendationContext {
   long alertId;
   long[] matchIds;
   Map<String, String> matchComments;
+  Map<String, String> alertLabels;
 }

@@ -38,22 +38,29 @@ class SelectPendingAlertsQuery {
     jdbcTemplate.setMaxRows(fetchSize);
   }
 
-  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   PendingAlerts execute(long analysisId) {
     var pendingAlerts = jdbcTemplate.query(
-        "SELECT aamsq.alert_id, aamsq.match_solutions, aamsq.match_ids, aamsq.match_contexts\n"
+        "SELECT aamsq.alert_id,\n"
+            + "       aamsq.match_solutions,\n"
+            + "       aamsq.match_ids,\n"
+            + "       aamsq.match_contexts::text,\n"
+            + "       json_object_agg(coalesce(aal.name, ''), coalesce(aal.value, ''))\n"
             + "FROM ae_alert_match_solutions_query aamsq\n"
             + "         JOIN ae_pending_alert_matches_query apamq\n"
             + "              ON aamsq.alert_id = apamq.alert_id\n"
             + "                  AND aamsq.match_ids = apamq.match_ids\n"
             + "                  AND aamsq.analysis_id = apamq.analysis_id\n"
             + "         JOIN ae_alert_comment_input aaci ON apamq.alert_id = aaci.alert_id\n"
-            + "WHERE aamsq.analysis_id = ?\n"
-            + "  AND NOT EXISTS(\n"
+            + "         LEFT JOIN ae_alert_labels aal ON aamsq.alert_id = aal.alert_id\n"
+            +
+            "WHERE aamsq.analysis_id = ?\n"
+            + "  AND NOT exists(\n"
             + "        SELECT 1\n"
             + "        FROM ae_recommendation ar\n"
             + "        WHERE aamsq.alert_id = ar.alert_id\n"
-            + "          AND ar.analysis_id = ?)",
+            + "          AND ar.analysis_id = ?)\n"
+            + "GROUP BY 1, 2, 3, 4",
         ROW_MAPPER, analysisId, analysisId);
 
     log.info("Pending alerts size: {}", pendingAlerts.size());
@@ -70,6 +77,7 @@ class SelectPendingAlertsQuery {
       var matchSolutions = rs.getArray(2);
       var matchIds = rs.getArray(3);
       var matchContexts = rs.getString(4);
+      var alertLabels = rs.getString(5);
 
       var solutions = Arrays
           .stream((String[]) matchSolutions.getArray())
@@ -81,12 +89,21 @@ class SelectPendingAlertsQuery {
           .matchSolutions(solutions)
           .matchIds((long[]) ArrayUtils.toPrimitive(matchIds.getArray()))
           .matchContexts(readMatchContext(matchContexts))
+          .alertLabels(readAlertLabels(alertLabels))
           .build();
     }
 
     private static ObjectNode[] readMatchContext(String matchContexts) {
       try {
         return MAPPER.readValue(matchContexts, ObjectNode[].class);
+      } catch (JsonProcessingException e) {
+        throw new MatchContextsJsonNodeReadException(e);
+      }
+    }
+
+    private static ObjectNode readAlertLabels(String alertLabels) {
+      try {
+        return MAPPER.readValue(alertLabels, ObjectNode.class);
       } catch (JsonProcessingException e) {
         throw new MatchContextsJsonNodeReadException(e);
       }

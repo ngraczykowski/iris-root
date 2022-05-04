@@ -31,6 +31,9 @@ public class PendingAlert {
   @Getter
   ObjectNode[] matchContexts;
 
+  @Getter
+  ObjectNode alertLabels;
+
   public Alert toAlert() {
     var matches = matchSolutions.stream()
         .map(m -> Match.newBuilder()
