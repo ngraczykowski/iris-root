@@ -85,6 +85,8 @@ server:
   error:
     include-exception: true
     include-stacktrace: never
+    whitelabel:
+      enabled: false
 
 #---------------------------------------------------------------------------------------------------
 # MANAGEMENT

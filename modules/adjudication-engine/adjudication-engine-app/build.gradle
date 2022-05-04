@@ -102,6 +102,7 @@ dependencies {
   testImplementation libraries.silenteight_sep_base_testing
   testImplementation libraries.adjudication_engine_api
   testImplementation libraries.awaitility
+  testImplementation libraries.spring_boot_starter_test
 }
 
 jar {

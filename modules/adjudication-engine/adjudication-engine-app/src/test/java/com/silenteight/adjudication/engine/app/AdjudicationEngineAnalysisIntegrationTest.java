@@ -34,7 +34,9 @@ import static org.awaitility.Awaitility.await;
 @ContextConfiguration(initializers = { RabbitTestInitializer.class, PostgresTestInitializer.class })
 @SpringBootTest(
     classes = AdjudicationEngineApplication.class,
-    properties = "debug=true")
+    properties = "debug=true",
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+)
 @EnableConfigurationProperties
 @ActiveProfiles({ "mockagents", "rabbitdeclare", "mockgovernance", "mockdatasource", "test" })
 @Tag("longrunning")
