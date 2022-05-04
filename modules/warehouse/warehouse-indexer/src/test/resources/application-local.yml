@@ -10,11 +10,6 @@ spring:
     username: dev
     password: dev
     virtual-host: /
-  elasticsearch:
-    rest:
-      username: technicaluser
-      password: technicaluser
-      uris: http://localhost:9201,http://localhost:9200
 
 warehouse:
   minio:
