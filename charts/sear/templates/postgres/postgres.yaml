@@ -1,0 +1,35 @@
+apiVersion: acid.zalan.do/v1
+kind: postgresql
+metadata:
+  name: {{ include "sear.fullname" . }}-postgres
+  labels:
+    app.kubernetes.io/component: database
+    {{- include "sear.labels" . | nindent 4 }}
+spec:
+  teamId: {{ .Release.Name | quote }}
+
+  postgresql:
+    version: {{ .Values.database.postgresql.version | quote }}
+
+  numberOfInstances: {{ .Values.database.numberOfInstances }}
+
+  volume:
+      size: {{ .Values.database.volume.size | quote }}
+
+  users:
+    ae: []
+    gov: []
+    pb: []
+    sim: []
+    uds: []
+    wh: []
+    webapp: []
+
+  databases:
+    ae: ae
+    gov: gov
+    pb: pb
+    sim: sim
+    uds: uds
+    wh: wh
+    webapp: webapp

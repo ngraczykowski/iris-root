@@ -1,19 +1,17 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "spring.fullname" . }}
+  name: {{ include "sear.componentName" . }}
   labels:
-    {{- include "spring.labels" . | nindent 4 }}
+    {{- include "sear.componentLabels" . | nindent 4 }}
 data:
-  {{- if .Values.spring.configFiles }}
-    {{- toYaml .Values.spring.configFiles | nindent 2 }}
+  {{- if .component.configFiles }}
+    {{- toYaml .component.configFiles | nindent 2 }}
   {{- end }}
-  {{- if .Values.spring.secrets }}
   secrets.yml: |
     spring:
       config:
-        import: configtree:/etc/spring/secrets/*/
-  {{- end }}
+        import: configtree:/var/run/secrets/spring/*/
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE configuration>

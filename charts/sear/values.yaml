@@ -1,0 +1,203 @@
+# String to partially override spring.fullname template (will maintain the release name)
+nameOverride: ""
+# String to fully override spring.fullname template
+fullnameOverride: ""
+
+#
+# Common for all components
+#
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+# fsGroup: 2000
+
+securityContext: {}
+# capabilities:
+#   drop:
+#   - ALL
+# readOnlyRootFilesystem: true
+# runAsNonRoot: true
+# runAsUser: 1000
+
+#
+# PostgreSQL database
+#
+database:
+  enabled: true
+
+  volume:
+    size: 50Gi
+
+  numberOfInstances: 1
+
+  postgresql:
+    version: "12"
+
+#
+# RabbitMQ
+#
+rabbitmq:
+  enabled: true
+
+  replicas: 1
+  persistence: {}
+  # storageClassName: gp3
+  # storage: 10Gi
+
+  resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+  annotations: {}
+  tolerations: []
+  affinity: {}
+
+ingress:
+  className: ""
+  annotations:
+    kubernetes.io/ingress.class: nginx-internal
+  hosts:
+    - chart-example.local
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+#
+# Configuration common for all components
+#
+common:
+  image:
+    pullPolicy: IfNotPresent
+    pullSecrets: []
+
+  replicaCount: 1
+
+  args: []
+  # - --spring.profiles.active=dev
+
+  configFiles: {}
+  # application.yml: |
+  #   logging:
+  #     level:
+  #       com.silenteight: DEBUG
+
+  service:
+    # Determines how the Service is exposed. Valid options are ExternalName, ClusterIP, NodePort, and LoadBalancer.
+    type: ClusterIP
+    http:
+      port: 8080
+    grpc:
+      enabled: true
+      port: 9090
+
+  containerPorts:
+    http:
+      port: 8080
+    management:
+      port: 8081
+    grpc:
+      enabled: true
+      port: 9090
+
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 6
+
+  livenessProbe:
+    enabled: true
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+
+  readinessProbe:
+    enabled: true
+    periodSeconds: 10
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 3
+
+  ingress:
+    enabled: false
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+#
+# Declare and customize components
+#
+components:
+  universal-data-source:
+    image:
+      repository: registry.dev.s8ops.com/uds/universal-data-source-app
+      tag: "latest"
+
+    # Name of the database the component uses. Defaults to the component name.
+    dbName: "uds"
+
+    # Web context path. Defaults to the component name.
+    webPath: "uds"
+
+    args: []
+    configFiles: {}
+    resources: {}
+    service: {}
+    containerPorts: {}
+    startupProbe: {}
+    livenessProbe: {}
+    readinessProbe: {}
+    ingress:
+      enabled: true
+    autoscaling: {}
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+
+#  governance:
+#    image:
+#      repository: registry.dev.s8ops.com/governance/governance-app
+#      tag: "latest"
+#
+#    # Name of the database the component uses. Defaults to the component name.
+#    dbName: "uds"
+#
+#    # Web context path. Defaults to the component name.
+#    webPath: "uds"
+#
+#    args: []
+#    configFiles: {}
+#    resources: {}
+#    service: {}
+#    containerPorts: {}
+#    startupProbe: {}
+#    livenessProbe: {}
+#    readinessProbe: {}
+#    ingress: {}
+#    autoscaling: {}
+#    nodeSelector: {}
+#    tolerations: []
+#    affinity: {}

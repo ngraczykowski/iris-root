@@ -1,0 +1,52 @@
+{{- range $componentName, $component := .Values.components -}}
+
+{{- if (default true $component.enabled) -}}
+
+{{- $image := deepCopy $.Values.common.image | mergeOverwrite $component.image -}}
+{{- $dbName := default $componentName $component.dbName -}}
+{{- $webPath := default $componentName $component.webPath -}}
+{{- $replicaCount := default $.Values.common.replicaCount $component.replicaCount -}}
+{{- $args := concat $.Values.common.args $component.args -}}
+{{- $configFiles := deepCopy $.Values.common.configFiles | mergeOverwrite $component.configFiles -}}
+{{- $service := default $.Values.common.service $component.service -}}
+{{- $ingress := default $.Values.common.ingress $component.ingress -}}
+{{- $resources := required (printf "You must define resources for component %s!" $componentName) $component.resources -}}
+{{- $containerPorts := deepCopy $.Values.common.containerPorts | mergeOverwrite $component.containerPorts -}}
+{{- $startupProbe := deepCopy $.Values.common.startupProbe | mergeOverwrite $component.startupProbe -}}
+{{- $livenessProbe := deepCopy $.Values.common.livenessProbe | mergeOverwrite $component.livenessProbe -}}
+{{- $readinessProbe := deepCopy $.Values.common.readinessProbe | mergeOverwrite $component.readinessProbe -}}
+{{- $autoscaling := deepCopy $.Values.common.autoscaling | mergeOverwrite $component.autoscaling -}}
+{{- $nodeSelector := deepCopy $.Values.common.nodeSelector | mergeOverwrite $component.nodeSelector -}}
+{{- $tolerations := concat $.Values.common.tolerations $component.tolerations -}}
+{{- $affinity := deepCopy $.Values.common.affinity | mergeOverwrite $component.affinity -}}
+
+{{-
+$mergedComponent := (dict
+  "image" $image
+  "replicaCount" $replicaCount
+  "dbName" $dbName
+  "webPath" $webPath
+  "args" $args
+  "configFiles" $configFiles
+  "service" $service
+  "ingress" $ingress
+  "resources" $resources
+  "containerPorts" $containerPorts
+  "startupProbe" $startupProbe
+  "livenessProbe" $livenessProbe
+  "readinessProbe" $readinessProbe
+  "autoscaling" $autoscaling
+  "nodeSelector" $nodeSelector
+  "tolerations" $tolerations
+  "affinity" $affinity)
+-}}
+{{- $context := merge $ (dict "componentName" $componentName "component" $mergedComponent) -}}
+
+{{- range $path, $_ := $.Files.Glob  "component/*.yaml.tpl" }}
+# From: {{ $path }}
+# Component: {{ $componentName }}
+{{ tpl ($.Files.Get $path) $context }}
+---
+{{- end }}
+{{- end }}
+{{- end }}
