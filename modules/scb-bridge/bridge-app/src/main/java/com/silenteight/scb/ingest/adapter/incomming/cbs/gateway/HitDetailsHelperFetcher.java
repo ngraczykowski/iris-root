@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.scb.ingest.adapter.incomming.cbs.domain.CbsHitDetails;
+import com.silenteight.scb.ingest.adapter.incomming.cbs.domain.CbsHitDetailsRowMapper;
 import com.silenteight.scb.ingest.adapter.incomming.common.config.FetcherConfiguration;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 

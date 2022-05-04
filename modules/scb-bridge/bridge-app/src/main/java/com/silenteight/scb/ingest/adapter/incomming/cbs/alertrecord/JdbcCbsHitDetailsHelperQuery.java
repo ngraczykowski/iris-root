@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.scb.ingest.adapter.incomming.cbs.batch.QueryStatementHelper;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.domain.CbsHitDetails;
+import com.silenteight.scb.ingest.adapter.incomming.cbs.domain.CbsHitDetailsRowMapper;
 import com.silenteight.scb.ingest.adapter.incomming.common.validation.OracleRelationName;
 
 import com.google.common.collect.Lists;
@@ -30,7 +31,7 @@ class JdbcCbsHitDetailsHelperQuery {
           + " FROM :dbRelationName"
           + " WHERE SYSTEM_ID IN (%s)";
   private static final int HITS_PER_RECORD = 1_000;
-  private final JdbcCbsHitDetailsRowMapper mapper = new JdbcCbsHitDetailsRowMapper();
+  private final CbsHitDetailsRowMapper mapper = new CbsHitDetailsRowMapper();
   private final JdbcTemplate jdbcTemplate;
 
   List<CbsHitDetails> execute(

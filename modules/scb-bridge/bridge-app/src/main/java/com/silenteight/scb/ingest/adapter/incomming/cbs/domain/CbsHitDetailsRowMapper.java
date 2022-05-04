@@ -1,7 +1,4 @@
-package com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord;
-
-import com.silenteight.scb.ingest.adapter.incomming.cbs.domain.CbsHitDetails;
-import com.silenteight.scb.ingest.adapter.incomming.cbs.domain.NeoFlag;
+package com.silenteight.scb.ingest.adapter.incomming.cbs.domain;
 
 import org.springframework.jdbc.core.RowMapper;
 
@@ -9,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
-class JdbcCbsHitDetailsRowMapper implements RowMapper<CbsHitDetails> {
+public class CbsHitDetailsRowMapper implements RowMapper<CbsHitDetails> {
 
   private static final String SYSTEM_ID_COLUMN_NAME = "system_id";
   private static final String BATCH_ID_COLUMN_NAME = "batch_id";
