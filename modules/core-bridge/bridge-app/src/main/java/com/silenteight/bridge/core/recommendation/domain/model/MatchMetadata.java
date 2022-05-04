@@ -9,7 +9,8 @@ public record MatchMetadata(
     String solution,
     Map<String, String> reason,
     Map<String, String> categories,
-    Map<String, FeatureMetadata> features
+    Map<String, FeatureMetadata> features,
+    String matchComment
 ) {
 
   @Builder

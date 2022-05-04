@@ -23,6 +23,7 @@ class FixturesMatchMetaData {
   static def FIRST_METADATA_FEATURES = createFeaturesMap(
       FIRST_METADATA_FEATURE_NAME, FIRST_METADATA_FEATURE_AGENT_CONFIG,
       FIRST_METADATA_FEATURE_SOLUTION)
+  static def FIRST_METADATA_MATCH_COMMENT = 'firstMetadataMatchComment'
 
   static def FIRST_MATCH_METADATA = MatchMetadata.builder()
       .match(FIRST_METADATA_MATCH_NAME)
@@ -30,6 +31,7 @@ class FixturesMatchMetaData {
       .categories(Map.of())
       .reason(FIRST_METADATA_REASON)
       .features(FIRST_METADATA_FEATURES)
+      .matchComment(FIRST_METADATA_MATCH_COMMENT)
       .build()
 
   static def SECOND_METADATA_MATCH_ID = 'match_id_2'
@@ -47,6 +49,7 @@ class FixturesMatchMetaData {
   static def SECOND_METADATA_FEATURES = createFeaturesMap(
       SECOND_METADATA_FEATURE_NAME, SECOND_METADATA_FEATURE_AGENT_CONFIG,
       SECOND_METADATA_FEATURE_SOLUTION)
+  static def SECOND_METADATA_MATCH_COMMENT = 'secondMetadataMatchComment'
 
   static def SECOND_MATCH_METADATA = MatchMetadata.builder()
       .match(SECOND_METADATA_MATCH_NAME)
@@ -54,6 +57,7 @@ class FixturesMatchMetaData {
       .categories(Map.of())
       .reason(SECOND_METADATA_REASON)
       .features(SECOND_METADATA_FEATURES)
+      .matchComment(SECOND_METADATA_MATCH_COMMENT)
       .build()
 
   static private Map<String, String> createReasonMap(String signature, String policy, String step) {

@@ -33,6 +33,7 @@ class RecommendationsMapperSpec extends Specification {
         solution() == Fixtures.MATCH_METADATA_SOLUTION
         reason() == Fixtures.MATCH_METADATA_REASON
         categories() == Fixtures.MATCH_METADATA_CATEGORIES
+        matchComment() == Fixtures.MATCH_METADATA_COMMENT
 
         with(features().get(Fixtures.MATCH_METADATA_FEATURES_KEY)) {
           agentConfig() == Fixtures.AGENT_CONFIG

@@ -8,7 +8,7 @@ ext {
   coreBridgeRegistrationApiVersion = '1.23.0'
   governanceApiVersion = '1.10.0'
   governanceApiLibraryVersion = '1.0.0'
-  adjudicationEngineApiVersion = '0.8.0'
+  adjudicationEngineApiVersion = '0.11.0'
   adjudicationEngineApiLibraryVersion = '1.4.0'
   warehouseApiVersion = "2.2.0"
   protobufSpringBootStarterVersion = '1.6.0'

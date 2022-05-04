@@ -21,6 +21,7 @@ class Fixtures {
   static def AGENT_CONFIG = 'agents/<ID of agent>/versions/<ID of version>/configs/<ID of config>'
   static def FEATURE_SOLUTION = 'featureSolution'
   static def MATCH_METADATA_SOLUTION = 'matchMetadataSolution'
+  static def MATCH_METADATA_COMMENT = 'matchMetadataComment'
   static def RECOMMENDATION_METADATA_NAME = 'analysis/<ID of analysis>/recommendations/<ID of recommendation>/metadata'
   static def RECOMMENDED_ACTION = 'recommendedAction'
   static def RECOMMENDATION_COMMENT = 'recommendationComment'
@@ -56,6 +57,7 @@ class Fixtures {
       .setReason(MATCH_METADATA_REASON_STRUCT)
       .putAllCategories(MATCH_METADATA_CATEGORIES)
       .putAllFeatures(MATCH_METADATA_FEATURES)
+      .setMatchComment(MATCH_METADATA_COMMENT)
       .build()
 
   static def RECOMMENDATION_METADATA = RecommendationMetadata.newBuilder()

@@ -33,7 +33,6 @@ class RecommendationMapper {
   private static final String EMPTY_STRING = "";
   private static final String DEFAULT_STEP = EMPTY_STRING;
   private static final String DEFAULT_SIGNATURE = EMPTY_STRING;
-  private static final String DEFAULT_COMMENT = EMPTY_STRING;
   private static final String STEP_KEY = "step";
   private static final String FV_SIGNATURE_KEY = "feature_vector_signature";
   private static final String FEATURE_PREFIX = "features/";
@@ -126,7 +125,8 @@ class RecommendationMapper {
             .orElseThrow()
         )
         .setRecommendedAction(matchMetadata.solution())
-        .setRecommendationComment(DEFAULT_COMMENT) //TODO verify if it is needed
+        .setRecommendationComment(
+            Optional.ofNullable(matchMetadata.matchComment()).orElse(EMPTY_STRING))
         .setStepId(matchMetadata.reason().getOrDefault(STEP_KEY, DEFAULT_STEP))
         .setFvSignature(
             matchMetadata.reason().getOrDefault(FV_SIGNATURE_KEY, DEFAULT_SIGNATURE))

@@ -147,7 +147,7 @@ class RecommendationFixtures {
       .newBuilder()
       .setId(FixturesMatchMetaData.FIRST_METADATA_MATCH_ID)
       .setRecommendedAction(FixturesMatchMetaData.FIRST_METADATA_SOLUTION)
-      .setRecommendationComment('')
+      .setRecommendationComment(FixturesMatchMetaData.FIRST_METADATA_MATCH_COMMENT)
       .setStepId(FixturesMatchMetaData.FIRST_METADATA_REASON_STEP)
       .setFvSignature(FixturesMatchMetaData.FIRST_METADATA_REASON_SIGNATURE)
       .setFeatures(
@@ -166,7 +166,7 @@ class RecommendationFixtures {
       .newBuilder()
       .setId(FixturesMatchMetaData.SECOND_METADATA_MATCH_ID)
       .setRecommendedAction(FixturesMatchMetaData.SECOND_METADATA_SOLUTION)
-      .setRecommendationComment('')
+      .setRecommendationComment(FixturesMatchMetaData.SECOND_METADATA_MATCH_COMMENT)
       .setStepId(FixturesMatchMetaData.SECOND_METADATA_REASON_STEP)
       .setFvSignature(FixturesMatchMetaData.SECOND_METADATA_REASON_SIGNATURE)
       .setFeatures(

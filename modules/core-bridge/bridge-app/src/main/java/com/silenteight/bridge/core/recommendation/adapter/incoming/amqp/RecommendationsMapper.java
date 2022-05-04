@@ -52,6 +52,7 @@ class RecommendationsMapper {
         .reason(StructMapperUtil.toMap(metadata.getReason()))
         .categories(metadata.getCategoriesMap())
         .features(toFeatureMetadataMap(metadata.getFeaturesMap()))
+        .matchComment(metadata.getMatchComment())
         .build();
   }
 
