@@ -25,10 +25,4 @@ class ProcessedMatchesRegister {
     reportsSenderAdapter.send(match, matchSolution);
     log.info("The processed match={} has been registered", match.matchName());
   }
-
-  @Async("qcoAsyncExecutor")
-  public void registerToDbOnly(QcoRecommendationMatch match, MatchSolution matchSolution) {
-    recommendationService.storeQcoOverriddenRecommendation(match, matchSolution);
-    log.info("The processed match={} has been stored into database", match.matchName());
-  }
 }

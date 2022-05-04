@@ -8,8 +8,6 @@ import com.silenteight.qco.domain.model.ResolverCommand;
 
 import org.springframework.stereotype.Component;
 
-import static com.silenteight.qco.domain.model.ResolverAction.OVERRIDE;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -23,18 +21,10 @@ class MatchOverridingResolver implements MatchResolver {
     var matchSolution = matchSolutionFactory.createMatchSolution(command);
     log.debug("The resolver created {} for matchName={}",
         matchSolution.toString(), command.match().matchName());
-    if (matchSolution.qcoMarked() && command.resolverAction() == OVERRIDE) {
+    if (matchSolution.qcoMarked()) {
       storeIntoDbAndSendToWarehouse(command, matchSolution);
-    } else if (matchSolution.qcoMarked()) {
-      storeIntoDbOnly(command, matchSolution);
     }
     return matchSolution;
-  }
-
-  private void storeIntoDbOnly(ResolverCommand command, MatchSolution matchSolution) {
-    log.info("The change of solution from {} to {} will be stored int DB for matchName={}",
-        command.match().solution(), matchSolution.solution(), command.match().matchName());
-    matchRegister.registerToDbOnly(command.match(), matchSolution);
   }
 
   private void storeIntoDbAndSendToWarehouse(ResolverCommand command, MatchSolution matchSolution) {

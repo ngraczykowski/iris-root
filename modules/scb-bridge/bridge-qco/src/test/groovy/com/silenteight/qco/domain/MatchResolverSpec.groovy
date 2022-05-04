@@ -35,7 +35,6 @@ class MatchResolverSpec extends Specification {
     then:
     1 * matchSolutionFactory.createMatchSolution(_) >> matchSolution
     1 * matchRegister.register(_, _)
-    0 * matchRegister.registerToDbOnly(_, _)
     result == matchSolution
   }
 
@@ -52,7 +51,6 @@ class MatchResolverSpec extends Specification {
     then:
     1 * matchSolutionFactory.createMatchSolution(_) >> matchSolution
     0 * matchRegister.register(_, _)
-    0 * matchRegister.registerToDbOnly(_, _)
     result == matchSolution
   }
 
@@ -68,8 +66,7 @@ class MatchResolverSpec extends Specification {
 
     then:
     1 * matchSolutionFactory.createMatchSolution(_) >> matchSolution
-    0 * matchRegister.register(_, _)
-    1 * matchRegister.registerToDbOnly(_, _)
+    1 * matchRegister.register(_, _)
     result == matchSolution
   }
 }

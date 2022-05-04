@@ -11,14 +11,19 @@ import com.silenteight.qco.domain.model.QcoRecommendationMatch;
 import com.google.protobuf.Struct;
 import com.google.protobuf.Value;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import static org.apache.commons.lang3.BooleanUtils.toStringYesNo;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @UtilityClass
 class QcoReportRequestMapper {
 
   private static final String QCO_RECOMMENDATION_STATUS = "qcoRecommendationStatus";
+  private static final String QCO_SAMPLED = "qcoSampled";
 
   ProductionDataIndexRequest toRequest(
       QcoRecommendationMatch recommendationMatch, MatchSolution matchSolution) {
@@ -32,20 +37,25 @@ class QcoReportRequestMapper {
         .setName(recommendationMatch.alertName())
         .setDiscriminator(recommendationMatch.alertId())
         .addAllMatches(
-            List.of(toMatch(recommendationMatch.matchName(), matchSolution.solution())))
+            List.of(toMatch(recommendationMatch.matchName(), matchSolution)))
         .build();
   }
 
 
-  private Match toMatch(String matchName, String targetSolution) {
+  private Match toMatch(String matchName, MatchSolution matchSolution) {
     return Match.newBuilder()
         .setName(matchName)
-        .setPayload(toStruct(getMatchDataPayload(targetSolution)))
+        .setPayload(toStruct(getMatchDataPayload(matchSolution)))
         .build();
   }
 
-  private Map<String, String> getMatchDataPayload(String targetSolution) {
-    return Map.of(QCO_RECOMMENDATION_STATUS, targetSolution);
+  private Map<String, String> getMatchDataPayload(MatchSolution matchSolution) {
+    Map<String, String> result = new HashMap<>(2);
+    result.put(QCO_SAMPLED, toStringYesNo(matchSolution.qcoMarked()));
+    if (isNotBlank(matchSolution.solution())) {
+      result.put(QCO_RECOMMENDATION_STATUS, matchSolution.solution());
+    }
+    return result;
   }
 
   private static Struct toStruct(Map<String, String> source) {

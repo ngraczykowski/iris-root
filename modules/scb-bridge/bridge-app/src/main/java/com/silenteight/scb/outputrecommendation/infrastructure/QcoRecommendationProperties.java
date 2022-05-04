@@ -4,5 +4,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 
 @ConstructorBinding
-@ConfigurationProperties("silenteight.scb-bridge.qco")
+@ConfigurationProperties("silenteight.qco")
 public record QcoRecommendationProperties(boolean enabled) {}
