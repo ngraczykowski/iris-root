@@ -12,7 +12,7 @@ data:
   secrets.yml: |
     spring:
       config:
-        import: optional:configtree:/etc/spring/secrets/*/
+        import: configtree:/etc/spring/secrets/*/
   {{- end }}
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>

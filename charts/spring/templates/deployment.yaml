@@ -29,7 +29,7 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ include "spring.fullname" . }}
+        - name: {{ include "spring.name" . }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -49,7 +49,7 @@ spec:
           {{- if .Values.startupProbe.enabled }}
           startupProbe:
             httpGet:
-              path: /management/health/liveness
+              path: /management/actuator/health/liveness
               port: management
             initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.startupProbe.periodSeconds }}
@@ -59,7 +59,7 @@ spec:
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /management/health/liveness
+              path: /management/actuator/health/liveness
               port: management
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -68,7 +68,7 @@ spec:
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /management/health/readiness
+              path: /management/actuator/health/readiness
               port: management
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
@@ -80,14 +80,15 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           args:
-            - --spring.application.name={{ include "spring.fullname" . }}
+            - --spring.application.name={{ include "spring.name" . }}
             - --server.servlet.context-path=/rest/{{ include "spring.webPath" . }}
             - --spring.webflux.base-path=/rest/{{ include "spring.webPath" . }}
-            - --spring.config.additional-location=file:/etc/spring/config/,optional:file:/spring/secrets.yml
+            - --spring.config.additional-location=file:/etc/spring/config/,optional:file:/etc/spring/config/secrets.yml
             - --logging.config=file:/etc/spring/config/logback.xml
             - --server.port={{ .Values.containerPorts.http.port }}
             - --management.server.port={{ .Values.containerPorts.management.port }}
             - --management.server.base-path=/management
+            - --management.endpoints.web.base-path=/actuator
             {{- if .Values.containerPorts.grpc.enabled }}
             - --grpc.server.port={{ .Values.containerPorts.grpc.port }}
             {{- end }}
@@ -100,7 +101,7 @@ spec:
               readOnly: true
             {{- range $index, $secret := .Values.spring.secrets }}
             - name: secret-{{ $index }}
-              mountPath: {{ printf "%s/%s" "/etc/spring/secrets/" (default $secret.prefixPath "") | trimSuffix "/" | quote }}
+              mountPath: "/etc/spring/secrets/{{ $index }}{{ if $secret.prefixPath }}/{{ $secret.prefixPath }}{{ end }}"
               readOnly: true
             {{- end }}
       volumes:
