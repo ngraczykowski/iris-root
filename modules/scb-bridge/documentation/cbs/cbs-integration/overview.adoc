@@ -1,0 +1,16 @@
+= Overview
+
+CBS is a set of configurable GNS database views with internal database procedures (PL/SQL).
+SCB Bridge service uses these views and procedures to fetch, acknowledge and store
+recommendation in GNS database.
+
+.CBS data sources
+
+* `SENS_V_FFF_RECORDS_ALRT` - View with new alerts for alert-level processing
+* `SENS_V_FFF_RECORDS_WL` - View with new alerts for watchlist-level processing
+* `CBS_HITS_DETAILS_ALRT_HLPR_V` - View with N/E/O flag for alert-level processing
+* `CBS_HITS_DETAILS_WL_HLPR_V` - View with N/E/O flag for watchlist-level processing
+
+.Additional GNS data sources
+* `FFF_HITS_DETAILS` - GNS table containing details regarding hits associated with alert
+* `FFF_DECISIONS` - GNS table containing details regarding alert state and analyst decision

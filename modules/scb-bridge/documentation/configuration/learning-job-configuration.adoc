@@ -1,0 +1,19 @@
+= Configuring the Learning Job
+
+There are two learning jobs that are an internal *SCB Bridge* batch jobs. Both runs periodically.
+First one is using GNS data and can work processing on *alert* or *watchlist* level. Second one is using
+*ECM* data on works by default on *watchlist* level.
+
+
+.Procedure
+
+. Enable and configure the Learning Jobs.
+
+. Re-start the SCB Bridge service.
+
+For details, see the following sections.
+
+
+include::learning-job/enable-learning-job.adoc[leveloffset=+1]
+
+include::learning-job/enable-ecm-learning-job.adoc[leveloffset=+1]

@@ -1,0 +1,31 @@
+[id="s8-to-gns-rt-mappings"]
+= Silent Eight to GNS-RT Alert Mapping
+
+The following table describes the mapping between Recommended Action given by Silent Eight and output Recommendation for GNS-RT.
+
+.Mappings
+[cols="60,36",options="header"]
+[%autofit]
+|====
+|Silent Eight Recommended Action
+|GNS-RT Recommendation
+
+|INVESTIGATE PARTIALLY FALSE POSITIVE
+|INVESTIGATE
+
+|INVESTIGATE HINTED FALSE POSITIVE
+|INVESTIGATE
+
+|INVESTIGATE HINTED TRUE POSITIVE
+|INVESTIGATE
+
+|FALSE POSITIVE
+|FALSE POSITIVE
+
+|INVESTIGATE
+|INVESTIGATE
+
+|POTENTIAL TRUE POSITIVE
+|POTENTIAL TRUE POSITIVE
+
+|====

@@ -1,0 +1,40 @@
+= High Level Processing
+
+. *SCB Bridge* component retrieves details about alert (from source view) together with:
+.. Hits information from `FFF_HITS_DETAILS`
+.. N/E/O flag for hits from CBS helper view
+. *SCB Bridge* component calls CBS *ACK* function - entire alert is acknowledged.
+. Alert is processed by system:
+.. For watchlist-level processing recommendation is generated for each watchlist where hits are identified as New
+.. For alert-level processing recommendation is generated at alert level
+.  *SCB Bridge* component calls *RECOM* function for each watchlist (watchlist-level processing only)
+
+.High level processing diagram
+[plantuml, diagram-classes, svg]
+....
+autonumber
+participant "SCB Bridge" as Bridge
+database "GNS Trust\nDatabase" as GNS
+database "CBS Database" as CBS
+
+Bridge -> CBS: read alerts from SENS_V_FFF_RECORDS_WL
+CBS --> Bridge: data returned
+Bridge -> GNS: fetch corresponding data from FFF_HITS_DETAILS
+GNS --> Bridge: data returned
+Bridge -> CBS: fetch NEO flag from CBS_HITS_DETAILS_WL_HLPR_V
+CBS --> Bridge: data returned
+Bridge -> CBS: acknowledge alert read (F_CBS_S8_LOG_ACK)
+CBS --> Bridge: return acknowledge status
+
+|||
+rnote over Bridge
+    Alerts are split into watchlist(s).
+endrnote
+
+rnote over Bridge
+    Each NEW watchlist is processed
+    by the Platform and recommendations
+    are generated.
+endrnote
+|||
+....

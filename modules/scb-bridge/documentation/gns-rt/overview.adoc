@@ -1,0 +1,24 @@
+= Overview
+
+GNS-RT (Global Name Screening -- Real-Time) is a system used in the first stage of customer screening, performed in near real-time prior to account opening.
+It is used to compare customer and related party names against Deny and Due Diligence (PEP +  Adverse Media) lists to identify any sanctioned or high-risk customers that require further investigation or enhanced due diligence.
+
+
+There are two parts of the integration:
+
+* Realtime integration of GNS Realtime
+* Near Real-time integration of GNS Realtime
+
+In first cycle, GNS-RT will communicate with Silent Eight using the REST-based (Representational State Transfer) API protocol over HTTP/1.1. Each GNS-RT request may contain up to five alerts to which Silent Eight will provide proper recommendations.
+In second, SERP will fetch data from Trust Database and dedicated *S8 SERP RT View* which contains data from *CBS RT Hit Detail* table.
+Both solution are described in link:architecture.adoc[Architecture].
+
+All GNS-RT requests are sent in JSON format.
+OpenAPI described link:open-api.adoc[here] defines a standard of the communication protocol.
+
+Section link:gns-rt-to-s8-mappings.adoc[mapping] describes how particular fields from Input JSON (SGBML) corresponds with Silent Eight objects used in alert processing.
+
+Sections link:request_examples.adoc[request] and link:response_examples.adoc[response] contains examples of GNS-RT requests and responses.
+
+.Additional resources
+* For more information about Open API specification, see link:https://en.wikipedia.org/wiki/OpenAPI_Specification[Open API]

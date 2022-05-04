@@ -1,0 +1,38 @@
+= N/E/O Flag for Hits
+
+The purpose of below query is to fetch `HIT_NEO_FLAG` column which value identifies each hit as:
+
+* *N(ew)* -- this is a New hit which analyst will be looking at - there was a change in customer
+records or watchlist details
+
+* *E(xisting)* -- this is a hit already investigated by analyst before and decision was made.
+Since last decision there was no change in customer records or watchlist details
+
+* *O(bsolete)* -- this is an obsolete hit where no further action is required
+In case no data is returned by helper view or number of hits returned by helper view is smaller
+than number of hits in `FFF_HITS_DETAILS.DETAILS` column then S8 application is using it’s existing
+logic to identify hit as N/E/O.
+
+[source,sql,indent=0]
+[subs=+quotes]
+----
+SELECT SYSTEM_ID, BATCH_ID, SEQ_NO, HIT_NEO_FLAG
+ FROM <CBS_HIT_DETAILS_HELPER_VIEW>
+ WHERE SYSTEM_ID = ?
+ ORDER BY LPAD(SEQ_NO, 5, '0')
+----
+
+`<CBS_HIT_DETAILS_HELPER_VIEW>` is a configurable view which contains N/E/O flag for hits
+
+`SYSTEM_ID` is the same as retrieved from link:fetch-system-ids-query.adoc#SystemIdQuery[SystemId] query.
+
+`SEQ_NO` is unique and corresponds to each _Suspect_ from `FFF_HITS_DETAILS.DETAILS` column.
+`SEQ_NO` cannot be `NULL` or duplicated for the same `SYSTEM_ID`.
+
+[NOTE]
+====
+`<CBS_HIT_DETAILS_HELPER_VIEW>` should always be in sync with alert retrieved in
+ link:full-alert-query.adoc[Full Alert with Hit Details] query, meaning that for provided `SYSTEM_ID` it’s able to correctly
+return `SEQ_NO` and `HIT_NEO_FLAG` information about each hit within alert.
+This means that helper view returns information only about latest state of the alert
+====

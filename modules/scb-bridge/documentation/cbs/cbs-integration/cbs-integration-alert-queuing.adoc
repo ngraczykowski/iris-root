@@ -1,0 +1,59 @@
+= The CBS Integration Alert Queuing
+
+// TODO: The diagram requires updating
+
+.Queuing CBS alerts for fetching data
+[plantuml,queuing-alerts-diagram,svg]
+....
+@startuml
+== **1) Get Alerts for Processing** ==
+Oracle -> QueingJob : SYSTEM_ID, BATCH_ID
+QueingJob -> InFlightRepository : Fetch alerts already in-flight
+InFlightRepository --> QueingJob : Alerts in-flight
+QueingJob -> QueingJob : Determine new alerts\n(don't include in-flight)
+QueingJob -> InFlightRepository : Add SYSTEM_ID, BATCH_ID of new alerts
+QueingJob ->> RabbitMQ : Send SYSTEM_ID, BATCH_ID, Priority,\nwith ACK, Alert- or Watchlist-level\nof new alerts
+
+== **2) Fetching Alerts** ==
+
+RabbitMQ ->> FetchingJob : SYSTEM_ID, BATCH_ID, Priority,\nif ACK, if Watchlist-level,\nif use NEO
+FetchingJob -> Oracle : Fetch Full Alert
+Oracle --> FetchingJob : Return Full Alert
+FetchingJob -> Oracle : ACK if wanted
+FetchingJob ->> RabbitMQ : Full Alert for Pipeline
+FetchingJob -> InFlightRepository : Remove in-flight alert
+
+== **3) Submitting Recommendations** ==
+
+RabbitMQ ->> RecommendationListener : Recommendation for alert
+RecommendationListener -> RecommendationRepository : Check for Existing (Chrome) Recommendation
+RecommendationListener -> RecommendationRepository : Store Recommendation
+RecommendationListener -> RabbitMQ : Send AlertRecommendationInfo (when stored Recommendation)
+RecommendationListener -> Oracle : RECOM if Watchlist-level
+
+== **4) Chrome Extension** ==
+
+Chrome -> RecommendationService : Get Recommendation for alert
+RecommendationService -> Oracle : Check alert discriminator
+RecommendationService -> RecommendationRepository : Check for Existing (Solving) Recommendation
+RecommendationService -> RabbitMQ : SYSTEM_ID, BATCH_ID, Priority, no ACK, Alert-level
+
+...
+
+RabbitMQ ->> RecommendationService : Recommendation for alert
+RecommendationService -> RecommendationRepository : Check for Existing (Solving) Recommendation
+RecommendationService --> Chrome : Recommendation for alert
+@enduml
+....
+
+Process of solving alerts from CBS can be divided into 3 steps:
+
+. Getting alerts for processing
++
+Purpose of this step is to constantly monitor CBS views for the existence of new alerts to solve. CBS can have multiple views feeding alerts to solve and they should be read as soon as they appear in the view. When alert is ingested into the system it will have an assigned priority with which it should be processed further by the system.
+. Fetching alerts with corresponding data
++
+Purpose of this step is to read all alert data, call ACK function and send alert for further processing.
+. Submitting recommendation
++
+In this step, recommendation generated at watchlist-level is sent back to CBS using call to RECOM function. All recommendations are also stored in postgres database.

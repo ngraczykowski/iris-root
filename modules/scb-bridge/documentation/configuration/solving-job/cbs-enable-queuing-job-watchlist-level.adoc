@@ -1,0 +1,46 @@
+= Enabling the Single Queuing Job (Watchlist Level)
+
+Follow this procedure to enable and configure Single Queuing Job for solving on Watchlist Level in SCB Bridge.
+
+.Procedure
+
+. Open the configuration file in text editor: `application-client.yaml`.
+
+. Enable the queuing job:
++
+[source,toml,indent=0]
+[subs=+quotes]
+----
+    silenteight:
+      scb-bridge:
+        queuing:
+              jobs:
+                - enabled: true
+
+----
+
+. Configure the queuing job:
++
+[source,toml,indent=0]
+[subs=+quotes]
+----
+    silenteight:
+      scb-bridge:
+        queuing:
+              jobs:
+                - enabled: true
+                  ack-records: true
+                  cron-expression: 3/30 * * * * ?
+                  hit-details-view: ''
+                  name: Watchlist-level queuing job
+                  priority: 1
+                  chunk-size: 1000
+                  records-view: SENS_V_FFF_RECORDS
+                  watchlist-level: true
+----
+
+NOTE: You can define multiple jobs.
+
+.Additional resources
+
+* For information about configuring the cron expression, see link:http://www.quartz-scheduler.org/documentation/quartz-2.3.0/tutorials/crontrigger.html[Cron Trigger Tutorial].

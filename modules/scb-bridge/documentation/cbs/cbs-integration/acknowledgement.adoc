@@ -1,0 +1,11 @@
+= Acknowledgement
+
+After SCB Bridge reads an alert with all the details and sends it for processing, CBS ACK function is called.
+This function is called once for each alert.
+
+For solving on watchlist level, only *new* hits in each alert are acknowledged.
+For alert level solving, whole alert is acknowledged, even alert with no new hits.
+
+Once an alert is acknowledged it is not returned by source view until new recommendation is required.
+
+Damaged alerts are also acknowledged although they are not processed and will never receive the recommendation.

@@ -1,0 +1,19 @@
+= Configuring the CBS Solving Job
+
+Solving jobs (Queuing jobs) are fetching alerts from multiple views simultaneously.
+
+Each job fetch alerts from CBS for processing on alert-level or watchlist-level using prioritized queue.
+
+Along-side, the fetching job retrieves the alert identifiers from prioritized queue, reads full alert data and sends it for recommendation.
+The fetching job ensures that the sequence of calls to ACK and RECOM is correct.
+
+.Procedure
+. Enable and configure the Queueing Jobs.
+
+. Restart SCB Bridge to refresh configuration changes.
+
+For details, see the following sections.
+
+include::solving-job/cbs-enable-queuing-job-alert-level.adoc[leveloffset=+1]
+
+include::solving-job/cbs-enable-queuing-job-watchlist-level.adoc[leveloffset=+1]

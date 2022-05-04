@@ -1,0 +1,40 @@
+= Enabling the Learning Job
+
+Follow this procedure to enable and configure the Learning Job in SCB Bridge.
+
+.Procedure
+
+. Open the configuration file in text editor: `application-client.yaml`.
+
+. Enable the learning job:
++
+[source,toml,indent=0]
+[subs=+quotes]
+----
+    silenteight:
+      scb-bridge:
+        learning:
+          alert:
+            enabled: true
+----
+
+. Configure the learning job:
++
+[source,toml,indent=0]
+[subs=+quotes]
+----
+    silenteight:
+      scb-bridge:
+        learning:
+          alert:
+            enabled: true
+            cron-expression: 0 0 3 ? * SUN
+            db-relation-name: SENS_V_FFF_RECORDS
+            cbs-hits-details-helper-view-name:
+----
+
+NOTE: Learning job runs only on Alert-level.
+
+.Additional resources
+
+* For information about configuring the cron expression, see link:http://www.quartz-scheduler.org/documentation/quartz-2.3.0/tutorials/crontrigger.html[Cron Trigger Tutorial].

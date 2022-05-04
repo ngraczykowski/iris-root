@@ -1,0 +1,10 @@
+= Alert Retrieval
+
+include::alert-retrieval/fetch-system-ids-query.adoc[leveloffset=+1]
+
+include::alert-retrieval/full-alert-query.adoc[leveloffset=+1]
+
+include::alert-retrieval/analyst-decisions-query.adoc[leveloffset=+1]
+
+include::alert-retrieval/neo-flag-query.adoc[leveloffset=+1]
+

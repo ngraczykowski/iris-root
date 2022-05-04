@@ -1,0 +1,17 @@
+= CBS Integration
+
+include::cbs-integration/overview.adoc[leveloffset=+1]
+
+include::cbs-integration/fetching-data-sequence-diagram.adoc[leveloffset=+1]
+
+include::cbs-integration/cbs-integration-alert-queuing.adoc[leveloffset=+1]
+
+include::cbs-integration/high-level-processing.adoc[leveloffset=+1]
+
+include::cbs-integration/acknowledgement.adoc[leveloffset=+1]
+
+include::cbs-integration/recommendation.adoc[leveloffset=+1]
+
+== Additional resources
+
+* For the reference of the CBS Interface, see link:cbs-interface-reference.adoc[CBS Interface Reference].

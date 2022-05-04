@@ -1,0 +1,89 @@
+= Fetching Data from CBS
+
+.Fetching data sequence diagram
+[plantuml,fetching-data-diagram,svg]
+....
+autonumber
+participant "SCB Bridge" as Bridge
+collections "Connection Pool" as ConPool
+participant "Connection 1" as Con1
+participant "Connection X" as ConX
+database "GNS DB (CBS)" as CBS
+participant "Transaction" as Txn
+participant "Cursor" as Cursor
+
+== **1) Open Cursor** ==
+group Get cursor for iterating over all system ids to process
+
+Bridge -> ConPool: get connection
+Con1 <- ConPool: get or create connection
+activate Con1
+Con1 --> ConPool: return connection
+Bridge <-- ConPool: return connection
+Con1 <- Bridge: query for system ids
+CBS <- Con1: execute query
+CBS -> Cursor: open cursor
+activate Cursor
+CBS --> Con1: return data
+Con1 --> Bridge: return result set
+end
+
+== **2) Fetch data ** ==
+group Fetch resultSet in chunks (in loop)
+
+Con1 <- Bridge: fetch <b>chunk-size</b> of system ids
+Con1 -> Cursor: fetch next page
+Con1 <-- Cursor: return data
+Con1 --> Bridge: return list of system ids
+
+group Loop for each chunk of system ids...
+
+Bridge -> ConPool: get connection
+ConX <- ConPool: get or create connection
+activate ConX
+
+ConX --> ConPool: return connection
+ConPool --> Bridge: return connection
+Bridge -> ConX: create transaction (isolation level: SERIALIZABLE)
+ConX -> CBS: execute begin transaction
+CBS -> Txn: setup transaction
+activate Txn
+
+Bridge -> ConX: query for decisions for all system ids in chunk
+ConX -> CBS: execute query
+ConX <-- CBS: return data
+Bridge <-- ConX: return list of decisions
+
+Bridge -> ConX: query for alert and hits data for all system ids in chunk
+ConX -> CBS: execute query
+ConX <-- CBS: return data
+Bridge <-- ConX: return alert data
+
+
+group Loop for each system id in chunk...
+ConX <- Bridge: query for N/E/O flag for single system id
+ConX -> CBS: execute query
+ConX <-- CBS: return data
+Bridge <-- ConX: return N/E/O flag data
+end
+
+Bridge -> ConX: commit transaction
+ConX -> CBS: execute commit transaction
+CBS -> Txn: commit transaction
+destroy Txn
+
+Bridge -> ConPool: release connection
+ConPool -> ConX: release connection
+deactivate ConX
+
+end
+
+== **3) Close Cursor ** ==
+Bridge -> Con1: close cursor
+Con1 -> CBS: close cursor
+CBS -> Cursor: close cursor
+destroy Cursor
+Bridge -> ConPool: release connection
+ConPool -> Con1: release connection to pool
+deactivate Con1
+....

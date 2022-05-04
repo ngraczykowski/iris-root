@@ -1,0 +1,34 @@
+= Full Alert with Hit Details
+
+The following query collects all information needed to generate agent features and
+generate the appropriate recommendation.
+
+[source,sql,indent=0]
+[subs=+quotes]
+----
+SELECT R.SYSTEM_ID,
+       R.BATCH_ID,
+       R.CHAR_SEP,
+       R.DB_ACCOUNT,
+       R.DB_CITY,
+       R.DB_COUNTRY,
+       R.DB_DOB,
+       R.DB_NAME,
+       R.DB_POB,
+       R.DECISION_TYPE,
+       R.FILTERED,
+       R.RECORD,
+       R.RECORD_ID,
+       R.TYPE_OF_REC,
+       R.LAST_DEC_BATCH_ID,
+       R.UNIT,
+       R.FMT_NAME,
+       H.DETAILS
+FROM <ALERT_VIEW> R
+         JOIN FFF_HITS_DETAILS H ON H.SYSTEM_ID = R.SYSTEM_ID
+WHERE R.SYSTEM_ID IN (<SYSTEM_IDS>)
+----
+
+`<ALERT_VIEW>` is a configurable view which contains new alerts (alert or watchlist level).
+
+`<SYSTEM_IDS>`  are ids previously retrieved from link:fetch-system-ids-query.adoc#SystemIdQuery[SystemId] query.

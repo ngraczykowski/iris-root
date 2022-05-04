@@ -1,0 +1,28 @@
+[id="cbs-interface-glossary-{context}"]
+= CBS Interface Glossary
+// REFERENCE
+
+
+CBS Interface is a database package called *CBS_INTERFACE_PKG* that contains 2 functions that are used in CBS Integration with SCB Bridge.
+Input and output parameters are different in both supported versions, however their meanings are the same.
+
+.CBS Interface Components
+[cols="2,2,3",options="header"]
+|====
+|Short Name
+|Full Component Name
+|Description
+
+|ACK
+|F_CBS_S8_LOG_ACK
+|Database function used to acknowledge alert read
+
+|RECOM
+|F_CBS_S8_LOG_RECOM
+|Database function used to recommend an alert
+
+|Read log table
+|CBS_S8_READ_LOG
+|Database table stores acknowledged and recommended alerts
+
+|====

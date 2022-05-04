@@ -1,0 +1,35 @@
+= Fetching System IDs
+
+The purpose of the below query is to fetch a list of system IDs for alerts that require a recommendation.
+
+== Multiple views solving
+
+It's possible to define in application-client.yml multiple views from which alerts are being fetched and processed.
+
+[source,indent=0]
+[subs=+quotes]
+----
+silenteight:
+  scb-bridge:
+    queuing:
+          jobs:
+            - enabled: true
+              ack-records: true
+              cron-expression: 0/30 * * * * ?
+              hit-details-view: ''
+              name: Watchlist-level queuing job (DENY)
+              priority: 10
+              chunk-size: 1000
+              records-view: SENS_V_FFF_RECORDS_DENY
+              watchlist-level: true
+----
+
+The service retrieves system IDs in chunks, separately from each view defined as `records_view`.
+To retrieve the system IDs, system uses the query described below:
+
+[source,sql,indent=0]
+[subs=+quotes]
+[id="SystemIdQuery"]
+----
+SELECT SYSTEM_ID, BATCH_ID FROM <RECORDS_VIEW>
+----

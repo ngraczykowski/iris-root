@@ -1,0 +1,7 @@
+= Recommendation
+
+After SEAR generates a recommendation, CBS RECOM function is called.
+
+Recommendation is called only for watchlist-level alerts, for each combination of  `SYSTEM_ID`, `BATCH_ID`, `WATCHLIST_ID`.
+
+Recommendation is called only for hits previously identified as New by the CBS helper view.

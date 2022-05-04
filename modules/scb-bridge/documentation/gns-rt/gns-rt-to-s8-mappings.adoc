@@ -1,0 +1,91 @@
+= GNS-RT to Silent Eight Alert Mapping
+
+GNS-RT requests (input) are based on SCBML structure, that contains all the fields needed by SCB Bridge for processing an alert and providing a recommendation.
+
+The following table describes the mapping.
+
+.Mappings
+[cols="48,25,25,25",options="header"]
+[%autofit]
+|====
+|GNS-RT Field
+|SCB Bridge Field
+|Transformation
+|Description
+
+|/screenCustomerNameRes /screenCustomerNameResPayload /screenCustomerNameResInfo /immediateResponseData /alerts /alertID
+|Alert.systemId
+|as-is
+|Unique identifier of an alert
+
+|/screenCustomerNameRes /header /originationDetails /trackingId
+|Alert.batchId
+|as-is
+|Identifier of related batch
+
+|/screenCustomerNameRes /screenCustomerNameResPayload /screenCustomerNameResInfo /immediateResponseData /alerts /alertID
+|Alert.unit
+|Extract the first 12 characters
+|Unit name (e.g SG_BTCH_DENY)
+
+|/screenCustomerNameRes /screenCustomerNameResPayload /screenCustomerNameResInfo /header /userBankID
+|Alert.dbAccount
+|as-is
+|Bank identifier
+
+|/screenCustomerNameRes /screenCustomerNameResPayload /screenCustomerNameResInfo /screenableData /fullLegalName
+|Alert.dbName
+|as-is
+|Full legal name of entity
+
+|/screenCustomerNameRes /screenCustomerNameResPayload /screenCustomerNameResInfo /screenableData /amlcountry
+|Alert.dbCountry
+|as-is
+|Country
+
+|/screenCustomerNameRes /screenCustomerNameResPayload /screenCustomerNameResInfo /screenableData /addressCity
+|Alert.dbCity
+|as-is
+|City name
+
+|/screenCustomerNameRes /screenCustomerNameResPayload /screenCustomerNameResInfo /screenableData /clientType
+|Alert.typeOfRec
+|as-is
+|Type of record (individual / company)
+
+|/screenCustomerNameRes /screenCustomerNameResPayload /screenCustomerNameResInfo /screenableData /dateOfBirthOrRegistration
+|Alert.dbDob
+|as-is
+|Date of birth
+
+|/screenCustomerNameRes /screenCustomerNameResPayload /screenCustomerNameResInfo /screenableData /countryOfBirthOrRegistration
+|Alert.dbPob
+|as-is
+|Country of birth
+
+|/screenCustomerNameRes /screenCustomerNameResPayload /screenCustomerNameResInfo /immediateResponse /immediateTimeStamp
+|Alert.filtered
+|as-is
+|Date of last screening (discriminator value)
+
+|<none>
+|Alert.lastDecBatchId
+|N/A
+|Last decision batch identifier
+
+|/screenCustomerNameRes /screenCustomerNameResPayload /screenCustomerNameResInfo /screenableData /sourceSystemIdentifier
+|GnsParty.sourceSystemIdentifier
+|as-is
+|Source system identifier
+
+|/screenCustomerNameRes /screenCustomerNameResPayload /screenCustomerNameResInfo /screenableData /customerIdentificationNo
+|GnsParty.customerIdentificationNo
+|as-is
+|Customer identification number
+
+|/screenCustomerNameRes /screenCustomerNameResPayload /screenCustomerNameResInfo /immediateResponseData /alerts /hitList /hitDetails
+|Alert.details
+|Base64 decoding
+|Hit Details
+
+|====

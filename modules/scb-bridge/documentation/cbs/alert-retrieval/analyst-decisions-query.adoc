@@ -1,0 +1,21 @@
+[id="analyst-decisions-{context}"]
+= Analyst Decisions
+
+Analyst decisions are used in case data in helper view is not available to identify hits as
+New, Existing or Obsolete.
+
+[id="analyst-decisions-query-{context}"]
+[source,sql,indent=0]
+[subs=+quotes]
+----
+SELECT D.SYSTEM_ID, D.OPERATOR, D.DECISION_DATE, D.TYPE, D.COMMENTS
+ FROM FFF_DECISIONS D
+    JOIN <ALERT_VIEW> R ON D.SYSTEM_ID = R.SYSTEM_ID
+    JOIN FFF_HITS_DETAILS H ON H.SYSTEM_ID = R.SYSTEM_ID
+ WHERE D.TYPE != 7 AND D.SYSTEM_ID IN (<SYSTEM_IDS>)
+ ORDER BY D.DECISION_DATE DESC
+----
+
+`<ALERT_VIEW>` is a configurable view which contains new alerts (alert or watchlist level).
+
+`<SYSTEM_IDS>` are ids previously retrieved from link:fetch-system-ids-query.adoc#SystemIdQuery[SystemId] query.

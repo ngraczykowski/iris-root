@@ -1,0 +1,63 @@
+[id="gns-rt-response-examples"]
+= Response Examples
+
+.Example 1:
+[source,indent=0]
+----
+{
+  "silent8Response" : {
+    "alerts" : [ {
+      "comments" : "S8 recommended action: False Positive",
+      "watchlistType" : "Sanctions",
+      "recommendation" : "FALSE_POSITIVE",
+      "recommendationTimestamp" : "2020-01-23T04:56:07.000+00:00",
+      "alertId" : "SG_BTCH_DENY!17a12bd5-d3e8-4544-a441-d8129dfe9df1"
+    }]
+  }
+}
+----
+
+.Example 2:
+[source,indent=0]
+----
+{
+  "silent8Response" : {
+    "alerts" : [ {
+      "comments" : "S8 recommended action: False Positive",
+      "watchlistType" : "Sanctions",
+      "recommendation" : "FALSE_POSITIVE",
+      "recommendationTimestamp" : "2020-01-23T04:56:07.000+00:00",
+      "alertId" : "SG_BTCH_DENY!17a12bd5-d3e8-4544-a441-d8129dfe9df1"
+    }, {
+      "comments" : "S8 recommended action: Manual Investigation\n Manual Investigation hits: 3019",
+      "watchlistType" : "Sanctions",
+      "recommendation" : "INVESTIGATE",
+      "recommendationTimestamp" : "2020-01-23T04:57:07.000+00:00",
+      "alertId" : "EN_BTCH_DENY!07a12bd5-d3e8-4544-a441-d8129dfe9df1"
+    } ]
+  }
+}
+----
+
+.Example 3: With QCO enabled
+[source,indent=0]
+----
+{
+  "silent8Response": {
+    "alerts": [ {
+      "alertId": "AE_BTCH_DENY!D59C0E1D-2ABC4D28-AEC14D9B-8ACAE795",
+      "comments": "S8 recommended action: POTENTIAL_TRUE_POSITIVE",
+      "recommendation": "POTENTIAL_TRUE_POSITIVE",
+      "recommendationTimestamp": "2022-04-28T09:07:46.418485",
+      "watchlistType": "Sanctions",
+      "policyId": "policies/c80a65e9-0b79-46d4-8e40-54065ae14e7b",
+      "matches": [ {
+        "hitID": "AS03706790",
+        "stepId": "steps/e22c0818-8ce0-4dfa-a1e0-aeaaab707557",
+        "fvSignature": "oArhsY1tPcuvG300QLz6AM3eKss="
+      } ]
+    } ]
+  }
+}
+----
+
