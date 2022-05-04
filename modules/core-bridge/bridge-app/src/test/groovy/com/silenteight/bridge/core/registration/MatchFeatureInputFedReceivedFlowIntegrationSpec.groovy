@@ -47,8 +47,8 @@ class MatchFeatureInputFedReceivedFlowIntegrationSpec extends BaseSpecificationI
     def batch = UdsFedFixtures.createBatch(isSimulationBatch, 2)
     def givenAlerts =
         [
-            UdsFedFixtures.createAlert(batch.id(), UUID.randomUUID().toString()),
-            UdsFedFixtures.createAlert(batch.id(), UUID.randomUUID().toString())
+            UdsFedFixtures.createAlert(batch.id(), "A_${UUID.randomUUID().toString()}", alertsStatus[0]),
+            UdsFedFixtures.createAlert(batch.id(), "B_${UUID.randomUUID().toString()}", alertsStatus[1])
         ]
     def udsFedMessages =
         [
@@ -76,7 +76,7 @@ class MatchFeatureInputFedReceivedFlowIntegrationSpec extends BaseSpecificationI
         def alerts = alertRepository.findAllByBatchIdAndNameIn(
             batch.id(),
             givenAlerts.collect {it.name()}
-        )
+        ).stream().toList().sort {it.name()}
         alerts.eachWithIndex {alert, idx ->
           assert alert.status() == expectedAlertsStatus[idx]
           assert alert.errorDescription() == expectedAlertsErrorDesctiption[idx]
@@ -93,13 +93,16 @@ class MatchFeatureInputFedReceivedFlowIntegrationSpec extends BaseSpecificationI
     }
 
     where:
-    isSimulationBatch | feedingStatuses                                || isBatchCompletedExpected | expectedBatchStatus    | expectedAnalysisName         | expectedAlertsStatus                             | expectedAlertsErrorDesctiption
-    false             | [FeedingStatus.SUCCESS, FeedingStatus.SUCCESS] || false                    | BatchStatus.PROCESSING | UdsFedFixtures.ANALYSIS_NAME | [AlertStatus.PROCESSING, AlertStatus.PROCESSING] | [null, null]
-    false             | [FeedingStatus.FAILURE, FeedingStatus.SUCCESS] || false                    | BatchStatus.PROCESSING | UdsFedFixtures.ANALYSIS_NAME | [AlertStatus.ERROR, AlertStatus.PROCESSING]      | [UdsFedFixtures.ALERT_ERROR_DESCRIPTION, null]
-    false             | [FeedingStatus.FAILURE, FeedingStatus.FAILURE] || true                     | BatchStatus.COMPLETED  | UdsFedFixtures.ANALYSIS_NAME | [AlertStatus.ERROR, AlertStatus.ERROR]           | [UdsFedFixtures.ALERT_ERROR_DESCRIPTION, UdsFedFixtures.ALERT_ERROR_DESCRIPTION]
-    true              | [FeedingStatus.SUCCESS, FeedingStatus.SUCCESS] || true                     | BatchStatus.COMPLETED  | ''                           | [AlertStatus.UDS_FED, AlertStatus.UDS_FED]       | [null, null]
-    true              | [FeedingStatus.FAILURE, FeedingStatus.SUCCESS] || true                     | BatchStatus.COMPLETED  | ''                           | [AlertStatus.ERROR, AlertStatus.UDS_FED]         | [UdsFedFixtures.ALERT_ERROR_DESCRIPTION, null]
-    true              | [FeedingStatus.FAILURE, FeedingStatus.FAILURE] || true                     | BatchStatus.COMPLETED  | ''                           | [AlertStatus.ERROR, AlertStatus.ERROR]           | [UdsFedFixtures.ALERT_ERROR_DESCRIPTION, UdsFedFixtures.ALERT_ERROR_DESCRIPTION]
+    isSimulationBatch | alertsStatus                                      | feedingStatuses                                || isBatchCompletedExpected | expectedBatchStatus    | expectedAnalysisName         | expectedAlertsStatus                              | expectedAlertsErrorDesctiption
+    false             | [AlertStatus.REGISTERED, AlertStatus.REGISTERED]  | [FeedingStatus.SUCCESS, FeedingStatus.SUCCESS] || false                    | BatchStatus.PROCESSING | UdsFedFixtures.ANALYSIS_NAME | [AlertStatus.PROCESSING, AlertStatus.PROCESSING]  | [null, null]
+    false             | [AlertStatus.ERROR, AlertStatus.REGISTERED]       | [FeedingStatus.SUCCESS, FeedingStatus.SUCCESS] || false                    | BatchStatus.PROCESSING | UdsFedFixtures.ANALYSIS_NAME | [AlertStatus.PROCESSING, AlertStatus.PROCESSING]  | [null, null]
+    false             | [AlertStatus.REGISTERED, AlertStatus.RECOMMENDED] | [FeedingStatus.SUCCESS, FeedingStatus.SUCCESS] || false                    | BatchStatus.PROCESSING | UdsFedFixtures.ANALYSIS_NAME | [AlertStatus.PROCESSING, AlertStatus.RECOMMENDED] | [null, null]
+    false             | [AlertStatus.REGISTERED, AlertStatus.REGISTERED]  | [FeedingStatus.FAILURE, FeedingStatus.SUCCESS] || false                    | BatchStatus.PROCESSING | UdsFedFixtures.ANALYSIS_NAME | [AlertStatus.ERROR, AlertStatus.PROCESSING]       | [UdsFedFixtures.ALERT_ERROR_DESCRIPTION, null]
+    false             | [AlertStatus.RECOMMENDED, AlertStatus.REGISTERED] | [FeedingStatus.FAILURE, FeedingStatus.SUCCESS] || false                    | BatchStatus.PROCESSING | UdsFedFixtures.ANALYSIS_NAME | [AlertStatus.RECOMMENDED, AlertStatus.PROCESSING] | [null, null]
+    false             | [AlertStatus.REGISTERED, AlertStatus.REGISTERED]  | [FeedingStatus.FAILURE, FeedingStatus.FAILURE] || true                     | BatchStatus.COMPLETED  | UdsFedFixtures.ANALYSIS_NAME | [AlertStatus.ERROR, AlertStatus.ERROR]            | [UdsFedFixtures.ALERT_ERROR_DESCRIPTION, UdsFedFixtures.ALERT_ERROR_DESCRIPTION]
+    true              | [AlertStatus.REGISTERED, AlertStatus.REGISTERED]  | [FeedingStatus.SUCCESS, FeedingStatus.SUCCESS] || true                     | BatchStatus.COMPLETED  | ''                           | [AlertStatus.UDS_FED, AlertStatus.UDS_FED]        | [null, null]
+    true              | [AlertStatus.REGISTERED, AlertStatus.REGISTERED]  | [FeedingStatus.FAILURE, FeedingStatus.SUCCESS] || true                     | BatchStatus.COMPLETED  | ''                           | [AlertStatus.ERROR, AlertStatus.UDS_FED]          | [UdsFedFixtures.ALERT_ERROR_DESCRIPTION, null]
+    true              | [AlertStatus.REGISTERED, AlertStatus.REGISTERED]  | [FeedingStatus.FAILURE, FeedingStatus.FAILURE] || true                     | BatchStatus.COMPLETED  | ''                           | [AlertStatus.ERROR, AlertStatus.ERROR]            | [UdsFedFixtures.ALERT_ERROR_DESCRIPTION, UdsFedFixtures.ALERT_ERROR_DESCRIPTION]
   }
 
   private getBatchCompletedMessage(boolean isSimulationBatch) {

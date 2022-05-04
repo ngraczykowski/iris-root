@@ -4,6 +4,7 @@ import com.silenteight.bridge.core.registration.domain.command.ProcessUdsFedAler
 import com.silenteight.bridge.core.registration.domain.command.ProcessUdsFedAlertsCommand.FedMatch
 import com.silenteight.bridge.core.registration.domain.command.ProcessUdsFedAlertsCommand.FeedingStatus
 import com.silenteight.bridge.core.registration.domain.model.Alert
+import com.silenteight.bridge.core.registration.domain.model.AlertStatus
 import com.silenteight.bridge.core.registration.domain.model.Batch
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.model.Match
@@ -65,7 +66,7 @@ class UdsFedAlertsServiceSpec extends Specification {
     1 * udsFedAlertsProcessorStrategy.processUdsFedAlerts(batch, _ as List<String>)
     with(alertRepository) {
       1 * updateStatusToError(
-          batch.id(), Map.of('Failed to flatten alert payload.', [failedAlert.name()] as Set<String>))
+          batch.id(), Map.of('Failed to flatten alert payload.', [failedAlert.name()] as Set<String>), EnumSet.of(AlertStatus.RECOMMENDED, AlertStatus.DELIVERED))
     }
     1 * alertService.hasNoPendingAlerts(batch) >> hasNoPendingAlerts
     if (hasNoPendingAlerts) {

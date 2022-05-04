@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.bridge.core.registration.domain.command.ProcessUdsFedAlertsCommand;
 import com.silenteight.bridge.core.registration.domain.command.ProcessUdsFedAlertsCommand.FeedingStatus;
+import com.silenteight.bridge.core.registration.domain.model.AlertStatus;
 import com.silenteight.bridge.core.registration.domain.model.Batch;
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository;
@@ -107,7 +108,10 @@ class UdsFedAlertsService {
       Batch batch, List<ProcessUdsFedAlertsCommand> commands) {
     var errorDescriptionsWithAlertNames =
         extractErrorDescriptionsWithAlertNamesFromCommands(commands);
-    alertRepository.updateStatusToError(batch.id(), errorDescriptionsWithAlertNames);
+    var statusesNotIn = EnumSet.of(AlertStatus.RECOMMENDED, AlertStatus.DELIVERED);
+    log.info("Set [{}] alerts status to [{}] for batch id [{}]. Skipping [{}] alerts.",
+        commands.size(), AlertStatus.ERROR, batch.id(), statusesNotIn);
+    alertRepository.updateStatusToError(batch.id(), errorDescriptionsWithAlertNames, statusesNotIn);
   }
 
   private List<ProcessUdsFedAlertsCommand> getSucceededCommands(

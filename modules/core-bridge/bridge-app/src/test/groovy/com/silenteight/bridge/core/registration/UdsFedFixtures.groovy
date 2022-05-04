@@ -18,10 +18,10 @@ class UdsFedFixtures {
   static def ALERT_METADATA = 'alertMetadata'
   static def ALERT_ERROR_DESCRIPTION = 'Failed to flatten alert payload.'
 
-  static def createAlert(String batchId, String alertName) {
+  static def createAlert(String batchId, String alertName, AlertStatus status) {
     Alert.builder()
         .name(alertName)
-        .status(AlertStatus.REGISTERED)
+        .status(status)
         .alertId(UUID.randomUUID().toString())
         .batchId(batchId)
         .metadata(ALERT_METADATA)

@@ -5,11 +5,13 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.bridge.core.registration.adapter.outgoing.jdbc.AlertEntity.Status;
 import com.silenteight.bridge.core.registration.domain.model.Alert;
 import com.silenteight.bridge.core.registration.domain.model.AlertName;
+import com.silenteight.bridge.core.registration.domain.model.AlertStatus;
 import com.silenteight.bridge.core.registration.domain.model.AlertWithMatches;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository;
 
 import org.springframework.stereotype.Repository;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -36,9 +38,12 @@ class JdbcAlertRepository implements AlertRepository {
   }
 
   @Override
-  public void updateStatusToProcessing(String batchId, List<String> alertNames) {
-    alertRepository.updateAlertsStatusByBatchIdAndIdsIn(
-        batchId, Status.PROCESSING.name(), alertNames);
+  public void updateStatusToProcessing(
+      String batchId, List<String> alertNames, EnumSet<AlertStatus> statusesNotIn) {
+    alertRepository.updateAlertsStatusByBatchIdAndAlertNamesInAndStatusNotIn(
+        batchId, Status.PROCESSING.name(), alertNames,
+        statusesNotIn.stream().map(Enum::name).toList()
+    );
   }
 
   @Override
@@ -49,10 +54,12 @@ class JdbcAlertRepository implements AlertRepository {
 
   @Override
   public void updateStatusToError(
-      String batchId, Map<String, Set<String>> errorDescriptionsWithAlertNames) {
+      String batchId, Map<String, Set<String>> errorDescriptionsWithAlertNames,
+      EnumSet<AlertStatus> statusesNotIn) {
     errorDescriptionsWithAlertNames.forEach((errorDescription, alertNames) ->
-        alertRepository.updateAlertsStatusWithErrorDescriptionByBatchIdAndAlertNames(
-            batchId, alertNames, Status.ERROR.name(), errorDescription));
+        alertRepository.updateAlertsStatusWithDescriptionByBatchIdAndAlertNamesInAndStatusesNotIn(
+            batchId, alertNames, Status.ERROR.name(), errorDescription,
+            statusesNotIn.stream().map(Enum::name).toList()));
   }
 
   @Override

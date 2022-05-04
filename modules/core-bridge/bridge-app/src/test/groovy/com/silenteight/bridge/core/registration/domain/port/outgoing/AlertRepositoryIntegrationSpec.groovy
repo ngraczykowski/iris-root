@@ -40,15 +40,16 @@ class AlertRepositoryIntegrationSpec extends BaseSpecificationIT {
     }
   }
 
-  def 'should update status of given alert ids to PROCESSING'() {
+  def 'should update status of given alert ids to PROCESSING if alert is not in the given status already'() {
     given:
     def batchId = 'batch_id_' + UUID.randomUUID()
-    def alert1 = dummyAlert(batchId, 'alert_id_' + UUID.randomUUID(), 'match_id_' + UUID.randomUUID())
-    def alert2 = dummyAlert(batchId, 'alert_id_' + UUID.randomUUID(), 'match_id_' + UUID.randomUUID())
-    alertRepository.saveAlerts([alert1, alert2])
+    def alert1 = dummyAlert(batchId, 'alert_id_' + UUID.randomUUID(), 'match_id_' + UUID.randomUUID(), AlertStatus.REGISTERED)
+    def alert2 = dummyAlert(batchId, 'alert_id_' + UUID.randomUUID(), 'match_id_' + UUID.randomUUID(), AlertStatus.REGISTERED)
+    def alert3 = dummyAlert(batchId, 'alert_id_' + UUID.randomUUID(), 'match_id_' + UUID.randomUUID(), AlertStatus.RECOMMENDED)
+    alertRepository.saveAlerts([alert1, alert2, alert3])
 
     when:
-    alertRepository.updateStatusToProcessing(batchId, [alert1.name()])
+    alertRepository.updateStatusToProcessing(batchId, [alert1.name(), alert3.name()], EnumSet.of(AlertStatus.RECOMMENDED))
 
     then: 'alert1 should have updated status'
     with(alertRepository.findAllByBatchIdAndNameIn(batchId, [alert1.name()]).first()) {
@@ -58,6 +59,11 @@ class AlertRepositoryIntegrationSpec extends BaseSpecificationIT {
     and: 'alert2 should not have updated status'
     with(alertRepository.findAllByBatchIdAndNameIn(batchId, [alert2.name()]).first()) {
       status() == alert2.status()
+    }
+
+    and: 'alert3 should not have updated status'
+    with(alertRepository.findAllByBatchIdAndNameIn(batchId, [alert3.name()]).first()) {
+      status() == alert3.status()
     }
   }
 
@@ -77,10 +83,10 @@ class AlertRepositoryIntegrationSpec extends BaseSpecificationIT {
     results.size() == 2
   }
 
-  private static def dummyAlert(String batchId, String alertId, String matchId) {
+  private static def dummyAlert(String batchId, String alertId, String matchId, AlertStatus status) {
     Alert.builder()
         .name("alerts/{$alertId}")
-        .status(AlertStatus.REGISTERED)
+        .status(status)
         .alertId(alertId)
         .batchId(batchId)
         .matches(
@@ -89,5 +95,9 @@ class AlertRepositoryIntegrationSpec extends BaseSpecificationIT {
             ]
         )
         .build()
+  }
+
+  private static def dummyAlert(String batchId, String alertId, String matchId) {
+    return dummyAlert(batchId, alertId, matchId, AlertStatus.REGISTERED)
   }
 }

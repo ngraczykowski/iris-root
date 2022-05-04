@@ -1,5 +1,6 @@
 package com.silenteight.bridge.core.registration.domain.strategy
 
+import com.silenteight.bridge.core.registration.domain.model.AlertStatus
 import com.silenteight.bridge.core.registration.domain.model.Batch
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository
@@ -35,7 +36,7 @@ class UdsFedAlertsProcessorSolvingStrategySpec extends Specification {
     underTest.processUdsFedAlerts(batch, alertNames)
 
     then:
-    1 * alertRepository.updateStatusToProcessing(batch.id(), alertNames)
+    1 * alertRepository.updateStatusToProcessing(batch.id(), alertNames, EnumSet.of(AlertStatus.RECOMMENDED, AlertStatus.DELIVERED))
     1 * analysisService.addAlertsToAnalysis(batch.analysisName(), alertNames, _ as Timestamp)
     0 * _
   }

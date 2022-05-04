@@ -39,14 +39,19 @@ class RecommendationCreatorMock {
   private List<AlertDto> getAlertNames(String analysisName) {
     var namedParameters = new MapSqlParameterSource()
         .addValue("analysisName", analysisName)
-        .addValue("status", AlertStatus.ERROR.name());
+        .addValue("status", AlertStatus.PROCESSING.name());
     var alertNamesFromDb = jdbcTemplate.query(
         """
             SELECT a.id, a.name, a.alert_id
             FROM core_bridge_alerts a
             LEFT JOIN core_bridge_batches b ON a.batch_id = b.batch_id
             WHERE b.analysis_name = :analysisName
-            AND a.status != :status
+            AND a.status = :status
+            AND a.name NOT IN (
+              SELECT alert_name 
+              FROM core_bridge_recommendations r 
+              WHERE r.analysis_name= :analysisName
+            )
             """,
         namedParameters,
         (rs, rowNum) -> new AlertDto(

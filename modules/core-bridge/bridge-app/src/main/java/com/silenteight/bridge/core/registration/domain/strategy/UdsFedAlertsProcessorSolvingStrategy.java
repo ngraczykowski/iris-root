@@ -14,6 +14,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
+import java.util.EnumSet;
 import java.util.List;
 
 @Slf4j
@@ -38,9 +39,10 @@ class UdsFedAlertsProcessorSolvingStrategy implements UdsFedAlertsProcessorStrat
   }
 
   private void updateAlertsStatus(String batchId, List<String> alertNames) {
-    log.info("Set [{}] alerts status to [{}] for batch id [{}].",
-        alertNames.size(), AlertStatus.PROCESSING, batchId);
-    alertRepository.updateStatusToProcessing(batchId, alertNames);
+    var statusesNotIn = EnumSet.of(AlertStatus.RECOMMENDED, AlertStatus.DELIVERED);
+    log.info("Set [{}] alerts status to [{}] for batch id [{}]. Skipping [{}] alerts.",
+        alertNames.size(), AlertStatus.PROCESSING, batchId, statusesNotIn);
+    alertRepository.updateStatusToProcessing(batchId, alertNames, statusesNotIn);
   }
 
   @Override

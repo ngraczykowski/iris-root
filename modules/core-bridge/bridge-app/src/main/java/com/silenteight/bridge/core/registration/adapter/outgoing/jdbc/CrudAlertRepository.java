@@ -85,10 +85,19 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
   @Modifying
   @Query("""
       UPDATE core_bridge_alerts
+      SET status = :status, updated_at = NOW(), error_description = NULL
+      WHERE status NOT IN (:statuses) AND batch_id = :batchId AND name IN(:alertNames)""")
+  void updateAlertsStatusByBatchIdAndAlertNamesInAndStatusNotIn(
+      String batchId, String status, List<String> alertNames, List<String> statuses);
+
+  @Modifying
+  @Query("""
+      UPDATE core_bridge_alerts
       SET status = :status, error_description = :errorDescription, updated_at = NOW()
-      WHERE batch_id = :batchId AND name IN(:alertNames)""")
-  void updateAlertsStatusWithErrorDescriptionByBatchIdAndAlertNames(
-      String batchId, Set<String> alertNames, String status, String errorDescription);
+      WHERE status NOT IN (:statuses) AND batch_id = :batchId AND name IN(:alertNames)""")
+  void updateAlertsStatusWithDescriptionByBatchIdAndAlertNamesInAndStatusesNotIn(
+      String batchId, Set<String> alertNames, String status, String errorDescription,
+      List<String> statuses);
 
   @Modifying
   @Query("""
