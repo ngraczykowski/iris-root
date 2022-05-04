@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="KubernetesSettings">
+    <option name="apiVersion" value="1.22" />
+    <option name="getSpecFromCluster" value="true" />
+    <specSources>
+      <SpecSource>
+        <option name="pathOrUrl" value="https://raw.githubusercontent.com/rabbitmq/cluster-operator/main/config/crd/bases/rabbitmq.com_rabbitmqclusters.yaml" />
+      </SpecSource>
+      <SpecSource>
+        <option name="pathOrUrl" value="https://raw.githubusercontent.com/zalando/postgres-operator/master/manifests/postgresql.crd.yaml" />
+      </SpecSource>
+      <SpecSource>
+        <option name="pathOrUrl" value="https://raw.githubusercontent.com/zalando/postgres-operator/master/manifests/postgresteam.crd.yaml" />
+      </SpecSource>
+      <SpecSource>
+        <option name="pathOrUrl" value="https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources" />
+      </SpecSource>
+      <SpecSource>
+        <option name="pathOrUrl" value="https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds" />
+      </SpecSource>
+    </specSources>
+  </component>
+</project>
