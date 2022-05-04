@@ -62,3 +62,30 @@ An example http request updating comment template is available in:
 
 The new version of the comment template can be tested without engaging the whole SEAR
 infrastructure. To do so follow the steps from `README.md` of `cli-commentator` project.
+
+## Removing feature values
+
+To remove feature values set up property: 
+
+```
+ae:
+  match-feature-value:
+    not-cached:
+      features:
+        - "features/historicalRiskAccountNumberTP"
+        - "features/historicalRiskAccountNumberFP"
+```
+
+These features will be periodically removed from Adjudication Engine database, in order for AE to ask
+agents for responses for these features once again.
+
+To determine how often these feature values are going to be removed set up:
+
+```
+ae:
+  match-feature-value:
+    not-cached:
+      scheduler: * */10 * * * ?
+```
+
+In this example default value is presented.
