@@ -305,7 +305,7 @@ sep:
       VIEW_SIMULATION_RESULT:
         - "LIST_SIMULATION_REPORTS"
       STATISTICS:
-        - "POLICY_STATISTICS"
+        - "RECOMMENDATION_STATISTICS"
 
     rolePermissionsMappings:
       USER_ADMINISTRATOR:

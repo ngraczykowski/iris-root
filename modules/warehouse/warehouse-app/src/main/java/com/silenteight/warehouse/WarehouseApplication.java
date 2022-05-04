@@ -38,6 +38,7 @@ import com.silenteight.warehouse.sampling.SamplingModule;
 import com.silenteight.warehouse.simulation.handler.SimulationMessageHandlerModule;
 import com.silenteight.warehouse.simulation.processing.SimulationProcessingModule;
 import com.silenteight.warehouse.statistics.StatisticsModule;
+import com.silenteight.warehouse.statistics.get.DashboardStatisticsModule;
 
 import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -59,6 +60,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     AvailableReportsModule.class,
     BackupModule.class,
     DomainModule.class,
+    DashboardStatisticsModule.class,
     ReportCreateModule.class,
     ReportDownloadModule.class,
     ReportGenerationModule.class,

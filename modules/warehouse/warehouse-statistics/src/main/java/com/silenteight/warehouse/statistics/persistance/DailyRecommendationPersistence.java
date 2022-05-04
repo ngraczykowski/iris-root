@@ -4,8 +4,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.warehouse.statistics.computers.AlertsRecommendationStatistics;
-import com.silenteight.warehouse.statistics.model.DailyPolicyStatistics;
-import com.silenteight.warehouse.statistics.model.DailyPolicyStatisticsRepository;
+import com.silenteight.warehouse.statistics.get.DailyRecommendationStatistics;
+import com.silenteight.warehouse.statistics.get.DailyRecommendationStatisticsRepository;
 
 import com.google.common.collect.Range;
 
@@ -17,11 +17,11 @@ public final class DailyRecommendationPersistence
     implements DataPersister<AlertsRecommendationStatistics> {
 
   @NonNull
-  private final DailyPolicyStatisticsRepository dailyPolicyStatisticRepository;
+  private final DailyRecommendationStatisticsRepository dailyStatisticRepository;
 
   @Override
   public void save(AlertsRecommendationStatistics data, Range<LocalDate> range) {
-    var dailyBuilder = DailyPolicyStatistics.builder()
+    var dailyBuilder = DailyRecommendationStatistics.builder()
         .day(range.upperEndpoint())
         .alertsCount(data.getAlertsCount())
         .falsePositivesCount(data.getFalsePositivesCount())
@@ -29,12 +29,12 @@ public final class DailyRecommendationPersistence
         .manualInvestigationsCount(data.getManualInvestigationsCount())
         .effectivenessPercent(data.getEffectivenessPercent())
         .efficiencyPercent(data.getEfficiencyPercent());
-    dailyPolicyStatisticRepository.save(dailyBuilder.build());
+    dailyStatisticRepository.save(dailyBuilder.build());
   }
 
   @Override
   public Optional<Range<LocalDate>> getLastPersistedRange(Number value) {
-    return dailyPolicyStatisticRepository.findFirstByOrderByDayWithOffset(value)
+    return dailyStatisticRepository.findFirstByOrderByDayWithOffset(value)
         .map((v -> Range.closed(v.getDay(), v.getDay())));
   }
 }

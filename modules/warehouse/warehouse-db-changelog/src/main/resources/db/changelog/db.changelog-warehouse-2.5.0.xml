@@ -2,9 +2,21 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
-    <changeSet author="tomaszdrozdz (generated)" id="164863412332-1">
-      <addUniqueConstraint columnNames="day"
-                           constraintName="warehouse_policy_statistics_constraint"
-                           tableName="warehouse_daily_policy_statistics"/>
-    </changeSet>
+  <changeSet author="tomaszdrozdz (generated)" id="164863412332-1">
+    <addUniqueConstraint columnNames="day"
+                         constraintName="warehouse_policy_statistics_constraint"
+                         tableName="warehouse_daily_policy_statistics"/>
+  </changeSet>
+
+  <changeSet id="warehouse-2.5.0-2" author="skociuba">
+    <renameTable oldTableName="warehouse_daily_policy_statistics" newTableName="warehouse_daily_recommendation_statistics"/>
+
+    <renameSequence newSequenceName="warehouse_daily_recommendation_statistics_id_seq"
+                    oldSequenceName="warehouse_daily_policy_statistics_id_seq"/>
+
+    <addColumn tableName="warehouse_daily_recommendation_statistics">
+      <column name="analyst_decision_count" type="integer"/>
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>

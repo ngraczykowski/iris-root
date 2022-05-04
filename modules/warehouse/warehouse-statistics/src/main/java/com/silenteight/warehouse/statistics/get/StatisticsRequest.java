@@ -1,5 +1,6 @@
-package com.silenteight.warehouse.statistics.controller;
+package com.silenteight.warehouse.statistics.get;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -8,6 +9,7 @@ import java.time.LocalDate;
 import javax.validation.constraints.NotNull;
 
 @Data
+@AllArgsConstructor(staticName = "of")
 public class StatisticsRequest {
 
   @NotNull
