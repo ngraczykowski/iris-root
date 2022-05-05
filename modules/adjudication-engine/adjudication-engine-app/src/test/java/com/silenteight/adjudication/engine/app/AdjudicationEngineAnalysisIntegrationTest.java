@@ -5,6 +5,9 @@ import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceBl
 import com.silenteight.adjudication.api.v1.DatasetServiceGrpc.DatasetServiceBlockingStub;
 import com.silenteight.adjudication.api.v1.StreamRecommendationsRequest;
 import com.silenteight.adjudication.engine.alerts.alert.AlertFacade;
+import com.silenteight.adjudication.engine.analysis.agentexchange.AgentExchangeDataAccess;
+import com.silenteight.adjudication.engine.analysis.agentexchange.AgentExchangeFeatureQueryRepository;
+import com.silenteight.adjudication.engine.analysis.analysis.AnalysisCancelledUseCase;
 import com.silenteight.adjudication.engine.analysis.pii.PiiFacade;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
@@ -20,15 +23,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.UUID;
 
 import static com.silenteight.adjudication.engine.app.IntegrationTestFixture.*;
 import static com.silenteight.adjudication.engine.app.MatchSolutionTestDataAccess.solvedMatchesCount;
 import static com.silenteight.adjudication.engine.app.RecommendationTestDataAccess.generatedMatchRecommendationCount;
 import static com.silenteight.adjudication.engine.app.RecommendationTestDataAccess.generatedRecommendationCount;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.awaitility.Awaitility.await;
 
 @ContextConfiguration(initializers = { RabbitTestInitializer.class, PostgresTestInitializer.class })
@@ -41,6 +47,10 @@ import static org.awaitility.Awaitility.await;
 @ActiveProfiles({ "mockagents", "rabbitdeclare", "mockgovernance", "mockdatasource", "test" })
 @Tag("longrunning")
 class AdjudicationEngineAnalysisIntegrationTest {
+
+  private static final UUID REQUEST_ID_1 = UUID.fromString("7e465bc0-b661-11ec-b909-0242ac120002");
+  private static final UUID REQUEST_ID_2 = UUID.fromString("9d2b4866-b661-11ec-b909-0242ac120002");
+  private static final UUID REQUEST_ID_3 = UUID.fromString("a73e486c-b661-11ec-b909-0242ac120002");
 
   @GrpcClient("ae")
   private AnalysisServiceBlockingStub analysisService;
@@ -65,6 +75,15 @@ class AdjudicationEngineAnalysisIntegrationTest {
 
   private static final int SOLVING_AWAIT_TIME = 20;
 
+
+  @Autowired
+  AnalysisCancelledUseCase analysisCancelledUseCase;
+
+  @Autowired
+  AgentExchangeFeatureQueryRepository repository;
+
+  @Autowired
+  AgentExchangeDataAccess agentExchangeDataAccess;
 
   @Test
   void shouldSolveAlerts() {
@@ -230,6 +249,19 @@ class AdjudicationEngineAnalysisIntegrationTest {
     assertGeneratedRecommendation(analysisId, 3);
 
     return ResourceName.create(alert.getName()).getLong("alerts");
+  }
+
+  @Test
+  @Sql(scripts = "populate_analysis_items.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
+  @Sql(scripts = "truncate_analysis_items.sql", executionPhase = ExecutionPhase.AFTER_TEST_METHOD)
+  void deleteItemsConnectedWithAnalysis() {
+    analysisCancelledUseCase.cancelAnalysis(1001L);
+
+    assertThat(
+        agentExchangeDataAccess
+            .selectAgentExchangeMatchFeatureIdsByAlertIds(
+                List.of(10001L, 10002L, 10003L)).size())
+        .isEqualTo(0);
   }
 
   private void assertSolvedAlerts(long analysisId, int solvedCount) {

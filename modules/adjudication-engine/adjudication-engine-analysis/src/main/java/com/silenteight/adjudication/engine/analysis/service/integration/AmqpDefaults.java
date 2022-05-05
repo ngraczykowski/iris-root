@@ -18,6 +18,8 @@ public class AmqpDefaults {
       EVENT_PREFIX + "match-recommendations-generated";
   static final String DATASET_EXPIRED_ROUTING_KEY =
       EVENT_PREFIX + "datasets-expired";
+  static final String ANALYSIS_CANCELLED_ROUTING_KEY =
+      EVENT_PREFIX + "analysis-cancelled";
 
   static final String EVENT_INTERNAL_EXCHANGE_NAME = PREFIX + "event.internal";
   static final String ANALYSIS_ALERTS_ADDED_ROUTING_KEY =
@@ -41,6 +43,9 @@ public class AmqpDefaults {
   static final String CATEGORY_QUEUE_NAME = PREFIX + "category";
   static final String COMMENT_INPUT_QUEUE_NAME = PREFIX + "comment-input";
   static final String MATCH_FEATURE_QUEUE_NAME = PREFIX + "match-feature";
+
+  static final String ANALYSIS_CANCELLED_EXCHANGE_NAME = "analysis.cancelled";
+  static final String ANALYSIS_CANCELLED_QUEUE_NAME = PREFIX + "analysis-cancelled";
 
   static final String AGENT_REQUEST_EXCHANGE_NAME = "agent.request";
   static final String TMP_AGENT_REQUEST_QUEUE_NAME = PREFIX + "tmp-agent-request";

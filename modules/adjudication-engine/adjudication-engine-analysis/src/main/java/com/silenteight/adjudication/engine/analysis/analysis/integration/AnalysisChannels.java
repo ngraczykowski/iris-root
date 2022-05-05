@@ -9,4 +9,7 @@ public class AnalysisChannels {
 
   public static final String ANALYSIS_ALERTS_ADDED_OUTBOUND_CHANNEL =
       "analysisAlertsAddedOutboundChannel";
+
+  public static final String ANALYSIS_ALERTS_CANCELLED_INBOUND_CHANNEL =
+      "analysisAlertsCancelledInboundChannel";
 }

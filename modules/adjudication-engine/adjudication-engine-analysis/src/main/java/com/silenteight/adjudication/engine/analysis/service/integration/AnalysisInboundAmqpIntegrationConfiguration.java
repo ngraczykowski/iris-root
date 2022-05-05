@@ -21,6 +21,7 @@ import org.springframework.integration.router.HeaderValueRouter;
 
 import javax.validation.Valid;
 
+import static com.silenteight.adjudication.engine.analysis.analysis.integration.AnalysisChannels.ANALYSIS_ALERTS_CANCELLED_INBOUND_CHANNEL;
 import static com.silenteight.adjudication.engine.analysis.pii.integration.RemovePiiChannels.REMOVE_PII_INBOUND_CHANNEL;
 import static com.silenteight.adjudication.engine.dataset.dataset.integration.DataRetentionChannels.ALERTS_EXPIRED_INBOUND_CHANNEL;
 import static org.springframework.integration.dsl.IntegrationFlows.from;
@@ -62,7 +63,9 @@ class AnalysisInboundAmqpIntegrationConfiguration {
     router.setChannelMapping(
         properties.getCommentInput().getInboundQueueName(),
         CommentInputChannels.COMMENT_INPUT_PENDING_RECOMMENDATIONS_INBOUND_CHANNEL);
-
+    router.setChannelMapping(
+        properties.getAnalysisCancelledInboundQueueName(),
+        AgentExchangeChannels.DELETE_AGENT_EXCHANGE_INBOUND_CHANNEL);
     return router;
   }
 
@@ -89,6 +92,14 @@ class AnalysisInboundAmqpIntegrationConfiguration {
     return from(createInboundAdapter(properties.getPiiExpiredInboundQueueName()))
         .log(Level.TRACE, getClass().getName() + ".dataRetentionIntegrationFlow")
         .channel(REMOVE_PII_INBOUND_CHANNEL)
+        .get();
+  }
+
+  @Bean
+  IntegrationFlow processAnalysisCancelledIntegrationFlow() {
+    return from(createInboundAdapter(properties.getAnalysisCancelledInboundQueueName()))
+        .log(Level.TRACE, getClass().getName() + ".analysisCancelledIntegrationFlow")
+        .channel(ANALYSIS_ALERTS_CANCELLED_INBOUND_CHANNEL)
         .get();
   }
 

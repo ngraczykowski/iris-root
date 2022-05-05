@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-class RemovePendingRecommendationsQuery {
+class RemoveSolvedPendingRecommendationsQuery {
 
   private final JdbcTemplate jdbcTemplate;
 

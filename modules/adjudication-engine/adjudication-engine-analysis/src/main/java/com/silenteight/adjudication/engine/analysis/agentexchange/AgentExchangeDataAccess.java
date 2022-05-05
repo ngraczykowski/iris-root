@@ -7,4 +7,9 @@ public interface AgentExchangeDataAccess {
 
   void removeAgentExchange(
       List<UUID> agentExchangeRequestId, List<Long> matchId, List<String> featuresIds);
+
+  List<Long> selectAgentExchangeMatchFeatureIdsByAlertIds(List<Long> alertIds);
+
+  void removeAgentExchangeMatchFeatureByAlertIds(List<Long> ids);
+
 }

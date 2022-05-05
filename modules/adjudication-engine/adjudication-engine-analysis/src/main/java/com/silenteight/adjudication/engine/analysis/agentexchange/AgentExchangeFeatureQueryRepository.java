@@ -7,7 +7,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-interface AgentExchangeFeatureQueryRepository extends Repository<AgentExchangeFeatureQuery, Long> {
+public interface AgentExchangeFeatureQueryRepository
+    extends Repository<AgentExchangeFeatureQuery, Long> {
 
   Stream<AgentExchangeFeatureQuery> findAllByRequestId(UUID requestId);
 

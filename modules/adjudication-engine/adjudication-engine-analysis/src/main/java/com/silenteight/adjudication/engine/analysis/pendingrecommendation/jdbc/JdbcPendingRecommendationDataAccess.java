@@ -9,13 +9,16 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Repository
 class JdbcPendingRecommendationDataAccess implements PendingRecommendationDataAccess {
 
   private final CreatePendingRecommendationsQuery createPendingRecommendationsQuery;
-
-  private final RemovePendingRecommendationsQuery removePendingRecommendationsQuery;
+  private final RemoveSolvedPendingRecommendationsQuery removeSolvedPendingRecommendationsQuery;
+  private final RemovePendingRecommendationByAnalysisIdsQuery
+      removePendingRecommendationByAnalysisIdsQuery;
 
   @Override
   @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
@@ -28,6 +31,12 @@ class JdbcPendingRecommendationDataAccess implements PendingRecommendationDataAc
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   public int removeSolvedPendingRecommendations() {
-    return removePendingRecommendationsQuery.execute();
+    return removeSolvedPendingRecommendationsQuery.execute();
+  }
+
+  @Override
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
+  public List<Long> removePendingRecommendationByAnalysisIds(List<Long> analysisIds) {
+    return removePendingRecommendationByAnalysisIdsQuery.execute(analysisIds);
   }
 }

@@ -59,12 +59,18 @@ class AnalysisInboundAmqpIntegrationProperties {
   @NotNull
   private CommentInput commentInput = new CommentInput();
 
+  @NestedConfigurationProperty
+  @Valid
+  @NotNull
+  private AnalysisCancelled analysisCancelled = new AnalysisCancelled();
+
   String[] getEventInternalInboundQueueNames() {
     return new String[] {
         pendingRecommendation.getInboundQueueName(),
         agentExchange.getInboundQueueName(),
         category.getInboundQueueName(),
         commentInput.getInboundQueueName(),
+        analysisCancelled.getInboundQueueName(),
         };
   }
 
@@ -78,6 +84,10 @@ class AnalysisInboundAmqpIntegrationProperties {
 
   String getPiiExpiredInboundQueueName() {
     return piiExpired.getInboundQueueName();
+  }
+
+  String getAnalysisCancelledInboundQueueName() {
+    return analysisCancelled.getInboundQueueName();
   }
 
   @Data
@@ -143,5 +153,12 @@ class AnalysisInboundAmqpIntegrationProperties {
 
     @NotBlank
     private String inboundQueueName = MATCH_FEATURE_QUEUE_NAME;
+  }
+
+  @Data
+  static class AnalysisCancelled {
+
+    @NotBlank
+    private String inboundQueueName = ANALYSIS_CANCELLED_QUEUE_NAME;
   }
 }

@@ -28,4 +28,5 @@ class InMemoryAnalysisDataAccess implements AnalysisDataAccess {
       long analysisId) {
     return new AnalysisAttachmentFlags(true, true);
   }
+
 }

@@ -18,7 +18,9 @@ import static org.assertj.core.api.Assertions.*;
 @ContextConfiguration(classes = {
     JdbcAgentExchangeDataAccess.class,
     DeleteEmptyAgentExchangesQuery.class,
-    DeleteAgentExchangeMatchFeatureQuery.class
+    DeleteAgentExchangeMatchFeatureQuery.class,
+    SelectAgentExchangeMatchFeatureIdsByAlertIdsQuery.class,
+    DeleteAgentExchangeMatchFeatureByIdsQuery.class,
 })
 class JdbcAgentExchangeDataAccessIT extends BaseJdbcTest {
 

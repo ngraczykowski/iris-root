@@ -37,6 +37,11 @@ class RabbitBrokerConfiguration {
         .durable(true)
         .internal()
         .build();
+
+    var analysisCancelledExchange = topicExchange(ANALYSIS_CANCELLED_EXCHANGE_NAME)
+        .durable(true)
+        .build();
+
     var deadLetterBinding = bind(deadLetterQueue, deadLetterExchange, "#");
 
     var pendingRecommendation = queueDeadLetter(PENDING_RECOMMENDATION_QUEUE_NAME).build();
@@ -58,6 +63,10 @@ class RabbitBrokerConfiguration {
     var commentInput = queueDeadLetter(COMMENT_INPUT_QUEUE_NAME).build();
     var commentInputBinding = bind(commentInput, eventInternalExchange,
         PENDING_RECOMMENDATIONS_ROUTING_KEY);
+
+    var cancelledAnalysis = queueDeadLetter(ANALYSIS_CANCELLED_QUEUE_NAME).build();
+    var cancelledAnalysisBinding = bind(cancelledAnalysis, analysisCancelledExchange,
+        ANALYSIS_CANCELLED_ROUTING_KEY);
 
     /* TODO(ahaczewski): Configure queue receiving agent responses.
     var matchFeature = makeQueue(MATCH_FEATURE_QUEUE_NAME);
@@ -89,6 +98,7 @@ class RabbitBrokerConfiguration {
         deleteAgentExchange, deleteAgentExchangeBinding,
         category, categoryBinding,
         commentInput, commentInputBinding,
+        cancelledAnalysis, cancelledAnalysisBinding,
         agentResponse, agentResponseBinding,
         tmpAgentRequest, tmpAgentRequestBinding,
         alertExpired, alertExpiredBinding,

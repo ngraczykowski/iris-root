@@ -16,7 +16,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
     JdbcTestConfiguration.class,
     JdbcPendingRecommendationDataAccess.class,
     CreatePendingRecommendationsQuery.class,
-    RemovePendingRecommendationsQuery.class
+    RemoveSolvedPendingRecommendationsQuery.class,
+    RemovePendingRecommendationByAnalysisIdsQuery.class
 })
 class JdbcPendingRecommendationDataAccessIT extends BaseJdbcTest {
 

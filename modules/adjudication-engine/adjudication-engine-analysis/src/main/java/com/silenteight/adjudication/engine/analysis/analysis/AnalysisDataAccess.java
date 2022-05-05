@@ -14,4 +14,5 @@ public interface AnalysisDataAccess {
   PolicyAndFeatureVectorElements getPolicyAndFeatureVectorElements(long analysisId);
 
   AnalysisAttachmentFlags getAnalysisAttachmentFlags(long analysisId);
+
 }

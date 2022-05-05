@@ -24,26 +24,27 @@ class JdbcAnalysisDataAccess implements AnalysisDataAccess {
   private final SelectFeatureVectorElementsQuery selectFeatureVectorElementsQuery;
 
   @Override
-  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   public List<String> findAgentConfigsByAnalysisId(long analysisId) {
     return selectAnalysisAgentConfigQuery.execute(analysisId);
   }
 
   @Override
-  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   public List<Long> findByPendingRecommendationMatchIds(List<Long> matchIds) {
     return selectAnalysisByPendingRecommendationMatches.execute(matchIds);
   }
 
   @Override
-  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   public PolicyAndFeatureVectorElements getPolicyAndFeatureVectorElements(long analysisId) {
     return selectFeatureVectorElementsQuery.execute(analysisId);
   }
 
   @Override
-  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   public AnalysisAttachmentFlags getAnalysisAttachmentFlags(long analysisId) {
     return selectAnalysisAttachmentFlagsQuery.execute(analysisId);
   }
+
 }
