@@ -112,6 +112,30 @@ spec:
             - name: secret-postgres
               mountPath: "/var/run/secrets/spring/postgres"
               readOnly: true
+          # FIXME(ahaczewski): Remove these envs once all images remove these variables.
+          #  The reason to put them here is that the environment variables are overwriting
+          #  `configtree` secrets mounted as files.
+          env:
+            - name: SPRING_RABBITMQ_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "sear.rabbitmqSecretName" . }}
+                  key: host
+            - name: SPRING_RABBITMQ_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "sear.rabbitmqSecretName" . }}
+                  key: port
+            - name: SPRING_RABBITMQ_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "sear.rabbitmqSecretName" . }}
+                  key: username
+            - name: SPRING_RABBITMQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "sear.rabbitmqSecretName" . }}
+                  key: password
       volumes:
         - name: config
           configMap:
