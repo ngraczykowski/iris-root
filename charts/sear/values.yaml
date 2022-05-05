@@ -150,6 +150,28 @@ common:
 #
 # Declare and customize components
 #
+# Each component can have the following parameters customized:
+#
+#   dbName  - (String) name of the database. Defaults to the component name.
+#   webPath - (String) URL path of this component. Defaults to the component name.
+#
+# You can also overwrite the `common` configuration, by configuring the following values:
+#
+#   replicaCount: 1
+#   args: []
+#   configFiles: {}
+#   resources: {}
+#   service: {}
+#   containerPorts: {}
+#   startupProbe: {}
+#   livenessProbe: {}
+#   readinessProbe: {}
+#   ingress: {}
+#   autoscaling: {}
+#   nodeSelector: {}
+#   tolerations: []
+#   affinity: {}
+#
 components:
   universal-data-source:
     image:
@@ -162,39 +184,17 @@ components:
     # Web context path. Defaults to the component name.
     webPath: "uds"
 
-    args: []
-    configFiles: {}
-    resources: {}
-    service: {}
-    containerPorts: {}
-    startupProbe: {}
-    livenessProbe: {}
-    readinessProbe: {}
-    ingress: {}
-    autoscaling: {}
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
-
   governance:
     image:
       repository: registry.dev.s8ops.com/iris/governance-app
       tag: "latest"
 
     dbName: "gov"
-    args: []
-    configFiles: {}
-    resources: {}
-    service: {}
-    containerPorts: {}
-    startupProbe: {}
-    livenessProbe: {}
-    readinessProbe: {}
-    ingress: {}
-    autoscaling: {}
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
+
+    startupProbe:
+      initialDelaySeconds: 85
+      failureThreshold: 120
+      periodSeconds: 10
 
   simulator:
     image:
