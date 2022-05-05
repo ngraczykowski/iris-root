@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 
@@ -46,10 +47,11 @@ class CreateMatchesUseCase {
 
     var alertId = getAlertId(newAlertMatches.getParentAlert());
     var matches = newAlertMatches.getMatches();
+    var index = new AtomicInteger();
 
     validateMatchIndexes(matches);
 
-    return matches.stream().map(item -> createEntity(alertId, item));
+    return matches.stream().map(item -> createEntity(alertId, item, index.getAndIncrement()));
   }
 
   private static void validateMatchIndexes(List<Match> matches) {
@@ -67,12 +69,12 @@ class CreateMatchesUseCase {
     }
   }
 
-  private static MatchEntity createEntity(long alertId, Match match) {
+  private static MatchEntity createEntity(long alertId, Match match, int index) {
     return MatchEntity.builder()
         .alertId(alertId)
         .clientMatchIdentifier(match.getMatchId())
         .labels(match.getLabelsMap())
-        .sortIndex(0)
+        .sortIndex(index)
         .build();
   }
 

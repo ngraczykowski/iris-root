@@ -61,7 +61,7 @@ class CreateMatchesUseCaseAcceptanceSpec extends Specification {
     verifyAll(matches[1]) {
       name =~ "alerts/123/matches/\\d+"
       matchId == "match 2"
-      index == 0
+      index == 1
       labelsMap == [another: "value"]
     }
   }
@@ -79,7 +79,7 @@ class CreateMatchesUseCaseAcceptanceSpec extends Specification {
 
     then:
     matches[0].sortIndex == 0
-    matches[1].sortIndex == 0
+    matches[1].sortIndex == 1
   }
 
   def "should check latest sort index and set correct indexes in new matches"() {
@@ -101,7 +101,7 @@ class CreateMatchesUseCaseAcceptanceSpec extends Specification {
 
     then:
     matches[0].sortIndex == 0
-    matches[1].sortIndex == 0
+    matches[1].sortIndex == 1
   }
 
   private static Builder match(String matchId) {
