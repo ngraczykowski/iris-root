@@ -1,4 +1,6 @@
 ingress:
+  annotations:
+    kubernetes.io/ingress.class: nginx-internal
   hosts:
     - aha-test.dev.s8ops.com
 
@@ -14,17 +16,17 @@ components:
       requests:
         memory: 1Gi
 
-#  governance:
-#    args:
-#      - --spring.profiles.active=linux,governance,database,rabbitmq,messaging,sierra
-#
-#    startupProbe:
-#      initialDelaySeconds: 85
-#      failureThreshold: 120
-#      periodSeconds: 10
-#
-#    resources:
-#      limits:
-#        memory: 1Gi
-#      requests:
-#        memory: 1Gi
+  governance:
+    args:
+      - --spring.profiles.active=linux,governance,database,rabbitmq,messaging,sierra
+
+    startupProbe:
+      initialDelaySeconds: 85
+      failureThreshold: 120
+      periodSeconds: 10
+
+    resources:
+      limits:
+        memory: 1Gi
+      requests:
+        memory: 1Gi

@@ -85,11 +85,11 @@ spec:
           {{- end }}
           args:
             - --spring.application.name={{ .componentName }}
+            - --server.port={{ .component.containerPorts.http.port }}
             - --server.servlet.context-path=/rest/{{ .component.webPath }}
             - --spring.webflux.base-path=/rest/{{ .component.webPath }}
-            - --spring.config.additional-location=file:/etc/spring/config/,optional:file:/etc/spring/config/secrets.yml
+            - --spring.config.additional-location=file:/etc/spring/config/,file:/etc/spring/config/kubernetes.yml
             - --logging.config=file:/etc/spring/config/logback.xml
-            - --server.port={{ .component.containerPorts.http.port }}
             - --management.server.port={{ .component.containerPorts.management.port }}
             - --management.server.base-path=/management
             - --management.endpoints.web.base-path=/actuator

@@ -8,10 +8,17 @@ data:
   {{- if .component.configFiles }}
     {{- toYaml .component.configFiles | nindent 2 }}
   {{- end }}
-  secrets.yml: |
+  kubernetes.yml: |
     spring:
       config:
         import: configtree:/var/run/secrets/spring/*/
+
+      security:
+        oauth2:
+          resourceserver:
+            jwt:
+              issuer-uri: https://auth.silenteight.com/auth/realms/sens-webapp
+              jwk-set-uri: https://auth.silenteight.com/auth/realms/sens-webapp/protocol/openid-connect/certs
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE configuration>

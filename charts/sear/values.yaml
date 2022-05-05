@@ -67,8 +67,8 @@ rabbitmq:
 
 ingress:
   className: ""
-  annotations:
-    kubernetes.io/ingress.class: nginx-internal
+  annotations: {}
+  # kubernetes.io/ingress.class: nginx-internal
   hosts:
     - chart-example.local
   tls: []
@@ -134,7 +134,7 @@ common:
     failureThreshold: 3
 
   ingress:
-    enabled: false
+    enabled: true
 
   autoscaling:
     enabled: false
@@ -170,34 +170,28 @@ components:
     startupProbe: {}
     livenessProbe: {}
     readinessProbe: {}
-    ingress:
-      enabled: true
+    ingress: {}
     autoscaling: {}
     nodeSelector: {}
     tolerations: []
     affinity: {}
 
-#  governance:
-#    image:
-#      repository: registry.dev.s8ops.com/governance/governance-app
-#      tag: "latest"
-#
-#    # Name of the database the component uses. Defaults to the component name.
-#    dbName: "uds"
-#
-#    # Web context path. Defaults to the component name.
-#    webPath: "uds"
-#
-#    args: []
-#    configFiles: {}
-#    resources: {}
-#    service: {}
-#    containerPorts: {}
-#    startupProbe: {}
-#    livenessProbe: {}
-#    readinessProbe: {}
-#    ingress: {}
-#    autoscaling: {}
-#    nodeSelector: {}
-#    tolerations: []
-#    affinity: {}
+  governance:
+    image:
+      repository: registry.dev.s8ops.com/iris/governance-app
+      tag: "latest"
+
+    dbName: "gov"
+    args: []
+    configFiles: {}
+    resources: {}
+    service: {}
+    containerPorts: {}
+    startupProbe: {}
+    livenessProbe: {}
+    readinessProbe: {}
+    ingress: {}
+    autoscaling: {}
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}

@@ -40,7 +40,7 @@ $mergedComponent := (dict
   "tolerations" $tolerations
   "affinity" $affinity)
 -}}
-{{- $context := merge $ (dict "componentName" $componentName "component" $mergedComponent) -}}
+{{- $context := deepCopy $ | merge (dict "componentName" $componentName "component" $mergedComponent) -}}
 
 {{- range $path, $_ := $.Files.Glob  "component/*.yaml.tpl" }}
 # From: {{ $path }}
