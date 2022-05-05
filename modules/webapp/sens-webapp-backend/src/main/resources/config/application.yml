@@ -321,6 +321,7 @@ sep.auth:
       - "REPORTING_UI"
   permit-all-urls:
       - "/management/**"
+      - "/api/configuration/auth"
 
 # Notifications
 sens.webapp.notification.enabled: true
