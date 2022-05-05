@@ -35,10 +35,15 @@ components:
     args:
       - --spring.profiles.active=linux,simulator,messaging,sierra
 
-    startupProbe:
-      initialDelaySeconds: 85
-      failureThreshold: 120
-      periodSeconds: 10
+    resources:
+      limits:
+        memory: 1Gi
+      requests:
+        memory: 1Gi
+
+  webapp:
+    args:
+      - --spring.profiles.active=sierra
 
     resources:
       limits:

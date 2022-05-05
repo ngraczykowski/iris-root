@@ -202,16 +202,18 @@ components:
       tag: "latest"
 
     dbName: "sim"
-    args: []
-    configFiles: {}
-    resources: {}
-    service: {}
-    containerPorts: {}
-    startupProbe: {}
-    livenessProbe: {}
-    readinessProbe: {}
-    ingress: {}
-    autoscaling: {}
-    nodeSelector: {}
-    tolerations: []
-    affinity: {}
+
+    startupProbe:
+      initialDelaySeconds: 85
+      failureThreshold: 120
+      periodSeconds: 10
+
+  webapp:
+    image:
+      repository: registry.dev.s8ops.com/iris/webapp-app
+      tag: "latest"
+
+    startupProbe:
+      initialDelaySeconds: 85
+      failureThreshold: 120
+      periodSeconds: 10
