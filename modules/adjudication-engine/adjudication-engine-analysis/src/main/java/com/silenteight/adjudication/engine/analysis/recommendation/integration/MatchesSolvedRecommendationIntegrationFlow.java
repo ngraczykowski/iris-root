@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.adjudication.engine.analysis.matchsolution.dto.MatchesSolvedEvent;
 import com.silenteight.adjudication.engine.analysis.recommendation.RecommendationFacade;
 
-import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -35,7 +34,8 @@ class MatchesSolvedRecommendationIntegrationFlow {
     }
     log.info(
         "Sending recommendation for analysis:{}", recommendation.get().getAnalysis());
-    var message = new Message(recommendation.get().toByteArray());
-    rabbitTemplate.send(EVENT_EXCHANGE_NAME, RECOMMENDATIONS_GENERATED_ROUTING_KEY, message);
+
+    rabbitTemplate.convertAndSend(
+        EVENT_EXCHANGE_NAME, RECOMMENDATIONS_GENERATED_ROUTING_KEY, recommendation);
   }
 }

@@ -59,7 +59,7 @@ class CommentInputResolveProcess {
   }
 
   private void process() {
-    log.debug("Start process single alert ");
+    log.trace("Start process single alert ");
     while (true) {
       final String alertID = this.alertCommentsInputQueue.poll();
       if (alertID == null) {
