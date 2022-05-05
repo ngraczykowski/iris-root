@@ -12,6 +12,7 @@
   <include file="db/changelog/db.changelog-warehouse-2.1.0.xml"/>
   <include file="db/changelog/db.changelog-warehouse-2.4.0.xml"/>
   <include file="db/changelog/db.changelog-warehouse-2.5.0.xml"/>
+  <include file="db/changelog/db.changelog-warehouse-2.6.0.xml"/>
 
 </databaseChangeLog>
 
