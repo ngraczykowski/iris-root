@@ -29,45 +29,6 @@ class AlertGrpcAdapterTest {
   }
 
   @Test
-  @DisplayName("should create batch of alerts")
-  void shouldCreateBatchAlerts() {
-    //given
-    var alerts = List.of(
-        AlertIn.builder().alertId("1").alertPriority(5).build(),
-        AlertIn.builder().alertId("2").alertPriority(1).build());
-
-    //when
-    var response = underTest.batchCreateAlerts(alerts);
-
-    //then
-    assertThat(response.getAlerts().size()).isEqualTo(2);
-    assertThat(response.getAlerts().get(0).getName()).isEqualTo("alert_1");
-    assertThat(response.getAlerts().get(0).getAlertId()).isEqualTo("1");
-    assertThat(response.getAlerts().get(1).getName()).isEqualTo("alert_2");
-    assertThat(response.getAlerts().get(1).getAlertId()).isEqualTo("2");
-  }
-
-  @Test
-  @DisplayName("should create batch of alert matches")
-  void shouldCreateBatchAlertMatches() {
-    //given
-    var request = BatchCreateAlertMatchesIn.builder()
-        .alertName("alert")
-        .matchIds(List.of("matchId_1", "matchId_2"))
-        .build();
-
-    //when
-    var response = underTest.batchCreateAlertMatches(request);
-
-    //then
-    assertThat(response.getAlertMatches().size()).isEqualTo(2);
-    assertThat(response.getAlertMatches().get(0).getName()).isEqualTo("match_1");
-    assertThat(response.getAlertMatches().get(0).getMatchId()).isEqualTo("1");
-    assertThat(response.getAlertMatches().get(1).getName()).isEqualTo("match_2");
-    assertThat(response.getAlertMatches().get(1).getMatchId()).isEqualTo("2");
-  }
-
-  @Test
   @DisplayName("should register alerts and matches")
   void shouldRegisterAlertsAndMatches() {
     //given
@@ -80,7 +41,7 @@ class AlertGrpcAdapterTest {
         BatchRegisterAlertMatchesIn.builder()
             .alertId("2")
             .alertPriority(1)
-            .matchIds(List.of("1", "2"))
+            .matchIds(List.of("2", "3"))
             .build());
 
     var request = RegisterAlertsAndMatchesIn.builder()
@@ -96,15 +57,13 @@ class AlertGrpcAdapterTest {
     assertThat(response.get(0).getAlertName()).isEqualTo("alert_1");
     assertThat(response.get(0).getMatches().get(0).getMatchId()).isEqualTo("1");
     assertThat(response.get(0).getMatches().get(0).getName()).isEqualTo("match_1");
-    assertThat(response.get(0).getMatches().get(1).getMatchId()).isEqualTo("2");
-    assertThat(response.get(0).getMatches().get(1).getName()).isEqualTo("match_2");
 
     assertThat(response.get(1).getAlertId()).isEqualTo("2");
     assertThat(response.get(1).getAlertName()).isEqualTo("alert_2");
-    assertThat(response.get(1).getMatches().get(0).getMatchId()).isEqualTo("1");
-    assertThat(response.get(1).getMatches().get(0).getName()).isEqualTo("match_1");
-    assertThat(response.get(1).getMatches().get(1).getMatchId()).isEqualTo("2");
-    assertThat(response.get(1).getMatches().get(1).getName()).isEqualTo("match_2");
+    assertThat(response.get(1).getMatches().get(0).getMatchId()).isEqualTo("2");
+    assertThat(response.get(1).getMatches().get(0).getName()).isEqualTo("match_2");
+    assertThat(response.get(1).getMatches().get(1).getMatchId()).isEqualTo("3");
+    assertThat(response.get(1).getMatches().get(1).getName()).isEqualTo("match_3");
   }
 
   static class MockedAlertServiceGrpcServer extends AlertServiceImplBase {
@@ -116,8 +75,35 @@ class AlertGrpcAdapterTest {
       responseObserver.onNext(
           BatchCreateAlertsResponse.newBuilder().addAllAlerts(
                   List.of(
-                      Alert.newBuilder().setName("alert_1").setAlertId("1").build(),
-                      Alert.newBuilder().setName("alert_2").setAlertId("2").build()))
+                      Alert.newBuilder()
+                          .setName("alert_1")
+                          .setAlertId("1")
+                          .addAllMatches(
+                              List.of(
+                                  Match.newBuilder()
+                                      .setName("match_1")
+                                      .setMatchId("1")
+                                      .build()
+                              )
+                          )
+                          .build(),
+                      Alert.newBuilder()
+                          .setName("alert_2")
+                          .setAlertId("2")
+                          .addAllMatches(
+                              List.of(
+                                  Match.newBuilder()
+                                      .setName("match_2")
+                                      .setMatchId("2")
+                                      .build(),
+                                  Match.newBuilder()
+                                      .setName("match_3")
+                                      .setMatchId("3")
+                                      .build()
+                              ))
+                          .build()
+                  )
+              )
               .build());
       responseObserver.onCompleted();
     }
@@ -129,8 +115,16 @@ class AlertGrpcAdapterTest {
       responseObserver.onNext(
           BatchCreateAlertMatchesResponse.newBuilder().addAllMatches(
                   List.of(
-                      Match.newBuilder().setName("match_1").setMatchId("1").build(),
-                      Match.newBuilder().setName("match_2").setMatchId("2").build()))
+                      Match.newBuilder()
+                          .setName("match_1")
+                          .setMatchId("1")
+                          .build(),
+                      Match.newBuilder()
+                          .setName("match_2")
+                          .setMatchId("2")
+                          .build()
+                  )
+              )
               .build());
       responseObserver.onCompleted();
     }

@@ -4,7 +4,7 @@ ext {
   //***********************************
   // Silent Eight
   //***********************************
-  adjudicationEngineApiVersion = "0.8.0"
+  adjudicationEngineApiVersion = "0.13.0"
 }
 
 // Silent Eight
