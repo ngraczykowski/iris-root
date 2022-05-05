@@ -283,3 +283,10 @@ frontend:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+
+#
+# Keycloak
+#
+keycloak:
+  authServerUrl: ""
+  realm: ""

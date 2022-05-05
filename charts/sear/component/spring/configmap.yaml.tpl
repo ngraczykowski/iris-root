@@ -13,12 +13,17 @@ data:
       config:
         import: configtree:/var/run/secrets/spring/*/
 
+      keycloak:
+        adapter:
+          auth-server-url: {{ .Values.keycloak.authServerUrl | quote }}
+          realm: {{ .Values.keycloak.realm | quote }}
+
       security:
         oauth2:
           resourceserver:
             jwt:
-              issuer-uri: https://auth.silenteight.com/auth/realms/{{ include "sear.fullname" . }}
-              jwk-set-uri: https://auth.silenteight.com/auth/realms/sens-webapp/protocol/openid-connect/certs
+              issuer-uri: "{{ include "sear.spring.authServer" . }}"
+              jwk-set-uri: "{{ include "sear.spring.authServer" . }}/protocol/openid-connect/certs"
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE configuration>
