@@ -53,7 +53,7 @@ spec:
           {{- if .component.startupProbe.enabled }}
           startupProbe:
             httpGet:
-              path: /management/actuator/health/liveness
+              path: /management/health/liveness
               port: management
             initialDelaySeconds: {{ .component.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .component.startupProbe.periodSeconds }}
@@ -63,7 +63,7 @@ spec:
           {{- if .component.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /management/actuator/health/liveness
+              path: /management/health/liveness
               port: management
             periodSeconds: {{ .component.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .component.livenessProbe.timeoutSeconds }}
@@ -72,7 +72,7 @@ spec:
           {{- if .component.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /management/actuator/health/readiness
+              path: /management/health/readiness
               port: management
             periodSeconds: {{ .component.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .component.readinessProbe.timeoutSeconds }}
@@ -91,8 +91,8 @@ spec:
             - --spring.config.additional-location=file:/etc/spring/config/,file:/etc/spring/config/kubernetes.yml
             - --logging.config=file:/etc/spring/config/logback.xml
             - --management.server.port={{ .component.containerPorts.management.port }}
-            - --management.server.base-path=/management
-            - --management.endpoints.web.base-path=/actuator
+            - --management.server.base-path=/
+            - --management.endpoints.web.base-path=/management
             - --spring.datasource.url={{ include "sear.spring.jdbcUrl" . }}
             # NOTE(ahaczewski): After Tadeusz Kleszcz recommendation, disable unhealthy on exceptions when communicating via gRPC.
             - --spring.autoconfigure.exclude=net.devh.boot.grpc.client.autoconfigure.GrpcClientHealthAutoConfiguration
