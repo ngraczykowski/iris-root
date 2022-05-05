@@ -17,7 +17,7 @@ public class MinioContainer {
   private static final String ADMIN_ACCESS_KEY = "admin";
   private static final String ADMIN_SECRET_KEY = "admin123";
   private static final String MINIO_DOCKER_IMAGE = "minio/minio:RELEASE.2021-03-10T05-11-33Z";
-  private static final String REGION = "US_EAST_1";
+  private static final String REGION = "us-iso-east-1";
   private static final int MINIO_PORT = 9000;
 
   private static final GenericContainer<?> MINIO_CONTAINER;

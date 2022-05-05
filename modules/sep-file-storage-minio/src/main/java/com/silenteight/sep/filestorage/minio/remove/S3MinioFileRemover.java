@@ -4,15 +4,15 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sep.filestorage.api.FileRemover;
 
-import io.minio.MinioClient;
-import io.minio.RemoveObjectArgs;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 
 import static java.lang.String.format;
 
 @RequiredArgsConstructor
-public class MinioFileRemover implements FileRemover {
+public class S3MinioFileRemover implements FileRemover {
 
-  private final MinioClient minioClient;
+  private final S3Client s3Client;
 
   @Override
   public void removeFile(String storageName, String fileName) {
@@ -25,13 +25,14 @@ public class MinioFileRemover implements FileRemover {
   }
 
   private void deleteFile(String bucketName, String fileName) throws Exception {
-    minioClient.removeObject(prepareObjectBasedOnFileToRemove(bucketName, fileName));
+    s3Client.deleteObject(buildDeleteObjectRequest(bucketName, fileName));
   }
 
-  private RemoveObjectArgs prepareObjectBasedOnFileToRemove(String bucketName, String fileName) {
-    return RemoveObjectArgs.builder()
+  private DeleteObjectRequest buildDeleteObjectRequest(String bucketName, String fileName) {
+    return DeleteObjectRequest
+        .builder()
         .bucket(bucketName)
-        .object(fileName)
+        .key(fileName)
         .build();
   }
 }

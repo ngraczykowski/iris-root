@@ -29,6 +29,7 @@ ext {
   sepDependenciesVersion = "2.2.1"
 }
 
+libraries.aws_java_sdk = [group: 'software.amazon.awssdk', name: 's3', version: '2.17.137']
 libraries.platform_spring_boot = [group: 'org.springframework.boot', name: 'spring-boot-dependencies', version: springBootVersion]
 libraries.spring_context = [group: 'org.springframework', name: 'spring-context']
 libraries.spring_security_config = [group: 'org.springframework.security', name: 'spring-security-config']
@@ -53,6 +54,7 @@ dependencies {
   implementation platform(libraries.platform_spring_boot)
   implementation libraries.spring_boot_starter_web
 
+  implementation libraries.aws_java_sdk
   implementation libraries.commons_text
   implementation libraries.minio
   implementation libraries.silenteight_file_storage_api

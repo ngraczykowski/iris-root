@@ -2,13 +2,13 @@ package com.silenteight.sep.filestorage;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.sep.filestorage.minio.FileStorageMinioModule;
+import com.silenteight.sep.filestorage.minio.S3FileStorageMinioModule;
 
 import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan(basePackageClasses = {
-    FileStorageMinioModule.class
+    S3FileStorageMinioModule.class
 })
 @RequiredArgsConstructor
-public class MinioFileStorageConfiguration {
+public class S3MinioFileStorageConfiguration {
 }

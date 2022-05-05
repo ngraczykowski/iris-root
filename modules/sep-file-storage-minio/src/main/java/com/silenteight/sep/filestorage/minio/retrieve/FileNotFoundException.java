@@ -1,4 +1,4 @@
-package com.silenteight.sep.filestorage.minio.retrieval;
+package com.silenteight.sep.filestorage.minio.retrieve;
 
 public class FileNotFoundException extends RuntimeException {
 

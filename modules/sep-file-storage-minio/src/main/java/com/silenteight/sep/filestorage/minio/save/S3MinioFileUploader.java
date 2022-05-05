@@ -6,17 +6,16 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.sep.filestorage.api.FileUploader;
 import com.silenteight.sep.filestorage.api.dto.StoreFileRequestDto;
 
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import static java.lang.String.format;
 
 @RequiredArgsConstructor
-public class MinioFileUploader implements FileUploader {
+public class S3MinioFileUploader implements FileUploader {
 
-  private static final int PART_SIZE = 10485760;
-
-  private final MinioClient minioClient;
+  private final S3Client s3Client;
 
   @Override
   public void storeFile(StoreFileRequestDto file) {
@@ -25,21 +24,21 @@ public class MinioFileUploader implements FileUploader {
 
   private void storeFileInMinio(StoreFileRequestDto request) {
     try {
-      PutObjectArgs fileToSave = prepareObjectBasedOnFileToSave(request);
-      minioClient.putObject(fileToSave);
+      s3Client.putObject(buildPutObjectRequest(request), buildRequestBody(request));
     } catch (Exception e) {
       throw new FileNotSavedException(
           format("File %s has not been saved", request.getFileName()), e);
     }
   }
 
-  private PutObjectArgs prepareObjectBasedOnFileToSave(
-      StoreFileRequestDto request) {
+  private RequestBody buildRequestBody(StoreFileRequestDto request) {
+    return RequestBody.fromInputStream(request.getFileContent(), request.getFileSize());
+  }
 
-    return PutObjectArgs.builder()
+  private PutObjectRequest buildPutObjectRequest(StoreFileRequestDto request) {
+    return PutObjectRequest.builder()
         .bucket(request.getStorageName())
-        .object(request.getFileName())
-        .stream(request.getFileContent(), request.getFileSize(), PART_SIZE)
+        .key(request.getFileName())
         .build();
   }
 }

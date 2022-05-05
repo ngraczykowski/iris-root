@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 @ConfigurationProperties(prefix = "sep.filestorage.minio")
-class MinioClientProperties {
+class S3MinioClientProperties {
 
   @NotBlank
   String url;

@@ -1,21 +1,21 @@
-package com.silenteight.sep.filestorage.minio.retrieval;
+package com.silenteight.sep.filestorage.minio.retrieve;
 
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sep.filestorage.api.FileRetriever;
 import com.silenteight.sep.filestorage.api.dto.FileDto;
 
-import io.minio.GetObjectArgs;
-import io.minio.MinioClient;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 
 import java.io.InputStream;
 
 import static java.lang.String.format;
 
 @RequiredArgsConstructor
-public class MinioFileRetriever implements FileRetriever {
+public class S3MinioFileRetriever implements FileRetriever {
 
-  private final MinioClient minioClient;
+  private final S3Client s3Client;
 
   @Override
   public FileDto getFile(String storageName, String fileName) {
@@ -39,10 +39,10 @@ public class MinioFileRetriever implements FileRetriever {
   }
 
   private InputStream getFileAsInputStream(String bucketName, String fileName) throws Exception {
-    return minioClient.getObject(
-        GetObjectArgs.builder()
-            .bucket(bucketName)
-            .object(fileName)
-            .build());
+    GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+        .bucket(bucketName)
+        .key(fileName)
+        .build();
+    return s3Client.getObject(getObjectRequest);
   }
 }

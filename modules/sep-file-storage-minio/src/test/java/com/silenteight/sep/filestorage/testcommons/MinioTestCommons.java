@@ -13,7 +13,6 @@ public class MinioTestCommons {
   public static final String FILE_NAME_2 = "test_file_2";
   public static final String FULL_FILE_NAME = "test_file.txt";
   public static final String FULL_FILE_NAME_2 = "contract.pdf";
-  public static final int PART_SIZE = 10485760;
   public static final MockMultipartFile MOCK_MULTIPART_FILE_TXT =
       new MockMultipartFile(FILE_NAME, FULL_FILE_NAME, TEXT_PLAIN_VALUE,
           "Test Content".getBytes(UTF_8));

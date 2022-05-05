@@ -1,4 +1,4 @@
 package com.silenteight.sep.filestorage.minio;
 
-public interface FileStorageMinioModule {
+public interface S3FileStorageMinioModule {
 }
