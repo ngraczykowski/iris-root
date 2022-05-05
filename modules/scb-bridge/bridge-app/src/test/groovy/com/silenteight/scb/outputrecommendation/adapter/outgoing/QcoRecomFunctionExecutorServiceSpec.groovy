@@ -33,7 +33,7 @@ class QcoRecomFunctionExecutorServiceSpec extends Specification {
         expectedQuery(),
         {
           Object[] p ->
-            p.length == 12 &&
+            p.length == 13 &&
                 p[0] == 'wl' &&
                 p[1] == alertRecommendation.alertExternalId &&
                 p[2] == alertRecommendation.batchId &&
@@ -46,6 +46,7 @@ class QcoRecomFunctionExecutorServiceSpec extends Specification {
                 p[9] == alertRecommendation.qcoInfo.hitId &&
                 p[10] == alertRecommendation.qcoInfo.stepId &&
                 p[11] == alertRecommendation.qcoInfo.fvSignature
+                p[12] == alertRecommendation.qcoInfo.qcoSampled
         },
         String.class) >> '000'
   }
@@ -56,6 +57,7 @@ class QcoRecomFunctionExecutorServiceSpec extends Specification {
         .hitId('hitId')
         .stepId('stepId')
         .fvSignature('fvSignature')
+        .qcoSampled("yes")
         .build()
   }
 
@@ -73,6 +75,6 @@ class QcoRecomFunctionExecutorServiceSpec extends Specification {
   }
 
   def expectedQuery() {
-    'SELECT ' + recomFunctionName + '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) FROM dual'
+    'SELECT ' + recomFunctionName + '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) FROM dual'
   }
 }

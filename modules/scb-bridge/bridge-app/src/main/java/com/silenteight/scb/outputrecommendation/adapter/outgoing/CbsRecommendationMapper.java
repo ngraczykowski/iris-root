@@ -87,6 +87,7 @@ public class CbsRecommendationMapper {
         .hitId(match.id())
         .stepId(match.stepId())
         .fvSignature(match.fvSignature())
+        .qcoSampled(match.qaSampled())
         .build();
   }
 }

@@ -229,5 +229,6 @@ Function signature:
         P_HIT_ID                        IN VARCHAR2, 
         P_STEP_ID                       IN VARCHAR2, 
         P_FV_SIGNATURE                  IN VARCHAR2
+        P_QA_SAMPLED                    IN VARCHAR2
     )
     RETURN VARCHAR2 AS PRAGMA AUTONOMOUS_TRANSACTION;

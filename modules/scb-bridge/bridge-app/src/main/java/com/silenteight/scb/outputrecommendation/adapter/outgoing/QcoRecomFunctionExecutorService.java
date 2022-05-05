@@ -37,7 +37,7 @@ public class QcoRecomFunctionExecutorService implements RecomFunctionExecutorSer
 
   private static String getQueryTemplate() {
     return String.format(
-        "SELECT %s(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) FROM dual", TEMPLATE_VARIABLE);
+        "SELECT %s(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) FROM dual", TEMPLATE_VARIABLE);
   }
 
   @Override
@@ -63,7 +63,8 @@ public class QcoRecomFunctionExecutorService implements RecomFunctionExecutorSer
         alertRecommendation.getQcoInfo().getPolicyId(),
         alertRecommendation.getQcoInfo().getHitId(),
         alertRecommendation.getQcoInfo().getStepId(),
-        alertRecommendation.getQcoInfo().getFvSignature()
+        alertRecommendation.getQcoInfo().getFvSignature(),
+        alertRecommendation.getQcoInfo().getQcoSampled()
     };
   }
 

@@ -39,5 +39,7 @@ public class CbsAlertRecommendation {
     String stepId;
     @NotNull
     String fvSignature;
+    @NotNull
+    String qcoSampled;
   }
 }
