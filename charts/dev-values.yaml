@@ -51,3 +51,10 @@ components:
               accessKey: dummy
               url: https://todo-add-bucket.s3.eu-central-1.amazonaws.com
               region: eu-central-1
+
+frontend:
+  resources:
+    limits:
+      memory: 256Mi
+    requests:
+      memory: 128Mi

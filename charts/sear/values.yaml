@@ -245,3 +245,35 @@ components:
       initialDelaySeconds: 85
       failureThreshold: 120
       periodSeconds: 10
+
+#
+# Frontend Web Application
+#
+frontend:
+  replicaCount: 1
+
+  image:
+    repository: registry.dev.s8ops.com/sep-front-app
+    tag: "latest"
+    pullPolicy: IfNotPresent
+    pullSecrets: []
+
+  service:
+    type: ClusterIP
+    port: 80
+
+  ingress:
+    enabled: true
+
+  resources: {}
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
