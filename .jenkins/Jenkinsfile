@@ -5,15 +5,12 @@ pipeline {
     label 'ec2-agent'
   }
   triggers {
-    cron('H/60 * * * *')
+    cron('0 0/1 0 ? * * *')
   }
   options {
     gitLabConnection(env.GITLAB_CONNECTION_NAME)
     skipDefaultCheckout(true)
     ansiColor('xterm')
-  }
-  tools {
-    jdk 'jdk-17'
   }
   stages {
     stage('Checkout') {
