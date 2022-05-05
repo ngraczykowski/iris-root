@@ -65,6 +65,9 @@ rabbitmq:
   tolerations: []
   affinity: {}
 
+#
+# Common Ingress configuration
+#
 ingress:
   className: ""
   annotations: {}
@@ -94,6 +97,14 @@ common:
   #   logging:
   #     level:
   #       com.silenteight: DEBUG
+
+  resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
 
   service:
     # Determines how the Service is exposed. Valid options are ExternalName, ClusterIP, NodePort, and LoadBalancer.
@@ -178,11 +189,16 @@ components:
       repository: registry.dev.s8ops.com/uds/universal-data-source-app
       tag: "latest"
 
-    # Name of the database the component uses. Defaults to the component name.
     dbName: "uds"
-
-    # Web context path. Defaults to the component name.
     webPath: "uds"
+
+  adjudication-engine:
+    image:
+      repository: registry.dev.s8ops.com/ae/adjudication-engine-app
+      tag: "latest"
+
+    dbName: "ae"
+    webPath: "ae"
 
   governance:
     image:
@@ -212,6 +228,18 @@ components:
     image:
       repository: registry.dev.s8ops.com/iris/webapp-app
       tag: "latest"
+
+    startupProbe:
+      initialDelaySeconds: 85
+      failureThreshold: 120
+      periodSeconds: 10
+
+  warehouse:
+    image:
+      repository: registry.dev.s8ops.com/warehouse/warehouse-app
+      tag: "latest"
+
+    dbName: "wh"
 
     startupProbe:
       initialDelaySeconds: 85

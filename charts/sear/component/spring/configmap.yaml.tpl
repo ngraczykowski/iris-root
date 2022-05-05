@@ -17,7 +17,7 @@ data:
         oauth2:
           resourceserver:
             jwt:
-              issuer-uri: https://auth.silenteight.com/auth/realms/sens-webapp
+              issuer-uri: https://auth.silenteight.com/auth/realms/{{ include "sear.fullname" . }}
               jwk-set-uri: https://auth.silenteight.com/auth/realms/sens-webapp/protocol/openid-connect/certs
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>

@@ -10,7 +10,7 @@
 {{- $configFiles := deepCopy (default (dict) $component.configFiles) | mergeOverwrite $.Values.common.configFiles -}}
 {{- $service := default $.Values.common.service $component.service -}}
 {{- $ingress := default $.Values.common.ingress $component.ingress -}}
-{{- $resources := required (printf "You must define resources for component %s!" $componentName) $component.resources -}}
+{{- $resources := deepCopy (default (dict) $component.resources) | mergeOverwrite $.Values.common.resources -}}
 {{- $containerPorts := deepCopy (default (dict) $component.containerPorts) | mergeOverwrite $.Values.common.containerPorts -}}
 {{- $startupProbe := deepCopy (default (dict) $component.startupProbe) | mergeOverwrite $.Values.common.startupProbe -}}
 {{- $livenessProbe := deepCopy (default (dict) $component.livenessProbe) | mergeOverwrite $.Values.common.livenessProbe -}}
