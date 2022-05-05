@@ -5,10 +5,11 @@ pipeline {
     label 'ec2-agent'
   }
   triggers {
-    cron('5 * * *')
+    cron('H/5 * * * *')
   }
   options {
     gitLabConnection(env.GITLAB_CONNECTION_NAME)
+    disableConcurrentBuilds()
     skipDefaultCheckout(true)
     ansiColor('xterm')
   }
