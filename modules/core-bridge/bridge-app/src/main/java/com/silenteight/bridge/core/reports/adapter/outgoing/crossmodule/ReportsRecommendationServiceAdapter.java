@@ -65,6 +65,7 @@ class ReportsRecommendationServiceAdapter implements RecommendationService {
         .match(matchMetadata.match())
         .solution(matchMetadata.solution())
         .reason(matchMetadata.reason())
+        .matchComment(matchMetadata.matchComment())
         .categories(matchMetadata.categories())
         .features(matchMetadata.features()
             .entrySet()

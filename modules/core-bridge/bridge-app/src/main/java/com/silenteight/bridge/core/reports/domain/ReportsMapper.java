@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 class ReportsMapper {
 
   private static final String EMPTY_STRING = "";
-  private static final String DEFAULT_COMMENT = EMPTY_STRING;
   private static final String STEP_KEY = "step";
   private static final String POLICY_KEY = "policy";
   private static final String STEP_TITLE_KEY = "step_title";
@@ -105,7 +104,7 @@ class ReportsMapper {
             .id(matchNameToMatchId.get(match.match()))
             .name(match.match())
             .recommendation(match.solution())
-            .comment(DEFAULT_COMMENT)
+            .comment(match.matchComment())
             .stepId(getFromReasonWithDefault(match, STEP_KEY))
             .stepTitle(getFromReasonWithDefault(match, STEP_TITLE_KEY))
             .fvSignature(getFromReasonWithDefault(match, FV_SIGNATURE_KEY))

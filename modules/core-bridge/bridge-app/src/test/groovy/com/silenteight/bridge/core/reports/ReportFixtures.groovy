@@ -58,11 +58,13 @@ class ReportFixtures {
   static def RECOMMENDATION_ONE_STEP_ID = 'steps/E6CEB774-AB56-4576-B653-1CDCEB2D25E7'
   static def RECOMMENDATION_ONE_STEP_TITLE = 'some fancy step title name'
   static def RECOMMENDATION_ONE_FV_SIGNATURE = 'J4VGkp1+FaNsaGDtBXgQsWpUYDo='
+  static def RECOMMENDATION_ONE_MATCH_COMMENT = 'some recommendation match metadata one comment'
   static def RECOMMENDATION_ONE_RECOMMENDED_AT = OffsetDateTime
       .of(2022, 3, 28, 11, 33, 00, 00, ZoneOffset.UTC)
   static def RECOMMENDATION_ONE_METADATA_MATCH_METADATA = MatchMetadataDto.builder()
       .match('alerts/1/matches/1')
       .solution('ACTION_POTENTIAL_TRUE_POSITIVE')
+      .matchComment(RECOMMENDATION_ONE_MATCH_COMMENT)
       .reason(
           Map.of(
               'feature_vector_signature', RECOMMENDATION_ONE_FV_SIGNATURE,
@@ -85,11 +87,13 @@ class ReportFixtures {
   static def RECOMMENDATION_TWO_NAME = 'recommendation/2'
   static def RECOMMENDATION_TWO_ACTION = 'some recommendation two action'
   static def RECOMMENDATION_TWO_COMMENT = 'some recommendation two comment'
+  static def RECOMMENDATION_TWO_MATCH_COMMENT = 'some recommendation match metadata two comment'
   static def RECOMMENDATION_TWO_RECOMMENDED_AT = OffsetDateTime
       .of(2022, 3, 28, 12, 33, 00, 00, ZoneOffset.UTC)
   static def RECOMMENDATION_TWO_METADATA_MATCH_METADATA = MatchMetadataDto.builder()
       .match('alerts/1/matches/2')
       .solution('ACTION_INVESTIGATE')
+      .matchComment(RECOMMENDATION_TWO_MATCH_COMMENT)
       .reason(
           Map.of(
               'fvSignature', 'J4VGkp1+FaNsaGDtBXgQsWpUYDo=',
@@ -218,7 +222,7 @@ class ReportFixtures {
       .id(MATCH_ONE_ID)
       .name('alerts/1/matches/1')
       .recommendation('ACTION_POTENTIAL_TRUE_POSITIVE')
-      .comment('')
+      .comment(RECOMMENDATION_ONE_MATCH_COMMENT)
       .stepId('steps/E6CEB774-AB56-4576-B653-1CDCEB2D25E7')
       .stepTitle('some fancy step title name')
       .fvSignature('J4VGkp1+FaNsaGDtBXgQsWpUYDo=')
