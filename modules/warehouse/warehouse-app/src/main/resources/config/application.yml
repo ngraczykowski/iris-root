@@ -58,9 +58,6 @@ warehouse:
     concurrency: 1
     prefetch: 1
     broker:
-      alert-backup-indexing:
-        queue-name: wh.index-request.backup
-        routing-key: command.index-request.production
       alert-production-indexing:
         queue-name: wh.index-request.production
         routing-key: command.index-request.production
@@ -80,7 +77,13 @@ warehouse:
         queue-name: wh.retention.alerts-expired
         routing-key: retention.alerts-expired
       to-remove:
-        bindings: []
+        bindings:
+          - queue-name: wh.index-request.backup
+            exchange: bridge.command
+            routing-key: command.index-request.production
+          - queue-name: wh.index-request.backup
+            exchange: gov.event
+            routing-key: event.qa-alert
   alert:
     migration:
       enabled: true
@@ -95,8 +98,6 @@ warehouse:
     production-batch-size: 200
     simulation-batch-size: 200
     qa-batch-size: 200
-    backup-indexing-inbound:
-      queue-name: ${warehouse.messaging.broker.alert-backup-indexing.queue-name}
     production-indexing-inbound:
       queue-name: ${warehouse.messaging.broker.alert-production-indexing.queue-name}
     production-indexed-outbound:

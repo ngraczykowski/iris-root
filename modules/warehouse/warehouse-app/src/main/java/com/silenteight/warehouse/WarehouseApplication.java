@@ -8,7 +8,6 @@ import com.silenteight.sep.auth.authentication.AuthenticationModule;
 import com.silenteight.sep.auth.authorization.AuthorizationModule;
 import com.silenteight.sep.auth.token.TokenModule;
 import com.silenteight.warehouse.alert.rest.RestAlertModule;
-import com.silenteight.warehouse.backup.BackupModule;
 import com.silenteight.warehouse.common.domain.DomainModule;
 import com.silenteight.warehouse.common.integration.AmqpCommonModule;
 import com.silenteight.warehouse.common.time.TimeModule;
@@ -58,7 +57,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     // Domain modules
     AlertModule.class,
     AvailableReportsModule.class,
-    BackupModule.class,
     DomainModule.class,
     DashboardStatisticsModule.class,
     ReportCreateModule.class,
