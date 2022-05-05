@@ -58,3 +58,8 @@ frontend:
       memory: 256Mi
     requests:
       memory: 128Mi
+
+  name-agent:
+    args:
+      - --spring.profiles.active=sierra,rabbitmq-declare
+      - --linguistics.name.facade.enabled=true

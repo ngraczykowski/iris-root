@@ -93,7 +93,9 @@ spec:
             - --management.server.port={{ .component.containerPorts.management.port }}
             - --management.server.base-path=/
             - --management.endpoints.web.base-path=/management
+            {{- if .component.useDb }}
             - --spring.datasource.url={{ include "sear.spring.jdbcUrl" . }}
+            {{- end }}
             # NOTE(ahaczewski): After Tadeusz Kleszcz recommendation, disable unhealthy on exceptions when communicating via gRPC.
             - --spring.autoconfigure.exclude=net.devh.boot.grpc.client.autoconfigure.GrpcClientHealthAutoConfiguration
             {{- if .component.containerPorts.grpc.enabled }}
@@ -109,13 +111,19 @@ spec:
             - name: secret-rabbitmq
               mountPath: "/var/run/secrets/spring/rabbitmq"
               readOnly: true
+            {{- if .component.useDb }}
             - name: secret-postgres
               mountPath: "/var/run/secrets/spring/postgres"
               readOnly: true
+            {{- end }}
           # FIXME(ahaczewski): Remove these envs once all images remove these variables.
           #  The reason to put them here is that the environment variables are overwriting
           #  `configtree` secrets mounted as files.
           env:
+            - name: SPRING_RABBITMQ_ADDRESSES
+              # FIXME(pputerla) some apps (eg agents) use addresses property which overrides
+              # FIXME(pputerla) subsequent host, port values; so I't being cleared here
+              value: ""
             - name: SPRING_RABBITMQ_HOST
               valueFrom:
                 secretKeyRef:
@@ -152,6 +160,7 @@ spec:
                 path: spring/rabbitmq/username
               - key: password
                 path: spring/rabbitmq/password
+        {{- if .component.useDb }}
         - name: secret-postgres
           secret:
             secretName: {{ include "sear.postgresqlSecretName" . }}
@@ -160,6 +169,7 @@ spec:
                 path: spring/datasource/username
               - key: password
                 path: spring/datasource/password
+        {{- end }}
       {{- with .component.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

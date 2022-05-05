@@ -4,6 +4,7 @@
 
 {{- $image := deepCopy $component.image | mergeOverwrite $.Values.common.image -}}
 {{- $dbName := default $componentName $component.dbName -}}
+{{- $useDb := hasKey $component "db" | ternary $component.db true -}}
 {{- $webPath := default $componentName $component.webPath -}}
 {{- $replicaCount := default $.Values.common.replicaCount $component.replicaCount -}}
 {{- $args := concat $.Values.common.args (default (list) $component.args) -}}
@@ -25,6 +26,7 @@ $mergedComponent := (dict
   "image" $image
   "replicaCount" $replicaCount
   "dbName" $dbName
+  "useDb" $useDb
   "webPath" $webPath
   "args" $args
   "configFiles" $configFiles

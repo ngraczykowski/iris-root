@@ -246,6 +246,12 @@ components:
       failureThreshold: 120
       periodSeconds: 10
 
+  # FIXME(pputerla) - remark - we're missing list of supported component keys
+  name-agent:
+    image:
+      repository: registry.dev.s8ops.com/linguistics-agent-sierra-ts
+    db: false
+
 #
 # Frontend Web Application
 #
