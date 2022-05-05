@@ -42,4 +42,3 @@ warehouse.reports.v2:
 logging:
   level:
     com.silenteight.warehouse.report: DEBUG
-    com.silenteight.warehouse.common.opendistro.elastic: DEBUG

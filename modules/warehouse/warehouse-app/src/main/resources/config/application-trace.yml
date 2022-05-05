@@ -16,7 +16,6 @@ logging:
     io.opencensus: INFO
     io.netty: INFO
     io.grpc.netty: INFO
-    org.springframework.data.elasticsearch.client.WIRE: TRACE
     org.springframework.integration: DEBUG
     jdk.internal.httpclient.debug: INFO
 

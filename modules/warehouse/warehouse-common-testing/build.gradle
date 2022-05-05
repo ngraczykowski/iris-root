@@ -25,12 +25,12 @@ dependencies {
 
   implementation libraries.spring_boot_starter_web
   implementation libraries.spring_boot_starter_undertow
-  implementation libraries.spring_boot_starter_elasticsearch
+
+  implementation libraries.spring_data_jpa
 
   implementation libraries.spring_security_web
   implementation libraries.spring_security_config
 
-  implementation libraries.test_containers_elasticsearch
   implementation libraries.test_containers_postgresql
   implementation libraries.test_containers_spock
 

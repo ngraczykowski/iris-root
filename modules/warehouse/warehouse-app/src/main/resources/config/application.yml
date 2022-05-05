@@ -21,9 +21,6 @@ server:
 #---------------------------------------------------------------------------------------------------
 
 management:
-  health:
-    elasticsearch:
-      enabled: false
   endpoint:
     health.show-details: always
 
