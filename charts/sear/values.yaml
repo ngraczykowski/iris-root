@@ -195,3 +195,23 @@ components:
     nodeSelector: {}
     tolerations: []
     affinity: {}
+
+  simulator:
+    image:
+      repository: registry.dev.s8ops.com/iris/simulator-app
+      tag: "latest"
+
+    dbName: "sim"
+    args: []
+    configFiles: {}
+    resources: {}
+    service: {}
+    containerPorts: {}
+    startupProbe: {}
+    livenessProbe: {}
+    readinessProbe: {}
+    ingress: {}
+    autoscaling: {}
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
