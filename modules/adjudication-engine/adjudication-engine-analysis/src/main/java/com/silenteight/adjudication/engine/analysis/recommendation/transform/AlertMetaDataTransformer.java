@@ -30,10 +30,13 @@ public final class AlertMetaDataTransformer {
     var analysisId = context.getAnalysisId();
     var alertId = context.getAlertId();
     var builder = RecommendationMetadata.newBuilder()
-        .putAllLabels(context.getAlertLabels())
         .setName("analysis/" + analysisId + "/recommendations/" + context.getRecommendationId()
             + "/metadata")
         .setAlert("alerts/" + alertId);
+
+    if (context.getAlertLabels() != null) {
+      builder.putAllLabels(context.getAlertLabels());
+    }
 
     for (int i = 0; i < matches.size(); i++) {
       builder.addMatches(convertMatchMetadata(matches.get(i), context.getMatchIds()[i], alertId,
