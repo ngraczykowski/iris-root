@@ -4,6 +4,9 @@ pipeline {
   agent {
     label 'ec2-agent'
   }
+  triggers {
+    cron('H/60 * * * *')
+  }
   options {
     gitLabConnection(env.GITLAB_CONNECTION_NAME)
     skipDefaultCheckout(true)
