@@ -6,10 +6,14 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
+import static com.silenteight.adjudication.engine.analysis.service.integration.AmqpDefaults.EVENT_EXCHANGE_NAME;
+import static com.silenteight.adjudication.engine.analysis.service.integration.AmqpDefaults.RECOMMENDATIONS_GENERATED_ROUTING_KEY;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -17,7 +21,7 @@ import java.util.Optional;
 class GenerateAndSaveRecommendationUseCase {
 
   private final GenerateRecommendationsUseCase generateRecommendationsUseCase;
-
+  private final RabbitTemplate rabbitTemplate;
 
 
   Optional<RecommendationsGenerated> generateAndSaveRecommendations(String analysisName) {
@@ -26,7 +30,15 @@ class GenerateAndSaveRecommendationUseCase {
     if (recommendationInfos.isEmpty())
       return Optional.empty();
 
-    return Optional.of(createRecommendationGenerated(analysisName, recommendationInfos));
+    var recommendation = createRecommendationGenerated(analysisName, recommendationInfos);
+
+    log.info(
+        "Sending recommendation for analysis:{}", recommendation.getAnalysis());
+
+    rabbitTemplate.convertAndSend(
+        EVENT_EXCHANGE_NAME, RECOMMENDATIONS_GENERATED_ROUTING_KEY, recommendation);
+
+    return Optional.of(recommendation);
   }
 
   private List<RecommendationInfo> generateRecommendationInfos(String analysisName) {

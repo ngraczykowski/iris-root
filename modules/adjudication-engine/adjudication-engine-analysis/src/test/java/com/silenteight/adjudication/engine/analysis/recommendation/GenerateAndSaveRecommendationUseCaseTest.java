@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +41,8 @@ class GenerateAndSaveRecommendationUseCaseTest {
   private GenerateCommentsUseCase generateCommentsUseCase;
   @Mock
   private CommentInputDataAccess commentInputDataAccess;
+  @Mock
+  private RabbitTemplate rabbitTemplate;
 
   @BeforeEach
   void setUp() {
@@ -48,7 +51,7 @@ class GenerateAndSaveRecommendationUseCaseTest {
         commentInputDataAccess, createRecommendationsUseCase,
         new SimpleMeterRegistry());
     generateAndSaveRecommendationUseCase = new GenerateAndSaveRecommendationUseCase(
-        generateRecommendationsUseCase
+        generateRecommendationsUseCase, rabbitTemplate
     );
   }
 

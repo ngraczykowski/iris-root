@@ -32,7 +32,6 @@ class AnalysisInternalIntegrationConfiguration {
               return p;
             })
         .log(Level.TRACE, getClass().getName() + ".matchesSolvedToRecommendationIntegrationFlow")
-        .channel(RecommendationChannels.MATCHES_SOLVED_RECOMMENDATION_INBOUND_CHANNEL)
         .get();
   }
 
