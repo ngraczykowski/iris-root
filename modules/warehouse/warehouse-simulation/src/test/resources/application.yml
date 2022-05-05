@@ -12,9 +12,6 @@ keycloak:
 warehouse:
   messaging:
     broker:
-      alert-backup-indexing:
-        queue-name: wh.index-request.backup
-        routing-key: command.index-request.production
       alert-production-indexing:
         queue-name: wh.prioritized-index-request.production
         routing-key: command.index-request.production

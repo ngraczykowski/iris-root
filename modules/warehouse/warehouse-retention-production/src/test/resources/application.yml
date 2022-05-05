@@ -17,9 +17,6 @@ warehouse:
       recommendation-date-field: "recommendationDate"
   messaging:
     broker:
-      alert-backup-indexing:
-        queue-name: wh.index-request.backup
-        routing-key: command.index-request.production
       alert-production-indexing:
         queue-name: wh.prioritized-index-request.production
         routing-key: command.index-request.production
@@ -46,8 +43,6 @@ warehouse:
   indexer:
     production-batch-size: 200
     simulation-batch-size: 200
-    backup-indexing-inbound:
-      queue-name: ${warehouse.messaging.broker.alert-backup-indexing.queue-name}
     production-indexing-inbound:
       queue-name: ${warehouse.messaging.broker.alert-production-indexing.queue-name}
     production-indexed-outbound:

@@ -3,7 +3,6 @@ gradle.ext.sepDependenciesVersion = '2.5.0'
 
 include 'warehouse-alert'
 include 'warehouse-app'
-include 'warehouse-backup'
 include 'warehouse-common'
 include 'warehouse-common-testing'
 include 'warehouse-db-changelog'

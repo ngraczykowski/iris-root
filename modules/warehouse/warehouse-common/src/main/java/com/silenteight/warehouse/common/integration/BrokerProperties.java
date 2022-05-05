@@ -16,10 +16,6 @@ class BrokerProperties {
 
   @Valid
   @NestedConfigurationProperty
-  private AmpqProperties alertBackupIndexing;
-
-  @Valid
-  @NestedConfigurationProperty
   private AmpqProperties alertProductionIndexing;
 
   @Valid
@@ -46,18 +42,6 @@ class BrokerProperties {
   @NestedConfigurationProperty
   private ToRemoveProperties toRemove;
 
-  String alertBackupIndexingQueueName() {
-    return alertBackupIndexing.getQueueName();
-  }
-
-  String alertBackupIndexingRoutingKey() {
-    return alertBackupIndexing.getRoutingKey();
-  }
-
-  Integer alertBackupIndexingMaxPriority() {
-    return alertBackupIndexing.getMaxPriority();
-  }
-
   String alertProductionIndexingQueueName() {
     return alertProductionIndexing.getQueueName();
   }
@@ -67,7 +51,7 @@ class BrokerProperties {
   }
 
   Integer alertProductionIndexingMaxPriority() {
-    return alertBackupIndexing.getMaxPriority();
+    return alertProductionIndexing.getMaxPriority();
   }
 
   String qaIndexingQueueName() {
@@ -79,7 +63,7 @@ class BrokerProperties {
   }
 
   Integer qaIndexingMaxPriority() {
-    return alertBackupIndexing.getMaxPriority();
+    return qaIndexing.getMaxPriority();
   }
 
   String alertSimulationIndexingQueueName() {
@@ -91,7 +75,7 @@ class BrokerProperties {
   }
 
   Integer alertSimulationIndexingMaxPriority() {
-    return alertBackupIndexing.getMaxPriority();
+    return alertSimulationIndexing.getMaxPriority();
   }
 
   String personalInformationExpiredIndexingQueueName() {

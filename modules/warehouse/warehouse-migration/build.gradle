@@ -16,7 +16,6 @@ configurations {
 dependencies {
   implementation project(":warehouse-common")
   implementation project(":warehouse-db-changelog")
-  implementation project(":warehouse-backup")
   implementation project(":warehouse-production")
 
   implementation libraries.silenteight_commons_core

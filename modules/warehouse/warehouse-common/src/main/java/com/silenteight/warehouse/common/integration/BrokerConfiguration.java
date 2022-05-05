@@ -29,15 +29,6 @@ class BrokerConfiguration {
   private final BrokerProperties properties;
 
   @Bean
-  Declarables alertBackupIndexingBinding() {
-    return new Declarables(
-        binding(
-            properties.alertBackupIndexingQueueName(),
-            BRIDGE_COMMAND_EXCHANGE,
-            properties.alertBackupIndexingRoutingKey()));
-  }
-
-  @Bean
   Declarables alertProductionIndexingBinding() {
     return new Declarables(
         binding(
@@ -93,13 +84,6 @@ class BrokerConfiguration {
             properties.analysisExpiredQueueName(),
             SIM_COMMAND_EXCHANGE,
             properties.analysisExpiredRoutingKey()));
-  }
-
-  @Bean
-  Queue alertBackupIndexingQueue() {
-    return queue(
-        properties.alertBackupIndexingQueueName(),
-        properties.alertBackupIndexingMaxPriority());
   }
 
   @Bean
