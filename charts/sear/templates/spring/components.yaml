@@ -42,7 +42,7 @@ $mergedComponent := (dict
 -}}
 {{- $context := deepCopy $ | merge (dict "componentName" $componentName "component" $mergedComponent) -}}
 
-{{- range $path, $_ := $.Files.Glob  "component/*.yaml.tpl" }}
+{{- range $path, $_ := $.Files.Glob  "component/spring/*.yaml.tpl" }}
 # From: {{ $path }}
 # Component: {{ $componentName }}
 {{ tpl ($.Files.Get $path) $context }}
