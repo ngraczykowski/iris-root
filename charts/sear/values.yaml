@@ -126,7 +126,7 @@ common:
 
   startupProbe:
     enabled: true
-    initialDelaySeconds: 10
+    initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 1
     failureThreshold: 6
@@ -207,11 +207,6 @@ components:
 
     dbName: "gov"
 
-    startupProbe:
-      initialDelaySeconds: 85
-      failureThreshold: 120
-      periodSeconds: 10
-
   simulator:
     image:
       repository: registry.dev.s8ops.com/iris/simulator-app
@@ -219,20 +214,10 @@ components:
 
     dbName: "sim"
 
-    startupProbe:
-      initialDelaySeconds: 85
-      failureThreshold: 120
-      periodSeconds: 10
-
   webapp:
     image:
       repository: registry.dev.s8ops.com/iris/webapp-app
       tag: "latest"
-
-    startupProbe:
-      initialDelaySeconds: 85
-      failureThreshold: 120
-      periodSeconds: 10
 
   warehouse:
     image:
@@ -242,15 +227,18 @@ components:
     dbName: "wh"
 
     startupProbe:
-      initialDelaySeconds: 85
-      failureThreshold: 120
-      periodSeconds: 10
+      initialDelaySeconds: 60
 
   # FIXME(pputerla) - remark - we're missing list of supported component keys
   name-agent:
     image:
       repository: registry.dev.s8ops.com/linguistics-agent-sierra-ts
-    db: false
+      tag: "latest"
+
+    useDb: false
+
+    startupProbe:
+      initialDelaySeconds: 60
 
 #
 # Frontend Web Application
@@ -285,8 +273,11 @@ frontend:
   affinity: {}
 
 #
-# Keycloak
+# KeyCloak
+#
+# Configuration of all the values below is required.
 #
 keycloak:
   authServerUrl: ""
   realm: ""
+  frontendClientId: ""

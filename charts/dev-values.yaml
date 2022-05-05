@@ -37,6 +37,9 @@ components:
   warehouse:
     args:
       - --spring.profiles.active=linux,warehouse,messaging,sierra
+      # FIXME(ahaczewski): Required to repeat configuration from `keycloak` below due to overwriting
+      #  environment variable defined directly in the WebApp container image.
+      - --keycloak.frontend-client-id=dev-frontend
 
     configFiles:
       application.yml: |
@@ -52,6 +55,17 @@ components:
               url: https://todo-add-bucket.s3.eu-central-1.amazonaws.com
               region: eu-central-1
 
+  name-agent:
+    args:
+      - --spring.profiles.active=sierra,rabbitmq-declare
+      - --linguistics.name.facade.enabled=true
+
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
+
 frontend:
   resources:
     limits:
@@ -59,7 +73,7 @@ frontend:
     requests:
       memory: 128Mi
 
-  name-agent:
-    args:
-      - --spring.profiles.active=sierra,rabbitmq-declare
-      - --linguistics.name.facade.enabled=true
+keycloak:
+  authServerUrl: https://auth.silenteight.com
+  realm: sens-webapp
+  frontendClientId: dev-frontend

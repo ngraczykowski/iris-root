@@ -4,7 +4,7 @@
 
 {{- $image := deepCopy $component.image | mergeOverwrite $.Values.common.image -}}
 {{- $dbName := default $componentName $component.dbName -}}
-{{- $useDb := hasKey $component "db" | ternary $component.db true -}}
+{{- $useDb := default true $component.useDb -}}
 {{- $webPath := default $componentName $component.webPath -}}
 {{- $replicaCount := default $.Values.common.replicaCount $component.replicaCount -}}
 {{- $args := concat $.Values.common.args (default (list) $component.args) -}}

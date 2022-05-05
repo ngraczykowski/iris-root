@@ -96,8 +96,6 @@ spec:
             {{- if .component.useDb }}
             - --spring.datasource.url={{ include "sear.spring.jdbcUrl" . }}
             {{- end }}
-            # NOTE(ahaczewski): After Tadeusz Kleszcz recommendation, disable unhealthy on exceptions when communicating via gRPC.
-            - --spring.autoconfigure.exclude=net.devh.boot.grpc.client.autoconfigure.GrpcClientHealthAutoConfiguration
             {{- if .component.containerPorts.grpc.enabled }}
             - --grpc.server.port={{ .component.containerPorts.grpc.port }}
             {{- end }}

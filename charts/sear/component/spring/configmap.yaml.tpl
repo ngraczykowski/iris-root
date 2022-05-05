@@ -13,10 +13,9 @@ data:
       config:
         import: configtree:/var/run/secrets/spring/*/
 
-      keycloak:
-        adapter:
-          auth-server-url: {{ .Values.keycloak.authServerUrl | quote }}
-          realm: {{ .Values.keycloak.realm | quote }}
+      {{ /* NOTE(ahaczewski): After Tadeusz Kleszcz recommendation, disable health check on exceptions when communicating via gRPC. */ -}}
+      autoconfigure:
+        exclude: net.devh.boot.grpc.client.autoconfigure.GrpcClientHealthAutoConfiguration
 
       security:
         oauth2:
@@ -24,6 +23,12 @@ data:
             jwt:
               issuer-uri: "{{ include "sear.spring.authServer" . }}"
               jwk-set-uri: "{{ include "sear.spring.authServer" . }}/protocol/openid-connect/certs"
+
+    keycloak:
+      frontend-client-id: {{ .Values.keycloak.frontendClientId | quote }}
+      adapter:
+        auth-server-url: {{ .Values.keycloak.authServerUrl | quote }}
+        realm: {{ .Values.keycloak.realm | quote }}
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE configuration>

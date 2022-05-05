@@ -6,5 +6,5 @@ jdbc:postgresql://{{ include "sear.postgresqlService" . }}:5432/{{ .component.db
 {{- end -}}
 
 {{- define "sear.spring.authServer" -}}
-{{ .Values.keycloak.authServerUrl }}/auth/realms/{{ .Values.keycloak.realm }}
+{{ required "keycloak.authServerUrl is required" .Values.keycloak.authServerUrl }}/auth/realms/{{ required "keycloak.realm is required" .Values.keycloak.realm }}
 {{- end -}}
