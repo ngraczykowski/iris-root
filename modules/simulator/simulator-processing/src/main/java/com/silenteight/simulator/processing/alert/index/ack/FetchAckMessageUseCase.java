@@ -4,7 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.data.api.v1.DataIndexResponse;
+import com.silenteight.data.api.v2.DataIndexResponse;
 import com.silenteight.simulator.management.domain.SimulationService;
 import com.silenteight.simulator.processing.alert.index.amqp.listener.AckMessageHandler;
 import com.silenteight.simulator.processing.alert.index.domain.IndexedAlertQuery;

@@ -6,13 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.Recommendation;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
+import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
+import com.silenteight.adjudication.api.v2.RecommendationMetadata;
 import com.silenteight.adjudication.api.v2.RecommendationMetadata.FeatureMetadata;
 import com.silenteight.adjudication.api.v2.RecommendationMetadata.MatchMetadata;
-import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
-import com.silenteight.data.api.v1.Alert;
-import com.silenteight.data.api.v1.SimulationDataIndexRequest;
-import com.silenteight.simulator.management.create.AnalysisService;
-import com.silenteight.simulator.management.domain.SimulationService;
+import com.silenteight.data.api.v2.SimulationAlert;
+import com.silenteight.data.api.v2.SimulationDataIndexRequest;
+import com.silenteight.data.api.v2.SimulationMatch;
 import com.silenteight.simulator.processing.alert.index.amqp.gateway.SimulationDataIndexRequestGateway;
 import com.silenteight.simulator.processing.alert.index.amqp.listener.RecommendationsGeneratedMessageHandler;
 import com.silenteight.simulator.processing.alert.index.domain.IndexedAlertService;
@@ -22,10 +22,12 @@ import com.google.protobuf.Timestamp;
 import com.google.protobuf.Value;
 import org.jetbrains.annotations.NotNull;
 
-import java.time.Instant;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
-import static com.silenteight.adjudication.api.v1.Analysis.State.DONE;
+import static java.time.Instant.ofEpochSecond;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
@@ -45,15 +47,9 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
   private static final String CATEGORY_FIELD_POSTFIX = ":value";
 
   @NonNull
-  private final SimulationService simulationService;
-  @NonNull
-  private final RecommendationService recommendationService;
-  @NonNull
   private final IndexedAlertService indexedAlertService;
   @NonNull
   private final RequestIdGenerator requestIdGenerator;
-  @NonNull
-  private final AnalysisService analysisService;
   @NonNull
   private final SimulationDataIndexRequestGateway simulationDataIndexRequestGateway;
   @NonNull
@@ -61,84 +57,57 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
 
   @Override
   public void handle(RecommendationsGenerated request) {
-    if (!simulationExists(request.getAnalysis())) {
-      log.debug("Analysis is not a simulation: analysis=" + request.getAnalysis());
-      return;
-    }
-    if (!isAnalysisDone(request.getAnalysis())) {
-      log.debug("Analysis {} is not finished yet.", request.getAnalysis());
-      return;
-    }
+    log.info("RecommendationsGenerated request received, analysisName={}", request.getAnalysis());
+    List<RecommendationInfo> recommendationInfosList =
+        request.getRecommendationInfosList();
 
-    try {
-      simulationService.streaming(request.getAnalysis());
-    } catch (RuntimeException e) {
-      log.warn("The analysis is not in the RUNNING state. "
-                   + "The other message could already trigger streaming.");
-      return;
-    }
-
-    sendAsBatches(
-        recommendationService.streamRecommendationsWithMetadata(request.getAnalysis()),
-        request.getAnalysis());
-  }
-
-  private boolean simulationExists(String analysisName) {
-    return simulationService.exists(analysisName);
-  }
-
-  private boolean isAnalysisDone(String analysis) {
-    return DONE == analysisService.getAnalysis(analysis).getState();
+    sendAsBatches(recommendationInfosList.stream().iterator(), request.getAnalysis());
+    log.debug("RecommendationsGenerated request processed, analysisName={}", request.getAnalysis());
   }
 
   private void sendAsBatches(
-      Iterator<RecommendationWithMetadata> iterator,
-      String analysisName) {
+      Iterator<RecommendationInfo> iterator, String analysisName) {
 
-    RecommendationWithMetaDataBatch recommendationWithMetaDataBatch
-        = getRecommendationWithMetaDataBatch();
-    iterator.forEachRemaining(recommendationWithMetadata -> {
-      if (!recommendationWithMetaDataBatch.isComplete())
-        recommendationWithMetaDataBatch.addItem(recommendationWithMetadata);
-      if (recommendationWithMetaDataBatch.isComplete() || !iterator.hasNext()) {
-        sendToFeed(analysisName, recommendationWithMetaDataBatch.getRecommendations());
-        recommendationWithMetaDataBatch.clear();
+    RecommendationInfoBatch recommendationInfoBatch = getRecommendationWithMetaDataBatch();
+
+    iterator.forEachRemaining(recommendationInfo -> {
+      if (!recommendationInfoBatch.isComplete())
+        recommendationInfoBatch.addItem(recommendationInfo);
+      if (recommendationInfoBatch.isComplete() || !iterator.hasNext()) {
+        sendToFeed(analysisName, recommendationInfoBatch.getRecommendations());
+        recommendationInfoBatch.clear();
       }
     });
   }
 
-  private void sendToFeed(
-      String analysisName,
-      List<RecommendationWithMetadata> recommendationsWithMetadata) {
-
+  private void sendToFeed(String analysisName, List<RecommendationInfo> recommendationInfoList) {
     String requestId = requestIdGenerator.generate();
-    log.debug("Recommendations generated: "
-        + " analysisName=" + analysisName
-        + " requestId=" + requestId
-        + " count=" + recommendationsWithMetadata.size());
+
+    log.info("Recommendations generated: analysisName={} requestId={} count={}",
+        analysisName, requestId, recommendationInfoList.size());
 
     SimulationDataIndexRequest indexRequest
-        = toIndexRequest(requestId, analysisName, recommendationsWithMetadata);
-    indexedAlertService.saveAsSent(
-        requestId, analysisName, recommendationsWithMetadata.size());
-    log.debug("Sending recommendations to feed: requestId=" + requestId);
+        = toIndexRequest(requestId, analysisName, recommendationInfoList);
 
+    indexedAlertService.saveAsSent(requestId, analysisName, recommendationInfoList.size());
+
+    log.debug("Sending recommendations to feed: requestId={}.", requestId);
     simulationDataIndexRequestGateway.send(indexRequest);
   }
 
   private static SimulationDataIndexRequest toIndexRequest(
       String requestId, String analysisName,
-      List<RecommendationWithMetadata> recommendationsWithMetadata) {
+      List<RecommendationInfo> recommendationInfo) {
 
     return SimulationDataIndexRequest.newBuilder()
         .setRequestId(requestId)
         .setAnalysisName(analysisName)
-        .addAllAlerts(toAlertsToIndex(recommendationsWithMetadata))
+        .addAllAlerts(toAlertsToIndex(recommendationInfo))
         .build();
   }
 
-  private static Collection<Alert> toAlertsToIndex(
-      List<RecommendationWithMetadata> recommendationsWithMetadata) {
+  private static List<SimulationAlert> toAlertsToIndex(
+      List<RecommendationInfo> recommendationsWithMetadata) {
 
     return recommendationsWithMetadata
         .stream()
@@ -146,47 +115,60 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
         .collect(toList());
   }
 
-  private static Alert toAlertToIndex(RecommendationWithMetadata recommendationWithMetadata) {
-    String alertName = recommendationWithMetadata.getRecommendation().getAlert();
-
-    return Alert.newBuilder()
-        .setDiscriminator(alertName)
+  private static SimulationAlert toAlertToIndex(RecommendationInfo recommendationInfo) {
+    String alertName = recommendationInfo.getAlert();
+    return SimulationAlert.newBuilder()
         .setName(alertName)
-        .setPayload(toStruct(recommendationWithMetadata))
+        .setPayload(toAlertStruct(recommendationInfo))
+        .addAllMatches(toMatchesToIndex(recommendationInfo.getMetadata()))
         .build();
   }
 
-  private static Struct toStruct(RecommendationWithMetadata recommendationWithMetadata) {
+  private static Struct toAlertStruct(RecommendationInfo recommendationInfo) {
     return Struct.newBuilder()
-        .putAllFields(toFields(recommendationWithMetadata))
+        .putAllFields(toAlertField(recommendationInfo))
         .build();
   }
 
-  private static Map<String, Value> toFields(
-      RecommendationWithMetadata recommendationWithMetadata) {
+  private static List<SimulationMatch> toMatchesToIndex(
+      RecommendationMetadata recommendationMetadata) {
 
-    Recommendation recommendation = recommendationWithMetadata.getRecommendation();
+    return recommendationMetadata.getMatchesList().stream()
+        .map(RecommendationsGeneratedUseCase::toMatchToIndex)
+        .collect(toList());
+  }
+
+  private static SimulationMatch toMatchToIndex(MatchMetadata matchMetadata) {
+    return SimulationMatch.newBuilder()
+        .setName(matchMetadata.getMatch())
+        .setPayload(toMatchStruct(matchMetadata))
+        .build();
+  }
+
+  private static Struct toMatchStruct(MatchMetadata matchMetadata) {
+    return Struct.newBuilder()
+        .putAllFields(toMatchFields(matchMetadata))
+        .build();
+  }
+
+  private static Map<String, Value> toAlertField(RecommendationInfo recommendationInfo) {
+    Recommendation recommendation = recommendationInfo.getValue();
     Map<String, Value> fields = new HashMap<>();
     fields.put(RECOMMENDATION_ALERT_FIELD, toValue(recommendation.getAlert()));
-    fields.put(RECOMMENDATION_CREATE_TIME_FIELD,
-               toValue(toIsoString(recommendation.getCreateTime())));
-    fields.put(RECOMMENDATION_RECOMMENDED_ACTION_FIELD,
+    fields.put(
+        RECOMMENDATION_CREATE_TIME_FIELD,
+        toValue(toIsoString(recommendation.getCreateTime())));
+    fields.put(
+        RECOMMENDATION_RECOMMENDED_ACTION_FIELD,
         toValue(recommendation.getRecommendedAction()));
     fields.put(RECOMMENDATION_COMMENT_FIELD, toValue(recommendation.getRecommendationComment()));
-
-    recommendationWithMetadata
-        .getMetadata()
-        .getMatchesList()
-        .stream()
-        .findFirst()
-        .ifPresent(matchMetadata -> fields.putAll(toMatchFields(matchMetadata)));
 
     return fields;
   }
 
   @NotNull
   private static String toIsoString(Timestamp timestamp) {
-    return Instant.ofEpochSecond(timestamp.getSeconds(), timestamp.getNanos()).toString();
+    return ofEpochSecond(timestamp.getSeconds(), timestamp.getNanos()).toString();
   }
 
   private static Map<String, Value> toMatchFields(MatchMetadata matchMetadata) {
@@ -210,7 +192,8 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
     Map<String, Value> fields = new HashMap<>();
     fields.put(key + FEATURE_CONFIG_FIELD_POSTFIX, toValue(featureMetadata.getAgentConfig()));
     fields.put(key + FEATURE_SOLUTION_FIELD_POSTFIX, toValue(featureMetadata.getSolution()));
-    fields.put(key + FEATURE_REASON_FIELD_POSTFIX,
+    fields.put(
+        key + FEATURE_REASON_FIELD_POSTFIX,
         toValue(featureMetadata.getReason().toString()));
 
     return fields;
@@ -222,7 +205,7 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
         .build();
   }
 
-  private RecommendationWithMetaDataBatch getRecommendationWithMetaDataBatch() {
-    return new RecommendationWithMetaDataBatch(batchSize);
+  private RecommendationInfoBatch getRecommendationWithMetaDataBatch() {
+    return new RecommendationInfoBatch(batchSize);
   }
 }

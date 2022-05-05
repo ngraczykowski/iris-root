@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.Analysis;
-import com.silenteight.data.api.v1.DataIndexResponse;
+import com.silenteight.data.api.v2.DataIndexResponse;
 import com.silenteight.simulator.management.details.dto.SimulationDetailsDto;
 import com.silenteight.simulator.management.domain.SimulationState;
 

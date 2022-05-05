@@ -1,6 +1,6 @@
 package com.silenteight.simulator.processing.alert.index.amqp.gateway;
 
-import com.silenteight.data.api.v1.SimulationDataIndexRequest;
+import com.silenteight.data.api.v2.SimulationDataIndexRequest;
 
 public interface SimulationDataIndexRequestGateway {
 

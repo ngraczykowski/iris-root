@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.adjudication.api.v1.AddDatasetRequest;
 import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.adjudication.api.v1.Analysis.Feature;
+import com.silenteight.adjudication.api.v1.Analysis.NotificationFlags;
 import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceBlockingStub;
 import com.silenteight.adjudication.api.v1.CreateAnalysisRequest;
 import com.silenteight.adjudication.api.v1.GetAnalysisRequest;
@@ -45,6 +46,7 @@ class GrpcAnalysisService implements AnalysisService {
         .setStrategy(model.getStrategyName())
         .addAllCategories(model.getCategoriesList())
         .addAllFeatures(toFeatures(model.getFeaturesList()))
+        .setNotificationFlags(getNotificationFlags())
         .build();
   }
 
@@ -61,6 +63,13 @@ class GrpcAnalysisService implements AnalysisService {
     return Feature.newBuilder()
         .setFeature(feature.getName())
         .setAgentConfig(feature.getAgentConfig())
+        .build();
+  }
+
+  private static NotificationFlags getNotificationFlags() {
+    return NotificationFlags.newBuilder()
+        .setAttachMetadata(true)
+        .setAttachRecommendation(true)
         .build();
   }
 
@@ -83,7 +92,7 @@ class GrpcAnalysisService implements AnalysisService {
   public Analysis getAnalysis(String analysisName) {
     GetAnalysisRequest getAnalysisRequest = toGetAnalysisRequest(analysisName);
     log.debug("Getting analysis by name={}", analysisName);
-    Analysis analysis  = analysisStub.getAnalysis(getAnalysisRequest);
+    Analysis analysis = analysisStub.getAnalysis(getAnalysisRequest);
     log.debug("Got analysis by name={}", analysisName);
     return analysis;
   }
