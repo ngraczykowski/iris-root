@@ -184,6 +184,16 @@ common:
 #   affinity: {}
 #
 components:
+  payments-bridge:
+    enabled: false
+
+    image:
+      repository: registry.dev.s8ops.com/pb/sear-payments-bridge-app
+      tag: "latest"
+
+    dbName: "pb"
+    webPath: "pb"
+
   universal-data-source:
     image:
       repository: registry.dev.s8ops.com/uds/universal-data-source-app
