@@ -1,3 +1,4 @@
 branches:
   release-*:
     - dev
+    - mike
