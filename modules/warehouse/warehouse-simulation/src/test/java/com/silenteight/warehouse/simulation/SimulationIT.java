@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
+import com.silenteight.warehouse.common.testing.e2e.CleanDatabase;
 import com.silenteight.warehouse.test.client.gateway.SimulationV1IndexClientGateway;
 import com.silenteight.warehouse.test.client.gateway.SimulationV2IndexClientGateway;
 import com.silenteight.warehouse.test.client.listener.sim.IndexedSimEventListener;
@@ -14,10 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.integration.test.context.SpringIntegrationTest;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -38,8 +38,7 @@ import static org.awaitility.Awaitility.await;
 })
 @AutoConfigureDataJpa
 @ActiveProfiles("jpa-test")
-@Transactional
-@DirtiesContext
+@CleanDatabase
 class SimulationIT {
 
   private static final int TIMEOUT = 5;
@@ -52,6 +51,9 @@ class SimulationIT {
 
   @Autowired
   private SimulationV2IndexClientGateway simulationV2IndexClientGateway;
+
+  @Autowired
+  private JdbcTemplate jdbcTemplate;
 
   @BeforeEach
   void init() {
@@ -75,6 +77,7 @@ class SimulationIT {
     assertThat(this.indexedSimEventListener.getLastEventId()).isPresent();
     assertThat(this.indexedSimEventListener.getLastEventId().get())
         .isEqualTo(request.getRequestId());
+    assertThat(countSimulationAlertsWithMatches()).isEqualTo(1);
   }
 
 
@@ -95,5 +98,15 @@ class SimulationIT {
     assertThat(this.indexedSimEventListener.getLastEventId()).isPresent();
     assertThat(this.indexedSimEventListener.getLastEventId().get())
         .isEqualTo(request.getRequestId());
+
+    assertThat(countSimulationAlertsWithMatches()).isEqualTo(1);
+  }
+
+  private Integer countSimulationAlertsWithMatches() {
+    return jdbcTemplate.queryForObject(
+        "SELECT COUNT(*) as sim_alert_with_match_count "
+            + "FROM warehouse_simulation_alert wsa "
+            + "JOIN warehouse_simulation_match wsm ON wsa.name=wsm.alert_name",
+        (rs, rowNum) -> rs.getInt("sim_alert_with_match_count"));
   }
 }

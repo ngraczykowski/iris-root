@@ -16,6 +16,8 @@ import com.silenteight.warehouse.simulation.processing.storage.SimulationAlertIn
 import com.silenteight.warehouse.simulation.processing.storage.SimulationMatchDefinition;
 import com.silenteight.warehouse.simulation.processing.storage.SimulationMatchInsertService;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -45,6 +47,7 @@ public class SimulationAlertV2UseCase implements SimulationRequestV2CommandHandl
   private final int simulationAlertsBatchSize;
 
   @Override
+  @Transactional
   public DataIndexResponse handle(SimulationDataIndexRequest request) {
 
     log.info("v2.SimulationDataIndexRequest received, requestId={}, analysisName={}, "

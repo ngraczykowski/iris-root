@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -23,7 +22,6 @@ public class SimulationAlertInsertService {
 
   private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-  @Transactional
   public void insert(Collection<SimulationAlertDefinition> mapWithIndex) {
     SqlParameterSource[] collect = mapWithIndex.stream()
         .map(map -> {
@@ -41,11 +39,10 @@ public class SimulationAlertInsertService {
   }
 
   /**
-    @deprecated To be removed V1 payload should be stored at both alert and match level
-                 and marked as migrated (WH-367)
+   * @deprecated To be removed V1 payload should be stored at both alert and match level and marked
+   *     as migrated (WH-367)
    */
   @Deprecated(forRemoval = true)
-  @Transactional
   public void insertNonMigrated(Collection<SimulationAlertDefinition> mapWithIndex) {
     SqlParameterSource[] collect = mapWithIndex.stream()
         .map(map -> {

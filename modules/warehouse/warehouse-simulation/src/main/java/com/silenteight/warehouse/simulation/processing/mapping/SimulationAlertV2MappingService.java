@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 
@@ -26,21 +27,26 @@ public class SimulationAlertV2MappingService {
 
   public List<SimulationAlertDefinition> mapAlerts(
       List<SimulationAlert> alerts, String analysisName) {
+
     return alerts.stream()
-        .map(alert -> tryMapping(alert, analysisName))
+        .map(tryMappingOrNull(analysisName))
         .filter(Objects::nonNull)
         .collect(toList());
   }
 
-  SimulationAlertDefinition tryMapping(SimulationAlert alert, String analysisName) {
-    try {
-      return mapAlert(alert, analysisName);
-    } catch (RuntimeException e) {
-      log.warn("Mapping simulation alert failed, alertName=" + Optional.ofNullable(alert)
-          .map(SimulationAlert::getName)
-          .orElse("<empty>"), e);
-      return null;
-    }
+  private Function<SimulationAlert, SimulationAlertDefinition> tryMappingOrNull(
+      String analysisName) {
+
+    return alert -> {
+      try {
+        return mapAlert(alert, analysisName);
+      } catch (RuntimeException e) {
+        log.warn("Mapping simulation alert failed, alertName=" + Optional.ofNullable(alert)
+            .map(SimulationAlert::getName)
+            .orElse("<empty>"), e);
+        return null;
+      }
+    };
   }
 
   SimulationAlertDefinition mapAlert(SimulationAlert alert, String analysisName) {
