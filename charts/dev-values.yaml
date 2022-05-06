@@ -167,3 +167,4 @@ keycloak:
   authServerUrl: https://auth.silenteight.com
   realm: sens-webapp
   frontendClientId: dev-frontend
+  jwtIssuerUri: "{{ .Values.keycloak.authServerUrl }}/realms/{{ .Values.keycloak.realm }}"

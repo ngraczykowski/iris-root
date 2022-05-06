@@ -21,8 +21,8 @@ data:
         oauth2:
           resourceserver:
             jwt:
-              issuer-uri: "{{ include "sear.spring.authServer" . }}"
-              jwk-set-uri: "{{ include "sear.spring.authServer" . }}/protocol/openid-connect/certs"
+              issuer-uri: "{{ tpl .Values.keycloak.jwtIssuerUri . }}"
+              jwk-set-uri: "{{ tpl .Values.keycloak.jwtIssuerUri . }}/protocol/openid-connect/certs"
 
     keycloak:
       frontend-client-id: {{ .Values.keycloak.frontendClientId | quote }}

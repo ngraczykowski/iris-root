@@ -326,3 +326,4 @@ keycloak:
   authServerUrl: ""
   realm: ""
   frontendClientId: ""
+  jwtIssuerUri: "{{ .Values.keycloak.authServerUrl }}/auth/realms/{{ .Values.keycloak.realm }}"
