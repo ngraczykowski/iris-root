@@ -26,6 +26,10 @@ data:
           cron: {{ .Values.emailNotification.cron | quote }}
           amount: {{ .Values.emailNotification.amount }}
           cmapi-enabled: {{ .Values.emailNotification.cmapiEnabled }}
+          cmapi-errors-enabled:
+            {{- range .Values.emailNotification.cmapiErrorsEnabled }}
+              - {{ . | quote }}
+            {{- end }}
           learning-enabled: {{ .Values.emailNotification.learningEnabled }}
       agents:
         specific-terms2:

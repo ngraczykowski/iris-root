@@ -45,7 +45,7 @@ public class MessageData {
   @Nonnull
   private MessageTag get(String tagName) {
     return findFirst(tagName)
-        .orElseThrow(() -> new UnsupportedMessageException("Tag '" + tagName + "' not found."));
+        .orElseThrow(() -> new UnsupportedMessageException("Tag not found: " + tagName));
   }
 
   @Nonnull

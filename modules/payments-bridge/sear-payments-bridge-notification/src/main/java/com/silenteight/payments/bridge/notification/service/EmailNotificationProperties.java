@@ -5,6 +5,9 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @ConfigurationProperties(prefix = "pb.email-notification")
 @Validated
@@ -20,5 +23,6 @@ public class EmailNotificationProperties {
   private String cron = DEFAULT_CRON;
   private int amount = DEFAULT_AMOUNT;
   private boolean cmapiEnabled;
+  private List<String> cmapiErrorsEnabled = new ArrayList<>();
   private boolean learningEnabled;
 }

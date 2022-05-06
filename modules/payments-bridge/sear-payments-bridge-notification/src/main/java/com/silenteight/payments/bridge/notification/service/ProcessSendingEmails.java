@@ -11,9 +11,8 @@ import com.silenteight.payments.bridge.notification.port.*;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -56,34 +55,80 @@ class ProcessSendingEmails implements ProcessSendingEmailsUseCase {
   }
 
   private void handleSendingCmapiProcessingNotifications(List<Notification> notifications) {
-
-    var ids = extractIds(notifications);
-
     if (emailNotificationProperties.isCmapiEnabled()) {
-
-      var attachments = extractAttachments(notifications);
-
-      var message = extractMessage(notifications);
-
-      var mergedAttachment = createMergedAttachment(attachments);
-
-      var attachmentName = mergedAttachment == null ? null : CMAPI_PROCESSING_ERROR_ATTACHMENT_NAME;
-
-      var subject = createSubject(notifications);
-
-      var sendEmailRequest = SendEmailRequest
-          .builder()
-          .ids(ids)
-          .subject(subject)
-          .htmlText(message)
-          .attachmentName(attachmentName)
-          .attachment(mergedAttachment)
-          .build();
-
-      send(sendEmailRequest, ids);
+      processCmapiNotificationsDependsOnDisablingTypes(notifications);
     } else {
+      var ids = extractIds(notifications);
       updateNotificationsAsDisabled(ids);
     }
+  }
+
+  private void processCmapiNotificationsDependsOnDisablingTypes(List<Notification> notifications) {
+
+    List<Notification> enabledCmapiNotifications = new ArrayList<>();
+    List<Notification> disabledCmapiNotifications = new ArrayList<>();
+
+    divideNotificationsForEnabledAndDisabled(
+        notifications, enabledCmapiNotifications, disabledCmapiNotifications);
+
+    var enabledNotificationsIds = extractIds(enabledCmapiNotifications);
+    var disabledNotificationsIds = extractIds(disabledCmapiNotifications);
+
+    if (!enabledCmapiNotifications.isEmpty()) {
+      createAndSendMessage(enabledCmapiNotifications, enabledNotificationsIds);
+    }
+
+    if (!disabledNotificationsIds.isEmpty()) {
+      updateNotificationsAsDisabled(disabledNotificationsIds);
+    }
+  }
+
+  private void divideNotificationsForEnabledAndDisabled(
+      List<Notification> notifications, List<Notification> enabledCmapiNotifications,
+      List<Notification> disabledCmapiNotifications) {
+    notifications.forEach(notification -> {
+          var attachmentAsText = new String(notification.getAttachment(), StandardCharsets.UTF_8)
+              .toUpperCase(Locale.ROOT);
+          if (checkIfExceptionIsEnabled(attachmentAsText)) {
+            enabledCmapiNotifications.add(notification);
+          } else {
+            disabledCmapiNotifications.add(notification);
+          }
+        }
+    );
+  }
+
+  private void createAndSendMessage(List<Notification> notifications, List<Long> ids) {
+    var attachments = extractAttachments(notifications);
+
+    var message = extractMessage(notifications);
+
+    var mergedAttachment = createMergedAttachment(attachments);
+
+    var attachmentName =
+        mergedAttachment == null ? null : CMAPI_PROCESSING_ERROR_ATTACHMENT_NAME;
+
+    var subject = createSubject(notifications);
+
+    var sendEmailRequest = SendEmailRequest
+        .builder()
+        .ids(ids)
+        .subject(subject)
+        .htmlText(message)
+        .attachmentName(attachmentName)
+        .attachment(mergedAttachment)
+        .build();
+
+    send(sendEmailRequest, ids);
+  }
+
+  private boolean checkIfExceptionIsEnabled(String attachment) {
+    for (String enabledError : emailNotificationProperties.getCmapiErrorsEnabled()) {
+      if (attachment.contains(enabledError)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @Nullable

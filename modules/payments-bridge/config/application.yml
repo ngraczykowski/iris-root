@@ -86,7 +86,13 @@ pb:
     cc: "cc@s8.com"
     cron: "0 * * * * *"
     amount: 10
-    cmapi-enabled: false
+    cmapi-enabled: true
+    cmapi-errors-enabled:
+      - "UNABLE TO MAP UNKNOWN TYPE"
+      - "FIRST CHAR IN NOT / WHEN"
+      - "INDEX OUT OF BOUND"
+      - "TAG NOT FOUND"
+      - "TAG NOT SUPPORTED"
     learning-enabled: false
 
   #-------------------------------------------------------------------------------------------------

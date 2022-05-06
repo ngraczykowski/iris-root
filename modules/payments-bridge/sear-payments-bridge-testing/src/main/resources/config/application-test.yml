@@ -32,6 +32,12 @@ pb:
     cron: "* * * ? * *"
     amount: 10
     cmapi-enabled: true
+    cmapi-errors-enabled:
+      - "UNABLE TO MAP UNKNOWN TYPE"
+      - "FIRST CHAR IN NOT / WHEN"
+      - "INDEX OUT OF BOUND"
+      - "TAG NOT FOUND"
+      - "TAG NOT SUPPORTED"
     learning-enabled: true
   daily-reports-remove:
     cron: "0 2 * * * *"
