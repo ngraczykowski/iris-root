@@ -15,6 +15,7 @@ spec:
     metadata:
       annotations:
         fluentbit.io/parser: spring-logback-json
+        silenteight.com/config-checksum: {{ tpl ($.Files.Get "component/spring/configmap.yaml.tpl") . | sha256sum }}
         {{- with .Values.podAnnotations }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
