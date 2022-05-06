@@ -20,14 +20,10 @@ import java.io.File;
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 
-import static com.silenteight.sep.auth.authentication.RestConstants.ROOT;
 import static com.silenteight.serp.governance.changerequest.domain.DomainConstants.ATTACHMENTS_REGEXP;
 import static com.silenteight.serp.governance.changerequest.domain.DomainConstants.CHANGE_REQUEST_ENDPOINT_TAG;
 import static com.silenteight.serp.governance.changerequest.domain.DomainConstants.INVALID_ATTACHMENT_UUID_MSG;
-import static com.silenteight.serp.governance.common.web.rest.RestConstants.BAD_REQUEST_DESCRIPTION;
-import static com.silenteight.serp.governance.common.web.rest.RestConstants.BAD_REQUEST_STATUS;
-import static com.silenteight.serp.governance.common.web.rest.RestConstants.OK_STATUS;
-import static com.silenteight.serp.governance.common.web.rest.RestConstants.SUCCESS_RESPONSE_DESCRIPTION;
+import static com.silenteight.serp.governance.common.web.rest.RestConstants.*;
 import static java.lang.String.format;
 
 @Slf4j

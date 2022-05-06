@@ -23,6 +23,7 @@ dependencies {
 
   implementation libs.silenteight.commons.app
   implementation libs.silenteight.filestorage.minio
+  implementation libs.silenteight.sep.auth
   implementation libs.silenteight.sep.base.common
   implementation libs.silenteight.sep.base.testing
   implementation libs.silenteight.serp.protocol.base

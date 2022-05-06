@@ -16,7 +16,6 @@ dependencies {
   api libs.spring.data.jpa
 
   // General dependencies
-  implementation libs.silenteight.sep.auth
   api libs.silenteight.audit.bs
   implementation libs.silenteight.commons.core
   implementation libs.sear.rabbitmq.common.schema

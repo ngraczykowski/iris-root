@@ -6,7 +6,6 @@ plugins {
 description = "Governance Change Request"
 
 dependencies {
-  implementation libs.silenteight.sep.auth
   implementation libs.silenteight.sep.base.common
   implementation libs.silenteight.sep.base.testing
   implementation libs.silenteight.filestorage.api
