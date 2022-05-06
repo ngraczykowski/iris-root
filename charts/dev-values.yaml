@@ -128,6 +128,11 @@ components:
         - --geotransactions.agent.facade.enabled=true
         - --sentry.dsn=https://057cc65ea9454a98b48877702c1a818f@o1129201.ingest.sentry.io/6176255
         - --sentry.environment=unknown
+      resources:
+        limits:
+          memory: 2Gi
+        requests:
+          memory: 1Gi
 
 frontend:
   resources:
