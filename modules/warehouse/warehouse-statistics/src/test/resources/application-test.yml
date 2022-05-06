@@ -1,5 +1,10 @@
 spring.cloud.consul.enabled: false
 
+warehouse:
+  statistics:
+    daily:
+      recommendation-enabled: true
+
 sep:
   auth:
     permissionMethodsMappings:

@@ -11,6 +11,7 @@ import com.silenteight.warehouse.statistics.aggregators.AlertAggregator;
 import com.silenteight.warehouse.statistics.computers.AlertRecommendationComputer;
 import com.silenteight.warehouse.statistics.extractors.AlertDataExtractor;
 import com.silenteight.warehouse.statistics.get.DailyRecommendationStatisticsRepository;
+import com.silenteight.warehouse.statistics.get.GetDashboardStatisticsUseCase;
 import com.silenteight.warehouse.statistics.persistance.DailyRecommendationPersistence;
 import com.silenteight.warehouse.statistics.properties.DailyStatisticsProperties;
 
@@ -29,6 +30,12 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableConfigurationProperties(DailyStatisticsProperties.class)
 @ConditionalOnProperty(value = "warehouse.statistics.daily.recommendation-enabled")
 public class StatisticsConfiguration {
+
+  @Bean
+  public GetDashboardStatisticsUseCase getDashboardStatisticsUseCase(
+      DailyRecommendationStatisticsRepository dailyRecommendationStatisticsRepository) {
+    return new GetDashboardStatisticsUseCase(dailyRecommendationStatisticsRepository);
+  }
 
   @Bean
   AlertRecommendationComputer alertRecommendationComputer(

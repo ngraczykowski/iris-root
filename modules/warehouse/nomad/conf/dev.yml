@@ -44,9 +44,9 @@ warehouse:
         TRUE_POSITIVE: ["analyst_decision_true_positive"]
         FALSE_POSITIVE: ["analyst_decision_false_positive"]
       field-name: "analyst_decision"
-    statistics:
-      daily:
-        recommendation-enabled: true
+  statistics:
+    daily:
+      recommendation-enabled: true
   country:
     migration:
       enabled: false
