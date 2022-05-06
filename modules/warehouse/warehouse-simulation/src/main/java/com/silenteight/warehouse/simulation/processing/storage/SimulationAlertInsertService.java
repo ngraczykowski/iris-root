@@ -2,23 +2,42 @@ package com.silenteight.warehouse.simulation.processing.storage;
 
 import lombok.RequiredArgsConstructor;
 
+import org.intellij.lang.annotations.Language;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class SimulationAlertInsertService {
 
-  private static final String INSERT_SQL = "INSERT into warehouse_simulation_alert "
+  @Language("PostgreSQL")
+  private static final String INSERT_SQL = "INSERT INTO warehouse_simulation_alert "
       + "(name, analysis_name, payload, migrated) "
       + "VALUES (:name, :analysis_name, TO_JSONB(:payload::jsonb), :migrated)";
 
-  private static final String INSERT_NONMIGRATED_SQL = "INSERT into warehouse_simulation_alert "
+  @Language("PostgreSQL")
+  private static final String INSERT_NONMIGRATED_SQL = "INSERT INTO warehouse_simulation_alert "
       + "(name, analysis_name, payload) "
       + "VALUES (:name, :analysis_name, TO_JSONB(:payload::jsonb))";
+
+  @Language("PostgreSQL")
+  private static final String SET_MIGRATION_FLAG = "UPDATE warehouse_simulation_alert "
+      + " SET migrated=:migrated "
+      + " WHERE analysis_name=:analysis_name";
+
+  private static final String MIGRATE_DATA = "INSERT INTO warehouse_simulation_match "
+      + "(name, analysis_name, alert_name, payload) "
+      + "SELECT "
+      + " name as match_name,"
+      + " analysis_name as analysis_name,"
+      + " name as alert_name,"
+      + " payload as payload "
+      + "FROM warehouse_simulation_alert "
+      + "WHERE analysis_name=:analysis_name";
 
   private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -56,5 +75,18 @@ public class SimulationAlertInsertService {
         .toArray(SqlParameterSource[]::new);
 
     namedParameterJdbcTemplate.batchUpdate(INSERT_NONMIGRATED_SQL, collect);
+  }
+
+  public int migrateAlertToMatch(String analysisName) {
+    return namedParameterJdbcTemplate.update(
+        MIGRATE_DATA,
+        Map.of("analysis_name", analysisName));
+  }
+
+  public int setMigrationFlag(String analysisName, boolean migrated) {
+    return namedParameterJdbcTemplate.update(SET_MIGRATION_FLAG, Map.of(
+        "analysis_name", analysisName,
+        "migrated", migrated
+    ));
   }
 }

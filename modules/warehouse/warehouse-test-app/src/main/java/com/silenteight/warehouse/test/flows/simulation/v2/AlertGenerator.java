@@ -70,7 +70,7 @@ class AlertGenerator {
             AlertMatchPair::getAlertName,
             mapping(AlertMatchPair::getMatchName, toList())));
 
-    if (matchesByAlertName.keySet().size() < count) {
+    if (matchesByAlertName.size() < count) {
       log.warn("Insufficient amount of production alerts in the database. "
           + "Generate production alerts first. "
           + "requestCount={}, actualCount={}", count, alertMatchPairs.size());

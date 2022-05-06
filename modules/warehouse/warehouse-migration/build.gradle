@@ -17,6 +17,7 @@ dependencies {
   implementation project(":warehouse-common")
   implementation project(":warehouse-db-changelog")
   implementation project(":warehouse-production")
+  implementation project(":warehouse-simulation")
 
   implementation libraries.silenteight_commons_core
   implementation libraries.silenteight_data_api
