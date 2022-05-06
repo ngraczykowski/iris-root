@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,6 +24,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping(ROOT)
 @AllArgsConstructor
+@ConditionalOnProperty(value = "warehouse.statistics.daily.recommendation-enabled")
 public class DashboardStatisticsRestController {
 
   private static final String STATISTICS_URL = "/statistics";
