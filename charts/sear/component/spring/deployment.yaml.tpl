@@ -89,7 +89,6 @@ spec:
             {{- toYaml .component.command | nindent 12 }}
           {{- end }}
           args:
-            - --spring.application.name={{ .componentName }}
             - --server.port={{ .component.containerPorts.http.port }}
             - --server.servlet.context-path=/rest/{{ .component.webPath }}
             - --spring.webflux.base-path=/rest/{{ .component.webPath }}
