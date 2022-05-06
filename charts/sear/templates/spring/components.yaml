@@ -2,9 +2,10 @@
 
 {{- if (hasKey $component "enabled" | ternary $component.enabled true ) -}}
 
+{{- $enabled := hasKey $component "enabled" | ternary $component.enabled true -}}
 {{- $image := deepCopy $component.image | mergeOverwrite $.Values.common.image -}}
 {{- $dbName := default $componentName $component.dbName -}}
-{{- $useDb := default true $component.useDb -}}
+{{- $useDb := hasKey $component "useDb" | ternary $component.useDb true -}}
 {{- $webPath := default $componentName $component.webPath -}}
 {{- $replicaCount := default $.Values.common.replicaCount $component.replicaCount -}}
 {{- $args := concat $.Values.common.args (default (list) $component.args) -}}
@@ -23,6 +24,7 @@
 
 {{-
 $mergedComponent := (dict
+  "enabled" $enabled
   "image" $image
   "replicaCount" $replicaCount
   "dbName" $dbName
