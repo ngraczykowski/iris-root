@@ -17,19 +17,15 @@ spec:
       size: {{ .Values.database.volume.size | quote }}
 
   users:
-    ae: []
-    gov: []
-    pb: []
-    sim: []
-    uds: []
-    wh: []
-    webapp: []
+    {{- range $componentName, $component := .Values.components }}
+    {{- if and (hasKey $component "enabled" | ternary $component.enabled true) (hasKey $component "useDb" | ternary $component.useDb true) }}
+    {{ default $componentName $component.dbName }}: []
+    {{- end }}
+    {{- end }}
 
   databases:
-    ae: ae
-    gov: gov
-    pb: pb
-    sim: sim
-    uds: uds
-    wh: wh
-    webapp: webapp
+    {{- range $componentName, $component := .Values.components }}
+    {{- if and (hasKey $component "enabled" | ternary $component.enabled true) (hasKey $component "useDb" | ternary $component.useDb true) }}
+    {{ default $componentName $component.dbName }}: {{ default $componentName $component.dbName }}
+    {{- end }}
+    {{- end }}
