@@ -45,7 +45,7 @@ gradleBuild(
                   List<String> testEnvVars = sh(
                       returnStdout: true, script: "../nomad/e2etest.sh mike").trim().split(',')
                   withEnv(testEnvVars) {
-                    gradle.gradle("clean test -Ptest.type=integration")
+                    gradle.gradle("clean test -Ptest.type=e2e")
                   }
                 }
               }

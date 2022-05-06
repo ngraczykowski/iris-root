@@ -8,6 +8,7 @@ if [[ -x $(command -v consul) && -x $(command -v jq) ]]; then
 
   core_bridge_db_discovery=$(consul watch -type=service -service=mike-core-bridge-db | jq --raw-output '.[0].Service | [ .Address, (.Port | tostring) ] | join(":")')
   ms_bridge_db_discovery=$(consul watch -type=service -service=mike-ms-bridge-db | jq --raw-output '.[0].Service | [ .Address, (.Port | tostring) ] | join(":")')
+  ms_bridge_http_discovery=$(consul watch -type=service -service=mike-ms-bridge | jq --raw-output '.[0].Service | [ .Address, (.Port | tostring) ] | join(":")')
 
   mike_core_bridge_secrets=$(consul kv get mike/core-bridge/secrets)
   mike_ms_bridge_secrets=$(consul kv get mike/ms-bridge/secrets)
@@ -25,5 +26,6 @@ test_core_db_password="TEST_CORE_DB_PASSWORD=$(echo "$mike_core_bridge_secrets" 
 test_ms_db_jdbc_url="TEST_MS_DB_JDBC_URL=jdbc:postgresql://${ms_bridge_db_discovery}/${env}-ms-bridge"
 test_ms_db_username="TEST_MS_DB_USERNAME=$(echo "$mike_ms_bridge_secrets" | grep SPRING_DATASOURCE_USERNAME | cut -d '=' -f 2)"
 test_ms_db_password="TEST_MS_DB_PASSWORD=$(echo "$mike_ms_bridge_secrets" | grep SPRING_DATASOURCE_PASSWORD | cut -d '=' -f 2)"
+test_ms_bridge_http_discovery="TEST_MS_HTTP_ADDRESS=${ms_bridge_http_discovery}"
 
-echo "${test_rabbitmq_vhost},${test_rabbitmq_addresses},${test_rabbitmq_username},${test_rabbitmq_password},${test_core_db_jdbc_url},${test_core_db_username},${test_core_db_password},${test_ms_db_jdbc_url},${test_ms_db_username},${test_ms_db_password}"
+echo "${test_rabbitmq_vhost},${test_rabbitmq_addresses},${test_rabbitmq_username},${test_rabbitmq_password},${test_core_db_jdbc_url},${test_core_db_username},${test_core_db_password},${test_ms_db_jdbc_url},${test_ms_db_username},${test_ms_db_password},${test_ms_bridge_http_discovery}"
