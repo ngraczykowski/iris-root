@@ -279,7 +279,12 @@ components:
     geo-agent:
       image:
         repository: registry.dev.s8ops.com/geo-agent
-
+    freetext-agent:
+      image:
+        repository: registry.dev.s8ops.com/freetext-agent
+    gender-agent:
+      image:
+        repository: registry.dev.s8ops.com/gender-agent
 #
 # Frontend Web Application
 #
