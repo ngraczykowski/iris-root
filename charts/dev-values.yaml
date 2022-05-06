@@ -146,6 +146,11 @@ components:
         - --freetext.agent.facade.enabled=true
         - --sentry.dsn=https://3c821f54634b4eae83f786e8ec32d996@o1129201.ingest.sentry.io/6242156
         - --sentry.environment=unknown
+      resources:
+        limits:
+          memory: 2Gi
+        requests:
+          memory: 1Gi
     gender-agent:
       args:
         - --spring.profiles.active=sierra,rabbitmq-declare
