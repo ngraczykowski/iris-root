@@ -5,6 +5,8 @@ import com.silenteight.fab.dataprep.domain.ex.DataPrepException
 import groovy.util.logging.Slf4j
 import spock.lang.Specification
 
+import static java.util.stream.Collectors.toList
+
 @Slf4j
 class MessageDataTokenizerTest extends Specification {
 
@@ -47,7 +49,10 @@ class MessageDataTokenizerTest extends Specification {
     where:
     payload << new File("src/test/resources/payload.txt").readLines()
     expected <<
-        new File("src/test/resources/payload.txt").readLines().stream().map(l -> l.split(";", -1))
+        new File("src/test/resources/payload.txt").readLines()
+            .stream()
+            .map {it.split(";", -1) }
+            .collect(toList())
   }
 
   def "should throws exception when can't payload #payload"() {

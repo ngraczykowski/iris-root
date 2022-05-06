@@ -64,7 +64,7 @@ class RegistrationServiceTest extends Specification {
             ]).build()
 
     when:
-    List<RegisteredAlert> registeredAlerts = underTest.registerAlertsAndMatches(alerts);
+    List<RegisteredAlert> registeredAlerts = underTest.registerAlertsAndMatches(alerts)
 
     then:
     registeredAlerts.each {

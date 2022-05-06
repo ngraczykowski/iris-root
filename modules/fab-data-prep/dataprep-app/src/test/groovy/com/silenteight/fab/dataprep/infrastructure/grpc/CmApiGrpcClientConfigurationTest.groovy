@@ -13,11 +13,11 @@ import java.time.temporal.ChronoUnit
 class CmApiGrpcClientConfigurationTest extends Specification {
 
   @Autowired
-  private GrpcProperties properties;
+  private GrpcProperties properties
 
   def "cm api grpc deadline property is read correctly"() {
     expect:
-    properties.getDeadline() == Duration.of(1, ChronoUnit.MINUTES);
+    properties.getDeadline() == Duration.of(1, ChronoUnit.MINUTES)
   }
 }
 

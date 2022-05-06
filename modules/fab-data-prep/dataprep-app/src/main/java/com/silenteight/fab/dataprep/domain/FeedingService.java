@@ -75,7 +75,7 @@ class FeedingService {
         .collect(toList());
   }
 
-  private Feature buildFeature(
+  private static Feature buildFeature(
       FabFeature fabFeature,
       ParsedMessageData parsedMessageData,
       RegisteredAlert.Match match) {

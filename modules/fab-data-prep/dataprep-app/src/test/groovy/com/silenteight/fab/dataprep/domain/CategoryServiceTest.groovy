@@ -30,7 +30,7 @@ class CategoryServiceTest extends BaseSpecificationIT {
 
   def "categories should be created"() {
     given:
-    FabCategory isSanFabCategory = Mock() {
+    FabCategory isSanFabCategory = Mock(FabCategory) {
       getCategoryName() >> "categories/is_san"
       getCategoryDefinition() >> CategoryDefinition.builder()
           .enabled(true)

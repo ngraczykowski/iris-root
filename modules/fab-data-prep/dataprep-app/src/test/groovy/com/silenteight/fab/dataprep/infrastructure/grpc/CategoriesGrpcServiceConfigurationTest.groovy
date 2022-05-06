@@ -14,18 +14,18 @@ import java.time.temporal.ChronoUnit
 class CategoriesGrpcServiceConfigurationTest extends Specification {
 
   @Autowired
-  private GrpcCategoryValueProperties grpcCategoryValueProperties;
+  private GrpcCategoryValueProperties grpcCategoryValueProperties
 
   @Autowired
-  private GrpcCategoryProperties grpcCategoryProperties;
+  private GrpcCategoryProperties grpcCategoryProperties
 
   def "category grpc deadline property is read correctly"() {
     expect:
-    grpcCategoryProperties.getDeadline() == Duration.of(1, ChronoUnit.MINUTES);
+    grpcCategoryProperties.getDeadline() == Duration.of(1, ChronoUnit.MINUTES)
   }
 
   def "category value grpc deadline property is read correctly"() {
     expect:
-    grpcCategoryValueProperties.getDeadline() == Duration.of(1, ChronoUnit.MINUTES);
+    grpcCategoryValueProperties.getDeadline() == Duration.of(1, ChronoUnit.MINUTES)
   }
 }

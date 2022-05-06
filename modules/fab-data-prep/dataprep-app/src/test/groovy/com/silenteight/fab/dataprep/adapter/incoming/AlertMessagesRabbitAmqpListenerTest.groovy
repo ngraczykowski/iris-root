@@ -47,7 +47,6 @@ class AlertMessagesRabbitAmqpListenerTest extends BaseSpecificationIT {
 
   def setupSpec() {
     startRabbitmq()
-    startPostgresql()   //TODO this shouldn't be needed
   }
 
   def "verify that MessageAlertStored event is sent over rabbitMQ"() {

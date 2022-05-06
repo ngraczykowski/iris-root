@@ -73,23 +73,31 @@ public class DataPrepFacade {
           var discriminator = value.getDiscriminator();
           var batchName = value.getBatchName();
           var errorDescription = getAlertErrorDescription(exception);
-          alertService.getAlertItem(discriminator)
-              .map(AlertItem::getAlertName)
-              .map(List::of)
-              .orElseGet(() -> registerFailedAlert(
-                  messageName,
-                  batchName,
-                  discriminator,
-                  errorDescription))
-              .forEach(alertName -> feedingFacade.notifyAboutError(
-                  batchName,
-                  alertName,
-                  errorDescription));
+          processAlertFailedWithDetails(discriminator, messageName, batchName, errorDescription);
         }))
         .onFailure(e -> {
           log.warn("Unable to parse message", e);
           failedToParseMessage(message, getAlertErrorDescription(e));
         });
+  }
+
+  private void processAlertFailedWithDetails(
+      String discriminator,
+      String messageName,
+      String batchName,
+      AlertErrorDescription errorDescription) {
+    alertService.getAlertItem(discriminator)
+        .map(AlertItem::getAlertName)
+        .map(List::of)
+        .orElseGet(() -> registerFailedAlert(
+            messageName,
+            batchName,
+            discriminator,
+            errorDescription))
+        .forEach(alertName -> feedingFacade.notifyAboutError(
+            batchName,
+            alertName,
+            errorDescription));
   }
 
   private static AlertErrorDescription getAlertErrorDescription(Throwable e) {

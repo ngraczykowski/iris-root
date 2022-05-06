@@ -9,9 +9,8 @@ import java.util.regex.Pattern;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class AdditionalInfoHelper {
 
-  //TODO handle values with slash
   static String getValue(String additionalInfo, String fieldName) {
-    Pattern pattern = Pattern.compile("^([^/]+/)*\\s*" + fieldName + ":([^/]+).*");
+    Pattern pattern = Pattern.compile("(^|.* / )" + fieldName + ": (.*?)( / [\\w\\s]*:.*|$)");
     Matcher matcher = pattern.matcher(additionalInfo);
     return matcher.matches() ? matcher.group(2).trim() : "";
   }

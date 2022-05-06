@@ -6,6 +6,7 @@ import com.silenteight.fab.dataprep.domain.model.AlertState
 import com.silenteight.fab.dataprep.domain.model.CreateAlertItem
 
 import org.hibernate.Session
+import org.hibernate.tuple.TimestampGenerators
 import org.hibernate.tuple.ValueGenerator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -51,7 +52,7 @@ class AlertServiceTest extends BaseSpecificationIT {
 
   static {
     //generator used by Hibernate to initialize createdAt field
-    org.hibernate.tuple.TimestampGenerators.generators.put(
+    TimestampGenerators.generators.put(
         OffsetDateTime,
         new SettableValueGenerator()
     )

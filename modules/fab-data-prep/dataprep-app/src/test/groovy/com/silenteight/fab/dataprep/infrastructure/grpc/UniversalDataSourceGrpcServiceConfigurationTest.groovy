@@ -13,10 +13,10 @@ import java.time.temporal.ChronoUnit
 class UniversalDataSourceGrpcServiceConfigurationTest extends Specification {
 
   @Autowired
-  private GrpcProperties properties;
+  private GrpcProperties properties
 
   def "uds grpc client deadline property is read correctly"() {
     expect:
-    properties.getDeadline() == Duration.of(1, ChronoUnit.MINUTES);
+    properties.getDeadline() == Duration.of(1, ChronoUnit.MINUTES)
   }
 }
