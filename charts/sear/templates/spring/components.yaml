@@ -1,28 +1,34 @@
 {{- range $key, $value := .Values.components -}}
-{{- $components := dict $key $value }}{{ if eq "agents" $key }}{{ $components = $value }}{{ end }}
+{{- $common := $.Values.common }}
+{{- $components := dict $key $value }}
+{{- if eq "agents" $key }}
+{{- $common = deepCopy $.Values.agentsCommon | mergeOverwrite $.Values.common -}}
+{{- $components = $value }}
+{{- end }}
 {{- range $componentName, $component := $components -}}
 
 {{- if (hasKey $component "enabled" | ternary $component.enabled true ) -}}
 
 {{- $enabled := hasKey $component "enabled" | ternary $component.enabled true -}}
-{{- $image := deepCopy $component.image | mergeOverwrite $.Values.common.image -}}
+{{- $image := deepCopy $component.image | mergeOverwrite $common.image -}}
 {{- $dbName := default $componentName $component.dbName -}}
-{{- $useDb := hasKey $component "useDb" | ternary $component.useDb true -}}
+{{- $useDb := hasKey $component "useDb" | ternary $component.useDb ( hasKey $common "useDb" | ternary $common.useDb true) -}}
 {{- $webPath := default $componentName $component.webPath -}}
-{{- $replicaCount := default $.Values.common.replicaCount $component.replicaCount -}}
-{{- $args := concat $.Values.common.args (default (list) $component.args) -}}
-{{- $configFiles := deepCopy (default (dict) $component.configFiles) | mergeOverwrite $.Values.common.configFiles -}}
-{{- $service := default $.Values.common.service $component.service -}}
-{{- $ingress := default $.Values.common.ingress $component.ingress -}}
-{{- $resources := deepCopy (default (dict) $component.resources) | mergeOverwrite $.Values.common.resources -}}
-{{- $containerPorts := deepCopy (default (dict) $component.containerPorts) | mergeOverwrite $.Values.common.containerPorts -}}
-{{- $startupProbe := deepCopy (default (dict) $component.startupProbe) | mergeOverwrite $.Values.common.startupProbe -}}
-{{- $livenessProbe := deepCopy (default (dict) $component.livenessProbe) | mergeOverwrite $.Values.common.livenessProbe -}}
-{{- $readinessProbe := deepCopy (default (dict) $component.readinessProbe) | mergeOverwrite $.Values.common.readinessProbe -}}
-{{- $autoscaling := deepCopy (default (dict) $component.autoscaling) | mergeOverwrite $.Values.common.autoscaling -}}
-{{- $nodeSelector := deepCopy (default (dict) $component.nodeSelector) | mergeOverwrite $.Values.common.nodeSelector -}}
-{{- $tolerations := concat $.Values.common.tolerations (default (list) $component.tolerations) -}}
-{{- $affinity := deepCopy (default (dict) $component.affinity) | mergeOverwrite $.Values.common.affinity -}}
+{{- $replicaCount := default $common.replicaCount $component.replicaCount -}}
+{{- $command := concat $common.command (default (list) $component.command) -}}
+{{- $args := concat $common.args (default (list) $component.args) -}}
+{{- $configFiles := deepCopy (default (dict) $component.configFiles) | mergeOverwrite $common.configFiles -}}
+{{- $service := default $common.service $component.service -}}
+{{- $ingress := default $common.ingress $component.ingress -}}
+{{- $resources := deepCopy (default (dict) $component.resources) | mergeOverwrite $common.resources -}}
+{{- $containerPorts := deepCopy (default (dict) $component.containerPorts) | mergeOverwrite $common.containerPorts -}}
+{{- $startupProbe := deepCopy (default (dict) $component.startupProbe) | mergeOverwrite $common.startupProbe -}}
+{{- $livenessProbe := deepCopy (default (dict) $component.livenessProbe) | mergeOverwrite $common.livenessProbe -}}
+{{- $readinessProbe := deepCopy (default (dict) $component.readinessProbe) | mergeOverwrite $common.readinessProbe -}}
+{{- $autoscaling := deepCopy (default (dict) $component.autoscaling) | mergeOverwrite $common.autoscaling -}}
+{{- $nodeSelector := deepCopy (default (dict) $component.nodeSelector) | mergeOverwrite $common.nodeSelector -}}
+{{- $tolerations := concat $common.tolerations (default (list) $component.tolerations) -}}
+{{- $affinity := deepCopy (default (dict) $component.affinity) | mergeOverwrite $common.affinity -}}
 
 {{-
 $mergedComponent := (dict
@@ -33,6 +39,7 @@ $mergedComponent := (dict
   "useDb" $useDb
   "webPath" $webPath
   "args" $args
+  "command" $command
   "configFiles" $configFiles
   "service" $service
   "ingress" $ingress
