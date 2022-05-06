@@ -16,12 +16,6 @@ common:
       memory: 1Gi
     requests:
       memory: 1Gi
-agentsCommon:
-  resources:
-    limits:
-      memory: 1Gi
-    requests:
-      memory: 512Mi
 
 components:
   payments-bridge:
@@ -106,28 +100,12 @@ components:
       args:
         - --spring.profiles.active=sierra,rabbitmq-declare
         - --linguistics.name.facade.enabled=true
-        - --sentry.dsn=https://423d3bd99f14476dbf7354cbd584cc57@o1129201.ingest.sentry.io/6176119
-        - --sentry.environment=unknown
+
       resources:
         limits:
           memory: 2Gi
         requests:
           memory: 1Gi
-    date-agent:
-      args:
-        - --spring.profiles.active=sierra,rabbitmq-declare
-        - --dob.agent.facade.enabled=true
-    document-comparer-agent:
-      args:
-        - --spring.profiles.active=sierra,rabbitmq-declare
-        - --nationalId.agent.facade.enabled=true
-    geo-agent:
-      args:
-        - --spring.profiles.active=sierra,rabbitmq-declare
-        - --geo.agent.facade.enabled=true
-        - --geotransactions.agent.facade.enabled=true
-        - --sentry.dsn=https://057cc65ea9454a98b48877702c1a818f@o1129201.ingest.sentry.io/6176255
-        - --sentry.environment=unknown
 
 frontend:
   resources:

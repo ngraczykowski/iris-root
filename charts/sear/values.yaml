@@ -89,8 +89,6 @@ common:
 
   replicaCount: 1
 
-  command: []
-
   args: []
   # - --spring.profiles.active=dev
 
@@ -160,12 +158,6 @@ common:
   tolerations: []
   affinity: {}
 
-agentsCommon:
-  useDb: false
-  startupProbe:
-    initialDelaySeconds: 60
-  image:
-    tag: "latest"
 #
 # Declare and customize components
 #
@@ -251,19 +243,13 @@ components:
   agents:
     name-agent:
       image:
-        repository: registry.dev.s8ops.com/linguistics-agent
-    date-agent:
-      image:
-        repository: registry.dev.s8ops.com/date-agent
-    document-comparer-agent:
-      command:
-        - "/docker-entrypoint.sh"
-        - "comparer"
-      image:
-        repository: registry.dev.s8ops.com/document-agent
-    geo-agent:
-      image:
-        repository: registry.dev.s8ops.com/geo-agent
+        repository: registry.dev.s8ops.com/linguistics-agent-sierra-ts
+        tag: "latest"
+
+      useDb: false
+
+      startupProbe:
+        initialDelaySeconds: 60
 
 #
 # Frontend Web Application
