@@ -2,6 +2,8 @@
 # MESSAGING CONCURRENCY
 #---------------------------------------------------------------------------------------------------
 ae:
+  security:
+    disable-security: false
   solving:
     enabled: false
   messaging:

@@ -31,3 +31,6 @@ serviceMonitor:
   path: /management/prometheus
   scrapeInterval: 30s
   namespaceSelector: default
+
+oauthResourceServerDisabled: false
+oauthResourceServerUri: ""

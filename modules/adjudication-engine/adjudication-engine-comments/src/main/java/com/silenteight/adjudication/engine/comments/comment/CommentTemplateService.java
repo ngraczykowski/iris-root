@@ -18,7 +18,7 @@ public class CommentTemplateService {
 
   @NonNull private final CommentTemplateRepository commentTemplateRepository;
 
-  CommentTemplate save(@Valid CommentTemplateDto dto) {
+  public CommentTemplate save(@Valid CommentTemplateDto dto) {
     return commentTemplateRepository.save(buildTemplate(dto));
   }
 

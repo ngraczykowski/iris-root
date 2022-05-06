@@ -1,7 +1,8 @@
-package com.silenteight.adjudication.engine.comments.comment;
+package com.silenteight.adjudication.engine.app.rest;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.adjudication.engine.comments.comment.CommentTemplateService;
 import com.silenteight.adjudication.engine.comments.comment.dto.CommentTemplateDto;
 
 import org.springframework.http.ResponseEntity;

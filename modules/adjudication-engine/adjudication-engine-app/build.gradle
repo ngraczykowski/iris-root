@@ -41,11 +41,19 @@ dependencies {
   implementation libraries.spring_boot_starter_actuator
   implementation libraries.spring_boot_starter_logging
   implementation libraries.spring_boot_starter_webflux
+  implementation libraries.spring_boot_starter_oauth2_resource_server
+  implementation libraries.spring_boot_starter_oauth2_client
+  implementation libraries.spring_boot_starter_security
   implementation libraries.micrometer_prometheus
 
   // Sentry
   runtimeOnly libraries.sentry_spring_boot_starter
   runtimeOnly libraries.sentry_logback
+
+  // Security
+  implementation libraries.spring_security_config
+  implementation libraries.spring_security_core
+  implementation libraries.spring_security_web
 
   // Spring Sleuth
   implementation libraries.spring_cloud_starter_sleuth
@@ -96,7 +104,8 @@ dependencies {
   // AspectJ
   implementation libraries.aspectjrt
   aspect libraries.silenteight_sep_base_aspects
-
+  compileOnly libraries.spring_web
+  compileOnly libraries.spring_tx
   // Testing
   testImplementation libraries.junit_jupiter_api
   testImplementation libraries.silenteight_sep_base_testing

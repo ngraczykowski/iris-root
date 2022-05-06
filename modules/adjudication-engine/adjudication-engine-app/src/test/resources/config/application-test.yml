@@ -86,3 +86,5 @@ ae:
     comment:
       templateName: alert-test
       matchTemplateName: match-template-test
+  security:
+    disable-security: true

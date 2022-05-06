@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class StatusController {
 
   @GetMapping("/status")
-  public ResponseEntity<Void> getStatus() {
-    return ResponseEntity.ok().build();
+  public ResponseEntity<String> getStatus() {
+    return ResponseEntity.ok().body("ok");
   }
 }

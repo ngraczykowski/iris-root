@@ -4,6 +4,15 @@ metadata:
   name: {{ .Values.name }}-spring
 data:
   application.yml: |
+    ae:
+      security:
+        disable-security: {{ .Values.oauthResourceServerDisabled | quote }}
+    spring:
+      security:
+        oauth2:
+          resourceserver:
+            jwt:
+              issuer-uri: {{ .Values.oauthResourceServerUri | quote }}
     management:
       server:
         port: {{ .Values.ports.management }}
