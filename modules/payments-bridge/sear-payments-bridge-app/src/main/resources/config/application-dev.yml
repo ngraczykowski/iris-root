@@ -14,7 +14,7 @@ logging:
     io.opencensus: INFO
     io.netty: INFO
     io.grpc.netty: INFO
-
+    org.springframework.security: DEBUG
 management:
   info:
     git:

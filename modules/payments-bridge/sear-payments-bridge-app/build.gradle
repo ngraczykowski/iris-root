@@ -45,15 +45,11 @@ dependencies {
   implementation libraries.spring_boot_starter_actuator
   implementation libraries.spring_boot_starter_logging
   implementation libraries.spring_boot_starter_oauth2_client
+  implementation libraries.spring_boot_starter_oauth2_resource_server
   implementation libraries.spring_boot_starter_security
   implementation libraries.spring_boot_starter_undertow
   implementation libraries.spring_boot_starter_web
   implementation libraries.micrometer_prometheus
-
-  // Security
-  implementation libraries.spring_security_config
-  implementation libraries.spring_security_core
-  implementation libraries.spring_security_web
 
   // Cloud
   implementation libraries.spring_cloud_consul_discovery
@@ -128,9 +124,6 @@ dependencies {
   testImplementation libraries.adjudication_engine_api
   testImplementation libraries.awaitility
   testImplementation libraries.test_greenmail
-
-  // Keycloak
-  implementation libraries.keycloak_spring_boot_starter
 
   // Shedlock
   implementation libraries.shedlock_spring

@@ -88,6 +88,7 @@ libraries.spring_boot_starter_integration = [group: 'org.springframework.boot', 
 libraries.spring_boot_starter_jdbc = [group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc']
 libraries.spring_boot_starter_logging = [group: 'org.springframework.boot', name: 'spring-boot-starter-logging']
 libraries.spring_boot_starter_mail = [group: 'org.springframework.boot', name: 'spring-boot-starter-mail']
+libraries.spring_boot_starter_oauth2_resource_server = [group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-resource-server']
 libraries.spring_boot_starter_oauth2_client = [group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client']
 libraries.spring_boot_starter_quartz = [group: 'org.springframework.boot', name: 'spring-boot-starter-quartz']
 libraries.spring_boot_starter_undertow = [group: 'org.springframework.boot', name: 'spring-boot-starter-undertow']
@@ -210,7 +211,6 @@ libraries.javax_cache_api = [group: 'javax.cache', name: 'cache-api']
 libraries.javax_mail = [group: 'javax.mail', name: 'mail', version: '1.4.1']
 libraries.jaxb_api = [group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api']
 libraries.jjwt = [group: 'io.jsonwebtoken', name: 'jjwt']
-libraries.keycloak_spring_boot_starter = [group: 'org.keycloak', name: 'keycloak-spring-boot-starter']
 libraries.liquibase_core = [group: 'org.liquibase', name: 'liquibase-core', version: '3.10.3']
 libraries.liquibase_sessionlock = [group: 'com.github.blagerweij', name: 'liquibase-sessionlock', version: '1.4.0']
 libraries.logback_access = [group: 'ch.qos.logback', name: 'logback-access']
@@ -290,7 +290,6 @@ dependencies {
   implementation platform("io.sentry:sentry-bom:5.6.0")
 
   implementation platform("software.amazon.awssdk:bom:2.17.46")
-  implementation platform("org.keycloak.bom:keycloak-adapter-bom:15.0.2")
 
   implementation libraries.slf4j_api
 }

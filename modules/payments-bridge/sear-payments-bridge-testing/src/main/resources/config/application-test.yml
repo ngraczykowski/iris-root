@@ -49,6 +49,8 @@ pb:
       cron: "*/5 * * * * *"
     personal-information:
       cron: "*/5 * * * * *"
+  security:
+    disable-security: true
 
 environment:
   name: "TEST"

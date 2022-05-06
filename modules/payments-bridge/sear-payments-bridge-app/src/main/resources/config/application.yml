@@ -1,13 +1,13 @@
 #------------------------------------------------------------------------------
 # Ingress authorization
 #------------------------------------------------------------------------------
-keycloak:
-  realm: sierra
-  auth-server-url: https://auth.silent8.cloud
-  ssl-required: external
-  resource: sierra-dev-api
-  use-resource-role-mappings: true
-  bearer-only: true
+#keycloak:
+#  realm: sierra
+#  auth-server-url: https://auth.silent8.cloud
+#  ssl-required: external
+#  resource: sierra-dev-api
+#  use-resource-role-mappings: true
+#  bearer-only: true
 
 #---------------------------------------------------------------------------------------------------
 # MESSAGING CONCURRENCY
@@ -252,7 +252,6 @@ spring:
 
   main:
     banner-mode: 'off'
-    allow-circular-references: true
   #-------------------------------------------------------------------------------------------------
   # CONSUL SERVICE DISCOVERY
   #-------------------------------------------------------------------------------------------------

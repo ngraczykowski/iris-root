@@ -154,6 +154,9 @@ spring:
   #------------------------------------------------------------------------------
   security:
     oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://auth.silent8.cloud/realms/sierra
       client:
         registration:
           callback:
@@ -187,17 +190,6 @@ spring:
 #------------------------------------------------------------------------------
 environment:
   name: "LOCALHOST"
-
-#------------------------------------------------------------------------------
-# Ingress authorization
-#------------------------------------------------------------------------------
-keycloak:
-  realm: sierra
-  auth-server-url: https://auth.silent8.cloud
-  ssl-required: external
-  resource: sierra-dev-api
-  use-resource-role-mappings: true
-  bearer-only: true
 
 management:
   server:
