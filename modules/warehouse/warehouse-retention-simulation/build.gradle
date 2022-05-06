@@ -25,7 +25,6 @@ dependencies {
   implementation libraries.silenteight_sep_base_common
   implementation libraries.protobuf_java_util
 
-  implementation libraries.spring_boot_starter_elasticsearch
   implementation libraries.spring_security_config
 
   testImplementation project(":warehouse-common-testing")

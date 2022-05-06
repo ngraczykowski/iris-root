@@ -26,7 +26,6 @@ dependencies {
   implementation libraries.protobuf_java_util
 
   implementation libraries.silenteight_sampling_alerts_api
-  implementation libraries.spring_boot_starter_elasticsearch
   implementation libraries.spring_security_config
 
 

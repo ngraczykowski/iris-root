@@ -18,11 +18,11 @@ dependencies {
 
   implementation libraries.spring_boot_actuator
   implementation libraries.spring_boot_actuator_autoconfigure
-  implementation libraries.spring_boot_starter_elasticsearch
   implementation libraries.spring_security_config
   implementation libraries.spring_security_web
   implementation libraries.spring_webmvc
 
+  implementation libraries.javax_annotation_api
   implementation libraries.springdoc_ui
   implementation libraries.springdoc_data_rest
   implementation libraries.springdoc_security

@@ -1,11 +1,6 @@
 server:
   port: {{ env "NOMAD_PORT_http" }}
 
-management:
-  health:
-    elasticsearch:
-      enabled: false
-
 spring:
   rabbitmq:
     addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
