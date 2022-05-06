@@ -2,7 +2,7 @@
 {{- $common := $.Values.common }}
 {{- $components := dict $key $value }}
 {{- if eq "agents" $key }}
-{{- $common = deepCopy $.Values.agentsCommon | mergeOverwrite $.Values.common -}}
+{{- $common = deepCopy $.Values.common | mergeOverwrite $.Values.agentsCommon -}}
 {{- $components = $value }}
 {{- end }}
 {{- range $componentName, $component := $components -}}
