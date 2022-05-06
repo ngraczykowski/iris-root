@@ -29,6 +29,33 @@ data:
       adapter:
         auth-server-url: {{ .Values.keycloak.authServerUrl | quote }}
         realm: {{ .Values.keycloak.realm | quote }}
+
+    grpc:
+      server:
+        max-inbound-message-size: 8MB
+
+      client:
+        GLOBAL:
+          {{/* TODO(ahaczewski): Use TLS for gRPC-based communication. */}}
+          negotiation-type: PLAINTEXT
+          max-inbound-message-size: 8MB
+
+        datasource:
+          address: dns:///{{ include "sear.fullname" . }}-universal-data-source.{{ .Release.Namespace }}.svc:9090
+
+        {{/* TODO(ahaczewski): Fix naming inconsistencies between applications. */}}
+        ae:
+          address: dns:///{{ include "sear.fullname" . }}-adjudication-engine.{{ .Release.Namespace }}.svc:9090
+        adjudication-engine:
+          address: dns:///{{ include "sear.fullname" . }}-adjudication-engine.{{ .Release.Namespace }}.svc:9090
+        adjudicationengine:
+          address: dns:///{{ include "sear.fullname" . }}-adjudication-engine.{{ .Release.Namespace }}.svc:9090
+
+        {{ range tuple "governance" "simulator" "webapp" "warehouse" -}}
+        {{ . }}:
+          address: dns:///{{ include "sear.fullname" $ }}-{{ . }}.{{ $.Release.Namespace }}.svc:9090
+        {{ end }}
+
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE configuration>
