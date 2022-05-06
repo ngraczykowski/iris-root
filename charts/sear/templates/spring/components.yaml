@@ -1,4 +1,6 @@
-{{- range $componentName, $component := .Values.components -}}
+{{- range $key, $value := .Values.components -}}
+{{- $components := dict $key $value }}{{ if eq "agents" $key }}{{ $components = $value }}{{ end }}
+{{- range $componentName, $component := $components -}}
 
 {{- if (hasKey $component "enabled" | ternary $component.enabled true ) -}}
 
@@ -51,6 +53,7 @@ $mergedComponent := (dict
 # Component: {{ $componentName }}
 {{ tpl ($.Files.Get $path) $context }}
 ---
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}

@@ -240,15 +240,16 @@ components:
       initialDelaySeconds: 60
 
   # FIXME(pputerla) - remark - we're missing list of supported component keys
-  name-agent:
-    image:
-      repository: registry.dev.s8ops.com/linguistics-agent-sierra-ts
-      tag: "latest"
+  agents:
+    name-agent:
+      image:
+        repository: registry.dev.s8ops.com/linguistics-agent-sierra-ts
+        tag: "latest"
 
-    useDb: false
+      useDb: false
 
-    startupProbe:
-      initialDelaySeconds: 60
+      startupProbe:
+        initialDelaySeconds: 60
 
 #
 # Frontend Web Application

@@ -95,16 +95,17 @@ components:
               url: https://todo-add-bucket.s3.eu-central-1.amazonaws.com
               region: eu-central-1
 
-  name-agent:
-    args:
-      - --spring.profiles.active=sierra,rabbitmq-declare
-      - --linguistics.name.facade.enabled=true
+  agents:
+    name-agent:
+      args:
+        - --spring.profiles.active=sierra,rabbitmq-declare
+        - --linguistics.name.facade.enabled=true
 
-    resources:
-      limits:
-        memory: 2Gi
-      requests:
-        memory: 1Gi
+      resources:
+        limits:
+          memory: 2Gi
+        requests:
+          memory: 1Gi
 
 frontend:
   resources:
