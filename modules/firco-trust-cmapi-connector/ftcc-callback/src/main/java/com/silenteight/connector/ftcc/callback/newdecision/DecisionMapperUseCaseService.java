@@ -40,11 +40,10 @@ class DecisionMapperUseCaseService implements DecisionMapperUseCase {
   }
 
   private static StatusInfoDto buildStatus(DecisionStatusRequest request, String destinationState) {
-    var statusInfoDto = request
+    return request
         .findNextStatus(destinationState)
         .orElseThrow(() -> new IllegalStateException(
             "No DestinationState='" + destinationState + "' don't meet NextStatuses"));
-    return statusInfoDto.toBuilder().build();
   }
 
 }

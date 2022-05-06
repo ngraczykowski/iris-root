@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import javax.validation.Valid;
 
 import static java.util.stream.Collectors.toList;
 
@@ -27,7 +28,7 @@ public class RequestStorage {
   private final MessageService messageService;
 
   @Transactional
-  public RequestStoreDto store(@NonNull RequestDto request, @NonNull UUID batchId) {
+  public RequestStoreDto store(@NonNull @Valid RequestDto request, @NonNull UUID batchId) {
     log.info("Store request for batchId={}", batchId);
     requestService.create(batchId);
     List<UUID> messageIds = registerMessages(request.getMessages(), batchId);

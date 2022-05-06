@@ -3,6 +3,7 @@ package com.silenteight.connector.ftcc.callback.response;
 import com.silenteight.connector.ftcc.common.database.partition.DatabasePartitionConfiguration;
 import com.silenteight.connector.ftcc.common.database.partition.PartitionCreator;
 import com.silenteight.connector.ftcc.common.dto.output.ClientRequestDto;
+import com.silenteight.connector.ftcc.common.dto.output.ClientRequestDto.Body;
 import com.silenteight.connector.ftcc.common.dto.output.FircoAuthenticationDto;
 import com.silenteight.connector.ftcc.common.dto.output.ReceiveDecisionDto;
 import com.silenteight.connector.ftcc.common.dto.output.ReceiveDecisionMessageDto;
@@ -89,18 +90,19 @@ class CallbackRequestServiceTest extends BaseDataJpaTest {
   }
 
   private ClientRequestDto buildClientRequestDto() {
-    var receiveDecisionDto = new ReceiveDecisionDto();
+    var receiveDecisionDto = ReceiveDecisionDto.builder();
     List<ReceiveDecisionMessageDto> decisionMessageDtos = List.of();
-    receiveDecisionDto.setMessages(decisionMessageDtos);
+    receiveDecisionDto.messages(decisionMessageDtos);
 
-    FircoAuthenticationDto authentication = new FircoAuthenticationDto();
-    authentication.setContinuityLogin("login");
-    authentication.setContinuityPassword("password");
+    FircoAuthenticationDto authentication = FircoAuthenticationDto.builder()
+        .continuityLogin("login")
+        .continuityPassword("password")
+        .build();
 
-    receiveDecisionDto.setAuthentication(authentication);
+    receiveDecisionDto.authentication(authentication);
 
-    var clientRequestDto = new ClientRequestDto();
-    clientRequestDto.setReceiveDecisionDto(receiveDecisionDto);
-    return clientRequestDto;
+    return ClientRequestDto.builder()
+        .body(new Body(receiveDecisionDto.build()))
+        .build();
   }
 }

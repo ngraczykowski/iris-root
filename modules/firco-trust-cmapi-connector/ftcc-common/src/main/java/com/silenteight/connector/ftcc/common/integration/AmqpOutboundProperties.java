@@ -1,11 +1,14 @@
 package com.silenteight.connector.ftcc.common.integration;
 
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
+
+import org.springframework.boot.context.properties.ConstructorBinding;
 
 import javax.validation.constraints.NotBlank;
 
-@Data
+@Value
+@ConstructorBinding
 @RequiredArgsConstructor
 public class AmqpOutboundProperties {
 

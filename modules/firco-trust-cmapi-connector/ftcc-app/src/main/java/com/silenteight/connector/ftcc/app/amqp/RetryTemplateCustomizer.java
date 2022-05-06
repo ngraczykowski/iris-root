@@ -45,7 +45,7 @@ class RetryTemplateCustomizer implements RabbitRetryTemplateCustomizer {
   }
 
   @NotNull
-  private RetryPolicy createPolicy(int maxAttempts) {
+  private static RetryPolicy createPolicy(int maxAttempts) {
     return maxAttempts > 0 ? new SimpleRetryPolicy(maxAttempts, RETRYABLE_CLASSIFIER, true)
                            : new AlwaysRetryPolicy();
   }

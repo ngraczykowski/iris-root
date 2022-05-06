@@ -1,26 +1,23 @@
 package com.silenteight.connector.ftcc.common.dto.output;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.extern.jackson.Jacksonized;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.UpperCamelCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
-import java.io.Serializable;
 import java.util.List;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Value
+@Builder
+@Jacksonized
 @JsonNaming(UpperCamelCaseStrategy.class)
-public class ReceiveDecisionDto implements Serializable {
+public class ReceiveDecisionDto {
 
-  private static final long serialVersionUID = -4284460925751955090L;
+  @Builder.Default
+  String versionTag = "1";
 
-  private String versionTag = "1";
+  FircoAuthenticationDto authentication;
 
-  private FircoAuthenticationDto authentication;
-
-  private List<ReceiveDecisionMessageDto> messages;
+  List<ReceiveDecisionMessageDto> messages;
 }

@@ -12,7 +12,6 @@ import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
-import java.io.Serializable;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,9 +28,7 @@ import javax.persistence.Table;
 @Entity
 @Table
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
-class MessageEntity extends BaseEntity implements Serializable {
-
-  private static final long serialVersionUID = -1226461844382953065L;
+class MessageEntity extends BaseEntity {
 
   @Id
   @Column(name = "message_id", updatable = false, nullable = false)

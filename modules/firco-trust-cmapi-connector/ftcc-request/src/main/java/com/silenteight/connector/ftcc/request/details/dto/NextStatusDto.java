@@ -1,27 +1,28 @@
 package com.silenteight.connector.ftcc.request.details.dto;
 
 import lombok.*;
+import lombok.extern.jackson.Jacksonized;
 
 import com.silenteight.connector.ftcc.common.dto.input.StatusInfoDto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.UpperCamelCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
+@Value
 @Builder
+@Jacksonized
 @JsonNaming(UpperCamelCaseStrategy.class)
 public class NextStatusDto {
 
   @NonNull
-  private StatusDto status;
+  StatusDto status;
 
   public StatusInfoDto statusInfoDto() {
-    return new StatusInfoDto(
-        status.getId(),
-        status.getName(),
-        status.getRoutingCode(),
-        status.getChecksum());
+    return StatusInfoDto.builder()
+        .id(status.getId())
+        .name(status.getName())
+        .routingCode(status.getRoutingCode())
+        .checksum(status.getChecksum())
+        .build();
   }
 }

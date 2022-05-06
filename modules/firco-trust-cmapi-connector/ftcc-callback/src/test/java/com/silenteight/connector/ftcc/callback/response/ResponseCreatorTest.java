@@ -35,7 +35,12 @@ class ResponseCreatorTest {
         new RecommendationSenderProperties("", "login", "password",
             Duration.ofSeconds(10), Duration.ofSeconds(10), "/etc/default/key.pkcs", "password");
     var ds = DestinationStatus.builder()
-        .status(new StatusInfoDto("12", "NAME", "CODE", "CHECKSUM"))
+        .status(StatusInfoDto.builder()
+            .id("12")
+            .name("NAME")
+            .routingCode("CODE")
+            .checksum("CHECKSUM")
+            .build())
         .valid(true)
         .build();
     when(decisionMapperUseCase.mapStatus(any())).thenReturn(ds);

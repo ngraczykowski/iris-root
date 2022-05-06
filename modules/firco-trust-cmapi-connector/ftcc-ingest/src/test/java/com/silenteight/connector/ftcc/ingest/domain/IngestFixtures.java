@@ -33,15 +33,16 @@ final class IngestFixtures {
     JsonNode message2 = new TextNode("message2");
     JsonNode message3 = new TextNode("message3");
 
-    RequestSendMessageDto sendMessage = new RequestSendMessageDto();
-    sendMessage.setMessages(List.of(message1, message2, message3));
+    RequestSendMessageDto sendMessage = RequestSendMessageDto.builder()
+        .messages(List.of(message1, message2, message3))
+        .build();
 
-    RequestBodyDto body = new RequestBodyDto();
-    body.setSendMessageDto(sendMessage);
+    RequestBodyDto body = RequestBodyDto.builder()
+        .sendMessageDto(sendMessage)
+        .build();
 
-    RequestDto request = new RequestDto();
-    request.setBody(body);
-
-    return request;
+    return RequestDto.builder()
+        .body(body)
+        .build();
   }
 }

@@ -74,6 +74,7 @@ class RecommendationSenderIT {
             .contentType(APPLICATION_JSON)
             .body(INSTANCE.objectMapper().writeValueAsString(AckDto.ok()))
         );
-    classUnderTest.send(BatchResource.toResourceName(UUID.randomUUID()), new ClientRequestDto());
+    classUnderTest.send(BatchResource.toResourceName(UUID.randomUUID()), ClientRequestDto.builder()
+        .build());
   }
 }

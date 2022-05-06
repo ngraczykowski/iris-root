@@ -17,6 +17,7 @@ import com.silenteight.proto.fab.api.v1.AlertMessageStored.State;
 
 import java.util.List;
 import java.util.UUID;
+import javax.validation.Valid;
 
 import static com.silenteight.proto.fab.api.v1.AlertMessageStored.State.NEW;
 import static java.lang.Boolean.FALSE;
@@ -37,7 +38,7 @@ public class IngestFacade {
   @NonNull
   private final DataPrepMessageGateway dataPrepMessageGateway;
 
-  public void ingest(@NonNull RequestDto request, UUID batchId) {
+  public void ingest(@NonNull @Valid RequestDto request, UUID batchId) {
     RequestStoreDto requestStore = requestStorage.store(request, batchId);
     registerBatch(request, batchId, requestStore.getMessageIds());
     sendToDataPrep(batchId, requestStore.getMessageIds());

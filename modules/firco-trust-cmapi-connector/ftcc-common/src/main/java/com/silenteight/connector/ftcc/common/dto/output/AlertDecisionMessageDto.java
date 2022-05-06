@@ -1,9 +1,9 @@
 package com.silenteight.connector.ftcc.common.dto.output;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Builder;
 import lombok.ToString;
+import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 
 import com.silenteight.connector.ftcc.common.dto.input.StatusInfoDto;
 
@@ -12,37 +12,35 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.UpperCamelCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import javax.validation.Valid;
 
-import java.io.Serializable;
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Value
+@Builder
+@Jacksonized
 @JsonNaming(UpperCamelCaseStrategy.class)
 @JsonIgnoreProperties({ "UserLogin", "UserPassword" })
-public class AlertDecisionMessageDto implements Serializable {
+public class AlertDecisionMessageDto {
 
-  private static final long serialVersionUID = -6851877425739319284L;
+  String unit;
 
-  private String unit;
+  String businessUnit;
 
-  private String businessUnit;
+  String messageID;
 
-  private String messageID;
+  String systemID;
 
-  private String systemID;
+  @Valid
+  StatusInfoDto status;
 
-  private StatusInfoDto status;
+  String comment;
 
-  private String comment;
-
-  private String operator;
+  String operator;
 
   @JsonInclude(Include.NON_NULL)
-  private AttachmentDto attachment;
+  AttachmentDto attachment;
 
-  private String userLogin;
+  String userLogin;
 
   @ToString.Exclude
-  private String userPassword;
+  String userPassword;
 }

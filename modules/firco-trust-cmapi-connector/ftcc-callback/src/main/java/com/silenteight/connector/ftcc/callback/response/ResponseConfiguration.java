@@ -39,6 +39,7 @@ import static org.springframework.util.ResourceUtils.getFile;
 @RequiredArgsConstructor
 class ResponseConfiguration {
 
+  @Valid
   private final RecommendationSenderProperties properties;
 
   @Bean

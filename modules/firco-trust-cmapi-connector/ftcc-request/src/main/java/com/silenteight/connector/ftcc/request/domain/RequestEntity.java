@@ -4,7 +4,6 @@ import lombok.*;
 
 import com.silenteight.sep.base.common.entity.BaseEntity;
 
-import java.io.Serializable;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,9 +19,7 @@ import javax.persistence.Table;
 @ToString(onlyExplicitlyIncluded = true)
 @Entity
 @Table
-class RequestEntity extends BaseEntity implements Serializable {
-
-  private static final long serialVersionUID = 7391298046030799466L;
+class RequestEntity extends BaseEntity {
 
   @Id
   @Column(name = "batch_id", updatable = false, nullable = false)

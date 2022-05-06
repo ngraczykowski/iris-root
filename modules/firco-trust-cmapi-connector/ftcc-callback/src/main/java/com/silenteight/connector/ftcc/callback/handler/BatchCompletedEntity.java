@@ -19,9 +19,7 @@ import javax.persistence.*;
 @Entity
 @Table
 @IdClass(BatchCompletedId.class)
-class BatchCompletedEntity extends BaseEntity implements Serializable {
-
-  private static final long serialVersionUID = 2532835493569826529L;
+class BatchCompletedEntity extends BaseEntity {
 
   @Id
   @NonNull

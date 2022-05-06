@@ -1,27 +1,24 @@
 package com.silenteight.connector.ftcc.common.dto.input;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 
 import com.silenteight.connector.ftcc.common.dto.validator.MinimalAlertDefinition;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.UpperCamelCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
-import java.io.Serializable;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Value
+@Builder
+@Jacksonized
 @JsonNaming(UpperCamelCaseStrategy.class)
-public class NextStatusDto implements Serializable {
-
-  private static final long serialVersionUID = 5905840863163081370L;
+public class NextStatusDto {
 
   @NotNull(groups = MinimalAlertDefinition.class)
   @Valid
-  private StatusInfoDto status;
+  StatusInfoDto status;
 }

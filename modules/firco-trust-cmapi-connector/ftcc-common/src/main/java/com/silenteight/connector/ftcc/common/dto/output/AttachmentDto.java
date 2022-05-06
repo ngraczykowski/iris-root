@@ -1,25 +1,21 @@
 package com.silenteight.connector.ftcc.common.dto.output;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.UpperCamelCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
-import java.io.Serializable;
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Value
+@Builder
+@Jacksonized
 @JsonNaming(UpperCamelCaseStrategy.class)
-public class AttachmentDto implements Serializable {
+public class AttachmentDto {
 
-  private static final long serialVersionUID = -3226178721695595437L;
+  String name;
 
-  private String name;
+  String contents;
 
-  private String contents;
-
-  private String comments;
+  String comments;
 }

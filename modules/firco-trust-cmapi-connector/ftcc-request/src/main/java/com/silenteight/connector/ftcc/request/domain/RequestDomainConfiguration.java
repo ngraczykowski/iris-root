@@ -13,6 +13,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.time.Clock;
+import javax.validation.Valid;
 
 @Configuration
 @EntityScan
@@ -44,7 +45,7 @@ class RequestDomainConfiguration {
       @NonNull NamedParameterJdbcTemplate jdbcTemplate,
       @NonNull ObjectMapper objectMapper,
       @NonNull Clock clock,
-      @NonNull RequestRetentionProperties requestRetentionProperties) {
+      @NonNull @Valid RequestRetentionProperties requestRetentionProperties) {
 
     return new MessageQuery(
         messageRepository,

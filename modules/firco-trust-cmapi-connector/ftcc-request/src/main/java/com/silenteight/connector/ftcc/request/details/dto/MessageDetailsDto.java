@@ -28,7 +28,9 @@ public class MessageDetailsDto {
   public List<NextStatusDto> nextStatusesDto() {
     return nextStatuses
         .stream()
-        .map(nextStatus -> new NextStatusDto(nextStatus.statusInfoDto()))
+        .map(nextStatus -> NextStatusDto.builder()
+            .status(nextStatus.statusInfoDto())
+            .build())
         .collect(toList());
   }
 }

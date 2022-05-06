@@ -1,38 +1,34 @@
 package com.silenteight.connector.ftcc.common.dto.input;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Builder;
 import lombok.ToString;
+import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.UpperCamelCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
-import java.io.Serializable;
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Value
+@Builder
+@Jacksonized
 @JsonNaming(UpperCamelCaseStrategy.class)
-public class CaseManagerAuthenticationDto implements Serializable {
-
-  private static final long serialVersionUID = 1172622409389133221L;
+public class CaseManagerAuthenticationDto {
 
   /**
    * Case manager login.
    */
   //  @NotEmpty(groups = MinimalAlertDefinition.class)
-  private String userLogin;
+  String userLogin;
 
   /**
    * Case manager password.
    */
   @ToString.Exclude
   //  @NotEmpty(groups = MinimalAlertDefinition.class)
-  private String userPassword;
+  String userPassword;
 
   /**
    * Case manager realm.
    */
-  private String userRealm;
+  String userRealm;
 }

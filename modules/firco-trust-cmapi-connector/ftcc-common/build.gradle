@@ -8,6 +8,7 @@ description = "Firco Trust CMAPI Connector Common"
 dependencies {
   // API dependencies
   api libraries.jakarta_validation_api
+  api libraries.jakarta_el
   api libraries.silenteight_sep_base_common
   api libraries.sentry
 

@@ -32,7 +32,7 @@ import static io.restassured.http.ContentType.JSON;
 @WebAppConfiguration
 @SpringBootTest(classes = { TestRestConfiguration.class, WebConfig.class })
 @ExtendWith({ SpringExtension.class })
-public class BaseRestControllerTest {
+public abstract class BaseRestControllerTest {
 
   @Autowired
   private WebApplicationContext context;

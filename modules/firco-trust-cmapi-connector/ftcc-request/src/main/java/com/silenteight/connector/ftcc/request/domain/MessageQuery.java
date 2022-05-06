@@ -129,10 +129,10 @@ class MessageQuery implements MessageByIdsQuery, MessageDetailsQuery, MessageCur
     return jdbcTemplate.query(
         SELECT_CURRENT_STATUS_NAME_QUERY,
         Map.of("batchId", batchId, "messageId", messageId),
-        (ResultSet resultSet) -> this.readCurrentStatusName(resultSet, batchId, messageId));
+        (ResultSet resultSet) -> readCurrentStatusName(resultSet, batchId, messageId));
   }
 
-  private String readCurrentStatusName(
+  private static String readCurrentStatusName(
       ResultSet resultSet, UUID batchId, UUID messageId) throws SQLException {
 
     if (!resultSet.next())

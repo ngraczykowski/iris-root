@@ -13,10 +13,10 @@ import com.opencsv.bean.CsvBindByName;
 @Data
 public class DecisionTransition {
 
-  @CsvBindByName(required = true,column = "SourceState")
+  @CsvBindByName(required = true, column = "SourceState")
   private String sourceState;
-  @CsvBindByName(required = true,column = "Recommendation")
+  @CsvBindByName(required = true, column = "Recommendation")
   private String recommendation;
-  @CsvBindByName(required = true,column = "DestinationState")
+  @CsvBindByName(required = true, column = "DestinationState")
   private String destinationState;
 }

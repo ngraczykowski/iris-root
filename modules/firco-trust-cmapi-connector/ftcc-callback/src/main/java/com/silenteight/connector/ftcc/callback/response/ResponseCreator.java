@@ -6,6 +6,8 @@ import com.silenteight.connector.ftcc.callback.newdecision.DecisionMapperUseCase
 import com.silenteight.connector.ftcc.callback.newdecision.DecisionStatusRequest;
 import com.silenteight.connector.ftcc.common.dto.input.NextStatusDto;
 import com.silenteight.connector.ftcc.common.dto.output.*;
+import com.silenteight.connector.ftcc.common.dto.output.AlertDecisionMessageDto.AlertDecisionMessageDtoBuilder;
+import com.silenteight.connector.ftcc.common.dto.output.ClientRequestDto.Body;
 import com.silenteight.connector.ftcc.request.details.dto.MessageDetailsDto;
 import com.silenteight.recommendation.api.library.v1.RecommendationOut;
 
@@ -17,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.validation.Valid;
 
 import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 
@@ -33,17 +36,18 @@ class ResponseCreator {
   private static final String COMMENT_FILE_EXTENSION = ".txt";
 
   private final DecisionMapperUseCase decisionMapperUseCase;
+  @Valid
   private final RecommendationSenderProperties properties;
 
   public ClientRequestDto build(List<ReceiveDecisionMessageDto> messages) {
-    var receiveDecisionDto = new ReceiveDecisionDto();
-    receiveDecisionDto.setMessages(messages);
-    receiveDecisionDto.setAuthentication(
-        mapToAuthentication(properties.getLogin(), properties.getPassword()));
+    var receiveDecisionDto = ReceiveDecisionDto.builder()
+        .messages(messages)
+        .authentication(mapToAuthentication(properties.getLogin(), properties.getPassword()))
+        .build();
 
-    var clientRequestDto = new ClientRequestDto();
-    clientRequestDto.setReceiveDecisionDto(receiveDecisionDto);
-    return clientRequestDto;
+    return ClientRequestDto.builder()
+        .body(new Body(receiveDecisionDto))
+        .build();
   }
 
   public ReceiveDecisionMessageDto buildMessageDto(
@@ -60,16 +64,16 @@ class ResponseCreator {
     String recommendationAction =
         defaultIfBlank(recommendation.getRecommendedAction(), "ACTION_INVESTIGATE");
 
-    var decision = new AlertDecisionMessageDto();
-    decision.setUnit(messageDetails.getUnit());
-    decision.setBusinessUnit(messageDetails.getBusinessUnit());
-    decision.setMessageID(messageDetails.getMessageID());
-    decision.setSystemID(messageDetails.getSystemID());
-    decision.setOperator(OPERATOR);
-    setComment(recommendationComment, decision);
+    var decisionBuilder = AlertDecisionMessageDto.builder()
+        .unit(messageDetails.getUnit())
+        .businessUnit(messageDetails.getBusinessUnit())
+        .messageID(messageDetails.getMessageID())
+        .systemID(messageDetails.getSystemID())
+        .operator(OPERATOR);
+    setComment(recommendationComment, decisionBuilder);
     setAttachment(
         messageDetails.getMessageID(), recommendationAction, recommendationComment,
-        decision);
+        decisionBuilder);
 
     var destinationStatus = decisionMapperUseCase.mapStatus(
         DecisionStatusRequest.builder()
@@ -82,31 +86,31 @@ class ResponseCreator {
             .currentStatusName(messageDetails.getCurrentStatus().getName())
             .recommendedAction(recommendationAction)
             .build());
-    decision.setStatus(destinationStatus.getStatus());
+    decisionBuilder.status(destinationStatus.getStatus());
 
-    return create(decision);
+    return create(decisionBuilder.build());
   }
 
-  private void setAttachment(
+  private static void setAttachment(
       String messageID, String recommendedAction, String recommendationComment,
-      AlertDecisionMessageDto decision) {
+      AlertDecisionMessageDtoBuilder decision) {
     if (recommendationComment.length() > MAX_COMMENT_LENGTH) {
-      decision.setAttachment(createAttachment(
+      decision.attachment(createAttachment(
           messageID,
           recommendedAction,
           recommendationComment));
     }
   }
 
-  private void setComment(String comment, AlertDecisionMessageDto messageDetails) {
+  private static void setComment(String comment, AlertDecisionMessageDtoBuilder messageDetails) {
     if (comment.length() > MAX_COMMENT_LENGTH) {
-      messageDetails.setComment(comment.substring(0, getCommentEndIndex()) + COMMENT_CUT_MSG);
+      messageDetails.comment(comment.substring(0, getCommentEndIndex()) + COMMENT_CUT_MSG);
     } else {
-      messageDetails.setComment(comment);
+      messageDetails.comment(comment);
     }
   }
 
-  private int getCommentEndIndex() {
+  private static int getCommentEndIndex() {
     return MAX_COMMENT_LENGTH - COMMENT_CUT_MSG.length();
   }
 
@@ -115,7 +119,11 @@ class ResponseCreator {
       String messageID, String solution, String comment) {
     var encodedComment =
         Base64.getEncoder().encodeToString(comment.getBytes(StandardCharsets.UTF_8));
-    return new AttachmentDto(getFileneme(messageID), encodedComment, solution);
+    return AttachmentDto.builder()
+        .name(getFileneme(messageID))
+        .contents(encodedComment)
+        .comments(solution)
+        .build();
   }
 
   @NotNull
@@ -125,15 +133,15 @@ class ResponseCreator {
 
 
   private static ReceiveDecisionMessageDto create(AlertDecisionMessageDto source) {
-    var receiveDecisionMessageDto = new ReceiveDecisionMessageDto();
-    receiveDecisionMessageDto.setDecisionMessage(source);
-    return receiveDecisionMessageDto;
+    return ReceiveDecisionMessageDto.builder()
+        .decisionMessage(source)
+        .build();
   }
 
   private static FircoAuthenticationDto mapToAuthentication(String login, String password) {
-    FircoAuthenticationDto authentication = new FircoAuthenticationDto();
-    authentication.setContinuityLogin(login);
-    authentication.setContinuityPassword(password);
-    return authentication;
+    return FircoAuthenticationDto.builder()
+        .continuityLogin(login)
+        .continuityPassword(password)
+        .build();
   }
 }

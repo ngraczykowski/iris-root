@@ -1,41 +1,30 @@
 package com.silenteight.connector.ftcc.common.dto.output;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.Builder;
+import lombok.Value;
+import lombok.experimental.NonFinal;
+import lombok.extern.jackson.Jacksonized;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.UpperCamelCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
-import java.io.Serializable;
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Slf4j
+@Value
+@Builder
+@Jacksonized
 @JsonNaming(UpperCamelCaseStrategy.class)
-public class ClientRequestDto implements Serializable {
-
-  private static final long serialVersionUID = 4361457566013326051L;
+@NonFinal
+public class ClientRequestDto {
 
   @JsonInclude
-  private String header;
+  String header;
 
-  private Body body;
+  Body body;
 
+  @Value
   public static class Body {
     @JsonProperty("msg_ReceiveStatusUpdate")
-    private ReceiveDecisionDto receiveDecisionDto;
+    ReceiveDecisionDto receiveDecisionDto;
   }
-
-  public void setReceiveDecisionDto(ReceiveDecisionDto receiveDecisionDto) {
-    if (body == null) {
-      body = new Body();
-    }
-    body.receiveDecisionDto = receiveDecisionDto;
-  }
-
 }
