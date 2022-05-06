@@ -16,6 +16,7 @@ import com.silenteight.warehouse.indexer.alert.AlertModule;
 import com.silenteight.warehouse.indexer.match.MatchModule;
 import com.silenteight.warehouse.indexer.query.QueryAlertModule;
 import com.silenteight.warehouse.management.ManagementModule;
+import com.silenteight.warehouse.migration.simulation.SimulationMigrationModule;
 import com.silenteight.warehouse.production.persistence.ProductionPersistenceModule;
 import com.silenteight.warehouse.qa.handler.QaMessageHandlerModule;
 import com.silenteight.warehouse.qa.processing.QaProcessingModule;
@@ -73,6 +74,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     QueryAlertModule.class,
     SamplingModule.class,
     SimulationMessageHandlerModule.class,
+    SimulationMigrationModule.class,
     SimulationProcessingModule.class,
     // Interface modules
     AmqpCommonModule.class,

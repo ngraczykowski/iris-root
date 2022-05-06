@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-class SimulationStorageConfiguration {
+public class SimulationStorageConfiguration {
 
   @Bean
   SimulationAlertInsertService simulationAlertInsertService(
@@ -19,5 +19,11 @@ class SimulationStorageConfiguration {
   SimulationMatchInsertService simulationMatchInsertService(
       NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
     return new SimulationMatchInsertService(namedParameterJdbcTemplate);
+  }
+
+  @Bean
+  SimulationAlertQueryService simulationAlertQueryService(
+      NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+    return new SimulationAlertQueryService(namedParameterJdbcTemplate);
   }
 }
