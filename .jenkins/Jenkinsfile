@@ -5,7 +5,7 @@ pipeline {
     label 'ec2-agent'
   }
   triggers {
-    cron('H/5 * * * *')
+    cron('H 6-18 * * 1-5')
   }
   options {
     gitLabConnection(env.GITLAB_CONNECTION_NAME)
