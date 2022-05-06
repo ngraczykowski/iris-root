@@ -84,6 +84,10 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          {{- if .component.command }}
+          command:
+            {{- toYaml .component.command | nindent 12 }}
+          {{- end }}
           args:
             - --spring.application.name={{ .componentName }}
             - --server.port={{ .component.containerPorts.http.port }}
