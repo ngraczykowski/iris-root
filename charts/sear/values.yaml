@@ -166,6 +166,9 @@ agentsCommon:
     initialDelaySeconds: 60
   image:
     tag: "latest"
+  ingress:
+    enabled: false
+
 #
 # Declare and customize components
 #
@@ -259,6 +262,18 @@ components:
       command:
         - "/docker-entrypoint.sh"
         - "comparer"
+      image:
+        repository: registry.dev.s8ops.com/document-agent
+    document-recognizer-agent:
+      command:
+        - "/docker-entrypoint.sh"
+        - "recognizer"
+      image:
+        repository: registry.dev.s8ops.com/document-agent
+    document-number-agent:
+      command:
+        - "/docker-entrypoint.sh"
+        - "number"
       image:
         repository: registry.dev.s8ops.com/document-agent
     geo-agent:

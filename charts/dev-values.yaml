@@ -121,6 +121,13 @@ components:
       args:
         - --spring.profiles.active=sierra,rabbitmq-declare
         - --nationalId.agent.facade.enabled=true
+    document-recognizer-agent:
+      args:
+        - --spring.profiles.active=sierra,rabbitmq-declare
+    document-number-agent:
+      args:
+        - --spring.profiles.active=sierra,rabbitmq-declare
+        - --document.agent.facade.enabled=true
     geo-agent:
       args:
         - --spring.profiles.active=sierra,rabbitmq-declare
