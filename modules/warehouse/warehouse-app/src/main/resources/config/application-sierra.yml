@@ -24,13 +24,7 @@ warehouse.messaging:
       routing-key: command.index-request.production
       max-priority: 10
     to-remove:
-      bindings:
-        - queue-name: wh.index-request.production
-          exchange: bridge.command
-          routing-key: command.index-request.production
-        - queue-name: wh.retention.personal-information-expired
-          exchange: bridge.retention
-          routing-key: retention.personal-information-expired
+      bindings: []
 
 warehouse.report.statistics:
   all-alerts-query:
