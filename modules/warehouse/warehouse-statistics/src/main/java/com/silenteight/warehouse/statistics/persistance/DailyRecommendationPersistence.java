@@ -24,6 +24,7 @@ public final class DailyRecommendationPersistence
     var dailyBuilder = DailyRecommendationStatistics.builder()
         .day(range.upperEndpoint())
         .alertsCount(data.getAlertsCount())
+        .analystDecisionCount(data.getAnalyticsDecisionCount())
         .falsePositivesCount(data.getFalsePositivesCount())
         .potentialTruePositivesCount(data.getPotentialTruePositivesCount())
         .manualInvestigationsCount(data.getManualInvestigationsCount())

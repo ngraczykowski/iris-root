@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.warehouse.common.domain.AnalystDecision;
+import com.silenteight.warehouse.common.domain.AnalystDecisionMapper;
 import com.silenteight.warehouse.common.domain.Recommendation;
 import com.silenteight.warehouse.common.domain.RecommendationMapper;
 import com.silenteight.warehouse.indexer.alert.dto.AlertDto;
@@ -28,36 +30,38 @@ import static com.silenteight.warehouse.common.domain.Recommendation.UNSPECIFIED
 public final class AlertRecommendationComputer
     implements StatisticsComputer<AlertDto, AlertsRecommendationStatistics> {
 
+  private static final List<Recommendation> RECOMMENDATION_REQUIRED_FOR_EFFICIENCY =
+      List.of(ACTION_FALSE_POSITIVE, ACTION_POTENTIAL_TRUE_POSITIVE);
   @NonNull
-  private final RecommendationMapper mapper;
+  private final RecommendationMapper recommendationMapper;
+
+  @NonNull
+  private final AnalystDecisionMapper analystDecisionMapper;
 
   private static int getRecommendationCount(
       Map<Recommendation, Long> result, Recommendation recommendation) {
     return Math.toIntExact(result.getOrDefault(recommendation, 0L));
   }
 
-  private static Double calculateEfficiency(
-      List<AlertDto> alerts,
-      Map<Recommendation, Long> result) {
-
-    var potentialTruePositivesCount =
-        getRecommendationCount(result, ACTION_POTENTIAL_TRUE_POSITIVE);
-    var falsePositivesCount = getRecommendationCount(result, ACTION_FALSE_POSITIVE);
-
-    return alerts.isEmpty() ? null :
-           ((double) (potentialTruePositivesCount + falsePositivesCount) / alerts.size()) * 100;
-  }
-
   @Override
   public AlertsRecommendationStatistics compute(
       List<AlertDto> alerts) {
 
-    Map<Recommendation, Long> result = alerts.stream()
+    Map<Recommendation, Long> recommendationTypeCounter = alerts.stream()
         .collect(Collectors.groupingBy(
-            alert -> mapper.getRecommendationByValue(alert.getPayload()),
+            alert -> recommendationMapper.getRecommendationByValue(alert.getPayload()),
             Collectors.counting()));
 
-    var unspecifiedRecommendationCount = getRecommendationCount(result, UNSPECIFIED);
+    List<AlertDto> analyticsDecisionAlerts = alerts
+        .stream()
+        .filter(this::shouldBeTakenInToAccountToCalculateEffectiveness)
+        .collect(Collectors.toList());
+
+    log.info("Alerts with analyst recommendation {}", analyticsDecisionAlerts.stream().map(
+        AlertDto::getDiscriminator).collect(Collectors.toList()));
+
+    var unspecifiedRecommendationCount =
+        getRecommendationCount(recommendationTypeCounter, UNSPECIFIED);
     if (unspecifiedRecommendationCount > 0) {
       log.warn(
           "Some alerts have no recommendations, alertCountWithoutRecommendation={}",
@@ -66,12 +70,61 @@ public final class AlertRecommendationComputer
 
     return AlertsRecommendationStatistics.builder()
         .alertsCount(alerts.size())
-        .potentialTruePositivesCount(getRecommendationCount(result, ACTION_POTENTIAL_TRUE_POSITIVE))
-        .falsePositivesCount(getRecommendationCount(result, ACTION_FALSE_POSITIVE))
-        .manualInvestigationsCount(getRecommendationCount(result, ACTION_MANUAL_INVESTIGATION))
-        // TODO(tdrozdz): This has to be additionally implemented as to do it analytics decision is
-        // required
-        .effectivenessPercent(null)
-        .efficiencyPercent(calculateEfficiency(alerts, result)).build();
+        .potentialTruePositivesCount(
+            getRecommendationCount(recommendationTypeCounter, ACTION_POTENTIAL_TRUE_POSITIVE))
+        .falsePositivesCount(
+            getRecommendationCount(recommendationTypeCounter, ACTION_FALSE_POSITIVE))
+        .manualInvestigationsCount(
+            getRecommendationCount(recommendationTypeCounter, ACTION_MANUAL_INVESTIGATION))
+        .effectivenessPercent(calculateEffectiveness(analyticsDecisionAlerts))
+        .analyticsDecisionCount(analyticsDecisionAlerts.size())
+        .efficiencyPercent(calculateEfficiency(alerts, recommendationTypeCounter)).build();
+  }
+
+  private Double calculateEfficiency(
+      List<AlertDto> alerts,
+      Map<Recommendation, Long> result) {
+
+    var potentialTruePositivesCount =
+        getRecommendationCount(result, ACTION_POTENTIAL_TRUE_POSITIVE);
+    var falsePositivesCount = getRecommendationCount(result, ACTION_FALSE_POSITIVE);
+
+    return alerts.isEmpty() ? Double.NaN :
+           ((double) (potentialTruePositivesCount + falsePositivesCount) / alerts.size()) * 100;
+  }
+
+  private Double calculateEffectiveness(
+      List<AlertDto> alerts) {
+    if (alerts.isEmpty()) {
+      return Double.NaN;
+    }
+    var analystDecisionFalsePositive = alerts
+        .stream()
+        .filter(this::isProperlyResolved)
+        .count();
+    return ((double) analystDecisionFalsePositive / alerts.size()) * 100;
+  }
+
+  private boolean shouldBeTakenInToAccountToCalculateEffectiveness(AlertDto alertDto) {
+    var analystDecisionFieldName = analystDecisionMapper.getAnalystDecisionFieldName();
+    if (!alertDto.getPayload().containsKey(analystDecisionFieldName)) {
+      return false;
+    }
+    return !alertDto.getPayload().get(analystDecisionFieldName).isEmpty()
+        && RECOMMENDATION_REQUIRED_FOR_EFFICIENCY.contains(getRecommendationFromAlert(alertDto));
+
+  }
+
+  private boolean isProperlyResolved(AlertDto alertDto) {
+    return getAnalystDecisionFromAlert(alertDto) == AnalystDecision.FALSE_POSITIVE
+        && getRecommendationFromAlert(alertDto) == ACTION_FALSE_POSITIVE;
+  }
+
+  private Recommendation getRecommendationFromAlert(AlertDto alertDto) {
+    return recommendationMapper.getRecommendationByValue(alertDto.getPayload());
+  }
+
+  private AnalystDecision getAnalystDecisionFromAlert(AlertDto alertDto) {
+    return analystDecisionMapper.getAnalystDecisionByValue(alertDto.getPayload());
   }
 }

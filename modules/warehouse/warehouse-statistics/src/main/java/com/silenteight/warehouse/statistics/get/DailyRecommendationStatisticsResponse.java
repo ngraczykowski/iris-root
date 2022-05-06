@@ -15,6 +15,6 @@ final class DailyRecommendationStatisticsResponse {
   private int potentialTruePositivesCount;
   private int manualInvestigationsCount;
   private int analystDecisionCount;
-  private double efficiencyPercent;
-  private double effectivenessPercent;
+  private Double efficiencyPercent;
+  private Double effectivenessPercent;
 }

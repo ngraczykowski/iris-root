@@ -1,7 +1,9 @@
 package com.silenteight.warehouse.statistics;
 
 import com.silenteight.sep.base.common.time.TimeSource;
+import com.silenteight.warehouse.common.domain.AnalystDecisionMapper;
 import com.silenteight.warehouse.common.domain.RecommendationMapper;
+import com.silenteight.warehouse.common.properties.AnalystDecisionProperties;
 import com.silenteight.warehouse.common.properties.RecommendationProperties;
 import com.silenteight.warehouse.indexer.alert.AlertRepository;
 import com.silenteight.warehouse.statistics.Annotations.Daily;
@@ -30,8 +32,11 @@ public class StatisticsConfiguration {
 
   @Bean
   AlertRecommendationComputer alertRecommendationComputer(
-      RecommendationProperties recommendationProperties) {
-    return new AlertRecommendationComputer(new RecommendationMapper(recommendationProperties));
+      RecommendationProperties recommendationProperties,
+      AnalystDecisionProperties analystDecisionProperties) {
+    return new AlertRecommendationComputer(
+        new RecommendationMapper(recommendationProperties),
+        new AnalystDecisionMapper(analystDecisionProperties));
   }
 
   @Bean

@@ -4,8 +4,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.List;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
@@ -17,6 +15,7 @@ public class GetDashboardStatisticsUseCase {
   @NonNull
   private final DailyRecommendationStatisticsRepository repository;
 
+
   public StatisticsResponse getTotalCount(StatisticsRequest request) {
 
     log.info("Statistics request received, calculation period: from={}, to={}",
@@ -27,7 +26,7 @@ public class GetDashboardStatisticsUseCase {
 
     double alertsCount =
         getTotalCount(statistics, DailyRecommendationStatistics::getAlertsCount);
-    double analystCount =
+    double analystDecisionCount =
         getTotalCount(statistics, DailyRecommendationStatistics::getAnalystDecisionCount);
     double fpCount =
         getTotalCount(statistics, DailyRecommendationStatistics::getFalsePositivesCount);
@@ -44,8 +43,8 @@ public class GetDashboardStatisticsUseCase {
         .potentialTruePositivePercent(asPercent(divide(ptpCount, alertsCount)))
         .manualInvestigation(asInt(miCount))
         .manualInvestigationPercent(asPercent(divide(miCount, alertsCount)))
-        .avgEfficiencyPercent(calculateEfficiency(statistics, analystCount))
-        .avgEffectivenessPercent(calculateEffectiveness(statistics, alertsCount))
+        .avgEfficiencyPercent(calculateEfficiency(statistics, alertsCount))
+        .avgEffectivenessPercent(calculateEffectiveness(statistics, analystDecisionCount))
         .build();
   }
 
@@ -77,34 +76,42 @@ public class GetDashboardStatisticsUseCase {
     double numeratorTotal =
         getTotalCount(
             statistics,
-            stat -> (stat.getAlertsCount() * stat.getEffectivenessPercent()));
+            GetDashboardStatisticsUseCase::efficiencyWeightedAvgPart);
 
-    return divide(BigDecimal.valueOf(numeratorTotal), BigDecimal.valueOf(alertsCount));
+    return divide(numeratorTotal, alertsCount);
   }
 
   private static double calculateEffectiveness(
       List<DailyRecommendationStatistics> statistics,
-      double alertsCount) {
+      double analyticsDecisionCount) {
 
     double numeratorTotal =
         getTotalCount(
             statistics,
-            stat -> (stat.getAnalystDecisionCount() * stat.getEffectivenessPercent()));
-
-    return divide(BigDecimal.valueOf(numeratorTotal), BigDecimal.valueOf(alertsCount));
+            GetDashboardStatisticsUseCase::effectivenessWeightedAvgPart);
+    return divide(numeratorTotal, analyticsDecisionCount);
   }
 
-  private static double divide(double numerator, double denominator) {
-    return divide(BigDecimal.valueOf(numerator), BigDecimal.valueOf(denominator));
+  private static double efficiencyWeightedAvgPart(DailyRecommendationStatistics stat) {
+    if (stat.getAlertsCount() == 0) {
+      return 0.0;
+    }
+    return stat.getAlertsCount() * stat.getEfficiencyPercent();
   }
 
-  private static double divide(BigDecimal numerator, BigDecimal denominator) {
-    return numerator.divide(denominator, new MathContext(4)).doubleValue();
+  private static double effectivenessWeightedAvgPart(DailyRecommendationStatistics stat) {
+    if (stat.getAnalystDecisionCount() == 0) {
+      return 0.0;
+    }
+    return stat.getAnalystDecisionCount() * stat.getEffectivenessPercent();
   }
 
-  private static double asPercent(double num) {
-    double percent = num * 100.0;
-    return Math.round(percent * 100.0) / 100.0;
+  private static Double divide(Double numerator, Double denominator) {
+    return numerator / denominator;
+  }
+
+  private static Double asPercent(Double num) {
+    return num * 100.0;
   }
 
   private static int asInt(double num) {

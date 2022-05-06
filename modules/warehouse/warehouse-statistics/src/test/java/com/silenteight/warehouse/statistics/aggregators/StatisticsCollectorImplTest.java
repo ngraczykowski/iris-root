@@ -1,7 +1,9 @@
 package com.silenteight.warehouse.statistics.aggregators;
 
 import com.silenteight.sep.base.common.time.TimeSource;
+import com.silenteight.warehouse.common.domain.AnalystDecisionMapper;
 import com.silenteight.warehouse.common.domain.RecommendationMapper;
+import com.silenteight.warehouse.common.properties.AnalystDecisionProperties;
 import com.silenteight.warehouse.common.properties.RecommendationProperties;
 import com.silenteight.warehouse.indexer.alert.AlertRepository;
 import com.silenteight.warehouse.indexer.alert.dto.AlertDto;
@@ -46,12 +48,21 @@ class StatisticsCollectorImplTest {
   private static final LocalDate OLDEST_DAILY_STATISTICS = AGGREGATION_DATE.minusDays(1);
 
   private static final String RECOMMENDATION_FIELD_NAME = "s8_recommendation";
-  private final RecommendationProperties recommendationProperties = new RecommendationProperties(
-      Map.of(
-          "ACTION_FALSE_POSITIVE", List.of("ACTION_FALSE_POSITIVE"),
-          "ACTION_MANUAL_INVESTIGATION", List.of("ACTION_MANUAL_INVESTIGATION"),
-          "ACTION_POTENTIAL_TRUE_POSITIVE", List.of("ACTION_POTENTIAL_TRUE_POSITIVE")),
-      RECOMMENDATION_FIELD_NAME);
+  private static final String ANALYST_DECISION_FIELD_NAME = "analyst_decision";
+  private static final RecommendationProperties RECOMMENDATION_PROPERTIES =
+      new RecommendationProperties(
+          Map.of(
+              "ACTION_FALSE_POSITIVE", List.of("ACTION_FALSE_POSITIVE"),
+              "ACTION_MANUAL_INVESTIGATION", List.of("ACTION_MANUAL_INVESTIGATION"),
+              "ACTION_POTENTIAL_TRUE_POSITIVE", List.of("ACTION_POTENTIAL_TRUE_POSITIVE")),
+          RECOMMENDATION_FIELD_NAME);
+  private static final AnalystDecisionProperties ANALYST_DECISION_PROPERTIES =
+      new AnalystDecisionProperties(
+          Map.of(
+              "FALSE_POSITIVE", List.of("analyst_decision_false_positive"),
+              "TRUE_POSITIVE", List.of("analyst_decision_true_positive")),
+          ANALYST_DECISION_FIELD_NAME);
+
   @Mock
   private AlertRepository alertRepository;
   @Mock
@@ -69,8 +80,8 @@ class StatisticsCollectorImplTest {
         .falsePositivesCount(0)
         .manualInvestigationsCount(0)
         .potentialTruePositivesCount(0)
-        .effectivenessPercent(null)
-        .efficiencyPercent(null)
+        .effectivenessPercent(Double.NaN)
+        .efficiencyPercent(Double.NaN)
         .analystDecisionCount(0)
         .build();
   }
@@ -93,7 +104,9 @@ class StatisticsCollectorImplTest {
         timeSource,
         new AlertDataExtractor(alertRepository),
         new AlertAggregator(AggregationPeriod.DAILY),
-        new AlertRecommendationComputer(new RecommendationMapper(recommendationProperties)),
+        new AlertRecommendationComputer(
+            new RecommendationMapper(RECOMMENDATION_PROPERTIES),
+            new AnalystDecisionMapper(ANALYST_DECISION_PROPERTIES)),
         new DailyRecommendationPersistence(dailyRecommendationStatisticsRepository),
         1);
 
@@ -116,7 +129,7 @@ class StatisticsCollectorImplTest {
         .falsePositivesCount(0)
         .manualInvestigationsCount(0)
         .potentialTruePositivesCount(1)
-        .effectivenessPercent(null)
+        .effectivenessPercent(Double.NaN)
         .efficiencyPercent(100.0)
         .analystDecisionCount(0)
         .build();
@@ -167,7 +180,7 @@ class StatisticsCollectorImplTest {
         .falsePositivesCount(3)
         .manualInvestigationsCount(1)
         .potentialTruePositivesCount(2)
-        .effectivenessPercent(null)
+        .effectivenessPercent(Double.NaN)
         .analystDecisionCount(0)
         .efficiencyPercent(((double) 5 / 6) * 100)
         .build();
@@ -221,7 +234,7 @@ class StatisticsCollectorImplTest {
         .falsePositivesCount(1)
         .manualInvestigationsCount(1)
         .potentialTruePositivesCount(1)
-        .effectivenessPercent(null)
+        .effectivenessPercent(Double.NaN)
         .analystDecisionCount(0)
         .efficiencyPercent(((double) 2 / 3) * 100)
         .build();
@@ -232,7 +245,7 @@ class StatisticsCollectorImplTest {
         .falsePositivesCount(0)
         .manualInvestigationsCount(0)
         .potentialTruePositivesCount(3)
-        .effectivenessPercent(null)
+        .effectivenessPercent(Double.NaN)
         .analystDecisionCount(0)
         .efficiencyPercent(100.0)
         .build();

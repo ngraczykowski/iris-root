@@ -18,6 +18,8 @@ public class AlertsRecommendationStatistics {
 
   int manualInvestigationsCount;
 
+  int analyticsDecisionCount;
+
   Double efficiencyPercent;
 
   Double effectivenessPercent;
