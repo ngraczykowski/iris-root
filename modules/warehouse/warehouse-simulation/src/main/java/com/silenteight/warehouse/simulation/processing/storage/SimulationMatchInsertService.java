@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -19,7 +18,6 @@ public class SimulationMatchInsertService {
 
   private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-  @Transactional
   public void insert(Collection<SimulationMatchDefinition> mapWithIndex) {
     SqlParameterSource[] collect = mapWithIndex.stream()
         .map(map -> {

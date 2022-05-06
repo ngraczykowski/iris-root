@@ -6,11 +6,14 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.data.api.v1.Alert;
 import com.silenteight.warehouse.simulation.processing.storage.SimulationAlertDefinition;
+import com.silenteight.warehouse.simulation.processing.storage.SimulationMatchDefinition;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
 
-import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
 
@@ -25,25 +28,43 @@ public class SimulationAlertV1MappingService {
 
   public List<SimulationAlertDefinition> mapFields(List<Alert> alerts, String analysisName) {
     return alerts.stream()
-        .map(alert -> mapFields(alert, analysisName))
+        .map(tryMappingOrNull(analysisName))
         .filter(Objects::nonNull)
         .collect(toList());
+  }
+
+  private Function<Alert, SimulationAlertDefinition> tryMappingOrNull(String analysisName) {
+    return alert -> {
+      try {
+        return mapFields(alert, analysisName);
+      } catch (RuntimeException e) {
+        log.warn("Mapping simulation alert failed, alertName=" + Optional.ofNullable(alert)
+            .map(Alert::getName)
+            .orElse("<empty>"), e);
+        return null;
+      }
+    };
   }
 
   public SimulationAlertDefinition mapFields(Alert alert, String analysisName) {
     String alertName = alert.getName();
 
-    try {
-      assertAlertNameExists(alert);
-      assertNoMatches(alert);
+    assertAlertNameExists(alert);
+    assertNoMatches(alert);
 
-      String payload = payloadConverter.convertPayload(alert.getPayload());
+    String payload = payloadConverter.convertPayload(alert.getPayload());
 
-      return new SimulationAlertDefinition(analysisName, alertName, payload, emptyList(), null);
-    } catch (RuntimeException e) {
-      log.warn("Mapping simulation alert failed, alertName=" + alertName, e);
-      return null;
-    }
+    List<SimulationMatchDefinition> matches =
+        singletonList(mapMatch(alert, analysisName, alertName));
+
+    return new SimulationAlertDefinition(analysisName, alertName, payload, matches, true);
+  }
+
+  SimulationMatchDefinition mapMatch(Alert alert, String analysisName, String alertName) {
+    String matchName = alertName;
+    String matchPayload = payloadConverter.convertPayload(alert.getPayload());
+
+    return new SimulationMatchDefinition(analysisName, alertName, matchName, matchPayload);
   }
 
   private static void assertAlertNameExists(Alert alert) {
@@ -54,9 +75,8 @@ public class SimulationAlertV1MappingService {
 
   private static void assertNoMatches(Alert alert) {
     if (alert.getMatchesCount() > NO_MATCH_ALERT) {
-      log.warn(
-          "Received alert with {} matches. Simulation does not handle matches.",
-          alert.getMatchesCount());
+      throw new IllegalArgumentException("This simulation request contains matches "
+          + "which is not supported by Data API v1. Migration to Data API v2 is required.");
     }
   }
 }

@@ -22,6 +22,7 @@ class SimulationProcessingConfiguration {
   @Bean
   SimulationAlertV1UseCase simulationAlertV1UseCase(
       SimulationAlertInsertService simulationAlertInsertService,
+      SimulationMatchInsertService simulationMatchInsertService,
       SimulationAlertV1MappingService simulationAlertV1MappingService,
       SimulationDbPartitionFactory simulationPartitionFactory,
       @Valid SimulationProcessingProperties properties,
@@ -31,6 +32,7 @@ class SimulationProcessingConfiguration {
         simulationPartitionFactory,
         simulationAlertV1MappingService,
         simulationAlertInsertService,
+        simulationMatchInsertService,
         timeSource,
         properties.getSimulationBatchSize());
   }
