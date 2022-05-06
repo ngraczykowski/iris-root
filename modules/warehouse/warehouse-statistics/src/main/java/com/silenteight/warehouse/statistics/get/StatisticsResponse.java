@@ -7,14 +7,14 @@ import lombok.Getter;
 @Getter
 final class StatisticsResponse {
 
-  private double avgEffectivenessPercent;
-  private double avgEfficiencyPercent;
+  private Double avgEffectivenessPercent;
+  private Double avgEfficiencyPercent;
   private int totalAlerts;
   private int falsePositive;
-  private double falsePositivePercent;
+  private Double falsePositivePercent;
   private int potentialTruePositive;
-  private double potentialTruePositivePercent;
+  private Double potentialTruePositivePercent;
   private int manualInvestigation;
-  private double manualInvestigationPercent;
+  private Double manualInvestigationPercent;
 
 }

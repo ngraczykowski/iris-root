@@ -12,9 +12,9 @@ import java.util.Map;
 @Validated
 @NoArgsConstructor
 @AllArgsConstructor
-@ConfigurationProperties(prefix = "warehouse.common.recommendation")
+@ConfigurationProperties(prefix = "warehouse.common.analyst-decision")
 @Getter
-public class RecommendationProperties {
+public class AnalystDecisionProperties {
 
   @NonNull
   private Map<String, List<String>> values;

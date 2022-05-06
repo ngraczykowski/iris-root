@@ -2,6 +2,7 @@ package com.silenteight.warehouse.common.domain;
 
 import com.silenteight.warehouse.common.domain.country.CountryPermissionService;
 import com.silenteight.warehouse.common.domain.country.CountryRepository;
+import com.silenteight.warehouse.common.properties.AnalystDecisionProperties;
 import com.silenteight.warehouse.common.properties.RecommendationProperties;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -13,7 +14,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @Configuration
 @EntityScan
 @EnableJpaRepositories
-@EnableConfigurationProperties({ RecommendationProperties.class })
+@EnableConfigurationProperties({ RecommendationProperties.class, AnalystDecisionProperties.class })
 public class DomainConfiguration {
 
   @Bean

@@ -38,7 +38,12 @@ warehouse:
         ACTION_POTENTIAL_TRUE_POSITIVE: [ "ACTION_POTENTIAL_TRUE_POSITIVE" ]
         ACTION_FALSE_POSITIVE: [ "ACTION_FALSE_POSITIVE", "ACTION_INVESTIGATE_PARTIALLY_FALSE_POSITIVE" ]
         ACTION_MANUAL_INVESTIGATION: [ "ACTION_MANUAL_INVESTIGATION", "MANUAL_INVESTIGATION","ACTION_INVESTIGATE" ]
-      recommendation-field-name: "s8_recommendation"
+      field-name: "s8_recommendation"
+    analyst-decision:
+      values:
+        TRUE_POSITIVE: ["analyst_decision_true_positive"]
+        FALSE_POSITIVE: ["analyst_decision_false_positive"]
+      field-name: "analyst_decision"
   country:
     migration:
       enabled: false

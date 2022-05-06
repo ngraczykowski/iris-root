@@ -23,7 +23,7 @@ class GetDashboardStatisticsUseCaseTest {
   private DailyRecommendationStatisticsRepository repository;
 
   @Test
-  void testCalculation() {
+  void testCalculation_allDataExists() {
     //given
     when(repository.findByDayBetween(any(), any())).thenReturn(provideDailyStatistic());
 
@@ -37,11 +37,68 @@ class GetDashboardStatisticsUseCaseTest {
         () -> assertEquals(430, response.getFalsePositive()),
         () -> assertEquals(110, response.getPotentialTruePositive()),
         () -> assertEquals(105, response.getManualInvestigation()),
-        () -> assertEquals(66.67, response.getFalsePositivePercent()),
-        () -> assertEquals(16.28, response.getManualInvestigationPercent()),
-        () -> assertEquals(17.05, response.getPotentialTruePositivePercent()),
-        () -> assertEquals(10.31, response.getAvgEffectivenessPercent()),
-        () -> assertEquals(22.07, response.getAvgEfficiencyPercent())
+        () -> assertEquals(66.66666666666666, response.getFalsePositivePercent()),
+        () -> assertEquals(16.27906976744186, response.getManualInvestigationPercent()),
+        () -> assertEquals(17.05426356589147, response.getPotentialTruePositivePercent()),
+        () -> assertEquals(16.58354114713217, response.getAvgEffectivenessPercent()),
+        () -> assertEquals(61.16279069767442, response.getAvgEfficiencyPercent())
+    );
+  }
+
+  @Test
+  void testCalculation_dataContainsNaN() {
+    //given
+    when(repository.findByDayBetween(any(), any())).thenReturn(provideDailyStatisticWithNaN());
+
+    //when
+    StatisticsResponse response =
+        cut.getTotalCount(StatisticsRequest.of(LocalDate.now(), LocalDate.now()));
+
+    //then
+    assertAll(
+        () -> assertEquals(645, response.getTotalAlerts()),
+        () -> assertEquals(430, response.getFalsePositive()),
+        () -> assertEquals(110, response.getPotentialTruePositive()),
+        () -> assertEquals(105, response.getManualInvestigation()),
+        () -> assertEquals(66.66666666666666, response.getFalsePositivePercent()),
+        () -> assertEquals(16.27906976744186, response.getManualInvestigationPercent()),
+        () -> assertEquals(17.05426356589147, response.getPotentialTruePositivePercent()),
+        () -> assertEquals(22.093023255813954, response.getAvgEffectivenessPercent()),
+        () -> assertEquals(61.16279069767442, response.getAvgEfficiencyPercent())
+    );
+  }
+
+  @Test
+  void testCalculation_emptyTable() {
+    //given
+    when(repository.findByDayBetween(any(), any())).thenReturn(List.of());
+
+    //when
+    StatisticsResponse response =
+        cut.getTotalCount(StatisticsRequest.of(LocalDate.now(), LocalDate.now()));
+
+    //then
+    assertAll(
+        () -> assertEquals(0, response.getTotalAlerts()),
+        () -> assertEquals(0, response.getFalsePositive()),
+        () -> assertEquals(0, response.getPotentialTruePositive()),
+        () -> assertEquals(0, response.getManualInvestigation()),
+        () -> assertEquals(Double.NaN, response.getFalsePositivePercent()),
+        () -> assertEquals(Double.NaN, response.getManualInvestigationPercent()),
+        () -> assertEquals(Double.NaN, response.getPotentialTruePositivePercent()),
+        () -> assertEquals(Double.NaN, response.getAvgEffectivenessPercent()),
+        () -> assertEquals(Double.NaN, response.getAvgEfficiencyPercent())
+    );
+  }
+
+  public List<DailyRecommendationStatistics> provideDailyStatisticWithNaN() {
+    return List.of(
+        new DailyRecommendationStatistics(
+            1L, LocalDate.now(), 300, 300, 0, 0, 0, 30.0, Double.NaN),
+        new DailyRecommendationStatistics(
+            2L, LocalDate.now(), 300, 100, 100, 100, 300, 100.0, 22.0),
+        new DailyRecommendationStatistics(
+            3L, LocalDate.now(), 45, 30, 10, 5, 1, 10.0, 50.0)
     );
   }
 
