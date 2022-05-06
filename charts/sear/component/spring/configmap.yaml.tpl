@@ -13,7 +13,7 @@ data:
       config:
         import: configtree:/var/run/secrets/spring/*/
 
-      {{ /* NOTE(ahaczewski): After Tadeusz Kleszcz recommendation, disable health check on exceptions when communicating via gRPC. */ -}}
+      {{/* NOTE(ahaczewski): After Tadeusz Kleszcz recommendation, disable health check on exceptions when communicating via gRPC. */}}
       autoconfigure:
         exclude: net.devh.boot.grpc.client.autoconfigure.GrpcClientHealthAutoConfiguration
 
