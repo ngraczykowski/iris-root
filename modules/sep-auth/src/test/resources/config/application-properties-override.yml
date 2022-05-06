@@ -1,0 +1,17 @@
+sep.auth:
+  permission-methods-mappings:
+    PERMISSION_1:
+      - METHOD_1
+      - METHOD_2
+    PERMISSION_2:
+      - METHOD_2
+      - METHOD_3
+  role-permissions-mappings:
+    ROLE_1:
+      - PERMISSION_1
+    ROLE_2:
+      - PERMISSION_2
+  permit-all-urls:
+    - /openapi/**
+    - /management/**
+  principal-claim: sub

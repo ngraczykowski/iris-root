@@ -167,6 +167,7 @@ spring-boot-starter-jdbc = { group = "org.springframework.boot", name = "spring-
 spring-boot-starter-logging = { group = "org.springframework.boot", name = "spring-boot-starter-logging" }
 spring-boot-starter-mail = { group = "org.springframework.boot", name = "spring-boot-starter-mail" }
 spring-boot-starter-oauth2-client = { group = "org.springframework.boot", name = "spring-boot-starter-oauth2-client" }
+spring-boot-starter-oauth2-resource-server = { group = "org.springframework.boot", name = "spring-boot-starter-oauth2-resource-server" }
 spring-boot-starter-quartz = { group = "org.springframework.boot", name = "spring-boot-starter-quartz" }
 spring-boot-starter-undertow = { group = "org.springframework.boot", name = "spring-boot-starter-undertow" }
 spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web" }
@@ -206,7 +207,6 @@ spring-security-config = { group = "org.springframework.security", name = "sprin
 spring-security-core = { group = "org.springframework.security", name = "spring-security-core" }
 spring-security-test = { group = "org.springframework.security", name = "spring-security-test" }
 spring-security-web = { group = "org.springframework.security", name = "spring-security-web" }
-
 # Project Reactor
 reactor-adapter = { group = "io.projectreactor.addons", name = "reactor-adapter" }
 reactor-bom = { group = "io.projectreactor", name = "reactor-bom" }

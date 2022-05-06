@@ -1,0 +1,20 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+}
+//TODO(dsniezek): verify if all dependencies are correct and needed
+dependencies {
+  implementation libs.platform.spring.boot
+  implementation libs.spring.security.web
+  implementation libs.spring.security.config
+  implementation libs.spring.boot.starter.web
+  implementation libs.spring.boot.starter.oauth2.resource.server
+  implementation libs.commons.text
+  implementation libs.jakarta.validation.api
+
+  testImplementation libs.assertj.core
+  testImplementation libs.spring.security.test
+  testImplementation libs.spring.boot.test
+  testImplementation libs.hibernate.validator
+
+  api libs.spring.context
+}
