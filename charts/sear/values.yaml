@@ -200,7 +200,7 @@ components:
 
     image:
       repository: registry.dev.s8ops.com/pb/sear-payments-bridge-app
-      tag: "latest"
+      tag: "snapshot"
 
     dbName: "pb"
     webPath: "pb"
@@ -208,7 +208,7 @@ components:
   universal-data-source:
     image:
       repository: registry.dev.s8ops.com/uds/universal-data-source-app
-      tag: "latest"
+      tag: "snapshot"
 
     dbName: "uds"
     webPath: "uds"
