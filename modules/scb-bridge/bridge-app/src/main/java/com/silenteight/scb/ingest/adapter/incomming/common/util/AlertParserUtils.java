@@ -26,6 +26,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 public final class AlertParserUtils {
 
   public static final String SPLIT_ID_CHARACTER = "|";
+  public static final String UNSPECIFIED_CLIENT_TYPE = "UNSPECIFIED";
 
   @SafeVarargs
   @SuppressWarnings("varargs")
@@ -53,7 +54,7 @@ public final class AlertParserUtils {
     else if (asList("O", "C").contains(suspectType))
       apType = "C";
     else
-      apType = null;
+      apType = UNSPECIFIED_CLIENT_TYPE;
 
     return apType;
   }

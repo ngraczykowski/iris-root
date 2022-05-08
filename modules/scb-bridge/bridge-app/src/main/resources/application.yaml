@@ -143,6 +143,7 @@ silenteight:
         allowed-values:
           - I
           - C
+          - UNSPECIFIED
         display-name: Alerted Party Type
         category-type: ENUMERATED
       - name: categories/isDeny
