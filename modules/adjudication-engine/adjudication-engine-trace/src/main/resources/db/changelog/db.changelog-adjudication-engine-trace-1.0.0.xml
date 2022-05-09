@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet author="ppietrucha" id="adjudication-engine-trace-1.0.0-1">
+    <createTable tableName="ae_event_journal">
+      <column name="event_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="event_type" type="varchar">
+        <constraints nullable="false"/>
+      </column>
+      <column name="recommendation_hash" type="varchar"/>
+      <column name="payload" type="JSONB">
+        <constraints nullable="false"/>
+      </column>
+      <column name="occurred_on" type="timestamp">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="timestamp">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+  </changeSet>
+</databaseChangeLog>
