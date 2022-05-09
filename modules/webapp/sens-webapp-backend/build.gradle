@@ -27,7 +27,6 @@ dependencies {
 
   implementation libs.bouncycastle.bcprov
   implementation libs.commons.lang3
-  implementation libs.jjwt
 
   implementation libs.hibernate.envers
   implementation libs.hibernate.validator
@@ -55,9 +54,6 @@ dependencies {
   implementation libs.grpc.protobuf
   implementation libs.grpc.stub
   implementation libs.grpc.client.spring.boot.starter
-
-  // Oracle is used by plugins to allow connecting to Oracle DB
-  implementation libs.oracle
 
   implementation libs.hikari.cp
   runtimeOnly libs.liquibase.core

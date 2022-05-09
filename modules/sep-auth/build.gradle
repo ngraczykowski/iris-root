@@ -4,7 +4,6 @@ plugins {
 }
 //TODO(dsniezek): verify if all dependencies are correct and needed
 dependencies {
-  implementation libs.platform.spring.boot
   implementation libs.spring.security.web
   implementation libs.spring.security.config
   implementation libs.spring.boot.starter.web

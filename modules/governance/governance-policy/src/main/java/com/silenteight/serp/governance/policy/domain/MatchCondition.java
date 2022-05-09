@@ -8,10 +8,10 @@ import com.silenteight.serp.governance.policy.domain.dto.MatchConditionDto;
 import com.silenteight.serp.governance.policy.domain.dto.StepSearchCriteriaDto;
 import com.silenteight.serp.governance.policy.domain.dto.TransferredMatchConditionDto;
 
-import org.testcontainers.shaded.com.google.common.base.Objects;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 import javax.persistence.*;
 
 @Entity
@@ -85,6 +85,6 @@ class MatchCondition extends BaseEntity implements StepSearchCriteriaMatcher {
     return criteria
         .getConditions()
         .stream()
-        .anyMatch(c -> Objects.equal(c.getName(), name) && values.containsAll(c.getValues()));
+        .anyMatch(c -> Objects.equals(c.getName(), name) && values.containsAll(c.getValues()));
   }
 }

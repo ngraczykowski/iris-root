@@ -6,7 +6,7 @@ description = "Governance Files"
 
 dependencies {
   implementation libs.silenteight.sep.base.common
-  implementation libs.silenteight.sep.base.testing
+
 
   implementation libs.silenteight.filestorage.api
   implementation project(":governance-db-changelog")
