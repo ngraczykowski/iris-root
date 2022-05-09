@@ -51,6 +51,9 @@ class HttpCallbackRequest implements CallbackRequest {
     } catch (RestClientException exception) {
       logException(endpoint, exception);
       throw new NonRecoverableCallbackException(exception);
+    } catch (Exception e) {
+      logException(endpoint, e);
+      throw new NonRecoverableCallbackException(e);
     }
   }
 

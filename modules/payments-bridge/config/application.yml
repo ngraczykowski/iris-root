@@ -57,7 +57,7 @@ pb:
   #-------------------------------------------------------------------------------------------------
   cmapi:
     callback:
-      endpoint: "http://localhost:5000/callback-recommendation"
+      endpoint: "http://localhost:${server.port}/rest/pb/mock/cmapi"
       enabled: false
 
   #-------------------------------------------------------------------------------------------------

@@ -86,7 +86,8 @@ class OAuth2SecurityConfig extends WebSecurityConfigurerAdapter {
       http.authorizeRequests().anyRequest().permitAll();
     } else {
       http.authorizeRequests()
-          .antMatchers("/management/health/**", "/management/prometheus/**", "/status").permitAll()
+          .antMatchers("/management/health/**", "/management/prometheus/**", "/status",
+              "/mock/cmapi").permitAll()
           .and()
           .authorizeRequests()
           .anyRequest().authenticated();
