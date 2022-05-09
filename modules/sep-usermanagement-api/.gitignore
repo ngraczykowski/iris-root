@@ -1,0 +1,31 @@
+### Various ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.DS_Store
+
+### jenv ###
+.java-version
+
+### IntelliJ IDEA ###
+/.idea/*/
+/.idea/*.xml
+out/
+*.iws
+*.iml
+*.ipr
+.attach_pid*
+
+### Excluded IntelliJ IDEA configuration ###
+!/.idea/inspectionProfiles/
+!/.idea/runConfigurations/
+!/.idea/codeStyles/
+!/.idea/checkstyle-idea.xml
+!/.idea/sqldialects.xml
+
+### Gradle ###
+build/
+.gradle/

@@ -16,6 +16,7 @@ dependencyResolutionManagement {
 rootProject.name = 'iris-modules'
 
 include('app')
+includeBuild('sep-usermanagement-api')
 includeBuild('sep-auth')
 includeBuild('governance')
 includeBuild('simulator')
