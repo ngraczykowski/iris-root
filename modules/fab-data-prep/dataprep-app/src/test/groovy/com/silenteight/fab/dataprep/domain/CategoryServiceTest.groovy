@@ -29,33 +29,26 @@ class CategoryServiceTest extends BaseSpecificationIT {
   CategoryValuesServiceClient categoryValuesServiceClient = Mock()
 
   def "categories should be created"() {
-    given:
-    FabCategory isSanFabCategory = Mock(FabCategory) {
-      getCategoryName() >> "categories/is_san"
-      getCategoryDefinition() >> CategoryDefinition.builder()
-          .enabled(true)
-          .displayName("isSanction")
-          .categoryType("ANY_STRING")
-          .allowedValues([])
-          .multiValue(true)
-          .build()
-    }
-
-    List<FabCategory> categories = [isSanFabCategory]
-
     when:
-    underTest.createCategories(categories)
+    underTest.createCategories()
 
     then:
     1 * categoryServiceClient.createCategories(
         BatchCreateCategoriesIn.builder()
             .categories(
                 [CategoryShared.builder()
-                     .name("categories/is_san")
-                     .displayName("isSanction")
-                     .categoryType(CategoryTypeShared.ANY_STRING)
-                     .allowedValues([])
-                     .multiValue(true)
+                     .name("categories/hitType")
+                     .displayName("Risk Type")
+                     .categoryType(CategoryTypeShared.ENUMERATED)
+                     .allowedValues(['SAN', 'OTHER', 'NO_DATA'])
+                     .multiValue(false)
+                     .build(),
+                 CategoryShared.builder()
+                     .name("categories/customerType")
+                     .displayName("Customer Type")
+                     .categoryType(CategoryTypeShared.ENUMERATED)
+                     .allowedValues(['I', 'C', 'NO_DATA', 'DATA_SOURCE_ERROR'])
+                     .multiValue(false)
                      .build()])
             .build())
   }

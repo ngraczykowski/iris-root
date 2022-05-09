@@ -6,8 +6,14 @@ import com.silenteight.fab.dataprep.domain.category.BuildCategoryCommand;
 import com.silenteight.fab.dataprep.domain.category.FabCategory;
 import com.silenteight.fab.dataprep.domain.feature.FeatureInputsCommand;
 import com.silenteight.fab.dataprep.domain.model.RegisteredAlert;
+import com.silenteight.universaldatasource.api.library.UniversalDataSourceLibraryRuntimeException;
 import com.silenteight.universaldatasource.api.library.category.v2.*;
 
+import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,11 +35,13 @@ class CategoryService {
     this.categoryServiceClient = categoryServiceClient;
     this.categoryValuesServiceClient = categoryValuesServiceClient;
     this.categories = categories;
-
-    createCategories(categories);
   }
 
-  final void createCategories(List<FabCategory> categories) {
+  @Async
+  @EventListener(ApplicationStartedEvent.class)
+  @Retryable(maxAttempts = Integer.MAX_VALUE,
+      value = UniversalDataSourceLibraryRuntimeException.class, backoff = @Backoff(value = 10_000L))
+  public void createCategories() {
     log.info("Creating categories {}", categories.stream()
         .map(FabCategory::getCategoryName)
         .collect(toList()));
