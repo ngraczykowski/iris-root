@@ -79,7 +79,7 @@ pob_agent:
   - watchlistParty.matchRecords.WL_POB
   - watchlistParty.matchRecords.WL_NATIONALITY
 
-santioned_country_agent:
+sanctioned_country_agent:
   ap:
   - ALL_CONNECTED_PARTY_BIRTH_COUNTRIES
   - ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES
@@ -101,11 +101,13 @@ santioned_country_agent:
 residency_agent:
   ap:
   - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ADDRESS1_COUNTRY
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ADDRESS1_COUNTRY
   - ALL_PARTY1_COUNTRY_DOMICILE1
   - ALL_CONNECTED_PARTY_BIRTH_COUNTRIES
   - ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES
   - ALL_CONNECTED_COUNTRY_OF_INCORPORATION
   - ALL_PRTY_PRIM_CTZNSH_CNTRY
+  - ALL_PARTY1_COUNTRY1_CITIZENSHIP
   - ALL_PARTY1_COUNTRY2_CITIZENSHIP
   - ALL_PRTY_RSDNC_CNTRY_CD
   - ALL_PARTY1_COUNTRY_PEP
@@ -146,7 +148,6 @@ ap_name_tp_marked_agent:
   input:
   - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL 
 
-# should be analysed with if any([...]) logic
 ap_id_tp_marked_agent:
   input:
 # ISG_Party
