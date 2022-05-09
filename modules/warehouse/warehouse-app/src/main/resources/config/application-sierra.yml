@@ -112,59 +112,58 @@ warehouse.reports.v2:
       type: simulation
       description: Reasoning Branch Scorer (Match Level)
       selectSqlQuery: >
-        SELECT (wsa.payload ->> 'match_reason:feature_vector_signature')           AS "Reasoning Branch ID",
-               (wsa.payload ->> 'match_reason:policy')                             AS "Policy ID",
-               (wsa.payload ->> 'match_reason:policy_title')                       AS "Policy Name",
-               (wsa.payload ->> 'match_reason:step')                               AS "Step ID",
-               (wsa.payload ->> 'match_reason:step_title')                         AS "Step Name",
-               (wsa.payload ->> 'match_solution')                                  AS "S8 Match Resolution",
-               (wsa.payload ->> 'categories/matchType:value')                      AS "Match Type",
-               (wsa.payload ->> 'features/nameMatchedText:solution')               AS "Name",
-               (wsa.payload ->> 'features/geo2:solution')                          AS "Geo v2",
-               (wsa.payload ->> 'features/geo3:solution')                          AS "Geo v3",
-               (wsa.payload ->> 'categories/watchlistType:value')                  AS "Watchlist Type",
-               (wsa.payload ->> 'features/nameMatchedText:solution')               AS "Name Matched Text",
-               (wsa.payload ->> 'categories/crossmatch:value')                     AS "Name vs Address Crossmatch",
-               (wsa.payload ->> 'categories/specificTerms:value')                  AS "Specific Terms",
-               (wsa.payload ->> 'categories/specificTerms2:value')                 AS "Specific Terms v2",
-               (wsa.payload ->> 'categories/messageStructure:value')               AS "Message Structure",
-               (wsa.payload ->> 'categories/historicalRiskAssessment:value')       AS "Historical Risk Assessment",
-               (wsa.payload ->>
-                'features/historicalRiskAccountNumberTP:solution')                 AS "Historical Risk - Account Number - TP",
-               (wsa.payload ->>
-                'features/historicalRiskAccountNumberFP:solution')                 AS "Historical Risk - Account Number - FP",
-               (wsa.payload ->> 'features/contextualLearningNameTP:solution')      AS "Contextual Learning - TP",
-               (wsa.payload ->> 'features/contextualLearningNameFP:solution')      AS "Contextual Learning - FP",
-               (wsa.payload ->> 'features/organizationName:solution')              AS "Organization Name",
-               (wsa.payload ->> 'features/organizationName2:solution')             AS "Organization Name v2",
-               (wsa.payload ->> 'categories/companyNameSurrounding:value')         AS "Company Name Surrounding",
-               COUNT(wsa.payload ->> 'match_reason:feature_vector_signature')      AS "Hits Count"
+        SELECT wsm.payload ->> 'match_reason:feature_vector_signature'              AS "Reasoning Branch ID",
+               wsm.payload ->> 'match_reason:policy'                                AS "Policy ID",
+               wsm.payload ->> 'match_reason:policy_title'                          AS "Policy Name",
+               wsm.payload ->> 'match_reason:step'                                  AS "Step ID",
+               wsm.payload ->> 'match_reason:step_title'                            AS "Step Name",
+               wsm.payload ->> 'match_solution'                                     AS "S8 Match Resolution",
+               wsm.payload ->> 'categories/matchType:value'                         AS "Match Type",
+               wsm.payload ->> 'features/nameMatchedText:solution'                  AS "Name",
+               wsm.payload ->> 'features/geo2:solution'                             AS "Geo v2",
+               wsm.payload ->> 'features/geo3:solution'                             AS "Geo v3",
+               wsm.payload ->> 'categories/watchlistType:value'                     AS "Watchlist Type",
+               wsm.payload ->> 'features/nameMatchedText:solution'                  AS "Name Matched Text",
+               wsm.payload ->> 'categories/crossmatch:value'                        AS "Name vs Address Crossmatch",
+               wsm.payload ->> 'categories/specificTerms:value'                     AS "Specific Terms",
+               wsm.payload ->> 'categories/specificTerms2:value'                    AS "Specific Terms v2",
+               wsm.payload ->> 'categories/messageStructure:value'                  AS "Message Structure",
+               wsm.payload ->> 'categories/historicalRiskAssessment:value'          AS "Historical Risk Assessment",
+               wsm.payload ->> 'features/historicalRiskAccountNumberTP:solution'    AS "Historical Risk - Account Number - TP",
+               wsm.payload ->> 'features/historicalRiskAccountNumberFP:solution'    AS "Historical Risk - Account Number - FP",
+               wsm.payload ->> 'features/contextualLearningNameTP:solution'         AS "Contextual Learning - TP",
+               wsm.payload ->> 'features/contextualLearningNameFP:solution'         AS "Contextual Learning - FP",
+               wsm.payload ->> 'features/organizationName:solution'                 AS "Organization Name",
+               wsm.payload ->> 'features/organizationName2:solution'                AS "Organization Name v2",
+               wsm.payload ->> 'categories/companyNameSurrounding:value'            AS "Company Name Surrounding",
+               COUNT(wsa.payload ->> 'match_reason:feature_vector_signature')       AS "Hits Count"
         FROM warehouse_simulation_alert wsa 
+          JOIN warehouse_simulation_match wsm ON wsa.name = wsm.alert_name
         WHERE wsa.analysis_name = 'analysis/${analysisId}'
-        GROUP BY (wsa.payload ->> 'match_reason:feature_vector_signature'),
-                 (wsa.payload ->> 'match_reason:policy_title'),
-                 (wsa.payload ->> 'match_reason:policy'),
-                 (wsa.payload ->> 'match_reason:step'),
-                 (wsa.payload ->> 'match_reason:step_title'),
-                 (wsa.payload ->> 'match_solution'),
-                 (wsa.payload ->> 'categories/matchType:value'),
-                 (wsa.payload ->> 'features/nameMatchedText:solution'),
-                 (wsa.payload ->> 'features/geo2:solution'),
-                 (wsa.payload ->> 'features/geo3:solution'),
-                 (wsa.payload ->> 'categories/watchlistType:value'),
-                 (wsa.payload ->> 'features/nameMatchedText:solution'),
-                 (wsa.payload ->> 'categories/crossmatch:value'),
-                 (wsa.payload ->> 'categories/specificTerms:value'),
-                 (wsa.payload ->> 'categories/specificTerms2:value'),
-                 (wsa.payload ->> 'categories/messageStructure:value'),
-                 (wsa.payload ->> 'categories/historicalRiskAssessment:value'),
-                 (wsa.payload ->> 'features/historicalRiskAccountNumberTP:solution'),
-                 (wsa.payload ->> 'features/historicalRiskAccountNumberFP:solution'),
-                 (wsa.payload ->> 'features/contextualLearningNameTP:solution'),
-                 (wsa.payload ->> 'features/contextualLearningNameFP:solution'),
-                 (wsa.payload ->> 'features/organizationName:solution'),
-                 (wsa.payload ->> 'features/organizationName2:solution'),
-                 (wsa.payload ->> 'categories/companyNameSurrounding:value')
+        GROUP BY wsm.payload ->> 'match_reason:feature_vector_signature',
+                 wsm.payload ->> 'match_reason:policy_title',
+                 wsm.payload ->> 'match_reason:policy',
+                 wsm.payload ->> 'match_reason:step',
+                 wsm.payload ->> 'match_reason:step_title',
+                 wsm.payload ->> 'match_solution',
+                 wsm.payload ->> 'categories/matchType:value',
+                 wsm.payload ->> 'features/nameMatchedText:solution',
+                 wsm.payload ->> 'features/geo2:solution',
+                 wsm.payload ->> 'features/geo3:solution',
+                 wsm.payload ->> 'categories/watchlistType:value',
+                 wsm.payload ->> 'features/nameMatchedText:solution',
+                 wsm.payload ->> 'categories/crossmatch:value',
+                 wsm.payload ->> 'categories/specificTerms:value',
+                 wsm.payload ->> 'categories/specificTerms2:value',
+                 wsm.payload ->> 'categories/messageStructure:value',
+                 wsm.payload ->> 'categories/historicalRiskAssessment:value',
+                 wsm.payload ->> 'features/historicalRiskAccountNumberTP:solution',
+                 wsm.payload ->> 'features/historicalRiskAccountNumberFP:solution',
+                 wsm.payload ->> 'features/contextualLearningNameTP:solution',
+                 wsm.payload ->> 'features/contextualLearningNameFP:solution',
+                 wsm.payload ->> 'features/organizationName:solution',
+                 wsm.payload ->> 'features/organizationName2:solution',
+                 wsm.payload ->> 'categories/companyNameSurrounding:value'
     - name: AI_REASONING
       type: production
       description: AI Reasoning (Alert Level)
@@ -215,25 +214,26 @@ warehouse.reports.v2:
       type: simulation
       description: AI Reasoning (Match Level)
       selectSqlQuery: >
-        SELECT (wsa.payload ->> 'match_reason:feature_vector_signature') AS "Reasoning Branch ID",
-               (wsa.payload ->> 'match_reason:policy')                   AS "Policy ID",
-               (wsa.payload ->> 'match_reason:policy_title')             AS "Policy Name",
-               (wsa.payload ->> 'match_reason:step')                     AS "Step ID",
-               (wsa.payload ->> 'match_reason:step_title')               AS "Step Name",
-               (wsa.payload ->> 'match_solution')                        AS "S8 Match Resolution",
-               (wsa.payload ->> 'recommendation_recommended_action')     AS "S8 Alert Resolution",
-               (wsa.payload ->> 'recommendation_create_time')            AS "S8 Alert Resolution Timestamp (UTC)",
-               (wsa.payload ->> 'recommendation_comment')                AS "S8 Alert Comment",
-               (wa.payload ->> 'firco_system_id')                        AS "Client Alert ID",
-               wa.name                                                   AS "S8 Alert ID",
-               (wa.payload ->> 'status')                                 AS "Alert Status",
-               (wa.payload ->> 'delivery_status')                        AS "Alert Delivery Status",
-               wm.name                                                   AS "S8 Match ID"
+        SELECT wsm.payload ->> 'match_reason:feature_vector_signature' AS "Reasoning Branch ID",
+               wsm.payload ->> 'match_reason:policy'                   AS "Policy ID",
+               wsm.payload ->> 'match_reason:policy_title'             AS "Policy Name",
+               wsm.payload ->> 'match_reason:step'                     AS "Step ID",
+               wsm.payload ->> 'match_reason:step_title'               AS "Step Name",
+               wsm.payload ->> 'match_solution'                        AS "S8 Match Resolution",
+               wsa.payload ->> 'recommendation_recommended_action'     AS "S8 Alert Resolution",
+               wsa.payload ->> 'recommendation_create_time'            AS "S8 Alert Resolution Timestamp (UTC)",
+               wsa.payload ->> 'recommendation_comment'                AS "S8 Alert Comment",
+               wa.payload ->> 'firco_system_id'                        AS "Client Alert ID",
+               wa.name                                                 AS "S8 Alert ID",
+               wa.payload ->> 'status'                                 AS "Alert Status",
+               wa.payload ->> 'delivery_status'                        AS "Alert Delivery Status",
+               wm.name                                                 AS "S8 Match ID"
         FROM warehouse_alert wa
                  JOIN warehouse_match wm ON wa.id = wm.alert_id
                  FULL JOIN warehouse_simulation_alert wsa ON wa.name = wsa.name
-        WHERE wsa.analysis_name = 'analysis/${analysisId}' 
-                 AND (position(wa.name in wm.name)>0 or wm.name is null)
+                 JOIN warehouse_simulation_match wsm ON wsa.name = wsm.alert_name
+        WHERE wsa.analysis_name = 'analysis/${analysisId}'
+          AND (POSITION(wa.name IN wm.name) > 0 OR wm.name IS NULL)
     - name: ACCURACY
       type: production
       description: Accuracy (Alert Level)
@@ -256,21 +256,33 @@ warehouse.reports.v2:
       type: simulation
       description: Accuracy (Alert Level)
       selectSqlQuery: >
-        SELECT DISTINCT (wsa.payload ->> 'match_reason:policy')               AS "Policy ID",
-                        (wsa.payload ->> 'match_reason:policy_title')         AS "Policy Name",
-                        (wsa.payload ->> 'recommendation_recommended_action') AS "S8 Alert Resolution",
-                        (wsa.payload ->> 'recommendation_create_time')        AS "S8 Alert Resolution Timestamp (UTC)",
-                        (wsa.payload ->> 'recommendation_comment')            AS "S8 Alert Comment",
-                        (wa.payload ->> 'firco_analyst_decision')             AS "Analyst Decision",
-                        (wa.payload ->> 'firco_analyst_decision_time')        AS "Analyst Decision Timestamp",
-                        (wa.payload ->> 'firco_analyst_comment')              AS "Analyst Comment",
-                        (wa.payload ->> 'firco_system_id')                    AS "Client Alert ID",
-                        (wa.payload ->> 'status')                             AS "Alert Status",
-                        wa.name                                               AS "S8 Alert ID"
-        FROM warehouse_alert wa
-                 JOIN warehouse_simulation_alert wsa ON wa.name = wsa.name
+        SELECT DISTINCT wsm.payload ->> 'match_reason:policy'                AS "Policy ID",
+                        wsm.payload ->> 'match_reason:policy_title'          AS "Policy Name",
+                        wsa.payload ->> 'recommendation_recommended_action'  AS "S8 Alert Resolution",
+                        wsa.payload ->> 'recommendation_create_time'         AS "S8 Alert Resolution Timestamp (UTC)",
+                        wsa.payload ->> 'recommendation_comment'             AS "S8 Alert Comment",
+                        wa.payload ->> 'firco_analyst_decision'              AS "Analyst Decision",
+                        wa.payload ->> 'firco_analyst_decision_time'         AS "Analyst Decision Timestamp",
+                        wa.payload ->> 'firco_analyst_comment'               AS "Analyst Comment",
+                        wa.payload ->> 'firco_system_id'                     AS "Client Alert ID",
+                        wa.payload ->> 'status'                              AS "Alert Status",
+                        wa.name                                              AS "S8 Alert ID"
+        FROM warehouse_simulation_alert wsa 
+          LEFT JOIN warehouse_alert wa ON wa.name = wsa.name
+          LEFT JOIN warehouse_simulation_match wsm ON wsm.alert_name = wsa.name
         WHERE wsa.analysis_name = 'analysis/${analysisId}'
           AND (wa.payload ->> 'firco_analyst_decision') IN ('analyst_decision_true_positive', 'analyst_decision_false_positive')
+        GROUP BY wsm.payload ->> 'match_reason:policy',
+                 wsm.payload ->> 'match_reason:policy_title',
+                 wsa.payload ->> 'recommendation_recommended_action',
+                 wsa.payload ->> 'recommendation_create_time',
+                 wsa.payload ->> 'recommendation_comment',
+                 wa.payload ->> 'firco_analyst_decision',
+                 wa.payload ->> 'firco_analyst_decision_time',
+                 wa.payload ->> 'firco_analyst_comment',
+                 wa.payload ->> 'firco_system_id',
+                 wa.payload ->> 'status',
+                 wa.name
 
 sentry:
   traces-sample-rate: 0
