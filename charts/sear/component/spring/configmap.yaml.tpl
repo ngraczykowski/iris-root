@@ -74,7 +74,12 @@ data:
       <!-- https://logback.qos.ch/manual/configuration.html#shutdownHook and https://jira.qos.ch/browse/LOGBACK-1090 -->
       <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
 
+      <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+      <!--
+      //TODO: pputerla - disabling temporarily to be able to read logs more easily
       <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+
         <encoder class="co.elastic.logging.logback.EcsEncoder">
           <serviceName>${SERVICE_NAME}</serviceName>
           <includeMarkers>true</includeMarkers>
@@ -85,6 +90,7 @@ data:
         </encoder>
         <target>System.out</target>
       </appender>
+      -->
 
       <appender name="ASYNC_CONSOLE" class="ch.qos.logback.classic.AsyncAppender">
         <queueSize>512</queueSize>
