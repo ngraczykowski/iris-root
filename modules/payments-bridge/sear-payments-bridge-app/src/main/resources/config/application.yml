@@ -55,7 +55,6 @@ pb:
       lock-most: "PT15s"
       lock-least: "PT5s"
     timeZone: America/Chicago
-    fileEncoding: CP1250
     discriminator-prefix: "default"
     chunkSize: 128
   #-------------------------------------------------------------------------------------------------
