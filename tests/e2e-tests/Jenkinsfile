@@ -1,0 +1,44 @@
+pipeline {
+  agent {
+    docker {
+      image 'docker.repo.silenteight.com/gradle-java:jdk-11'
+    }
+  }
+  options {
+    buildDiscarder(logRotator(numToKeepStr: '90', artifactNumToKeepStr: '5'))
+    gitLabConnection env.GITLAB_CONNECTION_NAME
+    disableConcurrentBuilds()
+  }
+  parameters {
+    choice(
+      name: 'environments',
+      choices: ['bravo-dev'],
+      description: 'Environment to run the tests on'
+    )
+  }
+  environment {
+    KARATE_CLIENT = credentials('karate-client-id-secret')
+    KARATE_CREDS = credentials('karate-username-password')
+  }
+  stages {
+    stage('E2E Tests') {
+      steps {
+        sh "./gradlew test -Dkarate.env=${params.environments} -Dkarate.client-id=${KARATE_CLIENT_USR} -Dkarate.client-secret=${KARATE_CLIENT_PSW} -Dkarate.username=${KARATE_CREDS_USR} -Dkarate.password=${KARATE_CREDS_PSW}"
+      }
+    }
+  }
+  post {
+    always {
+      publishHTML (
+        target: [
+          allowMissing: true,
+          alwaysLinkToLastBuild: true,
+          keepAll: true,
+          reportDir: 'results/',
+          reportFiles: '*.html, *.css, *.otf, *.eot, *.svg, *.ttf, *.woff, *.woff2, *.js, *.png, *.min.css',
+          reportName: 'Test Report'
+        ]
+      )
+    }
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "projectKey": "QA",
+  "name": "${testCycleName}"
+}

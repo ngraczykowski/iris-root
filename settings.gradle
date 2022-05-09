@@ -4,3 +4,4 @@ includeBuild('platforms')
 includeBuild('build-logic')
 
 includeBuild('modules')
+includeBuild('tests')

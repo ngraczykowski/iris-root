@@ -1,0 +1,821 @@
+{
+  "DN_CASE": {
+    "DN_CASE.ID": "${caseId}",
+    "DN_CASE.caseGroup": "match",
+    "DN_CASE.caseType": "issue",
+    "DN_CASE.externalId": "SEN-${caseId}",
+    "DN_CASE.externalIdSort": "SEN     ${caseId}",
+    "DN_CASE.caseKey": "0d5e9133021f0e878332ea94f33938e0",
+    "DN_CASE.keyLabel": "${alertId}",
+    "DN_CASE.parentId": "1014502",
+    "DN_CASE.supplementaryKey": "c3ee346966cc91b4ce3a89975bb33710",
+    "DN_CASE.supplementaryType": "",
+    "DN_CASE.flagKey": "${flagKey}",
+    "DN_CASE.description": "QWERTYUIOPOI U UYYTREWQEQWR VCXZXC SA DE CV",
+    "DN_CASE.createdBy": "0",
+    "DN_CASE.createdDateTime": "${alertDate}",
+    "DN_CASE.modifiedBy": "1073747620",
+    "DN_CASE.modifiedDateTime": "${alertDate}",
+    "DN_CASE.assignedUser": "-1",
+    "DN_CASE.assignedBy": "1073747620",
+    "DN_CASE.assignedDateTime": "${alertDate}",
+    "DN_CASE.priority": "250",
+    "DN_CASE.permission": "MEXICO",
+    "DN_CASE.currentState": "${currentState}",
+    "DN_CASE.derivedState": "",
+    "DN_CASE.stateExpiry": "",
+    "DN_CASE.stateChangeBy": "1073747620",
+    "DN_CASE.stateChangeDateTime": "${alertDate}",
+    "DN_CASE.sourceId": "69_416",
+    "DN_CASE.sourceName": "Sentry",
+    "DN_CASE.caseMarker": "0",
+    "DN_CASE.updatedBy": "1073747620",
+    "DN_CASE.updatedDateTime": "${alertDate}",
+    "DN_CASE.groupId": "375bb6a9-0050-46e7-845d-ed734514b423",
+    "DN_CASE.groupLevel": "1",
+    "DN_CASE.ExtendedAttribute1": "",
+    "DN_CASE.ExtendedAttribute2": "",
+    "DN_CASE.ExtendedAttribute3": "",
+    "DN_CASE.ExtendedAttribute4": "",
+    "DN_CASE.ExtendedAttribute5": "SAN",
+    "DN_CASE.ExtendedAttribute6": "Batch",
+    "DN_CASE.ExtendedAttribute7": "",
+    "DN_CASE.ExtendedAttribute8": "BAU",
+    "DN_CASE.ExtendedAttribute9": "",
+    "DN_CASE.ExtendedAttribute10": "GR-ESAN",
+    "DN_CASE.ExtendedAttribute11": "RBWM",
+    "DN_CASE.ExtendedAttribute12": "",
+    "DN_CASE.ExtendedAttribute13": "0",
+    "DN_CASE.ExtendedAttribute14": "",
+    "DN_CASE.ExtendedAttribute15": "",
+    "DN_CASE.AlertURL": "http://128.13.42.158:8001/edq/blueprints/casemanager/jnlp?caseId=SEN-1014503"
+  },
+  "DN_CASECOMMENT": [
+    {
+      "DN_CASECOMMENT.commentId": "3581349",
+      "DN_CASECOMMENT.commentedBy": "1073742245",
+      "DN_CASECOMMENT.commentDateTime": "${alertDate}",
+      "DN_CASECOMMENT.caseComment": "Alerts moved to Level 2 Review as part of new BAU process",
+      "DN_CASECOMMENT.deletedFlag": "0",
+      "DN_CASECOMMENT.restrictingPermission": ""
+    },
+    {
+      "DN_CASECOMMENT.commentId": "4190581",
+      "DN_CASECOMMENT.commentedBy": "1073742215",
+      "DN_CASECOMMENT.commentDateTime": "${alertDate}",
+      "DN_CASECOMMENT.caseComment": "Country of Register Not available on WC site, Number register/incorporation (Folio Mercatil) Not available on WC site, ID fiscal (RFC) Not available on WC site, Business Address No Match (PRIV B OTE DE LA 16 DE SEPT NO 1111 COL HUEXOTITLA PUEBLA PUEBLA 22222, MEXICO HOGAN VS Carrera 1 No. 1-12 of. 123 ~ Cali ~ COLOMBIA WC SITE), Business Name No Match (QWERTYUIOPOI U UYYTREWQEQWR VCXZXC VS QWERTYUIOPOI U UYYTREWQEQWR VCXZXC LTDA WC SITE).",
+      "DN_CASECOMMENT.deletedFlag": "0",
+      "DN_CASECOMMENT.restrictingPermission": ""
+    },
+    {
+      "DN_CASECOMMENT.commentId": "4190652",
+      "DN_CASECOMMENT.commentedBy": "1073742215",
+      "DN_CASECOMMENT.commentDateTime": "${alertDate}",
+      "DN_CASECOMMENT.caseComment": "Individual: Location Mismatch Discount: Record Location PRIV B OTE DE LA 11 DE SEPT NO 1111 COL HUEXOTITLA PUEBLA PUEBLA 22222, MEXICO HOGAN vs Watchlist Entry Location Carrera 1 No. 1-12 of. 123 ~ Cali ~ COLOMBIA WC SITE  Discount: Name Mismatch Record Name QWERTYUIOPOI U UYYTREWQEQWR VCXZXC vs Watchlist Entry Name QWERTYUIOPOI U UYYTREWQEQWR VCXZXC LTDA WC SITE",
+      "DN_CASECOMMENT.deletedFlag": "0",
+      "DN_CASECOMMENT.restrictingPermission": ""
+    },
+    {
+      "DN_CASECOMMENT.commentId": "4791879",
+      "DN_CASECOMMENT.commentedBy": "1073742182",
+      "DN_CASECOMMENT.commentDateTime": "${alertDate}",
+      "DN_CASECOMMENT.caseComment": "Alerts moved to Level 2 Review as part of new BAU process",
+      "DN_CASECOMMENT.deletedFlag": "0",
+      "DN_CASECOMMENT.restrictingPermission": ""
+    },
+    {
+      "DN_CASECOMMENT.commentId": "4819938",
+      "DN_CASECOMMENT.commentedBy": "1073742191",
+      "DN_CASECOMMENT.commentDateTime": "${alertDate}",
+      "DN_CASECOMMENT.caseComment": "Country of Register Not available on WC site , Number register/incorporation (Mnbvc Lkjhgfds) Not available on WC site ,ID fiscal (RFC) Not available on WC site ,Business Address No Match (MEXICO Hogan vs COLOMBIA WC Site), Business Name No Match (QWERTYUIOPOI U UYYTREWQEQWR VCXZXC vs  QWERTYUIOPOI U UYYTREWQEQWR VCXZXC LTDA WC Site) .",
+      "DN_CASECOMMENT.deletedFlag": "0",
+      "DN_CASECOMMENT.restrictingPermission": ""
+    },
+    {
+      "DN_CASECOMMENT.commentId": "4820001",
+      "DN_CASECOMMENT.commentedBy": "1073742191",
+      "DN_CASECOMMENT.commentDateTime": "${alertDate}",
+      "DN_CASECOMMENT.caseComment": "\"Discount: Name Mismatch Record Name   *QWERTYUIOPOI U UYYTREWQEQWR VCXZXC vs Watchlist Entry Name QWERTYUIOPOI U UYYTREWQEQWR VCXZXC LTDA WC SITE  Entity: Location Mismatch Discount: Record Location MEXICO HOGAN vs Watchlist Entry Location COLOMBIA WC SITE\"",
+      "DN_CASECOMMENT.deletedFlag": "0",
+      "DN_CASECOMMENT.restrictingPermission": ""
+    },
+    {
+      "DN_CASECOMMENT.commentId": "27086842",
+      "DN_CASECOMMENT.commentedBy": "1073742802",
+      "DN_CASECOMMENT.commentDateTime": "${alertDate}",
+      "DN_CASECOMMENT.caseComment": "The alert can be closed as False Positive because two of the following evidences are identified as not being the same for the record and the WP as follows: Country of Registration No Match (MEXICO, IWH:IDCE vs COLOMBIA, OWS), Registration/incorporation number (Mnbvc Lkjhgfdsa) Not Available on (OWS) for the WP, TAX ID (RFC) Not Available on (OWS) for the WP, Business Address No Match (PRIV B OTE DE LA 11 DE SEPT NO 1111 COL HUEXOTITLA PUEBLA PUEBLA 22222, MEXICO, OWS vs Cali,Valle del Cauca,COLOMBIA, OWS), Business Name No Match (QWERTYUIOPOI U UYYTREWQEQWR VCXZXC, OWS vs QWERTYUIOPOI U UYYTREWQEQWR VCXZXC UKJHGFT CIA LTDA, OWS)",
+      "DN_CASECOMMENT.deletedFlag": "0",
+      "DN_CASECOMMENT.restrictingPermission": ""
+    },
+    {
+      "DN_CASECOMMENT.commentId": "27086852",
+      "DN_CASECOMMENT.commentedBy": "1073742802",
+      "DN_CASECOMMENT.commentDateTime": "${alertDate}",
+      "DN_CASECOMMENT.caseComment": "Entity: Country of Registration or Incorporation Mismatch Discount: Record Country MEXICO, IWH:IDCE vs Watchlist Entry Country COLOMBIA, OWS  Entity: Businness Address Mismatch Discount: Record Business Address PRIV B OTE DE LA 11 DE SEPT NO 1111 COL HUEXOTITLA PUEBLA PUEBLA 22222, MEXICO, OWS vs Watchlist Entry Business Address Cali,Valle del Cauca,COLOMBIA, OWS  Discount: Business Name Mismatch Record Name QWERTYUIOPOI U UYYTREWQEQWR VCXZXC vs Watchlist Entry Name QWERTYUIOPOI U UYYTREWQEQWR VCXZXC UJHGFDR CIA LTDA, OWS",
+      "DN_CASECOMMENT.deletedFlag": "0",
+      "DN_CASECOMMENT.restrictingPermission": ""
+    },
+    {
+      "DN_CASECOMMENT.commentId": "34666543",
+      "DN_CASECOMMENT.commentedBy": "1073742297",
+      "DN_CASECOMMENT.commentDateTime": "${alertDate}",
+      "DN_CASECOMMENT.caseComment": "Re-alert: Entity: Country of Registration or Incorporation Mismatch Discount: Record Country MEXICO vs Watchlist Entry Country COLOMBIA Record Evidence: IWH (POAC) Watchlist Evidence: OWS  Re-alert: Entity: Business Address Mismatch Discount: Record Business Address PUEBLA, PUEBLA, MEXICO vs Watchlist Entry Business Address CALI, VALLE DEL CAUCA, COLOMBIA Record Evidence: OWS Watchlist Evidence: OWS  Re-alert: Discount: Business Name Mismatch Record Name QWERTYUIOPOI U UYYTREWQEQWR VCXZXC vs Watchlist Entry Name QWERTYUIOPOI U UYYTREWQEQWR VCXZXC UJHGFDR CIA LTDA Record Evidence: OWS Watchlist Evidence: OWS  Further Information:  The alert can be closed as False Positive because two of the following evidences are identified as not being the same for the record and the WP",
+      "DN_CASECOMMENT.deletedFlag": "0",
+      "DN_CASECOMMENT.restrictingPermission": ""
+    },
+    {
+      "DN_CASECOMMENT.commentId": "38141710",
+      "DN_CASECOMMENT.commentedBy": "1073747013",
+      "DN_CASECOMMENT.commentDateTime": "${alertDate}",
+      "DN_CASECOMMENT.caseComment": "Working Record Previous Entity Name: QWERTYUIOPOI U UYYTREWQEQWR VCXZXC PREV. Working Record Current Entity Name: QWERTYUIOPOI U UYYTREWQEQWR VCXZXC PREV",
+      "DN_CASECOMMENT.deletedFlag": "0",
+      "DN_CASECOMMENT.restrictingPermission": ""
+    },
+    {
+      "DN_CASECOMMENT.commentId": "38141728",
+      "DN_CASECOMMENT.commentedBy": "1073747013",
+      "DN_CASECOMMENT.commentDateTime": "${alertDate}",
+      "DN_CASECOMMENT.caseComment": "BP assigning alert for Level 2 Review.",
+      "DN_CASECOMMENT.deletedFlag": "0",
+      "DN_CASECOMMENT.restrictingPermission": ""
+    },
+    {
+      "DN_CASECOMMENT.commentId": "38143168",
+      "DN_CASECOMMENT.commentedBy": "1073742285",
+      "DN_CASECOMMENT.commentDateTime": "${alertDate}",
+      "DN_CASECOMMENT.caseComment": "Re-alert: Entity: Country of Registration or Incorporation Mismatch Discount: Record Country MEXICO vs Watchlist Entry Country COLOMBIA Record Evidence:  IWH (POAC) Watchlist Evidence: OWS  Re-alert: Entity: Business Address Mismatch Discount: Record Business Address MEXICO vs Watchlist Entry Business Address COLOMBIA Record Evidence: OWS Watchlist Evidence: OWS  Re-alert: Discount: Business Name Mismatch Record Name QWERTYUIOPOI U UYYTREWQEQWR VCXZXC vs Watchlist Entry Name QWERTYUIOPOI U UYYTREWQEQWR VCXZXC UJHGFDR CIA LTDA Record Evidence: OWS Watchlist Evidence: OWS  Further Information:  The alert can be closed as False Positive because two of the following evidences are identified as not being the same for the record and the WP",
+      "DN_CASECOMMENT.deletedFlag": "0",
+      "DN_CASECOMMENT.restrictingPermission": ""
+    }
+  ],
+  "DN_CASEHISTORY": [
+    {
+      "DN_CASEHISTORY.modifiedBy": "0",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "caseMarker",
+      "DN_CASEHISTORY.oldValue": "0",
+      "DN_CASEHISTORY.newValue": "1",
+      "DN_CASEHISTORY.transition": ""
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742245",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "caseMarker",
+      "DN_CASEHISTORY.oldValue": "1",
+      "DN_CASEHISTORY.newValue": "0",
+      "DN_CASEHISTORY.transition": "Send to Level 2 Review (L1)"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742245",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "currentState",
+      "DN_CASEHISTORY.oldValue": "Level 1 Review",
+      "DN_CASEHISTORY.newValue": "Level 2 Review",
+      "DN_CASEHISTORY.transition": "Send to Level 2 Review (L1)"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742245",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "ExtendedAttribute12",
+      "DN_CASEHISTORY.oldValue": "",
+      "DN_CASEHISTORY.newValue": "Cannot be Discounted",
+      "DN_CASEHISTORY.transition": "Send to Level 2 Review (L1)"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742245",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "assignedUser",
+      "DN_CASEHISTORY.oldValue": "-1",
+      "DN_CASEHISTORY.newValue": "1073742215",
+      "DN_CASEHISTORY.transition": ""
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742215",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "attachment",
+      "DN_CASEHISTORY.oldValue": "",
+      "DN_CASEHISTORY.newValue": "SEN-1014503_DJGB.pdf",
+      "DN_CASEHISTORY.transition": ""
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742215",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "currentState",
+      "DN_CASEHISTORY.oldValue": "Level 2 Review",
+      "DN_CASEHISTORY.newValue": "False Positive",
+      "DN_CASEHISTORY.transition": "Send to False Positive (L2) Clear Day 1"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742215",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "assignedUser",
+      "DN_CASEHISTORY.oldValue": "1073742215",
+      "DN_CASEHISTORY.newValue": "-1",
+      "DN_CASEHISTORY.transition": "Send to False Positive (L2) Clear Day 1"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742215",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "ExtendedAttribute12",
+      "DN_CASEHISTORY.oldValue": "Cannot be Discounted",
+      "DN_CASEHISTORY.newValue": "",
+      "DN_CASEHISTORY.transition": "Send to False Positive (L2) Clear Day 1"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742215",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "ExtendedAttribute8",
+      "DN_CASEHISTORY.oldValue": "Day 1 Spike",
+      "DN_CASEHISTORY.newValue": "BAU",
+      "DN_CASEHISTORY.transition": "Send to False Positive (L2) Clear Day 1"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "0",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "currentState",
+      "DN_CASEHISTORY.oldValue": "False Positive",
+      "DN_CASEHISTORY.newValue": "Level 1 Review",
+      "DN_CASEHISTORY.transition": "Re-Alert from False Positive"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "0",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "caseMarker",
+      "DN_CASEHISTORY.oldValue": "0",
+      "DN_CASEHISTORY.newValue": "1",
+      "DN_CASEHISTORY.transition": ""
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742182",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "caseMarker",
+      "DN_CASEHISTORY.oldValue": "1",
+      "DN_CASEHISTORY.newValue": "0",
+      "DN_CASEHISTORY.transition": "Send to Level 2 Review (L1)"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742182",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "currentState",
+      "DN_CASEHISTORY.oldValue": "Level 1 Review",
+      "DN_CASEHISTORY.newValue": "Level 2 Review",
+      "DN_CASEHISTORY.transition": "Send to Level 2 Review (L1)"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742182",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "ExtendedAttribute12",
+      "DN_CASEHISTORY.oldValue": "",
+      "DN_CASEHISTORY.newValue": "Cannot be Discounted",
+      "DN_CASEHISTORY.transition": "Send to Level 2 Review (L1)"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742182",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "assignedUser",
+      "DN_CASEHISTORY.oldValue": "-1",
+      "DN_CASEHISTORY.newValue": "1073742191",
+      "DN_CASEHISTORY.transition": ""
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742191",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "attachment",
+      "DN_CASEHISTORY.oldValue": "",
+      "DN_CASEHISTORY.newValue": "SEN-1014503_VRY.pdf",
+      "DN_CASEHISTORY.transition": ""
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742191",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "assignedUser",
+      "DN_CASEHISTORY.oldValue": "1073742191",
+      "DN_CASEHISTORY.newValue": "-1",
+      "DN_CASEHISTORY.transition": "Send to False Positive (L2) Clear Day 1"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742191",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "currentState",
+      "DN_CASEHISTORY.oldValue": "Level 2 Review",
+      "DN_CASEHISTORY.newValue": "False Positive",
+      "DN_CASEHISTORY.transition": "Send to False Positive (L2) Clear Day 1"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742191",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "ExtendedAttribute12",
+      "DN_CASEHISTORY.oldValue": "Cannot be Discounted",
+      "DN_CASEHISTORY.newValue": "",
+      "DN_CASEHISTORY.transition": "Send to False Positive (L2) Clear Day 1"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "0",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "currentState",
+      "DN_CASEHISTORY.oldValue": "False Positive",
+      "DN_CASEHISTORY.newValue": "Level 1 Review",
+      "DN_CASEHISTORY.transition": "Re-Alert from False Positive"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "0",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "stateExpiry",
+      "DN_CASEHISTORY.oldValue": "",
+      "DN_CASEHISTORY.newValue": "1499106821973",
+      "DN_CASEHISTORY.transition": "Re-Alert from False Positive"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "0",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "caseMarker",
+      "DN_CASEHISTORY.oldValue": "0",
+      "DN_CASEHISTORY.newValue": "1",
+      "DN_CASEHISTORY.transition": ""
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "0",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "ExtendedAttribute13",
+      "DN_CASEHISTORY.oldValue": "",
+      "DN_CASEHISTORY.newValue": "true",
+      "DN_CASEHISTORY.transition": ""
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "0",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "stateExpiry",
+      "DN_CASEHISTORY.oldValue": "1499106821000",
+      "DN_CASEHISTORY.newValue": "",
+      "DN_CASEHISTORY.transition": ""
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742245",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "assignedUser",
+      "DN_CASEHISTORY.oldValue": "-1",
+      "DN_CASEHISTORY.newValue": "1073742802",
+      "DN_CASEHISTORY.transition": ""
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742802",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "attachment",
+      "DN_CASEHISTORY.oldValue": "",
+      "DN_CASEHISTORY.newValue": "SEN-1014503_MZG.pdf",
+      "DN_CASEHISTORY.transition": ""
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742802",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "currentState",
+      "DN_CASEHISTORY.oldValue": "Level 1 Review",
+      "DN_CASEHISTORY.newValue": "False Positive",
+      "DN_CASEHISTORY.transition": "Send to False Positive (L2) Clear Day 1"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742802",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "assignedUser",
+      "DN_CASEHISTORY.oldValue": "1073742802",
+      "DN_CASEHISTORY.newValue": "-1",
+      "DN_CASEHISTORY.transition": "Send to False Positive (L2) Clear Day 1"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742802",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "caseMarker",
+      "DN_CASEHISTORY.oldValue": "1",
+      "DN_CASEHISTORY.newValue": "0",
+      "DN_CASEHISTORY.transition": "Send to False Positive (L2) Clear Day 1"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742802",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "ExtendedAttribute13",
+      "DN_CASEHISTORY.oldValue": "true",
+      "DN_CASEHISTORY.newValue": "false",
+      "DN_CASEHISTORY.transition": "Send to False Positive (L2) Clear Day 1"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "0",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "currentState",
+      "DN_CASEHISTORY.oldValue": "False Positive",
+      "DN_CASEHISTORY.newValue": "Level 1 Review",
+      "DN_CASEHISTORY.transition": "Re-Alert from False Positive"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "0",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "stateExpiry",
+      "DN_CASEHISTORY.oldValue": "",
+      "DN_CASEHISTORY.newValue": "1505917200938",
+      "DN_CASEHISTORY.transition": "Re-Alert from False Positive"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "0",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "caseMarker",
+      "DN_CASEHISTORY.oldValue": "0",
+      "DN_CASEHISTORY.newValue": "1",
+      "DN_CASEHISTORY.transition": ""
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "0",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "ExtendedAttribute13",
+      "DN_CASEHISTORY.oldValue": "false",
+      "DN_CASEHISTORY.newValue": "true",
+      "DN_CASEHISTORY.transition": ""
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "0",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "stateExpiry",
+      "DN_CASEHISTORY.oldValue": "1505917200000",
+      "DN_CASEHISTORY.newValue": "",
+      "DN_CASEHISTORY.transition": ""
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742761",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "assignedUser",
+      "DN_CASEHISTORY.oldValue": "-1",
+      "DN_CASEHISTORY.newValue": "1073742761",
+      "DN_CASEHISTORY.transition": ""
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742761",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "assignedUser",
+      "DN_CASEHISTORY.oldValue": "1073742761",
+      "DN_CASEHISTORY.newValue": "-1",
+      "DN_CASEHISTORY.transition": ""
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742761",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "ExtendedAttribute9",
+      "DN_CASEHISTORY.oldValue": "",
+      "DN_CASEHISTORY.newValue": "Yes",
+      "DN_CASEHISTORY.transition": ""
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073746792",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "assignedUser",
+      "DN_CASEHISTORY.oldValue": "-1",
+      "DN_CASEHISTORY.newValue": "1073746792",
+      "DN_CASEHISTORY.transition": ""
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073746792",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "assignedUser",
+      "DN_CASEHISTORY.oldValue": "1073746792",
+      "DN_CASEHISTORY.newValue": "-1",
+      "DN_CASEHISTORY.transition": ""
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742182",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "assignedUser",
+      "DN_CASEHISTORY.oldValue": "-1",
+      "DN_CASEHISTORY.newValue": "1073742297",
+      "DN_CASEHISTORY.transition": ""
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742297",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "currentState",
+      "DN_CASEHISTORY.oldValue": "Level 1 Review",
+      "DN_CASEHISTORY.newValue": "False Positive",
+      "DN_CASEHISTORY.transition": "Send to False Positive (L2) Clear Day 1"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742297",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "ExtendedAttribute9",
+      "DN_CASEHISTORY.oldValue": "Yes",
+      "DN_CASEHISTORY.newValue": "",
+      "DN_CASEHISTORY.transition": "Send to False Positive (L2) Clear Day 1"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742297",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "ExtendedAttribute13",
+      "DN_CASEHISTORY.oldValue": "true",
+      "DN_CASEHISTORY.newValue": "false",
+      "DN_CASEHISTORY.transition": "Send to False Positive (L2) Clear Day 1"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742297",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "assignedUser",
+      "DN_CASEHISTORY.oldValue": "1073742297",
+      "DN_CASEHISTORY.newValue": "-1",
+      "DN_CASEHISTORY.transition": "Send to False Positive (L2) Clear Day 1"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742297",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "caseMarker",
+      "DN_CASEHISTORY.oldValue": "1",
+      "DN_CASEHISTORY.newValue": "0",
+      "DN_CASEHISTORY.transition": "Send to False Positive (L2) Clear Day 1"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "0",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "currentState",
+      "DN_CASEHISTORY.oldValue": "False Positive",
+      "DN_CASEHISTORY.newValue": "Level 1 Review",
+      "DN_CASEHISTORY.transition": "Re-Alert from False Positive"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "0",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "stateExpiry",
+      "DN_CASEHISTORY.oldValue": "",
+      "DN_CASEHISTORY.newValue": "1515096981825",
+      "DN_CASEHISTORY.transition": "Re-Alert from False Positive"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "0",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "caseMarker",
+      "DN_CASEHISTORY.oldValue": "0",
+      "DN_CASEHISTORY.newValue": "1",
+      "DN_CASEHISTORY.transition": ""
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "0",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "ExtendedAttribute13",
+      "DN_CASEHISTORY.oldValue": "false",
+      "DN_CASEHISTORY.newValue": "true",
+      "DN_CASEHISTORY.transition": ""
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "0",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "stateExpiry",
+      "DN_CASEHISTORY.oldValue": "1515096981000",
+      "DN_CASEHISTORY.newValue": "",
+      "DN_CASEHISTORY.transition": ""
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073746792",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "assignedUser",
+      "DN_CASEHISTORY.oldValue": "-1",
+      "DN_CASEHISTORY.newValue": "1073746792",
+      "DN_CASEHISTORY.transition": ""
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073747013",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "caseMarker",
+      "DN_CASEHISTORY.oldValue": "1",
+      "DN_CASEHISTORY.newValue": "0",
+      "DN_CASEHISTORY.transition": "Send to Level 2 Review (L1)"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073747013",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "assignedUser",
+      "DN_CASEHISTORY.oldValue": "1073746792",
+      "DN_CASEHISTORY.newValue": "-1",
+      "DN_CASEHISTORY.transition": "Send to Level 2 Review (L1)"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073747013",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "currentState",
+      "DN_CASEHISTORY.oldValue": "Level 1 Review",
+      "DN_CASEHISTORY.newValue": "Level 2 Review",
+      "DN_CASEHISTORY.transition": "Send to Level 2 Review (L1)"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073747013",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "ExtendedAttribute12",
+      "DN_CASEHISTORY.oldValue": "",
+      "DN_CASEHISTORY.newValue": "Cannot be Discounted",
+      "DN_CASEHISTORY.transition": "Send to Level 2 Review (L1)"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742182",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "assignedUser",
+      "DN_CASEHISTORY.oldValue": "-1",
+      "DN_CASEHISTORY.newValue": "1073742285",
+      "DN_CASEHISTORY.transition": ""
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742285",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "ExtendedAttribute12",
+      "DN_CASEHISTORY.oldValue": "Cannot be Discounted",
+      "DN_CASEHISTORY.newValue": "",
+      "DN_CASEHISTORY.transition": "Send to False Positive (L2) Clear Day 1"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742285",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "assignedUser",
+      "DN_CASEHISTORY.oldValue": "1073742285",
+      "DN_CASEHISTORY.newValue": "-1",
+      "DN_CASEHISTORY.transition": "Send to False Positive (L2) Clear Day 1"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742285",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "ExtendedAttribute13",
+      "DN_CASEHISTORY.oldValue": "true",
+      "DN_CASEHISTORY.newValue": "false",
+      "DN_CASEHISTORY.transition": "Send to False Positive (L2) Clear Day 1"
+    },
+    {
+      "DN_CASEHISTORY.modifiedBy": "1073742285",
+      "DN_CASEHISTORY.modifiedDateTime": "${alertDate}",
+      "DN_CASEHISTORY.attribute": "currentState",
+      "DN_CASEHISTORY.oldValue": "Level 2 Review",
+      "DN_CASEHISTORY.newValue": "False Positive",
+      "DN_CASEHISTORY.transition": "Send to False Positive (L2) Clear Day 1"
+    }
+  ],
+  "CustomerEntities": [
+    {
+      "CustomerEntities.Record Id": "2243",
+      "CustomerEntities.Input Stream": "CDI_Entities_Hub",
+      "CustomerEntities.Source System History ID": "",
+      "CustomerEntities.Close Of Business Date": "",
+      "CustomerEntities.Partition Number": "",
+      "CustomerEntities.Source System Identifier": "21",
+      "CustomerEntities.External Profile ID": "[26905554]",
+      "CustomerEntities.Concatenated Profile ID": "HOGAN[26905554]",
+      "CustomerEntities.Profile Type": "O",
+      "CustomerEntities.Party Role Type Code": "C",
+      "CustomerEntities.Profile Status": "A",
+      "CustomerEntities.Profile Segment": "BUSINESS BANKING",
+      "CustomerEntities.LoB Name": "RBWM",
+      "CustomerEntities.LoB Region": "LATAM",
+      "CustomerEntities.LoB Country": "MX",
+      "CustomerEntities.HSBC Legal Entity Code": "HBMX",
+      "CustomerEntities.Name Category Code": "O",
+      "CustomerEntities.NameTypeCode": "U",
+      "CustomerEntities.Name Language Type Code": "P",
+      "CustomerEntities.Entity Name (Original)": "*QWERTYUIOPOI U UYYTREWQEQWR VCXZXC",
+      "CustomerEntities.PEP Indicator": "N",
+      "CustomerEntities.Special Category Customer": "N",
+      "CustomerEntities.Source Address Type": "PERSONAL E-MAIL ADDRESS",
+      "CustomerEntities.AddressFormatCode": "S",
+      "CustomerEntities.Address Language Type Code": "P",
+      "CustomerEntities.Source Address Line 1": "",
+      "CustomerEntities.Source Address Line 2": "XYZ@QWERTYUIOPO.NET.MX",
+      "CustomerEntities.Source Address Line 3": "",
+      "CustomerEntities.Source Address Line 4": "",
+      "CustomerEntities.Source Address Line 5": "",
+      "CustomerEntities.Source Address Line 6": "",
+      "CustomerEntities.Source Address Line 7": "",
+      "CustomerEntities.Source Address Line 8": "",
+      "CustomerEntities.Source Address Line 9": "",
+      "CustomerEntities.Source Address Line 10": "",
+      "CustomerEntities.Source Postal Code": "EMAIL",
+      "CustomerEntities.Source Address Country": "MEXICO",
+      "CustomerEntities.Identification Document 1": "\"O\",\"00000 CUENTAS INCOMPLETAS\",\"\",\"\",\"\"",
+      "CustomerEntities.Identification Document 2": "\"O\",\"07 COMMERCIAL BUSINESS \",\"\",\"\",\"\"",
+      "CustomerEntities.Identification Document 3": "\"O\",\"12 INCORPORATED COMPANY \",\"\",\"\",\"\"",
+      "CustomerEntities.Identification Document 4": "",
+      "CustomerEntities.Identification Document 5": "",
+      "CustomerEntities.Identification Document 6": "",
+      "CustomerEntities.Identification Document 7": "",
+      "CustomerEntities.Identification Document 8": "",
+      "CustomerEntities.Identification Document 9": "",
+      "CustomerEntities.Identification Document 10": "",
+      "CustomerEntities.Trades With Countries": "",
+      "CustomerEntities.Subsidiaries Operates in Countries": "",
+      "CustomerEntities.Export Countries": "",
+      "CustomerEntities.Import Countries": "",
+      "CustomerEntities.Countries of Incorporation": "",
+      "CustomerEntities.Countries of Registration (Original)": "",
+      "CustomerEntities.Countries of Business": "",
+      "CustomerEntities.Countries of Head Office": "",
+      "CustomerEntities.edqCustID": "HOGAN[26905554]",
+      "CustomerEntities.edqCustSubID": "[26905554]",
+      "CustomerEntities.edqLoBCountryCode": "MX",
+      "CustomerEntities.Address Country": "MEXICO",
+      "CustomerEntities.edqAddressCountryCode": "MX",
+      "CustomerEntities.edqTradesWithCountries": "",
+      "CustomerEntities.edqExportsCountries": "",
+      "CustomerEntities.edqImportsCountries": "",
+      "CustomerEntities.edqIncorporationCountries": "",
+      "CustomerEntities.edqIncorporationCountriesCodes": "",
+      "CustomerEntities.Registration Country": "",
+      "CustomerEntities.edqRegiistrationCountriesCodes": "",
+      "CustomerEntities.edqBusinessCountries": "",
+      "CustomerEntities.edqHeadOfficeCountries": "",
+      "CustomerEntities.Countries (All)": "MEXICO",
+      "CustomerEntities.Countries (All) Codes": "MX",
+      "CustomerEntities.edqLoB": "RBWM",
+      "CustomerEntities.edqPermission": "MEXICO",
+      "CustomerEntities.Tax ID": "",
+      "CustomerEntities.City": "",
+      "CustomerEntities.Profile Hyperlink": "",
+      "CustomerEntities.Search Hyperlink": "http://www.google.co.uk/search?hl=en&q=CONSTRUCTORA%20E%20INMOBILIARIA%20DELVAR%20S%20A%20DE%20C%20V",
+      "CustomerEntities.edqListKey": "Cust",
+      "CustomerEntities.Address": "EMAIL",
+      "CustomerEntities.Entity Name": "CONSTRUCTORA E INMOBILIARIA DELVAR S A DE C V",
+      "CustomerEntities.Postal Code": "EMAIL",
+      "CustomerEntities.Person or Business Indicator": "Organisation",
+      "CustomerEntities.edqCloseOfBusinessDate": "",
+      "CustomerEntities.Operating Countries": "",
+      "CustomerEntities.edqOperatingCountriesCodes": "",
+      "CustomerEntities.Registration Number": "",
+      "CustomerEntities.Profile Name Type": "Other",
+      "CustomerEntities.edqPartyRoleTypeDescription": "Customer",
+      "CustomerEntities.edqPartyStatusCodeDescription": "Active",
+      "CustomerEntities.edqDay1SpikeFlag": "",
+      "CustomerEntities.Original Script Name": "",
+      "CustomerEntities.Profile Full Address": "DELVARMGDT@PUEBLA.MEGARED.NET.MX",
+      "CustomerEntities.edqScreeningMode": "Batch",
+      "CustomerEntities.edqCaseKey": "HOGAN[26905554]:MX",
+      "CustomerEntities.Address Type": "PERSONAL E-MAIL ADDRESS",
+      "CustomerEntities.SSC Codes": "",
+      "CustomerEntities.CTRP Fragment": "",
+      "CustomerEntities.Request User Name": "",
+      "CustomerEntities.Request Date/Time": ""
+    }
+  ],
+  "WorldCheckEntities": [
+    {
+      "WorldCheckEntities.Record Id": "156",
+      "WorldCheckEntities.Input Stream": "[EDQ] File In: Matching Entities SAN World Check Output",
+      "WorldCheckEntities.List Key": "WC",
+      "WorldCheckEntities.List Sub Key": "WC-SAN",
+      "WorldCheckEntities.List Record Type": "SAN",
+      "WorldCheckEntities.List Record Origin": "OFAC; SDNT",
+      "WorldCheckEntities.List Record Id": "14196",
+      "WorldCheckEntities.List Record Sub Id": "80bf8080d9ce8e",
+      "WorldCheckEntities.Registration Number": "",
+      "WorldCheckEntities.Entity Name (Original)": "QWERTYUIOPOI U UYYTREWQEQWR VCXZXC UJHGFDR CIA LTDA",
+      "WorldCheckEntities.Entity Name (Derived)": "QWERTYUIOPOI U UYYTREWQEQWR VCXZXC UJHGFDR CIA LTDA",
+      "WorldCheckEntities.Name Type": "Primary",
+      "WorldCheckEntities.Name Quality": "High",
+      "WorldCheckEntities.Primary Name": "QWERTYUIOPOI U UYYTREWQEQWR VCXZXC UJHGFDR CIA LTDA",
+      "WorldCheckEntities.Original Script Name": "",
+      "WorldCheckEntities.Alias is Acronym": "N",
+      "WorldCheckEntities.Vessel Indicator": "N",
+      "WorldCheckEntities.Vessel Info": "",
+      "WorldCheckEntities.Address": "Cali,Valle del Cauca,COLOMBIA",
+      "WorldCheckEntities.City": "Cali",
+      "WorldCheckEntities.State": "Valle del Cauca",
+      "WorldCheckEntities.Postal Code": "",
+      "WorldCheckEntities.Address Country": "CO",
+      "WorldCheckEntities.Registration Country": "COLOMBIA",
+      "WorldCheckEntities.Operating Countries": "COLOMBIA",
+      "WorldCheckEntities.Country Codes (All)": "CO",
+      "WorldCheckEntities.Countries (All)": "COLOMBIA",
+      "WorldCheckEntities.Profile Hyperlink": "https://www.world-check.com/frontend/profile/14196",
+      "WorldCheckEntities.Search Hyperlink": "",
+      "WorldCheckEntities.Linked Profiles": "51613",
+      "WorldCheckEntities.Linked Relationships": "",
+      "WorldCheckEntities.Risk Score": "74",
+      "WorldCheckEntities.PEP Risk Score": "",
+      "WorldCheckEntities.Data Confidence Score": "",
+      "WorldCheckEntities.Data Confidence Comment": "",
+      "WorldCheckEntities.Inactive Flag": "",
+      "WorldCheckEntities.Inactive Since Date": "",
+      "WorldCheckEntities.PEP Classification": "",
+      "WorldCheckEntities.Category": "CORPORATE",
+      "WorldCheckEntities.External Sources": "http://www.treas.gov/offices/enforcement/ofac/sdn/delimit/sdn.csv http://www.treas.gov/offices/eotffc/ofac/sdn/t11sdn.pdf",
+      "WorldCheckEntities.Linked to": "51613",
+      "WorldCheckEntities.Companies": "",
+      "WorldCheckEntities.Further Information": "[USA SANCTIONS - OFAC] SDN Ref No 6666 - SDNT (Specially Designated Narcotics Traffickers). PRIMARY NAME - QWERTYUIOPOI U UYYTREWQEQWR VCXZXC UJHGFDR CIA. LTDA. Carrera 1 No. 1-12 of. 123, Cali, Colombia. NIT # 123456789-1 (Colombia). [BIOGRAPHY] To be determined. [IDENTIFICATION] ID no: 123456789-1. [REPORTS] Aug 2016 - no further information reported.",
+      "WorldCheckEntities.Sub-Category Description": "",
+      "WorldCheckEntities.Update Category": "C1",
+      "WorldCheckEntities.Native Alias Language Name": "",
+      "WorldCheckEntities.Native Alias Language Country": "",
+      "WorldCheckEntities.Cached External Sources": "https://www.world-check.com/portal/archive?uid=14196&url=http://www.treas.gov/offices/enforcement/ofac/sdn/delimit/sdn.csv https://www.world-check.com/portal/archive?uid=14196&url=http://www.treas.gov/offices/eotffc/ofac/sdn/t11sdn.pdf",
+      "WorldCheckEntities.Added Date": "08-Feb-01",
+      "WorldCheckEntities.Last Updated Date": "10-Aug-16",
+      "WorldCheckEntities.edqWCListType": "",
+      "WorldCheckEntities.edqOWSWatchlistName": "GR-ESAN"
+    }
+  ],
+  "Relationships": [
+    {
+      "Relationships.Input Id": "1",
+      "Relationships.Input Name": "CDI_Entities_Hub",
+      "Relationships.Record Id": "2243",
+      "Relationships.Related Input Id": "1073741823",
+      "Relationships.Related Input Name": "[EDQ] File In: Matching Entities SAN World Check Output",
+      "Relationships.Related Record Id": "156",
+      "Relationships.Rule Name": "[E420E] Name without business words loose match and full name sounds like (conflict)",
+      "Relationships.Priority Score": "52",
+      "Relationships.Relationship Hash": "RELN"
+    }
+  ]
+}

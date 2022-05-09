@@ -1,0 +1,50 @@
+plugins {
+  id 'java'
+}
+
+group = 'com.silenteight.iris.tests'
+
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(11)
+  }
+}
+
+dependencies {
+  testImplementation group: 'com.intuit.karate', name: 'karate-junit5', version: '1.1.0'
+  testImplementation group: 'com.intuit.karate', name: 'karate-apache', version: '0.9.6'
+  testImplementation group: 'com.aventstack', name: 'extentreports', version: '5.0.9'
+  testImplementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind',
+      version: '2.13.2.2'
+  testImplementation group: 'org.apache.commons', name: 'commons-text', version: '1.9'
+
+  testCompileOnly 'org.projectlombok:lombok:1.18.22'
+  testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+}
+
+sourceSets {
+  test {
+    resources {
+      srcDir file('src/test/java')
+      exclude '**/*.java'
+    }
+  }
+}
+
+test {
+  useJUnitPlatform()
+  systemProperty "karate.options", System.properties.getProperty("karate.options")
+  systemProperty "karate.env", System.properties.getProperty("karate.env")
+  systemProperty "karate.username", System.properties.getProperty("karate.username")
+  systemProperty "karate.password", System.properties.getProperty("karate.password")
+  systemProperty "karate.client-id", System.properties.getProperty("karate.client-id")
+  systemProperty "karate.client-secret", System.properties.getProperty("karate.client-secret")
+  systemProperty "karate.isRegression", System.properties.getProperty("karate.isRegression")
+  systemProperty "zephyrAuthToken", System.properties.getProperty("zephyrAuthToken")
+  outputs.upToDateWhen {false}
+}
+
+task karateDebug(type: JavaExec) {
+  classpath = sourceSets.test.runtimeClasspath
+  mainClass = 'com.intuit.karate.cli.Main'
+}

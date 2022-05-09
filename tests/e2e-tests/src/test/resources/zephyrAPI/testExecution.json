@@ -1,0 +1,12 @@
+{
+  "projectKey": "QA",
+  "testCaseKey": "${testCaseKey}",
+  "testCycleKey": "${testCycleKey}",
+  "statusName": "Pass",
+  "testScriptResults": [
+    {
+      "statusName": "Pass",
+      "actualResult": "TODO with extended zephyr reporting"
+    }
+  ]
+}
