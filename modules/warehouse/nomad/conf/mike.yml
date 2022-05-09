@@ -87,7 +87,7 @@ warehouse.report.statistics:
     SELECT count(*)
     FROM warehouse_simulation_alert
     WHERE analysis_name = ?
-    AND (payload ->> 'recommendationRecommendedAction')
+    AND (payload ->> 'recommendation_recommended_action')
     IN ('ACTION_FALSE_POSITIVE', 'ACTION_POTENTIAL_TRUE_POSITIVE')
   ai-false-positive-query:
     SELECT count(*)
@@ -95,18 +95,18 @@ warehouse.report.statistics:
     JOIN warehouse_alert wa ON wsa.name = wa.name
     WHERE wsa.analysis_name = ?
     AND (wa.payload ->> 'analystDecision') IN ('ANALYST_FALSE_POSITIVE', 'ANALYST_TRUE_POSITIVE')
-    AND (wsa.payload ->> 'recommendationRecommendedAction') = 'ACTION_FALSE_POSITIVE'
+    AND (wsa.payload ->> 'recommendation_recommended_action') = 'ACTION_FALSE_POSITIVE'
   analyst-false-positive-query:
     SELECT count(*)
     FROM warehouse_simulation_alert wsa
     JOIN warehouse_alert wa ON wsa.name = wa.name
     WHERE wsa.analysis_name = ?
     AND (wa.payload ->> 'analystDecision') = 'ANALYST_FALSE_POSITIVE'
-    AND (wsa.payload ->> 'recommendationRecommendedAction') = 'ACTION_FALSE_POSITIVE'
+    AND (wsa.payload ->> 'recommendation_recommended_action') = 'ACTION_FALSE_POSITIVE'
 
 warehouse.report.zip:
   enabled: true
-  rowsLimit: 10
+  rowsLimit: 50000
 
 warehouse.reports.v2:
   reports:
@@ -114,7 +114,6 @@ warehouse.reports.v2:
       type: production
       description: RB Scorer (Match Level)
       selectSqlQuery: >
-        
         WITH tmp_match_count AS (
           SELECT alert_id        AS alert_id,
                  COUNT(alert_id) AS hit_count
@@ -124,8 +123,8 @@ warehouse.reports.v2:
 
         SELECT wa.payload ->> 'policyId'                           AS "Policy ID",
                wa.payload ->> 'policyTitle'                        AS "Policy Name",
-               wa.payload ->> 'stepId'                             AS "Step ID",
-               wa.payload ->> 'stepTitle'                          AS "Step Name",
+               wm.payload ->> 'stepId'                             AS "Step ID",
+               wm.payload ->> 'stepTitle'                          AS "Step Name",
                wm.payload ->> 'fvSignature'                        AS "Reasoning Branch ID",
                wm.payload ->> 's8Recommendation'                   AS "S8 Match Resolution",
                COUNT(wm.payload ->> 'fvSignature')                 AS "Total Matches Count",
@@ -143,16 +142,17 @@ warehouse.reports.v2:
                wm.payload ->> 'features/geoSanctioned:solution'    AS "Geo Sanctioned Country",
                wm.payload ->> 'features/companyName:solution'      AS "Company Name",
                wm.payload ->> 'categories/alertType'               AS "Dataset Type",
-               wm.payload ->> 'categories/hitType'                 AS "Risk Type",
+               wm.payload ->> 'features/hitType:solution'          AS "Risk Type",
                wm.payload ->> 'categories/entitiesTypesMatch'      AS "Entities Types Match",
                wm.payload ->> 'features/employerName:solution'     AS "Employer Name"
         FROM warehouse_alert wa
                  JOIN warehouse_match wm ON wa.id = wm.alert_id
                  JOIN tmp_match_count tmc ON tmc.alert_id = wa.id
+        WHERE wa.recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
         GROUP BY wa.payload ->> 'policyId',
                  wa.payload ->> 'policyTitle',
-                 wa.payload ->> 'stepId',
-                 wa.payload ->> 'stepTitle',
+                 wm.payload ->> 'stepId',
+                 wm.payload ->> 'stepTitle',
                  wm.payload ->> 's8Recommendation',
                  wm.payload ->> 'fvSignature',
                  wm.payload ->> 'categories/customerType',
@@ -168,7 +168,7 @@ warehouse.reports.v2:
                  wm.payload ->> 'features/geoSanctioned:solution',
                  wm.payload ->> 'features/companyName:solution',
                  wm.payload ->> 'categories/alertType',
-                 wm.payload ->> 'categories/hitType',
+                 wm.payload ->> 'features/hitType:solution',
                  wm.payload ->> 'categories/entitiesTypesMatch',
                  wm.payload ->> 'features/employerName:solution'
 
@@ -176,7 +176,6 @@ warehouse.reports.v2:
       type: simulation
       description: RB Scorer
       selectSqlQuery: >
-        
         WITH tmp_match_count AS (
           SELECT alert_id        AS alert_id,
                  COUNT(alert_id) AS hit_count
@@ -205,7 +204,7 @@ warehouse.reports.v2:
                wsa.payload ->> 'features/geoSanctioned:solution'                AS "Geo Sanctioned Country",
                wsa.payload ->> 'features/companyName:solution'                  AS "Company Name",
                wsa.payload ->> 'categories/alertType'                           AS "Dataset Type",
-               wsa.payload ->> 'categories/hitType'                             AS "Risk Type",
+               wsa.payload ->> 'features/hitType:solution'                      AS "Risk Type",
                wsa.payload ->> 'categories/entitiesTypesMatch'                  AS "Entities Types Match",
                wsa.payload ->> 'features/employerName:solution'                 AS "Employer Name"
         FROM warehouse_simulation_alert wsa
@@ -232,7 +231,7 @@ warehouse.reports.v2:
                  wsa.payload ->> 'features/geoSanctioned:solution',
                  wsa.payload ->> 'features/companyName:solution',
                  wsa.payload ->> 'categories/alertType',
-                 wsa.payload ->> 'categories/hitType',
+                 wsa.payload ->> 'features/hitType:solution',
                  wsa.payload ->> 'categories/entitiesTypesMatch',
                  wsa.payload ->> 'features/employerName:solution'
 
@@ -256,7 +255,7 @@ warehouse.reports.v2:
                wa.payload ->> 'comment'                         AS "S8 Alert Reason"
         FROM warehouse_alert wa
                  JOIN warehouse_match wm ON wa.id = wm.alert_id
-        WHERE wa.created_at BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
+        WHERE wa.recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
         GROUP BY wa.name,
                  wa.payload ->> 'clientId',
                  wa.payload ->> 'policyId',
@@ -318,7 +317,7 @@ warehouse.reports.v2:
         SELECT wa.name                                          AS "S8 Alert ID",
                wa.payload ->> 'clientId'                        AS "Client Alert ID",
                STRING_AGG(wm.payload ->> 'clientId', ', ')      AS "Client Match IDs",
-               wa.payload ->> 'policy'                          AS "Policy ID",
+               wa.payload ->> 'policyId'                        AS "Policy ID",
                wa.payload ->> 'policyTitle'                     AS "Policy Name",
                STRING_AGG(wm.payload ->> 'stepId', ', ')        AS "Step ID",
                STRING_AGG(wm.payload ->> 'stepTitle', ', ')     AS "Step Name",
@@ -337,7 +336,7 @@ warehouse.reports.v2:
           AND wa.payload ->> 'analystDecision' != ''
         GROUP BY wa.name,
                  wa.payload ->> 'clientId',
-                 wa.payload ->> 'policy',
+                 wa.payload ->> 'policyId',
                  wa.payload ->> 'policyTitle',
                  wa.payload ->> 'datasetId',
                  wa.payload ->> 'datasetName',
