@@ -64,6 +64,9 @@ data:
     spring:
       security:
         oauth2:
+          resourceserver:
+            jwt:
+              issuer-uri: {{ .Values.oauthResourceServerUri | default "https://auth.silent8.cloud/realms/sierra" | quote}}
           client:
             registration:
               callback:
