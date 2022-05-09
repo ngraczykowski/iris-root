@@ -1,0 +1,33 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "maven-publish"
+}
+
+dependencies {
+  api(libs.silenteight.sep.base.common) {
+    exclude group: 'org.springframework.amqp', module: '*'
+    exclude group: 'org.springframework.integration', module: '*'
+    exclude group: 'com.rabbitmq', module: '*'
+    exclude group: 'jakarta.servlet', module: '*'
+    exclude group: 'org.hibernate', module: '*'
+    exclude group: 'jakarta.persistence', module: '*'
+    exclude group: 'com.google.protobuf', module: '*'
+  }
+
+  implementation libs.silenteight.sep.usermanagement.api
+  implementation libs.keycloak.admin.client
+  implementation libs.caffeine
+  implementation libs.streamex
+  implementation libs.jackson.datatype.jsr310
+  testImplementation libs.test.containers.keycloak
+
+  testImplementation(libs.silenteight.sep.base.testing) {
+    exclude group: 'org.testcontainers', module: '*'
+    exclude group: 'io.grpc', module: '*'
+  }
+  testImplementation libs.assertj.core
+  testImplementation libs.test.containers.junit.jupiter
+  testImplementation libs.mockito.inline
+
+  api libs.spring.context
+}

@@ -1,0 +1,21 @@
+{
+    "validateSignature": "true",
+    "signingCertificate": "MIICozCCAYsCBgF8UFqiMDANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDDApzaWVycmEtZGV2MB4XDTIxMTAwNTEyMDYyOVoXDTMxMTAwNTEyMDgwOVowFTETMBEGA1UEAwwKc2llcnJhLWRldjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMaUgBemCSOCT/Ar/crbckkfpbxiYPIA/UGXonKRjydFqiEGQlFAzQGSCUn7exsvQOVZMqZtXm1A+isoljotypGZOOoUJ1tlI1uR0aXZROmvzUbcP5AP8d79/RSyp96+7zCyvQlbO9M0ptidpqhBrfscqc8Mv55tnmfFOZOo2WuQUX+NxhubE5khrAo2rC13efqY0aI4W1EkbN1Fw8RLcIred1rOBcmoOKp/eQB7+7QTd2/gPewCLfbINrOPuDI4Mjg2tjqaX4Nv0/+/zwcluOSDMkLkUqmWtY01EWydlCHahytqHxWeIFveUZTAP+QyTIuReXvGrzGcEezQ0DNhBu8CAwEAATANBgkqhkiG9w0BAQsFAAOCAQEAJ9XpObEKQ4zX6yxDM2QaOg3F9BdL+Su4KzFsXGmqmCyAoUSKAQUoJLKZKZJIPFa3jXB7fNGm6jQ4mwJfpSvhBbVX0hl5AcUMawG1bukud9b5fDjBUOWVm2eTb/8Axf7/vQkTFDNFH/bJxtnwIqIYzkszM8E3qq329J4no1BPsHrqDvJGqFOeB8zKPgjsVuL0bdTIQFbLHG5KA8nEO3Cx7U3cHi41dml4VDcz5r8dr6sY0cOxE2oWgcEyFO9taaK8ni/1lJtNxujm4V9wGxtculZHvGx6VBMh0MAsbxmcpQN7dP3XEaq3czs++t9Wn159PLTLucB5CZr6riY+HBr+zA==",
+    "postBindingLogout": "true",
+    "nameIDPolicyFormat": "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
+    "postBindingResponse": "true",
+    "singleLogoutServiceUrl": "https://auth.silent8.cloud/realms/sierra-dev/protocol/saml",
+    "entityId": "https://auth.silenteight.com/realms/sens-webapp",
+    "signatureAlgorithm": "RSA_SHA256",
+    "xmlSigKeyInfoKeyNameTransformer": "KEY_ID",
+    "useJwksUrl": "true",
+    "loginHint": "false",
+    "authnContextComparisonType": "exact",
+    "postBindingAuthnRequest": "true",
+    "syncMode": "FORCE",
+    "singleSignOnServiceUrl": "https://auth.silent8.cloud/realms/sierra-dev/protocol/saml",
+    "wantAuthnRequestsSigned": "true",
+    "addExtensionsElementWithKeyInfo": "false",
+    "principalType": "SUBJECT"
+}
+

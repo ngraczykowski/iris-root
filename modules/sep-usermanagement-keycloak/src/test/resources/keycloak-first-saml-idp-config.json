@@ -1,0 +1,13 @@
+{
+"nameIDPolicyFormat": "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
+"singleLogoutServiceUrl": "https://auth.silent8.cloud/realms/sierra-dev/protocol/saml",
+"authnContextComparisonType": "exact",
+"syncMode": "IMPORT",
+"entityId": "https://auth.silenteight.com/realms/sens-webapp",
+"singleSignOnServiceUrl": "https://auth.silent8.cloud/realms/sierra-dev/protocol/saml",
+"principalType": "SUBJECT",
+"signatureAlgorithm": "RSA_SHA256",
+"xmlSigKeyInfoKeyNameTransformer": "KEY_ID",
+"useJwksUrl": "true"
+}
+
