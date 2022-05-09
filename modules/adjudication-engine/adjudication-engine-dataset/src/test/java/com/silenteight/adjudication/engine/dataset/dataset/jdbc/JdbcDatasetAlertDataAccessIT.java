@@ -8,6 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.OffsetDateTime;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -34,6 +35,18 @@ class JdbcDatasetAlertDataAccessIT extends BaseJdbcTest {
 
     dataAccess.createSingleMatchFilteredDataset(
         3, List.of("solvingCMAPI"), OffsetDateTime.MIN, OffsetDateTime.MAX);
+
+    var datasetIds = dataAccess.selectDatasetsByAlerts(List.of(4L, 5L));
+
+    assertThat(datasetIds.size()).isEqualTo(1);
+    assertThat(datasetIds.get(0)).isEqualTo(3);
+  }
+
+  @Test
+  void shouldCreateSingleMatchDatasetWithoutLabels() {
+
+    dataAccess.createSingleMatchFilteredDataset(
+        3, Collections.emptyList(), OffsetDateTime.MIN, OffsetDateTime.MAX);
 
     var datasetIds = dataAccess.selectDatasetsByAlerts(List.of(4L, 5L));
 

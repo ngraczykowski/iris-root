@@ -23,7 +23,8 @@ class CreateSingleMatchFilteredDatasetQuery {
       + "LEFT JOIN ae_alert_labels aal ON aea.alert_id = aal.alert_id\n"
       + "LEFT JOIN ae_match am ON aea.alert_id = am.alert_id\n"
       + "WHERE aea.alerted_at >= :startDate and aea.alerted_at < :endDate\n"
-      + "AND (:labelsValues IS NULL OR (aal.name || aal.value IN (:labelsValues)))\n"
+      + "AND (cast(:labelsValues AS VARCHAR) IS NULL\n"
+      + "OR (aal.name || aal.value IN (:labelsValues)))\n"
       + "AND am.match_id IS NOT NULL\n"
       + "AND aea.alert_id IN (SELECT alert_id FROM single_match_alerts_temp)\n"
       + "ON CONFLICT DO NOTHING";
@@ -41,12 +42,11 @@ class CreateSingleMatchFilteredDatasetQuery {
         + "HAVING COUNT(*) = 1");
 
     var parameters = new MapSqlParameterSource("datasetId", datasetId);
-    parameters.addValue("labelsValues", labelsValues);
+    parameters.addValue("labelsValues", labelsValues.isEmpty() ? null : labelsValues);
     parameters.addValue("startDate", startDate);
     parameters.addValue("endDate", endDate);
     namedParameterJdbcTemplate.update(SQL, parameters);
 
     jdbcTemplate.execute("DROP TABLE IF EXISTS single_match_alerts_temp");
-
   }
 }
