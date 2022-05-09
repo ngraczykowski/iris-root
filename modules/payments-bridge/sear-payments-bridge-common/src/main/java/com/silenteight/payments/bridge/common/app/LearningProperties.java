@@ -7,6 +7,7 @@ import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
+import java.nio.charset.StandardCharsets;
 import java.time.ZoneId;
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotEmpty;
@@ -19,7 +20,7 @@ public class LearningProperties {
 
   @NotEmpty
   private String timeZone = "America/Chicago";
-  private String fileEncoding = "CP1250";
+  private String fileEncoding = StandardCharsets.UTF_8.name();
   private String discriminatorPrefix = "";
   private int chunkSize = 128;
 
