@@ -1,57 +1,10 @@
 plugins {
-  id "idea"
-  id "java-library"
+  id "com.silenteight.iris.build.java-library"
   id "maven-publish"
-  id "com.silenteight.gradle.wrapper" version "1.1.0"
-  id "com.silenteight.gradle.release" version "1.4.0"
-  id "com.silenteight.gradle.convention" version "1.14.0"
-  id "org.sonarqube" version "2.8"
 }
-
-projectSetup {
-  javaVersion = JavaVersion.VERSION_11
-}
-
-sourceCompatibility = 1.11
-targetCompatibility = 1.11
-
-ext {
-  libraries = [:]
-  springBootVersion = "2.4.9"
-  silenteightSepBaseVersion = "1.12.2"
-  silenteightSepUsermanagementApiVersion = "1.16.0"
-  keycloakVersion = "15.0.2"
-  testContainerKeycloakVersion = "1.9.0"
-  testContainerJupiterVersion = "1.16.2"
-  jacksonDataTypeJsr310Version = "2.11.4"
-}
-
-repositories {
-  mavenCentral()
-}
-
-libraries.silenteight_sep_base_common = [group: 'com.silenteight.sep.base', name: 'sep-base-common', version: silenteightSepBaseVersion]
-libraries.silenteight_sep_base_testing = [group: 'com.silenteight.sep.base', name: 'sep-base-testing', version: silenteightSepBaseVersion]
-libraries.silenteight_sep_usermanagement_api = [group: 'com.silenteight.sep.usermanagement', name: 'sep-usermanagement-api', version: silenteightSepUsermanagementApiVersion]
-
-libraries.platform_spring_boot = [group: 'org.springframework.boot', name: 'spring-boot-dependencies', version: springBootVersion]
-libraries.spring_context = [group: 'org.springframework', name: 'spring-context']
-
-// Keycloak
-libraries.keycloak_bom = [group: 'org.keycloak.bom', name: 'keycloak-adapter-bom', version: keycloakVersion]
-libraries.keycloak_admin_client = [group: 'org.keycloak', name: 'keycloak-admin-client', version: keycloakVersion]
-
-libraries.assertj_core = [group: 'org.assertj', name: 'assertj-core']
-libraries.mockito_inline = [group: 'org.mockito', name: 'mockito-inline']
-libraries.caffeine = [group: 'com.github.ben-manes.caffeine', name: 'caffeine']
-libraries.streamex = [group: "one.util", name: "streamex", version: "0.7.2"]
-
-libraries.test_container_keycloak = [group: 'com.github.dasniko', name: 'testcontainers-keycloak', version: testContainerKeycloakVersion]
-libraries.test_container_jupiter =  [group: 'org.testcontainers', name: 'junit-jupiter', version: testContainerJupiterVersion]
-libraries.jackson_datatype_jsr310 = [group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: jacksonDataTypeJsr310Version]
 
 dependencies {
-  api(libraries.silenteight_sep_base_common) {
+  api(libs.silenteight.sep.base.common) {
     exclude group: 'org.springframework.amqp', module: '*'
     exclude group: 'org.springframework.integration', module: '*'
     exclude group: 'com.rabbitmq', module: '*'
@@ -61,21 +14,20 @@ dependencies {
     exclude group: 'com.google.protobuf', module: '*'
   }
 
-  implementation libraries.silenteight_sep_usermanagement_api
-  implementation platform(libraries.platform_spring_boot)
-  implementation libraries.keycloak_admin_client
-  implementation libraries.caffeine
-  implementation libraries.streamex
-  implementation libraries.jackson_datatype_jsr310
-  testImplementation libraries.test_container_keycloak
+  implementation libs.silenteight.sep.usermanagement.api
+  implementation libs.keycloak.admin.client
+  implementation libs.caffeine
+  implementation libs.streamex
+  implementation libs.jackson.datatype.jsr310
+  testImplementation libs.test.containers.keycloak
 
-  testImplementation(libraries.silenteight_sep_base_testing) {
+  testImplementation(libs.silenteight.sep.base.testing) {
     exclude group: 'org.testcontainers', module: '*'
     exclude group: 'io.grpc', module: '*'
   }
-  testImplementation libraries.assertj_core
-  testImplementation libraries.test_container_jupiter
-  testImplementation libraries.mockito_inline
+  testImplementation libs.assertj.core
+  testImplementation libs.test.containers.junit.jupiter
+  testImplementation libs.mockito.inline
 
-  api libraries.spring_context
+  api libs.spring.context
 }
