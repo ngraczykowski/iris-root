@@ -117,7 +117,7 @@ OFAC ID:1
       amlCountry == alertRecord.dbCountry
       clientType == alertRecord.typeOfRec
       customerIdentificationNo == 'HKCCNS600'
-      sourceSystemIdentifier == 'ECDDP'
+      sourceSystemIdentifier == 'CCMS'
       fullLegalName == 'John Smith'
       dateOfBirthOrRegistration == '19690926'
       registeredOrResidentialAddress == '75 W Mondamin St, Minooka, IL 60447, USA'

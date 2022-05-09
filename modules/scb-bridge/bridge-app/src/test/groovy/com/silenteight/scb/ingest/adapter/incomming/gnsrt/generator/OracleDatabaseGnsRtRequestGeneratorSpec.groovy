@@ -14,7 +14,8 @@ class OracleDatabaseGnsRtRequestGeneratorSpec extends Specification {
 
   def jdbcTemplate = Mock(JdbcTemplate)
   def mapper = Mock(GnsRtRequestMapper)
-  def objectUnderTest = new OracleDatabaseGnsRtRequestGenerator(jdbcTemplate, mapper)
+  def validator = Mock(GnsRtRecommendationRequestValidator)
+  def objectUnderTest = new OracleDatabaseGnsRtRequestGenerator(jdbcTemplate, mapper, validator)
 
   def someRequest = new GnsRtRecommendationRequest()
   def someAlertRecord = AlertRecord.builder()
@@ -60,7 +61,7 @@ class OracleDatabaseGnsRtRequestGeneratorSpec extends Specification {
     thrown(EmptyResultDataAccessException)
   }
 
-  def 'generate request with random system_id'() {
+  def 'should generate request with random system_id'() {
     given:
     def numOfAlerts = 1
 
@@ -71,5 +72,24 @@ class OracleDatabaseGnsRtRequestGeneratorSpec extends Specification {
     result == someRequest
     1 * jdbcTemplate.query(_ as String, _ as RowMapper, numOfAlerts) >> [someAlertRecord]
     1 * mapper.map([someAlertRecord]) >> someRequest
+    1 * validator.isValid(someRequest) >> true
+  }
+
+  def 'should generate another request when request is invalid'() {
+    given:
+    def numOfAlerts = 1
+
+    when:
+    def result = objectUnderTest.generateWithRandomSystemId(numOfAlerts)
+
+    then:
+    result == someRequest
+    1 * jdbcTemplate.query(_ as String, _ as RowMapper, numOfAlerts) >> [someAlertRecord]
+    1 * mapper.map([someAlertRecord]) >> someRequest
+    1 * validator.isValid(someRequest) >> false
+
+    1 * jdbcTemplate.query(_ as String, _ as RowMapper, numOfAlerts) >> [someAlertRecord]
+    1 * mapper.map([someAlertRecord]) >> someRequest
+    1 * validator.isValid(someRequest) >> true
   }
 }

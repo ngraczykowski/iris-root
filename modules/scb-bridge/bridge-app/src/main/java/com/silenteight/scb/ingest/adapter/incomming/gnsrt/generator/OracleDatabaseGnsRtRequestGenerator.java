@@ -2,6 +2,7 @@ package com.silenteight.scb.ingest.adapter.incomming.gnsrt.generator;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertRecord;
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertRecordMapper;
@@ -19,9 +20,11 @@ import java.util.List;
 
 import static org.springframework.util.CollectionUtils.isEmpty;
 
+@Slf4j
 @RequiredArgsConstructor
 class OracleDatabaseGnsRtRequestGenerator implements GnsRtRequestGenerator {
 
+  private static final int MAX_ATTEMPTS = 100;
   private static final GnsRtRequestRecordDataMapper ROW_MAPPER = new GnsRtRequestRecordDataMapper();
   private static final GnsRtRequestWithRandomSystemIdMapper ROW_MAPPER_WITH_RANDOM_SYSTEM_ID =
       new GnsRtRequestWithRandomSystemIdMapper();
@@ -71,6 +74,7 @@ class OracleDatabaseGnsRtRequestGenerator implements GnsRtRequestGenerator {
 
   private final JdbcTemplate jdbcTemplate;
   private final GnsRtRequestMapper mapper;
+  private final GnsRtRecommendationRequestValidator requestValidator;
 
   @Override
   public GnsRtRecommendationRequest generateBySystemId(@NonNull String systemId) {
@@ -84,7 +88,17 @@ class OracleDatabaseGnsRtRequestGenerator implements GnsRtRequestGenerator {
 
   @Override
   public GnsRtRecommendationRequest generateWithRandomSystemId(int numOfAlerts) {
-    return mapper.map(fetchData(numOfAlerts));
+    var numberOfAttempts = 1;
+    while (numberOfAttempts <= MAX_ATTEMPTS) {
+      var request = mapper.map(fetchData(numOfAlerts));
+      if (requestValidator.isValid(request)) {
+        return request;
+      }
+      log.debug("Invalid data. Looking for other alerts to generate request. Attempt: {}/{}",
+          numberOfAttempts, MAX_ATTEMPTS);
+      numberOfAttempts++;
+    }
+    throw new CouldNotFindValidAlertsException();
   }
 
   private List<AlertRecord> fetchData(String filterColumn, String value) {

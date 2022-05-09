@@ -120,7 +120,7 @@ class RecordToGnsRequestMapper {
     ScreenableData screenableData = new ScreenableData();
     screenableData.setAmlCountry(record.getDbCountry());
     screenableData.setClientType(record.getTypeOfRec());
-    screenableData.setSourceSystemIdentifier("ECDDP");
+    screenableData.setSourceSystemIdentifier(alertedParty.getSourceSystemIdentifier());
     screenableData.setCustomerIdentificationNo(alertedParty.getCustomerIdentificationNo());
 
     alertedParty.getName().ifPresent(screenableData::setFullLegalName);

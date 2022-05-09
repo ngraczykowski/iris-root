@@ -1,8 +1,10 @@
 package com.silenteight.scb.ingest.adapter.incomming.gnsrt.rest;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.hitdetails.HitDetailsParser.ParserException;
+import com.silenteight.scb.ingest.adapter.incomming.gnsrt.generator.CouldNotFindValidAlertsException;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.generator.GnsRtRequestGenerator;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.request.GnsRtRecommendationRequest;
 
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class GnsRtTestingHarnessController {
@@ -53,5 +56,13 @@ public class GnsRtTestingHarnessController {
       reason = "One of the found alerts has hit details that cannot be parsed")
   public void handleParserException() {
     //do nothing
+  }
+
+  @ExceptionHandler(CouldNotFindValidAlertsException.class)
+  @ResponseStatus(
+      value = HttpStatus.NOT_FOUND,
+      reason = "Could not find valid alerts to generate request")
+  public void handleCouldNotFindValidAlertsException() {
+    log.warn("Could not find valid alerts to generate request");
   }
 }

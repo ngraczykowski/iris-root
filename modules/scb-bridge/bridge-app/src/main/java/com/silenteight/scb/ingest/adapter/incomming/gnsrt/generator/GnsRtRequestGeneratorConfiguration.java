@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import javax.validation.Validation;
+
 @Configuration
 @RequiredArgsConstructor
 class GnsRtRequestGeneratorConfiguration {
@@ -16,10 +18,19 @@ class GnsRtRequestGeneratorConfiguration {
 
   @Bean
   GnsRtRequestGenerator gnsRtRequestGenerator() {
-    return new OracleDatabaseGnsRtRequestGenerator(jdbcTemplate, getGnsRtRequestMapper());
+    return new OracleDatabaseGnsRtRequestGenerator(
+        jdbcTemplate,
+        getGnsRtRequestMapper(),
+        getGnsRtRecommendationRequestValidator());
   }
 
   private static GnsRtRequestMapper getGnsRtRequestMapper() {
     return new GnsRtRequestMapper(new HitDetailsParser());
+  }
+
+  private static GnsRtRecommendationRequestValidator getGnsRtRecommendationRequestValidator() {
+    return new GnsRtRecommendationRequestValidator(
+        Validation.buildDefaultValidatorFactory().getValidator()
+    );
   }
 }
