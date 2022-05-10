@@ -1,4 +1,4 @@
-{{- range $componentName, $component := include "buildComponents" . | mustFromJson  }}
+{{- range $componentName, $component := include "sear.mergedComponents" . | mustFromJson  }}
 {{- $context := mergeOverwrite (deepCopy $) (dict "componentName" $componentName "component" $component) }}
 {{- range $path, $_ := $.Files.Glob  "component/spring/*.yaml.tpl" }}
 # From: {{ $path }}

@@ -85,27 +85,11 @@ Create the name of the service account to use
   {{- end }}
 {{- end }}
 
-{{/*
-Name of the postgres database credentials secret
-*/}}
-{{- define "sear.rabbitmqSecretName" -}}
-  {{- include "sear.fullname" . }}-rabbitmq-default-user
-{{- end -}}
+{{ define "sear.rabbitmqSecretName" }}{{ include "sear.fullname" . }}-rabbitmq-default-user{{ end }}
+{{ define "sear.postgresqlSecretName" }}{{ printf "%s.%s" .component.dbName (include "sear.fullname" .) }}-postgres.credentials.postgresql.acid.zalan.do{{ end }}
+{{ define "sear.postgresqlService" }}{{ include "sear.fullname" . }}-postgres.{{ .Release.Namespace }}.svc{{ end }}
 
-{{/*
-Name of the postgres database credentials secret
-*/}}
-{{- define "sear.postgresqlSecretName" -}}
-  {{- printf "%s.%s" .componentName (include "sear.fullname" .) }}-postgres.credentials.postgresql.acid.zalan.do
-{{- end -}}
-
-{{/*
-Address of Postgres service
-*/}}
-{{- define "sear.postgresqlService" -}}
-  {{- include "sear.fullname" . }}-postgres.{{ .Release.Namespace }}.svc
-{{- end -}}
-{{- define "buildComponents" }}
+{{- define "sear.mergedComponents" }}
 {{- $effective := dict}}
 {{- range $key, $value := $.Values.components }}
 {{- $common := $.Values.common }}

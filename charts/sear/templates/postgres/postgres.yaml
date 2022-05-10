@@ -16,16 +16,19 @@ spec:
   volume:
       size: {{ .Values.database.volume.size | quote }}
 
+  # <user> : <roles>
+  # waring: username is used in sear.postgresqlSecretName
   users:
-    {{- range $componentName, $component := include "buildComponents" . | mustFromJson }}
+    {{- range $componentName, $component := include "sear.mergedComponents" . | mustFromJson }}
     {{- if and $component.enabled $component.useDb }}
-    {{ $component.dbName }}-user: []
+    {{ $component.dbName }}: []
     {{- end }}
     {{- end }}
 
+  # <db>: <user>
   databases:
-    {{- range $componentName, $component := include "buildComponents" . | mustFromJson }}
+    {{- range $componentName, $component := include "sear.mergedComponents" . | mustFromJson }}
     {{- if and $component.enabled $component.useDb }}
-    {{ $component.dbName }}: {{ $component.dbName }}-user
+    {{ $component.dbName }}: {{ $component.dbName }}
     {{- end }}
     {{- end }}
