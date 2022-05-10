@@ -26,9 +26,6 @@ keycloak:
 serp:
   governance:
     modelTransfer: LOCAL
-    agent:
-      agent-configuration-source: file:local/conf/agents/agent_configs.json
-      agent-details-source: file:local/conf/agents/agent_details.json
     files.default-bucket: attachments-dev
     qa:
       sampling:
@@ -73,4 +70,4 @@ serp.governance.featurevector:
       feature-or-category-regex: ^(categories\/(\w)+)$|^(features\/(\w)+\:solution)$
       prefix-and-suffix-regex: (:solution)$
   event:
-    strategy: INGEST #[INGEST,SOLVE]
+    strategy: SOLVE #[INGEST,SOLVE]

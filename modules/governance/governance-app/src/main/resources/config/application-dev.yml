@@ -89,3 +89,7 @@ sep.auth:
   permit-all-urls:
     - "/management/**"
     - "/openapi/**"
+
+serp.governance.agent:
+  agent-configuration-source: file:local/conf/agents/agent_configs.json
+  agent-details-source: file:local/conf/agents/agent_details.json
