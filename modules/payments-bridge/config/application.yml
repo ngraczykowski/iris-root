@@ -167,24 +167,6 @@ spring:
           external:
             token-uri: https://auth.silent8.cloud/realms/egress-mock/protocol/openid-connect/token
 
-  #-------------------------------------------------------------------------------------------------
-  # EMAIL SENDING
-  # NOTE: The configuration below is for development purposes only
-  #-------------------------------------------------------------------------------------------------
-  mail:
-    host: localhost
-    port: 24170
-    username: user
-    password: password
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-        transport:
-          protocol: smtp
-
 #------------------------------------------------------------------------------
 # Environment
 #------------------------------------------------------------------------------
