@@ -30,21 +30,8 @@ components:
     enabled: true
     args:
       - --spring.profiles.active=mockaws,mockemail
-    configFiles:
-      application.yml: |
-        spring:
-            security:
-              oauth2:
-                resourceserver:
-                  jwt:
-                    issuer-uri: https://auth.silent8.cloud/realms/sierra
-                client:
-                  registration:
-                    callback:
-                      client-id: cmapi-dev
-                  provider:
-                    external:
-                      token-uri: https://auth.silent8.cloud/realms/egress-mock/protocol/openid-connect/token
+      - --spring.security.oauth2.client.registration.callback.client-id=cmapi-dev
+      - --spring.security.oauth2.client.provider.external.token-uri=https://auth.silent8.cloud/realms/egress-mock/protocol/openid-connect/token
 
   adjudication-engine:
     args:
