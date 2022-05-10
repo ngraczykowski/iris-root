@@ -26,10 +26,41 @@ agentsCommon:
 components:
   payments-bridge:
     enabled: true
-
+    args:
+      - --spring.profiles.active=mockaws
     configFiles:
       application.yml: |
+        spring:
+            security:
+              oauth2:
+                resourceserver:
+                  jwt:
+                    issuer-uri: https://auth.silent8.cloud/realms/sierra
+                client:
+                  registration:
+                    callback:
+                      client-id: cmapi-dev
+                      # Set the client-secret via environment variable SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_callback_CLIENT-SECRET
+                      #client-secret: <CLIENT SECRET>
+                  provider:
+                    external:
+                      token-uri: https://auth.silent8.cloud/realms/egress-mock/protocol/openid-connect/token
+            mail:
+              host: localhost
+              port: 24170
+              username: user
+              password: password
+              properties:
+                mail:
+                  smtp:
+                    auth: true
+                    starttls:
+                      enable: true
+                  transport:
+                    protocol: smtp
         pb:
+          daily-reports-remove:
+            cron: "*/600 * * * * *"
           alert-message:
             original-message-deleted-after-recommendation: false
           cmapi:
