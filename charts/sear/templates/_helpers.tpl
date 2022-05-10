@@ -90,26 +90,32 @@ Create the name of the service account to use
 {{ define "sear.postgresqlService" }}{{ include "sear.fullname" . }}-postgres.{{ .Release.Namespace }}.svc{{ end }}
 
 {{- define "sear.mergedComponents" }}
-{{- $effective := dict}}
-{{- range $key, $value := $.Values.components }}
-{{- $common := $.Values.common }}
-{{- $command := concat $common.command (default (list) $value.command) }}
-{{- $args := concat $common.args (default (list) $value.args) }}
-{{- $mergedValue := mergeOverwrite (deepCopy $common) $value (dict "args" $args "command" $command ) }}
-{{- $mergedValue = mergeOverwrite (deepCopy $mergedValue) (dict "dbName" (default $key $mergedValue.dbName) "webPath" (default $key $mergedValue.webPath) )}}
-{{- if $mergedValue.enabled -}}
-{{- $_:= set $effective $key $mergedValue }}
-{{- end }}
-{{- end }}
-{{- range $key, $value := $.Values.agents }}
-{{- $common := mergeOverwrite (deepCopy $.Values.common) $.Values.agentsCommon }}
-{{- $command := concat $common.command (default (list) $value.command) }}
-{{- $args := concat  $common.args (default (list) $value.args) }}
-{{- $mergedValue := mergeOverwrite (deepCopy $common) $value (dict "args" $args "command" $command ) }}
-{{- $mergedValue = mergeOverwrite (deepCopy $mergedValue) (dict "dbName" (default $key $mergedValue.dbName) "webPath" (default $key $mergedValue.webPath) )}}
-{{- if $mergedValue.enabled -}}
-{{- $_:= set $effective $key $mergedValue }}
-{{- end }}
-{{- end }}
-{{- $effective | mustToJson }}
+
+  {{- $output := dict}}
+
+  {{- range $key, $value := $.Values.components }}
+    {{- $common := $.Values.common }}
+    {{- $command := concat $common.command (default (list) $value.command) }}
+    {{- $args := concat $common.args (default (list) $value.args) }}
+    {{- $mergedValue := mergeOverwrite (deepCopy $common) $value (dict "args" $args "command" $command ) }}
+    {{- $mergedValue = mergeOverwrite (deepCopy $mergedValue) (dict "dbName" (default $key $mergedValue.dbName) "webPath" (default $key $mergedValue.webPath) )}}
+    {{- if $mergedValue.enabled -}}
+      {{- $_:= set $output $key $mergedValue }}
+    {{- end }}
+  {{- end }}
+
+  {{- range $key, $value := $.Values.agents }}
+    {{- $common := mergeOverwrite (deepCopy $.Values.common) $.Values.agentsCommon }}
+    {{- if hasKey $value "from" }}
+      {{- $common = mergeOverwrite $common (get $.Values.agents $value.from) }}
+    {{- end }}
+    {{- $command := concat $common.command (default (list) $value.command) }}
+    {{- $args := concat  $common.args (default (list) $value.args) }}
+    {{- $mergedValue := mergeOverwrite (deepCopy $common) $value (dict "args" $args "command" $command ) }}
+    {{- $mergedValue = mergeOverwrite (deepCopy $mergedValue) (dict "dbName" (default $key $mergedValue.dbName) "webPath" (default $key $mergedValue.webPath) )}}
+    {{- if $mergedValue.enabled -}}
+      {{- $_:= set $output $key $mergedValue }}
+    {{- end }}
+  {{- end }}
+  {{- $output | mustToJson }}
 {{- end }}
