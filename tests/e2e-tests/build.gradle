@@ -10,13 +10,26 @@ java {
   }
 }
 
+repositories {
+  mavenCentral()
+}
+
 dependencies {
-  testImplementation group: 'com.intuit.karate', name: 'karate-junit5', version: '1.1.0'
-  testImplementation group: 'com.intuit.karate', name: 'karate-apache', version: '0.9.6'
   testImplementation group: 'com.aventstack', name: 'extentreports', version: '5.0.9'
   testImplementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind',
       version: '2.13.2.2'
+  testImplementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-csv',
+      version: '2.13.2'
   testImplementation group: 'org.apache.commons', name: 'commons-text', version: '1.9'
+  testImplementation group: 'io.cucumber', name: 'cucumber-jvm-deps', version: '1.0.6'
+  testImplementation group: 'io.cucumber', name: 'cucumber-junit', version: '7.3.4'
+  testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '5.0.1'
+  testImplementation group: 'io.cucumber', name: 'cucumber-java', version: '7.3.4'
+  testImplementation group: 'junit', name: 'junit', version: '4.13.2'
+  testImplementation group: 'org.awaitility', name: 'awaitility', version: '4.2.0'
+//  testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.8.2'
+//  testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.8.2'
+
 
   testCompileOnly 'org.projectlombok:lombok:1.18.22'
   testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
@@ -41,7 +54,7 @@ test {
   systemProperty "karate.client-secret", System.properties.getProperty("karate.client-secret")
   systemProperty "karate.isRegression", System.properties.getProperty("karate.isRegression")
   systemProperty "zephyrAuthToken", System.properties.getProperty("zephyrAuthToken")
-  outputs.upToDateWhen {false}
+  outputs.upToDateWhen { false }
 }
 
 task karateDebug(type: JavaExec) {
