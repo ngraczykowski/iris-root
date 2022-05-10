@@ -30,6 +30,21 @@ class DailyRecommendationStatisticsRepositoryTest extends BaseDataJpaTest {
   @Autowired
   private DailyRecommendationStatisticsRepository repository;
 
+  private static DailyRecommendationStatistics createDailyRecommendationStatistic(
+      LocalDate localDate) {
+    return DailyRecommendationStatistics
+        .builder()
+        .day(localDate)
+        .alertsCount(100)
+        .falsePositivesCount(90)
+        .potentialTruePositivesCount(8)
+        .manualInvestigationsCount(2)
+        .analystDecisionCount(3)
+        .efficiencyPercent(20.0)
+        .effectivenessPercent(80.0)
+        .build();
+  }
+
   @Test
   void getStatisticFromRange_oneStatisticInRange_statisticReturned() {
     // Given
@@ -40,7 +55,8 @@ class DailyRecommendationStatisticsRepositoryTest extends BaseDataJpaTest {
     // When
     List<DailyRecommendationStatistics>
         dailyRecommendationStatisticList =
-        repository.findByDayBetween(LocalDate.of(2022, 3, 13), LocalDate.of(2022, 3, 13));
+        repository.findByDayBetweenOrderByDayDesc(
+            LocalDate.of(2022, 3, 13), LocalDate.of(2022, 3, 13));
 
     // Then
     assertThat(dailyRecommendationStatisticList).containsExactlyInAnyOrder(
@@ -60,7 +76,8 @@ class DailyRecommendationStatisticsRepositoryTest extends BaseDataJpaTest {
     // When
     List<DailyRecommendationStatistics>
         dailyRecommendationStatisticList =
-        repository.findByDayBetween(LocalDate.of(2022, 3, 13), LocalDate.of(2022, 3, 14));
+        repository.findByDayBetweenOrderByDayDesc(
+            LocalDate.of(2022, 3, 13), LocalDate.of(2022, 3, 14));
 
     // Then
     assertThat(dailyRecommendationStatisticList).containsExactlyInAnyOrder(
@@ -95,20 +112,5 @@ class DailyRecommendationStatisticsRepositoryTest extends BaseDataJpaTest {
     // Then
     assertThat(dailyRecommendationStatisticOptional).isEmpty();
 
-  }
-
-  private static DailyRecommendationStatistics createDailyRecommendationStatistic(
-      LocalDate localDate) {
-    return DailyRecommendationStatistics
-        .builder()
-        .day(localDate)
-        .alertsCount(100)
-        .falsePositivesCount(90)
-        .potentialTruePositivesCount(8)
-        .manualInvestigationsCount(2)
-        .analystDecisionCount(3)
-        .efficiencyPercent(20.0)
-        .effectivenessPercent(80.0)
-        .build();
   }
 }

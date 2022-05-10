@@ -1,5 +1,7 @@
 package com.silenteight.warehouse.statistics.aggregators;
 
+import com.silenteight.warehouse.statistics.AggregationPeriod;
+
 import com.google.common.collect.Range;
 
 import java.time.LocalDate;
@@ -23,4 +25,9 @@ public interface DataAggregator<T> {
    * @return aggregated data based on the range
    */
   Map<Range<LocalDate>, List<T>> aggregate(Range<LocalDate> ranges, List<T> data);
+
+  /**
+   * @return aggregation period
+   */
+  AggregationPeriod getAggregationPeriod();
 }

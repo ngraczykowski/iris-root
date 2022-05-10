@@ -24,10 +24,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -98,6 +95,10 @@ class StatisticsCollectorImplTest {
         .build();
   }
 
+  private static OffsetDateTime getOffsetDateTime(LocalDate localDate, LocalTime localTime) {
+    return OffsetDateTime.of(localDate, localTime, ZoneOffset.UTC);
+  }
+
   @BeforeEach
   void setUp() {
     dailyAlertRecommendationCollector = new StatisticsCollectorImpl<>(
@@ -108,7 +109,7 @@ class StatisticsCollectorImplTest {
             new RecommendationMapper(RECOMMENDATION_PROPERTIES),
             new AnalystDecisionMapper(ANALYST_DECISION_PROPERTIES)),
         new DailyRecommendationPersistence(dailyRecommendationStatisticsRepository),
-        1);
+        1, 1);
 
     when(timeSource.localDateTime()).thenReturn(NOW.atStartOfDay());
   }
@@ -143,6 +144,7 @@ class StatisticsCollectorImplTest {
     ArgumentCaptor<DailyRecommendationStatistics> argument =
         ArgumentCaptor.forClass(DailyRecommendationStatistics.class);
     verify(dailyRecommendationStatisticsRepository, times(2)).save(argument.capture());
+    verify(alertRepository, times(1)).fetchAlerts(any(), any());
     assertThat(argument.getAllValues()).containsExactlyInAnyOrder(dps, dps2);
   }
 
@@ -153,7 +155,7 @@ class StatisticsCollectorImplTest {
         Optional.of(DailyRecommendationStatistics
             .builder()
             .day(OLDEST_DAILY_STATISTICS.minusDays(1)).build()));
-    when(alertRepository.fetchAlerts(any(), any())).thenReturn(
+    when(alertRepository.fetchAlerts(any(), any())).thenReturn(List.of()).thenReturn(
         List.of(
             buildAlert(
                 AGGREGATION_DATE,
@@ -196,6 +198,18 @@ class StatisticsCollectorImplTest {
     // Then
     ArgumentCaptor<DailyRecommendationStatistics> argument =
         ArgumentCaptor.forClass(DailyRecommendationStatistics.class);
+    ArgumentCaptor<OffsetDateTime> localDateStartCaptor =
+        ArgumentCaptor.forClass(OffsetDateTime.class);
+    ArgumentCaptor<OffsetDateTime> localDateEndCaptor =
+        ArgumentCaptor.forClass(OffsetDateTime.class);
+    verify(alertRepository, times(2)).fetchAlerts(
+        localDateStartCaptor.capture(), localDateEndCaptor.capture());
+    assertThat(localDateStartCaptor.getAllValues()).containsExactlyInAnyOrder(
+        getOffsetDateTime(OLDEST_DAILY_STATISTICS.minusDays(1), LocalTime.MIN),
+        getOffsetDateTime(OLDEST_DAILY_STATISTICS.plusDays(1), LocalTime.MIN));
+    assertThat(localDateEndCaptor.getAllValues()).containsExactlyInAnyOrder(
+        getOffsetDateTime(OLDEST_DAILY_STATISTICS, LocalTime.MAX),
+        getOffsetDateTime(OLDEST_DAILY_STATISTICS.plusDays(1), LocalTime.MAX));
     verify(dailyRecommendationStatisticsRepository, times(3)).save(argument.capture());
     assertThat(argument.getAllValues()).containsExactlyInAnyOrder(dps, dps2, dps3);
   }
@@ -257,6 +271,7 @@ class StatisticsCollectorImplTest {
     ArgumentCaptor<DailyRecommendationStatistics> argument =
         ArgumentCaptor.forClass(DailyRecommendationStatistics.class);
     verify(dailyRecommendationStatisticsRepository, times(2)).save(argument.capture());
+    verify(alertRepository, times(1)).fetchAlerts(any(), any());
     assertThat(argument.getAllValues()).containsExactlyInAnyOrder(dps, dps2);
   }
 }

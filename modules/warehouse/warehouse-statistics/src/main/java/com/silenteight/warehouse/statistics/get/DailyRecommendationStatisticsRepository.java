@@ -12,7 +12,8 @@ public interface DailyRecommendationStatisticsRepository
 
   void save(DailyRecommendationStatistics entity);
 
-  List<DailyRecommendationStatistics> findByDayBetween(LocalDate startDate, LocalDate endDate);
+  List<DailyRecommendationStatistics> findByDayBetweenOrderByDayDesc(
+      LocalDate startDate, LocalDate endDate);
 
   Optional<DailyRecommendationStatistics> findFirstByOrderByDayDesc();
 

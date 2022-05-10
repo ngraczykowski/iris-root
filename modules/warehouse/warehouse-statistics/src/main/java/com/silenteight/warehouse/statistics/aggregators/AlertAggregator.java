@@ -51,6 +51,11 @@ public final class AlertAggregator implements DataAggregator<AlertDto> {
     return aggregatedRanges;
   }
 
+  @Override
+  public AggregationPeriod getAggregationPeriod() {
+    return rangeSize;
+  }
+
   @NotNull
   private Map<Range<LocalDate>, List<AlertDto>> generateRangesToAggregator(
       Range<LocalDate> dateRange) {

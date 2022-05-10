@@ -73,6 +73,7 @@ public class StatisticsConfiguration {
       TimeSource timeSource,
       DailyStatisticsProperties properties) {
     return new StatisticsCollectorImpl<>(timeSource,
-        extractor, aggregator, computer, persistance, properties.getRecalculationPeriod());
+        extractor, aggregator, computer, persistance, properties.getRecalculationPeriod(),
+        properties.getBucketSize());
   }
 }

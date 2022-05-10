@@ -11,4 +11,6 @@ import org.springframework.validation.annotation.Validated;
 public class DailyStatisticsProperties {
 
   Number recalculationPeriod;
+
+  Integer bucketSize;
 }

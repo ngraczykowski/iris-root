@@ -22,7 +22,7 @@ public class GetDashboardStatisticsUseCase {
         request.getFrom(), request.getTo());
 
     List<DailyRecommendationStatistics> statistics =
-        repository.findByDayBetween(request.getFrom(), request.getTo());
+        repository.findByDayBetweenOrderByDayDesc(request.getFrom(), request.getTo());
 
     double alertsCount =
         getTotalCount(statistics, DailyRecommendationStatistics::getAlertsCount);
@@ -53,7 +53,7 @@ public class GetDashboardStatisticsUseCase {
     log.info("Daily statistics request received, calculation period: from={}, to={}",
         request.getFrom(), request.getTo());
 
-    return repository.findByDayBetween(request.getFrom(), request.getTo())
+    return repository.findByDayBetweenOrderByDayDesc(request.getFrom(), request.getTo())
         .stream()
         .map(GetDashboardStatisticsUseCase::toDailyStatisticsResponse)
         .collect(Collectors.toList());

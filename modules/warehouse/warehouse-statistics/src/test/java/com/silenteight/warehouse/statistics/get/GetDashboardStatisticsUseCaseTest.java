@@ -25,7 +25,8 @@ class GetDashboardStatisticsUseCaseTest {
   @Test
   void testCalculation_allDataExists() {
     //given
-    when(repository.findByDayBetween(any(), any())).thenReturn(provideDailyStatistic());
+    when(repository.findByDayBetweenOrderByDayDesc(any(), any())).thenReturn(
+        provideDailyStatistic());
 
     //when
     StatisticsResponse response =
@@ -48,7 +49,8 @@ class GetDashboardStatisticsUseCaseTest {
   @Test
   void testCalculation_dataContainsNaN() {
     //given
-    when(repository.findByDayBetween(any(), any())).thenReturn(provideDailyStatisticWithNaN());
+    when(repository.findByDayBetweenOrderByDayDesc(any(), any())).thenReturn(
+        provideDailyStatisticWithNaN());
 
     //when
     StatisticsResponse response =
@@ -71,7 +73,7 @@ class GetDashboardStatisticsUseCaseTest {
   @Test
   void testCalculation_emptyTable() {
     //given
-    when(repository.findByDayBetween(any(), any())).thenReturn(List.of());
+    when(repository.findByDayBetweenOrderByDayDesc(any(), any())).thenReturn(List.of());
 
     //when
     StatisticsResponse response =
