@@ -140,7 +140,7 @@ to do is to:
 
 ## Test script
 
-For your convenience you may use [testing script](scripts/smoke-tests.sh) which issues gns-rt 
+For your convenience you may use [testing script](tests/test-random-requests.sh) which issues gns-rt 
 random requests and logs the responses.
 
 ## Running tests in Gradle

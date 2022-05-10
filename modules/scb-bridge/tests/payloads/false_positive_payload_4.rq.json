@@ -1,0 +1,143 @@
+{
+    "screenCustomerNameRes": {
+        "screenCustomerNameResPayload": {
+            "payloadFormat": null,
+            "payloadVersion": null,
+            "screenCustomerNameResInfo": {
+                "header": {
+                    "userBankID": "AEECDDPDA75BD4B",
+                    "screeningUniqueReference": null,
+                    "sourceSystem": "GNSRT",
+                    "watchlistTypeAll": "Y",
+                    "watchlistTypeSanctions": null,
+                    "watchlistTypePEP": null,
+                    "watchlistTypeAM": null,
+                    "watchlistTypeDD": null,
+                    "countryCode": "AE",
+                    "segment": null,
+                    "clientType": "I",
+                    "partyType": null,
+                    "genericSearchFlag": null,
+                    "priorityScreeningFlag": null,
+                    "userDepartment": null,
+                    "requestorOrGroupMailId": null,
+                    "emailNotificationRequiredOrNot": null,
+                    "responseType": null,
+                    "requestInTime": null,
+                    "requestOutTime": null
+                },
+                "screenableData": {
+                    "amlcountry": "AE",
+                    "sourceSystemIdentifier": "ECDDP",
+                    "customerIdentificationNo": "AEECDDPDA75BD4B",
+                    "clientType": "I",
+                    "fullLegalName": "TZUNG RUNG LOU",
+                    "fullTradingName": null,
+                    "legalParentOrGroupName": null,
+                    "executiveManagementNames": null,
+                    "supplementaryCardName": null,
+                    "alternateName1": null,
+                    "alternateName2": null,
+                    "alternateName3": null,
+                    "alternateNameRest": null,
+                    "registeredOrResidentialAddress": null,
+                    "registeredOrResidentialAddressCountry": null,
+                    "mailingOrCommunicationAddress": null,
+                    "mailingOrCommunicationAddressCountry": null,
+                    "operatingOrOfficialAddress": null,
+                    "operatingOrOfficialAddressCountry": null,
+                    "otherAddress": null,
+                    "otherAddressCountry": null,
+                    "registeredAddressOfHeadOffice": null,
+                    "registeredAddressCountryOfHeadOffice": null,
+                    "registeredAddressOfParentCompany": null,
+                    "registeredAddressCountryOfParentCompany": null,
+                    "nationalityAll": null,
+                    "establishmentCountryOfHO": null,
+                    "establishmentCountryOfParentCompany": null,
+                    "identificationType1": null,
+                    "identificationNumber1": null,
+                    "identificationType2": null,
+                    "identificationNumber2": null,
+                    "identificationType3": null,
+                    "identificationNumber3": null,
+                    "identificationType4": null,
+                    "identificationNumber4": null,
+                    "identificationTypeRest": null,
+                    "identificationNumberRest": null,
+                    "dateOfBirthOrRegistration": null,
+                    "countryOfBirthOrRegistration": null,
+                    "homeStateAuthorityOrGovtCountryName": null,
+                    "nameOfStockExchange": null,
+                    "nameOfAuthority": null,
+                    "businessNature": null,
+                    "clientLegalEntityType": "Private Company",
+                    "gender": null,
+                    "countryOfEmployment": null,
+                    "addressCity": null,
+                    "dateTimeStamp": "2019/01/24 22:14:29",
+                    "supplementaryInformation1": null,
+                    "supplementaryInformation2": null,
+                    "supplementaryInformation3": null,
+                    "supplementaryInformation4": null,
+                    "supplementaryInformation5": null,
+                    "supplementaryInformation6": null,
+                    "supplementaryInformation7": null,
+                    "supplementaryInformation8": null,
+                    "supplementaryInformation9": null,
+                    "supplementaryInformation10": null,
+                    "partyType": "RELATED PARTY",
+                    "supplierType": null,
+                    "acctOrRelationshipOrProfileClosedDate": null,
+                    "lastCDDApprovedDate": "2019/01/14 19:27:29",
+                    "linkedCustomerIdentificationNo": "13727432_CDD00104206_1.001",
+                    "natureOfRelationshipWithHomeStateAuthority": null,
+                    "ownershipStatusOfClient": null,
+                    "relationshipToThePrimaryCardholder": null,
+                    "clientSegment": "Medium Enterprises",
+                    "clientSubSegment": "Medium Enterprise",
+                    "classesOfBeneficiary": null,
+                    "customerStatus": "ACTIVE",
+                    "staffAccountIdentifier": null,
+                    "relatedPartyType": "|Beneficial Owner|",
+                    "casaFlag": null,
+                    "priorityIndicator": null,
+                    "relianceFlgOrSuppTypOrKoreanName": null,
+                    "realTimeMessageIndicator": null,
+                    "changeOrPriorityIndicator": "F",
+                    "alternateID1Description": null,
+                    "alternateID1": null,
+                    "alternateID2Description": null,
+                    "alternateID2": null,
+                    "nottobeused": null,
+                    "cddriskRating": "C",
+                    "pepstatus": "N",
+                    "rmcodeOfCDDOwner": "1520790",
+                    "rmlocationOfCDDOwner": null
+                },
+                "immediateResponseData": {
+                    "immediateResponseTimestamp": "2019-01-17T11:46:29.000",
+                    "overAllStatus": "POTENTIAL_MATCH",
+                    "alerts": [
+                        {
+                            "watchlistType": "DD",
+                            "alertStatus": "POTENTIAL_MATCH",
+                            "alertID": "AE_BTCH_DUDL!DA75BD4B-34644EFC-AD14F3F9-7C7E5BAB",
+                            "hitList": [
+                                {
+                                    "hitID": "AZ06356891",
+                                    "hitDetails": "T0ZBQyBJRDpBWjA2MzU2ODkxCk1BVENIOiAwLjAwClRBRzogTkFNCk1BVENISU5HVEVYVDogUlVORyBMT1UKUkVTVUxUOiAoMCkKCkJBVENIOiAyMDE5LzAxLzE4XzAwMDJfQUVfQlRDSF9EVURMCk5BTUU6IFJVTkcgTE9VCiAgU3lub255bXM6IG5vbmUgCkFERFJFU1M6IDcxNzUyIEthcmVuIE1vdW50IFN1aXRlIDE5NApMZXNsaWVzdGFkLCBTQyAxNzI2Mi0xNzI5CiAgU3lub255bXM6IG5vbmUgCkNJVFk6IFNPVVRIIEpBS0FSVEEKICBTeW5vbnltczogbm9uZSAKQ09VTlRSWTogU0dQCiAgU3lub255bXM6IG5vbmUgClNUQVRFOiAKICBTeW5vbnltczogbm9uZSAKT1JJR0lOOgpEQkdST1VQCkRFU0lHTkFUSU9OOgpYWC1HUwpUWVBFOgpJClNFQVJDSCBDT0RFUzoKbm9uZQpVU0VSIERBVEEgMToKQU5USS1NT05FWSBMQVVOREVSSU5HLVNlbnNpdGl2ZSBDbGllbnQtUmVwdXRhdGlvbgpVU0VSIERBVEEgMjoKbm9uZQpPRkZJQ0lBTCBSRUY6Cm5vbmUKUEFTU1BPUlQ6Cm5vbmUKQklDIENPREVTOgpub25lCk5BVElEOgpBMDA5MjMwMQpQTEFDRSBPRiBCSVJUSDoKQkFHSERBRCwgSVJBUQpEQVRFIE9GIEJJUlRIOgoxOTkzLTA1LTAyCk5BVElPTkFMSVRZOgpub25lCkFERElUSU9OQUwgSU5GT1M6Ckxpc3QgSUQ6IDQ0IC8gQ3JlYXRlIERhdGU6IDAzLzIxLzIwMDIgMDA6MDA6MDAgLyBMYXN0IFVwZGF0ZSBEYXRlOiAwMS8xOS8yMDE3IDE3OjEyOjUwIC8gUHJvZ3JhbTogVEFMSUJBTiAvIFRpdGxlOiBHT1ZFUk5PUiBPRiBTQVJJUFVMIFBST1ZJTkNFIFVOREVSIFRIRSBUQUxJQkFOIFJFR0lNRTsgTUFVTEFWSSAvIE5hdGlvbmFsaXR5OiBBZmdoYW5pc3RhbiAvIE90aGVySW5mb3JtYXRpb246IE1lbWJlciBvZiBUYWxpYmFuIFN1cHJlbWUgQ291bmNpbCBhcyBhdCAyMDExLiBCZWxvbmdzIHRvIE51cnphaSB0cmliZS4gSU5URVJQT0wtVU4gU2VjdXJpdHkgQ291bmNpbCBTcGVjaWFsIE5vdGljZSB3ZWIgbGluazogaHR0cHM6Ly93d3cuaW50ZXJwb2wuaW50L2VuL25vdGljZS9zZWFyY2gvdW4vNDY3ODU1MyAvIE9yaWdpbmFsSUQ6IFRBaS4xMDcKRk1MIFRZUEU6CjAKRk1MIFBSSU9SSVRZOgowCkZNTCBDT05GSURFTlRJQUxJVFk6CjAKRk1MIElORk86Cm5vbmUKUEVQLUZFUDoKMCAwCktFWVdPUkRTOgpub25lCkhZUEVSTElOS1M6Cm5vbmUKVFlTOiAyCklTTjogLTEK"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        "header": {
+            "originationDetails": {
+                "trackingId": "2019/01/18_0002_AE_BTCH_DUDL"
+            }
+        }
+    }
+}
