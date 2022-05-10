@@ -50,7 +50,14 @@ public class AnalysisFixtures {
   static List<Analysis> randomAnalysisList() {
     List<Analysis> analysisList = new ArrayList<>();
     for (int i = 0; i < current().nextInt(10, 100); i++) {
-      analysisList.add(randomAnalysisEntity().updateBuilder(Analysis.newBuilder()).build());
+      var builder = Analysis.newBuilder();
+      var analysisEntity = randomAnalysisEntity();
+      analysisEntity.updateBuilder(builder);
+
+      builder.addAllCategories(getRandomCategories(analysisEntity.getCategories().size()));
+      builder.addAllFeatures(getRandomFeatures(analysisEntity.getFeatures().size()));
+
+      analysisList.add(builder.build());
     }
     return analysisList;
   }

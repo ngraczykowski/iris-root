@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.adjudication.api.v1.Analysis.Feature;
+import com.silenteight.adjudication.engine.common.grpc.InvalidAnalysisException;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
@@ -28,9 +29,20 @@ class CreateAnalysisUseCase {
   private final FeatureProvider featureProvider;
 
   @Transactional
-  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   String createAnalysis(Analysis analysis) {
+    validateAnalysis(analysis);
     return repository.save(createEntity(analysis)).getName();
+  }
+
+  private static void validateAnalysis(Analysis analysis) {
+    if (areFeaturesAndCategoriesEmpty(analysis)) {
+      throw new InvalidAnalysisException("Analysis doesn't have any categories nor features");
+    }
+  }
+
+  private static boolean areFeaturesAndCategoriesEmpty(Analysis analysis) {
+    return analysis.getCategoriesList().isEmpty() && analysis.getFeaturesList().isEmpty();
   }
 
   private AnalysisEntity createEntity(Analysis analysis) {
