@@ -68,6 +68,7 @@ def assert_list(tested, reference, key):
 
 def assert_compare_list_of_dict_of_list(tested, reference, col):
     assert len(tested) == len(reference)
+
     for tested_element, reference_element in zip(tested, reference):
         for key in tested_element:
             assert sorted(tested_element[key]) == sorted(reference_element[key]), col
