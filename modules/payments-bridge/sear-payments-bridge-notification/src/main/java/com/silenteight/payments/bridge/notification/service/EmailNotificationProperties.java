@@ -22,7 +22,7 @@ public class EmailNotificationProperties {
   private String cc;
   private String cron = DEFAULT_CRON;
   private int amount = DEFAULT_AMOUNT;
-  private boolean cmapiEnabled;
+  private boolean cmapiEnabled = false;
   private List<String> cmapiErrorsEnabled = new ArrayList<>();
-  private boolean learningEnabled;
+  private boolean learningEnabled = false;
 }
