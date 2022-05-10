@@ -42,6 +42,7 @@ warehouse:
     daily:
       scheduled-cron: "0 0 1 * * *"
       recalculation-period: 20
+      bucket-size: 2
       recommendation-enabled: false
   web:
     cors:

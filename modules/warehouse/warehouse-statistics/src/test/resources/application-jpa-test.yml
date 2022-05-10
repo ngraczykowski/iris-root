@@ -54,6 +54,7 @@ warehouse:
       scheduled-cron: "0 0 1 * * *"
       recalculation-period: 20
       recommendation-enabled: true
+      bucket-size: 2
   common:
     recommendation:
       values:
