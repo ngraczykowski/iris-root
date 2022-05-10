@@ -297,7 +297,7 @@ job "governance" {
           "-Dlogging.config=secrets/conf/logback.xml",
           "-jar",
           "local/governance-app.jar",
-          "--spring.profiles.active=linux,governance,database,rabbitmq,messaging",
+          "--spring.profiles.default=linux,governance,database,rabbitmq,messaging",
           "--spring.config.additional-location=file:local/conf/",
           "--spring.rabbitmq.virtual-host=/${var.namespace}",
         ]
