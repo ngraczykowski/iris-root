@@ -21,7 +21,7 @@ class SolutionConfigurationCsvFileParserTest extends Specification {
     when:
     def result = underTest.getSolutionConfigurations()
     then:
-    assert result.size() == 2
+    assert result.size() == 3
     def configResult = result.get(0)
     configResult.getPolicyId() == 'policies/3f1432f4-8828-478e-a6b4-8803ba80be2b'
     configResult.getStepId() == 'steps/5ca9d972-695b-4550-a383-b09311ff42e4'
