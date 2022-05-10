@@ -132,60 +132,83 @@ components:
               url: https://todo-add-bucket.s3.eu-central-1.amazonaws.com
               region: eu-central-1
 
-  agents:
-    name-agent:
-      args:
-        - --spring.profiles.active=sierra,rabbitmq-declare
-        - --linguistics.name.facade.enabled=true
-        - --sentry.dsn=https://423d3bd99f14476dbf7354cbd584cc57@o1129201.ingest.sentry.io/6176119
-        - --sentry.environment=unknown
-      resources:
-        limits:
-          memory: 2Gi
-        requests:
-          memory: 1Gi
-    date-agent:
-      args:
-        - --spring.profiles.active=sierra,rabbitmq-declare
-        - --dob.agent.facade.enabled=true
-    document-comparer-agent:
-      args:
-        - --spring.profiles.active=sierra,rabbitmq-declare
-        - --nationalId.agent.facade.enabled=true
-    document-recognizer-agent:
-      args:
-        - --spring.profiles.active=sierra,rabbitmq-declare
-    document-number-agent:
-      args:
-        - --spring.profiles.active=sierra,rabbitmq-declare
-        - --document.agent.facade.enabled=true
-    geo-agent:
-      args:
-        - --spring.profiles.active=sierra,rabbitmq-declare
-        - --geo.agent.facade.enabled=true
-        - --geotransactions.agent.facade.enabled=true
-        - --sentry.dsn=https://057cc65ea9454a98b48877702c1a818f@o1129201.ingest.sentry.io/6176255
-        - --sentry.environment=unknown
-      resources:
-        limits:
-          memory: 2Gi
-        requests:
-          memory: 1Gi
-    freetext-agent:
-      args:
-        - --spring.profiles.active=sierra,rabbitmq-declare
-        - --freetext.agent.facade.enabled=true
-        - --sentry.dsn=https://3c821f54634b4eae83f786e8ec32d996@o1129201.ingest.sentry.io/6242156
-        - --sentry.environment=unknown
-      resources:
-        limits:
-          memory: 2Gi
-        requests:
-          memory: 1Gi
-    gender-agent:
-      args:
-        - --spring.profiles.active=sierra,rabbitmq-declare
-        - --gender.agent.facade.enabled=true
+agents:
+  name-agent:
+    args:
+      - --spring.profiles.active=sierra,rabbitmq-declare
+      - --linguistics.name.facade.enabled=true
+      - --sentry.dsn=https://423d3bd99f14476dbf7354cbd584cc57@o1129201.ingest.sentry.io/6176119
+      - --sentry.environment=unknown
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
+  date-agent:
+    args:
+      - --spring.profiles.active=sierra,rabbitmq-declare
+      - --dob.agent.facade.enabled=true
+  document-comparer-agent:
+    args:
+      - --spring.profiles.active=sierra,rabbitmq-declare
+      - --nationalId.agent.facade.enabled=true
+  document-recognizer-agent:
+    args:
+      - --spring.profiles.active=sierra,rabbitmq-declare
+  document-number-agent:
+    args:
+      - --spring.profiles.active=sierra,rabbitmq-declare
+      - --document.agent.facade.enabled=true
+  geo-agent:
+    args:
+      - --spring.profiles.active=sierra,rabbitmq-declare
+      - --geo.agent.facade.enabled=true
+      - --geotransactions.agent.facade.enabled=true
+      - --sentry.dsn=https://057cc65ea9454a98b48877702c1a818f@o1129201.ingest.sentry.io/6176255
+      - --sentry.environment=unknown
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
+  learning-engine:
+    useDb: true
+    dbName: "learning-engine"
+    args:
+      - --spring.profiles.active=sierra,rabbitmq-declare
+      - --learning.agent.facade.enabled=true
+      - --geotransactions.agent.facade.enabled=true
+      - --sentry.dsn=https://057cc65ea9454a98b48877702c1a818f@o1129201.ingest.sentry.io/6176255
+      - --sentry.environment=unknown
+    resources:
+      limits:
+        memory: 1Gi
+      requests:
+        memory: 768Mi
+  freetext-agent:
+    args:
+      - --spring.profiles.active=sierra,rabbitmq-declare
+      - --freetext.agent.facade.enabled=true
+      - --sentry.dsn=https://3c821f54634b4eae83f786e8ec32d996@o1129201.ingest.sentry.io/6242156
+      - --sentry.environment=unknown
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
+  gender-agent:
+    args:
+      - --spring.profiles.active=sierra,rabbitmq-declare
+      - --gender.agent.facade.enabled=true
+  region-agent:
+    args:
+      - --spring.profiles.active=sierra,rabbitmq-declare
+      - --region.agent.facade.enabled=true
+    resources:
+      limits:
+        memory: 1Gi
+      requests:
+        memory: 768Mi
 
 frontend:
   resources:

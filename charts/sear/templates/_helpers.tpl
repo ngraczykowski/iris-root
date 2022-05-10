@@ -105,3 +105,25 @@ Address of Postgres service
 {{- define "sear.postgresqlService" -}}
   {{- include "sear.fullname" . }}-postgres.{{ .Release.Namespace }}.svc
 {{- end -}}
+{{- define "buildComponents" }}
+{{- $effective := dict}}
+{{- range $key, $value := $.Values.components }}
+{{- $command := concat $.Values.common.command (default (list) $value.command) }}
+{{- $args := concat $.Values.common.args (default (list) $value.args) }}
+{{- $mergedValue := mergeOverwrite (deepCopy $.Values.common) $value (dict "args" $args "command" $command ) }}
+{{- $mergedValue = mergeOverwrite (deepCopy $mergedValue) (dict "dbName" (default $key $mergedValue.dbName) "webPath" (default $key $mergedValue.webPath) )}}
+{{- if $mergedValue.enabled -}}
+{{- $_:= set $effective $key $mergedValue }}
+{{- end }}
+{{- end }}
+{{- range $key, $value := $.Values.agents }}
+{{- $command := concat $.Values.common.command (default (list) $value.command) }}
+{{- $args := concat $.Values.common.args (default (list) $value.args) }}
+{{- $mergedValue := mergeOverwrite (deepCopy $.Values.common) $.Values.agentsCommon $value (dict "args" $args "command" $command ) }}
+{{- $mergedValue = mergeOverwrite (deepCopy $mergedValue) (dict "dbName" (default $key $mergedValue.dbName) "webPath" (default $key $mergedValue.webPath) )}}
+{{- if $mergedValue.enabled -}}
+{{- $_:= set $effective $key $mergedValue }}
+{{- end }}
+{{- end }}
+{{- $effective | mustToJson }}
+{{- end }}

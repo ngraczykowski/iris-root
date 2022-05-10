@@ -17,15 +17,15 @@ spec:
       size: {{ .Values.database.volume.size | quote }}
 
   users:
-    {{- range $componentName, $component := .Values.components }}
-    {{- if and (hasKey $component "enabled" | ternary $component.enabled true) (hasKey $component "useDb" | ternary $component.useDb true) }}
+    {{- range $componentName, $component := include "buildComponents" . | mustFromJson }}
+    {{- if and $component.enabled $component.useDb }}
     {{ default $componentName $component.dbName }}: []
     {{- end }}
     {{- end }}
 
   databases:
-    {{- range $componentName, $component := .Values.components }}
-    {{- if and (hasKey $component "enabled" | ternary $component.enabled true) (hasKey $component "useDb" | ternary $component.useDb true) }}
+    {{- range $componentName, $component := include "buildComponents" . | mustFromJson }}
+    {{- if and $component.enabled $component.useDb }}
     {{ default $componentName $component.dbName }}: {{ default $componentName $component.dbName }}
     {{- end }}
     {{- end }}

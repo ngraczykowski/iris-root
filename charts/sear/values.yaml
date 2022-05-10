@@ -83,6 +83,9 @@ ingress:
 # Configuration common for all components
 #
 common:
+  enabled: true
+  useDb: true
+  dbName: ""
   image:
     pullPolicy: IfNotPresent
     pullSecrets: []
@@ -250,41 +253,48 @@ components:
     startupProbe:
       initialDelaySeconds: 60
 
-  # FIXME(pputerla) - remark - we're missing list of supported component keys
-  agents:
-    name-agent:
-      image:
-        repository: registry.dev.s8ops.com/linguistics-agent
-    date-agent:
-      image:
-        repository: registry.dev.s8ops.com/date-agent
-    document-comparer-agent:
-      command:
-        - "/docker-entrypoint.sh"
-        - "comparer"
-      image:
-        repository: registry.dev.s8ops.com/document-agent
-    document-recognizer-agent:
-      command:
-        - "/docker-entrypoint.sh"
-        - "recognizer"
-      image:
-        repository: registry.dev.s8ops.com/document-agent
-    document-number-agent:
-      command:
-        - "/docker-entrypoint.sh"
-        - "number"
-      image:
-        repository: registry.dev.s8ops.com/document-agent
-    geo-agent:
-      image:
-        repository: registry.dev.s8ops.com/geo-agent
-    freetext-agent:
-      image:
-        repository: registry.dev.s8ops.com/freetext-agent
-    gender-agent:
-      image:
-        repository: registry.dev.s8ops.com/gender-agent
+# FIXME(pputerla) - remark - we're missing list of supported component keys
+agents:
+  name-agent:
+    image:
+      repository: registry.dev.s8ops.com/linguistics-agent
+  date-agent:
+    image:
+      repository: registry.dev.s8ops.com/date-agent
+  document-comparer-agent:
+    command:
+      - "/docker-entrypoint.sh"
+      - "comparer"
+    image:
+      repository: registry.dev.s8ops.com/document-agent
+  document-recognizer-agent:
+    command:
+      - "/docker-entrypoint.sh"
+      - "recognizer"
+    image:
+      repository: registry.dev.s8ops.com/document-agent
+  document-number-agent:
+    command:
+      - "/docker-entrypoint.sh"
+      - "number"
+    image:
+      repository: registry.dev.s8ops.com/document-agent
+  geo-agent:
+    image:
+      repository: registry.dev.s8ops.com/geo-agent
+  learning-engine:
+    dbName: "learning-engine"
+    image:
+      repository: registry.dev.s8ops.com/learning-engine
+  freetext-agent:
+    image:
+      repository: registry.dev.s8ops.com/freetext-agent
+  gender-agent:
+    image:
+      repository: registry.dev.s8ops.com/gender-agent
+  region-agent:
+    image:
+      repository: registry.dev.s8ops.com/region-agent
 #
 # Frontend Web Application
 #
