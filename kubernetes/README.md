@@ -4,10 +4,11 @@ This directory contains [values files](https://helm.sh/docs/chart_template_guide
 
 ## Overview
 
-The minimum values required to deploy working system are:
+The values required to deploy a working system are:
 
 - Core
 - Ingress
+- Environment-specific bridge and agents
 
 ### Core
 
@@ -16,6 +17,10 @@ The core of the product is deployed with `values.core.yaml`. Deploying this conf
 ### Ingress
 
 Besides the Core, system must have ingress configured. Right now there is only single ingress type, `values.ingress-internal.yaml`, which grants access to the environment via ingress controller available through Silent Eight VPN.
+
+### Bridge and agents
+
+The system needs a bridge, which is responsible for receiving and ETLing alerts, as well as environment-specific set of agents. Sets of these are pre-configured in `values.*.yaml` files.
 
 ## Deploying environment
 
