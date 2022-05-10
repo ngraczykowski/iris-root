@@ -1,6 +1,0 @@
-apiVersion: v1
-name: webapp-app
-description: A Helm chart for WebApp deployed in Kubernetes
-type: application
-version: "1.0.7"
-appVersion: "1.4.0"

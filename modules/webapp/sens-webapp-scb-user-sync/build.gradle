@@ -34,8 +34,6 @@ dependencies {
 
   implementation libs.springdoc.security
 
-  implementation libs.oracle
-
   implementation doNotUseLibs.vavr
   implementation libs.hikari.cp
 

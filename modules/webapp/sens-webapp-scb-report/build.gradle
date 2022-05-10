@@ -18,7 +18,6 @@ dependencies {
   implementation libs.silenteight.sep.usermanagement.api
   implementation libs.bouncycastle.bcprov
   implementation libs.commons.lang3
-  implementation libs.jjwt
 
   implementation libs.spring.boot.starter.actuator
 
@@ -52,7 +51,6 @@ dependencies {
   implementation libs.cronutils
 
   testImplementation project(":sens-webapp-db-changelog")
-  testImplementation libs.silenteight.sep.base.testing
   testImplementation libs.rest.assured
   testImplementation libs.rest.assured.spring.mock.mvc
 }

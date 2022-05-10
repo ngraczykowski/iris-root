@@ -10,7 +10,6 @@ dependencies {
   implementation project(":governance-agent")
   implementation project(":governance-change-request")
   implementation project(":governance-common-web")
-  implementation project(":governance-common-web-testing")
   implementation project(":governance-db-changelog")
   implementation project(":governance-feature-vector")
   implementation project(":governance-file")
@@ -22,10 +21,13 @@ dependencies {
   implementation libs.commons.collections
 
   implementation libs.silenteight.commons.app
-  implementation libs.silenteight.filestorage.minio
+  //TODO(dsniezek): remove exclude when silenteight.filestorage.minio dependency
+  // will be fixed(should not contains test dependencies)
+  implementation(libs.silenteight.filestorage.minio){
+    exclude group: 'org.testcontainers', module: '*'
+  }
   implementation libs.silenteight.sep.auth
   implementation libs.silenteight.sep.base.common
-  implementation libs.silenteight.sep.base.testing
   implementation libs.silenteight.serp.protocol.base
 
   implementation libs.spring.boot.starter.actuator
@@ -56,13 +58,11 @@ dependencies {
   // https://stackoverflow.com/questions/67630048/springboot-2-5-0-for-jackson-kotlin-classes-support-please-add-com-fasterxml-ja
   implementation libs.jackson.module.kotlin
 
-  implementation libs.jakarta.inject
   implementation libs.jakarta.mail
 
   implementation libs.protobuf.java.util
 
   implementation libs.querydsl.jpa
-  implementation libs.ecs.logging.core
 
   //Sentry
   runtimeOnly libs.sentry.spring.boot.starter
@@ -81,6 +81,7 @@ dependencies {
   annotationProcessor libs.jakarta.annotation.api
   annotationProcessor libs.spring.boot.configuration.processor
 
+  testImplementation project(":governance-common-web-testing")
   testImplementation libs.spock.spring
   testImplementation libs.spring.integration.test
 

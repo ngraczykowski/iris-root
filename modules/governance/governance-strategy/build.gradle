@@ -8,14 +8,12 @@ description = "Governance Strategy"
 dependencies {
   implementation libs.commons.collections
   implementation libs.silenteight.sep.base.common
-  implementation libs.silenteight.sep.base.testing
   implementation libs.silenteight.serp.protocol.base
 
   implementation libs.governance.solving.api
 
   implementation project(":governance-db-changelog")
   implementation project(":governance-common-web")
-  implementation project(":governance-common-web-testing")
 
   implementation libs.spring.webmvc
   implementation libs.spring.security.config
@@ -24,6 +22,7 @@ dependencies {
   implementation libs.grpc.api
   implementation libs.grpc.stub
 
+  testImplementation project(":governance-common-web-testing")
   testImplementation libs.rest.assured.spring.mock.mvc
   testImplementation libs.spring.security.test
   testImplementation libs.spock.spring

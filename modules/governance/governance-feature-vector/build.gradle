@@ -7,19 +7,19 @@ description = "Governance Vector"
 
 dependencies {
   implementation libs.silenteight.sep.base.common
-  implementation libs.silenteight.sep.base.testing
   implementation libs.governance.solving.api
   implementation libs.warehouse.data.api
 
   implementation project(":governance-db-changelog")
   implementation project(":governance-common-web")
-  implementation project(":governance-common-web-testing")
   implementation project(":governance-policy")
 
+  implementation libs.guava
   implementation libs.spring.data.jpa
   implementation libs.spring.webmvc
   implementation libs.spring.security.config
 
+  testImplementation project(":governance-common-web-testing")
   testImplementation(testFixtures(project(":governance-policy")))
   testImplementation libs.rest.assured.spring.mock.mvc
 
