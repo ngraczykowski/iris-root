@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.scb.feeding.domain.FeedingFacade;
-import com.silenteight.scb.feeding.domain.model.FeedUdsCommand;
-import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 import com.silenteight.scb.ingest.domain.model.AlertIngested;
 
 import org.springframework.context.event.EventListener;
@@ -22,9 +20,6 @@ class FeedingListener {
   @Async
   @EventListener
   public void subscribe(AlertIngested alertIngested) {
-    Alert alert = alertIngested.alert();
-    log.info("Alert received: {}", alert.logInfo());
-    FeedUdsCommand feedUdsCommand = new FeedUdsCommand(alert);
-    feedingFacade.feedUds(feedUdsCommand);
+    feedingFacade.feedUds(alertIngested.alert());
   }
 }

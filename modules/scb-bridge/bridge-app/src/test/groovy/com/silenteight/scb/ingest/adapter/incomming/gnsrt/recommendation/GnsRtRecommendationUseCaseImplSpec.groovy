@@ -1,5 +1,6 @@
 package com.silenteight.scb.ingest.adapter.incomming.gnsrt.recommendation
 
+import com.silenteight.scb.ingest.adapter.incomming.common.ingest.UdsFeedingPublisher
 import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService
 import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlertService
 import com.silenteight.scb.ingest.adapter.incomming.common.trafficmanagement.TrafficManager
@@ -10,7 +11,6 @@ import com.silenteight.scb.ingest.domain.AlertRegistrationFacade
 import com.silenteight.scb.ingest.domain.model.Batch.Priority
 import com.silenteight.scb.ingest.domain.model.BatchSource
 import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext
-import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher
 
 import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
@@ -30,7 +30,7 @@ class GnsRtRecommendationUseCaseImplSpec extends Specification {
 
   def registrationFacade = Mock(AlertRegistrationFacade)
 
-  def ingestEventPublisher = Mock(IngestEventPublisher)
+  def feeder = Mock(UdsFeedingPublisher)
 
   def gnsRtRecommendationService = Mock(GnsRtRecommendationService)
 
@@ -45,7 +45,7 @@ class GnsRtRecommendationUseCaseImplSpec extends Specification {
       .alertMapper(alertMapper)
       .responseMapper(responseMapper)
       .alertRegistrationFacade(registrationFacade)
-      .ingestEventPublisher(ingestEventPublisher)
+      .udsFeedingPublisher(feeder)
       .gnsRtRecommendationService(gnsRtRecommendationService)
       .rawAlertService(rawAlertService)
       .batchInfoService(batchInfoService)
@@ -80,7 +80,7 @@ class GnsRtRecommendationUseCaseImplSpec extends Specification {
     1 * registrationFacade.registerAlerts(
         _, fixtures.alerts, new RegistrationBatchContext(Priority.HIGH, BatchSource.GNS_RT))
         >> registrationResponse(fixtures.alerts)
-    1 * ingestEventPublisher.publish(_)
+    1 * feeder.publishToUds(_, fixtures.alerts, _)
   }
 
 }

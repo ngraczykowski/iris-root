@@ -6,7 +6,6 @@ import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRec
 import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService;
 import com.silenteight.scb.ingest.adapter.incomming.common.trafficmanagement.TrafficManager;
 import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
-import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
 import com.silenteight.scb.reports.domain.port.outgoing.ReportsSenderService;
 import com.silenteight.sep.base.common.messaging.MessagingConfiguration;
 
@@ -24,7 +23,7 @@ class IngestConfiguration {
 
   private final ScbRecommendationService scbRecommendationService;
   private final AlertRegistrationFacade alertRegistrationFacade;
-  private final IngestEventPublisher ingestEventPublisher;
+  private final UdsFeedingPublisher udsFeedingPublisher;
   private final ReportsSenderService reportsSenderService;
   private final TrafficManager trafficManager;
   private final BatchInfoService batchInfoService;
@@ -34,7 +33,7 @@ class IngestConfiguration {
     return IngestService.builder()
         .scbRecommendationService(scbRecommendationService)
         .alertRegistrationFacade(alertRegistrationFacade)
-        .ingestEventPublisher(ingestEventPublisher)
+        .udsFeedingPublisher(udsFeedingPublisher)
         .reportsSenderService(reportsSenderService)
         .trafficManager(trafficManager)
         .batchInfoService(batchInfoService)

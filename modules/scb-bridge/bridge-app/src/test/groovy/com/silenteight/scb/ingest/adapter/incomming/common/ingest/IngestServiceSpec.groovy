@@ -1,13 +1,11 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.ingest
 
-import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRecommendationService
 import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService
 import com.silenteight.scb.ingest.adapter.incomming.common.trafficmanagement.TrafficManager
 import com.silenteight.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator
 import com.silenteight.scb.ingest.domain.AlertRegistrationFacade
 import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext
-import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher
 import com.silenteight.scb.reports.domain.port.outgoing.ReportsSenderService
 
 import spock.lang.Specification
@@ -24,7 +22,7 @@ class IngestServiceSpec extends Specification {
 
   def scbRecommendationService = Mock(ScbRecommendationService)
   def alertRegistrationFacade = Mock(AlertRegistrationFacade)
-  def ingestEventPublisher = Mock(IngestEventPublisher)
+  def udsFeedingPublisher = Mock(UdsFeedingPublisher)
   def reportsSenderService = Mock(ReportsSenderService)
   def trafficManager = Mock(TrafficManager)
   def batchInfoService = Mock(BatchInfoService)
@@ -32,7 +30,7 @@ class IngestServiceSpec extends Specification {
   def ingestService = IngestService.builder()
       .scbRecommendationService(scbRecommendationService)
       .alertRegistrationFacade(alertRegistrationFacade)
-      .ingestEventPublisher(ingestEventPublisher)
+      .udsFeedingPublisher(udsFeedingPublisher)
       .reportsSenderService(reportsSenderService)
       .trafficManager(trafficManager)
       .batchInfoService(batchInfoService)
@@ -56,20 +54,7 @@ class IngestServiceSpec extends Specification {
     1 * batchInfoService.store(internalBatchId, LEARNING, _)
     1 * alertRegistrationFacade.registerAlerts(internalBatchId, alerts, learningBatchContext) >>
         registrationResponse(alerts)
-    1 * ingestEventPublisher.publish(
-        {Alert it ->
-          it.id().id() == alerts[0].id().id()
-          it.flags() == IngestService.ALERT_LEARNING_FLAGS
-          it.ingestedAt() != null
-          it.details().getAlertName() == 'alertName/alertId1'
-        })
-    1 * ingestEventPublisher.publish(
-        {Alert it ->
-          it.id().id() == alerts[1].id().id()
-          it.flags() == IngestService.ALERT_LEARNING_FLAGS
-          it.ingestedAt() != null
-          it.details().getAlertName() == 'alertName/alertId2'
-        })
+    1 * udsFeedingPublisher.publishToUds(internalBatchId, alerts, learningBatchContext)
     1 * reportsSenderService.send({it.size() == 2})
     0 * _
   }
@@ -107,20 +92,7 @@ class IngestServiceSpec extends Specification {
     then:
     1 * alertRegistrationFacade.registerAlerts(internalBatchId, alerts, solvingBatchContext)
         >> registrationResponse(alerts)
-    1 * ingestEventPublisher.publish(
-        {Alert it ->
-          it.id().id() == alerts[0].id().id()
-          it.flags() == IngestService.ALERT_RECOMMENDATION_FLAGS
-          it.ingestedAt() != null
-          it.details().getAlertName() == 'alertName/alertId1'
-        })
-    1 * ingestEventPublisher.publish(
-        {Alert it ->
-          it.id().id() == alerts[1].id().id()
-          it.flags() == IngestService.ALERT_RECOMMENDATION_FLAGS
-          it.ingestedAt() != null
-          it.details().getAlertName() == 'alertName/alertId2'
-        })
+    1 * udsFeedingPublisher.publishToUds(internalBatchId, alerts, solvingBatchContext)
     0 * _
   }
 

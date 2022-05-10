@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.scb.feeding.domain.agent.input.AgentInputFactory;
 import com.silenteight.scb.feeding.domain.model.AlertErrorDescription;
-import com.silenteight.scb.feeding.domain.model.FeedUdsCommand;
 import com.silenteight.scb.feeding.domain.model.UdsFedEvent;
 import com.silenteight.scb.feeding.domain.model.UdsFedEvent.FedMatch;
 import com.silenteight.scb.feeding.domain.model.UdsFedEvent.Status;
@@ -33,27 +32,26 @@ public class FeedingFacade {
   private final UniversalDatasourceApiClient universalDatasourceApiClient;
   private final FeedingEventPublisher feedingEventPublisher;
 
-  public void feedUds(FeedUdsCommand feedUdsCommand) {
-    registerCategoriesValuesInUds(feedUdsCommand);
-    registerAgentInputsInUds(feedUdsCommand);
+  public void feedUds(Alert alert) {
+    log.info("Feeding {} to Uds", alert.logInfo());
+    registerCategoriesValuesInUds(alert);
+    registerAgentInputsInUds(alert);
   }
 
-  private void registerCategoriesValuesInUds(FeedUdsCommand feedUdsCommand) {
-    StopWatch stopWatch = StopWatch.createStarted();
-    Try.run(() -> registerCategoriesValuesForMatches(feedUdsCommand))
+  private void registerCategoriesValuesInUds(Alert alert) {
+    var stopWatch = StopWatch.createStarted();
+    Try.run(() -> registerCategoriesValuesForMatches(alert))
         .onFailure(e -> {
-          var alert = feedUdsCommand.alert();
-          log.error("Failed to register categories values for {}", alert.logInfo(), e);
+          log.error("Failed to register categories values for {} after {}", alert.logInfo(),
+              stopWatch, e);
         })
         .onSuccess(e -> {
-          var alert = feedUdsCommand.alert();
           log.info("Categories values have been registered for {}, executed in: {}",
               alert.logInfo(), stopWatch);
         });
   }
 
-  private void registerCategoriesValuesForMatches(FeedUdsCommand feedUdsCommand) {
-    var alert = feedUdsCommand.alert();
+  private void registerCategoriesValuesForMatches(Alert alert) {
     alert.matches().forEach(match -> {
       var createCategoryValuesIns =
           agentInputFactory.createCategoryValuesIns(alert, match);
@@ -69,12 +67,12 @@ public class FeedingFacade {
     universalDatasourceApiClient.registerCategoryValues(batchCreateCategoryValuesIn);
   }
 
-  private void registerAgentInputsInUds(FeedUdsCommand feedUdsCommand) {
-    StopWatch stopWatch = StopWatch.createStarted();
-    Try.run(() -> registerAgentInputsForMatches(feedUdsCommand))
+  private void registerAgentInputsInUds(Alert alert) {
+    var stopWatch = StopWatch.createStarted();
+    Try.run(() -> registerAgentInputsForMatches(alert))
         .onFailure(e -> {
-          Alert alert = feedUdsCommand.alert();
-          log.error("Failed to create feature inputs for {}", alert.logInfo(), e);
+          log.error(
+              "Failed to create feature inputs for {} after: {}", alert.logInfo(), stopWatch, e);
           if (!alert.isLearnFlag()) {
             feedingEventPublisher.publish(
                 createUdsFedEvent(
@@ -82,7 +80,6 @@ public class FeedingFacade {
           }
         })
         .onSuccess(e -> {
-          Alert alert = feedUdsCommand.alert();
           log.info("Feature inputs for {} created successfully, executed in: {}", alert.logInfo(),
               stopWatch);
           if (!alert.isLearnFlag()) {
@@ -92,8 +89,7 @@ public class FeedingFacade {
         });
   }
 
-  private void registerAgentInputsForMatches(FeedUdsCommand feedUdsCommand) {
-    Alert alert = feedUdsCommand.alert();
+  private void registerAgentInputsForMatches(Alert alert) {
     alert.matches().forEach(match -> {
       var agentInputIns =
           agentInputFactory.createAgentInputIns(alert, match);

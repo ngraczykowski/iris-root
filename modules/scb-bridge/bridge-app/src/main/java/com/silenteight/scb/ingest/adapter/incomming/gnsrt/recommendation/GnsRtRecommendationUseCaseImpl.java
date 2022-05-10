@@ -5,6 +5,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.scb.ingest.adapter.incomming.common.ingest.UdsFeedingPublisher;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService;
 import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlertService;
@@ -18,7 +19,6 @@ import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtRe
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtResponseAlert;
 import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
 import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext;
-import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
 import com.silenteight.scb.outputrecommendation.domain.model.Recommendations;
 
 import reactor.core.publisher.Mono;
@@ -37,7 +37,7 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
   private final GnsRtRequestToAlertMapper alertMapper;
   private final GnsRtResponseMapper responseMapper;
   private final AlertRegistrationFacade alertRegistrationFacade;
-  private final IngestEventPublisher ingestEventPublisher;
+  private final UdsFeedingPublisher udsFeedingPublisher;
   private final RawAlertService rawAlertService;
   private final BatchInfoService batchInfoService;
   private final GnsRtRecommendationService gnsRtRecommendationService;
@@ -61,14 +61,10 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
 
     AlertUpdater.updateWithRegistrationResponse(alerts, registrationResponse);
 
-    feedUds(alerts);
+    udsFeedingPublisher.publishToUds(internalBatchId, alerts, registrationBatchContext);
 
     return gnsRtRecommendationService.recommendationsMono(internalBatchId)
         .map(recommendations -> mapResponse(request, recommendations));
-  }
-
-  private void feedUds(List<Alert> alerts) {
-    alerts.forEach(ingestEventPublisher::publish);
   }
 
   private List<Alert> mapAlerts(GnsRtRecommendationRequest request, String internalBatchId) {
