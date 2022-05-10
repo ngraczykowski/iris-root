@@ -23,6 +23,7 @@ serp:
 
 silenteight:
   scb-bridge:
+    working-mode: NORMAL
     learning:
       alert:
         enabled: false
@@ -44,6 +45,7 @@ silenteight:
 
     solving:
       alert-processor:
+        enabled: true
         fixed-delay: 1000
         initial-delay: 2000
         read-chunk-size: 100

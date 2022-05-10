@@ -2,12 +2,14 @@ package com.silenteight.scb.ingest.adapter.incomming.common.quartz;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.scb.ingest.adapter.incomming.common.mode.OnLearningAlertCondition;
+import com.silenteight.scb.ingest.adapter.incomming.common.mode.OnLearningEcmCondition;
 import com.silenteight.scb.ingest.adapter.incomming.common.quartz.QuartzConfiguration.BatchJobConfiguration;
 
 import org.quartz.JobDetail;
 import org.quartz.Trigger;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -32,10 +34,7 @@ class QuartzLearningConfiguration {
   }
 
   @Bean
-  @ConditionalOnProperty(
-      prefix = "silenteight.scb-bridge.learning.alert",
-      name = "enabled",
-      havingValue = "true")
+  @Conditional(OnLearningAlertCondition.class)
   Trigger scbAlertLevelLearningJobTrigger() {
     return QuartzConfiguration.createCronTrigger(
         "scbAlertLevelLearningJobTrigger",
@@ -44,10 +43,7 @@ class QuartzLearningConfiguration {
   }
 
   @Bean
-  @ConditionalOnProperty(
-      prefix = "silenteight.scb-bridge.learning.ecm",
-      name = "enabled",
-      havingValue = "true")
+  @Conditional(OnLearningEcmCondition.class)
   Trigger ecmLearningJobTrigger() {
     return QuartzConfiguration.createCronTrigger(
         "ecmLearningJobTrigger",

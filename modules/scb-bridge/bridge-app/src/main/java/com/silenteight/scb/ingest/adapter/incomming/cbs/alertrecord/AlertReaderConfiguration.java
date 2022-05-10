@@ -7,11 +7,13 @@ import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.Ale
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckGateway;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.metrics.CbsOracleMetrics;
 import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertIngestService;
+import com.silenteight.scb.ingest.adapter.incomming.common.mode.OnAlertProcessorCondition;
 import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService;
 import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlertService;
 import com.silenteight.scb.ingest.adapter.incomming.common.trafficmanagement.TrafficManager;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
@@ -30,6 +32,7 @@ class AlertReaderConfiguration {
   private final TrafficManager trafficManager;
 
   @Bean
+  @Conditional(OnAlertProcessorCondition.class)
   AlertProcessor alertProcessor() {
     return AlertProcessor.builder()
         .alertInFlightService(alertInFlightService)

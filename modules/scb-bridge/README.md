@@ -113,6 +113,10 @@ following defaults will be used
 ```
 
 ### GNS-RT
+The SCB-Bridge supports real time mode. The real-time means that only GNS-RT alerts are processed. 
+Periodic alert solving (CBS) and learning alerts acquisition is disabled.
+To use the mode, set up silenteight.scb-bridge.working-mode=REAL_TIME_ONLY
+Possible values to set the working-mode parameter are REAL_TIME_ONLY and NORMAL
 
 The simplest way to test GNS-RT locally is to send a JSON request using Postman:
 

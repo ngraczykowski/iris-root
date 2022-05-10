@@ -119,6 +119,7 @@ spring:
 
 silenteight:
   scb-bridge:
+    working-mode: NORMAL
     db:
       host: localhost
       port: 24291
@@ -131,6 +132,8 @@ silenteight:
     learning:
       alert.enabled: false
       ecm.enabled: false
+    solving:
+      alert-processor.enabled: false
     grpc:
       recommendation:
         recommendation-deadline: 1m
