@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.List;
 
 import static java.lang.Math.min;
@@ -44,7 +45,9 @@ class AlertsUnderProcessingService implements AlertInFlightService {
   @Override
   @Transactional(GnsSyncConstants.PRIMARY_TRANSACTION_MANAGER)
   public void deleteExpired(@NonNull OffsetDateTime expireDate) {
-    alertUnderProcessingRepository.deleteByCreatedAtBefore(expireDate);
+    alertUnderProcessingRepository.deleteByCreatedAtBeforeAndStateIn(expireDate, EnumSet.of(
+        State.ERROR,
+        State.ACK));
   }
 
   @Override

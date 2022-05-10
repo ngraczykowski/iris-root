@@ -2,6 +2,7 @@ package com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing;
 
 import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId;
+import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertUnderProcessing.State;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertUnderProcessingRepositoryIT.TestConfiguration;
 import com.silenteight.scb.ingest.adapter.incomming.common.SyncTestInitializer;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
@@ -17,6 +18,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.time.OffsetDateTime;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.List;
 
 import static com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertUnderProcessing.State.ERROR;
@@ -78,13 +80,16 @@ class AlertUnderProcessingRepositoryIT extends BaseDataJpaTest {
     persistEntities(entity1);
 
     //when
-    alertUnderProcessingRepository.deleteByCreatedAtBefore(OffsetDateTime.now().minusDays(1));
+    alertUnderProcessingRepository.deleteByCreatedAtBeforeAndStateIn(
+        OffsetDateTime.now().minusDays(1),
+        allStates());
 
     //then
     assertThat(alertUnderProcessingRepository.findAll()).hasSize(1);
 
     //when
-    alertUnderProcessingRepository.deleteByCreatedAtBefore(OffsetDateTime.now());
+    alertUnderProcessingRepository.deleteByCreatedAtBeforeAndStateIn(OffsetDateTime.now(),
+        allStates());
 
     //then
     assertThat(alertUnderProcessingRepository.findAll()).isEmpty();
@@ -164,6 +169,10 @@ class AlertUnderProcessingRepositoryIT extends BaseDataJpaTest {
       assertThat(entry.getState()).isEqualTo(ERROR);
       assertThat(entry.getError()).isEqualTo("text");
     }
+  }
+
+  private static EnumSet<State> allStates() {
+    return EnumSet.allOf(State.class);
   }
 
   @EntityScan(basePackages = "com.silenteight.scb")

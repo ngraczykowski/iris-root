@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.OffsetDateTime;
 import java.util.Collection;
+import java.util.EnumSet;
 
 interface AlertUnderProcessingRepository
     extends Repository<AlertUnderProcessing, AlertUnderProcessingKey> {
@@ -28,7 +29,7 @@ interface AlertUnderProcessingRepository
 
   void deleteBySystemIdAndBatchId(String systemId, String batchId);
 
-  void deleteByCreatedAtBefore(OffsetDateTime expireDate);
+  void deleteByCreatedAtBeforeAndStateIn(OffsetDateTime expireDate, EnumSet<State> states);
 
   @Modifying
   @Query("UPDATE AlertUnderProcessing SET state = :state"

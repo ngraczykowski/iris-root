@@ -7,6 +7,7 @@ import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.Ale
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Predicate;
 import javax.annotation.Nonnull;
@@ -42,8 +43,9 @@ class InMemoryAlertUnderProcessingRepository implements AlertUnderProcessingRepo
   }
 
   @Override
-  public void deleteByCreatedAtBefore(OffsetDateTime expireDate) {
-    store.removeIf(p -> p.getCreatedAt().isBefore(expireDate));
+  public void deleteByCreatedAtBeforeAndStateIn(
+      OffsetDateTime expireDate, EnumSet<State> states) {
+    store.removeIf(p -> p.getCreatedAt().isBefore(expireDate) && states.contains(p.getState()));
   }
 
   @Override

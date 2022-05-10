@@ -1,6 +1,7 @@
 package com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing
 
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId
+import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertUnderProcessing.State
 import com.silenteight.sep.base.testing.transaction.CleanTransactionManagerCacheExtension
 
 import spock.lang.Specification
@@ -36,6 +37,7 @@ class AlertsUnderProcessingServiceSpec extends Specification {
     objectUnderTest.deleteExpired(expireDate)
 
     then:
-    1 * repository.deleteByCreatedAtBefore(expireDate)
+    1 * repository.deleteByCreatedAtBeforeAndStateIn(expireDate, EnumSet.of(State.ERROR,
+                                                                  State.ACK))
   }
 }
