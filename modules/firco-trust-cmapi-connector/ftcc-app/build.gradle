@@ -102,9 +102,8 @@ publishing {
 jib {
   from {
     // NOTE(ahaczewski): Use debug version of the image for SNAPSHOT builds.
-    def imageSuffix = ("$version".contains("-BUILD") || "$version".endsWith("-SNAPSHOT")) ?
-                      "-debug" : ""
-    image = "gcr.io/distroless/java-debian10:11" + imageSuffix
+    def imageTag = "$version".endsWith("-SNAPSHOT") ? "debug-nonroot" : "nonroot"
+    image = "gcr.io/distroless/java11-debian11:" + imageTag
   }
   to {
     image = "docker.repo.silenteight.com/ftcc/${project.name}:${version}"
