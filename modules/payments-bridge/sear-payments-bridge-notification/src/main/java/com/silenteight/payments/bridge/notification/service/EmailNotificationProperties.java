@@ -16,10 +16,13 @@ public class EmailNotificationProperties {
 
   private static final String DEFAULT_CRON = "0 0/10 * * * *";
   private static final int DEFAULT_AMOUNT = 10;
+  private static final String DEFAULT_FROM = "from@s8.com";
+  private static final String DEFAULT_TO = "to@s8.com";
+  private static final String DEFAULT_CC = "cc@s8.com";
 
-  private String from;
-  private String to;
-  private String cc;
+  private String from = DEFAULT_FROM;
+  private String to = DEFAULT_TO;
+  private String cc = DEFAULT_CC;
   private String cron = DEFAULT_CRON;
   private int amount = DEFAULT_AMOUNT;
   private boolean cmapiEnabled = false;
