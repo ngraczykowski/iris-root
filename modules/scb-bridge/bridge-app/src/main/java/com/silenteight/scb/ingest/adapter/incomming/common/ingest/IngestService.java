@@ -9,8 +9,11 @@ import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert.Flag;
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRecommendation;
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRecommendationService;
+import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService;
+import com.silenteight.scb.ingest.adapter.incomming.common.trafficmanagement.TrafficManager;
 import com.silenteight.scb.ingest.adapter.incomming.common.util.AlertUpdater;
 import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
+import com.silenteight.scb.ingest.domain.model.BatchSource;
 import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext;
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
 import com.silenteight.scb.reports.domain.model.ReportMapper;
@@ -42,6 +45,8 @@ class IngestService implements BatchAlertIngestService {
   private final AlertRegistrationFacade alertRegistrationFacade;
   private final IngestEventPublisher ingestEventPublisher;
   private final ReportsSenderService reportsSenderService;
+  private final TrafficManager trafficManager;
+  private final BatchInfoService batchInfoService;
 
   @Getter
   private long ingestedLearningAlertsCounter;
@@ -51,36 +56,46 @@ class IngestService implements BatchAlertIngestService {
     log.info("Ingesting {} learning alerts", alerts.size());
 
     var filteredAlerts = new FilteredAlerts(alerts, this::hasRecommendation);
-
-    registerAndPublishLearningAlerts(
-        internalBatchId,
-        filteredAlerts.alertsWithoutDecisions(),
-        filteredAlerts.alertsWithDecisionAndWithoutRecommendation());
-
     updateAlertNameFromRecommendation(filteredAlerts.alertsWithDecisionAndWithRecommendation());
-    sendReportsToWarehouse(filteredAlerts.alertsWithDecisions());
+
+    if (trafficManager.holdPeriodicAlertProcessing()) {
+      sendToWarehouse(filteredAlerts.alertsWithDecisionAndWithRecommendation());
+    } else {
+      registerAndPublishLearningAlerts(internalBatchId, filteredAlerts);
+    }
+  }
+
+  @Override
+  public void ingestAlertsForRecommendation(
+      @NonNull String internalBatchId,
+      @NonNull List<Alert> alerts,
+      RegistrationBatchContext registrationBatchContext) {
+    registerAndPublish(
+        internalBatchId, alerts, ALERT_RECOMMENDATION_FLAGS, registrationBatchContext);
   }
 
   private void registerAndPublishLearningAlerts(
-      String internalBatchId,
-      List<Alert> alertsWithoutDecisions,
-      List<Alert> alertsWithDecisionAndWithoutRecommendation) {
-    if (alertsWithoutDecisions.isEmpty() && alertsWithDecisionAndWithoutRecommendation.isEmpty()) {
+      String internalBatchId, FilteredAlerts filteredAlerts) {
+    List<Alert> alertsToRegister = ListUtils.union(
+        filteredAlerts.alertsWithoutDecisions(),
+        filteredAlerts.alertsWithDecisionAndWithoutRecommendation());
+
+    if (alertsToRegister.isEmpty()) {
+      sendToWarehouse(filteredAlerts.alertsWithDecisionAndWithRecommendation());
       log.info(
           "No learning alerts to register for internalBatchId: {} - skipping", internalBatchId);
       return;
     }
 
-    log.info("Registering {} learning alerts without decision and "
-            + "{} learning alerts with decision and without recommendation",
-        alertsWithoutDecisions.size(), alertsWithDecisionAndWithoutRecommendation.size());
+    log.info("Registering {} learning alerts without decision "
+        + "and with decision and without recommendation", alertsToRegister.size());
 
-    registerAndPublishLearningAlerts(internalBatchId, ListUtils.union(
-        alertsWithoutDecisions,
-        alertsWithDecisionAndWithoutRecommendation));
+    batchInfoService.store(internalBatchId, BatchSource.LEARNING, alertsToRegister.size());
+    registerAndPublishLearningAlertsInCore(internalBatchId, alertsToRegister);
+    sendToWarehouse(filteredAlerts.alertsWithDecisions());
   }
 
-  private void registerAndPublishLearningAlerts(String internalBatchId, List<Alert> alerts) {
+  private void registerAndPublishLearningAlertsInCore(String internalBatchId, List<Alert> alerts) {
     var batchContext = new RegistrationBatchContext(LOW, LEARNING);
     registerAndPublish(internalBatchId, alerts, ALERT_LEARNING_FLAGS, batchContext);
     ingestedLearningAlertsCounter += alerts.size();
@@ -124,6 +139,14 @@ class IngestService implements BatchAlertIngestService {
         .build();
   }
 
+  private void sendToWarehouse(List<Alert> alerts) {
+    sendReportsToWarehouse(alerts);
+  }
+
+  private void sendReportsToWarehouse(List<Alert> alerts) {
+    reportsSenderService.send(ReportMapper.toReports(alerts));
+  }
+
   private void updateAlertNameFromRecommendation(List<Alert> alerts) {
     // For Alerts which have just been sent to core-bridge, we already have AlertName populated as
     // it is sent in the Registration Response.
@@ -139,19 +162,6 @@ class IngestService implements BatchAlertIngestService {
             "Recommendation for " + alert.logInfo() + " does not exist"));
   }
 
-  private void sendReportsToWarehouse(List<Alert> alerts) {
-    reportsSenderService.send(ReportMapper.toReports(alerts));
-  }
-
-  @Override
-  public void ingestAlertsForRecommendation(
-      @NonNull String internalBatchId,
-      @NonNull List<Alert> alerts,
-      RegistrationBatchContext registrationBatchContext) {
-    registerAndPublish(
-        internalBatchId, alerts, ALERT_RECOMMENDATION_FLAGS, registrationBatchContext);
-  }
-
   private boolean hasRecommendation(Alert alert) {
     return maybeRecommendation(alert).isPresent();
   }
@@ -161,5 +171,4 @@ class IngestService implements BatchAlertIngestService {
         alert.details().getSystemId(),
         alert.id().discriminator());
   }
-
 }

@@ -3,6 +3,8 @@ package com.silenteight.scb.ingest.adapter.incomming.common.ingest;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRecommendationService;
+import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService;
+import com.silenteight.scb.ingest.adapter.incomming.common.trafficmanagement.TrafficManager;
 import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
 import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
 import com.silenteight.scb.reports.domain.port.outgoing.ReportsSenderService;
@@ -24,6 +26,8 @@ class IngestConfiguration {
   private final AlertRegistrationFacade alertRegistrationFacade;
   private final IngestEventPublisher ingestEventPublisher;
   private final ReportsSenderService reportsSenderService;
+  private final TrafficManager trafficManager;
+  private final BatchInfoService batchInfoService;
 
   @Bean
   IngestService ingestService() {
@@ -32,6 +36,8 @@ class IngestConfiguration {
         .alertRegistrationFacade(alertRegistrationFacade)
         .ingestEventPublisher(ingestEventPublisher)
         .reportsSenderService(reportsSenderService)
+        .trafficManager(trafficManager)
+        .batchInfoService(batchInfoService)
         .build();
   }
 

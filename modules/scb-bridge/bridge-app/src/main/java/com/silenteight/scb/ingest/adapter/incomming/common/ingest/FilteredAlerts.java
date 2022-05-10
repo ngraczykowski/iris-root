@@ -23,20 +23,14 @@ public class FilteredAlerts {
     this.hasRecommendation = memoized(hasRecommendation);
   }
 
+  private static <T> Predicate<T> memoized(Predicate<T> predicate) {
+    return CacheBuilder.newBuilder()
+        .build(CacheLoader.from(predicate::test))
+        ::getUnchecked;
+  }
+
   public List<Alert> alertsWithDecisions() {
     return filter(hasDecision);
-  }
-
-  public List<Alert> alertsWithoutDecisions() {
-    return filter(hasDecision.negate());
-  }
-
-  public List<Alert> alertsWithDecisionAndWithRecommendation() {
-    return filter(hasDecision.and(hasRecommendation));
-  }
-
-  public List<Alert> alertsWithDecisionAndWithoutRecommendation() {
-    return filter(hasDecision.and(hasRecommendation.negate()));
   }
 
   private List<Alert> filter(Predicate<Alert> predicate) {
@@ -45,10 +39,16 @@ public class FilteredAlerts {
         .toList();
   }
 
-  private static <T> Predicate<T> memoized(Predicate<T> predicate) {
-    return CacheBuilder.newBuilder()
-        .build(CacheLoader.from(predicate::test))
-        ::getUnchecked;
+  public List<Alert> alertsWithDecisionAndWithRecommendation() {
+    return filter(hasDecision.and(hasRecommendation));
+  }
+
+  public List<Alert> alertsWithoutDecisions() {
+    return filter(hasDecision.negate());
+  }
+
+  public List<Alert> alertsWithDecisionAndWithoutRecommendation() {
+    return filter(hasDecision.and(hasRecommendation.negate()));
   }
 
 }
