@@ -14,7 +14,7 @@ class DailyReportScheduler {
 
   private final ProcessRemoveDailyReportsUseCase processRemoveDailyReportsUseCase;
 
-  @Scheduled(cron = "${pb.daily-reports-remove.cron}")
+  @Scheduled(cron = "${pb.daily-reports-remove.cron:*/600 * * * * *}")
   @SchedulerLock(name = "daily_reports_remove_sending_lock", lockAtMostFor = "3600")
   void scheduleRemoveDailyReports() {
     processRemoveDailyReportsUseCase.processRemoveDailyReports();
