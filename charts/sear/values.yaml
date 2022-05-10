@@ -283,7 +283,8 @@ agents:
     image:
       repository: registry.dev.s8ops.com/geo-agent
   learning-engine:
-    dbName: "learning-engine"
+    useDb: true
+    dbName: "learningengine"
     image:
       repository: registry.dev.s8ops.com/learning-engine
   freetext-agent:

@@ -96,7 +96,7 @@ Name of the postgres database credentials secret
 Name of the postgres database credentials secret
 */}}
 {{- define "sear.postgresqlSecretName" -}}
-  {{- printf "%s.%s" .component.dbName (include "sear.fullname" .) }}-postgres.credentials.postgresql.acid.zalan.do
+  {{- printf "%s.%s" .componentName (include "sear.fullname" .) }}-postgres.credentials.postgresql.acid.zalan.do
 {{- end -}}
 
 {{/*
@@ -108,18 +108,20 @@ Address of Postgres service
 {{- define "buildComponents" }}
 {{- $effective := dict}}
 {{- range $key, $value := $.Values.components }}
-{{- $command := concat $.Values.common.command (default (list) $value.command) }}
-{{- $args := concat $.Values.common.args (default (list) $value.args) }}
-{{- $mergedValue := mergeOverwrite (deepCopy $.Values.common) $value (dict "args" $args "command" $command ) }}
+{{- $common := $.Values.common }}
+{{- $command := concat $common.command (default (list) $value.command) }}
+{{- $args := concat $common.args (default (list) $value.args) }}
+{{- $mergedValue := mergeOverwrite (deepCopy $common) $value (dict "args" $args "command" $command ) }}
 {{- $mergedValue = mergeOverwrite (deepCopy $mergedValue) (dict "dbName" (default $key $mergedValue.dbName) "webPath" (default $key $mergedValue.webPath) )}}
 {{- if $mergedValue.enabled -}}
 {{- $_:= set $effective $key $mergedValue }}
 {{- end }}
 {{- end }}
 {{- range $key, $value := $.Values.agents }}
-{{- $command := concat $.Values.common.command (default (list) $value.command) }}
-{{- $args := concat $.Values.common.args (default (list) $value.args) }}
-{{- $mergedValue := mergeOverwrite (deepCopy $.Values.common) $.Values.agentsCommon $value (dict "args" $args "command" $command ) }}
+{{- $common := mergeOverwrite (deepCopy $.Values.common) $.Values.agentsCommon }}
+{{- $command := concat $common.command (default (list) $value.command) }}
+{{- $args := concat  $common.args (default (list) $value.args) }}
+{{- $mergedValue := mergeOverwrite (deepCopy $common) $value (dict "args" $args "command" $command ) }}
 {{- $mergedValue = mergeOverwrite (deepCopy $mergedValue) (dict "dbName" (default $key $mergedValue.dbName) "webPath" (default $key $mergedValue.webPath) )}}
 {{- if $mergedValue.enabled -}}
 {{- $_:= set $effective $key $mergedValue }}

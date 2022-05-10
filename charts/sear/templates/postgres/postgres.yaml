@@ -19,13 +19,13 @@ spec:
   users:
     {{- range $componentName, $component := include "buildComponents" . | mustFromJson }}
     {{- if and $component.enabled $component.useDb }}
-    {{ default $componentName $component.dbName }}: []
+    {{ $component.dbName }}-user: []
     {{- end }}
     {{- end }}
 
   databases:
     {{- range $componentName, $component := include "buildComponents" . | mustFromJson }}
     {{- if and $component.enabled $component.useDb }}
-    {{ default $componentName $component.dbName }}: {{ default $componentName $component.dbName }}
+    {{ $component.dbName }}: {{ $component.dbName }}-user
     {{- end }}
     {{- end }}
