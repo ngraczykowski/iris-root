@@ -29,7 +29,7 @@ class AnalysisProvider {
     }
   }
 
-  @Scheduled(initialDelay = 1, fixedRate = 60, timeUnit = TimeUnit.SECONDS)
+  @Scheduled(initialDelay = 20, fixedRate = 60, timeUnit = TimeUnit.SECONDS)
   void refresh() {
     debug("Refresh current analysis start!");
     var currentAnalysis = getCurrentAnalysisUseCase.getOrCreateAnalysis();
