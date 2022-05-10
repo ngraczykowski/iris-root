@@ -14,7 +14,7 @@ class AlertMessageProperties {
 
   private Duration decisionRequestedTime = Duration.ofSeconds(15);
 
-  private boolean originalMessageDeletedAfterRecommendation = true;
+  private boolean originalMessageDeletedAfterRecommendation = false;
 
   private int maxHitsPerAlert = 10;
 
