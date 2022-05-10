@@ -14,7 +14,7 @@ class NotificationScheduler {
 
   private final ProcessSendingEmailsUseCase processSendingEmailsUseCase;
 
-  @Scheduled(cron = "${pb.email-notification.cron}")
+  @Scheduled(cron = "${pb.email-notification.cron:0 0/10 * * * *}")
   @SchedulerLock(name = "notification_sending_lock", lockAtMostFor = "3600")
   void scheduleSendingEmails() {
     processSendingEmailsUseCase.processSendingEmails();
