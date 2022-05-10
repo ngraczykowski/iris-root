@@ -5,8 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.ae.alertregistration.port.AnalysisDataAccessPort;
 import com.silenteight.payments.bridge.ae.alertregistration.port.BuildCreateAnalysisRequestPort;
+import com.silenteight.payments.bridge.governance.solvingmodel.port.CheckDefaultModelExistsUseCase;
 
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,15 +19,24 @@ class GetCurrentAnalysisUseCase {
   private final AnalysisDataAccessPort analysisDataAccessPort;
   private final CreateAnalysisService createAnalysisService;
   private final BuildCreateAnalysisRequestPort buildCreateAnalysisRequestPort;
+  private final CheckDefaultModelExistsUseCase checkDefaultModelExistsUseCase;
 
-  String getOrCreateAnalysis() {
-    return analysisDataAccessPort
-        .findCurrentAnalysis()
-        .orElseGet(this::createNewAnalysis);
+  Optional<String> getOrCreateAnalysis() {
+    var current = analysisDataAccessPort
+        .findCurrentAnalysis();
+
+    if (current.isPresent()) {
+      return current;
+    }
+
+    return createNewAnalysis();
   }
 
-  private String createNewAnalysis() {
-    return createAnalysisService.createAnalysis(
-        buildCreateAnalysisRequestPort.buildFromCurrentModel());
+  private Optional<String> createNewAnalysis() {
+    if (!checkDefaultModelExistsUseCase.checkDefaultModelExists()) {
+      return Optional.empty();
+    }
+    return Optional.of(createAnalysisService.createAnalysis(
+        buildCreateAnalysisRequestPort.buildFromCurrentModel()));
   }
 }

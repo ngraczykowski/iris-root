@@ -29,15 +29,19 @@ class AnalysisProvider {
     }
   }
 
-  @Scheduled(initialDelay = 20, fixedRate = 60, timeUnit = TimeUnit.SECONDS)
+  @Scheduled(initialDelay = 1, fixedRate = 60, timeUnit = TimeUnit.SECONDS)
   void refresh() {
     debug("Refresh current analysis start!");
     var currentAnalysis = getCurrentAnalysisUseCase.getOrCreateAnalysis();
+    if (currentAnalysis.isEmpty()) {
+      log.warn("Couldn't get nor create solving analysis");
+      return;
+    }
     debug("Refreshing finished!. Now determined analysis is: {}", currentAnalysis);
-    currentAnalysisName.set(currentAnalysis);
+    currentAnalysisName.set(currentAnalysis.get());
   }
 
-  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   public String currentAnalysis() {
     var currentAnalysis = this.currentAnalysisName.get();
     if (StringUtils.isBlank(currentAnalysis)) {

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.model.api.v1.SolvingModel;
 import com.silenteight.model.api.v1.SolvingModelServiceGrpc.SolvingModelServiceBlockingStub;
+import com.silenteight.payments.bridge.governance.solvingmodel.model.GovernanceClientException;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import com.google.protobuf.Empty;
@@ -41,15 +42,6 @@ class SolvingModelServiceClient {
       log.error("Unable to get the default model from Governance: code={}, description={}",
           status.getCode(), status.getDescription(), e);
       throw new GovernanceClientException("Failed to get the default model", e);
-    }
-  }
-
-  private static final class GovernanceClientException extends RuntimeException {
-
-    private static final long serialVersionUID = 7568497398228085792L;
-
-    GovernanceClientException(String message, Exception e) {
-      super(message, e);
     }
   }
 }
