@@ -110,7 +110,7 @@ class ApplicationJobMaintainer implements JobMaintainer {
       if (BatchStatus.FAILED.equals(jobExecution.getStatus())) {
         restartJobExecution(jobExecution);
       } else {
-        log.info("Job:{} execution status was:{} with exitStatus: {} restart ignored",
+        log.trace("Job:{} execution status was:{} with exitStatus: {} restart ignored",
             jobName, jobExecution.getStatus(), jobExecution.getExitStatus());
       }
     });
