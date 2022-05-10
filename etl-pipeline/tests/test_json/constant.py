@@ -237,12 +237,7 @@ EXAMPLE_FOR_TEST_SET_REF_KEY = {
 
 
 RESULT_FOR_EXAMPLE_FOR_TEST_SET_REF_KEY = [
-    "entityTextType",
     "AP_TRIGGERS",
-    "TRIGGERED_BY",
-    "SRC_REF_KEY",
-    "masterVersion",
-    "entity",
 ]
 
 

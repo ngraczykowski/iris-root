@@ -59,18 +59,18 @@ def remove_nulls_from_aggegated(match):
     return [i for i in match if i]
 
 
-def assert_list(tested, reference):
+def assert_list(tested, reference, key):
     try:
-        assert sorted(tested) == sorted(reference)
+        assert sorted(tested) == sorted(reference), key
     except TypeError:
-        assert_compare_list_of_dict_of_list(tested, reference)
+        assert_compare_list_of_dict_of_list(tested, reference, key)
 
 
-def assert_compare_list_of_dict_of_list(tested, reference):
+def assert_compare_list_of_dict_of_list(tested, reference, col):
     assert len(tested) == len(reference)
     for tested_element, reference_element in zip(tested, reference):
         for key in tested_element:
-            assert sorted(tested_element[key]) == sorted(reference_element[key])
+            assert sorted(tested_element[key]) == sorted(reference_element[key]), col
 
 
 def check_payload(out_payload, reference_file):
@@ -95,7 +95,7 @@ def check_payload(out_payload, reference_file):
                 flatten([i for i in reference_payload[cols].values])
             )
             output = remove_nulls_from_aggegated(flatten([i for i in out_payload[cols].values]))
-            assert_list(output, reference)
+            assert_list(output, reference, cols)
 
 
 def assert_length_and_content_match(
