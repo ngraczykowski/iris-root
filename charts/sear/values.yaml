@@ -66,6 +66,76 @@ rabbitmq:
   affinity: {}
 
 #
+# Mailhog
+#
+mailhog:
+  enabled: true
+
+  image:
+    repository: docker.io/mailhog/mailhog
+    tag: "v1.0.1"
+    pullPolicy: IfNotPresent
+    pullSecrets: []
+
+  service:
+    annotations: {}
+    clusterIP: ""
+    externalIPs: []
+    loadBalancerIP: ""
+    loadBalancerSourceRanges: []
+    type: ClusterIP
+    port:
+      http: 8025
+      smtp: 1025
+    nodePort:
+      http: ""
+      smtp: ""
+
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+    runAsNonRoot: true
+    fsGroup: 1000
+
+  containerSecurityContext:
+    readOnlyRootFilesystem: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+
+  auth:
+    enabled: true
+    existingSecret: ""
+    fileName: auth.txt
+    # User/password is test/test
+    fileContents: |
+      test:$2a$04$qxRo.ftFoNep7ld/5jfKtuBTnGqff/fZVyj53mUC5sVf9dtDLAi/S
+
+  extraEnv: []
+
+  priorityClassName: ""
+
+  podAnnotations: {}
+
+  podLabels: {}
+
+  resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+  affinity: {}
+
+  nodeSelector: {}
+
+  tolerations: []
+
+#
 # Common Ingress configuration
 #
 ingress:

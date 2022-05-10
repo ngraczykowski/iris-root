@@ -1,0 +1,101 @@
+{{- if .Values.mailhog.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "mailhog.fullname" . }}
+  labels:
+    {{- include "mailhog.labels" . | nindent 4 }}
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "mailhog.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        silenteight.com/config-checksum: {{ tpl ($.Files.Get "templates/mailhog/auth-secret.yaml") . | sha256sum }}
+        {{- with .Values.mailhog.podAnnotations }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "mailhog.selectorLabels" . | nindent 8 }}
+        {{- with .Values.mailhog.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ include "sear.serviceAccountName" . }}
+      {{- with .Values.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.mailhog.image.pullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ template "mailhog.name" . }}
+          image: "{{ .Values.mailhog.image.repository }}:{{ .Values.mailhog.image.tag | default "" }}"
+          imagePullPolicy: "{{ .Values.mailhog.image.pullPolicy }}"
+          env:
+            - name: MH_HOSTNAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            {{- if .Values.mailhog.auth.enabled }}
+            - name: MH_AUTH_FILE
+              value: /authdir/{{ .Values.mailhog.auth.fileName }}
+            {{- end }}
+            - name: MH_UI_WEB_PATH
+              value: mailhog
+            {{- with .Values.mailhog.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: 8025
+              protocol: TCP
+            - name: tcp-smtp
+              containerPort: 1025
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: tcp-smtp
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+          readinessProbe:
+            tcpSocket:
+              port: tcp-smtp
+          {{ if .Values.mailhog.auth.enabled }}
+          volumeMounts:
+            - name: authdir
+              mountPath: /authdir
+              readOnly: true
+          {{- end }}
+          {{- with .Values.mailhog.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.mailhog.resources | nindent 12 }}
+      {{- with .Values.mailhog.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.mailhog.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.mailhog.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.mailhog.auth.enabled }}
+      volumes:
+        - name: authdir
+          secret:
+            secretName: {{ template "mailhog.authFileSecret" . }}
+      {{- end }}
+      {{- if .Values.mailhog.priorityClassName }}
+      priorityClassName: {{ .Values.mailhog.priorityClassName }}
+      {{- end }}
+{{- end -}}
