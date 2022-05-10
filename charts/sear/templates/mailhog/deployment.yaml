@@ -13,7 +13,6 @@ spec:
   template:
     metadata:
       annotations:
-        silenteight.com/config-checksum: {{ tpl ($.Files.Get "templates/mailhog/auth-secret.yaml") . | sha256sum }}
         {{- with .Values.mailhog.podAnnotations }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
