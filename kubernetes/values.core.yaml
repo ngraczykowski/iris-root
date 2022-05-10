@@ -1,0 +1,63 @@
+common:
+  image:
+    pullPolicy: Always
+
+  args:
+    - --serp.show-env=true
+
+  resources:
+    limits:
+      memory: 1Gi
+    requests:
+      memory: 1Gi
+
+components:
+  adjudication-engine:
+    args:
+      - --spring.profiles.active=rabbitdeclare
+
+  governance:
+    args:
+      - --spring.profiles.active=linux,governance,database,rabbitmq,messaging,sierra
+
+  simulator:
+    args:
+      - --spring.profiles.active=linux,simulator,messaging,sierra
+
+  webapp:
+    args:
+      - --spring.profiles.active=sierra
+
+  warehouse:
+    args:
+      - --spring.profiles.active=linux,warehouse,messaging,sierra
+      # FIXME(ahaczewski): Required to repeat configuration from `keycloak` below due to overwriting
+      #  environment variable defined directly in the WebApp container image.
+      - --keycloak.frontend-client-id=dev-frontend
+
+    configFiles:
+      application.yml: |
+        warehouse:
+          report:
+            default-bucket: todo-add-bucket
+
+        sep:
+          filestorage:
+            minio:
+              privateKey: dummy
+              accessKey: dummy
+              url: https://todo-add-bucket.s3.eu-central-1.amazonaws.com
+              region: eu-central-1
+
+frontend:
+  resources:
+    limits:
+      memory: 256Mi
+    requests:
+      memory: 128Mi
+
+keycloak:
+  authServerUrl: https://auth.silenteight.com
+  realm: sens-webapp
+  frontendClientId: dev-frontend
+  jwtIssuerUri: "{{ .Values.keycloak.authServerUrl }}/realms/{{ .Values.keycloak.realm }}"

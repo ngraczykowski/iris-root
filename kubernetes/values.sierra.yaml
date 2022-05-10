@@ -1,0 +1,92 @@
+## This values configure Sierra environment, with Payments Bridge as bridge and transaction
+## screening agents.
+##
+components:
+  payments-bridge:
+    enabled: true
+
+    args:
+      - --spring.profiles.active=mockaws
+
+    configFiles:
+      application.yml: |
+        pb:
+          alert-message:
+            original-message-deleted-after-recommendation: false
+          cmapi:
+            callback:
+              client-registration-id: callback
+              enabled: false
+              endpoint: "https://cmapi-mock.nomad.silenteight.com/callback-recommendation"
+          data-retention:
+            alert-data:
+              expiration: "365d"
+              cron: "*/60 * * * * *"
+            personal-information:
+              expiration: "1h"
+              cron: "* * * * * *"
+          email-notification:
+            from: "noreply+sierra@silenteight.com"
+            to: "proj-svb-ts@silenteight.com"
+            cron: "0 0/10 * * * *"
+            amount: 10
+            cmapiEnabled: false
+            learningEnabled: false
+          daily-reports-remove:
+            cron: "0 2 * * * *"
+            bucket: "sps-reports-dev-20211110115534833400000001"
+            file-prefix: "SVB_SEAR_DEV_ai_reasoning_alert_level"
+            report-expiration-in-months: 6
+          metrics:
+            alert-resolution:
+              percentiles: [ 0.5, 0.95 ]
+          svb-learning:
+            discriminator: ""
+            aws:
+              file-list:
+                bucket-name: todo-add-bucket
+                prefix: learning
+            store:
+              skip-deletion: true
+            use-new-learning: true
+
+        spring:
+          mail:
+            host: localhost
+            port: 24170
+            username: user
+            password: password
+            properties:
+              mail:
+                smtp:
+                  auth: true
+                  starttls:
+                    enable: true
+                transport:
+                  protocol: smtp
+
+  agents:
+    name-agent:
+      args:
+        - --spring.profiles.active=sierra,rabbitmq-declare
+        - --linguistics.name.facade.enabled=true
+        - --sentry.dsn=https://423d3bd99f14476dbf7354cbd584cc57@o1129201.ingest.sentry.io/6176119
+        - --sentry.environment=unknown
+      resources:
+        limits:
+          memory: 2Gi
+        requests:
+          memory: 1Gi
+
+    geo-agent:
+      args:
+        - --spring.profiles.active=sierra,rabbitmq-declare
+        - --geo.agent.facade.enabled=true
+        - --geotransactions.agent.facade.enabled=true
+        - --sentry.dsn=https://057cc65ea9454a98b48877702c1a818f@o1129201.ingest.sentry.io/6176255
+        - --sentry.environment=unknown
+      resources:
+        limits:
+          memory: 2Gi
+        requests:
+          memory: 1Gi
