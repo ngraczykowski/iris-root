@@ -14,7 +14,7 @@ import org.springframework.validation.annotation.Validated;
 public class StoreCsvJobProperties {
 
   private long retryPeriodMilliseconds = 30 * 1000;
-  private boolean skipDeletion;
+  private boolean skipDeletion = true;
   private int retryLimit = 5;
 
 }
