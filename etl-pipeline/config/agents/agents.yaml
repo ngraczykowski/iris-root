@@ -45,6 +45,12 @@ employer_name_agent:
 
 nationality_agent:
   ap:
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ADDRESS1_COUNTRY
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ADDRESS1_COUNTRY
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.COUNTRY_CODE
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_DOMICILE1
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY1_CITIZENSHIP
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_CITIZENSHIP1
   - ALL_PARTY1_COUNTRY1_CITIZENSHIP
   - ALL_PARTY1_COUNTRY_DOMICILE1
   - ALL_PRTY_RSDNC_CNTRY_CD
@@ -81,6 +87,12 @@ pob_agent:
 
 sanctioned_country_agent:
   ap:
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ADDRESS1_COUNTRY
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ADDRESS1_COUNTRY
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_DOMICILE1
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY1_CITIZENSHIP
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_CITIZENSHIP1
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.COUNTRY_CODE
   - ALL_CONNECTED_PARTY_BIRTH_COUNTRIES
   - ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES
   - ALL_CONNECTED_COUNTRY_OF_INCORPORATION 
@@ -102,6 +114,10 @@ residency_agent:
   ap:
   - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ADDRESS1_COUNTRY
   - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ADDRESS1_COUNTRY
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_DOMICILE1
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY1_CITIZENSHIP
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_CITIZENSHIP1
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.COUNTRY_CODE
   - ALL_PARTY1_COUNTRY_DOMICILE1
   - ALL_CONNECTED_PARTY_BIRTH_COUNTRIES
   - ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES

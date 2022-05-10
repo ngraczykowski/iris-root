@@ -61,7 +61,7 @@ def remove_nulls_from_aggegated(match):
 
 def assert_list(tested, reference, key):
     try:
-        assert sorted(tested) == sorted(reference), key
+        assert set(sorted(tested)) == set(sorted(reference)), key
     except TypeError:
         assert_compare_list_of_dict_of_list(tested, reference, key)
 
