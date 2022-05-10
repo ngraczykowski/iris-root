@@ -38,7 +38,8 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.ingress.hosts }}
+    {{- $hosts := .Values.ingress.hosts | default (list (include "sear.defaultHost" .)) }}
+    {{- range $hosts }}
     - host: {{ . | quote }}
       http:
         paths:

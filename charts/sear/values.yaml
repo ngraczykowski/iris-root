@@ -142,12 +142,14 @@ ingress:
   className: ""
   annotations: {}
   # kubernetes.io/ingress.class: nginx-internal
-  hosts:
-    - sear-example.local
+  ## hosts is a list of host names to expose ingress for.
+  ## Defaults to <release name>-<namespace>.prv.dev.s8ops.com
+  hosts: []
+  # - sear-example.local
   tls: []
-  #  - secretName: sear-example-tls
-  #    hosts:
-  #      - sear-example.local
+  # - secretName: sear-example-tls
+  #   hosts:
+  #     - sear-example.local
 
 #
 # Configuration common for all components

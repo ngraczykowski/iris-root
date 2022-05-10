@@ -85,7 +85,14 @@ Create the name of the service account to use
   {{- end }}
 {{- end }}
 
-{{ define "sear.rabbitmqSecretName" }}{{ include "sear.fullname" . }}-rabbitmq-default-user{{ end }}
+{{/*
+Creates the default name of host
+*/}}
+{{- define "sear.defaultHost" -}}
+  {{- printf "%s-%s.dev.s8ops.com" $.Release.Name $.Release.Namespace }}
+{{- end }}
+
+{{ define "sear.rabbitmqSecretName" } }{{ include "sear.fullname" . }}-rabbitmq-default-user{{ end }}
 {{ define "sear.postgresqlSecretName" }}{{ printf "%s.%s" .component.dbName (include "sear.fullname" .) }}-postgres.credentials.postgresql.acid.zalan.do{{ end }}
 {{ define "sear.postgresqlService" }}{{ include "sear.fullname" . }}-postgres.{{ .Release.Namespace }}.svc{{ end }}
 
