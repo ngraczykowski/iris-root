@@ -136,10 +136,9 @@ warehouse.reports.v2:
                wsm.payload ->> 'features/organizationName:solution'                 AS "Organization Name",
                wsm.payload ->> 'features/organizationName2:solution'                AS "Organization Name v2",
                wsm.payload ->> 'categories/companyNameSurrounding:value'            AS "Company Name Surrounding",
-               COUNT(wsa.payload ->> 'match_reason:feature_vector_signature')       AS "Hits Count"
-        FROM warehouse_simulation_alert wsa 
-          JOIN warehouse_simulation_match wsm ON wsa.name = wsm.alert_name
-        WHERE wsa.analysis_name = 'analysis/${analysisId}'
+               COUNT(wsm.payload ->> 'match_reason:feature_vector_signature')       AS "Hits Count"
+        FROM warehouse_simulation_match wsm 
+        WHERE wsm.analysis_name = 'analysis/${analysisId}'
         GROUP BY wsm.payload ->> 'match_reason:feature_vector_signature',
                  wsm.payload ->> 'match_reason:policy_title',
                  wsm.payload ->> 'match_reason:policy',
