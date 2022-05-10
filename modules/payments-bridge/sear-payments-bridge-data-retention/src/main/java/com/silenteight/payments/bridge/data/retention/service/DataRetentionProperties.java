@@ -26,7 +26,7 @@ class DataRetentionProperties {
   @Data
   static class AlertData {
     @NotNull
-    Duration expiration = Duration.ofHours(48);
+    Duration expiration = Duration.ofDays(151);
 
     @NotNull
     int chunkSize = 1000;
