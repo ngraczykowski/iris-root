@@ -4,6 +4,13 @@ ingress:
   hosts:
     - aha-test.dev.s8ops.com
 
+mailhog:
+  resources:
+    limits:
+      memory: 128Mi
+    requests:
+      memory: 64Mi
+
 common:
   image:
     pullPolicy: Always
