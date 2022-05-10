@@ -1,0 +1,9 @@
+You have just installed SEAR!
+
+Important URLs:
+{{- $hosts := .Values.ingress.hosts | default (list (include "sear.defaultHost" .)) }}
+
+  - Frontend: https://{{ first $hosts }}
+  - Mailhog: https://{{ first $hosts }}/mailhog
+
+Default username and password for Mailhog are test/test.
