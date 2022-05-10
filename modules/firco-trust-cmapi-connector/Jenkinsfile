@@ -25,6 +25,7 @@ gradleBuild(
     )
   ],
   additionalStages: {
+    buildContainerImage()
     deployOnNomad()
   }
 )
