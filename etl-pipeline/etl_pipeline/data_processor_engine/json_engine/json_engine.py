@@ -55,7 +55,7 @@ COLLECTIVE_REPRESENTATION_MAP_FOR_FIELD = {
 class JsonProcessingEngine(ProcessingEngine):
     REF_KEY_REGEX = r"(\d{4}-\d{2}-\d{2}-\d{2}.\d{2}.\d{2}.\d{6})"
     REF_KEY_REGEX_PYTHON = re.compile(REF_KEY_REGEX)
-    discoverer = TriggeredTokensDiscoverer(fuzzy_threshold=1.0)
+    discoverer = TriggeredTokensDiscoverer(fuzzy_threshold=71)
 
     def __init__(self, pipeline_config: Pipeline = None):
         self.pipeline_config = pipeline_config.config
@@ -209,15 +209,6 @@ class JsonProcessingEngine(ProcessingEngine):
     @staticmethod
     def discover(matched_tokens, dict_values):
         return JsonProcessingEngine.discover(matched_tokens, dict_values)
-
-    def set_discovery_tokens(self, payload):
-        ap_columns = self.pipeline_config.AP_COLUMNS
-        dict_values = {}
-        for i in range(len(ap_columns)):
-            if ap_columns[i] != "":
-                dict_values[ap_columns[i]] = ap_columns[i]
-        matched_tokens = payload[cn.WL_MATCHED_TOKENS]
-        return self.discoverer.discover(matched_tokens, dict_values)
 
     def set_triggered_tokens_discovery(self, match, fields):
         TRIGGERS_MAP = {field: fields[field].value for field in fields if fields[field]}

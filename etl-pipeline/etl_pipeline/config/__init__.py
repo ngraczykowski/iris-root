@@ -1,6 +1,7 @@
 import glob
 import logging
 import os
+import re
 
 import consul
 from omegaconf import OmegaConf, dictconfig
@@ -12,6 +13,10 @@ logger = logging.getLogger("main")
 
 
 class ConsulServiceError(Exception):
+    pass
+
+
+class DatasetConfigError(Exception):
     pass
 
 
@@ -95,12 +100,20 @@ class Pipeline:
     def __init__(self, filename=os.path.join(CONFIG_APP_DIR, "pipeline", "pipeline.yaml")):
         self.config = None
         self.cn = None
+        self.dataset_config = None
         self.load_configs(filename)
 
     def load_configs(self, filename):
         config = OmegaConf.load(filename)
         self.config = config.PIPELINE
         self.cn = config.PAYLOAD_KEYS
+        self.dataset_config = self.load_dataset_config(config.DATASET_CONFIG)
+
+    def load_dataset_config(self, dataset_scope):
+        dataset_config = {}
+        for key, value in dataset_scope.items():
+            dataset_config[re.compile(key)] = value
+        return DatasetConfig(dataset_config)
 
     def reload_pipeline_config(self):
         self.load_configs()
@@ -113,6 +126,17 @@ def check_duplicates_for_agent_configuration(agent_name, agent_config):
                 logger.warning(
                     f"The following field in agents.yaml appears more than once: {agent_name} -> {category} -> {field}"
                 )
+
+
+class DatasetConfig:
+    def __init__(self, config):
+        self.config = config
+
+    def get(self, dataset_name):
+        for key, value in self.config.items():
+            if key.match(dataset_name):
+                return value
+        raise DatasetConfigError(f"Dataset {dataset_name} is not expected by ETL")
 
 
 def check_for_duplicate_fields(alert_agents_config):

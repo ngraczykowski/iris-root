@@ -172,7 +172,7 @@ EXAMPLES = [
             "WL_DOB": ["MAY 6, 1981", ""],
             "WL_ENTITYTYPE": "03",
             "WL_COUNTRY": None,
-            "WL_COUNTRY_NAME": None,
+            "WL_COUNTRYNAME": None,
             "WL_NATIONALITY": [""],
             "WL_CITIZENSHIP": [""],
             "WL_POB": [""],
@@ -237,12 +237,7 @@ EXAMPLE_FOR_TEST_SET_REF_KEY = {
 
 
 RESULT_FOR_EXAMPLE_FOR_TEST_SET_REF_KEY = [
-    "entityTextType",
     "AP_TRIGGERS",
-    "TRIGGERED_BY",
-    "SRC_REF_KEY",
-    "masterVersion",
-    "entity",
 ]
 
 
@@ -429,7 +424,7 @@ EXAMPLES_WITH_INVALID_OUTPUT = [
             "WL_DOB": ["MAY 6, 1981", ""],
             "WL_ENTITYTYPE": "03",
             "WL_COUNTRY": None,
-            "WL_COUNTRY_NAME": None,
+            "WL_COUNTRYNAME": None,
             "WL_NATIONALITY": [""],
             "WL_CITIZENSHIP": [""],
             "WL_POB": [""],
@@ -661,7 +656,7 @@ TEST_AGENT_INPUT_CASES = [
             ("wl", "watchlistParty.matchRecords.WL_POB"): [["Orlando, Florida"]],
             ("wl", "watchlistParty.matchRecords.WL_CITIZENSHIP"): ["AMMMerican"],
             ("wl", "watchlistParty.matchRecords.WL_COUNTRY"): "US",
-            ("wl", "watchlistParty.matchRecords.WL_COUNTRY_NAME"): "United States of America",
+            ("wl", "watchlistParty.matchRecords.WL_COUNTRYNAME"): "United States of America",
         },
     ),
     TestAgentInput(
@@ -699,7 +694,7 @@ TEST_AGENT_INPUT_CASES = [
             ("ap", "ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES"): ["Belize"],
             ("ap", "ALL_CONNECTED_COUNTRY_OF_INCORPORATION"): ["TOGO"],
             ("wl", "watchlistParty.matchRecords.WL_COUNTRY"): "US",
-            ("wl", "watchlistParty.matchRecords.WL_COUNTRY_NAME"): "United States of America",
+            ("wl", "watchlistParty.matchRecords.WL_COUNTRYNAME"): "United States of America",
             ("wl", "watchlistParty.matchRecords.WL_POB"): [["Orlando, Florida"]],
             ("wl", "watchlistParty.matchRecords.WL_NATIONALITY"): ["American"],
         },
@@ -773,7 +768,7 @@ TEST_AGENT_INPUT_CASES = [
             ("ap", "ALL_PARTY1_COUNTRY_OF_INCORPORATION"): "Hapland",
             ("ap", "ALL_PRTY_PRIM_CTZNSH_CNTRY"): "Trapland",
             ("wl", "watchlistParty.matchRecords.WL_COUNTRY"): "US",
-            ("wl", "watchlistParty.matchRecords.WL_COUNTRY_NAME"): "United States of America",
+            ("wl", "watchlistParty.matchRecords.WL_COUNTRYNAME"): "United States of America",
             ("wl", "watchlistParty.matchRecords.WL_NAME"): "Ding Dong",
         },
     ),
@@ -837,7 +832,7 @@ TEST_AGENT_INPUT_CASES = [
             ("wl", "watchlistParty.matchRecords.WL_COUNTRY"): "USAntarctica",
             (
                 "wl",
-                "watchlistParty.matchRecords.WL_COUNTRY_NAME",
+                "watchlistParty.matchRecords.WL_COUNTRYNAME",
             ): "United States of Antarctica",
         },
     ),

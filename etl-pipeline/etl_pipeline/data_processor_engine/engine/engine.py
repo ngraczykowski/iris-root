@@ -61,7 +61,6 @@ class ProcessingEngine:
                     ratio = fuzz.partial_ratio(value.lower(), token.lower())
                     if ratio >= FUZZINESS:
                         result.append(key)
-
         return list(set(result))
 
     def set_beneficiary_hits(self, payload):

@@ -255,7 +255,7 @@ class WatchlistExtractor:
             "WL_DOB": self.extract_dob(match),
             "WL_ENTITYTYPE": match.get("entityType", ""),
             "WL_COUNTRY": self.extract_country(match),
-            "WL_COUNTRY_NAME": self.extract_country_name(match),
+            "WL_COUNTRYNAME": self.extract_country_name(match),
             "WL_NATIONALITY": self.extract_nationality(match),
             "WL_CITIZENSHIP": self.extract_citizenships(match),
             "WL_POB": self.extract_wl_data_by_path(match, "pobs", "pob"),

@@ -188,7 +188,7 @@ PAYLOAD_KEYS:
     - *PRTY_RSDNC_CNTRY_CD
 
 PIPELINE: 
-  FUZZINESS_LEVEL: 0.8
+  FUZZINESS_LEVEL: 71
   ISG_ACCOUNT_COLS_TO_CONVERT_FROM_JSON: [*WL_NATIONALITY]
   PARTY_AND_ADDRESS_RELATIONSHIP_INPUT_PATH: tests/shared/Party_And_Address_Relationship.csv
   WM_ACCOUNTS_IN_SCOPE_INPUT_PATH: tests/shared/WM/WM_Account_In_Scope.csv
@@ -205,10 +205,7 @@ PIPELINE:
   id-column-name: id-column-name
   input-record-columns: input-record-columns
   output-paths: output-paths
-  sanctions-360: sanctions-360
   temp: /tmp
-  
-  
   
   AP_COLUMNS: 
     - *ADDRESS1_COUNTRY
@@ -224,11 +221,8 @@ PIPELINE:
     - *ALL_CONNECTED_PARTIES_NAMES
 
 
-
-  REFERENCES_COLUMNS: 
-    - *PRTY_TYP
-    - *PRTY_NM
-    - *DOB_DT
-    - *PRTY_CNTRY_OF_BIRTH
-    - *PRTY_PRIM_CTZNSH_CNTRY
-    - *PRTY_RSDNC_CNTRY_CD
+DATASET_CONFIG:
+  R_.*_MultiParty.*: "ISG_PARTY"
+  R_.*_Active_Address.*: "WM_ADDRESS"
+  R_.*_Active_Party.*: "WM_PARTY"
+  R_.*_MultiAccounts.*: "ISG_ACCOUNT"
