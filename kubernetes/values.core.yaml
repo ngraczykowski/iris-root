@@ -18,6 +18,9 @@ common:
     requests:
       memory: 1Gi
 
+agentsCommon:
+  args: []
+
 components:
   adjudication-engine:
     args:

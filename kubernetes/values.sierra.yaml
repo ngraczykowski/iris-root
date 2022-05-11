@@ -35,3 +35,6 @@ agents:
 
   geo-agent2:
     from: geo-agent
+
+  organization-name-agent:
+    enabled: true
