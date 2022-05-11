@@ -1,0 +1,35 @@
+## This values file configures Foxtrot environment, with FAB Bridge(ftcc, dataprep, core-bridge)
+##
+components:
+  ftcc:
+    enabled: true
+    args:
+      - --spring.profiles.active=mockcallback
+
+#TODO(dsniezek): agents copied from sierra for now
+agents:
+  name-agent:
+    enabled: true
+    args:
+      - --spring.profiles.active=sierra,rabbitmq-declare
+      - --linguistics.name.facade.enabled=true
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
+
+  geo-agent:
+    enabled: true
+    args:
+      - --spring.profiles.active=sierra,rabbitmq-declare
+      - --geo.agent.facade.enabled=true
+      - --geotransactions.agent.facade.enabled=true
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
+
+  geo-agent2:
+    from: geo-agent

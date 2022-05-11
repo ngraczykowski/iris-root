@@ -275,6 +275,18 @@ agentsCommon:
 #   affinity: {}
 #
 components:
+  #FAB bridge start
+  ftcc:
+    enabled: false
+
+    image:
+      repository: registry.dev.s8ops.com/ftcc/ftcc-app
+      tag: "snapshot"
+
+    dbName: "ftcc"
+    webPath: "ftcc"
+
+  #Fab bridge end
   payments-bridge:
     enabled: false
 
