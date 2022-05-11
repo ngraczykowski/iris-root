@@ -175,6 +175,10 @@ common:
   #     level:
   #       com.silenteight: DEBUG
 
+  sentry:
+    dsn: ""
+    environment: ""
+
   resources: {}
   # limits:
   #   cpu: 100m

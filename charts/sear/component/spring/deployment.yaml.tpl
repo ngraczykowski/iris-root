@@ -97,6 +97,10 @@ spec:
             - --management.server.port={{ .component.containerPorts.management.port }}
             - --management.server.base-path=/
             - --management.endpoints.web.base-path=/management
+            {{- if .component.sentry.dsn }}
+            - --sentry.dsn={{ .component.sentry.dsn }}
+            - --sentry.environment={{ include "sear.sentryEnvironment" . }}
+            {{- end }}
             {{- if .component.useDb }}
             - --spring.datasource.url={{ include "sear.spring.jdbcUrl" . }}
             {{- end }}
