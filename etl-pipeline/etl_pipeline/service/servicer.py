@@ -133,9 +133,9 @@ class EtlPipelineServiceServicer(object):
             payload[cn.MATCH_IDS] = alert.matches
             payload = pipeline.transform_standardized_to_cleansed(payload)
             logger.debug(f"Number of records (input_record vs match pairs): {len(payload)}")
-            logger.debug("{alert.alert_name} - Transform standardized to cleansed - success")
+            logger.debug(f"{alert.alert_name} - Transform standardized to cleansed - success")
             payload = pipeline.transform_cleansed_to_application(payload)
-            logger.debug("{alert.alert_name} - Transform cleansed to application - success")
+            logger.debug(f"{alert.alert_name} - Transform cleansed to application - success")
         except Exception as e:
             error = str(e)
             status = FAILURE

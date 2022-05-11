@@ -14,21 +14,10 @@ pipeline {
     }
 
     stages {
-        stage('Build') {
-            steps {
-                sh './scripts/build_only_service.sh'
-            }
-        }
-        stage('Publish docker image') {
-            steps {
-            sshagent([env.JENKINS_SSH_NAME]) {
-                sh './scripts/push_only_service.sh --index-url ${PIP_INDEX_URL}'
-            }}
-        }
         stage('Deploy On Nomad mike') {
-          steps {
-              sh './nomad/deploy.sh'
-          }
+            steps {
+                sh './nomad/deploy.sh'
+            }
         }
     }
 }
