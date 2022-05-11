@@ -97,6 +97,12 @@ spec:
             - --management.server.port={{ .component.containerPorts.management.port }}
             - --management.server.base-path=/
             - --management.endpoints.web.base-path=/management
+            {{- if .Values.mailhog.enabled }}
+            - --spring.mail.host={{ include "mailhog.fullname" . }}.{{ $.Release.Namespace }}.svc
+            - --spring.mail.port=1025
+            - --spring.mail.username=test
+            - --spring.mail.password=test
+            {{- end }}
             {{- if .component.sentry.dsn }}
             - --sentry.dsn={{ .component.sentry.dsn }}
             - --sentry.environment={{ include "sear.sentryEnvironment" . }}
