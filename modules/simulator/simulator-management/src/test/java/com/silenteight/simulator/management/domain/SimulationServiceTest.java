@@ -80,7 +80,7 @@ class SimulationServiceTest extends BaseDataJpaTest {
   @Test
   void shouldFinish() {
     // given
-    SimulationEntity simulation = persistSimulation(STREAMING, ANALYSIS_NAME_1, SOLVED_ALERTS);
+    SimulationEntity simulation = persistSimulation(RUNNING, ANALYSIS_NAME_1, SOLVED_ALERTS);
 
     // when
     underTest.finish(ANALYSIS_NAME_1);
@@ -88,6 +88,7 @@ class SimulationServiceTest extends BaseDataJpaTest {
     // then
     SimulationEntity savedSimulation =
         entityManager.find(SimulationEntity.class, simulation.getId());
+
     assertThat(savedSimulation.getState()).isEqualTo(DONE);
   }
 
@@ -102,6 +103,7 @@ class SimulationServiceTest extends BaseDataJpaTest {
     // then
     SimulationEntity savedSimulation =
         entityManager.find(SimulationEntity.class, simulation.getId());
+
     assertThat(savedSimulation.getState()).isEqualTo(ARCHIVED);
   }
 

@@ -31,4 +31,10 @@
       </column>
     </addColumn>
   </changeSet>
+  <changeSet id="simulator-1.5.0-4" author="rpajdak">
+    <update tableName="simulator_simulation">
+      <column name="state" value="RUNNING"/>
+      <where>state = 'STREAMING'</where>
+    </update>
+  </changeSet>
 </databaseChangeLog>

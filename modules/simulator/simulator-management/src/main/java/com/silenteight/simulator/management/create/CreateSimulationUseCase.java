@@ -37,7 +37,7 @@ public class CreateSimulationUseCase {
 
     SolvingModel model = modelService.getModel(request.getModel());
     Analysis analysis = runAnalysis(model);
-    storeSimulation(request, request.getDatasets(), analysis.getName());
+    storeSimulation(request, analysis.getName());
     addDatasetsToAnalysis(analysis.getName(), request.getDatasets());
 
     request.postAudit(auditingLogger::log);
@@ -49,10 +49,8 @@ public class CreateSimulationUseCase {
     return analysis;
   }
 
-  private void storeSimulation(
-      CreateSimulationRequest request, Set<String> datasets, String analysis) {
-
-    simulationService.createSimulation(request, datasets, analysis);
+  private void storeSimulation(CreateSimulationRequest request, String analysisName) {
+    simulationService.createSimulation(request, request.getDatasets(), analysisName);
   }
 
   private void addDatasetsToAnalysis(@NonNull String analysis, @NonNull Set<String> datasets) {

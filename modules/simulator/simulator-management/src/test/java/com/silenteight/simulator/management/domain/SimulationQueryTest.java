@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.silenteight.simulator.management.SimulationFixtures.*;
-import static com.silenteight.simulator.management.domain.SimulationState.RUNNING;
-import static com.silenteight.simulator.management.domain.SimulationState.STREAMING;
 import static java.util.List.of;
 import static java.util.UUID.fromString;
 import static org.assertj.core.api.Assertions.*;
@@ -51,21 +49,6 @@ class SimulationQueryTest extends BaseDataJpaTest {
     // then
     assertThat(result).hasSize(1);
     assertSimulation(result.get(0), PENDING_STATE);
-  }
-
-  @Test
-  void shouldListSimulationsByStatesStreamingCase() {
-    // given
-    UUID canceledSimulationId = fromString("b4708d8c-4832-6fde-8dc0-d17b4708d8ca");
-    persistSimulation(ID, STREAMING);
-    persistSimulation(canceledSimulationId, CANCELED_STATE);
-
-    // when
-    List<SimulationListDto> result = underTest.list(of(RUNNING, ARCHIVED_STATE));
-
-    // then
-    assertThat(result).hasSize(1);
-    assertSimulation(result.get(0), RUNNING);
   }
 
   @Test
@@ -156,18 +139,6 @@ class SimulationQueryTest extends BaseDataJpaTest {
     assertThat(analysisName).isEqualTo(ANALYSIS_NAME_1);
   }
 
-  @Test
-  void shouldReturnRunningForStreamingStatus() {
-    // given
-    persistSimulation(ID, STREAMING);
-
-    // when
-    SimulationDetailsDto simulationDetailsDto = underTest.get(ID);
-
-    // then
-    assertThat(simulationDetailsDto.getState()).isEqualTo(RUNNING);
-  }
-
   private static void assertSimulation(SimulationListDto result, SimulationState pendingState) {
     assertThat(result.getId()).isEqualTo(ID);
     assertThat(result.getSimulationName()).isEqualTo(SIMULATION_NAME);
@@ -188,7 +159,7 @@ class SimulationQueryTest extends BaseDataJpaTest {
     assertThat(result.getAnalysis()).isEqualTo(ANALYSIS_NAME_1);
     assertThat(result.getCreatedBy()).isEqualTo(USERNAME);
     assertThat(result.getCreatedAt()).isNotNull();
-    assertThat(result.getSolvedAlerts()).isEqualTo(ALERTS_COUNT);
+    assertThat(result.getSolvedAlerts()).isEqualTo(SOLVED_ALERTS);
   }
 
   private void persistSimulation(UUID simulationId, SimulationState state) {
@@ -202,7 +173,7 @@ class SimulationQueryTest extends BaseDataJpaTest {
         .datasetNames(DATASETS)
         .modelName(MODEL_NAME)
         .analysisName(ANALYSIS_NAME_1)
-        .solvedAlerts(ALERTS_COUNT)
+        .solvedAlerts(SOLVED_ALERTS)
         .build();
 
     simulationRepository.save(simulationEntity);

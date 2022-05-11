@@ -42,9 +42,16 @@ final class AckMessageFixtures {
       .setRequestId(REQUEST_ID)
       .build();
 
-  static final Analysis ANALYSIS = Analysis
+  static final Analysis ANALYSIS_1 = Analysis
       .newBuilder()
       .setState(DONE)
+      .setAlertCount(20L)
+      .build();
+
+  static final Analysis ANALYSIS_2 = Analysis
+      .newBuilder()
+      .setState(DONE)
+      .setAlertCount(42L)
       .build();
 
   public static final SimulationDetailsDto SIMULATION_DETAILS =

@@ -14,19 +14,13 @@ import com.silenteight.simulator.management.progress.AnalysisNameQuery;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
 
-import static com.silenteight.simulator.management.domain.SimulationState.RUNNING;
-import static com.silenteight.simulator.management.domain.SimulationState.STREAMING;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
-import static java.util.stream.Stream.of;
 
 @Slf4j
 @RequiredArgsConstructor
 class SimulationQuery
-    implements AnalysisNameQuery, ListSimulationsQuery, SimulationDetailsQuery,
-    SimulationStateProvider {
+    implements AnalysisNameQuery, ListSimulationsQuery, SimulationDetailsQuery {
 
   @NonNull
   private final SimulationRepository repository;
@@ -34,9 +28,6 @@ class SimulationQuery
   @Override
   public List<SimulationDto> listDomainDto(Collection<SimulationState> states) {
     log.debug("Listing all SimulationDto by states={}", states);
-
-    if (states.contains(RUNNING))
-      states = Stream.concat(states.stream(), of(STREAMING)).collect(toSet());
 
     return repository
         .findAllByStateIn(states)
@@ -81,14 +72,6 @@ class SimulationQuery
   @Override
   public Collection<String> getAnalysisNames(@NonNull Collection<String> datasetNames) {
     return repository.findAllAnalysisNamesByDatasetNames(datasetNames);
-  }
-
-  @Override
-  public boolean isStreaming(@NonNull String analysis) {
-    return repository
-        .findByAnalysisName(analysis)
-        .map(SimulationEntity::isStreaming)
-        .orElseThrow(() -> new SimulationNotFoundException(analysis));
   }
 
   @Override

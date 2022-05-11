@@ -92,7 +92,7 @@ class SimulationEntity extends BaseModifiableEntity implements IdentifiableEntit
   }
 
   void finish(OffsetDateTime finishedAt) {
-    assertInState(STREAMING);
+    assertInState(RUNNING);
     this.state = DONE;
     this.finishedAt = finishedAt;
   }
@@ -107,7 +107,7 @@ class SimulationEntity extends BaseModifiableEntity implements IdentifiableEntit
   }
 
   private void setErrorState(OffsetDateTime finishedAt) {
-    assertInState(RUNNING,STREAMING);
+    assertInState(RUNNING);
     this.state = ERROR;
     this.finishedAt = finishedAt;
   }
@@ -123,15 +123,6 @@ class SimulationEntity extends BaseModifiableEntity implements IdentifiableEntit
 
   boolean isArchived() {
     return getState() == ARCHIVED;
-  }
-
-  boolean isStreaming() {
-    return state == STREAMING;
-  }
-
-  public void streaming() {
-    assertInState(RUNNING);
-    this.state = STREAMING;
   }
 
   void timeout(OffsetDateTime dateTime) {
@@ -157,9 +148,6 @@ class SimulationEntity extends BaseModifiableEntity implements IdentifiableEntit
   }
 
   SimulationState getState() {
-    if (state == STREAMING)
-      return RUNNING;
-
     return state;
   }
 }

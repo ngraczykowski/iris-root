@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.silenteight.simulator.management.domain.SimulationState.RUNNING;
-import static com.silenteight.simulator.management.domain.SimulationState.STREAMING;
 import static java.util.List.of;
 import static java.util.stream.Collectors.toList;
 
@@ -36,7 +35,7 @@ class SimulationTimeoutService {
   @Transactional
   public void timeoutSimulations() {
     List<SimulationDto> runningSimulations = listSimulationsQuery
-        .listDomainDto(of(RUNNING, STREAMING))
+        .listDomainDto(of(RUNNING))
         .stream()
         .filter(simulationDto -> simulationLastCheckTimes
             .isIntervalElapsed(simulationDto.getSimulationName()))

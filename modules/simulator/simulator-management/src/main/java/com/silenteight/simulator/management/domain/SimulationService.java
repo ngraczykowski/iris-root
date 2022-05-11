@@ -38,6 +38,7 @@ public class SimulationService {
         .datasetNames(datasets)
         .state(PENDING)
         .build();
+
     simulationEntity.run();
     try {
       repository.save(simulationEntity);
@@ -97,9 +98,11 @@ public class SimulationService {
   }
 
   private void setErrorStateOnSimulation(UUID simulationId) {
+    log.info("Setting ERROR on simulation with id={}", simulationId);
     SimulationEntity simulationEntity = repository
         .findSimulationEntityBySimulationId(simulationId)
         .orElseThrow(() -> new SimulationNotFoundException(simulationId));
+
     simulationEntity.timeout(timeSource.offsetDateTime());
   }
 
@@ -107,14 +110,5 @@ public class SimulationService {
     return repository
         .findSimulationEntityBySimulationId(simulationId)
         .orElseThrow(() -> new SimulationNotFoundException(simulationId));
-  }
-
-  @Transactional
-  public void streaming(@NonNull String analysis) {
-    SimulationEntity simulationEntity = repository
-        .findByAnalysisName(analysis)
-        .orElseThrow(() -> new SimulationNotFoundException(analysis));
-    simulationEntity.streaming();
-    log.debug("Saved as 'STREAMING' SimulationEntity={}", simulationEntity);
   }
 }

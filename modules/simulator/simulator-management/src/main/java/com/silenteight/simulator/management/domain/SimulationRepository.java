@@ -30,4 +30,9 @@ interface SimulationRepository extends Repository<SimulationEntity, Long> {
       + " FROM simulator_simulation s"
       + " WHERE s.simulation_id = :simulationId", nativeQuery = true)
   String findAnalysisNameBySimulationId(UUID simulationId);
+
+  @Query(value = "SELECT s.alerts_count"
+      + " FROM simulator_simulation s"
+      + " WHERE s.analysis_name = :analysisName", nativeQuery = true)
+  long getAlertsCountByAnalysisName(String analysisName);
 }
