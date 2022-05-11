@@ -1,5 +1,5 @@
 rootProject.name = 'universal-data-source'
-gradle.ext.sepDependenciesVersion = "2.2.2"
+gradle.ext.sepDependenciesVersion = "2.5.0"
 
 include 'universal-data-source-app'
 include 'universal-data-source-common'
