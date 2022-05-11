@@ -89,7 +89,7 @@ Create the name of the service account to use
 Creates the default name of host
 */}}
 {{- define "sear.defaultHost" -}}
-  {{- printf "%s-%s.dev.s8ops.com" $.Release.Name $.Release.Namespace }}
+  {{- printf "%s-%s.prv.dev.s8ops.com" $.Release.Name $.Release.Namespace }}
 {{- end }}
 
 {{ define "sear.rabbitmqSecretName" }}{{ include "sear.fullname" . }}-rabbitmq-default-user{{ end }}
