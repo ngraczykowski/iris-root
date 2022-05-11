@@ -5,6 +5,8 @@ components:
     enabled: true
     profiles:
       - mockcallback
+  dataprep:
+    enabled: true
 
 #TODO(dsniezek): agents copied from sierra for now
 agents:

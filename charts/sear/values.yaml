@@ -289,7 +289,14 @@ components:
     dbName: "ftcc"
     webPath: "ftcc"
 
+  dataprep:
+    enabled: false
+
+    image:
+      repository: registry.dev.s8ops.com/dataprep/dataprep-app
+      tag: "snapshot"
   #Fab bridge end
+
   payments-bridge:
     enabled: false
 
