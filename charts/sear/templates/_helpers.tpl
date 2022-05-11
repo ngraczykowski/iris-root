@@ -105,9 +105,9 @@ Creates the default name of host
     {{- $command := concat $common.command (default (list) $value.command) }}
     {{- $args := concat $common.args (default (list) $value.args) }}
     {{- $mergedValue := mergeOverwrite (deepCopy $common) $value (dict "args" $args "command" $command ) }}
-    {{- $mergedValue = mergeOverwrite (deepCopy $mergedValue) (dict "dbName" (default $key $mergedValue.dbName) "webPath" (default $key $mergedValue.webPath) )}}
+    {{- $mergedValue = mergeOverwrite (deepCopy $mergedValue) (dict "dbName" (default $key $mergedValue.dbName) "webPath" (default $key $mergedValue.webPath) ) }}
     {{- if $mergedValue.enabled -}}
-      {{- $_:= set $output $key $mergedValue }}
+      {{- $_ := set $output $key $mergedValue }}
     {{- end }}
   {{- end }}
 
@@ -119,9 +119,9 @@ Creates the default name of host
     {{- $command := concat $common.command (default (list) $value.command) }}
     {{- $args := concat  $common.args (default (list) $value.args) }}
     {{- $mergedValue := mergeOverwrite (deepCopy $common) $value (dict "args" $args "command" $command ) }}
-    {{- $mergedValue = mergeOverwrite (deepCopy $mergedValue) (dict "dbName" (default $key $mergedValue.dbName) "webPath" (default $key $mergedValue.webPath) )}}
+    {{- $mergedValue = mergeOverwrite (deepCopy $mergedValue) (dict "dbName" (default $key $mergedValue.dbName) "webPath" (default $key $mergedValue.webPath) ) }}
     {{- if $mergedValue.enabled -}}
-      {{- $_:= set $output $key $mergedValue }}
+      {{- $_ := set $output $key $mergedValue }}
     {{- end }}
   {{- end }}
   {{- $output | mustToJson }}
