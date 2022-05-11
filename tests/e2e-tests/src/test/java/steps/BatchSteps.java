@@ -53,7 +53,8 @@ public class BatchSteps {
     response.then().statusCode(200);
 
     given()
-        .body(response)
+        .contentType("application/json")
+        .body(response.getBody().asString())
         .when()
         .post("rest/hsbc-bridge/async/batch/v1/ingestRecommendations")
         .then()

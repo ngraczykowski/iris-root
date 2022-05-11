@@ -27,6 +27,7 @@ public class WarehouseSteps {
     Batch batch = (Batch) scenarioContext.get("batch");
 
     Response response = given()
+        .urlEncodingEnabled(true)
         .param("from", batch.getGenerationStartTime())
         .param("to", dataGenerationService.getDateTimeNow())
         .post("rest/warehouse/api/v2/analysis/production/reports/" + value);
@@ -62,6 +63,6 @@ public class WarehouseSteps {
   @And("Downloaded report contains {int} rows")
   public void reportContainsXRows(int size) {
     Assert.assertEquals(
-        filesHelper.getRowsNumber((InputStream) scenarioContext.get("report")), size);
+        size, filesHelper.getRowsNumber((InputStream) scenarioContext.get("report")));
   }
 }
