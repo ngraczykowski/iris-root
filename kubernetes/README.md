@@ -38,11 +38,10 @@ kubectl config set-context --current --namespace=dev-<your username>
 To install the chart, run the following command, replacing `<environment>` with the name of environment you want to deploy:
 
 ```bash
-helm upgrade --install --namespace=dev-<your username> \
+helm upgrade --install \
   --values values.core.yaml \
   --values values.ingress-internal.yaml \
   --values values.<environment>.yaml \
-  --set ingress.hosts[0]=<your environment url>.dev.s8ops.com \
   <release name> \
   ../charts/sear
 ```
@@ -50,8 +49,6 @@ helm upgrade --install --namespace=dev-<your username> \
 For `<environment>` choose one of the provided environment values files.
 
 For `<release name>` you can put any name you want (e.g., `sear`). It allows you to install multiple releases of the chart to a single namespace.
-
-For `<your environment url>` you can put any DNS-compatible name. This will be the URL you access your environment with.
 
 ### Watching the deployment progress
 
@@ -68,7 +65,7 @@ The running environment costs real world money. If you do not need the environme
 To uninstall the chart, run the following command:
 
 ```bash
-helm uninstall --namespace=dev-<your username> <release name>
+helm uninstall <release name>
 ```
 
 ### Upgrading chart
