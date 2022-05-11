@@ -1,34 +1,35 @@
 plugins {
-	id "maven-publish"
-	id "org.sonarqube" version "3.3"
-	id "com.silenteight.gradle.wrapper" version "1.1.0"
-	id "com.silenteight.gradle.release" version "1.4.0"
-	id "com.silenteight.gradle.convention" version "1.21.4"
-	id "com.silenteight.gradle.testreportspublisher" version "1.2.0"
+  id "maven-publish"
+  id "org.sonarqube" version "3.3"
+  id "com.silenteight.gradle.wrapper" version "1.1.0"
+  id "com.silenteight.gradle.release" version "1.4.0"
+  id "com.silenteight.gradle.convention" version "1.21.4"
+  id "com.silenteight.gradle.testreportspublisher" version "1.2.0"
+  id "com.google.cloud.tools.jib" version "3.2.1" apply false
 }
 
 projectSetup {
-	javaVersion = JavaVersion.VERSION_11
+  javaVersion = JavaVersion.VERSION_11
 }
 
 ext {
   gradleScriptDir = "${rootProject.projectDir}/gradle/scripts"
 }
 
-subprojects { Project project ->
+subprojects {Project project ->
   pluginManager.withPlugin("java") {
 
     project.apply from: "${gradleScriptDir}/dependencies.gradle"
 
-	project.pluginManager.apply "maven-publish"
+    project.pluginManager.apply "maven-publish"
 
-    project.tasks.named(JavaPlugin.COMPILE_JAVA_TASK_NAME).configure { JavaCompile java ->
+    project.tasks.named(JavaPlugin.COMPILE_JAVA_TASK_NAME).configure {JavaCompile java ->
       def processResources = project.tasks.named(JavaPlugin.PROCESS_RESOURCES_TASK_NAME)
 
       java.dependsOn processResources
     }
 
-    project.tasks.withType(JavaCompile).configureEach { JavaCompile java ->
+    project.tasks.withType(JavaCompile).configureEach {JavaCompile java ->
       java.options.fork = true
     }
   }

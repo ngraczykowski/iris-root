@@ -1,0 +1,1 @@
+dsniezek: scripts directory needed to allow use buildContainerImage() in Jenkinsfile
