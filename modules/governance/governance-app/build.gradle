@@ -70,6 +70,8 @@ dependencies {
   runtimeOnly libs.sentry.logback
 
   runtimeOnly libs.hikari.cp
+  runtimeOnly libs.liquibase.core
+  runtimeOnly libs.liquibase.sessionlock
   runtimeOnly libs.postgresql
 
   annotationProcessor(libs.querydsl.apt.jpa) {
