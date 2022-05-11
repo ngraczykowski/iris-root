@@ -155,6 +155,7 @@ ingress:
 # Configuration common for all components
 #
 common:
+  type: spring
   enabled: true
   useDb: true
   dbName: ""
