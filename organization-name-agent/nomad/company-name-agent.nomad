@@ -18,9 +18,20 @@ variable "company_name_agent_config" {
   description = "Configuration files"
 }
 
+variable "application_config_file_name" {
+  type = string
+  description = "YAML configuration file to be used as application.yaml"
+  default = "application-nomad-dev.yaml"
+}
+
 variable "namespace" {
   type = string
   default = "dev"
+}
+
+variable "run_args" {
+  type = list(string)
+  default = []
 }
 
 job "company-name-agent" {
@@ -139,7 +150,7 @@ job "company-name-agent" {
       }
 
       template {
-        data = file("application.nomad.yaml")
+        data = file("${var.application_config_file_name}")
         destination = "local/config/application.yaml"
         change_mode = "restart"
       }
@@ -147,7 +158,7 @@ job "company-name-agent" {
       config {
         image = "python:3.7"
         command = "python"
-        args = ["/app/company_name-${var.company_name_agent_version}.pyz", "-c", "/app/config", "--grpc", "-v"]
+        args = concat(["/app/company_name-${var.company_name_agent_version}.pyz"], var.run_args)
         network_mode = "host"
         volumes = ["local:/app"]
       }

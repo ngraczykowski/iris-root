@@ -1,0 +1,50 @@
+grpc:
+  client:
+    data-source:
+      address: {{ range $index, $client := service "mike-universal-data-source" -}}
+          {{ if $index }},{{ end -}}
+          {{ $client.Address }}:{{ $client.Port -}}
+      {{- end }}
+      timeout: 10
+      # client_ca: {{ env "meta.silenteight.home" }}/cert/chain.pem
+      # client_private_key: {{ env "meta.silenteight.home" }}/cert/company-name-agent/company-name-agent-key.pem
+      # client_public_key_chain: {{ env "meta.silenteight.home" }}/cert/company-name-agent/company-name-agent-chain.pem
+
+rabbitmq:
+  addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
+      {{ if $index }},{{ end -}}
+      {{ $rabbit.Address }}:{{ $rabbit.Port -}}
+  {{- end }}
+  virtualhost: /{{ env "NOMAD_NAMESPACE" }}
+  # tls:
+  #   ca_certs: "tests/ssl_example/ca.pem"
+  #   keyfile: "tests/ssl_example/client-key.pem"
+  #   certfile: "tests/ssl_example/client.pem"
+
+consul:
+  host: localhost
+  port: 8500
+
+agent:
+  processes: 2
+
+  agent-exchange:
+    request:
+      exchange: "agent.request"
+      routing-key: "agents.companyName.versions.*.configs.*"
+      queue-name: "agent.companyname-requests"
+
+    response:
+      exchange: 'agent.response'
+      routing-key: ""
+
+  grpc:
+    port: {{ env "NOMAD_PORT_grpc" }}
+    # server_ca: {{ env "meta.silenteight.home" }}/cert/chain.pem
+    # server_private_key: {{ env "meta.silenteight.home" }}/cert/company-name-agent/company-name-agent-key.pem
+    # server_public_key_chain: {{ env "meta.silenteight.home" }}/cert/company-name-agent/company-name-agent-chain.pem
+
+#sentry:
+#  environment: unknown
+#  release: unknown
+#  sample_rate: 1.0

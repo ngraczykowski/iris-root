@@ -190,7 +190,7 @@ pipeline {
             when {
                 anyOf {
                     branch 'master'
-                    // tag pattern: '^v(\\d+(\\.\\d+)*)\$', comparator: 'REGEXP'
+                    branch pattern: '^v(\\d+(\\.\\d+)*)\$', comparator: 'REGEXP'
                 }
             }
             stages {
@@ -222,17 +222,15 @@ pipeline {
                 }
                 stage('Deploy on nomad') {
                     when {
-                        allOf {
-                            anyOf {
-                                branch 'master'
-                                branch pattern: '^v(\\d+(\\.\\d+)*)\$', comparator: 'REGEXP'
-                            }
-                            expression { return params.RELEASE }
+                        anyOf {
+                            branch 'master'
+                            branch pattern: '^v(\\d+(\\.\\d+)*)\$', comparator: 'REGEXP'
                         }
                     }
                     steps {
-                        sh './nomad/deploy.sh -var="namespace=mike"'
-                        sh './nomad/deploy.sh -var="namespace=lima"'
+                        sh './nomad/deploy.sh -var-file="vars/dev.vars"'
+                        sh './nomad/deploy.sh -var-file="vars/mike.vars"'
+                        // sh './nomad/deploy.sh -var-file="vars/lima.vars"'
                     }
                 }
             }
