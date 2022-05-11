@@ -56,6 +56,7 @@ class EtlPipelineServiceServicer(object):
 
     def __init__(self, ssl) -> None:
         EtlPipelineServiceServicer.router.initialize(ssl)
+        logger.info("Service started")
 
     def set_failure_forall(self, alerts):
         return [self._parse_alert(alert, status) for alert, status in alerts]

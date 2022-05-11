@@ -43,8 +43,8 @@ def get_file_handler(filename="etl_pipeline.log"):
     file_handler = TimedRotatingFileHandler(
         os.path.join(LOGGING_PATH, filename), encoding="utf8", when="midnight"
     )
-    file_handler.setLevel(get_logging_level())
     file_handler.setFormatter(FORMATTER)
+    file_handler.setLevel(get_logging_level())
     return file_handler
 
 
