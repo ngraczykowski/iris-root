@@ -12,4 +12,5 @@ curl https://bootstrap.pypa.io/pip/3.6/get-pip.py | python -
 pip install --no-index --no-deps local/app/temp/*.whl
 echo Service is installed
 echo Service is starting
+export PYTHONIOENCODING=UTF-8
 python -m etl_pipeline
