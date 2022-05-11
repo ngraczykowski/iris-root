@@ -17,6 +17,7 @@ pipeline {
     stage('Checkout') {
       steps {
         ciCheckout()
+        sh './scripts/get-version.sh >.version'
       }
     }
     stage('Build') {
@@ -32,11 +33,7 @@ pipeline {
                   credentialsId: 'artifactory-user',
                   usernameVariable: 'S8_REPO_USER',
                   passwordVariable: 'S8_REPO_PASSWORD')]) {
-            sh '''
-              ./gradlew \
-              -Pversion=$(./scripts/get-version.sh) \
-              clean build
-            '''
+            sh './gradlew -Pversion=$(cat .version) clean build'
           }
         }
       }
@@ -82,17 +79,23 @@ pipeline {
                 -Dsilenteight.repoDeploymentUser=$repoDeploymentUser \
                 -Dsilenteight.repoDeploymentPassword=$repoDeploymentPassword \
                 -Djib.console=plain \
-                -Pversion=$(./scripts/get-version.sh) \
+                -Pversion=$(cat .version) \
                 publish
               '''
             }
           }
         }
+        updateBuildName displayName: "#${env.BUILD_NUMBER} v${readFile(file: '.version').trim()}"
       }
     }
-    stage('Deploy') {
+    stage('Release') {
       parallel {
-        stage('Deploy to K8s') {
+        stage('Release K8s/Sierra') {
+          steps {
+            echo 'placeholder deployment'
+          }
+        }
+        stage('Release K8s/Hotel') {
           steps {
             echo 'placeholder deployment'
           }
