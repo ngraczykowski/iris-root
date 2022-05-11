@@ -13,12 +13,13 @@ ext {
   dataRetentionVersion = "0.3.0"
   governanceApiVersion = "1.7.0"
   learingEngineStoreApiVersion = "0.5.0"
-  sepDependenciesVersion = "2.3.0"
+  sepDependenciesVersion = "2.5.0"
   silenteightCommonsVersion = "2.1.0"
   silenteightDataSourceApiVersion = "0.18.0"
   silenteightSepBaseVersion = "1.12.2"
   warehouseProtocolVersion = "2.2.0"
   jacksonVersion = "2.13.0"
+  lombok =  "1.18.24"
 
   //***********************************
   // Others libraries
@@ -27,6 +28,8 @@ ext {
 }
 
 // @formatter:off
+
+libraries.lombok = [group: 'org.projectlombok', name: 'lombok',version: lombok]
 
 // Silent Eight
 libraries.adjudication_engine_api = [group: 'com.silenteight.adjudication.api', name: 'adjudication-api', version: adjudicationEngineApiVersion]
@@ -147,9 +150,9 @@ libraries.slf4j_api = [group: 'org.slf4j', name: 'slf4j-api']
 libraries.amqp_client = [group: 'com.rabbitmq', name: 'amqp-client']
 libraries.antlr4 = [group: 'org.antlr', name: 'antlr4']
 libraries.antlr4_runtime = [group: 'org.antlr', name: 'antlr4-runtime']
-libraries.aspectjrt = [group: 'org.aspectj', name: 'aspectjrt', version: '1.9.7']
+libraries.aspectjrt = [group: 'org.aspectj', name: 'aspectjrt', version: '1.9.9.1']
 libraries.aspectjtools = [group: 'org.aspectj', name: 'aspectjtools', version: libraries.aspectjrt.version]
-libraries.aspectjweaver = [group: 'org.aspectj', name: 'aspectjweaver']
+libraries.aspectjweaver = [group: 'org.aspectj', name: 'aspectjweaver', version: libraries.aspectjrt.version]
 libraries.awaitility = [group: 'org.awaitility', name: 'awaitility']
 libraries.aws_apache_client = [group: 'software.amazon.awssdk', name: 'apache-client']
 libraries.aws_auth = [group: 'software.amazon.awssdk', name: 'auth']

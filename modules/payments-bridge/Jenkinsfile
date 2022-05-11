@@ -4,7 +4,7 @@ def gradle = new com.silenteight.jenkins.ci.Gradle()
 def git = new com.silenteight.jenkins.ci.Git()
 
 gradleBuild(
-    jdkVersion: 'jdk-11',
+    jdkVersion: 'jdk-17',
     sonarEnabled: true,
     dependencyCheckEnabled: true,
     archiveArtifactsPattern: 'build/reports/*.zip',
