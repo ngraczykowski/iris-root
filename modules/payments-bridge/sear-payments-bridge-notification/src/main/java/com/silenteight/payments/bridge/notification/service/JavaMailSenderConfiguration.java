@@ -5,27 +5,28 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.Properties;
 
-@RequiredArgsConstructor
 @Configuration
-@EnableConfigurationProperties(EmailSenderProperties.class)
-class EmailSenderConfiguration {
+@RequiredArgsConstructor
+@EnableConfigurationProperties(JavaMailSenderProperties.class)
+@Profile("!mockemail")
+class JavaMailSenderConfiguration {
 
-  private final EmailSenderProperties emailSenderProperties;
+  private final JavaMailSenderProperties javaMailSenderProperties;
 
   @Bean
   public JavaMailSender javaMailSender() {
     JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 
-    mailSender.setHost(emailSenderProperties.getHost());
-    mailSender.setPort(emailSenderProperties.getPort());
-
-    mailSender.setUsername(emailSenderProperties.getUsername());
-    mailSender.setPassword(emailSenderProperties.getPassword());
+    mailSender.setHost(javaMailSenderProperties.getHost());
+    mailSender.setPort(javaMailSenderProperties.getPort());
+    mailSender.setUsername(javaMailSenderProperties.getUsername());
+    mailSender.setPassword(javaMailSenderProperties.getPassword());
 
     Properties props = mailSender.getJavaMailProperties();
     props.put("mail.transport.protocol", "smtp");
