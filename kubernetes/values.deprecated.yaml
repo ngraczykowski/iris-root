@@ -23,7 +23,9 @@ common:
       memory: 1Gi
     requests:
       memory: 1Gi
+
 agentsCommon:
+  enabled: true
   args:
     - --spring.profiles.include=rabbitmq-declare
   resources:

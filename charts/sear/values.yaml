@@ -240,6 +240,7 @@ common:
   affinity: {}
 
 agentsCommon:
+  enabled: false
   useDb: false
   startupProbe:
     initialDelaySeconds: 60
