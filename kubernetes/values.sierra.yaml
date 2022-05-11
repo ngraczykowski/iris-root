@@ -8,6 +8,7 @@ components:
       - --spring.profiles.active=mockaws,mockemail
       - --spring.security.oauth2.client.registration.callback.client-id=cmapi-dev
       - --spring.security.oauth2.client.provider.external.token-uri=https://auth.silent8.cloud/realms/egress-mock/protocol/openid-connect/token
+      - --pb.email-notification.learning-enabled=true
 
 agents:
   name-agent:
