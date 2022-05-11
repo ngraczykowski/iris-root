@@ -1,69 +1,13 @@
-## This values configure Sierra environment, with Payments Bridge as bridge and transaction
+## This values file configures Sierra environment, with Payments Bridge as bridge and transaction
 ## screening agents.
 ##
 components:
   payments-bridge:
     enabled: true
-
     args:
-      - --spring.profiles.active=mockaws
-
-    configFiles:
-      application.yml: |
-        pb:
-          alert-message:
-            original-message-deleted-after-recommendation: false
-          cmapi:
-            callback:
-              client-registration-id: callback
-              enabled: false
-              endpoint: "https://cmapi-mock.nomad.silenteight.com/callback-recommendation"
-          data-retention:
-            alert-data:
-              expiration: "365d"
-              cron: "*/60 * * * * *"
-            personal-information:
-              expiration: "1h"
-              cron: "* * * * * *"
-          email-notification:
-            from: "noreply+sierra@silenteight.com"
-            to: "proj-svb-ts@silenteight.com"
-            cron: "0 0/10 * * * *"
-            amount: 10
-            cmapiEnabled: false
-            learningEnabled: false
-          daily-reports-remove:
-            cron: "0 2 * * * *"
-            bucket: "sps-reports-dev-20211110115534833400000001"
-            file-prefix: "SVB_SEAR_DEV_ai_reasoning_alert_level"
-            report-expiration-in-months: 6
-          metrics:
-            alert-resolution:
-              percentiles: [ 0.5, 0.95 ]
-          svb-learning:
-            discriminator: ""
-            aws:
-              file-list:
-                bucket-name: todo-add-bucket
-                prefix: learning
-            store:
-              skip-deletion: true
-            use-new-learning: true
-
-        spring:
-          mail:
-            host: localhost
-            port: 24170
-            username: user
-            password: password
-            properties:
-              mail:
-                smtp:
-                  auth: true
-                  starttls:
-                    enable: true
-                transport:
-                  protocol: smtp
+      - --spring.profiles.active=mockaws,mockemail
+      - --spring.security.oauth2.client.registration.callback.client-id=cmapi-dev
+      - --spring.security.oauth2.client.provider.external.token-uri=https://auth.silent8.cloud/realms/egress-mock/protocol/openid-connect/token
 
 agents:
   name-agent:
