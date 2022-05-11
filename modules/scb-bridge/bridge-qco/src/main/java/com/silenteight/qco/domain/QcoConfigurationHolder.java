@@ -31,7 +31,7 @@ public class QcoConfigurationHolder {
             this::createKeyMap,
             this::createValueMap,
             this::duplicationKeyResolver));
-    log.info("Tha following data was loaded to the configuration map. {}", configuration);
+    log.info("The following data was loaded to the configuration map. {}", configuration);
   }
 
   @NotNull
