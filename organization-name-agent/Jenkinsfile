@@ -190,7 +190,7 @@ pipeline {
             when {
                 anyOf {
                     branch 'master'
-                    tag pattern: '^v(\\d+(\\.\\d+)*)\$', comparator: 'REGEXP'
+                    // tag pattern: '^v(\\d+(\\.\\d+)*)\$', comparator: 'REGEXP'
                 }
             }
             stages {
