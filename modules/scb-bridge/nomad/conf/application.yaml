@@ -3,12 +3,20 @@ server:
 
 grpc:
   client:
+    GLOBAL.max-inbound-message-size: 31457280
     recommendation.address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-core-bridge
     registration.address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-core-bridge
     universal-data-source.address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-universal-data-source
 
 silenteight:
   scb-bridge:
+    grpc:
+      recommendation:
+        recommendation-deadline: 10m
+      registration:
+        registration-deadline: 10m
+      universal-data-source:
+        uds-deadline: 10m
     db:
       name: {{ env "NOMAD_NAMESPACE" }}-scb-bridge
 {{- $nomad_namespace := env "NOMAD_NAMESPACE" -}}
@@ -18,36 +26,42 @@ silenteight:
 {{ end -}}
 
 spring:
-    rabbitmq:
-      addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
-        {{ if $index }},{{ end -}}
-        {{ $rabbit.Address }}:{{ $rabbit.Port -}}
-    {{- end }}
-    # NOTE(ahaczewski): Intentionally left empty.
+  rabbitmq:
+    addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
+      {{ if $index }},{{ end -}}
+      {{ $rabbit.Address }}:{{ $rabbit.Port -}}
+  {{- end }}
+# NOTE(ahaczewski): Intentionally left empty.
     host:
     virtual-host: /{{ env "NOMAD_NAMESPACE" }}
 
-    #-------------------------------------------------------------------------------------------------
-    # Consul Service Discovery
-    #-------------------------------------------------------------------------------------------------
-    cloud:
-      consul:
+  #-------------------------------------------------------------------------------------------------
+  # Consul Service Discovery
+  #-------------------------------------------------------------------------------------------------
+  cloud:
+    consul:
+      enabled: true
+      host: localhost
+      port: 8500
+      scheme: http
+      discovery:
         enabled: true
-        host: localhost
-        port: 8500
-        scheme: http
-        discovery:
+        register: false
+        register-health-check: false
+        catalog-services-watch:
           enabled: true
-          register: false
-          register-health-check: false
-          catalog-services-watch:
-            enabled: true
-        service-registry:
-          auto-registration:
-            enabled: false
+      service-registry:
+        auto-registration:
+          enabled: false
 
 ### SENTRY
 sentry:
   dsn: https://5991989c7325495fbdeff0bd32ddbb1d@o1129201.ingest.sentry.io/6204134
   environment: unknown
   tracesSampleRate: 0
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: [ "health", "info", "liquibase", "metrics", "prometheus", "loggers" ]

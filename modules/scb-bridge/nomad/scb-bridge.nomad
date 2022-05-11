@@ -133,7 +133,7 @@ job "scb-bridge" {
         type     = "http"
         path     = "/rest/scb-bridge/management/health"
         method   = "GET"
-        interval = "30s"
+        interval = "60s"
         timeout  = "10s"
       }
     }
@@ -159,7 +159,7 @@ job "scb-bridge" {
       template {
         data = file("./conf/application.yaml")
         destination = "local/conf/application.yaml"
-        change_mode = "restart"
+        change_mode = "noop"
       }
 
       template {
@@ -221,8 +221,8 @@ job "scb-bridge" {
       }
 
       resources {
-        cpu = 50
-        memory = 100
+        cpu = 150
+        memory = 200
       }
 
       template {
