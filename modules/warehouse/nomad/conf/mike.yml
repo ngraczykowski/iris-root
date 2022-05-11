@@ -242,7 +242,6 @@ warehouse.reports.v2:
         SELECT wa.name                                          AS "S8 Alert ID",
                wa.payload ->> 'clientId'                        AS "Client Alert ID",
                STRING_AGG(wm.payload ->> 'clientMatchId', ', ') AS "Client Match IDs",
-               STRING_AGG(wm.payload ->> 'watchListId', ', ')   AS "Watchlist Match IDs",
                wa.payload ->> 'policyId'                        AS "Policy ID",
                wa.payload ->> 'policyTitle'                     AS "Policy Name",
                STRING_AGG(wm.payload ->> 'stepId', ', ')        AS "Step ID",
