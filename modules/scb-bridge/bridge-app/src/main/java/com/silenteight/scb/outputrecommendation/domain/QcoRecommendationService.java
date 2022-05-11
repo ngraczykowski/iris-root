@@ -27,11 +27,8 @@ class QcoRecommendationService {
     }
 
     return Try.of(() -> updateMatches(recommendationsEvent))
-        .onSuccess(recommendation -> {
-          if (log.isDebugEnabled()) {
-            log.debug("Recommendation was processed by QCO module {}", recommendation.toString());
-          }
-        })
+        .onSuccess(recommendation ->
+            log.debug("Recommendation was processed by QCO module {}", recommendation.toString()))
         .onFailure(e -> log.error(
             "Failed to update recommendations with QCO, batchId: {}",
             recommendationsEvent.batchId(), e))

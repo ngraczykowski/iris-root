@@ -31,7 +31,11 @@ public class QcoConfigurationHolder {
             this::createKeyMap,
             this::createValueMap,
             this::duplicationKeyResolver));
-    log.info("The following data was loaded to the configuration map. {}", configuration);
+    log.info(
+        "The following data was loaded {} values to the configuration map:", configuration.size());
+    configuration.forEach((key, param) ->
+        log.info("Configuration QCO map: key: {}, param: {} and keyHashCode: {}",
+            key.toString(), param.toString(), key.hashCode()));
   }
 
   @NotNull

@@ -21,8 +21,9 @@ public class SimpleMatchChangeConditionFactory implements ChangeConditionFactory
     var changeCondition = new ChangeCondition(policyId, stepId, solution);
     boolean conditionExists = configurationHolder.getConfiguration().containsKey(changeCondition);
     if (!conditionExists) {
-      log.warn("The Qco configuration was not found for policyId={}, stepId={}, solution={}",
-          policyId, stepId, solution);
+      log.debug("The Qco configuration was not found for "
+              + "policyId={}, stepId={}, solution={} and hashCode={}",
+          policyId, stepId, solution, changeCondition.hashCode());
       return NO_CONDITION_FULFILLED;
     }
     log.debug("The Qco configuration was found for policyId={}, stepId={}, solution={}",
