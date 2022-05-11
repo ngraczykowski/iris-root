@@ -19,19 +19,6 @@ public class SimpleMatchChangeConditionFactory implements ChangeConditionFactory
   @Override
   public ChangeCondition createChangeCondition(String policyId, String stepId, String solution) {
     var changeCondition = new ChangeCondition(policyId, stepId, solution);
-    //Temporary logs
-    log.debug("Input params policyId: {}, stepId:{}, solution: {}", policyId, stepId, solution);
-    log.debug("data of changeCondition: {}, hashCode:{} ",
-        changeCondition, changeCondition.hashCode());
-    log.debug(
-        "Number of defined steps in qco configuration: {}",
-        configurationHolder.getConfiguration().size());
-    configurationHolder.getConfiguration()
-        .forEach((key, param) ->
-            log.debug("key: {}, param: {}, hashCode of key: {}",
-                key.toString(), param.toString(), key.hashCode()));
-
-    //end of temporary logs
     boolean conditionExists = configurationHolder.getConfiguration().containsKey(changeCondition);
     if (!conditionExists) {
       log.warn("The Qco configuration was not found for policyId={}, stepId={}, solution={}",
