@@ -413,6 +413,8 @@ agents:
     type: python
     image:
       repository: registry.dev.s8ops.com/organization-name-agent
+    properties:
+      "serp.show-env": null
     configFiles:
       application.yml: |
         agent:

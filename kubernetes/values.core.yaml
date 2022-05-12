@@ -9,8 +9,8 @@ common:
   image:
     pullPolicy: Always
 
-  args:
-    - --serp.show-env=true
+  properties:
+    "serp.show-env": true
 
   resources:
     limits:
