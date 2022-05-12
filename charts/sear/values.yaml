@@ -280,6 +280,18 @@ agentsCommon:
 #   affinity: {}
 #
 components:
+  hsbc-bridge:
+    enabled: false
+    args:
+      - --spring.profiles.active=consuldisabled
+
+    image:
+      repository: registry.dev.s8ops.com/hsbc/hsbc-bridge
+      tag: "snapshot"
+
+    dbName: "hb"
+    webPath: "hb"
+
   #FAB bridge start
   ftcc:
     enabled: false

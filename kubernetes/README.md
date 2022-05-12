@@ -45,7 +45,6 @@ helm upgrade --install \
   <release name> \
   ../charts/sear
 ```
-
 For `<environment>` choose one of the provided environment values files.
 
 For `<release name>` you can put any name you want (e.g., `sear`). It allows you to install multiple releases of the chart to a single namespace.

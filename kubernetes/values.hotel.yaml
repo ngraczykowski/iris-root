@@ -1,0 +1,14 @@
+## This values configure Hotel environment, with HSBC Bridge as bridge
+##
+components:
+  hsbc-bridge:
+    enabled: true
+    args:
+      - --spring.profiles.active=consuldisabled
+
+    image:
+      repository: registry.dev.s8ops.com/hsbc/hsbc-bridge
+      tag: "snapshot"
+
+    dbName: "hb"
+    webPath: "hb"
