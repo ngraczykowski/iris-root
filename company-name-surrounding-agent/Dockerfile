@@ -14,4 +14,4 @@ RUN --mount=type=secret,id=pypi_url_secret\
     --index-url="$(cat /run/secrets/pypi_url_secret)"
 
 EXPOSE 9090
-CMD ["python", "-m", "company_name.main", "-c", "/app/config", "--grpc", "-v"]
+CMD ["python", "-m", "company_name_surrounding", "-c", "/app/config", "--grpc", "-v"]
