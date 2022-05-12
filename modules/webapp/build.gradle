@@ -1,7 +1,6 @@
 plugins {
   id('com.silenteight.iris.build.root-build')
 
-  alias(libs.plugins.jib) apply false
   alias(libs.plugins.freefair.aspectj.weaving) apply false
 }
 
@@ -29,56 +28,6 @@ configure(subprojects - project(":sens-webapp-common-testing")) {Project subproj
   subproject.pluginManager.withPlugin("java") {
     subproject.dependencies {
       testImplementation project(":sens-webapp-common-testing")
-    }
-
-    subproject.afterEvaluate {
-      if (subproject.pluginManager.hasPlugin("com.google.cloud.tools.jib")) {
-        subproject.jib {
-          from {
-            // NOTE(ahaczewski): Use debug version of the image for SNAPSHOT builds.
-            def imageTag = "$version".endsWith("-SNAPSHOT") ? "debug-nonroot" : "nonroot"
-            image = "gcr.io/distroless/java17-debian11:" + imageTag
-          }
-          to {
-            image = "docker.repo.silenteight.com/iris/webapp-app:${version}"
-            if (!"$version".endsWith("-SNAPSHOT"))
-              tags = ["latest"]
-          }
-          container {
-            appRoot = "/silenteight/web-app"
-            environment = [
-                "SILENTEIGHT_HOME"                    : "/silenteight",
-                "SENS_WEBAPP_DB_HOST"                 : "webapp-db",
-                "SENS_WEBAPP_DB_PORT"                 : "5432",
-                "SENS_WEBAPP_DB_NAME"                 : "sens",
-                "SENS_WEBAPP_DB_USERNAME"             : "sens",
-                "SENS_WEBAPP_DB_PASSWORD"             : "sens",
-                "SENS_WEBAPP_RABBITMQ_HOST"           : "rabbitmq",
-                "SENS_WEBAPP_RABBITMQ_PORT"           : "5672",
-                "SENS_WEBAPP_RABBITMQ_USER"           : "dev",
-                "SENS_WEBAPP_RABBITMQ_PASSWORD"       : "dev",
-                "SPRING_PROFILES_INCLUDE"             : "linux,database,rabbitmq,messaging,debug",
-                "SPRING_PROFILES_ACTIVE"              : "",
-                "KEYCLOAK_CLIENT_ID"                  : "backend",
-                "KEYCLOAK_ADAPTER_AUTH_SERVER_URL"    : "https://auth.silenteight.com/",
-                "KEYCLOAK_ADAPTER_RESOURCE"           : "backend",
-                "KEYCLOAK_ADAPTER_CREDENTIALS_SECRET" : "",
-                "KEYCLOAK_ADAPTER_REALM"              : "sens-webapp",
-            ]
-            jvmFlags = [
-                "-XX:MaxRAMPercentage=75",
-                "-Dfile.encoding=UTF-8",
-                "-Dsun.jnu.encoding=UTF-8",
-                "-Djava.net.preferIPv4Stack=true",
-                "-Djava.io.tmpdir=/tmp",
-            ]
-            ports = ["24410"]
-            user = "nonroot"
-            volumes = ["/silenteight/cert"]
-            workingDirectory = "/silenteight"
-          }
-        }
-      }
     }
   }
 }

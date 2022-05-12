@@ -1,0 +1,33 @@
+plugins {
+  id 'com.silenteight.iris.build.java-base'
+
+  id 'com.google.cloud.tools.jib'
+}
+
+jib {
+  from {
+    // NOTE(ahaczewski): Use debug version of the image for SNAPSHOT builds.
+    def imageTag = "$version".endsWith("-SNAPSHOT") ? "debug-nonroot" : "nonroot"
+    image = "gcr.io/distroless/java17-debian11:" + imageTag
+  }
+  to {
+    image = "docker.repo.silenteight.com/iris/${project.name}:${version}"
+    if ("$version".endsWith("-SNAPSHOT")) {
+      tags = ["snapshot"]
+    } else {
+      tags = ["latest"]
+    }
+  }
+  container {
+    appRoot = "/silenteight/app"
+    jvmFlags = [
+        "-XX:MaxRAMPercentage=75",
+        "-Dfile.encoding=UTF-8",
+        "-Dsun.jnu.encoding=UTF-8",
+        "-Djava.net.preferIPv4Stack=true",
+        "-Djava.io.tmpdir=/tmp",
+    ]
+    user = "nonroot"
+    workingDirectory = "/silenteight"
+  }
+}

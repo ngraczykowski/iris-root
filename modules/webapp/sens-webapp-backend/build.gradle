@@ -1,5 +1,5 @@
 plugins {
-  id "com.google.cloud.tools.jib"
+  id "com.silenteight.iris.build.container-image"
   id "com.silenteight.iris.build.spring-boot-application"
 }
 

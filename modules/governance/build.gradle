@@ -1,7 +1,6 @@
 plugins {
   id('com.silenteight.iris.build.root-build')
 
-  alias(libs.plugins.jib) apply false
   alias(libs.plugins.freefair.aspectj.weaving) apply false
 }
 
@@ -22,62 +21,6 @@ subprojects {Project subproject ->
       java.ajc.options.compilerArgs = ajcArgs
       java.options.fork = true
       java.options.compilerArgs << "-parameters"
-    }
-
-    subproject.afterEvaluate {
-      if (subproject.pluginManager.hasPlugin("com.google.cloud.tools.jib")) {
-        subproject.jib {
-          from {
-            // NOTE(ahaczewski): Use debug version of the image for SNAPSHOT builds.
-            def imageTag = "$version".endsWith("-SNAPSHOT") ? "debug-nonroot" : "nonroot"
-            image = "gcr.io/distroless/java17-debian11:" + imageTag
-          }
-          to {
-            image = "docker.repo.silenteight.com/iris/${project.name}:${version}"
-            if (!"$version".endsWith("-SNAPSHOT"))
-              tags = ["latest"]
-          }
-          container {
-            appRoot = "/silenteight/governance"
-            environment = [
-                "SILENTEIGHT_HOME"                   : "/silenteight",
-                "SERP_DB_HOST"                       : "postgres",
-                "SERP_DB_PORT"                       : "5432",
-                "SERP_DB_NAME"                       : "governance",
-                "SERP_DB_USER"                       : "governance",
-                "SERP_DB_PASSWORD"                   : "governance",
-                "SPRING_RABBITMQ_HOST"               : "rabbitmq",
-                "SPRING_RABBITMQ_PORT"               : "5672",
-                "SPRING_RABBITMQ_USERNAME"           : "dev",
-                "SPRING_RABBITMQ_PASSWORD"           : "dev",
-                "SPRING_RABBITMQ_VIRTUAL_HOST"       : "/",
-                "SERP_TRUSTSTORE_PATH"               : "/silenteight/cert/truststore.p12",
-                "SERP_TRUSTSTORE_PASSWORD"           : "changeme",
-                "SERP_KEYSTORE_PATH"                 : "/silenteight/cert/keystore.p12",
-                "SERP_KEYSTORE_PASSWORD"             : "changeme",
-                "SPRING_PROFILES_ACTIVE"             : "linux,governance,database,rabbitmq,messaging,infra,grpc-server,tls",
-                "KEYCLOAK_ADAPTER_AUTH_SERVER_URL"   : "https://auth.silenteight.com/",
-                "KEYCLOAK_CLIENT_ID"                 : "backend",
-                "KEYCLOAK_ADAPTER_RESOURCE"          : "backend",
-                "KEYCLOAK_ADAPTER_CREDENTIALS_SECRET": "changeme",
-                "KEYCLOAK_ADAPTER_REALM"             : "sens-webapp",
-            ]
-            jvmFlags = [
-                "-XX:MaxRAMPercentage=75",
-                "-Dfile.encoding=UTF-8",
-                "-Dsun.jnu.encoding=UTF-8",
-                "-Djava.net.preferIPv4Stack=true",
-                "-Djava.io.tmpdir=/tmp",
-                "-Dserver.port=8080",
-                "-Dgrpc.server.port=9090",
-            ]
-            ports = ["8080", "9090"]
-            user = "nonroot"
-            volumes = ["/silenteight/cert"]
-            workingDirectory = "/silenteight"
-          }
-        }
-      }
     }
   }
 }

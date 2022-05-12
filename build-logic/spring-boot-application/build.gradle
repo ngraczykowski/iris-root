@@ -1,5 +1,5 @@
 plugins {
-  id('groovy-gradle-plugin') // <1>
+  id('groovy-gradle-plugin')
 }
 
 dependencies {
@@ -8,4 +8,5 @@ dependencies {
   implementation(project(':java-base'))
 
   implementation('org.springframework.boot:org.springframework.boot.gradle.plugin')
+  implementation('com.google.cloud.tools.jib:com.google.cloud.tools.jib.gradle.plugin')
 }
