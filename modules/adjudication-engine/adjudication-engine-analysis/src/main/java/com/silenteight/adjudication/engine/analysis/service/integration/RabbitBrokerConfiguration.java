@@ -38,10 +38,6 @@ class RabbitBrokerConfiguration {
         .internal()
         .build();
 
-    var analysisCancelledExchange = topicExchange(ANALYSIS_CANCELLED_EXCHANGE_NAME)
-        .durable(true)
-        .build();
-
     var deadLetterBinding = bind(deadLetterQueue, deadLetterExchange, "#");
 
     var pendingRecommendation = queueDeadLetter(PENDING_RECOMMENDATION_QUEUE_NAME).build();
@@ -65,7 +61,7 @@ class RabbitBrokerConfiguration {
         PENDING_RECOMMENDATIONS_ROUTING_KEY);
 
     var cancelledAnalysis = queueDeadLetter(ANALYSIS_CANCELLED_QUEUE_NAME).build();
-    var cancelledAnalysisBinding = bind(cancelledAnalysis, analysisCancelledExchange,
+    var cancelledAnalysisBinding = bind(cancelledAnalysis, eventExchange,
         ANALYSIS_CANCELLED_ROUTING_KEY);
 
     /* TODO(ahaczewski): Configure queue receiving agent responses.
