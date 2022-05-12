@@ -19,28 +19,43 @@ common:
       memory: 1Gi
 
 agentsCommon:
-  args: []
+  args:
+    - --agent.facade.enabled=true
+  profiles:
+    - rabbitmq-declare
 
 components:
   adjudication-engine:
-    args:
-      - --spring.profiles.active=rabbitdeclare
+    profiles:
+      - rabbitdeclare
 
   governance:
-    args:
-      - --spring.profiles.active=linux,governance,database,rabbitmq,messaging,sierra
+    profiles:
+      - linux
+      - governance
+      - database
+      - rabbitmq
+      - messaging
+      - sierra
 
   simulator:
-    args:
-      - --spring.profiles.active=linux,simulator,messaging,sierra
+    profiles:
+      - linux
+      - simulator
+      - messaging
+      - sierra
 
   webapp:
-    args:
-      - --spring.profiles.active=sierra
+    profiles:
+      - sierra
 
   warehouse:
+    profiles:
+      - linux
+      - warehouse
+      - messaging
+      - sierra
     args:
-      - --spring.profiles.active=linux,warehouse,messaging,sierra
       # FIXME(ahaczewski): Required to repeat configuration from `keycloak` below due to overwriting
       #  environment variable defined directly in the WebApp container image.
       - --keycloak.frontend-client-id=dev-frontend

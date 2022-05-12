@@ -116,6 +116,9 @@ spec:
             {{- if .component.args }}
               {{- toYaml .component.args | nindent 12 }}
             {{- end }}
+            {{- if .component.profiles }}
+            - --spring.profiles.include={{ join "," .component.profiles }}
+            {{- end }}
           volumeMounts:
             - name: config
               mountPath: "/etc/spring/config"

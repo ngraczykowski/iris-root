@@ -3,16 +3,15 @@
 components:
   ftcc:
     enabled: true
-    args:
-      - --spring.profiles.active=mockcallback
+    profiles:
+      - mockcallback
 
 #TODO(dsniezek): agents copied from sierra for now
 agents:
   name-agent:
     enabled: true
-    args:
-      - --spring.profiles.active=sierra,rabbitmq-declare
-      - --linguistics.name.facade.enabled=true
+    profiles:
+      - sierra
     resources:
       limits:
         memory: 2Gi
@@ -21,8 +20,9 @@ agents:
 
   geo-agent:
     enabled: true
+    profiles:
+      - sierra
     args:
-      - --spring.profiles.active=sierra,rabbitmq-declare
       - --geo.agent.facade.enabled=true
       - --geotransactions.agent.facade.enabled=true
     resources:
