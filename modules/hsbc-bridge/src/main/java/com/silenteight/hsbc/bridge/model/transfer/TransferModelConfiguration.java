@@ -28,7 +28,8 @@ class TransferModelConfiguration {
         getModelUseCase,
         worldCheckMessageSender,
         modelRepository,
-        modelTransferModelLoader);
+        modelTransferModelLoader,
+        repositoryClient);
   }
 
   @Bean
@@ -43,7 +44,8 @@ class TransferModelConfiguration {
         getModelUseCase,
         storeModelUseCase,
         modelTransferModelLoader,
-        historicalDecisionsMessageSender);
+        historicalDecisionsMessageSender,
+        repositoryClient);
   }
 
   @Bean

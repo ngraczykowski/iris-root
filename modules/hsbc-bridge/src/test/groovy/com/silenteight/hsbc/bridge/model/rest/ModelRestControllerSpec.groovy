@@ -3,6 +3,7 @@ package com.silenteight.hsbc.bridge.model.rest
 import com.silenteight.hsbc.bridge.model.ModelRestController
 import com.silenteight.hsbc.bridge.model.ModelServiceClient
 import com.silenteight.hsbc.bridge.model.dto.ModelDetails
+import com.silenteight.hsbc.bridge.model.dto.ModelStatusUpdatedDto
 import com.silenteight.hsbc.bridge.model.dto.ModelType
 import com.silenteight.hsbc.bridge.model.dto.SolvingModelDto
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoRequest
@@ -42,21 +43,6 @@ class ModelRestControllerSpec extends Specification {
     verifyStringResults(result, '{"name":"name","policyName":"policy"}')
   }
 
-  def 'should update Governance model'() {
-    given:
-    governanceModelManager.supportsModelType(ModelType.MODEL) >> true
-    def modelInfoRequest = createModelInfoRequest('MODEL', 'MINOR')
-
-    when:
-    def result = mockMvc.perform(
-        MockMvcRequestBuilders.post('/model').contentType(MediaType.APPLICATION_JSON)
-            .content(JsonOutput.toJson(modelInfoRequest)))
-
-    then:
-    1 * modelManagers.first().transferModelFromJenkins(_ as ModelInfoRequest)
-    result.andExpect(MockMvcResultMatchers.status().isOk())
-  }
-
   def 'should export governance model'() {
     given:
     governanceModelManager.supportsModelType(ModelType.MODEL) >> true
@@ -90,27 +76,28 @@ class ModelRestControllerSpec extends Specification {
   def 'should send model status to Governance'() {
     given:
     governanceModelManager.supportsModelType(ModelType.MODEL) >> true
-    def modelInfoStatusRequest = createModelInfoStatusRequest('MODEL', 'SUCCESS')
+    def modelInfoRequest = createModelInfoRequest('MODEL', 'MAJOR')
+    governanceModelManager.transferModelFromJenkins(modelInfoRequest) >> createModelStatusUpdatedDto()
 
     when:
     def result = mockMvc.perform(
-        MockMvcRequestBuilders.put('/model').contentType(MediaType.APPLICATION_JSON)
-            .content(JsonOutput.toJson(modelInfoStatusRequest)))
+        MockMvcRequestBuilders.post('/model').contentType(MediaType.APPLICATION_JSON)
+            .content(JsonOutput.toJson(modelInfoRequest)))
 
     then:
-    1 * modelManagers.first().transferModelStatus(_ as ModelInfoStatusRequest)
+    1 * modelManagers.first().transferModelStatus(_ as ModelInfoRequest)
     result.andExpect(MockMvcResultMatchers.status().isOk())
   }
 
   def 'should send BAD_REQUEST status when model is not supported in Governance during sending model status'() {
     given:
     governanceModelManager.supportsModelType(ModelType.MODEL) >> false
-    def modelInfoStatusRequest = createModelInfoStatusRequest('MODEL', 'SUCCESS')
+    def modelInfoRequest = createModelInfoRequest('MODEL', 'MAJOR')
 
     when:
     def result = mockMvc.perform(
-        MockMvcRequestBuilders.put('/model').contentType(MediaType.APPLICATION_JSON)
-            .content(JsonOutput.toJson(modelInfoStatusRequest)))
+        MockMvcRequestBuilders.post('/model').contentType(MediaType.APPLICATION_JSON)
+            .content(JsonOutput.toJson(modelInfoRequest)))
 
     then:
     result.andExpect(MockMvcResultMatchers.status().isBadRequest())
@@ -120,6 +107,7 @@ class ModelRestControllerSpec extends Specification {
     given:
     worldCheckModelManager.supportsModelType(ModelType.IS_PEP_PROCEDURAL) >> true
     def modelInfoRequest = createModelInfoRequest('IS_PEP_PROCEDURAL', 'MAJOR')
+    worldCheckModelManager.transferModelFromJenkins(modelInfoRequest) >> createModelStatusUpdatedDto()
 
     when:
     def result = mockMvc.perform(
@@ -127,7 +115,7 @@ class ModelRestControllerSpec extends Specification {
             .content(JsonOutput.toJson(modelInfoRequest)))
 
     then:
-    1 * modelManagers.get(1).transferModelFromJenkins(_ as ModelInfoRequest)
+    1 * modelManagers.get(1).transferModelStatus(_ as ModelInfoRequest)
     result.andExpect(MockMvcResultMatchers.status().isOk())
   }
 
@@ -147,10 +135,11 @@ class ModelRestControllerSpec extends Specification {
     verifyResults(result, '{"modelJson":"20210801082734"}')
   }
 
-  def 'should send BAD_REQUEST status when model is not supported in WorldCheck during updating model'() {
+  def 'should send model status to WorldCheck'() {
     given:
-    worldCheckModelManager.supportsModelType(ModelType.IS_PEP_PROCEDURAL) >> false
-    def modelInfoRequest = createModelInfoRequest('IS_PEP_PROCEDURAL', 'MAJOR')
+    worldCheckModelManager.supportsModelType(ModelType.IS_PEP_PROCEDURAL) >> true
+    def modelInfoRequest = createModelInfoRequest('IS_PEP_PROCEDURAL', 'MINOR')
+    worldCheckModelManager.transferModelFromJenkins(modelInfoRequest) >> createModelStatusUpdatedDto()
 
     when:
     def result = mockMvc.perform(
@@ -158,33 +147,19 @@ class ModelRestControllerSpec extends Specification {
             .content(JsonOutput.toJson(modelInfoRequest)))
 
     then:
-    result.andExpect(MockMvcResultMatchers.status().isBadRequest())
-  }
-
-  def 'should send model status to WorldCheck'() {
-    given:
-    worldCheckModelManager.supportsModelType(ModelType.IS_PEP_PROCEDURAL) >> true
-    def modelInfoStatusRequest = createModelInfoStatusRequest('IS_PEP_PROCEDURAL', 'SUCCESS')
-
-    when:
-    def result = mockMvc.perform(
-        MockMvcRequestBuilders.put('/model').contentType(MediaType.APPLICATION_JSON)
-            .content(JsonOutput.toJson(modelInfoStatusRequest)))
-
-    then:
-    1 * modelManagers.get(1).transferModelStatus(_ as ModelInfoStatusRequest)
+    1 * modelManagers.get(1).transferModelStatus(_ as ModelInfoRequest)
     result.andExpect(MockMvcResultMatchers.status().isOk())
   }
 
-  def 'should send BAD_REQUEST status when model is not supported in WorldCheck during sending model status'() {
+  def 'should send BAD_REQUEST status when model is not supported in WorldCheck during updating and sending model status'() {
     given:
     worldCheckModelManager.supportsModelType(ModelType.IS_PEP_PROCEDURAL) >> false
-    def modelInfoStatusRequest = createModelInfoStatusRequest('IS_PEP_PROCEDURAL', 'SUCCESS')
+    def modelInfoRequest = createModelInfoRequest('IS_PEP_PROCEDURAL', 'MINOR')
 
     when:
     def result = mockMvc.perform(
-        MockMvcRequestBuilders.put('/model').contentType(MediaType.APPLICATION_JSON)
-            .content(JsonOutput.toJson(modelInfoStatusRequest)))
+        MockMvcRequestBuilders.post('/model').contentType(MediaType.APPLICATION_JSON)
+            .content(JsonOutput.toJson(modelInfoRequest)))
 
     then:
     result.andExpect(MockMvcResultMatchers.status().isBadRequest())
@@ -236,5 +211,14 @@ class ModelRestControllerSpec extends Specification {
         "type": modelType,
         "status": status
     )
+  }
+
+  static ModelStatusUpdatedDto createModelStatusUpdatedDto() {
+    ModelStatusUpdatedDto.builder()
+            .name("name")
+            .url("http://localhost:9000/MODEL.json")
+            .type("MODEL")
+            .status("SUCCESS")
+            .build()
   }
 }

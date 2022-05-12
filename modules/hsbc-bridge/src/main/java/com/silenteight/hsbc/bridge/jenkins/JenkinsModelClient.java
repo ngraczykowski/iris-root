@@ -159,6 +159,7 @@ class JenkinsModelClient implements ModelClient {
         .addParameter("name", modelInfo.getName())
         .addParameter("url", modelInfo.getUrl())
         .addParameter("type", modelInfo.getType())
+        .addParameter("version", modelInfo.getVersion())
         .addParameter("changeType", modelInfo.getChangeType())
         .toString();
 

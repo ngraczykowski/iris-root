@@ -20,6 +20,10 @@ public class ModelInfo {
   String name;
 
   @NotNull
+  @JsonProperty("version")
+  String version;
+
+  @NotNull
   @JsonProperty("url")
   String url;
 

@@ -6,7 +6,6 @@ import com.silenteight.hsbc.bridge.bulk.rest.ErrorResponse;
 import com.silenteight.hsbc.bridge.model.dto.ModelDetails;
 import com.silenteight.hsbc.bridge.model.dto.SolvingModelDto;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoRequest;
-import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoStatusRequest;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelType;
 import com.silenteight.hsbc.bridge.model.rest.output.SimpleModelResponse;
 import com.silenteight.hsbc.bridge.model.transfer.ModelManager;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
@@ -47,13 +45,18 @@ class ModelRestController {
   @PostMapping
   public void modelUpdate(@RequestBody ModelInfoRequest request) {
     var modelManager = getMatchingModelManager(request.getType());
-    modelManager.transferModelFromJenkins(request);
+    var statusDto = modelManager.transferModelFromJenkins(request);
+    var transferModelRequest = createModelInfoRequest(request, statusDto.getUrl());
+    modelManager.transferModelStatus(transferModelRequest);
   }
 
-  @PutMapping
-  public void modelStatus(@RequestBody ModelInfoStatusRequest request) {
-    var modelManager = getMatchingModelManager(request.getType());
-    modelManager.transferModelStatus(request);
+  private ModelInfoRequest createModelInfoRequest(ModelInfoRequest modelInfoRequest, String url) {
+    var request = new ModelInfoRequest();
+    request.setName(modelInfoRequest.getName());
+    request.setType(modelInfoRequest.getType());
+    request.setChangeType(modelInfoRequest.getChangeType());
+    request.setUrl(url);
+    return request;
   }
 
   @ExceptionHandler({ ModelNotRecognizedException.class, RequestNotValidException.class })
@@ -76,15 +79,10 @@ class ModelRestController {
   }
 
   private ModelManager getMatchingModelManager(ModelType modelType) {
-    var matchingManagers = modelManagers.stream()
+    return modelManagers.stream()
         .filter(manager -> manager.supportsModelType(mapToModelType(modelType)))
-        .distinct()
-        .collect(Collectors.toList());
-
-    if (matchingManagers.isEmpty()) {
-      throw new ModelNotRecognizedException(modelType.name());
-    }
-    return matchingManagers.get(0);
+        .findFirst()
+        .orElseThrow(() -> new ModelNotRecognizedException(modelType.name()));
   }
 
   private com.silenteight.hsbc.bridge.model.dto.ModelType mapToModelType(ModelType type) {

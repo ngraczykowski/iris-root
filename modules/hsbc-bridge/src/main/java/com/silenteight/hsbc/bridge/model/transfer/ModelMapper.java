@@ -17,7 +17,7 @@ class ModelMapper {
 
   private static final String SUCCESS = ModelStatus.SUCCESS.name();
 
-  static ModelPersisted toModelPersisted(ModelInfoStatusRequest request) {
+  static ModelPersisted toModelPersisted(ModelInfoRequest request) {
     return ModelPersisted.newBuilder()
         .setModelName(request.getName())
         .setModelUri(request.getUrl())
@@ -26,7 +26,7 @@ class ModelMapper {
   }
 
   static com.silenteight.proto.historicaldecisions.model.v1.api.ModelPersisted toHistoricalDecisionsModelPersisted(
-      ModelInfoStatusRequest request) {
+      ModelInfoRequest request) {
     return com.silenteight.proto.historicaldecisions.model.v1.api.ModelPersisted.newBuilder()
         .setModelName(request.getName())
         .setModelUri(request.getUrl())

@@ -31,8 +31,10 @@ class NewHistoricalDecisionsModelListener {
   private ModelInfo convertToModelInfo(ModelPersisted modelPersisted) {
     var version = modelPersisted.getModelVersion();
     var type = modelPersisted.getModelType().name();
+    var name = modelPersisted.getModelName();
     return ModelInfo.builder()
-        .name(version)
+        .name(name)
+        .version(version)
         .url(address + "/model/export/" + type + "/" + version)
         .type(type)
         .changeType(ChangeType.MINOR.name())

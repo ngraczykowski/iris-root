@@ -8,10 +8,10 @@ import com.silenteight.hsbc.bridge.model.dto.ModelStatus;
 import com.silenteight.hsbc.bridge.model.dto.ModelStatusUpdatedDto;
 import com.silenteight.hsbc.bridge.model.dto.ModelType;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoRequest;
-import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoStatusRequest;
 
 import org.apache.commons.io.IOUtils;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -26,6 +26,7 @@ public class WorldCheckModelManager implements ModelManager {
   private final WorldCheckMessageSender worldCheckMessageSender;
   private final ModelRepository modelRepository;
   private final ModelTransferModelLoader modelTransferModelLoader;
+  private final RepositoryClient nexusModelClient;
 
   @Override
   public void transferModelToJenkins(ModelInfo modelInfo) {
@@ -33,13 +34,12 @@ public class WorldCheckModelManager implements ModelManager {
   }
 
   @Override
-  public void transferModelFromJenkins(ModelInfoRequest request) {
-    var modelStatusUpdated = trySavingModel(request);
-    jenkinsModelClient.sendModelStatus(modelStatusUpdated);
+  public ModelStatusUpdatedDto transferModelFromJenkins(ModelInfoRequest request) {
+    return trySavingModel(request);
   }
 
   @Override
-  public void transferModelStatus(ModelInfoStatusRequest request) {
+  public void transferModelStatus(ModelInfoRequest request) {
     var modelPersisted = ModelMapper.toModelPersisted(request);
     worldCheckMessageSender.send(modelPersisted);
   }
@@ -61,7 +61,9 @@ public class WorldCheckModelManager implements ModelManager {
 
   private ModelStatusUpdatedDto trySavingModel(ModelInfoRequest request) {
     try {
-      var modelUri = modelRepository.saveModel(request.getUrl(), request.getName());
+      var modelBytes = nexusModelClient.updateModel(request.getUrl());
+      var inputStream = new ByteArrayInputStream(modelBytes);
+      var modelUri = modelRepository.saveModel(inputStream, request.getName());
       return ModelMapper.createModelStatusUpdate(request, modelUri);
     } catch (IOException e) {
       log.error("Unable to update model uri on minio: " + request.getName(), e);

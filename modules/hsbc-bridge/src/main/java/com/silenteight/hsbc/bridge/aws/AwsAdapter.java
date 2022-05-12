@@ -43,6 +43,13 @@ class AwsAdapter
   }
 
   @Override
+  public URI saveModel(InputStream inputStream, String name) throws IOException {
+      putObjectFromInputStream(inputStream, name, modelBucketName);
+      var url = createUrl(name, modelBucketName);
+      return toUri(url);
+  }
+
+  @Override
   public URI save(InputStream inputStream, String name) throws WatchlistSavingException {
     try {
       putObjectFromInputStream(inputStream, name, watchlistBucketName);

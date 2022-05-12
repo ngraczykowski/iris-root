@@ -59,9 +59,8 @@ class ModelGrpcAdapter implements ModelServiceClient {
 
   @Retryable(value = StatusRuntimeException.class)
   public ImportNewModelResponseDto importModel(byte[] model) {
-    log.info(
-        "Imported model from Nexus as request to grpc call importModel: {}",
-        new String(model, StandardCharsets.UTF_8));
+    log.info("Imported model from Nexus as request to grpc call importModel, model length: "
+        + model.length);
     var request = ImportNewModelRequest.newBuilder()
         .setModelJson(ByteString.copyFrom(model))
         .build();

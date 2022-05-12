@@ -9,7 +9,6 @@ import com.silenteight.hsbc.bridge.model.dto.ModelStatus;
 import com.silenteight.hsbc.bridge.model.dto.ModelStatusUpdatedDto;
 import com.silenteight.hsbc.bridge.model.dto.ModelType;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoRequest;
-import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoStatusRequest;
 
 import java.io.IOException;
 
@@ -27,14 +26,13 @@ public class GovernanceModelManager implements ModelManager {
   }
 
   @Override
-  public void transferModelFromJenkins(ModelInfoRequest request) {
-    var modelStatusUpdated = transferModelFromNexus(request);
-    jenkinsModelClient.sendModelStatus(modelStatusUpdated);
+  public ModelStatusUpdatedDto transferModelFromJenkins(ModelInfoRequest request) {
+    return transferModelFromNexus(request);
   }
 
   @Override
-  public void transferModelStatus(ModelInfoStatusRequest request) {
-    governanceServiceClient.sendStatus(request.getName());
+  public void transferModelStatus(ModelInfoRequest request) {
+    // No need to do anything - "use model" already sent to Governance
   }
 
   @Override

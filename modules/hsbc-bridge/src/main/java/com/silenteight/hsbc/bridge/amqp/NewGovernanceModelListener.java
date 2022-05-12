@@ -33,8 +33,10 @@ class NewGovernanceModelListener {
   private ModelInfo convertToModelInfo(ModelPromotedForProduction modelPromoted) {
     var version = modelPromoted.getVersion();
     var type = MODEL;
+    var name = modelPromoted.getName();
     return ModelInfo.builder()
-        .name(version)
+        .name(name)
+        .version(version)
         .url(address + "/model/export/" + type + "/" + version)
         .type(type)
         .changeType(ChangeType.MAJOR.name())

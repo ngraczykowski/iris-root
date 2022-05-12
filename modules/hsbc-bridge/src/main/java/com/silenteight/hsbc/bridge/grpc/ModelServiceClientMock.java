@@ -42,7 +42,7 @@ class ModelServiceClientMock implements ModelServiceClient {
   }
 
   @Override
-  public void sendStatus(String modelName) {
-    log.info("Transfer Governance model: {} has status: MOCK", modelName);
+  public void sendStatus(String version) {
+    log.info("Transfer Governance model: {} has status: MOCK", version);
   }
 }

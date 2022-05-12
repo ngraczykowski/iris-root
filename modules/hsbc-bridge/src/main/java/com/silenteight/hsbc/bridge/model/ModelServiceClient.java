@@ -11,5 +11,5 @@ public interface ModelServiceClient {
 
   String transferModel(byte[] jsonModel);
 
-  void sendStatus(String modelName);
+  void sendStatus(String version);
 }
