@@ -37,6 +37,7 @@ dependencies {
   // Base Libraries
   implementation libraries.silenteight_sep_base_common
   implementation libraries.silenteight_commons_app
+  implementation libraries.sear_rabbitmq_common_schema
 
   // Application Starters
   implementation libraries.spring_boot_starter_actuator
