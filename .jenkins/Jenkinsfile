@@ -88,6 +88,9 @@ pipeline {
           triggeredBy 'TimerTrigger'
         }
       }
+      environment {
+        ARTIFACTORY = credentials('artifactory-deployment-user')
+      }
       steps {
         sh """
           helm package \
@@ -96,22 +99,23 @@ pipeline {
             --version "${version}" \
             --destination build/charts \
             charts/sear
+
+          helm push-artifactory \
+            --skip-reindex \
+            --username "\$ARTIFACTORY_USR" \
+            --password "\$ARTIFACTORY_PSW" \
+            build/charts/sear-"${version}".tgz \
+            https://repo.silenteight.com/artifactory/helm
         """
-        withCredentials(
-            [usernamePassword(
-                 credentialsId: 'artifactory-deployment-user',
-                 usernameVariable: 'HELM_REPO_USERNAME',
-                 passwordVariable: 'HELM_REPO_PASSWORD')]) {
-          sh """
-            helm push-artifactory \
-              --skip-reindex \
-              build/charts/sear-"${version}".tgz \
-              https://repo.silenteight.com/artifactory/helm
-          """
-        }
       }
     }
     stage('Release') {
+      agent {
+        label 'ec2-agent-devenv'
+      }
+      options {
+        // TODO(ahaczewski): Connect to DevEnv Kubernetes cluster!
+      }
       parallel {
         stage('Release K8s/Sierra') {
           steps {
