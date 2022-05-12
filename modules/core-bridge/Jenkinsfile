@@ -28,6 +28,7 @@ gradleBuild(
 
     additionalStages: {
       deployOnNomad()
+      buildContainerImage()
       if (git.getGitBranch() == 'master' || (params.forceDeploy?.toBoolean())) {
         // Run e2e test only on mike env once the scenario is related to the MS customer.
         if (params.environments.contains('mike')) {
