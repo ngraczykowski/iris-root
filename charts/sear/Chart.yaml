@@ -1,7 +1,7 @@
 apiVersion: v2
 name: sear
 version: 1.0.0
-appVersion: "1.0.0"
+appVersion: "latest"
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami

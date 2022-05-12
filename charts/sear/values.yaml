@@ -160,6 +160,8 @@ common:
   useDb: true
   dbName: ""
   image:
+    repository: ""
+    tag: ""
     pullPolicy: IfNotPresent
     pullSecrets: []
 
@@ -340,21 +342,18 @@ components:
   governance:
     image:
       repository: registry.dev.s8ops.com/iris/governance-app
-      tag: "latest"
 
     dbName: "gov"
 
   simulator:
     image:
       repository: registry.dev.s8ops.com/iris/simulator-app
-      tag: "latest"
 
     dbName: "sim"
 
   webapp:
     image:
-      repository: registry.dev.s8ops.com/iris/webapp-app
-      tag: "latest"
+      repository: registry.dev.s8ops.com/iris/sens-webapp-backend
 
   warehouse:
     image:
