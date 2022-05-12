@@ -210,8 +210,8 @@ serp:
           recom-function-name: CBS_INTERFACE_PKG.F_CBS_S8_LOG_RECOM
           recom-with-qco-function-name: CBS_INTERFACE_PKG_V4.F_CBS_S8_LOG_RECOM
           source-application-values:
-            alert-level: S8ALERT
-            watchlist-level: S8HIT
+            alert-level: SA
+            watchlist-level: S8
         recommendation:
           recommendation-values:
             ACTION_INVESTIGATE: Manual Investigation
