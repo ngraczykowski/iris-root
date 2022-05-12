@@ -19,6 +19,7 @@ gradleBuild(
         visibleItemCount: 10)
     ],
     additionalStages: {
+      buildContainerImage()
       deployOnNomad()
     }
 )

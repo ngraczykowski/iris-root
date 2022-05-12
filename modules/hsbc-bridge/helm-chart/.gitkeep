@@ -1,0 +1,1 @@
+aformella: helm-chart directory needed to allow use buildContainerImage() in Jenkinsfile

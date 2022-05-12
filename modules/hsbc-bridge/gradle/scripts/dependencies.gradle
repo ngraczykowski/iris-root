@@ -12,6 +12,7 @@ ext {
   worldCheckApiVersion = "0.4.0"
   historicalDecisionsApiVersion = "0.2.0"
   dataRetentionApiVersion = "0.0.1"
+  rabbitmqCommonsVersion = "1.9.0"
 
   //***********************************
   // Dependency Versions
@@ -38,6 +39,7 @@ libraries.warehouse_api = [group: 'com.silenteight.warehouse.api', name: 'se-dat
 libraries.worldcheck_api = [group: 'com.silenteight.worldcheck.api', name: 'protocol-world-check', version: worldCheckApiVersion]
 libraries.historical_decisions_api = [group: 'com.silenteight.historicaldecisions.api', name: 'historical-decisions-model-api', version: historicalDecisionsApiVersion]
 libraries.data_retention_api = [group: 'com.silenteight.sens.data-retention-api', name: 'data-retention-api', version: dataRetentionApiVersion]
+libraries.sear_rabbitmq_common_schema = [group: 'com.silenteight.rabbitmqcommonschema', name: 'sear-rabbitmq-common-schema-definitions', version: rabbitmqCommonsVersion]
 
 // Spring
 libraries.spring_aspects = [group: 'org.springframework', name: 'spring-aspects', version: springVersion]
@@ -99,6 +101,7 @@ libraries.streamex = [group: 'one.util', name: 'streamex', version: '0.6.8']
 libraries.lz4_java = [group: 'org.lz4', name: 'lz4-java', version: '1.7.1']
 libraries.spring_amqp = [group: 'org.springframework.amqp', name: 'spring-amqp', version: springRabbitVersion]
 libraries.spring_rabbit = [group: 'org.springframework.amqp', name: 'spring-rabbit', version: springRabbitVersion]
+libraries.spring_integration_amqp = [group: 'org.springframework.integration', name: 'spring-integration-amqp', version: "5.5.11"]
 
 // Testing
 libraries.assertj_core = [group: 'org.assertj', name: 'assertj-core', version: '3.20.2']
@@ -163,6 +166,7 @@ dependencies {
   implementation libraries.data_source_categories_api
   implementation libraries.data_source_comments_api
   implementation libraries.data_retention_api
+  implementation libraries.sear_rabbitmq_common_schema
   implementation libraries.grpc_spring_boot_starter
   implementation libraries.io_utils
   implementation libraries.jetbrains_annotations
@@ -191,6 +195,7 @@ dependencies {
   implementation libraries.spring_cloud_starter_sleuth
   implementation libraries.spring_data_jpa
   implementation libraries.spring_rabbit
+  implementation libraries.spring_integration_amqp
   implementation libraries.spring_retry
   implementation libraries.streamex
   implementation libraries.warehouse_api
