@@ -8,7 +8,7 @@ import grpc
 import omegaconf
 
 import etl_pipeline.service.proto.api.etl_pipeline_pb2 as etl__pipeline__pb2
-from etl_pipeline.config import service_config
+from etl_pipeline.config import ConsulServiceConfig
 from etl_pipeline.logger import get_logger
 from etl_pipeline.service.servicer import EtlPipelineServiceServicer
 
@@ -31,6 +31,7 @@ def add_EtlPipelineServiceServicer_to_server(servicer, server):
 
 async def serve(args):
     server = grpc.aio.server(futures.ThreadPoolExecutor(max_workers=10))
+    service_config = ConsulServiceConfig()
 
     add_EtlPipelineServiceServicer_to_server(EtlPipelineServiceServicer(args.ssl), server)
     if args.ssl:
@@ -50,7 +51,7 @@ async def serve(args):
     else:
         try:
             address = service_config.ETL_SERVICE_ADDR
-        except omegaconf.errors.ConfigAttributeError:
+        except (omegaconf.errors.ConfigAttributeError, KeyError):
             address = f"{service_config.ETL_SERVICE_IP}:{service_config.ETL_SERVICE_PORT}"
         server.add_insecure_port(address)
     await server.start()

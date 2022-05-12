@@ -9,7 +9,7 @@ import grpc
 import pytest
 from aiounittest import AsyncTestCase
 
-from etl_pipeline.config import service_config
+from etl_pipeline.config import ConsulServiceConfig
 from etl_pipeline.service.proto.api.etl_pipeline_pb2 import (
     FAILURE,
     SUCCESS,
@@ -137,6 +137,7 @@ class TestGrpcServerWithoutSSL(BaseGrpcTestCase.TestGrpcServer):
     def setUpClass(cls):
         cls.tearDownClass()
         environment = os.environ.copy()
+        service_config = ConsulServiceConfig()
         subprocess.Popen("tests/scripts/start_services.sh", env=environment)
         channel = grpc.insecure_channel(
             f"{service_config.ETL_SERVICE_IP}:{service_config.ETL_SERVICE_PORT}"

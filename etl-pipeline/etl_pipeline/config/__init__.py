@@ -25,11 +25,12 @@ class ConsulServiceConfig:
         service = OmegaConf.load(os.path.join(CONFIG_APP_DIR, "service", "service.yaml"))
         host = getattr(service, "CONSUL_HOSTNAME", None)
         port = getattr(service, "CONSUL_PORT", None)
-        cert = getattr(service, "CONSUL_CLIENT_CERT", None)
+        cert_file = getattr(service, "GRPC_CLIENT_TLS_CA", None)
         token = getattr(service, "CONSUL_ACL_TOKEN", None)
-
-        self.c = consul.Consul(host=host, port=port, cert=cert, token=token)
+        self.c = consul.Consul(host=host, port=port, cert=cert_file, token=token)
         self.map = {}
+        self.params = None
+        self.reload()
 
     def __getattr__(self, name):
         try:
@@ -37,7 +38,20 @@ class ConsulServiceConfig:
         except AttributeError:
             return self.get_secret(name)
 
+    def reload(self):
+        self.params = OmegaConf.load(os.path.join(CONFIG_APP_DIR, "service", "service.yaml"))
+        for key in self.params:
+            try:
+                if self.params[key].startswith("discovery:///"):
+                    self.params[key] = self.get_service(self.params[key])
+            except AttributeError:
+                continue
+
     def get_secret(self, secret_name):
+        try:
+            return self.params[secret_name]
+        except KeyError:
+            pass
         try:
             return self.map[secret_name]
         except KeyError:
@@ -52,12 +66,15 @@ class ConsulServiceConfig:
                 if variable_name == secret_name:
                     self.map[variable_name] = secret[left_side_ix + 1 :]
                     logger.debug(f"Got environment variable: {variable_name}")
-        return self.map[variable_name]
+        return self.map[secret_name]
 
     def get_service(self, service_name):
         service_name = service_name.replace("discovery:///", "")
-        address = self.c.catalog.service(service_name)[1][0]["ServiceAddress"]
-        port = self.c.catalog.service(service_name)[1][0]["ServicePort"]
+        try:
+            address = self.c.catalog.service(service_name)[1][0]["ServiceAddress"]
+            port = self.c.catalog.service(service_name)[1][0]["ServicePort"]
+        except (IndexError, KeyError):
+            return None
         return f"{address}:{port}"
 
 
@@ -193,17 +210,6 @@ def validate_agents_fields(alert_agents_config):
     if fields_not_found:
         logger.warning("The following fields have not been found in any file:")
         logger.warning(fields_not_found)
-
-
-service_config = OmegaConf.load(os.path.join(CONFIG_APP_DIR, "service", "service.yaml"))
-
-for key in service_config:
-    try:
-        if service_config[key].startswith("discovery:///"):
-
-            service_config[key] = ConsulServiceConfig().get_service(service_config[key])
-    except AttributeError:
-        continue
 
 
 pipeline_config = Pipeline()

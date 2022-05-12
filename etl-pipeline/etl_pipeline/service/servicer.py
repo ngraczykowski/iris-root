@@ -7,7 +7,7 @@ from typing import List
 import omegaconf
 
 import etl_pipeline.service.proto.api.etl_pipeline_pb2 as etl__pipeline__pb2
-from etl_pipeline.config import pipeline_config, service_config
+from etl_pipeline.config import ConsulServiceConfig, pipeline_config
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.data_processor_engine.json_engine.json_engine import JsonProcessingEngine
 from etl_pipeline.service.agent_router import AgentInputCreator
@@ -44,6 +44,7 @@ pipeline = WmAddressMSPipeline(engine, pipeline_config)
 logger = logging.getLogger("main").getChild("servicer")
 
 
+service_config = ConsulServiceConfig()
 try:
     PROCESSES = service_config.PROCESSES
 except omegaconf.errors.ConfigAttributeError:
@@ -109,10 +110,10 @@ class EtlPipelineServiceServicer(object):
 
     async def process_request(self, alerts_to_parse):
 
-        future_payloads = [self.pool.submit(self.parse_alert, alert) for alert in alerts_to_parse]
-        payloads = [future.result() for future in future_payloads]
-        logger.debug(f"Collected parsed payloads {len(alerts_to_parse)}")
-        # payloads = [self.parse_alert(alert) for alert in alerts_to_parse]  # debugging
+        # future_payloads = [self.pool.submit(self.parse_alert, alert) for alert in alerts_to_parse]
+        # payloads = [future.result() for future in future_payloads]
+        # logger.debug(f"Collected parsed payloads {len(alerts_to_parse)}")
+        payloads = [self.parse_alert(alert) for alert in alerts_to_parse]  # debugging
         statuses = []
         for alert, record in zip(alerts_to_parse, payloads):
             logger.debug(f"Collected parsed payloads {len(alerts_to_parse)}")
