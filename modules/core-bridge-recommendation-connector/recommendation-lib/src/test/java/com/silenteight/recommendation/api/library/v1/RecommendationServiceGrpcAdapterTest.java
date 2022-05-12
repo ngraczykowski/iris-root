@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 
 class RecommendationServiceGrpcAdapterTest {
@@ -41,12 +42,32 @@ class RecommendationServiceGrpcAdapterTest {
     Assertions.assertEquals(response, Fixtures.RESPONSE);
   }
 
+  @Test
+  void streamRecommendations() {
+    //when
+    var response = underTest.streamRecommendations(Fixtures.RECOMMENDATIONS_IN);
+
+    //then
+    var result = new ArrayList<>();
+    response.forEachRemaining(result::add);
+
+    Assertions.assertEquals(result.size(), 1);
+    Assertions.assertEquals(result.get(0), Fixtures.GRPC_STREAM_RESPONSE);
+  }
+
   static class MockedRecommendationServiceGrpcServer extends RecommendationServiceImplBase {
 
     @Override
     public void getRecommendations(
         RecommendationsRequest request, StreamObserver<RecommendationsResponse> responseObserver) {
       responseObserver.onNext(Fixtures.GRPC_RESPONSE);
+      responseObserver.onCompleted();
+    }
+
+    @Override
+    public void streamRecommendations(
+        RecommendationsRequest request, StreamObserver<RecommendationResponse> responseObserver) {
+      responseObserver.onNext(Fixtures.GRPC_STREAM_RESPONSE);
       responseObserver.onCompleted();
     }
   }
@@ -105,6 +126,10 @@ class RecommendationServiceGrpcAdapterTest {
 
     static final RecommendationsResponse GRPC_RESPONSE = RecommendationsResponse.newBuilder()
         .addAllRecommendations(RECOMMENDATIONS)
+        .build();
+
+    static final RecommendationResponse GRPC_STREAM_RESPONSE = RecommendationResponse.newBuilder()
+        .setRecommendation(RECOMMENDATION)
         .build();
 
     static final RecommendationsOut RESPONSE =

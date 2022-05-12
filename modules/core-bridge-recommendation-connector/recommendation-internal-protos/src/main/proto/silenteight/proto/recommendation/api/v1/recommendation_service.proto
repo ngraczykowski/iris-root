@@ -21,6 +21,13 @@ service RecommendationService {
       body: "getRecommendations"
     };
   }
+
+  rpc StreamRecommendations (RecommendationsRequest) returns (stream RecommendationResponse) {
+    option (google.api.http) = {
+      post: "/v1/recommendation:streamRecommendations"
+      body: "streamRecommendations"
+    };
+  }
 }
 
 message RecommendationsRequest {
@@ -30,6 +37,11 @@ message RecommendationsRequest {
 
 message RecommendationsResponse {
   repeated Recommendation recommendations = 1 [(google.api.field_behavior) = REQUIRED];
+  Statistics statistics = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message RecommendationResponse {
+  Recommendation recommendation = 1 [(google.api.field_behavior) = REQUIRED];
   Statistics statistics = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
