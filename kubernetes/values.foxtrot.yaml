@@ -5,8 +5,14 @@ components:
     enabled: true
     profiles:
       - mockcallback
+
   dataprep:
     enabled: true
+
+  core-bridge:
+    enabled: true
+    profiles:
+      - consuldisabled
 
 #TODO(dsniezek): agents copied from sierra for now
 agents:

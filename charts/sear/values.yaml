@@ -313,6 +313,15 @@ components:
       tag: "snapshot"
   #Fab bridge end
 
+  core-bridge:
+    enabled: false
+
+    image:
+      repository: registry.dev.s8ops.com/cb/bridge-app
+      tag: snapshot
+    dbName: cb
+    webPath: cb
+
   payments-bridge:
     enabled: false
 
