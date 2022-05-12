@@ -55,10 +55,10 @@ components:
       - warehouse
       - messaging
       - sierra
-    args:
+    properties:
       # FIXME(ahaczewski): Required to repeat configuration from `keycloak` below due to overwriting
       #  environment variable defined directly in the WebApp container image.
-      - --keycloak.frontend-client-id=dev-frontend
+      "keycloak.frontend-client-id": dev-frontend
 
     configFiles:
       application.yml: |

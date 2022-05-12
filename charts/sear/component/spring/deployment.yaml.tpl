@@ -119,8 +119,10 @@ spec:
             {{- if .component.profiles }}
             - --spring.profiles.include={{ join "," .component.profiles }}
             {{- end }}
-            {{- range $key,$value := .component.properties }}
+            {{- range $key, $value := .component.properties }}
+            {{- if $value }}
             - --{{ $key }}={{ $value }}
+            {{- end }}
             {{- end }}
           volumeMounts:
             - name: config
@@ -138,9 +140,9 @@ spec:
           #  The reason to put them here is that the environment variables are overwriting
           #  `configtree` secrets mounted as files.
           env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: ""
             - name: SPRING_RABBITMQ_ADDRESSES
-              # FIXME(pputerla) some apps (eg agents) use addresses property which overrides
-              # FIXME(pputerla) subsequent host, port values; so I't being cleared here
               value: ""
             - name: SPRING_RABBITMQ_HOST
               valueFrom:
