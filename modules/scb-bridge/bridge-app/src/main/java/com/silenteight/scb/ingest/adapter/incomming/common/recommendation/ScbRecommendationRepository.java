@@ -4,11 +4,18 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface ScbRecommendationRepository extends CrudRepository<ScbRecommendation, Long> {
 
-  Optional<ScbRecommendation> findFirstBySystemIdOrderByRecommendedAtDesc(String systemId);
+  @Query(value = "SELECT * FROM ( "
+      + "SELECT *, row_number() over (PARTITION BY system_id "
+      + "ORDER BY recommended_at DESC) "
+      + "AS row_number "
+      + "FROM scb_recommendation "
+      + "WHERE system_id IN (:systemIds)) "
+      + "TEMP WHERE row_number = 1", nativeQuery = true)
+  List<ScbRecommendation> findAllBySystemIdIn(List<String> systemIds);
 
   @Modifying
   @Query("DELETE FROM ScbRecommendation")

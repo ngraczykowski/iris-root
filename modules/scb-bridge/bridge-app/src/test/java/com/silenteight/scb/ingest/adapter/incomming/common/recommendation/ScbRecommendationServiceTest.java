@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 
@@ -60,14 +61,13 @@ class ScbRecommendationServiceTest {
     when(scbDiscriminatorMatcher.match(anyString(), anyString())).thenReturn(true);
 
     var scbRecommendation = new ScbRecommendation();
+    scbRecommendation.setSystemId(SYSTEM_ID);
     scbRecommendation.setDiscriminator("");
-    when(scbRecommendationRepository.findFirstBySystemIdOrderByRecommendedAtDesc(
-        SYSTEM_ID)).thenReturn(Optional.of(scbRecommendation));
 
     // when
     underTest.saveRecommendation(alertRecommendation);
     Optional<ScbRecommendation> result =
-        underTest.alertRecommendation(alertId, "");
+        underTest.getRecommendation(SYSTEM_ID, "", List.of(scbRecommendation));
 
     //then
     assertThat(result).isPresent();

@@ -21,6 +21,7 @@ import org.apache.commons.collections4.ListUtils;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 @Slf4j
 @Builder
@@ -40,14 +41,23 @@ class IngestService implements BatchAlertIngestService {
   public void ingestAlertsForLearn(@NonNull String internalBatchId, @NonNull List<Alert> alerts) {
     log.info("Ingesting {} learning alerts", alerts.size());
 
-    var filteredAlerts = new FilteredAlerts(alerts, this::hasRecommendation);
-    updateAlertNameFromRecommendation(filteredAlerts.alertsWithDecisionAndWithRecommendation());
+    var recommendations = scbRecommendationService.getRecommendations(getSystemIds(alerts));
+
+    var filteredAlerts = new FilteredAlerts(alerts, hasRecommendation(recommendations));
+    updateAlertNameFromRecommendation(
+        filteredAlerts.alertsWithDecisionAndWithRecommendation(), recommendations);
 
     if (trafficManager.holdPeriodicAlertProcessing()) {
       sendToWarehouse(filteredAlerts.alertsWithDecisionAndWithRecommendation());
     } else {
       registerAndPublishLearningAlerts(internalBatchId, filteredAlerts);
     }
+  }
+
+  private List<String> getSystemIds(@NonNull List<Alert> alerts) {
+    return alerts.stream()
+        .map(alert -> alert.details().getSystemId())
+        .toList();
   }
 
   @Override
@@ -105,28 +115,31 @@ class IngestService implements BatchAlertIngestService {
     reportsSenderService.send(ReportMapper.toReports(alerts));
   }
 
-  private void updateAlertNameFromRecommendation(List<Alert> alerts) {
+  private void updateAlertNameFromRecommendation(
+      List<Alert> alerts, List<ScbRecommendation> recommendations) {
     // For Alerts which have just been sent to core-bridge, we already have AlertName populated as
     // it is sent in the Registration Response.
 
     // For Alerts which have not been sent to core-bridge (because they have already been
     // registered) we take AlertName from Recommendation.
-    alerts.forEach(alert -> alert.details().setAlertName(recommendation(alert).requireAlertName()));
+    alerts.forEach(alert -> alert
+        .details()
+        .setAlertName(recommendation(alert, recommendations).requireAlertName()));
   }
 
-  private ScbRecommendation recommendation(Alert alert) {
-    return maybeRecommendation(alert)
+  private ScbRecommendation recommendation(Alert alert, List<ScbRecommendation> recommendations) {
+    return maybeRecommendation(alert, recommendations)
         .orElseThrow(() -> new IllegalStateException(
             "Recommendation for " + alert.logInfo() + " does not exist"));
   }
 
-  private boolean hasRecommendation(Alert alert) {
-    return maybeRecommendation(alert).isPresent();
+  private Predicate<Alert> hasRecommendation(List<ScbRecommendation> recommendations) {
+    return alert -> maybeRecommendation(alert, recommendations).isPresent();
   }
 
-  private Optional<ScbRecommendation> maybeRecommendation(Alert alert) {
-    return scbRecommendationService.alertRecommendation(
-        alert.details().getSystemId(),
-        alert.id().discriminator());
+  private Optional<ScbRecommendation> maybeRecommendation(
+      Alert alert, List<ScbRecommendation> recommendations) {
+    return scbRecommendationService.getRecommendation(
+        alert.details().getSystemId(), alert.id().discriminator(), recommendations);
   }
 }

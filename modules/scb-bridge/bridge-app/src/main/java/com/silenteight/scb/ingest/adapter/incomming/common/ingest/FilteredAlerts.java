@@ -11,9 +11,7 @@ import java.util.function.Predicate;
 public class FilteredAlerts {
 
   private final Predicate<Alert> hasDecision = Alert::hasDecision;
-
   private final Predicate<Alert> hasRecommendation;
-
   private final List<Alert> alerts;
 
   FilteredAlerts(

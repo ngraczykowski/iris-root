@@ -21,9 +21,17 @@ public class ScbRecommendationService {
   private final ScbDiscriminatorMatcher scbDiscriminatorMatcher;
   private final PayloadConverter payloadConverter;
 
-  public Optional<ScbRecommendation> alertRecommendation(String systemId, String discriminator) {
-    return scbRecommendationRepository.findFirstBySystemIdOrderByRecommendedAtDesc(systemId)
-        .filter(r -> scbDiscriminatorMatcher.match(discriminator, r.getDiscriminator()));
+  public List<ScbRecommendation> getRecommendations(List<String> systemIds) {
+    return scbRecommendationRepository.findAllBySystemIdIn(systemIds);
+  }
+
+  public Optional<ScbRecommendation> getRecommendation(
+      String systemId, String discriminator, List<ScbRecommendation> recommendations) {
+    return recommendations
+        .stream()
+        .filter(reco -> reco.getSystemId().equals(systemId)
+            && scbDiscriminatorMatcher.match(discriminator, reco.getDiscriminator()))
+        .findFirst();
   }
 
   @Transactional(PRIMARY_TRANSACTION_MANAGER)

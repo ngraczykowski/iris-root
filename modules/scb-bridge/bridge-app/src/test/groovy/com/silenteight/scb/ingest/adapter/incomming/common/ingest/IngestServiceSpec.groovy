@@ -43,8 +43,9 @@ class IngestServiceSpec extends Specification {
     ingestService.ingestAlertsForLearn(internalBatchId, alerts)
 
     then:
-    2 * scbRecommendationService.alertRecommendation(_, _) >> Optional.empty()
+    1 * scbRecommendationService.getRecommendations(_) >> []
     1 * trafficManager.holdPeriodicAlertProcessing() >> false
+    2 * scbRecommendationService.getRecommendation(_, _, _) >> Optional.empty()
     1 * batchInfoService.store(internalBatchId, LEARNING, _)
     1 * alertRegistrationFacade.registerAlerts(internalBatchId, alerts, LEARNING_CONTEXT) >>
         registrationResponse(alerts)
@@ -60,16 +61,20 @@ class IngestServiceSpec extends Specification {
 
     def r1 = recommendation(alerts[0])
     def r2 = recommendation(alerts[1])
+    def recommendations = List.of(r1, r2)
 
     when:
     ingestService.ingestAlertsForLearn(internalBatchId, alerts)
 
     then:
-    2 * scbRecommendationService.alertRecommendation(r1.systemId, r1.discriminator) >>
+    1 * scbRecommendationService.getRecommendations(_) >> recommendations
+    2 * scbRecommendationService
+        .getRecommendation(r1.systemId, r1.discriminator, recommendations) >>
         Optional.of(r1)
-    2 * scbRecommendationService.alertRecommendation(r2.systemId, r2.discriminator) >>
+    2 * scbRecommendationService
+        .getRecommendation(r2.systemId, r2.discriminator, recommendations) >>
         Optional.of(r2)
-    1 * trafficManager.holdPeriodicAlertProcessing() >> false
+    1 * trafficManager.holdPeriodicAlertProcessing() >> true
     0 * batchInfoService.store(internalBatchId, LEARNING, _)
     1 * reportsSenderService.send({it.size() == 2})
     0 * _
