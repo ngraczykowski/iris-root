@@ -13,6 +13,9 @@
 # MESSAGING CONCURRENCY
 #---------------------------------------------------------------------------------------------------
 pb:
+  batch:
+    job:
+      concurrencyLimit: 10
   messaging:
     concurrency: 8
     prefetch: 25
