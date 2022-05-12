@@ -96,7 +96,7 @@
 
   <logger
       name="com.silenteight.qco"
-      level="debug"
+      level="info"
       additivity="false">
     <appender-ref ref="ASYNC_CONSOLE"/>
     <appender-ref ref="ASYNC_STASH"/>

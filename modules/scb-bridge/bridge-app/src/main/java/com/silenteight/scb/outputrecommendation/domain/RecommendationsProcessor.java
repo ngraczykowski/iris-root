@@ -1,7 +1,6 @@
 package com.silenteight.scb.outputrecommendation.domain;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.scb.outputrecommendation.domain.port.outgoing.RecommendationApiClient;
 import com.silenteight.scb.outputrecommendation.domain.port.outgoing.RecommendationDeliveredEventPublisher;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 class RecommendationsProcessor {
@@ -39,9 +37,7 @@ class RecommendationsProcessor {
         recommendationsMapper.toRecommendationsDeliveredEvent(
             command.batchId(), command.analysisName());
 
-    log.debug("Recommendation before QCO processing {}", recommendationsEvent.toString());
     var qcoUpdatedRecommendations = qcoRecommendationService.process(recommendationsEvent);
-    log.debug("Recommendation after QCO processed {}", qcoUpdatedRecommendations.toString());
     recommendationPublisher.publishCompleted(qcoUpdatedRecommendations);
     recommendationDeliveredEventPublisher.publish(recommendationsDeliveredEvent);
   }

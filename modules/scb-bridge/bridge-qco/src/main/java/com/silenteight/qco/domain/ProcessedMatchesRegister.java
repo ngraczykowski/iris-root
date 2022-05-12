@@ -23,6 +23,7 @@ class ProcessedMatchesRegister {
   public void register(QcoRecommendationMatch match, MatchSolution matchSolution) {
     recommendationService.storeQcoOverriddenRecommendation(match, matchSolution);
     reportsSenderAdapter.send(match, matchSolution);
-    log.info("The processed match={} has been registered", match.matchName());
+    log.info("The processed match={} has been registered with {}",
+        match.toString(), matchSolution.toString());
   }
 }

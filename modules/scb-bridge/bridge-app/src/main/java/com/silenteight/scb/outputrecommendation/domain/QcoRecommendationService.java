@@ -23,12 +23,16 @@ class QcoRecommendationService {
 
   RecommendationsGeneratedEvent process(RecommendationsGeneratedEvent recommendationsEvent) {
     if (!isQcoAllowed()) {
+      log.debug("The Qco processing is disabled");
       return recommendationsEvent;
     }
 
     return Try.of(() -> updateMatches(recommendationsEvent))
-        .onSuccess(recommendation ->
-            log.debug("Recommendation was processed by QCO module {}", recommendation.toString()))
+        .onSuccess(recommendation -> {
+          if (log.isTraceEnabled()) {
+            log.trace("Recommendation was processed by QCO module {}", recommendation.toString());
+          }
+        })
         .onFailure(e -> log.error(
             "Failed to update recommendations with QCO, batchId: {}",
             recommendationsEvent.batchId(), e))

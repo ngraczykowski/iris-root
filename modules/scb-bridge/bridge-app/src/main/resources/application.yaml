@@ -163,6 +163,10 @@ silenteight:
 
   qco:
     enabled: false
+    comments-prefix: "QCO Automation – FP Overridden to MI"
+      config-file:
+        location: "classpath:config/qco_config_file.csv"
+        separator: "|"
 
 serp:
   # GNS DB Configuration

@@ -26,10 +26,10 @@ public class MatchProcessor {
     var changeCondition = changeConditionFactory
         .createChangeCondition(match.policyId(), match.stepId(), match.solution());
     var resolverAction = determineResolverAction(changeCondition, match.onlyMark());
-    log.debug("QCO module determined ResolverAction={} for matchName={}",
-        resolverAction.name(), match.matchName());
+    log.debug("QCO module determined ResolverAction={} for {}",
+        resolverAction.name(), match);
     var resolverCommand = new ResolverCommand(match, changeCondition, resolverAction);
-    log.debug("QCO module is calling resolver for matchName={}", match.matchName());
+    log.trace("QCO module is calling resolver for matchName={}", match.matchName());
     return resolver.overrideSolutionInMatch(resolverCommand);
   }
 

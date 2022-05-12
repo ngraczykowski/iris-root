@@ -45,7 +45,7 @@ class QcoCounter {
 
     @Override
     public boolean increaseAndResetAfterOverflow() {
-      log.debug("State of {}", this);
+      log.info("Counter of QCO module {}", this);
       if (++value < threshold) {
         return false;
       }

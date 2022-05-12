@@ -163,6 +163,12 @@ job "scb-bridge" {
       }
 
       template {
+        data = file("./conf/qco_config_file.csv")
+        destination = "local/conf/qco_config_file.csv"
+        change_mode = "noop"
+      }
+
+      template {
         data = file("./conf/logback.xml")
         destination = "secrets/conf/logback.xml"
         change_mode = "noop"

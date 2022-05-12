@@ -9,6 +9,11 @@ grpc:
     universal-data-source.address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-universal-data-source
 
 silenteight:
+  qco:
+    enabled: true
+    config-file:
+      location: "file:local/conf/qco_config_file.csv"
+      separator: "|"
   scb-bridge:
     grpc:
       recommendation:
