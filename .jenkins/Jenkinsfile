@@ -129,6 +129,7 @@ pipeline {
                   --values kubernetes/values.ingress-internal.yaml  \
                   --values kubernetes/values.sierra.yaml \
                   --wait \
+                  --timeout 10m \
                   sear \
                   https://repo.silenteight.com/artifactory/helm/sear/sear-"${version}".tgz
               """
@@ -176,6 +177,7 @@ pipeline {
                   --values kubernetes/values.ingress-internal.yaml  \
                   --values kubernetes/values.hotel.yaml \
                   --wait \
+                  --timeout 10m \
                   sear \
                   https://repo.silenteight.com/artifactory/helm/sear/sear-"${version}".tgz
               """
