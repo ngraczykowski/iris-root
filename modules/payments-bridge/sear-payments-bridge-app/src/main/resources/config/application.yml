@@ -43,18 +43,11 @@ pb:
   # SVB Learning
   #-------------------------------------------------------------------------------------------------
   sear-learning:
-    aws:
-      file-list:
-        prefix: learning
-        bucket-name: sierra-dev-decrypted-files
-    store:
-      skip-deletion: true
     etl:
       alert:
         time-zone: America/Los_Angeles
         batch-size: 50
     trigger-csv-processing:
-      cron: 0/10 * * * * ?
       lock-most: "PT15s"
       lock-least: "PT5s"
     timeZone: America/Chicago

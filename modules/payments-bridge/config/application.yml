@@ -105,15 +105,6 @@ pb:
       regular-terms-key: "category/regularTerms.csv"
       specific-terms-key: "category/specificTerms.csv"
 
-  #-------------------------------------------------------------------------------------------------
-  # SEAR Daily Reports
-  #-------------------------------------------------------------------------------------------------
-  daily-reports-remove:
-    cron: "0 2 * * * *"
-    bucket: "sps-reports-dev-20211110115534833400000001"
-    file-prefix: "SVB_SEAR_DEV_ai_reasoning_alert_level"
-    report-expiration-in-months: 6
-
 spring:
   #-------------------------------------------------------------------------------------------------
   # MULTI-THREADING
