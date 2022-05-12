@@ -136,7 +136,19 @@ pipeline {
           }
           post {
             failure {
-
+              withKubeConfig(credentialsId: 'devenv-eks', serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
+                sh '''
+                  export NAMESPACE=jenkins-sierra
+                  mkdir -p logs
+                  FAILED_PODS=$(kubectl get events --namespace $NAMESPACE --field-selector='type!=Normal,reason=BackOff' --sort-by='.metadata.creationTimestamp' --output=custom-columns="POD:involvedObject.name" --no-headers)
+                  for pod in $FAILED_PODS ; do
+                    kubectl --namespace $NAMESPACE logs --previous $pod >logs/$pod.previous.log || true
+                    kubectl --namespace $NAMESPACE logs $pod >logs/$pod.log || true
+                    (cat logs/$pod.log 2>/dev/null || true) | tail 200
+                  done
+                '''
+              }
+              archiveArtifacts allowEmptyArchive: true, artifacts: 'logs/*'
             }
             cleanup {
               withKubeConfig(credentialsId: 'devenv-eks', serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
@@ -170,6 +182,21 @@ pipeline {
             }
           }
           post {
+            failure {
+              withKubeConfig(credentialsId: 'devenv-eks', serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
+                sh '''
+                  export NAMESPACE=jenkins-hotel
+                  mkdir -p logs
+                  FAILED_PODS=$(kubectl get events --namespace $NAMESPACE --field-selector='type!=Normal,reason=BackOff' --sort-by='.metadata.creationTimestamp' --output=custom-columns="POD:involvedObject.name" --no-headers)
+                  for pod in $FAILED_PODS ; do
+                    kubectl --namespace $NAMESPACE logs --previous $pod >logs/$pod.previous.log || true
+                    kubectl --namespace $NAMESPACE logs $pod >logs/$pod.log || true
+                    (cat logs/$pod.log 2>/dev/null || true) | tail 200
+                  done
+                '''
+              }
+              archiveArtifacts allowEmptyArchive: true, artifacts: 'logs/*'
+            }
             cleanup {
               withKubeConfig(credentialsId: 'devenv-eks', serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
                 sh """
