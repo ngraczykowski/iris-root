@@ -121,7 +121,8 @@ Creates the name of Sentry environment
   {{- range $key, $value := $.Values.agents }}
     {{- $common := mergeOverwrite (deepCopy $.Values.common) $.Values.agentsCommon }}
     {{- if hasKey $value "from" }}
-      {{- $common = mergeOverwrite $common (get $.Values.agents $value.from) }}
+      {{- $value = mergeOverwrite (deepCopy $value) (get $.Values.agents $value.from) }}
+      {{- $_ := unset $value "from" }}
     {{- end }}
     {{- $concatenated := dict }}
     {{- range $toConcatenate := list "args" "command" "profiles" }}
