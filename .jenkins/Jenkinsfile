@@ -144,7 +144,7 @@ pipeline {
                   for pod in $FAILED_PODS ; do
                     kubectl --namespace $NAMESPACE logs --previous $pod >logs/$pod.previous.log || true
                     kubectl --namespace $NAMESPACE logs $pod >logs/$pod.log || true
-                    (cat logs/$pod.log 2>/dev/null || true) | tail 200
+                    (cat logs/$pod.log 2>/dev/null || true) | tail -n 200
                   done
                 '''
               }
@@ -191,7 +191,7 @@ pipeline {
                   for pod in $FAILED_PODS ; do
                     kubectl --namespace $NAMESPACE logs --previous $pod >logs/$pod.previous.log || true
                     kubectl --namespace $NAMESPACE logs $pod >logs/$pod.log || true
-                    (cat logs/$pod.log 2>/dev/null || true) | tail 200
+                    (cat logs/$pod.log 2>/dev/null || true) | tail -n 200
                   done
                 '''
               }
