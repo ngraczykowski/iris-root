@@ -12,13 +12,11 @@ pipeline {
   options {
     gitLabConnection(env.GITLAB_CONNECTION_NAME)
     disableConcurrentBuilds()
-    skipDefaultCheckout(true)
     ansiColor('xterm')
   }
   stages {
-    stage('Checkout') {
+    stage('Version') {
       steps {
-        ciCheckout()
         script {
           version = sh(returnStdout: true, script: './scripts/get-version.sh').trim()
         }
@@ -110,19 +108,88 @@ pipeline {
       }
     }
     stage('Release') {
-      agent {
-        label 'ec2-agent-devenv'
-      }
-      options {
-        // TODO(ahaczewski): Connect to DevEnv Kubernetes cluster!
+      environment {
+        ARTIFACTORY = credentials('artifactory-user')
       }
       parallel {
         stage('Release K8s/Sierra') {
+          agent {
+            label 'ec2-agent-devenv'
+          }
+          steps {
+            echo "Deploying version ${version}"
+            withKubeConfig(credentialsId: 'devenv-eks', serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
+              sh """
+                helm install \
+                  --create-namespace \
+                  --namespace jenkins-sierra \
+                  --username "\$ARTIFACTORY_USR" \
+                  --password "\$ARTIFACTORY_PSW" \
+                  --values kubernetes/values.core.yaml \
+                  --values kubernetes/values.ingress-internal.yaml  \
+                  --values kubernetes/values.sierra.yaml \
+                  --wait \
+                  sear \
+                  https://repo.silenteight.com/artifactory/helm/sear/sear-"${version}".tgz
+              """
+            }
+          }
+          post {
+            failure {
+
+            }
+            cleanup {
+              withKubeConfig(credentialsId: 'devenv-eks', serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
+                sh """
+                  helm uninstall --namespace jenkins-sierra sear
+                """
+              }
+            }
+          }
+        }
+        stage('Release K8s/Hotel') {
+          agent {
+            label 'ec2-agent-devenv'
+          }
+          steps {
+            echo "Deploying version ${version}"
+            withKubeConfig(credentialsId: 'devenv-eks', serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
+              sh """
+                helm install \
+                  --create-namespace \
+                  --namespace jenkins-hotel \
+                  --username "\$ARTIFACTORY_USR" \
+                  --password "\$ARTIFACTORY_PSW" \
+                  --values kubernetes/values.core.yaml \
+                  --values kubernetes/values.ingress-internal.yaml  \
+                  --values kubernetes/values.hotel.yaml \
+                  --wait \
+                  sear \
+                  https://repo.silenteight.com/artifactory/helm/sear/sear-"${version}".tgz
+              """
+            }
+          }
+          post {
+            cleanup {
+              withKubeConfig(credentialsId: 'devenv-eks', serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
+                sh """
+                  helm uninstall --namespace jenkins-hotel sear
+                """
+              }
+            }
+          }
+        }
+        stage('Release K8s/Foxtrot') {
           steps {
             echo "Deploying version ${version}"
           }
         }
-        stage('Release K8s/Hotel') {
+        stage('Release K8s/Mike') {
+          steps {
+            echo "Deploying version ${version}"
+          }
+        }
+        stage('Release K8s/Lima') {
           steps {
             echo "Deploying version ${version}"
           }
@@ -130,6 +197,16 @@ pipeline {
         stage('Deploy to Nomad') {
           steps {
             echo "Deploying version ${version} to Nomad?"
+          }
+        }
+      }
+      post {
+        cleanup {
+          withKubeConfig(credentialsId: 'devenv-eks', serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
+            sh '''
+              kubectl delete namespace jenkins-sierra
+              kubectl delete namespace jenkins-hotel
+            '''
           }
         }
       }
