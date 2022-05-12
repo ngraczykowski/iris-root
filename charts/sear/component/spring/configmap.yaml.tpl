@@ -6,7 +6,7 @@ metadata:
     {{- include "sear.componentLabels" . | nindent 4 }}
 data:
   {{- if .component.configFiles }}
-    {{- toYaml .component.configFiles | nindent 2 }}
+    {{- tpl (toYaml .component.configFiles) . | nindent 2 }}
   {{- end }}
   kubernetes.yml: |
     spring:

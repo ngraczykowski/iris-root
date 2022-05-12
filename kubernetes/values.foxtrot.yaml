@@ -5,6 +5,13 @@ components:
     enabled: true
     profiles:
       - mockcallback
+      - additional
+    configFiles:
+      application-additional.yml: |
+        grpc:
+          client:
+            core-bridge:
+              address: dns:///{{ include "sear.fullname" . }}-core-bridge.{{ .Release.Namespace }}.svc:9090
 
   dataprep:
     enabled: true
