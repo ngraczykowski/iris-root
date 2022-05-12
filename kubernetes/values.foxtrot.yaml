@@ -41,3 +41,14 @@ agents:
 
   geo-agent2:
     from: geo-agent
+    properties:
+      "facade.amqp.queueDefinitions[geo].inboundRoutingKey": "agents.geo.versions.2_0_0.configs.*"
+      "facade.amqp.queueDefinitions[geo].inboundQueueName": "agent.geo2-requests"
+      "facade.amqp.queueDefinitions[geo].deadLetterExchangeName": "geo2-agent-dead-letter-exchange"
+      "facade.amqp.queueDefinitions[geo].deadLetterQueueName": "geo2-agent-dead-letter-queue"
+      "facade.amqp.queueDefinitions[geo].deadLetterRoutingKey": "geo2-agent-dead-letter-key"
+      "facade.amqp.queueDefinitions[geosanctions].inboundRoutingKey": "agents.geosanctions.versions.2_0_0.configs.*"
+      "facade.amqp.queueDefinitions[geosanctions].inboundQueueName": "agent.geosanctions2-requests"
+      "facade.amqp.queueDefinitions[geosanctions].deadLetterExchangeName": "geosanctions2-agent-dead-letter-exchange"
+      "facade.amqp.queueDefinitions[geosanctions].deadLetterQueueName": "geosanctions2-agent-dead-letter-queue"
+      "facade.amqp.queueDefinitions[geosanctions].deadLetterRoutingKey": "geosanctions2-agent-dead-letter-key"
