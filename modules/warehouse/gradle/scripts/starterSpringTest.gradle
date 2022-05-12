@@ -1,0 +1,9 @@
+dependencies {
+  // Testing in Spring
+  starterSpringTest libraries.spring_test
+  starterSpringTest libraries.spring_boot_test
+  starterSpringTest libraries.spring_boot_test_autoconfigure
+
+  // Logging in tests
+  starterSpringTest libraries.spring_boot_starter_logging
+}

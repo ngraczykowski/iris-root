@@ -1,0 +1,29 @@
+dependencies {
+  // Liquibase for handling migrations
+  starterDatabase libraries.liquibase_core
+
+  // Transaction API
+  starterDatabase libraries.jakarta_transaction_api
+
+  // Spring Data JPA
+  starterDatabase(libraries.spring_data_jpa) {
+    //exclude group:'org.aspectj', module:'aspectjrt'
+  }
+
+  starterDatabase libraries.spring_jdbc
+
+  // Hibernate
+  starterDatabase libraries.hibernate_core
+  starterDatabase libraries.hibernate_envers
+
+  // Connection Pool
+  starterDatabase libraries.hikari_cp
+
+  // JDBC Driver for PostgreSQL
+  starterDatabaseRuntime libraries.postgresql
+
+  // Caffeine-base 2nd Level Hibernate Cache
+  starterDatabaseRuntime libraries.hibernate_jcache
+  starterDatabaseRuntime libraries.caffeine
+  starterDatabaseRuntime libraries.caffeine_jcache
+}

@@ -1,0 +1,505 @@
+openapi: 3.0.3
+info:
+  title: QA Alerts Process
+  description: Quality Assurance process over alerts
+  version: 1.0.0
+
+servers:
+  - url: '{environment}/rest/warehouse/api/v1'
+    variables:
+      environment:
+        enum:
+          - http://localhost:24291
+          - https://localhost:24111
+        default: http://localhost:24291
+
+paths:
+  /analysis/production/query:
+    get:
+      tags:
+        - single hit alert
+        - multi hit alert
+      parameters:
+        - in: query
+          name: fields
+          required: true
+          explode: false
+          description: List of fields to return in a response. This field should be exactly the same as a field name in the Elastic Search, no mappings between those fields should be made on a backend side.
+          schema:
+            type: array
+            items:
+              minItems: 1
+              maxItems: 10
+              type: string
+            example: ["alertId", "alertName", "riskType", "country"]
+        - in: query
+          name: name
+          required: true
+          explode: false
+          description: Alert resource name
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/AlertName'
+            example: ["alerts/c01e5d49-a72d-4e6a-b634-265165916c9a", "alerts/5d49c01e-4e6a-a72d-34b6-916c9a265165"]
+      responses:
+        '200':
+          description: defauld response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alerts'
+
+
+  /analysis/production/alerts/{id}:
+    get:
+      tags:
+        - single hit alert
+        - multi hit alert
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Alert Id - UUID from the `AlertName` field
+          schema:
+            $ref: '#/components/schemas/AlertId'
+        - in: query
+          name: fields
+          required: true
+          explode: false
+          description: List of fields to return in a response. This field should be exactly the same as a field name in the Elastic Search, no mappings between those fields should be made on a backend side.
+          schema:
+            type: array
+            minItems: 1
+            maxItems: 20
+            items:
+              type: string
+            example: [ "alertName", "alertId", "riskType", "country", "policyName", "aiDecision", "aiComment"]
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertDetails'
+    post:
+      tags:
+        - single hit alert
+        - multi hit alert
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: 'UUID / alerts id'
+          example: 'c01e5d49-a72d-4e6a-b634-265165916c9a'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertDetailsRequest'
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertDetails'
+
+  /analysis/production/alerts/{id}/matches:
+    get:
+      tags:
+        - multi hit alert
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Alert Id - UUID from the `AlertName` field
+          schema:
+            $ref: '#/components/schemas/AlertId'
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertMatches'
+
+
+  /analysis/production/matches/{matchId}:
+    get:
+      tags:
+        - multi hit alert
+      parameters:
+        - in: path
+          name: matchId
+          required: true
+          description: Match Id - UUID form the `MatchName` field
+          schema:
+            $ref: '#/components/schemas/MatchId'
+        - in: query
+          name: field
+          required: true
+          explode: false
+          description: List of fields to return in a response. This field should be exactly the same as a field name in the Elastic Search, no mappings between those fields should be made on a backend side.
+          schema:
+            type: array
+            minItems: 1
+            maxItems: 20
+            items:
+              type: string
+            example: [ "alertName", "alertId", "featureVectorId", "aiSolution"]
+      responses:
+        '200':
+          description: defauld response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchDetails'
+
+  /analysis/production/matches/{matchId}/categories:
+    get:
+      tags:
+        - multi hit alert
+      parameters:
+        - in: path
+          name: matchId
+          required: true
+          description: Match Id - UUID form the `MatchName` field
+          schema:
+            $ref: '#/components/schemas/MatchId'
+      responses:
+        '200':
+          description: defauld response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchCategories'
+
+  /analysis/production/matches/{matchId}/categories/{categoryId}/values:
+    get:
+      tags:
+        - multi hit alert
+      parameters:
+        - in: path
+          name: matchId
+          required: true
+          description: Match Id - UUID form the `MatchName` field
+          schema:
+            $ref: '#/components/schemas/MatchId'
+        - in: path
+          name: categoryId
+          required: true
+          description: Category Id - UUID from the `CategoryName` field
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: Each category requere inputs related to his needs, so the responce
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+
+  /analysis/production/matches/{matchId}/features:
+    get:
+      tags:
+        - multi hit alert
+      parameters:
+        - in: path
+          name: matchId
+          required: true
+          description: Match Id - UUID form the `MatchName` field
+          schema:
+            $ref: '#/components/schemas/MatchId'
+      responses:
+        '200':
+          description: defauld response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchFeatures'
+
+
+  /analysis/production/matches/{matchId}/features/{featureId}/inputs:
+    get:
+      tags:
+        - multi hit alert
+      parameters:
+        - in: path
+          name: matchId
+          required: true
+          description: Match Id - UUID form the `MatchName` field
+          schema:
+            $ref: '#/components/schemas/MatchId'
+        - in: path
+          name: featureId
+          required: true
+          description: Feature Id - UUID from the `FeatureName` field
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: |
+            Each feature require inputs related to his needs, so the response will be different for each feature
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeatureInput'
+
+  /analysis/production/matches/{matchId}/features/{featureId}/solution:
+    get:
+      tags:
+        - multi hit alert
+      parameters:
+        - in: path
+          name: matchId
+          required: true
+          description: Match Id - UUID form the `MatchName` field
+          schema:
+            $ref: '#/components/schemas/MatchId'
+        - in: path
+          name: featureId
+          required: true
+          description: Feature Id - UUID from the `FeatureName` field
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: sda
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeatureSolution'
+
+components:
+  schemas:
+    AlertName:
+      type: string
+      description: Name of the alert. This field contains `resourceName` and `alertId` (UUID) generated by S8 system.
+      example: 'alerts/c01e5d49-a72d-4e6a-b634-265165916c9a'
+
+    AlertId:
+      type: string
+      description: The UUID value available in the `AlertName` field.
+      example: 'c01e5d49-a72d-4e6a-b634-265165916c9a'
+
+    MatchName:
+      type: string
+      description: Name of the match. This field contains `resourceName` and `alertId` (UUID) generated by S8 system.
+      example: 'matches/23dbd750-fbd4-4461-bd1a-85ce721760e4'
+
+    MatchId:
+      type: string
+      description: The UUID value available in the `MatchName` field.
+      example: '23dbd750-fbd4-4461-bd1a-85ce721760e4'
+
+    Alerts:
+      type: array
+      items:
+        $ref: '#/components/schemas/Alert'
+      example:
+        [
+          {
+            'alertName': 'alerts/c01e5d49-a72d-4e6a-b634-265165916c9a',
+            'alertId': 'HK_BTCH_PEPL!57535030-D413B044-C999F2CD-075A3457',
+            'riskType': 'PEP',
+            'country': 'UK'
+          },
+          {
+            'alertName': 'alerts/998bbb9d-db03-49a5-ba4c-e8f069154964',
+            'alertId': 'HK_BTCH_DENY!D413B044-075A3457-C999F2CD-57535030',
+            'riskType': 'Sanctions',
+            'country': 'UK'
+          }
+        ]
+
+
+    Alert:
+      required:
+        - alertName
+        - alertId
+        - riskType
+        - country
+      type: object
+      properties:
+        alertName:
+          $ref: '#/components/schemas/AlertName'
+        alertId:
+          type: string
+          description: |
+            Source System Alert Id - this is the ID of the alert which is understood by the bank.
+            QA Alerts -> Review -> Alert Details -> Alert ID
+
+        riskType:
+          $ref: '#/components/schemas/RiskType'
+        country:
+          type: string
+      example:
+        {
+          'alertName': 'alerts/c01e5d49-a72d-4e6a-b634-265165916c9a',
+          'alertId': 'HK_BTCH_DENY!57535030-D413B044-C999F2CD-075A3457',
+          'riskType': 'PEP',
+          'country': 'UK'
+        }
+
+
+    RiskType:
+      type: string
+      enum:
+        - PEP
+        - Sanctions
+
+
+    AlertDetails:
+      required:
+        - alertName
+        - alertId
+        - riskType
+        - country
+        - aiDecision
+      type: object
+      properties:
+        alertName:
+          $ref: '#/components/schemas/AlertName'
+        alertId:
+          type: string
+        riskType:
+          $ref: '#/components/schemas/RiskType'
+        country:
+          description: Customer country
+          type: string
+        policyName:
+          type: string
+        aiDecision:
+          type: string
+        aiComment:
+          type: string
+
+    AlertMatches:
+      type: array
+      items:
+        properties:
+          matchName:
+            type: string
+      example:
+        [ 'matches/1f42bba8-da6b-4b47-934e-ebde74327a9b' ]
+
+
+    MatchDetails:
+      required:
+        - matchName
+        - watchlistId
+        - featureVectorId
+      type: object
+      properties:
+        matchName:
+          $ref: '#/components/schemas/MatchName'
+        watchlistId:
+          type: string
+        featureVectorId:
+          type: string
+        aiSolution:
+          type: string
+      example:
+        {
+          'alertName': 'alerts/c01e5d49-a72d-4e6a-b634-265165916c9a',
+          'alertId': 'HK_BTCH_DENY!57535030-D413B044-C999F2CD-075A3457',
+          'featureVectorId': '4e94985e-4f94-4158-9050-a81941b2f45f',
+          'aiSolution': 'FALSE_POSITIVE',
+         }
+
+    MatchCategories:
+      type: array
+      items:
+        $ref: '#/components/schemas/CategoryName'
+        example:
+          [
+            'categories/apType',
+            'categories/isDeny'
+          ]
+
+    MatchFeatures:
+      type: array
+      items:
+        $ref: '#/components/schemas/FeatureName'
+      example:
+        [
+          'features/name',
+          'features/date',
+          'features/nationality',
+        ]
+
+    CategoryName:
+      type: string
+      example:
+        'categories/isDeny'
+
+    FeatureName:
+      type: string
+      example:
+        'features/name'
+
+    FeatureInput:
+      type: object
+      properties:
+        feature:
+          type: string
+        match:
+          $ref: '#/components/schemas/MatchName'
+        input:
+          type: object
+          description: Details in a Datasource API proto files - https://gitlab.silenteight.com/sens/data-source-api/-/tree/master/data-source-api/src/main/proto/silenteight/datasource/api
+      example:
+        {
+          'feature': 'features/name',
+          'match': 'matches/23dbd750-fbd4-4461-bd1a-85ce721760e4',
+          'input': 'json data'
+        }
+
+    Category:
+      type: object
+      description: More details in - https://gitlab.silenteight.com/sens/data-source-api/-/blob/master/data-source-categories-api/src/main/proto/silenteight/datasource/categories/api/v1/category.proto
+      properties:
+        category:
+          type: string
+        values:
+          type: array
+          items:
+            type: string
+      example:
+        {
+          'category': 'segment',
+          'values': ['corporate']
+        }
+
+    FeatureSolution:
+      type: object
+      properties:
+        feature:
+          type: string
+        match:
+          $ref: '#/components/schemas/MatchName'
+        solution:
+          type: string
+      example:
+        {
+          'feature': 'features/name',
+          'match': 'matches/23dbd750-fbd4-4461-bd1a-85ce721760e4',
+          'solution': 'MATCH'
+        }
+
+    AlertDetailsRequest:
+      type: object
+      properties:
+        fields:
+          type: array
+      example:
+        {
+          'fields': ['s8_alert_name', 'alert_recommendation'],
+        }

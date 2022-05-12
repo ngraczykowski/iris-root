@@ -1,0 +1,46 @@
+spring:
+  rabbitmq:
+    #   If multiple brokers required:
+    #   host: <must be empty>
+    #   addresses: host1:port1,host2:port2,...
+
+    #   configuration for common-docker-infrastructure
+    host: localhost
+    port: 24160
+    username: dev
+    password: dev
+    virtual-host: /
+
+  datasource:
+    # Postgres database
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:postgresql://${warehouse.db.host}:${warehouse.db.port}/${warehouse.db.name}?currentSchema=${warehouse.db.schema:public}
+    username: ${warehouse.db.username}
+    password: ${warehouse.db.password}
+    initialization-mode: never
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    default-schema: ${warehouse.db.schema:public}
+    contexts: default
+warehouse:
+  alert-mapping:
+    country-source-key: lob_country
+    ignored-keys:
+      - "\\d{1,}\\.CustomerEntities\\..*"
+      - "\\d{1,}\\.CustomerIndividuals\\..*"
+      - "\\d{1,}\\.PrivateListEntities\\..*"
+      - "\\d{1,}\\.PrivateListIndividuals\\..*"
+      - "\\d{1,}\\.CTRPPRHBListEntities\\..*"
+      - "\\d{1,}\\.CTRPPRHBListIndividuals\\..*"
+      - "\\d{1,}\\.DN_CASECOMMENT\\..*"
+      - "\\d{1,}\\.DN_CASEHISTORY\\..*"
+      - "\\d{1,}\\.Relationships\\..*"
+      - "\\d{1,}\\.WorldCheckEntities\\..*"
+      - "\\d{1,}\\.WorldCheckIndividuals\\..*"
+  db:
+    host: localhost
+    port: 24910
+    name: warehouse
+    username: warehouse
+    password: warehouse

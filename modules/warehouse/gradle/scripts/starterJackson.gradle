@@ -1,0 +1,8 @@
+dependencies {
+  starterJackson libraries.jackson_dataformat_xml
+  starterJackson libraries.jackson_datatype_jdk8
+  starterJackson libraries.jackson_datatype_jsr310
+  starterJackson libraries.jackson_module_afterburner
+  starterJackson libraries.jackson_module_paranamer
+  starterJackson libraries.jackson_module_parameter_names
+}

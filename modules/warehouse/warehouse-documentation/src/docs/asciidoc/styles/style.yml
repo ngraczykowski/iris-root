@@ -1,0 +1,185 @@
+# A set of styles to generate a PDF file from documentation created in asciidoc
+#
+# Created by Patryk Górski
+# v 1.0
+
+
+# Declarate fonts
+font:
+    catalog:
+        Roboto:
+            normal: Roboto-Regular.ttf
+            italic: Roboto-Italic.ttf
+            bold: Roboto-Bold.ttf
+            bold_italic: Roboto-BoldItalic.ttf
+        Ubuntu-Mono:
+            normal: UbuntuMono-R.ttf
+            italic: UbuntuMono-RI.ttf
+            bold: UbuntuMono-B.ttf
+            bold_italic: UbuntuMono-BI.ttf
+        Fallback:
+            normal: GEM_FONTS_DIR/mplus1p-regular-fallback.ttf
+            italic: GEM_FONTS_DIR/mplus1p-regular-fallback.ttf
+            bold: GEM_FONTS_DIR/mplus1p-regular-fallback.ttf
+            bold_italic: GEM_FONTS_DIR/mplus1p-regular-fallback.ttf
+
+    fallbacks:
+        - Fallback
+
+        
+# Variables
+var:
+    color:
+        text:
+            header: #000000
+            primary: #333333
+            secondary: #999999
+            link: #0367D8
+        admonition:
+            note: #26A6D9
+            important: #FF3859
+            information: #26A6D9
+            warning: #FFC629
+            caution: #EF013D
+            tip: #26A6D9
+        field:
+            neutral: #f6f8fa
+        border: #e5e5e5
+        
+    font:
+        size:
+            base: 10
+            h6: $var_font_size_base + 4
+            h5: $var_font_size_h6 + 2
+            h4: $var_font_size_h5 + 2
+            h3: $var_font_size_h4 + 2
+            h2: $var_font_size_h3 + 2
+            h1: $var_font_size_h2 + 2
+            title: $var_font_size_h1 + 10
+
+
+# General Document properties
+page:
+    layout: portrait
+    margin: [1in]
+    size: A4
+
+base:
+    align: left
+    font_color: $var_color_text_primary
+    font_size: $var_font_size_base
+    font_family: Roboto
+    line_height: 1.4
+    line_height_length: $base_line_height / 2
+
+
+# Document styles
+## Title page
+title_page:
+    align: left
+    title:
+        font_style: bold
+        font_size: $var_font_size_title
+        font_color: $var_color_text_header
+        margin_bottom: 15
+    authors:
+        font_color: $var_color_text_primary
+        font_style: bold
+        font_size: $var_font_size_base
+    revision:
+        font_color: $var_color_text_secondary
+        font_size: $var_font_size_base
+    logo:
+        top: 0%
+        align: left
+
+        
+## Headings
+heading:
+    font_color: $var_color_text_header
+    margin_top: 14
+    margin_bottom: 8
+    h1_font_size: $var_font_size_h1
+    h2_font_size: $var_font_size_h2
+    h3_font_size: $var_font_size_h3
+    h4_font_size: $var_font_size_h4
+    h5_font_size: $var_font_size_h5
+    h6_font_size: $var_font_size_h6
+
+    
+## Link
+
+link:
+    font_color: $var_color_text_link
+    
+    
+## Paragraph
+prose:
+  margin_bottom: $var_font_size_base
+  
+## Code
+code:
+  font_family: Ubuntu-Mono
+  border_color: $var_color_field_neutral
+  background_color: $var_color_field_neutral
+  padding: $var_font_size_base * 1.4
+  border_radius: 4
+
+  
+## Admonitions
+admonition:
+    padding: [0, 10, 0, 10]
+    column_rule_width: 1
+    icon:
+        tip:
+            stroke_color: $var_color_admonition_tip
+        note:
+            stroke_color: $var_color_admonition_note
+        important:
+            stroke_color: $var_color_admonition_important
+        warning:
+            stroke_color: $var_color_admonition_warning
+        caution:
+            stroke_color: $var_color_admonition_caution
+            
+            
+## Table
+table:
+  border_color: $var_color_border
+  head:
+    background_color: $var_color_field_neutral
+    font_style: bold
+  cell:
+    padding: 10
+
+
+## Unordered List
+ulist:
+  marker:
+    font-family: far
+    font-size: $var_font_size_base * 0.4
+    line-height: $base_line_height * 2.0
+    disc:
+      font-family: fas
+      content: "\uf111"
+    square:
+      font-family: fas
+      content: "\uf45c"
+    circle:
+      content: "\uf111"
+    checked:
+      content: "\uf14a"
+    unchecked:
+      content: "\uf0c8"
+
+
+footer:
+  height: 100
+  line-height: $base_line_height
+  columns: =100%
+  recto:
+    center:
+      content: '{page-number}'
+  verso:
+    center:
+      content: '{page-number}'

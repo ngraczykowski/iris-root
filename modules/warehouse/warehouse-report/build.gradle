@@ -1,0 +1,41 @@
+plugins {
+  id "java-library"
+  id "java-test-fixtures"
+}
+
+description = "Warehouse Report"
+
+configurations {
+  implementation.extendsFrom starterCommon
+  implementation.extendsFrom starterDatabase
+  runtimeOnly.extendsFrom starterDatabaseRuntime
+
+  testImplementation.extendsFrom starterCommon
+  testImplementation.extendsFrom starterSpringTest
+}
+
+dependencies {
+
+  implementation project(":warehouse-common")
+  implementation project(":warehouse-db-changelog")
+  implementation project(":warehouse-indexer")
+
+  implementation libraries.silenteight_commons_core
+  implementation libraries.silenteight_sep_auth
+  implementation libraries.spring_security_config
+  implementation libraries.spring_security_web
+  // ANO: jackson_module_kotlin can be removed once spring and or jackson is bumped
+  // kotlin is required by minio
+  // https://stackoverflow.com/questions/67630048/springboot-2-5-0-for-jackson-kotlin-classes-support-please-add-com-fasterxml-ja
+  implementation libraries.jackson_module_kotlin 
+  implementation libraries.minio
+  implementation libraries.jakarta_validation_api
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.postgresql
+  implementation libraries.aws_java_sdk
+
+  testImplementation project(":warehouse-common-testing")
+  testImplementation testFixtures(project(':warehouse-indexer'))
+  testImplementation testFixtures(project(':warehouse-common'))
+  testImplementation libraries.awaitility
+}

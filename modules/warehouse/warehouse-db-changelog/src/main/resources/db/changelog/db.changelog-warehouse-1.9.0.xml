@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+  <changeSet id="warehouse-1.9.0-1" author="plewandowski">
+    <createTable tableName="warehouse_report_accuracy">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="report_type" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="analysis" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="state" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="data" type="${type.text}"/>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="warehouse_report_accuracy"
+        indexName="ix_warehouse_report_accuracy_created_at"
+        unique="false">
+      <column name="created_at"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="warehouse-1.9.0-2" author="plewandowski">
+    <dropTable tableName="warehouse_report"/>
+
+    <createIndex
+        tableName="warehouse_report_rbs"
+        indexName="ix_warehouse_report_rbs_created_at"
+        unique="false">
+      <column name="created_at"/>
+    </createIndex>
+
+    <createIndex
+        tableName="warehouse_report_metrics"
+        indexName="ix_warehouse_report_metrics_created_at"
+        unique="false">
+      <column name="created_at"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="warehouse-1.9.0-3" author="anowicki">
+    <createTable tableName="warehouse_production_alert">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="discriminator" type="VARCHAR(128)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="index_name" type="VARCHAR(128)">
+        <constraints nullable="false" />
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="warehouse_production_alert"
+        indexName="ix_warehouse_production_alert_discriminator"
+        unique="true">
+      <column name="discriminator"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="warehouse-1.9.0-4" author="plewandowski">
+    <createTable tableName="warehouse_report_ai_reasoning">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="report_type" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="analysis" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="state" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="data" type="${type.text}"/>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="warehouse_report_ai_reasoning"
+        indexName="ix_warehouse_report_ai_reasoning_created_at"
+        unique="false">
+      <column name="created_at"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="warehouse-1.9.0-5" author="plewandowski">
+    <addColumn tableName="warehouse_report_metrics">
+      <column name="file_name" type="VARCHAR(64)"/>
+    </addColumn>
+    <dropNotNullConstraint columnName="report_type"
+                           tableName="warehouse_report_metrics"/>
+    <dropNotNullConstraint columnName="analysis"
+                           tableName="warehouse_report_metrics"/>
+  </changeSet>
+
+  <changeSet id="warehouse-1.9.0-6" author="plewandowski">
+    <addColumn tableName="warehouse_report_rbs">
+      <column name="file_name" type="VARCHAR(64)"/>
+    </addColumn>
+    <dropNotNullConstraint columnName="report_type"
+                           tableName="warehouse_report_rbs"/>
+  </changeSet>
+
+  <changeSet id="warehouse-1.9.0-7" author="plewandowski">
+    <addColumn tableName="warehouse_report_billing">
+      <column name="file_name" type="VARCHAR(64)"/>
+    </addColumn>
+    <dropNotNullConstraint columnName="report_type"
+                           tableName="warehouse_report_billing"/>
+  </changeSet>
+
+  <changeSet id="warehouse-1.9.0-8" author="plewandowski">
+    <dropNotNullConstraint columnName="report_type"
+                           tableName="warehouse_report_ai_reasoning"/>
+    <dropNotNullConstraint columnName="analysis"
+                           tableName="warehouse_report_ai_reasoning"/>
+
+    <renameColumn newColumnName="file_storage_name"
+                  oldColumnName="data"
+                  tableName="warehouse_report_ai_reasoning"/>
+
+    <modifyDataType columnName="file_storage_name"
+                    newDataType="VARCHAR(64)"
+                    tableName="warehouse_report_ai_reasoning"/>
+
+    <addColumn tableName="warehouse_report_ai_reasoning">
+      <column name="from_range" type="TIMESTAMP"/>
+    </addColumn>
+    <addColumn tableName="warehouse_report_ai_reasoning">
+      <column name="to_range" type="TIMESTAMP"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="warehouse-1.9.0-9" author="anowicki">
+    <createTable tableName="warehouse_production_match">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="alert_discriminator" type="VARCHAR(128)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="discriminator" type="VARCHAR(128)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="index_name" type="VARCHAR(128)">
+        <constraints nullable="false" />
+      </column>
+      <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="warehouse_production_match"
+        indexName="ix_warehouse_production_match_discriminator"
+        unique="true">
+      <column name="discriminator"/>
+    </createIndex>
+
+    <createIndex
+        tableName="warehouse_production_match"
+        indexName="ix_warehouse_production_match_alert_discriminator"
+        unique="true">
+      <column name="alert_discriminator"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="warehouse-1.9.0-10" author="anowicki">
+    <addColumn tableName="warehouse_production_alert">
+      <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+        <constraints nullable="false" />
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="warehouse-1.9.0-11" author="plewandowski">
+    <dropNotNullConstraint columnName="report_type"
+                           tableName="warehouse_report_accuracy"/>
+    <dropNotNullConstraint columnName="analysis"
+                           tableName="warehouse_report_accuracy"/>
+
+    <renameColumn newColumnName="file_storage_name"
+                  oldColumnName="data"
+                  tableName="warehouse_report_accuracy"/>
+
+    <modifyDataType columnName="file_storage_name"
+                    newDataType="VARCHAR(64)"
+                    tableName="warehouse_report_accuracy"/>
+
+    <addColumn tableName="warehouse_report_accuracy">
+      <column name="from_range" type="TIMESTAMP"/>
+    </addColumn>
+    <addColumn tableName="warehouse_report_accuracy">
+      <column name="to_range" type="TIMESTAMP"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="warehouse-1.9.0-12" author="kdzieciol">
+    <addColumn tableName="warehouse_message_backup">
+      <column name="diagnostic" type="JSONB"/>
+    </addColumn>
+
+    <createIndex
+        tableName="warehouse_message_backup"
+        indexName="ix_warehouse_message_backup_request_id">
+      <column name="request_id"/>
+    </createIndex>
+    <createIndex
+        tableName="warehouse_message_backup"
+        indexName="ix_warehouse_message_backup_analysis_name">
+      <column name="analysis_name"/>
+    </createIndex>
+    <createIndex
+        tableName="warehouse_message_backup"
+        indexName="ix_warehouse_message_backup_created_at">
+      <column name="created_at"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="warehouse-1.9.0-13" author="kdzieciol">
+    <dropIndex
+        tableName="warehouse_production_match"
+        indexName="ix_warehouse_production_match_alert_discriminator"/>
+  </changeSet>
+
+  <changeSet id="warehouse-1.9.0-14" author="kdzieciol">
+    <createIndex
+        tableName="warehouse_production_match"
+        indexName="ix_warehouse_production_match_alert_discriminator_discriminator"
+        unique="true">
+      <column name="alert_discriminator"/>
+      <column name="discriminator"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="warehouse-1.9.0-15" author="kdzieciol">
+    <createIndex
+        tableName="warehouse_production_match"
+        indexName="ix_warehouse_production_match_alert_discriminator">
+      <column name="alert_discriminator"/>
+    </createIndex>
+  </changeSet>
+
+
+  <changeSet id="warehouse-1.9.0-16" author="plewandowski">
+    <createTable tableName="warehouse_report_ai_reasoning_match_level">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="report_type" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="analysis" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="state" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="file_storage_name" type="VARCHAR(64)"/>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="warehouse_report_ai_reasoning_match_level"
+        indexName="ix_warehouse_report_ai_reasoning_match_level_created_at"
+        unique="false">
+      <column name="created_at"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="warehouse-1.9.0-17" author="plewandowski">
+    <dropNotNullConstraint columnName="report_type"
+                           tableName="warehouse_report_ai_reasoning_match_level"/>
+    <dropNotNullConstraint columnName="analysis"
+                           tableName="warehouse_report_ai_reasoning_match_level"/>
+
+    <addColumn tableName="warehouse_report_ai_reasoning_match_level">
+      <column name="from_range" type="TIMESTAMP"/>
+    </addColumn>
+    <addColumn tableName="warehouse_report_ai_reasoning_match_level">
+      <column name="to_range" type="TIMESTAMP"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="warehouse-1.9.0-18" author="plewandowski">
+    <dropColumn columnName="file_name"
+                tableName="warehouse_report_rbs">
+    </dropColumn>
+    <addColumn tableName="warehouse_report_rbs">
+      <column name="from_range" type="TIMESTAMP"/>
+    </addColumn>
+    <addColumn tableName="warehouse_report_rbs">
+      <column name="to_range" type="TIMESTAMP"/>
+    </addColumn>
+
+    <dropColumn columnName="file_name"
+                tableName="warehouse_report_billing">
+    </dropColumn>
+    <addColumn tableName="warehouse_report_billing">
+      <column name="from_range" type="TIMESTAMP"/>
+    </addColumn>
+    <addColumn tableName="warehouse_report_billing">
+      <column name="to_range" type="TIMESTAMP"/>
+    </addColumn>
+
+    <dropColumn columnName="file_name"
+                tableName="warehouse_report_metrics">
+    </dropColumn>
+    <addColumn tableName="warehouse_report_metrics">
+      <column name="from_range" type="TIMESTAMP"/>
+    </addColumn>
+    <addColumn tableName="warehouse_report_metrics">
+      <column name="to_range" type="TIMESTAMP"/>
+    </addColumn>
+  </changeSet>
+</databaseChangeLog>

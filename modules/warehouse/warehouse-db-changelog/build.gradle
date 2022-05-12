@@ -1,0 +1,13 @@
+plugins {
+  id "java"
+}
+
+description = "Warehouse DB Changelog"
+
+configurations {
+  implementation.extendsFrom starterDatabase
+}
+
+dependencies {
+  implementation libraries.liquibase_sessionlock
+}

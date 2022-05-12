@@ -1,0 +1,103 @@
+= HLD 1
+
+- Created at: *10.04.2021*
+- Reference ticket: *https://silent8.atlassian.net/browse/WEB-774[WEB-774]*
+- Reason: Production reports processing
+
+
+== Assumptions
+
+In the diagram, we assume that:
+
+- Elastic already contains all the data required to generate reports,
+- Kibana already has defined reports in a master tenant.
+
+== Generating and storing reports
+
+[plantuml, production-reports-processing-generating-and-storing-reports, svg]
+-----
+@startuml
+header Production reports processing - Generating and storing reports
+
+title  Production reports processing - Generating and storing reports
+
+actor User
+
+participant Frontend
+
+participant Warehouse
+database DB as db
+
+participant MinIO
+
+participant Kibana
+participant Elastic
+
+--> Kibana : Prepare reports in a master tenant
+...
+--> Elastic : Update/Create index for production data
+
+...
+
+autonumber
+Kibana -> Kibana : Generate reports based on definitions \nin master tenant - scheduled/on demand
+Kibana -> Elastic : Generate reports
+...
+
+alt Two ways to force the warehouse to synchronize reports
+autonumber 3.1
+    Warehouse -> Warehouse : Scheduled event
+else
+autonumber 3.1
+    User -> Warehouse : Synchronize reports (dev)
+end
+
+autonumber 4
+
+Warehouse -> Kibana : List reports
+Warehouse -> db : Check missing reports
+Warehouse -> Kibana : Download new reports
+Kibana -> Warehouse : Reports data
+Warehouse -> MinIO : Store reports
+Warehouse -> db : Store downloaded report metadata \n(name, index, tenant, analysis, minio URL [relative])
+
+@enduml
+-----
+
+== Downloading reports
+
+[plantuml, production-reports-processing-downloading-reports, svg]
+-----
+@startuml
+header Production reports processing - Downloading reports
+
+title  Production reports processing - Downloading reports
+
+actor User
+
+participant Frontend
+
+participant Warehouse
+database DB as db
+
+participant MinIO
+
+autonumber 1
+
+User -> Frontend : List production reports
+Frontend -> Warehouse : List production reports
+Warehouse -> db : List production reports
+db -> Warehouse : List of reports
+Warehouse -> Frontend: List of reports \n(download report URL leads to Warehouse)
+
+User -> Frontend : Download specific report
+Frontend -> Warehouse : Download report
+Warehouse -> db : Get report URL
+db -> Warehouse : MinIO report URL
+Warehouse -> MinIO : Download report
+MinIO -> Warehouse : Report data (no redirect directly to MinIO)
+Warehouse -> Frontend : Report data
+Frontend -> User : Save report
+
+@enduml
+-----

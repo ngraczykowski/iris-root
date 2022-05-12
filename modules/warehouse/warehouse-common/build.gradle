@@ -1,0 +1,35 @@
+plugins {
+  id "java-library"
+  id "java-test-fixtures"
+}
+
+description = "Warehouse Common"
+
+configurations {
+  implementation.extendsFrom starterDatabase
+  testImplementation.extendsFrom starterSpringTest
+}
+
+dependencies {
+  implementation libraries.jakarta_validation_api
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.silenteight_commons_core
+  implementation libraries.silenteight_rabbit_mq_common_schema
+
+  implementation libraries.spring_boot_actuator
+  implementation libraries.spring_boot_actuator_autoconfigure
+  implementation libraries.spring_security_config
+  implementation libraries.spring_security_web
+  implementation libraries.spring_webmvc
+
+  implementation libraries.javax_annotation_api
+  implementation libraries.springdoc_ui
+  implementation libraries.springdoc_data_rest
+  implementation libraries.springdoc_security
+  implementation libraries.protobuf_java_util
+  implementation libraries.apache_httpclient
+  implementation libraries.apache_httpmime
+
+  testImplementation project(":warehouse-common-testing")
+  testImplementation libraries.awaitility
+}

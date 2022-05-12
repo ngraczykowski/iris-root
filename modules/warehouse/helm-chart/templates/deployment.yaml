@@ -1,0 +1,141 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    app: {{ .Values.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+      annotations:
+        fluentbit.io/parser: spring-logback-json
+        deployment-tag: {{ randAlphaNum 5 | quote }}
+    spec:
+      containers:
+        - name: {{ .Values.name }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbeHttpGetPath }}
+              port: {{ .Values.ports.management }}
+            failureThreshold: 30
+            initialDelaySeconds: 10
+            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbeHttpGetPath }}
+              port: {{ .Values.ports.management }}
+            failureThreshold: 30
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
+          env:
+            - name: 'WAREHOUSE_DB_HOST'
+              value: {{ .Values.whDbHost }}
+            - name: 'WAREHOUSE_DB_PORT'
+              value: {{ .Values.whDbPort | quote }}
+            - name: 'WAREHOUSE_DB_NAME'
+              value: {{ .Values.whDbName }}
+            - name: 'WAREHOUSE_DB_USERNAME'
+              value: {{ .Values.whDbUsername }}
+            - name: 'WAREHOUSE_DB_PASSWORD'
+              value: {{ .Values.whDbPassword }}
+            - name: 'SPRING_RABBITMQ_ADDRESSES'
+              value: {{ .Values.springRabbitmqAddresses }}
+            - name: 'SPRING_RABBITMQ_PORT'
+              value: {{ .Values.springRabbitmqPort | quote }}
+            - name: 'SPRING_RABBITMQ_USERNAME'
+              value: {{ .Values.springRabbitmqUsername }}
+            - name: 'SPRING_RABBITMQ_PASSWORD'
+              value: {{ .Values.springRabbitmqPassword }}
+            - name: 'SPRING_RABBITMQ_VIRTUAL_HOST'
+              value: {{ .Values.springRabbitmqVirtualHost }}
+            - name: 'GRPC_SERVER_PORT'
+              value: {{ .Values.ports.grpc | quote }}
+            - name: 'SERVER_PORT'
+              value: {{ .Values.ports.http | quote }}
+            - name: 'SPRING_ELASTICSEARCH_REST_URIS'
+              value: {{ .Values.elasticUrl }}
+            - name: 'SPRING_ELASTICSEARCH_REST_USERNAME'
+              value: {{ .Values.elasticRestUsername }}
+            - name: 'SPRING_ELASTICSEARCH_REST_PASSWORD'
+              value: {{ .Values.elasticRestPassword }}
+            - name: 'WAREHOUSE_KIBANA_USERNAME'
+              value: {{ .Values.kibanaUsername }}
+            - name: 'WAREHOUSE_KIBANA_PASSWORD'
+              value: {{ .Values.kibanaPassword }}
+            - name: 'WAREHOUSE_ENVIRONMENT_PREFIX'
+              value: {{ .Values.whEnvironmentPrefix }}
+            - name: 'KEYCLOAK_CLIENT_ID'
+              value: {{ .Values.keycloakClientId | squote }}
+            - name: 'KEYCLOAK_FRONTEND_CLIENT_ID'
+              value: {{ .Values.keycloakFrontendClientId | squote }}
+            - name: 'KEYCLOAK_ADAPTER_AUTH_SERVER_URL'
+              value: {{ .Values.keycloakAdapterAuthServerUrl | squote }}
+            - name: 'KEYCLOAK_ADAPTER_RESOURCE'
+              value: {{ .Values.keycloakAdapterResource | squote }}
+            - name: 'KEYCLOAK_ADAPTER_CREDENTIALS_SECRET'
+              value: {{ .Values.keycloakAdapterCredentialsSecret | squote }}
+            - name: 'KEYCLOAK_ADAPTER_REALM'
+              value: {{ .Values.keycloakAdapterRealm | squote }}
+            - name: 'SPRING_PROFILES_ACTIVE'
+              value: {{ .Values.springProfilesActive | squote }}
+          image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
+          resources:
+            limits:
+              memory: {{ .Values.memoryLimit | quote }}
+            requests:
+              memory: {{ .Values.memoryRequest | quote }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          args:
+            - --management.server.port={{ .Values.ports.management }}
+          {{ if .Values.args }}
+          {{ range .Values.args }}
+            - {{ . }}
+          {{ end }}
+          {{ end }}
+            - --sentry.dsn={{ .Values.sentry.dsn }}
+            - --sentry.environment={{ .Values.sentry.environment }}
+            - --sentry.traces-sample-rate={{ .Values.sentry.tracesSampleRate }}
+          volumeMounts:
+            - mountPath: /etc/logback.xml
+              name: logback-config
+              subPath: logback-config-file
+          ports:
+            - containerPort: {{ .Values.ports.http }}
+              name: http
+            - containerPort: {{ .Values.ports.grpc }}
+              name: grpc
+            - containerPort: {{ .Values.ports.management }}
+              name: management
+      initContainers:
+      {{ if .Values.migration.sim.enabled }}
+        - name: warehouse-sim-migration
+          image: {{ .Values.migration.sim.image }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          env:
+            - name: 'ES_URL'
+              value: {{ .Values.elasticUrl }}
+            - name: 'ES_USERNAME'
+              value: {{ .Values.elasticRestUsername }}
+            - name: 'ES_PASSWORD'
+              value: {{ .Values.elasticRestPassword }}
+            - name: 'WAREHOUSE_DB_HOST'
+              value: {{ .Values.whDbHost }} 
+            - name: 'WAREHOUSE_DB_PORT'
+              value: {{ .Values.whDbPort | quote }}
+            - name: 'WAREHOUSE_DB_NAME'
+              value: {{ .Values.whDbName }}
+            - name: 'WAREHOUSE_DB_USERNAME'
+              value: {{ .Values.whDbUsername }}
+            - name: 'WAREHOUSE_DB_PASSWORD'
+              value: {{ .Values.whDbPassword }}
+      {{ end }}
+      volumes:
+        - name: "logback-config"
+          configMap:
+            name: {{ .Values.name }}-logback-configmap

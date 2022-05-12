@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: warehouse
+logging:
+  level:
+    com.silenteight.warehouse.report: DEBUG

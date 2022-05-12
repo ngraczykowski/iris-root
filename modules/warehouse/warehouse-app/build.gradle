@@ -1,0 +1,77 @@
+plugins {
+  id "java"
+  id "maven-publish"
+  id "io.freefair.aspectj.post-compile-weaving"
+  id "org.springframework.boot"
+  id "com.google.cloud.tools.jib"
+}
+
+description = "Warehouse"
+
+configurations {
+  implementation.extendsFrom starterCommon
+  implementation.extendsFrom starterSpringApp
+  implementation.extendsFrom starterMessaging
+  implementation.extendsFrom starterIntegration
+
+  testImplementation.extendsFrom starterSpringTest
+  testImplementation.extendsFrom starterSpockTest
+}
+
+dependencies {
+  implementation project(":warehouse-alert")
+  implementation project(":warehouse-common")
+  implementation project(":warehouse-db-changelog")
+  implementation project(":warehouse-indexer")
+  implementation project(":warehouse-management")
+  implementation project(":warehouse-migration")
+  implementation project(":warehouse-production")
+  implementation project(":warehouse-qa")
+  implementation project(":warehouse-report")
+  implementation project(":warehouse-report-statistics")
+  implementation project(":warehouse-retention-production")
+  implementation project(":warehouse-retention-simulation")
+  implementation project(":warehouse-sampling")
+  implementation project(":warehouse-simulation")
+  implementation project(":warehouse-statistics")
+
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.silenteight_commons_app
+
+  implementation libraries.spring_boot_starter_actuator
+  implementation libraries.spring_boot_starter_undertow
+  implementation libraries.spring_boot_starter_web
+
+  implementation libraries.spring_context_support
+  implementation libraries.spring_security_config
+  implementation libraries.spring_security_web
+  implementation libraries.spring_cloud_consul_discovery
+
+  implementation libraries.commons_lang3
+
+  implementation libraries.jaxb_api
+  implementation libraries.jakarta_inject
+
+  implementation libraries.protobuf_java_util
+  implementation libraries.logback_ecs_encoder
+  implementation libraries.ecs_logging_core
+
+  runtimeOnly libraries.sentry_spring_boot_starter
+  runtimeOnly libraries.sentry_logback
+
+  testImplementation project(":warehouse-common-testing")
+
+  testImplementation libraries.spock_spring
+  testImplementation libraries.spring_integration_test
+  testImplementation libraries.rest_assured_spring_mock_mvc
+
+  aspect libraries.silenteight_sep_base_aspects
+}
+
+publishing {
+  publications {
+    bootJava(MavenPublication) {
+      artifact bootJar
+    }
+  }
+}

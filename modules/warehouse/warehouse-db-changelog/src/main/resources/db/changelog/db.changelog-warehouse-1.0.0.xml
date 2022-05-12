@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+  <changeSet id="warehouse-1.0.0-1" author="anowicki">
+    <createTable tableName="warehouse_report">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="report_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="filename" type="VARCHAR(128)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="tenant" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="kibana_report_instance_id" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="warehouse_report"
+        indexName="ix_warehouse_report_id"
+        unique="true">
+      <column name="report_id"/>
+    </createIndex>
+
+    <createIndex
+        tableName="warehouse_report"
+        indexName="ix_warehouse_kibana_report_instance_id"
+        unique="true">
+      <column name="kibana_report_instance_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="warehouse-1.0.0-2" author="anowicki">
+    <createTable tableName="warehouse_analysis_metadata">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="analysis_id" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="analysis" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="tenant" type="VARCHAR(128)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="elastic_index_pattern" type="VARCHAR(128)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="warehouse_analysis_metadata"
+        indexName="ix_warehouse_metadata_analysis_id"
+        unique="true">
+      <column name="id"/>
+    </createIndex>
+
+    <createIndex
+        tableName="warehouse_analysis_metadata"
+        indexName="ix_warehouse_analysis_metadata_analysis_id"
+        unique="true">
+      <column name="analysis_id"/>
+    </createIndex>
+
+    <createIndex
+        tableName="warehouse_analysis_metadata"
+        indexName="ix_warehouse_analysis_metadata_analysis"
+        unique="true">
+      <column name="analysis"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="warehouse-1.0.0-3" author="plewandowski">
+    <createTable tableName="warehouse_country_group">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="country_group_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="country_group_name" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP"/>
+    </createTable>
+
+    <createIndex
+        tableName="warehouse_country_group"
+        indexName="ix_warehouse_country_group_id"
+        unique="true">
+      <column name="country_group_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="warehouse-1.0.0-4" author="kdzieciol">
+    <createTable tableName="warehouse_report_rbs">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="report_type" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="state" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="data" type="${type.text}"/>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="warehouse-1.0.0-5" author="kdzieciol">
+    <createTable tableName="warehouse_report_billing">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="report_type" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="state" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="data" type="${type.text}"/>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="warehouse-1.0.0-6" author="tbiedrzycki">
+    <createTable tableName="warehouse_report_sm">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="report_type" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="analysis" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="state" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="data" type="${type.text}"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="warehouse-1.0.0-7" author="tbiedrzycki">
+    <createTable tableName="warehouse_message_backup">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="request_id" type="VARCHAR(40)">
+      </column>
+      <column name="analysis_name" type="VARCHAR(64)">
+      </column>
+      <column name="data" type="BYTEA">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="warehouse-1.0.0-8" author="kdzieciol">
+    <addColumn tableName="warehouse_report_sm">
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="warehouse-1.0.0-9" author="plewandowski">
+    <renameTable oldTableName="warehouse_report_sm" newTableName="warehouse_report_metrics"/>
+
+    <renameSequence newSequenceName="warehouse_report_metrics_id_seq"
+                    oldSequenceName="warehouse_report_sm_id_seq"/>
+
+    <createIndex
+        tableName="warehouse_report_metrics"
+        indexName="ix_warehouse_report_metrics_id"
+        unique="true">
+      <column name="id"/>
+    </createIndex>
+  </changeSet>
+</databaseChangeLog>

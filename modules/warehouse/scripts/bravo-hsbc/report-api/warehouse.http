@@ -1,0 +1,19 @@
+### Reports API: Step 1: generate report
+POST {{baseUrl}}/rest/warehouse/api/v2/analysis/production/reports/{{type}}?from=2020-10-15T01%3A00%3A00.000Z&to=2021-10-15T01%3A00%3A00.000Z
+Accept: application/json
+Content-Type: application/json
+Authorization: {{authorization}}
+
+
+### Reports API: Step 2: check report status
+GET {{baseUrl}}/rest/warehouse/api/v2/analysis/production/reports/{{type}}/{{id}}/status
+Accept: application/json
+Content-Type: application/json
+Authorization: {{authorization}}
+
+
+### Reports API: Step 3: download report
+GET {{baseUrl}}/rest/warehouse/api/v2/analysis/production/reports/{{type}}/{{id}}
+Accept: application/json
+Content-Type: application/json
+Authorization: {{authorization}}

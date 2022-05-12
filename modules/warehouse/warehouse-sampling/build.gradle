@@ -1,0 +1,35 @@
+plugins {
+  id "java-library"
+  id "java-test-fixtures"
+}
+
+description = "Warehouse Sampling"
+
+configurations {
+  implementation.extendsFrom starterCommon
+  implementation.extendsFrom starterGrpc
+
+  implementation.extendsFrom starterDatabase
+  runtimeOnly.extendsFrom starterDatabaseRuntime
+
+  testImplementation.extendsFrom starterSpringTest
+}
+
+dependencies {
+  implementation project(":warehouse-common")
+  implementation project(":warehouse-indexer")
+  implementation libraries.silenteight_commons_core
+  implementation libraries.silenteight_sampling_alerts_api
+  implementation libraries.spring_security_config
+  implementation libraries.jakarta_validation_api
+  implementation libraries.silenteight_sep_base_common
+
+  implementation libraries.grpc_api
+  implementation libraries.grpc_stub
+
+  implementation libraries.test_containers_junit_jupiter
+
+  testImplementation project(":warehouse-common-testing")
+  testImplementation libraries.awaitility
+  testImplementation libraries.spring_cloud_starter_sleuth
+}

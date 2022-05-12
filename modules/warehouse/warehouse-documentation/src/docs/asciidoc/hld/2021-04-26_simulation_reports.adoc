@@ -1,0 +1,93 @@
+= HLD 2
+
+- Created at: *10.04.2021*
+- Reference ticket: *https://silent8.atlassian.net/browse/WEB-774[WEB-774]*
+- Reason: Simulation reports processing
+
+== Assumptions
+
+In the diagram, we assume that:
+ - Elastic already contains all the data required to generate reports,
+ - Kibana already has defined reports in a master tenant.
+
+== Generating and storing reports
+
+[plantuml, simulation-reports-processing-generating-reports, svg]
+-----
+@startuml
+header Simulation reports processing - Generating and storing reports
+
+title  Simulation reports processing - Generating and storing reports
+
+actor User
+
+participant Frontend
+
+participant Warehouse
+database DB as db
+
+'participant MinIO
+participant Kibana
+participant Elastic
+
+participant AE
+
+--> Kibana : Prepare reports in a master tenant
+...
+--> Elastic : Create an index and fill it with simulation data
+
+...
+
+autonumber
+AE -> Warehouse : Analysis finished message (all data - indexed)
+
+Warehouse -> Kibana : Create a tenant for a specific index
+Warehouse -> Kibana : Copy reports definitions form \nthe master tenant to the newly created tenant
+Warehouse -> Kibana : Generate reports based on definitions in created tenant
+Warehouse -> db : Store generated reports metadata \n(tenant, analysis)
+
+'==Audit==
+'
+'Warehouse -> Kibana : Copy reports definitions form \nthe master audit tenant to the newly created tenant
+'Warehouse -> Kibana : Download audit reports
+'Kibana -> Elastic : Generate audit reports
+'Kibana -> Warehouse : Reports data
+'Warehouse -> MinIO : Store reports
+'Warehouse -> db : Store downloaded audit report metadata \n(tenant, analysis)
+
+-----
+
+== Downloading reports
+
+[plantuml, simulation-reports-processing-downloading-reports, svg]
+-----
+@startuml
+header Simulation reports processing - Downloading reports
+
+title  Simulation reports processing - Downloading reports
+
+actor User
+
+participant Frontend
+
+participant Warehouse
+database DB as db
+
+'participant MinIO
+participant Kibana
+
+autonumber
+
+User -> Frontend : List reports for analysis
+Frontend -> Warehouse : List reports for analysis
+Warehouse -> db : List tenants for analysis
+db -> Warehouse : List of tenants
+Warehouse -> Kibana : List reports in tenants
+Kibana -> Warehouse : List of reports
+Warehouse -> Frontend: List of reports with URL direct to Kibana
+
+User -> Kibana : Download report
+Kibana -> User : Save report
+
+@enduml
+-----

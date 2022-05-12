@@ -1,0 +1,41 @@
+plugins {
+  id "java-library"
+}
+
+description = "Warehouse Common Web Testing"
+
+dependencies {
+  api libraries.junit_jupiter_api
+  api libraries.silenteight_sep_base_testing
+  api libraries.spring_test
+  api libraries.spring_boot_test
+  api libraries.spring_boot_test_autoconfigure
+  api libraries.spring_security_test
+  api libraries.test_containers
+  api libraries.reactor_test
+  api libraries.rest_assured_spring_mock_mvc
+
+  implementation project(":warehouse-common")
+
+  implementation libraries.spring_jdbc
+  implementation libraries.spring_tx
+
+  implementation libraries.spring_boot
+  implementation libraries.spring_boot_autoconfigure
+
+  implementation libraries.spring_boot_starter_web
+  implementation libraries.spring_boot_starter_undertow
+
+  implementation libraries.spring_data_jpa
+
+  implementation libraries.spring_security_web
+  implementation libraries.spring_security_config
+
+  implementation libraries.test_containers_postgresql
+  implementation libraries.test_containers_spock
+
+  implementation libraries.protobuf_java_util
+
+  implementation libraries.spring_amqp
+  implementation libraries.rest_assured
+}

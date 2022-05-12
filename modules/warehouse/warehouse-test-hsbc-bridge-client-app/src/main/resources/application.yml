@@ -1,0 +1,12 @@
+server:
+  port: 24960
+
+test:
+  hsbc-bridge-client:
+#   Every 60 seconds
+    cron: "*/60 * * * * ?"
+    batch-prefix: datagen
+    batch-size: 1000
+    base-url: https://bravo.dev.silenteight.com/rest/hsbc-bridge/
+    datagen:
+      alert-templates: classpath:alert_payload_1.tmpl.json, classpath:alert_payload_2.tmpl.json, classpath:alert_payload_3.tmpl.json

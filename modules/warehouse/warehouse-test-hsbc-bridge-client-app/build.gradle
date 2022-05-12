@@ -1,0 +1,20 @@
+plugins {
+  id "java"
+  id "io.freefair.aspectj.post-compile-weaving"
+  id "org.springframework.boot"
+}
+
+description = "Test HSBC Bridge client application"
+
+configurations {
+  implementation.extendsFrom starterCommon
+}
+
+dependencies {
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.silenteight_commons_app
+  implementation libraries.spring_boot_starter_undertow
+  implementation libraries.spring_boot_starter_webflux
+
+  implementation libraries.spring_context_support
+}

@@ -1,0 +1,40 @@
+### Start the recommendation process
+POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/{{batchId}}/recommend
+Accept: application/json
+Content-Type: application/json
+
+< ./PB_20210915_recommend.json
+
+
+### Check HSBC Bridge status
+GET {{baseUrl}}/rest/hsbc-bridge/management/info
+Accept: application/json
+
+
+### Get Recommendations
+GET {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/{{batchId}}/status
+Accept: application/json
+Content-Type: application/json
+
+
+### Get Recommendations
+GET {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/{{batchId}}/result
+Accept: application/json
+Content-Type: application/json
+
+
+### Step 1: Ingest Recommendation
+POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/ingestRecommendations
+Accept: application/json
+Content-Type: application/json
+
+< ./PB_20210915_ingestRecommendation.json
+
+
+### Step 2: Learning
+POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/{{batchId}}/learning
+Accept: application/json
+Content-Type: application/json
+
+< ./PB_20210915_recommend.json
+

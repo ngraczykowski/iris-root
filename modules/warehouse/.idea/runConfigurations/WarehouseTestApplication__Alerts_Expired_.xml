@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="WarehouseTestApplication (Alerts Expired)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="warehouse.warehouse-test-app.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.silenteight.warehouse.test.app.WarehouseTestApplication" />
+    <option name="ACTIVE_PROFILES" value="local" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <option name="SHORTEN_COMMAND_LINE" value="NONE" />
+    <envs>
+      <env name="server.port" value="24901" />
+      <env name="test.flows.alerts-expired.enabled" value="true" />
+    </envs>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

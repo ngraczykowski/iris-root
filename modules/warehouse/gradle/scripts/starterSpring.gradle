@@ -1,0 +1,26 @@
+dependencies {
+  // Spring
+  starterSpring libraries.spring_aspects
+  starterSpring libraries.spring_aop
+  starterSpring libraries.spring_beans
+  starterSpring libraries.spring_context
+  starterSpring libraries.spring_context_support
+  starterSpring libraries.spring_core
+  starterSpring libraries.spring_expression
+
+  // Spring Boot
+  starterSpring libraries.spring_boot
+  starterSpring libraries.spring_boot_autoconfigure
+
+  // AspectJ
+  starterSpring libraries.aspectjrt
+
+  // Spring Data
+  starterSpring libraries.spring_data_commons
+  
+  // Yaml Parsing
+  starterSpring libraries.snakeyaml
+
+  // Support caching
+  starterSpring libraries.javax_cache_api
+}

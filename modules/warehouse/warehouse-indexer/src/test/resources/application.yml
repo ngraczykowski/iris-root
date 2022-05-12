@@ -1,0 +1,72 @@
+keycloak:
+  adapter:
+    authServerUrl: fakeAuthHost:8000
+    realm: sens-webapp
+    publicClient: false
+    confidentialPort: 0
+    principalAttribute: preferred_username
+    resource: backend
+    sslRequired: external
+    credentials.secret: 55555555-4444-3333-2222-000111000111
+
+warehouse:
+  messaging:
+    broker:
+      alert-production-indexing:
+        queue-name: wh.prioritized-index-request.production
+        routing-key: command.index-request.production
+      qa-indexing:
+        queue-name: wh.qa-index-request
+        routing-key: event.qa-alert
+      alert-simulation-indexing:
+        queue-name: wh.index-request.simulation
+        routing-key: command.index-request.simulation
+      analysis-expired-indexing:
+        queue-name: wh.retention.analysis-expired
+        routing-key: retention.analysis-expired
+      personal-information-expired-indexing:
+        queue-name: wh.retention.personal-information-expired
+        routing-key: retention.personal-information-expired
+      alerts-expired-indexing:
+        queue-name: wh.retention.alerts-expired
+        routing-key: retention.alerts-expired
+      to-remove:
+        bindings: []
+  indexer:
+    production-batch-size: 200
+    simulation-batch-size: 200
+    qa-batch-size: 200
+    production-indexing-inbound:
+      queue-name: ${warehouse.messaging.broker.alert-production-indexing.queue-name}
+    production-indexed-outbound:
+      exchange-name: wh.event
+      routing-key: event.index-response.production
+    simulation-indexing-inbound:
+      queue-name: ${warehouse.messaging.broker.alert-simulation-indexing.queue-name}
+    simulation-indexed-outbound:
+      exchange-name: wh.event
+      routing-key: event.index-response.simulation
+    qa-indexing-inbound:
+      queue-name: ${warehouse.messaging.broker.qa-indexing.queue-name}
+test:
+  messaging:
+    integration:
+      production-indexing-test-client-outbound:
+        exchange-name: testapp.command
+        routing-key: command.index-request.production
+      simulation-indexing-test-client-outbound:
+        exchange-name: testapp.command
+        routing-key: command.index-request.simulation
+      analysis-expired-indexing-test-client-outbound:
+        exchange-name: testapp.command
+        routing-key: command.analysis-expired
+      production-indexed-event-test-listener-inbound:
+        queue-name: testapp.index-response.production
+      simulation-indexed-event-test-listener-inbound:
+        queue-name: testapp.index-response.simulation
+      alerts-expired-indexing-test-client-outbound:
+        exchange-name: testapp.command
+        routing-key: retention.alerts-expired
+      qa-indexing-test-client-outbound:
+        exchange-name: testapp.command.qa
+        routing-key: command.qa-index-request
