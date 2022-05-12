@@ -39,7 +39,7 @@ agent:
       routing-key: ""
 
   grpc:
-#    port: {{ env "NOMAD_PORT_grpc" }}
+    port: {{ env "NOMAD_PORT_grpc" }}
 #    server_ca: {{ env "meta.silenteight.home" }}/cert/chain.pem
 #    server_private_key: {{ env "meta.silenteight.home" }}/cert/company-name-agent/company-name-agent-key.pem
 #    server_public_key_chain: {{ env "meta.silenteight.home" }}/cert/company-name-agent/company-name-agent-chain.pem
