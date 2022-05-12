@@ -19,8 +19,8 @@ common:
       memory: 1Gi
 
 agentsCommon:
-  args:
-    - --agent.facade.enabled=true
+  properties:
+    "agent.facade.enabled": true
   profiles:
     - rabbitmq-declare
 

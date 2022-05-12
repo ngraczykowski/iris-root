@@ -178,6 +178,8 @@ common:
 
   profiles: []
 
+  properties: {}
+
   sentry:
     dsn: ""
     environment: ""

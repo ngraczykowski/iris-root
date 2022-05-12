@@ -25,11 +25,11 @@ agents:
 
   geo-agent:
     enabled: true
+    properties:
+      "geotransactions.agent.facade.enabled": true
+      "geo.agent.facade.enabled": true
     profiles:
       - sierra
-    args:
-      - --geo.agent.facade.enabled=true
-      - --geotransactions.agent.facade.enabled=true
     resources:
       limits:
         memory: 2Gi

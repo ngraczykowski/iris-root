@@ -127,6 +127,9 @@ Creates the name of Sentry environment
     {{- range $toConcatenate := list "args" "command" "profiles" }}
       {{- $_ := set $concatenated $toConcatenate (concat (get $common $toConcatenate) (default list (get $value $toConcatenate) ) ) }}
     {{- end }}
+    {{- range $toMerge := list "properties" }}
+      {{- $_ := set $concatenated $toMerge (mergeOverwrite (deepCopy (get $common $toMerge)) (default dict (get $value $toMerge) ) ) }}
+    {{- end }}
     {{- $mergedValue := mergeOverwrite (deepCopy $common) $value $concatenated }}
     {{- $mergedValue = mergeOverwrite (deepCopy $mergedValue) (dict "dbName" (default $key $mergedValue.dbName) "webPath" (default $key $mergedValue.webPath) ) }}
     {{- if $mergedValue.enabled -}}

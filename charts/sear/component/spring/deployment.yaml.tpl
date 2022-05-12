@@ -119,6 +119,9 @@ spec:
             {{- if .component.profiles }}
             - --spring.profiles.include={{ join "," .component.profiles }}
             {{- end }}
+            {{- range $key,$value := .component.properties }}
+            - --{{ $key }}={{ $value }}
+            {{- end }}
           volumeMounts:
             - name: config
               mountPath: "/etc/spring/config"
