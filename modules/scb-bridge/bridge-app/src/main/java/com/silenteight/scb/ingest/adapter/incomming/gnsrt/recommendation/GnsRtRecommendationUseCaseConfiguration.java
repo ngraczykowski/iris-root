@@ -12,6 +12,8 @@ import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import reactor.core.scheduler.Scheduler;
+import reactor.core.scheduler.Schedulers;
 
 @Configuration
 @RequiredArgsConstructor
@@ -38,7 +40,15 @@ class GnsRtRecommendationUseCaseConfiguration {
         .batchInfoService(batchInfoService)
         .gnsRtRecommendationService(gnsRtRecommendationService)
         .trafficManager(trafficManager)
+        .scheduler(scheduler())
         .build();
+  }
+
+  private Scheduler scheduler() {
+    return Schedulers.newBoundedElastic(
+        gnsRtRecommendationProperties.getSchedulerThreadCap(),
+        gnsRtRecommendationProperties.getSchedulerQueuedTaskCap(),
+        "gns-rt-scheduler");
   }
 
 }

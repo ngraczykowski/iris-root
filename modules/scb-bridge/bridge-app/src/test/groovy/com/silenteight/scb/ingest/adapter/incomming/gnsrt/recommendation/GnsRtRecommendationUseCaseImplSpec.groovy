@@ -8,11 +8,11 @@ import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtRequestToA
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtResponseMapper
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtResponseAlert
 import com.silenteight.scb.ingest.domain.AlertRegistrationFacade
-import com.silenteight.scb.ingest.domain.model.Batch.Priority
 import com.silenteight.scb.ingest.domain.model.BatchSource
 import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext
 
 import reactor.core.publisher.Mono
+import reactor.core.scheduler.Schedulers
 import reactor.test.StepVerifier
 import spock.lang.Specification
 import spock.lang.Subject
@@ -30,7 +30,7 @@ class GnsRtRecommendationUseCaseImplSpec extends Specification {
 
   def registrationFacade = Mock(AlertRegistrationFacade)
 
-  def feeder = Mock(UdsFeedingPublisher)
+  def udsFeedingPublisher = Mock(UdsFeedingPublisher)
 
   def gnsRtRecommendationService = Mock(GnsRtRecommendationService)
 
@@ -45,11 +45,12 @@ class GnsRtRecommendationUseCaseImplSpec extends Specification {
       .alertMapper(alertMapper)
       .responseMapper(responseMapper)
       .alertRegistrationFacade(registrationFacade)
-      .udsFeedingPublisher(feeder)
+      .udsFeedingPublisher(udsFeedingPublisher)
       .gnsRtRecommendationService(gnsRtRecommendationService)
       .rawAlertService(rawAlertService)
       .batchInfoService(batchInfoService)
       .trafficManager(trafficManager)
+      .scheduler(Schedulers.boundedElastic())
       .build()
 
   def 'should resolve GnsRtRecommendationRequest with 1 alert'() {
@@ -63,24 +64,27 @@ class GnsRtRecommendationUseCaseImplSpec extends Specification {
     responseMapper.map(fixtures.gnsAlert, fixtures.recommendation) >> mappedAlert
     gnsRtRecommendationService.recommendationsMono(_ as String)
         >> Mono.just(fixtures.recommendations)
-
+    registrationFacade.registerAlerts(
+        _ as String, fixtures.alerts, RegistrationBatchContext.GNS_RT_CONTEXT)
+        >> registrationResponse(fixtures.alerts)
     when:
     var mono = underTest.recommend(fixtures.gnsRtRecommendationRequest)
 
-    then:
+    and:
     StepVerifier
         .create(mono)
         .assertNext(
             r -> assertThat(r.getSilent8Response().getAlerts()).containsExactly(mappedAlert))
         .verifyComplete()
 
+    then:
     1 * trafficManager.activateRtSemaphore()
     1 * rawAlertService.store(_, fixtures.alerts)
     1 * batchInfoService.store(_, _ as BatchSource, fixtures.alerts.size())
     1 * registrationFacade.registerAlerts(
-        _, fixtures.alerts, new RegistrationBatchContext(Priority.HIGH, BatchSource.GNS_RT))
+        _, fixtures.alerts, RegistrationBatchContext.GNS_RT_CONTEXT)
         >> registrationResponse(fixtures.alerts)
-    1 * feeder.publishToUds(_, fixtures.alerts, _)
+    1 * udsFeedingPublisher.publishToUds(_, _, _)
   }
 
 }

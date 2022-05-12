@@ -22,12 +22,13 @@ import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext;
 import com.silenteight.scb.outputrecommendation.domain.model.Recommendations;
 
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Scheduler;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.silenteight.scb.ingest.domain.model.Batch.Priority.HIGH;
 import static com.silenteight.scb.ingest.domain.model.BatchSource.GNS_RT;
+import static com.silenteight.scb.ingest.domain.model.RegistrationBatchContext.GNS_RT_CONTEXT;
 
 @Slf4j
 @Builder
@@ -42,29 +43,42 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
   private final BatchInfoService batchInfoService;
   private final GnsRtRecommendationService gnsRtRecommendationService;
   private final TrafficManager trafficManager;
+  private final Scheduler scheduler;
 
   @Override
   public Mono<GnsRtRecommendationResponse> recommend(@NonNull GnsRtRecommendationRequest request) {
-    trafficManager.activateRtSemaphore();
-    var internalBatchId = InternalBatchIdGenerator.generate();
 
+    trafficManager.activateRtSemaphore();
+
+    return Mono.fromCallable(InternalBatchIdGenerator::generate)
+        .publishOn(scheduler)
+        .flatMap(internalBatchId -> {
+          registerRequest(request, internalBatchId);
+          return gnsRtRecommendationService.recommendationsMono(internalBatchId);
+        })
+        .map(recommendations -> mapResponse(request, recommendations));
+  }
+
+  private void registerRequest(GnsRtRecommendationRequest request, String internalBatchId) {
     var alerts = mapAlerts(request, internalBatchId);
     logGnsRtRequest(alerts, internalBatchId);
 
     rawAlertService.store(internalBatchId, alerts);
     batchInfoService.store(internalBatchId, GNS_RT, alerts.size());
 
-    var registrationBatchContext = new RegistrationBatchContext(HIGH, GNS_RT);
+    registerAndPublish(internalBatchId, alerts, GNS_RT_CONTEXT);
+  }
+
+  private void registerAndPublish(
+      String internalBatchId,
+      List<Alert> alerts,
+      RegistrationBatchContext batchContext) {
     var registrationResponse =
-        alertRegistrationFacade
-            .registerAlerts(internalBatchId, alerts, registrationBatchContext);
+        alertRegistrationFacade.registerAlerts(internalBatchId, alerts, batchContext);
 
     AlertUpdater.updateWithRegistrationResponse(alerts, registrationResponse);
 
-    udsFeedingPublisher.publishToUds(internalBatchId, alerts, registrationBatchContext);
-
-    return gnsRtRecommendationService.recommendationsMono(internalBatchId)
-        .map(recommendations -> mapResponse(request, recommendations));
+    udsFeedingPublisher.publishToUds(internalBatchId, alerts, batchContext);
   }
 
   private List<Alert> mapAlerts(GnsRtRecommendationRequest request, String internalBatchId) {

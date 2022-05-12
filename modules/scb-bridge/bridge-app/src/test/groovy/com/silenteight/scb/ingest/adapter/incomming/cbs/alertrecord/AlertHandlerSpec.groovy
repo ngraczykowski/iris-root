@@ -36,7 +36,7 @@ class AlertHandlerSpec extends Specification {
       .alertMapper(alertMapper)
       .ingestService(ingestService)
       .rawAlertService(rawAlertService)
-      .build();
+      .build()
 
   def 'should handle invalid alerts'() {
     given:
@@ -64,7 +64,7 @@ class AlertHandlerSpec extends Specification {
     given:
     def internalBatchId = InternalBatchIdGenerator.generate()
     def alertIdContext = ScbAlertIdContext.newBuilder().setWatchlistLevel(true).build()
-    def batchContext = new RegistrationBatchContext(MEDIUM, CBS)
+    def batchContext = RegistrationBatchContext.CBS_CONTEXT
     def alerts = [fixtures.alert1, fixtures.alert2]
     def validAlertComposites = [
         fixtures.validAlertComposite1, fixtures.validAlertComposite2

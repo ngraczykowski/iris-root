@@ -5,7 +5,6 @@ import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.Batch
 import com.silenteight.scb.ingest.adapter.incomming.common.trafficmanagement.TrafficManager
 import com.silenteight.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator
 import com.silenteight.scb.ingest.domain.AlertRegistrationFacade
-import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext
 import com.silenteight.scb.reports.domain.port.outgoing.ReportsSenderService
 
 import spock.lang.Specification
@@ -13,10 +12,9 @@ import spock.lang.Specification
 import static com.silenteight.scb.ingest.adapter.incomming.common.ingest.Fixtures.alerts
 import static com.silenteight.scb.ingest.adapter.incomming.common.ingest.Fixtures.recommendation
 import static com.silenteight.scb.ingest.domain.Fixtures.registrationResponse
-import static com.silenteight.scb.ingest.domain.model.Batch.Priority.LOW
-import static com.silenteight.scb.ingest.domain.model.Batch.Priority.MEDIUM
-import static com.silenteight.scb.ingest.domain.model.BatchSource.CBS
 import static com.silenteight.scb.ingest.domain.model.BatchSource.LEARNING
+import static com.silenteight.scb.ingest.domain.model.RegistrationBatchContext.CBS_CONTEXT
+import static com.silenteight.scb.ingest.domain.model.RegistrationBatchContext.LEARNING_CONTEXT
 
 class IngestServiceSpec extends Specification {
 
@@ -36,10 +34,6 @@ class IngestServiceSpec extends Specification {
       .batchInfoService(batchInfoService)
       .build()
 
-  def learningBatchContext = new RegistrationBatchContext(LOW, LEARNING)
-
-  def solvingBatchContext = new RegistrationBatchContext(MEDIUM, CBS)
-
   def 'should ingest alerts without Recommendation for learn'() {
     given:
     def internalBatchId = InternalBatchIdGenerator.generate()
@@ -52,9 +46,9 @@ class IngestServiceSpec extends Specification {
     2 * scbRecommendationService.alertRecommendation(_, _) >> Optional.empty()
     1 * trafficManager.holdPeriodicAlertProcessing() >> false
     1 * batchInfoService.store(internalBatchId, LEARNING, _)
-    1 * alertRegistrationFacade.registerAlerts(internalBatchId, alerts, learningBatchContext) >>
+    1 * alertRegistrationFacade.registerAlerts(internalBatchId, alerts, LEARNING_CONTEXT) >>
         registrationResponse(alerts)
-    1 * udsFeedingPublisher.publishToUds(internalBatchId, alerts, learningBatchContext)
+    1 * udsFeedingPublisher.publishToUds(internalBatchId, alerts,  LEARNING_CONTEXT)
     1 * reportsSenderService.send({it.size() == 2})
     0 * _
   }
@@ -87,12 +81,12 @@ class IngestServiceSpec extends Specification {
     def alerts = alerts()
 
     when:
-    ingestService.ingestAlertsForRecommendation(internalBatchId, alerts, solvingBatchContext)
+    ingestService.ingestAlertsForRecommendation(internalBatchId, alerts, CBS_CONTEXT)
 
     then:
-    1 * alertRegistrationFacade.registerAlerts(internalBatchId, alerts, solvingBatchContext)
+    1 * alertRegistrationFacade.registerAlerts(internalBatchId, alerts, CBS_CONTEXT)
         >> registrationResponse(alerts)
-    1 * udsFeedingPublisher.publishToUds(internalBatchId, alerts, solvingBatchContext)
+    1 * udsFeedingPublisher.publishToUds(internalBatchId, alerts, CBS_CONTEXT)
     0 * _
   }
 

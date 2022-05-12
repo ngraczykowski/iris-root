@@ -22,9 +22,6 @@ import org.apache.commons.collections4.ListUtils;
 import java.util.List;
 import java.util.Optional;
 
-import static com.silenteight.scb.ingest.domain.model.Batch.Priority.LOW;
-import static com.silenteight.scb.ingest.domain.model.BatchSource.LEARNING;
-
 @Slf4j
 @Builder
 class IngestService implements BatchAlertIngestService {
@@ -83,8 +80,7 @@ class IngestService implements BatchAlertIngestService {
   }
 
   private void registerAndPublishLearningAlertsInCore(String internalBatchId, List<Alert> alerts) {
-    var batchContext = new RegistrationBatchContext(LOW, LEARNING);
-    registerAndPublish(internalBatchId, alerts, batchContext);
+    registerAndPublish(internalBatchId, alerts, RegistrationBatchContext.LEARNING_CONTEXT);
     ingestedLearningAlertsCounter += alerts.size();
   }
 

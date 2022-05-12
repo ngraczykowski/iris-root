@@ -12,14 +12,12 @@ import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsOutput;
 import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertIngestService;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlertService;
-import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext;
 
 import org.apache.commons.lang3.time.StopWatch;
 
 import java.util.List;
 
-import static com.silenteight.scb.ingest.domain.model.Batch.Priority.MEDIUM;
-import static com.silenteight.scb.ingest.domain.model.BatchSource.CBS;
+import static com.silenteight.scb.ingest.domain.model.RegistrationBatchContext.CBS_CONTEXT;
 
 @Slf4j
 @Builder
@@ -70,8 +68,7 @@ class AlertHandler {
   }
 
   private void registerAlerts(String internalBatchId, List<Alert> alerts) {
-    var registrationBatchContext = new RegistrationBatchContext(MEDIUM, CBS);
-    ingestService.ingestAlertsForRecommendation(internalBatchId, alerts, registrationBatchContext);
+    ingestService.ingestAlertsForRecommendation(internalBatchId, alerts, CBS_CONTEXT);
   }
 
   private void acknowledgeAlerts(

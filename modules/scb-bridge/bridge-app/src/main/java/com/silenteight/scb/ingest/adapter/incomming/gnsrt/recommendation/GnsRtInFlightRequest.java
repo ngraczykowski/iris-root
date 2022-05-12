@@ -9,8 +9,8 @@ import com.silenteight.scb.outputrecommendation.domain.model.Recommendations;
 
 import org.apache.commons.lang3.time.StopWatch;
 import reactor.core.publisher.Mono;
-
-import java.util.concurrent.CompletableFuture;
+import reactor.core.publisher.Sinks;
+import reactor.core.publisher.Sinks.EmitFailureHandler;
 
 @Slf4j
 @ToString
@@ -18,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
 public class GnsRtInFlightRequest {
 
   @ToString.Exclude
-  private final CompletableFuture<Recommendations> future = new CompletableFuture<>();
+  private final Sinks.One<Recommendations> sink = Sinks.one();
 
   @Getter
   private final String internalBatchId;
@@ -27,17 +27,17 @@ public class GnsRtInFlightRequest {
 
   public void recommendationsReceived(Recommendations recommendations) {
     log.info("Recommendations are available for {}", this);
-    future.complete(recommendations);
+    sink.tryEmitValue(recommendations);
   }
 
   public void batchFailed(String errorDescription) {
-    future.completeExceptionally(
+    sink.emitError(
         new RuntimeException(String.format("Batch with internalBatchId: %s failed, reason: %s",
-            internalBatchId, errorDescription)));
+            internalBatchId, errorDescription)), EmitFailureHandler.FAIL_FAST);
   }
 
   public Mono<Recommendations> mono() {
-    return Mono.fromFuture(future);
+    return sink.asMono();
   }
 
 }
