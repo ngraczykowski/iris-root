@@ -1,5 +1,7 @@
 @Library('pipeline-shared-library@master') _
 
+def version = ""
+
 pipeline {
   agent {
     label 'ec2-agent'
@@ -17,10 +19,13 @@ pipeline {
     stage('Checkout') {
       steps {
         ciCheckout()
-        sh './scripts/get-version.sh >.version'
+        script {
+          version = sh(returnStdout: true, script: './scripts/get-version.sh').trim()
+        }
+        updateBuildName displayName: "#${env.BUILD_NUMBER} v${version}"
       }
     }
-    stage('Build') {
+    stage('Build Applications') {
       when {
         not {
           triggeredBy 'TimerTrigger'
@@ -33,7 +38,29 @@ pipeline {
                   credentialsId: 'artifactory-user',
                   usernameVariable: 'S8_REPO_USER',
                   passwordVariable: 'S8_REPO_PASSWORD')]) {
-            sh './gradlew -Pversion=$(cat .version) clean build'
+            sh """./gradlew -Pversion="${version}" clean build"""
+          }
+          withCredentials(
+              [usernamePassword(
+                  credentialsId: 'artifactory-user',
+                  usernameVariable: 'S8_REPO_USER',
+                  passwordVariable: 'S8_REPO_PASSWORD'),
+               usernamePassword(
+                   credentialsId: 'artifactory-deployment-user',
+                   usernameVariable: 'repoDeploymentUser',
+                   passwordVariable: 'repoDeploymentPassword')]) {
+            withDockerRegistry(
+                url: 'https://docker.repo.silenteight.com',
+                credentialsId: 'artifactory-deployment-user') {
+              sh """
+                ./gradlew \
+                  -Dsilenteight.repoDeploymentUser="\$repoDeploymentUser" \
+                  -Dsilenteight.repoDeploymentPassword="\$repoDeploymentPassword" \
+                  -Djib.console=plain \
+                  -Pversion="${version}" \
+                  publish
+              """
+            }
           }
         }
       }
@@ -55,54 +82,50 @@ pipeline {
         }
       }
     }
-    stage('Publish') {
+    stage('Build Chart') {
       when {
         not {
           triggeredBy 'TimerTrigger'
         }
       }
       steps {
-        withGradle {
-          withCredentials(
-              [usernamePassword(
-                  credentialsId: 'artifactory-user',
-                  usernameVariable: 'S8_REPO_USER',
-                  passwordVariable: 'S8_REPO_PASSWORD'),
-               usernamePassword(
-                   credentialsId: 'artifactory-deployment-user',
-                   usernameVariable: 'repoDeploymentUser',
-                   passwordVariable: 'repoDeploymentPassword')]) {
-            withDockerRegistry(
-                url: 'https://docker.repo.silenteight.com',
-                credentialsId: 'artifactory-deployment-user') {
-              sh '''./gradlew \
-                -Dsilenteight.repoDeploymentUser=$repoDeploymentUser \
-                -Dsilenteight.repoDeploymentPassword=$repoDeploymentPassword \
-                -Djib.console=plain \
-                -Pversion=$(cat .version) \
-                publish
-              '''
-            }
-          }
+        sh """
+          helm package \
+            --dependency-update \
+            --app-version "${version}" \
+            --version "${version}" \
+            --destination build/charts \
+            charts/sear
+        """
+        withCredentials(
+            [usernamePassword(
+                 credentialsId: 'artifactory-deployment-user',
+                 usernameVariable: 'HELM_REPO_USERNAME',
+                 passwordVariable: 'HELM_REPO_PASSWORD')]) {
+          sh """
+            helm push-artifactory \
+              --skip-reindex \
+              build/charts/sear-"${version}".tgz \
+              https://repo.silenteight.com/artifactory/helm
+          """
         }
-        updateBuildName displayName: "#${env.BUILD_NUMBER} v${readFile(file: '.version').trim()}"
       }
     }
     stage('Release') {
       parallel {
         stage('Release K8s/Sierra') {
           steps {
-            echo 'placeholder deployment'
+            echo "Deploying version ${version}"
           }
         }
         stage('Release K8s/Hotel') {
           steps {
-            echo 'placeholder deployment'
+            echo "Deploying version ${version}"
           }
         }
         stage('Deploy to Nomad') {
           steps {
-            echo 'placeholder deployment'
+            echo "Deploying version ${version} to Nomad?"
           }
         }
       }
