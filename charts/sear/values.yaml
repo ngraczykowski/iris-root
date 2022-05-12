@@ -402,7 +402,7 @@ agents:
       repository: registry.dev.s8ops.com/document-agent
   geo-agent:
     image:
-      repository: registry.dev.s8ops.com/geo-agent
+      repository: registry.dev.s8ops.com/geo-agent-default
   learning-engine:
     useDb: true
     dbName: "learningengine"
@@ -421,38 +421,6 @@ agents:
     type: python
     image:
       repository: registry.dev.s8ops.com/organization-name-agent
-    properties:
-      "serp.show-env": null
-    configFiles:
-      application.yml: |
-        agent:
-          processes: 1
-
-          agent-exchange:
-            request:
-              exchange: 'agent.request'
-              routing-key: 'agents.companyName.versions.1_0_0.configs.1'
-              queue-name: 'agent.companyname-requests'
-
-            response:
-              exchange: 'agent.response'
-
-          grpc:
-            port: 9090
-
-        grpc:
-          client:
-            data-source:
-              address: universal-data-source-service.default.svc.cluster.local:9090
-              timeout: 15
-
-        rabbitmq:
-          host: wrkd-sierra-uat-rmq-nlb-d1beaa949f286776.elb.us-west-1.amazonaws.com
-          port: 5672
-          login: {{ ssm "/rabbitmq/username" "required=true" "region=$AWS_REGION" }}
-          password: {{ ssm "/rabbitmq/password" "required=true" "region=$AWS_REGION" }}
-          virtualhost: /
-
 
 #
 # Frontend Web Application

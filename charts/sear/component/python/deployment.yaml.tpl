@@ -31,10 +31,42 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if .component.initScripts }}
       initContainers:
-        - name: init-rabbit-secrets
+        - name: init-scripts
           image: busybox
-          command: ['sh', '-c', "sleep 1"]
+          command: ['sh', '-c', "run-parts /var/run/initScripts"]
+          volumeMounts:
+            - name: init-scripts
+              mountPath: "/var/run/initScripts"
+              readOnly: true
+            - name: tmp
+              mountPath: "/tmp"
+              readOnly: false
+          env:
+            - name: RABBITMQ_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "sear.rabbitmqSecretName" . }}
+                  key: host
+            - name: RABBITMQ_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "sear.rabbitmqSecretName" . }}
+                  key: port
+            - name: RABBITMQ_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "sear.rabbitmqSecretName" . }}
+                  key: username
+            - name: RABBITMQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "sear.rabbitmqSecretName" . }}
+                  key: password
+            - name: UDS_ADDRESS
+              value: {{ include "sear.fullname" . }}-universal-data-source.{{ .Release.Namespace }}.svc:9090
+      {{- end }}
       containers:
         - name: {{ .componentName }}
           {{- with .Values.securityContext }}
@@ -58,14 +90,6 @@ spec:
             {{- toYaml .component.command | nindent 12 }}
           {{- end }}
           args:
-            - -v
-            {{- if .component.sentry.dsn }}
-#            - --sentry.dsn={{ .component.sentry.dsn }}
-#            - --sentry.environment={{ include "sear.sentryEnvironment" . }}
-            {{- end }}
-            {{- if .component.containerPorts.grpc.enabled }}
-            - --grpc
-            {{- end }}
             {{- if .component.args }}
               {{- toYaml .component.args | nindent 12 }}
             {{- end }}
@@ -76,6 +100,18 @@ spec:
             - name: secret-rabbitmq
               mountPath: "/var/run/secrets/rabbitmq"
               readOnly: true
+            {{- if .component.initScripts }}
+            - name: init-scripts
+              mountPath: "/var/run/initScripts"
+              readOnly: true
+            - name: tmp
+              mountPath: "/tmp"
+              readOnly: false
+            - name: tmp
+              mountPath: "/app/config/application.yaml"
+              readOnly: true
+              subPath: application.yaml
+            {{- end }}
           env:
       volumes:
         - name: config
@@ -84,6 +120,14 @@ spec:
         - name: secret-rabbitmq
           secret:
             secretName: {{ include "sear.rabbitmqSecretName" . }}
+        {{- if .component.initScripts }}
+        - name: init-scripts
+          configMap:
+            defaultMode: 0777
+            name: {{ include "sear.componentName" . }}-init-scripts
+        - name: tmp
+          emptyDir: {}
+        {{- end }}
       {{- with .component.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
