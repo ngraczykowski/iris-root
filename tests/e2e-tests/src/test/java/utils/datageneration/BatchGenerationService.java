@@ -63,6 +63,6 @@ public class BatchGenerationService {
   }
 
   private static class AlertDataTypeRef extends TypeReference<Map<String, String>> {
-    // Intentinally left empty.
+    // Intentionally left empty.
   }
 }

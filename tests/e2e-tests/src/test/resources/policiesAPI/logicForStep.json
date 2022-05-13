@@ -1,0 +1,10 @@
+{
+  "featuresLogic": [
+    {
+      "features": [
+        ${features}
+      ],
+      "toFulfill": 1
+    }
+  ]
+}

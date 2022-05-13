@@ -1,0 +1,7 @@
+{
+  "name": "${featureName}",
+  "condition": "${condition}",
+  "values": [
+    ${values}
+  ]
+}
