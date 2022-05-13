@@ -265,8 +265,8 @@ job "adjudication-engine" {
       }
 
       resources {
-        cpu = 50
-        memory = 20
+        cpu = 150
+        memory = 200
       }
 
       template {
