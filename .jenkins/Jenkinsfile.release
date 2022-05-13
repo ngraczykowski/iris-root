@@ -1,0 +1,111 @@
+/*
+ * Copyright (c) 2022 Silent Eight Pte. Ltd. All rights reserved.
+ */
+
+@Library('pipeline-shared-library@master') _
+
+def version = ""
+
+pipeline {
+  agent {
+    label 'ec2-agent-devenv'
+  }
+  triggers {
+    cron('H 5-17 * * 1-5')
+  }
+  options {
+    gitLabConnection(env.GITLAB_CONNECTION_NAME)
+    disableConcurrentBuilds()
+    ansiColor('xterm')
+  }
+  stages {
+    stage('Version') {
+      steps {
+        script {
+          version = sh(returnStdout: true, script: './scripts/get-version.sh').trim()
+        }
+        updateBuildName displayName: "#${env.BUILD_NUMBER} v${version}"
+      }
+    }
+    stage('Kubernetes Release') {
+      matrix {
+        axes {
+          axis {
+            name 'ENVIRONMENT'
+            values 'sierra', 'hotel', 'foxtrot'
+          }
+        }
+        environment {
+          ARTIFACTORY = credentials('artifactory-user')
+        }
+        stages {
+          stage('Install chart') {
+            steps {
+              echo "Deploying version ${version} to ${ENVIRONMENT}"
+              withKubeConfig(
+                  credentialsId: 'devenv-eks',
+                  serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
+                sh """
+                  helm install \
+                    --create-namespace \
+                    --namespace jenkins-${ENVIRONMENT} \
+                    --username "\$ARTIFACTORY_USR" \
+                    --password "\$ARTIFACTORY_PSW" \
+                    --values kubernetes/values.core.yaml \
+                    --values kubernetes/values.ingress-internal.yaml  \
+                    --values kubernetes/values.${ENVIRONMENT}.yaml \
+                    --wait \
+                    --timeout 10m \
+                    sear \
+                    https://repo.silenteight.com/artifactory/helm/sear/sear-"${version}".tgz
+                """
+              }
+            }
+            post {
+              failure {
+                echo "Deployment of ${version} to ${ENVIRONMENT} failed!"
+                withKubeConfig(
+                    credentialsId: 'devenv-eks',
+                    serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
+                  sh """
+                    export NAMESPACE=jenkins-${ENVIRONMENT}
+                    export LOGS_DIR=logs/${ENVIRONMENT}
+
+                    mkdir -p "\$LOGS_DIR"
+
+                    kubectl get pods \
+                      --namespace \$NAMESPACE \
+                      --output wide \
+                      --sort-by '.status.containerStatuses[0].restartCount' | tee "\$LOGS_DIR"/${ENVIRONMENT}+pods.log
+
+                    kubectl get events \
+                      --namespace \$NAMESPACE \
+                      --field-selector='type!=Normal,reason=BackOff' \
+                      --sort-by='.metadata.creationTimestamp' | tee "\$LOGS_DIR"/${ENVIRONMENT}+events.log
+
+                    FAILED_PODS=\$(kubectl get pods \
+                      --namespace \$NAMESPACE \
+                      --output=custom-columns="POD:metadata.name" \
+                      --no-headers)
+                    for pod in \$FAILED_PODS ; do
+                      kubectl --namespace \$NAMESPACE logs --previous \$pod >"\$LOGS_DIR"/${ENVIRONMENT}+\$pod.previous.log || true
+                      kubectl --namespace \$NAMESPACE logs \$pod >"\$LOGS_DIR"/${ENVIRONMENT}+\$pod.log || true
+                    done
+                  """
+                }
+                archiveArtifacts allowEmptyArchive: true, artifacts: "logs/${ENVIRONMENT}/*"
+              }
+              cleanup {
+                withKubeConfig(
+                    credentialsId: 'devenv-eks',
+                    serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
+                  sh "helm uninstall --namespace jenkins-${ENVIRONMENT} sear"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

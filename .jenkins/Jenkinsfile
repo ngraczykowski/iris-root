@@ -6,9 +6,6 @@ pipeline {
   agent {
     label 'ec2-agent'
   }
-  triggers {
-    cron('H 5-17 * * 1-5')
-  }
   options {
     gitLabConnection(env.GITLAB_CONNECTION_NAME)
     disableConcurrentBuilds()
@@ -24,11 +21,6 @@ pipeline {
       }
     }
     stage('Build Applications') {
-      when {
-        not {
-          triggeredBy 'TimerTrigger'
-        }
-      }
       steps {
         withGradle {
           withCredentials(
@@ -36,7 +28,7 @@ pipeline {
                   credentialsId: 'artifactory-user',
                   usernameVariable: 'S8_REPO_USER',
                   passwordVariable: 'S8_REPO_PASSWORD')]) {
-            sh """./gradlew -Pversion="${version}" clean build"""
+            sh "./gradlew -Pversion="${version}" clean build"
           }
           withCredentials(
               [usernamePassword(
@@ -51,7 +43,7 @@ pipeline {
                 url: 'https://docker.repo.silenteight.com',
                 credentialsId: 'artifactory-deployment-user') {
               sh """
-                ./gradlew \
+                if [[ \$BRANCH_NAME == 'master' ]] && ./gradlew \
                   -Dsilenteight.repoDeploymentUser="\$repoDeploymentUser" \
                   -Dsilenteight.repoDeploymentPassword="\$repoDeploymentPassword" \
                   -Djib.console=plain \
@@ -82,9 +74,7 @@ pipeline {
     }
     stage('Build Chart') {
       when {
-        not {
-          triggeredBy 'TimerTrigger'
-        }
+        branch 'master'
       }
       environment {
         ARTIFACTORY = credentials('artifactory-deployment-user')
@@ -105,141 +95,6 @@ pipeline {
             build/charts/sear-"${version}".tgz \
             https://repo.silenteight.com/artifactory/helm
         """
-      }
-    }
-    stage('Release') {
-      environment {
-        ARTIFACTORY = credentials('artifactory-user')
-      }
-      parallel {
-        stage('Release K8s/Sierra') {
-          agent {
-            label 'ec2-agent-devenv'
-          }
-          steps {
-            echo "Deploying version ${version}"
-            withKubeConfig(credentialsId: 'devenv-eks', serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
-              sh """
-                helm install \
-                  --create-namespace \
-                  --namespace jenkins-sierra \
-                  --debug \
-                  --username "\$ARTIFACTORY_USR" \
-                  --password "\$ARTIFACTORY_PSW" \
-                  --values kubernetes/values.core.yaml \
-                  --values kubernetes/values.ingress-internal.yaml  \
-                  --values kubernetes/values.sierra.yaml \
-                  --wait \
-                  --timeout 10m \
-                  sear \
-                  https://repo.silenteight.com/artifactory/helm/sear/sear-"${version}".tgz
-              """
-            }
-          }
-          post {
-            failure {
-              withKubeConfig(credentialsId: 'devenv-eks', serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
-                sh '''
-                  export NAMESPACE=jenkins-sierra
-                  mkdir -p logs
-                  FAILED_PODS=$(kubectl get events --namespace $NAMESPACE --field-selector='type!=Normal,reason=BackOff' --sort-by='.metadata.creationTimestamp' --output=custom-columns="POD:involvedObject.name" --no-headers)
-                  for pod in $FAILED_PODS ; do
-                    kubectl --namespace $NAMESPACE logs --previous $pod >logs/$pod.previous.log || true
-                    kubectl --namespace $NAMESPACE logs $pod >logs/$pod.log || true
-                    (cat logs/$pod.log 2>/dev/null || true) | tail -n 200
-                  done
-                '''
-              }
-              archiveArtifacts allowEmptyArchive: true, artifacts: 'logs/*'
-            }
-            cleanup {
-              withKubeConfig(credentialsId: 'devenv-eks', serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
-                sh """
-                  helm uninstall --namespace jenkins-sierra sear
-                """
-              }
-            }
-          }
-        }
-        stage('Release K8s/Hotel') {
-          agent {
-            label 'ec2-agent-devenv'
-          }
-          steps {
-            echo "Deploying version ${version}"
-            withKubeConfig(credentialsId: 'devenv-eks', serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
-              sh """
-                helm install \
-                  --create-namespace \
-                  --namespace jenkins-hotel \
-                  --debug \
-                  --username "\$ARTIFACTORY_USR" \
-                  --password "\$ARTIFACTORY_PSW" \
-                  --values kubernetes/values.core.yaml \
-                  --values kubernetes/values.ingress-internal.yaml  \
-                  --values kubernetes/values.hotel.yaml \
-                  --wait \
-                  --timeout 10m \
-                  sear \
-                  https://repo.silenteight.com/artifactory/helm/sear/sear-"${version}".tgz
-              """
-            }
-          }
-          post {
-            failure {
-              withKubeConfig(credentialsId: 'devenv-eks', serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
-                sh '''
-                  export NAMESPACE=jenkins-hotel
-                  mkdir -p logs
-                  FAILED_PODS=$(kubectl get events --namespace $NAMESPACE --field-selector='type!=Normal,reason=BackOff' --sort-by='.metadata.creationTimestamp' --output=custom-columns="POD:involvedObject.name" --no-headers)
-                  for pod in $FAILED_PODS ; do
-                    kubectl --namespace $NAMESPACE logs --previous $pod >logs/$pod.previous.log || true
-                    kubectl --namespace $NAMESPACE logs $pod >logs/$pod.log || true
-                    (cat logs/$pod.log 2>/dev/null || true) | tail -n 200
-                  done
-                '''
-              }
-              archiveArtifacts allowEmptyArchive: true, artifacts: 'logs/*'
-            }
-            cleanup {
-              withKubeConfig(credentialsId: 'devenv-eks', serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
-                sh """
-                  helm uninstall --namespace jenkins-hotel sear
-                """
-              }
-            }
-          }
-        }
-        stage('Release K8s/Foxtrot') {
-          steps {
-            echo "Deploying version ${version}"
-          }
-        }
-        stage('Release K8s/Mike') {
-          steps {
-            echo "Deploying version ${version}"
-          }
-        }
-        stage('Release K8s/Lima') {
-          steps {
-            echo "Deploying version ${version}"
-          }
-        }
-        stage('Deploy to Nomad') {
-          steps {
-            echo "Deploying version ${version} to Nomad?"
-          }
-        }
-      }
-      post {
-        cleanup {
-          withKubeConfig(credentialsId: 'devenv-eks', serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
-            sh '''
-              kubectl delete namespace jenkins-sierra
-              kubectl delete namespace jenkins-hotel
-            '''
-          }
-        }
       }
     }
   }
