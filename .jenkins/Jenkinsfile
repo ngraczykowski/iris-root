@@ -43,7 +43,7 @@ pipeline {
                 url: 'https://docker.repo.silenteight.com',
                 credentialsId: 'artifactory-deployment-user') {
               sh """
-                if [[ \$BRANCH_NAME == 'master' ]] && ./gradlew \
+                test \$BRANCH_NAME = 'master' && ./gradlew \
                   -Dsilenteight.repoDeploymentUser="\$repoDeploymentUser" \
                   -Dsilenteight.repoDeploymentPassword="\$repoDeploymentPassword" \
                   -Djib.console=plain \
