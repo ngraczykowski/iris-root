@@ -1,4 +1,4 @@
-{{ range .Values.keycloak.realmData.users }}
+{{ range (.Values.keycloak.realmData).users }}
 ---
 kind: KeycloakUser
 apiVersion: keycloak.org/v1alpha1

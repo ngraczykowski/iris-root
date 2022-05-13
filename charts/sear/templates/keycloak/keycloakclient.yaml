@@ -1,4 +1,4 @@
-{{- range .Values.keycloak.realmData.clients }}
+{{- range (.Values.keycloak.realmData).clients }}
 ---
 kind: KeycloakClient
 apiVersion: keycloak.org/v1alpha1
