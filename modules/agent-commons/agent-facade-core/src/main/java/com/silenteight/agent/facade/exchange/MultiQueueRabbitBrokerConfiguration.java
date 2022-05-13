@@ -2,21 +2,16 @@ package com.silenteight.agent.facade.exchange;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.amqp.core.AmqpAdmin;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.Exchange;
-import org.springframework.amqp.core.ExchangeBuilder;
-import org.springframework.amqp.core.FanoutExchange;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.QueueBuilder;
-import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.core.*;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-import javax.annotation.PostConstruct;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 @Configuration
 @RequiredArgsConstructor
@@ -26,74 +21,61 @@ import javax.annotation.PostConstruct;
 class MultiQueueRabbitBrokerConfiguration {
 
   private final AgentFacadeProperties agentFacadeProperties;
-  private final AmqpAdmin amqpAdmin;
 
-  @PostConstruct
-  public void init() {
-    agentFacadeProperties.getQueueDefinitions()
+  @Bean
+  public Declarables init() {
+    var declarables = agentFacadeProperties
+        .getQueueDefinitions()
         .values()
         .stream()
-        .forEach(this::createQueuesAndExchangesAndBindings);
+        .flatMap(MultiQueueRabbitBrokerConfiguration::createQueuesAndExchangesAndBindings)
+        .collect(toList());
+    return new Declarables(declarables);
   }
 
-  private void createQueuesAndExchangesAndBindings(QueueItem queueItem) {
+  private static Stream<Declarable> createQueuesAndExchangesAndBindings(QueueItem queueItem) {
     var inboundRoutingKey = queueItem.getInboundRoutingKey();
     var deadLetterExchangeName = queueItem.getDeadLetterExchangeName();
 
-    var inboundQueue = createQueue(queueItem.getInboundQueueName(),
-        deadLetterExchangeName, queueItem.getDeadLetterRoutingKey());
+    var inboundQueue = createQueue(queueItem.getInboundQueueName(), deadLetterExchangeName,
+        queueItem.getDeadLetterRoutingKey());
     var inboundExchange = createTopicExchange(queueItem.getInboundExchangeName());
-    createQueueBinding(inboundQueue, inboundExchange, inboundRoutingKey);
+    var queueBinding = createQueueBinding(inboundQueue, inboundExchange, inboundRoutingKey);
 
-    createTopicExchange(queueItem.getOutboundExchangeName());
+    var outboundExchange = createTopicExchange(queueItem.getOutboundExchangeName());
 
     var deadLetterQueue = createQueue(queueItem.getDeadLetterQueueName());
     var deadLetterExchange = createFanoutExchange(deadLetterExchangeName);
-    createQueueBinding(deadLetterQueue, deadLetterExchange, inboundRoutingKey);
+    var deadLetterBinding =
+        createQueueBinding(deadLetterQueue, deadLetterExchange, inboundRoutingKey);
+
+    return Stream.of(inboundQueue, inboundExchange, queueBinding, outboundExchange, deadLetterQueue,
+        deadLetterExchange, deadLetterBinding);
   }
-  
-  private Queue createQueue(
+
+  private static Queue createQueue(
       String queueName, String deadLetterExchange, String deadLetterRoutingKey) {
 
-    var queue = QueueBuilder
+    return QueueBuilder
         .durable(queueName)
         .deadLetterExchange(deadLetterExchange)
         .deadLetterRoutingKey(deadLetterRoutingKey)
         .build();
-    amqpAdmin.declareQueue(queue);
-    return queue;
   }
 
-  private TopicExchange createTopicExchange(String exchangeName) {
-    TopicExchange exchange = ExchangeBuilder
-        .topicExchange(exchangeName)
-        .build();
-    amqpAdmin.declareExchange(exchange);
-    return exchange;
+  private static TopicExchange createTopicExchange(String exchangeName) {
+    return ExchangeBuilder.topicExchange(exchangeName).build();
   }
 
-  private void createQueueBinding(Queue queue, Exchange exchange, String routingKey) {
-    Binding binding = BindingBuilder
-        .bind(queue)
-        .to(exchange)
-        .with(routingKey)
-        .noargs();
-    amqpAdmin.declareBinding(binding);
+  private static Binding createQueueBinding(Queue queue, Exchange exchange, String routingKey) {
+    return BindingBuilder.bind(queue).to(exchange).with(routingKey).noargs();
   }
 
-  private Queue createQueue(String queueName) {
-    Queue queue = QueueBuilder
-        .durable(queueName)
-        .build();
-    amqpAdmin.declareQueue(queue);
-    return queue;
+  private static Queue createQueue(String queueName) {
+    return QueueBuilder.durable(queueName).build();
   }
 
-  private FanoutExchange createFanoutExchange(String exchangeName) {
-    FanoutExchange exchange = ExchangeBuilder
-        .fanoutExchange(exchangeName)
-        .build();
-    amqpAdmin.declareExchange(exchange);
-    return exchange;
+  private static FanoutExchange createFanoutExchange(String exchangeName) {
+    return ExchangeBuilder.fanoutExchange(exchangeName).build();
   }
 }
