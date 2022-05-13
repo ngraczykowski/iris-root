@@ -104,8 +104,12 @@ pipeline {
       gitTagAndPush tag: 'last-known-good-build'
     }
     failure {
-      slackSend color: 'danger', channel: '#iris-tech',
-          message: "Build of ${env.BRANCH_NAME} v${version} failed (<${env.BUILD_URL}|Open>)."
+      script {
+        if (env.BRANCH_NAME == 'master') {
+          slackSend color: 'danger', channel: '#iris-tech',
+              message: "Build of v${version} failed (<${env.BUILD_URL}|Open>)."
+        }
+      }
     }
   }
 }
