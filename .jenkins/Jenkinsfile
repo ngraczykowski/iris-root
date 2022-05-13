@@ -98,4 +98,10 @@ pipeline {
       }
     }
   }
+  post {
+    success {
+      echo 'Tagging successful build'
+      gitTagAndPush tag: 'last-known-good-build'
+    }
+  }
 }
