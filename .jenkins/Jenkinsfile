@@ -103,5 +103,9 @@ pipeline {
       echo 'Tagging successful build'
       gitTagAndPush tag: 'last-known-good-build'
     }
+    failure {
+      slackSend color: 'danger', channel: '#iris-tech',
+          message: "Build of ${version} failed (<${env.BUILD_URL}|Open>)"
+    }
   }
 }
