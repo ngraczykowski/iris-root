@@ -36,7 +36,9 @@ pipeline {
         not {
           branch 'last-known-good-build'
         }
-        triggeredBy 'SCMTrigger'
+        not {
+          triggeredBy 'TimerTrigger'
+        }
       }
       steps {
         withGradle {
@@ -96,7 +98,9 @@ pipeline {
       when {
         beforeAgent true
         branch 'master'
-        triggeredBy 'SCMTrigger'
+        not {
+          triggeredBy 'TimerTrigger'
+        }
       }
       environment {
         ARTIFACTORY = credentials('artifactory-deployment-user')
