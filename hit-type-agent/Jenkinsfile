@@ -191,54 +191,54 @@ pipeline {
                 // }
             }
         }
-        stage('Zipped (.pyz) artifacts upload') {
-            agent any
-            when {
-                anyOf {
-                    branch 'master'
-                    tag pattern: '^v(\\d+(\\.\\d+)*)\$', comparator: 'REGEXP'
-                }
-            }
-            stages {
-                stage('Upload artifacts') {
-                    steps {
-                        sh './scripts/clean.sh'
-                        unstash 'artifacts'
-                        rtServer (
-                            id: "silenteight-repo",
-                            url: "https://repo.silenteight.com/artifactory",
-                            credentialsId: "artifactory-deployment-user"
-                        )
-                        rtUpload (
-                            serverId: 'silenteight-repo',
-                            spec: '''{
-                                "files": [
-                                    {
-                                      "pattern": "dist/*.pyz",
-                                      "target": "dist-public-local/hit-type-agent/"
-                                    },
-                                    {
-                                      "pattern": "dist/*.tgz",
-                                      "target": "dist-public-local/hit-type-agent/"
-                                    }
-                                ]
-                            }''',
-                        )
-                    }
-                }
-                stage('Deploy on nomad') {
-                    when {
-                        anyOf {
-                            branch 'master'
-                            tag pattern: '^v(\\d+(\\.\\d+)*)\$', comparator: 'REGEXP'
-                        }
-                    }
-                    steps {
-                        sh './nomad/deploy.sh'  //mike
-                    }
-                }
-            }
-       }
+//         stage('Zipped (.pyz) artifacts upload') {
+//             agent any
+//             when {
+//                 anyOf {
+//                     branch 'master'
+//                     branch pattern: '^v(\\d+(\\.\\d+)*)\$', comparator: 'REGEXP'
+//                 }
+//             }
+//             stages {
+//                 stage('Upload artifacts') {
+//                     steps {
+//                         sh './scripts/clean.sh'
+//                         unstash 'artifacts'
+//                         rtServer (
+//                             id: "silenteight-repo",
+//                             url: "https://repo.silenteight.com/artifactory",
+//                             credentialsId: "artifactory-deployment-user"
+//                         )
+//                         rtUpload (
+//                             serverId: 'silenteight-repo',
+//                             spec: '''{
+//                                 "files": [
+//                                     {
+//                                       "pattern": "dist/*.pyz",
+//                                       "target": "dist-public-local/hit-type-agent/"
+//                                     },
+//                                     {
+//                                       "pattern": "dist/*.tgz",
+//                                       "target": "dist-public-local/hit-type-agent/"
+//                                     }
+//                                 ]
+//                             }''',
+//                         )
+//                     }
+//                 }
+//                 stage('Deploy on nomad') {
+//                     when {
+//                         anyOf {
+//                             branch 'master'
+//                             branch pattern: '^v(\\d+(\\.\\d+)*)\$', comparator: 'REGEXP'
+//                         }
+//                     }
+//                     steps {
+//                         sh './nomad/deploy.sh'  //mike
+//                     }
+//                 }
+//             }
+//        }
     }
 }
 
