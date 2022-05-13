@@ -199,7 +199,8 @@ class WatchlistExtractor:
             details = descriptor.get("stopDescriptorDetails", [])
             for detail in details:
                 input_tokens.append(detail.get("inputToken", ""))
-
+        # input_tokens = set([token for tokens in input_tokens for token in tokens.split()])
+        # input_tokens = sorted(list(input_tokens))
         return {cn.WL_MATCHED_TOKENS: json.dumps(input_tokens)}
 
     @safe_field_extractor

@@ -110,10 +110,10 @@ class EtlPipelineServiceServicer(object):
 
     async def process_request(self, alerts_to_parse):
 
-        # future_payloads = [self.pool.submit(self.parse_alert, alert) for alert in alerts_to_parse]
-        # payloads = [future.result() for future in future_payloads]
-        # logger.debug(f"Collected parsed payloads {len(alerts_to_parse)}")
-        payloads = [self.parse_alert(alert) for alert in alerts_to_parse]  # debugging
+        future_payloads = [self.pool.submit(self.parse_alert, alert) for alert in alerts_to_parse]
+        payloads = [future.result() for future in future_payloads]
+        logger.debug(f"Collected parsed payloads {len(alerts_to_parse)}")
+        # payloads = [self.parse_alert(alert) for alert in alerts_to_parse]  # debugging
         statuses = []
         for alert, record in zip(alerts_to_parse, payloads):
             logger.debug(f"Collected parsed payloads {len(alerts_to_parse)}")
