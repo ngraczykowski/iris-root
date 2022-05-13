@@ -1,15 +1,15 @@
 plugins {
-  id "java-library"
+  id "com.silenteight.iris.build.java-library"
   id "groovy"
 }
 
 dependencies {
-  api libraries.sentry
-  implementation libraries.silenteight_sep_base_common
-  implementation libraries.spring_context
-  implementation libraries.protobuf_java_util
-  implementation libraries.commons_lang3
-  implementation libraries.guava
-  implementation libraries.grpc_protobuf
-  implementation libraries.hibernate_validator
+  api libs.sentry
+  implementation libs.silenteight.sep.base.common
+  implementation libs.spring.context
+  implementation libs.protobuf.java.util
+  implementation libs.commons.lang3
+  implementation libs.guava
+  implementation libs.grpc.protobuf
+  implementation libs.hibernate.validator
 }
