@@ -148,7 +148,20 @@ keycloak:
           # looks like change is enforced on first login
           - type: "password"
             value: "temporary123"
+        realmRoles:
+          - default-roles-{{ .Release.Namespace }}
+        clientRoles:
+          frontend:
+            - "QA_ISSUE_MANAGER"
+            - "MODEL_TUNER"
+            - "USER_ADMINISTRATOR"
+            - "QA"
+            - "APPROVER"
+            - "AUDITOR"
       - username: "ttorcz"
+        firstName: "Tomasz"
+        lastName: "Torcz"
+        email: "ttorcz@silenteight.com"
         enabled: true
         credentials:
           - type: "password"
