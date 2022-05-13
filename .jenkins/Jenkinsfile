@@ -118,7 +118,7 @@ pipeline {
       script {
         if (env.BRANCH_NAME == 'master') {
           slackSend color: 'danger', channel: '#iris-tech',
-              message: "Build of version ${version} failed! To see the details, <${env.BUILD_URL}|click here>).."
+              message: "Build of version ${version} failed! To see the details, <${env.BUILD_URL}|click here>."
         }
       }
     }

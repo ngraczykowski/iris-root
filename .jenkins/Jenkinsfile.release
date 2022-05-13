@@ -111,7 +111,7 @@ pipeline {
   post {
     failure {
       slackSend color: 'danger', channel: '#iris-tech',
-          message: "Failed to release version ${version}! To see the details, <${env.BUILD_URL}|click here>)."
+          message: "Failed to release version ${version}! To see the details, <${env.BUILD_URL}artifact/logs/|click here>."
     }
   }
 }
