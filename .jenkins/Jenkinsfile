@@ -28,7 +28,7 @@ pipeline {
                   credentialsId: 'artifactory-user',
                   usernameVariable: 'S8_REPO_USER',
                   passwordVariable: 'S8_REPO_PASSWORD')]) {
-            sh "./gradlew -Pversion="${version}" clean build"
+            sh "./gradlew -Pversion=\"${version}\" clean build"
           }
           withCredentials(
               [usernamePassword(
