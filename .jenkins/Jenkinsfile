@@ -107,6 +107,7 @@ pipeline {
       post {
         success {
           echo 'Marking successful build'
+          sh 'git branch --force last-known-good-build'
           gitPush branch: 'last-known-good-build'
         }
       }
