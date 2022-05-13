@@ -49,7 +49,7 @@ uds:
   #-------------------------------------------------------------------------------------------------
   # Feature input mapping
   #
-  # It contains only these features which should be mapped  
+  # It contains only these features which should be mapped
   #-------------------------------------------------------------------------------------------------
   feature:
     mapping:
