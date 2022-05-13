@@ -158,7 +158,7 @@ hit_type_agent:
  
 matched_tokens_tp_marked_agent:
   input:
-  - watchlistParty.matchRecords.WL_MATCHED_TOKENS
+  - watchlistParty.matchRecords.TOKENS_RISK_CARRIER
 
 ap_name_tp_marked_agent:
   input:
