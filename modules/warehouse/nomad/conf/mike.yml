@@ -34,7 +34,9 @@ warehouse:
   persistence:
     alert:
       recommendation-date-field: "recommendationDate"
-
+  simulation:
+    migration:
+      enabled: true
   db:
     name: {{ env "NOMAD_NAMESPACE" }}-warehouse
   {{- $nomad_namespace := env "NOMAD_NAMESPACE" -}}
