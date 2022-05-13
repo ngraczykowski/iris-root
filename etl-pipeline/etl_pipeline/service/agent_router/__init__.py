@@ -151,6 +151,8 @@ class AgentInputCreator:
         for producer in self.producers:
             try:
                 feature_input = producer.produce_feature_input(payload)
+                if feature_input is None:
+                    continue
                 logger.debug(f"Produced features {str(feature_input)}")
                 if isinstance(feature_input, list):
                     for input_ in feature_input:
@@ -176,6 +178,8 @@ class AgentInputCreator:
                 category_value = producer.produce_feature_input(
                     payload, match_payload, alert, match_name
                 )
+                if category_value is None:
+                    continue
                 logger.debug(f"Produced features {str(category_value)}")
                 category_matches.append(
                     CreateCategoryValuesRequest(

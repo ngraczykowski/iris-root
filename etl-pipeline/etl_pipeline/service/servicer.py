@@ -116,7 +116,6 @@ class EtlPipelineServiceServicer(object):
         # payloads = [self.parse_alert(alert) for alert in alerts_to_parse]  # debugging
         statuses = []
         for alert, record in zip(alerts_to_parse, payloads):
-            logger.debug(f"Collected parsed payloads {len(alerts_to_parse)}")
             statuses.append(self.upload_to_data_source(alert, record))
         all_data = await asyncio.gather(*statuses)
         etl_alerts = [self._parse_alert(alert, status) for alert, status in all_data]
@@ -133,8 +132,11 @@ class EtlPipelineServiceServicer(object):
             payload = PayloadLoader().load_payload_from_json(payload)
             payload = {key: payload[key] for key in sorted(payload)}
             payload[cn.MATCH_IDS] = alert.matches
+            logger.debug(f"Payload loaded for {alert.alert_name}")
             payload = pipeline.transform_standardized_to_cleansed(payload)
-            logger.debug(f"Number of records (input_record vs match pairs): {len(payload)}")
+            logger.debug(
+                f"Number of records (input_record vs match pairs): {len(payload)} for {alert.alert_name}"
+            )
             logger.debug(f"{alert.alert_name} - Transform standardized to cleansed - success")
             payload = pipeline.transform_cleansed_to_application(payload)
             logger.debug(f"{alert.alert_name} - Transform cleansed to application - success")

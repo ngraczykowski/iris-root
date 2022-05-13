@@ -36,6 +36,18 @@ from silenteight.datasource.categories.api.v2.category_value_pb2 import Category
 logger = logging.getLogger("main").getChild("producers")
 
 
+def safe_produce(func):
+    def wrap(*args, **kwargs):
+        try:
+            result = func(*args, **kwargs)
+        except Exception as e:
+            logger.error(e)
+            result = None
+        return result
+
+    return wrap
+
+
 class Producer(ABC):
     def __init__(self, prefix, feature_name, field_maps):
         self.feature_name = f"{prefix}/{feature_name}"
@@ -47,6 +59,7 @@ class Producer(ABC):
 
 
 class CountryFeatureInputProducer(Producer):
+    @safe_produce
     def produce_feature_input(self, payload):
         fields = deepcopy(self.fields)
         payload = deepcopy(payload)
@@ -59,6 +72,7 @@ class CountryFeatureInputProducer(Producer):
 
 
 class DateFeatureInputProducer(Producer):
+    @safe_produce
     def produce_feature_input(self, payload):
         fields = deepcopy(self.fields)
         payload = deepcopy(payload)
@@ -73,6 +87,7 @@ class DateFeatureInputProducer(Producer):
 
 
 class DocumentFeatureInputProducer(Producer):
+    @safe_produce
     def produce_feature_input(self, payload):
         fields = deepcopy(self.fields)
         payload = deepcopy(payload)
@@ -87,6 +102,7 @@ class DocumentFeatureInputProducer(Producer):
 
 
 class HistoricalDecisionsFeatureInputProducer(Producer):
+    @safe_produce
     def produce_feature_input(self, payload):
         fields = deepcopy(self.fields)
         payload = deepcopy(payload)
@@ -103,6 +119,7 @@ class HistoricalDecisionsFeatureInputProducer(Producer):
 
 
 class LocationFeatureInputProducer(Producer):
+    @safe_produce
     def produce_feature_input(self, payload):
         fields = deepcopy(self.fields)
         payload = deepcopy(payload)
@@ -124,6 +141,7 @@ class NameFeatureInputProducer(Producer):
         "UNKNOWN": NameFeatureInput.EntityType.ENTITY_TYPE_UNSPECIFIED,
     }
 
+    @safe_produce
     def produce_feature_input(self, payload):
         fields = deepcopy(self.fields)
         payload = deepcopy(payload)
@@ -146,6 +164,7 @@ class NameFeatureInputProducer(Producer):
 
 
 class CategoryProducer(Producer):
+    @safe_produce
     def produce_feature_input(self, payload, match_payload, alert, match_name):
         fields = deepcopy(self.fields)
         payload = deepcopy(payload)
@@ -154,6 +173,7 @@ class CategoryProducer(Producer):
 
 
 class HitTypeFeatureInputProducer(Producer):
+    @safe_produce
     def produce_feature_input(self, payload):
         fields = deepcopy(dict(self.fields))
         payload = deepcopy(dict(payload))
