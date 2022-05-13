@@ -11,6 +11,20 @@ from etl_pipeline.data_processor_engine.engine.engine import ProcessingEngine
 
 logger = logging.getLogger("main").getChild("engine")
 cn = pipeline_config.cn
+
+
+def safe_field_extractor(func):
+    def wrap(*args, **kwargs):
+        try:
+            result = func(*args, **kwargs)
+        except Exception as e:
+            logger.error(f"{str(e)} for {func}")
+            result = ""
+        return result
+
+    return wrap
+
+
 COLLECTIVE_REPRESENTATION_MAP_FOR_PARTY = {
     cn.ALL_CONNECTED_PARTIES_NAMES: cn.CONNECTED_FULL_NAME,
     cn.ALL_CONNECTED_PARTY_TYPES: cn.PARTY_TYPE,
@@ -83,6 +97,7 @@ class JsonProcessingEngine(ProcessingEngine):
         return {cn.WL_MATCHED_TOKENS: json.dumps(result)}
 
     @staticmethod
+    @safe_field_extractor
     def set_trigger_reasons(match, fuzziness_level):
         skip_columns = ["USER_NOTE_TEXT"]
         result = []
@@ -148,6 +163,7 @@ class JsonProcessingEngine(ProcessingEngine):
         return self.spark_instance.read_delta(*args, **kwargs)
 
     @staticmethod
+    @safe_field_extractor
     def get_clean_names_from_concat_name(concat_field: str, source_fields: Dict[str, str]):
 
         distinct_names = []
@@ -223,16 +239,16 @@ class JsonProcessingEngine(ProcessingEngine):
                 try:
                     value.append(mapper[valid_source_col])
                 except KeyError:
-                    logger.warning(f"No field in payload named: {valid_source_col}.")
+                    if "hit_type" not in valid_source_col:
+                        logger.warning(f"No field in payload named: {valid_source_col}.")
         elif len(source_cols) == 1:
             try:
                 value = mapper[source_cols[0]]
                 if return_array:
                     value = [value]
             except KeyError:
-                logger.warning(
-                    f"No field in payload named: {source_cols}. Ignore for HIT TYPE AGENT"
-                )
+                if "hit_type" not in source_cols:
+                    logger.warning(f"No field in payload named: {source_cols}")
         else:
             value = None
             if return_array:
@@ -256,7 +272,7 @@ class JsonProcessingEngine(ProcessingEngine):
 
     def collect_party_values_from_parties_from_fields(self, fields, payload):
         for connected_key, value in COLLECTIVE_REPRESENTATION_MAP_FOR_FIELD.items():
-            logger.debug(f"{connected_key}, {value}, {self.get_field_value_name(fields, value)}")
+            # logger.debug(f"{connected_key}, {value}, {self.get_field_value_name(fields, value)}")
             payload[connected_key] = self.get_field_value_name(fields, value)
 
     def get_field_value_name(self, fields, name):

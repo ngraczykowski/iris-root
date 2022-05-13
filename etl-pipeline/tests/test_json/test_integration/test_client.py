@@ -20,6 +20,17 @@ from etl_pipeline.service.proto.api.etl_pipeline_pb2 import (
 from etl_pipeline.service.proto.api.etl_pipeline_pb2_grpc import EtlPipelineServiceStub
 
 
+def sort_geo_feature(tested_item, reference_item):
+    if tested_item.get("alertedPartyLocation", None):
+        tested_item["alertedPartyLocation"] = set(tested_item["alertedPartyLocation"].split())
+        reference_item["alertedPartyLocation"] = set(
+            reference_item["alertedPartyLocation"].split()
+        )
+    if tested_item.get("watchlistLocation", None):
+        tested_item["watchlistLocation"] = set(tested_item["watchlistLocation"].split())
+        reference_item["watchlistLocation"] = set(reference_item["watchlistLocation"].split())
+
+
 def sort_hit_feature(i, j):
     for key in i["triggeredTokens"]:
         for token in i["triggeredTokens"][key]:
@@ -35,34 +46,48 @@ def compare_tested_uds_features_with_reference(tested_file, reference_file):
     with open(tested_file, "r") as f1, open(reference_file, "r") as f2:
         tested = json.load(f1)
         reference = json.load(f2)
-        for i, j in zip(tested, reference):
-            if i["feature"] in ["features/name", "features/companyName", "features/employerName"]:
-                if i.get("alertedPartyNames", None):
-                    i["alertedPartyNames"] = sorted(
-                        i["alertedPartyNames"], key=lambda x: x["name"]
+        for tested_item, reference_item in zip(tested, reference):
+            if tested_item["feature"] in [
+                "features/name",
+                "features/companyName",
+                "features/employerName",
+            ]:
+                if tested_item.get("alertedPartyNames", None):
+                    tested_item["alertedPartyNames"] = sorted(
+                        tested_item["alertedPartyNames"], key=lambda x: x["name"]
                     )
-                    j["alertedPartyNames"] = sorted(
-                        j["alertedPartyNames"], key=lambda x: x["name"]
+                    reference_item["alertedPartyNames"] = sorted(
+                        reference_item["alertedPartyNames"], key=lambda x: x["name"]
                     )
-                if i.get("watchlistNames", None):
-                    i["watchlistNames"] = sorted(i["watchlistNames"], key=lambda x: x["name"])
-                    j["watchlistNames"] = sorted(j["watchlistNames"], key=lambda x: x["name"])
-            if i["feature"] == "features/dateOfBirth":
-                i["alertedPartyDates"] = sorted(i["alertedPartyDates"])
-                j["alertedPartyDates"] = sorted(j["alertedPartyDates"])
-                i["watchlistDates"] = sorted(i["watchlistDates"])
-                j["watchlistDates"] = sorted(j["watchlistDates"])
-            if i["feature"] == "features/document":
-                i["alertedPartyDocuments"] = sorted(i["alertedPartyDocuments"])
-                j["alertedPartyDocuments"] = sorted(j["alertedPartyDocuments"])
-            if "geo" in i["feature"]:
-                i["alertedPartyLocation"] = set(i["alertedPartyLocation"].split())
-                j["alertedPartyLocation"] = set(j["alertedPartyLocation"].split())
-                i["watchlistLocation"] = set(i["watchlistLocation"].split())
-                j["watchlistLocation"] = set(j["watchlistLocation"].split())
-            if "hitType" in i["feature"]:
-                sort_hit_feature(i, j)
-        assert i == j
+                if tested_item.get("watchlistNames", None):
+                    tested_item["watchlistNames"] = sorted(
+                        tested_item["watchlistNames"], key=lambda x: x["name"]
+                    )
+                    reference_item["watchlistNames"] = sorted(
+                        reference_item["watchlistNames"], key=lambda x: x["name"]
+                    )
+            if tested_item["feature"] == "features/dateOfBirth":
+                if tested_item.get("alertedPartyDates", None):
+                    tested_item["alertedPartyDates"] = sorted(tested_item["alertedPartyDates"])
+                    reference_item["alertedPartyDates"] = sorted(
+                        reference_item["alertedPartyDates"]
+                    )
+                if tested_item.get("watchlistDates", None):
+                    tested_item["watchlistDates"] = sorted(tested_item["watchlistDates"])
+                    reference_item["watchlistDates"] = sorted(reference_item["watchlistDates"])
+            if tested_item["feature"] == "features/document":
+                if tested_item.get("alertedPartyDocuments", None):
+                    tested_item["alertedPartyDocuments"] = sorted(
+                        tested_item["alertedPartyDocuments"]
+                    )
+                    reference_item["alertedPartyDocuments"] = sorted(
+                        reference_item["alertedPartyDocuments"]
+                    )
+            if "geo" in tested_item["feature"]:
+                sort_geo_feature(tested_item, reference_item)
+            if "hitType" in tested_item["feature"]:
+                sort_hit_feature(tested_item, reference_item)
+        assert tested_item == reference_item
 
 
 def load_alert(filepath: str = "notebooks/sample/wm_address_in_payload_format.json"):
@@ -89,7 +114,7 @@ def load_alert(filepath: str = "notebooks/sample/wm_address_in_payload_format.js
 class BaseGrpcTestCase:
     @pytest.mark.asyncio
     class TestGrpcServer(AsyncTestCase):
-        TIMEOUT = 3
+        TIMEOUT = 10
 
         @classmethod
         def tearDownClass(cls):
@@ -109,7 +134,7 @@ class BaseGrpcTestCase:
             for match in request_alert.matches:
                 compare_tested_uds_features_with_reference(
                     f'/tmp/features_{match.match_name.replace("/", "_")}.json',
-                    f'tests/test_json/test_integration/expected_features/test_ok_flow_{match.match_name.replace("/", "_")}.json',
+                    f'tests/test_json/test_integration/expected_features/test_ok_flow_features/features_{match.match_name.replace("/", "_")}.json',
                 )
                 os.remove(f'/tmp/features_{match.match_name.replace("/", "_")}.json')
 
@@ -178,6 +203,18 @@ class BaseGrpcTestCase:
         def test_empty_flow(self):
             response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[]))
             assert [i for i in response.etl_alerts] == []
+
+        @pytest.mark.asyncio
+        async def test_ok_for_big_payload(self):
+            request_alert = load_alert("notebooks/sample/big_fat_flat_payload.json")
+            response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[request_alert]))
+            for etl_alert in response.etl_alerts:
+                assert etl_alert.etl_status == SUCCESS
+            for match in request_alert.matches:
+                compare_tested_uds_features_with_reference(
+                    f'/tmp/features_{match.match_name.replace("/", "_")}.json',
+                    f'tests/test_json/test_integration/expected_features/test_ok_for_big_payload/features_{match.match_name.replace("/", "_")}.json',
+                )
 
 
 class TestGrpcServerWithoutSSL(BaseGrpcTestCase.TestGrpcServer):

@@ -1,3 +1,4 @@
+import json
 import logging
 from copy import deepcopy
 
@@ -151,6 +152,7 @@ class MSPipeline(ETLPipeline):
                 self.set_up_party_type(payload, match)
             self.set_up_party_type(payload, payload)
             self.set_up_dataset_type_match(payload, match)
+            self.set_token_risk_carrier(match)
         return payloads
 
     def parse_key(self, value, match, payload, new_config):
@@ -316,3 +318,12 @@ class MSPipeline(ETLPipeline):
         match[cn.DATASET_TYPE] = self.dataset_config.get(
             payload[cn.ALERTED_PARTY_FIELD][cn.HEADER_INFO][cn.DATASET_NAME]
         )
+
+    def set_token_risk_carrier(self, match):
+        filtered_tokens = [
+            token
+            for tokens in json.loads(match["WL_MATCHED_TOKENS"])
+            for token in tokens.split()
+            if len(token) > 2
+        ]
+        match["TOKENS_RISK_CARRIER"] = ",".join(sorted(list(set(filtered_tokens))))

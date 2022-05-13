@@ -1,3 +1,4 @@
+import logging
 import re
 from typing import Any, Dict, List, NamedTuple
 
@@ -11,12 +12,26 @@ class NamedValues(NamedTuple):
 
 
 cleaner = re.compile(r"\W")
+logger = logging.getLogger("main").getChild("TriggeredTokensDiscoverer")
+
+
+def safe_field_extractor(func):
+    def wrap(*args, **kwargs):
+        try:
+            result = func(*args, **kwargs)
+        except Exception as e:
+            logger.error(f"{str(e)} for {func}")
+            result = ""
+        return result
+
+    return wrap
 
 
 class TriggeredTokensDiscoverer:
     def __init__(self, fuzzy_threshold: int):
         self.fuzzy_threshold = fuzzy_threshold
 
+    @safe_field_extractor
     def discover(
         self, matched_tokens: List[str], values_dict: Dict[str, Any]
     ) -> Dict[str, Dict[str, List[str]]]:

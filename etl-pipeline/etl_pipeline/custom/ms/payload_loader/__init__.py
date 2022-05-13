@@ -1,6 +1,14 @@
 import collections.abc
 import json
+import logging
 import re
+from configparser import ParsingError
+
+logger = logging.getLogger("main").getChild("payload_loader")
+
+
+class PayloadLoaderError(Exception):
+    pass
 
 
 class PayloadLoader:
@@ -25,7 +33,7 @@ class PayloadLoader:
         try:
             value = self.deep_update(list_to_be_updated[idx], value[idx])
             list_to_be_updated[idx] = value
-        except IndexError:
+        except (IndexError, AttributeError):
             self.add_new_elements(list_to_be_updated, value, idx)
 
     def collect_list(self, dictionary_to_be_updated, key, value):
@@ -94,14 +102,12 @@ class PayloadLoader:
                     dictionary[new_key] = extracted_value
         except IndexError:
             self.update_dictionary_with_value_or_list(dictionary, value, splitted_keys)
-
         return dictionary, extracted_value_is_array
 
     def update_dictionary_with_value_or_list(self, dict_, value, splitted_keys):
         extracted_value = self.jsonify(value)
         if len(splitted_keys) == 1:
             new_key = splitted_keys[0]
-
             if self.LIST_TYPE_REGEX.findall(new_key):
                 dict_.update(self.create_dict_with_array_value(new_key, extracted_value))
             else:
@@ -113,6 +119,12 @@ class PayloadLoader:
         new_payload = {}
         for key, value in payload.items():
             splitted_keys = key.split(".")
-            extracted_dict, _ = self.extract_dict(splitted_keys, value)
-            new_payload = self.deep_update(new_payload, extracted_dict)
+            try:
+                extracted_dict, _ = self.extract_dict(splitted_keys, value)
+                new_payload = self.deep_update(new_payload, extracted_dict)
+            except Exception as e:
+                logger.debug(
+                    f"This fragment cannot be parsed from json input: {extracted_dict} and {splitted_keys}. Existing parsed payload: {new_payload}"
+                )
+                raise ParsingError(f"{str(e)}")
         return new_payload

@@ -140,6 +140,12 @@ def assert_length_and_content_match(
             2,
             "A05003324172",
         ),
+        (
+            "notebooks/sample/big_fat_flat_payload.json",
+            "tests/shared/big_fat_payload_parsed.pkl",
+            9,
+            "A00183210139",
+        ),
     ],
 )
 def test_pipeline(payload_file, reference_file, reference_length, ap_id_tp_marked_agent_input):

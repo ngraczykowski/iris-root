@@ -30,6 +30,7 @@ class WatchlistExtractor:
         else:
             return [x]
 
+    @safe_field_extractor
     def parse_dob_dict(self, dob):
         dmy = ["", "", ""]
         result = []
