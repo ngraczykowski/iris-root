@@ -11,7 +11,7 @@ pipeline {
     label 'ec2-agent-devenv'
   }
   triggers {
-    cron('H 5-17 * * 1-5')
+    pollSCM('H 5-17 * * 1-5')
   }
   options {
     gitLabConnection(env.GITLAB_CONNECTION_NAME)
