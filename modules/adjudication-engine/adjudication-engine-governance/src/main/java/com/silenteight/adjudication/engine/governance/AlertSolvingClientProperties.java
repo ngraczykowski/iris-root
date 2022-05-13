@@ -7,7 +7,7 @@ import org.springframework.validation.annotation.Validated;
 
 import java.time.Duration;
 
-@ConfigurationProperties("ae.grcp.client.alert-solving")
+@ConfigurationProperties("ae.grpc.client.alert-solving")
 @Data
 @Validated
 class AlertSolvingClientProperties {
