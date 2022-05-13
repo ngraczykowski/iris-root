@@ -18,7 +18,11 @@ class DeleteFeaturesService implements DeleteFeaturesUseCase {
 
   private final FeatureDataAccess dataAccess;
 
-  @Timed(value = "uds.feature.use_cases", extraTags = { "action", "deleteFeatures" })
+  @Timed(
+      value = "uds.feature.use_cases",
+      extraTags = { "action", "deleteFeatures" },
+      histogram = true,
+      percentiles = { 0.5, 0.95, 0.99 })
   @Override
   public void delete(List<String> alerts) {
 

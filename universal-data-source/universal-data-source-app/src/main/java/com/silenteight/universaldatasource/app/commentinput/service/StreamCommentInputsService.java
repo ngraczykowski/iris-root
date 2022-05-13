@@ -22,7 +22,12 @@ class StreamCommentInputsService implements StreamCommentInputsUseCase {
 
   private final CommentInputMapper commentInputMapper;
 
-  @Timed(value = "uds.comment-input.use_cases", extraTags = { "action", "streamCommentInput" })
+  @Timed(
+      value = "uds.comment-input.use_cases",
+      extraTags = { "action", "streamCommentInput" },
+      histogram = true,
+      percentiles = { 0.5, 0.95, 0.99 }
+  )
   @Override
   public void streamCommentInput(List<String> alerts, Consumer<CommentInput> consumer) {
 

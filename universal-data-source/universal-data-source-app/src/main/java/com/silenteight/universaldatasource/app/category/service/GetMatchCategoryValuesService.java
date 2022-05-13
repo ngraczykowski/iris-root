@@ -28,7 +28,12 @@ class GetMatchCategoryValuesService implements GetMatchCategoryValuesUseCase {
 
   private final CategoryValueDataAccess categoryValueDataAccess;
 
-  @Timed(value = "uds.category.use_cases", extraTags = { "action", "batchGetCategoryValues" })
+  @Timed(
+      value = "uds.category.use_cases",
+      extraTags = { "action", "batchGetCategoryValues" },
+      histogram = true,
+      percentiles = { 0.5, 0.95, 0.99 }
+  )
   @Override
   public BatchGetMatchesCategoryValuesResponse batchGetMatchCategoryValues(
       List<CategoryMatches> matchValuesList) {

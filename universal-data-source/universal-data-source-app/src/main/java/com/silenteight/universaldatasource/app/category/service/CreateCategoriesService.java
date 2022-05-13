@@ -22,7 +22,12 @@ class CreateCategoriesService implements CreateCategoriesUseCase {
 
   private final CategoryDataAccess categoryDataAccess;
 
-  @Timed(value = "uds.category.use_cases", extraTags = { "action", "createCategories" })
+  @Timed(
+      value = "uds.category.use_cases",
+      extraTags = { "action", "createCategories" },
+      histogram = true,
+      percentiles = { 0.5, 0.95, 0.99 }
+  )
   @Override
   public BatchCreateCategoriesResponse createCategories(
       List<Category> newCategories) {

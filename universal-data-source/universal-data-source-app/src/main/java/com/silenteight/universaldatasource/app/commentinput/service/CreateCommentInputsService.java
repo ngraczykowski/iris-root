@@ -23,7 +23,12 @@ class CreateCommentInputsService implements CreateCommentInputsUseCase {
 
   private final AlertCommentInputMapper alertCommentInputMapper;
 
-  @Timed(value = "uds.comment-input.use_cases", extraTags = { "action", "addCommentInputs" })
+  @Timed(
+      value = "uds.comment-input.use_cases",
+      extraTags = { "action", "addCommentInputs" },
+      histogram = true,
+      percentiles = { 0.5, 0.95, 0.99 }
+  )
   @Override
   public BatchCreateCommentInputResponse addCommentInputs(List<CommentInput> commentInputs) {
 

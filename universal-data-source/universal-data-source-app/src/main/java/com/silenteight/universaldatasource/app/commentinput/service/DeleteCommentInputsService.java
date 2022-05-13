@@ -18,7 +18,12 @@ class DeleteCommentInputsService implements DeleteCommentInputsUseCase {
 
   private final CommentInputDataAccess dataAccess;
 
-  @Timed(value = "uds.comment-input.use_cases", extraTags = { "action", "deleteCommentInputs" })
+  @Timed(
+      value = "uds.comment-input.use_cases",
+      extraTags = { "action", "deleteCommentInputs" },
+      histogram = true,
+      percentiles = { 0.5, 0.95, 0.99 }
+  )
   @Override
   public void delete(List<String> alerts) {
 

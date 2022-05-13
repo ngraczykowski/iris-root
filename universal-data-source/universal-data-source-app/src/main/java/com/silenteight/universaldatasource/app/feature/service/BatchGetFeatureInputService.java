@@ -30,7 +30,12 @@ class BatchGetFeatureInputService implements BatchGetFeatureInputUseCase {
   private final FeatureMapperFactory featureMapperFactory;
   private final FeatureInputMapper featureInputMapper;
 
-  @Timed(value = "uds.feature.use_cases", extraTags = { "action", "batchGetFeature" })
+  @Timed(
+      value = "uds.feature.use_cases",
+      extraTags = { "action", "batchGetFeature" },
+      histogram = true,
+      percentiles = {0.5, 0.95, 0.99}
+  )
   @Override
   public void batchGetFeatureInput(
       BatchFeatureRequest batchFeatureRequest,

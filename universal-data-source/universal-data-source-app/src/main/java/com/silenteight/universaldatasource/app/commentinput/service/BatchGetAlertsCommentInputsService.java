@@ -24,7 +24,12 @@ class BatchGetAlertsCommentInputsService implements BatchGetAlertsCommentInputsU
 
   private final CommentInputMapper commentInputMapper;
 
-  @Timed(value = "uds.comment-input.use_cases", extraTags = { "action", "batchGetCommentInputs" })
+  @Timed(
+      value = "uds.comment-input.use_cases",
+      extraTags = { "action", "batchGetCommentInputs" },
+      histogram = true,
+      percentiles = { 0.5, 0.95, 0.99 }
+  )
   @Override
   public BatchGetAlertsCommentInputsResponse batchGetAlertsCommentInputs(List<String> alerts) {
 

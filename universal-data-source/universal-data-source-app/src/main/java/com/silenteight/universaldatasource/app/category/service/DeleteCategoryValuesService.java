@@ -18,7 +18,12 @@ class DeleteCategoryValuesService implements DeleteCategoryValuesUseCase {
 
   private final CategoryValueDataAccess categoryValueDataAccess;
 
-  @Timed(value = "uds.category.use_cases", extraTags = { "action", "deleteCategoryValues" })
+  @Timed(
+      value = "uds.category.use_cases",
+      extraTags = { "action", "deleteCategoryValues" },
+      histogram = true,
+      percentiles = { 0.5, 0.95, 0.99 }
+  )
   @Override
   public void delete(List<String> alerts) {
 

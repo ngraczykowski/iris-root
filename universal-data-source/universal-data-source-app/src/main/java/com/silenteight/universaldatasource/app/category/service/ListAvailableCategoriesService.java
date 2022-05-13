@@ -26,7 +26,12 @@ class ListAvailableCategoriesService implements ListAvailableCategoriesUseCase {
 
   private final ListAvailableCategoriesProperties properties;
 
-  @Timed(value = "uds.category.use_cases", extraTags = { "action", "getAvailableCategories" })
+  @Timed(
+      value = "uds.category.use_cases",
+      extraTags = { "action", "getAvailableCategories" },
+      histogram = true,
+      percentiles = { 0.5, 0.95, 0.99 }
+  )
   @Override
   public ListCategoriesResponse getAvailableCategories() {
 
