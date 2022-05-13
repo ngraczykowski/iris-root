@@ -36,25 +36,21 @@ components:
       - database
       - rabbitmq
       - messaging
-      - sierra
 
   simulator:
     profiles:
       - linux
       - simulator
       - messaging
-      - sierra
 
   webapp:
     profiles:
-      - sierra
 
   warehouse:
     profiles:
       - linux
       - warehouse
       - messaging
-      - sierra
     properties:
       # FIXME(ahaczewski): Required to repeat configuration from `keycloak` below due to overwriting
       #  environment variable defined directly in the WebApp container image.
