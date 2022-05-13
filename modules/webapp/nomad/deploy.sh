@@ -2,6 +2,8 @@
 set  -e -o pipefail
 scriptdir="$(cd -- "$(dirname -- "${0}")" && pwd -P)"
 
+MINIO_ADDR=https://minio.silenteight.com
+
 MINIO_ALIAS=${MINIO_ALIAS:-minio}
 
 export NOMAD_ADDR="${NOMAD_ADDR:-http://localhost:4646}"
