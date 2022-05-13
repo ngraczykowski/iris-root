@@ -83,6 +83,10 @@ keycloak:
   realm: sens-webapp
   frontendClientId: dev-frontend
   jwtIssuerUri: "{{ .Values.keycloak.authServerUrl }}/realms/{{ .Values.keycloak.realm }}"
+  resource: "dev-backend"
+  #TODO(dsniezek):credentials.secret should be stored in a safe manner or injected via operator
+  credentials:
+    secret: "e27cbeeb-b8dc-4d84-a7dc-7c2065d8b01f"
   # new stuff to be tested
   # realm name is implied and equal to namespace name
   #authServerUrl: https://auth.dev.s8ops.com
