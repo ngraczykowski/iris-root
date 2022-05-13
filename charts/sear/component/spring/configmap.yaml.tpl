@@ -28,8 +28,10 @@ data:
       frontend-client-id: {{ .Values.keycloak.frontendClientId | quote }}
       adapter:
         auth-server-url: {{ .Values.keycloak.authServerUrl | quote }}
-        realm: {{ .Values.keycloak.realm | quote }}
-        #realm: {{ .Release.Namespace | quote }}
+        realm: {{ (tpl .Values.keycloak.realm . ) | quote }}
+        #TODO(dsniezek): Should be fixed see UserAuthActivityReportGenerator and LastLoginTimeCacheUpdater
+        resource: {{ .Values.keycloak.resource | quote }}
+        credentials.secret: {{ .Values.keycloak.credentials.secret | quote }}
 
     grpc:
       server:

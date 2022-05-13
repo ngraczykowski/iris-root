@@ -491,4 +491,10 @@ frontend:
 keycloak:
   authServerUrl: ""
   frontendClientId: ""
-  jwtIssuerUri: "{{ .Values.keycloak.authServerUrl }}/auth/realms/{{ .Release.Namespace }}"
+  #realm: "{{ .Release.Namespace | quote }}"
+  realm: ""
+  jwtIssuerUri: "{{ .Values.keycloak.authServerUrl }}/auth/realms/{{ .Values.keycloak.realm }}"
+  #TODO(dsniezek): Should be fixed see UserAuthActivityReportGenerator and LastLoginTimeCacheUpdater
+  resource: ""
+  credentials:
+    secret: ""
