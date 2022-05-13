@@ -11,7 +11,6 @@ pipeline {
   }
   triggers {
     cron '*/2 5-22 * * 1-5'
-    upstream 'iris/iris%2Firis/master'
   }
   stages {
     stage('Version') {
