@@ -105,7 +105,7 @@ pipeline {
     }
     failure {
       slackSend color: 'danger', channel: '#iris-tech',
-          message: "Build of ${version} failed (<${env.BUILD_URL}|Open>)"
+          message: "Build of ${env.BRANCH_NAME} v${version} failed (<${env.BUILD_URL}|Open>)."
     }
   }
 }
