@@ -252,9 +252,9 @@ TEST_CASES = [
             "data": {
                 "normal_trigger_categories": ["name"],
                 "trigger_categories": {
-                    "name": ["CONCAT_ADDRESS"],
+                    "name": ["PARTY1_NAME_FULL"],
                     "country": ["ADDRESS1_COUNTRY"],
-                    "job": [],
+                    "job": ["CONCAT_ADDRESS"],
                     "other": [],
                 },
                 "triggered_tokens": {
