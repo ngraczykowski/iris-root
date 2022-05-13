@@ -30,10 +30,13 @@ agent:
 
   agent-exchange:
     request:
-      queue-name: 'agent.hittype-requests'
+      exchange: "agent.request"
+      queue-name: "agent.hittype-requests"
+      routing-key: "agents.hitType.versions.*.configs.*"
 
     response:
-      exchange: 'agent.response'
+      exchange: "agent.response"
+      routing_key: ""
 
   grpc:
     port: {{ env "NOMAD_PORT_grpc" }}
@@ -42,6 +45,6 @@ agent:
     # server_public_key_chain: {{ env "meta.silenteight.home" }}/cert/hit-type-agent/hit-type-agent-chain.pem
 
 # sentry:
-#   environment: mike
-#   release: 0.16.0-dev
+#   environment: unknown
+#   release: unknown
 #   sample_rate: 1.0

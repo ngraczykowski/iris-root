@@ -20,7 +20,18 @@ variable "hit_type_agent_config" {
 
 variable "namespace" {
   type = string
-  default = "mike"
+  default = "dev"
+}
+
+variable "application_config_file_name" {
+  type = string
+  description = "YAML configuration file to be used as application.yaml"
+  default = "application-nomad-dev.yaml"
+}
+
+variable "run_args" {
+  type = list(string)
+  default = []
 }
 
 job "hit-type-agent" {
@@ -139,7 +150,7 @@ job "hit-type-agent" {
       }
 
       template {
-        data = file("application.nomad.yaml")
+        data = file("${var.application_config_file_name}")
         destination = "local/config/application.yaml"
         change_mode = "restart"
       }
@@ -147,7 +158,7 @@ job "hit-type-agent" {
       config {
         image = "python:3.7"
         command = "python"
-        args = ["/app/hit_type-${var.hit_type_agent_version}.pyz", "-c", "/app/config", "--grpc", "-v"]
+        args = concat(["/app/hit_type-${var.hit_type_agent_version}.pyz"], var.run_args)
         network_mode = "host"
         volumes = ["local:/app"]
       }

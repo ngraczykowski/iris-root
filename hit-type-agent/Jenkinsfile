@@ -234,7 +234,9 @@ pipeline {
 //                         }
 //                     }
 //                     steps {
-//                         sh './nomad/deploy.sh'  //mike
+//                      sh './nomad/deploy.sh -var-file="vars/dev.vars"'
+//                      sh './nomad/deploy.sh -var-file="vars/mike.vars"'
+//                      // sh './nomad/deploy.sh -var-file="vars/lima.vars"'
 //                     }
 //                 }
 //             }
