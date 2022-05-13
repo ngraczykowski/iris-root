@@ -267,7 +267,7 @@ TEST_CASES = [
             },
             "result": {
                 "solution": "INCONCLUSIVE",
-                "hit_categories": ["unknown", "name"],
+                "hit_categories": ["unknown", "job"],
                 "normal_categories": ["name"],
             },
         }
