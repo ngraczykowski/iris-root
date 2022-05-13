@@ -26,7 +26,7 @@ from silenteight.datasource.categories.api.v2.category_value_service_pb2_grpc im
     CategoryValueServiceStub,
 )
 
-from etl_pipeline.config import pipeline_config, service_config
+from etl_pipeline.config import ConsulServiceConfig, pipeline_config
 from etl_pipeline.service.agent_router.producers import (  # noqa F401;
     CategoryProducer,
     CountryFeatureInputProducer,
@@ -42,6 +42,10 @@ logger = logging.getLogger("main").getChild("agent_input_creator")
 cn = pipeline_config.cn
 
 
+class AgentInputCreatorError(Exception):
+    pass
+
+
 class AgentInputCreator:
     def __init__(self):
         self.ssl = False
@@ -49,11 +53,11 @@ class AgentInputCreator:
     def initiate_channel(self, endpoint, ssl=False):
 
         if ssl:
-            with open(service_config.GRPC_CLIENT_TLS_CA, "rb") as f:
+            with open(self.service_config.GRPC_CLIENT_TLS_CA, "rb") as f:
                 ca = f.read()
-            with open(service_config.GRPC_CLIENT_TLS_PRIVATE_KEY, "rb") as f:
+            with open(self.service_config.GRPC_CLIENT_TLS_PRIVATE_KEY, "rb") as f:
                 private_key = f.read()
-            with open(service_config.GRPC_CLIENT_TLS_PUBLIC_KEY_CHAIN, "rb") as f:
+            with open(self.service_config.GRPC_CLIENT_TLS_PUBLIC_KEY_CHAIN, "rb") as f:
                 certificate_chain = f.read()
             server_credentials = grpc.ssl_channel_credentials(ca, private_key, certificate_chain)
             channel = grpc.secure_channel(
@@ -88,17 +92,34 @@ class AgentInputCreator:
                         field_maps=params["fields"],
                     )
                 )
-        logger.debug(f"Connecting to UDS via {service_config.DATA_SOURCE_INPUT_ENDPOINT}")
-        channel = self.initiate_channel(service_config.DATA_SOURCE_INPUT_ENDPOINT, ssl)
-        self.agent_input_stub = AgentInputServiceStub(channel)
-        channel = self.initiate_channel(service_config.DATA_SOURCE_INPUT_ENDPOINT, ssl)
-        self.category_input_stub = CategoryValueServiceStub(channel)
-        channel = self.initiate_channel(service_config.DATA_SOURCE_INPUT_ENDPOINT, ssl)
-        self.initialize_categories(date_input_config, channel)
+        self.date_input_config = date_input_config
+        self.service_config = ConsulServiceConfig()
+        self.initialize_categories()
 
-    def initialize_categories(self, date_input_config, channel):
+    def connect_to_uds(self):
+        while True:
+            try:
+                self.service_config.reload()
+                logger.debug(
+                    f"Connecting to UDS via {self.service_config.DATA_SOURCE_INPUT_ENDPOINT}"
+                )
+                channel = self.initiate_channel(
+                    self.service_config.DATA_SOURCE_INPUT_ENDPOINT, self.ssl
+                )
+                self.agent_input_stub = AgentInputServiceStub(channel)
+                channel = self.initiate_channel(
+                    self.service_config.DATA_SOURCE_INPUT_ENDPOINT, self.ssl
+                )
+                self.category_input_stub = CategoryValueServiceStub(channel)
+                break
+            except AttributeError:
+                time.sleep(1)
+
+    def initialize_categories(self):
+        self.connect_to_uds()
+        channel = self.initiate_channel(self.service_config.DATA_SOURCE_INPUT_ENDPOINT, self.ssl)
         categories = []
-        for feature, params in date_input_config.items():
+        for feature, params in self.date_input_config.items():
             if params["feature_type"] == "categories":
                 category = Category(
                     name=f"categories/{feature}",
@@ -110,17 +131,18 @@ class AgentInputCreator:
                 categories.append(category)
         while True:
             try:
+
                 category_input_stub = CategoryServiceStub(channel)
                 category_input_stub.BatchCreateCategories(
                     BatchCreateCategoriesRequest(categories=categories)
                 )
                 break
-            except grpc._channel._InactiveRpcError:
-
+            except (grpc.RpcError, AttributeError):
                 logger.error("No UDS response. Waiting 1s and try again")
                 time.sleep(1)
+                self.connect_to_uds()
                 channel = self.initiate_channel(
-                    service_config.DATA_SOURCE_INPUT_ENDPOINT, self.ssl
+                    self.service_config.DATA_SOURCE_INPUT_ENDPOINT, self.ssl
                 )
         logger.info(f"Categories created: {categories}")
 
@@ -196,21 +218,41 @@ class AgentInputCreator:
             if category_values_requests:
                 logger.debug(category_values_requests)
                 all_category_values_requests.extend(category_values_requests)
-        return all_category_values_requests
+        return BatchCreateCategoryValuesRequest(requests=all_category_values_requests)
 
-    async def send_features(self, alert, payload):
-        batch = self.produce_batch_create_agent_input_request(alert, payload)
-        response = self.agent_input_stub.BatchCreateAgentInputs(batch)
-        logger.debug(f"{response}")
-
-    async def send_categories(self, alert, payload):
-        batch = self.produce_batch_create_agent_input_category_request(alert, payload)
-        response = self.category_input_stub.BatchCreateCategoryValues(
-            BatchCreateCategoryValuesRequest(requests=batch)
-        )
-        logger.debug(f"{response}")
+    async def send_items(self, produce_func, stub_request, alert, payload):
+        batch = produce_func(alert, payload)
+        response = None
+        while True:
+            try:
+                response = stub_request(batch)
+                break
+            except (grpc.RpcError) as e:
+                if e.code() in [grpc.StatusCode.INVALID_ARGUMENT]:
+                    raise AgentInputCreatorError("Invalid argument")
+            except AttributeError:
+                pass
+            logger.warning(
+                f"Cannot connect to UDS on {self.service_config.DATA_SOURCE_INPUT_ENDPOINT}"
+            )
+            time.sleep(5)
+            self.initialize_categories()
+        logger.debug(f"Response from UDS: {response}")
 
     async def upload_data_inputs(self, alert, payload):
         logger.debug("Uploading features")
-        tasks = [self.send_features(alert, payload), self.send_categories(alert, payload)]
+        tasks = [
+            self.send_items(
+                self.produce_batch_create_agent_input_request,
+                self.agent_input_stub.BatchCreateAgentInputs,
+                alert,
+                payload,
+            ),
+            self.send_items(
+                self.produce_batch_create_agent_input_category_request,
+                self.category_input_stub.BatchCreateCategoryValues,
+                alert,
+                payload,
+            ),
+        ]
         await asyncio.gather(*tasks)

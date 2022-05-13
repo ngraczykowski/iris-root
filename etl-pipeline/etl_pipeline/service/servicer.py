@@ -7,7 +7,7 @@ from typing import List
 import omegaconf
 
 import etl_pipeline.service.proto.api.etl_pipeline_pb2 as etl__pipeline__pb2
-from etl_pipeline.config import pipeline_config, service_config
+from etl_pipeline.config import ConsulServiceConfig, pipeline_config
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.data_processor_engine.json_engine.json_engine import JsonProcessingEngine
 from etl_pipeline.service.agent_router import AgentInputCreator
@@ -44,6 +44,7 @@ pipeline = WmAddressMSPipeline(engine, pipeline_config)
 logger = logging.getLogger("main").getChild("servicer")
 
 
+service_config = ConsulServiceConfig()
 try:
     PROCESSES = service_config.PROCESSES
 except omegaconf.errors.ConfigAttributeError:

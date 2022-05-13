@@ -131,5 +131,3 @@ hitType:
       - name
     trigger_categories: all_hit_type_aggregated 
     triggered_tokens: AP_TRIGGERS
-
-   

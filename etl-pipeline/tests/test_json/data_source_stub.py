@@ -1,9 +1,11 @@
 import argparse
+import importlib
+import json
 import os
-import pickle
 from concurrent import futures
 
 import grpc
+from google.protobuf.json_format import MessageToDict
 from silenteight.datasource.agentinput.api.v1 import agent_input_service_pb2 as input__service__pb2
 from silenteight.datasource.categories.api.v2 import category_service_pb2 as category_service_pb2
 from silenteight.datasource.categories.api.v2 import category_value_service_pb2
@@ -25,8 +27,28 @@ class AgentInputServiceServicer(object):
             )
         if context.code() == grpc.StatusCode.OK:
             os.makedirs("/tmp/", exist_ok=True)
-            with open("/tmp/request.pkl", "wb") as f:
-                pickle.dump(request, f)
+            string_features = []
+            with open(f"/tmp/features_{agent_input.match.replace('/','_')}.json", "w") as f:
+                for agent_input in request.agent_inputs:
+                    for feature in agent_input.feature_inputs:
+                        path = feature.agent_feature_input.type_url.split("/")[1]
+                        elements = path.split(".")
+                        if "historicaldecisions" in elements:
+                            module_name = elements[:-1] + ["historical_decisions" + "_pb2"]
+                        elif "hittype" in elements:
+                            module_name = elements[:-1] + ["hit_type" + "_pb2"]
+                        else:
+                            module_name = elements[:-1] + [elements[-3] + "_pb2"]
+
+                        field_type = getattr(
+                            importlib.import_module(".".join(module_name)), elements[-1]
+                        )
+                        new_field = field_type()
+                        feature.agent_feature_input.Unpack(new_field)
+
+                        string_features.append(MessageToDict(new_field))
+                json.dump(string_features, f)
+
         return input__service__pb2.BatchCreateAgentInputsResponse(
             created_agent_inputs=created_agent_inputs
         )
