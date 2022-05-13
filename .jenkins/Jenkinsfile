@@ -123,6 +123,7 @@ pipeline {
                 helm install \
                   --create-namespace \
                   --namespace jenkins-sierra \
+                  --debug \
                   --username "\$ARTIFACTORY_USR" \
                   --password "\$ARTIFACTORY_PSW" \
                   --values kubernetes/values.core.yaml \
@@ -171,6 +172,7 @@ pipeline {
                 helm install \
                   --create-namespace \
                   --namespace jenkins-hotel \
+                  --debug \
                   --username "\$ARTIFACTORY_USR" \
                   --password "\$ARTIFACTORY_PSW" \
                   --values kubernetes/values.core.yaml \
