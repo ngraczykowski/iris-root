@@ -25,7 +25,7 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping(value = ROOT, produces = APPLICATION_JSON_VALUE)
 @Tag(name = SSO_ENDPOINT_TAG)
-class ListSsoMappingsRestController {
+class ListSsoMappingRestController {
 
   @NonNull
   ListSsoMappingsQuery listSsoMappingsQuery;
