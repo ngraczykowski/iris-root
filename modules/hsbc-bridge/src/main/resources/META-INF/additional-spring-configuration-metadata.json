@@ -241,6 +241,11 @@
       "description": "Enable or disable alerts data retention."
     },
     {
+      "name": "silenteight.bridge.data.retention.dry-run-mode.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enable or disable dry run mode in data retention."
+    },
+    {
       "name": "silenteight.bridge.data.retention.alerts-expired.duration",
       "type": "java.time.Duration",
       "description": "Duration of alerts data retention."

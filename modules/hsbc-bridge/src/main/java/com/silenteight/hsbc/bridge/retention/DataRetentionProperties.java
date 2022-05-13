@@ -16,6 +16,7 @@ class DataRetentionProperties {
   Duration rate;
   PersonalInformationExpired personalInformationExpired;
   AlertsExpired alertsExpired;
+  DryRunMode dryRunMode;
 
   @Value
   static class PersonalInformationExpired {
@@ -29,5 +30,11 @@ class DataRetentionProperties {
 
     boolean enabled;
     Duration duration;
+  }
+
+  @Value
+  static class DryRunMode {
+
+    boolean enabled;
   }
 }

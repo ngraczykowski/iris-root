@@ -17,20 +17,21 @@ import java.time.Duration;
 @Slf4j
 class DataRetentionConfiguration {
 
-  private final AlertRetentionSender alertRetentionMessageSender;
-  private final DataCleaner alertDataCleaner;
-  private final DataCleaner matchDataCleaner;
   private final DataRetentionProperties properties;
   private final TaskScheduler taskScheduler;
+  private final DataRetentionJob dataRetentionJob;
+  private final DataRetentionDryRunJob dataRetentionDryRunJob;
 
   @EventListener(ApplicationStartedEvent.class)
   public void applicationStarted() {
     log.info(
         "Data retention properties: "
+            + "dryRunEnabled={}, "
             + "alertsExpiredEnabled={}, "
             + "alertsExpiredDuration={} days, "
             + "personalInformationExpiredEnabled={}, "
             + "personalInformationExpiredDuration={} days",
+        properties.getDryRunMode().isEnabled(),
         properties.getAlertsExpired().isEnabled(),
         properties.getAlertsExpired().getDuration().toDays(),
         properties.getPersonalInformationExpired().isEnabled(),
@@ -48,7 +49,8 @@ class DataRetentionConfiguration {
   private void schedulePayloadRetentionJobForGivenEnvironment(boolean isPersonalInfoExpired) {
     if (isPersonalInfoExpired) {
       var personalInfoExpiredDuration = properties.getPersonalInformationExpired().getDuration();
-      schedulePayloadRetentionJob(personalInfoExpiredDuration, DataRetentionType.PERSONAL_INFO_EXPIRED);
+      schedulePayloadRetentionJob(
+          personalInfoExpiredDuration, DataRetentionType.PERSONAL_INFO_EXPIRED);
     } else {
       var alertsExpiredDuration = properties.getAlertsExpired().getDuration();
       schedulePayloadRetentionJob(alertsExpiredDuration, DataRetentionType.ALERTS_EXPIRED);
@@ -56,20 +58,19 @@ class DataRetentionConfiguration {
   }
 
   private void schedulePayloadRetentionJob(Duration duration, DataRetentionType type) {
-    log.debug("Registering payload cleaner job, day rate={}", properties.getRate().toDays());
-
-    taskScheduler.scheduleAtFixedRate(
-        getPayloadRetentionJob(duration, type)::process, properties.getRate());
-  }
-
-  private DataRetentionJob getPayloadRetentionJob(Duration duration, DataRetentionType type) {
-    return DataRetentionJob.builder()
-        .alertDataCleaner(alertDataCleaner)
-        .matchDataCleaner(matchDataCleaner)
-        .alertRetentionMessageSender(alertRetentionMessageSender)
-        .dataRetentionDuration(duration)
-        .type(type)
-        .chunkSize(properties.getChunk())
-        .build();
+    Runnable job;
+    if (properties.getDryRunMode().isEnabled()) {
+      log.debug("Registering dry run job, day rate={}", properties.getRate().toDays());
+      job = () -> dataRetentionDryRunJob.process(duration);
+    } else {
+      log.debug("Registering payload cleaner job, day rate={}", properties.getRate().toDays());
+      var jobProperties = DataRetentionJobProperties.builder()
+          .dataRetentionDuration(duration)
+          .type(type)
+          .chunkSize(properties.getChunk())
+          .build();
+      job = () -> dataRetentionJob.process(jobProperties);
+    }
+    taskScheduler.scheduleAtFixedRate(job, properties.getRate());
   }
 }

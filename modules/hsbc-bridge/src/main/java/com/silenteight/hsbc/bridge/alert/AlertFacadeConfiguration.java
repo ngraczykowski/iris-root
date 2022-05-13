@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.hsbc.bridge.retention.AlertRetentionSender;
 import com.silenteight.hsbc.bridge.retention.DataCleaner;
 import com.silenteight.hsbc.bridge.retention.DataRetentionMessageSender;
+import com.silenteight.hsbc.bridge.retention.DryRunDataCleaner;
 import com.silenteight.hsbc.bridge.util.CustomDateTimeFormatter;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -56,6 +57,11 @@ class AlertFacadeConfiguration {
         entityManager,
         alertRepository,
         alertSender());
+  }
+
+  @Bean
+  DryRunDataCleaner dryRunDataCleaner() {
+    return new AlertDryRunDataCleaner(alertPayloadRepository);
   }
 
   private AlertSender alertSender() {

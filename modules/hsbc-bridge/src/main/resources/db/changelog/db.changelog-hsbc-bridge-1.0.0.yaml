@@ -760,3 +760,50 @@ databaseChangeLog:
       author: awojcicki
       changes:
         - sql: ALTER TABLE hsbc_bridge_recommendation RENAME CONSTRAINT const_alert TO unique_recommendation_alert;
+
+  - changeSet:
+      id: 1.0.0-30
+      author: dturek
+      changes:
+        - createTable:
+            tableName: hsbc_bridge_data_retention_dry_run_job
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: alerts_expiration_date
+                  type: timestamp
+        - createTable:
+            tableName: hsbc_bridge_data_retention_dry_run_job_alerts
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: job_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_dry_run_job_id
+                    references: hsbc_bridge_data_retention_dry_run_job(id)
+              - column:
+                  name: alert_name
+                  type: varchar(256)
+        - addUniqueConstraint:
+            columnNames: job_id, alert_name
+            constraintName: unique_hsbc_bridge_data_retention_dry_run_job_alerts_constraint
+            tableName: hsbc_bridge_data_retention_dry_run_job_alerts
+
+

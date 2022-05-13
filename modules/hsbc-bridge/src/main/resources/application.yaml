@@ -83,6 +83,8 @@ silenteight.bridge:
     alerts-expired:
       enabled: false
       duration: ${RETENTION_PERIOD:155d}
+    dry-run-mode:
+      enabled: false
 
   ### JENKINS
 
