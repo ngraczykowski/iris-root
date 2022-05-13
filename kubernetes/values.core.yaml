@@ -78,7 +78,19 @@ frontend:
       memory: 128Mi
 
 keycloak:
+  # working values for now:
   authServerUrl: https://auth.silenteight.com
   realm: sens-webapp
   frontendClientId: dev-frontend
   jwtIssuerUri: "{{ .Values.keycloak.authServerUrl }}/realms/{{ .Values.keycloak.realm }}"
+  # new stuff to be tested
+  # realm name is implied and equal to namespace name
+  #authServerUrl: https://auth.dev.s8ops.com
+  #jwtIssuerUri: "{{ .Values.keycloak.authServerUrl }}/realms/{{ .Release.Namespace }}"
+
+  # for examples, check existing files; format documentation:
+  # > kubectl explain keycloakuser.spec.user
+  # > kubectl explain keycloakclient.spec.client
+  #realmData:
+  #  users:
+  #  clients:

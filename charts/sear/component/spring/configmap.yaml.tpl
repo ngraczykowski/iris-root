@@ -29,6 +29,7 @@ data:
       adapter:
         auth-server-url: {{ .Values.keycloak.authServerUrl | quote }}
         realm: {{ .Values.keycloak.realm | quote }}
+        #realm: {{ .Release.Namespace | quote }}
 
     grpc:
       server:

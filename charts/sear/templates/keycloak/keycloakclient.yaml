@@ -1,0 +1,16 @@
+{{- range .Values.keycloak.realmData.clients }}
+---
+kind: KeycloakClient
+apiVersion: keycloak.org/v1alpha1
+metadata:
+  name: {{ .clientId }}-{{ $.Release.Namespace }}
+  labels:
+    client: {{ .clientId }}
+  namespace: "keycloak-operator"
+spec:
+  client:
+{{ . | toYaml | indent 4 }}
+  realmSelector:
+    matchLabels:
+      realm: {{ $.Release.Namespace }}
+{{ end }}

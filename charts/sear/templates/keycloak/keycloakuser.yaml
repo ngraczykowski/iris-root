@@ -1,0 +1,16 @@
+{{ range .Values.keycloak.realmData.users }}
+---
+kind: KeycloakUser
+apiVersion: keycloak.org/v1alpha1
+metadata:
+  name: {{ .username }}-{{ $.Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: "sear-keycloak"
+  namespace: "keycloak-operator"
+spec:
+  user:
+{{ . | toYaml | indent 4 }}
+  realmSelector:
+    matchLabels:
+      realm: {{ $.Release.Namespace }}
+{{ end }}

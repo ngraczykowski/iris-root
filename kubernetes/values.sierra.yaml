@@ -132,3 +132,45 @@ agents:
           release: unknown
           sample_rate: 1.0
         EOF
+
+keycloak:
+  realmData:
+    users:
+      - username: "iris"
+        enabled: true
+        credentials:
+          # must be provided in plain-text for now
+          # https://github.com/keycloak/keycloak-operator/issues/499
+          # looks like change is enforced on first login
+          - type: "password"
+            value: "temporary123"
+      - username: "ttorcz"
+        enabled: true
+        credentials:
+          - type: "password"
+            value: "temporary123"
+    clients:
+      - clientId: dev-frontend
+        protocol: openid-connect
+        #rootUrl:
+        clientAuthenticatorType: "client-secret"
+        redirectUris:
+          - "*"
+        defaultClientScopes:
+          - web-origins
+          - acr
+          - profile
+          - roles
+          - email
+        optionalClientScopes:
+          - address
+          - phone
+          - offline_access
+          - microprofile-jwt
+        defaultRoles:
+          - AUDITOR
+          - APPROVER
+          - QA
+          - USER_ADMINISTRATOR
+          - MODEL_TUNER
+          - QA_ISSUE_MANAGER
