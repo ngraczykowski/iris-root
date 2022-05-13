@@ -114,7 +114,7 @@ def load_alert(filepath: str = "notebooks/sample/wm_address_in_payload_format.js
 class BaseGrpcTestCase:
     @pytest.mark.asyncio
     class TestGrpcServer(AsyncTestCase):
-        TIMEOUT = 3
+        TIMEOUT = 10
 
         @classmethod
         def tearDownClass(cls):
@@ -134,7 +134,7 @@ class BaseGrpcTestCase:
             for match in request_alert.matches:
                 compare_tested_uds_features_with_reference(
                     f'/tmp/features_{match.match_name.replace("/", "_")}.json',
-                    f'tests/test_json/test_integration/expected_features/test_ok_flow_{match.match_name.replace("/", "_")}.json',
+                    f'tests/test_json/test_integration/expected_features/test_ok_flow_features/features_{match.match_name.replace("/", "_")}.json',
                 )
                 os.remove(f'/tmp/features_{match.match_name.replace("/", "_")}.json')
 

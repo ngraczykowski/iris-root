@@ -140,7 +140,7 @@ hit_type_agent:
   - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS3
   - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS4
   - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL
-  country:
+  address:
   - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ADDRESS1_COUNTRY
   - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_DOMICILE1
   - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_FORMATION1
@@ -150,6 +150,14 @@ hit_type_agent:
   - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_PEP
   - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_OF_INCORPORATION
   - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ADDRESS1_COUNTRY
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ADDRESS1_COUNTRY
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.CONCAT_ADDRESS
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ADDRESS1_CITY
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ADDRESS1_STATE
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ADDRESS1_CITY
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ADDRESS1_STATE
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ADDRESS1_PROVINCE
+
   job:
   - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_EMPLOYER
   - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ORGANIZATION_NAME
