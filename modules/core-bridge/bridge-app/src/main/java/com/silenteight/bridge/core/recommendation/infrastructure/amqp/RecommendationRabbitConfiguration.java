@@ -13,7 +13,8 @@ import java.util.Optional;
     RecommendationIncomingRecommendationsGeneratedConfigurationProperties.class,
     RecommendationIncomingNotifyBatchTimeoutConfigurationProperties.class,
     RecommendationOutgoingRecommendationsStoredConfigurationProperties.class,
-    AmqpRecommendationProperties.class
+    AmqpRecommendationProperties.class,
+    AlertsStreamProperties.class
 })
 class RecommendationRabbitConfiguration {
 

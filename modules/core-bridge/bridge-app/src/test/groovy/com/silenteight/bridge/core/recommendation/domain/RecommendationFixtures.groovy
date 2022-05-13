@@ -12,7 +12,10 @@ import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDt
 import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto.AlertWithMatchesDto.MatchDto
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationMetadata
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationWithMetadata
+import com.silenteight.bridge.core.registration.adapter.outgoing.jdbc.AlertWithoutMatches
+import com.silenteight.bridge.core.registration.adapter.outgoing.jdbc.MatchWithAlertId
 import com.silenteight.bridge.core.registration.domain.model.AlertWithMatches
+import com.silenteight.bridge.core.registration.domain.model.BatchIdWithPolicy
 import com.silenteight.bridge.core.registration.domain.model.BatchWithAlerts
 import com.silenteight.proto.recommendation.api.v1.*
 import com.silenteight.proto.recommendation.api.v1.Alert.AlertStatus
@@ -22,6 +25,7 @@ import com.google.protobuf.Value
 
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
+import java.util.stream.Stream
 
 class RecommendationFixtures {
 
@@ -243,4 +247,29 @@ class RecommendationFixtures {
       .addAllRecommendations(List.of(ERRONEOUS_RECOMMENDATION))
       .setStatistics(STATISTICS)
       .build()
+
+  static def BATCH_ID_WITH_POLICY = new BatchIdWithPolicy(Fixtures.BATCH_ID, POLICY_NAME)
+
+  static def ALERTS_STREAM = Stream.of(
+      AlertWithoutMatches.builder()
+          .id("1")
+          .alertId(Fixtures.ALERT_ID)
+          .alertName(ALERT_NAME)
+          .alertStatus(AlertWithoutMatches.AlertStatus.RECOMMENDED)
+          .metadata(METADATA)
+          .build()
+  )
+
+  static def MATCHES_WITH_ALERTS_IDS = List.of(
+      MatchWithAlertId.builder()
+          .alertId("1")
+          .id(FixturesMatchMetaData.FIRST_METADATA_MATCH_ID)
+          .name(FixturesMatchMetaData.FIRST_METADATA_MATCH_NAME)
+          .build(),
+      MatchWithAlertId.builder()
+          .alertId("1")
+          .id(FixturesMatchMetaData.SECOND_METADATA_MATCH_ID)
+          .name(FixturesMatchMetaData.SECOND_METADATA_MATCH_NAME)
+          .build()
+  )
 }

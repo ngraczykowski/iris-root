@@ -2,6 +2,7 @@ package com.silenteight.bridge.core.recommendation.domain;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.bridge.core.recommendation.adapter.outgoing.jdbc.RecommendationStatisticsRepository;
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationWithMetadata;
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationsStatistics;
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendedAction;
@@ -17,10 +18,26 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 class RecommendationsStatisticsService {
 
+  private final RecommendationStatisticsRepository statisticsRepository;
+
   RecommendationsStatistics createRecommendationsStatistics(
       List<RecommendationWithMetadata> recommendations) {
     var actionCountMap = groupByActionCount(recommendations);
 
+    return buildStatistics(actionCountMap);
+  }
+
+  RecommendationsStatistics createRecommendationsStatistics(
+      String analysisName,
+      List<String> alertsNames) {
+    if (alertsNames.isEmpty()) {
+      return buildStatistics(statisticsRepository.getRecommendationStatistics(analysisName));
+    }
+    return buildStatistics(
+        statisticsRepository.getRecommendationStatistics(analysisName, alertsNames));
+  }
+
+  private RecommendationsStatistics buildStatistics(Map<String, Long> actionCountMap) {
     return RecommendationsStatistics
         .builder()
         .truePositiveCount(

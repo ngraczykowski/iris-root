@@ -3,6 +3,8 @@ package com.silenteight.bridge.core.registration.domain;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.bridge.core.registration.adapter.outgoing.jdbc.AlertWithoutMatches;
+import com.silenteight.bridge.core.registration.adapter.outgoing.jdbc.MatchWithAlertId;
 import com.silenteight.bridge.core.registration.domain.command.RegisterAlertsCommand;
 import com.silenteight.bridge.core.registration.domain.model.*;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRegistrationService;
@@ -12,7 +14,10 @@ import com.silenteight.bridge.core.registration.domain.strategy.BatchStrategyFac
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -28,6 +33,10 @@ class AlertService {
 
   List<AlertWithMatches> getAlertsAndMatches(String batchId) {
     return alertRepository.findAllWithMatchesByBatchId(batchId);
+  }
+
+  List<AlertWithMatches> getAlertsAndMatchesByName(String batchId, List<String> alertNames) {
+    return alertRepository.findAllWithMatchesByBatchIdAndNameIn(batchId, alertNames);
   }
 
   List<RegistrationAlert> registerAlertsAndMatches(
@@ -47,6 +56,18 @@ class AlertService {
     return Stream.of(successfulAlerts, failedAlerts, alreadyRegistered)
         .flatMap(Collection::stream)
         .toList();
+  }
+
+  Stream<AlertWithoutMatches> streamAllByBatchId(String batchId) {
+    return alertRepository.streamAllByBatchId(batchId);
+  }
+
+  Stream<AlertWithoutMatches> streamAllByBatchIdAndNameIn(String batchId, List<String> alertNames) {
+    return alertRepository.streamAllByBatchIdAndNameIn(batchId, alertNames);
+  }
+
+  List<MatchWithAlertId> getAllMatchesForAlerts(Set<Long> alertsIds) {
+    return alertRepository.findMatchesByAlertIdIn(alertsIds);
   }
 
   private List<RegistrationAlert> getAlreadyRegistered(

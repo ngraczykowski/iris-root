@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.bridge.core.recommendation.domain.RecommendationFacade;
 import com.silenteight.bridge.core.recommendation.domain.command.GetRecommendationCommand;
+import com.silenteight.proto.recommendation.api.v1.RecommendationResponse;
 import com.silenteight.proto.recommendation.api.v1.RecommendationServiceGrpc;
 import com.silenteight.proto.recommendation.api.v1.RecommendationsRequest;
 import com.silenteight.proto.recommendation.api.v1.RecommendationsResponse;
@@ -28,5 +29,16 @@ class RecommendationGrpcService extends RecommendationServiceGrpc.Recommendation
     log.info("Get recommendation response for analysis name [{}].", command.analysisName());
     responseObserver.onNext(recommendationFacade.getRecommendationsResponse(command));
     responseObserver.onCompleted();
+  }
+
+  @Override
+  public void streamRecommendations(
+      RecommendationsRequest request, StreamObserver<RecommendationResponse> responseObserver) {
+    var command =
+        new GetRecommendationCommand(request.getAnalysisName(), request.getAlertNamesList());
+
+    log.info("Stream recommendations response for analysis name [{}].", command.analysisName());
+
+    recommendationFacade.streamRecommendationResponses(command, responseObserver);
   }
 }

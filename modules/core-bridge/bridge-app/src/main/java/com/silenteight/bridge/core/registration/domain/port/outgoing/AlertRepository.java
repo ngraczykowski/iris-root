@@ -1,5 +1,7 @@
 package com.silenteight.bridge.core.registration.domain.port.outgoing;
 
+import com.silenteight.bridge.core.registration.adapter.outgoing.jdbc.AlertWithoutMatches;
+import com.silenteight.bridge.core.registration.adapter.outgoing.jdbc.MatchWithAlertId;
 import com.silenteight.bridge.core.registration.domain.model.Alert;
 import com.silenteight.bridge.core.registration.domain.model.AlertName;
 import com.silenteight.bridge.core.registration.domain.model.AlertStatus;
@@ -9,6 +11,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public interface AlertRepository {
 
@@ -34,6 +37,15 @@ public interface AlertRepository {
   List<Alert> findAllByBatchId(String batchId);
 
   List<AlertWithMatches> findAllWithMatchesByBatchId(String batchId);
+
+  List<AlertWithMatches> findAllWithMatchesByBatchIdAndNameIn(
+      String batchId, List<String> alertNames);
+
+  Stream<AlertWithoutMatches> streamAllByBatchId(String batchId);
+
+  Stream<AlertWithoutMatches> streamAllByBatchIdAndNameIn(String batchId, List<String> alertNames);
+
+  List<MatchWithAlertId> findMatchesByAlertIdIn(Set<Long> alertIds);
 
   List<AlertWithMatches> findAllWithMatchesByBatchIdAndAlertIdsIn(
       String batchId, List<String> alertIds);

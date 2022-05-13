@@ -66,7 +66,7 @@ class RegistrationFixtures {
   static def NOTIFY_BATCH_ERROR_COMMAND = new NotifyBatchErrorCommand(
       Fixtures.BATCH_ID, ERROR_DESCRIPTION, METADATA, false)
 
-  static def GET_BATCH_WITH_ALERTS_COMMAND = new GetBatchWithAlertsCommand(ANALYSIS_NAME)
+  static def GET_BATCH_WITH_ALERTS_COMMAND = new GetBatchWithAlertsCommand(ANALYSIS_NAME, List.of())
 
   static def GET_ALERTS_WITH_MATCHES_COMMAND = new GetAlertsWithMatchesCommand(Fixtures.BATCH_ID)
 

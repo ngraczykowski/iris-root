@@ -3,18 +3,19 @@ package com.silenteight.bridge.core.registration.domain;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto;
+import com.silenteight.bridge.core.registration.adapter.outgoing.jdbc.AlertWithoutMatches;
+import com.silenteight.bridge.core.registration.adapter.outgoing.jdbc.MatchWithAlertId;
 import com.silenteight.bridge.core.registration.domain.command.*;
-import com.silenteight.bridge.core.registration.domain.model.AlertWithMatches;
-import com.silenteight.bridge.core.registration.domain.model.Batch;
-import com.silenteight.bridge.core.registration.domain.model.BatchId;
-import com.silenteight.bridge.core.registration.domain.model.BatchWithAlerts;
-import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert;
+import com.silenteight.bridge.core.registration.domain.model.*;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -37,7 +38,7 @@ public class RegistrationFacade {
   public BatchWithAlerts getBatchWithAlerts(GetBatchWithAlertsCommand command) {
     var batchIdWithPolicy =
         batchService.findBatchIdWithPolicyByAnalysisName(command.analysisName());
-    var alerts = alertService.getAlertsAndMatches(batchIdWithPolicy.id());
+    var alerts = getAlerts(batchIdWithPolicy.id(), command.alertNames());
 
     return BatchWithAlerts.builder()
         .batchId(batchIdWithPolicy.id())
@@ -91,6 +92,29 @@ public class RegistrationFacade {
     batchTimeoutService.verifyBatchTimeoutForAllErroneousAlerts(command);
   }
 
+  public BatchIdWithPolicy getBatchId(GetBatchIdCommand command) {
+    return batchService.findBatchIdWithPolicyByAnalysisName(command.analysisName());
+  }
+
+  public Stream<AlertWithoutMatches> streamAllByBatchId(GetAlertsWithoutMatchesCommand command) {
+    if (command.alertsName().isEmpty()) {
+      return alertService.streamAllByBatchId(command.batchId());
+    }
+    return alertService.streamAllByBatchIdAndNameIn(command.batchId(), command.alertsName());
+  }
+
+  public List<MatchWithAlertId> getAllMatchesForAlerts(GetMatchesWithAlertIdCommand command) {
+    return alertService.getAllMatchesForAlerts(command.alertsIds());
+  }
+
+  public Map<BatchWithAlertsDto.AlertStatus, Long> getAlertsStatusStatistics(
+      GetAlertStatisticsCommand command) {
+    if (command.alertsNames().isEmpty()) {
+      return batchService.getAlertsStatusStatistics(command.batchId());
+    }
+    return batchService.getAlertsStatusStatistics(command.batchId(), command.alertsNames());
+  }
+
   private boolean allAlertsAreDelivered(Batch batch, List<String> alertNames) {
     if (CollectionUtils.isEmpty(alertNames)) {
       return true;
@@ -107,5 +131,12 @@ public class RegistrationFacade {
     } else {
       throw new IllegalStateException("Either batchId or analysisName must be present.");
     }
+  }
+
+  private List<AlertWithMatches> getAlerts(String batchId, List<String> alertNames) {
+    if (!alertNames.isEmpty()) {
+      return alertService.getAlertsAndMatchesByName(batchId, alertNames);
+    }
+    return alertService.getAlertsAndMatches(batchId);
   }
 }

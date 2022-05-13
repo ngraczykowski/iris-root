@@ -18,9 +18,10 @@ class BatchServiceSpec extends Specification {
   def batchRepository = Mock(BatchRepository)
   def batchStrategyFactory = Mock(BatchStrategyFactory)
   def batchRegistrationStrategy = Mock(BatchRegistrationStrategy)
+  def batchStatisticsRepository = Mock(BatchStatisticsRepository)
 
   @Subject
-  def underTest = new BatchService(eventPublisher, batchRepository, batchStrategyFactory)
+  def underTest = new BatchService(eventPublisher, batchRepository, batchStrategyFactory, batchStatisticsRepository)
 
   def 'should register batch'() {
     given:

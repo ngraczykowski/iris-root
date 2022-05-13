@@ -8,6 +8,7 @@ import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDt
 import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto.AlertWithMatchesDto;
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationWithMetadata;
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationsStatistics;
+import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RegistrationService;
 
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 class BatchStatisticsService {
 
   private final RecommendationsStatisticsService statisticsService;
+  private final RegistrationService registrationService;
 
   BatchStatistics createBatchStatistics(
       List<AlertWithMatchesDto> alerts, List<RecommendationWithMetadata> recommendations) {
@@ -29,6 +31,26 @@ class BatchStatisticsService {
     var errorAlertsCount = getErrorAlertsCount(statusCountMap);
     var recommendationsStatistics =
         statisticsService.createRecommendationsStatistics(recommendations);
+
+    return BatchStatistics.builder()
+        .recommendedAlertsCount(recommendedAlertsCount)
+        .totalProcessedCount(recommendedAlertsCount)
+        .totalUnableToProcessCount(errorAlertsCount)
+        .recommendationsStats(
+            mapToRecommendationsStats(recommendationsStatistics, errorAlertsCount))
+        .build();
+  }
+
+  BatchStatistics createBatchStatistics(
+      String batchId,
+      String analysisName,
+      List<String> alertsNames) {
+    var statusCountMap = registrationService.getAlertsStatusStatistics(batchId, alertsNames);
+    var recommendationsStatistics =
+        statisticsService.createRecommendationsStatistics(analysisName, alertsNames);
+
+    var recommendedAlertsCount = getRecommendedAlertsCount(statusCountMap);
+    var errorAlertsCount = getErrorAlertsCount(statusCountMap);
 
     return BatchStatistics.builder()
         .recommendedAlertsCount(recommendedAlertsCount)

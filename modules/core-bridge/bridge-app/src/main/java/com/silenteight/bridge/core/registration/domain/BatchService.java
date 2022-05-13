@@ -3,17 +3,21 @@ package com.silenteight.bridge.core.registration.domain;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto;
 import com.silenteight.bridge.core.registration.domain.command.NotifyBatchErrorCommand;
 import com.silenteight.bridge.core.registration.domain.command.RegisterBatchCommand;
 import com.silenteight.bridge.core.registration.domain.model.*;
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchEventPublisher;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository;
+import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchStatisticsRepository;
 import com.silenteight.bridge.core.registration.domain.strategy.BatchStrategyFactory;
 
 import org.springframework.stereotype.Service;
 
 import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -29,6 +33,7 @@ class BatchService {
   private final BatchEventPublisher eventPublisher;
   private final BatchRepository batchRepository;
   private final BatchStrategyFactory batchStrategyFactory;
+  private final BatchStatisticsRepository statisticsRepository;
 
   BatchId register(RegisterBatchCommand registerBatchCommand) {
     return batchRepository.findById(registerBatchCommand.id())
@@ -93,6 +98,15 @@ class BatchService {
         "Set solving batch status to [{}] with batch id [{}].", BatchStatus.DELIVERED, batch.id());
     batchRepository.updateStatusToDelivered(batch.id());
     publishBatchDelivered(batch);
+  }
+
+  Map<BatchWithAlertsDto.AlertStatus, Long> getAlertsStatusStatistics(String batchId) {
+    return statisticsRepository.getAlertsStatusStatistics(batchId);
+  }
+
+  Map<BatchWithAlertsDto.AlertStatus, Long> getAlertsStatusStatistics(
+      String batchId, List<String> alertsNames) {
+    return statisticsRepository.getAlertsStatusStatistics(batchId, alertsNames);
   }
 
   private Batch validateBatchStatus(Batch batch, EnumSet<BatchStatus> allowedStatuses) {

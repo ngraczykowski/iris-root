@@ -194,6 +194,11 @@
       "name": "registration.verify-batch-timeout.enabled",
       "type": "java.lang.Boolean",
       "description": "Enable or disable batch timeout handling."
+    },
+    {
+      "name": "registration.alert-stream.registration-api-to-recommendation-alerts-chunk-size",
+      "type": "java.lang.String",
+      "description": "Size of alerts stream chunk which will be processed at once."
     }
   ]
 }
