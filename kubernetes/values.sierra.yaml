@@ -58,84 +58,18 @@ agents:
 
   organization-name-agent:
     enabled: true
-    properties:
-      "serp.show-env": null
+    amqp:
+      routingKey: agents.companyName.versions.1_0_0.configs.1
+      queueName: agent.companyname-requests
     args:
-      - --configuration-dir=/app/config
-      - --grpc
       - --agent-exchange
-      - --verbose
-    initScripts:
-      000mkConfig.sh: |
-        #!/bin/sh
-        cat > /tmp/application.yaml << EOF
-        agent:
-          processes: 10
-          agent-exchange:
-            request:
-              exchange: 'agent.request'
-              routing-key: 'agents.companyName.versions.1_0_0.configs.1'
-              queue-name: 'agent.companyname-requests'
-            response:
-              exchange: 'agent.response'
-          grpc:
-            port: 9090
-        grpc:
-          client:
-            data-source:
-              address: $UDS_ADDRESS
-              timeout: 15
-        rabbitmq:
-          host: $RABBITMQ_HOST
-          port: $RABBITMQ_PORT
-          login: $RABBITMQ_USERNAME
-          password: $RABBITMQ_PASSWORD
-          virtualhost: /
-        sentry:
-          turn_on: false
-          environment: unknown
-          release: unknown
-          sample_rate: 1.0
-        EOF
   organization-name-agent2:
+    amqp:
+      routingKey: agents.companyName.versions.2_0_0.configs.1
+      queueName: agent.companyname-requests-2
     from: organization-name-agent
-    args:
-      - --configuration-dir=/app/config
-      - --grpc
-      - --agent-exchange
-      - --verbose
-    initScripts:
-      000mkConfig.sh: |
-        #!/bin/sh
-        cat > /tmp/application.yaml << EOF
-        agent:
-          processes: 10
-          agent-exchange:
-            request:
-              exchange: 'agent.request'
-              routing-key: 'agents.companyName.versions.2_0_0.configs.1'
-              queue-name: 'agent.companyname-requests-2'
-            response:
-              exchange: 'agent.response'
-          grpc:
-            port: 9090
-        grpc:
-          client:
-            data-source:
-              address: $UDS_ADDRESS
-              timeout: 15
-        rabbitmq:
-          host: $RABBITMQ_HOST
-          port: $RABBITMQ_PORT
-          login: $RABBITMQ_USERNAME
-          password: $RABBITMQ_PASSWORD
-          virtualhost: /
-        sentry:
-          turn_on: false
-          environment: unknown
-          release: unknown
-          sample_rate: 1.0
-        EOF
+  company-name-surrounding-agent:
+    enabled: true
 
 keycloak:
   realmData:

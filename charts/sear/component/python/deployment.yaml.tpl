@@ -15,7 +15,7 @@ spec:
     metadata:
       annotations:
         fluentbit.io/parser: spring-logback-json
-        silenteight.com/config-checksum: {{ tpl ($.Files.Get "component/spring/configmap.yaml.tpl") . | sha256sum }}
+        silenteight.com/init-scripts-checksum: {{ tpl ($.Files.Get "component/python/configmap-init-scripts.yaml.tpl") . | sha256sum }}
         {{- with .Values.podAnnotations }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -31,7 +31,6 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if .component.initScripts }}
       initContainers:
         - name: init-scripts
           image: busybox
@@ -40,7 +39,7 @@ spec:
             - name: init-scripts
               mountPath: "/var/run/initScripts"
               readOnly: true
-            - name: tmp
+            - name: generated
               mountPath: "/tmp"
               readOnly: false
           env:
@@ -66,7 +65,6 @@ spec:
                   key: password
             - name: UDS_ADDRESS
               value: {{ include "sear.fullname" . }}-universal-data-source.{{ .Release.Namespace }}.svc:9090
-      {{- end }}
       containers:
         - name: {{ .componentName }}
           {{- with .Values.securityContext }}
@@ -94,40 +92,21 @@ spec:
               {{- toYaml .component.args | nindent 12 }}
             {{- end }}
           volumeMounts:
-            - name: config
-              mountPath: "/var/run/configs/"
-              readOnly: true
-            - name: secret-rabbitmq
-              mountPath: "/var/run/secrets/rabbitmq"
-              readOnly: true
-            {{- if .component.initScripts }}
-            - name: init-scripts
-              mountPath: "/var/run/initScripts"
-              readOnly: true
-            - name: tmp
-              mountPath: "/tmp"
-              readOnly: false
-            - name: tmp
+            - name: generated
               mountPath: "/app/config/application.yaml"
               readOnly: true
               subPath: application.yaml
-            {{- end }}
           env:
       volumes:
-        - name: config
-          configMap:
-            name: {{ include "sear.componentName" . }}
         - name: secret-rabbitmq
           secret:
             secretName: {{ include "sear.rabbitmqSecretName" . }}
-        {{- if .component.initScripts }}
         - name: init-scripts
           configMap:
             defaultMode: 0777
             name: {{ include "sear.componentName" . }}-init-scripts
-        - name: tmp
+        - name: generated
           emptyDir: {}
-        {{- end }}
       {{- with .component.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

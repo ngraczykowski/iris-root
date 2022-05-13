@@ -56,6 +56,9 @@ data:
         {{ . }}:
           address: dns:///{{ include "sear.fullname" $ }}-{{ . }}.{{ $.Release.Namespace }}.svc:9090
         {{ end }}
+    {{- if .component.additionalConfig }}
+    {{- .component.additionalConfig | toYaml | nindent 4}}
+    {{- end }}
 
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>
