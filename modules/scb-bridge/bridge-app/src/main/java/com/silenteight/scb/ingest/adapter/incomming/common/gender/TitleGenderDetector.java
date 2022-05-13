@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+import static com.silenteight.scb.ingest.adapter.incomming.common.gender.Gender.UNKNOWN;
+import static com.silenteight.scb.ingest.adapter.incomming.common.gender.TitleGenderDetectorSwitchProperty.isTitleGenderDetectorDisabled;
 import static java.util.regex.Pattern.compile;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -25,6 +27,9 @@ public class TitleGenderDetector {
       compile("(^|.*\\s)(d/o|D/o|D/O|d/O|w/o|W/o|W/O|w/O)\\W.*");
 
   public static Gender detect(@NonNull List<String> names) {
+    if (isTitleGenderDetectorDisabled()) {
+      return UNKNOWN;
+    }
     List<Gender> genders = names
         .stream()
         .filter(StringUtils::isNotBlank)
@@ -45,7 +50,7 @@ public class TitleGenderDetector {
     if (isMale(name))
       return Gender.MALE;
 
-    return Gender.UNKNOWN;
+    return UNKNOWN;
   }
 
   private static boolean isFemale(String name) {
@@ -68,7 +73,7 @@ public class TitleGenderDetector {
     if (femaleMatch && !maleMatch)
       return Gender.FEMALE;
 
-    return Gender.UNKNOWN;
+    return UNKNOWN;
   }
 }
 

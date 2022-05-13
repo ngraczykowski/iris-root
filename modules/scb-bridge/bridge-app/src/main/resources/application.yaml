@@ -125,6 +125,8 @@ spring:
 silenteight:
   scb-bridge:
     working-mode: NORMAL
+    title-gender-detector:
+      enabled: true
     db:
       host: localhost
       port: 24291

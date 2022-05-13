@@ -24,6 +24,8 @@ serp:
 silenteight:
   scb-bridge:
     working-mode: NORMAL
+    title-gender-detector:
+      enabled: true
     learning:
       alert:
         enabled: false
