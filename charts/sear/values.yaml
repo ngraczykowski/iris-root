@@ -422,11 +422,11 @@ agents:
     image:
       repository: registry.dev.s8ops.com/region-agent
   organization-name-agent:
-    type: python
+    type: pythonagent
     image:
       repository: registry.dev.s8ops.com/organization-name-agent
   company-name-surrounding-agent:
-    type: python
+    type: pythonagent
     image:
       repository: registry.dev.s8ops.com/company-name-surrounding-agent
     additionalConfig:
