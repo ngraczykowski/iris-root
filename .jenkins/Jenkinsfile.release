@@ -11,7 +11,8 @@ pipeline {
     label 'ec2-agent-devenv'
   }
   triggers {
-    pollSCM('*/5 5-18 * * 1-5')
+    cron '*/1 5-18 * * 1-5'
+    upstream 'iris/iris%2Firis/master'
   }
   options {
     gitLabConnection(env.GITLAB_CONNECTION_NAME)
