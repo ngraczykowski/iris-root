@@ -54,8 +54,6 @@ agents:
 
   geo-agent:
     enabled: true
-    profiles:
-      - sierra
     args:
       - --geo.agent.facade.enabled=true
       - --geotransactions.agent.facade.enabled=true

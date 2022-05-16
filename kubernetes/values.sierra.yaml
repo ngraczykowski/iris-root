@@ -13,6 +13,18 @@ components:
       - --pb.email-notification.learning-enabled=true
 
 agents:
+  allow-list-agent:
+    enabled: true
+    image:
+      repository: registry.dev.s8ops.com/allow-list-agent-sierra
+    properties:
+      "allowlist.agent.facade.enabled": true
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
+
   name-agent:
     enabled: true
     profiles:
@@ -22,16 +34,20 @@ agents:
         memory: 2Gi
       requests:
         memory: 1Gi
+
   learning-engine:
     enabled: true
     profiles:
-      - sierra
+      - rabbitmq-declare
+
   historical-decisions-agent:
     enabled: true
-    profiles:
-      - sierra
+    properties:
+      "historicaldecisions.agent.facade.enabled": true
+      "contextuallearning.agent.facade.enabled": true
     image:
       repository: registry.dev.s8ops.com/historical-decisions-agent-sierra
+
   geo-agent:
     enabled: true
     image:
@@ -39,8 +55,6 @@ agents:
     properties:
       "geosanctions.agent.facade.enabled": true
       "geo.agent.facade.enabled": true
-    profiles:
-      - sierra
     resources:
       limits:
         memory: 2Gi
@@ -75,8 +89,10 @@ agents:
       routingKey: agents.companyName.versions.2_0_0.configs.1
       queueName: agent.companyname-requests-2
     from: organization-name-agent
+
   company-name-surrounding-agent:
     enabled: true
+
 
 keycloak:
   realmData:

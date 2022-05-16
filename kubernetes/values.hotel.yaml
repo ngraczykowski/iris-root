@@ -43,6 +43,19 @@ agents:
 
   geo-agent2:
     from: geo-agent
+    properties:
+      "facade.amqp.queueDefinitions[geo].inbound-exchange-name": "agent.request"
+      "facade.amqp.queueDefinitions[geo].inbound-routing-key": "agents.geo.versions.2_0_0.configs.*"
+      "facade.amqp.queueDefinitions[geo].inbound-queue-name": "agent.geo2-requests"
+      "facade.amqp.queueDefinitions[geo].dead-letter-exchange-name": "geo2-agent-dead-letter-exchange"
+      "facade.amqp.queueDefinitions[geo].dead-letter-queue-name": "geo2-agent-dead-letter-queue"
+      "facade.amqp.queueDefinitions[geo].dead-letter-routing-key": "geo2-agent-dead-letter-key"
+      "facade.amqp.queueDefinitions[geoSanctions].inbound-routing-key": "agents.geosanctions.versions.2_0_0.configs.*"
+      "facade.amqp.queueDefinitions[geoSanctions].inbound-queue-name": "agent.geosanctions2-requests"
+      "facade.amqp.queueDefinitions[geoSanctions].dead-letter-exchange-name": "geosanctions2-agent-dead-letter-exchange"
+      "facade.amqp.queueDefinitions[geoSanctions].dead-letter-queue-name": "geosanctions2-agent-dead-letter-queue"
+      "facade.amqp.queueDefinitions[geoSanctions].dead-letter-routing-key": "geosanctions2-agent-dead-letter-key"
+      "facade.amqp.queueDefinitions[geoSanctions].outbound-exchange-name": "agent.response"
 
   organization-name-agent:
     enabled: true
@@ -178,3 +191,60 @@ agents:
         memory: 2Gi
       requests:
         memory: 1Gi
+
+  country-agent:
+    enabled: true
+    image:
+      repository: registry.dev.s8ops.com/country-agent
+    profiles:
+      - rabbitmq-declare
+    properties:
+      "country.agent.facade.enabled": true
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
+
+  gender-agent:
+    enabled: true
+    image:
+      repository: registry.dev.s8ops.com/gender-agent
+    profiles:
+      - rabbitmq-declare
+    properties:
+      "gender.agent.facade.enabled": true
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
+
+
+  document-comparer-agent:
+    enabled: true
+    properties:
+      "nationalId.agent.facade.enabled": true
+    profiles:
+      - rabbitmq-declare
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
+
+  document-number-agent:
+    properties:
+      "document.agent.facade.enabled": true
+    profiles:
+      - rabbitmq-declare
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
+
+  learning-engine:
+    enabled: true
+    profiles:
+      - rabbitmq-declare
