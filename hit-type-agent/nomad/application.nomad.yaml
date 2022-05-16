@@ -29,11 +29,13 @@ agent:
   processes: 2
 
   agent-exchange:
-    request:
-      queue-name: 'agent.hittype-requests'
-
-    response:
-      exchange: 'agent.response'
+    request: 
+      exchange: "agent.request" 
+      routing-key: "agents.hitType.versions.*.configs.*" 
+      queue-name: "agent.hittype-requests" 
+    response: 
+      exchange: 'agent.response' 
+      routing-key: ""
 
   grpc:
     port: {{ env "NOMAD_PORT_grpc" }}
