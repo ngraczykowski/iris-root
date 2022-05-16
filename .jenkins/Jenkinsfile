@@ -3,7 +3,9 @@
 def version = ""
 
 pipeline {
-  agent none
+  agent {
+    label 'ec2-agent'
+  }
   options {
     gitLabConnection(env.GITLAB_CONNECTION_NAME)
     disableConcurrentBuilds()
@@ -11,9 +13,6 @@ pipeline {
   }
   stages {
     stage('Version') {
-      agent {
-        label 'ec2-agent'
-      }
       steps {
         script {
           version = sh(returnStdout: true, script: './scripts/get-version.sh').trim()
@@ -23,9 +22,6 @@ pipeline {
       }
     }
     stage('Build Applications') {
-      agent {
-        label 'ec2-agent'
-      }
       steps {
         withGradle {
           withCredentials(
@@ -85,9 +81,6 @@ pipeline {
       }
     }
     stage('Build Chart') {
-      agent {
-        label 'ec2-agent'
-      }
       when {
         beforeAgent true
         branch 'master'
