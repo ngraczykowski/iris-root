@@ -88,7 +88,7 @@ agents:
       "document.agent.facade.enabled": true
   geo-agent:
     properties:
-      "geotransactions.agent.facade.enabled": true
+      "geosanctions.agent.facade.enabled": true
       "geo.agent.facade.enabled": true
   learning-engine:
     properties:
