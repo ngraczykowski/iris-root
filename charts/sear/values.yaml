@@ -411,7 +411,21 @@ agents:
     useDb: true
     dbName: "learningengine"
     image:
-      repository: registry.dev.s8ops.com/learning-engine
+      repository: registry.dev.s8ops.com/learning-engine-default
+  is-pep-agent:
+    image:
+      repository: registry.dev.s8ops.com/is-pep-agent-default
+  historical-decisions-agent:
+    useDb: true
+    dbName: "historicaldecisions"
+    image:
+      repository: registry.dev.s8ops.com/historical-decisions-agent
+  allow-list-agent:
+    image:
+      repository: registry.dev.s8ops.com/allow-list-agent-default
+  country-agent:
+    image:
+      repository: registry.dev.s8ops.com/country-agent
   freetext-agent:
     image:
       repository: registry.dev.s8ops.com/freetext-agent
@@ -450,6 +464,12 @@ agents:
           lower_bound: 5
           upper_bound: 1000000
       default_response: AGENT_ERROR
+  hit-type-name-agent:
+    type: pythonagent
+    image:
+      repository: registry.dev.s8ops.com/hit-type-name-agent
+    # not working yet - wiaiting for docker fix
+
 
 #
 # Frontend Web Application

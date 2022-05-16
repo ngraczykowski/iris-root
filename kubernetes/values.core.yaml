@@ -70,6 +70,47 @@ components:
               url: https://todo-add-bucket.s3.eu-central-1.amazonaws.com
               region: eu-central-1
 
+
+agents:
+  name-agent:
+    properties:
+      "linguistics.name.facade.enabled": true
+  date-agent:
+    properties:
+      "dob.agent.facade.enabled": true
+  document-comparer-agent:
+    properties:
+      "nationalId.agent.facade.enabled": true
+  document-recognizer-agent:
+    properties:
+  document-number-agent:
+    properties:
+      "document.agent.facade.enabled": true
+  geo-agent:
+    properties:
+      "geotransactions.agent.facade.enabled": true
+      "geo.agent.facade.enabled": true
+  learning-engine:
+    properties:
+  is-pep-agent:
+    properties:
+      "ispep.agent.facade.enabled": true
+  historical-decisions-agent:
+    properties:
+      "historicaldecisions.agent.facade.enabled": true
+  allow-list-agent:
+    properties:
+      "allowlist.agent.facade.enabled": true
+  country-agent:
+    properties:
+      "country.agent.facade.enabled": true
+  freetext-agent:
+    properties:
+      "freetext.agent.facade.enabled": true
+  gender-agent:
+    properties:
+      "gender.agent.facade.enabled": true
+
 frontend:
   resources:
     limits:

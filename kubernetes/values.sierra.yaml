@@ -22,14 +22,54 @@ agents:
         memory: 2Gi
       requests:
         memory: 1Gi
-
+  date-agent:
+    enabled: true
+  document-comparer-agent:
+    enabled: true
+  document-recognizer-agent:
+    enabled: true
+  document-number-agent:
+    enabled: true
+  freetext-agent:
+    enabled: true
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
+  gender-agent:
+    enabled: true
+  region-agent:
+    enabled: true
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
+  country-agent:
+    enabled: true
+  learning-engine:
+    enabled: true
+    profiles:
+      - sierra
+  historical-decisions-agent:
+    enabled: true
+    profiles:
+      - sierra
+    image:
+      repository: registry.dev.s8ops.com/historical-decisions-agent-sierra
+  is-pep-agent:
+    enabled: true
+    profiles:
+      - sierra
+  allow-list-agent:
+    enabled: true
+    profiles:
+      - sierra
   geo-agent:
     enabled: true
     image:
       repository: registry.dev.s8ops.com/geo-agent-default
-    properties:
-      "geotransactions.agent.facade.enabled": true
-      "geo.agent.facade.enabled": true
     profiles:
       - sierra
     resources:
