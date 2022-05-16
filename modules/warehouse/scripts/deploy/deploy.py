@@ -84,6 +84,9 @@ class Deployer:
 
         if not os.path.exists(TMP_FOLDER):
             os.makedirs(TMP_FOLDER)
+        else:
+            print('Config exists, new one will not be fetched')
+            return
 
         if not os.path.exists(LOCAL_ADDITIONAL_CONF_FOLDER):
             os.makedirs(LOCAL_ADDITIONAL_CONF_FOLDER)
