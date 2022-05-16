@@ -2,7 +2,6 @@ from setuptools import find_packages, setup
 
 install_require = [
     "agent-base==0.20.0dev",
-    "agents-api==0.7.0.33",
     "aio-pika==7.1.2",
     "aiohttp==3.7.4.post0",
     "data-source-api==0.23.0.12",
