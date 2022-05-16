@@ -15,6 +15,7 @@ dependencies {
   api project(":agent-monitoring")
   implementation project(":agent-starter")
   implementation project(":agent-messaging")
+  implementation project(":agent-logging")
   implementation libraries.s8_datasource_api
   implementation libraries.s8_rabbit_mq_common_schema
 

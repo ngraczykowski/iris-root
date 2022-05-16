@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 import static com.silenteight.agent.common.dictionary.DictionaryLineTransformers.INVERTED_KEYS_AND_VALUES;
 import static com.silenteight.agent.common.dictionary.DictionaryLineTransformers.KEYS_AND_VALUES;
 import static com.silenteight.agent.common.dictionary.DictionaryLineTransformers.TRIM_AND_UPPER_CASE;
+import static com.silenteight.agents.logging.AgentLogger.trace;
 
 @Slf4j
 public class MultiValueDictionary implements Dictionary {
@@ -63,12 +64,12 @@ public class MultiValueDictionary implements Dictionary {
 
   public List<String> findByKey(String key) {
     var result = Optional.ofNullable(map.get(key.toUpperCase()));
-    if (log.isTraceEnabled()) {
-      result.ifPresentOrElse(
-          values -> log.trace("Values for {} found: {}", key, values),
-          () -> log.trace("Values for {} not found", key)
-      );
-    }
+
+    result.ifPresentOrElse(
+        values -> trace(log, "Values for {} found: {}", () -> key, () -> values),
+        () -> trace(log, "Values for {} not found", () -> key)
+    );
+
     return result.orElse(List.of());
   }
 

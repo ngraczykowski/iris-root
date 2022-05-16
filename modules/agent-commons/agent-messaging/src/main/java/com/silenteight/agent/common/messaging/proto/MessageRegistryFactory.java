@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static com.silenteight.agents.logging.AgentLogger.trace;
+
 @Slf4j
 public class MessageRegistryFactory {
 
@@ -71,8 +73,7 @@ public class MessageRegistryFactory {
     if (type == null) {
       log.warn("Could not load message type: class={}", classInfo.getName());
     } else {
-      if (log.isTraceEnabled())
-        log.trace("Loaded message type: class={}", type.getName());
+      trace(log, "Loaded message type: class={}", type::getName);
     }
 
     return type;

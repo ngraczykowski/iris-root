@@ -9,6 +9,8 @@ import com.silenteight.agents.v1.api.exchange.AgentOutput.Feature;
 import java.util.List;
 import java.util.function.Function;
 
+import static com.silenteight.agents.logging.AgentLogger.debug;
+import static com.silenteight.agents.logging.AgentLogger.info;
 import static java.util.stream.Collectors.joining;
 
 @Slf4j
@@ -33,12 +35,10 @@ class AgentFacadeProcessor<AgentInputT extends AgentInput> {
   private void logAgentOutputs(List<AgentOutput> agentOutputs) {
     var agentOutputsMatches = getAgentOutputsMatches(agentOutputs);
     var agentOutputsFeatures = getAgentOutputsFeatures(agentOutputs);
-    log.info(
-        "Agent responded, data outputs count: {}, outputs matches: {}, outputs features: {}",
-        agentOutputs.size(),
-        agentOutputsMatches,
-        agentOutputsFeatures
-    );
+    info(log, "Agent responded, data outputs count: {}, outputs matches: {}, outputs features: {}",
+        agentOutputs::size,
+        () -> agentOutputsMatches,
+        () -> agentOutputsFeatures);
   }
 
   private static String getAgentOutputsFeatures(List<AgentOutput> agentOutputs) {
@@ -63,12 +63,8 @@ class AgentFacadeProcessor<AgentInputT extends AgentInput> {
 
   private void logAgentsInputFromDataSource(List<AgentInputT> agentsInput) {
     log.info("Received data inputs from data source with count: " + agentsInput.size());
-    if (log.isDebugEnabled()) {
-      String features = getAgentsInputsFeatures(agentsInput);
-      String matches = getAgentsInputsMatches(agentsInput);
-      log.debug("Received agents inputs from data source with matches {} and features {}",
-          matches, features);
-    }
+    debug(log, "Received agents inputs from data source with matches {} and features {}",
+        () -> getAgentsInputsFeatures(agentsInput), () -> getAgentsInputsMatches(agentsInput));
   }
 
   private String getAgentsInputsFeatures(List<AgentInputT> agentsInput) {

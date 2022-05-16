@@ -1,7 +1,6 @@
 package com.silenteight.agent.facade;
 
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.agents.v1.api.exchange.AgentOutput;
 
@@ -11,7 +10,6 @@ import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 
-@Slf4j
 class AgentFacadeWorker<T> {
 
   private final Function<T, AgentOutput> mapper;

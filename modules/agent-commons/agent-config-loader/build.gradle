@@ -10,6 +10,7 @@ configurations {
 
 dependencies {
   // Commons
+  implementation project(":agent-logging")
   implementation libraries.s8_commons_core
   implementation libraries.commons_lang3
   implementation libraries.commons_text

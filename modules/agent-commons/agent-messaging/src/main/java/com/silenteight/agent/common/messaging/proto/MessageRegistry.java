@@ -18,6 +18,7 @@ import java.util.Optional;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
+import static com.silenteight.agents.logging.AgentLogger.debug;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 
@@ -44,8 +45,8 @@ public class MessageRegistry {
     Parser<Message> parser = (Parser<Message>) invokeStaticGetter(type, "parser").orElse(null);
 
     if (descriptor == null || parser == null) {
-      if (log.isDebugEnabled())
-        log.debug("Ignoring type that is not a Protocol Buffers message: class={}", type);
+      debug(log, "Ignoring type that is not a Protocol Buffers message: class={}",
+          () -> type);
       return;
     }
 

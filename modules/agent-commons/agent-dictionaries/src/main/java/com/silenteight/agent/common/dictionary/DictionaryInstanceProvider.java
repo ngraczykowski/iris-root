@@ -9,6 +9,8 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
+import static com.silenteight.agents.logging.AgentLogger.info;
+
 @Slf4j
 @Builder
 class DictionaryInstanceProvider<TargetT extends Dictionary> {
@@ -28,7 +30,7 @@ class DictionaryInstanceProvider<TargetT extends Dictionary> {
 
   private TargetT createDictionary() {
     var targetT = factory.get();
-    log.info("{} loaded successfully from {}.", clazz.getSimpleName(), identifier);
+    info(log, "{} loaded successfully from {}.", clazz::getSimpleName, () -> identifier);
     return targetT;
   }
 

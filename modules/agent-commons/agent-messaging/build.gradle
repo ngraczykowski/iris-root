@@ -13,6 +13,8 @@ dependencies {
   api libraries.spring_amqp
   api libraries.spring_amqp_rabbit
   api libraries.spring_integration_amqp
+
+  implementation project(":agent-logging")
   implementation libraries.spring_boot_configuration_processor
   implementation libraries.spring_boot_starter_amqp
   implementation libraries.spring_boot_starter_integration

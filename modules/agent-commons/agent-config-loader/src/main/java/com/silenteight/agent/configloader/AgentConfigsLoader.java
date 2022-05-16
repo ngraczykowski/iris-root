@@ -3,6 +3,8 @@ package com.silenteight.agent.configloader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.agents.logging.AgentLogger;
+
 import java.io.IOException;
 import java.nio.file.Path;
 
@@ -34,14 +36,15 @@ public class AgentConfigsLoader<T> {
           String agentName = getAgentName(configsRootPath, configFile);
           parse(configFile, prefix, propertiesType)
               .ifPresent(properties -> {
-                log.info("Successfully loaded config {} [{}] from {}.",
-                    agentName, properties.getClass().getSimpleName(), configFile);
+                AgentLogger.info(log, "Successfully loaded config {} [{}] from {}.",
+                    () -> agentName,
+                    () -> properties.getClass().getSimpleName(),
+                    () -> configFile);
                 agentConfigs.put(agentName, properties);
               });
         }
       }
     }
-
     return agentConfigs;
   }
 

@@ -1,7 +1,6 @@
 package com.silenteight.agent.facade;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.agent.facade.datasource.AmqpMessageToDataSourceRequestMapper;
 import com.silenteight.agent.facade.datasource.DataSourceClient;
@@ -11,7 +10,6 @@ import java.util.List;
 
 import static com.silenteight.agent.facade.GrpcDeadlineHandler.checkRequestTimeout;
 
-@Slf4j
 @RequiredArgsConstructor
 class AgentFacadeDataExtractor<DataSourceRequestT, AgentInputT> {
 

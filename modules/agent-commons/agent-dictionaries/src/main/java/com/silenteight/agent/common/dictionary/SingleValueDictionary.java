@@ -2,6 +2,8 @@ package com.silenteight.agent.common.dictionary;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.agents.logging.AgentLogger;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -51,12 +53,12 @@ public class SingleValueDictionary implements Dictionary {
 
   public Optional<String> findByKey(String key) {
     var result = ofNullable(map.get(key.toUpperCase()));
-    if (log.isTraceEnabled()) {
-      result.ifPresentOrElse(
-          value -> log.trace("Value for {} found: {}", key, value),
-          () -> log.trace("Value for {} not found", key)
-      );
-    }
+
+    result.ifPresentOrElse(
+        value -> AgentLogger.trace(log, "Value for {} found: {}", () -> key, () -> value),
+        () -> AgentLogger.trace(log, "Value for {} not found", () -> key)
+    );
+
     return result;
   }
 

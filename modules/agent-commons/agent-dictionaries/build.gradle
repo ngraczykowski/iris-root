@@ -8,6 +8,7 @@ description = "Agent Dictionaries"
 
 dependencies {
   implementation project(":agent-config-loader")
+  implementation project(":agent-logging")
 
   implementation libraries.commons_lang3
   implementation libraries.commons_io

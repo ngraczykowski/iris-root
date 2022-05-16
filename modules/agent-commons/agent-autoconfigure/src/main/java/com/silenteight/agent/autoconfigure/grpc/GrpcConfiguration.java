@@ -43,7 +43,7 @@ public class GrpcConfiguration {
           .filter(t -> t > 0)
           .orElse(NettyRuntime.availableProcessors());
 
-      log.info("Using executor service with " + threads + " threads for gRPC handling.");
+      log.info("Using executor service with {} threads for gRPC handling.", threads);
       nettyServerBuilder.executor(newFixedThreadPool(threads));
     }
   }

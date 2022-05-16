@@ -5,16 +5,13 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
-import com.google.protobuf.Any;
-import com.google.protobuf.ByteString;
-import com.google.protobuf.InvalidProtocolBufferException;
-import com.google.protobuf.Message;
-import com.google.protobuf.TextFormat;
+import com.google.protobuf.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
 import static com.google.common.base.Throwables.getRootCause;
+import static com.silenteight.agents.logging.AgentLogger.debug;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 
@@ -46,15 +43,15 @@ public final class AnyUtils {
     try {
       return of(anyMessage.unpack(type));
     } catch (InvalidProtocolBufferException e) {
-      if (log.isDebugEnabled()) {
-        Throwable rootCause = getRootCause(e);
-        log.debug("Unable to unpack message: type={}, exception={}, error={}, message={}",
-            type.getName(),
-            rootCause.getClass(),
-            rootCause.getMessage(),
-            TextFormat.shortDebugString(anyMessage));
-      }
-      return empty();
+      Throwable rootCause = getRootCause(e);
+      debug(log, "Unable to unpack message: type={}, exception={}, error={}, message={}",
+          type::getName,
+          rootCause::getClass,
+          rootCause::getMessage,
+          () -> TextFormat.shortDebugString(anyMessage));
     }
+    return empty();
   }
+
 }
+

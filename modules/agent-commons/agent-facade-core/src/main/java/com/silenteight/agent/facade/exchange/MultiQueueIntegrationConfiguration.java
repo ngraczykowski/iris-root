@@ -1,7 +1,6 @@
 package com.silenteight.agent.facade.exchange;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.agent.common.messaging.amqp.AmqpInboundFactory;
 import com.silenteight.agent.common.messaging.amqp.AmqpOutboundFactory;
@@ -27,7 +26,6 @@ import static org.springframework.integration.IntegrationMessageHeaderAccessor.C
 @RequiredArgsConstructor
 @Conditional(MultiFacadeEnabledCondition.class)
 @EnableConfigurationProperties(AgentFacadeProperties.class)
-@Slf4j
 class MultiQueueIntegrationConfiguration {
 
   private final AgentFacadeProperties agentFacadeProperties;
