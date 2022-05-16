@@ -1,6 +1,7 @@
 package com.silenteight.sens.webapp.backend.user.rest.dto;
 
 import lombok.*;
+import lombok.extern.jackson.Jacksonized;
 
 import com.silenteight.sens.webapp.user.registration.RegisterInternalUserUseCase.RegisterInternalUserCommand;
 
@@ -14,8 +15,7 @@ import static java.util.Collections.emptySet;
 
 @Data
 @Builder
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Jacksonized
 public class CreateUserDto {
 
   @NonNull
