@@ -15,7 +15,7 @@ class AlertedPartyCreatorSpec extends Specification {
   def 'should create alerted party (group 5)'() {
     given:
     def alertRecord = createRecord(
-        'EBBS~722172921~I~MUHAMMED iammasked lalala~~~~~~~~~registOrResidentialAddress~registOrResidenAddCntry~mailingOrCommunicationAddr~mailingOrCommunAddrCntry~operatingOrOfficialAddress~operatingOrOffAddrCntry~otherAddress~otherAddressCountry~registeredAddOfHeadOffice~registeredAddCntryOfHo~registeredAddOfParentComp~regAddCntryParCompany~PAK~estCountryOfHeadOffice~estCountryOfParentCompany~OLD NIC NUMBER~722172921~NEW NIC NUMBER~3520114467193~Passport No~~~~Deferred Docs~~1977-02-12~PK~~~nameOfAuthority~PK~Salaried~AZZ~~IND~EB Premium Banking~15~ACTIVE~~2017-06-09~~~~CUSTOMER                      ~N~~~02A~~~~~~N~Active CASA~~F~~~~~~~~~~~~~~~')
+        'EBBS~722172921~I~MUHAMMED iammasked lalala~~~~~李~~~~registOrResidentialAddress~registOrResidenAddCntry~mailingOrCommunicationAddr~mailingOrCommunAddrCntry~operatingOrOfficialAddress~operatingOrOffAddrCntry~otherAddress~otherAddressCountry~registeredAddOfHeadOffice~registeredAddCntryOfHo~registeredAddOfParentComp~regAddCntryParCompany~PAK~estCountryOfHeadOffice~estCountryOfParentCompany~OLD NIC NUMBER~722172921~NEW NIC NUMBER~3520114467193~Passport No~~~~Deferred Docs~~1977-02-12~PK~~~nameOfAuthority~PK~Salaried~AZZ~~IND~EB Premium Banking~15~ACTIVE~~2017-06-09~~~~CUSTOMER                      ~N~~~02A~~~~~~N~Active CASA~~F~~~~~~黃波~~~~~~~~~')
     def gnsParty = makeGnsParty(alertRecord)
 
     when:
@@ -24,7 +24,7 @@ class AlertedPartyCreatorSpec extends Specification {
     then:
     with(result.id) {
       sourceId == alertRecord.recordId
-      discriminator == '30YQz1dm5IuNRZ-e2Zj02xtK00M='
+      discriminator == 'Nj7mnPxleF-cwNW_VfIrZ8VrFkM='
     }
     result.apId == alertRecord.systemId
     result.apSrcSysId == gnsParty.sourceSystemIdentifier
@@ -35,6 +35,7 @@ class AlertedPartyCreatorSpec extends Specification {
     result.apName == gnsParty.name.get()
     result.apNameSynonyms as Set == gnsParty.alternateNames
     result.apResidentialAddresses == gnsParty.fields.residentialAddresses
+    result.apOriginalCnNames == ['黃波', '李'] as Set
     result.apResidentialAddresses == ['registOrResidentialAddress',
                                       'mailingOrCommunicationAddr',
                                       'operatingOrOfficialAddress',
@@ -100,8 +101,8 @@ class AlertedPartyCreatorSpec extends Specification {
     result.apNameSynonyms as Set == gnsParty.alternateNames
     result.apResidentialAddresses == gnsParty.fields.residentialAddresses
     result.apResidentialAddresses == ['streetAddress',
-                                                          'city',
-                                                          'state']
+                                      'city',
+                                      'state']
   }
 
   def 'should apName be empty if gnsParty has no name'() {

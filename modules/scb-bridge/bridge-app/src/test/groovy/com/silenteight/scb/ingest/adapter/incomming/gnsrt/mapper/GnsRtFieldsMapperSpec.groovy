@@ -36,23 +36,23 @@ class GnsRtFieldsMapperSpec extends Specification {
     result == expectedResult as Set
 
     where:
-    screenableData                        | expectedResult
+    screenableData              | expectedResult
     new ScreenableData(
-        sourceSystemIdentifier: 'CUPD',
-        amlCountry: 'CN',
-        supplementaryInformation1: 'Tom') | []
+        supplementaryInformation1: 'Tom',
+        alternateName1: 'Li')   | []
     new ScreenableData(
-        sourceSystemIdentifier: '',
-        amlCountry: '',
-        supplementaryInformation1: '黃波')  | []
+        supplementaryInformation1: '黃波Li',
+        alternateName1: '李Xyz') | []
     new ScreenableData(
-        sourceSystemIdentifier: 'CUPD',
-        amlCountry: 'CN',
-        supplementaryInformation1: '黃波')  | ['黃波']
+        supplementaryInformation1: '黃波',
+        alternateName1: '')     | ['黃波']
     new ScreenableData(
-        sourceSystemIdentifier: 'TNDM',
-        amlCountry: 'TW',
-        supplementaryInformation1: '黃波')  | ['黃波']
+        supplementaryInformation1: '黃波',
+        alternateName1: '李')    | ['黃波', '李']
+    new ScreenableData(
+        supplementaryInformation1: '黃波',
+        alternateName1: '李',
+        alternateName3: '王')    | ['黃波', '李', '王']
   }
 
   def "should get residential addresses"() {
