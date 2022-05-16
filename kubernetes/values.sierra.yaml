@@ -36,6 +36,9 @@ agents:
     enabled: true
     image:
       repository: registry.dev.s8ops.com/geo-agent-default
+    properties:
+      "geosanctions.agent.facade.enabled": true
+      "geo.agent.facade.enabled": true
     profiles:
       - sierra
     resources:

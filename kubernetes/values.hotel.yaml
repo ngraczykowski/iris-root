@@ -5,10 +5,176 @@ components:
     enabled: true
     profiles:
       - consuldisabled
-
     image:
       repository: registry.dev.s8ops.com/hsbc/hsbc-bridge
       tag: "snapshot"
 
     dbName: "hb"
     webPath: "hb"
+
+agents:
+  name-agent:
+    image:
+      repository: registry.dev.s8ops.com/linguistics-agent-hotel-ns
+    enabled: true
+    profiles:
+      - sierra
+      - rabbitmq-declare
+    properties:
+      "linguistics.name.facade.enabled": true
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
+
+  geo-agent:
+    enabled: true
+    image:
+      repository: registry.dev.s8ops.com/geo-agent-hotel
+    properties:
+      "geo.agent.facade.enabled": true
+      "geosanctions.agent.facade.enabled": true
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
+
+  geo-agent2:
+    from: geo-agent
+
+  organization-name-agent:
+    enabled: true
+    properties:
+      "serp.show-env": null
+    args:
+      - --configuration-dir=/app/config
+      - --grpc
+      - --agent-exchange
+      - --verbose
+    initScripts:
+      000mkConfig.sh: |
+        #!/bin/sh
+        cat > /tmp/application.yaml << EOF
+        agent:
+          processes: 10
+          agent-exchange:
+            request:
+              exchange: 'agent.request'
+              routing-key: 'agents.companyName.versions.1_0_0.configs.1'
+              queue-name: 'agent.companyname-requests'
+            response:
+              exchange: 'agent.response'
+          grpc:
+            port: 9090
+        grpc:
+          client:
+            data-source:
+              address: $UDS_ADDRESS
+              timeout: 15
+        rabbitmq:
+          host: $RABBITMQ_HOST
+          port: $RABBITMQ_PORT
+          login: $RABBITMQ_USERNAME
+          password: $RABBITMQ_PASSWORD
+          virtualhost: /
+        sentry:
+          turn_on: false
+          environment: unknown
+          release: unknown
+          sample_rate: 1.0
+        EOF
+    organization-name-agent2:
+      from: organization-name-agent
+      args:
+        - --configuration-dir=/app/config
+        - --grpc
+        - --agent-exchange
+        - --verbose
+      initScripts:
+        000mkConfig.sh: |
+          #!/bin/sh
+          cat > /tmp/application.yaml << EOF
+          agent:
+            processes: 10
+            agent-exchange:
+              request:
+                exchange: 'agent.request'
+                routing-key: 'agents.companyName.versions.2_0_0.configs.1'
+                queue-name: 'agent.companyname-requests-2'
+              response:
+                exchange: 'agent.response'
+            grpc:
+              port: 9090
+          grpc:
+            client:
+              data-source:
+                address: $UDS_ADDRESS
+                timeout: 15
+          rabbitmq:
+            host: $RABBITMQ_HOST
+            port: $RABBITMQ_PORT
+            login: $RABBITMQ_USERNAME
+            password: $RABBITMQ_PASSWORD
+            virtualhost: /
+          sentry:
+            turn_on: false
+            environment: unknown
+            release: unknown
+            sample_rate: 1.0
+          EOF
+
+  allow-list-agent:
+    enabled: true
+    image:
+      repository: registry.dev.s8ops.com/allow-list-agent-hotel
+    properties:
+      "allowlist.agent.facade.enabled": true
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
+
+  is-pep-agent:
+    enabled: true
+    profiles:
+      - rabbitmq-declare
+    image:
+      repository: registry.dev.s8ops.com/is-pep-agent-hotel
+    properties:
+      "ispep.agent.facade.enabled": true
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
+
+  historical-decisions-agent:
+    enabled: true
+    image:
+      repository: registry.dev.s8ops.com/historical-decisions-agent
+    properties:
+      "historicaldecisions.agent.facade.enabled": true
+      "contextuallearning.agent.facade.enabled": true
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
+
+  date-agent:
+    enabled: true
+    image:
+      repository: registry.dev.s8ops.com/date-agent-hotel-ns
+    profiles:
+      - rabbitmq-declare
+    properties:
+      "dob.agent.facade.enabled": true
+      "logicaldiscounting.agent.facade.enabled": true
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
