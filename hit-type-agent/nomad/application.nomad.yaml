@@ -1,7 +1,7 @@
 grpc:
   client:
     data-source:
-      address: {{ range $index, $client := service "grpc-universal-data-source" -}}
+      address: {{ range $index, $client := service "mike-universal-data-source" -}}
           {{ if $index }},{{ end -}}
           {{ $client.Address }}:{{ $client.Port -}}
       {{- end }}
