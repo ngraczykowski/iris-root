@@ -155,10 +155,15 @@ ingress:
 # Configuration common for all components
 #
 common:
+  # which component templates to use; supported: spring, pythonagent
   type: spring
+  # enable component
   enabled: true
+  # use database (inject postgres secrets)
   useDb: true
+  # configure db name via postgres operator
   dbName: ""
+  # std k8s docker image settings
   image:
     repository: ""
     tag: ""
@@ -167,25 +172,38 @@ common:
 
   replicaCount: 1
 
+  # override docker entrypoint command
   command: []
 
+  # override docker command arguments
+  # values defined in "common", "agentCommon" and specified component are _concatenated_ together
   args: []
   # - --spring.profiles.active=dev
 
+  # inject additional configuration files (eg into /etc/spring/ for type: spring)
+  # currently only supported for type: spring
   configFiles: {}
   # application.yml: |
   #   logging:
   #     level:
   #       com.silenteight: DEBUG
 
+  # inject --spring.profiles.include=[] into cmd arguments; only applicable for type: spring
   profiles: []
 
+  # inject --<property>=<value> into cmd arguments; only applicable for type: spring
   properties: {}
 
+  # inject additional yaml entries into default config files:
+  # - /etc/spring/kubernetes.yaml for type: spring
+  # - /app/config/application.yaml for type: pythonagent
+  # (note - /app/config/application.yaml support os environment variables - see "configmap-init-scripts.yaml.tpl")
   additionalConfig: {}
 
+  # inject amqp specific parameters; currently used for type: pythonagent (see "configmap-init-scripts.yaml.tpl")
   amqp: {}
 
+  # inject sentry specific parameters into spring apps (--sentry.dsn, --sentry.environment)
   sentry:
     dsn: ""
     environment: ""
@@ -250,6 +268,7 @@ common:
   tolerations: []
   affinity: {}
 
+## override "common" node for agent deployments only
 agentsCommon:
   enabled: false
   useDb: false
