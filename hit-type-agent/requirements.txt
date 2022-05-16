@@ -1,5 +1,4 @@
 agent-base==0.20.0dev0
-agents-api==0.7.0.33
 aio-pika==7.1.2
 aiohttp==3.7.4.post0
 aiormq==6.2.3

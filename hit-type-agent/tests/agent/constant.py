@@ -266,8 +266,113 @@ TEST_CASES = [
                 },
             },
             "result": {
-                "solution": "INCONCLUSIVE",
+                "solution": "ENTITY_TYPE_MISMATCH",
                 "hit_categories": ["unknown", "job"],
+                "normal_categories": ["name"],
+            },
+        }
+    ),
+    (
+        {
+            "data": {
+                "normal_trigger_categories": ["name"],
+                "trigger_categories": {
+                    "name": ["CONCAT_NAME", "PARTY1_NAME_FULL"],
+                    "country": ["ADDRESS1_COUNTRY"],
+                    "job": [],
+                    "other": [],
+                },
+                "triggered_tokens": {
+                    "Doe": {
+                        "ADDRESS1_LINE2": ["Jane Doe AA BBB"],
+                        "CONCAT_ADDRESS": [
+                            "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
+                        ],
+                    }
+                },
+            },
+            "result": {
+                "solution": "INCONCLUSIVE",
+                "hit_categories": ["unknown"],
+                "normal_categories": ["name"],
+            },
+        }
+    ),
+    (
+        {
+            "data": {
+                "normal_trigger_categories": ["name"],
+                "trigger_categories": {
+                    "name": ["CONCAT_NAME", "PARTY1_NAME_FULL"],
+                    "country": ["ADDRESS1_COUNTRY", "CONCAT_ADDRESS"],
+                    "job": [],
+                    "other": [],
+                },
+                "triggered_tokens": {
+                    "Doe": {
+                        "ADDRESS1_LINE2": ["Jane Doe AA BBB"],
+                        "CONCAT_ADDRESS": [
+                            "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
+                        ],
+                    }
+                },
+            },
+            "result": {
+                "solution": "ENTITY_TYPE_MISMATCH",
+                "hit_categories": ["country"],
+                "normal_categories": ["name"],
+            },
+        }
+    ),
+    (
+        {
+            "data": {
+                "normal_trigger_categories": ["name", "country"],
+                "trigger_categories": {
+                    "name": ["CONCAT_NAME", "PARTY1_NAME_FULL"],
+                    "country": ["ADDRESS1_COUNTRY", "CONCAT_ADDRESS"],
+                    "job": [],
+                    "other": [],
+                },
+                "triggered_tokens": {
+                    "Doe": {
+                        "ADDRESS1_LINE2": ["Jane Doe AA BBB"],
+                        "CONCAT_ADDRESS": [
+                            "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
+                        ],
+                    }
+                },
+            },
+            "result": {
+                "solution": "NORMAL",
+                "hit_categories": ["country"],
+                "normal_categories": ["name", "country"],
+            },
+        }
+    ),
+    (
+        {
+            "data": {
+                "normal_trigger_categories": ["name"],
+                "trigger_categories": {
+                    "name": ["CONCAT_NAME", "PARTY1_NAME_FULL"],
+                    "country": ["ADDRESS1_COUNTRY", "CONCAT_ADDRESS"],
+                    "job": [],
+                    "other": [],
+                },
+                "triggered_tokens": {
+                    "Doe": {
+                        "ADDRESS1_LINE2": ["Jane Doe AA BBB"],
+                        "CONCAT_ADDRESS": [
+                            "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
+                        ],
+                    },
+                    "Joe": {"PARTY1_NAME_FULL": "Big Joe"},
+                },
+            },
+            "result": {
+                "solution": "SCATTER",
+                "hit_categories": ["name", "country"],
                 "normal_categories": ["name"],
             },
         }

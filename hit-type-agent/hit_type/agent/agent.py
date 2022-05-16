@@ -97,10 +97,12 @@ class HitTypeAgent(Agent):
         )
         if all(is_normal_mask):
             return Solution.NORMAL
-        elif any(is_unknown_mask):
-            return Solution.INCONCLUSIVE
+        elif not any(is_normal_mask) and not all(is_unknown_mask):
+            return Solution.ENTITY_TYPE_MISMATCH
         elif any(is_normal_mask):
             return Solution.SCATTER
+        elif any(is_unknown_mask):
+            return Solution.INCONCLUSIVE
         else:
             return Solution.ENTITY_TYPE_MISMATCH
 
