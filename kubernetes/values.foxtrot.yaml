@@ -15,11 +15,30 @@ components:
 
   dataprep:
     enabled: true
-
+    profiles:
+      - additional
+    configFiles:
+      application-additional.yml: |
+        grpc:
+          client:
+            registration:
+              address: dns:///{{ include "sear.fullname" . }}-core-bridge.{{ .Release.Namespace }}.svc:9090
+            universal-data-source:
+              address: dns:///{{ include "sear.fullname" . }}-universal-data-source.{{ .Release.Namespace }}.svc:9090
+            cm-api-connector:
+              address: dns:///{{ include "sear.fullname" . }}-ftcc.{{ .Release.Namespace }}.svc:9090
+            category:
+              address: dns:///{{ include "sear.fullname" . }}-universal-data-source.{{ .Release.Namespace }}.svc:9090
+            category-value:
+              address: dns:///{{ include "sear.fullname" . }}-universal-data-source.{{ .Release.Namespace }}.svc:9090
   core-bridge:
     enabled: true
     profiles:
       - consuldisabled
+
+  governance:
+    profiles:
+      - foxtrot
 
 #TODO(dsniezek): agents copied from sierra for now
 agents:
