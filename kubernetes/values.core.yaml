@@ -14,8 +14,10 @@ common:
 
   resources:
     limits:
+      cpu: 2000m
       memory: 1Gi
     requests:
+      cpu: 750m
       memory: 1Gi
 
 agentsCommon:
