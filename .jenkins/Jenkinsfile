@@ -123,7 +123,7 @@ pipeline {
   }
   post {
     failure {
-      notifyBuild color: 'danger', channel: 'C03D4GD7RHP'
+      notifyBuild color: 'danger', channel: 'C03D4GD7RHP', title: ':building_construction: Iris Build'
     }
   }
 }
