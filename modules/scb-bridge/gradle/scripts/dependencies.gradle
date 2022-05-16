@@ -20,17 +20,12 @@ ext {
   warehouseApiVersion = "2.3.0"
 
   springBootVersion = '2.5.10'
-  springCloudVersion = '3.0.1'
-  springVersion = '5.3.16'
   springRetryVersion = '1.3.1'
   springBatchCore = '4.3.4'
   springIntegrationVersion = '5.5.9'
   springRabbitVersion = '2.3.6'
   serpProtocolVersion = "0.37.0"
 
-  reactorCoreVersion = '3.4.15'
-  reactorRabbitmqVersion = '1.5.4'
-  reactorGrpcStubVersion = '1.0.0'
   hibernateEnversVersion = '5.6.5.Final'
   ojdbcVersion = '12.2.0.1'
   postgresqlVersion = '42.2.24'
@@ -71,11 +66,11 @@ libraries.data_source_categories_api = [group: 'com.silenteight.sens.date-source
 libraries.warehouse_api = [group: 'com.silenteight.warehouse.api', name: 'se-data-api', version: warehouseApiVersion]
 
 // Spring
-libraries.spring_aspects = [group: 'org.springframework', name: 'spring-aspects', version: springVersion]
 libraries.spring_boot = [group: 'org.springframework.boot', name: 'spring-boot', version: springBootVersion]
 libraries.spring_boot_actuator = [group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: springBootVersion]
 libraries.spring_boot_configuration_processor = [group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', version: springBootVersion]
 libraries.spring_boot_starter_undertow = [group: 'org.springframework.boot', name: 'spring-boot-starter-undertow', version: springBootVersion]
+libraries.spring_boot_starter_webflux = [group: 'org.springframework.boot', name: 'spring-boot-starter-webflux', version: springBootVersion]
 libraries.spring_boot_starter_validation = [group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: springBootVersion]
 libraries.spring_boot_starter_web = [group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion]
 libraries.spring_data_jdbc = [group: 'org.springframework.boot', name: 'spring-boot-starter-data-jdbc', version: springBootVersion]
@@ -89,16 +84,9 @@ libraries.spring_batch_core = [group: 'org.springframework.batch', name: 'spring
 libraries.spring_integration_core = [group: 'org.springframework.integration', name: 'spring-integration-core', version: springIntegrationVersion]
 libraries.spring_integration_amqp = [group: 'org.springframework.integration', name: 'spring-integration-amqp', version: springIntegrationVersion]
 
-libraries.spring_cloud_starter_bootstrap = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: springCloudVersion]
-libraries.spring_cloud_starter_consul_config = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-consul-config', version: springCloudVersion]
-libraries.spring_cloud_starter_consul_discovery = [group: 'org.springframework.cloud', name: 'spring-cloud-consul-discovery', version: springCloudVersion]
-libraries.spring_cloud_starter_sleuth = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth']
-libraries.spring_cloud_dependencies = [group: 'org.springframework.cloud', name: 'spring-cloud-dependencies']
-
-// Project Reactor
-libraries.reactor_core = [group: 'io.projectreactor', name: 'reactor-core', version: reactorCoreVersion]
-libraries.reactor_rabbitmq = [group: 'io.projectreactor.rabbitmq', name: 'reactor-rabbitmq', version: reactorRabbitmqVersion]
-libraries.reactor_grpc_stub = [group: 'com.salesforce.servicelibs', name: 'reactor-grpc-stub', version: reactorGrpcStubVersion]
+libraries.spring_cloud_starter_bootstrap = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap']
+libraries.spring_cloud_starter_consul_config = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-consul-config']
+libraries.spring_cloud_starter_consul_discovery = [group: 'org.springframework.cloud', name: 'spring-cloud-consul-discovery']
 
 // Database and Hibernate
 libraries.caffeine = [group: 'com.github.ben-manes.caffeine', name: 'caffeine']
@@ -127,15 +115,11 @@ libraries.grpc_netty_shaded = [group: 'io.grpc', name: 'grpc-netty-shaded', vers
 libraries.guava = [group: 'com.google.guava', name: 'guava', version: guavaVersion]
 libraries.protobuf_java = [group: 'com.google.protobuf', name: 'protobuf-java', version: googleProtobufVersion]
 libraries.protobuf_java_util = [group: 'com.google.protobuf', name: 'protobuf-java-util', version: googleProtobufVersion]
-libraries.xstream = [group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.19']
 libraries.vavr = [group: 'io.vavr', name: 'vavr', version: '0.10.4']
 libraries.micrometer_prometheus = [group: 'io.micrometer', name: 'micrometer-registry-prometheus', version: '1.8.4']
-libraries.ecs_logging_core = [group: 'co.elastic.logging', name: 'ecs-logging-core', version: '1.0.1']
-libraries.logback_ecs_encoder = [group: 'co.elastic.logging', name: 'logback-ecs-encoder', version: libraries.ecs_logging_core.version]
 libraries.jackson_dataformat_csv = [group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-csv', version: jacksonDataformatCsvVersion]
 
 // Testing
-libraries.spring_test = [group: 'org.springframework', name: 'spring-test', version: springVersion]
 libraries.groovy_all = [group: 'org.codehaus.groovy', name: 'groovy-all', version: groovyVersion]
 libraries.json_path = [group: 'com.jayway.jsonpath', name: 'json-path']
 libraries.junit_platform_commons = [group: 'org.junit.platform', name: 'junit-platform-commons', version: junitPlatformCommonsVersion]
@@ -149,6 +133,7 @@ libraries.testcontainers_spock = [group: 'org.testcontainers', name: 'spock', ve
 configurations.all {
   exclude group: 'org.glassfish', module: 'javax.el'
   exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+  exclude group: 'org.springframework.boot', module: 'spring-boot-starter-reactor-netty'
 
   resolutionStrategy {
     failOnVersionConflict()
@@ -165,10 +150,7 @@ configurations.all {
     force libraries.commons_io
     force libraries.protobuf_java
     force libraries.protobuf_java_util
-    force libraries.reactor_grpc_stub
     force libraries.grpc_netty_shaded
-    force libraries.reactor_core
-    force libraries.spring_test
   }
 }
 
@@ -201,23 +183,20 @@ dependencies {
 
   implementation libraries.protobuf_java
   implementation libraries.protobuf_java_util
-  implementation libraries.reactor_grpc_stub
-  implementation libraries.reactor_rabbitmq
 
   implementation libraries.spring_boot
   implementation libraries.spring_boot_actuator
   implementation libraries.spring_boot_starter_undertow
+  implementation libraries.spring_boot_starter_webflux
   implementation libraries.spring_boot_starter_validation
   implementation libraries.spring_boot_starter_web
 
   implementation libraries.spring_cloud_starter_bootstrap
   implementation libraries.spring_cloud_starter_consul_config
   implementation libraries.spring_cloud_starter_consul_discovery
-  implementation libraries.spring_cloud_starter_sleuth
   implementation libraries.spring_boot_starter_amqp
   implementation libraries.spring_data_jdbc
   implementation libraries.spring_retry
-  implementation libraries.spring_cloud_dependencies
   implementation libraries.spring_integration_core
   implementation libraries.spring_integration_amqp
 
@@ -230,17 +209,13 @@ dependencies {
   implementation libraries.registration_api_proto
 
   implementation libraries.micrometer_prometheus
-  implementation libraries.json_path
-  implementation libraries.xstream
   implementation libraries.vavr
-
-  runtimeOnly libraries.ecs_logging_core
-  runtimeOnly libraries.logback_ecs_encoder
 
   testImplementation libraries.silenteight_sep_base_testing
   testImplementation libraries.groovy_all
   testImplementation libraries.spock_spring
   testImplementation libraries.testcontainers
+  testImplementation libraries.json_path
 
   testRuntimeOnly libraries.junit_platform_commons
 }

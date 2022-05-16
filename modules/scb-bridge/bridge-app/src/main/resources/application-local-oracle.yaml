@@ -1,0 +1,15 @@
+# To run application wit local oracle, invoke:
+# docker-compose --profile oracle up -d
+#
+# Note, wait a bit before connecting as the image need to init itself.
+# and run application with profile `local-oracle`
+serp:
+  gns:
+    db:
+      service:
+        name: XEPDB1
+      user: scb
+      password: scb
+      port: 1521
+      host: localhost
+

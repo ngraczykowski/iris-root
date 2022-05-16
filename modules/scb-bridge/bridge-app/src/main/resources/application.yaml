@@ -2,6 +2,11 @@ server:
   port: 24220
   servlet.context-path: /rest/${spring.application.name}
 
+  undertow:
+    threads:
+      io: 4
+      worker: 8
+
 grpc:
   client:
     registration.address: static://localhost:24806
@@ -189,8 +194,8 @@ serp:
   scb:
     gnsrt:
       recommendation:
-        scheduler-thread-cap: 20
-        scheduler-queued-task-cap: 100
+        scheduler-thread-cap: 128
+        scheduler-queued-task-cap: 1000
     bridge:
       config:
         time-zone: Asia/Hong_Kong

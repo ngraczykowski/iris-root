@@ -4,18 +4,22 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.registration.api.library.v1.*;
 
+import org.apache.commons.lang3.RandomUtils;
+
 @Slf4j
 class RegistrationServiceClientMock implements RegistrationServiceClient {
 
   @Override
   public EmptyOut registerBatch(RegisterBatchIn request) {
     log.info("MOCK: Batch with id: {} registered in Core Bridge.", request.getBatchId());
+    randomSleep();
     return EmptyOut.getInstance();
   }
 
   @Override
   public EmptyOut notifyBatchError(NotifyBatchErrorIn request) {
     log.info("MOCK: Batch with id: {} status set to ERROR in Core Bridge", request.getBatchId());
+    randomSleep();
     return EmptyOut.getInstance();
   }
 
@@ -24,7 +28,7 @@ class RegistrationServiceClientMock implements RegistrationServiceClient {
     log.info(
         "MOCK: Alerts and matches for batch id: {} registered in Core Bridge",
         request.getBatchId());
-
+    randomSleep();
     return RegisterAlertsAndMatchesOut.builder()
         .registeredAlertWithMatches(request.getAlertsWithMatches().stream()
             .map(alert -> RegisteredAlertWithMatchesOut.builder()
@@ -40,5 +44,13 @@ class RegistrationServiceClientMock implements RegistrationServiceClient {
                 .build())
             .toList())
         .build();
+  }
+
+  private static void randomSleep() {
+    try {
+      Thread.sleep(RandomUtils.nextInt(200, 400));
+    } catch (InterruptedException e) {
+      throw new IllegalStateException(e);
+    }
   }
 }

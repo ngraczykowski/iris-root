@@ -1,6 +1,18 @@
 version: "3.5"
 
 services:
+  oracle:
+    profiles:
+      - oracle
+    image: gvenzl/oracle-xe:21.3.0
+    volumes:
+      - oracle-storage:/opt/oracle/oradata
+    ports:
+      - 1521:1521
+    environment:
+      APP_USER: "scb"
+      APP_USER_PASSWORD: "scb"
+      ORACLE_RANDOM_PASSWORD: "true"
   rabbitmq:
     image: rabbitmq:3.8.2-management
     restart: unless-stopped
@@ -76,3 +88,4 @@ volumes:
   rabbitmq-storage:
   postgres-storage:
   consul-storage:
+  oracle-storage:

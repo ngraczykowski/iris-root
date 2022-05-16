@@ -3,46 +3,26 @@ package com.silenteight.scb.outputrecommendation.infrastructure.grpc;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.recommendation.api.library.v1.*;
-import com.silenteight.recommendation.api.library.v1.AlertOut.AlertStatus;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 @Slf4j
-class RecommendationServiceClientMock implements RecommendationServiceClient {
+public class RecommendationServiceClientMock implements RecommendationServiceClient {
+
+  private final ConcurrentMap<String, List<RecommendationOut>> data = new ConcurrentHashMap<>();
 
   @Override
   public RecommendationsOut getRecommendations(RecommendationsIn request) {
     log.info("MOCK: Get recommendations called for analysis id: {}", request.getAnalysisName());
+    var list = data.remove(request.getAnalysisName());
+    if (list == null) {
+      throw new IllegalStateException(
+          "No recommendations for analysis: " + request.getAnalysisName());
+    }
     return RecommendationsOut.builder()
-        .recommendations(List.of(
-            RecommendationOut.builder()
-                .name("some_name")
-                .recommendedAction("some_action")
-                .recommendationComment("some_comment")
-                .recommendedAt(OffsetDateTime.of(2022, 1, 19, 14, 30, 30, 0, ZoneOffset.UTC))
-                .alert(AlertOut.builder()
-                    .id("some_alert_id")
-                    .status(AlertStatus.SUCCESS)
-                    .metadata("{}")
-                    .errorMessage("some_error_message")
-                    .build())
-                .matches(List.of(
-                    MatchOut.builder()
-                        .id("some_match_id")
-                        .recommendedAction("match_action")
-                        .recommendationComment("match_comment")
-                        .stepId("step_id")
-                        .fvSignature("fv_signature")
-                        .features(Map.of(
-                            "name", "EXACT_MATCH"
-                        ))
-                        .build()
-                ))
-                .build()
-        ))
+        .recommendations(list)
         .statistics(StatisticsOut.builder()
             .totalProcessedCount(5)
             .totalUnableToProcessCount(0)
@@ -56,4 +36,9 @@ class RecommendationServiceClientMock implements RecommendationServiceClient {
             .build())
         .build();
   }
+
+  public void add(String analysisName, List<RecommendationOut> recommendations) {
+    data.put(analysisName, recommendations);
+  }
+
 }
