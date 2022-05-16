@@ -4,6 +4,7 @@ import com.silenteight.bridge.core.Fixtures
 import com.silenteight.bridge.core.recommendation.domain.RecommendationFixtures
 import com.silenteight.bridge.core.registration.domain.command.MarkAlertsAsDeliveredCommand
 import com.silenteight.bridge.core.registration.domain.command.MarkAlertsAsRecommendedCommand
+import com.silenteight.bridge.core.registration.domain.command.StartDataRetentionCommand
 import com.silenteight.bridge.core.registration.domain.command.VerifyBatchTimeoutCommand
 import com.silenteight.bridge.core.registration.domain.model.Alert
 import com.silenteight.bridge.core.registration.domain.model.Batch
@@ -20,9 +21,10 @@ class RegistrationFacadeSpec extends Specification {
   def alertService = Mock(AlertService)
   def udsFedAlertsService = Mock(UdsFedAlertsService)
   def batchTimeoutService = Mock(BatchTimeoutService)
+  def dataRetentionService = Mock(DataRetentionService)
 
   @Subject
-  def underTest = new RegistrationFacade(batchService, alertService, udsFedAlertsService, batchTimeoutService)
+  def underTest = new RegistrationFacade(batchService, alertService, udsFedAlertsService, batchTimeoutService, dataRetentionService)
 
   def 'should call register batch method'() {
     given:
@@ -276,5 +278,16 @@ class RegistrationFacadeSpec extends Specification {
 
     then:
     1 * batchTimeoutService.verifyBatchTimeout(command)
+  }
+
+  def 'should call start data retention'() {
+    given:
+    def command = StartDataRetentionCommand.builder().build()
+
+    when:
+    underTest.startDataRetention(command)
+
+    then:
+    1 * dataRetentionService.start(command)
   }
 }

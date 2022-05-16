@@ -2,11 +2,9 @@ package com.silenteight.bridge.core.registration.domain.port.outgoing;
 
 import com.silenteight.bridge.core.registration.adapter.outgoing.jdbc.AlertWithoutMatches;
 import com.silenteight.bridge.core.registration.adapter.outgoing.jdbc.MatchWithAlertId;
-import com.silenteight.bridge.core.registration.domain.model.Alert;
-import com.silenteight.bridge.core.registration.domain.model.AlertName;
-import com.silenteight.bridge.core.registration.domain.model.AlertStatus;
-import com.silenteight.bridge.core.registration.domain.model.AlertWithMatches;
+import com.silenteight.bridge.core.registration.domain.model.*;
 
+import java.time.Instant;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
@@ -61,4 +59,8 @@ public interface AlertRepository {
   long countAllDeliveredAndErrorAlerts(String batchId);
 
   long countAllUdsFedAndErrorAlerts(String batchId);
+
+  List<AlertToRetention> findAlertsApplicableForDataRetention(Instant expirationDate);
+
+  void markAsArchived(List<String> alertNames);
 }

@@ -248,3 +248,84 @@ databaseChangeLog:
             tableName: core_bridge_batches
             columnName: is_simulation
             defaultNullValue: "false"
+
+  - changeSet:
+      id: 1.0.0-4
+      author: dturek
+      changes:
+        - createTable:
+            tableName: shedlock
+            columns:
+              - column:
+                  name: name
+                  type: varchar(64)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: lock_until
+                  type: timestamp
+              - column:
+                  name: locked_at
+                  type: timestamp
+              - column:
+                  name: locked_by
+                  type: varchar(255)
+        - addColumn:
+            tableName: core_bridge_alerts
+            columns:
+              - column:
+                  name: alert_time
+                  type: timestamp
+                  defaultValueComputed: NOW()
+              - column:
+                  name: is_archived
+                  type: boolean
+        - addNotNullConstraint:
+            constraintName: core_bridge_alerts_non_null_batch_is_archived
+            tableName: core_bridge_alerts
+            columnName: is_archived
+            defaultNullValue: "false"
+        - createTable:
+            tableName: core_bridge_data_retention_job
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: alerts_expiration_date
+                  type: timestamp
+              - column:
+                  name: type
+                  type: varchar(255)
+        - createTable:
+            tableName: core_bridge_data_retention_job_alerts
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: job_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_dry_run_job_id
+                    references: core_bridge_data_retention_job(id)
+              - column:
+                  name: alert_name
+                  type: varchar(255)
+        - addUniqueConstraint:
+            columnNames: job_id, alert_name
+            constraintName: unique_core_bridge_data_retention_job_alerts_constraint
+            tableName: core_bridge_data_retention_job_alerts

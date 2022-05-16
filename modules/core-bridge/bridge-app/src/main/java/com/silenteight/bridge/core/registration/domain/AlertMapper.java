@@ -32,6 +32,7 @@ class AlertMapper {
             .matches(registeredAlert.matches().stream()
                 .map(this::toMatch)
                 .toList())
+            .alertTime(registeredAlert.alertTime())
             .build())
         .toList();
   }
@@ -49,6 +50,7 @@ class AlertMapper {
             .matches(alert.matches().stream()
                 .map(this::toMatch)
                 .toList())
+            .alertTime(alert.alertTime())
             .build())
         .toList();
   }
@@ -64,12 +66,14 @@ class AlertMapper {
 
   private AlertWithMatches toAlertWithMatches(
       RegisterAlertsCommand.AlertWithMatches alert, Integer priority) {
-    return new AlertWithMatches(
-        alert.alertId(),
-        priority,
-        alert.matches().stream()
+    return AlertWithMatches.builder()
+        .alertId(alert.alertId())
+        .priority(priority)
+        .matches(alert.matches().stream()
             .map(match -> new AlertsToRegister.Match(match.id()))
-            .toList());
+            .toList())
+        .alertTime(alert.alertTime())
+        .build();
   }
 
   private Match toMatch(RegisteredAlerts.Match match) {

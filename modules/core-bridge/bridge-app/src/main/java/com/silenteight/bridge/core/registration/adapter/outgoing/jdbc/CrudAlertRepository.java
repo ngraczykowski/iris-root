@@ -5,6 +5,7 @@ import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Set;
 
@@ -122,4 +123,18 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
       SET status = :status, updated_at = NOW()
       WHERE batch_id = :batchId""")
   void updateAlertsStatusByBatchId(String batchId, String status);
+
+  @Query(value = """
+        SELECT alert_id, name, batch_id
+        FROM core_bridge_alerts
+        WHERE NOT is_archived AND alert_time < :expirationDate
+      """)
+  List<AlertIdNameBatchIdProjection> findAllByAlertTimeBefore(Instant expirationDate);
+
+  @Modifying
+  @Query("""
+      UPDATE core_bridge_alerts
+      SET is_archived = TRUE, updated_at = NOW()
+      WHERE name IN(:alertNames)""")
+  void markAsArchived(List<String> alertNames);
 }

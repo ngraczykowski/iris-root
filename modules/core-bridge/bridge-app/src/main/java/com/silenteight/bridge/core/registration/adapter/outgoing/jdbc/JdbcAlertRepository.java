@@ -3,16 +3,15 @@ package com.silenteight.bridge.core.registration.adapter.outgoing.jdbc;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.bridge.core.registration.adapter.outgoing.jdbc.AlertEntity.Status;
-import com.silenteight.bridge.core.registration.domain.model.Alert;
-import com.silenteight.bridge.core.registration.domain.model.AlertName;
-import com.silenteight.bridge.core.registration.domain.model.AlertStatus;
-import com.silenteight.bridge.core.registration.domain.model.AlertWithMatches;
+import com.silenteight.bridge.core.registration.domain.model.*;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +24,6 @@ class JdbcAlertRepository implements AlertRepository {
 
   private final CrudAlertRepository alertRepository;
   private final JdbcAlertMapper mapper;
-
   private final NamedParameterJdbcTemplate jdbcTemplate;
 
   @Override
@@ -195,5 +193,19 @@ class JdbcAlertRepository implements AlertRepository {
   @Override
   public long countAllAlerts(String batchId) {
     return alertRepository.countAllAlertsByBatchId(batchId);
+  }
+
+  @Override
+  public List<AlertToRetention> findAlertsApplicableForDataRetention(Instant expirationDate) {
+    return alertRepository.findAllByAlertTimeBefore(expirationDate).stream()
+        .map(mapper::toAlertToRetention)
+        .toList();
+  }
+
+  @Override
+  public void markAsArchived(List<String> alertNames) {
+    if (CollectionUtils.isNotEmpty(alertNames)) {
+      alertRepository.markAsArchived(alertNames);
+    }
   }
 }

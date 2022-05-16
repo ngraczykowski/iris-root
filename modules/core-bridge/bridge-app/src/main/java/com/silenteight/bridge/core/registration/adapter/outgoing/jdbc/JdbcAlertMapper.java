@@ -6,6 +6,7 @@ import com.silenteight.bridge.core.registration.domain.model.*;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -25,6 +26,9 @@ class JdbcAlertMapper {
             .map(this::toMatchEntity)
             .collect(Collectors.toSet()))
         .errorDescription(alert.errorDescription())
+        .alertTime(Optional.ofNullable(alert.alertTime())
+            .map(OffsetDateTime::toInstant)
+            .orElse(null))
         .build();
   }
 
@@ -39,6 +43,7 @@ class JdbcAlertMapper {
             .map(this::toMatch)
             .toList())
         .errorDescription(alert.errorDescription())
+        .isArchived(alert.isArchived())
         .build();
   }
 
@@ -53,6 +58,14 @@ class JdbcAlertMapper {
         .entrySet().stream()
         .map(entry -> toAlertWithMatches(entry.getKey(), entry.getValue()))
         .toList();
+  }
+
+  AlertToRetention toAlertToRetention(AlertIdNameBatchIdProjection projection) {
+    return AlertToRetention.builder()
+        .id(projection.alertId())
+        .batchId(projection.batchId())
+        .name(projection.name())
+        .build();
   }
 
   private MatchEntity toMatchEntity(Match match) {

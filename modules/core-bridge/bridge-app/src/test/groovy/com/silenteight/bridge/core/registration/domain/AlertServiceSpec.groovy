@@ -1,14 +1,9 @@
 package com.silenteight.bridge.core.registration.domain
 
-import com.silenteight.bridge.core.Fixtures
 import com.silenteight.bridge.core.registration.domain.command.RegisterAlertsCommand
 import com.silenteight.bridge.core.registration.domain.command.RegisterAlertsCommand.AlertStatus
 import com.silenteight.bridge.core.registration.domain.command.RegisterAlertsCommand.AlertWithMatches
-import com.silenteight.bridge.core.registration.domain.model.Alert
-import com.silenteight.bridge.core.registration.domain.model.AlertsToRegister
-import com.silenteight.bridge.core.registration.domain.model.Batch
-import com.silenteight.bridge.core.registration.domain.model.RegisteredAlerts
-import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert
+import com.silenteight.bridge.core.registration.domain.model.*
 import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert.Status
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRegistrationService
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository
@@ -19,10 +14,7 @@ import spock.lang.Specification
 import spock.lang.Subject
 import spock.lang.Unroll
 
-import static com.silenteight.bridge.core.registration.domain.AlertServiceSpecHelper.buildAlert
-import static com.silenteight.bridge.core.registration.domain.AlertServiceSpecHelper.buildAlertToRegister
-import static com.silenteight.bridge.core.registration.domain.AlertServiceSpecHelper.buildRegisteredAlert
-import static com.silenteight.bridge.core.registration.domain.AlertServiceSpecHelper.buildRegistrationAlert
+import static com.silenteight.bridge.core.registration.domain.AlertServiceSpecHelper.*
 
 class AlertServiceSpec extends Specification {
 

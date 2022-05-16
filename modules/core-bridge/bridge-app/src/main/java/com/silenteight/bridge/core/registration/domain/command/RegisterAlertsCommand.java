@@ -2,6 +2,7 @@ package com.silenteight.bridge.core.registration.domain.command;
 
 import lombok.Builder;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 public record RegisterAlertsCommand(
@@ -14,7 +15,8 @@ public record RegisterAlertsCommand(
       String errorDescription,
       String alertMetadata,
       List<Match> matches,
-      AlertStatus alertStatus
+      AlertStatus alertStatus,
+      OffsetDateTime alertTime
   ) {
 
     @Builder

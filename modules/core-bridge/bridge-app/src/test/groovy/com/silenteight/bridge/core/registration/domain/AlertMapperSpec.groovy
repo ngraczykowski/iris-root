@@ -9,6 +9,8 @@ import com.silenteight.bridge.core.registration.domain.model.RegisteredAlerts
 import spock.lang.Specification
 import spock.lang.Subject
 
+import java.time.OffsetDateTime
+
 class AlertMapperSpec extends Specification {
 
   @Subject
@@ -26,6 +28,7 @@ class AlertMapperSpec extends Specification {
             .errorDescription('')
             .matches(matchesIn)
             .alertStatus(RegisterAlertsCommand.AlertStatus.SUCCESS)
+            .alertTime(OffsetDateTime.now())
             .build()
     ]
 
@@ -34,9 +37,10 @@ class AlertMapperSpec extends Specification {
 
     then:
     with(result.registerAlertsWithMatches().first()) {
-      alertId() == 'alertId'
+      alertId() == alerts[0].alertId()
       priority() == priorityIn
-      matches().first().matchId() == 'matchId'
+      matches().first().matchId() == alerts[0].matches()[0].id()
+      alertTime() == alerts[0].alertTime()
     }
   }
 

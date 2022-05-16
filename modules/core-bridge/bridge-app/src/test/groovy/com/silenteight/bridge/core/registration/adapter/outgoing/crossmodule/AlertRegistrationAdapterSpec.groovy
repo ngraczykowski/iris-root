@@ -10,6 +10,8 @@ import com.silenteight.bridge.core.registration.domain.model.AlertsToRegister.Ma
 import spock.lang.Specification
 import spock.lang.Subject
 
+import java.time.OffsetDateTime
+
 class AlertRegistrationAdapterSpec extends Specification {
 
   def mapper = Mock(AlertRegistrationMapper)
@@ -23,7 +25,13 @@ class AlertRegistrationAdapterSpec extends Specification {
     def alertId = 'alertId'
     def priority = 0
     def matches = [new Match('matchId')]
-    def registerAlerts = new AlertsToRegister([new AlertWithMatches(alertId, priority, matches)])
+    def registerAlerts = new AlertsToRegister(
+        [AlertWithMatches.builder()
+             .alertId(alertId)
+             .priority(priority)
+             .matches(matches)
+             .alertTime(OffsetDateTime.now())
+             .build()])
 
     when:
     underTest.registerAlerts(registerAlerts)

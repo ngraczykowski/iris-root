@@ -199,6 +199,61 @@
       "name": "registration.alert-stream.registration-api-to-recommendation-alerts-chunk-size",
       "type": "java.lang.String",
       "description": "Size of alerts stream chunk which will be processed at once."
+    },
+    {
+      "name": "silenteight.bridge.data-retention.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enables or disables data retention."
+    },
+    {
+      "name": "silenteight.bridge.data-retention.chunk",
+      "type": "java.lang.Integer",
+      "description": "Defines how many alerts are published in a data retention message."
+    },
+    {
+      "name": "silenteight.bridge.data-retention.rate",
+      "type": "java.time.Duration",
+      "description": "Defines scheduling interval of data retention."
+    },
+    {
+      "name": "silenteight.bridge.data-retention.personal-information-expired.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enables or disables data retention for personal information."
+    },
+    {
+      "name": "silenteight.bridge.data-retention.personal-information-expired.duration",
+      "type": "java.time.Duration",
+      "description": "Defines how old alerts are taken into consideration in data retention."
+    },
+    {
+      "name": "silenteight.bridge.data-retention.alerts-expired.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enables or disables data retention for alerts."
+    },
+    {
+      "name": "silenteight.bridge.data-retention.alerts-expired.duration",
+      "type": "java.time.Duration",
+      "description": "Defines how old alerts are taken into consideration in data retention."
+    },
+    {
+      "name": "silenteight.bridge.data-retention.dry-run-mode.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enables or disabled dry run mode in data retention."
+    },
+    {
+      "name": "amqp.registration.outgoing.data-retention.exchange-name",
+      "type": "java.lang.String",
+      "description": "Exchange name for data retention."
+    },
+    {
+      "name": "amqp.registration.outgoing.data-retention.personal-information-expired-routing-key",
+      "type": "java.lang.String",
+      "description": "Routing key for personal information expired data retention."
+    },
+    {
+      "name": "amqp.registration.outgoing.data-retention.alerts-expired-routing-key",
+      "type": "java.lang.String",
+      "description": "Routing key for alerts expired data retention."
     }
   ]
 }

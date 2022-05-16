@@ -19,6 +19,8 @@ record AlertEntity(@Id long id,
                    String batchId,
                    String metadata,
                    String errorDescription,
+                   boolean isArchived,
+                   Instant alertTime,
                    @CreatedDate Instant createdAt,
                    @LastModifiedDate Instant updatedAt,
                    @MappedCollection(idColumn = "alert_id") Set<MatchEntity> matches) {

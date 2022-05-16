@@ -9,6 +9,7 @@ import com.silenteight.proto.registration.api.v1.*;
 
 import org.springframework.stereotype.Component;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,6 +72,7 @@ class RegistrationGrpcMapper {
             .map(this::toRegisterAlertsCommandMatch)
             .toList())
         .errorDescription(alertWithMatches.getErrorDescription())
+        .alertTime(OffsetDateTime.now())
         .build();
   }
 

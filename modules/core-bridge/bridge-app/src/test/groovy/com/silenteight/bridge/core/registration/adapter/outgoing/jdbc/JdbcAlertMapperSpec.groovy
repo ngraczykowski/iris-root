@@ -9,6 +9,8 @@ import org.assertj.core.api.Assertions
 import spock.lang.Specification
 import spock.lang.Subject
 
+import java.time.OffsetDateTime
+
 class JdbcAlertMapperSpec extends Specification {
 
   @Subject
@@ -20,6 +22,7 @@ class JdbcAlertMapperSpec extends Specification {
         new Match('matchName', 'matchId')
     ]
 
+    def now = OffsetDateTime.now()
     def alertIn = Alert.builder()
         .name('alertName')
         .status(AlertStatus.REGISTERED)
@@ -28,6 +31,7 @@ class JdbcAlertMapperSpec extends Specification {
         .metadata('metadata')
         .matches(matchesIn)
         .errorDescription('errorDescription')
+        .alertTime(now)
         .build()
 
     when:
@@ -41,6 +45,7 @@ class JdbcAlertMapperSpec extends Specification {
       batchId() == 'batchId'
       metadata() == 'metadata'
       errorDescription() == 'errorDescription'
+      alertTime() == now.toInstant()
 
       with(result.matches().first()) {
         name() == 'matchName'
@@ -103,6 +108,21 @@ class JdbcAlertMapperSpec extends Specification {
     Assertions.assertThat(result)
         .hasSameSizeAs(expected)
         .containsAll(expected)
+  }
+
+  def 'should map to AlertToRetention'() {
+    given:
+    def projection = new AlertIdNameBatchIdProjection('id', 'name', 'batchId')
+
+    when:
+    def result = underTest.toAlertToRetention(projection)
+
+    then:
+    with(result) {
+      id() == projection.alertId()
+      name() == projection.name()
+      batchId() == projection.batchId()
+    }
   }
 
   class Fixtures {

@@ -26,6 +26,7 @@ public class RegistrationFacade {
   private final AlertService alertService;
   private final UdsFedAlertsService udsFedAlertsService;
   private final BatchTimeoutService batchTimeoutService;
+  private final DataRetentionService dataRetentionService;
 
   public BatchId register(RegisterBatchCommand registerBatchCommand) {
     return batchService.register(registerBatchCommand);
@@ -113,6 +114,10 @@ public class RegistrationFacade {
       return batchService.getAlertsStatusStatistics(command.batchId());
     }
     return batchService.getAlertsStatusStatistics(command.batchId(), command.alertsNames());
+  }
+
+  public void startDataRetention(StartDataRetentionCommand command) {
+    dataRetentionService.start(command);
   }
 
   private boolean allAlertsAreDelivered(Batch batch, List<String> alertNames) {

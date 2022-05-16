@@ -8,6 +8,7 @@ import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert
 import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert.RegistrationMatch
 import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert.Status
 
+import java.time.OffsetDateTime
 import java.util.stream.Collectors
 
 class AlertServiceSpecHelper {
@@ -25,7 +26,12 @@ class AlertServiceSpecHelper {
   static AlertsToRegister.AlertWithMatches buildAlertToRegister(
       String id,
       List<String> matchesIds) {
-    new AlertsToRegister.AlertWithMatches(id, PRIORITY, buildMatchesToRegister(matchesIds))
+    AlertsToRegister.AlertWithMatches.builder()
+        .alertId(id)
+        .priority(PRIORITY)
+        .matches(buildMatchesToRegister(matchesIds))
+        .alertTime(OffsetDateTime.now())
+        .build()
   }
 
   static com.silenteight.bridge.core.registration.domain.model.AlertWithMatches buildRegisteredAlert(

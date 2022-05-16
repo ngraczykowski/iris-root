@@ -34,6 +34,7 @@ class AlertRegistrationMapper {
         .matchIds(alertWithMatches.matches().stream()
             .map(AlertsToRegister.Match::matchId)
             .toList())
+        .alertTime(alertWithMatches.alertTime())
         .build();
   }
 
@@ -44,6 +45,7 @@ class AlertRegistrationMapper {
         .matches(alertWithMatchesOut.getMatches().stream()
             .map(this::toMatch)
             .toList())
+        .alertTime(alertWithMatchesOut.getAlertTime())
         .build();
   }
 

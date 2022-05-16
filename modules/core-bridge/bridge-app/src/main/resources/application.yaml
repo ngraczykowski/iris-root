@@ -15,6 +15,21 @@ silenteight:
     http:
       port: 24805
 
+    ### DATA RETENTION
+    data-retention:
+      enabled: false
+      chunk: 10
+      rate: PT24H
+      ### Enable one of retention types below
+      personal-information-expired:
+        enabled: false
+        duration: ${RETENTION_PERIOD:155d}
+      alerts-expired:
+        enabled: false
+        duration: ${RETENTION_PERIOD:155d}
+      dry-run-mode:
+        enabled: false
+
 ### GRPC
 grpc:
   server:
@@ -80,6 +95,10 @@ amqp:
         exchange-name: core-bridge.notify-batch-timed-out-exchange
       notify-batch-delivered:
         exchange-name: core-bridge.notify-batch-delivered-exchange
+      data-retention:
+        exchange-name: bridge.retention
+        personal-information-expired-routing-key: retention.personal-information-expired
+        alerts-expired-routing-key: retention.alerts-expired
   recommendation:
     number-of-retries-dead-messages: 2
     incoming:

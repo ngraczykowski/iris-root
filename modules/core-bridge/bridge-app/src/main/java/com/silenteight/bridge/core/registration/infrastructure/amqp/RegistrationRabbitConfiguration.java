@@ -25,7 +25,8 @@ import java.util.Optional;
     AmqpRegistrationOutgoingNotifyBatchTimedOutProperties.class,
     AmqpRegistrationProperties.class,
     AmqpRegistrationOutgoingNotifyBatchDeliveredProperties.class,
-    RegistrationVerifyBatchTimeoutProperties.class
+    RegistrationVerifyBatchTimeoutProperties.class,
+    AmqpRegistrationOutgoingDataRetentionProperties.class
 })
 class RegistrationRabbitConfiguration {
 
