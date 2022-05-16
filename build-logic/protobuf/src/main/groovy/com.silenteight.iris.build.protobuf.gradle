@@ -1,0 +1,11 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "com.google.protobuf"
+}
+
+protobuf {
+}
+
+dependencies {
+  api "com.google.api.grpc:proto-google-common-protos:2.7.0"
+}
