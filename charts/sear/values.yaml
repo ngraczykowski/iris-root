@@ -236,7 +236,7 @@ common:
 
   startupProbe:
     enabled: true
-    initialDelaySeconds: 30
+    initialDelaySeconds: 45
     periodSeconds: 10
     timeoutSeconds: 1
     failureThreshold: 6
