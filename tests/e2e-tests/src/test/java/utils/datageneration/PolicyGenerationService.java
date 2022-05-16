@@ -40,7 +40,7 @@ public class PolicyGenerationService {
         .build();
   }
 
-  public Feature generateFeature(String name, String condition, List<String> values) {
+  public Feature generateFeature(String name, String condition, String values) {
     return Feature.builder()
         .name(name)
         .condition(condition)
@@ -59,20 +59,36 @@ public class PolicyGenerationService {
   }
 
   @SneakyThrows
+  public List<String> generatePayloadsForStepsAddition(List<PolicyStep> stepList) {
+    List<String> stepAdditionPayloads = new ArrayList<>(Collections.emptyList());
+
+    stepList.forEach(step -> {
+      Map<String, String> map = new HashMap<>(Collections.emptyMap());
+      map.put("stepUuid", step.getId());
+      map.put("stepName", step.getName());
+      map.put("solution", step.getSolution());
+
+      stepAdditionPayloads.add(templateService.template(getJsonTemplate("newPolicyStep"), map));
+    });
+
+    return stepAdditionPayloads;
+  }
+
+
+  //TODO MAKE IT ABLE TO PROCESS MORE THAN 1 FEATURE PER REQUEST
+  @SneakyThrows
   private String templateFeatureList(List<Feature> featureList) {
     List<ObjectNode> features =
         featureList.stream()
             .map(
                 feature ->
                     objectMapper.convertValue(feature, new FeatureDataTypeRef()))
-            .map(featuresDataMap -> templateService.template(getJsonTemplate("featureTemplate"),
+            .map(featuresDataMap -> templateService.templateObject(getJsonTemplate("logicForStep"),
                 featuresDataMap))
             .map(this::asObjectNode)
             .collect(toList());
 
-    ArrayNode jsonNodes = objectMapper.createArrayNode().addAll(features);
-
-    return objectMapper.writeValueAsString(jsonNodes);
+    return objectMapper.writeValueAsString(features.get(0));
   }
 
   @SneakyThrows
@@ -87,7 +103,7 @@ public class PolicyGenerationService {
     return (ObjectNode) objectMapper.readTree(body);
   }
 
-  private static class FeatureDataTypeRef extends TypeReference<Map<String, String>> {
+  private static class FeatureDataTypeRef extends TypeReference<Map<String, Object>> {
     // Intentionally left empty.
   }
 }

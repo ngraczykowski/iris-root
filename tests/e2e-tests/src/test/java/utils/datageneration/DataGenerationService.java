@@ -1,14 +1,9 @@
 package utils.datageneration;
 
-import com.fasterxml.jackson.annotation.JsonFormat.Features;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -72,26 +67,12 @@ public class DataGenerationService {
     return policyGenerationService.generatePolicy(name, state, policySteps);
   }
 
-  public List<PolicyStep> generatePolicyStepsList(
-      List<String> names, List<String> solutions, List<List<Feature>> features) {
-
-    List<PolicyStep> policySteps = new ArrayList<>(Collections.emptyList());
-    for (int i = 0; i < names.size(); i++) {
-      policySteps.add(policyGenerationService.generatePolicyStep(names.get(i), solutions.get(i),
-          features.get(i)));
-    }
-    return policySteps;
+  public PolicyStep generatePolicyStep(String name, String solution, List<Feature> features) {
+    return policyGenerationService.generatePolicyStep(name, solution, features);
   }
 
-  public List<Feature> generateFeatureList(
-      List<String> names, List<String> conditions, List<List<String>> values) {
-
-    List<Feature> features = new ArrayList<>(Collections.emptyList());
-    for (int i = 0; i < names.size(); i++) {
-      features.add(
-          policyGenerationService.generateFeature(names.get(i), conditions.get(i), values.get(i)));
-    }
-    return features;
+  public Feature generateFeature(String name, String condition, String values) {
+    return policyGenerationService.generateFeature(name, condition, values);
   }
 
   //endregion

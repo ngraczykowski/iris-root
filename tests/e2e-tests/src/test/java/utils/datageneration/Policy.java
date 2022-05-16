@@ -1,16 +1,20 @@
 package utils.datageneration;
 
 import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.Value;
 
 import java.util.List;
 
-@Value
+@Getter
+@Setter
 @Builder(toBuilder = true)
 public class Policy {
-  String uuid;
-  String name;
-  String state;
-  List<PolicyStep> steps;
-  String creationPayload;
+  private String uuid;
+  private String name;
+  private String state;
+  private List<PolicyStep> steps;
+  private String creationPayload;
+  private List<String> stepAdditionPayloads;
 }

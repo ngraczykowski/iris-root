@@ -12,4 +12,9 @@ public class TemplateService {
   String template(String template, Map<String, String> parameters) {
     return StringSubstitutor.replace(template, parameters);
   }
+
+  @SneakyThrows
+  String templateObject(String template, Map<String, Object> parameters) {
+    return StringSubstitutor.replace(template, parameters);
+  }
 }
