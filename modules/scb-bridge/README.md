@@ -20,10 +20,11 @@ To start an app locally:
 
 Services are exposed on locally accessible port numbers. The table below shows how to access them.
 
-| Service  | URL                       | User   | Password |
-|:---------|:--------------------------|:-------|:---------|
-| RabbitMQ | http://localhost:5681/    | `serp` | `serp`   |
-| Consul   | http://localhost:8500/ui/ |        |          |
+| Service              | URL                              | User  | Password |
+|:---------------------|:---------------------------------|:------|:---------|
+| RabbitMQ             | http://localhost:24131/rabbitmq  | `scb` | `scb`    |
+| Consul               | http://localhost:8500/ui/        |       |          |
+| Oracle DB (optional) | localhost:1521                   | `scb` | `scb`    |
 
 ## Externalizing configuration
 
@@ -113,10 +114,11 @@ following defaults will be used
 ```
 
 ### GNS-RT
-The SCB-Bridge supports real time mode. The real-time means that only GNS-RT alerts are processed. 
-Periodic alert solving (CBS) and learning alerts acquisition is disabled.
-To use the mode, set up silenteight.scb-bridge.working-mode=REAL_TIME_ONLY
-Possible values to set the working-mode parameter are REAL_TIME_ONLY and NORMAL
+
+The SCB-Bridge supports real time mode. The real-time means that only GNS-RT alerts are processed.
+Periodic alert solving (CBS) and learning alerts acquisition is disabled. To use the mode, set up
+silenteight.scb-bridge.working-mode=REAL_TIME_ONLY Possible values to set the working-mode parameter
+are REAL_TIME_ONLY and NORMAL
 
 The simplest way to test GNS-RT locally is to send a JSON request using Postman:
 
@@ -144,7 +146,7 @@ to do is to:
 
 ## Test script
 
-For your convenience you may use [testing script](tests/test-random-requests.sh) which issues gns-rt 
+For your convenience you may use [testing script](tests/test-random-requests.sh) which issues gns-rt
 random requests and logs the responses.
 
 ## Running tests in Gradle

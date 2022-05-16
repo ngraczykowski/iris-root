@@ -1,4 +1,4 @@
-# To run application wit local oracle, invoke:
+# To run application with local oracle, invoke:
 # docker-compose --profile oracle up -d
 #
 # Note, wait a bit before connecting as the image need to init itself.

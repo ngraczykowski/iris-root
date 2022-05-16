@@ -7,7 +7,15 @@
 
 # Test locally
 
-- run scb-bridge locally with profiles: `dev,client`
+## Environment
+
+- 16 cpus 11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz
+- 32 gb ram
+- java18 with jvm opts `-Xmx1024m -Xms1024m`
+
+## Steps
+
+- run scb-bridge locally with profiles: `dev,client`, note: if you wish to use local oracle, include profile `local-oracle` as well and invoke `docker-compose --profile oracle up -d`
 - with `dev` profile activated Mocks will be used instead of Uds and Core-Bridge
     - the Mocks will simulate latencies by sleeping some random time on endpoint calls
     - with those latencies each RT request should be processed in 3500 ms to 7000 ms, which does not
