@@ -88,7 +88,7 @@ Rel(wh, db, Store index data)
 @enduml
 -----
 
-Ingest data https://gitlab.silenteight.com/sens/warehouse-api/-/blob/master/se-data-api/src/main/proto/silenteight/data/api/v1/data.proto![API].
+Ingest data: https://gitlab.silenteight.com/sens/warehouse-api/-/blob/master/se-data-api/src/main/proto/silenteight/data/api/v1/data.proto[API v1] or https://gitlab.silenteight.com/sens/warehouse-api/-/blob/master/se-data-api/src/main/proto/silenteight/data/api/v2/data.proto![API v2]
 
 Bridge sends two types of data to the Warehouse.
 
@@ -128,7 +128,7 @@ Rel(wh, es, Store Data, https)
 @enduml
 -----
 
-https://gitlab.silenteight.com/sens/warehouse-api/-/blob/master/se-data-api/src/main/proto/silenteight/data/api/v2/sim.proto![API] for Simulations.
+https://gitlab.silenteight.com/sens/warehouse-api/-/blob/master/se-data-api/src/main/proto/silenteight/data/api/v2/sim.proto[API v2] for Simulations.
 
 == Warehouse - Governance
 
@@ -157,8 +157,8 @@ Rel(wh, db, Get Index)
 @enduml
 -----
 
-https://gitlab.silenteight.com/sens/warehouse-api/-/blob/master/se-sampling-alerts-api/src/main/proto/silenteight/sampling/alerts/api/v1/get_distribution.proto![API] for alerts distribution.
+https://gitlab.silenteight.com/sens/warehouse-api/-/blob/master/se-sampling-alerts-api/src/main/proto/silenteight/sampling/alerts/api/v1/get_distribution.proto[API v1] for alerts distribution.
 
-https://gitlab.silenteight.com/sens/warehouse-api/-/blob/master/se-sampling-alerts-api/src/main/proto/silenteight/sampling/alerts/api/v1/get_alerts.proto![API] for alerts sampling.
+https://gitlab.silenteight.com/sens/warehouse-api/-/blob/master/se-sampling-alerts-api/src/main/proto/silenteight/sampling/alerts/api/v1/get_alerts.proto[API v1] for alerts sampling.
 
-https://gitlab.silenteight.com/sens/warehouse-api/-/blob/master/se-data-api/src/main/proto/silenteight/data/api/v2/qa.proto![API] for QA results.
+https://gitlab.silenteight.com/sens/warehouse-api/-/blob/master/se-data-api/src/main/proto/silenteight/data/api/v2/qa.proto[API v2] for QA results.

@@ -1,6 +1,6 @@
 = HLD #26
 
-- Reference ticket: https://silent8.atlassian.net/browse/WEB-1307
+- Reference ticket: *https://silent8.atlassian.net/browse/WEB-1307[WEB-1307]*
 - Reason: Downloading RBS report
 
 == Downloading RBS report - queue

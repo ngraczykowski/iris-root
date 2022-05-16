@@ -1,8 +1,8 @@
 [id="warehouse-technical-guide"]
+:productname: Silent Eight Warehouse
 = {productname} Technical Guide
 Silent Eight Pte._Ltd.
 :context: warehouse-technical-guide
-:productname: Silent Eight Warehouse
 :doctype: article
 :toc: left
 :sectnums:
@@ -12,3 +12,14 @@ Silent Eight Pte._Ltd.
 
 [abstract]
 This manual explains how to develop {productname}.
+
+Documentation:
+
+xref:c4/warehouse.adoc[Warehouse C4 diagram]
+
+* xref:hld/2021-04-26_production_reports.adoc[2021-04-26_production_reports] - Description how Production Reports works.
+* xref:hld/2021-04-26_simulation_reports.adoc[2021-04-26_simulation_reports] - Description how Simulation Reports works.
+* xref:hld/2021-05-10_production_on_demand_reports.adoc[2021-05-10_production_on_demand_reports] - Description how Production On-Demand Reports works.
+* xref:hld/2021-05-10_production_periodic_reports.adoc[2021-05-10_production_periodic_reports] - Description how Production Periodic Reports works.
+* xref:hld/2021-05-28_periodic_and_on_demand_reports.adoc[2021-05-28_periodic_and_on_demand_reports] - Description how Periodic and on demand reports works.
+* xref:hld/2021-07-06_downloading_rbs_report.adoc[2021-07-06_downloading_rbs_report] - Description how Downloading RBS report works.
