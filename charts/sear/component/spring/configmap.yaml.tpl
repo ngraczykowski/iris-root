@@ -53,6 +53,8 @@ data:
           address: dns:///{{ include "sear.fullname" . }}-adjudication-engine.{{ .Release.Namespace }}.svc:9090
         adjudicationengine:
           address: dns:///{{ include "sear.fullname" . }}-adjudication-engine.{{ .Release.Namespace }}.svc:9090
+        companynamesurroundingagent:
+          address: dns:///{{ include "sear.fullname" . }}-company-name-surrounding-agent.{{ .Release.Namespace }}.svc:9090
 
         {{ range tuple "governance" "simulator" "webapp" "warehouse" -}}
         {{ . }}:
