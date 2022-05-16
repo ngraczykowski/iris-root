@@ -1,48 +1,64 @@
 = The CBS Integration Alert Queuing
 
-// TODO: The diagram requires updating
-
 .Queuing CBS alerts for fetching data
 [plantuml,queuing-alerts-diagram,svg]
 ....
 @startuml
+database "Oracle" as Oracle
+participant "QueuingJob" as QueuingJob
+database "Postgres" as Postgres
+participant "FetchingJob" as FetchingJob
+participant "Feeding" as Feeding
+participant "RecommendationService" as Recommendations
+queue "RabbitMQ" as RabbitMQ
+participant "Core Bridge" as CoreBridge
+
+
 == **1) Get Alerts for Processing** ==
-Oracle -> QueingJob : SYSTEM_ID, BATCH_ID
-QueingJob -> InFlightRepository : Fetch alerts already in-flight
-InFlightRepository --> QueingJob : Alerts in-flight
-QueingJob -> QueingJob : Determine new alerts\n(don't include in-flight)
-QueingJob -> InFlightRepository : Add SYSTEM_ID, BATCH_ID of new alerts
-QueingJob ->> RabbitMQ : Send SYSTEM_ID, BATCH_ID, Priority,\nwith ACK, Alert- or Watchlist-level\nof new alerts
+autonumber
+QueuingJob -> Oracle : Fetch SYSTEM_ID, BATCH_ID
+activate QueuingJob
+Oracle --> QueuingJob : Return SYSTEM_ID, BATCH_ID
+QueuingJob -> Postgres : Store unique alertIds
+deactivate QueuingJob
+activate Postgres
 
 == **2) Fetching Alerts** ==
 
-RabbitMQ ->> FetchingJob : SYSTEM_ID, BATCH_ID, Priority,\nif ACK, if Watchlist-level,\nif use NEO
-FetchingJob -> Oracle : Fetch Full Alert
-Oracle --> FetchingJob : Return Full Alert
-FetchingJob -> Oracle : ACK if wanted
-FetchingJob ->> RabbitMQ : Full Alert for Pipeline
-FetchingJob -> InFlightRepository : Remove in-flight alert
+FetchingJob -> Postgres : Read AlertIds by priority
+activate FetchingJob
+Postgres --> FetchingJob : Return AlertIds
+
+FetchingJob -> Postgres : Store batch info
+FetchingJob -> Oracle : Fetch full alerts with details
+Oracle --> FetchingJob : Return full alerts with details
+FetchingJob -> FetchingJob : Parsing alerts
+FetchingJob -> Postgres : Store raw alerts
+FetchingJob -> CoreBridge : gRPC - Register alerts
+activate CoreBridge
+CoreBridge --> FetchingJob : Return alert and matches names
+deactivate CoreBridge
+FetchingJob -> Feeding : Feed UDS
+FetchingJob -> Oracle : Acknowledge alerts
+FetchingJob -> Postgres : Update status of alert
+deactivate FetchingJob
+deactivate Postgres
 
 == **3) Submitting Recommendations** ==
 
-RabbitMQ ->> RecommendationListener : Recommendation for alert
-RecommendationListener -> RecommendationRepository : Check for Existing (Chrome) Recommendation
-RecommendationListener -> RecommendationRepository : Store Recommendation
-RecommendationListener -> RabbitMQ : Send AlertRecommendationInfo (when stored Recommendation)
-RecommendationListener -> Oracle : RECOM if Watchlist-level
-
-== **4) Chrome Extension** ==
-
-Chrome -> RecommendationService : Get Recommendation for alert
-RecommendationService -> Oracle : Check alert discriminator
-RecommendationService -> RecommendationRepository : Check for Existing (Solving) Recommendation
-RecommendationService -> RabbitMQ : SYSTEM_ID, BATCH_ID, Priority, no ACK, Alert-level
-
-...
-
-RabbitMQ ->> RecommendationService : Recommendation for alert
-RecommendationService -> RecommendationRepository : Check for Existing (Solving) Recommendation
-RecommendationService --> Chrome : Recommendation for alert
+RabbitMQ -> Recommendations : Recommendations generated
+activate Recommendations
+Recommendations -> CoreBridge : gRPC - Get recommendations
+activate CoreBridge
+CoreBridge --> Recommendations : Return recommendations
+deactivate CoreBridge
+Recommendations -> Postgres : Store recommendation
+activate Postgres
+Recommendations -> Oracle : Send recommendation if Watchlist-level
+Oracle --> Recommendations : Return status code
+Recommendations -> Postgres : Update recommendation with recom status
+deactivate Postgres
+deactivate Recommendations
 @enduml
 ....
 

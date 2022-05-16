@@ -2,7 +2,6 @@
 
 .Realtime integration of GNS Realtime
 
-// TODO: Update image
 image::images/gns_rt_architecture.png[]
 
 .High-level Flow
@@ -16,7 +15,6 @@ image::images/gns_rt_architecture.png[]
 
 .Near Real-time integration of GNS Realtime
 
-// TODO: Update image
 image::images/gns_rt_architecture_cbs.png[]
 
 

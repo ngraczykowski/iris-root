@@ -54,7 +54,8 @@
       "matches": [ {
         "hitID": "AS03706790",
         "stepId": "steps/e22c0818-8ce0-4dfa-a1e0-aeaaab707557",
-        "fvSignature": "oArhsY1tPcuvG300QLz6AM3eKss="
+        "fvSignature": "oArhsY1tPcuvG300QLz6AM3eKss=",
+        "qcoSampled": "yes"
       } ]
     } ]
   }
