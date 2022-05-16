@@ -34,7 +34,7 @@ import static io.grpc.protobuf.StatusProto.toStatusRuntimeException;
 
 @RequiredArgsConstructor
 @Slf4j
-class SolvingModelGrpcService extends SolvingModelServiceGrpc.SolvingModelServiceImplBase {
+public class SolvingModelGrpcService extends SolvingModelServiceGrpc.SolvingModelServiceImplBase {
 
   private static final String MODEL_NOT_CONFIGURED_ERROR =
       "Requested model is not fully configured.";

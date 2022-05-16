@@ -32,6 +32,8 @@ public class ImportModelUseCase {
   public UUID apply(@NonNull String modelJson) {
     TransferredModelRootDto root = parse(modelJson);
     TransferredModelDto transferredModel = root.getModel();
+    System.out.println(root);
+    System.out.println(transferredModel);
     assertTheSame(root.getChecksum(), transferredModel);
     UUID policyId = importPolicyUseCase.apply(toImportPolicyCommand(transferredModel));
 
