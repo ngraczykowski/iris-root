@@ -338,8 +338,7 @@ components:
 
   universal-data-source:
     image:
-      repository: registry.dev.s8ops.com/uds/universal-data-source-app
-      tag: "snapshot"
+      repository: registry.dev.s8ops.com/iris/universal-data-source-app
 
     dbName: "uds"
     webPath: "uds"

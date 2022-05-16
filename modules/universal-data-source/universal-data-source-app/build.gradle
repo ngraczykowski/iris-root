@@ -103,56 +103,10 @@ dependencies {
   testImplementation libs.tomcat.embed.el
 }
 
-jar {
-  manifest {
-    attributes "Main-Class": "com.silenteight.universaldatasource.app.UniversalDataSourceApplication"
-  }
-}
-
-jib {
-  from {
-    // NOTE(ahaczewski): Use debug version of the image for SNAPSHOT builds.
-    def imageSuffix = ("$version".contains("-BUILD") || "$version".endsWith("-SNAPSHOT")) ?
-                      ":debug" : ""
-    image = "gcr.io/distroless/java17-debian11" + imageSuffix
-  }
-  to {
-    image = "docker.repo.silenteight.com/uds/${project.name}:${version}"
-    if ("$version".contains("-BUILD") || "$version".endsWith("-SNAPSHOT")) {
-      tags = ["snapshot"]
-    } else {
-      tags = ["latest"]
+publishing {
+  publications {
+    bootJava(MavenPublication) {
+      artifact bootJar
     }
-  }
-  container {
-    appRoot = "/silenteight/app"
-    environment = [
-        "SILENTEIGHT_HOME"            : "/silenteight",
-        "UDS_DB_HOST"                  : "postgres",
-        "UDS_DB_PORT"                  : "5432",
-        "UDS_DB_NAME"                  : "datasource",
-        "UDS_DB_USERNAME"              : "datasource",
-        "UDS_DB_PASSWORD"              : "datasource",
-        "SPRING_RABBITMQ_ADDRESSES"   : "rabbitmq",
-        "SPRING_RABBITMQ_PORT"        : "5672",
-        "SPRING_RABBITMQ_USERNAME"    : "dev",
-        "SPRING_RABBITMQ_PASSWORD"    : "dev",
-        "SPRING_RABBITMQ_VIRTUAL_HOST": "/",
-        "SPRING_PROFILES_ACTIVE"      : "",
-    ]
-    jvmFlags = [
-        "-XX:MaxRAMPercentage=75",
-        "-Dfile.encoding=UTF-8",
-        "-Dsun.jnu.encoding=UTF-8",
-        "-Djava.net.preferIPv4Stack=true",
-        "-Djava.io.tmpdir=/tmp",
-        "-Dsilenteight.home=/silenteight",
-        "-Dspring.profiles.include=container",
-        "-Dserver.port=8080",
-        "-Dgrpc.server.port=9090",
-    ]
-    ports = ["8080", "9090"]
-    user = "nonroot"
-    workingDirectory = "/silenteight"
   }
 }
