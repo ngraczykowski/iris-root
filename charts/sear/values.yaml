@@ -453,18 +453,6 @@ agents:
   region-agent:
     image:
       repository: registry.dev.s8ops.com/region-agent
-  historical-decisions-agent:
-    image:
-      repository: registry.dev.s8ops.com/historical-decisions-agent
-  is-pep-agent:
-    image:
-      repository: registry.dev.s8ops.com/is-pep-agent-default
-  allow-list-agent:
-    image:
-      repository: registry.dev.s8ops.com/allow-list-agent-default
-  country-agent:
-    image:
-      repository: registry.dev.s8ops.com/country-agent
   organization-name-agent:
     type: pythonagent
     image:
