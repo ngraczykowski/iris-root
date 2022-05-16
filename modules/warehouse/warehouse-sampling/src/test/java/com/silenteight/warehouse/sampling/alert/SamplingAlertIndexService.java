@@ -4,7 +4,6 @@ import com.silenteight.model.api.v1.SampleAlertServiceProto.Alert;
 import com.silenteight.model.api.v1.SampleAlertServiceProto.AlertsSampleRequest;
 import com.silenteight.model.api.v1.SampleAlertServiceProto.AlertsSampleResponse;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
-import com.silenteight.warehouse.common.testing.rest.WithElasticAccessCredentials;
 import com.silenteight.warehouse.sampling.configuration.SamplingProperties;
 
 import org.junit.jupiter.api.AfterEach;
@@ -59,7 +58,6 @@ abstract class SamplingAlertIndexService {
 
   @ParameterizedTest
   @MethodSource("getAlertsSampleRequests")
-  @WithElasticAccessCredentials
   void shouldReturnCorrectNumberOfAlertsForSampling(
       AlertsSampleRequest req, int alertsCount, List<String> expectedNames) {
     // Given
