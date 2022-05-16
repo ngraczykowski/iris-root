@@ -224,6 +224,94 @@ warehouse.reports.v2:
         WHERE analysis_name = 'analysis/${analysisId}'
         AND (wa.payload ->> 's8_lobCountryCode') IN (${countries})
         AND (wa.payload ->> 'analyst_decision') IN ('analyst_decision_false_positive', 'analyst_decision_true_positive')
+    - name: DAD
+      type: production
+      description: Data Availability Diagnostic (DAD)
+      selectSqlQuery: >
+        SELECT wa.payload ->> 'policyId'                                 AS "Policy ID",
+          wa.payload ->> 'policy_title'                             AS "Policy Name",
+          wa.payload ->> 'stepId'                                   AS "Step ID",
+          wa.payload ->> 'step_title'                               AS "Step Name",
+          wa.payload ->> 'fvSignature'                              AS "Reasoning Branch ID",
+          wa.payload ->> 's8_recommendation'                        AS "S8 Alert Resolution",
+          wa.payload ->> 'recommendationDate'                       AS "S8 Alert Resolution Timestamp",
+          wa.payload ->> 'recommendation'                           AS "HSBC Alert Resolution",
+          wa.payload ->> 'comment'                                  AS "S8 Alert Comment",
+          wa.payload ->> 's8_lobCountryCode'                        AS "Country LoB",
+          wa.payload ->> 'categories/customerType'                  AS "Customer Type",
+          wa.payload ->> 'categories/hitType'                       AS "Risk Type",
+          wa.payload ->> 'features/name:solution'                   AS "Name",
+          wa.payload ->> 'features/dateOfBirth:solution'            AS "Date of Birth / Incorporation",
+          wa.payload ->> 'features/isPep:solution'                  AS "PEP",
+          wa.payload ->> 'features/gender:solution'                 AS "Gender",
+          wa.payload ->> 'features/geoPlaceOfBirth:solution'        AS "Geo Place of Birth",
+          wa.payload ->> 'features/geoResidencies:solution'         AS "Geo Residencies",
+          wa.payload ->> 'features/nationalIdDocument:solution'     AS "National ID",
+          wa.payload ->> 'features/otherDocument:solution'          AS "Other Document",
+          wa.payload ->> 'features/passportNumberDocument:solution' AS "Passport Number Document",
+          wa.payload ->> 'features/incorporationCountry:solution'   AS "Incorporation Country",
+          wa.payload ->> 'features/nationalityCountry:solution'     AS "Nationality Country",
+          wa.payload ->> 'features/otherCountry:solution'           AS "Other Country",
+          wa.payload ->> 'features/registrationCountry:solution'    AS "Registration Country",
+          wa.payload ->> 'features/residencyCountry:solution'       AS "Residency Country",
+          wa.payload ->> 'features/commonAp:solution'               AS "Common Alerted Party",
+          wa.payload ->> 'features/commonMp:solution'               AS "Common Watchlist Party",
+          wa.payload ->> 'features/commonNames:solution'            AS "Common Name",
+          wa.payload ->> 'features/invalidAlert:solution'           AS "Invalid Alert",
+          wa.payload ->> 'features/isApTpMarked:solution'           AS "True Case - Alerted Party",
+          wa.payload ->> 'features/isTpMarked:solution'             AS "True Case - Watchlist",
+          wa.payload ->> 'features/isCaseTpMarked:solution'         AS "True Case - Historical",
+          wa.payload ->> 'features/logicalDiscountingDob:solution'  AS "Logical Discounting",
+          wa.payload ->> 'DN_CASE.ID'                               AS "Client Alert ID",
+          wa.payload ->> 'status'                                   AS "Alert Status",
+          wa.discriminator                                          AS "S8 Alert ID"
+          FROM warehouse_alert wa
+          WHERE wa.recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
+    - name: DAD
+      type: simulation
+      description: Data Availability Diagnostic (DAD)
+      selectSqlQuery: >
+        SELECT wsm.payload ->> 'match_reason:policy'                      AS "Policy ID",
+               wsm.payload ->> 'match_reason:policy_title'                AS "Policy Name",
+               wsm.payload ->> 'match_reason:step'                        AS "Step ID",
+               wsm.payload ->> 'match_reason:step_title'                  AS "Step Name",
+               wsm.payload ->> 'match_reason:feature_vector_signature'    AS "Reasoning Branch ID",
+               wsa.payload ->> 'recommendation_recommended_action'        AS "S8 Alert Resolution",
+               wsa.payload ->> 'recommendation_create_time'               AS "S8 Alert Resolution Timestamp",
+               wsa.payload ->> 'recommendation_comment'                   AS "S8 Alert Comment",
+               wa.payload ->> 's8_lobCountryCode'                         AS "Country LoB",
+               wsm.payload ->> 'categories/customerType:value'            AS "Customer Type",
+               wsm.payload ->> 'categories/hitType:value'                 AS "Risk Type",
+               wsm.payload ->> 'features/name:solution'                   AS "Name",
+               wsm.payload ->> 'features/dateOfBirth:solution'            AS "Date of Birth / Incorporation",
+               wsm.payload ->> 'features/isPep:solution'                  AS "PEP",
+               wsm.payload ->> 'features/gender:solution'                 AS "Gender",
+               wsm.payload ->> 'features/geoPlaceOfBirth:solution'        AS "Geo Place of Birth",
+               wsm.payload ->> 'features/geoResidencies:solution'         AS "Geo Residencies",
+               wsm.payload ->> 'features/nationalIdDocument:solution'     AS "National ID",
+               wsm.payload ->> 'features/otherDocument:solution'          AS "Other Document",
+               wsm.payload ->> 'features/passportNumberDocument:solution' AS "Passport Number Document",
+               wsm.payload ->> 'features/incorporationCountry:solution'   AS "Incorporation Country",
+               wsm.payload ->> 'features/nationalityCountry:solution'     AS "Nationality Country",
+               wsm.payload ->> 'features/otherCountry:solution'           AS "Other Country",
+               wsm.payload ->> 'features/registrationCountry:solution'    AS "Registration Country",
+               wsm.payload ->> 'features/residencyCountry:solution'       AS "Residency Country",
+               wsm.payload ->> 'features/commonAp:solution'               AS "Common Alerted Party",
+               wsm.payload ->> 'features/commonMp:solution'               AS "Common Watchlist Party",
+               wsm.payload ->> 'features/commonNames:solution'            AS "Common Name",
+               wsm.payload ->> 'features/invalidAlert:solution'           AS "Invalid Alert",
+               wsm.payload ->> 'features/isApTpMarked:solution'           AS "True Case - Alerted Party",
+               wsm.payload ->> 'features/isTpMarked:solution'             AS "True Case - Watchlist",
+               wsm.payload ->> 'features/isCaseTpMarked:solution'         AS "True Case - Historical",
+               wsm.payload ->> 'features/logicalDiscountingDob:solution'  AS "Logical Discounting",
+               wa.payload ->> 'DN_CASE.ID'                                AS "Client Alert ID",
+               wa.payload ->> 'status'                                    AS "Alert Status",
+               wa.discriminator                                           AS "S8 Alert ID"
+        FROM warehouse_simulation_alert wsa
+                 JOIN warehouse_alert wa ON wsa.name = wa.name
+                 JOIN warehouse_simulation_match wsm
+                      ON wsa.name = wsm.alert_name AND wsa.analysis_name = wsm.analysis_name
+        WHERE wsa.analysis_name = 'analysis/${analysisId}'
     - name: RB_SCORER
       type: production
       description: Reasoning Branch Scorer
