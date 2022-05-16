@@ -1,8 +1,5 @@
 package com.silenteight.serp.governance.model.grpc;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-
 import com.silenteight.model.api.v1.*;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
@@ -68,7 +65,7 @@ class ExportModelClientIT extends BaseRpcClientTest {
     ExportModelResponse expectedResponse = ExportModelResponse.newBuilder().build();
     ExportModelResponse response =
         modelServiceBlockingStub.exportModel(ExportModelRequest.newBuilder().build());
-//
+
     assertThat(response).isEqualTo(expectedResponse);
   }
 
