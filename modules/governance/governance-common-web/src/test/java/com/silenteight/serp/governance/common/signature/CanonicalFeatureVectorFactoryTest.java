@@ -83,26 +83,6 @@ class CanonicalFeatureVectorFactoryTest {
   }
 
   @Test
-  void shouldThrowExceptionWhenEmptyAgentNameListInInput() {
-    assertThatThrownBy(
-        () -> underTest.fromNamesAndValues(
-            EMPTY_AGENT_NAME_LIST, CORRECT_FEATURE_VALUES_LIST_WITH_THREE_VALUES))
-        .isInstanceOf(
-            InvalidInputException.class)
-        .hasMessage("Missing data: featureNames are empty");
-  }
-
-  @Test
-  void shouldThrowExceptionWhenEmptyFeatureValuesListInInput() {
-    assertThatThrownBy(
-        () -> underTest.fromNamesAndValues(
-            CORRECT_AGENT_NAME_LIST_WITH_TWO_NAMES, EMPTY_FEATURE_VALUES_LIST))
-        .isInstanceOf(
-            InvalidInputException.class)
-        .hasMessage("Missing data: featureValues are empty");
-  }
-
-  @Test
   void shouldNotThrowInvalidExceptionWhenInputIsValid() {
     try {
       underTest.fromNamesAndValues(
