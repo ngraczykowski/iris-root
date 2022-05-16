@@ -147,7 +147,7 @@ job "hit-type-agent" {
       config {
         image = "python:3.7"
         command = "python"
-        args = ["/app/hit_type-${var.hit_type_agent_version}.pyz", "-c", "/app/config", "--grpc", "-v"]
+        args = ["/app/hit_type-${var.hit_type_agent_version}.pyz", "-c", "/app/config", "--grpc", "-v", "--agent-exchange"]
         network_mode = "host"
         volumes = ["local:/app"]
       }
