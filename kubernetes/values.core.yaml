@@ -98,6 +98,7 @@ agents:
   historical-decisions-agent:
     properties:
       "historicaldecisions.agent.facade.enabled": true
+      "contextuallearning.agent.facade.enabled": true
   allow-list-agent:
     properties:
       "allowlist.agent.facade.enabled": true
