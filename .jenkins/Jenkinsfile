@@ -2,79 +2,6 @@
 
 def version = ""
 
-def makeSlackChanges(changes, defaults) {
-  return changes.findAll {
-    it.changes.size() > 0
-  }.collect {
-    [
-        title     : "Build #${it.number}",
-        title_link: it.url,
-        mrkdwn_in : ["text"],
-        text      : it.changes.collect {ch ->
-          def slackUserId = slackUserIdFromEmail email: ch.authorEmail
-          def author = slackUserId ? "<@${slackUserId}>" : ch.authorName
-          "<https://gitlab.silenteight.com/iris/iris/-/commit/${ch.commitId}|${ch.commitId.take(7)}>: ${ch.truncatedMsg} - _${author}_"
-        }.join('\n'),
-    ] + defaults ?: [:]
-  }
-}
-
-@NonCPS
-def getAllChanges() {
-  def buildChanges = []
-  buildChanges << getBuildChanges(currentBuild)
-
-  def buildToCheck = currentBuild.getPreviousBuild()
-  while (buildToCheck != null && buildToCheck.result != 'SUCCESS') {
-    buildChanges << getBuildChanges(buildToCheck)
-
-    buildToCheck = buildToCheck.previousBuild
-  }
-
-  return buildChanges
-}
-
-@NonCPS
-def getBuildChanges(build) {
-  return [
-      number : build.number,
-      url    : build.absoluteUrl,
-      changes: getChangesForBuild(build),
-  ]
-}
-
-@NonCPS
-def getChangesForBuild(build) {
-  MAX_MSG_LEN = 60
-
-  def changeSets = build.changeSets
-  def changes = []
-
-  for (int i = 0; i < changeSets.size(); i++) {
-    def entries = changeSets[i].items
-    for (int j = 0; j < entries.length; j++) {
-      def entry = entries[j]
-      def truncatedMsg = entry.msg.take(MAX_MSG_LEN)
-      if (entry.msg.length() > MAX_MSG_LEN) {
-        truncatedMsg += "..."
-      }
-
-      authorId = entry.author.id
-      authorEmail = authorId.endsWith('@silenteight.com') ? authorId : authorId + '@silenteight.com'
-
-      changes << [
-          commitId     : entry.commitId,
-          truncatedMsg : truncatedMsg,
-          authorName   : entry.author.fullName,
-          authorEmail  : authorEmail,
-          affectedPaths: entry.affectedPaths,
-      ]
-    }
-  }
-
-  return changes
-}
-
 pipeline {
   agent none
   options {
@@ -108,28 +35,6 @@ pipeline {
                   passwordVariable: 'S8_REPO_PASSWORD')]) {
             sh "./gradlew -Pversion=\"${version}\" clean build"
           }
-          withCredentials(
-              [usernamePassword(
-                  credentialsId: 'artifactory-user',
-                  usernameVariable: 'S8_REPO_USER',
-                  passwordVariable: 'S8_REPO_PASSWORD'),
-               usernamePassword(
-                   credentialsId: 'artifactory-deployment-user',
-                   usernameVariable: 'repoDeploymentUser',
-                   passwordVariable: 'repoDeploymentPassword')]) {
-            withDockerRegistry(
-                url: 'https://docker.repo.silenteight.com',
-                credentialsId: 'artifactory-deployment-user') {
-              sh """
-                test \$BRANCH_NAME = 'master' && ./gradlew \
-                  -Dsilenteight.repoDeploymentUser="\$repoDeploymentUser" \
-                  -Dsilenteight.repoDeploymentPassword="\$repoDeploymentPassword" \
-                  -Djib.console=plain \
-                  -Pversion="${version}" \
-                  publish
-              """
-            }
-          }
         }
       }
       post {
@@ -148,6 +53,35 @@ pipeline {
               normalTags: 'TODO, FIXME',
               lowTags: 'XXX')
         }
+      }
+    }
+    stage('Publish') {
+      when {
+        branch 'master'
+      }
+      steps {
+        withCredentials(
+          [usernamePassword(
+            credentialsId: 'artifactory-user',
+            usernameVariable: 'S8_REPO_USER',
+            passwordVariable: 'S8_REPO_PASSWORD'),
+          usernamePassword(
+            credentialsId: 'artifactory-deployment-user',
+            usernameVariable: 'repoDeploymentUser',
+            passwordVariable: 'repoDeploymentPassword')]) {
+          withDockerRegistry(
+            url: 'https://docker.repo.silenteight.com',
+            credentialsId: 'artifactory-deployment-user') {
+              sh """
+                ./gradlew \
+                  -Dsilenteight.repoDeploymentUser="\$repoDeploymentUser" \
+                  -Dsilenteight.repoDeploymentPassword="\$repoDeploymentPassword" \
+                  -Djib.console=plain \
+                  -Pversion="${version}" \
+                  publish
+              """
+            }
+          }
       }
     }
     stage('Build Chart') {
@@ -189,35 +123,7 @@ pipeline {
   }
   post {
     failure {
-      script {
-        if (env.BRANCH_NAME == 'master') {
-          slackSend color: 'danger', channel: 'C03D4GD7RHP', attachments: [
-              [
-                  color : 'danger',
-                  author_name: ':building_construction: Iris Build',
-                  author_link: env.JOB_DISPLAY_URL,
-                  title : "${currentBuild.fullProjectName} build failed <${env.RUN_DISPLAY_URL}|${currentBuild.displayName}>.",
-                  fields: [
-                      [
-                          title: 'Artifacts',
-                          value: "<${env.RUN_ARTIFACTS_DISPLAY_URL}|link to artifacts>",
-                          short: true
-                      ],
-                      [
-                          title: 'Changes',
-                          value: "<${env.RUN_CHANGES_DISPLAY_URL}|link to changes>",
-                          short: true
-                      ],
-                      [
-                          title: 'Tests',
-                          value: "<${env.RUN_TESTS_DISPLAY_URL}|link to tests>",
-                          short: true
-                      ],
-                  ]
-              ],
-          ] + makeSlackChanges(getAllChanges(), [color: 'danger'])
-        }
-      }
+      notifyBuild color: 'danger', channel: 'C03D4GD7RHP'
     }
   }
 }
