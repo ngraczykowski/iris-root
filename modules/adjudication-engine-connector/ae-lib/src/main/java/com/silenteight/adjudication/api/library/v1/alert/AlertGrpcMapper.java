@@ -1,5 +1,6 @@
 package com.silenteight.adjudication.api.library.v1.alert;
 
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 import com.silenteight.adjudication.api.library.v1.util.TimeStampUtil;
@@ -8,8 +9,11 @@ import com.silenteight.adjudication.api.v1.BatchCreateAlertsResponse;
 import com.silenteight.adjudication.api.v1.Match;
 
 import com.google.protobuf.Timestamp;
+import com.google.protobuf.TimestampOrBuilder;
 
+import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +39,7 @@ class AlertGrpcMapper {
                 .alertId(alert.getAlertId())
                 .alertName(alert.getName())
                 .matches(AlertGrpcMapper.toAlertMatchesOut(alert.getMatchesList()))
+                .alertTime(toOffsetDateTime(alert.getAlertTimeOrBuilder()))
                 .build())
             .collect(Collectors.toList()))
         .build();
@@ -69,5 +74,14 @@ class AlertGrpcMapper {
     return Optional.ofNullable(time)
         .map(TimeStampUtil::fromOffsetDateTime)
         .orElse(null);
+  }
+
+  private static Instant toInstant(@NonNull TimestampOrBuilder timestamp) {
+    return Instant.ofEpochSecond(timestamp.getSeconds(), timestamp.getNanos());
+  }
+
+  private static OffsetDateTime toOffsetDateTime(@NonNull TimestampOrBuilder timestamp) {
+    Instant instant = toInstant(timestamp);
+    return OffsetDateTime.ofInstant(instant, ZoneId.systemDefault());
   }
 }
