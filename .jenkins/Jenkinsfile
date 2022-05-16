@@ -1,7 +1,6 @@
 @Library('pipeline-shared-library@master') _
 
 def version = ""
-def changes = []
 
 def makeSlackChanges(changes, defaults) {
   return changes.findAll {
@@ -91,7 +90,6 @@ pipeline {
       steps {
         script {
           version = sh(returnStdout: true, script: './scripts/get-version.sh').trim()
-          changes = getAllChanges()
         }
 
         updateBuildName displayName: "#${env.BUILD_NUMBER} v${version}"
@@ -217,7 +215,7 @@ pipeline {
                       ],
                   ]
               ],
-          ] + makeSlackChanges(changes, [color: 'danger'])
+          ] + makeSlackChanges(getAllChanges(), [color: 'danger'])
         }
       }
     }
