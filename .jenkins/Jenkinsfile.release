@@ -56,7 +56,7 @@ pipeline {
                     --values kubernetes/values.ingress-internal.yaml  \
                     --values kubernetes/values.${ENVIRONMENT}.yaml \
                     --wait \
-                    --timeout 10m \
+                    --timeout 12m \
                     sear \
                     https://repo.silenteight.com/artifactory/helm/sear/sear-"${version}".tgz
                 """
