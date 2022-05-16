@@ -12,6 +12,7 @@ option java_multiple_files = true;
 message AlertsExpired {
   // List of alerts' resource name to be removed
   repeated string alerts = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated AlertData alerts_data = 2 [(google.api.field_behavior) = OPTIONAL];
 }
 
 message DatasetsExpired {
@@ -22,9 +23,16 @@ message DatasetsExpired {
 message PersonalInformationExpired {
   // List of alerts from which PII data need to be removed
   repeated string alerts = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated AlertData alerts_data = 2 [(google.api.field_behavior) = OPTIONAL];
 }
 
 message AnalysisExpired {
   // List of analysis' resource name from which PII data need to be removed
   repeated string analysis = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message AlertData {
+  string batch_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string alert_id = 2 [(google.api.field_behavior) = REQUIRED];
+  string alert_name = 3 [(google.api.field_behavior) = REQUIRED];
 }
