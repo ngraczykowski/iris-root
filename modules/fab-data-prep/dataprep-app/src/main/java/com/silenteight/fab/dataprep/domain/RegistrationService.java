@@ -1,6 +1,7 @@
 package com.silenteight.fab.dataprep.domain;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.fab.dataprep.domain.model.AlertErrorDescription;
 import com.silenteight.fab.dataprep.domain.model.ParsedAlertMessage;
@@ -23,6 +24,7 @@ import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class RegistrationService {
 
   private final RegistrationServiceClient registrationServiceClient;
@@ -39,6 +41,7 @@ public class RegistrationService {
                 .map(RegistrationConverter::convert)
                 .collect(toList()))
         .build();
+    log.debug("Try to register Alerts with Matches: {}", registerAlertsAndMatchesIn);
     RegisterAlertsAndMatchesOut result =
         registrationServiceClient.registerAlertsAndMatches(registerAlertsAndMatchesIn);
 
