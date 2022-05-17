@@ -9,8 +9,8 @@ from company_name.scores.score import Score
 
 config = Config(
     configuration_dirs=(
-        pathlib.Path(dir_name) for dir_name in ("./config", "local/config", "app/config", "/app/config")
-
+        pathlib.Path(dir_name)
+        for dir_name in ("./config", "local/config", "app/config", "/app/config")
     )
 )
 blacklist_file_path = config.get_config_path("blacklist.txt", required=True)
