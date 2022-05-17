@@ -31,6 +31,19 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if .component.useDb }}
+      initContainers:
+        - name: check-db-ready
+          image: "postgres:{{ .Values.database.postgresql.version }}"
+          command:
+            - sh
+            - -c
+            - >-
+              until pg_isready -h {{ include "sear.postgresqlService" . }} -p 5432; do
+                echo waiting for database;
+                sleep 2;
+              done;
+      {{- end }}
       containers:
         - name: {{ .componentName }}
           {{- with .Values.securityContext }}
