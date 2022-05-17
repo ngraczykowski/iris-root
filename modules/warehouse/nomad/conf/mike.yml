@@ -117,9 +117,11 @@ warehouse.reports.v2:
       description: RB Scorer (Match Level)
       selectSqlQuery: >
         WITH tmp_match_count AS (
-          SELECT alert_id        AS alert_id,
-                 COUNT(alert_id) AS hit_count
-          FROM warehouse_match
+          SELECT wm.alert_id        AS alert_id,
+                 COUNT(wm.alert_id) AS hit_count
+          FROM warehouse_alert wa
+          JOIN warehouse_match wm ON wa.id = wm.alert_id
+          WHERE wa.recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
           GROUP BY alert_id
         )
 
@@ -179,81 +181,79 @@ warehouse.reports.v2:
       description: RB Scorer
       selectSqlQuery: >
         WITH tmp_match_count AS (
-          SELECT alert_id        AS alert_id,
-                 COUNT(alert_id) AS hit_count
-          FROM warehouse_match
-          GROUP BY alert_id
+            SELECT alert_name             AS alert_name,
+                   COUNT(alert_name)      AS hit_count
+            FROM warehouse_simulation_match
+            WHERE analysis_name = 'analysis/${analysisId}'
+            GROUP BY alert_name
         )
-
-        SELECT wsa.payload ->> 'match_reason:policy'                            AS "Policy ID",
-               wsa.payload ->> 'match_reason:policy_title'                      AS "Policy Name",
-               wsa.payload ->> 'match_reason:step'                              AS "Step ID",
-               wsa.payload ->> 'match_reason:step_title'                        AS "Step Name",
-               wsa.payload ->> 'match_reason:feature_vector_signature'          AS "Reasoning Branch ID",
-               wsa.payload ->> 'recommendation_recommended_action'              AS "S8 Match Resolution",
-               COUNT((wsa.payload ->> 'match_reason:feature_vector_signature')) AS "Total Matches Count",
-               COUNT(*) FILTER ( WHERE hit_count = 1 )                          AS "Single Matches Count",
-               wm.payload ->> 'categories/customerType'                         AS "Customer Type",
-               wsa.payload ->> 'features/name:solution'                         AS "Name",
-               wsa.payload ->> 'features/dateOfBirth:solution'                  AS "Date of Birth / Incorporation",
-               wsa.payload ->> 'features/document:solution'                     AS "Document",
-               wsa.payload ->> 'features/geoResidencies:solution'               AS "Geo Residencies",
-               wsa.payload ->> 'features/geoPlaceOfBirth:solution'              AS "Geo Place of Birth",
-               wsa.payload ->> 'features/geoNationality:solution'               AS "Geo Nationality",
-               wsa.payload ->> 'features/isApIdTpMarked:solution'               AS "True Case - Alerted ID",
-               wsa.payload ->> 'features/isApNameTpMarked:solution'             AS "True Case - Alerted Party Name",
-               wsa.payload ->> 'features/isTokensTpMarked:solution'             AS "True Case - Matched Tokens",
-               wsa.payload ->> 'features/geoSanctioned:solution'                AS "Geo Sanctioned Country",
-               wsa.payload ->> 'features/companyName:solution'                  AS "Company Name",
-               wsa.payload ->> 'categories/alertType'                           AS "Dataset Type",
-               wsa.payload ->> 'features/hitType:solution'                      AS "Risk Type",
-               wsa.payload ->> 'categories/entitiesTypesMatch'                  AS "Entities Types Match",
-               wsa.payload ->> 'features/employerName:solution'                 AS "Employer Name"
-        FROM warehouse_simulation_alert wsa
-                 JOIN warehouse_alert wa ON wa.name = wsa.name
-                 JOIN warehouse_match wm ON wa.id = wm.alert_id
-                 JOIN tmp_match_count tmc ON tmc.alert_id = wa.id
-        WHERE wsa.analysis_name = 'analysis/${analysisId}'
-        GROUP BY wsa.payload ->> 'match_reason:policy',
-                 wsa.payload ->> 'match_reason:policy_title',
-                 wsa.payload ->> 'match_reason:step',
-                 wsa.payload ->> 'match_reason:step_title',
-                 wsa.payload ->> 'match_reason:feature_vector_signature',
-                 wsa.payload ->> 'recommendation_recommended_action',
-                 wm.payload ->> 'categories/customerType',
-                 wsa.payload ->> 'features/name:solution',
-                 wsa.payload ->> 'features/dateOfBirth:solution',
-                 wsa.payload ->> 'features/document:solution',
-                 wsa.payload ->> 'features/geoResidencies:solution',
-                 wsa.payload ->> 'features/geoPlaceOfBirth:solution',
-                 wsa.payload ->> 'features/geoNationality:solution',
-                 wsa.payload ->> 'features/isApIdTpMarked:solution',
-                 wsa.payload ->> 'features/isApNameTpMarked:solution',
-                 wsa.payload ->> 'features/isTokensTpMarked:solution',
-                 wsa.payload ->> 'features/geoSanctioned:solution',
-                 wsa.payload ->> 'features/companyName:solution',
-                 wsa.payload ->> 'categories/alertType',
-                 wsa.payload ->> 'features/hitType:solution',
-                 wsa.payload ->> 'categories/entitiesTypesMatch',
-                 wsa.payload ->> 'features/employerName:solution'
+        SELECT wsm.payload ->> 'match_reason:policy'                            AS "Policy ID",
+               wsm.payload ->> 'match_reason:policy_title'                      AS "Policy Name",
+               wsm.payload ->> 'match_reason:step'                              AS "Step ID",
+               wsm.payload ->> 'match_reason:step_title'                        AS "Step Name",
+               wsm.payload ->> 'match_reason:feature_vector_signature'          AS "Reasoning Branch ID",
+               wsm.payload ->> 'match_solution'                                 AS "S8 Match Resolution",
+               COUNT(wsm.payload ->> 'match_reason:feature_vector_signature')   AS "Total Matches Count",
+               COUNT(tmc.hit_count) FILTER ( WHERE tmc.hit_count = 1 )          AS "Single Matches Count",
+               wsm.payload ->> 'categories/customerType:value'                  AS "Customer Type",
+               wsm.payload ->> 'features/name:solution'                         AS "Name",
+               wsm.payload ->> 'features/dateOfBirth:solution'                  AS "Date of Birth / Incorporation",
+               wsm.payload ->> 'features/document:solution'                     AS "Document",
+               wsm.payload ->> 'features/geoResidencies:solution'               AS "Geo Residencies",
+               wsm.payload ->> 'features/geoPlaceOfBirth:solution'              AS "Geo Place of Birth",
+               wsm.payload ->> 'features/geoNationality:solution'               AS "Geo Nationality",
+               wsm.payload ->> 'features/isApIdTpMarked:solution'               AS "True Case - Alerted ID",
+               wsm.payload ->> 'features/isApNameTpMarked:solution'             AS "True Case - Alerted Party Name",
+               wsm.payload ->> 'features/isTokensTpMarked:solution'             AS "True Case - Matched Tokens",
+               wsm.payload ->> 'features/geoSanctioned:solution'                AS "Geo Sanctioned Country",
+               wsm.payload ->> 'features/companyName:solution'                  AS "Company Name",
+               wsm.payload ->> 'categories/alertType:value'                     AS "Dataset Type",
+               wsm.payload ->> 'features/hitType:solution'                      AS "Risk Type",
+               wsm.payload ->> 'categories/entitiesTypesMatch:value'            AS "Entities Types Match",
+               wsm.payload ->> 'features/employerName:solution'                 AS "Employer Name"
+        FROM warehouse_simulation_match wsm
+               JOIN tmp_match_count tmc ON wsm.alert_name = tmc.alert_name
+        WHERE wsm.analysis_name = 'analysis/${analysisId}'
+        GROUP BY wsm.payload ->> 'match_reason:policy',
+                 wsm.payload ->> 'match_reason:policy_title',
+                 wsm.payload ->> 'match_reason:step',
+                 wsm.payload ->> 'match_reason:step_title',
+                 wsm.payload ->> 'match_reason:feature_vector_signature',
+                 wsm.payload ->> 'match_solution',
+                 wsm.payload ->> 'categories/customerType:value',
+                 wsm.payload ->> 'features/name:solution',
+                 wsm.payload ->> 'features/dateOfBirth:solution',
+                 wsm.payload ->> 'features/document:solution',
+                 wsm.payload ->> 'features/geoResidencies:solution',
+                 wsm.payload ->> 'features/geoPlaceOfBirth:solution',
+                 wsm.payload ->> 'features/geoNationality:solution',
+                 wsm.payload ->> 'features/isApIdTpMarked:solution',
+                 wsm.payload ->> 'features/isApNameTpMarked:solution',
+                 wsm.payload ->> 'features/isTokensTpMarked:solution',
+                 wsm.payload ->> 'features/geoSanctioned:solution',
+                 wsm.payload ->> 'features/companyName:solution',
+                 wsm.payload ->> 'categories/alertType:value',
+                 wsm.payload ->> 'features/hitType:solution',
+                 wsm.payload ->> 'categories/entitiesTypesMatch:value',
+                 wsm.payload ->> 'features/employerName:solution'
 
     - name: AI_REASONING
       type: production
       description: AI Reasoning (Alert Level)
       selectSqlQuery: >
-        SELECT wa.name                                          AS "S8 Alert ID",
-               wa.payload ->> 'clientId'                        AS "Client Alert ID",
-               STRING_AGG(wm.payload ->> 'clientMatchId', ', ') AS "Client Match IDs",
-               wa.payload ->> 'policyId'                        AS "Policy ID",
-               wa.payload ->> 'policyTitle'                     AS "Policy Name",
-               STRING_AGG(wm.payload ->> 'stepId', ', ')        AS "Step ID",
-               STRING_AGG(wm.payload ->> 'stepTitle', ', ')     AS "Step Name",
-               STRING_AGG(wm.payload ->> 'fvSignature', ', ')   AS "Reasoning Branch IDs",
-               wa.payload ->> 'datasetId'                       AS "Batch ID",
-               wa.payload ->> 'datasetName'                     AS "Batch Type",
-               wa.payload ->> 's8Recommendation'                AS "S8 Alert Resolution",
-               wa.payload ->> 'recommendationDate'              AS "S8 Resolution Timestamp",
-               wa.payload ->> 'comment'                         AS "S8 Alert Reason"
+        SELECT wa.name                                                      AS "S8 Alert ID",
+               wa.payload ->> 'clientId'                                    AS "Client Alert ID",
+               STRING_AGG(NULLIF(wm.payload ->> 'clientMatchId', ''), ', ') AS "Client Match IDs",
+               wa.payload ->> 'policyId'                                    AS "Policy ID",
+               wa.payload ->> 'policyTitle'                                 AS "Policy Name",
+               STRING_AGG(NULLIF(wm.payload ->> 'stepId', ''), ', ')        AS "Step ID",
+               STRING_AGG(NULLIF(wm.payload ->> 'stepTitle', ''), ', ')     AS "Step Name",
+               STRING_AGG(NULLIF(wm.payload ->> 'fvSignature', ''), ', ')   AS "Reasoning Branch IDs",
+               wa.payload ->> 'datasetId'                                   AS "Batch ID",
+               wa.payload ->> 'datasetName'                                 AS "Batch Type",
+               wa.payload ->> 's8Recommendation'                            AS "S8 Alert Resolution",
+               wa.payload ->> 'recommendationDate'                          AS "S8 Resolution Timestamp",
+               wa.payload ->> 'comment'                                     AS "S8 Alert Reason"
         FROM warehouse_alert wa
                  JOIN warehouse_match wm ON wa.id = wm.alert_id
         WHERE wa.recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
@@ -296,41 +296,43 @@ warehouse.reports.v2:
         SELECT wa.name                                                 AS "S8 Alert ID",
                wa.payload ->> 'clientId'                               AS "Client Alert ID",
                wm.payload ->> 'clientMatchId'                          AS "Client Match ID",
-               wsa.payload ->> 'match_reason:policy'                   AS "Policy ID",
-               wsa.payload ->> 'match_reason:policy_title'             AS "Policy Name",
-               wsa.payload ->> 'match_reason:step'                     AS "Step ID",
-               wsa.payload ->> 'match_reason:step_title'               AS "Step Name",
-               wsa.payload ->> 'match_reason:feature_vector_signature' AS "Reasoning Branch ID",
-               wsa.payload ->> 'datasetId'                             AS "Batch ID",
-               wsa.payload ->> 'datasetName'                           AS "Batch Type",
-               wsa.payload ->> 'recommendation_recommended_action'     AS "S8 Match Resolution",
+               wsm.payload ->> 'match_reason:policy'                   AS "Policy ID",
+               wsm.payload ->> 'match_reason:policy_title'             AS "Policy Name",
+               wsm.payload ->> 'match_reason:step'                     AS "Step ID",
+               wsm.payload ->> 'match_reason:step_title'               AS "Step Name",
+               wsm.payload ->> 'match_reason:feature_vector_signature' AS "Reasoning Branch ID",
+               wa.payload ->> 'datasetId'                              AS "Batch ID",
+               wa.payload ->> 'datasetName'                            AS "Batch Type",
+               wsm.payload ->> 'match_solution'                        AS "S8 Match Resolution",
                wsa.payload ->> 'recommendation_create_time'            AS "S8 Resolution Timestamp",
-               wsa.payload ->> 'recommendation_comment'                AS "S8 Match Reason"
+               wsm.payload ->> 'match_comment'                         AS "S8 Match Reason"
         FROM warehouse_simulation_alert wsa
-                 JOIN warehouse_alert wa ON wsa.name = wa.name
-                 JOIN warehouse_match wm ON wa.id = wm.alert_id
+               JOIN warehouse_simulation_match wsm ON wsa.name = wsm.alert_name
+               LEFT JOIN warehouse_alert wa ON wsa.name = wa.name
+               LEFT JOIN warehouse_match wm ON wsm.name = wm.name
         WHERE wsa.analysis_name = 'analysis/${analysisId}'
+               AND wsm.analysis_name = 'analysis/${analysisId}'
 
     - name: ACCURACY
       type: production
       description: Accuracy (Alert Level)
       selectSqlQuery: >
-        SELECT wa.name                                          AS "S8 Alert ID",
-               wa.payload ->> 'clientId'                        AS "Client Alert ID",
-               STRING_AGG(wm.payload ->> 'clientMatchId', ', ') AS "Client Match IDs",
-               wa.payload ->> 'policyId'                        AS "Policy ID",
-               wa.payload ->> 'policyTitle'                     AS "Policy Name",
-               STRING_AGG(wm.payload ->> 'stepId', ', ')        AS "Step ID",
-               STRING_AGG(wm.payload ->> 'stepTitle', ', ')     AS "Step Name",
-               STRING_AGG(wm.payload ->> 'fvSignature', ', ')   AS "Reasoning Branch IDs",
-               wa.payload ->> 'datasetId'                       AS "Batch ID",
-               wa.payload ->> 'datasetName'                     AS "Batch Type",
-               wa.payload ->> 's8Recommendation'                AS "S8 Alert Resolution",
-               wa.payload ->> 'recommendationDate'              AS "S8 Resolution Timestamp",
-               wa.payload ->> 'comment'                         AS "S8 Alert Reason",
-               wa.payload ->> 'analystDecision'                 AS "Analyst Decision",
-               wa.payload ->> 'analystDecisionModifiedDateTime' AS "Analyst Decision Timestamp",
-               wa.payload ->> 'analystReason'                   AS "Analyst Reason"
+        SELECT wa.name                                                      AS "S8 Alert ID",
+               wa.payload ->> 'clientId'                                    AS "Client Alert ID",
+               STRING_AGG(NULLIF(wm.payload ->> 'clientMatchId', ''), ', ') AS "Client Match IDs",
+               wa.payload ->> 'policyId'                                    AS "Policy ID",
+               wa.payload ->> 'policyTitle'                                 AS "Policy Name",
+               STRING_AGG(NULLIF(wm.payload ->> 'stepId', ''), ', ')        AS "Step ID",
+               STRING_AGG(NULLIF(wm.payload ->> 'stepTitle', ''), ', ')     AS "Step Name",
+               STRING_AGG(NULLIF(wm.payload ->> 'fvSignature', ''), ', ')   AS "Reasoning Branch IDs",
+               wa.payload ->> 'datasetId'                                   AS "Batch ID",
+               wa.payload ->> 'datasetName'                                 AS "Batch Type",
+               wa.payload ->> 's8Recommendation'                            AS "S8 Alert Resolution",
+               wa.payload ->> 'recommendationDate'                          AS "S8 Resolution Timestamp",
+               wa.payload ->> 'comment'                                     AS "S8 Alert Reason",
+               wa.payload ->> 'analystDecision'                             AS "Analyst Decision",
+               wa.payload ->> 'analystDecisionModifiedDateTime'             AS "Analyst Decision Timestamp",
+               wa.payload ->> 'analystReason'                               AS "Analyst Reason"
         FROM warehouse_alert wa
           JOIN warehouse_match wm ON wa.id = wm.alert_id
         WHERE wa.recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
@@ -352,35 +354,37 @@ warehouse.reports.v2:
       type: simulation
       description: Accuracy
       selectSqlQuery: >
-        SELECT wa.name                                                                     AS "S8 Alert ID",
-               wsa.payload ->> 'clientId'                                                  AS "Client Alert ID",
-               STRING_AGG(wm.payload ->> 'clientMatchId', ', ')                            AS "Client Match IDs",
-               wsa.payload ->> 'match_reason:policy'                                       AS "Policy ID",
-               wsa.payload ->> 'match_reason:policy_title'                                 AS "Policy Name",
-               wsa.payload ->> 'match_reason:step'                                         AS "Step ID",
-               wsa.payload ->> 'match_reason:step_title'                                   AS "Step Name",
-               STRING_AGG(wsa.payload ->> 'match_reason:feature_vector_signature', ', ')   AS "Reasoning Branch IDs",
-               wsa.payload ->> 'datasetId'                                                 AS "Batch ID",
-               wsa.payload ->> 'datasetName'                                               AS "Batch Type",
-               wsa.payload ->> 'recommendation_recommended_action'                         AS "S8 Alert Resolution",
-               wsa.payload ->> 'recommendation_create_time'                                AS "S8 Resolution Timestamp",
-               wsa.payload ->> 'recommendation_comment'                                    AS "S8 Alert Reason",
-               wa.payload ->> 'analystDecision'                                            AS "Analyst Decision",
-               wa.payload ->> 'analystDecisionModifiedDateTime'                            AS "Analyst Decision Timestamp",
-               wa.payload ->> 'analystReason'                                              AS "Analyst Reason"
+        SELECT wa.name                                                                                 AS "S8 Alert ID",
+               wa.payload ->> 'clientId'                                                               AS "Client Alert ID",
+               STRING_AGG(NULLIF(wm.payload ->> 'clientMatchId', ''), ', ')                            AS "Client Match IDs",
+               wsm.payload ->> 'match_reason:policy'                                                   AS "Policy ID",
+               wsm.payload ->> 'match_reason:policy_title'                                             AS "Policy Name",
+               wsm.payload ->> 'match_reason:step'                                                     AS "Step ID",
+               wsm.payload ->> 'match_reason:step_title'                                               AS "Step Name",
+               STRING_AGG(NULLIF(wsm.payload ->> 'match_reason:feature_vector_signature', ''), ', ')   AS "Reasoning Branch IDs",
+               wa.payload ->> 'datasetId'                                                              AS "Batch ID",
+               wa.payload ->> 'datasetName'                                                            AS "Batch Type",
+               wsa.payload ->> 'recommendation_recommended_action'                                     AS "S8 Alert Resolution",
+               wsa.payload ->> 'recommendation_create_time'                                            AS "S8 Resolution Timestamp",
+               wsa.payload ->> 'recommendation_comment'                                                AS "S8 Alert Reason",
+               wa.payload ->> 'analystDecision'                                                        AS "Analyst Decision",
+               wa.payload ->> 'analystDecisionModifiedDateTime'                                        AS "Analyst Decision Timestamp",
+               wa.payload ->> 'analystReason'                                                          AS "Analyst Reason"
         FROM warehouse_simulation_alert wsa
-          JOIN warehouse_alert wa ON wsa.name = wa.name
-          JOIN warehouse_match wm ON wa.id = wm.alert_id
+               JOIN warehouse_simulation_match wsm ON wsa.name = wsm.alert_name
+               LEFT JOIN warehouse_alert wa ON wsa.name = wa.name
+               LEFT JOIN warehouse_match wm ON wsm.name = wm.name
         WHERE wsa.analysis_name = 'analysis/${analysisId}'
-          AND wa.payload ->> 'analyst_decision' IN ('ANALYST_FALSE_POSITIVE', 'ANALYST_TRUE_POSITIVE')
+          AND wsm.analysis_name = 'analysis/${analysisId}'
+          AND wa.payload ->> 'analystDecision' != ''
         GROUP BY wa.name,
-                 wsa.payload ->> 'clientId',
-                 wsa.payload ->> 'match_reason:policy',
-                 wsa.payload ->> 'match_reason:policy_title',
-                 wsa.payload ->> 'match_reason:step',
-                 wsa.payload ->> 'match_reason:step_title',
-                 wsa.payload ->> 'datasetId',
-                 wsa.payload ->> 'datasetName',
+                 wa.payload ->> 'clientId',
+                 wsm.payload ->> 'match_reason:policy',
+                 wsm.payload ->> 'match_reason:policy_title',
+                 wsm.payload ->> 'match_reason:step',
+                 wsm.payload ->> 'match_reason:step_title',
+                 wa.payload ->> 'datasetId',
+                 wa.payload ->> 'datasetName',
                  wsa.payload ->> 'recommendation_recommended_action',
                  wsa.payload ->> 'recommendation_create_time',
                  wsa.payload ->> 'recommendation_comment',
