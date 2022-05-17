@@ -45,8 +45,7 @@ class CreateRoleRestController {
       @RequestBody @Valid CreateRoleDto dto, Authentication authentication) {
 
     log.info(ROLE_MANAGEMENT, "Creating new role. dto={}", dto);
-
-    CreateRoleRequest command = CreateRoleRequest.builder()
+    CreateRoleRequest request = CreateRoleRequest.builder()
         .id(dto.getId())
         .name(dto.getName())
         .description(dto.getDescription())
@@ -54,7 +53,7 @@ class CreateRoleRestController {
         .createdBy(authentication.getName())
         .build();
 
-    createRoleUseCase.activate(command);
+    createRoleUseCase.activate(request);
     log.info(ROLE_MANAGEMENT, "Role created.");
     return status(CREATED).build();
   }

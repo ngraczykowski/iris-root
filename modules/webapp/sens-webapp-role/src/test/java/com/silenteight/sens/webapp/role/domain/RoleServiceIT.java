@@ -42,7 +42,7 @@ class RoleServiceIT extends BaseDataJpaTest {
     Role role = roleOpt.get();
     assertThat(role.getName()).isEqualTo(ROLE_NAME_1);
     assertThat(role.getDescription()).isEqualTo(ROLE_DESCRIPTION_1);
-    assertThat(role.getPermissionIds()).isEqualTo(PERMISSION_IDS);
+    assertThat(role.getPermissionIds()).isEqualTo(PERMISSION_IDS_1);
     assertThat(role.getCreatedAt()).isNotNull();
     assertThat(role.getCreatedBy()).isEqualTo(USERNAME_1);
     assertThat(role.getUpdatedAt()).isNotNull();
@@ -76,12 +76,33 @@ class RoleServiceIT extends BaseDataJpaTest {
             format("There are users with role %s. Role will not be removed.", ROLE_NAME_1));
   }
 
+  @Test
+  void shouldUpdateRole() {
+    // given
+    persistRole(EDIT_ROLE_REQUEST.getId());
+
+    // when
+    underTest.update(EDIT_ROLE_REQUEST);
+
+    // then
+    Optional<Role> roleOpt = repository.findByRoleId(EDIT_ROLE_REQUEST.getId());
+    assertThat(roleOpt).isPresent();
+    Role role = roleOpt.get();
+    assertThat(role.getName()).isEqualTo(EDIT_ROLE_REQUEST.getName());
+    assertThat(role.getDescription()).isEqualTo(EDIT_ROLE_REQUEST.getDescription());
+    assertThat(role.getPermissionIds()).isEqualTo(EDIT_ROLE_REQUEST.getPermissions());
+    assertThat(role.getCreatedAt()).isNotNull();
+    assertThat(role.getCreatedBy()).isEqualTo(USERNAME_1);
+    assertThat(role.getUpdatedAt()).isNotNull();
+    assertThat(role.getUpdatedBy()).isEqualTo(EDIT_ROLE_REQUEST.getUpdatedBy());
+  }
+
   private void persistRole(UUID roleId) {
     Role role = Role.builder()
         .roleId(roleId)
         .name(ROLE_NAME_1)
         .description(ROLE_DESCRIPTION_1)
-        .permissionIds(PERMISSION_IDS)
+        .permissionIds(PERMISSION_IDS_1)
         .createdBy(USERNAME_1)
         .updatedBy(USERNAME_1)
         .build();

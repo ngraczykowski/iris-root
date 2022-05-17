@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.sens.webapp.role.create.CreateRoleRequest;
 import com.silenteight.sens.webapp.role.domain.exception.RoleAlreadyAssignedToUserException;
 import com.silenteight.sens.webapp.role.domain.exception.RoleNotFoundException;
+import com.silenteight.sens.webapp.role.edit.EditRoleRequest;
 import com.silenteight.sens.webapp.role.validate.RoleAssignmentValidator;
 
 import java.util.UUID;
@@ -44,5 +45,20 @@ public class RoleService {
 
     repository.delete(role);
     log.info("Role removed. roleId={}", roleId);
+  }
+
+  public void update(EditRoleRequest request) {
+    Role role = repository
+        .findByRoleId(request.getId())
+        .orElseThrow(() -> new RoleNotFoundException(request.getId()));
+
+    role.edit(
+        request.getName(),
+        request.getDescription(),
+        request.getPermissions(),
+        request.getUpdatedBy());
+
+    repository.save(role);
+    log.debug("Updated Role={}", role);
   }
 }

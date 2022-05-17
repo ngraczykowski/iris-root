@@ -6,9 +6,13 @@ import com.silenteight.sens.webapp.role.details.dto.RoleDetailsDto;
 import com.silenteight.sens.webapp.role.list.dto.RoleDto;
 import com.silenteight.sep.base.common.entity.BaseModifiableEntity;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import javax.annotation.Nullable;
 import javax.persistence.*;
+
+import static java.util.Optional.ofNullable;
 
 @Entity
 @Data
@@ -68,5 +72,21 @@ class Role extends BaseModifiableEntity {
         .updatedAt(getUpdatedAt())
         .updatedBy(getUpdatedBy())
         .build();
+  }
+
+  void edit(
+      @Nullable String name,
+      @Nullable String description,
+      @Nullable Set<UUID> permissionIds,
+      @NonNull String updatedBy) {
+
+    ofNullable(name).ifPresent(this::setName);
+    ofNullable(description).ifPresent(this::setDescription);
+    ofNullable(permissionIds).ifPresent(this::changePermissions);
+    this.updatedBy = updatedBy;
+  }
+
+  private void changePermissions(@NonNull Set<UUID> permissionIds) {
+    this.permissionIds = new HashSet<>(permissionIds);
   }
 }

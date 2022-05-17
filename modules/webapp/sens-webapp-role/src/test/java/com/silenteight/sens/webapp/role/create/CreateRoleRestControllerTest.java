@@ -25,23 +25,23 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 @Import({ CreateRoleRestController.class })
 class CreateRoleRestControllerTest extends BaseRestControllerTest {
 
-  private static final String CREATE_TOLE_URL = "/v2/roles";
+  private static final String CREATE_ROLE_URL = "/v2/roles";
 
   @MockBean
-  CreateRoleUseCase createRoleUseCase;
+  private CreateRoleUseCase createRoleUseCase;
 
   @Test
   @WithMockUser(username = USERNAME, authorities = USER_ADMINISTRATOR)
   void its201WhenRoleCreated() {
     doNothing().when(createRoleUseCase).activate(any());
 
-    post(CREATE_TOLE_URL, CREATE_ROLE_DTO).statusCode(CREATED.value());
+    post(CREATE_ROLE_URL, CREATE_ROLE_DTO).statusCode(CREATED.value());
   }
 
   @Test
   @TestWithRole(roles = { APPROVER, AUDITOR, MODEL_TUNER, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
-    post(CREATE_TOLE_URL, CREATE_ROLE_DTO)
+    post(CREATE_ROLE_URL, CREATE_ROLE_DTO)
         .contentType(anything())
         .statusCode(FORBIDDEN.value());
   }
@@ -51,7 +51,7 @@ class CreateRoleRestControllerTest extends BaseRestControllerTest {
   void its400WhenFieldLengthIsNotValid(CreateRoleDto createRoleDto) {
     doNothing().when(createRoleUseCase).activate(any());
 
-    post(CREATE_TOLE_URL, createRoleDto)
+    post(CREATE_ROLE_URL, createRoleDto)
         .statusCode(BAD_REQUEST.value());
   }
 
