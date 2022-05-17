@@ -34,7 +34,7 @@ pipeline {
                    usernameVariable: 'repoDeploymentUser',
                    passwordVariable: 'repoDeploymentPassword')]) {
             sh """
-                ./gradlew -Pversion=\"${version}\" clean build"
+                ./gradlew -Pversion="${version}" clean build
 
                 if [[ \$BRANCH_NAME = 'master' ]]; then
                   ./gradlew \
