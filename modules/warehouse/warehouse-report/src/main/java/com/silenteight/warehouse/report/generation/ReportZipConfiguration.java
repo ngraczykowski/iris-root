@@ -1,6 +1,6 @@
 package com.silenteight.warehouse.report.generation;
 
-import com.silenteight.sep.base.common.time.IsoOffsetDateFormatter;
+import com.silenteight.warehouse.common.time.OffsetDateTimeFormatter;
 import com.silenteight.warehouse.report.name.ReportFileName;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,7 +21,7 @@ public class ReportZipConfiguration {
     return new ReportTempFileCreator(
         reportZipProperties,
         reportNameResolvers,
-        IsoOffsetDateFormatter.INSTANCE
+        OffsetDateTimeFormatter.INSTANCE
     );
   }
 }

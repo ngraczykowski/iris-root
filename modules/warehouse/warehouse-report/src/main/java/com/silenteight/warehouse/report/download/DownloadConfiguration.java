@@ -1,6 +1,6 @@
 package com.silenteight.warehouse.report.download;
 
-import com.silenteight.sep.base.common.time.IsoOffsetDateFormatter;
+import com.silenteight.warehouse.common.time.OffsetDateTimeFormatter;
 import com.silenteight.warehouse.report.name.ReportFileName;
 import com.silenteight.warehouse.report.persistence.ReportPersistenceService;
 import com.silenteight.warehouse.report.storage.ReportStorage;
@@ -24,7 +24,7 @@ class DownloadConfiguration {
         reportPersistenceService,
         reportStorage,
         reportNameResolvers,
-        IsoOffsetDateFormatter.INSTANCE
+        OffsetDateTimeFormatter.INSTANCE
     );
   }
 }
