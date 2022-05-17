@@ -322,6 +322,7 @@ opencsv = { group = "com.opencsv", name = "opencsv", version = "5.5.1" }
 pebble = { group = "io.pebbletemplates", name = "pebble", version = "3.1.5" }
 postgresql = { group = "org.postgresql", name = "postgresql" }
 protobuf-java = { group = "com.google.protobuf", name = "protobuf-java", version.ref = "protobuf" }
+protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
 protobuf-java-util = { group = "com.google.protobuf", name = "protobuf-java-util", version.ref = "protobuf" }
 pw-swift-core = { group = "com.prowidesoftware", name = "pw-swift-core", version = "SRU2021-9.2.12" }
 querydsl-apt-jpa = { group = "com.querydsl", name = "querydsl-apt" }
