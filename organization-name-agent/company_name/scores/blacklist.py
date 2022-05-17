@@ -1,18 +1,22 @@
+import pathlib
 import re
 from typing import List
 
-from agent_base.utils.config import ConfigurationException
+from agent_base.utils.config import Config
 from organization_name_knowledge import NameInformation
 
 from company_name.scores.score import Score
 
-try:
-    with open("config/blacklist.txt", "r") as ftr:
-        BLACKLIST = ftr.read().split("\n")
-    BLACKLIST_REGEX = re.compile(r"|".join(BLACKLIST), re.IGNORECASE)
+config = Config(
+    configuration_dirs=(
+        pathlib.Path(dir_name) for dir_name in ("./config", "local/config", "app/config", "/app/config")
 
-except FileNotFoundError:
-    raise ConfigurationException("Configuration file blacklist.txt missing")
+    )
+)
+blacklist_file_path = config.get_config_path("blacklist.txt", required=True)
+with open(blacklist_file_path, "r") as ftr:
+    BLACKLIST = ftr.read().split("\n")
+BLACKLIST_REGEX = re.compile(r"|".join(BLACKLIST), re.IGNORECASE)
 
 
 def _blacklisted(name: str) -> List[str]:
