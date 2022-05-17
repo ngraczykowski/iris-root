@@ -24,8 +24,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -106,18 +105,14 @@ public class RecommendationFacade {
 
     var names = alerts.stream()
         .map(AlertWithoutMatches::alertName)
+        .filter(Objects::nonNull)
         .toList();
 
     var matches = registrationService.getAllMatchesForAlerts(ids)
         .stream()
         .collect(Collectors.groupingBy(MatchWithAlertId::alertId));
 
-    var recommendations =
-        recommendationRepository.findByAnalysisNameAndAlertNameIn(
-                command.analysisName(),
-                names)
-            .stream()
-            .collect(Collectors.toMap(RecommendationWithMetadata::alertName, Function.identity()));
+    var recommendations = getRecommendations(command.analysisName(), names);
 
     alerts.forEach(alert -> {
       var recommendationResponse = RecommendationMapper.toRecommendationResponse(
@@ -125,7 +120,7 @@ public class RecommendationFacade {
               .batchId(batchId)
               .alert(alert)
               .matchWithAlertIds(matches.get(alert.id()))
-              .recommendation(recommendations.get(alert.alertName()))
+              .recommendation(recommendations.getOrDefault(alert.alertName(), null))
               .recommendedAtForErrorAlerts(OffsetDateTime.now())
               .statistics(statistics)
               .build());
@@ -138,5 +133,19 @@ public class RecommendationFacade {
     return alerts.stream()
         .map(alert -> Long.valueOf(alert.id()))
         .collect(Collectors.toSet());
+  }
+
+  private Map<String, RecommendationWithMetadata> getRecommendations(
+      String analysisName,
+      List<String> alertNames) {
+    if (alertNames.isEmpty()) {
+      return Collections.emptyMap();
+    }
+
+    return recommendationRepository.findByAnalysisNameAndAlertNameIn(
+            analysisName,
+            alertNames)
+        .stream()
+        .collect(Collectors.toMap(RecommendationWithMetadata::alertName, Function.identity()));
   }
 }
