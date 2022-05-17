@@ -131,6 +131,7 @@ pipeline {
                         anyOf {
                             branch 'master'
                             branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
+                            changeRequest()  // todo remove later
                         }
                     }
                     steps {
