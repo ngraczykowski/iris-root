@@ -75,6 +75,11 @@ agents:
   name-agent:
     properties:
       "linguistics.name.facade.enabled": true
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
   date-agent:
     properties:
       "dob.agent.facade.enabled": true
@@ -90,11 +95,21 @@ agents:
     properties:
       "geosanctions.agent.facade.enabled": true
       "geo.agent.facade.enabled": true
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
   learning-engine:
     properties:
   is-pep-agent:
     properties:
       "ispep.agent.facade.enabled": true
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
   historical-decisions-agent:
     properties:
       "historicaldecisions.agent.facade.enabled": true
@@ -102,6 +117,11 @@ agents:
   allow-list-agent:
     properties:
       "allowlist.agent.facade.enabled": true
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
   country-agent:
     properties:
       "country.agent.facade.enabled": true
