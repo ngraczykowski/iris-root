@@ -112,15 +112,16 @@ class JdbcAlertMapperSpec extends Specification {
 
   def 'should map to AlertToRetention'() {
     given:
-    def projection = new AlertIdNameBatchIdProjection('id', 'name', 'batchId')
+    def projection = new AlertIdNameBatchIdProjection(0l, 'alertId', 'name', 'batchId')
 
     when:
     def result = underTest.toAlertToRetention(projection)
 
     then:
     with(result) {
-      id() == projection.alertId()
-      name() == projection.name()
+      alertPrimaryId() == projection.id()
+      alertId() == projection.alertId()
+      alertName() == projection.name()
       batchId() == projection.batchId()
     }
   }

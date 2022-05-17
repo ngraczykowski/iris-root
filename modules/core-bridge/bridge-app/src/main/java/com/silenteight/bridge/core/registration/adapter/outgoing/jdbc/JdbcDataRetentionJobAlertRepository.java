@@ -15,11 +15,11 @@ class JdbcDataRetentionJobAlertRepository implements DataRetentionJobAlertReposi
   private final CrudDataRetentionJobAlertRepository repository;
 
   @Override
-  public void saveAll(long jobId, List<String> alertNames) {
-    var entities = alertNames.stream()
-        .map(alertName -> DataRetentionJobAlertEntity.builder()
+  public void saveAll(long jobId, List<Long> alertPrimaryIds) {
+    var entities = alertPrimaryIds.stream()
+        .map(alertPrimaryId -> DataRetentionJobAlertEntity.builder()
             .jobId(jobId)
-            .alertName(alertName)
+            .alertId(alertPrimaryId)
             .build())
         .toList();
     repository.saveAll(entities);

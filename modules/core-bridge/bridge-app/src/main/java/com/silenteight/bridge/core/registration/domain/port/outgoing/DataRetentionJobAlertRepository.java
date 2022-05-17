@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface DataRetentionJobAlertRepository {
 
-  void saveAll(long jobId, List<String> alertNames);
+  void saveAll(long jobId, List<Long> alertPrimaryIds);
 }

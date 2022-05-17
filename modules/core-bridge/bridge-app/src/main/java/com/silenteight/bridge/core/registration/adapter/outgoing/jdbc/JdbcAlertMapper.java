@@ -62,9 +62,10 @@ class JdbcAlertMapper {
 
   AlertToRetention toAlertToRetention(AlertIdNameBatchIdProjection projection) {
     return AlertToRetention.builder()
-        .id(projection.alertId())
+        .alertPrimaryId(projection.id())
+        .alertId(projection.alertId())
         .batchId(projection.batchId())
-        .name(projection.name())
+        .alertName(projection.name())
         .build();
   }
 

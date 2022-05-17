@@ -6,7 +6,6 @@ import com.silenteight.bridge.core.registration.adapter.outgoing.jdbc.AlertEntit
 import com.silenteight.bridge.core.registration.domain.model.*;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -203,9 +202,7 @@ class JdbcAlertRepository implements AlertRepository {
   }
 
   @Override
-  public void markAsArchived(List<String> alertNames) {
-    if (CollectionUtils.isNotEmpty(alertNames)) {
-      alertRepository.markAsArchived(alertNames);
-    }
+  public void markAsArchived(List<Long> alertPrimaryIds) {
+    alertRepository.markAsArchived(alertPrimaryIds);
   }
 }

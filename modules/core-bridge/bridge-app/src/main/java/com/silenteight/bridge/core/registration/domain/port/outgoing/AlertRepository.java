@@ -62,5 +62,5 @@ public interface AlertRepository {
 
   List<AlertToRetention> findAlertsApplicableForDataRetention(Instant expirationDate);
 
-  void markAsArchived(List<String> alertNames);
+  void markAsArchived(List<Long> alertPrimaryIds);
 }

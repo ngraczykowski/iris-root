@@ -68,7 +68,7 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
             m.name AS match_name
           FROM core_bridge_alerts a
           LEFT JOIN core_bridge_matches m ON m.alert_id = a.id
-          WHERE a.batch_id = :batchId AND a.name in(:alertNames)""")
+          WHERE a.batch_id = :batchId AND a.name IN(:alertNames)""")
   List<AlertWithMatchNamesProjection> findAllWithMatchesByBatchIdAndAlertNamesIn(
       String batchId, List<String> alertNames);
 
@@ -125,7 +125,7 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
   void updateAlertsStatusByBatchId(String batchId, String status);
 
   @Query(value = """
-        SELECT alert_id, name, batch_id
+        SELECT id, alert_id, name, batch_id
         FROM core_bridge_alerts
         WHERE NOT is_archived AND alert_time < :expirationDate
       """)
@@ -135,6 +135,6 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
   @Query("""
       UPDATE core_bridge_alerts
       SET is_archived = TRUE, updated_at = NOW()
-      WHERE name IN(:alertNames)""")
-  void markAsArchived(List<String> alertNames);
+      WHERE id IN(:ids)""")
+  void markAsArchived(List<Long> ids);
 }

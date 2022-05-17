@@ -3,8 +3,9 @@ package com.silenteight.bridge.core.registration.domain.model;
 import lombok.Builder;
 
 public record AlertToRetention(
-    String id,
-    String name,
+    long alertPrimaryId,
+    String alertId,
+    String alertName,
     String batchId) {
 
   @Builder

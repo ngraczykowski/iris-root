@@ -9,7 +9,7 @@ import org.springframework.data.relational.core.mapping.Table;
 record DataRetentionJobAlertEntity(
     @Id long id,
     long jobId,
-    String alertName) {
+    long alertId) {
 
   @Builder
   public DataRetentionJobAlertEntity {}

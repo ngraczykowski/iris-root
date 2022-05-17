@@ -329,3 +329,21 @@ databaseChangeLog:
             columnNames: job_id, alert_name
             constraintName: unique_core_bridge_data_retention_job_alerts_constraint
             tableName: core_bridge_data_retention_job_alerts
+
+  - changeSet:
+      id: 1.0.0-5
+      author: dturek
+      changes:
+        - dropColumn:
+            tableName: core_bridge_data_retention_job_alerts
+            columnName: alert_name
+        - addColumn:
+            tableName: core_bridge_data_retention_job_alerts
+            columns:
+              - column:
+                  name: alert_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_core_bridge_data_retention_job_alerts_core_bridge_alerts
+                    references: core_bridge_alerts(id)

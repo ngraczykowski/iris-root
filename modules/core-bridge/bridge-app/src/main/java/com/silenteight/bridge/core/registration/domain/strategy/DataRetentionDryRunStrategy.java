@@ -35,21 +35,20 @@ class DataRetentionDryRunStrategy implements DataRetentionStrategy {
   @Transactional
   public void run(DataRetentionStrategyCommand command) {
     var jobId = jobRepository.save(command.expirationDate(), command.type());
-    log.info("Created data retention job with ID [{}]", jobId);
+    log.info("Created data retention dry run job with ID [{}]", jobId);
 
     if (command.alerts().isEmpty()) {
-      log.info("No alerts qualified for data retention in job [{}]. Exiting.", jobId);
+      log.info("No alerts qualified for dry data retention in job [{}]. Exiting.", jobId);
       return;
     }
 
-    var alertNames = extractAlertNames(command.alerts());
-    log.info("Storing [{}] alert names in job [{}]", alertNames.size(), jobId);
-    jobAlertRepository.saveAll(jobId, alertNames);
+    log.info("Storing [{}] alerts in dry run job [{}]", command.alerts().size(), jobId);
+    jobAlertRepository.saveAll(jobId, extractAlertPrimaryIds(command.alerts()));
   }
 
-  private List<String> extractAlertNames(List<AlertToRetention> alerts) {
+  private List<Long> extractAlertPrimaryIds(List<AlertToRetention> alerts) {
     return alerts.stream()
-        .map(AlertToRetention::name)
+        .map(AlertToRetention::alertPrimaryId)
         .toList();
   }
 }

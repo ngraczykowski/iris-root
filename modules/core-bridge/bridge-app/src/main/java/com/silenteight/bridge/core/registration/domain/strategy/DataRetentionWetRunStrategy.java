@@ -40,27 +40,27 @@ class DataRetentionWetRunStrategy implements DataRetentionStrategy {
   @Transactional
   public void run(DataRetentionStrategyCommand command) {
     var jobId = jobRepository.save(command.expirationDate(), command.type());
-    log.info("Created data retention job with ID [{}]", jobId);
+    log.info("Created data retention wet run job with ID [{}]", jobId);
 
     if (command.alerts().isEmpty()) {
-      log.info("No alert names qualified for data retention in job [{}]. Exiting.", jobId);
+      log.info("No alert qualified for wet data retention in job [{}]. Exiting.", jobId);
       return;
     }
 
-    var alertNames = extractAlertNames(command.alerts());
+    var alertPrimaryIds = extractAlertsPrimaryIds(command.alerts());
 
-    log.info("Storing [{}] alerts in job [{}]", alertNames, jobId);
-    jobAlertRepository.saveAll(jobId, alertNames);
+    log.info("Storing [{}] alerts in wet run job [{}]", alertPrimaryIds.size(), jobId);
+    jobAlertRepository.saveAll(jobId, alertPrimaryIds);
 
-    log.info("Marking alerts [{}] as archived", alertNames);
-    alertRepository.markAsArchived(alertNames);
+    log.info("Marking [{}] alerts as archived", alertPrimaryIds.size());
+    alertRepository.markAsArchived(alertPrimaryIds);
 
     publishMessages(command.alerts(), command.chunkSize(), command.type());
   }
 
-  private List<String> extractAlertNames(List<AlertToRetention> alerts) {
+  private List<Long> extractAlertsPrimaryIds(List<AlertToRetention> alerts) {
     return alerts.stream()
-        .map(AlertToRetention::name)
+        .map(AlertToRetention::alertPrimaryId)
         .toList();
   }
 

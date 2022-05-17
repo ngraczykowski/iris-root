@@ -16,6 +16,8 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -49,7 +51,8 @@ class DataRetentionRabbitPublisher implements DataRetentionPublisher {
 
   private List<String> extractAlertNames(List<AlertToRetention> alerts) {
     return alerts.stream()
-        .map(AlertToRetention::name)
+        .map(AlertToRetention::alertName)
+        .filter(Objects::nonNull)
         .toList();
   }
 
@@ -57,8 +60,8 @@ class DataRetentionRabbitPublisher implements DataRetentionPublisher {
     return alerts.stream()
         .map(alert -> AlertData.newBuilder()
             .setBatchId(alert.batchId())
-            .setAlertId(alert.id())
-            .setAlertName(alert.name())
+            .setAlertId(alert.alertId())
+            .setAlertName(Optional.ofNullable(alert.alertName()).orElse(""))
             .build())
         .toList();
   }
