@@ -2,11 +2,13 @@ package com.silenteight.sep.usermanagement.keycloak.query;
 
 import com.silenteight.sep.base.common.time.TimeConverter;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
+import com.silenteight.sep.usermanagement.api.role.RoleNotFoundException;
 import com.silenteight.sep.usermanagement.api.user.dto.UserDto;
 import com.silenteight.sep.usermanagement.keycloak.query.KeycloakUserQueryTestFixtures.KeycloakUser;
 import com.silenteight.sep.usermanagement.keycloak.query.client.ClientQuery;
 import com.silenteight.sep.usermanagement.keycloak.query.role.InMemoryTestRoleProvider;
 
+import org.assertj.core.api.Assertions;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +23,7 @@ import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import javax.ws.rs.NotFoundException;
 
 import static com.silenteight.sep.usermanagement.keycloak.KeycloakUserAttributeNames.LOCKED_AT;
 import static com.silenteight.sep.usermanagement.keycloak.KeycloakUserAttributeNames.USER_ORIGIN;
@@ -134,6 +137,23 @@ class KeycloakUserQueryTest {
     assertThat(actual)
         .hasSize(1)
         .anySatisfy(userDto -> assertThatUserDto(userDto).isEqualTo(SENS_USER_2));
+  }
+
+  @Test
+  void throwsRoleNotFoundExceptionWhenNotFoundExceptionThrown() {
+    //given
+    reset(usersListFilter);
+    given(clientQuery.getByClientId(any())).willReturn(clientRepresentation);
+    given(clientRepresentation.getId()).willReturn(CLIENT_ID);
+    given(clientsResource.get(any())).willReturn(clientResource);
+    given(clientResource.roles()).willReturn(rolesResource);
+    given(rolesResource.get(any())).willReturn(roleResource);
+    given(roleResource.getRoleUserMembers()).willThrow(new NotFoundException());
+
+    //when
+    Assertions.assertThatThrownBy(() -> underTest.listAll(ROLE_NAME, ROLE_SCOPE))
+        .isInstanceOf(RoleNotFoundException.class)
+        .hasMessage("Role with name ROLE_NAME was not found");
   }
 
   @Test
