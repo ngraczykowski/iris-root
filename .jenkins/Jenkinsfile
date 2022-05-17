@@ -22,31 +22,34 @@ pipeline {
       }
     }
     stage('Applications') {
+      environment {
+        ARTIFACTORY = credentials('artifactory-deployment-user')
+      }
       steps {
         withGradle {
           withCredentials(
               [usernamePassword(
                   credentialsId: 'artifactory-user',
                   usernameVariable: 'S8_REPO_USER',
-                  passwordVariable: 'S8_REPO_PASSWORD'),
-               usernamePassword(
-                   credentialsId: 'artifactory-deployment-user',
-                   usernameVariable: 'repoDeploymentUser',
-                   passwordVariable: 'repoDeploymentPassword')]) {
-            sh """
-                ./gradlew -Pversion="${version}" clean build
+                  passwordVariable: 'S8_REPO_PASSWORD')]) {
+            sh "./gradlew -Pversion=\"${version}\" clean build"
 
-                if [[ \$BRANCH_NAME = 'master' ]]; then
-                  ./gradlew \
-                    -Dsilenteight.repoDeploymentUser="\$repoDeploymentUser" \
-                    -Dsilenteight.repoDeploymentPassword="\$repoDeploymentPassword" \
-                    -Djib.console=plain \
-                    -Pversion="${version}" \
-                    publish
-
-                  jq --raw-output '.image' \$(find . -type f -name 'jib-image.json') >.jib-images
-                fi
-            """
+            withDockerRegistry(
+                url: 'https://docker.repo.silenteight.com',
+                credentialsId: 'artifactory-deployment-user') {
+              sh """
+                test \$BRANCH_NAME = 'master' \
+                  && \
+                    ./gradlew \
+                      -Dsilenteight.repoDeploymentUser="\$ARTIFACTORY_USR" \
+                      -Dsilenteight.repoDeploymentPassword="\$ARTIFACTORY_PWD" \
+                      -Djib.console=plain \
+                      -Pversion="${version}" \
+                      publish \
+                  && \
+                    jq --raw-output '.image' \$(find . -type f -name 'jib-image.json') >.jib-images
+              """
+            }
 
             stash name: 'jib', includes: '.jib-images', allowEmpty: true
           }
