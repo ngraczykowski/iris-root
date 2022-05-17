@@ -2,7 +2,7 @@
 
 def version = ""
 
-def distributions = ["hotel", "sierra"]
+def distributions = ["hotel", "sierra", "foxtrot"]
 
 pipeline {
   agent {
@@ -83,16 +83,19 @@ pipeline {
         withGradle {
           script {
             for (def distribution: distributions) {
-                sh """
-                    gradle test
-                    -Dcucumber.features=src/test/java/features/SmokeTests.feature
-                    -Dcucumber.plugin=html:report.html
-                    -Dtest.isRegression=false
-                    -Dtest.clientId=dev-frontend
-                    -Dtest.username=${E2E_TESTS_CREDS_USR}
-                    -Dtest.password=${E2E_TESTS_CREDS_PWD}
-                    -Dtest.url=https://bravo.dev.silenteight.com/
-                  """
+              sh """
+                echo "Starting E2E tests for ${distribution} distribution."
+              """
+              sh """
+                  ./gradlew test \
+                  -Dcucumber.features=src/test/java/features/SmokeTests.feature \
+                  -Dcucumber.plugin=html:report.html \
+                  -Dtest.isRegression=false \
+                  -Dtest.clientId=dev-frontend \
+                  -Dtest.username=${E2E_TESTS_CREDS_USR} \
+                  -Dtest.password=${E2E_TESTS_CREDS_PWD} \
+                  -Dtest.url=https://bravo.dev.silenteight.com/
+                """
             }
           }
         }
