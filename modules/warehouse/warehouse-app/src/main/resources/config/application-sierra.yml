@@ -227,10 +227,10 @@ warehouse.reports.v2:
                wa.payload ->> 'status'                                 AS "Alert Status",
                wa.payload ->> 'delivery_status'                        AS "Alert Delivery Status",
                wm.name                                                 AS "S8 Match ID"
-        FROM warehouse_alert wa
-                 JOIN warehouse_match wm ON wa.id = wm.alert_id
-                 FULL JOIN warehouse_simulation_alert wsa ON wa.name = wsa.name
-                 JOIN warehouse_simulation_match wsm ON wsa.name = wsm.alert_name
+        FROM warehouse_simulation_alert wsa
+          JOIN warehouse_simulation_match wsm ON wsa.name = wsm.alert_name
+          JOIN warehouse_match wm ON wsm.name = wm.name
+          JOIN warehouse_alert wa ON wsa.name = wa.name
         WHERE wsa.analysis_name = 'analysis/${analysisId}'
           AND (POSITION(wa.name IN wm.name) > 0 OR wm.name IS NULL)
     - name: ACCURACY
@@ -270,6 +270,7 @@ warehouse.reports.v2:
           LEFT JOIN warehouse_alert wa ON wa.name = wsa.name
           LEFT JOIN warehouse_simulation_match wsm ON wsm.alert_name = wsa.name
         WHERE wsa.analysis_name = 'analysis/${analysisId}'
+          AND wsm.analysis_name = 'analysis/${analysisId}'
           AND (wa.payload ->> 'firco_analyst_decision') IN ('analyst_decision_true_positive', 'analyst_decision_false_positive')
         GROUP BY wsm.payload ->> 'match_reason:policy',
                  wsm.payload ->> 'match_reason:policy_title',
