@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.common.time.TimeConverter;
+import com.silenteight.sep.usermanagement.api.role.RoleNotFoundException;
 import com.silenteight.sep.usermanagement.api.user.UserQuery;
 import com.silenteight.sep.usermanagement.api.user.dto.UserDto;
 import com.silenteight.sep.usermanagement.keycloak.query.client.ClientQuery;
@@ -19,6 +20,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import javax.ws.rs.NotFoundException;
 
 import static com.silenteight.sep.usermanagement.api.origin.SensOrigin.SENS_ORIGIN;
 import static com.silenteight.sep.usermanagement.keycloak.KeycloakUserAttributeNames.LOCKED_AT;
@@ -63,11 +65,17 @@ public class KeycloakUserQuery implements UserQuery {
   @Override
   public List<UserDto> listAll(String roleName, String roleScope) {
     log.info("Listing all users with role name={}", roleName);
-    return clientsResource
-        .get(clientQuery.getByClientId(roleScope).getId())
-        .roles()
-        .get(roleName)
-        .getRoleUserMembers()
+    Set<UserRepresentation> roleUserMembers = null;
+    try {
+      roleUserMembers = clientsResource
+          .get(clientQuery.getByClientId(roleScope).getId())
+          .roles()
+          .get(roleName)
+          .getRoleUserMembers();
+    } catch (NotFoundException e) {
+      throw new RoleNotFoundException(roleName, e);
+    }
+    return roleUserMembers
         .stream()
         .filter(usersListFilter::isVisible)
         .map(userRepresentation -> mapToDto(userRepresentation, of(roleScope)))
