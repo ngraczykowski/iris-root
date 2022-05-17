@@ -14,10 +14,9 @@ common:
 
   resources:
     limits:
-      cpu: 1250m
       memory: 1Gi
     requests:
-      cpu: 750m
+      cpu: 200m
       memory: 1Gi
 
 agentsCommon:
@@ -79,6 +78,7 @@ agents:
       limits:
         memory: 2Gi
       requests:
+        cpu: 800m
         memory: 1Gi
   date-agent:
     properties:
@@ -99,6 +99,7 @@ agents:
       limits:
         memory: 2Gi
       requests:
+        cpu: 800m
         memory: 1Gi
   learning-engine:
     properties:
