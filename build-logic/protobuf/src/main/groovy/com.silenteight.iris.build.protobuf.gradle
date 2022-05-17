@@ -4,8 +4,11 @@ plugins {
 }
 
 protobuf {
+  protoc {
+    artifact = libs.protobuf.protoc.get()
+  }
 }
 
 dependencies {
-  api "com.google.api.grpc:proto-google-common-protos:2.7.0"
+  api libs.google.common.protos
 }
