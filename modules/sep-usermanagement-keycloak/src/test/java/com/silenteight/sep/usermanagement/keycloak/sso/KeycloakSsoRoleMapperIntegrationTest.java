@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class KeycloakSsoRoleMapperIntegrationTest extends BaseKeycloakIntegrationTest {
+class KeycloakSsoRoleMapperIntegrationTest extends BaseKeycloakIntegrationTest {
 
   private static final String IDENTITY_PROVIDER_NAME = "saml";
   private static final String KEYCLOAK_SAML_IDP_SPEC_JSON = "keycloak-saml-idp-configuration.json";
@@ -62,7 +62,7 @@ public class KeycloakSsoRoleMapperIntegrationTest extends BaseKeycloakIntegratio
     //and
     List<RoleMappingDto> actualMappings = underTest.listDefaultIdpMappings();
     //then
-    assertThat(actualMappings.size()).isEqualTo(ssoMappings.size());
+    assertThat(actualMappings).hasSameSizeAs(ssoMappings);
     //and
     actualMappings.forEach(m -> {
       assertThat(m.getProviderAlias()).isEqualTo(IDENTITY_PROVIDER_NAME);
@@ -81,7 +81,7 @@ public class KeycloakSsoRoleMapperIntegrationTest extends BaseKeycloakIntegratio
     actualMappings = underTest.listDefaultIdpMappings();
 
     //then
-    assertThat(actualMappings.size()).isEqualTo(ssoMappings.size() - 1);
+    assertThat(actualMappings).hasSize(ssoMappings.size() - 1);
     assertFalse(actualMappings.stream().anyMatch(m -> m.getName().equals("mappingToRemove")));
   }
 
@@ -174,7 +174,7 @@ public class KeycloakSsoRoleMapperIntegrationTest extends BaseKeycloakIntegratio
     List<RoleMappingDto> mappings = underTest.listDefaultIdpMappings();
 
     //then
-    assertThat(mappings.size()).isEqualTo(1);
+    assertThat(mappings).hasSize(1);
     assertThat(mappings.get(0).getProviderAlias()).isEqualTo(expectedProviderName);
     assertThat(mappings.get(0).getName()).isEqualTo("test mapping");
   }
@@ -206,7 +206,7 @@ public class KeycloakSsoRoleMapperIntegrationTest extends BaseKeycloakIntegratio
     getRealm().identityProviders().create(idp);
   }
 
-  private void deleteIdentityProvider(String idpName) {
+  private static void deleteIdentityProvider(String idpName) {
     getRealm().identityProviders().get(idpName).remove();
   }
 }
