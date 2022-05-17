@@ -9,7 +9,7 @@ variable "simulator_artifact_checksum" {
 }
 
 variable "memory" {
-  default = 1500
+  default = 2000
 }
 
 variable "namespace" {
