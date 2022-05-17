@@ -273,6 +273,7 @@ grpc-spring-boot-starter = { group = "net.devh", name = "grpc-spring-boot-starte
 grpc-stub = { group = "io.grpc", name = "grpc-stub", version.ref = "grpc" }
 grpc-testing = { group = "io.grpc", name = "grpc-testing", version.ref = "grpc" }
 guava = { group = "com.google.guava", name = "guava", version = "31.0.1-jre"}
+google-common-protos = { group = "com.google.api.grpc", name="proto-google-common-protos", version = "2.7.0" }
 hibernate-core = { group = "org.hibernate", name = "hibernate-core" }
 hibernate-envers = { group = "org.hibernate", name = "hibernate-envers" }
 hibernate-jcache = { group = "org.hibernate", name = "hibernate-jcache" }
