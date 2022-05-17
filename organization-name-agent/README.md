@@ -143,6 +143,7 @@ Basic application configuration for running agent. Example configuration is stor
   and for Sentry - to monitor running on remote. Before remote launch, modify 'sentry' config section: 
   set 'turn_on' to _true_, and 'environment' and 'release' to appropriate values.
 
+* blacklist.txt - list of blacklisted names, used to get blacklist score
 
 * reduction-rules.yaml - configuration for [scores reduction](#scores-reduction)
 

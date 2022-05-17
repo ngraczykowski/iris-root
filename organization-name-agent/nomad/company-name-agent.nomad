@@ -24,6 +24,12 @@ variable "application_config_file" {
   default = "configs/dev/application.yaml"
 }
 
+variable "blacklist_file" {
+  type = string
+  description = "Path to .txt file to be used as blacklist.txt (nomad dir relative)"
+  default = "configs/dev/blacklist.txt"
+}
+
 variable "name_preconditions_file" {
   type = string
   description = "Path to YAML file to be used as name-preconditions.yaml (nomad dir relative)"
@@ -162,6 +168,12 @@ job "company-name-agent" {
       template {
         data = file("${var.application_config_file}")
         destination = "local/config/application.yaml"
+        change_mode = "restart"
+      }
+
+      template {
+        data = file("${var.blacklist_file}")
+        destination = "local/config/blacklist.txt"
         change_mode = "restart"
       }
 
