@@ -83,14 +83,35 @@ agents:
   date-agent:
     properties:
       "dob.agent.facade.enabled": true
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
   document-comparer-agent:
     properties:
       "nationalId.agent.facade.enabled": true
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
   document-recognizer-agent:
     properties:
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
+
   document-number-agent:
     properties:
       "document.agent.facade.enabled": true
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
   geo-agent:
     properties:
       "geosanctions.agent.facade.enabled": true
@@ -100,9 +121,15 @@ agents:
         memory: 2Gi
       requests:
         cpu: 800m
-        memory: 1Gi
+        memory: 2Gi
   learning-engine:
     properties:
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
+
   is-pep-agent:
     properties:
       "ispep.agent.facade.enabled": true
@@ -111,10 +138,17 @@ agents:
         memory: 2Gi
       requests:
         memory: 1Gi
+
   historical-decisions-agent:
     properties:
       "historicaldecisions.agent.facade.enabled": true
       "contextuallearning.agent.facade.enabled": true
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
+
   allow-list-agent:
     properties:
       "allowlist.agent.facade.enabled": true
@@ -123,15 +157,34 @@ agents:
         memory: 2Gi
       requests:
         memory: 1Gi
+
   country-agent:
     properties:
       "country.agent.facade.enabled": true
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
+
   freetext-agent:
     properties:
       "freetext.agent.facade.enabled": true
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
+
   gender-agent:
     properties:
       "gender.agent.facade.enabled": true
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        memory: 1Gi
+
 
 frontend:
   resources:

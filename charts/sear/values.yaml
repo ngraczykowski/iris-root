@@ -428,7 +428,7 @@ agents:
     useDb: true
     dbName: "learningengine"
     image:
-      repository: registry.dev.s8ops.com/learning-engine-default
+      repository: registry.dev.s8ops.com/learning-engine #should be changed to default distribution when version update (to 1.10.0) will be accepted
   is-pep-agent:
     image:
       repository: registry.dev.s8ops.com/is-pep-agent-default

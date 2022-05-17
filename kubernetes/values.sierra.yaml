@@ -54,22 +54,21 @@ components:
                 AND (wsa.payload ->> 'recommendation_recommended_action') = 'ACTION_FALSE_POSITIVE'
 
 agents:
-  allow-list-agent:
-    enabled: true
-    image:
-      repository: registry.dev.s8ops.com/allow-list-agent-sierra
-    properties:
-      "allowlist.agent.facade.enabled": true
 
   name-agent:
     enabled: true
     profiles:
       - sierra
+    image:
+      repository: registry.dev.s8ops.com/linguistics-agent-sierra-ts
+      tag: "3.16.0-BUILD.51"
 
   learning-engine:
     enabled: true
     profiles:
       - rabbitmq-declare
+    image:
+      tag: "1.4.0"
 
   historical-decisions-agent:
     enabled: true
@@ -78,11 +77,13 @@ agents:
       "contextuallearning.agent.facade.enabled": true
     image:
       repository: registry.dev.s8ops.com/historical-decisions-agent-sierra
+      tag: "0.7.0"
 
   geo-agent:
     enabled: true
     image:
       repository: registry.dev.s8ops.com/geo-agent-default
+      tag: "1.8.0-BUILD.230"
     properties:
       "geosanctions.agent.facade.enabled": true
       "geo.agent.facade.enabled": true
@@ -102,6 +103,8 @@ agents:
       "facade.amqp.queueDefinitions[geoSanctions].dead-letter-queue-name": "geosanctions2-agent-dead-letter-queue"
       "facade.amqp.queueDefinitions[geoSanctions].dead-letter-routing-key": "geosanctions2-agent-dead-letter-key"
       "facade.amqp.queueDefinitions[geoSanctions].outbound-exchange-name": "agent.response"
+    image:
+      tag: "1.12.0"
 
   organization-name-agent:
     enabled: true
@@ -110,14 +113,20 @@ agents:
       queueName: agent.companyname-requests
     args:
       - --agent-exchange
+    image:
+      tag: "0.16.0-sierra" #unfortunately, I didn't found any corresponding docker image to the https://gitlab.silenteight.com/devops/helm-workload-sierra-uat/-/blob/c0b2038e0077c5c5b57f0b01eb6f0683e99cc9ad/scripts/charts.json#L24
   organization-name-agent2:
     amqp:
       routingKey: agents.companyName.versions.2_0_0.configs.1
       queueName: agent.companyname-requests-2
     from: organization-name-agent
+    image:
+      tag: "0.16.0-sierra"
 
   company-name-surrounding-agent:
     enabled: true
+    image:
+      tag: "0.4.0.dev0" #the only working image tag
 
 
 keycloak:

@@ -7,8 +7,7 @@ components:
       - consuldisabled
     image:
       repository: registry.dev.s8ops.com/hsbc/hsbc-bridge
-      tag: "snapshot"
-
+      tag: "0.19.0-BUILD.520" #we have no docker image with 0.17.0 version, like here: https://gitlab.silenteight.com/hsbc-bank/sear-installation/-/blob/master/ae/nomad/version.vars#L1
     dbName: "hb"
     webPath: "hb"
 
@@ -58,78 +57,60 @@ agents:
   name-agent:
     image:
       repository: registry.dev.s8ops.com/linguistics-agent-hotel-ns
+      tag: "3.22.0"
     enabled: true
 
   geo-agent:
     enabled: true
     image:
       repository: registry.dev.s8ops.com/geo-agent-hotel
+      tag: "1.11.0" #in https://gitlab.silenteight.com/hsbc-bank/sear-installation/-/blob/26ec033050f90d39074ae4057eaec77a5665f929/ae/nomad/version.vars#L19 there is a 1.9.0 version, but we have no docker image with that tag
 
   allow-list-agent:
     enabled: true
     image:
       repository: registry.dev.s8ops.com/allow-list-agent-hotel
+      tag: "1.6.0-BUILD.124"
 
   is-pep-agent:
     enabled: true
     image:
       repository: registry.dev.s8ops.com/is-pep-agent-hotel
+      tag: "1.7.0-BUILD.170"
 
   historical-decisions-agent:
     enabled: true
     image:
-      repository: registry.dev.s8ops.com/historical-decisions-agent
-    resources:
-      limits:
-        memory: 2Gi
-      requests:
-        memory: 1Gi
+      repository: registry.dev.s8ops.com/historical-decisions-agent-hotel
+      tag: "0.3.0-BUILD.106"
 
   date-agent:
     enabled: true
     image:
       repository: registry.dev.s8ops.com/date-agent-hotel-ns
-    resources:
-      limits:
-        memory: 2Gi
-      requests:
-        memory: 1Gi
+      tag: "1.13.0"
 
   country-agent:
     enabled: true
     image:
-      repository: registry.dev.s8ops.com/country-agent
-    resources:
-      limits:
-        memory: 2Gi
-      requests:
-        memory: 1Gi
+      tag: "2.11.0"
 
   gender-agent:
     enabled: true
     image:
-      repository: registry.dev.s8ops.com/gender-agent
-    resources:
-      limits:
-        memory: 2Gi
-      requests:
-        memory: 1Gi
-
+      tag: "1.8.0"
 
   document-comparer-agent:
     enabled: true
-    resources:
-      limits:
-        memory: 2Gi
-      requests:
-        memory: 1Gi
+    image:
+      tag: "2.17.0"
 
   document-number-agent:
-    resources:
-      limits:
-        memory: 2Gi
-      requests:
-        memory: 1Gi
+    enabled: true
+    image:
+      tag: "2.17.0"
 
   learning-engine:
     enabled: true
+    image:
+      tag: "1.3.1"
