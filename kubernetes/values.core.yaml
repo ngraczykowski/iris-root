@@ -44,6 +44,11 @@ components:
 
   webapp:
     profiles:
+    configFiles:
+      application.yml: |
+        sens.webapp:
+          roles:
+            country-groups-scope: kibana-sso
 
   warehouse:
     profiles:
