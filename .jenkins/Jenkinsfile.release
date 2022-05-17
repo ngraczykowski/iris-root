@@ -81,7 +81,6 @@ pipeline {
 
                     kubectl get events \
                       --namespace \$NAMESPACE \
-                      --field-selector='type!=Normal,reason=BackOff' \
                       --sort-by='.metadata.creationTimestamp' | tee "\$LOGS_DIR"/${ENVIRONMENT}_events.log
 
                     FAILED_PODS=\$(set +x && kubectl get pods \
