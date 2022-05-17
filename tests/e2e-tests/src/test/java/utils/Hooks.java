@@ -1,7 +1,6 @@
 package utils;
 
 import io.cucumber.java.BeforeAll;
-import io.cucumber.java.BeforeStep;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 
