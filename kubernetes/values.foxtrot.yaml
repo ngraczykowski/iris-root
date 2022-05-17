@@ -80,26 +80,19 @@ components:
                 AND (wa.payload ->> 'analystDecision') = 'ANALYST_FALSE_POSITIVE'
                 AND (wsa.payload ->> 'recommendation_recommended_action') = 'ACTION_FALSE_POSITIVE'
 
-#TODO(dsniezek): agents copied from sierra for now
 agents:
+
   name-agent:
     enabled: true
 
-  geo-agent:
+  document-number-agent:
     enabled: true
 
-  geo-agent2:
-    from: geo-agent
-    properties:
-      "facade.amqp.queueDefinitions[geo].inbound-exchange-name": "agent.request"
-      "facade.amqp.queueDefinitions[geo].inbound-routing-key": "agents.geo.versions.2_0_0.configs.*"
-      "facade.amqp.queueDefinitions[geo].inbound-queue-name": "agent.geo2-requests"
-      "facade.amqp.queueDefinitions[geo].dead-letter-exchange-name": "geo2-agent-dead-letter-exchange"
-      "facade.amqp.queueDefinitions[geo].dead-letter-queue-name": "geo2-agent-dead-letter-queue"
-      "facade.amqp.queueDefinitions[geo].dead-letter-routing-key": "geo2-agent-dead-letter-key"
-      "facade.amqp.queueDefinitions[geoSanctions].inbound-routing-key": "agents.geosanctions.versions.2_0_0.configs.*"
-      "facade.amqp.queueDefinitions[geoSanctions].inbound-queue-name": "agent.geosanctions2-requests"
-      "facade.amqp.queueDefinitions[geoSanctions].dead-letter-exchange-name": "geosanctions2-agent-dead-letter-exchange"
-      "facade.amqp.queueDefinitions[geoSanctions].dead-letter-queue-name": "geosanctions2-agent-dead-letter-queue"
-      "facade.amqp.queueDefinitions[geoSanctions].dead-letter-routing-key": "geosanctions2-agent-dead-letter-key"
-      "facade.amqp.queueDefinitions[geoSanctions].outbound-exchange-name": "agent.response"
+  date-agent:
+    enabled: true
+
+  gender-agent:
+    enabled: true
+
+  country-agent:
+    enabled: true
