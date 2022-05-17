@@ -65,19 +65,6 @@ agents:
     image:
       repository: registry.dev.s8ops.com/geo-agent-hotel
 
-  organization-name-agent:
-    enabled: true
-    amqp:
-      routingKey: agents.companyName.versions.1_0_0.configs.1
-      queueName: agent.companyname-requests
-    args:
-      - --agent-exchange
-  organization-name-agent2:
-    amqp:
-      routingKey: agents.companyName.versions.2_0_0.configs.1
-      queueName: agent.companyname-requests-2
-    from: organization-name-agent
-
   allow-list-agent:
     enabled: true
     image:
