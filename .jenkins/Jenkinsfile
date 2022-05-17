@@ -92,6 +92,8 @@ pipeline {
                   echo "Starting E2E tests for ${distribution} distribution."
                 """
                 sh """
+                    cd tests/e2e-tests
+
                     ./gradlew test \
                     -Dcucumber.features=src/test/java/features/SmokeTests.feature \
                     -Dcucumber.plugin=html:report.html \
