@@ -14,7 +14,7 @@ common:
 
   resources:
     limits:
-      cpu: 2000m
+      cpu: 1250m
       memory: 1Gi
     requests:
       cpu: 750m
