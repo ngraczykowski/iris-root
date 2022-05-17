@@ -1,5 +1,5 @@
 plugins {
-  id "java-library"
+  id "com.silenteight.iris.build.java-library"
   id "maven-publish"
   id "groovy"
 }
@@ -14,30 +14,30 @@ dependencies {
   implementation project(":adjudication-engine-governance")
   implementation project(":proto-adjudication-engine-internal-protos")
 
-  implementation libraries.adjudication_engine_api
-  implementation libraries.agents_api
-  implementation libraries.data_retention_api
-  implementation libraries.data_source_categories_api
-  implementation libraries.data_source_comments_api
-  implementation libraries.governance_solving_api
-  implementation libraries.protobuf_java_util
+  implementation libs.adjudication.engine.api
+  implementation libs.agents.api
+  implementation libs.data.retention.api
+  implementation libs.data.source.categories.api
+  implementation libs.data.source.comments.api
+  implementation libs.governance.solving.api
+  implementation libs.protobuf.java.util
 
   // Metrics
-  implementation libraries.micrometer_prometheus
+  implementation libs.micrometer.prometheus
 
-  implementation libraries.silenteight_sep_base_aspects
+  implementation libs.silenteight.sep.base.aspects
 
-  implementation libraries.postgresql
-  implementation libraries.grpc_spring_boot_starter
-  implementation libraries.spring_data_jpa
-  implementation libraries.silenteight_sep_base_common
-  implementation libraries.hibernate_types
-  implementation libraries.shedlock_spring
+  implementation libs.postgresql
+  implementation libs.grpc.spring.boot.starter
+  implementation libs.spring.data.jpa
+  implementation libs.silenteight.sep.base.common
+  implementation libs.hibernate.types
+  implementation libs.shedlock.spring
 
   testImplementation project(":adjudication-engine-testing")
-  testImplementation libraries.hibernate_validator
-  testImplementation libraries.protobuf_java_util
-  testImplementation libraries.silenteight_sep_base_testing
-  testImplementation libraries.tomcat_embed_el
-  testImplementation libraries.shedlock_provider_jdbc_template
+  testImplementation libs.hibernate.validator
+  testImplementation libs.protobuf.java.util
+  testImplementation libs.silenteight.sep.base.testing
+  testImplementation libs.tomcat.embed.el
+  testImplementation libs.shedlock.jdbc.provider
 }

@@ -1,29 +1,29 @@
 plugins {
-  id "java-library"
+  id "com.silenteight.iris.build.java-library"
   id "groovy"
 }
 
 description = "Adjudication Engine Dataset"
 
 dependencies {
-  implementation libraries.adjudication_engine_api
-  implementation libraries.data_retention_api
-  implementation libraries.grpc_spring_boot_starter
-  implementation libraries.silenteight_sep_base_common
-  implementation libraries.spring_data_jpa
-  implementation libraries.jakarta_validation_api
+  implementation libs.adjudication.engine.api
+  implementation libs.data.retention.api
+  implementation libs.grpc.spring.boot.starter
+  implementation libs.silenteight.sep.base.common
+  implementation libs.spring.data.jpa
+  implementation libs.jakarta.validation.api
   implementation project(":adjudication-engine-alerts")
   implementation project(":adjudication-engine-common")
 
   // NOTE(ahaczewski): This enables aspects for validating classes. Spring Web and Tx are required
   //  for correctly compiling aspects.
-  aspect libraries.silenteight_sep_base_aspects
-  compileOnly libraries.spring_web
-  compileOnly libraries.spring_tx
+  aspect libs.silenteight.sep.base.aspects
+  compileOnly libs.spring.web
+  compileOnly libs.spring.tx
 
   // We need to have liquibase change log files to create db structures
   testImplementation project(":adjudication-engine-testing")
-  testImplementation libraries.silenteight_sep_base_testing
-  testImplementation libraries.hibernate_validator
-  testImplementation libraries.tomcat_embed_el
+  testImplementation libs.silenteight.sep.base.testing
+  testImplementation libs.hibernate.validator
+  testImplementation libs.tomcat.embed.el
 }

@@ -1,21 +1,21 @@
 plugins {
-  id "java-library"
+  id "com.silenteight.iris.build.java-library"
   id "groovy"
 }
 
 dependencies {
   implementation project(":adjudication-engine-common")
-  implementation libraries.adjudication_engine_api
-  implementation libraries.grpc_spring_boot_starter
-  implementation libraries.protobuf_java_util
-  implementation libraries.silenteight_sep_base_common
-  implementation libraries.spring_data_jpa
-  implementation libraries.guava
-  implementation libraries.spring_integration_amqp
-  implementation libraries.hibernate_types
-  implementation libraries.shedlock_spring
+  implementation libs.adjudication.engine.api
+  implementation libs.grpc.spring.boot.starter
+  implementation libs.protobuf.java.util
+  implementation libs.silenteight.sep.base.common
+  implementation libs.spring.data.jpa
+  implementation libs.guava
+  implementation libs.spring.integration.amqp
+  implementation libs.hibernate.types
+  implementation libs.shedlock.spring
 
   testImplementation project(":adjudication-engine-alerts")
   testImplementation project(":adjudication-engine-testing")
-  testImplementation libraries.silenteight_sep_base_testing
+  testImplementation libs.silenteight.sep.base.testing
 }

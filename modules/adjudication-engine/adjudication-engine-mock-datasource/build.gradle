@@ -1,10 +1,10 @@
 plugins {
-  id "java-library"
+  id "com.silenteight.iris.build.java-library"
 }
 
 dependencies {
-  implementation libraries.data_source_api
-  implementation libraries.data_source_categories_api
-  implementation libraries.data_source_comments_api
-  implementation libraries.grpc_spring_boot_starter
+  implementation libs.data.source.api
+  implementation libs.data.source.categories.api
+  implementation libs.data.source.comments.api
+  implementation libs.grpc.spring.boot.starter
 }

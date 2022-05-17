@@ -1,10 +1,10 @@
 plugins {
-  id "java-library"
+  id "com.silenteight.iris.build.java-library"
   id "groovy"
 }
 
 dependencies {
   implementation project(":adjudication-engine-common")
-  implementation libraries.governance_solving_api
-  implementation libraries.grpc_spring_boot_starter
+  implementation libs.governance.solving.api
+  implementation libs.grpc.spring.boot.starter
 }

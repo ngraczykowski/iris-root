@@ -1,10 +1,10 @@
 plugins {
-  id "java-library"
+  id "com.silenteight.iris.build.java-library"
 }
 
 dependencies {
-  implementation libraries.spring_boot_starter_data_jpa
+  implementation libs.spring.boot.starter.data.jpa
 
-  runtimeOnly libraries.liquibase_core
-  runtimeOnly libraries.postgresql
+  runtimeOnly libs.liquibase.core
+  runtimeOnly libs.postgresql
 }

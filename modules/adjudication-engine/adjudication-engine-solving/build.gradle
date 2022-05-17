@@ -1,5 +1,5 @@
 plugins {
-  id "java-library"
+  id "com.silenteight.iris.build.java-library"
 }
 
 dependencies {
@@ -9,41 +9,41 @@ dependencies {
   implementation project(":adjudication-engine-analysis")
   implementation project(":proto-adjudication-engine-internal-protos")
 
-  implementation libraries.agents_api
-  implementation libraries.guava
-  implementation libraries.hazelcast
-  implementation libraries.jackson_databind
-  implementation libraries.jackson_annotations
-  implementation libraries.jackson_datatype_jsr310
-  implementation libraries.jackson_dataformat_xml
-  implementation libraries.jackson_datatype_jdk8
-  implementation libraries.spring_data_jpa
-  implementation libraries.silenteight_sep_base_common
-  implementation libraries.adjudication_engine_api
+  implementation libs.agents.api
+  implementation libs.guava
+  implementation libs.hazelcast
+  implementation libs.jackson.databind
+  implementation libs.jackson.annotations
+  implementation libs.jackson.datatype.jsr310
+  implementation libs.jackson.dataformat.xml
+  implementation libs.jackson.datatype.jdk8
+  implementation libs.spring.data.jpa
+  implementation libs.silenteight.sep.base.common
+  implementation libs.adjudication.engine.api
 
   // Sentry
-  runtimeOnly libraries.sentry_spring_boot_starter
-  runtimeOnly libraries.sentry_logback
+  runtimeOnly libs.sentry.spring.boot.starter
+  runtimeOnly libs.sentry.logback
 
   // Messaging
-  implementation libraries.amqp_client
-  implementation libraries.lz4_java
-  implementation libraries.spring_boot_starter_integration
-  implementation libraries.spring_integration_amqp
-  implementation libraries.spring_integration_core
+  implementation libs.amqp.client
+  implementation libs.lz4.java
+  implementation libs.spring.boot.starter.integration
+  implementation libs.spring.integration.amqp
+  implementation libs.spring.integration.core
 
   // Enable aspects
-  aspect libraries.silenteight_sep_base_aspects
-  compileOnly libraries.spring_tx
+  aspect libs.silenteight.sep.base.aspects
+  compileOnly libs.spring.tx
 
   //Agents
-  implementation libraries.agents_api
+  implementation libs.agents.api
 
   //Governance
-  implementation libraries.governance_solving_api
+  implementation libs.governance.solving.api
 
   testImplementation project(":adjudication-engine-testing")
-  testImplementation libraries.protobuf_java_util
-  testImplementation libraries.hibernate_validator
-  testImplementation libraries.silenteight_sep_base_testing
+  testImplementation libs.protobuf.java.util
+  testImplementation libs.hibernate.validator
+  testImplementation libs.silenteight.sep.base.testing
 }

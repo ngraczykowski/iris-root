@@ -1,23 +1,23 @@
 plugins {
-  id "java-library"
+  id "com.silenteight.iris.build.java-library"
 }
 
 dependencies {
   implementation project(":adjudication-engine-common")
 
-  implementation libraries.agents_api
+  implementation libs.agents.api
 
-  implementation libraries.grpc_spring_boot_starter
-  implementation libraries.rabbitmq_mock
-  implementation libraries.spring_amqp
-  implementation libraries.spring_amqp_rabbit
+  implementation libs.grpc.spring.boot.starter
+  implementation libs.rabbitmq.mock
+  implementation libs.spring.amqp
+  implementation libs.spring.amqp.rabbit
 
 
-  implementation libraries.amqp_client
-  implementation libraries.lz4_java
-  implementation libraries.spring_boot_starter_integration
-  implementation libraries.spring_integration_amqp
-  implementation libraries.spring_integration_core
+  implementation libs.amqp.client
+  implementation libs.lz4.java
+  implementation libs.spring.boot.starter.integration
+  implementation libs.spring.integration.amqp
+  implementation libs.spring.integration.core
 
-  implementation libraries.protobuf_java_util
+  implementation libs.protobuf.java.util
 }

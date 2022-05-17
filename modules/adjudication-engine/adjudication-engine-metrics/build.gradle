@@ -1,5 +1,5 @@
 plugins {
-  id "java"
+  id "com.silenteight.iris.build.java-library"
   id "groovy"
 }
 
@@ -9,29 +9,29 @@ dependencies {
   implementation project(":adjudication-engine-alerts")
 
   // Utilities
-  implementation libraries.commons_lang3
-  implementation libraries.commons_text
-  implementation libraries.guava
+  implementation libs.commons.lang3
+  implementation libs.commons.text
+  implementation libs.guava
 
   // Logging
-  runtimeOnly libraries.ecs_logging_core
-  runtimeOnly libraries.logback_ecs_encoder
+  runtimeOnly libs.ecs.logging.core
+  runtimeOnly libs.logback.ecs.encoder
 
-  // Base Libraries
-  implementation libraries.silenteight_sep_base_common
-  implementation libraries.silenteight_commons_app
+  // Base libs
+  implementation libs.silenteight.sep.base.common
+  implementation libs.silenteight.commons.app
 
   // Metrics
-  implementation libraries.micrometer_prometheus
+  implementation libs.micrometer.prometheus
 
   // AspectJ
-  implementation libraries.aspectjrt
-  aspect libraries.silenteight_sep_base_aspects
+  implementation libs.aspectjrt
+  aspect libs.silenteight.sep.base.aspects
 
   //  Testing
-  testImplementation libraries.silenteight_sep_base_testing
-  testImplementation libraries.awaitility
+  testImplementation libs.silenteight.sep.base.testing
+  testImplementation libs.awaitility
 
 
-  testImplementation libraries.silenteight_sep_base_testing
+  testImplementation libs.silenteight.sep.base.testing
 }

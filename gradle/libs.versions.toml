@@ -2,11 +2,12 @@
 #-----------------------------------
 # Silent Eight
 #-----------------------------------
-adjudication-engine-api = "0.8.0"
+adjudication-engine-api = "0.13.0"
 agents-api = "0.4.0"
 agents-protocol = "0.14.0"
 data-retention = "0.3.0"
 governance-api = "1.10.0"
+hazelcast = "5.1.1"
 learing-engine-store-api = "0.5.0"
 serp-protocol = "0.27.0"
 silenteight-audit-bs = "1.3.0"
@@ -103,7 +104,7 @@ silenteight-commons-core = { group = "com.silenteight.commons", name = "silentei
 silenteight-data-retention-api = { group = "com.silenteight.sens.data-retention-api", name = "data-retention-api", version.ref = "silenteight-data-retention-api" }
 silenteight-filestorage-api = { group = "com.silenteight.sep.filestorage.api", name = "sep-filestorage-api", version.ref = "silenteight-filestorage-api" }
 silenteight-filestorage-minio = { group = "com.silenteight.sep.filestorage-minio", name = "sep-filestorage-minio", version.ref = "silenteight-filestorage-minio" }
-silenteight-sep-auth = { group = "com.silenteight.iris", name = "sep-auth"}
+silenteight-sep-auth = { group = "com.silenteight.iris", name = "sep-auth" }
 silenteight-sep-base-aspects = { group = "com.silenteight.sep.base", name = "sep-base-aspects", version.ref = "silenteight-sep-base" }
 silenteight-sep-base-common = { group = "com.silenteight.sep.base", name = "sep-base-common", version.ref = "silenteight-sep-base" }
 silenteight-sep-base-testing = { group = "com.silenteight.sep.base", name = "sep-base-testing", version.ref = "silenteight-sep-base" }
@@ -207,6 +208,7 @@ spring-security-config = { group = "org.springframework.security", name = "sprin
 spring-security-core = { group = "org.springframework.security", name = "spring-security-core" }
 spring-security-test = { group = "org.springframework.security", name = "spring-security-test" }
 spring-security-web = { group = "org.springframework.security", name = "spring-security-web" }
+
 # Project Reactor
 reactor-adapter = { group = "io.projectreactor.addons", name = "reactor-adapter" }
 reactor-bom = { group = "io.projectreactor", name = "reactor-bom" }
@@ -222,7 +224,7 @@ springdoc-security = { group = "org.springdoc", name = "springdoc-openapi-securi
 
 # APIs
 jsr305 = { group = "com.google.code.findbugs", name = "jsr305" }
-jetbrains-annotations = { group = "org.jetbrains", name = "annotations" , version = "21.0.1"}
+jetbrains-annotations = { group = "org.jetbrains", name = "annotations", version = "21.0.1" }
 slf4j-api = { group = "org.slf4j", name = "slf4j-api" }
 spotbugs-annotations = { group = "com.github.spotbugs", name = "spotbugs-annotations", version.ref = "spotbugs" }
 
@@ -246,19 +248,21 @@ bouncycastle-bcpkix = { group = "org.bouncycastle", name = "bcpkix-jdk15on", ver
 bouncycastle-bcprov = { group = "org.bouncycastle", name = "bcprov-jdk15on", version.ref = "bouncycastle" }
 bouncycastle-bcprov-ext = { group = "org.bouncycastle", name = "bcprov-ext-jdk15on", version.ref = "bouncycastle" }
 brave-instrumentation-grpc = { group = "io.zipkin.brave", name = "brave-instrumentation-grpc" }
-byte-buddy-agent = { group = "net.bytebuddy", name = "byte-buddy-agent", version = "1.12.5"}
+byte-buddy-agent = { group = "net.bytebuddy", name = "byte-buddy-agent", version = "1.12.5" }
 caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine" }
 caffeine-jcache = { group = "com.github.ben-manes.caffeine", name = "jcache" }
+commons-codec = { group = 'commons-codec', name = 'commons-codec' }
 commons-collections = { group = "org.apache.commons", name = "commons-collections4" }
 commons-io = { group = "commons-io", name = "commons-io", version = "2.11.0" }
 commons-csv = { group = "org.apache.commons", name = "commons-csv", version = "1.9.0" }
 commons-lang3 = { group = "org.apache.commons", name = "commons-lang3" }
-commons-text = { group = "org.apache.commons", name = "commons-text", version = "1.9"}
+commons-text = { group = "org.apache.commons", name = "commons-text", version = "1.9" }
 cronutils = { group = 'com.cronutils', name = 'cron-utils', version = '9.1.6' }
-ecs-logging-core = { group = "co.elastic.logging", name = "ecs-logging-core" , version.ref  = "ecs"}
+ecs-logging-core = { group = "co.elastic.logging", name = "ecs-logging-core", version.ref = "ecs" }
 fastutil = { group = "it.unimi.dsi", name = "fastutil" }
 feign-slf4j = { group = "io.github.openfeign", name = "feign-slf4j" }
 freemarker = { group = "org.freemarker", name = "freemarker" }
+google-common-protos = { group = "com.google.api.grpc", name="proto-google-common-protos", version = "2.7.0" }
 grpc-api = { group = "io.grpc", name = "grpc-api", version.ref = "grpc" }
 grpc-auth = { group = "io.grpc", name = "grpc-auth", version.ref = "grpc" }
 grpc-census = { group = "io.grpc", name = "grpc-census", version.ref = "grpc" }
@@ -272,8 +276,8 @@ grpc-services = { group = "io.grpc", name = "grpc-services", version.ref = "grpc
 grpc-spring-boot-starter = { group = "net.devh", name = "grpc-spring-boot-starter", version.ref = "grpc-starter" }
 grpc-stub = { group = "io.grpc", name = "grpc-stub", version.ref = "grpc" }
 grpc-testing = { group = "io.grpc", name = "grpc-testing", version.ref = "grpc" }
-guava = { group = "com.google.guava", name = "guava", version = "31.0.1-jre"}
-google-common-protos = { group = "com.google.api.grpc", name="proto-google-common-protos", version = "2.7.0" }
+guava = { group = "com.google.guava", name = "guava", version = "31.0.1-jre" }
+hazelcast = { group = 'com.hazelcast', name = 'hazelcast', version.ref = "hazelcast" }
 hibernate-core = { group = "org.hibernate", name = "hibernate-core" }
 hibernate-envers = { group = "org.hibernate", name = "hibernate-envers" }
 hibernate-jcache = { group = "org.hibernate", name = "hibernate-jcache" }
@@ -302,15 +306,15 @@ jakarta-validation-api = { group = "jakarta.validation", name = "jakarta.validat
 javax-cache-api = { group = "javax.cache", name = "cache-api" }
 javax-mail = { group = "javax.mail", name = "mail", version = "1.4.1" }
 jaxb-api = { group = "jakarta.xml.bind", name = "jakarta.xml.bind-api" }
-keycloak-admin-client = {group = 'org.keycloak', name = 'keycloak-admin-client', version.ref = "platform-keycloak-adapter" }
+keycloak-admin-client = { group = 'org.keycloak', name = 'keycloak-admin-client', version.ref = "platform-keycloak-adapter" }
 keycloak-spring-boot-starter = { group = "org.keycloak", name = "keycloak-spring-boot-starter" }
 liquibase-core = { group = "org.liquibase", name = "liquibase-core" }
 liquibase-sessionlock = { group = "com.github.blagerweij", name = "liquibase-sessionlock", version = "1.5.1" }
 logback-access = { group = "ch.qos.logback", name = "logback-access" }
 logback-classic = { group = "ch.qos.logback", name = "logback-classic" }
-logback-ecs-encoder = { group = "co.elastic.logging", name = "logback-ecs-encoder" , version.ref = "ecs"}
+logback-ecs-encoder = { group = "co.elastic.logging", name = "logback-ecs-encoder", version.ref = "ecs" }
 logstash-logback-encoder = { group = "net.logstash.logback", name = "logstash-logback-encoder", version = "7.1.1" }
-lz4-java = { group = "org.lz4", name = "lz4-java" , version = "1.8.0"}
+lz4-java = { group = "org.lz4", name = "lz4-java", version = "1.8.0" }
 micrometer-core = { group = "io.micrometer", name = "micrometer-core" }
 micrometer-influx = { group = "io.micrometer", name = "micrometer-registry-influx" }
 micrometer-prometheus = { group = "io.micrometer", name = "micrometer-registry-prometheus" }
@@ -330,7 +334,7 @@ shedlock-jdbc-provider = { group = "net.javacrumbs.shedlock", name = "shedlock-p
 shedlock-spring = { group = "net.javacrumbs.shedlock", name = "shedlock-spring", version.ref = "shedlock" }
 snakeyaml = { group = "org.yaml", name = "snakeyaml" }
 #TODO(dsniezek): in my opinion we should remove this lib(used only in keycloak, easy replace with pure java)
-streamex = { group = "one.util", name = "streamex", version = "0.8.1"}
+streamex = { group = "one.util", name = "streamex", version = "0.8.1" }
 tomcat-embed-el = { group = "org.apache.tomcat.embed", name = "tomcat-embed-el" }
 tika-core = { group = "org.apache.tika", name = "tika-core", version = "2.1.0" }
 
@@ -357,7 +361,7 @@ spock-spring = { group = "org.spockframework", name = "spock-spring" }
 test-containers = { group = "org.testcontainers", name = "testcontainers" }
 test-containers-elasticsearch = { group = "org.testcontainers", name = "elasticsearch" }
 test-containers-junit-jupiter = { group = "org.testcontainers", name = "junit-jupiter" }
-test-containers-keycloak = {group = 'com.github.dasniko', name = 'testcontainers-keycloak', version = "1.9.0"}
+test-containers-keycloak = { group = 'com.github.dasniko', name = 'testcontainers-keycloak', version = "1.9.0" }
 test-containers-oracle-xe = { group = "org.testcontainers", name = "oracle-xe" }
 test-containers-postgresql = { group = "org.testcontainers", name = "postgresql" }
 test-containers-spock = { group = "org.testcontainers", name = "spock" }

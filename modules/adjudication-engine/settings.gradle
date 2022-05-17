@@ -1,21 +1,33 @@
+includeBuild('../../platforms')
+includeBuild('../../build-logic')
+
+dependencyResolutionManagement {
+  versionCatalogs {
+    libs {
+      from(files("../../gradle/libs.versions.toml"))
+    }
+  }
+}
+
+
 rootProject.name = 'adjudication-engine'
+gradle.ext.sepDependenciesVersion = '2.5.0'
 
 // NOTE(ahaczewski): Keep sorted alphabetically.
-include "adjudication-engine-alerts"
-include "adjudication-engine-analysis"
-include "adjudication-engine-app"
-include "adjudication-engine-dist"
-include "adjudication-engine-comments"
-include "adjudication-engine-common"
-include "adjudication-engine-dataset"
-include "adjudication-engine-features"
-include "adjudication-engine-testing"
-include "adjudication-engine-metrics"
-include "adjudication-engine-mock-agents"
-include "adjudication-engine-mock-datasource"
-include "adjudication-engine-mock-governance"
-include "adjudication-engine-solving"
-include "adjudication-engine-trace"
-include "proto-adjudication-engine-internal-protos"
+include 'adjudication-engine-alerts'
+include 'adjudication-engine-analysis'
+include 'adjudication-engine-app'
+include 'adjudication-engine-dist'
+include 'adjudication-engine-comments'
+include 'adjudication-engine-common'
+include 'adjudication-engine-dataset'
+include 'adjudication-engine-features'
+include 'adjudication-engine-testing'
+include 'adjudication-engine-metrics'
+include 'adjudication-engine-mock-agents'
+include 'adjudication-engine-mock-datasource'
+include 'adjudication-engine-mock-governance'
+include 'adjudication-engine-solving'
+include 'adjudication-engine-trace'
+include 'proto-adjudication-engine-internal-protos'
 include 'adjudication-engine-governance'
-

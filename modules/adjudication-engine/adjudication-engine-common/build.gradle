@@ -1,26 +1,26 @@
 plugins {
-  id "java-library"
+  id "com.silenteight.iris.build.java-library"
 }
 
 dependencies {
-  api libraries.jakarta_validation_api
-  api libraries.grpc_api
-  api libraries.protobuf_java
-  api libraries.sentry
-  compileOnly libraries.grpc_server_spring_boot_starter
-  compileOnly libraries.logback_access
-  implementation libraries.ecs_logging_core
-  implementation libraries.guava
-  implementation libraries.silenteight_sep_base_common
-  implementation libraries.spring_boot_autoconfigure
-  implementation libraries.spring_context
-  implementation libraries.grpc_protobuf
+  api libs.jakarta.validation.api
+  api libs.grpc.api
+  api libs.protobuf.java
+  api libs.sentry
+  compileOnly libs.grpc.server.spring.boot.starter
+  compileOnly libs.logback.access
+  implementation libs.ecs.logging.core
+  implementation libs.guava
+  implementation libs.silenteight.sep.base.common
+  implementation libs.spring.boot.autoconfigure
+  implementation libs.spring.context
+  implementation libs.grpc.protobuf
 
   // Enable aspects
-  aspect libraries.silenteight_sep_base_aspects
-  compileOnly libraries.spring_web
-  compileOnly libraries.spring_tx
+  aspect libs.silenteight.sep.base.aspects
+  compileOnly libs.spring.web
+  compileOnly libs.spring.tx
 
-  testImplementation libraries.protobuf_java_util
-  testImplementation libraries.hibernate_validator
+  testImplementation libs.protobuf.java.util
+  testImplementation libs.hibernate.validator
 }

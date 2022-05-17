@@ -2,6 +2,14 @@
 # MESSAGING CONCURRENCY
 #---------------------------------------------------------------------------------------------------
 ae:
+  db:
+    host: localhost
+    port: 24880
+    schema: public
+    name: adjudication-engine
+    username: adjudication-engine
+    password: adjudication-engine
+
   security:
     disable-security: false
   solving:
@@ -112,6 +120,14 @@ management:
       application: ${spring.application.name}
 
 spring:
+  #---------------------------------------------------------------------------------------------------
+  # SECURITY
+  #---------------------------------------------------------------------------------------------------
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://auth.silent8.cloud/realms/sierra
   #-------------------------------------------------------------------------------------------------
   # GENERAL
   #-------------------------------------------------------------------------------------------------
@@ -233,6 +249,11 @@ spring:
   # RABBITMQ
   #-------------------------------------------------------------------------------------------------
   rabbitmq:
+    host: localhost
+    port: 24160
+    username: dev
+    password: dev
+    virtual-host: /
     listener:
       type: simple
       direct:
