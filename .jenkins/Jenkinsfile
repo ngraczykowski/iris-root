@@ -43,8 +43,12 @@ pipeline {
                     -Djib.console=plain \
                     -Pversion="${version}" \
                     publish
+
+                  jq --raw-output '.image' \$(find . -type f -name 'jib-image.json') >.jib-images
                 fi
             """
+
+            stash name: 'jib', includes: '.jib-images', allowEmpty: true
           }
         }
       }
@@ -97,6 +101,23 @@ pipeline {
           sh 'git branch --force last-known-good-build'
           gitPush branch: 'last-known-good-build'
         }
+      }
+    }
+    stage('ECR') {
+      agent {
+        label 'aws-worker'
+      }
+      when {
+        beforeAgent true
+        branch 'master'
+      }
+      steps {
+        unstash name: 'jib'
+
+        // TODO(ahaczewski): Implement sync with ECR.
+        // 1. Ensure repository in ECR exists, if not - create one
+        // 2. Login to skopeo
+        // 3. Copy/sync images from `.jib-images` to ECR.
       }
     }
   }
