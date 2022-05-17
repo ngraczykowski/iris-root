@@ -1,10 +1,7 @@
 grpc:
   client:
     data-source:
-      address: {{ range $index, $client := service "mike-universal-data-source" -}}
-          {{ if $index }},{{ end -}}
-          {{ $client.Address }}:{{ $client.Port -}}
-      {{- end }}
+      address: discovery:///{{ env "NOMAD_NAMESPACE" }}-universal-data-source
       timeout: 10
       # client_ca: {{ env "meta.silenteight.home" }}/cert/chain.pem
       # client_private_key: {{ env "meta.silenteight.home" }}/cert/company-name-agent/company-name-agent-key.pem
@@ -22,7 +19,7 @@ rabbitmq:
   #   certfile: "tests/ssl_example/client.pem"
 
 consul:
-  host: localhost
+  host: 10.8.0.1
   port: 8500
 
 agent:

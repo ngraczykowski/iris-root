@@ -18,10 +18,22 @@ variable "company_name_agent_config" {
   description = "Configuration files"
 }
 
-variable "application_config_file_name" {
+variable "application_config_file" {
   type = string
-  description = "YAML configuration file to be used as application.yaml"
-  default = "application-nomad-dev.yaml"
+  description = "Path to YAML configuration file to be used as application.yaml (nomad dir relative)"
+  default = "configs/dev/application.yaml"
+}
+
+variable "name_preconditions_file" {
+  type = string
+  description = "Path to YAML file to be used as name-preconditions.yaml (nomad dir relative)"
+  default = "configs/dev/name-preconditions.yaml"
+}
+
+variable "reduction_rules_file" {
+  type = string
+  description = "Path to YAML file to be used as reduction-rules.yaml (nomad dir relative)"
+  default = "configs/dev/reduction-rules.yaml"
 }
 
 variable "namespace" {
@@ -95,7 +107,6 @@ job "company-name-agent" {
       ])
     }
 
-
     task "grpcui" {
       driver = "raw_exec"
 
@@ -128,7 +139,6 @@ job "company-name-agent" {
       }
     }
 
-
     task "company-name-agent" {
       driver = "docker"
 
@@ -150,8 +160,20 @@ job "company-name-agent" {
       }
 
       template {
-        data = file("${var.application_config_file_name}")
+        data = file("${var.application_config_file}")
         destination = "local/config/application.yaml"
+        change_mode = "restart"
+      }
+
+      template {
+        data = file("${var.name_preconditions_file}")
+        destination = "local/config/name-preconditions.yaml"
+        change_mode = "restart"
+      }
+
+      template {
+        data = file("${var.reduction_rules_file}")
+        destination = "local/config/reduction-rules.yaml"
         change_mode = "restart"
       }
 

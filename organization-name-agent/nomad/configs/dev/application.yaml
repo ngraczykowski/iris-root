@@ -1,10 +1,7 @@
 grpc:
   client:
     data-source:
-      address: {{ range $index, $client := service "grpc-universal-data-source" -}}
-          {{ if $index }},{{ end -}}
-          {{ $client.Address }}:{{ $client.Port -}}
-      {{- end }}
+      address: discovery:///{{ env "NOMAD_NAMESPACE" }}-hsbc-bridge
       timeout: 10
 #      client_ca: {{ env "meta.silenteight.home" }}/cert/chain.pem
 #      client_private_key: {{ env "meta.silenteight.home" }}/cert/company-name-agent/company-name-agent-key.pem
