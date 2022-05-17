@@ -15,7 +15,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
-
 @ContextConfiguration(classes = RepositoryTestConfiguration.class)
 @Sql
 class MatchRepositoryIT extends BaseDataJpaTest {
@@ -23,8 +22,7 @@ class MatchRepositoryIT extends BaseDataJpaTest {
   private static final long ALERT_ID_1 = 123;
   private static final long ALERT_ID_2 = 124;
 
-  @Autowired
-  private MatchRepository repository;
+  @Autowired private MatchRepository repository;
 
   @Test
   void savesMatchToRepository() {
@@ -35,7 +33,10 @@ class MatchRepositoryIT extends BaseDataJpaTest {
   private void compareMatchInDatabase(MatchEntity match) {
     var foundAlert = entityManager.find(MatchEntity.class, match.getId());
 
-    assertThat(foundAlert).usingRecursiveComparison().ignoringFields("id").isEqualTo(match);
+    assertThat(foundAlert)
+        .usingRecursiveComparison()
+        .ignoringFields("id", "alertedAt", "createdAt")
+        .isEqualTo(match);
   }
 
   @Test
@@ -60,35 +61,40 @@ class MatchRepositoryIT extends BaseDataJpaTest {
 
     givenMatch(ALERT_ID_2, 4);
 
-    var latestSortIndexes = repository
-        .findLatestSortIndexByAlertIds(List.of(ALERT_ID_1, ALERT_ID_2));
+    var latestSortIndexes =
+        repository.findLatestSortIndexByAlertIds(List.of(ALERT_ID_1, ALERT_ID_2));
 
     assertThat(latestSortIndexes)
         .hasSize(2)
-        .anySatisfy(a -> {
-          assertThat(a.getAlertId()).isEqualTo(ALERT_ID_1);
-          assertThat(a.getSortIndex()).isEqualTo(2);
-        })
-        .anySatisfy(a -> {
-          assertThat(a.getAlertId()).isEqualTo(ALERT_ID_2);
-          assertThat(a.getSortIndex()).isEqualTo(4);
-        });
+        .anySatisfy(
+            a -> {
+              assertThat(a.getAlertId()).isEqualTo(ALERT_ID_1);
+              assertThat(a.getSortIndex()).isEqualTo(2);
+            })
+        .anySatisfy(
+            a -> {
+              assertThat(a.getAlertId()).isEqualTo(ALERT_ID_2);
+              assertThat(a.getSortIndex()).isEqualTo(4);
+            });
   }
 
   private AbstractOptionalAssert<?, Integer> assertThatLastSortIndex(long alertId) {
-    return assertThat(repository.findLatestSortIndexByAlertIds(List.of(alertId))
-        .map(LatestSortIndex::getSortIndex)
-        .findFirst());
+    return assertThat(
+        repository
+            .findLatestSortIndexByAlertIds(List.of(alertId))
+            .map(LatestSortIndex::getSortIndex)
+            .findFirst());
   }
 
   @NotNull
   private MatchEntity givenMatch(long alertId, int sortIndex) {
-    final var match = MatchEntity.builder()
-        .alertId(alertId)
-        .clientMatchIdentifier("test match " + sortIndex)
-        .label("test label", "test value")
-        .sortIndex(sortIndex)
-        .build();
+    final var match =
+        MatchEntity.builder()
+            .alertId(alertId)
+            .clientMatchIdentifier("test match " + sortIndex)
+            .label("test label", "test value")
+            .sortIndex(sortIndex)
+            .build();
 
     var matches = repository.saveAll(() -> List.of(match).iterator());
     entityManager.flush();

@@ -16,8 +16,7 @@ import static org.assertj.core.api.Assertions.*;
 @ContextConfiguration(classes = RepositoryTestConfiguration.class)
 class AlertRepositoryIT extends BaseDataJpaTest {
 
-  @Autowired
-  private AlertRepository repository;
+  @Autowired private AlertRepository repository;
 
   @Test
   void persistAndFindWithEntityManagerReturnsSameAlert() {
@@ -43,7 +42,10 @@ class AlertRepositoryIT extends BaseDataJpaTest {
   private void compareAlertInDatabase(AlertEntity alert) {
     var foundAlert = entityManager.find(AlertEntity.class, alert.getId());
 
-    assertThat(foundAlert).usingRecursiveComparison().ignoringFields("id").isEqualTo(alert);
+    assertThat(foundAlert)
+        .usingRecursiveComparison()
+        .ignoringFields("id", "alertedAt", "createdAt")
+        .isEqualTo(alert);
   }
 
   @Test

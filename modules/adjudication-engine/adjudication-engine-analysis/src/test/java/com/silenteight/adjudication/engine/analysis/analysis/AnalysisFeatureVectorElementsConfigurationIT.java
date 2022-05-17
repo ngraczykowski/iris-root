@@ -14,8 +14,7 @@ import static org.assertj.core.api.Assertions.*;
 @ContextConfiguration(classes = RepositoryTestConfiguration.class)
 class AnalysisFeatureVectorElementsConfigurationIT extends BaseDataJpaTest {
 
-  @Autowired
-  private AnalysisRepository repository;
+  @Autowired private AnalysisRepository repository;
 
   @Test
   void persistAndFindWithEntityManagerReturnsSameAnalysisEntity() {
@@ -50,10 +49,11 @@ class AnalysisFeatureVectorElementsConfigurationIT extends BaseDataJpaTest {
   }
 
   private void compareAnalysisEntityInDatabase(AnalysisEntity analysisEntity) {
-    var foundAnalysisEntity = entityManager.find(
-        AnalysisEntity.class, analysisEntity.getId());
+    var foundAnalysisEntity = entityManager.find(AnalysisEntity.class, analysisEntity.getId());
 
     assertThat(foundAnalysisEntity)
-        .usingRecursiveComparison().ignoringFields("id").isEqualTo(analysisEntity);
+        .usingRecursiveComparison()
+        .ignoringFields("id", "alertedAt", "createdAt")
+        .isEqualTo(analysisEntity);
   }
 }
