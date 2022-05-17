@@ -8,7 +8,6 @@ import com.silenteight.sens.webapp.audit.AuditModule;
 import com.silenteight.sens.webapp.backend.application.logging.ApplicationLoggingModule;
 import com.silenteight.sens.webapp.backend.config.WebModule;
 import com.silenteight.sens.webapp.backend.configuration.ConfigurationModule;
-import com.silenteight.sens.webapp.backend.external.apps.ExternalAppsModule;
 import com.silenteight.sens.webapp.backend.report.domain.ReportDomainModule;
 import com.silenteight.sens.webapp.backend.user.rest.UserRestModule;
 import com.silenteight.sens.webapp.common.integration.AmqpCommonModule;
@@ -42,7 +41,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
         AuthorizationModule.class,
         ConfigurationModule.class,
         EndpointModule.class,
-        ExternalAppsModule.class,
         GrpcModule.class,
         UsermanagementKeycloakModule.class,
         NotificationModule.class,

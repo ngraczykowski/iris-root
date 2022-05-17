@@ -32,8 +32,6 @@ sens.webapp.rabbitmq.password: serp
 sens.webapp.messaging.concurrency: 4
 sens.webapp.messaging.prefetch: 25
 
-sens.webapp.external.apps.reporting-ui.url: http://localhost:24400/kibana/
-
 ####################################################################################################
 info:
   component: "SENS Web App REST API"
@@ -152,9 +150,6 @@ grpc:
 
     circuit-breaker:
       address: static://localhost:24213
-
-sens.webapp.external.apps:
-  reportingUrl: ${sens.webapp.external.apps.reporting-ui.url}
 
 sens.webapp.messaging:
   broker:
