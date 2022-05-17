@@ -364,7 +364,7 @@ components:
 
   adjudication-engine:
     image:
-      repository: registry.dev.s8ops.com/ae/adjudication-engine-app
+      repository: registry.dev.s8ops.com/iris/adjudication-engine-app
       tag: "latest"
 
     dbName: "ae"
