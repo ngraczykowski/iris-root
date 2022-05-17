@@ -6,7 +6,6 @@
 
 `-Dtest.clientId=${clientId}
 -Dtest.env=${environment}
--Dtest.clientSecret=${clientSecret}
 -Dtest.username=${username}
 -Dtest.password=${password}`
 
@@ -18,7 +17,7 @@
 -Dcucumber.plugin=html:report.html 
 -Dtest.isRegression=false
 -Dtest.clientId=${clientId}
--Dtest.env=${environment} 
--Dtest.clientSecret=${clientSecret} 
+-Dtest.env=${environment}
 -Dtest.username=${username} 
--Dtest.password=${password}`
+-Dtest.password=${password}
+-Dtest.url=${baseUrl}`

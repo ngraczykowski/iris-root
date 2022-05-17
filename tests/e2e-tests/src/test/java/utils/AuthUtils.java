@@ -10,7 +10,6 @@ public class AuthUtils {
         .param("username",System.getProperty("test.username"))
         .param("password", System.getProperty("test.password"))
         .param("client_id" ,System.getProperty("test.clientId"))
-        .param("client_secret", System.getProperty("test.clientSecret"))
         .post("https://auth.silenteight.com/realms/sens-webapp/protocol/openid-connect/token")
         .then()
         .statusCode(200)
