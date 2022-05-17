@@ -15,31 +15,22 @@
       <tableExists tableName="warehouse_message_backup"/>
     </preConditions>
     <dropTable  cascadeConstraints="true"
-                schemaName="public"
                 tableName="warehouse_report_accuracy"/>
     <dropTable  cascadeConstraints="true"
-                schemaName="public"
                 tableName="warehouse_report_ai_reasoning"/>
     <dropTable  cascadeConstraints="true"
-                schemaName="public"
                 tableName="warehouse_report_ai_reasoning_match_level"/>
     <dropTable  cascadeConstraints="true"
-                schemaName="public"
                 tableName="warehouse_report_rbs"/>
     <dropTable  cascadeConstraints="true"
-                schemaName="public"
                 tableName="warehouse_report_billing"/>
     <dropTable  cascadeConstraints="true"
-                schemaName="public"
                 tableName="warehouse_report_metrics"/>
     <dropTable  cascadeConstraints="true"
-                schemaName="public"
                 tableName="warehouse_production_alert"/>
     <dropTable  cascadeConstraints="true"
-                schemaName="public"
                 tableName="warehouse_production_match"/>
     <dropTable  cascadeConstraints="true"
-                schemaName="public"
                 tableName="warehouse_message_backup"/>
   </changeSet>
 
