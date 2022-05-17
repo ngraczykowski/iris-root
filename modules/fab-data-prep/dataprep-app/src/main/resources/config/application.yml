@@ -110,7 +110,7 @@ amqp:
         dead-letter-exchange-name: alert-message-queue.dlx
     outgoing:
       match-feature-input-set-fed:
-        exchange-name: bridge.match-feature-input-set-fed-exchange
+        exchange-name: core-bridge.match-feature-input-set-fed-exchange
 
 grpc:
   client:
