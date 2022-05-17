@@ -268,7 +268,7 @@ class PolicyServiceTest {
 
   @NotNull
   private Policy createPolicyWithSteps(Collection<Step> steps) {
-    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER).getId();
     Policy policy = policyRepository.getByPolicyId(uuid);
     steps.forEach(policy::addStep);
     policyRepository.save(policy);
@@ -294,21 +294,19 @@ class PolicyServiceTest {
 
   @Test
   void savePolicyOnDraftWillChangeState() {
-    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
-    Policy policy = policyRepository.getByPolicyId(uuid);
+    PolicyDto policyDto = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
+    assertThat(policyDto.getState()).isEqualTo(DRAFT);
 
-    assertThat(policy.getState()).isEqualTo(DRAFT);
+    underTest.savePolicy(SavePolicyRequest.of(policyDto.getId(), OTHER_USER));
 
-    underTest.savePolicy(SavePolicyRequest.of(uuid, OTHER_USER));
-
-    policy = policyRepository.getByPolicyId(uuid);
+    Policy policy = policyRepository.getByPolicyId(policyDto.getId());
     assertThat(policy.getState()).isEqualTo(SAVED);
     assertThat(policy.getUpdatedBy()).isEqualTo(OTHER_USER);
   }
 
   @Test
   void savePolicyOnNonDraftWillThrowException() {
-    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER).getId();
     Policy policy = policyRepository.getByPolicyId(uuid);
     policy.save();
 
@@ -320,19 +318,19 @@ class PolicyServiceTest {
 
   @Test
   void archivePolicyOnDraftWillThrowException() {
-    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
-    Policy policy = policyRepository.getByPolicyId(uuid);
+    PolicyDto policyDto = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
 
-    assertThat(policy.getState()).isEqualTo(DRAFT);
+    assertThat(policyDto.getState()).isEqualTo(DRAFT);
 
-    ArchivePolicyRequest archivePolicyRequest = ArchivePolicyRequest.of(uuid, OTHER_USER);
+    ArchivePolicyRequest archivePolicyRequest = ArchivePolicyRequest.of(
+        policyDto.getId(), OTHER_USER);
     assertThatExceptionOfType(WrongPolicyStateChangeException.class)
         .isThrownBy(() -> underTest.archivePolicy(archivePolicyRequest));
   }
 
   @Test
   void archivePolicyOnInUseWillThrowException() {
-    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER).getId();
     Policy policy = policyRepository.getByPolicyId(uuid);
     policy.save();
     policy.publish();
@@ -347,7 +345,7 @@ class PolicyServiceTest {
 
   @Test
   void archivePolicySavedDraftWillChangeState() {
-    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER).getId();
     Policy policy = policyRepository.getByPolicyId(uuid);
     policy.save();
 
@@ -360,7 +358,7 @@ class PolicyServiceTest {
 
   @Test
   void usePolicyOnSaveWillChangeState() {
-    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER).getId();
     Policy policy = policyRepository.getByPolicyId(uuid);
     policy.setState(SAVED);
 
@@ -373,28 +371,26 @@ class PolicyServiceTest {
 
   @Test
   void usePolicyOnNonSaveWillThrowException() {
-    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
-    Policy policy = policyRepository.getByPolicyId(uuid);
-    assertThat(policy.getState()).isEqualTo(DRAFT);
+    PolicyDto policyDto = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
+    assertThat(policyDto.getState()).isEqualTo(DRAFT);
 
     assertThatExceptionOfType(WrongPolicyStateChangeException.class)
-        .isThrownBy(() -> underTest.usePolicy(UsePolicyRequest.of(uuid, USER)));
+        .isThrownBy(() -> underTest.usePolicy(UsePolicyRequest.of(policyDto.getId(), USER)));
   }
 
   @Test
   void deletePolicyOnDraftWillChangeState() {
-    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
-    Policy policy = policyRepository.getByPolicyId(uuid);
-    assertThat(policy.getState()).isEqualTo(DRAFT);
+    PolicyDto policyDto = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
+    assertThat(policyDto.getState()).isEqualTo(DRAFT);
 
-    underTest.deletePolicy(DeletePolicyRequest.of(uuid, OTHER_USER));
+    underTest.deletePolicy(DeletePolicyRequest.of(policyDto.getId(), OTHER_USER));
 
-    assertThat(policyRepository.findByPolicyId(uuid)).isEmpty();
+    assertThat(policyRepository.findByPolicyId(policyDto.getId())).isEmpty();
   }
 
   @Test
   void deletePolicyOnNonSaveWillThrowException() {
-    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER).getId();
     Policy policy = policyRepository.getByPolicyId(uuid);
     policy.save();
     assertThat(policy.getState()).isEqualTo(SAVED);
@@ -406,14 +402,13 @@ class PolicyServiceTest {
 
   @Test
   void updatePolicyOnDraftWillUpdatePolicy() {
-    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
-    Policy policy = policyRepository.getByPolicyId(uuid);
-    assertThat(policy.getState()).isEqualTo(DRAFT);
+    PolicyDto policyDto = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
+    assertThat(policyDto.getState()).isEqualTo(DRAFT);
 
     underTest.updatePolicy(
-        UpdatePolicyRequest.of(uuid, NEW_POLICY_NAME, NEW_DESCRIPTION, OTHER_USER));
+        UpdatePolicyRequest.of(policyDto.getId(), NEW_POLICY_NAME, NEW_DESCRIPTION, OTHER_USER));
 
-    policy = policyRepository.getByPolicyId(uuid);
+    Policy policy = policyRepository.getByPolicyId(policyDto.getId());
     assertThat(policy.getName()).isEqualTo(NEW_POLICY_NAME);
     assertThat(policy.getDescription()).isEqualTo(NEW_DESCRIPTION);
     assertThat(policy.getUpdatedBy()).isEqualTo(OTHER_USER);
@@ -421,7 +416,7 @@ class PolicyServiceTest {
 
   @Test
   void updatePolicyOnNonDraftWillThrowException() {
-    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER).getId();
     Policy policy = policyRepository.getByPolicyId(uuid);
     policy.setState(SAVED);
 
@@ -461,7 +456,7 @@ class PolicyServiceTest {
 
   @Test
   void setStepsOrderOnNonDraftWillThrowException() {
-    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER).getId();
     Policy policy = policyRepository.getByPolicyId(uuid);
     policy.setState(SAVED);
 
@@ -473,12 +468,11 @@ class PolicyServiceTest {
 
   @Test
   void setStepsOrderOnDraftWithWrongStepsSizeWillThrowException() {
-    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
-    Policy policy = policyRepository.getByPolicyId(uuid);
-    assertThat(policy.getState()).isEqualTo(DRAFT);
+    PolicyDto policyDto = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
+    assertThat(policyDto.getState()).isEqualTo(DRAFT);
 
     SetStepsOrderRequest request = SetStepsOrderRequest
-        .of(policy.getPolicyId(), of(FIRST_STEP_ID, SECOND_STEP_ID, THIRD_STEP_ID), OTHER_USER);
+        .of(policyDto.getId(), of(FIRST_STEP_ID, SECOND_STEP_ID, THIRD_STEP_ID), OTHER_USER);
     assertThatExceptionOfType(StepsOrderListsSizeMismatch.class)
         .isThrownBy(() -> underTest.setStepsOrder(request));
   }
@@ -788,7 +782,7 @@ class PolicyServiceTest {
 
   @Test
   void markPolicyUsedOnToBeUsedWillChangeState() {
-    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER).getId();
     Policy policy = policyRepository.getByPolicyId(uuid);
     policy.setUpdatedBy(OTHER_USER);
     policy.setState(TO_BE_USED);

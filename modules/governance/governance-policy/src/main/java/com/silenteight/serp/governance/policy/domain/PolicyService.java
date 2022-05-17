@@ -64,14 +64,14 @@ public class PolicyService {
     return savedPolicy.getPolicyId();
   }
 
-  public UUID createPolicy(
+  public PolicyDto createPolicy(
       @NonNull UUID policyId,
       @NonNull String policyName,
       @NonNull String createdBy) {
 
     AddPolicyRequest addPolicyRequest = AddPolicyRequest.of(policyId, policyName, null, createdBy);
     Policy policy = addPolicyInternal(addPolicyRequest);
-    return policy.getPolicyId();
+    return policy.toDto();
   }
 
   @NotNull

@@ -4,8 +4,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.serp.governance.policy.domain.PolicyService;
+import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
 
-import java.util.UUID;
 
 @RequiredArgsConstructor
 class CreatePolicyUseCase {
@@ -13,7 +13,7 @@ class CreatePolicyUseCase {
   @NonNull
   private final PolicyService policyService;
 
-  UUID activate(@NonNull CreatePolicyCommand command) {
+  PolicyDto activate(@NonNull CreatePolicyCommand command) {
     return policyService.createPolicy(
         command.getId(), command.getPolicyName(), command.getCreatedBy());
   }

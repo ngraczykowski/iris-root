@@ -119,7 +119,7 @@ class FeatureLogicQueryTest extends BaseDataJpaTest {
   }
 
   private void savePolicyWithConfiguredStepsLogic() {
-    UUID uuid = policyService.createPolicy(POLICY_UID, POLICY_NAME, POLICY_CREATED_BY);
+    UUID uuid = policyService.createPolicy(POLICY_UID, POLICY_NAME, POLICY_CREATED_BY).getId();
     Policy policy = policyRepository.getByPolicyId(uuid);
     CreateStepRequest createStepRequest = CreateStepRequest.of(
         POLICY_UID, SOLUTION_NO_DECISION, STEP_ID, STEP_NAME, STEP_DESC, STEP_TYPE,"user");

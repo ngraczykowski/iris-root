@@ -32,7 +32,8 @@ class RbsToPolicyTransformationService {
   private final PolicyStepsRequestQuery policyStepsRequestQuery;
 
   public UUID transform(StepsData stepsData) {
-    UUID policyId = policyService.createPolicy(UUID.randomUUID(), stepsData.getName(), CREATED_BY);
+    UUID policyId = policyService.createPolicy(
+        UUID.randomUUID(), stepsData.getName(), CREATED_BY).getId();
 
     int index = 0;
     int stepsCount = stepsData.getSteps().size();

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.policy.create.dto.CreatePolicyDto;
+import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -21,7 +22,8 @@ import javax.validation.Valid;
 
 import static com.silenteight.serp.governance.common.web.rest.RestConstants.*;
 import static com.silenteight.serp.governance.policy.domain.DomainConstants.POLICY_ENDPOINT_TAG;
-import static org.springframework.http.ResponseEntity.accepted;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.ResponseEntity.status;
 
 @Slf4j
 @RestController
@@ -36,10 +38,10 @@ class CreatePolicyRequestRestController {
   @PostMapping("/v1/policies")
   @PreAuthorize("isAuthorized('CREATE_POLICY')")
   @ApiResponses(value = {
-      @ApiResponse(responseCode = ACCEPTED_STATUS, description = SUCCESS_RESPONSE_DESCRIPTION),
+      @ApiResponse(responseCode = CREATED_STATUS, description = SUCCESS_RESPONSE_DESCRIPTION),
       @ApiResponse(responseCode = BAD_REQUEST_STATUS, description = BAD_REQUEST_DESCRIPTION)
   })
-  public ResponseEntity<Void> create(
+  public ResponseEntity<PolicyDto> create(
       @Valid @RequestBody CreatePolicyDto createPolicyDto, Authentication authentication) {
 
     log.info("Creating policy. CreatePolicyDto={}", createPolicyDto);
@@ -50,10 +52,9 @@ class CreatePolicyRequestRestController {
         .policyName(createPolicyDto.getPolicyName())
         .createdBy(authentication.getName())
         .build();
-    createPolicyUseCase.activate(command);
-    //TODO https://silent8.atlassian.net/browse/WEB-2231
 
+    PolicyDto policy = createPolicyUseCase.activate(command);
     log.debug("Create policy request processed.");
-    return accepted().build();
+    return status(CREATED).body(policy);
   }
 }
