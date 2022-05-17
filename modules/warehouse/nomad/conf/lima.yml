@@ -153,46 +153,54 @@ warehouse.reports.v2:
 
     - name: RB_SCORER_MATCH_LEVEL
       type: simulation
-      description: RB Scorer (Match level)
+      description: RB Scorer
       selectSqlQuery: >
-        SELECT wsa.payload ->> 'match_reason:policy'                          AS "Policy ID",
-               wsa.payload ->> 'match_reason:policy_title'                    AS "Policy Name",
-               wsa.payload ->> 'match_reason:step'                            AS "Step ID",
-               wsa.payload ->> 'match_reason:step_title'                      AS "Step Name",
-               wsa.payload ->> 'match_reason:feature_vector_signature'        AS "Reasoning Branch ID",
-               wsa.payload ->> 'recommendation_recommended_action'            AS "S8 Hit Resolution",
-               COUNT(wsa.payload ->> 'match_reason:feature_vector_signature') AS "Total Hits Count",
-               COUNT(wsa.payload ->> 'match_reason:feature_vector_signature') AS "Single Hits Count",
-               wm.payload ->> 'categories/customerType'                       AS "Customer Type",
-               wm.payload ->> 'categories/isDeny'                             AS "Sanctions",
-               wsa.payload ->> 'features/name:solution'                       AS "Name",
-               wsa.payload ->> 'features/date:solution'                       AS "Date of Birth / Incorporation",
-               wsa.payload ->> 'features/nationalId:solution'                 AS "National ID",
-               wsa.payload ->> 'features/passport:solution'                   AS "Passport Number Document",
-               wsa.payload ->> 'features/document:solution'                   AS "Other Document",
-               wsa.payload ->> 'features/gender:solution'                     AS "Gender",
-               wsa.payload ->> 'features/nationality:solution'                AS "Nationality Country",
-               wsa.payload ->> 'features/residency:solution'                  AS "Residency Country"
-        FROM warehouse_simulation_alert wsa
-        JOIN warehouse_alert wa ON wa.name = wsa.name
-        JOIN warehouse_match wm ON wa.id = wm.alert_id
+        
+        WITH tmp_match_count AS (
+            SELECT alert_name          AS alert_name,
+                   COUNT(alert_name)   AS alert_name
+            FROM warehouse_simulation_match
+            WHERE analysis_name = 'analysis/${analysisId}'
+            GROUP BY alert_name
+        )
+        
+        SELECT wsm.payload ->> 'match_reason:policy'                          AS "Policy ID",
+               wsm.payload ->> 'match_reason:policy_title'                    AS "Policy Name",
+               wsm.payload ->> 'match_reason:step'                            AS "Step ID",
+               wsm.payload ->> 'match_reason:step_title'                      AS "Step Name",
+               wsm.payload ->> 'match_reason:feature_vector_signature'        AS "Reasoning Branch ID",
+               wsm.payload ->> 'match_solution'                               AS "S8 Hit Resolution",
+               COUNT(wsm.payload ->> 'match_reason:feature_vector_signature') AS "Total Hits Count",
+               COUNT(tmc.hit_count) FILTER ( WHERE hit_count = 1 )            AS "Single Hits Count",
+               wsm.payload ->> 'categories/customerType:value'                AS "Customer Type",
+               wsm.payload ->> 'categories/isDeny:value'                      AS "Sanctions",
+               wsm.payload ->> 'features/name:solution'                       AS "Name",
+               wsm.payload ->> 'features/date:solution'                       AS "Date of Birth / Incorporation",
+               wsm.payload ->> 'features/nationalId:solution'                 AS "National ID",
+               wsm.payload ->> 'features/passport:solution'                   AS "Passport Number Document",
+               wsm.payload ->> 'features/document:solution'                   AS "Other Document",
+               wsm.payload ->> 'features/gender:solution'                     AS "Gender",
+               wsm.payload ->> 'features/nationality:solution'                AS "Nationality Country",
+               wsm.payload ->> 'features/residency:solution'                  AS "Residency Country"
+        FROM warehouse_simulation_match wsm
+          JOIN tmp_match_count tmc ON wsm.alert_name = tmc.alert_name
         WHERE wsa.analysis_name = 'analysis/${analysisId}'
-        GROUP BY wsa.payload ->> 'match_reason:policy',
-                 wsa.payload ->> 'match_reason:policy_title',
-                 wsa.payload ->> 'match_reason:step',
-                 wsa.payload ->> 'match_reason:step_title',
-                 wsa.payload ->> 'match_reason:feature_vector_signature',
-                 wsa.payload ->> 'recommendation_recommended_action',
-                 wm.payload ->> 'categories/customerType',
-                 wm.payload ->> 'categories/isDeny',
-                 wsa.payload ->> 'features/name:solution',
-                 wsa.payload ->> 'features/date:solution',
-                 wsa.payload ->> 'features/nationalId:solution',
-                 wsa.payload ->> 'features/passport:solution',
-                 wsa.payload ->> 'features/document:solution',
-                 wsa.payload ->> 'features/gender:solution',
-                 wsa.payload ->> 'features/nationality:solution',
-                 wsa.payload ->> 'features/residency:solution'
+        GROUP BY wsm.payload ->> 'match_reason:policy',
+                 wsm.payload ->> 'match_reason:policy_title',
+                 wsm.payload ->> 'match_reason:step',
+                 wsm.payload ->> 'match_reason:step_title',
+                 wsm.payload ->> 'match_reason:feature_vector_signature',
+                 wsm.payload ->> 'match_solution',
+                 wsm.payload ->> 'categories/customerType:value',
+                 wsm.payload ->> 'categories/isDeny:value',
+                 wsm.payload ->> 'features/name:solution',
+                 wsm.payload ->> 'features/date:solution',
+                 wsm.payload ->> 'features/nationalId:solution',
+                 wsm.payload ->> 'features/passport:solution',
+                 wsm.payload ->> 'features/document:solution',
+                 wsm.payload ->> 'features/gender:solution',
+                 wsm.payload ->> 'features/nationality:solution',
+                 wsm.payload ->> 'features/residency:solution'
 
     - name: AI_REASONING
       type: production
@@ -264,12 +272,12 @@ warehouse.reports.v2:
       selectSqlQuery: >
         SELECT wa.discriminator                                        AS "S8 Alert ID",
                wa.payload ->> 'clientId'                               AS "Client Alert ID",
-               wm.payload ->> 'watchListId'                            AS "Watchlist Hit ID",
-               wsa.payload ->> 'match_reason:policy'                   AS "Policy ID",
-               wsa.payload ->> 'match_reason:policy_title'             AS "Policy Name",
-               wsa.payload ->> 'match_reason:step'                     AS "Step ID",
-               wsa.payload ->> 'match_reason:step_title'               AS "Step Name",
-               wsa.payload ->> 'match_reason:feature_vector_signature' AS "Reasoning Branch ID",
+               wsm.payload ->> 'watchListId'                           AS "Watchlist Hit ID",
+               wsm.payload ->> 'match_reason:policy'                   AS "Policy ID",
+               wsm.payload ->> 'match_reason:policy_title'             AS "Policy Name",
+               wsm.payload ->> 'match_reason:step'                     AS "Step ID",
+               wsm.payload ->> 'match_reason:step_title'               AS "Step Name",
+               wsm.payload ->> 'match_reason:feature_vector_signature' AS "Reasoning Branch ID",
                wa.payload ->> 'batchId'                                AS "Batch ID",
                wa.payload ->> 'batchType'                              AS "Batch Type",
                wa.payload ->> 'batchCountry'                           AS "Origin Country",
@@ -280,9 +288,10 @@ warehouse.reports.v2:
                wsa.payload ->> 'recommendation_create_time'            AS "S8 Resolution Timestamp",
                wsa.payload ->> 'recommendation_comment'                AS "S8 Hit Reason"
         FROM warehouse_simulation_alert wsa
-        JOIN warehouse_alert wa ON wsa.name = wa.name
-        JOIN warehouse_match wm ON wa.id = wm.alert_id
+          JOIN warehouse_alert wa ON wsa.name = wa.name
+          JOIN warehouse_simulation_match wsm ON wsm.alert_name = wsa.name
         WHERE wsa.analysis_name = 'analysis/${analysisId}'
+          AND wsm.analysis_name = 'analysis/${analysisId}'
 
     - name: ACCURACY_ALERT_LEVEL
       type: production
@@ -354,13 +363,13 @@ warehouse.reports.v2:
       description: Accuracy
       selectSqlQuery: >
         SELECT wa.discriminator                                        AS "S8 Alert ID",
-               wa.payload ->> 'clientId'                               AS "Client Alert ID",
-               wm.payload ->> 'watchListId'                            AS "Watchlist Hit ID",
-               wsa.payload ->> 'match_reason:policy'                   AS "Policy ID",
-               wsa.payload ->> 'match_reason:policy_title'             AS "Policy Name",
-               wsa.payload ->> 'match_reason:step'                     AS "Step ID",
-               wsa.payload ->> 'match_reason:step_title'               AS "Step Name",
-               wsa.payload ->> 'match_reason:feature_vector_signature' AS "Reasoning Branch ID",
+               wsm.payload ->> 'clientId'                              AS "Client Alert ID",
+               wsm.payload ->> 'watchListId'                           AS "Watchlist Hit ID",
+               wsm.payload ->> 'match_reason:policy'                   AS "Policy ID",
+               wsm.payload ->> 'match_reason:policy_title'             AS "Policy Name",
+               wsm.payload ->> 'match_reason:step'                     AS "Step ID",
+               wsm.payload ->> 'match_reason:step_title'               AS "Step Name",
+               wsm.payload ->> 'match_reason:feature_vector_signature' AS "Reasoning Branch ID",
                wa.payload ->> 'batchId'                                AS "Batch Id",
                wa.payload ->> 'batchType'                              AS "Batch Type",
                wa.payload ->> 'batchCountry'                           AS "Origin Country",
@@ -369,8 +378,9 @@ warehouse.reports.v2:
                wsa.payload ->> 'recommendation_create_time'            AS "S8 Resolution Timestamp",
                wsa.payload ->> 'recommendation_comment'                AS "S8 Hit Reason"
         FROM warehouse_simulation_alert wsa
-                 JOIN warehouse_alert wa ON wsa.name = wa.name
-                 JOIN warehouse_match wm ON wa.id = wm.alert_id
+          JOIN warehouse_alert wa ON wsa.name = wa.name
+          JOIN warehouse_simulation_match wsm ON wsm.alert_name = wsa.name
         WHERE wsa.analysis_name = 'analysis/${analysisId}'
+          AND wsm.analysis_name = 'analysis/${analysisId}'
           AND wm.payload ->> 'analystDecision' IN
               ('ANALYST_FALSE_POSITIVE', 'ANALYST_TRUE_POSITIVE')
