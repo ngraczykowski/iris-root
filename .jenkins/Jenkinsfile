@@ -21,15 +21,30 @@ pipeline {
         updateBuildName displayName: "#${env.BUILD_NUMBER} v${version}"
       }
     }
-    stage('Build Applications') {
+    stage('Applications') {
       steps {
         withGradle {
           withCredentials(
               [usernamePassword(
                   credentialsId: 'artifactory-user',
                   usernameVariable: 'S8_REPO_USER',
-                  passwordVariable: 'S8_REPO_PASSWORD')]) {
-            sh "./gradlew -Pversion=\"${version}\" clean build"
+                  passwordVariable: 'S8_REPO_PASSWORD'),
+               usernamePassword(
+                   credentialsId: 'artifactory-deployment-user',
+                   usernameVariable: 'repoDeploymentUser',
+                   passwordVariable: 'repoDeploymentPassword')]) {
+            sh """
+                ./gradlew -Pversion=\"${version}\" clean build"
+
+                if [[ \$BRANCH_NAME = 'master' ]]; then
+                  ./gradlew \
+                    -Dsilenteight.repoDeploymentUser="\$repoDeploymentUser" \
+                    -Dsilenteight.repoDeploymentPassword="\$repoDeploymentPassword" \
+                    -Djib.console=plain \
+                    -Pversion="${version}" \
+                    publish
+                fi
+            """
           }
         }
       }
@@ -51,36 +66,7 @@ pipeline {
         }
       }
     }
-    stage('Publish') {
-      when {
-        branch 'master'
-      }
-      steps {
-        withCredentials(
-          [usernamePassword(
-            credentialsId: 'artifactory-user',
-            usernameVariable: 'S8_REPO_USER',
-            passwordVariable: 'S8_REPO_PASSWORD'),
-          usernamePassword(
-            credentialsId: 'artifactory-deployment-user',
-            usernameVariable: 'repoDeploymentUser',
-            passwordVariable: 'repoDeploymentPassword')]) {
-          withDockerRegistry(
-            url: 'https://docker.repo.silenteight.com',
-            credentialsId: 'artifactory-deployment-user') {
-              sh """
-                ./gradlew \
-                  -Dsilenteight.repoDeploymentUser="\$repoDeploymentUser" \
-                  -Dsilenteight.repoDeploymentPassword="\$repoDeploymentPassword" \
-                  -Djib.console=plain \
-                  -Pversion="${version}" \
-                  publish
-              """
-            }
-          }
-      }
-    }
-    stage('Build Chart') {
+    stage('Chart') {
       when {
         beforeAgent true
         branch 'master'
@@ -116,7 +102,8 @@ pipeline {
   }
   post {
     failure {
-      notifyBuild color: 'danger', channel: 'C03D4GD7RHP', title: ':building_construction: Iris Build'
+      notifyBuild color: 'danger', channel: 'C03D4GD7RHP',
+          title: ':building_construction: Iris Build'
     }
   }
 }
