@@ -94,7 +94,7 @@ pipeline {
                 sh """
                     cd tests/e2e-tests
 
-                    ./gradlew test \
+                    ../../gradlew test \
                     -Dcucumber.features=src/test/java/features/SmokeTests.feature \
                     -Dcucumber.plugin=html:report.html \
                     -Dtest.isRegression=false \
