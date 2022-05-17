@@ -155,6 +155,7 @@ class RecommendationsGeneratedUseCaseTest {
 
   private static final Map<String, String> EXPECTED_MATCH_PAYLOAD =
       Map.of("match_solution", MATCH_SOLUTION_TP,
+          "match_comment", MATCH_COMMENT,
           "match_reason:step", "",
           "match_reason:policy", POLICY_NAME,
           "match_reason:step_title", " ",

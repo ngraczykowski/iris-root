@@ -45,6 +45,7 @@ public final class RecommendationFixtures {
   public static final String FEATURE_SOLUTION = "FALSE_POSITIVE";
   public static final String MATCH_SOLUTION_FP = "FALSE_POSITIVE";
   public static final String MATCH_SOLUTION_TP = "TRUE_POSITIVE";
+  public static final String MATCH_COMMENT = "Test match comment";
   public static final String AGENTS_CONFIG = "agents/name/versions/1.0.0/configs/1";
   public static final String FEATURES_NAMES_KEYS = "features/name";
   public static final Recommendation RECOMMENDATION =
@@ -141,6 +142,7 @@ public final class RecommendationFixtures {
       .setSolution(MATCH_SOLUTION_TP)
       .putFeatures(FEATURES_NAMES_KEYS, FEATURE_METADATA_2)
       .setReason(MATCH_REASON)
+      .setMatchComment(MATCH_COMMENT)
       .build();
 
   public static final RecommendationMetadata RECOMMENDATION_METADATA_WITH_MULTI_HIT_ALERT =

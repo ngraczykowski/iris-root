@@ -41,6 +41,7 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
   private static final String RECOMMENDATION_COMMENT_FIELD = "recommendation_comment";
   private static final String MATCH_SOLUTION_FIELD = "match_solution";
   private static final String MATCH_REASON_FIELD = "match_reason";
+  private static final String MATCH_COMMENT_FIELD = "match_comment";
   private static final String FEATURE_CONFIG_FIELD_POSTFIX = ":config";
   private static final String FEATURE_SOLUTION_FIELD_POSTFIX = ":solution";
   private static final String FEATURE_REASON_FIELD_POSTFIX = ":reason";
@@ -158,11 +159,12 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
     fields.put(
         RECOMMENDATION_CREATE_TIME_FIELD,
         toValue(toIsoString(recommendation.getCreateTime())));
+
     fields.put(
         RECOMMENDATION_RECOMMENDED_ACTION_FIELD,
         toValue(recommendation.getRecommendedAction()));
-    fields.put(RECOMMENDATION_COMMENT_FIELD, toValue(recommendation.getRecommendationComment()));
 
+    fields.put(RECOMMENDATION_COMMENT_FIELD, toValue(recommendation.getRecommendationComment()));
     return fields;
   }
 
@@ -174,13 +176,16 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
   private static Map<String, Value> toMatchFields(MatchMetadata matchMetadata) {
     Map<String, Value> fields = new HashMap<>();
     fields.put(MATCH_SOLUTION_FIELD, toValue(matchMetadata.getSolution()));
+    fields.put(MATCH_COMMENT_FIELD, toValue(matchMetadata.getMatchComment()));
     matchMetadata
         .getReason()
         .getFieldsMap()
         .forEach((key, value) -> fields.put(MATCH_REASON_FIELD + ":" + key, value));
+
     matchMetadata
         .getFeaturesMap()
         .forEach((key, value) -> fields.putAll(toFeatureFields(key, value)));
+
     matchMetadata
         .getCategoriesMap()
         .forEach((key, value) -> fields.put(key + CATEGORY_FIELD_POSTFIX, toValue(value)));
