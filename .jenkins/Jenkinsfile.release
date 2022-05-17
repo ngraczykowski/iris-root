@@ -111,7 +111,7 @@ pipeline {
   }
   post {
     failure {
-        notifyBuild color: 'danger', channel: 'C03D4GD7RHP', title: ':rocket: Iris Release'
+      notifyBuild color: 'danger', channel: 'C03D4GD7RHP', title: ':rocket: Iris Release'
     }
   }
 }

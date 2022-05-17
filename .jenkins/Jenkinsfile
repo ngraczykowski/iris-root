@@ -102,8 +102,12 @@ pipeline {
   }
   post {
     failure {
-      notifyBuild color: 'danger', channel: 'C03D4GD7RHP',
-          title: ':building_construction: Iris Build'
+      script {
+        if (env.BRANCH_NAME == 'master') {
+          notifyBuild color: 'danger', channel: 'C03D4GD7RHP',
+              title: ':building_construction: Iris Build'
+        }
+      }
     }
   }
 }
