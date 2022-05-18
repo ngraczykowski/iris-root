@@ -1,10 +1,9 @@
-from typing import Mapping
+from typing import Dict
 
 from organization_name_knowledge import NameInformation, parse
 
 from company_name.errors import ComparisonError
 from company_name.scores.abbreviation import get_abbreviation_score
-from company_name.scores.blacklist import get_blacklist_score
 from company_name.scores.country import get_country_score
 from company_name.scores.first_token import get_first_token_score
 from company_name.scores.fuzzy import (
@@ -24,7 +23,7 @@ from company_name.scores.tokenization import get_tokenization_score
 
 def compare_names(
     alerted_name: NameInformation, watchlist_name: NameInformation
-) -> Mapping[str, Score]:
+) -> Dict[str, Score]:
     scores = {
         "parenthesis_match": get_parenthesis_score(alerted_name, watchlist_name),
         "abbreviation": get_abbreviation_score(alerted_name, watchlist_name),
@@ -38,7 +37,7 @@ def compare_names(
         "absolute_tokenization": get_tokenization_score(
             alerted_name, watchlist_name, absolute=True
         ),
-        "blacklisted": get_blacklist_score(alerted_name, watchlist_name),
+        "blacklisted": Score(),
         "country": get_country_score(
             alerted_name.countries,
             watchlist_name.countries,
@@ -52,7 +51,7 @@ def compare_names(
     return scores
 
 
-def compare(alerted_name: str, watchlist_name: str) -> Mapping[str, Score]:
+def compare(alerted_name: str, watchlist_name: str) -> Dict[str, Score]:
     try:
         return compare_names(parse(alerted_name), parse(watchlist_name))
     except Exception:

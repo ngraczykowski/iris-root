@@ -1,6 +1,7 @@
 import pytest
+from organization_name_knowledge import parse
 
-from company_name.compare import compare
+from company_name.agent.agent import CompanyNameAgent
 
 
 @pytest.mark.parametrize(
@@ -12,11 +13,11 @@ from company_name.compare import compare
 )
 def test_no_blacklist(first, second):
     print(repr(first), repr(second))
-    score = compare(first, second)
+    score = CompanyNameAgent().blacklist.get_blacklist_score(parse(first), parse(second))
     print(score)
-    assert score["blacklisted"].status.name == "OK"
-    assert score["blacklisted"].value == 0
-    assert score["blacklisted"].compared == ((), ())
+    assert score.status.name == "OK"
+    assert score.value == 0
+    assert score.compared == ((), ())
 
 
 @pytest.mark.parametrize(
@@ -37,12 +38,12 @@ def test_no_blacklist(first, second):
 )
 def test_simple_blacklist(first, second, blacklisted):
     print(repr(first), repr(second))
-    score = compare(first, second)
+    score = CompanyNameAgent().blacklist.get_blacklist_score(parse(first), parse(second))
     print(score)
 
-    assert score["blacklisted"].status.name == "OK"
-    assert score["blacklisted"].value == 1
-    assert score["blacklisted"].compared == blacklisted
+    assert score.status.name == "OK"
+    assert score.value == 1
+    assert score.compared == blacklisted
 
 
 @pytest.mark.parametrize(
@@ -55,12 +56,12 @@ def test_simple_blacklist(first, second, blacklisted):
 )
 def test_blacklist_as_part_of_other_word(first, second, score_value, blacklisted):
     print(repr(first), repr(second))
-    score = compare(first, second)
+    score = CompanyNameAgent().blacklist.get_blacklist_score(parse(first), parse(second))
     print(score)
 
-    assert score["blacklisted"].status.name == "OK"
-    assert score["blacklisted"].value == score_value
-    assert score["blacklisted"].compared == blacklisted
+    assert score.status.name == "OK"
+    assert score.value == score_value
+    assert score.compared == blacklisted
 
 
 @pytest.mark.parametrize(
@@ -72,9 +73,9 @@ def test_blacklist_as_part_of_other_word(first, second, score_value, blacklisted
 )
 def test_no_blacklist_on_watchlist_name(first, second):
     print(repr(first), repr(second))
-    score = compare(first, second)
+    score = CompanyNameAgent().blacklist.get_blacklist_score(parse(first), parse(second))
     print(score)
 
-    assert score["blacklisted"].status.name == "OK"
-    assert score["blacklisted"].value == 0
-    assert score["blacklisted"].compared == ((), ())
+    assert score.status.name == "OK"
+    assert score.value == 0
+    assert score.compared == ((), ())

@@ -7,6 +7,7 @@ from agent_base.agent import Agent
 from organization_name_knowledge import KnowledgeBase, NameInformation, parse
 
 from company_name.compare import compare_names
+from company_name.scores.blacklist import Blacklist
 from company_name.solution.name_preconditions import NamePreconditions
 from company_name.solution.scores_reduction import ScoresReduction
 from company_name.solution.solution import PairResult, Reason, Result, Solution
@@ -25,6 +26,7 @@ class CompanyNameAgent(Agent):
         )
         self.reduction = ScoresReduction(self.config)
         self.name_preconditions = NamePreconditions(self.config)
+        self.blacklist = Blacklist(self.config)
 
     def _check_pair(
         self,
@@ -33,6 +35,8 @@ class CompanyNameAgent(Agent):
         min_solution: Solution,
     ) -> PairResult:
         scores = compare_names(ap_name, mp_name)
+        blacklist_score = self.blacklist.get_blacklist_score(ap_name, mp_name)
+        scores["blacklisted"] = blacklist_score
         solution, probability = max(self.reduction.get_reduced_score(scores), (min_solution, 0))
 
         return PairResult(
