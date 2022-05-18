@@ -154,11 +154,11 @@ warehouse.reports.v2:
       type: simulation
       description: AI Reasoning
       selectSqlQuery: >
-        SELECT (wsa.payload ->> 'match_reason:feature_vector_signature') AS "Reasoning Branch ID",
-               (wsa.payload ->> 'match_reason:policy') AS "Policy ID",
-               (wsa.payload ->> 'match_reason:policy_title') AS "Policy Name",
-               (wsa.payload ->> 'match_reason:step') AS "Step ID",
-               (wsa.payload ->> 'match_reason:step_title') AS "Step Name",
+        SELECT (wsm.payload ->> 'match_reason:feature_vector_signature') AS "Reasoning Branch ID",
+               (wsm.payload ->> 'match_reason:policy') AS "Policy ID",
+               (wsm.payload ->> 'match_reason:policy_title') AS "Policy Name",
+               (wsm.payload ->> 'match_reason:step') AS "Step ID",
+               (wsm.payload ->> 'match_reason:step_title') AS "Step Name",
                (wsa.payload ->> 'recommendation_recommended_action') AS "S8 Alert Resolution",
                (wsa.payload ->> 'recommendation_create_time') AS "S8 Alert Resolution Timestamp",
                (wsa.payload ->> 'recommendation_comment') AS "Alert Comment",
@@ -169,9 +169,11 @@ warehouse.reports.v2:
                (wa.payload ->> 'status') AS "Alert Status",
                wa.discriminator AS "S8 Alert ID"
         FROM warehouse_simulation_alert wsa
-                 JOIN warehouse_alert wa ON wsa.name = wa.name
-        WHERE analysis_name = 'analysis/${analysisId}'
-        AND (wa.payload ->> 's8_lobCountryCode') IN (${countries})
+          JOIN warehouse_alert wa ON wsa.name = wa.name
+          JOIN warehouse_simulation_match wsm ON wsm.alert_name = wsa.name
+        WHERE wsa.analysis_name = 'analysis/${analysisId}'
+          AND wsm.analysis_name = 'analysis/${analysisId}'
+          AND (wa.payload ->> 's8_lobCountryCode') IN (${countries})
     - name: ACCURACY
       type: production
       description: Accuracy
@@ -202,11 +204,11 @@ warehouse.reports.v2:
       type: simulation
       description: Accuracy
       selectSqlQuery: >
-        SELECT (wsa.payload ->> 'match_reason:feature_vector_signature') AS "Reasoning Branch ID",
-             (wsa.payload ->> 'match_reason:policy') AS "Policy ID",
-             (wsa.payload ->> 'match_reason:policy_title') AS "Policy Name",
-             (wsa.payload ->> 'match_reason:step') AS "Step ID",
-             (wsa.payload ->> 'match_reason:step_title') AS "Step Name",
+        SELECT (wsm.payload ->> 'match_reason:feature_vector_signature') AS "Reasoning Branch ID",
+             (wsm.payload ->> 'match_reason:policy') AS "Policy ID",
+             (wsm.payload ->> 'match_reason:policy_title') AS "Policy Name",
+             (wsm.payload ->> 'match_reason:step') AS "Step ID",
+             (wsm.payload ->> 'match_reason:step_title') AS "Step Name",
              (wsa.payload ->> 'recommendation_recommended_action') AS "S8 Alert Resolution",
              (wsa.payload ->> 'recommendation_create_time') AS "S8 Alert Resolution Timestamp",
              (wsa.payload ->> 'recommendation_comment') AS "Alert Comment",
@@ -220,8 +222,10 @@ warehouse.reports.v2:
              (wa.payload ->> 'status') AS "Alert Status",
              wa.discriminator AS "S8 Alert ID"
         FROM warehouse_simulation_alert wsa
-            JOIN warehouse_alert wa ON wsa.name = wa.name
-        WHERE analysis_name = 'analysis/${analysisId}'
+          JOIN warehouse_alert wa ON wsa.name = wa.name
+          JOIN warehouse_simulation_match wsm ON wsm.alert_name = wsa.name
+        WHERE wsa.analysis_name = 'analysis/${analysisId}'
+        AND wsm.analysis_name = 'analysis/${analysisId}'
         AND (wa.payload ->> 's8_lobCountryCode') IN (${countries})
         AND (wa.payload ->> 'analyst_decision') IN ('analyst_decision_false_positive', 'analyst_decision_true_positive')
     - name: DAD
@@ -386,73 +390,76 @@ warehouse.reports.v2:
       type: simulation
       description: Reasoning Branch Scorer
       selectSqlQuery: >
-        SELECT (wsa.payload ->> 'match_reason:feature_vector_signature') AS "Reasoning Branch ID",
-               (wsa.payload ->> 'match_reason:policy') AS "Policy ID",
-               (wsa.payload ->> 'match_reason:policy_title') AS "Policy Name",
-               (wsa.payload ->> 'match_reason:step') AS "Step ID",
-               (wsa.payload ->> 'match_reason:step_title') AS "Step Name",
+        SELECT (wsm.payload ->> 'match_reason:feature_vector_signature') AS "Reasoning Branch ID",
+               (wsm.payload ->> 'match_reason:policy') AS "Policy ID",
+               (wsm.payload ->> 'match_reason:policy_title') AS "Policy Name",
+               (wsm.payload ->> 'match_reason:step') AS "Step ID",
+               (wsm.payload ->> 'match_reason:step_title') AS "Step Name",
                (wsa.payload ->> 'recommendation_recommended_action') AS "S8 Alert Resolution",
-               (wsa.payload ->> 'categories/customerType:value') AS "Customer Type",
-               (wsa.payload ->> 'categories/hitType:value') AS "Risk Type",
-               (wsa.payload ->> 'features/commonAp:solution') AS "Common Alerted Party",
-               (wsa.payload ->> 'features/commonMp:solution') AS "Common Watchlist Party",
-               (wsa.payload ->> 'features/commonNames:solution') AS "Common Name",
-               (wsa.payload ->> 'features/dateOfBirth:solution') AS "Date of Birth / Incorporation",
-               (wsa.payload ->> 'features/gender:solution') AS "Gender",
-               (wsa.payload ->> 'features/geoPlaceOfBirth:solution') AS "Geo Place of Birth",
-               (wsa.payload ->> 'features/geoResidencies:solution') AS "Geo Residencies",
-               (wsa.payload ->> 'features/invalidAlert:solution') AS "Invalid Alert",
-               (wsa.payload ->> 'features/isApTpMarked:solution') AS "True Case - Alerted Party ",
-               (wsa.payload ->> 'features/isTpMarked:solution') AS "True Case - Watchlist",
-               (wsa.payload ->> 'features/isCaseTpMarked:solution') AS "True Case - Historical",
-               (wsa.payload ->> 'features/isPep:solution') AS "PEP",
-               (wsa.payload ->> 'features/logicalDiscountingDob:solution') AS "Logical Discounting",
-               (wsa.payload ->> 'features/name:solution') AS "Name",
-               (wsa.payload ->> 'features/incorporationCountry:solution') AS "Incorporation Country",
-               (wsa.payload ->> 'features/nationalityCountry:solution') AS "Nationality Country",
-               (wsa.payload ->> 'features/otherCountry:solution') AS "Other Country",
-               (wsa.payload ->> 'features/nationalIdDocument:solution') AS "National ID",
-               (wsa.payload ->> 'features/otherDocument:solution') AS "Other Document",
-               (wsa.payload ->> 'features/passportNumberDocument:solution') AS "Passport Number Document",
-               (wsa.payload ->> 'features/registrationCountry:solution') AS "Registration Country",
-               (wsa.payload ->> 'features/residencyCountry:solution') AS "Residency Country",
-               count((wsa.payload ->> 'match_reason:feature_vector_signature')) AS "Hits Counts",
+               (wsm.payload ->> 'categories/customerType:value') AS "Customer Type",
+               (wsm.payload ->> 'categories/hitType:value') AS "Risk Type",
+               (wsm.payload ->> 'features/commonAp:solution') AS "Common Alerted Party",
+               (wsm.payload ->> 'features/commonMp:solution') AS "Common Watchlist Party",
+               (wsm.payload ->> 'features/commonNames:solution') AS "Common Name",
+               (wsm.payload ->> 'features/dateOfBirth:solution') AS "Date of Birth / Incorporation",
+               (wsm.payload ->> 'features/gender:solution') AS "Gender",
+               (wsm.payload ->> 'features/geoPlaceOfBirth:solution') AS "Geo Place of Birth",
+               (wsm.payload ->> 'features/geoResidencies:solution') AS "Geo Residencies",
+               (wsm.payload ->> 'features/invalidAlert:solution') AS "Invalid Alert",
+               (wsm.payload ->> 'features/isApTpMarked:solution') AS "True Case - Alerted Party ",
+               (wsm.payload ->> 'features/isTpMarked:solution') AS "True Case - Watchlist",
+               (wsm.payload ->> 'features/isCaseTpMarked:solution') AS "True Case - Historical",
+               (wsm.payload ->> 'features/isPep:solution') AS "PEP",
+               (wsm.payload ->> 'features/logicalDiscountingDob:solution') AS "Logical Discounting",
+               (wsm.payload ->> 'features/name:solution') AS "Name",
+               (wsm.payload ->> 'features/incorporationCountry:solution') AS "Incorporation Country",
+               (wsm.payload ->> 'features/nationalityCountry:solution') AS "Nationality Country",
+               (wsm.payload ->> 'features/otherCountry:solution') AS "Other Country",
+               (wsm.payload ->> 'features/nationalIdDocument:solution') AS "National ID",
+               (wsm.payload ->> 'features/otherDocument:solution') AS "Other Document",
+               (wsm.payload ->> 'features/passportNumberDocument:solution') AS "Passport Number Document",
+               (wsm.payload ->> 'features/registrationCountry:solution') AS "Registration Country",
+               (wsm.payload ->> 'features/residencyCountry:solution') AS "Residency Country",
+               count((wsm.payload ->> 'match_reason:feature_vector_signature')) AS "Hits Counts",
                count(CASE WHEN (wa.payload ->> 'qa.level-0.state') = 'qa_decision_TRUE'  THEN 1 END ) AS "QA decision True Positive",
                count(CASE WHEN (wa.payload ->> 'qa.level-0.state') = 'qa_decision_FAILED' THEN 1 END ) AS "QA decision False Positive",
                count(CASE WHEN (wa.payload ->> 'analyst_decision') = 'analyst_decision_true_positive' THEN 1 END ) AS "Analyst decision True Positive",
                count(CASE WHEN (wa.payload ->> 'analyst_decision') = 'analyst_decision_false_positive' THEN 1 END ) AS "Analyst decision False Positive"
-        FROM warehouse_simulation_alert wsa JOIN warehouse_alert wa ON wsa.name = wa.name
+        FROM warehouse_simulation_alert wsa 
+          JOIN warehouse_alert wa ON wsa.name = wa.name
+          JOIN warehouse_simulation_match wsm ON wsm.alert_name = wsa.name
         WHERE wsa.analysis_name = 'analysis/${analysisId}'
-        GROUP BY (wsa.payload ->> 'match_reason:feature_vector_signature'),
-                 (wsa.payload ->> 'match_reason:policy'),
-                 (wsa.payload ->> 'match_reason:policy_title'),
-                 (wsa.payload ->> 'match_reason:step'),
-                 (wsa.payload ->> 'match_reason:step_title'),
+          AND wsm.analysis_name = 'analysis/${analysisId}'
+        GROUP BY (wsm.payload ->> 'match_reason:feature_vector_signature'),
+                 (wsm.payload ->> 'match_reason:policy'),
+                 (wsm.payload ->> 'match_reason:policy_title'),
+                 (wsm.payload ->> 'match_reason:step'),
+                 (wsm.payload ->> 'match_reason:step_title'),
                  (wsa.payload ->> 'recommendation_recommended_action'),
-                 (wsa.payload ->> 'categories/customerType:value'),
-                 (wsa.payload ->> 'categories/hitType:value'),
-                 (wsa.payload ->> 'features/commonAp:solution'),
-                 (wsa.payload ->> 'features/commonMp:solution'),
-                 (wsa.payload ->> 'features/commonNames:solution'),
-                 (wsa.payload ->> 'features/dateOfBirth:solution'),
-                 (wsa.payload ->> 'features/gender:solution'),
-                 (wsa.payload ->> 'features/geoPlaceOfBirth:solution'),
-                 (wsa.payload ->> 'features/geoResidencies:solution'),
-                 (wsa.payload ->> 'features/invalidAlert:solution'),
-                 (wsa.payload ->> 'features/isApTpMarked:solution'),
-                 (wsa.payload ->> 'features/isTpMarked:solution'),
-                 (wsa.payload ->> 'features/isCaseTpMarked:solution'),
-                 (wsa.payload ->> 'features/isPep:solution'),
-                 (wsa.payload ->> 'features/logicalDiscountingDob:solution'),
-                 (wsa.payload ->> 'features/name:solution'),
-                 (wsa.payload ->> 'features/incorporationCountry:solution'),
-                 (wsa.payload ->> 'features/nationalityCountry:solution'),
-                 (wsa.payload ->> 'features/otherCountry:solution'),
-                 (wsa.payload ->> 'features/nationalIdDocument:solution'),
-                 (wsa.payload ->> 'features/otherDocument:solution'),
-                 (wsa.payload ->> 'features/passportNumberDocument:solution'),
-                 (wsa.payload ->> 'features/registrationCountry:solution'),
-                 (wsa.payload ->> 'features/residencyCountry:solution')
+                 (wsm.payload ->> 'categories/customerType:value'),
+                 (wsm.payload ->> 'categories/hitType:value'),
+                 (wsm.payload ->> 'features/commonAp:solution'),
+                 (wsm.payload ->> 'features/commonMp:solution'),
+                 (wsm.payload ->> 'features/commonNames:solution'),
+                 (wsm.payload ->> 'features/dateOfBirth:solution'),
+                 (wsm.payload ->> 'features/gender:solution'),
+                 (wsm.payload ->> 'features/geoPlaceOfBirth:solution'),
+                 (wsm.payload ->> 'features/geoResidencies:solution'),
+                 (wsm.payload ->> 'features/invalidAlert:solution'),
+                 (wsm.payload ->> 'features/isApTpMarked:solution'),
+                 (wsm.payload ->> 'features/isTpMarked:solution'),
+                 (wsm.payload ->> 'features/isCaseTpMarked:solution'),
+                 (wsm.payload ->> 'features/isPep:solution'),
+                 (wsm.payload ->> 'features/logicalDiscountingDob:solution'),
+                 (wsm.payload ->> 'features/name:solution'),
+                 (wsm.payload ->> 'features/incorporationCountry:solution'),
+                 (wsm.payload ->> 'features/nationalityCountry:solution'),
+                 (wsm.payload ->> 'features/otherCountry:solution'),
+                 (wsm.payload ->> 'features/nationalIdDocument:solution'),
+                 (wsm.payload ->> 'features/otherDocument:solution'),
+                 (wsm.payload ->> 'features/passportNumberDocument:solution'),
+                 (wsm.payload ->> 'features/registrationCountry:solution'),
+                 (wsm.payload ->> 'features/residencyCountry:solution')
     - name: METRICS
       type: production
       description: Metrics
