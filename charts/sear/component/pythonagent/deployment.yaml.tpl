@@ -32,39 +32,8 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       initContainers:
-        - name: init-scripts
-          image: busybox
-          command: ['sh', '-c', "run-parts /var/run/initScripts"]
-          volumeMounts:
-            - name: init-scripts
-              mountPath: "/var/run/initScripts"
-              readOnly: true
-            - name: generated
-              mountPath: "/tmp"
-              readOnly: false
-          env:
-            - name: RABBITMQ_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "sear.rabbitmqSecretName" . }}
-                  key: host
-            - name: RABBITMQ_PORT
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "sear.rabbitmqSecretName" . }}
-                  key: port
-            - name: RABBITMQ_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "sear.rabbitmqSecretName" . }}
-                  key: username
-            - name: RABBITMQ_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "sear.rabbitmqSecretName" . }}
-                  key: password
-            - name: UDS_ADDRESS
-              value: {{ include "sear.fullname" . }}-universal-data-source.{{ .Release.Namespace }}.svc:9090
+        {{- include "initScripts" . | indent 8 }}
+        {{- include "checkRabbitMqInitContainer" . | indent 8 }}
       containers:
         - name: {{ .componentName }}
           {{- with .Values.securityContext }}
