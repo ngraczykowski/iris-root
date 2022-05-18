@@ -1,5 +1,5 @@
 plugins {
-  id "java-library"
+  id "com.silenteight.iris.build.java-library"
   id "groovy"
 }
 
@@ -7,21 +7,21 @@ dependencies {
 
   implementation project(":sear-payments-bridge-common")
 
-  implementation libraries.silenteight_sep_base_common
+  implementation libs.silenteight.sep.base.common
 
-  implementation libraries.spring_boot
-  implementation libraries.spring_context
-  implementation libraries.spring_boot_starter_mail
-  implementation libraries.hibernate_validator
-  implementation libraries.opencsv
+  implementation libs.spring.boot
+  implementation libs.spring.context
+  implementation libs.spring.boot.starter.mail
+  implementation libs.hibernate.validator
+  implementation libs.opencsv
 
   testImplementation project(":sear-payments-bridge-testing")
 
-  testImplementation libraries.spock_core
-  testImplementation libraries.spock_spring
-  testImplementation libraries.spring_boot_test
-  testImplementation libraries.silenteight_sep_base_testing
-  testImplementation libraries.test_greenmail
-  testImplementation libraries.awaitility
+  testImplementation libs.spock.core
+  testImplementation libs.spock.spring
+  testImplementation libs.spring.boot.test
+  testImplementation libs.silenteight.sep.base.testing
+  testImplementation libs.test.greenmail
+  testImplementation libs.awaitility
 
 }

@@ -349,8 +349,7 @@ components:
     enabled: false
 
     image:
-      repository: registry.dev.s8ops.com/pb/sear-payments-bridge-app
-      tag: "snapshot"
+      repository: registry.dev.s8ops.com/iris/sear-payments-bridge-app
 
     dbName: "pb"
     webPath: "pb"

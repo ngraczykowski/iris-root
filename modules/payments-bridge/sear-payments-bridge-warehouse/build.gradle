@@ -1,5 +1,5 @@
 plugins {
-  id "java-library"
+  id "com.silenteight.iris.build.java-library"
   id "groovy"
 }
 
@@ -8,15 +8,15 @@ dependencies {
   implementation project(":proto-sear-payments-bridge-internal-protos")
   testImplementation project(":sear-payments-bridge-testing")
 
-  implementation libraries.spring_boot
-  implementation libraries.guava
-  implementation libraries.jackson_databind
-  implementation libraries.protobuf_java
-  implementation libraries.protobuf_java_util
-  implementation libraries.spring_messaging
-  implementation libraries.warehouse_data_api
-  implementation libraries.adjudication_engine_api
-  implementation libraries.commons_lang3
+  implementation libs.spring.boot
+  implementation libs.guava
+  implementation libs.jackson.databind
+  implementation libs.protobuf.java
+  implementation libs.protobuf.java.util
+  implementation libs.spring.messaging
+  implementation libs.warehouse.data.api
+  implementation libs.adjudication.engine.api
+  implementation libs.commons.lang3
 
-  testImplementation libraries.silenteight_sep_base_testing
+  testImplementation libs.silenteight.sep.base.testing
 }

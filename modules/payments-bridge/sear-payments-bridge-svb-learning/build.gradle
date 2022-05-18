@@ -1,5 +1,5 @@
 plugins {
-  id "java-library"
+  id "com.silenteight.iris.build.java-library"
   id "groovy"
 }
 
@@ -15,47 +15,47 @@ dependencies {
   implementation project(":sear-payments-bridge-notification")
   implementation project(":sear-payments-bridge-warehouse")
 
-  implementation libraries.silenteight_sep_base_common
-  implementation libraries.data_source_api
-  implementation libraries.data_source_categories_api
-  implementation libraries.data_source_agentinput_api
-  implementation libraries.learning_engine_store_api
-  implementation libraries.warehouse_data_api
+  implementation libs.silenteight.sep.base.common
+  implementation libs.data.source.api
+  implementation libs.data.source.categories.api
+  implementation libs.data.source.agentinput.api
+  implementation libs.learning.engine.store.api
+  implementation libs.warehouse.data.api
 
-  implementation libraries.spring_amqp
-  implementation libraries.spring_batch_starter
-  implementation libraries.spring_boot
-  implementation libraries.spring_context
-  implementation libraries.spring_security_core
-  implementation libraries.spring_web
-  implementation libraries.spring_webmvc
-  implementation libraries.grpc_client_spring_boot_starter
+  implementation libs.spring.amqp
+  implementation libs.spring.batch.starter
+  implementation libs.spring.boot
+  implementation libs.spring.context
+  implementation libs.spring.security.core
+  implementation libs.spring.web
+  implementation libs.spring.webmvc
+  implementation libs.grpc.client.spring.boot.starter
 
-  implementation libraries.guava
-  implementation libraries.hibernate_validator
-  implementation libraries.jackson_annotations
-  implementation libraries.jackson_databind
-  implementation libraries.jackson_dataformat_csv
-  implementation libraries.jakarta_annotation_api
-  implementation libraries.jakarta_validation_api
-  implementation libraries.opencsv
-  implementation libraries.commons_collections
-  implementation libraries.protobuf_java_util
+  implementation libs.guava
+  implementation libs.hibernate.validator
+  implementation libs.jackson.annotations
+  implementation libs.jackson.databind
+  implementation libs.jackson.dataformat.csv
+  implementation libs.jakarta.annotation.api
+  implementation libs.jakarta.validation.api
+  implementation libs.opencsv
+  implementation libs.commons.collections
+  implementation libs.protobuf.java.util
 
   // TODO: please remove this dependency when old learning package will be removed
-  implementation libraries.aws_auth
-  implementation libraries.aws_s3
-  implementation libraries.aws_ses
+  implementation libs.aws.auth
+  implementation libs.aws.s3
+  implementation libs.aws.ses
 
-  implementation libraries.javax_mail
+  implementation libs.javax.mail
 
-  implementation libraries.shedlock_jdbc_provider
-  implementation libraries.shedlock_spring
+  implementation libs.shedlock.jdbc.provider
+  implementation libs.shedlock.spring
 
-  testImplementation libraries.spring_batch_test
-  testImplementation libraries.silenteight_sep_base_testing
-  testImplementation libraries.spock_core
-  testImplementation libraries.spock_spring
+  testImplementation libs.spring.batch.test
+  testImplementation libs.silenteight.sep.base.testing
+  testImplementation libs.spock.core
+  testImplementation libs.spock.spring
 
   testImplementation project(":sear-payments-bridge-testing")
 }

@@ -1,5 +1,5 @@
 plugins {
-  id "java-library"
+  id "com.silenteight.iris.build.java-library"
   id "groovy"
 }
 
@@ -14,46 +14,46 @@ dependencies {
   implementation project(":proto-sear-payments-bridge-internal-protos")
   testImplementation project(":sear-payments-bridge-testing")
 
-  implementation libraries.silenteight_sep_base_common
+  implementation libs.silenteight.sep.base.common
 
-  implementation libraries.spring_amqp
-  implementation libraries.spring_boot
-  implementation libraries.spring_boot_starter_oauth2_client
-  implementation libraries.spring_context
-  implementation libraries.spring_security_core
-  implementation libraries.spring_web
-  implementation libraries.spring_webmvc
-  implementation libraries.spring_data_jpa
+  implementation libs.spring.amqp
+  implementation libs.spring.boot
+  implementation libs.spring.boot.starter.oauth2.client
+  implementation libs.spring.context
+  implementation libs.spring.security.core
+  implementation libs.spring.web
+  implementation libs.spring.webmvc
+  implementation libs.spring.data.jpa
 
-  implementation libraries.grpc_client_spring_boot_starter
-  implementation libraries.grpc_server_spring_boot_starter
+  implementation libs.grpc.client.spring.boot.starter
+  implementation libs.grpc.server.spring.boot.starter
 
-  implementation libraries.guava
-  implementation libraries.hibernate_validator
-  implementation libraries.hibernate_types
-  implementation libraries.jackson_annotations
-  implementation libraries.jackson_databind
-  implementation libraries.jackson_dataformat_csv
-  implementation libraries.jakarta_annotation_api
-  implementation libraries.jakarta_validation_api
-  implementation libraries.opencsv
-  implementation libraries.protobuf_java_util
-  implementation libraries.shedlock_spring
+  implementation libs.guava
+  implementation libs.hibernate.validator
+  implementation libs.hibernate.types
+  implementation libs.jackson.annotations
+  implementation libs.jackson.databind
+  implementation libs.jackson.dataformat.csv
+  implementation libs.jakarta.annotation.api
+  implementation libs.jakarta.validation.api
+  implementation libs.opencsv
+  implementation libs.protobuf.java.util
+  implementation libs.shedlock.spring
 
-  implementation libraries.data_source_api
-  implementation libraries.data_source_categories_api
-  implementation libraries.data_source_comments_api
-  implementation libraries.data_source_agentinput_api
-  implementation libraries.micrometer_prometheus
+  implementation libs.data.source.api
+  implementation libs.data.source.categories.api
+  implementation libs.data.source.comments.api
+  implementation libs.data.source.agentinput.api
+  implementation libs.micrometer.prometheus
 
-  testImplementation libraries.silenteight_sep_base_testing
-  testImplementation libraries.spring_security_test
+  testImplementation libs.silenteight.sep.base.testing
+  testImplementation libs.spring.security.test
 
-  implementation libraries.adjudication_engine_api
+  implementation libs.adjudication.engine.api
 
   // Tests
-  testImplementation libraries.junit_jupiter_api
-  testImplementation libraries.grpc_testing
+  testImplementation libs.junit.jupiter.api
+  testImplementation libs.grpc.testing
 
-  testRuntimeOnly libraries.junit_jupiter_engine
+  testRuntimeOnly libs.junit.jupiter.engine
 }

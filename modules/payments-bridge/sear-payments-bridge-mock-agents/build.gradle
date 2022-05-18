@@ -1,16 +1,16 @@
 plugins {
-  id "java-library"
+  id "com.silenteight.iris.build.java-library"
   id "groovy"
 }
 
 dependencies {
-  implementation libraries.grpc_server_spring_boot_starter
+  implementation libs.grpc.server.spring.boot.starter
 
-  implementation libraries.silenteight_sep_base_common
-  implementation libraries.silenteight_agents_protocol
+  implementation libs.silenteight.sep.base.common
+  implementation libs.silenteight.agents.protocol
 
-  implementation libraries.spring_boot
-  implementation libraries.spring_context
+  implementation libs.spring.boot
+  implementation libs.spring.context
 
 
 }

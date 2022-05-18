@@ -1,8 +1,8 @@
 plugins {
   id "java"
   id "groovy"
-  id "org.springframework.boot"
-  id "com.google.cloud.tools.jib"
+  id "com.silenteight.iris.build.spring-boot-application"
+  id "com.silenteight.iris.build.container-image"
 }
 
 dependencies {
@@ -24,164 +24,110 @@ dependencies {
 
 
   // Utilities
-  implementation libraries.commons_lang3
-  implementation libraries.commons_text
-  implementation libraries.guava
+  implementation libs.commons.lang3
+  implementation libs.commons.text
+  implementation libs.guava
 
   // Logging
-  runtimeOnly libraries.ecs_logging_core
-  runtimeOnly libraries.logback_ecs_encoder
+  runtimeOnly libs.ecs.logging.core
+  runtimeOnly libs.logback.ecs.encoder
 
   // Sentry
-  runtimeOnly libraries.sentry_spring_boot_starter
-  runtimeOnly libraries.sentry_logback
+  runtimeOnly libs.sentry.spring.boot.starter
+  runtimeOnly libs.sentry.logback
 
-  // Base Libraries
-  implementation libraries.silenteight_sep_base_common
-  implementation libraries.silenteight_commons_app
+  // Base libs
+  implementation libs.silenteight.sep.base.common
+  implementation libs.silenteight.commons.app
 
   // Application Starters
-  implementation libraries.spring_batch_starter
-  implementation libraries.spring_boot_starter_actuator
-  implementation libraries.spring_boot_starter_logging
-  implementation libraries.spring_boot_starter_oauth2_client
-  implementation libraries.spring_boot_starter_oauth2_resource_server
-  implementation libraries.spring_boot_starter_security
-  implementation libraries.spring_boot_starter_undertow
-  implementation libraries.spring_boot_starter_web
-  implementation libraries.micrometer_prometheus
+  implementation libs.spring.batch.starter
+  implementation libs.spring.boot.starter.actuator
+  implementation libs.spring.boot.starter.logging
+  implementation libs.spring.boot.starter.oauth2.client
+  implementation libs.spring.boot.starter.oauth2.resource.server
+  implementation libs.spring.boot.starter.security
+  implementation libs.spring.boot.starter.undertow
+  implementation libs.spring.boot.starter.web
+  implementation libs.micrometer.prometheus
 
   // Cloud
-  implementation libraries.spring_cloud_consul_discovery
-  implementation libraries.spring_cloud_starter_consul_config
-  implementation libraries.spring_cloud_starter_sleuth
+  implementation libs.spring.cloud.consul.discovery
+  implementation libs.spring.cloud.starter.consul.config
+  implementation libs.spring.cloud.starter.sleuth
 
   // Validator
-  implementation libraries.tomcat_embed_el
-  implementation libraries.hibernate_validator
+  implementation libs.tomcat.embed.el
+  implementation libs.hibernate.validator
 
   // Jackson
-  implementation libraries.jackson_annotations
-  implementation libraries.jackson_databind
-  runtimeOnly libraries.jackson_datatype_jdk8
-  runtimeOnly libraries.jackson_datatype_jsr310
-  runtimeOnly libraries.jackson_module_afterburner
-  runtimeOnly libraries.jackson_module_paranamer
-  runtimeOnly libraries.jackson_module_parameter_names
+  implementation libs.jackson.annotations
+  implementation libs.jackson.databind
+  runtimeOnly libs.jackson.datatype.jdk8
+  runtimeOnly libs.jackson.datatype.jsr310
+  runtimeOnly libs.jackson.module.afterburner
+  runtimeOnly libs.jackson.module.paranamer
+  runtimeOnly libs.jackson.module.parameter.names
 
   // Database
-  implementation libraries.spring_boot_starter_data_jpa
-  implementation libraries.spring_boot_starter_jdbc
-  implementation libraries.liquibase_core
-  implementation libraries.hikari_cp
-  runtimeOnly libraries.postgresql
-  runtimeOnly libraries.liquibase_sessionlock
+  implementation libs.spring.boot.starter.data.jpa
+  implementation libs.spring.boot.starter.jdbc
+  implementation libs.liquibase.core
+  implementation libs.hikari.cp
+  runtimeOnly libs.postgresql
+  runtimeOnly libs.liquibase.sessionlock
 
   // s3
-  implementation libraries.aws_auth
-  implementation libraries.aws_s3
-  implementation libraries.aws_ses
+  implementation libs.aws.auth
+  implementation libs.aws.s3
+  implementation libs.aws.ses
 
   // Messaging
-  implementation libraries.amqp_client
-  implementation libraries.lz4_java
-  implementation libraries.spring_boot_starter_integration
-  implementation libraries.spring_integration_amqp
-  implementation libraries.spring_integration_core
-  implementation libraries.spring_integration_http
-  implementation libraries.sear_rabbitmq_common_schema
+  implementation libs.amqp.client
+  implementation libs.lz4.java
+  implementation libs.spring.boot.starter.integration
+  implementation libs.spring.integration.amqp
+  implementation libs.spring.integration.core
+  implementation libs.spring.integration.http
+  implementation libs.sear.rabbitmq.common.schema
 
   // GRPC
-  implementation libraries.brave_instrumentation_grpc
-  implementation libraries.grpc_server_spring_boot_starter
-  implementation libraries.grpc_client_spring_boot_starter
+  implementation libs.brave.instrumentation.grpc
+  implementation libs.grpc.server.spring.boot.starter
+  implementation libs.grpc.client.spring.boot.starter
 
   // AspectJ
-  implementation libraries.aspectjrt
-  aspect libraries.silenteight_sep_base_aspects
+  implementation libs.aspectjrt
+  aspect libs.silenteight.sep.base.aspects
 
   //  Datasource API
-  implementation libraries.data_source_api
-  implementation libraries.data_source_categories_api
+  implementation libs.data.source.api
+  implementation libs.data.source.categories.api
 
   // AE API
-  implementation libraries.adjudication_engine_api
+  implementation libs.adjudication.engine.api
 
   // Learning Engine API
-  implementation libraries.learning_engine_store_api
+  implementation libs.learning.engine.store.api
 
   // Governance
-  implementation libraries.governance_model_api
+  implementation libs.governance.model.api
 
   // Warehouse API
-  implementation libraries.warehouse_data_api
+  implementation libs.warehouse.data.api
 
   //Retention
-  implementation libraries.data_retention_api
+  implementation libs.data.retention.api
 
   //  Testing
-  testImplementation libraries.silenteight_sep_base_testing
-  testImplementation libraries.adjudication_engine_api
-  testImplementation libraries.awaitility
-  testImplementation libraries.test_greenmail
+  testImplementation libs.silenteight.sep.base.testing
+  testImplementation libs.adjudication.engine.api
+  testImplementation libs.awaitility
+  testImplementation libs.test.greenmail
 
   // Shedlock
-  implementation libraries.shedlock_spring
-  implementation libraries.shedlock_jdbc_provider
+  implementation libs.shedlock.spring
+  implementation libs.shedlock.jdbc.provider
 
-  testImplementation libraries.silenteight_sep_base_testing
-}
-
-jar {
-  manifest {
-    attributes "Main-Class": "com.silenteight.payments.bridge.PaymentsBridgeApplication"
-  }
-}
-
-jib {
-  from {
-    // NOTE(ahaczewski): Use debug version of the image for SNAPSHOT builds.
-    def imageSuffix = ("$version".contains("-BUILD") || "$version".endsWith("-SNAPSHOT")) ?
-                      ":debug" : ""
-    image = "gcr.io/distroless/java17-debian11" + imageSuffix
-  }
-  to {
-    image = "docker.repo.silenteight.com/pb/${project.name}:${version}"
-    if ("$version".contains("-BUILD") || "$version".endsWith("-SNAPSHOT")) {
-      tags = ["snapshot"]
-    } else {
-      tags = ["latest"]
-    }
-  }
-  container {
-    appRoot = "/silenteight/app"
-    environment = [
-        "SILENTEIGHT_HOME"            : "/silenteight",
-        "PB_DB_HOST"                  : "postgres",
-        "PB_DB_PORT"                  : "5432",
-        "PB_DB_NAME"                  : "paymentsbridge",
-        "PB_DB_USERNAME"              : "paymentsbridge",
-        "PB_DB_PASSWORD"              : "paymentsbridge",
-        "SPRING_RABBITMQ_ADDRESSES"   : "rabbitmq",
-        "SPRING_RABBITMQ_PORT"        : "5672",
-        "SPRING_RABBITMQ_USERNAME"    : "dev",
-        "SPRING_RABBITMQ_PASSWORD"    : "dev",
-        "SPRING_RABBITMQ_VIRTUAL_HOST": "/",
-        "SPRING_PROFILES_ACTIVE"      : "",
-    ]
-    jvmFlags = [
-        "-XX:MaxRAMPercentage=75",
-        "-Dfile.encoding=UTF-8",
-        "-Dsun.jnu.encoding=UTF-8",
-        "-Djava.net.preferIPv4Stack=true",
-        "-Djava.io.tmpdir=/tmp",
-        "-Dsilenteight.home=/silenteight",
-        "-Dspring.profiles.include=container",
-        "-Dserver.port=8080",
-        "-Dgrpc.server.port=9090"
-    ]
-    ports = ["8080", "9090"]
-    user = "nonroot"
-    workingDirectory = "/silenteight"
-  }
+  testImplementation libs.silenteight.sep.base.testing
 }

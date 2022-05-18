@@ -1,4 +1,4 @@
 plugins {
-  id "java-library"
-  id "com.google.protobuf"
+  id "com.silenteight.iris.build.java-library"
+  id "com.silenteight.iris.build.protobuf"
 }

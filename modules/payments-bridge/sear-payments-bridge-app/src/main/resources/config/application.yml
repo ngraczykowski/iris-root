@@ -13,6 +13,21 @@
 # MESSAGING CONCURRENCY
 #---------------------------------------------------------------------------------------------------
 pb:
+  security:
+    disable-security: true
+  #-------------------------------------------------------------------------------------------------
+  # DATABASE
+  #-------------------------------------------------------------------------------------------------
+  db:
+    host: localhost
+    port: 24681
+    schema: public
+    name: paymentsbridge
+    username: paymentsbridge
+    password: paymentsbridge
+    connections:
+      min: 10
+      max: 100
   batch:
     job:
       concurrencyLimit: 10
@@ -222,6 +237,28 @@ management:
 
 spring:
   #-------------------------------------------------------------------------------------------------
+  # SECURITY
+  #-------------------------------------------------------------------------------------------------
+  security:
+    oauth2:
+      client:
+        registration:
+          callback:
+            clientId: clientId
+            provider: external
+            # client-id: <CLIENT ID>
+            # client-secret: <CLIENT SECRET>
+            client-authentication-method: basic
+            authorization-grant-type: client_credentials
+            scope:
+        provider:
+          external:
+            token-uri: https://auth.silent8.cloud/realms/egress-mock/protocol/openid-connect/token
+      resourceserver:
+        jwt:
+          issuer-uri: https://auth.silent8.cloud/realms/sierra
+  #-------------------------------------------------------------------------------------------------
+  #-------------------------------------------------------------------------------------------------
   # GENERAL
   #-------------------------------------------------------------------------------------------------
   application:
@@ -323,6 +360,11 @@ spring:
   # RABBITMQ
   #-------------------------------------------------------------------------------------------------
   rabbitmq:
+    host: localhost
+    port: 24160
+    username: dev
+    password: dev
+    virtual-host: /
     listener:
       type: simple
       direct:
@@ -351,24 +393,6 @@ spring:
   webflux:
     base-path: /rest/${spring.application.name}
 
-  #-------------------------------------------------------------------------------------------------
-  # SECURITY
-  #-------------------------------------------------------------------------------------------------
-  security:
-    oauth2:
-      client:
-        registration:
-          callback:
-            provider: external
-            # client-id: <CLIENT ID>
-            # client-secret: <CLIENT SECRET>
-            client-authentication-method: basic
-            authorization-grant-type: client_credentials
-            scope:
-        provider:
-          external:
-            token-uri: ""
-  #-------------------------------------------------------------------------------------------------
   # BATCH
   #-------------------------------------------------------------------------------------------------
   batch:
@@ -381,11 +405,20 @@ info:
 
 grpc:
   server:
+    port: 24603
     max-inbound-message-size: 8MB
   client:
     GLOBAL:
       negotiation-type: PLAINTEXT
       max-inbound-message-size: 8MB
+    ae:
+      address: static://localhost:${grpc.server.port}
+    datasource:
+      address: static://localhost:${grpc.server.port}
+    governance:
+      address: static://localhost:${grpc.server.port}
+    companynamesurroundingagent:
+      address: static://localhost:${grpc.server.port}
 
 sentry:
   environment: unknown

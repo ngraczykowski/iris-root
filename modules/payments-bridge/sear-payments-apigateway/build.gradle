@@ -1,8 +1,8 @@
 plugins {
   id "java"
   id "groovy"
-  id "org.springframework.boot"
-  id "com.google.cloud.tools.jib"
+  id "com.silenteight.iris.build.spring-boot-application"
+  id "com.silenteight.iris.build.container-image"
 }
 
 dependencies {
@@ -10,29 +10,29 @@ dependencies {
   implementation project(":sear-payments-bridge-common")
 
   // Utilities
-  implementation libraries.commons_lang3
-  implementation libraries.commons_text
-  implementation libraries.guava
+  implementation libs.commons.lang3
+  implementation libs.commons.text
+  implementation libs.guava
 
   // Logging
-  runtimeOnly libraries.ecs_logging_core
-  runtimeOnly libraries.logback_ecs_encoder
+  runtimeOnly libs.ecs.logging.core
+  runtimeOnly libs.logback.ecs.encoder
 
   // Application Starters
-  implementation libraries.spring_boot_starter_actuator
-  implementation libraries.spring_boot_starter_logging
-  implementation libraries.spring_boot_starter_webflux
-  implementation libraries.micrometer_prometheus
+  implementation libs.spring.boot.starter.actuator
+  implementation libs.spring.boot.starter.logging
+  implementation libs.spring.boot.starter.webflux
+  implementation libs.micrometer.prometheus
 
   // Cloud
-  implementation libraries.spring_cloud_consul_discovery
-  implementation libraries.spring_cloud_starter_consul_config
-  implementation libraries.spring_cloud_starter_gateway
-  implementation libraries.spring_cloud_starter_sleuth
+  implementation libs.spring.cloud.consul.discovery
+  implementation libs.spring.cloud.starter.consul.config
+  implementation libs.spring.cloud.starter.gateway
+  implementation libs.spring.cloud.starter.sleuth
 
   // AspectJ
-  implementation libraries.aspectjrt
-  aspect libraries.silenteight_sep_base_aspects
+  implementation libs.aspectjrt
+  aspect libs.silenteight.sep.base.aspects
 }
 
 jar {

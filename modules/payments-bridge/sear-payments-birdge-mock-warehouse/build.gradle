@@ -1,5 +1,5 @@
 plugins {
-  id "java-library"
+  id "com.silenteight.iris.build.java-library"
   id "groovy"
 }
 
@@ -10,7 +10,7 @@ dependencies {
   implementation project(":sear-payments-bridge-warehouse")
   testImplementation project(":sear-payments-bridge-testing")
 
-  implementation libraries.spring_boot
-  implementation libraries.warehouse_data_api
-  implementation libraries.spring_integration_core
+  implementation libs.spring.boot
+  implementation libs.warehouse.data.api
+  implementation libs.spring.integration.core
 }
