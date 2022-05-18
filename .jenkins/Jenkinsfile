@@ -116,11 +116,20 @@ pipeline {
       }
       steps {
         unstash name: 'jib'
+        // Copy images from `.jib-images` file to ECR.
+        sh '''
+          # Login to ECR
+          aws ecr get-login-password --region us-east-1 | \
+            skopeo login --username AWS --password-stdin 278875966478.dkr.ecr.us-east-1.amazonaws.com
 
-        // TODO(ahaczewski): Implement sync with ECR.
-        // 1. Ensure repository in ECR exists, if not - create one
-        // 2. Login to skopeo
-        // 3. Copy/sync images from `.jib-images` to ECR.
+          while read line; do \
+            aws ecr --region us-east-1 \
+              create-repository --encryption-configuration encryptionType=KMS \
+                --repository-name  $(echo $line | grep  -Po '(?<=\\/).*(?=\\:)') || true; \
+            skopeo copy docker://$line \
+              docker://278875966478.dkr.ecr.us-east-1.amazonaws.com/$(echo $line | grep -Po '(?<=\\/).*'); \
+          done < '.jib-images'
+        '''
       }
     }
   }
