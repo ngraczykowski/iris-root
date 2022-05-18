@@ -1,8 +1,10 @@
-package utils;
+package steps;
 
 import io.cucumber.java.BeforeAll;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
+import utils.AuthUtils;
+import utils.ScenarioContext;
 
 public class Hooks {
 
@@ -14,6 +16,9 @@ public class Hooks {
     RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     RestAssured.requestSpecification = new RequestSpecBuilder()
         .build()
-        .header("Authorization", "Bearer " + new AuthUtils().getAuthToken());
+        .header("Authorization", "Bearer " + new AuthUtils().getAuthToken())
+        .given()
+        .log()
+        .all();
   }
 }
