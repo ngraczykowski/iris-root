@@ -222,9 +222,12 @@ pipeline {
                 }
                 stage('Deploy on nomad') {
                     when {
-                        anyOf {
-                            branch 'master'
-                            branch pattern: '^v(\\d+(\\.\\d+)*)\$', comparator: 'REGEXP'
+                        allOf {
+                            anyOf {
+                                branch 'master'
+                                branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
+                            }
+                            expression { return params.RELEASE }
                         }
                     }
                     steps {
