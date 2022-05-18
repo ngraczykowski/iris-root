@@ -1,5 +1,15 @@
 rootProject.name = "sep-base"
-gradle.ext.sepDependenciesVersion = "2.5.0"
+includeBuild('../../platforms')
+includeBuild('../../build-logic')
+
+
+dependencyResolutionManagement {
+  versionCatalogs {
+    libs {
+      from(files("../../gradle/libs.versions.toml"))
+    }
+  }
+}
 
 // NOTE(ahaczewski): Keep sorted alphabetically.
 include "sep-base-aspects"

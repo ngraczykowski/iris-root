@@ -17,7 +17,6 @@ silenteight-data-retention-api = "0.0.1"
 silenteight-data-source-api = "0.23.0"
 silenteight-filestorage-api = "1.3.0"
 silenteight-filestorage-minio = "1.6.0"
-silenteight-sep-base = "1.12.2"
 warehouse-protocol = "2.3.0"
 
 #-----------------------------------
@@ -105,9 +104,9 @@ silenteight-data-retention-api = { group = "com.silenteight.sens.data-retention-
 silenteight-filestorage-api = { group = "com.silenteight.sep.filestorage.api", name = "sep-filestorage-api", version.ref = "silenteight-filestorage-api" }
 silenteight-filestorage-minio = { group = "com.silenteight.sep.filestorage-minio", name = "sep-filestorage-minio", version.ref = "silenteight-filestorage-minio" }
 silenteight-sep-auth = { group = "com.silenteight.iris", name = "sep-auth" }
-silenteight-sep-base-aspects = { group = "com.silenteight.sep.base", name = "sep-base-aspects", version.ref = "silenteight-sep-base" }
-silenteight-sep-base-common = { group = "com.silenteight.sep.base", name = "sep-base-common", version.ref = "silenteight-sep-base" }
-silenteight-sep-base-testing = { group = "com.silenteight.sep.base", name = "sep-base-testing", version.ref = "silenteight-sep-base" }
+silenteight-sep-base-aspects = { group = "com.silenteight.iris", name = "sep-base-aspects" }
+silenteight-sep-base-common = { group = "com.silenteight.iris", name = "sep-base-common" }
+silenteight-sep-base-testing = { group = "com.silenteight.iris", name = "sep-base-testing" }
 silenteight-sep-usermanagement-api = { group = "com.silenteight.iris", name = "sep-usermanagement-api" }
 silenteight-sep-usermanagement-keycloak = { group = "com.silenteight.iris", name = "sep-usermanagement-keycloak" }
 silenteight-serp-protocol-agent = { group = "com.silenteight.serp.protocol", name = "serp-protocol-agent", version.ref = "serp-protocol" }
@@ -139,6 +138,7 @@ spring-core = { group = "org.springframework", name = "spring-core" }
 spring-expression = { group = "org.springframework", name = "spring-expression" }
 spring-instrument = { group = "org.springframework", name = "spring-instrument" }
 spring-jdbc = { group = "org.springframework", name = "spring-jdbc" }
+spring-jcl = { group = "org.springframework", name = "spring-jcl" }
 spring-messaging = { group = "org.springframework", name = "spring-messaging" }
 spring-orm = { group = "org.springframework", name = "spring-orm" }
 spring-retry = { group = "org.springframework.retry", name = "spring-retry" }
@@ -261,6 +261,7 @@ cronutils = { group = 'com.cronutils', name = 'cron-utils', version = '9.1.6' }
 ecs-logging-core = { group = "co.elastic.logging", name = "ecs-logging-core", version.ref = "ecs" }
 fastutil = { group = "it.unimi.dsi", name = "fastutil" }
 feign-slf4j = { group = "io.github.openfeign", name = "feign-slf4j" }
+classgraph = { group = "io.github.classgraph", name = "classgraph",  version = "4.8.146" }
 freemarker = { group = "org.freemarker", name = "freemarker" }
 google-common-protos = { group = "com.google.api.grpc", name="proto-google-common-protos", version = "2.7.0" }
 grpc-api = { group = "io.grpc", name = "grpc-api", version.ref = "grpc" }
@@ -281,6 +282,7 @@ hazelcast = { group = 'com.hazelcast', name = 'hazelcast', version.ref = "hazelc
 hibernate-core = { group = "org.hibernate", name = "hibernate-core" }
 hibernate-envers = { group = "org.hibernate", name = "hibernate-envers" }
 hibernate-jcache = { group = "org.hibernate", name = "hibernate-jcache" }
+hibernate-jpamodelgen = {group = "org.hibernate", name = "hibernate-jpamodelgen" }
 hibernate-types = { group = "com.vladmihalcea", name = "hibernate-types-52", version = "2.11.1" }
 hibernate-validator = { group = "org.hibernate.validator", name = "hibernate-validator" }
 hikari-cp = { group = "com.zaxxer", name = "HikariCP" }

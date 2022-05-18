@@ -1,42 +1,39 @@
 plugins {
-  id "java-library"
+  id "com.silenteight.iris.build.java-library"
   id "maven-publish"
 }
 
 description = "SERP Common Testing"
 
 dependencies {
-  api libraries.junit_jupiter_api
-  api libraries.spring_amqp_rabbit_test
-  api libraries.spring_test
-  api libraries.spring_boot_test
-  api libraries.spring_boot_test_autoconfigure
-  api libraries.spring_integration_test
-  api libraries.test_containers
-  api libraries.test_containers_spock
-  api libraries.grpc_testing
-  api libraries.reactor_test
 
-  implementation libraries.commons_lang3
+  implementation platform('com.silenteight.iris.platform:test-platform')
 
-  implementation libraries.spring_aspects
-  implementation libraries.spring_amqp
-  implementation libraries.spring_jdbc
-  implementation libraries.spring_tx
-  implementation libraries.spring_boot
-  implementation libraries.spring_boot_autoconfigure
+  api libs.junit.jupiter.api
+  api libs.spring.amqp.rabbit.test
+  api libs.spring.test
+  api libs.spring.boot.test
+  api libs.spring.boot.test.autoconfigure
+  api libs.spring.integration.test
+  api libs.test.containers
+  api libs.test.containers.spock
+  api libs.grpc.testing
+  api libs.reactor.test
 
+  implementation libs.commons.lang3
+  implementation libs.spring.aspects
+  implementation libs.spring.amqp
+  implementation libs.spring.jdbc
+  implementation libs.spring.tx
 
-  implementation libraries.test_containers_elasticsearch
-  implementation libraries.test_containers_junit_jupiter
-  implementation libraries.test_containers_oracle_xe
-  implementation libraries.test_containers_postgresql
+  api libs.test.containers.elasticsearch
+  api libs.test.containers.junit.jupiter
+  api libs.test.containers.oracle.xe
+  api libs.test.containers.postgresql
 
-  implementation libraries.grpc_stub
-
-  implementation libraries.protobuf_java_util
-
-  implementation libraries.bouncycastle_bcprov
+  implementation libs.grpc.stub
+  implementation libs.protobuf.java.util
+  implementation libs.bouncycastle.bcprov
 
   // NOTE(ahaczewski): There seems like there is a dependency cycle between sep-base-common
   //  and sep-base-testing, as both depend on each other, but it is not true, as sep-base-common
