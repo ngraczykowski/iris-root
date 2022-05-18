@@ -37,18 +37,20 @@ pipeline {
             withDockerRegistry(
                 url: 'https://docker.repo.silenteight.com',
                 credentialsId: 'artifactory-deployment-user') {
-              sh """
-                test \$BRANCH_NAME = 'master' \
-                  && \
+              script {
+                if (env.BRANCH_NAME == 'master') {
+                  sh """
                     ./gradlew \
                       -Dsilenteight.repoDeploymentUser="\$ARTIFACTORY_USR" \
                       -Dsilenteight.repoDeploymentPassword="\$ARTIFACTORY_PWD" \
                       -Djib.console=plain \
                       -Pversion="${version}" \
                       publish \
-                  && \
-                    jq --raw-output '.image' \$(find . -type f -name 'jib-image.json') >.jib-images
-              """
+                    && \
+                      jq --raw-output '.image' \$(find . -type f -name 'jib-image.json') >.jib-images
+                  """
+                }
+              }
             }
 
             stash name: 'jib', includes: '.jib-images', allowEmpty: true
