@@ -485,7 +485,6 @@ agents:
     type: pythonagent
     image:
       repository: registry.dev.s8ops.com/hit-type-name-agent
-    # not working yet - wiaiting for docker fix
 
 
 #

@@ -127,3 +127,12 @@ agents:
     enabled: true
     image:
       tag: "0.4.0.dev0" #the only working image tag
+  hit-type-name-agent:
+    enabled: true
+    image:
+      tag: "0.3.0-dev" #the only working image tag
+    amqp:
+      routingKey: agents.hittype.versions.1_0_0.configs.1
+      queueName: agent.hittype-requests
+    args:
+      - --agent-exchange
