@@ -45,7 +45,7 @@ ae:
   analysis:
     agent-exchange:
       missing-match-feature-reader:
-        chunk-size: 1
+        chunk-size: 1024
         max-rows: 8192
 
     analysis:
