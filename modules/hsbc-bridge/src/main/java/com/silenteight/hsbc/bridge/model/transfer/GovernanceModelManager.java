@@ -26,13 +26,13 @@ public class GovernanceModelManager implements ModelManager {
   }
 
   @Override
-  public ModelStatusUpdatedDto transferModelFromJenkins(ModelInfoRequest request) {
-    return transferModelFromNexus(request);
+  public void transferModelFromJenkins(ModelInfoRequest request) {
+    transferModelFromNexus(request);
   }
 
-  @Override
-  public void transferModelStatus(ModelInfoRequest request) {
-    // No need to do anything - "use model" already sent to Governance
+  public void markAsUsedOnProd(String version) {
+    log.info("Marking model version '{}' as used on production", version);
+    governanceServiceClient.sendStatus(version);
   }
 
   @Override

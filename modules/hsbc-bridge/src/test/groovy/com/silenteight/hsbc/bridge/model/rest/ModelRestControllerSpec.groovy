@@ -49,13 +49,13 @@ class ModelRestControllerSpec extends Specification {
     def version = "20210801082734"
     def type = "MODEL"
     def modelDetails = createModelDetails(type, version)
-    def exportModelResponse = createExportModelResponse()
+    def exportModelResponse = createExportModelResponse(version)
 
     when:
     def result = mockMvc.perform(MockMvcRequestBuilders.get('/model/export/' + type + '/' + version))
 
     then:
-    1 * modelManagers.first().exportModel(modelDetails) >> exportModelResponse
+    1 * governanceModelManager.exportModel(modelDetails) >> exportModelResponse
     verifyResults(result, '{"modelJson":"20210801082734"}')
   }
 
@@ -85,22 +85,8 @@ class ModelRestControllerSpec extends Specification {
             .content(JsonOutput.toJson(modelInfoRequest)))
 
     then:
-    1 * modelManagers.first().transferModelStatus(_ as ModelInfoRequest)
+    1 * governanceModelManager.transferModelFromJenkins(_ as ModelInfoRequest)
     result.andExpect(MockMvcResultMatchers.status().isOk())
-  }
-
-  def 'should send BAD_REQUEST status when model is not supported in Governance during sending model status'() {
-    given:
-    governanceModelManager.supportsModelType(ModelType.MODEL) >> false
-    def modelInfoRequest = createModelInfoRequest('MODEL', 'MAJOR')
-
-    when:
-    def result = mockMvc.perform(
-        MockMvcRequestBuilders.post('/model').contentType(MediaType.APPLICATION_JSON)
-            .content(JsonOutput.toJson(modelInfoRequest)))
-
-    then:
-    result.andExpect(MockMvcResultMatchers.status().isBadRequest())
   }
 
   def 'should update WorldCheck model'() {
@@ -115,7 +101,7 @@ class ModelRestControllerSpec extends Specification {
             .content(JsonOutput.toJson(modelInfoRequest)))
 
     then:
-    1 * modelManagers.get(1).transferModelStatus(_ as ModelInfoRequest)
+    1 * worldCheckModelManager.transferModelFromJenkins(_ as ModelInfoRequest)
     result.andExpect(MockMvcResultMatchers.status().isOk())
   }
 
@@ -125,30 +111,14 @@ class ModelRestControllerSpec extends Specification {
     def version = "20210801082734"
     def type = "IS_PEP_PROCEDURAL"
     def modelDetails = createModelDetails(type, version)
-    def exportModelResponse = createExportModelResponse()
+    def exportModelResponse = createExportModelResponse(version)
 
     when:
     def result = mockMvc.perform(MockMvcRequestBuilders.get('/model/export/' + type + '/' + version))
 
     then:
-    1 * modelManagers.get(1).exportModel(modelDetails) >> exportModelResponse
+    1 * worldCheckModelManager.exportModel(modelDetails) >> exportModelResponse
     verifyResults(result, '{"modelJson":"20210801082734"}')
-  }
-
-  def 'should send model status to WorldCheck'() {
-    given:
-    worldCheckModelManager.supportsModelType(ModelType.IS_PEP_PROCEDURAL) >> true
-    def modelInfoRequest = createModelInfoRequest('IS_PEP_PROCEDURAL', 'MINOR')
-    worldCheckModelManager.transferModelFromJenkins(modelInfoRequest) >> createModelStatusUpdatedDto()
-
-    when:
-    def result = mockMvc.perform(
-        MockMvcRequestBuilders.post('/model').contentType(MediaType.APPLICATION_JSON)
-            .content(JsonOutput.toJson(modelInfoRequest)))
-
-    then:
-    1 * modelManagers.get(1).transferModelStatus(_ as ModelInfoRequest)
-    result.andExpect(MockMvcResultMatchers.status().isOk())
   }
 
   def 'should send BAD_REQUEST status when model is not supported in WorldCheck during updating and sending model status'() {
@@ -191,8 +161,8 @@ class ModelRestControllerSpec extends Specification {
         .build()
   }
 
-  def static createExportModelResponse() {
-    return '{"modelJson":"20210801082734"}'.getBytes(StandardCharsets.UTF_8)
+  def static createExportModelResponse(String version) {
+    return ('{"modelJson":"' + version + '"}').getBytes(StandardCharsets.UTF_8)
   }
 
   static ModelInfoRequest createModelInfoRequest(String modelType, String changeType) {

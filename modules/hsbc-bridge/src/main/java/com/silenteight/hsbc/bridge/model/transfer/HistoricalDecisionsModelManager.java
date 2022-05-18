@@ -34,12 +34,18 @@ public class HistoricalDecisionsModelManager implements ModelManager {
   }
 
   @Override
-  public ModelStatusUpdatedDto transferModelFromJenkins(ModelInfoRequest request) {
-    return trySavingModel(request);
+  public void transferModelFromJenkins(ModelInfoRequest request) {
+    var statusDto = trySavingModel(request);
+    var transferModelRequest = createModelInfoRequest(request, statusDto.getUrl());
+    transferModelStatus(transferModelRequest);
   }
 
   @Override
-  public void transferModelStatus(ModelInfoRequest request) {
+  public void markAsUsedOnProd(String version) {
+    //not used
+  }
+
+  private void transferModelStatus(ModelInfoRequest request) {
     var modelPersisted = ModelMapper.toHistoricalDecisionsModelPersisted(request);
     historicalDecisionsMessageSender.send(modelPersisted);
   }

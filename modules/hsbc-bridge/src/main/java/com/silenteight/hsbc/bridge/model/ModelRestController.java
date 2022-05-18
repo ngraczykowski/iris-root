@@ -45,18 +45,14 @@ class ModelRestController {
   @PostMapping
   public void modelUpdate(@RequestBody ModelInfoRequest request) {
     var modelManager = getMatchingModelManager(request.getType());
-    var statusDto = modelManager.transferModelFromJenkins(request);
-    var transferModelRequest = createModelInfoRequest(request, statusDto.getUrl());
-    modelManager.transferModelStatus(transferModelRequest);
+    modelManager.transferModelFromJenkins(request);
   }
 
-  private ModelInfoRequest createModelInfoRequest(ModelInfoRequest modelInfoRequest, String url) {
-    var request = new ModelInfoRequest();
-    request.setName(modelInfoRequest.getName());
-    request.setType(modelInfoRequest.getType());
-    request.setChangeType(modelInfoRequest.getChangeType());
-    request.setUrl(url);
-    return request;
+  @PostMapping("/markAsUsedOnProd/{type}/{version}")
+  public void markAsUsedOnProd(@PathVariable String type, @PathVariable String version) {
+    var modelDetails = ModelDetails.builder().type(type).version(version).build();
+    var modelManager = getMatchingModelManager(ModelType.fromValue(modelDetails.getType()));
+    modelManager.markAsUsedOnProd(version);
   }
 
   @ExceptionHandler({ ModelNotRecognizedException.class, RequestNotValidException.class })
