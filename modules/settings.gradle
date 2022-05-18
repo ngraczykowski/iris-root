@@ -17,7 +17,6 @@ rootProject.name = 'iris-modules'
 
 include('app')
 includeBuild('sep-usermanagement-api')
-includeBuild('sep-usermanagement-keycloak')
 includeBuild('sep-auth')
 includeBuild('governance')
 includeBuild('simulator')
