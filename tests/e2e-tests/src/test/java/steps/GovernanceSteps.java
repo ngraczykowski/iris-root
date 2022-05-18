@@ -3,11 +3,9 @@ package steps;
 import io.cucumber.java.en.And;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import utils.Hooks;
 import utils.ScenarioContext;
 import utils.datageneration.*;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +67,7 @@ public class GovernanceSteps {
 
     response
         .then()
-        .statusCode(202);
+        .statusCode(201);
   }
 
   @And("Add prepared steps to policy")
