@@ -41,12 +41,13 @@ pipeline {
         environment {
           ARTIFACTORY = credentials('artifactory-user')
           E2E_TESTS_CREDS = credentials('karate-username-password')
-          BASE_URL = '$ENVIRONMENT-jenkins.dev.s8ops.com'
+          BASE_URL = "${ENVIRONMENT}-jenkins-pipeline.dev.s8ops.com"
         }
         stages {
           stage('Install chart') {
             steps {
               echo "Deploying version ${version} to ${ENVIRONMENT}"
+
               withKubeConfig(
                   credentialsId: 'devenv-eks',
                   serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
@@ -59,7 +60,7 @@ pipeline {
                     --values kubernetes/values.core.yaml \
                     --values kubernetes/values.ingress-internal.yaml  \
                     --values kubernetes/values.${ENVIRONMENT}.yaml \
-                    --set ingress.hosts[0]=$BASE_URL
+                    --set ingress.hosts[0]=${BASE_URL} \
                     --wait \
                     --timeout 12m \
                     sear \
