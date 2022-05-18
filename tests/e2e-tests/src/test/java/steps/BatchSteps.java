@@ -4,7 +4,6 @@ import io.cucumber.java.en.And;
 
 import io.restassured.response.Response;
 import org.awaitility.Awaitility;
-import utils.Hooks;
 import utils.ScenarioContext;
 import utils.datageneration.Batch;
 import utils.datageneration.DataGenerationService;
@@ -64,6 +63,19 @@ public class BatchSteps {
   @And("Send batch on learning")
   public void sendBatchOnLearning() {
     Batch batch = (Batch) scenarioContext.get("batch");
+
+    given()
+        .body(batch.getPayload())
+        .when()
+        .post("rest/hsbc-bridge/async/batch/v1/" + batch.getId() + "-learning/learning")
+        .then()
+        .statusCode(200);
+  }
+
+  @And("Send batch with {int} alerts on learning")
+  public void sendNewBatchOnLearning(int size) {
+    Batch batch = dataGenerationService.generateBatchWithSize(size);
+    scenarioContext.set("batch", batch);
 
     given()
         .body(batch.getPayload())

@@ -5,7 +5,6 @@ import io.restassured.response.Response;
 import org.awaitility.Awaitility;
 import org.junit.Assert;
 import utils.FilesHelper;
-import utils.Hooks;
 import utils.ScenarioContext;
 import utils.datageneration.Batch;
 import utils.datageneration.DataGenerationService;
