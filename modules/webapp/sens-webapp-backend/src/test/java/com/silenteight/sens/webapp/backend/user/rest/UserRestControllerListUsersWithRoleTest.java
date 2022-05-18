@@ -1,6 +1,8 @@
 package com.silenteight.sens.webapp.backend.user.rest;
 
 import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
+import com.silenteight.sep.usermanagement.api.role.RoleNotFoundException;
+
 
 import static com.silenteight.sens.webapp.backend.user.rest.UserRestControllerFixtures.AUDITOR_USER;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
@@ -11,6 +13,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
 class UserRestControllerListUsersWithRoleTest extends UserRestControllerTest {
@@ -38,6 +41,14 @@ class UserRestControllerListUsersWithRoleTest extends UserRestControllerTest {
   @TestWithRole(roles = { APPROVER, AUDITOR, MODEL_TUNER, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
     get(getRequestPath()).statusCode(FORBIDDEN.value());
+  }
+
+  @TestWithRole(role = USER_ADMINISTRATOR)
+  void its404_whenRoleNameNotFound() {
+    given(listUsersWithRoleUseCase.apply(ROLE_NAME))
+        .willThrow(new RoleNotFoundException(ROLE_NAME));
+
+    get(getRequestPath()).statusCode(NOT_FOUND.value());
   }
 
   private static String getRequestPath() {
