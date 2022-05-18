@@ -17,18 +17,18 @@ silenteight:
 
     ### DATA RETENTION
     data-retention:
-      enabled: false
+      enabled: true
       chunk: 10
       rate: PT24H
       ### Enable one of retention types below
       personal-information-expired:
-        enabled: false
-        duration: ${RETENTION_PERIOD:155d}
+        enabled: true
+        duration: ${RETENTION_PERIOD:50d}
       alerts-expired:
         enabled: false
         duration: ${RETENTION_PERIOD:155d}
       dry-run-mode:
-        enabled: false
+        enabled: true
 
 ### GRPC
 grpc:
