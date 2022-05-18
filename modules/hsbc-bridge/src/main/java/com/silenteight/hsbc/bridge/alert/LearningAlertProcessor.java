@@ -69,8 +69,12 @@ public class LearningAlertProcessor {
       Collection<Long> unregisteredAlertIds,
       Collection<Long> registeredAlertFromDbIds) {
     return (!registeredAlertFromDbIds.isEmpty()) ?
-           Stream.concat(registeredAlertFromDbIds.stream(), unregisteredAlertIds.stream()).collect(Collectors.toList()) :
-           Stream.concat(registeredAlertIds.stream(), unregisteredAlertIds.stream()).collect(Collectors.toList());
+           Stream
+               .concat(registeredAlertFromDbIds.stream(), unregisteredAlertIds.stream())
+               .collect(Collectors.toList()) :
+           Stream
+               .concat(registeredAlertIds.stream(), unregisteredAlertIds.stream())
+               .collect(Collectors.toList());
   }
 
   private void sendAlertsChunked(Stream<AlertEntity> alertEntities) {

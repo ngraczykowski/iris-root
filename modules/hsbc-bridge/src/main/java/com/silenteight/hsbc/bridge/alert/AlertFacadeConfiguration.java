@@ -65,7 +65,7 @@ class AlertFacadeConfiguration {
   }
 
   private AlertSender alertSender() {
-    return new AlertSender(warehouseApi, agentApi, alertMapper());
+    return new AlertSender(warehouseApi, agentApi, alertMapper(), alertRepository);
   }
 
   private AlertMapper alertMapper() {

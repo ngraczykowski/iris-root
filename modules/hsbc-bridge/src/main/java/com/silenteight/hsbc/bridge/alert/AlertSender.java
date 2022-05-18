@@ -3,6 +3,7 @@ package com.silenteight.hsbc.bridge.alert;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.alert.dto.AlertEntityDto;
 import com.silenteight.hsbc.bridge.json.external.model.AlertData;
@@ -12,14 +13,17 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 class AlertSender {
 
   private final WarehouseApi warehouseApi;
   private final AgentApi agentApi;
   private final AlertMapper mapper;
+  private final AlertRepository alertRepository;
 
   void send(@NonNull Collection<AlertEntityDto> alerts, SendOption[] options) {
     var alertComposites = getAlertInformation(alerts);
@@ -47,10 +51,27 @@ class AlertSender {
     warehouseApi.send(reportAlerts);
   }
 
-  private List<AlertDataComposite> getAlertInformation(Collection<AlertEntityDto> alerts) {
-    return alerts.stream()
-        .map(a -> new AlertDataComposite(a, mapper.toAlertData(a.getPayload())))
+  private List<AlertDataComposite> getAlertInformation(Collection<AlertEntityDto> alertEntityDtos) {
+    return alertEntityDtos.stream()
+        .map(this::createAlertDataComposite)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
         .collect(Collectors.toList());
+  }
+
+  private Optional<AlertDataComposite> createAlertDataComposite(AlertEntityDto alertEntityDto) {
+    try {
+      return Optional.of(new AlertDataComposite(
+          alertEntityDto,
+          mapper.toAlertData(alertEntityDto.getPayload())));
+    } catch (AlertConversionException e) {
+      log.error("Learning alert data conversion failed, alert name: {}", alertEntityDto.getName());
+      alertRepository.findByName(alertEntityDto.getName()).ifPresent(alertEntity -> {
+        alertEntity.error(e.getMessage());
+        alertRepository.save(alertEntity);
+      });
+    }
+    return Optional.empty();
   }
 
   private Collection<Alert> getReportAlerts(Collection<AlertDataComposite> alerts) {
