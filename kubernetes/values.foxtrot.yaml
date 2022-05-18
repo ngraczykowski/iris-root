@@ -8,6 +8,11 @@ components:
       - additional
     configFiles:
       application-additional.yml: |
+        ftcc:
+          core-bridge:
+            inbound:
+              batch-completed:
+                exchange: core-bridge.notify-batch-completed-exchange
         grpc:
           client:
             core-bridge:
