@@ -144,8 +144,8 @@ pipeline {
                         allowMissing: true,
                         alwaysLinkToLastBuild: true,
                         keepAll: true,
-                        reportDir: 'results/',
-                        reportFiles: '*.html, *.css, *.otf, *.eot, *.svg, *.ttf, *.woff, *.woff2, *.js, *.png, *.min.css',
+                        reportDir: 'target/reports',
+                        reportFiles: '*.html',
                         reportName: 'Test Report'
                       ]
                     )
