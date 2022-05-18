@@ -1,0 +1,75 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          callback:
+            client-id: test-client-id
+        provider:
+          external:
+            token-uri: "https://example.com/token/uri"
+  main:
+    web-application-type: none
+  mail:
+    host: localhost
+    port: 3025
+    username: user
+    password: password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+        transport:
+          protocol: smtp
+
+pb:
+  email-notification:
+    from: "email.example@silenteight.com"
+    to: "email.example2@silenteight.com"
+    cc: ""
+    cron: "* * * ? * *"
+    amount: 10
+    cmapi-enabled: true
+    cmapi-errors-enabled:
+      - "UNABLE TO MAP UNKNOWN TYPE"
+      - "FIRST CHAR IN NOT / WHEN"
+      - "INDEX OUT OF BOUND"
+      - "TAG NOT FOUND"
+      - "TAG NOT SUPPORTED"
+    learning-enabled: true
+  daily-reports-remove:
+    cron: "0 2 * * * *"
+    bucket: "sps-reports-dev-20211110115534833400000001"
+    file-prefix: "SVB_SEAR_DEV_ai_reasoning_alert_level"
+    report-expiration-in-months: 6
+  data-retention:
+    alert-data:
+      cron: "*/5 * * * * *"
+    personal-information:
+      cron: "*/5 * * * * *"
+  security:
+    disable-security: true
+
+environment:
+  name: "TEST"
+
+grpc:
+  server:
+    in-process-name: test
+    port: -1
+  client:
+    GLOBAL:
+      negotiation-type: PLAINTEXT
+    ae:
+      address: in-process:test
+    pb:
+      address: in-process:test
+    governance:
+      address: in-process:test
+    datasource:
+      address: in-process:test
+    companynamesurroundingagent:
+      address: in-process:test
+

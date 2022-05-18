@@ -1,0 +1,56 @@
+{
+  "featuresLogic": [
+    {
+      "toFulfill": 5,
+      "features": [
+        {
+          "name": "categories/watchlistType",
+          "condition": "is",
+          "values": [
+            "COMPANY"
+          ]
+        },
+        {
+          "name": "features/name",
+          "condition": "is",
+          "values": [
+            "MATCH",
+            "WEAK_MATCH",
+            "NO_MATCH",
+            "HQ_NO_MATCH"
+          ]
+        },
+        {
+          "name": "features/nameMatchedText",
+          "condition": "is",
+          "values": [
+            "EXACT_MATCH",
+            "STRONG_MATCH",
+            "MATCH",
+            "WEAK_MATCH",
+            "NO_MATCH",
+            "HQ_NO_MATCH",
+            "INCONCLUSIVE"
+          ]
+        },
+        {
+          "name": "categories/crossmatch",
+          "condition": "is",
+          "values": [
+            "CROSSMATCH"
+          ]
+        },
+        {
+          "name": "features/geo2",
+          "condition": "is",
+          "values": [
+            "CITY_NO_MATCH",
+            "COUNTRY_NO_MATCH",
+            "COUNTRY_WEAK_MATCH",
+            "STATE_NO_MATCH"
+          ]
+        }
+      ]
+    }
+  ]
+}

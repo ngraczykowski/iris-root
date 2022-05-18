@@ -1,0 +1,49 @@
+{
+  "featuresLogic": [
+    {
+      "toFulfill": 4,
+      "features": [
+        {
+          "name": "categories/watchlistType",
+          "condition": "is",
+          "values": [
+            "INDIVIDUAL"
+          ]
+        },
+        {
+          "name": "features/name",
+          "condition": "is",
+          "values": [
+            "WEAK_MATCH",
+            "NO_MATCH",
+            "HQ_NO_MATCH"
+          ]
+        },
+        {
+          "name": "features/geo",
+          "condition": "is",
+          "values": [
+            "CITY_NO_MATCH",
+            "COUNTRY_NO_MATCH",
+            "COUNTRY_WEAK_MATCH",
+            "STATE_NO_MATCH"
+          ]
+        },
+        {
+          "name": "features/nameMatchedText",
+          "condition": "is",
+          "values": [
+            "EXACT_MATCH",
+            "STRONG_MATCH",
+            "MATCH",
+            "WEAK_MATCH",
+            "NO_MATCH",
+            "HQ_NO_MATCH",
+            "NO_DATA",
+            "INCONCLUSIVE"
+          ]
+        }
+      ]
+    }
+  ]
+}

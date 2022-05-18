@@ -1,0 +1,81 @@
+[FIRCOSOFT     X] FMT V1.0 GEN CoreEngine 5.6.4.2.p0
+[UNIT          X] STS-SG
+[BUSINESS      X] WB
+[APPLI         X] STS+SG
+[UUMID         X] ONATSS1432806SGSINSG22401R0236309SG
+[TYPE          X] ???NA OUTBOUND
+[AMOUNT         ] USD 1165.01
+[VALUEDATE     X] ?
+[REFERENCE     X] TSS1432806SGSINSG22401R0236309SG
+[SERVICE       X] ?
+[USERREF       X] ?
+[G_BLOCK       X] ---- Group Header----
+[G_CREATETM    X] 2020-10-09T16:20:14.060+08:00
+[G_CTRLSUM     X] 0.00
+[INT_BLOCK     X] ----  InitiatingParty Header----
+[INT_PARTY      ] SIN
+SG
+[INT_PTY_ID     ] 0123456789
+[P_BLOCK       X] ---- Payment Header----
+[P_PAYID       X] SG12345
+[P_METHOD      X] TRF
+[P_TYPE        X] TT
+[P_EXEDATE     X] 0020-10-09T00:00:00.000+08:00
+[PD_BLOCK      X] ---- Payment Debtor (PD)Header----
+[PD_DEBTOR      ] ALIPAY SINGAPORE E- COMMERCE PRIVAT
+SIN
+SG
+[PD_ACCOUNT     ] 0123456789
+[PD_ACC_CCY     ] USD
+[PD_AGT_BIC     ] SCBLGB2LWEB
+[UD_BLOCK      X] ---- Payment Ultimate Debtor (PUD)Header----
+[UD_CTRY        ] CN
+[CTT_BLOCK     X] ---- CreditTransferTransaction Header----
+[PC_INST       X] R0236309
+[PC_DEBAMC      ] USD
+[PC_DEBAMT     X] 0.00
+[PC_CREDAMC     ] USD
+[PC_CREDAMT    X] 0.00
+[PC_CHQMAT     X] 2020-10-09T16:20:14.059+08:00
+[UD_BLOCK      X] ---- CreditTransferTransaction UltimateDebtor Header----
+[UD_UDEBTOR     ] Shenzhen Panduo Information Technol
+ogy Co., Ltd. 7606, 7608, 7609, Bui
+lding 2, Area Z, Internet industry
+/CHINA
+[UD_UDEBTID     ] 0123456789
+[I1_BLOCK      X] ---- CreditTransferTransaction IntermediaryAgent1 Header----
+[I2_BLOCK      X] ---- CreditTransferTransaction IntermediaryAgent2 Header----
+[C_CAGT_BIC     ] WFBIUS6SXXX
+[C_CAGT         ] US
+WFBIUS6SXXX/WELLS FARGO BANK//US
+[C_BLOCK       X] ---- CreditTransferTransaction Creditor Header----
+[C_CREDITOR     ] ShenZhen Pan Duo Information Techno
+US
+logy co. LTD
+/UNITED STATES
+[C_CREDIBAN     ] 12345678912345678
+[C_CREDACCT     ] 12345678912345678
+[PC_INSTRDA     ] S10620000283902
+[PC_RMBLOCK    X] ---- RemittanceInformation Header----
+[S_BLOCK       X] ---- CreditTransferTransaction Supplementary Data ----
+[S_DBANKID      ] SCBLSG22XXX
+[S_PAYSYREF    X] TSS1432806SGSINSG22401R0236309SG
+[S_CREDIT       ] ShenZhen Pan Duo Information Techno
+logy co. LTD
+UNITED STATES
+/UNITED STATES
+[S_DEBTACC      ] SG
+SIN
+[S_DEBTOR       ] ALIPAY SINGAPORE E- COMMERCE PRIVAT
+[S_CREDAMT     X] 0.00
+[S_CREDAMTL    X] 0
+[S_CREDAMTR    X] 0.00
+[S_DEBAMTB     X] 0.00
+[S_PAY_BCE     X] 0.00
+[S_CREDAMTB    X] 0.00
+[S_PAYSDATE    X] 09-OCT-20 04.20.13.000000 PM
+[S_PAYMTREF    X] R0236309
+[S_UDEBTOR      ] ogy Co., Ltd. 7606, 7608, 7609, Bui
+lding 7, Area A, Internet industry
+/CHINA
+Shenzhen Panduo Information Technol

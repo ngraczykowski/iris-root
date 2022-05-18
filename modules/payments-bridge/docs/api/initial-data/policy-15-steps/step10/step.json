@@ -1,0 +1,7 @@
+{
+  "id": "{{step10-uuid}}",
+  "name": "10 - I, NMT AnyValueExceptError, Geo No,Weak",
+  "description": "",
+  "solution": "FALSE_POSITIVE",
+  "type": "BUSINESS_LOGIC"
+}

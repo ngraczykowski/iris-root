@@ -1,0 +1,5 @@
+requests
+click
+tqdm
+flake8
+locust

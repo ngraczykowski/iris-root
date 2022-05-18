@@ -1,0 +1,7 @@
+{
+  "id": "{{step3-uuid}}",
+  "name": "03 - C, Crossmatch Name No,Weak, NMT No,Weak, Geo No Weak or Country match",
+  "description": "",
+  "solution": "FALSE_POSITIVE",
+  "type": "BUSINESS_LOGIC"
+}

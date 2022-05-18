@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        dbchangelog-3.10.xsd">
+  <changeSet id="payments-bridge-data-retention-1.7.0" author="wkeska">
+    <createTable tableName="pb_file_data_retention">
+      <column name="file_name" type="VARCHAR(30)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="file_data_removed_at" type="TIMESTAMP">
+        <constraints nullable="true"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="pb_file_data_retention"
+        indexName="ix_pb_file_data_retention_file_name"
+        unique="true">
+      <column name="file_name"/>
+    </createIndex>
+
+  </changeSet>
+</databaseChangeLog>

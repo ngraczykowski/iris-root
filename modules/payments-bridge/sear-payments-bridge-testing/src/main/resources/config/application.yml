@@ -1,0 +1,70 @@
+spring:
+  application:
+    name: pb
+
+  profiles:
+    include: test
+
+  #-------------------------------------------------------------------------------------------------
+  # DATABASE
+  #-------------------------------------------------------------------------------------------------
+  datasource:
+    # Postgres database
+    type: com.zaxxer.hikari.HikariDataSource
+    url: localhost
+    username: paymentsbridge
+    password: paymentsbridge
+    initialization-mode: never
+
+    # Hikari pool configuration
+    hikari:
+      pool-name: Database-Pool
+      minimum-idle: 1
+      maximum-pool-size: 10
+      auto-commit: false
+      schema: public
+      isolate-internal-queries: true
+      # NOTE(ahaczewski): Forces HikariCP to commit the transaction after opening fresh connection.
+      #  Without it, the connection transaction is left in OPEN state instead of IDLE, because
+      #  just before HikariCP runs `SET SESSION spb.h_path TO '${ae.db.schema}'` which begins
+      #  transaction. Thus, with that query as workaround, we force the transaction commit.
+      connection-init-sql: SELECT 1
+      data-source-properties:
+        ApplicationName: SEAR Payments Bridge
+        reWriteBatchedInserts: true
+
+  # Database migrations
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-test.xml
+    default-schema: public
+    contexts: default, test
+    database-change-log-table: pb_databasechangelog
+    database-change-log-lock-table: pb_databasechangeloglock
+
+  # Spring Data JPA
+  jpa:
+    database: POSTGRESQL
+    show-sql: false
+    open-in-view: false
+    database-platform: com.silenteight.sep.base.common.support.hibernate.FixedPostgreSql95Dialect
+
+    hibernate:
+      ddl-auto: validate
+      use-new-id-generator-mappings: true
+
+    properties:
+      hibernate.cache.use_query_cache: false
+      hibernate.connection.handling_mode: DELAYED_ACQUISITION_AND_HOLD
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.generate_statistics: false
+      hibernate.id.optimizer.pooled.preferred: pooled-lo
+      hibernate.jdbc.batch_size: 2048
+      hibernate.jdbc.lob.non_contextual_creation: true
+      hibernate.jdbc.use_get_generated_keys: true
+      hibernate.jdbc.time_zone: UTC
+      hibernate.temp.use_jdbc_metadata_defaults: false
+      hibernate.order_inserts: true
+      hibernate.order_updates: true
+      #org.hibernate.flushMode: COMMIT
+      org.hibernate.envers.audit_table_suffix: _audit
+      org.hibernate.envers.store_data_at_delete: true

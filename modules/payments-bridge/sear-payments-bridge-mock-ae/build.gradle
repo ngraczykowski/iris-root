@@ -1,0 +1,14 @@
+plugins {
+  id "java-library"
+  id "groovy"
+}
+
+dependencies {
+  implementation project(":sear-payments-bridge-common")
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.adjudication_engine_api
+
+  implementation libraries.spring_boot
+  implementation libraries.spring_context
+  implementation libraries.grpc_server_spring_boot_starter
+}

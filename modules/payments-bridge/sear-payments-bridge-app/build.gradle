@@ -1,0 +1,187 @@
+plugins {
+  id "java"
+  id "groovy"
+  id "org.springframework.boot"
+  id "com.google.cloud.tools.jib"
+}
+
+dependencies {
+  // Application modules
+  implementation project(":sear-payments-bridge-common")
+  implementation project(":sear-payments-bridge-ae")
+  implementation project(":sear-payments-bridge-mock-ae")
+  implementation project(":sear-payments-bridge-mock-datasource")
+  implementation project(":sear-payments-birdge-mock-warehouse")
+  implementation project(":sear-payments-bridge-firco")
+  implementation project(":sear-payments-bridge-governance")
+  implementation project(":sear-payments-bridge-svb-learning")
+  implementation project(":sear-payments-bridge-data-retention")
+  implementation project(":sear-payments-bridge-warehouse")
+  implementation project(":sear-payments-bridge-etl")
+  implementation project(":sear-payments-bridge-notification")
+  implementation project(":proto-sear-payments-bridge-internal-protos")
+  testImplementation project(":sear-payments-bridge-testing")
+
+
+  // Utilities
+  implementation libraries.commons_lang3
+  implementation libraries.commons_text
+  implementation libraries.guava
+
+  // Logging
+  runtimeOnly libraries.ecs_logging_core
+  runtimeOnly libraries.logback_ecs_encoder
+
+  // Sentry
+  runtimeOnly libraries.sentry_spring_boot_starter
+  runtimeOnly libraries.sentry_logback
+
+  // Base Libraries
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.silenteight_commons_app
+
+  // Application Starters
+  implementation libraries.spring_batch_starter
+  implementation libraries.spring_boot_starter_actuator
+  implementation libraries.spring_boot_starter_logging
+  implementation libraries.spring_boot_starter_oauth2_client
+  implementation libraries.spring_boot_starter_oauth2_resource_server
+  implementation libraries.spring_boot_starter_security
+  implementation libraries.spring_boot_starter_undertow
+  implementation libraries.spring_boot_starter_web
+  implementation libraries.micrometer_prometheus
+
+  // Cloud
+  implementation libraries.spring_cloud_consul_discovery
+  implementation libraries.spring_cloud_starter_consul_config
+  implementation libraries.spring_cloud_starter_sleuth
+
+  // Validator
+  implementation libraries.tomcat_embed_el
+  implementation libraries.hibernate_validator
+
+  // Jackson
+  implementation libraries.jackson_annotations
+  implementation libraries.jackson_databind
+  runtimeOnly libraries.jackson_datatype_jdk8
+  runtimeOnly libraries.jackson_datatype_jsr310
+  runtimeOnly libraries.jackson_module_afterburner
+  runtimeOnly libraries.jackson_module_paranamer
+  runtimeOnly libraries.jackson_module_parameter_names
+
+  // Database
+  implementation libraries.spring_boot_starter_data_jpa
+  implementation libraries.spring_boot_starter_jdbc
+  implementation libraries.liquibase_core
+  implementation libraries.hikari_cp
+  runtimeOnly libraries.postgresql
+  runtimeOnly libraries.liquibase_sessionlock
+
+  // s3
+  implementation libraries.aws_auth
+  implementation libraries.aws_s3
+  implementation libraries.aws_ses
+
+  // Messaging
+  implementation libraries.amqp_client
+  implementation libraries.lz4_java
+  implementation libraries.spring_boot_starter_integration
+  implementation libraries.spring_integration_amqp
+  implementation libraries.spring_integration_core
+  implementation libraries.spring_integration_http
+  implementation libraries.sear_rabbitmq_common_schema
+
+  // GRPC
+  implementation libraries.brave_instrumentation_grpc
+  implementation libraries.grpc_server_spring_boot_starter
+  implementation libraries.grpc_client_spring_boot_starter
+
+  // AspectJ
+  implementation libraries.aspectjrt
+  aspect libraries.silenteight_sep_base_aspects
+
+  //  Datasource API
+  implementation libraries.data_source_api
+  implementation libraries.data_source_categories_api
+
+  // AE API
+  implementation libraries.adjudication_engine_api
+
+  // Learning Engine API
+  implementation libraries.learning_engine_store_api
+
+  // Governance
+  implementation libraries.governance_model_api
+
+  // Warehouse API
+  implementation libraries.warehouse_data_api
+
+  //Retention
+  implementation libraries.data_retention_api
+
+  //  Testing
+  testImplementation libraries.silenteight_sep_base_testing
+  testImplementation libraries.adjudication_engine_api
+  testImplementation libraries.awaitility
+  testImplementation libraries.test_greenmail
+
+  // Shedlock
+  implementation libraries.shedlock_spring
+  implementation libraries.shedlock_jdbc_provider
+
+  testImplementation libraries.silenteight_sep_base_testing
+}
+
+jar {
+  manifest {
+    attributes "Main-Class": "com.silenteight.payments.bridge.PaymentsBridgeApplication"
+  }
+}
+
+jib {
+  from {
+    // NOTE(ahaczewski): Use debug version of the image for SNAPSHOT builds.
+    def imageSuffix = ("$version".contains("-BUILD") || "$version".endsWith("-SNAPSHOT")) ?
+                      ":debug" : ""
+    image = "gcr.io/distroless/java17-debian11" + imageSuffix
+  }
+  to {
+    image = "docker.repo.silenteight.com/pb/${project.name}:${version}"
+    if ("$version".contains("-BUILD") || "$version".endsWith("-SNAPSHOT")) {
+      tags = ["snapshot"]
+    } else {
+      tags = ["latest"]
+    }
+  }
+  container {
+    appRoot = "/silenteight/app"
+    environment = [
+        "SILENTEIGHT_HOME"            : "/silenteight",
+        "PB_DB_HOST"                  : "postgres",
+        "PB_DB_PORT"                  : "5432",
+        "PB_DB_NAME"                  : "paymentsbridge",
+        "PB_DB_USERNAME"              : "paymentsbridge",
+        "PB_DB_PASSWORD"              : "paymentsbridge",
+        "SPRING_RABBITMQ_ADDRESSES"   : "rabbitmq",
+        "SPRING_RABBITMQ_PORT"        : "5672",
+        "SPRING_RABBITMQ_USERNAME"    : "dev",
+        "SPRING_RABBITMQ_PASSWORD"    : "dev",
+        "SPRING_RABBITMQ_VIRTUAL_HOST": "/",
+        "SPRING_PROFILES_ACTIVE"      : "",
+    ]
+    jvmFlags = [
+        "-XX:MaxRAMPercentage=75",
+        "-Dfile.encoding=UTF-8",
+        "-Dsun.jnu.encoding=UTF-8",
+        "-Djava.net.preferIPv4Stack=true",
+        "-Djava.io.tmpdir=/tmp",
+        "-Dsilenteight.home=/silenteight",
+        "-Dspring.profiles.include=container",
+        "-Dserver.port=8080",
+        "-Dgrpc.server.port=9090"
+    ]
+    ports = ["8080", "9090"]
+    user = "nonroot"
+    workingDirectory = "/silenteight"
+  }
+}

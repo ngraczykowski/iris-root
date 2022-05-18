@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        dbchangelog-3.10.xsd">
+  <changeSet id="payments-bridge-ae-1.0.0_1" author="wkeska">
+    <createTable tableName="pb_analysis">
+      <column name="analysis_id" type="BIGINT">
+        <constraints primaryKey="true" primaryKeyName="pk_pb_analysis_id"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="payments-bridge-ae-1.0.0_2" author="jgajewski">
+    <createTable tableName="pb_registered_alert">
+      <column name="alert_id" type="UUID">
+        <constraints primaryKey="true" primaryKeyName="pk_pb_alert_id"/>
+      </column>
+      <column name="alert_name" type="VARCHAR(30)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="pb_registered_alert"
+        indexName="ix_pb_registered_alert_alert_name">
+      <column name="alert_name"/>
+    </createIndex>
+
+    <addUniqueConstraint
+        columnNames="alert_id, alert_name"
+        constraintName="uq_apb_registered_alert_alert_id_alert_name"
+        tableName="pb_registered_alert"/>
+  </changeSet>
+
+  <changeSet id="payments-bridge-ae-1.0.0_3" author="jgajewski">
+    <modifyDataType
+        columnName="alert_name"
+        newDataType="VARCHAR(150)"
+        tableName="pb_registered_alert"/>
+  </changeSet>
+
+  <changeSet id="payments-bridge-ae-1.0.0_4" author="wkeska">
+    <modifyDataType tableName="pb_analysis"
+                    columnName="analysis_id"
+                    newDataType="varchar"/>
+  </changeSet>
+
+  <changeSet id="payments-bridge-ae-1.0.0_5" author="wkeska">
+    <renameColumn tableName="pb_analysis"
+                  oldColumnName="analysis_id"
+                  newColumnName="analysis_name"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_6" author="wkeska">
+    <sqlFile
+        path="sql/rename_analysis_name.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
+
+  <changeSet id="payments-bridge-ae-1.0.0_7" author="wkeska">
+    <modifyDataType
+        columnName="alert_id"
+        newDataType="UUID"
+        tableName="pb_registered_alert"/>
+  </changeSet>
+
+  <changeSet id="payments-bridge-ae-1.0.0_8" author="wkeska">
+    <renameColumn tableName="pb_registered_alert"
+                  oldColumnName="alert_id"
+                  newColumnName="alert_message_id"/>
+  </changeSet>
+
+  <changeSet id="payments-bridge-ae-1.0.0_10" author="wkeska">
+    <createTable tableName="pb_registered_match">
+      <column name="alert_message_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="match_name" type="VARCHAR(30)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="pb_registered_match"
+        indexName="ix_pb_registered_match_match_name">
+      <column name="match_name"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="payments-bridge-ae-1.0.0_11" author="wkeska">
+    <addForeignKeyConstraint baseTableName="pb_registered_match"
+                             baseColumnNames="alert_message_id"
+                             constraintName="fk_pb_registered_match_alert_message_id"
+                             referencedTableName="pb_registered_alert"
+                             referencedColumnNames="alert_message_id"/>
+  </changeSet>
+
+  <changeSet id="payments-bridge-ae-1.0.0_12" author="jgajewski">
+
+    <dropForeignKeyConstraint baseTableName="pb_registered_match"
+                              constraintName="fk_pb_registered_match_alert_message_id"/>
+
+    <addForeignKeyConstraint baseTableName="pb_registered_match"
+                             baseColumnNames="alert_message_id"
+                             constraintName="fk_pb_registered_match_alert_message_id"
+                             referencedTableName="pb_registered_alert"
+                             referencedColumnNames="alert_message_id"
+                             onDelete="CASCADE"/>
+  </changeSet>
+
+</databaseChangeLog>

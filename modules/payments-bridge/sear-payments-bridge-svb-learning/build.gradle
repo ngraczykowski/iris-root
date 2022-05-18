@@ -1,0 +1,61 @@
+plugins {
+  id "java-library"
+  id "groovy"
+}
+
+dependencies {
+  implementation project(":proto-sear-payments-bridge-internal-protos")
+  implementation project(":sear-payments-bridge-ae")
+  implementation project(":sear-payments-bridge-agents")
+  implementation project(":sear-payments-bridge-common")
+  implementation project(":sear-payments-bridge-data-retention")
+  implementation project(":sear-payments-bridge-datasource")
+  implementation project(":sear-payments-bridge-etl")
+  implementation project(":sear-payments-bridge-mock-datasource")
+  implementation project(":sear-payments-bridge-notification")
+  implementation project(":sear-payments-bridge-warehouse")
+
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.data_source_api
+  implementation libraries.data_source_categories_api
+  implementation libraries.data_source_agentinput_api
+  implementation libraries.learning_engine_store_api
+  implementation libraries.warehouse_data_api
+
+  implementation libraries.spring_amqp
+  implementation libraries.spring_batch_starter
+  implementation libraries.spring_boot
+  implementation libraries.spring_context
+  implementation libraries.spring_security_core
+  implementation libraries.spring_web
+  implementation libraries.spring_webmvc
+  implementation libraries.grpc_client_spring_boot_starter
+
+  implementation libraries.guava
+  implementation libraries.hibernate_validator
+  implementation libraries.jackson_annotations
+  implementation libraries.jackson_databind
+  implementation libraries.jackson_dataformat_csv
+  implementation libraries.jakarta_annotation_api
+  implementation libraries.jakarta_validation_api
+  implementation libraries.opencsv
+  implementation libraries.commons_collections
+  implementation libraries.protobuf_java_util
+
+  // TODO: please remove this dependency when old learning package will be removed
+  implementation libraries.aws_auth
+  implementation libraries.aws_s3
+  implementation libraries.aws_ses
+
+  implementation libraries.javax_mail
+
+  implementation libraries.shedlock_jdbc_provider
+  implementation libraries.shedlock_spring
+
+  testImplementation libraries.spring_batch_test
+  testImplementation libraries.silenteight_sep_base_testing
+  testImplementation libraries.spock_core
+  testImplementation libraries.spock_spring
+
+  testImplementation project(":sear-payments-bridge-testing")
+}

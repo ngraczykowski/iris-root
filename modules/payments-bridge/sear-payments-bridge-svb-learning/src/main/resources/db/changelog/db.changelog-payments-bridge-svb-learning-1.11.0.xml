@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        dbchangelog-3.10.xsd">
+
+  <changeSet id="payments-bridge-svb-learning-1.11.0" author="tbozek">
+    <modifyDataType tableName="pb_learning_error" columnName="file_name"
+                    newDataType="varchar"/>
+    <modifyDataType tableName="pb_learning_processed_alert" columnName="file_name"
+                    newDataType="varchar"/>
+  </changeSet>
+
+</databaseChangeLog>

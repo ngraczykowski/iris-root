@@ -1,0 +1,167 @@
+#---------------------------------------------------------------------------------------------------
+# REST SERVER
+#---------------------------------------------------------------------------------------------------
+server:
+  port: 24602
+
+#---------------------------------------------------------------------------------------------------
+# GRPC SERVER
+#---------------------------------------------------------------------------------------------------
+grpc:
+  server:
+    port: 24603
+  client:
+    GLOBAL:
+      negotiation-type: PLAINTEXT
+    ae:
+      address: static://localhost:${grpc.server.port}
+    datasource:
+      address: static://localhost:${grpc.server.port}
+    governance:
+      address: static://localhost:${grpc.server.port}
+    companynamesurroundingagent:
+      address: static://localhost:${grpc.server.port}
+
+pb:
+  #-------------------------------------------------------------------------------------------------
+  # DATABASE
+  #-------------------------------------------------------------------------------------------------
+  db:
+    host: localhost
+    port: 24681
+    schema: public
+    name: paymentsbridge
+    username: paymentsbridge
+    password: paymentsbridge
+    connections:
+      min: 10
+      max: 100
+
+  #-------------------------------------------------------------------------------------------------
+  # WEB CONCURRENCY
+  #-------------------------------------------------------------------------------------------------
+  web:
+    threads:
+      io: 2
+      worker: 4
+
+  #-------------------------------------------------------------------------------------------------
+  # MESSAGING CONCURRENCY
+  #-------------------------------------------------------------------------------------------------
+  messaging:
+    concurrency: 2
+    prefetch: 2
+
+  #-------------------------------------------------------------------------------------------------
+  # CMAPI CALLBACK
+  #-------------------------------------------------------------------------------------------------
+  cmapi:
+    callback:
+      endpoint: "http://localhost:${server.port}/rest/pb/mock/cmapi"
+      enabled: false
+
+  #-------------------------------------------------------------------------------------------------
+  # ALERT MESSAGES
+  #-------------------------------------------------------------------------------------------------
+  alert-message:
+    # NOTE(ahaczewski): For ease of debugging, the original message is stored indefinitely
+    #  in the pb_alert_message_payload table.
+    original-message-deleted-after-recommendation: false
+
+  #-------------------------------------------------------------------------------------------------
+  # SECURITY
+  #
+  # The security is disabled by default for local development.
+  # Please see the README.md for information on how to enable it.
+  #-------------------------------------------------------------------------------------------------
+  security:
+    disable-security: true
+
+  #-------------------------------------------------------------------------------------------------
+  # Notification sending
+  #-------------------------------------------------------------------------------------------------
+  email-notification:
+    cmapi-enabled: true
+    cmapi-errors-enabled:
+      - "UNABLE TO MAP UNKNOWN TYPE"
+      - "FIRST CHAR IN NOT / WHEN"
+      - "INDEX OUT OF BOUND"
+      - "TAG NOT FOUND"
+      - "TAG NOT SUPPORTED"
+    learning-enabled: false
+
+  #-------------------------------------------------------------------------------------------------
+  # SEAR Learning
+  #-------------------------------------------------------------------------------------------------
+  sear-learning:
+    discriminator-prefix: "sierra"
+
+  #-------------------------------------------------------------------------------------------------
+  # SEAR Agents
+  #-------------------------------------------------------------------------------------------------
+  agents:
+    specific-terms2:
+      bucket: "sierra-dev-decrypted-files"
+      regular-terms-key: "category/regularTerms.csv"
+      specific-terms-key: "category/specificTerms.csv"
+
+spring:
+  #-------------------------------------------------------------------------------------------------
+  # MULTI-THREADING
+  #-------------------------------------------------------------------------------------------------
+  task:
+    execution:
+      pool:
+        core-size: 2
+        max-size: 4
+        queue-capacity: 1000
+
+  #-------------------------------------------------------------------------------------------------
+  # RABBITMQ
+  #-------------------------------------------------------------------------------------------------
+  rabbitmq:
+    host: localhost
+    port: 24160
+    username: dev
+    password: dev
+    virtual-host: /
+
+  #---------------------------------------------------------------------------------------------------
+  # SECURITY
+  #---------------------------------------------------------------------------------------------------
+
+  #------------------------------------------------------------------------------
+  # Egress authorization
+  #
+  # NOTE(ahaczewski): The configuration below is for development purposes only,
+  #   and the `egress-mock` realm in our Keycloak is used to simulate the customer
+  #   auth server.
+  #
+  #------------------------------------------------------------------------------
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://auth.silent8.cloud/realms/sierra
+      client:
+        registration:
+          callback:
+            client-id: cmapi-dev
+            # Set the client-secret via environment variable SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_callback_CLIENT-SECRET
+            #client-secret: <CLIENT SECRET>
+        provider:
+          external:
+            token-uri: https://auth.silent8.cloud/realms/egress-mock/protocol/openid-connect/token
+
+#------------------------------------------------------------------------------
+# Environment
+#------------------------------------------------------------------------------
+environment:
+  name: "LOCALHOST"
+
+management:
+  server:
+    port: 24604
+  health:
+    probes:
+      enabled: true

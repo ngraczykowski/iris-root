@@ -1,0 +1,33 @@
+{%- extends "bootstrap/base.html" %}
+
+{% block title %}CMAPI Mock{% endblock %}
+
+{% import "bootstrap/fixes.html" as fixes %}
+
+{% block head %}
+    {{ super() }}
+    {{ fixes.ie8() }}
+{%- endblock %}
+
+{% block styles -%}
+    {{ super() }}
+    <style>
+        textarea {
+            width: 620px;
+            height: 440px;
+        }
+    </style>
+{% endblock %}
+
+{% macro render_field(field) %}
+    <dt>{{ field.label }}
+    <dd>{{ field(**kwargs)|safe }}
+        {% if field.errors %}
+            <ul class=errors>
+                {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </dd>
+{% endmacro %}

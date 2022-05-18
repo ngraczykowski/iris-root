@@ -1,0 +1,7 @@
+{
+  "id": "{{step13-uuid}}",
+  "name": "13 - C, Name No,Weak",
+  "description": "",
+  "solution": "FALSE_POSITIVE",
+  "type": "BUSINESS_LOGIC"
+}

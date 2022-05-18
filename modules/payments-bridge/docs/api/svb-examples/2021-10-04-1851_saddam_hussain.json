@@ -1,0 +1,2070 @@
+{
+  "Header": null,
+  "Body": {
+    "msg_SendMessage": {
+      "VersionTag": "1",
+      "Authentication": {
+        "UserLogin": "CMAPI_LOGIN",
+        "UserPassword": "abc",
+        "UserRealm": ""
+      },
+      "Messages": [
+        {
+          "Message": {
+            "Unit": "MTS-SCB",
+            "BusinessUnit": "ROOT",
+            "MessageID": "8DDC55A6-2E5A-0BE3-E053-150A6C0AD492",
+            "SystemID": "DIN20200319153450-00010-18253",
+            "Bypass": "0",
+            "Command": "1",
+            "BusinessType": "SWF",
+            "MessageType": "O-FPS",
+            "IOIndicator": "O",
+            "SenderReference": "ABCOFP1123",
+            "Currency": "EUR",
+            "Amount": "5431.26",
+            "ApplicationCode": "GTEX",
+            "ToApplication": "",
+            "MessageFormat": "SWIFT",
+            "SenderCode": "SVBKGB20XXXX",
+            "ReceiverCode": "091036164",
+            "ApplicationPriority": "0",
+            "CutoffTime": "20190606173000",
+            "NormalizedAmount": "",
+            "MessageData": "{1:F01SVBKUS60XXXX0000000000}{2:I199SVBKUS60XXXXN}{3:{108:ECSAMT0000418871}{121:f299c3d8-0121-12c5-b352-1d16b7017419}}{4:\n:20:ABCOFP1123\n:23B:CRED BP00000009LK\n:32A:10606CAD5431,26\n:50K:\/3300565427\nSINA BANK\nABCD LTD\nSADDAM HUSSAIN CUBA Clara\n:59A:nosccatt\nSCOTT PLAZA 40 king street West\nsuite 5800 PO Box 1011\nTORONTO ON MSH 351 Canada\n:71A:SHA\n-}{5:{CHK:370453F95D8E}{TNG:}}",
+            "LastComment": "",
+            "LastOperator": "svb_user1",
+            "ValueDate": "?",
+            "FilteredDate": "2020\/03\/19 15:34:51",
+            "RelatedReference": "",
+            "CreatedDate": "2020\/03\/19 15:34:50",
+            "Priority": "0",
+            "Confidentiality": "0",
+            "Blocking": "16",
+            "NonBlocking": "0",
+            "CopyService": "",
+            "Hits": [
+              {
+                "Hit": {
+                  "MatchingText": "HUSSAIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "224",
+                        "PositionEnd": "230"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "1",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "'HUSSAIN'",
+                  "HittedEntity": {
+                    "ID": "AS00495156",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2013-10-17 15:34:20 UN"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "ALI MUHAMMAD, MATI UR-REHMAN"
+                      },
+                      {
+                        "Name": "'HUSSAIN'"
+                      },
+                      {
+                        "Name": "'TARIQ'"
+                      },
+                      {
+                        "Name": "MATI-UR REHMAN"
+                      },
+                      {
+                        "Name": "MATIUR RAHMAN"
+                      },
+                      {
+                        "Name": "MATIUR REHMAN"
+                      },
+                      {
+                        "Name": "MATTI AL-REHMAN"
+                      },
+                      {
+                        "Name": "MUSHTAQ, QARI"
+                      },
+                      {
+                        "Name": "REHMAN, MATI UR"
+                      },
+                      {
+                        "Name": "SAMAD, ABDUL"
+                      },
+                      {
+                        "Name": "SIAL, ABDUL SAMAD"
+                      },
+                      {
+                        "Name": "SIAL, SAMAD"
+                      },
+                      {
+                        "Name": "TALHA, USTAD"
+                      },
+                      {
+                        "Name": "مطیع الرحمن علی محمد"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "UNITED_NATIONS",
+                    "Designation": "ISILDAESHALQAIDA",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:UNITED_NATIONS"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "List ID: 44 \/ Create Date: 08\/22\/2011 16:02:58 \/ Last Update Date: 01\/19\/2017 17:12:54 \/ Program: ISIL (DA'ESH) & AL-QAIDA \/ Nationality: Pakistan \/ OtherInformation: Physical description: 5 feet 2 inches; 157,4 cm. Name of father: Ali Muhammad. Mati ur-Rehman is the chief operational commander of Lashkar i Jhangvi (LJ) (QDe.096). Associated with Harakat-ul Jihad Islami (QDe.130). INTERPOL-UN Security Council Special Notice web link: https:\/\/www.interpol.int\/en\/notice\/search\/un\/4674457 \/ OriginalID: QDi.296",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "APPROXIMATELY 1977"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "Chak number 36\/DNB, Rajkan, Madina Colony, Bahawalpur District, Punjab Province, Pakistan"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "49361",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "SADDAM HUSSAIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "217",
+                        "PositionEnd": "230"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "AL-TIKRITI, ALI SADDAM HUSSEIN",
+                  "HittedEntity": {
+                    "ID": "AS00307517",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2009-05-06 12:41:36 HK"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "AL-TIKRITI, ALI SADDAM HUSSEIN"
+                      },
+                      {
+                        "Name": "HASSAN"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "HK_HKMA",
+                    "Designation": "IRAQ",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:HONG_KONG"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "List ID: 37 \/ Create Date: 04\/15\/2009 14:32:23 \/ Last Update Date: 01\/19\/2010 10:21:07 \/ Program: IRAQ \/ Nationality: IRAQI \/ OtherInformation: SON OF SAMIRA SHAHBANDAR AND SADDAM HUSSEIN",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "1980 1983"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "IRAQ"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "6669",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "SADDAM HUSSAIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "217",
+                        "PositionEnd": "230"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "1",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "HUSAYN, SADDAM",
+                  "HittedEntity": {
+                    "ID": "AS00048458",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2009-02-10 11:44:46 UST"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "AL-TIKRITI, SADDAM HUSSEIN"
+                      },
+                      {
+                        "Name": "HUSAYN, SADDAM"
+                      },
+                      {
+                        "Name": "HUSSAIN, SADDAM"
+                      },
+                      {
+                        "Name": "HUSSEIN, SADDAM"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "US_OFAC",
+                    "Designation": "IRAQ2",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:OFAC"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "List ID: 0 \/ Create Date: 06\/25\/2003 11:05:11 \/ Last Update Date: 10\/20\/2014 08:53:41 \/ Program: IRAQ2 \/ Weak Alias: 'ABU ALI' \/ Title: FORMER PRESIDENT; FORMER PRESIDENT NAMED IN UNSCR 1438; FORMER PRESIDENT NAMED IN UNSCR 1483 \/ Nationality: IRAQ \/ OtherInformation: NAMED IN UNSCR 1483 \/ OriginalID: 7843",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "04\/28\/1937"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "AL-AWJA, NEAR TIKRIT, IRAQ"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "46118",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "SADDAM HUSSAIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "217",
+                        "PositionEnd": "230"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "1",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "HUSSEIN, UDAI SADDAM",
+                  "HittedEntity": {
+                    "ID": "AS00048462",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2010-02-10 13:10:16 UST"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "AL-TIKRITI, UDAY SADDAM HUSSEIN"
+                      },
+                      {
+                        "Name": "HUSSEIN, UDAI SADDAM"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "US_OFAC",
+                    "Designation": "IRAQ2",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:OFAC"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "List ID: 0 \/ Create Date: 06\/25\/2003 11:05:11 \/ Last Update Date: 10\/20\/2014 09:18:52 \/ Program: IRAQ2 \/ Title: FORMER LEADER PARAMILITARY ORG. FEDAYEEN SADDAM \/ Nationality: IRAQ \/ OtherInformation: SADDAM HUSSEIN AL-TIKRITI'S ELDEST SON; SADDAM HUSSEIN ELDEST SON \/ OriginalID: 7845",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "1964 1967"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "BAGHDAD, IRAQ"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "46119",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "SADDAM HUSSAIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "217",
+                        "PositionEnd": "230"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "AL-TIKRITI, ALI SADDAM HUSSEIN",
+                  "HittedEntity": {
+                    "ID": "AS00082742",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2004-05-14 09:19:29 EU"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "AL-TIKRITI, ALI SADDAM HUSSEIN"
+                      },
+                      {
+                        "Name": "HASSAN"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "EUROPEAN_UNION",
+                    "Designation": "IRAQ_HUSSEIN",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:EUROPEAN_UNION"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "List ID: 33 \/ Create Date: 05\/13\/2004 18:01:55 \/ Last Update Date: 11\/11\/2009 11:06:31 \/ Program: IRAQ - FORMER PRESIDENT SADDAM HUSSEIN \/ Legal_Basis: 924\/2004 (OJ L 163) \/ Nationality: IRAQI \/ Gender: M \/ OtherInformation: SON OF SAMIRA SHAHBANDAR AND SADDAM HUSSEIN \/ EffectiveDate: 4\/30\/2004 \/ OriginalID: 1892",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "1980 1983"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "IRAQ"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "6669",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "CUBA, CUBA",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "232",
+                        "PositionEnd": "235"
+                      }
+                    },
+                    {
+                      "Position": {
+                        "PositionStart": "232",
+                        "PositionEnd": "235"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "6",
+                  "SynonymIndex": "-1",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "CUBA",
+                  "HittedEntity": {
+                    "ID": "AS00010013",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2011-11-30 12:06:11 RBL"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "*"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                            {
+                              "City": "*"
+                            }
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                            {
+                              "Country": "CUBA"
+                            },
+                            {
+                              "Country": "CUBA"
+                            },
+                            {
+                              "Country": "CUBANA"
+                            },
+                            {
+                              "Country": "KUBA"
+                            },
+                            {
+                              "Country": "REPUBLIC OF CUBA"
+                            },
+                            {
+                              "Country": "REPUBLICA DE CUBA"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "US_OFAC_ENH_LCTN",
+                    "Designation": "CUBA",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:OFAC"
+                      }
+                    ],
+                    "Type": "O",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "31 main cities:BAYAMO, CAMAGUEY, CIEGO DE AVILA, CIENFUEGOS, HABANA, HOLGUIN, LAS TUNAS, GUANTANAMO, MANZANILLO, MATANZAS, HAVANA, PINAR DEL RIO, SANTIAGO DE CUBA, SANCTI SPIRITUS, PALMA SORIANO, LA HAVANE, CAYO LARGO, SANTA CLARA, LA HABANA, VARADERO, ANTILLA, BANES, BARACOA, CAIBARIEN, SAGUA LA GRANDE, NUEVA GERONA, TANAMO, SANTA CRUZ DEL SUR, HABANAS, HAVANNA, L AVANAList ID: 1072 \/ Create Date: 11\/13\/1997 00:00:00 \/ Last Update Date: 09\/24\/2015 18:10:23 \/ Program: CUBA \/ OtherInformation: XLOC. OFAC maintains a sanctions program for Cuba. Please refer to the OFAC website for detailed information: http:\/\/www.treasury.gov\/resource-center\/sanctions\/Programs\/Pages\/cuba.aspx",
+                    "DatesOfBirth": [
+                    ],
+                    "PlacesOfBirth": [
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "SADDAM HUSSAIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "217",
+                        "PositionEnd": "230"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "AL-TIKRITI, ALI SADDAM HUSSEIN",
+                  "HittedEntity": {
+                    "ID": "AS00069712",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2009-02-10 11:44:58 UST"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "AL-TIKRITI, ALI SADDAM HUSSEIN"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "US_OFAC",
+                    "Designation": "IRAQ2",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:OFAC"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "List ID: 0 \/ Create Date: 03\/18\/2004 11:59:37 \/ Last Update Date: 03\/29\/2013 12:40:49 \/ Program: IRAQ2 \/ Weak Alias: 'HASSAN' \/ Nationality: IRAQ \/ OtherInformation: SON OF SADDAM HUSSEIN AL-TIKRITI \/ OriginalID: 8187",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "1980 1983"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "IRAQ"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "6669",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "SADDAM HUSSAIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "217",
+                        "PositionEnd": "230"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "HUSSEIN AL-TIKRITI, SADDAM",
+                  "HittedEntity": {
+                    "ID": "AS00052274",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2009-10-15 16:48:12 EU"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "HUSSEIN AL-TIKRITI, SADDAM"
+                      },
+                      {
+                        "Name": "ABOU ALI"
+                      },
+                      {
+                        "Name": "ABU ALI"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "EUROPEAN_UNION",
+                    "Designation": "IRAQ_HUSSEIN",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:EUROPEAN_UNION"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "List ID: 33 \/ Create Date: 08\/14\/2003 15:56:40 \/ Last Update Date: 11\/11\/2009 11:07:04 \/ Program: IRAQ - FORMER PRESIDENT SADDAM HUSSEIN \/ Legal_Basis: 1210\/2003 (OJ L 169) \/ Title: NAMED IN UNSCR 1483 \/ Nationality: IRAQI \/ Gender: M \/ OtherInformation: UNSC RESOLUTION 1483 \/ EffectiveDate: 7\/9\/2003 \/ OriginalID: 13",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "04\/28\/1937"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "Al-Awja, near Tikrit; AL-AWJA, NEAR TIKRIT, IRAQ"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "46118",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "SADDAM HUSSAIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "217",
+                        "PositionEnd": "230"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "HUSSEIN AL-TIKRITI, QUSAY SADDAM",
+                  "HittedEntity": {
+                    "ID": "AS00052276",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2009-10-15 16:48:13 EU"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "HUSSEIN AL-TIKRITI, QUSAY SADDAM"
+                      },
+                      {
+                        "Name": "HUSSEIN AL-TIKRITI, QOUSSAI SADDAM"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "EUROPEAN_UNION",
+                    "Designation": "IRAQ_HUSSEIN",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:EUROPEAN_UNION"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "List ID: 33 \/ Create Date: 08\/14\/2003 15:56:41 \/ Last Update Date: 11\/11\/2009 11:07:04 \/ Program: IRAQ - FORMER PRESIDENT SADDAM HUSSEIN \/ Legal_Basis: 1210\/2003 (OJ L 169) \/ Title: OVERSAW SPECIAL REPUBLICAN GUARD, SPECIAL SECURITY ORGANISATION, AND REPUBLICAN GUARD; SADDAM'S SECOND SON \/ Nationality: IRAQI \/ Gender: M \/ OtherInformation: UNSC RESOLUTION 1483 BASIS; Saddam's second son; Oversaw Special Republican Guard, Special Security Organisation, and Republican Guard \/ EffectiveDate: 7\/9\/2003 \/ OriginalID: 20",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "1965 1966"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "Baghdad; BAGHDAD, IRAQ"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "6673",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "SADDAM HUSSAIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "217",
+                        "PositionEnd": "230"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "HUSSEIN AL-TIKRITI, UDAY SADDAM",
+                  "HittedEntity": {
+                    "ID": "AS00052278",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2009-10-15 16:48:13 EU"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "HUSSEIN AL-TIKRITI, UDAY SADDAM"
+                      },
+                      {
+                        "Name": "HUSSEIN AL-TIKRITI, OUDAI SADDAM"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "EUROPEAN_UNION",
+                    "Designation": "IRAQ_HUSSEIN",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:EUROPEAN_UNION"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "List ID: 33 \/ Create Date: 08\/14\/2003 15:56:41 \/ Last Update Date: 11\/11\/2009 11:07:04 \/ Program: IRAQ - FORMER PRESIDENT SADDAM HUSSEIN \/ Legal_Basis: 1210\/2003 (OJ L 169) \/ Title: LEADER OF PARAMILITARY ORGANISATION FEDAYEEN SADDAM; LEADER OF PARAMILITARY ORGANISATION FEDAYEEN SADDAM.; SADDAM'S ELDEST SON \/ Nationality: IRAQI \/ Gender: M \/ OtherInformation: UNSC RESOLUTION 1483 BASIS; Saddam's eldest son \/ EffectiveDate: 7\/9\/2003 \/ OriginalID: 23",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "1964 1967"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "Baghdad; BAGHDAD, IRAQ"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "46119",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "SADDAM HUSSAIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "217",
+                        "PositionEnd": "230"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "AL-TIKRITI, ALI SADDAM HUSSEIN",
+                  "HittedEntity": {
+                    "ID": "AS00071864",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2004-04-29 16:51:28 BofE"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "AL-TIKRITI, ALI SADDAM HUSSEIN"
+                      },
+                      {
+                        "Name": "'HASSAN'"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "GB_HMT",
+                    "Designation": "IRAQ",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:BANK_OF_ENGLAND"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "List ID: 29 \/ Create Date: 04\/28\/2004 12:10:23 \/ Last Update Date: 06\/30\/2015 10:40:06 \/ Program: IRAQ \/ Nationality: IRAQI \/ OtherInformation: SON OF SAMIRA SHAHBANDAR AND SADDAM HUSSEIN \/ EffectiveDate: 6\/2\/2008 \/ OriginalID: 8247",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "1980 1983"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "IRAQ"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "6669",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "SINA BANK",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "198",
+                        "PositionEnd": "206"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "SINA BANK",
+                  "HittedEntity": {
+                    "ID": "AS06200733",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2019-01-08 11:52:17 WBD"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "SINA BANK"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "NO.187, MOTAHHARI AVENUE,, 1588864571",
+                          "Cities": [
+                            {
+                              "City": "TEHRAN"
+                            },
+                            {
+                              "City": "TEHERAN"
+                            },
+                            {
+                              "City": "TEHRAN"
+                            }
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                            {
+                              "Country": "IRAN ISLAMIC REPUBLIC OF"
+                            },
+                            {
+                              "Country": "IRAN"
+                            },
+                            {
+                              "Country": "IRAN (ISLAMIC REPUBLIC OF)"
+                            },
+                            {
+                              "Country": "IRAN ISLAMIC REPUBLIC OF"
+                            },
+                            {
+                              "Country": "IRAO"
+                            },
+                            {
+                              "Country": "ISLAMIC REPUBLIC OF IRAN"
+                            },
+                            {
+                              "Country": "JOMHURI YE ESLAMI YE IRAN"
+                            },
+                            {
+                              "Country": "JOMHURI-YE ESLAMI-YE IRAN"
+                            },
+                            {
+                              "Country": "PERSIA"
+                            },
+                            {
+                              "Country": "REPUBLIQUE ISLAMIQUE D'IRAN"
+                            },
+                            {
+                              "Country": "REPUBLIQUE ISLAMIQUE D IRAN"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "US_OFAC_ENH_BANK",
+                    "Designation": "IFSR__IRAN__SDGT",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:OFAC"
+                      }
+                    ],
+                    "Type": "C",
+                    "Codes": [
+                      {
+                        "Code": {
+                          "Name": "SINAIRT1",
+                          "Type": "Bic"
+                        }
+                      }
+                    ],
+                    "AdditionalInfo": "List ID: 1072 \/ Create Date: 01\/04\/2019 16:52:57 \/ Last Update Date: 01\/07\/2019 10:19:26 \/ Org_PID: 25067 \/ Program: IFSR & IRAN & SDGT \/ BIC: SINAIRT1418",
+                    "DatesOfBirth": [
+                    ],
+                    "PlacesOfBirth": [
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "43624",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "SINA BANK",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "198",
+                        "PositionEnd": "206"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "SINA BANK",
+                  "HittedEntity": {
+                    "ID": "AS00543250",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2018-10-24 12:05:44 311"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "SINA BANK"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "NO.184, MOTAHHARI AVENUE, 1588864571",
+                          "Cities": [
+                            {
+                              "City": "TEHRAN"
+                            },
+                            {
+                              "City": "TEHERAN"
+                            },
+                            {
+                              "City": "TEHRAN"
+                            }
+                          ],
+                          "States": [
+                            {
+                              "State": "TEHRAN"
+                            }
+                          ],
+                          "Countries": [
+                            {
+                              "Country": "IRAN ISLAMIC REPUBLIC OF"
+                            },
+                            {
+                              "Country": "IRAN"
+                            },
+                            {
+                              "Country": "IRAN (ISLAMIC REPUBLIC OF)"
+                            },
+                            {
+                              "Country": "IRAN ISLAMIC REPUBLIC OF"
+                            },
+                            {
+                              "Country": "IRAO"
+                            },
+                            {
+                              "Country": "ISLAMIC REPUBLIC OF IRAN"
+                            },
+                            {
+                              "Country": "JOMHURI YE ESLAMI YE IRAN"
+                            },
+                            {
+                              "Country": "JOMHURI-YE ESLAMI-YE IRAN"
+                            },
+                            {
+                              "Country": "PERSIA"
+                            },
+                            {
+                              "Country": "REPUBLIQUE ISLAMIQUE D'IRAN"
+                            },
+                            {
+                              "Country": "REPUBLIQUE ISLAMIQUE D IRAN"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "US_FINCEN_311",
+                    "Designation": "GWL",
+                    "Keywords": [
+                      {
+                        "Keyword": "ENHANCEMENT:ENHANCEMENT_Y"
+                      },
+                      {
+                        "Keyword": "OS:FINCEN"
+                      }
+                    ],
+                    "Type": "C",
+                    "Codes": [
+                      {
+                        "Code": {
+                          "Name": "SINAIRT1",
+                          "Type": "Bic"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "SINAIRTH",
+                          "Type": "Bic"
+                        }
+                      }
+                    ],
+                    "AdditionalInfo": "List ID: 1022 \/ Create Date: 03\/02\/2012 06:59:56 \/ Last Update Date: 01\/09\/2019 08:29:39 \/ BIC: SINAIRT1418; SINAIRTH418 \/ OtherInformation: SPECIAL MEASURES PROPOSED",
+                    "DatesOfBirth": [
+                    ],
+                    "PlacesOfBirth": [
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "43624",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "SADDAM HUSSAIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "217",
+                        "PositionEnd": "230"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "AL-TIKRITI, ALI SADDAM HUSSEIN",
+                  "HittedEntity": {
+                    "ID": "AS00071278",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2004-04-14 13:55:21 UN"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "AL-TIKRITI, ALI SADDAM HUSSEIN"
+                      },
+                      {
+                        "Name": "'HASSAN'"
+                      },
+                      {
+                        "Name": "علي صدام حسين التكريتي"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "UNITED_NATIONS",
+                    "Designation": "IRAQ",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:UNITED_NATIONS"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "List ID: 44 \/ Create Date: 04\/14\/2004 11:30:48 \/ Last Update Date: 05\/14\/2015 16:51:05 \/ Program: IRAQ \/ Nationality: IRAQ \/ OriginalID: IQi.061",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "1980 1983"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "IRAQ"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "6669",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "HUSSAIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "224",
+                        "PositionEnd": "230"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "1",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "'HUSSAIN'",
+                  "HittedEntity": {
+                    "ID": "AS00567419",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2013-11-05 14:34:50 BofE"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "ALI MUHAMMAD, MATI UR-REHMAN"
+                      },
+                      {
+                        "Name": "'HUSSAIN'"
+                      },
+                      {
+                        "Name": "'QARI MUSHTAQ'"
+                      },
+                      {
+                        "Name": "'TARIQ'"
+                      },
+                      {
+                        "Name": "AL-REHMAN, MATTI"
+                      },
+                      {
+                        "Name": "RAHMAN, MATIUR"
+                      },
+                      {
+                        "Name": "REHMAN, MATI-UR"
+                      },
+                      {
+                        "Name": "REHMAN, MATIUR"
+                      },
+                      {
+                        "Name": "SAMAD, ABDUL"
+                      },
+                      {
+                        "Name": "SIAL, ABDUL SAMAD"
+                      },
+                      {
+                        "Name": "SIAL, SAMAD"
+                      },
+                      {
+                        "Name": "TALHA, USTAD"
+                      },
+                      {
+                        "Name": "UR REHMAN, MATI"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "GB_HMT",
+                    "Designation": "ISILDAESHALQAIDA",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:BANK_OF_ENGLAND"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "List ID: 29 \/ Create Date: 07\/09\/2012 11:48:25 \/ Last Update Date: 03\/17\/2016 14:57:17 \/ Program: ISIL (DA'ESH) AND AL-QAIDA ORGANISATIONS \/ Nationality: Pakistani \/ OtherInformation: UN Ref QI.M.296.11. Also referred to as Qari Mushtaq, Tariq and Hussain. Chief operational commander of Lashkar i Jhangvi. Associated with Harakat-ul Juhad Islami. Physical description: 5 feet 2 inches, 157.4 cm. Name of father: Ali Muhammad. DOB is approximate. \/ EffectiveDate: 11\/5\/2013 \/ OriginalID: 12038",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "1977"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "Chak number 36\/DNB, Rajkan, Madina Colony, Bahawalpur District, Punjab Province, Pakistan"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "49361",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "SINA BANK",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "198",
+                        "PositionEnd": "206"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "SINA BANK",
+                  "HittedEntity": {
+                    "ID": "AS06187639",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2018-10-16 16:31:57 UST"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "SINA BANK"
+                      },
+                      {
+                        "Name": "SINA FINANCE AND CREDIT INSTITUTE"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "BETWEEN MIREMAD STREET AND MOFATEH STREET, MOTAHARI AVENUE, 15888-6457",
+                          "Cities": [
+                            {
+                              "City": "TEHRAN"
+                            },
+                            {
+                              "City": "TEHERAN"
+                            },
+                            {
+                              "City": "TEHRAN"
+                            }
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                            {
+                              "Country": "IRAN ISLAMIC REPUBLIC OF"
+                            },
+                            {
+                              "Country": "IRAN"
+                            },
+                            {
+                              "Country": "IRAN (ISLAMIC REPUBLIC OF)"
+                            },
+                            {
+                              "Country": "IRAN ISLAMIC REPUBLIC OF"
+                            },
+                            {
+                              "Country": "IRAO"
+                            },
+                            {
+                              "Country": "ISLAMIC REPUBLIC OF IRAN"
+                            },
+                            {
+                              "Country": "JOMHURI YE ESLAMI YE IRAN"
+                            },
+                            {
+                              "Country": "JOMHURI-YE ESLAMI-YE IRAN"
+                            },
+                            {
+                              "Country": "PERSIA"
+                            },
+                            {
+                              "Country": "REPUBLIQUE ISLAMIQUE D'IRAN"
+                            },
+                            {
+                              "Country": "REPUBLIQUE ISLAMIQUE D IRAN"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "US_OFAC",
+                    "Designation": "IFSR__IRAN__SDGT",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:OFAC"
+                      }
+                    ],
+                    "Type": "C",
+                    "Codes": [
+                      {
+                        "Code": {
+                          "Name": "SINAIRTH",
+                          "Type": "Bic"
+                        }
+                      }
+                    ],
+                    "AdditionalInfo": "List ID: 0 \/ Create Date: 10\/16\/2018 14:57:03 \/ Last Update Date: 10\/16\/2018 16:00:57 \/ Program: IFSR & IRAN & SDGT \/ OtherInformation: (LINKED TO: ANDISHEH MEHVARAN INVESTMENT COMPANY); ADDITIONAL SANCTIONS INFORMATION: SUBJECT TO SECONDARY SANCTIONS; WEBSITE: WWW.SINABANK.IR \/ OriginalID: 25067",
+                    "DatesOfBirth": [
+                    ],
+                    "PlacesOfBirth": [
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "43624",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              }
+            ],
+            "Actions": [
+              {
+                "Action": {
+                  "DateTime": "20200319153451",
+                  "Operator": "Filter Engine",
+                  "Comment": "Stop: 16, Nonblocking: 0",
+                  "Status": {
+                    "ID": "0",
+                    "Name": "FILTER",
+                    "RoutingCode": "0",
+                    "Checksum": "c4b4872d17cf6fa4f27f06e3b5d93c78"
+                  }
+                }
+              },
+              {
+                "Action": {
+                  "DateTime": "20200319153452",
+                  "Operator": "Stripping Engine",
+                  "Comment": "Stop: 16, Nonblocking: 0",
+                  "Status": {
+                    "ID": "-2",
+                    "Name": "NO HIT",
+                    "RoutingCode": "-2",
+                    "Checksum": "1080a07f679004254edcc4854e8f66a7"
+                  }
+                }
+              },
+              {
+                "Action": {
+                  "DateTime": "20200319153505",
+                  "Operator": "svb_user1",
+                  "Comment": "svb_user1 opened this message",
+                  "Status": {
+                    "ID": "-1000",
+                    "Name": "N\/A",
+                    "RoutingCode": "-1",
+                    "Checksum": "7163dc6253aa3c4467fdcb2ad60600df"
+                  }
+                }
+              },
+              {
+                "Action": {
+                  "DateTime": "20200319153614",
+                  "Operator": "svb_user1",
+                  "Comment": "svb_user1 opened this message in read-only mode",
+                  "Status": {
+                    "ID": "-1000",
+                    "Name": "N\/A",
+                    "RoutingCode": "-1",
+                    "Checksum": "7163dc6253aa3c4467fdcb2ad60600df"
+                  }
+                }
+              },
+              {
+                "Action": {
+                  "DateTime": "20200319153625",
+                  "Operator": "svb_user1",
+                  "Comment": "svb_user1 unlocked this message",
+                  "Status": {
+                    "ID": "-1000",
+                    "Name": "N\/A",
+                    "RoutingCode": "-1",
+                    "Checksum": "7163dc6253aa3c4467fdcb2ad60600df"
+                  }
+                }
+              },
+              {
+                "Action": {
+                  "DateTime": "20200319153629",
+                  "Operator": "svb_user1",
+                  "Comment": "svb_user1 opened this message",
+                  "Status": {
+                    "ID": "-1000",
+                    "Name": "N\/A",
+                    "RoutingCode": "-1",
+                    "Checksum": "7163dc6253aa3c4467fdcb2ad60600df"
+                  }
+                }
+              },
+              {
+                "Action": {
+                  "DateTime": "20200319153635",
+                  "Operator": "svb_user1",
+                  "Comment": "",
+                  "Status": {
+                    "ID": "202",
+                    "Name": "ESC_TO_L2",
+                    "RoutingCode": "12",
+                    "Checksum": "66930351d743258bf108503fcb90a93b"
+                  }
+                }
+              }
+            ],
+            "CurrentStatus": {
+              "ID": "202",
+              "Name": "ESC_TO_L2",
+              "RoutingCode": "12",
+              "Checksum": "66930351d743258bf108503fcb90a93b"
+            },
+            "NextStatuses": [
+              {
+                "Status": {
+                  "ID": "203",
+                  "Name": "ESC_TO_L3",
+                  "RoutingCode": "12",
+                  "Checksum": "5fc5b53ca380d9625b9da3808cc5b149"
+                }
+              },
+              {
+                "Status": {
+                  "ID": "207",
+                  "Name": "L2_PASS",
+                  "RoutingCode": "2",
+                  "Checksum": "9062bff0fa674708bf0c37520e5d2e46"
+                }
+              },
+              {
+                "Status": {
+                  "ID": "5",
+                  "Name": "CANCELLED",
+                  "RoutingCode": "9",
+                  "Checksum": "dd14a73271d20ce1bcd2fd4468dcb3e8"
+                }
+              },
+              {
+                "Status": {
+                  "ID": "9",
+                  "Name": "HALF_PASSED",
+                  "RoutingCode": "12",
+                  "Checksum": "728566e441f9253a054cb24d39fcb186"
+                }
+              },
+              {
+                "Status": {
+                  "ID": "201",
+                  "Name": "PASS",
+                  "RoutingCode": "2",
+                  "Checksum": "7fce6ccfe67556c54a0bd069a86033d8"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "id": "{{step4-uuid}}",
+  "name": "04 - C, Name No,Weak, NMT No,Weak, Geo No Weak",
+  "description": "",
+  "solution": "FALSE_POSITIVE",
+  "type": "BUSINESS_LOGIC"
+}

@@ -1,0 +1,7 @@
+{
+  "id": "{{step1-uuid}}",
+  "name": "01 - PTP",
+  "description": "",
+  "solution": "POTENTIAL_TRUE_POSITIVE",
+  "type": "BUSINESS_LOGIC"
+}

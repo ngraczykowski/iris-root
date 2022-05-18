@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        dbchangelog-3.10.xsd">
+  <changeSet id="payments-bridge-firco-1.2.0" author="zruchala">
+    <addColumn tableName="pb_alert_message_status">
+      <column name="delivery_status" type="VARCHAR(50)" />
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="payments-bridge-firco-1.2.1" author="zruchala">
+    <update tableName="pb_alert_message_status">
+      <column name="delivery_status" value="DELIVERED" />
+    </update>
+  </changeSet>
+
+  <changeSet id="payments-bridge-firco-1.2.2" author="zruchala">
+    <addNotNullConstraint tableName="pb_alert_message_status" columnName="delivery_status"/>
+  </changeSet>
+
+  <changeSet id="payments-bridge-firco-1.2.3" author="msitarski">
+    <addColumn tableName="pb_alert_message">
+      <column name="number_of_hits" type="INTEGER" />
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="payments-bridge-firco-1.2.4" author="msitarski">
+    <update tableName="pb_alert_message">
+      <column name="number_of_hits" value="1" />
+    </update>
+  </changeSet>
+
+  <changeSet id="payments-bridge-firco-1.2.5" author="msitarski">
+    <addNotNullConstraint tableName="pb_alert_message" columnName="number_of_hits"/>
+  </changeSet>
+
+  <changeSet id="payments-bridge-firco-1.2.6" author="mbartecki">
+    <addColumn tableName="pb_alert_message">
+      <column name="user_login" type="VARCHAR(50)" />
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="payments-bridge-firco-1.2.7" author="mbartecki">
+    <addColumn tableName="pb_alert_message">
+      <column name="user_password" type="VARCHAR(50)" />
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="payments-bridge-firco-1.2.8" author="mbartecki">
+    <createTable tableName="pb_recommendation">
+      <column name="recommendation_id" type="UUID">
+        <constraints primaryKey="true" primaryKeyName="pk_pb_recommendation"/>
+      </column>
+      <column name="alert_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="recommendation_name" type="VARCHAR(20)">
+      </column>
+      <column name="alert_name" type="VARCHAR(50)">
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="generated_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="recommended_action" type="VARCHAR(50)">
+      </column>
+      <column name="recommendation_comment" type="VARCHAR(50)">
+      </column>
+      <column name="recommendation_source" type="VARCHAR(50)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="recommendation_reason" type="VARCHAR(50)">
+      </column>
+    </createTable>
+    <createIndex
+        tableName="pb_recommendation"
+        indexName="ix_pb_recommendation_recommended_action">
+      <column name="recommended_action"/>
+    </createIndex>
+
+    <createTable tableName="pb_recommendation_metadata">
+      <column name="recommendation_id" type="UUID">
+        <constraints
+            primaryKey="true"
+            primaryKeyName="pk_pb_recommendation_payload"
+            foreignKeyName="fk_pb_recommendation_payload_recommendation_id"
+            referencedTableName="pb_recommendation"
+            referencedColumnNames="recommendation_id"
+            deleteCascade="true"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="metadata" type="JSONB">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+  </changeSet>
+
+  <changeSet id="payments-bridge-firco-1.2.8" author="zruchala">
+    <modifyDataType
+        columnName="recommendation_name"
+        newDataType="varchar(50)"
+        tableName="pb_recommendation"/>
+  </changeSet>
+
+  <changeSet id="payments-bridge-firco-1.2.9" author="jgajewski">
+    <modifyDataType
+        columnName="recommendation_name"
+        newDataType="VARCHAR(150)"
+        tableName="pb_recommendation"/>
+
+    <modifyDataType
+        columnName="alert_name"
+        newDataType="VARCHAR(150)"
+        tableName="pb_recommendation"/>
+
+    <modifyDataType
+        columnName="recommendation_comment"
+        newDataType="TEXT"
+        tableName="pb_recommendation"/>
+  </changeSet>
+
+</databaseChangeLog>

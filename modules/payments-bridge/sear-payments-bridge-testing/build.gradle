@@ -1,0 +1,15 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+  implementation libraries.spring_batch_test
+  implementation libraries.spring_boot_starter_data_jpa
+  implementation libraries.spring_boot_test_autoconfigure
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.silenteight_sep_base_testing
+  implementation libraries.test_greenmail
+
+  runtimeOnly libraries.liquibase_core
+  runtimeOnly libraries.postgresql
+}

@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sear-payments-bridge-ingress
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  labels:
+    app: sear-payments-bridge-ingress
+
+spec:
+  rules:
+    - host: {{ .Values.domain }}
+      http:
+        paths:
+          - path: /rest/pb
+            pathType: Prefix
+            backend:
+              service:
+                name: sear-payments-bridge-service
+                port:
+                  name: http

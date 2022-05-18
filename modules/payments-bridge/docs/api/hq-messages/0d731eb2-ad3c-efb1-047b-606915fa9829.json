@@ -1,0 +1,1990 @@
+{
+  "Header": null,
+  "Body": {
+    "msg_SendMessage": {
+      "VersionTag": "1",
+      "Authentication": {
+        "UserLogin": "sierra",
+        "UserPassword": "sierra-dev-pass",
+        "UserRealm": ""
+      },
+      "Messages": [
+        {
+          "Message": {
+            "Hits": [
+              {
+                "Hit": {
+                  "Tag": "ORIGINATOR",
+                  "Score": "0.0",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionEnd": "296",
+                        "PositionStart": "295"
+                      }
+                    }
+                  ],
+                  "EntityText": "STS AO",
+                  "HittedEntity": {
+                    "ID": "AS06336342",
+                    "Type": "C",
+                    "Codes": [
+                      {
+                        "Code": {
+                          "Name": "5137746065001",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "7725808905",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "5137746065001",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "7725808905",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "5137746065001",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "7725808905",
+                          "Type": "NationalID"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "SOVREMENNYE TEKHNOLOGII SUDOSTROYENIYA AO"
+                      },
+                      {
+                        "Name": "MODERN SHIPBUILDING TECHNOLOGIES JSC"
+                      },
+                      {
+                        "Name": "STS AO"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u041e\u0412\u0420\u0415\u041c\u0415\u041d\u041d\u042b\u0415 \u0422\u0415\u0425\u041d\u041e\u041b\u041e\u0413\u0418\u0418 \u0421\u0423\u0414\u041e\u0421\u0422\u0420\u041e\u0415\u041d\u0418\u042f"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u0422\u0421"
+                      },
+                      {
+                        "Name": "SOVREMENNYE TEKHNOLOGII SUDOSTROYENIYA AO"
+                      },
+                      {
+                        "Name": "MODERN SHIPBUILDING TECHNOLOGIES JSC"
+                      },
+                      {
+                        "Name": "STS AO"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u041e\u0412\u0420\u0415\u041c\u0415\u041d\u041d\u042b\u0415 \u0422\u0415\u0425\u041d\u041e\u041b\u041e\u0413\u0418\u0418 \u0421\u0423\u0414\u041e\u0421\u0422\u0420\u041e\u0415\u041d\u0418\u042f"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u0422\u0421"
+                      },
+                      {
+                        "Name": "SOVREMENNYE TEKHNOLOGII SUDOSTROYENIYA AO"
+                      },
+                      {
+                        "Name": "MODERN SHIPBUILDING TECHNOLOGIES JSC"
+                      },
+                      {
+                        "Name": "STS AO"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u041e\u0412\u0420\u0415\u041c\u0415\u041d\u041d\u042b\u0415 \u0422\u0415\u0425\u041d\u041e\u041b\u041e\u0413\u0418\u0418 \u0421\u0423\u0414\u041e\u0421\u0422\u0420\u041e\u0415\u041d\u0418\u042f"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u0422\u0421"
+                      }
+                    ],
+                    "Origin": "US_OFAC_ENH_RESEARCH",
+                    "HideIDs": [],
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:OFAC_SSI"
+                      },
+                      {
+                        "Keyword": "SC:OWNERSHIP_50_100"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "Cities": [
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSCOU"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSKVA"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSCOU"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSKVA"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSCOU"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSKVA"
+                            }
+                          ],
+                          "IsMain": "1",
+                          "States": [],
+                          "Countries": [
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "FEDERATION DE RUSSIE"
+                            },
+                            {
+                              "Country": "ROSSIYA"
+                            },
+                            {
+                              "Country": "ROSSIYSKAYA FEDERATSIYA"
+                            },
+                            {
+                              "Country": "RUSIA"
+                            },
+                            {
+                              "Country": "RUSSIA"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "RUSSIE"
+                            },
+                            {
+                              "Country": "RUSSISCHE FODERATION"
+                            },
+                            {
+                              "Country": "RUSSLAND"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "FEDERATION DE RUSSIE"
+                            },
+                            {
+                              "Country": "ROSSIYA"
+                            },
+                            {
+                              "Country": "ROSSIYSKAYA FEDERATSIYA"
+                            },
+                            {
+                              "Country": "RUSIA"
+                            },
+                            {
+                              "Country": "RUSSIA"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "RUSSIE"
+                            },
+                            {
+                              "Country": "RUSSISCHE FODERATION"
+                            },
+                            {
+                              "Country": "RUSSLAND"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "FEDERATION DE RUSSIE"
+                            },
+                            {
+                              "Country": "ROSSIYA"
+                            },
+                            {
+                              "Country": "ROSSIYSKAYA FEDERATSIYA"
+                            },
+                            {
+                              "Country": "RUSIA"
+                            },
+                            {
+                              "Country": "RUSSIA"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "RUSSIE"
+                            },
+                            {
+                              "Country": "RUSSISCHE FODERATION"
+                            },
+                            {
+                              "Country": "RUSSLAND"
+                            }
+                          ],
+                          "PostalAddress": "UL. BOLOTNAYA, D. 16, STR. 1, 115035"
+                        }
+                      }
+                    ],
+                    "HideUnits": [],
+                    "UserData1": "169861",
+                    "UserData2": "",
+                    "HideInTags": [],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "Designation": "UKRAINEEO13662",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideOrigins": [],
+                    "IsException": "0",
+                    "Nationality": "",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "AdditionalInfo": "List ID: 1072 / Create Date: 01/15/2021 09:47:02 / Last Update Date: 01/15/2021 10:23:24 / Org_PID: 17016; 17022 / Program: UKRAINE-EO13662 / NATIONAL NO: 5137746065001 OtherInfo: Reg. Number issued 11/12/2013; 7725808905 OtherInfo: INN Number / OtherInformation: 50% Joint venture of RN-TRANS AO (100% Subsidiary of OPEN JOINT-STOCK COMPANY ROSNEFT OIL COMPANY (SSI)); 50% Joint venture of GPB - PROMYSHLENNYE INVESTITSII OOO (100% Subsidiary of GAZPROMBANK OAO (SSI)). Executive Order 13662 Directive Determination - Subject to Directives 1, 2 & 4: For more information on directives, please visit the following link: http://www.treasury.gov/resource-center/sanctions/Programs/Pages/ukraine.aspx#directives / OwnershipPercent: 100.00; SourceLink: https://egrul.nalog.ru/index.html (INN:7725808905); https://en.portnews.ru/news/283284/; https://pro.fira.ru/search/companies/card/index.html?code=7728596#!198; https://www.offshore-energy.biz/russia-turns-to-domestic-shipbuilding/",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2021-02-11 11:54:28 TFP"
+                        }
+                      }
+                    ],
+                    "HideSenderReceivers": []
+                  },
+                  "MatchingText": "ST",
+                  "RulesContext": {
+                    "Info": "none",
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0"
+                  },
+                  "SolutionType": "1",
+                  "SynonymIndex": "2"
+                }
+              },
+              {
+                "Hit": {
+                  "Tag": "ORIGINATOR",
+                  "Score": "0.0",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionEnd": "296",
+                        "PositionStart": "295"
+                      }
+                    }
+                  ],
+                  "EntityText": "STS AO",
+                  "HittedEntity": {
+                    "ID": "AS06336994",
+                    "Type": "C",
+                    "Codes": [
+                      {
+                        "Code": {
+                          "Name": "5137746065001",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "7725808905",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "5137746065001",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "7725808905",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "5137746065001",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "7725808905",
+                          "Type": "NationalID"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "SOVREMENNYE TEKHNOLOGII SUDOSTROYENIYA AO"
+                      },
+                      {
+                        "Name": "MODERN SHIPBUILDING TECHNOLOGIES JSC"
+                      },
+                      {
+                        "Name": "STS AO"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u041e\u0412\u0420\u0415\u041c\u0415\u041d\u041d\u042b\u0415 \u0422\u0415\u0425\u041d\u041e\u041b\u041e\u0413\u0418\u0418 \u0421\u0423\u0414\u041e\u0421\u0422\u0420\u041e\u0415\u041d\u0418\u042f"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u0422\u0421"
+                      },
+                      {
+                        "Name": "SOVREMENNYE TEKHNOLOGII SUDOSTROYENIYA AO"
+                      },
+                      {
+                        "Name": "MODERN SHIPBUILDING TECHNOLOGIES JSC"
+                      },
+                      {
+                        "Name": "STS AO"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u041e\u0412\u0420\u0415\u041c\u0415\u041d\u041d\u042b\u0415 \u0422\u0415\u0425\u041d\u041e\u041b\u041e\u0413\u0418\u0418 \u0421\u0423\u0414\u041e\u0421\u0422\u0420\u041e\u0415\u041d\u0418\u042f"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u0422\u0421"
+                      },
+                      {
+                        "Name": "SOVREMENNYE TEKHNOLOGII SUDOSTROYENIYA AO"
+                      },
+                      {
+                        "Name": "MODERN SHIPBUILDING TECHNOLOGIES JSC"
+                      },
+                      {
+                        "Name": "STS AO"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u041e\u0412\u0420\u0415\u041c\u0415\u041d\u041d\u042b\u0415 \u0422\u0415\u0425\u041d\u041e\u041b\u041e\u0413\u0418\u0418 \u0421\u0423\u0414\u041e\u0421\u0422\u0420\u041e\u0415\u041d\u0418\u042f"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u0422\u0421"
+                      }
+                    ],
+                    "Origin": "EU_ENH",
+                    "HideIDs": [],
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:EU_ENHANCEMENT"
+                      },
+                      {
+                        "Keyword": "SC:OWNERSHIP_50_100"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "Cities": [
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSCOU"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSKVA"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSCOU"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSKVA"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSCOU"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSKVA"
+                            }
+                          ],
+                          "IsMain": "1",
+                          "States": [],
+                          "Countries": [
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "FEDERATION DE RUSSIE"
+                            },
+                            {
+                              "Country": "ROSSIYA"
+                            },
+                            {
+                              "Country": "ROSSIYSKAYA FEDERATSIYA"
+                            },
+                            {
+                              "Country": "RUSIA"
+                            },
+                            {
+                              "Country": "RUSSIA"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "RUSSIE"
+                            },
+                            {
+                              "Country": "RUSSISCHE FODERATION"
+                            },
+                            {
+                              "Country": "RUSSLAND"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "FEDERATION DE RUSSIE"
+                            },
+                            {
+                              "Country": "ROSSIYA"
+                            },
+                            {
+                              "Country": "ROSSIYSKAYA FEDERATSIYA"
+                            },
+                            {
+                              "Country": "RUSIA"
+                            },
+                            {
+                              "Country": "RUSSIA"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "RUSSIE"
+                            },
+                            {
+                              "Country": "RUSSISCHE FODERATION"
+                            },
+                            {
+                              "Country": "RUSSLAND"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "FEDERATION DE RUSSIE"
+                            },
+                            {
+                              "Country": "ROSSIYA"
+                            },
+                            {
+                              "Country": "ROSSIYSKAYA FEDERATSIYA"
+                            },
+                            {
+                              "Country": "RUSIA"
+                            },
+                            {
+                              "Country": "RUSSIA"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "RUSSIE"
+                            },
+                            {
+                              "Country": "RUSSISCHE FODERATION"
+                            },
+                            {
+                              "Country": "RUSSLAND"
+                            }
+                          ],
+                          "PostalAddress": "UL. BOLOTNAYA, D. 16, STR. 1, 115035"
+                        }
+                      }
+                    ],
+                    "HideUnits": [],
+                    "UserData1": "169861",
+                    "UserData2": "",
+                    "HideInTags": [],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "Designation": "UKRAINE_NO_FREEZE",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideOrigins": [],
+                    "IsException": "0",
+                    "Nationality": "",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "AdditionalInfo": "List ID: 1170 / Create Date: 01/25/2021 14:37:40 / Last Update Date: 01/25/2021 17:46:53 / Org_PID: 738465; 751058 / Program: UKRAINE RESTRICTIVE MEASURES (NOT SUBJECT TO ASSET FREEZE) / NATIONAL NO: 5137746065001 OtherInfo: Reg. Number issued 11/12/2013; 7725808905 OtherInfo: INN Number / OtherInformation: 50% Joint venture of RN-TRANS AO (100% Subsidiary of ROSNEFT (EU)); 50% Joint venture of GPB - PROMYSHLENNYE INVESTITSII OOO (100% Subsidiary of GAZPROMBANK (EU)). Prohibited to directly or indirectly purchase, sell, provide investment services/assistance in issuance of; deal w/transferable securities & money-market instruments; make new loans/credit, w/maturity exceeding 30 days, issued after 9/12/14. EU:833/2014 / OwnershipPercent: 100.00; SourceLink: https://egrul.nalog.ru/index.html (INN:7725808905); https://en.portnews.ru/news/283284/; https://pro.fira.ru/search/companies/card/index.html?code=7728596#!198; https://www.offshore-energy.biz/russia-turns-to-domestic-shipbuilding/",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2021-02-02 15:47:59 EUE"
+                        }
+                      }
+                    ],
+                    "HideSenderReceivers": []
+                  },
+                  "MatchingText": "ST",
+                  "RulesContext": {
+                    "Info": "none",
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0"
+                  },
+                  "SolutionType": "1",
+                  "SynonymIndex": "2"
+                }
+              },
+              {
+                "Hit": {
+                  "Tag": "ORIGINATOR",
+                  "Score": "0.0",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionEnd": "296",
+                        "PositionStart": "295"
+                      }
+                    }
+                  ],
+                  "EntityText": "STS AO",
+                  "HittedEntity": {
+                    "ID": "AS06337077",
+                    "Type": "C",
+                    "Codes": [
+                      {
+                        "Code": {
+                          "Name": "5137746065001",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "7725808905",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "5137746065001",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "7725808905",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "5137746065001",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "7725808905",
+                          "Type": "NationalID"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "SOVREMENNYE TEKHNOLOGII SUDOSTROYENIYA AO"
+                      },
+                      {
+                        "Name": "MODERN SHIPBUILDING TECHNOLOGIES JSC"
+                      },
+                      {
+                        "Name": "STS AO"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u041e\u0412\u0420\u0415\u041c\u0415\u041d\u041d\u042b\u0415 \u0422\u0415\u0425\u041d\u041e\u041b\u041e\u0413\u0418\u0418 \u0421\u0423\u0414\u041e\u0421\u0422\u0420\u041e\u0415\u041d\u0418\u042f"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u0422\u0421"
+                      },
+                      {
+                        "Name": "SOVREMENNYE TEKHNOLOGII SUDOSTROYENIYA AO"
+                      },
+                      {
+                        "Name": "MODERN SHIPBUILDING TECHNOLOGIES JSC"
+                      },
+                      {
+                        "Name": "STS AO"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u041e\u0412\u0420\u0415\u041c\u0415\u041d\u041d\u042b\u0415 \u0422\u0415\u0425\u041d\u041e\u041b\u041e\u0413\u0418\u0418 \u0421\u0423\u0414\u041e\u0421\u0422\u0420\u041e\u0415\u041d\u0418\u042f"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u0422\u0421"
+                      },
+                      {
+                        "Name": "SOVREMENNYE TEKHNOLOGII SUDOSTROYENIYA AO"
+                      },
+                      {
+                        "Name": "MODERN SHIPBUILDING TECHNOLOGIES JSC"
+                      },
+                      {
+                        "Name": "STS AO"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u041e\u0412\u0420\u0415\u041c\u0415\u041d\u041d\u042b\u0415 \u0422\u0415\u0425\u041d\u041e\u041b\u041e\u0413\u0418\u0418 \u0421\u0423\u0414\u041e\u0421\u0422\u0420\u041e\u0415\u041d\u0418\u042f"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u0422\u0421"
+                      }
+                    ],
+                    "Origin": "GB_HMT_ENH",
+                    "HideIDs": [],
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:HM_TREASURY"
+                      },
+                      {
+                        "Keyword": "SC:OWNERSHIP_50_100"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "Cities": [
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSCOU"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSKVA"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSCOU"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSKVA"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSCOU"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSKVA"
+                            }
+                          ],
+                          "IsMain": "1",
+                          "States": [],
+                          "Countries": [
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "FEDERATION DE RUSSIE"
+                            },
+                            {
+                              "Country": "ROSSIYA"
+                            },
+                            {
+                              "Country": "ROSSIYSKAYA FEDERATSIYA"
+                            },
+                            {
+                              "Country": "RUSIA"
+                            },
+                            {
+                              "Country": "RUSSIA"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "RUSSIE"
+                            },
+                            {
+                              "Country": "RUSSISCHE FODERATION"
+                            },
+                            {
+                              "Country": "RUSSLAND"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "FEDERATION DE RUSSIE"
+                            },
+                            {
+                              "Country": "ROSSIYA"
+                            },
+                            {
+                              "Country": "ROSSIYSKAYA FEDERATSIYA"
+                            },
+                            {
+                              "Country": "RUSIA"
+                            },
+                            {
+                              "Country": "RUSSIA"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "RUSSIE"
+                            },
+                            {
+                              "Country": "RUSSISCHE FODERATION"
+                            },
+                            {
+                              "Country": "RUSSLAND"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "FEDERATION DE RUSSIE"
+                            },
+                            {
+                              "Country": "ROSSIYA"
+                            },
+                            {
+                              "Country": "ROSSIYSKAYA FEDERATSIYA"
+                            },
+                            {
+                              "Country": "RUSIA"
+                            },
+                            {
+                              "Country": "RUSSIA"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "RUSSIE"
+                            },
+                            {
+                              "Country": "RUSSISCHE FODERATION"
+                            },
+                            {
+                              "Country": "RUSSLAND"
+                            }
+                          ],
+                          "PostalAddress": "UL. BOLOTNAYA, D. 16, STR. 1, 115035"
+                        }
+                      }
+                    ],
+                    "HideUnits": [],
+                    "UserData1": "169861",
+                    "UserData2": "",
+                    "HideInTags": [],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "Designation": "RU_INVESTMENT_BAN",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideOrigins": [],
+                    "IsException": "0",
+                    "Nationality": "",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "AdditionalInfo": "List ID: 1130 / Create Date: 01/27/2021 12:32:47 / Last Update Date: 01/27/2021 12:54:01 / Org_PID: 13081; 13117 / Program: RU INVESTMENT BAN / NATIONAL NO: 5137746065001 OtherInfo: Reg. Number issued 11/12/2013; 7725808905 OtherInfo: INN Number / OtherInformation: 50% Joint venture of RN-TRANS AO (100% Subsidiary of ROSNEFT (HMT)); 50% Joint venture of GPB - PROMYSHLENNYE INVESTITSII OOO (100% Subsidiary of GAZPROMBANK (HMT)). Parent entity listed under Schedule 2 of the Russia (Sanctions) (EU Exit) Regulations 2019 (S.I. 2019/855). Not subject to an asset freeze. / OwnershipPercent: 100.00; SourceLink: https://egrul.nalog.ru/index.html (INN:7725808905); https://en.portnews.ru/news/283284/; https://pro.fira.ru/search/companies/card/index.html?code=7728596#!198; https://www.offshore-energy.biz/russia-turns-to-domestic-shipbuilding/",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2021-02-02 15:48:19 HME"
+                        }
+                      }
+                    ],
+                    "HideSenderReceivers": []
+                  },
+                  "MatchingText": "ST",
+                  "RulesContext": {
+                    "Info": "none",
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0"
+                  },
+                  "SolutionType": "1",
+                  "SynonymIndex": "2"
+                }
+              },
+              {
+                "Hit": {
+                  "Tag": "ORIGINATOR",
+                  "Score": "0.0",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionEnd": "266",
+                        "PositionStart": "263"
+                      }
+                    }
+                  ],
+                  "EntityText": "Line-Up",
+                  "HittedEntity": {
+                    "ID": "SIBIE194",
+                    "Type": "C",
+                    "Codes": [],
+                    "Names": [
+                      {
+                        "Name": "Line-Up"
+                      },
+                      {
+                        "Name": "Line UP Digital Agency"
+                      },
+                      {
+                        "Name": "Line-Up"
+                      },
+                      {
+                        "Name": "Line UP Digital Agency"
+                      }
+                    ],
+                    "Origin": "SVB_INTERNAL",
+                    "HideIDs": [],
+                    "Keywords": [
+                      {
+                        "Keyword": "none"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "Cities": [
+                            {
+                              "City": "Simferopol"
+                            },
+                            {
+                              "City": "Simferopol"
+                            }
+                          ],
+                          "IsMain": "1",
+                          "States": [],
+                          "Countries": [
+                            {
+                              "Country": "Crimea"
+                            },
+                            {
+                              "Country": "CRIMEA"
+                            },
+                            {
+                              "Country": "CRIMEE"
+                            },
+                            {
+                              "Country": "KRIMIA"
+                            },
+                            {
+                              "Country": "KRYM"
+                            },
+                            {
+                              "Country": "QIRIM"
+                            },
+                            {
+                              "Country": "Crimea"
+                            },
+                            {
+                              "Country": "CRIMEA"
+                            },
+                            {
+                              "Country": "CRIMEE"
+                            },
+                            {
+                              "Country": "KRIMIA"
+                            },
+                            {
+                              "Country": "KRYM"
+                            },
+                            {
+                              "Country": "QIRIM"
+                            }
+                          ],
+                          "PostalAddress": ""
+                        }
+                      }
+                    ],
+                    "HideUnits": [],
+                    "UserData1": "",
+                    "UserData2": "",
+                    "HideInTags": [],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "Designation": "SANCTIONS",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideOrigins": [],
+                    "IsException": "0",
+                    "Nationality": "",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "AdditionalInfo": "Additional Info: Refer to Sanctions Operations. SVB client Mission Barns, Inc. sent multiple payments to Konstiantyn Zhuravskyi who owns Line-up, a company which appears to be located in Simferopol, Crimea. Refer to Global Sanctions Compliance.\u0002",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2020-06-25"
+                        }
+                      }
+                    ],
+                    "HideSenderReceivers": []
+                  },
+                  "MatchingText": "LINE",
+                  "RulesContext": {
+                    "Info": "none",
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0"
+                  },
+                  "SolutionType": "1",
+                  "SynonymIndex": "0"
+                }
+              },
+              {
+                "Hit": {
+                  "Tag": "BENE",
+                  "Score": "0.0",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionEnd": "521",
+                        "PositionStart": "516"
+                      }
+                    }
+                  ],
+                  "EntityText": "STS AO",
+                  "HittedEntity": {
+                    "ID": "AS06336342",
+                    "Type": "C",
+                    "Codes": [
+                      {
+                        "Code": {
+                          "Name": "5137746065001",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "7725808905",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "5137746065001",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "7725808905",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "5137746065001",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "7725808905",
+                          "Type": "NationalID"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "SOVREMENNYE TEKHNOLOGII SUDOSTROYENIYA AO"
+                      },
+                      {
+                        "Name": "MODERN SHIPBUILDING TECHNOLOGIES JSC"
+                      },
+                      {
+                        "Name": "STS AO"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u041e\u0412\u0420\u0415\u041c\u0415\u041d\u041d\u042b\u0415 \u0422\u0415\u0425\u041d\u041e\u041b\u041e\u0413\u0418\u0418 \u0421\u0423\u0414\u041e\u0421\u0422\u0420\u041e\u0415\u041d\u0418\u042f"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u0422\u0421"
+                      },
+                      {
+                        "Name": "SOVREMENNYE TEKHNOLOGII SUDOSTROYENIYA AO"
+                      },
+                      {
+                        "Name": "MODERN SHIPBUILDING TECHNOLOGIES JSC"
+                      },
+                      {
+                        "Name": "STS AO"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u041e\u0412\u0420\u0415\u041c\u0415\u041d\u041d\u042b\u0415 \u0422\u0415\u0425\u041d\u041e\u041b\u041e\u0413\u0418\u0418 \u0421\u0423\u0414\u041e\u0421\u0422\u0420\u041e\u0415\u041d\u0418\u042f"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u0422\u0421"
+                      },
+                      {
+                        "Name": "SOVREMENNYE TEKHNOLOGII SUDOSTROYENIYA AO"
+                      },
+                      {
+                        "Name": "MODERN SHIPBUILDING TECHNOLOGIES JSC"
+                      },
+                      {
+                        "Name": "STS AO"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u041e\u0412\u0420\u0415\u041c\u0415\u041d\u041d\u042b\u0415 \u0422\u0415\u0425\u041d\u041e\u041b\u041e\u0413\u0418\u0418 \u0421\u0423\u0414\u041e\u0421\u0422\u0420\u041e\u0415\u041d\u0418\u042f"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u0422\u0421"
+                      }
+                    ],
+                    "Origin": "US_OFAC_ENH_RESEARCH",
+                    "HideIDs": [],
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:OFAC_SSI"
+                      },
+                      {
+                        "Keyword": "SC:OWNERSHIP_50_100"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "Cities": [
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSCOU"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSKVA"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSCOU"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSKVA"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSCOU"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSKVA"
+                            }
+                          ],
+                          "IsMain": "1",
+                          "States": [],
+                          "Countries": [
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "FEDERATION DE RUSSIE"
+                            },
+                            {
+                              "Country": "ROSSIYA"
+                            },
+                            {
+                              "Country": "ROSSIYSKAYA FEDERATSIYA"
+                            },
+                            {
+                              "Country": "RUSIA"
+                            },
+                            {
+                              "Country": "RUSSIA"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "RUSSIE"
+                            },
+                            {
+                              "Country": "RUSSISCHE FODERATION"
+                            },
+                            {
+                              "Country": "RUSSLAND"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "FEDERATION DE RUSSIE"
+                            },
+                            {
+                              "Country": "ROSSIYA"
+                            },
+                            {
+                              "Country": "ROSSIYSKAYA FEDERATSIYA"
+                            },
+                            {
+                              "Country": "RUSIA"
+                            },
+                            {
+                              "Country": "RUSSIA"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "RUSSIE"
+                            },
+                            {
+                              "Country": "RUSSISCHE FODERATION"
+                            },
+                            {
+                              "Country": "RUSSLAND"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "FEDERATION DE RUSSIE"
+                            },
+                            {
+                              "Country": "ROSSIYA"
+                            },
+                            {
+                              "Country": "ROSSIYSKAYA FEDERATSIYA"
+                            },
+                            {
+                              "Country": "RUSIA"
+                            },
+                            {
+                              "Country": "RUSSIA"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "RUSSIE"
+                            },
+                            {
+                              "Country": "RUSSISCHE FODERATION"
+                            },
+                            {
+                              "Country": "RUSSLAND"
+                            }
+                          ],
+                          "PostalAddress": "UL. BOLOTNAYA, D. 16, STR. 1, 115035"
+                        }
+                      }
+                    ],
+                    "HideUnits": [],
+                    "UserData1": "169861",
+                    "UserData2": "",
+                    "HideInTags": [],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "Designation": "UKRAINEEO13662",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideOrigins": [],
+                    "IsException": "0",
+                    "Nationality": "",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "AdditionalInfo": "List ID: 1072 / Create Date: 01/15/2021 09:47:02 / Last Update Date: 01/15/2021 10:23:24 / Org_PID: 17016; 17022 / Program: UKRAINE-EO13662 / NATIONAL NO: 5137746065001 OtherInfo: Reg. Number issued 11/12/2013; 7725808905 OtherInfo: INN Number / OtherInformation: 50% Joint venture of RN-TRANS AO (100% Subsidiary of OPEN JOINT-STOCK COMPANY ROSNEFT OIL COMPANY (SSI)); 50% Joint venture of GPB - PROMYSHLENNYE INVESTITSII OOO (100% Subsidiary of GAZPROMBANK OAO (SSI)). Executive Order 13662 Directive Determination - Subject to Directives 1, 2 & 4: For more information on directives, please visit the following link: http://www.treasury.gov/resource-center/sanctions/Programs/Pages/ukraine.aspx#directives / OwnershipPercent: 100.00; SourceLink: https://egrul.nalog.ru/index.html (INN:7725808905); https://en.portnews.ru/news/283284/; https://pro.fira.ru/search/companies/card/index.html?code=7728596#!198; https://www.offshore-energy.biz/russia-turns-to-domestic-shipbuilding/",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2021-02-11 11:54:28 TFP"
+                        }
+                      }
+                    ],
+                    "HideSenderReceivers": []
+                  },
+                  "MatchingText": "STREET",
+                  "RulesContext": {
+                    "Info": "none",
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0"
+                  },
+                  "SolutionType": "1",
+                  "SynonymIndex": "2"
+                }
+              },
+              {
+                "Hit": {
+                  "Tag": "BENE",
+                  "Score": "0.0",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionEnd": "521",
+                        "PositionStart": "516"
+                      }
+                    }
+                  ],
+                  "EntityText": "STS AO",
+                  "HittedEntity": {
+                    "ID": "AS06336994",
+                    "Type": "C",
+                    "Codes": [
+                      {
+                        "Code": {
+                          "Name": "5137746065001",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "7725808905",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "5137746065001",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "7725808905",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "5137746065001",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "7725808905",
+                          "Type": "NationalID"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "SOVREMENNYE TEKHNOLOGII SUDOSTROYENIYA AO"
+                      },
+                      {
+                        "Name": "MODERN SHIPBUILDING TECHNOLOGIES JSC"
+                      },
+                      {
+                        "Name": "STS AO"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u041e\u0412\u0420\u0415\u041c\u0415\u041d\u041d\u042b\u0415 \u0422\u0415\u0425\u041d\u041e\u041b\u041e\u0413\u0418\u0418 \u0421\u0423\u0414\u041e\u0421\u0422\u0420\u041e\u0415\u041d\u0418\u042f"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u0422\u0421"
+                      },
+                      {
+                        "Name": "SOVREMENNYE TEKHNOLOGII SUDOSTROYENIYA AO"
+                      },
+                      {
+                        "Name": "MODERN SHIPBUILDING TECHNOLOGIES JSC"
+                      },
+                      {
+                        "Name": "STS AO"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u041e\u0412\u0420\u0415\u041c\u0415\u041d\u041d\u042b\u0415 \u0422\u0415\u0425\u041d\u041e\u041b\u041e\u0413\u0418\u0418 \u0421\u0423\u0414\u041e\u0421\u0422\u0420\u041e\u0415\u041d\u0418\u042f"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u0422\u0421"
+                      },
+                      {
+                        "Name": "SOVREMENNYE TEKHNOLOGII SUDOSTROYENIYA AO"
+                      },
+                      {
+                        "Name": "MODERN SHIPBUILDING TECHNOLOGIES JSC"
+                      },
+                      {
+                        "Name": "STS AO"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u041e\u0412\u0420\u0415\u041c\u0415\u041d\u041d\u042b\u0415 \u0422\u0415\u0425\u041d\u041e\u041b\u041e\u0413\u0418\u0418 \u0421\u0423\u0414\u041e\u0421\u0422\u0420\u041e\u0415\u041d\u0418\u042f"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u0422\u0421"
+                      }
+                    ],
+                    "Origin": "EU_ENH",
+                    "HideIDs": [],
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:EU_ENHANCEMENT"
+                      },
+                      {
+                        "Keyword": "SC:OWNERSHIP_50_100"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "Cities": [
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSCOU"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSKVA"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSCOU"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSKVA"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSCOU"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSKVA"
+                            }
+                          ],
+                          "IsMain": "1",
+                          "States": [],
+                          "Countries": [
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "FEDERATION DE RUSSIE"
+                            },
+                            {
+                              "Country": "ROSSIYA"
+                            },
+                            {
+                              "Country": "ROSSIYSKAYA FEDERATSIYA"
+                            },
+                            {
+                              "Country": "RUSIA"
+                            },
+                            {
+                              "Country": "RUSSIA"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "RUSSIE"
+                            },
+                            {
+                              "Country": "RUSSISCHE FODERATION"
+                            },
+                            {
+                              "Country": "RUSSLAND"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "FEDERATION DE RUSSIE"
+                            },
+                            {
+                              "Country": "ROSSIYA"
+                            },
+                            {
+                              "Country": "ROSSIYSKAYA FEDERATSIYA"
+                            },
+                            {
+                              "Country": "RUSIA"
+                            },
+                            {
+                              "Country": "RUSSIA"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "RUSSIE"
+                            },
+                            {
+                              "Country": "RUSSISCHE FODERATION"
+                            },
+                            {
+                              "Country": "RUSSLAND"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "FEDERATION DE RUSSIE"
+                            },
+                            {
+                              "Country": "ROSSIYA"
+                            },
+                            {
+                              "Country": "ROSSIYSKAYA FEDERATSIYA"
+                            },
+                            {
+                              "Country": "RUSIA"
+                            },
+                            {
+                              "Country": "RUSSIA"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "RUSSIE"
+                            },
+                            {
+                              "Country": "RUSSISCHE FODERATION"
+                            },
+                            {
+                              "Country": "RUSSLAND"
+                            }
+                          ],
+                          "PostalAddress": "UL. BOLOTNAYA, D. 16, STR. 1, 115035"
+                        }
+                      }
+                    ],
+                    "HideUnits": [],
+                    "UserData1": "169861",
+                    "UserData2": "",
+                    "HideInTags": [],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "Designation": "UKRAINE_NO_FREEZE",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideOrigins": [],
+                    "IsException": "0",
+                    "Nationality": "",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "AdditionalInfo": "List ID: 1170 / Create Date: 01/25/2021 14:37:40 / Last Update Date: 01/25/2021 17:46:53 / Org_PID: 738465; 751058 / Program: UKRAINE RESTRICTIVE MEASURES (NOT SUBJECT TO ASSET FREEZE) / NATIONAL NO: 5137746065001 OtherInfo: Reg. Number issued 11/12/2013; 7725808905 OtherInfo: INN Number / OtherInformation: 50% Joint venture of RN-TRANS AO (100% Subsidiary of ROSNEFT (EU)); 50% Joint venture of GPB - PROMYSHLENNYE INVESTITSII OOO (100% Subsidiary of GAZPROMBANK (EU)). Prohibited to directly or indirectly purchase, sell, provide investment services/assistance in issuance of; deal w/transferable securities & money-market instruments; make new loans/credit, w/maturity exceeding 30 days, issued after 9/12/14. EU:833/2014 / OwnershipPercent: 100.00; SourceLink: https://egrul.nalog.ru/index.html (INN:7725808905); https://en.portnews.ru/news/283284/; https://pro.fira.ru/search/companies/card/index.html?code=7728596#!198; https://www.offshore-energy.biz/russia-turns-to-domestic-shipbuilding/",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2021-02-02 15:47:59 EUE"
+                        }
+                      }
+                    ],
+                    "HideSenderReceivers": []
+                  },
+                  "MatchingText": "STREET",
+                  "RulesContext": {
+                    "Info": "none",
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0"
+                  },
+                  "SolutionType": "1",
+                  "SynonymIndex": "2"
+                }
+              },
+              {
+                "Hit": {
+                  "Tag": "BENE",
+                  "Score": "0.0",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionEnd": "521",
+                        "PositionStart": "516"
+                      }
+                    }
+                  ],
+                  "EntityText": "STS AO",
+                  "HittedEntity": {
+                    "ID": "AS06337077",
+                    "Type": "C",
+                    "Codes": [
+                      {
+                        "Code": {
+                          "Name": "5137746065001",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "7725808905",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "5137746065001",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "7725808905",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "5137746065001",
+                          "Type": "NationalID"
+                        }
+                      },
+                      {
+                        "Code": {
+                          "Name": "7725808905",
+                          "Type": "NationalID"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "SOVREMENNYE TEKHNOLOGII SUDOSTROYENIYA AO"
+                      },
+                      {
+                        "Name": "MODERN SHIPBUILDING TECHNOLOGIES JSC"
+                      },
+                      {
+                        "Name": "STS AO"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u041e\u0412\u0420\u0415\u041c\u0415\u041d\u041d\u042b\u0415 \u0422\u0415\u0425\u041d\u041e\u041b\u041e\u0413\u0418\u0418 \u0421\u0423\u0414\u041e\u0421\u0422\u0420\u041e\u0415\u041d\u0418\u042f"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u0422\u0421"
+                      },
+                      {
+                        "Name": "SOVREMENNYE TEKHNOLOGII SUDOSTROYENIYA AO"
+                      },
+                      {
+                        "Name": "MODERN SHIPBUILDING TECHNOLOGIES JSC"
+                      },
+                      {
+                        "Name": "STS AO"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u041e\u0412\u0420\u0415\u041c\u0415\u041d\u041d\u042b\u0415 \u0422\u0415\u0425\u041d\u041e\u041b\u041e\u0413\u0418\u0418 \u0421\u0423\u0414\u041e\u0421\u0422\u0420\u041e\u0415\u041d\u0418\u042f"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u0422\u0421"
+                      },
+                      {
+                        "Name": "SOVREMENNYE TEKHNOLOGII SUDOSTROYENIYA AO"
+                      },
+                      {
+                        "Name": "MODERN SHIPBUILDING TECHNOLOGIES JSC"
+                      },
+                      {
+                        "Name": "STS AO"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u041e\u0412\u0420\u0415\u041c\u0415\u041d\u041d\u042b\u0415 \u0422\u0415\u0425\u041d\u041e\u041b\u041e\u0413\u0418\u0418 \u0421\u0423\u0414\u041e\u0421\u0422\u0420\u041e\u0415\u041d\u0418\u042f"
+                      },
+                      {
+                        "Name": "\u0410\u041e \u0421\u0422\u0421"
+                      }
+                    ],
+                    "Origin": "GB_HMT_ENH",
+                    "HideIDs": [],
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:HM_TREASURY"
+                      },
+                      {
+                        "Keyword": "SC:OWNERSHIP_50_100"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "Cities": [
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSCOU"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSKVA"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSCOU"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSKVA"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSCOU"
+                            },
+                            {
+                              "City": "MOSCOW"
+                            },
+                            {
+                              "City": "MOSKVA"
+                            }
+                          ],
+                          "IsMain": "1",
+                          "States": [],
+                          "Countries": [
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "FEDERATION DE RUSSIE"
+                            },
+                            {
+                              "Country": "ROSSIYA"
+                            },
+                            {
+                              "Country": "ROSSIYSKAYA FEDERATSIYA"
+                            },
+                            {
+                              "Country": "RUSIA"
+                            },
+                            {
+                              "Country": "RUSSIA"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "RUSSIE"
+                            },
+                            {
+                              "Country": "RUSSISCHE FODERATION"
+                            },
+                            {
+                              "Country": "RUSSLAND"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "FEDERATION DE RUSSIE"
+                            },
+                            {
+                              "Country": "ROSSIYA"
+                            },
+                            {
+                              "Country": "ROSSIYSKAYA FEDERATSIYA"
+                            },
+                            {
+                              "Country": "RUSIA"
+                            },
+                            {
+                              "Country": "RUSSIA"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "RUSSIE"
+                            },
+                            {
+                              "Country": "RUSSISCHE FODERATION"
+                            },
+                            {
+                              "Country": "RUSSLAND"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "FEDERATION DE RUSSIE"
+                            },
+                            {
+                              "Country": "ROSSIYA"
+                            },
+                            {
+                              "Country": "ROSSIYSKAYA FEDERATSIYA"
+                            },
+                            {
+                              "Country": "RUSIA"
+                            },
+                            {
+                              "Country": "RUSSIA"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "RUSSIE"
+                            },
+                            {
+                              "Country": "RUSSISCHE FODERATION"
+                            },
+                            {
+                              "Country": "RUSSLAND"
+                            }
+                          ],
+                          "PostalAddress": "UL. BOLOTNAYA, D. 16, STR. 1, 115035"
+                        }
+                      }
+                    ],
+                    "HideUnits": [],
+                    "UserData1": "169861",
+                    "UserData2": "",
+                    "HideInTags": [],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "Designation": "RU_INVESTMENT_BAN",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideOrigins": [],
+                    "IsException": "0",
+                    "Nationality": "",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "AdditionalInfo": "List ID: 1130 / Create Date: 01/27/2021 12:32:47 / Last Update Date: 01/27/2021 12:54:01 / Org_PID: 13081; 13117 / Program: RU INVESTMENT BAN / NATIONAL NO: 5137746065001 OtherInfo: Reg. Number issued 11/12/2013; 7725808905 OtherInfo: INN Number / OtherInformation: 50% Joint venture of RN-TRANS AO (100% Subsidiary of ROSNEFT (HMT)); 50% Joint venture of GPB - PROMYSHLENNYE INVESTITSII OOO (100% Subsidiary of GAZPROMBANK (HMT)). Parent entity listed under Schedule 2 of the Russia (Sanctions) (EU Exit) Regulations 2019 (S.I. 2019/855). Not subject to an asset freeze. / OwnershipPercent: 100.00; SourceLink: https://egrul.nalog.ru/index.html (INN:7725808905); https://en.portnews.ru/news/283284/; https://pro.fira.ru/search/companies/card/index.html?code=7728596#!198; https://www.offshore-energy.biz/russia-turns-to-domestic-shipbuilding/",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2021-02-02 15:48:19 HME"
+                        }
+                      }
+                    ],
+                    "HideSenderReceivers": []
+                  },
+                  "MatchingText": "STREET",
+                  "RulesContext": {
+                    "Info": "none",
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0"
+                  },
+                  "SolutionType": "1",
+                  "SynonymIndex": "2"
+                }
+              }
+            ],
+            "Unit": "US",
+            "Amount": "12.10",
+            "Bypass": "0",
+            "Actions": [
+              {
+                "Action": {
+                  "Status": {
+                    "ID": "0",
+                    "Name": "FILTER",
+                    "Checksum": "c4b4872d17cf6fa4f27f06e3b5d93c78",
+                    "RoutingCode": "0"
+                  },
+                  "Comment": "Stop: 7, Nonblocking: 0",
+                  "DateTime": "20211020100827",
+                  "Operator": "Filter Engine"
+                }
+              },
+              {
+                "Action": {
+                  "Status": {
+                    "ID": "-2",
+                    "Name": "NO HIT",
+                    "Checksum": "1080a07f679004254edcc4854e8f66a7",
+                    "RoutingCode": "-2"
+                  },
+                  "Comment": "Stop: 7, Nonblocking: 0",
+                  "DateTime": "20211020100828",
+                  "Operator": "Stripping Engine"
+                }
+              },
+              {
+                "Action": {
+                  "Status": {
+                    "ID": "223",
+                    "Name": "FILTER_S8",
+                    "Checksum": "6a905528e3b9126041bbfe8f59cfe07b",
+                    "RoutingCode": "12"
+                  },
+                  "Comment": "Auto decision",
+                  "DateTime": "20211020100829",
+                  "Operator": "DBCLient"
+                }
+              }
+            ],
+            "Command": "1",
+            "Blocking": "7",
+            "Currency": "USD",
+            "Priority": "0",
+            "SystemID": "DIN20211020100826-00967-31425",
+            "MessageID": "CECA756B-992B-5303-E053-1A186C0A02B4",
+            "ValueDate": "2021/10/20",
+            "CutoffTime": "",
+            "SenderCode": "121140399",
+            "CopyService": "",
+            "CreatedDate": "2021/10/20 10:08:26",
+            "IOIndicator": "O",
+            "LastComment": "Suspect(s) detected by OFAC-Agent",
+            "MessageData": "[FIRCOSOFT     X] SVB BE MUX FILTER\n[APPLI         X] GFX\n[UNIT          X] US\n[REFERENCE     X] 20212930195300\n[TYPE          X] FED 1000 O\n[VALUEDATE      ] 2021/10/20\n[AMOUNT         ] USD 12.10\n[SENDER         ] 121140399\n[ORIGINATOR     ] AC\n3302745719\nADDR LINE 1 2000109817\n2443 FILLMORE ST.\nSUITE NO 380-7361, C/O RIPPLING PEO\nSAN FRANCISCO, CA 94115\nUS\n[DBTACCOFF      ] 001\n[DBTACCTYP      ] DDA\n[DBTACCNUM      ] 3302745719\n[RECEIVER       ] 121137522\n[BENE           ] AC\n56472326465\nJACOB\n1114TH SALADO STREET\n[FXRATE        X] 1.000000\n[TRANCD         ] DOMPC\n[CHARGESCD      ] OUR\n",
+            "MessageType": "FED1000",
+            "NonBlocking": "0",
+            "BusinessType": "CTR",
+            "BusinessUnit": "ROOT",
+            "FilteredDate": "2021/10/20 10:08:27",
+            "LastOperator": "OFAC-Agent",
+            "NextStatuses": [
+              {
+                "Status": {
+                  "ID": "225",
+                  "Name": "S8_ADJ",
+                  "Checksum": "0d14589062b13cbce8cf38f9eb7a22a7",
+                  "RoutingCode": "12"
+                }
+              }
+            ],
+            "ReceiverCode": "121137522",
+            "CurrentStatus": {
+              "ID": "223",
+              "Name": "FILTER_S8",
+              "Checksum": "6a905528e3b9126041bbfe8f59cfe07b",
+              "RoutingCode": "12"
+            },
+            "MessageFormat": "ALL",
+            "ToApplication": "",
+            "ApplicationCode": "GFX",
+            "Confidentiality": "0",
+            "SenderReference": "20212930195300",
+            "NormalizedAmount": "",
+            "RelatedReference": "",
+            "ApplicationPriority": "0"
+          }
+        }
+      ]
+    }
+  }
+}
