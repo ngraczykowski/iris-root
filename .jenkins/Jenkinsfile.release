@@ -34,29 +34,43 @@ pipeline {
       }
     }
     stage("E2E Tests") {
-      steps {
-        withGradle {
-          script {
-            for (def distribution: distributions) {
-                sh """
-                    ./gradlew test \
-                    -Dcucumber.features=src/test/java/features/SmokeTests.feature \
-                    -Dcucumber.plugin=html:report.html \
-                    -Dtest.isRegression=false \
-                    -Dtest.clientId=dev-frontend \
-                    -Dtest.username=${E2E_TESTS_CREDS_USR} \
-                    -Dtest.password=${E2E_TESTS_CREDS_PWD} \
-                    -Dtest.url=https://bravo.dev.silenteight.com/
-                  """
+          environment {
+            E2E_TESTS_CREDS = credentials('karate-username-password')
+          }
+          steps {
+            withGradle {
+              withCredentials(
+                            [usernamePassword(
+                                credentialsId: 'artifactory-user',
+                                usernameVariable: 'S8_REPO_USER',
+                                passwordVariable: 'S8_REPO_PASSWORD')]) {
+                script {
+                  for (def distribution: distributions) {
+                    sh """
+                      echo "Starting E2E tests for ${distribution} distribution."
+                    """
+                    sh """
+                        cd tests/e2e-tests
+
+                        ../../gradlew test \
+                        -Dcucumber.features=src/test/java/features/SmokeTests.feature \
+                        -Dcucumber.plugin=html:report.html \
+                        -Dtest.isRegression=false \
+                        -Dtest.clientId=dev-frontend \
+                        -Dtest.username="\$E2E_TESTS_CREDS_USR" \
+                        -Dtest.password="\$E2E_TESTS_CREDS_PWD" \
+                        -Dtest.url=https://bravo.dev.silenteight.com/
+                      """
+                  }
+                }
+              }
             }
           }
-        }
-      }
-      post {
-        success {
-          echo 'E2E tests were successful'
-        }
-      }
+          post {
+            success {
+              echo 'E2E tests were successful'
+            }
+          }
     }
     stage('Kubernetes Release') {
       matrix {
