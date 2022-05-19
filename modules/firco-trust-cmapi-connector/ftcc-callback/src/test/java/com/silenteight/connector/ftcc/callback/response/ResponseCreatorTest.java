@@ -33,7 +33,8 @@ class ResponseCreatorTest {
   void dummyCreateClientRequestDto() {
     RecommendationSenderProperties properties =
         new RecommendationSenderProperties("", "login", "password",
-            Duration.ofSeconds(10), Duration.ofSeconds(10), "/etc/default/key.pkcs", "password");
+            Duration.ofSeconds(10), Duration.ofSeconds(10), "/etc/default/key.pkcs", "password",
+            "Manual investigation");
     var ds = DestinationStatus.builder()
         .status(StatusInfoDto.builder()
             .id("12")

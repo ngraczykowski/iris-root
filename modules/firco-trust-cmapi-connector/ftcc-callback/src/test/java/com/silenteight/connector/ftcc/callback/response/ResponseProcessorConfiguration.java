@@ -72,7 +72,8 @@ final class ResponseProcessorConfiguration {
       return new ResponseCreator(
           decisionMapperUseCase,
           new RecommendationSenderProperties("localhost:8080", "admin", "pass",
-              Duration.ofSeconds(10), Duration.ofSeconds(10), "/path", "pass"));
+              Duration.ofSeconds(10), Duration.ofSeconds(10), "/path", "pass",
+              "Manual investigation"));
     }
 
     @Bean

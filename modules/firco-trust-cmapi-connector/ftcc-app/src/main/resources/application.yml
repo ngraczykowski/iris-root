@@ -61,6 +61,7 @@ ftcc:
       password: "password"
       connectionTimeout: 10s
       readTimeout: 10s
+      defaultRecommendationComment: "S8 recommended action: Manual Investigation"
 
   #-------------------------------------------------------------------------------------------------
   # Alert state

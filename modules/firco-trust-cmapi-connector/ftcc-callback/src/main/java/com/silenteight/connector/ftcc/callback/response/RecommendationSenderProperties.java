@@ -28,5 +28,6 @@ public class RecommendationSenderProperties {
   Duration connectionTimeout;
   String keystorePath;
   String keystorePassword;
-
+  @NotBlank
+  String defaultRecommendationComment;
 }

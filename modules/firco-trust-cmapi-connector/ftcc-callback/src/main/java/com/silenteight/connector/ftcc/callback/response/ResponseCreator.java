@@ -60,7 +60,9 @@ class ResponseCreator {
       MessageDetailsDto messageDetails, RecommendationOut recommendation) {
     //TODO remove defaults when https://silent8.atlassian.net/browse/ALL-737 will be implemented
     String recommendationComment =
-        defaultIfBlank(recommendation.getRecommendationComment(), "Manual Investigation");
+        defaultIfBlank(
+            recommendation.getRecommendationComment(),
+            properties.getDefaultRecommendationComment());
     String recommendationAction =
         defaultIfBlank(recommendation.getRecommendedAction(), "ACTION_INVESTIGATE");
 

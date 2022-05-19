@@ -14,9 +14,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Function;
 
+import static com.silenteight.connector.ftcc.common.resource.MessageResource.fromResourceName;
 import static java.lang.System.lineSeparator;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,6 +28,8 @@ public class ClientRequestDtoBuilder {
 
   private static final String ERROR_GENERATING_CLIENT_REQUEST =
       "Error generating ClientRequestDto from Recommendations for batchName={}, analysisName={}";
+  protected static final RecommendationOut EMPTY_RECOMMENDATION = RecommendationOut.builder()
+      .build();
   private final ResponseCreator responseCreator;
 
   private final MessageDetailsService messageDetailsService;
@@ -34,13 +39,17 @@ public class ClientRequestDtoBuilder {
 
     log.info("Fetching Message from DB using batchName={}", batchName);
     var messageDetailsMap = messageDetailsService.messages(batchName);
+    var messageIdToRecommendationMap = getRecommendationMap(recommendations);
 
     try {
-      var decisionMessageDtos = recommendations
-          .getRecommendations()
+      var decisionMessageDtos = messageDetailsMap.values()
           .stream()
-          .peek(recommendationOut -> log(recommendationOut, batchName, analysisName))
-          .map(recommendation -> createMessageDto(messageDetailsMap, recommendation))
+          .map(messageDetails -> {
+            var recommendation = messageIdToRecommendationMap
+                .getOrDefault(messageDetails.getId(), EMPTY_RECOMMENDATION);
+            log(recommendation, batchName, analysisName);
+            return createMessageDto(messageDetails, recommendation);
+          })
           .peek(clientRequestDto -> log(clientRequestDto, batchName, analysisName))
           .collect(toList());
       return responseCreator.build(decisionMessageDtos);
@@ -51,10 +60,7 @@ public class ClientRequestDtoBuilder {
   }
 
   private ReceiveDecisionMessageDto createMessageDto(
-      Map<UUID, MessageDetailsDto> messageDetailsMap, RecommendationOut recommendation) {
-    var messageDetails = messageDetailsService.messageFrom(
-        messageDetailsMap,
-        recommendation.getAlert().getId());
+      MessageDetailsDto messageDetails, RecommendationOut recommendation) {
     return responseCreator.buildMessageDto(messageDetails, recommendation);
   }
 
@@ -70,5 +76,15 @@ public class ClientRequestDtoBuilder {
     log.debug(
         "Generated ReceiveDecisionMessageDto for batchName={}, analysisName={}{}{}", batchName,
         analysisName, lineSeparator(), messageDto);
+  }
+
+  private static Map<UUID, RecommendationOut> getRecommendationMap(
+      RecommendationsOut recommendations) {
+    return recommendations.getRecommendations()
+        .stream()
+        .collect(
+            toMap(
+                recommendationOut -> fromResourceName(recommendationOut.getAlert().getId()),
+                Function.identity()));
   }
 }
