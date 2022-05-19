@@ -125,7 +125,7 @@ pipeline {
 
                           ../../gradlew test \
                           -Dcucumber.features=src/test/java/features/SmokeTests.feature \
-                          -Dcucumber.plugin=html:report-\${ENVIRONMENT}.html \
+                          -Dcucumber.plugin=json:report-\${ENVIRONMENT}.json \
                           -Dtest.isRegression=false \
                           -Dtest.clientId=dev-frontend \
                           -Dtest.username="\$E2E_TESTS_CREDS_USR" \
