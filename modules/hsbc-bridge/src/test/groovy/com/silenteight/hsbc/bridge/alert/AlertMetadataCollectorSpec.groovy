@@ -14,6 +14,7 @@ class AlertMetadataCollectorSpec extends Specification {
     given:
     def alertData = new AlertData(
         caseInformation: new CaseInformation(
+            id: 'someCaseId',
             extendedAttribute5: 'extendedAttribute5',
             flagKey: 'flagKey',
             keyLabel: 'keyLabel'
@@ -31,7 +32,8 @@ class AlertMetadataCollectorSpec extends Specification {
         new AlertMetadata(key: 'discriminator', value: 'keyLabel_flagKey'),
         new AlertMetadata(key: 'trackingId', value: 'flagKey'),
         new AlertMetadata(key: 's8_lobCountryCode', value: 'edqLobCountryCodeIndividual'),
-        new AlertMetadata(key: 'extendedAttribute5', value: 'extendedAttribute5')
+        new AlertMetadata(key: 'extendedAttribute5', value: 'extendedAttribute5'),
+        new AlertMetadata(key: 'clientId', value: 'someCaseId')
     ] as Set<AlertMetadata>
   }
 
@@ -39,6 +41,7 @@ class AlertMetadataCollectorSpec extends Specification {
     given:
     def alertData = new AlertData(
         caseInformation: new CaseInformation(
+            id: 'someCaseId',
             extendedAttribute5: 'extendedAttribute5',
             flagKey: 'flagKey',
             keyLabel: 'keyLabel'
@@ -56,7 +59,8 @@ class AlertMetadataCollectorSpec extends Specification {
         new AlertMetadata(key: 'discriminator', value: 'keyLabel_flagKey'),
         new AlertMetadata(key: 'trackingId', value: 'flagKey'),
         new AlertMetadata(key: 's8_lobCountryCode', value: 'GB'),
-        new AlertMetadata(key: 'extendedAttribute5', value: 'extendedAttribute5')
+        new AlertMetadata(key: 'extendedAttribute5', value: 'extendedAttribute5'),
+        new AlertMetadata(key: 'clientId', value: 'someCaseId')
     ] as Set<AlertMetadata>
   }
 
@@ -64,6 +68,7 @@ class AlertMetadataCollectorSpec extends Specification {
     given:
     def alertData = new AlertData(
         caseInformation: new CaseInformation(
+            id: 'someCaseId',
             extendedAttribute5: 'extendedAttribute5',
             flagKey: 'flagKey',
             keyLabel: 'keyLabel'
@@ -81,7 +86,8 @@ class AlertMetadataCollectorSpec extends Specification {
         new AlertMetadata(key: 'discriminator', value: 'keyLabel_flagKey'),
         new AlertMetadata(key: 'trackingId', value: 'flagKey'),
         new AlertMetadata(key: 's8_lobCountryCode', value: ''),
-        new AlertMetadata(key: 'extendedAttribute5', value: 'extendedAttribute5')
+        new AlertMetadata(key: 'extendedAttribute5', value: 'extendedAttribute5'),
+        new AlertMetadata(key: 'clientId', value: 'someCaseId')
     ] as Set<AlertMetadata>
   }
 }

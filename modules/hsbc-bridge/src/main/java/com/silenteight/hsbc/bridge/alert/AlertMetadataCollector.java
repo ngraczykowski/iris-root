@@ -47,7 +47,8 @@ class AlertMetadataCollector {
     return List.of(
         new AlertMetadata(MetadataKey.DISCRIMINATOR, info.getKeyLabel() + "_" + info.getFlagKey()),
         new AlertMetadata(MetadataKey.EXTENDED_ATTRIBUTE_5, info.getExtendedAttribute5()),
-        new AlertMetadata(MetadataKey.TRACKING_ID, info.getFlagKey())
+        new AlertMetadata(MetadataKey.TRACKING_ID, info.getFlagKey()),
+        new AlertMetadata(MetadataKey.CLIENT_ID, info.getId())
     );
   }
 
