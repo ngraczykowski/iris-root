@@ -17,9 +17,8 @@ import javax.validation.Valid;
 
 import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.BRIDGE_COMMAND_EXCHANGE;
 import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.BRIDGE_RETENTION_EXCHANGE;
-import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.GOV_EVENT_EXCHANGE;
+import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.GOV_EVENTS_EXCHANGE;
 import static java.util.Collections.emptyMap;
-import static org.springframework.amqp.core.Binding.DestinationType.EXCHANGE;
 import static org.springframework.amqp.core.Binding.DestinationType.QUEUE;
 
 @Configuration
@@ -38,7 +37,7 @@ class BrokerConfiguration {
   @Bean
   Declarables analyticsBinding() {
     return new Declarables(
-        queueBinding(
+        binding(
             brokerProperties.analyticsQueueName(),
             exchangeProperties.getAnalytics(),
             brokerProperties.analyticsRoutingKey()));
@@ -47,7 +46,7 @@ class BrokerConfiguration {
   @Bean
   Declarables ingestBinding() {
     return new Declarables(
-        queueBinding(
+        binding(
             brokerProperties.ingestQueueName(),
             BRIDGE_COMMAND_EXCHANGE,
             brokerProperties.ingestRoutingKey()));
@@ -56,7 +55,7 @@ class BrokerConfiguration {
   @Bean
   Declarables qaRetentionPersonalInformationExpiredBinding() {
     return new Declarables(
-        queueBinding(
+        binding(
             brokerProperties.qaRetentionPersonalInformationExpiredQueueName(),
             BRIDGE_RETENTION_EXCHANGE,
             brokerProperties.qaRetentionPersonalInformationExpiredRoutingKey()));
@@ -65,7 +64,7 @@ class BrokerConfiguration {
   @Bean
   Declarables qaRetentionAlertsExpiredBinding() {
     return new Declarables(
-        queueBinding(
+        binding(
             brokerProperties.qaRetentionAlertsExpiredQueueName(),
             BRIDGE_RETENTION_EXCHANGE,
             brokerProperties.qaRetentionAlertsExpiredRoutingKey()));
@@ -74,7 +73,7 @@ class BrokerConfiguration {
   @Bean
   Declarables notificationBinding() {
     return new Declarables(
-        queueBinding(
+        binding(
             brokerProperties.notificationQueueName(),
             exchangeProperties.getNotification(),
             brokerProperties.notificationRoutingKey()));
@@ -83,7 +82,7 @@ class BrokerConfiguration {
   @Bean
   Declarables notificationSendMailBinding() {
     return new Declarables(
-        queueBinding(
+        binding(
             brokerProperties.notificationSendMailQueueName(),
             exchangeProperties.getNotification(),
             brokerProperties.notificationSendMailRoutingKey()));
@@ -92,54 +91,23 @@ class BrokerConfiguration {
   @Bean
   Declarables solutionDiscrepancyBinding() {
     return new Declarables(
-        queueBinding(
+        binding(
             brokerProperties.solutionDiscrepancyQueueName(),
             exchangeProperties.getSolutionDiscrepancy(),
             brokerProperties.solutionDiscrepancyRoutingKey()));
   }
 
   @Bean
-  Declarables modelExportBinding() {
-    return new Declarables(
-        exchangeBinding(
-            GOV_EVENT_EXCHANGE,
-            exchangeProperties.getModel(),
-            brokerProperties.modelExportRoutingKey()));
-  }
-
-  @Bean
-  Declarables modelInUseBinding() {
-    return new Declarables(
-        exchangeBinding(
-            GOV_EVENT_EXCHANGE,
-            exchangeProperties.getModel(),
-            brokerProperties.modelInUseRoutingKey()));
-  }
-
-  @Bean
-  Declarables modelsArchivedExchangeBinding() {
-    return new Declarables(
-        exchangeBinding(
-            GOV_EVENT_EXCHANGE,
-            exchangeProperties.getModel(),
-            brokerProperties.modelsArchivedRoutingKey()));
-  }
-
-  @Bean
   Declarables modelsArchivedQueueBinding() {
     return new Declarables(
-        queueBinding(
+        binding(
             brokerProperties.modelsArchivedQueueName(),
-            GOV_EVENT_EXCHANGE,
+            GOV_EVENTS_EXCHANGE,
             brokerProperties.modelsArchivedRoutingKey()));
   }
 
-  private static Binding queueBinding(String queueName, String exchange, String routingKey) {
+  private static Binding binding(String queueName, String exchange, String routingKey) {
     return new Binding(queueName, QUEUE, exchange, routingKey, emptyMap());
-  }
-
-  private static Binding exchangeBinding(String destination, String exchange, String routingKey) {
-    return new Binding(destination, EXCHANGE, exchange, routingKey, emptyMap());
   }
 
   @Bean

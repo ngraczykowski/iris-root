@@ -32,11 +32,10 @@ serp:
     messaging:
       exchange:
         analytics: feature-vector
-        model: gov.model
+        model: gov.events
         notification: notification
         solution-discrepancy: learning
         gov-events: gov.events
-        gov-event: gov.event
       broker:
         analytics:
           queue-name: governance.analytics

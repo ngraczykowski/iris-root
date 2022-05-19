@@ -26,7 +26,4 @@ class ExchangeProperties {
 
   @NotBlank
   String govEvents;
-
-  @NotBlank
-  String govEvent;
 }

@@ -94,7 +94,6 @@ serp.governance:
       notification: notification
       solution-discrepancy: learning
       gov-events: gov.events
-      gov-event: gov.event
     broker:
       analytics:
         queue-name: governance.analytics
