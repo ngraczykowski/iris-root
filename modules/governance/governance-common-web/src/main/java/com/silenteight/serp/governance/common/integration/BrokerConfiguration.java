@@ -134,15 +134,6 @@ class BrokerConfiguration {
             brokerProperties.modelsArchivedRoutingKey()));
   }
 
-  @Bean
-  Declarables govEventBinding() {
-    return new Declarables(
-        exchangeBinding(
-            GOV_EVENT_EXCHANGE,
-            exchangeProperties.getGovEvents(),
-            brokerProperties.govEventsRoutingKey()));
-  }
-
   private static Binding queueBinding(String queueName, String exchange, String routingKey) {
     return new Binding(queueName, QUEUE, exchange, routingKey, emptyMap());
   }
