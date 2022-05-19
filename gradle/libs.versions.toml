@@ -37,7 +37,7 @@ platform-test-containers = "1.17.1"
 aspectj = "1.9.9.1"
 bouncycastle = "1.70"
 ecs = "1.2.0"
-grpc = "1.45.1"
+grpc = "1.46.0"
 grpc-starter = "2.13.1.RELEASE"
 jackson = "2.13.0"
 lombok = "1.18.24"
@@ -275,6 +275,7 @@ grpc-services = { group = "io.grpc", name = "grpc-services", version.ref = "grpc
 grpc-spring-boot-starter = { group = "net.devh", name = "grpc-spring-boot-starter", version.ref = "grpc-starter" }
 grpc-stub = { group = "io.grpc", name = "grpc-stub", version.ref = "grpc" }
 grpc-testing = { group = "io.grpc", name = "grpc-testing", version.ref = "grpc" }
+grpc-gen = { group = "io.grpc", name = "protoc-gen-grpc-java" , version = "1.46.0" }
 guava = { group = "com.google.guava", name = "guava", version = "31.0.1-jre" }
 hazelcast = { group = 'com.hazelcast', name = 'hazelcast', version.ref = "hazelcast" }
 hibernate-core = { group = "org.hibernate", name = "hibernate-core" }
