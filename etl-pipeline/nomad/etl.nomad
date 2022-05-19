@@ -8,8 +8,6 @@ variable "namespace" {
   default = "mike"
 }
 
-
-
 job "etl-pipeline" {
   type = "service"
 

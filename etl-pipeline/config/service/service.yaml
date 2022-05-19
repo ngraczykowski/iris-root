@@ -16,13 +16,5 @@ GRPC_CLIENT_TLS_PUBLIC_KEY_CHAIN: tests/ssl/server.pem
 DATA_SOURCE_INPUT_ENDPOINT: localhost:50052
 # DATA_SOURCE_INPUT_ENDPOINT: discovery:///mike-universal-data-source
 
-
-CONSUL_HOSTNAME: 10.8.0.1
-CONSUL_PORT: 8500
-
 # debugging flags
 # DATA_SOURCE_INPUT_ENDPOINT: discovery:///mike-universal-data-source
-
-
-# CONSUL_CLIENT_CERT: "dummy_cert"
-# CONSUL_ACL_TOKEN: "dummy_to"

@@ -8,7 +8,7 @@ import grpc
 import omegaconf
 
 import etl_pipeline.service.proto.api.etl_pipeline_pb2 as etl__pipeline__pb2
-from etl_pipeline.config import ConsulServiceConfig
+from etl_pipeline.config import ConsulServiceConfig, ConsulServiceError
 from etl_pipeline.logger import get_logger
 from etl_pipeline.service.servicer import EtlPipelineServiceServicer
 
@@ -51,7 +51,7 @@ async def serve(args):
     else:
         try:
             address = service_config.ETL_SERVICE_ADDR
-        except (omegaconf.errors.ConfigAttributeError, KeyError):
+        except (omegaconf.errors.ConfigAttributeError, KeyError, ConsulServiceError):
             address = f"{service_config.ETL_SERVICE_IP}:{service_config.ETL_SERVICE_PORT}"
         server.add_insecure_port(address)
     await server.start()
