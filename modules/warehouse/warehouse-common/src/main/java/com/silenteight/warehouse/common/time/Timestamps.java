@@ -57,12 +57,12 @@ public class Timestamps {
   @NotNull
   public java.sql.Timestamp toSqlTimestamp(@NonNull OffsetDateTime offsetDateTime) {
     return java.sql.Timestamp.valueOf(
-        offsetDateTime.atZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime());
+        offsetDateTime.atZoneSameInstant(UTC).toLocalDateTime());
   }
 
   @NotNull
   public OffsetDateTime toOffsetDateTime(@NonNull java.sql.Timestamp timestamp) {
-    return OffsetDateTime.ofInstant(timestamp.toInstant(), ZoneId.of("UTC"));
+    return OffsetDateTime.ofInstant(timestamp.toInstant(), UTC);
   }
 
   @NotNull

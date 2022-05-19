@@ -17,7 +17,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -35,9 +34,8 @@ class RandomPostgresSearchAlertQueryServiceTest {
       .id(1L)
       .name("alertName")
       .discriminator("test_desc")
-      .createdAt(
-          Date.from(Instant.now()))
-      .recommendationDate(Date.from(Instant.now()))
+      .createdAt(Instant.now())
+      .recommendationDate(Instant.now())
       .payload(Map.of())
       .build();
 

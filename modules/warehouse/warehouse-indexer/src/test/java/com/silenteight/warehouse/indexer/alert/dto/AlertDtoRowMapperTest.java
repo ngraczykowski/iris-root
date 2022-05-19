@@ -55,8 +55,8 @@ class AlertDtoRowMapperTest {
         .name("alertName")
         .discriminator("alertDiscriminator")
         .recommendationDate(
-            RECOMMENDATION_TIMESTAMP)
-        .createdAt(CREATE_TIMESTAMP)
+            RECOMMENDATION_TIMESTAMP.toInstant())
+        .createdAt(CREATE_TIMESTAMP.toInstant())
         .payload(payload)
         .build();
   }

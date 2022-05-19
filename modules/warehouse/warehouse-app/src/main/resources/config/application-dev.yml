@@ -14,5 +14,5 @@ warehouse:
   statistics:
     daily:
       scheduled-cron: "*/60 * * * * *"
-      recalculation-period: 20
+      recalculation-period: 40
       recommendation-enabled: true

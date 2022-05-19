@@ -6,7 +6,7 @@ import com.silenteight.warehouse.statistics.AggregationPeriod;
 import com.google.common.collect.Range;
 import org.junit.jupiter.api.Test;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +16,18 @@ import static org.assertj.core.api.Assertions.*;
 class AlertAggregatorTest {
 
   private AlertAggregator aggregator;
+
+  private static AlertDto alertDtoBuilder(Instant date) {
+    return AlertDto
+        .builder()
+        .id(1L)
+        .name("alertName")
+        .discriminator("test_desc")
+        .createdAt(date)
+        .recommendationDate(date)
+        .payload(Map.of())
+        .build();
+  }
 
   @Test
   void createDailyAggregations() {
@@ -71,10 +83,8 @@ class AlertAggregatorTest {
   void createWeeklyAggregationsWithData() {
     // Given
     aggregator = new AlertAggregator(AggregationPeriod.DAILY);
-    var alert1 = alertDtoBuilder(
-        Timestamp.valueOf("2022-04-01 09:01:15"));
-    var alert2 = alertDtoBuilder(
-        Timestamp.valueOf("2022-04-02 09:01:15"));
+    var alert1 = alertDtoBuilder(Instant.parse("2022-04-01T09:01:15Z"));
+    var alert2 = alertDtoBuilder(Instant.parse("2022-04-02T00:17:49Z"));
 
     // When
     Map<Range<LocalDate>, List<AlertDto>> result = aggregator.aggregate(
@@ -94,17 +104,5 @@ class AlertAggregatorTest {
                 LocalDate.of(2022, 4, 2),
                 LocalDate.of(2022, 4, 2)),
             List.of(alert2)));
-  }
-
-  private static AlertDto alertDtoBuilder(Timestamp date) {
-    return AlertDto
-        .builder()
-        .id(1L)
-        .name("alertName")
-        .discriminator("test_desc")
-        .createdAt(date)
-        .recommendationDate(date)
-        .payload(Map.of())
-        .build();
   }
 }

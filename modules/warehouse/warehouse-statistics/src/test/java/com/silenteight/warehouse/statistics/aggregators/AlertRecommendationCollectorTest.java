@@ -10,7 +10,6 @@ import com.silenteight.warehouse.statistics.computers.AlertsRecommendationStatis
 
 import org.junit.jupiter.api.Test;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +50,7 @@ class AlertRecommendationCollectorTest {
   }
 
   private static AlertDto alertDtoBuilder(Map<String, String> map) {
-    var now = Timestamp.from(Instant.now());
+    var now = Instant.now();
     return AlertDto
         .builder()
         .id(1L)

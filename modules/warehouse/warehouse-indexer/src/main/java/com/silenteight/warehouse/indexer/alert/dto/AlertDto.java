@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.Map;
 
 @Value
@@ -17,14 +17,13 @@ public class AlertDto {
   @NonNull
   String discriminator;
 
-  @NonNull
   String name;
 
   @NonNull
-  Date createdAt;
+  Instant createdAt;
 
   @NonNull
-  Date recommendationDate;
+  Instant recommendationDate;
 
   // This is a json consider other type to store it in better way
   @NonNull

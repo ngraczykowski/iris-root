@@ -41,11 +41,11 @@ public final class AlertPostgresRepository implements AlertRepository {
           + " RANDOM() LIMIT ?";
   @Language("PostgreSQL")
   private static final String FETCH_ALERT_BETWEEN_RECOMMENDATION_DATE =
-      "SELECT * FROM warehouse_alert WHERE name IS NOT NULL AND recommendation_date"
+      "SELECT * FROM warehouse_alert WHERE recommendation_date"
           + " BETWEEN ? AND ?";
   @Language("PostgreSQL")
   private static final String FETCH_ALL_WITH_RECOMMENDATION_DATE_ORDERED =
-      "SELECT recommendation_date FROM warehouse_alert WHERE name IS NOT NULL AND"
+      "SELECT recommendation_date FROM warehouse_alert WHERE"
           + " recommendation_date IS NOT NULL ORDER BY recommendation_date LIMIT 1";
   @Language("PostgreSQL")
   private static final String GROUP_BY =

@@ -57,8 +57,7 @@ public final class AlertRecommendationComputer
         .filter(this::shouldBeTakenInToAccountToCalculateEffectiveness)
         .collect(Collectors.toList());
 
-    log.info("Alerts with analyst recommendation {}", analyticsDecisionAlerts.stream().map(
-        AlertDto::getDiscriminator).collect(Collectors.toList()));
+    log.trace("Alerts with analyst recommendation count {}", analyticsDecisionAlerts.size());
 
     var unspecifiedRecommendationCount =
         getRecommendationCount(recommendationTypeCounter, UNSPECIFIED);

@@ -36,11 +36,8 @@ public final class AlertAggregator implements DataAggregator<AlertDto> {
 
     for (AlertDto alertDto : data) {
       var alertLocalDate =
-          alertDto
-              .getRecommendationDate()
-              .toInstant()
-              .atZone(ZoneOffset.UTC)
-              .toLocalDate();
+          LocalDate.ofInstant(alertDto
+              .getRecommendationDate(), ZoneOffset.UTC);
       for (Entry<Range<LocalDate>, List<AlertDto>> entry : aggregatedRanges.entrySet()) {
         if (entry.getKey().contains(alertLocalDate)) {
           entry.getValue().add(alertDto);

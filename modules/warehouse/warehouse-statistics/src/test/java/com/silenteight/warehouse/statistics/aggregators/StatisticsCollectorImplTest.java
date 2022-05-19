@@ -23,7 +23,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.sql.Timestamp;
 import java.time.*;
 import java.util.List;
 import java.util.Map;
@@ -89,8 +88,8 @@ class StatisticsCollectorImplTest {
         .id(1L)
         .name("alertName")
         .discriminator("test_desc")
-        .createdAt(Timestamp.valueOf(localDate.atStartOfDay()))
-        .recommendationDate(Timestamp.valueOf(localDate.atStartOfDay()))
+        .createdAt(localDate.atStartOfDay().toInstant(ZoneOffset.UTC))
+        .recommendationDate(localDate.atStartOfDay().toInstant(ZoneOffset.UTC))
         .payload(map)
         .build();
   }

@@ -49,6 +49,7 @@ public final class StatisticsCollectorImpl<T, S> implements StatisticsCollector 
 
   public void generateStatisticsData() {
 
+    log.info("Staring daily statistics calculation");
     LocalDate startingDate = dataPersister.getLastPersistedRange(recalculationPeriod)
         .map(Range::upperEndpoint)
         .orElseGet(dataExtractor::getEarliestDate);
@@ -59,6 +60,7 @@ public final class StatisticsCollectorImpl<T, S> implements StatisticsCollector 
     List<Range<LocalDate>> collectorRangeBuckets = createRangeBuckets(collectorRange);
 
     collectorRangeBuckets.forEach(this::execution);
+    log.info("Daily statistics calculation finished");
   }
 
   private List<Range<LocalDate>> createRangeBuckets(Range<LocalDate> collectorRange) {

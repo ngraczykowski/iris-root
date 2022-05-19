@@ -8,7 +8,6 @@ import com.silenteight.warehouse.indexer.alert.dto.AlertDto;
 
 import org.junit.jupiter.api.Test;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
@@ -55,8 +54,8 @@ class AlertRecommendationComputerTest {
         .id(1L)
         .name("alertName")
         .discriminator("test_desc")
-        .createdAt(Timestamp.from(Instant.now()))
-        .recommendationDate(Timestamp.from(Instant.now()))
+        .createdAt(Instant.now())
+        .recommendationDate(Instant.now())
         .payload(payload)
         .build();
   }

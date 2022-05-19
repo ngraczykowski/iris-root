@@ -42,8 +42,8 @@ public final class AlertDtoRowMapper implements RowMapper<AlertDto> {
         .id(rs.getLong("id"))
         .name(rs.getString("name"))
         .discriminator(rs.getString("discriminator"))
-        .recommendationDate(rs.getTimestamp("recommendation_date"))
-        .createdAt(rs.getTimestamp(AlertColumnName.CREATED_AT.getName()))
+        .recommendationDate(rs.getTimestamp("recommendation_date").toInstant())
+        .createdAt(rs.getTimestamp(AlertColumnName.CREATED_AT.getName()).toInstant())
         .payload(payload)
         .build();
   }
