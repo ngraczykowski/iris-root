@@ -1,10 +1,14 @@
 @Library('pipeline-shared-library@master') _
 
 def version = ""
+def images = []
 
 pipeline {
   agent {
     label 'ec2-agent'
+  }
+  environment {
+    ECR = '278875966478.dkr.ecr.us-east-1.amazonaws.com'
   }
   options {
     gitLabConnection(env.GITLAB_CONNECTION_NAME)
@@ -45,15 +49,12 @@ pipeline {
                       -Dsilenteight.repoDeploymentPassword="\$ARTIFACTORY_PWD" \
                       -Djib.console=plain \
                       -Pversion="${version}" \
-                      publish \
-                    && \
-                      jq --raw-output '.image' \$(find . -type f -name 'jib-image.json') >.jib-images
+                      publish
                   """
+                  images = findFiles(glob: '**/jib-image.json').collect {readJSON(file: it.path)}.image.collect {it.minus('docker.repo.silenteight.com/')}
                 }
               }
             }
-
-            stash name: 'jib', includes: '.jib-images', allowEmpty: true
           }
         }
       }
@@ -110,21 +111,20 @@ pipeline {
         branch 'master'
       }
       steps {
-        unstash name: 'jib'
         // Copy images from `.jib-images` file to ECR.
         sh '''
           # Login to ECR
           aws ecr get-login-password --region us-east-1 | \
-            skopeo login --username AWS --password-stdin 278875966478.dkr.ecr.us-east-1.amazonaws.com
-
-          while read line; do \
-            aws ecr --region us-east-1 \
-              create-repository --encryption-configuration encryptionType=KMS \
-                --repository-name  $(echo $line | grep  -Po '(?<=\\/).*(?=\\:)') || true; \
-            skopeo copy docker://$line \
-              docker://278875966478.dkr.ecr.us-east-1.amazonaws.com/$(echo $line | grep -Po '(?<=\\/).*'); \
-          done < '.jib-images'
-        '''
+            skopeo login --username AWS --password-stdin ${env.ECR}
+            '''
+        script {
+          images.each {
+            sh """
+            aws ecr --region us-east-1 create-repository --encryption-configuration encryptionType=KMS --repository-name ${it} || true
+            skopeo copy docker://docker.repo.silenteight.com/${it} docker://${env.ECR}/${it}
+            """
+          }
+        }
       }
     }
     stage('Last known good build') {
