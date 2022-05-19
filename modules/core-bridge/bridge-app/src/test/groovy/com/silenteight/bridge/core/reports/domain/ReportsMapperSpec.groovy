@@ -22,4 +22,16 @@ class ReportsMapperSpec extends Specification {
     then:
     report == ReportFixtures.REPORT_ONE
   }
+
+  def 'should map alert and matches to AlertWithMatchesDto'() {
+    given:
+    def alertWithoutMatches = ReportFixtures.ALERT_ONE_WITHOUT_MATCHES
+    def matches = List.of(ReportFixtures.MATCH_ONE_WITH_ALERT_ID, ReportFixtures.MATCH_TWO_WITH_ALERT_ID)
+
+    when:
+    def result = underTest.toAlertWithMatches(alertWithoutMatches, matches)
+
+    then:
+    result == ReportFixtures.ALERT_ONE
+  }
 }

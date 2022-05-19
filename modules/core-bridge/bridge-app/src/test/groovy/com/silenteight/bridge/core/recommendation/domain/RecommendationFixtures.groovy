@@ -233,8 +233,13 @@ class RecommendationFixtures {
               .build())
       .build()
 
-  static def RECOMMENDATION_RESPONSE = RecommendationsResponse.newBuilder()
+  static def RECOMMENDATIONS_RESPONSE = RecommendationsResponse.newBuilder()
       .addAllRecommendations(List.of(RECOMMENDATION))
+      .setStatistics(STATISTICS)
+      .build()
+
+  static def RECOMMENDATION_RESPONSE = RecommendationResponse.newBuilder()
+      .setRecommendation(RECOMMENDATION)
       .setStatistics(STATISTICS)
       .build()
 
@@ -243,22 +248,42 @@ class RecommendationFixtures {
       .setStatistics(STATISTICS)
       .build()
 
-  static def ERRONEOUS_RECOMMENDATION_RESPONSE = RecommendationsResponse.newBuilder()
+  static def ERRONEOUS_RECOMMENDATIONS_RESPONSE = RecommendationsResponse.newBuilder()
       .addAllRecommendations(List.of(ERRONEOUS_RECOMMENDATION))
+      .setStatistics(STATISTICS)
+      .build()
+
+  static def ERRONEOUS_RECOMMENDATION_RESPONSE = RecommendationResponse.newBuilder()
+      .setRecommendation(ERRONEOUS_RECOMMENDATION)
       .setStatistics(STATISTICS)
       .build()
 
   static def BATCH_ID_WITH_POLICY = new BatchIdWithPolicy(Fixtures.BATCH_ID, POLICY_NAME)
 
-  static def ALERTS_STREAM = Stream.of(
-      AlertWithoutMatches.builder()
-          .id("1")
-          .alertId(Fixtures.ALERT_ID)
-          .alertName(ALERT_NAME)
-          .alertStatus(AlertWithoutMatches.AlertStatus.RECOMMENDED)
-          .metadata(METADATA)
-          .build()
-  )
+  static def ALERTS_WITHOUT_MATCHES = AlertWithoutMatches.builder()
+      .id("1")
+      .alertId(Fixtures.ALERT_ID)
+      .alertName(ALERT_NAME)
+      .alertStatus(AlertWithoutMatches.AlertStatus.RECOMMENDED)
+      .metadata(METADATA)
+      .build()
+
+  static def ERROR_ALERTS_WITHOUT_MATCHES = AlertWithoutMatches.builder()
+      .id("1")
+      .alertId(Fixtures.ALERT_ID)
+      .errorDescription(ERROR_DESCRIPTION)
+      .alertStatus(AlertWithoutMatches.AlertStatus.ERROR)
+      .metadata(METADATA)
+      .build()
+
+
+  static def ALERTS_WITHOUT_MATCHES_WITHOUT_NAME = AlertWithoutMatches.builder()
+      .id("1")
+      .alertId(Fixtures.ALERT_ID)
+      .alertName(null)
+      .alertStatus(AlertWithoutMatches.AlertStatus.RECOMMENDED)
+      .metadata(METADATA)
+      .build()
 
   static def MATCHES_WITH_ALERTS_IDS = List.of(
       MatchWithAlertId.builder()

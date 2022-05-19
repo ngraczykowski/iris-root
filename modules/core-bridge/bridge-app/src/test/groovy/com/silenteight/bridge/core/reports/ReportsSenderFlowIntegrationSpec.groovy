@@ -17,6 +17,8 @@ import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
 import spock.util.concurrent.PollingConditions
 
+import java.util.stream.Stream
+
 @ActiveProfiles("test")
 @Import(ReportsSenderFlowRabbitMqTestConfig.class)
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
@@ -25,11 +27,14 @@ class ReportsSenderFlowIntegrationSpec extends BaseSpecificationIT {
   @SpringBean
   RegistrationService registrationService = Stub {
     getAlertsWithMatches(ReportFixtures.BATCH_ID) >> [ReportFixtures.ALERT_ONE]
+    streamAlerts(ReportFixtures.BATCH_ID) >> Stream.of(ReportFixtures.ALERT_ONE_WITHOUT_MATCHES)
+    getMatches(Set.of(1L)) >> List.of(ReportFixtures.MATCH_ONE_WITH_ALERT_ID)
   }
 
   @SpringBean
   RecommendationService recommendationService = Stub {
     getRecommendations(ReportFixtures.ANALYSIS_NAME) >> ReportFixtures.RECOMMENDATIONS_WITH_METADATA
+    getRecommendations(ReportFixtures.ANALYSIS_NAME, List.of(ReportFixtures.ALERT_ONE_NAME)) >> ReportFixtures.RECOMMENDATIONS_WITH_METADATA
   }
 
   @Autowired

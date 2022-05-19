@@ -57,6 +57,20 @@ class ReportsMapper {
         .build();
   }
 
+  AlertWithMatchesDto toAlertWithMatches(
+      AlertWithoutMatchesDto alert, List<MatchWithAlertId> matches) {
+    return AlertWithMatchesDto.builder()
+        .id(alert.alertId())
+        .name(alert.alertName())
+        .status(alert.alertStatus())
+        .metadata(alert.metadata())
+        .errorDescription(alert.errorDescription())
+        .matches(matches.stream()
+            .map(match -> new MatchDto(match.id(), match.name()))
+            .toList())
+        .build();
+  }
+
   private AlertData getAlertData(AlertWithMatchesDto alert) {
     return getAlertData(alert, null);
   }
@@ -99,6 +113,11 @@ class ReportsMapper {
     var matchNameToMatchId = alert.matches().stream()
         .collect(Collectors.toMap(MatchDto::name, MatchDto::id));
 
+    return buildMatchesData(recommendation, matchNameToMatchId);
+  }
+
+  private List<MatchData> buildMatchesData(
+      RecommendationWithMetadataDto recommendation, Map<String, String> matchNameToMatchId) {
     return getMatchMetadata(recommendation).stream()
         .map(match -> MatchData.builder()
             .id(matchNameToMatchId.get(match.match()))

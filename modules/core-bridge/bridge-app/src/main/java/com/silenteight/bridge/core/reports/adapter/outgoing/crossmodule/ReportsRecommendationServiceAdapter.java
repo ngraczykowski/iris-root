@@ -36,6 +36,16 @@ class ReportsRecommendationServiceAdapter implements RecommendationService {
         .toList();
   }
 
+  @Override
+  public List<RecommendationWithMetadataDto> getRecommendations(
+      String analysisName, List<String> alertNames) {
+    var command = new GetRecommendationCommand(analysisName, alertNames);
+    return recommendationFacade.getRecommendations(command)
+        .stream()
+        .map(this::toRecommendationWithMetadataDto)
+        .toList();
+  }
+
   private RecommendationWithMetadataDto toRecommendationWithMetadataDto(
       RecommendationWithMetadata recommendationWithMetadata) {
     return RecommendationWithMetadataDto.builder()

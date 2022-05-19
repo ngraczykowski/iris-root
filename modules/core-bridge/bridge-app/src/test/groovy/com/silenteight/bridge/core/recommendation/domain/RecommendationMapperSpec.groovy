@@ -1,5 +1,7 @@
 package com.silenteight.bridge.core.recommendation.domain
 
+import com.silenteight.bridge.core.recommendation.domain.model.RecommendationDto
+
 import spock.lang.Specification
 
 class RecommendationMapperSpec extends Specification {
@@ -16,7 +18,7 @@ class RecommendationMapperSpec extends Specification {
         batchWithAlerts, recommendationWithMetadata, recommendedAtForErrorAlerts, batchStatistics)
 
     then:
-    recommendation == RecommendationFixtures.RECOMMENDATION_RESPONSE
+    recommendation == RecommendationFixtures.RECOMMENDATIONS_RESPONSE
   }
 
   def 'should create recommendation response for erroneous alert'() {
@@ -31,7 +33,7 @@ class RecommendationMapperSpec extends Specification {
         batchWithAlerts, recommendationWithMetadata, recommendedAtForErrorAlerts, batchStatistics)
 
     then:
-    recommendation == RecommendationFixtures.ERRONEOUS_RECOMMENDATION_RESPONSE
+    recommendation == RecommendationFixtures.ERRONEOUS_RECOMMENDATIONS_RESPONSE
   }
 
   def 'should create recommendation response for null recommendation metadata'() {
@@ -43,9 +45,45 @@ class RecommendationMapperSpec extends Specification {
 
     when:
     def recommendation = RecommendationMapper.toRecommendationsResponse(
-        batchWithAlerts, recommendationWithNullMetadata, recommendedAtForErrorAlerts, batchStatistics)
+        batchWithAlerts, recommendationWithNullMetadata, recommendedAtForErrorAlerts,
+        batchStatistics)
 
     then:
     recommendation == RecommendationFixtures.RECOMMENDATION_WITHOUT_METADATA_RESPONSE
+  }
+
+  def 'should map dto to RecommendationResponse'() {
+    given:
+    def dto = RecommendationDto.builder()
+        .batchId(RecommendationFixtures.BATCH_ID_WITH_POLICY)
+        .alert(RecommendationFixtures.ALERTS_WITHOUT_MATCHES)
+        .matchWithAlertIds(RecommendationFixtures.MATCHES_WITH_ALERTS_IDS)
+        .recommendation(RecommendationFixtures.RECOMMENDATION_WITH_METADATA)
+        .statistics(RecommendationFixtures.BATCH_STATISTICS)
+        .build()
+
+    when:
+    def recommendation = RecommendationMapper.toRecommendationResponse(dto)
+
+    then:
+    recommendation == RecommendationFixtures.RECOMMENDATION_RESPONSE
+  }
+
+  def 'should map dto to erroneous RecommendationResponse'() {
+    given:
+    def dto = RecommendationDto.builder()
+        .batchId(RecommendationFixtures.BATCH_ID_WITH_POLICY)
+        .alert(RecommendationFixtures.ERROR_ALERTS_WITHOUT_MATCHES)
+        .matchWithAlertIds(RecommendationFixtures.MATCHES_WITH_ALERTS_IDS)
+        .recommendation(null)
+        .statistics(RecommendationFixtures.BATCH_STATISTICS)
+        .recommendedAtForErrorAlerts(RecommendationFixtures.RECOMMENDATION_RECOMMENDED_AT)
+        .build()
+
+    when:
+    def recommendation = RecommendationMapper.toRecommendationResponse(dto)
+
+    then:
+    recommendation == RecommendationFixtures.ERRONEOUS_RECOMMENDATION_RESPONSE
   }
 }

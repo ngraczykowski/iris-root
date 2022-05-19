@@ -22,7 +22,8 @@ import spock.util.concurrent.PollingConditions
     webEnvironment = WebEnvironment.NONE,
     properties = [
         "grpc.server.inProcessName=test",
-        "grpc.client.inProcess.address=in-process:test"
+        "grpc.client.inProcess.address=in-process:test",
+        "reports.streaming-enabled:false"
     ])
 @Import(ReportsSenderFlowRabbitMqTestConfig.class)
 @ActiveProfiles("test")

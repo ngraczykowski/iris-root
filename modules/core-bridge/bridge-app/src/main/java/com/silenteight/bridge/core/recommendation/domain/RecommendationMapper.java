@@ -147,7 +147,7 @@ class RecommendationMapper {
 
   private static Alert getProtoAlert(AlertWithoutMatches alert) {
     return Alert.newBuilder()
-        .setId(alert.id())
+        .setId(alert.alertId())
         .setStatus(toStatus(alert))
         .setMetadata(Optional.ofNullable(alert.metadata()).orElse(EMPTY_STRING))
         .setErrorMessage(Optional.ofNullable(alert.errorDescription()).orElse(EMPTY_STRING))
@@ -231,6 +231,7 @@ class RecommendationMapper {
             .getOrDefault(STEP_KEY, DEFAULT_STEP))
         .setFvSignature(matchMetadata.reason()
             .getOrDefault(FV_SIGNATURE_KEY, DEFAULT_SIGNATURE))
+        .setFeatures(getFeatures(matchMetadata))
         .setName(Optional.ofNullable(matchMetadata.match()).orElse(EMPTY_STRING))
         .build();
   }

@@ -206,6 +206,8 @@ registration:
 ## REPORTS
 reports:
   enabled: true
+  streaming-enabled: true
+  registration-api-to-reports-alerts-chunk-size: 100
 
 ### SENTRY
 sentry:

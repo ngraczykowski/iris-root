@@ -7,4 +7,7 @@ import java.util.List;
 public interface RecommendationService {
 
   List<RecommendationWithMetadataDto> getRecommendations(String analysisName);
+
+  List<RecommendationWithMetadataDto> getRecommendations(
+      String analysisName, List<String> alertNames);
 }
