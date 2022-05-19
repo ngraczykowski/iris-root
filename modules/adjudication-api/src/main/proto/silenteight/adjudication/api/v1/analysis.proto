@@ -1,0 +1,82 @@
+// Copyright 2021 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package silenteight.adjudication.api.v1;
+
+import "google/api/field_behavior.proto";
+import "google/protobuf/timestamp.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "AnalysisProto";
+option java_package = "com.silenteight.adjudication.api.v1";
+
+message Analysis {
+  // The unique name of the analysis. This is always system-assigned.
+  string name = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Policy which is assigned to analysis.
+  string policy = 2 [(google.api.field_behavior) = REQUIRED, (google.api.field_behavior) = IMMUTABLE];
+
+  // Strategy which is assigned to analysis.
+  string strategy = 3 [(google.api.field_behavior) = REQUIRED, (google.api.field_behavior) = IMMUTABLE];
+
+  // The list of categories for solving matches.
+  repeated string categories = 4 [(google.api.field_behavior) = IMMUTABLE];
+
+  // The feature to request from an agent.
+  message Feature {
+    // The name of the feature to request from the agent, in form of `features/<Feature>`.
+    string feature = 1;
+
+    // Agent config to request the feature from, in form of
+    // `agents/<Agent ID>/versions/<Agent Version>/configs/<Agent Config>`.
+    string agent_config = 2;
+  }
+
+  // Features and their agent configs that are assigned to the analysis.
+  // For each feature defined here, Adjudication Engine will request agent to provide the feature
+  // value.
+  repeated Feature features = 5 [(google.api.field_behavior) = REQUIRED, (google.api.field_behavior) = IMMUTABLE];
+
+  // The time the analysis was created in the system. Assigned by the server.
+  google.protobuf.Timestamp create_time = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Possible states of analysis.
+  enum State {
+    STATE_UNSPECIFIED = 0;
+    NEW = 1;
+    PLANNING = 2;
+    RUNNING = 3;
+    DONE = 4;
+    OUTDATED = 5;
+  }
+  // Current state of analysis.
+  State state = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Number of analysis pending alerts.
+  int64 pending_alerts = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Number of analysis total alerts.
+  int64 alert_count = 9 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The labels with user-defined metadata to organize your Analysis.
+  // The maximum length of label name is 50 characters, and label value is 150 characters.
+  map<string, string> labels = 10;
+
+  // Determine what type of recommendation notification to.
+  // By default it will use FLAG_EMPTY
+  NotificationFlags notification_flags = 11 [(google.api.field_behavior) = OPTIONAL];
+
+  // Flag to determine what to include in recommendation notification.
+  message NotificationFlags {
+
+    // Setting this flag to true will attach recommendation data
+    // (recommended_action, recommendation_comment...)
+    bool attach_recommendation = 1;
+
+    // Setting this flag to true will include recommendation metadata into notification.
+    bool attach_metadata = 2;
+  }
+
+}

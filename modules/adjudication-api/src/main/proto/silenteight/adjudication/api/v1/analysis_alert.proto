@@ -1,0 +1,33 @@
+// Copyright 2021 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package silenteight.adjudication.api.v1;
+
+import "google/api/field_behavior.proto";
+import "google/protobuf/timestamp.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "AnalysisAlertProto";
+option java_package = "com.silenteight.adjudication.api.v1";
+
+message AnalysisAlert {
+  // The unique name of the analysis alert. This is always system-assigned, in form of
+  // `analysis/<Analysis ID>/alerts/<Analysis Alert ID>`.
+  // Please note that `<Analysis Alert ID>` might be different than `<Alert ID>`.
+  string name = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The name of the alert, in form of `alerts/<Alert ID>`.
+  string alert = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // The time the alert was added to the analysis, i.e., when the analysis alert resource was
+  // created. Assigned by the server.
+  google.protobuf.Timestamp create_time = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The time the alert needs to have its recommendation generated. When the deadline is getting
+  // close, the recommendation might be generated without waiting for the agents to complete their
+  // work.
+  //
+  // If unspecified, generating the alert recommendation will never time out.
+  google.protobuf.Timestamp deadline_time = 4;
+}

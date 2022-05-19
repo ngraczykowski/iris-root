@@ -1,0 +1,61 @@
+// Copyright 2021 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package silenteight.adjudication.api.v1alpha1;
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+
+import "silenteight/adjudication/api/v1/analysis.proto";
+import "silenteight/adjudication/api/v1/recommendation.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "AnalysisServiceProto";
+option java_package = "com.silenteight.adjudication.api.v1alpha1";
+
+service AnalysisService {
+
+  rpc BatchGetRecommendation (BatchGetRecommendationRequest) returns (v1.Recommendation) {
+    option (google.api.http) = {
+      post: "/v1alpha1/analysis/-/recommendations:batchGet"
+      body: "recommendations"
+    };
+  }
+
+  rpc GetAlertsRecommendation (GetAlertsRecommendationRequest) returns (v1.Recommendation) {
+    option (google.api.http) = {
+      post: "/v1alpha1/{analysis=analysis/*}/recommendations:alerts"
+      body: "alerts"
+    };
+  }
+
+  rpc ListAnalysis (ListAnalysisRequest) returns (ListAnalysisResponse) {
+    option (google.api.http) = {
+      get: "/v1alpha1/analysis"
+    };
+  }
+}
+
+message BatchGetRecommendationRequest {
+  repeated string recommendation = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message GetAlertsRecommendationRequest {
+  // The name of the analysis resource to retrieve.
+  string analysis = 1 [(google.api.field_behavior) = REQUIRED];
+
+  repeated string alerts = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message ListAnalysisRequest {
+  int32 page_size = 1;
+
+  string page_token = 2;
+}
+
+message ListAnalysisResponse {
+  repeated v1.Analysis analysis = 1;
+
+  string next_page_token = 2;
+}

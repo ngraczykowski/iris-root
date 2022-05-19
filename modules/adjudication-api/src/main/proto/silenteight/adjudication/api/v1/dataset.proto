@@ -1,0 +1,24 @@
+// Copyright 2021 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package silenteight.adjudication.api.v1;
+
+import "google/api/field_behavior.proto";
+import "google/protobuf/timestamp.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "DatasetProto";
+option java_package = "com.silenteight.adjudication.api.v1";
+
+message Dataset {
+  // The unique name of the dataset. This is always system-assigned, in form of
+  // `datasets/<Dataset ID>`.
+  string name = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The time the dataset was created in the system. Assigned by the server.
+  google.protobuf.Timestamp create_time = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Number of alerts associated with created dataset. Calculated by the server.
+  int64 alert_count = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}

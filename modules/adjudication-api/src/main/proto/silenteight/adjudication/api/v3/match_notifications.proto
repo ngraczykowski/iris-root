@@ -1,0 +1,37 @@
+// Copyright 2021 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package silenteight.adjudication.api.v3;
+
+import "google/api/field_behavior.proto";
+import "silenteight/adjudication/api/v3/match_recommendation.proto";
+import "silenteight/adjudication/api/v3/match_recommendation_metadata.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "MatchNotificationsProto";
+option java_package = "com.silenteight.adjudication.api.v3";
+
+// The notification informing that match recommendations were generated.
+message MatchRecommendationsGenerated {
+  // The name of the analysis, in form of `analysis/<Analysis ID>`.
+  string analysis = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Represents information about generated recommendation.
+  message RecommendationInfo {
+    // The name of the recommendation, in form of
+    // `analysis/<Analysis ID>/match-recommendations/<Recommendation ID>`.
+    string match_recommendation = 1;
+
+    // The name of the recommended alert, in form of `alerts/<Alert ID>/matches<MatchID>`.
+    string match = 2;
+
+    // Recommendation data. Field is optional and determined by flag on analysis.
+    silenteight.adjudication.api.v3.MatchRecommendation value = 3;
+
+    // Recommendation metadata. Field is optional and determined by flag on analysis.
+    silenteight.adjudication.api.v3.MatchRecommendationMetadata metadata = 4;
+  }
+  // The list of information about generated recommendations.
+  repeated RecommendationInfo recommendation_infos = 2;
+}

@@ -1,0 +1,30 @@
+// Copyright 2022 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package silenteight.adjudication.api.v3;
+
+import "google/api/field_behavior.proto";
+import "google/protobuf/timestamp.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "MatchRecommendationProto";
+option java_package = "com.silenteight.adjudication.api.v3";
+
+message MatchRecommendation {
+  // The unique name of the recommendation. This is always system-assigned.
+  // The format is `analysis/<ID of analysis>/match-recommendations/<ID of recommendation>`.
+  string name = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The alert name this recommendation is for, in form of `matches/<ID of match>`.
+  string match = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The time the recommendation was created in the system. Assigned by the server.
+  google.protobuf.Timestamp create_time = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Maximum allowed length is 50 characters.
+  string recommended_action = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The human-understandable reason for the recommended action.
+  string recommendation_comment = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+}

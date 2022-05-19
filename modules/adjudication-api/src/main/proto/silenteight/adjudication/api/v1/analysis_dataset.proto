@@ -1,0 +1,22 @@
+// Copyright 2021 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package silenteight.adjudication.api.v1;
+
+import "google/api/field_behavior.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "AnalysisDatasetProto";
+option java_package = "com.silenteight.adjudication.api.v1";
+
+message AnalysisDataset {
+  // The unique name of the analysis dataset. This is always system-assigned.
+  string name = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Number of pending alerts in the analysis dataset.
+  int64 pending_alerts = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Total number of alerts in the analysis dataset.
+  int64 alert_count = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
