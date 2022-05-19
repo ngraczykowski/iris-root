@@ -28,7 +28,7 @@ public class Hooks {
 
   @BeforeAll
   public static void setupRestAssured() {
-    RestAssured.baseURI = "https://bravo.dev.silenteight.com/";
+    RestAssured.baseURI = System.getProperty("test.url");
     RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     RestAssured.requestSpecification = new RequestSpecBuilder()
         .build()
