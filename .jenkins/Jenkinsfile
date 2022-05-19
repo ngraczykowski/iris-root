@@ -106,13 +106,6 @@ pipeline {
             https://repo.silenteight.com/artifactory/helm
         """
       }
-      post {
-        success {
-          echo 'Marking successful build'
-          sh 'git branch --force last-known-good-build'
-          gitPush branch: 'last-known-good-build'
-        }
-      }
     }
     stage('ECR') {
       agent {
@@ -138,6 +131,16 @@ pipeline {
               docker://278875966478.dkr.ecr.us-east-1.amazonaws.com/$(echo $line | grep -Po '(?<=\\/).*'); \
           done < '.jib-images'
         '''
+      }
+    }
+    stage('Last known good build') {
+      when {
+        beforeAgent true
+        branch 'master'
+      }
+      steps {
+        sh 'git branch --force last-known-good-build'
+        gitPush branch: 'last-known-good-build', force: true
       }
     }
   }
