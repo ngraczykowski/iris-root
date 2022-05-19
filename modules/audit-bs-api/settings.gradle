@@ -1,5 +1,5 @@
-rootProject.name = 'audit-bs'
-includeBuild('../../platforms')
+rootProject.name = 'audit-bs-api'
+includeBuild('../..//platforms')
 includeBuild('../../build-logic')
 
 

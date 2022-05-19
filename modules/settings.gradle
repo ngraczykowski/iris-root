@@ -17,6 +17,7 @@ rootProject.name = 'iris-modules'
 
 include('app')
 includeBuild('audit-bs')
+includeBuild('audit-bs-api')
 includeBuild('sep-filestorage-api')
 includeBuild('sep-file-storage-minio')
 includeBuild('sep-usermanagement-api')
