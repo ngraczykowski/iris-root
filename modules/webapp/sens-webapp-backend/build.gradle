@@ -24,6 +24,8 @@ dependencies {
   implementation libs.silenteight.sep.auth
   implementation libs.silenteight.sep.usermanagement.api
   implementation libs.silenteight.sep.usermanagement.keycloak
+  //TODO: temporary until audit-bs is migrated
+  implementation libs.silenteight.sep.base.common
 
   implementation libs.bouncycastle.bcprov
   implementation libs.commons.lang3
