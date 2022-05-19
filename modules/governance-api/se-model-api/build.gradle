@@ -1,5 +1,10 @@
 plugins {
-  id "java-library"
   id "maven-publish"
-  id "com.google.protobuf"
+  id "com.silenteight.iris.build.grpc"
+}
+
+dependencies {
+  compileOnly libs.javax.annotation.api
+  compileOnly libs.grpc.stub
+  compileOnly libs.grpc.protobuf
 }
