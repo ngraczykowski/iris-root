@@ -4,6 +4,7 @@ import os
 import re
 
 import consul
+import requests
 from omegaconf import OmegaConf, dictconfig
 
 import etl_pipeline
@@ -22,12 +23,27 @@ class DatasetConfigError(Exception):
 
 class ConsulServiceConfig:
     def __init__(self) -> None:
-        service = OmegaConf.load(os.path.join(CONFIG_APP_DIR, "service", "service.yaml"))
-        host = getattr(service, "CONSUL_HOSTNAME", None)
-        port = getattr(service, "CONSUL_PORT", None)
-        cert_file = getattr(service, "GRPC_CLIENT_TLS_CA", None)
-        token = getattr(service, "CONSUL_ACL_TOKEN", None)
-        self.c = consul.Consul(host=host, port=port, cert=cert_file, token=token)
+        host = os.environ.get("CONSUL_HTTP_ADDR", None)
+        public_key_chain = os.environ.get("CONSUL_CLIENT_CERT", None)
+        private_key = os.environ.get("CONSUL_CLIENT_KEY", None)
+        trusted_ca = os.environ.get("CONSUL_CACERT", None)
+        token = os.environ.get("CONSUL_HTTP_TOKEN", None)
+        cert = []
+        if public_key_chain and private_key:
+            cert = [public_key_chain, private_key]
+
+        self.CONSUL_SECRET_PATH = os.environ.get("CONSUL_SECRET_PATH", None)
+
+        if host and host.startswith("http"):
+            host = re.compile("http[s]*?://").sub("", host)
+            os.environ["CONSUL_HTTP_ADDR"] = host
+        self.c = consul.Consul(
+            host=host,
+            cert=cert,
+            verify=trusted_ca,
+            scheme="https" if cert else "http",
+            token=token,
+        )
         self.map = {}
         self.params = None
         self.reload()
@@ -55,17 +71,23 @@ class ConsulServiceConfig:
         try:
             return self.map[secret_name]
         except KeyError:
-            byte_secrets = self.c.kv.get("mike/etl_service/secrets")[1]["Value"]
-            secrets = byte_secrets.decode().splitlines()
-            for secret in secrets:
-                left_side_ix = secret.find("=")
-                if left_side_ix == -1:
-                    logger.warning("No '=' in secret")
+            if self.CONSUL_SECRET_PATH:
+                try:
+                    byte_secrets = self.c.kv.get(self.CONSUL_SECRET_PATH)[1]["Value"]
+                    secrets = byte_secrets.decode().splitlines()
+                    for secret in secrets:
+                        left_side_ix = secret.find("=")
+                        if left_side_ix == -1:
+                            logger.warning("No '=' in secret")
 
-                variable_name = secret[:left_side_ix]
-                if variable_name == secret_name:
-                    self.map[variable_name] = secret[left_side_ix + 1 :]
-                    logger.debug(f"Got environment variable: {variable_name}")
+                        variable_name = secret[:left_side_ix]
+                        if variable_name == secret_name:
+                            self.map[variable_name] = secret[left_side_ix + 1 :]
+                            logger.debug(f"Got environment variable: {variable_name}")
+                except (requests.exceptions.InvalidURL, ConsulServiceError):
+                    raise ConsulServiceError("No valid consul connection")
+            else:
+                raise ConsulServiceError("No valid consul service secrets path")
         return self.map[secret_name]
 
     def get_service(self, service_name):

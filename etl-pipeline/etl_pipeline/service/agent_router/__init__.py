@@ -116,8 +116,7 @@ class AgentInputCreator:
                 time.sleep(1)
 
     def initialize_categories(self):
-        self.connect_to_uds()
-        channel = self.initiate_channel(self.service_config.DATA_SOURCE_INPUT_ENDPOINT, self.ssl)
+
         categories = []
         for feature, params in self.date_input_config.items():
             if params["feature_type"] == "categories":
@@ -131,6 +130,10 @@ class AgentInputCreator:
                 categories.append(category)
         while True:
             try:
+                self.connect_to_uds()
+                channel = self.initiate_channel(
+                    self.service_config.DATA_SOURCE_INPUT_ENDPOINT, self.ssl
+                )
 
                 category_input_stub = CategoryServiceStub(channel)
                 category_input_stub.BatchCreateCategories(
