@@ -13,17 +13,15 @@ import com.silenteight.recommendation.api.library.v1.RecommendationOut;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 
-@Component
 @EnableConfigurationProperties(RecommendationSenderProperties.class)
 @RequiredArgsConstructor
 class ResponseCreator {
@@ -31,11 +29,13 @@ class ResponseCreator {
   private static final String COMMENT_CUT_MSG =
       "\n\nPlease find the attachment for review comments";
   private static final int MAX_COMMENT_LENGTH = 1024;
-  public static final String DATA_CENTER = "";
-  public static final String OPERATOR = "S8 SEAR";
+  private static final String DATA_CENTER = "";
+  private static final String OPERATOR = "S8 SEAR";
   private static final String COMMENT_FILE_EXTENSION = ".txt";
 
+  @NotNull
   private final DecisionMapperUseCase decisionMapperUseCase;
+  @NotNull
   @Valid
   private final RecommendationSenderProperties properties;
 
@@ -94,8 +94,11 @@ class ResponseCreator {
   }
 
   private static void setAttachment(
-      String messageID, String recommendedAction, String recommendationComment,
+      String messageID,
+      String recommendedAction,
+      String recommendationComment,
       AlertDecisionMessageDtoBuilder decision) {
+
     if (recommendationComment.length() > MAX_COMMENT_LENGTH) {
       decision.attachment(createAttachment(
           messageID,
@@ -105,11 +108,10 @@ class ResponseCreator {
   }
 
   private static void setComment(String comment, AlertDecisionMessageDtoBuilder messageDetails) {
-    if (comment.length() > MAX_COMMENT_LENGTH) {
+    if (comment.length() > MAX_COMMENT_LENGTH)
       messageDetails.comment(comment.substring(0, getCommentEndIndex()) + COMMENT_CUT_MSG);
-    } else {
+    else
       messageDetails.comment(comment);
-    }
   }
 
   private static int getCommentEndIndex() {
@@ -117,22 +119,19 @@ class ResponseCreator {
   }
 
   @NotNull
-  private static AttachmentDto createAttachment(
-      String messageID, String solution, String comment) {
-    var encodedComment =
-        Base64.getEncoder().encodeToString(comment.getBytes(StandardCharsets.UTF_8));
+  private static AttachmentDto createAttachment(String messageID, String solution, String comment) {
+    var encodedComment = Base64.getEncoder().encodeToString(comment.getBytes(UTF_8));
     return AttachmentDto.builder()
-        .name(getFileneme(messageID))
+        .name(getFileName(messageID))
         .contents(encodedComment)
         .comments(solution)
         .build();
   }
 
   @NotNull
-  private static String getFileneme(String messageID) {
+  private static String getFileName(String messageID) {
     return messageID + COMMENT_FILE_EXTENSION;
   }
-
 
   private static ReceiveDecisionMessageDto create(AlertDecisionMessageDto source) {
     return ReceiveDecisionMessageDto.builder()

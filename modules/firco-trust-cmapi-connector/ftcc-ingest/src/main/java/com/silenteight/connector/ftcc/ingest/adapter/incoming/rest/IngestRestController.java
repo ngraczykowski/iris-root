@@ -29,12 +29,13 @@ class IngestRestController {
 
   @NonNull
   private final IngestFacade ingestFacade;
-
   @NonNull
   private final ObjectMapper objectMapper;
-
   @NonNull
   private final BatchIdGenerator batchIdGenerator;
+  // TODO(mmastylo): change that logic to not use whole properties here
+  @NonNull
+  private final AlertLoggingProperties alertLoggingProperties;
 
   @PostMapping("/v1/alert")
   public ResponseEntity<AckDto> alert(@RequestBody String request) throws JsonProcessingException {
@@ -42,7 +43,9 @@ class IngestRestController {
     MDC.put(BATCH_NAME, BatchResource.toResourceName(batchId));
     try {
       log.info("Alert received");
-      log.info("Received request body:\n{}", request);
+      if (alertLoggingProperties.isActive())
+        log.info("Received request body:\n{}", request);
+
       ingestFacade.ingest(objectMapper.readValue(request, RequestDto.class), batchId);
       return ResponseEntity.ok(AckDto.ok());
     } finally {

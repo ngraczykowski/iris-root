@@ -3,10 +3,10 @@ package com.silenteight.connector.ftcc.callback.response;
 import com.silenteight.connector.ftcc.callback.outgoing.RecommendationsDeliveredPublisher;
 import com.silenteight.proto.registration.api.v1.MessageBatchCompleted;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -22,15 +22,22 @@ class ResponseProcessorTest {
   @Mock
   RecommendationSender recommendationSender;
   @Mock
-  MessageDetailsService messageDetailsService;
-  @Mock
   RecommendationsDeliveredPublisher recommendationsDeliveredPublisher;
   @Mock
   ClientRequestDtoBuilder clientRequestDtoBuilder;
   @Mock
   RecommendationClientApi recommendationClientApi;
-  @InjectMocks
+
   ResponseProcessor underTest;
+
+  @BeforeEach
+  void setUp() {
+    underTest = new ResponseProcessor(clientRequestDtoBuilder,
+        recommendationSender,
+        recommendationClientApi,
+        recommendationsDeliveredPublisher,
+        true);
+  }
 
   @DisplayName("When Recommendations Received, then 'ClientRequestDto' should be created")
   @Test

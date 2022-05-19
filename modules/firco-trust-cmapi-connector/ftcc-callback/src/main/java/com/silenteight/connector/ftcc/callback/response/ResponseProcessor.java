@@ -1,5 +1,6 @@
 package com.silenteight.connector.ftcc.callback.response;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -10,20 +11,23 @@ import com.silenteight.proto.registration.api.v1.MessageBatchCompleted;
 
 import org.slf4j.MDC;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Component;
 
 import static com.silenteight.connector.ftcc.common.MdcParams.BATCH_NAME;
 import static java.lang.System.lineSeparator;
 
 @RequiredArgsConstructor
-@Component
 @Slf4j
 public class ResponseProcessor {
 
+  @NonNull
   private final ClientRequestDtoBuilder clientRequestDtoBuilder;
+  @NonNull
   private final RecommendationSender recommendationSender;
+  @NonNull
   private final RecommendationClientApi recommendationClientApi;
+  @NonNull
   private final RecommendationsDeliveredPublisher recommendationsDeliveredPublisher;
+  private final boolean loggingActive;
 
   @Async
   public void process(MessageBatchCompleted messageBatchCompleted) {
@@ -36,7 +40,8 @@ public class ResponseProcessor {
       var responseDto =
           clientRequestDtoBuilder.build(batchName, analysisName, recommendations);
 
-      logClientRequestDto(responseDto, analysisName);
+      if (loggingActive)
+        logClientRequestDto(responseDto, analysisName);
 
       recommendationSender.send(batchName, responseDto);
       recommendationsDeliveredPublisher.publish(RecommendationsDeliveredEvent

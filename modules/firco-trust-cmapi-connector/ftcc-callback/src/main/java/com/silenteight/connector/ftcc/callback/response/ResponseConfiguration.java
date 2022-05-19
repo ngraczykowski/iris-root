@@ -4,6 +4,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.connector.ftcc.callback.newdecision.DecisionMapperUseCase;
+import com.silenteight.connector.ftcc.callback.outgoing.RecommendationsDeliveredPublisher;
 import com.silenteight.connector.ftcc.common.database.partition.PartitionCreator;
 import com.silenteight.connector.ftcc.request.details.MessageDetailsQuery;
 
@@ -103,4 +105,37 @@ class ResponseConfiguration {
     return keyStore;
   }
 
+  @Bean
+  ClientRequestDtoBuilder clientRequestDtoBuilder(
+      ResponseCreator responseCreator,
+      MessageDetailsService messageDetailsService,
+      RecommendationSenderProperties properties) {
+
+    return new ClientRequestDtoBuilder(
+        responseCreator, messageDetailsService, properties.loggingActive());
+  }
+
+  @Bean
+  ResponseCreator responseCreator(
+      DecisionMapperUseCase decisionMapperUseCase,
+      RecommendationSenderProperties properties) {
+
+    return new ResponseCreator(decisionMapperUseCase, properties);
+  }
+
+  @Bean
+  ResponseProcessor responseProcessor(
+      ClientRequestDtoBuilder clientRequestDtoBuilder,
+      RecommendationSender recommendationSender,
+      RecommendationClientApi recommendationClientApi,
+      RecommendationsDeliveredPublisher recommendationsDeliveredPublisher,
+      RecommendationSenderProperties properties) {
+
+    return new ResponseProcessor(
+        clientRequestDtoBuilder,
+        recommendationSender,
+        recommendationClientApi,
+        recommendationsDeliveredPublisher,
+        properties.loggingActive());
+  }
 }

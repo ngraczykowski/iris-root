@@ -32,7 +32,7 @@ import static org.mockito.Mockito.*;
 @Transactional
 @TestPropertySource("classpath:/data-test.properties")
 @ContextConfiguration(
-    classes = { ResponseConfiguration.class, DatabasePartitionConfiguration.class })
+    classes = { DatabasePartitionConfiguration.class, CallbackTestConfiguration.class })
 class CallbackRequestServiceTest extends BaseDataJpaTest {
 
   @MockBean

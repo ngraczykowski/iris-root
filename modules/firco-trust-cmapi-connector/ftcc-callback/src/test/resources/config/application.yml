@@ -12,5 +12,5 @@ ftcc:
       keystorePath: "classpath:mtls/badssl.com-client.p12"
       keystorePassword: badssl.com
       defaultRecommendationComment: "S8 recommended action: Manual Investigation"
-
-
+      logging:
+        active: true

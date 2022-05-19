@@ -16,10 +16,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
 
+import static java.time.Duration.ofSeconds;
 import static org.mockito.Mockito.*;
 
 @ExtendWith({ SpringExtension.class })
@@ -31,10 +31,18 @@ class ResponseCreatorTest {
   @DisplayName("Minimal Data to create ClientRequestDto for callback")
   @Test
   void dummyCreateClientRequestDto() {
+    LoggingProperties loggingProperties = new LoggingProperties(false);
     RecommendationSenderProperties properties =
-        new RecommendationSenderProperties("", "login", "password",
-            Duration.ofSeconds(10), Duration.ofSeconds(10), "/etc/default/key.pkcs", "password",
-            "Manual investigation");
+        new RecommendationSenderProperties(
+            "",
+            "login",
+            "password",
+            ofSeconds(10),
+            ofSeconds(10),
+            "/etc/default/key.pkcs",
+            "password",
+            "Manual investigation",
+            new LoggingProperties(false));
     var ds = DestinationStatus.builder()
         .status(StatusInfoDto.builder()
             .id("12")

@@ -1,5 +1,6 @@
 package com.silenteight.connector.ftcc.callback.response
 
+import com.silenteight.connector.ftcc.common.database.partition.DatabasePartitionConfiguration
 import com.silenteight.connector.ftcc.common.database.partition.PartitionCreator
 import com.silenteight.connector.ftcc.request.details.MessageDetailsQuery
 
@@ -18,7 +19,8 @@ import static java.time.temporal.ChronoUnit.SECONDS
 import static org.springframework.http.HttpStatus.BAD_REQUEST
 import static org.springframework.http.HttpStatus.OK
 
-@SpringBootTest(classes = [ ResponseConfiguration, ResponseTestConfiguration ])
+@SpringBootTest(classes = [ResponseConfiguration, CallbackTestConfiguration,
+    DatabasePartitionConfiguration])
 @AutoConfigureWebClient
 class RecommendationSenderConfigurationTest extends Specification {
 
@@ -55,7 +57,8 @@ class RecommendationSenderConfigurationTest extends Specification {
   }
 }
 
-@SpringBootTest(classes = [ ResponseConfiguration, ResponseTestConfiguration ],
+@SpringBootTest(classes = [ResponseConfiguration, CallbackTestConfiguration,
+    DatabasePartitionConfiguration],
     properties = "ftcc.cmapi.callback.keystorePath:")
 @AutoConfigureWebClient
 class RecommendationSenderConfigurationWithoutKeystorePathTest extends Specification {

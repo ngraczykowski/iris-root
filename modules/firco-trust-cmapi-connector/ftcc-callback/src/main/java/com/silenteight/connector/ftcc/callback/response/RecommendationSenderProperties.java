@@ -4,9 +4,11 @@ import lombok.Value;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.Duration;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -30,4 +32,11 @@ public class RecommendationSenderProperties {
   String keystorePassword;
   @NotBlank
   String defaultRecommendationComment;
+  @Valid
+  @NestedConfigurationProperty
+  private LoggingProperties logging;
+
+  public boolean loggingActive() {
+    return logging.isActive();
+  }
 }

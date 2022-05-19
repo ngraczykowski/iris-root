@@ -1,5 +1,6 @@
 package com.silenteight.connector.ftcc.callback.response;
 
+import com.silenteight.connector.ftcc.common.database.partition.DatabasePartitionConfiguration;
 import com.silenteight.connector.ftcc.common.database.partition.PartitionCreator;
 import com.silenteight.connector.ftcc.common.dto.output.AckDto;
 import com.silenteight.connector.ftcc.common.dto.output.ClientRequestDto;
@@ -29,7 +30,7 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 
-@SpringBootTest(classes = CallbackTestConfiguration.class)
+@SpringBootTest(classes = { DatabasePartitionConfiguration.class, CallbackTestConfiguration.class })
 @AutoConfigureWebClient
 class RecommendationSenderIT {
 

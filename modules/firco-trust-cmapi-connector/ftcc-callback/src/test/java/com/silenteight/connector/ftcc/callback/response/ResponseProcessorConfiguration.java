@@ -16,7 +16,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
 
@@ -68,28 +67,13 @@ final class ResponseProcessorConfiguration {
     }
 
     @Bean
-    ResponseCreator responseCreator(DecisionMapperUseCase decisionMapperUseCase) {
-      return new ResponseCreator(
-          decisionMapperUseCase,
-          new RecommendationSenderProperties("localhost:8080", "admin", "pass",
-              Duration.ofSeconds(10), Duration.ofSeconds(10), "/path", "pass",
-              "Manual investigation"));
-    }
-
-    @Bean
     ClientRequestDtoBuilder callbackRequestBuilder(
-        ResponseCreator responseCreator, MessageDetailsService messageDetailsService) {
-      return new ClientRequestDtoBuilder(responseCreator, messageDetailsService);
-    }
+        ResponseCreator responseCreator,
+        MessageDetailsService messageDetailsService,
+        RecommendationSenderProperties properties) {
 
-    @Bean
-    ResponseProcessor responseProcessor(
-        ClientRequestDtoBuilder clientRequestDtoBuilder, RecommendationSender recommendationSender,
-        RecommendationClientApi recommendationClientApi,
-        RecommendationsDeliveredPublisher recommendationsDeliveredPublisher) {
-      return new ResponseProcessor(
-          clientRequestDtoBuilder, recommendationSender, recommendationClientApi,
-          recommendationsDeliveredPublisher);
+      return new ClientRequestDtoBuilder(
+          responseCreator, messageDetailsService, properties.loggingActive());
     }
 
     @Bean

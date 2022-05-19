@@ -7,10 +7,10 @@ import com.silenteight.recommendation.api.library.v1.AlertOut;
 import com.silenteight.recommendation.api.library.v1.RecommendationOut;
 import com.silenteight.recommendation.api.library.v1.RecommendationsOut;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -36,8 +36,12 @@ class ClientRequestDtoBuilderTest {
   @Mock
   private MessageDetailsService messageDetailsService;
 
-  @InjectMocks
   private ClientRequestDtoBuilder underTest;
+
+  @BeforeEach
+  void setUp() {
+    underTest = new ClientRequestDtoBuilder(responseCreator, messageDetailsService, true);
+  }
 
   @DisplayName("When CallbackRequestDto can't be build then NonRecoverableException is thrown")
   @Test

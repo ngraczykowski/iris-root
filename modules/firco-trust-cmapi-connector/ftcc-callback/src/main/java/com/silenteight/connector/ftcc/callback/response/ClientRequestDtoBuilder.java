@@ -1,5 +1,6 @@
 package com.silenteight.connector.ftcc.callback.response;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -9,8 +10,6 @@ import com.silenteight.connector.ftcc.common.dto.output.ReceiveDecisionMessageDt
 import com.silenteight.connector.ftcc.request.details.dto.MessageDetailsDto;
 import com.silenteight.recommendation.api.library.v1.RecommendationOut;
 import com.silenteight.recommendation.api.library.v1.RecommendationsOut;
-
-import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.UUID;
@@ -23,16 +22,18 @@ import static java.util.stream.Collectors.toMap;
 
 @Slf4j
 @RequiredArgsConstructor
-@Component
 public class ClientRequestDtoBuilder {
 
   private static final String ERROR_GENERATING_CLIENT_REQUEST =
       "Error generating ClientRequestDto from Recommendations for batchName={}, analysisName={}";
   protected static final RecommendationOut EMPTY_RECOMMENDATION = RecommendationOut.builder()
       .build();
-  private final ResponseCreator responseCreator;
 
+  @NonNull
+  private final ResponseCreator responseCreator;
+  @NonNull
   private final MessageDetailsService messageDetailsService;
+  private final boolean loggingActive;
 
   ClientRequestDto build(
       String batchName, String analysisName, RecommendationsOut recommendations) {
@@ -64,18 +65,20 @@ public class ClientRequestDtoBuilder {
     return responseCreator.buildMessageDto(messageDetails, recommendation);
   }
 
-  private static void log(
-      RecommendationOut recommendationOut, String batchName, String analysisName) {
-    log.debug(
-        "RecommendationOut for batchName={}, analysisName={}{}{}", batchName, analysisName,
-        lineSeparator(), recommendationOut);
+  private void log(RecommendationOut recommendationOut, String batchName, String analysisName) {
+    if (loggingActive) {
+      log.debug(
+          "RecommendationOut for batchName={}, analysisName={}{}{}", batchName, analysisName,
+          lineSeparator(), recommendationOut);
+    }
   }
 
-  private static void log(
-      ReceiveDecisionMessageDto messageDto, String batchName, String analysisName) {
-    log.debug(
-        "Generated ReceiveDecisionMessageDto for batchName={}, analysisName={}{}{}", batchName,
-        analysisName, lineSeparator(), messageDto);
+  private void log(ReceiveDecisionMessageDto messageDto, String batchName, String analysisName) {
+    if (loggingActive) {
+      log.debug(
+          "Generated ReceiveDecisionMessageDto for batchName={}, analysisName={}{}{}", batchName,
+          analysisName, lineSeparator(), messageDto);
+    }
   }
 
   private static Map<UUID, RecommendationOut> getRecommendationMap(

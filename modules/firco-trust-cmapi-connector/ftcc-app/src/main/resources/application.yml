@@ -50,7 +50,6 @@ ftcc:
   retention:
     request:
       data-retention-duration: 90d
-
   #-------------------------------------------------------------------------------------------------
   # CMAPI CALLBACK
   #-------------------------------------------------------------------------------------------------
@@ -62,11 +61,15 @@ ftcc:
       connectionTimeout: 10s
       readTimeout: 10s
       defaultRecommendationComment: "S8 recommended action: Manual Investigation"
+      logging:
+        active: false
 
   #-------------------------------------------------------------------------------------------------
   # Alert state
   #-------------------------------------------------------------------------------------------------
   alert.state:
+    logging:
+      active: false
     mappings:
       NEW:
         - "PENDING"
