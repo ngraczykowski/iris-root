@@ -30,4 +30,6 @@ interface DatasetEntityRepository extends Repository<DatasetEntity, Long> {
       + " FROM DatasetEntity d"
       + " WHERE d.datasetId IN :datasetIds")
   long sumAlertsInDatasets(Collection<UUID> datasetIds);
+
+  Collection<DatasetEntity> findAllByDatasetIdIn(Collection<UUID> datasetIds);
 }

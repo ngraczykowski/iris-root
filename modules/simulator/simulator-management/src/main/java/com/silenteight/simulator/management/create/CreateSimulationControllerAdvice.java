@@ -2,6 +2,7 @@ package com.silenteight.simulator.management.create;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.simulator.dataset.domain.exception.NonActiveDatasetInSet;
 import com.silenteight.simulator.management.domain.NonUniqueSimulationException;
 
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,12 @@ class CreateSimulationControllerAdvice {
 
   @ExceptionHandler(NonUniqueSimulationException.class)
   public ResponseEntity<String> handle(NonUniqueSimulationException e) {
+    log(e);
+    return new ResponseEntity<>(e.getMessage(), BAD_REQUEST);
+  }
+
+  @ExceptionHandler(NonActiveDatasetInSet.class)
+  public ResponseEntity<String> handle(NonActiveDatasetInSet e) {
     log(e);
     return new ResponseEntity<>(e.getMessage(), BAD_REQUEST);
   }

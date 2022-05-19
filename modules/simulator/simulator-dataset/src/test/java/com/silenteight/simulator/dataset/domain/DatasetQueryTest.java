@@ -2,6 +2,7 @@ package com.silenteight.simulator.dataset.domain;
 
 import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
+import com.silenteight.simulator.dataset.domain.exception.NonActiveDatasetInSet;
 import com.silenteight.simulator.dataset.dto.DatasetDto;
 
 import org.junit.jupiter.api.Test;
@@ -137,5 +138,19 @@ class DatasetQueryTest extends BaseDataJpaTest {
         .alertMatch(AlertMatch.MULTI)
         .labels(JsonConversionHelper.INSTANCE.serializeToString(LABELS))
         .build();
+  }
+
+  @Test
+  void doNothingIfAllDatasetsActive() {
+    persistDatasets();
+    assertThatNoException().isThrownBy(
+        () -> underTest.assertAllDatasetsActive(Set.of(RESOURCE_NAME_1, RESOURCE_NAME_2)));
+  }
+
+  @Test
+  void returnFalseIfAnyDatasetIsNotActive() {
+    persistDatasets();
+    assertThatExceptionOfType(NonActiveDatasetInSet.class).isThrownBy(
+        () -> underTest.assertAllDatasetsActive(Set.of(RESOURCE_NAME_1, RESOURCE_NAME_3)));
   }
 }

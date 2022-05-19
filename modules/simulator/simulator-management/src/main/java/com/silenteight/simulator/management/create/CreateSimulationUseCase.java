@@ -8,7 +8,8 @@ import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.auditing.bs.AuditingLogger;
 import com.silenteight.model.api.v1.SolvingModel;
 import com.silenteight.simulator.dataset.common.DatasetResource;
-import com.silenteight.simulator.dataset.domain.DatasetQuery;
+import com.silenteight.simulator.dataset.domain.DatasetExternalResourceNameProvider;
+import com.silenteight.simulator.dataset.domain.DatasetValidator;
 import com.silenteight.simulator.management.domain.SimulationService;
 
 import java.util.Set;
@@ -24,7 +25,10 @@ public class CreateSimulationUseCase {
   private final AnalysisService analysisService;
 
   @NonNull
-  private final DatasetQuery datasetQuery;
+  private final DatasetExternalResourceNameProvider externalResourceNameProvider;
+
+  @NonNull
+  private final DatasetValidator datasetValidator;
 
   @NonNull
   private final SimulationService simulationService;
@@ -34,6 +38,7 @@ public class CreateSimulationUseCase {
 
   public void activate(CreateSimulationRequest request) {
     request.preAudit(auditingLogger::log);
+    datasetValidator.assertAllDatasetsActive(request.getDatasets());
 
     SolvingModel model = modelService.getModel(request.getModel());
     Analysis analysis = runAnalysis(model);
@@ -57,7 +62,7 @@ public class CreateSimulationUseCase {
     datasets
         .stream()
         .map(DatasetResource::fromResourceName)
-        .map(datasetQuery::getExternalResourceName)
+        .map(externalResourceNameProvider::getExternalResourceName)
         .forEach(resourceName -> analysisService.addDatasetToAnalysis(analysis, resourceName));
   }
 }

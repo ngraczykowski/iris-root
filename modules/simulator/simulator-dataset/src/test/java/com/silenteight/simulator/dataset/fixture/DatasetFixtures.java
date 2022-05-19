@@ -40,6 +40,7 @@ public final class DatasetFixtures {
   public static final UUID ID_6 = fromString("b95eb010-7f98-45b1-8c13-78eee94923fc");
   public static final String RESOURCE_NAME_1 = "datasets/" + ID_1;
   public static final String RESOURCE_NAME_2 = "datasets/" + ID_2;
+  public static final String RESOURCE_NAME_3 = "datasets/" + ID_3;
   public static final String DATASET_NAME = "Dataset name";
   public static final String DESCRIPTION = "Dataset description";
   public static final String EXTERNAL_RESOURCE_NAME =

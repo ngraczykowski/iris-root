@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.simulator.dataset.common.DatasetResource;
 import com.silenteight.simulator.dataset.domain.exception.DatasetNotFoundException;
+import com.silenteight.simulator.dataset.domain.exception.NonActiveDatasetInSet;
 import com.silenteight.simulator.dataset.dto.DatasetDto;
 
 import java.util.Collection;
@@ -17,7 +18,7 @@ import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @RequiredArgsConstructor
-public class DatasetQuery {
+public class DatasetQuery implements DatasetExternalResourceNameProvider, DatasetValidator {
 
   @NonNull
   private final DatasetEntityRepository repository;
@@ -47,6 +48,7 @@ public class DatasetQuery {
         .orElseThrow(() -> new DatasetNotFoundException(datasetId));
   }
 
+  @Override
   public String getExternalResourceName(@NonNull UUID datasetId) {
     log.trace("Getting ExternalResourceName by datasetId={}", datasetId);
 
@@ -62,5 +64,16 @@ public class DatasetQuery {
         .stream()
         .map(DatasetResource::toResourceName)
         .collect(toList());
+  }
+
+  @Override
+  public void assertAllDatasetsActive(Set<String> datasets) {
+    boolean allDatasetActive = repository
+        .findAllByDatasetIdIn(DatasetResource.fromResourceNamesSet(datasets))
+        .stream()
+        .allMatch(DatasetEntity::isActive);
+
+    if (!allDatasetActive)
+      throw new NonActiveDatasetInSet(datasets);
   }
 }

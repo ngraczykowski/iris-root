@@ -1,7 +1,8 @@
 package com.silenteight.simulator.management.create;
 
 import com.silenteight.auditing.bs.AuditingLogger;
-import com.silenteight.simulator.dataset.domain.DatasetQuery;
+import com.silenteight.simulator.dataset.domain.DatasetExternalResourceNameProvider;
+import com.silenteight.simulator.dataset.domain.DatasetValidator;
 import com.silenteight.simulator.management.domain.SimulationService;
 
 import org.springframework.context.annotation.Bean;
@@ -14,11 +15,17 @@ class CreateSimulationConfiguration {
   CreateSimulationUseCase createSimulationUseCase(
       ModelService modelService,
       AnalysisService analysisService,
-      DatasetQuery datasetQuery,
+      DatasetExternalResourceNameProvider datasetExternalResourceNameProvider,
+      DatasetValidator datasetValidator,
       SimulationService simulationService,
       AuditingLogger auditingLogger) {
 
     return new CreateSimulationUseCase(
-        modelService, analysisService, datasetQuery, simulationService, auditingLogger);
+        modelService,
+        analysisService,
+        datasetExternalResourceNameProvider,
+        datasetValidator,
+        simulationService,
+        auditingLogger);
   }
 }

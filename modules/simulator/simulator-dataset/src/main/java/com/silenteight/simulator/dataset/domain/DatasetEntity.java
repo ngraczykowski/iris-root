@@ -147,4 +147,8 @@ class DatasetEntity extends BaseEntity implements Serializable {
         .to(getGenerationDateTo())
         .build();
   }
+
+  boolean isActive() {
+    return state == ACTIVE;
+  }
 }

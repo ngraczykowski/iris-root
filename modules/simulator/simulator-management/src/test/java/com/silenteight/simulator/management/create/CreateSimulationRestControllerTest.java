@@ -2,6 +2,7 @@ package com.silenteight.simulator.management.create;
 
 import com.silenteight.simulator.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.simulator.common.web.exception.GenericExceptionControllerAdvice;
+import com.silenteight.simulator.dataset.domain.exception.NonActiveDatasetInSet;
 import com.silenteight.simulator.management.domain.NonUniqueSimulationException;
 
 import org.junit.jupiter.api.Test;
@@ -45,6 +46,16 @@ class CreateSimulationRestControllerTest extends BaseRestControllerTest {
   @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER, AUDITOR })
   void its400_whenSimulationUuidExists() {
     doThrow(NonUniqueSimulationException.class)
+        .when(createSimulationUseCase).activate(any());
+
+    post(SIMULATIONS_URL, CREATE_SIMULATION_REQUEST)
+        .statusCode(BAD_REQUEST.value());
+  }
+
+  @Test
+  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER, AUDITOR })
+  void its400_whenSimulationCreatedWithExpiredDatasets() {
+    doThrow(NonActiveDatasetInSet.class)
         .when(createSimulationUseCase).activate(any());
 
     post(SIMULATIONS_URL, CREATE_SIMULATION_REQUEST)

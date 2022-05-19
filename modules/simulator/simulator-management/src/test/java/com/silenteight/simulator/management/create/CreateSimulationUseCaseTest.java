@@ -4,20 +4,23 @@ import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.auditing.bs.AuditingLogger;
 import com.silenteight.simulator.dataset.domain.DatasetQuery;
+import com.silenteight.simulator.dataset.domain.exception.NonActiveDatasetInSet;
 import com.silenteight.simulator.management.domain.SimulationService;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Set;
 
 import static com.silenteight.simulator.management.SimulationFixtures.*;
 import static com.silenteight.simulator.management.create.CreateSimulationRequest.POST_AUDIT_TYPE;
 import static com.silenteight.simulator.management.create.CreateSimulationRequest.PRE_AUDIT_TYPE;
+import static java.util.Set.of;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentCaptor.forClass;
 import static org.mockito.Mockito.*;
@@ -25,7 +28,6 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class CreateSimulationUseCaseTest {
 
-  @InjectMocks
   private CreateSimulationUseCase underTest;
 
   @Mock
@@ -43,6 +45,12 @@ class CreateSimulationUseCaseTest {
   @Mock
   private AuditingLogger auditingLogger;
 
+  @BeforeEach
+  void setUp() {
+    underTest = new CreateSimulationConfiguration().createSimulationUseCase(
+        modelService, analysisService,datasetQuery,datasetQuery,simulationService,auditingLogger);
+  }
+
   @Test
   void createSimulation() {
     // given
@@ -51,6 +59,7 @@ class CreateSimulationUseCaseTest {
     when(analysisService.createAnalysis(SOLVING_MODEL)).thenReturn(analysis);
     when(datasetQuery.getExternalResourceName(DATASET_ID_1)).thenReturn(DATASET_NAME_1);
     when(datasetQuery.getExternalResourceName(DATASET_ID_2)).thenReturn(DATASET_NAME_2);
+    doNothing().when(datasetQuery).assertAllDatasetsActive(any());
 
     // when
     underTest.activate(CREATE_SIMULATION_REQUEST);
@@ -80,5 +89,17 @@ class CreateSimulationUseCaseTest {
     List<AuditDataDto> logs = logCaptor.getAllValues();
     assertThat(logs).hasSizeGreaterThanOrEqualTo(index + 1);
     return logs.get(index);
+  }
+
+  @Test
+  void createSimulationWithExpiredDatasetShouldThrowAnException() {
+    // given
+    Set<String> datasets = of(DATASET_NAME_1, DATASET_NAME_2);
+    doThrow(new NonActiveDatasetInSet(datasets))
+        .when(datasetQuery).assertAllDatasetsActive(datasets);
+
+    // when
+    assertThatThrownBy(() -> underTest.activate(CREATE_SIMULATION_REQUEST))
+        .isInstanceOf(NonActiveDatasetInSet.class);
   }
 }
