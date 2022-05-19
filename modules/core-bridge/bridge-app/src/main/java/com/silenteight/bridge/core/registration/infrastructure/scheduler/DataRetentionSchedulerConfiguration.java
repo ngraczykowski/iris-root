@@ -14,7 +14,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
     DataRetentionSchedulerProperties.class
 })
 @EnableScheduling
-@EnableSchedulerLock(defaultLockAtMostFor = "10m")
+@EnableSchedulerLock(defaultLockAtMostFor = "${silenteight.bridge.data-retention.lock-at-most-for}")
 class DataRetentionSchedulerConfiguration {
 
   @Bean

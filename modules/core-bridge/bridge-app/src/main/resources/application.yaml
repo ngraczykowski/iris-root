@@ -20,6 +20,7 @@ silenteight:
       enabled: true
       cron: '* 0 1 * * *' # At 01:00
       lock-at-least-for: PT1H
+      lock-at-most-for: PT2H
       chunk: 10
       ### Enable one of retention types below
       personal-information-expired:

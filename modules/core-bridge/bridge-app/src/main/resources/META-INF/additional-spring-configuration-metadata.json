@@ -221,6 +221,11 @@
       "description": "The lock will be held at least for given duration."
     },
     {
+      "name": "silenteight.bridge.data-retention.lock-at-most-for",
+      "type": "java.time.Duration",
+      "description": "The lock will be held at most for given duration."
+    },
+    {
       "name": "silenteight.bridge.data-retention.personal-information-expired.enabled",
       "type": "java.lang.Boolean",
       "description": "Enables or disables data retention for personal information."
