@@ -2,6 +2,12 @@
 
 def version = ""
 
+@NonCPS
+def isPreviousBuildFailed() {
+  def previousBuild = currentBuild.getPreviousBuild()
+  return previousBuild != null && previousBuild != 'SUCCESS'
+}
+
 pipeline {
   agent {
     label 'ec2-agent'
@@ -136,6 +142,14 @@ pipeline {
     }
   }
   post {
+    success {
+      script {
+        if (isPreviousBuildFailed()) {
+          slackSend color: 'good', channel: 'C03D4GD7RHP',
+              message: "${currentBuild.fullProjectName} build fixed <${env.RUN_DISPLAY_URL}|${currentBuild.displayName}>!"
+        }
+      }
+    }
     failure {
       script {
         if (env.BRANCH_NAME == 'master') {
