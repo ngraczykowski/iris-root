@@ -184,7 +184,7 @@ pipeline {
                 branch 'master'
                 branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
               }
-              expression { return params.RELEASE }
+              // expression { return params.RELEASE }
             }
           }
           steps {
