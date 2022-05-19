@@ -61,7 +61,7 @@ public class DataPrepFacade {
       AlertMessageStored message,
       AlertErrorDescription errorDescription) {
     String batchName = message.getBatchName();
-    registerFailedAlert(message.getMessageName(), batchName, "", errorDescription)
+    registerFailedAlert(message.getMessageName(), batchName, errorDescription)
         .forEach(
             alertName -> feedingFacade.notifyAboutError(batchName, alertName, errorDescription));
   }
@@ -70,10 +70,9 @@ public class DataPrepFacade {
     log.debug("Process alert failed: {}", message);
     Try.of(() -> getExtractedAlerts(message))
         .onSuccess(extractedAlerts -> extractedAlerts.forEach((messageName, value) -> {
-          var discriminator = value.getDiscriminator();
           var batchName = value.getBatchName();
           var errorDescription = getAlertErrorDescription(exception);
-          processAlertFailedWithDetails(discriminator, messageName, batchName, errorDescription);
+          processAlertFailedWithDetails(messageName, batchName, errorDescription);
         }))
         .onFailure(e -> {
           log.warn("Unable to parse message", e);
@@ -82,17 +81,15 @@ public class DataPrepFacade {
   }
 
   private void processAlertFailedWithDetails(
-      String discriminator,
       String messageName,
       String batchName,
       AlertErrorDescription errorDescription) {
-    alertService.getAlertItem(discriminator)
+    alertService.getAlertItem(messageName)
         .map(AlertItem::getAlertName)
         .map(List::of)
         .orElseGet(() -> registerFailedAlert(
             messageName,
             batchName,
-            discriminator,
             errorDescription))
         .forEach(alertName -> feedingFacade.notifyAboutError(
             batchName,
@@ -113,10 +110,9 @@ public class DataPrepFacade {
   private List<String> registerFailedAlert(
       String messageName,
       String batchName,
-      String discriminator,
       AlertErrorDescription errorDescription) {
     return registrationService.registerFailedAlerts(of(messageName),
-            batchName, discriminator, errorDescription)
+            batchName, errorDescription)
         .stream()
         .map(RegisteredAlert::getAlertName)
         .collect(toList());

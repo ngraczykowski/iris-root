@@ -26,7 +26,7 @@ public class FeedingFacade {
 
   private static final String SUCCESS_MESSAGE =
       "Feature inputs for batch: {} and alert: {} "
-          + "(Origin alert discriminator: {}) created successfully.";
+          + "(Origin alert messageName: {}) created successfully.";
   private final FeedingService feedingService;
   private final FeedingEventPublisher feedingEventPublisher;
 
@@ -41,7 +41,7 @@ public class FeedingFacade {
         .onSuccess(e -> {
           log.info(
               SUCCESS_MESSAGE, registeredAlert.getBatchName(), registeredAlert.getAlertName(),
-              registeredAlert.getDiscriminator());
+              registeredAlert.getMessageName());
           feedingEventPublisher.publish(createUdsFedEvent(registeredAlert, SUCCESS, NONE));
         })
         .get();

@@ -33,7 +33,6 @@ public class AlertParser {
   private static final String HITS_PATH = "$.Message.Hits.*.Hit";
   private static final String MESSAGE_DATA_PATH = "$.Message.MessageData";
   private static final String SYSTEM_ID_PATH = "$.Message.SystemID";
-  private static final String MESSAGE_ID_PATH = "$.Message.MessageID";
   private static final String OFAC_ID_PATH = "$.HittedEntity.ID";
   private static final String CURRENT_STATUS_NAME = "$.Message.CurrentStatus.Name";
   private static final String CURRENT_STATUS_CHECKSUM = "$.Message.CurrentStatus.Checksum";
@@ -54,7 +53,6 @@ public class AlertParser {
         .messageName(message.getMessageName())
         .parsedMessageData(parseMessageData(documentContext))
         .systemId(getSystemId(documentContext))
-        .messageId(getMessageId(documentContext))
         .currentStatusName(getCurrentStatusName(documentContext))
         .currentActionDateTime(getCurrentActionDateTime(documentContext))
         .currentActionComment(getCurrentActionComment(documentContext))
@@ -97,10 +95,6 @@ public class AlertParser {
 
   private static String getSystemId(DocumentContext documentContext) {
     return getStringValue(documentContext, SYSTEM_ID_PATH);
-  }
-
-  private static String getMessageId(DocumentContext documentContext) {
-    return getStringValue(documentContext, MESSAGE_ID_PATH);
   }
 
   Map<String, List<JsonNode>> mergeHits(List<JsonNode> hits) {

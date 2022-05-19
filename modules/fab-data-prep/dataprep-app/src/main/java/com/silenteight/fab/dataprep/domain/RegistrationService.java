@@ -57,7 +57,6 @@ public class RegistrationService {
   public List<RegisteredAlert> registerFailedAlerts(
       List<String> messageNames,
       String batchName,
-      String discriminator,
       AlertErrorDescription errorDescription) {
     RegisterAlertsAndMatchesIn registerAlertsAndMatchesIn = RegisterAlertsAndMatchesIn
         .builder()
@@ -75,7 +74,7 @@ public class RegistrationService {
         .getRegisteredAlertWithMatches()
         .stream()
         .map(registeredAlertWithMatchesOut -> createFailedRegisteredAlert(
-            registeredAlertWithMatchesOut, batchName, discriminator, errorDescription))
+            registeredAlertWithMatchesOut, batchName, errorDescription))
         .collect(toList());
   }
 }

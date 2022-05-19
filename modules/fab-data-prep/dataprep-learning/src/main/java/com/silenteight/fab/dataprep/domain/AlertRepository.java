@@ -14,13 +14,13 @@ interface AlertRepository extends CrudRepository<AlertEntity, Long>, AlertReposi
 
   @Modifying(clearAutomatically = true)
   @Query("update AlertEntity set state = :state"
-      + " where discriminator = :discriminator and createdAt > :createdAfter")
+      + " where messageName = :messageName and createdAt > :createdAfter")
   void updateState(
-      @Param("discriminator") String discriminator,
+      @Param("messageName") String messageName,
       @Param("state") AlertEntity.State state,
       @Param("createdAfter") OffsetDateTime createdAfter);
 
-  Optional<AlertEntity> findByDiscriminatorAndCreatedAtAfter(
-      String discriminator,
+  Optional<AlertEntity> findByMessageNameAndCreatedAtAfter(
+      String messageName,
       OffsetDateTime createdAt);
 }

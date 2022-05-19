@@ -34,13 +34,12 @@ public class AlertService {
     createPartitions();
   }
 
-  public Optional<AlertItem> getAlertItem(String discriminator) {
+  public Optional<AlertItem> getAlertItem(String messageName) {
     OffsetDateTime createdAfter = getCreatedAfter();
-    return alertRepository.findByDiscriminatorAndCreatedAtAfter(discriminator, createdAfter)
+    return alertRepository.findByMessageNameAndCreatedAtAfter(messageName, createdAfter)
         .map(entity -> AlertItem.builder()
             .alertName(entity.getAlertName())
             .messageName(entity.getMessageName())
-            .discriminator(entity.getDiscriminator())
             .state(AlertState.valueOf(entity.getState().name()))
             .matchNames(new ArrayList<>(entity.getMatchNames()))
             .build());
@@ -48,7 +47,6 @@ public class AlertService {
 
   public void save(CreateAlertItem createAlertItem) {
     AlertEntity alertEntity = AlertEntity.builder()
-        .discriminator(createAlertItem.getDiscriminator())
         .alertName(createAlertItem.getAlertName())
         .messageName(createAlertItem.getMessageName())
         .state(State.REGISTERED)
@@ -59,9 +57,9 @@ public class AlertService {
     alertRepository.save(alertEntity);
   }
 
-  public void setAlertState(String discriminator, AlertState alertState) {
+  public void setAlertState(String messageName, AlertState alertState) {
     OffsetDateTime createdAfter = getCreatedAfter();
-    alertRepository.updateState(discriminator, State.valueOf(alertState.name()), createdAfter);
+    alertRepository.updateState(messageName, State.valueOf(alertState.name()), createdAfter);
   }
 
   public void deleteAll() {

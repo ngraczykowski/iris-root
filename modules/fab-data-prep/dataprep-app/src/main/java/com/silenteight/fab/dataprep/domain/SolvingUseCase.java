@@ -25,8 +25,8 @@ class SolvingUseCase extends BaseUseCase {
     registerNewAlerts(solvingRequest.getExtractedAlerts())
         .forEach(registeredAlert -> {
           feedingFacade.etlAndFeedUds(registeredAlert);
-          var discriminator = registeredAlert.getDiscriminator();
-          alertService.setAlertState(discriminator, AlertState.IN_UDS);
+          var messageName = registeredAlert.getMessageName();
+          alertService.setAlertState(messageName, AlertState.IN_UDS);
         });
   }
 }

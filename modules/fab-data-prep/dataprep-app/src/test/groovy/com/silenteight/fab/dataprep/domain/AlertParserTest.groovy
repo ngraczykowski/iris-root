@@ -31,7 +31,6 @@ class AlertParserTest extends Specification {
     then:
     parsedAlertMessage.getParsedMessageData().getGender() == "M"
     parsedAlertMessage.getSystemId() == 'TRAINING!60C2ED1B-58A1D68E-0326AE78-A8C7CC79'
-    parsedAlertMessage.getMessageId() == '00000004'
     parsedAlertMessage.getCurrentStatusName() == 'COMMHUB'
     parsedAlertMessage.getCurrentActionDateTime() == '20180827094707'
     parsedAlertMessage.getCurrentActionComment() == ''

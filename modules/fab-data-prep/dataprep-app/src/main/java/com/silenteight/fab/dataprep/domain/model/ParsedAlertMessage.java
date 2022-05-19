@@ -20,7 +20,6 @@ public class ParsedAlertMessage {
   @NonNull
   ParsedMessageData parsedMessageData;
   String systemId;
-  String messageId;
   String currentStatusName;
   String currentActionDateTime;
   String currentActionComment;
@@ -28,10 +27,6 @@ public class ParsedAlertMessage {
 
   public Hit getHit(String hitName) {
     return hits.get(hitName);
-  }
-
-  public String getDiscriminator() {
-    return systemId + "|" + messageId;
   }
 
   @Value

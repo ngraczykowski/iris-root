@@ -83,15 +83,14 @@ class DataPrepFacadeTest extends Specification {
         [REGISTERED_ALERT]
     1 * feedingFacade.etlAndFeedUds(REGISTERED_ALERT)
     0 * feedingFacade._
-    1 * alertService.getAlertItem(DISCRIMINATOR) >> Optional.empty()
+    1 * alertService.getAlertItem(MESSAGE_NAME) >> Optional.empty()
     1 * alertService.save(
         CreateAlertItem.builder()
-            .discriminator(DISCRIMINATOR)
             .alertName(ALERT_NAME)
             .messageName(MESSAGE_NAME)
             .matchNames([MATCH_NAME])
             .build())
-    1 * alertService.setAlertState(DISCRIMINATOR, AlertState.IN_UDS)
+    1 * alertService.setAlertState(MESSAGE_NAME, AlertState.IN_UDS)
     0 * learningService._
   }
 
@@ -107,8 +106,8 @@ class DataPrepFacadeTest extends Specification {
     1 * alertParser.parse(message, ALERT_MESSAGE_DETAILS) >> PARSED_ALERT_MESSAGE
     0 * registrationService._
     1 * feedingFacade.etlAndFeedUds(REGISTERED_ALERT)
-    1 * alertService.getAlertItem(DISCRIMINATOR) >> Optional.of(ALERT_ITEM)
-    1 * alertService.setAlertState(DISCRIMINATOR, AlertState.IN_UDS)
+    1 * alertService.getAlertItem(MESSAGE_NAME) >> Optional.of(ALERT_ITEM)
+    1 * alertService.setAlertState(MESSAGE_NAME, AlertState.IN_UDS)
     0 * alertService._
     0 * learningService._
   }
@@ -125,7 +124,7 @@ class DataPrepFacadeTest extends Specification {
     1 * alertParser.parse(message, ALERT_MESSAGE_DETAILS) >> PARSED_ALERT_MESSAGE
     0 * registrationService._
     0 * feedingFacade._
-    1 * alertService.getAlertItem(DISCRIMINATOR) >> Optional.of(ALERT_ITEM_IN_UDS)
+    1 * alertService.getAlertItem(MESSAGE_NAME) >> Optional.of(ALERT_ITEM_IN_UDS)
     0 * alertService._
     0 * learningService._
   }
@@ -144,8 +143,8 @@ class DataPrepFacadeTest extends Specification {
     1 * alertParser.parse(message, ALERT_MESSAGE_DETAILS) >> PARSED_ALERT_MESSAGE
     0 * registrationService._
     1 * feedingFacade.etlAndFeedUds(REGISTERED_ALERT)
-    2 * alertService.getAlertItem(DISCRIMINATOR) >> Optional.of(ALERT_ITEM)
-    1 * alertService.setAlertState(DISCRIMINATOR, AlertState.IN_UDS)
+    2 * alertService.getAlertItem(MESSAGE_NAME) >> Optional.of(ALERT_ITEM)
+    1 * alertService.setAlertState(MESSAGE_NAME, AlertState.IN_UDS)
     0 * alertService._
     1 * learningService.feedWarehouse(
         LearningData.builder()
@@ -173,7 +172,7 @@ class DataPrepFacadeTest extends Specification {
     1 * alertParser.parse(message, ALERT_MESSAGE_DETAILS) >> PARSED_ALERT_MESSAGE
     0 * registrationService._
     0 * feedingFacade._
-    2 * alertService.getAlertItem(DISCRIMINATOR) >> Optional.of(ALERT_ITEM_IN_UDS)
+    2 * alertService.getAlertItem(MESSAGE_NAME) >> Optional.of(ALERT_ITEM_IN_UDS)
     0 * alertService._
     1 * learningService.feedWarehouse(
         LearningData.builder()
@@ -204,15 +203,14 @@ class DataPrepFacadeTest extends Specification {
         [REGISTERED_ALERT]
     1 * feedingFacade.etlAndFeedUds(REGISTERED_ALERT)
     0 * feedingFacade._
-    2 * alertService.getAlertItem(DISCRIMINATOR) >>> [Optional.empty(), Optional.of(ALERT_ITEM)]
+    2 * alertService.getAlertItem(MESSAGE_NAME) >>> [Optional.empty(), Optional.of(ALERT_ITEM)]
     1 * alertService.save(
         CreateAlertItem.builder()
-            .discriminator(DISCRIMINATOR)
             .alertName(ALERT_NAME)
             .messageName(MESSAGE_NAME)
             .matchNames([MATCH_NAME])
             .build())
-    1 * alertService.setAlertState(DISCRIMINATOR, AlertState.IN_UDS)
+    1 * alertService.setAlertState(MESSAGE_NAME, AlertState.IN_UDS)
     1 * learningService.feedWarehouse(
         LearningData.builder()
             .alertName(ALERT_NAME)
@@ -244,11 +242,11 @@ class DataPrepFacadeTest extends Specification {
     1 * alertParser.parse(message, ALERT_MESSAGE_DETAILS) >> PARSED_ALERT_MESSAGE
     1 * registrationService
         .registerFailedAlerts(
-            [MESSAGE_NAME], BATCH_NAME, DISCRIMINATOR, GETTING_FROM_DB) >>
+            [MESSAGE_NAME], BATCH_NAME, GETTING_FROM_DB) >>
         [REGISTERED_ALERT]
     1 * feedingFacade.notifyAboutError(BATCH_NAME, ALERT_NAME, GETTING_FROM_DB)
     0 * feedingFacade._
-    1 * alertService.getAlertItem(DISCRIMINATOR) >> Optional.empty()
+    1 * alertService.getAlertItem(MESSAGE_NAME) >> Optional.empty()
     0 * learningService._
   }
 
@@ -267,7 +265,7 @@ class DataPrepFacadeTest extends Specification {
     0 * registrationService._
     1 * feedingFacade.notifyAboutError(BATCH_NAME, ALERT_NAME, GETTING_FROM_DB)
     0 * feedingFacade._
-    1 * alertService.getAlertItem(DISCRIMINATOR) >> Optional.of(ALERT_ITEM)
+    1 * alertService.getAlertItem(MESSAGE_NAME) >> Optional.of(ALERT_ITEM)
     0 * learningService._
   }
 }

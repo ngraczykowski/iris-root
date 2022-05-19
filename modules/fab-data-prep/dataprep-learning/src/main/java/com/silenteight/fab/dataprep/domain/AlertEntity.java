@@ -24,14 +24,11 @@ class AlertEntity extends BaseEntity {
 
   @Id
   @EqualsAndHashCode.Include
-  @Column(nullable = false, updatable = false)
-  private String discriminator;
+  @Column(nullable = false, updatable = false, name = "message_name")
+  private String messageName;
 
   @Column(nullable = false, updatable = false, name = "alert_name")
   private String alertName;
-
-  @Column(nullable = false, updatable = false, name = "message_name")
-  private String messageName;
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)

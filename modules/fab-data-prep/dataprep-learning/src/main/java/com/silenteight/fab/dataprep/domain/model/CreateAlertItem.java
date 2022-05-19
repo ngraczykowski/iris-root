@@ -11,8 +11,6 @@ import java.util.List;
 public class CreateAlertItem {
 
   @NonNull
-  String discriminator;
-  @NonNull
   String alertName;
   @NonNull
   String messageName;

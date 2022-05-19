@@ -70,51 +70,48 @@ class AlertServiceTest extends BaseSpecificationIT {
     when:
     underTest.save(
         CreateAlertItem.builder()
-            .discriminator(DISCRIMINATOR)
             .alertName(ALERT_NAME)
             .messageName(MESSAGE_NAME)
             .matchNames([MATCH_NAME])
             .build())
-    def result = underTest.getAlertItem(DISCRIMINATOR).get()
+    def result = underTest.getAlertItem(MESSAGE_NAME).get()
 
     then:
     result == AlertItem.builder()
         .alertName(ALERT_NAME)
         .messageName(MESSAGE_NAME)
-        .discriminator(DISCRIMINATOR)
         .state(AlertState.REGISTERED)
         .matchNames([MATCH_NAME])
         .build()
   }
 
   @Unroll
-  def 'learning alert should be found in DB #alerName #discriminator'() {
+  def 'learning alert should be found in DB #alerName #messageName'() {
     given:
     underTest.save(
         CreateAlertItem.builder()
-            .discriminator(discriminator)
             .alertName(alerName)
-            .messageName(MESSAGE_NAME)
+            .messageName(messageName)
             .matchNames([])
             .build())
 
     when:
-    def result = underTest.getAlertItem(discriminator).get().getAlertName()
+    def result = underTest.getAlertItem(messageName).get().getAlertName()
 
     then:
     result == alerName
 
     when:
     clock.fixedInstant = Instant.now().plus(30, ChronoUnit.DAYS)
-    result = underTest.getAlertItem(discriminator)
+    result = underTest.getAlertItem(messageName)
 
     then:
     result.isEmpty()
 
     where:
-    alerName   | discriminator
-    ALERT_NAME | DISCRIMINATOR
-    ""         | DISCRIMINATOR
+    alerName   | messageName
+    ALERT_NAME | MESSAGE_NAME
+    ""         | MESSAGE_NAME
     ALERT_NAME | ""
   }
 
@@ -122,15 +119,14 @@ class AlertServiceTest extends BaseSpecificationIT {
     given:
     underTest.save(
         CreateAlertItem.builder()
-            .discriminator(DISCRIMINATOR)
             .alertName(ALERT_NAME)
             .messageName(MESSAGE_NAME)
             .matchNames([])
             .build())
 
     when:
-    underTest.setAlertState(DISCRIMINATOR, AlertState.IN_UDS)
-    def result = underTest.getAlertItem(DISCRIMINATOR).get()
+    underTest.setAlertState(MESSAGE_NAME, AlertState.IN_UDS)
+    def result = underTest.getAlertItem(MESSAGE_NAME).get()
 
     then:
     result.getState() == AlertState.IN_UDS
@@ -145,9 +141,8 @@ class AlertServiceTest extends BaseSpecificationIT {
     underTest.createPartitions()
     underTest.save(
         CreateAlertItem.builder()
-            .discriminator('alert-1')
             .alertName(ALERT_NAME)
-            .messageName(MESSAGE_NAME)
+            .messageName('alert-1')
             .matchNames([])
             .build())
     testEntityManager.flush()
@@ -157,9 +152,8 @@ class AlertServiceTest extends BaseSpecificationIT {
     SettableValueGenerator.fixedOffsetDateTime = OffsetDateTime.now(clock)
     underTest.save(
         CreateAlertItem.builder()
-            .discriminator('alert-2')
             .alertName(ALERT_NAME)
-            .messageName(MESSAGE_NAME)
+            .messageName('alert-2')
             .matchNames([])
             .build())
     testEntityManager.flush()

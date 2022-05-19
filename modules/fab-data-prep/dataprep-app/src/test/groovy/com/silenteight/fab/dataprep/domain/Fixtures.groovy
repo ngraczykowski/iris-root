@@ -30,8 +30,6 @@ class Fixtures {
   static final String MESSAGE_NAME = 'messages/e525c926-a12a-11ec-97fc-3f5de86f02ac'
   static final String BATCH_NAME = 'batches/031dafde-a12b-11ec-8e04-2f2fd89dfc3f'
   static final String SYSTEM_ID = 'TRAINING!60C2ED1B-58A1D68E-0326AE78-A8C7CC79'
-  static final String MESSAGE_ID = '00000004'
-  static final String DISCRIMINATOR = "$SYSTEM_ID|$MESSAGE_ID"
   static final String CURRENT_STATUS_NAME = "COMMHUB"
   static final String CURRENT_ACTION_DATE_TIME = "20180827094707"
 
@@ -85,7 +83,6 @@ class Fixtures {
       .alertName(ALERT_NAME)
       .messageName(MESSAGE_NAME)
       .systemId(SYSTEM_ID)
-      .discriminator(DISCRIMINATOR)
       .parsedMessageData(PARSED_PAYLOAD)
       .matches([EMPTY_MATCH])
       .status(AlertStatus.SUCCESS)
@@ -96,7 +93,6 @@ class Fixtures {
       .alertName(ALERT_NAME)
       .messageName(MESSAGE_NAME)
       .systemId(SYSTEM_ID)
-      .discriminator(DISCRIMINATOR)
       .parsedMessageData(PARSED_PAYLOAD)
       .matches([])
       .status(AlertStatus.SUCCESS)
@@ -135,7 +131,6 @@ class Fixtures {
       .batchName(BATCH_NAME)
       .messageName(MESSAGE_NAME)
       .systemId(SYSTEM_ID)
-      .messageId(MESSAGE_ID)
       .currentActionComment("")
       .currentActionDateTime(CURRENT_ACTION_DATE_TIME)
       .currentStatusName(CURRENT_STATUS_NAME)
@@ -152,7 +147,6 @@ class Fixtures {
   static ALERT_ITEM = AlertItem.builder()
       .alertName(ALERT_NAME)
       .messageName(MESSAGE_NAME)
-      .discriminator(DISCRIMINATOR)
       .state(AlertState.REGISTERED)
       .matchNames([MATCH_NAME])
       .build()
@@ -160,7 +154,6 @@ class Fixtures {
   static ALERT_ITEM_IN_UDS = AlertItem.builder()
       .alertName(ALERT_NAME)
       .messageName(MESSAGE_NAME)
-      .discriminator(DISCRIMINATOR)
       .state(AlertState.IN_UDS)
       .matchNames([MATCH_NAME])
       .build()

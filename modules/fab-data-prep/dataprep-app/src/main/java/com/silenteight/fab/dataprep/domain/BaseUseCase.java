@@ -30,7 +30,7 @@ abstract class BaseUseCase {
     Map<String, ParsedAlertMessage> alertsToRegister = new HashMap<>();
 
     extractedAlerts.forEach((messageName, parsedAlertMessage) -> alertService
-        .getAlertItem(parsedAlertMessage.getDiscriminator())
+        .getAlertItem(parsedAlertMessage.getMessageName())
         .ifPresentOrElse(
             alertItem -> {
               if (alertItem.getState() == AlertState.REGISTERED) {
@@ -56,9 +56,7 @@ abstract class BaseUseCase {
         .stream()
         .map(Match::getMatchName)
         .collect(toList());
-    var discriminator = registeredAlert.getDiscriminator();
     CreateAlertItem createAlertItem = CreateAlertItem.builder()
-        .discriminator(discriminator)
         .alertName(registeredAlert.getAlertName())
         .messageName(registeredAlert.getMessageName())
         .matchNames(matchNames)

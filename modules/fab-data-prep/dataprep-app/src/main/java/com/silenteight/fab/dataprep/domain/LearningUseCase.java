@@ -45,8 +45,7 @@ class LearningUseCase extends BaseUseCase {
     return extractedAlerts.values()
         .stream()
         .map(parsedAlertMessage -> {
-          var discriminator = parsedAlertMessage.getDiscriminator();
-          AlertItem alertItem = alertService.getAlertItem(discriminator)
+          AlertItem alertItem = alertService.getAlertItem(parsedAlertMessage.getMessageName())
               .orElseThrow(() -> new DataPrepException("Alert not found"));
           return getLearningData(
               alertItem.getAlertName(),
@@ -61,9 +60,9 @@ class LearningUseCase extends BaseUseCase {
     List<RegisteredAlert> registeredNotInUdsAlerts = registerNewAlerts(extractedAlerts);
 
     registeredNotInUdsAlerts.forEach(registeredAlert -> {
-      var discriminator = registeredAlert.getDiscriminator();
+      var messageName = registeredAlert.getMessageName();
       feedingFacade.etlAndFeedUds(registeredAlert);
-      alertService.setAlertState(discriminator, AlertState.IN_UDS);
+      alertService.setAlertState(messageName, AlertState.IN_UDS);
     });
   }
 

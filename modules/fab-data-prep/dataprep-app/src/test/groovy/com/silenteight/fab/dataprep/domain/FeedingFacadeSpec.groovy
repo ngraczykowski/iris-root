@@ -36,7 +36,6 @@ class FeedingFacadeSpec extends Specification {
         .messageName(MESSAGE_NAME)
         .status(status)
         .errorDescription(errorDescription)
-        .discriminator(DISCRIMINATOR)
         .matches(
             [
                 Match.builder()

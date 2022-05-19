@@ -26,8 +26,6 @@ public class RegisteredAlert {
   AlertErrorDescription errorDescription;
   ParsedMessageData parsedMessageData;
   String systemId;
-  @NonNull
-  String discriminator;
   @Builder.Default
   List<Match> matches = emptyList();
 

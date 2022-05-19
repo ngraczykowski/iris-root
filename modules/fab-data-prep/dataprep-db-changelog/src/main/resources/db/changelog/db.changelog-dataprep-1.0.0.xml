@@ -70,4 +70,8 @@
     </addColumn>
   </changeSet>
 
+  <changeSet id="dataprep-1.0.0-6" author="wwatroba">
+    <dropColumn tableName="dataprep_alert" columnName="discriminator"/>
+  </changeSet>
+
 </databaseChangeLog>

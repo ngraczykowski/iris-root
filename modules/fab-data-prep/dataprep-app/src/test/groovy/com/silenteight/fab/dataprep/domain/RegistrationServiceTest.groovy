@@ -103,7 +103,7 @@ class RegistrationServiceTest extends Specification {
 
     when:
     List<RegisteredAlert> registeredAlerts = underTest
-        .registerFailedAlerts(alerts, BATCH_NAME, DISCRIMINATOR, AlertErrorDescription.EXTRACTION)
+        .registerFailedAlerts(alerts, BATCH_NAME, AlertErrorDescription.EXTRACTION)
 
     then:
     registeredAlerts.each {
