@@ -18,6 +18,12 @@ variable "company_name_surrounding_agent_config" {
   description = "Configuration files"
 }
 
+variable "application_config_file" {
+  type = string
+  description = "Path to YAML configuration file to be used as application.yaml (nomad dir relative)"
+  default = "configs/dev/application.yaml"
+}
+
 variable "namespace" {
   type = string
   default = "dev"
@@ -139,7 +145,7 @@ job "company-name-surrounding-agent" {
       }
 
       template {
-        data = file("application.nomad.yaml")
+        data = file("${var.application_config_file}")
         destination = "local/config/application.yaml"
         change_mode = "restart"
       }
