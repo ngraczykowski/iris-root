@@ -112,11 +112,11 @@ pipeline {
       }
       steps {
         // Copy images from `.jib-images` file to ECR.
-        sh '''
+        sh """
           # Login to ECR
           aws ecr get-login-password --region us-east-1 | \
             skopeo login --username AWS --password-stdin ${env.ECR}
-            '''
+            """
         script {
           images.each {
             sh """
