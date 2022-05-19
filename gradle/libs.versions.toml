@@ -11,7 +11,6 @@ learing-engine-store-api = "0.5.0"
 serp-protocol = "0.27.0"
 silenteight-commons = "2.1.0"
 silenteight-data-retention-api = "0.0.1"
-silenteight-data-source-api = "0.23.0"
 warehouse-protocol = "2.3.0"
 
 #-----------------------------------
@@ -81,10 +80,10 @@ adjudication-engine-api = { group = "com.silenteight.adjudication.api", name = "
 agents-api = { group = "com.silenteight.agent.api", name = "agents-api", version.ref = "agents-api" }
 consul-grpc-registration = { group = "com.silenteight.commons", name = "consul-grpc-registration", version = "1.0.0" }
 data-retention-api = { group = "com.silenteight.sens.data-retention-api", name = "data-retention-api", version.ref = "data-retention" }
-data-source-agentinput-api = { group = "com.silenteight.sens.date-source-api", name = "data-source-agentinput-api", version.ref = "silenteight-data-source-api" }
-data-source-api = { group = "com.silenteight.sens.date-source-api", name = "data-source-api", version.ref = "silenteight-data-source-api" }
-data-source-categories-api = { group = "com.silenteight.sens.date-source-api", name = "data-source-categories-api", version.ref = "silenteight-data-source-api" }
-data-source-comments-api = { group = "com.silenteight.sens.date-source-api", name = "data-source-comments-api", version.ref = "silenteight-data-source-api" }
+data-source-agentinput-api = { group = "com.silenteight.iris", name = "data-source-agentinput-api" }
+data-source-api = { group = "com.silenteight.iris", name = "data-source-api" }
+data-source-categories-api = { group = "com.silenteight.iris", name = "data-source-categories-api" }
+data-source-comments-api = { group = "com.silenteight.iris", name = "data-source-comments-api" }
 governance-api = { group = "com.silenteight.iris", name = "se-governance-api" }
 governance-model-api = { group = "com.silenteight.iris", name = "se-model-api" }
 governance-solving-api = { group = "com.silenteight.iris", name = "se-solving-api" }
