@@ -18,13 +18,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.Instant;
 import java.util.List;
 
 import static com.silenteight.serp.governance.common.web.rest.RestConstants.*;
+import static com.silenteight.serp.governance.qa.manage.common.PageResolver.getNextItem;
 import static com.silenteight.serp.governance.qa.manage.domain.DomainConstants.QA_ENDPOINT_TAG;
 import static java.lang.String.valueOf;
 import static java.time.OffsetDateTime.parse;
+import static java.util.Collections.emptyList;
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
@@ -54,19 +55,16 @@ class ListAlertAnalysisRestController {
       @RequestParam Integer pageSize,
       @RequestParam(required = false, defaultValue = MIN_DATE) String pageToken) {
 
-    List<AlertAnalysisDto> list = listAlertQuery.list(state, parse(pageToken), pageSize);
     int count = listAlertQuery.count(state);
+    List<AlertAnalysisDto> list = emptyList();
+    if (count > 0)
+      list = listAlertQuery.list(state, parse(pageToken), pageSize);
+
     log.debug("Returning a list of QA Alerts (listSize={}, all={}", list.size(), count);
+
     return ok()
         .header(HEADER_TOTAL_ITEMS, valueOf(count))
-        .header(HEADER_NEXT_ITEM, valueOf(getHeaderNextItem(list, pageSize)))
+        .header(HEADER_NEXT_ITEM, valueOf(getNextItem(list, pageSize)))
         .body(list);
-  }
-
-  private static Instant getHeaderNextItem(List<AlertAnalysisDto> list, Integer pageSize) {
-    if (list.size() < pageSize)
-      return null;
-
-    return list.get(list.size() - 1).getAddedAt();
   }
 }

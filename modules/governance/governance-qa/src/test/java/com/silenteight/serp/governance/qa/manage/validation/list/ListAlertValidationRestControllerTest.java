@@ -60,8 +60,8 @@ class ListAlertValidationRestControllerTest extends BaseRestControllerTest {
         .header(HEADER_TOTAL_ITEMS, is("0"))
         .header(HEADER_NEXT_ITEM, is("null"))
         .body("size()", is(0));
-    verify(alertValidationQuery, times(1)).list(ALERT_STATES,
-        createdAfter, LIMIT);
+    verify(alertValidationQuery, times(1)).count(ALERT_STATES);
+    verify(alertValidationQuery, never()).list(ALERT_STATES, createdAfter, LIMIT);
   }
 
   @TestWithRole(roles = { AUDITOR, QA_ISSUE_MANAGER })
@@ -70,8 +70,8 @@ class ListAlertValidationRestControllerTest extends BaseRestControllerTest {
 
     get(ALERTS_LIST_URL).statusCode(OK.value()).body("size()", is(0));
 
-    verify(alertValidationQuery, times(1))
-        .list(ALERT_STATES, MIN_DATE, LIMIT);
+    verify(alertValidationQuery, times(1)).count(ALERT_STATES);
+    verify(alertValidationQuery, never()).list(ALERT_STATES, MIN_DATE, LIMIT);
   }
 
   @TestWithRole(roles = { AUDITOR, QA_ISSUE_MANAGER })
@@ -88,7 +88,7 @@ class ListAlertValidationRestControllerTest extends BaseRestControllerTest {
         .contentType(JSON)
         .statusCode(OK.value())
         .header(HEADER_TOTAL_ITEMS, is("1"))
-        .header(HEADER_NEXT_ITEM, is(secondValidation.getAddedAt().toString()))
+        .header(HEADER_NEXT_ITEM, is(secondValidation.getToken().toString()))
         .body("[0].alertName", is(firstValidation.getAlertName()))
         .body("[0].state", is(firstValidation.getState().toString()))
         .body("[0].decisionComment", is(firstValidation.getDecisionComment()))
@@ -104,6 +104,7 @@ class ListAlertValidationRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { AUDITOR, QA_ISSUE_MANAGER })
   void its400_whenInvalidPageTokenProvided() {
+    given(alertValidationQuery.count(any())).willReturn(5);
     get(ALERTS_LIST_WITH_INVALID_PAGE_TOKEN_URL).statusCode(BAD_REQUEST.value());
   }
 }

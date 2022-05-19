@@ -38,12 +38,12 @@ public class GenericNewAlertValidationDto implements AlertValidationDto {
   }
 
   @Override
-  public String getDecisionBy() {
-    return DECIDED_BY;
+  public Instant getAddedAt() {
+    return addedAt;
   }
 
   @Override
-  public Instant getAddedAt() {
-    return addedAt;
+  public String getDecisionBy() {
+    return DECIDED_BY;
   }
 }

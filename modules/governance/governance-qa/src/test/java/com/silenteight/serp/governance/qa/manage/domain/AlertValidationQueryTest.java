@@ -52,7 +52,7 @@ class AlertValidationQueryTest {
     assertThat(alertDtos.size()).isEqualTo(1);
     assertThat(alertDtos.get(0).getAlertName()).isEqualTo(alertFailedAfter.getAlertName());
     assertThat(alertDtos.get(0).getState()).isEqualTo(decisionFailedAfter.getState());
-    assertThat(alertDtos.get(0).getAddedAt()).isAfter(ALERT_BEFORE_DATE.toInstant());
+    assertThat(parse(alertDtos.get(0).getToken())).isAfter(ALERT_BEFORE_DATE);
   }
 
   private Alert getMockedAlert(OffsetDateTime createdAt) {

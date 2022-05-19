@@ -57,7 +57,7 @@ class AlertAnalysisQueryTest {
     List<AlertAnalysisDto> alertDtos = underTest.list(of(NEW, FAILED), ALERT_BEFORE_DATE,5);
     //then
     alertDtos.forEach(dto -> {
-      assertThat(dto.getAddedAt()).isAfter(ALERT_BEFORE_DATE.toInstant());
+      assertThat(parse(dto.getToken())).isAfter(ALERT_BEFORE_DATE);
       assertThat(dto.getState()).isIn(NEW, FAILED);
     });
     assertThat(alertDtos.size()).isEqualTo(2);

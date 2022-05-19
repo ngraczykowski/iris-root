@@ -61,7 +61,8 @@ class ListAlertAnalysisRestControllerTest extends BaseRestControllerTest {
         .header(HEADER_TOTAL_ITEMS, is("0"))
         .body("size()", is(0));
 
-    verify(listQuery, times(1)).list(ALERT_STATES, createdAt, LIMIT);
+    verify(listQuery, times(1)).count(ALERT_STATES);
+    verify(listQuery, never()).list(ALERT_STATES, createdAt, LIMIT);
   }
 
   @TestWithRole(roles = { QA, QA_ISSUE_MANAGER, AUDITOR })
@@ -70,7 +71,9 @@ class ListAlertAnalysisRestControllerTest extends BaseRestControllerTest {
 
     get(ALERTS_LIST_URL).statusCode(OK.value()).body("size()", is(0));
 
-    verify(listQuery, times(1)).list(ALERT_STATES, MIN_DATE, LIMIT);
+    verify(listQuery, times(1)).count(ALERT_STATES);
+    verify(listQuery, never()).list(ALERT_STATES, MIN_DATE, LIMIT);
+
   }
 
   @TestWithRole(roles = { QA, AUDITOR, QA_ISSUE_MANAGER })
@@ -87,7 +90,7 @@ class ListAlertAnalysisRestControllerTest extends BaseRestControllerTest {
     get(ALERTS_LIST_URL)
         .contentType(JSON)
         .header(HEADER_TOTAL_ITEMS, is("3"))
-        .header(HEADER_NEXT_ITEM, is(thirdAnalysis.getAddedAt().toString()))
+        .header(HEADER_NEXT_ITEM, is(thirdAnalysis.getToken().toString()))
         .statusCode(OK.value())
         .body("[0].alertName", is(firstAnalysis.getAlertName()))
         .body("[0].state", is(firstAnalysis.getState().toString()))
@@ -108,6 +111,7 @@ class ListAlertAnalysisRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { QA, AUDITOR })
   void its400_whenInvalidPageTokenProvided() {
+    given(listQuery.count(any())).willReturn(5);
     get(ALERTS_LIST_WITH_INVALID_PAGE_TOKEN_URL).statusCode(BAD_REQUEST.value());
   }
 }
