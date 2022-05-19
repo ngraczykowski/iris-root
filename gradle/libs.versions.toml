@@ -15,8 +15,6 @@ silenteight-audit-bs-api = "0.1.0"
 silenteight-commons = "2.1.0"
 silenteight-data-retention-api = "0.0.1"
 silenteight-data-source-api = "0.23.0"
-silenteight-filestorage-api = "1.3.0"
-silenteight-filestorage-minio = "1.6.0"
 warehouse-protocol = "2.3.0"
 
 #-----------------------------------
@@ -101,8 +99,8 @@ silenteight-audit-bs-api = { group = "com.silenteight.sens.audit-bs-api", name =
 silenteight-commons-app = { group = "com.silenteight.commons", name = "silenteight-commons-app", version.ref = "silenteight-commons" }
 silenteight-commons-core = { group = "com.silenteight.commons", name = "silenteight-commons-core", version.ref = "silenteight-commons" }
 silenteight-data-retention-api = { group = "com.silenteight.sens.data-retention-api", name = "data-retention-api", version.ref = "silenteight-data-retention-api" }
-silenteight-filestorage-api = { group = "com.silenteight.sep.filestorage.api", name = "sep-filestorage-api", version.ref = "silenteight-filestorage-api" }
-silenteight-filestorage-minio = { group = "com.silenteight.sep.filestorage-minio", name = "sep-filestorage-minio", version.ref = "silenteight-filestorage-minio" }
+silenteight-filestorage-api = { group = "com.silenteight.iris", name = "sep-filestorage-api" }
+silenteight-filestorage-minio = { group = "com.silenteight.iris", name = "sep-filestorage-minio-s3" }
 silenteight-sep-auth = { group = "com.silenteight.iris", name = "sep-auth" }
 silenteight-sep-base-aspects = { group = "com.silenteight.iris", name = "sep-base-aspects" }
 silenteight-sep-base-common = { group = "com.silenteight.iris", name = "sep-base-common" }
@@ -320,6 +318,7 @@ lz4-java = { group = "org.lz4", name = "lz4-java", version = "1.8.0" }
 micrometer-core = { group = "io.micrometer", name = "micrometer-core" }
 micrometer-influx = { group = "io.micrometer", name = "micrometer-registry-influx" }
 micrometer-prometheus = { group = "io.micrometer", name = "micrometer-registry-prometheus" }
+minio = { group = 'io.minio', name = 'minio', version = '8.2.0' }
 opencsv = { group = "com.opencsv", name = "opencsv", version = "5.5.1" }
 pebble = { group = "io.pebbletemplates", name = "pebble", version = "3.1.5" }
 postgresql = { group = "org.postgresql", name = "postgresql" }
