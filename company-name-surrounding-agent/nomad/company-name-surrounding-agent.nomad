@@ -123,15 +123,14 @@ job "company-name-surrounding-agent" {
       }
     }
 
-
     task "company-name-surrounding-agent" {
       driver = "docker"
 
-//      template {
-//        data = "{{ key \"${var.namespace}/company-name-surrounding-agent/secrets\" }}"
-//        destination = "secrets/company-name-surrounding-agent.env"
-//        env = true
-//      }
+      template {
+        data = "{{ key \"${var.namespace}/company-name-surrounding-agent/secrets\" }}"
+        destination = "secrets/company-name-surrounding-agent.env"
+        env = true
+      }
 
       artifact {
         source = var.company_name_surrounding_agent_artifact
