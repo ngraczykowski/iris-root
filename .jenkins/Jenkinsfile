@@ -148,8 +148,14 @@ pipeline {
     success {
       script {
         if (isPreviousBuildFailed()) {
-          slackSend color: 'good', channel: 'C03D4GD7RHP',
-              message: "${currentBuild.fullProjectName} build is fixed with <${env.RUN_DISPLAY_URL}|${currentBuild.displayName}>!"
+          slackSend color: 'good', channel: 'C03D4GD7RHP', attachments: [
+              [
+                  color      : 'good',
+                  author_name: ':building_construction: Iris Build',
+                  author_link: env.JOB_DISPLAY_URL,
+                  title      : "${currentBuild.fullProjectName} build is fixed with <${env.RUN_DISPLAY_URL}|${currentBuild.displayName}>!",
+              ]
+          ]
         }
       }
     }
