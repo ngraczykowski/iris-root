@@ -14,6 +14,9 @@ service GeoLocationAgent {
   rpc CompareLocations (CompareLocationsRequest) returns (CompareLocationsResponse) {
   }
 
+  rpc CompareMultipleLocations (CompareMultipleLocationsRequest) returns (CompareLocationsResponse) {
+  }
+
   rpc BatchCompareLocations (BatchCompareLocationsRequest) returns (BatchCompareLocationsResponse) {
   }
 }
@@ -42,3 +45,9 @@ message IdentifiedLocations {
   repeated IdentifiedLocation alerted_party_identified_locations = 1 [(google.api.field_behavior) = REQUIRED];
   repeated IdentifiedLocation watchlist_party_identified_locations = 2 [(google.api.field_behavior) = REQUIRED];
 }
+
+message CompareMultipleLocationsRequest {
+  repeated string alerted_party_locations = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated string watchlist_party_locations = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
