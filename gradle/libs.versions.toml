@@ -36,6 +36,7 @@ platform-test-containers = "1.17.1"
 #-----------------------------------
 # Others libraries
 #-----------------------------------
+apache-http = "4.5.13"
 aspectj = "1.9.9.1"
 bouncycastle = "1.70"
 ecs = "1.2.0"
@@ -103,6 +104,7 @@ silenteight-data-retention-api = { group = "com.silenteight.sens.data-retention-
 silenteight-filestorage-api = { group = "com.silenteight.sep.filestorage.api", name = "sep-filestorage-api", version.ref = "silenteight-filestorage-api" }
 silenteight-filestorage-minio = { group = "com.silenteight.sep.filestorage-minio", name = "sep-filestorage-minio", version.ref = "silenteight-filestorage-minio" }
 silenteight-sep-auth = { group = "com.silenteight.iris", name = "sep-auth"}
+silenteight-sep-auth-wh = { group = "com.silenteight.sep.auth", name = "sep-auth", version = "1.21.0"}
 silenteight-sep-base-aspects = { group = "com.silenteight.sep.base", name = "sep-base-aspects", version.ref = "silenteight-sep-base" }
 silenteight-sep-base-common = { group = "com.silenteight.sep.base", name = "sep-base-common", version.ref = "silenteight-sep-base" }
 silenteight-sep-base-testing = { group = "com.silenteight.sep.base", name = "sep-base-testing", version.ref = "silenteight-sep-base" }
@@ -153,6 +155,7 @@ spring-amqp-rabbit-junit = { group = "org.springframework.amqp", name = "spring-
 
 spring-boot = { group = "org.springframework.boot", name = "spring-boot" }
 spring-boot-actuator = { group = "org.springframework.boot", name = "spring-boot-actuator" }
+spring-boot-actuator-autoconfigure = { group = "org.springframework.boot", name = "spring-boot-actuator-autoconfigure" }
 spring-boot-autoconfigure = { group = "org.springframework.boot", name = "spring-boot-autoconfigure" }
 spring-boot-autoconfigure-processor = { group = "org.springframework.boot", name = "spring-boot-autoconfigure-processor" }
 spring-boot-configuration-processor = { group = "org.springframework.boot", name = "spring-boot-configuration-processor" }
@@ -198,6 +201,7 @@ spring-integration-core = { group = "org.springframework.integration", name = "s
 spring-integration-http = { group = "org.springframework.integration", name = "spring-integration-http" }
 spring-integration-mail = { group = "org.springframework.integration", name = "spring-integration-mail" }
 spring-integration-test = { group = "org.springframework.integration", name = "spring-integration-test" }
+spring-integration-jdbc = { group = "org.springframework.integration", name = "spring-integration-jdbc" }
 
 spring-security-acl = { group = "org.springframework.security", name = "spring-security-acl" }
 spring-security-aspects = { group = "org.springframework.security", name = "spring-security-aspects" }
@@ -232,6 +236,8 @@ lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 amqp-client = { group = "com.rabbitmq", name = "amqp-client" }
 antlr4 = { group = "org.antlr", name = "antlr4" }
 antlr4-runtime = { group = "org.antlr", name = "antlr4-runtime" }
+apache-httpclient = { group = "org.apache.httpcomponents", name = "httpclient", version.ref = "apache-http" }
+apache-httpmime = { group = "org.apache.httpcomponents", name = "httpmime", version.ref = "apache-http" }
 aspectjrt = { group = "org.aspectj", name = "aspectjrt", version.ref = "aspectj" }
 aspectjtools = { group = "org.aspectj", name = "aspectjtools", version.ref = "aspectj" }
 aspectjweaver = { group = "org.aspectj", name = "aspectjweaver" }
@@ -297,6 +303,7 @@ jakarta-persistence-api = { group = "jakarta.persistence", name = "jakarta.persi
 jakarta-servlet-api = { group = "jakarta.servlet", name = "jakarta.servlet-api" }
 jakarta-transaction-api = { group = "jakarta.transaction", name = "jakarta.transaction-api" }
 jakarta-validation-api = { group = "jakarta.validation", name = "jakarta.validation-api" }
+javax-annotation-api = { group = "javax.annotation", name = "javax.annotation-api" }
 javax-cache-api = { group = "javax.cache", name = "cache-api" }
 javax-mail = { group = "javax.mail", name = "mail", version = "1.4.1" }
 jaxb-api = { group = "jakarta.xml.bind", name = "jakarta.xml.bind-api" }
@@ -312,6 +319,7 @@ lz4-java = { group = "org.lz4", name = "lz4-java" , version = "1.8.0"}
 micrometer-core = { group = "io.micrometer", name = "micrometer-core" }
 micrometer-influx = { group = "io.micrometer", name = "micrometer-registry-influx" }
 micrometer-prometheus = { group = "io.micrometer", name = "micrometer-registry-prometheus" }
+minio = { group = "io.minio", name = "minio", version = "8.2.0" }
 opencsv = { group = "com.opencsv", name = "opencsv", version = "5.5.1" }
 pebble = { group = "io.pebbletemplates", name = "pebble", version = "3.1.5" }
 postgresql = { group = "org.postgresql", name = "postgresql" }

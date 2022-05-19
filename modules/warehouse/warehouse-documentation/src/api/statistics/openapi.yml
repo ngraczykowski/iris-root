@@ -119,7 +119,7 @@ components:
         manualInvestigationPercent:
           type: number
           example: 38
-    
+
     PolicyDailyStatisticsList:
       type: array
       items:
@@ -151,4 +151,4 @@ components:
           example: 99
 
 
-        
+

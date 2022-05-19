@@ -1,3 +1,14 @@
+includeBuild('../../platforms')
+includeBuild('../../build-logic')
+
+dependencyResolutionManagement {
+  versionCatalogs {
+    libs {
+      from(files("../../gradle/libs.versions.toml"))
+    }
+  }
+}
+
 rootProject.name = 'warehouse'
 gradle.ext.sepDependenciesVersion = '2.5.0'
 
@@ -23,4 +34,3 @@ include 'warehouse-test-app'
 include 'warehouse-test-client'
 include 'warehouse-test-hsbc-bridge-client-app'
 include 'warehouse-statistics'
-

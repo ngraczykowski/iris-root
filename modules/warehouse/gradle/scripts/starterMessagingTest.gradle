@@ -1,4 +1,4 @@
 dependencies {
-  starterMessagingTest libraries.spring_amqp_rabbit_test
-  starterMessagingTest libraries.spring_amqp_rabbit_junit
+  starterMessagingTest libs.spring.amqp.rabbit.test
+  starterMessagingTest libs.spring.amqp.rabbit.junit
 }

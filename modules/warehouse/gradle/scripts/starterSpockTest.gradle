@@ -1,16 +1,16 @@
 dependencies {
-  starterSpockTest libraries.spock_core
+  starterSpockTest libs.spock.core
 
   // Optional dependencies for using Spock
-  starterSpockTest libraries.groovy_all
+  starterSpockTest libs.groovy.all
 
   // Enables mocking by Spock
-  starterSpockTest libraries.byte_buddy
-  starterSpockTest libraries.objenesis
+  starterSpockTest libs.byte.buddy
+  starterSpockTest libs.objenesis
 
   // Use Hamcrest matchers with Spock
-  starterSpockTest libraries.hamcrest
+  starterSpockTest libs.hamcrest
 
   //enable json path
-  starterSpockTest libraries.json_path
+  starterSpockTest libs.json.path
 }

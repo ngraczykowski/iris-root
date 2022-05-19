@@ -1,20 +1,19 @@
 plugins {
-  id "java"
+  id "com.silenteight.iris.build.java-library"
   id "io.freefair.aspectj.post-compile-weaving"
-  id "org.springframework.boot"
+  id "com.silenteight.iris.build.spring-boot-application"
 }
 
 description = "Test HSBC Bridge client application"
 
-configurations {
-  implementation.extendsFrom starterCommon
-}
-
 dependencies {
-  implementation libraries.silenteight_sep_base_common
-  implementation libraries.silenteight_commons_app
-  implementation libraries.spring_boot_starter_undertow
-  implementation libraries.spring_boot_starter_webflux
+  implementation project(":warehouse-common")
+  implementation libs.commons.text
+  implementation libs.silenteight.sep.base.common
+  implementation libs.silenteight.commons.app
+  implementation libs.silenteight.commons.core
+  implementation libs.spring.boot.starter.undertow
+  implementation libs.spring.boot.starter.webflux
 
-  implementation libraries.spring_context_support
+  implementation libs.spring.context.support
 }

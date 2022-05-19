@@ -1,39 +1,30 @@
 plugins {
-  id "java"
+  id "com.silenteight.iris.build.java-library"
   id "io.freefair.aspectj.post-compile-weaving"
-  id "org.springframework.boot"
+  id "com.silenteight.iris.build.spring-boot-application"
 }
 
 description = "Test App Warehouse"
-
-configurations {
-  implementation.extendsFrom starterCommon
-  implementation.extendsFrom starterMessaging
-  implementation.extendsFrom starterIntegration
-  implementation.extendsFrom starterDatabase
-  runtimeOnly.extendsFrom starterDatabaseRuntime
-}
 
 dependencies {
   implementation project(":warehouse-test-client")
   implementation project(":warehouse-indexer")
   implementation project(":warehouse-db-changelog")
 
-  implementation libraries.silenteight_sep_base_common
-  implementation libraries.silenteight_commons_app
-  implementation libraries.spring_boot_starter_undertow
+  implementation libs.silenteight.sep.base.common
+  implementation libs.silenteight.commons.app
+  implementation libs.spring.boot.starter.undertow
 
-  implementation libraries.spring_context_support
+  implementation libs.spring.context.support
 
-  implementation libraries.silenteight_data_api
-  implementation libraries.silenteight_data_retention_api
+  implementation libs.warehouse.data.api
+  implementation libs.silenteight.data.retention.api
 
-  implementation libraries.commons_lang3
+  implementation libs.commons.lang3
 
-  implementation libraries.jaxb_api
-  implementation libraries.jakarta_inject
+  implementation libs.jaxb.api
 
-  implementation libraries.protobuf_java_util
+  implementation libs.protobuf.java.util
 
-  aspect libraries.silenteight_sep_base_aspects
+  aspect libs.silenteight.sep.base.aspects
 }

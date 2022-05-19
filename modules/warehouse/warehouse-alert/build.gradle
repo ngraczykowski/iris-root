@@ -1,21 +1,16 @@
 plugins {
-  id "java-library"
+  id "com.silenteight.iris.build.java-library"
   id "java-test-fixtures"
 }
 
 description = "Warehouse Alerts"
 
-configurations {
-  implementation.extendsFrom starterCommon
-
-  testImplementation.extendsFrom starterSpringTest
-}
-
 dependencies {
   implementation project(":warehouse-common")
   implementation project(":warehouse-indexer")
-  implementation libraries.silenteight_sep_base_common
-  implementation libraries.spring_security_config
+  implementation libs.silenteight.sep.base.common
+  implementation libs.spring.security.config
+  implementation libs.silenteight.sep.auth.wh
 
   testImplementation project(":warehouse-common-testing")
   testImplementation testFixtures(project(':warehouse-indexer'))

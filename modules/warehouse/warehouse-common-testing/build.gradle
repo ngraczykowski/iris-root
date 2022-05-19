@@ -1,41 +1,45 @@
 plugins {
-  id "java-library"
+  id "com.silenteight.iris.build.java-library"
 }
 
 description = "Warehouse Common Web Testing"
 
 dependencies {
-  api libraries.junit_jupiter_api
-  api libraries.silenteight_sep_base_testing
-  api libraries.spring_test
-  api libraries.spring_boot_test
-  api libraries.spring_boot_test_autoconfigure
-  api libraries.spring_security_test
-  api libraries.test_containers
-  api libraries.reactor_test
-  api libraries.rest_assured_spring_mock_mvc
+  implementation platform('com.silenteight.iris.platform:test-platform')
+
+  api libs.junit.jupiter.api
+  api libs.silenteight.sep.base.testing
+  api libs.spring.test
+  api libs.spring.boot.test
+  api libs.spring.boot.test.autoconfigure
+  api libs.spring.security.test
+  api libs.test.containers
+  api libs.reactor.test
+  api libs.rest.assured.spring.mock.mvc
+  api libs.silenteight.sep.auth.wh
+  api libs.hibernate.validator
 
   implementation project(":warehouse-common")
 
-  implementation libraries.spring_jdbc
-  implementation libraries.spring_tx
+  implementation libs.spring.jdbc
+  implementation libs.spring.tx
 
-  implementation libraries.spring_boot
-  implementation libraries.spring_boot_autoconfigure
+  implementation libs.spring.boot
+  implementation libs.spring.boot.autoconfigure
 
-  implementation libraries.spring_boot_starter_web
-  implementation libraries.spring_boot_starter_undertow
+  implementation libs.spring.boot.starter.web
+  implementation libs.spring.boot.starter.undertow
 
-  implementation libraries.spring_data_jpa
+  implementation libs.spring.data.jpa
 
-  implementation libraries.spring_security_web
-  implementation libraries.spring_security_config
+  implementation libs.spring.security.web
+  implementation libs.spring.security.config
 
-  implementation libraries.test_containers_postgresql
-  implementation libraries.test_containers_spock
+  implementation libs.test.containers.postgresql
+  implementation libs.test.containers.spock
 
-  implementation libraries.protobuf_java_util
+  implementation libs.protobuf.java.util
 
-  implementation libraries.spring_amqp
-  implementation libraries.rest_assured
+  implementation libs.spring.amqp
+  implementation libs.rest.assured
 }

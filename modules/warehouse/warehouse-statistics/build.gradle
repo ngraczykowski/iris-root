@@ -1,26 +1,19 @@
 plugins {
-  id "java-library"
+  id "com.silenteight.iris.build.java-library"
   id "java-test-fixtures"
 }
 
 description = "Warehouse Statistics Data"
 
-configurations {
-  implementation.extendsFrom starterCommon
-  implementation.extendsFrom starterDatabase
-
-  runtimeOnly.extendsFrom starterDatabaseRuntime
-
-  testImplementation.extendsFrom starterCommon
-  testImplementation.extendsFrom starterSpringTest
-}
-
 dependencies {
   implementation project(":warehouse-common")
   implementation project(":warehouse-db-changelog")
   implementation project(":warehouse-indexer")
-  implementation libraries.silenteight_sep_base_common
-  implementation libraries.spring_security_config
+  implementation libs.silenteight.sep.base.common
+  implementation libs.spring.security.config
+  implementation libs.spring.data.jpa
+  implementation libs.jakarta.validation.api
+  implementation libs.guava
 
   testImplementation project(":warehouse-common-testing")
   testFixturesImplementation testFixtures(project(':warehouse-common'))

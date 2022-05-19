@@ -1,9 +1,9 @@
 dependencies {
   // Testing in Spring
-  starterSpringTest libraries.spring_test
-  starterSpringTest libraries.spring_boot_test
-  starterSpringTest libraries.spring_boot_test_autoconfigure
+  starterSpringTest libs.spring.test
+  starterSpringTest libs.spring.boot.test
+  starterSpringTest libs.spring.boot.test.autoconfigure
 
   // Logging in tests
-  starterSpringTest libraries.spring_boot_starter_logging
+  starterSpringTest libs.spring.boot.starter.logging
 }

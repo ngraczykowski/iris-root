@@ -1,5 +1,5 @@
 plugins {
-  id "java-library"
+  id "com.silenteight.iris.build.java-library"
   id "java-test-fixtures"
 }
 
@@ -17,16 +17,17 @@ dependencies {
   implementation project(":warehouse-db-changelog")
   implementation project(":warehouse-common")
 
-  implementation libraries.silenteight_commons_core
-  implementation libraries.silenteight_data_api
-  implementation libraries.silenteight_sep_base_common
-  implementation libraries.protobuf_java_util
-  implementation libraries.jackson_datatype_jsr310
+  implementation libs.silenteight.commons.core
+  implementation libs.warehouse.data.api
+  implementation libs.silenteight.sep.base.common
+  implementation libs.protobuf.java.util
+  implementation libs.jackson.datatype.jsr310
+  implementation libs.jakarta.validation.api
 
   testImplementation project(":warehouse-common-testing")
   testImplementation project(":warehouse-test-client")
   testImplementation project(":warehouse-production")
-  testImplementation libraries.awaitility
+  testImplementation libs.awaitility
 
   testFixturesImplementation testFixtures(project(':warehouse-common'))
 }

@@ -1,37 +1,32 @@
 plugins {
-  id "java-library"
+  id "com.silenteight.iris.build.java-library"
   id "java-test-fixtures"
 }
 
 description = "Warehouse Indexer"
 
-configurations {
-  implementation.extendsFrom starterCommon
-  implementation.extendsFrom starterDatabase
-  runtimeOnly.extendsFrom starterDatabaseRuntime
-  implementation.extendsFrom starterMessaging
-
-  testImplementation.extendsFrom starterSpringTest
-}
-
 dependencies {
+  implementation platform('com.silenteight.iris.platform:test-platform')
+
   implementation project(":warehouse-common")
   implementation project(":warehouse-db-changelog")
-  implementation libraries.silenteight_commons_core
-  implementation libraries.silenteight_data_api
-  implementation libraries.silenteight_sampling_alerts_api
-  implementation libraries.spring_security_config
-  implementation libraries.jakarta_validation_api
-  implementation libraries.silenteight_sep_base_common
+  implementation libs.silenteight.commons.core
+  implementation libs.warehouse.data.api
+  implementation libs.warehouse.sampling.api
+  implementation libs.spring.security.config
+  implementation libs.jakarta.validation.api
+  implementation libs.silenteight.sep.base.common
+  implementation libs.guava
 
   implementation 'org.jooq:jooq:3.13.4'
 
-  implementation libraries.test_containers_postgresql
-  implementation libraries.test_containers_junit_jupiter
+  implementation libs.test.containers.postgresql
+  implementation libs.test.containers.junit.jupiter
 
   testImplementation project(":warehouse-common-testing")
   testImplementation project(":warehouse-test-client")
-  testImplementation libraries.awaitility
+  testImplementation libs.awaitility
 
+  testFixturesImplementation libs.aspectjrt
   testFixturesImplementation testFixtures(project(':warehouse-common'))
 }

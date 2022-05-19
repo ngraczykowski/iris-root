@@ -1,23 +1,17 @@
 plugins {
-  id "java-library"
-  id "io.freefair.aspectj.post-compile-weaving"
+  id "com.silenteight.iris.build.java-library"
+  id "java-test-fixtures"
 }
 
 description = "Warehouse Test Client"
 
-configurations {
-  implementation.extendsFrom starterCommon
-  implementation.extendsFrom starterMessaging
-  implementation.extendsFrom starterIntegration
-}
-
 dependencies {
-  implementation libraries.silenteight_sep_base_common
-  implementation libraries.silenteight_commons_core
-  implementation libraries.silenteight_data_api
-  implementation libraries.silenteight_data_retention_api
-  implementation libraries.jakarta_validation_api
-  implementation libraries.spring_context_support
+  implementation libs.silenteight.sep.base.common
+  implementation libs.silenteight.commons.core
+  implementation libs.warehouse.data.api
+  implementation libs.silenteight.data.retention.api
+  implementation libs.jakarta.validation.api
+  implementation libs.spring.context.support
 
-  aspect libraries.silenteight_sep_base_aspects
+  aspect libs.silenteight.sep.base.aspects
 }
