@@ -22,9 +22,5 @@ subprojects {Project subproject ->
       java.options.fork = true
       java.options.compilerArgs << "-parameters"
     }
-
-    subproject.configurations.implementation {
-      exclude group: 'com.silenteight.sep.base', module: '*'
-    }
   }
 }

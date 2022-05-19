@@ -11,10 +11,6 @@ subprojects {Project project ->
     project.dependencies {
       implementation libs.jaxb.api
     }
-
-    project.configurations.implementation {
-      exclude group: 'com.silenteight.sep.base', module: '*'
-    }
   }
 }
 

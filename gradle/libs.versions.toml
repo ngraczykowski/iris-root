@@ -9,7 +9,6 @@ data-retention = "0.3.0"
 hazelcast = "5.1.1"
 learing-engine-store-api = "0.5.0"
 serp-protocol = "0.27.0"
-silenteight-audit-bs = "1.3.0"
 silenteight-audit-bs-api = "0.1.0"
 silenteight-commons = "2.1.0"
 silenteight-data-retention-api = "0.0.1"
@@ -93,7 +92,7 @@ governance-solving-api = { group = "com.silenteight.iris", name = "se-solving-ap
 learning-engine-store-api = { group = "com.silenteight.learningengine.api", name = "learning-store-api", version.ref = "learing-engine-store-api" }
 sear-rabbitmq-common-schema = { group = "com.silenteight.rabbitmqcommonschema", name = "sear-rabbitmq-common-schema-definitions", version = "1.9.0" }
 silenteight-agents-protocol = { group = "com.silenteight.agent.api", name = "protocol-agents", version.ref = "agents-protocol" }
-silenteight-audit-bs = { group = "com.silenteight.auditing.bs", name = "silenteight-audit-bs", version.ref = "silenteight-audit-bs" }
+silenteight-audit-bs = { group = "com.silenteight.iris", name = "audit-bs" }
 silenteight-audit-bs-api = { group = "com.silenteight.sens.audit-bs-api", name = "audit-bs-api", version.ref = "silenteight-audit-bs-api" }
 silenteight-commons-app = { group = "com.silenteight.commons", name = "silenteight-commons-app", version.ref = "silenteight-commons" }
 silenteight-commons-core = { group = "com.silenteight.commons", name = "silenteight-commons-core", version.ref = "silenteight-commons" }

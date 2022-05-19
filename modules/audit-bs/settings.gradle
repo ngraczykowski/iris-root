@@ -1,1 +1,14 @@
-rootProject.name = 'silenteight-audit-bs'
+rootProject.name = 'audit-bs'
+includeBuild('../../platforms')
+includeBuild('../../build-logic')
+
+
+dependencyResolutionManagement {
+  versionCatalogs {
+    libs {
+      from(files("../../gradle/libs.versions.toml"))
+    }
+  }
+}
+
+include "api"

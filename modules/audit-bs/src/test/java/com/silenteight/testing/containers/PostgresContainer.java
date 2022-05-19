@@ -10,8 +10,9 @@ import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.util.Map;
 
-import static org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils.randomAlphabetic;
-import static org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils.randomAlphanumeric;
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
+
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PostgresContainer {

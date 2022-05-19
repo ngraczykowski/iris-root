@@ -16,6 +16,7 @@ dependencyResolutionManagement {
 rootProject.name = 'iris-modules'
 
 include('app')
+includeBuild('audit-bs')
 includeBuild('sep-filestorage-api')
 includeBuild('sep-file-storage-minio')
 includeBuild('sep-usermanagement-api')
