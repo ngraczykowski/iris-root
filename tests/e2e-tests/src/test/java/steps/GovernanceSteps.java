@@ -5,6 +5,8 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import utils.ScenarioContext;
 import utils.datageneration.*;
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.is;
 
 import java.util.Collections;
 import java.util.List;
@@ -93,7 +95,7 @@ public class GovernanceSteps {
         .when()
         .put(String.format("/rest/governance/api/v1/steps/%s/logic", step.getId()))
         .then()
-        .statusCode(202));
+        .statusCode(anyOf(is(202), is(201))));
   }
 
   @And("Policy is created")
