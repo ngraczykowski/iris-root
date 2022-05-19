@@ -120,7 +120,7 @@ pipeline {
         script {
           images.each {
             sh """
-            aws ecr --region us-east-1 create-repository --encryption-configuration encryptionType=KMS --repository-name ${it} || true
+            aws ecr --region us-east-1 create-repository --encryption-configuration encryptionType=KMS --repository-name ${it.split(':')[0]} || true
             skopeo copy docker://docker.repo.silenteight.com/${it} docker://${env.ECR}/${it}
             """
           }
