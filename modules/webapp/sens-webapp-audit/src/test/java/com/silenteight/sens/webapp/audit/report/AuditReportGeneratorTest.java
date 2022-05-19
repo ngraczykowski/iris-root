@@ -1,6 +1,7 @@
 package com.silenteight.sens.webapp.audit.report;
 
 import com.silenteight.sens.webapp.audit.api.list.ListAuditLogsQuery;
+import com.silenteight.sens.webapp.report.ConfigurableReport;
 import com.silenteight.sens.webapp.report.Report;
 import com.silenteight.sens.webapp.report.exception.IllegalParameterException;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
@@ -40,7 +41,8 @@ class AuditReportGeneratorTest {
     underTest = new AuditReportGenerator(
         new MockTimeSource(parse("2020-04-22T15:15:30Z")),
         new TestDateFormatter(),
-        listAuditLogsQuery);
+        listAuditLogsQuery,
+        mock(AuditReportProperties.class));
   }
 
   @Test
@@ -108,5 +110,10 @@ class AuditReportGeneratorTest {
   private String getReportAsString(String expectedReportFile) throws IOException {
     InputStream reportStream = getClass().getClassLoader().getResourceAsStream(expectedReportFile);
     return new String(reportStream.readAllBytes());
+  }
+
+  @Test
+  void reportGeneratorShouldBeConfigurable() {
+    assertThat(underTest).isInstanceOf(ConfigurableReport.class);
   }
 }

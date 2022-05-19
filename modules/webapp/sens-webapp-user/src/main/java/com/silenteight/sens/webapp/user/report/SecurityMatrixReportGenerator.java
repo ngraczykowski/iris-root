@@ -1,11 +1,9 @@
-package com.silenteight.sens.webapp.scb.report;
+package com.silenteight.sens.webapp.user.report;
 
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.report.Report;
-import com.silenteight.sens.webapp.report.ReportGenerator;
-import com.silenteight.sens.webapp.report.ReportLinesReader;
-import com.silenteight.sens.webapp.report.SimpleReport;
+import com.silenteight.sens.webapp.report.*;
 
 import java.nio.charset.Charset;
 import java.util.List;
@@ -15,7 +13,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
-class SecurityMatrixReportGenerator implements ReportGenerator {
+class SecurityMatrixReportGenerator extends AbstractConfigurableReport
+    implements ReportGenerator {
 
   private static final String REPORT_NAME = "security-matrix-report";
   private static final String FILE_NAME = REPORT_NAME + ".csv";
@@ -23,9 +22,8 @@ class SecurityMatrixReportGenerator implements ReportGenerator {
 
   private final ReportLinesReader reportLinesReader = new ReportLinesReader(FILE_NAME, ENCODING);
 
-  @Override
-  public String getName() {
-    return REPORT_NAME;
+  SecurityMatrixReportGenerator(@NonNull ReportProperties reportProperties) {
+    super(reportProperties);
   }
 
   @Override

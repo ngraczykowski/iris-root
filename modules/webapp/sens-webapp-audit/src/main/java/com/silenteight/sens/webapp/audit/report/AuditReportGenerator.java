@@ -1,15 +1,12 @@
 package com.silenteight.sens.webapp.audit.report;
 
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.audit.api.dto.AuditLogDto;
 import com.silenteight.sens.webapp.audit.api.list.ListAuditLogsQuery;
 import com.silenteight.sens.webapp.common.support.csv.CsvBuilder;
-import com.silenteight.sens.webapp.report.Report;
-import com.silenteight.sens.webapp.report.ReportGenerator;
-import com.silenteight.sens.webapp.report.SimpleReport;
+import com.silenteight.sens.webapp.report.*;
 import com.silenteight.sens.webapp.report.exception.IllegalParameterException;
 import com.silenteight.sep.base.common.time.DateFormatter;
 import com.silenteight.sep.base.common.time.TimeSource;
@@ -28,16 +25,11 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.of;
 
 @Slf4j
-@RequiredArgsConstructor
-class AuditReportGenerator implements ReportGenerator {
-
+class AuditReportGenerator extends AbstractConfigurableReport implements ReportGenerator {
   private static final DateTimeFormatter TIMESTAMP_FORMATTER =
       ofPattern("yyyy-MM-dd HH:mm:ss.SSS").withZone(TIME_ZONE.toZoneId());
-
-  private static final String REPORT_NAME = "audit-report";
   private static final String FROM_PARAMETER_NAME = "from";
   private static final String TO_PARAMETER_NAME = "to";
-
   private static final String EVENT_ID_COLUMN_HEADER = "event_id";
   private static final String CORRELATION_ID_COLUMN_HEADER = "correlation_id";
   private static final String TIMESTAMP_COLUMN_HEADER = "timestamp";
@@ -47,17 +39,26 @@ class AuditReportGenerator implements ReportGenerator {
   private static final String ENTITY_CLASS_COLUMN_HEADER = "entity_class";
   private static final String ENTITY_ACTION_COLUMN_HEADER = "entity_action";
   private static final String DETAILS_COLUMN_HEADER = "details";
-
   @NonNull
   private final TimeSource timeProvider;
   @NonNull
   private final DateFormatter dateFormatter;
   @NonNull
   private final ListAuditLogsQuery listAuditLogsQuery;
+  @NonNull
+  private final AuditReportProperties auditReportProperties;
 
-  @Override
-  public String getName() {
-    return REPORT_NAME;
+  protected AuditReportGenerator(@NonNull TimeSource timeProvider,
+      @NonNull DateFormatter dateFormatter,
+      @NonNull ListAuditLogsQuery listAuditLogsQuery,
+      @NonNull AuditReportProperties auditReportProperties) {
+
+    super(auditReportProperties);
+
+    this.timeProvider = timeProvider;
+    this.dateFormatter = dateFormatter;
+    this.listAuditLogsQuery = listAuditLogsQuery;
+    this.auditReportProperties = auditReportProperties;
   }
 
   @Override

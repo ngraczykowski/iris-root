@@ -360,6 +360,21 @@ paths:
         204:
           description: SSO Mapping removed.
 
+  /reports/:
+    get:
+      tags:
+        - mapping
+      description: Return available reports list.
+      responses:
+        200:
+          description: Lis of available reports.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReportDto'
+
 components:
   schemas:
     Users:
@@ -686,3 +701,21 @@ components:
           key: 'Logic key',
           value: 'Logic value'
         }
+    ReportDto:
+      type: object
+      example:
+
+    ReportDto:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        filter:
+          type: string
+          enum: [NONE, DATE_RANGE]
+      example:
+        name: 'report/users'
+        description: 'Users report list'
+        filter: 'NONE'
