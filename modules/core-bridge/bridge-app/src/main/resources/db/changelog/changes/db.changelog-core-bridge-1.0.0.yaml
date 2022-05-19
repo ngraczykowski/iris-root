@@ -347,3 +347,11 @@ databaseChangeLog:
                     nullable: false
                     foreignKeyName: fk_core_bridge_data_retention_job_alerts_core_bridge_alerts
                     references: core_bridge_alerts(id)
+
+  - changeSet:
+      id: 1.0.0-6
+      author: dturek
+      changes:
+        - dropNotNullConstraint:
+            tableName: core_bridge_recommendations
+            columnName: recommendation_comment

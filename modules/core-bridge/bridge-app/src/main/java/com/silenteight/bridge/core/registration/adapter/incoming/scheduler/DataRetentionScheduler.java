@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.bridge.core.registration.domain.RegistrationFacade;
 import com.silenteight.bridge.core.registration.domain.command.StartDataRetentionCommand;
 import com.silenteight.bridge.core.registration.domain.model.DataRetentionType;
-import com.silenteight.bridge.core.registration.infrastructure.retention.DataRetentionProperties;
+import com.silenteight.bridge.core.registration.infrastructure.scheduler.DataRetentionSchedulerProperties;
 
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -27,10 +27,11 @@ import static com.silenteight.bridge.core.registration.domain.model.DataRetentio
 class DataRetentionScheduler {
 
   private final RegistrationFacade registrationFacade;
-  private final DataRetentionProperties properties;
+  private final DataRetentionSchedulerProperties properties;
 
-  @Scheduled(fixedRateString = "${silenteight.bridge.data-retention.rate}")
-  @SchedulerLock(name = "dataRetention", lockAtMostFor = "5m", lockAtLeastFor = "1m")
+  @Scheduled(cron = "${silenteight.bridge.data-retention.cron}")
+  @SchedulerLock(name = "dataRetention",
+      lockAtLeastFor = "${silenteight.bridge.data-retention.lock-at-least-for}")
   void run() {
     log.info(
         """

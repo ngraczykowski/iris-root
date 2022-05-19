@@ -134,7 +134,7 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
   @Modifying
   @Query("""
       UPDATE core_bridge_alerts
-      SET is_archived = TRUE, updated_at = NOW()
+      SET metadata = NULL, is_archived = TRUE, updated_at = NOW()
       WHERE id IN(:ids)""")
-  void markAsArchived(List<Long> ids);
+  void markAsArchivedAndClearMetadata(List<Long> ids);
 }

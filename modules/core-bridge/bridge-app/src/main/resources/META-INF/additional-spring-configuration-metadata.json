@@ -211,9 +211,14 @@
       "description": "Defines how many alerts are published in a data retention message."
     },
     {
-      "name": "silenteight.bridge.data-retention.rate",
+      "name": "silenteight.bridge.data-retention.cron",
+      "type": "java.lang.String",
+      "description": "Cron expression triggering Data Retention."
+    },
+    {
+      "name": "silenteight.bridge.data-retention.lock-at-least-for",
       "type": "java.time.Duration",
-      "description": "Defines scheduling interval of data retention."
+      "description": "The lock will be held at least for given duration."
     },
     {
       "name": "silenteight.bridge.data-retention.personal-information-expired.enabled",
@@ -254,6 +259,36 @@
       "name": "amqp.registration.outgoing.data-retention.alerts-expired-routing-key",
       "type": "java.lang.String",
       "description": "Routing key for alerts expired data retention."
+    },
+    {
+      "name": "amqp.recommendation.incoming.data-retention.exchange-name",
+      "type": "java.lang.String",
+      "description": "Exchange name for data retention."
+    },
+    {
+      "name": "amqp.recommendation.incoming.data-retention.alerts-expired-queue-name",
+      "type": "java.lang.String",
+      "description": "Queue name for data retention."
+    },
+    {
+      "name": "amqp.recommendation.incoming.data-retention.alerts-expired-routing-key",
+      "type": "java.lang.String",
+      "description": "Routing key for data retention."
+    },
+    {
+      "name": "amqp.recommendation.incoming.data-retention.alerts-expired-dead-letter-queue-name",
+      "type": "java.lang.String",
+      "description": "Dead letter queue name for data retention."
+    },
+    {
+      "name": "amqp.recommendation.incoming.data-retention.alerts-expired-dead-letter-exchange-name",
+      "type": "java.lang.String",
+      "description": "Dead letter exchange name for data retention."
+    },
+    {
+      "name": "amqp.recommendation.incoming.data-retention.dead-letter-queue-time-to-live-in-milliseconds",
+      "type": "java.lang.Integer",
+      "description": "Dead letter queue TTL for data retention."
     }
   ]
 }

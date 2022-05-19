@@ -1,4 +1,4 @@
-package com.silenteight.bridge.core.registration.infrastructure.retention;
+package com.silenteight.bridge.core.registration.infrastructure.scheduler;
 
 import net.javacrumbs.shedlock.core.LockProvider;
 import net.javacrumbs.shedlock.provider.jdbctemplate.JdbcTemplateLockProvider;
@@ -11,11 +11,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Configuration
 @EnableConfigurationProperties({
-    DataRetentionProperties.class
+    DataRetentionSchedulerProperties.class
 })
 @EnableScheduling
 @EnableSchedulerLock(defaultLockAtMostFor = "10m")
-class DataRetentionConfiguration {
+class DataRetentionSchedulerConfiguration {
 
   @Bean
   LockProvider lockProvider(JdbcTemplate jdbcTemplate) {

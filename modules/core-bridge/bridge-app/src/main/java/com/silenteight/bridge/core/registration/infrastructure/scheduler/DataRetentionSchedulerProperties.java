@@ -1,4 +1,4 @@
-package com.silenteight.bridge.core.registration.infrastructure.retention;
+package com.silenteight.bridge.core.registration.infrastructure.scheduler;
 
 import lombok.Builder;
 
@@ -9,14 +9,14 @@ import java.time.Duration;
 
 @ConstructorBinding
 @ConfigurationProperties(prefix = "silenteight.bridge.data-retention")
-public record DataRetentionProperties(
+public record DataRetentionSchedulerProperties(
     int chunk,
     DryRunMode dryRunMode,
     PersonalInformationExpired personalInformationExpired,
     AlertsExpired alertsExpired) {
 
   @Builder
-  public DataRetentionProperties {}
+  public DataRetentionSchedulerProperties {}
 
   public record DryRunMode(boolean enabled) {}
 

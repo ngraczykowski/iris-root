@@ -202,7 +202,7 @@ class JdbcAlertRepository implements AlertRepository {
   }
 
   @Override
-  public void markAsArchived(List<Long> alertPrimaryIds) {
-    alertRepository.markAsArchived(alertPrimaryIds);
+  public void markAsArchivedAndClearMetadata(List<Long> alertPrimaryIds) {
+    alertRepository.markAsArchivedAndClearMetadata(alertPrimaryIds);
   }
 }

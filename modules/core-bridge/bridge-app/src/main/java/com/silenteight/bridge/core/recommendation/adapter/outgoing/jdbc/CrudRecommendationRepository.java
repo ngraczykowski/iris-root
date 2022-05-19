@@ -1,5 +1,6 @@
 package com.silenteight.bridge.core.recommendation.adapter.outgoing.jdbc;
 
+import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -17,4 +18,13 @@ interface CrudRecommendationRepository extends CrudRepository<RecommendationEnti
 
   List<RecommendationEntity> findByAnalysisNameAndAlertNameIn(
       String analysisName, List<String> alertNames);
+
+
+  @Modifying
+  @Query("""
+      UPDATE core_bridge_recommendations
+      SET recommendation_comment = NULL, payload = NULL
+      WHERE alert_name IN(:alertNames)
+      """)
+  void clearCommentAndPayload(List<String> alertNames);
 }

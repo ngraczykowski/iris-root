@@ -53,7 +53,7 @@ class DataRetentionWetRunStrategy implements DataRetentionStrategy {
     jobAlertRepository.saveAll(jobId, alertPrimaryIds);
 
     log.info("Marking [{}] alerts as archived", alertPrimaryIds.size());
-    alertRepository.markAsArchived(alertPrimaryIds);
+    alertRepository.markAsArchivedAndClearMetadata(alertPrimaryIds);
 
     publishMessages(command.alerts(), command.chunkSize(), command.type());
   }

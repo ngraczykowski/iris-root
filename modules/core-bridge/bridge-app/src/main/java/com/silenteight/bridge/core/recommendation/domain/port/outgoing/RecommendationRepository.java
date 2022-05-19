@@ -14,4 +14,6 @@ public interface RecommendationRepository {
 
   List<RecommendationWithMetadata> findByAnalysisNameAndAlertNameIn(
       String analysisName, List<String> alertNames);
+
+  void clearCommentAndPayload(List<String> alertNames);
 }

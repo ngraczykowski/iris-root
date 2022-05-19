@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.bridge.core.recommendation.domain.command.GetRecommendationCommand;
 import com.silenteight.bridge.core.recommendation.domain.command.ProceedBatchTimeoutCommand;
+import com.silenteight.bridge.core.recommendation.domain.command.ProceedDataRetentionOnRecommendationsCommand;
 import com.silenteight.bridge.core.recommendation.domain.command.ProceedReadyRecommendationsCommand;
 import com.silenteight.bridge.core.recommendation.domain.model.BatchStatistics;
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationDto;
@@ -38,8 +39,8 @@ public class RecommendationFacade {
   private final RecommendationProcessor recommendationProcessor;
   private final RecommendationRepository recommendationRepository;
   private final BatchStatisticsService batchStatisticsService;
-
   private final AlertsStreamProperties streamProperties;
+  private final RecommendationsDataRetentionService dataRetentionService;
 
   public void proceedReadyRecommendations(ProceedReadyRecommendationsCommand command) {
     recommendationProcessor.proceedReadyRecommendations(command.recommendationsWithMetadata());
@@ -93,6 +94,10 @@ public class RecommendationFacade {
                 alerts, batchId, statistics, command, responseObserver));
 
     responseObserver.onCompleted();
+  }
+
+  public void performDataRetention(ProceedDataRetentionOnRecommendationsCommand command) {
+    dataRetentionService.performDataRetention(command);
   }
 
   private void processRecommendations(

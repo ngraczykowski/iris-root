@@ -2,10 +2,10 @@ package com.silenteight.bridge.core.registration.adapter.incoming.scheduler
 
 import com.silenteight.bridge.core.registration.domain.RegistrationFacade
 import com.silenteight.bridge.core.registration.domain.command.StartDataRetentionCommand
-import com.silenteight.bridge.core.registration.infrastructure.retention.DataRetentionProperties
-import com.silenteight.bridge.core.registration.infrastructure.retention.DataRetentionProperties.AlertsExpired
-import com.silenteight.bridge.core.registration.infrastructure.retention.DataRetentionProperties.DryRunMode
-import com.silenteight.bridge.core.registration.infrastructure.retention.DataRetentionProperties.PersonalInformationExpired
+import com.silenteight.bridge.core.registration.infrastructure.scheduler.DataRetentionSchedulerProperties
+import com.silenteight.bridge.core.registration.infrastructure.scheduler.DataRetentionSchedulerProperties.AlertsExpired
+import com.silenteight.bridge.core.registration.infrastructure.scheduler.DataRetentionSchedulerProperties.DryRunMode
+import com.silenteight.bridge.core.registration.infrastructure.scheduler.DataRetentionSchedulerProperties.PersonalInformationExpired
 
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -78,7 +78,7 @@ class DataRetentionSchedulerSpec extends Specification {
   private static def createProperties(
       boolean personalInfoEnabled, Duration personalInfoDuration, boolean alertsEnabled,
       Duration alertsDuration, boolean dryRunEnabled = false) {
-    DataRetentionProperties.builder()
+    DataRetentionSchedulerProperties.builder()
         .chunk(10)
         .dryRunMode(new DryRunMode(dryRunEnabled))
         .personalInformationExpired(

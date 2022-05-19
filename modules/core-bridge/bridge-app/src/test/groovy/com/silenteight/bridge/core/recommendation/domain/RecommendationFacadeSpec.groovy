@@ -1,5 +1,6 @@
 package com.silenteight.bridge.core.recommendation.domain
 
+import com.silenteight.bridge.core.recommendation.domain.command.ProceedDataRetentionOnRecommendationsCommand
 import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RecommendationRepository
 import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RegistrationService
 import com.silenteight.bridge.core.recommendation.infrastructure.amqp.AlertsStreamProperties
@@ -16,6 +17,7 @@ class RecommendationFacadeSpec extends Specification {
   def recommendationRepository = Mock(RecommendationRepository)
   def batchStatisticsService = Mock(BatchStatisticsService)
   def alertsStreamProperties = new AlertsStreamProperties(1)
+  def dataRetentionService = Mock(RecommendationsDataRetentionService)
 
   @Subject
   def underTest = new RecommendationFacade(
@@ -23,7 +25,8 @@ class RecommendationFacadeSpec extends Specification {
       recommendationProcessor,
       recommendationRepository,
       batchStatisticsService,
-      alertsStreamProperties
+      alertsStreamProperties,
+      dataRetentionService
   )
 
   def 'should proceed ready recommendations'() {
@@ -111,5 +114,16 @@ class RecommendationFacadeSpec extends Specification {
     1 * recommendationRepository.findByAnalysisNameAndAlertNameIn(analysisName, alertNames) >> List.of(RecommendationFixtures.RECOMMENDATION_WITH_METADATA)
 
     1 * observer.onNext(_)
+  }
+
+  def 'should call perform data retention'() {
+    given:
+    def command = new ProceedDataRetentionOnRecommendationsCommand(['1'])
+
+    when:
+    underTest.performDataRetention(command)
+
+    then:
+    dataRetentionService.performDataRetention(command)
   }
 }

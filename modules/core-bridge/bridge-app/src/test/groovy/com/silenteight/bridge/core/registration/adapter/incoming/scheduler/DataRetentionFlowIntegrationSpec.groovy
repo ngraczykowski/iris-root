@@ -61,9 +61,7 @@ class DataRetentionFlowIntegrationSpec extends BaseSpecificationIT {
       with(message) {
         alertsDataList == EXPECTED_ALERTS_DATA
       }
-      alertRepository.findAllByBatchIdAndNameIn(BATCH.id(), [ALERT_1.name(), ALERT_2.name()]).each {
-        assert it.isArchived()
-      }
+      verifyAlertsAreArchivedAndHaveClearedMetadata()
     }
   }
 
@@ -83,9 +81,14 @@ class DataRetentionFlowIntegrationSpec extends BaseSpecificationIT {
       with(message) {
         alertsDataList == EXPECTED_ALERTS_DATA
       }
-      alertRepository.findAllByBatchIdAndNameIn(BATCH.id(), [ALERT_1.name(), ALERT_2.name()]).each {
-        assert it.isArchived()
-      }
+      verifyAlertsAreArchivedAndHaveClearedMetadata()
+    }
+  }
+
+  private def verifyAlertsAreArchivedAndHaveClearedMetadata() {
+    alertRepository.findAllByBatchIdAndNameIn(BATCH.id(), [ALERT_1.name(), ALERT_2.name()]).each {
+      assert it.metadata() == null
+      assert it.isArchived()
     }
   }
 }

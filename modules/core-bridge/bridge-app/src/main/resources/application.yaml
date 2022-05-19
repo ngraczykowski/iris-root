@@ -18,8 +18,9 @@ silenteight:
     ### DATA RETENTION
     data-retention:
       enabled: true
+      cron: '* 0 1 * * *' # At 01:00
+      lock-at-least-for: PT1H
       chunk: 10
-      rate: PT24H
       ### Enable one of retention types below
       personal-information-expired:
         enabled: true
@@ -114,6 +115,13 @@ amqp:
         dead-letter-queue-name: core-bridge.notify-batch-timeout.dlq
         dead-letter-queue-time-to-live-in-milliseconds: 30000
         dead-letter-exchange-name: core-bridge.notify-batch-timeout.dlx
+      data-retention:
+        exchange-name: bridge.retention
+        alerts-expired-queue-name: core-bridge.recommendation-alerts-expired-queue-name
+        alerts-expired-routing-key: retention.alerts-expired
+        alerts-expired-dead-letter-queue-name: core-bridge.recommendation-alerts-expired.dlq
+        alerts-expired-dead-letter-exchange-name: core-bridge.recommendation-alerts-expired.dlx
+        dead-letter-queue-time-to-live-in-milliseconds: 30000
     outgoing:
       recommendation-stored:
         exchange-name: core-bridge.recommendation-stored-exchange

@@ -53,7 +53,7 @@ class DataRetentionWetRunStrategySpec extends Specification {
     then:
     1 * jobRepository.save(command.expirationDate(), command.type()) >> 1l
     1 * jobAlertRepository.saveAll(1l, alertPrimaryIds)
-    1 * alertRepository.markAsArchived(alertPrimaryIds)
+    1 * alertRepository.markAsArchivedAndClearMetadata(alertPrimaryIds)
     if (ALERTS_EXPIRED == command.type()) {
       1 * dataRetentionPublisher.publish(new DataRetentionAlertsExpiredEvent(alertsFirstChunk))
       1 * dataRetentionPublisher.publish(new DataRetentionAlertsExpiredEvent(alertsSecondChunk))

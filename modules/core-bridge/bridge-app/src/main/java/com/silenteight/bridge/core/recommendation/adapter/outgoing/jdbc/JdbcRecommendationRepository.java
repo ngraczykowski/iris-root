@@ -46,6 +46,11 @@ class JdbcRecommendationRepository implements RecommendationRepository {
         .toList();
   }
 
+  @Override
+  public void clearCommentAndPayload(List<String> alertNames) {
+    crudRecommendationRepository.clearCommentAndPayload(alertNames);
+  }
+
   private RecommendationWithMetadata mapToRecommendationWithMetadata(RecommendationEntity entity) {
     return RecommendationWithMetadata.builder()
         .name(entity.name())
