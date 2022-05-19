@@ -69,7 +69,7 @@ public class GovernanceSteps {
 
     response
         .then()
-        .statusCode(201);
+        .statusCode(anyOf(is(202), is(201)));
   }
 
   @And("Add prepared steps to policy")
@@ -95,7 +95,7 @@ public class GovernanceSteps {
         .when()
         .put(String.format("/rest/governance/api/v1/steps/%s/logic", step.getId()))
         .then()
-        .statusCode(anyOf(is(202), is(201))));
+        .statusCode(202));
   }
 
   @And("Policy is created")
