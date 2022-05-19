@@ -1,6 +1,0 @@
-@Library('pipeline-shared-library') _
-
-gradleBuild(
-    archiveArtifactsPattern: '**/build/libs/*.jar',
-    jdkVersion: 'jdk-11',
-)

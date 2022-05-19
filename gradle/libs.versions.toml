@@ -2,7 +2,6 @@
 #-----------------------------------
 # Silent Eight
 #-----------------------------------
-adjudication-engine-api = "0.13.0"
 agents-api = "0.4.0"
 agents-protocol = "0.14.0"
 data-retention = "0.3.0"
@@ -76,7 +75,7 @@ plugin-google-protobuf = "0.8.18"
 #commons-lang3 = { group = "org.apache.commons", name = "commons-lang3", version = { strictly = "[3.8, 4.0[", prefer="3.9" } }
 
 # Silent Eight
-adjudication-engine-api = { group = "com.silenteight.adjudication.api", name = "adjudication-api", version.ref = "adjudication-engine-api" }
+adjudication-engine-api = { group = "com.silenteight.iris", name = "adjudication-api" }
 agents-api = { group = "com.silenteight.agent.api", name = "agents-api", version.ref = "agents-api" }
 consul-grpc-registration = { group = "com.silenteight.commons", name = "consul-grpc-registration", version = "1.0.0" }
 data-retention-api = { group = "com.silenteight.sens.data-retention-api", name = "data-retention-api", version.ref = "data-retention" }
