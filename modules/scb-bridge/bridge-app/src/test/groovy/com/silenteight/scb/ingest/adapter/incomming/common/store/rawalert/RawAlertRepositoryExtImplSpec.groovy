@@ -38,4 +38,19 @@ class RawAlertRepositoryExtImplSpec extends Specification {
     '2010-02-28T00:00:00.00Z' | '2010_02'     | '2010-02-01' | '2010-03-01'
   }
 
+  def 'should remove expired partitions'() {
+    given:
+    def date = '2021-11-12T00:00+02:00'
+    def expiredDate = OffsetDateTime.parse(date)
+
+    when:
+    underTest.removeExpiredPartitions(expiredDate)
+
+    then:
+    1 * entityManager.createNativeQuery(
+        {String sql ->
+          assert sql
+              .contains("CALL drop_expired_partitions('scb_raw_alert', 'raw_alert_', '2021-11-01')")
+        }) >> Mock(Query)
+  }
 }

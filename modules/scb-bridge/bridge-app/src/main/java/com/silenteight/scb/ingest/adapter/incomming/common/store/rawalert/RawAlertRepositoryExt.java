@@ -5,4 +5,6 @@ import java.time.OffsetDateTime;
 public interface RawAlertRepositoryExt {
 
   void createPartition(OffsetDateTime dateTime);
+
+  void removeExpiredPartitions(OffsetDateTime expiredDate);
 }

@@ -15,11 +15,15 @@ import javax.persistence.EntityManager;
 @AllArgsConstructor
 public class RawAlertRepositoryExtImpl implements RawAlertRepositoryExt {
 
+  private static final String RAW_ALERT_TABLE = "scb_raw_alert";
+  private static final String PARTITION_PREFIX = "raw_alert_";
+  private static final String DROP_PARTITIONS_QUERY =
+      "CALL drop_expired_partitions('%s', '%s', '%s')";
   private static final String CREATE_PARTITION_QUERY =
       "CREATE TABLE IF NOT EXISTS %s PARTITION OF scb_raw_alert FOR VALUES FROM ('%s') TO ('%s')";
 
   private static final DateTimeFormatter PARTITION_NAME_FORMATTER =
-      DateTimeFormatter.ofPattern("'raw_alert_'yyyy_MM");
+      DateTimeFormatter.ofPattern("'" + PARTITION_PREFIX + "'yyyy_MM");
 
   private static final DateTimeFormatter RANGE_FORMATTER =
       DateTimeFormatter.ofPattern("yyyy-MM'-01'");
@@ -38,6 +42,18 @@ public class RawAlertRepositoryExtImpl implements RawAlertRepositoryExt {
 
     var query = entityManager.createNativeQuery(
         String.format(CREATE_PARTITION_QUERY, partitionName, rangeFrom, rangeTo));
+    query.executeUpdate();
+  }
+
+  @Override
+  @Transactional(GnsSyncConstants.PRIMARY_TRANSACTION_MANAGER)
+  public void removeExpiredPartitions(OffsetDateTime expiredDate) {
+    var expiredPartitionDate = expiredDate.withDayOfMonth(1).toLocalDate();
+    log.info("Removing partitions with raw alerts created before {}", expiredPartitionDate);
+
+    var query = entityManager.createNativeQuery(
+        String.format(
+            DROP_PARTITIONS_QUERY, RAW_ALERT_TABLE, PARTITION_PREFIX, expiredPartitionDate));
     query.executeUpdate();
   }
 

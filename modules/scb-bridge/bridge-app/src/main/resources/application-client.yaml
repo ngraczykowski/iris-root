@@ -83,6 +83,11 @@ silenteight:
         enabled: false
         timer: 10s
 
+    retention:
+      raw-alerts:
+        enabled: false
+        expired-after: 180d
+
   qco:
     enabled: true
     comments-prefix: "QCO Automation – FP Overridden to MI"
