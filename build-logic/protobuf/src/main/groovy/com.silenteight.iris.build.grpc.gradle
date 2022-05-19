@@ -16,3 +16,9 @@ protobuf {
     }
   }
 }
+
+dependencies {
+  compileOnly libs.javax.annotation.api
+  compileOnly libs.grpc.stub
+  compileOnly libs.grpc.protobuf
+}
