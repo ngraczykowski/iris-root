@@ -14,9 +14,12 @@ import com.silenteight.serp.governance.qa.manage.domain.exception.WrongAlertName
 import com.silenteight.serp.governance.qa.send.SendAlertMessageCommand;
 import com.silenteight.serp.governance.qa.send.SendAlertMessageUseCase;
 
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.OffsetDateTime;
 import java.util.List;
-import javax.transaction.Transactional;
 
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionState.VIEWING;
 import static java.util.List.of;
@@ -34,7 +37,9 @@ public class DecisionService {
   @NonNull
   private final SendAlertMessageUseCase sendAlertMessageUseCase;
 
-  @Transactional
+  @Transactional(
+      propagation = Propagation.REQUIRES_NEW,
+      rollbackFor = DataIntegrityViolationException.class)
   public Alert addAlert(String alertName) {
     Alert alert = new Alert();
     alert.setAlertName(alertName);

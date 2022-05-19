@@ -4,6 +4,7 @@ import com.silenteight.model.api.v1.AlertsDistributionServiceProto.AlertDistribu
 import com.silenteight.model.api.v1.AlertsDistributionServiceProto.Distribution;
 import com.silenteight.model.api.v1.SampleAlertServiceProto.RequestedAlertsFilter;
 import com.silenteight.serp.governance.qa.manage.analysis.create.CreateAlertWithDecisionUseCase;
+import com.silenteight.serp.governance.qa.manage.domain.DecisionService;
 import com.silenteight.serp.governance.qa.manage.domain.dto.CreateDecisionRequest;
 import com.silenteight.serp.governance.qa.sampling.domain.AlertSamplingService;
 import com.silenteight.serp.governance.qa.sampling.domain.dto.DateRangeDto;
@@ -14,6 +15,7 @@ import com.silenteight.serp.governance.qa.send.SendAlertMessageCommand;
 import com.silenteight.serp.governance.qa.send.SendAlertMessageUseCase;
 import com.silenteight.serp.governance.qa.send.dto.AlertDto;
 
+import org.hibernate.PersistentObjectException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -23,9 +25,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.silenteight.serp.governance.qa.AlertFixture.generateAlertName;
 import static com.silenteight.serp.governance.qa.FilterFixture.FIELD_ALERT_RECOMMENDATION;
@@ -182,6 +186,8 @@ class AlertsGeneratorServiceTest {
         .thenReturn(of(alertNameFirst));
     when(alertProvider.getAlerts(getAlertsSampleRequest(SANCTION)))
         .thenReturn(of(alertNameSecond));
+    when(createAlertWithDecisionUseCase.activate(any()))
+        .thenAnswer(invocation -> Optional.of(invocation.getArgument(0)));
     //when
     underTest.generateAlerts(dateRangeDto, 1L);
     //then
@@ -239,6 +245,8 @@ class AlertsGeneratorServiceTest {
         .thenReturn(of(alertNameFirst));
     when(alertProvider.getAlerts(getAlertsSampleRequest(SANCTION)))
         .thenReturn(of(alertNameSecond));
+    when(createAlertWithDecisionUseCase.activate(any()))
+        .thenAnswer(invocation -> Optional.of(invocation.getArgument(0)));
     //when
     underTest.generateAlerts(dateRangeDto, 1L);
     //then
@@ -255,5 +263,60 @@ class AlertsGeneratorServiceTest {
         .level(ANALYSIS)
         .state(NEW)
         .build();
+  }
+
+  @Test
+  void generateAlertsShouldOmitAlertWhenDataIntegrityViolationExceptionThrown() {
+    //given
+    when(distributionProvider.getDistribution(dateRangeDto, properties.getGroupingFields()))
+        .thenReturn(of(getAlertDistribution(2, RISK_TYPE, SANCTION)));
+    String alertNameFirst = generateAlertName();
+    String alertNameSecond = generateAlertName();
+    when(alertProvider.getAlerts(any())).thenReturn(of(alertNameFirst, alertNameSecond));
+    DecisionService decisionService = mock(DecisionService.class);
+    doThrow(DataIntegrityViolationException.class).when(decisionService).addAlert(alertNameFirst);
+    underTest = new AlertsGeneratorService(distributionProvider,
+        alertProvider,
+        new CreateAlertWithDecisionUseCase(decisionService),
+        properties.getSampleCount(),
+        properties.getGroupingFields(),
+        properties.getFilters(),
+        alertSamplingService,
+        eventPublisher);
+
+    //when
+    underTest.generateAlerts(dateRangeDto, 1L);
+
+    //then
+    verify(sendAlertMessageUseCase, times(1))
+        .activate(messageCommandCaptor.capture());
+    assertThat(messageCommandCaptor.getValue().getAlertDtos().size()).isEqualTo(1);
+    assertThat(messageCommandCaptor.getValue().getAlertDtos())
+        .isEqualTo(of(getAlertDto(alertNameSecond)));
+  }
+
+  @Test
+  void generateAlertsShouldNotSendWhenDatabaseExceptionThrown() {
+    //given
+    when(distributionProvider.getDistribution(dateRangeDto, properties.getGroupingFields()))
+        .thenReturn(of(getAlertDistribution(1, RISK_TYPE, SANCTION)));
+
+    String alertName = generateAlertName();
+    when(alertProvider.getAlerts(any())).thenReturn(of(alertName));
+    DecisionService decisionService = mock(DecisionService.class);
+    doThrow(PersistentObjectException.class).when(decisionService).addAlert(alertName);
+
+    underTest = new AlertsGeneratorService(distributionProvider,
+        alertProvider,
+        new CreateAlertWithDecisionUseCase(decisionService),
+        properties.getSampleCount(),
+        properties.getGroupingFields(),
+        properties.getFilters(),
+        alertSamplingService,
+        eventPublisher);
+    //when
+    //then
+    assertThatThrownBy(() -> underTest.generateAlerts(dateRangeDto, 1L))
+        .isInstanceOf(PersistentObjectException.class);
   }
 }

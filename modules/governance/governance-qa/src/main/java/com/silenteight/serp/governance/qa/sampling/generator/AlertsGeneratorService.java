@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import javax.validation.Valid;
 
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.ANALYSIS;
@@ -58,13 +59,15 @@ public class AlertsGeneratorService {
     log.debug("Generating alerts of total count={}", totalAlertsCount);
     DistributionCalculator distributionCalculator = getDistributionCalculator(
         totalSampleCount, totalAlertsCount);
-
     List<CreateDecisionRequest> createDecisionRequests = distribution.stream()
         .map(alertDistribution
             -> toAlertSampleRequest(alertDistribution, distributionCalculator, dateRangeDto))
-        .map(alertProvider::getAlerts).flatMap(List::stream)
+        .map(alertProvider::getAlerts)
+        .flatMap(List::stream)
         .map(this::getCreateDecisionRequest)
-        .peek(createAlertWithDecisionUseCase::activate)
+        .map(createAlertWithDecisionUseCase::activate)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
         .collect(toList());
 
     alertSamplingService.saveAlertDistribution(
