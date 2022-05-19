@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package silenteight.data.sampling.alerts.api.v1;
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+option java_package = "com.silenteight.model.api.v1";
+option java_outer_classname = "SampleAlertServiceProto";
+
+service SamplingAlertsService {
+  rpc GetAlertsSample(AlertsSampleRequest) returns (AlertsSampleResponse) {
+    option (google.api.http) = {
+      post: "/v1/alerts:getRandomSample"
+      body: "*"
+    };
+  }
+}
+
+message AlertsSampleRequest {
+  // Requested number of alerts.
+  int32 alert_count = 1 [(google.api.field_behavior) = REQUIRED];
+  // Timestamp that represents point in time where requested time range starts.
+  google.protobuf.Timestamp time_range_from = 2 [(google.api.field_behavior) = REQUIRED];
+  // Timestamp that represents point in time where requested time range ends.
+  google.protobuf.Timestamp time_range_to = 3 [(google.api.field_behavior) = REQUIRED];
+  // Requested alert's fields and their values.
+  repeated RequestedAlertsFilter requested_alerts_filter = 4 [(google.api.field_behavior) = REQUIRED];
+}
+
+message AlertsSampleResponse {
+  // Random alerts that match request.
+  repeated Alert alerts = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message Alert {
+  //Name of the alert;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message RequestedAlertsFilter {
+  // Requested field name.
+  string field_name = 1 [(google.api.field_behavior) = REQUIRED];
+  // Requested field value.
+  string field_value = 2 [(google.api.field_behavior) = REQUIRED];
+}
