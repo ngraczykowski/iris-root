@@ -55,6 +55,7 @@ dependencies {
   api libs.spring.amqp
   api libs.spring.amqp.rabbit
   api libs.spring.integration.amqp
+  api libs.spring.aspects
   implementation libs.amqp.client
   implementation libs.bouncycastle.bcprov
   implementation libs.bouncycastle.bcprov.ext
