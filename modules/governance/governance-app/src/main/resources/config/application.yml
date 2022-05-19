@@ -405,6 +405,9 @@ serp.governance:
   policy-step-solution:
     hinted-enabled: false
 
+  policy.promotion:
+    direct: false
+
 sep.auth:
   permissionMethodsMappings:
     CANCEL_APPROVAL_TICKET:

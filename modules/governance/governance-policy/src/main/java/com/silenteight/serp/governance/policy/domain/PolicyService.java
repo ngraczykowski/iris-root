@@ -37,6 +37,7 @@ public class PolicyService {
   private final AuditingLogger auditingLogger;
   @NonNull
   private final ApplicationEventPublisher eventPublisher;
+  private final boolean directPromotion;
 
   @Transactional
   public UUID doImport(ConfigurePolicyRequest request) {
@@ -137,11 +138,21 @@ public class PolicyService {
   @Transactional
   public void usePolicy(UsePolicyRequest usePolicyRequest) {
     usePolicyRequest.preAudit(auditingLogger::log);
-    stopUsingOtherPolicies(usePolicyRequest.getActivatedBy());
     Policy policy = policyRepository.getByPolicyId(usePolicyRequest.getPolicyId());
+
+    if (usePolicyForbidden(policy)) {
+      throw new WrongPolicyStateChangeException(
+          usePolicyRequest.getPolicyId(), policy.getState(), IN_USE);
+    }
+
+    stopUsingOtherPolicies(usePolicyRequest.getActivatedBy());
     policy.use();
     policy.setUpdatedBy(usePolicyRequest.getActivatedBy());
     usePolicyRequest.postAudit(auditingLogger::log);
+  }
+
+  private boolean usePolicyForbidden(Policy policy) {
+    return !(directPromotion || policy.toBeUsed());
   }
 
   @Transactional

@@ -3,6 +3,7 @@ package com.silenteight.serp.governance.policy.domain;
 import com.silenteight.auditing.bs.AuditingLogger;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,15 +14,21 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EntityScan
 @EnableJpaRepositories
 @EnableTransactionManagement
+@EnableConfigurationProperties(PolicyPromotionProperties.class)
 class PolicyDomainConfiguration {
 
   @Bean
   PolicyService policyService(
       PolicyRepository policyRepository,
       AuditingLogger auditingLogger,
-      ApplicationEventPublisher eventPublisher) {
+      ApplicationEventPublisher eventPublisher,
+      PolicyPromotionProperties properties) {
 
-    return new PolicyService(policyRepository, auditingLogger, eventPublisher);
+    return new PolicyService(
+        policyRepository,
+        auditingLogger,
+        eventPublisher,
+        properties.isDirect());
   }
 
   @Bean

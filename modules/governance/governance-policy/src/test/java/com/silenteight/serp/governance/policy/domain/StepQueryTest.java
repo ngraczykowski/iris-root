@@ -60,7 +60,6 @@ class StepQueryTest extends BaseDataJpaTest {
   @Autowired
   private PolicyRepository policyRepository;
 
-
   @BeforeEach
   void setUp() {
     underTest = new PolicyDomainConfiguration().stepQuery(stepRepository, policyRepository);

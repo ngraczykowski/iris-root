@@ -11,7 +11,6 @@ import com.silenteight.serp.governance.policy.domain.exception.*;
 import com.silenteight.solving.api.v1.FeatureVectorSolution;
 
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -28,6 +27,7 @@ import java.util.stream.Stream;
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.MODEL_TUNER;
 import static com.silenteight.serp.governance.policy.domain.Condition.IS;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.*;
+import static com.silenteight.serp.governance.policy.domain.SharedTestFixtures.POLICY_ID;
 import static com.silenteight.serp.governance.policy.domain.SharedTestFixtures.POLICY_NAME;
 import static com.silenteight.serp.governance.policy.domain.SharedTestFixtures.USER;
 import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LOGIC;
@@ -52,18 +52,13 @@ class PolicyServiceTest {
   private AuditingLogger auditingLogger;
   @Mock
   private ApplicationEventPublisher eventPublisher;
-
-  private PolicyService underTest;
-
-  @BeforeEach
-  void setUp() {
-    underTest = new PolicyDomainConfiguration()
-        .policyService(policyRepository, auditingLogger, eventPublisher);
-  }
+  @Mock
+  private PolicyPromotionProperties policyPromotionProperties;
 
   @Test
   void importPolicyWithUuids() {
     // given
+    PolicyService underTest = initializePolicyService(false);
     String featureName = "nameAgent";
     Collection<String> featureValues = of("EXACT_MATCH", "NEAR_MATCH");
     int logicCount = 1;
@@ -141,6 +136,7 @@ class PolicyServiceTest {
   @Test
   void importPolicyWithoutUuids() {
     // given
+    PolicyService underTest = initializePolicyService(false);
     String featureName = "nameAgent";
     Collection<String> featureValues = of("EXACT_MATCH", "NEAR_MATCH");
     int logicCount = 1;
@@ -213,6 +209,7 @@ class PolicyServiceTest {
 
   @Test
   void configureStepWithZeroFeatureConfigurationWillThrowException() {
+    PolicyService underTest = initializePolicyService(false);
     Policy policy = createPolicyWithSteps(of(createStep(FIRST_STEP_ID, 0)));
 
     ConfigureStepLogicRequest request = ConfigureStepLogicRequest
@@ -223,6 +220,7 @@ class PolicyServiceTest {
 
   @Test
   void configureStepWithZeroFeaturesConfigurationIsValidRequest() {
+    PolicyService underTest = initializePolicyService(false);
     Policy policy = createPolicyWithSteps(of(createStep(FIRST_STEP_ID, 0)));
 
     ConfigureStepLogicRequest request = ConfigureStepLogicRequest
@@ -232,6 +230,7 @@ class PolicyServiceTest {
 
   @Test
   void configureStepWithZeroMatchConditionValuesWillThrowException() {
+    PolicyService underTest = initializePolicyService(false);
     Policy policy = createPolicyWithSteps(of(createStep(FIRST_STEP_ID, 0)));
     Collection<FeatureLogicConfiguration> featureLogicConfiguration = getFeatureLogicConfiguration(
         1, getFeatureConfiguration("name", of()));
@@ -244,6 +243,7 @@ class PolicyServiceTest {
 
   @Test
   void configureStepWithZeroInToFulfillValueWillThrowException() {
+    PolicyService underTest = initializePolicyService(false);
     Policy policy = createPolicyWithSteps(of(createStep(FIRST_STEP_ID, 0)));
     Collection<FeatureLogicConfiguration> featureLogicConfiguration = getFeatureLogicConfiguration(
         0, getFeatureConfiguration("name", of("value")));
@@ -256,6 +256,7 @@ class PolicyServiceTest {
 
   @Test
   void configureStepWithTooBigInToFulfillValueWillThrowException() {
+    PolicyService underTest = initializePolicyService(false);
     Policy policy = createPolicyWithSteps(of(createStep(FIRST_STEP_ID, 2)));
     Collection<FeatureLogicConfiguration> featureLogicConfiguration = getFeatureLogicConfiguration(
         0, getFeatureConfiguration("name", of("value")));
@@ -268,6 +269,7 @@ class PolicyServiceTest {
 
   @NotNull
   private Policy createPolicyWithSteps(Collection<Step> steps) {
+    PolicyService underTest = initializePolicyService(false);
     UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER).getId();
     Policy policy = policyRepository.getByPolicyId(uuid);
     steps.forEach(policy::addStep);
@@ -294,6 +296,8 @@ class PolicyServiceTest {
 
   @Test
   void savePolicyOnDraftWillChangeState() {
+    PolicyService underTest = initializePolicyService(false);
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER).getId();
     PolicyDto policyDto = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
     assertThat(policyDto.getState()).isEqualTo(DRAFT);
 
@@ -306,6 +310,7 @@ class PolicyServiceTest {
 
   @Test
   void savePolicyOnNonDraftWillThrowException() {
+    PolicyService underTest = initializePolicyService(false);
     UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER).getId();
     Policy policy = policyRepository.getByPolicyId(uuid);
     policy.save();
@@ -318,6 +323,9 @@ class PolicyServiceTest {
 
   @Test
   void archivePolicyOnDraftWillThrowException() {
+    PolicyService underTest = initializePolicyService(false);
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER).getId();
+    Policy policy = policyRepository.getByPolicyId(uuid);
     PolicyDto policyDto = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
 
     assertThat(policyDto.getState()).isEqualTo(DRAFT);
@@ -330,6 +338,7 @@ class PolicyServiceTest {
 
   @Test
   void archivePolicyOnInUseWillThrowException() {
+    PolicyService underTest = initializePolicyService(false);
     UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER).getId();
     Policy policy = policyRepository.getByPolicyId(uuid);
     policy.save();
@@ -345,6 +354,7 @@ class PolicyServiceTest {
 
   @Test
   void archivePolicySavedDraftWillChangeState() {
+    PolicyService underTest = initializePolicyService(false);
     UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER).getId();
     Policy policy = policyRepository.getByPolicyId(uuid);
     policy.save();
@@ -358,6 +368,7 @@ class PolicyServiceTest {
 
   @Test
   void usePolicyOnSaveWillChangeState() {
+    PolicyService underTest = initializePolicyService(true);
     UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER).getId();
     Policy policy = policyRepository.getByPolicyId(uuid);
     policy.setState(SAVED);
@@ -370,9 +381,39 @@ class PolicyServiceTest {
   }
 
   @Test
-  void usePolicyOnNonSaveWillThrowException() {
+  void usePolicyOnSavedWillThrowExceptionWhenInUseShortPathDisabled() {
+    PolicyService underTest = initializePolicyService(false);
     PolicyDto policyDto = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
     assertThat(policyDto.getState()).isEqualTo(DRAFT);
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER).getId();
+    Policy policy = policyRepository.getByPolicyId(uuid);
+    policy.setState(SAVED);
+
+    assertThatExceptionOfType(WrongPolicyStateChangeException.class)
+        .isThrownBy(() -> underTest.usePolicy(UsePolicyRequest.of(uuid, USER)));
+  }
+
+  @Test
+  void usePolicyOnToBeUsedWillChangeStateWhenInUseShortPathDisabled() {
+    PolicyService underTest = initializePolicyService(false);
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER).getId();
+    Policy policy = policyRepository.getByPolicyId(uuid);
+    policy.setState(TO_BE_USED);
+
+    underTest.usePolicy(UsePolicyRequest.of(uuid, OTHER_USER));
+
+    policy = policyRepository.getByPolicyId(uuid);
+    assertThat(policy.getState()).isEqualTo(IN_USE);
+    assertThat(policy.getUpdatedBy()).isEqualTo(OTHER_USER);
+  }
+
+  @Test
+  void usePolicyOnNonSavedWillThrowExceptionWhenInUseShortPathDisabled() {
+    PolicyService underTest = initializePolicyService(false);
+    PolicyDto policyDto = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER).getId();
+    Policy policy = policyRepository.getByPolicyId(uuid);
+    assertThat(policy.getState()).isEqualTo(DRAFT);
 
     assertThatExceptionOfType(WrongPolicyStateChangeException.class)
         .isThrownBy(() -> underTest.usePolicy(UsePolicyRequest.of(policyDto.getId(), USER)));
@@ -380,7 +421,10 @@ class PolicyServiceTest {
 
   @Test
   void deletePolicyOnDraftWillChangeState() {
+    PolicyService underTest = initializePolicyService(false);
     PolicyDto policyDto = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
+    Policy policy = policyRepository.getByPolicyId(policyDto.getId());
+    assertThat(policy.getState()).isEqualTo(DRAFT);
     assertThat(policyDto.getState()).isEqualTo(DRAFT);
 
     underTest.deletePolicy(DeletePolicyRequest.of(policyDto.getId(), OTHER_USER));
@@ -390,6 +434,7 @@ class PolicyServiceTest {
 
   @Test
   void deletePolicyOnNonSaveWillThrowException() {
+    PolicyService underTest = initializePolicyService(false);
     UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER).getId();
     Policy policy = policyRepository.getByPolicyId(uuid);
     policy.save();
@@ -402,13 +447,16 @@ class PolicyServiceTest {
 
   @Test
   void updatePolicyOnDraftWillUpdatePolicy() {
+    PolicyService underTest = initializePolicyService(false);
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER).getId();
+    Policy policy = policyRepository.getByPolicyId(uuid);
+    assertThat(policy.getState()).isEqualTo(DRAFT);
     PolicyDto policyDto = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
     assertThat(policyDto.getState()).isEqualTo(DRAFT);
 
     underTest.updatePolicy(
         UpdatePolicyRequest.of(policyDto.getId(), NEW_POLICY_NAME, NEW_DESCRIPTION, OTHER_USER));
 
-    Policy policy = policyRepository.getByPolicyId(policyDto.getId());
     assertThat(policy.getName()).isEqualTo(NEW_POLICY_NAME);
     assertThat(policy.getDescription()).isEqualTo(NEW_DESCRIPTION);
     assertThat(policy.getUpdatedBy()).isEqualTo(OTHER_USER);
@@ -416,6 +464,7 @@ class PolicyServiceTest {
 
   @Test
   void updatePolicyOnNonDraftWillThrowException() {
+    PolicyService underTest = initializePolicyService(false);
     UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER).getId();
     Policy policy = policyRepository.getByPolicyId(uuid);
     policy.setState(SAVED);
@@ -427,6 +476,7 @@ class PolicyServiceTest {
 
   @Test
   void setStepsOrderOnDraftWillChangeOrder() {
+    PolicyService underTest = initializePolicyService(false);
     Policy policy = createPolicyWithSteps(of(
         createStep(FIRST_STEP_ID, 0),
         createStep(SECOND_STEP_ID, 1),
@@ -456,6 +506,7 @@ class PolicyServiceTest {
 
   @Test
   void setStepsOrderOnNonDraftWillThrowException() {
+    PolicyService underTest = initializePolicyService(false);
     UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER).getId();
     Policy policy = policyRepository.getByPolicyId(uuid);
     policy.setState(SAVED);
@@ -468,6 +519,10 @@ class PolicyServiceTest {
 
   @Test
   void setStepsOrderOnDraftWithWrongStepsSizeWillThrowException() {
+    PolicyService underTest = initializePolicyService(false);
+    UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER).getId();
+    Policy policy = policyRepository.getByPolicyId(uuid);
+    assertThat(policy.getState()).isEqualTo(DRAFT);
     PolicyDto policyDto = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER);
     assertThat(policyDto.getState()).isEqualTo(DRAFT);
 
@@ -479,6 +534,7 @@ class PolicyServiceTest {
 
   @Test
   void setStepsOrderOnDraftWithWrongStepsWillThrowException() {
+    PolicyService underTest = initializePolicyService(false);
     Policy policy = createPolicyWithSteps(of(
         createStep(FIRST_STEP_ID, 0),
         createStep(SECOND_STEP_ID, 1),
@@ -517,6 +573,7 @@ class PolicyServiceTest {
 
   @Test
   void updatedStepOnNonDraftWillThrowException() {
+    PolicyService underTest = initializePolicyService(false);
     Policy policy = createPolicyWithSteps(of(
         createStep(FIRST_STEP_ID, 0),
         createStep(SECOND_STEP_ID, 1),
@@ -532,6 +589,7 @@ class PolicyServiceTest {
 
   @Test
   void updatedStepOnDraftWillUpdateStep() {
+    PolicyService underTest = initializePolicyService(false);
     Policy policy = createPolicyWithSteps(of(
         createStep(FIRST_STEP_ID, 0),
         createStep(SECOND_STEP_ID, 1),
@@ -565,6 +623,7 @@ class PolicyServiceTest {
 
   @Test
   void deleteStepOnNonDraftWillThrowException() {
+    PolicyService underTest = initializePolicyService(false);
     Policy policy = createPolicyWithSteps(of(
         createStep(FIRST_STEP_ID, 0),
         createStep(SECOND_STEP_ID, 1),
@@ -579,6 +638,7 @@ class PolicyServiceTest {
 
   @Test
   void deleteStepOnDraftWillDeleteStep() {
+    PolicyService underTest = initializePolicyService(false);
     Policy policy = createPolicyWithSteps(of(
         createStep(FIRST_STEP_ID, 0),
         createStep(SECOND_STEP_ID, 1),
@@ -604,6 +664,7 @@ class PolicyServiceTest {
   @Test
   void clonePolicyWillMakeDeepCopy() {
     //given
+    PolicyService underTest = initializePolicyService(false);
     Step firstStep = createStep(FIRST_STEP_ID, 0);
     firstStep.setName(STEP_NAME);
     firstStep.setFeatureLogics(of(FEATURE_LOGIC));
@@ -656,6 +717,7 @@ class PolicyServiceTest {
   @Test
   void shouldReturnClonedStepId() {
     //given
+    PolicyService underTest = initializePolicyService(false);
     CloneStepRequest request =
         CloneStepRequest.of(OTHER_STEP_ID, FIRST_STEP_ID, POLICY_ID, MODEL_TUNER);
 
@@ -694,11 +756,14 @@ class PolicyServiceTest {
   @MethodSource("provideStepsWithValidOrder")
   void assertStepOrdersWithNarrowSteps(List<Step> actual, List<Step> expected) {
     //given
+    PolicyService underTest = initializePolicyService(false);
     Policy policy = createPolicyWithSteps(actual);
     List<UUID> stepIds = actual.stream().map(Step::getStepId).collect(toList());
     SetStepsOrderRequest request = SetStepsOrderRequest.of(policy.getPolicyId(), stepIds, USER);
+
     //when
     underTest.setStepsOrder(request);
+
     //then
     assertStepsOrder(policy.getSteps(), expected);
   }
@@ -746,6 +811,7 @@ class PolicyServiceTest {
   @Test
   void invalidNarrowStepOrderWillThrowException() {
     //given
+    PolicyService underTest = initializePolicyService(false);
     List<Step> steps = of(
         createStep(FIRST_STEP_ID, 0, NARROW),
         createStep(SECOND_STEP_ID, 1),
@@ -782,6 +848,7 @@ class PolicyServiceTest {
 
   @Test
   void markPolicyUsedOnToBeUsedWillChangeState() {
+    PolicyService underTest = initializePolicyService(false);
     UUID uuid = underTest.createPolicy(POLICY_ID, POLICY_NAME, USER).getId();
     Policy policy = policyRepository.getByPolicyId(uuid);
     policy.setUpdatedBy(OTHER_USER);
@@ -792,5 +859,12 @@ class PolicyServiceTest {
     policy = policyRepository.getByPolicyId(uuid);
     assertThat(policy.getState()).isEqualTo(IN_USE);
     assertThat(policy.getUpdatedBy()).isEqualTo(OTHER_USER);
+  }
+
+  private PolicyService initializePolicyService(boolean directPromotion) {
+    when(policyPromotionProperties.isDirect()).thenReturn(directPromotion);
+
+    return new PolicyDomainConfiguration()
+        .policyService(policyRepository, auditingLogger, eventPublisher, policyPromotionProperties);
   }
 }

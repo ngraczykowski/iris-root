@@ -125,6 +125,10 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
     setState(TO_BE_USED);
   }
 
+  public boolean toBeUsed() {
+    return state == TO_BE_USED;
+  }
+
   public void use() {
     // TODO(kdzieciol): Remove `SAVED` state from the allowed states list (WEB-1092)
     assertAllowedStateChange(IN_USE, SAVED, TO_BE_USED, OBSOLETE);

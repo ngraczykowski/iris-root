@@ -23,6 +23,7 @@ import static com.silenteight.serp.governance.policy.domain.DomainConstants.POLI
 import static com.silenteight.serp.governance.policy.domain.PolicyState.ARCHIVED;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.IN_USE;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.SAVED;
+import static org.springframework.http.ResponseEntity.ok;
 
 @Slf4j
 @RestController
@@ -65,7 +66,7 @@ class EditPolicyRequestRestController {
     changePolicyState(id, editPolicyDto.getState(), authentication.getName());
 
     log.debug("Editing policy request processed.");
-    return ResponseEntity.ok().build();
+    return ok().build();
   }
 
   private void changePolicyState(UUID id, PolicyState state, String userName) {
@@ -73,7 +74,6 @@ class EditPolicyRequestRestController {
       savePolicyUseCase.activate(id, userName);
     if (ARCHIVED == state)
       archivePolicyUseCase.activate(id, userName);
-    // TODO(kdzieciol): Remove this. (WEB-1092)
     if (IN_USE == state)
       usePolicyUseCase.activate(id, userName);
   }
