@@ -1,0 +1,78 @@
+### Get OAuth2 authorization token using client credentials flow
+// @no-log
+// @no-cookie-jar
+POST {{authurl}}/protocol/openid-connect/token
+Accept: application/json
+Content-Type: application/x-www-form-urlencoded; charset=utf-8
+
+client_id={{client-id}}&client_secret={{client-secret}}&grant_type=client_credentials
+
+> {%
+  client.test("Request executed successfully", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+
+  client.global.set("access_token", response.body["access_token"]);
+%}
+
+
+### Trigger batch job etl
+### When file name is not set jobs will take all alerts
+POST {{baseurl}}/rest/pb/batch/trigger
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "JobName": "etl-job",
+  "FileName": "learning/learningMockSystemId.csv"
+}
+
+### Trigger batch historical risk job
+### When file name is not set jobs will take all alerts
+POST {{baseurl}}/rest/pb/batch/trigger
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "JobName": "historical-risk-assessment-job",
+  "FileName": ""
+}
+
+### Trigger batch contextual risk job
+### When file name is not set jobs will take all alerts
+POST {{baseurl}}/rest/pb/batch/trigger
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "JobName": "contextual-learning-job",
+  "FileName": ""
+}
+
+### Trigger batch historical risk job
+### When file name is not set jobs will take all alerts
+POST {{baseurl}}/rest/pb/batch/trigger
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "JobName": "re-etl-job",
+  "FileName": "sierra-user/learning_feed/svb_learn_02_03_2022.csv",
+  "Features": []
+}
+
+
+### Trigger batch for re-etl
+### When file name is not set jobs will take all alerts
+### When features are not set job will etl all features
+POST {{baseurl}}/rest/pb/batch/trigger
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{"JobName" : "re-etl-job", "FileName" :  "", "Features":  []}
+

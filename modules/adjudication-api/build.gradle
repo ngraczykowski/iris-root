@@ -1,0 +1,4 @@
+plugins {
+  id "com.silenteight.iris.build.grpc"
+  id "maven-publish"
+}

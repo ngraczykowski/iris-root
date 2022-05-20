@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+package silenteight.data.api.v1;
+
+import "google/api/field_behavior.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+option java_package = "com.silenteight.data.api.v1";
+option java_outer_classname = "DataProto";
+option java_multiple_files = true;
+
+message ProductionDataIndexRequest {
+  // Request id, if provided, is returned in the response allowing to match request with
+  // a response on the client side. It is a client responsibility to ensure its uniqueness.
+  string request_id = 1 [(google.api.field_behavior) = OPTIONAL];
+  // Name of the analysis that alerts are part of.
+  string analysis_name = 2 [(google.api.field_behavior) = OPTIONAL];
+  // Alerts that should be stored. The name of the alerts needs to be unique globally.
+  repeated Alert alerts = 3 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message SimulationDataIndexRequest {
+  option deprecated = true;
+  // Request id, if provided, is returned in the response allowing to match request with
+  // a response on the client side. It is a client responsibility to ensure its uniqueness.
+  string request_id = 1 [(google.api.field_behavior) = OPTIONAL];
+  // Name of the analysis that alerts are part of.
+  string analysis_name = 2 [(google.api.field_behavior) = REQUIRED];
+  // Alerts that should be stored. The name of the alert needs to be unique within a specific analysis.
+  // Any two alerts with the same name but different analysis name are considered to be
+  // distinct data.
+  repeated Alert alerts = 3 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message Alert {
+  // Name of the alert
+  string name = 1 [(google.api.field_behavior) = OPTIONAL];
+  // Payload of the alert that should be stored.
+  // If an alert with this name is already stored, the payload will be merged into an existing
+  // content. Because order of processing messages is not guaranteed, values for existing keys
+  // should not be modified, unless updates are properly synchronized by the client.
+  google.protobuf.Struct payload = 2 [(google.api.field_behavior) = REQUIRED];
+  // Matches associated with the alert that should be stored.
+  repeated Match matches = 3 [(google.api.field_behavior) = OPTIONAL];
+  // Discriminator to be able to join various messages into one document.
+  // All messages describing the same alert should have the same value in this field.
+  // This field should be unique across the whole system.
+  string discriminator = 4  [(google.api.field_behavior) = REQUIRED];
+  // The value of this field is used to control access permission to the data
+  // This value should be REQUIRED in the future but for compatibility reasons it is set
+  // to OPTIONAL for now (until Simulator and Governance do not switch to data.api.v2)
+  string access_permission_tag = 5  [(google.api.field_behavior) = OPTIONAL];
+}
+
+message Match {
+  // The unique name of the match within specific analysis.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  // Payload of the match that should be stored.
+  // If a match with this name is already stored, the payload will be merged into an existing
+  // content. Because order of processing messages is not guaranteed, values for existing keys
+  // should not be modified, unless updates are properly synchronized by the client.
+  google.protobuf.Struct payload = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message DataIndexResponse {
+  // The value or Request id, if provided in corresponding request, that allows to match
+  // request with a response on the client side.
+  string request_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY, (google.api.field_behavior) = OPTIONAL];
+  // Timestamp that represents point in time where all data from corresponding request
+  // is guaranteed to be processed.
+  google.protobuf.Timestamp index_time = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}

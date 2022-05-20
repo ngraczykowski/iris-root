@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package silenteight.protobuf;
+
+option java_package = "com.silenteight.proto.protobuf";
+option java_outer_classname = "UuidProto";
+option java_multiple_files = true;
+option objc_class_prefix = "SPB";
+
+message Uuid {
+    bytes value = 1;
+}

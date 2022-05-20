@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<validation-config
+    xmlns="http://xmlns.jcp.org/xml/ns/validation/configuration"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/validation/configuration
+        http://xmlns.jcp.org/xml/ns/validation/configuration/validation-configuration-2.0.xsd"
+    version="2.0">
+
+  <constraint-mapping>META-INF/validation/category-validation.xml</constraint-mapping>
+  <constraint-mapping>META-INF/validation/category-v1-validation.xml</constraint-mapping>
+  <constraint-mapping>META-INF/validation/comment-input-validation.xml</constraint-mapping>
+  <constraint-mapping>META-INF/validation/comment-input-v1-validation.xml</constraint-mapping>
+  <constraint-mapping>META-INF/validation/feature/feature-input-validation.xml</constraint-mapping>
+  <constraint-mapping>META-INF/validation/feature/allow-list-feature-validation.xml</constraint-mapping>
+  <constraint-mapping>META-INF/validation/feature/bank-identification-codes-feature-validation.xml</constraint-mapping>
+  <constraint-mapping>META-INF/validation/feature/country-feature-validation.xml</constraint-mapping>
+  <constraint-mapping>META-INF/validation/feature/date-feature-validation.xml</constraint-mapping>
+  <constraint-mapping>META-INF/validation/feature/document-feature-validation.xml</constraint-mapping>
+  <constraint-mapping>META-INF/validation/feature/event-feature-validation.xml</constraint-mapping>
+  <constraint-mapping>META-INF/validation/feature/free-text-feature-validation.xml</constraint-mapping>
+  <constraint-mapping>META-INF/validation/feature/gender-feature-validation.xml</constraint-mapping>
+  <constraint-mapping>META-INF/validation/feature/historical-decisions-feature-validation.xml</constraint-mapping>
+  <constraint-mapping>META-INF/validation/feature/is-pep-feature-validation.xml</constraint-mapping>
+  <constraint-mapping>META-INF/validation/feature/location-feature-validation.xml</constraint-mapping>
+  <constraint-mapping>META-INF/validation/feature/name-feature-validation.xml</constraint-mapping>
+  <constraint-mapping>META-INF/validation/feature/national-id-feature-validation.xml</constraint-mapping>
+  <constraint-mapping>META-INF/validation/feature/transaction-feature-validation.xml</constraint-mapping>
+  <constraint-mapping>META-INF/validation/feature/hit-type-validation.xml</constraint-mapping>
+
+</validation-config>

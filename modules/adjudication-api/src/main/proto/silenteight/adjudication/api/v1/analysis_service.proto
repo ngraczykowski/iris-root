@@ -1,0 +1,188 @@
+// Copyright 2021 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package silenteight.adjudication.api.v1;
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+
+import "silenteight/adjudication/api/v1/analysis.proto";
+import "silenteight/adjudication/api/v1/analysis_alert.proto";
+import "silenteight/adjudication/api/v1/analysis_dataset.proto";
+import "silenteight/adjudication/api/v1/match_solution.proto";
+import "silenteight/adjudication/api/v1/recommendation.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "AnalysisServiceProto";
+option java_package = "com.silenteight.adjudication.api.v1";
+
+service AnalysisService {
+
+  rpc CreateAnalysis (CreateAnalysisRequest) returns (Analysis) {
+    option (google.api.http) = {
+      post: "/v1/analysis"
+      body: "analysis"
+    };
+  }
+
+  rpc AddDataset (AddDatasetRequest) returns (AnalysisDataset) {
+    option (google.api.http) = {
+      post: "/v1/{analysis=analysis/*}/datasets"
+      body: "dataset"
+    };
+  }
+
+  rpc BatchAddDatasets (BatchAddDatasetsRequest) returns (BatchAddDatasetsResponse) {
+    option (google.api.http) = {
+      post: "/v1/{analysis=analysis/*}/datasets:batchAdd"
+      body: "datasets"
+    };
+  }
+
+  rpc AddAlert (AddAlertRequest) returns (AnalysisAlert) {
+    option (google.api.http) = {
+      post: "/v1/{analysis=analysis/*}/alerts"
+      body: "analysis_alert"
+    };
+  }
+
+  rpc BatchAddAlerts (BatchAddAlertsRequest) returns (BatchAddAlertsResponse) {
+    option (google.api.http) = {
+      post: "/v1/{analysis=analysis/*}/alerts:batchAdd"
+      body: "analysis_alerts"
+    };
+  }
+
+  rpc GetAnalysis (GetAnalysisRequest) returns (Analysis) {
+    option (google.api.http) = {
+      get: "/v1/{analysis=analysis/*}"
+    };
+  }
+
+  // Deprecated: use silenteight.adjudication.api.v2.RecommendationService instead.
+  rpc StreamRecommendations (StreamRecommendationsRequest) returns (stream Recommendation) {
+    option deprecated = true;
+    option (google.api.http) = {
+      get: "/v1/{analysis=analysis/*}/recommendations:stream"
+    };
+  }
+
+  // Deprecated: use silenteight.adjudication.api.v2.RecommendationService instead.
+  rpc GetRecommendation (GetRecommendationRequest) returns (Recommendation) {
+    option deprecated = true;
+    option (google.api.http) = {
+      get: "/v1/{recommendation=analysis/*/recommendations/*}"
+    };
+  }
+
+  rpc StreamMatchSolutions (StreamMatchSolutionsRequest) returns (stream MatchSolution) {
+    option (google.api.http) = {
+      get: "/v1/{analysis=analysis/*}/match-solutions:stream"
+    };
+  }
+
+  rpc GetMatchSolution (GetMatchSolutionRequest) returns (MatchSolution) {
+    option (google.api.http) = {
+      get: "/v1/{match_solution=analysis/*/match-solutions/*}"
+    };
+  }
+}
+
+// Request for creating single analysis.
+message CreateAnalysisRequest {
+  // The analysis to create.
+  Analysis analysis = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request for adding single dataset to analysis.
+message AddDatasetRequest {
+  // The name of the analysis resource to add dataset to, in form of `analysis/<Analysis ID>`.
+  string analysis = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The dataset name which will be added to analysis, in form of `datasets/<Dataset ID>`.
+  string dataset = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request for adding multiple datasets to analysis.
+message BatchAddDatasetsRequest {
+  // The name of the analysis resource to add datasets to, in form of `analysis/<Analysis ID>`.
+  string analysis = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The list of datasets to add to the analysis, in form of `datasets/<Dataset ID>`.
+  // The maximum number of datasets in the request accepted by the service is 1024.
+  repeated string datasets = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Response for adding datasets to analysis in batch.
+message BatchAddDatasetsResponse {
+  // The list of analysis datasets added.
+  repeated AnalysisDataset analysis_datasets = 1;
+}
+
+// Request for adding single alert to analysis.
+message AddAlertRequest {
+  // The name of the analysis resource to add dataset to, in form of `analysis/<Analysis ID>`.
+  string analysis = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The alert which will be added to analysis.
+  AnalysisAlert analysis_alert = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request for adding multiple alerts to analysis.
+message BatchAddAlertsRequest {
+  // The name of the analysis resource to add datasets to, in form of `analysis/<Analysis ID>`.
+  string analysis = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The list of alerts to add to the analysis.
+  // The maximum number of alerts in the request accepted by the service is 1024.
+  repeated AnalysisAlert analysis_alerts = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Response for adding alerts to analysis in batch.
+message BatchAddAlertsResponse {
+  // The list of analysis alerts added.
+  repeated AnalysisAlert analysis_alerts = 1;
+}
+
+// Request for getting analysis.
+message GetAnalysisRequest {
+  // The name of the analysis resource to retrieve.
+  string analysis = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request for getting analysis recommendations.
+message StreamRecommendationsRequest {
+  // The name of the analysis resource to retrieve, in form of `analysis/<Analysis ID>`.
+  string analysis = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The optional name of the dataset resource to filter recommendations from,
+  // in form of `analysis/<Analysis ID>/datasets/<Dataset ID>`.
+  // If not given, all recommendations from analysis are returned.
+  string dataset = 2 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// Response for getting analysis recommendation.
+message GetRecommendationRequest {
+  // The name of the recommendation resource to retrieve,
+  // in form of `analysis/<Analysis ID>/recommendations/<Recommendation ID>`.
+  string recommendation = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Response for getting analysis recommendation.
+message GetMatchSolutionRequest {
+  // The name of the match solution resource to retrieve,
+  // in form of `analysis/<Analysis ID>/match-solutions/<Match Solution ID>`.
+  string match_solution = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request for getting analysis match solutions.
+message StreamMatchSolutionsRequest {
+  // The name of the analysis resource to retrieve.
+  string analysis = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The optional name of the dataset resource to filter recommendations from,
+  // in form of `analysis/<Analysis ID>/datasets/<Dataset ID>`.
+  // If not given, all match solutions from analysis are returned.
+  string dataset = 2 [(google.api.field_behavior) = OPTIONAL];
+}

@@ -1,0 +1,47 @@
+[plantuml,importing-steps,svg]
+-----
+@startuml
+!pragma teoz true
+
+
+actor "HSBC" as hsbc
+participant "Scheduler" as scheduler
+participant "Bridge" as bridge
+database Database as db
+queue RabbitMQ as queue
+participant "Adjudication Engine" as ae
+
+
+||10||
+== Receiving learning data from HSBC ==
+|||
+
+
+autonumber
+
+hsbc -> bridge: [POST] send learning data
+activate bridge
+bridge <-> db: save bulk and alerts data
+bridge --> hsbc: return OK
+deactivate bridge
+
+||10||
+== Scheduled data processing ==
+|||
+
+autonumber
+
+scheduler -> bridge:  invoke bulk process
+activate bridge
+bridge <-> db: get pre processed bulk
+bridge -> bridge: process
+
+bridge <-> ae: [gRPC] register alerts and matches
+bridge <-> queue: send learning data for isPep
+bridge <-> queue: send learning data for warehouse
+bridge <-> queue: send learning data for historical decisions
+deactivate bridge
+
+||10||
+@enduml
+-----

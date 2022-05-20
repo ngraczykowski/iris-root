@@ -1,0 +1,16 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "groovy"
+}
+
+dependencies {
+  implementation libs.grpc.server.spring.boot.starter
+
+  implementation libs.silenteight.sep.base.common
+  implementation libs.silenteight.agents.protocol
+
+  implementation libs.spring.boot
+  implementation libs.spring.context
+
+
+}

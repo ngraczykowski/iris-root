@@ -9,7 +9,7 @@ dependencies {
   implementation libs.commons.collections
   implementation libs.cronutils
 
-  implementation libs.silenteight.data.retention.api
+  implementation libs.data.retention.api
   implementation libs.silenteight.sep.base.common
   implementation libs.silenteight.serp.protocol.base
   implementation libs.warehouse.sampling.api

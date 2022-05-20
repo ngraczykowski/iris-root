@@ -1,0 +1,201 @@
+// Copyright 2021 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package silenteight.adjudication.api.v1;
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+
+import "silenteight/adjudication/api/v1/alert.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "AlertServiceProto";
+option java_package = "com.silenteight.adjudication.api.v1";
+
+service AlertService {
+  rpc CreateAlert (CreateAlertRequest) returns (Alert) {
+    option (google.api.http) = {
+      post: "/v1/alerts"
+      body: "*"
+    };
+    option (google.api.method_signature) = "alert_id,alert_time";
+  }
+
+  rpc BatchAddLabels (BatchAddLabelsRequest) returns (BatchAddLabelsResponse) {
+    option (google.api.http) = {
+      post: "/v1/alerts:batchAddLabels"
+      body: "*"
+    };
+  }
+
+  rpc BatchRemoveLabels (BatchRemoveLabelsRequest) returns (BatchRemoveLabelsResponse) {
+    option (google.api.http) = {
+      post: "/v1/alerts:batchRemoveLabels"
+      body: "*"
+    };
+  }
+
+  rpc BatchCreateAlerts (BatchCreateAlertsRequest) returns (BatchCreateAlertsResponse) {
+    option (google.api.http) = {
+      post: "/v1/alerts:batchCreate"
+      body: "alerts"
+    };
+  }
+
+  rpc CreateMatch (CreateMatchRequest) returns (Match) {
+    option (google.api.http) = {
+      post: "/v1/{alert=alerts/*}/matches"
+      body: "*"
+    };
+    option (google.api.method_signature) = "alert,match";
+  }
+
+  rpc BatchCreateAlertMatches (BatchCreateAlertMatchesRequest) returns (BatchCreateAlertMatchesResponse) {
+    option (google.api.http) = {
+      post: "/v1/{alert=alerts/*}/matches:batchCreate"
+      body: "matches"
+    };
+  }
+
+  rpc BatchCreateMatches (BatchCreateMatchesRequest) returns (BatchCreateMatchesResponse) {
+    option (google.api.http) = {
+      post: "/v1/alerts/-/matches:batchCreate"
+      body: "alert_matches"
+    };
+  }
+
+  rpc GetAlert (GetAlertRequest) returns (Alert) {
+    option (google.api.http) = {
+      get: "/v1/{alert=alerts/*}"
+    };
+  }
+
+  rpc ListAlertMatches (ListAlertMatchesRequest) returns (ListAlertMatchesResponse) {
+    option (google.api.http) = {
+      get: "/v1/{alert=alerts/*}/matches"
+    };
+  }
+
+  rpc GetMatch (GetMatchRequest) returns (Match) {
+    option (google.api.http) = {
+      get: "/v1/{match=alerts/*/matches/*}"
+    };
+  }
+}
+
+// Request for creating single alert.
+message CreateAlertRequest {
+  // The alert to create.
+  Alert alert = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request for adding labels into alerts.
+message BatchAddLabelsRequest {
+  // The alerts names to which labels should be added, in form of `alerts/<Alert ID>`.
+  repeated string alerts = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The labels with user-defined metadata to organize your Alerts.
+  // The maximum length of label name is 50 characters, and label value is 150 characters.
+  map<string, string> labels = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Response with added labels.
+message BatchAddLabelsResponse {
+  // The labels with user-defined metadata to organize your Alerts.
+  // The maximum length of label name is 50 characters, and label value is 150 characters.
+  map<string, string> labels = 1;
+}
+
+// Request for removing labels from alerts.
+message BatchRemoveLabelsRequest {
+  // The alerts names for which labels should be removed, in form of `alerts/<Alert ID>`.
+  repeated string alerts = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The labels names that shall be removed from alerts
+  repeated string labels_names = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Response with affected alerts.
+message BatchRemoveLabelsResponse {
+  // The alerts names for which labels were removed, in form of `alerts/<Alert ID>`.
+  repeated string alerts = 1;
+}
+
+// Request for creating alerts in batch.
+message BatchCreateAlertsRequest {
+  // The alerts to create.
+  // The maximum number of alerts accepted by the service is 16384.
+  repeated Alert alerts = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Response for creating alerts in batch.
+message BatchCreateAlertsResponse {
+  // The created alerts.
+  repeated Alert alerts = 1;
+}
+
+// Request for creating single match.
+message CreateMatchRequest {
+  // The alert name this match belongs to, in form of `alerts/<Alert ID>`.
+  string alert = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The match to create.
+  Match match = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request for creating multiple matches for single alert.
+message BatchCreateAlertMatchesRequest {
+  // The alert that all matches created belong to, in form of `alerts/<Alert ID>`.
+  string alert = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The matches to create.
+  // The maximum number of matches accepted by the service is 16384.
+  repeated Match matches = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Response for creating multiple matches for single alert.
+message BatchCreateAlertMatchesResponse {
+  // The created matches.
+  repeated Match matches = 1;
+}
+
+// Request for creating multiple matches for multiple alerts.
+message BatchCreateMatchesRequest {
+  // The batches list of requests for creating multiple matches per alert.
+  repeated BatchCreateAlertMatchesRequest alert_matches = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Response for creating matches in batch.
+message BatchCreateMatchesResponse {
+  // The created matches.
+  repeated Match matches = 1;
+}
+
+// Request for getting a single alert.
+message GetAlertRequest {
+  // The alert name, in form of `alerts/<Alert ID>`.
+  string alert = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request for listing matches from a single alert.
+message ListAlertMatchesRequest {
+  // The alert name, in form of `alerts/<Alert ID>`.
+  string alert = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Response with a list of matches.
+message ListAlertMatchesResponse {
+  // The alert name, in form of `alerts/<Alert ID>`.
+  string alert = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The list of matches belonging to this alert.
+  repeated Match matches = 2;
+}
+
+// Request for getting a single match.
+message GetMatchRequest {
+  // The match name, in form of `alerts/<Alert ID>/matches/<Match ID>`.
+  string match = 1 [(google.api.field_behavior) = REQUIRED];
+}

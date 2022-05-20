@@ -1,0 +1,9 @@
+plugins {
+  id "maven-publish"
+  id "com.silenteight.iris.build.protobuf"
+}
+
+
+dependencies {
+  implementation libs.guava
+}

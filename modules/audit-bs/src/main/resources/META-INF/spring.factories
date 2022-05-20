@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.silenteight.auditing.bs.AuditingConfiguration,\
+  com.silenteight.auditing.bs.amqp.AuditingMessagingConfiguration

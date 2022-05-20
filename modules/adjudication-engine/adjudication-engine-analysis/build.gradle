@@ -1,0 +1,43 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "maven-publish"
+  id "groovy"
+}
+
+description = "Adjudication Engine Analysis"
+dependencies {
+  implementation project(":adjudication-engine-common")
+  implementation project(":adjudication-engine-alerts")
+  implementation project(":adjudication-engine-comments")
+  implementation project(":adjudication-engine-dataset")
+  implementation project(":adjudication-engine-features")
+  implementation project(":adjudication-engine-governance")
+  implementation project(":proto-adjudication-engine-internal-protos")
+
+  implementation libs.adjudication.engine.api
+  implementation libs.agents.api
+  implementation libs.data.retention.api
+  implementation libs.data.source.categories.api
+  implementation libs.data.source.comments.api
+  implementation libs.governance.solving.api
+  implementation libs.protobuf.java.util
+
+  // Metrics
+  implementation libs.micrometer.prometheus
+
+  implementation libs.silenteight.sep.base.aspects
+
+  implementation libs.postgresql
+  implementation libs.grpc.spring.boot.starter
+  implementation libs.spring.data.jpa
+  implementation libs.silenteight.sep.base.common
+  implementation libs.hibernate.types
+  implementation libs.shedlock.spring
+
+  testImplementation project(":adjudication-engine-testing")
+  testImplementation libs.hibernate.validator
+  testImplementation libs.protobuf.java.util
+  testImplementation libs.silenteight.sep.base.testing
+  testImplementation libs.tomcat.embed.el
+  testImplementation libs.shedlock.jdbc.provider
+}

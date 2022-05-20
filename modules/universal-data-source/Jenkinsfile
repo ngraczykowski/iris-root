@@ -1,0 +1,34 @@
+@Library('pipeline-shared-library@master') _
+
+def gradle = new com.silenteight.jenkins.ci.Gradle()
+def git = new com.silenteight.jenkins.ci.Git()
+def jenkins = new com.silenteight.jenkins.ci.Jenkins()
+
+gradleBuild(
+    jdkVersion: 'jdk-17',
+    sonarEnabled: true,
+    dependencyCheckEnabled: true,
+    includeBuildNumberInSnapshotVersion: true,
+    additionalParams: [
+      booleanParam(
+        name: 'deployOnTest',
+        description: '''Deploy on test environment in Nomad.''', defaultValue: false),
+      extendedChoice(
+        name: 'environments',
+        value: 'test,mike,lima',
+        defaultValue: '',
+        description: 'Environments to deploy to on Nomad',
+        multiSelectDelimiter: ',',
+        quoteValue: false,
+        saveJSONParameterToFile: false,
+        type: 'PT_MULTI_SELECT',
+        visibleItemCount: 10
+        )
+    ],
+    additionalStages: {
+      buildContainerImage()
+      awsECR()
+      helmChartRegistry()
+      deployOnNomad()
+    }
+)

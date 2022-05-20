@@ -1,0 +1,32 @@
+{
+  "Header": null,
+  "Body": {
+    "msg_ReceiveDecision": {
+      "VersionTag": "1",
+      "Authentication": {
+        "ContinuityLogin": "username",
+        "ContinuityPassword": "password",
+        "ContinuityBusinessUnit": "ROOT"
+      },
+      "Messages": [
+        {
+          "Message": {
+            "Unit": "HB-UK",
+            "BusinessUnit": "ROOT",
+            "MessageID": "2020061300000008",
+            "SystemID": "MTH20210106102116-00003-16630",
+            "Status": {
+              "ID": "202",
+              "Name": "S8_ADJ_PR",
+              "RoutingCode": "2",
+              "Checksum": "152c65fe973360004140a71f25a34cdd"
+            },
+            "Comment": "S8 Recommendation: False Positive\n",
+            "Operator": "Silent Eight",
+            "Actions": []
+          }
+        }
+      ]
+    }
+  }
+}

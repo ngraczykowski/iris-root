@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+  <property name="now" value="now()" dbms="postgresql"/>
+
+  <changeSet id="adjudication-engine-comments-1.20.0_0" author="wkeska">
+    <insert tableName="ae_comment_template">
+      <column name="template_name" value="date-agent.ftl"/>
+      <column name="created_at" valueDate="${now}"/>
+      <column name="revision" valueNumeric="2"/>
+      <column name="template" valueClobFile="templates/date-agent.ftl"/>
+    </insert>
+  </changeSet>
+
+</databaseChangeLog>

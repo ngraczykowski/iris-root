@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet id="adjudication-engine-features-1.3.0_1" author="ahaczewski">
+    <addColumn tableName="ae_match_feature_value">
+      <column name="reason" type="jsonb"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-features-1.3.0_2" author="jgajewski">
+    <dropForeignKeyConstraint
+        baseTableName="ae_agent_exchange_match_feature"
+        constraintName="fk_ae_agent_exchange_match_feature_match_id"/>
+
+    <addForeignKeyConstraint
+        baseTableName="ae_agent_exchange_match_feature"
+        baseColumnNames="match_id"
+        constraintName="fk_ae_agent_exchange_match_feature_match_id"
+        referencedTableName="ae_match"
+        referencedColumnNames="match_id"
+        onDelete="CASCADE"/>
+
+    <dropForeignKeyConstraint
+        baseTableName="ae_match_category_value"
+        constraintName="fk_ae_match_category_value_match_id"/>
+
+    <addForeignKeyConstraint
+        baseTableName="ae_match_category_value"
+        baseColumnNames="match_id"
+        constraintName="fk_ae_match_category_value_match_id"
+        referencedTableName="ae_match"
+        referencedColumnNames="match_id"
+        onDelete="CASCADE"/>
+
+    <dropForeignKeyConstraint
+        baseTableName="ae_match_feature_value"
+        constraintName="fk_ae_match_feature_value_match_id"/>
+
+    <addForeignKeyConstraint
+        baseTableName="ae_match_feature_value"
+        baseColumnNames="match_id"
+        constraintName="fk_ae_match_feature_value_match_id"
+        referencedTableName="ae_match"
+        referencedColumnNames="match_id"
+        onDelete="CASCADE"/>
+  </changeSet>
+  <!--  <changeSet id="adjudication-engine-features-1.3.0_2" author="ahaczewski">-->
+  <!--  </changeSet>-->
+</databaseChangeLog>

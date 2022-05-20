@@ -1,0 +1,68 @@
+{%- extends "base.html" %}
+
+{% import "bootstrap/utils.html" as utils %}
+
+{% block content %}
+    <div class="container">
+        {%- with messages = get_flashed_messages(with_categories=True) %}
+            {%- if messages %}
+                <div class="row" style="margin-top: 10px">
+                    <div class="col-md-12">
+                        {{ utils.flashed_messages(messages) }}
+                    </div>
+                </div>
+            {%- endif %}
+        {%- endwith %}
+        <div class="col-md-12">
+            <h2>CMAPI to TSaaS Bridge request sender</h2>
+            <form method="post" class="form-horizontal">
+                <div class="form-group">
+                    <label for="requests" class="col-sm-2 control-label">{{ form.requests.label }}</label>
+                    <div class="col-sm-10">
+                        {{ form.requests(class_="form-control") }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="request" class="col-sm-2 control-label">{{ form.request.label }}</label>
+                    <div class="col-sm-10">
+                        {{ form.request(class_="form-control", rows="10") }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-right">
+                        <input class="btn btn-primary" type="submit" value="Send request">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{%- endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        $(document).ready(function () {
+            $("select#requests").change(function () {
+                $('textarea#request').text('')
+                var selectedRequest = $(this).children("option:selected").val();
+                if (selectedRequest) {
+                    $.ajax({
+                        type: 'POST',
+                        contentType: 'application/json',
+                        url: 'get-request-content',
+                        dataType: 'json',
+                        data: JSON.stringify({request_file: selectedRequest}),
+                        success: function (result) {
+                            var jsonPretty = JSON.stringify(result, null, '\t');
+                            $('textarea#request').text(jsonPretty)
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert('Error message: ' + errorThrown);
+                            jQuery('body').removeClass("loading");
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+{% endblock %}

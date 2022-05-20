@@ -1,0 +1,4 @@
+@ParametersAreNonnullByDefault
+package com.silenteight.adjudication.engine.analysis.categoryrequest.integration;
+
+import javax.annotation.ParametersAreNonnullByDefault;

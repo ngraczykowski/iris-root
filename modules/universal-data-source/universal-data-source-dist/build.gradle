@@ -1,0 +1,64 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+  id "distribution"
+  id "maven-publish"
+}
+
+description = "Universal Data Source Distribution"
+
+configurations {
+  dist
+}
+
+dependencies {
+  dist project(path: ":universal-data-source-app", configuration: "bootArchives")
+}
+
+def runScript(String name) {
+  copySpec {
+    from(file("src/bash/run.template.sh")) {
+      rename {
+        name
+      }
+      filter(
+          ReplaceTokens,
+          tokens: [jarfile: "universal-data-source-app-${project.version}-exec.jar".toString()],
+          beginToken: "@@",
+          endToken: "@@",
+      )
+      into("bin/")
+    }
+  }
+}
+
+distributions {
+  main {
+    distributionBaseName = "universal-data-source-dist"
+
+    contents {
+      from(configurations.dist) {
+        into "lib/"
+      }
+      with runScript("universal-data-source")
+    }
+  }
+}
+
+tasks.named("distTar") {
+  compression = Compression.BZIP2
+  archiveExtension = "tar.bz2"
+}
+
+tasks.withType(Zip) {
+  enabled = false
+}
+
+publishing {
+  publications {
+    distribution(MavenPublication) {
+      artifact distTar
+      artifactId "universal-data-source-dist"
+    }
+  }
+}

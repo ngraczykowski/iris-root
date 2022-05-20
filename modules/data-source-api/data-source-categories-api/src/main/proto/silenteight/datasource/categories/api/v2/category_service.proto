@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package silenteight.datasource.categories.api.v2;
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+
+import "silenteight/datasource/categories/api/v2/category.proto";
+
+option java_package = "com.silenteight.datasource.categories.api.v2";
+option java_outer_classname = "CategoryServiceProto";
+option java_multiple_files = true;
+
+service CategoryService {
+
+  rpc BatchCreateCategories (BatchCreateCategoriesRequest) returns (BatchCreateCategoriesResponse) {
+    option (google.api.http) = {
+      post: "/v2/categories:batchCreate"
+      body: "categories"
+    };
+  }
+
+  // TODO(ahaczewski): Add RPCs for: removing single category and removing all categories.
+
+  rpc ListCategories (ListCategoriesRequest) returns (ListCategoriesResponse) {
+    option (google.api.http) = {
+      get: "/v2/categories"
+    };
+  }
+}
+
+message BatchCreateCategoriesRequest {
+  // The list of categories to create.
+  repeated Category categories = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message BatchCreateCategoriesResponse {
+  // The list of created categories.
+  repeated Category categories = 1;
+}
+
+message ListCategoriesRequest {
+}
+
+message ListCategoriesResponse {
+  // The list of all categories.
+  repeated Category categories = 1;
+}

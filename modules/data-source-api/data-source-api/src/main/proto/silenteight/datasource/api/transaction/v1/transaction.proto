@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package silenteight.datasource.api.transaction.v1;
+
+import "google/api/annotations.proto";
+
+option java_package = "com.silenteight.datasource.api.transaction.v1";
+option java_outer_classname = "TransactionProto";
+option java_multiple_files = true;
+
+/**
+  Intended to be used by Free Text Agent
+ */
+service TransactionInputService {
+  rpc BatchGetMatchTransactionInputs (BatchGetMatchTransactionInputsRequest) returns (stream BatchGetMatchTransactionInputsResponse) {
+    option (google.api.http) = {
+      post: "/agent-inputs/transaction/versions/v1/matches:batchGet"
+      body: "*"
+    };
+  }
+}
+
+message BatchGetMatchTransactionInputsRequest {
+  // The list of matches data is requested for, in form of `alerts/<Alert ID>/matches/<Match ID>`.
+  repeated string matches = 1;
+  // The list of features the input data for each match is requested, in form of `features/<Feature ID>`.
+  repeated string features = 2;
+}
+
+message BatchGetMatchTransactionInputsResponse {
+  repeated TransactionInput transaction_inputs = 1;
+}
+
+message TransactionInput {
+  string match = 1;
+  repeated TransactionFeatureInput transaction_feature_inputs = 2;
+}
+
+message TransactionFeatureInput {
+  string feature = 1;
+
+  repeated string transaction_messages = 2;
+  repeated WatchlistName watchlist_names = 3;
+  WatchlistType watchlist_type = 4;
+
+  // List of strings that screening engine matched (used only for Organization)
+  repeated string matching_texts = 5;
+
+  enum WatchlistType {
+    WATCHLIST_TYPE_UNSPECIFIED = 0;
+    INDIVIDUAL = 1;
+    ORGANIZATION = 2;
+  }
+}
+
+message WatchlistName {
+  string name = 1;
+  NameType type = 2;
+
+  enum NameType {
+    NAME_TYPE_UNSPECIFIED = 0;
+    // The regular name used by the watchlist party.
+    REGULAR = 1;
+    // The name used as an alias of the watchlist party.
+    ALIAS = 2;
+  }
+}

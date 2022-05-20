@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+  <changeSet id="quartz-derby" author="quartz" dbms="derby">
+    <sqlFile encoding="utf8" path="db/changelog/quartz/tables_derby.sql" splitStatements="true"
+             stripComments="true"/>
+    <rollback>
+      <sqlFile encoding="utf8" path="db/changelog/quartz/tables_derby_drop.sql"
+               splitStatements="true" stripComments="true"/>
+    </rollback>
+  </changeSet>
+
+  <changeSet id="quartz-h2" author="quartz" dbms="h2">
+    <sqlFile encoding="utf8" path="db/changelog/quartz/tables_h2.sql" splitStatements="true"
+             stripComments="true"/>
+  </changeSet>
+
+  <changeSet id="quartz-hsqldb" author="quartz" dbms="hsqldb">
+    <sqlFile encoding="utf8" path="db/changelog/quartz/tables_hsqldb.sql" splitStatements="true"
+             stripComments="true"/>
+  </changeSet>
+
+  <changeSet id="quartz-mysql" author="quartz" dbms="mysql">
+    <sqlFile encoding="utf8" path="db/changelog/quartz/tables_mysql_innodb.sql"
+             splitStatements="true" stripComments="true"/>
+  </changeSet>
+
+  <changeSet id="quartz-postgres" author="quartz" dbms="postgresql">
+    <sqlFile encoding="utf8" path="db/changelog/quartz/tables_postgres.sql" splitStatements="true"
+             stripComments="true"/>
+  </changeSet>
+
+  <changeSet id="quartz-oracle" author="quartz" dbms="oracle">
+    <sqlFile encoding="utf8" path="db/changelog/quartz/tables_oracle.sql" splitStatements="true"
+             stripComments="true"/>
+    <rollback>
+      <sqlFile encoding="utf8" path="db/changelog/quartz/tables_oracle_drop.sql"
+               splitStatements="true" stripComments="true"/>
+    </rollback>
+  </changeSet>
+</databaseChangeLog>

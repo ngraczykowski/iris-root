@@ -1,0 +1,15 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "groovy"
+}
+
+dependencies {
+  api libs.sentry
+  implementation libs.silenteight.sep.base.common
+  implementation libs.spring.context
+  implementation libs.protobuf.java.util
+  implementation libs.commons.lang3
+  implementation libs.guava
+  implementation libs.grpc.protobuf
+  implementation libs.hibernate.validator
+}

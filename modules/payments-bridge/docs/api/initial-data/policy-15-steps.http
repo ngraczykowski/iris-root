@@ -1,0 +1,504 @@
+### Get OAuth2 authorization token using client credentials flow
+// @no-log
+// @no-cookie-jar
+POST {{authurl}}/protocol/openid-connect/token
+Accept: application/json
+Content-Type: application/x-www-form-urlencoded; charset=utf-8
+
+client_id={{client-id}}&grant_type=password&username={{username}}&password={{password}}
+
+> {%
+  client.test("Request executed successfully", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+
+  client.global.set("access_token", response.body["access_token"]);
+  client.global.set("policy-uuid", "1713cb8f-75c8-40df-80dc-2ac3dcf034a4");
+  client.global.set("step1-uuid", "68a260e8-4f28-4374-8a06-09ca41d9513e");
+  client.global.set("step2-uuid", "b0233964-7a5c-4038-a6d2-86b50e0245dd");
+  client.global.set("step3-uuid", "bf7c2c76-e461-4d25-b382-6620949731e0");
+  client.global.set("step4-uuid", "64e2fdc5-1ac3-44a0-99b7-f41383f601c0");
+  client.global.set("step5-uuid", "7331f4b1-ca0f-4bcd-8eba-87c36be730cb");
+  client.global.set("step6-uuid", "01061b6e-213e-4ca1-9117-9949814e1fc7");
+  client.global.set("step7-uuid", "715d4b60-2beb-4a34-b59b-e9a8efa65adf");
+  client.global.set("step8-uuid", "87fba91b-dd0f-4752-9372-69e962ecdca5");
+  client.global.set("step9-uuid", "c5b3a156-a883-4219-8d30-667f9c6e2527");
+  client.global.set("step10-uuid", "ac5a3a26-c57c-4ea0-8c9c-f9a7b3bf7685");
+  client.global.set("step11-uuid", "e39187d9-c449-48f5-98c8-368ba40e4e60");
+  client.global.set("step12-uuid", "d6da405d-da93-4439-9e86-4006da655e0e");
+  client.global.set("step13-uuid", "acbed167-60a3-490b-8e41-6ace8fa7db3c");
+  client.global.set("step14-uuid", "319964b3-fad3-4298-8290-e571cda81e3a");
+%}
+
+### Create policy
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/governance/api/v1/policies
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/policy.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 202, "Response status is not 202");
+   });
+ %}
+
+### Create step 1
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/governance/api/v1/policies/{{policy-uuid}}/steps
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step1/step.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 204, "Response status is not 204");
+   });
+ %}
+
+### Patch step 1 logic
+// @no-log
+// @no-cookie-jar
+PUT {{baseurl}}/rest/governance/api/v1/steps/{{step1-uuid}}/logic
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step1/step-logic.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 202, "Response status is not 202");
+   });
+ %}
+
+
+### Create step 2
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/governance/api/v1/policies/{{policy-uuid}}/steps
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step2/step.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 204, "Response status is not 204");
+   });
+ %}
+
+### Patch step 2 logic
+// @no-log
+// @no-cookie-jar
+PUT {{baseurl}}/rest/governance/api/v1/steps/{{step2-uuid}}/logic
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step2/step-logic.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 202, "Response status is not 202");
+   });
+ %}
+
+### Create step 3
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/governance/api/v1/policies/{{policy-uuid}}/steps
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step3/step.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 204, "Response status is not 204");
+   });
+ %}
+
+### Patch step 3 logic
+// @no-log
+// @no-cookie-jar
+PUT {{baseurl}}/rest/governance/api/v1/steps/{{step3-uuid}}/logic
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step3/step-logic.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 202, "Response status is not 202");
+   });
+ %}
+
+### Create step 4
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/governance/api/v1/policies/{{policy-uuid}}/steps
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step4/step.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 204, "Response status is not 204");
+   });
+ %}
+
+### Patch step 4 logic
+// @no-log
+// @no-cookie-jar
+PUT {{baseurl}}/rest/governance/api/v1/steps/{{step4-uuid}}/logic
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step4/step-logic.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 202, "Response status is not 202");
+   });
+ %}
+
+### Create step 5
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/governance/api/v1/policies/{{policy-uuid}}/steps
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step5/step.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 204, "Response status is not 204");
+   });
+ %}
+
+### Patch step 5 logic
+// @no-log
+// @no-cookie-jar
+PUT {{baseurl}}/rest/governance/api/v1/steps/{{step5-uuid}}/logic
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step5/step-logic.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 202, "Response status is not 202");
+   });
+ %}
+
+### Create step 6
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/governance/api/v1/policies/{{policy-uuid}}/steps
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step6/step.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 204, "Response status is not 204");
+   });
+ %}
+
+### Patch step 6 logic
+// @no-log
+// @no-cookie-jar
+PUT {{baseurl}}/rest/governance/api/v1/steps/{{step6-uuid}}/logic
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step6/step-logic.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 202, "Response status is not 202");
+   });
+ %}
+
+### Create step 7
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/governance/api/v1/policies/{{policy-uuid}}/steps
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step7/step.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 204, "Response status is not 204");
+   });
+ %}
+
+### Patch step 7 logic
+// @no-log
+// @no-cookie-jar
+PUT {{baseurl}}/rest/governance/api/v1/steps/{{step7-uuid}}/logic
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step7/step-logic.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 202, "Response status is not 202");
+   });
+ %}
+
+
+### Create step 8
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/governance/api/v1/policies/{{policy-uuid}}/steps
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step8/step.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 204, "Response status is not 204");
+   });
+ %}
+
+### Patch step 8 logic
+// @no-log
+// @no-cookie-jar
+PUT {{baseurl}}/rest/governance/api/v1/steps/{{step8-uuid}}/logic
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step8/step-logic.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 202, "Response status is not 202");
+   });
+ %}
+
+### Create step 9
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/governance/api/v1/policies/{{policy-uuid}}/steps
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step9/step.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 204, "Response status is not 204");
+   });
+ %}
+
+### Patch step 9 logic
+// @no-log
+// @no-cookie-jar
+PUT {{baseurl}}/rest/governance/api/v1/steps/{{step9-uuid}}/logic
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step9/step-logic.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 202, "Response status is not 202");
+   });
+ %}
+
+### Create step 10
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/governance/api/v1/policies/{{policy-uuid}}/steps
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step10/step.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 204, "Response status is not 204");
+   });
+ %}
+
+### Patch step 10 logic
+// @no-log
+// @no-cookie-jar
+PUT {{baseurl}}/rest/governance/api/v1/steps/{{step10-uuid}}/logic
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step10/step-logic.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 202, "Response status is not 202");
+   });
+ %}
+
+
+### Create step 11
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/governance/api/v1/policies/{{policy-uuid}}/steps
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step11/step.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 204, "Response status is not 204");
+   });
+ %}
+
+### Patch step 11 logic
+// @no-log
+// @no-cookie-jar
+PUT {{baseurl}}/rest/governance/api/v1/steps/{{step11-uuid}}/logic
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step11/step-logic.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 202, "Response status is not 202");
+   });
+ %}
+
+### Create step 12
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/governance/api/v1/policies/{{policy-uuid}}/steps
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step12/step.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 204, "Response status is not 204");
+   });
+ %}
+
+### Patch step 12 logic
+// @no-log
+// @no-cookie-jar
+PUT {{baseurl}}/rest/governance/api/v1/steps/{{step12-uuid}}/logic
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step12/step-logic.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 202, "Response status is not 202");
+   });
+ %}
+
+### Create step 13
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/governance/api/v1/policies/{{policy-uuid}}/steps
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step13/step.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 204, "Response status is not 204");
+   });
+ %}
+
+### Patch step 13 logic
+// @no-log
+// @no-cookie-jar
+PUT {{baseurl}}/rest/governance/api/v1/steps/{{step13-uuid}}/logic
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step13/step-logic.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 202, "Response status is not 202");
+   });
+ %}
+
+
+### Create step 14
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/governance/api/v1/policies/{{policy-uuid}}/steps
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step14/step.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 204, "Response status is not 204");
+   });
+ %}
+
+### Patch step 14 logic
+// @no-log
+// @no-cookie-jar
+PUT {{baseurl}}/rest/governance/api/v1/steps/{{step14-uuid}}/logic
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< policy-15-steps/step14/step-logic.json
+
+> {%
+  client.test("Request executed successfully", function() {
+        client.assert(response.status === 202, "Response status is not 202");
+   });
+ %}
+
+
+
+
+

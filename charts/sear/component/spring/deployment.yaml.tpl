@@ -31,6 +31,11 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      initContainers:
+        {{- if .component.useDb }}
+        {{- include "checkPostgresReadyInitContainer" . | indent 8 }}
+        {{- end }}
+        {{- include "checkRabbitMqInitContainer" . | indent 8 }}
       containers:
         - name: {{ .componentName }}
           {{- with .Values.securityContext }}

@@ -1,0 +1,15 @@
+includeBuild('../../platforms')
+includeBuild('../../build-logic')
+
+dependencyResolutionManagement {
+  versionCatalogs {
+    libs {
+      from(files("../../gradle/libs.versions.toml"))
+    }
+  }
+}
+
+rootProject.name = "governance-api"
+
+include "se-model-api"
+include "se-solving-api"

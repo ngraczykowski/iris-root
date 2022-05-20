@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package silenteight.datasource.api.hittype.v1;
+
+import "google/api/annotations.proto";
+
+option java_package = "com.silenteight.datasource.api.hittype.v1";
+option java_outer_classname = "HitTypeProto";
+option java_multiple_files = true;
+
+service HitTypeInputService {
+  rpc BatchGetMatchHitTypeInputs (BatchGetMatchHitTypeInputsRequest) returns (stream BatchGetMatchHitTypeInputsResponse) {
+    option (google.api.http) = {
+      post: "/agent-inputs/hittype/versions/v1/matches:batchGet"
+      body: "*"
+    };
+  }
+}
+
+message BatchGetMatchHitTypeInputsRequest {
+  // The list of matches data is requested for, in form of `alerts/<Alert ID>/matches/<Match ID>`.
+  repeated string matches = 1;
+  // The list of features the input data for each match is requested, in form of `features/<Feature ID>`.
+  repeated string features = 2;
+}
+
+message BatchGetMatchHitTypeInputsResponse {
+  repeated HitTypeInput hit_type_inputs = 1;
+}
+
+message HitTypeInput {
+  // Match in form of `alerts/<Alert ID>/matches/<Match ID>`
+  string match = 1;
+  repeated HitTypeFeatureInput hit_type_feature_inputs = 2;
+}
+
+message StringList {
+  // List of string tokens. Need to add it as type in map<string, StringList>
+  repeated string tokens = 1;
+}
+
+message TokensMap {
+  // Map of <string, StringList>. Need to add it as type in map<string, TokensMap>
+  map<string, StringList> tokens_map = 1;
+}
+
+message HitTypeFeatureInput {
+  string feature = 1;
+  // Categories that should be considered for triggering alerts
+  repeated string normal_trigger_categories = 2;
+  // Map of categories and alert fields that should be considered for triggering the alert
+  map<string, StringList> trigger_categories = 3;
+  // Map of tokens that should trigger the alert with map of field names and list of field values
+  map<string, TokensMap> triggered_tokens = 4;
+}

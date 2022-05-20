@@ -1,0 +1,16 @@
+{
+  "featuresLogic": [
+    {
+      "features": [
+        {
+          "name": "${name}",
+          "condition": "${condition}",
+          "values": [
+            "${values}"
+          ]
+        }
+      ],
+      "toFulfill": 1
+    }
+  ]
+}

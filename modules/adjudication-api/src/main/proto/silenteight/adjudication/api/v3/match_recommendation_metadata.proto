@@ -1,0 +1,56 @@
+// Copyright 2022 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package silenteight.adjudication.api.v3;
+
+import "google/api/field_behavior.proto";
+import "google/protobuf/struct.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "MatchRecommendationMetadataProto";
+option java_package = "com.silenteight.adjudication.api.v3";
+
+message MatchRecommendationMetadata {
+  // The unique name of the recommendation metadata resource. This is always system-assigned.
+  // The format is `analysis/<ID of analysis>/match-recommendations/<ID of recommendation>/metadata`.
+  string name = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The match name this recommendation is for, in form of `alerts/<ID of alert>/matches/<ID of match>`.
+  string match = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The metadata of match.
+  MatchMetadata match_metadata = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The metadata about the match.
+  message MatchMetadata {
+    // The match name this metadata describes, in form of
+    // `alerts/<ID of alert>/matches/<ID of match>`.
+    string match = 1;
+
+    // The solution of this match.
+    string solution = 2;
+
+    // The structured reason data about the solution, received from Governance.
+    google.protobuf.Struct reason = 3;
+
+    // The map of category name to category value.
+    map<string, string> categories = 4;
+
+    // The map of feature name to feature metadata.
+    map<string, FeatureMetadata> features = 5;
+  }
+
+  // The metadata about the feature.
+  message FeatureMetadata {
+    // The name of agent config, in form of
+    // `agents/<ID of agent>/versions/<ID of version>/configs/<ID of config>`.
+    string agentConfig = 1;
+
+    // The solution this agent provided.
+    string solution = 2;
+
+    // The structured reason for the solution.
+    google.protobuf.Struct reason = 3;
+  }
+}

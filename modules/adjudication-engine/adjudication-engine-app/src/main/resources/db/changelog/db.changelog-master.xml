@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <include file="db/changelog/db.changelog-shedlock.xml"/>
+
+  <include file="db/changelog/db.changelog-adjudication-engine-alerts-master.xml"/>
+  <include file="db/changelog/db.changelog-adjudication-engine-comments-master.xml"/>
+  <include file="db/changelog/db.changelog-adjudication-engine-dataset-master.xml"/>
+  <include file="db/changelog/db.changelog-adjudication-engine-analysis-master.xml"/>
+
+  <include file="db/changelog/db.changelog-adjudication-engine-solve-master.xml"/>
+  <include file="db/changelog/db.changelog-adjudication-engine-trace-master.xml"/>
+  <include file="db/changelog/db.changelog-adjudication-engine-analysis-master-1.2.xml"/>
+</databaseChangeLog>

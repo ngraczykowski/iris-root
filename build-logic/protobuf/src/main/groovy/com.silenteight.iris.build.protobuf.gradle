@@ -1,0 +1,14 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "com.google.protobuf"
+}
+
+protobuf {
+  protoc {
+    artifact = libs.protobuf.protoc.get()
+  }
+}
+
+dependencies {
+  api libs.google.common.protos
+}

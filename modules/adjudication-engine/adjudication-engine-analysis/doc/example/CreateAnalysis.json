@@ -1,0 +1,26 @@
+{
+  "analysis": {
+    "strategy": "strategies/back_test",
+    "policy": "policies/af85189b-fa0d-437b-9009-ebb5e5bd5028",
+    "categories": [
+      "categories/source_system",
+      "categories/country",
+      "categories/customer_type",
+      "categories/hit_category"
+    ],
+    "features": [
+      {
+        "feature": "features/name",
+        "agentConfig": "agents/name/versions/1.0.0/configs/1"
+      },
+      {
+        "feature": "features/dob",
+        "agentConfig": "agents/date/versions/1.0.0/configs/1"
+      }
+    ],
+    "labels": {
+      "source": "SIMULATION",
+      "month": "2021-03"
+    }
+  }
+}

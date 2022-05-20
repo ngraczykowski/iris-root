@@ -1,0 +1,24 @@
+plugins {
+  id "com.silenteight.iris.build.protobuf"
+}
+
+protobuf {
+
+  generateProtoTasks {
+    all()*.plugins {
+      grpc {}
+    }
+  }
+
+  plugins {
+    grpc {
+      artifact = libs.grpc.gen.get()
+    }
+  }
+}
+
+dependencies {
+  compileOnly libs.javax.annotation.api
+  compileOnly libs.grpc.stub
+  compileOnly libs.grpc.protobuf
+}

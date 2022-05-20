@@ -1,0 +1,26 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+}
+
+dependencies {
+  implementation project(":adjudication-engine-common")
+  implementation project(":adjudication-engine-alerts")
+
+  implementation libs.data.source.comments.api
+  implementation libs.guava
+  implementation libs.pebble
+  implementation libs.freemarker
+  implementation libs.silenteight.sep.base.common
+  implementation libs.hibernate.types
+  implementation libs.caffeine
+
+  // Enable aspects
+  aspect libs.silenteight.sep.base.aspects
+  compileOnly libs.spring.tx
+
+  testImplementation project(":adjudication-engine-testing")
+  testImplementation libs.hibernate.validator
+  testImplementation libs.protobuf.java.util
+  testImplementation libs.silenteight.sep.base.testing
+  testImplementation libs.tomcat.embed.el
+}

@@ -1,0 +1,49 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+}
+
+dependencies {
+  implementation project(":adjudication-engine-common")
+  implementation project(":adjudication-engine-comments")
+  implementation project(":adjudication-engine-governance")
+  implementation project(":adjudication-engine-analysis")
+  implementation project(":proto-adjudication-engine-internal-protos")
+
+  implementation libs.agents.api
+  implementation libs.guava
+  implementation libs.hazelcast
+  implementation libs.jackson.databind
+  implementation libs.jackson.annotations
+  implementation libs.jackson.datatype.jsr310
+  implementation libs.jackson.dataformat.xml
+  implementation libs.jackson.datatype.jdk8
+  implementation libs.spring.data.jpa
+  implementation libs.silenteight.sep.base.common
+  implementation libs.adjudication.engine.api
+
+  // Sentry
+  runtimeOnly libs.sentry.spring.boot.starter
+  runtimeOnly libs.sentry.logback
+
+  // Messaging
+  implementation libs.amqp.client
+  implementation libs.lz4.java
+  implementation libs.spring.boot.starter.integration
+  implementation libs.spring.integration.amqp
+  implementation libs.spring.integration.core
+
+  // Enable aspects
+  aspect libs.silenteight.sep.base.aspects
+  compileOnly libs.spring.tx
+
+  //Agents
+  implementation libs.agents.api
+
+  //Governance
+  implementation libs.governance.solving.api
+
+  testImplementation project(":adjudication-engine-testing")
+  testImplementation libs.protobuf.java.util
+  testImplementation libs.hibernate.validator
+  testImplementation libs.silenteight.sep.base.testing
+}

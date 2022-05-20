@@ -1,0 +1,36 @@
+{
+  "Header": null,
+  "Body": {
+    "msg_ReceiveDecision": {
+      "VersionTag": "1",
+      "Authentication": {
+        "ContinuityLogin": "username",
+        "ContinuityPassword": "password",
+        "ContinuityBusinessUnit": "ROOT"
+      },
+      "Messages": [
+        {
+          "Message": {
+            "Unit": "HB-UK",
+            "BusinessUnit": "ROOT",
+            "MessageID": "2020061300000008",
+            "SystemID": "MTH20210106102116-00003-16630",
+            "Status": {
+              "ID": "202",
+              "Name": "S8_ADJ",
+              "RoutingCode": "2",
+              "Checksum": "152c65fe973360004140a71f25a34cdd"
+            },
+            "Comment": "",
+            "Operator": "Silent Eight",
+            "Attachment": {
+              "Name": "recommendation.txt",
+              "Contents": "UzggUmVjb21tZW5kYXRpb246IE1hbnVhbCBJbnZlc3RpZ2F0aW9uCgpMb3JlbSBpcHN1bSBkb2xvciBzaXQgYW1ldCwgY29uc2VjdGV0dXIgYWRpcGlzY2luZyBlbGl0LiBBbGlxdWFtIHZlbCBtYXVyaXMgbmVjIG9yY2kgcGhhcmV0cmEgdGluY2lkdW50LiBBZW5lYW4gaW4gYW50ZSBzZWQgdGVsbHVzIG1vbGVzdGllIGNvbnNlY3RldHVyLiBTZWQgZXUgcXVhbSBtYXNzYS4gTnVsbGEgdml0YWUgZWxpdCBtYWxlc3VhZGEsIGVnZXN0YXMgZG9sb3IgZWdldCwgc2NlbGVyaXNxdWUgdmVsaXQuIFByYWVzZW50IG9ybmFyZSBmZXJtZW50dW0ganVzdG8uIENyYXMgdmVsIG5lcXVlIGFjIGxlY3R1cyB2b2x1dHBhdCB0cmlzdGlxdWUuIFNlZCBwdXJ1cyBqdXN0bywgcnV0cnVtIHZlbCBqdXN0byBlZ2V0LCBtYWxlc3VhZGEgZmVybWVudHVtIHF1YW0uIFBlbGxlbnRlc3F1ZSBkaWduaXNzaW0gbWF1cmlzIG1ldHVzLCBub24gcG9ydGEgdHVycGlzIGdyYXZpZGEgbmVjLiBQZWxsZW50ZXNxdWUgaGFiaXRhbnQgbW9yYmkgdHJpc3RpcXVlIHNlbmVjdHVzIGV0IG5ldHVzIGV0IG1hbGVzdWFkYSBmYW1lcyBhYyB0dXJwaXMgZWdlc3Rhcy4gQ3JhcyB0ZWxsdXMgbGliZXJvLCB2ZXN0aWJ1bHVtIGlkIHZlbmVuYXRpcyB2aXRhZSwgbGFjaW5pYSBzaXQgYW1ldCB0ZWxsdXMuIFZlc3RpYnVsdW0gbmVjIGV4IGVnZXQgbWF1cmlzIGNvbmRpbWVudHVtIHBsYWNlcmF0LiBOYW0gdXQgZGFwaWJ1cyBudWxsYSwgcXVpcyBtYXR0aXMgbG9yZW0uIFF1aXNxdWUgdmVoaWN1bGEgb2RpbyBsYWN1cywgZWdldCBwaGFyZXRyYSByaXN1cyBmYXVjaWJ1cyBzaXQgYW1ldC4gRG9uZWMgdmVsIHVybmEgbmliaC4gUGVsbGVudGVzcXVlIGFudGUgZGlhbSwgdm9sdXRwYXQgc2l0IGFtZXQgbmVxdWUgYSwgZWxlbWVudHVtIGF1Y3RvciBzZW0uIE5hbSB2dWxwdXRhdGUgYmxhbmRpdCBmZXVnaWF0LgoKRG9uZWMgdmFyaXVzIHZlbmVuYXRpcyBsaWJlcm8gYWMgaW1wZXJkaWV0LiBQaGFzZWxsdXMgYmliZW5kdW0gdmVuZW5hdGlzIHNlbSB2ZWwgdGVtcG9yLiBDdXJhYml0dXIgdGVtcHVzIGJpYmVuZHVtIGp1c3RvLCBhIGRpY3R1bSBtZXR1cyB1bHRyaWNpZXMgbm9uLiBTZWQgc29kYWxlcyBhdWd1ZSBldSBzb2xsaWNpdHVkaW4gdmVoaWN1bGEuIFN1c3BlbmRpc3NlIGxhb3JlZXQsIHR1cnBpcyBtYXR0aXMgZWxlaWZlbmQgYWxpcXVldCwgbWF1cmlzIGZlbGlzIGZhY2lsaXNpcyBwdXJ1cywgYSBhY2N1bXNhbiBhcmN1IG51bmMgZXQgZXguIEluIGEgaXBzdW0gc2FwaWVuLiBEb25lYyBmZWxpcyBuZXF1ZSwgdmFyaXVzIGluIHRlbGx1cyBpbiwgZnJpbmdpbGxhIGV1aXNtb2QgbGFjdXMuCgpVdCBub24gc2NlbGVyaXNxdWUgZXN0LiBGdXNjZSBwb3J0dGl0b3IgdGVsbHVzIG5vbiBwcmV0aXVtIGRpY3R1bS4gTnVsbGFtIGhlbmRyZXJpdCBzYXBpZW4gZXUgcXVhbSB2aXZlcnJhIGludGVyZHVtLiBFdGlhbSBwdXJ1cyBsZWN0dXMsIGRhcGlidXMgcXVpcyBpcHN1bSBzZWQsIHB1bHZpbmFyIHBsYWNlcmF0IGlwc3VtLiBNYWVjZW5hcyB2aXRhZSBlbGl0IG1hc3NhLiBEb25lYyBhIGxhY3VzIGVsaXQuIEludGVnZXIgcG9ydHRpdG9yIG9ybmFyZSBlcmF0IGEgZXVpc21vZC4gRG9uZWMgc2l0IGFtZXQgZGljdHVtIG5lcXVlLCB2aXRhZSBiaWJlbmR1bSBsZWN0dXMuIE51bmMgaW4gbGFjaW5pYSBsaWJlcm8uCg=="
+            },
+            "Actions": []
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,10 @@
+ANALYZE ae_agent_exchange_match_feature;
+ANALYZE ae_alert;
+ANALYZE ae_alert_comment_input;
+ANALYZE ae_analysis_alert;
+ANALYZE ae_dataset_alert;
+ANALYZE ae_match;
+ANALYZE ae_match_category_value;
+ANALYZE ae_match_feature_value;
+ANALYZE ae_match_solution;
+ANALYZE ae_recommendation;

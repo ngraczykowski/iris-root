@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package silenteight.solving.api.v1;
+
+option java_package = "com.silenteight.solving.api.v1";
+option java_outer_classname = "FeatureProto";
+option java_multiple_files = true;
+
+// Representation of the feature space
+message FeatureCollection {
+  // Ordered list of features
+  repeated Feature feature = 1;
+}
+
+// Single feature with its characteristics
+message Feature {
+  // A unique name of the feature
+  string name = 1;
+}
+
+// Vector representing a single point in the feature space
+message FeatureVector {
+  // Coordinates within feature space defined by FeatureCollection
+  repeated string feature_value = 1;
+}
+
+// Available solutions that can be assigned to each feature vector
+enum FeatureVectorSolution {
+  // No flag is set.
+  FEATURE_VECTOR_SOLUTION_UNSPECIFIED = 0;
+  // Solved as no decision.
+  SOLUTION_NO_DECISION = 1;
+  // Solved as false positive.
+  SOLUTION_FALSE_POSITIVE = 2;
+  // Solved as potential true positive.
+  SOLUTION_POTENTIAL_TRUE_POSITIVE = 3;
+  // Solved as hinted false positive.
+  SOLUTION_HINTED_FALSE_POSITIVE = 4;
+  // Solved as hinted potential true positive.
+  SOLUTION_HINTED_POTENTIAL_TRUE_POSITIVE = 5;
+}

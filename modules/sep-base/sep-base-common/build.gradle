@@ -1,0 +1,79 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "maven-publish"
+}
+
+description = "SEP Base Common"
+
+configurations {
+  testImplementation.extendsFrom compileOnly
+}
+
+dependencies {
+  api libs.jackson.databind
+  api libs.jakarta.servlet.api
+  api libs.protobuf.java
+  api libs.silenteight.commons.app
+  api libs.spring.beans
+  api libs.spring.boot
+  api libs.spring.boot.autoconfigure
+  api libs.spring.context
+  api libs.spring.core
+  api libs.spring.data.commons
+  api libs.spring.jdbc
+  api libs.spring.tx
+  api libs.spring.web
+  api libs.classgraph
+  implementation libs.byte.buddy.agent
+  implementation libs.commons.lang3
+  implementation libs.grpc.protobuf
+  implementation libs.guava
+  implementation libs.jakarta.validation.api
+  implementation libs.micrometer.core
+  implementation libs.protobuf.java.util
+  implementation libs.spring.jcl
+  implementation libs.spring.webmvc
+
+  implementation libs.querydsl.jpa
+  annotationProcessor libs.querydsl.apt.jpa
+  annotationProcessor libs.jakarta.persistence.api
+  annotationProcessor libs.jakarta.annotation.api
+
+  // Support for gRPC
+  compileOnly libs.grpc.api
+  compileOnly libs.grpc.server.spring.boot.starter
+
+  // Support for Spring Batch
+  compileOnly libs.spring.batch.core
+
+  // Logging dependencies
+  compileOnly libs.logback.classic
+  runtimeOnly libs.logback.ecs.encoder
+  runtimeOnly libs.logstash.logback.encoder
+
+  // Messaging-related dependencies
+  api libs.spring.amqp
+  api libs.spring.amqp.rabbit
+  api libs.spring.integration.amqp
+  api libs.spring.aspects
+  implementation libs.amqp.client
+  implementation libs.bouncycastle.bcprov
+  implementation libs.bouncycastle.bcprov.ext
+  implementation libs.lz4.java
+  implementation libs.spring.messaging
+
+  // Database-related dependencies
+  api libs.hibernate.core
+  api libs.hibernate.envers
+  api libs.jakarta.persistence.api
+  implementation libs.spring.orm
+  annotationProcessor libs.hibernate.jpamodelgen
+
+  testImplementation project(":sep-base-testing")
+  testImplementation libs.commons.collections
+  testImplementation libs.spring.integration.test
+  testImplementation libs.hibernate.validator
+  testImplementation libs.awaitility
+  testImplementation libs.assertj.core
+
+}

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+  <changeSet id="adjudication-engine-comments-1.15.0_1" author="tbozek">
+
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">SELECT COUNT(*)
+                                   FROM ae_comment_template
+                                   WHERE template_name = 'agent-utils.ftl'</sqlCheck>
+    </preConditions>
+    <sqlFile path="db/changelog/sql/create_template_agent_utils.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-comments-1.15.0_2" author="tbozek">
+
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">SELECT COUNT(*)
+                                   FROM ae_comment_template
+                                   WHERE template_name = 'alert.ftl'</sqlCheck>
+    </preConditions>
+    <sqlFile path="db/changelog/sql/create_template_alert.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-comments-1.15.0_3" author="tbozek">
+
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">SELECT COUNT(*)
+                                   FROM ae_comment_template
+                                   WHERE template_name = 'alert-utils.ftl'</sqlCheck>
+    </preConditions>
+    <sqlFile path="db/changelog/sql/create_template_alert_utils.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-comments-1.15.0_4" author="tbozek">
+
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">SELECT COUNT(*)
+                                   FROM ae_comment_template
+                                   WHERE template_name = 'categories.ftl'</sqlCheck>
+    </preConditions>
+    <sqlFile path="db/changelog/sql/create_template_categories.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-comments-1.15.0_5" author="tbozek">
+
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">SELECT COUNT(*)
+                                   FROM ae_comment_template
+                                   WHERE template_name = 'geo-agent.ftl'</sqlCheck>
+    </preConditions>
+    <sqlFile path="db/changelog/sql/create_template_geo_agent.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-comments-1.15.0_6" author="tbozek">
+
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">SELECT COUNT(*)
+                                   FROM ae_comment_template
+                                   WHERE template_name = 'match.ftl'</sqlCheck>
+    </preConditions>
+    <sqlFile path="db/changelog/sql/create_template_match.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-comments-1.15.0_7" author="tbozek">
+
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">SELECT COUNT(*)
+                                   FROM ae_comment_template
+                                   WHERE template_name = 'match-utils.ftl'</sqlCheck>
+    </preConditions>
+    <sqlFile path="db/changelog/sql/create_template_match_utils.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-comments-1.15.0_8" author="tbozek">
+
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">SELECT COUNT(*)
+                                   FROM ae_comment_template
+                                   WHERE template_name = 'missing-agent.ftl'</sqlCheck>
+    </preConditions>
+    <sqlFile path="db/changelog/sql/create_template_missing_agent.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-comments-1.15.0_9" author="tbozek">
+
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">SELECT COUNT(*)
+                                   FROM ae_comment_template
+                                   WHERE template_name = 'name-agent.ftl'</sqlCheck>
+    </preConditions>
+    <sqlFile path="db/changelog/sql/create_template_name_agent.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-comments-1.15.0_10" author="tbozek">
+
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">SELECT COUNT(*)
+                                   FROM ae_comment_template
+                                   WHERE template_name = 'name-matched-text-agent.ftl'</sqlCheck>
+    </preConditions>
+    <sqlFile path="db/changelog/sql/create_template_name_matched_text_agent.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-comments-1.15.0_11" author="tbozek">
+
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">SELECT COUNT(*)
+                                   FROM ae_comment_template
+                                   WHERE template_name = 'organization-name-agent.ftl'</sqlCheck>
+    </preConditions>
+    <sqlFile path="db/changelog/sql/create_template_organization_name_agent.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-comments-1.15.0_12" author="tbozek">
+
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">SELECT COUNT(*)
+                                   FROM ae_comment_template
+                                   WHERE template_name = 'historical-agent-fp.ftl'</sqlCheck>
+    </preConditions>
+    <sqlFile path="db/changelog/sql/create_template_historical_agent_fp.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-comments-1.15.0_13" author="tbozek">
+
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">SELECT COUNT(*)
+                                   FROM ae_comment_template
+                                   WHERE template_name = 'historical-agent-tp.ftl'</sqlCheck>
+    </preConditions>
+    <sqlFile path="db/changelog/sql/create_template_historical_agent_tp.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-comments-1.15.0_14" author="tbozek">
+    <sqlFile path="db/changelog/sql/update_template_match_v2.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-comments-1.15.0_15" author="jgajewski">
+    <sqlFile path="db/changelog/sql/create_template_contextual_agent_fp.sql"/>
+    <sqlFile path="db/changelog/sql/create_template_contextual_agent_tp.sql"/>
+    <sqlFile path="db/changelog/sql/update_template_match_v3.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-comments-1.15.0_16" author="jgajewski">
+    <sqlFile path="db/changelog/sql/update_template_contextual_agent_fp_v2.sql"/>
+    <sqlFile path="db/changelog/sql/update_template_contextual_agent_tp_v2.sql"/>
+    <sqlFile path="db/changelog/sql/update_template_historical_agent_fp_v2.sql"/>
+    <sqlFile path="db/changelog/sql/update_template_historical_agent_tp_v2.sql"/>
+  </changeSet>
+</databaseChangeLog>

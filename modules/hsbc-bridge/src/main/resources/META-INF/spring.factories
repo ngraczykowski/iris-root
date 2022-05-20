@@ -1,0 +1,6 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.silenteight.hsbc.bridge.grpc.autoconfigure.GrpcConfiguration
+
+org.springframework.context.ApplicationListener=\
+  com.silenteight.hsbc.bridge.util.environment.EnvironmentLoggingApplicationListener
+

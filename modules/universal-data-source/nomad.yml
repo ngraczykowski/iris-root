@@ -1,0 +1,5 @@
+branches:
+  master:
+  release-1.10:
+    - mike
+    - dev

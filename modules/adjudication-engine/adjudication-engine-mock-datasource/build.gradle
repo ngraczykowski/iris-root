@@ -1,0 +1,10 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+}
+
+dependencies {
+  implementation libs.data.source.api
+  implementation libs.data.source.categories.api
+  implementation libs.data.source.comments.api
+  implementation libs.grpc.spring.boot.starter
+}

@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_1" author="wkeska">
+    <createTable tableName="ae_analysis_alert">
+      <column name="analysis_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="alert_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="deadline_at" type="TIMESTAMP"/>
+
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="ae_analysis_alert"
+        baseColumnNames="analysis_id"
+        constraintName="fk_ae_analysis_alert_analysis_id"
+        referencedTableName="ae_analysis"
+        referencedColumnNames="analysis_id"
+        onDelete="CASCADE"
+        onUpdate="CASCADE"/>
+
+    <addForeignKeyConstraint
+        baseTableName="ae_analysis_alert"
+        baseColumnNames="alert_id"
+        constraintName="fk_ae_analysis_alert_alert_id"
+        referencedTableName="ae_alert"
+        referencedColumnNames="alert_id"
+        onDelete="CASCADE"
+        onUpdate="CASCADE"/>
+  </changeSet>
+  <changeSet id="adjudication-engine-analysis-1.5.0_2" author="wkeska">
+    <sqlFile path="db/changelog/sql/remove_duplicated_recommendations.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_3" author="wkeska">
+    <addUniqueConstraint
+        columnNames="analysis_id, alert_id"
+        constraintName="uq_ae_recommendation_analysis_id_alert_id"
+        tableName="ae_recommendation"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_4" author="wkeska">
+    <dropView viewName="ae_analysis_match_feature_vector_elements_query"/>
+    <dropView viewName="ae_analysis_query"/>
+    <dropView viewName="ae_missing_alert_comment_input_query"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_5" author="wkeska">
+    <validCheckSum>8:9974fa9bf1be5cc575c0d8f6e071f2ca</validCheckSum>
+    <createView
+        viewName="ae_analysis_match_feature_vector_elements_query"
+        path="db/changelog/sql/view_ae_analysis_match_feature_vector_elements_query_v3.sql"/>
+    <createView
+        viewName="ae_analysis_query"
+        path="db/changelog/sql/view_ae_analysis_query_v3.sql"/>
+    <createView
+        viewName="ae_missing_alert_comment_input_query"
+        path="db/changelog/sql/view_ae_missing_alert_comment_input_query_v3.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_6" author="wkeska">
+    <sqlFile
+        path="db/changelog/sql/migrate_ae_analysis_alert.sql"/>
+
+    <rollback>
+      <sqlFile path="db/changelog/sql/revert_analysis_alert.sql"/>
+    </rollback>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_7" author="wkeska">
+    <sqlFile
+        path="db/changelog/sql/drop_ae_analysis_alert_query.sql"/>
+
+    <sqlFile
+        path="db/changelog/sql/drop_ae_analysis_alert_trigger.sql"/>
+
+    <sqlFile
+        path="db/changelog/sql/drop_ae_analysis_alert_query_refresh_procedure.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_8" author="wkeska">
+    <addPrimaryKey tableName="ae_analysis_alert"
+                   columnNames="analysis_id, alert_id"
+                   constraintName="pk_ae_analysis_alert_analysis_id_alert_id"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_9" author="ahaczewski">
+    <validCheckSum>8:fddcd3fb263b72d48706b3817cc10e5e</validCheckSum>
+    <dropView viewName="ae_match_feature_vector_elements_query"/>
+
+    <createView
+        viewName="ae_match_categories_agg_query"
+        path="db/changelog/sql/view_ae_match_categories_agg_query.sql"/>
+
+    <createView
+        viewName="ae_match_features_agg_query"
+        path="db/changelog/sql/view_ae_match_features_agg_query.sql"/>
+
+    <createView
+        viewName="ae_match_feature_vector_elements_query"
+        path="db/changelog/sql/view_ae_match_feature_vector_elements_query_v3.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_10" author="ahaczewski">
+    <validCheckSum>8:67d1565fef70e04b973a89060ba42911</validCheckSum>
+    <dropView viewName="ae_analysis_match_feature_vector_elements_query"/>
+
+    <createView
+        viewName="ae_analysis_match_categories_agg_query"
+        path="db/changelog/sql/view_ae_analysis_match_categories_agg_query.sql"/>
+
+    <createView
+        viewName="ae_analysis_match_features_agg_query"
+        path="db/changelog/sql/view_ae_analysis_match_features_agg_query.sql"/>
+
+    <createView
+        viewName="ae_analysis_match_feature_vector_elements_query"
+        path="db/changelog/sql/view_ae_analysis_match_feature_vector_elements_query_v4.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_11" author="ahaczewski">
+    <validCheckSum>8:33ee1da68dea23356001c99bae7e8c5b</validCheckSum>
+    <dropView viewName="ae_analysis_feature_vector_elements_query"/>
+
+    <createView
+        viewName="ae_analysis_categories_agg_query"
+        path="db/changelog/sql/view_ae_analysis_categories_agg_query.sql"/>
+
+    <createView
+        viewName="ae_analysis_features_agg_query"
+        path="db/changelog/sql/view_ae_analysis_features_agg_query.sql"/>
+
+    <createView
+        viewName="ae_analysis_feature_vector_elements_query"
+        path="db/changelog/sql/view_ae_analysis_feature_vector_elements_query_v3.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_12" author="ahaczewski">
+    <validCheckSum>8:240387d9fb563fcddd76a4f9f66c7a66</validCheckSum>
+    <dropView viewName="ae_alert_recommendation_query"/>
+    <dropView viewName="ae_comments_match_context"/>
+    <dropView viewName="ae_comments_feature_context"/>
+
+    <createView
+        viewName="ae_comments_feature_context"
+        path="db/changelog/sql/view_ae_comments_feature_context_v2.sql"/>
+
+    <createView
+        viewName="ae_comments_match_context"
+        path="db/changelog/sql/view_ae_comments_match_context_v3.sql"/>
+
+    <createView
+        viewName="ae_alert_recommendation_query"
+        path="db/changelog/sql/view_ae_alert_recommendation_query.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_14" author="ahaczewski">
+    <sqlFile path="db/changelog/sql/remove_finished_exchanges.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_15" author="ahaczewski">
+    <sqlFile path="db/changelog/sql/create_ae_agent_exchange_match_feature.sql"/>
+    <rollback>
+      <sqlFile path="db/changelog/sql/drop_ae_agent_exchange_match_feature.sql"/>
+    </rollback>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_16" author="ahaczewski">
+    <validCheckSum>8:9d8c38939d3f5d447a66cf4306602464</validCheckSum>
+    <dropView viewName="ae_missing_match_feature_query"/>
+    <dropView viewName="ae_pending_match_feature_query"/>
+
+    <createView
+        viewName="ae_missing_match_feature_query"
+        path="db/changelog/sql/view_ae_missing_match_feature_query_v3.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_17" author="ahaczewski">
+    <dropTable tableName="ae_agent_exchange_match"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_18" author="ahaczewski"
+             runInTransaction="false">
+    <sqlFile path="db/changelog/sql/vacuum_agent_exchange.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_19" author="ahaczewski">
+    <sqlFile path="db/changelog/sql/remove_finished_exchanges_v2.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_20" author="ahaczewski">
+    <createIndex tableName="ae_analysis_alert" indexName="ix_ae_analysis_alert_analysis_id">
+      <column name="analysis_id"/>
+    </createIndex>
+    <createIndex tableName="ae_analysis_alert" indexName="ix_ae_analysis_alert_alert_id">
+      <column name="alert_id"/>
+    </createIndex>
+    <createIndex
+        tableName="ae_pending_recommendation"
+        indexName="ix_ae_pending_recommendation_alert_id">
+      <column name="alert_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_21" author="jgajewski">
+    <validCheckSum>8:981bdc803f9b349b3111dbf5a109fa22</validCheckSum>
+    <dropView viewName="ae_alert_matches_query"/>
+
+    <createView
+        viewName="ae_alert_matches_query"
+        path="db/changelog/sql/view_ae_alert_matches_query_v2.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_22" author="ahaczewski">
+    <validCheckSum>8:89b6191b0d980ff82b268c29c1db97c5</validCheckSum>
+    <dropView viewName="ae_alert_match_solutions_query"/>
+    <createView
+        viewName="ae_alert_match_solutions_query"
+        path="db/changelog/sql/view_ae_alert_match_solutions_query_v3.sql"/>
+
+    <createView
+        viewName="ae_pending_alert_matches_query"
+        path="db/changelog/sql/view_ae_pending_alert_matches_query.sql"/>
+  </changeSet>
+
+  <!--
+    NOTE(ahaczewski): The `adjudication-engine-analysis-1.5.0_23` and `_24` are intentionally
+      left out!
+  -->
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_25" author="ahaczewski">
+    <sqlFile
+        path="db/changelog/sql/analyze_large_tables.sql"/>
+  </changeSet>
+
+</databaseChangeLog>

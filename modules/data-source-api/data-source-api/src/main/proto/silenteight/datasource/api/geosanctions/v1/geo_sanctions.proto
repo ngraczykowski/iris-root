@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package silenteight.datasource.api.geosanctions.v1;
+
+import "google/api/annotations.proto";
+
+option java_package = "com.silenteight.datasource.api.geosanctions.v1";
+option java_outer_classname = "GeoSanctionsProto";
+option java_multiple_files = true;
+
+service GeoSanctionsInputService {
+  rpc BatchVerifySanctions (BatchVerifySanctionsRequest) returns (stream BatchVerifySanctionsResponse) {
+    option (google.api.http) = {
+      post: "/agent-inputs/geosanctions/versions/v1/matches:batchGet"
+      body: "*"
+    };
+  }
+}
+
+message BatchVerifySanctionsRequest {
+  // The list of matches data is requested for, in form of `alerts/<Alert ID>/matches/<Match ID>`.
+  repeated string matches = 1;
+  // The list of features the input data for each match is requested, in form of `features/<Feature ID>`.
+  repeated string features = 2;
+}
+
+message BatchVerifySanctionsResponse {
+  repeated VerifySanctionsInput verify_sanctions_input = 1;
+}
+
+message VerifySanctionsInput {
+  string match = 1;
+  repeated VerifySanctionsFeatureInput verify_sanctions_feature_inputs = 2;
+}
+
+message VerifySanctionsFeatureInput {
+  string feature = 1;
+  Discriminator discriminator = 2;
+  repeated string locations = 3;
+}
+
+message Discriminator {
+  string value = 1;
+}

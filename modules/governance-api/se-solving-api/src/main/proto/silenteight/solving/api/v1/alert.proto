@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package silenteight.solving.api.v1;
+
+import public "silenteight/solving/api/v1/match.proto";
+
+option java_package = "com.silenteight.solving.api.v1";
+option java_outer_classname = "AlertProto";
+option java_multiple_files = true;
+
+// Representation of the alert
+message Alert {
+  // Name of alert resource
+  string name = 1;
+  // Ordered collection of matches
+  repeated Match matches = 2;
+}
+
+// Available analyst solutions that can be set for alert
+enum AnalystSolution {
+  // No flag is set.
+  ANALYST_SOLUTION_UNSPECIFIED = 0;
+  // Solved as false positive.
+  ANALYST_FALSE_POSITIVE = 1;
+  // Solved as potential true positive.
+  ANALYST_POTENTIAL_TRUE_POSITIVE = 2;
+  // Solved as true positive.
+  ANALYST_TRUE_POSITIVE = 3;
+  // Solution that is not final yet.
+  ANALYST_OTHER = 4;
+}

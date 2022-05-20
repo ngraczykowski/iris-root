@@ -1,0 +1,42 @@
+version: "3.5"
+
+services:
+  postgres:
+    image: docker.io/library/postgres:12
+    restart: unless-stopped
+    ports:
+      - "${POSTGRES_PORT:-24880}:5432"
+    environment:
+      POSTGRES_DB: "${POSTGRES_DB:-adjudication-engine}"
+      POSTGRES_USER: "${POSTGRES_USER:-adjudication-engine}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-adjudication-engine}"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - postgres-storage:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 1G
+  ae:
+    image: docker.repo.silenteight.com/ae/adjudication-engine-app:snapshot
+    restart: unless-stopped
+    environment:
+      AE_DB_HOST: "postgres"
+      AE_DB_NAME: "adjudication-engine"
+      AE_DB_USERNAME: "adjudication-engine"
+      AE_DB_PASSWORD: "adjudication-engine"
+
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 1G
+
+volumes:
+  postgres-storage:
+
+networks:
+  default:

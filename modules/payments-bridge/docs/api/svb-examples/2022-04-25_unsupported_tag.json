@@ -1,0 +1,234 @@
+{
+  "Header": null,
+  "Body": {
+    "msg_SendMessage": {
+      "VersionTag": "1",
+      "Authentication": {
+        "UserLogin": "CMAPI_LOGIN",
+        "UserPassword": "abc",
+        "UserRealm": ""
+      },
+      "Messages": [
+        {
+          "Message": {
+            "Hits": [
+              {
+                "Hit": {
+                  "Tag": "{2",
+                  "Score": "0.0",
+                  "Blocking": true,
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionEnd": "51",
+                        "PositionStart": "50"
+                      }
+                    },
+                    {
+                      "Position": {
+                        "PositionEnd": "51",
+                        "PositionStart": "50"
+                      }
+                    }
+                  ],
+                  "EntityText": "RUSSIAN FEDERATION",
+                  "NotBlocking": false,
+                  "HittedEntity": {
+                    "ID": "AS0645400034",
+                    "Type": "O",
+                    "Codes": [],
+                    "Names": [
+                      {
+                        "Name": "*"
+                      }
+                    ],
+                    "Origin": "US_OFAC_ENH_LCTN",
+                    "HideIDs": [],
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:OFAC"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "Cities": [
+                            {
+                              "City": "*"
+                            }
+                          ],
+                          "IsMain": "1",
+                          "States": [],
+                          "Countries": [
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "FEDERATION DE RUSSIE"
+                            },
+                            {
+                              "Country": "ROSSIYA"
+                            },
+                            {
+                              "Country": "ROSSIYSKAYA FEDERATSIYA"
+                            },
+                            {
+                              "Country": "RUSIA"
+                            },
+                            {
+                              "Country": "RUSSIA"
+                            },
+                            {
+                              "Country": "RUSSIAN FEDERATION"
+                            },
+                            {
+                              "Country": "RUSSIE"
+                            },
+                            {
+                              "Country": "RUSSISCHE FODERATION"
+                            },
+                            {
+                              "Country": "RUSSLAND"
+                            }
+                          ],
+                          "PostalAddress": ""
+                        }
+                      }
+                    ],
+                    "HideUnits": [],
+                    "UserData1": "",
+                    "UserData2": "",
+                    "HideInTags": [],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "Designation": "RUSSIAN_FEDERATION",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideOrigins": [],
+                    "IsException": "0",
+                    "Nationality": "",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "AdditionalInfo": "218 main cities:\u0002MOSCOW, ���������, ����������, \u0002������������, SAINT PETERSBURG, NOVOSIBIRSK, YEKATERINBURG, \u0002NIZHNY NOVGOROD, SAMARA, OMSK, KAZAN, \u0002CHELYABINSK, ROSTOV ON DON, UFA, VOLGOGRAD, \u0002KRASNOYARSK, VORONEZH, SARATOV, KRASNODAR, \u0002ALUPKA, ALUSHTA, ARMYANSK, BAKHCHYSARAI, \u0002BILOHIRSK, DZHANKOY, FEODOSIA, KERCH, \u0002KRASNOPEREKOPSK, SAKY, SHCHOLKINE, SIMFEROPOL, \u0002STARY KRYM, SUDAK, YALTA, YEVPATORIA, \u0002CHORNOMORSKE, BALAKLAVA, EUPATORIA, JANKOY, \u0002SHCHELKINO, SHCHYOLKINO, JALTA, SAKI, \u0002THEODOSIA, KAMYSH BURUN, EVPATORIA, CHERNOMORSK, \u0002SEVASTAPOL, SIMFERPOL, CHUFUT KALE, CUFUT QALE, \u0002GURZUF, INKERMAN, KACHA, KOKTEBEL, \u0002KOREIZ, KRASNOKAMIANKA, MANGUP, NOVYI SVET, \u0002NOVYI SVIT, PARTENIT, SCYTHIAN NEAPOLIS, SIMEIZ, \u0002YENI KALE, VLADIVOSTOK, FOROS, KIROVSKY, \u0002MASSANDRA, PERVOMAYSKY, SOVETSKY, CHERNOMOSKOE, \u0002ERMENI BAZAR, BAKHCHISARAY, BAKHCHISARAJ, BELOGORSK, \u0002BILOGIRSK, QARASUVBAZAR, BYELOGORSK, CHERNOMORSKOYE, \u0002KEZLEV, AQMESCIT, YEVPATORIYA, NOVOOZERNE, \u0002BALAKLAVSKYI, ������������, ������������, ����������������, \u0002��������������, ��������������������, ������������������, ��������������������, \u0002������������������, ������������������������, ������������������, ����������������, \u0002��������������������������������, ������������������������������, ����������������������, ��������������, \u0002��������������, ����������, ����������������������, ������������ ��������, \u0002������������ ��������, ALU��TA, BA����ASARAY, BALIQLAVA, \u0002AQME��IT, CANK��Y, ����OLKINO, ESKI QIRIM, \u0002MOSKVA, ALMETYEVSK, ARKHANGELSK, ASTRAKHAN, \u0002BALTIYSK, BARNAUL, BLAGOVESHCHENSK, BRATSK, \u0002CHEBOKSARY, CHEREPOVETS, DUDINKA, IGARKA, \u0002IRKUTSK, KALININGRAD, KHABAROVSK, KHANTY MANSIYSK, \u0002KHOLMSK, KURSK, LIPETSK, MAGADAN, \u0002MAGNITOGORSK, MAKHACHKALA, MURMANSK, MYTISHCHI, \u0002NABEREZHNYE CHELNY, NAKHODKA, NALCHIK, NEMCHINOVKA, \u0002NERYUNGRI, NEVELSK, NOVOROSSIYSK, NOYABRSK, \u0002ODINTSOVO, OZERSKOYE, PETROPAVLOVSK KAMCHATSKIY, PRIMORSK, \u0002PUSHKINO, PYATIGORSK, RYAZAN, SOCHI, \u0002TIKSI, TOGLIATTI, TUAPSE, TYUMEN, \u0002ULYANOVSK, VANINO, VESVOLOZHSK, VITINO, \u0002VLADIKAVKAZ, VOSTOCHNY, VYBORG\u0002",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2022-04-08 14:04:20 RBL"
+                        }
+                      }
+                    ],
+                    "HideSenderReceivers": []
+                  },
+                  "MatchingText": "RU, RU",
+                  "RulesContext": {
+                    "Info": "none",
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0"
+                  },
+                  "SolutionType": "6",
+                  "SynonymIndex": "-1"
+                }
+              }
+            ],
+            "Unit": "US",
+            "Amount": "113822536.50",
+            "Bypass": "0",
+            "Actions": [
+              {
+                "Action": {
+                  "Status": {
+                    "ID": "0",
+                    "Name": "FILTER",
+                    "Checksum": "c4b4872d17cf6fa4f27f06e3b5d93c78",
+                    "RoutingCode": "0"
+                  },
+                  "Comment": "Stop: 1, Nonblocking: 0",
+                  "DateTime": "20220412102713",
+                  "Operator": "Filter Engine"
+                }
+              },
+              {
+                "Action": {
+                  "Status": {
+                    "ID": "-2",
+                    "Name": "NO HIT",
+                    "Checksum": "1080a07f679004254edcc4854e8f66a7",
+                    "RoutingCode": "-2"
+                  },
+                  "Comment": "Stop: 1, Nonblocking: 0",
+                  "DateTime": "20220412102714",
+                  "Operator": "Stripping Engine"
+                }
+              },
+              {
+                "Action": {
+                  "Status": {
+                    "ID": "223",
+                    "Name": "FILTER_S8",
+                    "Checksum": "6a905528e3b9126041bbfe8f59cfe07b",
+                    "RoutingCode": "12"
+                  },
+                  "Comment": "Auto decision",
+                  "DateTime": "20220412102723",
+                  "Operator": "DBCLient"
+                }
+              }
+            ],
+            "Command": "1",
+            "Blocking": "1",
+            "Currency": "RUB",
+            "Priority": "0",
+            "SystemID": "DIN2022034412102706-10824-533",
+            "MessageID": "DC777506-9168-3AF7-E03453-9F04610AA9D7",
+            "ValueDate": "2022/04/12",
+            "CutoffTime": "",
+            "SenderCode": "IMBKRUMMXXX",
+            "CopyService": "",
+            "CreatedDate": "2022/04/12 10:27:06",
+            "IOIndicator": "I",
+            "LastComment": "Suspect(s) detected by OFAC-Agent",
+            "MessageData": "{1:F01HHBKUS6BBBBB0837503996}{2:O9101926220412IMBKRUMMBXXX93140778000004120926N}{3:{108:ECSAMT0000418871}{121:f299c3d8-0121-12c5-b352-1d16b7017419}}{4:\n:20:ABCOFP1123\n:23B:CRED BP00000009LK\n:32A:10606CAD5431,26\n:50K:\/3300565427\nSINA BANK\nABCD LTD\nSADDAM HUSSAIN CUBA Clara\n:59A:nosccatt\nSCOTT PLAZA 40 king street West\nsuite 5800 PO Box 1011\nTORONTO ON MSH 351 Canada\n:71A:SHA\n-}{5:{CHK:370453F95D8E}{TNG:}}",
+            "MessageType": "I-USOTHR",
+            "NonBlocking": "0",
+            "BusinessType": "910",
+            "BusinessUnit": "ROOT",
+            "FilteredDate": "2022/04/12 10:27:13",
+            "LastOperator": "OFAC-Agent",
+            "NextStatuses": [
+              {
+                "Status": {
+                  "ID": "225",
+                  "Name": "S8_ADJ",
+                  "Checksum": "0d14589062b13cbce8cf38f9eb7a22a7",
+                  "RoutingCode": "12"
+                }
+              }
+            ],
+            "ReceiverCode": "SVBKUS6SXXX",
+            "CurrentStatus": {
+              "ID": "223",
+              "Name": "FILTER_S8",
+              "Checksum": "6a905528e3b9126041bbfe8f59cfe07b",
+              "RoutingCode": "12"
+            },
+            "MessageFormat": "SWIFT",
+            "ToApplication": "",
+            "ApplicationCode": "GTEX",
+            "Confidentiality": "0",
+            "SenderReference": "R910220412A6R3X5",
+            "NormalizedAmount": "",
+            "RelatedReference": "NONREF",
+            "ApplicationPriority": "0"
+          }
+        }
+      ]
+    }
+  }
+}

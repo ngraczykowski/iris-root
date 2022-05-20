@@ -1,0 +1,27 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "groovy"
+}
+
+dependencies {
+  implementation project(":sear-payments-bridge-common")
+  implementation project(":sear-payments-bridge-agents")
+  implementation project(":sear-payments-bridge-datasource")
+
+  implementation libs.silenteight.sep.base.common
+
+  implementation libs.spring.boot
+  implementation libs.spring.context
+
+  implementation libs.guava
+  implementation libs.pw.swift.core
+
+  //implementation libs.graalvm.js
+
+  implementation libs.data.source.categories.api
+  implementation libs.data.source.comments.api
+  implementation libs.data.source.agentinput.api
+
+  testImplementation libs.spock.core
+  testImplementation libs.spock.spring
+}

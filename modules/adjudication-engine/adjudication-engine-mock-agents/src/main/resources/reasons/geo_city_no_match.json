@@ -1,0 +1,27 @@
+{
+  "geoCompareResults": [
+    {
+      "type": "COUNTRY",
+      "alertedPartyValue": "CHINA",
+      "watchlistPartyValue": "CHINA"
+    },
+    {
+      "type": "LOCALITY",
+      "matchType": "NO_MATCH",
+      "alertedPartyValue": "URUMQI",
+      "watchlistPartyValue": "XIAN"
+    },
+    {
+      "type": "LOCALITY",
+      "matchType": "NO_MATCH",
+      "alertedPartyValue": "YINING",
+      "watchlistPartyValue": "XIAN"
+    },
+    {
+      "type": "LOCALITY",
+      "matchType": "NO_MATCH",
+      "alertedPartyValue": "XINJIANG",
+      "watchlistPartyValue": "XIAN"
+    }
+  ]
+}

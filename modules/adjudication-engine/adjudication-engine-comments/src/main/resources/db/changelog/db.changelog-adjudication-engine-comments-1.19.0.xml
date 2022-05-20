@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+  <property name="now" value="now()" dbms="postgresql"/>
+
+  <changeSet id="adjudication-engine-comments-1.19.0_1" author="jgajewski">
+    <sqlFile path="db/changelog/sql/update_template_contextual_agent_fp_v3.sql"/>
+    <sqlFile path="db/changelog/sql/update_template_contextual_agent_tp_v3.sql"/>
+    <sqlFile path="db/changelog/sql/update_template_historical_agent_fp_v3.sql"/>
+    <sqlFile path="db/changelog/sql/update_template_historical_agent_tp_v3.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-comments-1.19.0_2" author="jgajewski">
+    <insert tableName="ae_comment_template">
+      <column name="template_name" value="match-utils.ftl"/>
+      <column name="created_at" valueDate="${now}"/>
+      <column name="revision" valueNumeric="2"/>
+      <column name="template" valueClobFile="templates/match-utils.ftl"/>
+    </insert>
+
+    <insert tableName="ae_comment_template">
+      <column name="template_name" value="categories.ftl"/>
+      <column name="created_at" valueDate="${now}"/>
+      <column name="revision" valueNumeric="5"/>
+      <column name="template" valueClobFile="templates/categories.ftl"/>
+    </insert>
+
+    <insert tableName="ae_comment_template">
+      <column name="template_name" value="name-agent.ftl"/>
+      <column name="created_at" valueDate="${now}"/>
+      <column name="revision" valueNumeric="3"/>
+      <column name="template" valueClobFile="templates/name-agent.ftl"/>
+    </insert>
+
+    <insert tableName="ae_comment_template">
+      <column name="template_name" value="organization-name-agent.ftl"/>
+      <column name="created_at" valueDate="${now}"/>
+      <column name="revision" valueNumeric="2"/>
+      <column name="template" valueClobFile="templates/organization-name-agent.ftl"/>
+    </insert>
+
+  </changeSet>
+
+  <changeSet id="adjudication-engine-comments-1.19.0_3" author="wkeska">
+    <insert tableName="ae_comment_template">
+      <column name="template_name" value="match-template.ftl"/>
+      <column name="created_at" valueDate="${now}"/>
+      <column name="revision" valueNumeric="1"/>
+      <column name="template" valueClobFile="templates/match-template.ftl"/>
+    </insert>
+  </changeSet>
+
+
+</databaseChangeLog>

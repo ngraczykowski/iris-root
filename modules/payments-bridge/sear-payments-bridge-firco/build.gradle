@@ -1,0 +1,59 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "groovy"
+}
+
+dependencies {
+  implementation project(":sear-payments-bridge-agents")
+  implementation project(":sear-payments-bridge-common")
+  implementation project(":sear-payments-bridge-datasource")
+  implementation project(":sear-payments-bridge-etl")
+  implementation project(":sear-payments-bridge-mock-agents")
+  implementation project(":sear-payments-bridge-notification")
+  implementation project(":sear-payments-bridge-warehouse")
+  implementation project(":proto-sear-payments-bridge-internal-protos")
+  testImplementation project(":sear-payments-bridge-testing")
+
+  implementation libs.silenteight.sep.base.common
+
+  implementation libs.spring.amqp
+  implementation libs.spring.boot
+  implementation libs.spring.boot.starter.oauth2.client
+  implementation libs.spring.context
+  implementation libs.spring.security.core
+  implementation libs.spring.web
+  implementation libs.spring.webmvc
+  implementation libs.spring.data.jpa
+
+  implementation libs.grpc.client.spring.boot.starter
+  implementation libs.grpc.server.spring.boot.starter
+
+  implementation libs.guava
+  implementation libs.hibernate.validator
+  implementation libs.hibernate.types
+  implementation libs.jackson.annotations
+  implementation libs.jackson.databind
+  implementation libs.jackson.dataformat.csv
+  implementation libs.jakarta.annotation.api
+  implementation libs.jakarta.validation.api
+  implementation libs.opencsv
+  implementation libs.protobuf.java.util
+  implementation libs.shedlock.spring
+
+  implementation libs.data.source.api
+  implementation libs.data.source.categories.api
+  implementation libs.data.source.comments.api
+  implementation libs.data.source.agentinput.api
+  implementation libs.micrometer.prometheus
+
+  testImplementation libs.silenteight.sep.base.testing
+  testImplementation libs.spring.security.test
+
+  implementation libs.adjudication.engine.api
+
+  // Tests
+  testImplementation libs.junit.jupiter.api
+  testImplementation libs.grpc.testing
+
+  testRuntimeOnly libs.junit.jupiter.engine
+}

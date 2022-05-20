@@ -1,0 +1,229 @@
+{
+  "Header": null,
+  "Body": {
+    "msg_SendMessage": {
+      "VersionTag": "1",
+      "Authentication": {
+        "UserLogin": "username",
+        "UserPassword": "password",
+        "UserRealm": ""
+      },
+      "Messages": [
+        {
+          "Message": {
+            "Unit": "HB-UK",
+            "BusinessUnit": "string",
+            "MessageID": "2020061300000008",
+            "SystemID": "MTH20210106102116-00003-16630",
+            "Bypass": "0",
+            "Command": "1",
+            "BusinessType": "MCTSMTHO",
+            "MessageType": "103",
+            "IOIndicator": "O",
+            "SenderReference": "MX020054487902B",
+            "Currency": "AUD",
+            "Amount": "123.00",
+            "ApplicationCode": "STAR0026",
+            "ToApplication": "",
+            "MessageFormat": "SWIFT",
+            "SenderCode": "SCBLSGS0AZPB",
+            "ReceiverCode": "WPACAU2SXXXX",
+            "ApplicationPriority": "0",
+            "CutoffTime": "",
+            "NormalizedAmount": "",
+            "MessageData": "{1:F01SCBLINBBAXXX0000000000}{2:I199BOKLNPKAXXXXN}{3:{108:IR36701908280002}}{4:\n:20:IR36701908280002\n:50F:IT36701908273410\n1/SMITH ANONYM\n2/299, PARK AVENUE\n3/US/NEW YORK, NY 10017\n:79:REFER YOUR MT103\nDATED 27/08/2019\nVIDE REF XYZJOHNABEXYZ\nFOR INR 98940.00\nPLS BE ADVISED THAT WE HAVE\nEFFECTED PAYMENT AS PER YOUR INSTN.\nHOWEVER FUNDS WERE RETURNED BY\nBENE BANK REASON BEING\nA/C DOES NOT EXIST\nWE CONFIRM HAVING CREDITED YOUR\nACCOUNT WITH US FOR INR 98645.00\nDATED 28/08/2019\nBEING REFUND OF THE CAPTIONED\nMESSAGE.NET OUR CHARGES\nKINDLY SEND US FRESH PYMT INSTN\nIF YOU STILL WISH\nTO EFFECT THE PYMT WITHOUT QUOTING\nPREVIOUS REFERENCES.\nOUR REF IT36701908273410\nREGARDS\nPAYMENTS PROCESSING CENTRE\nINDIA\nKIND ATTENTION - TO ENSURE PRECISE\nPROCESSING OF TRANSACTIONS, PLEASE\nPROVIDE CORRECT IFSC CODE OF THE\nBENEFICIARY BANK.\n-}",
+            "LastComment": "UAT",
+            "LastOperator": "1533636",
+            "ValueDate": "2018/06/19",
+            "FilteredDate": "2021/01/06 10:21:16",
+            "RelatedReference": "MX020054487902A",
+            "CreatedDate": "2021/01/06 10:21:16",
+            "Priority": "40",
+            "Confidentiality": "0",
+            "Blocking": "2",
+            "NonBlocking": "0",
+            "CopyService": "",
+            "Hits": [
+              {
+                "Hit": {
+                  "MatchingText": "PARK",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "378",
+                        "PositionEnd": "389"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50F",
+                  "SolutionType": "1",
+                  "SynonymIndex": "1",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "40",
+                    "Confidentiality": "0",
+                    "Info": "+SCSTAR PRIORITY SG"
+                  },
+                  "EntityText": "JAY PARK",
+                  "HittedEntity": {
+                    "ID": "TEST000051",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": ""
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "JAY PARK"
+                      },
+                      {
+                        "Name": "JAY PARK ABC"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                            {
+                              "City": "Dunkerque"
+                            }
+                          ],
+                          "States": [
+                            {
+                              "State": "Nord-Pas-de-Calais-Pikardia"
+                            }
+                          ],
+                          "Countries": [
+                            {
+                              "Country": "France"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "EU",
+                    "Designation": "NORTH_KOREA",
+                    "Keywords": [
+                      {
+                        "Keyword": "none"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                      {
+                        "Code": {
+                          "Name": "BA366700",
+                          "Type": "Passport"
+                        }
+                      }
+                    ],
+                    "AdditionalInfo": "",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "June 6th 1944"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "Calais"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [],
+                    "HideIDs": [],
+                    "HideOrigins": [],
+                    "HideInTags": [],
+                    "HideUnits": [],
+                    "HideSenderReceivers": []
+                  }
+                }
+              }
+            ],
+            "Actions": [
+              {
+                "Action": {
+                  "DateTime": "20210106102116",
+                  "Operator": "Filter Engine",
+                  "Comment": "Stop: 23, Nonblocking: 0",
+                  "Status": {
+                    "ID": "0",
+                    "Name": "FILTER",
+                    "RoutingCode": "0",
+                    "Checksum": "c4b4872d17cf6fa4f27f06e3b5d93c78"
+                  }
+                }
+              },
+              {
+                "Action": {
+                  "DateTime": "20210106102117",
+                  "Operator": "Stripping Engine",
+                  "Comment": "Stop: 23, Nonblocking: 0",
+                  "Status": {
+                    "ID": "-2",
+                    "Name": "NO HIT",
+                    "RoutingCode": "-2",
+                    "Checksum": "1080a07f679004254edcc4854e8f66a7"
+                  }
+                }
+              },
+              {
+                "Action": {
+                  "DateTime": "20210106103416",
+                  "Operator": "1548822",
+                  "Comment": "1548822 opened this message",
+                  "Status": {
+                    "ID": "-1000",
+                    "Name": "N/A",
+                    "RoutingCode": "-1",
+                    "Checksum": "7163dc6253aa3c4467fdcb2ad60600df"
+                  }
+                }
+              }
+            ],
+            "CurrentStatus": {
+              "ID": "211",
+              "Name": "PI_BOOK1",
+              "RoutingCode": "12",
+              "Checksum": "bb6c8712a888eff9122d0f1709da063d"
+            },
+            "NextStatuses": [
+              {
+                "ID": "1",
+                "Name": "PASSED",
+                "RoutingCode": "2",
+                "Checksum": "bc67fdf269178b4bd32ac055fd2738d6"
+              },
+              {
+                "ID": "2",
+                "Name": "FAILED",
+                "RoutingCode": "3",
+                "Checksum": "bfb1776a1ec2d4a85ed14b2e370f5e61"
+              },
+              {
+                "ID": "201",
+                "Name": "CASE_CREATED",
+                "RoutingCode": "12",
+                "Checksum": "8117a4d7693553f41cc80089984c6c3b"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

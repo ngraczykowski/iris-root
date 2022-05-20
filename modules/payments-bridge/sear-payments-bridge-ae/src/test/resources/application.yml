@@ -1,0 +1,4 @@
+pb:
+  jdbc:
+    analysis-query:
+      new-analysis-interval: 30m

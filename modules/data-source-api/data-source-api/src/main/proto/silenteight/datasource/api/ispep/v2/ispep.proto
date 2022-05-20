@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package silenteight.datasource.api.ispep.v2;
+
+import "google/api/annotations.proto";
+import "google/protobuf/struct.proto";
+
+option java_package = "com.silenteight.datasource.api.ispep.v2";
+option java_outer_classname = "IsPepProto";
+option java_multiple_files = true;
+
+service IsPepInputService {
+  rpc BatchGetMatchIsPepInputs (BatchGetMatchIsPepInputsRequest) returns (stream BatchGetMatchIsPepInputsResponse) {
+    option (google.api.http) = {
+      post: "/agent-inputs/ispep/versions/v2/matches:batchGet"
+      body: "*"
+    };
+  }
+}
+
+message BatchGetMatchIsPepInputsRequest {
+  repeated string matches = 1;
+  repeated string features = 2;
+}
+
+message BatchGetMatchIsPepInputsResponse {
+  repeated IsPepInput is_pep_inputs = 1;
+}
+
+message IsPepInput {
+  string match = 1;
+  IsPepFeatureInput is_pep_feature_input = 2;
+}
+
+message IsPepFeatureInput {
+  string feature = 1;
+  WatchlistItem watchlist_item = 2;
+  AlertedPartyItem alerted_party_item = 3;
+}
+
+message WatchlistItem {
+  string id = 1; // watchlist uid
+  string type = 2; // e.g. WorldCheckIndividuals | WorldCheckEntities | PrivateListIndividuals | PrivateListEntities
+  repeated string countries = 3;
+  string further_information = 4;
+  repeated string linked_peps_uids = 5;
+}
+
+message AlertedPartyItem {
+  string country = 1; // e.g ap EdqLobCountries
+}

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet id="adjudication-engine-analysis-1.3.0_1" author="tbozek">
+    <validCheckSum>8:6761779ff4bd714092ac961b4f6b65f5</validCheckSum>
+    <createView
+        viewName="ae_missing_match_category_values_query"
+        path="db/changelog/sql/view_ae_missing_match_category_values_query.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.3.0_2" author="ahaczewski">
+    <validCheckSum>8:f8823872b57b81b75742abf95c591cb8</validCheckSum>
+    <createView
+        viewName="ae_agent_exchange_feature_query"
+        path="db/changelog/sql/view_ae_agent_exchange_feature_query.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.3.0_3" author="tbozek">
+    <validCheckSum>8:155f9b807f5f90fddf747954bbc39b32</validCheckSum>
+    <createView
+        viewName="ae_missing_alert_comment_input_query"
+        path="db/changelog/sql/view_ae_missing_alert_comment_input_query.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.3.0_4" author="ahaczewski">
+    <validCheckSum>8:c453e906f58617a10caadc1ea30c26e8</validCheckSum>
+    <createView
+        viewName="ae_analysis_feature_vector_elements_query"
+        path="db/changelog/sql/view_ae_analysis_feature_vector_elements_query.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.3.0_5" author="ahaczewski">
+    <validCheckSum>8:24f8f19c0c85c4e178fae7dd4e99272d</validCheckSum>
+    <createView
+        viewName="ae_match_feature_vector_elements_query"
+        path="db/changelog/sql/view_ae_match_feature_vector_elements_query.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.3.0_6" author="ahaczewski">
+    <dropView viewName="ae_analysis_feature_vector_elements_query"/>
+    <dropView viewName="ae_match_feature_vector_elements_query"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.3.0_7" author="ahaczewski">
+    <validCheckSum>8:95ba6449b3ad20b3f15546045c20b00e</validCheckSum>
+    <createView
+        viewName="ae_analysis_feature_vector_elements_query"
+        path="db/changelog/sql/view_ae_analysis_feature_vector_elements_query_v2.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.3.0_8" author="ahaczewski">
+    <validCheckSum>8:00b40f62f2ca21ed45d85cb6970b9428</validCheckSum>
+    <createView
+        viewName="ae_match_feature_vector_elements_query"
+        path="db/changelog/sql/view_ae_match_feature_vector_elements_query_v2.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.3.0_9" author="wkeska">
+    <addColumn tableName="ae_match_solution">
+      <column name="reason" type="JSONB"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.3.0_10" author="ahaczewski">
+    <dropView viewName="ae_missing_match_category_values_query"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.3.0_11" author="ahaczewski">
+    <validCheckSum>8:c14928adb75801874db9ed1b5cf5e2e6</validCheckSum>
+    <createView
+        viewName="ae_missing_match_category_values_query"
+        path="db/changelog/sql/view_ae_missing_match_category_values_query_v2.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.3.0_12" author="wkeska">
+    <validCheckSum>8:5f8ec7c5804ca0e9e63db078e7777983</validCheckSum>
+    <createView viewName="ae_alert_match_solutions_query"
+                path="db/changelog/sql/view_ae_alert_match_solutions_query.sql"/>
+
+    <createView viewName="ae_alert_matches_query"
+                path="db/changelog/sql/view_ae_alert_matches_query.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.3.0_13" author="wkeska">
+    <dropColumn tableName="ae_recommendation"
+                columnName="recommendation_comment"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.3.0_14" author="ahaczewski">
+    <dropView viewName="ae_missing_alert_comment_input_query"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.3.0_15" author="ahaczewski">
+    <validCheckSum>8:02df05f38853edb72ce093852e9a47f1</validCheckSum>
+    <createView viewName="ae_missing_alert_comment_input_query"
+                path="db/changelog/sql/view_ae_missing_alert_comment_input_query_v2.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.3.0_16" author="wkeska">
+    <validCheckSum>8:24bbd7744cbe5570a3c3b2585399a7f2</validCheckSum>
+    <createView viewName="ae_comments_category_context"
+                path="db/changelog/sql/view_ae_comments_category_context.sql"/>
+    <createView viewName="ae_comments_feature_context"
+                path="db/changelog/sql/view_ae_comments_feature_context.sql"/>
+    <createView viewName="ae_comments_match_context"
+                path="db/changelog/sql/view_ae_comments_match_context.sql"/>
+    <createView viewName="ae_comments_context"
+                path="db/changelog/sql/view_ae_comments_context.sql"/>
+  </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,17 @@
+rootProject.name = "sep-base"
+includeBuild('../../platforms')
+includeBuild('../../build-logic')
+
+
+dependencyResolutionManagement {
+  versionCatalogs {
+    libs {
+      from(files("../../gradle/libs.versions.toml"))
+    }
+  }
+}
+
+// NOTE(ahaczewski): Keep sorted alphabetically.
+include "sep-base-aspects"
+include "sep-base-common"
+include "sep-base-testing"

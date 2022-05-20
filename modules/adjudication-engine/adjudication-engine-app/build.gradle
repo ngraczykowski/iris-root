@@ -1,0 +1,123 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "maven-publish"
+  id "com.silenteight.iris.build.spring-boot-application"
+  id "com.silenteight.iris.build.container-image"
+}
+
+description = "Adjudication Engine Application"
+
+dependencies {
+  implementation project(":adjudication-engine-alerts")
+  implementation project(":adjudication-engine-analysis")
+  implementation project(":adjudication-engine-comments")
+  implementation project(":adjudication-engine-common")
+  implementation project(":adjudication-engine-dataset")
+  implementation project(":adjudication-engine-features")
+  implementation project(":proto-adjudication-engine-internal-protos")
+  implementation project(":adjudication-engine-metrics")
+  implementation project(":adjudication-engine-mock-agents")
+  implementation project(":adjudication-engine-mock-datasource")
+  implementation project(":adjudication-engine-mock-governance")
+  implementation project(":adjudication-engine-solving")
+  implementation project(":adjudication-engine-trace")
+
+  implementation libs.spring.cloud.consul.discovery
+  implementation libs.spring.cloud.starter.consul.config
+
+  // Utilities
+  implementation libs.commons.lang3
+  implementation libs.commons.text
+  implementation libs.guava
+  implementation libs.shedlock.spring
+  implementation libs.shedlock.jdbc.provider
+  runtimeOnly libs.ecs.logging.core
+  runtimeOnly libs.logback.ecs.encoder
+
+  // Base libs
+  implementation libs.silenteight.sep.base.common
+  implementation libs.silenteight.commons.app
+  implementation libs.sear.rabbitmq.common.schema
+
+  // Application Starters
+  implementation libs.spring.boot.starter.actuator
+  implementation libs.spring.boot.starter.logging
+  implementation libs.spring.boot.starter.webflux
+  implementation libs.spring.boot.starter.oauth2.resource.server
+  implementation libs.spring.boot.starter.oauth2.client
+  implementation libs.spring.boot.starter.security
+  implementation libs.micrometer.prometheus
+
+  // Sentry
+  runtimeOnly libs.sentry.spring.boot.starter
+  runtimeOnly libs.sentry.logback
+
+  // Security
+  implementation libs.spring.security.config
+  implementation libs.spring.security.core
+  implementation libs.spring.security.web
+
+  // Spring Sleuth
+  implementation libs.spring.cloud.starter.sleuth
+
+  // Validator
+  implementation libs.tomcat.embed.el
+  implementation libs.hibernate.validator
+
+  // APIs
+  implementation libs.jakarta.persistence.api
+  implementation libs.jakarta.transaction.api
+
+  // Jackson
+  implementation libs.jackson.annotations
+  implementation libs.jackson.databind
+  runtimeOnly libs.jackson.dataformat.xml
+  runtimeOnly libs.jackson.datatype.jdk8
+  runtimeOnly libs.jackson.datatype.jsr310
+  runtimeOnly libs.jackson.module.afterburner
+  runtimeOnly libs.jackson.module.paranamer
+  runtimeOnly libs.jackson.module.parameter.names
+
+  // Database
+  implementation libs.liquibase.core
+  implementation libs.spring.jdbc
+  implementation libs.spring.data.jpa
+  implementation libs.hikari.cp
+  implementation libs.hibernate.core
+  runtimeOnly libs.postgresql
+  runtimeOnly libs.hibernate.jcache
+  runtimeOnly libs.caffeine
+  runtimeOnly libs.caffeine.jcache
+  runtimeOnly libs.liquibase.sessionlock
+
+  // Messaging
+  implementation libs.amqp.client
+  implementation libs.lz4.java
+  implementation libs.spring.boot.starter.integration
+  implementation libs.spring.integration.amqp
+  implementation libs.spring.integration.core
+  implementation libs.spring.integration.http
+
+  // GRPC
+  implementation libs.brave.instrumentation.grpc
+  implementation libs.grpc.server.spring.boot.starter
+  implementation libs.grpc.client.spring.boot.starter
+
+  // AspectJ
+  implementation libs.aspectjrt
+  aspect libs.silenteight.sep.base.aspects
+  compileOnly libs.spring.web
+  compileOnly libs.spring.tx
+  // Testing
+  testImplementation libs.junit.jupiter.api
+  testImplementation libs.silenteight.sep.base.testing
+  testImplementation libs.adjudication.engine.api
+  testImplementation libs.awaitility
+  testImplementation libs.spring.boot.starter.test
+}
+
+jar {
+  manifest {
+    attributes "Main-Class": "com.silenteight.adjudication.engine.app.AdjudicationEngineApplication"
+  }
+}

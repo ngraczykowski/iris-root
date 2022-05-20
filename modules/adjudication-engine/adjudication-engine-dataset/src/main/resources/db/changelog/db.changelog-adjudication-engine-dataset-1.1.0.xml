@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="adjudication-engine-dataset-1.1.0-1" author="tbozek">
+    <renameColumn tableName="ae_dataset" oldColumnName="create_time" newColumnName="created_at"/>
+  </changeSet>
+
+
+  <changeSet id="adjudication-engine-dataset-1.1.0-2" author="jgajewski">
+    <dropForeignKeyConstraint
+        baseTableName="ae_dataset_alert"
+        constraintName="fk_ae_ae_dataset_alerts_alert_id"/>
+
+    <addForeignKeyConstraint
+        baseTableName="ae_dataset_alert"
+        baseColumnNames="alert_id"
+        constraintName="fk_ae_ae_dataset_alerts_alert_id"
+        referencedTableName="ae_alert"
+        referencedColumnNames="alert_id"
+        onDelete="CASCADE"/>
+  </changeSet>
+</databaseChangeLog>

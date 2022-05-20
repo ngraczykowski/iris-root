@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package silenteight.datasource.api.contextuallearning.v1;
+
+import "google/api/annotations.proto";
+
+option java_package = "com.silenteight.datasource.api.contextuallearning.v1";
+option java_outer_classname = "ContextualLearningProto";
+option java_multiple_files = true;
+
+service ContextualLearningInputService {
+  rpc BatchGetMatchContextualLearningInputs (BatchGetMatchContextualLearningInputsRequest) returns (stream BatchGetMatchContextualLearningInputsResponse) {
+    option (google.api.http) = {
+      post: "/agent-inputs/contextuallearning/versions/v1/matches:batchGet"
+      body: "*"
+    };
+  }
+}
+
+message BatchGetMatchContextualLearningInputsRequest {
+  // The list of matches data is requested for, in form of `alerts/<Alert ID>/matches/<Match ID>`.
+  repeated string matches = 1;
+  // The list of features the input data for each match is requested, in form of `features/<Feature ID>`.
+  repeated string features = 2;
+}
+
+message BatchGetMatchContextualLearningInputsResponse {
+  repeated ContextualLearningInput contextual_learning_inputs = 1;
+}
+
+message ContextualLearningInput {
+  string match = 1;
+  repeated ContextualLearningFeatureInput contextual_learning_feature_input = 2;
+}
+
+message ContextualLearningFeatureInput {
+  string feature = 1;
+  string match_text = 2;
+  string matching_field = 3;
+  WatchlistParty watchlist_party = 4;
+  Discriminator discriminator = 5;
+}
+
+message WatchlistParty {
+  string id = 1;
+  string type = 2;
+}
+
+message Discriminator {
+  string value = 1;
+}

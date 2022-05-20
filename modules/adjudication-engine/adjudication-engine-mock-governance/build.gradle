@@ -1,0 +1,8 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+}
+
+dependencies {
+  implementation libs.governance.solving.api
+  implementation libs.grpc.spring.boot.starter
+}

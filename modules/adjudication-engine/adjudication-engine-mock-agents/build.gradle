@@ -1,0 +1,23 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+}
+
+dependencies {
+  implementation project(":adjudication-engine-common")
+
+  implementation libs.agents.api
+
+  implementation libs.grpc.spring.boot.starter
+  implementation libs.rabbitmq.mock
+  implementation libs.spring.amqp
+  implementation libs.spring.amqp.rabbit
+
+
+  implementation libs.amqp.client
+  implementation libs.lz4.java
+  implementation libs.spring.boot.starter.integration
+  implementation libs.spring.integration.amqp
+  implementation libs.spring.integration.core
+
+  implementation libs.protobuf.java.util
+}

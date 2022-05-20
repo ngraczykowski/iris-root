@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <property name="type.json" value="TEXT" dbms="postgresql"/>
+  <property name="type.json" value="MEDIUMTEXT" dbms="mysql"/>
+  <property name="type.json" value="LONGVARCHAR" dbms="hsqldb"/>
+
+  <property name="type.text" value="TEXT" dbms="postgresql"/>
+  <property name="type.text" value="MEDIUMTEXT" dbms="mysql"/>
+  <property name="type.text" value="LONGVARCHAR" dbms="hsqldb"/>
+
+  <property name="type.uuid" value="UUID" dbms="postgresql, hsqldb"/>
+  <property name="type.uuid" value="BINARY(16)" dbms="mysql"/>
+
+  <property dbms="postgresql" name="type.blob" value="bytea"/>
+  <property dbms="oracle" name="type.blob" value="blob"/>
+</databaseChangeLog>

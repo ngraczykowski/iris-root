@@ -1,0 +1,173 @@
+/*
+ * Copyright (c) 2022 Silent Eight Pte. Ltd. All rights reserved.
+ */
+
+@Library('pipeline-shared-library@master') _
+
+def version = ""
+def distributions = ["hotel", "sierra", "foxtrot"]
+
+pipeline {
+  agent {
+    label 'ec2-agent-devenv'
+  }
+  triggers {
+    pollSCM 'H 5-17 * * 1-5'
+  }
+  options {
+    disableConcurrentBuilds()
+    ansiColor('xterm')
+  }
+  stages {
+    stage('Version') {
+      steps {
+        script {
+          version = sh(returnStdout: true, script: './scripts/get-version.sh').trim()
+        }
+
+        updateBuildName displayName: "#${env.BUILD_NUMBER} v${version}"
+      }
+    }
+    stage('Kubernetes Release') {
+      matrix {
+        axes {
+          axis {
+            name 'ENVIRONMENT'
+            values 'sierra', 'hotel', 'foxtrot'
+          }
+        }
+        environment {
+          ARTIFACTORY = credentials('artifactory-user')
+          E2E_TESTS_CREDS = credentials('karate-username-password')
+          INGRESS_HOST = "${ENVIRONMENT}-jenkins-pipeline.prv.dev.s8ops.com"
+          BASE_URL = "https://${env.INGRESS_HOST}"
+        }
+        stages {
+          stage('Install chart') {
+            steps {
+              echo "Deploying version ${version} to ${ENVIRONMENT}"
+
+              withKubeConfig(
+                  credentialsId: 'devenv-eks',
+                  serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
+                sh """
+                  helm install \
+                    --create-namespace \
+                    --namespace jenkins-${ENVIRONMENT} \
+                    --username "\$ARTIFACTORY_USR" \
+                    --password "\$ARTIFACTORY_PSW" \
+                    --values kubernetes/values.core.yaml \
+                    --values kubernetes/values.ingress-internal.yaml  \
+                    --values kubernetes/values.${ENVIRONMENT}.yaml \
+                    --set ingress.hosts[0]=${INGRESS_HOST} \
+                    --wait \
+                    --timeout 12m \
+                    sear \
+                    https://repo.silenteight.com/artifactory/helm/sear/sear-"${version}".tgz
+                """
+              }
+            }
+            post {
+              failure {
+                echo "Deployment of ${version} to ${ENVIRONMENT} failed!"
+                withKubeConfig(
+                    credentialsId: 'devenv-eks',
+                    serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
+                  sh """
+                    export NAMESPACE=jenkins-${ENVIRONMENT}
+                    export LOGS_DIR=logs/${ENVIRONMENT}
+
+                    mkdir -p "\$LOGS_DIR"
+
+                    kubectl get pods \
+                      --namespace \$NAMESPACE \
+                      --output wide \
+                      --sort-by '.status.containerStatuses[0].restartCount' | tee "\$LOGS_DIR"/${ENVIRONMENT}_pods.log
+
+                    kubectl get events \
+                      --namespace \$NAMESPACE \
+                      --sort-by='.metadata.creationTimestamp' | tee "\$LOGS_DIR"/${ENVIRONMENT}_events.log
+
+                    FAILED_PODS=\$(set +x && kubectl get pods \
+                      --namespace \$NAMESPACE \
+                      --output=custom-columns="POD:metadata.name" \
+                      --no-headers)
+                    for pod in \$FAILED_PODS ; do
+                      kubectl --namespace \$NAMESPACE logs --previous \$pod >"\$LOGS_DIR"/${ENVIRONMENT}_\$pod.previous.log || true
+                      kubectl --namespace \$NAMESPACE logs \$pod >"\$LOGS_DIR"/${ENVIRONMENT}_\$pod.log || true
+                    done
+                  """
+                }
+                archiveArtifacts allowEmptyArchive: true, artifacts: "logs/${ENVIRONMENT}/*"
+              }
+            }
+          }
+          stage("E2E Tests") {
+            steps {
+              withGradle {
+                withCredentials(
+                    [usernamePassword(
+                        credentialsId: 'artifactory-user',
+                        usernameVariable: 'S8_REPO_USER',
+                        passwordVariable: 'S8_REPO_PASSWORD'),
+                     usernamePassword(
+                         credentialsId: 'karate-username-password',
+                         usernameVariable: 'E2E_TESTS_CREDS_USR',
+                         passwordVariable: 'E2E_TESTS_CREDS_PWD'
+                     )]) {
+                  script {
+                    echo "Starting E2E tests for ${ENVIRONMENT} environment."
+                    sh """
+                      cd tests/e2e-tests
+
+                      ../../gradlew test \
+                      -Dcucumber.features=src/test/java/features/SmokeTests.feature \
+                      -Dcucumber.plugin=json:report-\${ENVIRONMENT}.json \
+                      -Dtest.isRegression=false \
+                      -Dtest.clientId=dev-frontend \
+                      -Dtest.username="\$E2E_TESTS_CREDS_USR" \
+                      -Dtest.password="\$E2E_TESTS_CREDS_PWD" \
+                      -Dtest.url="\$BASE_URL" \
+                      --info --stacktrace
+                    """
+                  }
+                }
+              }
+            }
+            post {
+              always {
+                cucumber fileIncludePattern: "**/report-${env.ENVIRONMENT}.json",
+                    reportTitle: env.ENVIRONMENT
+              }
+            }
+
+          }
+        }
+        post {
+          cleanup {
+            withKubeConfig(
+                credentialsId: 'devenv-eks',
+                serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
+              sh "helm uninstall --namespace jenkins-${ENVIRONMENT} sear"
+            }
+          }
+        }
+      }
+    }
+  }
+  post {
+    success {
+      slackSend color: "good", channel: 'C03D4GD7RHP', attachments: [
+          [
+              color      : "good",
+              author_name: ':rocket: Iris Release',
+              author_link: env.JOB_DISPLAY_URL,
+              title      : "${currentBuild.fullProjectName} build passed <${env.RUN_DISPLAY_URL}|${currentBuild.displayName}>."
+          ]
+      ]
+    }
+    //failure {
+    //notifyBuild color: 'danger', channel: 'C03D4GD7RHP', title: ':rocket: Iris Release'
+    //}
+  }
+}

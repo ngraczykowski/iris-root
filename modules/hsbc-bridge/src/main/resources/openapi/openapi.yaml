@@ -1,0 +1,1698 @@
+openapi: 3.0.1
+info:
+  title: HSCB-Bridge-batch API
+  description: HSCB-Bridge-batch API
+  version: 1.0.0
+
+paths:
+  /async/batch/v1/{batchId}/recommend:
+    parameters:
+      - name: batchId
+        in: path
+        required: true
+        description: The id batch job.
+        schema:
+          type: string
+    post:
+      summary: Submit batch of alerts for async recommendations.
+      requestBody:
+        description: BatchId and list of alerts to recommend.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Alerts'
+      responses:
+        '200':
+          description: Confirmation of accepting batch.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchAcceptedResponse'
+
+  /async/batch/v1/{batchId}/learning:
+    parameters:
+      - name: batchId
+        in: path
+        required: true
+        description: The id batch job.
+        schema:
+          type: string
+    post:
+      summary: Submit batch of alerts for learning.
+      requestBody:
+        description: BatchId and list of alerts for learning processes.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Alerts'
+      responses:
+        '200':
+          description: Confirmation of accepting batch.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchAcceptedResponse'
+
+  /async/batch/v1/ingestRecommendations:
+    post:
+      summary: Submit recommendations.
+      requestBody:
+        description: BatchId and list of recommended alerts.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchSolvedAlertsResponse'
+      responses:
+        '200':
+          description: Confirmation of ingesting alerts.
+          content:
+            application/json:
+              example: ''
+
+  /async/batch/v1/{batchId}/status:
+    get:
+      summary: Status of batch processing for given ID
+      parameters:
+        - name: batchId
+          in: path
+          required: true
+          description: The id batch job.
+          schema:
+            type: string
+      responses:
+        200:
+          description: List of requested alerts with status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchStatusResponse'
+
+  /async/batch/v1/{batchId}/ack:
+    put:
+      summary: Update batch status for given ID
+      parameters:
+        - name: batchId
+          in: path
+          required: true
+          description: The id batch job.
+          schema:
+            type: string
+      responses:
+        200:
+          description: List of requested alerts with status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchStatusResponse'
+
+  /async/batch/v1/processingStatus:
+    get:
+      summary: Status of batch processing for all batches
+      responses:
+        200:
+          description: Boolean value if AE processing or not.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BatchProcessingStatusResponse"
+
+  /async/batch/v1/{batchId}/result:
+    get:
+      summary: Get results from batch job.
+      parameters:
+        - name: batchId
+          in: path
+          required: true
+          description: The id batch job.
+          schema:
+            type: string
+      responses:
+        200:
+          description: List of alerts with recommendation.
+          content:
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/BatchSolvedAlertsResponse'
+
+  /async/batch/v1/{batchId}/cancel:
+    get:
+      summary: Cancel batch with given id.
+      parameters:
+        - name: batchId
+          in: path
+          required: true
+          description: The id batch job.
+          schema:
+            type: string
+      responses:
+        200:
+          description: Batch with given has been canceled.
+          content:
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/BatchCancelResponse'
+
+  /model:
+    get:
+      summary: Get current model version
+      responses:
+        200:
+          description: Current model version which is used for processing.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleModelResponse"
+
+    post:
+      summary: Submit new model.
+      requestBody:
+        description: Model information.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelInfoRequest'
+      responses:
+        '200':
+          description: Model uploaded.
+
+    put:
+      summary: Update status of new model.
+      requestBody:
+        description: Model information.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelInfoStatusRequest'
+      responses:
+        '200':
+          description: Model uploaded.
+
+  /model/export/**:
+    get:
+      summary: Get exported model
+      responses:
+        200:
+          description: Export model which is generated by Governance.
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /watchlist/v1/upload:
+    post:
+      summary: Upload watchlist files with up to 1GB limit.
+      requestBody:
+        description: One zip file with 5 files inside (3 types of watchlist and 2 md5 files). Parameter name is not necessary - it can also be a null
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                '':
+                  type: object
+                  items:
+                    type: string
+                  format: binary
+      responses:
+        200:
+          description: The watchlist was uploaded successfully.
+
+components:
+  schemas:
+    CountryCtrpScreeningIndividuals:
+      type: object
+      properties:
+        CTRPPRHBListIndividuals.Record Id:
+          title: 'Record id'
+          example: 'recordId'
+          description: 'recordId'
+          type: string
+        CTRPPRHBListIndividuals.Input Stream:
+          type: string
+        CTRPPRHBListIndividuals.Country Code:
+          type: string
+        CTRPPRHBListIndividuals.Type of Match:
+          type: string
+        CTRPPRHBListIndividuals.Country Name:
+          type: string
+        CTRPPRHBListIndividuals.Match Type:
+          type: string
+        CTRPPRHBListIndividuals.OWS Watchlist Name:
+          type: string
+        CTRPPRHBListIndividuals.PRB List Type:
+          type: string
+        CTRPPRHBListIndividuals.CTRP Value:
+          type: string
+        CTRPPRHBListIndividuals.CTRP Level:
+          type: string
+        CTRPPRHBListIndividuals.CTRP Commonality:
+          type: string
+        CTRPPRHBListIndividuals.CTRP Source:
+          type: string
+        CTRPPRHBListIndividuals.CTRP Name Type:
+          type: string
+        CTRPPRHBListIndividuals.CTRP Rule Narrative:
+          type: string
+        CTRPPRHBListIndividuals.AlertKeyFragment:
+          type: string
+    CustomerEntities:
+      type: object
+      properties:
+        CustomerEntities.Record Id:
+          type: string
+        CustomerEntities.Input Stream:
+          type: string
+        CustomerEntities.Source System History ID:
+          type: string
+        CustomerEntities.Close Of Business Date:
+          type: string
+        CustomerEntities.Partition Number:
+          type: string
+        CustomerEntities.Source System Identifier:
+          type: string
+        CustomerEntities.External Profile ID:
+          type: string
+        CustomerEntities.Concatenated Profile ID:
+          type: string
+        CustomerEntities.Profile Type:
+          type: string
+        CustomerEntities.Party Role Type Code:
+          type: string
+        CustomerEntities.Profile Status:
+          type: string
+        CustomerEntities.Profile Segment:
+          type: string
+        CustomerEntities.LoB Name:
+          type: string
+        CustomerEntities.LoB Region:
+          type: string
+        CustomerEntities.LoB Country:
+          type: string
+        CustomerEntities.HSBC Legal Entity Code:
+          type: string
+        CustomerEntities.Name Category Code:
+          type: string
+        CustomerEntities.NameTypeCode:
+          type: string
+        CustomerEntities.Name Language Type Code:
+          type: string
+        CustomerEntities.Entity Name (Original):
+          type: string
+        CustomerEntities.PEP Indicator:
+          type: string
+        CustomerEntities.Special Category Customer:
+          type: string
+        CustomerEntities.Source Address Type:
+          type: string
+        CustomerEntities.AddressFormatCode:
+          type: string
+        CustomerEntities.Address Language Type Code:
+          type: string
+        CustomerEntities.Source Address Line 1:
+          type: string
+        CustomerEntities.Source Address Line 2:
+          type: string
+        CustomerEntities.Source Address Line 3:
+          type: string
+        CustomerEntities.Source Address Line 4:
+          type: string
+        CustomerEntities.Source Address Line 5:
+          type: string
+        CustomerEntities.Source Address Line 6:
+          type: string
+        CustomerEntities.Source Address Line 7:
+          type: string
+        CustomerEntities.Source Address Line 8:
+          type: string
+        CustomerEntities.Source Address Line 9:
+          type: string
+        CustomerEntities.Source Address Line 10:
+          type: string
+        CustomerEntities.Source Postal Code:
+          type: string
+        CustomerEntities.Source Address Country:
+          type: string
+        CustomerEntities.Identification Document 1:
+          type: string
+        CustomerEntities.Identification Document 2:
+          type: string
+        CustomerEntities.Identification Document 3:
+          type: string
+        CustomerEntities.Identification Document 4:
+          type: string
+        CustomerEntities.Identification Document 5:
+          type: string
+        CustomerEntities.Identification Document 6:
+          type: string
+        CustomerEntities.Identification Document 7:
+          type: string
+        CustomerEntities.Identification Document 8:
+          type: string
+        CustomerEntities.Identification Document 9:
+          type: string
+        CustomerEntities.Identification Document 10:
+          type: string
+        CustomerEntities.Trades With Countries:
+          type: string
+        CustomerEntities.Subsidiaries Operates in Countries:
+          type: string
+        CustomerEntities.Export Countries:
+          type: string
+        CustomerEntities.Import Countries:
+          type: string
+        CustomerEntities.Countries of Incorporation:
+          type: string
+        CustomerEntities.Countries of Registration (Original):
+          type: string
+        CustomerEntities.Countries of Business:
+          type: string
+        CustomerEntities.Countries of Head Office:
+          type: string
+        CustomerEntities.edqCustID:
+          type: string
+        CustomerEntities.edqCustSubID:
+          type: string
+        CustomerEntities.edqLoBCountryCode:
+          type: string
+        CustomerEntities.Address Country:
+          type: string
+        CustomerEntities.edqAddressCountryCode:
+          type: string
+        CustomerEntities.edqTradesWithCountries:
+          type: string
+        CustomerEntities.edqExportsCountries:
+          type: string
+        CustomerEntities.edqImportsCountries:
+          type: string
+        CustomerEntities.edqIncorporationCountries:
+          type: string
+        CustomerEntities.edqIncorporationCountriesCodes:
+          type: string
+        CustomerEntities.Registration Country:
+          type: string
+        CustomerEntities.edqRegiistrationCountriesCodes:
+          type: string
+        CustomerEntities.edqBusinessCountries:
+          type: string
+        CustomerEntities.edqHeadOfficeCountries:
+          type: string
+        CustomerEntities.Countries (All):
+          type: string
+        CustomerEntities.Countries (All) Codes:
+          type: string
+        CustomerEntities.edqLoB:
+          type: string
+        CustomerEntities.edqPermission:
+          type: string
+        CustomerEntities.Tax ID:
+          type: string
+        CustomerEntities.City:
+          type: string
+        CustomerEntities.Profile Hyperlink:
+          type: string
+        CustomerEntities.Search Hyperlink:
+          type: string
+        CustomerEntities.edqListKey:
+          type: string
+        CustomerEntities.Address:
+          type: string
+        CustomerEntities.Entity Name:
+          type: string
+        CustomerEntities.Postal Code:
+          type: string
+        CustomerEntities.Person or Business Indicator:
+          type: string
+        CustomerEntities.edqCloseOfBusinessDate:
+          type: string
+        CustomerEntities.Operating Countries:
+          type: string
+        CustomerEntities.edqOperatingCountriesCodes:
+          type: string
+        CustomerEntities.Registration Number:
+          type: string
+        CustomerEntities.Profile Name Type:
+          type: string
+        CustomerEntities.edqPartyRoleTypeDescription:
+          type: string
+        CustomerEntities.edqPartyStatusCodeDescription:
+          type: string
+        CustomerEntities.edqDay1SpikeFlag:
+          type: string
+        CustomerEntities.Original Script Name:
+          type: string
+        CustomerEntities.Profile Full Address:
+          type: string
+        CustomerEntities.edqScreeningMode:
+          type: string
+        CustomerEntities.edqCaseKey:
+          type: string
+        CustomerEntities.Address Type:
+          type: string
+        CustomerEntities.SSC Codes:
+          type: string
+        CustomerEntities.CTRP Fragment:
+          type: string
+        CustomerEntities.Request User Name:
+          type: string
+        CustomerEntities.Request Date/Time:
+          type: string
+    WorldCheckEntities:
+      type: object
+      properties:
+        WorldCheckEntities.Record Id:
+          type: string
+        WorldCheckEntities.Input Stream:
+          type: string
+        WorldCheckEntities.List Key:
+          type: string
+        WorldCheckEntities.List Sub Key:
+          type: string
+        WorldCheckEntities.List Record Type:
+          type: string
+        WorldCheckEntities.List Record Origin:
+          type: string
+        WorldCheckEntities.List Record Id:
+          type: string
+        WorldCheckEntities.List Record Sub Id:
+          type: string
+        WorldCheckEntities.Registration Number:
+          type: string
+        WorldCheckEntities.Entity Name (Original):
+          type: string
+        WorldCheckEntities.Entity Name (Derived):
+          type: string
+        WorldCheckEntities.Name Type:
+          type: string
+        WorldCheckEntities.Name Quality:
+          type: string
+        WorldCheckEntities.Primary Name:
+          type: string
+        WorldCheckEntities.Original Script Name:
+          type: string
+        WorldCheckEntities.Alias is Acronym:
+          type: string
+        WorldCheckEntities.Vessel Indicator:
+          type: string
+        WorldCheckEntities.Vessel Info:
+          type: string
+        WorldCheckEntities.Address:
+          type: string
+        WorldCheckEntities.City:
+          type: string
+        WorldCheckEntities.State:
+          type: string
+        WorldCheckEntities.Postal Code:
+          type: string
+        WorldCheckEntities.Address Country:
+          type: string
+        WorldCheckEntities.Registration Country:
+          type: string
+        WorldCheckEntities.Operating Countries:
+          type: string
+        WorldCheckEntities.Country Codes (All):
+          type: string
+        WorldCheckEntities.Countries (All):
+          type: string
+        WorldCheckEntities.Profile Hyperlink:
+          type: string
+        WorldCheckEntities.Search Hyperlink:
+          type: string
+        WorldCheckEntities.Linked Profiles:
+          type: string
+        WorldCheckEntities.Linked Relationships:
+          type: string
+        WorldCheckEntities.Risk Score:
+          type: string
+        WorldCheckEntities.PEP Risk Score:
+          type: string
+        WorldCheckEntities.Data Confidence Score:
+          type: string
+        WorldCheckEntities.Data Confidence Comment:
+          type: string
+        WorldCheckEntities.Inactive Flag:
+          type: string
+        WorldCheckEntities.Inactive Since Date:
+          type: string
+        WorldCheckEntities.PEP Classification:
+          type: string
+        WorldCheckEntities.Category:
+          type: string
+        WorldCheckEntities.External Sources:
+          type: string
+        WorldCheckEntities.Linked to:
+          type: string
+        WorldCheckEntities.Companies:
+          type: string
+        WorldCheckEntities.Further Information:
+          type: string
+        WorldCheckEntities.Sub-Category Description:
+          type: string
+        WorldCheckEntities.Update Category:
+          type: string
+        WorldCheckEntities.Native Alias Language Name:
+          type: string
+        WorldCheckEntities.Native Alias Language Country:
+          type: string
+        WorldCheckEntities.Cached External Sources:
+          type: string
+        WorldCheckEntities.Added Date:
+          type: string
+        WorldCheckEntities.Last Updated Date:
+          type: string
+        WorldCheckEntities.edqWCListType:
+          type: string
+        WorldCheckEntities.edqOWSWatchlistName:
+          type: string
+    CustomerIndividuals:
+      type: object
+      properties:
+        CustomerIndividuals.Record Id:
+          type: string
+        CustomerIndividuals.Input Stream:
+          type: string
+        CustomerIndividuals.Source System History ID:
+          type: string
+        CustomerIndividuals.Close Of Business Date:
+          type: string
+        CustomerIndividuals.Partition Number:
+          type: string
+        CustomerIndividuals.Source System Identifier:
+          type: string
+        CustomerIndividuals.External Profile ID:
+          type: string
+        CustomerIndividuals.Concatenated Profile ID:
+          type: string
+        CustomerIndividuals.Profile Type:
+          type: string
+        CustomerIndividuals.Party Role Type Code:
+          type: string
+        CustomerIndividuals.Profile Status:
+          type: string
+        CustomerIndividuals.Profile Segment:
+          type: string
+        CustomerIndividuals.LoB Name:
+          type: string
+        CustomerIndividuals.LoB Region:
+          type: string
+        CustomerIndividuals.LoB Country:
+          type: string
+        CustomerIndividuals.HSBC Legal Entity Code:
+          type: string
+        CustomerIndividuals.Name Category Code:
+          type: string
+        CustomerIndividuals.NameTypeCode:
+          type: string
+        CustomerIndividuals.Name Language Type Code:
+          type: string
+        CustomerIndividuals.Given Name:
+          type: string
+        CustomerIndividuals.Middle Name:
+          type: string
+        CustomerIndividuals.Family Name (Original):
+          type: string
+        CustomerIndividuals.Initials (Original):
+          type: string
+        CustomerIndividuals.Profile Full Name:
+          type: string
+        CustomerIndividuals.PEP Indicator:
+          type: string
+        CustomerIndividuals.Special Category Customer Indicator:
+          type: string
+        CustomerIndividuals.Gender Code:
+          type: string
+        CustomerIndividuals.Birth Date:
+          type: string
+        CustomerIndividuals.Place of Birth:
+          type: string
+        CustomerIndividuals.Town of Birth:
+          type: string
+        CustomerIndividuals.State Province or County of Birth:
+          type: string
+        CustomerIndividuals.Country of Birth (Original):
+          type: string
+        CustomerIndividuals.Source Address Type:
+          type: string
+        CustomerIndividuals.Address Format Code:
+          type: string
+        CustomerIndividuals.Address Language Type Code:
+          type: string
+        CustomerIndividuals.Source Address Line 1:
+          type: string
+        CustomerIndividuals.Source Address Line 2:
+          type: string
+        CustomerIndividuals.Source Address Line 3:
+          type: string
+        CustomerIndividuals.Source Address Line 4:
+          type: string
+        CustomerIndividuals.Source Address Line 5:
+          type: string
+        CustomerIndividuals.Source Address Line 6:
+          type: string
+        CustomerIndividuals.Source Address Line 7:
+          type: string
+        CustomerIndividuals.Source Address Line 8:
+          type: string
+        CustomerIndividuals.Source Address Line 9:
+          type: string
+        CustomerIndividuals.Source Address Line 10:
+          type: string
+        CustomerIndividuals.Source Postal Code:
+          type: string
+        CustomerIndividuals.Source Country:
+          type: string
+        CustomerIndividuals.Identification Document 1:
+          type: string
+        CustomerIndividuals.Identification Document 2:
+          type: string
+        CustomerIndividuals.Identification Document 3:
+          type: string
+        CustomerIndividuals.Identification Document 4:
+          type: string
+        CustomerIndividuals.Identification Document 5:
+          type: string
+        CustomerIndividuals.Identification Document 6:
+          type: string
+        CustomerIndividuals.Identification Document 7:
+          type: string
+        CustomerIndividuals.Identification Document 8:
+          type: string
+        CustomerIndividuals.Identification Document 9:
+          type: string
+        CustomerIndividuals.Identification Document 10:
+          type: string
+        CustomerIndividuals.Residence Countries:
+          type: string
+        CustomerIndividuals.NationalityCitizenshipCountries:
+          type: string
+        CustomerIndividuals.Employer 1 Details:
+          type: string
+        CustomerIndividuals.Employer 1 Address 1:
+          type: string
+        CustomerIndividuals.Employer 1 Address 2:
+          type: string
+        CustomerIndividuals.Employer 1 Address 3:
+          type: string
+        CustomerIndividuals.Employer 2 Details:
+          type: string
+        CustomerIndividuals.Employer 2 Address 1:
+          type: string
+        CustomerIndividuals.Employer 2 Address 2:
+          type: string
+        CustomerIndividuals.Employer 2 Address 3:
+          type: string
+        CustomerIndividuals.Employer 3 Details:
+          type: string
+        CustomerIndividuals.Employer 3 Address 1:
+          type: string
+        CustomerIndividuals.Employer 3 Address 2:
+          type: string
+        CustomerIndividuals.Employer 3 Address 3:
+          type: string
+        CustomerIndividuals.edqCustID:
+          type: string
+        CustomerIndividuals.edqCustSubID:
+          type: string
+        CustomerIndividuals.Title (Derived):
+          type: string
+        CustomerIndividuals.Given Names (Derived):
+          type: string
+        CustomerIndividuals.Full Name:
+          type: string
+        CustomerIndividuals.Family Name (Derived):
+          type: string
+        CustomerIndividuals.Initials:
+          type: string
+        CustomerIndividuals.edqLoBCountryCode:
+          type: string
+        CustomerIndividuals.Country of Birth:
+          type: string
+        CustomerIndividuals.Address Country:
+          type: string
+        CustomerIndividuals.edqAddressCountryCode:
+          type: string
+        CustomerIndividuals.Country of Residence:
+          type: string
+        CustomerIndividuals.edqBirthCountryCode:
+          type: string
+        CustomerIndividuals.edqResidenceCountriesCode:
+          type: string
+        CustomerIndividuals.Nationality or Citizenship:
+          type: string
+        CustomerIndividuals.Nationality Countries:
+          type: string
+        CustomerIndividuals.Countries (All):
+          type: string
+        CustomerIndividuals.edqCountriesAllCodes:
+          type: string
+        CustomerIndividuals.edqEmployerAllCountries:
+          type: string
+        CustomerIndividuals.edqEmployerAllCountriesCodes:
+          type: string
+        CustomerIndividuals.edqLoB:
+          type: string
+        CustomerIndividuals.edqPermission:
+          type: string
+        CustomerIndividuals.Tax ID:
+          type: string
+        CustomerIndividuals.Date of Birth:
+          type: string
+        CustomerIndividuals.DOB (Original):
+          type: string
+        CustomerIndividuals.edqDOBString:
+          type: string
+        CustomerIndividuals.Year of Birth:
+          type: string
+        CustomerIndividuals.City:
+          type: string
+        CustomerIndividuals.Postal Code:
+          type: string
+        CustomerIndividuals.Profile Full Address:
+          type: string
+        CustomerIndividuals.Gender:
+          type: string
+        CustomerIndividuals.Gender Derived Flag:
+          type: string
+        CustomerIndividuals.Profile Hyperlink:
+          type: string
+        CustomerIndividuals.Search Hyperlink:
+          type: string
+        CustomerIndividuals.edqListKey:
+          type: string
+        CustomerIndividuals.Passport Number:
+          type: string
+        CustomerIndividuals.Passport Issue Country:
+          type: string
+        CustomerIndividuals.Social Security Number:
+          type: string
+        CustomerIndividuals.edqCloseOfBusinessDate:
+          type: string
+        CustomerIndividuals.Profile Occupation:
+          type: string
+        CustomerIndividuals.Person or Business Indicator:
+          type: string
+        CustomerIndividuals.Profile Name Type:
+          type: string
+        CustomerIndividuals.edqPartyRoleTypeDescription:
+          type: string
+        CustomerIndividuals.edqPartyStatusCodeDescription:
+          type: string
+        CustomerIndividuals.edqDay1SpikeFlag:
+          type: string
+        CustomerIndividuals.Original Script Name:
+          type: string
+        CustomerIndividuals.Address:
+          type: string
+        CustomerIndividuals.Given Names (Original):
+          type: string
+        CustomerIndividuals.Surname:
+          type: string
+        CustomerIndividuals.edqScreeningMode:
+          type: string
+        CustomerIndividuals.edqCaseKey:
+          type: string
+        CustomerIndividuals.Address Type:
+          type: string
+        CustomerIndividuals.SSC Codes:
+          type: string
+        CustomerIndividuals.CTRP Fragment:
+          type: string
+        CustomerIndividuals.Request User Name:
+          type: string
+        CustomerIndividuals.ReqDT:
+          type: string
+        CustomerIndividuals.Auto Discount Decision:
+          type: string
+        CustomerIndividuals.RecordType:
+          type: string
+        CustomerIndividuals.Dummy:
+          type: string
+    WorldCheckIndividuals:
+      type: object
+      properties:
+        WorldCheckIndividuals.Record Id:
+          type: string
+        WorldCheckIndividuals.Input Stream:
+          type: string
+        WorldCheckIndividuals.List Key:
+          type: string
+        WorldCheckIndividuals.List Sub Key:
+          type: string
+        WorldCheckIndividuals.List Record Type:
+          type: string
+        WorldCheckIndividuals.List Record Origin:
+          type: string
+        WorldCheckIndividuals.List Record Id:
+          type: string
+        WorldCheckIndividuals.List Record Sub Id:
+          type: string
+        WorldCheckIndividuals.Passport Number:
+          type: string
+        WorldCheckIndividuals.National Id:
+          type: string
+        WorldCheckIndividuals.Title:
+          type: string
+        WorldCheckIndividuals.Full Name (Original):
+          type: string
+        WorldCheckIndividuals.Given Names (Original):
+          type: string
+        WorldCheckIndividuals.Family Name (Original):
+          type: string
+        WorldCheckIndividuals.Full Name (Derived):
+          type: string
+        WorldCheckIndividuals.Given Name (Derived):
+          type: string
+        WorldCheckIndividuals.Family Name (Derived):
+          type: string
+        WorldCheckIndividuals.Name Type:
+          type: string
+        WorldCheckIndividuals.Name Quality:
+          type: string
+        WorldCheckIndividuals.Primary Name:
+          type: string
+        WorldCheckIndividuals.Original Script Name:
+          type: string
+        WorldCheckIndividuals.Gender:
+          type: string
+        WorldCheckIndividuals.Gender Derived Flag:
+          type: string
+        WorldCheckIndividuals.Date of Birth:
+          type: string
+        WorldCheckIndividuals.Year of Birth:
+          type: string
+        WorldCheckIndividuals.Deceased Flag:
+          type: string
+        WorldCheckIndividuals.Deceased Date:
+          type: string
+        WorldCheckIndividuals.Occupation:
+          type: string
+        WorldCheckIndividuals.Address:
+          type: string
+        WorldCheckIndividuals.City:
+          type: string
+        WorldCheckIndividuals.State:
+          type: string
+        WorldCheckIndividuals.Postal Code:
+          type: string
+        WorldCheckIndividuals.Address Country:
+          type: string
+        WorldCheckIndividuals.Residency Country:
+          type: string
+        WorldCheckIndividuals.Country of Birth:
+          type: string
+        WorldCheckIndividuals.Nationalities:
+          type: string
+        WorldCheckIndividuals.Country Codes (All):
+          type: string
+        WorldCheckIndividuals.Countries (All):
+          type: string
+        WorldCheckIndividuals.Profile Hyperlink:
+          type: string
+        WorldCheckIndividuals.Search Hyperlink:
+          type: string
+        WorldCheckIndividuals.Linked Profiles:
+          type: string
+        WorldCheckIndividuals.Linked Relationships:
+          type: string
+        WorldCheckIndividuals.Risk Score:
+          type: string
+        WorldCheckIndividuals.PEP Risk Score:
+          type: string
+        WorldCheckIndividuals.Data Confidence Score:
+          type: string
+        WorldCheckIndividuals.Data Confidence Comment:
+          type: string
+        WorldCheckIndividuals.Inactive Flag:
+          type: string
+        WorldCheckIndividuals.Inactive Since Date:
+          type: string
+        WorldCheckIndividuals.PEP Classification:
+          type: string
+        WorldCheckIndividuals.Category:
+          type: string
+        WorldCheckIndividuals.External Sources:
+          type: string
+        WorldCheckIndividuals.Linked to:
+          type: string
+        WorldCheckIndividuals.Companies:
+          type: string
+        WorldCheckIndividuals.Date of Birth (Original):
+          type: string
+        WorldCheckIndividuals.Year of Birth (Approximated):
+          type: string
+        WorldCheckIndividuals.Place of Birth (Original):
+          type: string
+        WorldCheckIndividuals.Further Information:
+          type: string
+        WorldCheckIndividuals.Countries (Original):
+          type: string
+        WorldCheckIndividuals.Social Security Number:
+          type: string
+        WorldCheckIndividuals.Passport Country:
+          type: string
+        WorldCheckIndividuals.Sub-Category Description:
+          type: string
+        WorldCheckIndividuals.Update Category:
+          type: string
+        WorldCheckIndividuals.Native Alias Language Name:
+          type: string
+        WorldCheckIndividuals.Native Alias Language Country:
+          type: string
+        WorldCheckIndividuals.Cached External Sources:
+          type: string
+        WorldCheckIndividuals.Added Date:
+          type: string
+        WorldCheckIndividuals.Last Updated Date:
+          type: string
+        WorldCheckIndividuals.edqOWSWatchlistName:
+          type: string
+        WorldCheckIndividuals.DOBs:
+          type: string
+          format: date
+        WorldCheckIndividuals.ID Numbers:
+          type: string
+        WorldCheckIndividuals.RecordType:
+          type: string
+        WorldCheckIndividuals.Dummy:
+          type: string
+    CaseComments:
+      type: object
+      properties:
+        DN_CASECOMMENT.commentId:
+          type: string
+        DN_CASECOMMENT.commentedBy:
+          type: string
+        DN_CASECOMMENT.commentDateTime:
+          type: string
+        DN_CASECOMMENT.caseComment:
+          type: string
+        DN_CASECOMMENT.deletedFlag:
+          type: string
+        DN_CASECOMMENT.restrictingPermission:
+          type: string
+    Relationships:
+      type: object
+      properties:
+        Relationships.Input Id:
+          type: string
+        Relationships.Input Name:
+          type: string
+        Relationships.Record Id:
+          type: string
+        Relationships.Related Input Id:
+          type: string
+        Relationships.Related Input Name:
+          type: string
+        Relationships.Related Record Id:
+          type: string
+        Relationships.Rule Name:
+          type: string
+        Relationships.Priority Score:
+          type: string
+        Relationships.Relationship Hash:
+          type: string
+    PrivateListIndividuals:
+      type: object
+      properties:
+        PrivateListIndividuals.Record Id:
+          type: string
+        PrivateListIndividuals.Input Stream:
+          type: string
+        PrivateListIndividuals.List Key:
+          type: string
+        PrivateListIndividuals.List Sub Key:
+          type: string
+        PrivateListIndividuals.List Record Type:
+          type: string
+        PrivateListIndividuals.List Record Origin:
+          type: string
+        PrivateListIndividuals.List Record Id:
+          type: string
+        PrivateListIndividuals.List Record Sub Id:
+          type: string
+        PrivateListIndividuals.Passport Number:
+          type: string
+        PrivateListIndividuals.National ID:
+          type: string
+        PrivateListIndividuals.Title:
+          type: string
+        PrivateListIndividuals.Full Name (Original):
+          type: string
+        PrivateListIndividuals.Given Names (Original):
+          type: string
+        PrivateListIndividuals.Family Name (Original):
+          type: string
+        PrivateListIndividuals.Full Name:
+          type: string
+        PrivateListIndividuals.Given Names (Derived):
+          type: string
+        PrivateListIndividuals.Family Name (Derived):
+          type: string
+        PrivateListIndividuals.Name Type:
+          type: string
+        PrivateListIndividuals.Name Quality:
+          type: string
+        PrivateListIndividuals.Primary Name:
+          type: string
+        PrivateListIndividuals.Original Script Name:
+          type: string
+        PrivateListIndividuals.Gender:
+          type: string
+        PrivateListIndividuals.Gender Derived Flag:
+          type: string
+        PrivateListIndividuals.Date of Birth:
+          type: string
+        PrivateListIndividuals.YOB:
+          type: string
+        PrivateListIndividuals.Deceased Flag:
+          type: string
+        PrivateListIndividuals.Deceased Date:
+          type: string
+        PrivateListIndividuals.Customer Occupation:
+          type: string
+        PrivateListIndividuals.Address:
+          type: string
+        PrivateListIndividuals.City:
+          type: string
+        PrivateListIndividuals.Place of Birth:
+          type: string
+        PrivateListIndividuals.Postal Code:
+          type: string
+        PrivateListIndividuals.Address Country:
+          type: string
+        PrivateListIndividuals.Country of Residence:
+          type: string
+        PrivateListIndividuals.<Country> of Birth:
+          type: string
+        PrivateListIndividuals.Nationalities:
+          type: string
+        PrivateListIndividuals.Country Codes (All):
+          type: string
+        PrivateListIndividuals.Countries (All):
+          type: string
+        PrivateListIndividuals.Profile Hyperlink:
+          type: string
+        PrivateListIndividuals.Search Hyperlink:
+          type: string
+        PrivateListIndividuals.Linked Profiles:
+          type: string
+        PrivateListIndividuals.Linked Relationships:
+          type: string
+        PrivateListIndividuals.Risk Score:
+          type: string
+        PrivateListIndividuals.PEP Risk Score:
+          type: string
+        PrivateListIndividuals.Data Confidence Score:
+          type: string
+        PrivateListIndividuals.Data Confidence Comment:
+          type: string
+        PrivateListIndividuals.Inactive Flag:
+          type: string
+        PrivateListIndividuals.Inactive Since Date:
+          type: string
+        PrivateListIndividuals.PEP Classification:
+          type: string
+        PrivateListIndividuals.Added Date:
+          type: string
+        PrivateListIndividuals.Last Updated Date:
+          type: string
+        PrivateListIndividuals.Address Type:
+          type: string
+        PrivateListIndividuals.edqCurrentAddress:
+          type: string
+        PrivateListIndividuals.Telephone Number:
+          type: string
+        PrivateListIndividuals.Cell Number (Business):
+          type: string
+        PrivateListIndividuals.Cell Number (Personal):
+          type: string
+        PrivateListIndividuals.Tax Number:
+          type: string
+        PrivateListIndividuals.Email Address:
+          type: string
+        PrivateListIndividuals.SCION Reference Number:
+          type: string
+        PrivateListIndividuals.Role:
+          type: string
+        PrivateListIndividuals.List Category:
+          type: string
+        PrivateListIndividuals.Further Info:
+          type: string
+        PrivateListIndividuals.External Customer ID:
+          type: string
+        PrivateListIndividuals.List Customer Type:
+          type: string
+        PrivateListIndividuals.edqListName:
+          type: string
+        PrivateListIndividuals.edqWatchlistListType:
+          type: string
+        PrivateListIndividuals.Middle Name 1 (Derived):
+          type: string
+        PrivateListIndividuals.Middle Name 2 (Derived):
+          type: string
+        PrivateListIndividuals.Middle Name 1 (Original):
+          type: string
+        PrivateListIndividuals.Middle Name 2 (Original):
+          type: string
+        PrivateListIndividuals.Social Security Number:
+          type: string
+        PrivateListIndividuals.Current Address:
+          type: string
+        PrivateListIndividuals.Suffix:
+          type: string
+        PrivateListIndividuals.Driving Licence:
+          type: string
+        PrivateListIndividuals.National Insurance Number:
+          type: string
+        PrivateListIndividuals.RecordType:
+          type: string
+        PrivateListIndividuals.Dummy:
+          type: string
+        PrivateListIndividuals.Case Country of Origin:
+          type: string
+        PrivateListIndividuals.LOB:
+          type: string
+    PrivateListEntities:
+      type: object
+      properties:
+        PrivateListEntities.Record Id:
+          type: string
+        PrivateListEntities.Input Stream:
+          type: string
+        PrivateListEntities.List Key:
+          type: string
+        PrivateListEntities.List Sub Key:
+          type: string
+        PrivateListEntities.List Record Type:
+          type: string
+        PrivateListEntities.List Record Origin:
+          type: string
+        PrivateListEntities.List Record Id:
+          type: string
+        PrivateListEntities.List Record Sub Id:
+          type: string
+        PrivateListEntities.Registration Number:
+          type: string
+        PrivateListEntities.Entity Name (Original):
+          type: string
+        PrivateListEntities.Entity Name (Derived):
+          type: string
+        PrivateListEntities.Name Type:
+          type: string
+        PrivateListEntities.Name Quality:
+          type: string
+        PrivateListEntities.Primary Name:
+          type: string
+        PrivateListEntities.Original Script Name:
+          type: string
+        PrivateListEntities.Alias is Acronym:
+          type: string
+        PrivateListEntities.Vessel Indicator:
+          type: string
+        PrivateListEntities.Vessel Info:
+          type: string
+        PrivateListEntities.Address:
+          type: string
+        PrivateListEntities.City:
+          type: string
+        PrivateListEntities.State:
+          type: string
+        PrivateListEntities.Postal Code:
+          type: string
+        PrivateListEntities.Address Country:
+          type: string
+        PrivateListEntities.Registration Country:
+          type: string
+        PrivateListEntities.Operating Countries:
+          type: string
+        PrivateListEntities.Country Codes (All):
+          type: string
+        PrivateListEntities.Countries (All):
+          type: string
+        PrivateListEntities.Profile Hyperlink:
+          type: string
+        PrivateListEntities.Search Hyperlink:
+          type: string
+        PrivateListEntities.Linked Profiles:
+          type: string
+        PrivateListEntities.Linked Relationships:
+          type: string
+        PrivateListEntities.Risk Score:
+          type: string
+        PrivateListEntities.PEP Risk Score:
+          type: string
+        PrivateListEntities.Data Confidence Score:
+          type: string
+        PrivateListEntities.Data Confidence Comment:
+          type: string
+        PrivateListEntities.Inactive Flag:
+          type: string
+        PrivateListEntities.Inactive Since Date:
+          type: string
+        PrivateListEntities.PEP Classification:
+          type: string
+        PrivateListEntities.Added Date:
+          type: string
+        PrivateListEntities.Last Updated Date:
+          type: string
+        PrivateListEntities.Address Type:
+          type: string
+        PrivateListEntities.Current Address:
+          type: string
+        PrivateListEntities.Telephone Number:
+          type: string
+        PrivateListEntities.edqBusinessTelephoneNumber:
+          type: string
+        PrivateListEntities.Telephone Number (Business):
+          type: string
+        PrivateListEntities.edqCellNumberPersonal:
+          type: string
+        PrivateListEntities.edqTaxNumber:
+          type: string
+        PrivateListEntities.edqEmailAddress:
+          type: string
+        PrivateListEntities.SCION Reference Number:
+          type: string
+        PrivateListEntities.Role:
+          type: string
+        PrivateListEntities.List Category:
+          type: string
+        PrivateListEntities.Further Info:
+          type: string
+        PrivateListEntities.edqBusinessType:
+          type: string
+        PrivateListEntities.Date of Incorporation:
+          type: string
+        PrivateListEntities.edqDataOfIncorporationSTRING:
+          type: string
+        PrivateListEntities.External Customer ID:
+          type: string
+        PrivateListEntities.List Customer Type:
+          type: string
+        PrivateListEntities.edqListName:
+          type: string
+        PrivateListEntities.edqWatchlistLstType:
+          type: string
+        PrivateListEntities.Primary Name.1:
+          type: string
+        PrivateListEntities.Entity Name:
+          type: string
+        PrivateListEntities.Entity Name.1:
+          type: string
+        PrivateListEntities.Entity Name.2:
+          type: string
+        PrivateListEntities.Case Country of Origin:
+          type: string
+        PrivateListEntities.LOB:
+          type: string
+    CaseHistory:
+      type: object
+      properties:
+        DN_CASEHISTORY.modifiedBy:
+          type: string
+        DN_CASEHISTORY.modifiedDateTime:
+          type: string
+        DN_CASEHISTORY.attribute:
+          type: string
+        DN_CASEHISTORY.oldValue:
+          type: string
+        DN_CASEHISTORY.newValue:
+          type: string
+        DN_CASEHISTORY.transition:
+          type: string
+    CountryCtrpScreeningEntities:
+      type: object
+      properties:
+        CTRPPRHBListEntities.Record Id:
+          type: string
+        CTRPPRHBListEntities.Input Stream:
+          type: string
+        CTRPPRHBListEntities.Country Code:
+          type: string
+        CTRPPRHBListEntities.Type of Match:
+          type: string
+        CTRPPRHBListEntities.Country Name:
+          type: string
+        CTRPPRHBListEntities.Match Type:
+          type: string
+        CTRPPRHBListEntities.OWS Watchlist Name:
+          type: string
+        CTRPPRHBListEntities.PRB List Type:
+          type: string
+        CTRPPRHBListEntities.CTRP Value:
+          type: string
+        CTRPPRHBListEntities.CTRP Level:
+          type: string
+        CTRPPRHBListEntities.CTRP Commonality:
+          type: string
+        CTRPPRHBListEntities.CTRP Source:
+          type: string
+        CTRPPRHBListEntities.CTRP Name Type:
+          type: string
+        CTRPPRHBListEntities.CTRP Rule Narrative:
+          type: string
+        CTRPPRHBListEntities.AlertKeyFragment:
+          type: string
+    CasesWithAlertURL:
+      type: object
+      properties:
+        DN_CASE.ID:
+          type: string
+        DN_CASE.caseGroup:
+          type: string
+        DN_CASE.caseType:
+          type: string
+        DN_CASE.externalId:
+          type: string
+        DN_CASE.externalIdSort:
+          type: string
+        DN_CASE.caseKey:
+          type: string
+        DN_CASE.keyLabel:
+          type: string
+        DN_CASE.parentId:
+          type: string
+        DN_CASE.supplementaryKey:
+          type: string
+        DN_CASE.supplementaryType:
+          type: string
+        DN_CASE.flagKey:
+          type: string
+        DN_CASE.description:
+          type: string
+        DN_CASE.createdBy:
+          type: string
+        DN_CASE.createdDateTime:
+          type: string
+        DN_CASE.modifiedBy:
+          type: string
+        DN_CASE.modifiedDateTime:
+          type: string
+        DN_CASE.assignedUser:
+          type: string
+        DN_CASE.assignedBy:
+          type: string
+        DN_CASE.assignedDateTime:
+          type: string
+        DN_CASE.priority:
+          type: string
+        DN_CASE.permission:
+          type: string
+        DN_CASE.currentState:
+          type: string
+        DN_CASE.derivedState:
+          type: string
+        DN_CASE.stateExpiry:
+          type: string
+        DN_CASE.stateChangeBy:
+          type: string
+        DN_CASE.stateChangeDateTime:
+          type: string
+        DN_CASE.sourceId:
+          type: string
+        DN_CASE.sourceName:
+          type: string
+        DN_CASE.caseMarker:
+          type: string
+        DN_CASE.updatedBy:
+          type: string
+        DN_CASE.updatedDateTime:
+          type: string
+        DN_CASE.groupId:
+          type: string
+        DN_CASE.groupLevel:
+          type: string
+        DN_CASE.ExtendedAttribute1:
+          type: string
+        DN_CASE.ExtendedAttribute2:
+          type: string
+        DN_CASE.ExtendedAttribute3:
+          type: string
+        DN_CASE.ExtendedAttribute4:
+          type: string
+        DN_CASE.ExtendedAttribute5:
+          type: string
+        DN_CASE.ExtendedAttribute6:
+          type: string
+        DN_CASE.ExtendedAttribute7:
+          type: string
+        DN_CASE.ExtendedAttribute8:
+          type: string
+        DN_CASE.ExtendedAttribute9:
+          type: string
+        DN_CASE.ExtendedAttribute10:
+          type: string
+        DN_CASE.ExtendedAttribute11:
+          type: string
+        DN_CASE.ExtendedAttribute12:
+          type: string
+        DN_CASE.ExtendedAttribute13:
+          type: string
+        DN_CASE.ExtendedAttribute13_date_time:
+          type: string
+        DN_CASE.ExtendedAttribute14:
+          type: string
+        DN_CASE.ExtendedAttribute15:
+          type: string
+        DN_CASE.AlertURL:
+          type: string
+    Alert:
+      type: object
+      properties:
+        CTRPPRHBListIndividuals:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountryCtrpScreeningIndividuals'
+        CustomerEntities:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerEntities'
+        WorldCheckEntities:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorldCheckEntities'
+        CustomerIndividuals:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerIndividuals'
+        WorldCheckIndividuals:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorldCheckIndividuals'
+        DN_CASECOMMENT:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaseComments'
+        Relationships:
+          type: array
+          items:
+            $ref: '#/components/schemas/Relationships'
+        PrivateListIndividuals:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrivateListIndividuals'
+        PrivateListEntities:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrivateListEntities'
+        DN_CASEHISTORY:
+          type: array
+          items:
+            $ref: '#/components/schemas/CaseHistory'
+        CTRPPRHBListEntities:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountryCtrpScreeningEntities'
+        DN_CASE:
+          type: array
+          items:
+            $ref: '#/components/schemas/CasesWithAlertURL'
+
+    AlertRecommendation:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          $ref: '#/components/schemas/BatchAlertItemStatus'
+        errorMessage:
+          type: string
+        recommendation:
+          type: string
+        comment:
+          type: string
+        policy_id:
+          type: string
+        step_id:
+          type: string
+        fv_signature:
+          type: string
+        alertMetadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyValue'
+
+    KeyValue:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+
+    BatchIdWithAlerts:
+      type: object
+      properties:
+        batchId:
+          type: string
+        alerts:
+          type: array
+          items:
+            $ref: "#/components/schemas/Alert"
+
+    Alerts:
+      type: object
+      properties:
+        alerts:
+          type: array
+          items:
+            $ref: "#/components/schemas/Alert"
+
+    BatchStatus:
+      type: string
+      enum:
+        - PROCESSING
+        - ERROR
+        - COMPLETED
+        - DELIVERED
+        - CANCELLED
+        - STORED
+
+    BatchAlertItemStatus:
+      type: string
+      enum:
+        - PROCESSING
+        - ERROR
+        - COMPLETED
+        - STORED
+
+    BatchAlertItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        status:
+          $ref: '#/components/schemas/BatchAlertItemStatus'
+        errorMessage:
+          type: string
+
+    BatchAcceptedResponse:
+      type: object
+      properties:
+        batchId:
+          type: string
+        requestedAlerts:
+          type: array
+          items:
+            $ref: '#/components/schemas/BatchAlertItem'
+
+    BatchStatusResponse:
+      type: object
+      properties:
+        batchId:
+          type: string
+        batchStatus:
+          $ref: '#/components/schemas/BatchStatus'
+        requestedAlerts:
+          type: array
+          items:
+            $ref: '#/components/schemas/BatchAlertItem'
+        policyName:
+          type: string
+          description: Name of solving policy (might be empty at the early stage of processing)
+
+    BatchProcessingStatusResponse:
+      type: object
+      properties:
+        isAdjudicationEngineProcessing:
+          type: boolean
+
+    BatchCancelResponse:
+      type: object
+      properties:
+        batchId:
+          type: string
+        batchStatus:
+          $ref: '#/components/schemas/BatchStatus'
+
+    BatchSolvedAlertsResponse:
+      type: object
+      properties:
+        batchId:
+          type: string
+        batchStatus:
+          $ref: '#/components/schemas/BatchStatus'
+        alerts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlertRecommendation'
+
+    SimpleModelResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        policyName:
+          type: string
+
+    ModelInfoRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        url:
+          type: string
+        type:
+          $ref: '#/components/schemas/ModelType'
+        changeType:
+          $ref: '#/components/schemas/ChangeType'
+
+    ModelInfoStatusRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        url:
+          type: string
+        type:
+          $ref: '#/components/schemas/ModelType'
+        status:
+          $ref: '#/components/schemas/ModelChangeStatus'
+
+    ModelType:
+      type: string
+      enum:
+        - MODEL
+        - IS_PEP_PROCEDURAL
+        - IS_PEP_HISTORICAL
+        - NAME_ALIASES
+        - HISTORICAL_DECISIONS_ALERTED_PARTY
+        - HISTORICAL_DECISIONS_WATCHLIST_PARTY
+        - HISTORICAL_DECISIONS_MATCH
+
+    ChangeType:
+      type: string
+      enum:
+        - MINOR
+        - MAJOR
+
+    ModelChangeStatus:
+      type: string
+      enum:
+        - SUCCESS
+        - FAILURE

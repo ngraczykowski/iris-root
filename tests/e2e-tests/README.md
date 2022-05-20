@@ -1,16 +1,23 @@
-# Karate Automated Tests
+# IRIS Automated Tests
 
 ### How to run tests
 
 1. **To run the tests using feature file, set the VM Options in run/debug config:**
 
-`-Dkarate.env=bravo-dev -Dkarate.client-id=FILL_WITH_DATA -Dkarate.client-secret=FILL_WITH_DATA -Dkarate.username=FILL_WITH_DATA -Dkarate.password=FILL_WITH_DATA!`
+`-Dtest.clientId=${clientId}
+-Dtest.username=${username}
+-Dtest.password=${password}
+-Dtest.url=${baseUrl}
+-Dtest.isRegression=false`
 
 
 2. **Run the tests using gradle command:**
 
-`gradle test --tests ChooseRunnerName -Dkarate.env=bravo-dev -Dkarate.client-id=FILL_WITH_DATA -Dkarate.client-secret=FILL_WITH_DATA -Dkarate.username=FILL_WITH_DATA -Dkarate.password=FILL_WITH_DATA`
-
-_example:_
-
-`gradle test --tests SmokeTestRunner -Dkarate.env=bravo-dev -Dkarate.client-id=FILL_WITH_DATA -Dkarate.client-secret=FILL_WITH_DATA -Dkarate.username=FILL_WITH_DATA -Dkarate.password=FILL_WITH_DATA`
+`gradle test
+-Dcucumber.features=src/test/java/features/SmokeTests.feature
+-Dcucumber.plugin=html:report.html
+-Dtest.isRegression=false
+-Dtest.clientId=${clientId}
+-Dtest.username=${username}
+-Dtest.password=${password}
+-Dtest.url=${baseUrl}`

@@ -16,11 +16,13 @@ common:
     limits:
       memory: 1Gi
     requests:
+      cpu: 200m
       memory: 1Gi
 
 agentsCommon:
-  properties:
-    "agent.facade.enabled": true
+  resources:
+    limits:
+      memory: 2Gi
   profiles:
     - rabbitmq-declare
 
@@ -36,25 +38,26 @@ components:
       - database
       - rabbitmq
       - messaging
-      - sierra
 
   simulator:
     profiles:
       - linux
       - simulator
       - messaging
-      - sierra
 
   webapp:
     profiles:
-      - sierra
+    configFiles:
+      application.yml: |
+        sens.webapp:
+          roles:
+            country-groups-scope: kibana-sso
 
   warehouse:
     profiles:
       - linux
       - warehouse
       - messaging
-      - sierra
     properties:
       # FIXME(ahaczewski): Required to repeat configuration from `keycloak` below due to overwriting
       #  environment variable defined directly in the WebApp container image.
@@ -74,6 +77,68 @@ components:
               url: https://todo-add-bucket.s3.eu-central-1.amazonaws.com
               region: eu-central-1
 
+
+agents:
+  name-agent:
+    properties:
+      "linguistics.name.facade.enabled": true
+    resources:
+      requests:
+        cpu: 800m
+  date-agent:
+    properties:
+      "dob.agent.facade.enabled": true
+  document-comparer-agent:
+    properties:
+      "nationalId.agent.facade.enabled": true
+  document-recognizer-agent:
+  document-number-agent:
+    properties:
+      "document.agent.facade.enabled": true
+  geo-agent:
+    properties:
+      "geosanctions.agent.facade.enabled": true
+      "geo.agent.facade.enabled": true
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        cpu: 800m
+        memory: 2Gi
+  learning-engine:
+    properties:
+  is-pep-agent:
+    properties:
+      "ispep.agent.facade.enabled": true
+  historical-decisions-agent:
+    properties:
+      "historicaldecisions.agent.facade.enabled": true
+      "contextuallearning.agent.facade.enabled": true
+  allow-list-agent:
+    properties:
+      "allowlist.agent.facade.enabled": true
+  country-agent:
+    properties:
+      "country.agent.facade.enabled": true
+  freetext-agent:
+    properties:
+      "freetext.agent.facade.enabled": true
+  gender-agent:
+    properties:
+      "gender.agent.facade.enabled": true
+  organization-name-agent:
+    resources:
+      limits:
+        memory: 1Gi
+  company-name-surrounding-agent:
+    resources:
+      limits:
+        memory: 1Gi
+  hit-type-name-agent:
+    resources:
+      limits:
+        memory: 1Gi
+
 frontend:
   resources:
     limits:
@@ -82,7 +147,23 @@ frontend:
       memory: 128Mi
 
 keycloak:
+  # working values for now:
   authServerUrl: https://auth.silenteight.com
   realm: sens-webapp
   frontendClientId: dev-frontend
   jwtIssuerUri: "{{ .Values.keycloak.authServerUrl }}/realms/{{ .Values.keycloak.realm }}"
+  resource: "dev-backend"
+  #TODO(dsniezek):credentials.secret should be stored in a safe manner or injected via operator
+  credentials:
+    secret: "e27cbeeb-b8dc-4d84-a7dc-7c2065d8b01f"
+  # new stuff to be tested
+  # realm name is implied and equal to namespace name
+  #authServerUrl: https://auth.dev.s8ops.com
+  #jwtIssuerUri: "{{ .Values.keycloak.authServerUrl }}/realms/{{ .Release.Namespace }}"
+
+  # for examples, check existing files; format documentation:
+  # > kubectl explain keycloakuser.spec.user
+  # > kubectl explain keycloakclient.spec.client
+  #realmData:
+  #  users:
+  #  clients:

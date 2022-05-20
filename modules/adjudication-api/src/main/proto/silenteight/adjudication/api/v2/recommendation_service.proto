@@ -1,0 +1,106 @@
+// Copyright 2021 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package silenteight.adjudication.api.v2;
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+
+import "silenteight/adjudication/api/v1/recommendation.proto";
+import "silenteight/adjudication/api/v2/recommendation_metadata.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "RecommendationServiceProto";
+option java_package = "com.silenteight.adjudication.api.v2";
+
+service RecommendationService {
+
+  // Deprecated: Use attach_recommendation flag on analysis to
+  // receive recommendation directly in recommendation generated notification
+  rpc StreamRecommendations (StreamRecommendationsRequest) returns (stream silenteight.adjudication.api.v1.Recommendation) {
+    option deprecated = true;
+    option (google.api.http) = {
+      get: "/v1/{analysis=analysis/*}/recommendations:stream"
+    };
+  }
+
+  // Deprecated: Use attach_metadata and attach_recommendation flag on analysis to
+  // receive recommendation with metadata directly in recommendation generated notification
+  rpc StreamRecommendationsWithMetadata (StreamRecommendationsWithMetadataRequest) returns (stream RecommendationWithMetadata) {
+    option deprecated = true;
+    option (google.api.http) = {
+      get: "/v1/{analysis=analysis/*}/recommendations:streamWithMetadata"
+    };
+  }
+
+  // Deprecated: Use attach_recommendation flag on analysis to
+  // receive recommendation directly in recommendation generated notification
+  rpc GetRecommendation (GetRecommendationRequest) returns (silenteight.adjudication.api.v1.Recommendation) {
+    option deprecated = true;
+    option (google.api.http) = {
+      get: "/v1/{recommendation=analysis/*/recommendations/*}"
+    };
+  }
+
+  // Deprecated: Use attach_metadata flag on analysis to
+  // receive metadata directly in recommendation generated notification
+  rpc GetRecommendationMetadata (GetRecommendationMetadataRequest) returns (RecommendationMetadata) {
+    option deprecated = true;
+    option (google.api.http) = {
+      get: "/v1/{recommendation_metadata=analysis/*/recommendations/*/metadata}"
+    };
+  }
+
+  // Deprecated: Use attach_metadata and attach_recommendation flag on analysis to
+  // receive recommendation with metadata directly in recommendation generated notification
+  rpc GetRecommendationWithMetadata (GetRecommendationRequest) returns (RecommendationWithMetadata) {
+    option deprecated = true;
+    option (google.api.http) = {
+      get: "/v1/{recommendation=analysis/*/recommendations/*}:withMetadata"
+    };
+  }
+}
+
+// Request for streaming analysis recommendations.
+message StreamRecommendationsRequest {
+  // The resource to query for recommendations.
+  // Can be one of:
+  //   - the name of the analysis resource to retrieve, in form of `analysis/<Analysis ID>`,
+  //   - the name of the analysis dataset resource to filter recommendations from,
+  //     in form of `analysis/<Analysis ID>/datasets/<Dataset ID>`.
+  string recommendation_source = 1;
+}
+
+// Request for getting recommendation.
+message GetRecommendationRequest {
+  // The name of the recommendation resource to retrieve,
+  // in form of `analysis/<Analysis ID>/recommendations/<Recommendation ID>`.
+  string recommendation = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request for streaming analysis recommendations with metadata.
+message StreamRecommendationsWithMetadataRequest {
+  // The resource to query for recommendations.
+  // Can be one of:
+  //   - the name of the analysis resource to retrieve, in form of `analysis/<Analysis ID>`,
+  //   - the name of the analysis dataset resource to filter recommendations from,
+  //     in form of `analysis/<Analysis ID>/datasets/<Dataset ID>`.
+  string recommendation_source = 1;
+}
+
+// Response for recommendation with metadata.
+message RecommendationWithMetadata {
+  // The recommendation.
+  silenteight.adjudication.api.v1.Recommendation recommendation = 1;
+
+  // The recommendation metadata.
+  RecommendationMetadata metadata = 2;
+}
+
+// Request for getting recommendation metadata.
+message GetRecommendationMetadataRequest {
+  // The name of the recommendation resource to retrieve,
+  // in form of `analysis/<Analysis ID>/recommendations/<Recommendation ID>/metadata`.
+  string recommendation_metadata = 1 [(google.api.field_behavior) = REQUIRED];
+}

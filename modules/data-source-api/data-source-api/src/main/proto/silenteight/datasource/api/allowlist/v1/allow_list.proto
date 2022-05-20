@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package silenteight.datasource.api.allowlist.v1;
+
+import "google/api/annotations.proto";
+
+option java_package = "com.silenteight.datasource.api.allowlist.v1";
+option java_outer_classname = "AllowListProto";
+option java_multiple_files = true;
+
+service AllowListInputService {
+  rpc BatchGetMatchAllowListInputs (BatchGetMatchAllowListInputsRequest) returns (stream BatchGetMatchAllowListInputsResponse) {
+    option (google.api.http) = {
+      post: "/agent-inputs/allowlist/versions/v1/matches:batchGet"
+      body: "*"
+    };
+  }
+}
+
+message BatchGetMatchAllowListInputsRequest {
+  // The list of matches data is requested for, in form of `alerts/<Alert ID>/matches/<Match ID>`.
+  repeated string matches = 1;
+  // The list of features the input data for each match is requested, in form of `features/<Feature ID>`.
+  repeated string features = 2;
+}
+
+message BatchGetMatchAllowListInputsResponse {
+  repeated AllowListInput allow_list_inputs = 1;
+}
+
+message AllowListInput {
+  string match = 1;
+  repeated AllowListFeatureInput allow_list_feature_inputs = 2;
+}
+
+message AllowListFeatureInput {
+  string feature = 1;
+  repeated string characteristics_values = 2;
+  repeated string allow_list_name = 3;
+}

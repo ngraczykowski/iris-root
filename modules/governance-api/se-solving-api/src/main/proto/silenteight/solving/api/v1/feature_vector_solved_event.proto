@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package silenteight.solving.api.v1;
+
+import "google/protobuf/timestamp.proto";
+
+import public "silenteight/protobuf/uuid.proto";
+import public "silenteight/solving/api/v1/feature.proto";
+
+option java_package = "com.silenteight.solving.api.v1";
+option java_outer_classname = "FeatureVectorSolvedEventProto";
+option java_multiple_files = true;
+
+message FeatureVectorSolvedEventBatch {
+  repeated FeatureVectorSolvedEvent events = 1;
+}
+
+message FeatureVectorSolvedEvent {
+  // Identifier of an event
+  protobuf.Uuid id = 1;
+  // Correlation id that allows to tie it message that triggered it
+  protobuf.Uuid correlation_id = 2;
+  // Timestamp that represents creation time
+  google.protobuf.Timestamp created_at = 3;
+  // Contains list of feature names
+  FeatureCollection feature_collection = 4;
+  // Contains list of feature values
+  FeatureVector feature_vector = 5;
+  // Signature of feature names and feature values
+  bytes feature_vector_signature = 6;
+  // Solution assigned to the feature vector
+  FeatureVectorSolution feature_vector_solution = 7;
+  // Uuid of the step that matched the feature vector
+  protobuf.Uuid step_id = 8;
+}

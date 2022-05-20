@@ -1,0 +1,11 @@
+# Spring `debug` profile configuration
+serp:
+  show-env: true
+
+logging:
+  level:
+    com.silenteight.sep: DEBUG
+    com.silenteight.payments: DEBUG
+    io.opencensus: INFO
+    io.netty: INFO
+    io.grpc.netty: INFO

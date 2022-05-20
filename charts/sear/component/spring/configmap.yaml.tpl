@@ -6,7 +6,7 @@ metadata:
     {{- include "sear.componentLabels" . | nindent 4 }}
 data:
   {{- if .component.configFiles }}
-    {{- toYaml .component.configFiles | nindent 2 }}
+    {{- tpl (toYaml .component.configFiles) . | nindent 2 }}
   {{- end }}
   kubernetes.yml: |
     spring:
@@ -28,7 +28,10 @@ data:
       frontend-client-id: {{ .Values.keycloak.frontendClientId | quote }}
       adapter:
         auth-server-url: {{ .Values.keycloak.authServerUrl | quote }}
-        realm: {{ .Values.keycloak.realm | quote }}
+        realm: {{ (tpl .Values.keycloak.realm . ) | quote }}
+        #TODO(dsniezek): Should be fixed see UserAuthActivityReportGenerator and LastLoginTimeCacheUpdater
+        resource: {{ .Values.keycloak.resource | quote }}
+        credentials.secret: {{ .Values.keycloak.credentials.secret | quote }}
 
     grpc:
       server:
@@ -50,11 +53,16 @@ data:
           address: dns:///{{ include "sear.fullname" . }}-adjudication-engine.{{ .Release.Namespace }}.svc:9090
         adjudicationengine:
           address: dns:///{{ include "sear.fullname" . }}-adjudication-engine.{{ .Release.Namespace }}.svc:9090
+        companynamesurroundingagent:
+          address: dns:///{{ include "sear.fullname" . }}-company-name-surrounding-agent.{{ .Release.Namespace }}.svc:9090
 
         {{ range tuple "governance" "simulator" "webapp" "warehouse" -}}
         {{ . }}:
           address: dns:///{{ include "sear.fullname" $ }}-{{ . }}.{{ $.Release.Namespace }}.svc:9090
         {{ end }}
+    {{- if .component.additionalConfig }}
+    {{- .component.additionalConfig | toYaml | nindent 4}}
+    {{- end }}
 
   logback.xml: |
     <?xml version="1.0" encoding="UTF-8"?>

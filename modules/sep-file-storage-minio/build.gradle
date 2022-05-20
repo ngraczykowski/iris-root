@@ -1,0 +1,23 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "maven-publish"
+}
+//TODO(dsniezek): check if all this dependencies are needed
+dependencies {
+  //or maybe create java-test-library plugin?
+  implementation platform('com.silenteight.iris.platform:test-platform')
+
+  implementation libs.spring.boot.test
+  implementation libs.spring.boot.starter.web
+  implementation libs.aws.s3
+  implementation libs.commons.text
+  implementation libs.minio
+  implementation libs.silenteight.filestorage.api
+  implementation libs.commons.lang3
+  implementation libs.jakarta.validation.api
+  testImplementation libs.assertj.core
+  testImplementation libs.spring.security.test
+  testImplementation libs.spring.boot.test
+  //TODO(dsniezek): this dependency should be removed and MinioContainer should be moved to sep-base-testing
+  implementation libs.test.containers
+}

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+
+  <changeSet id="adjudication-engine-analysis-1.7.0_1" author="ahaczewski">
+    <sqlFile
+        path="db/changelog/sql/drop_function_unsolved_matches_query.sql"/>
+    <sqlFile
+        path="db/changelog/sql/create_function_unsolved_matches_query.sql"
+        splitStatements="false"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.7.0_2" author="ahaczewski">
+    <validCheckSum>8:bd43299e72d4f25de5f9444dfdaf383d</validCheckSum>
+    <dropView viewName="ae_alert_recommendation_query"/>
+    <dropView viewName="ae_comments_match_context"/>
+    <dropView viewName="ae_comments_feature_context"/>
+
+    <createView
+        viewName="ae_comments_feature_context"
+        path="db/changelog/sql/view_ae_comments_feature_context_v3.sql"/>
+
+    <createView
+        viewName="ae_comments_match_context"
+        path="db/changelog/sql/view_ae_comments_match_context_v4.sql"/>
+
+    <createView
+        viewName="ae_alert_recommendation_query"
+        path="db/changelog/sql/view_ae_alert_recommendation_query.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.7.0_3" author="mwilkowski">
+    <sqlFile
+        path="db/changelog/sql/drop_function_unsolved_matches_query.sql"/>
+    <sqlFile
+        path="db/changelog/sql/drop_function_ae_select_unsolved_matches.sql"/>
+    <sqlFile
+        path="db/changelog/sql/create_function_ae_select_unsolved_matches.sql"
+        splitStatements="false"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.7.0_4" author="wkeska">
+    <dropView viewName="ae_missing_match_category_values_query"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.7.0_5" author="wkeska">
+    <validCheckSum>8:dad30e53f4073c53d4eb8aa6ba4c8ab2</validCheckSum>
+    <createView
+        viewName="ae_missing_match_category_values_query"
+        path="db/changelog/sql/view_ae_missing_match_category_values_query_v3.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.7.0_6" author="iwnek">
+    <addColumn tableName="ae_match_solution">
+      <column name="match_context" type="JSONB"/>
+    </addColumn>
+
+    <sqlFile path="db/changelog/sql/insert_context_to_match_solution.sql"/>
+
+    <addNotNullConstraint tableName="ae_match_solution" columnName="match_context"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.7.0_7" author="iwnek">
+    <validCheckSum>8:4f8740c471cc5f2f0badb4d3756a5a9b</validCheckSum>
+    <dropView viewName="ae_alert_recommendation_query"/>
+    <dropView viewName="ae_comments_match_context"/>
+    <dropView viewName="ae_comments_feature_context"/>
+    <dropView viewName="ae_comments_category_context"/>
+
+    <createView
+        viewName="ae_comments_match_context"
+        path="db/changelog/sql/view_ae_comments_match_context_v5.sql"/>
+
+    <createView
+        viewName="ae_alert_recommendation_query"
+        path="db/changelog/sql/view_ae_alert_recommendation_query.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.7.0_8" author="iwnek">
+    <sqlFile
+        path="db/changelog/sql/drop_function_ae_select_unsolved_matches.sql"/>
+    <sqlFile
+        path="db/changelog/sql/create_function_ae_select_unsolved_matches_v2.sql"
+        splitStatements="false"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.7.0_9" author="iwnek">
+    <addColumn tableName="ae_recommendation">
+      <column name="match_ids" type="BIGINT[]"/>
+      <column name="match_contexts" type="JSONB"/>
+    </addColumn>
+
+    <sqlFile path="db/changelog/sql/insert_matches_to_alert_recommendation.sql"/>
+
+    <addNotNullConstraint tableName="ae_recommendation" columnName="match_ids"/>
+    <addNotNullConstraint tableName="ae_recommendation" columnName="match_contexts"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.7.0_10" author="iwnek">
+    <validCheckSum>8:8cc72a236bbb97fe855d51fef7db7c5f</validCheckSum>
+    <dropView viewName="ae_alert_recommendation_query"/>
+    <dropView viewName="ae_comments_match_context"/>
+
+    <createView
+        viewName="ae_alert_recommendation_query"
+        path="db/changelog/sql/view_ae_alert_recommendation_query_v2.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.7.0_11" author="iwnek">
+    <validCheckSum>8:86a545d413bf08459d14047f3f848a2e</validCheckSum>
+    <dropView viewName="ae_pending_alert_matches_query"/>
+    <dropView viewName="ae_alert_match_solutions_query"/>
+
+    <createView
+        viewName="ae_alert_match_solutions_query"
+        path="db/changelog/sql/view_ae_alert_match_solutions_query_v4.sql"/>
+
+    <createView
+        viewName="ae_pending_alert_matches_query"
+        path="db/changelog/sql/view_ae_pending_alert_matches_query.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.7.0_12" author="iwnek">
+    <sqlFile
+        path="db/changelog/sql/create_function_ae_select_unsolved_matches_v3.sql"
+        splitStatements="false"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.7.0_13" author="iwnek">
+    <sqlFile
+        path="db/changelog/sql/create_function_ae_select_unsolved_matches_v4.sql"
+        splitStatements="false"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.7.0_14" author="jgajewski">
+    <dropForeignKeyConstraint
+        baseTableName="ae_pending_recommendation"
+        constraintName="fk_ae_pending_recommendation_alert_id"/>
+
+    <addForeignKeyConstraint
+        baseTableName="ae_pending_recommendation"
+        baseColumnNames="alert_id"
+        constraintName="fk_ae_pending_recommendation_alert_id"
+        referencedTableName="ae_alert"
+        referencedColumnNames="alert_id"
+        onDelete="CASCADE"/>
+
+    <dropForeignKeyConstraint
+        baseTableName="ae_recommendation"
+        constraintName="fk_ae_recommendation_alert_id"/>
+
+    <addForeignKeyConstraint
+        baseTableName="ae_recommendation"
+        baseColumnNames="alert_id"
+        constraintName="fk_ae_recommendation_alert_id"
+        referencedTableName="ae_alert"
+        referencedColumnNames="alert_id"
+        onDelete="CASCADE"
+        onUpdate="NO ACTION"/>
+
+    <dropForeignKeyConstraint
+        baseTableName="ae_match_solution"
+        constraintName="fk_ae_match_solution_match_id"/>
+
+    <addForeignKeyConstraint
+        baseTableName="ae_match_solution"
+        baseColumnNames="match_id"
+        constraintName="fk_ae_match_solution_match_id"
+        referencedTableName="ae_match"
+        referencedColumnNames="match_id"
+        onDelete="CASCADE"
+        onUpdate="NO ACTION"/>
+  </changeSet>
+</databaseChangeLog>

@@ -155,10 +155,15 @@ ingress:
 # Configuration common for all components
 #
 common:
+  # which component templates to use; supported: spring, pythonagent
   type: spring
+  # enable component
   enabled: true
+  # use database (inject postgres secrets)
   useDb: true
+  # configure db name via postgres operator
   dbName: ""
+  # std k8s docker image settings
   image:
     repository: ""
     tag: ""
@@ -167,21 +172,38 @@ common:
 
   replicaCount: 1
 
+  # override docker entrypoint command
   command: []
 
+  # override docker command arguments
+  # values defined in "common", "agentCommon" and specified component are _concatenated_ together
   args: []
   # - --spring.profiles.active=dev
 
+  # inject additional configuration files (eg into /etc/spring/ for type: spring)
+  # currently only supported for type: spring
   configFiles: {}
   # application.yml: |
   #   logging:
   #     level:
   #       com.silenteight: DEBUG
 
+  # inject --spring.profiles.include=[] into cmd arguments; only applicable for type: spring
   profiles: []
 
+  # inject --<property>=<value> into cmd arguments; only applicable for type: spring
   properties: {}
 
+  # inject additional yaml entries into default config files:
+  # - /etc/spring/kubernetes.yaml for type: spring
+  # - /app/config/application.yaml for type: pythonagent
+  # (note - /app/config/application.yaml support os environment variables - see "configmap-init-scripts.yaml.tpl")
+  additionalConfig: {}
+
+  # inject amqp specific parameters; currently used for type: pythonagent (see "configmap-init-scripts.yaml.tpl")
+  amqp: {}
+
+  # inject sentry specific parameters into spring apps (--sentry.dsn, --sentry.environment)
   sentry:
     dsn: ""
     environment: ""
@@ -214,7 +236,7 @@ common:
 
   startupProbe:
     enabled: true
-    initialDelaySeconds: 30
+    initialDelaySeconds: 45
     periodSeconds: 10
     timeoutSeconds: 1
     failureThreshold: 6
@@ -246,6 +268,7 @@ common:
   tolerations: []
   affinity: {}
 
+## override "common" node for agent deployments only
 agentsCommon:
   enabled: false
   useDb: false
@@ -313,28 +336,34 @@ components:
       tag: "snapshot"
   #Fab bridge end
 
+  core-bridge:
+    enabled: false
+
+    image:
+      repository: registry.dev.s8ops.com/cb/bridge-app
+      tag: snapshot
+    dbName: cb
+    webPath: cb
+
   payments-bridge:
     enabled: false
 
     image:
-      repository: registry.dev.s8ops.com/pb/sear-payments-bridge-app
-      tag: "snapshot"
+      repository: registry.dev.s8ops.com/iris/sear-payments-bridge-app
 
     dbName: "pb"
     webPath: "pb"
 
   universal-data-source:
     image:
-      repository: registry.dev.s8ops.com/uds/universal-data-source-app
-      tag: "snapshot"
+      repository: registry.dev.s8ops.com/iris/universal-data-source-app
 
     dbName: "uds"
     webPath: "uds"
 
   adjudication-engine:
     image:
-      repository: registry.dev.s8ops.com/ae/adjudication-engine-app
-      tag: "latest"
+      repository: registry.dev.s8ops.com/iris/adjudication-engine-app
 
     dbName: "ae"
     webPath: "ae"
@@ -393,12 +422,26 @@ agents:
       repository: registry.dev.s8ops.com/document-agent
   geo-agent:
     image:
-      repository: registry.dev.s8ops.com/geo-agent
+      repository: registry.dev.s8ops.com/geo-agent-default
   learning-engine:
     useDb: true
     dbName: "learningengine"
     image:
-      repository: registry.dev.s8ops.com/learning-engine
+      repository: registry.dev.s8ops.com/learning-engine #should be changed to default distribution when version update (to 1.10.0) will be accepted
+  is-pep-agent:
+    image:
+      repository: registry.dev.s8ops.com/is-pep-agent-default
+  historical-decisions-agent:
+    useDb: true
+    dbName: "historicaldecisions"
+    image:
+      repository: registry.dev.s8ops.com/historical-decisions-agent
+  allow-list-agent:
+    image:
+      repository: registry.dev.s8ops.com/allow-list-agent-default
+  country-agent:
+    image:
+      repository: registry.dev.s8ops.com/country-agent
   freetext-agent:
     image:
       repository: registry.dev.s8ops.com/freetext-agent
@@ -409,40 +452,38 @@ agents:
     image:
       repository: registry.dev.s8ops.com/region-agent
   organization-name-agent:
-    type: python
+    type: pythonagent
     image:
       repository: registry.dev.s8ops.com/organization-name-agent
-    properties:
-      "serp.show-env": null
-    configFiles:
-      application.yml: |
-        agent:
-          processes: 1
-
-          agent-exchange:
-            request:
-              exchange: 'agent.request'
-              routing-key: 'agents.companyName.versions.1_0_0.configs.1'
-              queue-name: 'agent.companyname-requests'
-
-            response:
-              exchange: 'agent.response'
-
-          grpc:
-            port: 9090
-
-        grpc:
-          client:
-            data-source:
-              address: universal-data-source-service.default.svc.cluster.local:9090
-              timeout: 15
-
-        rabbitmq:
-          host: wrkd-sierra-uat-rmq-nlb-d1beaa949f286776.elb.us-west-1.amazonaws.com
-          port: 5672
-          login: {{ ssm "/rabbitmq/username" "required=true" "region=$AWS_REGION" }}
-          password: {{ ssm "/rabbitmq/password" "required=true" "region=$AWS_REGION" }}
-          virtualhost: /
+  company-name-surrounding-agent:
+    type: pythonagent
+    image:
+      repository: registry.dev.s8ops.com/company-name-surrounding-agent
+    additionalConfig:
+      solution_rules:
+        - solution: 0
+          lower_bound: 0
+          upper_bound: 0
+        - solution: 1
+          lower_bound: 1
+          upper_bound: 1
+        - solution: 2
+          lower_bound: 2
+          upper_bound: 2
+        - solution: 3
+          lower_bound: 3
+          upper_bound: 3
+        - solution: 4
+          lower_bound: 4
+          upper_bound: 4
+        - solution: 5+
+          lower_bound: 5
+          upper_bound: 1000000
+      default_response: AGENT_ERROR
+  hit-type-name-agent:
+    type: pythonagent
+    image:
+      repository: registry.dev.s8ops.com/hit-type-name-agent
 
 
 #
@@ -484,6 +525,11 @@ frontend:
 #
 keycloak:
   authServerUrl: ""
-  realm: ""
   frontendClientId: ""
+  #realm: "{{ .Release.Namespace | quote }}"
+  realm: ""
   jwtIssuerUri: "{{ .Values.keycloak.authServerUrl }}/auth/realms/{{ .Values.keycloak.realm }}"
+  #TODO(dsniezek): Should be fixed see UserAuthActivityReportGenerator and LastLoginTimeCacheUpdater
+  resource: ""
+  credentials:
+    secret: ""

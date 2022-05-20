@@ -1,0 +1,143 @@
+syntax = "proto3";
+
+package silenteight.model.api.v1;
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "google/protobuf/empty.proto";
+
+option java_package = "com.silenteight.model.api.v1";
+option java_outer_classname = "SolvingModelProto";
+option java_multiple_files = true;
+
+service SolvingModelService {
+  rpc GetDefaultSolvingModel(google.protobuf.Empty) returns (SolvingModel) {
+    option (google.api.http) = {
+      get: "/v1/solving-models:getDefault"
+    };
+  }
+
+  rpc GetSolvingModel(ModelRequest) returns (SolvingModel) {
+    option (google.api.http) = {
+      get: "/v1/{model=solving-models/*}"
+    };
+  }
+
+  rpc ExportModel(ExportModelRequest) returns (ExportModelResponse) {
+    option (google.api.http) = {
+      get: "/v1/{model.name=solving-models/*}:export"
+    };
+  }
+
+  rpc ImportModel(ImportNewModelRequest) returns (ImportNewModelResponse) {
+    option (google.api.http) = {
+      post: "/v1/solving-models:import"
+    };
+  }
+
+  rpc UseModel(UseModelRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/{model=solving-models/*}:use"
+    };
+  }
+
+  rpc ModelDeployedOnProduction(ModelDeployedOnProductionRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/{model.name=solving-models/*}:deployed"
+    };
+  }
+}
+
+message ModelRequest {
+  // Name of solving model
+  string model = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Binds together configurations of different part of the system required for solving set of alerts
+message SolvingModel {
+  // The unique name of the model. This is always system-assigned.
+  string name = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Policy that binds together feature vectors with solution at match level. Set via Policy API.
+  string policy_name = 2 [(google.api.field_behavior) = REQUIRED];
+  // Strategy which represents an algorithm for determining alert level solution. Required for Solving API.
+  string strategy_name = 3 [(google.api.field_behavior) = REQUIRED];
+  // List of agent configs that that are required to determine feature vector for each match
+  repeated Feature features = 4 [(google.api.field_behavior) = REQUIRED];
+  repeated string categories = 5 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Representation of the feature
+message Feature {
+  // The unique name of the feature. This name is obtained from an external API.
+  // [`features/<Feature Name>`]
+  // e.g. `features/name`
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  // The unique name of the agent config. This name is obtained from an external API.
+  // [`agents/<Agent Name>/versions/<Agent Version>/configs/<Agent Config Version>`]
+  // e.g. `agents/name_agent/version/4.35/configs/345`.
+  string agent_config = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Provides information about new model available for production
+message ModelPromotedForProduction {
+  // The unique name of the model. This is always system-assigned.
+  string name = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Version of the solving model
+  string version = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+// Request for model to be exported
+message ExportModelRequest {
+  oneof model {
+    // Name of solving model
+    string name = 1;
+    // Version of the solving model
+    string version = 2;
+  }
+}
+
+// Response with exported model
+message ExportModelResponse {
+  // Json with exported model
+  bytes model_json = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Id of the solving model, may be different on a different environment
+  int32 id = 2 [(google.api.field_behavior) = OUTPUT_ONLY, deprecated = true];
+  // Name of solving model
+  string name = 3;
+  // Version of the solving model
+  string version = 4;
+}
+
+// Request with new model to import
+message ImportNewModelRequest {
+  // Json with model to be used
+  bytes model_json = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Response with imported model
+message ImportNewModelResponse {
+  // The unique name of the model. This is always system-assigned.
+  string model = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+// Request to use the specific model for solving alerts
+message UseModelRequest {
+  // Name of the model to use for solving alerts
+  string model = 1;
+}
+
+// Request for model deployed on production
+message ModelDeployedOnProductionRequest {
+  oneof model {
+    // Name of solving model
+    string name = 1;
+    // Version of the solving model
+    string version = 2;
+  }
+}
+
+// Message that informs about list of archiving model
+message ModelsArchived {
+  // List of models' resource name that have been archived
+  repeated string models = 1 [(google.api.field_behavior) = REQUIRED];
+}

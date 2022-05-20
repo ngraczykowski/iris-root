@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package silenteight.datasource.comments.api.v2;
+
+import "google/api/field_behavior.proto";
+import "google/protobuf/struct.proto";
+
+option java_package = "com.silenteight.datasource.comments.api.v2";
+option java_outer_classname = "CommentInputProto";
+option java_multiple_files = true;
+
+// Comment input contains alert and match data required to generate a comment from a template.
+message CommentInput {
+  // The name of this comment input, in form of `comment-inputs/<Comment input ID>`.
+  string name = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Alert name in form of `alerts/<Alert ID>`.
+  string alert = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // Generic Struct which contains nested objects with comment input for alert.
+  // Example content: alert metadata.
+  google.protobuf.Struct alert_comment_input = 3 [(google.api.field_behavior) = REQUIRED];
+
+  // List of match comment inputs.
+  repeated MatchCommentInput match_comment_inputs = 4;
+}
+
+// Match Comment input contains match data required to generate a comment from a template.
+message MatchCommentInput {
+  // Match name in form of `alerts/<Alert ID>/matches/<Match ID>`.
+  string match = 1;
+
+  // Generic Struct which contains nested objects with comment input for match.
+  // Example content: agent inputs, match metadata.
+  google.protobuf.Struct comment_input = 2;
+}

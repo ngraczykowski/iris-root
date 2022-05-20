@@ -1,0 +1,404 @@
+{
+  "properties": [
+    {
+      "name": "silenteight.bridge.grpc.port",
+      "type": "java.lang.String",
+      "description": "Bridge gRPC port."
+    },
+    {
+      "name": "silenteight.bridge.grpc.recommendation-deadline",
+      "type": "java.time.Duration",
+      "description": "Recommendation gRPC adapter deadline time."
+    },
+    {
+      "name": "silenteight.bridge.grpc.dataset-deadline",
+      "type": "java.time.Duration",
+      "description": "Dataset gRPC adapter deadline time."
+    },
+    {
+      "name": "silenteight.bridge.grpc.historical-decisions-deadline",
+      "type": "java.time.Duration",
+      "description": "Historical decisions gRPC adapter deadline time."
+    },
+    {
+      "name": "silenteight.bridge.grpc.analysis-deadline",
+      "type": "java.time.Duration",
+      "description": "Analysis gRPC adapter deadline time."
+    },
+    {
+      "name": "silenteight.bridge.grpc.alert-deadline",
+      "type": "java.time.Duration",
+      "description": "Alert gRPC adapter deadline time."
+    },
+    {
+      "name": "silenteight.bridge.grpc.is-pep-deadline",
+      "type": "java.time.Duration",
+      "description": "Is-pep gRPC adapter deadline time."
+    },
+    {
+      "name": "silenteight.bridge.grpc.name-information-deadline",
+      "type": "java.time.Duration",
+      "description": "Name information gRPC adapter deadline time."
+    },
+    {
+      "name": "silenteight.bridge.grpc.model-deadline",
+      "type": "java.time.Duration",
+      "description": "Model gRPC adapter deadline time."
+    },
+    {
+      "name": "silenteight.bridge.grpc.adjudication-engine-address",
+      "type": "java.lang.String",
+      "description": "gRPC adjudication engine address."
+    },
+    {
+      "name": "silenteight.bridge.grpc.governance-address",
+      "type": "java.lang.String",
+      "description": "gRPC governance address."
+    },
+    {
+      "name": "silenteight.bridge.grpc.worldcheck-address",
+      "type": "java.lang.String",
+      "description": "gRPC worldcheck address."
+    },
+    {
+      "name": "silenteight.bridge.grpc.historical-decisions-model-address",
+      "type": "java.lang.String",
+      "description": "gRPC historical decisions model address."
+    },
+    {
+      "name": "silenteight.bridge.http.port",
+      "type": "java.lang.String",
+      "description": "HTTP port."
+    },
+    {
+      "name": "silenteight.bridge.amqp.model-persisted-exchange-name",
+      "type": "java.lang.String",
+      "description": "Model persisted exchange name."
+    },
+    {
+      "name": "silenteight.bridge.amqp.outgoing.worldcheck-model-persisted-routing-key",
+      "type": "java.lang.String",
+      "description": "Worldcheck model persisted exchange routing key."
+    },
+    {
+      "name": "silenteight.bridge.amqp.outgoing.historical-decisions-model-persisted-routing-key",
+      "type": "java.lang.String",
+      "description": "Historical decisions model persisted exchange routing key."
+    },
+    {
+      "name": "silenteight.bridge.amqp.outgoing.warehouse-exchange-name",
+      "type": "java.lang.String",
+      "description": "Bridge warehouse exchange name."
+    },
+    {
+      "name": "silenteight.bridge.amqp.outgoing.warehouse-routing-key",
+      "type": "java.lang.String",
+      "description": "Bridge warehouse routing key."
+    },
+    {
+      "name": "silenteight.bridge.amqp.outgoing.watchlist-persisted-exchange-name",
+      "type": "java.lang.String",
+      "description": "Watchlist persisted exchange name."
+    },
+    {
+      "name": "silenteight.bridge.amqp.outgoing.watchlist-persisted-routing-key",
+      "type": "java.lang.String",
+      "description": "Watchlist persisted exchange routing key."
+    },
+    {
+      "name": "silenteight.bridge.amqp.outgoing.is-pep-exchange-name",
+      "type": "java.lang.String",
+      "description": "IsPep learning store exchange name."
+    },
+    {
+      "name": "silenteight.bridge.amqp.outgoing.is-pep-routing-key",
+      "type": "java.lang.String",
+      "description": "IsPep learning store exchange routing key."
+    },
+    {
+      "name": "silenteight.bridge.amqp.outgoing.historical-decision-exchange-name",
+      "type": "java.lang.String",
+      "description": "Historical decision learning store exchange name."
+    },
+    {
+      "name": "silenteight.bridge.amqp.outgoing.historical-decision-routing-key",
+      "type": "java.lang.String",
+      "description": "Historical decision learning store routing key."
+    },
+    {
+      "name": "silenteight.bridge.amqp.outgoing.data-retention-exchange-name",
+      "type": "java.lang.String",
+      "description": "Data retention exchange name."
+    },
+    {
+      "name": "silenteight.bridge.amqp.outgoing.data-retention-personal-information-expired-routing-key",
+      "type": "java.lang.String",
+      "description": "Data retention personal information expired routing key."
+    },
+    {
+      "name": "silenteight.bridge.amqp.outgoing.data-retention-alerts-expired-routing-key",
+      "type": "java.lang.String",
+      "description": "Data retention alerts expired routing key."
+    },
+    {
+      "name": "silenteight.bridge.amqp.outgoing.data-retention-routing-key",
+      "type": "java.lang.String",
+      "description": "Data retention routing key."
+    },
+    {
+      "name": "silenteight.bridge.amqp.ingoing.model-promoted-queue",
+      "type": "java.lang.String",
+      "description": "Model promoted ingoing queue."
+    },
+    {
+      "name": "silenteight.bridge.amqp.ingoing.dead-letter-queue",
+      "type": "java.lang.String",
+      "description": "Dead letter queue."
+    },
+    {
+      "name": "silenteight.bridge.amqp.ingoing.recommendations-queue",
+      "type": "java.lang.String",
+      "description": "Recommendations ingoing queue."
+    },
+    {
+      "name": "silenteight.bridge.amqp.ingoing.worldcheck-model-loaded-queue",
+      "type": "java.lang.String",
+      "description": "Worldcheck model loaded ingoing queue."
+    },
+    {
+      "name": "silenteight.bridge.amqp.ingoing.historical-decisions-model-loaded-queue",
+      "type": "java.lang.String",
+      "description": "Historical decisions model loaded ingoing queue."
+    },
+    {
+      "name": "silenteight.bridge.amqp.ingoing.worldcheck-model-persisted-queue",
+      "type": "java.lang.String",
+      "description": "Worldcheck model persisted ingoing queue."
+    },
+    {
+      "name": "silenteight.bridge.amqp.ingoing.historical-decisions-model-persisted-queue",
+      "type": "java.lang.String",
+      "description": "Historical decisions model persisted ingoing queue."
+    },
+    {
+      "name": "silenteight.bridge.analysis.timeout",
+      "type": "java.time.Duration",
+      "description": "Duration of analysis timeout for 5000 alerts."
+    },
+    {
+      "name": "silenteight.bridge.aws.accessKey",
+      "type": "java.lang.String",
+      "description": "AWS access key."
+    },
+    {
+      "name": "silenteight.bridge.aws.buckets.modelBucketName",
+      "type": "java.lang.String",
+      "description": "AWS model bucket name."
+    },
+    {
+      "name": "silenteight.bridge.aws.buckets.watchlistBucketName",
+      "type": "java.lang.String",
+      "description": "AWS watchlist bucket name."
+    },
+    {
+      "name": "silenteight.bridge.aws.region",
+      "type": "java.lang.String",
+      "description": "AWS region name."
+    },
+    {
+      "name": "silenteight.bridge.aws.secretKey",
+      "type": "java.lang.String",
+      "description": "AWS secret key."
+    },
+    {
+      "name": "silenteight.bridge.aws.uri",
+      "type": "java.net.URI",
+      "description": "Endpoint address for uploading files."
+    },
+    {
+      "name": "silenteight.bridge.data.retention.chunk",
+      "type": "java.lang.Integer",
+      "description": "Chunk for data retention."
+    },
+    {
+      "name": "silenteight.bridge.data.retention.rate",
+      "type": "java.time.Duration",
+      "description": "Execution rate of data retention job."
+    },
+    {
+      "name": "silenteight.bridge.data.retention.personal-information-expired.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enable or disable personal information data retention."
+    },
+    {
+      "name": "silenteight.bridge.data.retention.personal-information-expired.duration",
+      "type": "java.time.Duration",
+      "description": "Duration of data personal information retention."
+    },
+    {
+      "name": "silenteight.bridge.data.retention.alerts-expired.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enable or disable alerts data retention."
+    },
+    {
+      "name": "silenteight.bridge.data.retention.dry-run-mode.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enable or disable dry run mode in data retention."
+    },
+    {
+      "name": "silenteight.bridge.data.retention.alerts-expired.duration",
+      "type": "java.time.Duration",
+      "description": "Duration of alerts data retention."
+    },
+    {
+      "name": "silenteight.bridge.unpacker.path",
+      "type": "java.lang.String",
+      "description": "Path to unpacked file or temporary directory when the file is unpacked."
+    },
+    {
+      "name": "silenteight.bridge.alert.datetime.format",
+      "type": "java.lang.String",
+      "description": "DateTime pattern for CustomDateTimeFormatter.class used in date mapping."
+    },
+    {
+      "name": "silenteight.bridge.model.is-pep-historical-model-export.cron",
+      "type": "java.lang.String",
+      "description": "Cron for is pep historical model export."
+    },
+    {
+      "name": "silenteight.bridge.model.is-pep-procedural-model-export.cron",
+      "type": "java.lang.String",
+      "description": "Cron for is pep procedural model export."
+    },
+    {
+      "name": "silenteight.bridge.model.name-model-export.cron",
+      "type": "java.lang.String",
+      "description": "Cron for name aliases model export."
+    },
+    {
+      "name": "silenteight.bridge.json.alert-limit",
+      "type": "java.lang.String",
+      "description": "Maximal number of alerts in a single batch."
+    },
+    {
+      "name": "silenteight.bridge.category.risk-type-values.SAN",
+      "type": "java.util.List",
+      "description": "Map's key value SAN for risk type values."
+    },
+    {
+      "name": "silenteight.bridge.category.risk-type-values.AML",
+      "type": "java.util.List",
+      "description": "Map's key value AML for risk type values."
+    },
+    {
+      "name": "silenteight.bridge.category.risk-type-values.PEP",
+      "type": "java.util.List",
+      "description": "Map's key value PEP for risk type values."
+    },
+    {
+      "name": "silenteight.bridge.category.risk-type-values.EXITS",
+      "type": "java.util.List",
+      "description": "Map's key value EXITS for risk type values."
+    },
+    {
+      "name": "silenteight.bridge.category.risk-type-values.SSC",
+      "type": "java.util.List",
+      "description": "Map's key value SSC for risk type values."
+    },
+    {
+      "name": "silenteight.bridge.comment.wl-types.SAN",
+      "type": "java.util.List",
+      "description": "Map's key value 'SAN' for comment watchlist types."
+    },
+    {
+      "name": "silenteight.bridge.comment.wl-types.AML",
+      "type": "java.util.List",
+      "description": "Map's key value 'AML' for comment watchlist types."
+    },
+    {
+      "name": "silenteight.bridge.comment.wl-types.PEP",
+      "type": "java.util.List",
+      "description": "Map's key value 'PEP' for comment watchlist types."
+    },
+    {
+      "name": "silenteight.bridge.comment.wl-types.EXITS",
+      "type": "java.util.List",
+      "description": "Map's key value 'EXITS' for comment watchlist types."
+    },
+    {
+      "name": "silenteight.bridge.comment.wl-types.SSC",
+      "type": "java.util.List",
+      "description": "Map's key value 'SSC' for comment watchlist types."
+    },
+    {
+      "name": "silenteight.bridge.date.watchlist-types.SAN",
+      "type": "java.util.List",
+      "description": "Map's key value 'SAN' for comment watchlist types."
+    },
+    {
+      "name": "silenteight.bridge.date.watchlist-types.AML",
+      "type": "java.util.List",
+      "description": "Map's key value 'AML' for comment watchlist types."
+    },
+    {
+      "name": "silenteight.bridge.date.watchlist-types.PEP",
+      "type": "java.util.List",
+      "description": "Map's key value 'PEP' for comment watchlist types."
+    },
+    {
+      "name": "silenteight.bridge.date.watchlist-types.EXITS",
+      "type": "java.util.List",
+      "description": "Map's key value 'EXITS' for comment watchlist types."
+    },
+    {
+      "name": "silenteight.bridge.date.watchlist-types.SSC",
+      "type": "java.util.List",
+      "description": "Map's key value 'SSC' for comment watchlist types."
+    },
+    {
+      "name": "silenteight.bridge.recommendation.silentEightValues.MANUAL_INVESTIGATION",
+      "type": "java.lang.String",
+      "description": "Recommendation action for manual investigation solution."
+    },
+    {
+      "name": "silenteight.bridge.recommendation.silentEightValues.FALSE_POSITIVE",
+      "type": "java.lang.String",
+      "description": "Recommendation action for false positive solution."
+    },
+    {
+      "name": "silenteight.bridge.recommendation.silentEightValues.POTENTIAL_TRUE_POSITIVE",
+      "type": "java.lang.String",
+      "description": "Recommendation action for potential true positive solution."
+    },
+    {
+      "name": "silenteight.bridge.recommendation.userFriendlyValues.AAA_FALSE_POSITIVE",
+      "type": "java.lang.String",
+      "description": "User-friendly value for AAA FALSE POSITIVE recommendation."
+    },
+    {
+      "name": "silenteight.bridge.recommendation.userFriendlyValues.LEVEL_1_REVIEW",
+      "type": "java.lang.String",
+      "description": "User-friendly value for LEVEL 1 REVIEW recommendation."
+    },
+    {
+      "name": "silenteight.bridge.recommendation.userFriendlyValues.LEVEL_2_REVIEW",
+      "type": "java.lang.String",
+      "description": "User-friendly value for LEVEL 2 REVIEW recommendation."
+    },
+    {
+      "name": "silenteight.bridge.recommendation.userFriendlyValues.LEVEL_3_REVIEW",
+      "type": "java.lang.String",
+      "description": "User-friendly value for LEVEL 3 REVIEW recommendation."
+    },
+    {
+      "name": "silenteight.bridge.learning.batch-size",
+      "type": "java.lang.String",
+      "description": "Batch size of sending messages for learning data."
+    },
+    {
+      "name": "management.endpoints.loggers.sensitive",
+      "type": "java.lang.Boolean",
+      "description": "Sensitive loggers endpoints for metrics enabled/disabled."
+    }
+  ]
+}

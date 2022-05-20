@@ -42,9 +42,11 @@ pre-commit install
 
 > **WORK IN PROGRESS**
 
-The recommended method for running Iris components is to them from IntelliJ directly, while all the third-party dependencies as Docker Compose managed Docker containers.
+## Build logic plugins
 
-## Gradle plugins
+Iris is using [Gradle convention plugins](https://docs.gradle.org/current/userguide/sharing_build_logic_between_subprojects.html) for configuring builds of its components.
+
+> **WORK IN PROGRESS**
 
 `com.silenteight.sear.build.spring-boot-application`
 

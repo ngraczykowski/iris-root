@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package silenteight.datasource.agentinput.api.v1;
+
+import "google/protobuf/any.proto";
+import "google/api/field_behavior.proto";
+
+option java_package = "com.silenteight.datasource.agentinput.api.v1";
+option java_outer_classname = "AgentInputProto";
+option java_multiple_files = true;
+
+message AgentInput {
+  // The name of the agent input, in form of `agent-inputs/<Agent input ID>`.
+  string name = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Alert name in form of `alerts/<Alert ID>`.
+  string alert = 4 [(google.api.field_behavior) = REQUIRED];
+
+  // The name of the match this agent input is for, in form of
+  // `alerts/<Alert ID>/matches/<Match ID>`.
+  string match = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // The list of feature inputs.
+  repeated FeatureInput feature_inputs = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+message FeatureInput {
+  // The name of the feature this agent input is for, in form of
+  // `features/<Feature>`.
+  string feature = 1 [(google.api.field_behavior) = REQUIRED];
+
+  google.protobuf.Any agent_feature_input = 2 [(google.api.field_behavior) = REQUIRED];
+}

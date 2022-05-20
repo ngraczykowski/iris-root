@@ -1,0 +1,22 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "maven-publish"
+  id "io.freefair.aspectj.post-compile-weaving"
+}
+
+description = "SEP Base Aspects"
+
+dependencies {
+  api libs.aspectjrt
+  api libs.jakarta.validation.api
+  api libs.micrometer.core
+  api libs.spring.context
+  api libs.spring.boot.autoconfigure
+  testImplementation libs.hibernate.validator
+  testImplementation libs.tomcat.embed.el
+  testImplementation libs.logback.classic
+}
+// weave tests with source from main
+tasks.named(JavaPlugin.COMPILE_TEST_JAVA_TASK_NAME).configure {JavaCompile java ->
+  java.ajc.options.aspectpath.from sourceSets.main.output.classesDirs
+}

@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package silenteight.datasource.agentinput.api.v1;
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "silenteight/datasource/agentinput/api/v1/agent_input.proto";
+
+option java_package = "com.silenteight.datasource.agentinput.api.v1";
+option java_outer_classname = "AgentInputServiceProto";
+option java_multiple_files = true;
+
+service AgentInputService {
+
+  rpc BatchCreateAgentInputs (BatchCreateAgentInputsRequest) returns (BatchCreateAgentInputsResponse) {
+    option (google.api.http) = {
+      post: "/v1/agent-inputs:batchCreate"
+      body: "agent_inputs"
+    };
+  }
+}
+
+message BatchCreateAgentInputsRequest {
+  repeated AgentInput agent_inputs = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message CreatedAgentInput {
+  // The name of the agent input, in form of `agent-inputs/<Agent input ID>`.
+  string name = 1;
+
+  // The name of the match this agent input is for, in form of
+  // `alerts/<Alert ID>/matches/<Match ID>`.
+  string match = 2;
+}
+
+message BatchCreateAgentInputsResponse {
+  // The list of created agent inputs.
+  repeated CreatedAgentInput created_agent_inputs = 1;
+}

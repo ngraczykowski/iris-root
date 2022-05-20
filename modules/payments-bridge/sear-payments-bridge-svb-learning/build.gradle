@@ -1,0 +1,61 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "groovy"
+}
+
+dependencies {
+  implementation project(":proto-sear-payments-bridge-internal-protos")
+  implementation project(":sear-payments-bridge-ae")
+  implementation project(":sear-payments-bridge-agents")
+  implementation project(":sear-payments-bridge-common")
+  implementation project(":sear-payments-bridge-data-retention")
+  implementation project(":sear-payments-bridge-datasource")
+  implementation project(":sear-payments-bridge-etl")
+  implementation project(":sear-payments-bridge-mock-datasource")
+  implementation project(":sear-payments-bridge-notification")
+  implementation project(":sear-payments-bridge-warehouse")
+
+  implementation libs.silenteight.sep.base.common
+  implementation libs.data.source.api
+  implementation libs.data.source.categories.api
+  implementation libs.data.source.agentinput.api
+  implementation libs.learning.engine.store.api
+  implementation libs.warehouse.data.api
+
+  implementation libs.spring.amqp
+  implementation libs.spring.batch.starter
+  implementation libs.spring.boot
+  implementation libs.spring.context
+  implementation libs.spring.security.core
+  implementation libs.spring.web
+  implementation libs.spring.webmvc
+  implementation libs.grpc.client.spring.boot.starter
+
+  implementation libs.guava
+  implementation libs.hibernate.validator
+  implementation libs.jackson.annotations
+  implementation libs.jackson.databind
+  implementation libs.jackson.dataformat.csv
+  implementation libs.jakarta.annotation.api
+  implementation libs.jakarta.validation.api
+  implementation libs.opencsv
+  implementation libs.commons.collections
+  implementation libs.protobuf.java.util
+
+  // TODO: please remove this dependency when old learning package will be removed
+  implementation libs.aws.auth
+  implementation libs.aws.s3
+  implementation libs.aws.ses
+
+  implementation libs.javax.mail
+
+  implementation libs.shedlock.jdbc.provider
+  implementation libs.shedlock.spring
+
+  testImplementation libs.spring.batch.test
+  testImplementation libs.silenteight.sep.base.testing
+  testImplementation libs.spock.core
+  testImplementation libs.spock.spring
+
+  testImplementation project(":sear-payments-bridge-testing")
+}

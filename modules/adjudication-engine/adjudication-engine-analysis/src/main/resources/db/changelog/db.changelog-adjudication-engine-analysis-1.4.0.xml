@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet id="adjudication-engine-analysis-1.4.0_1" author="ahaczewski">
+    <dropColumn tableName="ae_analysis" columnName="state"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.4.0_2" author="ahaczewski">
+    <validCheckSum>8:a92372be4ee9f02e7cc7a50fb066f4fd</validCheckSum>
+    <dropView viewName="ae_analysis_query"/>
+    <createView
+        viewName="ae_analysis_query"
+        path="db/changelog/sql/view_ae_analysis_query_v2.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.4.0_3" author="ahaczewski">
+    <dropView viewName="ae_comments_context"/>
+    <dropView viewName="ae_comments_match_context"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.4.0_4" author="ahaczewski">
+    <validCheckSum>8:46dc637ccc1a24b79ee3ec5e649dcb99</validCheckSum>
+    <createView
+        viewName="ae_comments_match_context"
+        path="db/changelog/sql/view_ae_comments_match_context_v2.sql"/>
+    <createView
+        viewName="ae_comments_context"
+        path="db/changelog/sql/view_ae_comments_context_v2.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.4.0_5" author="ahaczewski">
+    <dropView viewName="ae_comments_context"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.4.0_6" author="ahaczewski">
+    <validCheckSum>8:6728ef64b527fdd277f7d17689860067</validCheckSum>
+    <createView
+        viewName="ae_alert_recommendation_query"
+        path="db/changelog/sql/view_ae_alert_recommendation_query.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.4.0_7" author="wkeska">
+    <validCheckSum>8:11aa9a5a2ce5be6673d55b6ee2726e79</validCheckSum>
+    <createView
+        viewName="ae_analysis_match_feature_vector_elements_query"
+        path="db/changelog/sql/view_ae_analysis_match_feature_vector_elements_query.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.4.0_9" author="wkeska">
+    <createIndex
+        tableName="ae_match_solution"
+        indexName="uq_ix_ae_match_solution_analysis_id_match_id"
+        unique="true">
+      <column name="analysis_id"/>
+      <column name="match_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.4.0_10" author="wkeska">
+    <dropView viewName="ae_alert_match_solutions_query"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.4.0_11" author="wkeska">
+    <validCheckSum>8:d8b3f0ca210c86c204b1fce3b8157bf1</validCheckSum>
+    <createView
+        viewName="ae_alert_match_solutions_query"
+        path="db/changelog/sql/view_ae_alert_match_solutions_query_v2.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.4.0_12" author="ahaczewski">
+    <dropView viewName="ae_analysis_match_feature_vector_elements_query"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.4.0_13" author="ahaczewski">
+    <validCheckSum>8:43f71f4c1eac04bb685825cc8fe330fe</validCheckSum>
+    <createView
+        viewName="ae_analysis_match_feature_vector_elements_query"
+        path="db/changelog/sql/view_ae_analysis_match_feature_vector_elements_query_v2.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.4.0_14" author="wkeska">
+    <dropView viewName="ae_alert_recommendation_query"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.4.0_15" author="wkeska">
+    <validCheckSum>8:23176a8499669b6090eb64dd38fcd467</validCheckSum>
+    <modifyDataType
+        columnName="client_alert_identifier"
+        newDataType="varchar(250)"
+        tableName="ae_alert"/>
+
+    <createView
+        viewName="ae_alert_recommendation_query"
+        path="db/changelog/sql/view_ae_alert_recommendation_query.sql"/>
+  </changeSet>
+</databaseChangeLog>

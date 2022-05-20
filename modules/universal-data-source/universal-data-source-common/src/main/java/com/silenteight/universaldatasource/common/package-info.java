@@ -1,0 +1,4 @@
+@ParametersAreNonnullByDefault
+package com.silenteight.universaldatasource.common;
+
+import javax.annotation.ParametersAreNonnullByDefault;

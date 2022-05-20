@@ -9,7 +9,7 @@ dependencies {
   implementation project(":simulator-dataset")
   implementation project(":simulator-management")
 
-  implementation libs.silenteight.data.retention.api
+  implementation libs.data.retention.api
 
   aspect libs.silenteight.sep.base.aspects
 

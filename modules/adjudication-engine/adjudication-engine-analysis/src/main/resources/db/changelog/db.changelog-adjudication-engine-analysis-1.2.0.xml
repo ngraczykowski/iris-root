@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_1" author="ahaczewski">
+    <renameTable oldTableName="ae_analysis_categories" newTableName="ae_analysis_category"/>
+    <renameSequence
+        oldSequenceName="ae_analysis_categories_analysis_category_id_seq"
+        newSequenceName="ae_analysis_category_analysis_category_id_seq"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_2" author="ahaczewski">
+    <renameTable oldTableName="ae_analysis_features" newTableName="ae_analysis_features_migration"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_3" author="ahaczewski">
+    <createTable tableName="ae_analysis_feature">
+      <column name="analysis_feature_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="analysis_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="agent_config_feature_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="ae_analysis_feature"
+        indexName="ix_ae_analysis_feature_analysis_id">
+      <column name="analysis_id"/>
+    </createIndex>
+    <createIndex
+        tableName="ae_analysis_feature"
+        indexName="ix_ae_analysis_feature_agent_config_feature_id">
+      <column name="agent_config_feature_id"/>
+    </createIndex>
+
+    <addUniqueConstraint
+        tableName="ae_analysis_feature"
+        columnNames="analysis_id, agent_config_feature_id"
+        constraintName="uq_ae_analysis_feature_analysis_id_agent_config_feature_id"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_4" author="ahaczewski">
+    <sqlFile path="db/changelog/sql/migrate_analysis_feature.sql"/>
+    <rollback>
+      <sqlFile path="db/changelog/sql/revert_analysis_feature.sql"/>
+    </rollback>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_5" author="ahaczewski">
+    <dropTable tableName="ae_analysis_features_migration"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_6" author="ahaczewski">
+    <renameTable oldTableName="ae_analysis_category" newTableName="ae_analysis_category_migration"/>
+    <renameSequence
+        oldSequenceName="ae_analysis_category_analysis_category_id_seq"
+        newSequenceName="ae_analysis_category_analysis_category_id_seq_migration"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_7" author="ahaczewski">
+    <createTable tableName="ae_analysis_category">
+      <column name="analysis_category_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="analysis_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="category_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="ae_analysis_category"
+        indexName="ix_ae_analysis_category_analysis_id">
+      <column name="analysis_id"/>
+    </createIndex>
+    <createIndex
+        tableName="ae_analysis_category"
+        indexName="ix_ae_analysis_category_category_id">
+      <column name="category_id"/>
+    </createIndex>
+
+    <addUniqueConstraint
+        tableName="ae_analysis_category"
+        columnNames="analysis_id, category_id"
+        constraintName="uq_ae_analysis_category_analysis_id_category_id"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_8" author="ahaczewski">
+    <sqlFile
+        path="db/changelog/sql/migrate_analysis_category.sql"/>
+    <rollback>
+      <sqlFile path="db/changelog/sql/revert_analysis_category.sql"/>
+    </rollback>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_9" author="ahaczewski">
+    <dropTable tableName="ae_analysis_category_migration"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_10" author="ahaczewski">
+    <validCheckSum>8:06436a0645041361b11508c1b6c5ba2b</validCheckSum>
+    <createView
+        viewName="ae_analysis_feature_query"
+        path="db/changelog/sql/view_ae_analysis_feature_query.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_11" author="ahaczewski">
+    <validCheckSum>8:42c3a27264ec4f339a0c31c2146ebcc8</validCheckSum>
+    <createView
+        viewName="ae_analysis_category_query"
+        path="db/changelog/sql/view_ae_analysis_category_query.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_12" author="ahaczewski">
+    <validCheckSum>8:e855ea07f49cc868ca17c96898d3dfb6</validCheckSum>
+    <createView
+        viewName="ae_analysis_query"
+        path="db/changelog/sql/view_ae_analysis_query.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_13" author="ahaczewski">
+    <comment>Create an indexes on ae_analysis_alert_query materialized view</comment>
+    <createIndex
+        tableName="ae_analysis_alert_query"
+        indexName="ix_ae_analysis_alert_query_analysis_id">
+      <column name="analysis_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_14" author="ahaczewski">
+    <createTable tableName="ae_pending_recommendation">
+      <column name="analysis_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="alert_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="ae_pending_recommendation"
+        indexName="ix_ae_pending_recommendation_analysis_id">
+      <column name="analysis_id"/>
+    </createIndex>
+
+    <addUniqueConstraint
+        tableName="ae_pending_recommendation"
+        columnNames="analysis_id, alert_id"
+        constraintName="uq_ix_ae_pending_recommendation_analysis_id_alert_id"/>
+
+    <addForeignKeyConstraint
+        baseTableName="ae_pending_recommendation"
+        baseColumnNames="analysis_id"
+        constraintName="fk_ae_pending_recommendation_analysis_id"
+        referencedTableName="ae_analysis"
+        referencedColumnNames="analysis_id"/>
+
+    <addForeignKeyConstraint
+        baseTableName="ae_pending_recommendation"
+        baseColumnNames="alert_id"
+        constraintName="fk_ae_pending_recommendation_alert_id"
+        referencedTableName="ae_alert"
+        referencedColumnNames="alert_id"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_15" author="ahaczewski">
+    <validCheckSum>8:122b6c847eb8255ad855d4d63bbe00d4</validCheckSum>
+    <createView
+        viewName="ae_pending_match_feature_query"
+        path="db/changelog/sql/view_ae_pending_match_feature_query.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_16" author="ahaczewski">
+    <validCheckSum>8:e89c062b534b39b801944bd894804078</validCheckSum>
+    <createView
+        viewName="ae_missing_match_feature_query"
+        path="db/changelog/sql/view_ae_missing_match_feature_query.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_17" author="ahaczewski">
+    <comment>Drop views using previous structure of agent exchange.</comment>
+    <dropView viewName="ae_missing_match_feature_query"/>
+    <dropView viewName="ae_pending_match_feature_query"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_18" author="ahaczewski">
+    <comment>Drop tables previously created in `adjudication-engine-features` module.</comment>
+    <dropTable tableName="ae_agent_exchange_match_feature"/>
+    <dropTable tableName="ae_agent_exchange"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_19" author="ahaczewski">
+    <createTable tableName="ae_agent_exchange">
+      <column name="agent_exchange_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="request_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="request_priority" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="agent_config" type="VARCHAR(150)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addUniqueConstraint
+        tableName="ae_agent_exchange"
+        columnNames="request_id"
+        constraintName="uq_ae_agent_exchange_request_id"/>
+
+    <createIndex tableName="ae_agent_exchange" indexName="ix_ae_agent_exchange_request_id">
+      <column name="request_id"/>
+    </createIndex>
+    <createIndex tableName="ae_agent_exchange" indexName="ix_ae_agent_exchange_agent_config">
+      <column name="agent_config"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_20" author="ahaczewski">
+    <createTable tableName="ae_agent_exchange_match">
+      <column name="agent_exchange_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="match_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addPrimaryKey
+        tableName="ae_agent_exchange_match"
+        columnNames="agent_exchange_id, match_id"
+        constraintName="pk_ae_agent_exchange_match"/>
+    <addForeignKeyConstraint
+        baseTableName="ae_agent_exchange_match"
+        baseColumnNames="agent_exchange_id"
+        constraintName="fk_ae_agent_exchange_match_agent_exchange_id"
+        referencedTableName="ae_agent_exchange"
+        referencedColumnNames="agent_exchange_id"
+        onUpdate="CASCADE"
+        onDelete="CASCADE"/>
+    <addForeignKeyConstraint
+        baseTableName="ae_agent_exchange_match"
+        baseColumnNames="match_id"
+        constraintName="fk_ae_agent_exchange_match_match_id"
+        referencedTableName="ae_match"
+        referencedColumnNames="match_id"/>
+
+    <createIndex
+        tableName="ae_agent_exchange_match"
+        indexName="ix_ae_agent_exchange_match_agent_exchange_id">
+      <column name="agent_exchange_id"/>
+    </createIndex>
+    <createIndex
+        tableName="ae_agent_exchange_match"
+        indexName="ix_ae_agent_exchange_match_match_id">
+      <column name="match_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_21" author="ahaczewski">
+    <createTable tableName="ae_agent_exchange_feature">
+      <column name="agent_exchange_feature_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="agent_exchange_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="feature" type="VARCHAR(150)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="ae_agent_exchange_feature"
+        baseColumnNames="agent_exchange_id"
+        constraintName="fk_ae_agent_exchange_feature_agent_exchange_id"
+        referencedTableName="ae_agent_exchange"
+        referencedColumnNames="agent_exchange_id"
+        onUpdate="CASCADE"
+        onDelete="CASCADE"/>
+
+    <createIndex
+        tableName="ae_agent_exchange_feature"
+        indexName="ix_ae_agent_exchange_feature_agent_exchange_id">
+      <column name="agent_exchange_id"/>
+    </createIndex>
+    <createIndex
+        tableName="ae_agent_exchange_feature"
+        indexName="ix_ae_agent_exchange_feature_feature">
+      <column name="feature"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_22" author="ahaczewski">
+    <validCheckSum>8:32123d03af484fd49ad08bf5951f2b06</validCheckSum>
+    <createView
+        viewName="ae_pending_match_feature_query"
+        path="db/changelog/sql/view_ae_pending_match_feature_query_v2.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_23" author="ahaczewski">
+    <validCheckSum>8:82f8cf32f1395697929087de239c60bf</validCheckSum>
+    <createView
+        viewName="ae_missing_match_feature_query"
+        path="db/changelog/sql/view_ae_missing_match_feature_query_v2.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.2.0_24" author="ahaczewski">
+    <sql splitStatements="true">
+      ALTER TABLE ae_agent_exchange ALTER COLUMN agent_exchange_id DROP IDENTITY;
+      ALTER TABLE ae_agent_exchange_feature ALTER COLUMN agent_exchange_feature_id DROP IDENTITY;
+    </sql>
+    <createSequence
+        sequenceName="ae_agent_exchange_seq"
+        incrementBy="10"/>
+    <createSequence
+        sequenceName="ae_agent_exchange_feature_seq"
+        incrementBy="10"/>
+    <sql splitStatements="true">
+      SELECT setval(
+        'ae_agent_exchange_seq',
+        (SELECT max(agent_exchange_id) FROM ae_agent_exchange) + 1);
+      SELECT setval(
+        'ae_agent_exchange_feature_seq',
+        (SELECT max(agent_exchange_feature_id) FROM ae_agent_exchange_feature) + 1);
+    </sql>
+  </changeSet>
+
+  <!--  <changeSet id="adjudication-engine-analysis-1.2.0_25" author="ahaczewski">-->
+  <!--  </changeSet>-->
+</databaseChangeLog>

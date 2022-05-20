@@ -11,7 +11,8 @@ jib {
     image = "gcr.io/distroless/java17-debian11:" + imageTag
   }
   to {
-    image = "docker.repo.silenteight.com/iris/${project.name}:${version}"
+    def registry = System.properties.getOrDefault('jibRegistry', 'docker.repo.silenteight.com')
+    image = "${registry}/iris/${project.name}:${version}"
     if ("$version".endsWith("-SNAPSHOT")) {
       tags = ["snapshot"]
     } else {

@@ -121,7 +121,8 @@ Creates the name of Sentry environment
   {{- range $key, $value := $.Values.agents }}
     {{- $common := mergeOverwrite (deepCopy $.Values.common) $.Values.agentsCommon }}
     {{- if hasKey $value "from" }}
-      {{- $common = mergeOverwrite $common (get $.Values.agents $value.from) }}
+      {{- $value = mergeOverwrite (deepCopy $value) (get $.Values.agents $value.from) }}
+      {{- $_ := unset $value "from" }}
     {{- end }}
     {{- $concatenated := dict }}
     {{- range $toConcatenate := list "args" "command" "profiles" }}
@@ -137,4 +138,84 @@ Creates the name of Sentry environment
     {{- end }}
   {{- end }}
   {{- $output | mustToJson }}
+{{- end }}
+{{- define "checkRabbitMqInitContainer" }}
+- name: check-rabbitmq-ready
+  image: busybox
+  command:
+     - sh
+     - -c
+     - >-
+       until wget -q http://$RABBITMQ_USERNAME:$RABBITMQ_PASSWORD@$RABBITMQ_HOST:15672/api/aliveness-test/%2F; do
+         echo waiting for rabbitmq;
+         sleep 2;
+       done;
+  env:
+    - name: RABBITMQ_HOST
+      valueFrom:
+        secretKeyRef:
+          name: {{ include "sear.rabbitmqSecretName" . }}
+          key: host
+    - name: RABBITMQ_PORT
+      valueFrom:
+        secretKeyRef:
+          name: {{ include "sear.rabbitmqSecretName" . }}
+          key: port
+    - name: RABBITMQ_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: {{ include "sear.rabbitmqSecretName" . }}
+          key: username
+    - name: RABBITMQ_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: {{ include "sear.rabbitmqSecretName" . }}
+          key: password
+{{- end }}
+{{- define "checkPostgresReadyInitContainer" }}
+- name: check-db-ready
+  image: "postgres:{{ .Values.database.postgresql.version }}"
+  command:
+    - sh
+    - -c
+    - >-
+      until pg_isready -h {{ include "sear.postgresqlService" . }} -p 5432; do
+        echo waiting for database;
+        sleep 2;
+      done;
+{{- end }}
+{{- define "initScripts" }}
+- name: init-scripts
+  image: busybox
+  command: ['sh', '-c', "run-parts /var/run/initScripts"]
+  volumeMounts:
+    - name: init-scripts
+      mountPath: "/var/run/initScripts"
+      readOnly: true
+    - name: generated
+      mountPath: "/tmp"
+      readOnly: false
+  env:
+    - name: RABBITMQ_HOST
+      valueFrom:
+        secretKeyRef:
+          name: {{ include "sear.rabbitmqSecretName" . }}
+          key: host
+    - name: RABBITMQ_PORT
+      valueFrom:
+        secretKeyRef:
+          name: {{ include "sear.rabbitmqSecretName" . }}
+          key: port
+    - name: RABBITMQ_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: {{ include "sear.rabbitmqSecretName" . }}
+          key: username
+    - name: RABBITMQ_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: {{ include "sear.rabbitmqSecretName" . }}
+          key: password
+    - name: UDS_ADDRESS
+      value: {{ include "sear.fullname" . }}-universal-data-source.{{ .Release.Namespace }}.svc:9090
 {{- end }}

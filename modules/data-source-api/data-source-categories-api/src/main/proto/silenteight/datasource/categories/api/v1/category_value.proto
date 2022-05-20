@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package silenteight.datasource.categories.api.v1;
+
+option java_package = "com.silenteight.datasource.categories.api.v1";
+option java_outer_classname = "CategoryValueProto";
+option java_multiple_files = true;
+
+// The message encapsulating multiple values in a single category.
+message MultiValue {
+  repeated string values = 1;
+}
+
+// The value of the category for a match.
+message CategoryValue {
+  // The name of category value, in form of `categories/<Category ID>/matches/<Match ID>`.
+  string name = 1;
+
+  oneof type {
+    // The single value of the category.
+    string single_value = 2;
+    // The multiple values of the category, set only when Category has `multi_value` as true.
+    MultiValue multi_value = 3;
+  }
+}

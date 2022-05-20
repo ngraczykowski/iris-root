@@ -1,0 +1,71 @@
+// Copyright 2021 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package silenteight.adjudication.api.v1;
+
+import "google/api/field_behavior.proto";
+import "google/protobuf/timestamp.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "AlertProto";
+option java_package = "com.silenteight.adjudication.api.v1";
+
+// The alert.
+message Alert {
+  // The unique name of the alert. This is always system-assigned.
+  string name = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Client-assigned identifier of the alert.
+  string alert_id = 2 [(google.api.field_behavior) = REQUIRED, (google.api.field_behavior) = IMMUTABLE];
+
+  // The time the alert was created in the system. Assigned by the server.
+  google.protobuf.Timestamp create_time = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The time the alert was generated in the source system.
+  //
+  // If unspecified, it will have the same value as `create_time`.
+  google.protobuf.Timestamp alert_time = 4;
+
+  // The labels with user-defined metadata to organize your Alerts.
+  // The maximum length of label name is 50 characters, and label value is 150 characters.
+  map<string, string> labels = 5;
+
+  // The priority of the alert. Determines the order of recommending alerts, where alerts with
+  // higher priority are solved before alerts with lower priority.
+  // The value shall be between 1 (inclusive) and 10 (inclusive), where 1 is the lowest priority
+  // and 10 is the highest priority.
+  // When set to 0 (the default in newly created Alert message), the priority defaults to 5.
+  // When set lower than 0, the priority value is clamped at 1.
+  // When set greater than 10, the priority value is clamped at 10.
+  int32 priority = 6 [(google.api.field_behavior) = IMMUTABLE];
+
+  // The matches to create.
+  repeated Match matches = 7 [(google.api.field_behavior) = OPTIONAL];
+}
+
+// The match.
+message Match {
+  // The unique name of the match. This is always system-assigned.
+  string name = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Client-assigned identifier of the match. Must be unique within the parent alert.
+  string match_id = 2 [(google.api.field_behavior) = REQUIRED, (google.api.field_behavior) = IMMUTABLE];
+
+  // The time the match was created in the system. Assigned by the server.
+  google.protobuf.Timestamp create_time = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The labels with user-defined metadata to organize your Matches.
+  // The maximum length of label name is 50 characters, and label value is 150 characters.
+  map<string, string> labels = 4;
+
+  // The index of a match in the alert, determines the ordering of matches for the purposes
+  // of generating recommendation comment.
+  // When set to 0, the index will be determined automatically by the order in which matches
+  // are added to the same alert.
+  // Given the above default behavior, the index always starts from 1, i.e., the first match
+  // in an alert will have the index 1, not 0, as the nature of computer programming might suggest.
+  // The value of `index` must not be negative.
+  // There must not be two matches in the same alert having the same `index` value.
+  int32 index = 5 [(google.api.field_behavior) = IMMUTABLE];
+}

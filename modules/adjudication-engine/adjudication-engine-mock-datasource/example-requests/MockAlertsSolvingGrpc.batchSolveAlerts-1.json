@@ -1,0 +1,23 @@
+{
+  "strategy": "strategies/back_test",
+  "alerts": [
+    {
+      "name": "alerts/1"
+    },
+    {
+      "name": "alerts/2"
+    },
+    {
+      "name": "alerts/3"
+    },
+    {
+      "name": "alerts/4"
+    },
+    {
+      "name": "alerts/5"
+    },
+    {
+      "name": "alerts/6"
+    }
+  ]
+}

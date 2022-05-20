@@ -1,0 +1,61 @@
+version: '3.5'
+services:
+  postgres:
+    image: postgres:10
+    restart: unless-stopped
+    ports:
+      - "${POSTGRES_PORT:-24881}:5432"
+    environment:
+      POSTGRES_DB: "${POSTGRES_DB:-hsbc_bridge}"
+      POSTGRES_USER: "${POSTGRES_USER:-serp}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-serp}"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - postgres-storage:/var/lib/postgresql/data
+      - ./docker/postgres:/docker-entrypoint-initdb.d
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 1G
+
+  minio:
+    image: minio/minio
+    restart: unless-stopped
+    ports:
+      - 9000:9000
+      - 9001:9001
+    volumes:
+      - /Volumes/Data/mnt/data1:/data1
+      - /Volumes/Data/mnt/data2:/data2
+      - /Volumes/Data/mnt/data3:/data3
+      - /Volumes/Data/mnt/data4:/data4
+    environment:
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+    command: server --address :9000 --console-address :9001 /data{1...4}
+
+  createbuckets:
+    image: minio/mc
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      until (/usr/bin/mc config host add myminio http://minio:9000 minioadmin minioadmin) do echo '...waiting...' && sleep 1; done;
+      /usr/bin/mc mb myminio/test;
+      /usr/bin/mc policy set public myminio/test;
+      exit 0;
+      "
+#
+#  consul-server:
+#    image: consul:1.9.3
+#    restart: unless-stopped
+#    ports:
+#      - '8500:8500'
+#      - '8600:8600/tcp'
+#      - '8600:8600/udp'
+#    command: "agent -server -bootstrap -ui -client=0.0.0.0"
+
+volumes:
+  postgres-storage:

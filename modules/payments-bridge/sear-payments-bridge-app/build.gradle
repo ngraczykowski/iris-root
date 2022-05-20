@@ -1,0 +1,133 @@
+plugins {
+  id "java"
+  id "groovy"
+  id "com.silenteight.iris.build.spring-boot-application"
+  id "com.silenteight.iris.build.container-image"
+}
+
+dependencies {
+  // Application modules
+  implementation project(":sear-payments-bridge-common")
+  implementation project(":sear-payments-bridge-ae")
+  implementation project(":sear-payments-bridge-mock-ae")
+  implementation project(":sear-payments-bridge-mock-datasource")
+  implementation project(":sear-payments-birdge-mock-warehouse")
+  implementation project(":sear-payments-bridge-firco")
+  implementation project(":sear-payments-bridge-governance")
+  implementation project(":sear-payments-bridge-svb-learning")
+  implementation project(":sear-payments-bridge-data-retention")
+  implementation project(":sear-payments-bridge-warehouse")
+  implementation project(":sear-payments-bridge-etl")
+  implementation project(":sear-payments-bridge-notification")
+  implementation project(":proto-sear-payments-bridge-internal-protos")
+  testImplementation project(":sear-payments-bridge-testing")
+
+
+  // Utilities
+  implementation libs.commons.lang3
+  implementation libs.commons.text
+  implementation libs.guava
+
+  // Logging
+  runtimeOnly libs.ecs.logging.core
+  runtimeOnly libs.logback.ecs.encoder
+
+  // Sentry
+  runtimeOnly libs.sentry.spring.boot.starter
+  runtimeOnly libs.sentry.logback
+
+  // Base libs
+  implementation libs.silenteight.sep.base.common
+  implementation libs.silenteight.commons.app
+
+  // Application Starters
+  implementation libs.spring.batch.starter
+  implementation libs.spring.boot.starter.actuator
+  implementation libs.spring.boot.starter.logging
+  implementation libs.spring.boot.starter.oauth2.client
+  implementation libs.spring.boot.starter.oauth2.resource.server
+  implementation libs.spring.boot.starter.security
+  implementation libs.spring.boot.starter.undertow
+  implementation libs.spring.boot.starter.web
+  implementation libs.micrometer.prometheus
+
+  // Cloud
+  implementation libs.spring.cloud.consul.discovery
+  implementation libs.spring.cloud.starter.consul.config
+  implementation libs.spring.cloud.starter.sleuth
+
+  // Validator
+  implementation libs.tomcat.embed.el
+  implementation libs.hibernate.validator
+
+  // Jackson
+  implementation libs.jackson.annotations
+  implementation libs.jackson.databind
+  runtimeOnly libs.jackson.datatype.jdk8
+  runtimeOnly libs.jackson.datatype.jsr310
+  runtimeOnly libs.jackson.module.afterburner
+  runtimeOnly libs.jackson.module.paranamer
+  runtimeOnly libs.jackson.module.parameter.names
+
+  // Database
+  implementation libs.spring.boot.starter.data.jpa
+  implementation libs.spring.boot.starter.jdbc
+  implementation libs.liquibase.core
+  implementation libs.hikari.cp
+  runtimeOnly libs.postgresql
+  runtimeOnly libs.liquibase.sessionlock
+
+  // s3
+  implementation libs.aws.auth
+  implementation libs.aws.s3
+  implementation libs.aws.ses
+
+  // Messaging
+  implementation libs.amqp.client
+  implementation libs.lz4.java
+  implementation libs.spring.boot.starter.integration
+  implementation libs.spring.integration.amqp
+  implementation libs.spring.integration.core
+  implementation libs.spring.integration.http
+  implementation libs.sear.rabbitmq.common.schema
+
+  // GRPC
+  implementation libs.brave.instrumentation.grpc
+  implementation libs.grpc.server.spring.boot.starter
+  implementation libs.grpc.client.spring.boot.starter
+
+  // AspectJ
+  implementation libs.aspectjrt
+  aspect libs.silenteight.sep.base.aspects
+
+  //  Datasource API
+  implementation libs.data.source.api
+  implementation libs.data.source.categories.api
+
+  // AE API
+  implementation libs.adjudication.engine.api
+
+  // Learning Engine API
+  implementation libs.learning.engine.store.api
+
+  // Governance
+  implementation libs.governance.model.api
+
+  // Warehouse API
+  implementation libs.warehouse.data.api
+
+  //Retention
+  implementation libs.data.retention.api
+
+  //  Testing
+  testImplementation libs.silenteight.sep.base.testing
+  testImplementation libs.adjudication.engine.api
+  testImplementation libs.awaitility
+  testImplementation libs.test.greenmail
+
+  // Shedlock
+  implementation libs.shedlock.spring
+  implementation libs.shedlock.jdbc.provider
+
+  testImplementation libs.silenteight.sep.base.testing
+}

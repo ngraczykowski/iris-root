@@ -1,0 +1,141 @@
+// Copyright 2021 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package silenteight.adjudication.api.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "google/api/field_behavior.proto";
+
+import "silenteight/adjudication/api/v1/dataset.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "DatasetServiceProto";
+option java_package = "com.silenteight.adjudication.api.v1";
+
+service DatasetService {
+  rpc CreateDataset (CreateDatasetRequest) returns (Dataset) {
+    option (google.api.http) = {
+      post: "/v1/datasets"
+      body: "*"
+    };
+  }
+
+  rpc GetDataset (GetDatasetRequest) returns (Dataset) {
+    option (google.api.http) = {
+      get: "/v1/{name=datasets/*}"
+    };
+  }
+
+  rpc ListDatasets (ListDatasetsRequest) returns (ListDatasetsResponse) {
+    option (google.api.http) = {
+      get: "/v1/datasets"
+    };
+  }
+
+  rpc ListDatasetAlerts (ListDatasetAlertsRequest) returns (ListDatasetAlertsResponse) {
+    option (google.api.http) = {
+      get: "/v1/{dataset=datasets/*}/alerts"
+    };
+  }
+}
+
+message CreateDatasetRequest {
+  oneof filter {
+    // Selects alerts by name.
+    NamedAlerts named_alerts = 1;
+    // Selects alerts by filter
+    FilteredAlerts filtered_alerts = 2;
+  }
+}
+
+// Specifies alert names when creating dataset.
+message NamedAlerts {
+  // The list of alert names which will be used to filter alerts, in format `alerts/<Alert ID>`.
+  // The maximum number of alerts accepted by the service is 16384.
+  //
+  // NOTE: It is not possible to create a dataset naming more than 16k alerts. To create such
+  //       dataset, use alert filtering with FilteredAlerts instead.
+  repeated string alerts = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Specifies alerts filtering when creating dataset.
+message FilteredAlerts {
+  // Filters alerts by `alert_time`.
+  AlertTimeRange alert_time_range = 1;
+  // Filters alerts by values of labels.
+  LabelsFilter labels_filter = 2;
+
+  // Possible states of match_quantity.
+  enum MatchQuantity {
+    ALL = 0;
+    SINGLE = 1;
+  }
+  // Current state of analysis.
+  MatchQuantity match_quantity = 3 [(google.api.field_behavior) = REQUIRED];
+
+  message AlertTimeRange {
+    // Start time used to filter alerts by alert_time (inclusive).
+    google.protobuf.Timestamp start_time = 1 [(google.api.field_behavior) = REQUIRED];
+    // End time used to filter alerts by alert_time (exclusive).
+    google.protobuf.Timestamp end_time = 2 [(google.api.field_behavior) = REQUIRED];
+  }
+
+  message LabelsFilter {
+    // The list of labels, with key naming a label and value listing all values.
+    // Dataset will include alerts with all labels having one of the listed values.
+    //
+    // E.g., when labels are specified as follows:
+    //
+    //   labels={
+    //     country={
+    //       values=["SG", "PL", "US", "UK"]
+    //     },
+    //     batch_type={
+    //       values=["PEPL", "DENY"]
+    //     }
+    //   }
+    //
+    // the dataset will include all alerts that have label "country" AND "batch_type", while
+    // each of them having ONE OF the values listed, i.e., alerts with label "batch_type" having
+    // value of "PEPL" OR "DENY", AND with label "country" having value of "GS", "PL", "US" OR "UK".
+    map<string, LabelValues> labels = 1 [(google.api.field_behavior) = REQUIRED];
+  }
+
+  message LabelValues {
+    // The list of label values.
+    // The maximum number of label values accepted by the service is 128.
+    repeated string value = 1;
+  }
+}
+
+message GetDatasetRequest {
+  // Unique Dataset identifier assigned by the system in format: datasets/<dataset ID>.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message ListDatasetsRequest {
+  int32 page_size = 1 [(google.api.field_behavior) = REQUIRED];
+  string page_token = 2;
+}
+
+message ListDatasetsResponse {
+  // The list of datasets.
+  repeated Dataset datasets = 1;
+
+  string next_page_token = 2;
+}
+
+message ListDatasetAlertsRequest {
+  // Unique Dataset identifier assigned by the system in format: datasets/<dataset ID>.
+  string dataset = 1 [(google.api.field_behavior) = REQUIRED];
+  int32 page_size = 2 [(google.api.field_behavior) = REQUIRED];
+  string page_token = 3;
+}
+
+message ListDatasetAlertsResponse {
+  // Unique Alert in Dataset identifier assigned by the system in format: datasets/<dataset ID>/alerts/<alert ID>.
+  repeated string dataset_alert_names = 1;
+  string next_page_token = 2;
+}

@@ -1,0 +1,25 @@
+// Copyright 2021 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package silenteight.adjudication.api.v1;
+
+import "google/api/field_behavior.proto";
+import "google/protobuf/timestamp.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "MatchSolutionProto";
+option java_package = "com.silenteight.adjudication.api.v1";
+
+message MatchSolution {
+  // The unique name of the match solution. This is always system-assigned.
+  string name = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  string match = 2;
+
+  // The time the match solution was created in the system. Assigned by the server.
+  google.protobuf.Timestamp create_time = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Maximum allowed length is 50 characters.
+  string solution = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+}

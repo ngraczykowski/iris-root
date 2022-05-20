@@ -12,32 +12,127 @@ components:
       - --spring.security.oauth2.client.provider.external.token-uri=https://auth.silent8.cloud/realms/egress-mock/protocol/openid-connect/token
       - --pb.email-notification.learning-enabled=true
 
+  warehouse:
+    enabled: true
+    profiles:
+      - linux
+      - warehouse
+      - messaging
+      - sierra
+    configFiles:
+      application-sierra.yml: |
+        warehouse:
+          persistence:
+            alert:
+              labels:
+              recommendation-date-field: "create_time"
+          report:
+            statistics:
+              all-alerts-query:
+                SELECT count(*)
+                FROM warehouse_simulation_alert
+                WHERE analysis_name = ?
+              solved-alerts-query:
+                SELECT count(*)
+                FROM warehouse_simulation_alert
+                WHERE analysis_name = ?
+                AND (payload ->> 'recommendation_recommended_action')
+                IN ('ACTION_FALSE_POSITIVE', 'ACTION_POTENTIAL_TRUE_POSITIVE')
+              ai-false-positive-query:
+                SELECT count(*)
+                FROM warehouse_simulation_alert wsa
+                JOIN warehouse_alert wa ON wsa.name = wa.name
+                WHERE wsa.analysis_name = ?
+                AND (wa.payload ->> 'firco_analyst_decision') IN ('analyst_decision_true_positive', 'analyst_decision_false_positive')
+                AND (wsa.payload ->> 'recommendation_recommended_action') = 'ACTION_FALSE_POSITIVE'
+              analyst-false-positive-query:
+                SELECT count(*)
+                FROM warehouse_simulation_alert wsa
+                JOIN warehouse_alert wa ON wsa.name = wa.name
+                WHERE wsa.analysis_name = ?
+                AND (wa.payload ->> 'firco_analyst_decision') = 'analyst_decision_false_positive'
+                AND (wsa.payload ->> 'recommendation_recommended_action') = 'ACTION_FALSE_POSITIVE'
+
 agents:
+
   name-agent:
     enabled: true
     profiles:
       - sierra
-    resources:
-      limits:
-        memory: 2Gi
-      requests:
-        memory: 1Gi
+    image:
+      repository: registry.dev.s8ops.com/linguistics-agent-sierra-ts
+      tag: "3.16.0-BUILD.51"
+
+  learning-engine:
+    enabled: true
+    profiles:
+      - rabbitmq-declare
+    image:
+      tag: "1.4.0"
+
+  historical-decisions-agent:
+    enabled: true
+    properties:
+      "historicaldecisions.agent.facade.enabled": true
+      "contextuallearning.agent.facade.enabled": true
+    image:
+      repository: registry.dev.s8ops.com/historical-decisions-agent-sierra
+      tag: "0.7.0"
 
   geo-agent:
     enabled: true
+    image:
+      repository: registry.dev.s8ops.com/geo-agent-default
+      tag: "1.8.0-BUILD.230"
     properties:
-      "geotransactions.agent.facade.enabled": true
+      "geosanctions.agent.facade.enabled": true
       "geo.agent.facade.enabled": true
-    profiles:
-      - sierra
-    resources:
-      limits:
-        memory: 2Gi
-      requests:
-        memory: 1Gi
 
   geo-agent2:
     from: geo-agent
+    properties:
+      "facade.amqp.queueDefinitions[geo].inbound-exchange-name": "agent.request"
+      "facade.amqp.queueDefinitions[geo].inbound-routing-key": "agents.geo.versions.2_0_0.configs.*"
+      "facade.amqp.queueDefinitions[geo].inbound-queue-name": "agent.geo2-requests"
+      "facade.amqp.queueDefinitions[geo].dead-letter-exchange-name": "geo2-agent-dead-letter-exchange"
+      "facade.amqp.queueDefinitions[geo].dead-letter-queue-name": "geo2-agent-dead-letter-queue"
+      "facade.amqp.queueDefinitions[geo].dead-letter-routing-key": "geo2-agent-dead-letter-key"
+      "facade.amqp.queueDefinitions[geoSanctions].inbound-routing-key": "agents.geosanctions.versions.2_0_0.configs.*"
+      "facade.amqp.queueDefinitions[geoSanctions].inbound-queue-name": "agent.geosanctions2-requests"
+      "facade.amqp.queueDefinitions[geoSanctions].dead-letter-exchange-name": "geosanctions2-agent-dead-letter-exchange"
+      "facade.amqp.queueDefinitions[geoSanctions].dead-letter-queue-name": "geosanctions2-agent-dead-letter-queue"
+      "facade.amqp.queueDefinitions[geoSanctions].dead-letter-routing-key": "geosanctions2-agent-dead-letter-key"
+      "facade.amqp.queueDefinitions[geoSanctions].outbound-exchange-name": "agent.response"
+    image:
+      tag: "1.12.0"
 
   organization-name-agent:
     enabled: true
+    amqp:
+      routingKey: agents.companyName.versions.1_0_0.configs.1
+      queueName: agent.companyname-requests
+    args:
+      - --agent-exchange
+    image:
+      tag: "0.16.0-sierra" #unfortunately, I didn't found any corresponding docker image to the https://gitlab.silenteight.com/devops/helm-workload-sierra-uat/-/blob/c0b2038e0077c5c5b57f0b01eb6f0683e99cc9ad/scripts/charts.json#L24
+  organization-name-agent2:
+    amqp:
+      routingKey: agents.companyName.versions.2_0_0.configs.1
+      queueName: agent.companyname-requests-2
+    from: organization-name-agent
+    image:
+      tag: "0.16.0-sierra"
+
+  company-name-surrounding-agent:
+    enabled: true
+    image:
+      tag: "0.4.0.dev0" #the only working image tag
+  hit-type-name-agent:
+    enabled: true
+    image:
+      tag: "0.3.0-dev" #the only working image tag
+    amqp:
+      routingKey: agents.hittype.versions.1_0_0.configs.1
+      queueName: agent.hittype-requests
+    args:
+      - --agent-exchange

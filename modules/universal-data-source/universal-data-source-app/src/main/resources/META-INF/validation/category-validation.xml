@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<constraint-mappings
+    xmlns="http://xmlns.jcp.org/xml/ns/validation/mapping"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/validation/mapping
+                      http://xmlns.jcp.org/xml/ns/validation/mapping/validation-mapping-2.0.xsd"
+    version="2.0">
+
+  <default-package>com.silenteight.datasource.categories.api.v2</default-package>
+
+  <bean class="Category">
+    <getter name="name">
+      <constraint annotation="javax.validation.constraints.Pattern">
+        <element name="regexp">categories/\w+</element>
+      </constraint>
+    </getter>
+    <getter name="type">
+      <constraint
+          annotation="com.silenteight.universaldatasource.app.category.validator.CategoryTypeConstraint"/>
+    </getter>
+  </bean>
+
+  <bean class="BatchCreateCategoriesRequest">
+    <field name="categories_">
+      <valid/>
+      <constraint annotation="javax.validation.constraints.NotEmpty"/>
+    </field>
+
+  </bean>
+  <bean class="CategoryValue">
+<!--    NOTE(jgajewski): Uncomment when data retention is going to be used-->
+<!--    <getter name="alert">-->
+<!--      <constraint annotation="javax.validation.constraints.Pattern">-->
+<!--        <element name="regexp">alerts/\d+</element>-->
+<!--      </constraint>-->
+<!--    </getter>-->
+    <getter name="match">
+      <constraint annotation="javax.validation.constraints.Pattern">
+        <element name="regexp">alerts/\d+/matches/\d+</element>
+      </constraint>
+    </getter>
+  </bean>
+
+  <bean class="CreateCategoryValuesRequest">
+    <field name="categoryValues_">
+      <valid/>
+      <constraint annotation="javax.validation.constraints.NotEmpty"/>
+    </field>
+    <getter name="category">
+      <constraint annotation="javax.validation.constraints.Pattern">
+        <element name="regexp">categories/\w+</element>
+      </constraint>
+    </getter>
+  </bean>
+
+  <bean class="BatchCreateCategoryValuesRequest">
+    <field name="requests_">
+      <valid/>
+      <constraint annotation="javax.validation.constraints.NotEmpty"/>
+    </field>
+  </bean>
+
+  <bean class="BatchGetMatchesCategoryValuesRequest">
+    <field name="categoryMatches_">
+      <valid/>
+      <constraint annotation="javax.validation.constraints.NotEmpty"/>
+    </field>
+  </bean>
+
+  <bean class="CategoryMatches">
+    <field name="matches_">
+      <valid/>
+      <constraint annotation="javax.validation.constraints.NotEmpty"/>
+      <constraint
+          annotation="com.silenteight.universaldatasource.common.validator.MatchListNameConstraint"/>
+    </field>
+
+    <getter name="category">
+      <constraint annotation="javax.validation.constraints.Pattern">
+        <element name="regexp">categories/\w+</element>
+      </constraint>
+    </getter>
+  </bean>
+
+</constraint-mappings>

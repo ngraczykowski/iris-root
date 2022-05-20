@@ -1,0 +1,169 @@
+plugins {
+  id('com.silenteight.iris.build.root-build')
+}
+
+def createPythonVenvTask = tasks.register("createPythonVenv", Exec) {
+  it.group "Python GRPC"
+  it.description "Creates empty venv"
+  it.executable "python3"
+  it.args(
+      "-m",
+      "venv",
+      "$buildDir/venv"
+  )
+}
+
+def installPythonPackagesTask = tasks.register("installPythonPackages", Exec) {
+  it.group "Python GRPC"
+  it.description "Installs needed packages"
+  it.executable "$buildDir/venv/bin/pip"
+  it.args(
+      "install",
+      "--disable-pip-version-check",
+      "--quiet",
+      "--upgrade",
+      "pip",
+      "setuptools",
+      "wheel",
+      "twine"
+  )
+  it.dependsOn createPythonVenvTask
+}
+
+def installPythonGrpcPackagesTask = tasks.register("installPythonGrpcPackages", Exec) {
+  it.group "Python GRPC"
+  it.description "Installs needed packages"
+  it.executable "$buildDir/venv/bin/pip"
+  it.args(
+      "install",
+      "--disable-pip-version-check",
+      "--quiet",
+      "--upgrade",
+      "grpcio-tools"
+  )
+  it.dependsOn installPythonPackagesTask
+}
+
+/**
+ *TODO(dsniezek):have to be fixed, grpc for python is used !!!
+configure(subprojects) {Project subproject ->
+  def compiledPythonDir = subproject.buildDir.path + "/generated/sources/proto/main/python"
+
+  def compilePythonGrpcTask = subproject.tasks.register("compilePythonGrpc", Exec) {
+    it.group "Python GRPC"
+    it.description "Compiles Python GRPC files from proto files"
+    it.executable "$rootProject.buildDir/venv/bin/python"
+    it.argumentProviders.add({ ->
+      def staticArguments = [ "-m",
+                              "grpc_tools.protoc",
+                              "-I",
+                              subproject.buildDir.path + "/extracted-include-protos/main",
+                              "-I",
+                              projectDir.path + "/src/main/proto",
+                              "--python_out=" + compiledPythonDir,
+                              "--grpc_python_out=" + compiledPythonDir ]
+      def inputFiles = fileTree("$projectDir/src/main/proto").files.collect({ it.path })
+      return staticArguments + inputFiles
+    } as CommandLineArgumentProvider)
+
+    it.doFirst {
+      mkdir compiledPythonDir
+    }
+
+    it.dependsOn installPythonGrpcPackagesTask
+    it.dependsOn subproject.tasks.named("extractIncludeProto")
+  }
+
+  def pythonGrpcZip = tasks.register("pythonGrpcZip", Zip) {
+    it.group "Python GRPC"
+    it.description "Zips Python GRPC files"
+
+    it.from compiledPythonDir
+
+    it.dependsOn compilePythonGrpcTask
+  }
+
+  def copySetupPyFileTask = tasks.register("copySetupPyFile", Copy) {
+    it.group "Python GRPC"
+    it.description "Copy setup.py file to Python package"
+
+    it.from file("$rootDir/setup.template.py")
+    it.into file(compiledPythonDir)
+    it.rename "setup.template.py", "setup.py"
+
+    it.dependsOn compilePythonGrpcTask
+  }
+
+  def buildPythonWheelTask = tasks.register("buildPythonWheel", Exec) {
+    it.group "Python GRPC"
+    it.description "Builds Python package in wheel format"
+
+    it.executable "$rootProject.buildDir/venv/bin/python"
+    it.args(
+        "$compiledPythonDir/setup.py",
+        "sdist",
+        "bdist_wheel",
+        "--dist-dir",
+        "$buildDir/distributions"
+    )
+    it.workingDir compiledPythonDir
+
+    it.environment "PYTHON_PACKAGE_NAME", subproject.name
+    it.environment "PYTHON_PACKAGE_DESCRIPTION", subproject.description
+    it.environment "PYTHON_PACKAGE_VERSION", getPythonVersion()
+
+    it.dependsOn copySetupPyFileTask
+  }
+
+  def publishPythonTask = tasks.register("publishPython", Exec) {
+    it.group "Python GRPC"
+    it.description "Publish package to internal PyPI repository"
+
+    it.executable "$rootProject.buildDir/venv/bin/twine"
+    it.argumentProviders.add({ ->
+      def staticArguments = [ "upload" ]
+      def inputFiles = fileTree("$buildDir/distributions") { it.include "*.whl" }.files.collect({ it.path })
+      return staticArguments + inputFiles
+    } as CommandLineArgumentProvider)
+    it.workingDir compiledPythonDir
+
+    it.dependsOn buildPythonWheelTask
+
+    it.doFirst {
+      if (!System.env["TWINE_REPOSITORY_URL"] ||
+          !System.env["TWINE_USERNAME"] ||
+          !System.env["TWINE_PASSWORD"]) {
+        throw new Exception("It is required to set: TWINE_REPOSITORY_URL, " +
+            "TWINE_USERNAME, TWINE_PASSWORD environment variables to perform " +
+            "publishing Python package")
+      }
+    }
+  }
+
+  subproject.pluginManager.withPlugin("maven-publish") {
+    subproject.tasks.named("publish") {
+      it.dependsOn publishPythonTask
+    }
+  }
+
+  subproject.pluginManager.withPlugin("java-library") {
+    subproject.jar {
+      archiveBaseName = "se-${subproject.name}"
+    }
+
+    tasks.named("build") {
+      it.dependsOn pythonGrpcZip
+    }
+
+  }
+}
+ **/
+
+// In case of SNAPSHOT, remove -SNAPSHOT and add build number as the last part
+def getPythonVersion() {
+  if (version.endsWith('-SNAPSHOT'))
+    return (version - '-SNAPSHOT') + ".${System.env['BUILD_NUMBER'] ?: '0'}"
+  else
+    return version
+}
+

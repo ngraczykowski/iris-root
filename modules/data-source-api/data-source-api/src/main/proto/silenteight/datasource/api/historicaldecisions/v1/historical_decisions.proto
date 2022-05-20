@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package silenteight.datasource.api.historicaldecisions.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/struct.proto";
+
+option java_package = "com.silenteight.datasource.api.historicaldecisions.v1";
+option java_outer_classname = "HistoricalDecisionsProto";
+option java_multiple_files = true;
+
+service HistoricalDecisionsInputService {
+  rpc BatchGetMatchHistoricalDecisionsInputs (BatchGetMatchHistoricalDecisionsInputsRequest) returns (stream BatchGetMatchHistoricalDecisionsInputsResponse) {
+    option (google.api.http) = {
+      post: "/agent-inputs/historicaldecisions/versions/v1/matches:batchGet"
+      body: "*"
+    };
+  }
+}
+
+message BatchGetMatchHistoricalDecisionsInputsRequest {
+  // The list of matches data is requested for, in form of `alerts/<Alert ID>/matches/<Match ID>`.
+  repeated string matches = 1;
+  // The list of features the input data for each match is requested, in form of `features/<Feature ID>`.
+  repeated string features = 2;
+}
+
+message BatchGetMatchHistoricalDecisionsInputsResponse {
+  repeated HistoricalDecisionsInput historical_decisions_inputs = 1;
+}
+
+message HistoricalDecisionsInput {
+  string match = 1;
+  repeated HistoricalDecisionsFeatureInput feature_inputs  = 2;
+
+  message HistoricalDecisionsFeatureInput {
+    string feature = 1;
+    uint32 true_positive_count = 2;
+    ModelType model_type = 3;
+    google.protobuf.Struct reason = 4;
+  }
+
+    enum ModelType {
+      UNSPECIFIED = 0;
+      ALERTED_PARTY = 1;
+      WATCHLIST_PARTY = 2;
+      MATCH = 3;
+    }
+}

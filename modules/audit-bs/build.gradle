@@ -1,0 +1,31 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "maven-publish"
+}
+
+
+dependencies {
+  implementation libs.silenteight.sep.base.common
+  implementation libs.sear.rabbitmq.common.schema
+  implementation libs.silenteight.audit.bs.api
+  implementation libs.spring.boot.starter.amqp
+  implementation libs.spring.boot.starter.integration
+
+  api libs.spring.context
+  api libs.spring.jdbc
+  api libs.jakarta.transaction.api
+  api libs.jakarta.validation.api
+
+  testImplementation libs.test.containers
+  testImplementation libs.test.containers.postgresql
+  testImplementation libs.spring.boot.test
+  testImplementation libs.liquibase.core
+  testImplementation libs.hikari.cp
+  testImplementation libs.postgresql
+  testImplementation libs.spring.test
+  testImplementation libs.spring.boot.test.autoconfigure
+  testImplementation libs.snakeyaml
+  testImplementation libs.spring.data.jpa
+  testImplementation libs.hibernate.core
+  testImplementation libs.spring.boot.starter.logging
+}

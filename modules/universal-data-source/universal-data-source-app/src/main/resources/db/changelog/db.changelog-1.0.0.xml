@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="universal-datasource-1.0.0-1" author="jgajewski">
+    <createTable tableName="uds_category">
+      <column name="category_id" type="VARCHAR(100)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="category_display_name" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="category_type" type="VARCHAR(50)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="allowed_values" type="TEXT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="multi_value" type="BOOLEAN">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="universal-datasource-1.0.0-2" author="jgajewski">
+    <createTable tableName="uds_category_value">
+      <column name="category_value_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="category_id" type="VARCHAR(100)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="match_name" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="category_value" type="TEXT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="uds_category_value"
+        indexName="ix_uds_category_match_name">
+      <column name="match_name"/>
+    </createIndex>
+
+    <createIndex
+        tableName="uds_category_value"
+        indexName="ix_uds_category_category_id">
+      <column name="category_id"/>
+    </createIndex>
+
+    <addForeignKeyConstraint
+        baseTableName="uds_category_value"
+        baseColumnNames="category_id"
+        constraintName="fk_uds_category_value_category_id"
+        referencedTableName="uds_category"
+        referencedColumnNames="category_id"/>
+  </changeSet>
+
+  <changeSet id="universal-datasource-1.0.0-3" author="jgajewski">
+    <createTable tableName="uds_comment_input">
+      <column name="comment_input_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="alert" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="alert_comment_input" type="JSONB">
+        <constraints nullable="false"/>
+      </column>
+      <column name="match_comment_inputs" type="JSONB">
+        <constraints nullable="true"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="uds_comment_input"
+        indexName="ix_uds_comment_input_alert">
+      <column name="alert"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="universal-datasource-1.0.0-4" author="mbartecki">
+    <createTable tableName="uds_feature_input">
+      <column name="agent_input_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="match_name" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="feature" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <!-- The name of the type contained in `agent_input` column. -->
+      <column name="agent_input_type" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <!--
+        Contains JSON-serialized Protobuf message object with Agent feature input, e.g.,
+        `com.silenteight.datasource.api.location.v1LocationFeatureInput`,
+        or `com.silenteight.datasource.api.name.v1.NameFeatureInput`.
+      -->
+      <column name="agent_input" type="JSONB">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="uds_feature_input"
+        indexName="ix_uds_feature_input_match_name">
+      <column name="match_name"/>
+    </createIndex>
+
+    <createIndex
+        tableName="uds_feature_input"
+        indexName="ix_uds_feature_input_feature">
+      <column name="feature"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="universal-datasource-1.0.0-5" author="jgajewski">
+    <modifyDataType
+        columnName="agent_input_type"
+        newDataType="VARCHAR(150)"
+        tableName="uds_feature_input"/>
+  </changeSet>
+
+  <changeSet id="universal-datasource-1.0.0-6" author="jgajewski">
+    <addColumn tableName="uds_category_value">
+      <column name="alert_name" type="VARCHAR(150)" />
+    </addColumn>
+
+    <addColumn tableName="uds_feature_input">
+      <column name="alert_name" type="VARCHAR(150)" />
+    </addColumn>
+
+    <renameColumn tableName="uds_comment_input"
+                  oldColumnName="alert"
+                  newColumnName="alert_name"/>
+  </changeSet>
+</databaseChangeLog>

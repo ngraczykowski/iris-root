@@ -1,0 +1,37 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "groovy"
+}
+
+dependencies {
+  // Application modules
+  implementation project(":adjudication-engine-common")
+  implementation project(":adjudication-engine-alerts")
+
+  // Utilities
+  implementation libs.commons.lang3
+  implementation libs.commons.text
+  implementation libs.guava
+
+  // Logging
+  runtimeOnly libs.ecs.logging.core
+  runtimeOnly libs.logback.ecs.encoder
+
+  // Base libs
+  implementation libs.silenteight.sep.base.common
+  implementation libs.silenteight.commons.app
+
+  // Metrics
+  implementation libs.micrometer.prometheus
+
+  // AspectJ
+  implementation libs.aspectjrt
+  aspect libs.silenteight.sep.base.aspects
+
+  //  Testing
+  testImplementation libs.silenteight.sep.base.testing
+  testImplementation libs.awaitility
+
+
+  testImplementation libs.silenteight.sep.base.testing
+}

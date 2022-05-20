@@ -1,0 +1,40 @@
+{#- @pebvariable name="alertId" type="java.lang.String" -#}
+{#- @pebvariable name="commentInput" type="java.util.Map<java.lang.String, java.lang.Object>" -#}
+{#- @pebvariable name="recommendedAction" type="java.lang.String" -#}
+{#- @pebvariable name="matches" type="java.util.List<com.silenteight.adjudication.engine.comments.comment.domain.MatchContext>" -#}
+{#- @pebvariable name="feature" type="java.util.HashMap<java.lang.String, com.silenteight.adjudication.engine.comments.comment.domain.FeatureContext>" -#}
+{#- @pebvariable name="reason" type="java.util.Map<java.lang.String, java.lang.Object>" -#}
+NOTE: This is the default alert comment template!
+
+Alert ID: {{ alertId }}
+Comment Input:
+{%- for entry in commentInput %}
+    - {{ entry.key }}: {{ entry.value }}
+{%- endfor %}
+Recommended Action: {{ recommendedAction }}
+
+Matches:
+{%- for match in matches %}
+
+-   Match ID: {{ match.matchId }}
+    Solution: {{ match.solution }}
+    Reason:
+{%- for matchReason in match.reason %}
+        - {{ matchReason.key }}: {{ matchReason.value }}
+{%- endfor %}
+    Categories:
+{%- for category in match.categories %}
+    -   {{ category.key }}: {{ category.value }}
+{%- endfor %}
+    Features:
+{%- for feature in match.features %}
+        {{ feature.key }}:
+            Agent Config: {{ feature.value.agentConfig }}
+            Agent Name: {{ feature.value.agentName }}
+            Solution: {{ feature.value.solution }}
+            Reason:
+{%- for featureReason in feature.value.reason %}
+                - {{ featureReason.key }}: {{ featureReason.value }}
+{%- endfor %}{# for reason in feature.value.reason #}
+{%- endfor %}{# for feature in match.features #}
+{%- endfor %}{# for match in matches #}

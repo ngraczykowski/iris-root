@@ -1,0 +1,56 @@
+package com.silenteight.hsbc.datasource.feature.country;
+
+import java.util.Set;
+
+class CountryValidator {
+
+  private final Set<String> countriesAlpha2 =
+      Set.of("AF", "AL", "DZ", "AS", "AD", "AO", "AI", "AQ", "AG", "AR", "AM", "AW", "AU", "AT", "AZ", "BS", "BH", "BD", "BB", "BY", "BE", "BZ", "BJ", "BM", "BT", "BO", "BQ", "BA", "BW", "BV", "BR",
+          "IO", "BN", "BG", "BF", "BI", "CV", "KH", "CM", "CA", "KY", "CF", "TD", "CL", "CN", "CX", "CC", "CO", "KM", "CD", "CG", "CK", "CR", "HR", "CU", "CW", "CY", "CZ", "CI", "DK", "DJ", "DM",
+          "DO", "EC", "EG", "SV", "GQ", "ER", "EE", "SZ", "ET", "FK", "FO", "FJ", "FI", "FR", "GF", "PF", "TF", "GA", "GM", "GE", "DE", "GH", "GI", "GR", "GL", "GD", "GP", "GU", "GT", "GG", "GN",
+          "GW", "GY", "HT", "HM", "VA", "HN", "HK", "HU", "IS", "IN", "ID", "IR", "IQ", "IE", "IM", "IL", "IT", "JM", "JP", "JE", "JO", "KZ", "KE", "KI", "KP", "KR", "KW", "KG", "LA", "LV", "LB",
+          "LS", "LR", "LY", "LI", "LT", "LU", "MO", "MG", "MW", "MY", "MV", "ML", "MT", "MH", "MQ", "MR", "MU", "YT", "MX", "FM", "MD", "MC", "MN", "ME", "MS", "MA", "MZ", "MM", "NA", "NR", "NP",
+          "NL", "NC", "NZ", "NI", "NE", "NG", "NU", "NF", "MP", "NO", "OM", "PK", "PW", "PS", "PA", "PG", "PY", "PE", "PH", "PN", "PL", "PT", "PR", "QA", "MK", "RO", "RU", "RW", "RE", "BL", "SH",
+          "KN", "LC", "MF", "PM", "VC", "WS", "SM", "ST", "SA", "SN", "RS", "SC", "SL", "SG", "SX", "SK", "SI", "SB", "SO", "ZA", "GS", "SS", "ES", "LK", "SD", "SR", "SJ", "SE", "CH", "SY", "TW",
+          "TJ", "TZ", "TH", "TL", "TG", "TK", "TO", "TT", "TN", "TR", "TM", "TC", "TV", "UG", "UA", "AE", "GB", "UK", "UM", "US", "UY", "UZ", "VU", "VE", "VN", "VG", "VI", "WF", "EH", "YE", "ZM",
+          "ZW", "AX");
+  private final Set<String> countriesAlpha3 =
+      Set.of("AFG", "ALB", "DZA", "ASM", "AND", "AGO", "AIA", "ATA", "ATG", "ARG", "ARM", "ABW", "AUS", "AUT", "AZE", "BHS", "BHR", "BGD", "BRB", "BLR", "BEL", "BLZ", "BEN", "BMU", "BTN", "BOL",
+          "BES", "BIH", "BWA", "BVT", "BRA", "IOT", "BRN", "BGR", "BFA", "BDI", "CPV", "KHM", "CMR", "CAN", "CYM", "CAF", "TCD", "CHL", "CHN", "CXR", "CCK", "COL", "COM", "COD", "COG", "COK", "CRI",
+          "HRV", "CUB", "CUW", "CYP", "CZE", "CIV", "DNK", "DJI", "DMA", "DOM", "ECU", "EGY", "SLV", "GNQ", "ERI", "EST", "SWZ", "ETH", "FLK", "FRO", "FJI", "FIN", "FRA", "GUF", "PYF", "ATF", "GAB",
+          "GMB", "GEO", "DEU", "GHA", "GIB", "GRC", "GRL", "GRD", "GLP", "GUM", "GTM", "GGY", "GIN", "GNB", "GUY", "HTI", "HMD", "VAT", "HND", "HKG", "HUN", "ISL", "IND", "IDN", "IRN", "IRQ", "IRL",
+          "IMN", "ISR", "ITA", "JAM", "JPN", "JEY", "JOR", "KAZ", "KEN", "KIR", "PRK", "KOR", "KWT", "KGZ", "LAO", "LVA", "LBN", "LSO", "LBR", "LBY", "LIE", "LTU", "LUX", "MAC", "MDG", "MWI", "MYS",
+          "MDV", "MLI", "MLT", "MHL", "MTQ", "MRT", "MUS", "MYT", "MEX", "FSM", "MDA", "MCO", "MNG", "MNE", "MSR", "MAR", "MOZ", "MMR", "NAM", "NRU", "NPL", "NLD", "NCL", "NZL", "NIC", "NER", "NGA",
+          "NIU", "NFK", "MNP", "NOR", "OMN", "PAK", "PLW", "PSE", "PAN", "PNG", "PRY", "PER", "PHL", "PCN", "POL", "PRT", "PRI", "QAT", "MKD", "ROU", "RUS", "RWA", "REU", "BLM", "SHN", "KNA", "LCA",
+          "MAF", "SPM", "VCT", "WSM", "SMR", "STP", "SAU", "SEN", "SRB", "SYC", "SLE", "SGP", "SXM", "SVK", "SVN", "SLB", "SOM", "ZAF", "SGS", "SSD", "ESP", "LKA", "SDN", "SUR", "SJM", "SWE", "CHE",
+          "SYR", "TWN", "TJK", "TZA", "THA", "TLS", "TGO", "TKL", "TON", "TTO", "TUN", "TUR", "TKM", "TCA", "TUV", "UGA", "UKR", "ARE", "GBR", "UMI", "USA", "URY", "UZB", "VUT", "VEN", "VNM", "VGB",
+          "VIR", "WLF", "ESH", "YEM", "ZMB", "ZWE", "ALA");
+  private final Set<String> countriesNames =
+      Set.of("CHAD", "CUBA", "FIJI", "GUAM", "IRAQ", "MALI", "NIUE", "OMAN", "PERU", "TOGO", "ARUBA", "BENIN", "CHILE", "CHINA", "CONGO", "EGYPT", "GABON", "GHANA", "HAITI", "INDIA", "ITALY", "JAPAN",
+          "KENYA", "LIBYA", "MACAO", "MACAU", "MALTA", "NAURU", "NEPAL", "NIGER", "PALAU", "QATAR", "SAMOA", "SPAIN", "SUDAN", "TONGA", "YEMEN", "ANGOLA", "BELIZE", "BHUTAN", "BRAZIL",
+          "CANADA", "CYPRUS", "FRANCE", "GAMBIA", "GREECE", "GUINEA", "GUYANA", "ISRAEL", "JERSEY", "JORDAN", "KUWAIT", "LATVIA", "MALAWI", "MEXICO", "MONACO", "NORWAY", "PANAMA", "POLAND", "RWANDA",
+          "SERBIA", "SWEDEN", "TAIWAN", "TURKEY", "TUVALU", "UGANDA", "ZAMBIA", "ALBANIA", "ALGERIA", "ANDORRA", "ARMENIA", "AUSTRIA", "BAHAMAS", "BAHRAIN", "BELARUS", "BELGIUM", "BERMUDA", "BURUNDI",
+          "COMOROS", "CROATIA", "CURACAO", "CURAÇAO", "CZECHIA", "DENMARK", "ECUADOR", "ERITREA", "ESTONIA", "FINLAND", "GEORGIA", "GERMANY", "GRENADA", "HUNGARY", "ICELAND", "IRELAND",
+          "JAMAICA", "LEBANON", "LESOTHO", "LIBERIA", "MAYOTTE", "MOROCCO", "MYANMAR", "NAMIBIA", "NIGERIA", "RÉUNION", "ROMANIA", "SENEGAL", "SOMALIA", "TOKELAU", "TUNISIA", "UKRAINE", "URUGUAY",
+          "VANUATU", "VIETNAM", "ANGUILLA", "BARBADOS", "BOTSWANA", "BULGARIA", "CAMBODIA", "CAMEROON", "COLOMBIA", "DJIBOUTI", "DOMINICA", "ESWATINI", "ETHIOPIA", "GUERNSEY", "HOLY SEE", "HONDURAS",
+          "ISLE MAN", "KIRIBATI", "MALAYSIA", "MALDIVES", "MEXICANA", "MEXICANO", "MONGOLIA", "PAKISTAN", "PARAGUAY", "PITCAIRN", "PORTUGAL", "SLOVAKIA", "SLOVENIA", "SURINAME", "THAILAND",
+          "VIET NAM", "ZIMBABWE", "ARGENTINA", "AUSTRALIA", "CHINA PRC", "GIBRALTAR", "GREENLAND", "GUATEMALA", "HONG KONG", "INDONESIA", "LITHUANIA", "MAURITIUS", "NICARAGUA", "SINGAPORE",
+          "SRI LANKA", "VENEZUELA", "ANTARCTICA", "AZERBAIJAN", "BANGLADESH", "CABO VERDE", "COSTA RICA", "GUADELOUPE", "KAZAKHSTAN", "KYRGYZSTAN", "LUXEMBOURG", "MADAGASCAR", "MARTINIQUE",
+          "MAURITANIA", "MONTENEGRO", "MONTSERRAT", "MOZAMBIQUE", "SAN MARINO", "SEYCHELLES", "TAJIKISTAN", "TIMORLESTE", "UZBEKISTAN", "AFGHANISTAN", "EL SALVADOR", "NETHERLANDS", "NEW ZEALAND",
+          "NORTH KOREA", "PHILIPPINES", "PUERTO RICO", "SAINT LUCIA", "SOUTH KOREA", "SOUTH SUDAN", "SWITZERLAND", "BURKINA FASO", "COOK ISLANDS", "COTE DIVOIRE", "CÔTE DIVOIRE", "GUINEABISSAU",
+          "SAUDI ARABIA", "SIERRA LEONE", "SOUTH AFRICA", "TURKMENISTAN", "ÅLAND ISLANDS", "BOUVET ISLAND", "COREA DEL SUR", "FAROE ISLANDS", "FRENCH GUIANA", "LIECHTENSTEIN", "NEW CALEDONIA",
+          "UNITED STATES", "AMERICAN SAMOA", "CAYMAN ISLANDS", "CZECH REPUBLIC", "ESTADOS UNIDOS", "KOREA REPUBLIC", "NORFOLK ISLAND", "REPUBLIC CHINA", "REPUBLIC KOREA", "UNITED KINGDOM",
+          "VIRGIN ISLANDS", "WESTERN SAHARA", "NORTH MACEDONIA", "PALESTINE STATE", "SOLOMON ISLANDS", "CHRISTMAS ISLAND", "FRENCH POLYNESIA", "MARSHALL ISLANDS", "MOLDOVA REPUBLIC",
+          "PAPUA NEW GUINEA", "SAINT BARTHÉLEMY", "BRUNEI DARUSSALAM", "EQUATORIAL GUINEA", "VIRGIN ISLANDS US", "WALLIS AND FUTUNA", "DOMINICAN REPUBLIC", "RUSSIAN FEDERATION", "ANTIGUA AND BARBUDA",
+          "TRINIDAD AND TOBAGO", "SYRIAN ARAB REPUBLIC", "UNITED ARAB EMIRATES", "COCOS KEELING ISLANDS", "IRAN ISLAMIC REPUBLIC", "SAINT KITTS AND NEVIS",
+          "SAO TOME AND PRINCIPE", "TAIWAN PROVINCE CHINA", "UNITED STATES AMERICA", "BOSNIA AND HERZEGOVINA", "BRITISH VIRGIN ISLANDS", "PEOPLES REPUBLIC CHINA", "SVALBARD AND JAN MAYEN",
+          "VIRGIN ISLANDS BRITISH", "SINT MAARTEN DUTCH PART", "CENTRAL AFRICAN REPUBLIC", "NORTHERN MARIANA ISLANDS", "REPUBLIC NORTH MACEDONIA", "SAINT MARTIN FRENCH PART",
+          "TANZANIA UNITED REPUBLIC", "TURKS AND CAICOS ISLANDS", "CONGO DEMOCRATIC REPUBLIC", "FALKLAND ISLANDS MALVINAS", "SAINT PIERRE AND MIQUELON", "BOLIVIA PLURINATIONAL STATE",
+          "FRENCH SOUTHERN TERRITORIES", "HOLY SEE VATICAN CITY STATE", "MICRONESIA FEDERATED STATES", "SAINT VINCENT AND GRENADINES", "VENEZUELA BOLIVARIAN REPUBLIC",
+          "BRITISH INDIAN OCEAN TERRITORY", "BONAIRE SINT EUSTATIUS AND SABA", "LAO PEOPLES DEMOCRATIC REPUBLIC", "HEARD ISLAND AND MCDONALD ISLANDS", "KOREA DEMOCRATIC PEOPLES REPUBLIC",
+          "UNITED STATES MINOR OUTLYING ISLANDS", "SOUTH GEORGIA AND SOUTH SANDWICH ISLANDS", "SAINT HELENA ASCENSION AND TRISTAN DA CUNHA", "UNITED KINGDOM GREAT BRITAIN AND NORTHERN IRELAND");
+
+  boolean validate(String country) {
+    return countriesAlpha2.contains(country) || countriesAlpha3.contains(country) || countriesNames.contains(country);
+  }
+}

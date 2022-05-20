@@ -1,0 +1,34 @@
+includeBuild('../../platforms')
+includeBuild('../../build-logic')
+
+dependencyResolutionManagement {
+  versionCatalogs {
+    libs {
+      from(files("../../gradle/libs.versions.toml"))
+    }
+  }
+}
+
+rootProject.name = 'payments-bridge'
+gradle.ext.sepDependenciesVersion = '2.5.0'
+
+include 'proto-sear-payments-bridge-internal-protos'
+include 'sear-payments-apigateway'
+include 'sear-payments-bridge-ae'
+include 'sear-payments-bridge-agents'
+include 'sear-payments-bridge-app'
+include 'sear-payments-bridge-common'
+include 'sear-payments-bridge-datasource'
+include 'sear-payments-bridge-data-retention'
+include 'sear-payments-bridge-etl'
+include 'sear-payments-bridge-firco'
+include 'sear-payments-bridge-governance'
+include 'sear-payments-bridge-mock-ae'
+include 'sear-payments-bridge-mock-agents'
+include 'sear-payments-bridge-mock-datasource'
+include 'sear-payments-bridge-mock-governance'
+include 'sear-payments-bridge-notification'
+include 'sear-payments-bridge-svb-learning'
+include 'sear-payments-bridge-testing'
+include 'sear-payments-bridge-warehouse'
+include 'sear-payments-birdge-mock-warehouse'

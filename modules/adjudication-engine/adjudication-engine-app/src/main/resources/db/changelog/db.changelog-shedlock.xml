@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_26" author="ahaczewski">
+    <createTable tableName="ae_shedlock">
+      <column name="name" type="VARCHAR(64)">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="pk_ae_shedlock"/>
+      </column>
+      <column name="lock_until" type="TIMESTAMP"/>
+      <column name="locked_at" type="TIMESTAMP"/>
+      <column name="locked_by" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex tableName="ae_shedlock" indexName="ae_shedlock_locked_by">
+      <column name="locked_by"/>
+    </createIndex>
+  </changeSet>
+</databaseChangeLog>

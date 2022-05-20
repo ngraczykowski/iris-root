@@ -1,0 +1,16 @@
+// Copyright 2021 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package silenteight.adjudication.internal.v1;
+
+import "google/api/field_behavior.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "CommentInputsUpdatedProto";
+option java_package = "com.silenteight.adjudication.internal.v1";
+
+message CommentInputsUpdated {
+  // The list of analysis names that has pending recommendations, in form of `analysis/<Analysis>`.
+  repeated string analysis = 1 [(google.api.field_behavior) = REQUIRED];
+}

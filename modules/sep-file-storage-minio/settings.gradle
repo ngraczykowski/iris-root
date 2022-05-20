@@ -1,0 +1,10 @@
+rootProject.name = 'sep-filestorage-minio-s3'
+includeBuild('../../platforms')
+includeBuild('../../build-logic')
+dependencyResolutionManagement {
+  versionCatalogs {
+    libs {
+      from(files("../../gradle/libs.versions.toml"))
+    }
+  }
+}

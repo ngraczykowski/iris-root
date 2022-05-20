@@ -1,0 +1,216 @@
+= HLD #1
+
+== Using Adjudication Engine to solve alerts
+
+- Reference ticket: TBA
+- Reason:
+
+== Using Adjudication Engine to solve alerts
+[plantuml,using-adjudication-engine-to-solve-alerts,svg]
+-----
+@startuml
+header Using Adjudication Engine to solve alerts
+
+actor Client as cAPI
+
+participant Bridge as b
+database "Bridge DB" as bdb
+participant Datasource as ds
+
+participant "Adjudication Engine" as ae
+
+queue Queue as q
+
+box agents
+participant name_agent as na
+participant date_agent as da
+end box
+
+participant "Commentator 2.0" as c
+
+participant Simulator as s
+
+participant Governance as g
+
+participant Frontend as f
+
+actor User as u
+
+
+==Configure agents - phase 2==
+
+u -> f : create name agent configuration
+f -> g : create name agent configuration
+
+na -> c : register reason proto
+
+==Gathering the Agents Configuration - Simulation Server==
+
+na -> na : agent start with specific configuration
+na -> g : available results
+
+==Creating agents configuration set - Simulation Server==
+
+f -> g : get agents
+f -> g : get available configurations
+u -> f : create configuration set with agents configurations
+f -> g : create configuration set
+
+==Configuring Policy - Simulation Server==
+
+f -> g : get agents
+f -> g : get available results for each agent
+u -> f : create policy
+f -> g : create policy
+g -> f : policy created
+
+==Simulate - Simulation Server==
+
+cAPI -> b : historical alerts
+b -> bdb : store alerts
+b -> ae : create alerts (no alert data)
+
+
+u -> f : create dataset (query on alerts)
+f -> ae : create dataset
+ae -> b : query alerts
+b -> ae : alerts name
+ae -> ae : create dataset for returned alerts
+ae -> f : dataset name + alerts count
+
+u -> f : create simulation (dataset, policy, configuration set, strategy)
+f -> s : create simulation
+
+s -> ae : create analysis with model data (policy name, configuration set, strategy name)
+s -> g : get configuration data for configuration set
+g -> ae : configuration data (name agent configuration id/version, date agent configuration id/version, ...)
+ae -> ae : store analysis with default model data
+s -> ae : add dataset to analysis
+
+...this part is exactly the same as solving on a production...
+ae -> q : solve match by name agent \n(match name, agent version, agent configuration id)
+q -> na : solve match
+na -> ds : get inputs for name agent
+ds -> bdb : get inputs
+bdb -> ds : inputs
+ds -> na : inputs
+na -> q : name solution (result)
+q -> ae : name agent solution
+ae -> ae : store name solution
+ae -> ae : date agent solution solved earlier
+
+ae -> ds : get categories
+ds -> bdb : get values
+bdb -> ds : values
+ds -> ae : categories
+
+ae -> g : solve match (agents results + categories map)
+...how to remove unsolved matches from the queue on Cancel...
+g -> ae : solution
+
+ae -> g : get alert solution based on strategy
+g -> ae : alert solution
+
+
+ae -> c : generate comment for alert (with list of matches, matches solution, alert solution, reasons)
+c -> ds : get data to generate comments
+ds -> bdb : get values
+ds -> c : data for comments
+c -> ae : comment
+
+ae -> q : dataset solved
+q -> s : simulation ends
+s -> ae : get reports
+
+...
+
+u -> f : get simulation status
+f -> s : simulation status
+s -> ae : analysis status (alerts to proceed/all)
+ae -> s : status
+s -> ae : already proceeded alerts statistic
+ae -> s : statistics
+s -> f : simulation status
+
+==Maker-Approver process - Simulation Server==
+
+...maker...
+f -> s : get simulation model
+s -> f : simulation model
+f -> g : get configuration sets
+f -> g : get strategies
+u -> f : prepare model to export (policy name, configuration set name, strategy name)
+f -> g : prepare model to export
+g -> f : model prepared
+
+...approver...
+u -> f : approve model
+f -> g : approve model
+g -> g : change model status as deployable on a production
+
+...
+g -> : deploy model on a production \n(implementation detail)
+
+...a few moments later...
+
+==Solve alerts - Production Server==
+
+-> g : approved model
+g -> g : new default model
+
+cAPI -> b : solve alerts (batch)
+b -> bdb : store alerts
+b -> ae : create alerts (no alert data)
+ae -> b : identifiers for alerts
+b -> bdb : store correlated identifiers for alerts
+b -> ae : create matches (no match data)
+ae -> b : identifiers for matches \n(alerts/234/matches/3456)
+b -> bdb : store correlated identifiers for matches
+b -> ae : create analysis without policy
+ae -> g : get default model data (policy name, name agent configuration id/version, date agent configuration id/version, ..., strategy name)
+g -> ae : default model data
+ae -> ae : store analysis with default model data
+b -> ae : create dataset with a list of alerts
+b -> ae : add dataset to analysis
+
+ae -> q : solve match by name agent \n(match name, agent version, agent configuration id)
+q -> na : solve match
+na -> ds : get inputs for name agent
+ds -> bdb : get inputs
+bdb -> ds : inputs
+ds -> na : inputs
+na -> q : name solution (result)
+q -> ae : name agent solution
+ae -> ae : store name solution
+ae -> ae : date agent solution solved earlier
+
+ae -> ds : get categories
+ds -> bdb : get values
+bdb -> ds : values
+ds -> ae : categories
+
+ae -> g : solve match (agents results + categories map)
+g -> ae : solution
+
+ae -> g : get alert solution based on strategy
+g -> ae : alert solution
+
+
+ae -> c : generate comment for alert (with list of matches, matches solution, alert solution, reasons)
+c -> ds : get data to generate comments
+ds -> bdb : get values
+ds -> c : data for comments
+c -> ae : comment
+
+ae -> q : alert solved
+ae -> q : dataset solved
+
+q -> b : dataset solved
+b -> ae : get recommendations
+ae -> b : recommendations
+
+b -> cAPI : recommendations
+
+
+@enduml
+-----

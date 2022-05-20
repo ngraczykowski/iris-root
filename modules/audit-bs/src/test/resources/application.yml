@@ -1,0 +1,5 @@
+spring:
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-auditing.xml
+    default-schema: public
+    contexts: default

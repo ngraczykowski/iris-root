@@ -1,0 +1,24 @@
+// Copyright 2021 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package silenteight.adjudication.internal.v1;
+
+import "google/api/field_behavior.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "MatchCategoriesUpdatedProto";
+option java_package = "com.silenteight.adjudication.internal.v1";
+
+message MatchCategoriesUpdated {
+  // The name of the analysis which triggered the match category values update, in form of
+  // `analysis/<Analysis ID>`.
+  string analysis = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The list of match names that had category values updated, in form of
+  // `alerts/<Alert ID>/matches/<Match ID>`.
+  repeated string matches = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // The list of category names updated, in form of `categories/<Category ID>`.
+  repeated string categories = 3 [(google.api.field_behavior) = REQUIRED];
+}

@@ -1,0 +1,16 @@
+---
+kind: KeycloakRealm
+apiVersion: keycloak.org/v1alpha1
+metadata:
+  name: {{ .Release.Namespace }}
+  labels:
+    realm: {{ .Release.Namespace }}
+  namespace: "keycloak-operator"
+spec:
+  realm:
+    realm: {{ .Release.Namespace }}
+    enabled: true
+    displayName: {{ .Release.Namespace }}
+  instanceSelector:
+    matchLabels:
+      app.kubernetes.io/name: "sear-keycloak"

@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package silenteight.datasource.api.freetext.v1;
+
+import "google/api/annotations.proto";
+
+option java_package = "com.silenteight.datasource.api.freetext.v1";
+option java_outer_classname = "FreeTextProto";
+option java_multiple_files = true;
+
+service FreeTextInputService {
+  rpc BatchGetMatchFreeTextInputs (BatchGetMatchFreeTextInputsRequest) returns (stream BatchGetMatchFreeTextInputsResponse) {
+    option (google.api.http) = {
+      post: "/agent-inputs/freetext/versions/v1/matches:batchGet"
+      body: "*"
+    };
+  }
+}
+
+message BatchGetMatchFreeTextInputsRequest {
+  // The list of matches data is requested for, in form of `alerts/<Alert ID>/matches/<Match ID>`.
+  repeated string matches = 1;
+  // The list of features the input data for each match is requested, in form of `features/<Feature ID>`.
+  repeated string features = 2;
+}
+
+message BatchGetMatchFreeTextInputsResponse {
+  repeated FreeTextInput freetext_inputs = 1;
+}
+
+message FreeTextInput {
+  string match = 1;
+  repeated FreeTextFeatureInput freetext_feature_inputs = 2;
+}
+
+message FreeTextFeatureInput {
+  string feature = 1;
+  string matched_name = 2;
+  string matched_name_synonym = 3;
+  string matched_type = 4;
+  repeated string matching_texts = 5;
+  string freetext = 6;
+}

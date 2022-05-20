@@ -1,0 +1,30 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+}
+
+description = "Adjudication Engine Trace Application"
+
+dependencies {
+
+  implementation libs.jackson.databind
+  implementation libs.jackson.datatype.jsr310
+  implementation libs.commons.codec
+  implementation libs.silenteight.sep.base.common
+
+  // Messaging
+  implementation libs.amqp.client
+  implementation libs.lz4.java
+  implementation libs.spring.boot.autoconfigure
+  implementation libs.spring.amqp.rabbit
+
+  // Database
+  implementation libs.spring.jdbc
+  implementation libs.hikari.cp
+  runtimeOnly libs.postgresql
+
+  // Testing
+  testImplementation project(":adjudication-engine-testing")
+  testImplementation libs.junit.jupiter.api
+  testImplementation libs.silenteight.sep.base.testing
+
+}

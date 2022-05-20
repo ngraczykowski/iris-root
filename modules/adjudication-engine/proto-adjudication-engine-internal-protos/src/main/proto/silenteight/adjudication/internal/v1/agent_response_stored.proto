@@ -1,0 +1,25 @@
+// Copyright 2021 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package silenteight.adjudication.internal.v1;
+
+import "google/api/field_behavior.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "AgentResponseStoredProto";
+option java_package = "com.silenteight.adjudication.internal.v1";
+
+message AgentResponseStored {
+
+  repeated StoredMatchFeatures stored_match_features = 1;
+}
+
+message StoredMatchFeatures {
+
+  string request = 1 [(google.api.field_behavior) = REQUIRED];
+
+  int64 match_id = 2 [(google.api.field_behavior) = REQUIRED];
+
+  repeated string features = 3 [(google.api.field_behavior) = REQUIRED];
+}

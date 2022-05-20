@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+  <changeSet id="adjudication-engine-alerts-1.12.0_1" author="tbozek">
+    <createIndex tableName="ae_alert_labels" indexName="idx_ae_alert_labels_name_value">
+      <column name="name"/>
+      <column name="value"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-alerts-1.12.0_2" author="jgajewski">
+    <sqlFile path="db/changelog/sql/update_ae_alert_labels_source_CMAPI_to_solving.sql"/>
+    <sqlFile path="db/changelog/sql/update_ae_alert_labels_source_CSV_to_learning.sql"/>
+  </changeSet>
+</databaseChangeLog>

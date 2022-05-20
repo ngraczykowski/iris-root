@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package silenteight.datasource.categories.api.v2;
+
+import "google/api/field_behavior.proto";
+
+option java_package = "com.silenteight.datasource.categories.api.v2";
+option java_outer_classname = "CategoryProto";
+option java_multiple_files = true;
+
+// The type of category.
+enum CategoryType {
+  CATEGORY_TYPE_UNSPECIFIED = 0;
+  // The list of category values is known up-front, e.g., a type of party can be "INDIVIDUAL",
+  // "ORGANIZATION", "VESSEL", "COUNTRY". In such a case, the type shall be set to `ENUMERATED`
+  // to ease editing policies in the Web UI.
+  ENUMERATED = 1;
+  // The list of category values is not known up-front.
+  ANY_STRING = 2;
+}
+
+// Represents a category of categorical values a respective resource can have.
+// In example, a match can have values in the following categories:
+//
+//   - Bank branch
+//   - Account country
+//   - Source system
+//   - Customer country of residence
+//   - Customer nationality
+//   - Company country of registration
+//   - Customer type (individual, organization, etc.)
+//   - Segment (corporate, consumer, wealth management)
+//   - Watchlist party category (Sanctions, PEP)
+//   - Watchlist party type (individual, organization, etc.)
+//
+message Category {
+  // The unique name of the category, in form of `categories/<Category>`.
+  // Must be unique.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The human-readable name of this category, e.g., "Bank branch", "Country of residence", etc.
+  // If not specified, the `name` is used as a display name of the category.
+  string display_name = 2;
+
+  // The type of this category, must not be CATEGORY_TYPE_UNSPECIFIED.
+  CategoryType type = 3 [(google.api.field_behavior) = REQUIRED, (google.api.field_behavior) = IMMUTABLE];
+
+  // The list of allowed values. This is required for when `type` is `ENUMERATED`.
+  // Do not set this for `ANY_STRING` type.
+  repeated string allowed_values = 4;
+
+  // Indicates that there might be multiple values of the same category in a single resource.
+  bool multi_value = 5 [(google.api.field_behavior) = IMMUTABLE];
+}

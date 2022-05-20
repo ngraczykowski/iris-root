@@ -1,0 +1,33 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "groovy"
+}
+
+dependencies {
+
+  api libs.sentry
+
+  implementation project(":proto-sear-payments-bridge-internal-protos")
+
+  implementation libs.silenteight.sep.base.common
+  implementation libs.spring.context
+  implementation libs.protobuf.java.util
+
+  implementation libs.jakarta.annotation.api
+  implementation libs.jakarta.validation.api
+
+  // Hibernate validators
+  implementation libs.hibernate.validator
+  implementation libs.jakarta.el
+
+  implementation libs.adjudication.engine.api
+
+  implementation libs.warehouse.data.api
+  implementation libs.data.retention.api
+  implementation libs.data.source.agentinput.api
+
+  implementation libs.spring.batch.core
+
+  testImplementation libs.spock.core
+  testImplementation libs.spock.spring
+}

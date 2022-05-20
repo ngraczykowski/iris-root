@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="universal-datasource-1.9.0-1" author="jgajewski">
+    <preConditions onFail="MARK_RAN"><tableExists tableName="fail_on_purpose"/></preConditions>
+    <comment>There might not be a public schema, therefore this changeSet should not be run any more. This table is dropped properly in changelog-1.10.0</comment>
+    <dropTable schemaName="public"
+               tableName="uds_feature_mapper"/>
+  </changeSet>
+
+</databaseChangeLog>

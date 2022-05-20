@@ -23,7 +23,7 @@ pipeline {
   stages {
     stage('E2E Tests') {
       steps {
-        sh "./gradlew test -Dkarate.env=${params.environments} -Dkarate.client-id=${KARATE_CLIENT_USR} -Dkarate.client-secret=${KARATE_CLIENT_PSW} -Dkarate.username=${KARATE_CREDS_USR} -Dkarate.password=${KARATE_CREDS_PSW}"
+        sh "../../gradlew test -Dkarate.env=${params.environments} -Dkarate.client-id=${KARATE_CLIENT_USR} -Dkarate.client-secret=${KARATE_CLIENT_PSW} -Dkarate.username=${KARATE_CREDS_USR} -Dkarate.password=${KARATE_CREDS_PSW}"
       }
     }
   }
