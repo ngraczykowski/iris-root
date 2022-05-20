@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-set -eU -o pipefail
+set -eu -o pipefail
 
 function gitRelease() {
   echo 'Releasing'
   bump2version release
   echo 'Building'
   scripts/clean.sh
-  scripts/build.sh
+  scripts/build.sh "$@"
   echo 'Resetting release commit'
   git reset --hard HEAD~1 # remove release commit after tag
 }
@@ -18,12 +18,12 @@ fi
 
 if [ "${branch}" == "master" ]; then
   echo 'Releasing master'
-  gitRelease
+  gitRelease "$@"
   echo 'Bumping minor'
   bump2version minor # for master
 elif [[ $branch == release* ]]; then
   echo 'Releasing branch'
-  gitRelease
+  gitRelease "$@"
   echo 'Bumping patch'
   bump2version patch # for release
 else
