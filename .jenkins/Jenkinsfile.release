@@ -7,7 +7,6 @@
 def version = ""
 def distributions = ["hotel", "sierra", "foxtrot"]
 
-
 pipeline {
   agent {
     label 'ec2-agent-devenv'
@@ -104,74 +103,72 @@ pipeline {
               }
             }
           }
-           stage("E2E Tests") {
-              steps {
-                withGradle {
-                  withCredentials(
-                      [usernamePassword(
-                          credentialsId: 'artifactory-user',
-                          usernameVariable: 'S8_REPO_USER',
-                          passwordVariable: 'S8_REPO_PASSWORD'),
-                       usernamePassword(
-                          credentialsId: 'karate-username-password',
-                          usernameVariable: 'E2E_TESTS_CREDS_USR',
-                          passwordVariable: 'E2E_TESTS_CREDS_PWD'
-                       )]) {
-                    script {
-                      sh """
-                        echo "Starting E2E tests for ${ENVIRONMENT} environment."
-                      """
-                      sh """
-                          cd tests/e2e-tests
+          stage("E2E Tests") {
+            steps {
+              withGradle {
+                withCredentials(
+                    [usernamePassword(
+                        credentialsId: 'artifactory-user',
+                        usernameVariable: 'S8_REPO_USER',
+                        passwordVariable: 'S8_REPO_PASSWORD'),
+                     usernamePassword(
+                         credentialsId: 'karate-username-password',
+                         usernameVariable: 'E2E_TESTS_CREDS_USR',
+                         passwordVariable: 'E2E_TESTS_CREDS_PWD'
+                     )]) {
+                  script {
+                    echo "Starting E2E tests for ${ENVIRONMENT} environment."
+                    sh """
+                      cd tests/e2e-tests
 
-                          ../../gradlew test \
-                          -Dcucumber.features=src/test/java/features/SmokeTests.feature \
-                          -Dcucumber.plugin=json:report-\${ENVIRONMENT}.json \
-                          -Dtest.isRegression=false \
-                          -Dtest.clientId=dev-frontend \
-                          -Dtest.username="\$E2E_TESTS_CREDS_USR" \
-                          -Dtest.password="\$E2E_TESTS_CREDS_PWD" \
-                          -Dtest.url="\$BASE_URL" \
-                          --info --stacktrace
-                        """
-                    }
+                      ../../gradlew test \
+                      -Dcucumber.features=src/test/java/features/SmokeTests.feature \
+                      -Dcucumber.plugin=json:report-\${ENVIRONMENT}.json \
+                      -Dtest.isRegression=false \
+                      -Dtest.clientId=dev-frontend \
+                      -Dtest.username="\$E2E_TESTS_CREDS_USR" \
+                      -Dtest.password="\$E2E_TESTS_CREDS_PWD" \
+                      -Dtest.url="\$BASE_URL" \
+                      --info --stacktrace
+                    """
                   }
                 }
               }
-              post {
-                  always {
-                      cucumber fileIncludePattern: "**/report-${env.ENVIRONMENT}.json",
-                                reportTitle: ${env.ENVIRONMENT}
-                  }
-                }
-
+            }
+            post {
+              always {
+                cucumber fileIncludePattern: "**/report-${env.ENVIRONMENT}.json",
+                    reportTitle: env.ENVIRONMENT
               }
-           }
-           post {
-            cleanup {
-               withKubeConfig(
-                   credentialsId: 'devenv-eks',
-                   serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
-                 sh "helm uninstall --namespace jenkins-${ENVIRONMENT} sear"
-               }
-             }
-           }
+            }
+
+          }
+        }
+        post {
+          cleanup {
+            withKubeConfig(
+                credentialsId: 'devenv-eks',
+                serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
+              sh "helm uninstall --namespace jenkins-${ENVIRONMENT} sear"
+            }
+          }
         }
       }
     }
-    post {
-        success {
-          slackSend color: "good", channel: 'C03D4GD7RHP', attachments: [
-            [
-                color : "good",
-                author_name: ':rocket: Iris Release',
-                author_link: env.JOB_DISPLAY_URL,
-                title : "${currentBuild.fullProjectName} build passed <${env.RUN_DISPLAY_URL}|${currentBuild.displayName}>."
-            ]
-          ]
-        }
-        //failure {
-          //notifyBuild color: 'danger', channel: 'C03D4GD7RHP', title: ':rocket: Iris Release'
-        //}
-      }
   }
+  post {
+    success {
+      slackSend color: "good", channel: 'C03D4GD7RHP', attachments: [
+          [
+              color      : "good",
+              author_name: ':rocket: Iris Release',
+              author_link: env.JOB_DISPLAY_URL,
+              title      : "${currentBuild.fullProjectName} build passed <${env.RUN_DISPLAY_URL}|${currentBuild.displayName}>."
+          ]
+      ]
+    }
+    //failure {
+    //notifyBuild color: 'danger', channel: 'C03D4GD7RHP', title: ':rocket: Iris Release'
+    //}
+  }
+}
