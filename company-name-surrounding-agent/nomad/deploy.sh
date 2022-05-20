@@ -11,7 +11,7 @@ MINIO_ALIAS=${MINIO_ALIAS:-minio}
 
 export NOMAD_ADDR="${NOMAD_ADDR:-http://localhost:4646}"
 
-agent_artifact_path="$(ls "$scriptdir"/artifacts/company_name-*.pyz)"
+agent_artifact_path="$(ls "$scriptdir"/artifacts/company_name-surrounding-agent-*.pyz)"
 agent_artifact=$(basename -- "$agent_artifact_path")
 agent_version=$(ls -al "$agent_artifact_path" | awk -F'company_name-surrounding-agent-|.pyz' '{print $2}')
 agent_config="company_name_surrounding_agent-config-${agent_version}.tgz"
