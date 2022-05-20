@@ -140,7 +140,8 @@ pipeline {
               }
               post {
                   always {
-                      cucumber fileIncludePattern: '**/report-\${ENVIRONMENT}.json'
+                      cucumber fileIncludePattern: "**/report-${ENVIRONMENT}.json",
+                                reportTitle: "Report ${env.ENVIRONMENT}"
                   }
                 }
 
