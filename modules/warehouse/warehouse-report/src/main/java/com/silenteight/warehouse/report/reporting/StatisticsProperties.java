@@ -22,5 +22,11 @@ public class StatisticsProperties {
   private final String aiFalsePositiveQuery;
   @NotBlank
   private final String analystFalsePositiveQuery;
+  @NotBlank
+  private final String falsePositiveAlertsQuery;
+  @NotBlank
+  private final String potentialTruePositiveAlertsQuery;
+  @NotBlank
+  private final String manualInvestigationAlertsQuery;
 
 }

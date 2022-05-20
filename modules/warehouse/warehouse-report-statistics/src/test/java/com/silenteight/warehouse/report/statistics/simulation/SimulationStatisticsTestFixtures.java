@@ -107,6 +107,48 @@ public final class SimulationStatisticsTestFixtures {
       .builder()
       .solvedAlerts(20L)
       .allAlerts(25L)
+      .falsePositiveAlerts(12L)
+      .falsePositiveAlertsPercent(48L)
+      .potentialTruePositiveAlerts(10L)
+      .potentialTruePositiveAlertsPercent(40L)
+      .manualInvestigationAlerts(3L)
+      .manualInvestigationAlertsPercent(12L)
+      .build();
+
+  static final EffectivenessDto COUNT_STATISTICS_EFFECTIVENESS_DTO = EffectivenessDto
+      .builder()
+      .analystSolvedAsFalsePositive(1L)
+      .aiSolvedAsFalsePositive(2L)
+      .build();
+
+  static final EfficiencyDto COUNT_STATISTICS_EFFICIENCY_DTO = EfficiencyDto
+      .builder()
+      .solvedAlerts(2L)
+      .allAlerts(3L)
+      .falsePositiveAlerts(2L)
+      .falsePositiveAlertsPercent(66.66666666666667)
+      .potentialTruePositiveAlerts(0)
+      .potentialTruePositiveAlertsPercent(0)
+      .manualInvestigationAlerts(1L)
+      .manualInvestigationAlertsPercent(33.333333333333336)
+      .build();
+
+  static final EfficiencyDto EMPTY_EFFICIENCY_DTO = EfficiencyDto
+      .builder()
+      .solvedAlerts(0)
+      .allAlerts(0)
+      .falsePositiveAlerts(0)
+      .falsePositiveAlertsPercent(Double.NaN)
+      .potentialTruePositiveAlerts(0)
+      .potentialTruePositiveAlertsPercent(Double.NaN)
+      .manualInvestigationAlerts(0)
+      .manualInvestigationAlertsPercent(Double.NaN)
+      .build();
+
+  static final EffectivenessDto EMPTY_EFFECTIVENESS_DTO = EffectivenessDto
+      .builder()
+      .analystSolvedAsFalsePositive(0)
+      .aiSolvedAsFalsePositive(0)
       .build();
 
   public static final SimulationStatisticsDto STATISTICS_DTO = builder()

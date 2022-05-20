@@ -45,7 +45,13 @@ class SimulationStatisticsRestControllerTest extends BaseRestControllerTest {
         .body("effectiveness.aiSolvedAsFalsePositive", is(5))
         .body("effectiveness.analystSolvedAsFalsePositive", is(10))
         .body("efficiency.solvedAlerts", is(20))
-        .body("efficiency.allAlerts", is(25));
+        .body("efficiency.allAlerts", is(25))
+        .body("efficiency.falsePositiveAlerts", is(12))
+        .body("efficiency.falsePositiveAlertsPercent", is(48.0F))
+        .body("efficiency.potentialTruePositiveAlerts", is(10))
+        .body("efficiency.potentialTruePositiveAlertsPercent", is(40.0F))
+        .body("efficiency.manualInvestigationAlerts", is(3))
+        .body("efficiency.manualInvestigationAlertsPercent", is(12.0F));
   }
 
   @Test

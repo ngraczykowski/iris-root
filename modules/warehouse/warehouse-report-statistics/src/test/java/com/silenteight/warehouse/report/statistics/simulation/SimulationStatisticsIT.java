@@ -55,10 +55,9 @@ class SimulationStatisticsIT {
     // then
     EfficiencyDto efficiency = statistics.getEfficiency();
     EffectivenessDto effectiveness = statistics.getEffectiveness();
-    assertThat(efficiency.getAllAlerts()).isEqualTo(3L);
-    assertThat(efficiency.getSolvedAlerts()).isEqualTo(2L);
-    assertThat(effectiveness.getAiSolvedAsFalsePositive()).isEqualTo(2L);
-    assertThat(effectiveness.getAnalystSolvedAsFalsePositive()).isEqualTo(1L);
+
+    assertThat(efficiency).isEqualTo(COUNT_STATISTICS_EFFICIENCY_DTO);
+    assertThat(effectiveness).isEqualTo(COUNT_STATISTICS_EFFECTIVENESS_DTO);
   }
 
   @Test
@@ -69,9 +68,8 @@ class SimulationStatisticsIT {
     // then
     EfficiencyDto efficiency = statistics.getEfficiency();
     EffectivenessDto effectiveness = statistics.getEffectiveness();
-    assertThat(efficiency.getAllAlerts()).isZero();
-    assertThat(efficiency.getSolvedAlerts()).isZero();
-    assertThat(effectiveness.getAiSolvedAsFalsePositive()).isZero();
-    assertThat(effectiveness.getAnalystSolvedAsFalsePositive()).isZero();
+
+    assertThat(efficiency).isEqualTo(EMPTY_EFFICIENCY_DTO);
+    assertThat(effectiveness).isEqualTo(EMPTY_EFFECTIVENESS_DTO);
   }
 }

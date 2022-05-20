@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.report.reporting.StatisticsProperties;
+import com.silenteight.warehouse.report.statistics.simulation.calculation.PercentageCalculator;
 import com.silenteight.warehouse.report.statistics.simulation.dto.SimulationStatisticsDto;
 import com.silenteight.warehouse.report.statistics.simulation.dto.SimulationStatisticsDto.EffectivenessDto;
 import com.silenteight.warehouse.report.statistics.simulation.dto.SimulationStatisticsDto.EfficiencyDto;
@@ -44,10 +45,28 @@ class SimulationStatisticsQuery implements StatisticsQuery {
     long solvedAlertsCount = countSolvedAlerts(analysisId);
     long alertsCount = countAllAlerts(analysisId);
 
+    long falsePositiveAlertsCount = countFalsePositiveAlerts(analysisId);
+    double falsePositiveAlertsPercent =
+        PercentageCalculator.calculate(falsePositiveAlertsCount, alertsCount);
+
+    long potentialTruePositiveAlertsCount = countPotentialTruePositiveAlerts(analysisId);
+    double potentialTruePositiveAlertsPercent =
+        PercentageCalculator.calculate(potentialTruePositiveAlertsCount, alertsCount);
+
+    long manualInvestigationAlertsCount = countManualInvestigationAlerts(analysisId);
+    double manualInvestigationAlertsPercent =
+        PercentageCalculator.calculate(manualInvestigationAlertsCount, alertsCount);
+
     return EfficiencyDto
         .builder()
         .allAlerts(alertsCount)
         .solvedAlerts(solvedAlertsCount)
+        .falsePositiveAlerts(falsePositiveAlertsCount)
+        .falsePositiveAlertsPercent(falsePositiveAlertsPercent)
+        .potentialTruePositiveAlerts(potentialTruePositiveAlertsCount)
+        .potentialTruePositiveAlertsPercent(potentialTruePositiveAlertsPercent)
+        .manualInvestigationAlerts(manualInvestigationAlertsCount)
+        .manualInvestigationAlertsPercent(manualInvestigationAlertsPercent)
         .build();
   }
 
@@ -70,6 +89,21 @@ class SimulationStatisticsQuery implements StatisticsQuery {
   private long countAllAlerts(String analysisParameter) {
     String allAlertsQuery = properties.getAllAlertsQuery();
     return getCount(allAlertsQuery, analysisParameter);
+  }
+
+  private long countFalsePositiveAlerts(String analysisId) {
+    String falsePositiveAlertsQuery = properties.getFalsePositiveAlertsQuery();
+    return getCount(falsePositiveAlertsQuery, analysisId);
+  }
+
+  private long countPotentialTruePositiveAlerts(String analysisId) {
+    String potentialTruePositiveAlertsQuery = properties.getPotentialTruePositiveAlertsQuery();
+    return getCount(potentialTruePositiveAlertsQuery, analysisId);
+  }
+
+  private long countManualInvestigationAlerts(String analysisId) {
+    String manualInvestigationAlertsQuery = properties.getManualInvestigationAlertsQuery();
+    return getCount(manualInvestigationAlertsQuery, analysisId);
   }
 
   private long countSolvedAsFalsePositiveByAnalyst(String analysisParameter) {

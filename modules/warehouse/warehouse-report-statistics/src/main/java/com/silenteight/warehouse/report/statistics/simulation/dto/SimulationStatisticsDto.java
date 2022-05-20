@@ -27,5 +27,11 @@ public class SimulationStatisticsDto {
 
     long solvedAlerts;
     long allAlerts;
+    long falsePositiveAlerts;
+    double falsePositiveAlertsPercent;
+    long potentialTruePositiveAlerts;
+    double potentialTruePositiveAlertsPercent;
+    long manualInvestigationAlerts;
+    double manualInvestigationAlertsPercent;
   }
 }

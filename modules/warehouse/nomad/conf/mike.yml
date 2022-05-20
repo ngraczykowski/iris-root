@@ -105,6 +105,21 @@ warehouse.report.statistics:
     WHERE wsa.analysis_name = ?
     AND (wa.payload ->> 'analystDecision') = 'ANALYST_FALSE_POSITIVE'
     AND (wsa.payload ->> 'recommendation_recommended_action') = 'ACTION_FALSE_POSITIVE'
+  false-positive-alerts-query:
+    SELECT count(*)
+    FROM warehouse_simulation_alert
+    WHERE analysis_name = ?
+    AND (payload ->> 'recommendation_recommended_action') = 'ACTION_FALSE_POSITIVE'
+  potential-true-positive-alerts-query:
+    SELECT count(*)
+    FROM warehouse_simulation_alert
+    WHERE analysis_name = ?
+    AND (payload ->> 'recommendation_recommended_action') = 'ACTION_POTENTIAL_TRUE_POSITIVE'
+  manual-investigation-alerts-query:
+    SELECT count(*)
+    FROM warehouse_simulation_alert
+    WHERE analysis_name = ?
+    AND (payload ->> 'recommendation_recommended_action') = 'ACTION_INVESTIGATE'
 
 warehouse.report.zip:
   enabled: true
