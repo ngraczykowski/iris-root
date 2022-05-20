@@ -11,7 +11,7 @@ function gitRelease() {
   git reset --hard HEAD~1 # remove release commit after tag
 }
 
-branch="${CI_COMMIT_REF_NAME}"
+branch="${CI_COMMIT_REF_NAME:-}"
 if [[ -z "${branch}" ]]; then
   branch=$(git rev-parse --abbrev-ref HEAD)
 fi
@@ -21,7 +21,7 @@ if [ "${branch}" == "master" ]; then
   gitRelease "$@"
   echo 'Bumping minor'
   bump2version minor # for master
-elif [[ $branch == release* ]]; then
+elif [[ "${branch}" == release* ]]; then
   echo 'Releasing branch'
   gitRelease "$@"
   echo 'Bumping patch'
@@ -33,4 +33,4 @@ fi
 
 echo 'Pushing'
 
-git push --atomic --tags origin HEAD:$branch
+git push --atomic --tags origin HEAD:"${branch}"
