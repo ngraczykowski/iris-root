@@ -123,25 +123,25 @@ pipeline {
       }
     }
 
-    stage('Build and push image') {
-      when {
-        anyOf {
-          branch 'master'
-          branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
-        }
-      }
-      steps {
-        withCredentials([usernamePassword(
-           credentialsId: 'pypi-deployment-user',
-           usernameVariable: 'TWINE_USERNAME',
-           passwordVariable: 'TWINE_PASSWORD',
-         )]) {
-           buildAndPush(
-             "company-name-surrounding-agent", "${VERSION},latest", "--build-arg PYPI_URL=${PYPI_URL} -f Dockerfile ."
-           )
-         }
-      }
-    }
+//    stage('Build and push image') {
+//      when {
+//        anyOf {
+//          branch 'master'
+//          branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
+//        }
+//      }
+//      steps {
+//        withCredentials([usernamePassword(
+//           credentialsId: 'pypi-deployment-user',
+//           usernameVariable: 'TWINE_USERNAME',
+//           passwordVariable: 'TWINE_PASSWORD',
+//         )]) {
+//           buildAndPush(
+//             "company-name-surrounding-agent", "${VERSION},latest", "--build-arg PYPI_URL=${PYPI_URL} -f Dockerfile ."
+//           )
+//         }
+//      }
+//    }
 
     stage('Zipped (.pyz) atrifacts upload') {
 //      when {
@@ -155,26 +155,26 @@ pipeline {
           steps {
             sh './scripts/clean.sh'
             unstash 'artifacts'
-            rtServer (
-              id: "silenteight-repo",
-              url: "https://repo.silenteight.com/artifactory",
-              credentialsId: "artifactory-deployment-user"
-            )
-            rtUpload (
-              serverId: 'silenteight-repo',
-              spec: '''{
-                "files": [
-                  {
-                    "pattern": "dist/*.pyz",
-                    "target": "datascience-local/company-name-surrounding-agent/"
-                  },
-                  {
-                    "pattern": "dist/*.tgz",
-                    "target": "datascience-local/company-name-surrounding-agent/"
-                  }
-                ]
-              }''',
-            )
+//            rtServer (
+//              id: "silenteight-repo",
+//              url: "https://repo.silenteight.com/artifactory",
+//              credentialsId: "artifactory-deployment-user"
+//            )
+//            rtUpload (
+//              serverId: 'silenteight-repo',
+//              spec: '''{
+//                "files": [
+//                  {
+//                    "pattern": "dist/*.pyz",
+//                    "target": "datascience-local/company-name-surrounding-agent/"
+//                  },
+//                  {
+//                    "pattern": "dist/*.tgz",
+//                    "target": "datascience-local/company-name-surrounding-agent/"
+//                  }
+//                ]
+//              }''',
+//            )
           }
         }
         stage('Deploy on nomad') {
