@@ -7,9 +7,6 @@ pipeline {
   agent {
     label 'ec2-agent'
   }
-  environment {
-    ECR = '278875966478.dkr.ecr.us-east-1.amazonaws.com'
-  }
   options {
     gitLabConnection(env.GITLAB_CONNECTION_NAME)
     disableConcurrentBuilds()
@@ -113,18 +110,20 @@ pipeline {
         beforeAgent true
         branch 'master'
       }
+      environment {
+        ECR = '278875966478.dkr.ecr.us-east-1.amazonaws.com'
+        AWS_REGION = 'us-east-1'
+      }
       steps {
         // Copy images from `.jib-images` file to ECR.
-        sh """
-          # Login to ECR
-          aws ecr get-login-password --region us-east-1 | \
-            skopeo login --username AWS --password-stdin ${env.ECR}
-            """
+        sh "aws ecr get-login-password | skopeo login --username AWS --password-stdin ${env.ECR}"
         script {
           images.each {
+            def repositoryName = it.split(':')[0]
             sh """
-            aws ecr --region us-east-1 create-repository --encryption-configuration encryptionType=KMS --repository-name ${it.split(':')[0]} || true
-            skopeo copy docker://docker.repo.silenteight.com/${it} docker://${env.ECR}/${it}
+              aws ecr describe-repositories --repository-names ${repositoryName} 2>&1 >/dev/null \
+                || aws ecr create-repository --encryption-configuration encryptionType=KMS --repository-name ${repositoryName}
+              skopeo copy docker://docker.repo.silenteight.com/${it} docker://${env.ECR}/${it}
             """
           }
         }
