@@ -119,6 +119,9 @@ libraries.vavr = [group: 'io.vavr', name: 'vavr', version: '0.10.4']
 libraries.micrometer_prometheus = [group: 'io.micrometer', name: 'micrometer-registry-prometheus', version: '1.8.4']
 libraries.jackson_dataformat_csv = [group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-csv', version: jacksonDataformatCsvVersion]
 
+libraries.ecs_logging_core = [group: 'co.elastic.logging', name: 'ecs-logging-core', version: '1.0.1']
+libraries.logback_ecs_encoder = [group: 'co.elastic.logging', name: 'logback-ecs-encoder', version: libraries.ecs_logging_core.version]
+
 // Testing
 libraries.groovy_all = [group: 'org.codehaus.groovy', name: 'groovy-all', version: groovyVersion]
 libraries.json_path = [group: 'com.jayway.jsonpath', name: 'json-path']
@@ -210,6 +213,9 @@ dependencies {
 
   implementation libraries.micrometer_prometheus
   implementation libraries.vavr
+
+  runtimeOnly libraries.ecs_logging_core
+  runtimeOnly libraries.logback_ecs_encoder
 
   testImplementation libraries.silenteight_sep_base_testing
   testImplementation libraries.groovy_all
