@@ -116,7 +116,6 @@ pipeline {
         anyOf {
           branch 'master'
           branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
-          changeRequest()
         }
       }
       steps {
