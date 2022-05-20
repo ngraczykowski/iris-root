@@ -144,6 +144,7 @@ pipeline {
 //    }
 
     stage('Zipped (.pyz) atrifacts upload') {
+      agent any
 //      when {
 //        anyOf {
 //          branch 'master'
