@@ -1,16 +1,17 @@
 # syntax=docker/dockerfile:1.2
-FROM python:3.7-slim
+FROM alpine:latest AS BUILD
 
-RUN mkdir /app
-WORKDIR /app
-COPY organization_name_knowledge /app/organization_name_knowledge/
+COPY organization_name_knowledge /app/organization_name_knowledge
 COPY pyproject.toml setup.py setup.cfg requirements.txt /app/
 
-RUN apt-get update
+FROM python:3.7-slim
+ARG PYPI_URL
 
-RUN --mount=type=secret,id=mysecret\
-     pip install .\
-    --index-url="$(cat /run/secrets/mysecret)"
+COPY --from=BUILD /app /app
+
+RUN apt-get update \
+    && cd /app \
+    && pip install . --index-url="$PYPI_URL"
 
 EXPOSE 5000
 ENTRYPOINT ["python", "-m", "organization_name_knowledge", "--port", "5000"]
