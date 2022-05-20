@@ -6,14 +6,17 @@ agents-api = "0.4.0"
 agents-protocol = "0.14.0"
 hazelcast = "5.1.1"
 learing-engine-store-api = "0.5.0"
+historical-decisions-model-api = "0.2.0"
 serp-protocol = "0.27.0"
 silenteight-commons = "2.1.0"
 warehouse-protocol = "2.3.0"
+worldcheck-api = "0.4.0"
 
 #-----------------------------------
 # Platforms
 #-----------------------------------
 platform-awssdk = "2.17.169"
+platform-awssdk1 = "1.12.223"
 platform-junit5 = "5.8.2"
 platform-keycloak-adapter = "17.0.1"
 platform-reactor = "2020.0.13"
@@ -38,6 +41,7 @@ protobuf = "3.20.1"
 shedlock = "4.27.0"
 spotbugs = "4.6.0"
 springdoc = "1.6.7"
+mapstruct = "1.4.2.Final"
 
 #-----------------------------------
 # Testing
@@ -85,6 +89,7 @@ governance-api = { group = "com.silenteight.iris", name = "se-governance-api" }
 governance-model-api = { group = "com.silenteight.iris", name = "se-model-api" }
 governance-solving-api = { group = "com.silenteight.iris", name = "se-solving-api" }
 learning-engine-store-api = { group = "com.silenteight.learningengine.api", name = "learning-store-api", version.ref = "learing-engine-store-api" }
+historical-decisions-api = { group = "com.silenteight.historicaldecisions.api", name = "historical-decisions-model-api", version.ref = "historical-decisions-model-api" }
 sear-rabbitmq-common-schema = { group = "com.silenteight.rabbitmqcommonschema", name = "sear-rabbitmq-common-schema-definitions", version = "1.9.0" }
 silenteight-agents-protocol = { group = "com.silenteight.agent.api", name = "protocol-agents", version.ref = "agents-protocol" }
 silenteight-audit-bs = { group = "com.silenteight.iris", name = "audit-bs" }
@@ -106,9 +111,11 @@ silenteight-serp-protocol-scb = { group = "com.silenteight.serp.protocol", name 
 warehouse-data-api = { group = "com.silenteight.iris", name = "se-data-api" }
 warehouse-sampling-api = { group = "com.silenteight.iris", name = "se-sampling-alerts-api" }
 warehouse-internal-api = { group = "com.silenteight.iris", name = "se-warehouse-internal-api" }
+worldcheck-api = { group = 'com.silenteight.worldcheck.api', name = 'protocol-world-check', version.ref = "worldcheck-api"}
 
 # Platforms
 platform-awssdk = { module = "software.amazon.awssdk:bom", version.ref = "platform-awssdk" }
+platform-awssdk1 = { module = "com.amazonaws:aws-java-sdk-bom", version.ref = "platform-awssdk1" }
 platform-junit5 = { module = "org.junit:junit-bom", version.ref = "platform-junit5" }
 platform-keycloak-adapter = { module = "org.keycloak.bom:keycloak-adapter-bom", version.ref = "platform-keycloak-adapter" }
 platform-reactor = { module = "io.projectreactor:reactor-bom", version.ref = "platform-reactor" }
@@ -166,6 +173,7 @@ spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-b
 spring-boot-starter-webflux = { group = "org.springframework.boot", name = "spring-boot-starter-webflux" }
 spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
 spring-boot-starter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security" }
+spring-boot-starter-validation = { group = "org.springframework.boot", name = "spring-boot-starter-validation" }
 spring-boot-test = { group = "org.springframework.boot", name = "spring-boot-test" }
 spring-boot-test-autoconfigure = { group = "org.springframework.boot", name = "spring-boot-test-autoconfigure" }
 
@@ -212,6 +220,7 @@ reactor-test = { group = "io.projectreactor", name = "reactor-test" }
 springdoc-ui = { group = "org.springdoc", name = "springdoc-openapi-ui", version.ref = "springdoc" }
 springdoc-data-rest = { group = "org.springdoc", name = "springdoc-openapi-data-rest", version.ref = "springdoc" }
 springdoc-security = { group = "org.springdoc", name = "springdoc-openapi-security", version.ref = "springdoc" }
+springfox-oas =  { group = 'io.springfox', name = 'springfox-oas', version = '3.0.0' }
 
 # APIs
 jsr305 = { group = "com.google.code.findbugs", name = "jsr305" }
@@ -234,6 +243,7 @@ aws-apache-client = { group = "software.amazon.awssdk", name = "apache-client" }
 aws-auth = { group = "software.amazon.awssdk", name = "auth" }
 aws-s3 = { group = "software.amazon.awssdk", name = "s3" }
 aws-ses = { group = "software.amazon.awssdk", name = "ses" }
+aws-sdk1-s3 =  { group = 'com.amazonaws', name = 'aws-java-sdk-s3' }
 bouncycastle-bcmail = { group = "org.bouncycastle", name = "bcmail-jdk15on", version.ref = "bouncycastle" }
 bouncycastle-bcpg = { group = "org.bouncycastle", name = "bcpg-jdk15on", version.ref = "bouncycastle" }
 bouncycastle-bcpkix = { group = "org.bouncycastle", name = "bcpkix-jdk15on", version.ref = "bouncycastle" }
@@ -249,6 +259,8 @@ commons-io = { group = "commons-io", name = "commons-io", version = "2.11.0" }
 commons-csv = { group = "org.apache.commons", name = "commons-csv", version = "1.9.0" }
 commons-lang3 = { group = "org.apache.commons", name = "commons-lang3" }
 commons-text = { group = "org.apache.commons", name = "commons-text", version = "1.9" }
+commons-compress = { group = "org.apache.commons", name = "commons-compress", version = "1.21" }
+commons-validator = { group = "commons-validator", name = "commons-validator", version = "1.7" }
 cronutils = { group = 'com.cronutils', name = 'cron-utils', version = '9.1.6' }
 ecs-logging-core = { group = "co.elastic.logging", name = "ecs-logging-core", version.ref = "ecs" }
 fastutil = { group = "it.unimi.dsi", name = "fastutil" }
@@ -334,6 +346,9 @@ snakeyaml = { group = "org.yaml", name = "snakeyaml" }
 streamex = { group = "one.util", name = "streamex", version = "0.8.1" }
 tomcat-embed-el = { group = "org.apache.tomcat.embed", name = "tomcat-embed-el" }
 tika-core = { group = "org.apache.tika", name = "tika-core", version = "2.1.0" }
+jjwt = { group = 'io.jsonwebtoken', name = 'jjwt', version = '0.9.1' }
+mapstruct = { group = 'org.mapstruct', name = 'mapstruct', version.ref = 'mapstruct' }
+mapstruct-processor = { group = 'org.mapstruct', name = 'mapstruct-processor', version.ref = 'mapstruct' }
 
 # Testing
 assertj-core = { group = "org.assertj", name = "assertj-core" }
@@ -361,6 +376,7 @@ test-containers-junit-jupiter = { group = "org.testcontainers", name = "junit-ju
 test-containers-keycloak = { group = 'com.github.dasniko', name = 'testcontainers-keycloak', version = "1.9.0" }
 test-containers-oracle-xe = { group = "org.testcontainers", name = "oracle-xe" }
 test-containers-postgresql = { group = "org.testcontainers", name = "postgresql" }
+test-containers-localstack = { group = "org.testcontainers", name = "localstack" }
 test-containers-spock = { group = "org.testcontainers", name = "spock" }
 test-greenmail = { group = "com.icegreen", name = "greenmail-junit5", version = "1.6.1" }
 

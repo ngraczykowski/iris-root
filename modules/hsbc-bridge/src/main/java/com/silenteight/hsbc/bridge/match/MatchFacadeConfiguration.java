@@ -21,12 +21,12 @@ class MatchFacadeConfiguration {
   private final MatchPayloadRepository matchPayloadRepository;
 
   @Bean
-  MatchFacade matchFacade(EntityManager entityManager) {
+  MatchFacade matchFacade(EntityManager entityManager, MatchDataMapper matchDataMapper) {
     return MatchFacade.builder()
         .objectConverter(objectConverter)
         .matchRepository(matchRepository)
         .eventPublisher(eventPublisher)
-        .matchDataMapper(new OrikaMatchDataMapper())
+        .matchDataMapper(matchDataMapper)
         .entityManager(entityManager)
         .build();
   }

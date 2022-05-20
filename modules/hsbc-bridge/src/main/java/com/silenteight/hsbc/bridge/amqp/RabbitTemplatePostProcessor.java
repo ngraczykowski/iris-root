@@ -2,6 +2,8 @@ package com.silenteight.hsbc.bridge.amqp;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.sep.base.common.messaging.ProtoMessageConverter;
+
 import org.springframework.amqp.rabbit.config.AbstractRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeansException;
@@ -18,13 +20,12 @@ class RabbitTemplatePostProcessor implements BeanPostProcessor {
   private static final Lz4DecompressingPostProcessor
       LZ4_DECOMPRESSING_POST_PROCESSOR = new Lz4DecompressingPostProcessor();
 
-  private final AmqpProtoMessageConverter amqpProtoMessageConverter;
+  private final ProtoMessageConverter amqpProtoMessageConverter;
 
   @Override
   public Object postProcessBeforeInitialization(Object bean, String beanName) throws
       BeansException {
-    if (bean instanceof RabbitTemplate) {
-      var template = (RabbitTemplate) bean;
+    if (bean instanceof RabbitTemplate template) {
       configureRabbitTemplate(template);
     }
     if (AbstractRabbitListenerContainerFactory.class.isAssignableFrom(bean.getClass())) {
