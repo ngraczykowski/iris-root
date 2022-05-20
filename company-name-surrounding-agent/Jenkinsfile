@@ -144,12 +144,12 @@ pipeline {
     }
 
     stage('Zipped (.pyz) atrifacts upload') {
-      when {
-        anyOf {
-          branch 'master'
-          branch pattern: '^v(\\d+(\\.\\d+)*)\$', comparator: 'REGEXP'
-        }
-      }
+//      when {
+//        anyOf {
+//          branch 'master'
+//          branch pattern: '^v(\\d+(\\.\\d+)*)\$', comparator: 'REGEXP'
+//        }
+//      }
       stages {
         stage('Upload artifacts to artifactory') {
           steps {
@@ -178,15 +178,15 @@ pipeline {
           }
         }
         stage('Deploy on nomad') {
-          when {
-            allOf {
-              anyOf {
-                branch 'master'
-                branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
-              }
-              // expression { return params.RELEASE }
-            }
-          }
+//          when {
+//            allOf {
+//              anyOf {
+//                branch 'master'
+//                branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
+//              }
+//              // expression { return params.RELEASE }
+//            }
+//          }
           steps {
             sh './nomad/deploy.sh -var-file="vars/dev.vars"'
           }
