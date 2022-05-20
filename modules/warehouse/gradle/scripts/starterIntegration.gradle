@@ -1,9 +1,0 @@
-dependencies {
-  starterIntegration libs.amqp.client
-  starterIntegration libs.lz4.java
-  starterIntegration libs.spring.boot.starter.integration
-  starterIntegration libs.spring.integration.amqp
-  starterIntegration libs.spring.integration.core
-  starterIntegration libs.spring.integration.mail
-  starterIntegration libs.spring.integration.jdbc
-}

@@ -1,9 +1,0 @@
-dependencies {
-  // Testing in Spring
-  starterSpringTest libs.spring.test
-  starterSpringTest libs.spring.boot.test
-  starterSpringTest libs.spring.boot.test.autoconfigure
-
-  // Logging in tests
-  starterSpringTest libs.spring.boot.starter.logging
-}

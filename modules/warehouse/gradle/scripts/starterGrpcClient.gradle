@@ -1,6 +1,0 @@
-dependencies {
-  starterGrpcClient libs.brave.instrumentation.grpc
-  starterGrpcClient libs.grpc.protobuf
-  starterGrpcClient libs.grpc.stub
-  starterGrpcClient libs.grpc.client.spring.boot.starter
-}

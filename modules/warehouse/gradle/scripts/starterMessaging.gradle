@@ -1,6 +1,0 @@
-dependencies {
-  starterMessaging libs.amqp.client
-  starterMessaging libs.lz4.java
-  starterMessaging libs.spring.amqp
-  starterMessaging libs.spring.amqp.rabbit
-}
