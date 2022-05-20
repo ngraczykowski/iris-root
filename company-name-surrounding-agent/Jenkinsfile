@@ -144,17 +144,22 @@ pipeline {
     }
 
     stage('Zipped (.pyz) atrifacts upload') {
-      when {
-        anyOf {
-          branch 'master'
-          branch pattern: '^v(\\d+(\\.\\d+)*)\$', comparator: 'REGEXP'
-        }
-      }
+      agent any
       stages {
-        stage('Upload artifacts to artifactory') {
+        stage ('Prepare') {
           steps {
             sh './scripts/clean.sh'
             unstash 'artifacts'
+          }
+        }
+        stage('Upload artifacts to artifactory') {
+          when {
+            anyOf {
+              branch 'master'
+              branch pattern: '^v(\\d+(\\.\\d+)*)\$', comparator: 'REGEXP'
+            }
+          }
+          steps {
             rtServer (
               id: "silenteight-repo",
               url: "https://repo.silenteight.com/artifactory",
@@ -184,7 +189,7 @@ pipeline {
                 branch 'master'
                 branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
               }
-              // expression { return params.RELEASE }
+              expression { return params.RELEASE }
             }
           }
           steps {
