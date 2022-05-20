@@ -1,0 +1,99 @@
+= HLD 3
+
+- Created at: *10.05.2021*
+- Reference ticket: *https://silent8.atlassian.net/browse/WEB-774[WEB-774]*
+- Reason: Production periodic reports processing
+
+
+== Assumptions
+
+In the diagram, we assume that:
+
+- Elastic already contains all the data required to generate reports,
+- Kibana already has defined reports in a master tenant.
+
+== Generating and storing on demand reports (Reports generated in Kibana)
+
+[plantuml, production-on_demand-reports-generating, svg]
+-----
+@startuml
+header Production on demand reports - Generating
+
+title  Production on demand reports - Generating
+
+actor User
+
+participant Kibana
+participant Elastic
+
+--> Kibana : Prepare on demand report definitions in a master tenant
+note over Kibana
+Example:
+- RBScorer (last week, last month, last 3 months)
+- AI Reasoning (last 24h, last day, last week, last month, last 3 months)
+end note
+...
+--> Elastic : Update/Create index for production data
+
+...
+'
+'autonumber
+'Kibana -> Kibana : Generate reports based on definitions \nin master tenant - scheduled/on demand
+'Kibana -> Elastic : Generate reports
+'note over Kibana
+'Generating those reports is controlled by Kibana.
+'The user defines a cron job, when a report should be generated,
+'and this report is generated automatically by Kibana.
+'end note
+'...
+'
+'Warehouse -> Warehouse : Scheduled event
+'Warehouse -> Kibana : List reports
+'Warehouse -> db : Check missing reports
+'Warehouse -> Kibana : Download new reports
+'Kibana -> Warehouse : Reports data
+'Warehouse -> MinIO : Store reports
+'Warehouse -> db : Store downloaded report metadata \n(name, index, tenant, analysis, minio URL [relative])
+
+@enduml
+-----
+
+== Downloading reports
+
+[plantuml, production-on_demand-reports-downloading-reports, svg]
+-----
+@startuml
+header Production on demand reports - Downloading reports
+
+title  Production on demand reports - Downloading reports
+
+actor User
+
+participant Frontend
+
+participant Warehouse
+
+participant Kibana
+
+autonumber
+
+User -> Frontend : List defined reports \n(on demand reports)
+Frontend -> Warehouse : List defined reports
+Warehouse -> Kibana : List defined on-demand report definitions
+Kibana -> Warehouse : Available reports
+Warehouse -> Frontend : Available reports
+User -> Frontend : Download the report
+Frontend -> Warehouse : Download the report
+Warehouse -> Kibana : Generate a report instance for the specific definition in the user's context
+note over Warehouse, Kibana
+Generating reports in the User's context will allow us to present only those data, the user may see
+end note
+Kibana -> Warehouse : The report metadata
+Warehouse -> Kibana : Download the report
+Kibana -> Warehouse : The report JSON
+Warehouse -> Warehouse : Repack to a CSV
+Warehouse -> Frontend : The report CSV
+Frontend -> User : Save the report
+
+@enduml
+-----

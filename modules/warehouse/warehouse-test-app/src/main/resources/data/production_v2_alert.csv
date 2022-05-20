@@ -1,0 +1,23 @@
+#field;value1,value2,value3
+recommendation_recommended_action;ACTION_FALSE_POSITIVE,ACTION_POTENTIAL_TRUE_POSITIVE,ACTION_INVESTIGATE
+status;LEARNING_COMPLETED,ERROR
+policyId;policies/c13b2278-f0d5-4366-a40f-576a3fb4f5a3,policies/c13b2278-f0d5-4366-a40f-576a3fb4f5a3
+policy_title;PROD Policy for HSBC - PoV v.16
+extendedAttribute5;SAN,PEP,SCION
+s8_recommendation;ACTION_FALSE_POSITIVE,ACTION_POTENTIAL_TRUE_POSITIVE,ACTION_INVESTIGATE
+analyst_decision;analyst_decision_unknown,analyst_decision_true_positive,analyst_decision_false_positive
+match_reason:policy;policies/dcfd0d54-42d4-4b5e-b105-9f81c2b9529b
+match_reason:policy_title;Working policy for simulation as of 22.07.2021
+recommendationYear;2021,2020,2019
+recommendationMonth;8,7,6
+recommendationDate;2021-10-13T09:37:28.558647Z,2021-10-19T09:37:28.559687Z
+DN_CASE.currentState;Level 1 Review,Level 2 Review,Awaiting AAA Adjudication
+DN_CASE.ID;12390
+DN_CASE.modifiedDateTime;2021-10-13T09:37:28.558647Z
+policy;policies/3f1432f4-8828-478e-a6b4-8803ba80be2b
+id;CDDOVERFLOWASP[HUBID][CUSTOMER][AAAGLOBAL165R1089]:ID:GG-ESCION-EX:20200212011
+recommendation;Level 1 Review,Level 2 Review
+comment;S8 recommended action: Manual Investigation GR-ISAN 2868757
+lastCaseComment;test comment 1,test comment 2
+s8_lobCountryCode;PL,UK
+DN_CASE.ExtendedAttribute5;SAN,PEP,SCION

@@ -1,0 +1,46 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+  <changeSet id="warehouse-2.6.0-1" author="psikorski">
+    <preConditions onFail="MARK_RAN">
+      <tableExists tableName="warehouse_report_accuracy"/>
+      <tableExists tableName="warehouse_report_ai_reasoning"/>
+      <tableExists tableName="warehouse_report_ai_reasoning_match_level"/>
+      <tableExists tableName="warehouse_report_rbs"/>
+      <tableExists tableName="warehouse_report_billing"/>
+      <tableExists tableName="warehouse_report_metrics"/>
+      <tableExists tableName="warehouse_production_alert"/>
+      <tableExists tableName="warehouse_production_match"/>
+      <tableExists tableName="warehouse_message_backup"/>
+    </preConditions>
+    <dropTable  cascadeConstraints="true"
+                schemaName="public"
+                tableName="warehouse_report_accuracy"/>
+    <dropTable  cascadeConstraints="true"
+                schemaName="public"
+                tableName="warehouse_report_ai_reasoning"/>
+    <dropTable  cascadeConstraints="true"
+                schemaName="public"
+                tableName="warehouse_report_ai_reasoning_match_level"/>
+    <dropTable  cascadeConstraints="true"
+                schemaName="public"
+                tableName="warehouse_report_rbs"/>
+    <dropTable  cascadeConstraints="true"
+                schemaName="public"
+                tableName="warehouse_report_billing"/>
+    <dropTable  cascadeConstraints="true"
+                schemaName="public"
+                tableName="warehouse_report_metrics"/>
+    <dropTable  cascadeConstraints="true"
+                schemaName="public"
+                tableName="warehouse_production_alert"/>
+    <dropTable  cascadeConstraints="true"
+                schemaName="public"
+                tableName="warehouse_production_match"/>
+    <dropTable  cascadeConstraints="true"
+                schemaName="public"
+                tableName="warehouse_message_backup"/>
+  </changeSet>
+
+</databaseChangeLog>

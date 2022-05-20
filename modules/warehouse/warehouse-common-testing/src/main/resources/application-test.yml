@@ -1,0 +1,64 @@
+spring.cloud.consul.enabled: false
+
+sep:
+  auth:
+    permissionMethodsMappings:
+      DOWNLOAD_SIMULATION_REPORTS:
+        - "DOWNLOAD_SIMULATION_REPORT"
+        - "GET_SIMULATION_TENANT"
+        - "CREATE_SIMULATION_REPORT"
+      DOWNLOAD_SOLVING_REPORTS:
+        - "DOWNLOAD_PRODUCTION_ON_DEMAND_REPORT"
+        - "LIST_PRODUCTION_ON_DEMAND_REPORTS"
+        - "CREATE_PRODUCTION_ON_DEMAND_REPORT"
+      VIEW_USERS:
+        - "GET_COUNTRY_GROUP"
+        - "LIST_COUNTRY_GROUP"
+        - "GET_COUNTRIES"
+      MANAGE_USERS:
+        - "CREATE_COUNTRY_GROUP"
+        - "UPDATE_COUNTRY_GROUP"
+        - "UPDATE_COUNTRIES"
+        - "DELETE_COUNTRY_GROUP"
+      VIEW_QA_ALERTS:
+        - "VIEW_ALERTS_DATA"
+      MANAGE_QA_ALERT:
+        - "VIEW_ALERTS_DATA"
+      VIEW_QA_VERIFICATION:
+        - "VIEW_ALERTS_DATA"
+      MANAGE_QA_VERIFICATION:
+        - "VIEW_ALERTS_DATA"
+      DASHBOARD:
+        - "VIEW_ALERTS_DATA"
+      VIEW_SIMULATION_RESULT:
+        - "LIST_SIMULATION_REPORTS"
+
+    rolePermissionsMappings:
+      USER_ADMINISTRATOR:
+        - "DOWNLOAD_AUDIT_REPORTS"
+        - "DOWNLOAD_USERS_REPORTS"
+        - "MANAGE_USERS"
+        - "VIEW_USERS"
+      MODEL_TUNER:
+        - "VIEW_SIMULATION_RESULT"
+        - "DOWNLOAD_SIMULATION_REPORTS"
+        - "DOWNLOAD_SOLVING_REPORTS"
+        - "DASHBOARD"
+      APPROVER:
+        - "VIEW_SIMULATION_RESULT"
+        - "DOWNLOAD_SIMULATION_REPORTS"
+        - "DOWNLOAD_SOLVING_REPORTS"
+        - "DASHBOARD"
+      AUDITOR:
+        - "VIEW_SIMULATION_RESULT"
+        - "VIEW_QA_ALERTS"
+        - "DASHBOARD"
+      QA:
+        - "VIEW_QA_ALERTS"
+        - "MANAGE_QA_ALERT"
+        - "VIEW_QA_VERIFICATION"
+        - "DASHBOARD"
+      QA_ISSUE_MANAGER:
+        - "VIEW_QA_VERIFICATION"
+        - "MANAGE_QA_VERIFICATION"
+        - "DASHBOARD"

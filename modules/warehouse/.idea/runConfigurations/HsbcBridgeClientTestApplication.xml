@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="HsbcBridgeClientTestApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="warehouse.warehouse-test-hsbc-bridge-client-app.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.silenteight.warehouse.test.hsbcbridgeclient.app.HsbcBridgeClientTestApplication" />
+    <option name="VM_PARAMETERS" value="-Xmx4g -Xms4g" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

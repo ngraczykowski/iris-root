@@ -1,0 +1,105 @@
+keycloak:
+  adapter:
+    authServerUrl: fakeAuthHost:8000
+    realm: sens-webapp
+    publicClient: false
+    confidentialPort: 0
+    principalAttribute: preferred_username
+    resource: backend
+    sslRequired: external
+    credentials.secret: 55555555-4444-3333-2222-000111000111
+
+warehouse:
+  persistence:
+    alert:
+      labels:
+        - "riskType"
+        - "lobCountry"
+        - "alertAnalystDecision"
+      recommendation-date-field: "recommendationDate"
+  messaging:
+    broker:
+      alert-production-indexing:
+        queue-name: wh.prioritized-index-request.production
+        routing-key: command.index-request.production
+      qa-indexing:
+        queue-name: wh.index-request.production
+        routing-key: event.qa-alert
+      alert-simulation-indexing:
+        queue-name: wh.index-request.simulation
+        routing-key: command.index-request.simulation
+      analysis-expired-indexing:
+        queue-name: wh.retention.analysis-expired
+        routing-key: retention.analysis-expired
+      personal-information-expired-indexing:
+        queue-name: wh.retention.personal-information-expired
+        routing-key: retention.personal-information-expired
+      alerts-expired-indexing:
+        queue-name: wh.retention.alerts-expired
+        routing-key: retention.alerts-expired
+      to-remove:
+        bindings: []
+  partition:
+    scheduledCron: 0 30 0 ? * *
+    size: 1500000
+  indexer:
+    production-batch-size: 200
+    simulation-batch-size: 200
+    production-indexing-inbound:
+      queue-name: ${warehouse.messaging.broker.alert-production-indexing.queue-name}
+    production-indexed-outbound:
+      exchange-name: wh.event
+      routing-key: event.index-response.production
+    simulation-indexing-inbound:
+      queue-name: ${warehouse.messaging.broker.alert-simulation-indexing.queue-name}
+    simulation-indexed-outbound:
+      exchange-name: wh.event
+      routing-key: event.index-response.simulation
+test:
+  messaging:
+    integration:
+      production-indexing-test-client-outbound:
+        exchange-name: testapp.command
+        routing-key: command.index-request.production
+      simulation-indexing-test-client-outbound:
+        exchange-name: testapp.command
+        routing-key: command.index-request.simulation
+      analysis-expired-indexing-test-client-outbound:
+        exchange-name: testapp.command
+        routing-key: command.analysis-expired
+      production-indexed-event-test-listener-inbound:
+        queue-name: testapp.index-response.production
+      simulation-indexed-event-test-listener-inbound:
+        queue-name: testapp.index-response.simulation
+      alerts-expired-indexing-test-client-outbound:
+        exchange-name: testapp.command
+        routing-key: retention.alerts-expired
+      qa-indexing-test-client-outbound:
+        exchange-name: testapp.command.qa
+        routing-key: command.qa-index-request
+
+warehouse.report.statistics:
+  all-alerts-query:
+    SELECT count(*)
+    FROM warehouse_simulation_alert
+    WHERE analysis_name = ?
+  solved-alerts-query:
+    SELECT count(*)
+    FROM warehouse_simulation_alert
+    WHERE analysis_name = ? 
+    AND (payload ->> 'recommendation_recommended_action')
+    IN ('ACTION_FALSE_POSITIVE', 'ACTION_POTENTIAL_TRUE_POSITIVE')
+  ai-false-positive-query:
+    SELECT count(*)
+    FROM warehouse_simulation_alert wsa
+    JOIN warehouse_alert wa ON wsa.name = wa.name
+    WHERE wsa.analysis_name = ? 
+    AND (wa.payload ->> 'DN_CASE.currentState') IN ('Level 1 Review', 'Level 2 Review')
+    AND (wsa.payload ->> 'recommendation_recommended_action') = 'ACTION_FALSE_POSITIVE'
+  analyst-false-positive-query:
+    SELECT count(*)
+    FROM warehouse_simulation_alert wsa
+    JOIN warehouse_alert wa ON wsa.name = wa.name
+    WHERE wsa.analysis_name = ? 
+    AND (wa.payload ->> 'DN_CASE.currentState') = 'Level 1 Review'
+    AND (wsa.payload ->> 'recommendation_recommended_action') = 'ACTION_FALSE_POSITIVE'

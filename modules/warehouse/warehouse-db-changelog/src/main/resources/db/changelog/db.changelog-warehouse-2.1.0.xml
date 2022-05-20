@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+  <changeSet id="warehouse-2.1.0-1" author="psikorski">
+    <addColumn tableName="warehouse_report">
+      <column name="extension" type="VARCHAR(3)"/>
+    </addColumn>
+    <update tableName="warehouse_report">
+      <column name="extension" value="CSV"/>
+    </update>
+    <addNotNullConstraint columnName="extension"
+                          tableName="warehouse_report"/>
+  </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: warehouse
+  jpa:
+    database: POSTGRESQL
+    show-sql: false
+    open-in-view: false
+    database-platform: com.silenteight.sep.base.common.support.hibernate.FixedPostgreSql95Dialect
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    default-schema: ${warehouse.db.schema:public}
+    contexts: default
+
+warehouse:
+  report:
+    default-bucket: reports
+    removal:
+      cron: "0 0 1 * * ?"
+      duration-time: P1D
+    file-name:
+      # Available patterns: [reportType], [from], [to], [timestamp], [extension]
+      production-pattern: "[reportType]_Prod_[from]_To_[to].[extension]"
+      # Available patterns: [reportType], [analysisId], [timestamp], [extension]
+      simulation-pattern: "[reportType]_Sim_[analysisId].[extension]"
+    copy-csv-pattern: "COPY ( %s ) TO STDOUT WITH (FORMAT CSV, HEADER)"
+
+warehouse.reports.v2:
+  reports:
+    - name: TEST_REPORT
+      type: production
+      description: Test report
+      selectSqlQuery: >
+        SELECT (payload ->> 'fvSignature') AS "Reasoning Branch ID",
+               (payload ->> 'country') AS "Country",
+               discriminator AS "Alert S8 ID",
+               name AS "Alert S8 Name",
+               recommendation_date
+        FROM warehouse_alert
+        WHERE recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
+        AND (payload ->> 'country') IN (${countries})
+
+logging:
+  level:
+    com.silenteight.warehouse.report: DEBUG

@@ -1,0 +1,9 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+}
+
+description = "Warehouse DB Changelog"
+
+dependencies {
+  implementation libs.liquibase.sessionlock
+}

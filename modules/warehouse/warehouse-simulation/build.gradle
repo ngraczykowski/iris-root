@@ -1,0 +1,21 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "java-test-fixtures"
+}
+
+description = "Warehouse Simulation"
+
+dependencies {
+  implementation project(":warehouse-common")
+  implementation project(":warehouse-db-changelog")
+  implementation libs.silenteight.commons.core
+  implementation libs.warehouse.data.api
+  implementation libs.jakarta.validation.api
+  implementation libs.silenteight.sep.base.common
+
+  testImplementation project(":warehouse-common-testing")
+  testImplementation project(":warehouse-test-client")
+  testImplementation libs.awaitility
+  testImplementation testFixtures(project(':warehouse-common'))
+  testImplementation testFixtures(project(':warehouse-indexer'))
+}

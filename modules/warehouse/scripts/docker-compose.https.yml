@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  minio:
+    volumes:
+      - ./minio/private.key:/root/.minio/certs/private.key:ro
+      - ./minio/public.crt:/root/.minio/certs/public.crt:ro
+  createbuckets:
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc config host add --insecure myminio https://minio:9000 admin admin123;
+      /usr/bin/mc mb --ignore-existing --insecure myminio/reports;
+      exit 0;
+      "

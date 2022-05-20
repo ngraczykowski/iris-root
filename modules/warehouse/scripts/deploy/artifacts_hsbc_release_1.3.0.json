@@ -1,0 +1,92 @@
+[
+  {
+    "jobName": "sep-frontend",
+    "projectId": "532",
+    "version": "sep-frontend-2.20.0.zip",
+    "artifact_name": "sep-frontend-2.20.0.zip",
+    "branch": "v2.14.0",
+    "nomadName": "sep_frontend",
+    "checksum": "sha256:ab53207e25d3caaab5e74ba14a18e70350edd312c38405bc04a4d470e96f066b",
+    "repo": "https://gitlab.silenteight.com/sens/sep-front"
+  },
+  {
+    "jobName": "webapp",
+    "projectId": "400",
+    "version": "sens-webapp-backend-1.37.0-exec.jar",
+    "artifact_name": "sens-webapp-backend-1.37.0-exec.jar",
+    "branch": "v1.37.0",
+    "nomadName": "webapp",
+    "checksum": "sha256:383dc776290ceab14ae1750751a81e24cdd56e7faef85ae6b643c39ffa36d8c4",
+    "repo": "https://gitlab.silenteight.com/sens/sens-webapp"
+  },
+  {
+    "jobName": "simulator",
+    "projectId": "626",
+    "version": "simulator-app-1.13.0-exec.jar",
+    "artifact_name": "simulator-app-1.13.0-exec.jar",
+    "branch": "v1.13.0",
+    "nomadName": "simulator",
+    "checksum": "sha256:f05636b956fd2410bf6868930f17aa1194628705da159392d86a76d8149256f2",
+    "repo": "https://gitlab.silenteight.com/sens/simulator"
+  },
+  {
+    "jobName": "governance",
+    "projectId": "576",
+    "version": "governance-app-4.9.0-exec.jar",
+    "artifact_name": "governance-app-4.9.0-exec.jar",
+    "branch": "master",
+    "nomadName": "governance",
+    "checksum": "sha256:5ef245058a50f4641c953a8926ab5d5bf6b9b8916e4337fead5ef73ca2e08efd",
+    "repo": "https://gitlab.silenteight.com/sens/serp-governance"
+  },
+  {
+    "jobName": "adjudication-engine",
+    "projectId": "644",
+    "version": "1.17.5",
+    "artifact_name": "adjudication-engine-dist-1.17.5.tar.bz2",
+    "branch": "release-1.17",
+    "nomadName": "adjudication_engine",
+    "checksum": "sha256:e940fbd8845195f20fd12d1a6af948db263cb8d4669cd5ede8882c102bf8b56d",
+    "repo": "https://gitlab.silenteight.com/sens/adjudication-engine"
+  },
+  {
+    "jobName":"hsbc-worldcheck",
+    "projectId": "678",
+    "version":"worldcheck-app-1.3.0.jar",
+    "artifact_name":"worldcheck-app-1.3.0.jar",
+    "branch":"v1.3.0",
+    "nomadName":"hsbc_worldcheck",
+    "checksum":"sha256:4216a8229c494bd8a0fa790fcbfcc871c10c2c569b39e3f584c6c7386f804a70",
+    "repo":"https://gitlab.silenteight.com/hsbc-bank/world-check"
+  },
+  {
+    "jobName": "hsbc-bridge",
+    "projectId": "628",
+    "version": "hsbc-bridge-0.17.0.jar",
+    "artifact_name": "hsbc-bridge-0.17.0.jar",
+    "nomadName": "hsbc_bridge",
+    "branch": "v0.17.0",
+    "checksum": "sha256:b24b77762ccb5002c32c39a659d84c2491931545ef8a5780564beaddfc3a77a6",
+    "repo": "https://gitlab.silenteight.com/hsbc-bank/hsbc-bridge"
+  },
+  {
+    "jobName": "warehouse",
+    "projectId": "643",
+    "version": "warehouse-app-2.2.0-exec.jar",
+    "artifact_name": "warehouse-app-2.2.0-exec.jar",
+    "branch": "master",
+    "nomadName": "warehouse",
+    "checksum": "sha256:fa9c1fb536a819f725c7a7933abc662b11b3c384c380d9f8e0559395385720ea",
+    "repo": "https://gitlab.silenteight.com/sens/warehouse"
+  },
+  {
+    "jobName": "name-agent",
+    "projectId": "434",
+    "artifact_name": "name-agent-dist-3.22.0.tar.bz2",
+    "version": "3.22.0",
+    "branch": "v3.22.0",
+    "nomadName": "name_agent",
+    "checksum": "sha256:b38f2dd6389cea64b6a5bd40c52042927147307ba4714e229cb8190c3984aa0b",
+    "repo": "https://gitlab.silenteight.com/ro/linguistics-agent-engine"
+  }
+]

@@ -1,0 +1,12 @@
+[
+  {
+    "jobName": "sep-frontend",
+    "projectId": "532",
+    "version": "sep-frontend-hotel-2.21.0-d0edb25.zip",
+    "artifact_name": "sep-frontend-hotel-2.21.0-d0edb25.zip",
+    "branch": "master",
+    "nomadName": "sep_frontend",
+    "checksum": "sha256:83adc2c7b031a5204c6534b181df3023b92d0409944605ee7831af7e6f477258",
+    "repo": "https://gitlab.silenteight.com/sens/sep-front"
+  }
+]

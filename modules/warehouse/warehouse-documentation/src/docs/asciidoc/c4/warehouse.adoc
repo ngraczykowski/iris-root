@@ -1,0 +1,164 @@
+= Warehouse C4 diagram
+
+- Created at: *07.10.2021*
+
+== C4 diagram
+
+[plantuml, c4, svg]
+-----
+@startuml
+!include <c4/C4_Container>
+
+title Warehouse
+
+Container_Ext(bridge, "Bridge", "Java")
+Container_Ext(sim, "Simulator", "Java")
+Container_Ext(gov, "Governance", "Java")
+Container_Ext(frontend, "Frontend", "Angular")
+ContainerDb_Ext(object_storage, "Minio", "S3")
+ContainerDb_Ext(db, Data base, "PostgreSQL")
+ContainerDb_Ext(es, Open Distro, "Elastic Search")
+
+Container(wh, Warehouse, Java)
+
+Rel(frontend, wh, " ", https)
+Rel(wh, db, " ")
+Rel(wh, es, " ", https)
+Rel_U(bridge, wh, " ", AMQP)
+Rel_U(sim, wh, " ", AMQP)
+Rel_R(gov, wh, " ", AMQP)
+Rel_R(gov, wh, " ", gRPC)
+Rel_U(wh, object_storage, " ", https)
+
+@enduml
+-----
+
+== Frontend - Warehouse
+
+[plantuml, frontend-governance, svg]
+-----
+@startuml
+!include <c4/C4_Container>
+
+title Frontend - Warehouse
+
+Container_Ext(frontend, "Frontend", "Angular")
+ContainerDb_Ext(object_storage, "Minio", "S3")
+ContainerDb_Ext(db, Data base, "PostgreSQL")
+ContainerDb_Ext(es, Open Distro, "Elastic Search")
+
+Container(wh, Warehouse, Java)
+
+Rel(frontend, wh, Generate Reports, https)
+Rel_R(wh, es, Fetch data, https)
+Rel(wh, object_storage, Store/download reports, https)
+Rel(wh, db, Store/download reports)
+
+@enduml
+-----
+
+Warehouse REST https://gitlab.silenteight.com/sens/warehouse/-/tree/master/warehouse-documentation/src/api[API].
+
+== Bridge - Warehouse
+
+Ingest data
+
+[plantuml, bridge-warehouse, svg]
+-----
+@startuml
+!include <c4/C4_Container>
+
+title Bridge - Warehouse
+
+Container_Ext(bridge, Bridge, Java)
+ContainerDb_Ext(mb, "Message Broker", "RabbitMQ")
+ContainerDb_Ext(es, Open Distro, "Elastic Search")
+ContainerDb_Ext(db, Data base, "PostgreSQL")
+
+Container(wh, Warehouse, Java)
+
+Rel(bridge, mb, Ingest Solving Data, AMQP)
+Rel(bridge, mb, Ingest Learning Data, AMQP)
+Rel(bridge, mb, Alert expired, AMQP)
+Rel(mb, wh, Production Data Index Request, AMQP)
+Rel(mb, wh, Alert Expired, AMQP)
+Rel(wh, es, Store/Remove Data, https)
+Rel(wh, db, Store index data)
+
+@enduml
+-----
+
+Ingest data https://gitlab.silenteight.com/sens/warehouse-api/-/blob/master/se-data-api/src/main/proto/silenteight/data/api/v1/data.proto![API].
+
+Bridge sends two types of data to the Warehouse.
+
+- Ingest - which contains the solving metadata, e.g. agents' solutions and reasons, policy, strategy, etc.
+- Learning - full alert detail (agents inputs) with the analyst final solution.
+
+The message sent by the Bridge contains a flat map with the key and the value.
+Each key will be added to the elastic search document as a column, based on those columns the developer can prepare reports' definitions dedicated to the specific client.
+
+The line between the two is purely business, as there is no separate message type for each message.
+The API allows sending a single message with all data or multiple messages with a small amount of data for the specific alert.
+
+== Simulator - Warehouse
+
+Ingest sim data
+
+[plantuml, sim-warehouse, svg]
+-----
+@startuml
+!include <c4/C4_Container>
+
+title Simulator - Warehouse
+
+Container_Ext(sim, Simulator, Java)
+ContainerDb_Ext(mb, "Message Broker", "RabbitMQ")
+ContainerDb_Ext(db, Data base, "PostgreSQL")
+ContainerDb_Ext(es, Open Distro, "Elastic Search")
+
+Container(wh, Warehouse, Java)
+
+Rel(sim, mb, Ingest Simulation Data, AMQP)
+Rel(mb, wh, Simulation Data Index Request, AMQP)
+Rel(wh, db, Store index-analysis translation)
+Rel(wh, es, Copy learning data to sim index, https)
+Rel(wh, es, Store Data, https)
+
+@enduml
+-----
+
+https://gitlab.silenteight.com/sens/warehouse-api/-/blob/master/se-data-api/src/main/proto/silenteight/data/api/v2/sim.proto![API] for Simulations.
+
+== Warehouse - Governance
+
+QA process
+
+[plantuml, wh-governance, svg]
+-----
+@startuml
+!include <c4/C4_Container>
+
+title Adjudication Engine - Governance
+
+Container(wh, Warehouse, "Java")
+ContainerDb_Ext(mb, "Message Broker", "RabbitMQ")
+Container_Ext(gov, Governance, Java)
+ContainerDb_Ext(db, Data base, "PostgreSQL")
+ContainerDb_Ext(es, Open Distro, "Elastic Search")
+
+Rel(mb, wh, QA result, AMQP)
+Rel(gov, wh, Alerts distribution, gRPC)
+Rel(gov, wh, Alerts sampling for the QA process, gRPC)
+Rel(gov, mb, QA result, AMQP)
+Rel(wh, es, Store Data, https)
+Rel(wh, db, Get Index)
+
+@enduml
+-----
+
+https://gitlab.silenteight.com/sens/warehouse-api/-/blob/master/se-sampling-alerts-api/src/main/proto/silenteight/sampling/alerts/api/v1/get_distribution.proto![API] for alerts distribution.
+
+https://gitlab.silenteight.com/sens/warehouse-api/-/blob/master/se-sampling-alerts-api/src/main/proto/silenteight/sampling/alerts/api/v1/get_alerts.proto![API] for alerts sampling.
+
+https://gitlab.silenteight.com/sens/warehouse-api/-/blob/master/se-data-api/src/main/proto/silenteight/data/api/v2/qa.proto![API] for QA results.

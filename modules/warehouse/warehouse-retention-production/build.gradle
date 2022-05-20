@@ -1,0 +1,29 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "java-test-fixtures"
+}
+
+description = "Warehouse Retention Production"
+
+dependencies {
+  implementation project(":warehouse-common")
+  implementation project(":warehouse-production")
+
+  implementation libs.silenteight.commons.core
+  implementation libs.warehouse.data.api
+  implementation libs.data.retention.api
+  implementation libs.jakarta.validation.api
+  implementation libs.silenteight.sep.base.common
+  implementation libs.protobuf.java.util
+
+  implementation libs.warehouse.sampling.api
+  implementation libs.spring.security.config
+
+
+  testImplementation project(":warehouse-common-testing")
+  testImplementation project(":warehouse-test-client")
+
+  testImplementation libs.awaitility
+
+  testFixturesImplementation testFixtures(project(':warehouse-common'))
+}

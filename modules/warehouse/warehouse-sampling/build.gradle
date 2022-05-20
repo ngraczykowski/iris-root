@@ -1,0 +1,29 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "java-test-fixtures"
+}
+
+description = "Warehouse Sampling"
+
+dependencies {
+  implementation platform('com.silenteight.iris.platform:test-platform')
+
+  implementation project(":warehouse-common")
+  implementation project(":warehouse-indexer")
+  implementation libs.silenteight.commons.core
+  implementation libs.warehouse.sampling.api
+  implementation libs.spring.security.config
+  implementation libs.jakarta.validation.api
+  implementation libs.silenteight.sep.base.common
+
+  implementation libs.grpc.api
+  implementation libs.grpc.stub
+  implementation libs.grpc.protobuf
+  implementation libs.grpc.server.spring.boot.starter
+
+  implementation libs.test.containers.junit.jupiter
+
+  testImplementation project(":warehouse-common-testing")
+  testImplementation libs.awaitility
+  testImplementation libs.spring.cloud.starter.sleuth
+}

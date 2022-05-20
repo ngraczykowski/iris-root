@@ -1,0 +1,311 @@
+openapi: 3.0.3
+info:
+  title: Report
+  description: Report API
+  version: 0.1.0
+servers:
+  - url: '{environment}/rest/warehouse/api/v2'
+    variables:
+      environment:
+        enum:
+          - http://localhost:24291
+          - https://localhost:24111
+        default: http://localhost:24291
+
+paths:
+  /analysis/{analysisId}/reports:
+    get:
+      tags:
+        - Simulation
+      description: Returns a list of reports for specific analysis
+      parameters:
+        - in: path
+          name: analysisId
+          required: true
+          schema:
+            type: string
+          allowEmptyValue: false
+          description: 'Analysis Id'
+          example: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+      responses:
+        200:
+          description: Returns a list of reports
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Report'
+              example:
+                - name: '/analysis/a9b45451-6fde-4832-8dc0-d17b4708d8ca/reports/ACCURACY'
+                  type: 'ACCURACY'
+                  title: 'Accuracy'
+                - name: '/analysis/a9b45451-6fde-4832-8dc0-d17b4708d8ca/reports/METRICS'
+                  type: 'METRICS'
+                  title: 'Simulation Metrics'
+
+  /analysis/{analysisId}/reports/{type}:
+    post:
+      tags:
+        - Simulation
+      description: Generate report instance.
+      parameters:
+        - in: path
+          name: analysisId
+          required: true
+          schema:
+            type: string
+          allowEmptyValue: false
+          description: 'Analysis Id'
+          example: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+        - name: type
+          in: path
+          description: Report type.
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+          style: simple
+          example: AI_REASONING
+      responses:
+        303:
+          description: Redirect to the report instance.
+          headers:
+            Location:
+              description: The report will be available over an URL address /analysis/a9b45451-6fde-4832-8dc0-d17b4708d8ca/reports/AI_REASONING
+
+  /analysis/{analysisId}/reports/{type}/{id}:
+    get:
+      tags:
+        - Simulation
+      description: Returns simulation report
+      parameters:
+        - in: path
+          name: analysisId
+          required: true
+          schema:
+            type: string
+          allowEmptyValue: false
+          description: 'Analysis Id'
+          example: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+        - name: type
+          in: path
+          description: Report type.
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+          style: simple
+          example: AI_REASONING
+        - in: path
+          name: id
+          description: Report instance id.
+          required: true
+          schema:
+            type: string
+          example: 1
+      responses:
+        102:
+          description: Processing. The report is still generating. Try again later.
+        200:
+          description: Returns a report.
+          content:
+            text/csv:
+              schema:
+                format: binary
+                type: string
+
+  /analysis/{analysisId}/reports/{type}/{id}/status:
+    get:
+      tags:
+        - Simulation
+      description: Returns simulation report status
+      parameters:
+        - in: path
+          name: analysisId
+          required: true
+          schema:
+            type: string
+          allowEmptyValue: false
+          description: 'Analysis Id'
+          example: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+        - name: type
+          in: path
+          description: Report type.
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+          style: simple
+          example: AI_REASONING
+        - in: path
+          name: id
+          description: Report instance id.
+          required: true
+          schema:
+            type: string
+          example: 1
+      responses:
+        200:
+          description: Returns status of report.
+        404:
+          description: Report not found exception.
+
+  /analysis/production/reports:
+    get:
+      tags:
+        - Production
+      description: Returns a list of production reports
+      responses:
+        200:
+          description: Returns a list of reports
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Report'
+              example:
+                - name: '/analysis/production/reports/ACCURACY'
+                  type: 'ACCURACY'
+                  title: 'Accuracy'
+                - name: '/analysis/production/reports/METRICS'
+                  type: 'METRICS'
+                  title: 'Production Metrics'
+
+  /analysis/production/reports/{type}:
+    post:
+      tags:
+        - Production
+      description: Generate report instance.
+      parameters:
+        - in: path
+          name: type
+          required: true
+          schema:
+            $ref: '#/components/schemas/ReportType'
+          style: simple
+          explode: false
+          description: Report type
+          example: AI_REASONING
+        - in: query
+          name: from
+          description: Start date of report.
+          required: true
+          explode: false
+          example: 2020-10-15T01:00:00.000Z
+          schema:
+            type: string
+        - in: query
+          name: to
+          description: End date of report.
+          required: true
+          explode: false
+          example: 2021-10-27T08:00:00.000Z
+          schema:
+            type: string
+      responses:
+        303:
+          description: Redirect to the report instance.
+          headers:
+            Location:
+              description: The report will be available over an URL address /analysis/production/reports/5
+              schema:
+                type: string
+                example: reports/5
+
+  /analysis/production/reports/{type}/{id}:
+    get:
+      tags:
+        - Production
+      description: Returns production report instance
+      parameters:
+        - in: path
+          name: type
+          required: true
+          schema:
+            $ref: '#/components/schemas/ReportType'
+          style: simple
+          explode: false
+          description: Report type
+          example: AI_REASONING
+        - in: path
+          name: id
+          description: Report instance id.
+          required: true
+          schema:
+            type: string
+          example: 5
+      responses:
+        102:
+          description: Processing. The report is still generating. Try again later.
+        200:
+          description: Returns a report.
+          content:
+            text/csv:
+              schema:
+                format: binary
+                type: string
+
+
+  /analysis/production/reports/{type}/{id}/status:
+    get:
+      tags:
+        - Production
+      description: Returns production report status
+      parameters:
+        - name: type
+          in: path
+          description: Report type.
+          required: true
+          allowEmptyValue: false
+          schema:
+            type: string
+          style: simple
+          example: AI_REASONING
+        - name: id
+          in: path
+          description: Report instance id.
+          required: true
+          schema:
+            type: string
+          example: 1
+      responses:
+        200:
+          description: Returns status of report.
+        404:
+          description: Report not found exception.
+
+
+components:
+  schemas:
+
+    ReportType:
+      type: string
+      enum:
+        - AI_REASONING
+        - ACCURACY
+        - RB_SCORER
+        - BILLING
+        - METRICS
+
+    Report:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        reportType:
+          $ref: '#/components/schemas/ReportType'
+      example:
+        - id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+          name: '/analysis/7afe9a43-f29c-4752-ba0a-057e5efee616/definitions/reports/a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+          title: 'AI Reasoning'
+          description: 'Last month'
+          reportType: 'AI_REASONING'
+

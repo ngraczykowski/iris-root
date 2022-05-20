@@ -1,0 +1,21 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <changeSet author="tomaszdrozdz (generated)" id="1648634122224-1">
+        <createTable tableName="warehouse_daily_policy_statistic">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="warehouse_daily_policy_statistic_pkey"/>
+            </column>
+            <column name="alerts_count" type="INTEGER"/>
+            <column name="day" type="date"/>
+            <column name="effectiveness_percent" type="INTEGER"/>
+            <column name="efficiency_percent" type="INTEGER"/>
+            <column name="false_positives_count" type="INTEGER"/>
+            <column name="manual_investigations_count" type="INTEGER"/>
+            <column name="potential_true_positives_count" type="INTEGER"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

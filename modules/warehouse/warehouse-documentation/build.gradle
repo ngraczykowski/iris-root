@@ -1,0 +1,21 @@
+plugins {
+  id "base"
+  id "maven-publish"
+  id 'com.silenteight.gradle.asciidoctor' version '1.6.0'
+}
+
+ext {
+  serpOptInstallerVersion = "1.25.0"
+  generatedAsciidocSourcesDir = "$buildDir/generated/sources/asciidoc"
+}
+
+description = "Warehouse Documentation"
+
+asciidoctorConfig {
+  includeSources = {
+    include "hld/*.adoc"
+    include "technical-guide.adoc"
+  }
+  publishAttributes = ["serp-opt-installer-version": serpOptInstallerVersion]
+  additionalAsciidoctorjAttributes = ["serp-opt-installer-version": serpOptInstallerVersion]
+}

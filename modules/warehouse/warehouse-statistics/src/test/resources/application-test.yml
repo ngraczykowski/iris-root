@@ -1,0 +1,15 @@
+spring.cloud.consul.enabled: false
+
+warehouse:
+  statistics:
+    daily:
+      recommendation-enabled: true
+
+sep:
+  auth:
+    permissionMethodsMappings:
+      STATISTICS:
+        - "RECOMMENDATION_STATISTICS"
+    rolePermissionsMappings:
+      MODEL_TUNER:
+        - "STATISTICS"

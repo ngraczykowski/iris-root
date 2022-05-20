@@ -16,6 +16,7 @@ worldcheck-api = "0.4.0"
 # Platforms
 #-----------------------------------
 platform-awssdk = "2.17.169"
+#TODO(dsniezek): should be updated
 platform-awssdk1 = "1.12.223"
 platform-junit5 = "5.8.2"
 platform-keycloak-adapter = "17.0.1"
@@ -30,6 +31,7 @@ platform-test-containers = "1.17.1"
 #-----------------------------------
 # Others libraries
 #-----------------------------------
+apache-http = "4.5.13"
 aspectj = "1.9.9.1"
 bouncycastle = "1.70"
 ecs = "1.2.0"
@@ -115,6 +117,7 @@ worldcheck-api = { group = 'com.silenteight.worldcheck.api', name = 'protocol-wo
 
 # Platforms
 platform-awssdk = { module = "software.amazon.awssdk:bom", version.ref = "platform-awssdk" }
+#TODO(dsniezek): check this?
 platform-awssdk1 = { module = "com.amazonaws:aws-java-sdk-bom", version.ref = "platform-awssdk1" }
 platform-junit5 = { module = "org.junit:junit-bom", version.ref = "platform-junit5" }
 platform-keycloak-adapter = { module = "org.keycloak.bom:keycloak-adapter-bom", version.ref = "platform-keycloak-adapter" }
@@ -153,6 +156,8 @@ spring-amqp-rabbit-junit = { group = "org.springframework.amqp", name = "spring-
 
 spring-boot = { group = "org.springframework.boot", name = "spring-boot" }
 spring-boot-actuator = { group = "org.springframework.boot", name = "spring-boot-actuator" }
+#TODO(dsniezek): is it needed?
+spring-boot-actuator-autoconfigure = { group = "org.springframework.boot", name = "spring-boot-actuator-autoconfigure" }
 spring-boot-autoconfigure = { group = "org.springframework.boot", name = "spring-boot-autoconfigure" }
 spring-boot-autoconfigure-processor = { group = "org.springframework.boot", name = "spring-boot-autoconfigure-processor" }
 spring-boot-configuration-processor = { group = "org.springframework.boot", name = "spring-boot-configuration-processor" }
@@ -199,6 +204,7 @@ spring-integration-core = { group = "org.springframework.integration", name = "s
 spring-integration-http = { group = "org.springframework.integration", name = "spring-integration-http" }
 spring-integration-mail = { group = "org.springframework.integration", name = "spring-integration-mail" }
 spring-integration-test = { group = "org.springframework.integration", name = "spring-integration-test" }
+spring-integration-jdbc = { group = "org.springframework.integration", name = "spring-integration-jdbc" }
 
 spring-security-acl = { group = "org.springframework.security", name = "spring-security-acl" }
 spring-security-aspects = { group = "org.springframework.security", name = "spring-security-aspects" }
@@ -236,6 +242,9 @@ lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 amqp-client = { group = "com.rabbitmq", name = "amqp-client" }
 antlr4 = { group = "org.antlr", name = "antlr4" }
 antlr4-runtime = { group = "org.antlr", name = "antlr4-runtime" }
+#TODO(dsniezek): is it needed?
+apache-httpclient = { group = "org.apache.httpcomponents", name = "httpclient", version.ref = "apache-http" }
+apache-httpmime = { group = "org.apache.httpcomponents", name = "httpmime", version.ref = "apache-http" }
 aspectjrt = { group = "org.aspectj", name = "aspectjrt", version.ref = "aspectj" }
 aspectjtools = { group = "org.aspectj", name = "aspectjtools", version.ref = "aspectj" }
 aspectjweaver = { group = "org.aspectj", name = "aspectjweaver" }
@@ -287,6 +296,7 @@ hazelcast = { group = 'com.hazelcast', name = 'hazelcast', version.ref = "hazelc
 hibernate-core = { group = "org.hibernate", name = "hibernate-core" }
 hibernate-envers = { group = "org.hibernate", name = "hibernate-envers" }
 hibernate-jcache = { group = "org.hibernate", name = "hibernate-jcache" }
+#TODO(dsniezek): not used, remove that
 hibernate-jpamodelgen = {group = "org.hibernate", name = "hibernate-jpamodelgen" }
 hibernate-types = { group = "com.vladmihalcea", name = "hibernate-types-52", version = "2.11.1" }
 hibernate-validator = { group = "org.hibernate.validator", name = "hibernate-validator" }
@@ -346,6 +356,7 @@ snakeyaml = { group = "org.yaml", name = "snakeyaml" }
 streamex = { group = "one.util", name = "streamex", version = "0.8.1" }
 tomcat-embed-el = { group = "org.apache.tomcat.embed", name = "tomcat-embed-el" }
 tika-core = { group = "org.apache.tika", name = "tika-core", version = "2.1.0" }
+#TODO(dsniezek): is it need?
 jjwt = { group = 'io.jsonwebtoken', name = 'jjwt', version = '0.9.1' }
 mapstruct = { group = 'org.mapstruct', name = 'mapstruct', version.ref = 'mapstruct' }
 mapstruct-processor = { group = 'org.mapstruct', name = 'mapstruct-processor', version.ref = 'mapstruct' }

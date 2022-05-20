@@ -1,0 +1,17 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "java-test-fixtures"
+}
+
+description = "Warehouse Test Client"
+
+dependencies {
+  implementation libs.silenteight.sep.base.common
+  implementation libs.silenteight.commons.core
+  implementation libs.warehouse.data.api
+  implementation libs.data.retention.api
+  implementation libs.jakarta.validation.api
+  implementation libs.spring.context.support
+
+  aspect libs.silenteight.sep.base.aspects
+}

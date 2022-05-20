@@ -1,0 +1,191 @@
+#---------------------------------------------------------------------------------------------------
+# SERVER
+#---------------------------------------------------------------------------------------------------
+
+server:
+  forward-headers-strategy: native
+  undertow:
+    threads:
+      io: 4
+      worker: 16
+
+  servlet:
+    context-path: /rest/${spring.application.name}
+
+  error:
+    include-exception: true
+    include-stacktrace: never
+
+warehouse:
+  messaging:
+    concurrency: 4
+    prefetch: 25
+  db:
+    host: localhost
+    port: 24910
+    name: warehouse
+    username: warehouse
+    password: warehouse
+
+spring:
+  #-------------------------------------------------------------------------------------------------
+  # GENERAL
+  #-------------------------------------------------------------------------------------------------
+  aop:
+    auto: false
+
+  task:
+    execution:
+      pool:
+        core-size: 8
+        keep-alive: 10s
+        max-size: 16
+        queue-capacity: 10000
+      thread-name-prefix: pool-task-
+
+    scheduling:
+      pool:
+        size: 2
+      thread-name-prefix: pool-scheduling-
+
+  main:
+    banner-mode: 'off'
+
+  #-------------------------------------------------------------------------------------------------
+  # MESSAGING
+  #-------------------------------------------------------------------------------------------------
+  rabbitmq:
+    ssl:
+      enabled: false
+    listener:
+      type: simple
+      direct:
+        consumers-per-queue: ${warehouse.messaging.concurrency}
+        prefetch: ${warehouse.messaging.prefetch}
+      simple:
+        concurrency: 1
+        max-concurrency: ${warehouse.messaging.concurrency}
+        prefetch: ${warehouse.messaging.prefetch}
+
+  #-------------------------------------------------------------------------------------------------
+  # DATABASE
+  #-------------------------------------------------------------------------------------------------
+  datasource:
+    # Postgres database
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:postgresql://${warehouse.db.host}:${warehouse.db.port}/${warehouse.db.name}?currentSchema=${warehouse.db.schema:public}
+    username: ${warehouse.db.username}
+    password: ${warehouse.db.password}
+    initialization-mode: never
+
+    # Hikari pool configuration
+    hikari:
+      pool-name: Database-Pool
+      minimum-idle: ${warehouse.db.connections.min:1}
+      maximum-pool-size: ${warehouse.db.connections.max:10}
+      auto-commit: false
+      schema: ${warehouse.db.schema:public}
+      isolate-internal-queries: true
+      # NOTE(ahaczewski): Forces HikariCP to commit the transaction after opening fresh connection.
+      #  Without it, the connection transaction is left in OPEN state instead of IDLE, because
+      #  just before HikariCP runs `SET SESSION search_path TO '${ae.db.schema}'` which begins
+      #  transaction. Thus, with that query as workaround, we force the transaction commit.
+      connection-init-sql: SELECT 1
+      data-source-properties:
+        ApplicationName: Warehouse
+
+  # Database migrations
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    default-schema: ${warehouse.db.schema:public}
+    contexts: default
+
+  # Spring Data JPA
+  jpa:
+    database: POSTGRESQL
+    show-sql: false
+    open-in-view: false
+    database-platform: com.silenteight.sep.base.common.support.hibernate.FixedPostgreSql95Dialect
+
+    hibernate:
+      ddl-auto: none
+      use-new-id-generator-mappings: true
+
+    properties:
+      hibernate.cache.use_query_cache: false
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.generate_statistics: false
+      hibernate.jdbc.lob.non_contextual_creation: true
+      hibernate.jdbc.time_zone: UTC
+      hibernate.temp.use_jdbc_metadata_defaults: false
+      hibernate.jdbc.batch_size: 1000
+      hibernate.order_inserts: true
+      hibernate.order_updates: true
+      org.hibernate.envers.audit_table_suffix: _audit
+      org.hibernate.envers.store_data_at_delete: true
+
+#---------------------------------------------------------------------------------------------------
+# SEP BASE CONFIGURATION
+#---------------------------------------------------------------------------------------------------
+
+serp:
+  show-env: true
+
+  messaging:
+    error-queue:
+      enabled: true
+
+test:
+  messaging:
+    integration:
+      production-indexing-test-client-outbound:
+        exchange-name: bridge.command
+        routing-key: command.index-request.production
+      simulation-indexing-test-client-outbound:
+        exchange-name: sim.command
+        routing-key: command.index-request.simulation
+      analysis-expired-indexing-test-client-outbound:
+        exchange-name: sim.command
+        routing-key: command.analysis-expired
+      production-indexed-event-test-listener-inbound:
+        queue-name: bridge.index-response.production
+      simulation-indexed-event-test-listener-inbound:
+        queue-name: sim.index-response.simulation
+      alerts-expired-indexing-test-client-outbound:
+        exchange-name: bridge.retention
+        routing-key: retention.alerts-expired
+      qa-indexing-test-client-outbound:
+        exchange-name: gov.events
+        routing-key: event.qa-alert
+  generator:
+    cron: "*/15 * * * * ?"
+
+  flows:
+    production:
+      v2:
+        enabled: false
+        alert-count: 10
+        alert-data-source: classpath:data/production_v2_alert.csv
+        match-data-source: classpath:data/production_v2_match.csv
+
+    simulation:
+      v1:
+        enabled: false
+        alert-count-in-analysis: 10
+        data-source: classpath:data/simulation_v1.csv
+      v2:
+        enabled: false
+        alert-count-in-analysis: 10
+        alert-data-source: classpath:data/simulation_v2_alert.csv
+        match-data-source: classpath:data/simulation_v2_match.csv
+
+    analysis-expired:
+      enabled: false
+      alert-count-in-analysis: 100
+
+    alerts-expired:
+      enabled: false
+      alert-count: 1000
+
+    qa:
+      enabled: false

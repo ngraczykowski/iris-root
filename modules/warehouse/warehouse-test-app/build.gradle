@@ -1,0 +1,30 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "io.freefair.aspectj.post-compile-weaving"
+  id "com.silenteight.iris.build.spring-boot-application"
+}
+
+description = "Test App Warehouse"
+
+dependencies {
+  implementation project(":warehouse-test-client")
+  implementation project(":warehouse-indexer")
+  implementation project(":warehouse-db-changelog")
+
+  implementation libs.silenteight.sep.base.common
+  implementation libs.silenteight.commons.app
+  implementation libs.spring.boot.starter.undertow
+
+  implementation libs.spring.context.support
+
+  implementation libs.warehouse.data.api
+  implementation libs.data.retention.api
+
+  implementation libs.commons.lang3
+
+  implementation libs.jaxb.api
+
+  implementation libs.protobuf.java.util
+
+  aspect libs.silenteight.sep.base.aspects
+}

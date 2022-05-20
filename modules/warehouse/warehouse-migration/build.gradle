@@ -1,0 +1,25 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "java-test-fixtures"
+}
+
+description = "Warehouse Migration"
+
+dependencies {
+  implementation project(":warehouse-common")
+  implementation project(":warehouse-db-changelog")
+  implementation project(":warehouse-production")
+  implementation project(":warehouse-simulation")
+
+  implementation libs.silenteight.commons.core
+  implementation libs.warehouse.data.api
+  implementation libs.warehouse.sampling.api
+  implementation libs.silenteight.sep.base.common
+  implementation libs.spring.integration.jdbc
+  implementation libs.postgresql
+
+  testImplementation project(":warehouse-common-testing")
+  testImplementation project(":warehouse-test-client")
+
+  testFixturesImplementation testFixtures(project(':warehouse-common'))
+}

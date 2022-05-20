@@ -1,0 +1,67 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "maven-publish"
+  id "io.freefair.aspectj.post-compile-weaving"
+  id "com.silenteight.iris.build.spring-boot-application"
+  id "com.silenteight.iris.build.container-image"
+}
+
+description = "Warehouse"
+
+dependencies {
+  implementation project(":warehouse-alert")
+  implementation project(":warehouse-common")
+  implementation project(":warehouse-db-changelog")
+  implementation project(":warehouse-indexer")
+  implementation project(":warehouse-management")
+  implementation project(":warehouse-migration")
+  implementation project(":warehouse-production")
+  implementation project(":warehouse-qa")
+  implementation project(":warehouse-report")
+  implementation project(":warehouse-report-statistics")
+  implementation project(":warehouse-retention-production")
+  implementation project(":warehouse-retention-simulation")
+  implementation project(":warehouse-sampling")
+  implementation project(":warehouse-simulation")
+  implementation project(":warehouse-statistics")
+
+  implementation libs.silenteight.sep.auth
+  implementation libs.silenteight.sep.base.common
+  implementation libs.silenteight.commons.app
+
+  implementation libs.spring.boot.starter.actuator
+  implementation libs.spring.boot.starter.undertow
+  implementation libs.spring.boot.starter.web
+
+  implementation libs.spring.context.support
+  implementation libs.spring.security.config
+  implementation libs.spring.security.web
+  implementation libs.spring.cloud.consul.discovery
+
+  implementation libs.commons.lang3
+
+  implementation libs.jaxb.api
+
+  implementation libs.protobuf.java.util
+  implementation libs.logback.ecs.encoder
+  implementation libs.ecs.logging.core
+
+  runtimeOnly libs.sentry.spring.boot.starter
+  runtimeOnly libs.sentry.logback
+
+  testImplementation project(":warehouse-common-testing")
+
+  testImplementation libs.spock.spring
+  testImplementation libs.spring.integration.test
+  testImplementation libs.rest.assured.spring.mock.mvc
+
+  aspect libs.silenteight.sep.base.aspects
+}
+
+publishing {
+  publications {
+    bootJava(MavenPublication) {
+      artifact bootJar
+    }
+  }
+}

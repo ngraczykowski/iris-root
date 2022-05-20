@@ -1,0 +1,32 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "java-test-fixtures"
+}
+
+description = "Warehouse Common"
+
+dependencies {
+  implementation libs.jakarta.validation.api
+  implementation libs.silenteight.sep.base.common
+  implementation libs.silenteight.commons.core
+  implementation libs.sear.rabbitmq.common.schema
+
+  implementation libs.spring.boot.actuator
+  implementation libs.spring.boot.actuator.autoconfigure
+  implementation libs.spring.data.jpa
+  implementation libs.spring.security.config
+  implementation libs.spring.security.web
+  implementation libs.spring.webmvc
+
+  implementation libs.javax.annotation.api
+  implementation libs.springdoc.ui
+  implementation libs.springdoc.data.rest
+  implementation libs.springdoc.security
+  implementation libs.protobuf.java.util
+  implementation libs.apache.httpclient
+  implementation libs.apache.httpmime
+
+  testImplementation project(":warehouse-common-testing")
+  testImplementation libs.awaitility
+  testFixturesImplementation libs.aspectjrt
+}

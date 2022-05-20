@@ -1,0 +1,14 @@
+[id="warehouse-technical-guide"]
+= {productname} Technical Guide
+Silent Eight Pte._Ltd.
+:context: warehouse-technical-guide
+:productname: Silent Eight Warehouse
+:doctype: article
+:toc: left
+:sectnums:
+:sectnumlevels: 4
+:toclevels: 4
+:xrefstyle: full
+
+[abstract]
+This manual explains how to develop {productname}.

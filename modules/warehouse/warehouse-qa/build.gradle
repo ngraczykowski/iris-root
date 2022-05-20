@@ -1,0 +1,33 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "java-test-fixtures"
+}
+
+description = "Warehouse Qa"
+
+configurations {
+  implementation.extendsFrom starterCommon
+  implementation.extendsFrom starterDatabase
+  runtimeOnly.extendsFrom starterDatabaseRuntime
+
+  testImplementation.extendsFrom starterSpringTest
+}
+
+dependencies {
+  implementation project(":warehouse-db-changelog")
+  implementation project(":warehouse-common")
+
+  implementation libs.silenteight.commons.core
+  implementation libs.warehouse.data.api
+  implementation libs.silenteight.sep.base.common
+  implementation libs.protobuf.java.util
+  implementation libs.jackson.datatype.jsr310
+  implementation libs.jakarta.validation.api
+
+  testImplementation project(":warehouse-common-testing")
+  testImplementation project(":warehouse-test-client")
+  testImplementation project(":warehouse-production")
+  testImplementation libs.awaitility
+
+  testFixturesImplementation testFixtures(project(':warehouse-common'))
+}
