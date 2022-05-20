@@ -135,7 +135,9 @@ pipeline {
       }
       steps {
         sh 'git branch --force last-known-good-build'
-        gitPush branch: 'last-known-good-build', force: true
+        sshagent(credentials: ['github-iris-ssh-key']) {
+          sh 'git push --atomic --force origin last-known-good-build'
+        }
       }
     }
   }
