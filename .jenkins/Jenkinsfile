@@ -8,7 +8,6 @@ pipeline {
     label 'ec2-agent'
   }
   options {
-    gitLabConnection(env.GITLAB_CONNECTION_NAME)
     disableConcurrentBuilds()
     ansiColor('xterm')
   }

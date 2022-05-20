@@ -15,7 +15,6 @@ pipeline {
     pollSCM 'H 5-17 * * 1-5'
   }
   options {
-    gitLabConnection(env.GITLAB_CONNECTION_NAME)
     disableConcurrentBuilds()
     ansiColor('xterm')
   }
