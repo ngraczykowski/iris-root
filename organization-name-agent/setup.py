@@ -9,7 +9,7 @@ install_require = [
     "grpcio==1.39.0",
     "grpcio-tools==1.39.0",
     "organizationname-agent-api>=0.27.0",
-    "organization-name-knowledge==0.9.0-dev",
+    "organization-name-knowledge==0.9.0",
     "phonetics==1.0.5",
     "psutil==5.9.0",
     "python-consul2==0.1.5",
