@@ -145,11 +145,13 @@ pipeline {
 
     stage('Zipped (.pyz) atrifacts upload') {
       agent any
-      steps {
-        sh './scripts/clean.sh'
-        unstash 'artifacts'
-      }
       stages {
+        stage ('Prepare') {
+          steps {
+            sh './scripts/clean.sh'
+            unstash 'artifacts'
+          }
+        }
         stage('Upload artifacts to artifactory') {
           when {
             anyOf {
