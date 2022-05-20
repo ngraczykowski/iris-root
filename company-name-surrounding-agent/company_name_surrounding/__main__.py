@@ -16,7 +16,7 @@ def run(configuration_dirs, start_grpc_service):
 
     if start_grpc_service:
         services.append(
-            GrpcService(config, servicers=(CompanyNameSurroundingAgentGrpcServicer(),))
+            GrpcService(config, agent_servicer=CompanyNameSurroundingAgentGrpcServicer())
         )
 
     AgentRunner(config).run(CompanyNameSurroundingAgent(config=config), services=services)

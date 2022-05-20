@@ -26,8 +26,9 @@ setup(
     package_data={"company_name_surrounding": ["templates/*"]},
     install_requires=[
         # Keep sorted alphabetically (case-insensitive)
-        "agent-base==0.3.0",
-        "organization-name-knowledge==0.1.0",
+        "agent-base==0.20.0",
+        "companynamesurrounding-agent-api>=0.27.0",
+        "organization-name-knowledge==0.9.0",
     ],
     extras_require={
         "tests": tests_require,

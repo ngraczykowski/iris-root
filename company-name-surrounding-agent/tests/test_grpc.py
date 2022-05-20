@@ -15,7 +15,7 @@ class ServerIsNotRunning(Exception):
     pass
 
 
-TIMEOUT_SEC = 5
+TIMEOUT_SEC = 0.5
 TEST_CASES = [
     {
         "expected": 0,
@@ -54,7 +54,7 @@ class TestServer(unittest.TestCase):
         channel = grpc.insecure_channel(GRPC_ADDRESS)
         counter = 0
         while counter < 10 and not grpc_server_on(channel):
-            time.sleep(5)
+            time.sleep(2)
             counter += 1
         if counter == 10:
             raise ServerIsNotRunning("Check server")
