@@ -11,6 +11,7 @@ import java.util.List;
 @Setter
 @Builder(toBuilder = true)
 public class PolicyStep {
+
   String id;
   String name;
   String solution;

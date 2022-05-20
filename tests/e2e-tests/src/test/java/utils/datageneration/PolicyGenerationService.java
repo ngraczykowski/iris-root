@@ -21,7 +21,8 @@ public class PolicyGenerationService {
   public Policy generatePolicy(String name, String state, List<PolicyStep> policySteps) {
     String uuid = String.valueOf(UUID.randomUUID());
 
-    return Policy.builder()
+    return Policy
+        .builder()
         .uuid(uuid)
         .name(name)
         .state(state)
@@ -31,7 +32,8 @@ public class PolicyGenerationService {
   }
 
   public PolicyStep generatePolicyStep(String name, String solution, List<Feature> featureList) {
-    return PolicyStep.builder()
+    return PolicyStep
+        .builder()
         .id(String.valueOf(UUID.randomUUID()))
         .name(name)
         .solution(solution)
@@ -41,11 +43,7 @@ public class PolicyGenerationService {
   }
 
   public Feature generateFeature(String name, String condition, String values) {
-    return Feature.builder()
-        .name(name)
-        .condition(condition)
-        .values(values)
-        .build();
+    return Feature.builder().name(name).condition(condition).values(values).build();
   }
 
   @SneakyThrows
@@ -78,24 +76,21 @@ public class PolicyGenerationService {
   //TODO MAKE IT ABLE TO PROCESS MORE THAN 1 FEATURE PER REQUEST
   @SneakyThrows
   private String templateFeatureList(List<Feature> featureList) {
-    List<ObjectNode> features =
-        featureList.stream()
-            .map(
-                feature ->
-                    objectMapper.convertValue(feature, new FeatureDataTypeRef()))
-            .map(featuresDataMap -> templateService.templateObject(getJsonTemplate("logicForStep"),
-                featuresDataMap))
-            .map(this::asObjectNode)
-            .collect(toList());
+    List<ObjectNode> features = featureList
+        .stream()
+        .map(feature -> objectMapper.convertValue(feature, new FeatureDataTypeRef()))
+        .map(featuresDataMap -> templateService.templateObject(getJsonTemplate("logicForStep"),
+            featuresDataMap))
+        .map(this::asObjectNode)
+        .toList();
 
     return objectMapper.writeValueAsString(features.get(0));
   }
 
   @SneakyThrows
   private String getJsonTemplate(String jsonName) {
-    return new String(
-        Files.readAllBytes(
-            Paths.get(String.format("src/test/resources/policiesAPI/%s.json", jsonName))));
+    return new String(Files.readAllBytes(
+        Paths.get(String.format("src/test/resources/policiesAPI/%s.json", jsonName))));
   }
 
   @SneakyThrows

@@ -1,4 +1,5 @@
 package utils;
+
 import io.restassured.filter.Filter;
 import io.restassured.filter.FilterContext;
 import io.restassured.response.Response;
@@ -6,12 +7,17 @@ import io.restassured.specification.FilterableRequestSpecification;
 import io.restassured.specification.FilterableResponseSpecification;
 
 public class CustomLogFilter implements Filter {
+
   private StringBuilder requestBuilderLogs;
   private StringBuilder responseBuilderLogs;
 
   @Override
-  public Response filter(FilterableRequestSpecification filterableRequestSpecification, FilterableResponseSpecification filterableResponseSpecification, FilterContext filterContext) {
-    Response response = filterContext.next(filterableRequestSpecification, filterableResponseSpecification);
+  public Response filter(
+      FilterableRequestSpecification filterableRequestSpecification,
+      FilterableResponseSpecification filterableResponseSpecification,
+      FilterContext filterContext) {
+    Response response =
+        filterContext.next(filterableRequestSpecification, filterableResponseSpecification);
     requestBuilderLogs = new StringBuilder();
     requestBuilderLogs.append("\n");
     requestBuilderLogs
@@ -53,23 +59,17 @@ public class CustomLogFilter implements Filter {
 
 
         """);
-    responseBuilderLogs.append("Status Code: ")
-        .append(response.getStatusCode());
+    responseBuilderLogs.append("Status Code: ").append(response.getStatusCode());
     responseBuilderLogs.append("\n");
-    responseBuilderLogs.append("Status Line: ")
-        .append(response.getStatusLine());
+    responseBuilderLogs.append("Status Line: ").append(response.getStatusLine());
     responseBuilderLogs.append("\n");
-    responseBuilderLogs.append("Response Cookies: ")
-        .append(response.getDetailedCookies());
+    responseBuilderLogs.append("Response Cookies: ").append(response.getDetailedCookies());
     responseBuilderLogs.append("\n");
-    responseBuilderLogs.append("Response Content Type: ")
-        .append(response.getContentType());
+    responseBuilderLogs.append("Response Content Type: ").append(response.getContentType());
     responseBuilderLogs.append("\n");
-    responseBuilderLogs.append("Response Headers: ")
-        .append(response.getHeaders());
+    responseBuilderLogs.append("Response Headers: ").append(response.getHeaders());
     responseBuilderLogs.append("\n");
-    responseBuilderLogs.append("Response Body: " + "\n")
-        .append(response.getBody().prettyPrint());
+    responseBuilderLogs.append("Response Body: " + "\n").append(response.getBody().prettyPrint());
     return response;
   }
 

@@ -11,6 +11,7 @@ import java.util.List;
 @Setter
 @Builder(toBuilder = true)
 public class Feature {
+
   String name;
   String condition;
   String values;

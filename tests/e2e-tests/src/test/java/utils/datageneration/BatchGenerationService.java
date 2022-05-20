@@ -23,7 +23,8 @@ public class BatchGenerationService {
 
   public Batch generateBatch(
       String batchId, List<AlertDataSource> alertDataSources, String startDate) {
-    return Batch.builder()
+    return Batch
+        .builder()
         .id(batchId)
         .status("NEW")
         .payload(generatePayload(alertDataSources))
@@ -33,14 +34,12 @@ public class BatchGenerationService {
 
   @SneakyThrows
   private String generatePayload(List<AlertDataSource> alertsDataSource) {
-    List<ObjectNode> alerts =
-        alertsDataSource.stream()
-            .map(
-                alertDataSource ->
-                    objectMapper.convertValue(alertDataSource, new AlertDataTypeRef()))
-            .map(alertDataMap -> templateService.template(getRandomAlertTemplate(), alertDataMap))
-            .map(this::asObjectNode)
-            .collect(toList());
+    List<ObjectNode> alerts = alertsDataSource
+        .stream()
+        .map(alertDataSource -> objectMapper.convertValue(alertDataSource, new AlertDataTypeRef()))
+        .map(alertDataMap -> templateService.template(getRandomAlertTemplate(), alertDataMap))
+        .map(this::asObjectNode)
+        .collect(toList());
 
     ArrayNode jsonNodes = objectMapper.createArrayNode().addAll(alerts);
 
@@ -49,12 +48,9 @@ public class BatchGenerationService {
 
   @SneakyThrows
   private String getRandomAlertTemplate() {
-    return new String(
-        Files.readAllBytes(
-            Paths.get(
-                String.format(
-                    "src/test/resources/alertTemplates/alertTemplate%d.json",
-                    random.nextInt(3) + 1))));
+    return new String(Files.readAllBytes(Paths.get(
+        String.format("src/test/resources/alertTemplates/alertTemplate%d.json",
+            random.nextInt(3) + 1))));
   }
 
   @SneakyThrows

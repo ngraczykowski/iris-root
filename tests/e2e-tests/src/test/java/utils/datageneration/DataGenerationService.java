@@ -38,7 +38,8 @@ public class DataGenerationService {
 
   public List<AlertDataSource> generateData(Integer batchSize, String batchId) {
 
-    return IntStream.range(0, batchSize)
+    return IntStream
+        .range(0, batchSize)
         .mapToObj(i -> generateDataSingleAlert(i, batchId))
         .collect(Collectors.toList());
   }
@@ -49,10 +50,11 @@ public class DataGenerationService {
     String alertDate = LocalDateTime.now().format(ofPattern(ALERT_DATE_PATTERN)).toUpperCase();
     String caseId = randomUUID().toString();
     String currentState =
-        getRandomValue(
-            "True Match Exit Completed", "False Positive", "False Positive", "Level 1 Review");
+        getRandomValue("True Match Exit Completed", "False Positive", "False Positive",
+            "Level 1 Review");
 
-    return AlertDataSource.builder()
+    return AlertDataSource
+        .builder()
         .alertId(alertId)
         .flagKey(flagKey)
         .alertDate(alertDate)
@@ -86,7 +88,8 @@ public class DataGenerationService {
   }
 
   public String getDateTimeNow() {
-    return OffsetDateTime.now()
+    return OffsetDateTime
+        .now()
         .atZoneSameInstant(ZoneOffset.UTC)
         .format(DateTimeFormatter.ISO_DATE_TIME);
   }

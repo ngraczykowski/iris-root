@@ -3,9 +3,8 @@ package steps;
 import io.cucumber.core.backend.TestCaseState;
 import io.cucumber.core.gherkin.Pickle;
 import io.cucumber.core.gherkin.Step;
-import io.cucumber.java.AfterStep;
-import io.cucumber.java.BeforeAll;
-import io.cucumber.java.Scenario;
+import io.cucumber.java8.En;
+import io.cucumber.java8.Scenario;
 import io.cucumber.plugin.event.TestCase;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -19,47 +18,46 @@ import utils.ScenarioContext;
 import java.lang.reflect.Field;
 import java.util.List;
 
-public class Hooks {
+public class Hooks implements En {
 
   public static ScenarioContext scenarioContext = new ScenarioContext();
   static CustomLogFilter customLogFilter = new CustomLogFilter();
   int stepNo = 0;
   String scenarioName = "";
 
-  @BeforeAll
-  public static void setupRestAssured() {
-    RestAssured.baseURI = System.getProperty("test.url");
-    RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-    RestAssured.requestSpecification = new RequestSpecBuilder()
-        .build()
-        .header("Authorization", "Bearer " + new AuthUtils().getAuthToken())
-        .given()
-        .filter(customLogFilter)
-        .log()
-        .all();
-  }
-
-  @AfterStep
-  public void afterStep(Scenario scenario) {
-    /*
+  public Hooks() {
+    Before(0, () -> {
+      RestAssured.baseURI = System.getProperty("test.url");
+      RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+      RestAssured.requestSpecification = new RequestSpecBuilder()
+          .build()
+          .header("Authorization", "Bearer " + new AuthUtils().getAuthToken())
+          .given()
+          .filter(customLogFilter)
+          .log()
+          .all();
+    });
+    AfterStep(0, (Scenario scenario) -> {
+     /*
       Cucumber do not provide steps info, so We had to create this mechanism
       We check scenario name to select index for desired step
      */
-    String currentScenarioName = scenario.getName();
-    if (!scenarioName.equals(currentScenarioName)) {
-      scenarioName = currentScenarioName;
-      stepNo = 0;
-    }
-    List<Step> stepList = getStepListFromScenario(scenario);
-    String currentStepName = stepList.get(stepNo).getText();
+      String currentScenarioName = scenario.getName();
+      if (!scenarioName.equals(currentScenarioName)) {
+        scenarioName = currentScenarioName;
+        stepNo = 0;
+      }
+      List<Step> stepList = getStepListFromScenario(scenario);
+      String currentStepName = stepList.get(stepNo).getText();
 
-    if (!currentStepName.startsWith("Prepare")) {
-      scenario.attach(
-          "\n" + "API Request: " + customLogFilter.getRequestBuilder()
-              + "\n" + "API Response: " + customLogFilter.getResponseBuilder(), "application/json",
-          "API communication for: " + currentStepName);
-    }
-    stepNo++;
+      if (!currentStepName.startsWith("Prepare")) {
+        scenario.attach(
+            "\n" + "API Request: " + customLogFilter.getRequestBuilder() + "\n" + "API Response: "
+                + customLogFilter.getResponseBuilder(), "application/json",
+            "API communication for: " + currentStepName);
+      }
+      stepNo++;
+    });
   }
 
   @SneakyThrows
