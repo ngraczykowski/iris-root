@@ -10,7 +10,7 @@ dependencies {
   implementation project(":warehouse-simulation")
 
   implementation libs.silenteight.commons.core
-  implementation libs.silenteight.data.retention.api
+  implementation libs.data.retention.api
   implementation libs.warehouse.data.api
   implementation libs.jakarta.validation.api
   implementation libs.silenteight.sep.base.common

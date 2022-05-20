@@ -3,7 +3,7 @@ package com.silenteight.warehouse.alert.rest.service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sep.auth.token.UserAwareTokenProvider;
+import com.silenteight.sep.auth.authorization.RoleAccessor;
 import com.silenteight.warehouse.common.domain.country.CountryPermissionService;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,12 +22,10 @@ import java.util.*;
 public class AlertProvider {
 
   private final CountryPermissionService countryPermissionService;
-  private final UserAwareTokenProvider userAwareTokenProvider;
+  private final RoleAccessor roleAccessor;
   private final ObjectMapper objectMapper;
   private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
   private final AlertSecurityProperties alertSecurityProperties;
-
-  public static final String GROUP_NAME = "kibana-sso";
 
   private final TypeReference<HashMap<String, String>> typeRef = new TypeReference<>() {};
 
@@ -68,7 +66,7 @@ public class AlertProvider {
   }
 
   private List<String> getSecurityParametersList() {
-    Set<String> roles = userAwareTokenProvider.getRolesForGroup(GROUP_NAME);
+    Set<String> roles = roleAccessor.getRoles();
     log.info("Current roles: {}", String.join(", ", roles));
     return List.copyOf(countryPermissionService.getCountries(roles));
   }

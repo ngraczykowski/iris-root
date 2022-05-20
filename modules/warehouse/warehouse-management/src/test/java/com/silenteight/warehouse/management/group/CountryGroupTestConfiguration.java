@@ -3,7 +3,7 @@ package com.silenteight.warehouse.management.group;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sep.auth.token.UserAwareTokenProvider;
+import com.silenteight.sep.auth.authorization.RoleAccessorConfiguration;
 import com.silenteight.sep.base.common.database.HibernateCacheAutoConfiguration;
 import com.silenteight.sep.base.common.support.hibernate.SilentEightNamingConventionConfiguration;
 import com.silenteight.sep.base.common.time.TimeSource;
@@ -16,13 +16,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.PROCESSING_TIMESTAMP;
 import static java.time.Instant.parse;
 
 @ComponentScan(basePackageClasses = {
     ManagementModule.class,
-    UserAwareTokenProvider.class,
     RestAlertModule.class,
     DomainModule.class
 })
@@ -30,6 +30,7 @@ import static java.time.Instant.parse;
     HibernateCacheAutoConfiguration.class,
     SilentEightNamingConventionConfiguration.class,
 })
+@Import(RoleAccessorConfiguration.class)
 @RequiredArgsConstructor
 @Slf4j
 class CountryGroupTestConfiguration {

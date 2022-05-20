@@ -3,7 +3,7 @@ package com.silenteight.warehouse.production;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sep.auth.token.UserAwareTokenProvider;
+import com.silenteight.sep.auth.authorization.RoleAccessor;
 import com.silenteight.sep.base.common.database.HibernateCacheAutoConfiguration;
 import com.silenteight.sep.base.common.messaging.IntegrationConfiguration;
 import com.silenteight.sep.base.common.messaging.MessagingConfiguration;
@@ -95,8 +95,8 @@ public class ProductionProcessingConfiguration {
   }
 
   @Bean
-  UserAwareTokenProvider userAwareTokenProvider() {
-    return mock(UserAwareTokenProvider.class);
+  RoleAccessor roleAccessor() {
+    return mock(RoleAccessor.class);
   }
 
   private Binding bind(Exchange exchange, String routingKey, Queue queue) {

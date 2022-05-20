@@ -129,6 +129,7 @@ class ReportGenerationIT {
             "2021-01-12 10:00:37");
   }
 
+
   @Test
   @WithMockUser(username = "user", authorities = COUNTRY_GROUP)
   void shouldGenerateReportWithNewlineCharsInPayload() {

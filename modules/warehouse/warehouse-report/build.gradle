@@ -11,7 +11,7 @@ dependencies {
   implementation project(":warehouse-indexer")
 
   implementation libs.silenteight.commons.core
-  implementation libs.silenteight.sep.auth.wh
+  implementation libs.silenteight.sep.auth
   implementation libs.spring.data.jpa
   implementation libs.spring.security.config
   implementation libs.spring.security.web

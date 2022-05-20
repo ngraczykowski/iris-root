@@ -1,6 +1,8 @@
 package com.silenteight.warehouse.report;
 
-import com.silenteight.sep.auth.token.TokenModule;
+import com.silenteight.sep.auth.authorization.AuthorizationModule;
+import com.silenteight.sep.auth.authorization.RoleAccessor;
+import com.silenteight.sep.auth.authorization.RoleAccessorConfiguration;
 import com.silenteight.warehouse.common.domain.country.CountryPermissionService;
 import com.silenteight.warehouse.report.create.ReportCreateModule;
 import com.silenteight.warehouse.report.download.ReportDownloadModule;
@@ -12,8 +14,10 @@ import com.silenteight.warehouse.report.sql.SqlExecutorModule;
 import com.silenteight.warehouse.report.status.ReportStatusModule;
 import com.silenteight.warehouse.report.storage.StorageModule;
 
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 
 import static org.mockito.Mockito.*;
@@ -26,9 +30,9 @@ import static org.mockito.Mockito.*;
     ReportPersistenceModule.class,
     ReportStatusModule.class,
     StorageModule.class,
-    SqlExecutorModule.class,
-    TokenModule.class
+    SqlExecutorModule.class
 })
+@Import(RoleAccessorConfiguration.class)
 class ReportGenerationConfiguration {
 
   @Bean

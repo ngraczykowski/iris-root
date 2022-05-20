@@ -6,7 +6,6 @@ import com.silenteight.commons.app.spring.DefaultSpringApplicationContextCallbac
 import com.silenteight.commons.app.spring.SpringApplicationTemplate;
 import com.silenteight.sep.auth.authentication.AuthenticationModule;
 import com.silenteight.sep.auth.authorization.AuthorizationModule;
-import com.silenteight.sep.auth.token.TokenModule;
 import com.silenteight.warehouse.alert.rest.RestAlertModule;
 import com.silenteight.warehouse.common.domain.DomainModule;
 import com.silenteight.warehouse.common.integration.AmqpCommonModule;
@@ -90,7 +89,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     SqlExecutorModule.class,
     StatisticsModule.class,
     StorageModule.class,
-    TokenModule.class,
     TimeModule.class,
     WebModule.class
 })

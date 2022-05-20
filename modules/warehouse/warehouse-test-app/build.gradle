@@ -18,7 +18,7 @@ dependencies {
   implementation libs.spring.context.support
 
   implementation libs.warehouse.data.api
-  implementation libs.silenteight.data.retention.api
+  implementation libs.data.retention.api
 
   implementation libs.commons.lang3
 

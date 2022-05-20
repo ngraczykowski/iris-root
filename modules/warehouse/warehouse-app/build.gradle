@@ -25,7 +25,7 @@ dependencies {
   implementation project(":warehouse-simulation")
   implementation project(":warehouse-statistics")
 
-  implementation libs.silenteight.sep.auth.wh
+  implementation libs.silenteight.sep.auth
   implementation libs.silenteight.sep.base.common
   implementation libs.silenteight.commons.app
 

@@ -1,6 +1,6 @@
 package com.silenteight.warehouse.alert.rest.service;
 
-import com.silenteight.sep.auth.token.UserAwareTokenProvider;
+import com.silenteight.sep.auth.authorization.RoleAccessor;
 import com.silenteight.warehouse.common.domain.country.CountryPermissionService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,12 +15,12 @@ public class AlertProviderConfiguration {
 
   @Bean
   AlertProvider alertProvider(CountryPermissionService countryPermissionService,
-      UserAwareTokenProvider userAwareTokenProvider,
+      RoleAccessor roleAccessor,
       ObjectMapper objectMapper,
       NamedParameterJdbcTemplate namedParameterJdbcTemplate,
       AlertSecurityProperties alertSecurityProperties) {
     return new AlertProvider(countryPermissionService,
-        userAwareTokenProvider, objectMapper, namedParameterJdbcTemplate, alertSecurityProperties);
+        roleAccessor, objectMapper, namedParameterJdbcTemplate, alertSecurityProperties);
   }
 
 }

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sep.auth.token.UserAwareTokenProvider;
+import com.silenteight.sep.auth.authorization.RoleAccessor;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +32,7 @@ public class CreateReportRestController {
   private final ReportRequestService reportRequestService;
 
   @NonNull
-  private final UserAwareTokenProvider userAwareTokenProvider;
+  private final RoleAccessor roleAccessor;
 
   @PostMapping(COMMON_URL)
   public ResponseEntity<Void> createReport(
@@ -46,7 +46,7 @@ public class CreateReportRestController {
     if (IS_PRODUCTION.test(type))
       validate(from, to);
 
-    Set<String> dataAccessRoles = userAwareTokenProvider.getRolesForGroup(GROUP_NAME);
+    Set<String> dataAccessRoles = roleAccessor.getRoles();
 
     log.info("Create report request received, "
         + "reportName={}, from={}, to={}, dataAccessRoles={}", name, from, to, dataAccessRoles);

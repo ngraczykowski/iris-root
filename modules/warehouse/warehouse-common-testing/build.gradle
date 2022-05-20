@@ -16,7 +16,7 @@ dependencies {
   api libs.test.containers
   api libs.reactor.test
   api libs.rest.assured.spring.mock.mvc
-  api libs.silenteight.sep.auth.wh
+  api libs.silenteight.sep.auth
   api libs.hibernate.validator
 
   implementation project(":warehouse-common")
@@ -42,4 +42,8 @@ dependencies {
 
   implementation libs.spring.amqp
   implementation libs.rest.assured
+
+  implementation libs.postgresql
+  implementation libs.liquibase.core
+  implementation libs.hikari.cp
 }

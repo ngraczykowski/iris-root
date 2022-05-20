@@ -10,7 +10,7 @@ dependencies {
   implementation project(":warehouse-indexer")
   implementation libs.silenteight.sep.base.common
   implementation libs.spring.security.config
-  implementation libs.silenteight.sep.auth.wh
+  implementation libs.silenteight.sep.auth
 
   testImplementation project(":warehouse-common-testing")
   testImplementation testFixtures(project(':warehouse-indexer'))
