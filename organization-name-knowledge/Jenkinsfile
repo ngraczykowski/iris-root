@@ -3,7 +3,9 @@ def utils = new com.silenteight.jenkins.ci.Utils()
 def jenkins = new com.silenteight.jenkins.ci.Jenkins()
 
 pipeline {
-  agent none
+  agent {
+    label "ec2-agent"
+  }
   environment {
     PYPI_URL = credentials('pypi-readonly-url')
     TWINE_REPOSITORY_URL = 'https://repo.silenteight.com/artifactory/api/pypi/pypi'
