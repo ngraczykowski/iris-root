@@ -1,0 +1,97 @@
+[plantuml,importing-steps,svg]
+-----
+@startuml
+
+actor HSBC as a
+
+participant Bulk as bulk
+
+participant Analysis as analysis
+participant "Alert" as alert
+participant "Match" as match
+database Database as d
+participant Analysis as analysis
+participant "Adjudication Facade" as ae
+participant "Adjudication API" as ae_api
+participant "Model API" as model
+
+participant "Data Source Provider" as l
+participant "Feature" as m
+participant "Data Source API" as k
+
+==Solving==
+autonumber
+
+a -> bulk: Request with Alerts to solve
+activate a
+activate bulk
+
+bulk <-> d: Store raw alerts
+bulk -->> alert: Bulk stored event
+activate alert
+bulk --> a: return batch id
+deactivate a
+deactivate bulk
+alert -> d: get Alerts for given bulk
+d --> alert: retrieve data
+loop
+    alert -> alert: create Alert
+    alert <-> d: store Alert
+    alert -> match: prepare and save matches
+    activate match
+    deactivate alert
+    match -> match: create Match
+    match <-> d: store Match
+    deactivate match
+end
+
+bulk <-> d: get pre processed bulk
+activate bulk
+bulk -> ae: register alerts and matches with analysis
+activate ae
+ae <-> ae_api: [gRPC] register alerts
+ae <-> ae_api: [gRPC] register matches
+ae <-> ae_api: [gRPC] create Dataset
+
+ae -> analysis: create analysis
+activate analysis
+
+analysis <-> model: [gRPC] Get default Model
+analysis <-> ae_api: [gRPC] Create Analysis
+analysis <-> d: save analysis
+analysis --> ae: return analysis data
+deactivate analysis
+
+ae --> bulk: return analysis data
+deactivate ae
+
+bulk <-> d: update bulk
+deactivate bulk
+
+==Data Source API case==
+autonumber
+
+k -> l: Request from agent
+activate k
+activate l
+l -> match: Get requested Matches
+activate match
+
+match -> d: get Matches
+activate d
+d --> match: retrieve data from db
+deactivate d
+match --> l: return data
+deactivate match
+
+l -> m: ask for InputData for agent
+activate m
+m -> m: transform fields
+m --> l: return InputData
+deactivate m
+l --> k: return data
+deactivate l
+deactivate k
+
+@enduml
+-----

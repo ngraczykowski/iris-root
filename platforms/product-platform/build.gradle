@@ -13,6 +13,7 @@ dependencies {
   api(platform(libs.platform.spring.cloud))
   api(platform(libs.platform.sentry))
   api(platform(libs.platform.awssdk))
+  api(platform(libs.platform.awssdk1))
   api(platform(libs.platform.keycloak.adapter))
 
   constraints {

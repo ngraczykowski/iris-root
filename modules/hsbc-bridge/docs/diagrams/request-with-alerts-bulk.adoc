@@ -1,0 +1,49 @@
+[plantuml,importing-steps,svg]
+-----
+@startuml
+actor HSBC
+participant "SERP Bridge" as bridge
+
+queue RabbitMQ
+participant Agents
+participant AE as ae
+participant Governance
+== **1) Receive Request with Alerts for Processing** ==
+
+HSBC -> bridge: Http request [REST/HTTP]
+activate HSBC
+activate bridge
+bridge <-> bridge: Store alerts in db
+bridge -> bridge: BulkStoredEvent
+HSBC <-- bridge: Http response with batch id [REST/HTTP]
+deactivate HSBC
+bridge <-> ae: [gRPC] register alerts and matches with analysis
+activate ae
+deactivate ae
+bridge <-> RabbitMQ: Send message
+deactivate bridge
+
+== **3) Solve alert hit** ==
+loop each agent
+RabbitMQ -> Agents: Receive message
+
+activate Agents
+
+Agents -> Agents : Solve request
+Agents --> RabbitMQ : Send message
+deactivate Agents
+||10||
+end
+
+== **3) Recommend alert** ==
+RabbitMQ -> Governance: Receive message
+activate Governance
+
+Governance -> Governance: Process and store \nrecommendation in db
+Governance --> RabbitMQ: Send recommendation
+deactivate Governance
+RabbitMQ -> bridge: Receive recommendation
+activate bridge
+deactivate bridge
+@enduml
+-----

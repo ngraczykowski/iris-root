@@ -1,0 +1,13 @@
+rootProject.name = 'hsbc-bridge'
+includeBuild('../../platforms')
+includeBuild('../../build-logic')
+
+dependencyResolutionManagement {
+  versionCatalogs {
+    libs {
+      from(files("../../gradle/libs.versions.toml"))
+    }
+  }
+}
+
+include 'dist'

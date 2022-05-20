@@ -1,0 +1,33 @@
+[plantuml,importing-steps,svg]
+-----
+@startuml
+actor HSBC
+participant "SERP Bridge" as bridge
+
+== **1) Request for bulk status** ==
+
+HSBC -> bridge: Http request for bulk status
+note left
+    /async/batch/v1/{batchId}/status
+end note
+activate HSBC
+activate bridge
+|||
+HSBC <-- bridge: Http response with bulk status for given id
+deactivate HSBC
+deactivate bridge
+
+== **2) Request for bulk result** ==
+HSBC -> bridge: Http request for results of bulk processing
+note left
+    /async/batch/v1/{batchId}/result
+end note
+activate HSBC
+activate bridge
+|||
+bridge --> HSBC: Http response
+deactivate HSBC
+deactivate bridge
+
+@enduml
+-----

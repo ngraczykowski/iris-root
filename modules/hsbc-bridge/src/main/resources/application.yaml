@@ -1,0 +1,241 @@
+silenteight.bridge:
+  address: ${BRIDGE_ADDRESS:http://localhost:24802}
+
+  ### GRPC PROPERTIES
+
+  grpc:
+    port: 24803
+    recommendation-deadline: 15m
+    dataset-deadline: 1m
+    historical-decisions-deadline: 20s
+    analysis-deadline: 1m
+    alert-deadline: 5m
+    is-pep-deadline: 20s
+    name-information-deadline: 20s
+    model-deadline: 20s
+    adjudication-engine-address: static://localhost:24801
+    governance-address: static://localhost:24205
+    worldcheck-address: static://localhost:24813
+    historical-decisions-model-address: static://localhost:24901
+
+  ### HTTP
+
+  http.port: 24802
+
+  ### RABBITMQ QUEUES
+
+  amqp:
+    outgoing:
+      model-persisted-exchange-name: bridge.model
+      worldcheck-model-persisted-routing-key: persisted.external.worldcheck
+      historical-decisions-model-persisted-routing-key: persisted.external.historical-decisions
+      warehouse-exchange-name: bridge.command
+      warehouse-routing-key: command.index-request.production
+      watchlist-persisted-exchange-name: bridge.watchlist
+      watchlist-persisted-routing-key: persisted
+      is-pep-exchange-name: bridge.ispep
+      is-pep-routing-key: ispep.ispep-learning-store-request.production
+      historical-decision-exchange-name: bridge.historical
+      historical-decision-routing-key: historical.historical-decisions-request.production
+      data-retention-exchange-name: bridge.retention
+      data-retention-personal-information-expired-routing-key: retention.personal-information-expired
+      data-retention-alerts-expired-routing-key: retention.alerts-expired
+    ingoing:
+      model-promoted-queue: bridge.model-promoted.production
+      dead-letter-queue: bridge.dlq
+      recommendations-queue: bridge.recommendations
+      worldcheck-model-loaded-queue: bridge.model.loaded.worldcheck
+      historical-decisions-model-loaded-queue: bridge.model.loaded.historical-decisions
+      worldcheck-model-persisted-queue: bridge.model.persisted.internal.worldcheck
+      historical-decisions-model-persisted-queue: bridge.model.persisted.internal.historical-decisions
+
+  ### ANALYSIS ALERT TIMEOUT
+
+  analysis:
+    ### Analysis timeout for 5000 alerts
+    timeout: 30m
+
+  ### LEARNING
+
+  learning:
+    batch-size: 50
+
+  ### AWS
+
+  aws:
+    accessKey: minioadmin
+    buckets:
+      modelBucketName: test
+      watchlistBucketName: test
+    region: US_EAST_1
+    secretKey: minioadmin
+    uri: http://127.0.0.1:9000
+
+  ### DATA RETENTION
+
+  data.retention:
+    chunk: 10
+    rate: 1d
+    ### Enable one of retention type below
+    personal-information-expired:
+      enabled: false
+      duration: ${RETENTION_PERIOD:155d}
+    alerts-expired:
+      enabled: false
+      duration: ${RETENTION_PERIOD:155d}
+    dry-run-mode:
+      enabled: false
+
+  ### JENKINS
+
+  jenkins.api:
+    crumbUri: ${CRUMB:https://jenkins.silenteight.com/crumbIssuer/api/json}
+    password: ${JENKINS_PASSWORD:dev}
+    username: ${JENKINS_USER:dev}
+    updateModelStatusUri: ${UPDATE_MODEL_STATUS_URI:https://jenkins.silenteight.com/model/status}
+    updateModelUri: ${UPDATE_MODEL_URI:https://jenkins.silenteight.com/model/update}
+
+  ### NEXUS
+
+  nexus.api:
+    password: ${NEXUS_PASSWORD:dev}
+    username: ${NEXUS_USER:dev}
+
+  ### UNZIP
+
+  unpacker:
+    path: ${UNPACKER_PATH:/tmp}
+
+  ### DATE TIME FORMAT
+
+  alert:
+    datetime:
+      format: "[yyyy-MMM-dd HH:mm:ss][dd-MMM-yy]"
+
+  ### MODEL
+  ### Export model jobs (use "-" value for disabling the particular job)
+
+  model:
+    is-pep-historical-model-export.cron: "-"
+    is-pep-procedural-model-export.cron: "-"
+    name-model-export.cron: "-"
+
+  ### JSON
+
+  json:
+    alert-limit: 30000
+
+### GRPC THREADS AUTOCONFIGURATION (if needed different than default)
+
+#bridge:
+#  rpc:
+#    threads=4:
+
+### GRPC
+
+grpc:
+  server.port: ${silenteight.bridge.grpc.port}
+  client:
+    GLOBAL.negotiation-type: PLAINTEXT
+    adjudication-engine.address: ${silenteight.bridge.grpc.adjudication-engine-address}
+    hsbc-worldcheck.address: ${silenteight.bridge.grpc.worldcheck-address}
+    governance.address: ${silenteight.bridge.grpc.governance-address}
+    historical-decisions-model.address: ${silenteight.bridge.grpc.historical-decisions-model-address}
+
+### HTTP
+
+server:
+  port: ${silenteight.bridge.http.port}
+  http2:
+    enabled: true
+
+### SPRING
+
+spring:
+  application.name: hsbc-bridge
+  servlet.multipart:
+    max-file-size: 3GB
+    max-request-size: 3GB
+  config:
+    import: application-mappers.yaml
+  jackson:
+    deserialization:
+      FAIL_ON_UNKNOWN_PROPERTIES: true
+
+  ### CONSUL
+
+  cloud.consul:
+    config.enabled: false
+    enabled: true
+    host: localhost
+    port: 8500
+    discovery:
+      enabled: true
+      register: false
+      register-health-check: false
+    service-registry.auto-registration.enabled: false
+
+  ### DATABASE
+
+  datasource:
+    password: serp
+    url: jdbc:postgresql://localhost:24881/hsbc_bridge
+    username: serp
+  jpa:
+    hibernate.ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+
+  ### RABBIT
+
+  rabbitmq:
+    host: ${RABBITMQ_ADDRESS:localhost}
+    password: ${RABBITMQ_PASSWORD:dev}
+    port: ${RABBITMQ_AMQP_PORT:24160}
+    username: ${RABBITMQ_USER:dev}
+
+    listener:
+      simple:
+        retry:
+          enabled: true
+          initial-interval: 3000
+          max-attempts: 3
+          max-interval: 10000
+          multiplier: 1.5
+
+# METRICS CONFIGURATION
+
+management:
+  endpoint:
+    health.show-details: always
+
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: [ "health", "info", "liquibase", "metrics", "prometheus", "loggers" ]
+    loggers:
+      sensitive: false
+
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    distribution:
+      minimum-expected-value:
+        http_server_requests_recommend: 500ms
+        http_server_requests_learning: 500ms
+        alert_processor_pre_process_alerts_within_solving_bulk: 500ms
+        alert_processor_pre_process_alerts_within_learning_bulk: 500ms
+        bulk_processor_try_to_process_solving_bulk: 1s
+        bulk_processor_try_to_process_learning_bulk: 1s
+        recommendation_generated_on_recommendation: 1s
+      maximum-expected-value:
+        http_server_requests_recommend: 20m
+        http_server_requests_learning: 20m
+        alert_processor_pre_process_alerts_within_solving_bulk: 20m
+        alert_processor_pre_process_alerts_within_learning_bulk: 20m
+        bulk_processor_try_to_process_solving_bulk: 20m
+        bulk_processor_try_to_process_learning_bulk: 20m
+        recommendation_generated_on_recommendation: 20m
