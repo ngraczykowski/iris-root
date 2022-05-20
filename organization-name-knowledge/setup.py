@@ -12,7 +12,7 @@ tests_require = [
 ]
 setup(
     name="organization-name-knowledge",
-    version="0.10.0-dev",
+    version="0.9.0-dev",
     description="Organization Name Knowledge Package",
     author="Silent Eight Pte. Ltd.",
     author_email="support@silenteight.com",
