@@ -11,3 +11,4 @@ dependencyResolutionManagement {
 }
 
 include 'dist'
+include 'hsbc-bridge-app'

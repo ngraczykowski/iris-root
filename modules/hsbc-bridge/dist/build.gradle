@@ -12,7 +12,7 @@ configurations {
 }
 
 dependencies {
-  dist project(path: ":", configuration: "bootArchives")
+  dist project(path: ":hsbc-bridge-app", configuration: "bootArchives")
 }
 
 def runScript(String name) {

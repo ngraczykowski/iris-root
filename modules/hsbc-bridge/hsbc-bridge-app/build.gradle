@@ -1,0 +1,84 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "com.silenteight.iris.build.spring-boot-application"
+  id "com.silenteight.iris.build.container-image"
+  id "io.freefair.aspectj.post-compile-weaving"
+
+}
+
+dependencies {
+  implementation libs.mapstruct
+  annotationProcessor libs.mapstruct.processor
+  implementation libs.micrometer.core
+  annotationProcessor libs.lombok
+  annotationProcessor libs.spring.boot.configuration.processor
+  implementation libs.commons.csv
+  implementation libs.jakarta.persistence.api
+  implementation libs.silenteight.sep.base.common
+  aspect libs.silenteight.sep.base.aspects
+  implementation libs.springfox.oas
+  implementation libs.adjudication.engine.api
+  implementation libs.aws.sdk1.s3
+  implementation libs.aws.s3
+  implementation libs.aws.auth
+  implementation libs.classgraph
+  implementation libs.commons.compress
+  implementation libs.commons.lang3
+  implementation libs.commons.validator
+  implementation libs.commons.collections
+  implementation libs.data.source.api
+  implementation libs.data.source.categories.api
+  implementation libs.data.source.comments.api
+  implementation libs.data.retention.api
+  implementation libs.sear.rabbitmq.common.schema
+  implementation libs.grpc.spring.boot.starter
+  implementation libs.commons.io
+  implementation libs.jetbrains.annotations
+  implementation libs.jjwt
+  implementation libs.hibernate.types
+  implementation libs.liquibase.core
+  implementation libs.liquibase.sessionlock
+  implementation libs.lz4.java
+  implementation libs.postgresql
+  implementation libs.protobuf.java.util
+  implementation libs.shedlock.jdbc.provider
+  implementation libs.shedlock.spring
+  implementation libs.governance.model.api
+  implementation libs.learning.engine.store.api
+  implementation libs.spring.amqp
+  implementation libs.spring.aspects
+  implementation libs.spring.boot
+  implementation libs.spring.boot.starter.actuator
+  implementation libs.spring.boot.actuator
+  implementation libs.spring.boot.starter.undertow
+  implementation libs.spring.boot.starter.validation
+  implementation libs.spring.boot.autoconfigure
+  implementation libs.spring.boot.starter.data.jpa
+  implementation libs.spring.cloud.starter.consul.config
+  implementation libs.spring.cloud.consul.discovery
+  implementation libs.spring.cloud.starter.sleuth
+  implementation libs.spring.amqp.rabbit
+  implementation libs.spring.integration.amqp
+  implementation libs.spring.retry
+  implementation libs.streamex
+  implementation libs.warehouse.data.api
+  implementation libs.worldcheck.api
+  implementation libs.historical.decisions.api
+  implementation libs.micrometer.prometheus
+  runtimeOnly libs.ecs.logging.core
+  runtimeOnly libs.logback.ecs.encoder
+
+  testAnnotationProcessor libs.lombok
+  testImplementation libs.spock.core
+  testImplementation libs.assertj.core
+  testImplementation libs.junit.jupiter.api
+  testImplementation libs.test.containers.junit.jupiter
+  testImplementation libs.test.containers.localstack
+  testImplementation libs.mockito.core
+  testImplementation libs.mockito.junit.jupiter
+  testImplementation libs.spock.spring
+  testImplementation libs.spring.boot.starter.test
+  testImplementation libs.test.containers
+  testImplementation libs.test.containers.postgresql
+  testRuntimeOnly libs.junit.jupiter.engine
+}
