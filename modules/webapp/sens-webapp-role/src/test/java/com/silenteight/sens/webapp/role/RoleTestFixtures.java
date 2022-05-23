@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import com.silenteight.sens.webapp.role.create.CreateRoleRequest;
 import com.silenteight.sens.webapp.role.create.dto.CreateRoleDto;
 import com.silenteight.sens.webapp.role.details.dto.RoleDetailsDto;
+import com.silenteight.sens.webapp.role.edit.EditRoleRequest;
+import com.silenteight.sens.webapp.role.edit.dto.EditRoleDto;
 import com.silenteight.sens.webapp.role.list.dto.RoleDto;
 import com.silenteight.sens.webapp.role.remove.RemoveRoleRequest;
 
@@ -26,20 +28,23 @@ public final class RoleTestFixtures {
   public static final UUID ROLE_ID_2 = fromString("65608792-1086-4fe8-bc80-55a351bd2018");
   public static final OffsetDateTime CREATED_AT = parse("2021-07-22T12:20:37.098Z");
   public static final OffsetDateTime UPDATED_AT = parse("2021-07-22T12:20:37.098Z");
-  public static final String ROLE_NAME_1 = "First role name";
-  public static final String ROLE_NAME_2 = "Second role name";
+  public static final String ROLE_NAME_1 = "AUDITOR";
+  public static final String ROLE_NAME_2 = "BUSINESS_OPERATOR";
+  public static final String ROLE_DESCRIPTION_1 = "Auditor";
+  public static final String ROLE_DESCRIPTION_2 = "Business operator";
   public static final String ROLE_NAME_TOO_LONG = "a".repeat(ROLE_FIELD_MAX_LENGTH + 1);
   public static final String ROLE_NAME_WITH_LESS_THAN_MIN_NUMBER_OF_CHAR = "TR";
-  public static final String ROLE_DESCRIPTION_1 = "First tole description";
-  public static final String ROLE_DESCRIPTION_2 = "Second tole description";
   public static final String ROLE_DESCRIPTION_WITH_LESS_CHARS_THEN_REQUIRED = "Rd";
   public static final String ROLE_DESCRIPTION_WITH_MORE_CHARS_THEN_PERMITTED =
       "a".repeat(ROLE_FIELD_MAX_LENGTH + 1);
 
   public static final String USERNAME_1 = "John Doe";
+  public static final String USERNAME_2 = "Alan Smith";
   public static final UUID PERMISSION_ID_1 = fromString("ec75b706-43e9-49ae-b328-0ef372f07058");
   public static final UUID PERMISSION_ID_2 = fromString("a6e9de43-6041-49eb-8eb6-b9ecaa99bf50");
-  public static final Set<UUID> PERMISSION_IDS = of(PERMISSION_ID_1, PERMISSION_ID_2);
+  public static final UUID PERMISSION_ID_3 = fromString("05bf9714-b1ee-4778-a733-6151df70fca3");
+  public static final Set<UUID> PERMISSION_IDS_1 = of(PERMISSION_ID_1, PERMISSION_ID_2);
+  public static final Set<UUID> PERMISSION_IDS_2 = of(PERMISSION_ID_3);
 
   public static final RoleDto ROLE_DTO_1 = RoleDto.builder()
       .id(ROLE_ID_1)
@@ -59,7 +64,7 @@ public final class RoleTestFixtures {
       .id(ROLE_ID_1)
       .name(ROLE_NAME_1)
       .description(ROLE_DESCRIPTION_1)
-      .permissions(PERMISSION_IDS)
+      .permissions(PERMISSION_IDS_1)
       .createdAt(CREATED_AT)
       .createdBy(USERNAME_1)
       .updatedAt(UPDATED_AT)
@@ -75,21 +80,21 @@ public final class RoleTestFixtures {
       .id(ROLE_ID_1)
       .name(ROLE_NAME_1)
       .description(ROLE_DESCRIPTION_1)
-      .permissions(PERMISSION_IDS)
+      .permissions(PERMISSION_IDS_1)
       .build();
 
   public static final CreateRoleDto CREATE_ROLE_DTO_WITH_TOO_LONG_NAME = CreateRoleDto.builder()
       .id(ROLE_ID_1)
       .name(ROLE_NAME_TOO_LONG)
       .description(ROLE_DESCRIPTION_1)
-      .permissions(PERMISSION_IDS)
+      .permissions(PERMISSION_IDS_1)
       .build();
 
   public static final CreateRoleDto CREATE_ROLE_DTO_WITH_TOO_SHORT_NAME = CreateRoleDto.builder()
       .id(ROLE_ID_1)
       .name(ROLE_NAME_WITH_LESS_THAN_MIN_NUMBER_OF_CHAR)
       .description(ROLE_DESCRIPTION_1)
-      .permissions(PERMISSION_IDS)
+      .permissions(PERMISSION_IDS_1)
       .build();
 
   public static final CreateRoleDto CREATE_ROLE_DTO_WITH_DESCRIPTION_TOO_SHORT =
@@ -97,7 +102,7 @@ public final class RoleTestFixtures {
           .id(ROLE_ID_1)
           .name(ROLE_NAME_1)
           .description(ROLE_DESCRIPTION_WITH_LESS_CHARS_THEN_REQUIRED)
-          .permissions(PERMISSION_IDS)
+          .permissions(PERMISSION_IDS_1)
           .build();
 
   public static final CreateRoleDto CREATE_ROLE_DTO_WITH_DESCRIPTION_TOO_LONG =
@@ -105,14 +110,28 @@ public final class RoleTestFixtures {
           .id(ROLE_ID_1)
           .name(ROLE_NAME_1)
           .description(ROLE_DESCRIPTION_WITH_MORE_CHARS_THEN_PERMITTED)
-          .permissions(PERMISSION_IDS)
+          .permissions(PERMISSION_IDS_1)
           .build();
 
   public static final CreateRoleRequest CREATE_ROLE_REQUEST = CreateRoleRequest.builder()
       .id(ROLE_ID_1)
       .name(ROLE_NAME_1)
       .description(ROLE_DESCRIPTION_1)
-      .permissions(PERMISSION_IDS)
+      .permissions(PERMISSION_IDS_1)
       .createdBy(USERNAME_1)
+      .build();
+
+  public static final EditRoleDto EDIT_ROLE_DTO = EditRoleDto.builder()
+      .name(ROLE_NAME_2)
+      .description(ROLE_DESCRIPTION_2)
+      .permissions(PERMISSION_IDS_2)
+      .build();
+
+  public static final EditRoleRequest EDIT_ROLE_REQUEST = EditRoleRequest.builder()
+      .id(ROLE_ID_1)
+      .name(ROLE_NAME_2)
+      .description(ROLE_DESCRIPTION_2)
+      .permissions(PERMISSION_IDS_2)
+      .updatedBy(USERNAME_2)
       .build();
 }

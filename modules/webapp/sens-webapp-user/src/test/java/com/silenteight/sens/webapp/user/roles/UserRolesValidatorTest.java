@@ -12,8 +12,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Map;
 
-import static com.silenteight.sens.webapp.user.roles.RolesTestFixtures.ROLE_NAME;
-import static com.silenteight.sens.webapp.user.roles.RolesTestFixtures.ROLE_SCOPE;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.*;
@@ -22,6 +20,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class UserRolesValidatorTest {
 
+  public static final String ROLE_NAME = "ANALYST";
+  public static final String ROLE_SCOPE = "frontend";
   private UserRolesValidator underTest;
 
   @Mock
@@ -31,7 +31,6 @@ class UserRolesValidatorTest {
   void setUp() {
     underTest = new UserRolesValidator(userQuery, ROLE_SCOPE);
   }
-
 
   @Test
   void anyUserHasRoleIsFalse() {

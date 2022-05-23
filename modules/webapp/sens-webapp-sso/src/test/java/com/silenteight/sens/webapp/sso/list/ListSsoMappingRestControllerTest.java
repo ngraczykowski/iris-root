@@ -16,8 +16,8 @@ import static org.hamcrest.Matchers.*;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
-@Import({ ListSsoMappingsRestController.class })
-class ListSsoMappingsRestControllerTest extends BaseRestControllerTest {
+@Import({ ListSsoMappingRestController.class })
+class ListSsoMappingRestControllerTest extends BaseRestControllerTest {
 
   private static final String LIST_SSO_MAPPING_URL = "/sso/mappings";
 

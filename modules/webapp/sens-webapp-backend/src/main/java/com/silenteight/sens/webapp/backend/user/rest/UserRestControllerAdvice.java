@@ -6,6 +6,7 @@ import com.silenteight.sens.webapp.common.rest.exception.ControllerAdviceOrder;
 import com.silenteight.sens.webapp.user.remove.OriginNotMatchingException;
 import com.silenteight.sens.webapp.user.remove.UserNotFoundException;
 import com.silenteight.sep.usermanagement.api.error.UserDomainError;
+import com.silenteight.sep.usermanagement.api.role.RoleNotFoundException;
 import com.silenteight.sep.usermanagement.api.user.UsernameUniquenessValidator.UsernameNotUniqueError;
 
 import org.springframework.core.annotation.Order;
@@ -45,5 +46,10 @@ class UserRestControllerAdvice extends AbstractErrorControllerAdvice {
   @ExceptionHandler(UserNotFoundException.class)
   public ResponseEntity<String> handle(UserNotFoundException e) {
     return ResponseEntity.status(NOT_FOUND).body("The user cannot be found");
+  }
+
+  @ExceptionHandler(RoleNotFoundException.class)
+  public ResponseEntity<String> handle(RoleNotFoundException e) {
+    return ResponseEntity.status(NOT_FOUND).body("The role cannot be found");
   }
 }

@@ -32,8 +32,6 @@ sens.webapp.rabbitmq.password: serp
 sens.webapp.messaging.concurrency: 4
 sens.webapp.messaging.prefetch: 25
 
-sens.webapp.external.apps.reporting-ui.url: http://localhost:24400/kibana/
-
 ####################################################################################################
 info:
   component: "SENS Web App REST API"
@@ -152,9 +150,6 @@ grpc:
 
     circuit-breaker:
       address: static://localhost:24213
-
-sens.webapp.external.apps:
-  reportingUrl: ${sens.webapp.external.apps.reporting-ui.url}
 
 sens.webapp.messaging:
   broker:
@@ -285,6 +280,8 @@ sep.auth:
       - "GENERATE_REPORT"
     DOWNLOAD_USERS_REPORTS:
       - "GENERATE_REPORT"
+    LIST_REPORTS:
+      - "LIST_REPORTS"
     REPORTING_UI:
       - "REDIRECT_TO_REPORTING"
     MANAGE_ROLES:
@@ -302,13 +299,16 @@ sep.auth:
     APPROVER:
       - "DOWNLOAD_SOLVING_REPORTS"
       - "REPORTING_UI"
+      - "LIST_REPORTS"
     AUDITOR:
       - "DOWNLOAD_AUDIT_REPORTS"
       - "DOWNLOAD_USERS_REPORTS"
       - "REPORTING_UI"
+      - "LIST_REPORTS"
     USER_ADMINISTRATOR:
       - "DOWNLOAD_AUDIT_REPORTS"
       - "DOWNLOAD_USERS_REPORTS"
+      - "LIST_REPORTS"
       - "MANAGE_USERS"
       - "VIEW_USERS"
       - "SYNC_ANALYSTS"
@@ -316,8 +316,10 @@ sep.auth:
       - "MANAGE_SSO_MAPPING"
     MODEL_TUNER:
       - "DOWNLOAD_SOLVING_REPORTS"
+      - "LIST_REPORTS"
       - "REPORTING_UI"
     QA:
+      - "LIST_REPORTS"
       - "REPORTING_UI"
   permit-all-urls:
       - "/management/**"
@@ -349,3 +351,20 @@ keycloak:
 sentry:
   environment: unknown
   traces-sample-rate: 0
+
+sens.webapp.reports:
+  audit:
+    enabled: true
+    name: audit-report
+    label: "Audit report"
+    filter-type: DATE_RANGE
+  users:
+    enabled: true
+    name: users-report
+    label: "Users report"
+    filter-type: DATE_RANGE
+  security-matrix:
+    enabled: true
+    name: security-matrix-report
+    label: "Security matrix report"
+    filter-type: NONE

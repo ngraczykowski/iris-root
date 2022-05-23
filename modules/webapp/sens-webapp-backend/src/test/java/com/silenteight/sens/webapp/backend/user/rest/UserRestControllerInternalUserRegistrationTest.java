@@ -71,9 +71,7 @@ class UserRestControllerInternalUserRegistrationTest extends UserRestControllerT
   private static Stream<CreateUserDto> getDtosWithInvalidFieldsLength() {
     return Stream.of(
         INVALID_REQUEST_WITH_TOO_LONG_USER_NAME,
-        INVALID_REQUEST_WITH_TOO_SHORT_USER_NAME,
-        INVALID_REQUEST_WITH_TOO_LONG_DISPLAY_NAME,
-        INVALID_REQUEST_WITH_TOO_SHORT_DISPLAY_NAME
+        INVALID_REQUEST_WITH_TOO_SHORT_USER_NAME
     );
   }
 }

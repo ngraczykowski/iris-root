@@ -38,11 +38,6 @@ class ScbReportsConfiguration {
   }
 
   @Bean
-  SecurityMatrixReportGenerator securityMatrixReportGenerator() {
-    return new SecurityMatrixReportGenerator();
-  }
-
-  @Bean
   IdManagementReportGenerator idManagementReportGenerator(
       IdManagementEventProvider idManagementEventProvider,
       ScbReportsProperties scbReportsProperties) {

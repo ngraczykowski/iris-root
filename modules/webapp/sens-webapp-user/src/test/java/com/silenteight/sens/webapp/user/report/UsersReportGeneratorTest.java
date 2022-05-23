@@ -1,5 +1,6 @@
 package com.silenteight.sens.webapp.user.report;
 
+import com.silenteight.sens.webapp.report.ConfigurableReport;
 import com.silenteight.sens.webapp.report.Report;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
 import com.silenteight.sep.usermanagement.api.user.UserQuery;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
@@ -36,6 +38,7 @@ class UsersReportGeneratorTest {
   private TestDateFormatter filenameDateFormatter;
   private TestDateFormatter rowDateFormatter;
   private UsersReportGenerator underTest;
+  private UsersReportProperties properties = mock(UsersReportProperties.class);
 
   @BeforeEach
   void setUp() {
@@ -47,11 +50,13 @@ class UsersReportGeneratorTest {
         filenameDateFormatter,
         rowDateFormatter,
         userQuery,
-        ROLES_SCOPE);
+        ROLES_SCOPE,
+        properties);
   }
 
   @Test
   void reportHasName() {
+    Mockito.when(properties.getName()).thenReturn("users-report");
     String name = underTest.getName();
 
     Assertions.assertThat(name).isEqualTo("users-report");
@@ -100,6 +105,11 @@ class UsersReportGeneratorTest {
     String expectedRole = format("\"%s,%s\"", ROLE_1, ROLE_2);
     assertThat(report).hasValues(0, EMPTY_VALUE, EMPTY_VALUE, ORIGIN, expectedRole,
         EMPTY_VALUE, EMPTY_VALUE, EMPTY_VALUE);
+  }
+
+  @Test
+  void reportGeneratorShouldBeConfigurable() {
+    Assertions.assertThat(underTest).isInstanceOf(ConfigurableReport.class);
   }
 
   static class UsersReportGeneratorFixtures {

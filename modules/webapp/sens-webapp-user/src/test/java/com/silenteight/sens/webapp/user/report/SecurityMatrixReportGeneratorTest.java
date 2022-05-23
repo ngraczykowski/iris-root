@@ -1,5 +1,6 @@
-package com.silenteight.sens.webapp.scb.report;
+package com.silenteight.sens.webapp.user.report;
 
+import com.silenteight.sens.webapp.report.ConfigurableReport;
 import com.silenteight.sens.webapp.report.Report;
 
 import org.jetbrains.annotations.NotNull;
@@ -7,10 +8,13 @@ import org.junit.jupiter.api.Test;
 
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class SecurityMatrixReportGeneratorTest {
-
-  private SecurityMatrixReportGenerator underTest = new SecurityMatrixReportGenerator();
+  private final SecurityMatrixReportProperties reportProperties =
+      mock(SecurityMatrixReportProperties.class);
+  private SecurityMatrixReportGenerator underTest =
+      new SecurityMatrixReportGenerator(reportProperties);
 
   @Test
   void generateEntitlementReportWhenRequested() {
@@ -72,5 +76,10 @@ class SecurityMatrixReportGeneratorTest {
         "REPORTING_UI (not part of MVP),can open ReportingUI service (Kibana),,X,X,X,X,",
         "VIEW_REASONING_BRANCHES,can open and view section of Reasoning Branches,,X,X,X,,",
     };
+  }
+
+  @Test
+  void reportGeneratorShouldBeConfigurable() {
+    assertThat(underTest).isInstanceOf(ConfigurableReport.class);
   }
 }

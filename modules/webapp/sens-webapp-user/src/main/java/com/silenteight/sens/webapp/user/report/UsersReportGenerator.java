@@ -1,19 +1,15 @@
 package com.silenteight.sens.webapp.user.report;
 
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.common.support.csv.CsvBuilder;
-import com.silenteight.sens.webapp.report.Report;
-import com.silenteight.sens.webapp.report.ReportGenerator;
-import com.silenteight.sens.webapp.report.SimpleReport;
+import com.silenteight.sens.webapp.report.*;
 import com.silenteight.sep.base.common.time.DateFormatter;
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.sep.usermanagement.api.role.UserRoles;
 import com.silenteight.sep.usermanagement.api.user.UserQuery;
 import com.silenteight.sep.usermanagement.api.user.dto.UserDto;
-
 
 import io.vavr.control.Option;
 
@@ -29,8 +25,7 @@ import static java.util.Set.of;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
-@RequiredArgsConstructor
-class UsersReportGenerator implements ReportGenerator {
+class UsersReportGenerator extends AbstractConfigurableReport implements ReportGenerator {
 
   private static final String REPORT_NAME = "users-report";
   private static final String MUTLIVALUE_FILED_SEPARATOR = ",";
@@ -54,9 +49,20 @@ class UsersReportGenerator implements ReportGenerator {
   @NonNull
   private final String rolesScope;
 
-  @Override
-  public String getName() {
-    return REPORT_NAME;
+  UsersReportGenerator(
+      @NonNull TimeSource timeProvider,
+      @NonNull DateFormatter fileNameDateFormatter,
+      @NonNull DateFormatter rowDateFormatter,
+      @NonNull UserQuery userQuery,
+      @NonNull String rolesScope,
+      @NonNull ReportProperties reportProperties) {
+
+    super(reportProperties);
+    this.timeProvider = timeProvider;
+    this.fileNameDateFormatter = fileNameDateFormatter;
+    this.rowDateFormatter = rowDateFormatter;
+    this.userQuery = userQuery;
+    this.rolesScope = rolesScope;
   }
 
   @Override

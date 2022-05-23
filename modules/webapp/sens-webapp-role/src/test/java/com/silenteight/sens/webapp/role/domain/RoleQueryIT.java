@@ -56,7 +56,7 @@ class RoleQueryIT extends BaseDataJpaTest {
     assertThat(details.getId()).isEqualTo(ROLE_ID_1);
     assertThat(details.getName()).isEqualTo(ROLE_NAME_1);
     assertThat(details.getDescription()).isEqualTo(ROLE_DESCRIPTION_1);
-    assertThat(details.getPermissions()).isEqualTo(PERMISSION_IDS);
+    assertThat(details.getPermissions()).isEqualTo(PERMISSION_IDS_1);
     assertThat(details.getCreatedAt()).isNotNull();
     assertThat(details.getCreatedBy()).isEqualTo(USERNAME_1);
     assertThat(details.getUpdatedAt()).isNotNull();
@@ -75,7 +75,7 @@ class RoleQueryIT extends BaseDataJpaTest {
         .roleId(roleId)
         .name(ROLE_NAME_1)
         .description(ROLE_DESCRIPTION_1)
-        .permissionIds(PERMISSION_IDS)
+        .permissionIds(PERMISSION_IDS_1)
         .createdBy(USERNAME_1)
         .updatedBy(USERNAME_1)
         .build();
