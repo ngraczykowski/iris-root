@@ -236,10 +236,10 @@ common:
 
   startupProbe:
     enabled: true
-    initialDelaySeconds: 45
+    initialDelaySeconds: 10
     periodSeconds: 10
     timeoutSeconds: 1
-    failureThreshold: 6
+    failureThreshold: 30
 
   livenessProbe:
     enabled: true
@@ -272,8 +272,6 @@ common:
 agentsCommon:
   enabled: false
   useDb: false
-  startupProbe:
-    initialDelaySeconds: 60
   image:
     tag: "latest"
   ingress:
@@ -386,9 +384,6 @@ components:
       tag: "latest"
 
     dbName: "wh"
-
-    startupProbe:
-      initialDelaySeconds: 60
 
 # FIXME(pputerla) - remark - we're missing list of supported component keys
 agents:
