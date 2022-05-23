@@ -1,22 +1,22 @@
 /gradle/wrapper/* @ahaczewski
-/gradle/*.toml    @ahaczewski
 /gradlew          @ahaczewski
 /gradlew.bat      @ahaczewski
 
-/.jenkins/*       @ahaczewski @gchodzicki
-/.github/*        @ahaczewski
-/.idea/**/*       @ahaczewski
+/.jenkins/*   @SilentEight/devops
+/.github/*    @SilentEight/devops
 
-build-logic/**/*  @ahaczewski
-platforms/**/*    @ahaczewski
-# tests/**/*        @kkicza
-
+/.idea/**/*               @ahaczewski
 /.editorconfig            @ahaczewski
 /.gitattributes           @ahaczewski
 /.gitignore               @ahaczewski
 /.pre-commit-config.yaml  @ahaczewski
 /CODEOWNERS               @ahaczewski
 
-build.gradle      @ahaczewski
-gradle.properties @ahaczewski
-settings.gradle   @ahaczewski
+/build-logic/**/* @SilentEight/architecture
+/platforms/**/*   @SilentEight/architecture
+/gradle/*.toml    @SilentEight/architecture
+build.gradle      @SilentEight/architecture
+gradle.properties @SilentEight/architecture
+settings.gradle   @SilentEight/architecture
+
+/tests/**/*       @kkicza
