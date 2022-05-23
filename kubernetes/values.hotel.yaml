@@ -5,10 +5,6 @@ components:
     enabled: true
     profiles:
       - consuldisabled
-    image:
-      repository: registry.dev.s8ops.com/iris/hsbc-bridge-app
-    dbName: "hb"
-    webPath: "hb"
 
   warehouse:
     enabled: true

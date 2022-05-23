@@ -307,12 +307,8 @@ agentsCommon:
 components:
   hsbc-bridge:
     enabled: false
-    args:
-      - --spring.profiles.active=consuldisabled
-
     image:
-      repository: registry.dev.s8ops.com/hsbc/hsbc-bridge
-      tag: "snapshot"
+      repository: registry.dev.s8ops.com/iris/hsbc-bridge-app
 
     dbName: "hb"
     webPath: "hb"
