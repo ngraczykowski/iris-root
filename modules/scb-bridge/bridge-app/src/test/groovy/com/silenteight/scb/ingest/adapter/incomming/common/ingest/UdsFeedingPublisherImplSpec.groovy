@@ -15,10 +15,6 @@ class UdsFeedingPublisherImplSpec extends Specification {
   @Subject
   def underTest = new UdsFeedingPublisherImpl(1000, 8, 8, feedingFacade)
 
-  def setup() {
-    underTest.init()
-  }
-
   def 'should successfully publish to uds'() {
     given:
     def internalBatchId = InternalBatchIdGenerator.generate()

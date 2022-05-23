@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
-import javax.annotation.PostConstruct;
 
 import static com.silenteight.scb.ingest.domain.model.BatchSource.CBS;
 import static com.silenteight.scb.ingest.domain.model.BatchSource.GNS_RT;
@@ -45,7 +44,7 @@ public class UdsFeedingPublisherImpl implements UdsFeedingPublisher {
 
   private final FeedingFacade feedingFacade;
 
-  private Map<BatchSource, ExecutorService> pools;
+  private final Map<BatchSource, ExecutorService> pools;
 
   UdsFeedingPublisherImpl(
       @Value("${silenteight.scb-bridge.usd-feeder.timeoutMs:10000}") int timeoutMs,
@@ -56,12 +55,7 @@ public class UdsFeedingPublisherImpl implements UdsFeedingPublisher {
     this.poolCbsThreads = poolCbsThreads;
     this.learningThreads = learningThreads;
     this.feedingFacade = feedingFacade;
-  }
-
-  @PostConstruct
-  public void init() {
-    log.info("Creating thread pools for feeding Uds");
-    pools = Map.of(
+    this.pools = Map.of(
         CBS, Executors.newFixedThreadPool(poolCbsThreads, threadFactory("uds-feeder-cbs-%d")),
         GNS_RT, Executors.newCachedThreadPool(threadFactory("uds-feeder-gns-rt-%d")),
         LEARNING,
