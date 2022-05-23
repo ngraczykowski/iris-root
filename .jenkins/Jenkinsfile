@@ -136,6 +136,7 @@ pipeline {
         branch 'master'
       }
       steps {
+        sh 'exit 1'
         sh 'git branch --force last-known-good-build'
         sshagent(credentials: ['github-iris-ssh-key']) {
           sh 'git push --atomic --force origin last-known-good-build'
