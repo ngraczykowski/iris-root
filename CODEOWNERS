@@ -5,6 +5,7 @@
 
 /.jenkins/*       @ahaczewski @gchodzicki
 /.github/*        @ahaczewski
+/.idea/**/*       @ahaczewski
 
 build-logic/**/*  @ahaczewski
 platforms/**/*    @ahaczewski
@@ -14,6 +15,7 @@ platforms/**/*    @ahaczewski
 /.gitattributes           @ahaczewski
 /.gitignore               @ahaczewski
 /.pre-commit-config.yaml  @ahaczewski
+/CODEOWNERS               @ahaczewski
 
 build.gradle      @ahaczewski
 gradle.properties @ahaczewski
