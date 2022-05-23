@@ -7,7 +7,6 @@ components:
       - consuldisabled
     image:
       repository: registry.dev.s8ops.com/iris/hsbc-bridge-app
-      tag: "snapshot"
     dbName: "hb"
     webPath: "hb"
 
