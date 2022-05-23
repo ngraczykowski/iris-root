@@ -34,15 +34,15 @@ public class MockAlertUseCase {
     return cacheAlert(databaseId, alert);
   }
 
-  public static Alert cacheAlert(Long databaseId, Alert alert) {
+  public static Alert cacheAlert(Long aeDatabaeId, Alert alert) {
     var storedAlert = Alert
         .newBuilder()
         .setAlertId(alert.getAlertId())
         .setPriority(alert.getPriority())
         .putAllLabels(alert.getLabelsMap())
-        .setName("alerts/" + databaseId)
+        .setName("alerts/" + aeDatabaeId)
         .build();
-    ALERTS.put(databaseId, storedAlert);
+    ALERTS.put(aeDatabaeId, storedAlert);
     return storedAlert;
   }
 

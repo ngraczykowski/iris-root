@@ -10,9 +10,11 @@ import com.silenteight.payments.bridge.common.resource.ResourceName;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.context.annotation.Profile;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 @Profile("mockae")
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 @Slf4j
 class AlertServiceGrpc extends AlertServiceImplBase {
 
+  private final AtomicLong aeDatabaseSeq = new AtomicLong(1000);
   private final JdbcTemplate jdbcTemplate;
 
   @Override
@@ -47,13 +50,18 @@ class AlertServiceGrpc extends AlertServiceImplBase {
   }
 
   Long fetchDatabaseId(String alertMessageId) {
-    long databaseID =
-        jdbcTemplate.queryForObject(
-            "SELECT * FROM pb_registered_alert WHERE alert_message_id = ?",
-            (rs, rowNum) -> ResourceName.create(rs.getString("alert_name")).getLong("alerts"),
-            UUID.fromString(alertMessageId));
-    log.info("DatabaseId:{} for alertMessageId:{}", databaseID, alertMessageId);
-    return databaseID;
+    try {
+      long databaseID =
+          jdbcTemplate.queryForObject(
+              "SELECT * FROM pb_registered_alert WHERE alert_message_id = ?",
+              (rs, rowNum) -> ResourceName.create(rs.getString("alert_name")).getLong("alerts"),
+              UUID.fromString(alertMessageId));
+      log.info("DatabaseId:{} for alertMessageId:{}", databaseID, alertMessageId);
+      return databaseID;
+    } catch (EmptyResultDataAccessException e) {
+      log.debug("No entry in database create mocked value for alertMessageId: {}", alertMessageId);
+    }
+    return aeDatabaseSeq.getAndIncrement();
   }
 
   @Override
