@@ -4,13 +4,13 @@
 components:
   payments-bridge:
     enabled: true
-    profiles:
-      - mockaws
-      - mockemail
     args:
       - --spring.security.oauth2.client.registration.callback.client-id=cmapi-dev
       - --spring.security.oauth2.client.provider.external.token-uri=https://auth.silent8.cloud/realms/egress-mock/protocol/openid-connect/token
       - --pb.email-notification.learning-enabled=true
+      - --pb.sear-learning.aws.file-list.bucketName=devenv-6fa57739-906d-1130-4a76-90dd1c5dc8a3
+      - --pb.sear-learning.aws.file-list.prefix=learning
+      - --pb.agents.specific-terms2.bucket=devenv-6fa57739-906d-1130-4a76-90dd1c5dc8a3
 
   warehouse:
     enabled: true
