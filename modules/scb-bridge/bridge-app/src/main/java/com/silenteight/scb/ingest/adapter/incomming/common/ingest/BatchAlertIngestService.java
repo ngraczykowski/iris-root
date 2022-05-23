@@ -9,7 +9,7 @@ public interface BatchAlertIngestService {
 
   void ingestAlertsForLearn(String internalBatchId, List<Alert> alerts);
 
-  void ingestAlertsForRecommendation(
+  IngestedAlertsStatus ingestAlertsForRecommendation(
       String internalBatchId,
       List<Alert> alerts,
       RegistrationBatchContext registrationBatchContext);

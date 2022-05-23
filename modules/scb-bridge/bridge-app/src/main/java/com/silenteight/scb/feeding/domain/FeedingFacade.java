@@ -17,7 +17,6 @@ import com.silenteight.universaldatasource.api.library.agentinput.v1.BatchCreate
 import com.silenteight.universaldatasource.api.library.category.v2.BatchCreateCategoryValuesIn;
 import com.silenteight.universaldatasource.api.library.category.v2.CreateCategoryValuesIn;
 
-import io.vavr.control.Try;
 import org.apache.commons.lang3.time.StopWatch;
 import org.springframework.stereotype.Service;
 
@@ -32,77 +31,65 @@ public class FeedingFacade {
   private final UniversalDatasourceApiClient universalDatasourceApiClient;
   private final FeedingEventPublisher feedingEventPublisher;
 
-  public void feedUds(Alert alert) {
+  public boolean feedUds(Alert alert) {
     log.info("Feeding {} to Uds", alert.logInfo());
-    registerCategoriesValuesInUds(alert);
-    registerAgentInputsInUds(alert);
+    var sw = StopWatch.createStarted();
+    try {
+      registerCategoriesValuesForMatches(alert);
+      log.info(
+          "Categories values have been registered for {}, executed in: {}", alert.logInfo(), sw);
+    } catch (Exception e) {
+      log.error("Failed to register categories values for {} after {}", alert.logInfo(), sw, e);
+    }
+
+    sw = StopWatch.createStarted();
+    try {
+      registerAgentInputsForMatches(alert);
+      log.info("Feature inputs for {} created successfully, executed in: {}", alert.logInfo(), sw);
+      alertFeedingSucceed(alert);
+    } catch (Exception e) {
+      log.error("Failed to create feature inputs for {} after: {}", alert.logInfo(), sw, e);
+      alertFeedingFailed(alert);
+      return false;
+    }
+    return true;
   }
 
-  private void registerCategoriesValuesInUds(Alert alert) {
-    var stopWatch = StopWatch.createStarted();
-    Try.run(() -> registerCategoriesValuesForMatches(alert))
-        .onFailure(e -> {
-          log.error("Failed to register categories values for {} after {}", alert.logInfo(),
-              stopWatch, e);
-        })
-        .onSuccess(e -> {
-          log.info("Categories values have been registered for {}, executed in: {}",
-              alert.logInfo(), stopWatch);
-        });
+  private void alertFeedingSucceed(Alert alert) {
+    if (!alert.isLearnFlag()) {
+      feedingEventPublisher.publish(
+          createUdsFedEvent(alert, Status.SUCCESS, AlertErrorDescription.NONE));
+    }
+  }
+
+  private void alertFeedingFailed(Alert alert) {
+    if (!alert.isLearnFlag()) {
+      feedingEventPublisher.publish(
+          createUdsFedEvent(alert, Status.FAILURE, AlertErrorDescription.CREATE_FEATURE_INPUT));
+    }
   }
 
   private void registerCategoriesValuesForMatches(Alert alert) {
-    alert.matches().forEach(match -> {
-      var createCategoryValuesIns =
-          agentInputFactory.createCategoryValuesIns(alert, match);
-      registerCategoriesValues(createCategoryValuesIns);
-    });
+    alert.matches()
+        .forEach(match -> registerCategoriesValues(
+            agentInputFactory.createCategoryValuesIns(alert, match)));
   }
 
   private void registerCategoriesValues(List<CreateCategoryValuesIn> createCategoryValuesIns) {
-    var batchCreateCategoryValuesIn =
-        BatchCreateCategoryValuesIn.builder()
-            .requests(createCategoryValuesIns)
-            .build();
-    universalDatasourceApiClient.registerCategoryValues(batchCreateCategoryValuesIn);
-  }
-
-  private void registerAgentInputsInUds(Alert alert) {
-    var stopWatch = StopWatch.createStarted();
-    Try.run(() -> registerAgentInputsForMatches(alert))
-        .onFailure(e -> {
-          log.error(
-              "Failed to create feature inputs for {} after: {}", alert.logInfo(), stopWatch, e);
-          if (!alert.isLearnFlag()) {
-            feedingEventPublisher.publish(
-                createUdsFedEvent(
-                    alert, Status.FAILURE, AlertErrorDescription.CREATE_FEATURE_INPUT));
-          }
-        })
-        .onSuccess(e -> {
-          log.info("Feature inputs for {} created successfully, executed in: {}", alert.logInfo(),
-              stopWatch);
-          if (!alert.isLearnFlag()) {
-            feedingEventPublisher.publish(
-                createUdsFedEvent(alert, Status.SUCCESS, AlertErrorDescription.NONE));
-          }
-        });
+    universalDatasourceApiClient.registerCategoryValues(BatchCreateCategoryValuesIn.builder()
+        .requests(createCategoryValuesIns)
+        .build());
   }
 
   private void registerAgentInputsForMatches(Alert alert) {
-    alert.matches().forEach(match -> {
-      var agentInputIns =
-          agentInputFactory.createAgentInputIns(alert, match);
-      registerAgentInputs(agentInputIns);
-    });
+    alert.matches()
+        .forEach(match -> registerAgentInputs(agentInputFactory.createAgentInputIns(alert, match)));
   }
 
   private void registerAgentInputs(List<AgentInputIn<Feature>> agentInputIns) {
-    BatchCreateAgentInputsIn<Feature> batchCreateAgentInputsIn =
-        BatchCreateAgentInputsIn.builder()
-            .agentInputs(agentInputIns)
-            .build();
-    universalDatasourceApiClient.registerAgentInputs(batchCreateAgentInputsIn);
+    universalDatasourceApiClient.registerAgentInputs(BatchCreateAgentInputsIn.builder()
+        .agentInputs(agentInputIns)
+        .build());
   }
 
   private UdsFedEvent createUdsFedEvent(

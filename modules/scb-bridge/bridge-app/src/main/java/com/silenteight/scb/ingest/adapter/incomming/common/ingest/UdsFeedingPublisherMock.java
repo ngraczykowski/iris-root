@@ -7,11 +7,11 @@ import com.silenteight.recommendation.api.library.v1.AlertOut;
 import com.silenteight.recommendation.api.library.v1.AlertOut.AlertStatus;
 import com.silenteight.recommendation.api.library.v1.RecommendationOut;
 import com.silenteight.recommendation.api.library.v1.RecommendationServiceClient;
+import com.silenteight.scb.feeding.domain.FeedingFacade;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 import com.silenteight.scb.ingest.domain.model.AlertMetadata;
 import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext;
 import com.silenteight.scb.ingest.domain.payload.PayloadConverter;
-import com.silenteight.scb.ingest.domain.port.outgoing.IngestEventPublisher;
 import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.RecommendedAction;
 import com.silenteight.scb.outputrecommendation.infrastructure.grpc.RecommendationServiceClientMock;
 
@@ -38,28 +38,22 @@ public class UdsFeedingPublisherMock implements UdsFeedingPublisher {
   private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(8);
 
   UdsFeedingPublisherMock(
-      IngestEventPublisher ingestEventPublisher,
+      FeedingFacade feedingFacade,
       PayloadConverter payloadConverter,
       RabbitTemplate rabbitTemplate,
       RecommendationServiceClient recommendationServiceClient) {
-    this.udsFeedingPublisher = new UdsFeedingPublisherImpl(ingestEventPublisher);
+    this.udsFeedingPublisher = new UdsFeedingPublisherImpl(1000, 8, 8, feedingFacade);
     this.payloadConverter = payloadConverter;
     this.rabbitTemplate = rabbitTemplate;
     this.recommendationServiceClient = recommendationServiceClient;
   }
 
-  public void publishToUds(
+  public IngestedAlertsStatus publishToUds(
       String internalBatchId,
       List<Alert> alerts,
       RegistrationBatchContext batchContext) {
 
     udsFeedingPublisher.publishToUds(internalBatchId, alerts, batchContext);
-
-    try {
-      Thread.sleep(RandomUtils.nextInt(100, 200));
-    } catch (InterruptedException e) {
-      throw new IllegalStateException(e);
-    }
 
     executorService.schedule(() -> {
 
@@ -68,7 +62,7 @@ public class UdsFeedingPublisherMock implements UdsFeedingPublisher {
       sendMessageBatchCompleted(message);
 
     }, RandomUtils.nextInt(3000, 6000), TimeUnit.MILLISECONDS);
-
+    return new IngestedAlertsStatus(alerts, List.of());
   }
 
   private void stubRecommendationService(

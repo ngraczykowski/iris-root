@@ -61,11 +61,11 @@ class IngestService implements BatchAlertIngestService {
   }
 
   @Override
-  public void ingestAlertsForRecommendation(
+  public IngestedAlertsStatus ingestAlertsForRecommendation(
       @NonNull String internalBatchId,
       @NonNull List<Alert> alerts,
       RegistrationBatchContext registrationBatchContext) {
-    registerAndPublish(internalBatchId, alerts, registrationBatchContext);
+    return registerAndPublish(internalBatchId, alerts, registrationBatchContext);
   }
 
   private void registerAndPublishLearningAlerts(
@@ -94,7 +94,7 @@ class IngestService implements BatchAlertIngestService {
     ingestedLearningAlertsCounter += alerts.size();
   }
 
-  private void registerAndPublish(
+  private IngestedAlertsStatus registerAndPublish(
       String internalBatchId,
       List<Alert> alerts,
       RegistrationBatchContext batchContext) {
@@ -103,7 +103,7 @@ class IngestService implements BatchAlertIngestService {
 
     AlertUpdater.updateWithRegistrationResponse(alerts, registrationResponse);
 
-    udsFeedingPublisher.publishToUds(internalBatchId, alerts, batchContext);
+    return udsFeedingPublisher.publishToUds(internalBatchId, alerts, batchContext);
   }
 
   private void sendToWarehouse(List<Alert> alerts) {

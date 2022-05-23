@@ -10,16 +10,15 @@ import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckGateway
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsOutput
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsOutput.State
 import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertIngestService
+import com.silenteight.scb.ingest.adapter.incomming.common.ingest.IngestedAlertsStatus
 import com.silenteight.scb.ingest.adapter.incomming.common.model.ObjectId
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertDetails
 import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlertService
 import com.silenteight.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator
 import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext
 
 import spock.lang.Specification
-
-import static com.silenteight.scb.ingest.domain.model.Batch.Priority.MEDIUM
-import static com.silenteight.scb.ingest.domain.model.BatchSource.CBS
 
 class AlertHandlerSpec extends Specification {
 
@@ -77,7 +76,8 @@ class AlertHandlerSpec extends Specification {
 
     then:
     1 * alertMapper.fromValidAlertComposites(validAlertComposites) >> alerts
-    1 * ingestService.ingestAlertsForRecommendation(internalBatchId, alerts, batchContext)
+    1 * ingestService.ingestAlertsForRecommendation(internalBatchId, alerts, batchContext) >>
+        new IngestedAlertsStatus(alerts, [])
     1 * cbsAckGateway.
         ackReadAlert({CbsAckAlert a -> a.alertExternalId == fixtures.alertId1.systemId}) >>
         new CbsOutput(state: State.OK)
@@ -102,8 +102,22 @@ class AlertHandlerSpec extends Specification {
     AlertId alertId1 = new AlertId(someId1, someId2)
     AlertId alertId2 = new AlertId(someId2, someId1)
 
-    Alert alert1 = Alert.builder().id(ObjectId.builder().build()).build()
-    Alert alert2 = Alert.builder().id(ObjectId.builder().build()).build()
+    Alert alert1 = Alert.builder()
+        .id(ObjectId.builder().build())
+        .details(
+            AlertDetails.builder()
+                .systemId(someId1)
+                .batchId(someId2)
+                .build())
+        .build()
+    Alert alert2 = Alert.builder()
+        .id(ObjectId.builder().build())
+        .details(
+            AlertDetails.builder()
+                .systemId(someId2)
+                .batchId(someId1)
+                .build())
+        .build()
 
     ValidAlertComposite validAlertComposite1 = new ValidAlertComposite(alertId1, [alert1])
     ValidAlertComposite validAlertComposite2 = new ValidAlertComposite(alertId2, [alert2])

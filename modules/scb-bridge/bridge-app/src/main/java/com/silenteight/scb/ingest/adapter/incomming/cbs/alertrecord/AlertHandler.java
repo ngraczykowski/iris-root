@@ -4,12 +4,14 @@ import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext;
+import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertmapper.AlertMapper;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertInFlightService;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckAlert;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckGateway;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsOutput;
 import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertIngestService;
+import com.silenteight.scb.ingest.adapter.incomming.common.ingest.IngestedAlertsStatus;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlertService;
 
@@ -53,12 +55,13 @@ class AlertHandler {
         internalBatchId, stopWatch);
 
     stopWatch = StopWatch.createStarted();
-    registerAlerts(internalBatchId, alerts);
+    var ingested = registerAlerts(internalBatchId, alerts);
     log.info("Alerts have been registered for internalBatchId: {} executed in: {}",
         internalBatchId, stopWatch);
 
     stopWatch = StopWatch.createStarted();
-    acknowledgeAlerts(context, validAlertComposites);
+    acknowledgeAlerts(context, ingested.success());
+    // TODO: what we do with ingested.failed() as for those won't have recommendations ?
     log.info("Alerts have been acknowledged for internalBatchId: {} executed in: {}",
         internalBatchId, stopWatch);
   }
@@ -67,14 +70,16 @@ class AlertHandler {
     rawAlertService.store(internalBatchId, alerts);
   }
 
-  private void registerAlerts(String internalBatchId, List<Alert> alerts) {
-    ingestService.ingestAlertsForRecommendation(internalBatchId, alerts, CBS_CONTEXT);
+  private IngestedAlertsStatus registerAlerts(String internalBatchId, List<Alert> alerts) {
+    return ingestService.ingestAlertsForRecommendation(internalBatchId, alerts, CBS_CONTEXT);
   }
 
-  private void acknowledgeAlerts(
-      ScbAlertIdContext context, List<ValidAlertComposite> validAlertComposites) {
-    validAlertComposites.forEach(alertComposite -> {
-      var alertId = alertComposite.getAlertId();
+  private void acknowledgeAlerts(ScbAlertIdContext context, List<Alert> alerts) {
+    alerts.forEach(alert -> {
+      var alertId = new AlertId(
+          alert.details().getSystemId(),
+          alert.details().getBatchId());
+
       var cbsOutput = ackAlert(
           alertId.getSystemId(),
           alertId.getBatchId(),

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UdsFeedingPublisher {
 
-  void publishToUds(
+  IngestedAlertsStatus publishToUds(
       String internalBatchId,
       List<Alert> alerts,
       RegistrationBatchContext batchContext);
