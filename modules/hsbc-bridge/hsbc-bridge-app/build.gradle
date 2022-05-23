@@ -9,7 +9,6 @@ plugins {
 dependencies {
   implementation libs.mapstruct
   annotationProcessor libs.mapstruct.processor
-  implementation libs.micrometer.core
   annotationProcessor libs.lombok
   annotationProcessor libs.spring.boot.configuration.processor
   implementation libs.commons.csv
@@ -46,7 +45,7 @@ dependencies {
   implementation libs.governance.model.api
   implementation libs.learning.engine.store.api
   implementation libs.spring.amqp
-  implementation libs.spring.aspects
+  aspect libs.spring.aspects
   implementation libs.spring.boot
   implementation libs.spring.boot.starter.actuator
   implementation libs.spring.boot.actuator
@@ -64,7 +63,6 @@ dependencies {
   implementation libs.warehouse.data.api
   implementation libs.worldcheck.api
   implementation libs.historical.decisions.api
-  implementation libs.micrometer.prometheus
   runtimeOnly libs.ecs.logging.core
   runtimeOnly libs.logback.ecs.encoder
 

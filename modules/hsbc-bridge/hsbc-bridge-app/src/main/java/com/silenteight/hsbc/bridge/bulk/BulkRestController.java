@@ -8,8 +8,8 @@ import com.silenteight.hsbc.bridge.bulk.exception.BatchIdNotFoundException;
 import com.silenteight.hsbc.bridge.bulk.exception.BatchResultNotAvailableException;
 import com.silenteight.hsbc.bridge.bulk.exception.BatchWithGivenIdAlreadyCreatedException;
 import com.silenteight.hsbc.bridge.bulk.rest.*;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
-import io.micrometer.core.annotation.Timed;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

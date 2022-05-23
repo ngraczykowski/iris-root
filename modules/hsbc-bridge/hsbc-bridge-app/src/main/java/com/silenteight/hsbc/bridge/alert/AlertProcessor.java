@@ -7,8 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.hsbc.bridge.json.external.model.AlertData;
 import com.silenteight.hsbc.bridge.json.external.model.CaseInformation;
 import com.silenteight.hsbc.bridge.match.MatchFacade;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
-import io.micrometer.core.annotation.Timed;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;

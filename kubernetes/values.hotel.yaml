@@ -6,8 +6,8 @@ components:
     profiles:
       - consuldisabled
     image:
-      repository: registry.dev.s8ops.com/hsbc/hsbc-bridge
-      tag: "0.19.0-BUILD.520" #we have no docker image with 0.17.0 version, like here: https://gitlab.silenteight.com/hsbc-bank/sear-installation/-/blob/master/ae/nomad/version.vars#L1
+      repository: pputerla-dev2.prv.dev.s8ops.com/iris/hsbc-bridge-app
+      tag: "snapshot"
     dbName: "hb"
     webPath: "hb"
 

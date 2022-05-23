@@ -7,8 +7,8 @@ import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
 import com.silenteight.hsbc.bridge.recommendation.event.AlertRecommendationInfo;
 import com.silenteight.hsbc.bridge.recommendation.event.RecommendationsGeneratedEvent;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
-import io.micrometer.core.annotation.Timed;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.context.ApplicationEventPublisher;
 

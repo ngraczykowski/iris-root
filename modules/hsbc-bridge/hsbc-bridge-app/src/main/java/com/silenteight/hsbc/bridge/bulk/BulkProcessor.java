@@ -9,8 +9,8 @@ import com.silenteight.hsbc.bridge.alert.AlertFacade;
 import com.silenteight.hsbc.bridge.alert.LearningAlertProcessor;
 import com.silenteight.hsbc.bridge.domain.AlertMatchIdComposite;
 import com.silenteight.hsbc.bridge.match.MatchIdComposite;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
-import io.micrometer.core.annotation.Timed;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
