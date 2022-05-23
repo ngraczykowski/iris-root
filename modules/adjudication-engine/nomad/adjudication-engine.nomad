@@ -19,7 +19,7 @@ variable "ds_name" {
 }
 
 variable "memory" {
-  default = 4096
+  default = 2048
 }
 
 variable "http_tags" {
@@ -98,9 +98,9 @@ job "adjudication-engine" {
       }
 
       resources {
-        cpu = 2048
+        cpu = 1024
         # MHz
-        memory = 4096
+        memory = 2048
         # MB
       }
     }
