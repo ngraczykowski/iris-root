@@ -1,0 +1,20 @@
+/gradle/wrapper/* @ahaczewski
+/gradle/*.toml    @ahaczewski
+/gradlew          @ahaczewski
+/gradlew.bat      @ahaczewski
+
+/.jenkins/*       @ahaczewski, @gchodzicki
+/.github/*        @ahaczewski
+
+build-logic/**/*  @ahaczewski, @snieguu, @pputerla
+platforms/**/*    @ahaczewski, @snieguu, @pputerla
+tests/**/*        @kkicza
+
+/.editorconfig            @ahaczewski
+/.gitattributes           @ahaczewski
+/.gitignore               @ahaczewski
+/.pre-commit-config.yaml  @ahaczewski
+
+build.gradle      @ahaczewski, @snieguu, @pputerla
+gradle.properties @ahaczewski, @snieguu, @pputerla
+settings.gradle   @ahaczewski, @snieguu, @pputerla
