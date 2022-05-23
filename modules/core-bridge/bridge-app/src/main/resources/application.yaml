@@ -193,6 +193,12 @@ logging:
         jdbc: DEBUG
     liquibase: INFO
 
+### METRICS
+management:
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
 ### REGISTRATION
 registration:
   analysis:
