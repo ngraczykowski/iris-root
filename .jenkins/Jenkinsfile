@@ -17,8 +17,6 @@ pipeline {
         script {
           version = sh(returnStdout: true, script: './scripts/get-version.sh').trim()
         }
-        sh 'exit 1'
-
         updateBuildName displayName: "#${env.BUILD_NUMBER} v${version}"
       }
     }
