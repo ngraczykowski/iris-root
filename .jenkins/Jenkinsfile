@@ -24,6 +24,8 @@ pipeline {
     stage('Applications') {
       environment {
         ARTIFACTORY = credentials('artifactory-deployment-user')
+        // NOTE(ahaczewski): See https://blog.andresteingress.com/2018/09/05/gradle-daemon-and-jenkins.html.
+        JENKINS_NODE_COOKIE = 'kill-protection'
       }
       steps {
         withGradle {
