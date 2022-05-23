@@ -73,7 +73,7 @@ public class RegisterAlertRequest {
   public Alert toAlert() {
     var alert = Alert
         .newBuilder()
-        .setAlertId(getFkcoSystemId())
+        .setAlertId(alertMessageIdAsString())
         .setPriority(getPriority())
         .setAlertTime(alertTime);
 
@@ -85,5 +85,13 @@ public class RegisterAlertRequest {
     }
 
     return alert.build();
+  }
+
+  public String alertMessageIdAsString() {
+    return getAlertMessageId().toString();
+  }
+
+  public UUID getAlertMessageId() {
+    return this.alertMessageId == null ? UUID.randomUUID() : this.alertMessageId;
   }
 }

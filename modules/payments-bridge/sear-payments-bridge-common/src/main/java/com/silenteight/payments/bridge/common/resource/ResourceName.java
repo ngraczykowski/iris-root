@@ -40,6 +40,10 @@ public class ResourceName {
     return Joiner.on(DELIMITER).withKeyValueSeparator(DELIMITER).join(pathTokens);
   }
 
+  public String getPartialPath(String token) {
+    return token.concat(DELIMITER).concat(pathTokens.get(token));
+  }
+
   @Override
   public String toString() {
     return getPath();

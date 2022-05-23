@@ -24,7 +24,7 @@ class AlertRegisteredJdbcDataAccess implements AlertRegisteredAccessPort {
   @Language("PostgreSQL")
   private static final String SQL =
       "SELECT "
-          + "pra.fkco_system_id,\n"
+          + "pra.alert_message_id,pra.fkco_system_id,\n"
           + "       pra.alert_name,\n"
           + "       to_jsonb(json_agg(json_build_object('matchId', prm.match_id, 'matchName',\n"
           + "                                           prm.match_name))) AS matches\n"
@@ -32,7 +32,7 @@ class AlertRegisteredJdbcDataAccess implements AlertRegisteredAccessPort {
           + "         JOIN pb_registered_match prm "
           + "ON pra.registered_alert_id = prm.registered_alert_id\n"
           + "WHERE pra.fkco_system_id IN (:systemIds)\n"
-          + "GROUP BY pra.fkco_system_id, pra.alert_name;";
+          + "GROUP BY pra.alert_message_id,pra.fkco_system_id, pra.alert_name;";
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
   private final ObjectMapper objectMapper;
@@ -51,8 +51,9 @@ class AlertRegisteredJdbcDataAccess implements AlertRegisteredAccessPort {
 
     return jdbcTemplate.query(SQL, Map.of("systemIds", systemIds),
         (rs, rowNum) -> new RegisteredAlert(
-            rs.getString(1),
-            rs.getString(2),
+            rs.getString("alert_message_id"),
+            rs.getString("fkco_system_id"),
+            rs.getString("alert_name"),
             deserializeRegisteredMatch(rs)));
   }
 

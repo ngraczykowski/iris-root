@@ -1,13 +1,15 @@
 package com.silenteight.payments.bridge.mock.ae;
 
 import com.silenteight.adjudication.api.v1.*;
+import com.silenteight.payments.bridge.common.resource.ResourceName;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
+import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 
@@ -15,31 +17,55 @@ import static java.util.stream.Collectors.toList;
 @Profile("mockae")
 public class MockAlertUseCase {
 
-  private static long alertId = 1;
   private static int matchId = 1;
 
-  private static final List<Alert> ALERTS = new ArrayList<>();
+  private static final Map<Long, Alert> ALERTS = new HashMap<>();
 
-  static Alert createAlert(Alert alert, Set<Long> existing) {
-    alertId++;
-    var savedAlert =
-        Alert.newBuilder().setAlertId(alert.getAlertId()).setName("alerts/" + alertId).build();
-    ALERTS.add(savedAlert);
-    return savedAlert;
+  static Alert getOrCreate(Alert alert, Function<String, Long> function) {
+    var alertStored = ALERTS
+        .values()
+        .stream()
+        .filter(a -> alert.getAlertId().equals(a.getAlertId()))
+        .findFirst();
+    if (alertStored.isPresent()) {
+      return alertStored.get();
+    }
+    Long databaseId = function.apply(alert.getAlertId());
+    return cacheAlert(databaseId, alert);
+  }
+
+  public static Alert cacheAlert(Long databaseId, Alert alert) {
+    var storedAlert = Alert
+        .newBuilder()
+        .setAlertId(alert.getAlertId())
+        .setPriority(alert.getPriority())
+        .putAllLabels(alert.getLabelsMap())
+        .setName("alerts/" + databaseId)
+        .build();
+    ALERTS.put(databaseId, storedAlert);
+    return storedAlert;
+  }
+
+  static Alert getCacheAlert(Long id) {
+    return ALERTS.get(id);
   }
 
   static BatchCreateMatchesResponse batchCreateMatches(BatchCreateMatchesRequest request) {
-    return BatchCreateMatchesResponse.newBuilder().addAllMatches(request
-        .getAlertMatchesList()
-        .stream()
-        .map(MockAlertUseCase::batchCreateAlertMatches)
-        .map(BatchCreateAlertMatchesResponse::getMatchesList)
-        .flatMap(List::stream)
-        .collect(toList())).build();
+    return BatchCreateMatchesResponse
+        .newBuilder()
+        .addAllMatches(request
+            .getAlertMatchesList()
+            .stream()
+            .map(MockAlertUseCase::batchCreateAlertMatches)
+            .map(BatchCreateAlertMatchesResponse::getMatchesList)
+            .flatMap(List::stream)
+            .collect(toList()))
+        .build();
   }
 
   static BatchCreateAlertMatchesResponse batchCreateAlertMatches(
       BatchCreateAlertMatchesRequest request) {
+    Long requestedAlertId = ResourceName.create(request.getAlert()).getLong("alerts");
     var response = BatchCreateAlertMatchesResponse
         .newBuilder()
         .addAllMatches(request
@@ -48,10 +74,9 @@ public class MockAlertUseCase {
             .map(m -> Match
                 .newBuilder()
                 .setMatchId(m.getMatchId())
-                .setName("alerts/" + alertId + "/matches/" + matchId)
+                .setName("alerts/" + requestedAlertId + "/matches/" + matchId)
                 .build())
-            .collect(
-                toList()))
+            .collect(toList()))
         .build();
     matchId++;
     return response;
@@ -62,10 +87,16 @@ public class MockAlertUseCase {
   }
 
   public static boolean containsAlertId(String alertId) {
-    return ALERTS.stream().anyMatch(a -> a.getAlertId().equals(alertId));
+    return ALERTS.values().stream().anyMatch(a -> a.getAlertId().equals(alertId));
   }
 
   public static String getAlertName(String alertId) {
-    return ALERTS.stream().filter(a -> a.getAlertId().equals(alertId)).findFirst().get().getName();
+    return ALERTS
+        .values()
+        .stream()
+        .filter(a -> a.getAlertId().equals(alertId))
+        .findFirst()
+        .get()
+        .getName();
   }
 }

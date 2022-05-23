@@ -11,13 +11,13 @@ import com.silenteight.payments.bridge.ae.alertregistration.domain.SaveRegistere
 import com.silenteight.payments.bridge.ae.alertregistration.port.AlertClientPort;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisteredAlertDataAccessPort;
+import com.silenteight.payments.bridge.common.resource.ResourceName;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -36,7 +36,7 @@ class RegisterAlertService implements RegisterAlertUseCase {
   private final ApplicationEventPublisher applicationEventPublisher;
 
   @Override
-  @Timed(percentiles = { 0.5, 0.95, 0.99}, histogram = true)
+  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   public RegisterAlertResponse register(RegisterAlertRequest request) {
     var response = alertClient.createAlert(request.toCreateAlertRequest());
     var alertName = response.getName();
@@ -45,12 +45,12 @@ class RegisterAlertService implements RegisterAlertUseCase {
         alertClient.createMatches(request.toCreateMatchesRequest(alertName));
 
     var registerAlertResponse = createRegisterAlertResponse(
-        request.getFkcoSystemId(), alertName, matchesNames.getMatchesList());
+        request.alertMessageIdAsString(), alertName, matchesNames.getMatchesList());
     applicationEventPublisher.publishEvent(registerAlertResponse);
     registeredAlertDataAccessPort.save(List.of(SaveRegisteredAlertRequest
         .builder()
         .alertMessageId(request.getAlertMessageId())
-        .alertName(registerAlertResponse.getAlertName())
+        .alertName(alertName)
         .fkcoSystemId(request.getFkcoSystemId())
         .matches(registerAlertResponse
             .getMatchResponses()
@@ -63,10 +63,10 @@ class RegisterAlertService implements RegisterAlertUseCase {
   }
 
   private static RegisterAlertResponse createRegisterAlertResponse(
-      String systemId, String alertName, List<Match> matches) {
+      String alertMessageId, String alertName, List<Match> matches) {
     return RegisterAlertResponse
         .builder()
-        .systemId(systemId)
+        .alertMessageId(alertMessageId)
         .alertName(alertName)
         .matchResponses(matches
             .stream()
@@ -122,9 +122,8 @@ class RegisterAlertService implements RegisterAlertUseCase {
 
     var response = alertClient.batchCreateMatches(matchesRequest);
     var groupedByAlertName = response.getMatchesList().stream().collect(groupingBy(match ->
-        String.join("/", Arrays.copyOf(match.getName().split("/"), 2))
-    ));
-
+        ResourceName.create(match.getName()).getPartialPath("alerts"))
+    );
     var alertsMap = batchCreateAlertsResponse.getAlertsList().stream()
         .collect(toMap(Alert::getName, Function.identity()));
 
@@ -149,7 +148,7 @@ class RegisterAlertService implements RegisterAlertUseCase {
       List<RegisterAlertRequest> registerAlertRequests,
       BatchCreateAlertsResponse batchCreateAlertsResponse) {
     var alertRequestsMap = registerAlertRequests.stream()
-        .collect(toMap(RegisterAlertRequest::getFkcoSystemId, Function.identity()));
+        .collect(toMap(RegisterAlertRequest::alertMessageIdAsString, Function.identity()));
 
     return batchCreateAlertsResponse.getAlertsList().stream()
         .filter(alert -> filter(alert, alertRequestsMap))

@@ -2,6 +2,7 @@ package com.silenteight.payments.bridge.app.integration;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.adjudication.api.v1.Alert;
 import com.silenteight.payments.bridge.PaymentsBridgeApplication;
 import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
 import com.silenteight.payments.bridge.firco.alertmessage.port.CreateAlertMessageUseCase;
@@ -23,11 +24,12 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
+import org.springframework.util.IdGenerator;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,6 +48,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.*;
 
 
 @SpringBootTest(classes = { PaymentsBridgeApplication.class })
@@ -56,6 +59,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
     "mockwarehouse" })
 class PaymentsBridgeApplicationIT {
 
+  private static long databaseId = 1;
   private static final String SAMPLE_REQUESTS_DIR = "requests";
   private static final List<String> VALID_REQUEST_FILES = List.of(
       "2021_10_08-1754_uat_firco_alert.json",
@@ -67,6 +71,7 @@ class PaymentsBridgeApplicationIT {
   private static final String EMAIL_RECEIVER = "email.example2@silenteight.com";
   private static final String EMAIL_SUBJECT = "Silent Eight - Learning data";
   private static final String EMAIL_MESSAGE = "This is to confirm Silent Eight has received";
+  public static final int WAIT_REGISTRATION_MAX_SECONDS = 20;
 
   private static GreenMail greenMail;
   @Autowired
@@ -86,6 +91,11 @@ class PaymentsBridgeApplicationIT {
   @Autowired
   JdbcTemplate jdbcTemplate;
 
+  @MockBean
+  private IdGenerator idGenerator;
+
+  private static final String ALERT_MESSAGE_ID = "cdd9c5ce-89dd-a37c-1e5f-b59b1f87f42b";
+
   @BeforeAll
   static void beforeAll() {
     greenMail = new GreenMail(getServerStartup(3025));
@@ -93,6 +103,15 @@ class PaymentsBridgeApplicationIT {
             .aConfig()
             .withUser("user", "password"))
         .start();
+
+    mockAlertMessageIdsToLearningAlerts(databaseId++, ALERT_MESSAGE_ID);
+  }
+
+  private static void mockAlertMessageIdsToLearningAlerts(long databseId, String messageId) {
+    var alert = Alert.newBuilder()
+        .setAlertId(messageId)
+        .setName("alerts/" + databseId).build();
+    MockAlertUseCase.cacheAlert(databseId, alert);
   }
 
   private static void assertMailSent() {
@@ -125,7 +144,7 @@ class PaymentsBridgeApplicationIT {
     var alertId = createAlert(fileName);
     await()
         .conditionEvaluationListener(new ConditionEvaluationLogger(log::info))
-        .atMost(Duration.ofSeconds(10))
+        .atMost(Duration.ofSeconds(WAIT_REGISTRATION_MAX_SECONDS))
         .until(() -> paymentsBridgeEventsListener.containsRegisteredAlert(alertId));
   }
 
@@ -166,16 +185,14 @@ class PaymentsBridgeApplicationIT {
   }
 
   @Test
-  @Sql(scripts = "add_registered_alert.sql")
   void shouldProcessLearningFilesUnregisteredAlert() {
+    when(idGenerator.generateId())
+        .thenReturn(UUID.fromString(ALERT_MESSAGE_ID));
     assertAlertRegistered();
-    assertAlertIndexed("alert_system_id|87AB4899-BE5B-5E4F-E053-150A6C0A7A84");
-    var alertName = MockAlertUseCase.getAlertName("alert_system_id");
+    assertAlertIndexed(ALERT_MESSAGE_ID);
+    var alertName = MockAlertUseCase.getAlertName(ALERT_MESSAGE_ID);
     assertUdsValuesCreated(alertName);
     assertMailSent();
-
-    // Registered alert
-    assertAlertIndexed("system_id_2|87AB4899-BE5B-5E4F-E053-150A6C0A7A84");
   }
 
   private void assertUdsValuesCreated(String alertName) {
@@ -185,16 +202,16 @@ class PaymentsBridgeApplicationIT {
 
   private void assertAlertIndexed(String discriminator) {
     await()
-        .atMost(Duration.ofSeconds(20))
+        .atMost(Duration.ofSeconds(WAIT_REGISTRATION_MAX_SECONDS))
         .until(() -> mockWarehouseService.containsIndexedDiscriminator(discriminator));
   }
 
   private void assertAlertRegistered() {
     await()
-        .atMost(Duration.ofSeconds(20))
+        .atMost(Duration.ofSeconds(WAIT_REGISTRATION_MAX_SECONDS))
         .until(() -> paymentsBridgeEventsListener.containsLearningRegisteredSystemId(
-            "alert_system_id"));
-    assertTrue(MockAlertUseCase.containsAlertId("alert_system_id"));
+            ALERT_MESSAGE_ID));
+    assertTrue(MockAlertUseCase.containsAlertId(ALERT_MESSAGE_ID));
   }
 
   private UUID createAlert(String fileName) {
@@ -207,8 +224,9 @@ class PaymentsBridgeApplicationIT {
     try {
       var requestDto = objectMapper.readValue(srcFile, RequestDto.class);
       var dto = requestDto.getAlerts().get(0);
-      return new FircoAlertMessage(
-          UUID.randomUUID(), OffsetDateTime.now(Clock.systemUTC()), dto,
+      var uuid = UUID.randomUUID();
+      mockAlertMessageIdsToLearningAlerts(databaseId++, uuid.toString());
+      return new FircoAlertMessage(uuid, OffsetDateTime.now(Clock.systemUTC()), dto,
           "", "", "login", "password");
     } catch (Exception exception) {
       throw new RuntimeException(exception);

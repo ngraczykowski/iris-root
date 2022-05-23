@@ -11,6 +11,7 @@ import com.silenteight.payments.bridge.svb.learning.step.composite.exception.Fet
 import org.intellij.lang.annotations.Language;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
+import org.springframework.util.IdGenerator;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,7 +19,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import javax.sql.DataSource;
 
 import static com.silenteight.payments.bridge.svb.learning.step.composite.AlertDetailsRowMapper.mapRow;
@@ -40,8 +40,9 @@ class AlertCompositeFetcher extends BaseCompositeFetcher<List<Long>, List<AlertC
   private final LearningProperties properties;
   private final ContextualLearningProperties contextualLearningProperties;
 
+
   public AlertCompositeFetcher(
-      DataSource dataSource, HitCompositeFetcher hitCompositeFetcher,
+      DataSource dataSource, IdGenerator idGenerator, HitCompositeFetcher hitCompositeFetcher,
       ActionCompositeFetcher actionCompositeFetcher,
       LearningProperties properties,
       ContextualLearningProperties contextualLearningProperties) {
@@ -62,7 +63,6 @@ class AlertCompositeFetcher extends BaseCompositeFetcher<List<Long>, List<AlertC
         .stream()
         .map(ad -> AlertComposite
             .builder()
-            .alertMessageId(UUID.randomUUID())
             .discriminator(properties.getDiscriminatorPrefix())
             .alertDetails(ad)
             .hits(hits.get(ad.getFkcoId()))
@@ -71,7 +71,6 @@ class AlertCompositeFetcher extends BaseCompositeFetcher<List<Long>, List<AlertC
             .build())
         .collect(toList());
   }
-
 
 
   private List<AlertDetails> fetchAlertsDetails(Connection connection, List<Long> alertIds) {

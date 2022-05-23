@@ -10,6 +10,8 @@ import lombok.Value;
 @Value
 public class LearningAlertRegisteredEvent {
 
+  String alertMessageId;
+
   String systemId;
 
   String alertName;

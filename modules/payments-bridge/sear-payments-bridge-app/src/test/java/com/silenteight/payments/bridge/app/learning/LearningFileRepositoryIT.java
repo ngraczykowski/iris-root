@@ -24,6 +24,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @ActiveProfiles({
     "mockae", "mockdatasource", "mockgovernance", "mockagents", "mockaws", "test",
     "mockwarehouse" })
+@Disabled
 class LearningFileRepositoryIT {
 
   @Autowired
@@ -32,7 +33,6 @@ class LearningFileRepositoryIT {
   private final String fileName = UUID.randomUUID().toString();
 
   @Test
-  @Disabled
   void shouldSelectExistingFile() {
     learningFileRepository.save(LearningFileEntity
         .builder()

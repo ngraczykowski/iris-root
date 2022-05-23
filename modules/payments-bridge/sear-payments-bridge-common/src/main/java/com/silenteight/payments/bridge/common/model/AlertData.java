@@ -26,7 +26,7 @@ public class AlertData implements AlertId {
   String userPassword;
 
   public String getDiscriminator() {
-    return systemId + "|" + messageId;
+    return alertId.toString();
   }
 
 }

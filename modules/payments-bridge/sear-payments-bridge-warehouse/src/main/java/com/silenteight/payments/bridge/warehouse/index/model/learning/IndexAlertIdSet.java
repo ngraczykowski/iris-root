@@ -4,12 +4,12 @@ import lombok.Value;
 
 @Value
 public class IndexAlertIdSet {
-  String alertId;
+  String alertMessageId;
   String alertName;
   String systemId;
   String messageId;
 
   public String getDiscriminator() {
-    return systemId + "|" + messageId;
+    return alertMessageId;
   }
 }

@@ -33,16 +33,9 @@ class FircoCaseManagerController {
   public ResponseEntity<AckDto> sendMessage(
       @RequestBody @Validated(MinimalAlertDefinition.class) RequestDto requestDto,
       @RequestParam(name = "receiveUrl", required = false, defaultValue = "") String receiveUrl,
-      @RequestParam(name = "dc", required = false, defaultValue = "") String dataCenter/*,
-      HttpServletResponse response*/) {
+      @RequestParam(name = "dc", required = false, defaultValue = "") String dataCenter) {
 
     fircoRequestAdapter.sendMessage(requestDto, receiveUrl, dataCenter);
-    //response.getWriter().write(...);
-    //response.getWriter().close();
-    //response.flushBuffer();
-
-    // sendMessage to queue.
-    // return;
     return ResponseEntity.ok(AckDto.ok());
   }
 }
