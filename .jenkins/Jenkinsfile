@@ -17,6 +17,7 @@ pipeline {
         script {
           version = sh(returnStdout: true, script: './scripts/get-version.sh').trim()
         }
+        sh 'exit 1'
 
         updateBuildName displayName: "#${env.BUILD_NUMBER} v${version}"
       }
@@ -136,7 +137,6 @@ pipeline {
         branch 'master'
       }
       steps {
-        sh 'exit 1'
         sh 'git branch --force last-known-good-build'
         sshagent(credentials: ['github-iris-ssh-key']) {
           sh 'git push --atomic --force origin last-known-good-build'
