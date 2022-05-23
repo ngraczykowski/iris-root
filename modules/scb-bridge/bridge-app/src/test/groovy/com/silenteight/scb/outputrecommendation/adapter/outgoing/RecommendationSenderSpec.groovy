@@ -19,7 +19,7 @@ class RecommendationSenderSpec extends Specification {
 
   @Subject
   def underTest = new RecommendationSender(
-      cbsRecommendationService,
+      Optional.of(cbsRecommendationService),
       gnsRtRecommendationService,
       scbRecommendationService)
 

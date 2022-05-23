@@ -11,12 +11,14 @@ import com.silenteight.scb.outputrecommendation.domain.port.outgoing.Recommendat
 
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
 class RecommendationSender implements RecommendationPublisher {
 
-  private final CbsRecommendationService cbsRecommendationService;
+  private final Optional<CbsRecommendationService> cbsRecommendationService;
   private final GnsRtRecommendationService gnsRtRecommendationService;
   private final ScbRecommendationService scbRecommendationService;
 
@@ -38,7 +40,7 @@ class RecommendationSender implements RecommendationPublisher {
 
     var batchSource = event.batchMetadata().batchSource();
     switch (batchSource) {
-      case CBS -> cbsRecommendationService.recommend(event.recommendations());
+      case CBS -> cbsRecommendationService.get().recommend(event.recommendations());
       case GNS_RT -> gnsRtRecommendationService.recommend(event.recommendations());
       default -> throw new IllegalStateException(
           "Unrecognized BatchSource type " + batchSource + " in batchMetadata");

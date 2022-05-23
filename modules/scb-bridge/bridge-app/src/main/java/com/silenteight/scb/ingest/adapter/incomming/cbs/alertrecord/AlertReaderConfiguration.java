@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
+@Conditional(OnAlertProcessorCondition.class)
 class AlertReaderConfiguration {
 
   private final AlertInFlightService alertInFlightService;

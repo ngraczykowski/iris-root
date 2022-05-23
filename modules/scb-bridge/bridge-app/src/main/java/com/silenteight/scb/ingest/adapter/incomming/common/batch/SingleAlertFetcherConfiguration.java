@@ -4,17 +4,20 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord.GnsSolutionMapper;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.batch.ScbBridgeConfigProperties;
+import com.silenteight.scb.ingest.adapter.incomming.common.mode.OnAlertProcessorCondition;
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.RecommendationOrderProperties;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 
 @Configuration
 @RequiredArgsConstructor
+@Conditional(OnAlertProcessorCondition.class)
 class SingleAlertFetcherConfiguration {
 
   private final ScbBridgeConfigProperties configProperties;

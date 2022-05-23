@@ -7,10 +7,12 @@ import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertIdReaderCon
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.TestingHarnessService;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.quartz.QueuingJob;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.quartz.QueuingJobConstants;
+import com.silenteight.scb.ingest.adapter.incomming.common.mode.OnAlertProcessorCondition;
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRecommendationRepository;
 import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlertRepository;
 
 import org.quartz.*;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +28,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping("/v1/cbs/test")
 @AllArgsConstructor
 @Slf4j
+@Conditional(OnAlertProcessorCondition.class)
 public class CbsTestingHarnessController {
 
   private static final String JOB_NAME = "on-demand-cbs-test-job";

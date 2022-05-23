@@ -3,10 +3,12 @@ package com.silenteight.scb.ingest.adapter.incomming.cbs.gateway;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.scb.ingest.adapter.incomming.cbs.batch.ScbBridgeConfigProperties;
+import com.silenteight.scb.ingest.adapter.incomming.common.mode.OnAlertProcessorCondition;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -16,6 +18,7 @@ import static java.util.Objects.nonNull;
 
 @Configuration
 @RequiredArgsConstructor
+@Conditional(OnAlertProcessorCondition.class)
 class CbsAckGatewayConfiguration {
 
   private final ScbBridgeConfigProperties scbBridgeConfigProperties;

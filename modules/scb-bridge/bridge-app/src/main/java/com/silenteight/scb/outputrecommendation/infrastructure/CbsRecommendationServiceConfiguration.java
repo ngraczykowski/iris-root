@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertInFlightService;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.batch.ScbBridgeConfigProperties;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsConfigProperties;
+import com.silenteight.scb.ingest.adapter.incomming.common.mode.OnAlertProcessorCondition;
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRecommendationService;
 import com.silenteight.scb.outputrecommendation.adapter.outgoing.*;
 
@@ -13,6 +14,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -30,6 +32,7 @@ public class CbsRecommendationServiceConfiguration {
   private final AlertInFlightService alertInFlightService;
 
   @Bean
+  @Conditional(OnAlertProcessorCondition.class)
   CbsRecommendationService cbsRecommendationService(
       CbsRecommendationGateway cbsRecommendationGateway,
       CbsRecommendationMapper cbsRecommendationMapper) {
@@ -40,6 +43,7 @@ public class CbsRecommendationServiceConfiguration {
   }
 
   @Bean
+  @Conditional(OnAlertProcessorCondition.class)
   @ConditionalOnProperty(
       value = "silenteight.scb-bridge.cbs.attach-qco-fields-to-recom",
       havingValue = "false",
@@ -55,6 +59,7 @@ public class CbsRecommendationServiceConfiguration {
   }
 
   @Bean
+  @Conditional(OnAlertProcessorCondition.class)
   @ConditionalOnProperty(
       value = "silenteight.scb-bridge.cbs.attach-qco-fields-to-recom",
       havingValue = "true")
@@ -69,6 +74,7 @@ public class CbsRecommendationServiceConfiguration {
   }
 
   @Bean
+  @Conditional(OnAlertProcessorCondition.class)
   CbsRecommendationGateway cbsRecommendationGateway(
       RecomFunctionExecutorService recomFunctionExecutorService,
       ScbRecommendationService recommendationService) {
