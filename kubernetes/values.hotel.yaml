@@ -6,7 +6,7 @@ components:
     profiles:
       - consuldisabled
     image:
-      repository: pputerla-dev2.prv.dev.s8ops.com/iris/hsbc-bridge-app
+      repository: registry.dev.s8ops.com/iris/hsbc-bridge-app
       tag: "snapshot"
     dbName: "hb"
     webPath: "hb"
