@@ -47,7 +47,7 @@ class ReEtlAlertProcessor implements ItemProcessor<AlertComposite, Void> {
     final List<RegisterMatchResponse> registerMatchResponses = determineMarchesResponse(alert);
     return RegisterAlertResponse.builder()
         .alertName(alert.getAlertName())
-        .systemId(alert.getSystemId())
+        .alertMessageId(alert.getAlertMessageId())
         .matchResponses(registerMatchResponses)
         .build();
   }

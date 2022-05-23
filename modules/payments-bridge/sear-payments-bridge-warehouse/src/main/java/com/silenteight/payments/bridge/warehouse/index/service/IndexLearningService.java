@@ -34,7 +34,7 @@ class IndexLearningService implements IndexLearningUseCase {
               alertIdSet.getAlertName(),
               learningAlert.getDecision())
               .addPayload(warehouseMapper.makeAlert(
-                  alertIdSet.getAlertId(), alertIdSet.getSystemId()));
+                  alertIdSet.getAlertMessageId(), alertIdSet.getSystemId()));
           learningAlert.getMatches().forEach(m -> alertBuilder
               .newMatch()
               .setName(m.getMatchName())

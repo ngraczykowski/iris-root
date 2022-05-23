@@ -5,6 +5,7 @@ import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredMat
 import com.silenteight.payments.bridge.ae.alertregistration.port.FindRegisteredAlertUseCase;
 
 import java.util.List;
+import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
 
@@ -17,7 +18,7 @@ public class FindRegisteredAlertPortMock implements FindRegisteredAlertUseCase {
     return registeredAlert
         .stream()
         .filter(registered::contains)
-        .map(a -> new RegisteredAlert(
+        .map(a -> new RegisteredAlert(UUID.randomUUID().toString(),
             a, "alerts/1", List.of(
             RegisteredMatch
                 .builder()

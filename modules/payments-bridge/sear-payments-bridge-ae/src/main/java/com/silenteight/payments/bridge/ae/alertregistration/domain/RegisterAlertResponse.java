@@ -9,6 +9,7 @@ import com.silenteight.payments.bridge.common.event.LearningAlertRegisteredEvent
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
@@ -17,7 +18,7 @@ import static java.util.stream.Collectors.toList;
 @Builder
 public class RegisterAlertResponse {
 
-  String systemId;
+  String alertMessageId;
   String alertName;
 
   List<RegisterMatchResponse> matchResponses;
@@ -32,26 +33,26 @@ public class RegisterAlertResponse {
     return LearningAlertRegisteredEvent
         .builder()
         .alertName(alertName)
-        .systemId(systemId)
+        .alertMessageId(alertMessageId)
         .build();
   }
 
   @NonNull
   public SaveRegisteredAlertRequest toSaveRegisterAlertRequest(
       List<RegisterAlertRequest> registerAlertRequests) {
-    var alertMessageId = registerAlertRequests
+    var fkcoSystemId = registerAlertRequests
         .stream()
-        .filter(rar -> rar.getFkcoSystemId().equals(systemId))
+        .filter(rar -> rar.alertMessageIdAsString().equals(alertMessageId))
         .findFirst()
         .orElseThrow(() -> new NoSuchElementException(
             "There is no corresponding alert in registerAlertRequest for RegisterAlertResponse"))
-        .getAlertMessageId();
+        .getFkcoSystemId();
 
     return SaveRegisteredAlertRequest
         .builder()
-        .alertMessageId(alertMessageId)
+        .alertMessageId(UUID.fromString(alertMessageId))
         .alertName(alertName)
-        .fkcoSystemId(systemId)
+        .fkcoSystemId(fkcoSystemId)
         .matches(matchResponses
             .stream()
             .map(RegisterMatchResponse::toSaveRegisteredMatchRequest)

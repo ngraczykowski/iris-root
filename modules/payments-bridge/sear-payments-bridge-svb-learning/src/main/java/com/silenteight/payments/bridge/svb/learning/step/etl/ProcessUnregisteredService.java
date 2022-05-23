@@ -17,6 +17,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.IdGenerator;
 
 import java.util.List;
 import java.util.Map;
@@ -35,10 +36,12 @@ class ProcessUnregisteredService {
 
   private final ApplicationEventPublisher applicationEventPublisher;
 
+  private final IdGenerator idGenerator;
+
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   LearningRegisteredAlert process(AlertComposite alertComposite, long jobId) {
     var registeredAlerts = registerAlertUseCase.batchRegistration(
-        List.of(alertComposite.toRegisterAlertRequest(jobId)));
+        List.of(alertComposite.toRegisterAlertRequest(idGenerator.generateId(), jobId)));
 
     var registeredAlert = registeredAlerts.get(0);
     applicationEventPublisher.publishEvent(registeredAlert.toLearningAlertRegisteredEvent());
@@ -57,7 +60,7 @@ class ProcessUnregisteredService {
     return List.of(
         new IndexAlertRequest(
             new IndexAlertIdSet(
-                String.valueOf(alertComposite.getAlertDetails().getAlertId()),
+                registeredAlert.getAlertMessageId(),
                 registeredAlert.getAlertName(),
                 alertComposite.getSystemId(),
                 alertComposite.getAlertDetails().getMessageId()),

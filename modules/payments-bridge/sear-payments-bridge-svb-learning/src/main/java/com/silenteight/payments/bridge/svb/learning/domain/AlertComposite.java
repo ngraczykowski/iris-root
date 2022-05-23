@@ -41,8 +41,6 @@ public class AlertComposite {
   private static final String ANALYST_DECISION_FALSE_POSITIVE = "analyst_decision_false_positive";
   private static final String ANALYST_DECISION_TRUE_POSITIVE = "analyst_decision_true_positive";
 
-  UUID alertMessageId;
-
   // Learning engine is multi-tenant db so some discriminator is required.
   String discriminator;
 
@@ -242,8 +240,8 @@ public class AlertComposite {
         .build();
   }
 
-  public RegisterAlertRequest toRegisterAlertRequest(Long jobId) {
-    return alertDetails.toRegisterAlertRequest(jobId, hits);
+  public RegisterAlertRequest toRegisterAlertRequest(UUID alertMessageId, Long jobId) {
+    return alertDetails.toRegisterAlertRequest(jobId, alertMessageId, hits);
   }
 
   public LearningRegisteredAlert toLearningRegisteredAlert(RegisteredAlert registeredAlert) {

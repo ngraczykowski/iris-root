@@ -59,7 +59,7 @@ class LearningMetricsMeter implements MeterBinder {
   void onLearningEvent(LearningAlertRegisteredEvent event) {
     log.debug(
         "Increment metrics counter solving value for alert systemId: {}",
-        event.getSystemId());
+        event.getAlertMessageId());
     fetchCounter(TYPE_LEARNING).increment();
   }
 }

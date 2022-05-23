@@ -13,10 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,36 +39,42 @@ class RegisterAlertServiceTests {
 
   @Test
   void test() {
-    final String alertId1 = "87AB4899-BE5B-5E4F-E053-150A6C0A7A84";
-    final String alertId2 = "883252A2-C860-7D0A-E053-150A6C0A0D90";
+    final String fkcoSystemId1 = "87AB4899-BE5B-5E4F-E053-150A6C0A7A84";
+    final String fkcoSystemId2 = "883252A2-C860-7D0A-E053-150A6C0A0D90";
+
+    final UUID alertMessageId1 = UUID.randomUUID();
+    final UUID alertMessageId2 = UUID.randomUUID();
+
     final String alertName1 = "alerts/123";
     final String alertName2 = "alerts/321";
 
     List<RegisterAlertRequest> requests = new ArrayList<>();
     requests.add(
         RegisterAlertRequest.builder()
-            .fkcoSystemId(alertId1)
+            .alertMessageId(alertMessageId1)
+            .fkcoSystemId(fkcoSystemId1)
             .matchIds(List.of("1:ONE", "1:TWO"))
             .alertTime(Timestamp.getDefaultInstance())
             .build());
     requests.add(
         RegisterAlertRequest.builder()
-            .fkcoSystemId(alertId2)
+            .alertMessageId(alertMessageId2)
+            .fkcoSystemId(fkcoSystemId2)
             .matchIds(List.of("2:ONE", "2:TWO"))
             .alertTime(Timestamp.getDefaultInstance())
             .build());
 
     when(alertClient.batchCreateAlerts(argThat(arg ->
-        alertId1.equals(arg.getAlertsList().get(0).getAlertId())
+        alertMessageId1.toString().equals(arg.getAlertsList().get(0).getAlertId())
     ))).thenReturn(
         BatchCreateAlertsResponse.newBuilder()
             .addAlerts(
                 Alert.newBuilder()
-                    .setAlertId(alertId1).setName(alertName1).build()
+                    .setAlertId(alertMessageId1.toString()).setName(alertName1).build()
             )
             .addAlerts(
                 Alert.newBuilder()
-                    .setAlertId(alertId2).setName(alertName2).build()
+                    .setAlertId(alertMessageId2.toString()).setName(alertName2).build()
             )
             .build());
 

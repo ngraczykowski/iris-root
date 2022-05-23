@@ -43,10 +43,11 @@ public class AlertDetails {
     return FindRegisteredAlertRequest.builder().messageId(messageId).systemId(systemId).build();
   }
 
-  public RegisterAlertRequest toRegisterAlertRequest(Long jobId, List<HitComposite> hits) {
+  public RegisterAlertRequest toRegisterAlertRequest(
+      Long jobId, UUID alertMessageId, List<HitComposite> hits) {
     return RegisterAlertRequest
         .builder()
-        .alertMessageId(UUID.randomUUID())
+        .alertMessageId(alertMessageId)
         .fkcoSystemId(systemId)
         .alertTime(fromOffsetDateTime(fkcoDFilteredDateTime))
         .priority(LEARNING_PRIORITY)

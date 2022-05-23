@@ -21,8 +21,7 @@ class RegisterAlertUseCaseMock implements RegisterAlertUseCase {
       List<RegisterAlertRequest> registerAlertRequest) {
     return registerAlertRequest.stream().map(a -> RegisterAlertResponse
         .builder()
-        .systemId(
-            a.getFkcoSystemId())
+        .alertMessageId(a.getAlertMessageId().toString())
         .alertName("alerts/" + a.getFkcoSystemId())
         .matchResponses(
             a.getMatchIds()
