@@ -6,15 +6,15 @@
 /.jenkins/*       @ahaczewski @gchodzicki
 /.github/*        @ahaczewski
 
-build-logic/**/*  @ahaczewski @snieguu @pputerla
-platforms/**/*    @ahaczewski @snieguu @pputerla
-tests/**/*        @kkicza
+build-logic/**/*  @ahaczewski
+platforms/**/*    @ahaczewski
+# tests/**/*        @kkicza
 
 /.editorconfig            @ahaczewski
 /.gitattributes           @ahaczewski
 /.gitignore               @ahaczewski
 /.pre-commit-config.yaml  @ahaczewski
 
-build.gradle      @ahaczewski @snieguu @pputerla
-gradle.properties @ahaczewski @snieguu @pputerla
-settings.gradle   @ahaczewski @snieguu @pputerla
+build.gradle      @ahaczewski
+gradle.properties @ahaczewski
+settings.gradle   @ahaczewski
