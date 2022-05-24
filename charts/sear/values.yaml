@@ -309,7 +309,7 @@ components:
       repository: registry.dev.s8ops.com/iris/hsbc-bridge-app
 
     dbName: "hb"
-    webPath: "hb"
+    webPath: "hsbc-bridge"
 
   #FAB bridge start
   ftcc:
