@@ -38,6 +38,8 @@ kubectl config set-context --current --namespace=dev-<your username>
 To install the chart, run the following command, replacing `<environment>` with the name of environment you want to deploy:
 
 ```bash
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm dependency build ../charts/sear/
 helm upgrade --install \
   --values values.core.yaml \
   --values values.ingress-internal.yaml \
