@@ -1,5 +1,5 @@
 --
--- In your Quartz properties file, you'll need to set 
+-- In your Quartz properties file, you'll need to set
 -- org.quartz.jobStore.driverDelegateClass = org.quartz.impl.jdbcjobstore.HSQLDBDelegate
 --
 
@@ -158,4 +158,3 @@ CREATE TABLE qrtz_locks
     LOCK_NAME  VARCHAR(40)  NOT NULL,
     PRIMARY KEY (SCHED_NAME, LOCK_NAME)
 );
-

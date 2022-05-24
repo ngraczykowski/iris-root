@@ -86,4 +86,3 @@ class SpecificTerms2Configuration {
     String response;
   }
 }
-

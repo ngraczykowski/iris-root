@@ -7,7 +7,7 @@ Configuration
 ===
 ---
 
-- `ae.solving.journal.enabled` - default value: `false`, options `[false, true]` 
+- `ae.solving.journal.enabled` - default value: `false`, options `[false, true]`
 
 Hash calculation
 ===

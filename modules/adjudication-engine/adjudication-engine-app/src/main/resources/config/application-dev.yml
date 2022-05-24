@@ -60,4 +60,3 @@ spring:
 grpc:
   logging:
     enabled: true
-

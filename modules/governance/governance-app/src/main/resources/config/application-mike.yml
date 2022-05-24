@@ -30,4 +30,3 @@ serp:
                 - ACTION_FALSE_POSITIVE
       viewing:
         max-state-reset-delay-ms: 45000
-

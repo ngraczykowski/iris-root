@@ -497,8 +497,3 @@ Authorization: Bearer {{access_token}}
         client.assert(response.status === 202, "Response status is not 202");
    });
  %}
-
-
-
-
-

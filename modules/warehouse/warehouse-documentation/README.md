@@ -15,7 +15,7 @@ Styles from `template.docx` file are used in generated `docx` file.
 Run command:
 
     gw clean docs
-    
+
 It will generate documentation in `pdf` and `docx` (if `pandoc` is installed).
 
 Documentation will be in `build/asciidoc` directory.

@@ -72,4 +72,3 @@ grpc:
       address: in-process:test
     companynamesurroundingagent:
       address: in-process:test
-

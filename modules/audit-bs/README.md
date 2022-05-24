@@ -1,6 +1,6 @@
 # Simple Auditing to Database Library
 
-This bullshit auditing library writes audit events to single table in the 
+This bullshit auditing library writes audit events to single table in the
 database.
 
 ## How to install

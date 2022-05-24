@@ -103,10 +103,10 @@ paths:
       responses:
         200:
           description: A list countries after update
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Countries'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Countries'
 
 components:
   schemas:

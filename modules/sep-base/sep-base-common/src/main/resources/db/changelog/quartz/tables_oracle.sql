@@ -1,5 +1,5 @@
 --
--- A hint submitted by a user: Oracle DB MUST be created as "shared" and the 
+-- A hint submitted by a user: Oracle DB MUST be created as "shared" and the
 -- job_queue_processes parameter  must be greater than 2
 -- However, these settings are pretty much standard after any
 -- Oracle install, so most users need not worry about this.
@@ -194,5 +194,3 @@ CREATE INDEX idx_qrtz_ft_j_g on qrtz_fired_triggers (SCHED_NAME, JOB_NAME, JOB_G
 CREATE INDEX idx_qrtz_ft_jg on qrtz_fired_triggers (SCHED_NAME, JOB_GROUP);
 CREATE INDEX idx_qrtz_ft_t_g on qrtz_fired_triggers (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP);
 CREATE INDEX idx_qrtz_ft_tg on qrtz_fired_triggers (SCHED_NAME, TRIGGER_GROUP);
-
-

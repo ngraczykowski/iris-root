@@ -146,4 +146,3 @@ class CountryGroupIT {
         .getBody().stream().findFirst().orElse(emptyMap());
   }
 }
-

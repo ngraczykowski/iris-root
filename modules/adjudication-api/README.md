@@ -11,12 +11,12 @@
 
            GET [transforms/v1/]agent-inputs -> [
                "name-v1",
-               "name-v2"    
+               "name-v2"  
            ]
 
            GET [transforms/v1/]agent-inputs/name-v2/alerts/1/matches/3
-           
-           POST [transforms/v1/]agent-inputs/name-v2/alerts/1/matches:batchGet                    
+
+           POST [transforms/v1/]agent-inputs/name-v2/alerts/1/matches:batchGet  
 
 -  A collection of comment inputs for specific alert(s): `comment-input/alerts/*`.
 
@@ -45,21 +45,21 @@
                 "type": "country",
                 "api-version": "v1",
                 "version": "1.4.42"
-                 solutions: ["NO_DATA", "MATCH", "NO_MATCH] 
+                 solutions: ["NO_DATA", "MATCH", "NO_MATCH]
              },
              {
-                 "name": "agents/13", 
+                 "name": "agents/13",
                  "type": "country",
                  "api-version": "v1",
                  "version": "1.4.43",
                  solutions: ["NO_DATA", "MATCH", "NO_MATCH]
               }
-        ]       
+        ]  
 
 
-    NOTES: a policy may or may not depend on an exact version of agent, depending 
-    on expected behavior during config-agent-sets selection 
-        
+    NOTES: a policy may or may not depend on an exact version of agent, depending
+    on expected behavior during config-agent-sets selection
+
             config-agents-sets
                 policy:
                    Step 1:
@@ -69,12 +69,12 @@
 
         GET config-agent-sets -> [
             {
-                config-agent-set-name: "config-agent-sets/1" 
+                config-agent-set-name: "config-agent-sets/1"
                 agents: [
                     "name-4_2_42",
                     "date-2_2_1"
-                ]    
-            }   
+                ]  
+            }  
         ]
 
 - create agent configuration set
@@ -96,7 +96,7 @@
                 solution: "PTP"
                 reasons: []
             }, ...],
-            alert: 
+            alert:
             alertSolution:
         } -> string
 
@@ -157,47 +157,47 @@ Values for these categories that can be "primed" might come directly from Bridge
 For every alert:
 
     POST alerts {
-        alert_id="AE_BTCH_PEPL!1391FFFD-2E8A4AC7-B0E596E6-2FE1CEC1", 
+        alert_id="AE_BTCH_PEPL!1391FFFD-2E8A4AC7-B0E596E6-2FE1CEC1",
         alert_time="2021-02-16T21:25:34Z"
-        lables={ 
-            "batch"="2021-02-16T21:24:13Z", 
-            "country"="AE"        
+        lables={
+            "batch"="2021-02-16T21:24:13Z",
+            "country"="AE"  
         }
     } -> {
-        name="alerts/1342", 
-        alert_id="AE_BTCH_PEPL!1391FFFD-2E8A4AC7-B0E596E6-2FE1CEC1", 
-        alert_time="2021-02-16T21:25:34Z", 
+        name="alerts/1342",
+        alert_id="AE_BTCH_PEPL!1391FFFD-2E8A4AC7-B0E596E6-2FE1CEC1",
+        alert_time="2021-02-16T21:25:34Z",
         create_time="2021-02-16T23:02:45Z"
     }
-    
+
     POST alerts/1342/matches {
         match_id="DB00013388"
     } -> {
-        name="alerts/1342/matches/32", 
+        name="alerts/1342/matches/32",
         match_id="DB00013388"
     }
-    
+
     PUT alerts/1342/matches/32/categories {
-        source_system="ECDD", 
-        country=["PL", "US"], 
+        source_system="ECDD",
+        country=["PL", "US"],
         hit_category="SAN"
     }
-    
-    bridge -> agent facade 
+
+    bridge -> agent facade
     POST agent-apis/name_v4/inputs {
         match="alerts/1342/matches/32",
-        instance_name="advname_indv", 
-        alerted_names=["John Smith"], 
+        instance_name="advname_indv",
+        alerted_names=["John Smith"],
         matched_names=["Jon Schmit"]
     } -> {
         name="agents/name_v4/inputs/858372",
         match="alerts/1342/matches/32"
     }
-    
+
     POST agent-apis/name_4_2_42/inputs {
         match="alerts/1342/matches/32",
-        instance_name="advname_indv", 
-        alerted_names=["John Smith"], 
+        instance_name="advname_indv",
+        alerted_names=["John Smith"],
         matched_names=["Jon Schmit"]
     } -> {
         name="agents/name_4_2_42/inputs/858372",
@@ -207,7 +207,7 @@ For every alert:
     bridge -> agent facade
     POST agent-apis/county_v5/inputs {
         match="alerts/1342/matches/32",
-        alerted_countries=["PL"], 
+        alerted_countries=["PL"],
         matched_countries=["Poland"]
     } -> {
         name="agents/country_5/inputs/858372",
@@ -236,28 +236,28 @@ With bulk API number of calls can be reduced. As alerts and matches will always 
 they can be created at once. First all alerts can be created:
 
     POST alerts:batchCreate [{
-        alert_id="AE_BTCH_PEPL!1391FFFD-2E8A4AC7-B0E596E6-2FE1CEC1", 
+        alert_id="AE_BTCH_PEPL!1391FFFD-2E8A4AC7-B0E596E6-2FE1CEC1",
         alert_time="2021-02-16T21:25:34Z"
-        lables={ 
-            "batch"="2021-02-16T21:24:13Z", 
-            "country"="AE", 
-        } 
+        lables={
+            "batch"="2021-02-16T21:24:13Z",
+            "country"="AE",
+        }
     }, {
-        alert_id="SG_BTCH_DUDL!1391FFFD-2E8A4AC7-B0E596E6-2FE1CEC1", 
+        alert_id="SG_BTCH_DUDL!1391FFFD-2E8A4AC7-B0E596E6-2FE1CEC1",
         alert_time="2021-02-08T21:25:34Z"
-        lables={ 
-            "batch"="2021-02-08T21:24:13Z", 
-            "country"="AE", 
-        } 
+        lables={
+            "batch"="2021-02-08T21:24:13Z",
+            "country"="AE",
+        }
     }] -> [{
-        name="alerts/1342", 
-        alert_id="AE_BTCH_PEPL!1391FFFD-2E8A4AC7-B0E596E6-2FE1CEC1", 
-        alert_time="2021-02-16T21:25:34Z", 
+        name="alerts/1342",
+        alert_id="AE_BTCH_PEPL!1391FFFD-2E8A4AC7-B0E596E6-2FE1CEC1",
+        alert_time="2021-02-16T21:25:34Z",
         create_time="2021-02-16T23:02:45Z"
     }, {
-        name="alerts/1343", 
-        alert_id="SG_BTCH_DUDL!1391FFFD-2E8A4AC7-B0E596E6-2FE1CEC1", 
-        alert_time="2021-02-08T21:25:34Z", 
+        name="alerts/1343",
+        alert_id="SG_BTCH_DUDL!1391FFFD-2E8A4AC7-B0E596E6-2FE1CEC1",
+        alert_time="2021-02-08T21:25:34Z",
         create_time="2021-02-16T23:02:48Z"
     }]
 
@@ -282,13 +282,13 @@ Also categories can be assigned to matches with just one request:
 
     PUT alerts/-/matches/-/categories:batchUpdate [{
         match="alerts/1342/matches/32",
-        source_system="ECDD", 
-        country=["PL", "US"], 
+        source_system="ECDD",
+        country=["PL", "US"],
         hit_category="SAN"
     }, {
         match="alerts/1343/matches/33",
-        source_system="ECDD", 
-        country=["SG", "US"], 
+        source_system="ECDD",
+        country=["SG", "US"],
         hit_category="SAN"
     }]
 
@@ -296,14 +296,14 @@ It is also possible to set agent inputs with batch call. The limitation is that 
 in specific version can be updated at once (because proto between versions can differ):
 
     POST agents/name_4_2_42/inputs:batchCreate [{
-        match="alerts/1342/matches/32", 
-        instance_name="advname_indv", 
-        alerted_names=["John Smith"], 
+        match="alerts/1342/matches/32",
+        instance_name="advname_indv",
+        alerted_names=["John Smith"],
         matched_names=["Jon Schmit"]
     }, {
-        match="alerts/1343/matches/33", 
-        instance_name="advname_indv", 
-        alerted_names=["Adam Doe"], 
+        match="alerts/1343/matches/33",
+        instance_name="advname_indv",
+        alerted_names=["Adam Doe"],
         matched_names=["Adam S. Doe"]
     }] -> [{
         name="agents/name_4_2_42/inputs/858372",
@@ -312,14 +312,14 @@ in specific version can be updated at once (because proto between versions can d
         name="agents/name_4_2_42/inputs/858373",
         match="alerts/1343/matches/33"
     }]
-    
+
     POST agents/county_5_4_32/inputs:batchCreate [{
-        match="alerts/1342/matches/32", 
-        alerted_countries=["PL"], 
+        match="alerts/1342/matches/32",
+        alerted_countries=["PL"],
         matched_countries=["Poland"]
     }, {
-        match="alerts/1343/matches/33", 
-        alerted_countries=["SG"], 
+        match="alerts/1343/matches/33",
+        alerted_countries=["SG"],
         matched_countries=["Singapore"]
     }] -> [{
         name="agents/county_5_4_32/inputs/858372",
@@ -356,7 +356,7 @@ Summarizing it gives just 10 calls to insert the same data.
        instance_name="advname_indv",
        alerted_names=["John Smith"],
        matched_names=["Jon Schmit"],
-  
+
        input_agent_proto = byte[]
    }
    ```
@@ -380,15 +380,15 @@ Summarizing it gives just 10 calls to insert the same data.
             ...
         ]
     }
-    
+
     GET agents/name_4_2_42/inputs {
         match="alerts/1342/matches/32"
     } -> {
-        match="alerts/1342/matches/32", 
-        alerted_names=["John Smith"], 
+        match="alerts/1342/matches/32",
+        alerted_names=["John Smith"],
         matched_names=["Jon Schmit"]
     }
-    
+
     GET analysis/829/alerts/1342/audit {
         strategy_name='strategy/5',
         ...
@@ -420,9 +420,9 @@ First step is to create Analysis:
         strategy="strategy/back_test"
         agent_configuration_set="configurations/3544" // contains all agents configuration, agent_version (name=4.4.42, coutry=5.4.3, ...)
     } -> {
-        name="analysis/829", 
+        name="analysis/829",
         policy="policy/54317992-a203-4e95-b145-b47d6a3aef0a",
-        strategy="strategy/back_test", 
+        strategy="strategy/back_test",
         create_time="2021-02-17T07:18:48Z",
         state=NEW
     }
@@ -432,12 +432,12 @@ Then add datasets to analysis:
     POST analysis/829/datasets {
         dataset="datasets/e572ca87-e93f-4e17-8954-d2c9892055ad"
     } -> {
-        name="analysis/829", 
+        name="analysis/829",
         policy="policy/54317992-a203-4e95-b145-b47d6a3aef0a",
-        strategy="strategy/back_test", 
+        strategy="strategy/back_test",
         create_time="2021-02-17T07:18:48Z",
-        state=PLANNING, 
-        alert_pending=63125, 
+        state=PLANNING,
+        alert_pending=63125,
         alert_count=63125
     }
 
@@ -447,12 +447,12 @@ Then add datasets to analysis:
             "datasets/d2c9892e-4e17-8954-e93f-572ca87d2989"
         ]
     } -> {
-        name="analysis/829", 
+        name="analysis/829",
         policy="policy/54317992-a203-4e95-b145-b47d6a3aef0a",
-        strategy="strategy/back_test", 
+        strategy="strategy/back_test",
         create_time="2021-02-17T07:18:48Z",
-        state=PLANNING, 
-        alert_pending=40125, 
+        state=PLANNING,
+        alert_pending=40125,
         alert_count=63125
     }
 
@@ -476,7 +476,7 @@ one, with only a difference in deteset_id.
 
 Store result and reason in AE.
 
-    ae -> governance 
+    ae -> governance
     GET governance/solve_features {
         features_map = {...}
     } -> {
@@ -515,9 +515,9 @@ Store result and reason in AE.
         match="alerts/1342/matches/32",
         agent_configuration_set="configurations/3544"
     } -> {
-        match="alerts/1342/matches/32", 
+        match="alerts/1342/matches/32",
         instance_name="advname_indv",
-        alerted_names=["John Smith"], 
+        alerted_names=["John Smith"],
         matched_names=["Jon Schmit"]
     }
 
@@ -532,23 +532,23 @@ Store result and reason in AE.
 #### 7. Viewing analysis state
 
     GET analysis/829 -> {
-        name="analysis/829", 
+        name="analysis/829",
         policy="policy/54317992-a203-4e95-b145-b47d6a3aef0a",
-        strategy="strategy/back_test", 
+        strategy="strategy/back_test",
         create_time="2021-02-17T07:18:48Z",
-        state=RUNNING, 
-        alert_pending=54321, 
+        state=RUNNING,
+        alert_pending=54321,
         alert_count=63125
     }
 
 A few minutes later...
 
     GET analysis/829 -> {
-        name="analysis/829", 
+        name="analysis/829",
         policy="policy/54317992-a203-4e95-b145-b47d6a3aef0a",
-        strategy="strategy/back_test", 
+        strategy="strategy/back_test",
         create_time="2021-02-17T07:18:48Z",
-        state=DONE, 
+        state=DONE,
         alert_count=63125
     }
 
@@ -596,11 +596,11 @@ That also suggests that agents, and their versions might need to be coupled to p
         "analysis/829/metrics/efficiency",
         "analysis/829/metrics/effectiveness",
     ]
-    
+
     GET analysis/829/metrics/efficiency -> {
-        efficiency=0.363, 
-        solved_alerts=3632, 
-        alert_count=10000, 
+        efficiency=0.363,
+        solved_alerts=3632,
+        alert_count=10000,
     }
 
 ### PoV Use Cases
@@ -632,7 +632,7 @@ That also suggests that agents, and their versions might need to be coupled to p
 
     POST solutions {
         alert_id="AE_BTCH_PEPL!1391FFFD-2E8A4AC7-B0E596E6-2FE1CEC1"
-        solution=ESCALATE, 
+        solution=ESCALATE,
         solve_time="2021-02-17T07:13:47Z"
     }
 
@@ -640,7 +640,7 @@ or
 
     POST solutions {
         alert="alerts/1342",
-        solution=ESCALATE, 
+        solution=ESCALATE,
         solve_time="2021-02-17T07:13:47Z",
     }
 
@@ -654,9 +654,9 @@ First step is to create Analysis:
         policy="policy/54317992-a203-4e95-b145-b47d6a3aef0a",
         strategy="strategy/back_test"
     } -> {
-        name="analysis/829", 
+        name="analysis/829",
         policy="policy/54317992-a203-4e95-b145-b47d6a3aef0a",
-        strategy="strategy/back_test", 
+        strategy="strategy/back_test",
         create_time="2021-02-17T07:18:48Z",
         state=NEW
     }
@@ -666,12 +666,12 @@ Then add datasets to analysis:
     POST analysis/829/datasets {
         dataset="datasets/e572ca87-e93f-4e17-8954-d2c9892055ad"
     } -> {
-        name="analysis/829", 
+        name="analysis/829",
         policy="policy/54317992-a203-4e95-b145-b47d6a3aef0a",
-        strategy="strategy/back_test", 
+        strategy="strategy/back_test",
         create_time="2021-02-17T07:18:48Z",
-        state=PLANNING, 
-        alert_pending=40125, 
+        state=PLANNING,
+        alert_pending=40125,
         alert_count=63125
     }
 
@@ -680,23 +680,23 @@ Adding dataset to analysis will trigger the solving process.
 #### 6. Viewing analysis state
 
     GET analysis/829 -> {
-        name="analysis/829", 
+        name="analysis/829",
         policy="policy/54317992-a203-4e95-b145-b47d6a3aef0a",
-        strategy="strategy/back_test", 
+        strategy="strategy/back_test",
         create_time="2021-02-17T07:18:48Z",
-        state=RUNNING, 
-        alert_pending=54321, 
+        state=RUNNING,
+        alert_pending=54321,
         alert_count=63125
     }
 
 A few minutes later...
 
     GET analysis/829 -> {
-        name="analysis/829", 
+        name="analysis/829",
         policy="policy/54317992-a203-4e95-b145-b47d6a3aef0a",
-        strategy="strategy/back_test", 
+        strategy="strategy/back_test",
         create_time="2021-02-17T07:18:48Z",
-        state=DONE, 
+        state=DONE,
         alert_count=63125
     }
 
@@ -709,10 +709,10 @@ A few minutes later...
 
     POST agents {agent_name="custom_agent"}
     POST agents/custom_agent/values {
-        match="alerts/1342/matches/32", 
-        result="CUSTOM_VALUE", 
+        match="alerts/1342/matches/32",
+        result="CUSTOM_VALUE",
         reason=struct.Value
-    }    
+    }  
     POST analysis
 
 #### 9. Re-ETLing input data for an agent
@@ -750,7 +750,7 @@ Report file MUST contain all fields described in a spreadsheet: https://docs.goo
         dataset = "datasets/e572ca87-e93f-4e17-8954-d2c9892055ad"
         report_name = "data_availability_diagnostic_report_dataset_e572ca87-e93f-4e17-8954-d2c9892055ad.csv"
         url = "https://some.domain/path/to/report/through/service/to/check/permission"
-    }    
+    }  
 
 #### 2. rb_scorer
 
@@ -796,12 +796,12 @@ Report file MUST contain all fields described in a spreadsheet: https://docs.goo
             {
                 agent="agents/name_4_2_42"
                 config="agents/name_4_2_42/configs/3"
-            },        
+            },  
             {
                 agent="agents/date_1_2_34"
                 config="agents/date_1_2_34/configs/2"
-            }        
-        ]    
+            }  
+        ]  
     }
 
 
@@ -831,19 +831,19 @@ Example:
     POST alerts:batchPost {
         createRequests: [
             {
-                 alert_id="AE_BTCH_PEPL!1391FFFD-2E8A4AC7-B0E596E6-2FE1CEC1", 
-                 alert_time="2021-02-16T21:25:34Z"   
+                 alert_id="AE_BTCH_PEPL!1391FFFD-2E8A4AC7-B0E596E6-2FE1CEC1",
+                 alert_time="2021-02-16T21:25:34Z"  
             },
             {
                  ...
             }
         ]
     } -> {
-        alerts: [ 
+        alerts: [
             {
-                name="alerts/1342", 
-                alert_id="AE_BTCH_PEPL!1391FFFD-2E8A4AC7-B0E596E6-2FE1CEC1", 
-                alert_time="2021-02-16T21:25:34Z", 
+                name="alerts/1342",
+                alert_id="AE_BTCH_PEPL!1391FFFD-2E8A4AC7-B0E596E6-2FE1CEC1",
+                alert_time="2021-02-16T21:25:34Z",
                 create_time="2021-02-16T23:02:45Z"
             },
             {
@@ -1018,19 +1018,19 @@ Additional extracts
        agent_config_set="agent-config-sets/3544",
        agents=[
            "agents/name_4_2_42",
-           "agents/date_1_2_34" 
-       ]                   
-   } -> [ 
+           "agents/date_1_2_34"
+       ]  
+   } -> [
         {
             agent="agents/name_4_2_42"
             result="NO_MATCH"
             reason=google.Value
-        },         
+        },  
         {
             agent="agents/date_1_2_34"
             result="MATCH"
             reason=google.Value
-        }         
+        }  
    ]
    ```
   2. Name Agent zapyta DataSource API o input
@@ -1038,12 +1038,12 @@ Additional extracts
    POST ... {
        match="alerts/1234/matches/5678"
        fields=[
-           "alert-fields/666",    
+           "alert-fields/666",  
            "match-fields/21",
-           "match-fields/22"            
-       ]           
+           "match-fields/22"  
+       ]  
    } -> {
-     
+
    }
    ```
 7. Bridge czeka na zakończenie analizy
@@ -1072,9 +1072,9 @@ JSON via REST API:
                 {
                     "id": "1273481",
                     "matchedText": "Global Co Limited"
-                }                                             
-            ]                
-        }                         
+                }  
+            ]  
+        }  
     }
 
 #### DATABASE:
@@ -1083,13 +1083,13 @@ JSON via REST API:
 
 #### AGENT REQUEST TO DS:
 
-    GET ??? 
-        
+    GET ???
+
     SELECT json FROM alerts
-    
+
     -> {
         instance_name="advname-org",
-        alerted_names=["Global Corporation Pte. Ltd."], 
+        alerted_names=["Global Corporation Pte. Ltd."],
         matched_names=["Global Co Limited"],
     }
 
@@ -1098,21 +1098,21 @@ JSON via REST API:
 
 Name Agent Input v1:
 
-        alerted_names=["John Smith"], 
+        alerted_names=["John Smith"],
         matched_names=["Jon Schmit"],
-        instance_name=""    
+        instance_name=""  
 
 Name Agent Input v2:
 
-        alerted_names=["John Smith"], 
+        alerted_names=["John Smith"],
         matched_names=["Jon Schmit"],
         shoe_size=42,
-        instance_name=""    
+        instance_name=""  
 
 Commentator Input v1:
 
     GET alerts/*/matches/*/comment-input/v1 -> {
-        ... 
+        ...
     }
 
 
@@ -1125,7 +1125,7 @@ Name Agent Request:
 Name Agent Response:
 
         result="NO_MATCH"
-        reason=google.protobuf.Value    
+        reason=google.protobuf.Value  
 
 
 ### RECOMMENDATION METADATA

@@ -125,7 +125,7 @@ spec:
             - name: 'ES_PASSWORD'
               value: {{ .Values.elasticRestPassword }}
             - name: 'WAREHOUSE_DB_HOST'
-              value: {{ .Values.whDbHost }} 
+              value: {{ .Values.whDbHost }}
             - name: 'WAREHOUSE_DB_PORT'
               value: {{ .Values.whDbPort | quote }}
             - name: 'WAREHOUSE_DB_NAME'

@@ -42,7 +42,7 @@ Alerts are associated with the Dataset by filters specified during creation.
         create_time="2021-02-17T07:14:48Z",
         alert_count=3400
     }
-    
+
 ### Get Dataset
 
     GET datasets/10 -> {
@@ -63,7 +63,7 @@ Alerts are associated with the Dataset by filters specified during creation.
         ],
         next_page_token=""
     }
-    
+
 ### List Alerts in Dataset
 
     GET datasets/10/alerts {
@@ -80,9 +80,9 @@ Alerts are associated with the Dataset by filters specified during creation.
 ## Open questions
 
 1. What are logical operators between all conditions: labels, alert_time_start, alert_time_end.
-   
+
    Current status: Only single selected condition is supported.
 
 2. Is it be possible to delete Dataset?
-   
+
    Current status: No.

@@ -40,4 +40,3 @@ class UpdateCountriesRestControllerTest extends BaseRestControllerTest {
     put(TEST_UPDATE_COUNTRIES_URL, COUNTRIES).statusCode(FORBIDDEN.value());
   }
 }
-

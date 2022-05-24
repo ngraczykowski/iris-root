@@ -121,10 +121,10 @@ class ArtifactReader:
         with open(self.artifact_file) as json_file:
             data = json.load(json_file)
             artifacts = []
-             
+
             for i in data:
                 artifacts.append(ArtifactRepresentation(i))
-                
+
         return artifacts
 
 

@@ -75,4 +75,3 @@ Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 {"JobName" : "re-etl-job", "FileName" :  "", "Features":  []}
-

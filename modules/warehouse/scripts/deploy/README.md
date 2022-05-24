@@ -1,12 +1,12 @@
 ## How to set up Python Virtual Environment
 
-Below you can skip if you did it before. 
+Below you can skip if you did it before.
 
 1. Install **python 3.8+**
 
     for Ubuntu: ``sudo apt install python3``
-    
-    for MacOs: ``brew install python3`` 
+
+    for MacOs: ``brew install python3``
 
 2. Install **python 3.8+ Virtual Environment**
 

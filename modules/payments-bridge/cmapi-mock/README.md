@@ -29,5 +29,5 @@ Other defined endpoints:
 - `/callback-phase1`
 - `/callback-phase2`
 - `/callback-phase3`
-  
+
 All of the above are `POST` endpoints.

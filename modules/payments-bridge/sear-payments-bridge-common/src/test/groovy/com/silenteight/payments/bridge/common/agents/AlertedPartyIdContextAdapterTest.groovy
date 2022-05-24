@@ -45,4 +45,3 @@ class AlertedPartyIdContextAdapterTest extends Specification {
     'GARCIA LUIS 314\rLA NEGRA ANTOFAGASTA\nCHILE'   | "LA NEGRA" | 1                  | 1                   | 2         | false      || "314 LA NEGRA ANTOFAGASTA"
   }
 }
-

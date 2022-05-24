@@ -13,4 +13,3 @@ FROM ae_analysis aa
          LEFT JOIN ae_match_category_value amcv
                    ON amcv.match_id = am.match_id AND amcv.category_id = aac.category_id
 WHERE amcv.category_id IS NULL;
-

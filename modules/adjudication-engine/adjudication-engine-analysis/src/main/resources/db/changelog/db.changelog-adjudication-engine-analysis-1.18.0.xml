@@ -4,13 +4,14 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
-  
+
   <changeSet id="adjudication-engine-analysis-1.18.0" author="wkeska">
     <preConditions onFail="MARK_RAN">
       <foreignKeyConstraintExists foreignKeyName="fk_ae_agent_exchange_match_feature_match_id"/>
     </preConditions>
 
-    <dropForeignKeyConstraint baseTableName="ae_agent_exchange_match_feature" constraintName="fk_ae_agent_exchange_match_feature_match_id"/>
+    <dropForeignKeyConstraint baseTableName="ae_agent_exchange_match_feature"
+                              constraintName="fk_ae_agent_exchange_match_feature_match_id"/>
     <addForeignKeyConstraint baseTableName="ae_agent_exchange_match_feature"
                              baseColumnNames="match_id"
                              constraintName="fk_ae_agent_exchange_match_feature_match_id"
@@ -52,7 +53,8 @@
       <foreignKeyConstraintExists foreignKeyName="fk_ae_match_recommendation_alert_id"/>
     </preConditions>
 
-    <dropForeignKeyConstraint baseTableName="ae_match_recommendation" constraintName="fk_ae_match_recommendation_alert_id"/>
+    <dropForeignKeyConstraint baseTableName="ae_match_recommendation"
+                              constraintName="fk_ae_match_recommendation_alert_id"/>
     <addForeignKeyConstraint baseTableName="ae_match_recommendation"
                              baseColumnNames="alert_id"
                              constraintName="fk_ae_match_recommendation_alert_id"

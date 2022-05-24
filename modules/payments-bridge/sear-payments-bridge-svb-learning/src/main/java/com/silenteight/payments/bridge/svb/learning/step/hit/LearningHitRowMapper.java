@@ -53,4 +53,3 @@ final class LearningHitRowMapper implements RowMapper<LearningHitEntity> {
         .build();
   }
 }
-

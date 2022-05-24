@@ -1,11 +1,11 @@
--- 
+--
 -- Apache Derby scripts by Steve Stewart, updated by Ronald Pomeroy
 -- Based on Srinivas Venkatarangaiah's file for Cloudscape
--- 
+--
 -- Known to work with Apache Derby 10.0.2.1, or 10.6.2.1
 --
 -- Updated by Zemian Deng <saltnlight5@gmail.com> on 08/21/2011
---   * Fixed nullable fields on qrtz_simprop_triggers table. 
+--   * Fixed nullable fields on qrtz_simprop_triggers table.
 --   * Added Derby QuickStart comments and drop tables statements.
 --
 -- DerbyDB + Quartz Quick Guide:
@@ -164,4 +164,3 @@ create table qrtz_locks
     lock_name  varchar(40)  not null,
     primary key (sched_name, lock_name)
 );
-

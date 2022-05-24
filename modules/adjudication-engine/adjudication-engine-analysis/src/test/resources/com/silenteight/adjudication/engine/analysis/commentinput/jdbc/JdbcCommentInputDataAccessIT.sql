@@ -28,5 +28,3 @@ INSERT INTO ae_analysis_alert
 VALUES (1, 1, now(), now()),
        (1, 2, now(), now()),
        (1, 3, now(), now());
-
-

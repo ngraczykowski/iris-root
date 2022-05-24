@@ -481,4 +481,3 @@ warehouse.reports.v2:
         WHERE
                recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}' AND
                wa.payload ->> 'qa.level-0.NEW.timestamp' IS NOT NULL
-

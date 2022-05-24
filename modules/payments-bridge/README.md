@@ -8,7 +8,7 @@ This project represents the high-level implementation of SEAR Payments using hea
 2. Follow the AE readme to run it
 3. Start the database using `make up`
 4. In Run configuration settings change 'Use class path module' to 'sear-payments-bridge.sear-payments-app.main'
-5. Enable the following Spring profiles for development: 
+5. Enable the following Spring profiles for development:
 ```
 logrequest,mockdatasource,mockaws,mockae,mockagents,mockwarehouse,mockemail
 ```
@@ -68,7 +68,7 @@ To enable security, set the following property:
 
 ## Getting access token from Keycloak
 
-To get access token for the client `sierra-dev-api` run: 
+To get access token for the client `sierra-dev-api` run:
 
     curl \
         -d client_id=sierra-dev-api \
@@ -88,9 +88,9 @@ The generated access token `$TOKEN` can be tested by following the steps below:
         curl 'http://localhost:24602/rest/pb/test-authentication' --header 'Authorization: Bearer $TOKEN'
 
 1. Verify the output:
-    
+
         Authenticated
-        
+
 # Authorize the requests to the CMAPI
 
 ## Configuration of CMAPI Auth Server
@@ -107,6 +107,6 @@ The generated access token `$TOKEN` can be tested by following the steps below:
 1. Verify the `Headers: Authorization: Bearer` from `cmapi-mock` debug log.
 
 
-### How run reEtl 
+### How run reEtl
 
-How to call endpoint 'trigger batch for re-etl' request 
+How to call endpoint 'trigger batch for re-etl' request

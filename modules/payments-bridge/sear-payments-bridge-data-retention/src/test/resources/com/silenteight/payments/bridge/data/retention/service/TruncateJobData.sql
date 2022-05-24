@@ -17,4 +17,3 @@ ALTER SEQUENCE pb_batch_step_execution_seq RESTART WITH 1;
 
 DELETE
 FROM pb_alert_data_retention;
-

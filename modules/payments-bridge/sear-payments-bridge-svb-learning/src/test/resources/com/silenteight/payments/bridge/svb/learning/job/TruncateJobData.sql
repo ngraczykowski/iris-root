@@ -25,4 +25,3 @@ DELETE
 FROM pb_learning_action;
 DELETE
 FROM pb_learning_file;
-

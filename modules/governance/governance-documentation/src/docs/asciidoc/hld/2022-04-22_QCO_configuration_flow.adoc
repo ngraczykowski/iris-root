@@ -101,6 +101,3 @@ Customer Bridge *MUST* add a queue to gov.events exchange to receive this inform
 . All components up
 . User change QCO settings
 . Customer Bridge reads the configuration and applies it to alerts
-
-
-

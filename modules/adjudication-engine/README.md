@@ -48,7 +48,7 @@ In both cases you have to remember to set proper values of:
 - `template` - the content of the template file;
 - `revision` - it is an index number indicating the version of a given `templateName`.
 
-> NOTE: If there are 2 templates with the same `templateName` then the one with higher revision 
+> NOTE: If there are 2 templates with the same `templateName` then the one with higher revision
 > will be used to generate comments.
 
 An example http request updating comment template is available in:
@@ -65,7 +65,7 @@ infrastructure. To do so follow the steps from `README.md` of `cli-commentator` 
 
 ## Removing feature values
 
-To remove feature values set up property: 
+To remove feature values set up property:
 
 ```
 ae:

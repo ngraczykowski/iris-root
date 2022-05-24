@@ -100,7 +100,7 @@ M1
 To get Match Solution for M1:
 - Request a solution from Gov for: AE, DENY, WEAK_MATCH, MATCH, NO_MATCH (feature vector), with policy "policies/xxxxxx".
 - **How do we know which matches are ready to be asked for?**
-- 
+-
 
 WHAT IS NEEDED FOR ANALYSIS:
 

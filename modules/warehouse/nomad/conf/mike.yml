@@ -182,7 +182,7 @@ warehouse.reports.v2:
           FROM warehouse_match
           GROUP BY alert_id
         )
-        
+
         SELECT wsa.payload ->> 'match_reason:policy'                            AS "Policy ID",
                wsa.payload ->> 'match_reason:policy_title'                      AS "Policy Name",
                wsa.payload ->> 'match_reason:step'                              AS "Step ID",

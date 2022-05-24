@@ -149,6 +149,3 @@ components:
         effectivenessPercent:
           type: number
           example: 99
-
-
-

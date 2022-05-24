@@ -168,4 +168,3 @@ INSERT INTO public.pb_learning_action (learning_action_id, fkco_messages, fkco_v
                                        fkco_v_status_behavior)
 VALUES (4, 102925, 'Automation Comment - FR FAIL', '7059', '2019-07-29 13:54:16.000000', '9196',
         '23', '1', 'FR_FAIL', 'PENDING');
-

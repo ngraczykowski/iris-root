@@ -59,7 +59,7 @@
       <column name="alert_id"/>
     </createIndex>
   </changeSet>
-  
+
   <changeSet id="adjudication-engine-analysis-1.17.0_1" author="wkeska">
     <addColumn tableName="ae_match_recommendation">
       <column name="alert_id" type="BIGINT">

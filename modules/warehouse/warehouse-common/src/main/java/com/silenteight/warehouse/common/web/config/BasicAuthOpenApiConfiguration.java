@@ -23,4 +23,3 @@ class BasicAuthOpenApiConfiguration {
 
   static final String APP_SECURITY_SCHEMA = "basic-security";
 }
-

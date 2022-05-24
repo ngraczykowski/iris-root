@@ -42,4 +42,3 @@ data:
         <appender-ref ref="ASYNC_CONSOLE"/>
       </root>
     </configuration>
-

@@ -87,7 +87,7 @@ def fetch_migrated_simulations():
 	cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 	cur.execute(FETCH_SIMULATION_PARTITION)
 	partitions = cur.fetchall()
-	cur.close()	
+	cur.close()
 	return partitions
 
 def was_partition_migrated(migrated_partitions, partition_to_migrate):

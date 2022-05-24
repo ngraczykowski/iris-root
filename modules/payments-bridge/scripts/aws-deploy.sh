@@ -11,4 +11,3 @@ aws ecr get-login-password --region us-east-1 | skopeo login --username AWS --pa
 skopeo copy docker://docker.repo.silenteight.com/pb/$CHART_NAME:$INSTALLER_VERSION $ECR_DESTINATION:$INSTALLER_VERSION
 skopeo copy docker://docker.repo.silenteight.com/pb/$CHART_NAME:snapshot  $ECR_DESTINATION:snapshot
 skopeo copy docker://docker.repo.silenteight.com/pb/$CHART_NAME:latest  $ECR_DESTINATION:latest
-

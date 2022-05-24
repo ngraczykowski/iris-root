@@ -703,10 +703,6 @@ components:
         }
     ReportDto:
       type: object
-      example:
-
-    ReportDto:
-      type: object
       properties:
         name:
           type: string

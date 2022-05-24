@@ -33,14 +33,14 @@ If commit is connected to jira task then add Task id at the end of commit messag
 ### Example 1
 
     feat(firco): Add Firco controller error handling (ABC-123)
-    
+
     The Firco Continuity Content Manager API requires the error to be in form
     that resembles SOAP 1.1 Fault.
 
 ### Example 2
 
     docs: Add ADR for using Conventional Commits specification
-    
+
     The commit messages shall have an easy set of rules for creating
     an explicit commit history; which makes it easier to write automated
     tools on top of.

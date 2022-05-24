@@ -26,7 +26,7 @@ font:
     fallbacks:
         - Fallback
 
-        
+
 # Variables
 var:
     color:
@@ -45,7 +45,7 @@ var:
         field:
             neutral: #f6f8fa
         border: #e5e5e5
-        
+
     font:
         size:
             base: 10
@@ -93,7 +93,7 @@ title_page:
         top: 0%
         align: left
 
-        
+
 ## Headings
 heading:
     font_color: $var_color_text_header
@@ -106,17 +106,17 @@ heading:
     h5_font_size: $var_font_size_h5
     h6_font_size: $var_font_size_h6
 
-    
+
 ## Link
 
 link:
     font_color: $var_color_text_link
-    
-    
+
+
 ## Paragraph
 prose:
   margin_bottom: $var_font_size_base
-  
+
 ## Code
 code:
   font_family: Ubuntu-Mono
@@ -125,7 +125,7 @@ code:
   padding: $var_font_size_base * 1.4
   border_radius: 4
 
-  
+
 ## Admonitions
 admonition:
     padding: [0, 10, 0, 10]
@@ -141,8 +141,8 @@ admonition:
             stroke_color: $var_color_admonition_warning
         caution:
             stroke_color: $var_color_admonition_caution
-            
-            
+
+
 ## Table
 table:
   border_color: $var_color_border

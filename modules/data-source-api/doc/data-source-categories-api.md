@@ -34,7 +34,7 @@ The resources available in the Data Source - Categories API:
 
     POST categories/-/matches:batchGet [
         "categories/customer_type/matches/1342",
-        "categories/customer_type/matches/1989"    
+        "categories/customer_type/matches/1989"  
     ] -> {
         category_values=[
             {
@@ -52,7 +52,7 @@ The resources available in the Data Source - Categories API:
 
     POST categories/-/matches:batchGet [
         "categories/multi_countries/matches/1342",
-        "categories/multi_countries/matches/1989"    
+        "categories/multi_countries/matches/1989"  
     ] -> {
         category_values=[
             {
@@ -74,9 +74,9 @@ The resources available in the Data Source - Categories API:
 
     POST categories/-/matches:batchGet [
         "categories/branch/matches/1342",
-        "categories/branch/matches/1989"    
+        "categories/branch/matches/1989"  
         "categories/customer_type/matches/1342",
-        "categories/customer_type/matches/1989"    
+        "categories/customer_type/matches/1989"  
     ] -> {
         category_values=[
             {

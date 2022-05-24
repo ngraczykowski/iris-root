@@ -27,4 +27,3 @@ helm package --app-version $version --destination build/chart helm-chart
 application_artifact=$(basename -- "$(ls "$scriptdir"/../build/chart/$chart_name-*.tgz)")
 echo "Creating HELM chart: $application_artifact"
 helm push-artifactory --skip-reindex $scriptdir/../build/chart/$application_artifact $helm_repo
-

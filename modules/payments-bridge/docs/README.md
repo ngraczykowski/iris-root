@@ -28,7 +28,7 @@ Encrypted zip file will create a directory inside doc/api folder
 
 
 ## Alert Types
-Historical decision 
+Historical decision
 
 ### false positive
 
@@ -49,5 +49,3 @@ Historical decision
 
 ## Using additional CMAPI examples
 To use additional jsons during tests unzip docs/api/svb-examples/additional-examples.zip in default location.
-
-

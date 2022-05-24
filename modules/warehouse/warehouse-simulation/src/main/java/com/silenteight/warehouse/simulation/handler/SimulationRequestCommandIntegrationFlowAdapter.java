@@ -50,4 +50,3 @@ class SimulationRequestCommandIntegrationFlowAdapter extends IntegrationFlowAdap
         .channel(outboundChannel);
   }
 }
-

@@ -25,4 +25,3 @@ VALUES (10, 'alerts/1/matches/1'),
        (90, 'alerts/9/matches/1'),
        (100, 'alerts/10/matches/1'),
        (100, 'alerts/10/matches/2');
-

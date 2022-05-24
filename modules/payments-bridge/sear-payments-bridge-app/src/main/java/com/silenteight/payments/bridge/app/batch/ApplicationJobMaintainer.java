@@ -164,4 +164,3 @@ class ApplicationJobMaintainer implements JobMaintainer {
     return Optional.empty();
   }
 }
-

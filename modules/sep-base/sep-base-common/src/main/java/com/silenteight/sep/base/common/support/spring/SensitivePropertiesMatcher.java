@@ -32,5 +32,3 @@ class SensitivePropertiesMatcher {
     return Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
   }
 }
-
-

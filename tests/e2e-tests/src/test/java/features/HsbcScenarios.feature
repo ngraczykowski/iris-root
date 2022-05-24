@@ -7,4 +7,3 @@ Feature: HSBC scenarios
     When Initialize generation of "AI_REASONING" report via warehouse and wait until it's generated
     And Download generated report
     Then Downloaded report contains 5 rows
-

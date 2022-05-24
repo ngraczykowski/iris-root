@@ -10,11 +10,11 @@ The resources available in Alert API:
 ### 1. Creating an Alert with a Match
 
     POST alerts {
-        alert_id="AE_BTCH_PEPL!1391FFFD-2E8A4AC7-B0E596E6-2FE1CEC1", 
+        alert_id="AE_BTCH_PEPL!1391FFFD-2E8A4AC7-B0E596E6-2FE1CEC1",
         alert_time="2021-02-16T21:25:34Z",
-        labels={ 
-            "batch"="AE_BTCH_PEPL", 
-            "country"="AE"        
+        labels={
+            "batch"="AE_BTCH_PEPL",
+            "country"="AE"  
         }
     } -> {
         name="alerts/1342",
@@ -26,11 +26,11 @@ The resources available in Alert API:
             "country"="AE"
         }
     }
-    
+
     POST alerts/1342/matches {
         match_id="DB00013388"
     } -> {
-        name="alerts/1342/matches/32", 
+        name="alerts/1342/matches/32",
         match_id="DB00013388",
         create_time="2021-02-17T23:05:45Z"
     }
@@ -40,17 +40,17 @@ The resources available in Alert API:
 
     POST alerts:batchCreate [
         {
-            alert_id="AE_BTCH_PEPL!1391FFFD-2E8A4AC7-B0E596E6-2FE1CEC1", 
+            alert_id="AE_BTCH_PEPL!1391FFFD-2E8A4AC7-B0E596E6-2FE1CEC1",
             alert_time="2021-02-16T21:25:34Z",
-            labels={ 
-                "batch"="AE_BTCH_PEPL" 
+            labels={
+                "batch"="AE_BTCH_PEPL"
             }
         },
         {
-            alert_id="AE_BTCH_DENY!284DB66D-09CC-4174-A541-A983E061770C", 
+            alert_id="AE_BTCH_DENY!284DB66D-09CC-4174-A541-A983E061770C",
             alert_time="2021-02-17T21:25:34Z",
-            labels={ 
-                "batch"="AE_BTCH_DENY" 
+            labels={
+                "batch"="AE_BTCH_DENY"
             }
         },
     ] -> [
@@ -65,10 +65,10 @@ The resources available in Alert API:
         },
         {
             name="alerts/97143",
-            alert_id="AE_BTCH_DENY!284DB66D-09CC-4174-A541-A983E061770C", 
+            alert_id="AE_BTCH_DENY!284DB66D-09CC-4174-A541-A983E061770C",
             alert_time="2021-02-17T21:25:34Z",
             create_time="2021-02-17T23:05:45Z",
-            labels={ 
+            labels={
                 "batch"="AE_BTCH_DENY"
             }
         }
@@ -86,12 +86,12 @@ The resources available in Alert API:
         }
     ] -> [
         {
-            name="alerts/1342/matches/32", 
+            name="alerts/1342/matches/32",
             match_id="DB00013388",
             create_time="2021-02-17T23:05:45Z"
         },
         {
-            name="alerts/1342/matches/33", 
+            name="alerts/1342/matches/33",
             match_id="AS00079876",
             create_time="2021-02-17T23:05:45Z"
         }
@@ -122,27 +122,26 @@ The resources available in Alert API:
                     match_id="GN00131324"
                 }
             ]
-        }                            
+        }  
     ] -> [
         {
-            name="alerts/1342/matches/32", 
+            name="alerts/1342/matches/32",
             match_id="DB00013388",
             create_time="2021-02-17T23:05:45Z"
         },
         {
-            name="alerts/1342/matches/33", 
+            name="alerts/1342/matches/33",
             match_id="AS00079876",
             create_time="2021-02-17T23:05:45Z"
         },
         {
-            name="alerts/97143/matches/34", 
+            name="alerts/97143/matches/34",
             match_id="AN00013211",
             create_time="2021-02-17T23:05:45Z"
         },
         {
-            name="alerts/97143/matches/35", 
+            name="alerts/97143/matches/35",
             match_id="GN00131324",
             create_time="2021-02-17T23:05:45Z"
         }
     ]
-

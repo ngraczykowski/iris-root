@@ -14,11 +14,11 @@ To fetch information from endpoints with the annotation @PreAuthorize("isAuthori
 
 For development purpose, you can run your application with a `basic-auth` profile.
 
-All endpoints will be then protected only by a basic authorization configured in a properties file. 
+All endpoints will be then protected only by a basic authorization configured in a properties file.
 So you will be able to run the application without Keyclaok in your local environment.
 
 An example properties file:
-    
+
     # settings used in the development process to allow testing with swagger and without keycloak or any other
     # authorization server
 
@@ -43,14 +43,14 @@ An example OpenAPI configuration, ie: `BasicAuthOpenApiConfiguration.java`:
     @Configuration
     @Profile("swagger & basic-auth")
     class BasicAuthOpenApiConfiguration {
-    
+
         static final String APP_SECURITY_SCHEMA = "basic-security";
     }
 
 
 Full example is available in this Marge Request:
 https://gitlab.silenteight.com/sens/simulator/-/merge_requests/19
- 
+
 ### Block endpoints
 
 Sometimes there is a need to block all endpoints (HSBC on a prod env).

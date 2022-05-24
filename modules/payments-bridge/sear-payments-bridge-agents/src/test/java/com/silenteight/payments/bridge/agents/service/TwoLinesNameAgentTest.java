@@ -46,4 +46,3 @@ class TwoLinesNameAgentTest {
     assertEquals(expected, actual);
   }
 }
-

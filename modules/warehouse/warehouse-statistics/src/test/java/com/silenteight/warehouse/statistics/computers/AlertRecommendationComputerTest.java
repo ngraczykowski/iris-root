@@ -20,7 +20,7 @@ class AlertRecommendationComputerTest {
   private static final String RECOMMENDATION_FIELD_NAME =
       "s8_recommendation";
   private static final String ANALYST_DECISION_FIELD_NAME = "analyst_decision";
-  
+
   private final AlertRecommendationComputer computer =
       new AlertRecommendationComputer(
           new RecommendationMapper(

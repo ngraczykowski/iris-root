@@ -221,9 +221,9 @@ the implementation of this method might look like this:
 @Override
 public void createAlert(
     CreateAlertRequest request, StreamObserver<Alert> responseObserver) {
-  
+
   var response = alertService.createAlert(request);
-  
+
   responseObserver.onNext(response);
   responseObserver.onCompleted();
 }

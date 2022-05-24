@@ -27,4 +27,3 @@ Authorization: Bearer {{access_token}}
 GET {{baseUrl}}/rest/ae/status
 Accept: application/json
 Content-Type: application/json
-
