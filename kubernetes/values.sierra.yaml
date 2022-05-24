@@ -65,10 +65,6 @@ agents:
 
   learning-engine:
     enabled: true
-    profiles:
-      - rabbitmq-declare
-    image:
-      tag: "1.4.0"
 
   historical-decisions-agent:
     enabled: true
