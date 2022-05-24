@@ -283,12 +283,17 @@ info:
 
 grpc:
   server:
+    port: 24801
     max-inbound-message-size: 8MB
   client:
     GLOBAL:
       negotiation-type: PLAINTEXT
       max-inbound-message-size: 8MB
       enable-keep-alive: false
+    datasource:
+      address: static://localhost:${grpc.server.port}
+    governance:
+      address: static://localhost:${grpc.server.port}
 
 sentry:
   environment: unknown
