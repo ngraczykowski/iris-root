@@ -62,7 +62,7 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
     List<RecommendationInfo> recommendationInfosList =
         request.getRecommendationInfosList();
 
-    sendAsBatches(recommendationInfosList.stream().iterator(), request.getAnalysis());
+    sendAsBatches(recommendationInfosList.iterator(), request.getAnalysis());
     log.debug("RecommendationsGenerated request processed, analysisName={}", request.getAnalysis());
   }
 
@@ -71,14 +71,15 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
 
     RecommendationInfoBatch recommendationInfoBatch = getRecommendationWithMetaDataBatch();
 
-    iterator.forEachRemaining(recommendationInfo -> {
+    while (iterator.hasNext()) {
+      RecommendationInfo recommendationInfo = iterator.next();
       if (!recommendationInfoBatch.isComplete())
         recommendationInfoBatch.addItem(recommendationInfo);
       if (recommendationInfoBatch.isComplete() || !iterator.hasNext()) {
         sendToFeed(analysisName, recommendationInfoBatch.getRecommendations());
         recommendationInfoBatch.clear();
       }
-    });
+    }
   }
 
   private void sendToFeed(String analysisName, List<RecommendationInfo> recommendationInfoList) {
