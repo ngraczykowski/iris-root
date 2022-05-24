@@ -3,7 +3,9 @@
 /gradlew.bat      @ahaczewski
 
 /.jenkins/*   @SilentEight/devops
-/.github/*    @SilentEight/devops
+/.github/*    @SilentEight/architecture
+
+/.github/workflows/*      @ahaczewski
 
 /.idea/**/*               @ahaczewski
 /.editorconfig            @ahaczewski
