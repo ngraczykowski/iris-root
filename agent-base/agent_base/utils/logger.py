@@ -22,12 +22,17 @@ def get_file_handler(filename="agent.log", log_level=logging.INFO):
 
 
 def get_logger(name, log_filename=None, log_level=logging.INFO):
+    console_handler = get_console_handler(log_level)
+    handlers = [console_handler]
+    if log_filename:
+        handlers.append(get_file_handler(log_filename, log_level))
     logging.basicConfig(
         level=log_level,
         format=LOG_FORMAT,
+        handlers=handlers,
     )
     logger = logging.getLogger(name)
-    logger.addHandler(get_console_handler(log_level))
+    logger.addHandler(console_handler)
     if log_filename:
         logger.addHandler(get_file_handler(log_filename, log_level))
     logger.propagate = False

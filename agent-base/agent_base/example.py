@@ -119,7 +119,9 @@ def main():
     args = parser.parse_args()
 
     log_filename = "example.log"
-    logger = get_logger("main", log_filename)
+    logger = get_logger(
+        "main", log_filename, log_level=logging.DEBUG if args.verbose else logging.INFO
+    )
     logger.info(f"Logging to stdout and to {log_filename} file")
 
     config = Config(configuration_dirs=args.configuration_dirs, required=True)
