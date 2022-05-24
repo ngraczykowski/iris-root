@@ -24,7 +24,6 @@ import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.springframework.transaction.annotation.Isolation.SERIALIZABLE;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -35,10 +34,7 @@ class DatabaseAlertRecordCompositeReader implements AlertRecordCompositeReader {
   private final DatabaseCbsHitDetailsReader cbsHitDetailsReader;
   private final CbsOracleMetrics cbsOracleMetrics;
 
-  @Transactional(
-      transactionManager = "externalTransactionManager",
-      isolation = SERIALIZABLE,
-      readOnly = true)
+  @Transactional(transactionManager = "externalTransactionManager", readOnly = true)
   @Override
   public AlertRecordCompositeCollection read(
       ScbAlertIdContext scbAlertIdContext, List<AlertId> alertIds) {

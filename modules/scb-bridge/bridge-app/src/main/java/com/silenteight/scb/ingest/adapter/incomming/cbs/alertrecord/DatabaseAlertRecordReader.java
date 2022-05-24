@@ -23,9 +23,6 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.validation.ValidationException;
 
-import static java.util.stream.Collectors.toList;
-import static org.springframework.transaction.annotation.Isolation.SERIALIZABLE;
-
 @Slf4j
 @RequiredArgsConstructor
 class DatabaseAlertRecordReader implements AlertRecordReader {
@@ -35,10 +32,7 @@ class DatabaseAlertRecordReader implements AlertRecordReader {
   private final JdbcTemplate jdbcTemplate;
 
   @Override
-  @Transactional(
-      transactionManager = "externalTransactionManager",
-      isolation = SERIALIZABLE,
-      readOnly = true)
+  @Transactional(transactionManager = "externalTransactionManager", readOnly = true)
   public List<AlertRecord> read(String dbRelationName, Collection<String> systemIds) {
     if (systemIds.isEmpty()) {
       return List.of();
@@ -48,7 +42,7 @@ class DatabaseAlertRecordReader implements AlertRecordReader {
         .map(ids -> getAlertRecords(dbRelationName, ids))
         .flatMap(Collection::stream)
         .filter(Objects::nonNull)
-        .collect(toList());
+        .toList();
   }
 
   @Nonnull

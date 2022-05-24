@@ -22,8 +22,6 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.validation.ValidationException;
 
-import static org.springframework.transaction.annotation.Isolation.SERIALIZABLE;
-
 @Slf4j
 class DatabaseDecisionRecordReader implements DecisionRecordReader {
 
@@ -38,10 +36,7 @@ class DatabaseDecisionRecordReader implements DecisionRecordReader {
   }
 
   @Override
-  @Transactional(
-      transactionManager = "externalTransactionManager",
-      isolation = SERIALIZABLE,
-      readOnly = true)
+  @Transactional(transactionManager = "externalTransactionManager", readOnly = true)
   public List<DecisionRecord> read(String dbRelationName, Collection<String> systemIds) {
     if (systemIds.isEmpty()) {
       return List.of();

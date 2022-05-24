@@ -8,9 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.springframework.transaction.annotation.Isolation.SERIALIZABLE;
 
 class DatabaseCbsHitDetailsReader implements CbsHitDetailsReader {
 
@@ -20,10 +17,7 @@ class DatabaseCbsHitDetailsReader implements CbsHitDetailsReader {
     query = new JdbcCbsHitDetailsHelperQuery(jdbcTemplate);
   }
 
-  @Transactional(
-      transactionManager = "externalTransactionManager",
-      isolation = SERIALIZABLE,
-      readOnly = true)
+  @Transactional(transactionManager = "externalTransactionManager", readOnly = true)
   @Override
   public List<CbsHitDetails> read(String dbRelationName, Collection<AlertId> alertIds) {
     if (alertIds.isEmpty()) {
@@ -32,12 +26,12 @@ class DatabaseCbsHitDetailsReader implements CbsHitDetailsReader {
 
     var systemIds = alertIds.stream()
         .map(AlertId::getSystemId)
-        .collect(Collectors.toList());
+        .toList();
     var foundCbsHitDetails = query.execute(dbRelationName, systemIds);
 
     return foundCbsHitDetails.stream()
         .filter(r -> alertIds.contains(toAlertId(r)))
-        .collect(Collectors.toList());
+        .toList();
   }
 
   private AlertId toAlertId(CbsHitDetails r) {

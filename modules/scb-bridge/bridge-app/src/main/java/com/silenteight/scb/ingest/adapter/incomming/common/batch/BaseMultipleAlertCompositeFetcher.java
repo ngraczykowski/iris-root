@@ -35,7 +35,6 @@ abstract class BaseMultipleAlertCompositeFetcher implements MultipleAlertComposi
     List<AlertComposite> result = new ArrayList<>();
     try (Connection connection = externalDataSource.getConnection()) {
       connection.setAutoCommit(false);
-      connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 
       result.addAll(fetch(connection, systemIds));
 
