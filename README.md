@@ -27,10 +27,11 @@ Before you jump in and start furiously contributing, you might need to have a fe
 
 ### After cloning
 
-Right after cloning this repository, please initialize the pre-commit hook:
+Right after cloning this repository, please initialize Git hooks:
 
 ```bash
 pre-commit install
+pre-commit install --hook-type commit-msg
 ```
 
 > **NOTE**

@@ -23,7 +23,7 @@ The elements allowed specifically for this project:
   existing tests,
 - exclamation mark for when the commit contains breaking change, e.g., `feat!:`, `feat(ae)!:`
 - `docs:` for updates in documentation, ADRs, etc.,
-- `config:` for changes in configuration, RabbitMQ definitions, etc.
+- `chore:` for changes in configuration, RabbitMQ definitions, deployment, chart, etc.
 - `build:` for changes in Gradle build files, dependencies updates, etc.
 - `ci:` for changes in Jenkins configuration or build definition,
 
