@@ -37,15 +37,19 @@ class ConsulServiceConfig:
         if host and host.startswith("http"):
             host = re.compile("http[s]*?://").sub("", host)
             os.environ["CONSUL_HTTP_ADDR"] = host
-        self.c = consul.Consul(
-            host=host,
-            cert=cert,
-            verify=trusted_ca,
-            scheme="https" if cert else "http",
-            token=token,
-        )
-        self.map = {}
-        self.params = None
+        try:
+            self.c = consul.Consul(
+                host=host,
+                cert=cert,
+                verify=trusted_ca,
+                scheme="https" if cert else "http",
+                token=token,
+            )
+            self.map = {}
+            self.params = None
+        except requests.exceptions.ConnectionError:
+            logger.warning("Cannot connect to Consul Service")
+            self.c = None
         self.reload()
 
     def __getattr__(self, name):
@@ -84,7 +88,11 @@ class ConsulServiceConfig:
                         if variable_name == secret_name:
                             self.map[variable_name] = secret[left_side_ix + 1 :]
                             logger.debug(f"Got environment variable: {variable_name}")
-                except (requests.exceptions.InvalidURL, ConsulServiceError):
+                except (
+                    requests.exceptions.InvalidURL,
+                    requests.exceptions.ConnectionError,
+                    ConsulServiceError,
+                ):
                     raise ConsulServiceError("No valid consul connection")
             else:
                 raise ConsulServiceError("No valid consul service secrets path")
@@ -95,7 +103,7 @@ class ConsulServiceConfig:
         try:
             address = self.c.catalog.service(service_name)[1][0]["ServiceAddress"]
             port = self.c.catalog.service(service_name)[1][0]["ServicePort"]
-        except (IndexError, KeyError):
+        except (IndexError, KeyError, requests.exceptions.ConnectionError):
             return None
         return f"{address}:{port}"
 
