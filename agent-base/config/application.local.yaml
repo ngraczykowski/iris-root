@@ -41,7 +41,7 @@ agent:
       routing-key: ""
 
   grpc:
-    port: 24804
+    port: 9090
     server_ca: "tests/ssl_example/ca.pem"
     server_private_key: "tests/ssl_example/server-key.pem"
     server_public_key_chain: "tests/ssl_example/server.pem"

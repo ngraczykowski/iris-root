@@ -1,5 +1,4 @@
 import logging
-import random
 from typing import Any, Mapping
 
 import consul.aio
@@ -7,7 +6,7 @@ import consul.aio
 
 class ConsulService:
     def __init__(self, config):
-        self.logger = logging.getLogger("consul_service")
+        self.logger = logging.getLogger("main").getChild("consul_service")
 
         consul_config = config.get("consul")
         if consul_config:
@@ -29,7 +28,7 @@ class ConsulService:
         if not services:
             raise Exception(f"Service {key} is not known")
 
-        return random.choice(services)
+        return services[0]
 
     async def get(self, key: str):
         _, value = self.consul.kv.get(key)

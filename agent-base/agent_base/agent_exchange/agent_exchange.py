@@ -2,7 +2,6 @@ import asyncio
 import collections
 import logging
 import os
-import sys
 import time
 from typing import Any, AsyncGenerator, Dict, Generator, Tuple
 
@@ -38,18 +37,19 @@ class AgentExchange(AgentService):
         self.connections = []
         self.data_source = data_source
         self.ssl = ssl
-        self.logger = logging.getLogger("AgentExchange")
-        self.logger.addHandler(logging.StreamHandler(sys.stdout))
+        self.logger = logging.getLogger("main").getChild("agent_exchange")
 
     async def start(self, *args, **kwargs) -> None:
-        self.logger.debug("Starting agent exchange")
+        self.logger.info("Starting agent exchange")
 
         await super().start(*args, **kwargs)
         connection = await self._set_pika_connection()
         self.connections = [connection]
 
         if self.data_source:
+            self.logger.info("Starting data source")
             await self.data_source.start()
+            self.logger.info("Data source started")
 
         self.logger.info("Agent exchange started")
 
@@ -58,7 +58,9 @@ class AgentExchange(AgentService):
 
         tasks = [s.stop() for s in self.connections]
         if self.data_source:
+            self.logger.info("Stopping data source")
             tasks.append(self.data_source.stop())
+            self.logger.info("Data source stopped")
 
         await asyncio.gather(*tasks)
         self.connections = []
@@ -75,9 +77,11 @@ class AgentExchange(AgentService):
                 raise MessageFormatException(body)
 
         request: AgentExchangeRequest = AgentExchangeRequest.FromString(body)
-        self.logger.info(f"Before request: {message.headers.get('correlationId', '')}")
+        self.logger.info(
+            f"CorrelationId before request: {message.headers.get('correlationId', '')}"
+        )
         response: AgentExchangeResponse = await self.process(request)
-        self.logger.info(f"After request: {message.headers.get('correlationId', '')}")
+        self.logger.info(f"CorrelationId after request: {message.headers.get('correlationId', '')}")
 
         response_body = lz4.frame.compress(
             response.SerializeToString(),
@@ -110,7 +114,6 @@ class AgentExchange(AgentService):
     ) -> Dict[str, Dict[str, AgentOutput.Feature]]:
         resolved = collections.defaultdict(dict)
         try:
-            self.logger.debug(type(agent_inputs))
             async for match, feature, task in self._create_tasks(agent_inputs):
                 resolved[match][feature] = await self._resolve_task(feature, task)
 

@@ -1,5 +1,4 @@
 import logging
-import sys
 from typing import Callable, Dict
 
 import aio_pika
@@ -25,8 +24,7 @@ class PikaConnection:
             None,
             None,
         )
-        self.logger = logging.getLogger("PikaConnection")
-        self.logger.addHandler(logging.StreamHandler(sys.stdout))
+        self.logger = logging.getLogger("main").getChild("pika_connection")
         self.max_requests_to_worker = max_requests_to_worker
         self.ssl = use_ssl
 
@@ -93,10 +91,13 @@ class PikaConnection:
                     durable=self.messaging_configuration["request"].get("queue-durable", True),
                     arguments=self.messaging_configuration["request"].get("queue-arguments", None),
                 )
-
+                request_exchange = self.messaging_configuration["request"]["exchange"]
                 await self.request_queue.bind(
-                    exchange=self.messaging_configuration["request"]["exchange"],
+                    exchange=request_exchange,
                     routing_key=self.messaging_configuration["request"].get("routing-key"),
+                )
+                self.logger.info(
+                    f"Created queue {self.request_queue} and bind to exchange {request_exchange}"
                 )
             else:
                 raise
@@ -121,16 +122,16 @@ class PikaConnection:
             await self.connection.close()
 
     async def on_request(self, message: aio_pika.IncomingMessage) -> None:
-        self.logger.debug(f"received {message}")
+        self.logger.debug(f"Received message id: {message.message_id}")
 
         try:
             response_message = await self.request_callback(message)
         except AgentException as err:
-            self.logger.warning(f"{err!r} on {message}")
+            self.logger.warning(f"{err!r} on message id: {message.message_id}")
             await message.nack(requeue=err.retry)
             return
         except Exception as err:
-            self.logger.warning(f"{err!r} on {message}")
+            self.logger.warning(f"{err!r} on message id: {message.message_id}")
             await message.nack()
             return
 
@@ -139,4 +140,4 @@ class PikaConnection:
             message=response_message,
         )
         await message.ack()
-        self.logger.debug(f"acknowledged {message.message_id}")
+        self.logger.debug(f"acknowledged message id: {message.message_id}")

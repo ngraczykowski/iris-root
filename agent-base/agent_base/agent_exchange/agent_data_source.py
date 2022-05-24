@@ -1,5 +1,4 @@
 import logging
-import sys
 from typing import Any, AsyncGenerator, Generator, Tuple
 
 import grpc
@@ -26,8 +25,7 @@ class AgentDataSource:
         self.address_service = AddressService(config.application_config)
         self.ssl = ssl
         self.channel, self.channel_stream_method = None, None
-        self.logger = logging.getLogger("AgentDataSource")
-        self.logger.addHandler(logging.StreamHandler(sys.stdout))
+        self.logger = logging.getLogger("main").getChild("data_source")
 
     async def start(self):
         data_source_config = self.application_config["grpc"]["client"]["data-source"]
@@ -44,7 +42,7 @@ class AgentDataSource:
                 certificate_chain = f.read()
             server_credentials = grpc.ssl_channel_credentials(ca, private_key, certificate_chain)
             self.channel = grpc.aio.secure_channel(address, server_credentials)
-
+        self.logger.info(f"Data source channel on {address}")
         self.channel_stream_method = None
 
     async def request(

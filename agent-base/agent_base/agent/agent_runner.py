@@ -3,7 +3,6 @@ import concurrent.futures
 import contextlib
 import functools
 import logging
-import sys
 from typing import List
 
 from agent_base.agent.agent import Agent
@@ -17,7 +16,8 @@ def run(start_callback, end_callback):
         loop.run_until_complete(start_callback())
         loop.run_forever()
     finally:
-        logging.info(f"Finishing, {len(asyncio.all_tasks(loop))} running tasks will be cancelled")
+        logger = logging.getLogger("main").getChild("run")
+        logger.info(f"Finishing, {len(asyncio.all_tasks(loop))} running tasks will be cancelled")
         tasks = asyncio.gather(*asyncio.all_tasks(loop))
         tasks.cancel()
         with contextlib.suppress(asyncio.CancelledError):
@@ -30,8 +30,7 @@ def run(start_callback, end_callback):
 class AgentRunner:
     def __init__(self, config: Config):
         self.application_config = config.application_config
-        self.logger = logging.getLogger("runner")
-        self.logger.addHandler(logging.StreamHandler(sys.stdout))
+        self.logger = logging.getLogger("main").getChild("agent_runner")
         self.pool = None
         self.running = []
 

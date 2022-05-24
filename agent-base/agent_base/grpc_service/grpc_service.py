@@ -17,7 +17,7 @@ class GrpcService(AgentService):
     ):
         super().__init__(config=config)
         self.ssl = ssl
-        self.logger = logging.getLogger("GrpcService")
+        self.logger = logging.getLogger("main").getChild("grpc_service")
         self.server = None
         self.agent_servicer = agent_servicer
         self.health_servicer = AgentHealthServicer(

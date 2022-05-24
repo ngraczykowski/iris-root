@@ -26,6 +26,7 @@ from agent_base.agent import Agent, AgentRunner
 from agent_base.agent_exchange import AgentDataSource, AgentExchange
 from agent_base.grpc_service import AgentGrpcServicer, GrpcService
 from agent_base.utils import Config
+from agent_base.utils.logger import get_logger
 
 
 # connecting to data source in bridge to request match data
@@ -117,10 +118,9 @@ def main():
     )
     args = parser.parse_args()
 
-    logging.basicConfig(
-        level=logging.DEBUG if args.verbose else logging.INFO,
-        format="%(asctime)s %(name)-20s %(levelname)-8s %(message)s",
-    )
+    log_filename = "example.log"
+    logger = get_logger("main", log_filename)
+    logger.info(f"Logging to stdout and to {log_filename} file")
 
     config = Config(configuration_dirs=args.configuration_dirs, required=True)
     AgentRunner(config).run(
