@@ -1,4 +1,4 @@
-package utils.datageneration;
+package utils.datageneration.namescreening;
 
 import lombok.Builder;
 import lombok.Value;

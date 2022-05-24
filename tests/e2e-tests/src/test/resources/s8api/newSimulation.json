@@ -1,0 +1,9 @@
+{
+  "simulationName": "${name}",
+  "description": "${description}",
+  "datasets": [
+    "datasets/${dataset.uuid}"
+  ],
+  "model": "solvingModels/${solvingModel}",
+  "id": "${uuid}"
+}

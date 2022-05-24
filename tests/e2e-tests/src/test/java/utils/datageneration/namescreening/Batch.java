@@ -1,9 +1,11 @@
-package utils.datageneration;
+package utils.datageneration.namescreening;
 
 import lombok.Builder;
-import lombok.Value;
+import lombok.Getter;
+import lombok.Setter;
 
-@Value
+@Getter
+@Setter
 @Builder(toBuilder = true)
 public class Batch {
 

@@ -1,6 +1,6 @@
 {
-  "id": "${stepUuid}",
-  "name": "${stepName}",
+  "id": "${uuid}",
+  "name": "${name}",
   "description": "",
   "solution": "${solution}",
   "type": "BUSINESS_LOGIC"

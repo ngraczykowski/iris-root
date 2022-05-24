@@ -4,20 +4,20 @@ import io.cucumber.java8.En;
 import io.restassured.response.Response;
 import org.awaitility.Awaitility;
 import utils.ScenarioContext;
-import utils.datageneration.Batch;
-import utils.datageneration.DataGenerationService;
+import utils.datageneration.namescreening.Batch;
+import utils.datageneration.namescreening.BatchGenerationService;
 
 import static io.restassured.RestAssured.*;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
-public class BatchSteps implements En {
+public class NameScreeningSteps implements En {
 
-  DataGenerationService dataGenerationService = new DataGenerationService();
+  BatchGenerationService batchGenerationService = new BatchGenerationService();
   ScenarioContext scenarioContext = Hooks.scenarioContext;
 
-  public BatchSteps() {
+  public NameScreeningSteps() {
     And("Send a batch with {int} alerts on solving and wait until it's solved", (Integer size) -> {
-      Batch batch = dataGenerationService.generateBatchWithSize(size);
+      Batch batch = batchGenerationService.generateBatchWithSize(size);
       scenarioContext.set("batch", batch);
 
       given()
@@ -39,6 +39,7 @@ public class BatchSteps implements En {
               .getString("batchStatus")
               .equals("COMPLETED"));
     });
+
     And("Get result for batch and send on ingest", () -> {
       Batch batch = (Batch) scenarioContext.get("batch");
 
@@ -57,6 +58,7 @@ public class BatchSteps implements En {
           .then()
           .statusCode(200);
     });
+
     And("Send batch on learning", () -> {
       Batch batch = (Batch) scenarioContext.get("batch");
 
@@ -67,14 +69,15 @@ public class BatchSteps implements En {
           .then()
           .statusCode(200);
     });
+
     And("Send batch with {int} alerts on learning", (Integer size) -> {
-      Batch batch = dataGenerationService.generateBatchWithSize(size);
-      scenarioContext.set("batch", batch);
+      Batch learningBatch = batchGenerationService.generateBatchWithSize(size);
+      scenarioContext.set("learningBatch", learningBatch);
 
       given()
-          .body(batch.getPayload())
+          .body(learningBatch.getPayload())
           .when()
-          .post("rest/hsbc-bridge/async/batch/v1/" + batch.getId() + "-learning/learning")
+          .post("rest/hsbc-bridge/async/batch/v1/" + learningBatch.getId() + "-learning/learning")
           .then()
           .statusCode(200);
     });

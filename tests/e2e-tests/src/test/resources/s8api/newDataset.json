@@ -1,0 +1,11 @@
+{
+  "id": "${uuid}",
+  "datasetName": "${name}",
+  "description": "",
+  "query": {
+    "alertGenerationDate": {
+      "from": "${from}",
+      "to": "${to}"
+    }
+  }
+}

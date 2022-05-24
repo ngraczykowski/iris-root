@@ -1,5 +1,0 @@
-{
-  "id": "${policyUuid}",
-  "policyName": "${policyName}",
-  "state": "${state}"
-}

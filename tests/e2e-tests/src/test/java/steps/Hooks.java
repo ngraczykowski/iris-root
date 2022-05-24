@@ -9,6 +9,9 @@ import io.cucumber.plugin.event.TestCase;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 
+import io.restassured.config.HeaderConfig;
+import io.restassured.config.RestAssuredConfig;
+
 import lombok.SneakyThrows;
 
 import utils.AuthUtils;
@@ -27,11 +30,15 @@ public class Hooks implements En {
 
   public Hooks() {
     Before(0, () -> {
+      scenarioContext.clearScenarioContext();
       RestAssured.baseURI = System.getProperty("test.url");
       RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
       RestAssured.requestSpecification = new RequestSpecBuilder()
+          .setConfig(RestAssuredConfig
+              .config()
+              .headerConfig(HeaderConfig.headerConfig().overwriteHeadersWithName("Authorization", "Content-Type")))
+          .addHeader("Authorization", "Bearer " + new AuthUtils().getAuthToken())
           .build()
-          .header("Authorization", "Bearer " + new AuthUtils().getAuthToken())
           .given()
           .filter(customLogFilter)
           .log()

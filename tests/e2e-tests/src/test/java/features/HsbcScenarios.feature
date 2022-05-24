@@ -1,6 +1,6 @@
 Feature: HSBC scenarios
 
-  Scenario: QA-T1 AI Reasoning report generated for batch with 5 alerts contains 5 rows
+  Scenario: AI Reasoning report generated for batch with 5 alerts contains 5 rows
     Given Send a batch with 5 alerts on solving and wait until it's solved
     And Get result for batch and send on ingest
     And Send batch on learning

@@ -6,9 +6,8 @@ import org.awaitility.Awaitility;
 import org.junit.Assert;
 import utils.FilesHelper;
 import utils.ScenarioContext;
-import utils.datageneration.Batch;
-import utils.datageneration.DataGenerationService;
-
+import utils.datageneration.namescreening.Batch;
+import utils.datageneration.CommonUtils;
 import java.io.InputStream;
 
 import static io.restassured.RestAssured.given;
@@ -17,7 +16,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class WarehouseSteps implements En {
 
-  DataGenerationService dataGenerationService = new DataGenerationService();
+  CommonUtils commonUtils = new CommonUtils();
   FilesHelper filesHelper = new FilesHelper();
   ScenarioContext scenarioContext = Hooks.scenarioContext;
 
@@ -29,7 +28,7 @@ public class WarehouseSteps implements En {
           Response response = given()
               .urlEncodingEnabled(true)
               .param("from", batch.getGenerationStartTime())
-              .param("to", dataGenerationService.getDateTimeNow())
+              .param("to", commonUtils.getDateTimeNow())
               .post("rest/warehouse/api/v2/analysis/production/reports/" + value);
 
           response.then().statusCode(200);
@@ -48,6 +47,7 @@ public class WarehouseSteps implements En {
                   .getString("status")
                   .equals("OK"));
         });
+
     And("Download generated report", () -> {
       final InputStream report = given()
           .get("rest/warehouse/api/v2/" + scenarioContext.get("reportName"))
@@ -58,6 +58,7 @@ public class WarehouseSteps implements En {
 
       scenarioContext.set("report", report);
     });
+
     And("Downloaded report contains {int} rows", (Integer size) -> {
       int sizeInt = size;
       Assert.assertEquals(

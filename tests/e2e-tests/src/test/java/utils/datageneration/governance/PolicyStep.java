@@ -1,9 +1,8 @@
-package utils.datageneration;
+package utils.datageneration.governance;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.Value;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
 @Builder(toBuilder = true)
 public class PolicyStep {
 
-  String id;
+  String uuid;
   String name;
   String solution;
   List<Feature> featureList;
