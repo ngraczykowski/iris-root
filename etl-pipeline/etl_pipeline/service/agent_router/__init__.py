@@ -193,7 +193,7 @@ class AgentInputCreator:
                 logger.error(f"Cannot parse features for {producer.feature_name}")
         return category_matches
 
-    def produce_batch_create_agent_input_request(self, alert, payload):
+    def produce_batch_create_agent_input_request(self, alert, payload, message_type="features"):
         agent_inputs = []
 
         for match_id, match in zip(
@@ -227,39 +227,46 @@ class AgentInputCreator:
                 all_category_values_requests.extend(category_values_requests)
         return BatchCreateCategoryValuesRequest(requests=all_category_values_requests)
 
-    async def send_items(self, produce_func, stub_request, alert, payload):
+    async def send_items(self, produce_func, alert, payload, message_type):
+        stub_request = None
+
         batch = produce_func(alert, payload)
         response = None
         while True:
+            logger.debug(f"Sending {message_type}")
+            if message_type == "features":
+                stub_request = self.agent_input_stub.BatchCreateAgentInputs
+            elif message_type == "categories":
+                stub_request = self.category_input_stub.BatchCreateCategoryValues
+            error_message = ""
             try:
                 response = stub_request(batch)
                 break
-            except (grpc.RpcError) as e:
+            except (grpc.RpcError, AttributeError) as e:
                 if e.code() in [grpc.StatusCode.INVALID_ARGUMENT]:
-                    raise AgentInputCreatorError("Invalid argument")
-            except AttributeError:
+                    raise AgentInputCreatorError(f"Invalid argument: {str(e)}")
+                error_message = str(e)
+            except Exception as e:
+                error_message = str(e)
                 pass
             logger.warning(
-                f"Cannot connect to UDS on {self.service_config.DATA_SOURCE_INPUT_ENDPOINT}"
+                f"Cannot connect to UDS on {self.service_config.DATA_SOURCE_INPUT_ENDPOINT} because of {error_message}. Reinitialize connection"
             )
             time.sleep(5)
             self.initialize_categories()
         logger.debug(f"Response from UDS: {response}")
 
     async def upload_data_inputs(self, alert, payload):
-        logger.debug("Uploading features")
+        logger.debug("Uploading messages to UDS")
         tasks = [
             self.send_items(
-                self.produce_batch_create_agent_input_request,
-                self.agent_input_stub.BatchCreateAgentInputs,
-                alert,
-                payload,
+                self.produce_batch_create_agent_input_request, alert, payload, "features"
             ),
             self.send_items(
                 self.produce_batch_create_agent_input_category_request,
-                self.category_input_stub.BatchCreateCategoryValues,
                 alert,
                 payload,
+                "categories",
             ),
         ]
         await asyncio.gather(*tasks)
