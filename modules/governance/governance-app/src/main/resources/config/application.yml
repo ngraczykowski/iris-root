@@ -528,6 +528,8 @@ sep.auth:
       - "MANAGE_QA_VERIFICATION"
       - "DASHBOARD"
       - "VIEW_REASONING_BRANCHES"
+  permit-all-urls:
+    - "/management/**"
 
 serp.governance.qa:
   sampling:
