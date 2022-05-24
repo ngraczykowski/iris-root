@@ -148,7 +148,7 @@ pipeline {
             withKubeConfig(
                 credentialsId: 'devenv-eks',
                 serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
-              sh "helm uninstall --namespace test-e2e--${ENVIRONMENT}-${env.BUILD_NUMBER} sear"
+              sh "helm uninstall --namespace test-e2e-${ENVIRONMENT}-${env.BUILD_NUMBER} sear"
             }
           }
         }
