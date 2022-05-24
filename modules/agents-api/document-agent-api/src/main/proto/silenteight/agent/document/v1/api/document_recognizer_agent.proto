@@ -11,6 +11,12 @@ option java_multiple_files = true;
 service DocumentRecognizerAgent {
   rpc RecognizeDocuments (RecognizeDocumentsRequest) returns (stream RecognizeDocumentsResponse) {
   }
+  rpc IsDocumentType (IsDocumentTypeRequest) returns (IsDocumentTypeResponse) {
+  }
+}
+message RecognizedDocument {
+  string type = 1;
+  Facts recognized_facts = 2;
 }
 
 message RecognizeDocumentsRequest {
@@ -18,13 +24,30 @@ message RecognizeDocumentsRequest {
 }
 
 message RecognizeDocumentsResponse {
-  message RecognizedDocument {
-    string type = 1;
-    Facts recognized_facts = 2;
-  }
-
   // Index of inputs collection element from the request body
   uint64 index = 1;
   repeated RecognizedDocument documents = 2;
   string error_message = 3;
+}
+
+message IsDocumentTypeRequest {
+  string document_number = 1;
+  repeated string document_types = 2;
+}
+
+message IsDocumentTypeResponse {
+
+  message Reason {
+    repeated RecognizedDocument recognized_documents = 1;
+  }
+
+  enum Solution {
+    TRUE = 0;
+    FALSE = 1;
+    NO_DATA = 2;
+    INCONCLUSIVE = 3;
+  }
+
+  Solution solution = 1;
+  Reason reason = 2;
 }
