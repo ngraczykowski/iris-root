@@ -24,6 +24,14 @@ message DetectLanguageRegionsRequest {
 
 message LanguageRegion {
   string name = 1;
+  Reason reason = 2;
+}
+
+message Reason {
+  // Information which mechanism was used to detect language
+  string detected_by = 1;
+  // Human friendly message with explanation: unicode code, dict name, NB probability
+  string details = 2;
 }
 
 message LanguageRegionsPerName {
