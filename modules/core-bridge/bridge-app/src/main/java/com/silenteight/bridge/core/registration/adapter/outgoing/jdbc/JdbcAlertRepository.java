@@ -6,6 +6,7 @@ import com.silenteight.bridge.core.registration.adapter.outgoing.jdbc.AlertEntit
 import com.silenteight.bridge.core.registration.domain.model.*;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -27,10 +28,10 @@ class JdbcAlertRepository implements AlertRepository {
 
   @Override
   public void saveAlerts(List<Alert> alerts) {
-    var alertEntities = alerts.stream()
-        .map(mapper::toAlertEntity)
-        .toList();
-    alertRepository.saveAll(alertEntities);
+    if (CollectionUtils.isNotEmpty(alerts)) {
+      insertAlerts(alerts);
+      insertMatches(alerts);
+    }
   }
 
   @Override
@@ -204,5 +205,29 @@ class JdbcAlertRepository implements AlertRepository {
   @Override
   public void markAsArchivedAndClearMetadata(List<Long> alertPrimaryIds) {
     alertRepository.markAsArchivedAndClearMetadata(alertPrimaryIds);
+  }
+
+  private void insertAlerts(List<Alert> alerts) {
+    var params = alerts.stream()
+        .map(mapper::toAlertParameters)
+        .toArray(MapSqlParameterSource[]::new);
+    jdbcTemplate.batchUpdate("""
+        INSERT INTO core_bridge_alerts(alert_id, batch_id, name, metadata, status, created_at,
+        error_description, alert_time, is_archived)
+        VALUES (:alertId, :batchId, :name, :metadata, :status, NOW(), :errorDescription, :alertTime,
+        :isArchived);
+        """, params);
+  }
+
+  private void insertMatches(List<Alert> alerts) {
+    var params = alerts.stream()
+        .flatMap(alert -> alert.matches().stream()
+            .map(match -> mapper.toMatchParameters(alert, match)))
+        .toArray(MapSqlParameterSource[]::new);
+    jdbcTemplate.batchUpdate("""
+        INSERT INTO core_bridge_matches(match_id, alert_id, name, created_at)
+        VALUES (:matchId, (SELECT id FROM core_bridge_alerts WHERE alert_id = :alertId
+        AND batch_id = :batchId), :name, NOW())
+        """, params);
   }
 }

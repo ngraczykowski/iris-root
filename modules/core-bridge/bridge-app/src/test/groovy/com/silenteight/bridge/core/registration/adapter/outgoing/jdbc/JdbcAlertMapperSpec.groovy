@@ -9,50 +9,13 @@ import org.assertj.core.api.Assertions
 import spock.lang.Specification
 import spock.lang.Subject
 
+import java.sql.Timestamp
 import java.time.OffsetDateTime
 
 class JdbcAlertMapperSpec extends Specification {
 
   @Subject
   def underTest = new JdbcAlertMapper()
-
-  def 'should map to alert entity'() {
-    given:
-    def matchesIn = [
-        new Match('matchName', 'matchId')
-    ]
-
-    def now = OffsetDateTime.now()
-    def alertIn = Alert.builder()
-        .name('alertName')
-        .status(AlertStatus.REGISTERED)
-        .alertId('alertId')
-        .batchId('batchId')
-        .metadata('metadata')
-        .matches(matchesIn)
-        .errorDescription('errorDescription')
-        .alertTime(now)
-        .build()
-
-    when:
-    def result = underTest.toAlertEntity(alertIn)
-
-    then:
-    with(result) {
-      name() == 'alertName'
-      status() == AlertEntity.Status.REGISTERED
-      alertId() == 'alertId'
-      batchId() == 'batchId'
-      metadata() == 'metadata'
-      errorDescription() == 'errorDescription'
-      alertTime() == now.toInstant()
-
-      with(result.matches().first()) {
-        name() == 'matchName'
-        matchId() == 'matchId'
-      }
-    }
-  }
 
   def 'should map to alert'() {
     given:
@@ -123,6 +86,54 @@ class JdbcAlertMapperSpec extends Specification {
       alertId() == projection.alertId()
       alertName() == projection.name()
       batchId() == projection.batchId()
+    }
+  }
+
+  def 'should map to alert parameters'() {
+    given:
+    def alert = Alert.builder()
+        .name('alertName')
+        .status(AlertStatus.REGISTERED)
+        .alertId('alertId')
+        .batchId('batchId')
+        .metadata('metadata')
+        .errorDescription('errorDescription')
+        .alertTime(OffsetDateTime.now())
+        .build()
+
+    when:
+    def result = underTest.toAlertParameters(alert)
+
+    then:
+    with(result) {
+      getValue('alertId') == alert.alertId()
+      getValue('batchId') == alert.batchId()
+      getValue('name') == alert.name()
+      getValue('metadata') == alert.metadata()
+      getValue('status') == alert.status().name()
+      getValue('errorDescription') == alert.errorDescription()
+      getValue('alertTime') == Timestamp.from(alert.alertTime().toInstant())
+      getValue('isArchived') == alert.isArchived()
+    }
+  }
+
+  def 'should map to match parameters'() {
+    given:
+    def alert = Alert.builder()
+        .alertId('alertId')
+        .batchId('batchId')
+        .build()
+    def match = new Match('name', 'id')
+
+    when:
+    def result = underTest.toMatchParameters(alert, match)
+
+    then:
+    with(result) {
+      getValue('matchId') == match.matchId()
+      getValue('alertId') == alert.alertId()
+      getValue('batchId') == alert.batchId()
+      getValue('name') == match.name()
     }
   }
 

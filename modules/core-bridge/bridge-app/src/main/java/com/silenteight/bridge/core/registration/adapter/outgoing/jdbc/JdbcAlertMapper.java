@@ -1,10 +1,11 @@
 package com.silenteight.bridge.core.registration.adapter.outgoing.jdbc;
 
-import com.silenteight.bridge.core.registration.adapter.outgoing.jdbc.AlertEntity.Status;
 import com.silenteight.bridge.core.registration.domain.model.*;
 
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -14,23 +15,6 @@ import java.util.stream.Collectors;
 
 @Component
 class JdbcAlertMapper {
-
-  AlertEntity toAlertEntity(Alert alert) {
-    return AlertEntity.builder()
-        .name(alert.name())
-        .status(Status.valueOf(alert.status().name()))
-        .alertId(alert.alertId())
-        .batchId(alert.batchId())
-        .metadata(alert.metadata())
-        .matches(alert.matches().stream()
-            .map(this::toMatchEntity)
-            .collect(Collectors.toSet()))
-        .errorDescription(alert.errorDescription())
-        .alertTime(Optional.ofNullable(alert.alertTime())
-            .map(OffsetDateTime::toInstant)
-            .orElse(null))
-        .build();
-  }
 
   Alert toAlert(AlertEntity alert) {
     return Alert.builder()
@@ -69,13 +53,26 @@ class JdbcAlertMapper {
         .build();
   }
 
-  private MatchEntity toMatchEntity(Match match) {
-    return MatchEntity.builder()
-        .name(match.name())
-        .matchId(match.matchId())
-        .createdAt(Instant.now())
-        .updatedAt(Instant.now())
-        .build();
+  MapSqlParameterSource toAlertParameters(Alert alert) {
+    return new MapSqlParameterSource()
+        .addValue("alertId", alert.alertId())
+        .addValue("batchId", alert.batchId())
+        .addValue("name", alert.name())
+        .addValue("metadata", alert.metadata())
+        .addValue("status", alert.status().name())
+        .addValue("errorDescription", alert.errorDescription())
+        .addValue("alertTime", Timestamp.from(Optional.ofNullable(alert.alertTime())
+            .map(OffsetDateTime::toInstant)
+            .orElseGet(Instant::now)))
+        .addValue("isArchived", alert.isArchived());
+  }
+
+  MapSqlParameterSource toMatchParameters(Alert alert, Match match) {
+    return new MapSqlParameterSource()
+        .addValue("matchId", match.matchId())
+        .addValue("alertId", alert.alertId())
+        .addValue("batchId", alert.batchId())
+        .addValue("name", match.name());
   }
 
   private Match toMatch(MatchEntity match) {
