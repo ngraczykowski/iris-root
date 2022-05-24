@@ -246,50 +246,98 @@ warehouse.reports.v2:
     - name: DAD
       type: production
       description: Data Availability Diagnostic (DAD)
-      selectSqlQuery: >
+      selectSqlQuery: > # NOTE(wszabelski): When adding/removing/changing feature/category to DAD report in select, remember to add/remove/change that also in WHERE condition
         SELECT wa.payload ->> 'policyId'                                 AS "Policy ID",
-          wa.payload ->> 'policy_title'                             AS "Policy Name",
-          wa.payload ->> 'stepId'                                   AS "Step ID",
-          wa.payload ->> 'step_title'                               AS "Step Name",
-          wa.payload ->> 'fvSignature'                              AS "Reasoning Branch ID",
-          wa.payload ->> 's8_recommendation'                        AS "S8 Alert Resolution",
-          wa.payload ->> 'recommendationDate'                       AS "S8 Alert Resolution Timestamp",
-          wa.payload ->> 'recommendation'                           AS "HSBC Alert Resolution",
-          wa.payload ->> 'comment'                                  AS "S8 Alert Comment",
-          wa.payload ->> 's8_lobCountryCode'                        AS "Country LoB",
-          wa.payload ->> 'categories/customerType'                  AS "Customer Type",
-          wa.payload ->> 'categories/hitType'                       AS "Risk Type",
-          wa.payload ->> 'features/name:solution'                   AS "Name",
-          wa.payload ->> 'features/dateOfBirth:solution'            AS "Date of Birth / Incorporation",
-          wa.payload ->> 'features/isPep:solution'                  AS "PEP",
-          wa.payload ->> 'features/gender:solution'                 AS "Gender",
-          wa.payload ->> 'features/geoPlaceOfBirth:solution'        AS "Geo Place of Birth",
-          wa.payload ->> 'features/geoResidencies:solution'         AS "Geo Residencies",
-          wa.payload ->> 'features/nationalIdDocument:solution'     AS "National ID",
-          wa.payload ->> 'features/otherDocument:solution'          AS "Other Document",
-          wa.payload ->> 'features/passportNumberDocument:solution' AS "Passport Number Document",
-          wa.payload ->> 'features/incorporationCountry:solution'   AS "Incorporation Country",
-          wa.payload ->> 'features/nationalityCountry:solution'     AS "Nationality Country",
-          wa.payload ->> 'features/otherCountry:solution'           AS "Other Country",
-          wa.payload ->> 'features/registrationCountry:solution'    AS "Registration Country",
-          wa.payload ->> 'features/residencyCountry:solution'       AS "Residency Country",
-          wa.payload ->> 'features/commonAp:solution'               AS "Common Alerted Party",
-          wa.payload ->> 'features/commonMp:solution'               AS "Common Watchlist Party",
-          wa.payload ->> 'features/commonNames:solution'            AS "Common Name",
-          wa.payload ->> 'features/invalidAlert:solution'           AS "Invalid Alert",
-          wa.payload ->> 'features/isApTpMarked:solution'           AS "True Case - Alerted Party",
-          wa.payload ->> 'features/isTpMarked:solution'             AS "True Case - Watchlist",
-          wa.payload ->> 'features/isCaseTpMarked:solution'         AS "True Case - Historical",
-          wa.payload ->> 'features/logicalDiscountingDob:solution'  AS "Logical Discounting",
-          wa.payload ->> 'DN_CASE.ID'                               AS "Client Alert ID",
-          wa.payload ->> 'status'                                   AS "Alert Status",
-          wa.discriminator                                          AS "S8 Alert ID"
-          FROM warehouse_alert wa
-          WHERE wa.recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
+               wa.payload ->> 'policy_title'                             AS "Policy Name",
+               wa.payload ->> 'stepId'                                   AS "Step ID",
+               wa.payload ->> 'step_title'                               AS "Step Name",
+               wa.payload ->> 'fvSignature'                              AS "Reasoning Branch ID",
+               wa.payload ->> 's8_recommendation'                        AS "S8 Alert Resolution",
+               wa.payload ->> 'recommendationDate'                       AS "S8 Alert Resolution Timestamp",
+               wa.payload ->> 'recommendation'                           AS "HSBC Alert Resolution",
+               wa.payload ->> 'comment'                                  AS "S8 Alert Comment",
+               wa.payload ->> 's8_lobCountryCode'                        AS "Country LoB",
+               wa.payload ->> 'categories/customerType'                  AS "Customer Type",
+               wa.payload ->> 'categories/hitType'                       AS "Risk Type",
+               wa.payload ->> 'features/name:solution'                   AS "Name",
+               wa.payload ->> 'features/dateOfBirth:solution'            AS "Date of Birth / Incorporation",
+               wa.payload ->> 'features/isPep:solution'                  AS "PEP",
+               wa.payload ->> 'features/gender:solution'                 AS "Gender",
+               wa.payload ->> 'features/geoPlaceOfBirth:solution'        AS "Geo Place of Birth",
+               wa.payload ->> 'features/geoResidencies:solution'         AS "Geo Residencies",
+               wa.payload ->> 'features/nationalIdDocument:solution'     AS "National ID",
+               wa.payload ->> 'features/otherDocument:solution'          AS "Other Document",
+               wa.payload ->> 'features/passportNumberDocument:solution' AS "Passport Number Document",
+               wa.payload ->> 'features/incorporationCountry:solution'   AS "Incorporation Country",
+               wa.payload ->> 'features/nationalityCountry:solution'     AS "Nationality Country",
+               wa.payload ->> 'features/otherCountry:solution'           AS "Other Country",
+               wa.payload ->> 'features/registrationCountry:solution'    AS "Registration Country",
+               wa.payload ->> 'features/residencyCountry:solution'       AS "Residency Country",
+               wa.payload ->> 'features/commonAp:solution'               AS "Common Alerted Party",
+               wa.payload ->> 'features/commonMp:solution'               AS "Common Watchlist Party",
+               wa.payload ->> 'features/commonNames:solution'            AS "Common Name",
+               wa.payload ->> 'features/invalidAlert:solution'           AS "Invalid Alert",
+               wa.payload ->> 'features/isApTpMarked:solution'           AS "True Case - Alerted Party",
+               wa.payload ->> 'features/isTpMarked:solution'             AS "True Case - Watchlist",
+               wa.payload ->> 'features/isCaseTpMarked:solution'         AS "True Case - Historical",
+               wa.payload ->> 'features/logicalDiscountingDob:solution'  AS "Logical Discounting",
+               wa.payload ->> 'DN_CASE.ID'                               AS "Client Alert ID",
+               wa.payload ->> 'status'                                   AS "Alert Status",
+               wa.discriminator                                          AS "S8 Alert ID"
+        FROM warehouse_alert wa
+        WHERE (wa.payload -> 'categories/customerType' @> '"NO_DATA"' OR
+               wa.payload -> 'categories/customerType' @> '"DATA_SOURCE_ERROR"' OR
+               wa.payload -> 'categories/hitType' @> '"NO_DATA"' OR
+               wa.payload -> 'categories/hitType' @> '"DATA_SOURCE_ERROR"' OR
+               wa.payload -> 'features/name:solution' @> '"NO_DATA"' OR
+               wa.payload -> 'features/name:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wa.payload -> 'features/dateOfBirth:solution' @> '"NO_DATA"' OR
+               wa.payload -> 'features/dateOfBirth:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wa.payload -> 'features/isPep:solution' @> '"NO_DATA"' OR
+               wa.payload -> 'features/isPep:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wa.payload -> 'features/gender:solution' @> '"NO_DATA"' OR
+               wa.payload -> 'features/gender:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wa.payload -> 'features/geoPlaceOfBirth:solution' @> '"NO_DATA"' OR
+               wa.payload -> 'features/geoPlaceOfBirth:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wa.payload -> 'features/geoResidencies:solution' @> '"NO_DATA"' OR
+               wa.payload -> 'features/geoResidencies:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wa.payload -> 'features/nationalIdDocument:solution' @> '"NO_DATA"' OR
+               wa.payload -> 'features/nationalIdDocument:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wa.payload -> 'features/otherDocument:solution' @> '"NO_DATA"' OR
+               wa.payload -> 'features/otherDocument:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wa.payload -> 'features/passportNumberDocument:solution' @> '"NO_DATA"' OR
+               wa.payload -> 'features/passportNumberDocument:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wa.payload -> 'features/incorporationCountry:solution' @> '"NO_DATA"' OR
+               wa.payload -> 'features/incorporationCountry:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wa.payload -> 'features/nationalityCountry:solution' @> '"NO_DATA"' OR
+               wa.payload -> 'features/nationalityCountry:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wa.payload -> 'features/otherCountry:solution' @> '"NO_DATA"' OR
+               wa.payload -> 'features/otherCountry:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wa.payload -> 'features/registrationCountry:solution' @> '"NO_DATA"' OR
+               wa.payload -> 'features/registrationCountry:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wa.payload -> 'features/residencyCountry:solution' @> '"NO_DATA"' OR
+               wa.payload -> 'features/residencyCountry:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wa.payload -> 'features/commonAp:solution' @> '"NO_DATA"' OR
+               wa.payload -> 'features/commonAp:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wa.payload -> 'features/commonMp:solution' @> '"NO_DATA"' OR
+               wa.payload -> 'features/commonMp:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wa.payload -> 'features/commonNames:solution' @> '"NO_DATA"' OR
+               wa.payload -> 'features/commonNames:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wa.payload -> 'features/invalidAlert:solution' @> '"NO_DATA"' OR
+               wa.payload -> 'features/invalidAlert:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wa.payload -> 'features/isApTpMarked:solution' @> '"NO_DATA"' OR
+               wa.payload -> 'features/isApTpMarked:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wa.payload -> 'features/isTpMarked:solution' @> '"NO_DATA"' OR
+               wa.payload -> 'features/isTpMarked:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wa.payload -> 'features/isCaseTpMarked:solution' @> '"NO_DATA"' OR
+               wa.payload -> 'features/isCaseTpMarked:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wa.payload -> 'features/logicalDiscountingDob:solution' @> '"NO_DATA"' OR
+               wa.payload -> 'features/logicalDiscountingDob:solution' @> '"DATA_SOURCE_ERROR"')
+          AND wa.recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
     - name: DAD
       type: simulation
       description: Data Availability Diagnostic (DAD)
-      selectSqlQuery: >
+      selectSqlQuery: > # NOTE(wszabelski): When adding/removing/changing feature/category to DAD report in select, remember to add/remove/change that also in WHERE condition
         SELECT wsm.payload ->> 'match_reason:policy'                      AS "Policy ID",
                wsm.payload ->> 'match_reason:policy_title'                AS "Policy Name",
                wsm.payload ->> 'match_reason:step'                        AS "Step ID",
@@ -330,7 +378,55 @@ warehouse.reports.v2:
                  JOIN warehouse_alert wa ON wsa.name = wa.name
                  JOIN warehouse_simulation_match wsm
                       ON wsa.name = wsm.alert_name AND wsa.analysis_name = wsm.analysis_name
-        WHERE wsa.analysis_name = 'analysis/${analysisId}'
+        WHERE (wsm.payload -> 'categories/customerType:value' @> '"NO_DATA"' OR
+               wsm.payload -> 'categories/customerType:value' @> '"DATA_SOURCE_ERROR"' OR
+               wsm.payload -> 'categories/hitType:value' @> '"NO_DATA"' OR
+               wsm.payload -> 'categories/hitType:value' @> '"DATA_SOURCE_ERROR"' OR
+               wsm.payload -> 'features/name:solution' @> '"NO_DATA"' OR
+               wsm.payload -> 'features/name:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wsm.payload -> 'features/dateOfBirth:solution' @> '"NO_DATA"' OR
+               wsm.payload -> 'features/dateOfBirth:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wsm.payload -> 'features/isPep:solution' @> '"NO_DATA"' OR
+               wsm.payload -> 'features/isPep:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wsm.payload -> 'features/gender:solution' @> '"NO_DATA"' OR
+               wsm.payload -> 'features/gender:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wsm.payload -> 'features/geoPlaceOfBirth:solution' @> '"NO_DATA"' OR
+               wsm.payload -> 'features/geoPlaceOfBirth:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wsm.payload -> 'features/geoResidencies:solution' @> '"NO_DATA"' OR
+               wsm.payload -> 'features/geoResidencies:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wsm.payload -> 'features/nationalIdDocument:solution' @> '"NO_DATA"' OR
+               wsm.payload -> 'features/nationalIdDocument:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wsm.payload -> 'features/otherDocument:solution' @> '"NO_DATA"' OR
+               wsm.payload -> 'features/otherDocument:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wsm.payload -> 'features/passportNumberDocument:solution' @> '"NO_DATA"' OR
+               wsm.payload -> 'features/passportNumberDocument:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wsm.payload -> 'features/incorporationCountry:solution' @> '"NO_DATA"' OR
+               wsm.payload -> 'features/incorporationCountry:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wsm.payload -> 'features/nationalityCountry:solution' @> '"NO_DATA"' OR
+               wsm.payload -> 'features/nationalityCountry:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wsm.payload -> 'features/otherCountry:solution' @> '"NO_DATA"' OR
+               wsm.payload -> 'features/otherCountry:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wsm.payload -> 'features/registrationCountry:solution' @> '"NO_DATA"' OR
+               wsm.payload -> 'features/registrationCountry:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wsm.payload -> 'features/residencyCountry:solution' @> '"NO_DATA"' OR
+               wsm.payload -> 'features/residencyCountry:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wsm.payload -> 'features/commonAp:solution' @> '"NO_DATA"' OR
+               wsm.payload -> 'features/commonAp:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wsm.payload -> 'features/commonMp:solution' @> '"NO_DATA"' OR
+               wsm.payload -> 'features/commonMp:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wsm.payload -> 'features/commonNames:solution' @> '"NO_DATA"' OR
+               wsm.payload -> 'features/commonNames:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wsm.payload -> 'features/invalidAlert:solution' @> '"NO_DATA"' OR
+               wsm.payload -> 'features/invalidAlert:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wsm.payload -> 'features/isApTpMarked:solution' @> '"NO_DATA"' OR
+               wsm.payload -> 'features/isApTpMarked:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wsm.payload -> 'features/isTpMarked:solution' @> '"NO_DATA"' OR
+               wsm.payload -> 'features/isTpMarked:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wsm.payload -> 'features/isCaseTpMarked:solution' @> '"NO_DATA"' OR
+               wsm.payload -> 'features/isCaseTpMarked:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wsm.payload -> 'features/logicalDiscountingDob:solution' @> '"NO_DATA"' OR
+               wsm.payload -> 'features/logicalDiscountingDob:solution' @> '"DATA_SOURCE_ERROR"')
+          AND wsa.analysis_name = 'analysis/${analysisId}'
     - name: RB_SCORER
       type: production
       description: Reasoning Branch Scorer
