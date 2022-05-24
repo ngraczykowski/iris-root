@@ -1,8 +1,6 @@
 package com.silenteight.fab.dataprep.infrastructure;
 
-import com.silenteight.fab.dataprep.domain.category.CustomerTypeCategory;
-import com.silenteight.fab.dataprep.domain.category.FabCategory;
-import com.silenteight.fab.dataprep.domain.category.HitTypeCategory;
+import com.silenteight.fab.dataprep.domain.category.*;
 import com.silenteight.fab.dataprep.domain.feature.*;
 import com.silenteight.fab.dataprep.infrastructure.grpc.CategoriesConfigurationProperties;
 
@@ -90,5 +88,36 @@ public class FeatureAndCategoryConfiguration {
     return new CustomerTypeCategory(
         configurationProperties.getCategories().get(categoryName), CATEGORY_PREFIX + categoryName
     );
+  }
+
+  @Bean
+  @ConditionalOnProperty("feeding.categories.isHitOnWlName.enabled")
+  FabCategory isHitOnWlName(
+      CategoriesConfigurationProperties configurationProperties, ParseContext parseContext) {
+    String categoryName = "isHitOnWlName";
+    return new IsHitOnWlNameCategory(
+        configurationProperties.getCategories().get(categoryName),
+        CATEGORY_PREFIX + categoryName,
+        parseContext);
+  }
+
+  @Bean
+  @ConditionalOnProperty("feeding.categories.recordSourceType.enabled")
+  FabCategory recordSourceType(
+      CategoriesConfigurationProperties configurationProperties) {
+    String categoryName = "recordSourceType";
+    return new RecordSourceTypeCategory(
+        configurationProperties.getCategories().get(categoryName), CATEGORY_PREFIX + categoryName);
+  }
+
+  @Bean
+  @ConditionalOnProperty("feeding.categories.watchlistType.enabled")
+  FabCategory watchlistType(
+      CategoriesConfigurationProperties configurationProperties, ParseContext parseContext) {
+    String categoryName = "watchlistType";
+    return new WatchlistTypeCategory(
+        configurationProperties.getCategories().get(categoryName),
+        CATEGORY_PREFIX + categoryName,
+        parseContext);
   }
 }

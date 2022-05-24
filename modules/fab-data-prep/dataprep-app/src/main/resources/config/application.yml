@@ -190,6 +190,24 @@ feeding:
       categoryType: ENUMERATED
       allowedValues: ["I", "C", "NO_DATA", "DATA_SOURCE_ERROR"]
       multiValue: false
+    isHitOnWlName:
+      enabled: true
+      displayName: Hit On Watchlist Name
+      categoryType: ENUMERATED
+      allowedValues: [ "NO", "NO_DATA" ]
+      multiValue: false
+    recordSourceType:
+      enabled: true
+      displayName: Record Source Type
+      categoryType: ENUMERATED
+      allowedValues: [ "T24", "OTHER", "NO_DATA" ]
+      multiValue: false
+    watchlistType:
+      enabled: true
+      displayName: Watchlist Type
+      categoryType: ENUMERATED
+      allowedValues: [ "INDIVIDUAL", "COMPANY", "ADDRESS", "VESSEL", "OTHER" ]
+      multiValue: false
 
   alert.state:
     analystDecisions:

@@ -86,7 +86,7 @@ class CategoryService {
     return registeredAlert.getMatches()
         .stream()
         .map(match -> fabCategory.buildCategory(BuildCategoryCommand.builder()
-            .matchName(match.getMatchName())
+            .match(match)
             .systemId(registeredAlert.getSystemId())
             .parsedMessageData(featureInputsCommand.getRegisteredAlert().getParsedMessageData())
             .build()))

@@ -8,13 +8,13 @@ import com.silenteight.fab.dataprep.infrastructure.grpc.CategoriesConfigurationP
 import org.apache.commons.lang3.StringUtils;
 
 @RequiredArgsConstructor
-public class HitTypeCategory extends BaseCategory {
+public class RecordSourceTypeCategory extends BaseCategory {
 
-  private static final String TYPE_SANCTION = "SAN";
+  private static final String TYPE_T24 = "T24";
   private static final String TYPE_OTHER = "OTHER";
   private static final String TYPE_NO_DATA = "NO_DATA";
 
-  private static final String SANCTION_TEXT = "SAN!";
+  private static final String T24_TEXT = "T24";
 
   @Getter
   private final CategoryDefinition categoryDefinition;
@@ -23,13 +23,13 @@ public class HitTypeCategory extends BaseCategory {
 
   @Override
   String getValue(BuildCategoryCommand buildCategoryCommand) {
-    return getValue(buildCategoryCommand.getSystemId());
+    return getValue(buildCategoryCommand.getParsedMessageData().getSource());
   }
 
-  private static String getValue(String systemId) {
-    if (StringUtils.isBlank(systemId)) {
+  private static String getValue(String source) {
+    if (StringUtils.isBlank(source)) {
       return TYPE_NO_DATA;
     }
-    return systemId.contains(SANCTION_TEXT) ? TYPE_SANCTION : TYPE_OTHER;
+    return source.startsWith(T24_TEXT) ? TYPE_T24 : TYPE_OTHER;
   }
 }

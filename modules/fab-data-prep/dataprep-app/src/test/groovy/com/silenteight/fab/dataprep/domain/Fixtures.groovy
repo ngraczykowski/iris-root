@@ -112,7 +112,7 @@ class Fixtures {
       .build()
 
   static BuildCategoryCommand BUILD_CATEGORY_COMMAND = BuildCategoryCommand.builder()
-      .matchName(MATCH_NAME)
+      .match(MATCH)
       .systemId(SYSTEM_ID)
       .parsedMessageData(PARSED_PAYLOAD)
       .build()

@@ -5,12 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.fab.dataprep.domain.model.ParsedMessageData;
 import com.silenteight.fab.dataprep.infrastructure.grpc.CategoriesConfigurationProperties.CategoryDefinition;
-import com.silenteight.universaldatasource.api.library.category.v2.CategoryValueIn;
-
-import java.util.UUID;
 
 @RequiredArgsConstructor
-public class CustomerTypeCategory implements FabCategory {
+public class CustomerTypeCategory extends BaseCategory {
 
   private static final String TYPE_INDIVIDUAL = "I";
   private static final String TYPE_CORPORATE = "C";
@@ -23,17 +20,8 @@ public class CustomerTypeCategory implements FabCategory {
   private final String categoryName;
 
   @Override
-  public CategoryValueIn buildCategory(
-      BuildCategoryCommand buildCategoryCommand) {
-    return CategoryValueIn.builder()
-        .name(generateValueName())
-        .match(buildCategoryCommand.getMatchName())
-        .singleValue(getValue(buildCategoryCommand.getParsedMessageData()))
-        .build();
-  }
-
-  private String generateValueName() {
-    return getCategoryName() + "/values/" + UUID.randomUUID();
+  String getValue(BuildCategoryCommand buildCategoryCommand) {
+    return getValue(buildCategoryCommand.getParsedMessageData());
   }
 
   private static String getValue(ParsedMessageData parsedMessageData) {

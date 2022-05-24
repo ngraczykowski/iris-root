@@ -11,12 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.TestPropertySource
 
 import static com.silenteight.fab.dataprep.domain.Fixtures.REGISTERED_ALERT
 
 @ContextConfiguration(classes = ServiceTestConfig,
     initializers = ConfigDataApplicationContextInitializer)
 @ActiveProfiles("dev")
+@TestPropertySource("classpath:test.properties")
 class CategoryServiceTest extends BaseSpecificationIT {
 
   @Autowired

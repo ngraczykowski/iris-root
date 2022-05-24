@@ -1,6 +1,7 @@
 package com.silenteight.fab.dataprep.domain.category
 
 import com.silenteight.fab.dataprep.domain.ServiceTestConfig
+import com.silenteight.fab.dataprep.domain.model.RegisteredAlert.Match
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer
@@ -12,45 +13,55 @@ import spock.lang.Unroll
 
 import static com.silenteight.fab.dataprep.domain.Fixtures.BUILD_CATEGORY_COMMAND
 import static com.silenteight.fab.dataprep.domain.Fixtures.MATCH_NAME
-import static com.silenteight.fab.dataprep.domain.Fixtures.MATCH
+import static com.silenteight.sep.base.common.support.jackson.JsonConversionHelper.INSTANCE
 
 @ContextConfiguration(classes = ServiceTestConfig,
     initializers = ConfigDataApplicationContextInitializer)
 @ActiveProfiles("dev")
-class HitTypeCategoryTest extends Specification {
+class WatchlistTypeCategoryTest extends Specification {
 
   @Subject
   @Autowired
-  HitTypeCategory underTest
+  WatchlistTypeCategory underTest
 
   def 'featureInput should be created'() {
     when:
     def result = underTest.buildCategory(BUILD_CATEGORY_COMMAND)
 
     then:
-    result.getName().startsWith('categories/hitType/values/')
+    result.getName().startsWith('categories/watchlistType/values/')
     result.getMatch() == MATCH_NAME
-    result.getSingleValue() == 'OTHER'
+    result.getSingleValue() == 'INDIVIDUAL'
   }
 
   @Unroll
-  def 'sanction should be extracted correctly #systemId'() {
+  def '#type type should be returned'() {
+    given:
+    def hit = INSTANCE.objectMapper().readTree(
+        """{
+  "HittedEntity": {
+    "Type": "$wlType"
+  }
+}""")
+    def categoryCommand = BuildCategoryCommand.builder()
+        .match(
+            Match.builder()
+                .matchName(MATCH_NAME)
+                .payloads([hit])
+                .build())
+        .build()
     when:
-    def result = underTest.buildCategory(
-        BuildCategoryCommand.builder()
-            .match(MATCH)
-            .systemId(systemId)
-            .build())
+    def result = underTest.buildCategory(categoryCommand)
 
     then:
-    result.getSingleValue() == expected
+    result.getSingleValue() == type
 
     where:
-    expected  | systemId
-    'SAN'     | 'SAN!'
-    'SAN'     | '123SAN!123'
-    'OTHER'   | 'SAN'
-    'OTHER'   | 'SAN123!'
-    'NO_DATA' | ''
+    wlType | type
+    'I'    | 'INDIVIDUAL'
+    'C'    | 'COMPANY'
+    'O'    | 'ADDRESS'
+    'V'    | 'VESSEL'
+    ''     | 'OTHER'
   }
 }

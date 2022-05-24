@@ -1,6 +1,7 @@
 package com.silenteight.fab.dataprep.domain.category
 
 import com.silenteight.fab.dataprep.domain.ServiceTestConfig
+import com.silenteight.fab.dataprep.domain.model.ParsedMessageData
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer
@@ -17,40 +18,43 @@ import static com.silenteight.fab.dataprep.domain.Fixtures.MATCH
 @ContextConfiguration(classes = ServiceTestConfig,
     initializers = ConfigDataApplicationContextInitializer)
 @ActiveProfiles("dev")
-class HitTypeCategoryTest extends Specification {
-
+class RecordSourceTypeCategoryTest extends Specification {
   @Subject
   @Autowired
-  HitTypeCategory underTest
+  RecordSourceTypeCategory underTest
 
   def 'featureInput should be created'() {
     when:
     def result = underTest.buildCategory(BUILD_CATEGORY_COMMAND)
 
     then:
-    result.getName().startsWith('categories/hitType/values/')
+    result.getName().startsWith('categories/recordSourceType/values/')
     result.getMatch() == MATCH_NAME
     result.getSingleValue() == 'OTHER'
   }
 
   @Unroll
-  def 'sanction should be extracted correctly #systemId'() {
+  def '#type type should be returned'() {
+    given:
+    def messageData = ParsedMessageData.builder()
+        .source(source)
+
+        .build()
+    def categoryCommand = BuildCategoryCommand.builder()
+        .parsedMessageData(messageData)
+        .match(MATCH)
+        .build()
     when:
-    def result = underTest.buildCategory(
-        BuildCategoryCommand.builder()
-            .match(MATCH)
-            .systemId(systemId)
-            .build())
+    def result = underTest.buildCategory(categoryCommand)
 
     then:
-    result.getSingleValue() == expected
+    result.getSingleValue() == type
 
     where:
-    expected  | systemId
-    'SAN'     | 'SAN!'
-    'SAN'     | '123SAN!123'
-    'OTHER'   | 'SAN'
-    'OTHER'   | 'SAN123!'
-    'NO_DATA' | ''
+    source    | type
+    'T24'     | 'T24'
+    'T241234' | 'T24'
+    ''        | 'NO_DATA'
+    'abc'     | 'OTHER'
   }
 }
