@@ -38,3 +38,6 @@ Feature: Smoke tests
     And Create solving model for created policy
     When Create simulation based on created policy and dataset with name "QA Simulation"
     And Wait until simulation is done
+
+  Scenario: Get an alert from CMAPI
+    Given Send alert on solving
