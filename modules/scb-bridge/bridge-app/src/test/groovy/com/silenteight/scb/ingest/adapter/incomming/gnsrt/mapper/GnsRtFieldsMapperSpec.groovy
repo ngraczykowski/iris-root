@@ -37,9 +37,7 @@ class GnsRtFieldsMapperSpec extends Specification {
 
     where:
     screenableData              | expectedResult
-    new ScreenableData(
-        supplementaryInformation1: 'Tom',
-        alternateName1: 'Li')   | []
+    new ScreenableData()        | []
     new ScreenableData(
         supplementaryInformation1: '黃波Li',
         alternateName1: '李Xyz') | []
@@ -50,9 +48,9 @@ class GnsRtFieldsMapperSpec extends Specification {
         supplementaryInformation1: '黃波',
         alternateName1: '李')    | ['黃波', '李']
     new ScreenableData(
-        supplementaryInformation1: '黃波',
+        supplementaryInformation1: '',
         alternateName1: '李',
-        alternateName3: '王')    | ['黃波', '李', '王']
+        fullLegalName: '波波')    | ['李']
   }
 
   def "should get residential addresses"() {

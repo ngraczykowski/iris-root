@@ -4,15 +4,13 @@ import lombok.NonNull;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertRecord;
 import com.silenteight.scb.ingest.adapter.incomming.common.gender.GenderDetector;
+import com.silenteight.scb.ingest.adapter.incomming.common.gnsparty.ChineseNamesResolver;
 import com.silenteight.scb.ingest.adapter.incomming.common.gnsparty.GnsParty;
-import com.silenteight.scb.ingest.adapter.incomming.common.gnsparty.SupplementaryInformationHelper;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.ObjectId;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertedParty;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertedParty.AlertedPartyBuilder;
-import com.silenteight.scb.ingest.adapter.incomming.common.validation.ChineseCharactersValidator;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -67,18 +65,6 @@ class AlertedPartyCreator {
   }
 
   private Set<String> getChineseNames(GnsParty party) {
-    var chineseNames = new HashSet<String>();
-
-    new SupplementaryInformationHelper(party).getChineseNameFromSupplementaryInformation1()
-        .ifPresent(chineseNames::add);
-
-    party.getName().filter(ChineseCharactersValidator::isValid)
-        .ifPresent(chineseNames::add);
-
-    party.getAlternateNames().stream()
-        .filter(ChineseCharactersValidator::isValid)
-        .forEach(chineseNames::add);
-
-    return chineseNames;
+    return ChineseNamesResolver.getChineseNames(party);
   }
 }

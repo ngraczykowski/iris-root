@@ -7,8 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertRecord;
 import com.silenteight.scb.ingest.adapter.incomming.common.gender.GenderDetector;
+import com.silenteight.scb.ingest.adapter.incomming.common.gnsparty.ChineseNamesResolver;
 import com.silenteight.scb.ingest.adapter.incomming.common.gnsparty.GnsParty;
-import com.silenteight.scb.ingest.adapter.incomming.common.gnsparty.SupplementaryInformationHelper;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.ObjectId;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert.Flag;
@@ -18,14 +18,12 @@ import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertedPa
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertedParty.AlertedPartyBuilder;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision.AnalystSolution;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match;
-import com.silenteight.scb.ingest.adapter.incomming.common.validation.ChineseCharactersValidator;
 
 import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.Tags;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.Nonnull;
@@ -204,19 +202,7 @@ public class RecordToAlertMapper {
   }
 
   static Set<String> getChineseNames(GnsParty party) {
-    var chineseNames = new HashSet<String>();
-
-    new SupplementaryInformationHelper(party).getChineseNameFromSupplementaryInformation1()
-        .ifPresent(chineseNames::add);
-
-    party.getName().filter(ChineseCharactersValidator::isValid)
-        .ifPresent(chineseNames::add);
-
-    party.getAlternateNames().stream()
-        .filter(ChineseCharactersValidator::isValid)
-        .forEach(chineseNames::add);
-
-    return chineseNames;
+    return ChineseNamesResolver.getChineseNames(party);
   }
 
   @Nonnull

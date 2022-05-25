@@ -2,13 +2,11 @@ package com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper;
 
 import lombok.NoArgsConstructor;
 
-import com.silenteight.scb.ingest.adapter.incomming.common.gnsparty.SupplementaryInformationHelper;
-import com.silenteight.scb.ingest.adapter.incomming.common.validation.ChineseCharactersValidator;
+import com.silenteight.scb.ingest.adapter.incomming.common.gnsparty.ChineseNamesResolver;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.request.ScreenableData;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -19,21 +17,7 @@ import static java.util.Arrays.asList;
 class GnsRtFieldsMapper {
 
   static Set<String> getOriginalChineseNames(ScreenableData data) {
-    var chineseNames = new HashSet<String>();
-
-    new SupplementaryInformationHelper(data).getChineseNameFromSupplementaryInformation1()
-        .ifPresent(chineseNames::add);
-
-    getAlternateNames(data).stream()
-        .filter(ChineseCharactersValidator::isValid)
-        .forEach(chineseNames::add);
-
-    var name = data.getFullLegalName();
-    if (ChineseCharactersValidator.isValid(name)) {
-      chineseNames.add(name);
-    }
-
-    return chineseNames;
+    return ChineseNamesResolver.getChineseNames(data);
   }
 
   static List<String> getAlternateNames(ScreenableData data) {
