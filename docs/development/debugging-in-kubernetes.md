@@ -6,6 +6,7 @@ To do so, you will have to:
 
 - locate the application deployment you want to debug,
 - patch the application deployment to start with jdwp agent,
+- remove probes from the deployment,
 - forward port from local host to pod,
 - attach remote JVM debugger.
 
@@ -16,6 +17,8 @@ The TL;DR version of the guide, for debugging Payments Bridge on port 5005, look
     kubectl get deploy
     kubectl set env deploy/sear-payments-bridge \
       JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address='*:5005'
+    kubectl patch deploy sear-payments-bridge --type='json' \
+      --patch='[{"op": "remove", "path":"/spec/template/spec/containers/0/livenessProbe"}, {"op": "remove", "path":"/spec/template/spec/containers/0/readinessProbe"}]'
     kubectl wait deployment sear-payments-bridge --for condition=Available=True
     kubectl get pods --selector=app.kubernetes.io/component=payments-bridge
     kubectl port-forward pod/sear-payments-bridge-XXXXXXXXXX-YYYYY 5005:5005
@@ -50,7 +53,7 @@ This will list you all deployments in the current context (i.e., cluster and nam
     sear-warehouse                        1/1     1            1           13m
     sear-webapp                           1/1     1            1           13m
 
-## Patching the application deployment
+## Patching application deployment
 
 To patch the deployment, so the application starts with remote debugger agent, run:
 
@@ -60,7 +63,16 @@ To patch the deployment, so the application starts with remote debugger agent, r
 
 This will restart deployment, starting the remote debugger, and wait for the deployment to become available.
 
-## Forwarding the debugger port
+## Removing probes from deployment
+
+Debugging inevitably means setting breakpoints, and breakpoints mean missed probes, and missed probes mean Kubernetes restarting the pod you are trying to debug.
+
+To fix this problem, patch the deployment to remove probes:
+
+    kubectl patch deploy <deployment name> --type='json' \
+      --patch='[{"op": "remove", "path":"/spec/template/spec/containers/0/livenessProbe"}, {"op": "remove", "path":"/spec/template/spec/containers/0/readinessProbe"}]'
+
+## Forwarding debugger port
 
 Before forwarding port, you have to get the name of pod. To do so, run:
 
