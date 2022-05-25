@@ -15,6 +15,9 @@ service DateAgent {
 
   rpc ExtractAndMeasure (stream ExtractAndMeasureRequest) returns (stream ExtractAndMeasureResponse) {
   }
+
+  rpc Compare (CompareDatesRequest) returns (CompareDatesResponse) {
+  }
 }
 
 message ExtractFactsRequest {
@@ -126,4 +129,15 @@ message ExtractAndMeasureResponse {
     NO_DATA = 3;
     ERROR = 4;
   }
+}
+
+message CompareDatesRequest {
+  string first_date = 1;
+  string second_date = 2;
+}
+
+//dummy response (SEALS-938)
+message CompareDatesResponse {
+  string id = 1;
+  string result = 2;
 }
