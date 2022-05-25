@@ -17,15 +17,13 @@ class FreemarkerCommentTemplateLoader implements TemplateLoader {
 
   @Override
   public Object findTemplateSource(String name) {
-    return repository
-        .findFirstByTemplateNameOrderByRevisionDesc(name)
-        .orElse(null);
+    return repository.findFirstByTemplateNameOrderByRevisionDesc(name).orElse(null);
   }
 
   @Override
   public long getLastModified(Object templateSource) {
     CommentTemplate template = (CommentTemplate) templateSource;
-    //NOTE(iwnek) Currently templates in database are immutable
+    // NOTE(iwnek) Currently templates in database are immutable
     return template.getCreatedAt().toInstant().toEpochMilli();
   }
 
@@ -39,6 +37,6 @@ class FreemarkerCommentTemplateLoader implements TemplateLoader {
 
   @Override
   public void closeTemplateSource(Object templateSource) {
-    //do nothing
+    // do nothing
   }
 }

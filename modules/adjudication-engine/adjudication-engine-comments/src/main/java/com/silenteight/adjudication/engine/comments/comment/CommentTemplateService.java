@@ -1,7 +1,7 @@
 package com.silenteight.adjudication.engine.comments.comment;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.comments.comment.dto.CommentTemplateDto;
 
@@ -14,11 +14,13 @@ import static java.lang.Integer.valueOf;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class CommentTemplateService {
 
-  @NonNull private final CommentTemplateRepository commentTemplateRepository;
+  private final CommentTemplateRepository commentTemplateRepository;
 
   public CommentTemplate save(@Valid CommentTemplateDto dto) {
+    log.info("updating {} template", dto.getTemplateName());
     return commentTemplateRepository.save(buildTemplate(dto));
   }
 
