@@ -12,6 +12,8 @@ interface ReportRepository extends Repository<Report, Long> {
 
   Optional<Report> getById(Long id);
 
+  Optional<Report> getByIdAndCreatedBy(Long id, String createdBy);
+
   List<Report> getAllByCreatedAtBefore(OffsetDateTime offsetDateTime);
 
   void deleteById(Long id);

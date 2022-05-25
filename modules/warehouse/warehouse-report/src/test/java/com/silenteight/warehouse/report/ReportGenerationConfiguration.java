@@ -20,6 +20,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 
+import java.security.Principal;
+
 import static org.mockito.Mockito.*;
 
 @ComponentScan(basePackageClasses = {
@@ -45,5 +47,11 @@ class ReportGenerationConfiguration {
   @Primary
   ReportZipProperties reportZipProperties() {
     return mock(ReportZipProperties.class);
+  }
+
+  @Bean
+  @Primary
+  Principal principalMock() {
+    return mock(Principal.class);
   }
 }

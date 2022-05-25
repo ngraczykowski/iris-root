@@ -17,8 +17,8 @@ class PersistenceService implements ReportPersistenceService {
   private final ReportRepository reportRepository;
 
   @Override
-  public ReportDto save(ReportRange range, String type, String id) {
-    Report persisted = reportRepository.save(Report.of(range, type, id));
+  public ReportDto save(ReportRange range, String type, String id, String createdBy) {
+    Report persisted = reportRepository.save(Report.of(range, type, id, createdBy));
     return persisted.toDto();
   }
 
@@ -55,8 +55,8 @@ class PersistenceService implements ReportPersistenceService {
   }
 
   @Override
-  public ReportDto getReport(long id) {
-    return reportRepository.getById(id)
+  public ReportDto getReport(long id, String createdBy) {
+    return reportRepository.getByIdAndCreatedBy(id, createdBy)
         .orElseThrow(() -> new ReportNotFoundException(id))
         .toDto();
   }

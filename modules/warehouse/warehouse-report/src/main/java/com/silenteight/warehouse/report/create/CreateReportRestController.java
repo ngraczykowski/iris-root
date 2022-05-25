@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.OffsetDateTime;
 import java.util.Set;
 
@@ -41,7 +42,8 @@ public class CreateReportRestController {
       @DateTimeFormat(iso = DATE_TIME)
       @RequestParam(required = false) OffsetDateTime to,
       @PathVariable String type,
-      @PathVariable String name) throws ReportNotAvailableException {
+      @PathVariable String name,
+      Principal principal) throws ReportNotAvailableException {
 
     if (IS_PRODUCTION.test(type))
       validate(from, to);
@@ -52,7 +54,7 @@ public class CreateReportRestController {
         + "reportName={}, from={}, to={}, dataAccessRoles={}", name, from, to, dataAccessRoles);
 
     ReportInstanceReferenceDto reportInstanceReference
-        = reportRequestService.request(from, to, type, name, dataAccessRoles);
+        = reportRequestService.request(from, to, type, name, dataAccessRoles, principal.getName());
 
     log.debug("Create report request processed, "
             + "reportName={}, from={}, to={}, dataAccessRoles={}, reportId={}",

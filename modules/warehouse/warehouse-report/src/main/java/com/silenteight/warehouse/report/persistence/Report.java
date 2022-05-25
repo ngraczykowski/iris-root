@@ -67,10 +67,14 @@ class Report extends BaseEntity implements IdentifiableEntity {
   @Enumerated(EnumType.STRING)
   private ReportFileExtension extension;
 
-  static Report of(ReportRange range, String analysisType, String reportType) {
+  @Column(name = "created_by")
+  private String createdBy;
+
+  static Report of(ReportRange range, String analysisType, String reportType, String createdBy) {
     Report report = new Report();
     report.setType(reportType);
     report.setState(NEW);
+    report.setCreatedBy(createdBy);
     report.setFrom(range.getFrom());
     report.setTo(range.getTo());
     report.generateFileStorageName();

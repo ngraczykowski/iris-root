@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
+
 import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
 import static java.lang.String.format;
 
@@ -33,12 +35,13 @@ public class ReportStatusRestController {
   public ResponseEntity<ReportStatus> checkReportStatus(
       @PathVariable String type,
       @PathVariable String name,
-      @PathVariable long id
+      @PathVariable long id,
+      Principal principal
   ) {
 
     log.debug("Get {} report status, reportId={}", name, id);
 
-    ReportDto dto = reportPersistenceService.getReport(id);
+    ReportDto dto = reportPersistenceService.getReport(id, principal.getName());
     ReportState state = dto.getState();
 
     return ResponseEntity.ok(state.getReportStatus(getReportName(type, name, id)));

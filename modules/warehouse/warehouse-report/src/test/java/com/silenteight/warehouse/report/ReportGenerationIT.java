@@ -12,6 +12,7 @@ import com.silenteight.warehouse.report.create.CreateReportRestController;
 import com.silenteight.warehouse.report.create.ReportNotAvailableException;
 import com.silenteight.warehouse.report.download.DownloadReportRestController;
 import com.silenteight.warehouse.report.generation.ReportZipProperties;
+import com.silenteight.warehouse.report.persistence.ReportNotFoundException;
 import com.silenteight.warehouse.report.persistence.ReportStatus.Status;
 import com.silenteight.warehouse.report.status.ReportStatusRestController;
 
@@ -33,6 +34,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
 
 import java.io.InputStream;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +73,8 @@ class ReportGenerationIT {
   private static final String REPORT_NAME = "TEST_REPORT";
   private static final String REPORT_NAME_NOT_CONF = "TEST_REPORT_NOT_CONF";
   private static final String REPORT_TYPE = "production";
+  private static final String USERNAME = "user";
+  private static final String USERNAME_2 = "other_user";
 
   @Autowired
   private S3Client s3Client;
@@ -93,6 +97,9 @@ class ReportGenerationIT {
   @Autowired
   private ReportZipProperties reportZipProperties;
 
+  @Autowired
+  private Principal principal;
+
   private final ObjectMapper objectMapper = new ObjectMapper();
 
   @BeforeAll
@@ -101,7 +108,7 @@ class ReportGenerationIT {
   }
 
   @Test
-  @WithMockUser(username = "user", authorities = COUNTRY_GROUP)
+  @WithMockUser(username = USERNAME, authorities = COUNTRY_GROUP)
   void shouldGenerateReport() {
     storeData(DISCRIMINATOR_1, NAME_1, RECOMMENDATION_DATE, Map.of(
         PAYLOAD_KEY_SIGNATURE, PAYLOAD_VALUE_SIGNATURE,
@@ -111,6 +118,7 @@ class ReportGenerationIT {
         PAYLOAD_KEY_COUNTRY, COUNTRY_US));
     when(countryPermissionService.getCountries(of(COUNTRY_GROUP)))
         .thenReturn(of(COUNTRY_PL));
+    when(principal.getName()).thenReturn(USERNAME);
 
     Long instanceId = createReport();
     await()
@@ -131,7 +139,27 @@ class ReportGenerationIT {
 
 
   @Test
-  @WithMockUser(username = "user", authorities = COUNTRY_GROUP)
+  @WithMockUser(username = USERNAME, authorities = COUNTRY_GROUP)
+  void shouldNotDownloadReportWhenOtherUserGenerated() {
+    storeData(DISCRIMINATOR_1, NAME_1, RECOMMENDATION_DATE, Map.of(
+        PAYLOAD_KEY_SIGNATURE, PAYLOAD_VALUE_SIGNATURE,
+        PAYLOAD_KEY_COUNTRY, COUNTRY_PL));
+    when(countryPermissionService.getCountries(of(COUNTRY_GROUP)))
+        .thenReturn(of(COUNTRY_PL));
+    when(principal.getName()).thenReturn(USERNAME);
+
+    Long instanceId = createReport();
+    await()
+        .atMost(5, SECONDS)
+        .until(() -> isReportCreated(instanceId));
+
+    when(principal.getName()).thenReturn(USERNAME_2);
+    assertThatThrownBy(() -> getReportContent(instanceId)).isInstanceOf(
+        ReportNotFoundException.class);
+  }
+
+  @Test
+  @WithMockUser(username = USERNAME, authorities = COUNTRY_GROUP)
   void shouldGenerateReportWithNewlineCharsInPayload() {
     storeData(DISCRIMINATOR_1, NAME_1, RECOMMENDATION_DATE, Map.of(
         PAYLOAD_KEY_SIGNATURE, PAYLOAD_VALUE_SIGNATURE,
@@ -142,6 +170,7 @@ class ReportGenerationIT {
         PAYLOAD_KEY_COUNTRY, COUNTRY_PL));
     when(countryPermissionService.getCountries(of(COUNTRY_GROUP)))
         .thenReturn(of(COUNTRY_PL));
+    when(principal.getName()).thenReturn(USERNAME);
 
     Long instanceId = createReport();
     await()
@@ -156,7 +185,7 @@ class ReportGenerationIT {
   }
 
   @Test
-  @WithMockUser(username = "user", authorities = COUNTRY_GROUP)
+  @WithMockUser(username = USERNAME, authorities = COUNTRY_GROUP)
   void shouldIncludeOnlyAlertsWithSpecificRecommendationDate() {
     var payload = Map.of(PAYLOAD_KEY_COUNTRY, COUNTRY_PL);
     storeData(DISCRIMINATOR_1, NAME_1, toLocalDateTime(TIMESTAMP_FROM).minusSeconds(1), payload);
@@ -164,6 +193,7 @@ class ReportGenerationIT {
     storeData(DISCRIMINATOR_3, NAME_3, toLocalDateTime(TIMESTAMP_TO).plusSeconds(1), payload);
     when(countryPermissionService.getCountries(of(COUNTRY_GROUP)))
         .thenReturn(of(COUNTRY_PL));
+    when(principal.getName()).thenReturn(USERNAME);
 
     Long instanceId = createReport();
     await()
@@ -181,7 +211,7 @@ class ReportGenerationIT {
   }
 
   @Test
-  @WithMockUser(username = "user", authorities = COUNTRY_GROUP)
+  @WithMockUser(username = USERNAME, authorities = COUNTRY_GROUP)
   void shouldZipReportWhenHasMoreRowsThanRowsLimitParameter() {
     int givenRowsLimit = 1000;
     int givenReportRowsCount = 1200;
@@ -205,26 +235,28 @@ class ReportGenerationIT {
   }
 
   @Test
-  @WithMockUser(username = "user", authorities = COUNTRY_GROUP)
+  @WithMockUser(username = USERNAME, authorities = COUNTRY_GROUP)
   void shouldNotGenerateReportWhenReportConfigurationNotPresent() {
     when(countryPermissionService.getCountries(of(COUNTRY_GROUP)))
         .thenReturn(of(COUNTRY_PL));
+    when(principal.getName()).thenReturn(USERNAME);
 
     assertThatThrownBy(() -> createReportRestController.createReport(
         parse(TIMESTAMP_FROM),
         parse(TIMESTAMP_TO),
         REPORT_TYPE,
-        REPORT_NAME_NOT_CONF))
+        REPORT_NAME_NOT_CONF, principal))
         .isInstanceOf(ReportNotAvailableException.class);
   }
 
   @SneakyThrows
   private Long createReport() {
+    when(principal.getName()).thenReturn(USERNAME);
     ResponseEntity<Void> report = createReportRestController.createReport(
         parse(TIMESTAMP_FROM),
         parse(TIMESTAMP_TO),
         REPORT_TYPE,
-        REPORT_NAME);
+        REPORT_NAME, principal);
 
     String location = report.getHeaders().get("Location").get(0);
     return Long.valueOf(location.replaceAll("[^0-9]", ""));
@@ -239,14 +271,14 @@ class ReportGenerationIT {
 
   private boolean isReportCreated(Long reportId) {
     return Status.OK == reportStatusRestController.checkReportStatus(
-            REPORT_TYPE, REPORT_NAME, reportId).getBody()
+            REPORT_TYPE, REPORT_NAME, reportId, principal).getBody()
         .getStatus();
   }
 
   @SneakyThrows
   private String getReportContent(Long instanceId) {
     return new String(downloadReportRestController
-        .downloadReport(REPORT_TYPE, REPORT_NAME, instanceId)
+        .downloadReport(REPORT_TYPE, REPORT_NAME, instanceId, principal)
         .getBody()
         .getInputStream()
         .readAllBytes());
@@ -255,7 +287,7 @@ class ReportGenerationIT {
   @SneakyThrows
   private ZipInputStream getReportZipped(Long instanceId) {
     var inputStream = downloadReportRestController
-        .downloadReport(REPORT_TYPE, REPORT_NAME, instanceId)
+        .downloadReport(REPORT_TYPE, REPORT_NAME, instanceId, principal)
         .getBody()
         .getInputStream();
     return new ZipInputStream(inputStream);

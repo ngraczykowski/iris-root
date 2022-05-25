@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
+
 import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
 import static java.lang.String.format;
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
@@ -35,11 +37,12 @@ public class DownloadReportRestController {
   public ResponseEntity<Resource> downloadReport(
       @PathVariable String type,
       @PathVariable String name,
-      @PathVariable long id) {
+      @PathVariable long id,
+      Principal principal) {
 
     log.info("Download {} report on demand request received, reportId={}", name, id);
 
-    DownloadReportDto dto = downloadService.getFor(type, id);
+    DownloadReportDto dto = downloadService.getFor(type, id, principal.getName());
 
     log.debug("Download {} report request processed, reportId={}, reportName={}",
         name, id, dto.getName());

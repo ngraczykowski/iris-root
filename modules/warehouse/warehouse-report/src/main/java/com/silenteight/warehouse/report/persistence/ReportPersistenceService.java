@@ -4,7 +4,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 public interface ReportPersistenceService {
-  ReportDto save(ReportRange range, String type, String id);
+  ReportDto save(ReportRange range, String type, String id, String createdBy);
 
   void generationFail(Long id);
 
@@ -18,5 +18,5 @@ public interface ReportPersistenceService {
 
   void deleteAll(List<ReportDto> reports);
 
-  ReportDto getReport(long id);
+  ReportDto getReport(long id, String createdBy);
 }

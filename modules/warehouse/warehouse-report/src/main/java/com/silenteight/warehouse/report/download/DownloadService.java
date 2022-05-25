@@ -33,8 +33,8 @@ class DownloadService {
   @NonNull
   private final DateFormatter dateFormatter;
 
-  public DownloadReportDto getFor(String type, long id) {
-    ReportDto dto = reportPersistenceService.getReport(id);
+  public DownloadReportDto getFor(String type, long id, String createdBy) {
+    ReportDto dto = reportPersistenceService.getReport(id, createdBy);
     FileDto report = reportStorage.getReport(dto.getFileStorageName());
 
     return DownloadReportDto.builder()

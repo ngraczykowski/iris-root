@@ -31,10 +31,12 @@ class ReportRequestService {
       OffsetDateTime to,
       String type,
       String name,
-      Set<String> dataAccessRoles) throws ReportNotAvailableException {
+      Set<String> dataAccessRoles,
+      String createdBy) throws ReportNotAvailableException {
 
     ReportProperties properties = reportPropertiesMatcher.getFor(name, type);
-    ReportDto report = reportPersistenceService.save(ReportRange.of(from, to, type), type, name);
+    ReportDto report =
+        reportPersistenceService.save(ReportRange.of(from, to, type), type, name, createdBy);
     Set<String> countries = countryPermissionService.getCountries(dataAccessRoles);
 
     reportProvider.generate(ReportRequestData.builder()
