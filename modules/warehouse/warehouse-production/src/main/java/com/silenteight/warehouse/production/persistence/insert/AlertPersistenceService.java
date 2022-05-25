@@ -26,20 +26,21 @@ class AlertPersistenceService {
   private static final String RECOMMENDATION_DATE_PARAMETER = "recommendationDate";
   private static final String PAYLOAD_PARAMETER = "payload";
 
-  private static final String INSERT_ALERT_SQL =
+  private static final String INSERT_OR_UPDATE_ALERT_SQL =
       "INSERT INTO warehouse_alert(discriminator, name, recommendation_date, payload)"
           + " VALUES (:discriminator,:name,:recommendationDate,TO_JSONB(:payload::jsonb))"
           + " ON CONFLICT (discriminator) "
           + " DO UPDATE SET name = coalesce(warehouse_alert.name, excluded.name),"
           + " payload = warehouse_alert.payload || excluded.payload,"
           + " recommendation_date ="
-          + " coalesce(warehouse_alert.recommendation_date, excluded.recommendation_date)"
+          + " coalesce(warehouse_alert.recommendation_date, excluded.recommendation_date),"
+          + " updated_at = now()"
           + " RETURNING id AS map_id";
 
   long persist(NamedParameterJdbcTemplate jdbcTemplate, AlertDefinition alertDefinition) {
     KeyHolder keyHolder = new GeneratedKeyHolder();
     MapSqlParameterSource parameters = toSqlParameters(alertDefinition);
-    jdbcTemplate.update(INSERT_ALERT_SQL, parameters, keyHolder);
+    jdbcTemplate.update(INSERT_OR_UPDATE_ALERT_SQL, parameters, keyHolder);
     return getPersistedAlertId(keyHolder, alertDefinition.getDiscriminator());
   }
 
