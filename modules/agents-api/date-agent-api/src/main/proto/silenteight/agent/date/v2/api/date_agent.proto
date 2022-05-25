@@ -136,8 +136,26 @@ message CompareDatesRequest {
   string second_date = 2;
 }
 
-//dummy response (SEALS-938)
 message CompareDatesResponse {
-  string id = 1;
-  string result = 2;
+  CompareResult result = 1;
+  CompareReason reason = 2;
+
+  enum CompareResult {
+    INCONCLUSIVE = 0;
+    AFTER = 1;
+    BEFORE = 2;
+    EQUAL = 3;
+    AGENT_ERROR = 4;
+  }
+
+  message CompareReason {
+    ParsedDateDetails first_date_details = 1;
+    ParsedDateDetails second_date_details = 2;
+    string error_message = 5;
+  }
+
+  message ParsedDateDetails {
+    string parsed_date = 1;
+    string format = 2;
+  }
 }
