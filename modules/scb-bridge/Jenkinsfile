@@ -9,7 +9,7 @@ gradleBuild(
     sonarEnabled: false,
     failPipeline: true,
     sonarDecorate: true,
-    dependencyCheckEnabled: true,
+    dependencyCheckEnabled: false,
     includeBuildNumberInSnapshotVersion: true,
 
     additionalParams: [
