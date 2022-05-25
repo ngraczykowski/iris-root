@@ -12,6 +12,22 @@ pipeline {
     ansiColor('xterm')
   }
   stages {
+    stage("Pre-Commit") {
+      when {
+        changeRequest()
+      }
+      steps {
+        sh '''
+          pre-commit run --show-diff-on-failure --color=always --all-files
+          git diff --quiet
+          if [[ $? -ne 0 ]]; then
+            git checkout HEAD -B $CHANGE_BRANCH
+            git commit -am 'chore: pre-commit fixes'
+            git push
+          fi
+          '''
+      }
+    }
     stage('Version') {
       steps {
         script {
