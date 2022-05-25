@@ -43,6 +43,10 @@ pre-commit install --hook-type commit-msg
 
 > **WORK IN PROGRESS**
 
+## Debugging in Kubernetes
+
+It is possible to debug applications in Kubernetes. For details, see [Debugging in Kubernetes](docs/development/debugging-in-kubernetes.md).
+
 ## Build logic plugins
 
 Iris is using [Gradle convention plugins](https://docs.gradle.org/current/userguide/sharing_build_logic_between_subprojects.html) for configuring builds of its components.
