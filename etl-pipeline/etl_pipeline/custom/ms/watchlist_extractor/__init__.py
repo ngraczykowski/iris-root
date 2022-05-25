@@ -112,9 +112,7 @@ class WatchlistExtractor:
 
     @safe_field_extractor
     def extract_wl_data_by_path(self, record, field1, field2):
-        entry = record.get("entity", {}).get(
-            field1, {}
-        )  # returning [] by get can cause error in next line
+        entry = record.get("entity", {}).get(field1, {})
         try:
             destination = entry.get(field2, "")
         except AttributeError:
@@ -200,8 +198,6 @@ class WatchlistExtractor:
             details = descriptor.get("stopDescriptorDetails", [])
             for detail in details:
                 input_tokens.append(detail.get("inputToken", ""))
-        # input_tokens = set([token for tokens in input_tokens for token in tokens.split()])
-        # input_tokens = sorted(list(input_tokens))
         return {cn.WL_MATCHED_TOKENS: json.dumps(input_tokens)}
 
     @safe_field_extractor
@@ -212,11 +208,12 @@ class WatchlistExtractor:
             address = match.get("entity", {}).get("addresses", {})
 
         if isinstance(address, dict):
-            return address.get("country")
+            return address.get("country") or address.get("address2")
         elif isinstance(address, list):
             countries = []
             for elem in address:
                 countries.append(elem.get("country"))
+                countries.append(elem.get("address2"))
             return "|".join(list(filter(lambda x: x is not None, countries)))
 
     @safe_field_extractor

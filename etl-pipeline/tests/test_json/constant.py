@@ -171,7 +171,7 @@ EXAMPLES = [
             "WL_NAME": "Joe Ding",
             "WL_DOB": ["MAY 6, 1981", ""],
             "WL_ENTITYTYPE": "03",
-            "WL_COUNTRY": None,
+            "WL_COUNTRY": "FL;US",
             "WL_COUNTRYNAME": None,
             "WL_NATIONALITY": [""],
             "WL_CITIZENSHIP": [""],
