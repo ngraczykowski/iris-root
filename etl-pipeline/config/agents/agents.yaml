@@ -27,6 +27,7 @@ company_name_agent:
   - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS4
   wl:
   - watchlistParty.matchRecords.WL_NAME
+  - watchlistParty.matchRecords.WL_ALIASES
 
 name_agent:
   ap:
@@ -42,7 +43,7 @@ name_agent:
   - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS4
   wl:
   - watchlistParty.matchRecords.WL_NAME
-
+  - watchlistParty.matchRecords.WL_ALIASES
 employer_name_agent:
   ap:
   - ALL_PARTY1_EMPLOYERS
@@ -158,7 +159,6 @@ hit_type_agent:
   - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_PEP
   - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_OF_INCORPORATION
   - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ADDRESS1_COUNTRY
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ADDRESS1_COUNTRY
   - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.CONCAT_ADDRESS
   - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ADDRESS1_CITY
   - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ADDRESS1_STATE
