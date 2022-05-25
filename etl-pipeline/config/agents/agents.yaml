@@ -21,6 +21,10 @@ company_name_agent:
   - ALL_CONNECTED_ACCOUNT_NAMES
   - ALL_CONNECTED_ACCOUNT_BENEFICIARY_NAMES
   - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS1
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS2
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS3
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS4
   wl:
   - watchlistParty.matchRecords.WL_NAME
 
@@ -32,6 +36,10 @@ name_agent:
   - ALL_CONNECTED_ACCOUNT_NAMES
   - ALL_CONNECTED_ACCOUNT_BENEFICIARY_NAMES
   - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS1
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS2
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS3
+  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS4
   wl:
   - watchlistParty.matchRecords.WL_NAME
 
