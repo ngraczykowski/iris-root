@@ -48,3 +48,6 @@ class Config:
 
         with configuration_path.open("rt") as config_file:
             return yaml.load(config_file, Loader=yaml.FullLoader)
+
+    def reload(self):
+        self.application_config = self.load_yaml_config("application.yaml", required=True)

@@ -4,6 +4,10 @@ from typing import Any, Mapping
 import consul.aio
 
 
+class ConsulServiceException(Exception):
+    pass
+
+
 class ConsulService:
     def __init__(self, config):
         self.logger = logging.getLogger("main").getChild("consul_service")
@@ -26,7 +30,8 @@ class ConsulService:
 
         _, services = await self.consul.catalog.service(key, **kwargs)
         if not services:
-            raise Exception(f"Service {key} is not known")
+            self.logger.error(f"Service {key} is not known")
+            raise ConsulServiceException(f"Service {key} is not known")
 
         return services[0]
 

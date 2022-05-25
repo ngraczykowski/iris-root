@@ -34,6 +34,8 @@ from agent_base.utils.logger import get_logger
 class JohnnyAgentDataSource(AgentDataSource):
     async def start(self):
         await super().start()
+
+    def prepare_stub(self):
         stub = NameInputServiceStub(self.channel)
         self.channel_stream_method = stub.BatchGetMatchNameInputs
 
