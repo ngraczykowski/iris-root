@@ -27,6 +27,10 @@ tasks.register('publish') {Task task ->
     if (subproject.pluginManager.hasPlugin('distribution'))
       task.dependsOn subproject.tasks.named('publish')
 
+    if (subproject.pluginManager.hasPlugin('maven-publish')) {
+      task.dependsOn subproject.tasks.named('publish')
+    }
+
     if (subproject.pluginManager.hasPlugin('com.silenteight.iris.build.spring-boot-application'))
       task.dependsOn subproject.tasks.named('publish')
   }

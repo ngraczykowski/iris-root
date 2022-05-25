@@ -11,6 +11,16 @@ java {
   }
 }
 
+if (pluginManager.hasPlugin('maven-publish')) {
+  publishing {
+    publications {
+      maven(MavenPublication) {
+        artifact jar
+      }
+    }
+  }
+}
+
 dependencies {
   implementation platform('com.silenteight.iris.platform:product-platform')
   annotationProcessor platform('com.silenteight.iris.platform:product-platform')
