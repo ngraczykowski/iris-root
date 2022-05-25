@@ -91,13 +91,20 @@ class AgentDataSource:
             self.request(request)
 
     def prepare_request(self, request: AgentExchangeRequest) -> Any:
-        ...
+        raise NotImplementedError
 
     def parse_response(self, response: Any) -> Generator[Tuple[str, str, Any], None, None]:
-        ...
+        raise NotImplementedError
 
     def prepare_stub(self):
-        ...
+        """
+        This method is to define stub and which it's method to use
+        as self.channel_stream_method. It should look i.e.:
+
+        stub = NameInputServiceStub(self.channel)
+        self.channel_stream_method = stub.BatchGetMatchNameInputs
+        """
+        raise NotImplementedError
 
     async def stop(self) -> None:
         if self.channel:

@@ -16,8 +16,9 @@ def get_console_handler(log_level=logging.INFO):
 
 
 def get_file_handler(log_file="agent.log", log_level=logging.INFO):
-    log_dir, _log_filename = log_file.rsplit("/", 1)
-    os.makedirs(log_dir, exist_ok=True)
+    if "/" in log_file:
+        log_dir, _log_filename = log_file.rsplit("/", 1)
+        os.makedirs(log_dir, exist_ok=True)
     file_handler = TimedRotatingFileHandler(log_file, encoding="utf8", when="midnight")
     file_handler.setFormatter(FORMATTER)
     file_handler.setLevel(log_level)
