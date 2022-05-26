@@ -30,6 +30,7 @@ class OutputRecommendationRabbitConfiguration {
     return QueueBuilder.durable(properties.queueName())
         .withArgument(X_DEAD_LETTER_EXCHANGE, properties.deadLetterExchangeName())
         .withArgument(X_DEAD_LETTER_ROUTING_KEY, properties.queueName())
+        .maxPriority(properties.queueMaxPriority())
         .build();
   }
 
@@ -58,6 +59,7 @@ class OutputRecommendationRabbitConfiguration {
             Optional.ofNullable(properties.deadLetterQueueTimeToLiveInMilliseconds())
                 .orElse(DEFAULT_TTL_IN_MILLISECONDS))
         .withArgument(X_DEAD_LETTER_EXCHANGE, EMPTY_ROUTING_KEY)
+        .maxPriority(properties.queueMaxPriority())
         .build();
   }
 

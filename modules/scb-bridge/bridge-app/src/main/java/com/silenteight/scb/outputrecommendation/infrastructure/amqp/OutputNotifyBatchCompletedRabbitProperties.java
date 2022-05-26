@@ -12,5 +12,6 @@ public record OutputNotifyBatchCompletedRabbitProperties(
     String deadLetterQueueName,
     String deadLetterExchangeName,
     Integer deadLetterQueueTimeToLiveInMilliseconds,
-    String batchRoutingKey
+    String batchRoutingKey,
+    Integer queueMaxPriority
 ) {}

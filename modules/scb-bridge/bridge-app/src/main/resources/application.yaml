@@ -273,6 +273,7 @@ amqp:
           dead-letter-queue-time-to-live-in-milliseconds: 30000
           dead-letter-exchange-name: scb-bridge.notify-batch-completed.dlx
           batch-routing-key: solving
+          queue-max-priority: 10
       batch-error:
         solving:
           exchange-name: core-bridge.notify-batch-error-exchange
