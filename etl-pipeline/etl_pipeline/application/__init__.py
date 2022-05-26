@@ -56,33 +56,3 @@ def create_agent_input_agg_col_config(agent_input_prepended_agent_name_config):
         agent_input_agg_col_config[agent_name][agent_wl_agg_col] = agent_wl_agg_source_cols
 
     return agent_input_agg_col_config
-
-
-def prepend_agent_name_to_ap_or_wl_or_aliases_key(agent_input_config):
-    """Prepend the agent name (level 1 key) to level 2 key. So the new level 2 key will be
-
-    Input:
-    { 'name_agent': {'ap': ['record_name'],
-                    'ap_aliases': [],
-                    'wl': ['name_hit'],
-                    'wl_aliases': []
-                    }
-    }
-
-    Output:
-    { 'name_agent': {'name_agent_ap': ['record_name'],
-                    'name_agent_ap_aliases': [],
-                    'name_agent_wl': ['name_hit'],
-                    'name_agent_wl_aliases': []
-                    }
-    }
-    """
-    result = {}
-    for agent_name, config in agent_input_config.items():
-        result[agent_name] = {}
-
-        for ap_or_wl_or_aliases, source_cols in config.items():
-            prepended_key_name = "_".join([agent_name, ap_or_wl_or_aliases])
-            result[agent_name][prepended_key_name] = source_cols
-
-    return result

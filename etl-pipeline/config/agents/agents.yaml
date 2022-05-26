@@ -44,6 +44,7 @@ name_agent:
   wl:
   - watchlistParty.matchRecords.WL_NAME
   - watchlistParty.matchRecords.WL_ALIASES
+
 employer_name_agent:
   ap:
   - ALL_PARTY1_EMPLOYERS

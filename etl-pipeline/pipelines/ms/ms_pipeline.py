@@ -22,8 +22,9 @@ class PipelineError:
 class MSPipeline(ETLPipeline):
     def __init__(self, engine, config=None):
         super().__init__(engine, config.config)
-        self.alert_agents_config = load_agent_configs()
+        self.reload_config()
         self.dataset_config = config.dataset_config
+        self.watchlist_extractor = WatchlistExtractor()
 
     def reload_config(self):
         self.alert_agents_config = load_agent_configs()
@@ -86,7 +87,7 @@ class MSPipeline(ETLPipeline):
             accounts = []
         return accounts
 
-    def transform_standardized_to_cleansed(self, payloads):
+    def prepare_containers(self, payloads):
         alerted_parties = self.get_parties(payloads)
         accounts = self.get_accounts(payloads)
 
@@ -105,6 +106,10 @@ class MSPipeline(ETLPipeline):
 
         self.parse_input_records(input_records)
         payloads = self.connect_input_record_with_match_record(payloads)
+        return payloads
+
+    def transform_standardized_to_cleansed(self, payloads):
+        payloads = self.prepare_containers(payloads)
 
         for payload in payloads:
             matches = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
@@ -113,7 +118,7 @@ class MSPipeline(ETLPipeline):
             accounts = self.get_accounts(payload)
             fields = input_records[0][cn.INPUT_FIELD]
             for match in matches:
-                WatchlistExtractor().update_match_with_wl_values(match)
+                self.watchlist_extractor.update_match_with_wl_values(match)
                 match[cn.TRIGGERED_BY] = self.engine.set_trigger_reasons(
                     match, self.pipeline_config.FUZZINESS_LEVEL
                 )
@@ -193,15 +198,14 @@ class MSPipeline(ETLPipeline):
     def transform_cleansed_to_application(self, payloads):
         for payload in payloads:
             matches = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
-            agent_config, yaml_conf = self.alert_agents_config["alert_type"]
-            agent_input_prepended_agent_name_config = (
-                application.prepend_agent_name_to_ap_or_wl_or_aliases_key(agent_config)
-            )
-
+            (
+                agent_config,
+                agent_input_prepended_agent_name_config,
+                yaml_conf,
+            ) = self.alert_agents_config["alert_type"]
             agent_input_agg_col_config = application.create_agent_input_agg_col_config(
                 agent_input_prepended_agent_name_config
             )
-
             for match in matches:
                 config = self.get_key(payload, match, yaml_conf)
                 self.engine.sql_to_merge_specific_columns_to_standardized(

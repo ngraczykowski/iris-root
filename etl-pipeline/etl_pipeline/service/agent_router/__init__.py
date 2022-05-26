@@ -199,6 +199,7 @@ class AgentInputCreator:
         for match_id, match in zip(
             payload[cn.MATCH_IDS], payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
         ):
+            assert len(payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]) == 1
             feature_inputs = self.produce_feature_inputs(match)
 
             agent_input = AgentInput(

@@ -109,7 +109,6 @@ class EtlPipelineServiceServicer(object):
         return alert, status
 
     async def process_request(self, alerts_to_parse):
-
         future_payloads = [self.pool.submit(self.parse_alert, alert) for alert in alerts_to_parse]
         payloads = [future.result() for future in future_payloads]
         logger.debug(f"Collected parsed payloads {len(alerts_to_parse)}")
@@ -123,7 +122,7 @@ class EtlPipelineServiceServicer(object):
         logger.debug(f"ETL results: {etl_alerts}")
         return etl_alerts
 
-    def parse_alert(self, alert):
+    def parse_alert(self, alert: AlertPayload):
         status = SUCCESS
         error = None
         try:
