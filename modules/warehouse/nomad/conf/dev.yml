@@ -155,16 +155,16 @@ warehouse.reports.v2:
                (payload ->> 'step_title')             AS "Step Name",
                (payload ->> 's8_recommendation')      AS "S8 Alert Resolution",
                (payload ->> 'recommendationDate')     AS "S8 Alert Resolution Timestamp",
-               (payload ->> 'recommendation')         AS "HSBC Alert Resolution",
-               (payload ->> 'comment')                AS "Alert Comment",
+               (payload ->> 'recommendation')         AS "Client Alert Resolution",
+               (payload ->> 'comment')                AS "S8 Alert Comment",
                (payload ->> 's8_lobCountryCode')      AS "Country LoB",
                (payload ->> 'categories/hitType')     AS "Risk Type",
                (payload ->> 'extendedAttribute5')     AS "List Type",
                (COALESCE(
                            payload ->> 'clientId',
-                           payload ->> 'DN_CASE.ID')) AS "Alert Client ID",
+                           payload ->> 'DN_CASE.ID')) AS "Client Client ID",
                (payload ->> 'status')                 AS "Alert Status",
-               discriminator                          AS "Alert S8 ID",
+               discriminator                          AS "S8 Alert ID",
                (payload ->> 'bulkIdSolving')          AS "Solving Batch ID"
         FROM warehouse_alert
         WHERE recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
@@ -180,13 +180,13 @@ warehouse.reports.v2:
                (wsm.payload ->> 'match_reason:step_title') AS "Step Name",
                (wsa.payload ->> 'recommendation_recommended_action') AS "S8 Alert Resolution",
                (wsa.payload ->> 'recommendation_create_time') AS "S8 Alert Resolution Timestamp",
-               (wsa.payload ->> 'recommendation_comment') AS "Alert Comment",
+               (wsa.payload ->> 'recommendation_comment') AS "S8 Alert Comment",
                (wa.payload ->> 's8_lobCountryCode') AS "Country LoB",
                (wa.payload ->> 'categories/hitType') AS "Risk Type",
                (wa.payload ->> 'extendedAttribute5') AS "List Type",
                (coalesce(
                   wa.payload ->> 'clientId',
-                  wa.payload ->> 'DN_CASE.ID')) AS "Customer Alert ID",
+                  wa.payload ->> 'DN_CASE.ID')) AS "Client Alert ID",
                (wa.payload ->> 'status') AS "Alert Status",
                wa.discriminator AS "S8 Alert ID"
         FROM warehouse_simulation_alert wsa
@@ -206,8 +206,8 @@ warehouse.reports.v2:
                (payload ->> 'step_title')               AS "Step Name",
                (payload ->> 's8_recommendation')        AS "S8 Alert Resolution",
                (payload ->> 'recommendationDate')       AS "S8 Alert Resolution Timestamp",
-               (payload ->> 'recommendation')           AS "HSBC Alert Resolution",
-               (payload ->> 'comment')                  AS "Alert Comment",
+               (payload ->> 'recommendation')           AS "Client Alert Resolution",
+               (payload ->> 'comment')                  AS "S8 Alert Comment",
                (payload ->> 's8_lobCountryCode')        AS "Country LoB",
                (payload ->> 'categories/hitType')       AS "Risk Type",
                (payload ->> 'extendedAttribute5')       AS "List Type",
@@ -216,7 +216,7 @@ warehouse.reports.v2:
                (payload ->> 'lastCaseComment')          AS "Analyst Comment",
                (COALESCE(
                            payload ->> 'clientId',
-                           payload ->> 'DN_CASE.ID'))   AS "Customer Alert ID",
+                           payload ->> 'DN_CASE.ID'))   AS "Client Alert ID",
                (payload ->> 'status')                   AS "Alert Status",
                discriminator                            AS "S8 Alert ID",
                (payload ->> 'bulkId')                   AS "Learning Batch ID"
@@ -236,7 +236,7 @@ warehouse.reports.v2:
              (wsm.payload ->> 'match_reason:step_title') AS "Step Name",
              (wsa.payload ->> 'recommendation_recommended_action') AS "S8 Alert Resolution",
              (wsa.payload ->> 'recommendation_create_time') AS "S8 Alert Resolution Timestamp",
-             (wsa.payload ->> 'recommendation_comment') AS "Alert Comment",
+             (wsa.payload ->> 'recommendation_comment') AS "S8 Alert Comment",
              (wa.payload ->> 's8_lobCountryCode') AS "Country LoB",
              (wa.payload ->> 'categories/hitType') AS "Risk Type",
              (wa.payload ->> 'extendedAttribute5') AS "List Type",
@@ -245,7 +245,7 @@ warehouse.reports.v2:
              (wa.payload ->> 'lastCaseComment') AS "Analyst Comment",
              (coalesce(
                 wa.payload ->> 'clientId',
-                wa.payload ->> 'DN_CASE.ID')) AS "Customer Alert ID",
+                wa.payload ->> 'DN_CASE.ID')) AS "Client Alert ID",
              (wa.payload ->> 'status') AS "Alert Status",
              wa.discriminator AS "S8 Alert ID"
         FROM warehouse_simulation_alert wsa
@@ -266,7 +266,7 @@ warehouse.reports.v2:
                wa.payload ->> 'fvSignature'                              AS "Reasoning Branch ID",
                wa.payload ->> 's8_recommendation'                        AS "S8 Alert Resolution",
                wa.payload ->> 'recommendationDate'                       AS "S8 Alert Resolution Timestamp",
-               wa.payload ->> 'recommendation'                           AS "HSBC Alert Resolution",
+               wa.payload ->> 'recommendation'                           AS "Client Alert Resolution",
                wa.payload ->> 'comment'                                  AS "S8 Alert Comment",
                wa.payload ->> 's8_lobCountryCode'                        AS "Country LoB",
                wa.payload ->> 'categories/customerType'                  AS "Customer Type",
@@ -475,7 +475,7 @@ warehouse.reports.v2:
                (payload ->> 'features/passportNumberDocument:solution') AS "Passport Number Document",
                (payload ->> 'features/registrationCountry:solution') AS "Registration Country",
                (payload ->> 'features/residencyCountry:solution') AS "Residency Country",
-               count((payload ->> 'fvSignature')) AS "Hits Counts",
+               count((payload ->> 'fvSignature')) AS "Matches Count",
                count(CASE WHEN (payload ->> 'qa.level-0.state') = 'qa_decision_TRUE'  THEN 1 END ) AS "QA decision True Positive",
                count(CASE WHEN (payload ->> 'qa.level-0.state') = 'qa_decision_FAILED' THEN 1 END ) AS "QA decision False Positive",
                count(CASE WHEN (payload ->> 'analyst_decision') = 'analyst_decision_true_positive' THEN 1 END ) AS "Analyst decision True Positive",
@@ -545,7 +545,7 @@ warehouse.reports.v2:
                (wsm.payload ->> 'features/passportNumberDocument:solution') AS "Passport Number Document",
                (wsm.payload ->> 'features/registrationCountry:solution') AS "Registration Country",
                (wsm.payload ->> 'features/residencyCountry:solution') AS "Residency Country",
-               count((wsm.payload ->> 'match_reason:feature_vector_signature')) AS "Hits Counts",
+               count((wsm.payload ->> 'match_reason:feature_vector_signature')) AS "Matches Count",
                count(CASE WHEN (wa.payload ->> 'qa.level-0.state') = 'qa_decision_TRUE'  THEN 1 END ) AS "QA decision True Positive",
                count(CASE WHEN (wa.payload ->> 'qa.level-0.state') = 'qa_decision_FAILED' THEN 1 END ) AS "QA decision False Positive",
                count(CASE WHEN (wa.payload ->> 'analyst_decision') = 'analyst_decision_true_positive' THEN 1 END ) AS "Analyst decision True Positive",
@@ -755,7 +755,7 @@ warehouse.reports.v2:
       selectSqlQuery: >
         SELECT coalesce(
                 wa.payload ->> 'clientId',
-                wa.payload ->> 'DN_CASE.ID')                AS "Customer Alert ID",
+                wa.payload ->> 'DN_CASE.ID')                AS "Client Alert ID",
                wa.payload ->> 'fvSignature'                 AS "Reasoning Branch ID",
                wa.payload ->> 'policyId'                    AS "Policy ID",
                wa.payload ->> 'policy_title'                AS "Policy Name",
@@ -785,7 +785,7 @@ warehouse.reports.v2:
       selectSqlQuery: >
         SELECT coalesce(
                   wa.payload ->> 'clientId',
-                  wa.payload ->> 'DN_CASE.ID')              AS "Customer Alert ID",
+                  wa.payload ->> 'DN_CASE.ID')              AS "Client Alert ID",
                wa.recommendation_date                       AS "S8 Alert Resolution Timestamp",
                wa.payload ->> 'qa.level-0.NEW.timestamp'    AS "Alert Selected for QA Timestamp",
                wa.payload ->> 'categories/hitType'          AS "Risk Type",
