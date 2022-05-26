@@ -1,5 +1,7 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.rest
 
+import com.silenteight.scb.ingest.adapter.incomming.common.rest.GlobalHealthEndpointProperties.Service
+
 import org.springframework.cloud.client.DefaultServiceInstance
 import org.springframework.cloud.client.discovery.simple.SimpleDiscoveryClient
 import org.springframework.cloud.client.discovery.simple.SimpleDiscoveryProperties
@@ -27,7 +29,11 @@ class GlobalHealthEndpointSpec extends Specification {
     sdp.setInstances(
         ["lima-universal-data-source": [new DefaultServiceInstance("", "", "someHost", 42, false)]])
 
-    def underTest = new GlobalHealthEndpoint(restTemplate, new SimpleDiscoveryClient(sdp), "lima");
+    def config = new GlobalHealthEndpointProperties(
+        [new Service("universal-data-source", "/rest/uds")])
+
+    def underTest = new GlobalHealthEndpoint(
+        restTemplate, new SimpleDiscoveryClient(sdp), "lima", config)
 
     when:
 
@@ -74,10 +80,10 @@ class GlobalHealthEndpointSpec extends Specification {
     then:
     mockServer.verify()
     data == ["universal-data-source": [
-        [status      : "UP",
+        [status: "UP",
          actuator_uri: "http://someHost:42/rest/uds/management",
-         artefact    : "com.silenteight.universaldatasource:universal-data-source-app:1.9.0",
-         commit_time : "2022-03-04T16:36:35Z"]
+         artefact: "com.silenteight.universaldatasource:universal-data-source-app:1.9.0",
+         commit_time: "2022-03-04T16:36:35Z"]
     ]]
   }
 }

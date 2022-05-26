@@ -128,6 +128,33 @@ spring:
         pool-name: GNS-On-Demand-Pool
 
 silenteight:
+  global-healthcheck:
+    services:
+      - id: scb-bridge
+        context-path: /rest/scb-bridge
+      - id: core-bridge
+        context-path: /rest/core-bridge
+      - id: adjudication-engine
+        context-path: /rest/ae
+      - id: universal-data-source
+        context-path: /rest/uds
+      - id: governance
+        context-path: /rest/governance
+      - id: warehouse
+        context-path: /rest/warehouse
+      - id: name-agent
+        context-path: /rest/name-agent
+      - id: date-agent
+        context-path: /rest/date-agent
+      - id: gender-agent
+        context-path: /rest/gender-agent
+      - id: country-agent
+        context-path: /rest/country-agent
+      - id: document-number-agent
+        context-path: /rest/document-number-agent
+      - id: document-comparer-agent
+        context-path: /rest/document-comparer-agent
+
   scb-bridge:
     working-mode: NORMAL
     title-gender-detector:

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.collections4.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
@@ -24,19 +25,7 @@ import java.util.Map;
 @Slf4j
 public class GlobalHealthEndpoint {
 
-  private record Service(String id, String contextPath) {}
-
   private final ObjectMapper mapper = new ObjectMapper();
-
-  private final List<Service> servicesToCheck = List.of(
-      new Service("scb-bridge", "/rest/scb-bridge"),
-      new Service("core-bridge", "/rest/core-bridge"),
-      new Service("adjudication-engine", "/rest/ae"),
-      new Service("universal-data-source", "/rest/uds"),
-      new Service("governance", "/rest/governance"),
-      new Service("warehouse", "/rest/warehouse"),
-      new Service("date-agent", "/rest/date-agent"),
-      new Service("name-agent", "/rest/name-agent"));
 
   private final RestTemplate restTemplate;
 
@@ -44,22 +33,29 @@ public class GlobalHealthEndpoint {
 
   private final String namespace;
 
+  private final GlobalHealthEndpointProperties globalHealthEndpointProperties;
+
   @Autowired
   GlobalHealthEndpoint(
-      DiscoveryClient discoveryClient, @Value("${namespace:}") String namespace) {
+      DiscoveryClient discoveryClient,
+      @Value("${namespace:}") String namespace,
+      GlobalHealthEndpointProperties globalHealthEndpointProperties) {
     this(
         new RestTemplate(httpComponentsClientHttpRequestFactory()),
         discoveryClient,
-        namespace);
+        namespace,
+        globalHealthEndpointProperties);
   }
 
   GlobalHealthEndpoint(
       RestTemplate restTemplate,
       DiscoveryClient discoveryClient,
-      String namespace) {
+      String namespace,
+      GlobalHealthEndpointProperties globalHealthEndpointProperties) {
     this.restTemplate = restTemplate;
     this.discoveryClient = discoveryClient;
     this.namespace = namespace;
+    this.globalHealthEndpointProperties = globalHealthEndpointProperties;
   }
 
   @ReadOperation
@@ -72,16 +68,16 @@ public class GlobalHealthEndpoint {
     var serviceIds = validServiceIds();
     var servicesMap = new LinkedHashMap<String, List<Map<String, String>>>();
 
-    servicesToCheck.forEach(service -> {
+    globalHealthEndpointProperties.services().forEach(service -> {
 
       log.info("Looking for serviceIds for service: {}", service);
 
       serviceIds.stream()
-          .filter(sid -> sid.endsWith(service.id))
-          .findFirst()
-          .ifPresent(serviceId -> {
+          .filter(sid -> sid.equals((namespace.isEmpty() ? "" : namespace + "-") + service.id()))
+          .forEach(serviceId -> {
             log.info("Found serviceId: {} for service: {}", serviceId, service);
-            servicesMap.put(service.id(), serviceInstances(serviceId, service.contextPath()));
+            servicesMap.merge(
+                service.id(), serviceInstances(serviceId, service.contextPath()), ListUtils::union);
           });
 
     });
@@ -109,12 +105,27 @@ public class GlobalHealthEndpoint {
   private List<Map<String, String>> serviceInstances(String serviceName, String contextPath) {
     var instances = new ArrayList<Map<String, String>>();
     for (var instance : discoveryClient.getInstances(serviceName)) {
+
+      if (instance.getInstanceId().contains("grpc")) {
+        continue;
+      }
+
       try {
         instances.add(serviceInfo(instance.getUri() + contextPath + "/management"));
       } catch (Exception e) {
+
         log.warn(
-            "Can't get instances for service: {}: {}/{}", serviceName, e.getClass().getName(),
+            "Can't get instance data for instance: {}, instanceMeta: {}, service: {}: {}/{}",
+            instance,
+            instance.getMetadata(),
+            serviceName,
+            e.getClass().getName(),
             e.getMessage());
+
+        var ans = new LinkedHashMap<String, String>();
+        ans.put("status", "Can't connect: " + e.getMessage());
+
+        instances.add(ans);
       }
     }
     return instances;
