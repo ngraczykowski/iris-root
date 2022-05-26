@@ -29,8 +29,12 @@ class AnalysisProvider {
     }
   }
 
-  @Scheduled(initialDelay = 1, fixedRate = 60, timeUnit = TimeUnit.SECONDS)
+  @Scheduled(initialDelay = 1, fixedRate = 60, timeUnit = TimeUnit.MINUTES)
   void refresh() {
+    this.currentAnalysisName.set("");
+  }
+
+  void createCurrentAnalysis() {
     debug("Refresh current analysis start!");
     var currentAnalysis = getCurrentAnalysisUseCase.getOrCreateAnalysis();
     if (currentAnalysis.isEmpty()) {
@@ -46,7 +50,7 @@ class AnalysisProvider {
     var currentAnalysis = this.currentAnalysisName.get();
     if (StringUtils.isBlank(currentAnalysis)) {
       debug("Current analysis is empty!. Refresh process started! ");
-      this.refresh();
+      this.createCurrentAnalysis();
       currentAnalysis = this.currentAnalysisName.get();
     }
     log.info("Determined current analysis: {} ", currentAnalysis);
