@@ -30,7 +30,10 @@ public class FeedingRabbitEventPublisher implements FeedingEventPublisher {
         .setFeedingStatus(FeedingStatus.valueOf(event.feedingStatus().name()))
         .addAllFedMatches(createFedMatches(event.fedMatches()))
         .build();
-    rabbitTemplate.convertAndSend(properties.exchangeName(), "", message);
+    rabbitTemplate.convertAndSend(properties.exchangeName(), "", message, rabbitMessage -> {
+      rabbitMessage.getMessageProperties().setPriority(event.priority());
+      return rabbitMessage;
+    });
   }
 
   private Iterable<FedMatch> createFedMatches(List<UdsFedEvent.FedMatch> fedMatches) {

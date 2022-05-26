@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.silenteight.scb.ingest.domain.model.BatchSource.GNS_RT;
-import static com.silenteight.scb.ingest.domain.model.RegistrationBatchContext.GNS_RT_CONTEXT;
 
 @Slf4j
 @Builder
@@ -66,19 +65,18 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
     rawAlertService.store(internalBatchId, alerts);
     batchInfoService.store(internalBatchId, GNS_RT, alerts.size());
 
-    registerAndPublish(internalBatchId, alerts, GNS_RT_CONTEXT);
+    registerAndPublish(internalBatchId, alerts);
   }
 
-  private void registerAndPublish(
-      String internalBatchId,
-      List<Alert> alerts,
-      RegistrationBatchContext batchContext) {
+  private void registerAndPublish(String internalBatchId, List<Alert> alerts) {
     var registrationResponse =
-        alertRegistrationFacade.registerAlerts(internalBatchId, alerts, batchContext);
+        alertRegistrationFacade.registerAlerts(
+            internalBatchId, alerts, RegistrationBatchContext.GNS_RT_CONTEXT);
 
     AlertUpdater.updateWithRegistrationResponse(alerts, registrationResponse);
 
-    udsFeedingPublisher.publishToUds(internalBatchId, alerts, batchContext);
+    udsFeedingPublisher.publishToUds(
+        internalBatchId, alerts, RegistrationBatchContext.GNS_RT_CONTEXT);
   }
 
   private List<Alert> mapAlerts(GnsRtRecommendationRequest request, String internalBatchId) {

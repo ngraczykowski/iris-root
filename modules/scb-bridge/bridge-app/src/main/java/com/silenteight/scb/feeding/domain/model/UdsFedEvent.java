@@ -9,7 +9,8 @@ public record UdsFedEvent(
     String alertName,
     AlertErrorDescription errorDescription,
     Status feedingStatus,
-    List<FedMatch> fedMatches) {
+    List<FedMatch> fedMatches,
+    Integer priority) {
 
   @Builder
   public UdsFedEvent {}

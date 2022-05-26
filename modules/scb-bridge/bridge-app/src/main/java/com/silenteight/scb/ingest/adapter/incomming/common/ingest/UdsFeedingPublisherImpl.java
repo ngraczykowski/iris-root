@@ -33,17 +33,10 @@ public class UdsFeedingPublisherImpl implements UdsFeedingPublisher {
   private static final int ALERT_RECOMMENDATION_FLAGS =
       Flag.RECOMMEND.getValue() | Flag.PROCESS.getValue() | Flag.ATTACH.getValue();
 
-  private static final int ALERT_LEARNING_FLAGS =
-      Flag.LEARN.getValue() | Flag.PROCESS.getValue();
+  private static final int ALERT_LEARNING_FLAGS = Flag.LEARN.getValue() | Flag.PROCESS.getValue();
 
-  private int timeoutMs;
-
-  private final int poolCbsThreads;
-
-  private final int learningThreads;
-
+  private final int timeoutMs;
   private final FeedingFacade feedingFacade;
-
   private final Map<BatchSource, ExecutorService> pools;
 
   UdsFeedingPublisherImpl(
@@ -52,14 +45,16 @@ public class UdsFeedingPublisherImpl implements UdsFeedingPublisher {
       @Value("${silenteight.scb-bridge.usd-feeder.pool.learning.threads:10}") int learningThreads,
       FeedingFacade feedingFacade) {
     this.timeoutMs = timeoutMs;
-    this.poolCbsThreads = poolCbsThreads;
-    this.learningThreads = learningThreads;
     this.feedingFacade = feedingFacade;
     this.pools = Map.of(
         CBS, Executors.newFixedThreadPool(poolCbsThreads, threadFactory("uds-feeder-cbs-%d")),
         GNS_RT, Executors.newCachedThreadPool(threadFactory("uds-feeder-gns-rt-%d")),
         LEARNING,
         Executors.newFixedThreadPool(learningThreads, threadFactory("uds-feeder-learning-%d")));
+  }
+
+  private static ThreadFactory threadFactory(String nameFormat) {
+    return new ThreadFactoryBuilder().setNameFormat(nameFormat).build();
   }
 
   public IngestedAlertsStatus publishToUds(
@@ -72,7 +67,7 @@ public class UdsFeedingPublisherImpl implements UdsFeedingPublisher {
 
     var updated = updateIngestInfoForAlert(alerts, flags(batchContext));
 
-    return feedUds(updated, requirePool(batchContext));
+    return feedUds(updated, batchContext, requirePool(batchContext));
   }
 
   private static int flags(RegistrationBatchContext batchContext) {
@@ -106,14 +101,15 @@ public class UdsFeedingPublisherImpl implements UdsFeedingPublisher {
     return pools.get(batchContext.batchSource());
   }
 
-  private IngestedAlertsStatus feedUds(List<Alert> alerts, ExecutorService pool) {
+  private IngestedAlertsStatus feedUds(
+      List<Alert> alerts, RegistrationBatchContext batchContext, ExecutorService pool) {
     var sw = StopWatch.createStarted();
     var i = -1;
     var success = new ArrayList<Alert>();
     var failed = new ArrayList<Alert>();
 
     log.debug("Feeding of {} alerts to Uds started...", alerts.size());
-    for (var future : invokeAll(pool, tasks(alerts))) {
+    for (var future : invokeAll(pool, tasks(alerts, batchContext))) {
       i++;
       var alert = alerts.get(i);
       if (future.isCancelled()) {
@@ -150,13 +146,9 @@ public class UdsFeedingPublisherImpl implements UdsFeedingPublisher {
     }
   }
 
-  private List<Callable<Boolean>> tasks(List<Alert> alerts) {
+  private List<Callable<Boolean>> tasks(List<Alert> alerts, RegistrationBatchContext batchContext) {
     return alerts.stream()
-        .map(alert -> (Callable<Boolean>) () -> feedingFacade.feedUds(alert))
+        .map(alert -> (Callable<Boolean>) () -> feedingFacade.feedUds(alert, batchContext))
         .toList();
-  }
-
-  private static ThreadFactory threadFactory(String nameFormat) {
-    return new ThreadFactoryBuilder().setNameFormat(nameFormat).build();
   }
 }

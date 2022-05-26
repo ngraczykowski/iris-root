@@ -8,6 +8,7 @@ import com.silenteight.scb.feeding.domain.model.UdsFedEvent.FedMatch
 import com.silenteight.scb.feeding.domain.model.UdsFedEvent.Status
 import com.silenteight.scb.feeding.infrastructure.amqp.AmqpFeedingOutgoingMatchFeatureInputSetFedProperties
 
+import org.springframework.amqp.core.MessagePostProcessor
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import spock.lang.Specification
 import spock.lang.Subject
@@ -28,6 +29,7 @@ class FeedingRabbitEventPublisherSpec extends Specification {
         .errorDescription(AlertErrorDescription.NONE)
         .feedingStatus(Status.SUCCESS)
         .fedMatches([new FedMatch('matchName')])
+        .priority(10)
         .build()
 
     def message = MessageAlertMatchesFeatureInputFed.newBuilder()
@@ -45,6 +47,7 @@ class FeedingRabbitEventPublisherSpec extends Specification {
     underTest.publish(event)
 
     then:
-    1 * rabbitTemplate.convertAndSend(properties.exchangeName(), '', message);
+    1 * rabbitTemplate
+        .convertAndSend(properties.exchangeName(), '', message, _ as MessagePostProcessor);
   }
 }

@@ -11,6 +11,7 @@ import com.silenteight.scb.feeding.domain.model.UdsFedEvent.Status;
 import com.silenteight.scb.feeding.domain.port.outgoing.FeedingEventPublisher;
 import com.silenteight.scb.feeding.domain.port.outgoing.UniversalDatasourceApiClient;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
+import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext;
 import com.silenteight.universaldatasource.api.library.Feature;
 import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputIn;
 import com.silenteight.universaldatasource.api.library.agentinput.v1.BatchCreateAgentInputsIn;
@@ -31,7 +32,7 @@ public class FeedingFacade {
   private final UniversalDatasourceApiClient universalDatasourceApiClient;
   private final FeedingEventPublisher feedingEventPublisher;
 
-  public boolean feedUds(Alert alert) {
+  public boolean feedUds(Alert alert, RegistrationBatchContext batchContext) {
     log.info("Feeding {} to Uds", alert.logInfo());
     var sw = StopWatch.createStarted();
     try {
@@ -46,26 +47,27 @@ public class FeedingFacade {
     try {
       registerAgentInputsForMatches(alert);
       log.info("Feature inputs for {} created successfully, executed in: {}", alert.logInfo(), sw);
-      alertFeedingSucceed(alert);
+      alertFeedingSucceed(alert, batchContext);
     } catch (Exception e) {
       log.error("Failed to create feature inputs for {} after: {}", alert.logInfo(), sw, e);
-      alertFeedingFailed(alert);
+      alertFeedingFailed(alert, batchContext);
       return false;
     }
     return true;
   }
 
-  private void alertFeedingSucceed(Alert alert) {
+  private void alertFeedingSucceed(Alert alert, RegistrationBatchContext batchContext) {
     if (!alert.isLearnFlag()) {
       feedingEventPublisher.publish(
-          createUdsFedEvent(alert, Status.SUCCESS, AlertErrorDescription.NONE));
+          createUdsFedEvent(alert, Status.SUCCESS, AlertErrorDescription.NONE, batchContext));
     }
   }
 
-  private void alertFeedingFailed(Alert alert) {
+  private void alertFeedingFailed(Alert alert, RegistrationBatchContext batchContext) {
     if (!alert.isLearnFlag()) {
       feedingEventPublisher.publish(
-          createUdsFedEvent(alert, Status.FAILURE, AlertErrorDescription.CREATE_FEATURE_INPUT));
+          createUdsFedEvent(
+              alert, Status.FAILURE, AlertErrorDescription.CREATE_FEATURE_INPUT, batchContext));
     }
   }
 
@@ -93,13 +95,17 @@ public class FeedingFacade {
   }
 
   private UdsFedEvent createUdsFedEvent(
-      Alert alert, Status status, AlertErrorDescription errorDescription) {
+      Alert alert,
+      Status status,
+      AlertErrorDescription errorDescription,
+      RegistrationBatchContext batchContext) {
     return UdsFedEvent.builder()
         .internalBatchId(alert.details().getInternalBatchId())
         .alertName(alert.details().getAlertName())
         .errorDescription(errorDescription)
         .feedingStatus(status)
         .fedMatches(createFedMatches(alert))
+        .priority(batchContext.priority().getValue())
         .build();
   }
 

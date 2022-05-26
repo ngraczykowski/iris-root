@@ -27,11 +27,11 @@ class UdsFeedingPublisherImplSpec extends Specification {
     1 * feedingFacade.feedUds(
         {Alert it ->
           it.id() == alerts[0].id()
-        })
+        }, RegistrationBatchContext.CBS_CONTEXT)
     1 * feedingFacade.feedUds(
         {Alert it ->
           it.id() == alerts[1].id()
-        })
+        }, RegistrationBatchContext.CBS_CONTEXT)
     0 * _
   }
 
@@ -39,7 +39,8 @@ class UdsFeedingPublisherImplSpec extends Specification {
     given:
     def internalBatchId = InternalBatchIdGenerator.generate()
     def alerts = Fixtures.alerts()
-    feedingFacade.feedUds(_ as Alert) >> {it -> throw new IllegalStateException("fake error")}
+    feedingFacade.feedUds(_ as Alert, _ as RegistrationBatchContext) >>
+        {it -> throw new IllegalStateException("fake error")}
 
     when:
     def result = underTest
@@ -52,10 +53,10 @@ class UdsFeedingPublisherImplSpec extends Specification {
 
   def 'should failed publish to uds because of timeout'() {
     given:
-    underTest.timeoutMs = 1
+    underTest = new UdsFeedingPublisherImpl(1, 8, 8, feedingFacade)
     def internalBatchId = InternalBatchIdGenerator.generate()
     def alerts = Fixtures.alerts()
-    feedingFacade.feedUds(_ as Alert) >> {it ->
+    feedingFacade.feedUds(_ as Alert, _ as RegistrationBatchContext) >> {it ->
       Thread.sleep(100000)
     }
 

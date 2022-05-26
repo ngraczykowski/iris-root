@@ -4,6 +4,7 @@ import com.silenteight.scb.feeding.domain.agent.input.AgentInputFactory
 import com.silenteight.scb.feeding.domain.port.outgoing.FeedingEventPublisher
 import com.silenteight.scb.feeding.domain.port.outgoing.UniversalDatasourceApiClient
 import com.silenteight.scb.feeding.fixtures.Fixtures
+import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext
 
 import spock.lang.Specification
 import spock.lang.Subject
@@ -26,7 +27,7 @@ class FeedingFacadeSpec extends Specification {
     def alert = Fixtures.LEARNING_ALERT
 
     when:
-    underTest.feedUds(alert)
+    underTest.feedUds(alert, RegistrationBatchContext.LEARNING_CONTEXT)
 
     then:
     1 * feedingService.createAgentInputIns(alert, alert.matches().get(0))
@@ -38,7 +39,7 @@ class FeedingFacadeSpec extends Specification {
     def alert = Fixtures.RECOMMENDATION_ALERT
 
     when:
-    underTest.feedUds(alert)
+    underTest.feedUds(alert, RegistrationBatchContext.CBS_CONTEXT)
 
     then:
     1 * feedingService.createAgentInputIns(alert, alert.matches().get(0))
