@@ -12,13 +12,12 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serial;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
-
-import static org.apache.commons.lang3.exception.ExceptionUtils.rethrow;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,36 +27,25 @@ class SpecificTerms2TermsProvider {
   private static final String COLUMN_NAME = "terms";
   private final CsvFileResourceProvider csvFileResourceProvider;
 
-  public @NotNull List<String> getTermsFromProceededCsvFile(String termsKey, String bucket) {
-    var fileRequest = FileRequest.builder()
-        .object(termsKey)
-        .bucket(bucket)
-        .build();
+  public @NotNull List<String> getTermsFromProceededCsvFile(String termsKey, String bucket)
+      throws IOException, CsvValidationException {
+    var fileRequest = FileRequest.builder().object(termsKey).bucket(bucket).build();
 
-    try (
-        var inputStreamReader = new InputStreamReader(
+    var inputStreamReader =
+        new InputStreamReader(
             csvFileResourceProvider.getResource(fileRequest).getInputStream(),
             Charset.forName("CP1250"));
-    ) {
 
-      List<String> output = genreateCsvFile(inputStreamReader);
+    List<String> output = genreateCsvFile(inputStreamReader);
 
-      log.info("File {}{} has been processed successfully", bucket, termsKey);
+    log.info("File {}{} has been processed successfully", bucket, termsKey);
 
-      return output;
-
-    } catch (CsvValidationException | IOException e) {
-      log.error(
-          "There was a problem when receiving or proceeding s3 object - Message: {}, Reason: {}",
-          e.getMessage(),
-          e.getCause());
-      return rethrow(e);
-    }
+    return output;
   }
 
   @Nonnull
-  private List<String> genreateCsvFile(InputStreamReader inputStreamReader) throws IOException,
-      CsvValidationException {
+  private static List<String> genreateCsvFile(InputStreamReader inputStreamReader)
+      throws IOException, CsvValidationException {
     var csvReader = new CSVReader(inputStreamReader);
 
     String header = csvReader.readNext()[0];
@@ -72,7 +60,7 @@ class SpecificTerms2TermsProvider {
     return output;
   }
 
-  private void validateCsv(@NotNull String header) {
+  private static void validateCsv(@NotNull String header) {
     if (!header.equals(COLUMN_NAME)) {
       throw new CsvTermsValidationException(header);
     }
@@ -80,7 +68,7 @@ class SpecificTerms2TermsProvider {
 
   private static final class CsvTermsValidationException extends RuntimeException {
 
-    private static final long serialVersionUID = 3289330233618778067L;
+    @Serial private static final long serialVersionUID = 3289330233618778067L;
 
     CsvTermsValidationException(String header) {
       super("CSV column name " + header + " is invalid. Should be " + COLUMN_NAME);
