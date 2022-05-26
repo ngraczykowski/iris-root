@@ -1,0 +1,9 @@
+aiohttp==3.7.4.post0
+grpcio==1.39.0
+grpcio-health-checking==1.39.0
+grpcio-reflection==1.39.0
+grpcio-tools==1.39.0
+protobuf==3.19.4
+psutil==5.9.0
+pytest>=6.1.2
+python-consul2==0.1.5
