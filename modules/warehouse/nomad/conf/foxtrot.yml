@@ -230,24 +230,23 @@ warehouse.reports.v2:
       type: production
       description: AI Reasoning (Alert Level)
       selectSqlQuery: >   
-        SELECT wa.name                                                 AS "S8 Alert ID",
-               STRING_AGG(wm.payload ->> 'clientMatchId', ', ')        AS "Client Match IDs",
-               wa.payload ->> 'policyId'                               AS "Policy ID",
-               wa.payload ->> 'policyTitle'                            AS "Policy Name",
-               STRING_AGG(wm.payload ->> 'stepId', ', ')               AS "Step IDs",
-               STRING_AGG(wm.payload ->> 'stepTitle', ', ')            AS "Step Names",
-               STRING_AGG(wm.payload ->> 'fvSignature', ', ')          AS "Reasoning Branch IDs",
-               STRING_AGG(wm.payload ->> 'categories/hitType' , ', ')  AS "Watchlist Type",
-               wa.payload ->> 's8Recommendation'                       AS "S8 Alert Resolution",
-               wa.payload ->> 'recommendationDate'                     AS "S8 Resolution Timestamp",
-               wa.payload ->> 'comment'                                AS "S8 Alert Reason"
+        SELECT wa.name                                                             AS "S8 Alert ID",
+               STRING_AGG(NULLIF(wm.payload ->> 'clientMatchId', ''), ', ')        AS "Client Match IDs",
+               wa.payload ->> 'policyId'                                           AS "Policy ID",
+               wa.payload ->> 'policyTitle'                                        AS "Policy Name",
+               STRING_AGG(NULLIF(wm.payload ->> 'stepId', ''), ', ')               AS "Step IDs",
+               STRING_AGG(NULLIF(wm.payload ->> 'stepTitle', ''), ', ')            AS "Step Names",
+               STRING_AGG(NULLIF(wm.payload ->> 'fvSignature', ''), ', ')          AS "Reasoning Branch IDs",
+               STRING_AGG(NULLIF(wm.payload ->> 'categories/hitType', ''), ', ')   AS "Watchlist Types",
+               wa.payload ->> 's8Recommendation'                                   AS "S8 Alert Resolution",
+               wa.payload ->> 'recommendationDate'                                 AS "S8 Resolution Timestamp",
+               wa.payload ->> 'comment'                                            AS "S8 Alert Reason"
         FROM warehouse_alert wa
           JOIN warehouse_match wm ON wa.id = wm.alert_id
         WHERE wa.recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
         GROUP BY wa.name,
                  wa.payload ->> 'policyId',
                  wa.payload ->> 'policyTitle',
-                 wa.payload ->> 'categories/hitType',     
                  wa.payload ->> 's8Recommendation',
                  wa.payload ->> 'recommendationDate',
                  wa.payload ->> 'comment'
@@ -256,17 +255,17 @@ warehouse.reports.v2:
       type: simulation
       description: AI Reasoning (Alert Level)
       selectSqlQuery: >
-        SELECT wa.name                                                                AS "S8 Alert ID",
-               STRING_AGG(NULLIF(wm.payload ->> 'clientMatchId', ''), ', ')           AS "Client Match IDs",
-               wsm.payload ->> 'match_reason:policy'                                  AS "Policy ID",
-               wsm.payload ->> 'match_reason:policy_title'                            AS "Policy Name",
-               STRING_AGG(wm.payload ->> 'stepId', ', ')                              AS "Step IDs",
-               STRING_AGG(wm.payload ->> 'stepTitle', ', ')                           AS "Step Names",
-               STRING_AGG(wm.payload ->> 'fvSignature', ', ')                         AS "Reasoning Branch IDs",
-               wsm.payload ->> 'categories/hitType:value'                             AS "Watchlist Type",
-               wsa.payload ->> 'recommendation_recommended_action'                    AS "S8 Alert Resolution",
-               wsa.payload ->> 'recommendation_create_time'                           AS "S8 Resolution Timestamp",
-               wsa.payload ->> 'recommendation_comment'                               AS "S8 Alert Reason"
+        SELECT wa.name                                                                    AS "S8 Alert ID",
+               STRING_AGG(NULLIF(wm.payload ->> 'clientMatchId', ''), ', ')               AS "Client Match IDs",
+               wsm.payload ->> 'match_reason:policy'                                      AS "Policy ID",
+               wsm.payload ->> 'match_reason:policy_title'                                AS "Policy Name",
+               STRING_AGG(NULLIF(wm.payload ->> 'stepId', ''), ', ')                      AS "Step IDs",
+               STRING_AGG(NULLIF(wm.payload ->> 'stepTitle', ''), ', ')                   AS "Step Names",
+               STRING_AGG(NULLIF(wm.payload ->> 'fvSignature', ''), ', ')                 AS "Reasoning Branch IDs",
+               STRING_AGG(NULLIF(wm.payload ->> 'categories/hitType:value', ''), ', ')    AS "Watchlist Types",
+               wsa.payload ->> 'recommendation_recommended_action'                        AS "S8 Alert Resolution",
+               wsa.payload ->> 'recommendation_create_time'                               AS "S8 Resolution Timestamp",
+               wsa.payload ->> 'recommendation_comment'                                   AS "S8 Alert Reason"
         FROM warehouse_simulation_alert wsa
           JOIN warehouse_simulation_match wsm ON wsa.name = wsm.alert_name
           LEFT JOIN warehouse_alert wa ON wsa.name = wa.name
@@ -276,7 +275,6 @@ warehouse.reports.v2:
         GROUP BY wa.name,
                  wsm.payload ->> 'match_reason:policy',
                  wsm.payload ->> 'match_reason:policy_title',
-                 wsm.payload ->> 'categories/hitType:value',
                  wsa.payload ->> 'recommendation_recommended_action',
                  wsa.payload ->> 'recommendation_create_time',
                  wsa.payload ->> 'recommendation_comment'
@@ -327,20 +325,20 @@ warehouse.reports.v2:
       type: production
       description: Accuracy (Alert Level)
       selectSqlQuery: >
-        SELECT wa.name                                                AS "S8 Alert ID",
-               STRING_AGG(wm.payload ->> 'clientMatchId', ', ')       AS "Client Match IDs",
-               wa.payload ->> 'policy'                                AS "Policy ID",
-               wa.payload ->> 'policyTitle'                           AS "Policy Name",
-               STRING_AGG(wm.payload ->> 'step', ', ')                AS "Step IDs",
-               STRING_AGG(wm.payload ->> 'stepTitle', ', ')           AS "Step Names",
-               STRING_AGG(wm.payload ->> 'fvSignature', ', ')         AS "Reasoning Branch IDs",
-               STRING_AGG(wm.payload ->> 'categories/hitType', ', ')  AS "Watchlist Type",
-               wa.payload ->> 's8Recommendation'                      AS "S8 Alert Resolution",
-               wa.payload ->> 'recommendationDate'                    AS "S8 Resolution Timestamp",
-               wa.payload ->> 'comment'                               AS "S8 Alert Reason",
-               wa.payload ->> 'analystDecision'                       AS "Analyst Decision",
-               wa.payload ->> 'analystDecisionModifiedDateTime'       AS "Analyst Decision Timestamp",
-               wa.payload ->> 'analystReason'                         AS "Analyst Reason"
+        SELECT wa.name                                                            AS "S8 Alert ID",
+               STRING_AGG(NULLIF(wm.payload ->> 'clientMatchId', ''), ', ')       AS "Client Match IDs",
+               wa.payload ->> 'policy'                                            AS "Policy ID",
+               wa.payload ->> 'policyTitle'                                       AS "Policy Name",
+               STRING_AGG(NULLIF(wm.payload ->> 'step', ''), ', ')                AS "Step IDs",
+               STRING_AGG(NULLIF(wm.payload ->> 'stepTitle', ''), ', ')           AS "Step Names",
+               STRING_AGG(NULLIF(wm.payload ->> 'fvSignature', ''), ', ')         AS "Reasoning Branch IDs",
+               STRING_AGG(NULLIF(wm.payload ->> 'categories/hitType', ''), ', ')  AS "Watchlist Type",
+               wa.payload ->> 's8Recommendation'                                  AS "S8 Alert Resolution",
+               wa.payload ->> 'recommendationDate'                                AS "S8 Resolution Timestamp",
+               wa.payload ->> 'comment'                                           AS "S8 Alert Reason",
+               wa.payload ->> 'analystDecision'                                   AS "Analyst Decision",
+               wa.payload ->> 'analystDecisionModifiedDateTime'                   AS "Analyst Decision Timestamp",
+               wa.payload ->> 'analystReason'                                     AS "Analyst Reason"
         FROM warehouse_alert wa
           JOIN warehouse_match wm ON wa.id = wm.alert_id
         WHERE wa.recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
