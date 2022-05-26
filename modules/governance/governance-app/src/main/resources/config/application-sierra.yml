@@ -25,3 +25,10 @@ serp:
 sentry:
   environment: sierra
   traces-sample-rate: 0
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://auth.silent8.cloud/realms/sierra
