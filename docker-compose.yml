@@ -40,11 +40,11 @@ services:
       - ./docker-compose/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
     ulimits:
       nproc:
-        hard: "262144"
-        soft: "262144"
+        hard: 262144
+        soft: 262144
       nofile:
-        hard: "65535"
-        soft: "65535"
+        hard: 65535
+        soft: 65535
 
   keycloak:
     #TODO move to no legacy version
