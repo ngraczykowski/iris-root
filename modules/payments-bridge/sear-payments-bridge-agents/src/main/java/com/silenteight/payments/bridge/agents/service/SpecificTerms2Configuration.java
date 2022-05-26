@@ -10,6 +10,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 
 import java.io.IOException;
 import java.util.List;
@@ -79,7 +80,7 @@ class SpecificTerms2Configuration {
               specificTerms2TermsProvider.getTermsFromProceededCsvFile(
                   properties.getRegularTermsKey(), properties.getBucket()),
               RESPONSE_YES));
-    } catch (CsvValidationException | IOException e) {
+    } catch (CsvValidationException | NoSuchKeyException | IOException e) {
       log.error(
           "There was a problem when receiving or proceeding s3 object. "
               + "Using default mapping - Message: {}, Reason: {}",
