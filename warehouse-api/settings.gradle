@@ -1,5 +1,0 @@
-rootProject.name = "warehouse-api"
-
-include "se-data-api"
-include "se-sampling-alerts-api"
-include "se-warehouse-internal-api"

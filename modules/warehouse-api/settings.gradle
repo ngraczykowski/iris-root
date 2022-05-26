@@ -1,0 +1,16 @@
+rootProject.name = "warehouse-api"
+
+includeBuild('../../platforms')
+includeBuild('../../build-logic')
+
+dependencyResolutionManagement {
+  versionCatalogs {
+    libs {
+      from(files("../../gradle/libs.versions.toml"))
+    }
+  }
+}
+
+include "se-data-api"
+include "se-sampling-alerts-api"
+include "se-warehouse-internal-api"
