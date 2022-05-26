@@ -51,10 +51,11 @@ class ReportsService {
     var counter = new AtomicInteger(0);
     var numberOfMessage = new AtomicInteger(0);
 
-    StreamEx.of(alerts)
-        .groupRuns((prev, next) -> counter.incrementAndGet()
-            % properties.registrationApiToReportsAlertsChunkSize() != 0)
-        .forEach(alertChunk -> send(numberOfMessage, batchId, alertChunk, analysisName));
+    try (var streamEx = StreamEx.of(alerts)) {
+      streamEx.groupRuns((prev, next) -> counter.incrementAndGet()
+              % properties.registrationApiToReportsAlertsChunkSize() != 0)
+          .forEach(alertChunk -> send(numberOfMessage, batchId, alertChunk, analysisName));
+    }
   }
 
   private void send(
@@ -76,7 +77,8 @@ class ReportsService {
     var recommendations = getRecommendations(analysisName, names);
 
     var reports = alerts.stream()
-        .map(alert -> toReport(batchId,
+        .map(alert -> toReport(
+            batchId,
             reportsMapper.toAlertWithMatches(alert, matches.get(alert.id())),
             recommendations.get(alert.alertName())))
         .toList();

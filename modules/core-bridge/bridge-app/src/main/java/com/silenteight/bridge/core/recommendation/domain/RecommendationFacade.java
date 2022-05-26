@@ -86,12 +86,13 @@ public class RecommendationFacade {
 
     var counter = new AtomicInteger(0);
 
-    StreamEx.of(alertsStream)
-        .groupRuns((prev, next) -> counter.incrementAndGet()
-            % streamProperties.registrationApiToRecommendationAlertsChunkSize() != 0)
-        .forEach(
-            alerts -> processRecommendations(
-                alerts, batchId, statistics, command, responseObserver));
+    try (var streamEx = StreamEx.of(alertsStream)) {
+      streamEx.groupRuns((prev, next) -> counter.incrementAndGet()
+              % streamProperties.registrationApiToRecommendationAlertsChunkSize() != 0)
+          .forEach(
+              alerts -> processRecommendations(
+                  alerts, batchId, statistics, command, responseObserver));
+    }
 
     responseObserver.onCompleted();
   }
