@@ -59,7 +59,7 @@ pipeline {
                   sh """
                     ./gradlew \
                       -Dsilenteight.repoDeploymentUser="\$ARTIFACTORY_USR" \
-                      -Dsilenteight.repoDeploymentPassword="\$ARTIFACTORY_PWD" \
+                      -Dsilenteight.repoDeploymentPassword="\$ARTIFACTORY_PSW" \
                       -Djib.console=plain \
                       -Pversion="${version}" \
                       publish
