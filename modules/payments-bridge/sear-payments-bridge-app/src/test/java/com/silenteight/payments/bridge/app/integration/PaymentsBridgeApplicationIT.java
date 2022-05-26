@@ -98,12 +98,13 @@ class PaymentsBridgeApplicationIT {
 
   @BeforeAll
   static void beforeAll() {
-    greenMail = new GreenMail(getServerStartup(3025));
+    greenMail = new GreenMail(getServerStartup(0));
     greenMail.withConfiguration(GreenMailConfiguration
             .aConfig()
             .withUser("user", "password"))
         .start();
 
+    System.setProperty("spring.mail.port", String.valueOf(greenMail.getSmtp().getPort()));
     mockAlertMessageIdsToLearningAlerts(databaseId++, ALERT_MESSAGE_ID);
   }
 
