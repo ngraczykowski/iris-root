@@ -53,7 +53,7 @@ customerType:
   feature_type: categories
   producer_type: CategoryProducer
   fields:
-    type: AP_PARTY_TYPE
+    type: alertedParty.AP_PARTY_TYPE
   display_name: "Customer Type"
   allowed_values: 
     - "I"
@@ -65,7 +65,7 @@ entitiesTypesMatch:
   feature_type: categories
   producer_type: CategoryProducer
   fields:
-    type: ENTITY_TYPE_MATCH
+    type: alertedParty.ENTITY_TYPE_MATCH
   display_name: "Entity Type Match"
   allowed_values: 
     - Y

@@ -42,23 +42,6 @@ class TestEngine(unittest.TestCase):
         assert parties[0][cn.CONNECTED_FULL_NAME] == "Ultra Giga Pole"
         assert parties[1][cn.CONNECTED_FULL_NAME] == ""
 
-    def test_collect_party_values_from_parties(self):
-        payload = {}
-        parties = deepcopy(EXAMPLE_PARTIES)
-        self.uut.collect_party_values_from_parties(parties, payload)
-        assert payload == {
-            "ALL_CONNECTED_PARTIES_NAMES": [],
-            "ALL_CONNECTED_PARTY_TYPES": [],
-            "ALL_CONNECTED_GOVT_IDS": [],
-            "ALL_CONNECTED_PARTY_NAMES": ["Shaolin kung fu master", "John, Doe Doe"],
-            "ALL_CONNECTED_TAX_IDS": ["1231413412312", "12097381208937"],
-            "ALL_CONNECTED_PARTY_DOBS": ["10/10/1969"],
-            "ALL_CONNECTED_PARTY_BIRTH_COUNTRIES": ["1341412312312", "13413401280"],
-            "ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES": ["Arabian Emirates"],
-            "ALL_CONNECTED_PARTY_RESIDENCY_COUNTRIES": [],
-            "ALL_CONNECTED_COUNTRY_OF_INCORPORATION": [],
-        }
-
     def test_get_clean_names_from_concat_name(self):
         assert self.uut.get_clean_names_from_concat_name(
             "KA LAI JOSEPH CHAN & KAR LUN KAREN LEE LUNKAREN",

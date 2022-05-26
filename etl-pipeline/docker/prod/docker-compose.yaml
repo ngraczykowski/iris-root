@@ -2,11 +2,11 @@ version: '2.3'
 
 services:
   jupyter_playground:
-    build:
-      context: ../..
-      dockerfile: docker/prod/Dockerfile
-      args:
-        - PIP_INDEX_URL=$PIP_INDEX_URL
+    # build:
+    #   context: ../..
+    #   dockerfile: docker/prod/Dockerfile
+    #   args:
+    #     - PIP_INDEX_URL=$PIP_INDEX_URL
     image: docker.repo.silenteight.com/etl-pipeline
     volumes:
       - ../..:/app:rw

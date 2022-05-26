@@ -269,4 +269,5 @@ class WatchlistExtractor:
             wl_record_data["WL_DOCUMENT_NUMBER"] = self.extract_wl_data_by_path(match, "ids", "id")
         except (KeyError, TypeError):
             wl_record_data["WL_DOCUMENT_NUMBER"] = ""
+
         match.update(wl_record_data)

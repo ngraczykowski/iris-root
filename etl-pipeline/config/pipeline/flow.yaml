@@ -1,0 +1,86 @@
+AP_PARTY_TYPE:
+  target_collection: alertedParty
+  method_name: set_up_party_type
+  pattern_method: pattern_set_up_party_type
+  source:
+    alertedParty:
+      - ALL_PARTY_TYPES
+
+ALL_CONNECTED_PARTIES_NAMES:
+  method_name: collect_party_full_names
+  pattern_method: pattern_aggregate
+  source:
+    parties:
+      - CONNECTED_FULL_NAME
+
+ALL_PARTY_TYPES:
+  target_collection: alertedParty
+  method_name: collect_party_types
+  pattern_method: pattern_aggregate
+  source:
+    parties:
+      - partyType
+
+ALL_CONNECTED_PARTY_NAMES:
+  method_name: collect_party_names
+  pattern_method: pattern_aggregate
+  source:
+    parties:
+      - partyName
+
+ALL_CONNECTED_TAX_IDS:
+  method_name: collect_party_tax_ids
+  pattern_method: pattern_aggregate
+  source:
+    parties:
+      - taxId
+
+ALL_PARTY_DOBS:
+  target_collection: alertedParty
+  method_name: collect_party_dobs
+  pattern_method: pattern_aggregate
+  source:
+    parties:
+      - dobDate
+
+ALL_CONNECTED_PARTY_BIRTH_COUNTRIES:
+  method_name: collect_party_birth_countries
+  pattern_method: pattern_aggregate
+  source:
+    parties:
+      - partyCountryOfBirth
+
+ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES:
+  method_name: collect_party_citizenship_countries
+  pattern_method: pattern_aggregate
+  source:
+    parties:
+      - partyPrimaryCitizenshipCountry
+
+ALL_CONNECTED_PARTY_RESIDENCY_COUNTRIES:
+  method_name: collect_party_residency_countries
+  pattern_method: pattern_aggregate
+  source:
+    parties:
+      - partyResidenceCountryCode
+
+ALL_CONNECTED_COUNTRY_OF_INCORPORATION:
+  method_name: collect_party_country_of_incorporation
+  pattern_method: pattern_aggregate
+  source:
+    parties:
+      - countryOfIncorporation
+
+ALL_CONNECTED_GOVT_IDS:
+  method_name: collect_party_government_id
+  pattern_method: pattern_aggregate
+  source:
+    parties:
+      - partyGovtIdNumber
+
+IS_BENEFICIARY_HIT:
+  method_name: set_beneficiary_hits
+  pattern_method: pattern_set_beneficiary_hits
+  source:
+    metadata:
+      - TRIGGERED_BY

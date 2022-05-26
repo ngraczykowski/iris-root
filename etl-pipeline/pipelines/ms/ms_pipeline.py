@@ -1,17 +1,17 @@
 import json
 import logging
+import os
 from copy import deepcopy
 
 from etl_pipeline import application
 from etl_pipeline.config import load_agent_configs, pipeline_config
-from etl_pipeline.custom.ms.datatypes.field import InputRecordField
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.custom.ms.watchlist_extractor import WatchlistExtractor
 from etl_pipeline.pipeline import ETLPipeline
+from pipelines.ms.collection import Collections
 
 logger = logging.getLogger("main").getChild("etl_pipeline")
-
-
+CONFIG_APP_DIR = os.environ["CONFIG_APP_DIR"]
 cn = pipeline_config.cn
 
 
@@ -20,27 +20,19 @@ class PipelineError:
 
 
 class MSPipeline(ETLPipeline):
-    def __init__(self, engine, config=None):
+    def __init__(self, engine, config, functions):
         super().__init__(engine, config.config)
         self.reload_config()
         self.dataset_config = config.dataset_config
         self.watchlist_extractor = WatchlistExtractor()
+        self.collections = Collections()
+        self.functions = functions
 
     def reload_config(self):
         self.alert_agents_config = load_agent_configs()
 
     def convert_raw_to_standardized(self, df):
         return df
-
-    def flatten_fields(self, fields):
-        for num, party in enumerate(fields):
-            fields[num] = party[cn.FIELDS]
-
-    def parse_input_records(self, input_records):
-        for input_record in input_records:
-            input_record[cn.INPUT_FIELD] = {
-                i["name"]: InputRecordField(**i) for i in input_record.get(cn.FIELDS, [])
-            }
 
     def connect_input_record_with_match_record(self, payload):
         new_payloads = []
@@ -67,67 +59,40 @@ class MSPipeline(ETLPipeline):
             logger.warning("No input vs match pairs")
         return new_payloads
 
-    def get_parties(self, payload):
-        try:
-            alerted_parties = payload[cn.ALERTED_PARTY_FIELD][cn.SUPPLEMENTAL_INFO][
-                cn.RELATED_PARTIES
-            ][cn.PARTIES]
-        except (KeyError, IndexError, TypeError):
-            logger.warning("No parties")
-            alerted_parties = []
-        return alerted_parties
-
-    def get_accounts(self, payload):
-        try:
-            accounts = payload[cn.ALERTED_PARTY_FIELD][cn.SUPPLEMENTAL_INFO][cn.RELATED_ACCOUNTS][
-                cn.ACCOUNTS
-            ]
-        except (KeyError, IndexError, TypeError):
-            logger.warning("No accounts")
-            accounts = []
-        return accounts
-
-    def prepare_containers(self, payloads):
-        alerted_parties = self.get_parties(payloads)
-        accounts = self.get_accounts(payloads)
-
-        if alerted_parties:
-            self.flatten_fields(alerted_parties)
-        if accounts:
-            self.flatten_fields(accounts)
-
-        try:
-            input_records = payloads[cn.ALERTED_PARTY_FIELD][cn.INPUT_RECORD_HIST][
-                cn.INPUT_RECORDS
-            ]
-        except (KeyError, IndexError):
-            logger.warning("No input_records")
-            return {}
-
-        self.parse_input_records(input_records)
-        payloads = self.connect_input_record_with_match_record(payloads)
-        return payloads
+    def collect_party_values(self, payload):
+        self.functions.collect_party_full_names(payload)
+        self.functions.collect_party_types(payload)
+        self.functions.collect_party_names(payload)
+        self.functions.collect_party_tax_ids(payload)
+        self.functions.collect_party_dobs(payload)
+        self.functions.collect_party_birth_countries(payload)
+        self.functions.collect_party_citizenship_countries(payload)
+        self.functions.collect_party_residency_countries(payload)
+        self.functions.collect_party_country_of_incorporation(payload)
+        self.functions.collect_party_government_id(payload)
 
     def transform_standardized_to_cleansed(self, payloads):
-        payloads = self.prepare_containers(payloads)
-
+        payloads = self.collections.prepare_collections(payloads)
+        payloads = self.connect_input_record_with_match_record(payloads)
         for payload in payloads:
             match = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
             input_records = payload[cn.ALERTED_PARTY_FIELD][cn.INPUT_RECORD_HIST][cn.INPUT_RECORDS]
-            alerted_parties = self.get_parties(payload)
-            accounts = self.get_accounts(payload)
+            alerted_parties = self.collections.get_parties(payload)
+            accounts = self.collections.get_accounts(payload)
             fields = input_records[cn.INPUT_FIELD]
-            self.watchlist_extractor.update_match_with_wl_values(match)
+            self.collections.prepare_wl_values(match)
+
             match[cn.TRIGGERED_BY] = self.engine.set_trigger_reasons(
                 match, self.pipeline_config.FUZZINESS_LEVEL
             )
-            self.engine.set_beneficiary_hits(match)
+            self.functions.set_beneficiary_hits(match)
 
             self.engine.connect_full_names(
                 alerted_parties, [cn.PRTY_FST_NM, cn.PRTY_MDL_NM, cn.PRTY_LST_NM]
             )
             self.engine.connect_full_names(accounts, [cn.ACCOUNT_FIRST_NAME, cn.ACCOUNT_LAST_NAME])
-            self.engine.collect_party_values_from_parties(alerted_parties, payload)
+
+            self.collect_party_values(payload)
             self.engine.collect_party_values_from_accounts(accounts, payload)
             self.engine.collect_party_values_from_parties_from_fields(fields, payload)
             names_source_cols = [
@@ -146,14 +111,11 @@ class MSPipeline(ETLPipeline):
             )
 
             payload.update({cn.CONCAT_RESIDUE: payload[cn.CLEANED_NAMES][cn.CONCAT_RESIDUE]})
-
             concat_residue = payload[cn.CONCAT_RESIDUE]
             concat_address = self.engine.get_field_value_name(fields, cn.CONCAT_ADDRESS)
-
             payload.update({cn.CONCAT_ADDRESS_NO_CHANGES: concat_residue == concat_address})
             match[cn.AP_TRIGGERS] = self.engine.set_triggered_tokens_discovery(match, fields)
-            self.set_up_party_type(payload, match)
-            self.set_up_party_type(payload, payload)
+            self.functions.set_up_party_type(payload)
             self.set_up_dataset_type_match(payload, match)
             self.set_token_risk_carrier(match)
         return payloads
@@ -166,6 +128,7 @@ class MSPipeline(ETLPipeline):
                 if cn.MATCH_RECORDS in element:
                     value = match
                     elements = elements[2:]
+
                 else:
 
                     value = payload
@@ -227,7 +190,7 @@ class MSPipeline(ETLPipeline):
             fields = input_records[cn.INPUT_FIELD]
             self.handle_hit_type_agent(match, agent_config, fields)
             self.select_ap_for_ap_id_tp_marked_agent(match)
-            self.set_up_entity_type_match(match)
+            self.set_up_entity_type_match(payload, match)
 
             self.engine.sql_to_merge_specific_columns_to_standardized(
                 agent_input_agg_col_config, match, config, False
@@ -299,20 +262,11 @@ class MSPipeline(ETLPipeline):
             logger.warning("No input for ap_id_tp_marked_agent. Setting up default")
             match["ap_id_tp_marked_agent_input"] = ""
 
-    def set_up_party_type(self, payload, match):
-        types = [i for i in payload[cn.ALL_CONNECTED_PARTY_TYPES] if i]
-        if not types:
-            match["AP_PARTY_TYPE"] = "UNKNOWN"
-        if "Individual" in types:
-            match["AP_PARTY_TYPE"] = "I"
+    def set_up_entity_type_match(self, payload, match):
+        if payload["alertedParty"]["AP_PARTY_TYPE"] == match["WLP_TYPE"]:
+            payload["alertedParty"]["ENTITY_TYPE_MATCH"] = "Y"
         else:
-            match["AP_PARTY_TYPE"] = "C"
-
-    def set_up_entity_type_match(self, match):
-        if match["AP_PARTY_TYPE"] == match["WLP_TYPE"]:
-            match["ENTITY_TYPE_MATCH"] = "Y"
-        else:
-            match["ENTITY_TYPE_MATCH"] = "N"
+            payload["alertedParty"]["ENTITY_TYPE_MATCH"] = "N"
 
     def set_up_dataset_type_match(self, payload, match):
         match[cn.DATASET_TYPE] = self.dataset_config.get(

@@ -2,7 +2,6 @@ import pytest
 
 from etl_pipeline.config import pipeline_config
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
-from etl_pipeline.data_processor_engine.json_engine.json_engine import JsonProcessingEngine
 from pipelines.ms.ms_pipeline import MSPipeline
 from tests.test_json.constant import TEST_AGENT_INPUT_CASES
 
@@ -38,8 +37,7 @@ def parse_key(value, match, payload, new_config):
 
 @pytest.fixture(scope="module")
 def pipeline_resource(request):
-    json_engine = JsonProcessingEngine(pipeline_config)
-    uut = MSPipeline(json_engine, config=pipeline_config)
+    uut = MSPipeline.build_pipeline(MSPipeline)
     yield uut
 
 

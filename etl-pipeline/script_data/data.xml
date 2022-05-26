@@ -1,0 +1,227 @@
+<alert>
+    <headerInfo>
+        <uniqueCustomerId>R_Global_MultiParty_Wkly_BBB03167332_MS101877544</uniqueCustomerId>
+        <datasetId>1033</datasetId>
+        <datasetName>R_Global_MultiParty_Wkly</datasetName>
+        <masterId>54622193</masterId>
+        <currentVersionId>78297835</currentVersionId>
+        <stopDescriptors>
+            <stopDescriptor>
+                <name>RED EAGLES</name>
+            </stopDescriptor>
+            <stopDescriptor>
+                <name>RED EAGLE</name>
+            </stopDescriptor>
+        </stopDescriptors>
+        <firstVersionCreatedDt>2021-08-06T16:53:49.940-04:00</firstVersionCreatedDt>
+        <lastVersionUpdatedDt>2021-08-06T16:53:49.940-04:00</lastVersionUpdatedDt>
+        <masterVersion>64729e7442ba14d54915e34fa874910b9d48c6c7</masterVersion>
+        <inputVersionSample>R_Global_MultiParty_Wkly_BBB03167332_MS101877544|B</inputVersionSample>
+    </headerInfo>
+    <inputRecordHist>
+        <inputRecord>
+            <version>64729e7442ba14d54915e34fa874910b9d48c6c7</version>
+            <createdDate>08/06/21</createdDate>
+            <field name="SOURCE_REF" isScreenable="false">
+                <value>R_Global_MultiParty_Wkly_BBB03167332_MS101877544</value>
+                <sortOrder>1</sortOrder>
+            </field>
+            <field name="PARTY1_ID" isScreenable="false">
+                <value>BBB03167332</value>
+                <sortOrder>2</sortOrder>
+            </field>
+            <field name="PARTY1_NAME_FULL" isScreenable="true">
+                <value>Dimetech Solutions</value>
+                <sortOrder>3</sortOrder>
+            </field>
+            <field name="PARTY1_NAME_ALIAS1" isScreenable="true">
+                <value>FBABYXIAT NARXAL,JQG, NZX FIISG ILDEVA</value>
+                <sortOrder>4</sortOrder>
+            </field>
+            <field name="ORGANIZATIONPERSONIND" isScreenable="false">
+                <value>O</value>
+                <sortOrder>5</sortOrder>
+            </field>
+            <field name="PARTY1_COUNTRY_FORMATION1" isScreenable="true">
+                <value>SOUTH AFRICA</value>
+                <sortOrder>6</sortOrder>
+            </field>
+            <field name="PARTY1_COUNTRY_DOMICILE1" isScreenable="true">
+                <sortOrder>7</sortOrder>
+            </field>
+            <field name="PARTY1_COUNTRY1" isScreenable="true">
+                <sortOrder>8</sortOrder>
+            </field>
+            <field name="PARTY1_DATE_OF_BIRTH" isScreenable="false">
+                <sortOrder>9</sortOrder>
+            </field>
+            <field name="YEAROFBIRTH" isScreenable="false">
+                <sortOrder>10</sortOrder>
+            </field>
+            <field name="AGE" isScreenable="false">
+                <sortOrder>11</sortOrder>
+            </field>
+            <field name="GOVTIDTYPE" isScreenable="false">
+                <sortOrder>12</sortOrder>
+            </field>
+            <field name="PARTY1_GOVID1_NUMBER" isScreenable="true">
+                <sortOrder>13</sortOrder>
+            </field>
+            <field name="PARTY1_GOVID2_NUMBER" isScreenable="true">
+                <sortOrder>14</sortOrder>
+            </field>
+            <field name="PARTY1_PASSPORT1_NUMBER" isScreenable="true">
+                <sortOrder>15</sortOrder>
+            </field>
+            <field name="PARTY1_SSN_NUMBER" isScreenable="true">
+                <sortOrder>16</sortOrder>
+            </field>
+            <field name="PARTYCREATIONDATE" isScreenable="false">
+                <value>2012-03-22</value>
+                <sortOrder>17</sortOrder>
+            </field>
+            <field name="SITEID" isScreenable="false">
+                <value>MS101877544</value>
+                <sortOrder>18</sortOrder>
+            </field>
+            <field name="SITETYPEID" isScreenable="false">
+                <value>1201</value>
+                <sortOrder>19</sortOrder>
+            </field>
+            <field name="PARTY1_ADDRESS1_FULL" isScreenable="true">
+                <value>1 EAGLE VALLEY RD</value>
+                <sortOrder>20</sortOrder>
+            </field>
+            <field name="PARTY1_ADDRESS1_CITY" isScreenable="true">
+                <value>Cape Town</value>
+                <sortOrder>21</sortOrder>
+            </field>
+            <field name="PARTY1_ADDRESS1_STATE" isScreenable="false">
+                <value>WESTERN CAPE</value>
+                <sortOrder>22</sortOrder>
+            </field>
+            <field name="PARTY1_ADDRESS1_POSTALCODE" isScreenable="false">
+                <value>8001</value>
+                <sortOrder>23</sortOrder>
+            </field>
+            <field name="PARTY1_ADDRESS1_COUNTRY" isScreenable="true">
+                <value>ZAF</value>
+                <sortOrder>24</sortOrder>
+            </field>
+            <field name="BUSINESS_NAME" isScreenable="true">
+                <sortOrder>25</sortOrder>
+            </field>
+            <field name="DIFC_TRADING_NAME" isScreenable="true">
+                <sortOrder>26</sortOrder>
+            </field>
+            <field name="FORMER_NAME" isScreenable="true">
+                <sortOrder>27</sortOrder>
+            </field>
+            <status>A</status>
+            <masterId>54622193</masterId>
+            <versionId>78297835</versionId>
+            <uniqueCustId>R_Global_MultiParty_Wkly_BBB03167332_MS101877544</uniqueCustId>
+        </inputRecord>
+    </inputRecordHist>
+    <matchRecords>
+        <matchRecord>
+            <masterId>54622193</masterId>
+            <accountSeq>1</accountSeq>
+            <datasetId>1033</datasetId>
+            <uniqueCustomerId>R_Global_MultiParty_Wkly_BBB03167332_MS101877544</uniqueCustomerId>
+            <masterVersion>64729e7442ba14d54915e34fa874910b9d48c6c7</masterVersion>
+            <matchId>193335190</matchId>
+            <matchStatus>O</matchStatus>
+            <riskScore>-1.0</riskScore>
+            <inputVersionId>78297835</inputVersionId>
+            <matchType>GWL</matchType>
+            <entityId>38471</entityId>
+            <entityVersion>20191108173026</entityVersion>
+            <entity id="38471" version="20191108173026">
+                <name>POPULAR FRONT FOR THE LIBERATION OF PALESTINE</name>
+                <listId>27</listId>
+                <listCode>AU</listCode>
+                <entityType>09</entityType>
+                <createdDate>12/09/2002</createdDate>
+                <lastUpdateDate>03/13/2020</lastUpdateDate>
+                <source>AU</source>
+                <aliases>
+                    <alias type="Alias">ABU ALI MUSTAFA BRIGADES</alias>
+                    <alias type="Alias">HALHUL SQUAD</alias>
+                    <alias type="Alias">KAANE HALHUL GANG</alias>
+                    <alias type="Alias">PALESTINIAN POPULAR RESISTANCE FORCES</alias>
+                    <alias type="Alias">PFLP</alias>
+                    <alias type="Alias">PPRF</alias>
+                    <alias type="Alias">RED EAGLE GANG</alias>
+                    <alias type="Alias">RED EAGLE GROUP</alias>
+                    <alias type="Alias">RED EAGLES</alias>
+                </aliases>
+                <programs>
+                    <program>1373 2001</program>
+                </programs>
+                <sdfs>
+                    <sdf name="ExpirationDate">11/07/2022</sdf>
+                    <sdf name="OriginalID">286</sdf>
+                    <sdf name="OtherInformation">Minister for Foreign Affairs listed entity on 12/21/01 under section 15(1) of Charter of the UN Act 1945 (CotUNA), pursuant to Australia's obligations under UNSC resolution 1373 (2001). Minister declared on 11/07/19, pursuant to section 15A(2) of CotUNA, listing under effect will cease to have effect 11/07/2022, unless extended in accordance w/section 15A CotUNA. PFLP is secular Marxist-Leninist revolutionary org., aspiring to establish single socialist democratic Palestinian state w/Jerusalem as capital.</sdf>
+                </sdfs>
+                <addresses>
+                    <address>
+                        <country>PS</country>
+                        <countryName>PALESTINIAN TERRITORY, OCCUPIED</countryName>
+                    </address>
+                </addresses>
+                <otherIds>
+                    <childId>38472</childId>
+                    <childId>38473</childId>
+                    <childId>38474</childId>
+                    <childId>38475</childId>
+                    <childId>38476</childId>
+                    <childId>38477</childId>
+                    <childId>38478</childId>
+                    <childId>38479</childId>
+                    <childId>6261161</childId>
+                </otherIds>
+            </entity>
+            <entityType>09</entityType>
+            <entityTextType>UPID</entityTextType>
+            <sourceCode>AU</sourceCode>
+            <stopDescriptors>
+                <stopDescriptor>
+                    <name>RED EAGLE</name>
+                    <totalMatchScore>0.875</totalMatchScore>
+                    <stopDescriptorDetail>
+                        <inputToken>rd</inputToken>
+                        <inputSynonym>null</inputSynonym>
+                        <sdToken>red</sdToken>
+                        <matchScore>0.6666666666666667</matchScore>
+                    </stopDescriptorDetail>
+                    <stopDescriptorDetail>
+                        <inputToken>eagle</inputToken>
+                        <inputSynonym>null</inputSynonym>
+                        <sdToken>eagle</sdToken>
+                        <matchScore>1.0</matchScore>
+                    </stopDescriptorDetail>
+                </stopDescriptor>
+                <stopDescriptor>
+                    <name>RED EAGLES</name>
+                    <totalMatchScore>0.875</totalMatchScore>
+                    <stopDescriptorDetail>
+                        <inputToken>rd</inputToken>
+                        <inputSynonym>null</inputSynonym>
+                        <sdToken>red</sdToken>
+                        <matchScore>0.6666666666666667</matchScore>
+                    </stopDescriptorDetail>
+                    <stopDescriptorDetail>
+                        <inputToken>eagle</inputToken>
+                        <inputSynonym>null&amp;eagle</inputSynonym>
+                        <sdToken>eagles</sdToken>
+                        <matchScore>1.0</matchScore>
+                    </stopDescriptorDetail>
+                </stopDescriptor>
+            </stopDescriptors>
+            <firstMatchedDate>08/07/21</firstMatchedDate>
+            <lastMatchedDate>08/07/21</lastMatchedDate>
+            <lastReviewDate>08/07/21</lastReviewDate>
+        </matchRecord>
+    </matchRecords>
+</alert>
