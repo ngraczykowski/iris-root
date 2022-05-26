@@ -12,7 +12,7 @@ import java.util.Map;
 
 import static java.util.UUID.randomUUID;
 
-public class AlertsGeneratingService {
+public class PbAlertsGeneratingService {
 
   private final CommonUtils commonUtils = new CommonUtils();
 

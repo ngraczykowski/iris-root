@@ -1,13 +1,6 @@
 {
-  "Header": null,
   "Body": {
     "msg_SendMessage": {
-      "VersionTag": "1",
-      "Authentication": {
-        "UserLogin": "sierra",
-        "UserPassword": "sierra-dev-pass",
-        "UserRealm": ""
-      },
       "Messages": [
         {
           "Message": {
