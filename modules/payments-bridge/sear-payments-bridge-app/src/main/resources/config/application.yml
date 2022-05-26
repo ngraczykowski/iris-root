@@ -167,6 +167,7 @@ pb:
           - "MATCH_3"
           - "MATCH_4"
           - "MATCH_5_OR_MORE"
+          - "AGENT_ERROR"
       messageStructure:
         displayName: Message Structure
         type: ENUMERATED
