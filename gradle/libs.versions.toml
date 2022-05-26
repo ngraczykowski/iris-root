@@ -110,10 +110,8 @@ silenteight-serp-protocol-agent = { group = "com.silenteight.serp.protocol", nam
 silenteight-serp-protocol-base = { group = "com.silenteight.serp.protocol", name = "serp-protocol-base", version.ref = "serp-protocol" }
 silenteight-serp-protocol-ns = { group = "com.silenteight.serp.protocol", name = "serp-protocol-ns", version.ref = "serp-protocol" }
 silenteight-serp-protocol-scb = { group = "com.silenteight.serp.protocol", name = "serp-protocol-scb", version.ref = "serp-protocol" }
-warehouse-data-api = { group = "com.silenteight.iris", name = "se-data-api" }
-warehouse-sampling-api = { group = "com.silenteight.iris", name = "se-sampling-alerts-api" }
-warehouse-internal-api = { group = "com.silenteight.iris", name = "se-warehouse-internal-api" }
-worldcheck-api = { group = 'com.silenteight.worldcheck.api', name = 'protocol-world-check', version.ref = "worldcheck-api"}
+warehouse-data-api = { group = "com.silenteight.warehouse.api", name = "se-data-api", version.ref = "warehouse-protocol" }
+warehouse-sampling-api = { group = "com.silenteight.warehouse.api", name = "se-sampling-alerts-api", version.ref = "warehouse-protocol" }
 
 # Platforms
 platform-awssdk = { module = "software.amazon.awssdk:bom", version.ref = "platform-awssdk" }
