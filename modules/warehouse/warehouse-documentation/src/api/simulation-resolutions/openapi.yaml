@@ -1,0 +1,76 @@
+openapi: 3.0.3
+info:
+  title: Simulation Resolutions
+  description: Simulation Resolutions API
+  version: 1.0.0
+
+servers:
+  - url: '{environment}/rest/warehouse/api/v1'
+    variables:
+      environment:
+        enum:
+          - http://localhost:24900
+          - https://localhost:24111
+        default: http://localhost:24900
+
+paths:
+  /analysis/{analysisId}/statistics:
+    get:
+      description: Get resolutions of simulation.
+      parameters:
+        - in: path
+          name: analysisId
+          required: true
+          description: Simulation ID.
+          example: a234-2234-234234-134
+          schema:
+            type: string
+      responses:
+        200:
+          description: Policy statistics object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimulationStatistics'
+
+components:
+  schemas:
+    SimulationStatistics:
+      type: object
+      properties:
+        efficiency:
+          type: object
+          properties:
+            solvedAlerts:
+              type: number
+              example: 7
+            allAlerts:
+              type: number
+              example: 10
+            falsePositiveAlerts:
+              type: number
+              example: 4
+            falsePositiveAlertsPercent:
+              type: number
+              example: 40.0
+            potentialTruePositiveAlerts:
+              type: number
+              example: 3
+            potentialTruePositiveAlertsPercent:
+              type: number
+              example: 30.0
+            manualInvestigationAlerts:
+              type: number
+              example: 0
+            manualInvestigationAlertsPercent:
+              type: number
+              example: 0.0
+        effectiveness:
+          type: object
+          properties:
+            analystSolvedAsFalsePositive:
+              type: number
+              example: 1
+            aiSolvedAsFalsePositive:
+              type: number
+              example: 2
