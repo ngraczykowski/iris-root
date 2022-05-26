@@ -59,9 +59,9 @@ class MSPipeline(ETLPipeline):
                     pair_payload = deepcopy(payload)
                     pair_payload[cn.ALERTED_PARTY_FIELD][cn.INPUT_RECORD_HIST][
                         cn.INPUT_RECORDS
-                    ] = [input_record]
-                    pair_payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS] = [match_record]
-                    pair_payload[cn.MATCH_IDS] = [pair_payload[cn.MATCH_IDS][num]]
+                    ] = input_record
+                    pair_payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS] = match_record
+                    pair_payload[cn.MATCH_IDS] = pair_payload[cn.MATCH_IDS][num]
                     new_payloads.append(pair_payload)
         if not new_payloads:
             logger.warning("No input vs match pairs")
@@ -112,17 +112,16 @@ class MSPipeline(ETLPipeline):
         payloads = self.prepare_containers(payloads)
 
         for payload in payloads:
-            matches = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
+            match = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
             input_records = payload[cn.ALERTED_PARTY_FIELD][cn.INPUT_RECORD_HIST][cn.INPUT_RECORDS]
             alerted_parties = self.get_parties(payload)
             accounts = self.get_accounts(payload)
-            fields = input_records[0][cn.INPUT_FIELD]
-            for match in matches:
-                self.watchlist_extractor.update_match_with_wl_values(match)
-                match[cn.TRIGGERED_BY] = self.engine.set_trigger_reasons(
-                    match, self.pipeline_config.FUZZINESS_LEVEL
-                )
-                self.engine.set_beneficiary_hits(match)
+            fields = input_records[cn.INPUT_FIELD]
+            self.watchlist_extractor.update_match_with_wl_values(match)
+            match[cn.TRIGGERED_BY] = self.engine.set_trigger_reasons(
+                match, self.pipeline_config.FUZZINESS_LEVEL
+            )
+            self.engine.set_beneficiary_hits(match)
 
             self.engine.connect_full_names(
                 alerted_parties, [cn.PRTY_FST_NM, cn.PRTY_MDL_NM, cn.PRTY_LST_NM]
@@ -152,9 +151,8 @@ class MSPipeline(ETLPipeline):
             concat_address = self.engine.get_field_value_name(fields, cn.CONCAT_ADDRESS)
 
             payload.update({cn.CONCAT_ADDRESS_NO_CHANGES: concat_residue == concat_address})
-            for match in matches:
-                match[cn.AP_TRIGGERS] = self.engine.set_triggered_tokens_discovery(match, fields)
-                self.set_up_party_type(payload, match)
+            match[cn.AP_TRIGGERS] = self.engine.set_triggered_tokens_discovery(match, fields)
+            self.set_up_party_type(payload, match)
             self.set_up_party_type(payload, payload)
             self.set_up_dataset_type_match(payload, match)
             self.set_token_risk_carrier(match)
@@ -174,7 +172,7 @@ class MSPipeline(ETLPipeline):
                 for field_name in elements:
                     if field_name == cn.INPUT_FIELD:
                         try:
-                            value = value[0][field_name][elements[-1]].value
+                            value = value[field_name][elements[-1]].value
                         except (AttributeError, KeyError):
                             value = None
                         break
@@ -197,7 +195,7 @@ class MSPipeline(ETLPipeline):
 
     def transform_cleansed_to_application(self, payloads):
         for payload in payloads:
-            matches = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
+            match = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
             (
                 agent_config,
                 agent_input_prepended_agent_name_config,
@@ -206,50 +204,48 @@ class MSPipeline(ETLPipeline):
             agent_input_agg_col_config = application.create_agent_input_agg_col_config(
                 agent_input_prepended_agent_name_config
             )
-            for match in matches:
-                config = self.get_key(payload, match, yaml_conf)
-                self.engine.sql_to_merge_specific_columns_to_standardized(
-                    agent_input_prepended_agent_name_config,
-                    match,
-                    config,
-                    False,
-                )
 
-                config.update(
-                    {
-                        key: self.flatten(match.get(key))
-                        for key in match
-                        if key.endswith("_ap")
-                        or key.endswith("_wl")
-                        or key.endswith("_name")
-                        or key.endswith("_aliases")
-                    }
-                )
-                input_records = payload[cn.ALERTED_PARTY_FIELD][cn.INPUT_RECORD_HIST][
-                    cn.INPUT_RECORDS
-                ]
-                fields = input_records[0][cn.INPUT_FIELD]
-                self.handle_hit_type_agent(match, agent_config, fields)
-                self.select_ap_for_ap_id_tp_marked_agent(match)
-                self.set_up_entity_type_match(match)
+            config = self.get_key(payload, match, yaml_conf)
+            self.engine.sql_to_merge_specific_columns_to_standardized(
+                agent_input_prepended_agent_name_config,
+                match,
+                config,
+                False,
+            )
 
-                self.engine.sql_to_merge_specific_columns_to_standardized(
-                    agent_input_agg_col_config, match, config, False
-                )
-                match.update(
-                    {
-                        key: self.produce_unique_flatten_list(match.get(key, []))
-                        for key in match
-                        if key.endswith("_aggregated") or key.startswith("hit_type_agent")
-                    }
-                )
-
-                match["all_hit_type_aggregated"] = {
-                    key.split("_")[-1]: [i for i in match[key] if i]
+            config.update(
+                {
+                    key: self.flatten(match.get(key))
                     for key in match
-                    if key.startswith("hit")
+                    if key.endswith("_ap")
+                    or key.endswith("_wl")
+                    or key.endswith("_name")
+                    or key.endswith("_aliases")
                 }
-                self.remove_nulls_from_aggegated(match)
+            )
+            input_records = payload[cn.ALERTED_PARTY_FIELD][cn.INPUT_RECORD_HIST][cn.INPUT_RECORDS]
+            fields = input_records[cn.INPUT_FIELD]
+            self.handle_hit_type_agent(match, agent_config, fields)
+            self.select_ap_for_ap_id_tp_marked_agent(match)
+            self.set_up_entity_type_match(match)
+
+            self.engine.sql_to_merge_specific_columns_to_standardized(
+                agent_input_agg_col_config, match, config, False
+            )
+            match.update(
+                {
+                    key: self.produce_unique_flatten_list(match.get(key, []))
+                    for key in match
+                    if key.endswith("_aggregated") or key.startswith("hit_type_agent")
+                }
+            )
+
+            match["all_hit_type_aggregated"] = {
+                key.split("_")[-1]: [i for i in match[key] if i]
+                for key in match
+                if key.startswith("hit")
+            }
+            self.remove_nulls_from_aggegated(match)
 
         return payloads
 

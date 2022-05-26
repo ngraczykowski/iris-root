@@ -76,7 +76,7 @@ def assert_compare_list_of_dict_of_list(tested, reference, col):
 
 def check_payload(out_payload, reference_file):
     out_payload = pd.DataFrame(
-        [match for payload in out_payload for match in payload["watchlistParty"]["matchRecords"]]
+        [payload["watchlistParty"]["matchRecords"] for payload in out_payload]
     )
     with open(reference_file, "rb") as f:
         reference_payloads = pickle.load(f)
@@ -105,9 +105,8 @@ def assert_length_and_content_match(
     assert len(parsed_payloads) == requested_length
     for i in parsed_payloads:
         assert len(i[cn.ALERTED_PARTY_FIELD][cn.INPUT_RECORD_HIST]) == 1
-        assert len(i[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]) == 1
         assert (
-            i[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][0]["ap_id_tp_marked_agent_input"]
+            i[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]["ap_id_tp_marked_agent_input"]
             == ap_id_tp_marked_agent_input
         )
     check_payload(parsed_payloads, reference_file)

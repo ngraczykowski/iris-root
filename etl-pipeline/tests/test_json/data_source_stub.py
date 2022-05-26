@@ -58,6 +58,7 @@ class CategoryInputServiceServicer(object):
     def BatchCreateCategoryValues(self, request, context):
         parsed_categories = []
         context.set_code(grpc.StatusCode.OK)
+
         with open("tests/categories.txt", "r") as f:
             categories = [i.strip() for i in f.readlines()]
         for category_request in request.requests:

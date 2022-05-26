@@ -195,37 +195,34 @@ class AgentInputCreator:
 
     def produce_batch_create_agent_input_request(self, alert, payload, message_type="features"):
         agent_inputs = []
+        match_id = payload[cn.MATCH_IDS]
+        match = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
+        feature_inputs = self.produce_feature_inputs(match)
 
-        for match_id, match in zip(
-            payload[cn.MATCH_IDS], payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
-        ):
-            assert len(payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]) == 1
-            feature_inputs = self.produce_feature_inputs(match)
-
-            agent_input = AgentInput(
-                alert=alert.alert_name,
-                match=f"{match_id.match_name}",
-                feature_inputs=feature_inputs,
-            )
-            logger.debug(agent_input)
-            agent_inputs.append(agent_input)
+        agent_input = AgentInput(
+            alert=alert.alert_name,
+            match=f"{match_id.match_name}",
+            feature_inputs=feature_inputs,
+        )
+        logger.debug(agent_input)
+        agent_inputs.append(agent_input)
         return BatchCreateAgentInputsRequest(agent_inputs=agent_inputs)
 
     def produce_batch_create_agent_input_category_request(self, alert, payload):
         all_category_values_requests = []
 
-        for match_id, match in zip(
-            payload[cn.MATCH_IDS], payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
-        ):
-            category_values_requests = self.produce_categories_inputs(
-                payload,
-                match_payload=match,
-                alert=alert.alert_name,
-                match_name=f"{match_id.match_name}",
-            )
-            if category_values_requests:
-                logger.debug(category_values_requests)
-                all_category_values_requests.extend(category_values_requests)
+        match_id = payload[cn.MATCH_IDS]
+        match = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
+
+        category_values_requests = self.produce_categories_inputs(
+            payload,
+            match_payload=match,
+            alert=alert.alert_name,
+            match_name=f"{match_id.match_name}",
+        )
+        if category_values_requests:
+            logger.debug(category_values_requests)
+            all_category_values_requests.extend(category_values_requests)
         return BatchCreateCategoryValuesRequest(requests=all_category_values_requests)
 
     async def send_items(self, produce_func, alert, payload, message_type):

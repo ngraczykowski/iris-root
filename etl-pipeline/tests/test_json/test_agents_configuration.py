@@ -23,7 +23,7 @@ def parse_key(value, match, payload, new_config):
             for field_name in elements:
                 if field_name == cn.INPUT_FIELD:
                     try:
-                        value = value[0][field_name][elements[-1]].value
+                        value = value[field_name][elements[-1]].value
                     except (AttributeError, KeyError):
                         value = None
                     break
@@ -53,12 +53,11 @@ def test_agent_input(test_case, pipeline_resource):
     parsed_payloads = pipeline_resource.transform_standardized_to_cleansed(payload_json)
     parsed_payloads = pipeline_resource.transform_cleansed_to_application(parsed_payloads)
     payload = parsed_payloads[0]
-    match = payload.get(cn.WATCHLIST_PARTY, {}).get(cn.MATCH_RECORDS, [])[0]
+    match = payload.get(cn.WATCHLIST_PARTY, {}).get(cn.MATCH_RECORDS, [])
     for cat, key in expected_result.keys():
         new_config = {}
         parse_key({cat: [key]}, match, payload, new_config)
         key_short = key.split(".")[-1] if "." in key else key
-
         assert (
             new_config[key_short] == expected_result[(cat, key)]
         ), f"{new_config[key_short]} != {expected_result[(cat, key)]} for {(cat, key)} in {test_case.agent_name}"
