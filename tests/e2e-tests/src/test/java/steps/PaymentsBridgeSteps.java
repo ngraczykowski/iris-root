@@ -5,22 +5,22 @@
 package steps;
 
 import io.cucumber.java8.En;
-
-import java.io.InputStream;
+import utils.datageneration.paymentsbridge.AlertsGeneratingService;
 
 import static io.restassured.RestAssured.given;
 
 public class PaymentsBridgeSteps implements En {
 
+  private AlertsGeneratingService alertsGeneratingService = new AlertsGeneratingService();
+
   public PaymentsBridgeSteps() {
     And("Send alert on solving", () -> {
-      InputStream requestBody =
-          PaymentsBridgeSteps.class.getResourceAsStream("/paymentsBridgeAlerts/alert-1.json");
+      String oneHitAlert = alertsGeneratingService.generateAlertWithHits(1);
 
       given()
           .when()
           .contentType("application/json")
-          .body(requestBody)
+          .body(oneHitAlert)
           .post("rest/pb/alert")
           .then()
           .statusCode(200);
