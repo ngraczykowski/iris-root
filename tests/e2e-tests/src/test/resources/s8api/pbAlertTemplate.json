@@ -1,0 +1,52 @@
+{
+  "Header": null,
+  "Body": {
+    "msg_SendMessage": {
+      "VersionTag": "1",
+      "Authentication": {
+        "UserLogin": "sierra",
+        "UserPassword": "sierra-dev-pass",
+        "UserRealm": ""
+      },
+      "Messages": [
+        {
+          "Message": {
+            "Unit": "US",
+            "Hits": [{
+              "Hit": {
+                "HittedEntity": {
+                  "ID": "${hitId}"
+                },
+                "RulesContext": {
+                  "Info": "none",
+                  "Type": "1",
+                  "Priority": "0",
+                  "Confidentiality": "0"
+                }
+              }
+            }],
+            "NextStatuses": [
+              {
+                "Status": {
+                  "ID": "225",
+                  "Name": "S8_ADJ",
+                  "Checksum": "0d14589062b13cbce8cf38f9eb7a22a7",
+                  "RoutingCode": "12"
+                }
+              }
+            ],
+            "CurrentStatus": {
+              "ID": "223",
+              "Name": "FILTER_S8",
+              "Checksum": "6a905528e3b9126041bbfe8f59cfe07b",
+              "RoutingCode": "12"
+            },
+            "SystemID": "${alertId}",
+            "MessageID": "${messageId}",
+            "MessageData": "${messageData}"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -48,6 +48,10 @@ public class CommonUtils {
         .format(DateTimeFormatter.ISO_DATE_TIME);
   }
 
+  public String templateObjectOfName(String templateName, Map<String, Object> parameters) {
+    return templateObject(getJsonTemplate(templateName), parameters);
+  }
+
   @SneakyThrows
   public String template(String template, Map<String, String> parameters) {
     return StringSubstitutor.replace(template, parameters);

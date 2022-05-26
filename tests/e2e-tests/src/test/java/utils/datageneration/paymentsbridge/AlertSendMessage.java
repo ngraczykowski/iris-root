@@ -16,5 +16,5 @@ import java.util.List;
 public class AlertSendMessage {
 
   @JsonProperty("Messages")
-  private List<AlertMessage> messages;
+  private List<String> messages;
 }

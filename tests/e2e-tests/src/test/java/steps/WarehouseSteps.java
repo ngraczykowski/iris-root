@@ -8,7 +8,6 @@ import utils.FilesHelper;
 import utils.ScenarioContext;
 import utils.datageneration.namescreening.Batch;
 import utils.datageneration.CommonUtils;
-import java.io.InputStream;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;

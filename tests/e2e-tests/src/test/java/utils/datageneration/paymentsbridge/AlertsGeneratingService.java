@@ -7,8 +7,11 @@ package utils.datageneration.paymentsbridge;
 import lombok.SneakyThrows;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import utils.datageneration.CommonUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -16,31 +19,25 @@ import static java.util.UUID.randomUUID;
 
 public class AlertsGeneratingService {
 
+  private final ObjectMapper objectMapper = new ObjectMapper();
+  private final CommonUtils commonUtils = new CommonUtils();
+
   @SneakyThrows
-  public String generateAlertWithHits(int numberOfHits) {
+  public String generateAlertWithHit() {
 
     final int alertNumber = 1;
     final String alertId = "Alert-ID-" + alertNumber;
+    final int hitNumber = 1;
+    final String hitId = "Hit-ID-" + hitNumber;
     final String messageId = randomUUID().toString();
 
-    SolvingAlert alert = SolvingAlert.builder()
-        .body(AlertBody.builder()
-            .sendMessage(AlertSendMessage.builder()
-                .messages(List.of(
-                    AlertMessage.builder()
-                        .alertId(alertId)
-                        .messageId(messageId)
-                        .messageData(String.format("Message %s data", messageId))
-                        .hits(generateHits(numberOfHits))
-                        .build()
-                )).build())
-            .build()).build();
-    return new ObjectMapper().writeValueAsString(alert);
-  }
-
-  private static List<AlertHit> generateHits(int numberOfHits) {
-    return IntStream.range(0, numberOfHits)
-        .mapToObj(i -> AlertHit.builder().id("Hit-" + i).build())
-        .collect(Collectors.toList());
+    return commonUtils.templateObjectOfName(
+        "pbAlertTemplate",
+        Map.of(
+            "alertId", alertId,
+            "messageId", messageId,
+            "messageData", String.format("Message %s data", messageId),
+            "hitId", hitId
+        ));
   }
 }

@@ -8,6 +8,7 @@ import io.cucumber.java8.En;
 import utils.datageneration.paymentsbridge.AlertsGeneratingService;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.core.Is.is;
 
 public class PaymentsBridgeSteps implements En {
 
@@ -15,7 +16,8 @@ public class PaymentsBridgeSteps implements En {
 
   public PaymentsBridgeSteps() {
     And("Send alert on solving", () -> {
-      String oneHitAlert = alertsGeneratingService.generateAlertWithHits(1);
+      String oneHitAlert = alertsGeneratingService.generateAlertWithHit();
+      scenarioContext.set("alert", oneHitAlert);
 
       given()
           .when()
@@ -23,7 +25,9 @@ public class PaymentsBridgeSteps implements En {
           .body(oneHitAlert)
           .post("rest/pb/alert")
           .then()
-          .statusCode(200);
+          .statusCode(200)
+          .body("Body.msg_Acknowledgement.faultcode", is("0"))
+          .body("Body.msg_Acknowledgement.faultstring", is("OK"));
     });
   }
 }
