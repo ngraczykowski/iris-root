@@ -6,6 +6,7 @@ package steps;
 
 import io.cucumber.java8.En;
 import utils.datageneration.paymentsbridge.AlertsGeneratingService;
+import utils.datageneration.paymentsbridge.PaymentsBridgeAlert;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.core.Is.is;
@@ -16,13 +17,13 @@ public class PaymentsBridgeSteps implements En {
 
   public PaymentsBridgeSteps() {
     And("Send alert on solving", () -> {
-      String oneHitAlert = alertsGeneratingService.generateAlertWithHit();
+      PaymentsBridgeAlert oneHitAlert = alertsGeneratingService.generateAlertWithHit();
       scenarioContext.set("alert", oneHitAlert);
 
       given()
           .when()
           .contentType("application/json")
-          .body(oneHitAlert)
+          .body(oneHitAlert.getPayload())
           .post("rest/pb/alert")
           .then()
           .statusCode(200)

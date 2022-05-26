@@ -7,12 +7,10 @@ package utils.datageneration.paymentsbridge;
 import lombok.Builder;
 import lombok.Getter;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 @Getter
 @Builder
-public class SolvingAlert {
+public class PaymentsBridgeAlert {
 
-  @JsonProperty("Body")
-  private AlertBody body;
+  private String id;
+  private String payload;
 }

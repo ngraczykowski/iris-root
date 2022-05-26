@@ -6,24 +6,18 @@ package utils.datageneration.paymentsbridge;
 
 import lombok.SneakyThrows;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import utils.datageneration.CommonUtils;
 
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static java.util.UUID.randomUUID;
 
 public class AlertsGeneratingService {
 
-  private final ObjectMapper objectMapper = new ObjectMapper();
   private final CommonUtils commonUtils = new CommonUtils();
 
   @SneakyThrows
-  public String generateAlertWithHit() {
+  public PaymentsBridgeAlert generateAlertWithHit() {
 
     final int alertNumber = 1;
     final String alertId = "Alert-ID-" + alertNumber;
@@ -31,7 +25,7 @@ public class AlertsGeneratingService {
     final String hitId = "Hit-ID-" + hitNumber;
     final String messageId = randomUUID().toString();
 
-    return commonUtils.templateObjectOfName(
+    String payload = commonUtils.templateObjectOfName(
         "pbAlertTemplate",
         Map.of(
             "alertId", alertId,
@@ -39,5 +33,9 @@ public class AlertsGeneratingService {
             "messageData", String.format("Message %s data", messageId),
             "hitId", hitId
         ));
+    return PaymentsBridgeAlert.builder()
+        .id(alertId)
+        .payload(payload)
+        .build();
   }
 }
