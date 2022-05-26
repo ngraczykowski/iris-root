@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package silenteight.datasource.api.ispep.v2;
+
+import "google/api/annotations.proto";
+
+option java_package = "com.silenteight.datasource.api.watchlist.v2";
+option java_outer_classname = "NewsAgeProto";
+option java_multiple_files = true;
+
+service NewsAgeInputService {
+  rpc BatchGetMatchNewsAgeInputs (BatchGetMatchNewsAgeInputsRequest) returns (stream BatchGetMatchNewsAgeInputsResponse) {
+    option (google.api.http) = {
+      post: "/agent-inputs/newsage/versions/v2/matches:batchGet"
+      body: "*"
+    };
+  }
+}
+
+message BatchGetMatchNewsAgeInputsRequest {
+  repeated string matches = 1;
+  repeated string features = 2;
+}
+
+message BatchGetMatchNewsAgeInputsResponse {
+  repeated NewsAgeInput news_age_inputs = 1;
+}
+
+message NewsAgeInput {
+  string match = 1;
+  NewsAgeFeatureInput news_age_feature_input = 2;
+}
+
+message NewsAgeFeatureInput {
+  string feature = 1;
+	NewsAgeWatchlistItem watchlist_item = 2;
+}
+
+message NewsAgeWatchlistItem {
+  string id = 1; // watchlist uid
+  string type = 2; // e.g. WorldCheckIndividuals | WorldCheckEntities | PrivateListIndividuals | PrivateListEntities
+  string further_information = 3;
+}
