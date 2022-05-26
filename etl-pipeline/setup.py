@@ -1,15 +1,16 @@
 from setuptools import find_packages, setup
 
 dev_require = [
+    "data-source-agentinput-api==0.21.0.5",
+    "data-source-api==0.23.0.12",
+    "data-source-categories-api==0.23.0.11",
     "fuzzywuzzy==0.18.0",
-    "omegaconf==2.1.1",
+    "googleapis-common-protos==1.55.0",
     "grpcio==1.44.0",
     "lxml==4.7.1",
-    "googleapis-common-protos==1.55.0",
-    "data-source-agentinput-api==0.21.0.5",
-    "data-source-api>=0.23.0.12",
+    "omegaconf==2.1.1",
+    "protobuf==3.19.4",
     "python-consul2==0.1.5",
-    "data-source-categories-api==0.23.0.11",
 ]
 
 tests_require = ["pandas==1.1.5"]
