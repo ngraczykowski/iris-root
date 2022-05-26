@@ -5,6 +5,8 @@
 /modules.xml
 /compiler.xml
 /jarRepositories.xml
+# Ignored as contains environment-specific configuration
+/misc.xml
 # Editor-based HTTP Client requests
 /httpRequests/
 # Datasource local storage ignored files
