@@ -1,3 +1,5 @@
+namespace: {{ env "NOMAD_NAMESPACE" }}
+
 server:
   port: {{ env "NOMAD_PORT_http" }}
 

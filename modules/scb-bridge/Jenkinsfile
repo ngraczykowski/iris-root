@@ -23,8 +23,13 @@ gradleBuild(
         saveJSONParameterToFile: false,
         type: 'PT_MULTI_SELECT',
         visibleItemCount: 10
-        )
-      ],
+        ),
+      booleanParam(
+        name: 'forceDeploy',
+        defaultValue: false,
+        description: 'Deploy from other branches then master'
+      )
+    ],
     additionalStages: {
         //buildContainerImage()
         //awsECR()
