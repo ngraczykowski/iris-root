@@ -37,7 +37,8 @@ class AlertMessagesRabbitAmqpListener {
   @RabbitListener(queues = QUEUE_NAME_PROPERTY)
   public void subscribe(Message msg) throws InvalidProtocolBufferException {
     Stopwatch stopwatch = Stopwatch.createStarted();
-    boolean isLastTry = isLastTry(msg);
+    int attempt = getAttempt(msg);
+    boolean isLastTry = isLastTry(attempt);
     AlertMessageStored message = AlertMessageStored.parseFrom(msg.getBody());
     MDC.put(BATCH_NAME, message.getBatchName());
 
@@ -51,7 +52,8 @@ class AlertMessagesRabbitAmqpListener {
             dataPrepFacade.processAlertFailed(message, e);
             log.error("Failed to process message, error occurred", e);
           } else {
-            log.error("Failed to process message, error occurred, retrying...", e);
+            log.error(
+                "Failed to process message, error occurred, attempt={} retrying...", attempt, e);
           }
         })
         .andFinally(() -> {
@@ -64,13 +66,16 @@ class AlertMessagesRabbitAmqpListener {
         .get();
   }
 
-  private boolean isLastTry(Message msg) {
+  private int getAttempt(Message msg) {
     Integer retriesCount = (Integer) msg.getMessageProperties().getHeaders().get(RETRY_PROPERTY);
     if (retriesCount == null) {
       retriesCount = 0;
     }
     msg.getMessageProperties().setHeader(RETRY_PROPERTY, ++retriesCount);
+    return retriesCount;
+  }
 
-    return retriesCount == retryLimit;
+  private boolean isLastTry(int retriesCount) {
+    return retriesCount >= retryLimit;
   }
 }
