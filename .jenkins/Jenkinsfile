@@ -17,7 +17,8 @@ pipeline {
         changeRequest()
       }
       steps {
-        sh '''#!/usr/bin/env bash
+        sshagent(credentials: ['github-iris-ssh-key']) {
+          sh '''#!/usr/bin/env bash
           changed_java_files=$(git diff --cached --name-only --diff-filter=ACMR | grep ".*java$" )
           echo $changed_java_files
           java \
@@ -36,6 +37,7 @@ pipeline {
             git push --set-upstream origin $CHANGE_BRANCH
           fi
           '''
+        }
       }
     }
     stage('Version') {
