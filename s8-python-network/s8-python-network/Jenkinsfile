@@ -31,7 +31,7 @@ pipeline {
                     steps {
                         script {
                             env.COMMIT_TYPE = sh (
-                                script: 'git log -1 --pretty=%B ${GIT_COMMIT} | grep : | cut -d ':' -f 1',
+                                script: "git log -1 --pretty=%B ${GIT_COMMIT} | grep : | cut -d ':' -f 1",
                                 returnStdout: true
                             ).trim()
                         }
