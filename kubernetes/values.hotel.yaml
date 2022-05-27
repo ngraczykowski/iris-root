@@ -47,6 +47,21 @@ components:
                 WHERE wsa.analysis_name = ?
                 AND (wa.payload ->> 'analyst_decision') = 'analyst_decision_false_positive'
                 AND (wsa.payload ->> 'recommendation_recommended_action') = 'ACTION_FALSE_POSITIVE'
+              false-positive-alerts-query:
+                SELECT count(*)
+                FROM warehouse_simulation_alert
+                WHERE analysis_name = ?
+                AND (payload ->> 'recommendation_recommended_action') = 'ACTION_FALSE_POSITIVE'
+              potential-true-positive-alerts-query:
+                SELECT count(*)
+                FROM warehouse_simulation_alert
+                WHERE analysis_name = ?
+                AND (payload ->> 'recommendation_recommended_action') = 'ACTION_POTENTIAL_TRUE_POSITIVE'
+              manual-investigation-alerts-query:
+                SELECT count(*)
+                FROM warehouse_simulation_alert
+                WHERE analysis_name = ?
+                AND (payload ->> 'recommendation_recommended_action') NOT IN ('ACTION_POTENTIAL_TRUE_POSITIVE','ACTION_FALSE_POSITIVE','')
 
 agents:
   name-agent:
