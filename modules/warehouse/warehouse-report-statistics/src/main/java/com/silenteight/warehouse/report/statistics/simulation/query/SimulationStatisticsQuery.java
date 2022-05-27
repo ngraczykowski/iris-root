@@ -4,8 +4,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.warehouse.common.calculation.PercentageCalculator;
 import com.silenteight.warehouse.report.reporting.StatisticsProperties;
-import com.silenteight.warehouse.report.statistics.simulation.calculation.PercentageCalculator;
 import com.silenteight.warehouse.report.statistics.simulation.dto.SimulationStatisticsDto;
 import com.silenteight.warehouse.report.statistics.simulation.dto.SimulationStatisticsDto.EffectivenessDto;
 import com.silenteight.warehouse.report.statistics.simulation.dto.SimulationStatisticsDto.EfficiencyDto;

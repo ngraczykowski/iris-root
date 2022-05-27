@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.report.statistics.simulation.calculation;
+package com.silenteight.warehouse.common.calculation;
 
 
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,8 @@ class PercentageCalculatorTest {
     return Stream.of(
         of(100, 100, 100.0),
         of(1, 2L, 50.0),
-        of(15,10,150.0)
+        of(15, 10, 150.0),
+        of(2, 3, 66.66666666666667)
     );
   }
 

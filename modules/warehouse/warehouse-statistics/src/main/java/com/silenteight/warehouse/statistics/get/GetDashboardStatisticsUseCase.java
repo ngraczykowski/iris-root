@@ -4,6 +4,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.warehouse.common.calculation.PercentageCalculator;
+
 import java.util.List;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
@@ -38,11 +40,11 @@ public class GetDashboardStatisticsUseCase {
     return StatisticsResponse.builder()
         .totalAlerts(asInt(alertsCount))
         .falsePositive(asInt(fpCount))
-        .falsePositivePercent(asPercent(divide(fpCount, alertsCount)))
+        .falsePositivePercent(PercentageCalculator.calculate(fpCount, alertsCount))
         .potentialTruePositive(asInt(ptpCount))
-        .potentialTruePositivePercent(asPercent(divide(ptpCount, alertsCount)))
+        .potentialTruePositivePercent(PercentageCalculator.calculate(ptpCount, alertsCount))
         .manualInvestigation(asInt(miCount))
-        .manualInvestigationPercent(asPercent(divide(miCount, alertsCount)))
+        .manualInvestigationPercent(PercentageCalculator.calculate(miCount, alertsCount))
         .avgEfficiencyPercent(calculateEfficiency(statistics, alertsCount))
         .avgEffectivenessPercent(calculateEffectiveness(statistics, analystDecisionCount))
         .build();
@@ -108,10 +110,6 @@ public class GetDashboardStatisticsUseCase {
 
   private static Double divide(Double numerator, Double denominator) {
     return numerator / denominator;
-  }
-
-  private static Double asPercent(Double num) {
-    return num * 100.0;
   }
 
   private static int asInt(double num) {
