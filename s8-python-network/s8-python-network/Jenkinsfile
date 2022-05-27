@@ -60,6 +60,7 @@ pipeline {
                         )]) {
                             sh './scripts/publish.sh --index-url "${PYPI_URL}"'
                             sh '''
+                            git tag --delete $(git tag --list)
                             bump2version patch
                             git push --atomic --tags origin HEAD:master
                             '''
