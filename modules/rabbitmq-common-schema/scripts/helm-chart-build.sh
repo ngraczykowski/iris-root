@@ -26,4 +26,3 @@ helm package --app-version $version --destination build/chart helm-chart
 name_agent_artifact=$(basename -- "$(ls "$scriptdir"/../build/chart/sear-rabbitmq-common-schema-initializr-*.tgz)")
 echo "Creating HELM chart: $name_agent_artifact"
 helm push-artifactory --skip-reindex $scriptdir/../build/chart/$name_agent_artifact $helm_repo
-
