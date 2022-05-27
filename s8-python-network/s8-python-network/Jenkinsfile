@@ -80,6 +80,7 @@ pipeline {
                             passwordVariable: 'TWINE_PASSWORD',
                         )]) {
                             sh './scripts/publish.sh --index-url "${PYPI_URL}"'
+                            sh 'git tag --delete $(git tag --list)'
                             sshagent([env.JENKINS_SSH_NAME]) {
                                 sh 'git tag ${VERSION}'
                                 sh 'git push --tags origin HEAD:master'
