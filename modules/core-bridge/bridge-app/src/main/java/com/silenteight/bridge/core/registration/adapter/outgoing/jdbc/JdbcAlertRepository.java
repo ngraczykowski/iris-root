@@ -108,12 +108,12 @@ class JdbcAlertRepository implements AlertRepository {
         .addValue("batchId", batchId);
 
     return jdbcTemplate.queryForStream("""
-        SELECT 
+        SELECT
           a.id AS id,
           a.alert_id AS alert_id,
-          a.name AS alert_name, 
-          a.status AS alert_status, 
-          a.metadata AS alert_metadata, 
+          a.name AS alert_name,
+          a.status AS alert_status,
+          a.metadata AS alert_metadata,
           a.error_description AS alert_error_description
         FROM core_bridge_alerts a
         WHERE a.batch_id = :batchId
@@ -128,12 +128,12 @@ class JdbcAlertRepository implements AlertRepository {
         .addValue("alertNames", alertNames);
 
     return jdbcTemplate.queryForStream("""
-        SELECT 
+        SELECT
           a.id AS id,
           a.alert_id AS alert_id,
-          a.name AS alert_name, 
-          a.status AS alert_status, 
-          a.metadata AS alert_metadata, 
+          a.name AS alert_name,
+          a.status AS alert_status,
+          a.metadata AS alert_metadata,
           a.error_description AS alert_error_description
         FROM core_bridge_alerts a
         WHERE a.batch_id = :batchId AND a.name IN(:alertNames)

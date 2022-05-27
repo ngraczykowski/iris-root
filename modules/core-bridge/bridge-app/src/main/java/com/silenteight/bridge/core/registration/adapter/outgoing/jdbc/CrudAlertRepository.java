@@ -20,8 +20,8 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
       String batchId, String status, List<String> alertNames);
 
   @Query("""
-      SELECT COUNT(status) 
-      FROM core_bridge_alerts 
+      SELECT COUNT(status)
+      FROM core_bridge_alerts
       WHERE batch_id = :batchId AND status IN(:statuses)""")
   long countAllAlertsByBatchIdAndStatusIn(String batchId, Set<String> statuses);
 
@@ -33,7 +33,7 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
 
 
   @Query("""
-        SELECT name 
+        SELECT name
         FROM core_bridge_alerts
         WHERE batch_id = :batchId AND (status = 'REGISTERED' OR status = 'PROCESSING')
       """)
@@ -42,11 +42,11 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
   @Query(
       rowMapperClass = AlertWithMatchNamesProjectionRowMapper.class,
       value = """
-          SELECT 
+          SELECT
             a.alert_id AS alert_alert_id,
-            a.name AS alert_name, 
-            a.status AS alert_status, 
-            a.metadata AS alert_metadata, 
+            a.name AS alert_name,
+            a.status AS alert_status,
+            a.metadata AS alert_metadata,
             a.error_description AS alert_error_description,
             m.match_id AS match_match_id,
             m.name AS match_name
@@ -58,11 +58,11 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
   @Query(
       rowMapperClass = AlertWithMatchNamesProjectionRowMapper.class,
       value = """
-          SELECT 
+          SELECT
             a.alert_id AS alert_alert_id,
-            a.name AS alert_name, 
-            a.status AS alert_status, 
-            a.metadata AS alert_metadata, 
+            a.name AS alert_name,
+            a.status AS alert_status,
+            a.metadata AS alert_metadata,
             a.error_description AS alert_error_description,
             m.match_id AS match_match_id,
             m.name AS match_name
@@ -75,11 +75,11 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
   @Query(
       rowMapperClass = AlertWithMatchNamesProjectionRowMapper.class,
       value = """
-          SELECT 
+          SELECT
             a.alert_id AS alert_alert_id,
-            a.name AS alert_name, 
-            a.status AS alert_status, 
-            a.metadata AS alert_metadata, 
+            a.name AS alert_name,
+            a.status AS alert_status,
+            a.metadata AS alert_metadata,
             a.error_description AS alert_error_description,
             m.match_id AS match_match_id,
             m.name AS match_name

@@ -18,7 +18,7 @@ class BaseSpecificationIT extends Specification {
   static PostgreSQLContainer postgresqlContainer = new PostgreSQLContainer("postgres:12")
 
   static RabbitMQContainer rabbitMqContainer = new RabbitMQContainer("rabbitmq:3.8.16-management")
-  
+
   @Shared
   @SuppressWarnings('unused')
   public PostgreSQLContainer POSTGRES_SQL_CONTAINER = postgresqlContainer

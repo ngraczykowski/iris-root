@@ -9,8 +9,8 @@ interface CrudRecommendationStatisticsRepository
     extends CrudRepository<RecommendationEntity, Long> {
 
   @Query("""
-      SELECT recommended_action, COUNT(recommended_action) 
-      FROM core_bridge_recommendations 
+      SELECT recommended_action, COUNT(recommended_action)
+      FROM core_bridge_recommendations
       WHERE analysis_name = :analysisName
       GROUP BY recommended_action
       """)
@@ -18,8 +18,8 @@ interface CrudRecommendationStatisticsRepository
 
 
   @Query("""
-      SELECT recommended_action, COUNT(recommended_action) 
-      FROM core_bridge_recommendations 
+      SELECT recommended_action, COUNT(recommended_action)
+      FROM core_bridge_recommendations
       WHERE analysis_name = :analysisName
       AND alert_name IN (:alertsNames)
       GROUP BY recommended_action

@@ -48,9 +48,9 @@ class RecommendationsStoredFlowIntegrationSpec extends BaseSpecificationIT {
 
   private static final BATCH_ID_INPUT = UUID.randomUUID().toString()
   private static final METADATA = '''
-        { 
+        {
           "someClientField": "123",
-          "someSpecialClientData": "Lorem ipsum" 
+          "someSpecialClientData": "Lorem ipsum"
         }
         '''
 

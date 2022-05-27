@@ -111,7 +111,7 @@ Core Bridge application uses **Java 17**
 
 | Service  | Port    |
 |:---------|:--------|
-| HTTP     | 24805   | 
+| HTTP     | 24805   |
 | GRPC     | 24806   |
 
 ### Accessing services in Docker

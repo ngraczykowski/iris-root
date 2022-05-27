@@ -48,8 +48,8 @@ class RecommendationCreatorMock {
             WHERE b.analysis_name = :analysisName
             AND a.status = :status
             AND a.name NOT IN (
-              SELECT alert_name 
-              FROM core_bridge_recommendations r 
+              SELECT alert_name
+              FROM core_bridge_recommendations r
               WHERE r.analysis_name= :analysisName
             )
             """,

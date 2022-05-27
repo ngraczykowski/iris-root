@@ -49,9 +49,9 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
     def alertsSize = 123
     def priority = 1
     def metadata = '''
-        { 
+        {
           "someClientField": "123",
-          "someSpecialClientData": "Lorem ipsum" 
+          "someSpecialClientData": "Lorem ipsum"
         }
         '''
     def registerBatchRequest = RegisterBatchRequest.newBuilder()
@@ -142,9 +142,9 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
     def batchIdInput = UUID.randomUUID().toString()
     def alertIdInput = UUID.randomUUID().toString()
     def alertMetadata = '''
-        { 
+        {
           "someClientField": "123",
-          "someSpecialClientData": "Lorem ipsum" 
+          "someSpecialClientData": "Lorem ipsum"
         }
         '''
     def matchIdInput = UUID.randomUUID().toString()

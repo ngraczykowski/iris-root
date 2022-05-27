@@ -8,16 +8,16 @@ import java.util.List;
 interface CrudBatchStatisticsRepository extends CrudRepository<AlertEntity, Long> {
 
   @Query("""
-      SELECT status, COUNT(status) 
-      FROM core_bridge_alerts 
+      SELECT status, COUNT(status)
+      FROM core_bridge_alerts
       WHERE batch_id = :batchId
       GROUP BY status
       """)
   List<BatchStatisticProjection> getAlertsStatusStatistics(String batchId);
 
   @Query("""
-      SELECT status, COUNT(status) 
-      FROM core_bridge_alerts 
+      SELECT status, COUNT(status)
+      FROM core_bridge_alerts
       WHERE batch_id = :batchId AND name IN(:alertsNames)
       GROUP BY status
       """)

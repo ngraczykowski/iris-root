@@ -28,15 +28,15 @@ interface CrudBatchRepository extends CrudRepository<BatchEntity, Long> {
 
   @Modifying
   @Query("""
-      UPDATE core_bridge_batches 
-      SET status = :status, error_description = :errorDescription, updated_at = NOW() 
+      UPDATE core_bridge_batches
+      SET status = :status, error_description = :errorDescription, updated_at = NOW()
       WHERE batch_id = :batchId""")
   void updateStatusAndErrorDescription(String batchId, Status status, String errorDescription);
 
   @Modifying
   @Query("""
-      UPDATE core_bridge_batches 
-      SET status = :status, updated_at = NOW() 
+      UPDATE core_bridge_batches
+      SET status = :status, updated_at = NOW()
       WHERE batch_id = :batchId""")
   void updateStatusByBatchId(String status, String batchId);
 }
