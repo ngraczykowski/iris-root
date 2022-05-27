@@ -6,8 +6,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Optional;
-
 import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.CONNECTOR_COMMAND_EXCHANGE;
 
 @Configuration
@@ -31,8 +29,6 @@ class RabbitConfiguration {
   @Bean
   Queue alertMessagesDeadLetterQueue(AlertMessagesProperties properties) {
     return QueueBuilder.durable(properties.getDeadLetterQueueName())
-        .ttl(Optional.ofNullable(properties.getDeadLetterQueueTimeToLiveInMilliseconds())
-            .orElse(DEFAULT_TTL_IN_MILLISECONDS))
         .deadLetterExchange(EMPTY_ROUTING_KEY)
         .build();
   }
