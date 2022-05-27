@@ -5,6 +5,9 @@ plugins {
 }
 
 subprojects {Project subproject ->
+  if (subproject.name.equals("proto-sear-payments-bridge-internal-protos")) {
+    return
+  }
   pluginManager.withPlugin("java") {
     subproject.pluginManager.apply "io.freefair.aspectj.post-compile-weaving"
 

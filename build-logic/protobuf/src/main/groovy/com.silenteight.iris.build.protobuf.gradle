@@ -3,6 +3,12 @@ plugins {
   id "com.google.protobuf"
 }
 
+// TODO(pputerla): migrate all depending on components to java 17; once done, remove the section below
+compileJava {
+  sourceCompatibility = JavaLanguageVersion.of(11)
+  targetCompatibility = JavaLanguageVersion.of(11)
+}
+
 protobuf {
   protoc {
     artifact = libs.protobuf.protoc.get()
