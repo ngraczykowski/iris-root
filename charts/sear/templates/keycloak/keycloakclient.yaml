@@ -1,16 +1,18 @@
+{{ if .Values.keycloak.internal }}
 {{- range (.Values.keycloak.realmData).clients }}
 ---
 kind: KeycloakClient
 apiVersion: keycloak.org/v1alpha1
 metadata:
-  name: {{ .clientId }}-{{ $.Release.Namespace }}
+  name: {{ include "sear.fullname" $ }}-{{ .client.clientId }}
   labels:
-    client: {{ .clientId }}
+    client: {{ .client.clientId }}
+    {{- include "sear.labels" $ | nindent 4 }}
   namespace: "keycloak-operator"
 spec:
-  client:
-{{ . | toYaml | indent 4 }}
+{{ (tpl ( . | toYaml) $ ) | indent 2 }}
   realmSelector:
     matchLabels:
-      realm: {{ $.Release.Namespace }}
+      realm: {{ include "sear.fullname" $ }}-keycloak-realm
+{{ end }}
 {{ end }}

@@ -1,16 +1,18 @@
+{{ if .Values.keycloak.internal }}
 ---
 kind: KeycloakRealm
 apiVersion: keycloak.org/v1alpha1
 metadata:
-  name: {{ .Release.Namespace }}
+  name: {{ include "sear.fullname" . }}-keycloak-realm
   labels:
-    realm: {{ .Release.Namespace }}
+    realm: {{ include "sear.fullname" . }}-keycloak-realm
   namespace: "keycloak-operator"
 spec:
   realm:
-    realm: {{ .Release.Namespace }}
+    realm: {{ include "sear.fullname" . }}
     enabled: true
-    displayName: {{ .Release.Namespace }}
+    displayName: {{ include "sear.fullname" . }}
   instanceSelector:
     matchLabels:
       app.kubernetes.io/name: "sear-keycloak"
+{{ end }}

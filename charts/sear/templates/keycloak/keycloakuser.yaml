@@ -1,16 +1,18 @@
+{{ if .Values.keycloak.internal }}
 {{ range (.Values.keycloak.realmData).users }}
 ---
 kind: KeycloakUser
 apiVersion: keycloak.org/v1alpha1
 metadata:
-  name: {{ .username }}-{{ $.Release.Namespace }}
+  name: {{ include "sear.fullname" $ }}-{{ .username }}
   labels:
-    app.kubernetes.io/name: "sear-keycloak"
+    {{- include "sear.labels" $ | nindent 4 }}
   namespace: "keycloak-operator"
 spec:
   user:
 {{ . | toYaml | indent 4 }}
   realmSelector:
     matchLabels:
-      realm: {{ $.Release.Namespace }}
+      realm: {{ include "sear.fullname" $ }}-keycloak-realm
+{{ end }}
 {{ end }}

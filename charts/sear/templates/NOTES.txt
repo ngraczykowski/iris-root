@@ -4,6 +4,7 @@ Important URLs:
 {{- $hosts := .Values.ingress.hosts | default (list (include "sear.defaultHost" .)) }}
 
   - Frontend: https://{{ first $hosts }}
+  - Keycloak: {{ .Values.keycloak.authServerUrl }}
   - Mailhog: https://{{ first $hosts }}/mailhog
 
 Default username and password for Mailhog are test/test.

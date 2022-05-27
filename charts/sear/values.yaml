@@ -514,12 +514,82 @@ frontend:
 # Configuration of all the values below is required.
 #
 keycloak:
-  authServerUrl: ""
-  frontendClientId: ""
-  #realm: "{{ .Release.Namespace | quote }}"
-  realm: ""
-  jwtIssuerUri: "{{ .Values.keycloak.authServerUrl }}/auth/realms/{{ .Values.keycloak.realm }}"
+  internal: true
+  realmData:
+    users:
+      - username: "iris-admin"
+        enabled: true
+        credentials:
+          - type: "password"
+            value: "iris-admin"
+        clientRoles:
+          dev-frontend:
+            - QA_ISSUE_MANAGER
+            - MODEL_TUNER
+            - USER_ADMINISTRATOR
+            - QA
+            - APPROVER
+            - AUDITOR
+          account:
+            - view-profile
+      - username: "qa-user"
+        enabled: true
+        credentials:
+          - type: "password"
+            value: "TestPassword123!"
+        clientRoles:
+          dev-frontend:
+            - QA_ISSUE_MANAGER
+            - MODEL_TUNER
+            - QA
+            - APPROVER
+            - AUDITOR
+          account:
+            - view-profile
+    clients:
+      - client:
+          clientId: dev-backend
+          secret: 5f8909cc-dd98-11ec-a941-7f28fefdd672
+          serviceAccountsEnabled: true
+      - client:
+          clientId: dev-frontend
+          protocol: openid-connect
+          clientAuthenticatorType: "client-secret"
+          publicClient: true
+          standardFlowEnabled: true
+          directAccessGrantsEnabled: true
+          redirectUris:
+            - 'https://{{- .Values.ingress.hosts | default (list (include "sear.defaultHost" $)) | first }}/*'
+          defaultClientScopes:
+            - web-origins
+            - profile
+            - roles
+            - email
+          protocolMappers:
+            - config:
+                multivalued: "true"
+                userinfo.token.claim: "true"
+                id.token.claim: "true"
+                access.token.claim: "true"
+                claim.name: "roles"
+                jsonType.label: "String"
+              consentRequired: false
+              name: "Roles Mapping"
+              protocol: "openid-connect"
+              protocolMapper: "oidc-usermodel-client-role-mapper"
+        roles:
+          - name: AUDITOR
+          - name: APPROVER
+          - name: QA
+          - name: USER_ADMINISTRATOR
+          - name: MODEL_TUNER
+          - name: QA_ISSUE_MANAGER
+  authServerUrl: https://auth.dev.s8ops.com/auth
+  frontendClientId: dev-frontend
+  realm: '{{ include "sear.fullname" . }}'
+  jwtIssuerUri: '{{ .Values.keycloak.authServerUrl }}/realms/{{ include "sear.fullname" . }}'
   #TODO(dsniezek): Should be fixed see UserAuthActivityReportGenerator and LastLoginTimeCacheUpdater
-  resource: ""
+  resource: dev-backend
+  #TODO(dsniezek):credentials.secret should be stored in a safe manner or injected via operator
   credentials:
-    secret: ""
+    secret: 5f8909cc-dd98-11ec-a941-7f28fefdd672

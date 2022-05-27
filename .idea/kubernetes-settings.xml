@@ -22,6 +22,9 @@
       <SpecSource>
         <option name="pathOrUrl" value="https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds" />
       </SpecSource>
+      <SpecSource>
+        <option name="pathOrUrl" value="https://raw.githubusercontent.com/keycloak/keycloak-operator/main/deploy/crds/keycloak.org_keycloakclients_crd.yaml" />
+      </SpecSource>
     </specSources>
   </component>
 </project>

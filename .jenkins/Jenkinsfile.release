@@ -127,6 +127,8 @@ pipeline {
                       -Dtest.clientId=dev-frontend \
                       -Dtest.username="\$E2E_TESTS_CREDS_USR" \
                       -Dtest.password="\$E2E_TESTS_CREDS_PWD" \
+                      -Dtest.realm=sear \
+                      -Dtest.authServerUrl="https://auth.dev.s8ops.com/auth" \
                       -Dtest.url="\$BASE_URL" \
                       --info --stacktrace
                     """
