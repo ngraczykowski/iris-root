@@ -27,6 +27,16 @@ pipeline {
                 }
             }
             stages {
+                stage('Get commit msg') {
+                    steps {
+                        script {
+                            env.COMMIT_TYPE = sh (
+                                script: 'git log -1 --pretty=%B ${GIT_COMMIT} | grep : | cut -d ':' -f 1',
+                                returnStdout: true
+                            ).trim()
+                        }
+                    }
+                }
                 stage('Prepare') {
                     steps {
                         sh 'pip install --index-url "${PYPI_URL}" --requirement requirements.txt'
@@ -46,9 +56,12 @@ pipeline {
                 }
                 stage('Publish package') {
                     when {
-                        anyOf {
-                            branch 'master'
-                            branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
+                        allOf {
+                            anyOf {
+                                branch 'master'
+                                branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
+                            }
+                            expression { env.COMMIT_TYPE != "Bump version" }
                         }
                     }
                     steps {
@@ -61,11 +74,8 @@ pipeline {
                         )]) {
                             sh './scripts/publish.sh --index-url "${PYPI_URL}"'
                             sshagent([env.JENKINS_SSH_NAME]) {
-                                sh '''
-                                bump2version patch
-                                git reset --hard HEAD~1
-                                git push --atomic --tags origin HEAD:master
-                                '''
+                                sh 'bump2version patch'
+                                sh 'git push --atomic --tags origin HEAD:master'
                             }
                         }
                     }
