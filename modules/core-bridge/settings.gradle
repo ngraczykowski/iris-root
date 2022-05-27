@@ -1,4 +1,12 @@
 rootProject.name = 'core-bridge'
 
+dependencyResolutionManagement {
+  versionCatalogs {
+    libs {
+      from(files("../../gradle/libs.versions.toml"))
+    }
+  }
+}
+
 include('bridge-app')
 include('bridge-dist')

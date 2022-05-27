@@ -1,24 +1,3 @@
 plugins {
-  id "org.sonarqube" version "3.0"
-  id "com.silenteight.gradle.wrapper" version "1.1.0"
-  id "com.silenteight.gradle.release" version "1.4.0"
-  id "com.silenteight.gradle.convention" version "1.21.4"
-}
-
-projectSetup {
-  javaVersion = JavaVersion.VERSION_17
-  setupIde(false)
-}
-
-configure(subprojects) {Project subproject ->
-  subproject.pluginManager.withPlugin("java") {
-    archivesBaseName = "silenteight-" + subproject.name
-  }
-}
-
-sonarqube {
-  properties {
-    // Excludes files or folders from duplication analysis, comma separated
-    property 'sonar.cpd.exclusions', "**/bridge-app/**/*AmqpErrorHandler.java"
-  }
+  id('com.silenteight.iris.build.root-build')
 }

@@ -12,6 +12,16 @@ silenteight-commons = "2.1.0"
 warehouse-protocol = "2.3.0"
 worldcheck-api = "0.4.0"
 
+protobufSpringBootStarterVersion = '1.6.0'
+coreBridgeRecommendationApiVersion = '1.19.0'
+coreBridgeRegistrationApiVersion = '1.23.0'
+#governanceApiVersion = '1.10.0'
+governanceApiLibraryVersion = '1.0.0'
+#adjudicationEngineApiVersion = '0.11.0'
+adjudicationEngineApiLibraryVersion = '1.6.0'
+#warehouseApiVersion = "2.2.0"
+#dataRetentionApiVersion = "0.4.0"
+
 #-----------------------------------
 # Platforms
 #-----------------------------------
@@ -113,8 +123,16 @@ silenteight-serp-protocol-scb = { group = "com.silenteight.serp.protocol", name 
 warehouse-data-api = { group = "com.silenteight.iris", name = "se-data-api" }
 warehouse-sampling-api = { group = "com.silenteight.iris", name = "se-sampling-alerts-api" }
 warehouse-internal-api = { group = "com.silenteight.iris", name = "se-warehouse-internal-api" }
-worldcheck-api = { group = 'com.silenteight.worldcheck.api', name = 'protocol-world-check', version.ref = "worldcheck-api"}
+worldcheck-api = { group = 'com.silenteight.worldcheck.api', name = 'protocol-world-check', version.ref = "worldcheck-api" }
 
+# TODO(pputerla): change groupid once those deps are included in iris
+silenteight-core-bridge-protobuf_spring_boot_starter = { group = 'com.silenteight', name = 'protobuf-spring-boot-starter', version.ref = "protobufSpringBootStarterVersion" }
+silenteight-recommendation-api-library = { group = 'com.silenteight.recommendation.api.library', name = 'recommendation-lib', version.ref = "coreBridgeRecommendationApiVersion" }
+silenteight-recommendation-api-proto = { group = 'com.silenteight.recommendation.api.library', name = 'recommendation-internal-protos', version.ref = "coreBridgeRecommendationApiVersion" }
+silenteight-registration-api-library = { group = 'com.silenteight.registration.api.library', name = 'registration-lib', version.ref = "coreBridgeRegistrationApiVersion" }
+silenteight-registration-api-proto = { group = 'com.silenteight.registration.api.library', name = 'registration-internal-protos', version.ref = "coreBridgeRegistrationApiVersion" }
+silenteight-governance-model-api-library = { group = 'com.silenteight.governance.api.library', name = 'governance-lib', version.ref = "governanceApiLibraryVersion" }
+silenteight-adjudication-engine-api-library = { group = 'com.silenteight.adjudication.api.library', name = 'ae-lib', version.ref = "adjudicationEngineApiLibraryVersion" }
 # Platforms
 platform-awssdk = { module = "software.amazon.awssdk:bom", version.ref = "platform-awssdk" }
 #TODO(dsniezek): check this?
@@ -164,6 +182,7 @@ spring-boot-configuration-processor = { group = "org.springframework.boot", name
 spring-boot-starter-actuator = { group = "org.springframework.boot", name = "spring-boot-starter-actuator" }
 spring-boot-starter-amqp = { group = "org.springframework.boot", name = "spring-boot-starter-amqp" }
 spring-boot-starter-data-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }
+spring-boot-starter-data-jdbc = { group = 'org.springframework.boot', name = 'spring-boot-starter-data-jdbc' }
 spring-boot-starter-elasticsearch = { group = "org.springframework.boot", name = "spring-boot-starter-data-elasticsearch" }
 spring-boot-starter-integration = { group = "org.springframework.boot", name = "spring-boot-starter-integration" }
 spring-boot-starter-jetty = { group = "org.springframework.boot", name = "spring-boot-starter-jetty" }
@@ -226,7 +245,7 @@ reactor-test = { group = "io.projectreactor", name = "reactor-test" }
 springdoc-ui = { group = "org.springdoc", name = "springdoc-openapi-ui", version.ref = "springdoc" }
 springdoc-data-rest = { group = "org.springdoc", name = "springdoc-openapi-data-rest", version.ref = "springdoc" }
 springdoc-security = { group = "org.springdoc", name = "springdoc-openapi-security", version.ref = "springdoc" }
-springfox-oas =  { group = 'io.springfox', name = 'springfox-oas', version = '3.0.0' }
+springfox-oas = { group = 'io.springfox', name = 'springfox-oas', version = '3.0.0' }
 
 # APIs
 jsr305 = { group = "com.google.code.findbugs", name = "jsr305" }
@@ -252,7 +271,7 @@ aws-apache-client = { group = "software.amazon.awssdk", name = "apache-client" }
 aws-auth = { group = "software.amazon.awssdk", name = "auth" }
 aws-s3 = { group = "software.amazon.awssdk", name = "s3" }
 aws-ses = { group = "software.amazon.awssdk", name = "ses" }
-aws-sdk1-s3 =  { group = 'com.amazonaws', name = 'aws-java-sdk-s3' }
+aws-sdk1-s3 = { group = 'com.amazonaws', name = 'aws-java-sdk-s3' }
 bouncycastle-bcmail = { group = "org.bouncycastle", name = "bcmail-jdk15on", version.ref = "bouncycastle" }
 bouncycastle-bcpg = { group = "org.bouncycastle", name = "bcpg-jdk15on", version.ref = "bouncycastle" }
 bouncycastle-bcpkix = { group = "org.bouncycastle", name = "bcpkix-jdk15on", version.ref = "bouncycastle" }
@@ -274,9 +293,9 @@ cronutils = { group = 'com.cronutils', name = 'cron-utils', version = '9.1.6' }
 ecs-logging-core = { group = "co.elastic.logging", name = "ecs-logging-core", version.ref = "ecs" }
 fastutil = { group = "it.unimi.dsi", name = "fastutil" }
 feign-slf4j = { group = "io.github.openfeign", name = "feign-slf4j" }
-classgraph = { group = "io.github.classgraph", name = "classgraph",  version = "4.8.146" }
+classgraph = { group = "io.github.classgraph", name = "classgraph", version = "4.8.146" }
 freemarker = { group = "org.freemarker", name = "freemarker" }
-google-common-protos = { group = "com.google.api.grpc", name="proto-google-common-protos", version = "2.7.0" }
+google-common-protos = { group = "com.google.api.grpc", name = "proto-google-common-protos", version = "2.7.0" }
 grpc-api = { group = "io.grpc", name = "grpc-api", version.ref = "grpc" }
 grpc-auth = { group = "io.grpc", name = "grpc-auth", version.ref = "grpc" }
 grpc-census = { group = "io.grpc", name = "grpc-census", version.ref = "grpc" }
@@ -290,14 +309,14 @@ grpc-services = { group = "io.grpc", name = "grpc-services", version.ref = "grpc
 grpc-spring-boot-starter = { group = "net.devh", name = "grpc-spring-boot-starter", version.ref = "grpc-starter" }
 grpc-stub = { group = "io.grpc", name = "grpc-stub", version.ref = "grpc" }
 grpc-testing = { group = "io.grpc", name = "grpc-testing", version.ref = "grpc" }
-grpc-gen = { group = "io.grpc", name = "protoc-gen-grpc-java" , version.ref = "grpc" }
+grpc-gen = { group = "io.grpc", name = "protoc-gen-grpc-java", version.ref = "grpc" }
 guava = { group = "com.google.guava", name = "guava", version = "31.0.1-jre" }
 hazelcast = { group = 'com.hazelcast', name = 'hazelcast', version.ref = "hazelcast" }
 hibernate-core = { group = "org.hibernate", name = "hibernate-core" }
 hibernate-envers = { group = "org.hibernate", name = "hibernate-envers" }
 hibernate-jcache = { group = "org.hibernate", name = "hibernate-jcache" }
 #TODO(dsniezek): not used, remove that
-hibernate-jpamodelgen = {group = "org.hibernate", name = "hibernate-jpamodelgen" }
+hibernate-jpamodelgen = { group = "org.hibernate", name = "hibernate-jpamodelgen" }
 hibernate-types = { group = "com.vladmihalcea", name = "hibernate-types-52", version = "2.11.1" }
 hibernate-validator = { group = "org.hibernate.validator", name = "hibernate-validator" }
 hikari-cp = { group = "com.zaxxer", name = "HikariCP" }
@@ -360,6 +379,8 @@ tika-core = { group = "org.apache.tika", name = "tika-core", version = "2.1.0" }
 jjwt = { group = 'io.jsonwebtoken', name = 'jjwt', version = '0.9.1' }
 mapstruct = { group = 'org.mapstruct', name = 'mapstruct', version.ref = 'mapstruct' }
 mapstruct-processor = { group = 'org.mapstruct', name = 'mapstruct-processor', version.ref = 'mapstruct' }
+json-flattener = { group = 'com.github.wnameless', name = 'json-flattener', version = '0.7.1' }
+vavr = { group = 'io.vavr', name = 'vavr', version = '0.10.4' }
 
 # Testing
 assertj-core = { group = "org.assertj", name = "assertj-core" }
@@ -387,6 +408,7 @@ test-containers-junit-jupiter = { group = "org.testcontainers", name = "junit-ju
 test-containers-keycloak = { group = 'com.github.dasniko', name = 'testcontainers-keycloak', version = "1.9.0" }
 test-containers-oracle-xe = { group = "org.testcontainers", name = "oracle-xe" }
 test-containers-postgresql = { group = "org.testcontainers", name = "postgresql" }
+test-containers-rabbitmq = { group = "org.testcontainers", name = "rabbitmq" }
 test-containers-localstack = { group = "org.testcontainers", name = "localstack" }
 test-containers-spock = { group = "org.testcontainers", name = "spock" }
 test-greenmail = { group = "com.icegreen", name = "greenmail-junit5", version = "1.6.1" }
