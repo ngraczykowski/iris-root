@@ -17,8 +17,7 @@ pipeline {
         changeRequest()
       }
       steps {
-        sshagent(credentials: ['github-iris-ssh-key']) {
-          sh '''#!/usr/bin/env bash
+        sh '''#!/usr/bin/env bash
           changed_java_files=$(git diff --cached --name-only --diff-filter=ACMR | grep ".*java$" )
           echo $changed_java_files
           java \
@@ -37,7 +36,6 @@ pipeline {
             git push --set-upstream origin $CHANGE_BRANCH
           fi
           '''
-        }
       }
     }
     stage('Version') {
@@ -163,9 +161,14 @@ pipeline {
         branch 'master'
       }
       steps {
-        sh 'git branch --force last-known-good-build'
-        sshagent(credentials: ['github-iris-ssh-key']) {
-          sh 'git push --atomic --force origin last-known-good-build'
+        withCredentials([string(credentialsId: 'github-token', variable: 'TOKEN')]) {
+          script {
+            def url = ${env.GIT_URL}.split(':')[1]
+            sh """
+              git branch --force last-known-good-build
+              git push --atomic --force origin last-known-good-build https://${TOKEN}@github.com/${url}
+            """
+          }
         }
       }
     }
