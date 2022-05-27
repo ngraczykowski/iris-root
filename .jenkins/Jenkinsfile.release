@@ -61,7 +61,7 @@ pipeline {
                     --values kubernetes/values.${ENVIRONMENT}.yaml \
                     --set ingress.hosts[0]=${INGRESS_HOST} \
                     --wait \
-                    --timeout 12m \
+                    --timeout 13m \
                     sear \
                     https://repo.silenteight.com/artifactory/helm/sear/sear-"${version}".tgz
                 """
