@@ -63,6 +63,7 @@ pipeline {
                             sshagent([env.JENKINS_SSH_NAME]) {
                                 sh '''
                                 bump2version patch
+                                git reset --hard HEAD~1
                                 git push --atomic --tags origin HEAD:master
                                 '''
                             }
