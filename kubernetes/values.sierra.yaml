@@ -4,8 +4,15 @@
 components:
   payments-bridge:
     enabled: true
+    profiles:
+      - mockcmapi
     args:
+      - --pb.cmapi.callback.enabled=true
+      - --pb.cmapi.callback.endpoint=http://{{ include "sear.fullname" . }}-payments-bridge.{{ .Release.Namespace }}.svc:{{ .component.containerPorts.http.port }}/rest/{{ .component.webPath }}/mock/cmapi
+      - --spring.security.oauth2.resourceserver.jwt.issuer-uri=https://auth.silent8.cloud/realms/egress-mock
       - --spring.security.oauth2.client.registration.callback.client-id=cmapi-dev
+      # TODO: fix this secret after @Damian Sniezek changes
+      - --spring.security.oauth2.client.registration.callback.client-secret=217cbfe8-2eba-4f56-ae8f-a9342ff27d95
       - --spring.security.oauth2.client.provider.external.token-uri=https://auth.silent8.cloud/realms/egress-mock/protocol/openid-connect/token
       - --pb.email-notification.learning-enabled=true
       - --pb.sear-learning.aws.file-list.bucket-name=devenv-6fa57739-906d-1130-4a76-90dd1c5dc8a3
