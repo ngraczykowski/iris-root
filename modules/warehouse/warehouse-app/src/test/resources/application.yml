@@ -114,4 +114,4 @@ warehouse.report.statistics:
     SELECT count(*)
     FROM warehouse_simulation_alert
     WHERE analysis_name = ?
-    AND (payload ->> 'recommendation_recommended_action') = 'ACTION_INVESTIGATE'
+    AND (payload ->> 'recommendation_recommended_action') NOT IN ('ACTION_POTENTIAL_TRUE_POSITIVE','ACTION_FALSE_POSITIVE','')
