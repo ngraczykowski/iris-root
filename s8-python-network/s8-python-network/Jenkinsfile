@@ -35,7 +35,7 @@ pipeline {
                                 returnStdout: true
                             ).trim()
                         }
-                        sh 'echo ${env.COMMIT_TYPE}'
+                        sh 'echo ${COMMIT_TYPE}'
                     }
                 }
                 stage('Prepare') {
