@@ -37,11 +37,6 @@ jib {
     appRoot = "/silenteight/app"
     environment = [
         "SILENTEIGHT_HOME"            : "/silenteight",
-        "SPRING_RABBITMQ_HOST"        : "rabbitmq",
-        "SPRING_RABBITMQ_PORT"        : "5672",
-        "SPRING_RABBITMQ_USERNAME"    : "dev",
-        "SPRING_RABBITMQ_PASSWORD"    : "dev",
-        "SPRING_RABBITMQ_VIRTUAL_HOST": "/",
         "SPRING_PROFILES_ACTIVE"      : "",
     ]
     jvmFlags = [

@@ -1,8 +1,7 @@
 spring:
   rabbitmq:
-    addresses: localhost:24166
-    # NOTE(ahaczewski): Intentionally left empty.
-    host:
+    host: localhost
+    port: 24160
+    username: dev
+    password: dev
     virtual-host: /
-    username: guest
-    password: guest
