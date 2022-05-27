@@ -12,15 +12,12 @@ silenteight-commons = "2.1.0"
 warehouse-protocol = "2.3.0"
 worldcheck-api = "0.4.0"
 
+#TODO(pputerla): core-bridge specific libs; remove verions once libs are imported into iris
 protobufSpringBootStarterVersion = '1.6.0'
 coreBridgeRecommendationApiVersion = '1.19.0'
 coreBridgeRegistrationApiVersion = '1.23.0'
-#governanceApiVersion = '1.10.0'
 governanceApiLibraryVersion = '1.0.0'
-#adjudicationEngineApiVersion = '0.11.0'
 adjudicationEngineApiLibraryVersion = '1.6.0'
-#warehouseApiVersion = "2.2.0"
-#dataRetentionApiVersion = "0.4.0"
 
 #-----------------------------------
 # Platforms
@@ -380,6 +377,7 @@ jjwt = { group = 'io.jsonwebtoken', name = 'jjwt', version = '0.9.1' }
 mapstruct = { group = 'org.mapstruct', name = 'mapstruct', version.ref = 'mapstruct' }
 mapstruct-processor = { group = 'org.mapstruct', name = 'mapstruct-processor', version.ref = 'mapstruct' }
 json-flattener = { group = 'com.github.wnameless', name = 'json-flattener', version = '0.7.1' }
+#TODO(pputerla): this is required by core-brige; remove once core bridge is cleansed
 vavr = { group = 'io.vavr', name = 'vavr', version = '0.10.4' }
 
 # Testing
