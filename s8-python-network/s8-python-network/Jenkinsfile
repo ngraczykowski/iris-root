@@ -35,6 +35,7 @@ pipeline {
                                 returnStdout: true
                             ).trim()
                         }
+                        sh 'echo ${env.COMMIT_TYPE}'
                     }
                 }
                 stage('Prepare') {
@@ -65,8 +66,8 @@ pipeline {
                         }
                     }
                     steps {
+                        sh 'git push --tags origin HEAD:master'
                         sh 'pip install --index-url "${PYPI_URL}" bump2version tox'
-                        sh 'git tag --delete $(git tag --list)'
                         withCredentials([usernamePassword(
                             credentialsId: 'pypi-deployment-user',
                             usernameVariable: 'TWINE_USERNAME',
@@ -75,7 +76,7 @@ pipeline {
                             sh './scripts/publish.sh --index-url "${PYPI_URL}"'
                             sshagent([env.JENKINS_SSH_NAME]) {
                                 sh 'bump2version patch'
-                                sh 'git push --atomic --tags origin HEAD:master'
+                                sh 'git push origin HEAD:master'
                             }
                         }
                     }
