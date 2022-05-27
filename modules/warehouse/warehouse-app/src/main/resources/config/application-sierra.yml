@@ -196,10 +196,10 @@ warehouse.reports.v2:
         FROM warehouse_alert wa
                  FULL JOIN (
             SELECT DISTINCT alert_id,
-                            STRING_AGG(payload ->> 'step', ', ') AS stepIds,
-                            STRING_AGG(payload ->> 'step_title', ', ') AS stepNames,
-                            (payload ->> 'policy')                     AS policyId,
-                            (payload ->> 'policy_title')               AS policyName
+                            STRING_AGG(NULLIF(payload ->> 'step', ''), ', ')        AS stepIds,
+                            STRING_AGG(NULLIF(payload ->> 'step_title', ''), ', ')  AS stepNames,
+                            (payload ->> 'policy')                                  AS policyId,
+                            (payload ->> 'policy_title')                            AS policyName
             FROM warehouse_match
             GROUP BY alert_id, (payload ->> 'policy'), (payload ->> 'policy_title')
         ) AS wm ON alert_id = wa.id
