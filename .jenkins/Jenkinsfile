@@ -163,14 +163,11 @@ pipeline {
         branch 'master'
       }
       steps {
-        sshagent(credentials: ['Github-app-access	']) {
-          script {
-            def url = "${env.GIT_URL}".split('com/')[1]
-            sh """
-              git branch --force last-known-good-build
-              git push --atomic --force origin last-known-good-build https://${TOKEN}@github.com/${url}
-            """
-          }
+        sshagent(credentials: ['Github-app-access']) {
+          sh """
+            git branch --force last-known-good-build
+            git push --atomic --force origin last-known-good-build
+          """
         }
       }
     }
