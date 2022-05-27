@@ -26,7 +26,7 @@ pipeline {
             --add-exports jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED \
             --add-exports jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED \
             --add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED \
-            -jar ~/.local/bin/google-java-format-1.15.0-all-deps.jar --replace $changed_java_files
+            -jar ~/.local/bin/google-java-format.jar --replace $changed_java_files
 
           pre-commit run --show-diff-on-failure --color=always --all-files
           git diff --quiet
