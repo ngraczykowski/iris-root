@@ -8,7 +8,7 @@ import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAle
 import com.silenteight.scb.ingest.adapter.incomming.common.trafficmanagement.TrafficManager;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtRequestToAlertMapper;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtResponseMapper;
-import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
+import com.silenteight.scb.ingest.domain.IngestFacade;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +23,7 @@ class GnsRtRecommendationUseCaseConfiguration {
   private final GnsRtRequestToAlertMapper gnsRtRequestToAlertMapper;
   private final GnsRtResponseMapper gnsRtResponseMapper;
   private final UdsFeedingPublisher udsFeedingPublisher;
-  private final AlertRegistrationFacade alertRegistrationFacade;
+  private final IngestFacade ingestFacade;
   private final RawAlertService rawAlertService;
   private final BatchInfoService batchInfoService;
   private final GnsRtRecommendationService gnsRtRecommendationService;
@@ -34,7 +34,7 @@ class GnsRtRecommendationUseCaseConfiguration {
     return GnsRtRecommendationUseCaseImpl.builder()
         .alertMapper(gnsRtRequestToAlertMapper)
         .responseMapper(gnsRtResponseMapper)
-        .alertRegistrationFacade(alertRegistrationFacade)
+        .ingestFacade(ingestFacade)
         .udsFeedingPublisher(udsFeedingPublisher)
         .rawAlertService(rawAlertService)
         .batchInfoService(batchInfoService)

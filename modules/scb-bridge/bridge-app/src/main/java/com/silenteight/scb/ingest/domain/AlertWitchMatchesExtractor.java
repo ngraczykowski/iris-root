@@ -1,7 +1,5 @@
 package com.silenteight.scb.ingest.domain;
 
-import lombok.extern.slf4j.Slf4j;
-
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 import com.silenteight.scb.ingest.domain.model.*;
 
@@ -9,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Slf4j
 @Component
 class AlertWitchMatchesExtractor {
 

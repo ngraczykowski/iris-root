@@ -7,7 +7,7 @@ import com.silenteight.scb.ingest.adapter.incomming.common.trafficmanagement.Tra
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtRequestToAlertMapper
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtResponseMapper
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtResponseAlert
-import com.silenteight.scb.ingest.domain.AlertRegistrationFacade
+import com.silenteight.scb.ingest.domain.IngestFacade
 import com.silenteight.scb.ingest.domain.model.BatchSource
 import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext
 
@@ -28,7 +28,7 @@ class GnsRtRecommendationUseCaseImplSpec extends Specification {
 
   def responseMapper = Mock(GnsRtResponseMapper)
 
-  def registrationFacade = Mock(AlertRegistrationFacade)
+  def registrationFacade = Mock(IngestFacade)
 
   def udsFeedingPublisher = Mock(UdsFeedingPublisher)
 
@@ -44,7 +44,7 @@ class GnsRtRecommendationUseCaseImplSpec extends Specification {
   def underTest = GnsRtRecommendationUseCaseImpl.builder()
       .alertMapper(alertMapper)
       .responseMapper(responseMapper)
-      .alertRegistrationFacade(registrationFacade)
+      .ingestFacade(registrationFacade)
       .udsFeedingPublisher(udsFeedingPublisher)
       .gnsRtRecommendationService(gnsRtRecommendationService)
       .rawAlertService(rawAlertService)

@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRecommendationService;
 import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService;
 import com.silenteight.scb.ingest.adapter.incomming.common.trafficmanagement.TrafficManager;
-import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
+import com.silenteight.scb.ingest.domain.IngestFacade;
 import com.silenteight.scb.reports.domain.port.outgoing.ReportsSenderService;
 import com.silenteight.sep.base.common.messaging.MessagingConfiguration;
 
@@ -22,7 +22,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 class IngestConfiguration {
 
   private final ScbRecommendationService scbRecommendationService;
-  private final AlertRegistrationFacade alertRegistrationFacade;
+  private final IngestFacade ingestFacade;
   private final UdsFeedingPublisher udsFeedingPublisher;
   private final ReportsSenderService reportsSenderService;
   private final TrafficManager trafficManager;
@@ -32,7 +32,7 @@ class IngestConfiguration {
   IngestService ingestService() {
     return IngestService.builder()
         .scbRecommendationService(scbRecommendationService)
-        .alertRegistrationFacade(alertRegistrationFacade)
+        .ingestFacade(ingestFacade)
         .udsFeedingPublisher(udsFeedingPublisher)
         .reportsSenderService(reportsSenderService)
         .trafficManager(trafficManager)

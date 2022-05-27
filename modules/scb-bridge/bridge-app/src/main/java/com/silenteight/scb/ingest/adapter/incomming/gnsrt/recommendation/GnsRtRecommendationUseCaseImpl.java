@@ -17,7 +17,7 @@ import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtResponseMa
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.request.GnsRtRecommendationRequest;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtRecommendationResponse;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtResponseAlert;
-import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
+import com.silenteight.scb.ingest.domain.IngestFacade;
 import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext;
 import com.silenteight.scb.outputrecommendation.domain.model.Recommendations;
 
@@ -36,7 +36,7 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
 
   private final GnsRtRequestToAlertMapper alertMapper;
   private final GnsRtResponseMapper responseMapper;
-  private final AlertRegistrationFacade alertRegistrationFacade;
+  private final IngestFacade ingestFacade;
   private final UdsFeedingPublisher udsFeedingPublisher;
   private final RawAlertService rawAlertService;
   private final BatchInfoService batchInfoService;
@@ -70,7 +70,7 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
 
   private void registerAndPublish(String internalBatchId, List<Alert> alerts) {
     var registrationResponse =
-        alertRegistrationFacade.registerAlerts(
+        ingestFacade.registerAlerts(
             internalBatchId, alerts, RegistrationBatchContext.GNS_RT_CONTEXT);
 
     AlertUpdater.updateWithRegistrationResponse(alerts, registrationResponse);

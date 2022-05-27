@@ -3,6 +3,7 @@ package com.silenteight.scb.ingest.domain;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
+import com.silenteight.scb.ingest.domain.model.DataRetentionCommand;
 import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext;
 import com.silenteight.scb.ingest.domain.model.RegistrationResponse;
 
@@ -12,10 +13,11 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class AlertRegistrationFacade {
+public class IngestFacade {
 
   private final BatchRegistrationService batchRegistrationService;
   private final AlertRegistrationService alertRegistrationService;
+  private final DataRetentionService dataRetentionService;
 
   public RegistrationResponse registerAlerts(
       String internalBatchId,
@@ -25,4 +27,7 @@ public class AlertRegistrationFacade {
     return alertRegistrationService.registerAlertsAndMatches(internalBatchId, alerts);
   }
 
+  public void performDataRetention(DataRetentionCommand command) {
+    dataRetentionService.performDataRetention(command);
+  }
 }

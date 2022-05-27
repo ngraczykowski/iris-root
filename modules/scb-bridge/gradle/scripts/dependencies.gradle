@@ -18,6 +18,7 @@ ext {
   universalDataSourceLibApiVersion = '1.4.0'
   silenteightDataSourceApiVersion = '0.23.0'
   warehouseApiVersion = "2.3.0"
+  dataRetentionApiVersion = "0.4.0"
 
   springBootVersion = '2.5.10'
   springRetryVersion = '1.3.1'
@@ -64,6 +65,7 @@ libraries.universal_datasource_api_library = [group: 'com.silenteight.universald
 libraries.data_source_agentinput_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-agentinput-api', version: silenteightDataSourceApiVersion]
 libraries.data_source_categories_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-categories-api', version: silenteightDataSourceApiVersion]
 libraries.warehouse_api = [group: 'com.silenteight.warehouse.api', name: 'se-data-api', version: warehouseApiVersion]
+libraries.data_retention_api = [group: 'com.silenteight.sens.data-retention-api', name: 'data-retention-api', version: dataRetentionApiVersion]
 
 // Spring
 libraries.spring_boot = [group: 'org.springframework.boot', name: 'spring-boot', version: springBootVersion]
@@ -210,6 +212,7 @@ dependencies {
   implementation libraries.silenteight_commons_core
   implementation libraries.registration_api_library
   implementation libraries.registration_api_proto
+  implementation libraries.data_retention_api
 
   implementation libraries.micrometer_prometheus
   implementation libraries.vavr

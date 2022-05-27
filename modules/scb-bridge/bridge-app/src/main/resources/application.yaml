@@ -286,6 +286,16 @@ amqp:
       recommendation-delivered:
         exchange-name: core-bridge.recommendation-delivered-exchange
 
+  ingest:
+    incoming:
+      data-retention:
+        exchange-name: bridge.retention
+        queue-name: scb-bridge.data-retention-alerts-expired-queue-name
+        routing-key: retention.alerts-expired
+        dead-letter-queue-name: scb-bridge.alerts-expired.dlq
+        dead-letter-exchange-name: scb-bridge.alerts-expired.dlx
+        number-of-retries-dead-messages: 2
+
   reports:
     outgoing:
       exchange-name: bridge.command

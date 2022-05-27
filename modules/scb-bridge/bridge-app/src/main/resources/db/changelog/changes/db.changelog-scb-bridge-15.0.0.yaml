@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 15.0.0-1
+      author: smrozowski
+      comment: Allow null value in payload column for data retention.
+      changes:
+        - dropNotNullConstraint:
+            tableName: scb_raw_alert
+            columnName: payload

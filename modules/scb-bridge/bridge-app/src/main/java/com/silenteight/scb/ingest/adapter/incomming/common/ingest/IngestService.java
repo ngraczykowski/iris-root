@@ -11,7 +11,7 @@ import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRec
 import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService;
 import com.silenteight.scb.ingest.adapter.incomming.common.trafficmanagement.TrafficManager;
 import com.silenteight.scb.ingest.adapter.incomming.common.util.AlertUpdater;
-import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
+import com.silenteight.scb.ingest.domain.IngestFacade;
 import com.silenteight.scb.ingest.domain.model.BatchSource;
 import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext;
 import com.silenteight.scb.reports.domain.model.ReportMapper;
@@ -28,7 +28,7 @@ import java.util.function.Predicate;
 class IngestService implements BatchAlertIngestService {
 
   private final ScbRecommendationService scbRecommendationService;
-  private final AlertRegistrationFacade alertRegistrationFacade;
+  private final IngestFacade ingestFacade;
   private final UdsFeedingPublisher udsFeedingPublisher;
   private final ReportsSenderService reportsSenderService;
   private final TrafficManager trafficManager;
@@ -99,7 +99,7 @@ class IngestService implements BatchAlertIngestService {
       List<Alert> alerts,
       RegistrationBatchContext batchContext) {
     var registrationResponse =
-        alertRegistrationFacade.registerAlerts(internalBatchId, alerts, batchContext);
+        ingestFacade.registerAlerts(internalBatchId, alerts, batchContext);
 
     AlertUpdater.updateWithRegistrationResponse(alerts, registrationResponse);
 

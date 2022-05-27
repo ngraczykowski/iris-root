@@ -238,13 +238,3 @@ Function signature:
         P_QA_SAMPLED                    IN VARCHAR2
     )
     RETURN VARCHAR2 AS PRAGMA AUTONOMOUS_TRANSACTION;
-
-## Data retention
-
-### Raw Alerts
-To enable data retention on Raw Alerts set property 
-`silenteight.scb-bridge.retention.raw-alerts.enabled` to `true`.
-
-Raw alerts data retention job is set to run once a month. By default, the expiration date is set to
-6 months which means all raw alerts created 6 months ago will be removed from the database.
-This can be configured in the property `silenteight.scb-bridge.retention.raw-alerts.expired-after`
