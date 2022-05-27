@@ -59,7 +59,10 @@ pipeline {
                             passwordVariable: 'TWINE_PASSWORD',
                         )]) {
                             sh './scripts/publish.sh --index-url "${PYPI_URL}"'
-                            sh 'bump2version patch'
+                            sh '''
+                            bump2version patch
+                            git push --atomic --tags origin HEAD:master
+                            '''
                         }
                     }
                 }
