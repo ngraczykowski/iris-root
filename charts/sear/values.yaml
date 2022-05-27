@@ -552,6 +552,11 @@ keycloak:
           secret: 5f8909cc-dd98-11ec-a941-7f28fefdd672
           serviceAccountsEnabled: true
       - client:
+          #Used by payments-bridge to emulate oAuth2 clint-credentials flow to cmapi
+          clientId: dev-cmapi
+          secret: 468e81d6-ddca-11ec-bb7e-679f3017e8de
+          serviceAccountsEnabled: true
+      - client:
           clientId: dev-frontend
           protocol: openid-connect
           clientAuthenticatorType: "client-secret"
