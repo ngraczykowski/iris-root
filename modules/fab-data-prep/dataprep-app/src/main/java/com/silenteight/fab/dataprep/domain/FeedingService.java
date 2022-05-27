@@ -59,12 +59,12 @@ class FeedingService {
       } catch (Exception e) {
         throw new DataPrepException("Unable to feed UDS", e);
       }
-    }
 
-    try {
-      categoryService.createCategoryInputs(featureInputsCommand);
-    } catch (Exception e) {
-      throw new DataPrepException("Unable to create category input", e);
+      try {
+        categoryService.createCategoryInputs(featureInputsCommand);
+      } catch (Exception e) {
+        throw new DataPrepException("Unable to create category input", e);
+      }
     }
   }
 
