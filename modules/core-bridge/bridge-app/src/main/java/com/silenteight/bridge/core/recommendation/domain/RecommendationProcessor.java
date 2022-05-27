@@ -33,6 +33,12 @@ class RecommendationProcessor {
     var analysisName = getAnalysisName(receivedRecommendations);
     var newRecommendations = filterOutExistingInDb(analysisName, receivedRecommendations);
 
+    if (CollectionUtils.isEmpty(newRecommendations)) {
+      log.info("No new recommendations to process for analysis name: [{}]. "
+          + "Storing in DB and event publishing skipped", analysisName);
+      return;
+    }
+
     log.info(
         "Received [{}] new recommendations from [{}] sent for analysis [{}].",
         newRecommendations.size(),
@@ -61,6 +67,12 @@ class RecommendationProcessor {
         .toList();
 
     var newRecommendations = filterOutExistingInDb(analysisName, createdRecommendations);
+
+    if (CollectionUtils.isEmpty(newRecommendations)) {
+      log.info("No new timed out recommendations to process for analysis name: [{}]. "
+          + "Storing in DB and event publishing skipped", analysisName);
+      return;
+    }
 
     saveRecommendations(analysisName, newRecommendations);
     eventPublisher.publish(new RecommendationsStoredEvent(

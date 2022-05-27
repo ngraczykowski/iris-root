@@ -45,8 +45,8 @@ class RecommendationProcessorSpec extends Specification {
     then:
     1 * recommendationRepository.findRecommendationAlertNamesByAnalysisName(analysisName) >>
         existingRecommendationAlertNames
-    1 * recommendationRepository.saveAll([])
-    1 * eventPublisher.publish(new RecommendationsStoredEvent(analysisName, [], false))
+    0 * recommendationRepository.saveAll([])
+    0 * eventPublisher.publish(new RecommendationsStoredEvent(analysisName, [], false))
   }
 
   def 'should create timed out recommendations without existing duplicates in DB'() {
@@ -67,7 +67,7 @@ class RecommendationProcessorSpec extends Specification {
     given:
     def analysisName = RecommendationFixtures.ANALYSIS_NAME
     def alertNames = ['alertName1', 'alertName2']
-    def existingRecommendationAlertNames = ['alertName1']
+    def existingRecommendationAlertNames = ['alertName1', 'alertName2']
 
     when:
     underTest.createTimedOutRecommendations(analysisName, alertNames)
@@ -75,7 +75,7 @@ class RecommendationProcessorSpec extends Specification {
     then:
     1 * recommendationRepository.findRecommendationAlertNamesByAnalysisName(analysisName) >>
         existingRecommendationAlertNames
-    1 * recommendationRepository.saveAll(_ as List<RecommendationWithMetadata>)
-    1 * eventPublisher.publish(new RecommendationsStoredEvent(analysisName, ['alertName2'], true))
+    0 * recommendationRepository.saveAll(_ as List<RecommendationWithMetadata>)
+    0 * eventPublisher.publish(new RecommendationsStoredEvent(analysisName, ['alertName2'], true))
   }
 }
