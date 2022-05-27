@@ -48,20 +48,20 @@ public class WarehouseSteps implements En {
         });
 
     And("Download generated report", () -> {
-      final InputStream report = given()
+      final String report = given()
           .get("rest/warehouse/api/v2/" + scenarioContext.get("reportName"))
           .then()
           .statusCode(200)
           .extract()
-          .asInputStream();
+          .asString();
 
       scenarioContext.set("report", report);
     });
 
     And("Downloaded report contains {int} rows", (Integer size) -> {
-      int sizeInt = size;
-      Assert.assertEquals(
-          sizeInt, filesHelper.getRowsNumber((InputStream) scenarioContext.get("report")));
+
+      String report = (String) scenarioContext.get("report");
+      Assert.assertEquals(size.intValue(), report.lines().count());
     });
   }
 }
