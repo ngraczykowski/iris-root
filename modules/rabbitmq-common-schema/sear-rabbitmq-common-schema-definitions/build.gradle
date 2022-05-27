@@ -1,8 +1,8 @@
 plugins {
-  id "java-library"
+  id "com.silenteight.iris.build.java-library"
 }
 
 dependencies {
-  compileOnly group: 'org.springframework.amqp', name: 'spring-amqp', version: '2.1.18.RELEASE'
-  compileOnly group: 'org.springframework.amqp', name: 'spring-rabbit', version: '2.1.18.RELEASE'
+  compileOnly libs.spring.amqp
+  compileOnly libs.spring.amqp.rabbit
 }

@@ -1,7 +1,0 @@
-spring:
-  rabbitmq:
-    host: localhost
-    port: 24160
-    username: dev
-    password: dev
-    virtual-host: /
