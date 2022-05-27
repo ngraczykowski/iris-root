@@ -1,8 +1,8 @@
 from concurrent import futures
 
 import grpc
-from grpc_health.v1.health import HealthServicer
 from grpc_health.v1.health import SERVICE_NAME as health_service_name
+from grpc_health.v1.health import HealthServicer
 from grpc_health.v1.health_pb2_grpc import add_HealthServicer_to_server
 from grpc_reflection.v1alpha import reflection
 

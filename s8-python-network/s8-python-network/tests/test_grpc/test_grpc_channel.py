@@ -6,7 +6,7 @@ from grpc_health.v1.health_pb2 import HealthCheckRequest, HealthCheckResponse
 from grpc_health.v1.health_pb2_grpc import HealthStub
 
 from s8_python_network.grpc_channel.grpc_channel import get_channel
-from s8_python_network.utils import kill_recursive, kill_process_on_the_port
+from s8_python_network.utils import kill_process_on_the_port, kill_recursive
 
 TIMEOUT = 0.5
 
@@ -15,9 +15,7 @@ def test_grpc_insecure():
     port = 9091
     kill_process_on_the_port(port)
     time.sleep(TIMEOUT * 2)
-    server_process = subprocess.Popen(
-        "python -m s8_python_network.grpc_channel.server_mocks.insecure".split()
-    )
+    server_process = subprocess.Popen("python -m tests.test_grpc.server_mocks.insecure".split())
     time.sleep(TIMEOUT)
     channel = get_channel(f"localhost:{port}", asynchronous=False)
     assert channel
