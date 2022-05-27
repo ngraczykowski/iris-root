@@ -334,8 +334,7 @@ components:
     enabled: false
 
     image:
-      repository: registry.dev.s8ops.com/cb/bridge-app
-      tag: snapshot
+      repository: registry.dev.s8ops.com/iris/bridge-app
     dbName: cb
     webPath: cb
 

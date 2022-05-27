@@ -27,6 +27,7 @@ dependencies {
   implementation libs.grpc.spring.boot.starter
   implementation libs.spring.boot
   implementation libs.spring.boot.actuator
+  implementation libs.spring.boot.starter.actuator
   implementation libs.spring.boot.starter.undertow
   implementation libs.spring.boot.starter.validation
   implementation libs.spring.boot.starter.web
