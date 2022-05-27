@@ -79,12 +79,13 @@ pipeline {
                             usernameVariable: 'TWINE_USERNAME',
                             passwordVariable: 'TWINE_PASSWORD',
                         )]) {
+                            sh 'pip install --index-url "${PYPI_URL}" bump2version tox'
                             sh './scripts/publish.sh --index-url "${PYPI_URL}"'
                             sh 'git tag --delete $(git tag --list)'
+
                             sshagent([env.JENKINS_SSH_NAME]) {
                                 sh 'git tag ${VERSION}'
                                 sh 'git push --tags origin HEAD:master'
-                                sh 'pip install --index-url "${PYPI_URL}" bump2version tox'
                                 sh 'bump2version patch'
                                 sh 'git push origin HEAD:master'
                             }
@@ -102,6 +103,7 @@ pipeline {
                         }
                     }
                     steps {
+                        sh 'pip install --index-url "${PYPI_URL}" bump2version tox'
                         sh 'git tag --delete $(git tag --list)'
                         sshagent([env.JENKINS_SSH_NAME]) {
                             sh './scripts/release.sh --index-url ${PYPI_URL}'
