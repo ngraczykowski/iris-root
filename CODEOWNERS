@@ -7,11 +7,11 @@
 
 /.github/workflows/*      @ahaczewski
 
-/.idea/**/*               @ahaczewski
-/.editorconfig            @ahaczewski
-/.gitattributes           @ahaczewski
-/.gitignore               @ahaczewski
-/.pre-commit-config.yaml  @ahaczewski
+/.idea/**/*               @ahaczewski @pputerla @snieguu
+/.editorconfig            @ahaczewski @pputerla @snieguu
+/.gitattributes           @ahaczewski @pputerla @snieguu
+/.gitignore               @ahaczewski @pputerla @snieguu
+/.pre-commit-config.yaml  @ahaczewski @pputerla @snieguu
 /CODEOWNERS               @ahaczewski
 
 /build-logic/**/* @SilentEight/architecture
@@ -21,4 +21,4 @@ build.gradle      @SilentEight/architecture
 gradle.properties @SilentEight/architecture
 settings.gradle   @SilentEight/architecture
 
-/tests/**/*       @kkicza
+/tests/**/*       @kkicza @pputerla @snieguu
