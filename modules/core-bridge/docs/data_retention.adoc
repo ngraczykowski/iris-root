@@ -1,0 +1,120 @@
+= Data Retention
+
+This application provides a Data Retention feature.
+It prevents holding PII longer than the customer or law regulations allow.
+
+This feature detects alerts that personal information stored in the Core Bridge expired,
+and ultimately broadcast such a message to the other components, so they can perform their job too.
+
+There are 2 modes of Data Retention:
+
+* Hot Run - it does the actual data purging;
+* Dry Run - it imitates data retention. This mode is helpful if you would like to verify which alerts will be collected by Data Retention
+before you start Hot Run.
+
+== Infrastructure
+
+To manage scheduling, it uses Spring Scheduled Job and Shedlock to prevent running the same job
+on multiple instances at once. This is why Liquibase creates `shedlock` table.
+
+No matter if you run Data Retention in wet or dry mode, a single run creates a new row in
+`core_bridge_data_retention_job` table, containing columns:
+
+* `id` - PK of the row,
+* `created_at` - the time when the job was started,
+* `alerts_expiration_date` - the time of alerts that are qualified for retention
+(`NOW`-`silenteight.bridge.data-retention.personal-information-expired.duration`),
+* `type` - the type of Data Retention was run with, such as:
+** `PERSONAL_INFO_EXPIRED` - meaning wet run
+** `PERSONAL_INFO_EXPIRED_DRY_RUN` - meaning dry run
+
+If any alerts were found, they are saved into `core_bridge_data_retention_job_alerts` table:
+
+* `id` - PK
+* `job_id` - related `core_bridge_data_retention_job.id`,
+* `alert_id` - related `core_bridge_alerts.id`
+
+This way you are able to track alerts that were qualified for Data Retention.
+
+=== Wet Run
+
+The point is, to find alerts with expired PII, update `core_bridge_alerts` by:
+
+* setting `is_archived` to `true`,
+* setting `metadata` to `null`
+
+and finally publish `PersonalInformationExpired` with found alerts.
+
+[plantuml,importing-steps,svg]
+-----
+@startuml
+title Wet Run Flow Diagram
+
+participant "Data Retention Scheduler" as sc
+participant "Core Bridge" as cb
+participant "Core Bridge DB" as db
+participant "RabbitMQ" as rm
+
+sc -> cb: Start data retention process
+cb -> db: Create job
+cb -> db: Find expired alerts
+db -> cb: List of expired alerts
+cb -> db: Save found alerts in job
+cb -> db: Mark alerts as archived\nand clear alerts metadata
+db -> rm: Publish 'PersonalInformationExpired'\n on 'bridge.retention' exchange
+
+@enduml
+-----
+
+=== Dry Run
+
+The Dry Run Mode is very similar to the Wet Run, but it neither updates alerts nor publishes a message.
+
+[plantuml,importing-steps,svg]
+-----
+@startuml
+title Dry Run Flow Diagram
+
+participant "Data Retention Scheduler" as sc
+participant "Core Bridge" as cb
+participant "Core Bridge DB" as db
+
+sc -> cb: Start data retention process
+cb -> db: Create job
+cb -> db: Find expired alerts
+db -> cb: List of expired alerts
+cb -> db: Save found alerts in job
+
+@enduml
+-----
+
+== Usage
+
+This feature is disabled by default. Follow the steps below to enable it.
+
+=== Configuration
+```yaml
+silenteight:
+  bridge:
+    data-retention:
+      enabled: true # registers bean DataRetentionScheduler
+      cron: '* 0 1 * * *' # cron expression scheduling the scheduler (here: every day at 01:00)
+      lock-at-least-for: PT1H # keeps the Shedlock lock at least for 1 hour
+      lock-at-most-for: PT2H # keeps the Shedlock lock at most for 2 hours
+      chunk: 10 # how many alerts are sent in single `PersonalInformationExpired` message
+      personal-information-expired:
+        enabled: true # (deprecated) enables checking alerts with expired PII
+        duration: 50d # how old alerts are taken to Data Retention job (here: older than 50 days)
+```
+
+==== Dry Run Mode
+
+In order to enable dry run, set the following property additionally to aforementioned ones:
+
+```yaml
+silenteight:
+  bridge:
+    data-retention:
+      dry-run-mode:
+        enabled: true
+```

@@ -6,6 +6,7 @@
 
 In the `docs/` directory you can find a bit more detailed documentation, such as:
 * [Batch Expiration Check Feature](docs/batch_expiration.adoc)
+* [Data Retention Feature](docs/data_retention.adoc)
 
 more info soon...
 
@@ -14,11 +15,12 @@ more info soon...
 ### Configuration
 Below you can find all configuration parameters that can be set to customize the Core Bridge.
 
-| name                           	 | description                                                                     	                           | path                                                            	 | type     	 | env variable (can be set e.g. via Consul       | default 	 |
-|----------------------------------|-------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------|------------|------------------------------------------------|-----------|
+| name                           	 | description                                                                     	                              | path                                                            	 | type     	 | env variable (can be set e.g. via Consul       | default 	 |
+|----------------------------------|----------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------|------------|------------------------------------------------|-----------|
 | Batch Expiration Check Enabled 	 | Specifies whether batch should expire after the specified time. More info [here](docs/batch_expiration.adoc) 	 | registration.verify-batch-timeout.enabled 	                       | boolean  	 | REGISTRATION_VERIFY_BATCH_TIMEOUT_ENABLED    	 | true    	 |
-| Batch Expiration Check Timeout 	 | Specifies the time after which the batch should expire. More info [here](docs/batch_expiration.adoc)        | registration.verify-batch-timeout.delay-time      	               | duration 	 | REGISTRATION_VERIFY_BATCH_TIMEOUT_DELAY_TIME 	 | 60m     	 |
-| Warehouse reports                | Specifies whether core bridge should send reports to warehouse | reports.enabled                              | boolean    | REPORTS_ENABLED                                | true      |
+| Batch Expiration Check Timeout 	 | Specifies the time after which the batch should expire. More info [here](docs/batch_expiration.adoc)           | registration.verify-batch-timeout.delay-time      	               | duration 	 | REGISTRATION_VERIFY_BATCH_TIMEOUT_DELAY_TIME 	 | 60m     	 |
+| Warehouse reports                | Specifies whether core bridge should send reports to warehouse                                                 | reports.enabled                                                   | boolean    | REPORTS_ENABLED                                | true      |
+| Data Retention                   | Specifies whether Data Retention should be enabled. More info [here](docs/data_retention.adoc)                 | silenteight.bridge.data-retention.enabled                         | boolean    | SILENTEIGHT_BRIDGE_DATA_RETENTION_ENABLED      | false     |
 
 There are two recommended ways of customizing the Core Bridge settings:
 * S8 Nomad environment:
@@ -45,7 +47,7 @@ There are 2 connectors that can be used out of the box:
 Read their READMEs in order to learn how to add them to your project.
 Next step is the configuration described below.
 
-### Core Bridge Recommendation Connector
+#### Core Bridge Recommendation Connector
 
 There is an interface named `RecommendationServiceClient` and its implementation `RecommendationServiceGrpcAdapter`.
 The point is to create an instance of `RecommendationServiceGrpcAdapter` what can be achieved
