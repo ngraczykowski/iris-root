@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.silenteight.warehouse.common.domain.AnalystDecision.FALSE_POSITIVE;
+import static com.silenteight.warehouse.common.domain.AnalystDecision.TRUE_POSITIVE;
 import static com.silenteight.warehouse.common.domain.Recommendation.ACTION_FALSE_POSITIVE;
 import static com.silenteight.warehouse.common.domain.Recommendation.ACTION_MANUAL_INVESTIGATION;
 import static com.silenteight.warehouse.common.domain.Recommendation.ACTION_POTENTIAL_TRUE_POSITIVE;
@@ -32,6 +34,8 @@ public final class AlertRecommendationComputer
 
   private static final List<Recommendation> RECOMMENDATION_REQUIRED_FOR_EFFICIENCY =
       List.of(ACTION_FALSE_POSITIVE, ACTION_POTENTIAL_TRUE_POSITIVE);
+  private static final List<AnalystDecision> ANALYST_DECISION_REQUIRED_FOR_EFFICIENCY =
+      List.of(TRUE_POSITIVE, FALSE_POSITIVE);
   @NonNull
   private final RecommendationMapper recommendationMapper;
 
@@ -109,13 +113,13 @@ public final class AlertRecommendationComputer
     if (!alertDto.getPayload().containsKey(analystDecisionFieldName)) {
       return false;
     }
-    return !alertDto.getPayload().get(analystDecisionFieldName).isEmpty()
-        && RECOMMENDATION_REQUIRED_FOR_EFFICIENCY.contains(getRecommendationFromAlert(alertDto));
+    return RECOMMENDATION_REQUIRED_FOR_EFFICIENCY.contains(getRecommendationFromAlert(alertDto))
+        && ANALYST_DECISION_REQUIRED_FOR_EFFICIENCY.contains(getAnalystDecisionFromAlert(alertDto));
 
   }
 
   private boolean isProperlyResolved(AlertDto alertDto) {
-    return getAnalystDecisionFromAlert(alertDto) == AnalystDecision.FALSE_POSITIVE
+    return getAnalystDecisionFromAlert(alertDto) == FALSE_POSITIVE
         && getRecommendationFromAlert(alertDto) == ACTION_FALSE_POSITIVE;
   }
 

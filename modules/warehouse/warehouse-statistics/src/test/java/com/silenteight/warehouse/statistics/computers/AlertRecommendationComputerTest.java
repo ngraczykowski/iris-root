@@ -64,7 +64,7 @@ class AlertRecommendationComputerTest {
   void calculateProperlyWhenAllDataAsSet() {
     // Given
     List<AlertDto> alerts = List.of(
-        buildAlert("ACTION_FALSE_POSITIVE"),
+        buildAlert("ACTION_FALSE_POSITIVE", ""),
         buildAlert("ACTION_FALSE_POSITIVE", "analyst_decision_false_positive"),
         buildAlert("ACTION_MANUAL_INVESTIGATION", "analyst_decision_false_positive"),
         buildAlert("ACTION_POTENTIAL_TRUE_POSITIVE")
@@ -108,6 +108,33 @@ class AlertRecommendationComputerTest {
         .efficiencyPercent(75.0)
         .manualInvestigationsCount(1)
         .falsePositivesCount(2)
+        .potentialTruePositivesCount(1)
+        .build());
+  }
+
+  @Test
+  void calculateProperlyWhenAnalystDecisionIsUnknown() {
+    // Given
+    List<AlertDto> alerts = List.of(
+        buildAlert("ACTION_FALSE_POSITIVE"),
+        buildAlert("ACTION_FALSE_POSITIVE", "analyst_decision_false_positive"),
+        buildAlert("ACTION_FALSE_POSITIVE", "analyst_decision_unknown"),
+        buildAlert("ACTION_MANUAL_INVESTIGATION", "analyst_decision_false_positive"),
+        buildAlert("ACTION_POTENTIAL_TRUE_POSITIVE", "analyst_decision_false_positive")
+    );
+
+    // When
+    AlertsRecommendationStatistics statistics = computer.compute(alerts);
+
+    // Then
+    assertThat(statistics).isEqualTo(AlertsRecommendationStatistics
+        .builder()
+        .alertsCount(5)
+        .effectivenessPercent(50.0)
+        .analyticsDecisionCount(2)
+        .efficiencyPercent(80.0)
+        .manualInvestigationsCount(1)
+        .falsePositivesCount(3)
         .potentialTruePositivesCount(1)
         .build());
   }
