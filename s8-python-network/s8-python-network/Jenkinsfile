@@ -53,17 +53,19 @@ pipeline {
                     }
                     steps {
                         sh 'pip install --index-url "${PYPI_URL}" bump2version tox'
+                        sh 'git tag --delete $(git tag --list)'
                         withCredentials([usernamePassword(
                             credentialsId: 'pypi-deployment-user',
                             usernameVariable: 'TWINE_USERNAME',
                             passwordVariable: 'TWINE_PASSWORD',
                         )]) {
                             sh './scripts/publish.sh --index-url "${PYPI_URL}"'
-                            sh '''
-                            git tag --delete $(git tag --list)
-                            bump2version patch
-                            git push --atomic --tags origin HEAD:master
-                            '''
+                            sshagent([env.JENKINS_SSH_NAME]) {
+                                sh '''
+                                bump2version patch
+                                git push --atomic --tags origin HEAD:master
+                                '''
+                            }
                         }
                     }
                 }
