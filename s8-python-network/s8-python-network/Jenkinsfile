@@ -47,6 +47,14 @@ pipeline {
                     steps {
                         sh './scripts/clean.sh'
                         sh './scripts/build.sh --index-url "${PYPI_URL}"'
+                        script {
+                           env.VERSION = sh(
+                            returnStdout: true,
+                            script: '''#!/bin/bash
+                                grep ^current_version setup.cfg | awk '{ print $3 }'
+                            '''
+                           ).trim()
+                        }
                     }
                 }
 //                stage('Test package') {
@@ -73,6 +81,7 @@ pipeline {
                         )]) {
                             sh './scripts/publish.sh --index-url "${PYPI_URL}"'
                             sshagent([env.JENKINS_SSH_NAME]) {
+                                sh 'git tag ${VERSION}'
                                 sh 'git push --tags origin HEAD:master'
                                 sh 'pip install --index-url "${PYPI_URL}" bump2version tox'
                                 sh 'bump2version patch'
