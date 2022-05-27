@@ -119,14 +119,14 @@ spec:
             - --grpc.server.port={{ .component.containerPorts.grpc.port }}
             {{- end }}
             {{- if .component.args }}
-              {{- toYaml .component.args | nindent 12 }}
+              {{- include "sear.tplvalues.render" (dict "value" .component.args "context" $) | nindent 12 }}
             {{- end }}
             {{- if .component.profiles }}
             - --spring.profiles.include={{ join "," .component.profiles }}
             {{- end }}
             {{- range $key, $value := .component.properties }}
             {{- if $value }}
-            - --{{ $key }}={{ $value }}
+            - --{{ $key }}={{ include "sear.tplvalues.render" (dict "value" $value "context" $) }}
             {{- end }}
             {{- end }}
           volumeMounts:
