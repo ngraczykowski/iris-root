@@ -327,9 +327,9 @@ warehouse.reports.v2:
       selectSqlQuery: >
         SELECT wa.name                                                            AS "S8 Alert ID",
                STRING_AGG(NULLIF(wm.payload ->> 'clientMatchId', ''), ', ')       AS "Client Match IDs",
-               wa.payload ->> 'policy'                                            AS "Policy ID",
+               wa.payload ->> 'policyId'                                          AS "Policy ID",
                wa.payload ->> 'policyTitle'                                       AS "Policy Name",
-               STRING_AGG(NULLIF(wm.payload ->> 'step', ''), ', ')                AS "Step IDs",
+               STRING_AGG(NULLIF(wm.payload ->> 'stepId', ''), ', ')              AS "Step IDs",
                STRING_AGG(NULLIF(wm.payload ->> 'stepTitle', ''), ', ')           AS "Step Names",
                STRING_AGG(NULLIF(wm.payload ->> 'fvSignature', ''), ', ')         AS "Reasoning Branch IDs",
                STRING_AGG(NULLIF(wm.payload ->> 'categories/hitType', ''), ', ')  AS "Watchlist Type",
@@ -344,7 +344,7 @@ warehouse.reports.v2:
         WHERE wa.recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
           AND wa.payload ->> 'analystDecision' != ''
         GROUP BY wa.name,
-                 wa.payload ->> 'policy',
+                 wa.payload ->> 'policyId',
                  wa.payload ->> 'policyTitle',
                  wa.payload ->> 's8Recommendation',
                  wa.payload ->> 'recommendationDate',
