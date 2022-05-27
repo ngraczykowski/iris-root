@@ -19,8 +19,6 @@ fi
 if [ "${branch}" == "master" ]; then
   echo 'Releasing - bumping minor'
   gitRelease "$@"
-  echo 'Bumping patch'
-  bump2version patch # for master
 else
   echo 'Not a release branch'
   exit 0
@@ -29,3 +27,8 @@ fi
 echo 'Pushing'
 
 git push --atomic --tags origin HEAD:"${branch}"
+
+echo 'Bumping patch'
+bump2version patch # for master
+
+git push origin HEAD:"${branch}"
