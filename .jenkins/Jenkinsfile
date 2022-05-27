@@ -17,7 +17,7 @@ pipeline {
         changeRequest()
       }
       steps {
-        sshagent(credentials: ['github-iris-ssh-key']) {
+        withCredentials([usernamePassword(credentialsId: 'Github-app-access', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
           sh '''#!/usr/bin/env bash
           changed_java_files=$(git diff --cached --name-only --diff-filter=ACMR | grep ".*java$" )
           echo $changed_java_files
@@ -163,10 +163,10 @@ pipeline {
         branch 'master'
       }
       steps {
-        sshagent(credentials: ['github-iris-ssh-key']) {
+        withCredentials([usernamePassword(credentialsId: 'Github-app-access', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
           sh """
             git branch --force last-known-good-build
-            git push --atomic --force origin last-known-good-build
+            git push --atomic --force origin last-known-good-build https://$USER:$PASS@github.com/SilentEight/iris.git
           """
         }
       }
