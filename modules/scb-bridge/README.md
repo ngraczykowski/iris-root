@@ -9,6 +9,17 @@ To start an app locally:
 - run `docker-compose up -d`
 - start class `ScbBridgeApplication` with profile `client`
 
+# Global check endpoint
+
+On Test or Client's environment actuator endpoint `globalhealth` is available which reports list of
+critical system components (like `core-bridge`, `ae` and agents) with its corresponding version.
+This is to quickly validate the sanity of the environment which is especially helpful on Test env
+where components can be deployed without our knowledge.
+
+The same information in exposed via `/v1/info/global` rest controller.
+
+For `lima` this endpoint is available [here](`https://lima.silenteight.com/rest/scb-bridge/v1/info/global`)
+
 ## Application ports
 
 | Service  | Port  |
