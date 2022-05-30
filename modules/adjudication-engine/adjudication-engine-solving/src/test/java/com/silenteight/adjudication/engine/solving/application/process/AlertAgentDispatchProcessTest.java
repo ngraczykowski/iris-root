@@ -24,206 +24,189 @@ import java.util.Set;
 @ExtendWith(MockitoExtension.class)
 class AlertAgentDispatchProcessTest {
 
-  @Mock
-  private RabbitTemplate rabbitTemplate;
-  @Mock
-  private MatchFeaturesFacade matchFeaturesFacade;
-  @Mock
-  private ReadyMatchFeatureVectorPublisher governanceProvider;
-  @Autowired
-  private AlertAgentDispatchProcess alertAgentDispatchProcess;
+  @Mock private RabbitTemplate rabbitTemplate;
+  @Mock private MatchFeaturesFacade matchFeaturesFacade;
+  @Mock private ReadyMatchFeatureVectorPublisher governanceProvider;
+  @Mock private CategoryResolveProcess categoryResolveProcess;
+  @Autowired private AlertAgentDispatchProcess alertAgentDispatchProcess;
   private AgentExchangeAlertSolvingMapper agentExchnageRequestMapper =
       new AgentExchangeAlertSolvingMapper();
   private AlertSolvingRepository alertSolvingRepository = new InMemoryAlertSolvingRepository();
 
-  @Mock
-  private CommentInputResolveProcess commentInputResolveProcess;
+  @Mock private CommentInputResolveProcess commentInputResolveProcess;
 
   @BeforeEach
   void setUp() {
     var matchesPublisher = new AgentsMatchPublisher(rabbitTemplate);
     alertAgentDispatchProcess =
         new AlertAgentDispatchProcess(
-            agentExchnageRequestMapper, matchesPublisher, matchFeaturesFacade,
-            alertSolvingRepository, governanceProvider, commentInputResolveProcess);
+            agentExchnageRequestMapper,
+            matchesPublisher,
+            matchFeaturesFacade,
+            alertSolvingRepository,
+            governanceProvider,
+            commentInputResolveProcess,
+            categoryResolveProcess);
   }
 
   @Test
   void shouldCreateAndSendAlertSolving() {
-    Mockito
-        .when(matchFeaturesFacade.findAnalysisFeatures(
-            Set.of(1L, 2L),
-            Set.of(1L, 2L, 3L, 4L)))
-        .thenReturn(List.of(
-            MatchFeatureDao
-                .builder()
-                .analysisId(1)
-                .alertId(1)
-                .matchId(1)
-                .agentConfigFeatureId(1000)
-                .agentConfig("agents/nameMatchedText/versions/1.0.0/configs/1")
-                .feature("features/nameMatchedText")
-                .featureValue("NO_MATCH")
-                .clientMatchId("AS00727328(BENE, #1)")
-                .featureReason("")
-                .build(),
-            MatchFeatureDao
-                .builder()
-                .analysisId(1)
-                .alertId(2)
-                .matchId(2)
-                .agentConfigFeatureId(1)
-                .agentConfig("agents/name/versions/1.0.0/configs/1")
-                .feature("features/name")
-                .featureValue("NO_MATCH")
-                .clientMatchId("AS00727328(BENE, #1)")
-                .featureReason("")
-                .build(),
-            MatchFeatureDao
-                .builder()
-                .analysisId(1)
-                .alertId(2)
-                .matchId(2)
-                .agentConfigFeatureId(1000)
-                .agentConfig("agents/nameMatchedText/versions/1.0.0/configs/1")
-                .feature("features/nameMatchedText")
-                .featureValue("NO_MATCH")
-                .clientMatchId("AS00727328(BENE, #1)")
-                .featureReason("")
-                .build(),
-            MatchFeatureDao
-                .builder()
-                .analysisId(1)
-                .alertId(2)
-                .matchId(3)
-                .agentConfigFeatureId(1000)
-                .agentConfig("agents/nameMatchedText/versions/1.0.0/configs/1")
-                .feature("features/nameMatchedText")
-                .featureValue("NO_MATCH")
-                .clientMatchId("AS00727328(BENE, #1)")
-                .featureReason("")
-                .build(),
-            MatchFeatureDao
-                .builder()
-                .analysisId(1)
-                .alertId(2)
-                .matchId(3)
-                .agentConfigFeatureId(1)
-                .agentConfig("agents/name/versions/1.0.0/configs/1")
-                .feature("features/name")
-                .featureValue("NO_MATCH")
-                .clientMatchId("AS00727328(BENE, #1)")
-                .featureReason("")
-                .build(),
-            MatchFeatureDao
-                .builder()
-                .analysisId(1)
-                .alertId(3)
-                .matchId(4)
-                .agentConfigFeatureId(1)
-                .agentConfig("agents/name/versions/1.0.0/configs/1")
-                .feature("features/name")
-                .featureValue("NO_MATCH")
-                .clientMatchId("AS00727328(BENE, #1)")
-                .featureReason("")
-                .build(),
-            MatchFeatureDao
-                .builder()
-                .analysisId(1)
-                .alertId(3)
-                .matchId(5)
-                .agentConfigFeatureId(1000)
-                .agentConfig("agents/nameMatchedText/versions/1.0.0/configs/1")
-                .feature("features/nameMatchedText")
-                .featureValue("NO_MATCH")
-                .clientMatchId("AS00727328(BENE, #1)")
-                .featureReason("")
-                .build(),
-            MatchFeatureDao
-                .builder()
-                .analysisId(1)
-                .alertId(3)
-                .matchId(5)
-                .agentConfigFeatureId(1)
-                .agentConfig("agents/name/versions/1.0.0/configs/1")
-                .feature("features/name")
-                .featureValue("NO_MATCH")
-                .clientMatchId("AS00727328(BENE, #1)")
-                .featureReason("")
-                .build(),
-            MatchFeatureDao
-                .builder()
-                .analysisId(1)
-                .alertId(3)
-                .matchId(6)
-                .agentConfigFeatureId(1000)
-                .agentConfig("agents/nameMatchedText/versions/1.0.0/configs/1")
-                .feature("features/nameMatchedText")
-                .featureValue("NO_MATCH")
-                .clientMatchId("AS00727328(BENE, #1)")
-                .featureReason("")
-                .build(),
-            MatchFeatureDao
-                .builder()
-                .analysisId(1)
-                .alertId(3)
-                .matchId(6)
-                .agentConfigFeatureId(1)
-                .agentConfig("agents/name/versions/1.0.0/configs/1")
-                .feature("features/name")
-                .featureValue("NO_MATCH")
-                .clientMatchId("AS00727328(BENE, #1)")
-                .featureReason("")
-                .build(),
-            MatchFeatureDao
-                .builder()
-                .analysisId(1)
-                .alertId(4)
-                .matchId(7)
-                .agentConfigFeatureId(1)
-                .agentConfig("agents/name/versions/1.0.0/configs/1")
-                .feature("features/name")
-                .featureValue("NO_MATCH")
-                .clientMatchId("AS00727328(BENE, #1)")
-                .featureReason("")
-                .build(),
-            MatchFeatureDao
-                .builder()
-                .analysisId(1)
-                .alertId(4)
-                .matchId(7)
-                .agentConfigFeatureId(1000)
-                .feature("features/nameMatchedText")
-                .agentConfig("agents/nameMatchedText/versions/1.0.0/configs/1")
-                .featureValue("NO_MATCH")
-                .clientMatchId("AS00727328(BENE, #1)")
-                .featureReason("")
-                .build()));
-    alertAgentDispatchProcess.handle(AnalysisAlertsAdded
-        .newBuilder()
-        .addAnalysisAlerts("analysis/1/alerts/1")
-        .addAnalysisAlerts("analysis/1/alerts/2")
-        .addAnalysisAlerts("analysis/2/alerts/3")
-        .addAnalysisAlerts("analysis/2/alerts/4")
-        .build());
+    Mockito.when(matchFeaturesFacade.findAnalysisFeatures(Set.of(1L, 2L), Set.of(1L, 2L, 3L, 4L)))
+        .thenReturn(
+            List.of(
+                MatchFeatureDao.builder()
+                    .analysisId(1)
+                    .alertId(1)
+                    .matchId(1)
+                    .agentConfigFeatureId(1000)
+                    .agentConfig("agents/nameMatchedText/versions/1.0.0/configs/1")
+                    .feature("features/nameMatchedText")
+                    .featureValue("NO_MATCH")
+                    .clientMatchId("AS00727328(BENE, #1)")
+                    .featureReason("")
+                    .build(),
+                MatchFeatureDao.builder()
+                    .analysisId(1)
+                    .alertId(2)
+                    .matchId(2)
+                    .agentConfigFeatureId(1)
+                    .agentConfig("agents/name/versions/1.0.0/configs/1")
+                    .feature("features/name")
+                    .featureValue("NO_MATCH")
+                    .clientMatchId("AS00727328(BENE, #1)")
+                    .featureReason("")
+                    .build(),
+                MatchFeatureDao.builder()
+                    .analysisId(1)
+                    .alertId(2)
+                    .matchId(2)
+                    .agentConfigFeatureId(1000)
+                    .agentConfig("agents/nameMatchedText/versions/1.0.0/configs/1")
+                    .feature("features/nameMatchedText")
+                    .featureValue("NO_MATCH")
+                    .clientMatchId("AS00727328(BENE, #1)")
+                    .featureReason("")
+                    .build(),
+                MatchFeatureDao.builder()
+                    .analysisId(1)
+                    .alertId(2)
+                    .matchId(3)
+                    .agentConfigFeatureId(1000)
+                    .agentConfig("agents/nameMatchedText/versions/1.0.0/configs/1")
+                    .feature("features/nameMatchedText")
+                    .featureValue("NO_MATCH")
+                    .clientMatchId("AS00727328(BENE, #1)")
+                    .featureReason("")
+                    .build(),
+                MatchFeatureDao.builder()
+                    .analysisId(1)
+                    .alertId(2)
+                    .matchId(3)
+                    .agentConfigFeatureId(1)
+                    .agentConfig("agents/name/versions/1.0.0/configs/1")
+                    .feature("features/name")
+                    .featureValue("NO_MATCH")
+                    .clientMatchId("AS00727328(BENE, #1)")
+                    .featureReason("")
+                    .build(),
+                MatchFeatureDao.builder()
+                    .analysisId(1)
+                    .alertId(3)
+                    .matchId(4)
+                    .agentConfigFeatureId(1)
+                    .agentConfig("agents/name/versions/1.0.0/configs/1")
+                    .feature("features/name")
+                    .featureValue("NO_MATCH")
+                    .clientMatchId("AS00727328(BENE, #1)")
+                    .featureReason("")
+                    .build(),
+                MatchFeatureDao.builder()
+                    .analysisId(1)
+                    .alertId(3)
+                    .matchId(5)
+                    .agentConfigFeatureId(1000)
+                    .agentConfig("agents/nameMatchedText/versions/1.0.0/configs/1")
+                    .feature("features/nameMatchedText")
+                    .featureValue("NO_MATCH")
+                    .clientMatchId("AS00727328(BENE, #1)")
+                    .featureReason("")
+                    .build(),
+                MatchFeatureDao.builder()
+                    .analysisId(1)
+                    .alertId(3)
+                    .matchId(5)
+                    .agentConfigFeatureId(1)
+                    .agentConfig("agents/name/versions/1.0.0/configs/1")
+                    .feature("features/name")
+                    .featureValue("NO_MATCH")
+                    .clientMatchId("AS00727328(BENE, #1)")
+                    .featureReason("")
+                    .build(),
+                MatchFeatureDao.builder()
+                    .analysisId(1)
+                    .alertId(3)
+                    .matchId(6)
+                    .agentConfigFeatureId(1000)
+                    .agentConfig("agents/nameMatchedText/versions/1.0.0/configs/1")
+                    .feature("features/nameMatchedText")
+                    .featureValue("NO_MATCH")
+                    .clientMatchId("AS00727328(BENE, #1)")
+                    .featureReason("")
+                    .build(),
+                MatchFeatureDao.builder()
+                    .analysisId(1)
+                    .alertId(3)
+                    .matchId(6)
+                    .agentConfigFeatureId(1)
+                    .agentConfig("agents/name/versions/1.0.0/configs/1")
+                    .feature("features/name")
+                    .featureValue("NO_MATCH")
+                    .clientMatchId("AS00727328(BENE, #1)")
+                    .featureReason("")
+                    .build(),
+                MatchFeatureDao.builder()
+                    .analysisId(1)
+                    .alertId(4)
+                    .matchId(7)
+                    .agentConfigFeatureId(1)
+                    .agentConfig("agents/name/versions/1.0.0/configs/1")
+                    .feature("features/name")
+                    .featureValue("NO_MATCH")
+                    .clientMatchId("AS00727328(BENE, #1)")
+                    .featureReason("")
+                    .build(),
+                MatchFeatureDao.builder()
+                    .analysisId(1)
+                    .alertId(4)
+                    .matchId(7)
+                    .agentConfigFeatureId(1000)
+                    .feature("features/nameMatchedText")
+                    .agentConfig("agents/nameMatchedText/versions/1.0.0/configs/1")
+                    .featureValue("NO_MATCH")
+                    .clientMatchId("AS00727328(BENE, #1)")
+                    .featureReason("")
+                    .build()));
+    alertAgentDispatchProcess.handle(
+        AnalysisAlertsAdded.newBuilder()
+            .addAnalysisAlerts("analysis/1/alerts/1")
+            .addAnalysisAlerts("analysis/1/alerts/2")
+            .addAnalysisAlerts("analysis/2/alerts/3")
+            .addAnalysisAlerts("analysis/2/alerts/4")
+            .build());
 
-    Assertions
-        .assertThat(alertSolvingRepository.get(1L))
+    Assertions.assertThat(alertSolvingRepository.get(1L))
         .extracting("matches")
         .asInstanceOf(InstanceOfAssertFactories.MAP)
         .containsOnlyKeys(1L);
-    Assertions
-        .assertThat(alertSolvingRepository.get(2L))
+    Assertions.assertThat(alertSolvingRepository.get(2L))
         .extracting("matches")
         .asInstanceOf(InstanceOfAssertFactories.MAP)
         .containsOnlyKeys(2L, 3L);
-    Assertions
-        .assertThat(alertSolvingRepository.get(3L))
+    Assertions.assertThat(alertSolvingRepository.get(3L))
         .extracting("matches")
         .asInstanceOf(InstanceOfAssertFactories.MAP)
         .containsOnlyKeys(4L, 5L, 6L);
-    Assertions
-        .assertThat(alertSolvingRepository.get(4L))
+    Assertions.assertThat(alertSolvingRepository.get(4L))
         .extracting("matches")
         .asInstanceOf(InstanceOfAssertFactories.MAP)
         .containsOnlyKeys(7L);

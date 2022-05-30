@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.Optional;
 import javax.annotation.Nonnull;
 
 @RequiredArgsConstructor
@@ -105,7 +105,8 @@ public class ResolvedAlertProcess {
     return matchContexts
         .stream()
         .map(converter::convert)
-        .map(Objects::nonNull)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
         .toArray(ObjectNode[]::new);
   }
 }

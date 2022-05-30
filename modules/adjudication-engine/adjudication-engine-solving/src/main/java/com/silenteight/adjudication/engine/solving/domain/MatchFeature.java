@@ -5,13 +5,15 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.engine.solving.data.MatchFeatureDao;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @Getter
 @RequiredArgsConstructor
 public class MatchFeature implements Serializable {
 
-  private static final long serialVersionUID = -3342537618800109906L;
+  @Serial private static final long serialVersionUID = -3342537618800109906L;
+
   private final long alertId;
   private final long matchId;
   private final long agentConfigFeatureId;

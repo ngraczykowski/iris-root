@@ -1,5 +1,6 @@
 package com.silenteight.adjudication.engine.solving.application.process;
 
+import com.silenteight.adjudication.engine.analysis.categoryrequest.CategoryValuesClient;
 import com.silenteight.adjudication.engine.analysis.commentinput.CommentInputClient;
 import com.silenteight.adjudication.engine.analysis.recommendation.RecommendationFacade;
 import com.silenteight.adjudication.engine.comments.comment.CommentFacade;
@@ -32,13 +33,17 @@ class ProcessConfiguration {
       MatchFeaturesFacade matchFeaturesFacade,
       AlertSolvingRepository alertSolvingRepository,
       ReadyMatchFeatureVectorPublisher governanceProvider,
-      CommentInputResolveProcess commentInputResolveProcess
+      CommentInputResolveProcess commentInputResolveProcess,
+      CategoryResolveProcess categoryResolveProcess) {
 
-  ) {
-    return new AlertAgentDispatchProcess(agentExchnageRequestMapper,
-        agentsMatchPublisher, matchFeaturesFacade, alertSolvingRepository, governanceProvider,
-        commentInputResolveProcess
-    );
+    return new AlertAgentDispatchProcess(
+        agentExchnageRequestMapper,
+        agentsMatchPublisher,
+        matchFeaturesFacade,
+        alertSolvingRepository,
+        governanceProvider,
+        commentInputResolveProcess,
+        categoryResolveProcess);
   }
 
   @Bean
@@ -46,21 +51,40 @@ class ProcessConfiguration {
       final ProtoMessageToObjectNodeConverter converter,
       final CommentInputClient commentInputClient,
       final CommentInputClientRepository commentInputClientRepository,
-      final HazelcastInstance hazelcastInstance
-  ) {
+      final HazelcastInstance hazelcastInstance) {
 
     final IQueue<String> alertCommentsInputQueue =
         hazelcastInstance.getQueue("alert.comments.inputs");
 
     final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
 
-    return new CommentInputResolveProcess(commentInputClient, converter,
+    return new CommentInputResolveProcess(
+        commentInputClient,
+        converter,
         commentInputClientRepository,
         scheduledExecutorService,
-        alertCommentsInputQueue
-    );
+        alertCommentsInputQueue);
   }
 
+  @Bean
+  public CategoryResolveProcess categoryResolveProcess(
+      CategoryValuesClient categoryValueClient,
+      AlertSolvingRepository alertSolvingRepository,
+      final HazelcastInstance hazelcastInstance,
+      ReadyMatchFeatureVectorPublisher readyMatchFeatureVectorPublisher) {
+
+    final IQueue<Long> alertCommentsInputQueue =
+        hazelcastInstance.getQueue("alert.category.value");
+
+    final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+
+    return new CategoryResolveProcess(
+        categoryValueClient,
+        scheduledExecutorService,
+        alertCommentsInputQueue,
+        alertSolvingRepository,
+        readyMatchFeatureVectorPublisher);
+  }
 
   @Bean
   ResolvedAlertProcess resolvedAlertProcess(
@@ -70,11 +94,15 @@ class ProcessConfiguration {
       AlertSolvingAlertContextMapper alertSolvingAlertContextMapper,
       RecommendationFacade recommendationFacade,
       ProtoMessageToObjectNodeConverter converter,
-      CommentInputClientRepository commentInputClientRepository
-  ) {
+      CommentInputClientRepository commentInputClientRepository) {
     return new ResolvedAlertProcess(
-        recommendationPublisher, alertSolvingRepository, alertSolvingAlertContextMapper,
-        commentFacade, recommendationFacade, converter, commentInputClientRepository);
+        recommendationPublisher,
+        alertSolvingRepository,
+        alertSolvingAlertContextMapper,
+        commentFacade,
+        recommendationFacade,
+        converter,
+        commentInputClientRepository);
   }
 
   @Bean
@@ -88,8 +116,7 @@ class ProcessConfiguration {
   @Bean
   SomethingSolution somethingSolution(
       final ReadyMatchFeatureVectorPublisher governanceProvider,
-      final AlertSolvingRepository alertSolvingRepository
-  ) {
+      final AlertSolvingRepository alertSolvingRepository) {
     return new SomethingSolution(governanceProvider, alertSolvingRepository);
   }
 
@@ -98,14 +125,11 @@ class ProcessConfiguration {
       final AlertSolvingRepository alertSolvingRepository,
       final HazelcastInstance hazelcastInstance,
       final GovernanceFacade governanceFacade,
-      final ResolvedAlertProcess resolvedAlertProcess
-  ) {
+      final ResolvedAlertProcess resolvedAlertProcess) {
     final ExecutorService scheduledExecutorService = Executors.newFixedThreadPool(15);
     final GovernanceAlertPublisher governanceAlertPublisher =
         new GovernanceAlertPublisher(
             governanceFacade, hazelcastInstance, scheduledExecutorService, resolvedAlertProcess);
-    return new GovernanceMatchResponseProcess(
-        governanceAlertPublisher,
-        alertSolvingRepository);
+    return new GovernanceMatchResponseProcess(governanceAlertPublisher, alertSolvingRepository);
   }
 }

@@ -19,15 +19,27 @@ public class Match implements Serializable {
   private final long matchId;
   private final String clientMatchId;
   private final Map<String, MatchFeature> features = new HashMap<>();
+  private final Map<String, MatchCategory> categories = new HashMap<>();
   String solution = null;
   String reason;
 
   public void addFeature(MatchFeature matchFeature) {
+    if (matchFeature.getFeature() == null) {
+      return;
+    }
     this.features.put(matchFeature.getFeature(), matchFeature);
+  }
+
+  public void addCategory(MatchCategory matchCategory) {
+    this.categories.put(matchCategory.getCategory(), matchCategory);
   }
 
   boolean hasAllFeaturesSolved() {
     return features.values().stream().allMatch(MatchFeature::hasValue);
+  }
+
+  boolean hasAllCategoryValues() {
+    return categories.values().stream().allMatch(MatchCategory::hasValue);
   }
 
   void setSolution(String solution, String reason) {

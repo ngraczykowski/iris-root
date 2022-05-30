@@ -18,4 +18,6 @@ public class MatchFeatureDao {
   String featureValue;
   String featureReason;
   String clientMatchId;
+  String category;
+  String categoryValue;
 }

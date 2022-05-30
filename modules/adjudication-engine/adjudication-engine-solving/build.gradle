@@ -20,6 +20,7 @@ dependencies {
   implementation libs.spring.data.jpa
   implementation libs.silenteight.sep.base.common
   implementation libs.adjudication.engine.api
+  implementation libs.data.source.categories.api
 
   // Sentry
   runtimeOnly libs.sentry.spring.boot.starter

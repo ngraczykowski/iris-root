@@ -7,9 +7,7 @@ import com.silenteight.adjudication.engine.comments.comment.domain.AlertContext;
 import com.silenteight.adjudication.engine.comments.comment.domain.FeatureContext;
 import com.silenteight.adjudication.engine.comments.comment.domain.MatchContext;
 import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectNodeConverter;
-import com.silenteight.adjudication.engine.solving.domain.AlertSolving;
-import com.silenteight.adjudication.engine.solving.domain.Match;
-import com.silenteight.adjudication.engine.solving.domain.MatchFeature;
+import com.silenteight.adjudication.engine.solving.domain.*;
 
 import org.springframework.stereotype.Component;
 
@@ -50,6 +48,7 @@ class AlertSolvingAlertContextMapper {
         .solution(match.getSolution())
         .reason(converter.convertJsonToMap(match.getReason()).orElse(Map.of()))
         .features(mapFeatures(match.getFeatures()))
+        .categories(mapCategories(match.getCategories()))
         .build();
   }
 
@@ -58,6 +57,13 @@ class AlertSolvingAlertContextMapper {
         .entrySet()
         .stream()
         .collect(Collectors.toMap(Entry::getKey, e -> mapFeature(e.getValue())));
+  }
+
+  private Map<String, String> mapCategories(Map<String, MatchCategory> categories) {
+    return categories
+        .entrySet()
+        .stream()
+        .collect(Collectors.toMap(Entry::getKey, e -> e.getValue().getCategoryValue()));
   }
 
   private FeatureContext mapFeature(MatchFeature matchFeature) {

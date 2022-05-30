@@ -8,10 +8,12 @@ import com.silenteight.adjudication.engine.solving.domain.command.UpdateCommentI
 import com.silenteight.adjudication.engine.solving.domain.event.FeatureMatchesUpdated;
 import com.silenteight.adjudication.engine.solving.domain.event.MatchFeatureUpdated;
 import com.silenteight.adjudication.engine.solving.domain.event.MatchesUpdated;
+import com.silenteight.datasource.categories.api.v2.CategoryMatches;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
@@ -21,7 +23,7 @@ import static java.util.stream.Collectors.toSet;
 public class AlertSolving implements Serializable {
 
   private static final long serialVersionUID = 899871569338286453L;
-  //<agent_config,set<features> // Which agent supports specific feature
+  // <agent_config,set<features> // Which agent supports specific feature
   long alertId;
 
   long analysisId;
@@ -54,36 +56,52 @@ public class AlertSolving implements Serializable {
   }
 
   public AlertSolving addMatchesFeatures(List<MatchFeature> matchesFeatures) {
-    matchesFeatures.forEach(matchFeature -> {
-      var features = this.matches.getOrDefault(
-          matchFeature.getMatchId(),
-          new Match(matchFeature.getMatchId(), matchFeature.getClientMatchId()));
-      features.addFeature(matchFeature);
-      this.matches.putIfAbsent(matchFeature.getMatchId(), features);
 
-      var agentFeatures =
-          this.agentFeatures.getOrDefault(matchFeature.getAgentConfig(), new HashSet<>());
-      agentFeatures.add(matchFeature.getFeature());
-      this.agentFeatures.put(matchFeature.getAgentConfig(), agentFeatures);
-    });
+    matchesFeatures.forEach(
+        matchFeature -> {
+          var match =
+              this.matches.getOrDefault(
+                  matchFeature.getMatchId(),
+                  new Match(matchFeature.getMatchId(), matchFeature.getClientMatchId()));
+
+          match.addFeature(matchFeature);
+          this.matches.putIfAbsent(matchFeature.getMatchId(), match);
+
+          if (matchFeature.getAgentConfig() == null) {
+            return;
+          }
+
+          var agentFeatures =
+              this.agentFeatures.getOrDefault(matchFeature.getAgentConfig(), new HashSet<>());
+          agentFeatures.add(matchFeature.getFeature());
+          this.agentFeatures.put(matchFeature.getAgentConfig(), agentFeatures);
+        });
     // event
     this.domainEvents.add(new MatchFeatureUpdated(this));
     return this;
   }
 
+  public AlertSolving addMatchesCategories(List<MatchCategory> matchCategories) {
+    matchCategories.forEach(
+        matchCategory -> {
+          if (matchCategory.getCategory() == null) return;
+          var match = this.matches.get(matchCategory.getMatchId());
+          match.addCategory(matchCategory);
+          this.matches.putIfAbsent(matchCategory.getMatchId(), match);
+        });
+    return this;
+  }
 
   public Set<String> getAllMatchesNames(String featureName) {
-    return this.matches
-        .keySet()
-        .stream()
+    return this.matches.keySet().stream()
         .filter(key -> !matches.get(key).hasSolvedFeature(featureName))
-        .map(matchId -> ResourceName
-            .create("")
-            .add("alerts", String.valueOf(this.alertId))
-            .add("matches", String.valueOf(matchId))
-            .getPath())
-        .collect(
-            toSet());
+        .map(
+            matchId ->
+                ResourceName.create("")
+                    .add("alerts", String.valueOf(this.alertId))
+                    .add("matches", String.valueOf(matchId))
+                    .getPath())
+        .collect(toSet());
   }
 
   public Map<String, Set<String>> getAgentFeatures() {
@@ -103,9 +121,7 @@ public class AlertSolving implements Serializable {
     AlertSolving.checkIsCompleted();
   }
 
-  /**
-   * Clear pending events
-   */
+  /** Clear pending events */
   public void clear() {
     this.domainEvents.clear();
   }
@@ -115,7 +131,7 @@ public class AlertSolving implements Serializable {
   }
 
   /**
-   * Fetch pending events <br/>
+   * Fetch pending events <br>
    * <strong>Events hasn't order, because is doesn't matter</strong>
    *
    * @return copy list of pending {@link DomainEvent} events
@@ -130,8 +146,8 @@ public class AlertSolving implements Serializable {
 
   public AlertSolving updateMatchFeatureValues(
       long matchId, List<FeatureSolution> featureSolutions) {
-    //TODO refactor transient domainEvents
-    //this.domainEvents.add(new MatchFeatureValuesUpdated(this));
+    // TODO refactor transient domainEvents
+    // this.domainEvents.add(new MatchFeatureValuesUpdated(this));
 
     for (var feature : featureSolutions) {
       matches
@@ -144,38 +160,54 @@ public class AlertSolving implements Serializable {
     return this;
   }
 
+  public AlertSolving updateMatchCategoryValues(long matchId, List<CategoryValue> categoryValues) {
+    for (var categoryValue : categoryValues) {
+      matches
+          .get(matchId)
+          .getCategories()
+          .get(categoryValue.getCategory())
+          .updateCategoryValue(categoryValue.getValue());
+    }
+
+    return this;
+  }
+
   @Override
   public String toString() {
-    return "AlertSolving{" +
-        "id=" + alertId +
-        ", solvingCreatetime=" + solvingCreatetime +
-        '}';
+    return "AlertSolving{" + "id=" + alertId + ", solvingCreatetime=" + solvingCreatetime + '}';
   }
 
   public boolean isMatchReadyForSolving(long matchId) {
-    return matches.get(matchId).hasAllFeaturesSolved();
+    return matches.get(matchId).hasAllFeaturesSolved()
+        && matches.get(matchId).hasAllCategoryValues();
   }
 
   public List<String> getMatchFeatureNames(long matchId) {
-    return matches
-        .get(matchId)
-        .getFeatures()
-        .values()
-        .stream()
-        .map(MatchFeature::getFeature)
-        .collect(
-            toList());
+    var features =
+        matches.get(matchId).getFeatures().values().stream()
+            .map(MatchFeature::getFeature)
+            .collect(toList());
+
+    var categories =
+        matches.get(matchId).getCategories().values().stream()
+            .map(MatchCategory::getCategory)
+            .collect(toList());
+
+    return Stream.concat(features.stream(), categories.stream()).collect(toList());
   }
 
   public List<String> getMatchFeatureVectors(long matchId) {
-    return matches
-        .get(matchId)
-        .getFeatures()
-        .values()
-        .stream()
-        .map(MatchFeature::getFeatureValue)
-        .collect(
-            toList());
+    var features =
+        matches.get(matchId).getFeatures().values().stream()
+            .map(MatchFeature::getFeatureValue)
+            .collect(toList());
+
+    var categories =
+        matches.get(matchId).getCategories().values().stream()
+            .map(MatchCategory::getCategoryValue)
+            .collect(toList());
+
+    return Stream.concat(features.stream(), categories.stream()).collect(toList());
   }
 
   public AlertSolving updateMatchSolution(long matchId, String solution, String reson) {
@@ -184,8 +216,8 @@ public class AlertSolving implements Serializable {
   }
 
   public boolean isAlertReadyForSolving() {
-    boolean isAlertReadyForSolving = matches.entrySet().stream()
-        .allMatch(entry -> entry.getValue().isSolved());
+    boolean isAlertReadyForSolving =
+        matches.entrySet().stream().allMatch(entry -> entry.getValue().isSolved());
     log.debug("isAlertReadyForSolving alertId={}", alertId);
     return isAlertReadyForSolving;
   }
@@ -213,8 +245,23 @@ public class AlertSolving implements Serializable {
 
   public AlertSolving updateCommentInput(UpdateCommentInput command) {
 
-
-
     return this;
+  }
+
+  public List<CategoryMatches> getCategoryMatches() {
+    var matchesNames = matches.values().stream().map(Match::getMatchName).collect(toList());
+
+    if (matchesNames.isEmpty()) {
+      return List.of();
+    }
+
+    return matches.values().stream().findFirst().get().getCategories().values().stream()
+        .map(
+            mc ->
+                CategoryMatches.newBuilder()
+                    .addAllMatches(matchesNames)
+                    .setCategory(mc.getCategory())
+                    .build())
+        .collect(toList());
   }
 }

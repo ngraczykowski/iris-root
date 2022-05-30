@@ -23,28 +23,33 @@ class SelectAnalysisFeaturesQuery {
 
   @Language("PostgreSQL")
   private static final String QUERY =
-      "SELECT aacf.feature,\n"
-          + "       aaf.agent_config_feature_id,\n"
-          + "       am.match_id,\n"
-          + "       am.alert_id,\n"
-          + "       aacf.agent_config,\n"
-          + "       aaa.policy,\n"
-          + "       aaa.strategy,\n"
-          + "       aaa.analysis_id,\n"
-          + "       amfv.value,\n"
-          + "       amfv.reason,\n"
-          + "       am.client_match_identifier\n"
-          +
-          "FROM ae_analysis aaa\n"
-          + "         JOIN ae_analysis_feature aaf ON aaa.analysis_id = aaf.analysis_id\n"
-          + "         JOIN ae_analysis_alert aaa2 ON aaa.analysis_id = aaa2.analysis_id\n"
-          + "         JOIN ae_match am ON am.alert_id = aaa2.alert_id\n"
-          + "         JOIN ae_agent_config_feature aacf\n"
-          + "              ON "
-          + "aaf.agent_config_feature_id = aacf.agent_config_feature_id\n"
-          + "        LEFT JOIN ae_match_feature_value amfv ON am.match_id = amfv.match_id\n"
-          + "WHERE aaa.analysis_id IN (:analysis)\n"
-          + "  AND aaa2.alert_id IN (:alerts)";
+        """
+          SELECT aacf.feature,
+                 aaf.agent_config_feature_id,
+                 am.match_id,
+                 am.alert_id,
+                 aacf.agent_config,
+                 aaa.policy,
+                 aaa.strategy,
+                 aaa.analysis_id,
+                 amfv.value,
+                 amfv.reason,
+                 am.client_match_identifier,
+                 ac.category,
+                 amcv.value as category_value
+          FROM ae_analysis aaa
+                   LEFT JOIN ae_analysis_feature aaf ON aaa.analysis_id = aaf.analysis_id
+                   LEFT Join ae_analysis_category aac on aaa.analysis_id = aac.analysis_id
+                   LEFT JOIN ae_category ac on aac.category_id = ac.category_id
+                   JOIN ae_analysis_alert aaa2 ON aaa.analysis_id = aaa2.analysis_id
+                   JOIN ae_match am ON am.alert_id = aaa2.alert_id
+                   LEFT JOIN ae_agent_config_feature aacf
+                        ON aaf.agent_config_feature_id = aacf.agent_config_feature_id
+                  LEFT JOIN ae_match_feature_value amfv ON am.match_id = amfv.match_id
+                  LEFT JOIN ae_match_category_value amcv ON am.match_id = amcv.match_id
+          WHERE aaa.analysis_id IN (:analysis)
+            AND aaa2.alert_id IN (:alerts)
+        """;
   private static final FeaturesRowMapper ROW_MAPPER = new FeaturesRowMapper();
 
 
@@ -76,6 +81,8 @@ class SelectAnalysisFeaturesQuery {
       var featureValue = rs.getString("value");
       var featureReason = rs.getString("reason");
       var clientMatchId = rs.getString("client_match_identifier");
+      var category = rs.getString("category");
+      var categoryValue = rs.getString("category_value");
 
       return MatchFeatureDao
           .builder()
@@ -90,6 +97,8 @@ class SelectAnalysisFeaturesQuery {
           .featureValue(featureValue)
           .featureReason(featureReason)
           .clientMatchId(clientMatchId)
+          .category(category)
+          .categoryValue(categoryValue)
           .build();
     }
   }

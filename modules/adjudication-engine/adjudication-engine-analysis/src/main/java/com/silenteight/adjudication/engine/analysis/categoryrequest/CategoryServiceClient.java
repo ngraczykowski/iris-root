@@ -26,21 +26,22 @@ import static java.util.stream.Collectors.toSet;
 
 @RequiredArgsConstructor
 @Slf4j
-class CategoryServiceClient {
+class CategoryServiceClient implements CategoryValuesClient {
 
   private final CategoryValueServiceBlockingStub stub;
 
-  @NonNull
-  private final Duration timeout;
+  @NonNull private final Duration timeout;
 
-  BatchGetMatchesCategoryValuesResponse batchGetMatchCategoryValues(
+  public BatchGetMatchesCategoryValuesResponse batchGetMatchCategoryValues(
       BatchGetMatchesCategoryValuesRequest request) {
 
     BatchGetMatchesCategoryValuesResponse response = performRequest(request);
 
     if (response.getCategoryValuesCount() < request.getCategoryMatchesCount()) {
-      log.error("Not all requested category values received: requestedCount={}, receivedCount={}",
-          request.getCategoryMatchesCount(), response.getCategoryValuesCount());
+      log.error(
+          "Not all requested category values received: requestedCount={}, receivedCount={}",
+          request.getCategoryMatchesCount(),
+          response.getCategoryValuesCount());
 
       return buildMockResponse(request, response);
     }
@@ -55,11 +56,11 @@ class CategoryServiceClient {
 
     var mockedResponseBuilder = response.toBuilder();
 
-    var responseCategoryMatches = response.getCategoryValuesList().stream()
-        .collect(groupingBy(CategoryValue::getName, mapping(CategoryValue::getMatch, toSet())));
+    var responseCategoryMatches =
+        response.getCategoryValuesList().stream()
+            .collect(groupingBy(CategoryValue::getName, mapping(CategoryValue::getMatch, toSet())));
 
-    request.getCategoryMatchesList()
-        .stream()
+    request.getCategoryMatchesList().stream()
         .flatMap(categoryMatch -> buildNotReceived(responseCategoryMatches, categoryMatch))
         .forEach(mockedResponseBuilder::addCategoryValues);
 
@@ -74,21 +75,25 @@ class CategoryServiceClient {
 
     if (!hasReceivedCategory) {
       return categoryMatch.getMatchesList().stream()
-          .map(m -> CategoryValue.newBuilder()
-              .setName(category)
-              .setMatch(m)
-              .setSingleValue("DATA_SOURCE_ERROR")
-              .build());
+          .map(
+              m ->
+                  CategoryValue.newBuilder()
+                      .setName(category)
+                      .setMatch(m)
+                      .setSingleValue("DATA_SOURCE_ERROR")
+                      .build());
     } else {
       var receivedMatches = responseCategoryMatches.get(category);
 
       return categoryMatch.getMatchesList().stream()
           .filter(m -> !receivedMatches.contains(m))
-          .map(m -> CategoryValue.newBuilder()
-              .setName(category)
-              .setMatch(m)
-              .setSingleValue("DATA_SOURCE_ERROR")
-              .build());
+          .map(
+              m ->
+                  CategoryValue.newBuilder()
+                      .setName(category)
+                      .setMatch(m)
+                      .setSingleValue("DATA_SOURCE_ERROR")
+                      .build());
     }
   }
 
@@ -103,9 +108,7 @@ class CategoryServiceClient {
     BatchGetMatchesCategoryValuesResponse response;
 
     try {
-      response = stub
-          .withDeadline(deadline)
-          .batchGetMatchesCategoryValues(request);
+      response = stub.withDeadline(deadline).batchGetMatchesCategoryValues(request);
     } catch (StatusRuntimeException status) {
       log.warn("Request to the categories service failed", status);
       response = BatchGetMatchesCategoryValuesResponse.getDefaultInstance();

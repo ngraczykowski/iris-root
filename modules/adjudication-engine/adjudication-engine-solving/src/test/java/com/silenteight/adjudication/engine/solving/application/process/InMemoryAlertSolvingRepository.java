@@ -2,6 +2,7 @@ package com.silenteight.adjudication.engine.solving.application.process;
 
 import com.silenteight.adjudication.engine.solving.domain.AlertSolving;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
+import com.silenteight.adjudication.engine.solving.domain.CategoryValue;
 import com.silenteight.adjudication.engine.solving.domain.FeatureSolution;
 
 import java.util.HashMap;
@@ -33,6 +34,12 @@ class InMemoryAlertSolvingRepository implements AlertSolvingRepository {
   @Override
   public AlertSolving updateMatchSolution(
       long alertId, long matchId, String matchSolution, String reason) {
+    return AlertSolving.empty();
+  }
+
+  @Override
+  public AlertSolving updateMatchCategoryValue(
+      long alertId, long matchId, CategoryValue categoryValues) {
     return AlertSolving.empty();
   }
 }

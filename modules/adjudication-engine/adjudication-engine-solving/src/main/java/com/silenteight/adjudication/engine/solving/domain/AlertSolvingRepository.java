@@ -12,4 +12,6 @@ public interface AlertSolvingRepository {
       long alertId, long matchId, List<FeatureSolution> featureSolutions);
 
   AlertSolving updateMatchSolution(long alertId, long matchId, String matchSolution, String reason);
+
+  AlertSolving updateMatchCategoryValue(long alertId, long matchId, CategoryValue categoryValues);
 }
