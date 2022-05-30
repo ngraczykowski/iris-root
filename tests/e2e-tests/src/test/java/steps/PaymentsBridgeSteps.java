@@ -6,8 +6,8 @@ package steps;
 
 import io.cucumber.java8.En;
 import utils.ScenarioContext;
-import utils.datageneration.paymentsbridge.PbAlertsGeneratingService;
 import utils.datageneration.paymentsbridge.PaymentsBridgeAlert;
+import utils.datageneration.paymentsbridge.PbAlertsGeneratingService;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.core.Is.is;

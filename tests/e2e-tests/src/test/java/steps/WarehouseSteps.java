@@ -20,48 +20,56 @@ public class WarehouseSteps implements En {
   ScenarioContext scenarioContext = Hooks.scenarioContext;
 
   public WarehouseSteps() {
-    And("Initialize generation of {string} report via warehouse and wait until it's generated",
-        (String value) -> {
-          Batch batch = (Batch) scenarioContext.get("batch");
+    And("Initialize generation of {string} HSBC report via warehouse and wait until it's generated",
+        this::generateReport);
+    And("Download generated HSBC report", this::downloadReport);
+    And("Downloaded HSBC report contains {int} rows", this::assertRowsNumber);
 
-          Response response = given()
-              .urlEncodingEnabled(true)
-              .param("from", batch.getGenerationStartTime())
-              .param("to", commonUtils.getDateTimeNow())
-              .post("rest/warehouse/api/v2/analysis/production/reports/" + value);
+    And("Initialize generation of {string} PB report via warehouse and wait until it's generated",
+        this::generateReport);
+    And("Download generated PB report", this::downloadReport);
+    And("Downloaded PB report contains {int} rows", this::assertRowsNumber);
+  }
 
-          response.then().statusCode(200);
+  private void generateReport(String reportName) {
+    Batch batch = (Batch) scenarioContext.get("batch");
 
-          scenarioContext.set("reportName", response.jsonPath().getString("reportName"));
+    Response response = given()
+        .urlEncodingEnabled(true)
+        .param("from", batch.getGenerationStartTime())
+        .param("to", commonUtils.getDateTimeNow())
+        .post("rest/warehouse/api/v2/analysis/production/reports/" + reportName);
 
-          Awaitility
-              .await()
-              .atMost(15, SECONDS)
-              .until(() -> when()
-                  .get("rest/warehouse/api/v2/" + scenarioContext.get("reportName") + "/status")
-                  .then()
-                  .extract()
-                  .response()
-                  .jsonPath()
-                  .getString("status")
-                  .equals("OK"));
-        });
+    response.then().statusCode(200);
 
-    And("Download generated report", () -> {
-      final String report = given()
-          .get("rest/warehouse/api/v2/" + scenarioContext.get("reportName"))
-          .then()
-          .statusCode(200)
-          .extract()
-          .asString();
+    scenarioContext.set("reportName", response.jsonPath().getString("reportName"));
 
-      scenarioContext.set("report", report);
-    });
+    Awaitility
+        .await()
+        .atMost(15, SECONDS)
+        .until(() -> when()
+            .get("rest/warehouse/api/v2/" + scenarioContext.get("reportName") + "/status")
+            .then()
+            .extract()
+            .response()
+            .jsonPath()
+            .getString("status")
+            .equals("OK"));
+  }
 
-    And("Downloaded report contains {int} rows", (Integer size) -> {
+  private void downloadReport() {
+    final String report = given()
+        .get("rest/warehouse/api/v2/" + scenarioContext.get("reportName"))
+        .then()
+        .statusCode(200)
+        .extract()
+        .asString();
 
-      String report = (String) scenarioContext.get("report");
-      Assert.assertEquals(size.intValue(), report.lines().count());
-    });
+    scenarioContext.set("report", report);
+  }
+
+  private void assertRowsNumber(int rowsNum) {
+    String report = (String) scenarioContext.get("report");
+    Assert.assertEquals(rowsNum, report.lines().count());
   }
 }
