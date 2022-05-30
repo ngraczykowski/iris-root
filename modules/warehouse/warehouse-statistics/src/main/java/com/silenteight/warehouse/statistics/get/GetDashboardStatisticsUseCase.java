@@ -10,56 +10,14 @@ import java.util.List;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+
 @RequiredArgsConstructor
 @Slf4j
 public class GetDashboardStatisticsUseCase {
 
   @NonNull
   private final DailyRecommendationStatisticsRepository repository;
-
-
-  public StatisticsResponse getTotalCount(StatisticsRequest request) {
-
-    log.info("Statistics request received, calculation period: from={}, to={}",
-        request.getFrom(), request.getTo());
-
-    List<DailyRecommendationStatistics> statistics =
-        repository.findByDayBetweenOrderByDayDesc(request.getFrom(), request.getTo());
-
-    double alertsCount =
-        getTotalCount(statistics, DailyRecommendationStatistics::getAlertsCount);
-    double analystDecisionCount =
-        getTotalCount(statistics, DailyRecommendationStatistics::getAnalystDecisionCount);
-    double fpCount =
-        getTotalCount(statistics, DailyRecommendationStatistics::getFalsePositivesCount);
-    double ptpCount =
-        getTotalCount(statistics, DailyRecommendationStatistics::getPotentialTruePositivesCount);
-    double miCount =
-        getTotalCount(statistics, DailyRecommendationStatistics::getManualInvestigationsCount);
-
-    return StatisticsResponse.builder()
-        .totalAlerts(asInt(alertsCount))
-        .falsePositive(asInt(fpCount))
-        .falsePositivePercent(PercentageCalculator.calculate(fpCount, alertsCount))
-        .potentialTruePositive(asInt(ptpCount))
-        .potentialTruePositivePercent(PercentageCalculator.calculate(ptpCount, alertsCount))
-        .manualInvestigation(asInt(miCount))
-        .manualInvestigationPercent(PercentageCalculator.calculate(miCount, alertsCount))
-        .avgEfficiencyPercent(calculateEfficiency(statistics, alertsCount))
-        .avgEffectivenessPercent(calculateEffectiveness(statistics, analystDecisionCount))
-        .build();
-  }
-
-  public List<DailyRecommendationStatisticsResponse> getTotalDailyCount(StatisticsRequest request) {
-
-    log.info("Daily statistics request received, calculation period: from={}, to={}",
-        request.getFrom(), request.getTo());
-
-    return repository.findByDayBetweenOrderByDayDesc(request.getFrom(), request.getTo())
-        .stream()
-        .map(GetDashboardStatisticsUseCase::toDailyStatisticsResponse)
-        .collect(Collectors.toList());
-  }
 
   private static double getTotalCount(
       List<DailyRecommendationStatistics> dailyRecommendationStatistics,
@@ -128,5 +86,51 @@ public class GetDashboardStatisticsUseCase {
         .effectivenessPercent(statistics.getEffectivenessPercent())
         .efficiencyPercent(statistics.getEfficiencyPercent())
         .build();
+  }
+
+  public StatisticsResponse getTotalCount(StatisticsRequest request) {
+
+    log.info("Statistics request received, calculation period: from={}, to={}",
+        request.getFrom(), request.getTo());
+
+    List<DailyRecommendationStatistics> statistics =
+        repository.findByDayBetweenOrderByDayDesc(request.getFrom(), request.getTo());
+
+    double alertsCount =
+        getTotalCount(statistics, DailyRecommendationStatistics::getAlertsCount);
+    double analystDecisionCount =
+        getTotalCount(statistics, DailyRecommendationStatistics::getAnalystDecisionCount);
+    double fpCount =
+        getTotalCount(statistics, DailyRecommendationStatistics::getFalsePositivesCount);
+    double ptpCount =
+        getTotalCount(statistics, DailyRecommendationStatistics::getPotentialTruePositivesCount);
+    double miCount =
+        getTotalCount(statistics, DailyRecommendationStatistics::getManualInvestigationsCount);
+    // The same local date should return 1, so that's why we add 1 at the end
+    long rangeInDays = DAYS.between(request.getFrom(), request.getTo()) + 1;
+
+    return StatisticsResponse.builder()
+        .totalAlerts(asInt(alertsCount))
+        .falsePositive(asInt(fpCount))
+        .falsePositivePercent(PercentageCalculator.calculate(fpCount, alertsCount))
+        .potentialTruePositive(asInt(ptpCount))
+        .potentialTruePositivePercent(PercentageCalculator.calculate(ptpCount, alertsCount))
+        .manualInvestigation(asInt(miCount))
+        .manualInvestigationPercent(PercentageCalculator.calculate(miCount, alertsCount))
+        .avgEfficiencyPercent(calculateEfficiency(statistics, alertsCount))
+        .avgEffectivenessPercent(calculateEffectiveness(statistics, analystDecisionCount))
+        .avgResolutionPerDay(alertsCount / rangeInDays)
+        .build();
+  }
+
+  public List<DailyRecommendationStatisticsResponse> getTotalDailyCount(StatisticsRequest request) {
+
+    log.info("Daily statistics request received, calculation period: from={}, to={}",
+        request.getFrom(), request.getTo());
+
+    return repository.findByDayBetweenOrderByDayDesc(request.getFrom(), request.getTo())
+        .stream()
+        .map(GetDashboardStatisticsUseCase::toDailyStatisticsResponse)
+        .collect(Collectors.toList());
   }
 }

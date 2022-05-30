@@ -9,6 +9,7 @@ final class StatisticsResponse {
 
   private Double avgEffectivenessPercent;
   private Double avgEfficiencyPercent;
+  private Double avgResolutionPerDay;
   private int totalAlerts;
   private int falsePositive;
   private Double falsePositivePercent;

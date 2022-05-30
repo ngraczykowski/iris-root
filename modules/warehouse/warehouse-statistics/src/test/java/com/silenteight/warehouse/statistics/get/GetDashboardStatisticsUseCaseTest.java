@@ -16,6 +16,11 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class GetDashboardStatisticsUseCaseTest {
 
+  private static final LocalDate CURRENT_DATE = LocalDate.now();
+
+  private static final LocalDate DAY_BEFORE_CURRENT_DATE = CURRENT_DATE.minusDays(1);
+
+  private static final LocalDate DAYS2_BEFORE_CURRENT_DATE = CURRENT_DATE.minusDays(2);
   @InjectMocks
   private GetDashboardStatisticsUseCase cut;
 
@@ -30,7 +35,7 @@ class GetDashboardStatisticsUseCaseTest {
 
     //when
     StatisticsResponse response =
-        cut.getTotalCount(StatisticsRequest.of(LocalDate.now(), LocalDate.now()));
+        cut.getTotalCount(StatisticsRequest.of(DAYS2_BEFORE_CURRENT_DATE, CURRENT_DATE));
 
     //then
     assertAll(
@@ -38,6 +43,7 @@ class GetDashboardStatisticsUseCaseTest {
         () -> assertEquals(430, response.getFalsePositive()),
         () -> assertEquals(110, response.getPotentialTruePositive()),
         () -> assertEquals(105, response.getManualInvestigation()),
+        () -> assertEquals(215, response.getAvgResolutionPerDay()),
         () -> assertEquals(66.66666666666667, response.getFalsePositivePercent()),
         () -> assertEquals(16.27906976744186, response.getManualInvestigationPercent()),
         () -> assertEquals(17.05426356589147, response.getPotentialTruePositivePercent()),
@@ -54,7 +60,7 @@ class GetDashboardStatisticsUseCaseTest {
 
     //when
     StatisticsResponse response =
-        cut.getTotalCount(StatisticsRequest.of(LocalDate.now(), LocalDate.now()));
+        cut.getTotalCount(StatisticsRequest.of(DAYS2_BEFORE_CURRENT_DATE, CURRENT_DATE));
 
     //then
     assertAll(
@@ -62,6 +68,7 @@ class GetDashboardStatisticsUseCaseTest {
         () -> assertEquals(430, response.getFalsePositive()),
         () -> assertEquals(110, response.getPotentialTruePositive()),
         () -> assertEquals(105, response.getManualInvestigation()),
+        () -> assertEquals(215, response.getAvgResolutionPerDay()),
         () -> assertEquals(66.66666666666667, response.getFalsePositivePercent()),
         () -> assertEquals(16.27906976744186, response.getManualInvestigationPercent()),
         () -> assertEquals(17.05426356589147, response.getPotentialTruePositivePercent()),
@@ -77,7 +84,7 @@ class GetDashboardStatisticsUseCaseTest {
 
     //when
     StatisticsResponse response =
-        cut.getTotalCount(StatisticsRequest.of(LocalDate.now(), LocalDate.now()));
+        cut.getTotalCount(StatisticsRequest.of(DAYS2_BEFORE_CURRENT_DATE, CURRENT_DATE));
 
     //then
     assertAll(
@@ -85,6 +92,7 @@ class GetDashboardStatisticsUseCaseTest {
         () -> assertEquals(0, response.getFalsePositive()),
         () -> assertEquals(0, response.getPotentialTruePositive()),
         () -> assertEquals(0, response.getManualInvestigation()),
+        () -> assertEquals(0, response.getAvgResolutionPerDay()),
         () -> assertEquals(Double.NaN, response.getFalsePositivePercent()),
         () -> assertEquals(Double.NaN, response.getManualInvestigationPercent()),
         () -> assertEquals(Double.NaN, response.getPotentialTruePositivePercent()),
@@ -96,22 +104,22 @@ class GetDashboardStatisticsUseCaseTest {
   public List<DailyRecommendationStatistics> provideDailyStatisticWithNaN() {
     return List.of(
         new DailyRecommendationStatistics(
-            1L, LocalDate.now(), 300, 300, 0, 0, 0, 30.0, Double.NaN),
+            1L, DAYS2_BEFORE_CURRENT_DATE, 300, 300, 0, 0, 0, 30.0, Double.NaN),
         new DailyRecommendationStatistics(
-            2L, LocalDate.now(), 300, 100, 100, 100, 300, 100.0, 22.0),
+            2L, DAY_BEFORE_CURRENT_DATE, 300, 100, 100, 100, 300, 100.0, 22.0),
         new DailyRecommendationStatistics(
-            3L, LocalDate.now(), 45, 30, 10, 5, 1, 10.0, 50.0)
+            3L, CURRENT_DATE, 45, 30, 10, 5, 1, 10.0, 50.0)
     );
   }
 
   public List<DailyRecommendationStatistics> provideDailyStatistic() {
     return List.of(
         new DailyRecommendationStatistics(
-            1L, LocalDate.now(), 300, 300, 0, 0, 100, 30.0, 0.0),
+            1L, DAYS2_BEFORE_CURRENT_DATE, 300, 300, 0, 0, 100, 30.0, 0.0),
         new DailyRecommendationStatistics(
-            2L, LocalDate.now(), 300, 100, 100, 100, 300, 100.0, 22.0),
+            2L, DAY_BEFORE_CURRENT_DATE, 300, 100, 100, 100, 300, 100.0, 22.0),
         new DailyRecommendationStatistics(
-            3L, LocalDate.now(), 45, 30, 10, 5, 1, 10.0, 50.0)
+            3L, CURRENT_DATE, 45, 30, 10, 5, 1, 10.0, 50.0)
     );
   }
 }
