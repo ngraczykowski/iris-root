@@ -1,6 +1,7 @@
 package steps;
 
 import io.cucumber.java8.En;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.awaitility.Awaitility;
 import utils.ScenarioContext;
@@ -22,6 +23,7 @@ public class NameScreeningSteps implements En {
 
       given()
           .body(batch.getPayload())
+          .contentType(ContentType.JSON)
           .when()
           .post("rest/hsbc-bridge/async/batch/v1/" + batch.getId() + "/recommend")
           .then()
@@ -51,21 +53,10 @@ public class NameScreeningSteps implements En {
       response.then().statusCode(200);
 
       given()
-          .contentType("application/json")
+          .contentType(ContentType.JSON)
           .body(response.getBody().asString())
           .when()
           .post("rest/hsbc-bridge/async/batch/v1/ingestRecommendations")
-          .then()
-          .statusCode(200);
-    });
-
-    And("Send batch on learning", () -> {
-      Batch batch = (Batch) scenarioContext.get("batch");
-
-      given()
-          .body(batch.getPayload())
-          .when()
-          .post("rest/hsbc-bridge/async/batch/v1/" + batch.getId() + "-learning/learning")
           .then()
           .statusCode(200);
     });
@@ -76,6 +67,7 @@ public class NameScreeningSteps implements En {
 
       given()
           .body(learningBatch.getPayload())
+          .contentType(ContentType.JSON)
           .when()
           .post("rest/hsbc-bridge/async/batch/v1/" + learningBatch.getId() + "-learning/learning")
           .then()

@@ -1,6 +1,7 @@
 package steps;
 
 import io.cucumber.java8.En;
+import io.restassured.http.ContentType;
 import org.awaitility.Awaitility;
 import utils.ScenarioContext;
 import utils.datageneration.namescreening.Batch;
@@ -9,9 +10,10 @@ import utils.datageneration.simulations.Dataset;
 import utils.datageneration.simulations.Simulation;
 import utils.datageneration.simulations.SimulationGenerationService;
 
+import java.time.Duration;
+
 import static io.restassured.RestAssured.*;
 import static java.util.concurrent.TimeUnit.MINUTES;
-import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class SimulationsSteps implements En {
 
@@ -44,7 +46,7 @@ public class SimulationsSteps implements En {
 
           given()
               .body(dataset.getCreationPayload())
-              .contentType("application/json")
+              .contentType(ContentType.JSON)
               .when()
               .post("/rest/simulator/api/v1/datasets")
               .then().statusCode(201);
@@ -72,11 +74,12 @@ public class SimulationsSteps implements En {
               when()
               .get(String.format("/rest/simulator/api/v1/simulations/%s", simulation.getUuid()))
               .then()
-              .statusCode(201);
+              .statusCode(200);
 
           Awaitility
               .await()
               .atMost(3, MINUTES)
+              .pollInterval(Duration.ofSeconds(5))
               .until(() -> when()
                   .get(String.format("/rest/simulator/api/v1/simulations/%s", simulation.getUuid()))
                   .then()
