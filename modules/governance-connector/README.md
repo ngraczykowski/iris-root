@@ -17,7 +17,7 @@ dependencies.
 libraries.silenteight_governance_model_api_library = [group: 'com.silenteight.governance.api.library', name: 'governance-lib', version: 1.0.0-SNAPSHOT]
 
 dependencies {
- implementation libraries.silenteight_governance_model_api_library 
+ implementation libraries.silenteight_governance_model_api_library
 }
 ```
 
