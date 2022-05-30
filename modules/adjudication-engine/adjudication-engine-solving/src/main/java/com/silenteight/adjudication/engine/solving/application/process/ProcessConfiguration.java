@@ -76,7 +76,7 @@ class ProcessConfiguration {
     final IQueue<Long> alertCommentsInputQueue =
         hazelcastInstance.getQueue("alert.category.value");
 
-    final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+    final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(15);
 
     return new CategoryResolveProcess(
         categoryValueClient,

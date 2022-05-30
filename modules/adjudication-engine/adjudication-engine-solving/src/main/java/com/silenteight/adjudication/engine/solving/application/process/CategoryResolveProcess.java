@@ -46,12 +46,12 @@ class CategoryResolveProcess {
 
   private void process() {
     while (true) {
-      final Long alertID = this.alertCategoryValuesInputQueue.poll();
-      if (alertID == null) {
+      final Long alertId = this.alertCategoryValuesInputQueue.poll();
+      if (alertId == null) {
         break;
       }
-      log.debug("Resolved alert {} for requesting for category value", alertID);
-      var alertSolving = alertSolvingRepository.get(alertID);
+      log.debug("Resolved alert {} for requesting for category value", alertId);
+      var alertSolving = alertSolvingRepository.get(alertId);
       var request =
           BatchGetMatchesCategoryValuesRequest.newBuilder()
               .addAllCategoryMatches(alertSolving.getCategoryMatches())
@@ -67,14 +67,14 @@ class CategoryResolveProcess {
           .forEach(
               cv ->
                   alertSolvingRepository.updateMatchCategoryValue(
-                      alertID,
+                      alertId,
                       ResourceName.create(cv.getMatch()).getLong("matches"),
                       CategoryValue.builder()
                           .category(cv.getName())
                           .value(cv.getSingleValue())
                           .build()));
 
-      var alert = alertSolvingRepository.get(alertID);
+      var alert = alertSolvingRepository.get(alertId);
       Arrays.stream(alert.getMatchIds())
           .forEach(
               matchId -> {

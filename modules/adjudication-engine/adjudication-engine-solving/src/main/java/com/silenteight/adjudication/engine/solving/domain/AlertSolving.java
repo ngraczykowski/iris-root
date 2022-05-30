@@ -165,7 +165,7 @@ public class AlertSolving implements Serializable {
       matches
           .get(matchId)
           .getCategories()
-          .get(categoryValue.getCategory())
+          .get("categories/" + ResourceName.create(categoryValue.getCategory()).get("categories"))
           .updateCategoryValue(categoryValue.getValue());
     }
 
