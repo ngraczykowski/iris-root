@@ -12,15 +12,12 @@ import java.time.Duration;
 public record DataRetentionSchedulerProperties(
     int chunk,
     DryRunMode dryRunMode,
-    PersonalInformationExpired personalInformationExpired,
-    AlertsExpired alertsExpired) {
+    Duration duration
+) {
 
   @Builder
   public DataRetentionSchedulerProperties {}
 
   public record DryRunMode(boolean enabled) {}
 
-  public record PersonalInformationExpired(boolean enabled, Duration duration) {}
-
-  public record AlertsExpired(boolean enabled, Duration duration) {}
 }

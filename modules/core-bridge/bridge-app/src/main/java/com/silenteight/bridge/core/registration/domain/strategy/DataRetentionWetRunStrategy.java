@@ -6,8 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.bridge.core.registration.domain.command.DataRetentionStrategyCommand;
 import com.silenteight.bridge.core.registration.domain.model.AlertToRetention;
 import com.silenteight.bridge.core.registration.domain.model.DataRetentionAlertsExpiredEvent;
-import com.silenteight.bridge.core.registration.domain.model.DataRetentionPersonalInformationExpiredEvent;
-import com.silenteight.bridge.core.registration.domain.model.DataRetentionType;
+import com.silenteight.bridge.core.registration.domain.model.DataRetentionMode;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.DataRetentionJobAlertRepository;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.DataRetentionJobRepository;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
@@ -32,14 +30,14 @@ class DataRetentionWetRunStrategy implements DataRetentionStrategy {
   private final DataRetentionPublisher dataRetentionPublisher;
 
   @Override
-  public Set<DataRetentionType> getSupportedDataRetentionTypes() {
-    return Set.of(DataRetentionType.PERSONAL_INFO_EXPIRED, DataRetentionType.ALERTS_EXPIRED);
+  public DataRetentionMode getSupportedDataRetentionMode() {
+    return DataRetentionMode.WET;
   }
 
   @Override
   @Transactional
   public void run(DataRetentionStrategyCommand command) {
-    var jobId = jobRepository.save(command.expirationDate(), command.type());
+    var jobId = jobRepository.save(command.expirationDate(), command.mode());
     log.info("Created data retention wet run job with ID [{}]", jobId);
 
     if (command.alerts().isEmpty()) {
@@ -55,7 +53,7 @@ class DataRetentionWetRunStrategy implements DataRetentionStrategy {
     log.info("Marking [{}] alerts as archived", alertPrimaryIds.size());
     alertRepository.markAsArchivedAndClearMetadata(alertPrimaryIds);
 
-    publishMessages(command.alerts(), command.chunkSize(), command.type());
+    publishMessages(command.alerts(), command.chunkSize());
   }
 
   private List<Long> extractAlertsPrimaryIds(List<AlertToRetention> alerts) {
@@ -64,20 +62,11 @@ class DataRetentionWetRunStrategy implements DataRetentionStrategy {
         .toList();
   }
 
-  private void publishMessages(
-      List<AlertToRetention> alerts, int chunkSize, DataRetentionType type) {
+  private void publishMessages(List<AlertToRetention> alerts, int chunkSize) {
     var counter = new AtomicInteger(0);
     StreamEx.of(alerts)
         .groupRuns((prev, next) -> counter.incrementAndGet() % chunkSize != 0)
-        .forEach(chunk -> sendMessageByType(type, chunk));
-  }
-
-  private void sendMessageByType(DataRetentionType type, List<AlertToRetention> alerts) {
-    log.info("Sending message of type [{}] with alerts count [{}]", type, alerts.size());
-    if (DataRetentionType.ALERTS_EXPIRED == type) {
-      dataRetentionPublisher.publish(new DataRetentionAlertsExpiredEvent(alerts));
-    } else {
-      dataRetentionPublisher.publish(new DataRetentionPersonalInformationExpiredEvent(alerts));
-    }
+        .map(DataRetentionAlertsExpiredEvent::new)
+        .forEach(dataRetentionPublisher::publish);
   }
 }

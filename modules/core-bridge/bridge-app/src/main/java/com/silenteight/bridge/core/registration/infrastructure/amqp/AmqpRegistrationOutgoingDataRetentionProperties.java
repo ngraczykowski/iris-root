@@ -7,5 +7,4 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 @ConfigurationProperties(prefix = "amqp.registration.outgoing.data-retention")
 public record AmqpRegistrationOutgoingDataRetentionProperties(
     String exchangeName,
-    String personalInformationExpiredRoutingKey,
     String alertsExpiredRoutingKey) {}

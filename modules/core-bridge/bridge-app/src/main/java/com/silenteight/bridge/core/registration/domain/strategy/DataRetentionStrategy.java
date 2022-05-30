@@ -1,13 +1,11 @@
 package com.silenteight.bridge.core.registration.domain.strategy;
 
 import com.silenteight.bridge.core.registration.domain.command.DataRetentionStrategyCommand;
-import com.silenteight.bridge.core.registration.domain.model.DataRetentionType;
-
-import java.util.Set;
+import com.silenteight.bridge.core.registration.domain.model.DataRetentionMode;
 
 public interface DataRetentionStrategy {
 
-  Set<DataRetentionType> getSupportedDataRetentionTypes();
+  DataRetentionMode getSupportedDataRetentionMode();
 
   void run(DataRetentionStrategyCommand command);
 }

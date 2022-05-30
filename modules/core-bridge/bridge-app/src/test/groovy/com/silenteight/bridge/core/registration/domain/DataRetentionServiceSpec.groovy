@@ -3,7 +3,7 @@ package com.silenteight.bridge.core.registration.domain
 import com.silenteight.bridge.core.registration.DataRetentionFixtures
 import com.silenteight.bridge.core.registration.domain.command.DataRetentionStrategyCommand
 import com.silenteight.bridge.core.registration.domain.command.StartDataRetentionCommand
-import com.silenteight.bridge.core.registration.domain.model.DataRetentionType
+import com.silenteight.bridge.core.registration.domain.model.DataRetentionMode
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository
 import com.silenteight.bridge.core.registration.domain.strategy.DataRetentionStrategy
 import com.silenteight.bridge.core.registration.domain.strategy.DataRetentionStrategyFactory
@@ -25,7 +25,7 @@ class DataRetentionServiceSpec extends Specification {
   def 'should get alerts and call strategy'() {
     given:
     def command = StartDataRetentionCommand.builder()
-        .type(DataRetentionType.PERSONAL_INFO_EXPIRED)
+        .mode(DataRetentionMode.WET)
         .duration(Duration.ofDays(1))
         .chunkSize(10)
         .build()
@@ -33,7 +33,7 @@ class DataRetentionServiceSpec extends Specification {
         DataRetentionFixtures.ALERTS_TO_RETENTION
 
     def strategy = Mock(DataRetentionStrategy)
-    1 * strategyFactory.getStrategy(command.type()) >> strategy
+    1 * strategyFactory.getStrategy(command.mode()) >> strategy
 
     when:
     underTest.start(command)
@@ -42,7 +42,7 @@ class DataRetentionServiceSpec extends Specification {
     1 * strategy.run(
         {DataRetentionStrategyCommand strategyCommand ->
           with(strategyCommand) {
-            type() == command.type()
+            mode() == command.mode()
             expirationDate() < Instant.now() - command.duration()
             it.alerts() == DataRetentionFixtures.ALERTS_TO_RETENTION
             chunkSize() == command.chunkSize()

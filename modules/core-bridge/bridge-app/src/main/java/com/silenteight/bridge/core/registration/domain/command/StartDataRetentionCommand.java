@@ -2,12 +2,12 @@ package com.silenteight.bridge.core.registration.domain.command;
 
 import lombok.Builder;
 
-import com.silenteight.bridge.core.registration.domain.model.DataRetentionType;
+import com.silenteight.bridge.core.registration.domain.model.DataRetentionMode;
 
 import java.time.Duration;
 
 public record StartDataRetentionCommand(
-    DataRetentionType type,
+    DataRetentionMode mode,
     Duration duration,
     int chunkSize) {
 

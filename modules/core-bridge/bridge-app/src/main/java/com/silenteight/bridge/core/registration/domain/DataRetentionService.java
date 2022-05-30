@@ -22,8 +22,8 @@ class DataRetentionService {
 
   void start(StartDataRetentionCommand command) {
     log.info(
-        "Starting data retention process. Duration: [{}], type: [{}]", command.duration(),
-        command.type());
+        "Starting data retention process. Duration: [{}], mode: [{}]", command.duration(),
+        command.mode());
 
     var expirationDate = Instant.now().minus(command.duration());
     var alerts = alertRepository.findAlertsApplicableForDataRetention(expirationDate);
@@ -31,9 +31,9 @@ class DataRetentionService {
         "Found [{}] alerts qualifying for data retention with expiration date [{}]", alerts.size(),
         expirationDate);
 
-    var strategy = strategyFactory.getStrategy(command.type());
+    var strategy = strategyFactory.getStrategy(command.mode());
     var strategyCommand = DataRetentionStrategyCommand.builder()
-        .type(command.type())
+        .mode(command.mode())
         .expirationDate(expirationDate)
         .alerts(alerts)
         .chunkSize(command.chunkSize())

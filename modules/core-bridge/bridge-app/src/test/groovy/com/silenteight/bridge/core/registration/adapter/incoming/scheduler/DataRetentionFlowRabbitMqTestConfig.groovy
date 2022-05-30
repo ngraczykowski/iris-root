@@ -10,25 +10,10 @@ import org.springframework.context.annotation.Bean
 @TestConfiguration
 class DataRetentionFlowRabbitMqTestConfig {
 
-  static def PERSONAL_INFO_EXPIRED_TEST_QUEUE_NAME = 'personal-info-expired-test-queue'
   static def ALERTS_EXPIRED_TEST_QUEUE_NAME = 'alerts-expired-test-queue'
 
   @Autowired
   AmqpRegistrationOutgoingDataRetentionProperties properties
-
-  @Bean
-  Queue testPersonalInfoExpiredQueue() {
-    return QueueBuilder.durable(PERSONAL_INFO_EXPIRED_TEST_QUEUE_NAME).build()
-  }
-
-  @Bean
-  Binding testPersonalInfoExpiredBinding(
-      Queue testPersonalInfoExpiredQueue, TopicExchange testBridgeRetentionExchange) {
-    return BindingBuilder
-        .bind(testPersonalInfoExpiredQueue)
-        .to(testBridgeRetentionExchange)
-        .with(properties.personalInformationExpiredRoutingKey())
-  }
 
   @Bean
   Queue testAlertsExpiredQueue() {

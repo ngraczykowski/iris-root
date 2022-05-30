@@ -17,7 +17,7 @@ class RecommendationsDataRetentionService {
   private final RecommendationRepository recommendationRepository;
 
   void performDataRetention(ProceedDataRetentionOnRecommendationsCommand command) {
-    log.info("Clearing PII from [{}] recommendations", command.alertNames().size());
+    log.info("Clearing sensitive data from [{}] recommendations", command.alertNames().size());
     if (CollectionUtils.isNotEmpty(command.alertNames())) {
       recommendationRepository.clearCommentAndPayload(command.alertNames());
     }

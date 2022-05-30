@@ -2,7 +2,7 @@ package com.silenteight.bridge.core.registration.domain.strategy
 
 import com.silenteight.bridge.core.registration.DataRetentionFixtures
 import com.silenteight.bridge.core.registration.domain.command.DataRetentionStrategyCommand
-import com.silenteight.bridge.core.registration.domain.model.DataRetentionType
+import com.silenteight.bridge.core.registration.domain.model.DataRetentionMode
 import com.silenteight.bridge.core.registration.domain.port.outgoing.DataRetentionJobAlertRepository
 import com.silenteight.bridge.core.registration.domain.port.outgoing.DataRetentionJobRepository
 
@@ -22,7 +22,7 @@ class DataRetentionDryRunStrategySpec extends Specification {
   def 'should create job and save alert ids'() {
     given:
     def command = DataRetentionStrategyCommand.builder()
-        .type(DataRetentionType.ALERTS_EXPIRED_DRY_RUN)
+        .mode(DataRetentionMode.DRY)
         .expirationDate(Instant.now())
         .alerts(DataRetentionFixtures.ALERTS_TO_RETENTION)
         .build()
@@ -39,7 +39,7 @@ class DataRetentionDryRunStrategySpec extends Specification {
   def 'should create job and do not save alert ids when they are empty'() {
     given:
     def command = DataRetentionStrategyCommand.builder()
-        .type(DataRetentionType.ALERTS_EXPIRED_DRY_RUN)
+        .mode(DataRetentionMode.DRY)
         .expirationDate(Instant.now())
         .alerts([])
         .build()

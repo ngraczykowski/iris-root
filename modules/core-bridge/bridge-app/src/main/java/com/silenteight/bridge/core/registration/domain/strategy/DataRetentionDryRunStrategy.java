@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.bridge.core.registration.domain.command.DataRetentionStrategyCommand;
 import com.silenteight.bridge.core.registration.domain.model.AlertToRetention;
-import com.silenteight.bridge.core.registration.domain.model.DataRetentionType;
+import com.silenteight.bridge.core.registration.domain.model.DataRetentionMode;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.DataRetentionJobAlertRepository;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.DataRetentionJobRepository;
 
@@ -13,10 +13,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 
-import static com.silenteight.bridge.core.registration.domain.model.DataRetentionType.ALERTS_EXPIRED_DRY_RUN;
-import static com.silenteight.bridge.core.registration.domain.model.DataRetentionType.PERSONAL_INFO_EXPIRED_DRY_RUN;
+import static com.silenteight.bridge.core.registration.domain.model.DataRetentionMode.DRY;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,14 +25,14 @@ class DataRetentionDryRunStrategy implements DataRetentionStrategy {
   private final DataRetentionJobAlertRepository jobAlertRepository;
 
   @Override
-  public Set<DataRetentionType> getSupportedDataRetentionTypes() {
-    return Set.of(PERSONAL_INFO_EXPIRED_DRY_RUN, ALERTS_EXPIRED_DRY_RUN);
+  public DataRetentionMode getSupportedDataRetentionMode() {
+    return DRY;
   }
 
   @Override
   @Transactional
   public void run(DataRetentionStrategyCommand command) {
-    var jobId = jobRepository.save(command.expirationDate(), command.type());
+    var jobId = jobRepository.save(command.expirationDate(), command.mode());
     log.info("Created data retention dry run job with ID [{}]", jobId);
 
     if (command.alerts().isEmpty()) {

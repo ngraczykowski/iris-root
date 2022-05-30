@@ -5,7 +5,6 @@ import com.silenteight.bridge.core.registration.domain.RegistrationFacade
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository
 import com.silenteight.dataretention.api.v1.AlertsExpired
-import com.silenteight.dataretention.api.v1.PersonalInformationExpired
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.beans.factory.annotation.Autowired
@@ -43,26 +42,6 @@ class DataRetentionFlowIntegrationSpec extends BaseSpecificationIT {
   def setup() {
     batchRepository.create(BATCH)
     alertRepository.saveAlerts(ALERTS)
-  }
-
-  @Transactional
-  def 'should publish PersonalInfoExpired and mark alerts as archived'() {
-    given:
-    def scheduler = new DataRetentionScheduler(registrationFacade, PERSONAL_INFO_EXPIRED_PROPERTIES)
-    def conditions = new PollingConditions(timeout: 10, initialDelay: 0.2, factor: 1.25)
-
-    when:
-    scheduler.run()
-
-    then:
-    conditions.eventually {
-      def message = (PersonalInformationExpired) rabbitTemplate.receiveAndConvert(
-          DataRetentionFlowRabbitMqTestConfig.PERSONAL_INFO_EXPIRED_TEST_QUEUE_NAME, 10000L)
-      with(message) {
-        alertsDataList == EXPECTED_ALERTS_DATA
-      }
-      verifyAlertsAreArchivedAndHaveClearedMetadata()
-    }
   }
 
   @Transactional

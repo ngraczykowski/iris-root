@@ -2,7 +2,7 @@ package com.silenteight.bridge.core.registration.adapter.outgoing.jdbc;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.bridge.core.registration.domain.model.DataRetentionType;
+import com.silenteight.bridge.core.registration.domain.model.DataRetentionMode;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.DataRetentionJobRepository;
 
 import org.springframework.stereotype.Repository;
@@ -16,10 +16,10 @@ class JdbcDataRetentionJobRepository implements DataRetentionJobRepository {
   private final CrudDataRetentionJobRepository repository;
 
   @Override
-  public long save(Instant alertsExpirationDate, DataRetentionType type) {
+  public long save(Instant alertsExpirationDate, DataRetentionMode mode) {
     var entity = DataRetentionJobEntity.builder()
         .alertsExpirationDate(alertsExpirationDate)
-        .type(type.name())
+        .type(mode.name())
         .build();
     return repository.save(entity).id();
   }

@@ -17,18 +17,12 @@ silenteight:
 
     ### DATA RETENTION
     data-retention:
-      enabled: true
+      enabled: false
       cron: '* 0 1 * * *' # At 01:00
       lock-at-least-for: PT1H
       lock-at-most-for: PT2H
       chunk: 10
-      ### Enable one of retention types below
-      personal-information-expired:
-        enabled: true
-        duration: ${RETENTION_PERIOD:50d}
-      alerts-expired:
-        enabled: false
-        duration: ${RETENTION_PERIOD:155d}
+      duration: ${RETENTION_PERIOD:155d}
       dry-run-mode:
         enabled: true
 
@@ -99,7 +93,6 @@ amqp:
         exchange-name: core-bridge.notify-batch-delivered-exchange
       data-retention:
         exchange-name: bridge.retention
-        personal-information-expired-routing-key: retention.personal-information-expired
         alerts-expired-routing-key: retention.alerts-expired
   recommendation:
     number-of-retries-dead-messages: 2

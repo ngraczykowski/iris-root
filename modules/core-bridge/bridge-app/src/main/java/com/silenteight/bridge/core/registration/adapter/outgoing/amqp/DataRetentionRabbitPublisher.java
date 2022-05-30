@@ -5,12 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.bridge.core.registration.domain.model.AlertToRetention;
 import com.silenteight.bridge.core.registration.domain.model.DataRetentionAlertsExpiredEvent;
-import com.silenteight.bridge.core.registration.domain.model.DataRetentionPersonalInformationExpiredEvent;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.DataRetentionPublisher;
 import com.silenteight.bridge.core.registration.infrastructure.amqp.AmqpRegistrationOutgoingDataRetentionProperties;
 import com.silenteight.dataretention.api.v1.AlertData;
 import com.silenteight.dataretention.api.v1.AlertsExpired;
-import com.silenteight.dataretention.api.v1.PersonalInformationExpired;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
@@ -36,17 +34,6 @@ class DataRetentionRabbitPublisher implements DataRetentionPublisher {
         .build();
     rabbitTemplate.convertAndSend(properties.exchangeName(), properties.alertsExpiredRoutingKey(),
         message);
-  }
-
-  @Override
-  public void publish(DataRetentionPersonalInformationExpiredEvent event) {
-    log.info("Sending PersonalInformationExpired with [{}] alerts", event.alerts().size());
-    var message = PersonalInformationExpired.newBuilder()
-        .addAllAlerts(extractAlertNames(event.alerts()))
-        .addAllAlertsData(mapToAlertsData(event.alerts()))
-        .build();
-    rabbitTemplate.convertAndSend(properties.exchangeName(),
-        properties.personalInformationExpiredRoutingKey(), message);
   }
 
   private List<String> extractAlertNames(List<AlertToRetention> alerts) {

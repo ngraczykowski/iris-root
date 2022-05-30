@@ -3,8 +3,7 @@ package com.silenteight.bridge.core.registration.domain.strategy
 import com.silenteight.bridge.core.registration.DataRetentionFixtures
 import com.silenteight.bridge.core.registration.domain.command.DataRetentionStrategyCommand
 import com.silenteight.bridge.core.registration.domain.model.DataRetentionAlertsExpiredEvent
-import com.silenteight.bridge.core.registration.domain.model.DataRetentionPersonalInformationExpiredEvent
-import com.silenteight.bridge.core.registration.domain.model.DataRetentionType
+import com.silenteight.bridge.core.registration.domain.model.DataRetentionMode
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository
 import com.silenteight.bridge.core.registration.domain.port.outgoing.DataRetentionJobAlertRepository
 import com.silenteight.bridge.core.registration.domain.port.outgoing.DataRetentionJobRepository
@@ -15,9 +14,6 @@ import spock.lang.Subject
 import spock.lang.Unroll
 
 import java.time.Instant
-
-import static com.silenteight.bridge.core.registration.domain.model.DataRetentionType.ALERTS_EXPIRED
-import static com.silenteight.bridge.core.registration.domain.model.DataRetentionType.PERSONAL_INFO_EXPIRED
 
 class DataRetentionWetRunStrategySpec extends Specification {
 
@@ -34,7 +30,7 @@ class DataRetentionWetRunStrategySpec extends Specification {
   def 'should publish messages in chunks and mark alerts as archived with retention type #dataRetentionType'() {
     given:
     def command = DataRetentionStrategyCommand.builder()
-        .type(dataRetentionType)
+        .mode(DataRetentionMode.WET)
         .expirationDate(Instant.now())
         .chunkSize(2)
         .alerts(DataRetentionFixtures.ALERTS_TO_RETENTION)
@@ -51,27 +47,17 @@ class DataRetentionWetRunStrategySpec extends Specification {
     underTest.run(command)
 
     then:
-    1 * jobRepository.save(command.expirationDate(), command.type()) >> 1l
+    1 * jobRepository.save(command.expirationDate(), command.mode()) >> 1l
     1 * jobAlertRepository.saveAll(1l, alertPrimaryIds)
     1 * alertRepository.markAsArchivedAndClearMetadata(alertPrimaryIds)
-    if (ALERTS_EXPIRED == command.type()) {
-      1 * dataRetentionPublisher.publish(new DataRetentionAlertsExpiredEvent(alertsFirstChunk))
-      1 * dataRetentionPublisher.publish(new DataRetentionAlertsExpiredEvent(alertsSecondChunk))
-    } else {
-      1 * dataRetentionPublisher
-          .publish(new DataRetentionPersonalInformationExpiredEvent(alertsFirstChunk))
-      1 * dataRetentionPublisher
-          .publish(new DataRetentionPersonalInformationExpiredEvent(alertsSecondChunk))
-    }
-
-    where:
-    dataRetentionType << [PERSONAL_INFO_EXPIRED, ALERTS_EXPIRED]
+    1 * dataRetentionPublisher.publish(new DataRetentionAlertsExpiredEvent(alertsFirstChunk))
+    1 * dataRetentionPublisher.publish(new DataRetentionAlertsExpiredEvent(alertsSecondChunk))
   }
 
   def 'should create job and and do nothing more when there is no alerts'() {
     given:
     def command = DataRetentionStrategyCommand.builder()
-        .type(DataRetentionType.ALERTS_EXPIRED_DRY_RUN)
+        .mode(DataRetentionMode.WET)
         .expirationDate(Instant.now())
         .alerts([])
         .build()

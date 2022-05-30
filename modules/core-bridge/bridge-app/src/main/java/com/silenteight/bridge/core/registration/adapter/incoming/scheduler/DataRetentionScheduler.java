@@ -5,20 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.bridge.core.registration.domain.RegistrationFacade;
 import com.silenteight.bridge.core.registration.domain.command.StartDataRetentionCommand;
-import com.silenteight.bridge.core.registration.domain.model.DataRetentionType;
+import com.silenteight.bridge.core.registration.domain.model.DataRetentionMode;
 import com.silenteight.bridge.core.registration.infrastructure.scheduler.DataRetentionSchedulerProperties;
 
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import java.time.Duration;
-
-import static com.silenteight.bridge.core.registration.domain.model.DataRetentionType.ALERTS_EXPIRED;
-import static com.silenteight.bridge.core.registration.domain.model.DataRetentionType.ALERTS_EXPIRED_DRY_RUN;
-import static com.silenteight.bridge.core.registration.domain.model.DataRetentionType.PERSONAL_INFO_EXPIRED;
-import static com.silenteight.bridge.core.registration.domain.model.DataRetentionType.PERSONAL_INFO_EXPIRED_DRY_RUN;
 
 @Component
 @ConditionalOnProperty(name = "silenteight.bridge.data-retention.enabled", havingValue = "true")
@@ -34,43 +27,19 @@ class DataRetentionScheduler {
       lockAtLeastFor = "${silenteight.bridge.data-retention.lock-at-least-for}")
   void run() {
     log.info(
-        """
-            Data retention properties:
-            dryRunEnabled [{}],
-            alertsExpiredEnabled [{}],
-            alertsExpiredDuration [{}] days,
-            personalInformationExpiredEnabled [{}],
-            personalInformationExpiredDuration [{}] days""",
-        properties.dryRunMode().enabled(),
-        properties.alertsExpired().enabled(),
-        properties.alertsExpired().duration().toDays(),
-        properties.personalInformationExpired().enabled(),
-        properties.personalInformationExpired().duration().toDays());
+        "Data retention properties: dryRunEnabled [{}], duration [{}] days, chunkSize [{}]",
+        properties.dryRunMode().enabled(), properties.duration().toDays(), properties.chunk());
 
-    var isPersonalInfoExpired = properties.personalInformationExpired().enabled();
-    var isAlertsExpired = properties.alertsExpired().enabled();
-
-    if (isPersonalInfoExpired ^ isAlertsExpired) {
-      var command = StartDataRetentionCommand.builder()
-          .type(getType(isPersonalInfoExpired))
-          .duration(getDuration(isPersonalInfoExpired))
-          .chunkSize(properties.chunk())
-          .build();
-      registrationFacade.startDataRetention(command);
-    } else {
-      log.warn("Either personalInformationExpired or alertsExpired has to be enabled. Not both.");
-    }
+    var command = StartDataRetentionCommand.builder()
+        .duration(properties.duration())
+        .chunkSize(properties.chunk())
+        .mode(getMode(properties))
+        .build();
+    registrationFacade.startDataRetention(command);
   }
 
-  private DataRetentionType getType(boolean isPersonalInfoExpired) {
-    if (properties.dryRunMode().enabled()) {
-      return isPersonalInfoExpired ? PERSONAL_INFO_EXPIRED_DRY_RUN : ALERTS_EXPIRED_DRY_RUN;
-    }
-    return isPersonalInfoExpired ? PERSONAL_INFO_EXPIRED : ALERTS_EXPIRED;
+  private DataRetentionMode getMode(DataRetentionSchedulerProperties properties) {
+    return properties.dryRunMode().enabled() ? DataRetentionMode.DRY : DataRetentionMode.WET;
   }
 
-  private Duration getDuration(boolean isPersonalInfoExpired) {
-    return isPersonalInfoExpired ? properties.personalInformationExpired().duration()
-                                 : properties.alertsExpired().duration();
-  }
 }

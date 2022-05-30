@@ -1,49 +1,34 @@
 = Data Retention
 
 This application provides a Data Retention feature.
-It prevents holding PII longer than the customer or law regulations allow.
+It prevents holding data longer than the customer or law regulations allow.
 
-This feature detects alerts that personal information stored in the Core Bridge expired,
-and ultimately broadcast such a message to the other components, so they can perform their job too.
+This feature detects all expired alerts, remove sensitive data and ultimately broadcast such a message to the other components, so they can perform their job too.
 
 There are 2 modes of Data Retention:
 
-* Hot Run - it does the actual data purging;
-* Dry Run - it imitates data retention. This mode is helpful if you would like to verify which alerts will be collected by Data Retention
-before you start Hot Run.
+* Wet Run - it does the actual data purging;
+* Dry Run - it imitates data retention.
+This mode is helpful if you would like to verify which alerts will be collected by Data Retention before you start Hot Run.
 
-== Infrastructure
 
-To manage scheduling, it uses Spring Scheduled Job and Shedlock to prevent running the same job
-on multiple instances at once. This is why Liquibase creates `shedlock` table.
-
-No matter if you run Data Retention in wet or dry mode, a single run creates a new row in
-`core_bridge_data_retention_job` table, containing columns:
-
-* `id` - PK of the row,
-* `created_at` - the time when the job was started,
-* `alerts_expiration_date` - the time of alerts that are qualified for retention
-(`NOW`-`silenteight.bridge.data-retention.personal-information-expired.duration`),
-* `type` - the type of Data Retention was run with, such as:
-** `PERSONAL_INFO_EXPIRED` - meaning wet run
-** `PERSONAL_INFO_EXPIRED_DRY_RUN` - meaning dry run
-
-If any alerts were found, they are saved into `core_bridge_data_retention_job_alerts` table:
-
-* `id` - PK
-* `job_id` - related `core_bridge_data_retention_job.id`,
-* `alert_id` - related `core_bridge_alerts.id`
-
-This way you are able to track alerts that were qualified for Data Retention.
+== Description and flow
+Core bridge queries for expired alerts based on the `alert_time` alert property.
+`alert_time` is the time at which alert was registered in the Core Bridge.
 
 === Wet Run
 
-The point is, to find alerts with expired PII, update `core_bridge_alerts` by:
+The point is, to find expired alerts, remove sensitive data by:
 
-* setting `is_archived` to `true`,
-* setting `metadata` to `null`
+* updating `core_bridge_alerts` by:
+** setting `is_archived` to `true`,
+** setting `metadata` to `null`
 
-and finally publish `PersonalInformationExpired` with found alerts.
+* updating `core_bridge_recommendations` by:
+** setting `payload` to `null`
+** setting `recommendation_comment` to `null`
+
+and finally publishing `AlertsExpired` with found alerts.
 
 [plantuml,importing-steps,svg]
 -----
@@ -61,14 +46,15 @@ cb -> db: Find expired alerts
 db -> cb: List of expired alerts
 cb -> db: Save found alerts in job
 cb -> db: Mark alerts as archived\nand clear alerts metadata
-db -> rm: Publish 'PersonalInformationExpired'\n on 'bridge.retention' exchange
+cb -> db: Clear recommendations payload and comment
+cb -> rm: Publish 'AlertsExpired'\n on 'bridge.retention' exchange
 
 @enduml
 -----
 
 === Dry Run
 
-The Dry Run Mode is very similar to the Wet Run, but it neither updates alerts nor publishes a message.
+The Dry Run Mode is very similar to the Wet Run, but it neither updates alerts and recommendations nor publishes a message.
 
 [plantuml,importing-steps,svg]
 -----
@@ -90,21 +76,21 @@ cb -> db: Save found alerts in job
 
 == Usage
 
-This feature is disabled by default. Follow the steps below to enable it.
+This feature is disabled by default.
+Follow the steps below to enable it.
 
 === Configuration
+
 ```yaml
 silenteight:
   bridge:
     data-retention:
-      enabled: true # registers bean DataRetentionScheduler
-      cron: '* 0 1 * * *' # cron expression scheduling the scheduler (here: every day at 01:00)
-      lock-at-least-for: PT1H # keeps the Shedlock lock at least for 1 hour
-      lock-at-most-for: PT2H # keeps the Shedlock lock at most for 2 hours
-      chunk: 10 # how many alerts are sent in single `PersonalInformationExpired` message
-      personal-information-expired:
-        enabled: true # (deprecated) enables checking alerts with expired PII
-        duration: 50d # how old alerts are taken to Data Retention job (here: older than 50 days)
+      enabled: true # Registers bean DataRetentionScheduler and thus run the whole mechanism
+      cron: '* 0 1 * * *' # Cron expression scheduling the scheduler (here: every day at 01:00). Please note that this type of expression is extended by the 'second' parameter in comparison to UN*X one. More info here -> https://spring.io/blog/2020/11/10/new-in-spring-5-3-improved-cron-expressions
+      lock-at-least-for: PT1H # Keeps the Shedlock lock at least for 1 hour. Prevents a situation that another instance starts the job too. Needs to be adjusted to the cron expression
+      lock-at-most-for: PT2H # Keeps the Shedlock lock at most for 2 hours. Prevents keeping lock once instance died - required by @EnableSchedulerLock
+      chunk: 10 # How many alerts are sent in single `AlertsExpired` message
+      duration: 50d # How old alerts are taken to Data Retention job (here: older than 50 days)
 ```
 
 ==== Dry Run Mode
@@ -118,3 +104,27 @@ silenteight:
       dry-run-mode:
         enabled: true
 ```
+
+
+== Solution technical background
+
+To manage scheduling, data retention uses Spring Scheduled Job and Shedlock to prevent running the same job on multiple instances at once.
+This is why Liquibase creates `shedlock` table.
+
+No matter if you run Data Retention in wet or dry mode, a single run creates a new row in
+`core_bridge_data_retention_job` table, containing columns:
+
+* `id` - PK of the row,
+* `created_at` - the time when the job was started,
+* `alerts_expiration_date` - the time of alerts that are qualified for retention (`NOW`-`silenteight.bridge.data-retention.duration`),
+* `type` - the type of Data Retention was run with, such as:
+** `WET` - meaning wet run
+** `DRY` - meaning dry run
+
+If any alerts were found, they are saved into `core_bridge_data_retention_job_alerts` table:
+
+* `id` - PK
+* `job_id` - related `core_bridge_data_retention_job.id`,
+* `alert_id` - related `core_bridge_alerts.id`
+
+This way you are able to track alerts that were qualified for Data Retention.

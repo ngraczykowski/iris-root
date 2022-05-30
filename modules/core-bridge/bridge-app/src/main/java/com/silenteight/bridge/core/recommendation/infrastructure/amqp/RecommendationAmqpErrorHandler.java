@@ -32,7 +32,7 @@ class RecommendationAmqpErrorHandler implements RabbitListenerErrorHandler {
             throw exception;
           } else {
             var messageProperties = amqpMessage.getMessageProperties();
-            log.info("Retries exhausted for message type [{}] from queue [{}].",
+            log.info("Retries exhausted for message mode [{}] from queue [{}].",
                 messageProperties.getType(), messageProperties.getConsumerQueue());
           }
         }, () -> {
