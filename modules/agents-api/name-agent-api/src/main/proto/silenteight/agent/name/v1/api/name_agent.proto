@@ -85,16 +85,16 @@ message ProcessingLog {
 }
 
 message NameCandidates {
-  repeated AlertedPartyNameCandidate alerted_party_name_candidates = 1;
-  repeated WatchlistPartyNameCandidate watchlist_party_name_candidates = 2 ;
+  AlertedPartyNameCandidates alerted_party_name_candidates = 1;
+  WatchlistPartyNameCandidates watchlist_party_name_candidates = 2 ;
 }
 
-message AlertedPartyNameCandidate {
+message AlertedPartyNameCandidates {
   string original_value = 1;
   repeated NameCandidate extracted_values = 2;
 }
 
-message WatchlistPartyNameCandidate {
+message WatchlistPartyNameCandidates {
   string original_value = 1;
   repeated NameCandidate extracted_values = 2;
 }
