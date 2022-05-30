@@ -1,4 +1,5 @@
-rootProject.name = 'core-bridge'
+includeBuild('../../platforms')
+includeBuild('../../build-logic')
 
 dependencyResolutionManagement {
   versionCatalogs {
@@ -7,6 +8,7 @@ dependencyResolutionManagement {
     }
   }
 }
+rootProject.name = 'core-bridge'
 
 include('bridge-app')
 include('bridge-dist')

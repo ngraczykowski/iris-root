@@ -1,3 +1,13 @@
+includeBuild('../../platforms')
+includeBuild('../../build-logic')
+
+dependencyResolutionManagement {
+  versionCatalogs {
+    libs {
+      from(files("../../gradle/libs.versions.toml"))
+    }
+  }
+}
 rootProject.name = 'core-bridge-registration-connector'
 
 include('registration-lib')

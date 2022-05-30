@@ -124,8 +124,8 @@ worldcheck-api = { group = 'com.silenteight.worldcheck.api', name = 'protocol-wo
 silenteight-core-bridge-protobuf_spring_boot_starter = { group = 'com.silenteight.iris', name = 'protobuf-spring-boot-starter' }
 silenteight-recommendation-api-library = { group = 'com.silenteight.iris', name = 'recommendation-lib' }
 silenteight-recommendation-api-proto = { group = 'com.silenteight.iris', name = 'recommendation-internal-protos' }
-silenteight-registration-api-library = { group = 'com.silenteight.registration.api.library', name = 'registration-lib', version.ref = "coreBridgeRegistrationApiVersion" }
-silenteight-registration-api-proto = { group = 'com.silenteight.registration.api.library', name = 'registration-internal-protos', version.ref = "coreBridgeRegistrationApiVersion" }
+silenteight-registration-api-library = { group = 'com.silenteight.iris', name = 'registration-lib' }
+silenteight-registration-api-proto = { group = 'com.silenteight.iris', name = 'registration-internal-protos' }
 silenteight-governance-model-api-library = { group = 'com.silenteight.governance.api.library', name = 'governance-lib', version.ref = "governanceApiLibraryVersion" }
 silenteight-adjudication-engine-api-library = { group = 'com.silenteight.adjudication.api.library', name = 'ae-lib', version.ref = "adjudicationEngineApiLibraryVersion" }
 # Platforms

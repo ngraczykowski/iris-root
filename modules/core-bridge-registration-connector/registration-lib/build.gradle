@@ -1,15 +1,14 @@
 plugins {
-  id "idea"
-  id 'java-library'
+  id "com.silenteight.iris.build.java-library"
   id "maven-publish"
 }
 
-ext {
-  gradleScriptDir = "${rootProject.projectDir}/gradle/scripts"
-}
-
-apply from: "${gradleScriptDir}/dependencies.gradle"
-
 dependencies {
+  implementation libs.grpc.core
+  implementation libs.protobuf.java.util
+  implementation libs.grpc.protobuf
+  implementation libs.grpc.stub
+  implementation libs.vavr
+  implementation libs.slf4j.api
   implementation project(":registration-internal-protos")
 }
