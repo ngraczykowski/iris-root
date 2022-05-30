@@ -47,7 +47,6 @@ public class Match implements Serializable {
     this.reason = reason;
   }
 
-
   boolean isSolved() {
     return solution != null;
   }
@@ -60,8 +59,10 @@ public class Match implements Serializable {
     return features.get(featureName).hasValue();
   }
 
-  public String getMatchName() {
-    return ResourceName.create("").add("matches", matchId).getPath();
+  public String getMatchName(long alertId) {
+    return ResourceName.create("")
+        .add("alerts", alertId)
+        .add("matches", matchId).getPath();
   }
 
   public void updateCommentInput() {

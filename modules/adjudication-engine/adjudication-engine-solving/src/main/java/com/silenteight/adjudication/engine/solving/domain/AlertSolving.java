@@ -248,7 +248,8 @@ public class AlertSolving implements Serializable {
   }
 
   public List<CategoryMatches> getCategoryMatches() {
-    var matchesNames = matches.values().stream().map(Match::getMatchName).collect(toList());
+    var matchesNames =
+        matches.values().stream().map(m -> m.getMatchName(alertId)).collect(toList());
 
     if (matchesNames.isEmpty()) {
       return List.of();
