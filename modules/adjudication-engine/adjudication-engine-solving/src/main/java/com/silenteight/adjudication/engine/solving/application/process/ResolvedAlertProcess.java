@@ -1,6 +1,7 @@
 package com.silenteight.adjudication.engine.solving.application.process;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
 import com.silenteight.adjudication.engine.analysis.recommendation.RecommendationFacade;
@@ -24,6 +25,7 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 
 @RequiredArgsConstructor
+@Slf4j
 public class ResolvedAlertProcess {
 
   private static final String COMMENT_TEMPLATE = "alert";
@@ -38,6 +40,8 @@ public class ResolvedAlertProcess {
 
   @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   public void generateRecommendation(long alertId, BatchSolveAlertsResponse solvedAlert) {
+
+    log.info("Generating recommendation for = {}", alertId);
 
     final AlertSolving alertSolvingModel = this.alertSolvingRepository.get(alertId);
 
@@ -73,6 +77,8 @@ public class ResolvedAlertProcess {
                 .matchComments(matchComments)
                 .build()));
     var recommendations = recommendationFacade.createRecommendations(saveRequest);
+
+    log.debug("Generated recommendation for = {}", alertSolvingModel.getAlertId());
 
     sendRecommendationNotification(alertSolvingModel, recommendations);
   }

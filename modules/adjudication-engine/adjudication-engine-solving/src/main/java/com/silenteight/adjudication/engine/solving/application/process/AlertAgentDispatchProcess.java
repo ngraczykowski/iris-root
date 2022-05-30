@@ -39,6 +39,8 @@ public class AlertAgentDispatchProcess {
       percentiles = {0.5, 0.95, 0.99},
       histogram = true)
   public void handle(final AnalysisAlertsAdded message) {
+    log.debug("Received alerts for solving = {}", message);
+
     var alerts = fetchAlertMatchesFeatures(message);
 
     var alertMatchFeatures =

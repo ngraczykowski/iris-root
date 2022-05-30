@@ -43,7 +43,7 @@ public class AgentResponseProcess {
 
       final var alertSolvingModel = updateMatchFeatureValues(agentOutput, matchId, alertId);
       if (alertSolvingModel.isEmpty() || !alertSolvingModel.isMatchReadyForSolving(matchId)) {
-        log.warn("alert match is not ready for solving {}", matchId);
+        log.warn("Match is not ready for solving {}", matchId);
         continue;
       }
       MatchSolutionRequest matchSolutionRequest = new MatchSolutionRequest(

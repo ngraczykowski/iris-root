@@ -20,6 +20,8 @@ public class GovernanceMatchResponseProcess {
   @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   public void processAlert(final MatchSolutionResponse matchSolutionResponse) {
 
+    log.debug("Processing match solution from governance = {}", matchSolutionResponse);
+
     long alertId = matchSolutionResponse.getAlertId();
     long matchId = matchSolutionResponse.getMatchId();
     var solution = matchSolutionResponse.getSolution();
@@ -29,11 +31,14 @@ public class GovernanceMatchResponseProcess {
         alertSolvingRepository.updateMatchSolution(alertId, matchId, solution, reason);
 
     if (alertSolvingModel.isEmpty() || !alertSolvingModel.isAlertReadyForSolving()) {
+      log.debug("Alert {} is not ready for solving", alertSolvingModel.getAlertId());
       return;
     }
 
     AlertSolutionRequest alertSolutionRequest =
         createAlertSolutionRequest(alertId, alertSolvingModel);
+
+    log.debug("Sending alert solution request for alert = {}", alertSolutionRequest.getAlertId());
     // TODO it may happen that two requests could be send to governance
     this.governanceAlertPublisher.send(alertSolutionRequest);
   }

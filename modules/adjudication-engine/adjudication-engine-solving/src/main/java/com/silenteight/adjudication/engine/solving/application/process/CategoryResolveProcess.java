@@ -51,8 +51,6 @@ class CategoryResolveProcess {
         break;
       }
       var alertSolving = alertSolvingRepository.get(alertID);
-      log.debug("Alert id: {} has been determined", alertID);
-
       var request =
           BatchGetMatchesCategoryValuesRequest.newBuilder()
               .addAllCategoryMatches(alertSolving.getCategoryMatches())
@@ -60,7 +58,7 @@ class CategoryResolveProcess {
       var categoriesValues = this.categoryValueClient.batchGetMatchCategoryValues(request);
 
       if (log.isDebugEnabled()) {
-        log.debug("Retrieved comments inputs: {}", categoriesValues);
+        log.debug("Retrieved category values: {}", categoriesValues);
       }
 
       categoriesValues

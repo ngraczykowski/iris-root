@@ -218,7 +218,6 @@ public class AlertSolving implements Serializable {
   public boolean isAlertReadyForSolving() {
     boolean isAlertReadyForSolving =
         matches.entrySet().stream().allMatch(entry -> entry.getValue().isSolved());
-    log.debug("isAlertReadyForSolving alertId={}", alertId);
     return isAlertReadyForSolving;
   }
 
