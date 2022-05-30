@@ -1,3 +1,5 @@
+import asyncio
+import contextlib
 import subprocess
 
 import grpc
@@ -28,3 +30,18 @@ def kill_process_on_the_port(port):
         "grep -o '[0-9]\\+' )".split()
     )
     kill.wait()
+
+
+def run_async(start_callback, end_callback):
+    loop = asyncio.get_event_loop()
+    try:
+        loop.run_until_complete(start_callback())
+        loop.run_forever()
+    finally:
+        tasks = asyncio.gather(*asyncio.Task.all_tasks(loop))
+        tasks.cancel()
+        with contextlib.suppress(asyncio.CancelledError):
+            loop.run_until_complete(tasks)
+            loop.run_until_complete(loop.shutdown_asyncgens())
+            loop.run_until_complete(end_callback())
+    loop.close()
