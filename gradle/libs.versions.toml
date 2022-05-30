@@ -114,8 +114,6 @@ warehouse-data-api = { group = "com.silenteight.iris", name = "se-data-api" }
 warehouse-sampling-api = { group = "com.silenteight.iris", name = "se-sampling-alerts-api" }
 warehouse-internal-api = { group = "com.silenteight.iris", name = "se-warehouse-internal-api" }
 worldcheck-api = { group = 'com.silenteight.worldcheck.api', name = 'protocol-world-check', version.ref = "worldcheck-api" }
-
-# TODO(pputerla): change groupid once those deps are included in iris
 silenteight-core-bridge-protobuf_spring_boot_starter = { group = 'com.silenteight.iris', name = 'protobuf-spring-boot-starter' }
 silenteight-recommendation-api-library = { group = 'com.silenteight.iris', name = 'recommendation-lib' }
 silenteight-recommendation-api-proto = { group = 'com.silenteight.iris', name = 'recommendation-internal-protos' }
