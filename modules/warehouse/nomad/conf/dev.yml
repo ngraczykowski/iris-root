@@ -26,6 +26,9 @@ spring:
         auto-registration:
           enabled: false
 
+warehouse.report.zip:
+  enabled: false
+
 warehouse:
   common:
     recommendation:
@@ -476,8 +479,8 @@ warehouse.reports.v2:
                (payload ->> 'features/registrationCountry:solution') AS "Registration Country",
                (payload ->> 'features/residencyCountry:solution') AS "Residency Country",
                count((payload ->> 'fvSignature')) AS "Matches Count",
-               count(CASE WHEN (payload ->> 'qa.level-0.state') = 'qa_decision_TRUE'  THEN 1 END ) AS "QA decision True Positive",
-               count(CASE WHEN (payload ->> 'qa.level-0.state') = 'qa_decision_FAILED' THEN 1 END ) AS "QA decision False Positive",
+               count(CASE WHEN (payload ->> 'qa.level-0.state') = 'FAILED' THEN 1 END ) AS "QA decision True Positive",
+               count(CASE WHEN (payload ->> 'qa.level-0.state') = 'PASSED' THEN 1 END ) AS "QA decision False Positive",
                count(CASE WHEN (payload ->> 'analyst_decision') = 'analyst_decision_true_positive' THEN 1 END ) AS "Analyst decision True Positive",
                count(CASE WHEN (payload ->> 'analyst_decision') = 'analyst_decision_false_positive' THEN 1 END ) AS "Analyst decision False Positive"
         FROM warehouse_alert WHERE recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
@@ -546,8 +549,8 @@ warehouse.reports.v2:
                (wsm.payload ->> 'features/registrationCountry:solution') AS "Registration Country",
                (wsm.payload ->> 'features/residencyCountry:solution') AS "Residency Country",
                count((wsm.payload ->> 'match_reason:feature_vector_signature')) AS "Matches Count",
-               count(CASE WHEN (wa.payload ->> 'qa.level-0.state') = 'qa_decision_TRUE'  THEN 1 END ) AS "QA decision True Positive",
-               count(CASE WHEN (wa.payload ->> 'qa.level-0.state') = 'qa_decision_FAILED' THEN 1 END ) AS "QA decision False Positive",
+               count(CASE WHEN (wa.payload ->> 'qa.level-0.state') = 'FAILED' THEN 1 END ) AS "QA decision True Positive",
+               count(CASE WHEN (wa.payload ->> 'qa.level-0.state') = 'PASSED' THEN 1 END ) AS "QA decision False Positive",
                count(CASE WHEN (wa.payload ->> 'analyst_decision') = 'analyst_decision_true_positive' THEN 1 END ) AS "Analyst decision True Positive",
                count(CASE WHEN (wa.payload ->> 'analyst_decision') = 'analyst_decision_false_positive' THEN 1 END ) AS "Analyst decision False Positive"
         FROM warehouse_simulation_alert wsa 

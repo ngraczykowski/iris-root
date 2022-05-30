@@ -33,30 +33,30 @@
     "jobName": "adjudication-engine",
     "projectId": "644",
     "version": "1.17.5",
-    "artifact_name": "adjudication-engine-app-1.17.5-exec.jar",
+    "artifact_name": "adjudication-engine-app-1.21.0-exec.jar",
     "branch": "master",
     "nomadName": "adjudication_engine",
-    "checksum": "sha256:7d838bebef84411566cdfb3ddfa9fc4915dae298605bca8984c95f67413723fb",
+    "checksum": "sha256:6e6d682cbb8d0b93533b9c212c3d4f140982bbed92ca240414c5ce036bfdd487",
     "repo": "https://gitlab.silenteight.com/sens/adjudication-engine"
   },
   {
     "jobName": "hsbc-bridge",
     "projectId": "628",
-    "version": "hsbc-bridge-0.17.0.jar",
-    "artifact_name": "hsbc-bridge-0.17.0.jar",
+    "version": "hsbc-bridge-0.19.0.jar",
+    "artifact_name": "hsbc-bridge-0.19.0.jar",
     "nomadName": "hsbc_bridge",
     "branch": "master",
-    "checksum": "sha256:b24b77762ccb5002c32c39a659d84c2491931545ef8a5780564beaddfc3a77a6",
+    "checksum": "sha256:101445a6e4448b3f7e4ca94e27cc4f56db8565a00efb3a42d75273261ee0b958",
     "repo": "https://gitlab.silenteight.com/hsbc-bank/hsbc-bridge"
   },
   {
     "jobName": "warehouse",
     "projectId": "643",
-    "version": "warehouse-app-2.2.0-exec.jar",
-    "artifact_name": "warehouse-app-2.2.0-exec.jar",
+    "version": "warehouse-app-2.7.0-exec.jar",
+    "artifact_name": "warehouse-app-2.7.0-exec.jar",
     "branch": "config-for-release",
     "nomadName": "warehouse",
-    "checksum": "sha256:fa9c1fb536a819f725c7a7933abc662b11b3c384c380d9f8e0559395385720ea",
+    "checksum": "sha256:ace9a8be2a86741191a7f984ea32ec9725400c12570d240da8c7c0a5393ff612",
     "repo": "https://gitlab.silenteight.com/sens/warehouse"
   }
 ]
