@@ -9,32 +9,34 @@ option java_outer_classname = "NameAgentApiProto";
 option java_multiple_files = true;
 
 service NameAgent {
-    rpc CompareNames (CompareNamesRequest) returns (stream CompareNamesResponse) {
-    }
+  rpc CompareNames (CompareNamesRequest) returns (stream CompareNamesResponse) {
+  }
 
-    rpc GetNameAgentDescriptor (GetNameAgentDescriptorRequest) returns (NameAgentDescriptor) {
-    }
+  rpc GetNameAgentDescriptor (GetNameAgentDescriptorRequest) returns (NameAgentDescriptor) {
+  }
 }
 
 message CompareNamesRequest {
-    // Name of the service instance which should be used to compare inputs
-    string instance_name = 1;
-    // Flag indicating whether the reason should be excluded from the response
-    bool exclude_reason = 2;
-    // Inputs collection for which responses should be generated
-    repeated CompareNamesInput inputs = 3;
+  // Name of the service instance which should be used to compare inputs
+  string instance_name = 1;
+  // Flag indicating whether the reason should be excluded from the response
+  bool exclude_reason = 2;
+  // Inputs collection for which responses should be generated
+  repeated CompareNamesInput inputs = 3;
+  // AlertId and matchId
+  Metadata metadata = 4;
 }
 
 message CompareNamesInput {
-    // Alerted names
-    repeated string alerted_names = 1;
-    // Matched names to compare
-    repeated string matched_names = 2 [deprecated = true];
-    // Override region detection with following regions (if empty - region will be detected)
-    repeated string region_overrides = 3;
-    repeated WatchlistName watchlist_names = 4;
-    // List of strings that screening engine matched.
-    repeated string matching_texts = 5;
+  // Alerted names
+  repeated string alerted_names = 1;
+  // Matched names to compare
+  repeated string matched_names = 2 [deprecated = true];
+  // Override region detection with following regions (if empty - region will be detected)
+  repeated string region_overrides = 3;
+  repeated WatchlistName watchlist_names = 4;
+  // List of strings that screening engine matched.
+  repeated string matching_texts = 5;
 }
 
 message WatchlistName {
@@ -42,52 +44,60 @@ message WatchlistName {
   string type = 2;
 }
 
+message Metadata {
+  string alertId = 1;
+  string matchId = 2;
+}
+
 message CompareNamesResponse {
-    // Index of inputs collection element from the request body
-    uint32 input_index = 1;
-    // Reduced result of the most matching names
-    string result = 2;
-    // Reason of the most matching names
-    NameAgentReason reason = 3;
+  // Index of inputs collection element from the request body
+  uint32 input_index = 1;
+  // Reduced result of the most matching names
+  string result = 2;
+  // Reason of the most matching names
+  NameAgentReason reason = 3;
 }
 
 message NameAgentReason {
-    // Alerted name value is going to be exchanged for many Alerted name values. See RP-1569.
-    string alerted_value = 1 [deprecated = true];
-    // Alerted name values
-    repeated string alerted_values = 5;
-    // Score of the most matching names
-    double score = 4;
-    // Matched name values grouped by the result value
-    repeated MatchedNameValueGroup matched_value_groups = 2;
-    // Duration which has been elapsed to compare names
-    google.protobuf.Duration execution_duration = 3;
-    // Names written in chinese script
-    ChineseScriptSolution chinese_script_solution = 6;
+  // Alerted name value is going to be exchanged for many Alerted name values. See RP-1569.
+  string alerted_value = 1 [deprecated = true];
+  // Alerted name values
+  repeated string alerted_values = 5;
+  // Score of the most matching names
+  double score = 4;
+  // Matched name values grouped by the result value
+  repeated MatchedNameValueGroup matched_value_groups = 2;
+  // Duration which has been elapsed to compare names
+  google.protobuf.Duration execution_duration = 3;
+  // Names written in chinese script
+  ChineseScriptSolution chinese_script_solution = 6;
 
-    string error_message = 7;
+  string error_message = 7;
+
+  // AlertId and matchId used for matching results with alerts and matches
+  Metadata metadata = 8;
 }
 
 message MatchedNameValueGroup {
-    // Result of all matched values within the group
-    string result = 1;
-    // Matched name values collection
-    repeated string matched_values = 2 [deprecated = true];
-    repeated WatchlistName watchlist_names = 3;
+  // Result of all matched values within the group
+  string result = 1;
+  // Matched name values collection
+  repeated string matched_values = 2 [deprecated = true];
+  repeated WatchlistName watchlist_names = 3;
 }
 
 message GetNameAgentDescriptorRequest {
-    // Name of the service instance
-    string instance_name = 1;
+  // Name of the service instance
+  string instance_name = 1;
 }
 
 message NameAgentDescriptor {
-    // Name of the given agent instance, e.g. Individual Name Agent
-    string name = 1;
-    // Description of the given agent instance
-    string description = 2;
-    // Possible results returned by Agent in CompareNamesResponse
-    repeated string value_names = 3;
+  // Name of the given agent instance, e.g. Individual Name Agent
+  string name = 1;
+  // Description of the given agent instance
+  string description = 2;
+  // Possible results returned by Agent in CompareNamesResponse
+  repeated string value_names = 3;
 }
 
 message ChineseScriptSolution {
