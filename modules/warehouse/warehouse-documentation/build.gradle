@@ -14,6 +14,7 @@ description = "Warehouse Documentation"
 asciidoctorConfig {
   includeSources = {
     include "hld/*.adoc"
+    include "howto/*.adoc"
     include "technical-guide.adoc"
   }
   publishAttributes = ["serp-opt-installer-version": serpOptInstallerVersion]
