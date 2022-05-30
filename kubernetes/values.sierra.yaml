@@ -9,10 +9,10 @@ components:
     args:
       - --pb.cmapi.callback.enabled=true
       - --pb.cmapi.callback.endpoint=http://{{ include "sear.fullname" . }}-payments-bridge.{{ .Release.Namespace }}.svc:{{ .component.containerPorts.http.port }}/rest/{{ .component.webPath }}/mock/cmapi
-      - --spring.security.oauth2.resourceserver.jwt.issuer-uri=https://auth.dev.s8ops.com/auth/realms/sear
+      - --spring.security.oauth2.resourceserver.jwt.issuer-uri={{ .Values.keycloak.authServerUrl }}/realms/{{ include "sear.fullname" . }}
       - --spring.security.oauth2.client.registration.callback.client-id=dev-cmapi
       - --spring.security.oauth2.client.registration.callback.client-secret=468e81d6-ddca-11ec-bb7e-679f3017e8de
-      - --spring.security.oauth2.client.provider.external.token-uri=https://auth.dev.s8ops.com/auth/realms/sear/protocol/openid-connect/token
+      - --spring.security.oauth2.client.provider.external.token-uri={{ .Values.keycloak.authServerUrl }}/realms/{{ include "sear.fullname" . }}/protocol/openid-connect/token
       - --pb.email-notification.learning-enabled=true
       - --pb.sear-learning.aws.file-list.bucket-name=devenv-6fa57739-906d-1130-4a76-90dd1c5dc8a3
       - --pb.sear-learning.aws.file-list.prefix=learning
