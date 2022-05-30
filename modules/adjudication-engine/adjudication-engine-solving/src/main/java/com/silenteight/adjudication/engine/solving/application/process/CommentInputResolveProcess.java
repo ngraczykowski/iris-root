@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.analysis.commentinput.CommentInputClient;
 import com.silenteight.adjudication.engine.comments.commentinput.CommentInputResponse;
-import com.silenteight.adjudication.engine.comments.commentinput.MatchCommentInputResponse;
 import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectNodeConverter;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.adjudication.engine.solving.domain.comment.CommentInputClientRepository;
@@ -31,8 +30,7 @@ class CommentInputResolveProcess {
       final ProtoMessageToObjectNodeConverter converter,
       final CommentInputClientRepository commentInputClientRepository,
       final ScheduledExecutorService scheduledExecutorService,
-      final IQueue<String> alertCommentsInputQueue
-  ) {
+      final IQueue<String> alertCommentsInputQueue) {
     this.commentInputClient = commentInputClient;
     this.converter = converter;
     this.commentInputClientRepository = commentInputClientRepository;
@@ -43,19 +41,6 @@ class CommentInputResolveProcess {
   public void resolve(final String alert) {
     log.debug("Resolve comment input: {}", alert);
     this.alertCommentsInputQueue.add(alert);
-  }
-
-
-  private void prepareUpdateCommand(MatchCommentInputResponse matchCommentInputResponse) {
-    log.debug("Process match comment input response: {} ", matchCommentInputResponse);
-    long alertId =
-        ResourceName.create(matchCommentInputResponse.getMatch()).alertId();
-
-    final String commentInputsMap = converter
-        .convertToJsonString(matchCommentInputResponse.getCommentInput())
-        .orElseThrow();
-
-    this.commentInputClientRepository.store(alertId, commentInputsMap);
   }
 
   private void process() {
@@ -72,10 +57,18 @@ class CommentInputResolveProcess {
       if (log.isDebugEnabled()) {
         log.debug("Retrieved comments inputs: {}", commentInputsResponse);
       }
-      commentInputsResponse
-          .stream()
-          .flatMap(p -> p.getMatchCommentInput().stream())
-          .forEach(this::prepareUpdateCommand);
+      commentInputsResponse.forEach(this::prepareUpdateCommand);
     }
+  }
+
+  private void prepareUpdateCommand(CommentInputResponse commentInputResponse) {
+    log.debug(
+        "Process match comment input response for alert: {} ", commentInputResponse.getAlert());
+    long alertId = ResourceName.create(commentInputResponse.getAlert()).alertId();
+
+    final String alertCommentInputsMap =
+        converter.convertToJsonString(commentInputResponse.getAlertCommentInput()).orElseThrow();
+
+    this.commentInputClientRepository.store(alertId, alertCommentInputsMap);
   }
 }

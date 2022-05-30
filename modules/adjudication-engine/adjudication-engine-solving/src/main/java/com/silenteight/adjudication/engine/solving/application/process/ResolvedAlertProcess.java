@@ -27,6 +27,7 @@ import javax.annotation.Nonnull;
 public class ResolvedAlertProcess {
 
   private static final String COMMENT_TEMPLATE = "alert";
+  private static final String MATCH_COMMENT_TEMPLATE = "match-template";
   private final RecommendationPublisher recommendationPublisher;
   private final AlertSolvingRepository alertSolvingRepository;
   private final AlertSolvingAlertContextMapper alertSolvingAlertContextMapper;
@@ -57,6 +58,8 @@ public class ResolvedAlertProcess {
         commentsInputs
     );
     var comment = commentFacade.generateComment(COMMENT_TEMPLATE, alertContext);
+    var matchComments =
+        commentFacade.generateMatchComments(MATCH_COMMENT_TEMPLATE, alertContext.getMatches());
 
     var saveRequest =
         new SaveRecommendationRequest(alertSolvingModel.getAnalysisId(), true, true, true, List.of(
@@ -67,7 +70,7 @@ public class ResolvedAlertProcess {
                 .matchIds(alertSolvingModel.getMatchIds())
                 .matchContexts(createMatchContexts(alertContext.getMatches()))
                 .comment(comment)
-                .matchComments(Map.of())
+                .matchComments(matchComments)
                 .build()));
     var recommendations = recommendationFacade.createRecommendations(saveRequest);
 
