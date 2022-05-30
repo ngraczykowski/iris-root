@@ -39,9 +39,9 @@ class CategoryResolveProcess {
     scheduledExecutorService.scheduleAtFixedRate(this::process, 500, 500, TimeUnit.MILLISECONDS);
   }
 
-  public void resolve(final Long alert) {
-    log.debug("Resolve category value: {}", alert);
-    this.alertCategoryValuesInputQueue.add(alert);
+  public void resolve(final Long alertId) {
+    log.debug("Resolve category value: {}", alertId);
+    this.alertCategoryValuesInputQueue.add(alertId);
   }
 
   private void process() {
@@ -50,6 +50,7 @@ class CategoryResolveProcess {
       if (alertID == null) {
         break;
       }
+      log.debug("Resolved alert {} for requesting for category value", alertID);
       var alertSolving = alertSolvingRepository.get(alertID);
       var request =
           BatchGetMatchesCategoryValuesRequest.newBuilder()

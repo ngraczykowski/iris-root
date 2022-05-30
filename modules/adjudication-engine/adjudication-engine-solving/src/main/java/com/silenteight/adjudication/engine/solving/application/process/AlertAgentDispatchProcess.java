@@ -74,8 +74,8 @@ public class AlertAgentDispatchProcess {
         alertSolving -> {
           // it sucks because is still blocking
           this.agentExchangeRequestMapper.from(alertSolving).forEach(matchesPublisher::publish);
-          this.commentInputResolveProcess.resolve(alertSolving.getAlertName());
           this.categoryResolveProcess.resolve(alertSolving.getAlertId());
+          this.commentInputResolveProcess.resolve(alertSolving.getAlertName());
         });
 
     solveReadyMatches(pendingAlerts);
