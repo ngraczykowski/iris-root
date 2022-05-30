@@ -61,6 +61,17 @@ public class NameScreeningSteps implements En {
           .statusCode(200);
     });
 
+    And("Send batch on learning", () -> {
+      Batch batch = (Batch) scenarioContext.get("batch");
+
+      given()
+          .body(batch.getPayload())
+          .when()
+          .post("rest/hsbc-bridge/async/batch/v1/" + batch.getId() + "-learning/learning")
+          .then()
+          .statusCode(200);
+    });
+
     And("Send batch with {int} alerts on learning", (Integer size) -> {
       Batch learningBatch = batchGenerationService.generateBatchWithSize(size);
       scenarioContext.set("learningBatch", learningBatch);
