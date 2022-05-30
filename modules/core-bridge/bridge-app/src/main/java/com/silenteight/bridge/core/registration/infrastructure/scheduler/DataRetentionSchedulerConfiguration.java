@@ -17,8 +17,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableSchedulerLock(defaultLockAtMostFor = "${silenteight.bridge.data-retention.lock-at-most-for}")
 class DataRetentionSchedulerConfiguration {
 
+  private static final String SHEDLOCK_TABLE_NAME = "core_bridge_shedlock";
+
   @Bean
   LockProvider lockProvider(JdbcTemplate jdbcTemplate) {
-    return new JdbcTemplateLockProvider(jdbcTemplate);
+    return new JdbcTemplateLockProvider(jdbcTemplate, SHEDLOCK_TABLE_NAME);
   }
 }

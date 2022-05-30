@@ -355,3 +355,26 @@ databaseChangeLog:
         - dropNotNullConstraint:
             tableName: core_bridge_recommendations
             columnName: recommendation_comment
+
+  - changeSet:
+      id: 1.0.0-7
+      author: dturek
+      changes:
+        - createTable:
+            tableName: core_bridge_shedlock
+            columns:
+              - column:
+                  name: name
+                  type: varchar(64)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: lock_until
+                  type: timestamp
+              - column:
+                  name: locked_at
+                  type: timestamp
+              - column:
+                  name: locked_by
+                  type: varchar(255)
