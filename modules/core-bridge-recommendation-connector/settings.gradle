@@ -1,4 +1,12 @@
 rootProject.name = 'core-bridge-recommendation-connector'
 
+dependencyResolutionManagement {
+  versionCatalogs {
+    libs {
+      from(files("../../gradle/libs.versions.toml"))
+    }
+  }
+}
+
 include('recommendation-lib')
 include('recommendation-internal-protos')

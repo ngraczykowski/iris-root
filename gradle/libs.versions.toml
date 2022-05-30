@@ -13,8 +13,6 @@ warehouse-protocol = "2.3.0"
 worldcheck-api = "0.4.0"
 
 #TODO(pputerla): core-bridge specific libs; remove verions once libs are imported into iris
-protobufSpringBootStarterVersion = '1.6.0'
-coreBridgeRecommendationApiVersion = '1.19.0'
 coreBridgeRegistrationApiVersion = '1.23.0'
 governanceApiLibraryVersion = '1.0.0'
 adjudicationEngineApiLibraryVersion = '1.6.0'
@@ -123,9 +121,9 @@ warehouse-internal-api = { group = "com.silenteight.iris", name = "se-warehouse-
 worldcheck-api = { group = 'com.silenteight.worldcheck.api', name = 'protocol-world-check', version.ref = "worldcheck-api" }
 
 # TODO(pputerla): change groupid once those deps are included in iris
-silenteight-core-bridge-protobuf_spring_boot_starter = { group = 'com.silenteight', name = 'protobuf-spring-boot-starter', version.ref = "protobufSpringBootStarterVersion" }
-silenteight-recommendation-api-library = { group = 'com.silenteight.recommendation.api.library', name = 'recommendation-lib', version.ref = "coreBridgeRecommendationApiVersion" }
-silenteight-recommendation-api-proto = { group = 'com.silenteight.recommendation.api.library', name = 'recommendation-internal-protos', version.ref = "coreBridgeRecommendationApiVersion" }
+silenteight-core-bridge-protobuf_spring_boot_starter = { group = 'com.silenteight.iris', name = 'protobuf-spring-boot-starter' }
+silenteight-recommendation-api-library = { group = 'com.silenteight.iris', name = 'recommendation-lib' }
+silenteight-recommendation-api-proto = { group = 'com.silenteight.iris', name = 'recommendation-internal-protos' }
 silenteight-registration-api-library = { group = 'com.silenteight.registration.api.library', name = 'registration-lib', version.ref = "coreBridgeRegistrationApiVersion" }
 silenteight-registration-api-proto = { group = 'com.silenteight.registration.api.library', name = 'registration-internal-protos', version.ref = "coreBridgeRegistrationApiVersion" }
 silenteight-governance-model-api-library = { group = 'com.silenteight.governance.api.library', name = 'governance-lib', version.ref = "governanceApiLibraryVersion" }
