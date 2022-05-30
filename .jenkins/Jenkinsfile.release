@@ -62,7 +62,7 @@ pipeline {
                     --set ingress.hosts[0]=${INGRESS_HOST} \
                     --wait \
                     --timeout 13m \
-                    sear \
+                    sear-$ENVIRONMENT \
                     https://repo.silenteight.com/artifactory/helm/sear/sear-"${version}".tgz
                 """
               }
@@ -151,7 +151,7 @@ pipeline {
                 credentialsId: 'devenv-eks',
                 serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
               sh """
-                helm uninstall --namespace test-e2e-${ENVIRONMENT}-${env.BUILD_NUMBER} sear
+                helm uninstall --namespace test-e2e-${ENVIRONMENT}-${env.BUILD_NUMBER} sear-$ENVIRONMENT
                 kubectl delete namespace test-e2e-${ENVIRONMENT}-${env.BUILD_NUMBER}
               """
             }

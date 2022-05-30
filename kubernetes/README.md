@@ -47,7 +47,11 @@ helm upgrade --install \
 ```
 For `<environment>` choose one of the provided environment values files.
 
-For `<release name>` you can put any name you want (e.g., `sear`). It allows you to install multiple releases of the chart to a single namespace.
+For `<release name>` you can put any name you want(have to be unique across the k8s cluster) (e.g., sear-1234).
+It allows you to install multiple releases of the chart to a single namespace.
+The reason that `<release name>` has to be unique across the k8s cluster is that based on this installation
+creates a Keycloak realm(Please note that we have 1 Keycloak instance, on the other hand,
+each helm release has/creates a dedicated realm)
 
 ### Watching the deployment progress
 
