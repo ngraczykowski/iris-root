@@ -45,7 +45,7 @@ dependencies {
     - UTIL
         - util classes have postfix **Util** appended at the end of the class name for example
           **TimestampUtil**
-        - 
+        -
 ## Running tests in Gradle
 
 By default, build run all tests. However, some integration tests take too much time. In order to
