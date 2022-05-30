@@ -1,11 +1,18 @@
 plugins {
-  id "idea"
-  id 'java-library'
+  id "com.silenteight.iris.build.java-library"
   id "maven-publish"
 }
 
-ext {
-  gradleScriptDir = "${rootProject.projectDir}/gradle/scripts"
-}
+dependencies {
+  implementation libs.adjudication.engine.api
+  implementation libs.grpc.core
+  implementation libs.protobuf.java.util
+  implementation libs.grpc.protobuf
+  implementation libs.grpc.stub
+  implementation libs.vavr
+  implementation libs.slf4j.api
 
-apply from: "${gradleScriptDir}/dependencies.gradle"
+  testImplementation libs.assertj.core
+  testImplementation libs.junit.jupiter.api
+  testRuntimeOnly libs.junit.jupiter.engine
+}

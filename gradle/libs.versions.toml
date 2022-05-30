@@ -12,9 +12,6 @@ silenteight-commons = "2.1.0"
 warehouse-protocol = "2.3.0"
 worldcheck-api = "0.4.0"
 
-#TODO(pputerla): core-bridge specific libs; remove verions once libs are imported into iris
-adjudicationEngineApiLibraryVersion = '1.6.0'
-
 #-----------------------------------
 # Platforms
 #-----------------------------------
@@ -125,7 +122,7 @@ silenteight-recommendation-api-proto = { group = 'com.silenteight.iris', name = 
 silenteight-registration-api-library = { group = 'com.silenteight.iris', name = 'registration-lib' }
 silenteight-registration-api-proto = { group = 'com.silenteight.iris', name = 'registration-internal-protos' }
 silenteight-governance-model-api-library = { group = 'com.silenteight.iris', name = 'governance-lib' }
-silenteight-adjudication-engine-api-library = { group = 'com.silenteight.adjudication.api.library', name = 'ae-lib', version.ref = "adjudicationEngineApiLibraryVersion" }
+silenteight-adjudication-engine-api-library = { group = 'com.silenteight.iris', name = 'ae-lib' }
 # Platforms
 platform-awssdk = { module = "software.amazon.awssdk:bom", version.ref = "platform-awssdk" }
 #TODO(dsniezek): check this?
