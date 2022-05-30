@@ -17,7 +17,7 @@ dependencies.
 libraries.adjudication_engine_api_library = [group: 'com.silenteight.adjudication.api.library', name: 'ae-lib', version: 1.0.0-SNAPSHOT]
 
 dependencies {
- implementation libraries.adjudication_engine_api_library 
+ implementation libraries.adjudication_engine_api_library
 }
 ```
 
