@@ -71,7 +71,7 @@ class PaymentsBridgeApplicationIT {
   private static final String EMAIL_RECEIVER = "email.example2@silenteight.com";
   private static final String EMAIL_SUBJECT = "Silent Eight - Learning data";
   private static final String EMAIL_MESSAGE = "This is to confirm Silent Eight has received";
-  public static final int WAIT_REGISTRATION_MAX_SECONDS = 40;
+  public static final int WAIT_REGISTRATION_MAX_SECONDS = 20;
 
   private static GreenMail greenMail;
   @Autowired
