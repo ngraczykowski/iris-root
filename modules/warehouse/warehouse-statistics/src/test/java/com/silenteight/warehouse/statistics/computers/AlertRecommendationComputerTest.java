@@ -67,7 +67,7 @@ class AlertRecommendationComputerTest {
         buildAlert("ACTION_FALSE_POSITIVE", ""),
         buildAlert("ACTION_FALSE_POSITIVE", "analyst_decision_false_positive"),
         buildAlert("ACTION_MANUAL_INVESTIGATION", "analyst_decision_false_positive"),
-        buildAlert("ACTION_POTENTIAL_TRUE_POSITIVE")
+        buildAlert("ACTION_POTENTIAL_TRUE_POSITIVE", "analyst_decision_true_positive")
     );
 
     // When
@@ -78,7 +78,7 @@ class AlertRecommendationComputerTest {
         .builder()
         .alertsCount(4)
         .effectivenessPercent(100.0)
-        .analyticsDecisionCount(1)
+        .analyticsDecisionCount(2)
         .efficiencyPercent(75.0)
         .manualInvestigationsCount(1)
         .falsePositivesCount(2)

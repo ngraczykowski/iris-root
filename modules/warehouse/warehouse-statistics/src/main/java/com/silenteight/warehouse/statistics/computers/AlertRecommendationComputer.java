@@ -101,11 +101,11 @@ public final class AlertRecommendationComputer
     if (alerts.isEmpty()) {
       return Double.NaN;
     }
-    var analystDecisionFalsePositive = alerts
+    var analystDecisionFalsePositiveOrPtp = alerts
         .stream()
         .filter(this::isProperlyResolved)
         .count();
-    return ((double) analystDecisionFalsePositive / alerts.size()) * 100;
+    return ((double) analystDecisionFalsePositiveOrPtp / alerts.size()) * 100;
   }
 
   private boolean shouldBeTakenInToAccountToCalculateEffectiveness(AlertDto alertDto) {
@@ -119,8 +119,10 @@ public final class AlertRecommendationComputer
   }
 
   private boolean isProperlyResolved(AlertDto alertDto) {
-    return getAnalystDecisionFromAlert(alertDto) == FALSE_POSITIVE
-        && getRecommendationFromAlert(alertDto) == ACTION_FALSE_POSITIVE;
+    return (getAnalystDecisionFromAlert(alertDto) == FALSE_POSITIVE
+        && getRecommendationFromAlert(alertDto) == ACTION_FALSE_POSITIVE) || (
+        getAnalystDecisionFromAlert(alertDto) == TRUE_POSITIVE
+            && getRecommendationFromAlert(alertDto) == ACTION_POTENTIAL_TRUE_POSITIVE);
   }
 
   private Recommendation getRecommendationFromAlert(AlertDto alertDto) {
