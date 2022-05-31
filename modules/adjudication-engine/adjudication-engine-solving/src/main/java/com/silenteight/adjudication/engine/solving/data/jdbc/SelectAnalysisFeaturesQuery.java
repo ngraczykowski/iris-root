@@ -108,8 +108,12 @@ class SelectAnalysisFeaturesQuery {
       var category = categories.getOrDefault(categoryName,
           new CategoryAggregate(categoryName, categoryValue));
 
-      features.putIfAbsent(featureName, feature);
-      categories.putIfAbsent(categoryName, category);
+      if (featureName != null) {
+        features.putIfAbsent(featureName, feature);
+      }
+      if (categoryName != null) {
+        categories.putIfAbsent(categoryName, category);
+      }
       matches.putIfAbsent(matchId, match);
       agentConfigs.putIfAbsent(agentConfig, agent);
       alerts.putIfAbsent(alertId, alertAggregate);
