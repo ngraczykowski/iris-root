@@ -10,7 +10,14 @@ subprojects {Project subproject ->
 
     subproject.dependencies {
       implementation libs.jaxb.api
+      aspect libs.spring.aspects
+      aspect libs.silenteight.sep.base.aspects
       annotationProcessor libs.spring.boot.configuration.processor
+
+      // Required by aspects
+      aspect libs.spring.security.aspects
+      aspect libs.spring.web
+      aspect libs.spring.tx
     }
 
     def ajcArgs = [

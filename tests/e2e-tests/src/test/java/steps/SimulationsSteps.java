@@ -38,7 +38,6 @@ public class SimulationsSteps implements En {
     And(
         "Create dataset with name {string} for recently created learning",
         (String value) -> {
-          Batch learningBatch = (Batch) scenarioContext.get("learningBatch");
 
           Dataset dataset = simulationGenerationService.generateDataset(value,
               commonUtils.getOnlyDateWithOffset(0), commonUtils.getOnlyDateWithOffset(1));

@@ -9,6 +9,8 @@ import utils.ScenarioContext;
 import utils.datageneration.namescreening.Batch;
 import utils.datageneration.CommonUtils;
 
+import java.time.Duration;
+
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -47,6 +49,7 @@ public class WarehouseSteps implements En {
     Awaitility
         .await()
         .atMost(15, SECONDS)
+        .pollInterval(Duration.ofSeconds(1))
         .until(() -> when()
             .get("rest/warehouse/api/v2/" + scenarioContext.get("reportName") + "/status")
             .then()
