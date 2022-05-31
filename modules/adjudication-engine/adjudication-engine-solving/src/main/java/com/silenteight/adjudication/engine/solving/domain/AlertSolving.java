@@ -1,18 +1,18 @@
 package com.silenteight.adjudication.engine.solving.domain;
 
 import lombok.Getter;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
-import com.silenteight.adjudication.engine.solving.domain.command.UpdateCommentInput;
-import com.silenteight.adjudication.engine.solving.domain.event.FeatureMatchesUpdated;
-import com.silenteight.adjudication.engine.solving.domain.event.MatchFeatureUpdated;
-import com.silenteight.adjudication.engine.solving.domain.event.MatchesUpdated;
+import com.silenteight.adjudication.engine.solving.data.AlertAggregate;
 import com.silenteight.datasource.categories.api.v2.CategoryMatches;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -20,19 +20,28 @@ import static java.util.stream.Collectors.toSet;
 
 @Slf4j
 @Getter
+@Value
 public class AlertSolving implements Serializable {
 
-  private static final long serialVersionUID = 899871569338286453L;
-  // <agent_config,set<features> // Which agent supports specific feature
+  @Serial private static final long serialVersionUID = 899871569338286453L;
   long alertId;
-
   long analysisId;
-  Map<String, Set<String>> agentFeatures = new HashMap<>();
-  Map<Long, Match> matches = new HashMap<>();
-  transient List<DomainEvent> domainEvents = new LinkedList<>();
+  Map<String, Set<String>> agentFeatures;
+  Map<Long, Match> matches;
   LocalDateTime solvingCreatetime = LocalDateTime.now();
   String policy;
   String strategy;
+
+  public AlertSolving(AlertAggregate alertAggregate) {
+    alertId = alertAggregate.alertId();
+    analysisId = alertAggregate.analysisId();
+    matches =
+        alertAggregate.matches().entrySet().stream()
+            .collect(Collectors.toMap(Map.Entry::getKey, e -> new Match(alertId, e.getValue())));
+    agentFeatures = alertAggregate.agentFeatures();
+    policy = alertAggregate.policy();
+    strategy = alertAggregate.strategy();
+  }
 
   public AlertSolving(
       final long alertId, final String policy, final String strategy, long analysisId) {
@@ -40,6 +49,8 @@ public class AlertSolving implements Serializable {
     this.policy = policy;
     this.strategy = strategy;
     this.analysisId = analysisId;
+    this.matches = new HashMap<>();
+    this.agentFeatures = new HashMap<>();
   }
 
   public static AlertSolving empty() {
@@ -53,43 +64,6 @@ public class AlertSolving implements Serializable {
 
   public long id() {
     return this.alertId;
-  }
-
-  public AlertSolving addMatchesFeatures(List<MatchFeature> matchesFeatures) {
-
-    matchesFeatures.forEach(
-        matchFeature -> {
-          var match =
-              this.matches.getOrDefault(
-                  matchFeature.getMatchId(),
-                  new Match(matchFeature.getMatchId(), matchFeature.getClientMatchId()));
-
-          match.addFeature(matchFeature);
-          this.matches.putIfAbsent(matchFeature.getMatchId(), match);
-
-          if (matchFeature.getAgentConfig() == null) {
-            return;
-          }
-
-          var agentFeatures =
-              this.agentFeatures.getOrDefault(matchFeature.getAgentConfig(), new HashSet<>());
-          agentFeatures.add(matchFeature.getFeature());
-          this.agentFeatures.put(matchFeature.getAgentConfig(), agentFeatures);
-        });
-    // event
-    this.domainEvents.add(new MatchFeatureUpdated(this));
-    return this;
-  }
-
-  public AlertSolving addMatchesCategories(List<MatchCategory> matchCategories) {
-    matchCategories.forEach(
-        matchCategory -> {
-          if (matchCategory.getCategory() == null) return;
-          var match = this.matches.get(matchCategory.getMatchId());
-          match.addCategory(matchCategory);
-          this.matches.putIfAbsent(matchCategory.getMatchId(), match);
-        });
-    return this;
   }
 
   public Set<String> getAllMatchesNames(String featureName) {
@@ -106,42 +80,6 @@ public class AlertSolving implements Serializable {
 
   public Map<String, Set<String>> getAgentFeatures() {
     return agentFeatures;
-  }
-
-  public void updateMatches(Object object) {
-    // TODO
-    this.domainEvents.add(new MatchesUpdated(this));
-    AlertSolving.checkIsCompleted();
-  }
-
-  public void updateFeatureMatches(Object o) {
-    // TODO
-    this.domainEvents.add(new FeatureMatchesUpdated(this));
-
-    AlertSolving.checkIsCompleted();
-  }
-
-  /** Clear pending events */
-  public void clear() {
-    this.domainEvents.clear();
-  }
-
-  private static boolean checkIsCompleted() {
-    return true;
-  }
-
-  /**
-   * Fetch pending events <br>
-   * <strong>Events hasn't order, because is doesn't matter</strong>
-   *
-   * @return copy list of pending {@link DomainEvent} events
-   */
-  public List<DomainEvent> pendingEvents() {
-    return new LinkedList<>(this.domainEvents);
-  }
-
-  public static boolean areAlertsSolved() {
-    return false;
   }
 
   public AlertSolving updateMatchFeatureValues(
@@ -240,11 +178,6 @@ public class AlertSolving implements Serializable {
   public long[] getMatchIds() {
     var matchIds = matches.keySet().toArray(Long[]::new);
     return Arrays.stream(matchIds).mapToLong(Long::longValue).toArray();
-  }
-
-  public AlertSolving updateCommentInput(UpdateCommentInput command) {
-
-    return this;
   }
 
   public List<CategoryMatches> getCategoryMatches() {

@@ -5,10 +5,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
+import com.silenteight.adjudication.engine.solving.data.MatchAggregate;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Getter
@@ -18,20 +19,20 @@ public class Match implements Serializable {
   private static final long serialVersionUID = 4207894003659221746L;
   private final long matchId;
   private final String clientMatchId;
-  private final Map<String, MatchFeature> features = new HashMap<>();
-  private final Map<String, MatchCategory> categories = new HashMap<>();
+  private final Map<String, MatchFeature> features;
+  private final Map<String, MatchCategory> categories;
   String solution = null;
   String reason;
 
-  public void addFeature(MatchFeature matchFeature) {
-    if (matchFeature.getFeature() == null) {
-      return;
-    }
-    this.features.put(matchFeature.getFeature(), matchFeature);
-  }
-
-  public void addCategory(MatchCategory matchCategory) {
-    this.categories.put(matchCategory.getCategory(), matchCategory);
+  public Match(long alertId, MatchAggregate matchAggregate) {
+    matchId = matchAggregate.matchId();
+    clientMatchId = matchAggregate.clientMatchId();
+    features = matchAggregate.features().entrySet().stream()
+        .collect(Collectors.toMap(Map.Entry::getKey,
+            e -> new MatchFeature(alertId, matchId, clientMatchId, e.getValue())));
+    categories = matchAggregate.categories().entrySet().stream()
+        .collect(Collectors.toMap(Map.Entry::getKey,
+            e -> new MatchCategory(alertId, matchId, e.getValue())));
   }
 
   boolean hasAllFeaturesSolved() {
@@ -63,9 +64,5 @@ public class Match implements Serializable {
     return ResourceName.create("")
         .add("alerts", alertId)
         .add("matches", matchId).getPath();
-  }
-
-  public void updateCommentInput() {
-    // TODO: implement it!
   }
 }

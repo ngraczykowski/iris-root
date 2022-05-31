@@ -3,8 +3,6 @@ package com.silenteight.adjudication.engine.solving.domain;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import com.silenteight.adjudication.engine.solving.data.MatchFeatureDao;
-
 import java.util.Objects;
 
 @Getter
@@ -16,11 +14,6 @@ public class MatchFeatureKey {
   private final long matchId;
 
   private final String featureName;
-
-  public static MatchFeatureKey from(MatchFeatureDao matchFeatureDao) {
-    return new MatchFeatureKey(matchFeatureDao.getAlertId(), matchFeatureDao.getMatchId(),
-        matchFeatureDao.getFeature());
-  }
 
   @Override
   public boolean equals(Object o) {

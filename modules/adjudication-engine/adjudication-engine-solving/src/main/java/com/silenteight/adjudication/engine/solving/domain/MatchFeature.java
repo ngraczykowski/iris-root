@@ -3,7 +3,7 @@ package com.silenteight.adjudication.engine.solving.domain;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.adjudication.engine.solving.data.MatchFeatureDao;
+import com.silenteight.adjudication.engine.solving.data.FeatureAggregate;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -23,14 +23,14 @@ public class MatchFeature implements Serializable {
   private String featureValue;
   private String reason;
 
-  public static MatchFeature from(MatchFeatureDao dao) {
-    // TODO: I'm note sure if we should replace . ian / inside agent config to send via rabbit
-    var match = new MatchFeature(dao.getAlertId(), dao.getMatchId(), dao.getAgentConfigFeatureId(),
-        dao.getFeature(), dao.getAgentConfig(), dao.getClientMatchId());
-
-    match.updateFeatureValue(dao.getFeatureValue(), dao.getFeatureReason());
-
-    return match;
+  public MatchFeature(
+      long alertId, long matchId, String clientMatchId, FeatureAggregate featureAggregate) {
+    this.alertId = alertId;
+    this.matchId = matchId;
+    agentConfigFeatureId = featureAggregate.agentConfigFeatureId();
+    feature = featureAggregate.featureName();
+    agentConfig = featureAggregate.agentConfig();
+    this.clientMatchId = clientMatchId;
   }
 
   public static MatchFeature empty() {

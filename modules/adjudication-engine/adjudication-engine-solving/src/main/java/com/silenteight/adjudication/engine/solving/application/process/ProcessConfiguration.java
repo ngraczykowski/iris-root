@@ -114,13 +114,6 @@ class ProcessConfiguration {
   }
 
   @Bean
-  SomethingSolution somethingSolution(
-      final ReadyMatchFeatureVectorPublisher governanceProvider,
-      final AlertSolvingRepository alertSolvingRepository) {
-    return new SomethingSolution(governanceProvider, alertSolvingRepository);
-  }
-
-  @Bean
   GovernanceMatchResponseProcess governanceMatchResponseProcess(
       final AlertSolvingRepository alertSolvingRepository,
       final HazelcastInstance hazelcastInstance,

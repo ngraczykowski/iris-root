@@ -1,8 +1,9 @@
 package com.silenteight.adjudication.engine.solving.data.jdbc;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.adjudication.engine.solving.data.MatchFeatureDao;
+import com.silenteight.adjudication.engine.solving.data.*;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.intellij.lang.annotations.Language;
@@ -13,9 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Component
@@ -50,27 +49,31 @@ class SelectAnalysisFeaturesQuery {
           WHERE aaa.analysis_id IN (:analysis)
             AND aaa2.alert_id IN (:alerts)
         """;
-  private static final FeaturesRowMapper ROW_MAPPER = new FeaturesRowMapper();
 
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
 
   @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
-  public List<MatchFeatureDao> findAlertAnalysisFeatures(Set<Long> analysis, Set<Long> alerts) {
+  public Map<Long, AlertAggregate> findAlertAnalysisFeatures(Set<Long> analysis, Set<Long> alerts) {
 
     var parameters = new MapSqlParameterSource(Map.of(
         "analysis", analysis,
         "alerts", alerts
     ));
-    return jdbcTemplate.query(QUERY, parameters, ROW_MAPPER);
+    var rowMapper = new AlertAggregateRowMapper();
+    jdbcTemplate.query(QUERY, parameters, rowMapper);
+    return rowMapper.getAlerts();
   }
 
-  private static final class FeaturesRowMapper
-      implements RowMapper<MatchFeatureDao> {
+  @Getter
+  private static class AlertAggregateRowMapper
+      implements RowMapper<AlertDao> {
+
+    private final Map<Long, AlertAggregate> alerts = new HashMap<>();
 
     @Override
-    public MatchFeatureDao mapRow(ResultSet rs, int rowNum) throws SQLException {
-      var feature = rs.getString("feature");
+    public AlertDao mapRow(ResultSet rs, int rowNum) throws SQLException {
+      var featureName = rs.getString("feature");
       var featureConfigId = rs.getLong("agent_config_feature_id");
       var matchId = rs.getLong("match_id");
       var alertId = rs.getLong("alert_id");
@@ -81,23 +84,50 @@ class SelectAnalysisFeaturesQuery {
       var featureValue = rs.getString("value");
       var featureReason = rs.getString("reason");
       var clientMatchId = rs.getString("client_match_identifier");
-      var category = rs.getString("category");
+      var categoryName = rs.getString("category");
       var categoryValue = rs.getString("category_value");
 
-      return MatchFeatureDao
+      var alertAggregate = alerts.getOrDefault(alertId,
+          new AlertAggregate(analysisId,
+              alertId,
+              new HashMap<>(),
+              policy,
+              strategy,
+              new HashMap<>()));
+      var agentConfigs = alertAggregate.agentFeatures();
+      var agent = agentConfigs.getOrDefault(agentConfig, new HashSet<>());
+      agent.add(featureName);
+      var matches = alertAggregate.matches();
+      var match = matches.getOrDefault(matchId,
+          new MatchAggregate(matchId, clientMatchId, new HashMap<>(), new HashMap<>()));
+      var features = match.features();
+      var feature = features.getOrDefault(featureName,
+          new FeatureAggregate(featureConfigId,
+              featureName, agentConfig, featureValue, featureReason));
+      var categories = match.categories();
+      var category = categories.getOrDefault(categoryName,
+          new CategoryAggregate(categoryName, categoryValue));
+
+      features.putIfAbsent(featureName, feature);
+      categories.putIfAbsent(categoryName, category);
+      matches.putIfAbsent(matchId, match);
+      agentConfigs.putIfAbsent(agentConfig, agent);
+      alerts.putIfAbsent(alertId, alertAggregate);
+
+      return AlertDao
           .builder()
           .analysisId(analysisId)
           .alertId(alertId)
           .matchId(matchId)
           .agentConfigFeatureId(featureConfigId)
-          .feature(feature)
+          .feature(featureName)
           .agentConfig(agentConfig)
           .policy(policy)
           .strategy(strategy)
           .featureValue(featureValue)
           .featureReason(featureReason)
           .clientMatchId(clientMatchId)
-          .category(category)
+          .category(categoryName)
           .categoryValue(categoryValue)
           .build();
     }

@@ -7,7 +7,7 @@ package com.silenteight.adjudication.engine.solving.domain;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.adjudication.engine.solving.data.MatchFeatureDao;
+import com.silenteight.adjudication.engine.solving.data.CategoryAggregate;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -23,13 +23,11 @@ public class MatchCategory implements Serializable {
 
   String categoryValue;
 
-  public static MatchCategory from(MatchFeatureDao dao) {
-    // TODO: I'm note sure if we should replace . ian / inside agent config to send via rabbit
-    var match = new MatchCategory(dao.getAlertId(), dao.getMatchId(), dao.getCategory());
-
-    match.updateCategoryValue(dao.getCategoryValue());
-
-    return match;
+  public MatchCategory(long alertId, long matchId, CategoryAggregate categoryAggregate) {
+    this.alertId = alertId;
+    this.matchId = matchId;
+    category = categoryAggregate.categoryName();
+    categoryValue = categoryAggregate.categoryValue();
   }
 
   public void updateCategoryValue(String categoryValue) {

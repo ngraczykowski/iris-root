@@ -27,6 +27,7 @@ class ReceivedAlertListener {
   private final AlertAgentDispatchProcess alertAgentDispatchProcess;
 
   @RabbitListener(autoStartup = "true",
+      concurrency = "10-10",
       bindings = @QueueBinding(value =
       @Queue(name = "ae.solving-received-alert"), exchange = @Exchange(
           name = "ae.event.internal",

@@ -44,7 +44,8 @@ public class ReadyMatchFeatureVectorPublisher {
   public void send(final MatchSolutionRequest matchSolutionRequest) {
     // Send for solving alert solution to governance via queue (internal)
     // Create Governance internal queue listener and send to Gov
-    log.info("Sending match for solving to Governance");
+    log.info("Queuing solve match features request for match = {}",
+        matchSolutionRequest.getMatchId());
     this.sendQueue.add(matchSolutionRequest);
   }
 
@@ -52,6 +53,7 @@ public class ReadyMatchFeatureVectorPublisher {
     do {
       final MatchSolutionRequest poll = this.sendQueue.poll();
       if (poll != null) {
+        log.debug("Pulled solve match features for match = {}", poll.getMatchId());
         this.sendRequestToGovernance(poll);
       }
     } while (true);

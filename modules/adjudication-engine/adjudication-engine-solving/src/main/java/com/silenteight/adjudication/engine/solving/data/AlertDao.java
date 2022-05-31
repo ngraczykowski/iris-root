@@ -5,7 +5,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class MatchFeatureDao {
+public class AlertDao {
 
   long analysisId;
   long alertId;
