@@ -18,18 +18,15 @@ import java.util.Optional;
 class OutputRecommendationRabbitConfiguration {
 
   private static final String EMPTY_ROUTING_KEY = "";
-  private static final String X_MESSAGE_TTL = "x-message-ttl";
   private static final Integer DEFAULT_TTL_IN_MILLISECONDS = 2000;
-  private static final String X_DEAD_LETTER_EXCHANGE = "x-dead-letter-exchange";
-  private static final String X_DEAD_LETTER_ROUTING_KEY = "x-dead-letter-routing-key";
 
   // batch completed
 
   @Bean
   Queue batchCompletedQueue(OutputNotifyBatchCompletedRabbitProperties properties) {
     return QueueBuilder.durable(properties.queueName())
-        .withArgument(X_DEAD_LETTER_EXCHANGE, properties.deadLetterExchangeName())
-        .withArgument(X_DEAD_LETTER_ROUTING_KEY, properties.queueName())
+        .deadLetterExchange(properties.deadLetterExchangeName())
+        .deadLetterRoutingKey(properties.queueName())
         .maxPriority(properties.queueMaxPriority())
         .build();
   }
@@ -54,11 +51,10 @@ class OutputRecommendationRabbitConfiguration {
   @Bean
   Queue batchCompletedDeadLetterQueue(OutputNotifyBatchCompletedRabbitProperties properties) {
     return QueueBuilder.durable(properties.deadLetterQueueName())
-        .withArgument(
-            X_MESSAGE_TTL,
+        .ttl(
             Optional.ofNullable(properties.deadLetterQueueTimeToLiveInMilliseconds())
                 .orElse(DEFAULT_TTL_IN_MILLISECONDS))
-        .withArgument(X_DEAD_LETTER_EXCHANGE, EMPTY_ROUTING_KEY)
+        .deadLetterExchange(EMPTY_ROUTING_KEY)
         .maxPriority(properties.queueMaxPriority())
         .build();
   }
@@ -80,8 +76,8 @@ class OutputRecommendationRabbitConfiguration {
   Queue batchErrorQueue(
       OutputBatchErrorRabbitProperties properties) {
     return QueueBuilder.durable(properties.queueName())
-        .withArgument(X_DEAD_LETTER_EXCHANGE, properties.deadLetterExchangeName())
-        .withArgument(X_DEAD_LETTER_ROUTING_KEY, properties.queueName())
+        .deadLetterExchange(properties.deadLetterExchangeName())
+        .deadLetterRoutingKey(properties.queueName())
         .build();
   }
 
@@ -105,11 +101,10 @@ class OutputRecommendationRabbitConfiguration {
   Queue batchErrorDeadLetterQueue(
       OutputBatchErrorRabbitProperties properties) {
     return QueueBuilder.durable(properties.deadLetterQueueName())
-        .withArgument(
-            X_MESSAGE_TTL,
+        .ttl(
             Optional.ofNullable(properties.deadLetterQueueTimeToLiveInMilliseconds())
                 .orElse(DEFAULT_TTL_IN_MILLISECONDS))
-        .withArgument(X_DEAD_LETTER_EXCHANGE, EMPTY_ROUTING_KEY)
+        .deadLetterExchange(EMPTY_ROUTING_KEY)
         .build();
   }
 
