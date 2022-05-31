@@ -35,7 +35,7 @@ Follow this procedure to enable and configure Single Queuing Job for solving on 
                   name: Watchlist-level queuing job
                   priority: 1
                   chunk-size: 1000
-                  records-view: SENS_V_FFF_RECORDS
+                  records-view: SENS_V_FFF_RECORDS_DENY
                   watchlist-level: true
 ----
 

@@ -4,15 +4,17 @@ services:
   oracle:
     profiles:
       - oracle
-    image: gvenzl/oracle-xe:21.3.0
+    image: gvenzl/oracle-xe:11.2.0.2
     volumes:
       - oracle-storage:/opt/oracle/oradata
+      - ./docker/oracle/init_scripts:/docker-entrypoint-initdb.d:ro
     ports:
       - 1521:1521
     environment:
       APP_USER: "scb"
       APP_USER_PASSWORD: "scb"
       ORACLE_RANDOM_PASSWORD: "true"
+      NLS_LANG: .AL32UTF8
   rabbitmq:
     image: rabbitmq:3.8.2-management
     restart: unless-stopped

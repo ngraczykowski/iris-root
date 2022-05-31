@@ -29,7 +29,7 @@ Follow this procedure to enable and configure the Learning Job in SCB Bridge.
           alert:
             enabled: true
             cron-expression: 0 0 3 ? * SUN
-            db-relation-name: SENS_V_FFF_RECORDS
+            db-relation-name: SENS_V_FFF_RECORDS_AL
             cbs-hits-details-helper-view-name:
 ----
 
