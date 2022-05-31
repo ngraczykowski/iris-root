@@ -6,6 +6,14 @@ components:
     profiles:
       - consuldisabled
 
+  governance:
+    profiles:
+      - linux
+      - governance
+      - database
+      - rabbitmq
+      - messaging
+      - hsbc
   warehouse:
     enabled: true
     profiles:
