@@ -5,7 +5,7 @@ import com.silenteight.bridge.core.registration.domain.model.Batch
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AnalysisService
-import com.silenteight.bridge.core.registration.infrastructure.RegistrationAnalysisProperties
+import com.silenteight.bridge.core.registration.infrastructure.application.RegistrationAnalysisProperties
 
 import com.google.protobuf.Timestamp
 import spock.lang.Specification

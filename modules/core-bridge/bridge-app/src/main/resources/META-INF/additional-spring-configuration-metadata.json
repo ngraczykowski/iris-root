@@ -274,6 +274,11 @@
       "name": "amqp.recommendation.incoming.data-retention.dead-letter-queue-time-to-live-in-milliseconds",
       "type": "java.lang.Integer",
       "description": "Dead letter queue TTL for data retention."
+    },
+    {
+      "name": "registration.recommendations.recommendations-stored-update-alerts-chunk-size",
+      "type": "java.lang.String",
+      "description": "Size of alert names stream chunk for update alerts to recommended."
     }
   ]
 }

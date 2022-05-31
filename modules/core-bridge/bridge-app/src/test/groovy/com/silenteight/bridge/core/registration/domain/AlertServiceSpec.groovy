@@ -9,6 +9,7 @@ import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRegist
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository
 import com.silenteight.bridge.core.registration.domain.strategy.BatchStrategyFactory
 import com.silenteight.bridge.core.registration.domain.strategy.PendingAlertsStrategy
+import com.silenteight.bridge.core.registration.infrastructure.application.RegistrationRecommendationsProperties
 
 import spock.lang.Specification
 import spock.lang.Subject
@@ -23,6 +24,7 @@ class AlertServiceSpec extends Specification {
   def alertRegistrationService = Mock(AlertRegistrationService)
   def registrationAlertResponseMapper = Mock(RegistrationAlertResponseMapper)
   def batchStrategyFactory = Mock(BatchStrategyFactory)
+  def registrationRecommendationsProperties = new RegistrationRecommendationsProperties(1)
 
 
   @Subject
@@ -31,7 +33,8 @@ class AlertServiceSpec extends Specification {
       alertRepository,
       alertRegistrationService,
       registrationAlertResponseMapper,
-      batchStrategyFactory
+      batchStrategyFactory,
+      registrationRecommendationsProperties
   )
 
   def 'two unregistered successful alerts: should save both alerts and matches'() {
@@ -400,7 +403,8 @@ class AlertServiceSpec extends Specification {
     underTest.updateStatusToRecommended(batchId, alertNames)
 
     then:
-    1 * alertRepository.updateStatusToRecommended(batchId, alertNames)
+    1 * alertRepository.updateStatusToRecommended(batchId, [alertNames.get(0)])
+    1 * alertRepository.updateStatusToRecommended(batchId, [alertNames.get(1)])
   }
 
   def 'should return true when all alerts in batch are in status RECOMMENDED, ERROR or DELIVERED'() {

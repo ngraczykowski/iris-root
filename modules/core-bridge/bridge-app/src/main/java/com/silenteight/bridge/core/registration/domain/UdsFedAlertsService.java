@@ -11,10 +11,8 @@ import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository;
 import com.silenteight.bridge.core.registration.domain.strategy.BatchStrategyFactory;
-import com.silenteight.bridge.core.registration.infrastructure.RegistrationAnalysisProperties;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 
 import java.util.EnumSet;
@@ -28,7 +26,6 @@ import static com.silenteight.bridge.core.registration.domain.model.Batch.BatchS
 
 @Slf4j
 @Service
-@EnableConfigurationProperties(RegistrationAnalysisProperties.class)
 @RequiredArgsConstructor
 class UdsFedAlertsService {
 

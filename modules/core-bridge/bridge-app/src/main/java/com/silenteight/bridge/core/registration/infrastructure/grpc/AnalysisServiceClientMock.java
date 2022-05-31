@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.adjudication.api.library.v1.analysis.*;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
 import com.silenteight.bridge.core.recommendation.infrastructure.amqp.RecommendationIncomingRecommendationsGeneratedConfigurationProperties;
-import com.silenteight.bridge.core.registration.infrastructure.RegistrationAnalysisProperties;
+import com.silenteight.bridge.core.registration.infrastructure.application.RegistrationAnalysisProperties;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 

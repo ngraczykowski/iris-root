@@ -7,10 +7,9 @@ import com.silenteight.bridge.core.registration.domain.model.AlertStatus;
 import com.silenteight.bridge.core.registration.domain.model.Batch;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AnalysisService;
-import com.silenteight.bridge.core.registration.infrastructure.RegistrationAnalysisProperties;
+import com.silenteight.bridge.core.registration.infrastructure.application.RegistrationAnalysisProperties;
 
 import com.google.protobuf.Timestamp;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
@@ -20,7 +19,6 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@EnableConfigurationProperties(RegistrationAnalysisProperties.class)
 class UdsFedAlertsProcessorSolvingStrategy implements UdsFedAlertsProcessorStrategy {
 
   private final AnalysisService analysisService;

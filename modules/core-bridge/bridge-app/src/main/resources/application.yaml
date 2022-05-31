@@ -202,6 +202,8 @@ registration:
     delay-time: 60m
   alert-stream:
     registration-api-to-recommendation-alerts-chunk-size: 500
+  recommendations:
+    recommendations-stored-update-alerts-chunk-size: 1000
 
 ## REPORTS
 reports:

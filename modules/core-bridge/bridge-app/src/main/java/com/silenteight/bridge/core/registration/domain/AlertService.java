@@ -10,7 +10,9 @@ import com.silenteight.bridge.core.registration.domain.model.*;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRegistrationService;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository;
 import com.silenteight.bridge.core.registration.domain.strategy.BatchStrategyFactory;
+import com.silenteight.bridge.core.registration.infrastructure.application.RegistrationRecommendationsProperties;
 
+import one.util.streamex.StreamEx;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -30,6 +33,7 @@ class AlertService {
   private final AlertRegistrationService alertRegistrationService;
   private final RegistrationAlertResponseMapper registrationAlertResponseMapper;
   private final BatchStrategyFactory batchStrategyFactory;
+  private final RegistrationRecommendationsProperties registrationRecommendationsProperties;
 
   List<AlertWithMatches> getAlertsAndMatches(String batchId) {
     return alertRepository.findAllWithMatchesByBatchId(batchId);
@@ -113,7 +117,14 @@ class AlertService {
 
   void updateStatusToRecommended(String batchId, List<String> alertNames) {
     log.info("Update alerts with names [{}] for batch id [{}].", alertNames, batchId);
-    alertRepository.updateStatusToRecommended(batchId, alertNames);
+    var counter = new AtomicInteger(0);
+    var chunkSize =
+        registrationRecommendationsProperties.recommendationsStoredUpdateAlertsChunkSize();
+
+    StreamEx.of(alertNames)
+        .groupRuns((prev, next) -> counter.incrementAndGet() % chunkSize != 0)
+        .forEach(
+            alertNamesChunk -> alertRepository.updateStatusToRecommended(batchId, alertNamesChunk));
   }
 
   boolean hasNoPendingAlerts(Batch batch) {

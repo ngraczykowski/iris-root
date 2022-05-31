@@ -7,7 +7,7 @@ import com.silenteight.adjudication.api.library.v1.analysis.AnalysisServiceClien
 import com.silenteight.adjudication.api.v1.AlertServiceGrpc.AlertServiceBlockingStub;
 import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceBlockingStub;
 import com.silenteight.bridge.core.recommendation.infrastructure.amqp.RecommendationIncomingRecommendationsGeneratedConfigurationProperties;
-import com.silenteight.bridge.core.registration.infrastructure.RegistrationAnalysisProperties;
+import com.silenteight.bridge.core.registration.infrastructure.application.RegistrationAnalysisProperties;
 import com.silenteight.governance.api.library.v1.model.ModelGrpcAdapter;
 import com.silenteight.governance.api.library.v1.model.ModelServiceClient;
 import com.silenteight.model.api.v1.SolvingModelServiceGrpc.SolvingModelServiceBlockingStub;
