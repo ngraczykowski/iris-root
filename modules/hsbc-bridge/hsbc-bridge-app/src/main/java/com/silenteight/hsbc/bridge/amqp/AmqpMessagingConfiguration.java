@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sep.base.common.protocol.AnyProtoMessageConverter;
 import com.silenteight.sep.base.common.protocol.MessageRegistry;
+import com.silenteight.sep.base.common.protocol.MessageRegistryFactory;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.Binding.DestinationType;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
 
@@ -51,6 +53,18 @@ class AmqpMessagingConfiguration implements RabbitListenerConfigurer, BeanPostPr
 
     registrar.setMessageHandlerMethodFactory(factory);
   }
+
+  @Bean
+  @Primary
+  MessageRegistry messageRegistryOverwrite() {
+    return new MessageRegistryFactory(
+        "com.silenteight",
+        "com.google.protobuf",
+        "com.google.rpc",
+        "com.google.type"
+    ).create();
+  }
+
 
   @Bean
   Declarables ingoingRabbitBrokerDeclarables() {

@@ -8,7 +8,6 @@ components:
 
   governance:
     profiles:
-      - linux
       - governance
       - database
       - rabbitmq
