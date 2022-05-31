@@ -1,11 +1,6 @@
 server:
   port: 24900
 
-keycloak:
-  adapter:
-    authServerUrl: http://localhost:8080
-    realm: Dev
-
 spring:
   security:
     oauth2:
