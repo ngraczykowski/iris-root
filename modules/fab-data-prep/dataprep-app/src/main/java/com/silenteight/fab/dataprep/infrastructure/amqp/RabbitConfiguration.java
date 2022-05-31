@@ -16,7 +16,6 @@ import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.CON
 class RabbitConfiguration {
 
   private static final String EMPTY_ROUTING_KEY = "";
-  private static final Integer DEFAULT_TTL_IN_MILLISECONDS = 2000;
 
   @Bean
   Queue alertMessagesQueue(AlertMessagesProperties alertMessagesProperties) {

@@ -109,7 +109,6 @@ amqp:
         queue-name: alert-message-queue
         binding-key: alert.message
         dead-letter-queue-name: alert-message-queue.dlq
-        dead-letter-queue-time-to-live-in-milliseconds: 30000
         dead-letter-exchange-name: alert-message-queue.dlx
     outgoing:
       match-feature-input-set-fed:
