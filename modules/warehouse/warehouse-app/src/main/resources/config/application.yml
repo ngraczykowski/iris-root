@@ -273,6 +273,8 @@ serp:
 
 sep:
   auth:
+    permit-all-urls:
+      - "/management/**"
     permissionMethodsMappings:
       DOWNLOAD_SIMULATION_REPORTS:
         - "DOWNLOAD_SIMULATION_REPORT"

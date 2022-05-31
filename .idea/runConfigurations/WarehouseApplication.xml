@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="WarehouseApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="warehouse.warehouse-app.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.silenteight.warehouse.WarehouseApplication" />
+    <option name="ACTIVE_PROFILES" value="swagger,debug,dev" />
+    <option name="WORKING_DIRECTORY" value="file://$ProjectFileDir$/modules/warehouse" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

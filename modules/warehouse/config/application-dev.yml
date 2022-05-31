@@ -1,7 +1,17 @@
 server:
   port: 24900
 
+keycloak:
+  adapter:
+    authServerUrl: http://localhost:8080
+    realm: Dev
+
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/auth/realms/Dev
   rabbitmq:
     #   If multiple brokers required:
     #   host: <must be empty>
@@ -39,12 +49,17 @@ warehouse:
       - name: alert_s8_recommendation
         values: ACTION_FALSE_POSITIVE
 
-sep.filestorage:
-  minio:
-    url: http://localhost:9000
-    access-key: admin
-    private-key: admin123
-    region: s3-test-region
+sep:
+  auth:
+    permit-all-urls:
+      - "/management/**"
+      - "/openapi/**"
+  filestorage:
+    minio:
+      url: http://localhost:9000
+      access-key: admin
+      private-key: admin123
+      region: s3-test-region
 
 grpc:
   server:

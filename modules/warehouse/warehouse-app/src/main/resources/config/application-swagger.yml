@@ -6,4 +6,4 @@ springdoc:
   swagger-ui:
     enabled: true
     path: /openapi/
-    url: ${server.servlet.context-path}/openapi/api-docs/
+    url: /openapi/api-docs/
