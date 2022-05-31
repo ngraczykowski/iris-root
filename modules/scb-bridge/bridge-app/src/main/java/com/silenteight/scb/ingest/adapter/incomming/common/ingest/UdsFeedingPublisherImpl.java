@@ -113,7 +113,8 @@ public class UdsFeedingPublisherImpl implements UdsFeedingPublisher {
       i++;
       var alert = alerts.get(i);
       if (future.isCancelled()) {
-        log.error("Didn't manage to feed: " + alert.logInfo() + " to Uds in specified time");
+        log.error(
+            "Didn't manage to feed: {} to Uds in specified time: {}ms", alert.logInfo(), timeoutMs);
         failed.add(alert);
         continue;
       }
@@ -125,7 +126,7 @@ public class UdsFeedingPublisherImpl implements UdsFeedingPublisher {
           failed.add(alert);
         }
       } catch (Exception e) {
-        log.error("Failed to feed: " + alert.logInfo() + " to Uds", e);
+        log.error("Failed to feed: {} to Uds", alert.logInfo(), e);
         failed.add(alert);
       }
     }

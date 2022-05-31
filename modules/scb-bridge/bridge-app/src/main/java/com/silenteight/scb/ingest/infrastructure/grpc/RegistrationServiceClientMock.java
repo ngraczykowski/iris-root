@@ -3,8 +3,7 @@ package com.silenteight.scb.ingest.infrastructure.grpc;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.registration.api.library.v1.*;
-
-import org.apache.commons.lang3.RandomUtils;
+import com.silenteight.scb.ingest.infrastructure.util.MockUtils;
 
 @Slf4j
 class RegistrationServiceClientMock implements RegistrationServiceClient {
@@ -47,10 +46,6 @@ class RegistrationServiceClientMock implements RegistrationServiceClient {
   }
 
   private static void randomSleep() {
-    try {
-      Thread.sleep(RandomUtils.nextInt(200, 400));
-    } catch (InterruptedException e) {
-      throw new IllegalStateException(e);
-    }
+    MockUtils.randomSleep(200, 400);
   }
 }

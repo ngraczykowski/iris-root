@@ -123,7 +123,8 @@ public class GlobalHealthEndpoint {
             e.getMessage());
 
         var ans = new LinkedHashMap<String, String>();
-        ans.put("status", "Can't connect: " + e.getMessage());
+        ans.put("status", "DOWN");
+        ans.put("error", e.getMessage());
 
         instances.add(ans);
       }
