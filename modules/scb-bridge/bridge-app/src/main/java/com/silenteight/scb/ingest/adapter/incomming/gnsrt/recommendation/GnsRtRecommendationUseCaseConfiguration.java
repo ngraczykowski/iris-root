@@ -2,13 +2,12 @@ package com.silenteight.scb.ingest.adapter.incomming.gnsrt.recommendation;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.scb.ingest.adapter.incomming.common.ingest.UdsFeedingPublisher;
+import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertIngestService;
 import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService;
 import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlertService;
 import com.silenteight.scb.ingest.adapter.incomming.common.trafficmanagement.TrafficManager;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtRequestToAlertMapper;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtResponseMapper;
-import com.silenteight.scb.ingest.domain.IngestFacade;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,8 +21,7 @@ class GnsRtRecommendationUseCaseConfiguration {
   private final GnsRtRecommendationProperties gnsRtRecommendationProperties;
   private final GnsRtRequestToAlertMapper gnsRtRequestToAlertMapper;
   private final GnsRtResponseMapper gnsRtResponseMapper;
-  private final UdsFeedingPublisher udsFeedingPublisher;
-  private final IngestFacade ingestFacade;
+  private final BatchAlertIngestService ingestService;
   private final RawAlertService rawAlertService;
   private final BatchInfoService batchInfoService;
   private final GnsRtRecommendationService gnsRtRecommendationService;
@@ -34,12 +32,12 @@ class GnsRtRecommendationUseCaseConfiguration {
     return GnsRtRecommendationUseCaseImpl.builder()
         .alertMapper(gnsRtRequestToAlertMapper)
         .responseMapper(gnsRtResponseMapper)
-        .ingestFacade(ingestFacade)
-        .udsFeedingPublisher(udsFeedingPublisher)
+        .ingestService(ingestService)
         .rawAlertService(rawAlertService)
         .batchInfoService(batchInfoService)
         .gnsRtRecommendationService(gnsRtRecommendationService)
         .trafficManager(trafficManager)
+        .recommendationProperties(gnsRtRecommendationProperties)
         .scheduler(scheduler())
         .build();
   }
@@ -50,5 +48,4 @@ class GnsRtRecommendationUseCaseConfiguration {
         gnsRtRecommendationProperties.getSchedulerQueuedTaskCap(),
         "gns-rt-scheduler");
   }
-
 }

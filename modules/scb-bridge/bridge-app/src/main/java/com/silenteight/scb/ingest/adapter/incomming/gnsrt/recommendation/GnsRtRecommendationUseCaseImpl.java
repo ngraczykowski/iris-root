@@ -5,29 +5,28 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.scb.ingest.adapter.incomming.common.ingest.UdsFeedingPublisher;
+import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertIngestService;
 import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService;
 import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlertService;
 import com.silenteight.scb.ingest.adapter.incomming.common.trafficmanagement.TrafficManager;
-import com.silenteight.scb.ingest.adapter.incomming.common.util.AlertUpdater;
 import com.silenteight.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtRequestToAlertMapper;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtResponseMapper;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.request.GnsRtRecommendationRequest;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtRecommendationResponse;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtResponseAlert;
-import com.silenteight.scb.ingest.domain.IngestFacade;
-import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext;
 import com.silenteight.scb.outputrecommendation.domain.model.Recommendations;
 
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.silenteight.scb.ingest.domain.model.BatchSource.GNS_RT;
+import static com.silenteight.scb.ingest.domain.model.RegistrationBatchContext.GNS_RT_CONTEXT;
 
 @Slf4j
 @Builder
@@ -36,17 +35,16 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
 
   private final GnsRtRequestToAlertMapper alertMapper;
   private final GnsRtResponseMapper responseMapper;
-  private final IngestFacade ingestFacade;
-  private final UdsFeedingPublisher udsFeedingPublisher;
+  private final BatchAlertIngestService ingestService;
   private final RawAlertService rawAlertService;
   private final BatchInfoService batchInfoService;
   private final GnsRtRecommendationService gnsRtRecommendationService;
   private final TrafficManager trafficManager;
+  private final GnsRtRecommendationProperties recommendationProperties;
   private final Scheduler scheduler;
 
   @Override
   public Mono<GnsRtRecommendationResponse> recommend(@NonNull GnsRtRecommendationRequest request) {
-
     trafficManager.activateRtSemaphore();
 
     return Mono.fromCallable(InternalBatchIdGenerator::generate)
@@ -55,6 +53,17 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
           registerRequest(request, internalBatchId);
           return gnsRtRecommendationService.recommendationsMono(internalBatchId);
         })
+        .timeout(
+            Duration.ofSeconds(recommendationProperties.getDeadlineInSeconds()),
+            Mono.fromCallable(
+                () -> {
+                  log.info(
+                      "Gns-RT solving timeout set to {} has expired. "
+                          + "Generating the Manual:Investigation response",
+                      recommendationProperties.getDeadlineInSeconds());
+                  return GnsRtManualInvestigationRecomBuilder
+                      .prepareManualInvestigationRecommendation(request);
+                }))
         .map(recommendations -> mapResponse(request, recommendations));
   }
 
@@ -65,18 +74,7 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
     rawAlertService.store(internalBatchId, alerts);
     batchInfoService.store(internalBatchId, GNS_RT, alerts.size());
 
-    registerAndPublish(internalBatchId, alerts);
-  }
-
-  private void registerAndPublish(String internalBatchId, List<Alert> alerts) {
-    var registrationResponse =
-        ingestFacade.registerAlerts(
-            internalBatchId, alerts, RegistrationBatchContext.GNS_RT_CONTEXT);
-
-    AlertUpdater.updateWithRegistrationResponse(alerts, registrationResponse);
-
-    udsFeedingPublisher.publishToUds(
-        internalBatchId, alerts, RegistrationBatchContext.GNS_RT_CONTEXT);
+    ingestService.ingestAlertsForRecommendation(internalBatchId, alerts, GNS_RT_CONTEXT);
   }
 
   private List<Alert> mapAlerts(GnsRtRecommendationRequest request, String internalBatchId) {

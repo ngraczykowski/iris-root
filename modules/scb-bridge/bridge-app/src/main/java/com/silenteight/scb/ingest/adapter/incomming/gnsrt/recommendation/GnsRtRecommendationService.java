@@ -40,15 +40,15 @@ public class GnsRtRecommendationService {
             .build());
   }
 
-  public void batchFailed(String internalBatchId, String errorDescription) {
-    registry.batchFailed(internalBatchId, errorDescription);
-  }
-
   private static String getBatchId(List<Recommendation> recommendations) {
     if (recommendations.isEmpty()) {
       throw new IllegalStateException("Empty recommendations");
     }
     return recommendations.get(0).batchId();
+  }
+
+  public void batchFailed(String internalBatchId, String errorDescription) {
+    registry.batchFailed(internalBatchId, errorDescription);
   }
 
 }

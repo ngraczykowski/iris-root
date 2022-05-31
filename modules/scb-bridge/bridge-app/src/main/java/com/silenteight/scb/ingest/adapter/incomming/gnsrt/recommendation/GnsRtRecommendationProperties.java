@@ -12,7 +12,6 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 class GnsRtRecommendationProperties {
 
-  // TODO: probably we should respect that
   private int deadlineInSeconds = 7;
 
   private int schedulerThreadCap;

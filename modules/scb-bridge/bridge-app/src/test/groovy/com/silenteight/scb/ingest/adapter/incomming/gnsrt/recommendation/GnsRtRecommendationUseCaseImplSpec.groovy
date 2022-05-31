@@ -1,13 +1,13 @@
 package com.silenteight.scb.ingest.adapter.incomming.gnsrt.recommendation
 
-import com.silenteight.scb.ingest.adapter.incomming.common.ingest.UdsFeedingPublisher
+import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertIngestService
+import com.silenteight.scb.ingest.adapter.incomming.common.ingest.IngestedAlertsStatus
 import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService
 import com.silenteight.scb.ingest.adapter.incomming.common.store.rawalert.RawAlertService
 import com.silenteight.scb.ingest.adapter.incomming.common.trafficmanagement.TrafficManager
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtRequestToAlertMapper
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtResponseMapper
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtResponseAlert
-import com.silenteight.scb.ingest.domain.IngestFacade
 import com.silenteight.scb.ingest.domain.model.BatchSource
 import com.silenteight.scb.ingest.domain.model.RegistrationBatchContext
 
@@ -17,7 +17,6 @@ import reactor.test.StepVerifier
 import spock.lang.Specification
 import spock.lang.Subject
 
-import static com.silenteight.scb.ingest.domain.Fixtures.registrationResponse
 import static org.assertj.core.api.Assertions.assertThat
 
 class GnsRtRecommendationUseCaseImplSpec extends Specification {
@@ -28,9 +27,7 @@ class GnsRtRecommendationUseCaseImplSpec extends Specification {
 
   def responseMapper = Mock(GnsRtResponseMapper)
 
-  def registrationFacade = Mock(IngestFacade)
-
-  def udsFeedingPublisher = Mock(UdsFeedingPublisher)
+  def ingestService = Mock(BatchAlertIngestService)
 
   def gnsRtRecommendationService = Mock(GnsRtRecommendationService)
 
@@ -38,18 +35,20 @@ class GnsRtRecommendationUseCaseImplSpec extends Specification {
 
   def batchInfoService = Mock(BatchInfoService)
 
+  def recommendationProperties = Mock(GnsRtRecommendationProperties)
+
   def trafficManager = Mock(TrafficManager)
 
   @Subject
   def underTest = GnsRtRecommendationUseCaseImpl.builder()
       .alertMapper(alertMapper)
       .responseMapper(responseMapper)
-      .ingestFacade(registrationFacade)
-      .udsFeedingPublisher(udsFeedingPublisher)
+      .ingestService(ingestService)
       .gnsRtRecommendationService(gnsRtRecommendationService)
       .rawAlertService(rawAlertService)
       .batchInfoService(batchInfoService)
       .trafficManager(trafficManager)
+      .recommendationProperties(recommendationProperties)
       .scheduler(Schedulers.boundedElastic())
       .build()
 
@@ -60,13 +59,12 @@ class GnsRtRecommendationUseCaseImplSpec extends Specification {
         .policyId("policyId")
         .build()
 
+    recommendationProperties.getDeadlineInSeconds() >> 7
     alertMapper.map(fixtures.gnsRtRecommendationRequest, _ as String) >> fixtures.alerts
     responseMapper.map(fixtures.gnsAlert, fixtures.recommendation) >> mappedAlert
     gnsRtRecommendationService.recommendationsMono(_ as String)
         >> Mono.just(fixtures.recommendations)
-    registrationFacade.registerAlerts(
-        _ as String, fixtures.alerts, RegistrationBatchContext.GNS_RT_CONTEXT)
-        >> registrationResponse(fixtures.alerts)
+
     when:
     var mono = underTest.recommend(fixtures.gnsRtRecommendationRequest)
 
@@ -81,10 +79,9 @@ class GnsRtRecommendationUseCaseImplSpec extends Specification {
     1 * trafficManager.activateRtSemaphore()
     1 * rawAlertService.store(_, fixtures.alerts)
     1 * batchInfoService.store(_, _ as BatchSource, fixtures.alerts.size())
-    1 * registrationFacade.registerAlerts(
-        _, fixtures.alerts, RegistrationBatchContext.GNS_RT_CONTEXT)
-        >> registrationResponse(fixtures.alerts)
-    1 * udsFeedingPublisher.publishToUds(_, _, _)
+    1 * ingestService.ingestAlertsForRecommendation(
+        _ as String, fixtures.alerts, RegistrationBatchContext.GNS_RT_CONTEXT) >>
+        new IngestedAlertsStatus(fixtures.alerts, [])
   }
 
 }

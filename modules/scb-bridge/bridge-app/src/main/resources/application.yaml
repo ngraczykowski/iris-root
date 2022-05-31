@@ -221,6 +221,7 @@ serp:
   scb:
     gnsrt:
       recommendation:
+        deadline-in-seconds: 7
         scheduler-thread-cap: 128
         scheduler-queued-task-cap: 1000
     bridge:

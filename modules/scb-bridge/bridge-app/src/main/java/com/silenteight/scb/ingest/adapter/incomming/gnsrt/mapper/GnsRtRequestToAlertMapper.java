@@ -18,12 +18,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 
 import static com.silenteight.scb.ingest.adapter.incomming.common.util.AlertParserUtils.mapString;
 import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 @RequiredArgsConstructor
@@ -31,7 +29,7 @@ public class GnsRtRequestToAlertMapper {
 
   private final HitDetailsParser hitDetailsParser;
   private final GenderDetector genderDetector;
-  private GnsRtRequestToAlertMapperHelper gnsRtRequestToAlertMapperHelper =
+  private final GnsRtRequestToAlertMapperHelper gnsRtRequestToAlertMapperHelper =
       new GnsRtRequestToAlertMapperHelper();
 
   public List<Alert> map(GnsRtRecommendationRequest request, String internalBatchId) {
@@ -50,7 +48,7 @@ public class GnsRtRequestToAlertMapper {
         .parallelStream()
         .filter(g -> g.getAlertStatus() == GnsRtAlertStatus.POTENTIAL_MATCH)
         .map(alert -> createAlert(request, alert, internalBatchId, screenableData))
-        .collect(toList());
+        .toList();
   }
 
   @Nonnull
@@ -86,7 +84,7 @@ public class GnsRtRequestToAlertMapper {
           .index(counter.getAndIncrement())
           .details(details)
           .build();
-    }).collect(toList());
+    }).toList();
   }
 
   private MatchedParty makeWatchlistParty(Suspect suspect, String typeOfRec) {
@@ -99,7 +97,7 @@ public class GnsRtRequestToAlertMapper {
         .id(AlertParserUtils.makeWatchlistPartyId(suspect.getOfacId(), suspect.getBatchId()))
         .wlGenderFromName(genderDetector.determineWlGenderFromName(typeOfRec, names))
         .wlNameSynonyms(suspect.getNameSynonyms().asListOfNames())
-        .wlHitNames(suspect.getActiveNames().stream().map(WlName::getName).collect(toList()))
+        .wlHitNames(suspect.getActiveNames().stream().map(WlName::getName).toList())
         .wlNames(mapWatchlistNames(suspect.getActiveNames()))
         .wlOriginalCnNames(mapWatchlistNames(suspect.getOriginalChineseNames()))
         .wlSearchCodes(suspect.getSearchCodes().asList())
@@ -130,6 +128,6 @@ public class GnsRtRequestToAlertMapper {
     return watchlistNames
         .stream()
         .map(name -> new MatchedParty.WatchlistName(name.getName(), name.getType().name()))
-        .collect(Collectors.toList());
+        .toList();
   }
 }

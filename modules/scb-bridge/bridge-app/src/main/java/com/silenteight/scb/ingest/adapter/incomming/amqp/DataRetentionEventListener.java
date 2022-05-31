@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.dataretention.api.v1.AlertData;
 import com.silenteight.dataretention.api.v1.AlertsExpired;
-import com.silenteight.scb.ingest.domain.IngestFacade;
+import com.silenteight.scb.ingest.domain.DataRetentionService;
 import com.silenteight.scb.ingest.domain.model.DataRetentionCommand;
 import com.silenteight.scb.ingest.domain.model.DataRetentionCommand.DataRetentionAlert;
 
@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 class DataRetentionEventListener {
 
-  private final IngestFacade ingestFacade;
+  private final DataRetentionService dataRetentionService;
 
   @RabbitListener(
       queues = "${amqp.ingest.incoming.data-retention.queue-name}",
@@ -27,7 +27,7 @@ class DataRetentionEventListener {
   public void receiveMessage(AlertsExpired message) {
     log.info("Received {} alerts to perform data retention", message.getAlertsCount());
     var command = createCommand(message);
-    ingestFacade.performDataRetention(command);
+    dataRetentionService.performDataRetention(command);
   }
 
   private DataRetentionCommand createCommand(AlertsExpired message) {

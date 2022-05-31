@@ -15,7 +15,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Base64.Decoder;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 import static java.util.Objects.requireNonNull;
@@ -32,7 +31,7 @@ public class HitDetailsParser {
         .map(GnsRtHit::getHitDetails)
         .map(String::trim)
         .map(s -> new String(base64Decoder.decode(s), StandardCharsets.UTF_8))
-        .collect(Collectors.toList());
+        .toList();
 
     StringBuilder hitDetailsTextBuilder = new StringBuilder();
     for (int index = 0; index < decodedHitDetails.size(); index++) {

@@ -20,7 +20,6 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.validation.Valid;
 
@@ -43,7 +42,6 @@ public class GnsRtController {
 
   private static ResponseEntity<GnsRtRecommendationResponse> makeResponse(
       GnsRtRecommendationResponse gnsRtRecommendationResponse) {
-
     return ResponseEntity.ok(gnsRtRecommendationResponse);
   }
 
@@ -57,7 +55,7 @@ public class GnsRtController {
         .getAllErrors()
         .stream()
         .map(GnsRtController::getErrorMessage)
-        .collect(Collectors.toList());
+        .toList();
 
     return createBadRequestErrorResponse(String.join(";\n", errorMessages));
   }

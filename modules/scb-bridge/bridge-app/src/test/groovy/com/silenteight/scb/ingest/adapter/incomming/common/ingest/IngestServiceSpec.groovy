@@ -4,7 +4,7 @@ import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRec
 import com.silenteight.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService
 import com.silenteight.scb.ingest.adapter.incomming.common.trafficmanagement.TrafficManager
 import com.silenteight.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator
-import com.silenteight.scb.ingest.domain.IngestFacade
+import com.silenteight.scb.ingest.domain.AlertRegistrationFacade
 import com.silenteight.scb.reports.domain.port.outgoing.ReportsSenderService
 
 import spock.lang.Specification
@@ -19,7 +19,7 @@ import static com.silenteight.scb.ingest.domain.model.RegistrationBatchContext.L
 class IngestServiceSpec extends Specification {
 
   def scbRecommendationService = Mock(ScbRecommendationService)
-  def ingestFacade = Mock(IngestFacade)
+  def ingestFacade = Mock(AlertRegistrationFacade)
   def udsFeedingPublisher = Mock(UdsFeedingPublisher)
   def reportsSenderService = Mock(ReportsSenderService)
   def trafficManager = Mock(TrafficManager)
@@ -27,7 +27,7 @@ class IngestServiceSpec extends Specification {
 
   def ingestService = IngestService.builder()
       .scbRecommendationService(scbRecommendationService)
-      .ingestFacade(ingestFacade)
+      .alertRegistrationFacade(ingestFacade)
       .udsFeedingPublisher(udsFeedingPublisher)
       .reportsSenderService(reportsSenderService)
       .trafficManager(trafficManager)
@@ -49,7 +49,7 @@ class IngestServiceSpec extends Specification {
     1 * batchInfoService.store(internalBatchId, LEARNING, _)
     1 * ingestFacade.registerAlerts(internalBatchId, alerts, LEARNING_CONTEXT) >>
         registrationResponse(alerts)
-    1 * udsFeedingPublisher.publishToUds(internalBatchId, alerts,  LEARNING_CONTEXT)
+    1 * udsFeedingPublisher.publishToUds(internalBatchId, alerts, LEARNING_CONTEXT)
     1 * reportsSenderService.send({it.size() == 2})
     0 * _
   }

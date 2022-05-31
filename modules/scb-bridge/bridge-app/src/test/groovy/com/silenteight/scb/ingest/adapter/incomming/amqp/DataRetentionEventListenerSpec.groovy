@@ -2,7 +2,7 @@ package com.silenteight.scb.ingest.adapter.incomming.amqp
 
 import com.silenteight.dataretention.api.v1.AlertData
 import com.silenteight.dataretention.api.v1.AlertsExpired
-import com.silenteight.scb.ingest.domain.IngestFacade
+import com.silenteight.scb.ingest.domain.DataRetentionService
 import com.silenteight.scb.ingest.domain.model.DataRetentionCommand
 import com.silenteight.scb.ingest.domain.model.DataRetentionCommand.DataRetentionAlert
 
@@ -11,10 +11,10 @@ import spock.lang.Subject
 
 class DataRetentionEventListenerSpec extends Specification {
 
-  def ingestFacade = Mock(IngestFacade)
+  def dataRetentionService = Mock(DataRetentionService)
 
   @Subject
-  def underTest = new DataRetentionEventListener(ingestFacade)
+  def underTest = new DataRetentionEventListener(dataRetentionService)
 
   def 'should call facade with proper command'() {
     given:
@@ -27,7 +27,7 @@ class DataRetentionEventListenerSpec extends Specification {
     underTest.receiveMessage(message)
 
     then:
-    1 * ingestFacade.performDataRetention(Fixtures.EXPECTED_COMMAND)
+    1 * dataRetentionService.performDataRetention(Fixtures.EXPECTED_COMMAND)
   }
 
   static class Fixtures {

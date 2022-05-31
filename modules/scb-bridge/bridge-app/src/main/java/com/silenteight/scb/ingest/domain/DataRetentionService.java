@@ -17,11 +17,11 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-class DataRetentionService {
+public class DataRetentionService {
 
   private final RawAlertService rawAlertService;
 
-  void performDataRetention(DataRetentionCommand command) {
+  public void performDataRetention(DataRetentionCommand command) {
     log.info("Performing data retention on {} alerts", command.alerts().size());
     groupByInternalBatchId(command.alerts())
         .forEach(this::removeExpiredRawAlerts);
