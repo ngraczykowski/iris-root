@@ -1,5 +1,4 @@
 import logging
-import sys
 
 from agent_base.grpc_service.servicer import GrpcServicer
 from agent_base.utils.config import ConfigurationException
@@ -19,14 +18,11 @@ from company_name.solution.name_preconditions import AlphabetRule, InclusionRule
 from company_name.solution.scores_reduction import FeatureRule, ModelRule, ModelSolutionRule
 from company_name.solution.sklearn_model import SklearnModel
 
-logger = logging.getLogger(__name__)
-c_handler = logging.StreamHandler(sys.stdout)
-c_handler.setLevel(logging.DEBUG)
-
 
 class CompanyNameAgentConfigServicer(OrganizationNameAgentConfigServicer, GrpcServicer):
     def __init__(self, agent: CompanyNameAgent):
         self.agent = agent
+        self.logger = logging.getLogger("main").getChild("config_change_servicer")
 
     name = DESCRIPTOR.services_by_name["OrganizationNameAgentConfig"].full_name
 
@@ -43,12 +39,12 @@ class CompanyNameAgentConfigServicer(OrganizationNameAgentConfigServicer, GrpcSe
             if any((request.feature_rules, request.model_solution_rules, request.model_path)):
                 await self.change_reduction_rules(request)
 
-            logger.info(f"Successfully set rules: {request}")
+            self.logger.info(f"Successfully set rules: {request}")
             return ChangeOrganizationNameAgentConfigResponse(
                 status=ChangeOrganizationNameAgentConfigResponse.Status.OK
             )
         except Exception as exc:
-            logger.error(exc)
+            self.logger.error(exc)
             return ChangeOrganizationNameAgentConfigResponse(
                 status=ChangeOrganizationNameAgentConfigResponse.Status.ERROR
             )

@@ -19,7 +19,7 @@ rabbitmq:
   #   certfile: "tests/ssl_example/client.pem"
 
 consul:
-  host: 10.8.0.1
+  host: localhost
   port: 8500
 
 agent:

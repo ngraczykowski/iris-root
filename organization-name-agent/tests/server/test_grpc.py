@@ -2,8 +2,9 @@ import subprocess
 import time
 import unittest
 
-import grpc
 from agent_base.utils import Config
+from s8_python_network.grpc_channel import get_channel
+from s8_python_network.utils import grpc_server_on, kill_process_on_the_port, kill_recursive
 from silenteight.agent.organizationname.v1.api.organization_name_agent_pb2 import (
     CompareOrganizationNamesRequest,
 )
@@ -11,13 +12,7 @@ from silenteight.agent.organizationname.v1.api.organization_name_agent_pb2_grpc 
     OrganizationNameAgentStub,
 )
 
-from tests.server.utils import (
-    TEST_CASES,
-    ServerIsNotRunning,
-    grpc_server_on,
-    kill_process_on_the_port,
-    kill_recursive,
-)
+from tests.server.utils import TEST_CASES, ServerIsNotRunning
 
 PORT = Config().load_yaml_config("application.yaml")["agent"]["grpc"]["port"]
 GRPC_ADDRESS = f"localhost:{PORT}"
@@ -25,7 +20,7 @@ TIMEOUT_SEC = 0.5
 
 
 def wait_for_server(address):
-    channel = grpc.insecure_channel(address)
+    channel = get_channel(address)
     counter = 0
     while counter < 10 and not grpc_server_on(channel, TIMEOUT_SEC):
         time.sleep(2)
@@ -45,7 +40,7 @@ class TestServer(unittest.TestCase):
         time.sleep(TIMEOUT_SEC)
 
     def test_check_grpc_response(self):
-        channel = grpc.insecure_channel(GRPC_ADDRESS)
+        channel = get_channel(GRPC_ADDRESS)
         stub = OrganizationNameAgentStub(channel)
         for test_case in TEST_CASES:
             request = CompareOrganizationNamesRequest(**test_case["data"])

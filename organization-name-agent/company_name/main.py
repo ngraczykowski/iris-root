@@ -6,6 +6,7 @@ import sentry_sdk
 from agent_base.agent import AgentRunner
 from agent_base.grpc_service import GrpcService
 from agent_base.utils import Config
+from agent_base.utils.logger import get_logger
 
 from company_name.agent.agent import CompanyNameAgent
 from company_name.agent.agent_config_grpc_servicer import CompanyNameAgentConfigServicer
@@ -91,6 +92,12 @@ def main():
         help="Increase verbosity for debug purpose",
     )
     parser.add_argument(
+        "--log-file",
+        type=str,
+        default="org_name.log",
+        help="Path to the file to save logs in",
+    )
+    parser.add_argument(
         "--ssl",
         action="store_true",
         help="Use ssl in grpc service and to connect with UDS & rabbitMQ",
@@ -99,10 +106,12 @@ def main():
     # if not args.grpc and not args.agent_exchange:
     #     parser.error("No services to run")
 
-    logging.basicConfig(
-        level=logging.DEBUG if args.verbose else logging.INFO,
-        format="%(asctime)s %(name)-20s %(levelname)-8s %(message)s",
+    logger = get_logger(
+        "main",
+        log_level=logging.DEBUG if args.verbose else logging.INFO,
+        log_file=args.log_file,
     )
+    logger.info(f"Start logging to stdout and to {args.log_file} file")
 
     run(
         configuration_dirs=(args.configuration_dir,),

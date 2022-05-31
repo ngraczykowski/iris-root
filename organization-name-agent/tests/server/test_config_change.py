@@ -1,9 +1,10 @@
 import subprocess
 import time
 
-import grpc
 import pytest
 from agent_base.utils import Config
+from s8_python_network.grpc_channel import get_channel
+from s8_python_network.utils import kill_process_on_the_port, kill_recursive
 from silenteight.agent.organizationname.v1.api.organization_name_agent_pb2 import (
     CompareOrganizationNamesRequest,
 )
@@ -23,9 +24,8 @@ from company_name.agent.config_service.organization_name_agent_config_pb2_grpc i
     OrganizationNameAgentConfigStub,
 )
 from tests.server.test_grpc import wait_for_server
-from tests.server.utils import kill_process_on_the_port, kill_recursive
 
-ESTIMATED_TIMEOUT = 0.5
+ESTIMATED_TIMEOUT = 1
 PORT = Config().load_yaml_config("application.yaml")["agent"]["grpc"]["port"]
 GRPC_ADDRESS = f"localhost:{PORT}"
 
@@ -118,7 +118,7 @@ def run_service():
 def test_passing_new_config(
     tested_case, before_change_solution, change_request, after_change_solution, run_service
 ):
-    channel = grpc.insecure_channel(GRPC_ADDRESS)
+    channel = get_channel(GRPC_ADDRESS)
     config_stub = OrganizationNameAgentConfigStub(channel)
     call_stub = OrganizationNameAgentStub(channel)
 

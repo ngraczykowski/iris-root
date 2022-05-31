@@ -13,10 +13,6 @@ from company_name.solution.scores_reduction import ScoresReduction
 from company_name.solution.solution import PairResult, Reason, Result, Solution
 from company_name.utils.names_abbreviations_filtering import remove_redundant_abbreviations
 
-logger = logging.getLogger(__name__)
-c_handler = logging.StreamHandler()
-c_handler.setLevel(logging.DEBUG)
-
 
 class CompanyNameAgent(Agent):
     def __init__(self, *args, additional_knowledge_dir: Optional[pathlib.Path] = None, **kwargs):
@@ -27,6 +23,7 @@ class CompanyNameAgent(Agent):
         self.reduction = ScoresReduction(self.config)
         self.name_preconditions = NamePreconditions(self.config)
         self.blacklist = Blacklist(self.config)
+        self.logger = logging.getLogger("main").getChild("agent")
 
     def _check_pair(
         self,
@@ -85,10 +82,10 @@ class CompanyNameAgent(Agent):
 
     def resolve(self, ap_names: Sequence[str], mp_names: Sequence[str]) -> Result:
         try:
-            logger.debug(f"Checking {ap_names} vs {mp_names}")
+            self.logger.debug(f"Checking {ap_names} vs {mp_names}")
             result = self._resolve(ap_names, mp_names)
-            logger.debug(f"For {ap_names} vs {mp_names} solution: {result.solution}")
+            self.logger.debug(f"For {ap_names} vs {mp_names} solution: {result.solution}")
             return result
         except Exception as err:  # noqa
-            logger.exception(f"for {ap_names} vs {mp_names}")
+            self.logger.exception(f"for {ap_names} vs {mp_names}")
             return Result(Solution.AGENT_ERROR)
