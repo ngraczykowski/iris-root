@@ -2,10 +2,10 @@ from setuptools import find_packages, setup
 
 install_require = [
     "aiohttp==3.7.4.post0",
-    "grpcio==1.39.0",
-    "grpcio-health-checking==1.39.0",
-    "grpcio-reflection==1.39.0",
-    "grpcio-tools==1.39.0",
+    "grpcio>=1.46.3",
+    "grpcio-health-checking>=1.46.3",
+    "grpcio-reflection>=1.46.3",
+    "grpcio-tools>=1.46.3",
     "protobuf==3.19.4",
     "psutil==5.9.0",
     "python-consul2==0.1.5",
