@@ -12,12 +12,19 @@ jib {
   }
   to {
     def registry = System.properties.getOrDefault('jibRegistry', 'docker.repo.silenteight.com')
-    image = "${registry}/iris/${project.name}:${version}"
-    if ("$version".endsWith("-SNAPSHOT")) {
-      tags = ["snapshot"]
-    } else {
-      tags = ["latest"]
-    }
+    def additionalTag = System.properties.getOrDefault('jibAdditionalTag', '')
+    def isSnapshot = "$version".endsWith('-SNAPSHOT')
+    def imageTag = isSnapshot ? "$version".minus('-SNAPSHOT') : "$version"
+    // NOTE(ahaczewski): Have to put it into local array variable, as Jib's `tags` is
+    // an immutable collection.
+    def extraTags = []
+    if (!isSnapshot)
+      extraTags << "latest"
+    if (additionalTag)
+      extraTags << additionalTag
+
+    image = "${registry}/iris/${project.name}:${imageTag}"
+    tags = extraTags
   }
   container {
     appRoot = "/silenteight/app"

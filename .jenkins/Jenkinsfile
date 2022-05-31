@@ -1,6 +1,7 @@
 @Library('pipeline-shared-library@master') _
 
 def version = ""
+def javaVersion = ""
 def images = []
 
 pipeline {
@@ -44,6 +45,11 @@ pipeline {
       steps {
         script {
           version = sh(returnStdout: true, script: './scripts/get-version.sh').trim()
+          if (env.CHANGE_ID)
+            version += "-${env.BRANCH_NAME}"
+          // NOTE(ahaczewski): To keep the "version" clean of -SNAPSHOT, while still using
+          //  Artifactory mechanism for clearing -SNAPSHOTs.
+          javaVersion = env.CHANGE_ID ? "${version}-SNAPSHOT" : version
         }
         updateBuildName displayName: "#${env.BUILD_NUMBER} v${version}"
       }
@@ -61,26 +67,25 @@ pipeline {
                   credentialsId: 'artifactory-user',
                   usernameVariable: 'S8_REPO_USER',
                   passwordVariable: 'S8_REPO_PASSWORD')]) {
-            sh "./gradlew -Pversion=\"${version}\" clean build"
+            sh "./gradlew -Pversion=\"${javaVersion}\" clean build"
 
             withDockerRegistry(
                 url: 'https://docker.repo.silenteight.com',
                 credentialsId: 'artifactory-deployment-user') {
               script {
-                if (env.BRANCH_NAME == 'master') {
-                  sh """
-                    ./gradlew \
-                      -Dsilenteight.repoDeploymentUser="\$ARTIFACTORY_USR" \
-                      -Dsilenteight.repoDeploymentPassword="\$ARTIFACTORY_PSW" \
-                      -Djib.console=plain \
-                      -Pversion="${version}" \
-                      publish
-                  """
-                  images =
-                      findFiles(glob: '**/jib-image.json')
-                          .collect {readJSON(file: it.path)}
-                          .image.collect {it.minus('docker.repo.silenteight.com/')}
-                }
+                sh """
+                  ./gradlew \
+                    -Dsilenteight.repoDeploymentUser="\$ARTIFACTORY_USR" \
+                    -Dsilenteight.repoDeploymentPassword="\$ARTIFACTORY_PSW" \
+                    -Djib.console=plain \
+                    -DjibAdditionalTag="${env.CHANGE_ID ? env.BRANCH_NAME.toLowerCase() : ''}" \
+                    -Pversion="${javaVersion}" \
+                    publish
+                """
+                images =
+                    findFiles(glob: '**/jib-image.json')
+                        .collect {readJSON(file: it.path)}
+                        .image.collect {it.minus('docker.repo.silenteight.com/')}
               }
             }
           }
