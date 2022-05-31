@@ -34,6 +34,9 @@ import com.silenteight.datasource.api.historicaldecisions.v1.HistoricalDecisions
 import com.silenteight.datasource.api.hittype.v1.BatchGetMatchHitTypeInputsRequest;
 import com.silenteight.datasource.api.hittype.v1.BatchGetMatchHitTypeInputsResponse;
 import com.silenteight.datasource.api.hittype.v1.HitTypeFeatureInput;
+import com.silenteight.datasource.api.isofgivendocumenttype.v1.BatchGetIsOfGivenDocumentTypeInputsRequest;
+import com.silenteight.datasource.api.isofgivendocumenttype.v1.BatchGetIsOfGivenDocumentTypeInputsResponse;
+import com.silenteight.datasource.api.isofgivendocumenttype.v1.IsOfGivenDocumentTypeFeatureInput;
 import com.silenteight.datasource.api.location.v1.BatchGetMatchLocationInputsRequest;
 import com.silenteight.datasource.api.location.v1.BatchGetMatchLocationInputsResponse;
 import com.silenteight.datasource.api.location.v1.LocationFeatureInput;
@@ -75,8 +78,9 @@ class FeatureAdapter {
   private static final String TRANSACTION_INPUT = TransactionFeatureInput.class.getCanonicalName();
   private static final String BANK_IDENTIFICATION_CODES_INPUT =
       BankIdentificationCodesFeatureInput.class.getCanonicalName();
-  private static final String HIT_TYPE_INPUT =
-      HitTypeFeatureInput.class.getCanonicalName();
+  private static final String HIT_TYPE_INPUT = HitTypeFeatureInput.class.getCanonicalName();
+  private static final String IS_OF_GIVEN_DOCUMENT_TYPE_INPUT =
+      IsOfGivenDocumentTypeFeatureInput.class.getCanonicalName();
 
   private final BatchGetFeatureInputUseCase getUseCase;
   private final BatchCreateMatchFeaturesUseCase addUseCase;
@@ -298,5 +302,21 @@ class FeatureAdapter {
         featureRequest,
         batch -> onNext.accept(
             batch.castResponse(BatchGetMatchHitTypeInputsResponse.class)));
+  }
+
+  public void batchGetIsOfGivenDocumentTypeInputs(
+      @Valid BatchGetIsOfGivenDocumentTypeInputsRequest request,
+      Consumer<BatchGetIsOfGivenDocumentTypeInputsResponse> onNext) {
+
+    var featureRequest = BatchFeatureRequest.builder()
+        .agentInputType(IS_OF_GIVEN_DOCUMENT_TYPE_INPUT)
+        .matches(request.getMatchesList())
+        .features(request.getFeaturesList())
+        .build();
+
+    getUseCase.batchGetFeatureInput(
+        featureRequest,
+        batch -> onNext.accept(
+            batch.castResponse(BatchGetIsOfGivenDocumentTypeInputsResponse.class)));
   }
 }

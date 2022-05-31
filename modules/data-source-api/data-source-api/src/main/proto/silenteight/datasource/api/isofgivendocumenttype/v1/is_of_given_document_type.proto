@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package silenteight.datasource.api.isofgivendocumenttype.v1;
+
+import "google/api/annotations.proto";
+
+option java_package = "com.silenteight.datasource.api.isofgivendocumenttype.v1";
+option java_outer_classname = "IsOfGivenDocumentTypeProto";
+option java_multiple_files = true;
+
+service IsOfGivenDocumentTypeInputService {
+  rpc BatchGetIsOfGivenDocumentTypeInputs (BatchGetIsOfGivenDocumentTypeInputsRequest) returns (stream BatchGetIsOfGivenDocumentTypeInputsResponse) {
+    option (google.api.http) = {
+      post: "/agent-inputs/is-of-given-document-type/versions/v1/matches:batchGet"
+      body: "*"
+    };
+  }
+}
+
+message BatchGetIsOfGivenDocumentTypeInputsRequest {
+  // The list of matches data is requested for, in form of `alerts/<Alert ID>/matches/<Match ID>`.
+  repeated string matches = 1;
+  // The list of features the input data for each match is requested, in form of `features/<Feature ID>`.
+  repeated string features = 2;
+}
+
+message BatchGetIsOfGivenDocumentTypeInputsResponse {
+  repeated IsOfGivenDocumentTypeInput is_of_given_document_type_inputs = 1;
+}
+
+message IsOfGivenDocumentTypeInput {
+  string match = 1;
+  repeated IsOfGivenDocumentTypeFeatureInput is_of_given_document_type_features_input = 2;
+}
+
+message IsOfGivenDocumentTypeFeatureInput {
+  string feature = 1;
+  string document_number = 2;
+  repeated string document_types = 3;
+}

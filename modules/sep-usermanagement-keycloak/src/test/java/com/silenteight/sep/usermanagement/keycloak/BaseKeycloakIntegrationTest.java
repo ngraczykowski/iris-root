@@ -8,6 +8,8 @@ import org.keycloak.admin.client.resource.RealmResource;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.time.Duration;
+
 @Testcontainers(disabledWithoutDocker = true)
 public class BaseKeycloakIntegrationTest {
 
@@ -22,7 +24,8 @@ public class BaseKeycloakIntegrationTest {
       new KeycloakContainer("jboss/keycloak:" + KEYCLOAK_VERSION)
           .withRealmImportFile(KEYCLOAK_REALM_CONFIG_JSON)
           .withAdminUsername("admin")
-          .withAdminPassword("admin");
+          .withAdminPassword("admin")
+          .withStartupTimeout(Duration.ofMinutes(5));
 
   @BeforeAll
   public static void setup() {
