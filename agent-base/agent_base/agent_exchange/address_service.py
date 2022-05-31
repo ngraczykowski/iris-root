@@ -1,7 +1,7 @@
 import random
 from typing import Mapping
 
-from agent_base.utils.consul import ConsulService
+from s8_python_network.consul import ConsulService
 
 
 class AddressService:

@@ -27,6 +27,17 @@ pipeline {
                 }
             }
             stages {
+                stage('Get commit msg') {
+                    steps {
+                        script {
+                            env.COMMIT_TYPE = sh (
+                                script: "git log -1 --pretty=%B | grep : | cut -d ':' -f 1",
+                                returnStdout: true
+                            ).trim()
+                        }
+                        echo "${COMMIT_TYPE}"
+                    }
+                }
                 stage('Prepare') {
                     steps {
                         sh 'pip install --index-url "${PYPI_URL}" --requirement requirements.txt'
@@ -36,6 +47,14 @@ pipeline {
                     steps {
                         sh './scripts/clean.sh'
                         sh './scripts/build.sh --index-url "${PYPI_URL}"'
+                        script {
+                           env.VERSION = sh(
+                            returnStdout: true,
+                            script: '''#!/bin/bash
+                                grep ^current_version setup.cfg | awk '{ print $3 }'
+                            '''
+                           ).trim()
+                        }
                     }
                 }
                 stage('Test package') {
@@ -46,9 +65,12 @@ pipeline {
                 }
                 stage('Publish package') {
                     when {
-                        anyOf {
-                            branch 'master'
-                            branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
+                        allOf {
+                            anyOf {
+                                branch 'master'
+                                branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
+                            }
+                            expression { env.COMMIT_TYPE != "Bump version" }
                         }
                     }
                     steps {
@@ -58,6 +80,11 @@ pipeline {
                             passwordVariable: 'TWINE_PASSWORD',
                         )]) {
                             sh './scripts/publish.sh --index-url "${PYPI_URL}"'
+                            sh 'git tag --delete $(git tag --list)'
+
+                            sshagent([env.JENKINS_SSH_NAME]) {
+                                sh './scripts/tag_and_bump_version.sh'
+                            }
                         }
                     }
                 }

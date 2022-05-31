@@ -3,12 +3,13 @@ import time
 from typing import Any, AsyncGenerator, Generator, Tuple
 
 import grpc
+from s8_python_network.consul import ConsulServiceException
+from s8_python_network.grpc_channel import SSLCredentials, get_channel
 from silenteight.agents.v1.api.exchange.exchange_pb2 import AgentExchangeRequest
 
 from agent_base.agent.exception import AgentException
 from agent_base.agent_exchange.address_service import AddressService
 from agent_base.utils import Config
-from agent_base.utils.consul import ConsulServiceException
 
 
 class AgentDataSourceException(AgentException):
@@ -61,16 +62,16 @@ class AgentDataSource:
 
     async def initiate_channel(self, address):
         self.logger.info(f"Connecting to UDS via {address}")
-        self.channel = grpc.aio.insecure_channel(address)
+        self.channel = get_channel(address, asynchronous=True, ssl=False)
         if self.ssl:
-            with open(self.data_source_config["client_ca"], "rb") as f:
-                ca = f.read()
-            with open(self.data_source_config["client_private_key"], "rb") as f:
-                private_key = f.read()
-            with open(self.data_source_config["client_public_key_chain"], "rb") as f:
-                certificate_chain = f.read()
-            server_credentials = grpc.ssl_channel_credentials(ca, private_key, certificate_chain)
-            self.channel = grpc.aio.secure_channel(address, server_credentials)
+            server_credentials = SSLCredentials(
+                self.data_source_config["client_ca"],
+                self.data_source_config["client_private_key"],
+                self.data_source_config["client_public_key_chain"],
+            )
+            self.channel = get_channel(
+                address, asynchronous=True, ssl=True, ssl_credentials=server_credentials
+            )
 
         self.logger.info(f"Data source channel on {address}")
 
@@ -78,17 +79,22 @@ class AgentDataSource:
         self, request: AgentExchangeRequest
     ) -> AsyncGenerator[Tuple[str, str, Any], None]:
         try:
-            async for response in self.channel_stream_method(
-                self.prepare_request(request),
-                timeout=self.data_source_config.get("timeout"),
-            ):
-                # https://www.python.org/dev/peps/pep-0525/#asynchronous-yield-from
-                for parsed in self.parse_response(response):
-                    yield parsed
+            async for response in self._request(request):
+                yield response
         except grpc.RpcError as err:
             self.logger.warning(f"{err!r} for {request}")
             await self.start()
-            self.request(request)
+            async for response in self._request(request):
+                yield response
+
+    async def _request(self, request):
+        async for response in self.channel_stream_method(
+            self.prepare_request(request),
+            timeout=self.data_source_config.get("timeout"),
+        ):
+            # https://www.python.org/dev/peps/pep-0525/#asynchronous-yield-from
+            for parsed in self.parse_response(response):
+                yield parsed
 
     def prepare_request(self, request: AgentExchangeRequest) -> Any:
         raise NotImplementedError

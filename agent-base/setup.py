@@ -6,14 +6,15 @@ install_require = [
     "aiohttp==3.7.4.post0",
     "data-source-api>=0.18.0",
     "googleapis-common-protos==1.53.0",
-    "grpcio==1.39.0",
-    "grpcio-health-checking==1.39.0",
-    "grpcio-reflection==1.39.0",
-    "grpcio-tools==1.39.0",
+    "grpcio>=1.46.3",
+    "grpcio-health-checking>=1.46.3",
+    "grpcio-reflection>=1.46.3",
+    "grpcio-tools>=1.46.3",
     "lz4==3.1.3",
     "name-agent-api>=0.27.0",
     "python-consul2==0.1.5",
     "pyyaml==5.4.1",
+    "s8_python_network==0.2.4",
 ]
 
 tests_require = [
@@ -32,7 +33,7 @@ tests_require = [
 
 setup(
     name="agent-base",
-    version="0.23.0-dev",
+    version="0.23.0",
     description="",
     author="Silent Eight Pte. Ltd.",
     author_email="support@silenteight.com",
