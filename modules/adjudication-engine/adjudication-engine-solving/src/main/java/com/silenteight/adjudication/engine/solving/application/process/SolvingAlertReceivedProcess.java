@@ -20,7 +20,7 @@ import javax.annotation.Nonnull;
 
 @RequiredArgsConstructor
 @Slf4j
-public class AlertAgentDispatchProcess {
+public class SolvingAlertReceivedProcess {
 
   private final AgentExchangeAlertSolvingMapper agentExchangeRequestMapper;
   private final AgentsMatchPublisher matchesPublisher;
@@ -47,7 +47,6 @@ public class AlertAgentDispatchProcess {
 
     pendingAlerts.forEach(
         alertSolving -> {
-          // it sucks because is still blocking
           this.agentExchangeRequestMapper.from(alertSolving).forEach(matchesPublisher::publish);
           this.categoryResolveProcess.resolve(alertSolving.getAlertId());
           this.commentInputResolveProcess.resolve(alertSolving.getAlertName());
@@ -61,22 +60,21 @@ public class AlertAgentDispatchProcess {
   }
 
   private void solveReadyMatches(List<AlertSolving> pendingAlerts) {
-    pendingAlerts.forEach(
-        alertSolving ->
-            Arrays.stream(alertSolving.getMatchIds())
-                .forEach(
-                    matchId -> {
-                      if (alertSolving.isMatchReadyForSolving(matchId)) {
-                        var matchSolutionRequest =
-                            new MatchSolutionRequest(
-                                alertSolving.getAlertId(),
-                                matchId,
-                                alertSolving.getPolicy(),
-                                alertSolving.getMatchFeatureNames(matchId),
-                                alertSolving.getMatchFeatureVectors(matchId));
-                        readyMatchFeatureVectorPublisher.send(matchSolutionRequest);
-                      }
-                    }));
+    for (var alertSolving : pendingAlerts) {
+      for (var matchId : alertSolving.getMatchIds()) {
+        if (!alertSolving.isMatchReadyForSolving(matchId)) {
+          continue;
+        }
+        var matchSolutionRequest =
+            new MatchSolutionRequest(
+                alertSolving.getAlertId(),
+                matchId,
+                alertSolving.getPolicy(),
+                alertSolving.getMatchFeatureNames(matchId),
+                alertSolving.getMatchFeatureVectors(matchId));
+        readyMatchFeatureVectorPublisher.send(matchSolutionRequest);
+      }
+    }
   }
 
   @Nonnull

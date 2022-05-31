@@ -27,7 +27,7 @@ import java.util.concurrent.ScheduledExecutorService;
 class ProcessConfiguration {
 
   @Bean
-  AlertAgentDispatchProcess alertAgentDispatcherProcess(
+  SolvingAlertReceivedProcess alertAgentDispatcherProcess(
       AgentExchangeAlertSolvingMapper agentExchnageRequestMapper,
       AgentsMatchPublisher agentsMatchPublisher,
       MatchFeaturesFacade matchFeaturesFacade,
@@ -36,7 +36,7 @@ class ProcessConfiguration {
       CommentInputResolveProcess commentInputResolveProcess,
       CategoryResolveProcess categoryResolveProcess) {
 
-    return new AlertAgentDispatchProcess(
+    return new SolvingAlertReceivedProcess(
         agentExchnageRequestMapper,
         agentsMatchPublisher,
         matchFeaturesFacade,
@@ -87,7 +87,7 @@ class ProcessConfiguration {
   }
 
   @Bean
-  ResolvedAlertProcess resolvedAlertProcess(
+  SolvedAlertProcess resolvedAlertProcess(
       AlertSolvingRepository alertSolvingRepository,
       RecommendationPublisher recommendationPublisher,
       CommentFacade commentFacade,
@@ -95,7 +95,7 @@ class ProcessConfiguration {
       RecommendationFacade recommendationFacade,
       ProtoMessageToObjectNodeConverter converter,
       CommentInputClientRepository commentInputClientRepository) {
-    return new ResolvedAlertProcess(
+    return new SolvedAlertProcess(
         recommendationPublisher,
         alertSolvingRepository,
         alertSolvingAlertContextMapper,
@@ -106,7 +106,7 @@ class ProcessConfiguration {
   }
 
   @Bean
-  AgentResponseProcess gamma(
+  AgentResponseProcess agentResponseProcess(
       final ReadyMatchFeatureVectorPublisher governanceProvider,
       AlertSolvingRepository alertSolvingRepository,
       ProtoMessageToObjectNodeConverter converter) {
@@ -118,11 +118,11 @@ class ProcessConfiguration {
       final AlertSolvingRepository alertSolvingRepository,
       final HazelcastInstance hazelcastInstance,
       final GovernanceFacade governanceFacade,
-      final ResolvedAlertProcess resolvedAlertProcess) {
+      final SolvedAlertProcess solvedAlertProcess) {
     final ExecutorService scheduledExecutorService = Executors.newFixedThreadPool(15);
     final GovernanceAlertPublisher governanceAlertPublisher =
         new GovernanceAlertPublisher(
-            governanceFacade, hazelcastInstance, scheduledExecutorService, resolvedAlertProcess);
+            governanceFacade, hazelcastInstance, scheduledExecutorService, solvedAlertProcess);
     return new GovernanceMatchResponseProcess(governanceAlertPublisher, alertSolvingRepository);
   }
 }

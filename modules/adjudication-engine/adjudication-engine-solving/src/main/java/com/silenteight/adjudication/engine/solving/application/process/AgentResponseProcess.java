@@ -1,6 +1,5 @@
 package com.silenteight.adjudication.engine.solving.application.process;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectNodeConverter;
@@ -20,17 +19,13 @@ import com.google.protobuf.Struct;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Slf4j
-public class AgentResponseProcess {
-
-  private final ReadyMatchFeatureVectorPublisher governanceProvider;
-  private final AlertSolvingRepository alertSolvingRepository;
-
-  private final ProtoMessageToObjectNodeConverter converter;
+public record AgentResponseProcess(ReadyMatchFeatureVectorPublisher governanceProvider,
+                                   AlertSolvingRepository alertSolvingRepository,
+                                   ProtoMessageToObjectNodeConverter converter) {
 
   @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
-  public void processMatches(final AgentExchangeResponse agentResponse) {
+  public void processMatchesFeatureValue(final AgentExchangeResponse agentResponse) {
 
     for (AgentOutput agentOutput : agentResponse.getAgentOutputsList()) {
 

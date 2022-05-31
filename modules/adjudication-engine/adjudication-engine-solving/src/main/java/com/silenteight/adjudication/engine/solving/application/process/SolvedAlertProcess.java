@@ -26,7 +26,7 @@ import javax.annotation.Nonnull;
 
 @RequiredArgsConstructor
 @Slf4j
-public class ResolvedAlertProcess {
+public class SolvedAlertProcess {
 
   private static final String COMMENT_TEMPLATE = "alert";
   private static final String MATCH_COMMENT_TEMPLATE = "match-template";

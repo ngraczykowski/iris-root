@@ -3,7 +3,7 @@ package com.silenteight.adjudication.engine.solving.application.listener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.adjudication.engine.solving.application.process.AlertAgentDispatchProcess;
+import com.silenteight.adjudication.engine.solving.application.process.SolvingAlertReceivedProcess;
 import com.silenteight.adjudication.internal.v1.AnalysisAlertsAdded;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 )
 class ReceivedAlertListener {
 
-  private final AlertAgentDispatchProcess alertAgentDispatchProcess;
+  private final SolvingAlertReceivedProcess solvingAlertReceivedProcess;
 
   @RabbitListener(autoStartup = "true",
       concurrency = "10-10",
@@ -37,7 +37,7 @@ class ReceivedAlertListener {
   void onReceivedAlert(AnalysisAlertsAdded message) {
 
     log.info("Received alert message with alerts count {}", message.getAnalysisAlertsCount());
-    this.alertAgentDispatchProcess.handle(message);
+    this.solvingAlertReceivedProcess.handle(message);
   }
 
 }

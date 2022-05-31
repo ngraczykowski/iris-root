@@ -26,7 +26,7 @@ class ReceiveAgentResponseListener {
     this.agentResponseProcess = agentResponseProcess;
   }
 
-  @RabbitListener(queues = "ae.agent-response")
+  @RabbitListener(queues = "ae.agent-response", concurrency = "10-10")
   @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   void onReceive(AgentExchangeResponse agentResponse) {
     log.info(
@@ -37,6 +37,6 @@ class ReceiveAgentResponseListener {
             .flatMap(f -> f.getFeaturesList().stream())
             .collect(
                 Collectors.toList()));
-    agentResponseProcess.processMatches(agentResponse);
+    agentResponseProcess.processMatchesFeatureValue(agentResponse);
   }
 }

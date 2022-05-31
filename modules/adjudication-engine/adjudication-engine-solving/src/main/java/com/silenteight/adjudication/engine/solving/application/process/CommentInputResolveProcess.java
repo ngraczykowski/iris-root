@@ -35,7 +35,7 @@ class CommentInputResolveProcess {
     this.converter = converter;
     this.commentInputClientRepository = commentInputClientRepository;
     this.alertCommentsInputQueue = alertCommentsInputQueue;
-    scheduledExecutorService.scheduleAtFixedRate(this::process, 500, 500, TimeUnit.MILLISECONDS);
+    scheduledExecutorService.scheduleAtFixedRate(this::process, 10, 10, TimeUnit.MILLISECONDS);
   }
 
   public void resolve(final String alert) {
@@ -44,6 +44,14 @@ class CommentInputResolveProcess {
   }
 
   private void process() {
+    try {
+      retrieveCommentInputs();
+    } catch (Exception e) {
+      log.error("Processing of category value failed: ", e);
+    }
+  }
+
+  private void retrieveCommentInputs() {
     log.trace("Start process single alert with received comment input");
     while (true) {
       final String alertID = this.alertCommentsInputQueue.poll();
