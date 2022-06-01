@@ -111,9 +111,14 @@ pipeline {
                         usernameVariable: 'S8_REPO_USER',
                         passwordVariable: 'S8_REPO_PASSWORD'),
                      usernamePassword(
-                         credentialsId: 'karate-username-password',
+                         credentialsId: 'ra-username-password',
                          usernameVariable: 'E2E_TESTS_CREDS_USR',
                          passwordVariable: 'E2E_TESTS_CREDS_PWD'
+                     ),
+                     usernamePassword(
+                         credentialsId: 'ra-username-password-2',
+                         usernameVariable: 'E2E_TESTS_CREDS_USR_2',
+                         passwordVariable: 'E2E_TESTS_CREDS_PWD_2'
                      )]) {
                   script {
                     echo "Starting E2E tests for ${ENVIRONMENT} environment."
@@ -127,6 +132,8 @@ pipeline {
                       -Dtest.clientId=dev-frontend \
                       -Dtest.username="\$E2E_TESTS_CREDS_USR" \
                       -Dtest.password="\$E2E_TESTS_CREDS_PWD" \
+                      -Dtest.username2="\$E2E_TESTS_CREDS_USR_2" \
+                      -Dtest.password2="\$E2E_TESTS_CREDS_PWD_2" \
                       -Dtest.realm=sear-$ENVIRONMENT \
                       -Dtest.authServerUrl="https://auth.dev.s8ops.com/auth" \
                       -Dtest.url="\$BASE_URL" \

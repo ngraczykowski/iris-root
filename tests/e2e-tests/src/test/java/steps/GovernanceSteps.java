@@ -4,6 +4,7 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java8.En;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import utils.AuthUtils;
 import utils.ScenarioContext;
 import utils.datageneration.governance.*;
 
@@ -126,6 +127,31 @@ public class GovernanceSteps implements En {
           .post("/rest/governance/api/v1/solvingModels")
           .then()
           .statusCode(202);
+    });
+
+    And("Create policy state change request", () -> {
+      SolvingModel solvingModel = (SolvingModel) scenarioContext.get("solvingModel");
+
+      given()
+          .body(solvingModel.getActivationPayload())
+          .contentType("application/json")
+          .when()
+          .post("/rest/governance/api/v1/changeRequests")
+          .then()
+          .statusCode(202);
+    });
+
+    And("Activate solving model as other user", () -> {
+      SolvingModel solvingModel = (SolvingModel) scenarioContext.get("solvingModel");
+
+      given()
+          .body("{\"approverComment\":\"Lorem ipsum dolor sit amet\"}")
+          .contentType("application/json")
+          .header("Authorization", "Bearer " + new AuthUtils().getAuthTokenForAnotherUser())
+          .when()
+          .post(String.format("/rest/governance/api/v1/changeRequests/%s:approve", solvingModel.getActivationUuid()))
+          .then()
+          .statusCode(204);
     });
   }
 }

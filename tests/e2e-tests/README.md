@@ -7,8 +7,9 @@
 `-Dtest.clientId=${clientId}
 -Dtest.username=${username}
 -Dtest.password=${password}
--Dtest.url=${baseUrl}
--Dtest.isRegression=false`
+-Dtest.username2=${username2}
+-Dtest.password2=${password2}
+-Dtest.url=${baseUrl}`
 
 
 2. **Run the tests using gradle command:**
@@ -20,4 +21,6 @@
 -Dtest.clientId=${clientId}
 -Dtest.username=${username}
 -Dtest.password=${password}
+-Dtest.username2=${username2}
+-Dtest.password2=${password2}
 -Dtest.url=${baseUrl}`

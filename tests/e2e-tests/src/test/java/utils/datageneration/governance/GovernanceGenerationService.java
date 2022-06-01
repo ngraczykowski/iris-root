@@ -44,12 +44,15 @@ public class GovernanceGenerationService {
 
   public SolvingModel generateSolvingModel(String policyUuid) {
     String uuid = String.valueOf(UUID.randomUUID());
+    String activationUuid = String.valueOf(UUID.randomUUID());
 
     return SolvingModel
         .builder()
         .uuid(uuid)
         .policyUuid(policyUuid)
+        .activationUuid(activationUuid)
         .creationPayload(generatePayloadForSolvingModelCreation(policyUuid, uuid))
+        .activationPayload(generatePayloadForSolvingModelActivation(uuid, activationUuid))
         .build();
   }
 
@@ -70,6 +73,15 @@ public class GovernanceGenerationService {
     map.put("policyUuid", policyUuid);
 
     return commonUtils.template(commonUtils.getJsonTemplate("newSolvingModel"), map);
+  }
+
+  @SneakyThrows
+  private String generatePayloadForSolvingModelActivation(String uuid, String activationUuid) {
+    Map<String, String> map = new HashMap<>(Collections.emptyMap());
+    map.put("uuid", activationUuid);
+    map.put("modelName", uuid);
+
+    return commonUtils.template(commonUtils.getJsonTemplate("activateSolvingModel"), map);
   }
 
   @SneakyThrows

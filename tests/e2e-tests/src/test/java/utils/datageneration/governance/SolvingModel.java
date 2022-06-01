@@ -11,5 +11,7 @@ public class SolvingModel {
 
   private String uuid;
   private String policyUuid;
+  private String activationUuid;
   private String creationPayload;
+  private String activationPayload;
 }
