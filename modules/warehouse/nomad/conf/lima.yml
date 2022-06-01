@@ -170,7 +170,7 @@ warehouse.reports.v2:
       type: simulation
       description: RB Scorer
       selectSqlQuery: >
-        
+
         WITH tmp_match_count AS (
             SELECT alert_name          AS alert_name,
                    COUNT(alert_name)   AS alert_name
@@ -178,7 +178,7 @@ warehouse.reports.v2:
             WHERE analysis_name = 'analysis/${analysisId}'
             GROUP BY alert_name
         )
-        
+
         SELECT wsm.payload ->> 'match_reason:policy'                          AS "Policy ID",
                wsm.payload ->> 'match_reason:policy_title'                    AS "Policy Name",
                wsm.payload ->> 'match_reason:step'                            AS "Step ID",

@@ -553,7 +553,7 @@ warehouse.reports.v2:
                count(CASE WHEN (wa.payload ->> 'qa.level-0.state') = 'PASSED' THEN 1 END ) AS "QA decision False Positive",
                count(CASE WHEN (wa.payload ->> 'analyst_decision') = 'analyst_decision_true_positive' THEN 1 END ) AS "Analyst decision True Positive",
                count(CASE WHEN (wa.payload ->> 'analyst_decision') = 'analyst_decision_false_positive' THEN 1 END ) AS "Analyst decision False Positive"
-        FROM warehouse_simulation_alert wsa 
+        FROM warehouse_simulation_alert wsa
           JOIN warehouse_alert wa ON wsa.name = wa.name
           JOIN warehouse_simulation_match wsm ON wsm.alert_name = wsa.name
         WHERE wsa.analysis_name = 'analysis/${analysisId}'

@@ -172,7 +172,7 @@ warehouse.reports.v2:
                  wm.payload ->> 'features/bic:solution',
                  wm.payload ->> 'features/gender:solution',
                  wm.payload ->> 'features/nationalityCountry:solution',
-                 wm.payload ->> 'features/country:solution'               
+                 wm.payload ->> 'features/country:solution'
 
     - name: RB_SCORER_MATCH_LEVEL
       type: simulation
@@ -185,7 +185,7 @@ warehouse.reports.v2:
           WHERE analysis_name = 'analysis/${analysisId}'
           GROUP BY alert_name
         )
-        
+
         SELECT wsm.payload ->> 'match_reason:policy'                            AS "Policy ID",
                wsm.payload ->> 'match_reason:policy_title'                      AS "Policy Name",
                wsm.payload ->> 'match_reason:step'                              AS "Step ID",
@@ -213,7 +213,7 @@ warehouse.reports.v2:
                  wsm.payload ->> 'match_reason:step',
                  wsm.payload ->> 'match_reason:step_title',
                  wsm.payload ->> 'match_reason:feature_vector_signature',
-                 wsm.payload ->> 'match_solution',                                 
+                 wsm.payload ->> 'match_solution',
                  wsm.payload ->> 'categories/customerType:value',
                  wsm.payload ->> 'categories/hitType:value',
                  wsm.payload ->> 'features/name:solution',
@@ -224,12 +224,12 @@ warehouse.reports.v2:
                  wsm.payload ->> 'features/bic:solution',
                  wsm.payload ->> 'features/gender:solution',
                  wsm.payload ->> 'features/nationalityCountry:solution',
-                 wsm.payload ->> 'features/country:solution'             
+                 wsm.payload ->> 'features/country:solution'
 
     - name: AI_REASONING
       type: production
       description: AI Reasoning (Alert Level)
-      selectSqlQuery: >   
+      selectSqlQuery: >
         SELECT wa.name                                                             AS "S8 Alert ID",
                STRING_AGG(NULLIF(wm.payload ->> 'clientMatchId', ''), ', ')        AS "Client Match IDs",
                wa.payload ->> 'policyId'                                           AS "Policy ID",
@@ -302,7 +302,7 @@ warehouse.reports.v2:
     - name: AI_REASONING_MATCH_LEVEL
       type: simulation
       description: AI Reasoning (Match Level)
-      selectSqlQuery: >        
+      selectSqlQuery: >
         SELECT wa.name                                                   AS "S8 Alert ID",
                wsm.payload ->> 'clientMatchId'                           AS "Client Match ID",
                wsm.payload ->> 'match_reason:policy'                     AS "Policy ID",
@@ -356,7 +356,7 @@ warehouse.reports.v2:
     - name: ACCURACY
       type: simulation
       description: Accuracy
-      selectSqlQuery: >   
+      selectSqlQuery: >
         SELECT wa.name                                                                                      AS "S8 Alert ID",
                STRING_AGG(NULLIF(wm.payload ->> 'clientMatchId', ''), ', ')                                 AS "Client Match IDs",
                wsm.payload ->> 'match_reason:policy'                                                        AS "Policy ID",
@@ -378,4 +378,3 @@ warehouse.reports.v2:
         WHERE wsa.analysis_name = 'analysis/${analysisId}'
           AND wa.payload ->> 'analystDecision' IN ('ANALYST_FALSE_POSITIVE', 'ANALYST_TRUE_POSITIVE')
           AND wsm.analysis_name = 'analysis/${analysisId}'
-

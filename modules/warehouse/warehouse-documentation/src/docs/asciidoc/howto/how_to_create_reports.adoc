@@ -353,4 +353,3 @@ WHERE wsa.analysis_name = 'analysis/${analysisId}'
 ** Accuracy (alert level) has number of rows that matches the number of alerts processed as a part of the reference simulation and supplied with learning data
 ** RB scorer's match count column total is equal to the total number of matches processed as a part of the reference simulation.
 * Verify that there are not outstanding issues in the "Overview" section (Total alerts count matches with the dataset size, the statistcs corresponds to expected values)
-
