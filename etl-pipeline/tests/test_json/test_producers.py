@@ -168,10 +168,17 @@ def test_produce_employer_name_feature_input_producer(
     initialization_params, payload_fields, reference_fields
 ):
     producer = NameFeatureInputProducer(**initialization_params)
-    result = producer.produce_feature_input(payload_fields)
+    result = producer.produce_feature_input(
+        payload_fields,
+        {"alertedParty": {"AP_PARTY_TYPE": initialization_params.get("ap_type", None)}},
+    )
     assert result == NameFeatureInput(
         feature=reference_fields["feature"],
-        alerted_party_type=NameFeatureInput.EntityType.INDIVIDUAL,
+        alerted_party_type=NameFeatureInputProducer.AP_TYPE_MAPPING.get(
+            initialization_params.get(
+                "ap_type", NameFeatureInput.EntityType.ENTITY_TYPE_UNSPECIFIED
+            )
+        ),
         alerted_party_names=reference_fields["ap"],
         watchlist_names=reference_fields["wl"],
     )
@@ -234,14 +241,14 @@ def test_produce_isApNameTpMarked_feature_input_producer(
         (
             {
                 "prefix": "features",
-                "feature_name": "geoNattionality",
+                "feature_name": "geoNationality",
                 "field_maps": {
                     "alerted_party_location": "ap_payload_locations",
                     "watchlist_location": "wl_payload_locations",
                 },
             },
             {"ap_payload_locations": ["Moominland"], "wl_payload_locations": ["Tattooine"]},
-            {"feature": "features/geoNattionality", "ap": "Moominland", "wl": "Tattooine"},
+            {"feature": "features/geoNationality", "ap": "Moominland", "wl": "Tattooine"},
         ),
         (
             {
@@ -350,7 +357,12 @@ def test_produce_location_feature_input_producer(
                     "watchlist_names": "wl_payload_names",
                 },
             },
-            {"ap_payload_names": [None], "wl_payload_names": ["Jim"], "ap_type": "UNKNOWN"},
+            {
+                "ap_payload_names": [None],
+                "wl_payload_names": ["Jim"],
+                "ap_type": "UNKNOWN",
+                "WLP_TYPE": "10",
+            },
             {
                 "feature": "features/last_name",
                 "ap": [AlertedPartyName(name="None")],
@@ -362,8 +374,15 @@ def test_produce_location_feature_input_producer(
 def test_produce_name_feature_input_producer(
     initialization_params, payload_fields, reference_fields
 ):
+    alert_type = (
+        payload_fields["WLP_TYPE"]
+        if payload_fields["ap_type"] == "UNKNOWN"
+        else payload_fields["ap_type"]
+    )
     producer = NameFeatureInputProducer(**initialization_params)
-    result = producer.produce_feature_input(payload_fields)
+    result = producer.produce_feature_input(
+        payload_fields, {"alertedParty": {"AP_PARTY_TYPE": alert_type}}
+    )
     assert result == NameFeatureInput(
         feature=reference_fields["feature"],
         alerted_party_type=NameFeatureInputProducer.AP_TYPE_MAPPING.get(payload_fields["ap_type"]),

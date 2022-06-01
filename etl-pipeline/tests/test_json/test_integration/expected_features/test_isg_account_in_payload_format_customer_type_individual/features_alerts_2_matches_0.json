@@ -6,12 +6,6 @@
                 "name": "Eva None Pladimirova"
             },
             {
-                "name": "Joe BlackJ"
-            },
-            {
-                "name": "Janusz"
-            },
-            {
                 "name": "Pladimir Vutin"
             },
             {
@@ -60,9 +54,7 @@
     {
         "feature": "features/isApNameTpMarked",
         "modelKey": {
-            "alertedParty": {
-                "id": "Janusz"
-            }
+            "alertedParty": {}
         },
         "discriminator": {
             "value": "mike_ap_name_tp_marked"
@@ -72,7 +64,7 @@
         "feature": "features/isApIdTpMarked",
         "modelKey": {
             "alertedParty": {
-                "id": "A05003324172"
+                "id": "None"
             }
         },
         "discriminator": {
@@ -92,7 +84,7 @@
     },
     {
         "feature": "features/geoNationality",
-        "alertedPartyLocation": "UNITED STATES OF AMERICA United States",
+        "alertedPartyLocation": "AMERICA OF STATES States UNITED United",
         "watchlistLocation": "United States of America US|FL;US"
     },
     {
@@ -102,12 +94,12 @@
     },
     {
         "feature": "features/geoSanctioned",
-        "alertedPartyLocation": "UNITED STATES OF AMERICA United States",
+        "alertedPartyLocation": "AMERICA OF STATES States UNITED United",
         "watchlistLocation": "Joe Ding United States of America US|FL;US"
     },
     {
         "feature": "features/geoResidencies",
-        "alertedPartyLocation": "UNITED STATES OF AMERICA United States",
+        "alertedPartyLocation": "AMERICA OF STATES States UNITED United",
         "watchlistLocation": "United States of America US|FL;US"
     },
     {
@@ -115,12 +107,6 @@
         "alertedPartyNames": [
             {
                 "name": "Eva None Pladimirova"
-            },
-            {
-                "name": "Joe BlackJ"
-            },
-            {
-                "name": "Janusz"
             },
             {
                 "name": "Pladimir Vutin"
@@ -148,33 +134,32 @@
         "triggerCategories": {
             "address": {
                 "tokens": [
-                    "CONCAT_ADDRESS",
                     "ADDRESS1_COUNTRY",
-                    "ADDRESS1_PROVINCE",
+                    "CONCAT_ADDRESS",
                     "ADDRESS1_CITY",
+                    "ADDRESS1_PROVINCE",
                     "ADDRESS1_STATE"
                 ]
             },
-            "other": {},
             "job": {},
+            "other": {},
             "name": {
                 "tokens": [
-                    "PARTY1_NAME_FULL",
-                    "CONCAT_NAME"
+                    "PARTY1_NAME_FULL"
                 ]
             }
         },
         "triggeredTokens": {
             "Doe": {
                 "tokensMap": {
-                    "ADDRESS1_LINE2": {
-                        "tokens": [
-                            "Jane Doe AA BBB"
-                        ]
-                    },
                     "CONCAT_ADDRESS": {
                         "tokens": [
                             "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
+                        ]
+                    },
+                    "ADDRESS1_LINE2": {
+                        "tokens": [
+                            "Jane Doe AA BBB"
                         ]
                     }
                 }

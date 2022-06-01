@@ -5,6 +5,15 @@ AP_PARTY_TYPE:
   source:
     alertedParty:
       - ALL_PARTY_TYPES
+    metadata:
+      - datasetType
+    xml_fields:
+      - PARTY1_ORGANIZATION_NAME
+      - ORGANIZATIONPERSONIND
+    alertSupplementalInfo:
+      - supplementalInfo.legalFormName
+    watchlistParty:
+      - WLP_TYPE
 
 ALL_CONNECTED_PARTIES_NAMES:
   method_name: collect_party_full_names

@@ -11,6 +11,7 @@ from etl_pipeline.pipeline import ETLPipeline
 from pipelines.ms.collection import Collections
 
 logger = logging.getLogger("main").getChild("etl_pipeline")
+
 CONFIG_APP_DIR = os.environ["CONFIG_APP_DIR"]
 cn = pipeline_config.cn
 
@@ -81,6 +82,7 @@ class MSPipeline(ETLPipeline):
             accounts = self.collections.get_accounts(payload)
             fields = input_records[cn.INPUT_FIELD]
             self.collections.prepare_wl_values(match)
+            self.set_up_dataset_type_match(payload, match)
 
             match[cn.TRIGGERED_BY] = self.engine.set_trigger_reasons(
                 match, self.pipeline_config.FUZZINESS_LEVEL
@@ -116,7 +118,6 @@ class MSPipeline(ETLPipeline):
             payload.update({cn.CONCAT_ADDRESS_NO_CHANGES: concat_residue == concat_address})
             match[cn.AP_TRIGGERS] = self.engine.set_triggered_tokens_discovery(match, fields)
             self.functions.set_up_party_type(payload)
-            self.set_up_dataset_type_match(payload, match)
             self.set_token_risk_carrier(match)
         return payloads
 
@@ -267,9 +268,14 @@ class MSPipeline(ETLPipeline):
             payload["alertedParty"]["ENTITY_TYPE_MATCH"] = "Y"
         else:
             payload["alertedParty"]["ENTITY_TYPE_MATCH"] = "N"
+        if payload["alertedParty"]["AP_PARTY_TYPE"] == "UNKNOWN":
+            payload["alertedParty"]["ENTITY_TYPE_MATCH"] = "INCONCLUSIVE"
 
     def set_up_dataset_type_match(self, payload, match):
         match[cn.DATASET_TYPE] = self.dataset_config.get(
+            payload[cn.ALERTED_PARTY_FIELD][cn.HEADER_INFO][cn.DATASET_NAME]
+        )
+        payload[cn.DATASET_TYPE] = self.dataset_config.get(
             payload[cn.ALERTED_PARTY_FIELD][cn.HEADER_INFO][cn.DATASET_NAME]
         )
 

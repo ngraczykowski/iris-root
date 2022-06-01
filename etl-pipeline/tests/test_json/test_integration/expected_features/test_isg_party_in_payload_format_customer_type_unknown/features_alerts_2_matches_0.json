@@ -6,12 +6,6 @@
                 "name": "Eva None Pladimirova"
             },
             {
-                "name": "Joe BlackJ"
-            },
-            {
-                "name": "Janusz"
-            },
-            {
                 "name": "Pladimir Vutin"
             },
             {
@@ -61,7 +55,7 @@
         "feature": "features/isApNameTpMarked",
         "modelKey": {
             "alertedParty": {
-                "id": "Janusz"
+                "id": "None"
             }
         },
         "discriminator": {
@@ -72,7 +66,7 @@
         "feature": "features/isApIdTpMarked",
         "modelKey": {
             "alertedParty": {
-                "id": "A05003324172"
+                "id": "None"
             }
         },
         "discriminator": {
@@ -92,7 +86,7 @@
     },
     {
         "feature": "features/geoNationality",
-        "alertedPartyLocation": "UNITED STATES OF AMERICA United States",
+        "alertedPartyLocation": "States United",
         "watchlistLocation": "United States of America US|FL;US"
     },
     {
@@ -102,12 +96,12 @@
     },
     {
         "feature": "features/geoSanctioned",
-        "alertedPartyLocation": "UNITED STATES OF AMERICA United States",
+        "alertedPartyLocation": "States United",
         "watchlistLocation": "Joe Ding United States of America US|FL;US"
     },
     {
         "feature": "features/geoResidencies",
-        "alertedPartyLocation": "UNITED STATES OF AMERICA United States",
+        "alertedPartyLocation": "States United",
         "watchlistLocation": "United States of America US|FL;US"
     },
     {
@@ -115,12 +109,6 @@
         "alertedPartyNames": [
             {
                 "name": "Eva None Pladimirova"
-            },
-            {
-                "name": "Joe BlackJ"
-            },
-            {
-                "name": "Janusz"
             },
             {
                 "name": "Pladimir Vutin"
@@ -146,38 +134,13 @@
             "name"
         ],
         "triggerCategories": {
-            "address": {
-                "tokens": [
-                    "CONCAT_ADDRESS",
-                    "ADDRESS1_COUNTRY",
-                    "ADDRESS1_PROVINCE",
-                    "ADDRESS1_CITY",
-                    "ADDRESS1_STATE"
-                ]
-            },
             "other": {},
+            "address": {},
             "job": {},
-            "name": {
-                "tokens": [
-                    "PARTY1_NAME_FULL",
-                    "CONCAT_NAME"
-                ]
-            }
+            "name": {}
         },
         "triggeredTokens": {
             "Doe": {
-                "tokensMap": {
-                    "ADDRESS1_LINE2": {
-                        "tokens": [
-                            "Jane Doe AA BBB"
-                        ]
-                    },
-                    "CONCAT_ADDRESS": {
-                        "tokens": [
-                            "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
-                        ]
-                    }
-                }
             }
         }
     }

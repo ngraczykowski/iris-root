@@ -54,7 +54,7 @@ class Producer(ABC):
         self.fields = field_maps
 
     @abstractmethod
-    def produce_feature_input(self, payload):
+    def produce_feature_input(self, match_payload, payload):
         pass
 
 
@@ -73,7 +73,7 @@ class CountryFeatureInputProducer(Producer):
 
 class DateFeatureInputProducer(Producer):
     @safe_produce
-    def produce_feature_input(self, payload):
+    def produce_feature_input(self, payload, auxiliary_payload=None):
         fields = deepcopy(self.fields)
         payload = deepcopy(payload)
         for input_key, payload_key in self.fields.items():
@@ -88,7 +88,7 @@ class DateFeatureInputProducer(Producer):
 
 class DocumentFeatureInputProducer(Producer):
     @safe_produce
-    def produce_feature_input(self, payload):
+    def produce_feature_input(self, payload, auxiliary_payload=None):
         fields = deepcopy(self.fields)
         payload = deepcopy(payload)
         for input_key, payload_key in self.fields.items():
@@ -103,7 +103,7 @@ class DocumentFeatureInputProducer(Producer):
 
 class HistoricalDecisionsFeatureInputProducer(Producer):
     @safe_produce
-    def produce_feature_input(self, payload):
+    def produce_feature_input(self, payload, auxiliary_payload=None):
         fields = deepcopy(self.fields)
         payload = deepcopy(payload)
         for input_key, payload_key in self.fields.items():
@@ -120,7 +120,7 @@ class HistoricalDecisionsFeatureInputProducer(Producer):
 
 class LocationFeatureInputProducer(Producer):
     @safe_produce
-    def produce_feature_input(self, payload):
+    def produce_feature_input(self, payload, auxiliary_payload=None):
         fields = deepcopy(self.fields)
         payload = deepcopy(payload)
         for input_key, payload_key in self.fields.items():
@@ -142,16 +142,18 @@ class NameFeatureInputProducer(Producer):
     }
 
     @safe_produce
-    def produce_feature_input(self, payload):
+    def produce_feature_input(self, payload, auxiliary_payload=None):
         fields = deepcopy(self.fields)
         payload = deepcopy(payload)
         for input_key, payload_key in self.fields.items():
             fields[input_key] = payload.get(payload_key, [])
-
+        alerted_party_type = auxiliary_payload["alertedParty"].get("AP_PARTY_TYPE")
+        if alerted_party_type == "UNKNOWN":
+            alerted_party_type = payload.get("WLP_TYPE")
         return NameFeatureInput(
             feature=self.feature_name,
             alerted_party_type=NameFeatureInputProducer.AP_TYPE_MAPPING.get(
-                fields["alerted_party_type"], NameFeatureInput.EntityType.ENTITY_TYPE_UNSPECIFIED
+                alerted_party_type, NameFeatureInput.EntityType.ENTITY_TYPE_UNSPECIFIED
             ),
             alerted_party_names=[
                 AlertedPartyName(name=str(i)) for i in fields["alerted_party_names"]
@@ -184,7 +186,7 @@ class CategoryProducer(Producer):
 
 class HitTypeFeatureInputProducer(Producer):
     @safe_produce
-    def produce_feature_input(self, payload):
+    def produce_feature_input(self, payload, auxiliary_payload=None):
         fields = deepcopy(dict(self.fields))
         payload = deepcopy(dict(payload))
         logger.debug(f"Fields: {fields}, payload: {payload}")
@@ -213,7 +215,7 @@ class HitTypeFeatureInputProducer(Producer):
 class TransactionFeatureInputProducer(Producer):
     feature_name = "features/transaction"
 
-    def produce_feature_input(self, payload):
+    def produce_feature_input(self, payload, auxiliary_payload=None):
         return TransactionFeatureInput(
             feature=self.feature_name,
             transaction_messages=[],
@@ -225,7 +227,7 @@ class TransactionFeatureInputProducer(Producer):
 class NationalIdFeatureInputProducer(Producer):
     feature_name = "features/nationalid"
 
-    def produce_feature_input(self, payload):
+    def produce_feature_input(self, payload, auxiliary_payload=None):
         return NationalIdFeatureInput(
             feature=self.feature_name,
             alerted_party_document_numbers=[
@@ -246,7 +248,7 @@ class NationalIdFeatureInputProducer(Producer):
 class GenderFeatureInputProducer(Producer):
     feature_name = "features/gender"
 
-    def produce_feature_input(self, payload):
+    def produce_feature_input(self, payload, auxiliary_payload=None):
         return GenderFeatureInput(
             feature=self.feature_name,
             alerted_party_genders=[
@@ -261,7 +263,7 @@ class GenderFeatureInputProducer(Producer):
 class FreeTextFeatureInputProducer(Producer):
     feature_name = "features/freetext"
 
-    def produce_feature_input(self, payload):
+    def produce_feature_input(self, payload, auxiliary_payload=None):
         return FreeTextFeatureInput(
             feature=self.feature_name,
             matched_name="",
@@ -275,7 +277,7 @@ class FreeTextFeatureInputProducer(Producer):
 class EventFeatureInputProducer(Producer):
     feature_name = "features/event"
 
-    def produce_feature_input(self, payload):
+    def produce_feature_input(self, payload, auxiliary_payload=None):
         return EventFeatureInput(
             feature=self.feature_name,
             alerted_party_dates=[
@@ -288,7 +290,7 @@ class EventFeatureInputProducer(Producer):
 class BankIdentificationCodesFeatureInputProducer(Producer):
     feature_name = "features/bankidentificationcodes"
 
-    def produce_feature_input(self, payload):
+    def produce_feature_input(self, payload, auxiliary_payload=None):
         return BankIdentificationCodesFeatureInput(
             feature=self.feature_name,
             alerted_party_matching_field=payload.get("ap_all_matching_field_aggregated", ""),
@@ -306,7 +308,7 @@ class BankIdentificationCodesFeatureInputProducer(Producer):
 class AllowListFeatureInputProducer(Producer):
     feature_name = "features/allowlist"
 
-    def produce_feature_input(self, payload):
+    def produce_feature_input(self, payload, auxiliary_payload=None):
         return AllowListFeatureInput(
             feature=self.feature_name,
             characteristics_values=[],

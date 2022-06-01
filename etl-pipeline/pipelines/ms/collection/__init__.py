@@ -40,6 +40,19 @@ class Collections:
             accounts = []
         return accounts
 
+    def get_alert_supplemental_info(self, payload, field_name):
+        return payload.get("alertSupplementalInfo", {}).get(field_name, {})
+
+    def get_xml_field(self, payload, field_name):
+        try:
+            input_records = payload[cn.ALERTED_PARTY_FIELD][cn.INPUT_RECORD_HIST][cn.INPUT_RECORDS]
+            fields = input_records[cn.INPUT_FIELD]
+            return fields.get(field_name, None)
+        except (KeyError, IndexError, TypeError):
+            logger.warning("No fields")
+            fields = None
+        return fields
+
     def prepare_collections(self, payloads):
         alerted_parties = self.get_parties(payloads)
         accounts = self.get_accounts(payloads)
@@ -58,7 +71,6 @@ class Collections:
             return {}
 
         self.prepare_xml_fields(input_records)
-
         return payloads
 
     def prepare_xml_fields(self, input_records):

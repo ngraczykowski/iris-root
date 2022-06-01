@@ -1,25 +1,23 @@
 [
     {
         "feature": "features/name",
+        "alertedPartyNames": [
+            {
+                "name": "Pladimir None Vutin"
+            },
+            {
+                "name": "Eva None Pladimirova"
+            },
+            {
+                "name": "Eva Pladimirova"
+            },
+            {
+                "name": "Pladimir Vutin"
+            }
+        ],
         "watchlistNames": [
             {
-                "name": "BA'ASYIR, ABU BAKAR",
-                "type": "REGULAR"
-            },
-            {
-                "name": "BAASYIR, ABU BAKAR",
-                "type": "REGULAR"
-            },
-            {
-                "name": "BASHIR, ABU BAKAR",
-                "type": "REGULAR"
-            },
-            {
-                "name": "ABDUS SAMAD",
-                "type": "REGULAR"
-            },
-            {
-                "name": "ABDUS SOMAD",
+                "name": "Joe Dong",
                 "type": "REGULAR"
             }
         ],
@@ -27,38 +25,27 @@
     },
     {
         "feature": "features/dateOfBirth",
+        "alertedPartyDates": [
+            "02/31/1900",
+            "04/31/1910"
+        ],
         "watchlistDates": [
-            "08/17/1938",
-            "17",
-            "1938",
-            "08"
+            "MAY 6, 1981"
         ],
         "alertedPartyType": "INDIVIDUAL"
     },
     {
-        "feature": "features/document"
+        "feature": "features/document",
+        "alertedPartyDocuments": [
+            "154421273",
+            "022368917"
+        ]
     },
     {
         "feature": "features/employerName",
         "watchlistNames": [
             {
-                "name": "BA'ASYIR, ABU BAKAR",
-                "type": "REGULAR"
-            },
-            {
-                "name": "BAASYIR, ABU BAKAR",
-                "type": "REGULAR"
-            },
-            {
-                "name": "BASHIR, ABU BAKAR",
-                "type": "REGULAR"
-            },
-            {
-                "name": "ABDUS SAMAD",
-                "type": "REGULAR"
-            },
-            {
-                "name": "ABDUS SOMAD",
+                "name": "Joe Dong",
                 "type": "REGULAR"
             }
         ],
@@ -79,7 +66,7 @@
         "feature": "features/isApIdTpMarked",
         "modelKey": {
             "alertedParty": {
-                "id": "A00183210139"
+                "id": "A05003324172"
             }
         },
         "discriminator": {
@@ -90,7 +77,7 @@
         "feature": "features/isTokensTpMarked",
         "modelKey": {
             "alertedParty": {
-                "id": "abdussomada"
+                "id": "Doe"
             }
         },
         "discriminator": {
@@ -99,44 +86,43 @@
     },
     {
         "feature": "features/geoNationality",
-        "alertedPartyLocation": "AHMEDOUA",
-        "watchlistLocation": "Jombang, East Java, Indonesia ID INDONESIA"
+        "alertedPartyLocation": "UNITED STATES OF AMERICA United States",
+        "watchlistLocation": "Poland PL"
     },
     {
         "feature": "features/geoPlaceOfBirth",
-        "watchlistLocation": "Jombang, East Java, Indonesia ID INDONESIA"
+        "alertedPartyLocation": "United States",
+        "watchlistLocation": "PL Poland"
     },
     {
         "feature": "features/geoSanctioned",
-        "alertedPartyLocation": "AHMEDOUA",
-        "watchlistLocation": "BA'ASYIR, ABU BAKAR ID INDONESIA"
+        "alertedPartyLocation": "UNITED STATES OF AMERICA United States",
+        "watchlistLocation": "PL Poland Joe Dong"
     },
     {
         "feature": "features/geoResidencies",
-        "alertedPartyLocation": "AHMEDOUA",
-        "watchlistLocation": "ID INDONESIA"
+        "alertedPartyLocation": "UNITED STATES OF AMERICA United States",
+        "watchlistLocation": "PL Poland"
     },
     {
         "feature": "features/companyName",
+        "alertedPartyNames": [
+            {
+                "name": "Pladimir None Vutin"
+            },
+            {
+                "name": "Eva None Pladimirova"
+            },
+            {
+                "name": "Eva Pladimirova"
+            },
+            {
+                "name": "Pladimir Vutin"
+            }
+        ],
         "watchlistNames": [
             {
-                "name": "BA'ASYIR, ABU BAKAR",
-                "type": "REGULAR"
-            },
-            {
-                "name": "BAASYIR, ABU BAKAR",
-                "type": "REGULAR"
-            },
-            {
-                "name": "BASHIR, ABU BAKAR",
-                "type": "REGULAR"
-            },
-            {
-                "name": "ABDUS SAMAD",
-                "type": "REGULAR"
-            },
-            {
-                "name": "ABDUS SOMAD",
+                "name": "Joe Dong",
                 "type": "REGULAR"
             }
         ],
@@ -149,24 +135,29 @@
         ],
         "triggerCategories": {
             "other": {},
-            "name": {},
+            "job": {},
             "address": {
                 "tokens": [
-                    "ADDRESS1_PROVINCE",
-                    "ADDRESS1_STATE",
-                    "ADDRESS1_CITY",
                     "ADDRESS1_COUNTRY",
-                    "CONCAT_ADDRESS"
+                    "ADDRESS1_PROVINCE",
+                    "CONCAT_ADDRESS",
+                    "ADDRESS1_STATE",
+                    "ADDRESS1_CITY"
                 ]
             },
-            "job": {}
+            "name": {}
         },
         "triggeredTokens": {
-            "abdussomada": {
+            "Doe": {
                 "tokensMap": {
-                    "ADDRESS1_STATE": {
+                    "CONCAT_ADDRESS": {
                         "tokens": [
-                            "ABDUSSOMADA"
+                            "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
+                        ]
+                    },
+                    "ADDRESS1_LINE2": {
+                        "tokens": [
+                            "Jane Doe AA BBB"
                         ]
                     }
                 }

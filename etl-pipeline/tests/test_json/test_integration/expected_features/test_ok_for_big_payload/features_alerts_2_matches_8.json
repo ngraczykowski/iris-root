@@ -1,1 +1,176 @@
-[{"feature": "features/name", "watchlistNames": [{"name": "BA'ASYIR, ABU BAKAR", "type": "REGULAR"}], "alertedPartyType": "ORGANIZATION"}, {"feature": "features/dateOfBirth", "watchlistDates": ["08/17/1938", "17", "1938", "08"], "alertedPartyType": "INDIVIDUAL"}, {"feature": "features/document"}, {"feature": "features/employerName", "watchlistNames": [{"name": "BA'ASYIR, ABU BAKAR", "type": "REGULAR"}, {"name": "BAASYIR, ABU BAKAR", "type": "REGULAR"}, {"name": "SAMAD, ABDUS", "type": "REGULAR"}, {"name": "BASHIR, ABU BAKAR", "type": "REGULAR"}, {"name": "SOMAD, ABDUS", "type": "REGULAR"}], "alertedPartyType": "ORGANIZATION"}, {"feature": "features/isApNameTpMarked", "modelKey": {"alertedParty": {"id": "None"}}, "discriminator": {"value": "mike_ap_name_tp_marked"}}, {"feature": "features/isApIdTpMarked", "modelKey": {"alertedParty": {"id": "A00183210139"}}, "discriminator": {"value": "mike_ap_id_tp_marked"}}, {"feature": "features/isTokensTpMarked", "modelKey": {"alertedParty": {"id": "abdussomada"}}, "discriminator": {"value": "mike_tokens_tp_marked"}}, {"feature": "features/geoNationality", "alertedPartyLocation": "AHMEDOUA", "watchlistLocation": "JOMBANG, EAST JAVA, INDONESIA ID INDONESIA"}, {"feature": "features/geoPlaceOfBirth", "watchlistLocation": "JOMBANG, EAST JAVA, INDONESIA ID INDONESIA"}, {"feature": "features/geoSanctioned", "alertedPartyLocation": "AHMEDOUA", "watchlistLocation": "BA'ASYIR, ABU BAKAR ID INDONESIA"}, {"feature": "features/geoResidencies", "alertedPartyLocation": "AHMEDOUA", "watchlistLocation": "ID INDONESIA"}, {"feature": "features/companyName", "watchlistNames": [{"name": "BA'ASYIR, ABU BAKAR", "type": "REGULAR"}], "alertedPartyType": "ORGANIZATION"}, {"feature": "features/hitType", "normalTriggerCategories": ["name"], "triggerCategories": {"job": {}, "address": {"tokens": ["ADDRESS1_PROVINCE", "ADDRESS1_STATE", "ADDRESS1_CITY", "ADDRESS1_COUNTRY", "CONCAT_ADDRESS"]}, "other": {}, "name": {}}, "triggeredTokens": {"abdussomada": {"tokensMap": {"ADDRESS1_STATE": {"tokens": ["ABDUSSOMADA"]}}}}}]
+[
+    {
+        "feature": "features/name",
+        "watchlistNames": [
+            {
+                "name": "BASHIR, ABU BAKAR",
+                "type": "REGULAR"
+            },
+            {
+                "name": "SOMAD, ABDUS",
+                "type": "REGULAR"
+            },
+            {
+                "name": "BA'ASYIR, ABU BAKAR",
+                "type": "REGULAR"
+            },
+            {
+                "name": "BAASYIR, ABU BAKAR",
+                "type": "REGULAR"
+            },
+            {
+                "name": "SAMAD, ABDUS",
+                "type": "REGULAR"
+            }
+        ],
+        "alertedPartyType": "INDIVIDUAL"
+    },
+    {
+        "feature": "features/dateOfBirth",
+        "watchlistDates": [
+            "17",
+            "1938",
+            "08",
+            "08/17/1938"
+        ],
+        "alertedPartyType": "INDIVIDUAL"
+    },
+    {
+        "feature": "features/document"
+    },
+    {
+        "feature": "features/employerName",
+        "watchlistNames": [
+            {
+                "name": "BASHIR, ABU BAKAR",
+                "type": "REGULAR"
+            },
+            {
+                "name": "SOMAD, ABDUS",
+                "type": "REGULAR"
+            },
+            {
+                "name": "BA'ASYIR, ABU BAKAR",
+                "type": "REGULAR"
+            },
+            {
+                "name": "BAASYIR, ABU BAKAR",
+                "type": "REGULAR"
+            },
+            {
+                "name": "SAMAD, ABDUS",
+                "type": "REGULAR"
+            }
+        ],
+        "alertedPartyType": "INDIVIDUAL"
+    },
+    {
+        "feature": "features/isApNameTpMarked",
+        "modelKey": {
+            "alertedParty": {
+                "id": "None"
+            }
+        },
+        "discriminator": {
+            "value": "mike_ap_name_tp_marked"
+        }
+    },
+    {
+        "feature": "features/isApIdTpMarked",
+        "modelKey": {
+            "alertedParty": {
+                "id": "A00183210139"
+            }
+        },
+        "discriminator": {
+            "value": "mike_ap_id_tp_marked"
+        }
+    },
+    {
+        "feature": "features/isTokensTpMarked",
+        "modelKey": {
+            "alertedParty": {
+                "id": "abdussomada"
+            }
+        },
+        "discriminator": {
+            "value": "mike_tokens_tp_marked"
+        }
+    },
+    {
+        "feature": "features/geoNationality",
+        "alertedPartyLocation": "AHMEDOUA",
+        "watchlistLocation": "ID JOMBANG, EAST JAVA, INDONESIA INDONESIA"
+    },
+    {
+        "feature": "features/geoPlaceOfBirth",
+        "watchlistLocation": "ID JOMBANG, EAST JAVA, INDONESIA INDONESIA"
+    },
+    {
+        "feature": "features/geoSanctioned",
+        "alertedPartyLocation": "AHMEDOUA",
+        "watchlistLocation": "BA'ASYIR, ABU BAKAR ID INDONESIA"
+    },
+    {
+        "feature": "features/geoResidencies",
+        "alertedPartyLocation": "AHMEDOUA",
+        "watchlistLocation": "ID INDONESIA"
+    },
+    {
+        "feature": "features/companyName",
+        "watchlistNames": [
+            {
+                "name": "BASHIR, ABU BAKAR",
+                "type": "REGULAR"
+            },
+            {
+                "name": "SOMAD, ABDUS",
+                "type": "REGULAR"
+            },
+            {
+                "name": "BA'ASYIR, ABU BAKAR",
+                "type": "REGULAR"
+            },
+            {
+                "name": "BAASYIR, ABU BAKAR",
+                "type": "REGULAR"
+            },
+            {
+                "name": "SAMAD, ABDUS",
+                "type": "REGULAR"
+            }
+        ],
+        "alertedPartyType": "INDIVIDUAL"
+    },
+    {
+        "feature": "features/hitType",
+        "normalTriggerCategories": [
+            "name"
+        ],
+        "triggerCategories": {
+            "name": {},
+            "other": {},
+            "job": {},
+            "address": {
+                "tokens": [
+                    "ADDRESS1_STATE",
+                    "ADDRESS1_CITY",
+                    "CONCAT_ADDRESS",
+                    "ADDRESS1_COUNTRY",
+                    "ADDRESS1_PROVINCE"
+                ]
+            }
+        },
+        "triggeredTokens": {
+            "abdussomada": {
+                "tokensMap": {
+                    "ADDRESS1_STATE": {
+                        "tokens": [
+                            "ABDUSSOMADA"
+                        ]
+                    }
+                }
+            }
+        }
+    }
+]
