@@ -62,8 +62,8 @@ pipeline {
                     --values kubernetes/values.${ENVIRONMENT}.yaml \
                     --set ingress.hosts[0]=$INGRESS_HOST \
                     --set keycloak.ingress.hostname=$INGRESS_HOST \
-                    --set keycloak.externalDatabase.host=$RELEASE_NAME-postgres.$NAMESPACE.svc \
-                    --set keycloak.externalDatabase.existingSecret=keycloak.$RELEASE_NAME-postgres.credentials.postgresql.acid.zalan.do \
+                    --set keycloak.externalDatabase.host=${RELEASE_NAME}-postgres.${NAMESPACE}.svc \
+                    --set keycloak.externalDatabase.existingSecret=keycloak.${RELEASE_NAME}-postgres.credentials.postgresql.acid.zalan.do \
                     --wait \
                     --timeout 13m \
                     $RELEASE_NAME \
@@ -126,7 +126,7 @@ pipeline {
                   -Dtest.username2="\$E2E_TESTS_CREDS_2_USR" \
                   -Dtest.password2="\$E2E_TESTS_CREDS_2_PSW" \
                   -Dtest.realm=Dev \
-                  -Dtest.authServerUrl=\${BASE_URL}/auth" \
+                  -Dtest.authServerUrl="\${BASE_URL}/auth" \
                   -Dtest.url="\$BASE_URL" \
                   --info --stacktrace
                 """
