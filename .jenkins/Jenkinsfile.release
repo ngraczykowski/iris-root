@@ -38,7 +38,6 @@ pipeline {
         }
         environment {
           ARTIFACTORY = credentials('artifactory-user')
-          E2E_TESTS_CREDS = credentials('karate-username-password')
           INGRESS_HOST = "${ENVIRONMENT}-jenkins-pipeline.prv.dev.s8ops.com"
           BASE_URL = "https://${env.INGRESS_HOST}"
         }
@@ -103,44 +102,29 @@ pipeline {
             }
           }
           stage("E2E Tests") {
+            environment {
+              E2E_TESTS_CREDS = credentials('ra-username-password')
+              E2E_TESTS_CREDS_2 = credentials('ra-username-password-2')
+            }
             steps {
               withGradle {
-                withCredentials(
-                    [usernamePassword(
-                        credentialsId: 'artifactory-user',
-                        usernameVariable: 'S8_REPO_USER',
-                        passwordVariable: 'S8_REPO_PASSWORD'),
-                     usernamePassword(
-                         credentialsId: 'ra-username-password',
-                         usernameVariable: 'E2E_TESTS_CREDS_USR',
-                         passwordVariable: 'E2E_TESTS_CREDS_PWD'
-                     ),
-                     usernamePassword(
-                         credentialsId: 'ra-username-password-2',
-                         usernameVariable: 'E2E_TESTS_CREDS_USR_2',
-                         passwordVariable: 'E2E_TESTS_CREDS_PWD_2'
-                     )]) {
-                  script {
-                    echo "Starting E2E tests for ${ENVIRONMENT} environment."
-                    sh """
-                      cd tests/e2e-tests
-
-                      ../../gradlew test \
-                      -Dcucumber.features="src/test/java/features/SmokeTests.feature, src/test/java/features/${ENVIRONMENT}Tests.feature" \
-                      -Dcucumber.plugin=json:report-\${ENVIRONMENT}.json \
-                      -Dtest.isRegression=false \
-                      -Dtest.clientId=dev-frontend \
-                      -Dtest.username="\$E2E_TESTS_CREDS_USR" \
-                      -Dtest.password="\$E2E_TESTS_CREDS_PWD" \
-                      -Dtest.username2="\$E2E_TESTS_CREDS_USR_2" \
-                      -Dtest.password2="\$E2E_TESTS_CREDS_PWD_2" \
-                      -Dtest.realm=sear-$ENVIRONMENT \
-                      -Dtest.authServerUrl="https://auth.dev.s8ops.com/auth" \
-                      -Dtest.url="\$BASE_URL" \
-                      --info --stacktrace
-                    """
-                  }
-                }
+                echo "Starting E2E tests for ${ENVIRONMENT} environment."
+                sh """
+                  cd tests/e2e-tests
+                  ../../gradlew test \
+                  -Dcucumber.features="src/test/java/features/SmokeTests.feature, src/test/java/features/${ENVIRONMENT}Tests.feature" \
+                  -Dcucumber.plugin=json:report-\${ENVIRONMENT}.json \
+                  -Dtest.isRegression=false \
+                  -Dtest.clientId=dev-frontend \
+                  -Dtest.username="\$E2E_TESTS_CREDS_USR" \
+                  -Dtest.password="\$E2E_TESTS_CREDS_PSW" \
+                  -Dtest.username2="\$E2E_TESTS_CREDS_2_USR" \
+                  -Dtest.password2="\$E2E_TESTS_CREDS_2_PSW" \
+                  -Dtest.realm=sear-$ENVIRONMENT \
+                  -Dtest.authServerUrl="https://auth.dev.s8ops.com/auth" \
+                  -Dtest.url="\$BASE_URL" \
+                  --info --stacktrace
+                """
               }
             }
             post {
