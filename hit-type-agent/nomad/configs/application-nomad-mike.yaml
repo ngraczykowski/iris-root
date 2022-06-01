@@ -1,10 +1,7 @@
 grpc:
   client:
     data-source:
-      address: {{ range $index, $client := service "mike-universal-data-source" -}}
-          {{ if $index }},{{ end -}}
-          {{ $client.Address }}:{{ $client.Port -}}
-      {{- end }}
+      address: discovery:///{{ env "NOMAD_NAMESPACE" }}-universal-data-source
       timeout: 10
       # client_ca: {{ env "meta.silenteight.home" }}/cert/chain.pem
       # client_private_key: {{ env "meta.silenteight.home" }}/cert/hit-type-agent/hit-type-agent-key.pem

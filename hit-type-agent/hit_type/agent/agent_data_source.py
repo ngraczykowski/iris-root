@@ -1,6 +1,3 @@
-import logging
-import sys
-
 from agent_base.agent_exchange.agent_data_source import AgentDataSource
 from silenteight.agents.v1.api.exchange.exchange_pb2 import AgentExchangeRequest
 from silenteight.datasource.api.hittype.v1.hit_type_pb2 import (
@@ -9,14 +6,12 @@ from silenteight.datasource.api.hittype.v1.hit_type_pb2 import (
 )
 from silenteight.datasource.api.hittype.v1.hit_type_pb2_grpc import HitTypeInputServiceStub
 
-logger = logging.getLogger(__name__)
-c_handler = logging.StreamHandler(sys.stdout)
-c_handler.setLevel(logging.DEBUG)
-
 
 class HitTypeAgentDataSource(AgentDataSource):
     async def start(self):
         await super().start()
+
+    def prepare_stub(self):
         stub = HitTypeInputServiceStub(self.channel)
         self.channel_stream_method = stub.BatchGetMatchHitTypeInputs
 

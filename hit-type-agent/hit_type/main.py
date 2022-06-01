@@ -6,6 +6,7 @@ import sentry_sdk
 from agent_base.agent import AgentRunner
 from agent_base.grpc_service import GrpcService
 from agent_base.utils import Config
+from agent_base.utils.logger import get_logger
 
 from hit_type.agent.agent import HitTypeAgent
 from hit_type.agent.agent_data_source import HitTypeAgentDataSource
@@ -77,14 +78,23 @@ def main():
         action="store_true",
         help="Use ssl in grpc service and to connect with UDS & rabbitMQ",
     )
+    parser.add_argument(
+        "--log-file",
+        type=str,
+        default="hit_type.log",
+        help="Path to the file to save logs in",
+    )
+
     args = parser.parse_args()
     # if not args.grpc and not args.agent_exchange:
     #     parser.error("No services to run")
 
-    logging.basicConfig(
-        level=logging.DEBUG if args.verbose else logging.INFO,
-        format="%(asctime)s %(name)-20s %(levelname)-8s %(message)s",
+    logger = get_logger(
+        "main",
+        log_level=logging.DEBUG if args.verbose else logging.INFO,
+        log_file=args.log_file,
     )
+    logger.info(f"Start logging to stdout and to {args.log_file} file")
 
     run(
         configuration_dirs=(args.configuration_dir,),

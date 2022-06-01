@@ -45,8 +45,9 @@ class DataSourceMock(HitTypeInputServiceServicer):
 
     async def _prepare_match_hit_type_inputs(self, match, features):
         match_info = self.alerts.get(match, {})
-        if match_info.get("sleep"):
-            await asyncio.sleep(match_info.get("sleep"))
+        sleep_time = match_info.pop("sleep", None)
+        if sleep_time:
+            await asyncio.sleep(sleep_time)
         return HitTypeInput(
             match=match,
             hit_type_feature_inputs=[

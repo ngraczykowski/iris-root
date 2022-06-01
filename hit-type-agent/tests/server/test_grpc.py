@@ -1,4 +1,3 @@
-import os
 import pathlib
 import subprocess
 import time
@@ -12,7 +11,7 @@ from temp_agent.hit_type_agent_pb2 import CheckTriggersRequest, StringList, Toke
 from temp_agent.hit_type_agent_pb2_grpc import HitTypeAgentStub
 from tests.agent.constant import TEST_CASES
 
-PORT = Config().load_yaml_config("application.local.yaml")["agent"]["grpc"]["port"]
+PORT = Config().load_yaml_config("application.yaml")["agent"]["grpc"]["port"]
 GRPC_ADDRESS = f"localhost:{PORT}"
 TIMEOUT_SEC = 0.5
 
@@ -59,19 +58,13 @@ def kill_process_on_the_port(port):
 
 class TestServer(unittest.TestCase):
     def setUp(self):
-        try:
-            os.remove("config/application.yaml")
-        except FileNotFoundError:
-            pass
         self.config_path = pathlib.Path("./config/application.yaml")
-        self.config_path.symlink_to("application.local.yaml")  # link to file from the same dir
         kill_process_on_the_port(PORT)
         self.server_process = subprocess.Popen("python -m hit_type.main -v --grpc".split())
         wait_for_server(GRPC_ADDRESS)
 
     def tearDown(self):
         kill_recursive(self.server_process.pid)
-        self.config_path.unlink()
         time.sleep(TIMEOUT_SEC)
 
     def test_check_grpc_response(self):

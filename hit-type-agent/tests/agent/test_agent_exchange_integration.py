@@ -1,6 +1,4 @@
 import logging
-import os
-import pathlib
 from typing import Generator, Tuple
 
 import pytest
@@ -29,16 +27,7 @@ FEATURE_NAME = "features/hitType"
 
 @pytest.fixture(autouse=True, scope="module")
 def config():
-    try:
-        os.remove("config/application.yaml")
-    except FileNotFoundError:
-        pass
-    configuration_path = pathlib.Path("./config/application.yaml")
-    configuration_path.symlink_to("application.local.yaml")
-    try:
-        yield Config()
-    finally:
-        configuration_path.unlink()
+    yield Config()
 
 
 @pytest.fixture(autouse=True)
