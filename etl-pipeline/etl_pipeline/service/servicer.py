@@ -9,10 +9,9 @@ import omegaconf
 import etl_pipeline.service.proto.api.etl_pipeline_pb2 as etl__pipeline__pb2
 from etl_pipeline.config import ConsulServiceConfig, pipeline_config
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
-from etl_pipeline.data_processor_engine.json_engine.json_engine import JsonProcessingEngine
 from etl_pipeline.service.agent_router import AgentInputCreator
 from etl_pipeline.service.proto.api.etl_pipeline_pb2 import FAILURE, SUCCESS, EtlAlert, EtlMatch
-from pipelines.ms.ms_pipeline import MSPipeline as WmAddressMSPipeline
+from pipelines.ms.ms_pipeline import MSPipeline
 
 cn = pipeline_config.cn
 
@@ -35,10 +34,7 @@ class Match:
     match_name: str
 
 
-engine = JsonProcessingEngine(pipeline_config)
-
-
-pipeline = WmAddressMSPipeline(engine, pipeline_config)
+pipeline = MSPipeline.build_pipeline(MSPipeline)
 
 
 logger = logging.getLogger("main").getChild("servicer")
@@ -109,7 +105,6 @@ class EtlPipelineServiceServicer(object):
         return alert, status
 
     async def process_request(self, alerts_to_parse):
-
         future_payloads = [self.pool.submit(self.parse_alert, alert) for alert in alerts_to_parse]
         payloads = [future.result() for future in future_payloads]
         logger.debug(f"Collected parsed payloads {len(alerts_to_parse)}")
@@ -123,7 +118,7 @@ class EtlPipelineServiceServicer(object):
         logger.debug(f"ETL results: {etl_alerts}")
         return etl_alerts
 
-    def parse_alert(self, alert):
+    def parse_alert(self, alert: AlertPayload):
         status = SUCCESS
         error = None
         try:

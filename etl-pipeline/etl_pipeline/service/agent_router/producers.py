@@ -167,8 +167,18 @@ class CategoryProducer(Producer):
     @safe_produce
     def produce_feature_input(self, payload, match_payload, alert, match_name):
         fields = deepcopy(self.fields)
-        payload = deepcopy(payload)
-        type = match_payload.get(fields["type"], "")
+        type = ""
+        try:
+            type = match_payload.get(fields["type"], "")
+            if not type:
+                if "." in fields["type"]:
+                    type = payload
+                    for splitted_key in fields["type"].split("."):
+                        type = type.get(splitted_key, "")
+                else:
+                    type = payload.get(fields["type"], "")
+        except:
+            pass
         return CategoryValue(single_value=type, alert=alert, match=match_name)
 
 

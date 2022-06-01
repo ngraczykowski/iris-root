@@ -63,9 +63,6 @@ class ProcessingEngine:
                         result.append(key)
         return list(set(result))
 
-    def set_beneficiary_hits(self, payload):
-        payload[cn.IS_BENEFICIARY_HIT] = payload[cn.AD_BNFL_NM] in payload[cn.TRIGGERED_BY]
-
     def load_raw_data(self, *args, **kwargs):
         return self.spark_instance.read_csv(*args, **kwargs)
 

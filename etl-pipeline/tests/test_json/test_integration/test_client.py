@@ -114,7 +114,7 @@ def load_alert(filepath: str = "notebooks/sample/wm_address_in_payload_format.js
 class BaseGrpcTestCase:
     @pytest.mark.asyncio
     class TestGrpcServer(AsyncTestCase):
-        TIMEOUT = 10
+        TIMEOUT = 5
 
         @classmethod
         def tearDownClass(cls):
@@ -226,7 +226,7 @@ class TestGrpcServerWithoutSSL(BaseGrpcTestCase.TestGrpcServer):
         cls.tearDownClass()
         environment = os.environ.copy()
         service_config = ConsulServiceConfig()
-        subprocess.Popen("tests/scripts/start_services.sh", env=environment)
+        _ = subprocess.Popen("tests/scripts/start_services.sh", env=environment)
         channel = grpc.insecure_channel(
             f"{service_config.ETL_SERVICE_IP}:{service_config.ETL_SERVICE_PORT}"
         )

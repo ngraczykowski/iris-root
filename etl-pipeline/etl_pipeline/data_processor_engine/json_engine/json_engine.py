@@ -25,20 +25,6 @@ def safe_field_extractor(func):
     return wrap
 
 
-COLLECTIVE_REPRESENTATION_MAP_FOR_PARTY = {
-    cn.ALL_CONNECTED_PARTIES_NAMES: cn.CONNECTED_FULL_NAME,
-    cn.ALL_CONNECTED_PARTY_TYPES: cn.PARTY_TYPE,
-    cn.ALL_CONNECTED_PARTY_NAMES: cn.PARTY_NAME,
-    cn.ALL_CONNECTED_TAX_IDS: cn.TAX_ID,
-    cn.ALL_CONNECTED_PARTY_DOBS: cn.DOB_DATE,
-    cn.ALL_CONNECTED_PARTY_BIRTH_COUNTRIES: cn.PARTY_COUNTRY_OF_BIRTH,
-    cn.ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES: cn.PARTY_PRIMARY_CITIZENSHIP_COUNTRY,
-    cn.ALL_CONNECTED_PARTY_RESIDENCY_COUNTRIES: cn.PARTY_RESIDENCE_COUNTRY_CODE,
-    cn.ALL_CONNECTED_COUNTRY_OF_INCORPORATION: cn.COUNTRY_OF_INCORPORATION,
-    cn.ALL_CONNECTED_GOVT_IDS: cn.PARTY_GOVT_ID_NUMBER,
-}
-
-
 COLLECTIVE_REPRESENTATION_MAP_FOR_ACCOUNTS = {
     cn.ALL_CONNECTED_ACCOUNT_NAMES: cn.CONNECTED_FULL_NAME,
     cn.ALL_CONNECTED_ACCOUNT_BRANCH_ACCOUNT_NUMBERS: cn.BRANCH_ACCOUNT_NUMBER,
@@ -125,15 +111,6 @@ class JsonProcessingEngine(ProcessingEngine):
                     if value.get(field_name_to_collect, "")
                 ]
             ).strip()
-
-    def collect_party_values_from_parties(self, parties, payload):
-        for (
-            collective_field_name,
-            field_name_to_collect,
-        ) in COLLECTIVE_REPRESENTATION_MAP_FOR_PARTY.items():
-            payload[collective_field_name] = [
-                i.get(field_name_to_collect) for i in parties if i.get(field_name_to_collect, "")
-            ]
 
     def collect_party_values_from_accounts(self, accounts, payload):
         for (

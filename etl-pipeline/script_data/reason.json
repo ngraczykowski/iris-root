@@ -1,0 +1,194 @@
+[
+    [
+        {
+            "reason": {
+                "step": null,
+                "policy": "policies/f101cd13-2ff8-4421-9435-0daccaa5159f",
+                "features": [],
+                "categories": [],
+                "step_title": null,
+                "policy_title": "Copy of MIKE general Policy Steps",
+                "feature_vector_signature": "IUWk0hxxew0m4+eAtXb9ZjMDeh0="
+            },
+            "matchId": "193335190",
+            "features": {
+                "features/name": {
+                    "reason": {
+                        "errorMessage": "UNIMPLEMENTED: HTTP status code 404\ninvalid content-type: null\ntrailers: Metadata(:status=404,date=Fri, 20 May 2022 09:38:51 GMT,content-length=0)"
+                    },
+                    "solution": "DATA_SOURCE_ERROR",
+                    "agentConfig": "agents/name/versions/1.0.0/configs/1"
+                },
+                "features/hitType": {
+                    "reason": {
+                        "hit_categories": [
+                            "unknown"
+                        ],
+                        "normal_categories": [
+                            "name"
+                        ]
+                    },
+                    "solution": "INCONCLUSIVE",
+                    "agentConfig": "agents/hitType/versions/1.0.0/configs/1"
+                },
+                "features/document": {
+                    "reason": {
+                        "errorMessage": "",
+                        "customerValue": "",
+                        "customerValues": [],
+                        "watchlistValues": []
+                    },
+                    "solution": "NO_DATA",
+                    "agentConfig": "agents/document/versions/1.0.0/configs/1"
+                },
+                "features/companyName": {
+                    "reason": {
+                        "results": [
+                            {
+                                "solution": "INCONCLUSIVE",
+                                "alerted_party_name": "Dimetech Solutions",
+                                "solution_probability": 0.0,
+                                "watchlist_party_name": "POPULAR FRONT FOR THE LIBERATION OF PALESTINE"
+                            }
+                        ]
+                    },
+                    "solution": "INCONCLUSIVE",
+                    "agentConfig": "agents/companyName/versions/1.0.0/configs/1"
+                },
+                "features/dateOfBirth": {
+                    "reason": {
+                        "errorMessage": "Unknown instance name: 'date-indv-normal'. Valid options: 'mike-ns/date-org-normal, mike-ns/date-org-strict, mike-ns/date-enty-normal, mike-ns/date-indv-strict, mike-ns/date-indv-normal, mike-ns/date-enty-strict'."
+                    },
+                    "solution": "AGENT_ERROR",
+                    "agentConfig": "agents/date/versions/1.0.0/configs/1"
+                },
+                "features/employerName": {
+                    "reason": {
+                        "results": []
+                    },
+                    "solution": "NO_DATA",
+                    "agentConfig": "agents/companyName/versions/1.0.0/configs/1"
+                },
+                "features/geoSanctioned": {
+                    "reason": {
+                        "geoCompareResults": [
+                            {
+                                "type": "COUNTRY",
+                                "matchType": "NO_MATCH",
+                                "alertedPartyValue": "ZAF",
+                                "watchlistPartyValue": "PS"
+                            }
+                        ]
+                    },
+                    "solution": "COUNTRY_NO_MATCH",
+                    "agentConfig": "agents/geo/versions/1.0.0/configs/1"
+                },
+                "features/geoNationality": {
+                    "reason": {
+                        "geoCompareResults": [
+                            {
+                                "type": "COUNTRY",
+                                "matchType": "NO_MATCH",
+                                "alertedPartyValue": "ZAF",
+                                "watchlistPartyValue": "PS"
+                            }
+                        ]
+                    },
+                    "solution": "COUNTRY_NO_MATCH",
+                    "agentConfig": "agents/geo/versions/1.0.0/configs/1"
+                },
+                "features/geoResidencies": {
+                    "reason": {
+                        "geoCompareResults": [
+                            {
+                                "type": "COUNTRY",
+                                "matchType": "NO_MATCH",
+                                "alertedPartyValue": "ZAF",
+                                "watchlistPartyValue": "PS"
+                            }
+                        ]
+                    },
+                    "solution": "COUNTRY_NO_MATCH",
+                    "agentConfig": "agents/geo/versions/1.0.0/configs/1"
+                },
+                "features/isApIdTpMarked": {
+                    "reason": {
+                        "discriminator": "mike_ap_id_tp_marked",
+                        "alertedPartyId": "BBB03167332",
+                        "decisionCounts": [
+                            {
+                                "name": "true_positive",
+                                "count": 0.0
+                            },
+                            {
+                                "name": "passed_with_reservations",
+                                "count": 0.0
+                            },
+                            {
+                                "name": "false_positive",
+                                "count": 0.0
+                            }
+                        ]
+                    },
+                    "solution": "NO",
+                    "agentConfig": "agents/historicaldecisions/versions/1.0.0/configs/1"
+                },
+                "features/geoPlaceOfBirth": {
+                    "reason": {},
+                    "solution": "NO_DATA",
+                    "agentConfig": "agents/geo/versions/1.0.0/configs/1"
+                },
+                "features/isApNameTpMarked": {
+                    "reason": {
+                        "discriminator": "mike_ap_name_tp_marked",
+                        "alertedPartyId": "Dimetech Solutions",
+                        "decisionCounts": [
+                            {
+                                "name": "true_positive",
+                                "count": 0.0
+                            },
+                            {
+                                "name": "passed_with_reservations",
+                                "count": 0.0
+                            },
+                            {
+                                "name": "false_positive",
+                                "count": 0.0
+                            }
+                        ]
+                    },
+                    "solution": "NO",
+                    "agentConfig": "agents/historicaldecisions/versions/1.0.0/configs/1"
+                },
+                "features/isTokensTpMarked": {
+                    "reason": {
+                        "discriminator": "mike_tokens_tp_marked",
+                        "alertedPartyId": "eagle",
+                        "decisionCounts": [
+                            {
+                                "name": "true_positive",
+                                "count": 0.0
+                            },
+                            {
+                                "name": "passed_with_reservations",
+                                "count": 0.0
+                            },
+                            {
+                                "name": "false_positive",
+                                "count": 0.0
+                            }
+                        ]
+                    },
+                    "solution": "NO",
+                    "agentConfig": "agents/historicaldecisions/versions/1.0.0/configs/1"
+                }
+            },
+            "solution": "SOLUTION_NO_DECISION",
+            "categories": {
+                "categories/alertType": "ISG_PARTY",
+                "categories/customerType": "UNKNOWN",
+                "categories/entitiesTypesMatch": "INCONCLUSIVE"
+            }
+        }
+    ]
+]

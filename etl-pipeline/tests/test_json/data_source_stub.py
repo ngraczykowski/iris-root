@@ -60,20 +60,21 @@ class CategoryInputServiceServicer(object):
         context.set_code(grpc.StatusCode.OK)
         with open("tests/categories.txt", "r") as f:
             categories = [i.strip() for i in f.readlines()]
-        for category_request in request.requests:
-            for category_value in category_request.category_values:
-                if "alerts" not in category_value.match:
-                    context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
-                    break
-                if category_request.category not in categories:
-
-                    context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
-                    break
-                parsed_categories.append(
-                    category_value_service_pb2.CreatedCategoryValue(
-                        name=category_request.category, match=category_value.match
+        with open("tests/categories1.txt", "w") as f:
+            for category_request in request.requests:
+                for category_value in category_request.category_values:
+                    if "alerts" not in category_value.match:
+                        context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+                        break
+                    if category_request.category not in categories:
+                        context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+                        break
+                    f.write(str(category_request))
+                    parsed_categories.append(
+                        category_value_service_pb2.CreatedCategoryValue(
+                            name=category_request.category, match=category_value.match
+                        )
                     )
-                )
 
         return category_value_service_pb2.BatchCreateCategoryValuesResponse(
             created_category_values=parsed_categories

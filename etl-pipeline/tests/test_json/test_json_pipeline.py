@@ -1,5 +1,6 @@
 import json
 import pickle
+from copy import deepcopy
 
 import pandas as pd
 import pytest
@@ -9,8 +10,8 @@ from etl_pipeline.custom.ms.datatypes.field import (  # noqa F401; required for 
     InputRecordField,
 )
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
-from etl_pipeline.data_processor_engine.json_engine.json_engine import JsonProcessingEngine
 from pipelines.ms.ms_pipeline import MSPipeline
+from tests.test_json.constant import EXAMPLE_PARTIES
 
 cn = pipeline_config.cn
 
@@ -27,6 +28,7 @@ def run_pipeline(uut, file_path):
         payload = json.loads(file.read())
     payload_json = {key: payload[key] for key in sorted(payload)}
     payload_json = PayloadLoader().load_payload_from_json(payload_json)
+
     payload_json["match_ids"] = [
         i for i in range(len(payload_json[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]))
     ]
@@ -74,20 +76,35 @@ def assert_compare_list_of_dict_of_list(tested, reference, col):
             assert sorted(tested_element[key]) == sorted(reference_element[key]), col
 
 
-def check_payload(out_payload, reference_file):
-    out_payload = pd.DataFrame(
-        [match for payload in out_payload for match in payload["watchlistParty"]["matchRecords"]]
-    )
+def load_payload(out_payload, reference_file):
     with open(reference_file, "rb") as f:
         reference_payloads = pickle.load(f)
-
-    reference_payload = pd.DataFrame(
+    alerted_payload = pd.DataFrame([payload["alertedParty"] for payload in out_payload])
+    wp_payload = pd.DataFrame([payload["alertedParty"] for payload in reference_payloads])
+    check_payload(alerted_payload, wp_payload)
+    alerted_payload = pd.DataFrame(
+        [payload["watchlistParty"]["matchRecords"] for payload in out_payload]
+    )
+    wp_payload = pd.DataFrame(
+        [payload["watchlistParty"]["matchRecords"] for payload in reference_payloads]
+    )
+    check_payload(alerted_payload, wp_payload)
+    alerted_payload = pd.DataFrame(
         [
-            match
-            for payload in reference_payloads
-            for match in payload["watchlistParty"]["matchRecords"]
+            {match: payload[match] for match in payload if not isinstance(payload[match], dict)}
+            for payload in out_payload
         ]
     )
+    wp_payload = pd.DataFrame(
+        [
+            {match: payload[match] for match in payload if not isinstance(payload[match], dict)}
+            for payload in reference_payloads
+        ]
+    )
+    check_payload(alerted_payload, wp_payload)
+
+
+def check_payload(out_payload, reference_payload):
     for cols in out_payload.columns:
         try:
             pd.testing.assert_series_equal(out_payload[cols], reference_payload[cols])
@@ -105,12 +122,11 @@ def assert_length_and_content_match(
     assert len(parsed_payloads) == requested_length
     for i in parsed_payloads:
         assert len(i[cn.ALERTED_PARTY_FIELD][cn.INPUT_RECORD_HIST]) == 1
-        assert len(i[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]) == 1
         assert (
-            i[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS][0]["ap_id_tp_marked_agent_input"]
+            i[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]["ap_id_tp_marked_agent_input"]
             == ap_id_tp_marked_agent_input
         )
-    check_payload(parsed_payloads, reference_file)
+    load_payload(parsed_payloads, reference_file)
 
 
 @pytest.mark.parametrize(
@@ -136,7 +152,7 @@ def assert_length_and_content_match(
         ),
         (
             "notebooks/sample/wm_party_payload_with_partial_supplemental_info.json",
-            "tests/shared/empty_payload.pkl",
+            "tests/shared/wm_party_payload_with_partial_supplemental_info.pkl",
             2,
             "A05003324172",
         ),
@@ -149,8 +165,7 @@ def assert_length_and_content_match(
     ],
 )
 def test_pipeline(payload_file, reference_file, reference_length, ap_id_tp_marked_agent_input):
-    json_engine = JsonProcessingEngine(pipeline_config)
-    uut = MSPipeline(json_engine, config=pipeline_config)
+    uut = MSPipeline.build_pipeline(MSPipeline)
     parsed_payloads = run_pipeline(uut, payload_file)
     assert_length_and_content_match(
         reference_length, parsed_payloads, reference_file, ap_id_tp_marked_agent_input
@@ -159,8 +174,7 @@ def test_pipeline(payload_file, reference_file, reference_length, ap_id_tp_marke
 
 @pytest.fixture(scope="module")
 def pipeline_resource(request):
-    json_engine = JsonProcessingEngine(pipeline_config)
-    uut = MSPipeline(json_engine, config=pipeline_config)
+    uut = MSPipeline.build_pipeline(MSPipeline)
     yield uut
 
 
@@ -267,3 +281,24 @@ def test_set_up_dataset_type_match(
     else:
         pipeline_resource.set_up_dataset_type_match(payload, match)
         assert match[cn.DATASET_TYPE] == expected_result
+
+
+def test_collect_party_values_from_parties(pipeline_resource):
+    parties = deepcopy(EXAMPLE_PARTIES)
+    payload = {
+        cn.ALERTED_PARTY_FIELD: {cn.SUPPLEMENTAL_INFO: {cn.RELATED_PARTIES: {cn.PARTIES: parties}}}
+    }
+    pipeline_resource.collect_party_values(payload)
+    assert {key: value for key, value in payload.items() if key.startswith("ALL")} == {
+        "ALL_CONNECTED_PARTIES_NAMES": [],
+        "ALL_CONNECTED_GOVT_IDS": [],
+        "ALL_CONNECTED_PARTY_NAMES": ["Shaolin kung fu master", "John, Doe Doe"],
+        "ALL_CONNECTED_TAX_IDS": ["1231413412312", "12097381208937"],
+        "ALL_CONNECTED_PARTY_BIRTH_COUNTRIES": ["1341412312312", "13413401280"],
+        "ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES": ["Arabian Emirates"],
+        "ALL_CONNECTED_PARTY_RESIDENCY_COUNTRIES": [],
+        "ALL_CONNECTED_COUNTRY_OF_INCORPORATION": ["Arabian Emirates"],
+    }
+
+    assert payload["alertedParty"]["ALL_PARTY_TYPES"] == []
+    assert payload["alertedParty"]["ALL_PARTY_DOBS"] == ["10/10/1969"]

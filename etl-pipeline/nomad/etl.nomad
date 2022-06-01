@@ -22,7 +22,7 @@ job "etl-pipeline" {
   }
 
   group "etl-pipeline" {
-    count = 1
+    count = 4
 
     network {
       port "grpc" {
@@ -41,6 +41,11 @@ job "etl-pipeline" {
       template {
         data        = file("../config/pipeline/pipeline.yaml")
         destination = "local/config/pipeline/pipeline.yaml"
+      }
+
+      template {
+        data        = file("../config/pipeline/flow.yaml")
+        destination = "local/config/pipeline/flow.yaml"
       }
 
       template {
