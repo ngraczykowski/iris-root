@@ -44,7 +44,7 @@ class SpecificTerms2TermsProvider {
   }
 
   @Nonnull
-  private static List<String> genreateCsvFile(InputStreamReader inputStreamReader)
+  private List<String> genreateCsvFile(InputStreamReader inputStreamReader)
       throws IOException, CsvValidationException {
     var csvReader = new CSVReader(inputStreamReader);
 
@@ -60,7 +60,7 @@ class SpecificTerms2TermsProvider {
     return output;
   }
 
-  private static void validateCsv(@NotNull String header) {
+  private void validateCsv(@NotNull String header) {
     if (!header.equals(COLUMN_NAME)) {
       throw new CsvTermsValidationException(header);
     }
