@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: governance-app-ingress
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  labels:
+    app: governance-app-ingress
+
+spec:
+  rules:
+    - host: {{ .Values.domain }}
+      http:
+        paths:
+          - path: /rest/governance
+            pathType: Prefix
+            backend:
+              service:
+                name: governance-app-service
+                port:
+                  name: http

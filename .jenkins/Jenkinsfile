@@ -133,6 +133,21 @@ pipeline {
             build/charts/sear-"${version}".tgz \
             https://repo.silenteight.com/artifactory/helm
         """
+        // NOTE(ahaczewski): Temporarily package and push old, deprecated Helm charts.
+        sh '''#!/usr/bin/env bash
+          for chart in charts/deprecated/* ; do
+            helm package --dependency-update --destination build/charts/deprecated $chart
+          done
+
+          for package in build/charts/deprecated/*.tgz ; do
+            helm push-artifactory \
+              --skip-reindex \
+              --username "$ARTIFACTORY_USR" \
+              --password "$ARTIFACTORY_PSW" \
+              "$package" \
+              https://repo.silenteight.com/artifactory/helm
+          done
+        '''
       }
     }
     stage('ECR') {

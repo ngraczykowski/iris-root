@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: simulator-app-ingress
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  labels:
+    app: simulator-app-ingress
+
+spec:
+  rules:
+    - host: {{ .Values.domain }}
+      http:
+        paths:
+          - path: /rest/simulator
+            pathType: Prefix
+            backend:
+              service:
+                name: simulator-app-service
+                port:
+                  name: http
