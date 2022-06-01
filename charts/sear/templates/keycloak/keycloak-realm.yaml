@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: keycloak-dev-realm
+  labels:
+    {{- include "sear.labels" . | nindent 4 }}
+data:
+  realm.json: |-
+{{ (tpl (.Files.Get "component/keycloak/realm.json") . ) | indent 4 }}

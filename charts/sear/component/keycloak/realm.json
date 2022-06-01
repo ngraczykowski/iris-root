@@ -246,7 +246,7 @@
       } ],
       "security-admin-console" : [ ],
       "admin-cli" : [ ],
-      "backend" : [ ],
+      "{{ .Values.keycloak.backend.clientId }}" : [ ],
       "account-console" : [ ],
       "broker" : [ {
         "id" : "7bcb9909-455c-4dec-bbf9-5379e128aacb",
@@ -324,7 +324,7 @@
         "containerId" : "cb54caeb-3b9c-4b64-8727-49e52e98ba64",
         "attributes" : { }
       } ],
-      "frontend" : [ {
+      "{{ .Values.keycloak.frontend.clientId }}" : [ {
         "id" : "39056cb2-01b6-4a13-a2e6-be6051e2bab3",
         "name" : "QA_ISSUE_MANAGER",
         "composite" : false,
@@ -424,18 +424,40 @@
     "requiredActions" : [ ],
     "realmRoles" : [ "default-roles-dev" ],
     "clientRoles" : {
-      "frontend" : [ "QA_ISSUE_MANAGER", "MODEL_TUNER", "USER_ADMINISTRATOR", "QA", "APPROVER", "AUDITOR" ]
+      "{{ .Values.keycloak.frontend.clientId }}" : [ "QA_ISSUE_MANAGER", "MODEL_TUNER", "USER_ADMINISTRATOR", "QA", "APPROVER", "AUDITOR" ]
+    },
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "273fc6a3-7523-4c3f-be73-53ab30d6752d",
+    "createdTimestamp" : 1654074583672,
+    "username" : "qa-user",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "credentials" : [ {
+      "id" : "5f3cc60d-beb0-459a-9746-d4dc3e8ec131",
+      "type" : "password",
+      "createdDate" : 1654074594180,
+      "secretData" : "{\"value\":\"Z4WeXP6WeIGbgu+KfovLX9wZQqIkf3TxnPau/o3bx8/YqPCCn6ACqroNR4DahVrtY3gWftKhySkaB80+UtLyvg==\",\"salt\":\"c6pfL9jOKrZ2JZLNCzRU2w==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-dev" ],
+    "clientRoles" : {
+      "{{ .Values.keycloak.frontend.clientId }}" : [ "QA_ISSUE_MANAGER", "MODEL_TUNER", "QA", "APPROVER", "AUDITOR" ]
     },
     "notBefore" : 0,
     "groups" : [ ]
   }, {
     "id" : "7b860d8c-a371-4d02-9062-d848f76cfbef",
     "createdTimestamp" : 1654005696380,
-    "username" : "service-account-backend",
+    "username" : "service-account-{{ .Values.keycloak.backend.clientId }}",
     "enabled" : true,
     "totp" : false,
     "emailVerified" : false,
-    "serviceAccountClientId" : "backend",
+    "serviceAccountClientId" : "{{ .Values.keycloak.backend.clientId }}",
     "credentials" : [ ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
@@ -550,12 +572,12 @@
     "optionalClientScopes" : [ "address", "phone", "offline_access", "microprofile-jwt" ]
   }, {
     "id" : "17cb71c2-a36b-4da8-ba20-3d3e28813f1a",
-    "clientId" : "backend",
+    "clientId" : "{{ .Values.keycloak.backend.clientId }}",
     "surrogateAuthRequired" : false,
     "enabled" : true,
     "alwaysDisplayInConsole" : false,
     "clientAuthenticatorType" : "client-secret",
-    "secret" : "Lr3ZKXx62YFtQs2SvsZle0wepVuOyLYI",
+    "secret" : "{{ .Values.keycloak.backend.clientSecret }}",
     "redirectUris" : [ ],
     "webOrigins" : [ ],
     "notBefore" : 0,
@@ -670,12 +692,12 @@
     "optionalClientScopes" : [ "address", "phone", "offline_access", "microprofile-jwt" ]
   }, {
     "id" : "38108d07-f49f-4ef2-a727-8eb45f076d16",
-    "clientId" : "frontend",
+    "clientId" : "{{ .Values.keycloak.frontend.clientId }}",
     "surrogateAuthRequired" : false,
     "enabled" : true,
     "alwaysDisplayInConsole" : false,
     "clientAuthenticatorType" : "client-secret",
-    "redirectUris" : [ ],
+    "redirectUris" : [ "{{ tpl .Values.keycloak.frontend.redirectUri . }}" ],
     "webOrigins" : [ ],
     "notBefore" : 0,
     "bearerOnly" : false,

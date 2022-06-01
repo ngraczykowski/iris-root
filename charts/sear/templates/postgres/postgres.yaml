@@ -19,6 +19,7 @@ spec:
   # <user> : <roles>
   # waring: username is used in sear.postgresqlSecretName
   users:
+    keycloak: []
     {{- range $componentName, $component := include "sear.mergedComponents" . | mustFromJson }}
     {{- if and $component.enabled $component.useDb }}
     {{ $component.dbName }}: []
@@ -27,6 +28,7 @@ spec:
 
   # <db>: <user>
   databases:
+    keycloak: keycloak
     {{- range $componentName, $component := include "sear.mergedComponents" . | mustFromJson }}
     {{- if and $component.enabled $component.useDb }}
     {{ $component.dbName }}: {{ $component.dbName }}

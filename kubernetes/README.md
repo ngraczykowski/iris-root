@@ -42,6 +42,9 @@ helm upgrade --install \
   --values values.core.yaml \
   --values values.ingress-internal.yaml \
   --values values.<environment>.yaml \
+  --set keycloak.ingress.hostname=<release-name>-<namespace>.prv.dev.s8ops.com \
+  --set keycloak.externalDatabase.host=<release-name>-postgres.<namespace>.svc \
+  --set keycloak.externalDatabase.existingSecret=keycloak.<release-name>-postgres.credentials.postgresql.acid.zalan.do \
   <release name> \
   ../charts/sear
 ```

@@ -21,17 +21,17 @@ data:
         oauth2:
           resourceserver:
             jwt:
-              issuer-uri: "{{ tpl .Values.keycloak.jwtIssuerUri . }}"
-              jwk-set-uri: "{{ tpl .Values.keycloak.jwtIssuerUri . }}/protocol/openid-connect/certs"
+              issuer-uri: "{{ tpl .Values.keycloak.authServerUrl . }}/realms/{{ .Values.keycloak.realm }}"
+              jwk-set-uri: "{{ tpl .Values.keycloak.authServerUrl . }}/realms/{{ .Values.keycloak.realm }}/protocol/openid-connect/certs"
 
     keycloak:
-      frontend-client-id: {{ .Values.keycloak.frontendClientId | quote }}
+      frontend-client-id: {{ .Values.keycloak.frontend.clientId | quote }}
       adapter:
-        auth-server-url: {{ .Values.keycloak.authServerUrl | quote }}
+        auth-server-url: {{ (tpl .Values.keycloak.authServerUrl . ) | quote }}
         realm: {{ (tpl .Values.keycloak.realm . ) | quote }}
         #TODO(dsniezek): Should be fixed see UserAuthActivityReportGenerator and LastLoginTimeCacheUpdater
-        resource: {{ .Values.keycloak.resource | quote }}
-        credentials.secret: {{ .Values.keycloak.credentials.secret | quote }}
+        resource: {{ .Values.keycloak.backend.clientId | quote }}
+        credentials.secret: {{ .Values.keycloak.backend.clientSecret | quote }}
 
     grpc:
       server:

@@ -514,87 +514,52 @@ frontend:
 # Configuration of all the values below is required.
 #
 keycloak:
+  enabled:
+  image:
+    tag:
+  auth:
+    adminUser: admin
+    adminPassword: secret
+  extraEnvVars:
+    - name: KEYCLOAK_EXTRA_ARGS
+      value: "-Dkeycloak.import=/config/realm.json"
+    - name: KEYCLOAK_PROXY_ADDRESS_FORWARDING
+      value: "true"
+  extraVolumeMounts:
+    - name: config
+      mountPath: "/config"
+      readOnly: true
+  extraVolumes:
+    - name: config
+      configMap:
+        name: keycloak-dev-realm
+        items:
+          - key: "realm.json"
+            path: "realm.json"
+  ingress:
+    enabled: true
+    #TODO(dsniezek) now it places with set - we should use helmfile?
+    hostname: "change me"
+    path: /auth
+    tls: true
+    annotations:
+      kubernetes.io/ingress.class: nginx-internal
+  postgresql:
+    enabled: false
+  externalDatabase:
+    #TODO(dsniezek) now it places with set - we should use helmfile?
+    host: "change me"
+    user: keycloak
+    database: keycloak
+    #TODO(dsniezek) now it places with set - we should use helmfile?
+    existingSecret: "change me"
+  #Start of IRIS "keycloak" values
   internal: true
-  realmData:
-    users:
-      - username: "iris-admin"
-        enabled: true
-        credentials:
-          - type: "password"
-            value: "iris-admin"
-        clientRoles:
-          dev-frontend:
-            - QA_ISSUE_MANAGER
-            - MODEL_TUNER
-            - USER_ADMINISTRATOR
-            - QA
-            - APPROVER
-            - AUDITOR
-          account:
-            - view-profile
-      - username: "qa-user"
-        enabled: true
-        credentials:
-          - type: "password"
-            value: "TestPassword123!"
-        clientRoles:
-          dev-frontend:
-            - QA_ISSUE_MANAGER
-            - MODEL_TUNER
-            - QA
-            - APPROVER
-            - AUDITOR
-          account:
-            - view-profile
-    clients:
-      - client:
-          clientId: dev-backend
-          secret: 5f8909cc-dd98-11ec-a941-7f28fefdd672
-          serviceAccountsEnabled: true
-      - client:
-          #Used by payments-bridge to emulate oAuth2 clint-credentials flow to cmapi
-          clientId: dev-cmapi
-          secret: 468e81d6-ddca-11ec-bb7e-679f3017e8de
-          serviceAccountsEnabled: true
-      - client:
-          clientId: dev-frontend
-          protocol: openid-connect
-          clientAuthenticatorType: "client-secret"
-          publicClient: true
-          standardFlowEnabled: true
-          directAccessGrantsEnabled: true
-          redirectUris:
-            - 'https://{{- .Values.ingress.hosts | default (list (include "sear.defaultHost" $)) | first }}/*'
-          defaultClientScopes:
-            - web-origins
-            - profile
-            - roles
-            - email
-          protocolMappers:
-            - config:
-                multivalued: "true"
-                userinfo.token.claim: "true"
-                id.token.claim: "true"
-                access.token.claim: "true"
-                claim.name: "roles"
-                jsonType.label: "String"
-              consentRequired: false
-              name: "Roles Mapping"
-              protocol: "openid-connect"
-              protocolMapper: "oidc-usermodel-client-role-mapper"
-        roles:
-          - name: AUDITOR
-          - name: APPROVER
-          - name: QA
-          - name: USER_ADMINISTRATOR
-          - name: MODEL_TUNER
-          - name: QA_ISSUE_MANAGER
-  authServerUrl: https://auth.dev.s8ops.com/auth
-  frontendClientId: dev-frontend
-  realm: '{{ include "sear.fullname" . }}'
-  jwtIssuerUri: '{{ .Values.keycloak.authServerUrl }}/realms/{{ include "sear.fullname" . }}'
-  #TODO(dsniezek): Should be fixed see UserAuthActivityReportGenerator and LastLoginTimeCacheUpdater
-  resource: dev-backend
-  #TODO(dsniezek):credentials.secret should be stored in a safe manner or injected via operator
-  credentials:
-    secret: 5f8909cc-dd98-11ec-a941-7f28fefdd672
+  authServerUrl: 'https://{{- .Values.ingress.hosts | default (list (include "sear.defaultHost" $)) | first }}/auth'
+  realm: Dev
+  frontend:
+    clientId: frontend
+    redirectUri: 'https://{{- .Values.ingress.hosts | default (list (include "sear.defaultHost" $)) | first }}/*'
+  backend:
+    clientId: backend
+    clientSecret: 5f8909cc-dd98-11ec-a941-7f28fefdd672

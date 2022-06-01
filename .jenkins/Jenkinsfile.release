@@ -40,6 +40,8 @@ pipeline {
           ARTIFACTORY = credentials('artifactory-user')
           INGRESS_HOST = "${ENVIRONMENT}-jenkins-pipeline.prv.dev.s8ops.com"
           BASE_URL = "https://${env.INGRESS_HOST}"
+          NAMESPACE = "test-e2e-${ENVIRONMENT}-${env.BUILD_NUMBER}"
+          RELEASE_NAME = "sear-${ENVIRONMENT}"
         }
         stages {
           stage('Install chart') {
@@ -52,16 +54,19 @@ pipeline {
                 sh """
                   helm install \
                     --create-namespace \
-                    --namespace test-e2e-${ENVIRONMENT}-${env.BUILD_NUMBER} \
+                    --namespace $NAMESPACE \
                     --username "\$ARTIFACTORY_USR" \
                     --password "\$ARTIFACTORY_PSW" \
                     --values kubernetes/values.core.yaml \
                     --values kubernetes/values.ingress-internal.yaml  \
                     --values kubernetes/values.${ENVIRONMENT}.yaml \
-                    --set ingress.hosts[0]=${INGRESS_HOST} \
+                    --set ingress.hosts[0]=$INGRESS_HOST \
+                    --set keycloak.ingress.hostname=$INGRESS_HOST \
+                    --set keycloak.externalDatabase.host=$RELEASE_NAME-postgres.$NAMESPACE.svc \
+                    --set keycloak.externalDatabase.existingSecret=keycloak.$RELEASE_NAME-postgres.credentials.postgresql.acid.zalan.do \
                     --wait \
                     --timeout 13m \
-                    sear-$ENVIRONMENT \
+                    $RELEASE_NAME \
                     https://repo.silenteight.com/artifactory/helm/sear/sear-"${version}".tgz
                 """
               }
@@ -115,13 +120,13 @@ pipeline {
                   -Dcucumber.features="src/test/java/features/SmokeTests.feature, src/test/java/features/${ENVIRONMENT}Tests.feature" \
                   -Dcucumber.plugin=json:report-\${ENVIRONMENT}.json \
                   -Dtest.isRegression=false \
-                  -Dtest.clientId=dev-frontend \
+                  -Dtest.clientId=frontend \
                   -Dtest.username="\$E2E_TESTS_CREDS_USR" \
                   -Dtest.password="\$E2E_TESTS_CREDS_PSW" \
                   -Dtest.username2="\$E2E_TESTS_CREDS_2_USR" \
                   -Dtest.password2="\$E2E_TESTS_CREDS_2_PSW" \
-                  -Dtest.realm=sear-$ENVIRONMENT \
-                  -Dtest.authServerUrl="https://auth.dev.s8ops.com/auth" \
+                  -Dtest.realm=Dev \
+                  -Dtest.authServerUrl=\${BASE_URL}/auth" \
                   -Dtest.url="\$BASE_URL" \
                   --info --stacktrace
                 """
