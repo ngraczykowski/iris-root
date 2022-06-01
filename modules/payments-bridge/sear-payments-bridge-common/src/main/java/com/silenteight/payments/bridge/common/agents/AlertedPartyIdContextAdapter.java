@@ -2,6 +2,8 @@ package com.silenteight.payments.bridge.common.agents;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.payments.bridge.common.app.StringUtil;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -40,7 +42,7 @@ public class AlertedPartyIdContextAdapter {
     int numberOfTokensRight = contextualModel.getNumberOfTokensRight();
     int minTokens = contextualModel.getMinTokens();
 
-    var matchingFieldSides = matchingField.split(matchText, -1);
+    var matchingFieldSides = matchingField.split(StringUtil.regexEscape(matchText), -1);
     if (matchingFieldSides.length < 2) {
       return EMPTY;
     }
