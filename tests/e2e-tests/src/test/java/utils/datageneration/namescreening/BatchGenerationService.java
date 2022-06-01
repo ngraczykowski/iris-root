@@ -31,10 +31,19 @@ public class BatchGenerationService {
   private static final String ALERT_DATE_PATTERN = "dd-LLL-yy";
   private final CommonUtils commonUtils = new CommonUtils();
 
-  public Batch generateBatchWithSize(int batchSize) {
+  public Batch generateBatchWithSize(int batchSize, String discriminator) {
     String batchId = generateBatchId();
-    List<AlertDataSource> alertDataSource = generateData(batchSize, batchId);
+    List<AlertDataSource> alertDataSource = generateData(batchSize, batchId, discriminator);
     return generateBatch(batchId, alertDataSource, commonUtils.getDateTimeNow());
+  }
+
+  public Batch generateBatchFrom(Batch batch, String newDiscriminator) {
+    return generateBatch(
+        batch.getId(),
+        batch.getAlertDataSources().stream()
+            .map(x -> x.toBuilder().flagKey(newDiscriminator).build())
+            .toList(),
+        commonUtils.getDateTimeNow());
   }
 
   public String generateBatchId() {
@@ -45,25 +54,25 @@ public class BatchGenerationService {
     return join("_QA-batch", randomValue, timestamp);
   }
 
-  public List<AlertDataSource> generateData(Integer batchSize, String batchId) {
+  public List<AlertDataSource> generateData(
+      Integer batchSize, String batchId, String discriminator) {
 
-    return IntStream
-        .range(0, batchSize)
-        .mapToObj(i -> generateDataSingleAlert(i, batchId))
+    return IntStream.range(0, batchSize)
+        .mapToObj(i -> generateDataSingleAlert(i, batchId, discriminator))
         .collect(Collectors.toList());
   }
 
-  private AlertDataSource generateDataSingleAlert(Integer alertNumber, String batchId) {
-    String alertId = String.join("_", "QA-Alert", batchId, alertNumber.toString());
-    String flagKey = randomUUID().toString();
+  private AlertDataSource generateDataSingleAlert(
+      Integer alertNumber, String batchId, String flagKey) {
+    String alertId =
+        String.join("_", "QA-Alert", batchId, alertNumber.toString() + randomUUID().toString());
     String alertDate = LocalDateTime.now().format(ofPattern(ALERT_DATE_PATTERN)).toUpperCase();
     String caseId = randomUUID().toString();
     String currentState =
-        commonUtils.getRandomValue("True Match Exit Completed", "False Positive", "False Positive",
-            "Level 1 Review");
+        commonUtils.getRandomValue(
+            "True Match Exit Completed", "False Positive", "False Positive", "Level 1 Review");
 
-    return AlertDataSource
-        .builder()
+    return AlertDataSource.builder()
         .alertId(alertId)
         .flagKey(flagKey)
         .alertDate(alertDate)
@@ -74,23 +83,25 @@ public class BatchGenerationService {
 
   public Batch generateBatch(
       String batchId, List<AlertDataSource> alertDataSources, String startDate) {
-    return Batch
-        .builder()
+    return Batch.builder()
         .id(batchId)
         .status("NEW")
         .payload(generatePayload(alertDataSources))
+        .alertDataSources(alertDataSources)
         .generationStartTime(startDate)
         .build();
   }
 
   @SneakyThrows
   private String generatePayload(List<AlertDataSource> alertsDataSource) {
-    List<ObjectNode> alerts = alertsDataSource
-        .stream()
-        .map(alertDataSource -> objectMapper.convertValue(alertDataSource, new AlertDataTypeRef()))
-        .map(alertDataMap -> commonUtils.template(getRandomAlertTemplate(), alertDataMap))
-        .map(this::asObjectNode)
-        .collect(toList());
+    List<ObjectNode> alerts =
+        alertsDataSource.stream()
+            .map(
+                alertDataSource ->
+                    objectMapper.convertValue(alertDataSource, new AlertDataTypeRef()))
+            .map(alertDataMap -> commonUtils.template(getRandomAlertTemplate(), alertDataMap))
+            .map(this::asObjectNode)
+            .collect(toList());
 
     ArrayNode jsonNodes = objectMapper.createArrayNode().addAll(alerts);
 
@@ -99,9 +110,12 @@ public class BatchGenerationService {
 
   @SneakyThrows
   private String getRandomAlertTemplate() {
-    return new String(Files.readAllBytes(Paths.get(
-        String.format("src/test/resources/alertTemplates/alertTemplate%d.json",
-            random.nextInt(3) + 1))));
+    return new String(
+        Files.readAllBytes(
+            Paths.get(
+                String.format(
+                    "src/test/resources/alertTemplates/alertTemplate%d.json",
+                    random.nextInt(3) + 1))));
   }
 
   @SneakyThrows

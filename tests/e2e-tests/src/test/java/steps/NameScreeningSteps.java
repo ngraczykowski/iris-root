@@ -19,101 +19,127 @@ public class NameScreeningSteps implements En {
   ScenarioContext scenarioContext = Hooks.scenarioContext;
 
   public NameScreeningSteps() {
-    And("Send a batch with {int} alerts on solving and wait until it's solved", (Integer size) -> {
-      Batch batch = batchGenerationService.generateBatchWithSize(size);
-      scenarioContext.set("batch", batch);
+    And(
+        "Send a batch with {int} alerts on solving and wait until it's solved",
+        (Integer size) -> {
+          Batch batch = batchGenerationService.generateBatchWithSize(size, "solve");
+          Batch learningBatch = batchGenerationService.generateBatchFrom(batch, "learning");
+          scenarioContext.set("batch", batch);
+          scenarioContext.set("learningBatch", learningBatch);
 
-      given()
-          .body(batch.getPayload())
-          .contentType(ContentType.JSON)
-          .when()
-          .post("rest/hsbc-bridge/async/batch/v1/" + batch.getId() + "/recommend")
-          .then()
-          .statusCode(200);
-
-      Awaitility
-          .await()
-          .atMost(15, SECONDS)
-          .pollInterval(Duration.ofSeconds(1))
-          .until(() -> "COMPLETED".equals(when()
-              .get("rest/hsbc-bridge/async/batch/v1/" + batch.getId() + "/status")
+          given()
+              .body(batch.getPayload())
+              .contentType(ContentType.JSON)
+              .when()
+              .post("rest/hsbc-bridge/async/batch/v1/" + batch.getId() + "/recommend")
               .then()
-              .extract()
-              .response()
-              .jsonPath()
-              .getString("batchStatus"))
-          );
-    });
+              .statusCode(200);
 
-    And("Get result for batch and send on ingest", () -> {
-      Batch batch = (Batch) scenarioContext.get("batch");
+          Awaitility.await()
+              .atMost(15, SECONDS)
+              .pollInterval(Duration.ofSeconds(1))
+              .until(
+                  () ->
+                      "COMPLETED"
+                          .equals(
+                              when()
+                                  .get(
+                                      "rest/hsbc-bridge/async/batch/v1/"
+                                          + batch.getId()
+                                          + "/status")
+                                  .then()
+                                  .extract()
+                                  .response()
+                                  .jsonPath()
+                                  .getString("batchStatus")));
+        });
 
-      Response response = given()
-          .body(batch.getPayload())
-          .when()
-          .get("rest/hsbc-bridge/async/batch/v1/" + batch.getId() + "/result");
+    And(
+        "Get result for batch and send on ingest",
+        () -> {
+          Batch batch = (Batch) scenarioContext.get("batch");
 
-      response.then().statusCode(200);
+          Response response =
+              given()
+                  .body(batch.getPayload())
+                  .when()
+                  .get("rest/hsbc-bridge/async/batch/v1/" + batch.getId() + "/result");
 
-      given()
-          .contentType(ContentType.JSON)
-          .body(response.getBody().asString())
-          .when()
-          .post("rest/hsbc-bridge/async/batch/v1/ingestRecommendations")
-          .then()
-          .statusCode(200);
-    });
+          response.then().statusCode(200);
 
-    And("Send batch on learning", () -> {
-      Batch batch = (Batch) scenarioContext.get("batch");
-
-      given()
-          .body(batch.getPayload())
-          .when()
-          .post("rest/hsbc-bridge/async/batch/v1/" + batch.getId() + "-learning/learning")
-          .then()
-          .statusCode(200);
-
-      Awaitility
-          .await()
-          .atMost(15, SECONDS)
-          .pollInterval(Duration.ofSeconds(1))
-          .until(() -> "COMPLETED".equals(when()
-              .get("rest/hsbc-bridge/async/batch/v1/" + batch.getId() + "-learning/status")
+          given()
+              .contentType(ContentType.JSON)
+              .body(response.getBody().asString())
+              .when()
+              .post("rest/hsbc-bridge/async/batch/v1/ingestRecommendations")
               .then()
-              .extract()
-              .response()
-              .jsonPath()
-              .getString("batchStatus")
-              ));
+              .statusCode(200);
+        });
 
-    });
+    And(
+        "Send batch on learning",
+        () -> {
+          Batch batch = (Batch) scenarioContext.get("learningBatch");
 
-    And("Send batch with {int} alerts on learning", (Integer size) -> {
-      Batch learningBatch = batchGenerationService.generateBatchWithSize(size);
-      scenarioContext.set("learningBatch", learningBatch);
-
-      given()
-          .body(learningBatch.getPayload())
-          .contentType(ContentType.JSON)
-          .when()
-          .post("rest/hsbc-bridge/async/batch/v1/" + learningBatch.getId() + "-learning/learning")
-          .then()
-          .statusCode(200);
-
-      Awaitility
-          .await()
-          .atMost(15, SECONDS)
-          .pollInterval(Duration.ofSeconds(1))
-          .until(() -> "COMPLETED".equals(when()
-              .get("rest/hsbc-bridge/async/batch/v1/" + learningBatch.getId() + "-learning/status")
+          given()
+              .body(batch.getPayload())
+              .when()
+              .contentType(ContentType.JSON)
+              .post("rest/hsbc-bridge/async/batch/v1/" + batch.getId() + "-learning/learning")
               .then()
-              .extract()
-              .response()
-              .jsonPath()
-              .getString("batchStatus")
-              ));
+              .statusCode(200);
 
-    });
+          Awaitility.await()
+              .atMost(15, SECONDS)
+              .pollInterval(Duration.ofSeconds(1))
+              .until(
+                  () ->
+                      "COMPLETED"
+                          .equals(
+                              when()
+                                  .get(
+                                      "rest/hsbc-bridge/async/batch/v1/"
+                                          + batch.getId()
+                                          + "-learning/status")
+                                  .then()
+                                  .extract()
+                                  .response()
+                                  .jsonPath()
+                                  .getString("batchStatus")));
+        });
+
+    And(
+        "Send batch with {int} alerts on learning",
+        (Integer size) -> {
+          Batch learningBatch = batchGenerationService.generateBatchWithSize(size, "learning");
+          scenarioContext.set("learningBatch", learningBatch);
+
+          given()
+              .body(learningBatch.getPayload())
+              .contentType(ContentType.JSON)
+              .when()
+              .post(
+                  "rest/hsbc-bridge/async/batch/v1/" + learningBatch.getId() + "-learning/learning")
+              .then()
+              .statusCode(200);
+
+          Awaitility.await()
+              .atMost(15, SECONDS)
+              .pollInterval(Duration.ofSeconds(1))
+              .until(
+                  () ->
+                      "COMPLETED"
+                          .equals(
+                              when()
+                                  .get(
+                                      "rest/hsbc-bridge/async/batch/v1/"
+                                          + learningBatch.getId()
+                                          + "-learning/status")
+                                  .then()
+                                  .extract()
+                                  .response()
+                                  .jsonPath()
+                                  .getString("batchStatus")));
+        });
   }
 }
