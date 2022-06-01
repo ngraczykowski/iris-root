@@ -1,7 +1,7 @@
 {
     "alertedParty.headerInfo.uniqueCustomerId": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480",
     "alertedParty.headerInfo.datasetId": "1044",
-    "alertedParty.headerInfo.datasetName": "R_Russ_MultiParty",
+    "alertedParty.headerInfo.datasetName": "R_Russ_MultiAccounts_TEST",
     "alertedParty.headerInfo.masterId": "72951854",
     "alertedParty.headerInfo.currentVersionId": "122438658",
     "alertedParty.headerInfo.stopDescriptors.stopDescriptor.name": "Joe Doe",
@@ -90,12 +90,6 @@
     "alertedParty.inputRecordHist.inputRecords[0].fields[21].sortOrder": "22",
     "alertedParty.inputRecordHist.inputRecords[0].fields[22].name": "PARTY1_NAME_FULL",
     "alertedParty.inputRecordHist.inputRecords[0].fields[22].isScreenable": "true",
-    "alertedParty.inputRecordHist.inputRecords[0].fields[22].value": "Janusz",
-    "alertedParty.inputRecordHist.inputRecords[0].fields[22].sortOrder": "22",
-    "alertedParty.inputRecordHist.inputRecords[0].fields[23].name": "CONCAT_NAME",
-    "alertedParty.inputRecordHist.inputRecords[0].fields[23].isScreenable": "true",
-    "alertedParty.inputRecordHist.inputRecords[0].fields[23].value": "Joe BlackJ",
-    "alertedParty.inputRecordHist.inputRecords[0].fields[23].sortOrder": "13",
     "alertedParty.inputRecordHist.inputRecords[0].status": "A",
     "alertedParty.inputRecordHist.inputRecords[0].masterId": "72951854",
     "alertedParty.inputRecordHist.inputRecords[0].versionId": "122438658",
@@ -274,5 +268,5 @@
     "watchlistParty.matchRecords[0].firstMatchedDate": "01/08/20",
     "watchlistParty.matchRecords[0].lastMatchedDate": "01/08/20",
     "watchlistParty.matchRecords[0].lastReviewDate": "01/08/20",
-    "alertedParty.alertSupplementalInfo.supplementalInfo[0].legalFormName": "Other weird name"
+    "alertedParty.alertSupplementalInfo.supplementalInfo[0].legalFormName": "Individual"
 }

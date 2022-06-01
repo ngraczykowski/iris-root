@@ -41,7 +41,11 @@ class Collections:
         return accounts
 
     def get_alert_supplemental_info(self, payload, field_name):
-        return payload.get("alertSupplementalInfo", {}).get(field_name, {})
+        return (
+            payload.get(cn.ALERTED_PARTY_FIELD, {})
+            .get("alertSupplementalInfo", {})
+            .get(field_name, {})
+        )
 
     def get_xml_field(self, payload, field_name):
         try:

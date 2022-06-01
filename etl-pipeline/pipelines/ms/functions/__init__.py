@@ -53,22 +53,30 @@ class Functions:
         logger.debug(f"ap_type: {ap_type}")
         if dataset_type == "WM_PARTY":
             ap_type = cls.collections.get_xml_field(payload, "PARTY1_ORGANIZATION_NAME")
+            if ap_type:
+                ap_type = ap_type.value
             logger.debug(f"ap_type: {ap_type}")
             if ap_type:
                 ap_type = "C"
             else:
                 ap_type = "I"
         elif dataset_type == "ISG_ACCOUNT":
-            supplemental_info = cls.collections.get_alert_supplemental_info("supplementalInfo")
+            supplemental_info = cls.collections.get_alert_supplemental_info(
+                payload, "supplementalInfo"
+            )
+            logger.debug(f"supplemental_info: {supplemental_info}")
             for info in supplemental_info:
                 ap_type = info.get("legalFormName", None)
                 break
+            logger.debug(f"ap_type: {ap_type}")
             if ap_type == "Individual":
                 ap_type = "I"
             elif ap_type:
                 ap_type = "C"
         elif dataset_type == "ISG_PARTY":
-            ap_type = cls.collections.get_xml_field(payload, "ORGANIZATIONPERSONIND").value
+            ap_type = cls.collections.get_xml_field(payload, "ORGANIZATIONPERSONIND")
+            if ap_type:
+                ap_type = ap_type.value
             if ap_type == "O":
                 ap_type = "C"
             elif ap_type == "P":
