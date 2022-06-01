@@ -39,6 +39,8 @@ management:
 
 ### REGISTRATION
 registration:
+  verify-batch-timeout:
+    delay-time: 600m
   analysis:
     mock-recommendations-generation: false
 
