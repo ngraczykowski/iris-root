@@ -71,6 +71,9 @@ spec:
               value: {{ .Values.ports.http | quote }}
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           args:
+          {{ range .Values.args }}
+            - {{ . }}
+          {{ end }}
             - --logging.config=file:/etc/logback.xml
             - --management.server.port={{ .Values.ports.management }}
             - --sentry.dsn={{ .Values.sentry.dsn }}
