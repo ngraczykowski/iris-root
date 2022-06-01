@@ -62,6 +62,14 @@ public class AlertSolving implements Serializable {
     return this.alertId == 0;
   }
 
+  public boolean hasCategories() {
+    return matches.values().stream().findFirst().get().getCategories().size() > 0;
+  }
+
+  public boolean hasFeatures() {
+    return matches.values().stream().findFirst().get().getFeatures().size() > 0;
+  }
+
   public long id() {
     return this.alertId;
   }

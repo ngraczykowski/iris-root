@@ -47,8 +47,15 @@ public class SolvingAlertReceivedProcess {
 
     pendingAlerts.forEach(
         alertSolving -> {
-          this.agentExchangeRequestMapper.from(alertSolving).forEach(matchesPublisher::publish);
-          this.categoryResolveProcess.resolve(alertSolving.getAlertId());
+
+          if (alertSolving.hasFeatures()) {
+            this.agentExchangeRequestMapper.from(alertSolving).forEach(matchesPublisher::publish);
+          }
+
+          if (alertSolving.hasCategories()) {
+            this.categoryResolveProcess.resolve(alertSolving.getAlertId());
+          }
+
           this.commentInputResolveProcess.resolve(alertSolving.getAlertName());
         });
 
