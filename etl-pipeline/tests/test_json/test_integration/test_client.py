@@ -260,6 +260,20 @@ class BaseGrpcTestCase:
                     f'tests/test_json/test_integration/expected_features/test_isg_party_in_payload_format_customer_type_company/features_{match.match_name.replace("/", "_")}.json',
                 )
 
+        @pytest.mark.asyncio
+        async def test_isg_party_in_payload_format_customer_type_individual(self):
+            request_alert = load_alert(
+                "notebooks/sample/isg_party_in_payload_format_customer_type_individual.json"
+            )
+            response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[request_alert]))
+            for etl_alert in response.etl_alerts:
+                assert etl_alert.etl_status == SUCCESS
+            for match in request_alert.matches:
+                compare_tested_uds_features_with_reference(
+                    f'/tmp/features_{match.match_name.replace("/", "_")}.json',
+                    f'tests/test_json/test_integration/expected_features/test_isg_party_in_payload_format_customer_type_individual/features_{match.match_name.replace("/", "_")}.json',
+                )
+
 
 class TestGrpcServerWithoutSSL(BaseGrpcTestCase.TestGrpcServer):
 
