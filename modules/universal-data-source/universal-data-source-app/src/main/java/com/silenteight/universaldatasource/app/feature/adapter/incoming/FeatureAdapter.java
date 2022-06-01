@@ -10,6 +10,9 @@ import com.silenteight.datasource.api.allowlist.v1.BatchGetMatchAllowListInputsR
 import com.silenteight.datasource.api.bankidentificationcodes.v1.BankIdentificationCodesFeatureInput;
 import com.silenteight.datasource.api.bankidentificationcodes.v1.BatchGetMatchBankIdentificationCodesInputsRequest;
 import com.silenteight.datasource.api.bankidentificationcodes.v1.BatchGetMatchBankIdentificationCodesInputsResponse;
+import com.silenteight.datasource.api.compareDates.v1.BatchGetCompareDatesInputsRequest;
+import com.silenteight.datasource.api.compareDates.v1.BatchGetCompareDatesInputsResponse;
+import com.silenteight.datasource.api.compareDates.v1.CompareDatesFeatureInput;
 import com.silenteight.datasource.api.country.v1.BatchGetMatchCountryInputsRequest;
 import com.silenteight.datasource.api.country.v1.BatchGetMatchCountryInputsResponse;
 import com.silenteight.datasource.api.country.v1.CountryFeatureInput;
@@ -81,6 +84,8 @@ class FeatureAdapter {
   private static final String HIT_TYPE_INPUT = HitTypeFeatureInput.class.getCanonicalName();
   private static final String IS_OF_GIVEN_DOCUMENT_TYPE_INPUT =
       IsOfGivenDocumentTypeFeatureInput.class.getCanonicalName();
+  private static final String COMPARE_DATES_INPUT =
+      CompareDatesFeatureInput.class.getCanonicalName();
 
   private final BatchGetFeatureInputUseCase getUseCase;
   private final BatchCreateMatchFeaturesUseCase addUseCase;
@@ -318,5 +323,21 @@ class FeatureAdapter {
         featureRequest,
         batch -> onNext.accept(
             batch.castResponse(BatchGetIsOfGivenDocumentTypeInputsResponse.class)));
+  }
+
+  public void batchGetCompareDatesInputs(
+      @Valid BatchGetCompareDatesInputsRequest request,
+      Consumer<BatchGetCompareDatesInputsResponse> onNext) {
+
+    var featureRequest =
+        BatchFeatureRequest.builder()
+            .agentInputType(COMPARE_DATES_INPUT)
+            .matches(request.getMatchesList())
+            .features(request.getFeaturesList())
+            .build();
+
+    getUseCase.batchGetFeatureInput(
+        featureRequest,
+        batch -> onNext.accept(batch.castResponse(BatchGetCompareDatesInputsResponse.class)));
   }
 }

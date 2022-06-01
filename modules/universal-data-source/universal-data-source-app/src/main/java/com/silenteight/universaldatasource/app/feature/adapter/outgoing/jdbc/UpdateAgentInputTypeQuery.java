@@ -48,7 +48,9 @@ class UpdateAgentInputTypeQuery {
           + "  WHEN 'IsOfGivenDocumentTypeFeatureInput' \n"
           + "    THEN 'com.silenteight.datasource.api.isofgivendocumenttype.v1"
           + "IsOfGivenDocumentTypeFeatureInput'\n"
-
+          + "  WHEN 'CompareDatesFeatureInput' \n"
+          + "    THEN 'com.silenteight.datasource.api.compareDates.v1"
+          + "CompareDatesFeatureInput'\n"
           + "END\n"
           + "WHERE agent_input_type IN ('NameFeatureInput',\n"
           + "                           'LocationFeatureInput',\n"
@@ -64,7 +66,8 @@ class UpdateAgentInputTypeQuery {
           + "                           'NationalIdFeatureInput',\n"
           + "                           'TransactionFeatureInput',\n"
           + "                           'BankIdentificationCodesFeatureInput',\n"
-          + "                           'IsOfGivenDocumentTypeFeatureInput')";
+          + "                           'IsOfGivenDocumentTypeFeatureInput',\n"
+          + "                           'CompareDatesFeatureInput')";
 
   private final JdbcTemplate jdbcTemplate;
 

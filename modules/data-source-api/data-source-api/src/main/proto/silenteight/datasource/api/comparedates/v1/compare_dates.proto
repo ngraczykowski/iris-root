@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package silenteight.datasource.api.compareDates.v1;
+
+import "google/api/annotations.proto";
+
+option java_package = "com.silenteight.datasource.api.compareDates.v1";
+option java_outer_classname = "compareDatesProto";
+option java_multiple_files = true;
+
+service CompareDatesInputService {
+	rpc BatchGetCompareDatesInputs (BatchGetCompareDatesInputsRequest) returns (stream BatchGetCompareDatesInputsResponse) {
+		option (google.api.http) = {
+			post: "/agent-inputs/compare-dates/versions/v1/matches:batchGet"
+			body: "*"
+		};
+	}
+}
+
+message BatchGetCompareDatesInputsRequest {
+	// The list of matches data is requested for, in form of `alerts/<Alert ID>/matches/<Match ID>`.
+	repeated string matches = 1;
+	// The list of features the input data for each match is requested, in form of `features/<Feature ID>`.
+	repeated string features = 2;
+}
+
+message BatchGetCompareDatesInputsResponse {
+	repeated CompareDatesInput compare_dates_inputs = 1;
+}
+
+message CompareDatesInput {
+	string match = 1;
+	repeated CompareDatesFeatureInput compare_dates_features_input = 2;
+}
+
+message CompareDatesFeatureInput {
+	string feature = 1;
+	string date_to_compare = 2;
+}
