@@ -21,13 +21,13 @@ spec:
         - name: {{ .Values.name }}
           livenessProbe:
             httpGet:
-              path: "/rest/governance/management/health/liveness"
+              path: {{ .Values.livenessProbeHttpGetPath }}
               port: {{ .Values.ports.management }}
             initialDelaySeconds: 30
             timeoutSeconds: 10
           readinessProbe:
             httpGet:
-              path: "/rest/governance/management/health/readiness"
+              path: {{ .Values.readinessProbeHttpGetPath }}
               port: {{ .Values.ports.management }}
             failureThreshold: 30
             initialDelaySeconds: 30
@@ -69,6 +69,8 @@ spec:
               value: {{ .Values.springProfilesActive | squote }}
             - name: 'GRPC_CLIENT_WAREHOUSE_ADDRESS'
               value: {{ .Values.grpc.client.warehouse.address | quote }}
+            - name: 'GRPC_SERVER_PORT'
+              value : {{ .Values.grpc.server.port | 9090 }}
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           args:
