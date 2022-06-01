@@ -68,11 +68,12 @@ class Functions:
             elif ap_type:
                 ap_type = "C"
         elif dataset_type == "ISG_PARTY":
-            ap_type = cls.collections.get_xml_field(payload, "ORGANIZATIONPERSONIND")
+            ap_type = cls.collections.get_xml_field(payload, "ORGANIZATIONPERSONIND").value
             if ap_type == "O":
                 ap_type = "C"
             elif ap_type == "P":
                 ap_type = "I"
+        logger.debug(f"ap_type: {ap_type}")
         return ap_type
 
     @classmethod
