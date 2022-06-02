@@ -2,7 +2,8 @@ import subprocess
 import time
 import unittest
 
-import grpc
+from s8_python_network.grpc_channel import get_channel
+from s8_python_network.utils import grpc_server_on, kill_process_on_the_port, kill_recursive
 from silenteight.agent.companynamesurrounding.v1.api.company_name_surrounding_agent_pb2 import (
     CheckCompanyNameSurroundingRequest,
 )
@@ -39,46 +40,27 @@ PORT = 24806
 GRPC_ADDRESS = f"localhost:{PORT}"
 
 
-def grpc_server_on(channel) -> bool:
-    # https://stackoverflow.com/questions/45759491/how-to-know-if-a-grpc-server-is-available/61384353#61384353
-    try:
-        grpc.channel_ready_future(channel).result(timeout=TIMEOUT_SEC)
-        return True
-    except grpc.FutureTimeoutError:
-        return False
-
-
 class TestServer(unittest.TestCase):
     @staticmethod
     def wait_for_server():
-        channel = grpc.insecure_channel(GRPC_ADDRESS)
+        channel = get_channel(GRPC_ADDRESS)
         counter = 0
-        while counter < 10 and not grpc_server_on(channel):
+        while counter < 10 and not grpc_server_on(channel, TIMEOUT_SEC):
             time.sleep(2)
             counter += 1
         if counter == 10:
             raise ServerIsNotRunning("Check server")
 
-    @staticmethod
-    def kill_process_on_the_port():
-        kill = subprocess.Popen(
-            f"kill -9 $(netstat -ltnp | "
-            "grep -w :{PORT} | "
-            "awk '{ print $7 }' | "
-            "grep -o '[0-9]\\+' )".split()
-        )
-        kill.wait()
-
     def setUp(self):
-        self.kill_process_on_the_port()
+        kill_process_on_the_port(PORT)
         self.server_process = subprocess.Popen("python company_name_surrounding -v --grpc".split())
         self.wait_for_server()
 
     def tearDown(self):
-        self.server_process.kill()
+        kill_recursive(self.server_process.pid)
 
     def test_check_grpc_response(self):
-        channel = grpc.insecure_channel(GRPC_ADDRESS)
+        channel = get_channel(GRPC_ADDRESS)
         stub = CompanyNameSurroundingAgentStub(channel)
         for test_case in TEST_CASES:
             request = CheckCompanyNameSurroundingRequest(**test_case["data"])
