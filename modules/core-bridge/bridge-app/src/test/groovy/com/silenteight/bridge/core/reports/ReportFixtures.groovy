@@ -50,6 +50,12 @@ class ReportFixtures {
   static def ALERT_TWO_ERR_DESC = 'potential error'
   static def ALERT_TWO_METADATA = "{\"currentVersionId\":\"678175153\",\"stopDescriptorNames\":[\"JOHN DOE\",\"DOE JOHN\"],\"datasetId\":\"1231123\",\"datasetName\":\"R_US_Address_FAKED\",\"uniqueCustId\":\"R_US_Address_FAKED_G1243141_2011-11-11-11.22.33.333333\",\"masterId\":\"21312321341324\",\"busDate\":\"123412412412331\"}"
 
+  static def ALERT_THREE_ID = 'SANC-ASM-1252431'
+  static def ALERT_THREE_NAME = 'alerts/3'
+  static def ALERT_THREE_STATUS = 'ERROR'
+  static def ALERT_THREE_ERR_DESC = 'some error'
+  static def ALERT_THREE_METADATA = "{\"currentVersionId\":\"678175153\", \"stopDescriptorNames\":[\"JOHN BAMBO\",\"BAMBO JOHN\"],\"datasetId\":\"1231123\",\"datasetName\":\"R_US_Address_FAKED\",\"uniqueCustId\":\"R_US_Address_FAKED_G1243141_2011-11-11-11.22.33.333333\",\"masterId\":\"21312321341324\",\"busDate\":\"123412412412331\"}"
+
   static def RECOMMENDATION_ONE_NAME = 'recommendation/1'
   static def RECOMMENDATION_ONE_ACTION = 'some recommendation one action'
   static def RECOMMENDATION_ONE_COMMENT = 'some recommendation one comment'
@@ -159,6 +165,15 @@ class ReportFixtures {
       .matches([MATCH_THREE, MATCH_FOUR])
       .build()
 
+  static def ALERT_THREE = AlertWithMatchesDto.builder()
+      .id(ALERT_THREE_ID)
+      .name(ALERT_THREE_NAME)
+      .status(ALERT_THREE_STATUS)
+      .metadata(ALERT_THREE_METADATA)
+      .errorDescription(ALERT_THREE_ERR_DESC)
+      .matches([])
+      .build()
+
   static def ALERT_ONE_WITHOUT_MATCHES = AlertWithoutMatchesDto.builder()
       .id("1")
       .alertId(ALERT_ONE_ID)
@@ -175,6 +190,15 @@ class ReportFixtures {
       .alertStatus(ALERT_TWO_STATUS)
       .metadata(ALERT_TWO_METADATA)
       .errorDescription(ALERT_TWO_ERR_DESC)
+      .build()
+
+  static def ALERT_THREE_ERROR_WITHOUT_MATCHES = AlertWithoutMatchesDto.builder()
+      .id("3")
+      .alertId(ALERT_THREE_ID)
+      .alertName(ALERT_THREE_NAME)
+      .alertStatus(ALERT_THREE_STATUS)
+      .metadata(ALERT_THREE_METADATA)
+      .errorDescription(ALERT_THREE_ERR_DESC)
       .build()
 
   static def MATCH_ONE_WITH_ALERT_ID = MatchWithAlertId.builder()
@@ -282,6 +306,20 @@ class ReportFixtures {
       .batchId(BATCH_ID)
       .analysisName(ANALYSIS_NAME)
       .alertData(ALERT_DATA_TWO)
+      .build()
+
+  static def REPORT_THREE = Report.builder()
+      .batchId(BATCH_ID)
+      .analysisName(ANALYSIS_NAME)
+      .alertData((
+          ALERT_DATA_ONE.toBuilder()
+              .recommendation(null)
+              .comment(null)
+              .recommendedAt(null)
+              .policyId(null)
+              .policyTitle(null)
+              .build()
+      ))
       .build()
 
   static def ERROR_REPORT_ONE = Report.builder()

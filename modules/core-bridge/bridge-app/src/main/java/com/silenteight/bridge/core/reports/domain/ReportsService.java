@@ -79,7 +79,8 @@ class ReportsService {
     var reports = alerts.stream()
         .map(alert -> toReport(
             batchId,
-            reportsMapper.toAlertWithMatches(alert, matches.get(alert.id())),
+            reportsMapper.toAlertWithMatches(
+                alert, matches.getOrDefault(alert.id(), Collections.emptyList())),
             recommendations.get(alert.alertName())))
         .toList();
 

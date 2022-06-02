@@ -74,7 +74,7 @@ class ReportsServiceSpec extends Specification {
     0 * _
   }
 
-  def 'should stream reports for given analysis, reports: 2'() {
+  def 'should stream reports for given analysis, reports: 2, 1 error'() {
     given:
     def batchId = ReportFixtures.BATCH_ID
     def analysisName = ReportFixtures.ANALYSIS_NAME
@@ -83,27 +83,26 @@ class ReportsServiceSpec extends Specification {
     underTest.streamReports(batchId, analysisName)
 
     then:
-    1 * registrationService.streamAlerts(batchId) >> Stream.of(ReportFixtures.ALERT_ONE_WITHOUT_MATCHES, ReportFixtures.ALERT_TWO_WITHOUT_MATCHES)
+    1 * registrationService.streamAlerts(batchId) >> Stream.of(ReportFixtures.ALERT_ONE_WITHOUT_MATCHES, ReportFixtures.ALERT_THREE_ERROR_WITHOUT_MATCHES)
 
-    1 * registrationService.getMatches(Set.of(Long.valueOf(ReportFixtures.ALERT_ONE_WITHOUT_MATCHES.id()), Long.valueOf(ReportFixtures.ALERT_TWO_WITHOUT_MATCHES.id())))
+    1 * registrationService.getMatches(Set.of(Long.valueOf(ReportFixtures.ALERT_ONE_WITHOUT_MATCHES.id()), Long.valueOf(ReportFixtures.ALERT_THREE_ERROR_WITHOUT_MATCHES.id())))
         >> [ReportFixtures.MATCH_ONE_WITH_ALERT_ID, ReportFixtures.MATCH_TWO_WITH_ALERT_ID]
 
-    1 * recommendationService.getRecommendations(analysisName, List.of(ReportFixtures.ALERT_ONE_WITHOUT_MATCHES.alertName(), ReportFixtures.ALERT_TWO_WITHOUT_MATCHES.alertName()))
-        >> [ReportFixtures.FIRST_RECOMMENDATION_WITH_METADATA, ReportFixtures.SECOND_RECOMMENDATION_WITH_METADATA]
+    1 * recommendationService.getRecommendations(analysisName, List.of(ReportFixtures.ALERT_ONE_WITHOUT_MATCHES.alertName(), ReportFixtures.ALERT_THREE_ERROR_WITHOUT_MATCHES.alertName()))
+        >> [ReportFixtures.FIRST_RECOMMENDATION_WITH_METADATA]
 
     1 * reportsMapper.toAlertWithMatches(ReportFixtures.ALERT_ONE_WITHOUT_MATCHES, List.of(ReportFixtures.MATCH_ONE_WITH_ALERT_ID))
         >> ReportFixtures.ALERT_ONE
 
-    1 * reportsMapper.toAlertWithMatches(ReportFixtures.ALERT_TWO_WITHOUT_MATCHES, List.of(ReportFixtures.MATCH_TWO_WITH_ALERT_ID))
-        >> ReportFixtures.ALERT_TWO
+    1 * reportsMapper.toAlertWithMatches(ReportFixtures.ALERT_THREE_ERROR_WITHOUT_MATCHES, []) >> ReportFixtures.ALERT_THREE
 
     1 * reportsMapper.toReport(batchId, ReportFixtures.ALERT_ONE, ReportFixtures.FIRST_RECOMMENDATION_WITH_METADATA)
         >> ReportFixtures.REPORT_ONE
 
-    1 * reportsMapper.toReport(batchId, ReportFixtures.ALERT_TWO, ReportFixtures.SECOND_RECOMMENDATION_WITH_METADATA)
-        >> ReportFixtures.REPORT_TWO
+    1 * reportsMapper.toErroneousReport(batchId, ReportFixtures.ALERT_THREE)
+        >> ReportFixtures.REPORT_THREE
 
-    1 * reportSenderService.send(analysisName, List.of(ReportFixtures.REPORT_ONE, ReportFixtures.REPORT_TWO))
+    1 * reportSenderService.send(analysisName, List.of(ReportFixtures.REPORT_ONE, ReportFixtures.REPORT_THREE))
   }
 
   def 'should stream reports for given analysis, reports: 3'() {
