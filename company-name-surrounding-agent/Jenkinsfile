@@ -2,6 +2,11 @@
 def utils = new com.silenteight.jenkins.ci.Utils()
 def jenkins = new com.silenteight.jenkins.ci.Jenkins()
 
+def loadValuesYaml(key){
+  def valuesYaml = readYaml (file: './helm-chart/Chart.yaml')
+  return valuesYaml[key];
+}
+
 pipeline {
   agent {
     label "ec2-agent"
@@ -9,6 +14,9 @@ pipeline {
   environment {
     PYPI_URL = credentials('pypi-readonly-url')
     TWINE_REPOSITORY_URL = 'https://repo.silenteight.com/artifactory/api/pypi/pypi'
+    ECR = '278875966478.dkr.ecr.us-east-1.amazonaws.com'
+    APP_NAME = loadValuesYaml('name')
+    HELM_VERSION = loadValuesYaml('version')
   }
   options {
     timeout(time: 1, unit: 'HOURS')   // just to be safe
