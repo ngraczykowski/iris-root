@@ -5,7 +5,10 @@ import com.silenteight.warehouse.report.persistence.ReportPersistenceService;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.util.Optionals;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.auth.signer.AwsS3V4Signer;
 import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
@@ -15,6 +18,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.S3Configuration;
 
 import java.net.URI;
+import java.util.Optional;
 import javax.validation.Valid;
 
 @Configuration
@@ -24,13 +28,19 @@ class ReportStorageConfiguration {
 
   @Bean
   S3Client s3Client(ReportStorageClientProperties reportStorageClientProperties) {
-    final AwsBasicCredentials credentials =
-        AwsBasicCredentials.create(
-            reportStorageClientProperties.getAccessKey(),
-            reportStorageClientProperties.getPrivateKey());
+    final AwsCredentialsProvider provider =
+        Optionals.mapIfAllPresent(
+                Optional.ofNullable(reportStorageClientProperties.getAccessKey()),
+                Optional.ofNullable(reportStorageClientProperties.getPrivateKey()),
+                (accessKey, privateKey) ->
+                    AwsBasicCredentials.create(
+                        reportStorageClientProperties.getAccessKey(),
+                        reportStorageClientProperties.getPrivateKey()))
+            .<AwsCredentialsProvider>map(StaticCredentialsProvider::create)
+            .orElseGet(DefaultCredentialsProvider::create);
 
     return S3Client.builder()
-        .credentialsProvider(StaticCredentialsProvider.create(credentials))
+        .credentialsProvider(provider)
         .region(Region.of(reportStorageClientProperties.getRegion()))
         .endpointOverride(URI.create(reportStorageClientProperties.getUrl()))
         .serviceConfiguration(
@@ -52,7 +62,7 @@ class ReportStorageConfiguration {
       @Valid ReportStorageProperties properties) {
 
     return new S3CompatibleStorage(
-        s3Client, reportStorageChecker, properties.getDefaultBucket());
+        s3Client, reportStorageChecker, properties.getDefaultBucket(), properties.getSse());
   }
 
   @Bean

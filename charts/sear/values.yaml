@@ -379,8 +379,7 @@ components:
 
   warehouse:
     image:
-      repository: registry.dev.s8ops.com/warehouse/warehouse-app
-      tag: "latest"
+      repository: registry.dev.s8ops.com/iris/warehouse-app
 
     dbName: "wh"
 

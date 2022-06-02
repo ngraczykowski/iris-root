@@ -47,11 +47,9 @@ components:
 
   webapp:
     profiles:
-    configFiles:
-      application.yml: |
-        sens.webapp:
-          roles:
-            country-groups-scope: kibana-sso
+    properties:
+      "sens.webapp.roles.country-groups-scope": kibana-sso
+      "sens.webapp.roles.roles-scope": kibana-sso
 
   warehouse:
     profiles:
@@ -59,23 +57,10 @@ components:
       - warehouse
       - messaging
     properties:
-      # FIXME(ahaczewski): Required to repeat configuration from `keycloak` below due to overwriting
-      #  environment variable defined directly in the WebApp container image.
-      "keycloak.frontend-client-id": frontend
-
-    configFiles:
-      application.yml: |
-        warehouse:
-          report:
-            default-bucket: todo-add-bucket
-
-        sep:
-          filestorage:
-            minio:
-              privateKey: dummy
-              accessKey: dummy
-              url: https://todo-add-bucket.s3.eu-central-1.amazonaws.com
-              region: eu-central-1
+      "warehouse.report.default-bucket": "{{ .Release.Namespace }}/{{ include \"sear.fullname\" . }}/warehouse"
+      "warehouse.report.sse": AWS_KMS
+      "sep.filestorage.minio.url": https://devenv-6fa57739-906d-1130-4a76-90dd1c5dc8a3.s3.eu-central-1.amazonaws.com
+      "sep.filestorage.minio.region": eu-central-1
 
 
 agents:

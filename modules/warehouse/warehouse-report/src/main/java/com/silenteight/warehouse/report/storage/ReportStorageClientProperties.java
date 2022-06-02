@@ -15,10 +15,8 @@ class ReportStorageClientProperties {
   @NotBlank
   private String url;
 
-  @NotBlank
   private String accessKey;
 
-  @NotBlank
   private String privateKey;
 
   @NotBlank

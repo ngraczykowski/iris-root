@@ -11,6 +11,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -26,15 +27,19 @@ class S3CompatibleStorage implements ReportStorage {
   @NonNull
   private final String bucketName;
 
+  private final ServerSideEncryption sse;
+
   @Override
   public void saveReport(Report report) {
-    var putObjectRequest = PutObjectRequest.builder()
+    var putObjectRequestBuilder = PutObjectRequest.builder()
         .bucket(bucketName)
-        .key(report.getReportName())
-        .build();
+        .key(report.getReportName());
+
+    Optional.ofNullable(sse).ifPresent(putObjectRequestBuilder::serverSideEncryption);
+
     var requestBody = RequestBody.fromFile(report.getReportPath());
 
-    s3Client.putObject(putObjectRequest, requestBody);
+    s3Client.putObject(putObjectRequestBuilder.build(), requestBody);
     reportStorageRequestStatusCheck.checkPersistenceStatus(report, bucketName);
   }
 
