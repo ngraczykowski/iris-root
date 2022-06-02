@@ -4,7 +4,6 @@ COPY hit_type /app/hit_type
 COPY temp_agent /app/temp_agent
 COPY config /app/config
 COPY pyproject.toml setup.py setup.cfg requirements.txt /app/
-RUN mv /app/config/application.local.yaml /app/config/application.yaml
 
 FROM python:3.7-slim
 ARG PYPI_URL
