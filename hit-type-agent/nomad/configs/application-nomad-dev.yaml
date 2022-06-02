@@ -36,7 +36,7 @@ agent:
 
     response:
       exchange: "agent.response"
-      routing_key: ""
+      routing-key: ""
 
   grpc:
     port: {{ env "NOMAD_PORT_grpc" }}

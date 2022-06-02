@@ -3,9 +3,9 @@ import subprocess
 import time
 import unittest
 
-import grpc
-import psutil
 from agent_base.utils import Config
+from s8_python_network.grpc_channel import get_channel
+from s8_python_network.utils import grpc_server_on, kill_process_on_the_port, kill_recursive
 
 from temp_agent.hit_type_agent_pb2 import CheckTriggersRequest, StringList, TokensMap
 from temp_agent.hit_type_agent_pb2_grpc import HitTypeAgentStub
@@ -20,40 +20,14 @@ class ServerIsNotRunning(Exception):
     pass
 
 
-def grpc_server_on(channel) -> bool:
-    # https://stackoverflow.com/questions/45759491/how-to-know-if-a-grpc-server-is-available/61384353#61384353
-    try:
-        grpc.channel_ready_future(channel).result(timeout=TIMEOUT_SEC)
-        return True
-    except grpc.FutureTimeoutError:
-        return False
-
-
 def wait_for_server(address):
-    channel = grpc.insecure_channel(address)
+    channel = get_channel(address)
     counter = 0
-    while counter < 10 and not grpc_server_on(channel):
+    while counter < 10 and not grpc_server_on(channel, TIMEOUT_SEC):
         time.sleep(2)
         counter += 1
     if counter == 10:
         raise ServerIsNotRunning("Check server")
-
-
-def kill_recursive(process_pid: int):
-    process = psutil.Process(process_pid)
-    for proc in process.children(recursive=True):
-        proc.kill()
-    process.kill()
-
-
-def kill_process_on_the_port(port):
-    kill = subprocess.Popen(
-        "kill -9 $(netstat -ltnp | "
-        f"grep -w :{port} | "
-        "awk '{ print $7 }' | "
-        "grep -o '[0-9]\\+' )".split()
-    )
-    kill.wait()
 
 
 class TestServer(unittest.TestCase):
@@ -68,7 +42,7 @@ class TestServer(unittest.TestCase):
         time.sleep(TIMEOUT_SEC)
 
     def test_check_grpc_response(self):
-        channel = grpc.insecure_channel(GRPC_ADDRESS)
+        channel = get_channel(GRPC_ADDRESS)
         stub = HitTypeAgentStub(channel)
         for test_case in TEST_CASES:
             data = test_case["data"]
