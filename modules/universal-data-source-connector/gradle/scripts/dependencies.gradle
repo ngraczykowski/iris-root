@@ -4,14 +4,15 @@ ext {
   //***********************************
   // Silent Eight
   //***********************************
-  grpcVersion = "1.41.0"
+  grpcVersion = "1.46.0"
   silenteightDataSourceApiVersion = "0.18.0"
+  silenteightIrisDataSourceApiVersion = "220601.12.0"
 }
 
 // Silent Eight
 libraries.data_source_categories_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-categories-api', version: silenteightDataSourceApiVersion]
 libraries.data_source_comments_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-comments-api', version: silenteightDataSourceApiVersion]
-libraries.data_source_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-api', version: silenteightDataSourceApiVersion]
+libraries.data_source_api = [group: 'com.silenteight.iris', name: 'data-source-api', version: silenteightIrisDataSourceApiVersion]
 libraries.data_source_agentinput_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-agentinput-api', version: silenteightDataSourceApiVersion]
 
 // APIs

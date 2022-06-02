@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.datasource.agentinput.api.v1.FeatureInput.Builder;
 import com.silenteight.datasource.api.allowlist.v1.AllowListFeatureInput;
 import com.silenteight.datasource.api.bankidentificationcodes.v1.BankIdentificationCodesFeatureInput;
+import com.silenteight.datasource.api.compareDates.v1.CompareDatesFeatureInput;
 import com.silenteight.datasource.api.country.v1.CountryFeatureInput;
 import com.silenteight.datasource.api.date.v1.DateFeatureInput;
 import com.silenteight.datasource.api.date.v1.DateFeatureInput.EntityType;
@@ -16,6 +17,7 @@ import com.silenteight.datasource.api.freetext.v1.FreeTextFeatureInput;
 import com.silenteight.datasource.api.gender.v1.GenderFeatureInput;
 import com.silenteight.datasource.api.historicaldecisions.v1.HistoricalDecisionsInput.HistoricalDecisionsFeatureInput;
 import com.silenteight.datasource.api.historicaldecisions.v1.HistoricalDecisionsInput.ModelType;
+import com.silenteight.datasource.api.isofgivendocumenttype.v1.IsOfGivenDocumentTypeFeatureInput;
 import com.silenteight.datasource.api.ispep.v2.AlertedPartyItem;
 import com.silenteight.datasource.api.ispep.v2.IsPepFeatureInput;
 import com.silenteight.datasource.api.ispep.v2.WatchlistItem;
@@ -30,6 +32,7 @@ import com.silenteight.datasource.api.transaction.v1.TransactionFeatureInput.Wat
 import com.silenteight.universaldatasource.api.library.allowlist.v1.AllowListFeatureInputOut;
 import com.silenteight.universaldatasource.api.library.bankidentificationcodes.v1.BankIdentificationCodesFeatureInputOut;
 import com.silenteight.universaldatasource.api.library.commentinput.v2.StructMapperUtil;
+import com.silenteight.universaldatasource.api.library.comparedates.v1.CompareDatesFeatureInputOut;
 import com.silenteight.universaldatasource.api.library.country.v1.CountryFeatureInputOut;
 import com.silenteight.universaldatasource.api.library.date.v1.DateFeatureInputOut;
 import com.silenteight.universaldatasource.api.library.document.v1.DocumentFeatureInputOut;
@@ -37,6 +40,7 @@ import com.silenteight.universaldatasource.api.library.event.v1.EventFeatureOut;
 import com.silenteight.universaldatasource.api.library.freetext.v1.FreeTextFeatureInputOut;
 import com.silenteight.universaldatasource.api.library.gender.v1.GenderFeatureInputOut;
 import com.silenteight.universaldatasource.api.library.historicaldecisions.v1.HistoricalDecisionsFeatureInputOut;
+import com.silenteight.universaldatasource.api.library.isofgivendocumenttype.v1.IsOfGivenDocumentTypeFeatureInputOut;
 import com.silenteight.universaldatasource.api.library.ispep.v2.IsPepFeatureInputOut;
 import com.silenteight.universaldatasource.api.library.ispep.v2.WatchlistItemOut;
 import com.silenteight.universaldatasource.api.library.location.v1.LocationFeatureInputOut;
@@ -264,6 +268,31 @@ public class FeatureBuilder implements FeatureBuilderProvider {
                 .addAllWatchlistNames(getNames(input))
                 .setWatchlistType(WatchlistType.valueOf(input.getWatchlistType().name()))
                 .addAllMatchingTexts(input.getMatchingTexts())
+                .build()
+        ));
+  }
+
+  @Override
+  public void build(IsOfGivenDocumentTypeFeatureInputOut input, Builder builder) {
+    builder
+        .setFeature(input.getFeature())
+        .setAgentFeatureInput(Any.pack(
+            IsOfGivenDocumentTypeFeatureInput.newBuilder()
+                .setFeature(input.getFeature())
+                .setDocumentNumber(input.getDocumentNumber())
+                .addAllDocumentTypes(input.getDocumentTypes())
+                .build()
+        ));
+  }
+
+  @Override
+  public void build(CompareDatesFeatureInputOut input, Builder builder) {
+    builder
+        .setFeature(input.getFeature())
+        .setAgentFeatureInput(Any.pack(
+            CompareDatesFeatureInput.newBuilder()
+                .setFeature(input.getFeature())
+                .setDateToCompare(input.getDateToCompare())
                 .build()
         ));
   }
