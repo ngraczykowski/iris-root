@@ -70,13 +70,13 @@ def assert_compare_list_of_dict_of_list(tested, reference, col=None):
     assert len(tested) == len(reference)
 
     for tested_element, reference_element in zip(tested, reference):
-        assert_nested_dict(tested_element, reference_element)
+        assert_nested_dict(tested_element, reference_element, col)
 
 
-def assert_nested_dict(tested, reference):
+def assert_nested_dict(tested, reference, key=None):
     if isinstance(reference, dict):
         for key in reference:
-            assert_nested_dict(tested[key], reference[key])
+            assert_nested_dict(tested[key], reference[key], key)
         return
     elif isinstance(reference, list):
         try:
@@ -84,7 +84,7 @@ def assert_nested_dict(tested, reference):
         except (TypeError, AssertionError):
             assert_compare_list_of_dict_of_list(tested, reference)
         return
-    assert tested == reference
+    assert tested == reference, key
 
 
 def load_payload(out_payload, reference_file):

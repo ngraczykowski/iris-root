@@ -912,95 +912,93 @@
                 ],
                 "hit_type_agent_name": [],
                 "hit_type_agent_address": [
-                    "ADDRESS1_CITY",
                     "ADDRESS1_PROVINCE",
                     "ADDRESS1_COUNTRY",
-                    "CONCAT_ADDRESS",
-                    "ADDRESS1_STATE"
+                    "ADDRESS1_STATE",
+                    "ADDRESS1_CITY",
+                    "CONCAT_ADDRESS"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_other": [],
                 "matched_tokens_tp_marked_agent_input": "abouhamza",
                 "ap_name_tp_marked_agent_input": null,
                 "ap_id_tp_marked_agent_input": "A00183210139",
-                "is_entity_match_agent_ap": "UNKNOWN",
-                "is_entity_match_agent_wl": "I",
                 "ap_all_dobs_aggregated": [],
                 "wl_all_dobs_aggregated": [
+                    "01",
                     "1971",
-                    "01/29/1971",
                     "29",
-                    "01"
+                    "01/29/1971"
                 ],
                 "ap_all_documents_aggregated": [],
                 "wl_all_documents_aggregated": [],
                 "ap_all_company_names_aggregated": [],
                 "wl_all_company_names_aggregated": [
-                    "BROUGERE, JACQUES",
-                    "KUMKAL",
-                    "RENE, MERLIN OLIVER CHRISTIAN",
-                    "MERLIN",
-                    "ANTONIO, DI KARLO",
                     "BILAL",
-                    "BRUGERE",
-                    "IMAD, ARFAUNI",
-                    "HAMZA",
-                    "ABOU HAMZA",
-                    "DIMON",
+                    "KUMKAL",
                     "HAMZA, ABU",
                     "TINET",
-                    "DUMONT, LIONEL",
+                    "BROUGERE, JACQUES",
+                    "MERLIN",
+                    "ANTONIO, DI KARLO",
+                    "BRUGERE",
+                    "ABOU HAMZA",
+                    "HAMZA",
+                    "DIMON",
+                    "IMAD, ARFAUNI",
                     "KOUMKAL",
+                    "RENE, MERLIN OLIVER CHRISTIAN",
+                    "HAMZA, ARFAUNI IMAD BEN YOUSSET",
                     "ARFAJ, IMAM BEN YUSSUF",
-                    "HAMZA, ARFAUNI IMAD BEN YOUSSET"
+                    "DUMONT, LIONEL"
                 ],
                 "ap_all_names_aggregated": [],
                 "wl_all_names_aggregated": [
-                    "BROUGERE, JACQUES",
-                    "KUMKAL",
-                    "RENE, MERLIN OLIVER CHRISTIAN",
-                    "MERLIN",
-                    "ANTONIO, DI KARLO",
                     "BILAL",
-                    "BRUGERE",
-                    "IMAD, ARFAUNI",
-                    "HAMZA",
-                    "ABOU HAMZA",
-                    "DIMON",
+                    "KUMKAL",
                     "HAMZA, ABU",
                     "TINET",
-                    "DUMONT, LIONEL",
+                    "BROUGERE, JACQUES",
+                    "MERLIN",
+                    "ANTONIO, DI KARLO",
+                    "BRUGERE",
+                    "ABOU HAMZA",
+                    "HAMZA",
+                    "DIMON",
+                    "IMAD, ARFAUNI",
                     "KOUMKAL",
+                    "RENE, MERLIN OLIVER CHRISTIAN",
+                    "HAMZA, ARFAUNI IMAD BEN YOUSSET",
                     "ARFAJ, IMAM BEN YUSSUF",
-                    "HAMZA, ARFAUNI IMAD BEN YOUSSET"
+                    "DUMONT, LIONEL"
                 ],
                 "ap_all_employer_names_aggregated": [],
                 "wl_all_employer_names_aggregated": [
-                    "BROUGERE, JACQUES",
-                    "KUMKAL",
-                    "RENE, MERLIN OLIVER CHRISTIAN",
-                    "MERLIN",
-                    "ANTONIO, DI KARLO",
                     "BILAL",
-                    "BRUGERE",
-                    "IMAD, ARFAUNI",
-                    "HAMZA",
-                    "ABOU HAMZA",
-                    "DIMON",
+                    "KUMKAL",
                     "HAMZA, ABU",
                     "TINET",
-                    "DUMONT, LIONEL",
+                    "BROUGERE, JACQUES",
+                    "MERLIN",
+                    "ANTONIO, DI KARLO",
+                    "BRUGERE",
+                    "ABOU HAMZA",
+                    "HAMZA",
+                    "DIMON",
+                    "IMAD, ARFAUNI",
                     "KOUMKAL",
+                    "RENE, MERLIN OLIVER CHRISTIAN",
+                    "HAMZA, ARFAUNI IMAD BEN YOUSSET",
                     "ARFAJ, IMAM BEN YUSSUF",
-                    "HAMZA, ARFAUNI IMAD BEN YOUSSET"
+                    "DUMONT, LIONEL"
                 ],
                 "ap_all_nationalities_aggregated": [
                     "AHMEDOUA"
                 ],
                 "wl_all_nationalities_aggregated": [
+                    "Robaix , France.",
                     "FR",
-                    "FRANCE",
-                    "Robaix , France."
+                    "FRANCE"
                 ],
                 "ap_all_party_types_aggregated": [],
                 "wl_all_party_types_aggregated": [
@@ -1008,17 +1006,17 @@
                 ],
                 "ap_all_pobs_aggregated": [],
                 "wl_all_pobs_aggregated": [
+                    "Robaix , France.",
                     "FR",
-                    "FRANCE",
-                    "Robaix , France."
+                    "FRANCE"
                 ],
                 "ap_all_sanctioned_countries_aggregated": [
                     "AHMEDOUA"
                 ],
                 "wl_all_sanctioned_countries_aggregated": [
+                    "DUMONT, LIONEL",
                     "FR",
-                    "FRANCE",
-                    "DUMONT, LIONEL"
+                    "FRANCE"
                 ],
                 "ap_all_residencies_aggregated": [
                     "AHMEDOUA"
@@ -1035,21 +1033,15 @@
                 "wl_all_ap_name_tp_markeds_aggregated": [],
                 "ap_all_ap_id_tp_markeds_aggregated": [],
                 "wl_all_ap_id_tp_markeds_aggregated": [],
-                "ap_all_is_entity_matchs_aggregated": [
-                    "UNKNOWN"
-                ],
-                "wl_all_is_entity_matchs_aggregated": [
-                    "I"
-                ],
                 "all_hit_type_aggregated": [
                     {
                         "name": [],
                         "address": [
-                            "ADDRESS1_CITY",
                             "ADDRESS1_PROVINCE",
                             "ADDRESS1_COUNTRY",
-                            "CONCAT_ADDRESS",
-                            "ADDRESS1_STATE"
+                            "ADDRESS1_STATE",
+                            "ADDRESS1_CITY",
+                            "CONCAT_ADDRESS"
                         ],
                         "job": [],
                         "other": []
@@ -1781,56 +1773,54 @@
                 ],
                 "hit_type_agent_name": [],
                 "hit_type_agent_address": [
-                    "ADDRESS1_CITY",
                     "ADDRESS1_PROVINCE",
                     "ADDRESS1_COUNTRY",
-                    "CONCAT_ADDRESS",
-                    "ADDRESS1_STATE"
+                    "ADDRESS1_STATE",
+                    "ADDRESS1_CITY",
+                    "CONCAT_ADDRESS"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_other": [],
                 "matched_tokens_tp_marked_agent_input": "abdalrahmanmilad",
                 "ap_name_tp_marked_agent_input": null,
                 "ap_id_tp_marked_agent_input": "A00183210139",
-                "is_entity_match_agent_ap": "UNKNOWN",
-                "is_entity_match_agent_wl": "I",
                 "ap_all_dobs_aggregated": [],
                 "wl_all_dobs_aggregated": [
                     "27",
-                    "1986",
+                    "07/27/1986",
                     "07",
-                    "07/27/1986"
+                    "1986"
                 ],
                 "ap_all_documents_aggregated": [],
                 "wl_all_documents_aggregated": [],
                 "ap_all_company_names_aggregated": [],
                 "wl_all_company_names_aggregated": [
-                    "AL-MILAD, ABD AL-RAHMAN",
-                    "AL-BIJA",
                     "MILAD, ABDURAHMAN SALEM IBRAHIM",
-                    "MILAD, RAHMAN SALIM"
+                    "MILAD, RAHMAN SALIM",
+                    "AL-MILAD, ABD AL-RAHMAN",
+                    "AL-BIJA"
                 ],
                 "ap_all_names_aggregated": [],
                 "wl_all_names_aggregated": [
-                    "AL-MILAD, ABD AL-RAHMAN",
-                    "AL-BIJA",
                     "MILAD, ABDURAHMAN SALEM IBRAHIM",
-                    "MILAD, RAHMAN SALIM"
+                    "MILAD, RAHMAN SALIM",
+                    "AL-MILAD, ABD AL-RAHMAN",
+                    "AL-BIJA"
                 ],
                 "ap_all_employer_names_aggregated": [],
                 "wl_all_employer_names_aggregated": [
-                    "AL-MILAD, ABD AL-RAHMAN",
-                    "AL-BIJA",
                     "MILAD, ABDURAHMAN SALEM IBRAHIM",
-                    "MILAD, RAHMAN SALIM"
+                    "MILAD, RAHMAN SALIM",
+                    "AL-MILAD, ABD AL-RAHMAN",
+                    "AL-BIJA"
                 ],
                 "ap_all_nationalities_aggregated": [
                     "AHMEDOUA"
                 ],
                 "wl_all_nationalities_aggregated": [
                     "LIBYAN ARAB JAMAHIRIYA",
-                    "TRIPOLI, LIBYA",
-                    "LY"
+                    "LY",
+                    "TRIPOLI, LIBYA"
                 ],
                 "ap_all_party_types_aggregated": [],
                 "wl_all_party_types_aggregated": [
@@ -1839,16 +1829,16 @@
                 "ap_all_pobs_aggregated": [],
                 "wl_all_pobs_aggregated": [
                     "LIBYAN ARAB JAMAHIRIYA",
-                    "TRIPOLI, LIBYA",
-                    "LY"
+                    "LY",
+                    "TRIPOLI, LIBYA"
                 ],
                 "ap_all_sanctioned_countries_aggregated": [
                     "AHMEDOUA"
                 ],
                 "wl_all_sanctioned_countries_aggregated": [
                     "LIBYAN ARAB JAMAHIRIYA",
-                    "AL-MILAD, ABD AL-RAHMAN",
-                    "LY"
+                    "LY",
+                    "AL-MILAD, ABD AL-RAHMAN"
                 ],
                 "ap_all_residencies_aggregated": [
                     "AHMEDOUA"
@@ -1865,21 +1855,15 @@
                 "wl_all_ap_name_tp_markeds_aggregated": [],
                 "ap_all_ap_id_tp_markeds_aggregated": [],
                 "wl_all_ap_id_tp_markeds_aggregated": [],
-                "ap_all_is_entity_matchs_aggregated": [
-                    "UNKNOWN"
-                ],
-                "wl_all_is_entity_matchs_aggregated": [
-                    "I"
-                ],
                 "all_hit_type_aggregated": [
                     {
                         "name": [],
                         "address": [
-                            "ADDRESS1_CITY",
                             "ADDRESS1_PROVINCE",
                             "ADDRESS1_COUNTRY",
-                            "CONCAT_ADDRESS",
-                            "ADDRESS1_STATE"
+                            "ADDRESS1_STATE",
+                            "ADDRESS1_CITY",
+                            "CONCAT_ADDRESS"
                         ],
                         "job": [],
                         "other": []
@@ -2641,57 +2625,55 @@
                 ],
                 "hit_type_agent_name": [],
                 "hit_type_agent_address": [
-                    "ADDRESS1_CITY",
                     "ADDRESS1_PROVINCE",
                     "ADDRESS1_COUNTRY",
-                    "CONCAT_ADDRESS",
-                    "ADDRESS1_STATE"
+                    "ADDRESS1_STATE",
+                    "ADDRESS1_CITY",
+                    "CONCAT_ADDRESS"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_other": [],
                 "matched_tokens_tp_marked_agent_input": "abdalhadi",
                 "ap_name_tp_marked_agent_input": null,
                 "ap_id_tp_marked_agent_input": "A00183210139",
-                "is_entity_match_agent_ap": "UNKNOWN",
-                "is_entity_match_agent_wl": "I",
                 "ap_all_dobs_aggregated": [],
                 "wl_all_dobs_aggregated": [
-                    "1977",
                     "07",
-                    "06",
-                    "07/06/1977"
+                    "07/06/1977",
+                    "1977",
+                    "06"
                 ],
                 "ap_all_documents_aggregated": [],
                 "wl_all_documents_aggregated": [],
                 "ap_all_company_names_aggregated": [],
                 "wl_all_company_names_aggregated": [
-                    "HADI, ABDUL",
-                    "BUKHORY",
                     "RUSMAN, GUNAWAN",
-                    "BUKHORI",
                     "KARIM, ABDUL",
+                    "HADI, ABDUL",
                     "AL-HADI, ABD",
-                    "GUNAWAN, GUN GUN RUSMAN"
+                    "BUKHORI",
+                    "GUNAWAN, GUN GUN RUSMAN",
+                    "BUKHORY"
                 ],
                 "ap_all_names_aggregated": [],
                 "wl_all_names_aggregated": [
-                    "HADI, ABDUL",
-                    "BUKHORY",
                     "RUSMAN, GUNAWAN",
-                    "BUKHORI",
                     "KARIM, ABDUL",
+                    "HADI, ABDUL",
                     "AL-HADI, ABD",
-                    "GUNAWAN, GUN GUN RUSMAN"
+                    "BUKHORI",
+                    "GUNAWAN, GUN GUN RUSMAN",
+                    "BUKHORY"
                 ],
                 "ap_all_employer_names_aggregated": [],
                 "wl_all_employer_names_aggregated": [
-                    "HADI, ABDUL",
-                    "BUKHORY",
                     "RUSMAN, GUNAWAN",
-                    "BUKHORI",
                     "KARIM, ABDUL",
+                    "HADI, ABDUL",
                     "AL-HADI, ABD",
-                    "GUNAWAN, GUN GUN RUSMAN"
+                    "BUKHORI",
+                    "GUNAWAN, GUN GUN RUSMAN",
+                    "BUKHORY"
                 ],
                 "ap_all_nationalities_aggregated": [
                     "AHMEDOUA"
@@ -2725,21 +2707,15 @@
                 "wl_all_ap_name_tp_markeds_aggregated": [],
                 "ap_all_ap_id_tp_markeds_aggregated": [],
                 "wl_all_ap_id_tp_markeds_aggregated": [],
-                "ap_all_is_entity_matchs_aggregated": [
-                    "UNKNOWN"
-                ],
-                "wl_all_is_entity_matchs_aggregated": [
-                    "I"
-                ],
                 "all_hit_type_aggregated": [
                     {
                         "name": [],
                         "address": [
-                            "ADDRESS1_CITY",
                             "ADDRESS1_PROVINCE",
                             "ADDRESS1_COUNTRY",
-                            "CONCAT_ADDRESS",
-                            "ADDRESS1_STATE"
+                            "ADDRESS1_STATE",
+                            "ADDRESS1_CITY",
+                            "CONCAT_ADDRESS"
                         ],
                         "job": [],
                         "other": []
@@ -3264,8 +3240,8 @@
                 "WL_DOCUMENT_NUMBER": [],
                 "datasetType": "WM_ADDRESS",
                 "TRIGGERED_BY": [
-                    "stopDescriptors",
-                    "matchStatus"
+                    "matchStatus",
+                    "stopDescriptors"
                 ],
                 "IS_BENEFICIARY_HIT": false,
                 "AP_TRIGGERS": {
@@ -3463,58 +3439,56 @@
                 ],
                 "hit_type_agent_name": [],
                 "hit_type_agent_address": [
-                    "ADDRESS1_CITY",
                     "ADDRESS1_PROVINCE",
                     "ADDRESS1_COUNTRY",
-                    "CONCAT_ADDRESS",
-                    "ADDRESS1_STATE"
+                    "ADDRESS1_STATE",
+                    "ADDRESS1_CITY",
+                    "CONCAT_ADDRESS"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_other": [],
                 "matched_tokens_tp_marked_agent_input": "abdussomada",
                 "ap_name_tp_marked_agent_input": null,
                 "ap_id_tp_marked_agent_input": "A00183210139",
-                "is_entity_match_agent_ap": "UNKNOWN",
-                "is_entity_match_agent_wl": "I",
                 "ap_all_dobs_aggregated": [],
                 "wl_all_dobs_aggregated": [
                     "08",
-                    "08/17/1938",
                     "17",
-                    "1938"
+                    "1938",
+                    "08/17/1938"
                 ],
                 "ap_all_documents_aggregated": [],
                 "wl_all_documents_aggregated": [],
                 "ap_all_company_names_aggregated": [],
                 "wl_all_company_names_aggregated": [
-                    "BA'ASYIR, ABU BAKAR",
                     "ABDUS SOMAD",
+                    "BASHIR, ABU BAKAR",
                     "ABDUS SAMAD",
                     "BAASYIR, ABU BAKAR",
-                    "BASHIR, ABU BAKAR"
+                    "BA'ASYIR, ABU BAKAR"
                 ],
                 "ap_all_names_aggregated": [],
                 "wl_all_names_aggregated": [
-                    "BA'ASYIR, ABU BAKAR",
                     "ABDUS SOMAD",
+                    "BASHIR, ABU BAKAR",
                     "ABDUS SAMAD",
                     "BAASYIR, ABU BAKAR",
-                    "BASHIR, ABU BAKAR"
+                    "BA'ASYIR, ABU BAKAR"
                 ],
                 "ap_all_employer_names_aggregated": [],
                 "wl_all_employer_names_aggregated": [
-                    "BA'ASYIR, ABU BAKAR",
                     "ABDUS SOMAD",
+                    "BASHIR, ABU BAKAR",
                     "ABDUS SAMAD",
                     "BAASYIR, ABU BAKAR",
-                    "BASHIR, ABU BAKAR"
+                    "BA'ASYIR, ABU BAKAR"
                 ],
                 "ap_all_nationalities_aggregated": [
                     "AHMEDOUA"
                 ],
                 "wl_all_nationalities_aggregated": [
-                    "ID",
                     "Jombang, East Java, Indonesia",
+                    "ID",
                     "INDONESIA"
                 ],
                 "ap_all_party_types_aggregated": [],
@@ -3523,24 +3497,24 @@
                 ],
                 "ap_all_pobs_aggregated": [],
                 "wl_all_pobs_aggregated": [
+                    "INDONESIA",
                     "ID",
-                    "Jombang, East Java, Indonesia",
-                    "INDONESIA"
+                    "Jombang, East Java, Indonesia"
                 ],
                 "ap_all_sanctioned_countries_aggregated": [
                     "AHMEDOUA"
                 ],
                 "wl_all_sanctioned_countries_aggregated": [
+                    "INDONESIA",
                     "ID",
-                    "BA'ASYIR, ABU BAKAR",
-                    "INDONESIA"
+                    "BA'ASYIR, ABU BAKAR"
                 ],
                 "ap_all_residencies_aggregated": [
                     "AHMEDOUA"
                 ],
                 "wl_all_residencies_aggregated": [
-                    "ID",
-                    "INDONESIA"
+                    "INDONESIA",
+                    "ID"
                 ],
                 "ap_all_hit_types_aggregated": [],
                 "wl_all_hit_types_aggregated": [],
@@ -3550,21 +3524,15 @@
                 "wl_all_ap_name_tp_markeds_aggregated": [],
                 "ap_all_ap_id_tp_markeds_aggregated": [],
                 "wl_all_ap_id_tp_markeds_aggregated": [],
-                "ap_all_is_entity_matchs_aggregated": [
-                    "UNKNOWN"
-                ],
-                "wl_all_is_entity_matchs_aggregated": [
-                    "I"
-                ],
                 "all_hit_type_aggregated": [
                     {
                         "name": [],
                         "address": [
-                            "ADDRESS1_CITY",
                             "ADDRESS1_PROVINCE",
                             "ADDRESS1_COUNTRY",
-                            "CONCAT_ADDRESS",
-                            "ADDRESS1_STATE"
+                            "ADDRESS1_STATE",
+                            "ADDRESS1_CITY",
+                            "CONCAT_ADDRESS"
                         ],
                         "job": [],
                         "other": []
@@ -4121,8 +4089,8 @@
                 "datasetType": "WM_ADDRESS",
                 "TRIGGERED_BY": [
                     "entity",
-                    "stopDescriptors",
-                    "matchStatus"
+                    "matchStatus",
+                    "stopDescriptors"
                 ],
                 "IS_BENEFICIARY_HIT": false,
                 "AP_TRIGGERS": {
@@ -4356,71 +4324,69 @@
                 ],
                 "hit_type_agent_name": [],
                 "hit_type_agent_address": [
-                    "ADDRESS1_CITY",
                     "ADDRESS1_PROVINCE",
                     "ADDRESS1_COUNTRY",
-                    "CONCAT_ADDRESS",
-                    "ADDRESS1_STATE"
+                    "ADDRESS1_STATE",
+                    "ADDRESS1_CITY",
+                    "CONCAT_ADDRESS"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_other": [],
                 "matched_tokens_tp_marked_agent_input": "abouhamza",
                 "ap_name_tp_marked_agent_input": null,
                 "ap_id_tp_marked_agent_input": "A00183210139",
-                "is_entity_match_agent_ap": "UNKNOWN",
-                "is_entity_match_agent_wl": "I",
                 "ap_all_dobs_aggregated": [],
                 "wl_all_dobs_aggregated": [
-                    "15",
                     "04/15/1958",
-                    "04",
-                    "1958"
+                    "1958",
+                    "15",
+                    "04"
                 ],
                 "ap_all_documents_aggregated": [],
                 "wl_all_documents_aggregated": [],
                 "ap_all_company_names_aggregated": [],
                 "wl_all_company_names_aggregated": [
-                    "AL-MISRI, ABU HAMZA",
                     "AL-MASRI, ABU HAMZA",
+                    "EAMAN, ADAM RAMSEY",
+                    "MUSTAFA, MUSTAFA KAMEL",
                     "HAMZA, ABU",
                     "MUSTAPHA, KAMEL MUSTAPHA",
+                    "AL-MISRI, ABU HAMZA",
                     "MOSTAFA, MOSTAFA KAMEL",
-                    "MUSTAFA, MUSTAFA KAMEL",
-                    "MUSTAPHA, MUSTAPHA KAMEL",
-                    "EAMAN, ADAM RAMSEY",
-                    "IBRAHIM, MOSTAFA KAMEL MOSTAFA"
+                    "IBRAHIM, MOSTAFA KAMEL MOSTAFA",
+                    "MUSTAPHA, MUSTAPHA KAMEL"
                 ],
                 "ap_all_names_aggregated": [],
                 "wl_all_names_aggregated": [
-                    "AL-MISRI, ABU HAMZA",
                     "AL-MASRI, ABU HAMZA",
+                    "EAMAN, ADAM RAMSEY",
+                    "MUSTAFA, MUSTAFA KAMEL",
                     "HAMZA, ABU",
                     "MUSTAPHA, KAMEL MUSTAPHA",
+                    "AL-MISRI, ABU HAMZA",
                     "MOSTAFA, MOSTAFA KAMEL",
-                    "MUSTAFA, MUSTAFA KAMEL",
-                    "MUSTAPHA, MUSTAPHA KAMEL",
-                    "EAMAN, ADAM RAMSEY",
-                    "IBRAHIM, MOSTAFA KAMEL MOSTAFA"
+                    "IBRAHIM, MOSTAFA KAMEL MOSTAFA",
+                    "MUSTAPHA, MUSTAPHA KAMEL"
                 ],
                 "ap_all_employer_names_aggregated": [],
                 "wl_all_employer_names_aggregated": [
-                    "AL-MISRI, ABU HAMZA",
                     "AL-MASRI, ABU HAMZA",
+                    "EAMAN, ADAM RAMSEY",
+                    "MUSTAFA, MUSTAFA KAMEL",
                     "HAMZA, ABU",
                     "MUSTAPHA, KAMEL MUSTAPHA",
+                    "AL-MISRI, ABU HAMZA",
                     "MOSTAFA, MOSTAFA KAMEL",
-                    "MUSTAFA, MUSTAFA KAMEL",
-                    "MUSTAPHA, MUSTAPHA KAMEL",
-                    "EAMAN, ADAM RAMSEY",
-                    "IBRAHIM, MOSTAFA KAMEL MOSTAFA"
+                    "IBRAHIM, MOSTAFA KAMEL MOSTAFA",
+                    "MUSTAPHA, MUSTAPHA KAMEL"
                 ],
                 "ap_all_nationalities_aggregated": [
                     "AHMEDOUA"
                 ],
                 "wl_all_nationalities_aggregated": [
-                    "UNITED STATES",
+                    "Alexandria, Egypt",
                     "US",
-                    "Alexandria, Egypt"
+                    "UNITED STATES"
                 ],
                 "ap_all_party_types_aggregated": [],
                 "wl_all_party_types_aggregated": [
@@ -4428,24 +4394,24 @@
                 ],
                 "ap_all_pobs_aggregated": [],
                 "wl_all_pobs_aggregated": [
-                    "UNITED STATES",
+                    "Alexandria, Egypt",
                     "US",
-                    "Alexandria, Egypt"
+                    "UNITED STATES"
                 ],
                 "ap_all_sanctioned_countries_aggregated": [
                     "AHMEDOUA"
                 ],
                 "wl_all_sanctioned_countries_aggregated": [
-                    "UNITED STATES",
+                    "IBRAHIM, MOSTAFA KAMEL MOSTAFA",
                     "US",
-                    "IBRAHIM, MOSTAFA KAMEL MOSTAFA"
+                    "UNITED STATES"
                 ],
                 "ap_all_residencies_aggregated": [
                     "AHMEDOUA"
                 ],
                 "wl_all_residencies_aggregated": [
-                    "UNITED STATES",
-                    "US"
+                    "US",
+                    "UNITED STATES"
                 ],
                 "ap_all_hit_types_aggregated": [],
                 "wl_all_hit_types_aggregated": [],
@@ -4455,21 +4421,15 @@
                 "wl_all_ap_name_tp_markeds_aggregated": [],
                 "ap_all_ap_id_tp_markeds_aggregated": [],
                 "wl_all_ap_id_tp_markeds_aggregated": [],
-                "ap_all_is_entity_matchs_aggregated": [
-                    "UNKNOWN"
-                ],
-                "wl_all_is_entity_matchs_aggregated": [
-                    "I"
-                ],
                 "all_hit_type_aggregated": [
                     {
                         "name": [],
                         "address": [
-                            "ADDRESS1_CITY",
                             "ADDRESS1_PROVINCE",
                             "ADDRESS1_COUNTRY",
-                            "CONCAT_ADDRESS",
-                            "ADDRESS1_STATE"
+                            "ADDRESS1_STATE",
+                            "ADDRESS1_CITY",
+                            "CONCAT_ADDRESS"
                         ],
                         "job": [],
                         "other": []
@@ -4939,8 +4899,8 @@
                 "WL_DOCUMENT_NUMBER": [],
                 "datasetType": "WM_ADDRESS",
                 "TRIGGERED_BY": [
-                    "accountSeq",
-                    "stopDescriptors"
+                    "stopDescriptors",
+                    "accountSeq"
                 ],
                 "IS_BENEFICIARY_HIT": false,
                 "AP_TRIGGERS": {
@@ -5085,19 +5045,17 @@
                 ],
                 "hit_type_agent_name": [],
                 "hit_type_agent_address": [
-                    "ADDRESS1_CITY",
                     "ADDRESS1_PROVINCE",
                     "ADDRESS1_COUNTRY",
-                    "CONCAT_ADDRESS",
-                    "ADDRESS1_STATE"
+                    "ADDRESS1_STATE",
+                    "ADDRESS1_CITY",
+                    "CONCAT_ADDRESS"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_other": [],
                 "matched_tokens_tp_marked_agent_input": "1177627035211",
                 "ap_name_tp_marked_agent_input": null,
                 "ap_id_tp_marked_agent_input": "A00183210139",
-                "is_entity_match_agent_ap": "UNKNOWN",
-                "is_entity_match_agent_wl": "C",
                 "ap_all_dobs_aggregated": [],
                 "wl_all_dobs_aggregated": [],
                 "ap_all_documents_aggregated": [],
@@ -5134,9 +5092,9 @@
                     "AHMEDOUA"
                 ],
                 "wl_all_sanctioned_countries_aggregated": [
+                    "SATURN-TURBORUS, AO",
                     "RUSSIAN FEDERATION",
-                    "RU|PR. LENINA, D. 179",
-                    "SATURN-TURBORUS, AO"
+                    "RU|PR. LENINA, D. 179"
                 ],
                 "ap_all_residencies_aggregated": [
                     "AHMEDOUA"
@@ -5153,21 +5111,15 @@
                 "wl_all_ap_name_tp_markeds_aggregated": [],
                 "ap_all_ap_id_tp_markeds_aggregated": [],
                 "wl_all_ap_id_tp_markeds_aggregated": [],
-                "ap_all_is_entity_matchs_aggregated": [
-                    "UNKNOWN"
-                ],
-                "wl_all_is_entity_matchs_aggregated": [
-                    "C"
-                ],
                 "all_hit_type_aggregated": [
                     {
                         "name": [],
                         "address": [
-                            "ADDRESS1_CITY",
                             "ADDRESS1_PROVINCE",
                             "ADDRESS1_COUNTRY",
-                            "CONCAT_ADDRESS",
-                            "ADDRESS1_STATE"
+                            "ADDRESS1_STATE",
+                            "ADDRESS1_CITY",
+                            "CONCAT_ADDRESS"
                         ],
                         "job": [],
                         "other": []
@@ -5740,8 +5692,8 @@
                 "WL_DOCUMENT_NUMBER": [],
                 "datasetType": "WM_ADDRESS",
                 "TRIGGERED_BY": [
-                    "stopDescriptors",
-                    "matchStatus"
+                    "matchStatus",
+                    "stopDescriptors"
                 ],
                 "IS_BENEFICIARY_HIT": false,
                 "AP_TRIGGERS": {
@@ -5949,56 +5901,54 @@
                 ],
                 "hit_type_agent_name": [],
                 "hit_type_agent_address": [
-                    "ADDRESS1_CITY",
                     "ADDRESS1_PROVINCE",
                     "ADDRESS1_COUNTRY",
-                    "CONCAT_ADDRESS",
-                    "ADDRESS1_STATE"
+                    "ADDRESS1_STATE",
+                    "ADDRESS1_CITY",
+                    "CONCAT_ADDRESS"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_other": [],
                 "matched_tokens_tp_marked_agent_input": "ahmedoua",
                 "ap_name_tp_marked_agent_input": null,
                 "ap_id_tp_marked_agent_input": "A00183210139",
-                "is_entity_match_agent_ap": "UNKNOWN",
-                "is_entity_match_agent_wl": "I",
                 "ap_all_dobs_aggregated": [],
                 "wl_all_dobs_aggregated": [
-                    "01/01/1982",
+                    "1982",
                     "01",
-                    "1982"
+                    "01/01/1982"
                 ],
                 "ap_all_documents_aggregated": [],
                 "wl_all_documents_aggregated": [],
                 "ap_all_company_names_aggregated": [],
                 "wl_all_company_names_aggregated": [
-                    "ASRIW, AHMOUDOU AG",
-                    "ISRIW, AMADOU AG",
-                    "ISEREOUI",
                     "ISRIOU",
-                    "AHMEDOU",
+                    "ASRIW, AHMOUDOU AG",
+                    "AHMADOU",
                     "ISREW",
-                    "AHMADOU"
+                    "AHMEDOU",
+                    "ISRIW, AMADOU AG",
+                    "ISEREOUI"
                 ],
                 "ap_all_names_aggregated": [],
                 "wl_all_names_aggregated": [
-                    "ASRIW, AHMOUDOU AG",
-                    "ISRIW, AMADOU AG",
-                    "ISEREOUI",
                     "ISRIOU",
-                    "AHMEDOU",
+                    "ASRIW, AHMOUDOU AG",
+                    "AHMADOU",
                     "ISREW",
-                    "AHMADOU"
+                    "AHMEDOU",
+                    "ISRIW, AMADOU AG",
+                    "ISEREOUI"
                 ],
                 "ap_all_employer_names_aggregated": [],
                 "wl_all_employer_names_aggregated": [
-                    "ASRIW, AHMOUDOU AG",
-                    "ISRIW, AMADOU AG",
-                    "ISEREOUI",
                     "ISRIOU",
-                    "AHMEDOU",
+                    "ASRIW, AHMOUDOU AG",
+                    "AHMADOU",
                     "ISREW",
-                    "AHMADOU"
+                    "AHMEDOU",
+                    "ISRIW, AMADOU AG",
+                    "ISEREOUI"
                 ],
                 "ap_all_nationalities_aggregated": [
                     "AHMEDOUA"
@@ -6039,21 +5989,15 @@
                 "wl_all_ap_name_tp_markeds_aggregated": [],
                 "ap_all_ap_id_tp_markeds_aggregated": [],
                 "wl_all_ap_id_tp_markeds_aggregated": [],
-                "ap_all_is_entity_matchs_aggregated": [
-                    "UNKNOWN"
-                ],
-                "wl_all_is_entity_matchs_aggregated": [
-                    "I"
-                ],
                 "all_hit_type_aggregated": [
                     {
                         "name": [],
                         "address": [
-                            "ADDRESS1_CITY",
                             "ADDRESS1_PROVINCE",
                             "ADDRESS1_COUNTRY",
-                            "CONCAT_ADDRESS",
-                            "ADDRESS1_STATE"
+                            "ADDRESS1_STATE",
+                            "ADDRESS1_CITY",
+                            "CONCAT_ADDRESS"
                         ],
                         "job": [],
                         "other": []
@@ -6775,51 +6719,49 @@
                 ],
                 "hit_type_agent_name": [],
                 "hit_type_agent_address": [
-                    "ADDRESS1_CITY",
                     "ADDRESS1_PROVINCE",
                     "ADDRESS1_COUNTRY",
-                    "CONCAT_ADDRESS",
-                    "ADDRESS1_STATE"
+                    "ADDRESS1_STATE",
+                    "ADDRESS1_CITY",
+                    "CONCAT_ADDRESS"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_other": [],
                 "matched_tokens_tp_marked_agent_input": "alfadhli,udaia",
                 "ap_name_tp_marked_agent_input": null,
                 "ap_id_tp_marked_agent_input": "A00183210139",
-                "is_entity_match_agent_ap": "UNKNOWN",
-                "is_entity_match_agent_wl": "I",
                 "ap_all_dobs_aggregated": [],
                 "wl_all_dobs_aggregated": [
-                    "08",
                     "27",
-                    "08/27/1981",
-                    "1981"
+                    "08",
+                    "1981",
+                    "08/27/1981"
                 ],
                 "ap_all_documents_aggregated": [],
                 "wl_all_documents_aggregated": [],
                 "ap_all_company_names_aggregated": [],
                 "wl_all_company_names_aggregated": [
-                    "AL-FADHLI, ABD AL-AZIZ UDAI SAMIN",
-                    "AL-FADHLI, ABD AL-AZIZ ADHAY ZIMIN",
-                    "AL-FADHL, ABD AL-AZIZ UDAI SAMIN",
+                    "AL-FADHALI, ABDALAZIZ AD'AI SAMIN FADHLI",
                     "AL-FADHIL, ABD AL-AZIZ ADAY ZIMINY",
-                    "AL-FADHALI, ABDALAZIZ AD'AI SAMIN FADHLI"
+                    "AL-FADHL, ABD AL-AZIZ UDAI SAMIN",
+                    "AL-FADHLI, ABD AL-AZIZ UDAI SAMIN",
+                    "AL-FADHLI, ABD AL-AZIZ ADHAY ZIMIN"
                 ],
                 "ap_all_names_aggregated": [],
                 "wl_all_names_aggregated": [
-                    "AL-FADHLI, ABD AL-AZIZ UDAI SAMIN",
-                    "AL-FADHLI, ABD AL-AZIZ ADHAY ZIMIN",
-                    "AL-FADHL, ABD AL-AZIZ UDAI SAMIN",
+                    "AL-FADHALI, ABDALAZIZ AD'AI SAMIN FADHLI",
                     "AL-FADHIL, ABD AL-AZIZ ADAY ZIMINY",
-                    "AL-FADHALI, ABDALAZIZ AD'AI SAMIN FADHLI"
+                    "AL-FADHL, ABD AL-AZIZ UDAI SAMIN",
+                    "AL-FADHLI, ABD AL-AZIZ UDAI SAMIN",
+                    "AL-FADHLI, ABD AL-AZIZ ADHAY ZIMIN"
                 ],
                 "ap_all_employer_names_aggregated": [],
                 "wl_all_employer_names_aggregated": [
-                    "AL-FADHLI, ABD AL-AZIZ UDAI SAMIN",
-                    "AL-FADHLI, ABD AL-AZIZ ADHAY ZIMIN",
-                    "AL-FADHL, ABD AL-AZIZ UDAI SAMIN",
+                    "AL-FADHALI, ABDALAZIZ AD'AI SAMIN FADHLI",
                     "AL-FADHIL, ABD AL-AZIZ ADAY ZIMINY",
-                    "AL-FADHALI, ABDALAZIZ AD'AI SAMIN FADHLI"
+                    "AL-FADHL, ABD AL-AZIZ UDAI SAMIN",
+                    "AL-FADHLI, ABD AL-AZIZ UDAI SAMIN",
+                    "AL-FADHLI, ABD AL-AZIZ ADHAY ZIMIN"
                 ],
                 "ap_all_nationalities_aggregated": [
                     "AHMEDOUA"
@@ -6853,21 +6795,15 @@
                 "wl_all_ap_name_tp_markeds_aggregated": [],
                 "ap_all_ap_id_tp_markeds_aggregated": [],
                 "wl_all_ap_id_tp_markeds_aggregated": [],
-                "ap_all_is_entity_matchs_aggregated": [
-                    "UNKNOWN"
-                ],
-                "wl_all_is_entity_matchs_aggregated": [
-                    "I"
-                ],
                 "all_hit_type_aggregated": [
                     {
                         "name": [],
                         "address": [
-                            "ADDRESS1_CITY",
                             "ADDRESS1_PROVINCE",
                             "ADDRESS1_COUNTRY",
-                            "CONCAT_ADDRESS",
-                            "ADDRESS1_STATE"
+                            "ADDRESS1_STATE",
+                            "ADDRESS1_CITY",
+                            "CONCAT_ADDRESS"
                         ],
                         "job": [],
                         "other": []
@@ -7383,8 +7319,8 @@
                 "WL_DOCUMENT_NUMBER": [],
                 "datasetType": "WM_ADDRESS",
                 "TRIGGERED_BY": [
-                    "stopDescriptors",
-                    "matchStatus"
+                    "matchStatus",
+                    "stopDescriptors"
                 ],
                 "IS_BENEFICIARY_HIT": false,
                 "AP_TRIGGERS": {
@@ -7582,59 +7518,57 @@
                 ],
                 "hit_type_agent_name": [],
                 "hit_type_agent_address": [
-                    "ADDRESS1_CITY",
                     "ADDRESS1_PROVINCE",
                     "ADDRESS1_COUNTRY",
-                    "CONCAT_ADDRESS",
-                    "ADDRESS1_STATE"
+                    "ADDRESS1_STATE",
+                    "ADDRESS1_CITY",
+                    "CONCAT_ADDRESS"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_other": [],
                 "matched_tokens_tp_marked_agent_input": "abdussomada",
                 "ap_name_tp_marked_agent_input": null,
                 "ap_id_tp_marked_agent_input": "A00183210139",
-                "is_entity_match_agent_ap": "UNKNOWN",
-                "is_entity_match_agent_wl": "I",
                 "ap_all_dobs_aggregated": [],
                 "wl_all_dobs_aggregated": [
                     "08",
-                    "08/17/1938",
                     "17",
-                    "1938"
+                    "1938",
+                    "08/17/1938"
                 ],
                 "ap_all_documents_aggregated": [],
                 "wl_all_documents_aggregated": [],
                 "ap_all_company_names_aggregated": [],
                 "wl_all_company_names_aggregated": [
                     "SAMAD, ABDUS",
-                    "BA'ASYIR, ABU BAKAR",
+                    "BASHIR, ABU BAKAR",
                     "BAASYIR, ABU BAKAR",
-                    "SOMAD, ABDUS",
-                    "BASHIR, ABU BAKAR"
+                    "BA'ASYIR, ABU BAKAR",
+                    "SOMAD, ABDUS"
                 ],
                 "ap_all_names_aggregated": [],
                 "wl_all_names_aggregated": [
                     "SAMAD, ABDUS",
-                    "BA'ASYIR, ABU BAKAR",
+                    "BASHIR, ABU BAKAR",
                     "BAASYIR, ABU BAKAR",
-                    "SOMAD, ABDUS",
-                    "BASHIR, ABU BAKAR"
+                    "BA'ASYIR, ABU BAKAR",
+                    "SOMAD, ABDUS"
                 ],
                 "ap_all_employer_names_aggregated": [],
                 "wl_all_employer_names_aggregated": [
                     "SAMAD, ABDUS",
-                    "BA'ASYIR, ABU BAKAR",
+                    "BASHIR, ABU BAKAR",
                     "BAASYIR, ABU BAKAR",
-                    "SOMAD, ABDUS",
-                    "BASHIR, ABU BAKAR"
+                    "BA'ASYIR, ABU BAKAR",
+                    "SOMAD, ABDUS"
                 ],
                 "ap_all_nationalities_aggregated": [
                     "AHMEDOUA"
                 ],
                 "wl_all_nationalities_aggregated": [
+                    "INDONESIA",
                     "ID",
-                    "JOMBANG, EAST JAVA, INDONESIA",
-                    "INDONESIA"
+                    "JOMBANG, EAST JAVA, INDONESIA"
                 ],
                 "ap_all_party_types_aggregated": [],
                 "wl_all_party_types_aggregated": [
@@ -7642,24 +7576,24 @@
                 ],
                 "ap_all_pobs_aggregated": [],
                 "wl_all_pobs_aggregated": [
+                    "INDONESIA",
                     "ID",
-                    "JOMBANG, EAST JAVA, INDONESIA",
-                    "INDONESIA"
+                    "JOMBANG, EAST JAVA, INDONESIA"
                 ],
                 "ap_all_sanctioned_countries_aggregated": [
                     "AHMEDOUA"
                 ],
                 "wl_all_sanctioned_countries_aggregated": [
+                    "INDONESIA",
                     "ID",
-                    "BA'ASYIR, ABU BAKAR",
-                    "INDONESIA"
+                    "BA'ASYIR, ABU BAKAR"
                 ],
                 "ap_all_residencies_aggregated": [
                     "AHMEDOUA"
                 ],
                 "wl_all_residencies_aggregated": [
-                    "ID",
-                    "INDONESIA"
+                    "INDONESIA",
+                    "ID"
                 ],
                 "ap_all_hit_types_aggregated": [],
                 "wl_all_hit_types_aggregated": [],
@@ -7669,21 +7603,15 @@
                 "wl_all_ap_name_tp_markeds_aggregated": [],
                 "ap_all_ap_id_tp_markeds_aggregated": [],
                 "wl_all_ap_id_tp_markeds_aggregated": [],
-                "ap_all_is_entity_matchs_aggregated": [
-                    "UNKNOWN"
-                ],
-                "wl_all_is_entity_matchs_aggregated": [
-                    "I"
-                ],
                 "all_hit_type_aggregated": [
                     {
                         "name": [],
                         "address": [
-                            "ADDRESS1_CITY",
                             "ADDRESS1_PROVINCE",
                             "ADDRESS1_COUNTRY",
-                            "CONCAT_ADDRESS",
-                            "ADDRESS1_STATE"
+                            "ADDRESS1_STATE",
+                            "ADDRESS1_CITY",
+                            "CONCAT_ADDRESS"
                         ],
                         "job": [],
                         "other": []

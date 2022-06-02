@@ -487,8 +487,8 @@
                 "WL_DOCUMENT_NUMBER": [],
                 "datasetType": "WM_ADDRESS",
                 "TRIGGERED_BY": [
-                    "stopDescriptors",
-                    "matchStatus"
+                    "matchStatus",
+                    "stopDescriptors"
                 ],
                 "IS_BENEFICIARY_HIT": false,
                 "AP_TRIGGERS": {
@@ -699,23 +699,21 @@
                     "United States of America"
                 ],
                 "hit_type_agent_name": [
-                    "CONCAT_NAME",
-                    "PARTY1_NAME_FULL"
+                    "PARTY1_NAME_FULL",
+                    "CONCAT_NAME"
                 ],
                 "hit_type_agent_address": [
-                    "CONCAT_ADDRESS",
+                    "ADDRESS1_PROVINCE",
                     "ADDRESS1_COUNTRY",
-                    "ADDRESS1_CITY",
                     "ADDRESS1_STATE",
-                    "ADDRESS1_PROVINCE"
+                    "ADDRESS1_CITY",
+                    "CONCAT_ADDRESS"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_other": [],
                 "matched_tokens_tp_marked_agent_input": "Doe",
                 "ap_name_tp_marked_agent_input": "Janusz",
                 "ap_id_tp_marked_agent_input": "A05003324172",
-                "is_entity_match_agent_ap": "I",
-                "is_entity_match_agent_wl": "I",
                 "ap_all_dobs_aggregated": [
                     "04/31/1910",
                     "02/31/1900"
@@ -724,23 +722,23 @@
                     "MAY 6, 1981"
                 ],
                 "ap_all_documents_aggregated": [
-                    "154421273",
-                    "022368917"
+                    "022368917",
+                    "154421273"
                 ],
                 "wl_all_documents_aggregated": [],
                 "ap_all_company_names_aggregated": [
-                    "Pladimir Vutin",
                     "Joe BlackJ",
                     "Janusz",
+                    "Pladimir Vutin",
                     "Eva Pladimirova"
                 ],
                 "wl_all_company_names_aggregated": [
                     "Joe Ding"
                 ],
                 "ap_all_names_aggregated": [
-                    "Pladimir Vutin",
                     "Joe BlackJ",
                     "Janusz",
+                    "Pladimir Vutin",
                     "Eva Pladimirova"
                 ],
                 "wl_all_names_aggregated": [
@@ -755,8 +753,8 @@
                     "United States"
                 ],
                 "wl_all_nationalities_aggregated": [
-                    "US|FL;US",
-                    "United States of America"
+                    "United States of America",
+                    "US|FL;US"
                 ],
                 "ap_all_party_types_aggregated": [
                     "Individual"
@@ -776,9 +774,9 @@
                     "United States"
                 ],
                 "wl_all_sanctioned_countries_aggregated": [
+                    "Joe Ding",
                     "United States of America",
-                    "US|FL;US",
-                    "Joe Ding"
+                    "US|FL;US"
                 ],
                 "ap_all_residencies_aggregated": [
                     "UNITED STATES OF AMERICA",
@@ -802,24 +800,18 @@
                 "wl_all_ap_name_tp_markeds_aggregated": [],
                 "ap_all_ap_id_tp_markeds_aggregated": [],
                 "wl_all_ap_id_tp_markeds_aggregated": [],
-                "ap_all_is_entity_matchs_aggregated": [
-                    "I"
-                ],
-                "wl_all_is_entity_matchs_aggregated": [
-                    "I"
-                ],
                 "all_hit_type_aggregated": [
                     {
                         "name": [
-                            "CONCAT_NAME",
-                            "PARTY1_NAME_FULL"
+                            "PARTY1_NAME_FULL",
+                            "CONCAT_NAME"
                         ],
                         "address": [
-                            "CONCAT_ADDRESS",
+                            "ADDRESS1_PROVINCE",
                             "ADDRESS1_COUNTRY",
-                            "ADDRESS1_CITY",
                             "ADDRESS1_STATE",
-                            "ADDRESS1_PROVINCE"
+                            "ADDRESS1_CITY",
+                            "CONCAT_ADDRESS"
                         ],
                         "job": [],
                         "other": []
@@ -1362,8 +1354,8 @@
                 "WL_DOCUMENT_NUMBER": [],
                 "datasetType": "WM_ADDRESS",
                 "TRIGGERED_BY": [
-                    "stopDescriptors",
-                    "matchStatus"
+                    "matchStatus",
+                    "stopDescriptors"
                 ],
                 "IS_BENEFICIARY_HIT": false,
                 "AP_TRIGGERS": {
@@ -1591,19 +1583,17 @@
                 ],
                 "hit_type_agent_name": [],
                 "hit_type_agent_address": [
-                    "CONCAT_ADDRESS",
+                    "ADDRESS1_PROVINCE",
                     "ADDRESS1_COUNTRY",
-                    "ADDRESS1_CITY",
                     "ADDRESS1_STATE",
-                    "ADDRESS1_PROVINCE"
+                    "ADDRESS1_CITY",
+                    "CONCAT_ADDRESS"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_other": [],
                 "matched_tokens_tp_marked_agent_input": "Doe",
                 "ap_name_tp_marked_agent_input": null,
                 "ap_id_tp_marked_agent_input": "A05003324172",
-                "is_entity_match_agent_ap": "I",
-                "is_entity_match_agent_wl": "I",
                 "ap_all_dobs_aggregated": [
                     "04/31/1910",
                     "02/31/1900"
@@ -1612,8 +1602,8 @@
                     "MAY 6, 1981"
                 ],
                 "ap_all_documents_aggregated": [
-                    "154421273",
-                    "022368917"
+                    "022368917",
+                    "154421273"
                 ],
                 "wl_all_documents_aggregated": [],
                 "ap_all_company_names_aggregated": [
@@ -1639,8 +1629,8 @@
                     "United States"
                 ],
                 "wl_all_nationalities_aggregated": [
-                    "Poland",
-                    "PL"
+                    "PL",
+                    "Poland"
                 ],
                 "ap_all_party_types_aggregated": [
                     "Individual"
@@ -1660,8 +1650,8 @@
                     "United States"
                 ],
                 "wl_all_sanctioned_countries_aggregated": [
-                    "PL",
                     "Joe Dong",
+                    "PL",
                     "Poland"
                 ],
                 "ap_all_residencies_aggregated": [
@@ -1680,21 +1670,15 @@
                 "wl_all_ap_name_tp_markeds_aggregated": [],
                 "ap_all_ap_id_tp_markeds_aggregated": [],
                 "wl_all_ap_id_tp_markeds_aggregated": [],
-                "ap_all_is_entity_matchs_aggregated": [
-                    "I"
-                ],
-                "wl_all_is_entity_matchs_aggregated": [
-                    "I"
-                ],
                 "all_hit_type_aggregated": [
                     {
                         "name": [],
                         "address": [
-                            "CONCAT_ADDRESS",
+                            "ADDRESS1_PROVINCE",
                             "ADDRESS1_COUNTRY",
-                            "ADDRESS1_CITY",
                             "ADDRESS1_STATE",
-                            "ADDRESS1_PROVINCE"
+                            "ADDRESS1_CITY",
+                            "CONCAT_ADDRESS"
                         ],
                         "job": [],
                         "other": []

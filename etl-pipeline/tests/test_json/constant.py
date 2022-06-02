@@ -1076,7 +1076,7 @@ TEST_AGENT_INPUT_CASES = [
         },
     ),
     TestAgentInput(
-        agent_name="is_entity_match_agent",
+        agent_name="is_entity_match_agent1",
         payload={
             "alertedParty.headerInfo.datasetName": "R_US_Active_Address",
             "alertedParty.inputRecordHist.inputRecords[0].versionId": "122438658",
@@ -1102,7 +1102,7 @@ TEST_AGENT_INPUT_CASES = [
         },
     ),
     TestAgentInput(
-        agent_name="company_name_agent",
+        agent_name="company_name_agent2",
         payload={
             "alertedParty.headerInfo.datasetName": "R_China_Active_Party",
             "alertedParty.inputRecordHist.inputRecords[0].versionId": "122438658",
@@ -1153,7 +1153,7 @@ TEST_AGENT_INPUT_CASES = [
         },
     ),
     TestAgentInput(
-        agent_name="company_name_agent",
+        agent_name="company_name_agent3",
         payload={
             "alertedParty.headerInfo.datasetName": "R_China_Active_Party",
             "alertedParty.inputRecordHist.inputRecords[0].versionId": "122438658",

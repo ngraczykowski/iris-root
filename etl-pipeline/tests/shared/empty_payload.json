@@ -410,8 +410,8 @@
                 "WL_DOCUMENT_NUMBER": [],
                 "datasetType": "WM_PARTY",
                 "TRIGGERED_BY": [
-                    "stopDescriptors",
-                    "matchStatus"
+                    "matchStatus",
+                    "stopDescriptors"
                 ],
                 "IS_BENEFICIARY_HIT": false,
                 "AP_TRIGGERS": {
@@ -578,19 +578,17 @@
                 ],
                 "hit_type_agent_name": [],
                 "hit_type_agent_address": [
-                    "ADDRESS1_CITY",
                     "ADDRESS1_PROVINCE",
                     "ADDRESS1_COUNTRY",
-                    "CONCAT_ADDRESS",
-                    "ADDRESS1_STATE"
+                    "ADDRESS1_STATE",
+                    "ADDRESS1_CITY",
+                    "CONCAT_ADDRESS"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_other": [],
                 "matched_tokens_tp_marked_agent_input": "Doe",
                 "ap_name_tp_marked_agent_input": null,
                 "ap_id_tp_marked_agent_input": "A05003324172",
-                "is_entity_match_agent_ap": "I",
-                "is_entity_match_agent_wl": "I",
                 "ap_all_dobs_aggregated": [],
                 "wl_all_dobs_aggregated": [
                     "MAY 6, 1981"
@@ -623,8 +621,8 @@
                 ],
                 "ap_all_sanctioned_countries_aggregated": [],
                 "wl_all_sanctioned_countries_aggregated": [
-                    "Joe Ding",
-                    "|FL;US"
+                    "|FL;US",
+                    "Joe Ding"
                 ],
                 "ap_all_residencies_aggregated": [],
                 "wl_all_residencies_aggregated": [
@@ -638,21 +636,15 @@
                 "wl_all_ap_name_tp_markeds_aggregated": [],
                 "ap_all_ap_id_tp_markeds_aggregated": [],
                 "wl_all_ap_id_tp_markeds_aggregated": [],
-                "ap_all_is_entity_matchs_aggregated": [
-                    "I"
-                ],
-                "wl_all_is_entity_matchs_aggregated": [
-                    "I"
-                ],
                 "all_hit_type_aggregated": [
                     {
                         "name": [],
                         "address": [
-                            "ADDRESS1_CITY",
                             "ADDRESS1_PROVINCE",
                             "ADDRESS1_COUNTRY",
-                            "CONCAT_ADDRESS",
-                            "ADDRESS1_STATE"
+                            "ADDRESS1_STATE",
+                            "ADDRESS1_CITY",
+                            "CONCAT_ADDRESS"
                         ],
                         "job": [],
                         "other": []
@@ -1121,8 +1113,8 @@
                 "WL_DOCUMENT_NUMBER": [],
                 "datasetType": "WM_PARTY",
                 "TRIGGERED_BY": [
-                    "stopDescriptors",
-                    "matchStatus"
+                    "matchStatus",
+                    "stopDescriptors"
                 ],
                 "IS_BENEFICIARY_HIT": false,
                 "AP_TRIGGERS": {
@@ -1305,19 +1297,17 @@
                 ],
                 "hit_type_agent_name": [],
                 "hit_type_agent_address": [
-                    "ADDRESS1_CITY",
                     "ADDRESS1_PROVINCE",
                     "ADDRESS1_COUNTRY",
-                    "CONCAT_ADDRESS",
-                    "ADDRESS1_STATE"
+                    "ADDRESS1_STATE",
+                    "ADDRESS1_CITY",
+                    "CONCAT_ADDRESS"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_other": [],
                 "matched_tokens_tp_marked_agent_input": "Doe",
                 "ap_name_tp_marked_agent_input": null,
                 "ap_id_tp_marked_agent_input": "A05003324172",
-                "is_entity_match_agent_ap": "I",
-                "is_entity_match_agent_wl": "I",
                 "ap_all_dobs_aggregated": [],
                 "wl_all_dobs_aggregated": [
                     "MAY 6, 1981"
@@ -1338,8 +1328,8 @@
                 ],
                 "ap_all_nationalities_aggregated": [],
                 "wl_all_nationalities_aggregated": [
-                    "Poland",
-                    "PL"
+                    "PL",
+                    "Poland"
                 ],
                 "ap_all_party_types_aggregated": [],
                 "wl_all_party_types_aggregated": [
@@ -1347,19 +1337,19 @@
                 ],
                 "ap_all_pobs_aggregated": [],
                 "wl_all_pobs_aggregated": [
-                    "Poland",
-                    "PL"
+                    "PL",
+                    "Poland"
                 ],
                 "ap_all_sanctioned_countries_aggregated": [],
                 "wl_all_sanctioned_countries_aggregated": [
-                    "Poland",
+                    "Joe Dong",
                     "PL",
-                    "Joe Dong"
+                    "Poland"
                 ],
                 "ap_all_residencies_aggregated": [],
                 "wl_all_residencies_aggregated": [
-                    "Poland",
-                    "PL"
+                    "PL",
+                    "Poland"
                 ],
                 "ap_all_hit_types_aggregated": [],
                 "wl_all_hit_types_aggregated": [],
@@ -1369,21 +1359,15 @@
                 "wl_all_ap_name_tp_markeds_aggregated": [],
                 "ap_all_ap_id_tp_markeds_aggregated": [],
                 "wl_all_ap_id_tp_markeds_aggregated": [],
-                "ap_all_is_entity_matchs_aggregated": [
-                    "I"
-                ],
-                "wl_all_is_entity_matchs_aggregated": [
-                    "I"
-                ],
                 "all_hit_type_aggregated": [
                     {
                         "name": [],
                         "address": [
-                            "ADDRESS1_CITY",
                             "ADDRESS1_PROVINCE",
                             "ADDRESS1_COUNTRY",
-                            "CONCAT_ADDRESS",
-                            "ADDRESS1_STATE"
+                            "ADDRESS1_STATE",
+                            "ADDRESS1_CITY",
+                            "CONCAT_ADDRESS"
                         ],
                         "job": [],
                         "other": []

@@ -48,23 +48,21 @@ class Functions:
             payload[target_field] = aggregated
 
     @classmethod
-    def select_ap_for_dataset_type(cls, payload, dataset_type):
-        ap_type = "UNKNOWN"
-        logger.debug(f"ap_type: {ap_type}")
-        if dataset_type == "WM_PARTY":
-            ap_type = cls.collections.get_xml_field(payload, "PARTY1_ORGANIZATION_NAME")
-            if ap_type:
-                ap_type = ap_type.value
-            logger.debug(f"ap_type: {ap_type}")
-            if ap_type:
-                ap_type = "C"
-            else:
-                ap_type = "I"
-        elif dataset_type == "ISG_ACCOUNT":
-            supplemental_info = cls.collections.get_alert_supplemental_info(
-                payload, "supplementalInfo"
-            )
-            logger.debug(f"supplemental_info: {supplemental_info}")
+    def set_up_for_wm_party(cls, payload):
+        ap_type = "I"
+        field = cls.collections.get_xml_field(payload, "PARTY1_ORGANIZATION_NAME")
+        if field:
+            ap_type = "C"
+        return ap_type
+
+    @classmethod
+    def set_up_for_isg_account(cls, payload):
+        ap_type = None
+        supplemental_info = cls.collections.get_alert_supplemental_info(
+            payload, "supplementalInfo"
+        )
+        logger.debug(f"supplemental_info: {supplemental_info}")
+        if supplemental_info:
             for info in supplemental_info:
                 ap_type = info.get("legalFormName", None)
                 break
@@ -73,16 +71,32 @@ class Functions:
                 ap_type = "I"
             elif ap_type:
                 ap_type = "C"
-        elif dataset_type == "ISG_PARTY":
-            ap_type = cls.collections.get_xml_field(payload, "ORGANIZATIONPERSONIND")
-            if ap_type:
-                ap_type = ap_type.value
+        return ap_type
+
+    @classmethod
+    def set_up_for_isg_party(cls, payload):
+        ap_type = None
+        field = cls.collections.get_xml_field(payload, "ORGANIZATIONPERSONIND")
+        if field:
+            ap_type = field.value
             if ap_type == "O":
                 ap_type = "C"
             elif ap_type == "P":
                 ap_type = "I"
-        logger.debug(f"ap_type: {ap_type}")
         return ap_type
+
+    @classmethod
+    def select_ap_for_dataset_type(cls, payload, dataset_type):
+        ap_type = None
+        logger.debug(f"ap_type: {ap_type}")
+        if dataset_type == "WM_PARTY":
+            ap_type = cls.set_up_for_wm_party(payload)
+        elif dataset_type == "ISG_ACCOUNT":
+            ap_type = cls.set_up_for_isg_account(payload)
+        elif dataset_type == "ISG_PARTY":
+            ap_type = cls.set_up_for_isg_party(payload)
+        logger.debug(f"ap_type: {ap_type}")
+        return ap_type if ap_type else "UNKNOWN"
 
     @classmethod
     def pattern_set_up_party_type(cls, payload, target_field="", source="", target_collection=""):

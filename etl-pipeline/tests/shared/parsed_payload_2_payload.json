@@ -463,8 +463,8 @@
                 "WL_DOCUMENT_NUMBER": [],
                 "datasetType": "WM_ADDRESS",
                 "TRIGGERED_BY": [
-                    "stopDescriptors",
-                    "matchStatus"
+                    "matchStatus",
+                    "stopDescriptors"
                 ],
                 "IS_BENEFICIARY_HIT": false,
                 "AP_TRIGGERS": {
@@ -676,19 +676,17 @@
                 ],
                 "hit_type_agent_name": [],
                 "hit_type_agent_address": [
-                    "ADDRESS1_CITY",
                     "ADDRESS1_PROVINCE",
                     "ADDRESS1_COUNTRY",
-                    "CONCAT_ADDRESS",
-                    "ADDRESS1_STATE"
+                    "ADDRESS1_STATE",
+                    "ADDRESS1_CITY",
+                    "CONCAT_ADDRESS"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_other": [],
                 "matched_tokens_tp_marked_agent_input": "Doe",
                 "ap_name_tp_marked_agent_input": null,
                 "ap_id_tp_marked_agent_input": "A05003324172",
-                "is_entity_match_agent_ap": "I",
-                "is_entity_match_agent_wl": "I",
                 "ap_all_dobs_aggregated": [
                     "04/31/1910",
                     "02/31/1900"
@@ -702,15 +700,15 @@
                 ],
                 "wl_all_documents_aggregated": [],
                 "ap_all_company_names_aggregated": [
-                    "Eva Pladimirova",
-                    "Pladimir Vutin"
+                    "Pladimir Vutin",
+                    "Eva Pladimirova"
                 ],
                 "wl_all_company_names_aggregated": [
                     "Joe Ding"
                 ],
                 "ap_all_names_aggregated": [
-                    "Eva Pladimirova",
-                    "Pladimir Vutin"
+                    "Pladimir Vutin",
+                    "Eva Pladimirova"
                 ],
                 "wl_all_names_aggregated": [
                     "Joe Ding"
@@ -745,8 +743,8 @@
                     "United States"
                 ],
                 "wl_all_sanctioned_countries_aggregated": [
-                    "United States of America",
                     "Joe Ding",
+                    "United States of America",
                     "US|FL;US"
                 ],
                 "ap_all_residencies_aggregated": [
@@ -765,21 +763,15 @@
                 "wl_all_ap_name_tp_markeds_aggregated": [],
                 "ap_all_ap_id_tp_markeds_aggregated": [],
                 "wl_all_ap_id_tp_markeds_aggregated": [],
-                "ap_all_is_entity_matchs_aggregated": [
-                    "I"
-                ],
-                "wl_all_is_entity_matchs_aggregated": [
-                    "I"
-                ],
                 "all_hit_type_aggregated": [
                     {
                         "name": [],
                         "address": [
-                            "ADDRESS1_CITY",
                             "ADDRESS1_PROVINCE",
                             "ADDRESS1_COUNTRY",
-                            "CONCAT_ADDRESS",
-                            "ADDRESS1_STATE"
+                            "ADDRESS1_STATE",
+                            "ADDRESS1_CITY",
+                            "CONCAT_ADDRESS"
                         ],
                         "job": [],
                         "other": []
@@ -1306,8 +1298,8 @@
                 "WL_DOCUMENT_NUMBER": [],
                 "datasetType": "WM_ADDRESS",
                 "TRIGGERED_BY": [
-                    "stopDescriptors",
-                    "matchStatus"
+                    "matchStatus",
+                    "stopDescriptors"
                 ],
                 "IS_BENEFICIARY_HIT": false,
                 "AP_TRIGGERS": {
@@ -1519,19 +1511,17 @@
                 ],
                 "hit_type_agent_name": [],
                 "hit_type_agent_address": [
-                    "ADDRESS1_CITY",
                     "ADDRESS1_PROVINCE",
                     "ADDRESS1_COUNTRY",
-                    "CONCAT_ADDRESS",
-                    "ADDRESS1_STATE"
+                    "ADDRESS1_STATE",
+                    "ADDRESS1_CITY",
+                    "CONCAT_ADDRESS"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_other": [],
                 "matched_tokens_tp_marked_agent_input": "Doe",
                 "ap_name_tp_marked_agent_input": null,
                 "ap_id_tp_marked_agent_input": "A05003324172",
-                "is_entity_match_agent_ap": "I",
-                "is_entity_match_agent_wl": "I",
                 "ap_all_dobs_aggregated": [
                     "04/31/1910",
                     "02/31/1900"
@@ -1545,15 +1535,15 @@
                 ],
                 "wl_all_documents_aggregated": [],
                 "ap_all_company_names_aggregated": [
-                    "Eva Pladimirova",
-                    "Pladimir Vutin"
+                    "Pladimir Vutin",
+                    "Eva Pladimirova"
                 ],
                 "wl_all_company_names_aggregated": [
                     "Joe Ding"
                 ],
                 "ap_all_names_aggregated": [
-                    "Eva Pladimirova",
-                    "Pladimir Vutin"
+                    "Pladimir Vutin",
+                    "Eva Pladimirova"
                 ],
                 "wl_all_names_aggregated": [
                     "Joe Ding"
@@ -1588,8 +1578,8 @@
                     "United States"
                 ],
                 "wl_all_sanctioned_countries_aggregated": [
-                    "United States of America",
                     "Joe Ding",
+                    "United States of America",
                     "US|FL;US"
                 ],
                 "ap_all_residencies_aggregated": [
@@ -1608,21 +1598,15 @@
                 "wl_all_ap_name_tp_markeds_aggregated": [],
                 "ap_all_ap_id_tp_markeds_aggregated": [],
                 "wl_all_ap_id_tp_markeds_aggregated": [],
-                "ap_all_is_entity_matchs_aggregated": [
-                    "I"
-                ],
-                "wl_all_is_entity_matchs_aggregated": [
-                    "I"
-                ],
                 "all_hit_type_aggregated": [
                     {
                         "name": [],
                         "address": [
-                            "ADDRESS1_CITY",
                             "ADDRESS1_PROVINCE",
                             "ADDRESS1_COUNTRY",
-                            "CONCAT_ADDRESS",
-                            "ADDRESS1_STATE"
+                            "ADDRESS1_STATE",
+                            "ADDRESS1_CITY",
+                            "CONCAT_ADDRESS"
                         ],
                         "job": [],
                         "other": []
@@ -2165,8 +2149,8 @@
                 "WL_DOCUMENT_NUMBER": [],
                 "datasetType": "WM_ADDRESS",
                 "TRIGGERED_BY": [
-                    "stopDescriptors",
-                    "matchStatus"
+                    "matchStatus",
+                    "stopDescriptors"
                 ],
                 "IS_BENEFICIARY_HIT": false,
                 "AP_TRIGGERS": {
@@ -2394,19 +2378,17 @@
                 ],
                 "hit_type_agent_name": [],
                 "hit_type_agent_address": [
-                    "ADDRESS1_CITY",
                     "ADDRESS1_PROVINCE",
                     "ADDRESS1_COUNTRY",
-                    "CONCAT_ADDRESS",
-                    "ADDRESS1_STATE"
+                    "ADDRESS1_STATE",
+                    "ADDRESS1_CITY",
+                    "CONCAT_ADDRESS"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_other": [],
                 "matched_tokens_tp_marked_agent_input": "Doe",
                 "ap_name_tp_marked_agent_input": null,
                 "ap_id_tp_marked_agent_input": "A05003324172",
-                "is_entity_match_agent_ap": "I",
-                "is_entity_match_agent_wl": "I",
                 "ap_all_dobs_aggregated": [
                     "04/31/1910",
                     "02/31/1900"
@@ -2420,15 +2402,15 @@
                 ],
                 "wl_all_documents_aggregated": [],
                 "ap_all_company_names_aggregated": [
-                    "Eva Pladimirova",
-                    "Pladimir Vutin"
+                    "Pladimir Vutin",
+                    "Eva Pladimirova"
                 ],
                 "wl_all_company_names_aggregated": [
                     "Joe Dong"
                 ],
                 "ap_all_names_aggregated": [
-                    "Eva Pladimirova",
-                    "Pladimir Vutin"
+                    "Pladimir Vutin",
+                    "Eva Pladimirova"
                 ],
                 "wl_all_names_aggregated": [
                     "Joe Dong"
@@ -2442,8 +2424,8 @@
                     "United States"
                 ],
                 "wl_all_nationalities_aggregated": [
-                    "Poland",
-                    "PL"
+                    "PL",
+                    "Poland"
                 ],
                 "ap_all_party_types_aggregated": [
                     "Individual"
@@ -2455,25 +2437,25 @@
                     "United States"
                 ],
                 "wl_all_pobs_aggregated": [
-                    "Poland",
-                    "PL"
+                    "PL",
+                    "Poland"
                 ],
                 "ap_all_sanctioned_countries_aggregated": [
                     "UNITED STATES OF AMERICA",
                     "United States"
                 ],
                 "wl_all_sanctioned_countries_aggregated": [
-                    "Poland",
+                    "Joe Dong",
                     "PL",
-                    "Joe Dong"
+                    "Poland"
                 ],
                 "ap_all_residencies_aggregated": [
                     "UNITED STATES OF AMERICA",
                     "United States"
                 ],
                 "wl_all_residencies_aggregated": [
-                    "Poland",
-                    "PL"
+                    "PL",
+                    "Poland"
                 ],
                 "ap_all_hit_types_aggregated": [],
                 "wl_all_hit_types_aggregated": [],
@@ -2483,21 +2465,15 @@
                 "wl_all_ap_name_tp_markeds_aggregated": [],
                 "ap_all_ap_id_tp_markeds_aggregated": [],
                 "wl_all_ap_id_tp_markeds_aggregated": [],
-                "ap_all_is_entity_matchs_aggregated": [
-                    "I"
-                ],
-                "wl_all_is_entity_matchs_aggregated": [
-                    "I"
-                ],
                 "all_hit_type_aggregated": [
                     {
                         "name": [],
                         "address": [
-                            "ADDRESS1_CITY",
                             "ADDRESS1_PROVINCE",
                             "ADDRESS1_COUNTRY",
-                            "CONCAT_ADDRESS",
-                            "ADDRESS1_STATE"
+                            "ADDRESS1_STATE",
+                            "ADDRESS1_CITY",
+                            "CONCAT_ADDRESS"
                         ],
                         "job": [],
                         "other": []
