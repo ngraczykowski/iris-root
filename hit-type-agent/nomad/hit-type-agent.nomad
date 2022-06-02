@@ -132,11 +132,11 @@ job "hit-type-agent" {
     task "hit-type-agent" {
       driver = "docker"
 
-  //    template {
-  //      data = "{{ key \"${var.namespace}/hit-type-agent/secrets\" }}"
-  //      destination = "secrets/hit-type-agent.env"
-  //      env = true
-  //    }
+      template {
+        data = "{{ key \"${var.namespace}/hit-type-agent/secrets\" }}"
+        destination = "secrets/hit-type-agent.env"
+        env = true
+      }
 
       artifact {
         source = var.hit_type_agent_artifact
