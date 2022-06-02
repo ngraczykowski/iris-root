@@ -57,25 +57,28 @@ class AgentInputServiceServicer(object):
 class CategoryInputServiceServicer(object):
     def BatchCreateCategoryValues(self, request, context):
         parsed_categories = []
-        context.set_code(grpc.StatusCode.OK)
-        with open("tests/categories.txt", "r") as f:
+        context.set_code(grpc.StatusCode.ABORTED)
+        with open("/tmp/categories.txt", "r") as f:
             categories = [i.strip() for i in f.readlines()]
-        with open("tests/categories1.txt", "w") as f:
-            for category_request in request.requests:
-                for category_value in category_request.category_values:
+        for category_request in request.requests:
+            for category_value in category_request.category_values:
+                with open(
+                    f"/tmp/categories_{category_value.match.replace('/','_')}.json", "a+"
+                ) as f:
                     if "alerts" not in category_value.match:
                         context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
                         break
                     if category_request.category not in categories:
                         context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
                         break
-                    f.write(str(category_request))
+                    json.dump(MessageToDict(category_request), f)
+                    f.write("\n")
                     parsed_categories.append(
                         category_value_service_pb2.CreatedCategoryValue(
                             name=category_request.category, match=category_value.match
                         )
                     )
-
+        context.set_code(grpc.StatusCode.OK)
         return category_value_service_pb2.BatchCreateCategoryValuesResponse(
             created_category_values=parsed_categories
         )
@@ -88,7 +91,7 @@ class CategoryServiceServicer(object):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.OK)
 
-        with open("tests/categories.txt", "w") as f:
+        with open("/tmp/categories.txt", "w") as f:
             for category in request.categories:
                 f.write(str(category.name) + "\n")
         return category_service_pb2.BatchCreateCategoriesResponse(categories=request.categories)

@@ -92,6 +92,20 @@ def compare_tested_uds_features_with_reference(tested_file, reference_file):  # 
             assert tested_item == reference_item
 
 
+def compare_tested_uds_categories_with_reference(tested_file, reference_file):  # noqa: C901
+    with open(tested_file, "r") as f1, open(reference_file, "r") as f2:
+        tested = sorted(
+            [json.loads(line) for line in f1.readlines()],
+            key=lambda x: x.get("singleValue") or x.get("category"),
+        )
+        reference = sorted(
+            [json.loads(line) for line in f2.readlines()],
+            key=lambda x: x.get("singleValue") or x.get("category"),
+        )
+        assert tested == reference
+    os.remove(tested_file)
+
+
 def load_alert(filepath: str = "notebooks/sample/wm_address_in_payload_format.json"):
     with open(filepath, "r") as f:
         text = json.load(f)
@@ -121,7 +135,7 @@ class BaseGrpcTestCase:
         @classmethod
         def tearDownClass(cls):
             try:
-                os.remove("tests/categories.txt")
+                os.remove("/tmp/categories.txt")
             except FileNotFoundError:
                 pass
             process = subprocess.Popen("tests/scripts/kill_services.sh")
@@ -130,7 +144,15 @@ class BaseGrpcTestCase:
         @pytest.mark.asyncio
         async def test_ok_flow(self):
             request_alert = load_alert()
+            for match in request_alert.matches:
+                try:
+                    os.remove(
+                        f'/tmp/categories_{match.match_name.replace("/", "_")}.json',
+                    )
+                except FileNotFoundError:
+                    pass
             response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[request_alert]))
+
             for etl_alert in response.etl_alerts:
                 assert etl_alert.etl_status == SUCCESS
             for match in request_alert.matches:
@@ -138,7 +160,11 @@ class BaseGrpcTestCase:
                     f'/tmp/features_{match.match_name.replace("/", "_")}.json',
                     f'tests/test_json/test_integration/expected_features/test_ok_flow_features/features_{match.match_name.replace("/", "_")}.json',
                 )
-                os.remove(f'/tmp/features_{match.match_name.replace("/", "_")}.json')
+
+                compare_tested_uds_categories_with_reference(
+                    f'/tmp/categories_{match.match_name.replace("/", "_")}.json',
+                    f'tests/test_json/test_integration/expected_features/test_ok_flow_features/categories_{match.match_name.replace("/", "_")}.json',
+                )
 
         @pytest.mark.asyncio
         async def test_failures_flow(self):
@@ -209,13 +235,25 @@ class BaseGrpcTestCase:
         @pytest.mark.asyncio
         async def test_ok_for_big_payload(self):
             request_alert = load_alert("notebooks/sample/big_fat_flat_payload.json")
+            for match in request_alert.matches:
+                try:
+                    os.remove(
+                        f'/tmp/categories_{match.match_name.replace("/", "_")}.json',
+                    )
+                except FileNotFoundError:
+                    pass
             response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[request_alert]))
+
             for etl_alert in response.etl_alerts:
                 assert etl_alert.etl_status == SUCCESS
             for match in request_alert.matches:
                 compare_tested_uds_features_with_reference(
                     f'/tmp/features_{match.match_name.replace("/", "_")}.json',
                     f'tests/test_json/test_integration/expected_features/test_ok_for_big_payload/features_{match.match_name.replace("/", "_")}.json',
+                )
+                compare_tested_uds_categories_with_reference(
+                    f'/tmp/categories_{match.match_name.replace("/", "_")}.json',
+                    f'tests/test_json/test_integration/expected_features/test_ok_for_big_payload/categories_{match.match_name.replace("/", "_")}.json',
                 )
 
         @pytest.mark.asyncio
