@@ -22,6 +22,5 @@ class GrpcCompareDatesInputService extends CompareDatesInputServiceImplBase {
 
     featureAdapter.batchGetCompareDatesInputs(request, responseObserver::onNext);
     responseObserver.onCompleted();
-    super.batchGetCompareDatesInputs(request, responseObserver);
   }
 }
