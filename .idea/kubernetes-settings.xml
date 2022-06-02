@@ -17,13 +17,28 @@
         <option name="pathOrUrl" value="https://raw.githubusercontent.com/zalando/postgres-operator/master/manifests/postgresteam.crd.yaml" />
       </SpecSource>
       <SpecSource>
-        <option name="pathOrUrl" value="https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources" />
-      </SpecSource>
-      <SpecSource>
-        <option name="pathOrUrl" value="https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds" />
-      </SpecSource>
-      <SpecSource>
         <option name="pathOrUrl" value="https://raw.githubusercontent.com/keycloak/keycloak-operator/main/deploy/crds/keycloak.org_keycloakclients_crd.yaml" />
+      </SpecSource>
+      <SpecSource>
+        <option name="pathOrUrl" value="https://raw.githubusercontent.com/prometheus-operator/kube-prometheus/main/manifests/setup/0podmonitorCustomResourceDefinition.yaml" />
+      </SpecSource>
+      <SpecSource>
+        <option name="pathOrUrl" value="https://raw.githubusercontent.com/prometheus-operator/kube-prometheus/main/manifests/setup/0alertmanagerCustomResourceDefinition.yaml" />
+      </SpecSource>
+      <SpecSource>
+        <option name="pathOrUrl" value="https://raw.githubusercontent.com/prometheus-operator/kube-prometheus/main/manifests/setup/0probeCustomResourceDefinition.yaml" />
+      </SpecSource>
+      <SpecSource>
+        <option name="pathOrUrl" value="https://raw.githubusercontent.com/prometheus-operator/kube-prometheus/main/manifests/setup/0prometheusruleCustomResourceDefinition.yaml" />
+      </SpecSource>
+      <SpecSource>
+        <option name="pathOrUrl" value="https://raw.githubusercontent.com/prometheus-operator/kube-prometheus/main/manifests/setup/0servicemonitorCustomResourceDefinition.yaml" />
+      </SpecSource>
+      <SpecSource>
+        <option name="pathOrUrl" value="https://raw.githubusercontent.com/cert-manager/cert-manager/master/deploy/crds/crd-certificates.yaml" />
+      </SpecSource>
+      <SpecSource>
+        <option name="pathOrUrl" value="https://raw.githubusercontent.com/cert-manager/cert-manager/master/deploy/crds/crd-certificaterequests.yaml" />
       </SpecSource>
     </specSources>
   </component>
