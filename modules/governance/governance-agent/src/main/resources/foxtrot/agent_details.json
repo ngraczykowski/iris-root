@@ -26,12 +26,17 @@
   "agents/date/versions/1.0.0/configs/1": {
     "agentId": "783d07ca-f95e-4e58-912c-372928254a37",
     "features": [
-      "features/date"
+      "features/date",
+      "feature/uaeNationalIdDateNotAfterToday"
     ],
     "featuresList": [
       {
         "name": "features/date",
         "displayName": "Date of Birth / Incorporation"
+      },
+      {
+        "name": "feature/uaeNationalIdDateNotAfterToday",
+        "displayName": "UAE National ID Not After Today"
       }
     ],
     "responses": [
@@ -51,7 +56,8 @@
       "features/passportNumberDocument",
       "features/otherDocument",
       "features/bic",
-      "features/nationalIdDocument"
+      "features/nationalIdDocument",
+      "feature/isUaeNationalId"
     ],
     "featuresList": [
       {
@@ -69,6 +75,10 @@
       {
         "name": "features/nationalIdDocument",
         "displayName": "National ID"
+      },
+      {
+        "name": "feature/isUaeNationalId",
+        "displayName": "Is UAE National ID"
       }
     ],
     "responses": [
