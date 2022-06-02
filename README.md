@@ -43,6 +43,17 @@ pre-commit install --hook-type commit-msg
 
 > **WORK IN PROGRESS**
 
+### Running Application(s) locally
+Most applications require some 3rd party components(Postgresql, RabbitMQ, or Keycloak).
+Those components are provided with Docker, to launch it simply executes:
+```
+docker-compose up -d
+```
+Stop components(for example if docker-compose definition changed) with
+```
+docker-compose rm -fsv
+```
+
 ## Debugging in Kubernetes
 
 It is possible to debug applications in Kubernetes. For details, see [Debugging in Kubernetes](docs/development/debugging-in-kubernetes.md).
