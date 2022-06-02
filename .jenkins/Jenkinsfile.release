@@ -110,6 +110,7 @@ pipeline {
             environment {
               E2E_TESTS_CREDS = credentials('ra-username-password')
               E2E_TESTS_CREDS_2 = credentials('ra-username-password-2')
+              ARTIFACTORY = credentials('artifactory-user')
             }
             steps {
               withGradle {
@@ -125,6 +126,8 @@ pipeline {
                   -Dtest.password="\$E2E_TESTS_CREDS_PSW" \
                   -Dtest.username2="\$E2E_TESTS_CREDS_2_USR" \
                   -Dtest.password2="\$E2E_TESTS_CREDS_2_PSW" \
+                  -Dsilenteight.repoUser="\$ARTIFACTORY_USR" \
+                  -Dsilenteight.repoPassword="\$ARTIFACTORY_PSW" \
                   -Dtest.realm=Dev \
                   -Dtest.authServerUrl="\${BASE_URL}/auth" \
                   -Dtest.url="\$BASE_URL" \
