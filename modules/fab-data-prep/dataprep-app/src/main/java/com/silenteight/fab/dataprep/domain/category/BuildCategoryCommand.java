@@ -11,6 +11,7 @@ import com.silenteight.fab.dataprep.domain.model.RegisteredAlert;
 public class BuildCategoryCommand {
 
   String systemId;
+  String alertName;
   ParsedMessageData parsedMessageData;
   RegisteredAlert.Match match;
 }

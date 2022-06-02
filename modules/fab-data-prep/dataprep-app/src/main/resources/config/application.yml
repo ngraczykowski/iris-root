@@ -179,6 +179,8 @@ feeding:
     bic-feature.enabled: true
     document-number-feature.enabled: true
     national-id-feature.enabled: true
+    document-number-type-feature.enabled: true
+    visa-document-expired-feature.enabled: true
   categories:
     hitType:
       enabled: true
@@ -194,7 +196,7 @@ feeding:
       multiValue: false
     isHitOnWlName:
       enabled: true
-      displayName: Hit On Watchlist Name
+      displayName: Is Hit on WL Name
       categoryType: ENUMERATED
       allowedValues: [ "NO", "NO_DATA" ]
       multiValue: false

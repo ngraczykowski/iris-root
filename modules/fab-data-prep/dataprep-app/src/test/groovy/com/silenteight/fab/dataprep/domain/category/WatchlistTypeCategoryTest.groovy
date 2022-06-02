@@ -11,6 +11,7 @@ import spock.lang.Specification
 import spock.lang.Subject
 import spock.lang.Unroll
 
+import static com.silenteight.fab.dataprep.domain.Fixtures.ALERT_NAME
 import static com.silenteight.fab.dataprep.domain.Fixtures.BUILD_CATEGORY_COMMAND
 import static com.silenteight.fab.dataprep.domain.Fixtures.MATCH_NAME
 import static com.silenteight.sep.base.common.support.jackson.JsonConversionHelper.INSTANCE
@@ -29,7 +30,7 @@ class WatchlistTypeCategoryTest extends Specification {
     def result = underTest.buildCategory(BUILD_CATEGORY_COMMAND)
 
     then:
-    result.getName().startsWith('categories/watchlistType/values/')
+    result.getAlert() == ALERT_NAME
     result.getMatch() == MATCH_NAME
     result.getSingleValue() == 'INDIVIDUAL'
   }

@@ -1,6 +1,7 @@
-package com.silenteight.fab.dataprep.domain.category
+package com.silenteight.fab.dataprep.domain.feature
 
 import com.silenteight.fab.dataprep.domain.ServiceTestConfig
+import com.silenteight.universaldatasource.api.library.comparedates.v1.CompareDatesFeatureInputOut
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer
@@ -9,26 +10,25 @@ import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
 import spock.lang.Subject
 
-import static com.silenteight.fab.dataprep.domain.Fixtures.BUILD_CATEGORY_COMMAND
-import static com.silenteight.fab.dataprep.domain.Fixtures.MATCH_NAME
-import static com.silenteight.fab.dataprep.domain.Fixtures.ALERT_NAME
+import static com.silenteight.fab.dataprep.domain.Fixtures.BUILD_FEATURE_COMMAND
 
 @ContextConfiguration(classes = ServiceTestConfig,
     initializers = ConfigDataApplicationContextInitializer)
 @ActiveProfiles("dev")
-class CustomerTypeCategoryTest extends Specification {
+class VisaDocumentExpiredFeatureTest extends Specification {
 
   @Subject
   @Autowired
-  CustomerTypeCategory underTest
+  VisaDocumentExpiredFeature underTest
 
   def 'featureInput should be created'() {
     when:
-    def result = underTest.buildCategory(BUILD_CATEGORY_COMMAND)
+    def result = underTest.buildFeature(BUILD_FEATURE_COMMAND)
 
     then:
-    result.getAlert() == ALERT_NAME
-    result.getMatch() == MATCH_NAME
-    result.getSingleValue() == 'I'
+    result == CompareDatesFeatureInputOut.builder()
+        .feature(VisaDocumentExpiredFeature.FEATURE_NAME)
+        .dateToCompare('10/20/2020')
+        .build()
   }
 }

@@ -74,6 +74,18 @@ public class FeatureAndCategoryConfiguration {
   }
 
   @Bean
+  @ConditionalOnProperty("feeding.features.document-number-type-feature.enabled")
+  FabFeature documentNumberTypeFeature() {
+    return new DocumentNumberTypeFeature();
+  }
+
+  @Bean
+  @ConditionalOnProperty("feeding.features.visa-document-expired-feature.enabled")
+  FabFeature visaDocumentExpiredFeature() {
+    return new VisaDocumentExpiredFeature();
+  }
+
+  @Bean
   @ConditionalOnProperty("feeding.categories.hitType.enabled")
   FabCategory hitTypeCategory(CategoriesConfigurationProperties configurationProperties) {
     String categoryName = "hitType";

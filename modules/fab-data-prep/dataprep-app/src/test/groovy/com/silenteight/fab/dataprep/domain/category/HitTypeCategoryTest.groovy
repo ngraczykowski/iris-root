@@ -13,6 +13,7 @@ import spock.lang.Unroll
 import static com.silenteight.fab.dataprep.domain.Fixtures.BUILD_CATEGORY_COMMAND
 import static com.silenteight.fab.dataprep.domain.Fixtures.MATCH_NAME
 import static com.silenteight.fab.dataprep.domain.Fixtures.MATCH
+import static com.silenteight.fab.dataprep.domain.Fixtures.ALERT_NAME
 
 @ContextConfiguration(classes = ServiceTestConfig,
     initializers = ConfigDataApplicationContextInitializer)
@@ -28,7 +29,7 @@ class HitTypeCategoryTest extends Specification {
     def result = underTest.buildCategory(BUILD_CATEGORY_COMMAND)
 
     then:
-    result.getName().startsWith('categories/hitType/values/')
+    result.getAlert() == ALERT_NAME
     result.getMatch() == MATCH_NAME
     result.getSingleValue() == 'OTHER'
   }
