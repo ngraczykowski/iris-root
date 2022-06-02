@@ -7,4 +7,15 @@ Important URLs:
   - Keycloak: {{ tpl .Values.keycloak.authServerUrl . }}
   - Mailhog: https://{{ first $hosts }}/mailhog
 
-Default username and password for Mailhog are test/test.
+The Keycloak admin username / password is:
+
+  - admin / secret
+
+There are following users available for SEAR (username / password):
+
+  - iris / iris
+  - qa-user / TestPassword123!
+
+Default username and password for Mailhog is:
+
+  - test / test.

@@ -35,26 +35,33 @@ kubectl config set-context --current --namespace=dev-<your username>
 
 ### Installing chart
 
-To install the chart, run the following command, replacing `<environment>` with the name of environment you want to deploy:
+Before installing the chart, run the following command to grab chart dependencies:
 
 ```bash
-helm upgrade --install \
+helm dependency build ../charts/sear
+```
+
+To install the chart, run the following command, replacing `<variables>` as documented below the command:
+
+```bash
+ENV=<environment> RELEASE_NAME=<release-name> NAMESPACE=<namespace> \
+  helm upgrade --install \
+  --namespace $NAMESPACE
   --values values.core.yaml \
   --values values.ingress-internal.yaml \
-  --values values.<environment>.yaml \
-  --set keycloak.ingress.hostname=<release-name>-<namespace>.prv.dev.s8ops.com \
-  --set keycloak.externalDatabase.host=<release-name>-postgres.<namespace>.svc \
-  --set keycloak.externalDatabase.existingSecret=keycloak.<release-name>-postgres.credentials.postgresql.acid.zalan.do \
-  <release name> \
+  --values values.$ENV.yaml \
+  --set keycloak.ingress.hostname=$RELEASE_NAME-$NAMESPACE.prv.dev.s8ops.com \
+  --set keycloak.externalDatabase.host=$RELEASE_NAME-postgres.$NAMESPACE.svc \
+  --set keycloak.externalDatabase.existingSecret=keycloak.$RELEASE_NAME-postgres.credentials.postgresql.acid.zalan.do \
+  $RELEASE_NAME \
   ../charts/sear
 ```
-For `<environment>` choose one of the provided environment values files.
 
-For `<release name>` you can put any name you want(have to be unique across the k8s cluster) (e.g., sear-1234).
-It allows you to install multiple releases of the chart to a single namespace.
-The reason that `<release name>` has to be unique across the k8s cluster is that based on this installation
-creates a Keycloak realm(Please note that we have 1 Keycloak instance, on the other hand,
-each helm release has/creates a dedicated realm)
+For `<environment>` choose one of the provided environment values files (e.g., `sierra`, `hotel`, `foxtrot`).
+
+For `<release-name>` you can put any name you want (have to be unique in the namespace, e.g., `sear-sierra`). It allows you to install multiple releases of the chart to a single namespace.
+
+For `<namespace>` put your individual namespace name.
 
 ### Watching the deployment progress
 
