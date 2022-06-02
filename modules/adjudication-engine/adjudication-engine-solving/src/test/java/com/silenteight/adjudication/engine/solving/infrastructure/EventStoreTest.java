@@ -3,6 +3,7 @@ package com.silenteight.adjudication.engine.solving.infrastructure;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolving;
 import com.silenteight.adjudication.engine.solving.domain.DomainEvent;
 import com.silenteight.adjudication.engine.solving.domain.event.FeatureMatchesUpdated;
+import com.silenteight.adjudication.engine.solving.infrastructure.EventStoreConfigurationProperties.JournalProperties;
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -65,7 +66,7 @@ public class EventStoreTest {
     final String exchangeName = "some.exchange";
     final String routingKey = "event.store.routing.key";
     final EventStoreConfigurationProperties eventStoreConfigurationProperties =
-        new EventStoreConfigurationProperties(exchangeName, routingKey);
+        new EventStoreConfigurationProperties(6, new JournalProperties(exchangeName, routingKey));
     final Queue queue = new Queue(TEST_QUEUE, true, true, true);
     this.rabbitAdmin.declareQueue(queue);
 

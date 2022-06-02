@@ -62,11 +62,12 @@ class EventStore {
 
   @Nonnull
   private Consumer<DomainEvent> publishSingleEvent() {
+    var journal = this.configurationProperties.getJournal();
     return domainEvent -> {
       log.debug("Publish event: {}", domainEvent);
       this.rabbitTemplate.convertAndSend(
-          this.configurationProperties.getExchange(),
-          this.configurationProperties.getRoutingKey(),
+          journal.getExchange(),
+          journal.getRoutingKey(),
           this.serializeEvent(domainEvent)
       );
     };

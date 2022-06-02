@@ -1,20 +1,25 @@
 package com.silenteight.adjudication.engine.solving.infrastructure;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ConfigurationProperties(prefix = "ae.solving.event-store")
 class EventStoreConfigurationProperties {
-  private String exchange;
-  private String routingKey;
+  private int poolSize = 6;
+  private JournalProperties journal;
 
-  public EventStoreConfigurationProperties(final String exchange, final String routingKey) {
-    this.exchange = exchange;
-    this.routingKey = routingKey;
-  }
+  @Data
+  @AllArgsConstructor
+  @NoArgsConstructor
+  static class JournalProperties {
 
-  String getExchange() {
-    return exchange;
-  }
-
-  String getRoutingKey() {
-    return routingKey;
+    private String exchange = "ae.journal";
+    private String routingKey = "";
   }
 }

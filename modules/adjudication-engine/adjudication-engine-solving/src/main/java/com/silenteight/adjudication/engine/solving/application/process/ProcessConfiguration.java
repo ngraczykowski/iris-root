@@ -16,6 +16,7 @@ import com.silenteight.adjudication.engine.solving.domain.comment.CommentInputCl
 
 import com.hazelcast.collection.IQueue;
 import com.hazelcast.core.HazelcastInstance;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,6 +25,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 @Configuration
+@EnableConfigurationProperties(ProcessConfigurationProperties.class)
 class ProcessConfiguration {
 
   @Bean
@@ -51,12 +53,15 @@ class ProcessConfiguration {
       final ProtoMessageToObjectNodeConverter converter,
       final CommentInputClient commentInputClient,
       final CommentInputClientRepository commentInputClientRepository,
-      final HazelcastInstance hazelcastInstance) {
+      final HazelcastInstance hazelcastInstance,
+      final ProcessConfigurationProperties processConfigurationProperties) {
 
     final IQueue<String> alertCommentsInputQueue =
         hazelcastInstance.getQueue("alert.comments.inputs");
 
-    final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+    final ScheduledExecutorService scheduledExecutorService =
+        Executors.newScheduledThreadPool(
+            processConfigurationProperties.getCommentInputProcess().getPoolSize());
 
     return new CommentInputResolveProcess(
         commentInputClient,
@@ -71,12 +76,14 @@ class ProcessConfiguration {
       CategoryValuesClient categoryValueClient,
       AlertSolvingRepository alertSolvingRepository,
       final HazelcastInstance hazelcastInstance,
-      ReadyMatchFeatureVectorPublisher readyMatchFeatureVectorPublisher) {
+      ReadyMatchFeatureVectorPublisher readyMatchFeatureVectorPublisher,
+      final ProcessConfigurationProperties processConfigurationProperties) {
 
-    final IQueue<Long> alertCommentsInputQueue =
-        hazelcastInstance.getQueue("alert.category.value");
+    final IQueue<Long> alertCommentsInputQueue = hazelcastInstance.getQueue("alert.category.value");
 
-    final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(30);
+    final ScheduledExecutorService scheduledExecutorService =
+        Executors.newScheduledThreadPool(
+            processConfigurationProperties.getCategoryProcess().getPoolSize());
 
     return new CategoryResolveProcess(
         categoryValueClient,
@@ -94,7 +101,8 @@ class ProcessConfiguration {
       AlertSolvingAlertContextMapper alertSolvingAlertContextMapper,
       RecommendationFacade recommendationFacade,
       ProtoMessageToObjectNodeConverter converter,
-      CommentInputClientRepository commentInputClientRepository) {
+      CommentInputClientRepository commentInputClientRepository,
+      final ProcessConfigurationProperties processConfigurationProperties) {
     return new SolvedAlertProcess(
         recommendationPublisher,
         alertSolvingRepository,
@@ -102,7 +110,8 @@ class ProcessConfiguration {
         commentFacade,
         recommendationFacade,
         converter,
-        commentInputClientRepository);
+        commentInputClientRepository,
+        processConfigurationProperties.getSolvedAlertProcess());
   }
 
   @Bean
@@ -118,8 +127,11 @@ class ProcessConfiguration {
       final AlertSolvingRepository alertSolvingRepository,
       final HazelcastInstance hazelcastInstance,
       final GovernanceFacade governanceFacade,
-      final SolvedAlertProcess solvedAlertProcess) {
-    final ExecutorService scheduledExecutorService = Executors.newFixedThreadPool(15);
+      final SolvedAlertProcess solvedAlertProcess,
+      final ProcessConfigurationProperties processConfigurationProperties) {
+    final ExecutorService scheduledExecutorService =
+        Executors.newFixedThreadPool(
+            processConfigurationProperties.getGovernanceProcess().getPoolSize());
     final GovernanceAlertPublisher governanceAlertPublisher =
         new GovernanceAlertPublisher(
             governanceFacade, hazelcastInstance, scheduledExecutorService, solvedAlertProcess);

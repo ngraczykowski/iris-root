@@ -11,6 +11,7 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,6 +20,7 @@ import java.util.concurrent.ScheduledExecutorService;
 
 @Configuration
 @Slf4j
+@EnableConfigurationProperties(EventStoreConfigurationProperties.class)
 class InMemoryStorageProviderConfiguration {
 
   private static final String ALERT_MAP = "in-memory-alert";
@@ -37,7 +39,8 @@ class InMemoryStorageProviderConfiguration {
   @Bean
   AlertSolvingRepository inMemoryAlertStorageProvider(
       final HazelcastInstance hazelcastInstance,
-      final RabbitTemplate rabbitTemplate
+      final RabbitTemplate rabbitTemplate,
+      final EventStoreConfigurationProperties eventStoreConfigurationProperties
   ) {
 
     final HazelcastConfigurationProperties hazelcastConfigurationProperties =
@@ -48,13 +51,8 @@ class InMemoryStorageProviderConfiguration {
 
     final IMap<Long, AlertSolving> map = hazelcastInstance.getMap(ALERT_MAP);
     log.info("Registering Entry Eviction listener");
-    //TODO make it bean - and move configuration to properties
-    final EventStoreConfigurationProperties eventStoreConfigurationProperties =
-        new EventStoreConfigurationProperties(
-            "test",
-            "test"
-        );
-    final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(6);
+    final ScheduledExecutorService scheduledExecutorService =
+        Executors.newScheduledThreadPool(eventStoreConfigurationProperties.getPoolSize());
     final EventStore eventStore =
         new EventStore(rabbitTemplate, eventStoreConfigurationProperties, hazelcastInstance,
             scheduledExecutorService

@@ -28,8 +28,6 @@ import javax.annotation.Nonnull;
 @Slf4j
 public class SolvedAlertProcess {
 
-  private static final String COMMENT_TEMPLATE = "alert";
-  private static final String MATCH_COMMENT_TEMPLATE = "match-template";
   private final RecommendationPublisher recommendationPublisher;
   private final AlertSolvingRepository alertSolvingRepository;
   private final AlertSolvingAlertContextMapper alertSolvingAlertContextMapper;
@@ -37,6 +35,7 @@ public class SolvedAlertProcess {
   private final RecommendationFacade recommendationFacade;
   private final ProtoMessageToObjectNodeConverter converter;
   private final CommentInputClientRepository commentInputClientRepository;
+  private final ProcessConfigurationProperties.SolvedAlertProcess properties;
 
   @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   public void generateRecommendation(long alertId, BatchSolveAlertsResponse solvedAlert) {
@@ -61,9 +60,10 @@ public class SolvedAlertProcess {
         recommendedAction,
         commentsInputs
     );
-    var comment = commentFacade.generateComment(COMMENT_TEMPLATE, alertContext);
+    var comment = commentFacade.generateComment(properties.getCommentTemplate(), alertContext);
     var matchComments =
-        commentFacade.generateMatchComments(MATCH_COMMENT_TEMPLATE, alertContext.getMatches());
+        commentFacade.generateMatchComments(
+            properties.getMatchCommentTemplate(), alertContext.getMatches());
 
     var saveRequest =
         new SaveRecommendationRequest(alertSolvingModel.getAnalysisId(), true, true, true, List.of(
