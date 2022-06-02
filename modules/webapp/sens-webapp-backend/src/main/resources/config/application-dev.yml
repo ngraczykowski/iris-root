@@ -15,7 +15,7 @@ keycloak:
     principal-attribute: preferred_username
     ssl-required: external
     credentials:
-      secret: <your-secret>
+      secret: Lr3ZKXx62YFtQs2SvsZle0wepVuOyLYI
     resource: backend
 
 spring:
