@@ -32,7 +32,7 @@ public class DateFeature implements FabFeature {
         .alertedPartyDates(getAlertedPart(parsedMessageData))
         .watchlistDates(merge(buildFeatureCommand.getMatch().getPayloads(), this::getWatchlistPart))
         .alertedPartyType(getPartyType(parsedMessageData))
-        .mode(SeverityModeOut.NORMAL)
+        .mode(SeverityModeOut.STRICT)
         .build();
   }
 
