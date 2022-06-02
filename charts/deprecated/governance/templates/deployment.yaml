@@ -70,7 +70,7 @@ spec:
             - name: 'GRPC_CLIENT_WAREHOUSE_ADDRESS'
               value: {{ .Values.grpc.client.warehouse.address | quote }}
             - name: 'GRPC_SERVER_PORT'
-              value : {{ .Values.grpc.server.port | 9090 }}
+              value : {{ .Values.ports.grpc | default 9090 }}
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           args:
