@@ -2,15 +2,7 @@ package com.silenteight.agent.facade.exchange;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.amqp.core.AmqpAdmin;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.Exchange;
-import org.springframework.amqp.core.ExchangeBuilder;
-import org.springframework.amqp.core.FanoutExchange;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.QueueBuilder;
-import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.core.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -26,78 +18,84 @@ import org.springframework.context.annotation.Profile;
 class SingleQueueRabbitBrokerConfiguration {
 
   private final AgentFacadeProperties agentFacadeProperties;
-  private final AmqpAdmin amqpAdmin;
 
   @Bean("facadeInQueue")
   Queue facadeInQueue() {
-    Queue queue = QueueBuilder
+    return QueueBuilder
         .durable(agentFacadeProperties.getInboundQueueName())
         .deadLetterExchange(agentFacadeProperties.getDeadLetterExchangeName())
         .deadLetterRoutingKey(agentFacadeProperties.getDeadLetterRoutingKey())
         .build();
-    amqpAdmin.declareQueue(queue);
-    return queue;
+  }
+
+  @Bean("facadeInQueueWithPrioritySupport")
+  Queue facadeInQueueWithPrioritySupport() {
+    return QueueBuilder
+        .durable(agentFacadeProperties.getInboundQueueWithPrioritySupportName())
+        .deadLetterExchange(agentFacadeProperties.getDeadLetterExchangeName())
+        .deadLetterRoutingKey(agentFacadeProperties.getDeadLetterRoutingKey())
+        .maxPriority(agentFacadeProperties.getMaxQueuePriority())
+        .build();
   }
 
   @Bean("inExchange")
   TopicExchange inExchange() {
-    TopicExchange exchange = ExchangeBuilder
+    return ExchangeBuilder
         .topicExchange(agentFacadeProperties.getInboundExchangeName())
         .build();
-    amqpAdmin.declareExchange(exchange);
-    return exchange;
   }
 
   @Bean("outExchange")
   TopicExchange outExchange() {
-    TopicExchange exchange = ExchangeBuilder
+    return ExchangeBuilder
         .topicExchange(agentFacadeProperties.getOutboundExchangeName())
         .build();
-    amqpAdmin.declareExchange(exchange);
-    return exchange;
   }
 
-  @Bean
+  @Bean("facadeInQueueBinding")
   Binding facadeInQueueBinding(
       @Qualifier("facadeInQueue") Queue facadeQueue,
       @Qualifier("inExchange") Exchange facadeExchange) {
-    Binding binding = BindingBuilder
+    return BindingBuilder
         .bind(facadeQueue)
         .to(facadeExchange)
         .with(agentFacadeProperties.getInboundRoutingKey())
         .noargs();
-    amqpAdmin.declareBinding(binding);
-    return binding;
+  }
+
+  @Bean("facadeInQueueWithPrioritySupportBinding")
+  Binding facadeInQueueWithPrioritySupportBinding(
+      @Qualifier("facadeInQueueWithPrioritySupport") Queue queueWithPrioSupport,
+      @Qualifier("inExchange") Exchange facadeExchange) {
+    return BindingBuilder
+        .bind(queueWithPrioSupport)
+        .to(facadeExchange)
+        .with(agentFacadeProperties.getInboundRoutingKey())
+        .noargs();
   }
 
   @Bean("facadeDeadLetterQueue")
   Queue facadeDeadLetterQueue() {
-    Queue queue = QueueBuilder
+    return QueueBuilder
         .durable(agentFacadeProperties.getDeadLetterQueueName())
         .build();
-    amqpAdmin.declareQueue(queue);
-    return queue;
   }
 
   @Bean("facadeDeadLetterExchange")
   FanoutExchange facadeDeadLetterExchange() {
-    FanoutExchange exchange = ExchangeBuilder
+    return ExchangeBuilder
         .fanoutExchange(agentFacadeProperties.getDeadLetterExchangeName())
         .build();
-    amqpAdmin.declareExchange(exchange);
-    return exchange;
   }
 
   @Bean
   Binding deadLetterExchangeBinding(
       @Qualifier("facadeDeadLetterQueue") Queue facadeDlQueue,
       @Qualifier("facadeDeadLetterExchange") Exchange facadeDlExchange) {
-    Binding binding = BindingBuilder
+    return BindingBuilder
         .bind(facadeDlQueue)
         .to(facadeDlExchange)
         .with(agentFacadeProperties.getInboundRoutingKey())
         .noargs();
-    amqpAdmin.declareBinding(binding);
-    return binding;
   }
 }

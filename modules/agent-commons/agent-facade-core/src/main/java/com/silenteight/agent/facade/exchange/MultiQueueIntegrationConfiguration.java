@@ -1,29 +1,33 @@
 package com.silenteight.agent.facade.exchange;
 
-import lombok.RequiredArgsConstructor;
-
 import com.silenteight.agent.common.messaging.amqp.AmqpInboundFactory;
 import com.silenteight.agent.common.messaging.amqp.AmqpOutboundFactory;
 import com.silenteight.agent.facade.AgentFacade;
 import com.silenteight.agents.v1.api.exchange.AgentExchangeRequest;
 import com.silenteight.agents.v1.api.exchange.AgentExchangeResponse;
 
+import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.Declarables;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.integration.amqp.dsl.SimpleMessageListenerContainerSpec;
 import org.springframework.integration.dsl.IntegrationFlows;
 import org.springframework.integration.dsl.StandardIntegrationFlow;
 import org.springframework.integration.dsl.context.IntegrationFlowContext;
 
 import java.util.List;
+import java.util.function.Consumer;
 import javax.annotation.PostConstruct;
 
 import static com.silenteight.agent.facade.exchange.AgentFacadeConfiguration.INBOUND_CHANNEL_NAME;
 import static com.silenteight.agent.facade.exchange.AgentFacadeConfiguration.OUTBOUND_CHANNEL_NAME;
+import static com.silenteight.agent.facade.exchange.DeleteQueueWithoutPrioritySupportUseCase.deleteIfEmptyQueueWithoutPrioritySupport;
 import static org.springframework.integration.IntegrationMessageHeaderAccessor.CORRELATION_ID;
 
 @Configuration
-@RequiredArgsConstructor
 @Conditional(MultiFacadeEnabledCondition.class)
 @EnableConfigurationProperties(AgentFacadeProperties.class)
 class MultiQueueIntegrationConfiguration {
@@ -34,6 +38,27 @@ class MultiQueueIntegrationConfiguration {
   private final List<AgentFacade<AgentExchangeRequest, AgentExchangeResponse>> agentFacades;
   private final IntegrationFlowContext context;
   private final MessageTransformer messageTransformer;
+  private final AmqpAdmin amqpAdmin;
+  private final Declarables declarables;
+
+  @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+  MultiQueueIntegrationConfiguration(
+      AgentFacadeProperties agentFacadeProperties,
+      AmqpInboundFactory inboundFactory,
+      AmqpOutboundFactory outboundFactory,
+      List<AgentFacade<AgentExchangeRequest, AgentExchangeResponse>> agentFacades,
+      IntegrationFlowContext context,
+      MessageTransformer messageTransformer, AmqpAdmin amqpAdmin,
+      @Qualifier("multiFacadeDeclarables") Declarables declarables) {
+    this.agentFacadeProperties = agentFacadeProperties;
+    this.inboundFactory = inboundFactory;
+    this.outboundFactory = outboundFactory;
+    this.agentFacades = agentFacades;
+    this.context = context;
+    this.messageTransformer = messageTransformer;
+    this.amqpAdmin = amqpAdmin;
+    this.declarables = declarables;
+  }
 
   @PostConstruct
   public void registerIntegrationFlows() {
@@ -48,7 +73,8 @@ class MultiQueueIntegrationConfiguration {
     var inboundChannelName = INBOUND_CHANNEL_NAME + facadeName;
     var outboundChannelName = OUTBOUND_CHANNEL_NAME + facadeName;
 
-    var requestFlow = createRequestFlow(queueItem.getInboundQueueName(), inboundChannelName);
+    var requestFlow = createRequestFlow(queueItem.getInboundQueueName(),
+        queueItem.getInboundQueueWithPrioritySupportName(), inboundChannelName);
     var processingFlow = createProcessingFlow(agentFacade, inboundChannelName, outboundChannelName);
     var responseFlow = createResponseFlow(queueItem.getOutboundExchangeName(), outboundChannelName);
 
@@ -61,13 +87,34 @@ class MultiQueueIntegrationConfiguration {
     responseFlowBuilder.register();
   }
 
-  private StandardIntegrationFlow createRequestFlow(String queueName, String channelName) {
+  private StandardIntegrationFlow createRequestFlow(
+      String queueName, String queueWithPrioritySupportName, String channelName) {
     return IntegrationFlows
         .from(inboundFactory
             .simpleAdapter()
-            .configureContainer(c -> c.addQueueNames(queueName)))
+            .configureContainer(baseOn(queueName, queueWithPrioritySupportName)))
         .channel(channelName)
         .get();
+  }
+
+  private Consumer<SimpleMessageListenerContainerSpec> baseOn(
+      String queueName, String queueWithPrioritySupportName) {
+    return c -> {
+      c.addQueueNames(queueWithPrioritySupportName);
+      unbindQueueWithoutPrioritySupport(queueName);
+      deleteIfEmptyQueueWithoutPrioritySupport(amqpAdmin, queueName, c);
+    };
+  }
+
+  private void unbindQueueWithoutPrioritySupport(String queueName) {
+    declarables
+        .getDeclarables()
+        .stream()
+        .filter(Binding.class::isInstance)
+        .map(Binding.class::cast)
+        .filter(binding -> binding.getDestination().equals(queueName))
+        .findFirst()
+        .ifPresent(amqpAdmin::removeBinding);
   }
 
   private StandardIntegrationFlow createProcessingFlow(

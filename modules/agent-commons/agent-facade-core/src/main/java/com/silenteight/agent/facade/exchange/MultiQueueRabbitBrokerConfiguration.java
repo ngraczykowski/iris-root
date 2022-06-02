@@ -22,7 +22,7 @@ class MultiQueueRabbitBrokerConfiguration {
 
   private final AgentFacadeProperties agentFacadeProperties;
 
-  @Bean
+  @Bean("multiFacadeDeclarables")
   public Declarables init() {
     var declarables = agentFacadeProperties
         .getQueueDefinitions()
@@ -36,11 +36,19 @@ class MultiQueueRabbitBrokerConfiguration {
   private static Stream<Declarable> createQueuesAndExchangesAndBindings(QueueItem queueItem) {
     var inboundRoutingKey = queueItem.getInboundRoutingKey();
     var deadLetterExchangeName = queueItem.getDeadLetterExchangeName();
+    var deadLetterRoutingKey = queueItem.getDeadLetterRoutingKey();
 
     var inboundQueue = createQueue(queueItem.getInboundQueueName(), deadLetterExchangeName,
-        queueItem.getDeadLetterRoutingKey());
+        deadLetterRoutingKey);
+    var inboundQueueWithPrioritySupport =
+        createQueueWithPrioritySupport(queueItem.getInboundQueueWithPrioritySupportName(),
+            deadLetterExchangeName, deadLetterRoutingKey, queueItem.getMaxQueuePriority());
+
     var inboundExchange = createTopicExchange(queueItem.getInboundExchangeName());
+
     var queueBinding = createQueueBinding(inboundQueue, inboundExchange, inboundRoutingKey);
+    var queueWithPrioritySupportBinding =
+        createQueueBinding(inboundQueueWithPrioritySupport, inboundExchange, inboundRoutingKey);
 
     var outboundExchange = createTopicExchange(queueItem.getOutboundExchangeName());
 
@@ -49,8 +57,19 @@ class MultiQueueRabbitBrokerConfiguration {
     var deadLetterBinding =
         createQueueBinding(deadLetterQueue, deadLetterExchange, inboundRoutingKey);
 
-    return Stream.of(inboundQueue, inboundExchange, queueBinding, outboundExchange, deadLetterQueue,
-        deadLetterExchange, deadLetterBinding);
+    return Stream.of(inboundQueue, inboundQueueWithPrioritySupport, inboundExchange,
+        queueBinding, queueWithPrioritySupportBinding, outboundExchange,
+        deadLetterQueue, deadLetterExchange, deadLetterBinding);
+  }
+
+  private static Queue createQueueWithPrioritySupport(
+      String queueName, String deadLetterExchange, String deadLetterRoutingKey, int priority) {
+    return QueueBuilder
+        .durable(queueName)
+        .deadLetterExchange(deadLetterExchange)
+        .deadLetterRoutingKey(deadLetterRoutingKey)
+        .maxPriority(priority)
+        .build();
   }
 
   private static Queue createQueue(

@@ -8,6 +8,9 @@ import com.silenteight.agent.facade.AgentFacade;
 import com.silenteight.agents.v1.api.exchange.AgentExchangeRequest;
 import com.silenteight.agents.v1.api.exchange.AgentExchangeResponse;
 
+import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.core.Binding;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
@@ -17,6 +20,7 @@ import org.springframework.integration.dsl.IntegrationFlows;
 
 import static com.silenteight.agent.facade.exchange.AgentFacadeConfiguration.INBOUND_CHANNEL_NAME;
 import static com.silenteight.agent.facade.exchange.AgentFacadeConfiguration.OUTBOUND_CHANNEL_NAME;
+import static com.silenteight.agent.facade.exchange.DeleteQueueWithoutPrioritySupportUseCase.deleteIfEmptyQueueWithoutPrioritySupport;
 import static org.springframework.integration.IntegrationMessageHeaderAccessor.CORRELATION_ID;
 
 @Configuration
@@ -29,13 +33,21 @@ class SingleQueueIntegrationConfiguration {
   private final AmqpInboundFactory inboundFactory;
   private final AmqpOutboundFactory outboundFactory;
   private final AgentFacade<AgentExchangeRequest, AgentExchangeResponse> agentFacade;
+  private final AmqpAdmin amqpAdmin;
 
+  @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
   @Bean
-  IntegrationFlow requestFlow() {
+  IntegrationFlow requestFlow(
+      @Qualifier("facadeInQueueBinding") Binding queueWithoutPrioritySupportBinding) {
     return IntegrationFlows
         .from(inboundFactory
             .simpleAdapter()
-            .configureContainer(c -> c.addQueueNames(agentFacadeProperties.getInboundQueueName())))
+            .configureContainer(c -> {
+              c.addQueueNames(agentFacadeProperties.getInboundQueueWithPrioritySupportName());
+              amqpAdmin.removeBinding(queueWithoutPrioritySupportBinding);
+              deleteIfEmptyQueueWithoutPrioritySupport(
+                  amqpAdmin, agentFacadeProperties.getInboundQueueName(), c);
+            }))
         .channel(INBOUND_CHANNEL_NAME)
         .get();
   }
