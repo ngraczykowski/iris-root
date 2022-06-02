@@ -562,3 +562,8 @@ keycloak:
   backend:
     clientId: backend
     clientSecret: 5f8909cc-dd98-11ec-a941-7f28fefdd672
+  cmapi:
+    clientId: dev-cmapi
+    clientSecret: 468e81d6-ddca-11ec-bb7e-679f3017e8de
+  kibana:
+    clientId: kibana-sso

@@ -46,10 +46,8 @@ components:
       - messaging
 
   webapp:
-    profiles:
     properties:
-      "sens.webapp.roles.country-groups-scope": kibana-sso
-      "sens.webapp.roles.roles-scope": kibana-sso
+      "sens.webapp.roles.country-groups-scope": "{{ .Values.keycloak.kibana.clientId }}"
 
   warehouse:
     profiles:
