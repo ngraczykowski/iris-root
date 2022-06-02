@@ -1,13 +1,14 @@
 from setuptools import find_packages, setup
 
 install_require = [
-    "agent-base==0.20.0dev",
+    "agent-base==0.23.0",
+    "agents-api>=0.27.0",
     "aio-pika==7.1.2",
     "aiohttp==3.7.4.post0",
     "data-source-api==0.23.0.12",
     "googleapis-common-protos==1.53.0",
-    "grpcio==1.39.0",
-    "grpcio-tools==1.39.0",
+    "grpcio>=1.46.3",
+    "grpcio-tools>=1.46.3",
     "importlib_resources==5.2.2",
     "psutil==5.9.0",
     "python-consul2==0.1.5",
@@ -31,7 +32,7 @@ tests_require = [
 
 setup(
     name="hit-type",
-    version="0.4.0-dev",
+    version="0.3.1",
     description="",
     author="Silent Eight Pte. Ltd.",
     author_email="support@silenteight.com",

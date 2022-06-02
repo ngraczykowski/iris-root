@@ -1,6 +1,7 @@
 # syntax=docker/dockerfile:1.2
 FROM alpine:latest AS BUILD
 COPY hit_type /app/hit_type
+COPY temp_agent /app/temp_agent
 COPY config /app/config
 COPY pyproject.toml setup.py setup.cfg requirements.txt /app/
 RUN mv /app/config/application.local.yaml /app/config/application.yaml

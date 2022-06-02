@@ -1,17 +1,16 @@
 import logging
-import sys
 from typing import Callable, Dict, List
 
 from agent_base.agent import Agent
 
 from hit_type.solution.solution import Result, Solution
 
-logger = logging.getLogger(__name__)
-c_handler = logging.StreamHandler(sys.stdout)
-c_handler.setLevel(logging.DEBUG)
-
 
 class HitTypeAgent(Agent):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.logger = logging.getLogger("main").getChild("agent")
+
     def resolve(
         self,
         normal_trigger_categories: List[str],
@@ -19,7 +18,7 @@ class HitTypeAgent(Agent):
         triggered_tokens: Dict[str, Dict[str, List[str]]],
     ) -> Result:
         try:
-            logger.debug(
+            self.logger.debug(
                 f"Checking normal trigger categories: {normal_trigger_categories},"
                 f"\n trigger categories: {trigger_categories},"
                 f"\n trigger tokens: {triggered_tokens}"
@@ -27,10 +26,10 @@ class HitTypeAgent(Agent):
             if not normal_trigger_categories or not trigger_categories or not triggered_tokens:
                 return Result(Solution.NO_DATA)
             result = self._resolve(normal_trigger_categories, trigger_categories, triggered_tokens)
-            logger.debug(f"Solution: {result.solution}")
+            self.logger.debug(f"Solution: {result.solution}")
             return result
         except Exception as err:  # noqa
-            logger.exception("UnknownError")
+            self.logger.exception("UnknownError")
             return Result(Solution.AGENT_ERROR)
 
     def _resolve(

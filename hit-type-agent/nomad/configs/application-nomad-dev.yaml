@@ -1,7 +1,7 @@
 grpc:
   client:
     data-source:
-      address: {{ range $index, $client := service "mike-universal-data-source" -}}
+      address: {{ range $index, $client := service "grpc-universal-data-source" -}}
           {{ if $index }},{{ end -}}
           {{ $client.Address }}:{{ $client.Port -}}
       {{- end }}
@@ -29,13 +29,14 @@ agent:
   processes: 2
 
   agent-exchange:
-    request: 
-      exchange: "agent.request" 
-      routing-key: "agents.hitType.versions.*.configs.*" 
-      queue-name: "agent.hittype-requests" 
-    response: 
-      exchange: 'agent.response' 
-      routing-key: ""
+    request:
+      exchange: "agent.request"
+      queue-name: "agent.hittype-requests"
+      routing-key: "agents.hitType.versions.*.configs.*"
+
+    response:
+      exchange: "agent.response"
+      routing_key: ""
 
   grpc:
     port: {{ env "NOMAD_PORT_grpc" }}
@@ -44,6 +45,6 @@ agent:
     # server_public_key_chain: {{ env "meta.silenteight.home" }}/cert/hit-type-agent/hit-type-agent-chain.pem
 
 # sentry:
-#   environment: mike
-#   release: 0.16.0-dev
+#   environment: unknown
+#   release: unknown
 #   sample_rate: 1.0
