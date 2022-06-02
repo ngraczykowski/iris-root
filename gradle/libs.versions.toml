@@ -92,7 +92,7 @@ governance-model-api = { group = "com.silenteight.iris", name = "se-model-api" }
 governance-solving-api = { group = "com.silenteight.iris", name = "se-solving-api" }
 learning-engine-store-api = { group = "com.silenteight.learningengine.api", name = "learning-store-api", version.ref = "learing-engine-store-api" }
 historical-decisions-api = { group = "com.silenteight.historicaldecisions.api", name = "historical-decisions-model-api", version.ref = "historical-decisions-model-api" }
-sear-rabbitmq-common-schema = { group = "com.silenteight.rabbitmqcommonschema", name = "sear-rabbitmq-common-schema-definitions", version = "1.9.0" }
+sear-rabbitmq-common-schema = { group = "com.silenteight.iris", name = "sear-rabbitmq-common-schema-definitions" }
 silenteight-agents-protocol = { group = "com.silenteight.agent.api", name = "protocol-agents", version.ref = "agents-protocol" }
 silenteight-audit-bs = { group = "com.silenteight.iris", name = "audit-bs" }
 silenteight-audit-bs-api = { group = "com.silenteight.iris", name = "audit-bs-api" }

@@ -32,7 +32,6 @@ dependencies {
     api(libs.governance.model.api)
     api(libs.governance.solving.api)
     api(libs.learning.engine.store.api)
-    api(libs.sear.rabbitmq.common.schema)
     api(libs.silenteight.agents.protocol)
     api(libs.silenteight.commons.app)
     api(libs.silenteight.commons.core)

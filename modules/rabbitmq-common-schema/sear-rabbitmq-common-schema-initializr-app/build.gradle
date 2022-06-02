@@ -1,9 +1,9 @@
 plugins {
+  id "com.silenteight.iris.build.container-image"
   id "com.silenteight.iris.build.spring-boot-application"
 }
 
 dependencies {
-
   implementation project(":sear-rabbitmq-common-schema-definitions")
 
   implementation libs.spring.boot.starter.amqp

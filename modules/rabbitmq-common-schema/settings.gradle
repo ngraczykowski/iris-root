@@ -1,4 +1,15 @@
-rootProject.name = 'sear-rabbitmq-common-schema'
+includeBuild('../../platforms')
+includeBuild('../../build-logic')
+
+dependencyResolutionManagement {
+  versionCatalogs {
+    libs {
+      from(files("../../gradle/libs.versions.toml"))
+    }
+  }
+}
+
+rootProject.name = 'rabbitmq-common-schema'
 
 // NOTE(ahaczewski): Keep sorted alphabetically.
 include "sear-rabbitmq-common-schema-definitions"
