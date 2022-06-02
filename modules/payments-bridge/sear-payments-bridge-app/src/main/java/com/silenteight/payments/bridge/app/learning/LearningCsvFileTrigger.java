@@ -27,7 +27,7 @@ class LearningCsvFileTrigger {
   private final CsvFileResourceProvider csvFileResourceProvider;
   private final LearningFileRepository learningFileRepository;
 
-  @Scheduled(cron = "${pb.sear-learning.trigger-csv-processing.cron:0/10 * * * * ?}")
+  @Scheduled(cron = "${pb.sear-learning.trigger-csv-processing.cron:0/5 * * * * *}")
   @SchedulerLock(name = "processLearningScheduler",
       lockAtMostFor = "${pb.sear-learning.trigger-csv-processing.lock-most}",
       lockAtLeastFor = "${pb.sear-learning.trigger-csv-processing.lock-least}")
