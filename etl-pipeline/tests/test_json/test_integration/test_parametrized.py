@@ -24,7 +24,7 @@ def pipeline_resource(request):
         f"{service_config.ETL_SERVICE_IP}:{service_config.ETL_SERVICE_PORT}"
     )
     uut = EtlPipelineServiceStub(channel)
-    time.sleep(4)
+    time.sleep(10)
     yield uut
     try:
         os.remove("/tmp/categories.txt")

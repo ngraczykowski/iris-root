@@ -130,7 +130,7 @@ def load_alert(filepath: str = "notebooks/sample/wm_address_in_payload_format.js
 class BaseGrpcTestCase:
     @pytest.mark.asyncio
     class TestGrpcServer(AsyncTestCase):
-        TIMEOUT = 5
+        TIMEOUT = 10
 
         @classmethod
         def tearDownClass(cls):
