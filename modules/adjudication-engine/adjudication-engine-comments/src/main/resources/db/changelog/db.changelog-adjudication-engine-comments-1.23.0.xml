@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+  <property name="now" value="now()" dbms="postgresql"/>
+
+  <changeSet id="adjudication-engine-comments-1.23.0_0" author="jgajewski">
+    <insert tableName="ae_comment_template">
+      <column name="template_name" value="name-matched-text-agent.ftl"/>
+      <column name="created_at" valueDate="${now}"/>
+      <column name="revision" valueNumeric="2"/>
+      <column name="template" valueClobFile="templates/name-matched-text-agent.ftl"/>
+    </insert>
+
+    <insert tableName="ae_comment_template">
+      <column name="template_name" value="historical-agent-fp.ftl"/>
+      <column name="created_at" valueDate="${now}"/>
+      <column name="revision" valueNumeric="4"/>
+      <column name="template" valueClobFile="templates/historical-agent-fp.ftl"/>
+    </insert>
+
+    <insert tableName="ae_comment_template">
+      <column name="template_name" value="historical-agent-tp.ftl"/>
+      <column name="created_at" valueDate="${now}"/>
+      <column name="revision" valueNumeric="4"/>
+      <column name="template" valueClobFile="templates/historical-agent-tp.ftl"/>
+    </insert>
+
+    <insert tableName="ae_comment_template">
+      <column name="template_name" value="contextual-agent-fp.ftl"/>
+      <column name="created_at" valueDate="${now}"/>
+      <column name="revision" valueNumeric="4"/>
+      <column name="template" valueClobFile="templates/contextual-agent-fp.ftl"/>
+    </insert>
+
+    <insert tableName="ae_comment_template">
+      <column name="template_name" value="contextual-agent-tp.ftl"/>
+      <column name="created_at" valueDate="${now}"/>
+      <column name="revision" valueNumeric="4"/>
+      <column name="template" valueClobFile="templates/contextual-agent-tp.ftl"/>
+    </insert>
+
+    <insert tableName="ae_comment_template">
+      <column name="template_name" value="alert-utils.ftl"/>
+      <column name="created_at" valueDate="${now}"/>
+      <column name="revision" valueNumeric="2"/>
+      <column name="template" valueClobFile="templates/alert-utils.ftl"/>
+    </insert>
+  </changeSet>
+
+</databaseChangeLog>
