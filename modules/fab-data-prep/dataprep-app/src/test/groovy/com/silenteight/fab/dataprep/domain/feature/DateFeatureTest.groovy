@@ -34,7 +34,7 @@ class DateFeatureTest extends Specification {
         .alertedPartyDates(alertedParty)
         .watchlistDates(watchList)
         .alertedPartyType(EntityTypeOut.INDIVIDUAL)
-        .mode(SeverityModeOut.NORMAL)
+        .mode(SeverityModeOut.STRICT)
         .build()
 
     where:
