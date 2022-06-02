@@ -116,8 +116,6 @@ class AnalysisInboundAmqpIntegrationProperties {
 
     @NotBlank
     private String inboundQueueName = AGENT_RESPONSE_QUEUE_NAME;
-
-    private boolean enabled = AGENT_RESPONSE_ENABLED_DEFAULT;
   }
 
   @Data

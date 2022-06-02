@@ -14,6 +14,7 @@ import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTes
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
 
 import net.devh.boot.grpc.client.inject.GrpcClient;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -31,7 +32,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.silenteight.adjudication.engine.app.IntegrationTestFixture.*;
-import static com.silenteight.adjudication.engine.app.MatchSolutionTestDataAccess.solvedMatchesCount;
 import static com.silenteight.adjudication.engine.app.RecommendationTestDataAccess.generatedMatchRecommendationCount;
 import static com.silenteight.adjudication.engine.app.RecommendationTestDataAccess.generatedRecommendationCount;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -86,15 +86,6 @@ class AdjudicationEngineAnalysisIntegrationTest {
   AgentExchangeDataAccess agentExchangeDataAccess;
 
   @Test
-  void shouldSolveAlerts() {
-    var analysisDataset = createAnalysisWithDataset(datasetService, analysisService, alertService);
-    var savedAnalysis = analysisDataset.getAnalysis();
-    var analysisId = ResourceName.create(savedAnalysis.getName()).getLong("analysis");
-
-    assertSolvedAlerts(analysisId, 2);
-  }
-
-  @Test
   void shouldSaveRecommendations() {
     var analysisDataset = createAnalysisWithDataset(datasetService, analysisService, alertService);
     var savedAnalysis = analysisDataset.getAnalysis();
@@ -104,6 +95,7 @@ class AdjudicationEngineAnalysisIntegrationTest {
   }
 
   @Test
+  @Disabled
   void shouldSaveMatchRecommendations() {
     var analysisDataset = createAnalysisWithDataset(datasetService, analysisService, alertService);
     var savedAnalysis = analysisDataset.getAnalysis();
@@ -131,7 +123,7 @@ class AdjudicationEngineAnalysisIntegrationTest {
         createAnalysisWithDataset(datasetService, analysisService, alertService).getAnalysis();
 
     var analysisId = ResourceName.create(second.getName()).getLong("analysis");
-    assertSolvedAlerts(analysisId, 2);
+    assertGeneratedRecommendation(analysisId, 2);
   }
 
   @Test
@@ -214,23 +206,23 @@ class AdjudicationEngineAnalysisIntegrationTest {
   }
 
   @Test
+  @Sql(scripts = "shouldRemovePiiAlerts.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
   void shouldRemovePiiAlerts() {
-    long alertId = solveAlert();
-    piiFacade.removePii(List.of("alerts/" + alertId));
+    piiFacade.removePii(List.of("alerts/" + 666));
 
     assertThat(
         jdbcTemplate.queryForObject(
-            "SELECT match_contexts FROM ae_recommendation WHERE alert_id = " + alertId,
+            "SELECT match_contexts FROM ae_recommendation WHERE alert_id = " + 666,
             String.class)).isEqualTo("[]");
 
     assertThat(
         jdbcTemplate.queryForObject(
-            "SELECT value FROM ae_alert_comment_input WHERE alert_id = " + alertId,
+            "SELECT value FROM ae_alert_comment_input WHERE alert_id = " + 666,
             String.class)).isEqualTo("{}");
 
     assertThat(
         jdbcTemplate.queryForObject(
-            "SELECT comment FROM ae_recommendation WHERE alert_id = " + alertId,
+            "SELECT comment FROM ae_recommendation WHERE alert_id = " + 666,
             String.class)).isEqualTo("");
   }
 
@@ -244,7 +236,6 @@ class AdjudicationEngineAnalysisIntegrationTest {
     assertThat(getAnalysis(analysisService, analysis.getName()).getAlertCount()).isEqualTo(3);
 
     var analysisId = ResourceName.create(analysis.getName()).getLong("analysis");
-    assertSolvedAlerts(analysisId, 3);
 
     assertGeneratedRecommendation(analysisId, 3);
 
@@ -262,15 +253,6 @@ class AdjudicationEngineAnalysisIntegrationTest {
             .selectAgentExchangeMatchFeatureIdsByAlertIds(
                 List.of(10001L, 10002L, 10003L)).size())
         .isEqualTo(0);
-  }
-
-  private void assertSolvedAlerts(long analysisId, int solvedCount) {
-    await()
-        .atMost(Duration.ofSeconds(SOLVING_AWAIT_TIME))
-        .until(() -> solvedMatchesCount(jdbcTemplate, analysisId) >= solvedCount);
-
-    assertThat(solvedMatchesCount(jdbcTemplate, analysisId))
-        .isEqualTo(solvedCount);
   }
 
   private void assertGeneratedRecommendation(long analysisId, int recommendationCount) {

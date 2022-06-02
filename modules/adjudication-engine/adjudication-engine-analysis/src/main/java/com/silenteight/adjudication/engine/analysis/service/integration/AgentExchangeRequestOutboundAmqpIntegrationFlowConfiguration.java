@@ -29,8 +29,8 @@ class AgentExchangeRequestOutboundAmqpIntegrationFlowConfiguration {
   private final AmqpOutboundFactory outboundFactory;
 
   @Bean
-  @ConditionalOnProperty(prefix = "ae.analysis.integration.outbound.agent", name = "enabled",
-      havingValue = "true", matchIfMissing = true)
+  @ConditionalOnProperty(prefix = "ae.solving", name = "enabled",
+      havingValue = "false", matchIfMissing = true)
   IntegrationFlow agentExchangeRequestOutboundAmqpIntegrationFlow() {
     return from(AgentExchangeChannels.AGENT_EXCHANGE_REQUEST_OUTBOUND_CHANNEL)
         .handle(createOutboundAdapter(properties.getAgent().getOutboundExchangeName()))

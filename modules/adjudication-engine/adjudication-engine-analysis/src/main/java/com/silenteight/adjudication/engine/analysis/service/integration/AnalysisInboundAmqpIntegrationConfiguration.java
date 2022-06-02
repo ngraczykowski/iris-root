@@ -70,8 +70,8 @@ class AnalysisInboundAmqpIntegrationConfiguration {
   }
 
   @Bean
-  @ConditionalOnProperty(prefix = "ae.analysis.integration.outbound.agent", name = "enabled",
-      havingValue = "true", matchIfMissing = true)
+  @ConditionalOnProperty(prefix = "ae.solving", name = "enabled",
+      havingValue = "false", matchIfMissing = true)
   IntegrationFlow agentResponseIntegrationFlow() {
     return from(createInboundAdapter(properties.getAgentResponseInboundQueueName()))
         .log(Level.TRACE, getClass().getName() + ".agentResponseIntegrationFlow")
