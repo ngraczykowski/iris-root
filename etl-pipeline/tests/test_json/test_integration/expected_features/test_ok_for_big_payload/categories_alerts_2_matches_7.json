@@ -1,0 +1,3 @@
+{"category": "categories/customerType", "categoryValues": [{"match": "alerts/2/matches/7", "singleValue": "UNKNOWN", "alert": "alerts/2"}]}
+{"category": "categories/entitiesTypesMatch", "categoryValues": [{"match": "alerts/2/matches/7", "singleValue": "INCONCLUSIVE", "alert": "alerts/2"}]}
+{"category": "categories/alertType", "categoryValues": [{"match": "alerts/2/matches/7", "singleValue": "WM_ADDRESS", "alert": "alerts/2"}]}

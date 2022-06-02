@@ -70,6 +70,7 @@ entitiesTypesMatch:
   allowed_values: 
     - Y
     - N
+    - INCONCLUSIVE
   category_type: ENUMERATED
 
 geoNationality:
@@ -78,7 +79,6 @@ geoNationality:
  fields:
    alerted_party_location: ap_all_nationalities_aggregated
    watchlist_location: wl_all_nationalities_aggregated
-
 
 geoPlaceOfBirth:
  feature_type: features

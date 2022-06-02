@@ -42,7 +42,7 @@ def sort_hit_feature(i, j):
             j["triggerCategories"][key][token] = sorted(j["triggerCategories"][key][token])
 
 
-def compare_tested_uds_features_with_reference(tested_file, reference_file):
+def compare_tested_uds_features_with_reference(tested_file, reference_file):  # noqa: C901
     with open(tested_file, "r") as f1, open(reference_file, "r") as f2:
         tested = json.load(f1)
         reference = json.load(f2)
@@ -59,7 +59,9 @@ def compare_tested_uds_features_with_reference(tested_file, reference_file):
                     reference_item["alertedPartyNames"] = sorted(
                         reference_item["alertedPartyNames"], key=lambda x: x["name"]
                     )
+
                 if tested_item.get("watchlistNames", None):
+
                     tested_item["watchlistNames"] = sorted(
                         tested_item["watchlistNames"], key=lambda x: x["name"]
                     )
@@ -87,7 +89,21 @@ def compare_tested_uds_features_with_reference(tested_file, reference_file):
                 sort_geo_feature(tested_item, reference_item)
             if "hitType" in tested_item["feature"]:
                 sort_hit_feature(tested_item, reference_item)
-        assert tested_item == reference_item
+            assert tested_item == reference_item
+
+
+def compare_tested_uds_categories_with_reference(tested_file, reference_file):  # noqa: C901
+    with open(tested_file, "r") as f1, open(reference_file, "r") as f2:
+        tested = sorted(
+            [json.loads(line) for line in f1.readlines()],
+            key=lambda x: x.get("singleValue") or x.get("category"),
+        )
+        reference = sorted(
+            [json.loads(line) for line in f2.readlines()],
+            key=lambda x: x.get("singleValue") or x.get("category"),
+        )
+        assert tested == reference
+    os.remove(tested_file)
 
 
 def load_alert(filepath: str = "notebooks/sample/wm_address_in_payload_format.json"):
@@ -119,7 +135,7 @@ class BaseGrpcTestCase:
         @classmethod
         def tearDownClass(cls):
             try:
-                os.remove("tests/categories.txt")
+                os.remove("/tmp/categories.txt")
             except FileNotFoundError:
                 pass
             process = subprocess.Popen("tests/scripts/kill_services.sh")
@@ -128,7 +144,15 @@ class BaseGrpcTestCase:
         @pytest.mark.asyncio
         async def test_ok_flow(self):
             request_alert = load_alert()
+            for match in request_alert.matches:
+                try:
+                    os.remove(
+                        f'/tmp/categories_{match.match_name.replace("/", "_")}.json',
+                    )
+                except FileNotFoundError:
+                    pass
             response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[request_alert]))
+
             for etl_alert in response.etl_alerts:
                 assert etl_alert.etl_status == SUCCESS
             for match in request_alert.matches:
@@ -136,7 +160,11 @@ class BaseGrpcTestCase:
                     f'/tmp/features_{match.match_name.replace("/", "_")}.json',
                     f'tests/test_json/test_integration/expected_features/test_ok_flow_features/features_{match.match_name.replace("/", "_")}.json',
                 )
-                os.remove(f'/tmp/features_{match.match_name.replace("/", "_")}.json')
+
+                compare_tested_uds_categories_with_reference(
+                    f'/tmp/categories_{match.match_name.replace("/", "_")}.json',
+                    f'tests/test_json/test_integration/expected_features/test_ok_flow_features/categories_{match.match_name.replace("/", "_")}.json',
+                )
 
         @pytest.mark.asyncio
         async def test_failures_flow(self):
@@ -207,13 +235,67 @@ class BaseGrpcTestCase:
         @pytest.mark.asyncio
         async def test_ok_for_big_payload(self):
             request_alert = load_alert("notebooks/sample/big_fat_flat_payload.json")
+            for match in request_alert.matches:
+                try:
+                    os.remove(
+                        f'/tmp/categories_{match.match_name.replace("/", "_")}.json',
+                    )
+                except FileNotFoundError:
+                    pass
             response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[request_alert]))
+
             for etl_alert in response.etl_alerts:
                 assert etl_alert.etl_status == SUCCESS
             for match in request_alert.matches:
                 compare_tested_uds_features_with_reference(
                     f'/tmp/features_{match.match_name.replace("/", "_")}.json',
                     f'tests/test_json/test_integration/expected_features/test_ok_for_big_payload/features_{match.match_name.replace("/", "_")}.json',
+                )
+                compare_tested_uds_categories_with_reference(
+                    f'/tmp/categories_{match.match_name.replace("/", "_")}.json',
+                    f'tests/test_json/test_integration/expected_features/test_ok_for_big_payload/categories_{match.match_name.replace("/", "_")}.json',
+                )
+
+        @pytest.mark.asyncio
+        async def test_wm_party_in_payload_format_customer_type(self):
+            request_alert = load_alert(
+                "notebooks/sample/wm_party_in_payload_format_customer_type.json"
+            )
+            response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[request_alert]))
+            for etl_alert in response.etl_alerts:
+                assert etl_alert.etl_status == SUCCESS
+            for match in request_alert.matches:
+                compare_tested_uds_features_with_reference(
+                    f'/tmp/features_{match.match_name.replace("/", "_")}.json',
+                    f'tests/test_json/test_integration/expected_features/test_wm_party_in_payload_format_customer_type/features_{match.match_name.replace("/", "_")}.json',
+                )
+
+        @pytest.mark.asyncio
+        async def test_wm_party_in_payload_format_customer_type_individual(self):
+            request_alert = load_alert(
+                "notebooks/sample/wm_party_in_payload_format_customer_type_individual.json"
+            )
+            response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[request_alert]))
+            for etl_alert in response.etl_alerts:
+                assert etl_alert.etl_status == SUCCESS
+            for match in request_alert.matches:
+                compare_tested_uds_features_with_reference(
+                    f'/tmp/features_{match.match_name.replace("/", "_")}.json',
+                    f'tests/test_json/test_integration/expected_features/test_wm_party_in_payload_format_customer_type_individual/features_{match.match_name.replace("/", "_")}.json',
+                )
+
+        @pytest.mark.asyncio
+        async def test_isg_party_in_payload_format_customer_type_company(self):
+            request_alert = load_alert(
+                "notebooks/sample/isg_party_in_payload_format_customer_type_company.json"
+            )
+            response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[request_alert]))
+            for etl_alert in response.etl_alerts:
+                assert etl_alert.etl_status == SUCCESS
+            for match in request_alert.matches:
+                compare_tested_uds_features_with_reference(
+                    f'/tmp/features_{match.match_name.replace("/", "_")}.json',
+                    f'tests/test_json/test_integration/expected_features/test_isg_party_in_payload_format_customer_type_company/features_{match.match_name.replace("/", "_")}.json',
                 )
 
 

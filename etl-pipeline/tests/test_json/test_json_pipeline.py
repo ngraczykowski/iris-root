@@ -1,8 +1,6 @@
 import json
-import pickle
 from copy import deepcopy
 
-import pandas as pd
 import pytest
 
 from etl_pipeline.config import DatasetConfigError, pipeline_config
@@ -68,52 +66,47 @@ def assert_list(tested, reference, key):
         assert_compare_list_of_dict_of_list(tested, reference, key)
 
 
-def assert_compare_list_of_dict_of_list(tested, reference, col):
+def assert_compare_list_of_dict_of_list(tested, reference, col=None):
     assert len(tested) == len(reference)
 
     for tested_element, reference_element in zip(tested, reference):
-        for key in tested_element:
-            assert sorted(tested_element[key]) == sorted(reference_element[key]), col
+        assert_nested_dict(tested_element, reference_element, col)
+
+
+def assert_nested_dict(tested, reference, key=None):
+    if isinstance(reference, dict):
+        for key in reference:
+            assert_nested_dict(tested[key], reference[key], key)
+        return
+    elif isinstance(reference, list):
+        try:
+            assert sorted(tested) == sorted(reference)
+        except (TypeError, AssertionError):
+            assert_compare_list_of_dict_of_list(tested, reference)
+        return
+    assert tested == reference, key
 
 
 def load_payload(out_payload, reference_file):
-    with open(reference_file, "rb") as f:
-        reference_payloads = pickle.load(f)
-    alerted_payload = pd.DataFrame([payload["alertedParty"] for payload in out_payload])
-    wp_payload = pd.DataFrame([payload["alertedParty"] for payload in reference_payloads])
-    check_payload(alerted_payload, wp_payload)
-    alerted_payload = pd.DataFrame(
-        [payload["watchlistParty"]["matchRecords"] for payload in out_payload]
-    )
-    wp_payload = pd.DataFrame(
-        [payload["watchlistParty"]["matchRecords"] for payload in reference_payloads]
-    )
-    check_payload(alerted_payload, wp_payload)
-    alerted_payload = pd.DataFrame(
-        [
-            {match: payload[match] for match in payload if not isinstance(payload[match], dict)}
-            for payload in out_payload
-        ]
-    )
-    wp_payload = pd.DataFrame(
-        [
-            {match: payload[match] for match in payload if not isinstance(payload[match], dict)}
-            for payload in reference_payloads
-        ]
-    )
-    check_payload(alerted_payload, wp_payload)
+    if reference_file.endswith(".json"):
+        with open(reference_file, "r") as f:
+            payload = json.load(f)
+        from dataclasses import asdict
 
-
-def check_payload(out_payload, reference_payload):
-    for cols in out_payload.columns:
-        try:
-            pd.testing.assert_series_equal(out_payload[cols], reference_payload[cols])
-        except (AssertionError, TypeError):
-            reference = remove_nulls_from_aggegated(
-                flatten([i for i in reference_payload[cols].values])
-            )
-            output = remove_nulls_from_aggegated(flatten([i for i in out_payload[cols].values]))
-            assert_list(output, reference, cols)
+        for i in out_payload:
+            try:
+                i["alertedParty"]["inputRecordHist"]["inputRecords"]["INPUT_FIELD"] = {
+                    j: asdict(
+                        i["alertedParty"]["inputRecordHist"]["inputRecords"]["INPUT_FIELD"][j]
+                    )
+                    for j in sorted(
+                        i["alertedParty"]["inputRecordHist"]["inputRecords"]["INPUT_FIELD"]
+                    )
+                }
+            except TypeError:
+                pass
+        assert_nested_dict(out_payload, payload)
+        return
 
 
 def assert_length_and_content_match(
@@ -134,31 +127,31 @@ def assert_length_and_content_match(
     [
         (
             "notebooks/sample/wm_address_in_payload_format.json",
-            "tests/shared/parsed_payload.pkl",
+            "tests/shared/parsed_payload.json",
             2,
             "A05003324172",
         ),
         (
             "notebooks/sample/wm_address_in_payload_format_2_input_3_match_records.json",
-            "tests/shared/parsed_payload_2_payload.pkl",
+            "tests/shared/parsed_payload_2_payload.json",
             3,
             "A05003324172",
         ),
         (
             "notebooks/sample/wm_party_payload_without_supplemental_info.json",
-            "tests/shared/empty_payload.pkl",
+            "tests/shared/empty_payload.json",
             2,
             "A05003324172",
         ),
         (
             "notebooks/sample/wm_party_payload_with_partial_supplemental_info.json",
-            "tests/shared/wm_party_payload_with_partial_supplemental_info.pkl",
+            "tests/shared/wm_party_payload_with_partial_supplemental_info.json",
             2,
             "A05003324172",
         ),
         (
             "notebooks/sample/big_fat_flat_payload.json",
-            "tests/shared/big_fat_payload_parsed.pkl",
+            "tests/shared/big_fat_payload_parsed.json",
             9,
             "A00183210139",
         ),

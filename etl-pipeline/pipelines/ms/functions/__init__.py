@@ -1,5 +1,9 @@
 from etl_pipeline.config import pipeline_config
+from etl_pipeline.logger import get_logger
 from pipelines.ms.collection import Collections
+
+logger = get_logger("main").getChild("Functions")
+
 
 cn = pipeline_config.cn
 
@@ -44,22 +48,75 @@ class Functions:
             payload[target_field] = aggregated
 
     @classmethod
+    def set_up_for_wm_party(cls, payload):
+        ap_type = "I"
+        field = cls.collections.get_xml_field(payload, "PARTY1_ORGANIZATION_NAME")
+        if field:
+            ap_type = "C"
+        return ap_type
+
+    @classmethod
+    def set_up_for_isg_account(cls, payload):
+        ap_type = None
+        supplemental_info = cls.collections.get_alert_supplemental_info(
+            payload, "supplementalInfo"
+        )
+        logger.debug(f"supplemental_info: {supplemental_info}")
+        if supplemental_info:
+            for info in supplemental_info:
+                ap_type = info.get("legalFormName", None)
+                break
+            logger.debug(f"ap_type: {ap_type}")
+            if ap_type == "Individual":
+                ap_type = "I"
+            elif ap_type:
+                ap_type = "C"
+        return ap_type
+
+    @classmethod
+    def set_up_for_isg_party(cls, payload):
+        ap_type = None
+        field = cls.collections.get_xml_field(payload, "ORGANIZATIONPERSONIND")
+        if field:
+            ap_type = field.value
+            if ap_type == "O":
+                ap_type = "C"
+            elif ap_type == "P":
+                ap_type = "I"
+        return ap_type
+
+    @classmethod
+    def select_ap_for_dataset_type(cls, payload, dataset_type):
+        ap_type = None
+        logger.debug(f"ap_type: {ap_type}")
+        if dataset_type == "WM_PARTY":
+            ap_type = cls.set_up_for_wm_party(payload)
+        elif dataset_type == "ISG_ACCOUNT":
+            ap_type = cls.set_up_for_isg_account(payload)
+        elif dataset_type == "ISG_PARTY":
+            ap_type = cls.set_up_for_isg_party(payload)
+        logger.debug(f"ap_type: {ap_type}")
+        return ap_type if ap_type else "UNKNOWN"
+
+    @classmethod
     def pattern_set_up_party_type(cls, payload, target_field="", source="", target_collection=""):
-        for collection in source:
-            field_name = source[collection][0]
-        field = payload[str(collection)][str(field_name)]
+        field = payload["alertedParty"]["ALL_PARTY_TYPES"]
         types = [i for i in field if i]
         try:
             match_place = payload[target_collection]
         except KeyError:
             payload[target_collection] = {}
             match_place = payload[target_collection]
-        if not types:
-            match_place[target_field] = "UNKNOWN"
-        if "Individual" in types:
-            match_place[target_field] = "I"
+        dataset_type = payload.get("datasetType")
+        match_place[target_field] = "UNKNOWN"
+        logger.debug(f"dataset_type: {dataset_type}, types {types}")
+        if dataset_type and not types:
+            match_place[target_field] = cls.select_ap_for_dataset_type(payload, dataset_type)
         else:
-            match_place[target_field] = "C"
+            if "Individual" in types:
+                match_place[target_field] = "I"
+            else:
+                match_place[target_field] = "C"
 
     @classmethod
     def pattern_set_beneficiary_hits(cls, payload, target_field="", **kwargs):

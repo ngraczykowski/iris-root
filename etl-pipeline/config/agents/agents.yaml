@@ -189,9 +189,3 @@ ap_id_tp_marked_agent:
   - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.UNIQUE_KEY
 # ISG_Account
   - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ACCOUNTNUMBER
-
-is_entity_match_agent:
-  ap:
-  - alertedParty.AP_PARTY_TYPE
-  wl:
-  - watchlistParty.matchRecords.WLP_TYPE
