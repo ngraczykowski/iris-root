@@ -1,6 +1,36 @@
 [
     {
+        "ALL_CONCAT_NAMES": null,
+        "ALL_CONNECTED_ACCOUNT_BENEFICIARY_NAMES": [],
+        "ALL_CONNECTED_ACCOUNT_BRANCH_ACCOUNT_NUMBERS": [],
+        "ALL_CONNECTED_ACCOUNT_NAMES": [],
+        "ALL_CONNECTED_COUNTRY_OF_INCORPORATION": [],
+        "ALL_CONNECTED_GOVT_IDS": [],
+        "ALL_CONNECTED_PARTIES_NAMES": [],
+        "ALL_CONNECTED_PARTY_BIRTH_COUNTRIES": [],
+        "ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES": [],
+        "ALL_CONNECTED_PARTY_NAMES": [],
+        "ALL_CONNECTED_PARTY_RESIDENCY_COUNTRIES": [],
+        "ALL_CONNECTED_TAX_IDS": [],
+        "ALL_PARTY1_ADDRESS1_COUNTRY": "",
+        "ALL_PARTY1_COUNTRY": null,
+        "ALL_PARTY1_COUNTRY1": null,
+        "ALL_PARTY1_COUNTRY1_CITIZENSHIP": null,
+        "ALL_PARTY1_COUNTRY2_CITIZENSHIP": null,
+        "ALL_PARTY1_COUNTRY_DOMICILE1": null,
+        "ALL_PARTY1_COUNTRY_FORMATION1": null,
+        "ALL_PARTY1_COUNTRY_OF_INCORPORATION": null,
+        "ALL_PARTY1_COUNTRY_PEP": null,
+        "ALL_PARTY1_EMPLOYERS": null,
+        "ALL_PARTY1_GOVTID1_NUMBER": null,
+        "ALL_PARTY1_GOVTID2_NUMBER": null,
+        "ALL_PRTY_PRIM_CTZNSH_CNTRY": null,
+        "ALL_PRTY_RSDNC_CNTRY_CD": null,
         "alertedParty": {
+            "ALL_PARTY_DOBS": [],
+            "ALL_PARTY_TYPES": [],
+            "AP_PARTY_TYPE": "I",
+            "ENTITY_TYPE_MATCH": "Y",
             "headerInfo": {
                 "currentVersionId": "122438658",
                 "datasetId": "1044",
@@ -19,6 +49,140 @@
             },
             "inputRecordHist": {
                 "inputRecords": {
+                    "INPUT_FIELD": {
+                        "ADDRESS1_CITY": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_CITY",
+                            "sortOrder": "14",
+                            "value": ""
+                        },
+                        "ADDRESS1_COUNTRY": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_COUNTRY",
+                            "sortOrder": "20",
+                            "value": ""
+                        },
+                        "ADDRESS1_COUNTRYCODE": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_COUNTRYCODE",
+                            "sortOrder": "21",
+                            "value": "USA"
+                        },
+                        "ADDRESS1_FOREIGNDOMESTICCODE": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_FOREIGNDOMESTICCODE",
+                            "sortOrder": "22",
+                            "value": "DOMESTIC"
+                        },
+                        "ADDRESS1_LINE1": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE1",
+                            "sortOrder": "7",
+                            "value": "Joe Black &"
+                        },
+                        "ADDRESS1_LINE2": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE2",
+                            "sortOrder": "8",
+                            "value": "Jane Doe AA BBB"
+                        },
+                        "ADDRESS1_LINE3": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE3",
+                            "sortOrder": "9",
+                            "value": "111 A 11TH ST AAA 1A"
+                        },
+                        "ADDRESS1_LINE4": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE4",
+                            "sortOrder": "10",
+                            "value": "New Jersey NJ 10011"
+                        },
+                        "ADDRESS1_LINE5": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE5",
+                            "sortOrder": "11",
+                            "value": ""
+                        },
+                        "ADDRESS1_LINE6": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE6",
+                            "sortOrder": "12",
+                            "value": ""
+                        },
+                        "ADDRESS1_POSTALCODE": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_POSTALCODE",
+                            "sortOrder": "17",
+                            "value": ""
+                        },
+                        "ADDRESS1_PROVINCE": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_PROVINCE",
+                            "sortOrder": "16",
+                            "value": ""
+                        },
+                        "ADDRESS1_STATE": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_STATE",
+                            "sortOrder": "15",
+                            "value": ""
+                        },
+                        "ADDRESS1_ZIP4": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_ZIP4",
+                            "sortOrder": "19",
+                            "value": ""
+                        },
+                        "ADDRESS1_ZIP5": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_ZIP5",
+                            "sortOrder": "18",
+                            "value": ""
+                        },
+                        "ADDRESS_TYPE": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS_TYPE",
+                            "sortOrder": "4",
+                            "value": "Plating Address"
+                        },
+                        "ATTENTION_TO_TEXT": {
+                            "isScreenable": "true",
+                            "name": "ATTENTION_TO_TEXT",
+                            "sortOrder": "6",
+                            "value": ""
+                        },
+                        "BARCODE": {
+                            "isScreenable": "false",
+                            "name": "BARCODE",
+                            "sortOrder": "3",
+                            "value": ""
+                        },
+                        "CARE_OF_TEXT": {
+                            "isScreenable": "true",
+                            "name": "CARE_OF_TEXT",
+                            "sortOrder": "5",
+                            "value": ""
+                        },
+                        "CONCAT_ADDRESS": {
+                            "isScreenable": "true",
+                            "name": "CONCAT_ADDRESS",
+                            "sortOrder": "13",
+                            "value": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
+                        },
+                        "SOURCE_REF": {
+                            "isScreenable": "false",
+                            "name": "SOURCE_REF",
+                            "sortOrder": "1",
+                            "value": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480"
+                        },
+                        "UNIQUE_KEY": {
+                            "isScreenable": "false",
+                            "name": "UNIQUE_KEY",
+                            "sortOrder": "2",
+                            "value": "A05003324172"
+                        }
+                    },
                     "createdDate": "01/08/20",
                     "fields": [
                         {
@@ -147,141 +311,7 @@
                     "status": "A",
                     "uniqueCustId": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480",
                     "version": "412740c151535f0756e8dbec7440b726c7a3e135",
-                    "versionId": "122438658",
-                    "INPUT_FIELD": {
-                        "ADDRESS1_CITY": {
-                            "name": "ADDRESS1_CITY",
-                            "isScreenable": "true",
-                            "value": "",
-                            "sortOrder": "14"
-                        },
-                        "ADDRESS1_COUNTRY": {
-                            "name": "ADDRESS1_COUNTRY",
-                            "isScreenable": "true",
-                            "value": "",
-                            "sortOrder": "20"
-                        },
-                        "ADDRESS1_COUNTRYCODE": {
-                            "name": "ADDRESS1_COUNTRYCODE",
-                            "isScreenable": "true",
-                            "value": "USA",
-                            "sortOrder": "21"
-                        },
-                        "ADDRESS1_FOREIGNDOMESTICCODE": {
-                            "name": "ADDRESS1_FOREIGNDOMESTICCODE",
-                            "isScreenable": "true",
-                            "value": "DOMESTIC",
-                            "sortOrder": "22"
-                        },
-                        "ADDRESS1_LINE1": {
-                            "name": "ADDRESS1_LINE1",
-                            "isScreenable": "false",
-                            "value": "Joe Black &",
-                            "sortOrder": "7"
-                        },
-                        "ADDRESS1_LINE2": {
-                            "name": "ADDRESS1_LINE2",
-                            "isScreenable": "false",
-                            "value": "Jane Doe AA BBB",
-                            "sortOrder": "8"
-                        },
-                        "ADDRESS1_LINE3": {
-                            "name": "ADDRESS1_LINE3",
-                            "isScreenable": "false",
-                            "value": "111 A 11TH ST AAA 1A",
-                            "sortOrder": "9"
-                        },
-                        "ADDRESS1_LINE4": {
-                            "name": "ADDRESS1_LINE4",
-                            "isScreenable": "false",
-                            "value": "New Jersey NJ 10011",
-                            "sortOrder": "10"
-                        },
-                        "ADDRESS1_LINE5": {
-                            "name": "ADDRESS1_LINE5",
-                            "isScreenable": "false",
-                            "value": "",
-                            "sortOrder": "11"
-                        },
-                        "ADDRESS1_LINE6": {
-                            "name": "ADDRESS1_LINE6",
-                            "isScreenable": "false",
-                            "value": "",
-                            "sortOrder": "12"
-                        },
-                        "ADDRESS1_POSTALCODE": {
-                            "name": "ADDRESS1_POSTALCODE",
-                            "isScreenable": "true",
-                            "value": "",
-                            "sortOrder": "17"
-                        },
-                        "ADDRESS1_PROVINCE": {
-                            "name": "ADDRESS1_PROVINCE",
-                            "isScreenable": "true",
-                            "value": "",
-                            "sortOrder": "16"
-                        },
-                        "ADDRESS1_STATE": {
-                            "name": "ADDRESS1_STATE",
-                            "isScreenable": "true",
-                            "value": "",
-                            "sortOrder": "15"
-                        },
-                        "ADDRESS1_ZIP4": {
-                            "name": "ADDRESS1_ZIP4",
-                            "isScreenable": "true",
-                            "value": "",
-                            "sortOrder": "19"
-                        },
-                        "ADDRESS1_ZIP5": {
-                            "name": "ADDRESS1_ZIP5",
-                            "isScreenable": "true",
-                            "value": "",
-                            "sortOrder": "18"
-                        },
-                        "ADDRESS_TYPE": {
-                            "name": "ADDRESS_TYPE",
-                            "isScreenable": "false",
-                            "value": "Plating Address",
-                            "sortOrder": "4"
-                        },
-                        "ATTENTION_TO_TEXT": {
-                            "name": "ATTENTION_TO_TEXT",
-                            "isScreenable": "true",
-                            "value": "",
-                            "sortOrder": "6"
-                        },
-                        "BARCODE": {
-                            "name": "BARCODE",
-                            "isScreenable": "false",
-                            "value": "",
-                            "sortOrder": "3"
-                        },
-                        "CARE_OF_TEXT": {
-                            "name": "CARE_OF_TEXT",
-                            "isScreenable": "true",
-                            "value": "",
-                            "sortOrder": "5"
-                        },
-                        "CONCAT_ADDRESS": {
-                            "name": "CONCAT_ADDRESS",
-                            "isScreenable": "true",
-                            "value": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ",
-                            "sortOrder": "13"
-                        },
-                        "SOURCE_REF": {
-                            "name": "SOURCE_REF",
-                            "isScreenable": "false",
-                            "value": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480",
-                            "sortOrder": "1"
-                        },
-                        "UNIQUE_KEY": {
-                            "name": "UNIQUE_KEY",
-                            "isScreenable": "false",
-                            "value": "A05003324172",
-                            "sortOrder": "2"
-                        }
-                    }
+                    "versionId": "122438658"
                 }
             },
             "supplementalInfo": {
@@ -298,16 +328,133 @@
                 },
                 "screeningId": -1,
                 "uniqueCustId": ""
-            },
-            "ALL_PARTY_TYPES": [],
-            "ALL_PARTY_DOBS": [],
-            "AP_PARTY_TYPE": "I",
-            "ENTITY_TYPE_MATCH": "Y"
+            }
         },
+        "cleaned_names": {
+            "concat_residue": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
+        },
+        "concat_address_no_changes": true,
+        "concat_residue": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ",
+        "datasetType": "WM_PARTY",
+        "match_ids": 0,
         "watchlistParty": {
             "matchRecords": {
+                "AP_TRIGGERS": {
+                    "Doe": {
+                        "ADDRESS1_LINE2": [
+                            "Jane Doe AA BBB"
+                        ],
+                        "CONCAT_ADDRESS": [
+                            "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
+                        ]
+                    }
+                },
+                "ENTITY_ID": "908043",
+                "ENTITY_VERSION": "20150505194929",
+                "IS_BENEFICIARY_HIT": false,
+                "SRC_REF_KEY": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480\n      ",
+                "TOKENS_RISK_CARRIER": "Doe",
+                "TRIGGERED_BY": [
+                    "matchStatus",
+                    "stopDescriptors"
+                ],
+                "VERSION_ID": "122438658",
+                "WLP_TYPE": "I",
+                "WL_ALIASES": [
+                    ""
+                ],
+                "WL_CITIZENSHIP": [
+                    ""
+                ],
+                "WL_COUNTRY": "|FL;US",
+                "WL_COUNTRYNAME": "",
+                "WL_DOB": [
+                    "MAY 6, 1981",
+                    ""
+                ],
+                "WL_DOCUMENT_NUMBER": [],
+                "WL_ENTITYTYPE": "03",
+                "WL_MATCHED_TOKENS": "[\"Doe\"]",
+                "WL_NAME": "Joe Ding",
+                "WL_NATIONALITY": [
+                    ""
+                ],
+                "WL_POB": [
+                    ""
+                ],
                 "accountSeq": "1",
+                "all_hit_type_aggregated": [
+                    {
+                        "address": [
+                            "ADDRESS1_STATE",
+                            "ADDRESS1_COUNTRY",
+                            "ADDRESS1_PROVINCE",
+                            "CONCAT_ADDRESS",
+                            "ADDRESS1_CITY"
+                        ],
+                        "job": [],
+                        "name": [],
+                        "other": []
+                    }
+                ],
+                "ap_all_ap_id_tp_markeds_aggregated": [],
+                "ap_all_ap_name_tp_markeds_aggregated": [],
+                "ap_all_company_names_aggregated": [],
+                "ap_all_dobs_aggregated": [],
+                "ap_all_documents_aggregated": [],
+                "ap_all_employer_names_aggregated": [],
+                "ap_all_hit_types_aggregated": [],
+                "ap_all_matched_tokens_tp_markeds_aggregated": [],
+                "ap_all_names_aggregated": [],
+                "ap_all_nationalities_aggregated": [],
+                "ap_all_party_types_aggregated": [],
+                "ap_all_pobs_aggregated": [],
+                "ap_all_residencies_aggregated": [],
+                "ap_all_sanctioned_countries_aggregated": [],
+                "ap_id_tp_marked_agent_input": "A05003324172",
+                "ap_name_tp_marked_agent_input": null,
+                "company_name_agent_ap": [
+                    null,
+                    [],
+                    [],
+                    [],
+                    [],
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                "company_name_agent_wl": [
+                    "Joe Ding",
+                    [
+                        ""
+                    ]
+                ],
                 "datasetId": "1044",
+                "datasetType": "WM_PARTY",
+                "dob_agent_ap": [],
+                "dob_agent_wl": [
+                    "MAY 6, 1981",
+                    ""
+                ],
+                "document_agent_ap": [
+                    [],
+                    [],
+                    null,
+                    null
+                ],
+                "document_agent_wl": null,
+                "employer_name_agent_ap": [
+                    null,
+                    null
+                ],
+                "employer_name_agent_wl": [
+                    "Joe Ding",
+                    [
+                        ""
+                    ]
+                ],
                 "entity": {
                     "addresses": [
                         {
@@ -356,6 +503,16 @@
                 "entityType": "03",
                 "entityVersion": "20150505194929",
                 "firstMatchedDate": "01/08/20",
+                "hit_type_agent_address": [
+                    "ADDRESS1_STATE",
+                    "ADDRESS1_COUNTRY",
+                    "ADDRESS1_PROVINCE",
+                    "CONCAT_ADDRESS",
+                    "ADDRESS1_CITY"
+                ],
+                "hit_type_agent_job": [],
+                "hit_type_agent_name": [],
+                "hit_type_agent_other": [],
                 "inputVersionId": "122438658",
                 "lastMatchedDate": "01/08/20",
                 "lastReviewDate": "01/08/20",
@@ -364,97 +521,7 @@
                 "matchId": "49159509",
                 "matchStatus": "O",
                 "matchType": "GWL",
-                "riskScore": "-1.0",
-                "sourceCode": "CON",
-                "stopDescriptors": [
-                    {
-                        "name": "Joe Doe",
-                        "stopDescriptorDetails": [
-                            {
-                                "inputSynonym": "null",
-                                "inputToken": "Doe",
-                                "matchScore": "0.8571428571428572",
-                                "sdToken": "Doe"
-                            }
-                        ],
-                        "totalMatchScore": "0.9230769230769231"
-                    }
-                ],
-                "uniqueCustomerId": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480\n      ",
-                "SRC_REF_KEY": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480\n      ",
-                "VERSION_ID": "122438658",
-                "ENTITY_ID": "908043",
-                "ENTITY_VERSION": "20150505194929",
-                "WL_NAME": "Joe Ding",
-                "WL_DOB": [
-                    "MAY 6, 1981",
-                    ""
-                ],
-                "WL_ENTITYTYPE": "03",
-                "WL_COUNTRY": "|FL;US",
-                "WL_COUNTRYNAME": "",
-                "WL_NATIONALITY": [
-                    ""
-                ],
-                "WL_CITIZENSHIP": [
-                    ""
-                ],
-                "WL_POB": [
-                    ""
-                ],
-                "WL_ALIASES": [
-                    ""
-                ],
-                "WL_MATCHED_TOKENS": "[\"Doe\"]",
-                "WLP_TYPE": "I",
-                "WL_DOCUMENT_NUMBER": [],
-                "datasetType": "WM_PARTY",
-                "TRIGGERED_BY": [
-                    "matchStatus",
-                    "stopDescriptors"
-                ],
-                "IS_BENEFICIARY_HIT": false,
-                "AP_TRIGGERS": {
-                    "Doe": {
-                        "ADDRESS1_LINE2": [
-                            "Jane Doe AA BBB"
-                        ],
-                        "CONCAT_ADDRESS": [
-                            "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
-                        ]
-                    }
-                },
-                "TOKENS_RISK_CARRIER": "Doe",
-                "dob_agent_ap": [],
-                "dob_agent_wl": [
-                    "MAY 6, 1981",
-                    ""
-                ],
-                "document_agent_ap": [
-                    [],
-                    [],
-                    null,
-                    null
-                ],
-                "document_agent_wl": null,
-                "company_name_agent_ap": [
-                    null,
-                    [],
-                    [],
-                    [],
-                    [],
-                    null,
-                    null,
-                    null,
-                    null,
-                    null
-                ],
-                "company_name_agent_wl": [
-                    "Joe Ding",
-                    [
-                        ""
-                    ]
-                ],
+                "matched_tokens_tp_marked_agent_input": "Doe",
                 "name_agent_ap": [
                     null,
                     [],
@@ -468,16 +535,6 @@
                     null
                 ],
                 "name_agent_wl": [
-                    "Joe Ding",
-                    [
-                        ""
-                    ]
-                ],
-                "employer_name_agent_ap": [
-                    null,
-                    null
-                ],
-                "employer_name_agent_wl": [
                     "Joe Ding",
                     [
                         ""
@@ -529,6 +586,29 @@
                         ""
                     ]
                 ],
+                "residency_agent_ap": [
+                    "",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    [],
+                    [],
+                    [],
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                "residency_agent_wl": [
+                    "|FL;US",
+                    ""
+                ],
+                "riskScore": "-1.0",
                 "sanctioned_country_agent_ap": [
                     "",
                     null,
@@ -554,140 +634,90 @@
                     "",
                     "Joe Ding"
                 ],
-                "residency_agent_ap": [
-                    "",
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    [],
-                    [],
-                    [],
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null
+                "sourceCode": "CON",
+                "stopDescriptors": [
+                    {
+                        "name": "Joe Doe",
+                        "stopDescriptorDetails": [
+                            {
+                                "inputSynonym": "null",
+                                "inputToken": "Doe",
+                                "matchScore": "0.8571428571428572",
+                                "sdToken": "Doe"
+                            }
+                        ],
+                        "totalMatchScore": "0.9230769230769231"
+                    }
                 ],
-                "residency_agent_wl": [
-                    "|FL;US",
-                    ""
-                ],
-                "hit_type_agent_name": [],
-                "hit_type_agent_address": [
-                    "ADDRESS1_PROVINCE",
-                    "ADDRESS1_COUNTRY",
-                    "ADDRESS1_STATE",
-                    "ADDRESS1_CITY",
-                    "CONCAT_ADDRESS"
-                ],
-                "hit_type_agent_job": [],
-                "hit_type_agent_other": [],
-                "matched_tokens_tp_marked_agent_input": "Doe",
-                "ap_name_tp_marked_agent_input": null,
-                "ap_id_tp_marked_agent_input": "A05003324172",
-                "ap_all_dobs_aggregated": [],
-                "wl_all_dobs_aggregated": [
-                    "MAY 6, 1981"
-                ],
-                "ap_all_documents_aggregated": [],
-                "wl_all_documents_aggregated": [],
-                "ap_all_company_names_aggregated": [],
+                "uniqueCustomerId": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480\n      ",
+                "wl_all_ap_id_tp_markeds_aggregated": [],
+                "wl_all_ap_name_tp_markeds_aggregated": [],
                 "wl_all_company_names_aggregated": [
                     "Joe Ding"
                 ],
-                "ap_all_names_aggregated": [],
-                "wl_all_names_aggregated": [
-                    "Joe Ding"
+                "wl_all_dobs_aggregated": [
+                    "MAY 6, 1981"
                 ],
-                "ap_all_employer_names_aggregated": [],
+                "wl_all_documents_aggregated": [],
                 "wl_all_employer_names_aggregated": [
                     "Joe Ding"
                 ],
-                "ap_all_nationalities_aggregated": [],
+                "wl_all_hit_types_aggregated": [],
+                "wl_all_matched_tokens_tp_markeds_aggregated": [],
+                "wl_all_names_aggregated": [
+                    "Joe Ding"
+                ],
                 "wl_all_nationalities_aggregated": [
                     "|FL;US"
                 ],
-                "ap_all_party_types_aggregated": [],
                 "wl_all_party_types_aggregated": [
                     "I"
                 ],
-                "ap_all_pobs_aggregated": [],
                 "wl_all_pobs_aggregated": [
                     "|FL;US"
                 ],
-                "ap_all_sanctioned_countries_aggregated": [],
-                "wl_all_sanctioned_countries_aggregated": [
-                    "|FL;US",
-                    "Joe Ding"
-                ],
-                "ap_all_residencies_aggregated": [],
                 "wl_all_residencies_aggregated": [
                     "|FL;US"
                 ],
-                "ap_all_hit_types_aggregated": [],
-                "wl_all_hit_types_aggregated": [],
-                "ap_all_matched_tokens_tp_markeds_aggregated": [],
-                "wl_all_matched_tokens_tp_markeds_aggregated": [],
-                "ap_all_ap_name_tp_markeds_aggregated": [],
-                "wl_all_ap_name_tp_markeds_aggregated": [],
-                "ap_all_ap_id_tp_markeds_aggregated": [],
-                "wl_all_ap_id_tp_markeds_aggregated": [],
-                "all_hit_type_aggregated": [
-                    {
-                        "name": [],
-                        "address": [
-                            "ADDRESS1_PROVINCE",
-                            "ADDRESS1_COUNTRY",
-                            "ADDRESS1_STATE",
-                            "ADDRESS1_CITY",
-                            "CONCAT_ADDRESS"
-                        ],
-                        "job": [],
-                        "other": []
-                    }
+                "wl_all_sanctioned_countries_aggregated": [
+                    "|FL;US",
+                    "Joe Ding"
                 ]
             }
-        },
-        "match_ids": 0,
-        "datasetType": "WM_PARTY",
-        "ALL_CONNECTED_PARTIES_NAMES": [],
-        "ALL_CONNECTED_PARTY_NAMES": [],
-        "ALL_CONNECTED_TAX_IDS": [],
-        "ALL_CONNECTED_PARTY_BIRTH_COUNTRIES": [],
-        "ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES": [],
-        "ALL_CONNECTED_PARTY_RESIDENCY_COUNTRIES": [],
-        "ALL_CONNECTED_COUNTRY_OF_INCORPORATION": [],
-        "ALL_CONNECTED_GOVT_IDS": [],
-        "ALL_CONNECTED_ACCOUNT_NAMES": [],
-        "ALL_CONNECTED_ACCOUNT_BRANCH_ACCOUNT_NUMBERS": [],
-        "ALL_CONNECTED_ACCOUNT_BENEFICIARY_NAMES": [],
-        "ALL_PARTY1_EMPLOYERS": null,
-        "ALL_PARTY1_COUNTRY": null,
-        "ALL_PARTY1_COUNTRY1": null,
-        "ALL_PARTY1_COUNTRY_OF_INCORPORATION": null,
-        "ALL_PARTY1_ADDRESS1_COUNTRY": "",
-        "ALL_PARTY1_COUNTRY1_CITIZENSHIP": null,
-        "ALL_PARTY1_COUNTRY2_CITIZENSHIP": null,
-        "ALL_PARTY1_COUNTRY_FORMATION1": null,
-        "ALL_PARTY1_COUNTRY_DOMICILE1": null,
-        "ALL_PRTY_PRIM_CTZNSH_CNTRY": null,
-        "ALL_PRTY_RSDNC_CNTRY_CD": null,
-        "ALL_PARTY1_COUNTRY_PEP": null,
-        "ALL_CONCAT_NAMES": null,
-        "ALL_PARTY1_GOVTID1_NUMBER": null,
-        "ALL_PARTY1_GOVTID2_NUMBER": null,
-        "cleaned_names": {
-            "concat_residue": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
-        },
-        "concat_residue": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ",
-        "concat_address_no_changes": true
+        }
     },
     {
+        "ALL_CONCAT_NAMES": null,
+        "ALL_CONNECTED_ACCOUNT_BENEFICIARY_NAMES": [],
+        "ALL_CONNECTED_ACCOUNT_BRANCH_ACCOUNT_NUMBERS": [],
+        "ALL_CONNECTED_ACCOUNT_NAMES": [],
+        "ALL_CONNECTED_COUNTRY_OF_INCORPORATION": [],
+        "ALL_CONNECTED_GOVT_IDS": [],
+        "ALL_CONNECTED_PARTIES_NAMES": [],
+        "ALL_CONNECTED_PARTY_BIRTH_COUNTRIES": [],
+        "ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES": [],
+        "ALL_CONNECTED_PARTY_NAMES": [],
+        "ALL_CONNECTED_PARTY_RESIDENCY_COUNTRIES": [],
+        "ALL_CONNECTED_TAX_IDS": [],
+        "ALL_PARTY1_ADDRESS1_COUNTRY": "",
+        "ALL_PARTY1_COUNTRY": null,
+        "ALL_PARTY1_COUNTRY1": null,
+        "ALL_PARTY1_COUNTRY1_CITIZENSHIP": null,
+        "ALL_PARTY1_COUNTRY2_CITIZENSHIP": null,
+        "ALL_PARTY1_COUNTRY_DOMICILE1": null,
+        "ALL_PARTY1_COUNTRY_FORMATION1": null,
+        "ALL_PARTY1_COUNTRY_OF_INCORPORATION": null,
+        "ALL_PARTY1_COUNTRY_PEP": null,
+        "ALL_PARTY1_EMPLOYERS": null,
+        "ALL_PARTY1_GOVTID1_NUMBER": null,
+        "ALL_PARTY1_GOVTID2_NUMBER": null,
+        "ALL_PRTY_PRIM_CTZNSH_CNTRY": null,
+        "ALL_PRTY_RSDNC_CNTRY_CD": null,
         "alertedParty": {
+            "ALL_PARTY_DOBS": [],
+            "ALL_PARTY_TYPES": [],
+            "AP_PARTY_TYPE": "I",
+            "ENTITY_TYPE_MATCH": "Y",
             "headerInfo": {
                 "currentVersionId": "122438658",
                 "datasetId": "1044",
@@ -706,6 +736,140 @@
             },
             "inputRecordHist": {
                 "inputRecords": {
+                    "INPUT_FIELD": {
+                        "ADDRESS1_CITY": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_CITY",
+                            "sortOrder": "14",
+                            "value": ""
+                        },
+                        "ADDRESS1_COUNTRY": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_COUNTRY",
+                            "sortOrder": "20",
+                            "value": ""
+                        },
+                        "ADDRESS1_COUNTRYCODE": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_COUNTRYCODE",
+                            "sortOrder": "21",
+                            "value": ""
+                        },
+                        "ADDRESS1_FOREIGNDOMESTICCODE": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_FOREIGNDOMESTICCODE",
+                            "sortOrder": "22",
+                            "value": "DOMESTIC"
+                        },
+                        "ADDRESS1_LINE1": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE1",
+                            "sortOrder": "7",
+                            "value": "Joe Black &"
+                        },
+                        "ADDRESS1_LINE2": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE2",
+                            "sortOrder": "8",
+                            "value": "Jane Doe AA BBB"
+                        },
+                        "ADDRESS1_LINE3": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE3",
+                            "sortOrder": "9",
+                            "value": "111 A 11TH ST AAA 1A"
+                        },
+                        "ADDRESS1_LINE4": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE4",
+                            "sortOrder": "10",
+                            "value": "New Jersey NJ 10011"
+                        },
+                        "ADDRESS1_LINE5": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE5",
+                            "sortOrder": "11",
+                            "value": ""
+                        },
+                        "ADDRESS1_LINE6": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE6",
+                            "sortOrder": "12",
+                            "value": ""
+                        },
+                        "ADDRESS1_POSTALCODE": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_POSTALCODE",
+                            "sortOrder": "17",
+                            "value": ""
+                        },
+                        "ADDRESS1_PROVINCE": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_PROVINCE",
+                            "sortOrder": "16",
+                            "value": ""
+                        },
+                        "ADDRESS1_STATE": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_STATE",
+                            "sortOrder": "15",
+                            "value": ""
+                        },
+                        "ADDRESS1_ZIP4": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_ZIP4",
+                            "sortOrder": "19",
+                            "value": ""
+                        },
+                        "ADDRESS1_ZIP5": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_ZIP5",
+                            "sortOrder": "18",
+                            "value": ""
+                        },
+                        "ADDRESS_TYPE": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS_TYPE",
+                            "sortOrder": "4",
+                            "value": "Plating Address"
+                        },
+                        "ATTENTION_TO_TEXT": {
+                            "isScreenable": "true",
+                            "name": "ATTENTION_TO_TEXT",
+                            "sortOrder": "6",
+                            "value": ""
+                        },
+                        "BARCODE": {
+                            "isScreenable": "false",
+                            "name": "BARCODE",
+                            "sortOrder": "3",
+                            "value": ""
+                        },
+                        "CARE_OF_TEXT": {
+                            "isScreenable": "true",
+                            "name": "CARE_OF_TEXT",
+                            "sortOrder": "5",
+                            "value": ""
+                        },
+                        "CONCAT_ADDRESS": {
+                            "isScreenable": "true",
+                            "name": "CONCAT_ADDRESS",
+                            "sortOrder": "13",
+                            "value": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
+                        },
+                        "SOURCE_REF": {
+                            "isScreenable": "false",
+                            "name": "SOURCE_REF",
+                            "sortOrder": "1",
+                            "value": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480"
+                        },
+                        "UNIQUE_KEY": {
+                            "isScreenable": "false",
+                            "name": "UNIQUE_KEY",
+                            "sortOrder": "2",
+                            "value": "A05003324172"
+                        }
+                    },
                     "createdDate": "01/08/20",
                     "fields": [
                         {
@@ -834,141 +998,7 @@
                     "status": "A",
                     "uniqueCustId": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480",
                     "version": "412740c151535f0756e8dbec7440b726c7a3e135",
-                    "versionId": "122438659",
-                    "INPUT_FIELD": {
-                        "ADDRESS1_CITY": {
-                            "name": "ADDRESS1_CITY",
-                            "isScreenable": "true",
-                            "value": "",
-                            "sortOrder": "14"
-                        },
-                        "ADDRESS1_COUNTRY": {
-                            "name": "ADDRESS1_COUNTRY",
-                            "isScreenable": "true",
-                            "value": "",
-                            "sortOrder": "20"
-                        },
-                        "ADDRESS1_COUNTRYCODE": {
-                            "name": "ADDRESS1_COUNTRYCODE",
-                            "isScreenable": "true",
-                            "value": "",
-                            "sortOrder": "21"
-                        },
-                        "ADDRESS1_FOREIGNDOMESTICCODE": {
-                            "name": "ADDRESS1_FOREIGNDOMESTICCODE",
-                            "isScreenable": "true",
-                            "value": "DOMESTIC",
-                            "sortOrder": "22"
-                        },
-                        "ADDRESS1_LINE1": {
-                            "name": "ADDRESS1_LINE1",
-                            "isScreenable": "false",
-                            "value": "Joe Black &",
-                            "sortOrder": "7"
-                        },
-                        "ADDRESS1_LINE2": {
-                            "name": "ADDRESS1_LINE2",
-                            "isScreenable": "false",
-                            "value": "Jane Doe AA BBB",
-                            "sortOrder": "8"
-                        },
-                        "ADDRESS1_LINE3": {
-                            "name": "ADDRESS1_LINE3",
-                            "isScreenable": "false",
-                            "value": "111 A 11TH ST AAA 1A",
-                            "sortOrder": "9"
-                        },
-                        "ADDRESS1_LINE4": {
-                            "name": "ADDRESS1_LINE4",
-                            "isScreenable": "false",
-                            "value": "New Jersey NJ 10011",
-                            "sortOrder": "10"
-                        },
-                        "ADDRESS1_LINE5": {
-                            "name": "ADDRESS1_LINE5",
-                            "isScreenable": "false",
-                            "value": "",
-                            "sortOrder": "11"
-                        },
-                        "ADDRESS1_LINE6": {
-                            "name": "ADDRESS1_LINE6",
-                            "isScreenable": "false",
-                            "value": "",
-                            "sortOrder": "12"
-                        },
-                        "ADDRESS1_POSTALCODE": {
-                            "name": "ADDRESS1_POSTALCODE",
-                            "isScreenable": "true",
-                            "value": "",
-                            "sortOrder": "17"
-                        },
-                        "ADDRESS1_PROVINCE": {
-                            "name": "ADDRESS1_PROVINCE",
-                            "isScreenable": "true",
-                            "value": "",
-                            "sortOrder": "16"
-                        },
-                        "ADDRESS1_STATE": {
-                            "name": "ADDRESS1_STATE",
-                            "isScreenable": "true",
-                            "value": "",
-                            "sortOrder": "15"
-                        },
-                        "ADDRESS1_ZIP4": {
-                            "name": "ADDRESS1_ZIP4",
-                            "isScreenable": "true",
-                            "value": "",
-                            "sortOrder": "19"
-                        },
-                        "ADDRESS1_ZIP5": {
-                            "name": "ADDRESS1_ZIP5",
-                            "isScreenable": "true",
-                            "value": "",
-                            "sortOrder": "18"
-                        },
-                        "ADDRESS_TYPE": {
-                            "name": "ADDRESS_TYPE",
-                            "isScreenable": "false",
-                            "value": "Plating Address",
-                            "sortOrder": "4"
-                        },
-                        "ATTENTION_TO_TEXT": {
-                            "name": "ATTENTION_TO_TEXT",
-                            "isScreenable": "true",
-                            "value": "",
-                            "sortOrder": "6"
-                        },
-                        "BARCODE": {
-                            "name": "BARCODE",
-                            "isScreenable": "false",
-                            "value": "",
-                            "sortOrder": "3"
-                        },
-                        "CARE_OF_TEXT": {
-                            "name": "CARE_OF_TEXT",
-                            "isScreenable": "true",
-                            "value": "",
-                            "sortOrder": "5"
-                        },
-                        "CONCAT_ADDRESS": {
-                            "name": "CONCAT_ADDRESS",
-                            "isScreenable": "true",
-                            "value": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ",
-                            "sortOrder": "13"
-                        },
-                        "SOURCE_REF": {
-                            "name": "SOURCE_REF",
-                            "isScreenable": "false",
-                            "value": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480",
-                            "sortOrder": "1"
-                        },
-                        "UNIQUE_KEY": {
-                            "name": "UNIQUE_KEY",
-                            "isScreenable": "false",
-                            "value": "A05003324172",
-                            "sortOrder": "2"
-                        }
-                    }
+                    "versionId": "122438659"
                 }
             },
             "supplementalInfo": {
@@ -985,16 +1015,149 @@
                 },
                 "screeningId": -1,
                 "uniqueCustId": ""
-            },
-            "ALL_PARTY_TYPES": [],
-            "ALL_PARTY_DOBS": [],
-            "AP_PARTY_TYPE": "I",
-            "ENTITY_TYPE_MATCH": "Y"
+            }
         },
+        "cleaned_names": {
+            "concat_residue": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
+        },
+        "concat_address_no_changes": true,
+        "concat_residue": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ",
+        "datasetType": "WM_PARTY",
+        "match_ids": 1,
         "watchlistParty": {
             "matchRecords": {
+                "AP_TRIGGERS": {
+                    "Doe": {
+                        "ADDRESS1_LINE2": [
+                            "Jane Doe AA BBB"
+                        ],
+                        "CONCAT_ADDRESS": [
+                            "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
+                        ]
+                    }
+                },
+                "ENTITY_ID": "908044",
+                "ENTITY_VERSION": "20150505194923",
+                "IS_BENEFICIARY_HIT": false,
+                "SRC_REF_KEY": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480\n      ",
+                "TOKENS_RISK_CARRIER": "Doe",
+                "TRIGGERED_BY": [
+                    "matchStatus",
+                    "stopDescriptors"
+                ],
+                "VERSION_ID": "122438659",
+                "WLP_TYPE": "I",
+                "WL_ADDRESS1": [
+                    "111 STREET 999"
+                ],
+                "WL_ADDRESS2": [
+                    "FL;US"
+                ],
+                "WL_ALIASES": [
+                    ""
+                ],
+                "WL_CITIZENSHIP": [
+                    ""
+                ],
+                "WL_CITY": [
+                    "ATLANTA"
+                ],
+                "WL_COUNTRY": [
+                    "PL"
+                ],
+                "WL_COUNTRYNAME": [
+                    "Poland"
+                ],
+                "WL_DOB": [
+                    "MAY 6, 1981",
+                    ""
+                ],
+                "WL_DOCUMENT_NUMBER": [],
+                "WL_ENTITYTYPE": "03",
+                "WL_MATCHED_TOKENS": "[\"Doe\"]",
+                "WL_NAME": "Joe Dong",
+                "WL_NATIONALITY": [
+                    ""
+                ],
+                "WL_POB": [
+                    ""
+                ],
+                "WL_POSTALCODE": [
+                    "11111"
+                ],
                 "accountSeq": "1",
+                "all_hit_type_aggregated": [
+                    {
+                        "address": [
+                            "ADDRESS1_STATE",
+                            "ADDRESS1_COUNTRY",
+                            "ADDRESS1_PROVINCE",
+                            "CONCAT_ADDRESS",
+                            "ADDRESS1_CITY"
+                        ],
+                        "job": [],
+                        "name": [],
+                        "other": []
+                    }
+                ],
+                "ap_all_ap_id_tp_markeds_aggregated": [],
+                "ap_all_ap_name_tp_markeds_aggregated": [],
+                "ap_all_company_names_aggregated": [],
+                "ap_all_dobs_aggregated": [],
+                "ap_all_documents_aggregated": [],
+                "ap_all_employer_names_aggregated": [],
+                "ap_all_hit_types_aggregated": [],
+                "ap_all_matched_tokens_tp_markeds_aggregated": [],
+                "ap_all_names_aggregated": [],
+                "ap_all_nationalities_aggregated": [],
+                "ap_all_party_types_aggregated": [],
+                "ap_all_pobs_aggregated": [],
+                "ap_all_residencies_aggregated": [],
+                "ap_all_sanctioned_countries_aggregated": [],
+                "ap_id_tp_marked_agent_input": "A05003324172",
+                "ap_name_tp_marked_agent_input": null,
+                "company_name_agent_ap": [
+                    null,
+                    [],
+                    [],
+                    [],
+                    [],
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                "company_name_agent_wl": [
+                    "Joe Dong",
+                    [
+                        ""
+                    ]
+                ],
                 "datasetId": "1044",
+                "datasetType": "WM_PARTY",
+                "dob_agent_ap": [],
+                "dob_agent_wl": [
+                    "MAY 6, 1981",
+                    ""
+                ],
+                "document_agent_ap": [
+                    [],
+                    [],
+                    null,
+                    null
+                ],
+                "document_agent_wl": null,
+                "employer_name_agent_ap": [
+                    null,
+                    null
+                ],
+                "employer_name_agent_wl": [
+                    "Joe Dong",
+                    [
+                        ""
+                    ]
+                ],
                 "entity": {
                     "addresses": {
                         "address": {
@@ -1043,6 +1206,16 @@
                 "entityType": "03",
                 "entityVersion": "20150505194923",
                 "firstMatchedDate": "01/08/20",
+                "hit_type_agent_address": [
+                    "ADDRESS1_STATE",
+                    "ADDRESS1_COUNTRY",
+                    "ADDRESS1_PROVINCE",
+                    "CONCAT_ADDRESS",
+                    "ADDRESS1_CITY"
+                ],
+                "hit_type_agent_job": [],
+                "hit_type_agent_name": [],
+                "hit_type_agent_other": [],
                 "inputVersionId": "122438659",
                 "lastMatchedDate": "01/08/20",
                 "lastReviewDate": "01/08/20",
@@ -1051,113 +1224,7 @@
                 "matchId": "49159506",
                 "matchStatus": "O",
                 "matchType": "GWL",
-                "riskScore": "-1.0",
-                "sourceCode": "CON",
-                "stopDescriptors": [
-                    {
-                        "name": "Joe Doe",
-                        "stopDescriptorDetails": [
-                            {
-                                "inputSynonym": "null",
-                                "inputToken": "Doe",
-                                "matchScore": "0.8571428571428572",
-                                "sdToken": "Doe"
-                            }
-                        ],
-                        "totalMatchScore": "0.9230769230769231"
-                    }
-                ],
-                "uniqueCustomerId": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480\n      ",
-                "SRC_REF_KEY": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480\n      ",
-                "VERSION_ID": "122438659",
-                "ENTITY_ID": "908044",
-                "ENTITY_VERSION": "20150505194923",
-                "WL_NAME": "Joe Dong",
-                "WL_DOB": [
-                    "MAY 6, 1981",
-                    ""
-                ],
-                "WL_ENTITYTYPE": "03",
-                "WL_COUNTRY": [
-                    "PL"
-                ],
-                "WL_COUNTRYNAME": [
-                    "Poland"
-                ],
-                "WL_NATIONALITY": [
-                    ""
-                ],
-                "WL_CITIZENSHIP": [
-                    ""
-                ],
-                "WL_POB": [
-                    ""
-                ],
-                "WL_ALIASES": [
-                    ""
-                ],
-                "WL_ADDRESS1": [
-                    "111 STREET 999"
-                ],
-                "WL_ADDRESS2": [
-                    "FL;US"
-                ],
-                "WL_CITY": [
-                    "ATLANTA"
-                ],
-                "WL_POSTALCODE": [
-                    "11111"
-                ],
-                "WL_MATCHED_TOKENS": "[\"Doe\"]",
-                "WLP_TYPE": "I",
-                "WL_DOCUMENT_NUMBER": [],
-                "datasetType": "WM_PARTY",
-                "TRIGGERED_BY": [
-                    "matchStatus",
-                    "stopDescriptors"
-                ],
-                "IS_BENEFICIARY_HIT": false,
-                "AP_TRIGGERS": {
-                    "Doe": {
-                        "ADDRESS1_LINE2": [
-                            "Jane Doe AA BBB"
-                        ],
-                        "CONCAT_ADDRESS": [
-                            "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
-                        ]
-                    }
-                },
-                "TOKENS_RISK_CARRIER": "Doe",
-                "dob_agent_ap": [],
-                "dob_agent_wl": [
-                    "MAY 6, 1981",
-                    ""
-                ],
-                "document_agent_ap": [
-                    [],
-                    [],
-                    null,
-                    null
-                ],
-                "document_agent_wl": null,
-                "company_name_agent_ap": [
-                    null,
-                    [],
-                    [],
-                    [],
-                    [],
-                    null,
-                    null,
-                    null,
-                    null,
-                    null
-                ],
-                "company_name_agent_wl": [
-                    "Joe Dong",
-                    [
-                        ""
-                    ]
-                ],
+                "matched_tokens_tp_marked_agent_input": "Doe",
                 "name_agent_ap": [
                     null,
                     [],
@@ -1171,16 +1238,6 @@
                     null
                 ],
                 "name_agent_wl": [
-                    "Joe Dong",
-                    [
-                        ""
-                    ]
-                ],
-                "employer_name_agent_ap": [
-                    null,
-                    null
-                ],
-                "employer_name_agent_wl": [
                     "Joe Dong",
                     [
                         ""
@@ -1240,6 +1297,33 @@
                         ""
                     ]
                 ],
+                "residency_agent_ap": [
+                    "",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    [],
+                    [],
+                    [],
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                "residency_agent_wl": [
+                    [
+                        "PL"
+                    ],
+                    [
+                        "Poland"
+                    ]
+                ],
+                "riskScore": "-1.0",
                 "sanctioned_country_agent_ap": [
                     "",
                     null,
@@ -1269,144 +1353,60 @@
                     ],
                     "Joe Dong"
                 ],
-                "residency_agent_ap": [
-                    "",
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    [],
-                    [],
-                    [],
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null
+                "sourceCode": "CON",
+                "stopDescriptors": [
+                    {
+                        "name": "Joe Doe",
+                        "stopDescriptorDetails": [
+                            {
+                                "inputSynonym": "null",
+                                "inputToken": "Doe",
+                                "matchScore": "0.8571428571428572",
+                                "sdToken": "Doe"
+                            }
+                        ],
+                        "totalMatchScore": "0.9230769230769231"
+                    }
                 ],
-                "residency_agent_wl": [
-                    [
-                        "PL"
-                    ],
-                    [
-                        "Poland"
-                    ]
-                ],
-                "hit_type_agent_name": [],
-                "hit_type_agent_address": [
-                    "ADDRESS1_PROVINCE",
-                    "ADDRESS1_COUNTRY",
-                    "ADDRESS1_STATE",
-                    "ADDRESS1_CITY",
-                    "CONCAT_ADDRESS"
-                ],
-                "hit_type_agent_job": [],
-                "hit_type_agent_other": [],
-                "matched_tokens_tp_marked_agent_input": "Doe",
-                "ap_name_tp_marked_agent_input": null,
-                "ap_id_tp_marked_agent_input": "A05003324172",
-                "ap_all_dobs_aggregated": [],
-                "wl_all_dobs_aggregated": [
-                    "MAY 6, 1981"
-                ],
-                "ap_all_documents_aggregated": [],
-                "wl_all_documents_aggregated": [],
-                "ap_all_company_names_aggregated": [],
+                "uniqueCustomerId": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480\n      ",
+                "wl_all_ap_id_tp_markeds_aggregated": [],
+                "wl_all_ap_name_tp_markeds_aggregated": [],
                 "wl_all_company_names_aggregated": [
                     "Joe Dong"
                 ],
-                "ap_all_names_aggregated": [],
-                "wl_all_names_aggregated": [
-                    "Joe Dong"
+                "wl_all_dobs_aggregated": [
+                    "MAY 6, 1981"
                 ],
-                "ap_all_employer_names_aggregated": [],
+                "wl_all_documents_aggregated": [],
                 "wl_all_employer_names_aggregated": [
                     "Joe Dong"
                 ],
-                "ap_all_nationalities_aggregated": [],
-                "wl_all_nationalities_aggregated": [
-                    "PL",
-                    "Poland"
+                "wl_all_hit_types_aggregated": [],
+                "wl_all_matched_tokens_tp_markeds_aggregated": [],
+                "wl_all_names_aggregated": [
+                    "Joe Dong"
                 ],
-                "ap_all_party_types_aggregated": [],
+                "wl_all_nationalities_aggregated": [
+                    "Poland",
+                    "PL"
+                ],
                 "wl_all_party_types_aggregated": [
                     "I"
                 ],
-                "ap_all_pobs_aggregated": [],
                 "wl_all_pobs_aggregated": [
-                    "PL",
-                    "Poland"
+                    "Poland",
+                    "PL"
                 ],
-                "ap_all_sanctioned_countries_aggregated": [],
+                "wl_all_residencies_aggregated": [
+                    "Poland",
+                    "PL"
+                ],
                 "wl_all_sanctioned_countries_aggregated": [
                     "Joe Dong",
-                    "PL",
-                    "Poland"
-                ],
-                "ap_all_residencies_aggregated": [],
-                "wl_all_residencies_aggregated": [
-                    "PL",
-                    "Poland"
-                ],
-                "ap_all_hit_types_aggregated": [],
-                "wl_all_hit_types_aggregated": [],
-                "ap_all_matched_tokens_tp_markeds_aggregated": [],
-                "wl_all_matched_tokens_tp_markeds_aggregated": [],
-                "ap_all_ap_name_tp_markeds_aggregated": [],
-                "wl_all_ap_name_tp_markeds_aggregated": [],
-                "ap_all_ap_id_tp_markeds_aggregated": [],
-                "wl_all_ap_id_tp_markeds_aggregated": [],
-                "all_hit_type_aggregated": [
-                    {
-                        "name": [],
-                        "address": [
-                            "ADDRESS1_PROVINCE",
-                            "ADDRESS1_COUNTRY",
-                            "ADDRESS1_STATE",
-                            "ADDRESS1_CITY",
-                            "CONCAT_ADDRESS"
-                        ],
-                        "job": [],
-                        "other": []
-                    }
+                    "Poland",
+                    "PL"
                 ]
             }
-        },
-        "match_ids": 1,
-        "datasetType": "WM_PARTY",
-        "ALL_CONNECTED_PARTIES_NAMES": [],
-        "ALL_CONNECTED_PARTY_NAMES": [],
-        "ALL_CONNECTED_TAX_IDS": [],
-        "ALL_CONNECTED_PARTY_BIRTH_COUNTRIES": [],
-        "ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES": [],
-        "ALL_CONNECTED_PARTY_RESIDENCY_COUNTRIES": [],
-        "ALL_CONNECTED_COUNTRY_OF_INCORPORATION": [],
-        "ALL_CONNECTED_GOVT_IDS": [],
-        "ALL_CONNECTED_ACCOUNT_NAMES": [],
-        "ALL_CONNECTED_ACCOUNT_BRANCH_ACCOUNT_NUMBERS": [],
-        "ALL_CONNECTED_ACCOUNT_BENEFICIARY_NAMES": [],
-        "ALL_PARTY1_EMPLOYERS": null,
-        "ALL_PARTY1_COUNTRY": null,
-        "ALL_PARTY1_COUNTRY1": null,
-        "ALL_PARTY1_COUNTRY_OF_INCORPORATION": null,
-        "ALL_PARTY1_ADDRESS1_COUNTRY": "",
-        "ALL_PARTY1_COUNTRY1_CITIZENSHIP": null,
-        "ALL_PARTY1_COUNTRY2_CITIZENSHIP": null,
-        "ALL_PARTY1_COUNTRY_FORMATION1": null,
-        "ALL_PARTY1_COUNTRY_DOMICILE1": null,
-        "ALL_PRTY_PRIM_CTZNSH_CNTRY": null,
-        "ALL_PRTY_RSDNC_CNTRY_CD": null,
-        "ALL_PARTY1_COUNTRY_PEP": null,
-        "ALL_CONCAT_NAMES": null,
-        "ALL_PARTY1_GOVTID1_NUMBER": null,
-        "ALL_PARTY1_GOVTID2_NUMBER": null,
-        "cleaned_names": {
-            "concat_residue": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
-        },
-        "concat_residue": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ",
-        "concat_address_no_changes": true
+        }
     }
 ]
