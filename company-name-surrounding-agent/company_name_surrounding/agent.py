@@ -7,22 +7,19 @@ from company_name_surrounding.data_models import Result
 from company_name_surrounding.rules import Rule, load_rules
 from company_name_surrounding.surrounding_check import get_company_token_number
 
-logger = logging.getLogger(__name__)
-c_handler = logging.StreamHandler()
-c_handler.setLevel(logging.DEBUG)
-
 
 class CompanyNameSurroundingAgent(Agent):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.rules: List[Rule] = load_rules(self.config)
         self.default_solution = self.config.application_config["default_response"]
+        self.logger = logging.getLogger("main").getChild("agent")
 
     def resolve(self, names: List[str]) -> Result:
-        logger.info("Checking {0}".format(names))
+        self.logger.info("Checking {0}".format(names))
         number = get_company_token_number(names=names)
         solution = self._get_solution(number)
-        logger.info("For {0} get count {1} and solution {2}".format(names, number, solution))
+        self.logger.info("For {0} get count {1} and solution {2}".format(names, number, solution))
         return Result(solution=solution, result=number)
 
     def _get_solution(self, number: int) -> str:

@@ -5,6 +5,7 @@ import pathlib
 from agent_base.agent import AgentRunner
 from agent_base.grpc_service import GrpcService
 from agent_base.utils import Config
+from agent_base.utils.logger import get_logger
 
 from company_name_surrounding.agent import CompanyNameSurroundingAgent
 from company_name_surrounding.grpc_service import CompanyNameSurroundingAgentGrpcServicer
@@ -42,11 +43,19 @@ def main():
         action="store_true",
         help="Increase verbosity for debug purpose",
     )
-    args = parser.parse_args()
-    logging.basicConfig(
-        level=logging.DEBUG if args.verbose else logging.INFO,
-        format="%(asctime)s %(name)-20s %(levelname)-8s %(message)s",
+    parser.add_argument(
+        "--log-file",
+        type=str,
+        default="company_name_surrounding.log",
+        help="Path to the file to save logs in",
     )
+    args = parser.parse_args()
+    logger = get_logger(
+        "main",
+        log_level=logging.DEBUG if args.verbose else logging.INFO,
+        log_file=args.log_file,
+    )
+    logger.info(f"Start logging to stdout and to {args.log_file} file")
     run(
         configuration_dirs=(args.configuration_dir,),
         start_grpc_service=args.grpc,

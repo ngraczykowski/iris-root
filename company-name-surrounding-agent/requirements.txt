@@ -1,5 +1,4 @@
-agent-base==0.20.0
-black==21.8b0
+agent-base==0.23.0
 companynamesurrounding-agent-api>=0.27.0
 coverage==5.5
 flake8==3.9.2
@@ -14,7 +13,7 @@ iniconfig==1.1.1
 isort==5.9.3
 organization-name-knowledge==0.9.0
 packaging==21.0
-protobuf==3.17.3
+protobuf>=3.17.3
 py==1.10.0
 pycodestyle==2.7.0
 pyflakes==2.3.1

@@ -26,6 +26,17 @@ pipeline {
         }
       }
       stages {
+        stage('Get commit msg') {
+          steps {
+            script {
+              env.COMMIT_TYPE = sh (
+                script: "git log -1 --pretty=%B | grep : | cut -d ':' -f 1",
+                returnStdout: true
+              ).trim()
+            }
+            echo "${COMMIT_TYPE}"
+          }
+        }
         stage('Prepare') {
           steps {
             sh 'pip install --index-url "${PYPI_URL}" --requirement requirements.txt'
@@ -56,9 +67,12 @@ pipeline {
 
         stage('Publish') {
           when {
-            anyOf {
-              branch 'master'
-              branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
+            allOf {
+              anyOf {
+                branch 'master'
+                branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
+              }
+              expression { env.COMMIT_TYPE != "Bump version" }
             }
           }
           steps {
@@ -68,6 +82,11 @@ pipeline {
               passwordVariable: 'TWINE_PASSWORD',
             )]) {
               sh './scripts/publish.sh --index-url "${PYPI_URL}"'
+              sh 'git tag --delete $(git tag --list)'
+
+              sshagent([env.JENKINS_SSH_NAME]) {
+                sh './scripts/tag_and_bump_version.sh'
+              }
             }
           }
         }
@@ -123,28 +142,88 @@ pipeline {
       }
     }
 
-    stage('Build and push image') {
-      when {
-        anyOf {
-          branch 'master'
-          branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
+    stage('Build and push docker image') {
+      stages {
+        stage('Build and push image') {
+          when {
+            allOf {
+                anyOf {
+                    branch 'master'
+                    branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
+                }
+                expression { env.COMMIT_TYPE != "Bump version" }
+            }
+          }
+          steps {
+            withCredentials([usernamePassword(
+              credentialsId: 'pypi-deployment-user',
+              usernameVariable: 'TWINE_USERNAME',
+              passwordVariable: 'TWINE_PASSWORD',
+             )]) {
+              buildAndPush("company-name-surrounding-agent", "${VERSION}", "--build-arg PYPI_URL=${PYPI_URL} -f Dockerfile .")
+            }
+          }
         }
-      }
-      steps {
-        withCredentials([usernamePassword(
-           credentialsId: 'pypi-deployment-user',
-           usernameVariable: 'TWINE_USERNAME',
-           passwordVariable: 'TWINE_PASSWORD',
-         )]) {
-           buildAndPush(
-             "company-name-surrounding-agent", "${VERSION},latest", "--build-arg PYPI_URL=${PYPI_URL} -f Dockerfile ."
-           )
-         }
+        stage('Helm') {
+          when {
+            allOf {
+              anyOf {
+                branch 'master'
+                branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
+              }
+              expression { return params.RELEASE }
+            }
+          }
+          steps {
+            withCredentials([
+              usernamePassword(
+                credentialsId: 'artifactory-deployment-user',
+                usernameVariable: 'DEPLOY_USERNAME',
+                passwordVariable: 'DEPLOY_PASSWORD'
+            )]) {
+              sh '''
+              helm repo add --username $DEPLOY_USERNAME --password $DEPLOY_PASSWORD s8helm https://repo.silenteight.com/artifactory/helm
+              helm package --app-version ${HELM_VERSION} helm-chart
+              helm push-artifactory --skip-reindex ${APP_NAME}-*.tgz s8helm
+              '''
+            }
+          }
+        }
+        stage('ECR') {
+          when {
+            allOf {
+              anyOf {
+                branch 'master'
+                branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
+              }
+              expression { env.COMMIT_TYPE != "Bump version" }
+            }
+          }
+          agent {
+            label 'aws'
+          }
+          steps {
+            sh """
+              aws ecr get-login-password --region us-east-1 | skopeo login --username AWS --password-stdin ${ECR}
+              skopeo copy docker://docker.repo.silenteight.com/company-name-surrounding-agent:${VERSION} docker://${ECR}/company-name-surrounding-agent:${VERSION}
+              skopeo copy docker://docker.repo.silenteight.com/company-name-surrounding-agent:${VERSION} docker://${ECR}/company-name-surrounding-agent:latest
+            """
+          }
+        }
       }
     }
 
     stage('Zipped (.pyz) atrifacts upload') {
       agent any
+      when {
+        allOf {
+          anyOf {
+            branch 'master'
+            branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
+          }
+          expression { env.COMMIT_TYPE != "Bump version" }
+        }
+      }
       stages {
         stage ('Prepare') {
           steps {
@@ -189,7 +268,7 @@ pipeline {
                 branch 'master'
                 branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
               }
-              expression { return params.RELEASE }
+              expression { env.COMMIT_TYPE != "Bump version" }
             }
           }
           steps {
