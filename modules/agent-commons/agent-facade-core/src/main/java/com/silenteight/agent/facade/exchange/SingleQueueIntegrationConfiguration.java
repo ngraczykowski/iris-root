@@ -10,6 +10,7 @@ import com.silenteight.agents.v1.api.exchange.AgentExchangeResponse;
 
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.Binding;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -38,13 +39,14 @@ class SingleQueueIntegrationConfiguration {
   @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
   @Bean
   IntegrationFlow requestFlow(
-      @Qualifier("facadeInQueueBinding") Binding queueWithoutPrioritySupportBinding) {
+      @Qualifier("facadeInQueueBinding")
+          ObjectProvider<Binding> queueWithoutPrioritySupportBinding) {
     return IntegrationFlows
         .from(inboundFactory
             .simpleAdapter()
             .configureContainer(c -> {
               c.addQueueNames(agentFacadeProperties.getInboundQueueWithPrioritySupportName());
-              amqpAdmin.removeBinding(queueWithoutPrioritySupportBinding);
+              queueWithoutPrioritySupportBinding.ifAvailable(amqpAdmin::removeBinding);
               deleteIfEmptyQueueWithoutPrioritySupport(
                   amqpAdmin, agentFacadeProperties.getInboundQueueName(), c);
             }))

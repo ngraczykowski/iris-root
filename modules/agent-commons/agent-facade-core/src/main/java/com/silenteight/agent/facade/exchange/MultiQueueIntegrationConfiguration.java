@@ -8,7 +8,9 @@ import com.silenteight.agents.v1.api.exchange.AgentExchangeResponse;
 
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.Declarable;
 import org.springframework.amqp.core.Declarables;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Conditional;
@@ -18,6 +20,8 @@ import org.springframework.integration.dsl.IntegrationFlows;
 import org.springframework.integration.dsl.StandardIntegrationFlow;
 import org.springframework.integration.dsl.context.IntegrationFlowContext;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 import javax.annotation.PostConstruct;
@@ -39,7 +43,7 @@ class MultiQueueIntegrationConfiguration {
   private final IntegrationFlowContext context;
   private final MessageTransformer messageTransformer;
   private final AmqpAdmin amqpAdmin;
-  private final Declarables declarables;
+  private final Collection<Declarable> declarables;
 
   @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
   MultiQueueIntegrationConfiguration(
@@ -49,7 +53,7 @@ class MultiQueueIntegrationConfiguration {
       List<AgentFacade<AgentExchangeRequest, AgentExchangeResponse>> agentFacades,
       IntegrationFlowContext context,
       MessageTransformer messageTransformer, AmqpAdmin amqpAdmin,
-      @Qualifier("multiFacadeDeclarables") Declarables declarables) {
+      @Qualifier("multiFacadeDeclarables") ObjectProvider<Declarables> declarables) {
     this.agentFacadeProperties = agentFacadeProperties;
     this.inboundFactory = inboundFactory;
     this.outboundFactory = outboundFactory;
@@ -57,7 +61,8 @@ class MultiQueueIntegrationConfiguration {
     this.context = context;
     this.messageTransformer = messageTransformer;
     this.amqpAdmin = amqpAdmin;
-    this.declarables = declarables;
+    this.declarables = new ArrayList<>();
+    declarables.ifAvailable(d -> this.declarables.addAll(d.getDeclarables()));
   }
 
   @PostConstruct
@@ -108,7 +113,6 @@ class MultiQueueIntegrationConfiguration {
 
   private void unbindQueueWithoutPrioritySupport(String queueName) {
     declarables
-        .getDeclarables()
         .stream()
         .filter(Binding.class::isInstance)
         .map(Binding.class::cast)
