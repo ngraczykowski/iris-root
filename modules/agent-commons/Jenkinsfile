@@ -3,8 +3,8 @@
 gradleBuild(
     jdkVersion: 'jdk-11',
     // Sonar does not seem to work with GitHub. The next 3 settings should be trun on whe this is fixed.
-    sonarEnabled: false,
-    failPipeline: false,
-    sonarDecorate: false,
+    sonarEnabled: true,
+    failPipeline: true,
+    sonarDecorate: true,
     dependencyCheckEnabled: true,
     archiveArtifactsPattern: '**/build/libs/*.jar')
