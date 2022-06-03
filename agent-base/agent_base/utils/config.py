@@ -23,6 +23,10 @@ class Config:
             *configuration_dirs,
         )
         self.application_config = self.load_yaml_config("application.yaml", required=required)
+        if self.application_config:
+            self.environment = self.application_config.get("env-variables", None)
+        else:
+            self.environment = {}
 
     @staticmethod
     def _get_from_environment(configuration_dir_key: str):

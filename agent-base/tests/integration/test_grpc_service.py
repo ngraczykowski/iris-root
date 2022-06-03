@@ -1,4 +1,3 @@
-import pathlib
 from typing import List
 
 import grpc
@@ -24,12 +23,7 @@ pytestmark = pytest.mark.asyncio
 
 @pytest.fixture(autouse=True, scope="module")
 def config():
-    configuration_path = pathlib.Path("./config/application.yaml")
-    configuration_path.symlink_to("application.local.yaml")
-    try:
-        yield Config([configuration_path.parent])
-    finally:
-        configuration_path.unlink()
+    yield Config()
 
 
 @pytest.fixture(autouse=True)

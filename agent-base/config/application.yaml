@@ -45,3 +45,8 @@ agent:
     server_ca: "tests/ssl_example/ca.pem"
     server_private_key: "tests/ssl_example/server-key.pem"
     server_public_key_chain: "tests/ssl_example/server.pem"
+
+
+environment-variables-mapping:
+  processes: AGENT_PROCESSES
+  grpc_port: GRPC_PORT
