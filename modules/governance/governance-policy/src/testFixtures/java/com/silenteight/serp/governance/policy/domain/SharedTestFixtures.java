@@ -17,6 +17,7 @@ public final class SharedTestFixtures {
 
   public static final String POLICY_NAME = "policy_name";
   public static final UUID POLICY_ID = fromString("7b0a69c9-24a2-4a3e-b64c-ccd073743416");
+  public static final UUID POLICY_ID_2 = fromString("7b0a69c9-24a2-4a3e-b64c-ccd073743417");
   public static final String POLICY_NAME_WITH_MAX_LENGTH = "a".repeat(MAX_POLICY_NAME_LENGTH);
   private static final String POLICY_NAME_WITH_MIN_LENGTH = "a".repeat(MIN_POLICY_NAME_LENGTH);
   public static final String POLICY_NAME_THAT_EXCEEDED_MAX_LENGTH =
