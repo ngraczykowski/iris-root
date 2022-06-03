@@ -1,5 +1,7 @@
 package steps;
 
+import lombok.SneakyThrows;
+
 import io.cucumber.core.backend.TestCaseState;
 import io.cucumber.core.gherkin.Pickle;
 import io.cucumber.core.gherkin.Step;
@@ -8,18 +10,15 @@ import io.cucumber.java8.Scenario;
 import io.cucumber.plugin.event.TestCase;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
-
 import io.restassured.config.HeaderConfig;
 import io.restassured.config.RestAssuredConfig;
-
-import lombok.SneakyThrows;
-
-import utils.AuthUtils;
 import utils.CustomLogFilter;
 import utils.ScenarioContext;
 
 import java.lang.reflect.Field;
 import java.util.List;
+
+import static utils.AuthUtils.getAuthTokenHeader;
 
 public class Hooks implements En {
 
@@ -37,7 +36,7 @@ public class Hooks implements En {
           .setConfig(RestAssuredConfig
               .config()
               .headerConfig(HeaderConfig.headerConfig().overwriteHeadersWithName("Authorization", "Content-Type")))
-          .addHeader("Authorization", "Bearer " + new AuthUtils().getAuthToken())
+          .addHeader("Authorization", getAuthTokenHeader())
           .build()
           .given()
           .filter(customLogFilter)

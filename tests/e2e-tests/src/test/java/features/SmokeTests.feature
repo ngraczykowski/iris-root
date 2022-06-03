@@ -21,3 +21,9 @@ Feature: Smoke scenarios
     And Add prepared features to steps
     Then Policy is created
     And Mark created policy as ready
+
+  Scenario: Get all users
+    Given Users endpoint responses with status code 200
+
+  Scenario: Create user
+    Given Create user with random name

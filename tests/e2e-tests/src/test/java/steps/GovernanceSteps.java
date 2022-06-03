@@ -3,8 +3,6 @@ package steps;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java8.En;
 import io.restassured.http.ContentType;
-import io.restassured.response.Response;
-import utils.AuthUtils;
 import utils.ScenarioContext;
 import utils.datageneration.governance.*;
 
@@ -14,6 +12,7 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.*;
+import static utils.AuthUtils.getAuthTokenHeaderForAdmin;
 
 public class GovernanceSteps implements En {
 
@@ -147,7 +146,7 @@ public class GovernanceSteps implements En {
       given()
           .body("{\"approverComment\":\"Lorem ipsum dolor sit amet\"}")
           .contentType("application/json")
-          .header("Authorization", "Bearer " + new AuthUtils().getAuthTokenForAnotherUser())
+          .header("Authorization", getAuthTokenHeaderForAdmin())
           .when()
           .post(String.format("/rest/governance/api/v1/changeRequests/%s:approve", solvingModel.getActivationUuid()))
           .then()
