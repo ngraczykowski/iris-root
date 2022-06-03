@@ -22,3 +22,7 @@ gradle.properties @SilentEight/architecture
 settings.gradle   @SilentEight/architecture
 
 /tests/**/*       @SilentEight/qa
+
+/modules/adjudication-engine/**/*    @SilentEight/delta
+/modules/payments-bridge/**/*        @SilentEight/delta
+/modules/universal-data-source/**/*  @SilentEight/delta
