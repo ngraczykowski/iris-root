@@ -52,7 +52,7 @@ class AlertEventListener {
     updater.updateWithCompletedStatus(event.getAlerts());
   }
 
-  @TransactionalEventListener
+  @TransactionalEventListener(fallbackExecution = true)
   @Async
   public void onBulkStoredEvent(BulkStoredEvent event) {
     var bulkId = event.getBulkId();
