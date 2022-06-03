@@ -21,4 +21,4 @@ build.gradle      @SilentEight/architecture
 gradle.properties @SilentEight/architecture
 settings.gradle   @SilentEight/architecture
 
-/tests/**/*       @kkicza @pputerla @snieguu
+/tests/**/*       @SilentEight/qa
