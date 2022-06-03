@@ -27,8 +27,8 @@
         "ALL_PRTY_PRIM_CTZNSH_CNTRY": null,
         "ALL_PRTY_RSDNC_CNTRY_CD": null,
         "alertedParty": {
-            "ALL_PARTY_DOBS": [],
             "ALL_PARTY_TYPES": [],
+            "AP_DOB": [],
             "AP_PARTY_TYPE": "I",
             "ENTITY_TYPE_MATCH": "Y",
             "headerInfo": {
@@ -387,10 +387,10 @@
                     {
                         "address": [
                             "ADDRESS1_STATE",
-                            "ADDRESS1_COUNTRY",
-                            "ADDRESS1_PROVINCE",
                             "CONCAT_ADDRESS",
-                            "ADDRESS1_CITY"
+                            "ADDRESS1_CITY",
+                            "ADDRESS1_PROVINCE",
+                            "ADDRESS1_COUNTRY"
                         ],
                         "job": [],
                         "name": [],
@@ -505,10 +505,10 @@
                 "firstMatchedDate": "01/08/20",
                 "hit_type_agent_address": [
                     "ADDRESS1_STATE",
-                    "ADDRESS1_COUNTRY",
-                    "ADDRESS1_PROVINCE",
                     "CONCAT_ADDRESS",
-                    "ADDRESS1_CITY"
+                    "ADDRESS1_CITY",
+                    "ADDRESS1_PROVINCE",
+                    "ADDRESS1_COUNTRY"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_name": [],
@@ -574,6 +574,7 @@
                 "pob_agent_ap": [
                     [],
                     [],
+                    null,
                     []
                 ],
                 "pob_agent_wl": [
@@ -588,6 +589,7 @@
                 ],
                 "residency_agent_ap": [
                     "",
+                    null,
                     null,
                     null,
                     null,
@@ -611,6 +613,7 @@
                 "riskScore": "-1.0",
                 "sanctioned_country_agent_ap": [
                     "",
+                    null,
                     null,
                     null,
                     null,
@@ -680,8 +683,8 @@
                     "|FL;US"
                 ],
                 "wl_all_sanctioned_countries_aggregated": [
-                    "|FL;US",
-                    "Joe Ding"
+                    "Joe Ding",
+                    "|FL;US"
                 ]
             }
         }
@@ -714,8 +717,8 @@
         "ALL_PRTY_PRIM_CTZNSH_CNTRY": null,
         "ALL_PRTY_RSDNC_CNTRY_CD": null,
         "alertedParty": {
-            "ALL_PARTY_DOBS": [],
             "ALL_PARTY_TYPES": [],
+            "AP_DOB": [],
             "AP_PARTY_TYPE": "I",
             "ENTITY_TYPE_MATCH": "Y",
             "headerInfo": {
@@ -1090,10 +1093,10 @@
                     {
                         "address": [
                             "ADDRESS1_STATE",
-                            "ADDRESS1_COUNTRY",
-                            "ADDRESS1_PROVINCE",
                             "CONCAT_ADDRESS",
-                            "ADDRESS1_CITY"
+                            "ADDRESS1_CITY",
+                            "ADDRESS1_PROVINCE",
+                            "ADDRESS1_COUNTRY"
                         ],
                         "job": [],
                         "name": [],
@@ -1208,10 +1211,10 @@
                 "firstMatchedDate": "01/08/20",
                 "hit_type_agent_address": [
                     "ADDRESS1_STATE",
-                    "ADDRESS1_COUNTRY",
-                    "ADDRESS1_PROVINCE",
                     "CONCAT_ADDRESS",
-                    "ADDRESS1_CITY"
+                    "ADDRESS1_CITY",
+                    "ADDRESS1_PROVINCE",
+                    "ADDRESS1_COUNTRY"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_name": [],
@@ -1281,6 +1284,7 @@
                 "pob_agent_ap": [
                     [],
                     [],
+                    null,
                     []
                 ],
                 "pob_agent_wl": [
@@ -1299,6 +1303,7 @@
                 ],
                 "residency_agent_ap": [
                     "",
+                    null,
                     null,
                     null,
                     null,
@@ -1326,6 +1331,7 @@
                 "riskScore": "-1.0",
                 "sanctioned_country_agent_ap": [
                     "",
+                    null,
                     null,
                     null,
                     null,
@@ -1387,24 +1393,24 @@
                     "Joe Dong"
                 ],
                 "wl_all_nationalities_aggregated": [
-                    "Poland",
-                    "PL"
+                    "PL",
+                    "Poland"
                 ],
                 "wl_all_party_types_aggregated": [
                     "I"
                 ],
                 "wl_all_pobs_aggregated": [
-                    "Poland",
-                    "PL"
+                    "PL",
+                    "Poland"
                 ],
                 "wl_all_residencies_aggregated": [
-                    "Poland",
-                    "PL"
+                    "PL",
+                    "Poland"
                 ],
                 "wl_all_sanctioned_countries_aggregated": [
                     "Joe Dong",
-                    "Poland",
-                    "PL"
+                    "PL",
+                    "Poland"
                 ]
             }
         }

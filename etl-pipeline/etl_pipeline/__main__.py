@@ -13,6 +13,7 @@ from etl_pipeline.logger import get_logger
 from etl_pipeline.service.servicer import EtlPipelineServiceServicer
 
 logger = get_logger("main", "ms_pipeline.log")
+MAX_MESSAGE_LENGTH = 4 * 5567700
 
 
 def add_EtlPipelineServiceServicer_to_server(servicer, server):
@@ -30,7 +31,13 @@ def add_EtlPipelineServiceServicer_to_server(servicer, server):
 
 
 async def serve(args):
-    server = grpc.aio.server(futures.ThreadPoolExecutor(max_workers=10))
+    server = grpc.aio.server(
+        futures.ThreadPoolExecutor(max_workers=10),
+        options=[
+            ("grpc.max_send_message_length", MAX_MESSAGE_LENGTH),
+            ("grpc.max_receive_message_length", MAX_MESSAGE_LENGTH),
+        ],
+    )
     service_config = ConsulServiceConfig()
 
     add_EtlPipelineServiceServicer_to_server(EtlPipelineServiceServicer(args.ssl), server)

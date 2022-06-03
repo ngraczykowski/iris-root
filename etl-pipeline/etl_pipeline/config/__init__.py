@@ -168,7 +168,6 @@ def load_agent_configs():
 
     check_for_duplicate_fields(alert_agents_config)
     validate_agents_fields(alert_agents_config)
-
     alert_agents_config = {
         alert_type: load_agent_config(config)
         for alert_type, config in alert_agents_config.items()
@@ -242,7 +241,7 @@ def get_fields(dict_):
     fields = [
         i.split(".")[-1]
         for i in raw_fields_no_duplicates
-        if "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD" not in i
+        if i and "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD" not in i
     ]
 
     return fields

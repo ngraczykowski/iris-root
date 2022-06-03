@@ -47,7 +47,7 @@ class ProcessingEngine:
         row[SRC_SYS_ACCT_KEY] = match.group(1) if match else ""
 
     @staticmethod
-    def set_trigger_reasons(values):
+    def set_trigger_reasons(values, match):
         skip_columns = ["USER_NOTE_TEXT"]
         result = []
         for whole_token in json.loads(values[cn.WL_MATCHED_TOKENS]):
@@ -61,7 +61,7 @@ class ProcessingEngine:
                     ratio = fuzz.partial_ratio(value.lower(), token.lower())
                     if ratio >= FUZZINESS:
                         result.append(key)
-        return list(set(result))
+        match[cn.TRIGGERED_BY] = list(set(result))
 
     def load_raw_data(self, *args, **kwargs):
         return self.spark_instance.read_csv(*args, **kwargs)
@@ -101,7 +101,7 @@ class ProcessingEngine:
             ALL_PARTY_DETAILS: selected_parties_payload,
             ALL_PARTS_NAMES: [party[PRTY_NM] for party in selected_parties_payload],
             cn.ALL_PARTY_TYPES: [party[PRTY_TYP] for party in selected_parties_payload],
-            cn.ALL_PARTY_DOBS: [party[DOB_DT] for party in selected_parties_payload],
+            cn.AP_DOB: [party[DOB_DT] for party in selected_parties_payload],
             cn.ALL_PARTY_BIRTH_COUNTRIES: [
                 party[PRTY_CNTRY_OF_BIRTH] for party in selected_parties_payload
             ],

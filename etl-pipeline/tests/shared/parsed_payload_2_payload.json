@@ -48,13 +48,13 @@
         "ALL_PRTY_PRIM_CTZNSH_CNTRY": null,
         "ALL_PRTY_RSDNC_CNTRY_CD": null,
         "alertedParty": {
-            "ALL_PARTY_DOBS": [
-                "02/31/1900",
-                "04/31/1910"
-            ],
             "ALL_PARTY_TYPES": [
                 "Individual",
                 "Individual"
+            ],
+            "AP_DOB": [
+                "02/31/1900",
+                "04/31/1910"
             ],
             "AP_PARTY_TYPE": "I",
             "ENTITY_TYPE_MATCH": "Y",
@@ -461,10 +461,10 @@
                     {
                         "address": [
                             "ADDRESS1_STATE",
-                            "ADDRESS1_COUNTRY",
-                            "ADDRESS1_PROVINCE",
                             "CONCAT_ADDRESS",
-                            "ADDRESS1_CITY"
+                            "ADDRESS1_CITY",
+                            "ADDRESS1_PROVINCE",
+                            "ADDRESS1_COUNTRY"
                         ],
                         "job": [],
                         "name": [],
@@ -474,8 +474,8 @@
                 "ap_all_ap_id_tp_markeds_aggregated": [],
                 "ap_all_ap_name_tp_markeds_aggregated": [],
                 "ap_all_company_names_aggregated": [
-                    "Eva Pladimirova",
-                    "Pladimir Vutin"
+                    "Pladimir Vutin",
+                    "Eva Pladimirova"
                 ],
                 "ap_all_dobs_aggregated": [
                     "02/31/1900",
@@ -489,12 +489,12 @@
                 "ap_all_hit_types_aggregated": [],
                 "ap_all_matched_tokens_tp_markeds_aggregated": [],
                 "ap_all_names_aggregated": [
-                    "Eva Pladimirova",
-                    "Pladimir Vutin"
+                    "Pladimir Vutin",
+                    "Eva Pladimirova"
                 ],
                 "ap_all_nationalities_aggregated": [
-                    "UNITED STATES OF AMERICA",
-                    "United States"
+                    "United States",
+                    "UNITED STATES OF AMERICA"
                 ],
                 "ap_all_party_types_aggregated": [
                     "Individual"
@@ -503,12 +503,12 @@
                     "United States"
                 ],
                 "ap_all_residencies_aggregated": [
-                    "UNITED STATES OF AMERICA",
-                    "United States"
+                    "United States",
+                    "UNITED STATES OF AMERICA"
                 ],
                 "ap_all_sanctioned_countries_aggregated": [
-                    "UNITED STATES OF AMERICA",
-                    "United States"
+                    "United States",
+                    "UNITED STATES OF AMERICA"
                 ],
                 "ap_id_tp_marked_agent_input": "A05003324172",
                 "ap_name_tp_marked_agent_input": null,
@@ -622,10 +622,10 @@
                 "firstMatchedDate": "01/08/20",
                 "hit_type_agent_address": [
                     "ADDRESS1_STATE",
-                    "ADDRESS1_COUNTRY",
-                    "ADDRESS1_PROVINCE",
                     "CONCAT_ADDRESS",
-                    "ADDRESS1_CITY"
+                    "ADDRESS1_CITY",
+                    "ADDRESS1_PROVINCE",
+                    "ADDRESS1_COUNTRY"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_name": [],
@@ -712,6 +712,7 @@
                         "United States",
                         "United States"
                     ],
+                    null,
                     []
                 ],
                 "pob_agent_wl": [
@@ -726,6 +727,7 @@
                 ],
                 "residency_agent_ap": [
                     "UNITED STATES OF AMERICA",
+                    null,
                     null,
                     null,
                     null,
@@ -752,6 +754,7 @@
                 "riskScore": "-1.0",
                 "sanctioned_country_agent_ap": [
                     "UNITED STATES OF AMERICA",
+                    null,
                     null,
                     null,
                     null,
@@ -827,8 +830,8 @@
                     "United States of America"
                 ],
                 "wl_all_sanctioned_countries_aggregated": [
-                    "Joe Ding",
                     "US|FL;US",
+                    "Joe Ding",
                     "United States of America"
                 ]
             }
@@ -883,13 +886,13 @@
         "ALL_PRTY_PRIM_CTZNSH_CNTRY": null,
         "ALL_PRTY_RSDNC_CNTRY_CD": null,
         "alertedParty": {
-            "ALL_PARTY_DOBS": [
-                "02/31/1900",
-                "04/31/1910"
-            ],
             "ALL_PARTY_TYPES": [
                 "Individual",
                 "Individual"
+            ],
+            "AP_DOB": [
+                "02/31/1900",
+                "04/31/1910"
             ],
             "AP_PARTY_TYPE": "I",
             "ENTITY_TYPE_MATCH": "Y",
@@ -1296,10 +1299,10 @@
                     {
                         "address": [
                             "ADDRESS1_STATE",
-                            "ADDRESS1_COUNTRY",
-                            "ADDRESS1_PROVINCE",
                             "CONCAT_ADDRESS",
-                            "ADDRESS1_CITY"
+                            "ADDRESS1_CITY",
+                            "ADDRESS1_PROVINCE",
+                            "ADDRESS1_COUNTRY"
                         ],
                         "job": [],
                         "name": [],
@@ -1309,8 +1312,8 @@
                 "ap_all_ap_id_tp_markeds_aggregated": [],
                 "ap_all_ap_name_tp_markeds_aggregated": [],
                 "ap_all_company_names_aggregated": [
-                    "Eva Pladimirova",
-                    "Pladimir Vutin"
+                    "Pladimir Vutin",
+                    "Eva Pladimirova"
                 ],
                 "ap_all_dobs_aggregated": [
                     "02/31/1900",
@@ -1324,12 +1327,12 @@
                 "ap_all_hit_types_aggregated": [],
                 "ap_all_matched_tokens_tp_markeds_aggregated": [],
                 "ap_all_names_aggregated": [
-                    "Eva Pladimirova",
-                    "Pladimir Vutin"
+                    "Pladimir Vutin",
+                    "Eva Pladimirova"
                 ],
                 "ap_all_nationalities_aggregated": [
-                    "UNITED STATES OF AMERICA",
-                    "United States"
+                    "United States",
+                    "UNITED STATES OF AMERICA"
                 ],
                 "ap_all_party_types_aggregated": [
                     "Individual"
@@ -1338,12 +1341,12 @@
                     "United States"
                 ],
                 "ap_all_residencies_aggregated": [
-                    "UNITED STATES OF AMERICA",
-                    "United States"
+                    "United States",
+                    "UNITED STATES OF AMERICA"
                 ],
                 "ap_all_sanctioned_countries_aggregated": [
-                    "UNITED STATES OF AMERICA",
-                    "United States"
+                    "United States",
+                    "UNITED STATES OF AMERICA"
                 ],
                 "ap_id_tp_marked_agent_input": "A05003324172",
                 "ap_name_tp_marked_agent_input": null,
@@ -1457,10 +1460,10 @@
                 "firstMatchedDate": "01/08/20",
                 "hit_type_agent_address": [
                     "ADDRESS1_STATE",
-                    "ADDRESS1_COUNTRY",
-                    "ADDRESS1_PROVINCE",
                     "CONCAT_ADDRESS",
-                    "ADDRESS1_CITY"
+                    "ADDRESS1_CITY",
+                    "ADDRESS1_PROVINCE",
+                    "ADDRESS1_COUNTRY"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_name": [],
@@ -1547,6 +1550,7 @@
                         "United States",
                         "United States"
                     ],
+                    null,
                     []
                 ],
                 "pob_agent_wl": [
@@ -1561,6 +1565,7 @@
                 ],
                 "residency_agent_ap": [
                     "UNITED STATES OF AMERICA",
+                    null,
                     null,
                     null,
                     null,
@@ -1587,6 +1592,7 @@
                 "riskScore": "-1.0",
                 "sanctioned_country_agent_ap": [
                     "UNITED STATES OF AMERICA",
+                    null,
                     null,
                     null,
                     null,
@@ -1662,8 +1668,8 @@
                     "United States of America"
                 ],
                 "wl_all_sanctioned_countries_aggregated": [
-                    "Joe Ding",
                     "US|FL;US",
+                    "Joe Ding",
                     "United States of America"
                 ]
             }
@@ -1718,13 +1724,13 @@
         "ALL_PRTY_PRIM_CTZNSH_CNTRY": null,
         "ALL_PRTY_RSDNC_CNTRY_CD": null,
         "alertedParty": {
-            "ALL_PARTY_DOBS": [
-                "02/31/1900",
-                "04/31/1910"
-            ],
             "ALL_PARTY_TYPES": [
                 "Individual",
                 "Individual"
+            ],
+            "AP_DOB": [
+                "02/31/1900",
+                "04/31/1910"
             ],
             "AP_PARTY_TYPE": "I",
             "ENTITY_TYPE_MATCH": "Y",
@@ -2147,10 +2153,10 @@
                     {
                         "address": [
                             "ADDRESS1_STATE",
-                            "ADDRESS1_COUNTRY",
-                            "ADDRESS1_PROVINCE",
                             "CONCAT_ADDRESS",
-                            "ADDRESS1_CITY"
+                            "ADDRESS1_CITY",
+                            "ADDRESS1_PROVINCE",
+                            "ADDRESS1_COUNTRY"
                         ],
                         "job": [],
                         "name": [],
@@ -2160,8 +2166,8 @@
                 "ap_all_ap_id_tp_markeds_aggregated": [],
                 "ap_all_ap_name_tp_markeds_aggregated": [],
                 "ap_all_company_names_aggregated": [
-                    "Eva Pladimirova",
-                    "Pladimir Vutin"
+                    "Pladimir Vutin",
+                    "Eva Pladimirova"
                 ],
                 "ap_all_dobs_aggregated": [
                     "02/31/1900",
@@ -2175,12 +2181,12 @@
                 "ap_all_hit_types_aggregated": [],
                 "ap_all_matched_tokens_tp_markeds_aggregated": [],
                 "ap_all_names_aggregated": [
-                    "Eva Pladimirova",
-                    "Pladimir Vutin"
+                    "Pladimir Vutin",
+                    "Eva Pladimirova"
                 ],
                 "ap_all_nationalities_aggregated": [
-                    "UNITED STATES OF AMERICA",
-                    "United States"
+                    "United States",
+                    "UNITED STATES OF AMERICA"
                 ],
                 "ap_all_party_types_aggregated": [
                     "Individual"
@@ -2189,12 +2195,12 @@
                     "United States"
                 ],
                 "ap_all_residencies_aggregated": [
-                    "UNITED STATES OF AMERICA",
-                    "United States"
+                    "United States",
+                    "UNITED STATES OF AMERICA"
                 ],
                 "ap_all_sanctioned_countries_aggregated": [
-                    "UNITED STATES OF AMERICA",
-                    "United States"
+                    "United States",
+                    "UNITED STATES OF AMERICA"
                 ],
                 "ap_id_tp_marked_agent_input": "A05003324172",
                 "ap_name_tp_marked_agent_input": null,
@@ -2308,10 +2314,10 @@
                 "firstMatchedDate": "01/08/20",
                 "hit_type_agent_address": [
                     "ADDRESS1_STATE",
-                    "ADDRESS1_COUNTRY",
-                    "ADDRESS1_PROVINCE",
                     "CONCAT_ADDRESS",
-                    "ADDRESS1_CITY"
+                    "ADDRESS1_CITY",
+                    "ADDRESS1_PROVINCE",
+                    "ADDRESS1_COUNTRY"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_name": [],
@@ -2402,6 +2408,7 @@
                         "United States",
                         "United States"
                     ],
+                    null,
                     []
                 ],
                 "pob_agent_wl": [
@@ -2420,6 +2427,7 @@
                 ],
                 "residency_agent_ap": [
                     "UNITED STATES OF AMERICA",
+                    null,
                     null,
                     null,
                     null,
@@ -2450,6 +2458,7 @@
                 "riskScore": "-1.0",
                 "sanctioned_country_agent_ap": [
                     "UNITED STATES OF AMERICA",
+                    null,
                     null,
                     null,
                     null,
@@ -2514,24 +2523,24 @@
                     "Joe Dong"
                 ],
                 "wl_all_nationalities_aggregated": [
-                    "Poland",
-                    "PL"
+                    "PL",
+                    "Poland"
                 ],
                 "wl_all_party_types_aggregated": [
                     "I"
                 ],
                 "wl_all_pobs_aggregated": [
-                    "Poland",
-                    "PL"
+                    "PL",
+                    "Poland"
                 ],
                 "wl_all_residencies_aggregated": [
-                    "Poland",
-                    "PL"
+                    "PL",
+                    "Poland"
                 ],
                 "wl_all_sanctioned_countries_aggregated": [
                     "Joe Dong",
-                    "Poland",
-                    "PL"
+                    "PL",
+                    "Poland"
                 ]
             }
         }

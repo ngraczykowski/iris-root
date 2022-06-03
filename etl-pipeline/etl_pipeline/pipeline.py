@@ -63,8 +63,13 @@ class ETLPipeline(ABC):
         for column_transformation in flow_config:
             pipeline_func: dict = flow_config[column_transformation]
             target_collection = pipeline_func.pop("target_collection", None)
-            method_name = pipeline_func.pop("method_name", None)
-            pattern_method = pipeline_func.pop("pattern_method")
+            method = pipeline_func.pop("method", None)
+            if method is None:
+                method_name = pipeline_func.pop("method_name", None)
+                pattern_method = pipeline_func.pop("pattern_method")
+            else:
+                method_name = method
+                pattern_method = f"_{method}"
             pipeline_func.update({"target_field": column_transformation})
             if method_name is None:
                 method_name = f"{column_transformation}_{pattern_method}"

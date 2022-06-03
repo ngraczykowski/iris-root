@@ -84,6 +84,7 @@ class JsonProcessingEngine(ProcessingEngine):
     @staticmethod
     @safe_field_extractor
     def set_trigger_reasons(match, fuzziness_level):
+
         skip_columns = ["USER_NOTE_TEXT"]
         result = []
         for whole_token in json.loads(match[cn.WL_MATCHED_TOKENS]):
@@ -97,7 +98,7 @@ class JsonProcessingEngine(ProcessingEngine):
                     ratio = fuzz.partial_ratio(value.lower(), token.lower())
                     if ratio >= fuzziness_level:
                         result.append(key)
-        return list(set(result))
+        match[cn.TRIGGERED_BY] = list(set(result))
 
     def set_beneficiary_hits(self, payload):
         payload[cn.IS_BENEFICIARY_HIT] = cn.AD_BNFL_NM in payload[cn.TRIGGERED_BY]
