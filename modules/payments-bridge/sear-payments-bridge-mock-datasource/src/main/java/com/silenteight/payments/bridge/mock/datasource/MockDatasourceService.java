@@ -26,6 +26,7 @@ public class MockDatasourceService {
   public BatchCreateAgentInputsResponse createAgentInputsResponse(
       BatchCreateAgentInputsRequest request) {
     var inputs = request.getAgentInputsList();
+    agentInputs.clear();
     agentInputs.addAll(inputs);
     return BatchCreateAgentInputsResponse
         .newBuilder()
@@ -53,6 +54,7 @@ public class MockDatasourceService {
         .map(CreateCategoryValuesRequest::getCategoryValuesList)
         .flatMap(Collection::stream)
         .collect(toList());
+    categoryValues.clear();
     categoryValues.addAll(inputs);
     return BatchCreateCategoryValuesResponse
         .newBuilder()

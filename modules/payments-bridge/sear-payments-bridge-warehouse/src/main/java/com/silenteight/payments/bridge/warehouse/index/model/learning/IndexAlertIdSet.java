@@ -8,8 +8,4 @@ public class IndexAlertIdSet {
   String alertName;
   String systemId;
   String messageId;
-
-  public String getDiscriminator() {
-    return alertMessageId;
-  }
 }

@@ -2,7 +2,10 @@ package com.silenteight.payments.bridge.app.integration;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.adjudication.api.v1.Alert;
 import com.silenteight.payments.bridge.PaymentsBridgeApplication;
+import com.silenteight.payments.bridge.common.indexing.DiscriminatorStrategy;
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.port.CsvFileResourceProvider;
 import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
 import com.silenteight.payments.bridge.firco.alertmessage.port.CreateAlertMessageUseCase;
 import com.silenteight.payments.bridge.firco.dto.input.RequestDto;
@@ -21,12 +24,17 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
+import org.springframework.util.IdGenerator;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,6 +53,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest(classes = {PaymentsBridgeApplication.class})
 @ContextConfiguration(initializers = {RabbitTestInitializer.class, PostgresTestInitializer.class})
@@ -59,7 +68,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
   "mockwarehouse"
 })
 class PaymentsBridgeApplicationIT {
-
   private static long databaseId = 1;
   private static final String SAMPLE_REQUESTS_DIR = "requests";
   private static final List<String> VALID_REQUEST_FILES =
@@ -70,12 +78,8 @@ class PaymentsBridgeApplicationIT {
 
   private static final String TOO_MANY_HITS_REQUEST_FILE = "2021-10-01_1837_osama_bin_laden.json";
 
-  private static final String EMAIL_RECEIVER = "email.example2@silenteight.com";
-  private static final String EMAIL_SUBJECT = "Silent Eight - Learning data";
-  private static final String EMAIL_MESSAGE = "This is to confirm Silent Eight has received";
   public static final int WAIT_REGISTRATION_MAX_SECONDS = 20;
 
-  private static GreenMail greenMail;
   @Autowired ObjectMapper objectMapper;
   @Autowired CreateAlertMessageUseCase createAlertMessageUseCase;
   @Autowired ResourceLoader resourceLoader;
@@ -84,6 +88,19 @@ class PaymentsBridgeApplicationIT {
   @Autowired MockDatasourceService mockDatasourceService;
   @Autowired MockWarehouseService mockWarehouseService;
   @Autowired JdbcTemplate jdbcTemplate;
+  @Mock private CsvFileResourceProvider csvFileResourceProvider;
+  @MockBean private IdGenerator idGenerator;
+  @MockBean private DiscriminatorStrategy discriminatorStrategy;
+  private static final String ALERT_MESSAGE_ID = "cdd9c5ce-89dd-a37c-1e5f-b59b1f87f42b";
+  private static final String ALERT_SYSTEM_ID = "alert_system_id";
+  private static final String MESSAGE_ID = "87AB4899-BE5B-5E4F-E053-150A6C0A7A84";
+  private static final String FIRCO_DISCRIMINATOR = ALERT_SYSTEM_ID + "|" + MESSAGE_ID;
+  private static final String BRIDGE_DISCRIMINATOR = ALERT_MESSAGE_ID;
+
+  private static final String EMAIL_RECEIVER = "email.example2@silenteight.com";
+  private static final String EMAIL_SUBJECT = "Silent Eight - Learning data";
+  private static final String EMAIL_MESSAGE = "This is to confirm Silent Eight has received";
+  private static GreenMail greenMail;
 
   @BeforeAll
   static void beforeAll() {
@@ -93,6 +110,13 @@ class PaymentsBridgeApplicationIT {
         .start();
 
     System.setProperty("spring.mail.port", String.valueOf(greenMail.getSmtp().getPort()));
+
+    mockAlertMessageIdsToLearningAlerts(databaseId++, ALERT_MESSAGE_ID);
+  }
+
+  @AfterAll
+  static void afterAll() {
+    greenMail.stop();
   }
 
   private static void assertMailSent() {
@@ -113,18 +137,52 @@ class PaymentsBridgeApplicationIT {
             });
   }
 
+  private static void mockAlertMessageIdsToLearningAlerts(long databseId, String messageId) {
+    var alert = Alert.newBuilder().setAlertId(messageId).setName("alerts/" + databseId).build();
+    MockAlertUseCase.cacheAlert(databseId, alert);
+  }
+
   static Stream<String> filesFactory() {
     return VALID_REQUEST_FILES.stream();
   }
 
-  @AfterAll
-  static void afterAll() {
-    greenMail.stop();
+  @Test
+  @Sql(scripts = "db/cleanup.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
+  void shouldRegisterAndIndexWithFircoDiscriminiator() {
+    when(discriminatorStrategy.create(ALERT_MESSAGE_ID, ALERT_SYSTEM_ID, MESSAGE_ID))
+        .thenReturn(FIRCO_DISCRIMINATOR);
+
+    when(idGenerator.generateId()).thenReturn(UUID.fromString(ALERT_MESSAGE_ID));
+    assertAlertRegistered(ALERT_MESSAGE_ID);
+    // When switch to bridge discriminator use alert message id
+    assertAlertIndexed(FIRCO_DISCRIMINATOR);
+    var alertName = MockAlertUseCase.getAlertName(ALERT_MESSAGE_ID);
+    assertUdsValuesCreated(alertName);
+    assertMailSent();
+  }
+
+  @Test
+  @Sql(scripts = "db/cleanup.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
+  void shouldRegisterAndIndexWithDefaultDiscriminiator() {
+    when(discriminatorStrategy.create(ALERT_MESSAGE_ID, ALERT_SYSTEM_ID, MESSAGE_ID))
+        .thenReturn(BRIDGE_DISCRIMINATOR);
+
+    when(idGenerator.generateId()).thenReturn(UUID.fromString(ALERT_MESSAGE_ID));
+    assertAlertRegistered(ALERT_MESSAGE_ID);
+    // When switch to bridge discriminator use alert message id
+    assertAlertIndexed(BRIDGE_DISCRIMINATOR);
+    var alertName = MockAlertUseCase.getAlertName(ALERT_MESSAGE_ID);
+    assertUdsValuesCreated(alertName);
+    assertMailSent();
   }
 
   @ParameterizedTest
   @MethodSource("filesFactory")
   void shouldRegisterAlertAndInputs(String fileName) {
+    when(csvFileResourceProvider.getFilesList()).thenReturn(List.of());
+    when(discriminatorStrategy.create(anyString(), anyString(), anyString()))
+        .thenReturn(FIRCO_DISCRIMINATOR);
+
     // assumed h_r_gtex is same format as gtex message
     var alertId = createAlert(fileName);
     await()
@@ -135,6 +193,11 @@ class PaymentsBridgeApplicationIT {
 
   @Test
   void shouldRemoveAlertRetention() {
+    when(discriminatorStrategy.create(anyString(), anyString(), anyString()))
+        .thenReturn(FIRCO_DISCRIMINATOR);
+
+    when(csvFileResourceProvider.getFilesList()).thenReturn(List.of());
+
     var alertId = createAlert("test_retention.json");
     await()
         .conditionEvaluationListener(new ConditionEvaluationLogger(log::info))
@@ -170,47 +233,25 @@ class PaymentsBridgeApplicationIT {
         .isEqualTo(0);
   }
 
+  @Test
+  void shouldRejectAlertWithTooManyHits() {
+    when(discriminatorStrategy.create(anyString(), anyString(), anyString()))
+        .thenReturn(FIRCO_DISCRIMINATOR);
+
+    when(csvFileResourceProvider.getFilesList()).thenReturn(List.of());
+    var alertId = createAlert(TOO_MANY_HITS_REQUEST_FILE);
+    await()
+        .conditionEvaluationListener(new ConditionEvaluationLogger(log::info))
+        .atMost(Duration.ofSeconds(3))
+        .until(() -> !paymentsBridgeEventsListener.containsRegisteredAlert(alertId));
+  }
+
   private Boolean isAlertRemoved(UUID alertId) {
     return jdbcTemplate.queryForObject(
             String.format(
                 "SELECT count(*) from pb_alert_message WHERE alert_message_id = '%s'", alertId),
             Integer.class)
         == 0;
-  }
-
-  @Test
-  void shouldProcessLearningFilesUnregisteredAlert() {
-    var alertMessageId = assertAlertRegistered("alert_system_id");
-    assertAlertIndexed(alertMessageId);
-    var alertName = MockAlertUseCase.getAlertName(alertMessageId);
-    assertUdsValuesCreated(alertName);
-    assertMailSent();
-  }
-
-  private void assertUdsValuesCreated(String alertName) {
-    assertThat(mockDatasourceService.getCreatedFeatureInputsCount(alertName)).isEqualTo(8);
-    assertThat(mockDatasourceService.getCreatedCategoryValuesCount(alertName)).isEqualTo(8);
-  }
-
-  private void assertAlertIndexed(String discriminator) {
-    await()
-        .atMost(Duration.ofSeconds(WAIT_REGISTRATION_MAX_SECONDS))
-        .until(() -> mockWarehouseService.containsIndexedDiscriminator(discriminator));
-  }
-
-  private String assertAlertRegistered(String systemId) {
-    await()
-        .atMost(Duration.ofSeconds(WAIT_REGISTRATION_MAX_SECONDS))
-        .until(
-            () ->
-                jdbcTemplate.queryForObject(
-                    "SELECT count(*) FROM pb_registered_alert WHERE fkco_system_id = ?",
-                    Integer.class, systemId) >= 1);
-    var messageId = jdbcTemplate.queryForObject(
-        "SELECT alert_message_id FROM pb_registered_alert WHERE fkco_system_id = ?",
-        String.class, systemId);
-    assertTrue(MockAlertUseCase.containsAlertId(messageId));
-    return messageId;
   }
 
   private UUID createAlert(String fileName) {
@@ -224,6 +265,7 @@ class PaymentsBridgeApplicationIT {
       var requestDto = objectMapper.readValue(srcFile, RequestDto.class);
       var dto = requestDto.getAlerts().get(0);
       var uuid = UUID.randomUUID();
+      mockAlertMessageIdsToLearningAlerts(databaseId++, uuid.toString());
       return new FircoAlertMessage(
           uuid, OffsetDateTime.now(Clock.systemUTC()), dto, "", "", "login", "password");
     } catch (Exception exception) {
@@ -241,12 +283,21 @@ class PaymentsBridgeApplicationIT {
     }
   }
 
-  @Test
-  void shouldRejectAlertWithTooManyHits() {
-    var alertId = createAlert(TOO_MANY_HITS_REQUEST_FILE);
+  private void assertUdsValuesCreated(String alertName) {
+    assertThat(mockDatasourceService.getCreatedFeatureInputsCount(alertName)).isEqualTo(5);
+    assertThat(mockDatasourceService.getCreatedCategoryValuesCount(alertName)).isEqualTo(3);
+  }
+
+  private void assertAlertIndexed(String discriminator) {
     await()
-        .conditionEvaluationListener(new ConditionEvaluationLogger(log::info))
-        .atMost(Duration.ofSeconds(3))
-        .until(() -> !paymentsBridgeEventsListener.containsRegisteredAlert(alertId));
+        .atMost(Duration.ofSeconds(WAIT_REGISTRATION_MAX_SECONDS))
+        .until(() -> mockWarehouseService.containsIndexedDiscriminator(discriminator));
+  }
+
+  private void assertAlertRegistered(String discriminator) {
+    await()
+        .atMost(Duration.ofSeconds(WAIT_REGISTRATION_MAX_SECONDS))
+        .until(() -> paymentsBridgeEventsListener.containsLearningRegisteredId(discriminator));
+    assertTrue(MockAlertUseCase.containsAlertId(discriminator));
   }
 }

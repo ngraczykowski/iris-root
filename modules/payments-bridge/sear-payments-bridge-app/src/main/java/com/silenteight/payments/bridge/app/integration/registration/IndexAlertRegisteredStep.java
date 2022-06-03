@@ -3,6 +3,7 @@ package com.silenteight.payments.bridge.app.integration.registration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.payments.bridge.common.indexing.DiscriminatorStrategy;
 import com.silenteight.payments.bridge.common.model.AeAlert;
 import com.silenteight.payments.bridge.common.model.AlertData;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessageStatusUseCase;
@@ -25,8 +26,11 @@ class IndexAlertRegisteredStep {
 
   private final AlertMessageStatusUseCase alertMessageStatusUseCase;
   private final IndexAlertRegisteredUseCase indexAlertRegisteredUseCase;
+  private final DiscriminatorStrategy discriminatorStrategy;
 
-  @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
+  @Timed(
+      percentiles = {0.5, 0.95, 0.99},
+      histogram = true)
   void invoke(Context ctx) {
     var status = alertMessageStatusUseCase.getStatus(ctx.getAlertId());
     indexAlertRegisteredUseCase.index(
@@ -34,12 +38,14 @@ class IndexAlertRegisteredStep {
             ctx.getAlertData(), ctx.getAeAlert(), ctx.getAlertMessageDto(), status.name()));
   }
 
-  private static IndexAlertRegisteredRequest createRequest(
+  private IndexAlertRegisteredRequest createRequest(
       AlertData alertData, AeAlert aeAlert, AlertMessageDto alertMessageDto, String status) {
-    return IndexAlertRegisteredRequest
-        .builder()
+    var discriminator =
+        discriminatorStrategy.create(
+            alertData.getAlertId().toString(), alertData.getSystemId(), alertData.getMessageId());
+    return IndexAlertRegisteredRequest.builder()
         .name(aeAlert.getAlertName())
-        .discriminator(alertData.getDiscriminator())
+        .discriminator(discriminator)
         .alertId(alertData.getAlertId())
         .systemId(alertMessageDto.getSystemID())
         .status(status)
@@ -47,8 +53,7 @@ class IndexAlertRegisteredStep {
         .build();
   }
 
-  private static List<IndexMatch> createIndexMatches(
-      AeAlert aeAlert, List<RequestHitDto> hits) {
+  private static List<IndexMatch> createIndexMatches(AeAlert aeAlert, List<RequestHitDto> hits) {
 
     var matches = new ArrayList<IndexMatch>();
 
@@ -61,12 +66,12 @@ class IndexAlertRegisteredStep {
       var matchId = hit.getMatchId(i);
       var matchName = aeAlert.getMatches().get(matchId);
 
-      var indexMatch = IndexMatch
-          .builder()
-          .matchId(matchId)
-          .matchName(matchName)
-          .matchingTexts(hit.getMatchingText())
-          .build();
+      var indexMatch =
+          IndexMatch.builder()
+              .matchId(matchId)
+              .matchName(matchName)
+              .matchingTexts(hit.getMatchingText())
+              .build();
 
       matches.add(indexMatch);
     }

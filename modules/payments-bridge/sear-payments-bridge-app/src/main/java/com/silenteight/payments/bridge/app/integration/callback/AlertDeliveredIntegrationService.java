@@ -3,7 +3,7 @@ package com.silenteight.payments.bridge.app.integration.callback;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.app.amqp.AlertUndeliveredPort;
-import com.silenteight.payments.bridge.common.model.AlertData;
+import com.silenteight.payments.bridge.common.indexing.DiscriminatorStrategy;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessageStatusUseCase;
@@ -21,12 +21,13 @@ import static com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryS
 
 @Component
 @RequiredArgsConstructor
-public class AlertDeliveredIntegrationService implements AlertDeliveredPublisherPort,
-    AlertUndeliveredPort {
+public class AlertDeliveredIntegrationService
+    implements AlertDeliveredPublisherPort, AlertUndeliveredPort {
 
   private final AlertMessageStatusUseCase alertMessageStatusUseCase;
   private final AlertMessageUseCase alertMessageUseCase;
   private final IndexResponseDeliveredUseCase indexResponseDeliveredUseCase;
+  private final DiscriminatorStrategy discriminatorStrategy;
 
   @Override
   public void sendDelivered(UUID alertId, AlertMessageStatus status) {
@@ -41,15 +42,17 @@ public class AlertDeliveredIntegrationService implements AlertDeliveredPublisher
   private void apply(UUID alertId, AlertMessageStatus status, DeliveryStatus deliveryStatus) {
     alertMessageStatusUseCase.transitionAlertMessageStatus(alertId, status, deliveryStatus);
     var alertData = alertMessageUseCase.findByAlertMessageId(alertId);
-    indexResponseDeliveredUseCase.index(createRequest(alertData, status, deliveryStatus));
+    var discriminator =
+        discriminatorStrategy.create(
+            alertData.getAlertId().toString(), alertData.getSystemId(), alertData.getMessageId());
+    indexResponseDeliveredUseCase.index(createRequest(discriminator, status, deliveryStatus));
   }
 
   // TODO(wkeska): Move this code to AlertData after it will be moved to firco module
   private static IndexResponseDeliveredRequest createRequest(
-      AlertData alertData, AlertMessageStatus status, DeliveryStatus deliveryStatus) {
-    return IndexResponseDeliveredRequest
-        .builder()
-        .discriminator(alertData.getDiscriminator())
+      String discriminator, AlertMessageStatus status, DeliveryStatus deliveryStatus) {
+    return IndexResponseDeliveredRequest.builder()
+        .discriminator(discriminator)
         .status(status.name())
         .deliveryStatus(deliveryStatus.name())
         .build();

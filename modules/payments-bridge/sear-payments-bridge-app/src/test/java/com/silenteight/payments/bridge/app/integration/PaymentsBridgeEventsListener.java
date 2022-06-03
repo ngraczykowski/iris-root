@@ -38,7 +38,7 @@ class PaymentsBridgeEventsListener {
         .anyMatch(are -> are.getAeAlert().getAlertId().equals(alertId));
   }
 
-  boolean containsLearningRegisteredSystemId(String alertId) {
+  boolean containsLearningRegisteredId(String alertId) {
     return learningAlertRegisteredEvents
         .stream()
         .anyMatch(are -> are.getAlertMessageId().equals(alertId));

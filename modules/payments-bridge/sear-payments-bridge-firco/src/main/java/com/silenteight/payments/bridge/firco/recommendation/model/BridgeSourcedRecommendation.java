@@ -3,6 +3,7 @@ package com.silenteight.payments.bridge.firco.recommendation.model;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.payments.bridge.common.indexing.DiscriminatorStrategy;
 import com.silenteight.payments.bridge.common.model.AlertData;
 import com.silenteight.payments.bridge.common.model.AlertId;
 import com.silenteight.payments.bridge.warehouse.index.model.IndexBridgeRecommendationRequest;
@@ -17,10 +18,13 @@ public class BridgeSourcedRecommendation implements AlertId {
   private final String status;
   private final String reason;
 
-  public IndexBridgeRecommendationRequest toIndexRecommendationRequest(AlertData alertData) {
-    return IndexBridgeRecommendationRequest
-        .builder()
-        .discriminator(alertData.getDiscriminator())
+  public IndexBridgeRecommendationRequest toIndexRecommendationRequest(
+      DiscriminatorStrategy discriminatorStrategy, AlertData alertData) {
+    var discriminator =
+        discriminatorStrategy.create(
+            alertData.getAlertId().toString(), alertData.getSystemId(), alertData.getMessageId());
+    return IndexBridgeRecommendationRequest.builder()
+        .discriminator(discriminator)
         .reason(reason)
         .status(status)
         .systemId(alertData.getSystemId())

@@ -25,8 +25,5 @@ public class AlertData implements AlertId {
   @ToString.Exclude
   String userPassword;
 
-  public String getDiscriminator() {
-    return alertId.toString();
-  }
 
 }

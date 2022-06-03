@@ -2,6 +2,7 @@ package com.silenteight.payments.bridge.app.integration;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.payments.bridge.common.indexing.DiscriminatorStrategy;
 import com.silenteight.payments.bridge.common.model.AlertData;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessageUseCase;
 import com.silenteight.payments.bridge.firco.recommendation.model.AdjudicationEngineSourcedRecommendation;
@@ -20,6 +21,7 @@ class IndexRecommendationIntegrationService implements IndexRecommendationPort {
   private final AlertMessageUseCase alertMessageUseCase;
   private final IndexBridgeRecommendationUseCase indexBridgeRecommendationUseCase;
   private final IndexRecommendationUseCase indexRecommendationUseCase;
+  private final DiscriminatorStrategy discriminatorStrategy;
 
   @Override
   public void send(AdjudicationEngineSourcedRecommendation recommendation) {
@@ -29,11 +31,13 @@ class IndexRecommendationIntegrationService implements IndexRecommendationPort {
   }
 
   // TODO(wkeska): Move this code to AlertData after it will be moved to firco module
-  private static IndexRecommendationRequest createRequest(
+  private IndexRecommendationRequest createRequest(
       AdjudicationEngineSourcedRecommendation recommendation, AlertData alertData) {
-    return IndexRecommendationRequest
-        .builder()
-        .discriminator(alertData.getDiscriminator())
+    var discriminator =
+        discriminatorStrategy.create(
+            alertData.getAlertId().toString(), alertData.getSystemId(), alertData.getMessageId());
+    return IndexRecommendationRequest.builder()
+        .discriminator(discriminator)
         .systemId(alertData.getSystemId())
         .recommendationWithMetadata(recommendation.getRecommendation())
         .build();
@@ -42,6 +46,7 @@ class IndexRecommendationIntegrationService implements IndexRecommendationPort {
   @Override
   public void send(BridgeSourcedRecommendation recommendation) {
     var alertData = alertMessageUseCase.findByAlertMessageId(recommendation.getAlertId());
-    indexBridgeRecommendationUseCase.index(recommendation.toIndexRecommendationRequest(alertData));
+    indexBridgeRecommendationUseCase.index(
+        recommendation.toIndexRecommendationRequest(discriminatorStrategy, alertData));
   }
 }
