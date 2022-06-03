@@ -1,15 +1,23 @@
 package steps;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.java8.En;
 import utils.ScenarioContext;
+import utils.datageneration.warehouse.CreateCountryGroup;
 import utils.datageneration.webapp.CreateUser;
 import utils.datageneration.webapp.WebAppGenerationService;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 import static io.restassured.RestAssured.given;
+import static steps.WarehouseSteps.COUNTRY_GROUP;
 import static utils.AuthUtils.getAuthTokenHeaderForAdmin;
 
 public class WebAppSteps implements En {
+
+  private static final String USER = "user";
   ScenarioContext scenarioContext = Hooks.scenarioContext;
 
   public WebAppSteps() {
@@ -27,7 +35,7 @@ public class WebAppSteps implements En {
         () -> {
           CreateUser user = WebAppGenerationService.createUser();
 
-          scenarioContext.set(user.getUserName(), user);
+          scenarioContext.set(USER, user);
 
           given()
               //TODO(dsniezek): fix dependency to allow jackson auto serialize to json
@@ -39,5 +47,22 @@ public class WebAppSteps implements En {
               .then()
               .statusCode(201);
         });
+    And("Assign user to country group", this::assignUserToCountryGroup);
+  }
+
+  private void assignUserToCountryGroup() throws JsonProcessingException {
+    CreateUser createUser = (CreateUser)scenarioContext.get(USER);
+    CreateCountryGroup countryGroup = (CreateCountryGroup)scenarioContext.get(COUNTRY_GROUP);
+    HashMap<String, Object> body = new HashMap<>();
+    body.put("countryGroups", new UUID[]{ countryGroup.getId()});
+    given()
+        //TODO(dsniezek): fix dependency to allow jackson auto serialize to json
+        .body(new ObjectMapper().writeValueAsString(body))
+        .header("Authorization", getAuthTokenHeaderForAdmin())
+        .contentType("application/json")
+        .when()
+        .patch(String.format("/rest/webapp/api/users/%s", createUser.getUserName()))
+        .then()
+        .statusCode(204);
   }
 }

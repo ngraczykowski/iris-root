@@ -22,6 +22,13 @@ Feature: Smoke scenarios
     Then Policy is created
     And Mark created policy as ready
 
+  Scenario: Create country group
+    Given Create country group
+    And Add countries to country group
+      | PL |
+    And Create user with random name
+    Then Assign user to country group
+
   Scenario: Get all users
     Given Users endpoint responses with status code 200
 
