@@ -14,6 +14,7 @@ import com.silenteight.hsbc.bridge.recommendation.event.RecommendationsGenerated
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.stream.Collectors;
 
@@ -51,7 +52,7 @@ class AlertEventListener {
     updater.updateWithCompletedStatus(event.getAlerts());
   }
 
-  @EventListener
+  @TransactionalEventListener
   @Async
   public void onBulkStoredEvent(BulkStoredEvent event) {
     var bulkId = event.getBulkId();
