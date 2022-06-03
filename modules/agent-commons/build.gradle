@@ -94,8 +94,8 @@ static def generateClassPathInManifest(Project project) {
   }
 }
 
-sonarqube {
-  properties {
-    property "sonar.projectKey", "SilentEight_agent-commons_AYEqCI_q5UHU8gMU5dMP"
-  }
-}
+// sonarqube {
+//   properties {
+//     property "sonar.projectKey", "SilentEight_agent-commons_AYEqCI_q5UHU8gMU5dMP"
+//   }
+// }
