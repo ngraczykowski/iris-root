@@ -55,7 +55,7 @@ components:
       - warehouse
       - messaging
     properties:
-      "warehouse.report.default-bucket": "{{ .Release.Namespace }}/{{ include \"sear.fullname\" . }}/warehouse"
+      "warehouse.report.default-bucket": "{{ .Release.Namespace }}-{{ include \"sear.fullname\" . }}-warehouse"
       "warehouse.report.sse": AWS_KMS
       "sep.filestorage.minio.url": https://devenv-6fa57739-906d-1130-4a76-90dd1c5dc8a3.s3.eu-central-1.amazonaws.com
       "sep.filestorage.minio.region": eu-central-1
