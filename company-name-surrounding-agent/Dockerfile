@@ -7,6 +7,8 @@ COPY pyproject.toml setup.py setup.cfg requirements.txt /app/
 FROM python:3.7-slim
 ARG PYPI_URL
 
+ENV SENTRY_DSN="https://0838e91130ed4c9eae71f81d86e75589@o1129201.ingest.sentry.io/6468420"
+
 COPY --from=BUILD /app /app
 
 RUN apt-get update \

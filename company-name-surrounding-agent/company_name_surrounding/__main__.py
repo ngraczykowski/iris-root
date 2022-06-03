@@ -2,6 +2,7 @@ import argparse
 import logging
 import pathlib
 
+import sentry_sdk
 from agent_base.agent import AgentRunner
 from agent_base.grpc_service import GrpcService
 from agent_base.utils import Config
@@ -13,6 +14,16 @@ from company_name_surrounding.grpc_service import CompanyNameSurroundingAgentGrp
 
 def run(configuration_dirs, start_grpc_service):
     config = Config(configuration_dirs=configuration_dirs, required=True)
+
+    sentry_config = config.application_config.get("sentry", None)
+    if sentry_config:
+        sentry_sdk.init(
+            traces_sample_rate=0.0,  # hard set to 0 to not increase usage cost
+            release=f"company-name-surrounding-agent@{sentry_config['release']}",
+            environment=sentry_config["environment"],
+            sample_rate=sentry_config["sample_rate"],
+        )
+
     services = []
 
     if start_grpc_service:

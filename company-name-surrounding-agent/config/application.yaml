@@ -24,3 +24,8 @@ solution_rules:
     upper_bound: 1000000
 
 default_response: AGENT_ERROR
+
+#sentry:
+#  environment: unknown
+#  release: unknown
+#  sample_rate: 1.0

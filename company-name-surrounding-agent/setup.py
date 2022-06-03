@@ -29,6 +29,7 @@ setup(
         "agent-base==0.23.0",
         "companynamesurrounding-agent-api>=0.27.0",
         "organization-name-knowledge==0.9.0",
+        "sentry_sdk==1.5.4",
     ],
     extras_require={
         "tests": tests_require,
