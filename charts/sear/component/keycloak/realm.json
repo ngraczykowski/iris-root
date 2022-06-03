@@ -465,7 +465,7 @@
     "requiredActions" : [ ],
     "realmRoles" : [ "default-roles-dev" ],
     "clientRoles" : {
-      "realm-management" : [ "view-events", "view-clients", "manage-users" ]
+      "realm-management" : [ "view-events", "manage-clients", "manage-users" ]
     },
     "notBefore" : 0,
     "groups" : [ ]
