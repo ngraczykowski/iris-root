@@ -9,7 +9,7 @@ import com.silenteight.universaldatasource.api.library.comparedates.v1.CompareDa
 @RequiredArgsConstructor
 public class VisaDocumentExpiredFeature implements FabFeature {
 
-  static final String FEATURE_NAME = "features/uaeNationalIdDateNotAfterToday";
+  static final String FEATURE_NAME = "features/visaExpiryDateVsToday";
 
   @Override
   public Feature buildFeature(BuildFeatureCommand buildFeatureCommand) {
