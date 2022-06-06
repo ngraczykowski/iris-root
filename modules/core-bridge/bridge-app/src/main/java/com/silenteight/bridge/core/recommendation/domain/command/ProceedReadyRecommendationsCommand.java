@@ -5,5 +5,6 @@ import com.silenteight.bridge.core.recommendation.domain.model.RecommendationWit
 import java.util.List;
 
 public record ProceedReadyRecommendationsCommand(
-    List<RecommendationWithMetadata> recommendationsWithMetadata
+    List<RecommendationWithMetadata> recommendationsWithMetadata,
+    String analysisName
 ) {}

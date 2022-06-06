@@ -1,5 +1,7 @@
 package com.silenteight.bridge.core.recommendation.domain
 
+import com.silenteight.bridge.core.recommendation.domain.command.ProceedBatchTimeoutCommand
+import com.silenteight.bridge.core.recommendation.domain.command.ProceedReadyRecommendationsCommand
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationWithMetadata
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationsStoredEvent
 import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RecommendationEventPublisher
@@ -25,7 +27,7 @@ class RecommendationProcessorSpec extends Specification {
     def analysisName = recommendationWithMetadata.first().analysisName()
 
     when:
-    underTest.proceedReadyRecommendations(recommendationWithMetadata)
+    underTest.proceedReadyRecommendations(new ProceedReadyRecommendationsCommand(recommendationWithMetadata, analysisName), RecommendationFixtures.BATCH_PRIORITY)
 
     then:
     1 * recommendationRepository.findRecommendationAlertNamesByAnalysisName(analysisName) >> []
@@ -40,13 +42,13 @@ class RecommendationProcessorSpec extends Specification {
     def existingRecommendationAlertNames = [recommendationWithMetadata.first().alertName()]
 
     when:
-    underTest.proceedReadyRecommendations(recommendationWithMetadata)
+    underTest.proceedReadyRecommendations(new ProceedReadyRecommendationsCommand(recommendationWithMetadata, analysisName), RecommendationFixtures.BATCH_PRIORITY)
 
     then:
     1 * recommendationRepository.findRecommendationAlertNamesByAnalysisName(analysisName) >>
         existingRecommendationAlertNames
     0 * recommendationRepository.saveAll([])
-    0 * eventPublisher.publish(new RecommendationsStoredEvent(analysisName, [], false))
+    0 * eventPublisher.publish(new RecommendationsStoredEvent(analysisName, [], false, RecommendationFixtures.BATCH_PRIORITY))
   }
 
   def 'should create timed out recommendations without existing duplicates in DB'() {
@@ -55,12 +57,12 @@ class RecommendationProcessorSpec extends Specification {
     def alertNames = ['alertName1', 'alertName2']
 
     when:
-    underTest.createTimedOutRecommendations(analysisName, alertNames)
+    underTest.createTimedOutRecommendations(new ProceedBatchTimeoutCommand(analysisName, alertNames), RecommendationFixtures.BATCH_PRIORITY)
 
     then:
     1 * recommendationRepository.findRecommendationAlertNamesByAnalysisName(analysisName) >> []
     1 * recommendationRepository.saveAll(_ as List<RecommendationWithMetadata>)
-    1 * eventPublisher.publish(new RecommendationsStoredEvent(analysisName, alertNames, true))
+    1 * eventPublisher.publish(new RecommendationsStoredEvent(analysisName, alertNames, true, RecommendationFixtures.BATCH_PRIORITY))
   }
 
   def 'should create timed out recommendations with existing duplicates in DB'() {
@@ -70,12 +72,12 @@ class RecommendationProcessorSpec extends Specification {
     def existingRecommendationAlertNames = ['alertName1', 'alertName2']
 
     when:
-    underTest.createTimedOutRecommendations(analysisName, alertNames)
+    underTest.createTimedOutRecommendations(new ProceedBatchTimeoutCommand(analysisName, alertNames), RecommendationFixtures.BATCH_PRIORITY)
 
     then:
     1 * recommendationRepository.findRecommendationAlertNamesByAnalysisName(analysisName) >>
         existingRecommendationAlertNames
     0 * recommendationRepository.saveAll(_ as List<RecommendationWithMetadata>)
-    0 * eventPublisher.publish(new RecommendationsStoredEvent(analysisName, ['alertName2'], true))
+    0 * eventPublisher.publish(new RecommendationsStoredEvent(analysisName, ['alertName2'], true, RecommendationFixtures.BATCH_PRIORITY))
   }
 }

@@ -279,6 +279,11 @@
       "name": "registration.recommendations.recommendations-stored-update-alerts-chunk-size",
       "type": "java.lang.String",
       "description": "Size of alert names stream chunk for update alerts to recommended."
+    },
+    {
+      "name": "silenteight.bridge.amqp.queue-max-priority",
+      "type": "java.lang.String",
+      "description": "Max priority for queues defined in core bridge."
     }
   ]
 }

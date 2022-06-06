@@ -35,6 +35,6 @@ class RecommendationsRabbitAmqpListener {
         .toList();
 
     recommendationFacade.proceedReadyRecommendations(
-        new ProceedReadyRecommendationsCommand(recommendationsWithMetadata));
+        new ProceedReadyRecommendationsCommand(recommendationsWithMetadata, analysisName));
   }
 }

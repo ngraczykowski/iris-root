@@ -26,6 +26,10 @@ silenteight:
       dry-run-mode:
         enabled: true
 
+    ### AMQP PROPERTIES
+    amqp:
+      queue-max-priority: 10
+
 ### GRPC
 grpc:
   server:

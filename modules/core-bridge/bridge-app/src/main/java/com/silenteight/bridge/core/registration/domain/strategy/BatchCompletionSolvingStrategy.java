@@ -41,6 +41,7 @@ class BatchCompletionSolvingStrategy implements BatchCompletionStrategy {
         .id(batch.id())
         .analysisName(batch.analysisName())
         .batchMetadata(batch.batchMetadata())
+        .priority(batch.batchPriority())
         .build()
     );
   }

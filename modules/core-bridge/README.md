@@ -7,6 +7,7 @@
 In the `docs/` directory you can find a bit more detailed documentation, such as:
 * [Batch Expiration Check Feature](docs/batch_expiration.adoc)
 * [Data Retention Feature](docs/data_retention.adoc)
+* [Queues Priority](docs/batch_processing_priority.adoc)
 
 more info soon...
 

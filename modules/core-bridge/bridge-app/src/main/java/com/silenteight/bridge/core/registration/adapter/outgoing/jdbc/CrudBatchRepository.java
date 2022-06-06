@@ -1,6 +1,7 @@
 package com.silenteight.bridge.core.registration.adapter.outgoing.jdbc;
 
 import com.silenteight.bridge.core.registration.adapter.outgoing.jdbc.BatchEntity.Status;
+import com.silenteight.bridge.core.registration.domain.model.BatchPriority;
 
 import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
@@ -19,6 +20,12 @@ interface CrudBatchRepository extends CrudRepository<BatchEntity, Long> {
       FROM core_bridge_batches
       WHERE batch_id = :batchId""")
   Optional<BatchPriorityWithStatusProjection> findPriorityByBatchId(String batchId);
+
+  @Query("""
+      SELECT priority
+      FROM core_bridge_batches
+      WHERE analysis_name = :analysisName""")
+  BatchPriority findPriorityByAnalysisName(String analysisName);
 
   @Query("""
       SELECT batch_id, policy_name

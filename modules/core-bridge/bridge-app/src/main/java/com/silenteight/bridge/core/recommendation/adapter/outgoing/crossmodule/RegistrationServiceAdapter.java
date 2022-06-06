@@ -2,6 +2,7 @@ package com.silenteight.bridge.core.recommendation.adapter.outgoing.crossmodule;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.bridge.core.recommendation.domain.model.BatchPriorityDto;
 import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto;
 import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto.AlertStatus;
 import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto.AlertWithMatchesDto;
@@ -13,12 +14,14 @@ import com.silenteight.bridge.core.registration.domain.RegistrationFacade;
 import com.silenteight.bridge.core.registration.domain.command.*;
 import com.silenteight.bridge.core.registration.domain.model.AlertWithMatches;
 import com.silenteight.bridge.core.registration.domain.model.BatchIdWithPolicy;
+import com.silenteight.bridge.core.registration.domain.model.BatchPriority;
 import com.silenteight.bridge.core.registration.domain.model.BatchWithAlerts;
 
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -39,6 +42,14 @@ class RegistrationServiceAdapter implements RegistrationService {
   public BatchIdWithPolicy getBatchId(String analysisName) {
     var command = new GetBatchIdCommand(analysisName);
     return registrationFacade.getBatchId(command);
+  }
+
+  @Override
+  public BatchPriorityDto getBatchPriority(String analysisName) {
+    var command = new GetBatchPriorityCommand(analysisName);
+    return new BatchPriorityDto(Optional.ofNullable(registrationFacade.getBatchPriority(command))
+        .map(BatchPriority::priority)
+        .orElse(0));
   }
 
   @Override

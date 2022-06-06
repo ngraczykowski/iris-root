@@ -1,5 +1,6 @@
 package com.silenteight.bridge.core.recommendation.domain.port.outgoing;
 
+import com.silenteight.bridge.core.recommendation.domain.model.BatchPriorityDto;
 import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto;
 import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto.AlertStatus;
 import com.silenteight.bridge.core.registration.adapter.outgoing.jdbc.AlertWithoutMatches;
@@ -16,6 +17,8 @@ public interface RegistrationService {
   BatchWithAlertsDto getBatchWithAlerts(String analysisName, List<String> alertNames);
 
   BatchIdWithPolicy getBatchId(String analysisName);
+
+  BatchPriorityDto getBatchPriority(String analysisName);
 
   Stream<AlertWithoutMatches> streamAllAlerts(String batchId, List<String> alertsNames);
 

@@ -32,6 +32,7 @@ class RegistrationFixtures {
           .alertsCount(ALERTS_COUNT)
           .batchMetadata(METADATA)
           .isSimulation(IS_SIMULATION)
+          .batchPriority(BATCH_PRIORITY)
 
   static def BATCH = BATCH_BUILDER
       .build()

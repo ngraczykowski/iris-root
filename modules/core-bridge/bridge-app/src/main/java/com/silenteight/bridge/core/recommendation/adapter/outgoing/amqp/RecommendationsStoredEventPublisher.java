@@ -32,6 +32,9 @@ class RecommendationsStoredEventPublisher implements RecommendationEventPublishe
         event.alertNames().size(),
         event.analysisName());
 
-    rabbitTemplate.convertAndSend(properties.exchangeName(), "", message);
+    rabbitTemplate.convertAndSend(properties.exchangeName(), "", message, rabbitMessage -> {
+      rabbitMessage.getMessageProperties().setPriority(event.priority());
+      return rabbitMessage;
+    });
   }
 }

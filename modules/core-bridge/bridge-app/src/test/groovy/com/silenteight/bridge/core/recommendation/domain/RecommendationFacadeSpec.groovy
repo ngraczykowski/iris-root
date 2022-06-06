@@ -40,8 +40,9 @@ class RecommendationFacadeSpec extends Specification {
     underTest.proceedReadyRecommendations(command)
 
     then:
+    1 * registrationService.getBatchPriority(RecommendationFixtures.ANALYSIS_NAME) >> RecommendationFixtures.BATCH_PRIORITY_DTO
     1 * recommendationProcessor
-        .proceedReadyRecommendations(RecommendationFixtures.READY_RECOMMENDATIONS_COMMAND.recommendationsWithMetadata())
+        .proceedReadyRecommendations(RecommendationFixtures.READY_RECOMMENDATIONS_COMMAND, RecommendationFixtures.BATCH_PRIORITY)
   }
 
   def 'should proceed batch timeout'() {
@@ -52,9 +53,8 @@ class RecommendationFacadeSpec extends Specification {
     underTest.proceedBatchTimeout(command)
 
     then:
-    1 * recommendationProcessor.createTimedOutRecommendations(
-        RecommendationFixtures.TIMED_OUT_RECOMMENDATIONS_COMMAND.analysisName(),
-        RecommendationFixtures.TIMED_OUT_RECOMMENDATIONS_COMMAND.alertNames())
+    1 * registrationService.getBatchPriority(RecommendationFixtures.ANALYSIS_NAME) >> RecommendationFixtures.BATCH_PRIORITY_DTO
+    1 * recommendationProcessor.createTimedOutRecommendations(RecommendationFixtures.TIMED_OUT_RECOMMENDATIONS_COMMAND, RecommendationFixtures.BATCH_PRIORITY)
   }
 
 

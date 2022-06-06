@@ -43,12 +43,13 @@ public class RecommendationFacade {
   private final RecommendationsDataRetentionService dataRetentionService;
 
   public void proceedReadyRecommendations(ProceedReadyRecommendationsCommand command) {
-    recommendationProcessor.proceedReadyRecommendations(command.recommendationsWithMetadata());
+    var batchPriority = registrationService.getBatchPriority(command.analysisName());
+    recommendationProcessor.proceedReadyRecommendations(command, batchPriority.priority());
   }
 
   public void proceedBatchTimeout(ProceedBatchTimeoutCommand command) {
-    recommendationProcessor.createTimedOutRecommendations(
-        command.analysisName(), command.alertNames());
+    var batchPriority = registrationService.getBatchPriority(command.analysisName());
+    recommendationProcessor.createTimedOutRecommendations(command, batchPriority.priority());
   }
 
   public RecommendationsResponse getRecommendationsResponse(GetRecommendationCommand command) {

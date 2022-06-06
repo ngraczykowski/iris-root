@@ -41,7 +41,7 @@ class BatchTimeoutServiceSpec extends Specification {
     then:
     1 * batchEventPublisher.publish(new BatchTimedOut(batch.analysisName(), alertNames))
     0 * batchEventPublisher
-        .publish(new SolvingBatchCompleted(batch.id(), batch.analysisName(), batch.batchMetadata()))
+        .publish(new SolvingBatchCompleted(batch.id(), batch.analysisName(), batch.batchMetadata(), batch.batchPriority()))
   }
 
   def "should ignore batch due to its status #status"() {
@@ -90,7 +90,7 @@ class BatchTimeoutServiceSpec extends Specification {
     then:
     0 * batchEventPublisher.publish(BatchTimedOut)
     1 * batchEventPublisher
-        .publish(new SolvingBatchCompleted(batch.id(), batch.analysisName(), batch.batchMetadata()))
+        .publish(new SolvingBatchCompleted(batch.id(), batch.analysisName(), batch.batchMetadata(), batch.batchPriority()))
   }
 
   def "should not publish BatchTimedOut and BatchCompleted messages"() {
@@ -108,7 +108,7 @@ class BatchTimeoutServiceSpec extends Specification {
     then:
     0 * batchEventPublisher.publish(BatchTimedOut)
     0 * batchEventPublisher
-        .publish(new SolvingBatchCompleted(batch.id(), batch.analysisName(), batch.batchMetadata()))
+        .publish(new SolvingBatchCompleted(batch.id(), batch.analysisName(), batch.batchMetadata(), batch.batchPriority()))
   }
 
   def "should mark batch with status #status as completed and publish batch completed when all alerts are erroneous"() {

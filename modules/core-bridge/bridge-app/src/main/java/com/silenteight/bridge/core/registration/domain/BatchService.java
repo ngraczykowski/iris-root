@@ -73,6 +73,10 @@ class BatchService {
     return batchProjection;
   }
 
+  BatchPriority findBatchPriority(String analysisName) {
+    return batchRepository.findBatchPriorityByAnalysisName(analysisName);
+  }
+
   void notifyBatchError(NotifyBatchErrorCommand notifyBatchErrorCommand) {
     batchRepository.findById(notifyBatchErrorCommand.id())
         .ifPresentOrElse(

@@ -2,6 +2,7 @@ package com.silenteight.bridge.core.registration.domain
 
 import com.silenteight.bridge.core.Fixtures
 import com.silenteight.bridge.core.recommendation.domain.RecommendationFixtures
+import com.silenteight.bridge.core.registration.domain.command.GetBatchPriorityCommand
 import com.silenteight.bridge.core.registration.domain.command.MarkAlertsAsDeliveredCommand
 import com.silenteight.bridge.core.registration.domain.command.MarkAlertsAsRecommendedCommand
 import com.silenteight.bridge.core.registration.domain.command.StartDataRetentionCommand
@@ -9,6 +10,7 @@ import com.silenteight.bridge.core.registration.domain.command.VerifyBatchTimeou
 import com.silenteight.bridge.core.registration.domain.model.Alert
 import com.silenteight.bridge.core.registration.domain.model.Batch
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
+import com.silenteight.bridge.core.registration.domain.model.BatchPriority
 import com.silenteight.bridge.core.registration.domain.model.BatchPriorityWithStatus
 
 import spock.lang.Specification
@@ -289,5 +291,17 @@ class RegistrationFacadeSpec extends Specification {
 
     then:
     1 * dataRetentionService.start(command)
+  }
+
+  def 'should find batch priority'() {
+    given:
+    def command = new GetBatchPriorityCommand(RegistrationFixtures.ANALYSIS_NAME)
+
+    when:
+    def result = underTest.getBatchPriority(command)
+
+    then:
+    1 * batchService.findBatchPriority(RegistrationFixtures.ANALYSIS_NAME) >> new BatchPriority(RegistrationFixtures.BATCH_PRIORITY)
+    result.priority() == RegistrationFixtures.BATCH_PRIORITY
   }
 }

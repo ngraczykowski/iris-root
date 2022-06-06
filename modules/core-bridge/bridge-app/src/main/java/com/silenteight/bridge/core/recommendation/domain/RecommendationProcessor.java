@@ -3,6 +3,8 @@ package com.silenteight.bridge.core.recommendation.domain;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.bridge.core.recommendation.domain.command.ProceedBatchTimeoutCommand;
+import com.silenteight.bridge.core.recommendation.domain.command.ProceedReadyRecommendationsCommand;
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationMetadata;
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationWithMetadata;
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationsStoredEvent;
@@ -29,35 +31,38 @@ class RecommendationProcessor {
   private final RecommendationEventPublisher eventPublisher;
   private final RecommendationRepository recommendationRepository;
 
-  void proceedReadyRecommendations(List<RecommendationWithMetadata> receivedRecommendations) {
-    var analysisName = getAnalysisName(receivedRecommendations);
-    var newRecommendations = filterOutExistingInDb(analysisName, receivedRecommendations);
+  void proceedReadyRecommendations(
+      ProceedReadyRecommendationsCommand command,
+      Integer priority) {
+    var newRecommendations =
+        filterOutExistingInDb(command.analysisName(), command.recommendationsWithMetadata());
 
     if (CollectionUtils.isEmpty(newRecommendations)) {
       log.info("No new recommendations to process for analysis name: [{}]. "
-          + "Storing in DB and event publishing skipped", analysisName);
+          + "Storing in DB and event publishing skipped", command.analysisName());
       return;
     }
 
     log.info(
         "Received [{}] new recommendations from [{}] sent for analysis [{}].",
         newRecommendations.size(),
-        receivedRecommendations.size(),
-        analysisName);
+        command.recommendationsWithMetadata().size(),
+        command.analysisName());
 
-    saveRecommendations(analysisName, newRecommendations);
+    saveRecommendations(command.analysisName(), newRecommendations);
     eventPublisher.publish(new RecommendationsStoredEvent(
-        analysisName,
+        command.analysisName(),
         getAlertNames(newRecommendations),
-        false));
+        false,
+        priority));
   }
 
-  void createTimedOutRecommendations(String analysisName, List<String> alertNames) {
-    var createdRecommendations = alertNames.stream()
+  void createTimedOutRecommendations(ProceedBatchTimeoutCommand command, Integer priority) {
+    var createdRecommendations = command.alertNames().stream()
         .map(alertName -> RecommendationWithMetadata.builder()
             .name(TIMED_OUT_RECOMMENDATION_NAME)
             .alertName(alertName)
-            .analysisName(analysisName)
+            .analysisName(command.analysisName())
             .recommendedAction(RecommendedAction.ACTION_INVESTIGATE.name())
             .recommendationComment(TIMED_OUT_RECOMMENDATION_COMMENT)
             .recommendedAt(OffsetDateTime.now())
@@ -66,26 +71,21 @@ class RecommendationProcessor {
             .build())
         .toList();
 
-    var newRecommendations = filterOutExistingInDb(analysisName, createdRecommendations);
+    var newRecommendations = filterOutExistingInDb(
+        command.analysisName(), createdRecommendations);
 
     if (CollectionUtils.isEmpty(newRecommendations)) {
       log.info("No new timed out recommendations to process for analysis name: [{}]. "
-          + "Storing in DB and event publishing skipped", analysisName);
+          + "Storing in DB and event publishing skipped", command.analysisName());
       return;
     }
 
-    saveRecommendations(analysisName, newRecommendations);
+    saveRecommendations(command.analysisName(), newRecommendations);
     eventPublisher.publish(new RecommendationsStoredEvent(
-        analysisName,
+        command.analysisName(),
         getAlertNames(newRecommendations),
-        true));
-  }
-
-  private String getAnalysisName(List<RecommendationWithMetadata> receivedRecommendations) {
-    return receivedRecommendations.stream()
-        .findAny()
-        .map(RecommendationWithMetadata::analysisName)
-        .orElseThrow();
+        true,
+        priority));
   }
 
   private List<RecommendationWithMetadata> filterOutExistingInDb(

@@ -9,6 +9,7 @@ import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDt
 import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto.AlertWithMatchesDto.MatchDto;
 import com.silenteight.bridge.core.registration.adapter.outgoing.jdbc.AlertWithoutMatches;
 import com.silenteight.bridge.core.registration.adapter.outgoing.jdbc.MatchWithAlertId;
+import com.silenteight.bridge.core.registration.domain.model.BatchPriority;
 import com.silenteight.proto.recommendation.api.v1.*;
 import com.silenteight.proto.recommendation.api.v1.Alert.AlertStatus;
 import com.silenteight.proto.recommendation.api.v1.RecommendationsStatistics;
@@ -71,6 +72,10 @@ class RecommendationMapper {
                 .build())
         .setStatistics(toStatistics(recommendation.statistics()))
         .build();
+  }
+
+  BatchPriorityDto toBatchPriorityDto(BatchPriority batchPriority) {
+    return new BatchPriorityDto(batchPriority.priority());
   }
 
   private Recommendation.Builder toRecommendationBuilder(

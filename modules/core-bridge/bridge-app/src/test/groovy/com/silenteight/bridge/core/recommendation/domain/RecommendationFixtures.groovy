@@ -3,8 +3,9 @@ package com.silenteight.bridge.core.recommendation.domain
 import com.silenteight.adjudication.api.library.v1.util.TimeStampUtil
 import com.silenteight.bridge.core.Fixtures
 import com.silenteight.bridge.core.recommendation.domain.command.GetRecommendationCommand
-import com.silenteight.bridge.core.recommendation.domain.command.ProceedReadyRecommendationsCommand
 import com.silenteight.bridge.core.recommendation.domain.command.ProceedBatchTimeoutCommand
+import com.silenteight.bridge.core.recommendation.domain.command.ProceedReadyRecommendationsCommand
+import com.silenteight.bridge.core.recommendation.domain.model.BatchPriorityDto
 import com.silenteight.bridge.core.recommendation.domain.model.BatchStatistics
 import com.silenteight.bridge.core.recommendation.domain.model.BatchStatistics.RecommendationsStats
 import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto
@@ -25,7 +26,6 @@ import com.google.protobuf.Value
 
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
-import java.util.stream.Stream
 
 class RecommendationFixtures {
 
@@ -41,7 +41,7 @@ class RecommendationFixtures {
   static def SECOND_METADATA_MATCH_NAME = 'alerts/1/matches/2'
 
   static def READY_RECOMMENDATIONS_COMMAND = new ProceedReadyRecommendationsCommand(
-      [RECOMMENDATION_WITH_METADATA])
+      [RECOMMENDATION_WITH_METADATA], ANALYSIS_NAME)
 
   static def TIMED_OUT_RECOMMENDATIONS_COMMAND = new ProceedBatchTimeoutCommand(
       ANALYSIS_NAME, [ALERT_NAME])
@@ -260,6 +260,8 @@ class RecommendationFixtures {
 
   static def BATCH_ID_WITH_POLICY = new BatchIdWithPolicy(Fixtures.BATCH_ID, POLICY_NAME)
 
+  static def BATCH_PRIORITY = 1
+
   static def ALERTS_WITHOUT_MATCHES = AlertWithoutMatches.builder()
       .id("1")
       .alertId(Fixtures.ALERT_ID)
@@ -297,4 +299,6 @@ class RecommendationFixtures {
           .name(FixturesMatchMetaData.SECOND_METADATA_MATCH_NAME)
           .build()
   )
+
+  static def BATCH_PRIORITY_DTO = new BatchPriorityDto(BATCH_PRIORITY)
 }

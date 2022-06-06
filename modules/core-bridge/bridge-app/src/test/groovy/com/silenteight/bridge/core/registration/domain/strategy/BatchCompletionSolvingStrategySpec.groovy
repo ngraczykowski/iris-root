@@ -24,7 +24,8 @@ class BatchCompletionSolvingStrategySpec extends Specification {
     def batchCompleted = new SolvingBatchCompleted(
         Fixtures.BATCH_ID,
         RegistrationFixtures.ANALYSIS_NAME,
-        RegistrationFixtures.METADATA
+        RegistrationFixtures.METADATA,
+        RegistrationFixtures.BATCH_PRIORITY
     )
 
     when:

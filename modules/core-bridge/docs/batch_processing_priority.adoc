@@ -1,0 +1,80 @@
+= Batch prioritizing
+
+To ensure batch priority support Core Bridge uses RabbitMQ priority queue implementation.
+Core Bridge is providing support for prioritizing alerts adding to analysis
+and recommendation handling. Batch priority is obtained from `RegisterBatchRequest` received
+in `registerBatch` gRPC call.
+
+Adding alerts to analysis process will be triggered by publishing message to `core-bridge.match-feature-input-set-fed-queue`
+queue, messages with higher priority property will be consumed by Core Bridge in the first place
+(by default the highest priority level is 10) and processed further before other requests.
+That ensure that alerts for batch with higher priority would be delivered quicker to
+Adjudication Engine.
+
+To provide prioritization in whole batch processing lifecycle Core Bridge supports receiving
+message with priority from AE when recommendations are generated. That event will trigger sending
+prioritized Rabbit message to registration module, when all alerts are not in pending statuses
+or batch is timed out `SolvingBatchCompleted` message will be published with batch priority,
+same as in previous events.
+Customer Bridge listening to that message should ensure support for prioritized Rabbit messages,
+if not message will be treated as regular message
+
+Core Bridge provides also prioritizing batch timeout process in similar manner, to learn more
+about batch expiration please refer to link:batch_expiration.adoc#_batch_expiration_check[Batch expiration docs]
+
+== Technical details
+=== Infrastructure
+==== RabbitMQ queue priority support
+Rabbit implementation support priority up to 255, but values between 1 and 10 are recommended,
+by default Core Bridge priority is set up to 10.
+Declaring priority queue in RabbitMQ can be achieved by using `x-max-priority` optional queue argument.
+
+IMPORTANT: Rabbit doesn't support updating properties for existing queues, to perform update queue needs to be removed manually and recreated during application startup.
+
+
+Reference: https://www.rabbitmq.com/priority.html
+
+==== Max priority value
+
+Priority in Core Bridge can be set up using `silenteight.bridge.amqp.queue-max-priority`  property.
+This property is common for each queue mentioned above.
+
+=== Supported queues
+
+Currently, Core Bridge implements priority for:
+
+* `core-bridge.match-feature-input-set-fed-queue`
+* `core-bridge.recommendation-stored-queue`
+* `core-bridge.recommendations-generated-queue`
+* `core-bridge.notify-batch-timeout-queue`
+
+=== Examples
+
+==== Example of queue definition with priority in Spring Boot configuration
+[source,java]
+----
+@Bean
+Queue notifyBatchTimeoutQueue(
+    RecommendationIncomingNotifyBatchTimeoutConfigurationProperties properties,
+    @Value("${silenteight.bridge.amqp.queue-max-priority}") Integer queueMaxPriority) {
+
+return QueueBuilder.durable(properties.queueName())
+    .deadLetterExchange(properties.deadLetterExchangeName())
+    .deadLetterRoutingKey(properties.queueName())
+    .maxPriority(queueMaxPriority)
+    .build();
+}
+----
+
+==== Example of sending message with priority
+[source,java]
+----
+
+rabbitTemplate.convertAndSend(
+    ...
+    message,
+    rabbitMessage -> {
+        rabbitMessage.getMessageProperties().setPriority(event.priority());
+        return rabbitMessage;
+});
+----

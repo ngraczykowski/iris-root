@@ -1,8 +1,8 @@
 package com.silenteight.bridge.core.recommendation.adapter.outgoing.amqp
 
-import com.silenteight.bridge.core.recommendation.adapter.outgoing.amqp.RecommendationsStoredEventPublisher
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationsStoredEvent
 import com.silenteight.bridge.core.recommendation.infrastructure.amqp.RecommendationOutgoingRecommendationsStoredConfigurationProperties
+import com.silenteight.bridge.core.registration.domain.RegistrationFixtures
 import com.silenteight.proto.recommendation.api.v1.RecommendationsStored
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate
@@ -21,7 +21,7 @@ class RecommendationsStoredEventPublisherSpec extends Specification {
     given:
     def analysisName = "analysis"
     def alertNames = ["alert/1"]
-    def event = new RecommendationsStoredEvent(analysisName, alertNames, false)
+    def event = new RecommendationsStoredEvent(analysisName, alertNames, false, RegistrationFixtures.BATCH_PRIORITY)
     def message = RecommendationsStored.newBuilder()
         .setAnalysisName(analysisName)
         .addAllAlertNames(alertNames)
@@ -31,6 +31,7 @@ class RecommendationsStoredEventPublisherSpec extends Specification {
     underTest.publish(event)
 
     then:
-    1 * rabbitTemplate.convertAndSend(properties.exchangeName(), "", message)
+    1 * rabbitTemplate.convertAndSend(
+        properties.exchangeName(), "", message, _)
   }
 }

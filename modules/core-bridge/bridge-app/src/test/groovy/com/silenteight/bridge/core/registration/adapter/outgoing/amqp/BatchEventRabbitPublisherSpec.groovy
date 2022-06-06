@@ -91,7 +91,9 @@ class BatchEventRabbitPublisherSpec extends Specification {
     1 * rabbitTemplate.convertAndSend(
         batchCompletedProperties.exchangeName(),
         batchCompletedProperties.solvingBatchRoutingKey(),
-        messageBatchCompleted)
+        messageBatchCompleted,
+        _)
+
   }
 
   def 'should notify batch completed for simulation batch'() {

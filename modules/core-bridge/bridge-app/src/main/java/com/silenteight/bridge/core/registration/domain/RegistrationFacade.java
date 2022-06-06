@@ -120,6 +120,10 @@ public class RegistrationFacade {
     dataRetentionService.start(command);
   }
 
+  public BatchPriority getBatchPriority(GetBatchPriorityCommand command) {
+    return batchService.findBatchPriority(command.analysisName());
+  }
+
   private boolean allAlertsAreDelivered(Batch batch, List<String> alertNames) {
     if (CollectionUtils.isEmpty(alertNames)) {
       return true;

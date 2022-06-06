@@ -2,6 +2,7 @@ package com.silenteight.bridge.core.recommendation.infrastructure.amqp;
 
 import org.springframework.amqp.core.*;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,25 +24,29 @@ class RecommendationRabbitConfiguration {
 
   @Bean
   Queue recommendationsGeneratedQueue(
-      RecommendationIncomingRecommendationsGeneratedConfigurationProperties properties) {
+      RecommendationIncomingRecommendationsGeneratedConfigurationProperties properties,
+      @Value("${silenteight.bridge.amqp.queue-max-priority}") Integer queueMaxPriority) {
     return QueueBuilder.durable(properties.queueName())
         .deadLetterExchange(properties.deadLetterExchangeName())
         .deadLetterRoutingKey(properties.queueName())
+        .maxPriority(queueMaxPriority)
         .build();
   }
 
   @Bean
-  Queue recommendationsReadyDeadLetterQueue(
-      RecommendationIncomingRecommendationsGeneratedConfigurationProperties properties) {
+  Queue recommendationsGeneratedDeadLetterQueue(
+      RecommendationIncomingRecommendationsGeneratedConfigurationProperties properties,
+      @Value("${silenteight.bridge.amqp.queue-max-priority}") Integer queueMaxPriority) {
     return QueueBuilder.durable(properties.deadLetterQueueName())
         .ttl(Optional.ofNullable(properties.deadLetterQueueTimeToLiveInMilliseconds())
             .orElse(DEFAULT_TTL_IN_MILLISECONDS))
         .deadLetterExchange(EMPTY_ROUTING_KEY)
+        .maxPriority(queueMaxPriority)
         .build();
   }
 
   @Bean
-  DirectExchange recommendationsReadyDeadLetterExchange(
+  DirectExchange recommendationsGeneratedDeadLetterExchange(
       RecommendationIncomingRecommendationsGeneratedConfigurationProperties properties) {
     return new DirectExchange(properties.deadLetterExchangeName());
   }
@@ -58,9 +63,9 @@ class RecommendationRabbitConfiguration {
   }
 
   @Bean
-  Binding recommendationsReadyDeadLetterBinding(
-      @Qualifier("recommendationsReadyDeadLetterQueue") Queue queue,
-      @Qualifier("recommendationsReadyDeadLetterExchange") DirectExchange exchange,
+  Binding recommendationsGeneratedDeadLetterBinding(
+      @Qualifier("recommendationsGeneratedDeadLetterQueue") Queue queue,
+      @Qualifier("recommendationsGeneratedDeadLetterExchange") DirectExchange exchange,
       RecommendationIncomingRecommendationsGeneratedConfigurationProperties properties) {
     return BindingBuilder
         .bind(queue)
@@ -70,20 +75,24 @@ class RecommendationRabbitConfiguration {
 
   @Bean
   Queue notifyBatchTimeoutQueue(
-      RecommendationIncomingNotifyBatchTimeoutConfigurationProperties properties) {
+      RecommendationIncomingNotifyBatchTimeoutConfigurationProperties properties,
+      @Value("${silenteight.bridge.amqp.queue-max-priority}") Integer queueMaxPriority) {
     return QueueBuilder.durable(properties.queueName())
         .deadLetterExchange(properties.deadLetterExchangeName())
         .deadLetterRoutingKey(properties.queueName())
+        .maxPriority(queueMaxPriority)
         .build();
   }
 
   @Bean
   Queue notifyBatchTimeoutDeadLetterQueue(
-      RecommendationIncomingNotifyBatchTimeoutConfigurationProperties properties) {
+      RecommendationIncomingNotifyBatchTimeoutConfigurationProperties properties,
+      @Value("${silenteight.bridge.amqp.queue-max-priority}") Integer queueMaxPriority) {
     return QueueBuilder.durable(properties.deadLetterQueueName())
         .ttl(Optional.ofNullable(properties.deadLetterQueueTimeToLiveInMilliseconds())
             .orElse(DEFAULT_TTL_IN_MILLISECONDS))
         .deadLetterExchange(EMPTY_ROUTING_KEY)
+        .maxPriority(queueMaxPriority)
         .build();
   }
 

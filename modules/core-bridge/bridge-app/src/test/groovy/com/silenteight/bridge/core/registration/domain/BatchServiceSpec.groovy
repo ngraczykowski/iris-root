@@ -247,4 +247,17 @@ class BatchServiceSpec extends Specification {
       !BatchService.ALLOWED_BATCH_STATUSES_FOR_MARKING_AS_DELIVERED.contains(it)
     }
   }
+
+  def 'should find batch priority for analysis name'() {
+    given:
+    def analysisName = RegistrationFixtures.ANALYSIS_NAME
+
+    when:
+    def result = underTest.findBatchPriority(analysisName)
+
+    then:
+    1 * batchRepository.findBatchPriorityByAnalysisName(analysisName) >> new BatchPriority(RegistrationFixtures.BATCH_PRIORITY)
+
+    result.priority() == RegistrationFixtures.BATCH_PRIORITY
+  }
 }

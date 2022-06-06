@@ -4,7 +4,8 @@ import lombok.Builder;
 
 public record SolvingBatchCompleted(String id,
                                     String analysisName,
-                                    String batchMetadata
+                                    String batchMetadata,
+                                    Integer priority
 ) {
 
   @Builder

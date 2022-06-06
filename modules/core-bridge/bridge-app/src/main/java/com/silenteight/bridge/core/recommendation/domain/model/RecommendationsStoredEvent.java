@@ -4,5 +4,6 @@ import java.util.List;
 
 public record RecommendationsStoredEvent(String analysisName,
                                          List<String> alertNames,
-                                         boolean isTimedOut
+                                         boolean isTimedOut,
+                                         Integer priority
 ) {}

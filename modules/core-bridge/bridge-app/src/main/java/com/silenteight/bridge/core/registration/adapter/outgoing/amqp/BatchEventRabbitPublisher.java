@@ -45,7 +45,11 @@ class BatchEventRabbitPublisher implements BatchEventPublisher {
     rabbitTemplate.convertAndSend(
         batchCompletedProperties.exchangeName(),
         batchCompletedProperties.solvingBatchRoutingKey(),
-        message);
+        message,
+        rabbitMessage -> {
+          rabbitMessage.getMessageProperties().setPriority(event.priority());
+          return rabbitMessage;
+        });
   }
 
   @Override

@@ -6,6 +6,7 @@ import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFacto
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -46,20 +47,24 @@ class RegistrationRabbitConfiguration {
 
   @Bean
   Queue matchFeatureInputSetFedQueue(
-      AmqpRegistrationIncomingMatchFeatureInputSetFedProperties properties) {
+      AmqpRegistrationIncomingMatchFeatureInputSetFedProperties properties,
+      @Value("${silenteight.bridge.amqp.queue-max-priority}") Integer queueMaxPriority) {
     return QueueBuilder.durable(properties.queueName())
         .deadLetterExchange(properties.deadLetterExchangeName())
         .deadLetterRoutingKey(properties.queueName())
+        .maxPriority(queueMaxPriority)
         .build();
   }
 
   @Bean
   Queue matchFeatureInputSetFedDeadLetterQueue(
-      AmqpRegistrationIncomingMatchFeatureInputSetFedProperties properties) {
+      AmqpRegistrationIncomingMatchFeatureInputSetFedProperties properties,
+      @Value("${silenteight.bridge.amqp.queue-max-priority}") Integer queueMaxPriority) {
     return QueueBuilder.durable(properties.deadLetterQueueName())
         .ttl(Optional.ofNullable(properties.deadLetterQueueTimeToLiveInMilliseconds())
             .orElse(DEFAULT_TTL_IN_MILLISECONDS))
         .deadLetterExchange(EMPTY_ROUTING_KEY)
+        .maxPriority(queueMaxPriority)
         .build();
   }
 
@@ -98,10 +103,12 @@ class RegistrationRabbitConfiguration {
 
   @Bean
   Queue recommendationsStoredQueue(
-      AmqpRegistrationIncomingRecommendationStoredProperties properties) {
+      AmqpRegistrationIncomingRecommendationStoredProperties properties,
+      @Value("${silenteight.bridge.amqp.queue-max-priority}") Integer queueMaxPriority) {
     return QueueBuilder.durable(properties.queueName())
         .deadLetterExchange(properties.deadLetterExchangeName())
         .deadLetterRoutingKey(properties.queueName())
+        .maxPriority(queueMaxPriority)
         .build();
   }
 
@@ -116,11 +123,13 @@ class RegistrationRabbitConfiguration {
 
   @Bean
   Queue recommendationsStoredDeadLetterQueue(
-      AmqpRegistrationIncomingRecommendationStoredProperties properties) {
+      AmqpRegistrationIncomingRecommendationStoredProperties properties,
+      @Value("${silenteight.bridge.amqp.queue-max-priority}") Integer queueMaxPriority) {
     return QueueBuilder.durable(properties.deadLetterQueueName())
         .ttl(Optional.ofNullable(properties.deadLetterQueueTimeToLiveInMilliseconds())
             .orElse(DEFAULT_TTL_IN_MILLISECONDS))
         .deadLetterExchange(EMPTY_ROUTING_KEY)
+        .maxPriority(queueMaxPriority)
         .build();
   }
 
