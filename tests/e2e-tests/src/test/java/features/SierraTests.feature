@@ -1,3 +1,4 @@
+@sierra
 Feature: Sierra scenarios
 
   Scenario: Get an alert from CMAPI

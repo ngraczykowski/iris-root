@@ -1,3 +1,4 @@
+@hotel
 Feature: Hotel scenarios
 
   Scenario: Create solving model from scratch

@@ -1,3 +1,4 @@
+@smoke
 Feature: Smoke scenarios
 
   Scenario: Get all the simulations
@@ -32,5 +33,6 @@ Feature: Smoke scenarios
   Scenario: Get all users
     Given Users endpoint responses with status code 200
 
-  Scenario: Create user
+  Scenario: Create and Delete user
     Given Create user with random name
+    Then Delete user

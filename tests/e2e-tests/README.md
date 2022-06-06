@@ -29,6 +29,14 @@ gradle test \
 -Dtest.realm=${realm} \
 -Dtest.authServerUrl=${authServerUrl}
 ```
+It is possible to specify a group of tests using one or more tags:
+* @smoke
+* @sierra
+* @hotel
+* @foxtrot
+```
+-Dcucumber.filter.tags="@smoke na @sierra"
+```
 
 3. **Test Parameters**
    clientId - Keycloak oAuth2 client ID (Defult: frontend)

@@ -23,12 +23,13 @@ public class WebAppSteps implements En {
   public WebAppSteps() {
     And(
         "Users endpoint responses with status code 200",
-        () -> given()
-            .header("Authorization", getAuthTokenHeaderForAdmin())
-            .when()
-            .get("rest/webapp/api/users")
-            .then()
-            .statusCode(200));
+        () ->
+            given()
+                .header("Authorization", getAuthTokenHeaderForAdmin())
+                .when()
+                .get("rest/webapp/api/users")
+                .then()
+                .statusCode(200));
 
     And(
         "Create user with random name",
@@ -38,7 +39,7 @@ public class WebAppSteps implements En {
           scenarioContext.set(USER, user);
 
           given()
-              //TODO(dsniezek): fix dependency to allow jackson auto serialize to json
+              // TODO(dsniezek): fix dependency to allow jackson auto serialize to json
               .body(new ObjectMapper().writeValueAsString(user))
               .header("Authorization", getAuthTokenHeaderForAdmin())
               .contentType("application/json")
@@ -48,20 +49,32 @@ public class WebAppSteps implements En {
               .statusCode(201);
         });
     And("Assign user to country group", this::assignUserToCountryGroup);
+    And("Delete user", this::deleteUser);
   }
 
   private void assignUserToCountryGroup() throws JsonProcessingException {
-    CreateUser createUser = (CreateUser)scenarioContext.get(USER);
-    CreateCountryGroup countryGroup = (CreateCountryGroup)scenarioContext.get(COUNTRY_GROUP);
+    CreateUser createUser = (CreateUser) scenarioContext.get(USER);
+    CreateCountryGroup countryGroup = (CreateCountryGroup) scenarioContext.get(COUNTRY_GROUP);
     HashMap<String, Object> body = new HashMap<>();
-    body.put("countryGroups", new UUID[]{ countryGroup.getId()});
+    body.put("countryGroups", new UUID[] {countryGroup.getId()});
     given()
-        //TODO(dsniezek): fix dependency to allow jackson auto serialize to json
+        // TODO(dsniezek): fix dependency to allow jackson auto serialize to json
         .body(new ObjectMapper().writeValueAsString(body))
         .header("Authorization", getAuthTokenHeaderForAdmin())
         .contentType("application/json")
         .when()
         .patch(String.format("/rest/webapp/api/users/%s", createUser.getUserName()))
+        .then()
+        .statusCode(204);
+  }
+
+  private void deleteUser() {
+    CreateUser createUser = (CreateUser) scenarioContext.get(USER);
+    given()
+        .header("Authorization", getAuthTokenHeaderForAdmin())
+        .contentType("application/json")
+        .when()
+        .delete(String.format("/rest/webapp/api/users/%s", createUser.getUserName()))
         .then()
         .statusCode(204);
   }
