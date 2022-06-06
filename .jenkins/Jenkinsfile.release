@@ -117,7 +117,7 @@ pipeline {
                 sh """
                   cd tests/e2e-tests
                   ../../gradlew test \
-                  -Dcucumber.features="src/test/java/features \
+                  -Dcucumber.features="src/test/java/features" \
                   -Dcucumber.filter.tags="@smoke nad @${ENVIRONMENT}" \
                   -Dcucumber.plugin=json:report-\${ENVIRONMENT}.json \
                   -Dtest.isRegression=false \

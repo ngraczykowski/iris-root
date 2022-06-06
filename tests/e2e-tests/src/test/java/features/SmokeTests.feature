@@ -12,23 +12,22 @@ Feature: Smoke scenarios
 
   Scenario: Create basic policy and activate
     Given Create empty policy with name "Test QA Policy"
-    And Prepare feature list for step
-      | name                 | condition | values |
-      | features/commonNames | is        | YES    |
-    And Prepare policy steps with predefined feature list
+    And Add steps to recently created policy
       | name      | solution                |
       | some step | POTENTIAL_TRUE_POSITIVE |
-    When Add prepared steps to policy
-    And Add prepared features to steps
+    And Add features to recently created steps
+      | name                 | condition | values |
+      | features/commonNames | is        | YES    |
     Then Policy is created
     And Mark created policy as ready
 
-  Scenario: Create country group
+  Scenario: Create country group and assign it
     Given Create country group
     And Add countries to country group
       | PL |
     And Create user with random name
     Then Assign user to country group
+    And Delete user
 
   Scenario: Get all users
     Given Users endpoint responses with status code 200

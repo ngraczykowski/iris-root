@@ -8,7 +8,6 @@ import io.restassured.response.Response;
 import org.awaitility.Awaitility;
 import org.junit.Assert;
 import utils.ScenarioContext;
-import utils.datageneration.CommonUtils;
 import utils.datageneration.namescreening.Batch;
 import utils.datageneration.warehouse.CreateCountryGroup;
 import utils.datageneration.warehouse.WarehouseGenerationService;
