@@ -4,16 +4,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @Builder(toBuilder = true)
-public class PolicyStep {
+public class CreatePolicyStep {
 
-  String uuid;
+  String id;
   String name;
+  String description;
   String solution;
-  List<Feature> featureList;
-  String templatedFeatureList;
+  String type;
 }

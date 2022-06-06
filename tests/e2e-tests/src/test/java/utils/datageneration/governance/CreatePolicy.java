@@ -4,15 +4,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Getter
 @Setter
 @Builder(toBuilder = true)
-public class Feature {
+public class CreatePolicy {
 
-  String name;
-  String condition;
-  List<String> values;
+  String id;
+  String policyName;
+  String state;
 }

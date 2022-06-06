@@ -5,120 +5,74 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import lombok.SneakyThrows;
-import utils.datageneration.CommonUtils;
+
+import lombok.experimental.UtilityClass;
 
 import java.util.*;
 
+import static utils.datageneration.CommonUtils.getJsonTemplate;
+import static utils.datageneration.CommonUtils.template;
+import static utils.datageneration.CommonUtils.templateObject;
+
+@UtilityClass
 public class GovernanceGenerationService {
-
-  private final ObjectMapper objectMapper = new ObjectMapper();
-  private final CommonUtils commonUtils = new CommonUtils();
-
-  public Policy generatePolicy(String name, String state, List<PolicyStep> policySteps) {
-    String uuid = String.valueOf(UUID.randomUUID());
-
-    return Policy
-        .builder()
-        .uuid(uuid)
-        .name(name)
-        .state(state)
-        .steps(policySteps)
-        .creationPayload(generatePayloadForPolicyCreation(uuid, name))
+  public static CreatePolicy createPolicy(String policyName) {
+    return CreatePolicy.builder()
+        .id(UUID.randomUUID().toString())
+        .policyName(policyName)
+        .state("DRAFT")
         .build();
   }
 
-  public PolicyStep generatePolicyStep(String name, String solution, List<Feature> featureList) {
-    return PolicyStep
-        .builder()
-        .uuid(String.valueOf(UUID.randomUUID()))
+  public static CreatePolicyStep createPolicyStep(String name, String solution) {
+    return CreatePolicyStep.builder()
+        .id(UUID.randomUUID().toString())
         .name(name)
+        .description("Lorem ipsum dolor sit amet")
         .solution(solution)
-        .featureList(featureList)
-        .templatedFeatureList(templateFeatureList(featureList))
+        .type("BUSINESS_LOGIC")
         .build();
   }
 
-  public Feature generateFeature(String name, String condition, String values) {
-    return Feature.builder().name(name).condition(condition).values(values).build();
-  }
-
-  public SolvingModel generateSolvingModel(String policyUuid) {
-    String uuid = String.valueOf(UUID.randomUUID());
-    String activationUuid = String.valueOf(UUID.randomUUID());
-
-    return SolvingModel
-        .builder()
-        .uuid(uuid)
-        .policyUuid(policyUuid)
-        .activationUuid(activationUuid)
-        .creationPayload(generatePayloadForSolvingModelCreation(policyUuid, uuid))
-        .activationPayload(generatePayloadForSolvingModelActivation(uuid, activationUuid))
-        .build();
-  }
-
-  @SneakyThrows
-  private String generatePayloadForPolicyCreation(String uuid, String name) {
-    Map<String, String> map = new HashMap<>(Collections.emptyMap());
-    map.put("uuid", uuid);
-    map.put("name", name);
-    map.put("state", "DRAFT");
-
-    return commonUtils.template(commonUtils.getJsonTemplate("newPolicy"), map);
-  }
-
-  @SneakyThrows
-  private String generatePayloadForSolvingModelCreation(String policyUuid, String uuid) {
-    Map<String, String> map = new HashMap<>(Collections.emptyMap());
-    map.put("uuid", uuid);
-    map.put("policyUuid", policyUuid);
-
-    return commonUtils.template(commonUtils.getJsonTemplate("newSolvingModel"), map);
-  }
-
-  @SneakyThrows
-  private String generatePayloadForSolvingModelActivation(String uuid, String activationUuid) {
-    Map<String, String> map = new HashMap<>(Collections.emptyMap());
-    map.put("uuid", activationUuid);
-    map.put("modelName", uuid);
-
-    return commonUtils.template(commonUtils.getJsonTemplate("activateSolvingModel"), map);
-  }
-
-  @SneakyThrows
   @SuppressWarnings("unchecked")
-  public List<String> generatePayloadsForStepsAddition(List<PolicyStep> stepList) {
-    List<String> stepAdditionPayloads = new ArrayList<>(Collections.emptyList());
+  public static CreateFeatureLogic createFeatureLogic(String name, String condition, String value) {
+    Feature feature = Feature.builder()
+        .name(name)
+        .condition(condition)
+        .values(Arrays.asList(value))
+        .build();
 
-    stepList.forEach(step -> {
-      stepAdditionPayloads.add(commonUtils.template(
-          commonUtils.getJsonTemplate("newPolicyStep"),
-          objectMapper.convertValue(step, Map.class)));
-    });
+    //TODO(kkicza): make it able to process more than 1 feature at once
+    ArrayList<Feature> featureList = new ArrayList<>();
+    featureList.add(feature);
 
-    return stepAdditionPayloads;
+    FeaturesLogic featuresLogic = FeaturesLogic.builder()
+        .features(featureList)
+        .toFulfill(1)
+        .build();
+
+    ArrayList<FeaturesLogic> featuresLogicList = new ArrayList<>();
+    featuresLogicList.add(featuresLogic);
+
+    return CreateFeatureLogic.builder()
+        .featuresLogic(featuresLogicList)
+        .build();
   }
 
-  //TODO MAKE IT ABLE TO PROCESS MORE THAN 1 FEATURE PER REQUEST
-  @SneakyThrows
-  private String templateFeatureList(List<Feature> featureList) {
-    List<ObjectNode> features = featureList
-        .stream()
-        .map(feature -> objectMapper.convertValue(feature, new FeatureDataTypeRef()))
-        .map(featuresDataMap -> commonUtils.templateObject(
-            commonUtils.getJsonTemplate("logicForStep"),
-            featuresDataMap))
-        .map(this::asObjectNode)
-        .toList();
-
-    return objectMapper.writeValueAsString(features.get(0));
+  public static CreateSolvingModel createSolvingModel(String policyUuid) {
+    return CreateSolvingModel
+        .builder()
+        .id(UUID.randomUUID().toString())
+        .policy("policies/"+policyUuid)
+        .build();
   }
 
-  @SneakyThrows
-  private ObjectNode asObjectNode(String body) {
-    return (ObjectNode) objectMapper.readTree(body);
-  }
-
-  private static class FeatureDataTypeRef extends TypeReference<Map<String, Object>> {
-    // Intentionally left empty.
+  public static ActivateSolvingModel activateSolvingModel(String modelUuid) {
+    return ActivateSolvingModel
+        .builder()
+        .id(UUID.randomUUID().toString())
+        .modelName("solvingModels/"+modelUuid)
+        .comment("Lorem ipsum dolor sit amet")
+        .build();
   }
 }

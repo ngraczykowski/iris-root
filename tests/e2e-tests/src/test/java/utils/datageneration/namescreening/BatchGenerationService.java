@@ -23,18 +23,20 @@ import static java.lang.String.valueOf;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
+import static utils.datageneration.CommonUtils.getDateTimeNow;
+import static utils.datageneration.CommonUtils.getRandomValue;
+import static utils.datageneration.CommonUtils.template;
 
 public class BatchGenerationService {
 
   private final ObjectMapper objectMapper = new ObjectMapper();
   private final Random random = new Random();
   private static final String ALERT_DATE_PATTERN = "dd-LLL-yy";
-  private final CommonUtils commonUtils = new CommonUtils();
 
   public Batch generateBatchWithSize(int batchSize, String discriminator) {
     String batchId = generateBatchId();
     List<AlertDataSource> alertDataSource = generateData(batchSize, batchId, discriminator);
-    return generateBatch(batchId, alertDataSource, commonUtils.getDateTimeNow());
+    return generateBatch(batchId, alertDataSource, getDateTimeNow());
   }
 
   public Batch generateBatchFrom(Batch batch, String newDiscriminator) {
@@ -43,7 +45,7 @@ public class BatchGenerationService {
         batch.getAlertDataSources().stream()
             .map(x -> x.toBuilder().flagKey(newDiscriminator).build())
             .toList(),
-        commonUtils.getDateTimeNow());
+        getDateTimeNow());
   }
 
   public String generateBatchId() {
@@ -69,7 +71,7 @@ public class BatchGenerationService {
     String alertDate = LocalDateTime.now().format(ofPattern(ALERT_DATE_PATTERN)).toUpperCase();
     String caseId = randomUUID().toString();
     String currentState =
-        commonUtils.getRandomValue(
+        getRandomValue(
             "True Match Exit Completed", "False Positive", "False Positive", "Level 1 Review");
 
     return AlertDataSource.builder()
@@ -99,7 +101,7 @@ public class BatchGenerationService {
             .map(
                 alertDataSource ->
                     objectMapper.convertValue(alertDataSource, new AlertDataTypeRef()))
-            .map(alertDataMap -> commonUtils.template(getRandomAlertTemplate(), alertDataMap))
+            .map(alertDataMap -> template(getRandomAlertTemplate(), alertDataMap))
             .map(this::asObjectNode)
             .collect(toList());
 

@@ -11,10 +11,9 @@ import utils.datageneration.CommonUtils;
 import java.util.Map;
 
 import static java.util.UUID.randomUUID;
+import static utils.datageneration.CommonUtils.templateObjectOfName;
 
 public class PbAlertsGeneratingService {
-
-  private final CommonUtils commonUtils = new CommonUtils();
 
   @SneakyThrows
   public PaymentsBridgeAlert generateAlertWithHit() {
@@ -25,17 +24,10 @@ public class PbAlertsGeneratingService {
     final String hitId = "Hit-ID-" + hitNumber;
     final String messageId = randomUUID().toString();
 
-    String payload = commonUtils.templateObjectOfName(
+    String payload = templateObjectOfName(
         "pbAlertTemplate",
-        Map.of(
-            "alertId", alertId,
-            "messageId", messageId,
-            "messageData", String.format("Message %s data", messageId),
-            "hitId", hitId
-        ));
-    return PaymentsBridgeAlert.builder()
-        .id(alertId)
-        .payload(payload)
-        .build();
+        Map.of("alertId", alertId, "messageId", messageId, "messageData",
+            String.format("Message %s data", messageId), "hitId", hitId));
+    return PaymentsBridgeAlert.builder().id(alertId).payload(payload).build();
   }
 }

@@ -2,6 +2,8 @@ package utils.datageneration;
 
 import lombok.SneakyThrows;
 
+import lombok.experimental.UtilityClass;
+
 import org.apache.commons.text.StringSubstitutor;
 
 import java.nio.file.Files;
@@ -12,16 +14,17 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Random;
 
+@UtilityClass
 public class CommonUtils {
   Random random = new Random();
 
   @SneakyThrows
-  public String getJsonTemplate(String jsonName) {
+  public static String getJsonTemplate(String jsonName) {
     return new String(Files.readAllBytes(
         Paths.get(String.format("src/test/resources/s8api/%s.json", jsonName))));
   }
 
-  public String getRandomValue(String... allowedValues) {
+  public static String getRandomValue(String... allowedValues) {
     if (allowedValues.length < 1)
       return "";
 
@@ -29,14 +32,14 @@ public class CommonUtils {
     return allowedValues[element];
   }
 
-  public String getDateTimeNow() {
+  public static String getDateTimeNow() {
     return OffsetDateTime
         .now()
         .atZoneSameInstant(ZoneOffset.UTC)
         .format(DateTimeFormatter.ISO_DATE_TIME);
   }
 
-  public String getOnlyDateWithOffset(int daysOffset) {
+  public static String getOnlyDateWithOffset(int daysOffset) {
     return OffsetDateTime
         .now()
         .withHour(0)
@@ -48,17 +51,17 @@ public class CommonUtils {
         .format(DateTimeFormatter.ISO_DATE_TIME);
   }
 
-  public String templateObjectOfName(String templateName, Map<String, Object> parameters) {
+  public static String templateObjectOfName(String templateName, Map<String, Object> parameters) {
     return templateObject(getJsonTemplate(templateName), parameters);
   }
 
   @SneakyThrows
-  public String template(String template, Map<String, String> parameters) {
+  public static String template(String template, Map<String, String> parameters) {
     return StringSubstitutor.replace(template, parameters);
   }
 
   @SneakyThrows
-  public String templateObject(String template, Map<String, Object> parameters) {
+  public static String templateObject(String template, Map<String, Object> parameters) {
     return StringSubstitutor.replace(template, parameters);
   }
 }

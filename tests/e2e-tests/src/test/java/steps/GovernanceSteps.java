@@ -1,8 +1,11 @@
 package steps;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java8.En;
 import io.restassured.http.ContentType;
+
 import utils.ScenarioContext;
 import utils.datageneration.governance.*;
 
@@ -13,114 +16,106 @@ import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.*;
 import static utils.AuthUtils.getAuthTokenHeaderForAdmin;
+import static utils.datageneration.governance.GovernanceGenerationService.*;
 
 public class GovernanceSteps implements En {
 
-  GovernanceGenerationService governanceGenerationService = new GovernanceGenerationService();
   ScenarioContext scenarioContext = Hooks.scenarioContext;
+  ObjectMapper objectMapper = new ObjectMapper();
 
   public GovernanceSteps() {
     And("Policies endpoint responses with status code 200", () -> {
       when().get("rest/governance/api/v1/policies").then().statusCode(200);
     });
 
-    And("Prepare feature list for step", (DataTable dataTable) -> {
-      List<Feature> featureList = new java.util.ArrayList<>(Collections.emptyList());
-
-      dataTable
-          .asMaps()
-          .forEach(feature -> featureList.add(
-              governanceGenerationService.generateFeature(
-                  feature.get("name"),
-                  feature.get("condition"),
-                  feature.get("values"))));
-      scenarioContext.set("feature list", featureList);
-    });
-
-    And("Prepare policy steps with predefined feature list", (DataTable dataTable) -> {
-      Policy policy = (Policy) scenarioContext.get("policy");
-      List<PolicyStep> policySteps = new java.util.ArrayList<>(Collections.emptyList());
-
-      dataTable.asMaps().forEach(step -> {
-        @SuppressWarnings("unchecked")
-        List<Feature> featuresList = (List<Feature>) scenarioContext.get("feature list");
-        policySteps.add(
-            governanceGenerationService.generatePolicyStep(step.get("name"), step.get("solution"),
-                featuresList));
-      });
-
-      policy.setSteps(policySteps);
-      policy.setStepAdditionPayloads(
-          new GovernanceGenerationService().generatePayloadsForStepsAddition(policySteps));
-    });
-
     And("Create empty policy with name {string}", (String value) -> {
-      Policy policy =
-          governanceGenerationService.generatePolicy(value, "DRAFT", Collections.emptyList());
+      CreatePolicy policy = createPolicy(value);
       scenarioContext.set("policy", policy);
 
       given()
-          .body(policy.getCreationPayload())
+          .body(objectMapper.writeValueAsString(policy))
           .contentType("application/json")
           .when()
           .post("/rest/governance/api/v1/policies")
-          .then().statusCode(anyOf(is(202), is(201)));
+          .then()
+          .statusCode(anyOf(is(202), is(201)));
     });
 
-    And("Add prepared steps to policy", () -> {
-      Policy policy = (Policy) scenarioContext.get("policy");
+    And("Add steps to recently created policy", (DataTable dataTable) -> {
+      CreatePolicy policy = (CreatePolicy) scenarioContext.get("policy");
+      List<CreatePolicyStep> policyStepList = new java.util.ArrayList<>(Collections.emptyList());
 
-      policy
-          .getStepAdditionPayloads()
-          .forEach(payload -> given()
-              .body(payload)
+      dataTable.asMaps().forEach(step -> {
+        CreatePolicyStep policyStep = createPolicyStep(step.get("name"), step.get("solution"));
+        try {
+          given()
+              .body(objectMapper.writeValueAsString(policyStep))
               .contentType(ContentType.JSON)
               .when()
-              .post(String.format("/rest/governance/api/v1/policies/%s/steps", policy.getUuid()))
+              .post(String.format("/rest/governance/api/v1/policies/%s/steps", policy.getId()))
               .then()
-              .statusCode(204));
+              .statusCode(204);
+
+          policyStepList.add(policyStep);
+        } catch (JsonProcessingException e) {
+          throw new RuntimeException(e);
+        }
+        scenarioContext.set("policySteps", policyStepList);
+      });
     });
 
-    And("Add prepared features to steps", () -> {
-      Policy policy = (Policy) scenarioContext.get("policy");
+    //TODO(kkicza): Make it able to process more than 1 feature per step
+    And("Add features to recently created steps", (DataTable dataTable) -> {
+      @SuppressWarnings("unchecked") List<CreatePolicyStep> policySteps =
+          (List<CreatePolicyStep>) scenarioContext.get("policySteps");
 
-      policy
-          .getSteps()
-          .forEach(step -> given()
-              .body(step.getTemplatedFeatureList())
+      dataTable.asMaps().forEach(feature -> {
+        CreateFeatureLogic featureLogic =
+            createFeatureLogic(feature.get("name"), feature.get("condition"),
+                feature.get("values"));
+
+        try {
+          given()
+              .body(objectMapper.writeValueAsString(featureLogic))
               .contentType(ContentType.JSON)
               .when()
-              .put(String.format("/rest/governance/api/v1/steps/%s/logic", step.getUuid()))
+              .put(String.format(
+                  "/rest/governance/api/v1/steps/%s/logic",
+                  policySteps.get(0).getId()))
               .then()
-              .statusCode(202));
+              .statusCode(202);
+        } catch (JsonProcessingException e) {
+          throw new RuntimeException(e);
+        }
+      });
     });
 
     And("Mark created policy as ready", () -> {
-      Policy policy = (Policy) scenarioContext.get("policy");
+      CreatePolicy policy = (CreatePolicy) scenarioContext.get("policy");
       given()
           .body("{\"state\":\"SAVED\"}")
           .contentType("application/json")
           .when()
-          .patch(String.format("/rest/governance/api/v1/policies/%s", policy.getUuid()))
+          .patch(String.format("/rest/governance/api/v1/policies/%s", policy.getId()))
           .then()
           .statusCode(200);
     });
 
     And("Policy is created", () -> {
-      Policy policy = (Policy) scenarioContext.get("policy");
+      CreatePolicy policy = (CreatePolicy) scenarioContext.get("policy");
       when()
-          .get(String.format("/rest/governance/api/v1/policies/%s", policy.getUuid()))
+          .get(String.format("/rest/governance/api/v1/policies/%s", policy.getId()))
           .then()
           .statusCode(200);
     });
 
     And("Create solving model for created policy", () -> {
-      Policy policy = (Policy) scenarioContext.get("policy");
-      SolvingModel solvingModel = governanceGenerationService.generateSolvingModel(policy.getUuid());
+      CreatePolicy policy = (CreatePolicy) scenarioContext.get("policy");
+      CreateSolvingModel solvingModel = createSolvingModel(policy.getId());
       scenarioContext.set("solvingModel", solvingModel);
 
       given()
-          .body(solvingModel.getCreationPayload())
+          .body(objectMapper.writeValueAsString(solvingModel))
           .contentType("application/json")
           .when()
           .post("/rest/governance/api/v1/solvingModels")
@@ -129,10 +124,13 @@ public class GovernanceSteps implements En {
     });
 
     And("Create policy state change request", () -> {
-      SolvingModel solvingModel = (SolvingModel) scenarioContext.get("solvingModel");
+      CreateSolvingModel solvingModel = (CreateSolvingModel) scenarioContext.get("solvingModel");
+      ActivateSolvingModel activationData = activateSolvingModel(solvingModel.getId());
+
+      scenarioContext.set("activationData", activationData);
 
       given()
-          .body(solvingModel.getActivationPayload())
+          .body(objectMapper.writeValueAsString(activationData))
           .contentType("application/json")
           .when()
           .post("/rest/governance/api/v1/changeRequests")
@@ -141,14 +139,16 @@ public class GovernanceSteps implements En {
     });
 
     And("Activate solving model as other user", () -> {
-      SolvingModel solvingModel = (SolvingModel) scenarioContext.get("solvingModel");
+      ActivateSolvingModel activationData = (ActivateSolvingModel) scenarioContext.get("activationData");
 
       given()
           .body("{\"approverComment\":\"Lorem ipsum dolor sit amet\"}")
           .contentType("application/json")
           .header("Authorization", getAuthTokenHeaderForAdmin())
           .when()
-          .post(String.format("/rest/governance/api/v1/changeRequests/%s:approve", solvingModel.getActivationUuid()))
+          .post(String.format(
+              "/rest/governance/api/v1/changeRequests/%s:approve",
+              activationData.getId()))
           .then()
           .statusCode(204);
     });

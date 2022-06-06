@@ -1,4 +1,0 @@
-{
-  "id": "${uuid}",
-  "policy": "policies/${policyUuid}"
-}

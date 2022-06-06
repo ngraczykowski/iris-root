@@ -1,7 +1,0 @@
-{
-  "id": "${uuid}",
-  "name": "${name}",
-  "description": "",
-  "solution": "${solution}",
-  "type": "BUSINESS_LOGIC"
-}

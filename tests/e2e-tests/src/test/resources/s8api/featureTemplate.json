@@ -1,7 +1,0 @@
-{
-  "name": "${name}",
-  "condition": "${condition}",
-  "values": [
-    "${values}"
-  ]
-}

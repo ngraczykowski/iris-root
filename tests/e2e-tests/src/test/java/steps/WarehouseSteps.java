@@ -19,12 +19,13 @@ import java.util.UUID;
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static java.util.concurrent.TimeUnit.SECONDS;
+
 import static utils.AuthUtils.getAuthTokenHeaderForAdmin;
+import static utils.datageneration.CommonUtils.getDateTimeNow;
 
 public class WarehouseSteps implements En {
 
   static final String COUNTRY_GROUP = "countryGroup";
-  CommonUtils commonUtils = new CommonUtils();
   ScenarioContext scenarioContext = Hooks.scenarioContext;
 
   public WarehouseSteps() {
@@ -78,7 +79,7 @@ public class WarehouseSteps implements En {
         given()
             .urlEncodingEnabled(true)
             .param("from", batch.getGenerationStartTime())
-            .param("to", commonUtils.getDateTimeNow())
+            .param("to", getDateTimeNow())
             .post("rest/warehouse/api/v2/analysis/production/reports/" + reportName);
 
     response.then().statusCode(200);

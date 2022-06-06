@@ -1,5 +1,0 @@
-{
-  "id": "${uuid}",
-  "modelName": "solvingModels/${modelName}",
-  "comment": "Lorem ipsum dolor sit amet"
-}

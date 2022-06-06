@@ -1,57 +1,48 @@
 package utils.datageneration.simulations;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.experimental.UtilityClass;
+
 import steps.Hooks;
 import utils.ScenarioContext;
-import utils.datageneration.CommonUtils;
-import utils.datageneration.governance.SolvingModel;
+import utils.datageneration.governance.CreateSolvingModel;
 
-import javax.xml.crypto.Data;
-import java.util.Map;
+import java.util.Arrays;
 import java.util.UUID;
 
+@UtilityClass
 public class SimulationGenerationService {
 
-  private final ObjectMapper objectMapper = new ObjectMapper();
-  private final CommonUtils commonUtils = new CommonUtils();
   ScenarioContext scenarioContext = Hooks.scenarioContext;
 
-  @SuppressWarnings("unchecked")
-  public Dataset generateDataset(String name, String from, String to) {
-    Dataset dataset = Dataset.builder()
-        .uuid(String.valueOf(UUID.randomUUID()))
-        .name(name)
-        .from(from)
-        .to(to)
-        .build();
-    dataset.setCreationPayload(commonUtils.template(
-        commonUtils.getJsonTemplate("newDataset"), objectMapper.convertValue(dataset, Map.class)));
+  public static CreateDataset createDataset(String name, String from, String to) {
 
-    return dataset;
+    return CreateDataset
+        .builder()
+        .id(UUID.randomUUID().toString())
+        .datasetName(name)
+        .description("Lorem ipsum dolor sit amet")
+        .query(
+            Query.builder()
+                .alertGenerationDate(AlertGenerationDate.builder()
+                    .from(from)
+                    .to(to)
+                    .build())
+                .build())
+        .build();
   }
 
-  @SuppressWarnings("unchecked")
-  public Simulation generateSimulation(String name) {
-    Dataset dataset = (Dataset) scenarioContext.get("dataset");
-    SolvingModel solvingModel = (SolvingModel) scenarioContext.get("solvingModel");
+  public static CreateSimulation createSimulation(String name) {
+    CreateDataset dataset = (CreateDataset) scenarioContext.get("dataset");
+    CreateSolvingModel solvingModel = (CreateSolvingModel) scenarioContext.get("solvingModel");
 
-    Simulation simulation = Simulation.builder()
-        .uuid(String.valueOf(UUID.randomUUID()))
-        .name(name)
-        .description("Lorem ipsum dolor")
-        .solvingModel(solvingModel.getUuid())
-        .dataset(dataset)
+    return CreateSimulation
+        .builder()
+        .simulationName(name)
+        .description("Lorem ipsum dolor sit amet")
+        .datasets(Arrays.asList("datasets/" + dataset.getId()))
+        .model("solvingModels/" + solvingModel.getId())
+        .id(UUID.randomUUID().toString())
         .build();
-
-    //TODO This is hack, need to figure out how to access object of dataset via StringSubstitor
-    Map<String, String> map = objectMapper.convertValue(simulation, Map.class);
-    map.put("dataset.uuid", dataset.getUuid());
-
-    simulation.setCreationPayload(commonUtils.template(
-        commonUtils.getJsonTemplate("newSimulation"),
-        map));
-
-    return simulation;
   }
 
 }

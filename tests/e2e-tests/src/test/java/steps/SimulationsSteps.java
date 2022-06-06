@@ -1,25 +1,25 @@
 package steps;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.java8.En;
 import io.restassured.http.ContentType;
 import org.awaitility.Awaitility;
 import utils.ScenarioContext;
-import utils.datageneration.namescreening.Batch;
-import utils.datageneration.CommonUtils;
-import utils.datageneration.simulations.Dataset;
-import utils.datageneration.simulations.Simulation;
-import utils.datageneration.simulations.SimulationGenerationService;
+import utils.datageneration.simulations.CreateDataset;
+import utils.datageneration.simulations.CreateSimulation;
 
 import java.time.Duration;
 
 import static io.restassured.RestAssured.*;
 import static java.util.concurrent.TimeUnit.MINUTES;
+import static utils.datageneration.CommonUtils.getOnlyDateWithOffset;
+import static utils.datageneration.simulations.SimulationGenerationService.createDataset;
+import static utils.datageneration.simulations.SimulationGenerationService.createSimulation;
 
 public class SimulationsSteps implements En {
 
-  SimulationGenerationService simulationGenerationService = new SimulationGenerationService();
   ScenarioContext scenarioContext = Hooks.scenarioContext;
-  CommonUtils commonUtils = new CommonUtils();
+  ObjectMapper objectMapper = new ObjectMapper();
 
   public SimulationsSteps() {
     And("Simulation endpoint responses with status code 200", () -> {
@@ -39,12 +39,12 @@ public class SimulationsSteps implements En {
         "Create dataset with name {string} for recently created learning",
         (String value) -> {
 
-          Dataset dataset = simulationGenerationService.generateDataset(value,
-              commonUtils.getOnlyDateWithOffset(0), commonUtils.getOnlyDateWithOffset(1));
+          CreateDataset dataset = createDataset(value,
+              getOnlyDateWithOffset(0), getOnlyDateWithOffset(1));
           scenarioContext.set("dataset", dataset);
 
           given()
-              .body(dataset.getCreationPayload())
+              .body(objectMapper.writeValueAsString(dataset))
               .contentType(ContentType.JSON)
               .when()
               .post("/rest/simulator/api/v1/datasets")
@@ -54,24 +54,25 @@ public class SimulationsSteps implements En {
     And(
         "Create simulation based on created policy and dataset with name {string}",
         (String value) -> {
-          Simulation simulation = simulationGenerationService.generateSimulation(value);
+          CreateSimulation simulation = createSimulation(value);
           scenarioContext.set("simulation", simulation);
 
           given()
-              .body(simulation.getCreationPayload())
+              .body(objectMapper.writeValueAsString(simulation))
               .contentType("application/json")
               .when()
               .post("/rest/simulator/api/v1/simulations")
               .then()
               .statusCode(201);
         });
+
     And(
         "Wait until simulation is done",
         () -> {
-          Simulation simulation = (Simulation) scenarioContext.get("simulation");
+          CreateSimulation simulation = (CreateSimulation) scenarioContext.get("simulation");
 
               when()
-              .get(String.format("/rest/simulator/api/v1/simulations/%s", simulation.getUuid()))
+              .get(String.format("/rest/simulator/api/v1/simulations/%s", simulation.getId()))
               .then()
               .statusCode(200);
 
@@ -80,7 +81,7 @@ public class SimulationsSteps implements En {
               .atMost(3, MINUTES)
               .pollInterval(Duration.ofSeconds(5))
               .until(() -> when()
-                  .get(String.format("/rest/simulator/api/v1/simulations/%s", simulation.getUuid()))
+                  .get(String.format("/rest/simulator/api/v1/simulations/%s", simulation.getId()))
                   .then()
                   .extract()
                   .response()

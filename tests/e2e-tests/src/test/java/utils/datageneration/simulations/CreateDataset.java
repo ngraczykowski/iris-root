@@ -7,11 +7,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder(toBuilder = true)
-public class Dataset {
+public class CreateDataset {
 
-  private String uuid;
-  private String name;
-  private String from;
-  private String to;
-  private String creationPayload;
+  private String id;
+  private String datasetName;
+  private String description;
+  private Query query;
 }

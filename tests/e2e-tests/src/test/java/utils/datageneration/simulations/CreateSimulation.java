@@ -4,15 +4,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Builder(toBuilder = true)
-public class Simulation {
+public class CreateSimulation {
 
-  private String name;
+  private String simulationName;
   private String description;
-  private Dataset dataset;
-  private String solvingModel;
-  private String uuid;
-  private String creationPayload;
+  private List<String> datasets;
+  private String model;
+  private String id;
 }
