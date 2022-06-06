@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.scb.ingest.adapter.incomming.cbs.batch.ScbBridgeConfigProperties;
 import com.silenteight.scb.ingest.adapter.incomming.common.domain.GnsSyncDeltaService;
-import com.silenteight.scb.ingest.adapter.incomming.common.mode.OnAlertProcessorCondition;
+import com.silenteight.scb.ingest.adapter.incomming.common.mode.OnLearningEcmCondition;
 import com.silenteight.scb.ingest.adapter.incomming.common.quartz.EcmBridgeLearningJobProperties;
 
 import org.springframework.batch.core.configuration.annotation.JobScope;
@@ -18,7 +18,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @RequiredArgsConstructor
-@Conditional(OnAlertProcessorCondition.class)
+@Conditional(OnLearningEcmCondition.class)
 class EcmMultipleAlertFetcherConfiguration {
 
   private final EcmBridgeLearningJobProperties ecmLearningJobProperties;

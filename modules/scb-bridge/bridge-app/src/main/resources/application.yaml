@@ -156,7 +156,7 @@ silenteight:
         context-path: /rest/document-comparer-agent
 
   scb-bridge:
-    working-mode: NORMAL
+    working-mode: ALL
     title-gender-detector:
       enabled: true
     db:

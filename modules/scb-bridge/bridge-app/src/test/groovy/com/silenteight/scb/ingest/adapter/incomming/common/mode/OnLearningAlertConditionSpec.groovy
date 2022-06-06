@@ -16,8 +16,10 @@ class OnLearningAlertConditionSpec extends Specification {
     def context = Mock(ConditionContext)
     def environment = Mock(Environment)
     context.getEnvironment() >> environment
-    context.getEnvironment().getProperty("silenteight.scb-bridge.working-mode") >> workingMode
-    context.getEnvironment().getProperty("silenteight.scb-bridge.learning.alert.enabled", _, _) >> learningAlertEnabled
+    context.getEnvironment().getProperty("silenteight.scb-bridge.working-mode", List.class) >>
+        workingMode
+    context.getEnvironment().getProperty("silenteight.scb-bridge.learning.alert.enabled", _, _) >>
+        learningAlertEnabled
 
     when:
     def result = underTest.matches(context, null)
@@ -26,15 +28,22 @@ class OnLearningAlertConditionSpec extends Specification {
     result == expectedResult
 
     where:
-    workingMode      | learningAlertEnabled | expectedResult
-    "NORMAL"         | true                  | true
-    "normal"         | true                  | true
-    ""               | true                  | true
-    null             | true                  | true
-    "REAL_TIME_ONLY" | true                  | false
-    "REAL_TIME_ONLY" | false                 | false
-    "NORMAL"         | false                 | false
-    ""               | false                 | false
-    null             | false                 | false
+    workingMode                      | learningAlertEnabled | expectedResult
+    ["LEARNING", "PERIODIC_SOLVING"] | true                 | true
+    ["LEARNING"]                     | true                 | true
+    ["learning"]                     | true                 | true
+    ["ALL"]                          | true                 | true
+    ["all"]                          | true                 | true
+    ["NONE"]                         | true                 | false
+    ["ANOTHER_MODE"]                 | true                 | false
+    []                               | true                 | false
+    null                             | true                 | false
+    ["LEARNING", "PERIODIC_SOLVING"] | false                | false
+    ["LEARNING"]                     | false                | false
+    ["learning"]                     | false                | false
+    ["ALL"]                          | false                | false
+    ["all"]                          | false                | false
+    ["NONE"]                         | false                | false
+    null                             | false                | false
   }
 }

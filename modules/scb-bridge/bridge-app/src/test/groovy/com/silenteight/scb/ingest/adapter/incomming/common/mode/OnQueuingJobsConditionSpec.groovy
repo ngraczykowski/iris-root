@@ -16,7 +16,8 @@ class OnQueuingJobsConditionSpec extends Specification {
     def context = Mock(ConditionContext)
     def environment = Mock(Environment)
     context.getEnvironment() >> environment
-    context.getEnvironment().getProperty("silenteight.scb-bridge.working-mode") >> workingMode
+    context.getEnvironment().getProperty("silenteight.scb-bridge.working-mode", List.class) >>
+        workingMode
 
     when:
     def result = underTest.matches(context, null)
@@ -25,11 +26,15 @@ class OnQueuingJobsConditionSpec extends Specification {
     result == expectedResult
 
     where:
-    workingMode      | expectedResult
-    "NORMAL"         | true
-    "normal"         | true
-    ""               | true
-    null             | true
-    "REAL_TIME_ONLY" | false
+    workingMode                      | expectedResult
+    ["PERIODIC_SOLVING", "LEARNING"] | true
+    ["PERIODIC_SOLVING"]             | true
+    ["periodic_solving"]             | true
+    ["ALL"]                          | true
+    ["all"]                          | true
+    ["NONE"]                         | false
+    ["ANOTHER_MODE"]                 | false
+    []                               | false
+    null                             | false
   }
 }

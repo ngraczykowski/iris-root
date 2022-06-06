@@ -4,10 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.hitdetails.HitDetailsParser.ParserException;
+import com.silenteight.scb.ingest.adapter.incomming.common.mode.OnRealTimeAlertCondition;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.generator.CouldNotFindValidAlertsException;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.generator.GnsRtRequestGenerator;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.request.GnsRtRecommendationRequest;
 
+import org.springframework.context.annotation.Conditional;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@Conditional(OnRealTimeAlertCondition.class)
 public class GnsRtTestingHarnessController {
 
   private final GnsRtRequestGenerator gnsRtRequestGenerator;

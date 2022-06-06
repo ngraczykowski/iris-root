@@ -7,9 +7,9 @@ serp:
   gns:
     db:
       service:
-        name: XEPDB1
-      user: scb
-      password: scb
+        name: XE
+      user: LC_GNS_WEB_SIT_01
+      password: password
       port: 1521
       host: localhost
 

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.domain.GnsSyncConstants;
-import com.silenteight.scb.ingest.adapter.incomming.common.mode.OnAlertProcessorCondition;
+import com.silenteight.scb.ingest.adapter.incomming.common.mode.OnOracleCondition;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -68,21 +68,21 @@ public class SyncDataSourcesConfiguration {
   }
 
   @Bean
-  @Conditional(OnAlertProcessorCondition.class)
+  @Conditional(OnOracleCondition.class)
   DataSourceTransactionManager externalTransactionManager() {
     return createTransactionManager(externalDataSource());
   }
 
   @Bean
   @ConfigurationProperties(prefix = "spring.external.datasource.hikari")
-  @Conditional(OnAlertProcessorCondition.class)
+  @Conditional(OnOracleCondition.class)
   DataSource externalDataSource() {
     return createHikariDataSource(externalDataSourceProperties());
   }
 
   @Bean
   @ConfigurationProperties(prefix = "spring.external.datasource")
-  @Conditional(OnAlertProcessorCondition.class)
+  @Conditional(OnOracleCondition.class)
   DataSourceProperties externalDataSourceProperties() {
     return new DataSourceProperties();
   }
@@ -97,14 +97,14 @@ public class SyncDataSourcesConfiguration {
   }
 
   @Bean
-  @Conditional(OnAlertProcessorCondition.class)
+  @Conditional(OnOracleCondition.class)
   DataSourceTransactionManager externalOnDemandTransactionManager() {
     return createTransactionManager(externalOnDemandDataSource());
   }
 
   @Bean
   @ConfigurationProperties(prefix = "spring.external.datasource.hikari-on-demand")
-  @Conditional(OnAlertProcessorCondition.class)
+  @Conditional(OnOracleCondition.class)
   DataSource externalOnDemandDataSource() {
     return createHikariDataSource(externalDataSourceProperties());
   }
