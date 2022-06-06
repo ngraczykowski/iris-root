@@ -7,7 +7,6 @@ components:
     profiles:
       - mockcmapi
     properties:
-    args:
       "pb.cmapi.callback.enabled": true
       "pb.cmapi.callback.endpoint": 'http://{{ include "sear.fullname" . }}-payments-bridge.{{ .Release.Namespace }}.svc:{{ .component.containerPorts.http.port }}/rest/{{ .component.webPath }}/mock/cmapi'
       "spring.security.oauth2.resourceserver.jwt.issuer-uri": "{{ .Values.keycloak.authServerUrl }}/realms/{{ .Values.keycloak.realm }}"
