@@ -78,34 +78,38 @@ class UDSConfig:
 class AgentConfig:
     agent_grpc_service: AgentServiceConfig
     consul: ConsulConfig
-    messaging: MessagingConfig
-    rabbitmq: RabbitMQConfig
-    uds: UDSConfig
+    messaging: MessagingConfig = None
+    rabbitmq: RabbitMQConfig = None
+    uds: UDSConfig = None
 
 
 class AgentConfigLoader:
-    def __int__(self, application_config: Dict[str, Any]):
+    def __init__(self, application_config: Dict[str, Any]):
         self._application_config = application_config
         self._env_vars = application_config.get("environment-variables-mapping")
 
     def load(self) -> AgentConfig:
         agent_service_config = AgentServiceConfig(
-            processes=self._get_param(
-                self._env_vars["processes"], ["agent", "processes"], required=True
-            ),
-            grpc_port=self._get_param(
-                self._env_vars["grpc_port"], ["agent", "grpc", "port"], required=True
-            ),
-            server_ca=self._get_param(
-                self._env_vars["grpc_server_ca"], ["agent", "grpc", "server_ca"]
-            ),
+            processes=int(self._get_param("processes", ["agent", "processes"], required=True)),
+            grpc_port=int(self._get_param("grpc_port", ["agent", "grpc", "port"], required=True)),
+            server_ca=self._get_param("grpc_server_ca", ["agent", "grpc", "server_ca"]),
             server_private_key=self._get_param(
-                self._env_vars["grpc_server_private_key"], ["agent", "grpc", "server_private_key"]
+                "grpc_server_private_key",
+                ["agent", "grpc", "server_private_key"],
             ),
             server_public_key_chain=self._get_param(
-                self._env_vars["grpc_server_public_key_chain"],
+                "grpc_server_public_key_chain",
                 ["agent", "grpc", "server_public_key_chain"],
             ),
+        )
+
+        consul_config = ConsulConfig(
+            host=self._get_param("consul_host", ["consul", "host"]),
+            port=int(self._get_param("consul_port", ["consul", "port"])),
+        )
+        return AgentConfig(
+            agent_service_config,
+            consul_config,
         )
 
     def _get_param(
@@ -116,9 +120,9 @@ class AgentConfigLoader:
         required: bool = False,
     ) -> Any:
         try:
-            param = os.environ[env_variable]
+            param = os.environ[str(self._env_vars.get(env_variable))]
             return param
-        except KeyError:
+        except (KeyError, TypeError):
             if not keys_from_yaml and required:
                 raise AgentConfigError
             elif not keys_from_yaml:

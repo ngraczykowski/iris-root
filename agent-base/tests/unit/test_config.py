@@ -30,3 +30,20 @@ def test_application_required_config():
     config_dir = pathlib.Path("./non_existing_config_dir")
     with pytest.raises(Exception):
         Config((config_dir,), required=True)
+
+
+@pytest.fixture
+def setup_and_tear_down():
+    os.environ.pop("GRPC_PORT", None)
+    yield
+    os.environ.pop("GRPC_PORT", None)
+
+
+def test_config_from_env(setup_and_tear_down):
+    default_grpc_port = 9090
+    new_grpc_port = 5000
+    config = Config()
+    assert config.application_config["agent"]["grpc"]["port"] == default_grpc_port
+    os.environ["GRPC_PORT"] = str(new_grpc_port)
+    config = Config()
+    assert config.agent_config.agent_grpc_service.grpc_port == new_grpc_port

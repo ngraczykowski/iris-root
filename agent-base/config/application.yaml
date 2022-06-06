@@ -50,3 +50,4 @@ agent:
 environment-variables-mapping:
   processes: AGENT_PROCESSES
   grpc_port: GRPC_PORT
+  consul_host: CONSUL_HOST

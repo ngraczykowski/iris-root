@@ -4,6 +4,8 @@ from typing import Any, Optional
 
 import yaml
 
+from agent_base.utils.agent_config import AgentConfigLoader
+
 CONFIG_DIRS = (pathlib.Path("./config"),)
 
 
@@ -24,9 +26,9 @@ class Config:
         )
         self.application_config = self.load_yaml_config("application.yaml", required=required)
         if self.application_config:
-            self.environment = self.application_config.get("env-variables", None)
+            self.agent_config = AgentConfigLoader(self.application_config).load()
         else:
-            self.environment = {}
+            self.agent_config = None
 
     @staticmethod
     def _get_from_environment(configuration_dir_key: str):
