@@ -252,35 +252,50 @@ warehouse.reports.v2:
       type: production
       description: Accuracy (Alert Level)
       selectSqlQuery: >
-        SELECT DISTINCT (wm.payload ->> 'policy')                       AS "Policy ID",
-                        (wm.payload ->> 'policy_title')                 AS "Policy Name",
-                        (wa.payload ->> 'recommended_action')           AS "S8 Alert Resolution",
-                        recommendation_date                             AS "S8 Alert Resolution Timestamp (UTC)",
-                        (wa.payload ->> 'recommendation_comment')       AS "S8 Alert Comment",
-                        (wa.payload ->> 'firco_analyst_decision')       AS "Analyst Decision",
-                        (wa.payload ->> 'firco_analyst_decision_time')  AS "Analyst Decision Timestamp",
-                        (wa.payload ->> 'firco_analyst_comment')        AS "Analyst Comment",
-                        (wa.payload ->> 'firco_system_id')              AS "Client Alert ID",
-                        (wa.payload ->> 'status')                       AS "Alert Status",
-                        wa.name                                         AS "S8 Alert ID"
+        SELECT wm.payload ->> 'policy'                                                    AS "Policy ID",
+               wm.payload ->> 'policy_title'                                              AS "Policy Name",
+               STRING_AGG(NULLIF(wm.payload ->> 'step', ''), ', ')                        AS "Step IDs",
+               STRING_AGG(NULLIF(wm.payload ->> 'step_title', ''), ', ')                  AS "Step Names",
+               wa.payload ->> 'recommended_action'                                        AS "S8 Alert Resolution",
+               recommendation_date                                                        AS "S8 Alert Resolution Timestamp (UTC)",
+               wa.payload ->> 'recommendation_comment'                                    AS "S8 Alert Comment",
+               wa.payload ->> 'firco_analyst_decision'                                    AS "Analyst Decision",
+               wa.payload ->> 'firco_analyst_decision_time'                               AS "Analyst Decision Timestamp",
+               wa.payload ->> 'firco_analyst_comment'                                     AS "Analyst Comment",
+               wa.payload ->> 'firco_system_id'                                           AS "Client Alert ID",
+               wa.payload ->> 'status'                                                    AS "Alert Status",
+               wa.name                                                                    AS "S8 Alert ID"
         FROM warehouse_alert wa JOIN warehouse_match wm ON wa.id = wm.alert_id
         WHERE wa.recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
             AND (wa.payload ->> 'firco_analyst_decision') IN ('analyst_decision_true_positive', 'analyst_decision_false_positive')
+        GROUP BY wm.payload ->> 'policy',
+                 wm.payload ->> 'policy_title',
+                 wa.payload ->> 'recommended_action',
+                 recommendation_date,
+                 wa.payload ->> 'recommendation_comment',
+                 wa.payload ->> 'firco_analyst_decision',
+                 wa.payload ->> 'firco_analyst_decision_time',
+                 wa.payload ->> 'firco_analyst_comment',
+                 wa.payload ->> 'firco_system_id',
+                 wa.payload ->> 'status',
+                 wa.name
     - name: ACCURACY
       type: simulation
       description: Accuracy (Alert Level)
       selectSqlQuery: >
-        SELECT DISTINCT wsm.payload ->> 'match_reason:policy'                AS "Policy ID",
-                        wsm.payload ->> 'match_reason:policy_title'          AS "Policy Name",
-                        wsa.payload ->> 'recommendation_recommended_action'  AS "S8 Alert Resolution",
-                        wsa.payload ->> 'recommendation_create_time'         AS "S8 Alert Resolution Timestamp (UTC)",
-                        wsa.payload ->> 'recommendation_comment'             AS "S8 Alert Comment",
-                        wa.payload ->> 'firco_analyst_decision'              AS "Analyst Decision",
-                        wa.payload ->> 'firco_analyst_decision_time'         AS "Analyst Decision Timestamp",
-                        wa.payload ->> 'firco_analyst_comment'               AS "Analyst Comment",
-                        wa.payload ->> 'firco_system_id'                     AS "Client Alert ID",
-                        wa.payload ->> 'status'                              AS "Alert Status",
-                        wa.name                                              AS "S8 Alert ID"
+        SELECT wsm.payload ->> 'match_reason:policy'                                   AS "Policy ID",
+               wsm.payload ->> 'match_reason:policy_title'                             AS "Policy Name",
+               STRING_AGG(NULLIF(wsm.payload ->> 'match_reason:step', ''), ', ')       AS "Step IDs",
+               STRING_AGG(NULLIF(wsm.payload ->> 'match_reason:step_title', ''), ', ') AS "Step Names",
+               wsa.payload ->> 'recommendation_recommended_action'                     AS "S8 Alert Resolution",
+               wsa.payload ->> 'recommendation_create_time'                            AS "S8 Alert Resolution Timestamp (UTC)",
+               wsa.payload ->> 'recommendation_comment'                                AS "S8 Alert Comment",
+               wa.payload ->> 'firco_analyst_decision'                                 AS "Analyst Decision",
+               wa.payload ->> 'firco_analyst_decision_time'                            AS "Analyst Decision Timestamp",
+               wa.payload ->> 'firco_analyst_comment'                                  AS "Analyst Comment",
+               wa.payload ->> 'firco_system_id'                                        AS "Client Alert ID",
+               wa.payload ->> 'status'                                                 AS "Alert Status",
+               wa.name                                                                 AS "S8 Alert ID"
         FROM warehouse_simulation_alert wsa
           LEFT JOIN warehouse_alert wa ON wa.name = wsa.name
           LEFT JOIN warehouse_simulation_match wsm ON wsm.alert_name = wsa.name
