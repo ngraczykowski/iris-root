@@ -134,3 +134,8 @@ frontend:
   #internal: false
   #authServerUrl: https://auth.silenteight.com
   #realm: sens-webapp
+  #frontend:
+  #  clientId: dev-frontend
+  #backend:
+  #  clientId: dev-backend
+  #  clientSecret:

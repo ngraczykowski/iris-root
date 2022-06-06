@@ -513,9 +513,6 @@ frontend:
 # Configuration of all the values below is required.
 #
 keycloak:
-  enabled:
-  image:
-    tag:
   auth:
     adminUser: admin
     adminPassword: secret
