@@ -53,6 +53,7 @@ mockito = "4.4.0"
 #-----------------------------------
 # Plugins
 #-----------------------------------
+plugin-cyclonedx-bom = "1.6.1"
 plugin-intellij = "1.1.4"
 plugin-jib = "3.2.1"
 plugin-nebula-resolution = "9.0.0"
@@ -404,6 +405,7 @@ test-containers-spock = { group = "org.testcontainers", name = "spock" }
 test-greenmail = { group = "com.icegreen", name = "greenmail-junit5", version = "1.6.1" }
 
 # Plugins (keep in sync with [plugins])
+plugin-cyclonedx-bom = { module = "org.cyclonedx.bom:org.cyclonedx.bom.gradle.plugin", version.ref = "plugin-cyclonedx-bom" }
 plugin-intellij = { module = "org.jetbrains.gradle.plugin.idea-ext:org.jetbrains.gradle.plugin.idea-ext.gradle.plugin", version.ref = "plugin-intellij" }
 plugin-jib = { module = "com.google.cloud.tools.jib:com.google.cloud.tools.jib.gradle.plugin", version.ref = "plugin-jib" }
 plugin-nebula-resolution = { module = "nebula.resolution-rules:nebula.resolution-rules.gradle.plugin", version.ref = "plugin-nebula-resolution" }
@@ -419,6 +421,7 @@ plugin-google-protobuf = { module = "com.google.protobuf:protobuf-gradle-plugin"
 [plugins]
 #jmh = { id = "me.champeau.jmh", version = "0.6.5" }
 
+cyclonedx-bom = { id = "org.cyclonedx.bom", version.ref = "plugin-cyclonedx-bom" }
 intellij = { id = "org.jetbrains.gradle.plugin.idea-ext", version.ref = "plugin-intellij" }
 jib = { id = "com.google.cloud.tools.jib", version.ref = "plugin-jib" }
 nebula-resolution = { id = "nebula.resolution-rules", version.ref = "plugin-nebula-resolution" }

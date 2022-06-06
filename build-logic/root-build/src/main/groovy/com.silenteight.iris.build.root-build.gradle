@@ -13,6 +13,13 @@ tasks.register('build') {Task task ->
 
   subprojects {Project subproject ->
     task.dependsOn subproject.tasks.named('build')
+
+    if (subproject.pluginManager.hasPlugin('org.cyclonedx.bom')) {
+      def isSbom = System.properties.getOrDefault('sbom', '')
+      if (isSbom) {
+        task.dependsOn subproject.tasks.named('cyclonedxBom')
+      }
+    }
   }
 }
 

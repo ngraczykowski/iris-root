@@ -67,7 +67,8 @@ pipeline {
                   credentialsId: 'artifactory-user',
                   usernameVariable: 'S8_REPO_USER',
                   passwordVariable: 'S8_REPO_PASSWORD')]) {
-            sh "./gradlew -Pversion=\"${javaVersion}\" clean build"
+            sh "./gradlew -Dsbom=true -Pversion=\"${javaVersion}\" clean build"
+            archiveArtifacts allowEmptyArchive: true, artifacts: 'modules/**/build/reports/*.bom.xml'
 
             withDockerRegistry(
                 url: 'https://docker.repo.silenteight.com',
