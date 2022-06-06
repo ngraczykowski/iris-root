@@ -10,6 +10,7 @@ import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.Rec
 import com.silenteight.scb.outputrecommendation.domain.model.Recommendations.RecommendedAction;
 
 import java.time.OffsetDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @UtilityClass
@@ -40,6 +41,7 @@ public class GnsRtManualInvestigationRecomBuilder {
         .recommendedAction(RecommendedAction.ACTION_INVESTIGATE)
         .recommendedComment(prepareComment(gnsRtAlert))
         .recommendedAt(OffsetDateTime.now())
+        .matches(Collections.emptyList())
         .build();
   }
 
