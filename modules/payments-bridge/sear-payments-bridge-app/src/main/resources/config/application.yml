@@ -29,6 +29,7 @@ pb:
       min: 10
       max: 100
   batch:
+    restart-failed-jobs: false
     job:
       concurrencyLimit: 10
   messaging:
