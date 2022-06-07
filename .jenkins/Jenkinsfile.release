@@ -107,7 +107,6 @@ pipeline {
           }
           stage("E2E Tests") {
             environment {
-              E2E_TESTS_CREDS = credentials('ra-username-password')
               E2E_TESTS_CREDS_2 = credentials('ra-username-password-2')
               ARTIFACTORY = credentials('artifactory-user')
             }
@@ -120,10 +119,7 @@ pipeline {
                   -Dcucumber.features="src/test/java/features" \
                   -Dcucumber.filter.tags="@smoke or @${ENVIRONMENT}" \
                   -Dcucumber.plugin=json:report-\${ENVIRONMENT}.json \
-                  -Dtest.isRegression=false \
                   -Dtest.clientId=frontend \
-                  -Dtest.username="\$E2E_TESTS_CREDS_USR" \
-                  -Dtest.password="\$E2E_TESTS_CREDS_PSW" \
                   -Dtest.admin.username="\$E2E_TESTS_CREDS_2_USR" \
                   -Dtest.admin.password="\$E2E_TESTS_CREDS_2_PSW" \
                   -Dsilenteight.repoUser="\$ARTIFACTORY_USR" \

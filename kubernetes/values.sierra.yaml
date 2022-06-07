@@ -9,10 +9,10 @@ components:
     properties:
       "pb.cmapi.callback.enabled": true
       "pb.cmapi.callback.endpoint": 'http://{{ include "sear.fullname" . }}-payments-bridge.{{ .Release.Namespace }}.svc:{{ .component.containerPorts.http.port }}/rest/{{ .component.webPath }}/mock/cmapi'
-      "spring.security.oauth2.resourceserver.jwt.issuer-uri": "{{ .Values.keycloak.authServerUrl }}/realms/{{ .Values.keycloak.realm }}"
+      "spring.security.oauth2.resourceserver.jwt.issuer-uri": "{{ tpl .Values.keycloak.authServerUrl $ }}/realms/{{ .Values.keycloak.realm }}"
       "spring.security.oauth2.client.registration.callback.client-id": "{{ .Values.keycloak.cmapi.clientId }}"
       "spring.security.oauth2.client.registration.callback.client-secret": "{{ .Values.keycloak.cmapi.secret }}"
-      "spring.security.oauth2.client.provider.external.token-uri": "{{ .Values.keycloak.authServerUrl }}/realms/{{ .Values.keycloak.realm }}/protocol/openid-connect/token"
+      "spring.security.oauth2.client.provider.external.token-uri": "{{ tpl .Values.keycloak.authServerUrl $ }}/realms/{{ .Values.keycloak.realm }}/protocol/openid-connect/token"
       "pb.email-notification.learning-enabled": true
       "pb.sear-learning.aws.file-list.bucket-name": devenv-6fa57739-906d-1130-4a76-90dd1c5dc8a3
       "pb.sear-learning.aws.file-list.prefix": learning

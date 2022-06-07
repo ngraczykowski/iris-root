@@ -3,29 +3,33 @@
 ### How to run tests
 
 1. **To run the tests using feature file, set the VM Options in run/debug config:**
+
 ```
 -Dtest.clientId=${clientId}
--Dtest.username=${username}
--Dtest.password=${password}
--Dtest.admin.username=${username2}
--Dtest.admin.password=${password2}
+-Dtest.admin.username=${admin_username}
+-Dtest.admin.password=${admin_password}
 -Dtest.realm=${realm}
 -Dtest.authServerUrl=${authServerUrl}
 -Dtest.url=${baseUrl}
 ```
 
+defaults:
+
+* test.clientId=frontend
+* test.realm=Dev
+* test.authServerUrl=${test.url}/auth
+
+So with the defaults the only required parameter is "test.url"
+
 2. **Run the tests using gradle command:**
 
 ```
 gradle test \
--Dcucumber.features=src/test/java/features/SmokeTests.feature \
+-Dcucumber.features="src/test/java/features[/a_feature_file.feature]" \
 -Dcucumber.plugin=html:report.html \
--Dtest.isRegression=false \
 -Dtest.clientId=${clientId} \
--Dtest.username=${username} \
--Dtest.password=${password} \
--Dtest.admin.username=${username2} \
--Dtest.admin.password=${password2} \
+-Dtest.admin.username=${admin_username} \
+-Dtest.admin.password=${admin_password} \
 -Dtest.url=${baseUrl} \
 -Dtest.realm=${realm} \
 -Dtest.authServerUrl=${authServerUrl}
