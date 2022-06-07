@@ -33,7 +33,7 @@ async def serve(args):
     service_config = ConsulServiceConfig()
     try:
         max_length = service_config.MAX_MESSAGE_LENGTH
-    except ConsulServiceError:
+    except (KeyError, ConsulServiceError):
         max_length = 22270800
     server = grpc.aio.server(
         futures.ThreadPoolExecutor(max_workers=10),
