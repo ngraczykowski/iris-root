@@ -38,12 +38,8 @@ public class ProtoMessageToObjectNodeConverter {
     return convertToObjectNode(json.get());
   }
 
-  public Optional<ObjectNode> convert(Object object) {
-    var json = OBJECT_MAPPER.convertValue(object, ObjectNode.class);
-    if (json.isEmpty()) {
-      return Optional.empty();
-    }
-    return Optional.of(json);
+  public ObjectNode convert(Object object) {
+    return OBJECT_MAPPER.convertValue(object, ObjectNode.class);
   }
 
   public Optional<String> convertToJsonString(Message message) {

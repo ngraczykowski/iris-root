@@ -15,6 +15,7 @@ public record AlertAggregate(long analysisId,
                              Map<Long, MatchAggregate> matches,
                              String policy,
                              String strategy,
-                             Map<String, Set<String>> agentFeatures) {
+                             Map<String, Set<String>> agentFeatures,
+                             Map<String, String> labels) {
 
 }

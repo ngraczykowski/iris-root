@@ -28,6 +28,7 @@ public class AlertSolving implements Serializable {
   long analysisId;
   Map<String, Set<String>> agentFeatures;
   Map<Long, Match> matches;
+  Map<String, String> labels;
   LocalDateTime solvingCreatetime = LocalDateTime.now();
   String policy;
   String strategy;
@@ -41,6 +42,7 @@ public class AlertSolving implements Serializable {
     agentFeatures = alertAggregate.agentFeatures();
     policy = alertAggregate.policy();
     strategy = alertAggregate.strategy();
+    labels = alertAggregate.labels();
   }
 
   public AlertSolving(
@@ -51,6 +53,7 @@ public class AlertSolving implements Serializable {
     this.analysisId = analysisId;
     this.matches = new HashMap<>();
     this.agentFeatures = new HashMap<>();
+    this.labels = new HashMap<>();
   }
 
   public static AlertSolving empty() {

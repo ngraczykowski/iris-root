@@ -10,7 +10,7 @@ import com.silenteight.adjudication.engine.solving.application.publisher.AgentsM
 import com.silenteight.adjudication.engine.solving.application.publisher.GovernanceAlertPublisher;
 import com.silenteight.adjudication.engine.solving.application.publisher.ReadyMatchFeatureVectorPublisher;
 import com.silenteight.adjudication.engine.solving.application.publisher.RecommendationPublisher;
-import com.silenteight.adjudication.engine.solving.data.MatchFeaturesFacade;
+import com.silenteight.adjudication.engine.solving.data.jdbc.MatchFeaturesFacade;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
 import com.silenteight.adjudication.engine.solving.domain.comment.CommentInputClientRepository;
 

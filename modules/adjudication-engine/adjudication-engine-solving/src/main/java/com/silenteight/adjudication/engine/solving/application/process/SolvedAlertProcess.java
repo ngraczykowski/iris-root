@@ -21,8 +21,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import javax.annotation.Nonnull;
+
+import static java.util.function.Predicate.not;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -75,6 +76,7 @@ public class SolvedAlertProcess {
                 .matchContexts(createMatchContexts(alertContext.getMatches()))
                 .comment(comment)
                 .matchComments(matchComments)
+                .alertLabels(converter.convert(alertSolvingModel.getLabels()))
                 .build()));
     var recommendations = recommendationFacade.createRecommendations(saveRequest);
 
@@ -111,8 +113,7 @@ public class SolvedAlertProcess {
     return matchContexts
         .stream()
         .map(converter::convert)
-        .filter(Optional::isPresent)
-        .map(Optional::get)
+        .filter(not(ObjectNode::isEmpty))
         .toArray(ObjectNode[]::new);
   }
 }

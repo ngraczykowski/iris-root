@@ -8,7 +8,7 @@ import com.silenteight.adjudication.engine.solving.application.publisher.AgentsM
 import com.silenteight.adjudication.engine.solving.application.publisher.ReadyMatchFeatureVectorPublisher;
 import com.silenteight.adjudication.engine.solving.application.publisher.dto.MatchSolutionRequest;
 import com.silenteight.adjudication.engine.solving.data.AlertAggregate;
-import com.silenteight.adjudication.engine.solving.data.MatchFeaturesFacade;
+import com.silenteight.adjudication.engine.solving.data.jdbc.MatchFeaturesFacade;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolving;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
 import com.silenteight.adjudication.internal.v1.AnalysisAlertsAdded;
