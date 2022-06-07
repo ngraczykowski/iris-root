@@ -1,5 +1,6 @@
 @Library('pipeline-shared-library@github') _
-def utils = new com.silenteight.jenkins.ci.Utils()
+def gradle = new com.silenteight.jenkins.ci.Gradle()
+def git = new com.silenteight.jenkins.ci.Git()
 def jenkins = new com.silenteight.jenkins.ci.Jenkins()
 
 def loadValuesYaml(key){
@@ -90,7 +91,7 @@ pipeline {
                             sh './scripts/publish.sh --index-url "${PYPI_URL}"'
                             sh 'git tag --delete $(git tag --list)'
 
-                            sshagent([env.JENKINS_SSH_NAME]) {
+                           withCredentials([gitUsernamePassword(credentialsId: 'Github-app-access')]) {
                                 sh './scripts/tag_and_bump_version.sh'
                             }
                         }
@@ -106,7 +107,7 @@ pipeline {
                     steps {
                         sh 'pip install --index-url "${PYPI_URL}" bump2version tox'
                         sh 'git tag --delete $(git tag --list)'
-                        sshagent([env.JENKINS_SSH_NAME]) {
+                        withCredentials([gitUsernamePassword(credentialsId: 'Github-app-access')]) {
                             sh './scripts/release.sh --index-url ${PYPI_URL}'
                         }
                         withCredentials([usernamePassword(
