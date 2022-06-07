@@ -9,7 +9,7 @@ from silenteight.agents.v1.api.exchange.exchange_pb2 import AgentExchangeRequest
 
 from agent_base.agent.exception import AgentException
 from agent_base.agent_exchange.address_service import AddressService
-from agent_base.utils import Config
+from agent_base.utils.config import Config
 
 
 class AgentDataSourceException(AgentException):

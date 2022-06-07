@@ -3,7 +3,7 @@ import pathlib
 import pytest
 
 from agent_base.agent import Agent
-from agent_base.utils import Config
+from agent_base.utils.config import Config
 
 
 def test_agent_without_config():

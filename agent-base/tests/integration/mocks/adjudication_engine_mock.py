@@ -29,7 +29,7 @@ class AdjudicationEngineMock:
 
     async def start(self):
         connection_configuration = self.config["rabbitmq"].copy()
-        connection_configuration.pop("tls", None)
+        connection_configuration.pop("ssl_options", None)
         self._connection: aio_pika.RobustConnection = await aio_pika.connect_robust(
             **connection_configuration
         )

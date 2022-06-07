@@ -39,6 +39,15 @@ def setup_and_tear_down():
     os.environ.pop("GRPC_PORT", None)
 
 
+def test_config_default():
+    config = Config()
+    assert config.agent_config.agent_grpc_service
+    assert config.agent_config.consul
+    assert config.agent_config.messaging
+    assert config.agent_config.rabbitmq
+    assert config.agent_config.uds
+
+
 def test_config_from_env(setup_and_tear_down):
     default_grpc_port = 9090
     new_grpc_port = 5000

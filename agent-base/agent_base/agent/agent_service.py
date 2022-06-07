@@ -2,8 +2,8 @@ import asyncio
 import functools
 
 from agent_base.agent import Agent
-from agent_base.utils import Config
 from agent_base.utils.asyncio_utils import awaitify
+from agent_base.utils.config import Config
 
 
 class AgentService:

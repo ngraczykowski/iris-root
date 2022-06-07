@@ -30,7 +30,7 @@ class PikaConnection:
 
     async def start(self) -> None:
         connection_configuration = self.connection_configuration.copy()
-        ssl_options = connection_configuration.pop("tls", None)
+        ssl_options = connection_configuration.pop("ssl_options", None)
 
         if self.ssl:
             if not ssl_options:

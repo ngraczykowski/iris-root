@@ -21,7 +21,7 @@ from agent_base.agent_exchange.agent_data_source import (
     AgentDataSourceException,
 )
 from agent_base.agent_exchange.pika_connection import PikaConnection
-from agent_base.utils import Config
+from agent_base.utils.config import Config
 
 
 class MessageFormatException(AgentException):

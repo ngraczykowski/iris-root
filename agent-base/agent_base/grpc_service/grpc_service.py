@@ -8,7 +8,7 @@ from grpc_reflection.v1alpha import reflection
 from agent_base.agent import AgentService
 from agent_base.grpc_service.health_servicer import AgentHealthServicer
 from agent_base.grpc_service.servicer import AgentGrpcServicer
-from agent_base.utils import Config
+from agent_base.utils.config import Config
 
 
 class GrpcService(AgentService):

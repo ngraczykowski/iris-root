@@ -4,7 +4,7 @@ from typing import Any, Optional
 
 import yaml
 
-from agent_base.utils.agent_config import AgentConfigLoader
+from agent_base.utils.config.agent_config_loader import AgentConfigLoader
 
 CONFIG_DIRS = (pathlib.Path("./config"),)
 

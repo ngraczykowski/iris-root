@@ -1,6 +1,6 @@
 import pytest
 
-from agent_base.utils import Config
+from agent_base.utils.config import Config
 
 
 @pytest.fixture()
