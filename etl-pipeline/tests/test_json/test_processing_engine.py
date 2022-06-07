@@ -22,8 +22,8 @@ class TestEngine(unittest.TestCase):
 
     def test_set_trigger_reasons(self):
         match = EXAMPLE_FOR_TEST_SET_REF_KEY
-        result = self.uut.set_trigger_reasons(match, pipeline_config.config.FUZZINESS_LEVEL)
-        self.assertEqual(sorted(result), sorted(RESULT_FOR_EXAMPLE_FOR_TEST_SET_REF_KEY))
+        self.uut.set_trigger_reasons(match, pipeline_config.config.FUZZINESS_LEVEL)
+        self.assertEqual(match[cn.TRIGGERED_BY], sorted(RESULT_FOR_EXAMPLE_FOR_TEST_SET_REF_KEY))
 
     def test_set_beneficiary_hits(self):
         match = EXAMPLE_FOR_TEST_SET_REF_KEY

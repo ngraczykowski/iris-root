@@ -1,7 +1,6 @@
 AP_PARTY_TYPE:
   target_collection: alertedParty
-  method_name: set_up_party_type
-  pattern_method: pattern_set_up_party_type
+  method: set_up_party_type
   source:
     alertedParty:
       - ALL_PARTY_TYPES
@@ -12,8 +11,7 @@ AP_PARTY_TYPE:
       - ORGANIZATIONPERSONIND
     alertSupplementalInfo:
       - supplementalInfo.legalFormName
-    watchlistParty:
-      - WLP_TYPE
+
 
 ALL_CONNECTED_PARTIES_NAMES:
   method_name: collect_party_full_names
@@ -44,13 +42,14 @@ ALL_CONNECTED_TAX_IDS:
     parties:
       - taxId
 
-ALL_PARTY_DOBS:
+AP_DOB:
   target_collection: alertedParty
-  method_name: collect_party_dobs
-  pattern_method: pattern_aggregate
-  source:
+  method: collect_party_dobs
+  source: 
     parties:
       - dobDate
+    xml_fields:
+      - PARTY1_DATE_OF_BIRTH
 
 ALL_CONNECTED_PARTY_BIRTH_COUNTRIES:
   method_name: collect_party_birth_countries

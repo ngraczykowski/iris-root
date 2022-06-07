@@ -82,7 +82,7 @@ def assert_nested_dict(tested, reference, key=None):
         try:
             assert sorted(tested) == sorted(reference)
         except (TypeError, AssertionError):
-            assert_compare_list_of_dict_of_list(tested, reference)
+            assert_compare_list_of_dict_of_list(tested, reference, key)
         return
     assert tested == reference, key
 
@@ -284,14 +284,31 @@ def test_collect_party_values_from_parties(pipeline_resource):
     pipeline_resource.collect_party_values(payload)
     assert {key: value for key, value in payload.items() if key.startswith("ALL")} == {
         "ALL_CONNECTED_PARTIES_NAMES": [],
-        "ALL_CONNECTED_GOVT_IDS": [],
         "ALL_CONNECTED_PARTY_NAMES": ["Shaolin kung fu master", "John, Doe Doe"],
         "ALL_CONNECTED_TAX_IDS": ["1231413412312", "12097381208937"],
         "ALL_CONNECTED_PARTY_BIRTH_COUNTRIES": ["1341412312312", "13413401280"],
         "ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES": ["Arabian Emirates"],
         "ALL_CONNECTED_PARTY_RESIDENCY_COUNTRIES": [],
         "ALL_CONNECTED_COUNTRY_OF_INCORPORATION": ["Arabian Emirates"],
+        "ALL_CONNECTED_GOVT_IDS": [],
+        "ALL_CONNECTED_ACCOUNT_NAMES": [],
+        "ALL_CONNECTED_ACCOUNT_BRANCH_ACCOUNT_NUMBERS": [],
+        "ALL_CONNECTED_ACCOUNT_BENEFICIARY_NAMES": [],
+        "ALL_PARTY1_EMPLOYERS": None,
+        "ALL_PARTY1_COUNTRY": None,
+        "ALL_PARTY1_COUNTRY1": None,
+        "ALL_PARTY1_COUNTRY_OF_INCORPORATION": None,
+        "ALL_PARTY1_ADDRESS1_COUNTRY": None,
+        "ALL_PARTY1_COUNTRY1_CITIZENSHIP": None,
+        "ALL_PARTY1_COUNTRY2_CITIZENSHIP": None,
+        "ALL_PARTY1_COUNTRY_FORMATION1": None,
+        "ALL_PARTY1_COUNTRY_DOMICILE1": None,
+        "ALL_PRTY_PRIM_CTZNSH_CNTRY": None,
+        "ALL_PRTY_RSDNC_CNTRY_CD": None,
+        "ALL_PARTY1_COUNTRY_PEP": None,
+        "ALL_CONCAT_NAMES": None,
+        "ALL_PARTY1_GOVTID1_NUMBER": None,
+        "ALL_PARTY1_GOVTID2_NUMBER": None,
     }
 
-    assert payload["alertedParty"]["ALL_PARTY_TYPES"] == []
-    assert payload["alertedParty"]["ALL_PARTY_DOBS"] == ["10/10/1969"]
+    assert payload["alertedParty"]["AP_DOB"] == ["10/10/1969"]

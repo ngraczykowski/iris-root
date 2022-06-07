@@ -49,12 +49,20 @@ class Collections:
 
     def get_xml_field(self, payload, field_name):
         try:
-            input_records = payload[cn.ALERTED_PARTY_FIELD][cn.INPUT_RECORD_HIST][cn.INPUT_RECORDS]
-            fields = input_records[cn.INPUT_FIELD]
-            return fields.get(field_name, None)
+            return self.get_xml_fields(payload).get(field_name, None)
         except (KeyError, IndexError, TypeError):
             logger.warning("No fields")
             fields = None
+        return fields
+
+    def get_xml_fields(self, payload):
+        try:
+            input_records = payload[cn.ALERTED_PARTY_FIELD][cn.INPUT_RECORD_HIST][cn.INPUT_RECORDS]
+            fields = input_records[cn.INPUT_FIELD]
+            return fields
+        except (KeyError, IndexError, TypeError):
+            logger.warning("No fields")
+            fields = {}
         return fields
 
     def prepare_collections(self, payloads):

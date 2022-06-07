@@ -1,4 +1,5 @@
 from etl_pipeline.config import pipeline_config
+from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.logger import get_logger
 from pipelines.ms.collection import Collections
 
@@ -6,6 +7,53 @@ logger = get_logger("main").getChild("Functions")
 
 
 cn = pipeline_config.cn
+
+
+def set_scope(func):
+    def wrap(*args, **kwargs):
+        try:
+
+            scope = kwargs.pop("source", {})
+            function_object: Functions = args[0]
+            payload = args[1]
+            scoped_payload = {}
+
+            for container in scope:
+                if container == "alertedParty":
+                    collection = payload.get("alertedParty")
+                    scoped_payload[str(container)] = scoped_payload.get(str(container), {})
+                    for field in scope[container]:
+                        scoped_payload[str(container)][field] = collection[field]
+                elif container == "metadata":
+                    collection = payload
+                    scoped_payload[str(container)] = scoped_payload.get(str(container), {})
+                    for field in scope[container]:
+                        scoped_payload[str(container)][field] = collection[field]
+                elif container == "xml_fields":
+                    collection = function_object.collections.get_xml_fields(payload)
+                    scoped_payload[str(container)] = scoped_payload.get(str(container), {})
+                    for field in scope[container]:
+                        scoped_payload[str(container)][field] = collection.get(field, None)
+                elif container == "alertSupplementalInfo":
+                    collection = (
+                        payload.get("alertedParty", {})
+                        .get("alertSupplementalInfo", {})
+                        .get("supplementalInfo", [])
+                    )
+                    scoped_payload[str(container)] = {"supplementalInfo": collection}
+            args = [function_object, scoped_payload]
+
+            func(*args, **kwargs)
+
+            target_collection = kwargs.pop("target_collection", None)
+            target_field = kwargs.pop("target_field", None)
+            payload[target_collection][target_field] = scoped_payload[target_collection][
+                target_field
+            ]
+        except Exception as e:
+            logger.error(f"{str(e)} for {func}")
+
+    return wrap
 
 
 class Functions:
@@ -19,6 +67,43 @@ class Functions:
             return self.func_maps.get(name)
         except AttributeError:
             return object.__getattribute__(self, name)
+
+    @classmethod
+    def parse_key(cls, value, match, payload, new_config):
+        temp_dict = dict(value)
+        for new_key in temp_dict:
+            for element in temp_dict[new_key]:
+                elements = element.split(".")
+                if cn.MATCH_RECORDS in element:
+                    value = match
+                    elements = elements[2:]
+
+                elif "xml_fields" in element:
+                    input_records = payload[cn.ALERTED_PARTY_FIELD][cn.INPUT_RECORD_HIST][
+                        cn.INPUT_RECORDS
+                    ]
+                    value = input_records[cn.INPUT_FIELD]
+                    try:
+                        value = value[elements[-1]].value
+                    except (AttributeError, KeyError):
+                        value = None
+
+                    new_elements = [elements[-1]]
+                    elements = []
+                else:
+                    value = payload
+                for field_name in elements:
+                    try:
+                        value = value.get(field_name, None)
+                    except (TypeError, AttributeError):
+                        key = PayloadLoader.LIST_TYPE_REGEX.sub("", field_name)
+                        ix = int(PayloadLoader.LIST_TYPE_REGEX.match(field_name).groups(0))
+                        value = value[key][ix]
+                new_config[elements[-1] if elements else new_elements[-1]] = value
+
+    @classmethod
+    def _collect_party_dobs(cls, *args, **kwargs):
+        cls.pattern_aggregate(*args, **kwargs)
 
     @classmethod
     def pattern_aggregate(
@@ -37,9 +122,11 @@ class Functions:
                     aggregated.extend(
                         [i.get(field_name) for i in parties if i.get(field_name, "")]
                     )
-            elif collection == "field":
-                for field in collection:
-                    aggregated.append(collection.get(field))
+            elif collection == "xml_fields":
+                fields = self.collections.get_xml_fields(payload)
+                for field in source[collection]:
+                    aggregated.append(fields.get(field).value if fields.get(field) else None)
+        aggregated = [i for i in aggregated if i]
         if unique:
             aggregated = list(set([i for i in aggregated if i]))
         if target_collection:
@@ -50,7 +137,7 @@ class Functions:
     @classmethod
     def set_up_for_wm_party(cls, payload):
         ap_type = "I"
-        field = cls.collections.get_xml_field(payload, "PARTY1_ORGANIZATION_NAME")
+        field = payload["xml_fields"]["PARTY1_ORGANIZATION_NAME"]
         if field:
             ap_type = "C"
         return ap_type
@@ -58,10 +145,8 @@ class Functions:
     @classmethod
     def set_up_for_isg_account(cls, payload):
         ap_type = None
-        supplemental_info = cls.collections.get_alert_supplemental_info(
-            payload, "supplementalInfo"
-        )
-        logger.debug(f"supplemental_info: {supplemental_info}")
+        supplemental_info = payload["alertSupplementalInfo"]["supplementalInfo"]
+        logger.debug(f"supplementalInfo: {supplemental_info}")
         if supplemental_info:
             for info in supplemental_info:
                 ap_type = info.get("legalFormName", None)
@@ -76,7 +161,7 @@ class Functions:
     @classmethod
     def set_up_for_isg_party(cls, payload):
         ap_type = None
-        field = cls.collections.get_xml_field(payload, "ORGANIZATIONPERSONIND")
+        field = payload["xml_fields"]["ORGANIZATIONPERSONIND"]
         if field:
             ap_type = field.value
             if ap_type == "O":
@@ -88,35 +173,37 @@ class Functions:
     @classmethod
     def select_ap_for_dataset_type(cls, payload, dataset_type):
         ap_type = None
-        logger.debug(f"ap_type: {ap_type}")
         if dataset_type == "WM_PARTY":
             ap_type = cls.set_up_for_wm_party(payload)
         elif dataset_type == "ISG_ACCOUNT":
             ap_type = cls.set_up_for_isg_account(payload)
         elif dataset_type == "ISG_PARTY":
             ap_type = cls.set_up_for_isg_party(payload)
-        logger.debug(f"ap_type: {ap_type}")
         return ap_type if ap_type else "UNKNOWN"
 
     @classmethod
-    def pattern_set_up_party_type(cls, payload, target_field="", source="", target_collection=""):
-        field = payload["alertedParty"]["ALL_PARTY_TYPES"]
-        types = [i for i in field if i]
-        try:
-            match_place = payload[target_collection]
-        except KeyError:
-            payload[target_collection] = {}
-            match_place = payload[target_collection]
-        dataset_type = payload.get("datasetType")
-        match_place[target_field] = "UNKNOWN"
-        logger.debug(f"dataset_type: {dataset_type}, types {types}")
-        if dataset_type and not types:
-            match_place[target_field] = cls.select_ap_for_dataset_type(payload, dataset_type)
-        else:
-            if "Individual" in types:
-                match_place[target_field] = "I"
+    @set_scope
+    def _set_up_party_type(cls, source_payload, target_field="", target_collection=""):
+        party_types = [
+            party_type
+            for party_type in source_payload["alertedParty"]["ALL_PARTY_TYPES"]
+            if party_type
+        ]
+        dataset_type = source_payload["metadata"]["datasetType"]
+        value = "UNKNOWN"
+        if dataset_type and not party_types:
+            value = cls.select_ap_for_dataset_type(source_payload, dataset_type)
+        elif party_types:
+            if "Individual" in party_types:
+                value = "I"
             else:
-                match_place[target_field] = "C"
+                value = "C"
+        try:
+            target = source_payload[target_collection]
+        except KeyError:
+            source_payload[target_collection] = {}
+            target = source_payload[target_collection]
+        target[target_field] = value
 
     @classmethod
     def pattern_set_beneficiary_hits(cls, payload, target_field="", **kwargs):

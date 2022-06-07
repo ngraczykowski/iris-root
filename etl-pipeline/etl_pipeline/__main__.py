@@ -30,9 +30,18 @@ def add_EtlPipelineServiceServicer_to_server(servicer, server):
 
 
 async def serve(args):
-    server = grpc.aio.server(futures.ThreadPoolExecutor(max_workers=10))
     service_config = ConsulServiceConfig()
-
+    try:
+        max_length = service_config.MAX_MESSAGE_LENGTH
+    except ConsulServiceError:
+        max_length = 22270800
+    server = grpc.aio.server(
+        futures.ThreadPoolExecutor(max_workers=10),
+        options=[
+            ("grpc.max_send_message_length", max_length),
+            ("grpc.max_receive_message_length", max_length),
+        ],
+    )
     add_EtlPipelineServiceServicer_to_server(EtlPipelineServiceServicer(args.ssl), server)
     if args.ssl:
         with open(service_config.GRPC_SERVER_TLS_PRIVATE_KEY, "rb") as f:

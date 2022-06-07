@@ -5,7 +5,6 @@ from copy import deepcopy
 
 from etl_pipeline import application
 from etl_pipeline.config import load_agent_configs, pipeline_config
-from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.custom.ms.watchlist_extractor import WatchlistExtractor
 from etl_pipeline.pipeline import ETLPipeline
 from pipelines.ms.collection import Collections
@@ -28,6 +27,80 @@ class MSPipeline(ETLPipeline):
         self.watchlist_extractor = WatchlistExtractor()
         self.collections = Collections()
         self.functions = functions
+
+    def transform_standardized_to_cleansed(self, payloads):
+        payloads = self.collections.prepare_collections(payloads)
+        payloads = self.connect_input_record_with_match_record(payloads)
+        for payload in payloads:
+            match = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
+            self.collections.prepare_wl_values(match)
+            self.set_up_dataset_type_match(payload, match)
+            self.engine.set_trigger_reasons(match, self.pipeline_config.FUZZINESS_LEVEL)
+            self.functions.set_beneficiary_hits(match)
+            self.connect_full_names(payload)
+            self.collect_party_values(payload)
+            self.collect_concat_values(payload, match)
+            self.functions.set_up_party_type(payload)
+            self.set_token_risk_carrier(match)
+        return payloads
+
+    def transform_cleansed_to_application(self, payloads):
+        for payload in payloads:
+            self.parse_agent_config(payload)
+            self.remove_nulls_from_aggegated(payload)
+        return payloads
+
+    def parse_agent_config(self, payload):
+        match = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
+        (
+            agent_config,
+            agent_input_prepended_agent_name_config,
+            yaml_conf,
+        ) = self.alert_agents_config["alert_type"]
+        agent_input_agg_col_config = application.create_agent_input_agg_col_config(
+            agent_input_prepended_agent_name_config
+        )
+
+        config = self.get_key(payload, match, yaml_conf)
+        self.engine.sql_to_merge_specific_columns_to_standardized(
+            agent_input_prepended_agent_name_config,
+            match,
+            config,
+            False,
+        )
+
+        config.update(
+            {
+                key: self.flatten(match.get(key))
+                for key in match
+                if key.endswith("_ap")
+                or key.endswith("_wl")
+                or key.endswith("_name")
+                or key.endswith("_aliases")
+            }
+        )
+        input_records = payload[cn.ALERTED_PARTY_FIELD][cn.INPUT_RECORD_HIST][cn.INPUT_RECORDS]
+        fields = input_records[cn.INPUT_FIELD]
+        self.handle_hit_type_agent(match, agent_config, fields)
+        self.select_ap_for_ap_id_tp_marked_agent(match)
+        self.set_up_entity_type_match(payload, match)
+
+        self.engine.sql_to_merge_specific_columns_to_standardized(
+            agent_input_agg_col_config, match, config, False
+        )
+        match.update(
+            {
+                key: self.produce_unique_flatten_list(match.get(key, []))
+                for key in match
+                if key.endswith("_aggregated") or key.startswith("hit_type_agent")
+            }
+        )
+
+        match["all_hit_type_aggregated"] = {
+            key.split("_")[-1]: [i for i in match[key] if i]
+            for key in match
+            if key.startswith("hit")
+        }
 
     def reload_config(self):
         self.alert_agents_config = load_agent_configs()
@@ -72,146 +145,54 @@ class MSPipeline(ETLPipeline):
         self.functions.collect_party_country_of_incorporation(payload)
         self.functions.collect_party_government_id(payload)
 
-    def transform_standardized_to_cleansed(self, payloads):
-        payloads = self.collections.prepare_collections(payloads)
-        payloads = self.connect_input_record_with_match_record(payloads)
-        for payload in payloads:
-            match = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
-            input_records = payload[cn.ALERTED_PARTY_FIELD][cn.INPUT_RECORD_HIST][cn.INPUT_RECORDS]
-            alerted_parties = self.collections.get_parties(payload)
-            accounts = self.collections.get_accounts(payload)
-            fields = input_records[cn.INPUT_FIELD]
-            self.collections.prepare_wl_values(match)
-            self.set_up_dataset_type_match(payload, match)
+        accounts = self.collections.get_accounts(payload)
+        self.engine.collect_party_values_from_accounts(accounts, payload)
 
-            match[cn.TRIGGERED_BY] = self.engine.set_trigger_reasons(
-                match, self.pipeline_config.FUZZINESS_LEVEL
-            )
-            self.functions.set_beneficiary_hits(match)
+        fields = self.collections.get_xml_fields(payload)
+        self.engine.collect_party_values_from_parties_from_fields(fields, payload)
 
-            self.engine.connect_full_names(
-                alerted_parties, [cn.PRTY_FST_NM, cn.PRTY_MDL_NM, cn.PRTY_LST_NM]
-            )
-            self.engine.connect_full_names(accounts, [cn.ACCOUNT_FIRST_NAME, cn.ACCOUNT_LAST_NAME])
+    def collect_concat_values(self, payload, match):
+        """temporary for demo"""
 
-            self.collect_party_values(payload)
-            self.engine.collect_party_values_from_accounts(accounts, payload)
-            self.engine.collect_party_values_from_parties_from_fields(fields, payload)
-            names_source_cols = [
-                cn.ALL_CONNECTED_PARTY_NAMES,
-                cn.ALL_CONNECTED_PARTIES_NAMES,
-                cn.ALL_CONNECTED_ACCOUNT_NAMES,
-            ]
+        fields = self.collections.get_xml_fields(payload)
 
-            payload.update(
-                {
-                    cn.CLEANED_NAMES: self.engine.get_clean_names_from_concat_name(
-                        self.engine.get_field_value_name(fields, cn.CONCAT_ADDRESS),
-                        {key: payload[key] for key in names_source_cols},
-                    )
-                }
-            )
+        names_source_cols = [
+            cn.ALL_CONNECTED_PARTY_NAMES,
+            cn.ALL_CONNECTED_PARTIES_NAMES,
+            cn.ALL_CONNECTED_ACCOUNT_NAMES,
+        ]
 
-            payload.update({cn.CONCAT_RESIDUE: payload[cn.CLEANED_NAMES][cn.CONCAT_RESIDUE]})
-            concat_residue = payload[cn.CONCAT_RESIDUE]
-            concat_address = self.engine.get_field_value_name(fields, cn.CONCAT_ADDRESS)
-            payload.update({cn.CONCAT_ADDRESS_NO_CHANGES: concat_residue == concat_address})
-            match[cn.AP_TRIGGERS] = self.engine.set_triggered_tokens_discovery(match, fields)
-            self.functions.set_up_party_type(payload)
-            self.set_token_risk_carrier(match)
-        return payloads
+        payload.update(
+            {
+                cn.CLEANED_NAMES: self.engine.get_clean_names_from_concat_name(
+                    self.engine.get_field_value_name(fields, cn.CONCAT_ADDRESS),
+                    {key: payload[key] for key in names_source_cols},
+                )
+            }
+        )
 
-    def parse_key(self, value, match, payload, new_config):
-        temp_dict = dict(value)
-        for new_key in temp_dict:
-            for element in temp_dict[new_key]:
-                elements = element.split(".")
-                if cn.MATCH_RECORDS in element:
-                    value = match
-                    elements = elements[2:]
+        payload.update({cn.CONCAT_RESIDUE: payload[cn.CLEANED_NAMES][cn.CONCAT_RESIDUE]})
+        concat_residue = payload[cn.CONCAT_RESIDUE]
+        concat_address = self.engine.get_field_value_name(fields, cn.CONCAT_ADDRESS)
+        payload.update({cn.CONCAT_ADDRESS_NO_CHANGES: concat_residue == concat_address})
+        match[cn.AP_TRIGGERS] = self.engine.set_triggered_tokens_discovery(match, fields)
 
-                else:
-
-                    value = payload
-                for field_name in elements:
-                    if field_name == cn.INPUT_FIELD:
-                        try:
-                            value = value[field_name][elements[-1]].value
-                        except (AttributeError, KeyError):
-                            value = None
-                        break
-                    try:
-                        value = value.get(field_name, None)
-                    except TypeError:
-                        key = PayloadLoader.LIST_ELEMENT_REGEX.sub("", field_name)
-                        ix = int(PayloadLoader.LIST_ELEMENT_REGEX.match(field_name).groups(0))
-                        value = value[key][ix]
-                new_config[elements[-1]] = value
+    def connect_full_names(self, payload):
+        alerted_parties = self.collections.get_parties(payload)
+        self.engine.connect_full_names(
+            alerted_parties, [cn.PRTY_FST_NM, cn.PRTY_MDL_NM, cn.PRTY_LST_NM]
+        )
+        accounts = self.collections.get_accounts(payload)
+        self.engine.connect_full_names(accounts, [cn.ACCOUNT_FIRST_NAME, cn.ACCOUNT_LAST_NAME])
 
     def get_key(self, payload, match, conf):
         new_config = {}
         for _, value in dict(conf).items():
             try:
-                self.parse_key(value, match, payload, new_config)
+                self.functions.parse_key(value, match, payload, new_config)
             except:
                 logger.warning(f"Field {value} does not exist in payload")
         return new_config
-
-    def transform_cleansed_to_application(self, payloads):
-        for payload in payloads:
-            match = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
-            (
-                agent_config,
-                agent_input_prepended_agent_name_config,
-                yaml_conf,
-            ) = self.alert_agents_config["alert_type"]
-            agent_input_agg_col_config = application.create_agent_input_agg_col_config(
-                agent_input_prepended_agent_name_config
-            )
-
-            config = self.get_key(payload, match, yaml_conf)
-            self.engine.sql_to_merge_specific_columns_to_standardized(
-                agent_input_prepended_agent_name_config,
-                match,
-                config,
-                False,
-            )
-
-            config.update(
-                {
-                    key: self.flatten(match.get(key))
-                    for key in match
-                    if key.endswith("_ap")
-                    or key.endswith("_wl")
-                    or key.endswith("_name")
-                    or key.endswith("_aliases")
-                }
-            )
-            input_records = payload[cn.ALERTED_PARTY_FIELD][cn.INPUT_RECORD_HIST][cn.INPUT_RECORDS]
-            fields = input_records[cn.INPUT_FIELD]
-            self.handle_hit_type_agent(match, agent_config, fields)
-            self.select_ap_for_ap_id_tp_marked_agent(match)
-            self.set_up_entity_type_match(payload, match)
-
-            self.engine.sql_to_merge_specific_columns_to_standardized(
-                agent_input_agg_col_config, match, config, False
-            )
-            match.update(
-                {
-                    key: self.produce_unique_flatten_list(match.get(key, []))
-                    for key in match
-                    if key.endswith("_aggregated") or key.startswith("hit_type_agent")
-                }
-            )
-
-            match["all_hit_type_aggregated"] = {
-                key.split("_")[-1]: [i for i in match[key] if i]
-                for key in match
-                if key.startswith("hit")
-            }
-            self.remove_nulls_from_aggegated(match)
-
-        return payloads
 
     def produce_unique_flatten_list(self, record):
         record = self.flatten(record)
@@ -230,7 +211,8 @@ class MSPipeline(ETLPipeline):
             return value[:1] + self.flatten(value[1:])
         return value
 
-    def remove_nulls_from_aggegated(self, match):
+    def remove_nulls_from_aggegated(self, payload):
+        match = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
         for key in match:
             if key.endswith("_aggregated") or key.startswith("hit_type_agent"):
                 value = match[key]

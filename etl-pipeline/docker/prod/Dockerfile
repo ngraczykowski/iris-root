@@ -24,4 +24,4 @@ RUN pip install -r /requirements.txt
 WORKDIR /app
 
 SHELL ["exit"]
-ENTRYPOINT ["/bin/sh"]
+ENTRYPOINT ["/app/scripts/start.sh"]

@@ -14,7 +14,3 @@ GRPC_CLIENT_TLS_PRIVATE_KEY: tests/ssl/server-key.pem
 GRPC_CLIENT_TLS_PUBLIC_KEY_CHAIN: tests/ssl/server.pem
 
 DATA_SOURCE_INPUT_ENDPOINT: localhost:50052
-# DATA_SOURCE_INPUT_ENDPOINT: discovery:///mike-universal-data-source
-
-# debugging flags
-# DATA_SOURCE_INPUT_ENDPOINT: discovery:///mike-universal-data-source

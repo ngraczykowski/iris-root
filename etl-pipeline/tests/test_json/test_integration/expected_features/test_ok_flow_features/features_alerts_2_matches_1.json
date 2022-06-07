@@ -1,1 +1,168 @@
-[{"feature": "features/name", "alertedPartyNames": [{"name": "Eva None Pladimirova"}, {"name": "Pladimir Vutin"}, {"name": "Pladimir None Vutin"}, {"name": "Eva Pladimirova"}], "watchlistNames": [{"name": "Joe Dong", "type": "REGULAR"}], "alertedPartyType": "INDIVIDUAL"}, {"feature": "features/dateOfBirth", "alertedPartyDates": ["02/31/1900", "04/31/1910"], "watchlistDates": ["MAY 6, 1981"], "alertedPartyType": "INDIVIDUAL"}, {"feature": "features/document", "alertedPartyDocuments": ["022368917", "154421273"]}, {"feature": "features/employerName", "watchlistNames": [{"name": "Joe Dong", "type": "REGULAR"}], "alertedPartyType": "INDIVIDUAL"}, {"feature": "features/isApNameTpMarked", "modelKey": {"alertedParty": {"id": "None"}}, "discriminator": {"value": "mike_ap_name_tp_marked"}}, {"feature": "features/isApIdTpMarked", "modelKey": {"alertedParty": {"id": "A05003324172"}}, "discriminator": {"value": "mike_ap_id_tp_marked"}}, {"feature": "features/isTokensTpMarked", "modelKey": {"alertedParty": {"id": "Doe"}}, "discriminator": {"value": "mike_tokens_tp_marked"}}, {"feature": "features/geoNationality", "alertedPartyLocation": "UNITED STATES OF AMERICA United States", "watchlistLocation": "PL Poland"}, {"feature": "features/geoPlaceOfBirth", "alertedPartyLocation": "United States", "watchlistLocation": "PL Poland"}, {"feature": "features/geoSanctioned", "alertedPartyLocation": "UNITED STATES OF AMERICA United States", "watchlistLocation": "PL Poland Joe Dong"}, {"feature": "features/geoResidencies", "alertedPartyLocation": "UNITED STATES OF AMERICA United States", "watchlistLocation": "PL Poland"}, {"feature": "features/companyName", "alertedPartyNames": [{"name": "Eva None Pladimirova"}, {"name": "Pladimir Vutin"}, {"name": "Pladimir None Vutin"}, {"name": "Eva Pladimirova"}], "watchlistNames": [{"name": "Joe Dong", "type": "REGULAR"}], "alertedPartyType": "INDIVIDUAL"}, {"feature": "features/hitType", "normalTriggerCategories": ["name"], "triggerCategories": {"job": {}, "address": {"tokens": ["CONCAT_ADDRESS", "ADDRESS1_COUNTRY", "ADDRESS1_PROVINCE", "ADDRESS1_CITY", "ADDRESS1_STATE"]}, "other": {}, "name": {}}, "triggeredTokens": {"Doe": {"tokensMap": {"CONCAT_ADDRESS": {"tokens": ["Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"]}, "ADDRESS1_LINE2": {"tokens": ["Jane Doe AA BBB"]}}}}}]
+[
+    {
+        "feature": "features/name",
+        "alertedPartyNames": [
+            {
+                "name": "Eva None Pladimirova"
+            },
+            {
+                "name": "Pladimir Vutin"
+            },
+            {
+                "name": "Pladimir None Vutin"
+            },
+            {
+                "name": "Eva Pladimirova"
+            }
+        ],
+        "watchlistNames": [
+            {
+                "name": "Joe Dong",
+                "type": "REGULAR"
+            }
+        ],
+        "alertedPartyType": "INDIVIDUAL"
+    },
+    {
+        "feature": "features/dateOfBirth",
+        "alertedPartyDates": [
+            "02/31/1900",
+            "04/31/1910",
+            "20/10/1963"
+        ],
+        "watchlistDates": [
+            "MAY 6, 1981"
+        ],
+        "alertedPartyType": "INDIVIDUAL"
+    },
+    {
+        "feature": "features/document",
+        "alertedPartyDocuments": [
+            "022368917",
+            "154421273"
+        ]
+    },
+    {
+        "feature": "features/employerName",
+        "watchlistNames": [
+            {
+                "name": "Joe Dong",
+                "type": "REGULAR"
+            }
+        ],
+        "alertedPartyType": "INDIVIDUAL"
+    },
+    {
+        "feature": "features/isApNameTpMarked",
+        "modelKey": {
+            "alertedParty": {
+                "id": "None"
+            }
+        },
+        "discriminator": {
+            "value": "mike_ap_name_tp_marked"
+        }
+    },
+    {
+        "feature": "features/isApIdTpMarked",
+        "modelKey": {
+            "alertedParty": {
+                "id": "A05003324172"
+            }
+        },
+        "discriminator": {
+            "value": "mike_ap_id_tp_marked"
+        }
+    },
+    {
+        "feature": "features/isTokensTpMarked",
+        "modelKey": {
+            "alertedParty": {
+                "id": "Doe"
+            }
+        },
+        "discriminator": {
+            "value": "mike_tokens_tp_marked"
+        }
+    },
+    {
+        "feature": "features/geoNationality",
+        "alertedPartyLocation": "UNITED STATES OF AMERICA United States",
+        "watchlistLocation": "PL Poland"
+    },
+    {
+        "feature": "features/geoPlaceOfBirth",
+        "alertedPartyLocation": "United States",
+        "watchlistLocation": "PL Poland"
+    },
+    {
+        "feature": "features/geoSanctioned",
+        "alertedPartyLocation": "UNITED STATES OF AMERICA United States",
+        "watchlistLocation": "PL Poland Joe Dong"
+    },
+    {
+        "feature": "features/geoResidencies",
+        "alertedPartyLocation": "UNITED STATES OF AMERICA United States",
+        "watchlistLocation": "PL Poland"
+    },
+    {
+        "feature": "features/companyName",
+        "alertedPartyNames": [
+            {
+                "name": "Eva None Pladimirova"
+            },
+            {
+                "name": "Pladimir Vutin"
+            },
+            {
+                "name": "Pladimir None Vutin"
+            },
+            {
+                "name": "Eva Pladimirova"
+            }
+        ],
+        "watchlistNames": [
+            {
+                "name": "Joe Dong",
+                "type": "REGULAR"
+            }
+        ],
+        "alertedPartyType": "INDIVIDUAL"
+    },
+    {
+        "feature": "features/hitType",
+        "normalTriggerCategories": [
+            "name"
+        ],
+        "triggerCategories": {
+            "job": {},
+            "address": {
+                "tokens": [
+                    "CONCAT_ADDRESS",
+                    "ADDRESS1_COUNTRY",
+                    "ADDRESS1_PROVINCE",
+                    "ADDRESS1_CITY",
+                    "ADDRESS1_STATE"
+                ]
+            },
+            "other": {},
+            "name": {}
+        },
+        "triggeredTokens": {
+            "Doe": {
+                "tokensMap": {
+                    "CONCAT_ADDRESS": {
+                        "tokens": [
+                            "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
+                        ]
+                    },
+                    "ADDRESS1_LINE2": {
+                        "tokens": [
+                            "Jane Doe AA BBB"
+                        ]
+                    }
+                }
+            }
+        }
+    }
+]

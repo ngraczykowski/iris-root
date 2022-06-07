@@ -1,6 +1,6 @@
 dob_agent:
   ap:
-  - alertedParty.ALL_PARTY_DOBS
+  - alertedParty.AP_DOB
   wl:
   - watchlistParty.matchRecords.WL_DOB
 
@@ -20,11 +20,11 @@ company_name_agent:
   - ALL_CONNECTED_PARTIES_NAMES
   - ALL_CONNECTED_ACCOUNT_NAMES
   - ALL_CONNECTED_ACCOUNT_BENEFICIARY_NAMES
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS1
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS2
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS3
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS4
+  - alertedParty.xml_fields.PARTY1_NAME_FULL
+  - alertedParty.xml_fields.PARTY1_NAME_ALIAS1
+  - alertedParty.xml_fields.PARTY1_NAME_ALIAS2
+  - alertedParty.xml_fields.PARTY1_NAME_ALIAS3
+  - alertedParty.xml_fields.PARTY1_NAME_ALIAS4
   wl:
   - watchlistParty.matchRecords.WL_NAME
   - watchlistParty.matchRecords.WL_ALIASES
@@ -36,11 +36,11 @@ name_agent:
   - ALL_CONNECTED_PARTIES_NAMES
   - ALL_CONNECTED_ACCOUNT_NAMES
   - ALL_CONNECTED_ACCOUNT_BENEFICIARY_NAMES
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS1
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS2
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS3
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS4
+  - alertedParty.xml_fields.PARTY1_NAME_FULL
+  - alertedParty.xml_fields.PARTY1_NAME_ALIAS1
+  - alertedParty.xml_fields.PARTY1_NAME_ALIAS2
+  - alertedParty.xml_fields.PARTY1_NAME_ALIAS3
+  - alertedParty.xml_fields.PARTY1_NAME_ALIAS4
   wl:
   - watchlistParty.matchRecords.WL_NAME
   - watchlistParty.matchRecords.WL_ALIASES
@@ -48,19 +48,19 @@ name_agent:
 employer_name_agent:
   ap:
   - ALL_PARTY1_EMPLOYERS
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ORGANIZATION_NAME
+  - alertedParty.xml_fields.PARTY1_ORGANIZATION_NAME
   wl:
   - watchlistParty.matchRecords.WL_NAME
   - watchlistParty.matchRecords.WL_ALIASES
 
 nationality_agent:
   ap:
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ADDRESS1_COUNTRY
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ADDRESS1_COUNTRY
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.COUNTRY_CODE
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_DOMICILE1
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY1_CITIZENSHIP
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_CITIZENSHIP1
+  - alertedParty.xml_fields.ADDRESS1_COUNTRY
+  - alertedParty.xml_fields.PARTY1_ADDRESS1_COUNTRY
+  - alertedParty.xml_fields.COUNTRY_CODE
+  - alertedParty.xml_fields.PARTY1_COUNTRY_DOMICILE1
+  - alertedParty.xml_fields.PARTY1_COUNTRY1_CITIZENSHIP
+  - alertedParty.xml_fields.PARTY1_COUNTRY_CITIZENSHIP1
   - ALL_PARTY1_COUNTRY1_CITIZENSHIP
   - ALL_PARTY1_COUNTRY_DOMICILE1
   - ALL_PRTY_RSDNC_CNTRY_CD
@@ -87,6 +87,7 @@ pob_agent:
   ap:
   - ALL_CONNECTED_PARTY_BIRTH_COUNTRIES
   - ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES
+  - alertedParty.xml_fields.PARTY1_COUNTRY1
   - ALL_CONNECTED_COUNTRY_OF_INCORPORATION
     
   wl:
@@ -97,12 +98,13 @@ pob_agent:
 
 sanctioned_country_agent:
   ap:
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ADDRESS1_COUNTRY
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ADDRESS1_COUNTRY
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_DOMICILE1
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY1_CITIZENSHIP
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_CITIZENSHIP1
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.COUNTRY_CODE
+  - alertedParty.xml_fields.ADDRESS1_COUNTRY
+  - alertedParty.xml_fields.PARTY1_ADDRESS1_COUNTRY
+  - alertedParty.xml_fields.PARTY1_COUNTRY_DOMICILE1
+  - alertedParty.xml_fields.PARTY1_COUNTRY1_CITIZENSHIP
+  - alertedParty.xml_fields.PARTY1_COUNTRY_CITIZENSHIP1
+  - alertedParty.xml_fields.PARTY1_COUNTRY1
+  - alertedParty.xml_fields.COUNTRY_CODE
   - ALL_CONNECTED_PARTY_BIRTH_COUNTRIES
   - ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES
   - ALL_CONNECTED_COUNTRY_OF_INCORPORATION 
@@ -122,13 +124,14 @@ sanctioned_country_agent:
 
 residency_agent:
   ap:
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ADDRESS1_COUNTRY
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ADDRESS1_COUNTRY
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_DOMICILE1
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY1_CITIZENSHIP
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_CITIZENSHIP1
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.COUNTRY_CODE
+  - alertedParty.xml_fields.ADDRESS1_COUNTRY
+  - alertedParty.xml_fields.PARTY1_ADDRESS1_COUNTRY
+  - alertedParty.xml_fields.PARTY1_COUNTRY_DOMICILE1
+  - alertedParty.xml_fields.PARTY1_COUNTRY1_CITIZENSHIP
+  - alertedParty.xml_fields.PARTY1_COUNTRY_CITIZENSHIP1
+  - alertedParty.xml_fields.COUNTRY_CODE
   - ALL_PARTY1_COUNTRY_DOMICILE1
+  - alertedParty.xml_fields.PARTY1_COUNTRY1
   - ALL_CONNECTED_PARTY_BIRTH_COUNTRIES
   - ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES
   - ALL_CONNECTED_COUNTRY_OF_INCORPORATION
@@ -144,34 +147,34 @@ residency_agent:
 
 hit_type_agent:
   name:
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.CONCAT_NAME
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS1
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS2
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS3
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS4
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL
+  - alertedParty.xml_fields.CONCAT_NAME
+  - alertedParty.xml_fields.PARTY1_NAME_ALIAS1
+  - alertedParty.xml_fields.PARTY1_NAME_ALIAS2
+  - alertedParty.xml_fields.PARTY1_NAME_ALIAS3
+  - alertedParty.xml_fields.PARTY1_NAME_ALIAS4
+  - alertedParty.xml_fields.PARTY1_NAME_FULL
   address:
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ADDRESS1_COUNTRY
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_DOMICILE1
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_FORMATION1
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PRTY_PRIM_CTZNSH_CNTRY
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY2_CITIZENSHIP
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PRTY_RSDNC_CNTRY_CD
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_PEP
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_OF_INCORPORATION
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ADDRESS1_COUNTRY
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.CONCAT_ADDRESS
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ADDRESS1_CITY
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ADDRESS1_STATE
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ADDRESS1_CITY
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ADDRESS1_STATE
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ADDRESS1_PROVINCE
+  - alertedParty.xml_fields.ADDRESS1_COUNTRY
+  - alertedParty.xml_fields.PARTY1_COUNTRY_DOMICILE1
+  - alertedParty.xml_fields.PARTY1_COUNTRY_FORMATION1
+  - alertedParty.xml_fields.PRTY_PRIM_CTZNSH_CNTRY
+  - alertedParty.xml_fields.PARTY1_COUNTRY2_CITIZENSHIP
+  - alertedParty.xml_fields.PRTY_RSDNC_CNTRY_CD
+  - alertedParty.xml_fields.PARTY1_COUNTRY_PEP
+  - alertedParty.xml_fields.PARTY1_COUNTRY_OF_INCORPORATION
+  - alertedParty.xml_fields.PARTY1_ADDRESS1_COUNTRY
+  - alertedParty.xml_fields.CONCAT_ADDRESS
+  - alertedParty.xml_fields.PARTY1_ADDRESS1_CITY
+  - alertedParty.xml_fields.PARTY1_ADDRESS1_STATE
+  - alertedParty.xml_fields.ADDRESS1_CITY
+  - alertedParty.xml_fields.ADDRESS1_STATE
+  - alertedParty.xml_fields.ADDRESS1_PROVINCE
 
   job:
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_EMPLOYER
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ORGANIZATION_NAME
+  - alertedParty.xml_fields.PARTY1_EMPLOYER
+  - alertedParty.xml_fields.PARTY1_ORGANIZATION_NAME
   other:
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_POSITION_TITLE
+  - alertedParty.xml_fields.PARTY1_POSITION_TITLE
  
 matched_tokens_tp_marked_agent:
   input:
@@ -179,13 +182,13 @@ matched_tokens_tp_marked_agent:
 
 ap_name_tp_marked_agent:
   input:
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL 
+  - alertedParty.xml_fields.PARTY1_NAME_FULL 
 
 ap_id_tp_marked_agent:
   input:
 # ISG_Party
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ID
+  - alertedParty.xml_fields.PARTY1_ID
 # WM_Party / WM_Address
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.UNIQUE_KEY
+  - alertedParty.xml_fields.UNIQUE_KEY
 # ISG_Account
-  - alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ACCOUNTNUMBER
+  - alertedParty.xml_fields.ACCOUNTNUMBER
