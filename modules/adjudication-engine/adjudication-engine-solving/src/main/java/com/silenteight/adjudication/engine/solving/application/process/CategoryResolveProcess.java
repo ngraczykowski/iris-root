@@ -11,8 +11,7 @@ import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository
 import com.silenteight.adjudication.engine.solving.domain.CategoryValue;
 import com.silenteight.datasource.categories.api.v2.BatchGetMatchesCategoryValuesRequest;
 
-import com.hazelcast.collection.IQueue;
-
+import java.util.Queue;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -22,17 +21,17 @@ class CategoryResolveProcess {
 
   private final CategoryValuesClient categoryValueClient;
   private final AlertSolvingRepository alertSolvingRepository;
-  private final IQueue<Long> alertCategoryValuesInputQueue;
+  private final Queue<Long> alertCategoryValuesInputQueue;
   private final ReadyMatchFeatureVectorPort readyMatchFeatureVectorPublisher;
 
   CategoryResolveProcess(
       final CategoryValuesClient categoryValueClient,
       final ScheduledExecutorService scheduledExecutorService,
-      final IQueue<Long> alertCommentsInputQueue,
+      final Queue<Long> alertCategoryValuesInputQueue,
       final AlertSolvingRepository alertSolvingRepository,
       final ReadyMatchFeatureVectorPort readyMatchFeatureVectorPublisher) {
     this.categoryValueClient = categoryValueClient;
-    this.alertCategoryValuesInputQueue = alertCommentsInputQueue;
+    this.alertCategoryValuesInputQueue = alertCategoryValuesInputQueue;
     this.alertSolvingRepository = alertSolvingRepository;
     this.readyMatchFeatureVectorPublisher = readyMatchFeatureVectorPublisher;
     scheduledExecutorService.scheduleAtFixedRate(this::process, 10, 10, TimeUnit.MILLISECONDS);

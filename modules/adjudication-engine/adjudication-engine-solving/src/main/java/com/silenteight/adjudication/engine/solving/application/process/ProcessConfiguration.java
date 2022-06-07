@@ -14,12 +14,12 @@ import com.silenteight.adjudication.engine.solving.data.MatchFeatureDataAccess;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
 import com.silenteight.adjudication.engine.solving.domain.comment.CommentInputClientRepository;
 
-import com.hazelcast.collection.IQueue;
 import com.hazelcast.core.HazelcastInstance;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -53,11 +53,8 @@ class ProcessConfiguration {
       final ProtoMessageToObjectNodeConverter converter,
       final CommentInputClient commentInputClient,
       final CommentInputClientRepository commentInputClientRepository,
-      final HazelcastInstance hazelcastInstance,
+      final Queue alertCommentsInputQueue,
       final ProcessConfigurationProperties processConfigurationProperties) {
-
-    final IQueue<String> alertCommentsInputQueue =
-        hazelcastInstance.getQueue("alert.comments.inputs");
 
     final ScheduledExecutorService scheduledExecutorService =
         Executors.newScheduledThreadPool(
@@ -75,11 +72,9 @@ class ProcessConfiguration {
   public CategoryResolveProcess categoryResolveProcess(
       CategoryValuesClient categoryValueClient,
       AlertSolvingRepository alertSolvingRepository,
-      final HazelcastInstance hazelcastInstance,
+      final Queue alertCategoryValuesQueue,
       ReadyMatchFeatureVectorPort readyMatchFeatureVectorPublisher,
       final ProcessConfigurationProperties processConfigurationProperties) {
-
-    final IQueue<Long> alertCommentsInputQueue = hazelcastInstance.getQueue("alert.category.value");
 
     final ScheduledExecutorService scheduledExecutorService =
         Executors.newScheduledThreadPool(
@@ -88,7 +83,7 @@ class ProcessConfiguration {
     return new CategoryResolveProcess(
         categoryValueClient,
         scheduledExecutorService,
-        alertCommentsInputQueue,
+        alertCategoryValuesQueue,
         alertSolvingRepository,
         readyMatchFeatureVectorPublisher);
   }

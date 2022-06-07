@@ -46,7 +46,7 @@ public class HazelcastConfigurationProperties {
   public static class AlertEvictionConfig {
 
     private MaxSizePolicy maxSizePolicy;
-    private int maxSizeCapacity;
+    private int maxCapacity;
     private EvictionPolicy evictionPolicy;
 
     static AlertEvictionConfig common() {
@@ -56,7 +56,7 @@ public class HazelcastConfigurationProperties {
     EvictionConfig getEvictionConfig() {
       return new EvictionConfig()
           .setMaxSizePolicy(this.maxSizePolicy)
-          .setSize(this.maxSizeCapacity)
+          .setSize(this.maxCapacity)
           .setEvictionPolicy(this.evictionPolicy);
     }
   }

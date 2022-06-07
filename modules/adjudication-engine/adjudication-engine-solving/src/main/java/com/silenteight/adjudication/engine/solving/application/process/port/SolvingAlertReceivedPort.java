@@ -8,5 +8,5 @@ import com.silenteight.adjudication.internal.v1.AnalysisAlertsAdded;
 
 public interface SolvingAlertReceivedPort {
 
-  public void handle(final AnalysisAlertsAdded message);
+  void handle(final AnalysisAlertsAdded message);
 }

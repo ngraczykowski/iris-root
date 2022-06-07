@@ -10,6 +10,7 @@ import com.hazelcast.core.HazelcastInstance;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -19,22 +20,25 @@ class PublisherConfiguration {
   @Bean
   ReadyMatchFeatureVectorPort readyMatchFeatureVectorPort(
       GovernanceFacade governanceFacade,
-      HazelcastInstance hazelcastInstance,
+      Queue governanceMatchToSendQueue,
       GovernanceMatchResponsePort governanceMatchResponseProcess,
       ProtoMessageToObjectNodeConverter converter) {
     final ExecutorService scheduledExecutorService = Executors.newFixedThreadPool(15);
     return new ReadyMatchFeatureVectorPublisher(
-        governanceFacade, hazelcastInstance, scheduledExecutorService,
-        governanceMatchResponseProcess, converter);
+        governanceFacade,
+        governanceMatchToSendQueue,
+        scheduledExecutorService,
+        governanceMatchResponseProcess,
+        converter);
   }
 
   @Bean
   GovernanceAlertPublisher governanceAlertPublisher(
       GovernanceFacade governanceFacade,
-      HazelcastInstance hazelcastInstance,
+      Queue governanceAlertsToSendQueue,
       SolvedAlertPort solvedAlertProcess) {
     final ExecutorService scheduledExecutorService = Executors.newFixedThreadPool(15);
     return new GovernanceAlertPublisher(
-        governanceFacade, hazelcastInstance, scheduledExecutorService, solvedAlertProcess);
+        governanceFacade, governanceAlertsToSendQueue, scheduledExecutorService, solvedAlertProcess);
   }
 }

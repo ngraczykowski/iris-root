@@ -9,9 +9,8 @@ import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectN
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.adjudication.engine.solving.domain.comment.CommentInputClientRepository;
 
-import com.hazelcast.collection.IQueue;
-
 import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -23,14 +22,14 @@ class CommentInputResolveProcess {
 
   private final ProtoMessageToObjectNodeConverter converter;
   private final CommentInputClientRepository commentInputClientRepository;
-  private final IQueue<String> alertCommentsInputQueue;
+  private final Queue<String> alertCommentsInputQueue;
 
   CommentInputResolveProcess(
       final CommentInputClient commentInputClient,
       final ProtoMessageToObjectNodeConverter converter,
       final CommentInputClientRepository commentInputClientRepository,
       final ScheduledExecutorService scheduledExecutorService,
-      final IQueue<String> alertCommentsInputQueue) {
+      final Queue<String> alertCommentsInputQueue) {
     this.commentInputClient = commentInputClient;
     this.converter = converter;
     this.commentInputClientRepository = commentInputClientRepository;

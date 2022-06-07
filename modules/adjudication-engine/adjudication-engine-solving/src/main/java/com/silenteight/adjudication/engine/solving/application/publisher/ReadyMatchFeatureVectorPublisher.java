@@ -13,29 +13,27 @@ import com.silenteight.solving.api.v1.BatchSolveFeaturesResponse;
 import com.silenteight.solving.api.v1.FeatureVectorSolution;
 import com.silenteight.solving.api.v1.SolutionResponse;
 
-import com.hazelcast.collection.IQueue;
-import com.hazelcast.core.HazelcastInstance;
-
 import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 
 @Slf4j
 class ReadyMatchFeatureVectorPublisher implements ReadyMatchFeatureVectorPort {
 
-  private final IQueue<MatchSolutionRequest> sendQueue;
+  private final Queue<MatchSolutionRequest> sendQueue;
   private final GovernanceFacade governanceFacade;
   private final GovernanceMatchResponsePort governanceMatchResponseProcess;
   private final ProtoMessageToObjectNodeConverter converter;
 
   public ReadyMatchFeatureVectorPublisher(
       final GovernanceFacade governanceFacade,
-      final HazelcastInstance hazelcastInstance,
+      final Queue governanceMatchToSendQueue,
       final ExecutorService executorService,
       final GovernanceMatchResponsePort governanceMatchResponseProcess,
       ProtoMessageToObjectNodeConverter converter) {
     this.governanceFacade = governanceFacade;
     this.governanceMatchResponseProcess = governanceMatchResponseProcess;
-    this.sendQueue = hazelcastInstance.getQueue("ae.governance.match.to.send");
+    this.sendQueue = governanceMatchToSendQueue;
     this.converter = converter;
     for (int i = 0; i < 15; i++) {
       executorService.submit(this::consume);
@@ -45,8 +43,8 @@ class ReadyMatchFeatureVectorPublisher implements ReadyMatchFeatureVectorPort {
   public void send(final MatchSolutionRequest matchSolutionRequest) {
     // Send for solving alert solution to governance via queue (internal)
     // Create Governance internal queue listener and send to Gov
-    log.info("Queuing solve match features request for match = {}",
-        matchSolutionRequest.getMatchId());
+    log.info(
+        "Queuing solve match features request for match = {}", matchSolutionRequest.getMatchId());
     this.sendQueue.add(matchSolutionRequest);
   }
 
@@ -60,23 +58,26 @@ class ReadyMatchFeatureVectorPublisher implements ReadyMatchFeatureVectorPort {
     } while (true);
   }
 
-  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
-  private void sendRequestToGovernance(
-      MatchSolutionRequest matchSolutionRequest) {
+  @Timed(
+      percentiles = {0.5, 0.95, 0.99},
+      histogram = true)
+  private void sendRequestToGovernance(MatchSolutionRequest matchSolutionRequest) {
 
     long alertId = matchSolutionRequest.getAlertId();
     long matchId = matchSolutionRequest.getMatchId();
     var batchSolveFeaturesRequest = matchSolutionRequest.mapToBatchSolveFeaturesRequest();
 
     log.debug(
-        "Sending request to governance for solving match for alert: {}, match: {}", alertId,
+        "Sending request to governance for solving match for alert: {}, match: {}",
+        alertId,
         matchId);
 
     final BatchSolveFeaturesResponse batchSolveFeaturesResponse =
         governanceFacade.batchSolveFeatures(batchSolveFeaturesRequest);
 
     log.debug(
-        "Received match solution response from governance for alert: {}, Match: {}", alertId,
+        "Received match solution response from governance for alert: {}, Match: {}",
+        alertId,
         matchId);
 
     sendForMatchSolutionProcess(alertId, matchId, batchSolveFeaturesResponse);
@@ -87,14 +88,13 @@ class ReadyMatchFeatureVectorPublisher implements ReadyMatchFeatureVectorPort {
 
     List<SolutionResponse> solutionResponses = batchSolveFeaturesResponse.getSolutionsList();
     if (!solutionResponses.isEmpty()) {
-      //TODO: We are only requesting for a solution for one alert at a time so we should receive
-      //ony one solution. Verify it.
+      // TODO: We are only requesting for a solution for one alert at a time so we should receive
+      // ony one solution. Verify it.
       SolutionResponse solutionResponse = solutionResponses.get(0);
       FeatureVectorSolution featureVectorSolution = solutionResponse.getFeatureVectorSolution();
       String solution = featureVectorSolution.toString();
 
-      var reason = converter.convertToJsonString(solutionResponse
-          .getReason()).orElse("");
+      var reason = converter.convertToJsonString(solutionResponse.getReason()).orElse("");
 
       MatchSolutionResponse matchSolutionResponse =
           new MatchSolutionResponse(alertId, matchId, solution, reason);
