@@ -104,7 +104,7 @@ pipeline {
                 branch 'master'
             }
             steps {
-                sshagent([env.JENKINS_SSH_NAME]) {
+                withCredentials([gitUsernamePassword(credentialsId: 'Github-app-access')]) {
                     sh './scripts/push.sh --index-url ${PIP_INDEX_URL}'
             }}
             }
