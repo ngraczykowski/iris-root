@@ -3,8 +3,9 @@ package com.silenteight.adjudication.engine.solving.application.publisher;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.governance.GovernanceFacade;
-import com.silenteight.adjudication.engine.solving.application.process.SolvedAlertProcess;
+import com.silenteight.adjudication.engine.solving.application.process.port.SolvedAlertPort;
 import com.silenteight.adjudication.engine.solving.application.publisher.dto.AlertSolutionRequest;
+import com.silenteight.adjudication.engine.solving.application.publisher.port.GovernanceAlertPort;
 
 import com.hazelcast.collection.IQueue;
 import com.hazelcast.core.HazelcastInstance;
@@ -12,18 +13,18 @@ import com.hazelcast.core.HazelcastInstance;
 import java.util.concurrent.ExecutorService;
 
 @Slf4j
-public class GovernanceAlertPublisher {
+class GovernanceAlertPublisher implements GovernanceAlertPort {
 
   private final IQueue<AlertSolutionRequest> sendQueue;
   private final GovernanceFacade governanceFacade;
 
-  private final SolvedAlertProcess solvedAlertProcess;
+  private final SolvedAlertPort solvedAlertProcess;
 
   public GovernanceAlertPublisher(
       final GovernanceFacade governanceFacade,
       final HazelcastInstance hazelcastInstance,
       final ExecutorService executorService,
-      final SolvedAlertProcess solvedAlertProcess
+      final SolvedAlertPort solvedAlertProcess
   ) {
     this.governanceFacade = governanceFacade;
     this.solvedAlertProcess = solvedAlertProcess;

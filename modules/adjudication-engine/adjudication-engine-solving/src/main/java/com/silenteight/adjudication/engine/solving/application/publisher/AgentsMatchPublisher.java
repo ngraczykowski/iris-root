@@ -3,6 +3,7 @@ package com.silenteight.adjudication.engine.solving.application.publisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.adjudication.engine.solving.application.publisher.port.AgentsMatchPort;
 import com.silenteight.adjudication.engine.solving.domain.AgentExchangeRequestMessage;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class AgentsMatchPublisher {
+class AgentsMatchPublisher implements AgentsMatchPort {
 
   public static final String AGENT_CONFIG_HEADER = "agentConfig";
   static final String AGENT_REQUEST_EXCHANGE_NAME = "agent.request";

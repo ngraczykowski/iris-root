@@ -2,7 +2,7 @@ package com.silenteight.adjudication.engine.solving.application.listener;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.adjudication.engine.solving.application.process.AgentResponseProcess;
+import com.silenteight.adjudication.engine.solving.application.process.port.AgentResponsePort;
 import com.silenteight.agents.v1.api.exchange.AgentExchangeResponse;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
 )
 class ReceiveAgentResponseListener {
 
-  private final AgentResponseProcess agentResponseProcess;
+  private final AgentResponsePort agentResponseProcess;
 
-  ReceiveAgentResponseListener(final AgentResponseProcess agentResponseProcess) {
+  ReceiveAgentResponseListener(final AgentResponsePort agentResponseProcess) {
     this.agentResponseProcess = agentResponseProcess;
   }
 

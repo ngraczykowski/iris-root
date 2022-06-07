@@ -6,11 +6,11 @@ import com.silenteight.adjudication.engine.analysis.recommendation.Recommendatio
 import com.silenteight.adjudication.engine.comments.comment.CommentFacade;
 import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectNodeConverter;
 import com.silenteight.adjudication.engine.governance.GovernanceFacade;
-import com.silenteight.adjudication.engine.solving.application.publisher.AgentsMatchPublisher;
-import com.silenteight.adjudication.engine.solving.application.publisher.GovernanceAlertPublisher;
-import com.silenteight.adjudication.engine.solving.application.publisher.ReadyMatchFeatureVectorPublisher;
 import com.silenteight.adjudication.engine.solving.application.publisher.RecommendationPublisher;
-import com.silenteight.adjudication.engine.solving.data.jdbc.MatchFeaturesFacade;
+import com.silenteight.adjudication.engine.solving.application.publisher.port.AgentsMatchPort;
+import com.silenteight.adjudication.engine.solving.application.publisher.port.GovernanceAlertPort;
+import com.silenteight.adjudication.engine.solving.application.publisher.port.ReadyMatchFeatureVectorPort;
+import com.silenteight.adjudication.engine.solving.data.MatchFeatureDataAccess;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
 import com.silenteight.adjudication.engine.solving.domain.comment.CommentInputClientRepository;
 
@@ -31,19 +31,19 @@ class ProcessConfiguration {
   @Bean
   SolvingAlertReceivedProcess alertAgentDispatcherProcess(
       AgentExchangeAlertSolvingMapper agentExchnageRequestMapper,
-      AgentsMatchPublisher agentsMatchPublisher,
-      MatchFeaturesFacade matchFeaturesFacade,
+      AgentsMatchPort agentsMatchPublisher,
+      MatchFeatureDataAccess jdbcMatchFeaturesDataAccess,
       AlertSolvingRepository alertSolvingRepository,
-      ReadyMatchFeatureVectorPublisher governanceProvider,
+      ReadyMatchFeatureVectorPort readyMatchFeatureVectorPort,
       CommentInputResolveProcess commentInputResolveProcess,
       CategoryResolveProcess categoryResolveProcess) {
 
     return new SolvingAlertReceivedProcess(
         agentExchnageRequestMapper,
         agentsMatchPublisher,
-        matchFeaturesFacade,
+        jdbcMatchFeaturesDataAccess,
         alertSolvingRepository,
-        governanceProvider,
+        readyMatchFeatureVectorPort,
         commentInputResolveProcess,
         categoryResolveProcess);
   }
@@ -76,7 +76,7 @@ class ProcessConfiguration {
       CategoryValuesClient categoryValueClient,
       AlertSolvingRepository alertSolvingRepository,
       final HazelcastInstance hazelcastInstance,
-      ReadyMatchFeatureVectorPublisher readyMatchFeatureVectorPublisher,
+      ReadyMatchFeatureVectorPort readyMatchFeatureVectorPublisher,
       final ProcessConfigurationProperties processConfigurationProperties) {
 
     final IQueue<Long> alertCommentsInputQueue = hazelcastInstance.getQueue("alert.category.value");
@@ -116,7 +116,7 @@ class ProcessConfiguration {
 
   @Bean
   AgentResponseProcess agentResponseProcess(
-      final ReadyMatchFeatureVectorPublisher governanceProvider,
+      final ReadyMatchFeatureVectorPort governanceProvider,
       AlertSolvingRepository alertSolvingRepository,
       ProtoMessageToObjectNodeConverter converter) {
     return new AgentResponseProcess(governanceProvider, alertSolvingRepository, converter);
@@ -128,13 +128,11 @@ class ProcessConfiguration {
       final HazelcastInstance hazelcastInstance,
       final GovernanceFacade governanceFacade,
       final SolvedAlertProcess solvedAlertProcess,
+      final GovernanceAlertPort governancePublisher,
       final ProcessConfigurationProperties processConfigurationProperties) {
     final ExecutorService scheduledExecutorService =
         Executors.newFixedThreadPool(
             processConfigurationProperties.getGovernanceProcess().getPoolSize());
-    final GovernanceAlertPublisher governanceAlertPublisher =
-        new GovernanceAlertPublisher(
-            governanceFacade, hazelcastInstance, scheduledExecutorService, solvedAlertProcess);
-    return new GovernanceMatchResponseProcess(governanceAlertPublisher, alertSolvingRepository);
+    return new GovernanceMatchResponseProcess(governancePublisher, alertSolvingRepository);
   }
 }

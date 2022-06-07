@@ -5,8 +5,8 @@
 package com.silenteight.adjudication.engine.app;
 
 import com.silenteight.adjudication.engine.solving.data.AlertAggregate;
+import com.silenteight.adjudication.engine.solving.data.MatchFeatureDataAccess;
 import com.silenteight.adjudication.engine.solving.data.jdbc.JdbcAccessConfiguration;
-import com.silenteight.adjudication.engine.solving.data.jdbc.MatchFeaturesFacade;
 import com.silenteight.sep.base.testing.BaseJdbcTest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,12 +24,12 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @Sql
 class SelectAnalysisFeaturesQueryIT extends BaseJdbcTest {
 
-  @Autowired MatchFeaturesFacade matchFeaturesFacade;
+  @Autowired MatchFeatureDataAccess jdbcMatchFeaturesDataAccess;
   private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
   @Test
   void shouldSelectAlertData() throws JsonProcessingException {
-    var alertMap = matchFeaturesFacade.findAnalysisFeatures(Set.of(1L), Set.of(1L));
+    var alertMap = jdbcMatchFeaturesDataAccess.findAnalysisFeatures(Set.of(1L), Set.of(1L));
     assertThat(alertMap.size()).isEqualTo(1);
     var alert = alertMap.get(1L);
     var expectedAlert = getAlertWithAllData();

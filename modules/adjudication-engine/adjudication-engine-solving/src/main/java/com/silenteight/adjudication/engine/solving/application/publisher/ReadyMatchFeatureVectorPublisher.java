@@ -4,9 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectNodeConverter;
 import com.silenteight.adjudication.engine.governance.GovernanceFacade;
-import com.silenteight.adjudication.engine.solving.application.process.GovernanceMatchResponseProcess;
 import com.silenteight.adjudication.engine.solving.application.process.dto.MatchSolutionResponse;
+import com.silenteight.adjudication.engine.solving.application.process.port.GovernanceMatchResponsePort;
 import com.silenteight.adjudication.engine.solving.application.publisher.dto.MatchSolutionRequest;
+import com.silenteight.adjudication.engine.solving.application.publisher.port.ReadyMatchFeatureVectorPort;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 import com.silenteight.solving.api.v1.BatchSolveFeaturesResponse;
 import com.silenteight.solving.api.v1.FeatureVectorSolution;
@@ -19,18 +20,18 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 @Slf4j
-public class ReadyMatchFeatureVectorPublisher {
+class ReadyMatchFeatureVectorPublisher implements ReadyMatchFeatureVectorPort {
 
   private final IQueue<MatchSolutionRequest> sendQueue;
   private final GovernanceFacade governanceFacade;
-  private final GovernanceMatchResponseProcess governanceMatchResponseProcess;
+  private final GovernanceMatchResponsePort governanceMatchResponseProcess;
   private final ProtoMessageToObjectNodeConverter converter;
 
   public ReadyMatchFeatureVectorPublisher(
       final GovernanceFacade governanceFacade,
       final HazelcastInstance hazelcastInstance,
       final ExecutorService executorService,
-      final GovernanceMatchResponseProcess governanceMatchResponseProcess,
+      final GovernanceMatchResponsePort governanceMatchResponseProcess,
       ProtoMessageToObjectNodeConverter converter) {
     this.governanceFacade = governanceFacade;
     this.governanceMatchResponseProcess = governanceMatchResponseProcess;

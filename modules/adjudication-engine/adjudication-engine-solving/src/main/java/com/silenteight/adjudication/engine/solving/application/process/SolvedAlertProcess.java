@@ -10,6 +10,7 @@ import com.silenteight.adjudication.engine.analysis.recommendation.domain.SaveRe
 import com.silenteight.adjudication.engine.comments.comment.CommentFacade;
 import com.silenteight.adjudication.engine.comments.comment.domain.MatchContext;
 import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectNodeConverter;
+import com.silenteight.adjudication.engine.solving.application.process.port.SolvedAlertPort;
 import com.silenteight.adjudication.engine.solving.application.publisher.RecommendationPublisher;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolving;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
@@ -27,7 +28,7 @@ import static java.util.function.Predicate.not;
 
 @RequiredArgsConstructor
 @Slf4j
-public class SolvedAlertProcess {
+class SolvedAlertProcess implements SolvedAlertPort {
 
   private final RecommendationPublisher recommendationPublisher;
   private final AlertSolvingRepository alertSolvingRepository;

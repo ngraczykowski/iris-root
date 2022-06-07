@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.analysis.categoryrequest.CategoryValuesClient;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
-import com.silenteight.adjudication.engine.solving.application.publisher.ReadyMatchFeatureVectorPublisher;
 import com.silenteight.adjudication.engine.solving.application.publisher.dto.MatchSolutionRequest;
+import com.silenteight.adjudication.engine.solving.application.publisher.port.ReadyMatchFeatureVectorPort;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
 import com.silenteight.adjudication.engine.solving.domain.CategoryValue;
 import com.silenteight.datasource.categories.api.v2.BatchGetMatchesCategoryValuesRequest;
@@ -23,14 +23,14 @@ class CategoryResolveProcess {
   private final CategoryValuesClient categoryValueClient;
   private final AlertSolvingRepository alertSolvingRepository;
   private final IQueue<Long> alertCategoryValuesInputQueue;
-  private final ReadyMatchFeatureVectorPublisher readyMatchFeatureVectorPublisher;
+  private final ReadyMatchFeatureVectorPort readyMatchFeatureVectorPublisher;
 
   CategoryResolveProcess(
       final CategoryValuesClient categoryValueClient,
       final ScheduledExecutorService scheduledExecutorService,
       final IQueue<Long> alertCommentsInputQueue,
       final AlertSolvingRepository alertSolvingRepository,
-      final ReadyMatchFeatureVectorPublisher readyMatchFeatureVectorPublisher) {
+      final ReadyMatchFeatureVectorPort readyMatchFeatureVectorPublisher) {
     this.categoryValueClient = categoryValueClient;
     this.alertCategoryValuesInputQueue = alertCommentsInputQueue;
     this.alertSolvingRepository = alertSolvingRepository;

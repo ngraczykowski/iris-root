@@ -4,11 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
-import com.silenteight.adjudication.engine.solving.application.publisher.AgentsMatchPublisher;
-import com.silenteight.adjudication.engine.solving.application.publisher.ReadyMatchFeatureVectorPublisher;
+import com.silenteight.adjudication.engine.solving.application.process.port.SolvingAlertReceivedPort;
 import com.silenteight.adjudication.engine.solving.application.publisher.dto.MatchSolutionRequest;
+import com.silenteight.adjudication.engine.solving.application.publisher.port.AgentsMatchPort;
+import com.silenteight.adjudication.engine.solving.application.publisher.port.ReadyMatchFeatureVectorPort;
 import com.silenteight.adjudication.engine.solving.data.AlertAggregate;
-import com.silenteight.adjudication.engine.solving.data.jdbc.MatchFeaturesFacade;
+import com.silenteight.adjudication.engine.solving.data.MatchFeatureDataAccess;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolving;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
 import com.silenteight.adjudication.internal.v1.AnalysisAlertsAdded;
@@ -20,13 +21,13 @@ import javax.annotation.Nonnull;
 
 @RequiredArgsConstructor
 @Slf4j
-public class SolvingAlertReceivedProcess {
+class SolvingAlertReceivedProcess implements SolvingAlertReceivedPort {
 
   private final AgentExchangeAlertSolvingMapper agentExchangeRequestMapper;
-  private final AgentsMatchPublisher matchesPublisher;
-  private final MatchFeaturesFacade matchFeaturesFacade;
+  private final AgentsMatchPort matchesPublisher;
+  private final MatchFeatureDataAccess jdbcMatchFeaturesDataAccess;
   private final AlertSolvingRepository alertSolvingRepository;
-  private final ReadyMatchFeatureVectorPublisher readyMatchFeatureVectorPublisher;
+  private final ReadyMatchFeatureVectorPort readyMatchFeatureVectorPublisher;
   private final CommentInputResolveProcess commentInputResolveProcess;
   private final CategoryResolveProcess categoryResolveProcess;
 
@@ -99,7 +100,7 @@ public class SolvingAlertReceivedProcess {
               alerts.add(alertId);
             });
     log.info("Getting data from analysis {} for {} alerts", analysis, alerts.size());
-    var alertAggregates = matchFeaturesFacade.findAnalysisFeatures(analysis, alerts);
+    var alertAggregates = jdbcMatchFeaturesDataAccess.findAnalysisFeatures(analysis, alerts);
 
     if (log.isTraceEnabled()) {
       log.trace("Found features: {}", alertAggregates);
