@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
+import com.silenteight.adjudication.engine.solving.application.process.port.CategoryResolveProcessPort;
+import com.silenteight.adjudication.engine.solving.application.process.port.CommentInputResolveProcessPort;
 import com.silenteight.adjudication.engine.solving.application.process.port.SolvingAlertReceivedPort;
 import com.silenteight.adjudication.engine.solving.application.publisher.dto.MatchSolutionRequest;
 import com.silenteight.adjudication.engine.solving.application.publisher.port.AgentsMatchPort;
@@ -28,8 +30,8 @@ class SolvingAlertReceivedProcess implements SolvingAlertReceivedPort {
   private final MatchFeatureDataAccess jdbcMatchFeaturesDataAccess;
   private final AlertSolvingRepository alertSolvingRepository;
   private final ReadyMatchFeatureVectorPort readyMatchFeatureVectorPublisher;
-  private final CommentInputResolveProcess commentInputResolveProcess;
-  private final CategoryResolveProcess categoryResolveProcess;
+  private final CommentInputResolveProcessPort commentInputResolveProcess;
+  private final CategoryResolveProcessPort categoryResolveProcess;
 
   @Timed(
       percentiles = {0.5, 0.95, 0.99},

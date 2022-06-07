@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.analysis.categoryrequest.CategoryValuesClient;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
+import com.silenteight.adjudication.engine.solving.application.process.port.CategoryResolveProcessPort;
 import com.silenteight.adjudication.engine.solving.application.publisher.dto.MatchSolutionRequest;
 import com.silenteight.adjudication.engine.solving.application.publisher.port.ReadyMatchFeatureVectorPort;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
@@ -17,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @RequiredArgsConstructor
-class CategoryResolveProcess {
+class CategoryResolveProcess implements CategoryResolveProcessPort {
 
   private final CategoryValuesClient categoryValueClient;
   private final AlertSolvingRepository alertSolvingRepository;

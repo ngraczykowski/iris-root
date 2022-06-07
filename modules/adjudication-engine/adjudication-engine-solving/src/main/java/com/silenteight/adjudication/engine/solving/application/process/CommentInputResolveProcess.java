@@ -7,6 +7,7 @@ import com.silenteight.adjudication.engine.analysis.commentinput.CommentInputCli
 import com.silenteight.adjudication.engine.comments.commentinput.CommentInputResponse;
 import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectNodeConverter;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
+import com.silenteight.adjudication.engine.solving.application.process.port.CommentInputResolveProcessPort;
 import com.silenteight.adjudication.engine.solving.domain.comment.CommentInputClientRepository;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @RequiredArgsConstructor
-class CommentInputResolveProcess {
+class CommentInputResolveProcess implements CommentInputResolveProcessPort {
 
   private final CommentInputClient commentInputClient;
 

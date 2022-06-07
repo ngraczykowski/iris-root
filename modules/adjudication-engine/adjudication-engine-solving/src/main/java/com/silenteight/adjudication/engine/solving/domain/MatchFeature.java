@@ -30,6 +30,8 @@ public class MatchFeature implements Serializable {
     agentConfigFeatureId = featureAggregate.agentConfigFeatureId();
     feature = featureAggregate.featureName();
     agentConfig = featureAggregate.agentConfig();
+    featureValue = featureAggregate.featureValue();
+    reason = featureAggregate.featureReason();
     this.clientMatchId = clientMatchId;
   }
 
