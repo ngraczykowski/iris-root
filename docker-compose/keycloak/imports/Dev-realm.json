@@ -810,8 +810,12 @@
     "enabled" : true,
     "alwaysDisplayInConsole" : false,
     "clientAuthenticatorType" : "client-secret",
-    "redirectUris" : [ ],
-    "webOrigins" : [ ],
+    "redirectUris": [
+      "http://localhost:24900/rest/warehouse/openapi/*"
+    ],
+    "webOrigins": [
+      "http://localhost:24900"
+    ],
     "notBefore" : 0,
     "bearerOnly" : false,
     "consentRequired" : false,

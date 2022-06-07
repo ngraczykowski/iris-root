@@ -24,6 +24,7 @@ Before you can run Warehouse, you need to have a few infrastructural services ru
 1. RabbitMQ - the message broker for communicating between components and with outside services.
 2. MinIO - a S3 compliant reportStorage service
 3. PostgreSQL - SQL database
+4. Keycloak - IAM
 
 ### Starting RabbitMQ
 To start RabbitMQ, follow the steps:
@@ -45,6 +46,12 @@ If you need to run services with TLS enabled:
 
         ./scripts/run-service-https.sh
 
+### Starting Keycloak
+
+To start keycloak, go to root of iris and run:
+
+        docker-compose up -d keycloak
+
 ## Testing
 
 1.  Deliver some test data to the application.
@@ -60,6 +67,15 @@ If you need to run services with TLS enabled:
 In order to run the application with swagger enabled apply 'swagger' Spring profile.
 
 Swagger UI is accessible via [http](http://localhost:24900/rest/warehouse/openapi/swagger-ui/index.html?configUrl=/rest/warehouse/openapi/api-docs/swagger-config).
+
+To authenticate with keycloak you should enter:
+
+        clientId: frontend
+        clientSecret: <empty>
+
+Then you need to login as frontend user
+
+Keycloak configuration resides in docker-compose/keycloak/imports/Dev-realm.json
 
 ## Other
 
