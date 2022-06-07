@@ -1,6 +1,9 @@
 @smoke
 Feature: Smoke scenarios
 
+  Background:
+    Given Default user is admin
+
   Scenario: Get all the simulations
     Given Simulation endpoint responses with status code 200
 
@@ -18,20 +21,19 @@ Feature: Smoke scenarios
     And Add features to recently created steps
       | name                 | condition | values |
       | features/commonNames | is        | YES    |
-    Then Policy is created
     And Mark created policy as ready
 
   Scenario: Create country group and assign it
     Given Create country group
     And Add countries to country group
       | PL |
-    And Create user with random name
-    Then Assign user to country group
-    And Delete user
+    And Create user "A" with random name
+    Then Assign user "A" to country group
+    And Delete user "A"
 
   Scenario: Get all users
     Given Users endpoint responses with status code 200
 
-  Scenario: Create and Delete user
-    Given Create user with random name
-    Then Delete user
+  Scenario: Create and Delete user A
+    Given Create user "A" with random name
+    Then Delete user "A"

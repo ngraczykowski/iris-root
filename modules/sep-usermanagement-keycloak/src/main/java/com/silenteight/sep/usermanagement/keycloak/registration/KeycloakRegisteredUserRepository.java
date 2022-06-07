@@ -13,6 +13,7 @@ import com.silenteight.sep.usermanagement.keycloak.assignrole.KeycloakUserRoleAs
 
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.springframework.beans.factory.annotation.Value;
 
 import static java.lang.Boolean.TRUE;
 import static java.util.Collections.singletonList;
@@ -21,6 +22,14 @@ import static org.keycloak.representations.idm.CredentialRepresentation.PASSWORD
 @Slf4j
 @RequiredArgsConstructor
 class KeycloakRegisteredUserRepository implements UserCreator {
+
+  /**
+   * only used when execting e2e tests creates new user with or without temporary password flag this
+   * is technical flag which should not be set on production systems thus injected as @Value
+   * property
+   */
+  @Value("${keycloak.create-temporary-password:true}")
+  private boolean createTemporaryPassword = true;
 
   private final KeycloakUserCreator keycloakUserCreator;
   private final KeycloakUserRoleAssigner roleAssigner;
@@ -34,7 +43,7 @@ class KeycloakRegisteredUserRepository implements UserCreator {
     roleAssigner.assignRoles(newlyCreatedUserId, command.getRoles());
   }
 
-  private static UserRepresentation toUserRepresentation(CreateUserCommand command) {
+  private UserRepresentation toUserRepresentation(CreateUserCommand command) {
     UserRepresentation userRepresentation = new UserRepresentation();
     userRepresentation.setUsername(command.getUsername());
     userRepresentation.setEnabled(TRUE);
@@ -51,11 +60,11 @@ class KeycloakRegisteredUserRepository implements UserCreator {
     return userRepresentation;
   }
 
-  private static CredentialRepresentation createPasswordCredential(Credentials credentials) {
+  private CredentialRepresentation createPasswordCredential(Credentials credentials) {
     CredentialRepresentation passwordCredential = new CredentialRepresentation();
     passwordCredential.setValue(credentials.getPassword());
     passwordCredential.setType(PASSWORD);
-    passwordCredential.setTemporary(TRUE);
+    passwordCredential.setTemporary(createTemporaryPassword);
 
     return passwordCredential;
   }

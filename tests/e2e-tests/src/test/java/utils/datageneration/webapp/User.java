@@ -9,7 +9,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder(toBuilder = true)
-public class CreateUser {
+public class User {
 
   private String userName;
 

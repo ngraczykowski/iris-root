@@ -48,6 +48,7 @@ components:
   webapp:
     properties:
       "sens.webapp.roles.country-groups-scope": "{{ .Values.keycloak.kibana.clientId }}"
+      "keycloak.create-temporary-password": "false"
 
   warehouse:
     profiles:

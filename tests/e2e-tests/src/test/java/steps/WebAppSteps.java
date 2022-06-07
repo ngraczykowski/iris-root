@@ -1,80 +1,112 @@
 package steps;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java8.En;
-import utils.ScenarioContext;
+import io.restassured.common.mapper.TypeRef;
 import utils.datageneration.warehouse.CreateCountryGroup;
-import utils.datageneration.webapp.CreateUser;
+import utils.datageneration.webapp.User;
 import utils.datageneration.webapp.WebAppGenerationService;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
+import static steps.Hooks.scenarioContext;
 import static steps.WarehouseSteps.COUNTRY_GROUP;
 import static utils.AuthUtils.getAuthTokenHeaderForAdmin;
 
 public class WebAppSteps implements En {
-
-  private static final String USER = "user";
-  ScenarioContext scenarioContext = Hooks.scenarioContext;
 
   public WebAppSteps() {
     And(
         "Users endpoint responses with status code 200",
         () ->
             given()
-                .header("Authorization", getAuthTokenHeaderForAdmin())
+                .auth()
+                .oauth2(getAuthTokenHeaderForAdmin())
                 .when()
                 .get("rest/webapp/api/users")
                 .then()
                 .statusCode(200));
 
     And(
-        "Create user with random name",
-        () -> {
-          CreateUser user = WebAppGenerationService.createUser();
-
-          scenarioContext.set(USER, user);
-
+        "Create user {string} with random name",
+        (String label) -> {
+          var token = getAuthTokenHeaderForAdmin();
+          User user = WebAppGenerationService.createUser(label);
           given()
-              // TODO(dsniezek): fix dependency to allow jackson auto serialize to json
-              .body(new ObjectMapper().writeValueAsString(user))
-              .header("Authorization", getAuthTokenHeaderForAdmin())
-              .contentType("application/json")
+              .body(user)
+              .auth()
+              .oauth2(token)
               .when()
               .post("/rest/webapp/api/users")
               .then()
               .statusCode(201);
+          scenarioContext.setUser(label, user);
         });
-    And("Assign user to country group", this::assignUserToCountryGroup);
-    And("Delete user", this::deleteUser);
+    And("Assign user {string} to country group", this::assignUserToCountryGroup);
+    And("Delete user {string}", this::deleteUser);
+    And("Assign user {string} to roles", this::assignUserToRoles);
   }
 
-  private void assignUserToCountryGroup() throws JsonProcessingException {
-    CreateUser createUser = (CreateUser) scenarioContext.get(USER);
+  private void assignUserToRoles(String label, DataTable roles) throws JsonProcessingException {
+    // ["AUDITOR","MODEL_TUNER","APPROVER","USER_ADMINISTRATOR"]
+    patchUser(label, Map.of("roles", roles.asList()));
+  }
+
+  private void assignUserToCountryGroup(String label) throws JsonProcessingException {
+    // "countryGroups":["warehouse_business_user_dev"]
     CreateCountryGroup countryGroup = (CreateCountryGroup) scenarioContext.get(COUNTRY_GROUP);
-    HashMap<String, Object> body = new HashMap<>();
-    body.put("countryGroups", new UUID[] {countryGroup.getId()});
+    patchUser(label, Map.of("countryGroups", new UUID[] {countryGroup.getId()}));
+  }
+
+  private void patchUser(String label, Map<String, Object> patch) throws JsonProcessingException {
+    User user = scenarioContext.getUser(label);
+
+    var token = getAuthTokenHeaderForAdmin();
+
+    var userData =
+        given()
+            .auth()
+            .oauth2(token)
+            .get("/rest/webapp/api/users")
+            .then()
+            .extract()
+            .response()
+            .as(new TypeRef<List<Map<String, Object>>>() {})
+            .stream()
+            .filter(x -> user.getUserName().equals(x.get("userName")))
+            .findAny()
+            .orElseThrow();
+
+    var body = new HashMap<>(userData);
+    body.putAll(patch);
+    body.remove("createdAt");
+    body.remove("lastLoginAt");
+    body.remove("lockedAt");
+    body.remove("origin");
+    body.remove("userName");
+
     given()
-        // TODO(dsniezek): fix dependency to allow jackson auto serialize to json
-        .body(new ObjectMapper().writeValueAsString(body))
-        .header("Authorization", getAuthTokenHeaderForAdmin())
-        .contentType("application/json")
+        .body(body)
+        .auth()
+        .oauth2(token)
         .when()
-        .patch(String.format("/rest/webapp/api/users/%s", createUser.getUserName()))
+        .patch(String.format("/rest/webapp/api/users/%s", user.getUserName()))
         .then()
         .statusCode(204);
   }
 
-  private void deleteUser() {
-    CreateUser createUser = (CreateUser) scenarioContext.get(USER);
+  private void deleteUser(String label) {
+    var user = scenarioContext.getUser(label);
     given()
         .header("Authorization", getAuthTokenHeaderForAdmin())
         .contentType("application/json")
         .when()
-        .delete(String.format("/rest/webapp/api/users/%s", createUser.getUserName()))
+        .delete(String.format("/rest/webapp/api/users/%s", user.getUserName()))
         .then()
         .statusCode(204);
   }

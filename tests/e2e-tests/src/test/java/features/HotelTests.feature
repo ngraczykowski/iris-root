@@ -1,6 +1,15 @@
 @hotel
 Feature: Hotel scenarios
 
+  Background:
+    Then Create user "A" with random name
+    And Assign user "A" to roles
+      | MODEL_TUNER |
+    And Create user "B" with random name
+    And Assign user "B" to roles
+      | APPROVER |
+    And Default user is "A"
+
   Scenario: Create solving model from scratch
     Given Send batch with 15 alerts on learning
     And Create empty policy with name "QA Policy for simulation test"
@@ -16,12 +25,19 @@ Feature: Hotel scenarios
     When Create simulation based on created policy and dataset with name "QA Simulation"
     And Wait until simulation is done
     And Create policy state change request
-    Then Activate solving model as other user
+    Then Activate solving model as user "B"
 
   Scenario: AI Reasoning report generated for batch with 5 alerts contains 5 rows
     Given Send a batch with 5 alerts on solving and wait until it's solved
     And Get result for batch and send on ingest
     And Send batch on learning
+    And Create country group
+    And Add countries to country group
+      | PL |
+      | MX |
+      | SG |
+    And Assign user "A" to country group
     When Initialize generation of "AI_REASONING" HSBC report via warehouse and wait until it's generated
     And Download generated HSBC report
     Then Downloaded HSBC report contains 5 rows
+    And All entries have "S8 Alert Resolution" equal to "ACTION_INVESTIGATE"

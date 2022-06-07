@@ -7,14 +7,15 @@
 -Dtest.clientId=${clientId}
 -Dtest.username=${username}
 -Dtest.password=${password}
--Dtest.username2=${username2}
--Dtest.password2=${password2}
+-Dtest.admin.username=${username2}
+-Dtest.admin.password=${password2}
 -Dtest.realm=${realm}
 -Dtest.authServerUrl=${authServerUrl}
 -Dtest.url=${baseUrl}
 ```
 
 2. **Run the tests using gradle command:**
+
 ```
 gradle test \
 -Dcucumber.features=src/test/java/features/SmokeTests.feature \
@@ -23,8 +24,8 @@ gradle test \
 -Dtest.clientId=${clientId} \
 -Dtest.username=${username} \
 -Dtest.password=${password} \
--Dtest.username2=${username2} \
--Dtest.password2=${password2} \
+-Dtest.admin.username=${username2} \
+-Dtest.admin.password=${password2} \
 -Dtest.url=${baseUrl} \
 -Dtest.realm=${realm} \
 -Dtest.authServerUrl=${authServerUrl}
