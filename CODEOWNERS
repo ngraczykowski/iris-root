@@ -26,3 +26,4 @@ settings.gradle   @SilentEight/architecture
 /modules/adjudication-engine/**/*    @SilentEight/delta
 /modules/payments-bridge/**/*        @SilentEight/delta
 /modules/universal-data-source/**/*  @SilentEight/delta
+/modules/warehouse/**/*              @SilentEight/whiskey
