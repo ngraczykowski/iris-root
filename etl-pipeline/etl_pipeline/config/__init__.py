@@ -56,6 +56,10 @@ class ConsulServiceConfig:
         try:
             return object.__getattribute__(self, name)
         except AttributeError:
+            pass
+        try:
+            return os.environ[name]
+        except KeyError:
             return self.get_secret(name)
 
     def reload(self):
