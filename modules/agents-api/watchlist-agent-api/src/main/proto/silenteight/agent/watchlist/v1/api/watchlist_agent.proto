@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package silenteight.agent.watchlist.api;
+
+import "google/api/field_behavior.proto";
+
+option java_package = "com.silenteight.proto.agent.watchlist.v1.api";
+option java_outer_classname = "WatchlistAgentApiProto";
+option java_multiple_files = true;
+
+service WatchlistAgent {
+
+  rpc VerifyNewsAge(VerifyNewsAgeRequest) returns (VerifyNewsAgeResponse) {
+  }
+}
+
+message VerifyNewsAgeRequest {
+  string id = 1 [(google.api.field_behavior) = REQUIRED];
+  string type = 2 [(google.api.field_behavior) = REQUIRED];
+  string further_information = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+message VerifyNewsAgeResponse {
+  string solution = 1 [(google.api.field_behavior) = REQUIRED];
+  VerifyNewsAgeReason reason = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message VerifyNewsAgeReason {
+  string reports_text = 1 [(google.api.field_behavior) = OPTIONAL];
+  string extracted_event_date = 2 [(google.api.field_behavior) = OPTIONAL];
+  string calculated_event_date = 3 [(google.api.field_behavior) = OPTIONAL];
+  string calculated_at = 4 [(google.api.field_behavior) = OPTIONAL];
+}
