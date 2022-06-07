@@ -110,6 +110,9 @@ agents:
 
   date-agent:
     enabled: true
+    image:
+      repository: registry.dev.s8ops.com/date-agent-hotel-ns
+      tag: "1.13.0"
 
   gender-agent:
     enabled: true
