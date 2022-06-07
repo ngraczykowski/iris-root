@@ -15,8 +15,6 @@ dependencies {
   implementation project(":simulator-processing")
   implementation project(":simulator-retention")
 
-  implementation libs.silenteight.sep.auth
-
   implementation libs.spring.boot.starter.actuator
   implementation libs.spring.boot.starter.web
 

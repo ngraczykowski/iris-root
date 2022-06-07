@@ -12,7 +12,6 @@ dependencies {
 
   api libs.junit.jupiter.api
 
-  api libs.silenteight.sep.auth
   api libs.silenteight.sep.base.testing
 
   api libs.spring.boot.test

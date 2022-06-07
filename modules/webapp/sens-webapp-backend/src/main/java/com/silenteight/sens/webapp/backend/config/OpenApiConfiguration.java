@@ -10,23 +10,20 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-@OpenAPIDefinition(security = {
-    @SecurityRequirement(name = OpenApiConfiguration.WEBAPP_OPENID_SECURITY_SCHEMA)
-})
+import static com.silenteight.sep.auth.authentication.RestConstants.ACCESS_TOKEN_URL;
+import static com.silenteight.sep.auth.authentication.RestConstants.AUTHORIZATION_URL;
+
+@OpenAPIDefinition(
+    security = @SecurityRequirement(name = OpenApiConfiguration.WEBAPP_OPENID_SECURITY_SCHEMA))
 @SecurityScheme(
     name = OpenApiConfiguration.WEBAPP_OPENID_SECURITY_SCHEMA,
     type = SecuritySchemeType.OAUTH2,
     in = SecuritySchemeIn.HEADER,
     bearerFormat = "jwt",
-    flows = @OAuthFlows(
-        authorizationCode = @OAuthFlow(
-            authorizationUrl = "${keycloak.adapter.auth-server-url}/realms/"
-                + "${keycloak.adapter.realm}/protocol/openid-connect/auth",
-            tokenUrl = "${keycloak.adapter.auth-server-url}/realms/${keycloak.adapter.realm}"
-                + "/protocol/openid-connect/token"
-        )
-    )
-)
+    flows =
+        @OAuthFlows(
+            authorizationCode =
+                @OAuthFlow(authorizationUrl = AUTHORIZATION_URL, tokenUrl = ACCESS_TOKEN_URL)))
 @Configuration
 @Profile("swagger")
 class OpenApiConfiguration {

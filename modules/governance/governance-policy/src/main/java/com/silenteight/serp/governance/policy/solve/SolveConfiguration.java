@@ -9,6 +9,7 @@ import com.silenteight.serp.governance.policy.step.PolicyStepsConfigurationQuery
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 
 @Configuration
 class SolveConfiguration {
@@ -21,6 +22,7 @@ class SolveConfiguration {
         stepsConfigurationQuery, inUsePolicyQuery, new StepMapper());
   }
 
+  @DependsOn(FeatureVectorSolvedMessageGateway.ID)
   @Bean
   SolveUseCase solveUseCase(
       StepsSupplierProvider stepsSupplierProvider,

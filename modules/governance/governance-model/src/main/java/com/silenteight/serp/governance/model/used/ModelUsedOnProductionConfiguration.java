@@ -8,6 +8,7 @@ import com.silenteight.serp.governance.policy.domain.PolicyService;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 
 @Configuration
 class ModelUsedOnProductionConfiguration {
@@ -23,10 +24,11 @@ class ModelUsedOnProductionConfiguration {
         modelDetailsQuery, policyDetailsQuery, policyService, sendModelUsedOnProductionUseCase);
   }
 
+  @DependsOn(ModelUsedOnProductionMessageGateway.ID)
   @Bean
   SendModelUsedOnProductionUseCase notifyModelUsedOnProductionUseCase(
-      ModelUsedOnProductionMessageGateway messageGateway, SolvingModelQuery solvingModelQuery) {
+      ModelUsedOnProductionMessageGateway modelUsedMessageGateway, SolvingModelQuery solvingModelQuery) {
 
-    return new SendModelUsedOnProductionUseCase(messageGateway, solvingModelQuery);
+    return new SendModelUsedOnProductionUseCase(modelUsedMessageGateway, solvingModelQuery);
   }
 }

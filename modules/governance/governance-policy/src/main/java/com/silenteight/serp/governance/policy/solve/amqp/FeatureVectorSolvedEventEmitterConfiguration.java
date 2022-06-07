@@ -13,7 +13,7 @@ import static com.silenteight.serp.governance.common.integration.FeatureVectorSo
 @Configuration
 class FeatureVectorSolvedEventEmitterConfiguration {
 
-  @Bean
+  @Bean(FeatureVectorSolvedMessageGateway.ID)
   GatewayProxyFactoryBean createFeatureVectorSolvedMessageGateway() {
     GatewayProxyFactoryBean factoryBean =
         new GatewayProxyFactoryBean(FeatureVectorSolvedMessageGateway.class);

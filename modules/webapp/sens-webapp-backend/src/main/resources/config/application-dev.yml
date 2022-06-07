@@ -1,3 +1,6 @@
+serp:
+  show-env: true
+
 logging:
   level:
     com.silenteight: DEBUG
@@ -28,6 +31,7 @@ spring:
 sep.auth:
   permit-all-urls:
     - "/management/**"
+    - "/api/configuration/auth"
     - "/openapi/**"
 
 sens:

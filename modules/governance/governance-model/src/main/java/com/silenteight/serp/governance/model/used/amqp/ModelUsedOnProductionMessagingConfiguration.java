@@ -30,7 +30,7 @@ class ModelUsedOnProductionMessagingConfiguration {
     return new DirectChannel();
   }
 
-  @Bean
+  @Bean(ModelUsedOnProductionMessageGateway.ID)
   GatewayProxyFactoryBean modelUsedMessageGateway(MessageChannel modelInUseOutboundChannel) {
     GatewayProxyFactoryBean result = new GatewayProxyFactoryBean(
         ModelUsedOnProductionMessageGateway.class);

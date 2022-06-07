@@ -26,7 +26,6 @@ dependencies {
   implementation(libs.silenteight.filestorage.minio){
     exclude group: 'org.testcontainers', module: '*'
   }
-  implementation libs.silenteight.sep.auth
   implementation libs.silenteight.sep.base.common
   implementation libs.silenteight.serp.protocol.base
 

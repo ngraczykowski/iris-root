@@ -25,7 +25,7 @@ class AuditingMessagingConfiguration {
   @NonNull
   private final AmqpOutboundFactory outboundFactory;
 
-  @Bean
+  @Bean(AuditDataMessageGateway.ID)
   GatewayProxyFactoryBean auditDataMessageGateway(MessageChannel auditDataOutboundChannel) {
     GatewayProxyFactoryBean result = new GatewayProxyFactoryBean(AuditDataMessageGateway.class);
     result.setDefaultRequestChannel(auditDataOutboundChannel);

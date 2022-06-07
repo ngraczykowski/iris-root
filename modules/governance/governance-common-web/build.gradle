@@ -17,7 +17,9 @@ dependencies {
 
   // General dependencies
   api libs.silenteight.audit.bs
+  implementation libs.silenteight.audit.bs
   implementation libs.silenteight.commons.core
+  api libs.silenteight.sep.auth
   implementation libs.sear.rabbitmq.common.schema
   implementation libs.spring.boot.actuator
 

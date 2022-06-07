@@ -35,6 +35,7 @@ dependencies {
 
   api libs.silenteight.audit.bs.api
   implementation libs.silenteight.audit.bs
+  api libs.silenteight.sep.auth
 
   api libs.springdoc.data.rest
   implementation libs.springdoc.ui

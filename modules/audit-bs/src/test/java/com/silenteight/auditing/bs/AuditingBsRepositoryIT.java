@@ -169,7 +169,7 @@ class AuditingBsRepositoryIT {
   @Configuration
   static class AuditingBsRepositoryITConfiguration {
 
-    @MockBean
+    @MockBean(name = AuditDataMessageGateway.ID)
     private AuditDataMessageGateway messageGateway;
   }
 }

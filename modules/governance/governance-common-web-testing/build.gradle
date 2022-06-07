@@ -9,7 +9,6 @@ dependencies {
   implementation platform('com.silenteight.iris.platform:test-platform')
 
   api libs.junit.jupiter.api
-  api libs.silenteight.sep.auth
   api libs.silenteight.sep.base.testing
   api libs.spring.test
   api libs.spring.boot.test
