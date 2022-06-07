@@ -25,25 +25,23 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static steps.Hooks.scenarioContext;
 import static utils.AuthUtils.getAuthTokenHeaderForAdmin;
 import static utils.datageneration.CommonUtils.getDateTimeNow;
+import static utils.datageneration.CommonUtils.getOnlyDateWithOffset;
 
 public class WarehouseSteps implements En {
 
   static final String COUNTRY_GROUP = "countryGroup";
 
   public WarehouseSteps() {
-    And(
-        "Initialize generation of {string} HSBC report via warehouse and wait until it's generated",
+    And("Initialize generation of {string} report via warehouse and wait until it's generated",
         this::generateReport);
-    And("Download generated HSBC report", this::downloadReport);
-    And("Downloaded HSBC report contains {int} rows", this::assertRowsNumber);
+    And("Download generated report", this::downloadReport);
+    And("Downloaded report contains {int} rows", this::assertRowsNumber);
 
-    And(
-        "Initialize generation of {string} PB report via warehouse and wait until it's generated",
-        this::generateReport);
-    And("Download generated PB report", this::downloadReport);
-    And("Downloaded PB report contains {int} rows", this::assertRowsNumber);
     And("Create country group", this::createCountryGroup);
     And("Add countries to country group", this::addCountriesToCountryGroup);
+    And("Prepare report date range for today", this::prepareReportDateRangeForToday);
+    And("Prepare report date range based on the last batch",
+        this::prepareReportDateRangeForLastBatch);
     And("All entries have {string} equal to {string}", this::assertAllReportEntriesWithValue);
   }
 
@@ -77,14 +75,12 @@ public class WarehouseSteps implements En {
   }
 
   private void generateReport(String reportName) {
-    Batch batch = (Batch) scenarioContext.get("batch");
-
     Response response =
         given()
             .urlEncodingEnabled(true)
             .contentType(ContentType.URLENC)
-            .param("from", batch.getGenerationStartTime())
-            .param("to", getDateTimeNow())
+            .param("from", scenarioContext.get("from"))
+            .param("to", scenarioContext.get("to"))
             .post("rest/warehouse/api/v2/analysis/production/reports/" + reportName);
 
     response.then().statusCode(200);
@@ -141,5 +137,16 @@ public class WarehouseSteps implements En {
   private void assertAllReportEntriesWithValue(String field, String value) {
     var report = (List<Map<String, String>>) scenarioContext.get("parsedReport");
     report.forEach(entry -> Assert.assertEquals("entry " + entry, value, entry.get(field)));
+  }
+
+  private void prepareReportDateRangeForToday() {
+    scenarioContext.set("from", getOnlyDateWithOffset(0));
+    scenarioContext.set("to",getOnlyDateWithOffset(1));
+  }
+
+  private void prepareReportDateRangeForLastBatch() {
+    Batch batch = (Batch) scenarioContext.get("batch");
+    scenarioContext.set("from",batch.getGenerationStartTime());
+    scenarioContext.set("to",getDateTimeNow());
   }
 }

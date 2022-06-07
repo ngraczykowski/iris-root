@@ -6,6 +6,7 @@ import steps.Hooks;
 import utils.ScenarioContext;
 import utils.datageneration.governance.CreateSolvingModel;
 
+import java.util.Map;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -44,5 +45,4 @@ public class SimulationGenerationService {
         .id(UUID.randomUUID().toString())
         .build();
   }
-
 }

@@ -1,0 +1,20 @@
+/*
+ * Copyright (c) 2022 Silent Eight Pte. Ltd. All rights reserved.
+ */
+
+package utils.datageneration.namescreening.ftcc;
+
+import utils.datageneration.CommonUtils;
+
+public class FtccAlertGenerationService {
+
+  public FtccAlert generate(String process) {
+    String template;
+    if (process.equals("solving")) {
+      template = CommonUtils.getJsonTemplate("alertTemplates/ftcc", "solvingAlertTemplate");
+    } else {
+      template = CommonUtils.getJsonTemplate("alertTemplates/ftcc", "learningAlertTemplate");
+    }
+    return FtccAlert.builder().payload(template).build();
+  }
+}

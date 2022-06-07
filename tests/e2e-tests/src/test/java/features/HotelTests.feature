@@ -37,7 +37,8 @@ Feature: Hotel scenarios
       | MX |
       | SG |
     And Assign user "A" to country group
-    When Initialize generation of "AI_REASONING" HSBC report via warehouse and wait until it's generated
-    And Download generated HSBC report
-    Then Downloaded HSBC report contains 5 rows
+    And Prepare report date range based on the last batch
+    When Initialize generation of "AI_REASONING" report via warehouse and wait until it's generated
+    And Download generated report
+    Then Downloaded report contains 5 rows
     And All entries have "S8 Alert Resolution" equal to "ACTION_INVESTIGATE"

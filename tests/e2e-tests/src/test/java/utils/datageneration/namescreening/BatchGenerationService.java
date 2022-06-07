@@ -8,8 +8,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import utils.datageneration.CommonUtils;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -18,6 +16,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static java.lang.String.*;
 import static java.lang.String.join;
 import static java.lang.String.valueOf;
 import static java.time.format.DateTimeFormatter.ofPattern;
@@ -112,12 +111,10 @@ public class BatchGenerationService {
 
   @SneakyThrows
   private String getRandomAlertTemplate() {
-    return new String(
-        Files.readAllBytes(
-            Paths.get(
-                String.format(
-                    "src/test/resources/alertTemplates/alertTemplate%d.json",
-                    random.nextInt(3) + 1))));
+    return CommonUtils.getJsonTemplate(
+        "alertTemplates/hsbc",
+        format("alertTemplate%d", random.nextInt(3) + 1)
+    );
   }
 
   @SneakyThrows

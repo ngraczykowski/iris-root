@@ -5,6 +5,8 @@ import io.restassured.response.Response;
 import org.awaitility.Awaitility;
 import utils.datageneration.namescreening.Batch;
 import utils.datageneration.namescreening.BatchGenerationService;
+import utils.datageneration.namescreening.ftcc.FtccAlert;
+import utils.datageneration.namescreening.ftcc.FtccAlertGenerationService;
 
 import java.time.Duration;
 
@@ -16,6 +18,7 @@ import static steps.Hooks.scenarioContext;
 public class NameScreeningSteps implements En {
 
   BatchGenerationService batchGenerationService = new BatchGenerationService();
+  FtccAlertGenerationService ftccAlertGenerationService = new FtccAlertGenerationService();
 
   public NameScreeningSteps() {
     And(
@@ -136,5 +139,27 @@ public class NameScreeningSteps implements En {
                                   .jsonPath()
                                   .getString("batchStatus")));
         });
+
+    And(
+        "Send {int} alerts on {string} to FTCC.",
+        (Integer numberOfAlerts, String process) -> {
+          for (int i = 0; i < numberOfAlerts; i++) {
+            FtccAlert alert = ftccAlertGenerationService.generate(process);
+
+            given()
+                .body(alert.getPayload())
+                .when()
+                .post("rest/ftcc/v1/alert")
+                .then()
+                .statusCode(200);
+          }
+        });
+
+    And(
+        "Give it time - {int} seconds",
+        (Integer seconds) -> {
+          SECONDS.sleep(seconds);
+        }
+    );
   }
 }

@@ -16,12 +16,20 @@ import java.util.Random;
 
 @UtilityClass
 public class CommonUtils {
+
+  public static final String DEFAULT_TEMPLATE_FOLDER = "s8api";
+
   Random random = new Random();
 
   @SneakyThrows
-  public static String getJsonTemplate(String jsonName) {
+  public static String getJsonTemplateFromDefaultFolder(String jsonName) {
+    return getJsonTemplate(DEFAULT_TEMPLATE_FOLDER,jsonName);
+  }
+
+  @SneakyThrows
+  public static String getJsonTemplate(String sourceFolder,String jsonName) {
     return new String(Files.readAllBytes(
-        Paths.get(String.format("src/test/resources/s8api/%s.json", jsonName))));
+        Paths.get(String.format("src/test/resources/%s/%s.json", sourceFolder,jsonName))));
   }
 
   public static String getRandomValue(String... allowedValues) {
@@ -52,7 +60,7 @@ public class CommonUtils {
   }
 
   public static String templateObjectOfName(String templateName, Map<String, Object> parameters) {
-    return templateObject(getJsonTemplate(templateName), parameters);
+    return templateObject(getJsonTemplateFromDefaultFolder(templateName), parameters);
   }
 
   @SneakyThrows
