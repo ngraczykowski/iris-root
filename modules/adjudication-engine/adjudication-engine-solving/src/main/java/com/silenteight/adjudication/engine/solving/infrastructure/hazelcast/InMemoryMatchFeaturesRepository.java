@@ -1,4 +1,8 @@
-package com.silenteight.adjudication.engine.solving.infrastructure;
+/*
+ * Copyright (c) 2022 Silent Eight Pte. Ltd. All rights reserved.
+ */
+
+package com.silenteight.adjudication.engine.solving.infrastructure.hazelcast;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

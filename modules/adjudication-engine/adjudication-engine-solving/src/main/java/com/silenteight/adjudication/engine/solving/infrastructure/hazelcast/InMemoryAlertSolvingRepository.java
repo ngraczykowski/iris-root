@@ -1,4 +1,8 @@
-package com.silenteight.adjudication.engine.solving.infrastructure;
+/*
+ * Copyright (c) 2022 Silent Eight Pte. Ltd. All rights reserved.
+ */
+
+package com.silenteight.adjudication.engine.solving.infrastructure.hazelcast;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,10 +21,7 @@ import java.util.function.Supplier;
 
 @Slf4j
 @RequiredArgsConstructor
-// TODO change to strong typing after model will be defined
 class InMemoryAlertSolvingRepository implements AlertSolvingRepository {
-
-  private final EventStore eventStore;
   private final IMap<Long, AlertSolving> map;
 
   @Override
@@ -28,7 +29,7 @@ class InMemoryAlertSolvingRepository implements AlertSolvingRepository {
       percentiles = {0.5, 0.95, 0.99},
       histogram = true)
   public AlertSolving get(Long id) {
-    log.debug("Getting AlertSolvingModel id:{}", id);
+    log.debug("[InMemorySolving] Getting AlertSolvingModel id:{}", id);
     return this.executeInLock(id, () -> map.getOrDefault(id, AlertSolving.empty()));
   }
 
@@ -38,14 +39,12 @@ class InMemoryAlertSolvingRepository implements AlertSolvingRepository {
       histogram = true)
   public AlertSolving save(final AlertSolving alertSolvingModel) {
     final long key = alertSolvingModel.id();
-    log.debug("Adding AlertSolvingModel to key:{}", key);
+    log.debug("[InMemorySolving] Adding AlertSolvingModel to key:{}", key);
 
     return this.executeInLock(
         key,
         () -> {
           this.map.set(key, alertSolvingModel);
-          //      this.eventStore.publish(alertSolvingModel.pendingEvents());
-          //      alertSolvingModel.clear();
           return alertSolvingModel;
         });
   }
@@ -57,7 +56,10 @@ class InMemoryAlertSolvingRepository implements AlertSolvingRepository {
         new AlertSolvingProcessor() {
           @Override
           public AlertSolving process(Entry<Long, AlertSolving> entry) {
-            log.debug("Updating features matchId:{}, foeatures: {}", matchId, featureSolutions);
+            log.debug(
+                "[InMemorySolving] Updating features matchId:{}, foeatures: {}",
+                matchId,
+                featureSolutions);
             entry.setValue(entry.getValue().updateMatchFeatureValues(matchId, featureSolutions));
             return entry.getValue();
           }
@@ -72,7 +74,9 @@ class InMemoryAlertSolvingRepository implements AlertSolvingRepository {
           @Override
           public AlertSolving process(Entry<Long, AlertSolving> entry) {
             log.debug(
-                "Updating categories matchId:{}, category values: {}", matchId, categoryValues);
+                "[InMemorySolving] Updating categories matchId:{}, category values: {}",
+                matchId,
+                categoryValues);
             entry.setValue(
                 entry.getValue().updateMatchCategoryValues(matchId, List.of(categoryValues)));
             return entry.getValue();
@@ -88,7 +92,10 @@ class InMemoryAlertSolvingRepository implements AlertSolvingRepository {
         new AlertSolvingProcessor() {
           @Override
           public AlertSolving process(Entry<Long, AlertSolving> entry) {
-            log.debug("Updating match solution matchId:{}, solution: {}", matchId, matchSolution);
+            log.debug(
+                "[InMemorySolving] Updating match solution matchId:{}, solution: {}",
+                matchId,
+                matchSolution);
             entry.setValue(entry.getValue().updateMatchSolution(matchId, matchSolution, reason));
             return entry.getValue();
           }

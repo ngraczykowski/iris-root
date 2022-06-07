@@ -95,9 +95,6 @@ public class AlertSolving implements Serializable {
 
   public AlertSolving updateMatchFeatureValues(
       long matchId, List<FeatureSolution> featureSolutions) {
-    // TODO refactor transient domainEvents
-    // this.domainEvents.add(new MatchFeatureValuesUpdated(this));
-
     for (var feature : featureSolutions) {
       matches
           .get(matchId)
