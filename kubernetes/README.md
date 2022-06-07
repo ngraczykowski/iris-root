@@ -44,9 +44,9 @@ helm dependency build ../charts/sear
 To install the chart, run the following command, replacing `<variables>` as documented below the command:
 
 ```bash
-ENV=<environment> RELEASE_NAME=<release-name> NAMESPACE=<namespace> \
+ENV=<environment> RELEASE_NAME=<release-name> NAMESPACE=<namespace> ; \
   helm upgrade --install \
-  --namespace $NAMESPACE
+  --namespace $NAMESPACE \
   --values values.core.yaml \
   --values values.ingress-internal.yaml \
   --values values.$ENV.yaml \
