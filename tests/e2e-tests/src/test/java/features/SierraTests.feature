@@ -1,4 +1,4 @@
-@sierra
+#@sierra - disabled intentionally
 Feature: Sierra scenarios
 
   Background:
