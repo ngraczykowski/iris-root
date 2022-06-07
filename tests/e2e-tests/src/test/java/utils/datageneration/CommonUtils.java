@@ -1,13 +1,13 @@
 package utils.datageneration;
 
 import lombok.SneakyThrows;
-
 import lombok.experimental.UtilityClass;
 
 import org.apache.commons.text.StringSubstitutor;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -16,15 +16,7 @@ import java.util.Random;
 
 @UtilityClass
 public class CommonUtils {
-
-  public static final String DEFAULT_TEMPLATE_FOLDER = "s8api";
-
   Random random = new Random();
-
-  @SneakyThrows
-  public static String getJsonTemplateFromDefaultFolder(String jsonName) {
-    return getJsonTemplate(DEFAULT_TEMPLATE_FOLDER,jsonName);
-  }
 
   @SneakyThrows
   public static String getJsonTemplate(String sourceFolder,String jsonName) {
@@ -47,6 +39,13 @@ public class CommonUtils {
         .format(DateTimeFormatter.ISO_DATE_TIME);
   }
 
+  public static String getDateTimeNowMinus(Duration minus) {
+    return OffsetDateTime.now()
+        .minus(minus)
+        .atZoneSameInstant(ZoneOffset.UTC)
+        .format(DateTimeFormatter.ISO_DATE_TIME);
+  }
+
   public static String getOnlyDateWithOffset(int daysOffset) {
     return OffsetDateTime
         .now()
@@ -58,11 +57,6 @@ public class CommonUtils {
         .atZoneSameInstant(ZoneOffset.UTC)
         .format(DateTimeFormatter.ISO_DATE_TIME);
   }
-
-  public static String templateObjectOfName(String templateName, Map<String, Object> parameters) {
-    return templateObject(getJsonTemplateFromDefaultFolder(templateName), parameters);
-  }
-
   @SneakyThrows
   public static String template(String template, Map<String, String> parameters) {
     return StringSubstitutor.replace(template, parameters);

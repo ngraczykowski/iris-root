@@ -1,4 +1,4 @@
-#@sierra - disabled intentionally
+@sierra
 Feature: Sierra scenarios
 
   Background:
@@ -10,9 +10,22 @@ Feature: Sierra scenarios
       | APPROVER |
     And Default user is "A"
 
+  Scenario: Create solving model from scratch without running simulation
+    And Create empty policy with name "QA Policy for simulation test"
+    And Add steps to recently created policy
+      | name      | solution                |
+      | some step | POTENTIAL_TRUE_POSITIVE |
+    And Add features to recently created steps
+      | name                 | condition | values |
+      | features/commonNames | is        | YES    |
+    And Mark created policy as ready
+    And Create solving model for created policy
+    And Create policy state change request
+    Then Activate solving model as user "B"
+
   Scenario: Get an alert from CMAPI
     Given Send alert on solving
-    And Prepare report date range based on the last batch
-    When Initialize generation of "PAYMENTS_BRIDGE" report via warehouse and wait until it's generated
+    When Initialize generation of "AI_REASONING" report via warehouse and wait until it's generated
     And Download generated report
     Then Downloaded report contains 1 rows
+    And All entries have "S8 Alert Resolution" equal to "ACTION_INVESTIGATE"

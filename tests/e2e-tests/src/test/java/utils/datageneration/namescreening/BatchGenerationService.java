@@ -16,7 +16,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static java.lang.String.*;
+import static java.lang.String.format;
 import static java.lang.String.join;
 import static java.lang.String.valueOf;
 import static java.time.format.DateTimeFormatter.ofPattern;
@@ -112,9 +112,7 @@ public class BatchGenerationService {
   @SneakyThrows
   private String getRandomAlertTemplate() {
     return CommonUtils.getJsonTemplate(
-        "alertTemplates/hsbc",
-        format("alertTemplate%d", random.nextInt(3) + 1)
-    );
+        "alertTemplates/hotel", format("alertTemplate%d", random.nextInt(3) + 1));
   }
 
   @SneakyThrows

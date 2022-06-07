@@ -11,9 +11,9 @@ public class FtccAlertGenerationService {
   public FtccAlert generate(String process) {
     String template;
     if (process.equals("solving")) {
-      template = CommonUtils.getJsonTemplate("alertTemplates/ftcc", "solvingAlertTemplate");
+      template = CommonUtils.getJsonTemplate("alertTemplates/foxtrot", "solvingAlertTemplate");
     } else {
-      template = CommonUtils.getJsonTemplate("alertTemplates/ftcc", "learningAlertTemplate");
+      template = CommonUtils.getJsonTemplate("alertTemplates/foxtrot", "learningAlertTemplate");
     }
     return FtccAlert.builder().payload(template).build();
   }

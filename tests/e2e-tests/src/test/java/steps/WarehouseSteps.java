@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
@@ -25,6 +26,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static steps.Hooks.scenarioContext;
 import static utils.AuthUtils.getAuthTokenHeaderForAdmin;
 import static utils.datageneration.CommonUtils.getDateTimeNow;
+import static utils.datageneration.CommonUtils.getDateTimeNowMinus;
 import static utils.datageneration.CommonUtils.getOnlyDateWithOffset;
 
 public class WarehouseSteps implements En {
@@ -36,7 +38,6 @@ public class WarehouseSteps implements En {
         this::generateReport);
     And("Download generated report", this::downloadReport);
     And("Downloaded report contains {int} rows", this::assertRowsNumber);
-
     And("Create country group", this::createCountryGroup);
     And("Add countries to country group", this::addCountriesToCountryGroup);
     And("Prepare report date range for today", this::prepareReportDateRangeForToday);
@@ -75,12 +76,18 @@ public class WarehouseSteps implements En {
   }
 
   private void generateReport(String reportName) {
+    Batch batch = (Batch) scenarioContext.get("batch");
+
     Response response =
         given()
             .urlEncodingEnabled(true)
             .contentType(ContentType.URLENC)
-            .param("from", scenarioContext.get("from"))
-            .param("to", scenarioContext.get("to"))
+            .param(
+                "from",
+                Optional.ofNullable(batch)
+                    .map(Batch::getGenerationStartTime)
+                    .orElseGet(() -> getDateTimeNowMinus(Duration.ofMinutes(1))))
+            .param("to", getDateTimeNow())
             .post("rest/warehouse/api/v2/analysis/production/reports/" + reportName);
 
     response.then().statusCode(200);
