@@ -12,7 +12,7 @@ class ReportsFacadeSpec extends Specification {
 
   def reportsService = Mock(ReportsService)
 
-  def reportsProperties = new ReportsProperties(false, 2)
+  def reportsProperties = new ReportsProperties(false, 2, [:])
 
   @Subject
   def underTest = new ReportsFacade(reportsService, reportsProperties)

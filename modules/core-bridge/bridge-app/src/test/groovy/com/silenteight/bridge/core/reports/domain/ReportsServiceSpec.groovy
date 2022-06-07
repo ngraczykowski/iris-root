@@ -17,7 +17,7 @@ class ReportsServiceSpec extends Specification {
   def reportSenderService = Mock(ReportsSenderService)
   def registrationService = Mock(RegistrationService)
   def recommendationService = Mock(RecommendationService)
-  def reportsProperties = new ReportsProperties(true, 2)
+  def reportsProperties = new ReportsProperties(true, 2, [:])
 
   @Subject
   def underTest = new ReportsService(

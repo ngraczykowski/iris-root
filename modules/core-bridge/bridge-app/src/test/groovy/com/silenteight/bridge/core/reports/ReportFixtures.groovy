@@ -56,8 +56,19 @@ class ReportFixtures {
   static def ALERT_THREE_ERR_DESC = 'some error'
   static def ALERT_THREE_METADATA = "{\"currentVersionId\":\"678175153\", \"stopDescriptorNames\":[\"JOHN BAMBO\",\"BAMBO JOHN\"],\"datasetId\":\"1231123\",\"datasetName\":\"R_US_Address_FAKED\",\"uniqueCustId\":\"R_US_Address_FAKED_G1243141_2011-11-11-11.22.33.333333\",\"masterId\":\"21312321341324\",\"busDate\":\"123412412412331\"}"
 
+  static def CUSTOMER_RECOMMENDATION_MAP =
+      [
+          'ACTION_INVESTIGATE'                         : 'ACTION_INVESTIGATE',
+          'ACTION_INVESTIGATE_HINTED_FALSE_POSITIVE'   : 'ACTION_INVESTIGATE_HINTED_FALSE_POSITIVE',
+          'ACTION_INVESTIGATE_PARTIALLY_FALSE_POSITIVE': 'ACTION_INVESTIGATE_PARTIALLY_FALSE_POSITIVE',
+          'ACTION_INVESTIGATE_HINTED_TRUE_POSITIVE'    : 'ACTION_INVESTIGATE_HINTED_TRUE_POSITIVE',
+          'ACTION_FALSE_POSITIVE'                      : 'ACTION_FALSE_POSITIVE',
+          'ACTION_POTENTIAL_TRUE_POSITIVE'             : 'ACTION_POTENTIAL_TRUE_POSITIVE'
+      ]
+
   static def RECOMMENDATION_ONE_NAME = 'recommendation/1'
-  static def RECOMMENDATION_ONE_ACTION = 'some recommendation one action'
+  static def RECOMMENDATION_ONE_ACTION_S8 = 'ACTION_INVESTIGATE'
+  static def RECOMMENDATION_ONE_ACTION_CUSTOMER = 'ACTION_INVESTIGATE'
   static def RECOMMENDATION_ONE_COMMENT = 'some recommendation one comment'
   static def RECOMMENDATION_ONE_POLICY_ID = 'policies/5AFC2F12-85C0-4FB3-992E-1552AC843CEB'
   static def RECOMMENDATION_ONE_POLICY_TITLE = 'some fancy policy title name'
@@ -217,7 +228,7 @@ class ReportFixtures {
       .name(RECOMMENDATION_ONE_NAME)
       .alertName(ALERT_ONE_NAME)
       .analysisName(ANALYSIS_NAME)
-      .recommendedAction(RECOMMENDATION_ONE_ACTION)
+      .recommendedAction(RECOMMENDATION_ONE_ACTION_S8)
       .recommendationComment(RECOMMENDATION_ONE_COMMENT)
       .recommendedAt(RECOMMENDATION_ONE_RECOMMENDED_AT)
       .metadata(RECOMMENDATION_ONE_METADATA)
@@ -253,7 +264,7 @@ class ReportFixtures {
   static AlertData ALERT_DATA_ONE = AlertData.builder()
       .id(ALERT_ONE.id())
       .name(ALERT_ONE.name())
-      .recommendation(RECOMMENDATION_ONE_ACTION)
+      .recommendation(RECOMMENDATION_ONE_ACTION_S8)
       .comment(RECOMMENDATION_ONE_COMMENT)
       .recommendedAt(RECOMMENDATION_ONE_RECOMMENDED_AT)
       .errorDescription(ALERT_ONE_ERR_DESC)
@@ -311,15 +322,16 @@ class ReportFixtures {
   static def REPORT_THREE = Report.builder()
       .batchId(BATCH_ID)
       .analysisName(ANALYSIS_NAME)
-      .alertData((
-          ALERT_DATA_ONE.toBuilder()
-              .recommendation(null)
-              .comment(null)
-              .recommendedAt(null)
-              .policyId(null)
-              .policyTitle(null)
-              .build()
-      ))
+      .alertData(
+          (
+              ALERT_DATA_ONE.toBuilder()
+                  .recommendation(null)
+                  .comment(null)
+                  .recommendedAt(null)
+                  .policyId(null)
+                  .policyTitle(null)
+                  .build()
+          ))
       .build()
 
   static def ERROR_REPORT_ONE = Report.builder()
@@ -347,7 +359,8 @@ class ReportFixtures {
       .putFields('batchId', getValue(BATCH_ID))
       .putFields('clientId', getValue(ALERT_ONE_ID))
       .putFields('name', getValue(ALERT_ONE_NAME))
-      .putFields('s8Recommendation', getValue(RECOMMENDATION_ONE_ACTION))
+      .putFields('s8Recommendation', getValue(RECOMMENDATION_ONE_ACTION_S8))
+      .putFields('customerRecommendation', getValue(RECOMMENDATION_ONE_ACTION_CUSTOMER))
       .putFields('recommendationDate', getValue(RECOMMENDATION_ONE_RECOMMENDED_AT))
       .putFields('comment', getValue(RECOMMENDATION_ONE_COMMENT))
       .putFields('policyId', getValue(RECOMMENDATION_ONE_POLICY_ID))
@@ -360,7 +373,8 @@ class ReportFixtures {
       .putFields('batchId', getValue(BATCH_ID))
       .putFields('clientId', getValue(ALERT_ONE_ID))
       .putFields('name', getValue(ALERT_ONE_NAME))
-      .putFields('s8Recommendation', getValue(RECOMMENDATION_ONE_ACTION))
+      .putFields('s8Recommendation', getValue(RECOMMENDATION_ONE_ACTION_S8))
+      .putFields('customerRecommendation', getValue(RECOMMENDATION_ONE_ACTION_CUSTOMER))
       .putFields('recommendationDate', getValue(RECOMMENDATION_ONE_RECOMMENDED_AT))
       .putFields('comment', getValue(RECOMMENDATION_ONE_COMMENT))
       .putFields('policyId', getValue(RECOMMENDATION_ONE_POLICY_ID))

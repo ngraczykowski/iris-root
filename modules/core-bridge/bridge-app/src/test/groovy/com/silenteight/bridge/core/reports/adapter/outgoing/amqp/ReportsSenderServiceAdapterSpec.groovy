@@ -1,6 +1,7 @@
 package com.silenteight.bridge.core.reports.adapter.outgoing.amqp
 
 import com.silenteight.bridge.core.reports.ReportFixtures
+import com.silenteight.bridge.core.reports.infrastructure.ReportsProperties
 import com.silenteight.bridge.core.reports.infrastructure.amqp.ReportsOutgoingConfigurationProperties
 import com.silenteight.data.api.v2.ProductionDataIndexRequest
 
@@ -14,10 +15,15 @@ class ReportsSenderServiceAdapterSpec extends Specification {
   def routingKey = 'some routing key'
 
   def rabbitTemplate = Mock(RabbitTemplate)
-  def properties = new ReportsOutgoingConfigurationProperties(exchangeName, routingKey)
+  def reportsOutgoingConfigurationProperties = new ReportsOutgoingConfigurationProperties(exchangeName, routingKey)
+  def reportsProperties = new ReportsProperties(true, 100, ReportFixtures.CUSTOMER_RECOMMENDATION_MAP)
 
   @Subject
-  def underTest = new ReportsSenderServiceAdapter(rabbitTemplate, properties)
+  def underTest = new ReportsSenderServiceAdapter(
+      rabbitTemplate,
+      reportsProperties,
+      reportsOutgoingConfigurationProperties
+  )
 
   def 'should map reports and send them to rabbitmq'() {
     when:
