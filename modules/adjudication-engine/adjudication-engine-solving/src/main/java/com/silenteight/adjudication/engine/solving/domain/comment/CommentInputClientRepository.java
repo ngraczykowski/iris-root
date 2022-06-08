@@ -17,7 +17,7 @@ public class CommentInputClientRepository {
   private final Map<Long, String> commentInputMap;
   private final ProtoMessageToObjectNodeConverter converter;
 
-  CommentInputClientRepository(
+  public CommentInputClientRepository(
       final Map<Long, String> commentInputMap,
       final ProtoMessageToObjectNodeConverter converter) {
     this.commentInputMap = commentInputMap;

@@ -13,8 +13,6 @@ import static java.util.stream.Collectors.toList;
 @Builder
 public class CommentInputResponse {
 
-  String name;
-
   String alert;
 
   Struct alertCommentInput;

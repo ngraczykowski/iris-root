@@ -23,10 +23,10 @@ class CommentInputResolveProcess implements CommentInputResolveProcessPort {
   private final CommentInputClientRepository commentInputClientRepository;
   private final CommentInputStoreService commentInputStoreService;
 
-  public void retrieveCommentInput(String alertID) {
-    log.debug("Alert id: {} has been determined", alertID);
+  public void retrieveCommentInput(String alertName) {
+    log.debug("Alert id: {} has been determined", alertName);
     final List<CommentInputResponse> commentInputsResponse =
-        this.commentInputClient.getCommentInputsResponse(List.of(alertID));
+        this.commentInputClient.getCommentInputsResponse(List.of(alertName));
 
     if (log.isDebugEnabled()) {
       log.debug("Retrieved comments inputs: {}", commentInputsResponse);
