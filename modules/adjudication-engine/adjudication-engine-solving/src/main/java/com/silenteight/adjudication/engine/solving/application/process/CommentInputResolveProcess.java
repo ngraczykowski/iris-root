@@ -8,9 +8,9 @@ import com.silenteight.adjudication.engine.comments.commentinput.CommentInputRes
 import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectNodeConverter;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.adjudication.engine.solving.application.process.port.CommentInputResolveProcessPort;
+import com.silenteight.adjudication.engine.solving.data.CommentInputDataAccess;
 import com.silenteight.adjudication.engine.solving.domain.comment.CommentInput;
 import com.silenteight.adjudication.engine.solving.domain.comment.CommentInputClientRepository;
-import com.silenteight.adjudication.engine.solving.domain.comment.CommentInputStoreService;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ class CommentInputResolveProcess implements CommentInputResolveProcessPort {
   private final CommentInputClient commentInputClient;
   private final ProtoMessageToObjectNodeConverter converter;
   private final CommentInputClientRepository commentInputClientRepository;
-  private final CommentInputStoreService commentInputStoreService;
+  private final CommentInputDataAccess jdbcCommentInputStoreDataAccess;
 
   public void retrieveCommentInput(String alertName) {
     log.debug("Alert id: {} has been determined", alertName);
@@ -43,6 +43,6 @@ class CommentInputResolveProcess implements CommentInputResolveProcessPort {
         converter.convertToJsonString(commentInputResponse.getAlertCommentInput()).orElseThrow();
 
     this.commentInputClientRepository.store(alertId, alertCommentInputsMap);
-    this.commentInputStoreService.store(new CommentInput(alertId, alertCommentInputsMap));
+    this.jdbcCommentInputStoreDataAccess.store(new CommentInput(alertId, alertCommentInputsMap));
   }
 }

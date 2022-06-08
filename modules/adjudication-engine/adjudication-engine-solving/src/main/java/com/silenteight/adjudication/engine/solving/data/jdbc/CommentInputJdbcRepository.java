@@ -2,10 +2,12 @@
  * Copyright (c) 2022 Silent Eight Pte. Ltd. All rights reserved.
  */
 
-package com.silenteight.adjudication.engine.solving.domain.comment;
+package com.silenteight.adjudication.engine.solving.data.jdbc;
 
 
 import lombok.RequiredArgsConstructor;
+
+import com.silenteight.adjudication.engine.solving.domain.comment.CommentInput;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -15,7 +17,7 @@ import java.time.Clock;
 import java.time.OffsetDateTime;
 
 @RequiredArgsConstructor
-public class CommentInputJdbcRepository {
+class CommentInputJdbcRepository {
   private final JdbcTemplate jdbcTemplate;
 
   private static final String SQL = """

@@ -8,11 +8,10 @@ import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectN
 import com.silenteight.adjudication.engine.governance.GovernanceFacade;
 import com.silenteight.adjudication.engine.solving.application.publisher.RecommendationPublisher;
 import com.silenteight.adjudication.engine.solving.application.publisher.port.*;
+import com.silenteight.adjudication.engine.solving.data.CommentInputDataAccess;
 import com.silenteight.adjudication.engine.solving.data.MatchFeatureDataAccess;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
 import com.silenteight.adjudication.engine.solving.domain.comment.CommentInputClientRepository;
-import com.silenteight.adjudication.engine.solving.domain.comment.CommentInputJdbcRepository;
-import com.silenteight.adjudication.engine.solving.domain.comment.CommentInputStoreService;
 
 import com.hazelcast.core.HazelcastInstance;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -52,13 +51,13 @@ class ProcessConfiguration {
       final ProtoMessageToObjectNodeConverter converter,
       final CommentInputClient commentInputClient,
       final CommentInputClientRepository commentInputClientRepository,
-      final CommentInputStoreService commentInputStoreService) {
+      final CommentInputDataAccess jdbcCommentInputStoreDataAccess) {
 
     return new CommentInputResolveProcess(
         commentInputClient,
         converter,
         commentInputClientRepository,
-        commentInputStoreService);
+        jdbcCommentInputStoreDataAccess);
   }
 
   @Bean
@@ -105,19 +104,8 @@ class ProcessConfiguration {
   @Bean
   GovernanceMatchResponseProcess governanceMatchResponseProcess(
       final AlertSolvingRepository alertSolvingRepository,
-      final HazelcastInstance hazelcastInstance,
-      final GovernanceFacade governanceFacade,
-      final SolvedAlertProcess solvedAlertProcess,
       final GovernanceAlertPort governancePublisher,
       final ProcessConfigurationProperties processConfigurationProperties) {
-    final ExecutorService scheduledExecutorService =
-        Executors.newFixedThreadPool(
-            processConfigurationProperties.getGovernanceProcess().getPoolSize());
     return new GovernanceMatchResponseProcess(governancePublisher, alertSolvingRepository);
-  }
-
-  @Bean
-  CommentInputStoreService commentInputStoreService(JdbcTemplate jdbcTemplate) {
-    return new CommentInputStoreService(new CommentInputJdbcRepository(jdbcTemplate));
   }
 }

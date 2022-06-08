@@ -21,6 +21,7 @@ class CommentInputResolveProcessTest {
 
   private CommentInputResolveProcess commentInputResolveProcess;
   private CommentInputClientRepository commentInputClientRepository;
+  private MockCommentInputDataAccess mockCommentInputDataAccess;
 
   @BeforeEach
   void setUp() {
@@ -35,8 +36,13 @@ class CommentInputResolveProcessTest {
                     "com.silenteight.dataretention")
                 .create());
     commentInputClientRepository = new CommentInputClientRepository(new HashMap<>(), converter);
+    mockCommentInputDataAccess = new MockCommentInputDataAccess();
     commentInputResolveProcess =
-        new CommentInputResolveProcess(commentInputClient, converter, commentInputClientRepository);
+        new CommentInputResolveProcess(
+            commentInputClient,
+            converter,
+            commentInputClientRepository,
+            mockCommentInputDataAccess);
   }
 
   @Test
@@ -44,5 +50,6 @@ class CommentInputResolveProcessTest {
     commentInputResolveProcess.retrieveCommentInput("alerts/1");
     var commentInput = commentInputClientRepository.get(1);
     assertThat(commentInput.get(COMMENT_INPUT_KEY)).isEqualTo(COMMENT_INPUT_VALUE);
+    assertThat(mockCommentInputDataAccess.getSavedCount()).isEqualTo(1);
   }
 }

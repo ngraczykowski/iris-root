@@ -2,14 +2,17 @@
  * Copyright (c) 2022 Silent Eight Pte. Ltd. All rights reserved.
  */
 
-package com.silenteight.adjudication.engine.solving.domain.comment;
+package com.silenteight.adjudication.engine.solving.data.jdbc;
 
 import lombok.RequiredArgsConstructor;
+
+import com.silenteight.adjudication.engine.solving.data.CommentInputDataAccess;
+import com.silenteight.adjudication.engine.solving.domain.comment.CommentInput;
 
 import org.springframework.scheduling.annotation.Async;
 
 @RequiredArgsConstructor
-public class CommentInputStoreService {
+class JdbcCommentInputStoreDataAccess implements CommentInputDataAccess {
 
   private final CommentInputJdbcRepository commentInputJdbcRepository;
 
