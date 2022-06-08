@@ -26,6 +26,9 @@ class Config:
             *configuration_dirs,
         )
         self.application_config = self.load_yaml_config("application.yaml", required=required)
+        self._load_agent_config()
+
+    def _load_agent_config(self):
         if self.application_config:
             self.agent_config = AgentConfigLoader(self.application_config).load()
         else:
@@ -58,3 +61,4 @@ class Config:
 
     def reload(self):
         self.application_config = self.load_yaml_config("application.yaml", required=True)
+        self._load_agent_config()

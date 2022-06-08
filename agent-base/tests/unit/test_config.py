@@ -6,6 +6,7 @@ import pytest
 from agent_base.utils.config import Config
 
 DEFAULT_DIR = pathlib.Path("./config")
+DEFAULT_GRPC_PORT = 9090
 
 
 def test_config_without_arguments():
@@ -49,10 +50,18 @@ def test_config_default():
 
 
 def test_config_from_env(setup_and_tear_down):
-    default_grpc_port = 9090
     new_grpc_port = 5000
     config = Config()
-    assert config.application_config["agent"]["grpc"]["port"] == default_grpc_port
+    assert config.agent_config.agent_grpc_service.grpc_port == DEFAULT_GRPC_PORT
     os.environ["GRPC_PORT"] = str(new_grpc_port)
     config = Config()
+    assert config.agent_config.agent_grpc_service.grpc_port == new_grpc_port
+
+
+def test_config_reload():
+    new_grpc_port = 5000
+    config = Config()
+    assert config.agent_config.agent_grpc_service.grpc_port == DEFAULT_GRPC_PORT
+    os.environ["GRPC_PORT"] = str(new_grpc_port)
+    config.reload()
     assert config.agent_config.agent_grpc_service.grpc_port == new_grpc_port
