@@ -1,0 +1,6 @@
+environment-variables-mapping:
+  processes: AGENT_PROCESSES
+  grpc_port: GRPC_PORT
+  consul_host: CONSUL_HOST
+  rabbitmq_login: SPRING_RABBITMQ_USERNAME
+  rabbitmq_password: SPRING_RABBITMQ_PASSWORD

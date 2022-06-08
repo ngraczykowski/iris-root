@@ -16,6 +16,10 @@ class ConsulConfig:
     host: str
     port: int
 
+    def __post_init__(self):
+        if self.port:
+            self.port = int(self.port)
+
 
 @dataclasses.dataclass
 class MessagingRequest:
@@ -82,3 +86,7 @@ class AgentConfig:
     messaging: MessagingConfig = None
     rabbitmq: RabbitMQConfig = None
     uds: UDSConfig = None
+
+
+class ConfigurationException(Exception):
+    pass

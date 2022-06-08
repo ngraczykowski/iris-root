@@ -4,14 +4,10 @@ from typing import Any, Optional
 
 import yaml
 
-from agent_base.utils.config.agent_config import AgentConfig
+from agent_base.utils.config.agent_config import AgentConfig, ConfigurationException
 from agent_base.utils.config.agent_config_loader import AgentConfigLoader
 
 CONFIG_DIRS = (pathlib.Path("./config"),)
-
-
-class ConfigurationException(Exception):
-    pass
 
 
 class Config:

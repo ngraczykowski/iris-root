@@ -3,7 +3,7 @@ import pathlib
 
 import pytest
 
-from agent_base.utils.config import Config
+from agent_base.utils.config import Config, ConfigurationException
 
 DEFAULT_DIR = pathlib.Path("./config")
 DEFAULT_GRPC_PORT = 9090
@@ -36,8 +36,10 @@ def test_application_required_config():
 @pytest.fixture
 def setup_and_tear_down():
     os.environ.pop("GRPC_PORT", None)
+    os.environ.pop("AGENT_PROCESSES", None)
     yield
     os.environ.pop("GRPC_PORT", None)
+    os.environ.pop("AGENT_PROCESSES", None)
 
 
 def test_config_default():
@@ -50,17 +52,31 @@ def test_config_default():
 
 
 def test_config_from_env(setup_and_tear_down):
+    config_without_grpc_port_dir = "tests/resources/config"
+
+    # no param in application.yaml nor in env variables
+    with pytest.raises(ConfigurationException):
+        Config((pathlib.Path(config_without_grpc_port_dir),))
+
     new_grpc_port = 5000
-    config = Config()
-    assert config.agent_config.agent_grpc_service.grpc_port == DEFAULT_GRPC_PORT
     os.environ["GRPC_PORT"] = str(new_grpc_port)
+
+    # param from env is superior to in this from application.yaml:
     config = Config()
     assert config.agent_config.agent_grpc_service.grpc_port == new_grpc_port
 
+    os.environ.pop("GRPC_PORT")
 
-def test_config_reload():
-    new_grpc_port = 5000
+    # when param not in env take from application.yaml:
     config = Config()
+    assert config.agent_config.agent_grpc_service.grpc_port == DEFAULT_GRPC_PORT
+
+
+def test_config_reload(setup_and_tear_down):
+    new_grpc_port = 5000
+    os.environ["GRPC_PORT"] = str(DEFAULT_GRPC_PORT)
+    os.environ["AGENT_PROCESSES"] = "2"
+    config = Config((pathlib.Path("tests/resources/config"),))
     assert config.agent_config.agent_grpc_service.grpc_port == DEFAULT_GRPC_PORT
     os.environ["GRPC_PORT"] = str(new_grpc_port)
     config.reload()

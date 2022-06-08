@@ -4,6 +4,7 @@ from typing import Any, Dict, List
 from agent_base.utils.config.agent_config import (
     AgentConfig,
     AgentServiceConfig,
+    ConfigurationException,
     ConsulConfig,
     MessagingConfig,
     MessagingRequest,
@@ -12,10 +13,6 @@ from agent_base.utils.config.agent_config import (
     RMQSSLOptions,
     UDSConfig,
 )
-
-
-class AgentConfigError(Exception):
-    pass
 
 
 class AgentConfigLoader:
@@ -40,7 +37,7 @@ class AgentConfigLoader:
 
         consul_config = ConsulConfig(
             host=self._get_param("consul_host", ["consul", "host"]),
-            port=int(self._get_param("consul_port", ["consul", "port"])),
+            port=self._get_param("consul_port", ["consul", "port"]),
         )
 
         messaging_request = MessagingRequest(
@@ -120,7 +117,7 @@ class AgentConfigLoader:
             return param
         except (KeyError, TypeError):
             if not keys_from_yaml and required:
-                raise AgentConfigError
+                raise ConfigurationException
             elif not keys_from_yaml:
                 return default
 
@@ -129,5 +126,8 @@ class AgentConfigLoader:
                 try:
                     _param = _param[key]
                 except (KeyError, TypeError):
-                    return default
+                    if required:
+                        raise ConfigurationException
+                    else:
+                        return default
             return _param

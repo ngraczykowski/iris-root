@@ -49,11 +49,11 @@ async def channel(config: Config):
 
 @pytest.fixture()
 async def secure_channel(config: Config):
-    with open("tests/ssl_example/ca.pem", "rb") as f:
+    with open("tests/resources/ssl_example/ca.pem", "rb") as f:
         ca = f.read()
-    with open("tests/ssl_example/client-key.pem", "rb") as f:
+    with open("tests/resources/ssl_example/client-key.pem", "rb") as f:
         private_key = f.read()
-    with open("tests/ssl_example/client.pem", "rb") as f:
+    with open("tests/resources/ssl_example/client.pem", "rb") as f:
         certificate_chain = f.read()
     server_credentials = grpc.ssl_channel_credentials(ca, private_key, certificate_chain)
     return grpc.aio.secure_channel(
