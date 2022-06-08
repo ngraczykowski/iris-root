@@ -49,16 +49,6 @@ pipeline {
           RELEASE_NAME = "sear-${ENVIRONMENT}"
         }
         stages {
-          stage('Axis') {
-            agent none
-            steps {
-              script {
-                stage("${ENVIRONMENT}") {
-                  print "${ENVIRONMENT}"
-                }
-              }
-            }
-          }
           stage('Install chart') {
             steps {
               echo "Deploying version ${version} to ${ENVIRONMENT}"
