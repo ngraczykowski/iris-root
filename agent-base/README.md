@@ -16,17 +16,11 @@ or from source
 pip install .
 ```
 
-or building wheel from source in dist directory
-```bash
-./scripts/bootstrap.sh
-./scripts/prepare_artifacts.sh
-```
-
 
 ## Implementing your agent
 
 Sample dummy agent implementation can be found in `agent_base/example.py`. 
-Sample agent implemented using this package is company name agent.
+Sample agent implemented using this package is Organization Name Agent.
 
 ### Agent
 

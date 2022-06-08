@@ -8,7 +8,7 @@ from grpc_reflection.v1alpha import reflection
 from agent_base.agent import AgentService
 from agent_base.grpc_service.health_servicer import AgentHealthServicer
 from agent_base.grpc_service.servicer import AgentGrpcServicer
-from agent_base.utils.config import Config
+from agent_base.utils.config import Config, ConfigurationException
 
 
 class GrpcService(AgentService):
@@ -42,15 +42,17 @@ class GrpcService(AgentService):
         self.server = grpc.aio.server()
         self._add_servicers()
         self._add_reflection()
-        grpc_config = self.config.application_config["agent"]["grpc"]
-        address = f"[::]:{grpc_config['port']}"
+        grpc_config = self.config.agent_config.agent_grpc_service
+        if not grpc_config:
+            raise ConfigurationException("Agent grpc service configuration missing!")
+        address = f"[::]:{grpc_config.grpc_port}"
 
         if self.ssl:
-            with open(grpc_config["server_ca"], "rb") as f:
+            with open(grpc_config.server_ca, "rb") as f:
                 list_cert = f.read()
-            with open(grpc_config["server_private_key"], "rb") as f:
+            with open(grpc_config.server_private_key, "rb") as f:
                 private_key = f.read()
-            with open(grpc_config["server_public_key_chain"], "rb") as f:
+            with open(grpc_config.server_public_key_chain, "rb") as f:
                 certificate_chain = f.read()
             server_credentials = grpc.ssl_server_credentials(
                 ((private_key, certificate_chain),),

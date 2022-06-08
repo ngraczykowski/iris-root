@@ -163,11 +163,10 @@ class AgentExchange(AgentService):
         return response
 
     async def _set_pika_connection(self):
-        messaging_config = self.config.application_config["agent"]["agent-exchange"]
-        max_requests_to_worker = self.config.application_config["agent"]["processes"]
+        max_requests_to_worker = self.config.agent_config.agent_grpc_service.processes
         for connection_config in self._prepare_connection_configurations():
             connection = PikaConnection(
-                messaging_config,
+                self.config.agent_config.messaging,
                 connection_config,
                 self.on_request,
                 max_requests_to_worker,

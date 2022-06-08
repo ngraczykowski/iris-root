@@ -52,11 +52,17 @@ class RMQSSLOptions:
 
 @dataclasses.dataclass
 class RabbitMQConfig:
-    host: str
-    port: int
+    """
+    Note: address, host & port are 'Optional', but at least one of: address, or host + port
+    must be set to connect with Rabbit MQ
+    """
+
     login: str
     password: str
     virtualhost: str
+    host: Optional[str] = None
+    port: Optional[str] = None
+    addresses: Optional[str] = None
     ssl_options: Optional[RMQSSLOptions] = None
 
 
@@ -71,8 +77,8 @@ class UDSConfig:
 
 @dataclasses.dataclass
 class AgentConfig:
-    agent_grpc_service: AgentServiceConfig
-    consul: ConsulConfig
-    messaging: MessagingConfig
-    rabbitmq: RabbitMQConfig
-    uds: UDSConfig
+    agent_grpc_service: AgentServiceConfig = None
+    consul: ConsulConfig = None
+    messaging: MessagingConfig = None
+    rabbitmq: RabbitMQConfig = None
+    uds: UDSConfig = None

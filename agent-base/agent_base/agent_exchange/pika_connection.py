@@ -4,12 +4,13 @@ from typing import Callable, Dict
 import aio_pika
 
 from agent_base.agent.exception import AgentException
+from agent_base.utils.config.agent_config import MessagingConfig
 
 
 class PikaConnection:
     def __init__(
         self,
-        messaging_configuration: Dict,
+        messaging_configuration: MessagingConfig,
         connection_configuration: Dict,
         callback: Callable,
         max_requests_to_worker: int,
@@ -73,13 +74,13 @@ class PikaConnection:
 
         try:
             self.request_queue = await self.channel.get_queue(
-                name=self.messaging_configuration["request"].get("queue-name"),
+                name=self.messaging_configuration.request.queue_name,
                 ensure=True,
             )
             self.logger.info(f"Got an existing (request) queue: {self.request_queue}")
         except aio_pika.exceptions.ChannelNotFoundEntity as err:
             self.logger.debug(f"Queue doesn't exits: {err!r}")
-            if "exchange" in self.messaging_configuration["request"]:
+            if self.messaging_configuration.request.exchange:
 
                 # not sure why but on error close callbacks are called in aiormq,
                 # and more exceptions happens
@@ -87,14 +88,14 @@ class PikaConnection:
                 channel: aio_pika.Channel = await self.connection.channel()
 
                 self.request_queue: aio_pika.queue.Queue = await channel.declare_queue(
-                    name=self.messaging_configuration["request"].get("queue-name", ""),
-                    durable=self.messaging_configuration["request"].get("queue-durable", True),
-                    arguments=self.messaging_configuration["request"].get("queue-arguments", None),
+                    name=self.messaging_configuration.request.queue_name,
+                    durable=self.messaging_configuration.request.queue_durable,
+                    arguments=self.messaging_configuration.request.queue_durable,
                 )
-                request_exchange = self.messaging_configuration["request"]["exchange"]
+                request_exchange = self.messaging_configuration.request.exchange
                 await self.request_queue.bind(
                     exchange=request_exchange,
-                    routing_key=self.messaging_configuration["request"].get("routing-key"),
+                    routing_key=self.messaging_configuration.request.routing_key,
                 )
                 self.logger.info(
                     f"Created queue {self.request_queue} and bind to exchange {request_exchange}"
@@ -103,7 +104,7 @@ class PikaConnection:
                 raise
 
         self.callback_exchange = await self.channel.get_exchange(
-            name=self.messaging_configuration["response"]["exchange"],
+            name=self.messaging_configuration.response.exchange,
             ensure=True,
         )
         self.logger.info(f"Got an existing (callback) exchange: {self.callback_exchange}")
@@ -136,7 +137,7 @@ class PikaConnection:
             return
 
         await self.callback_exchange.publish(
-            routing_key=self.messaging_configuration["response"]["routing-key"],
+            routing_key=self.messaging_configuration.response.routing_key,
             message=response_message,
         )
         await message.ack()
