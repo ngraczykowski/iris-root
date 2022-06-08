@@ -549,6 +549,29 @@ keycloak:
     database: keycloak
     #TODO(dsniezek) now it places with set - we should use helmfile?
     existingSecret: "change me"
+  readinessProbe:
+    enabled: false
+  customReadinessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+    httpGet:
+      path: /auth/realms/Dev
+      port: http
+  startupProbe:
+    enabled: false
+  customStartupProbe:
+    failureThreshold: 30
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+    httpGet:
+      path: /auth/realms/Dev
+      port: http
+
   #Start of IRIS "keycloak" values
   internal: true
   authServerUrl: 'https://{{- .Values.ingress.hosts | default (list (include "sear.defaultHost" $)) | first }}/auth'
