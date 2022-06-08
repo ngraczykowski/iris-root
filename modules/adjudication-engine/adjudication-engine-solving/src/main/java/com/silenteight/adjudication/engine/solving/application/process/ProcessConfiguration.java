@@ -11,11 +11,14 @@ import com.silenteight.adjudication.engine.solving.application.publisher.port.*;
 import com.silenteight.adjudication.engine.solving.data.MatchFeatureDataAccess;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
 import com.silenteight.adjudication.engine.solving.domain.comment.CommentInputClientRepository;
+import com.silenteight.adjudication.engine.solving.domain.comment.CommentInputJdbcRepository;
+import com.silenteight.adjudication.engine.solving.domain.comment.CommentInputStoreService;
 
 import com.hazelcast.core.HazelcastInstance;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -48,12 +51,14 @@ class ProcessConfiguration {
   public CommentInputResolveProcess commentInputResolveProcess(
       final ProtoMessageToObjectNodeConverter converter,
       final CommentInputClient commentInputClient,
-      final CommentInputClientRepository commentInputClientRepository) {
+      final CommentInputClientRepository commentInputClientRepository,
+      final CommentInputStoreService commentInputStoreService) {
 
     return new CommentInputResolveProcess(
         commentInputClient,
         converter,
-        commentInputClientRepository);
+        commentInputClientRepository,
+        commentInputStoreService);
   }
 
   @Bean
@@ -109,5 +114,10 @@ class ProcessConfiguration {
         Executors.newFixedThreadPool(
             processConfigurationProperties.getGovernanceProcess().getPoolSize());
     return new GovernanceMatchResponseProcess(governancePublisher, alertSolvingRepository);
+  }
+
+  @Bean
+  CommentInputStoreService commentInputStoreService(JdbcTemplate jdbcTemplate) {
+    return new CommentInputStoreService(new CommentInputJdbcRepository(jdbcTemplate));
   }
 }
