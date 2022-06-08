@@ -51,4 +51,13 @@
     </insert>
   </changeSet>
 
+  <changeSet id="adjudication-engine-comments-1.23.0_1" author="mbartecki">
+    <insert tableName="ae_comment_template">
+      <column name="template_name" value="match.ftl"/>
+      <column name="created_at" valueDate="${now}"/>
+      <column name="revision" valueNumeric="7"/>
+      <column name="template" valueClobFile="templates/match-rev-7.ftl"/>
+    </insert>
+  </changeSet>
+
 </databaseChangeLog>
