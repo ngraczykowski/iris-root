@@ -1,0 +1,41 @@
+{
+  "analysisId": 3,
+  "alertId": 3,
+  "matches": {
+    "1": {
+      "matchId": 1,
+      "clientMatchId": "911",
+      "features": {
+
+      },
+      "categories": {
+        "categories/test1": {
+          "categoryName": "categories/test1",
+          "categoryValue": "NO_DECISION"
+        }
+      }
+    },
+    "2": {
+      "matchId": 2,
+      "clientMatchId": "912",
+      "features": {
+
+      },
+      "categories": {
+        "categories/test1": {
+          "categoryName": "categories/test1"
+        }
+      }
+    }
+  },
+  "policy": "policy",
+  "strategy": "startegy",
+  "agentFeatures": {
+    "agents/name/versions/1.0.0/configs/1": [
+      "features/name"
+    ]
+  },
+  "labels": {
+    "matchQuantity": "many"
+  }
+}

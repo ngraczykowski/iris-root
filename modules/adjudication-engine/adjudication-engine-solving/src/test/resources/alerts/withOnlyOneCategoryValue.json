@@ -1,0 +1,49 @@
+{
+  "analysisId": 2,
+  "alertId": 2,
+  "matches": {
+    "1": {
+      "matchId": 1,
+      "clientMatchId": "911",
+      "features": {
+        "features/name": {
+          "agentConfigFeatureId": 1,
+          "featureName": "features/name",
+          "agentConfig": "agents/name/versions/1.0.0/configs/1"
+        }
+      },
+      "categories": {
+        "categories/test1": {
+          "categoryName": "categories/test1",
+          "categoryValue": "NO_DECISION"
+        }
+      }
+    },
+    "2": {
+      "matchId": 2,
+      "clientMatchId": "912",
+      "features": {
+        "features/name": {
+          "agentConfigFeatureId": 1,
+          "featureName": "features/name",
+          "agentConfig": "agents/name/versions/1.0.0/configs/1"
+        }
+      },
+      "categories": {
+        "categories/test1": {
+          "categoryName": "categories/test1"
+        }
+      }
+    }
+  },
+  "policy": "policy",
+  "strategy": "startegy",
+  "agentFeatures": {
+    "agents/name/versions/1.0.0/configs/1": [
+      "features/name"
+    ]
+  },
+  "labels": {
+    "matchQuantity": "many"
+  }
+}

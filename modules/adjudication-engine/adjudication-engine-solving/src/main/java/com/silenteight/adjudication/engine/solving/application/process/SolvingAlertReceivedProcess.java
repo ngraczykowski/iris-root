@@ -29,12 +29,12 @@ import javax.annotation.Nonnull;
 class SolvingAlertReceivedProcess implements SolvingAlertReceivedPort {
 
   private final AgentExchangeAlertSolvingMapper agentExchangeRequestMapper;
-  private final AgentsMatchPort matchesPublisher;
+  private final AgentsMatchPort matchesPublisherPort;
   private final MatchFeatureDataAccess jdbcMatchFeaturesDataAccess;
   private final AlertSolvingRepository alertSolvingRepository;
-  private final ReadyMatchFeatureVectorPort readyMatchFeatureVectorPublisher;
-  private final CommentInputResolvePublisherPort commentInputResolveProcess;
-  private final CategoryResolvePublisherPort categoryResolvePublsiher;
+  private final ReadyMatchFeatureVectorPort readyMatchFeatureVectorPublisherPort;
+  private final CommentInputResolvePublisherPort commentInputResolveProcessPort;
+  private final CategoryResolvePublisherPort categoryResolvePublisherPort;
 
   @Timed(
       percentiles = {0.5, 0.95, 0.99},
@@ -55,14 +55,15 @@ class SolvingAlertReceivedProcess implements SolvingAlertReceivedPort {
         alertSolving -> {
 
           if (alertSolving.hasFeatures()) {
-            this.agentExchangeRequestMapper.from(alertSolving).forEach(matchesPublisher::publish);
+            this.agentExchangeRequestMapper.from(alertSolving)
+                .forEach(matchesPublisherPort::publish);
           }
 
           if (alertSolving.hasCategories()) {
-            this.categoryResolvePublsiher.resolve(alertSolving.getAlertId());
+            this.categoryResolvePublisherPort.resolve(alertSolving.getAlertId());
           }
 
-          this.commentInputResolveProcess.resolve(alertSolving.getAlertName());
+          this.commentInputResolveProcessPort.resolve(alertSolving.getAlertName());
         });
 
     solveReadyMatches(pendingAlerts);
@@ -85,7 +86,7 @@ class SolvingAlertReceivedProcess implements SolvingAlertReceivedPort {
                 alertSolving.getPolicy(),
                 alertSolving.getMatchFeatureNames(matchId),
                 alertSolving.getMatchFeatureVectors(matchId));
-        readyMatchFeatureVectorPublisher.send(matchSolutionRequest);
+        readyMatchFeatureVectorPublisherPort.send(matchSolutionRequest);
       }
     }
   }
