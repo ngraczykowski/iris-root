@@ -29,6 +29,12 @@ pipeline {
     }
     stage('Kubernetes Release') {
       matrix {
+        agent {
+          node {
+            label 'ec2-agent-devenv'
+            customWorkspace "workspace/${JOB_NAME}/env/${ENVIRONMENT}/"
+          }
+        }
         axes {
           axis {
             name 'ENVIRONMENT'
@@ -43,6 +49,16 @@ pipeline {
           RELEASE_NAME = "sear-${ENVIRONMENT}"
         }
         stages {
+          stage('Axis') {
+            agent none
+            steps {
+              script {
+                stage("${ENVIRONMENT}") {
+                  print "${ENVIRONMENT}"
+                }
+              }
+            }
+          }
           stage('Install chart') {
             steps {
               echo "Deploying version ${version} to ${ENVIRONMENT}"
