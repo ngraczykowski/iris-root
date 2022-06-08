@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Profile;
                         "${spring.security.oauth2.resourceserver.jwt.issuer-uri}"
                             + "/protocol/openid-connect/token")))
 @Configuration
-@Profile("swagger & !basic-auth")
+@Profile("swagger")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 class OpenApiConfiguration {
 

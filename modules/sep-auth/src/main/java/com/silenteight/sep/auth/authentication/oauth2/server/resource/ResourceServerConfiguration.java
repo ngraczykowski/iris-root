@@ -25,7 +25,7 @@ import javax.validation.constraints.NotNull;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
-@Profile("!basic-auth && !no-rest-api")
+@Profile("!no-rest-api")
 @Configuration
 @AllArgsConstructor
 @EnableConfigurationProperties({ AuthorizationProperties.class })

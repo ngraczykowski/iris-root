@@ -33,7 +33,6 @@ Before you start working on the project, you need to install few prerequisites.
 
 Sometimes there is a need to block all endpoints (HSBC on a prod env).
 To do this, you can run the application with a `no-rest-api` profile.
-All endpoints will be available with a basic-auth, but there will be no user available to log in.
 
 With this profile, the application doesn't require Keycloak's adapter properties to boot.
 
@@ -72,20 +71,7 @@ To start RabbitMQ, follow the steps:
 By default, swagger is disabled in production. To enable it you need to apply `swagger` Spring Boot profile.
 UI available under [link](https://localhost:24204/rest/governance/openapi/swagger-ui/index.html?configUrl=/rest/governance/openapi/api-docs/swagger-config).
 
-In order to make authenticated requests add a `basic-auth` profile and fill sep.auth.basic.users property.
-
-```yaml
-sep.auth.basic.users:
-  - username: bo
-    password: bodev
-    roles:
-      - MODEL_TUNER
-  - username: ap
-    password: apdev
-    roles:
-      - APPROVER
-```
-
+In order to make authenticated requests login into Keycloak using clientId=frontend
 
 ## Helpers
 
