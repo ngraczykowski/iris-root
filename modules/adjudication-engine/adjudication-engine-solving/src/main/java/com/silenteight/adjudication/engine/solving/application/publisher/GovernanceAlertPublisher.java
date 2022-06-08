@@ -20,7 +20,7 @@ class GovernanceAlertPublisher implements GovernanceAlertPort {
 
   public GovernanceAlertPublisher(
       final GovernanceFacade governanceFacade,
-      final Queue governanceAlertsToSendQueue,
+      final Queue<AlertSolutionRequest> governanceAlertsToSendQueue,
       final ExecutorService executorService,
       final SolvedAlertPort solvedAlertProcess) {
     this.governanceFacade = governanceFacade;

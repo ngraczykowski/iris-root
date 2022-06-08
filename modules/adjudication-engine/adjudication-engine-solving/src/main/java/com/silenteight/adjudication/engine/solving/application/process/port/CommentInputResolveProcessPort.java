@@ -6,5 +6,5 @@ package com.silenteight.adjudication.engine.solving.application.process.port;
 
 public interface CommentInputResolveProcessPort {
 
-  void resolve(final String alert);
+  void retrieveCommentInput(String alertID);
 }

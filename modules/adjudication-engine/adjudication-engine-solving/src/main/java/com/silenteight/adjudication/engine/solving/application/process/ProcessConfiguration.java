@@ -7,9 +7,7 @@ import com.silenteight.adjudication.engine.comments.comment.CommentFacade;
 import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectNodeConverter;
 import com.silenteight.adjudication.engine.governance.GovernanceFacade;
 import com.silenteight.adjudication.engine.solving.application.publisher.RecommendationPublisher;
-import com.silenteight.adjudication.engine.solving.application.publisher.port.AgentsMatchPort;
-import com.silenteight.adjudication.engine.solving.application.publisher.port.GovernanceAlertPort;
-import com.silenteight.adjudication.engine.solving.application.publisher.port.ReadyMatchFeatureVectorPort;
+import com.silenteight.adjudication.engine.solving.application.publisher.port.*;
 import com.silenteight.adjudication.engine.solving.data.MatchFeatureDataAccess;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
 import com.silenteight.adjudication.engine.solving.domain.comment.CommentInputClientRepository;
@@ -19,10 +17,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 @Configuration
 @EnableConfigurationProperties(ProcessConfigurationProperties.class)
@@ -35,8 +31,8 @@ class ProcessConfiguration {
       MatchFeatureDataAccess jdbcMatchFeaturesDataAccess,
       AlertSolvingRepository alertSolvingRepository,
       ReadyMatchFeatureVectorPort readyMatchFeatureVectorPort,
-      CommentInputResolveProcess commentInputResolveProcess,
-      CategoryResolveProcess categoryResolveProcess) {
+      CommentInputResolvePublisherPort commentInputResolveProcess,
+      CategoryResolvePublisherPort categoryResolvePublisher) {
 
     return new SolvingAlertReceivedProcess(
         agentExchnageRequestMapper,
@@ -45,45 +41,29 @@ class ProcessConfiguration {
         alertSolvingRepository,
         readyMatchFeatureVectorPort,
         commentInputResolveProcess,
-        categoryResolveProcess);
+        categoryResolvePublisher);
   }
 
   @Bean
   public CommentInputResolveProcess commentInputResolveProcess(
       final ProtoMessageToObjectNodeConverter converter,
       final CommentInputClient commentInputClient,
-      final CommentInputClientRepository commentInputClientRepository,
-      final Queue alertCommentsInputQueue,
-      final ProcessConfigurationProperties processConfigurationProperties) {
-
-    final ScheduledExecutorService scheduledExecutorService =
-        Executors.newScheduledThreadPool(
-            processConfigurationProperties.getCommentInputProcess().getPoolSize());
+      final CommentInputClientRepository commentInputClientRepository) {
 
     return new CommentInputResolveProcess(
         commentInputClient,
         converter,
-        commentInputClientRepository,
-        scheduledExecutorService,
-        alertCommentsInputQueue);
+        commentInputClientRepository);
   }
 
   @Bean
   public CategoryResolveProcess categoryResolveProcess(
       CategoryValuesClient categoryValueClient,
       AlertSolvingRepository alertSolvingRepository,
-      final Queue alertCategoryValuesQueue,
-      ReadyMatchFeatureVectorPort readyMatchFeatureVectorPublisher,
-      final ProcessConfigurationProperties processConfigurationProperties) {
-
-    final ScheduledExecutorService scheduledExecutorService =
-        Executors.newScheduledThreadPool(
-            processConfigurationProperties.getCategoryProcess().getPoolSize());
+      ReadyMatchFeatureVectorPort readyMatchFeatureVectorPublisher) {
 
     return new CategoryResolveProcess(
         categoryValueClient,
-        scheduledExecutorService,
-        alertCategoryValuesQueue,
         alertSolvingRepository,
         readyMatchFeatureVectorPublisher);
   }

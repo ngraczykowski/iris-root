@@ -6,5 +6,5 @@ package com.silenteight.adjudication.engine.solving.application.process.port;
 
 public interface CategoryResolveProcessPort {
 
-  void resolve(final Long alertId);
+  void resolveCategoryValues(Long alertId);
 }

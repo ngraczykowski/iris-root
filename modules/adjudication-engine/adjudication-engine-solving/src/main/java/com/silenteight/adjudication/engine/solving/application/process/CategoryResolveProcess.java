@@ -12,56 +12,15 @@ import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository
 import com.silenteight.adjudication.engine.solving.domain.CategoryValue;
 import com.silenteight.datasource.categories.api.v2.BatchGetMatchesCategoryValuesRequest;
 
-import java.util.Queue;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 @Slf4j
 @RequiredArgsConstructor
 class CategoryResolveProcess implements CategoryResolveProcessPort {
 
   private final CategoryValuesClient categoryValueClient;
   private final AlertSolvingRepository alertSolvingRepository;
-  private final Queue<Long> alertCategoryValuesInputQueue;
   private final ReadyMatchFeatureVectorPort readyMatchFeatureVectorPublisher;
 
-  CategoryResolveProcess(
-      final CategoryValuesClient categoryValueClient,
-      final ScheduledExecutorService scheduledExecutorService,
-      final Queue<Long> alertCategoryValuesInputQueue,
-      final AlertSolvingRepository alertSolvingRepository,
-      final ReadyMatchFeatureVectorPort readyMatchFeatureVectorPublisher) {
-    this.categoryValueClient = categoryValueClient;
-    this.alertCategoryValuesInputQueue = alertCategoryValuesInputQueue;
-    this.alertSolvingRepository = alertSolvingRepository;
-    this.readyMatchFeatureVectorPublisher = readyMatchFeatureVectorPublisher;
-    scheduledExecutorService.scheduleAtFixedRate(this::process, 10, 10, TimeUnit.MILLISECONDS);
-  }
-
-  public void resolve(final Long alertId) {
-    log.debug("Resolve category value for alert: {}", alertId);
-    this.alertCategoryValuesInputQueue.add(alertId);
-  }
-
-  private void process() {
-    try {
-      execute();
-    } catch (Exception e) {
-      log.error("Processing of category value failed: ", e);
-    }
-  }
-
-  private void execute() {
-    while (true) {
-      final Long alertId = this.alertCategoryValuesInputQueue.poll();
-      if (alertId == null) {
-        break;
-      }
-      resolveCategoryValues(alertId);
-    }
-  }
-
-  private void resolveCategoryValues(Long alertId) {
+  public void resolveCategoryValues(Long alertId) {
     log.debug("Resolved alert {} for requesting for category value", alertId);
     var alertSolving = alertSolvingRepository.get(alertId);
     var categoryMatches = alertSolving.getCategoryMatches();

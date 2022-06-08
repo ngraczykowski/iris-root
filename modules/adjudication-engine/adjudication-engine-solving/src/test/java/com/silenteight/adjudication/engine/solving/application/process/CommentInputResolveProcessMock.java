@@ -4,12 +4,12 @@
 
 package com.silenteight.adjudication.engine.solving.application.process;
 
-import com.silenteight.adjudication.engine.solving.application.process.port.CommentInputResolveProcessPort;
+import com.silenteight.adjudication.engine.solving.application.publisher.port.CommentInputResolvePublisherPort;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class CommentInputResolveProcessMock implements CommentInputResolveProcessPort {
+class CommentInputResolveProcessMock implements CommentInputResolvePublisherPort {
 
   private List<String> alerts = new ArrayList<>();
 

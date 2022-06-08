@@ -4,11 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
-import com.silenteight.adjudication.engine.solving.application.process.port.CategoryResolveProcessPort;
-import com.silenteight.adjudication.engine.solving.application.process.port.CommentInputResolveProcessPort;
 import com.silenteight.adjudication.engine.solving.application.process.port.SolvingAlertReceivedPort;
 import com.silenteight.adjudication.engine.solving.application.publisher.dto.MatchSolutionRequest;
 import com.silenteight.adjudication.engine.solving.application.publisher.port.AgentsMatchPort;
+import com.silenteight.adjudication.engine.solving.application.publisher.port.CategoryResolvePublisherPort;
+import com.silenteight.adjudication.engine.solving.application.publisher.port.CommentInputResolvePublisherPort;
 import com.silenteight.adjudication.engine.solving.application.publisher.port.ReadyMatchFeatureVectorPort;
 import com.silenteight.adjudication.engine.solving.data.AlertAggregate;
 import com.silenteight.adjudication.engine.solving.data.MatchFeatureDataAccess;
@@ -17,7 +17,10 @@ import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository
 import com.silenteight.adjudication.internal.v1.AnalysisAlertsAdded;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 
@@ -30,8 +33,8 @@ class SolvingAlertReceivedProcess implements SolvingAlertReceivedPort {
   private final MatchFeatureDataAccess jdbcMatchFeaturesDataAccess;
   private final AlertSolvingRepository alertSolvingRepository;
   private final ReadyMatchFeatureVectorPort readyMatchFeatureVectorPublisher;
-  private final CommentInputResolveProcessPort commentInputResolveProcess;
-  private final CategoryResolveProcessPort categoryResolveProcess;
+  private final CommentInputResolvePublisherPort commentInputResolveProcess;
+  private final CategoryResolvePublisherPort categoryResolvePublsiher;
 
   @Timed(
       percentiles = {0.5, 0.95, 0.99},
@@ -56,7 +59,7 @@ class SolvingAlertReceivedProcess implements SolvingAlertReceivedPort {
           }
 
           if (alertSolving.hasCategories()) {
-            this.categoryResolveProcess.resolve(alertSolving.getAlertId());
+            this.categoryResolvePublsiher.resolve(alertSolving.getAlertId());
           }
 
           this.commentInputResolveProcess.resolve(alertSolving.getAlertName());

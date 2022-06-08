@@ -7,6 +7,8 @@ package com.silenteight.adjudication.engine.solving.infrastructure.hazelcast;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.adjudication.engine.solving.application.publisher.dto.AlertSolutionRequest;
+import com.silenteight.adjudication.engine.solving.application.publisher.dto.MatchSolutionRequest;
 import com.silenteight.adjudication.engine.solving.domain.*;
 import com.silenteight.adjudication.engine.solving.infrastructure.hazelcast.HazelcastConfigurationProperties.AsyncBackup;
 
@@ -31,8 +33,10 @@ class InMemoryStorageProviderConfiguration {
   private static final String MATCH_FEATURES_MAP = "in-memory-match-features";
   public static final String ALERT_CATEGORY_VALUE_QUEUE = "in-memory-alert-category-value";
   public static final String ALERT_COMMENTS_INPUTS_QUEUE = "in-memory-alert-comments-inputs";
-  public static final String AE_GOVERNANCE_MATCH_TO_SEND_QUEUE = "in-memory-ae-governance-match-to-send";
-  public static final String AE_GOVERNANCE_ALERT_TO_SEND_QUEUE = "in-memory-ae-governance-alert-to-send";
+  public static final String AE_GOVERNANCE_MATCH_TO_SEND_QUEUE =
+      "in-memory-ae-governance-match-to-send";
+  public static final String AE_GOVERNANCE_ALERT_TO_SEND_QUEUE =
+      "in-memory-ae-governance-alert-to-send";
   private final HazelcastConfigurationProperties hazelcastConfigurationProperties;
 
   @Bean
@@ -45,22 +49,22 @@ class InMemoryStorageProviderConfiguration {
   }
 
   @Bean
-  Queue governanceAlertsToSendQueue(HazelcastInstance hazelcastInstance) {
+  Queue<AlertSolutionRequest> governanceAlertsToSendQueue(HazelcastInstance hazelcastInstance) {
     return hazelcastInstance.getQueue(AE_GOVERNANCE_ALERT_TO_SEND_QUEUE);
   }
 
   @Bean
-  Queue governanceMatchToSendQueue(HazelcastInstance hazelcastInstance) {
+  Queue<MatchSolutionRequest> governanceMatchToSendQueue(HazelcastInstance hazelcastInstance) {
     return hazelcastInstance.getQueue(AE_GOVERNANCE_MATCH_TO_SEND_QUEUE);
   }
 
   @Bean
-  Queue alertCommentsInputQueue(HazelcastInstance hazelcastInstance) {
+  Queue<String> alertCommentsInputQueue(HazelcastInstance hazelcastInstance) {
     return hazelcastInstance.getQueue(ALERT_COMMENTS_INPUTS_QUEUE);
   }
 
   @Bean
-  Queue alertCategoryValuesQueue(HazelcastInstance hazelcastInstance) {
+  Queue<Long> alertCategoryValuesQueue(HazelcastInstance hazelcastInstance) {
     return hazelcastInstance.getQueue(ALERT_CATEGORY_VALUE_QUEUE);
   }
 

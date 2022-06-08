@@ -27,7 +27,7 @@ class ReadyMatchFeatureVectorPublisher implements ReadyMatchFeatureVectorPort {
 
   public ReadyMatchFeatureVectorPublisher(
       final GovernanceFacade governanceFacade,
-      final Queue governanceMatchToSendQueue,
+      final Queue<MatchSolutionRequest> governanceMatchToSendQueue,
       final ExecutorService executorService,
       final GovernanceMatchResponsePort governanceMatchResponseProcess,
       ProtoMessageToObjectNodeConverter converter) {
