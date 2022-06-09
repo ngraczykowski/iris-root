@@ -8,6 +8,7 @@ import com.silenteight.adjudication.api.v1.RecommendationsGenerated.Recommendati
 import com.silenteight.adjudication.api.v2.RecommendationMetadata;
 import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.SaveRecommendationRequest;
+import com.silenteight.adjudication.engine.analysis.recommendation.port.RecommendationFacadePort;
 import com.silenteight.adjudication.internal.v1.CommentInputsUpdated;
 import com.silenteight.adjudication.internal.v1.MatchesSolved;
 import com.silenteight.sep.base.aspects.metrics.Timed;
@@ -22,7 +23,7 @@ import java.util.function.Consumer;
 
 @RequiredArgsConstructor
 @Service
-public class RecommendationFacade {
+public class RecommendationFacade implements RecommendationFacadePort {
 
   private final HandleCommentInputsUpdatedUseCase handleCommentInputsUpdatedUseCase;
 

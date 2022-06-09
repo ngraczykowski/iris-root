@@ -12,7 +12,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 class CategoryResolveProcessTest {
 
   private CategoryResolveProcess categoryResolveProcess;
-  private InMemoryAlertSolvingRepositoryMock inMemoryAlertSolvingRepositoryMock;
   private ReadyMatchFeatureVectorPortMock readyMatchFeatureVectorPortMock;
 
   @BeforeEach
@@ -21,7 +20,8 @@ class CategoryResolveProcessTest {
     readyMatchFeatureVectorPortMock = new ReadyMatchFeatureVectorPortMock();
 
     var dataAccess = new InMemoryMatchFeatureDataAccess();
-    inMemoryAlertSolvingRepositoryMock = new InMemoryAlertSolvingRepositoryMock(dataAccess);
+    InMemoryAlertSolvingRepositoryMock inMemoryAlertSolvingRepositoryMock =
+        new InMemoryAlertSolvingRepositoryMock(dataAccess);
 
     categoryResolveProcess =
         new CategoryResolveProcess(

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.engine.comments.comment.domain.AlertContext;
 import com.silenteight.adjudication.engine.comments.comment.domain.MatchContext;
+import com.silenteight.adjudication.engine.comments.comment.port.CommentFacadePort;
 
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
-public class CommentFacade {
+public class CommentFacade implements CommentFacadePort {
 
   private final GenerateAlertCommentUseCase generateCommentUseCase;
   private final GenerateMatchCommentUseCase generateMatchCommentUseCase;

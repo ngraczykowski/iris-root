@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Data
 @ConfigurationProperties(prefix = "ae.solving.process")
-class ProcessConfigurationProperties {
+public class ProcessConfigurationProperties {
 
   private CommentInputProcess commentInputProcess = new CommentInputProcess();
   private CategoryProcess categoryProcess = new CategoryProcess();

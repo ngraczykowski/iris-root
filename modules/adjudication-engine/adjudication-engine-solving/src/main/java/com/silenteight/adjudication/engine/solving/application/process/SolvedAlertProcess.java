@@ -4,11 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
-import com.silenteight.adjudication.engine.analysis.recommendation.RecommendationFacade;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertSolution;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.SaveRecommendationRequest;
-import com.silenteight.adjudication.engine.comments.comment.CommentFacade;
+import com.silenteight.adjudication.engine.analysis.recommendation.port.RecommendationFacadePort;
 import com.silenteight.adjudication.engine.comments.comment.domain.MatchContext;
+import com.silenteight.adjudication.engine.comments.comment.port.CommentFacadePort;
 import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectNodeConverter;
 import com.silenteight.adjudication.engine.solving.application.process.port.SolvedAlertPort;
 import com.silenteight.adjudication.engine.solving.application.publisher.RecommendationPublisher;
@@ -33,8 +33,8 @@ class SolvedAlertProcess implements SolvedAlertPort {
   private final RecommendationPublisher recommendationPublisher;
   private final AlertSolvingRepository alertSolvingRepository;
   private final AlertSolvingAlertContextMapper alertSolvingAlertContextMapper;
-  private final CommentFacade commentFacade;
-  private final RecommendationFacade recommendationFacade;
+  private final CommentFacadePort commentFacadePort;
+  private final RecommendationFacadePort recommendationFacadePort;
   private final ProtoMessageToObjectNodeConverter converter;
   private final CommentInputClientRepository commentInputClientRepository;
   private final ProcessConfigurationProperties.SolvedAlertProcess properties;
@@ -62,9 +62,9 @@ class SolvedAlertProcess implements SolvedAlertPort {
         recommendedAction,
         commentsInputs
     );
-    var comment = commentFacade.generateComment(properties.getCommentTemplate(), alertContext);
+    var comment = commentFacadePort.generateComment(properties.getCommentTemplate(), alertContext);
     var matchComments =
-        commentFacade.generateMatchComments(
+        commentFacadePort.generateMatchComments(
             properties.getMatchCommentTemplate(), alertContext.getMatches());
 
     var saveRequest =
@@ -79,7 +79,7 @@ class SolvedAlertProcess implements SolvedAlertPort {
                 .matchComments(matchComments)
                 .alertLabels(converter.convert(alertSolvingModel.getLabels()))
                 .build()));
-    var recommendations = recommendationFacade.createRecommendations(saveRequest);
+    var recommendations = recommendationFacadePort.createRecommendations(saveRequest);
 
     log.debug("Generated recommendation for = {}", alertSolvingModel.getAlertId());
 
