@@ -33,7 +33,9 @@ spec:
       {{- end }}
       initContainers:
         {{- include "initScripts" . | indent 8 }}
+        {{- if .component.useRabbit }}
         {{- include "checkRabbitMqInitContainer" . | indent 8 }}
+        {{- end }}
       containers:
         - name: {{ .componentName }}
           {{- with .Values.securityContext }}
@@ -67,9 +69,11 @@ spec:
               subPath: application.yaml
           env:
       volumes:
+        {{- if .component.useRabbit }}
         - name: secret-rabbitmq
           secret:
             secretName: {{ include "sear.rabbitmqSecretName" . }}
+        {{- end }}
         - name: init-scripts
           configMap:
             defaultMode: 0777

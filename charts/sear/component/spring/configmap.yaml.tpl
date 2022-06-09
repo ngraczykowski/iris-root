@@ -11,7 +11,7 @@ data:
   kubernetes.yml: |
     spring:
       config:
-        import: configtree:/var/run/secrets/spring/*/
+        import: optional:configtree:/var/run/secrets/spring/*/
 
       {{/* NOTE(ahaczewski): After Tadeusz Kleszcz recommendation, disable health check on exceptions when communicating via gRPC. */}}
       autoconfigure:

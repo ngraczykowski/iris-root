@@ -25,12 +25,14 @@ data:
         data-source:
           address: $UDS_ADDRESS
           timeout: 15
+    {{- if .component.useRabbit }}
     rabbitmq:
       host: $RABBITMQ_HOST
       port: $RABBITMQ_PORT
       login: $RABBITMQ_USERNAME
       password: $RABBITMQ_PASSWORD
       virtualhost: /
+    {{- end }}
     sentry:
       turn_on: false
       environment: unknown

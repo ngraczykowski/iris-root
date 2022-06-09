@@ -161,6 +161,8 @@ common:
   enabled: true
   # use database (inject postgres secrets)
   useDb: true
+  # use rabbit (inject rabbit secrets)
+  useRabbit: true
   # configure db name via postgres operator
   dbName: ""
   # std k8s docker image settings

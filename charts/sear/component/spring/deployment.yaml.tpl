@@ -35,7 +35,9 @@ spec:
         {{- if .component.useDb }}
         {{- include "checkPostgresReadyInitContainer" . | indent 8 }}
         {{- end }}
+        {{- if .component.useRabbit }}
         {{- include "checkRabbitMqInitContainer" . | indent 8 }}
+        {{- end }}
       containers:
         - name: {{ .componentName }}
           {{- with .Values.securityContext }}
@@ -133,9 +135,11 @@ spec:
             - name: config
               mountPath: "/etc/spring/config"
               readOnly: true
+            {{- if .component.useRabbit }}
             - name: secret-rabbitmq
               mountPath: "/var/run/secrets/spring/rabbitmq"
               readOnly: true
+            {{- end }}
             {{- if .component.useDb }}
             - name: secret-postgres
               mountPath: "/var/run/secrets/spring/postgres"
@@ -147,6 +151,7 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: ""
+            {{- if .component.useRabbit }}
             - name: SPRING_RABBITMQ_ADDRESSES
               value: ""
             - name: SPRING_RABBITMQ_HOST
@@ -169,10 +174,12 @@ spec:
                 secretKeyRef:
                   name: {{ include "sear.rabbitmqSecretName" . }}
                   key: password
+            {{- end }}
       volumes:
         - name: config
           configMap:
             name: {{ include "sear.componentName" . }}
+        {{- if .component.useRabbit }}
         - name: secret-rabbitmq
           secret:
             secretName: {{ include "sear.rabbitmqSecretName" . }}
@@ -185,6 +192,7 @@ spec:
                 path: spring/rabbitmq/username
               - key: password
                 path: spring/rabbitmq/password
+        {{- end }}
         {{- if .component.useDb }}
         - name: secret-postgres
           secret:
