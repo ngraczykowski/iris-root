@@ -10,10 +10,22 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 class InMemoryAlertSolvingRepositoryMock implements AlertSolvingRepository {
 
   private Map<Long, AlertSolving> alerts = new HashMap<>();
+
+  public InMemoryAlertSolvingRepositoryMock(
+      InMemoryMatchFeatureDataAccess inMemoryMatchFeatureDataAccess) {
+    var alerts =
+        inMemoryMatchFeatureDataAccess.findAnalysisFeatures(Set.of(1L), Set.of(1L, 2L, 3L, 4L));
+    alerts.values().stream().map(AlertSolving::new).forEach(this::save);
+  }
+
+  public InMemoryAlertSolvingRepositoryMock() {
+
+  }
 
   @Override
   public AlertSolving get(@NotNull Long key) {

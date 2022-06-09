@@ -4,12 +4,8 @@
 
 package com.silenteight.adjudication.engine.solving.application.process;
 
-import com.silenteight.adjudication.engine.solving.domain.AlertSolving;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -22,14 +18,10 @@ class CategoryResolveProcessTest {
   @BeforeEach
   void setUp() {
     CategoryValuesClientMock categoryValuesClientMock = new CategoryValuesClientMock();
-    inMemoryAlertSolvingRepositoryMock = new InMemoryAlertSolvingRepositoryMock();
     readyMatchFeatureVectorPortMock = new ReadyMatchFeatureVectorPortMock();
 
     var dataAccess = new InMemoryMatchFeatureDataAccess();
-    var alerts = dataAccess.findAnalysisFeatures(Set.of(1L), Set.of(1L, 3L, 4L));
-    alerts.values().stream()
-        .map(AlertSolving::new)
-        .forEach(a -> inMemoryAlertSolvingRepositoryMock.save(a));
+    inMemoryAlertSolvingRepositoryMock = new InMemoryAlertSolvingRepositoryMock(dataAccess);
 
     categoryResolveProcess =
         new CategoryResolveProcess(
