@@ -7,7 +7,7 @@ from typing import List
 
 from agent_base.agent.agent import Agent
 from agent_base.agent.agent_service import AgentService
-from agent_base.utils.config import Config
+from agent_base.utils import Config
 
 
 def run(start_callback, end_callback):

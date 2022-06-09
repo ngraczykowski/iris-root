@@ -3,7 +3,7 @@ import pathlib
 
 import pytest
 
-from agent_base.utils.config import Config, ConfigurationException
+from agent_base.utils import Config, ConfigurationException
 
 DEFAULT_DIR = pathlib.Path("./config")
 DEFAULT_GRPC_PORT = 9090

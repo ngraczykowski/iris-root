@@ -10,7 +10,7 @@ from silenteight.agents.v1.api.exchange.exchange_pb2 import (
 from agent_base.agent import AgentRunner
 from agent_base.agent_exchange import AgentExchange
 from agent_base.example import JohnnyAgent, JohnnyAgentDataSource
-from agent_base.utils.config import Config
+from agent_base.utils import Config
 from tests.integration.mocks.adjudication_engine_mock import AdjudicationEngineMock
 from tests.integration.mocks.data_source_mock import DataSourceMock
 
@@ -30,7 +30,7 @@ def config():
 
 @pytest.fixture(autouse=True)
 async def ae_mock(config):
-    async with AdjudicationEngineMock(config.application_config) as mock:
+    async with AdjudicationEngineMock(config) as mock:
         yield mock
 
 

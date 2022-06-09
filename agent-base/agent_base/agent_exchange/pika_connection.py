@@ -1,17 +1,17 @@
 import logging
-from typing import Callable, Dict
+from typing import Callable
 
 import aio_pika
 
 from agent_base.agent.exception import AgentException
-from agent_base.utils.config.agent_config import MessagingConfig
+from agent_base.utils.config.agent_config import MessagingConfig, RabbitMQConfig
 
 
 class PikaConnection:
     def __init__(
         self,
         messaging_configuration: MessagingConfig,
-        connection_configuration: Dict,
+        connection_configuration: RabbitMQConfig,
         callback: Callable,
         max_requests_to_worker: int,
         use_ssl: bool = False,
@@ -30,44 +30,45 @@ class PikaConnection:
         self.ssl = use_ssl
 
     async def start(self) -> None:
-        connection_configuration = self.connection_configuration.copy()
-        ssl_options = connection_configuration.pop("ssl_options", None)
-
         if self.ssl:
-            if not ssl_options:
+            if not self.connection_configuration.ssl_options:
                 raise ValueError(
                     "No ssl connection parameters in config "
-                    "- add 'rabbitmq.tls' section to application.yaml"
+                    "- add 'rabbitmq.ssl_options' section to application.yaml"
                 )
             url = "".join(
                 map(
                     str,
                     (
                         "amqps://",
-                        connection_configuration["login"],
+                        self.connection_configuration.login,
                         ":",
-                        connection_configuration["password"],
+                        self.connection_configuration.password,
                         "@",
-                        connection_configuration["host"],
+                        self.connection_configuration.host,
                         ":",
-                        connection_configuration["port"],
+                        self.connection_configuration.port,
                         "/",
-                        connection_configuration["virtualhost"],
+                        self.connection_configuration.virtualhost,
                         "?cafile=",
-                        ssl_options["cafile"],
+                        self.connection_configuration.ssl_options.cafile,
                         "&keyfile=",
-                        ssl_options["keyfile"],
+                        self.connection_configuration.ssl_options.keyfile,
                         "&certfile=",
-                        ssl_options["certfile"],
+                        self.connection_configuration.ssl_options.certfile,
                         "&no_verify_ssl=",  # that's how aio-pika named it ...
-                        ssl_options["verify"],
+                        self.connection_configuration.ssl_options.verify,
                     ),
                 )
             )
             self.connection: aio_pika.RobustConnection = await aio_pika.connect_robust(url=url)
         else:
             self.connection: aio_pika.RobustConnection = await aio_pika.connect_robust(
-                **connection_configuration
+                host=self.connection_configuration.host,
+                port=self.connection_configuration.port,
+                login=self.connection_configuration.login,
+                password=self.connection_configuration.password,
+                virtualhost=self.connection_configuration.virtualhost,
             )
         self.channel: aio_pika.Channel = await self.connection.channel()
         await self.channel.set_qos(prefetch_count=self.max_requests_to_worker)

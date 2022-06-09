@@ -14,7 +14,7 @@ from silenteight.agent.name.v1.api.name_agent_pb2_grpc import NameAgentStub
 from agent_base.agent import AgentRunner
 from agent_base.example import JohnnyAgent, JohnnyAgentGrpcServicer
 from agent_base.grpc_service import GrpcService
-from agent_base.utils.config import Config
+from agent_base.utils import Config
 
 # mark all test with asyncio
 # - pytest will execute it as an asyncio task

@@ -25,7 +25,7 @@ from silenteight.datasource.api.name.v1.name_pb2_grpc import NameInputServiceStu
 from agent_base.agent import Agent, AgentRunner
 from agent_base.agent_exchange import AgentDataSource, AgentExchange
 from agent_base.grpc_service import AgentGrpcServicer, GrpcService
-from agent_base.utils.config import Config
+from agent_base.utils import Config
 from agent_base.utils.logger import get_logger
 
 
