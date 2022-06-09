@@ -2,6 +2,7 @@ package com.silenteight.hsbc.datasource.feature.historical
 
 import com.silenteight.hsbc.datasource.datamodel.CustomerIndividual
 import com.silenteight.hsbc.datasource.datamodel.MatchData
+import com.silenteight.hsbc.datasource.datamodel.NegativeNewsScreeningIndividuals
 import com.silenteight.hsbc.datasource.datamodel.WatchlistType
 import com.silenteight.hsbc.datasource.datamodel.WorldCheckIndividual
 import com.silenteight.hsbc.datasource.dto.historical.ModelKeyDto.ModelKeyType
@@ -44,6 +45,39 @@ class HistoricalIsTpMarkedFeatureSpec extends Specification {
       modelKey.modelKeyType == ModelKeyType.WATCHLIST_PARTY
       ((WatchlistPartyDto) modelKey.modelKeyValue).id == '2309274'
       ((WatchlistPartyDto) modelKey.modelKeyValue).type == 'WorldCheckIndividuals'
+      discriminator == "hotel_true_positive"
+    }
+  }
+
+  def 'should retrieve HistoricalIsTpMarked feature values for Negative News Screening'() {
+    def customerIndividual = Mock(CustomerIndividual) {
+      getExternalProfileId() >> 'aviR126SCR5640LU259TEST0016'
+    }
+
+    def nnsIndividual = Mock(NegativeNewsScreeningIndividuals) {
+      getListRecordId() >> '2309274'
+    }
+
+    def matchData = Mock(MatchData) {
+      isIndividual() >> true
+      getCustomerIndividuals() >> [customerIndividual]
+      getWorldCheckIndividuals() >> []
+      getNnsIndividuals() >> [nnsIndividual]
+      hasWorldCheckIndividuals() >> false
+      hasNnsIndividuals() >> true
+      getWatchlistId() >> Optional.of('2309274')
+      getWatchlistType() >> Optional.of(WatchlistType.NNS_LIST_INDIVIDUALS)
+    }
+
+    when:
+    def result = underTest.retrieve(matchData)
+
+    then:
+    with(result) {
+      feature == Feature.HISTORICAL_IS_TP_MARKED.fullName
+      modelKey.modelKeyType == ModelKeyType.WATCHLIST_PARTY
+      ((WatchlistPartyDto) modelKey.modelKeyValue).id == '2309274'
+      ((WatchlistPartyDto) modelKey.modelKeyValue).type == 'NNSIndividuals'
       discriminator == "hotel_true_positive"
     }
   }

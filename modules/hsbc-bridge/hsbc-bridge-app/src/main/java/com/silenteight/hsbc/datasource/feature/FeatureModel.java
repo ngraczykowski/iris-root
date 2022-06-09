@@ -14,6 +14,7 @@ import com.silenteight.hsbc.datasource.extractors.geolocation.GeoPlaceOfBirthCon
 import com.silenteight.hsbc.datasource.extractors.geolocation.GeoResidenciesConfigurer;
 import com.silenteight.hsbc.datasource.extractors.historical.HistoricalDecisionsQueryConfigurer;
 import com.silenteight.hsbc.datasource.extractors.name.NameQueryConfigurer;
+import com.silenteight.hsbc.datasource.extractors.newsage.NewsAgeConfigurer;
 import com.silenteight.hsbc.datasource.feature.allowedlist.AllowListCommonApFeature;
 import com.silenteight.hsbc.datasource.feature.allowedlist.AllowListCommonNameFeature;
 import com.silenteight.hsbc.datasource.feature.allowedlist.AllowListCommonWpFeature;
@@ -31,6 +32,7 @@ import com.silenteight.hsbc.datasource.feature.historical.HistoricalIsTpMarkedFe
 import com.silenteight.hsbc.datasource.feature.ispep.IsPepFeature;
 import com.silenteight.hsbc.datasource.feature.name.NameFeature;
 import com.silenteight.hsbc.datasource.feature.nationaliddocument.NationalIdDocumentFeature;
+import com.silenteight.hsbc.datasource.feature.newsage.NewsAgeFeature;
 
 import java.util.Map;
 
@@ -87,7 +89,10 @@ public class FeatureModel {
             new HistoricalIsCaseTpMarkedFeature(new HistoricalDecisionsQueryConfigurer().create())),
         Map.entry(
             Feature.HISTORICAL_IS_TP_MARKED,
-            new HistoricalIsTpMarkedFeature(new HistoricalDecisionsQueryConfigurer().create()))
+            new HistoricalIsTpMarkedFeature(new HistoricalDecisionsQueryConfigurer().create())),
+        Map.entry(
+            Feature.NEWS_AGE,
+            new NewsAgeFeature(new NewsAgeConfigurer().create()))
     );
   }
 

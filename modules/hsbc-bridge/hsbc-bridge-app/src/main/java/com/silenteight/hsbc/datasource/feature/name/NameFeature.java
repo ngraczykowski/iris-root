@@ -45,17 +45,16 @@ public class NameFeature implements NameFeatureClientValuesRetriever<NameFeature
     } else {
       var watchListEntities = getWatchListEntities(query);
 
-      inputBuilder.alertedPartyNames(mapToAlertedPartyNames(StreamUtils.toDistinctList(
-          query.apEntityExtractEntityNameOriginal(),
-          query.apEntityExtractOtherNames())));
+      inputBuilder.alertedPartyNames(
+          mapToAlertedPartyNames(
+              StreamUtils.toDistinctList(
+                  query.apEntityExtractEntityNameOriginal(), query.apEntityExtractOtherNames())));
       inputBuilder.watchlistNames(watchListEntities);
       inputBuilder.alertedPartyType(EntityType.ORGANIZATION);
     }
     inputBuilder.matchingTexts(Collections.emptyList());
 
-    var result = inputBuilder
-        .feature(getFeatureName())
-        .build();
+    var result = inputBuilder.feature(getFeatureName()).build();
 
     log.debug(
         "Datasource response for feature: {} with party type {}, alerted party size {} and watchlist party size {}.",
@@ -76,38 +75,63 @@ public class NameFeature implements NameFeatureClientValuesRetriever<NameFeature
     var wlIndividualWithoutAliases =
         mapToWatchlistNames(party.getWatchlistPartyIndividuals(), NameType.REGULAR);
 
-    var wlIndividualWithAliases = mapToWatchlistNames(
-        query.applyOriginalScriptEnhancementsForIndividualNamesWithAliases(), NameType.ALIAS);
+    var nnsIndividualWithoutAliases =
+        mapToWatchlistNames(party.getNnsIndividuals(), NameType.REGULAR);
 
-    return Stream.concat(wlIndividualWithoutAliases, wlIndividualWithAliases).collect(Collectors.toList());
+    var wlIndividualWithAliases =
+        mapToWatchlistNames(
+            query.applyOriginalScriptEnhancementsForIndividualNamesWithAliases(), NameType.ALIAS);
+
+    return Stream.of(
+            wlIndividualWithoutAliases,
+            wlIndividualWithAliases,
+            nnsIndividualWithoutAliases)
+        .flatMap(stream -> stream)
+        .collect(Collectors.toList());
   }
 
   private List<WatchlistNameDto> getWatchListEntities(NameQuery query) {
-    var wlEntitiesWithAliases = mapToWatchlistNames(
-        StreamUtils.toDistinctList(
-            query.mpWorldCheckEntitiesExtractOtherNames(),
-            query.mpWorldCheckEntitiesExtractXmlNamesWithCountries()), NameType.ALIAS);
+    var wlEntitiesWithAliases =
+        mapToWatchlistNames(
+            StreamUtils.toDistinctList(
+                query.mpWorldCheckEntitiesExtractOtherNames(),
+                query.mpWorldCheckEntitiesExtractXmlNamesWithCountries()),
+            NameType.ALIAS);
 
-    var wlEntitiesWithoutAliases = mapToWatchlistNames(StreamUtils.toDistinctList(
-        query.mpWorldCheckEntitiesExtractNames(),
-        query.mpPrivateListEntitiesExtractNames()), NameType.REGULAR);
+    var nnsEntitiesWithAliases =
+        mapToWatchlistNames(
+            StreamUtils.toDistinctList(
+                query.nnsEntitiesExtractOtherNames(),
+                query.nnsEntitiesExtractXmlNamesWithCountries()),
+            NameType.ALIAS);
 
-    return Stream.concat(wlEntitiesWithoutAliases, wlEntitiesWithAliases).collect(Collectors.toList());
+    var wlEntitiesWithoutAliases =
+        mapToWatchlistNames(
+            StreamUtils.toDistinctList(
+                query.mpWorldCheckEntitiesExtractNames(),
+                query.mpPrivateListEntitiesExtractNames()),
+            NameType.REGULAR);
+
+    var nnsEntitiesWithoutAliases =
+        mapToWatchlistNames(
+            StreamUtils.toDistinctList(query.nnsEntitiesExtractNames()), NameType.REGULAR);
+
+    return Stream.of(
+            wlEntitiesWithoutAliases,
+            wlEntitiesWithAliases,
+            nnsEntitiesWithAliases,
+            nnsEntitiesWithoutAliases)
+        .flatMap(stream -> stream)
+        .collect(Collectors.toList());
   }
 
   private List<AlertedPartyNameDto> mapToAlertedPartyNames(List<String> names) {
     return names.stream()
-        .map(name -> AlertedPartyNameDto.builder()
-            .name(name)
-            .build())
+        .map(name -> AlertedPartyNameDto.builder().name(name).build())
         .collect(Collectors.toList());
   }
 
   private Stream<WatchlistNameDto> mapToWatchlistNames(Collection<String> names, NameType type) {
-    return names.stream()
-        .map(name -> WatchlistNameDto.builder()
-            .name(name)
-            .type(type)
-            .build());
+    return names.stream().map(name -> WatchlistNameDto.builder().name(name).type(type).build());
   }
 }

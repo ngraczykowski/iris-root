@@ -12,7 +12,11 @@ public interface OtherCountryQuery {
 
   Stream<String> mpWorldCheckIndividualsOtherCountries();
 
+  Stream<String> nnsIndividualsOtherCountries();
+
   Stream<String> mpWorldCheckEntitiesOtherCountries();
+
+  Stream<String> mpNnsEntitiesOtherCountries();
 
   Stream<String> mpPrivateListIndividualsOtherCountries();
 

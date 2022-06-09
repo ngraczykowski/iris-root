@@ -10,7 +10,6 @@ interface MatchDataMapper {
 
   MatchRawData map(HsbcMatch hsbcMatch);
 
-
   default com.silenteight.hsbc.datasource.datamodel.CaseInformation castCaseInformation(
       com.silenteight.hsbc.bridge.json.internal.model.CaseInformation caseInformation) {
     return caseInformation;
@@ -45,4 +44,10 @@ interface MatchDataMapper {
   com.silenteight.hsbc.bridge.json.internal.model.CaseComment mapCaseComment(
       CaseComment caseComment);
 
+  com.silenteight.hsbc.bridge.json.internal.model.NegativeNewsScreeningIndividuals
+      mapNegativeNewsScreeningIndividuals(
+          NegativeNewsScreeningIndividuals negativeNewsScreeningIndividuals);
+
+  com.silenteight.hsbc.bridge.json.internal.model.NegativeNewsScreeningEntities
+      mapNegativeNewsScreeningEntities(NegativeNewsScreeningEntities negativeNewsScreeningEntities);
 }

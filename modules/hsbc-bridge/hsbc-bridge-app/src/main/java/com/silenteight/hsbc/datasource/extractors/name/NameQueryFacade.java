@@ -28,15 +28,17 @@ class NameQueryFacade implements NameQuery {
   @Override
   public Stream<String> apIndividualExtractNames() {
     return matchData.getCustomerIndividuals().stream()
-        .flatMap(customerIndividual -> new CustomerIndividualNamesExtractor(
-            customerIndividual).extract());
+        .flatMap(
+            customerIndividual ->
+                new CustomerIndividualNamesExtractor(customerIndividual).extract());
   }
 
   @Override
   public Stream<String> apIndividualExtractOtherNames() {
     return matchData.getCustomerIndividuals().stream()
-        .flatMap(customerIndividual -> new CustomerIndividualOtherNamesExtractor(
-            customerIndividual).extract());
+        .flatMap(
+            customerIndividual ->
+                new CustomerIndividualOtherNamesExtractor(customerIndividual).extract());
   }
 
   @Override
@@ -55,64 +57,93 @@ class NameQueryFacade implements NameQuery {
   @Override
   public Stream<String> mpWorldCheckIndividualsExtractNames() {
     var worldCheckIndividuals = matchData.getWorldCheckIndividuals();
-    return new WorldCheckIndividualsNamesExtractor(worldCheckIndividuals)
-        .extract();
+    return new WorldCheckIndividualsNamesExtractor(worldCheckIndividuals).extract();
+  }
+
+  @Override
+  public Stream<String> nnsIndividualsExtractNames() {
+    var nnsIndividuals = matchData.getNnsIndividuals();
+    return new NnsIndividualsNamesExtractor(nnsIndividuals).extract();
   }
 
   @Override
   public Stream<String> mpWorldCheckIndividualsExtractOtherNames() {
     var worldCheckIndividuals = matchData.getWorldCheckIndividuals();
-    return new WorldCheckIndividualsNamesExtractor(worldCheckIndividuals)
-        .extractOtherNames();
+    return new WorldCheckIndividualsNamesExtractor(worldCheckIndividuals).extractOtherNames();
+  }
+
+  @Override
+  public Stream<String> nnsIndividualsExtractOtherNames() {
+    var worldCheckIndividuals = matchData.getNnsIndividuals();
+    return new NnsIndividualsNamesExtractor(worldCheckIndividuals).extractOtherNames();
   }
 
   @Override
   public Stream<String> mpWorldCheckIndividualsExtractXmlNamesWithCountries() {
     return new WorldCheckIndividualsXmlNamesAndCountriesExtractor(
-        matchData, nameInformationServiceClient)
+            matchData, nameInformationServiceClient)
+        .extract();
+  }
+
+  @Override
+  public Stream<String> nnsIndividualsExtractXmlNamesWithCountries() {
+    return new NnsIndividualsXmlNamesAndCountriesExtractor(matchData, nameInformationServiceClient)
         .extract();
   }
 
   @Override
   public Stream<String> mpWorldCheckEntitiesExtractNames() {
     var worldCheckEntities = matchData.getWorldCheckEntities();
-    return new WorldCheckEntitiesNamesExtractor(worldCheckEntities)
-        .extract();
+    return new WorldCheckEntitiesNamesExtractor(worldCheckEntities).extract();
+  }
+
+  @Override
+  public Stream<String> nnsEntitiesExtractNames() {
+    var nnsEntities = matchData.getNnsEntities();
+    return new NnsEntitiesNamesExtractor(nnsEntities).extract();
   }
 
   @Override
   public Stream<String> mpWorldCheckEntitiesExtractOtherNames() {
     var worldCheckEntities = matchData.getWorldCheckEntities();
-    return new WorldCheckEntitiesNamesExtractor(worldCheckEntities)
-        .extractOtherNames();
+    return new WorldCheckEntitiesNamesExtractor(worldCheckEntities).extractOtherNames();
+  }
+
+  @Override
+  public Stream<String> nnsEntitiesExtractOtherNames() {
+    var nnsEntities = matchData.getNnsEntities();
+    return new NnsEntitiesNamesExtractor(nnsEntities).extractOtherNames();
   }
 
   @Override
   public Stream<String> mpWorldCheckEntitiesExtractXmlNamesWithCountries() {
     return new WorldCheckEntitiesXmlNamesAndCountriesExtractor(
-        matchData, nameInformationServiceClient)
+            matchData, nameInformationServiceClient)
+        .extract();
+  }
+
+  @Override
+  public Stream<String> nnsEntitiesExtractXmlNamesWithCountries() {
+    return new NnsEntitiesXmlNamesAndCountriesExtractor(matchData, nameInformationServiceClient)
         .extract();
   }
 
   @Override
   public Stream<String> mpPrivateListIndividualsExtractNames() {
     var privateListIndividuals = matchData.getPrivateListIndividuals();
-    return new PrivateListIndividualsNamesExtractor(privateListIndividuals)
-        .extract();
+    return new PrivateListIndividualsNamesExtractor(privateListIndividuals).extract();
   }
 
   @Override
   public Stream<String> mpPrivateListIndividualsExtractOtherNames() {
     var privateListIndividuals = matchData.getPrivateListIndividuals();
-    return new PrivateListIndividualsNamesExtractor(privateListIndividuals)
-        .extractOtherNames();
+    return new PrivateListIndividualsNamesExtractor(privateListIndividuals).extractOtherNames();
   }
 
   @Override
   public Stream<String> mpPrivateListEntitiesExtractNames() {
     var privateListEntities = matchData.getPrivateListEntities();
-    return new PrivateListEntitiesNamesExtractor(privateListEntities)
-        .extract();
+    return new PrivateListEntitiesNamesExtractor(privateListEntities).extract();
   }
 
   @Override
@@ -120,8 +151,9 @@ class NameQueryFacade implements NameQuery {
     return NameExtractor.applyOriginalScriptEnhancements(
             StreamUtils.toDistinctList(apAllIndividualNames()),
             StreamUtils.toDistinctList(
-                mpAllIndividualOtherNames(),
-                mpWorldCheckIndividualsExtractXmlNamesWithCountries()))
+                mpAllIndividualOtherNames(), mpWorldCheckIndividualsExtractXmlNamesWithCountries()),
+            StreamUtils.toDistinctList(
+                nnsIndividualsExtractOtherNames(), nnsIndividualsExtractXmlNamesWithCountries()))
         .getWatchlistPartyIndividuals();
   }
 
@@ -129,14 +161,16 @@ class NameQueryFacade implements NameQuery {
   public Party applyOriginalScriptEnhancementsForIndividualNames() {
     return NameExtractor.applyOriginalScriptEnhancements(
         StreamUtils.toDistinctList(apAllIndividualNames()),
-        StreamUtils.toDistinctList(mpAllIndividualNamesWithoutXmlAliases()));
+        StreamUtils.toDistinctList(mpAllIndividualNamesWithoutXmlAliases()),
+        StreamUtils.toDistinctList(nnsIndividualsExtractNames()));
   }
 
   @Override
   public Party applyOriginalScriptEnhancementsForIndividualNamesAll() {
     return NameExtractor.applyOriginalScriptEnhancements(
         apAllIndividualNames().collect(Collectors.toList()),
-        mpAllIndividualNamesWithoutXmlAliases().collect(Collectors.toList()));
+        mpAllIndividualNamesWithoutXmlAliases().collect(Collectors.toList()),
+        nnsIndividualsExtractNames().collect(Collectors.toList()));
   }
 
   private Stream<String> apAllIndividualNames() {

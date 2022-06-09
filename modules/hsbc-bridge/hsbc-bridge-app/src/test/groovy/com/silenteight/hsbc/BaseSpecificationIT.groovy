@@ -1,5 +1,7 @@
 package com.silenteight.hsbc
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
@@ -11,6 +13,9 @@ import spock.lang.Specification
 @Testcontainers
 @ActiveProfiles(["dev", "consuldisabled"])
 class BaseSpecificationIT extends Specification {
+
+  @MockBean
+  RabbitTemplate rabbitTemplate
 
   static PostgreSQLContainer postgresqlContainer = new PostgreSQLContainer("postgres:12")
 

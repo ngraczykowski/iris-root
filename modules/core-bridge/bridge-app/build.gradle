@@ -2,6 +2,7 @@ plugins {
   id "maven-publish"
   id "com.silenteight.iris.build.spring-boot-application"
   id "com.silenteight.iris.build.container-image"
+  id "groovy"
 }
 
 description = "bridge-app"
@@ -58,7 +59,7 @@ dependencies {
   implementation libs.shedlock.jdbc.provider
 
 
-  //testImplementation libs.groovy.all
+  testImplementation libs.groovy.all
   testImplementation libs.spock.core
   testImplementation libs.test.containers.junit.jupiter
   testImplementation libs.test.containers.localstack

@@ -15,6 +15,8 @@ public interface EntityComposite {
 
   List<CtrpScreening> getCtrpScreeningEntities();
 
+  List<NegativeNewsScreeningEntities> getNnsEntities();
+
   default boolean hasWorldCheckEntities() {
     return Objects.nonNull(getWorldCheckEntities()) && !getWorldCheckEntities().isEmpty();
   }
@@ -27,10 +29,19 @@ public interface EntityComposite {
     return Objects.nonNull(getCtrpScreeningEntities()) && !getCtrpScreeningEntities().isEmpty();
   }
 
+  default boolean hasNnsEntities() {
+    return Objects.nonNull(getNnsEntities()) && !getNnsEntities().isEmpty();
+  }
+
   default Optional<String> getEntityWatchlistId() {
     var listRecordId =
-        Stream.concat(getWorldCheckEntities().stream(), getPrivateListEntities().stream())
-            .map(ListRecordId::getListRecordId).findFirst();
+        Stream.of(
+                getWorldCheckEntities().stream(),
+                getPrivateListEntities().stream(),
+                getNnsEntities().stream())
+            .flatMap(stream -> stream)
+            .map(ListRecordId::getListRecordId)
+            .findFirst();
 
     return listRecordId.or(this::getCtrpScreeningEntityId);
   }
@@ -48,7 +59,8 @@ public interface EntityComposite {
       return Optional.of(WatchlistType.PRIVATE_LIST_ENTITIES);
     } else if (!getCtrpScreeningEntities().isEmpty()) {
       return Optional.of(WatchlistType.CTRPPRHB_LIST_ENTITIES);
-    } else
-      return Optional.empty();
+    } else if (!getNnsEntities().isEmpty()) {
+      return Optional.of(WatchlistType.NNS_LIST_ENTITIES);
+    } else return Optional.empty();
   }
 }

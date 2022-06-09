@@ -127,23 +127,24 @@ class NameExtractorSpec extends Specification {
     def wp = watchlistParty
 
     when:
-    def output = NameExtractor.applyOriginalScriptEnhancements(ap, wp)
+    def output = NameExtractor.applyOriginalScriptEnhancements(ap, wp, nns)
 
     then:
     output.alertedPartyIndividuals == apExpected
     output.watchlistPartyIndividuals == wpExpected
+    output.nnsIndividuals == nnsExpected
 
     where:
-    alertedParty                      | watchlistParty                     | apExpected                        | wpExpected
-    []                                | []                                 | []                                | []
-    null                              | null                               | []                                | []
-    null                              | []                                 | []                                | []
-    ['Osama Bin Laden']               | ['Osama Bin Laden']                | ['Osama Bin Laden']               | ['Osama Bin Laden']
-    ['Osama', 'أسامة']                | ['Osama', 'أسامة']                 | ['أسامة']                         | ['أسامة']
-    ['Lee Hsien Loong']               | ['Lee Hsien Loong', '李显龙', '李顯龍']  | ['Lee Hsien Loong']               | ['Lee Hsien Loong', '李显龙', '李顯龍']
-    ['Lee Hsien Loong', '李显龙', '李顯龍'] | ['Lee Hsien Loong']                | ['Lee Hsien Loong', '李显龙', '李顯龍'] | ['Lee Hsien Loong']
-    ['Lee Hsien Loong', '李显龙', '李顯龍'] | ['Lee Hsien Loong', '李顯龍', '1234'] | ['李显龙', '李顯龍']                    | ['李顯龍']
-    ['Lee Hsien Loong', '1234']       | ['Lee Hsien Loong', '1234']        | ['Lee Hsien Loong', '1234']       | ['Lee Hsien Loong', '1234']
+    alertedParty                          | watchlistParty                        | nns                                     | apExpected                              | wpExpected                                | nnsExpected
+    []                                    | []                                    | []                                      | []                                      | []                                        | []
+    null                                  | null                                  | null                                    | []                                      | []                                        | []
+    null                                  | []                                    | null                                    | []                                      | []                                        | []
+    ['Osama Bin Laden']                   | ['Osama Bin Laden']                   | ['Osama Bin Laden']                     | ['Osama Bin Laden']                     | ['Osama Bin Laden']                       | ['Osama Bin Laden']
+    ['Osama', 'أسامة']                    | ['Osama', 'أسامة']                    | ['Osama', 'أسامة']                      | ['أسامة']                               | ['أسامة']                                 | ['أسامة']
+    ['Lee Hsien Loong']                   | ['Lee Hsien Loong', '李显龙', '李顯龍'] | ['Lee Hsien Loong', '李显龙', '李顯龍']   | ['Lee Hsien Loong']                     | ['Lee Hsien Loong', '李显龙', '李顯龍']     | ['Lee Hsien Loong', '李显龙', '李顯龍']
+    ['Lee Hsien Loong', '李显龙', '李顯龍'] | ['Lee Hsien Loong']                   | ['Lee Hsien Loong']                     | ['Lee Hsien Loong', '李显龙', '李顯龍']   | ['Lee Hsien Loong']                       | ['Lee Hsien Loong']
+    ['Lee Hsien Loong', '李显龙', '李顯龍'] | ['Lee Hsien Loong', '李顯龍', '1234']  | ['Lee Hsien Loong', '李顯龍', '1234']    | ['李显龙', '李顯龍']                      | ['李顯龍']                                 | ['李顯龍']
+    ['Lee Hsien Loong', '1234']           | ['Lee Hsien Loong', '1234']           | ['Lee Hsien Loong', '1234']             | ['Lee Hsien Loong', '1234']             | ['Lee Hsien Loong', '1234']               | ['Lee Hsien Loong', '1234']
   }
 
   private static streamToList(Stream<String> names) {

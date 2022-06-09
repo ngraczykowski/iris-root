@@ -6,6 +6,7 @@ import com.silenteight.hsbc.datasource.feature.Feature
 import com.silenteight.hsbc.datasource.fixtures.FullMatch
 
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import static org.assertj.core.api.Assertions.assertThat
 
@@ -48,6 +49,22 @@ class NationalIdDocumentFeatureSpec extends Specification implements FullMatch {
       assertThat(watchlistCountries).containsExactly(
           'VNM GB IRN', 'UNITED STATES', 'US', 'IRAN, ISLAMIC REPUBLIC OF', 'IR', 'CHABAHAR',
           'UNK UNKW', 'VIET NAM', 'GB', 'IRAN')
+    }
+  }
+
+  def 'should retrieve national id document values when match is Negative News Screening'() {
+    when:
+    def result = underTest.retrieve(NNS_INDIVIDUAL_MATCH)
+
+    then:
+    with(result) {
+      feature == Feature.NATIONAL_ID_DOCUMENT.fullName
+      alertedPartyDocumentNumbers == ['Y999999']
+      watchlistDocumentNumbers == ['78845ID']
+      assertThat(alertedPartyCountries)
+          .containsExactlyInAnyOrder('UNITED KINGDOM', 'GB', 'DE', 'GERMANY', 'HK')
+      assertThat(watchlistCountries).containsExactly(
+          'VNM GB IRN', 'UNK UNKW', 'VIET NAM', 'GB', 'IRAN')
     }
   }
 }

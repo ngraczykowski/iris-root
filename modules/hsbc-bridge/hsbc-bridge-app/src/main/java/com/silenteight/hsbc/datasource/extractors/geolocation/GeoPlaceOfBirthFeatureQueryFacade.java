@@ -41,11 +41,13 @@ public class GeoPlaceOfBirthFeatureQueryFacade implements GeoPlaceOfBirthFeature
     var worldCheckIndividualsGeoPlaceOfBirth = worldCheckIndividualsGeoPlaceOfBirth();
     var privateListIndividualsGeoPlaceOfBirth = privateListIndividualsGeoPlaceOfBirth();
     var ctrpScreeningIndividualsGeoPlaceOfBirth = ctrpScreeningIndividualsGeoPlaceOfBirth();
+    var nnsIndividualsGeoPlaceOfBirth = nnsIndividualsGeoPlaceOfBirth();
 
     var fields = Stream.of(
         worldCheckIndividualsGeoPlaceOfBirth,
         privateListIndividualsGeoPlaceOfBirth,
-        ctrpScreeningIndividualsGeoPlaceOfBirth);
+        ctrpScreeningIndividualsGeoPlaceOfBirth,
+        nnsIndividualsGeoPlaceOfBirth);
 
     return fields.distinct().collect(Collectors.joining(" "));
   }
@@ -65,6 +67,12 @@ public class GeoPlaceOfBirthFeatureQueryFacade implements GeoPlaceOfBirthFeature
   private String ctrpScreeningIndividualsGeoPlaceOfBirth() {
     var ctrpScreeningIndividuals = individualComposite.getCtrpScreeningIndividuals();
     var fields = new CtrpScreeningExtractor(ctrpScreeningIndividuals).extract();
+    return GeoLocationExtractor.mergeFields(fields);
+  }
+
+  private String nnsIndividualsGeoPlaceOfBirth() {
+    var nnsIndividuals = individualComposite.getNnsIndividuals();
+    var fields = new NnsIndividualsPlaceOfBirthExtractor(nnsIndividuals).extract();
     return GeoLocationExtractor.mergeFields(fields);
   }
 }

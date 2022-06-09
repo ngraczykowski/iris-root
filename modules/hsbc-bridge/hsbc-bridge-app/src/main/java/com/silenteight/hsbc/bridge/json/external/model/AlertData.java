@@ -35,6 +35,11 @@ public class AlertData {
   private final List<CaseComment> caseComments = new ArrayList<>();
   @JsonProperty("DN_CASEHISTORY")
   private final List<CaseHistory> caseHistory = new ArrayList<>();
+  @JsonProperty("NNSEntities")
+  private final List<NegativeNewsScreeningEntities> nnsEntities = new ArrayList<>();
+  @JsonProperty("NNSIndividuals")
+  private final List<NegativeNewsScreeningIndividuals> nnsIndividuals = new ArrayList<>();
+
 
   @JsonIgnore
   public String getId() {

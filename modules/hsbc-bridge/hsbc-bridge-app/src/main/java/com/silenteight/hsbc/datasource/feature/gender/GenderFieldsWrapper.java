@@ -3,6 +3,7 @@ package com.silenteight.hsbc.datasource.feature.gender;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.datasource.datamodel.CustomerIndividual;
+import com.silenteight.hsbc.datasource.datamodel.NegativeNewsScreeningIndividuals;
 import com.silenteight.hsbc.datasource.datamodel.PrivateListIndividual;
 import com.silenteight.hsbc.datasource.datamodel.WorldCheckIndividual;
 
@@ -28,6 +29,10 @@ class GenderFieldsWrapper {
   }
 
   static GenderFieldsWrapper fromCustomerIndividual(CustomerIndividual indv) {
+    return GenderFieldsWrapper.of(indv.getGender(), indv.getGenderDerivedFlag());
+  }
+
+  static GenderFieldsWrapper fromNnsIndividual(NegativeNewsScreeningIndividuals indv) {
     return GenderFieldsWrapper.of(indv.getGender(), indv.getGenderDerivedFlag());
   }
 

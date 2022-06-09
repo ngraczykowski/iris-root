@@ -14,6 +14,7 @@ import com.silenteight.hsbc.datasource.dto.historical.HistoricalInputResponse;
 import com.silenteight.hsbc.datasource.dto.location.LocationInputResponse;
 import com.silenteight.hsbc.datasource.dto.name.NameInputResponse;
 import com.silenteight.hsbc.datasource.dto.nationalid.NationalIdInputResponse;
+import com.silenteight.hsbc.datasource.dto.newsage.NewsAgeInputResponse;
 import com.silenteight.hsbc.datasource.dto.transaction.TransactionInputResponse;
 import com.silenteight.hsbc.datasource.extractors.name.NameInformationServiceClient;
 import com.silenteight.hsbc.datasource.feature.country.CountryDiscoverer;
@@ -92,5 +93,10 @@ class DataProvidersConfiguration {
   @Bean
   DataSourceInputProvider<HistoricalInputResponse> historicalInputProvider() {
     return new HistoricalInputProvider(matchFacade);
+  }
+
+  @Bean
+  DataSourceInputProvider<NewsAgeInputResponse> newsAgeInputProvider() {
+    return new NewsAgeInputProvider(matchFacade);
   }
 }

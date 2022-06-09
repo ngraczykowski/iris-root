@@ -2,10 +2,7 @@ package com.silenteight.hsbc.datasource.extractors.country;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.datasource.datamodel.CtrpScreening;
-import com.silenteight.hsbc.datasource.datamodel.IndividualComposite;
-import com.silenteight.hsbc.datasource.datamodel.PrivateListIndividual;
-import com.silenteight.hsbc.datasource.datamodel.WorldCheckIndividual;
+import com.silenteight.hsbc.datasource.datamodel.*;
 import com.silenteight.hsbc.datasource.feature.country.ResidencyCountryFeatureQuery;
 
 import org.apache.commons.lang3.StringUtils;
@@ -23,6 +20,13 @@ public class ResidencyCountryFeatureQueryFacade implements ResidencyCountryFeatu
     return individualComposite.getWorldCheckIndividuals()
         .stream()
         .flatMap(ResidencyCountryFeatureQueryFacade::extractWorldCheckResidencies);
+  }
+
+  @Override
+  public Stream<String> nnsIndividualsResidencies() {
+    return individualComposite.getNnsIndividuals()
+        .stream()
+        .flatMap(ResidencyCountryFeatureQueryFacade::extractNnsIndividualsResidencies);
   }
 
   @Override
@@ -57,6 +61,14 @@ public class ResidencyCountryFeatureQueryFacade implements ResidencyCountryFeatu
     return Stream.of(
         worldCheckIndividual.getAddressCountry(),
         worldCheckIndividual.getResidencyCountry()
+    ).filter(StringUtils::isNotBlank);
+  }
+
+  private static Stream<String> extractNnsIndividualsResidencies(
+      NegativeNewsScreeningIndividuals nnsIndividuals) {
+    return Stream.of(
+        nnsIndividuals.getAddressCountry(),
+        nnsIndividuals.getResidenceCountry()
     ).filter(StringUtils::isNotBlank);
   }
 

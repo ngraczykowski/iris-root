@@ -23,6 +23,8 @@ silenteight.bridge:
         - SCION
       SSC:
         - SSC
+      NNS:
+        - NNS
 
   ### COMMENT MAP
 
@@ -47,6 +49,8 @@ silenteight.bridge:
         - SCION
       SSC:
         - SSC
+      NNS:
+        - NNS
 
   ### DATE WATCHLIST TYPES MAP
 
@@ -71,6 +75,8 @@ silenteight.bridge:
         - SCION
       SSC:
         - SSC
+      NNS:
+        - NNS
 
   ### ALERT DECISION MAP
 
@@ -102,3 +108,4 @@ silenteight.bridge:
       LEVEL_1_REVIEW: Level 1 Review
       LEVEL_2_REVIEW: Level 2 Review
       LEVEL_3_REVIEW: Level 3 Review
+      NEGATIVE_NEWS: Negative News Screening

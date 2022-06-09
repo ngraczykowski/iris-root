@@ -11,7 +11,9 @@ public enum WatchlistType {
   WORLDCHECK_INDIVIDUALS("WorldCheckIndividuals"),
   WORLDCHECK_ENTITIES("WorldCheckEntities"),
   PRIVATE_LIST_INDIVIDUALS("PrivateListIndividuals"),
-  PRIVATE_LIST_ENTITIES("PrivateListEntities");
+  PRIVATE_LIST_ENTITIES("PrivateListEntities"),
+  NNS_LIST_ENTITIES("NNSEntities"),
+  NNS_LIST_INDIVIDUALS("NNSIndividuals");
 
   @Getter
   private final String label;

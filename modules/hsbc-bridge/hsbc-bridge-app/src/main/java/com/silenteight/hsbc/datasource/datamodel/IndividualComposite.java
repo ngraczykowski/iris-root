@@ -1,5 +1,7 @@
 package com.silenteight.hsbc.datasource.datamodel;
 
+import org.apache.commons.collections.CollectionUtils;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -15,6 +17,8 @@ public interface IndividualComposite {
 
   List<CtrpScreening> getCtrpScreeningIndividuals();
 
+  List<NegativeNewsScreeningIndividuals> getNnsIndividuals();
+
   default boolean hasWorldCheckIndividuals() {
     return Objects.nonNull(getWorldCheckIndividuals()) && !getWorldCheckIndividuals().isEmpty();
   }
@@ -24,13 +28,23 @@ public interface IndividualComposite {
   }
 
   default boolean hasCtrpScreeningIndividuals() {
-    return Objects.nonNull(getCtrpScreeningIndividuals()) && !getCtrpScreeningIndividuals().isEmpty();
+    return Objects.nonNull(getCtrpScreeningIndividuals())
+        && !getCtrpScreeningIndividuals().isEmpty();
+  }
+
+  default boolean hasNnsIndividuals() {
+    return CollectionUtils.isNotEmpty(getNnsIndividuals());
   }
 
   default Optional<String> getIndividualWatchlistId() {
     var listRecordId =
-        Stream.concat(getWorldCheckIndividuals().stream(), getPrivateListIndividuals().stream())
-            .map(ListRecordId::getListRecordId).findFirst();
+        Stream.of(
+                getWorldCheckIndividuals().stream(),
+                getPrivateListIndividuals().stream(),
+                getNnsIndividuals().stream())
+            .flatMap(s -> s)
+            .map(ListRecordId::getListRecordId)
+            .findFirst();
 
     return listRecordId.or(this::getCtrpScreeningIndividualId);
   }
@@ -48,7 +62,10 @@ public interface IndividualComposite {
       return Optional.of(WatchlistType.PRIVATE_LIST_INDIVIDUALS);
     } else if (!getCtrpScreeningIndividuals().isEmpty()) {
       return Optional.of(WatchlistType.CTRPPRHB_LIST_INDIVIDUALS);
-    } else
+    } else if (!getNnsIndividuals().isEmpty()) {
+      return Optional.of(WatchlistType.NNS_LIST_INDIVIDUALS);
+    } else {
       return Optional.empty();
+    }
   }
 }

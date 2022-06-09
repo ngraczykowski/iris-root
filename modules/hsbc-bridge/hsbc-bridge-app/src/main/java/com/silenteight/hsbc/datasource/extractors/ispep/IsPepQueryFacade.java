@@ -20,49 +20,77 @@ class IsPepQueryFacade implements IsPepQuery {
 
   @Override
   public String apWorldCheckEntitiesExtractEdqLobCountryCode() {
-    return new CustomerEntityEdqLobCountryCodeExtractor(matchData.getCustomerEntities())
-        .extract();
+    return new CustomerEntityEdqLobCountryCodeExtractor(matchData.getCustomerEntities()).extract();
   }
 
   @Override
-  public String mpWorldCheckIndividualsFurtherInformation() {
-    return matchData.hasWorldCheckIndividuals() ?
-           new WorldCheckIndividualsFurtherInformationExtractor(matchData.getWorldCheckIndividuals())
-               .extract() : "";
+  public String individualsFurtherInformation() {
+    if (matchData.hasWorldCheckIndividuals()) {
+      return new WorldCheckIndividualsFurtherInformationExtractor(
+              matchData.getWorldCheckIndividuals())
+          .extract();
+    } else if (matchData.hasNnsIndividuals()) {
+      return new NnsIndividualsFurtherInformationExtractor(matchData.getNnsIndividuals()).extract();
+    }
+
+    return "";
   }
 
   @Override
-  public Stream<String> mpWorldCheckIndividualsLinkedTo() {
-    return matchData.hasWorldCheckIndividuals() ?
-           new WorldCheckIndividualsLinkedToExtractor(matchData.getWorldCheckIndividuals())
-               .extract() : Stream.empty();
+  public Stream<String> individualsLinkedTo() {
+    if (matchData.hasWorldCheckIndividuals()) {
+      return new WorldCheckIndividualsLinkedToExtractor(matchData.getWorldCheckIndividuals())
+          .extract();
+    } else if (matchData.hasNnsIndividuals()) {
+      return new NnsIndividualsLinkedToExtractor(matchData.getNnsIndividuals()).extract();
+    }
+
+    return Stream.empty();
   }
 
   @Override
-  public Stream<String> mpWorldCheckIndividualsCountryCodes() {
-    return matchData.hasWorldCheckIndividuals() ?
-           new WorldCheckIndividualsCountryCodesExtractor(matchData.getWorldCheckIndividuals())
-               .extract() : Stream.empty();
+  public Stream<String> individualsCountryCodes() {
+    if (matchData.hasWorldCheckIndividuals()) {
+      return new WorldCheckIndividualsCountryCodesExtractor(matchData.getWorldCheckIndividuals())
+          .extract();
+    } else if (matchData.hasNnsIndividuals()) {
+      return new NnsIndividualsCountryCodesExtractor(matchData.getNnsIndividuals()).extract();
+    }
+
+    return Stream.empty();
   }
 
   @Override
-  public String mpWorldCheckEntitiesFurtherInformation() {
-    return matchData.hasWorldCheckEntities() ?
-           new WorldCheckEntitiesFurtherInformationExtractor(matchData.getWorldCheckEntities())
-               .extract() : "";
+  public String entitiesFurtherInformation() {
+    if (matchData.hasWorldCheckEntities()) {
+      return new WorldCheckEntitiesFurtherInformationExtractor(matchData.getWorldCheckEntities())
+          .extract();
+    } else if (matchData.hasNnsEntities()) {
+      return new NnsEntitiesFurtherInformationExtractor(matchData.getNnsEntities()).extract();
+    }
+
+    return "";
   }
 
   @Override
-  public Stream<String> mpWorldCheckEntitiesLinkedTo() {
-    return matchData.hasWorldCheckEntities() ?
-           new WorldCheckEntitiesLinkedToExtractor(matchData.getWorldCheckEntities())
-               .extract() : Stream.empty();
+  public Stream<String> entitiesLinkedTo() {
+    if (matchData.hasWorldCheckEntities()) {
+      return new WorldCheckEntitiesLinkedToExtractor(matchData.getWorldCheckEntities()).extract();
+    } else if (matchData.hasNnsEntities()) {
+      return new NnsEntitiesLinkedToExtractor(matchData.getNnsEntities()).extract();
+    }
+
+    return Stream.empty();
   }
 
   @Override
-  public Stream<String> mpWorldCheckEntitiesCountryCodes() {
-    return matchData.hasWorldCheckEntities() ?
-           new WorldCheckEntitiesCountryCodesExtractor(matchData.getWorldCheckEntities())
-               .extract() : Stream.empty();
+  public Stream<String> entitiesCountryCodes() {
+    if (matchData.hasWorldCheckEntities()) {
+      return new WorldCheckEntitiesCountryCodesExtractor(matchData.getWorldCheckEntities())
+          .extract();
+    } else if (matchData.hasNnsEntities()) {
+      return new NnsEntitiesCountryCodesExtractor(matchData.getNnsEntities()).extract();
+    }
+    return Stream.empty();
   }
 }

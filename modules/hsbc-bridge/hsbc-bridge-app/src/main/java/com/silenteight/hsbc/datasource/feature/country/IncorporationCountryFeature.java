@@ -60,6 +60,15 @@ public class IncorporationCountryFeature implements FeatureValuesRetriever<Count
         )).filter(StringUtils::isNotBlank);
   }
 
+  public static Stream<String> nnsEntitiesIncorporationCountries(
+      List<NegativeNewsScreeningEntities> nnsEntities) {
+    return nnsEntities.stream()
+        .flatMap(nns -> Stream.of(
+            nns.getAllCountryCodes(),
+            nns.getAllCountries()
+        )).filter(StringUtils::isNotBlank);
+  }
+
   public static Stream<String> privateListEntitiesIncorporationCountries(
       List<PrivateListEntity> privateListEntities) {
     return privateListEntities.stream()
@@ -86,10 +95,13 @@ public class IncorporationCountryFeature implements FeatureValuesRetriever<Count
         privateListEntitiesIncorporationCountries(entity.getPrivateListEntities());
     var ctrpScreeningEntitiesIncorporationCountries =
         ctrpScreeningEntitiesIncorporationCountries(entity.getCtrpScreeningEntities());
+    var nnsEntitiesIncorporationCountries =
+        nnsEntitiesIncorporationCountries(entity.getNnsEntities());
 
     return StreamEx.of(worldCheckEntitiesIncorporationCountries)
         .append(privateListEntitiesIncorporationCountries)
-        .append(ctrpScreeningEntitiesIncorporationCountries);
+        .append(ctrpScreeningEntitiesIncorporationCountries)
+        .append(nnsEntitiesIncorporationCountries);
   }
 
   private static Stream<String> customerEntitiesIncorporationCountries(

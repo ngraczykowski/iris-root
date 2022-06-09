@@ -26,6 +26,10 @@ public class DocumentExtractor {
       var privateListIndividualsExtractor = new PrivateListIndividualsExtractor(document);
       privateListIndividualsExtractor.extract(individualComposite.getPrivateListIndividuals());
     }
+    if (individualComposite.hasNnsIndividuals()) {
+      var nnsIndividualsExtractor = new NnsIndividualsExtractor(document);
+      nnsIndividualsExtractor.extract(individualComposite.getNnsIndividuals());
+    }
     return document;
   }
 }

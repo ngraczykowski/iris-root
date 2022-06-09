@@ -114,6 +114,7 @@ class GeoResidenciesFeatureQueryFacadeTest extends Specification {
       getWorldCheckIndividuals() >> [worldCheckIndividual1, worldCheckIndividual2]
       getPrivateListIndividuals() >> [privateListIndividual1, privateListIndividual2]
       getCtrpScreeningIndividuals() >> [ctrpIndividual1, ctrpIndividual2]
+      getNnsIndividuals() >> []
     }
 
     when:
@@ -150,7 +151,7 @@ class GeoResidenciesFeatureQueryFacadeTest extends Specification {
       getCustomerIndividuals() >> [customerIndividual1, customerIndividual2]
     }
 
-    def party = new Party([firstCustomerName, secondCustomerName], [])
+    def party = new Party([firstCustomerName, secondCustomerName], [], [])
 
     when:
     def residencies = new GeoResidenciesFeatureQueryFacade(matchData, new CountryDiscoverer()).getApIndividualsGeoResidencies(party)

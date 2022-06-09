@@ -1,10 +1,14 @@
 package com.silenteight.hsbc.bridge.json
 
+import com.silenteight.hsbc.bridge.alert.AlertPayloadConverter.InputCommand
+import com.silenteight.hsbc.bridge.alert.dto.AlertDataComposite
 import com.silenteight.hsbc.bridge.json.ObjectConverter.ObjectConversionException
 import com.silenteight.hsbc.bridge.json.external.model.AlertData
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Specification
+
+import java.util.function.Consumer
 
 class ObjectMapperJsonConverterSpec extends Specification {
 
@@ -37,6 +41,20 @@ class ObjectMapperJsonConverterSpec extends Specification {
 
     then:
     thrown(ObjectConversionException)
+  }
+
+  def "should convert and consume AlertData"() {
+    given:
+    def input = getClass().getResource("/files/nnsAlertTest.json").openStream()
+    def command = new InputCommand("1", input)
+    Consumer<AlertDataComposite> consumer = Mock()
+
+    when:
+    underTest.convertAndConsumeAlertData(command, consumer)
+
+    then:
+    noExceptionThrown()
+    1 * consumer.accept(_)
   }
 
   AlertData getAlertData(){

@@ -1,5 +1,6 @@
 package com.silenteight.hsbc.datasource.feature.date
 
+import com.silenteight.hsbc.bridge.match.MatchRawData
 import com.silenteight.hsbc.datasource.datamodel.*
 import com.silenteight.hsbc.datasource.dto.date.SeverityMode
 import com.silenteight.hsbc.datasource.dto.name.EntityType
@@ -13,58 +14,53 @@ class DateOfBirthFeatureSpec extends Specification {
 
   def "should extract DateFeatureInput from matchData and watchlistTypes for CustomerIndividuals"() {
     given:
-    def matchData = [
-        getCaseInformation       : {
-          [
-              getExtendedAttribute5: {"AML"}
-          ] as CaseInformation
-        },
-        getCustomerEntities      : {null},
-        getCustomerIndividuals   :
-            {
-              [
-                  [
-                      getBirthDate  : {"1992 8 23 00:00:00.0"},
-                      getDateOfBirth: {"11111111"},
-                      getYearOfBirth: {"1994"}
-                  ] as CustomerIndividual
+    def matchData = Mock(MatchData) {
+      getCaseInformation() >> Mock(CaseInformation) {
+        getExtendedAttribute5() >> {"AML"}
+      }
 
-              ]
-            },
-        getWorldCheckIndividuals : {
-          [
-              [
-                  getDobs       : {"22 12 1990"},
-                  getYearOfBirth: {"1994"}
-              ] as WorldCheckIndividual,
-              [
-                  getDobs       : {"22 12 1990"},
-                  getYearOfBirth: {"1994"}
-              ] as WorldCheckIndividual,
-              [
-                  getDobs       : {"10 10 2012"},
-                  getYearOfBirth: {"2012"}
-              ] as WorldCheckIndividual
-          ]
-        },
-        getPrivateListIndividuals: {
-          [
-              [
-                  getDateOfBirth: {"23/12/1995"},
-                  getYearOfBirth: {"1995"}
-              ] as PrivateListIndividual,
-              [
-                  getDateOfBirth: {"23/12/1990"},
-                  getYearOfBirth: {"1995"}
-              ] as PrivateListIndividual,
-              [
-                  getDateOfBirth: {"10 10 2012"},
-                  getYearOfBirth: {null}
-              ] as PrivateListIndividual
-          ]
-        }
+      getCustomerEntities() >> null
 
-    ] as MatchData
+      getCustomerIndividuals() >> [
+          [
+              getBirthDate  : {"1992 8 23 00:00:00.0"},
+              getDateOfBirth: {"11111111"},
+              getYearOfBirth: {"1994"}
+          ] as CustomerIndividual
+      ]
+
+      getWorldCheckIndividuals() >> [
+          [
+              getDobs       : {"22 12 1990"},
+              getYearOfBirth: {"1994"}
+          ] as WorldCheckIndividual,
+          [
+              getDobs       : {"22 12 1990"},
+              getYearOfBirth: {"1994"}
+          ] as WorldCheckIndividual,
+          [
+              getDobs       : {"10 10 2012"},
+              getYearOfBirth: {"2012"}
+          ] as WorldCheckIndividual
+      ]
+
+      getPrivateListIndividuals() >> [
+          [
+              getDateOfBirth: {"23/12/1995"},
+              getYearOfBirth: {"1995"}
+          ] as PrivateListIndividual,
+          [
+              getDateOfBirth: {"23/12/1990"},
+              getYearOfBirth: {"1995"}
+          ] as PrivateListIndividual,
+          [
+              getDateOfBirth: {"10 10 2012"},
+              getYearOfBirth: {null}
+          ] as PrivateListIndividual
+      ]
+
+      getNnsIndividuals() >> []
+    }
 
     when:
     var actual = underTest.retrieve(matchData, watchlistTypes)
@@ -81,22 +77,69 @@ class DateOfBirthFeatureSpec extends Specification {
     }
   }
 
+  def "should extract DateFeatureInput from matchData and watchlistTypes for NNS CustomerIndividuals"() {
+    given:
+    def matchData = Mock(MatchData) {
+      getCaseInformation() >> Mock(CaseInformation) {
+        getExtendedAttribute5() >> {"NNS"}
+      }
+
+      getCustomerEntities() >> null
+
+      getCustomerIndividuals() >> [
+          [
+              getBirthDate  : {"1992 8 23 00:00:00.0"},
+              getDateOfBirth: {"11111111"},
+              getYearOfBirth: {"1994"}
+          ] as CustomerIndividual
+      ]
+
+      getWorldCheckIndividuals() >> []
+
+      getPrivateListIndividuals() >> []
+
+      getNnsIndividuals() >> [
+          [
+              getDobs       : {"22 12 1990"},
+              getYearOfBirth: {"1994"}
+          ] as NegativeNewsScreeningIndividuals,
+          [
+              getDobs       : {"22 12 1990"},
+              getYearOfBirth: {"1994"}
+          ] as NegativeNewsScreeningIndividuals,
+          [
+              getDobs       : {"10 10 2012"},
+              getYearOfBirth: {"2012"}
+          ] as NegativeNewsScreeningIndividuals
+      ]
+    }
+
+    when:
+    var actual = underTest.retrieve(matchData, watchlistTypes)
+
+    then:
+    with(actual) {
+      feature == Feature.DATE_OF_BIRTH.fullName
+      alertedPartyDates.size() == 2
+      watchlistDates.size() == 3
+      watchlistDates == ["22 12 1990", "10 10 2012", "1994"]
+      mode == SeverityMode.NORMAL
+      alertedPartyType == EntityType.INDIVIDUAL
+      alertedPartyDates == ["1992 8 23", "1994"]
+    }
+  }
+
   def "should extract DateFeatureInput from matchData and watchlistTypes for CustomerEntities"() {
     given:
-    def matchData = [
-        getCaseInformation    : {
-          [
+    def matchData = new MatchRawData(
+        caseInformation    : [
               getExtendedAttribute5: {"US-HBUS"}
-          ] as CaseInformation
-        },
-        getCustomerEntities   : {
-          [
+          ] as CaseInformation,
+        customerEntities   : [
               [getEntityName: "test"] as CustomerEntity
-          ]
-        },
-        getCustomerIndividuals:
-            {null},
-    ] as MatchData
+          ],
+        customerIndividuals: [null],
+    )
 
     when:
     var actual = underTest.retrieve(matchData, watchlistTypes)
@@ -134,6 +177,9 @@ class DateOfBirthFeatureSpec extends Specification {
           ] as List,
           'SSC'  : [
               'SSC'
+          ],
+          'NNS'  : [
+              'NNS'
           ]
       ] as Map
 }

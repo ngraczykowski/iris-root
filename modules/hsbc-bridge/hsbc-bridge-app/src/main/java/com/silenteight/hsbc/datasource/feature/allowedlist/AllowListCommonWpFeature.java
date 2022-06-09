@@ -53,6 +53,7 @@ public class AllowListCommonWpFeature implements FeatureValuesRetriever<AllowLis
     values.addAll(collectCountryCodes(entityComposite.getCtrpScreeningEntities()));
     values.addAll(collectIds(entityComposite.getPrivateListEntities()));
     values.addAll(collectIds(entityComposite.getWorldCheckEntities()));
+    values.addAll(collectIds(entityComposite.getNnsEntities()));
 
     return values;
   }
@@ -62,6 +63,7 @@ public class AllowListCommonWpFeature implements FeatureValuesRetriever<AllowLis
     values.addAll(collectCountryCodes(individualComposite.getCtrpScreeningIndividuals()));
     values.addAll(collectIds(individualComposite.getPrivateListIndividuals()));
     values.addAll(collectIds(individualComposite.getWorldCheckIndividuals()));
+    values.addAll(collectIds(individualComposite.getNnsIndividuals()));
 
     return values;
   }

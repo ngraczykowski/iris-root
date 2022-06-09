@@ -44,6 +44,10 @@ class RecommendationMapper {
     if (falsePositive.equals(recommendedAction)) {
       return HsbcRecommendation.AAA_FALSE_POSITIVE;
     } else if (isManualInvestigation(recommendedAction)) {
+      if (isNns(extendedAttribute5)) {
+        return HsbcRecommendation.NEGATIVE_NEWS;
+      }
+
       return isSanOrSsc(extendedAttribute5) ? HsbcRecommendation.LEVEL_2_REVIEW : HsbcRecommendation.LEVEL_1_REVIEW;
     } else if (potentialTruePositive.equals(recommendedAction) && !isSanOrSsc(extendedAttribute5)) {
       return HsbcRecommendation.LEVEL_2_REVIEW;
@@ -58,5 +62,9 @@ class RecommendationMapper {
 
   private boolean isSanOrSsc(String extendedAttribute5) {
     return "SAN".equalsIgnoreCase(extendedAttribute5) || "SSC".equalsIgnoreCase(extendedAttribute5);
+  }
+
+  private boolean isNns(String extendedAttribute5) {
+    return "NNS".equalsIgnoreCase(extendedAttribute5);
   }
 }

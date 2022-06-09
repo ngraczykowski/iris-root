@@ -26,6 +26,19 @@ class OtherCountryFeatureSpec extends Specification implements FullMatch {
     }
   }
 
+  def 'should retrieve other country feature values when customer is individual - Negative News Screening'() {
+    when:
+    def result = underTest.retrieve(NNS_INDIVIDUAL_MATCH)
+
+    then:
+    with(result) {
+      feature == Feature.OTHER_COUNTRY.fullName
+      alertedPartyCountries == ['BY', 'BELARUS;GERMANY', 'BY DE']
+      assertThat(watchlistCountries).containsExactly(
+          'BY DE RU', 'BELARUS;GERMANY;RUSSIAN FEDERATION', 'GERMANY')
+    }
+  }
+
   def 'should retrieve other country feature values when customer is entity'() {
     when:
     def result = underTest.retrieve(FULL_MATCH_3)
@@ -37,6 +50,19 @@ class OtherCountryFeatureSpec extends Specification implements FullMatch {
       assertThat(watchlistCountries).containsExactly(
           'RU', 'RUSSIAN FEDERATION', 'UNKNOWN', 'UNITED STATES', 'US', 'IRAN, ISLAMIC REPUBLIC OF',
           'IR', 'CHABAHAR')
+    }
+  }
+
+  def 'should retrieve other country feature values when customer is entity - Negative News Screening'() {
+    when:
+    def result = underTest.retrieve(NNS_ENTITY_MATCH)
+
+    then:
+    with(result) {
+      feature == Feature.OTHER_COUNTRY.fullName
+      alertedPartyCountries == ["RUSSIAN FEDERATION", "RU", "UA"]
+      assertThat(watchlistCountries).containsExactly(
+          'RU', 'RUSSIAN FEDERATION')
     }
   }
 }

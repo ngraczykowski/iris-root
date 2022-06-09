@@ -1,5 +1,8 @@
 package com.silenteight.hsbc.datasource.category
 
+import com.silenteight.hsbc.bridge.json.internal.model.NegativeNewsScreeningEntities
+import com.silenteight.hsbc.bridge.json.internal.model.NegativeNewsScreeningIndividuals
+
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -34,10 +37,27 @@ class CategoryModelHolderSpec extends Specification {
     'PEP'          || 'PEP'
     'SCION'        || 'EXITS'
     'SSC'          || 'SSC'
+    'NNS'          || 'NNS'
 
     ''             || 'OTHER'
     'DUMMY'        || 'OTHER'
     null           || 'OTHER'
+  }
+
+  @Unroll
+  def 'should return #expected value for #desc'() {
+    when:
+    def result = underTest.isTerrorRelated(List.of(nnsEntities), List.of(nnsIndividuals))
+
+    then:
+    result == expected
+
+    where:
+    desc                                                      || expected || nnsEntities                     || nnsIndividuals
+    "NNS Entities with terror related"                        || "YES"    || nnsEntitiesWithTerrorRelated    || nnsIndividualsWithoutTerrorRelated
+    "NNS Individuals with terror related"                     || "YES"    || nnsEntitiesWithoutTerrorRelated || nnsIndividualsWithTerrorRelated
+    "NNS Individuals and NNS Entities without terror related" || "NO"     || nnsEntitiesWithoutTerrorRelated || nnsIndividualsWithoutTerrorRelated
+    "NNS Individuals and NNS Entities with terror related"    || "YES"    || nnsEntitiesWithTerrorRelated    || nnsIndividualsWithTerrorRelated
   }
 
   class Fixtures {
@@ -67,7 +87,16 @@ class CategoryModelHolderSpec extends Specification {
             ] as List,
             'SSC'  : [
                 'SSC'
+            ],
+            'NNS' : [
+                'NNS'
             ]
         ] as Map
   }
+
+  static def nnsEntitiesWithTerrorRelated = new NegativeNewsScreeningEntities(sicCodeGlobalKeyword: List.of("Terror Related"), sicCodeLocalKeyword: List.of("Terror Related"))
+  static def nnsEntitiesWithoutTerrorRelated = new NegativeNewsScreeningEntities(sicCodeGlobalKeyword: List.of("Bribery and Corruption", "Environmental Crime"), sicCodeLocalKeyword: List.of(""))
+
+  static def nnsIndividualsWithTerrorRelated = new NegativeNewsScreeningIndividuals(sicCodeGlobalKeyword: List.of("Human Rights Violation", "Terror Related"), sicCodeLocalKeyword: List.of("Terror Related"))
+  static def nnsIndividualsWithoutTerrorRelated = new NegativeNewsScreeningIndividuals(sicCodeGlobalKeyword: List.of("Human Rights Violation"), sicCodeLocalKeyword: List.of("Money Laundering"))
 }

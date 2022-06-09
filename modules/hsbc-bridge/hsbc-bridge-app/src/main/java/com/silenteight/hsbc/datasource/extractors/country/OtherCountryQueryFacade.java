@@ -31,8 +31,20 @@ public class OtherCountryQueryFacade implements OtherCountryQuery {
   }
 
   @Override
+  public Stream<String> nnsIndividualsOtherCountries() {
+    return new NnsIndividualsOtherCountriesExtractor(matchData.getNnsIndividuals())
+        .extract();
+  }
+
+  @Override
   public Stream<String> mpWorldCheckEntitiesOtherCountries() {
     return new WorldCheckEntitiesOtherCountriesExtractor(matchData.getWorldCheckEntities())
+        .extract();
+  }
+
+  @Override
+  public Stream<String> mpNnsEntitiesOtherCountries() {
+    return new NnsEntitiesOtherCountriesExtractor(matchData.getNnsEntities())
         .extract();
   }
 

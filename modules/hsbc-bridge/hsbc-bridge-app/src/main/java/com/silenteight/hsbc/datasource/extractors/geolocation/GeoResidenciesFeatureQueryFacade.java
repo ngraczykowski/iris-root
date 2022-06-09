@@ -43,9 +43,10 @@ public class GeoResidenciesFeatureQueryFacade implements GeoResidencyFeatureQuer
     var worldCheckIndividualsGeoResidencies = worldCheckIndividualsGeoResidencies();
     var privateListIndividualsGeoResidencies = privateListIndividualsGeoResidencies();
     var ctrpScreeningIndividualsGeoResidencies = ctrpScreeningIndividualsGeoResidencies();
+    var nnsIndividualsGeoResidencies = nnsIndividualsGeoResidencies();
 
     var fields = Stream.of(worldCheckIndividualsGeoResidencies, privateListIndividualsGeoResidencies,
-        ctrpScreeningIndividualsGeoResidencies);
+        ctrpScreeningIndividualsGeoResidencies, nnsIndividualsGeoResidencies);
 
     return fields.distinct()
         .filter(StringUtils::isNotBlank)
@@ -118,6 +119,13 @@ public class GeoResidenciesFeatureQueryFacade implements GeoResidencyFeatureQuer
   private String ctrpScreeningEntitiesGeoResidencies() {
     var ctrpScreeningEntities = matchData.getCtrpScreeningEntities();
     var fields = new CtrpScreeningExtractor(ctrpScreeningEntities).extract();
+    return GeoLocationExtractor.mergeFields(fields);
+  }
+
+  private String nnsIndividualsGeoResidencies() {
+    var nnsIndividuals = matchData.getNnsIndividuals();
+    var fields = new NnsIndividualsResidenciesExtractor(nnsIndividuals).extract();
+
     return GeoLocationExtractor.mergeFields(fields);
   }
 }

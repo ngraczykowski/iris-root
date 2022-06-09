@@ -8,6 +8,8 @@ public interface RegistrationCountryFeatureQuery {
 
   Stream<String> worldCheckEntitiesRegistrationCountries();
 
+  Stream<String> nnsEntitiesRegistrationCountries();
+
   Stream<String> privateListEntitiesRegistrationCountries();
 
   Stream<String> ctrpScreeningEntitiesRegistrationCountries();

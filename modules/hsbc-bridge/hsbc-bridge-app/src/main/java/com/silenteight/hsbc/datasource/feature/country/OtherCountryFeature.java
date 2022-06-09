@@ -29,14 +29,16 @@ public class OtherCountryFeature implements FeatureValuesRetriever<CountryFeatur
       inputBuilder.watchlistCountries(StreamUtils.toDistinctList(
           query.mpWorldCheckIndividualsOtherCountries(),
           query.mpPrivateListIndividualsOtherCountries(),
-          query.mpCtrpScreeningIndividualsOtherCountries()));
+          query.mpCtrpScreeningIndividualsOtherCountries(),
+          query.nnsIndividualsOtherCountries()));
     } else {
       inputBuilder.alertedPartyCountries(StreamUtils.toDistinctList(
           query.apCustomerEntityOtherCountries()));
       inputBuilder.watchlistCountries(StreamUtils.toDistinctList(
           query.mpWorldCheckEntitiesOtherCountries(),
           query.mpPrivateListEntitiesOtherCountries(),
-          query.mpCtrpScreeningEntitiesOtherCountries()));
+          query.mpCtrpScreeningEntitiesOtherCountries(),
+          query.mpNnsEntitiesOtherCountries()));
     }
 
     var result = inputBuilder

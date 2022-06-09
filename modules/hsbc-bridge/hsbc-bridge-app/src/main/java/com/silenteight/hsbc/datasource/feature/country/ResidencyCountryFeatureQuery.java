@@ -8,6 +8,8 @@ public interface ResidencyCountryFeatureQuery {
 
   Stream<String> worldCheckIndividualsResidencies();
 
+  Stream<String> nnsIndividualsResidencies();
+
   Stream<String> privateListIndividualsResidencies();
 
   Stream<String> ctrpScreeningResidencies();

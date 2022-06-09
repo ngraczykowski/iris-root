@@ -3,7 +3,7 @@ plugins {
   id "com.silenteight.iris.build.spring-boot-application"
   id "com.silenteight.iris.build.container-image"
   id "io.freefair.aspectj.post-compile-weaving"
-
+  id "groovy"
 }
 
 dependencies {
@@ -68,6 +68,7 @@ dependencies {
 
   testAnnotationProcessor libs.lombok
   testImplementation libs.spock.core
+  testImplementation libs.groovy.all
   testImplementation libs.assertj.core
   testImplementation libs.junit.jupiter.api
   testImplementation libs.test.containers.junit.jupiter

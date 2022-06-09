@@ -52,6 +52,48 @@ class IsPepFeatureSpec extends Specification {
     }
   }
 
+  def 'should retrieve isPep values when customer is individual, Negative News Screening'() {
+    given:
+    def matchName = "alerts/f20b466a-8bc7-4703-9dc3-48bea4d97872/matches/e6b4ebd0-e901-4671-9969-a61bf537ca75"
+
+    def customerIndividual = Mock(CustomerIndividual) {
+      getEdqLobCountryCode() >> 'SG'
+    }
+
+    def nnsIndividual = Mock(NegativeNewsScreeningIndividuals) {
+      getListRecordId() >> '376829'
+      getLinkedTo() >> '28966;376830;376831;376832;448756;80217'
+      getFurtherInformation() >> Fixtures.FURTHER_INFORMATION
+      getAllCountryCodes() >> 'PL US RU'
+    }
+
+    def matchData = Mock(MatchData) {
+      isIndividual() >> true
+      getWatchlistId() >> Optional.of('376829')
+      getWatchlistType() >> Optional.of(WatchlistType.NNS_LIST_INDIVIDUALS)
+      getCustomerIndividuals() >> [customerIndividual]
+      getWorldCheckIndividuals() >> []
+      getNnsIndividuals() >> [nnsIndividual]
+      hasWorldCheckIndividuals() >> false
+      hasNnsIndividuals() >> true
+    }
+
+    when:
+    def result = underTest.retrieve(matchData, matchName)
+
+    then:
+    with(result) {
+      match == matchName
+      isPepFeatureInput.feature == Feature.IS_PEP.fullName
+      isPepFeatureInput.watchListItem.id == '376829'
+      isPepFeatureInput.watchListItem.type == 'NNSIndividuals'
+      isPepFeatureInput.watchListItem.furtherInformation == Fixtures.FURTHER_INFORMATION
+      isPepFeatureInput.watchListItem.linkedPepsUids == ['28966;376830;376831;376832;448756;80217']
+      isPepFeatureInput.watchListItem.countries == ['PL', 'US', 'RU']
+      isPepFeatureInput.alertedPartyItem.country == 'SG'
+    }
+  }
+
   def 'should retrieve isPep values when customer is entity'() {
     given:
     def matchName = "alerts/f20b466a-8bc7-4703-9dc3-48bea4d97872/matches/e6b4ebd0-e901-4671-9969-a61bf537ca75"
@@ -92,7 +134,49 @@ class IsPepFeatureSpec extends Specification {
     }
   }
 
-  def 'should not retrieve countries, furtherInformation and linkedPepsUids when watchlist type is different than WorldCheck'() {
+  def 'should retrieve isPep values when customer is entity, Negative News Screening'() {
+    given:
+    def matchName = "alerts/f20b466a-8bc7-4703-9dc3-48bea4d97872/matches/e6b4ebd0-e901-4671-9969-a61bf537ca75"
+
+    def customerEntity = Mock(CustomerEntity) {
+      getEdqLobCountryCode() >> 'SG'
+    }
+
+    def nnsEntity = Mock(NegativeNewsScreeningEntities) {
+      getListRecordId() >> '376829'
+      getLinkedTo() >> '28966;376830;376831;376832;448756;80217'
+      getFurtherInformation() >> Fixtures.FURTHER_INFORMATION
+      getAllCountryCodes() >> 'PL US RU'
+    }
+
+    def matchData = Mock(MatchData) {
+      isEntity() >> true
+      getWatchlistId() >> Optional.of('376829')
+      getWatchlistType() >> Optional.of(WatchlistType.NNS_LIST_ENTITIES)
+      getCustomerEntities() >> [customerEntity]
+      getWorldCheckEntities() >> []
+      getNnsEntities() >> [nnsEntity]
+      hasWorldCheckEntities() >> false
+      hasNnsEntities() >> true
+    }
+
+    when:
+    def result = underTest.retrieve(matchData, matchName)
+
+    then:
+    with(result) {
+      match == matchName
+      isPepFeatureInput.feature == Feature.IS_PEP.fullName
+      isPepFeatureInput.watchListItem.id == '376829'
+      isPepFeatureInput.watchListItem.type == 'NNSEntities'
+      isPepFeatureInput.watchListItem.furtherInformation == Fixtures.FURTHER_INFORMATION
+      isPepFeatureInput.watchListItem.linkedPepsUids == ['28966;376830;376831;376832;448756;80217']
+      isPepFeatureInput.watchListItem.countries == ['PL', 'US', 'RU']
+      isPepFeatureInput.alertedPartyItem.country == 'SG'
+    }
+  }
+
+  def 'should not retrieve countries, furtherInformation and linkedPepsUids when watchlist type is different than WorldCheck and NNS'() {
     def matchName = "alerts/f20b466a-8bc7-4703-9dc3-48bea4d97872/matches/e6b4ebd0-e901-4671-9969-a61bf537ca75"
 
     def customerEntity = Mock(CustomerEntity) {

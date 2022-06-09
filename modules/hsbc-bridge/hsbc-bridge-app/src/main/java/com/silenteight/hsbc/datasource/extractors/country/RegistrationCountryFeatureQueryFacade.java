@@ -2,10 +2,7 @@ package com.silenteight.hsbc.datasource.extractors.country;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.datasource.datamodel.CtrpScreening;
-import com.silenteight.hsbc.datasource.datamodel.EntityComposite;
-import com.silenteight.hsbc.datasource.datamodel.PrivateListEntity;
-import com.silenteight.hsbc.datasource.datamodel.WorldCheckEntity;
+import com.silenteight.hsbc.datasource.datamodel.*;
 import com.silenteight.hsbc.datasource.feature.country.RegistrationCountryFeatureQuery;
 
 import one.util.streamex.StreamEx;
@@ -24,6 +21,13 @@ public class RegistrationCountryFeatureQueryFacade implements RegistrationCountr
         .stream()
         .flatMap(
             RegistrationCountryFeatureQueryFacade::extractWorldCheckEntitiesRegistrationCountries);
+  }
+
+  @Override
+  public Stream<String> nnsEntitiesRegistrationCountries() {
+    return entityComposite.getNnsEntities()
+        .stream()
+        .flatMap(RegistrationCountryFeatureQueryFacade::extractNnsEntitiesRegistrationCountries);
   }
 
   @Override
@@ -57,16 +61,25 @@ public class RegistrationCountryFeatureQueryFacade implements RegistrationCountr
     var worldCheckEntitiesRegistrationCountries = worldCheckEntitiesRegistrationCountries();
     var privateListEntitiesRegistrationCountries = privateListEntitiesRegistrationCountries();
     var ctrpScreeningEntitiesRegistrationCountries = ctrpScreeningEntitiesRegistrationCountries();
+    var nnsEntitiesRegistrationCountries = nnsEntitiesRegistrationCountries();
 
     return StreamEx.of(worldCheckEntitiesRegistrationCountries)
         .append(privateListEntitiesRegistrationCountries)
-        .append(ctrpScreeningEntitiesRegistrationCountries);
+        .append(ctrpScreeningEntitiesRegistrationCountries)
+        .append(nnsEntitiesRegistrationCountries);
   }
 
   private static Stream<String> extractWorldCheckEntitiesRegistrationCountries(
       WorldCheckEntity worldCheckEntity) {
     return Stream.of(
         worldCheckEntity.getRegistrationCountry()
+    ).filter(StringUtils::isNotBlank);
+  }
+
+  private static Stream<String> extractNnsEntitiesRegistrationCountries(
+      NegativeNewsScreeningEntities nnsEntities) {
+    return Stream.of(
+        nnsEntities.getRegistrationCountry()
     ).filter(StringUtils::isNotBlank);
   }
 

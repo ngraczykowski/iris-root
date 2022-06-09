@@ -54,6 +54,8 @@ class GeoResidencyFeatureSpec extends Specification {
       hasPrivateListIndividuals() >> true
       getCtrpScreeningIndividuals() >> [ctrpScreeningIndividuals]
       hasCtrpScreeningIndividuals() >> true
+      getNnsIndividuals() >> []
+      hasNnsIndividuals() >> false
     }
 
     def nameServiceInfoClient = Mock(NameInformationServiceClient)
@@ -67,6 +69,52 @@ class GeoResidencyFeatureSpec extends Specification {
       alertedPartyLocation == 'LOS ANGELES, US, CALIFORNIA UNITED STATES LOS ANGELES US, CALIFORNIA UNITED STATES'
       watchlistLocation ==
           'MINSK;ST PETERSBURG,MINSK;LENINGRAD REGION,BELARUS;RUSSIAN FEDERATION CALIFORNIA UNITED STATES CHABAHAR IR'
+    }
+  }
+
+  def 'should retrieve geoResidencies values when customer is individual - Negative News Screening'() {
+    given:
+    def customerIndividual = Mock(CustomerIndividual) {
+      getAddress() >> 'John Doe Los Angeles, US, California'
+      getProfileFullAddress() >> 'LOS ANGELES US, CALIFORNIA'
+      getResidenceCountries() >> 'United States'
+      getAddressCountry() >> 'United States'
+      getProfileFullName() >> 'John Doe'
+      getFamilyNameOriginal() >> 'Doe'
+      getMiddleName() >> 'John'
+      getGivenName() >> 'John'
+      getOriginalScriptName() >> 'John'
+      getFullNameDerived() >> 'John Doe'
+    }
+
+    def nnsIndividual = Mock(NegativeNewsScreeningIndividuals) {
+      getAddress() >> 'Minsk;St Petersburg,Minsk;Leningrad Region,BELARUS;RUSSIAN FEDERATION'
+    }
+
+    def matchData = Mock(MatchData) {
+      isIndividual() >> true
+      getCustomerIndividuals() >> [customerIndividual, customerIndividual]
+      getWorldCheckIndividuals() >> []
+      hasWorldCheckIndividuals() >> false
+      getPrivateListIndividuals() >> []
+      hasPrivateListIndividuals() >> false
+      getCtrpScreeningIndividuals() >> []
+      hasCtrpScreeningIndividuals() >> false
+      getNnsIndividuals() >> [nnsIndividual]
+      hasNnsIndividuals() >> true
+    }
+
+    def nameServiceInfoClient = Mock(NameInformationServiceClient)
+
+    when:
+    def actual = underTest.retrieve(matchData, new CountryDiscoverer(), nameServiceInfoClient)
+
+    then:
+    with(actual) {
+      feature == Feature.GEO_RESIDENCIES.fullName
+      alertedPartyLocation == 'LOS ANGELES, US, CALIFORNIA UNITED STATES LOS ANGELES US, CALIFORNIA UNITED STATES'
+      watchlistLocation ==
+          'MINSK;ST PETERSBURG,MINSK;LENINGRAD REGION,BELARUS;RUSSIAN FEDERATION'
     }
   }
 

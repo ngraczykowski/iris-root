@@ -33,7 +33,8 @@ public class ResidencyCountryFeature implements FeatureValuesRetriever<CountryFe
       inputBuilder.watchlistCountries(StreamUtils.toDistinctList(
           query.worldCheckIndividualsResidencies(),
           query.privateListIndividualsResidencies(),
-          query.ctrpScreeningResidencies()));
+          query.ctrpScreeningResidencies(),
+          query.nnsIndividualsResidencies()));
     } else {
       inputBuilder.alertedPartyCountries(Collections.emptyList());
       inputBuilder.watchlistCountries(Collections.emptyList());

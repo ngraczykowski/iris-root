@@ -22,6 +22,18 @@ class GenderFeatureSpec extends Specification implements FullMatch, Match {
     }
   }
 
+  def 'should retrieve gender feature values for Negative News Screening'() {
+    when:
+    def result = underTest.retrieve(NNS_INDIVIDUAL_MATCH)
+
+    then:
+    with(result) {
+      feature == Feature.GENDER.fullName
+      alertedPartyGenders == ['M']
+      watchlistGenders == ['M']
+    }
+  }
+
   def 'should retrieve empty alertedPartyGenders when genderDerivedFlag is not "N"'() {
     when:
     def result = underTest.retrieve(MATCH_WITHOUT_AP_GENDER_DERIVED_FLAG_1)

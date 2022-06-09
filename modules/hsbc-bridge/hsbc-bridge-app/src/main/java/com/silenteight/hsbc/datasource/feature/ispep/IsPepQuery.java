@@ -10,17 +10,17 @@ public interface IsPepQuery {
 
   String apWorldCheckEntitiesExtractEdqLobCountryCode();
 
-  String mpWorldCheckIndividualsFurtherInformation();
+  public String individualsFurtherInformation();
 
-  Stream<String> mpWorldCheckIndividualsLinkedTo();
+  public Stream<String> individualsLinkedTo();
 
-  Stream<String> mpWorldCheckIndividualsCountryCodes();
+  Stream<String> individualsCountryCodes();
 
-  String mpWorldCheckEntitiesFurtherInformation();
+  String entitiesFurtherInformation();
 
-  Stream<String> mpWorldCheckEntitiesLinkedTo();
+  Stream<String> entitiesLinkedTo();
 
-  Stream<String> mpWorldCheckEntitiesCountryCodes();
+  Stream<String> entitiesCountryCodes();
 
   interface Factory {
 

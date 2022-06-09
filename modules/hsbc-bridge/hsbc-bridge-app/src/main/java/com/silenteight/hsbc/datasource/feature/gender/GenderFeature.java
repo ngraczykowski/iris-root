@@ -2,10 +2,7 @@ package com.silenteight.hsbc.datasource.feature.gender;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.hsbc.datasource.datamodel.IndividualComposite;
-import com.silenteight.hsbc.datasource.datamodel.MatchData;
-import com.silenteight.hsbc.datasource.datamodel.PrivateListIndividual;
-import com.silenteight.hsbc.datasource.datamodel.WorldCheckIndividual;
+import com.silenteight.hsbc.datasource.datamodel.*;
 import com.silenteight.hsbc.datasource.dto.gender.GenderFeatureInputDto;
 import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
@@ -34,10 +31,13 @@ public class GenderFeature implements FeatureValuesRetriever<GenderFeatureInputD
           getWorldCheckIndividualsGenders(matchData.getWorldCheckIndividuals());
       var privateListIndividualsGenders =
           getPrivateListIndividualsGenders(matchData.getPrivateListIndividuals());
+      var nnsIndividualsGenders =
+          getNnsIndividualsGenders(matchData.getNnsIndividuals());
 
       var wlGenders = mergeLists(
           worldCheckIndividualsGenders,
-          privateListIndividualsGenders);
+          privateListIndividualsGenders,
+          nnsIndividualsGenders);
 
       var apGender = getCustomerIndividualsGender(matchData);
 
@@ -73,9 +73,11 @@ public class GenderFeature implements FeatureValuesRetriever<GenderFeatureInputD
   }
 
   private List<String> mergeLists(
-      Stream<String> worldCheckIndividualsGenders, Stream<String> privateListIndividualsGenders) {
+      Stream<String> worldCheckIndividualsGenders, Stream<String> privateListIndividualsGenders,
+      Stream<String> nnsIndividualsGenders) {
     return Stream
-        .concat(worldCheckIndividualsGenders, privateListIndividualsGenders)
+        .of(worldCheckIndividualsGenders, privateListIndividualsGenders, nnsIndividualsGenders)
+        .flatMap(stream -> stream)
         .collect(Collectors.toList());
   }
 
@@ -92,6 +94,15 @@ public class GenderFeature implements FeatureValuesRetriever<GenderFeatureInputD
       List<WorldCheckIndividual> worldCheckIndividuals) {
     return worldCheckIndividuals.stream()
         .map(GenderFieldsWrapper::fromWorldCheckIndividual)
+        .map(GenderFieldsWrapper::tryExtracting)
+        .filter(Optional::isPresent)
+        .map(Optional::get);
+  }
+
+  private Stream<String> getNnsIndividualsGenders(
+      List<NegativeNewsScreeningIndividuals> nnsIndividuals) {
+    return nnsIndividuals.stream()
+        .map(GenderFieldsWrapper::fromNnsIndividual)
         .map(GenderFieldsWrapper::tryExtracting)
         .filter(Optional::isPresent)
         .map(Optional::get);

@@ -20,6 +20,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
 
@@ -30,6 +31,7 @@ import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.AE_
 import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.GOV_EVENT_EXCHANGE;
 import static org.springframework.amqp.core.ExchangeBuilder.topicExchange;
 
+@Profile("!dev")
 @Configuration
 @ConditionalOnClass(name = "com.rabbitmq.client.ConnectionFactory")
 @EnableRabbit

@@ -44,6 +44,8 @@ class GeoPlaceOfBirthFeatureSpec extends Specification {
       hasPrivateListIndividuals() >> true
       getCtrpScreeningIndividuals() >> [ctrpScreeningIndividuals]
       hasCtrpScreeningIndividuals() >> true
+      getNnsIndividuals() >> []
+      hasNnsIndividuals()>> false
     }
 
     when:
@@ -53,7 +55,44 @@ class GeoPlaceOfBirthFeatureSpec extends Specification {
     with(actual) {
       feature == Feature.GEO_PLACE_OF_BIRTH.fullName
       alertedPartyLocation == 'GERMANY GERMANY BERLIN UNKNOWN'
-      watchlistLocation == 'GERMANY GERMANY (GDR) GERNAMY (GDR) UNKNOWN CHABAHAR IR'
+      watchlistLocation == 'GERMANY GERMANY (GDR) GERNAMY (GDR) UNKNOWN CHABAHAR IR '
+    }
+  }
+
+  def 'should retrieve geoPlaceOfBirth values when customer is individual - Negative News Screening'() {
+    given:
+    def customerIndividual = Mock(CustomerIndividual) {
+      getPlaceOfBirth() >> 'UNKNOWN'
+      getCountryOfBirth() >> 'GERMANY'
+      getStateProvinceOrCountyOfBirth() >> 'GERMANY'
+      getTownOfBirth() >> 'Berlin'
+    }
+
+    def nnsIndividual = Mock(NegativeNewsScreeningIndividuals) {
+      getOriginalPlaceOfBirth() >> 'Germany; Germany (GDR); Gernamy (GDR)'
+    }
+
+    def matchData = Mock(MatchData) {
+      isIndividual() >> true
+      getCustomerIndividuals() >> [customerIndividual]
+      getWorldCheckIndividuals() >> []
+      hasWorldCheckIndividuals() >> false
+      getPrivateListIndividuals() >> []
+      hasPrivateListIndividuals() >> false
+      getCtrpScreeningIndividuals() >> []
+      hasCtrpScreeningIndividuals() >> false
+      getNnsIndividuals() >> [nnsIndividual]
+      hasNnsIndividuals() >> true
+    }
+
+    when:
+    def actual = underTest.retrieve(matchData)
+
+    then:
+    with(actual) {
+      feature == Feature.GEO_PLACE_OF_BIRTH.fullName
+      alertedPartyLocation == 'GERMANY GERMANY BERLIN UNKNOWN'
+      watchlistLocation == ' GERMANY GERMANY (GDR) GERNAMY (GDR)'
     }
   }
 }

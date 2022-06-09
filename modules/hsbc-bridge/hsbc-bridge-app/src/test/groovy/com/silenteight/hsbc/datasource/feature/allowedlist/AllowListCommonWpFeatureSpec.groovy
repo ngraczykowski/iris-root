@@ -2,6 +2,8 @@ package com.silenteight.hsbc.datasource.feature.allowedlist
 
 import com.silenteight.hsbc.datasource.datamodel.CtrpScreening
 import com.silenteight.hsbc.datasource.datamodel.MatchData
+import com.silenteight.hsbc.datasource.datamodel.NegativeNewsScreeningEntities
+import com.silenteight.hsbc.datasource.datamodel.NegativeNewsScreeningIndividuals
 import com.silenteight.hsbc.datasource.datamodel.PrivateListEntity
 import com.silenteight.hsbc.datasource.datamodel.PrivateListIndividual
 import com.silenteight.hsbc.datasource.datamodel.WorldCheckEntity
@@ -45,6 +47,31 @@ class AllowListCommonWpFeatureSpec extends Specification {
     }
   }
 
+  def 'should return feature values for individual - Negative News Screening'() {
+    given:
+    def matchData = Mock(MatchData) {
+      isIndividual() >> true
+      getCtrpScreeningIndividuals() >> []
+      getPrivateListIndividuals() >> []
+      getWorldCheckIndividuals() >> []
+      getNnsIndividuals() >> [
+          Mock(NegativeNewsScreeningIndividuals) {
+            getListRecordId() >> 'worldCheckListId'
+          }
+      ]
+    }
+
+    when:
+    def result = underTest.retrieve(matchData)
+
+    then:
+    with(result) {
+      allowListNames == ['hsbc_common_watchlist_party']
+      characteristicsValues == ['worldCheckListId']
+      feature == 'features/commonMp'
+    }
+  }
+
   def 'should return feature values for entity'() {
     given:
     def matchData = Mock(MatchData) {
@@ -73,6 +100,31 @@ class AllowListCommonWpFeatureSpec extends Specification {
     with(result) {
       allowListNames == ['hsbc_common_watchlist_party']
       characteristicsValues == ['worldCheckListId', 'privateListId', 'countryCode']
+      feature == 'features/commonMp'
+    }
+  }
+
+  def 'should return feature values for entity - Negative News Screening'() {
+    given:
+    def matchData = Mock(MatchData) {
+      isIndividual() >> false
+      getCtrpScreeningEntities() >> []
+      getPrivateListEntities() >> []
+      getWorldCheckEntities() >> []
+      getNnsEntities() >> [
+          Mock(NegativeNewsScreeningEntities) {
+            getListRecordId() >> 'worldCheckListId'
+          }
+      ]
+    }
+
+    when:
+    def result = underTest.retrieve(matchData)
+
+    then:
+    with(result) {
+      allowListNames == ['hsbc_common_watchlist_party']
+      characteristicsValues == ['worldCheckListId']
       feature == 'features/commonMp'
     }
   }

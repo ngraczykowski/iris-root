@@ -21,15 +21,27 @@ public interface NameQuery {
 
   Stream<String> mpWorldCheckIndividualsExtractNames();
 
+  Stream<String> nnsIndividualsExtractNames();
+
   Stream<String> mpWorldCheckIndividualsExtractOtherNames();
+
+  Stream<String> nnsIndividualsExtractOtherNames();
 
   Stream<String> mpWorldCheckIndividualsExtractXmlNamesWithCountries();
 
+  public Stream<String> nnsIndividualsExtractXmlNamesWithCountries();
+
   Stream<String> mpWorldCheckEntitiesExtractNames();
+
+  Stream<String> nnsEntitiesExtractNames();
 
   Stream<String> mpWorldCheckEntitiesExtractOtherNames();
 
+  Stream<String> nnsEntitiesExtractOtherNames();
+
   Stream<String> mpWorldCheckEntitiesExtractXmlNamesWithCountries();
+
+  Stream<String> nnsEntitiesExtractXmlNamesWithCountries();
 
   Stream<String> mpPrivateListIndividualsExtractNames();
 

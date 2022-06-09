@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-class MatchRawData implements MatchData {
+public class MatchRawData implements MatchData {
 
   @JsonDeserialize(as = com.silenteight.hsbc.bridge.json.internal.model.CaseInformation.class)
   private CaseInformation caseInformation;
@@ -47,9 +47,27 @@ class MatchRawData implements MatchData {
   @JsonDeserialize(contentAs = com.silenteight.hsbc.bridge.json.internal.model.CaseComment.class)
   private List<CaseComment> caseComments;
 
+  @JsonDeserialize(contentAs = com.silenteight.hsbc.bridge.json.internal.model.NegativeNewsScreeningEntities.class)
+  private List<NegativeNewsScreeningEntities> negativeNewsScreeningEntities;
+
+  @JsonDeserialize(contentAs = com.silenteight.hsbc.bridge.json.internal.model.NegativeNewsScreeningIndividuals.class)
+  private List<NegativeNewsScreeningIndividuals> negativeNewsScreeningIndividuals;
+
   @Override
   @JsonIgnore
   public boolean isIndividual() {
     return CollectionUtils.isNotEmpty(getCustomerIndividuals());
+  }
+
+  @Override
+  @JsonIgnore
+  public List<NegativeNewsScreeningEntities> getNnsEntities() {
+    return negativeNewsScreeningEntities;
+  }
+
+  @Override
+  @JsonIgnore
+  public List<NegativeNewsScreeningIndividuals> getNnsIndividuals() {
+    return negativeNewsScreeningIndividuals;
   }
 }

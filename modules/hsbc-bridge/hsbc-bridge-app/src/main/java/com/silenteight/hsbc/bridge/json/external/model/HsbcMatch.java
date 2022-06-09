@@ -21,4 +21,7 @@ public class HsbcMatch implements Serializable {
   private List<CtrpScreeningEntity> ctrpScreeningEntities = new ArrayList<>();
   private List<CtrpScreeningIndividual> ctrpScreeningIndividuals = new ArrayList<>();
   private List<CaseComment> caseComments = new ArrayList<>();
+  private List<NegativeNewsScreeningEntities> negativeNewsScreeningEntities = new ArrayList<>();
+  private List<NegativeNewsScreeningIndividuals> negativeNewsScreeningIndividuals =
+      new ArrayList<>();
 }

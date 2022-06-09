@@ -9,4 +9,6 @@ public class Party {
 
   List<String> alertedPartyIndividuals;
   List<String> watchlistPartyIndividuals;
+
+  List<String> nnsIndividuals;
 }

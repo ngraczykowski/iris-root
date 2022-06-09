@@ -56,9 +56,9 @@ public class IsPepFeature implements IsPepFeatureValuesRetriever<IsPepInputDto> 
   private IsPepFeatureInputDto getIsPepFeatureInputForIndividual(MatchData matchData) {
     var query = isPepQueryFactory.create(matchData);
     var apIndividualExtractLobCountry = query.apWorldCheckIndividualsExtractEdqLobCountryCode();
-    var furtherInformation = query.mpWorldCheckIndividualsFurtherInformation();
-    var linkedTo = StreamUtils.toDistinctList(query.mpWorldCheckIndividualsLinkedTo());
-    var wlCountries = StreamUtils.toDistinctList(query.mpWorldCheckIndividualsCountryCodes());
+    var furtherInformation = query.individualsFurtherInformation();
+    var linkedTo = StreamUtils.toDistinctList(query.individualsLinkedTo());
+    var wlCountries = StreamUtils.toDistinctList(query.individualsCountryCodes());
 
     return IsPepFeatureInputDto.builder()
         .feature(getFeatureName())
@@ -75,9 +75,9 @@ public class IsPepFeature implements IsPepFeatureValuesRetriever<IsPepInputDto> 
   private IsPepFeatureInputDto getIsPepFeatureInputForEntities(MatchData matchData) {
     var query = isPepQueryFactory.create(matchData);
     var apEntityExtractLobCountry = query.apWorldCheckEntitiesExtractEdqLobCountryCode();
-    var furtherInformation = query.mpWorldCheckEntitiesFurtherInformation();
-    var linkedTo = StreamUtils.toDistinctList(query.mpWorldCheckEntitiesLinkedTo());
-    var wlCountries = StreamUtils.toDistinctList(query.mpWorldCheckEntitiesCountryCodes());
+    var furtherInformation = query.entitiesFurtherInformation();
+    var linkedTo = StreamUtils.toDistinctList(query.entitiesLinkedTo());
+    var wlCountries = StreamUtils.toDistinctList(query.entitiesCountryCodes());
 
     return IsPepFeatureInputDto.builder()
         .feature(getFeatureName())

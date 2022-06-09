@@ -84,8 +84,8 @@ class NameExtractor {
     return values;
   }
 
-  static Party applyOriginalScriptEnhancements(List<String> alertedParty, List<String> matchParty) {
-    var party = keepOnlyOriginalScriptNamesIfAvailable(alertedParty, matchParty);
+  static Party applyOriginalScriptEnhancements(List<String> alertedParty, List<String> matchParty, List<String> nnsParty) {
+    var party = keepOnlyOriginalScriptNamesIfAvailable(alertedParty, matchParty, nnsParty);
 
     var apWithoutChineseNumeric =
         removeRedundantNumericChineseScript(party.getAlertedPartyIndividuals());
@@ -93,22 +93,27 @@ class NameExtractor {
     var wlWithoutChineseNumeric =
         removeRedundantNumericChineseScript(party.getWatchlistPartyIndividuals());
 
-    return new Party(apWithoutChineseNumeric, wlWithoutChineseNumeric);
+    var nnsWithoutChineseNumeric =
+        removeRedundantNumericChineseScript(party.getNnsIndividuals());
+
+    return new Party(apWithoutChineseNumeric, wlWithoutChineseNumeric, nnsWithoutChineseNumeric);
   }
 
   private static Party keepOnlyOriginalScriptNamesIfAvailable(
-      List<String> apNames, List<String> mpNames) {
+      List<String> apNames, List<String> mpNames, List<String> nnsNames) {
     if (apNames != null && mpNames != null) {
       var apOriginalScriptNames =
           apNames.stream().filter(NameExtractor::isOriginalScript).collect(Collectors.toList());
       var mpOriginalScriptNames =
           mpNames.stream().filter(NameExtractor::isOriginalScript).collect(Collectors.toList());
+      var nnsNamesOriginalScriptNames =
+          nnsNames.stream().filter(NameExtractor::isOriginalScript).collect(Collectors.toList());
 
       if (!apOriginalScriptNames.isEmpty() && !mpOriginalScriptNames.isEmpty()) {
-        return new Party(apOriginalScriptNames, mpOriginalScriptNames);
+        return new Party(apOriginalScriptNames, mpOriginalScriptNames, nnsNamesOriginalScriptNames);
       }
     }
-    return new Party(apNames, mpNames);
+    return new Party(apNames, mpNames, nnsNames);
   }
 
   private static List<String> removeRedundantNumericChineseScript(List<String> names) {

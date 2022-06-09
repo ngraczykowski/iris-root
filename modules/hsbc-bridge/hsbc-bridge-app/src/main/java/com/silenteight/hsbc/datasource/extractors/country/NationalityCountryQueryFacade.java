@@ -18,8 +18,9 @@ public class NationalityCountryQueryFacade implements NationalityCountryQuery {
   @Override
   public Stream<String> apDocumentCountries() {
     return new DocumentExtractor()
-        .convertAlertedPartyDocumentNumbers(individualComposite.getCustomerIndividuals())
-        .getAllCountries().stream();
+            .convertAlertedPartyDocumentNumbers(individualComposite.getCustomerIndividuals())
+            .getAllCountries()
+            .stream();
   }
 
   @Override
@@ -30,8 +31,10 @@ public class NationalityCountryQueryFacade implements NationalityCountryQuery {
 
   @Override
   public Stream<String> mpDocumentCountries() {
-    return new DocumentExtractor().convertMatchedPartyDocumentNumbers(individualComposite)
-        .getAllCountries().stream();
+    return new DocumentExtractor()
+        .convertMatchedPartyDocumentNumbers(individualComposite)
+        .getAllCountries()
+        .stream();
   }
 
   @Override
@@ -55,14 +58,22 @@ public class NationalityCountryQueryFacade implements NationalityCountryQuery {
         .flatMap(CtrpScreeningIndividualsCountriesExtractor::extract);
   }
 
+  public Stream<String> nnsIndividualsCountries() {
+    return individualComposite.getNnsIndividuals().stream()
+        .map(NnsIndividualsCountriesExtractor::new)
+        .flatMap(NnsIndividualsCountriesExtractor::extract);
+  }
+
   @Override
   public Stream<String> getWatchlistIndividualsNationalityCountry() {
     var mpWorldCheckCountries = mpWorldCheckIndividualCountries();
     var mpPrivateListIndividualsCountries = mpPrivateListIndividualsCountries();
     var mpCtrpScreeningIndividualsCountries = mpCtrpScreeningIndividualsCountries();
+    var nnsIndividualsCountries = nnsIndividualsCountries();
 
     return StreamEx.of(mpWorldCheckCountries)
         .append(mpPrivateListIndividualsCountries)
-        .append(mpCtrpScreeningIndividualsCountries);
+        .append(mpCtrpScreeningIndividualsCountries)
+        .append(nnsIndividualsCountries);
   }
 }

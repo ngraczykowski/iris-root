@@ -74,6 +74,7 @@ class NameFeatureSpec extends Specification {
       hasWorldCheckIndividuals() >> true
       getPrivateListIndividuals() >> [privateListIndividual]
       hasPrivateListIndividuals() >> true
+      getNnsIndividuals() >> []
     }
 
     when:
@@ -102,6 +103,83 @@ class NameFeatureSpec extends Specification {
         containsAll(
             [NameType.REGULAR, NameType.REGULAR, NameType.REGULAR,
              NameType.ALIAS, NameType.ALIAS])
+      }
+      alertedPartyType == EntityType.INDIVIDUAL
+      matchingTexts == []
+    }
+  }
+
+  def 'should retrieve name values when match is individual Negative News Screening'() {
+    given:
+    def getNameInformationResponseDto = GetNameInformationResponseDto.builder()
+        .foreignAliases(createForeignAliases())
+        .build()
+
+    def getNameInformationRequestDto = GetNameInformationRequestDto.builder()
+        .watchlistUuid('12')
+        .build()
+
+    def customerIndividual = Mock(CustomerIndividual) {
+      getProfileFullName() >> ''
+      getGivenName() >> 'ALAKSANDR LEANIDAVICH'
+      getMiddleName() >> ''
+      getFamilyNameOriginal() >> 'ZIMOUSKI'
+      getFullNameDerived() >> 'AKIAKSANDR LEANIDAVICH ZIMOUSKI'
+      getOriginalScriptName() >> ''
+    }
+
+    def nnsIndividuals = Mock(NegativeNewsScreeningIndividuals) {
+      getListRecordId() >> '12'
+      getPrimaryName() >> 'Aleksander ZIMOWSKI'
+      getOriginalFullName() >> 'Aleksandr Leonidovich ZIMOWSKI'
+      getDerivedFullName() >> 'Aleksandr Leonidovich ZIMOWSKI'
+      getOriginalScriptName() >> ''
+      getOriginalGivenNames() >> 'Akiaksandr Leanidavich'
+      getOriginalFamilyName() >> 'ZIMOWSKI'
+      getOriginalFullName() >> 'Akiaksandr Leanidavich ZIMOUSKI'
+      getCountryOfBirth() >> 'GERMANY'
+      getNationalities() >> 'DE'
+      getPassportCountry() >> ''
+      getNativeAliasLanguageCountry() >> ''
+      getAddressCountry() >> 'BY RU'
+      getResidenceCountry() >> 'BY RU'
+      getAllCountryCodes() >> 'BY DE RU'
+      getAllCountries() >> 'BELARUS;GERMANY;RUSSIAN FEDERATION'
+      getOriginalCountries() >> 'GERMANY'
+    }
+
+    def matchData = Mock(MatchData) {
+      isIndividual() >> true
+      getCustomerIndividuals() >> [customerIndividual]
+      getWorldCheckIndividuals() >> []
+      hasWorldCheckIndividuals() >> true
+      getPrivateListIndividuals() >> []
+      hasPrivateListIndividuals() >> true
+      getNnsIndividuals() >> [nnsIndividuals]
+    }
+
+    when:
+    def result = underTest.retrieve(matchData, client)
+
+    then:
+    1 * client.getNameInformation(getNameInformationRequestDto) >>
+        Optional.of(getNameInformationResponseDto)
+
+    with(result) {
+      feature == Feature.NAME.fullName
+      alertedPartyNames.size() == 2
+      with(alertedPartyNames.name) {
+        containsAll(['ALAKSANDR LEANIDAVICH ZIMOUSKI', 'AKIAKSANDR LEANIDAVICH ZIMOUSKI'])
+      }
+      watchlistNames.size() == 2
+      with(watchlistNames.name) {
+        containsAll(
+            ['Aleksander ZIMOWSKI',
+             'Aleksandr Leonidovich ZIMOWSKI'])
+      }
+      with(watchlistNames.type) {
+        containsAll(
+            [NameType.REGULAR, NameType.REGULAR])
       }
       alertedPartyType == EntityType.INDIVIDUAL
       matchingTexts == []
@@ -156,6 +234,7 @@ class NameFeatureSpec extends Specification {
       hasWorldCheckEntities() >> true
       getPrivateListEntities() >> [privateListEntity]
       hasPrivateListEntities() >> true
+      getNnsEntities() >> []
     }
 
     when:
@@ -180,6 +259,77 @@ class NameFeatureSpec extends Specification {
       }
       with(watchlistNames.type) {
         containsAll([NameType.REGULAR, NameType.REGULAR, NameType.REGULAR])
+      }
+      alertedPartyType == EntityType.ORGANIZATION
+      matchingTexts == []
+    }
+  }
+
+  def 'should retrieve name values when match is entity Negative News Screening'() {
+    given:
+    def getNameInformationResponseDto = GetNameInformationResponseDto.builder()
+        .foreignAliases(createForeignAliases())
+        .build()
+
+    def getNameInformationRequestDto = GetNameInformationRequestDto.builder()
+        .watchlistUuid('12')
+        .build()
+
+    def customerEntity = Mock(CustomerEntity) {
+      getEntityNameOriginal() >>
+          'AKTSIONERNOE OBSHCHESTVO KORPORATSIIA AVIAKOSMICHESKOE OBORUDOVANIE'
+      getEntityName() >>
+          'AKTSIONERNOE OBSHCHESTVO KORPORATSIIA AVIAKOSMICHESKOE OBORUDOVANIE'
+      getOriginalScriptName() >> ''
+    }
+
+    def nnsEntity = Mock(NegativeNewsScreeningEntities) {
+      getListRecordId() >> '12'
+      getPrimaryName() >> 'AKTSIONERNOER'
+      getOriginalEntityName() >> 'AKTSIONERNOE'
+      getDerivedEntityName() >> 'AKTSIONERNOE'
+      getOriginalScriptName() >> ''
+      getAllCountryCodes() >> 'RU'
+      getAllCountries() >> 'RUSSIAN FEDERATION'
+      getRegistrationCountry() >> 'RUSSIAN FEDERATION'
+      getAddressCountry() >> 'RU'
+      getOperatingCountries() >> 'RUSSIAN FEDERATION'
+      getAllCountryCodes() >> 'RU'
+      getAllCountries() >> 'RUSSIAN FEDERATION'
+      getNativeAliasLanguageCountry() >> ''
+    }
+
+    def matchData = Mock(MatchData) {
+      isEntity() >> true
+      getCustomerEntities() >> [customerEntity]
+      getWorldCheckEntities() >> []
+      hasWorldCheckEntities() >> true
+      getPrivateListEntities() >> []
+      hasPrivateListEntities() >> true
+      getNnsEntities() >> [nnsEntity]
+    }
+
+    when:
+    def result = underTest.retrieve(matchData, client)
+
+    then:
+    1 * client.getNameInformation(getNameInformationRequestDto) >>
+        Optional.of(getNameInformationResponseDto)
+
+    with(result) {
+      feature == Feature.NAME.fullName
+      alertedPartyNames.size() == 1
+      with(alertedPartyNames.name) {
+        containsAll(['AKTSIONERNOE OBSHCHESTVO KORPORATSIIA AVIAKOSMICHESKOE OBORUDOVANIE'])
+      }
+      watchlistNames.size() == 2
+      with(watchlistNames.name) {
+        containsAll(
+            ['AKTSIONERNOER',
+             'AKTSIONERNOE'])
+      }
+      with(watchlistNames.type) {
+        containsAll([NameType.REGULAR, NameType.REGULAR])
       }
       alertedPartyType == EntityType.ORGANIZATION
       matchingTexts == []

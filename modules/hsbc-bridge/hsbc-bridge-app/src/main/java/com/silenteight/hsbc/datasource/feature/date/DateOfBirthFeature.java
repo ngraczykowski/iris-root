@@ -38,8 +38,12 @@ public class DateOfBirthFeature implements DateFeatureValuesRetriever<DateFeatur
         matchData.getPrivateListIndividuals()).extract();
     var mpDobsWorldCheckIndividuals = new WorldCheckIndividualsDateExtractor(
         matchData.getWorldCheckIndividuals()).extract();
+    var mpDobsNnsIndividuals = new NnsIndividualsDateExtractor(
+        matchData.getNnsIndividuals()).extract();
 
-    var wlDates = Stream.concat(mpDobsWorldCheckIndividuals, mpDobsPrivateWatchlistDates);
+    var wlDates =
+        Stream.of(mpDobsWorldCheckIndividuals, mpDobsPrivateWatchlistDates, mpDobsNnsIndividuals)
+            .flatMap(stream -> stream);
 
     var result = featureBuilder
         .alertedPartyDates(StreamUtils.toDistinctList(apDates))

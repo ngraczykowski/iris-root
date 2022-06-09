@@ -30,7 +30,8 @@ public enum Feature {
   DATE_OF_BIRTH("dateOfBirth"),
   HISTORICAL_IS_CASE_TP_MARKED("isCaseTpMarked"),
   HISTORICAL_IS_AP_TP_MARKED("isApTpMarked"),
-  HISTORICAL_IS_TP_MARKED("isTpMarked");
+  HISTORICAL_IS_TP_MARKED("isTpMarked"),
+  NEWS_AGE("newsAge");
 
   private static final String PREFIX = "features/";
 

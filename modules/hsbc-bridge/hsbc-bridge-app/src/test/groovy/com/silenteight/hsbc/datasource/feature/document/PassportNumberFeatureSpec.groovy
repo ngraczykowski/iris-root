@@ -2,11 +2,11 @@ package com.silenteight.hsbc.datasource.feature.document
 
 import com.silenteight.hsbc.datasource.datamodel.CustomerIndividual
 import com.silenteight.hsbc.datasource.datamodel.MatchData
+import com.silenteight.hsbc.datasource.datamodel.NegativeNewsScreeningIndividuals
 import com.silenteight.hsbc.datasource.datamodel.PrivateListIndividual
 import com.silenteight.hsbc.datasource.datamodel.WorldCheckIndividual
 import com.silenteight.hsbc.datasource.extractors.document.PassportNumberDocumentQueryConfigurer
 import com.silenteight.hsbc.datasource.feature.Feature
-import com.silenteight.hsbc.datasource.feature.document.PassportNumberFeature
 
 import spock.lang.Specification
 
@@ -76,6 +76,49 @@ class PassportNumberFeatureSpec extends Specification {
       alertedPartyDocuments == ['123456']
       watchlistDocuments.size() == 3
       watchlistDocuments == ['KJ0114578', 'K45R78986', 'SUFFIX']
+    }
+  }
+
+  def 'should retrieve passport number document values when customer is individual - Negative News Screening'() {
+    given:
+    def customerIndividual = Mock(CustomerIndividual) {
+      getIdentificationDocument1() >> '"P","123456"'
+      getIdentificationDocument2() >> '2'
+      getIdentificationDocument3() >> '3'
+      getIdentificationDocument4() >> '4'
+      getIdentificationDocument5() >> '5'
+      getIdentificationDocument6() >> '6'
+      getIdentificationDocument7() >> '7'
+      getIdentificationDocument8() >> '8'
+      getIdentificationDocument9() >> '9'
+      getIdentificationDocument10() >> '10'
+    }
+
+    def nnsIndividual = Mock(NegativeNewsScreeningIndividuals) {
+      getPassportNumber() >> 'KJ0114578 (VIET NAM)'
+    }
+
+    def matchData = Mock(MatchData) {
+      isIndividual() >> true
+      getCustomerIndividuals() >> [customerIndividual]
+      getWorldCheckIndividuals() >> []
+      hasWorldCheckIndividuals() >> false
+      getPrivateListIndividuals() >> []
+      hasPrivateListIndividuals() >> false
+      getNnsIndividuals() >> [nnsIndividual]
+      hasNnsIndividuals() >> true
+    }
+
+    when:
+    def result = underTest.retrieve(matchData)
+
+    then:
+    with(result) {
+      feature == Feature.PASSPORT_NUMBER_DOCUMENT.fullName
+      alertedPartyDocuments.size() == 1
+      alertedPartyDocuments == ['123456']
+      watchlistDocuments.size() == 1
+      watchlistDocuments == ['KJ0114578']
     }
   }
 }

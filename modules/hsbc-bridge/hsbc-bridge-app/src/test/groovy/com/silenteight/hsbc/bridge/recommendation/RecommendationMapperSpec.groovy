@@ -23,7 +23,8 @@ class RecommendationMapperSpec extends Specification {
   var userValuesMap = [
       (HsbcRecommendation.AAA_FALSE_POSITIVE): 'AAA False Positive',
       (HsbcRecommendation.LEVEL_1_REVIEW)    : 'Level 1',
-      (HsbcRecommendation.LEVEL_2_REVIEW)    : 'Level 2'
+      (HsbcRecommendation.LEVEL_2_REVIEW)    : 'Level 2',
+      (HsbcRecommendation.NEGATIVE_NEWS)     : 'Negative News Screening'
   ] as Map
   def underTest = new RecommendationMapper(s8ValuesMap, userValuesMap)
 
@@ -58,6 +59,7 @@ class RecommendationMapperSpec extends Specification {
     hintedFP            | 'SSC'             | 'Level 2'
     ptp                 | 'SSC'             | 'LEVEL_3_REVIEW'
     ptp                 | 'SSC'             | 'LEVEL_3_REVIEW'
+    manualInvestigation | 'NNS'             | 'Negative News Screening'
 
   }
 }

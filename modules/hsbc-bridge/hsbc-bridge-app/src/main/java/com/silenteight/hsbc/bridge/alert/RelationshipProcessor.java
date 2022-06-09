@@ -51,6 +51,8 @@ class RelationshipProcessor {
       hsbcMatch.setWorldCheckEntities(alertData.getWorldCheckEntities());
       hsbcMatch.setWorldCheckIndividuals(alertData.getWorldCheckIndividuals());
       hsbcMatch.setCaseComments(alertData.getCaseComments());
+      hsbcMatch.setNegativeNewsScreeningEntities(alertData.getNnsEntities());
+      hsbcMatch.setNegativeNewsScreeningIndividuals(alertData.getNnsIndividuals());
 
       return hsbcMatch;
     }
@@ -76,7 +78,9 @@ class RelationshipProcessor {
           alertData.getPrivateListEntities().stream().map(PrivateListEntity::getRecordId),
           alertData.getPrivateListIndividuals().stream().map(PrivateListIndividual::getRecordId),
           alertData.getWorldCheckEntities().stream().map(WorldCheckEntity::getRecordId),
-          alertData.getWorldCheckIndividuals().stream().map(WorldCheckIndividual::getRecordId)
+          alertData.getWorldCheckIndividuals().stream().map(WorldCheckIndividual::getRecordId),
+          alertData.getNnsEntities().stream().map(NegativeNewsScreeningEntities::getRecordId),
+          alertData.getNnsIndividuals().stream().map(NegativeNewsScreeningIndividuals::getRecordId)
       ).flatMap(id -> id);
 
       return watchlistRecordIds.anyMatch(this::relationshipsDoesNotContainRelatedRecordId);
