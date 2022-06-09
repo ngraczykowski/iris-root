@@ -262,11 +262,10 @@ job "warehouse" {
       }
 
       config {
-        command = "java"
+        command = "/srv/s8cluster/java17/bin/java"
         args = [
           format("-Xms%dm", local.jvm_memory),
           format("-Xmx%dm", local.jvm_memory),
-          format("-XX:MaxPermSize=%dm", local.perm_memory),
           "-Dfile.encoding=UTF-8",
           "-Dsun.jnu.encoding=UTF-8",
           "-Djava.net.preferIPv4Stack=true",
