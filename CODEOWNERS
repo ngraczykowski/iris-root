@@ -1,29 +1,43 @@
+####################################################################################################
+# NOTE(ahaczewski): Add code owners for modules below.
+####################################################################################################
+
+#----------------------------------------------------------
+# Delta team
+#----------------------------------------------------------
+/modules/adjudication-engine/**/*     @SilentEight/delta
+/modules/payments-bridge/**/*         @SilentEight/delta
+/modules/universal-data-source/**/*   @SilentEight/delta
+
+#----------------------------------------------------------
+# Whiskey team
+#----------------------------------------------------------
+/modules/warehouse/**/*   @SilentEight/whiskey
+
+####################################################################################################
+# NOTE(ahaczewski): Add code owners for modules above. Do not modify owners below.
+####################################################################################################
+
 /gradle/wrapper/* @ahaczewski
 /gradlew          @ahaczewski
 /gradlew.bat      @ahaczewski
 
-/.jenkins/*   @SilentEight/devops
-/.github/*    @SilentEight/architecture
-
-/.github/workflows/*      @ahaczewski
+/.jenkins/*           @SilentEight/devops
+/.github/*            @SilentEight/architecture
+/.github/workflows/*  @ahaczewski
 
 /.idea/**/*               @ahaczewski @pputerla @snieguu
-/.editorconfig            @ahaczewski @pputerla @snieguu
-/.gitattributes           @ahaczewski @pputerla @snieguu
-/.gitignore               @ahaczewski @pputerla @snieguu
 /.pre-commit-config.yaml  @ahaczewski @pputerla @snieguu
 /CODEOWNERS               @ahaczewski
+.editorconfig             @ahaczewski @pputerla @snieguu
+.gitattributes            @ahaczewski @pputerla @snieguu
+.gitignore                @ahaczewski @pputerla @snieguu
 
-/build-logic/**/* @SilentEight/architecture
-/platforms/**/*   @SilentEight/architecture
-/gradle/*.toml    @SilentEight/architecture
-build.gradle      @SilentEight/architecture
-gradle.properties @SilentEight/architecture
-settings.gradle   @SilentEight/architecture
+/build-logic/**/*   @SilentEight/architecture
+/platforms/**/*     @SilentEight/architecture
+/gradle/*.toml      @SilentEight/architecture
+build.gradle        @SilentEight/architecture
+gradle.properties   @SilentEight/architecture
+settings.gradle     @SilentEight/architecture
 
 /tests/**/*       @SilentEight/qa
-
-/modules/adjudication-engine/**/*    @SilentEight/delta
-/modules/payments-bridge/**/*        @SilentEight/delta
-/modules/universal-data-source/**/*  @SilentEight/delta
-/modules/warehouse/**/*              @SilentEight/whiskey
