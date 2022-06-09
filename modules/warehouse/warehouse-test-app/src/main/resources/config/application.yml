@@ -22,10 +22,10 @@ warehouse:
     prefetch: 25
   db:
     host: localhost
-    port: 24910
-    name: warehouse
-    username: warehouse
-    password: warehouse
+    port: 5432
+    name: iris
+    username: iris
+    password: iris
 
 spring:
   #-------------------------------------------------------------------------------------------------

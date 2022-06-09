@@ -69,3 +69,8 @@ Iris is using [Gradle convention plugins](https://docs.gradle.org/current/usergu
 `com.silenteight.sear.build.java-library`
 
 `com.silenteight.sear.build.java-base`
+
+
+## Module specific README
+
+[Warehouse setup](modules/warehouse/README.md)

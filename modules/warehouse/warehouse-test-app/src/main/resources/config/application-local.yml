@@ -6,7 +6,7 @@ spring:
 
     #   configuration for common-docker-infrastructure
     host: localhost
-    port: 24160
+    port: 5672
     username: dev
     password: dev
     virtual-host: /
@@ -40,7 +40,7 @@ warehouse:
       - "\\d{1,}\\.WorldCheckIndividuals\\..*"
   db:
     host: localhost
-    port: 24910
-    name: warehouse
-    username: warehouse
-    password: warehouse
+    port: 5432
+    name: iris
+    username: iris
+    password: iris

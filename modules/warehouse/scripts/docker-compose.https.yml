@@ -8,7 +8,7 @@ services:
   createbuckets:
     entrypoint: >
       /bin/sh -c "
-      /usr/bin/mc config host add --insecure myminio https://minio:9000 admin admin123;
+      until (/usr/bin/mc config host add --insecure myminio https://minio:9000 admin admin123) do echo '...waiting...' && sleep 1; done;
       /usr/bin/mc mb --ignore-existing --insecure myminio/reports;
       exit 0;
       "

@@ -26,31 +26,7 @@ Before you can run Warehouse, you need to have a few infrastructural services ru
 3. PostgreSQL - SQL database
 4. Keycloak - IAM
 
-### Starting RabbitMQ
-To start RabbitMQ, follow the steps:
-
-1. Clone [Common Docker Infrastructure]:
-
-       git clone https://gitlab.silenteight.com/sens/common-docker-infrastructure
-
-1. Start docker-compose. It is sufficient to start just the rabbitmq service.
-
-       docker-compose up -d rabbitmq
-
-### Starting Kibana, MinIO and PostgreSQL
-To start the services run:
-
-        ./scripts/run-services.sh
-
-If you need to run services with TLS enabled:
-
-        ./scripts/run-service-https.sh
-
-### Starting Keycloak
-
-To start keycloak, go to root of iris and run:
-
-        docker-compose up -d keycloak
+To start all services see: [Iris - Running Application(s) locally](../../README.md#Running-Application(s)-locally)
 
 ## Testing
 
@@ -75,28 +51,33 @@ To authenticate with keycloak you should enter:
 
 Then you need to login as frontend user
 
+### Keycloak configuration
+
 Keycloak configuration resides in docker-compose/keycloak/imports/Dev-realm.json
+
+FYI: when something changes in dev-realm.json (from git pull for example) we need to docker-compose down -v to recreate docker volume because keycloak is caching devrealm.json file
 
 ## Other
 
 ### Running integration test against local environment
 
-1. start infrastructure:
-
-        ./scripts/run-services.sh
-
-2. Remove initialization of TestContainers by commenting/ removing ContextConfiguration initializers:
+1. Remove initialization of TestContainers by commenting/ removing ContextConfiguration initializers:
 
         @ContextConfiguration(initializers = {
         //    PostgresTestInitializer.class,
         })
 
-3. Activate local profile which provides connection setup for local environment.
+2. Activate local profile which provides connection setup for local environment.
    You may want to enable debug profile.
 
         @ActiveProfiles({ "local", "debug" })
 
 ### Setting-up HTTPS for dev environment
+
+#### Starting minio in TLS
+If you want to run services with TLS enabled you need to use [docker-compose.https](docker-compose.https.yml):
+
+    docker-compose --compatibility -f docker-compose.yml -f modules/warehouse/scripts/docker-compose.https.yml up -d
 
 #### Generating keys for minio
 

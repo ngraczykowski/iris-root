@@ -65,10 +65,10 @@ warehouse:
     copy-csv-pattern: "COPY ( %s ) TO STDOUT WITH (FORMAT CSV, HEADER)"
   db:
     host: localhost
-    port: 24910
-    name: warehouse
-    username: warehouse
-    password: warehouse
+    port: 5432
+    name: iris
+    username: iris
+    password: iris
 sep.filestorage:
   minio:
     url: http://localhost:9000
