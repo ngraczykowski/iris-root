@@ -4,9 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.agents.logging.AgentLogger;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static com.silenteight.agent.common.dictionary.DictionaryLineFilters.IGNORE_COMMENTS;
@@ -49,6 +47,10 @@ public class SingleValueDictionary implements Dictionary {
         .map(TRIM_AND_UPPER_CASE)
         .map(inverted ? INVERTED_KEYS_AND_VALUE : KEYS_AND_VALUE)
         .forEach(entry -> entry.getKeys().forEach(key -> map.put(key, entry.getValue())));
+  }
+
+  public Set<String> getKeys() {
+    return new HashSet<>(map.keySet());
   }
 
   public Optional<String> findByKey(String key) {
