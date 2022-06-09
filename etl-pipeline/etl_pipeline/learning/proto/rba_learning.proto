@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package silenteight.learningstore.historicaldecision.v2.api;
+
+import "google/api/field_behavior.proto";
+import public "silenteight/learningstore/historicaldecision/v2/api/common.proto";
+
+option java_package = "com.silenteight.proto.learningstore.historicaldecision.v2.api";
+option java_outer_classname = "RbaLearningExchangeProto";
+option java_multiple_files = true;
+
+// Message sent by Bridge to the Learning Engine queue. Related to RBA learning.
+message RbaLearningExchangeRequest {
+  repeated RbaAlert alerts = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message RbaAlert {
+  string alert_id = 1 [(google.api.field_behavior) = REQUIRED]; // e.g. ALERT_ID_101
+  string match_id = 2 [(google.api.field_behavior) = REQUIRED]; // e.g. MATCH_ID_011
+  string alerted_party_id = 3 [(google.api.field_behavior) = REQUIRED]; // e.g. AP_ID_401
+  Watchlist watchlist = 4 [(google.api.field_behavior) = REQUIRED];
+  repeated RbaDecision decisions = 5 [(google.api.field_behavior) = REQUIRED];
+  repeated Discriminator discriminators = 6 [(google.api.field_behavior) = REQUIRED];
+}
+
+message RbaDecision {
+  string id = 1 [(google.api.field_behavior) = REQUIRED]; // e.g. DECISION_ID_201
+  string value = 2 [(google.api.field_behavior) = REQUIRED]; // e.g. True Positive
+  string comment = 3 [(google.api.field_behavior) = REQUIRED]; // e.g. rba applied
+  int64 created_at = 4 [(google.api.field_behavior) = REQUIRED]; // Unix time
+}

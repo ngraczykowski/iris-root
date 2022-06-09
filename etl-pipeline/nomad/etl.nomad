@@ -30,7 +30,7 @@ job "etl-pipeline" {
       }
     }
     task "etl-pipeline" {
-      driver = "raw_exec"
+      driver = "docker"
 
       template {
         data        = "{{ key \"${var.namespace}/etl_service/secrets\" }}"
@@ -75,9 +75,11 @@ job "etl-pipeline" {
       }
 
       config {
+        image = "python:3.7"
         command = "bash"
-        args = [
-          "local/run_on_nomad.sh"]
+        args = concat(["/app/run_on_nomad.sh"])
+        network_mode = "host"
+        volumes = ["local:/app"]
       }
 
       constraint {

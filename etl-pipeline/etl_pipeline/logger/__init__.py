@@ -13,20 +13,20 @@ FORMATTER = logging.Formatter(
     "%(asctime)s — %(name)s — %(levelname)s — %(funcName)s:%(lineno)d — %(message)s"
 )
 
-LOGGING_PATH = None
+logging_path = None
 
 
 def get_logging_level():
-    LOGGING_LEVEL = logging.INFO
+    logging_level = logging.INFO
     try:
-        LOGGING_LEVEL = getattr(logging, service_config.LOGGING_LEVEL)
+        logging_level = getattr(logging, service_config.logging_level)
     except omegaconf.errors.ConfigAttributeError:
         pass
-    return LOGGING_LEVEL
+    return logging_level
 
 
 try:
-    LOGGING_PATH = service_config.LOGGING_PATH
+    logging_path = service_config.logging_path
 except omegaconf.errors.ConfigAttributeError:
     pass
 
@@ -39,9 +39,9 @@ def get_console_handler():
 
 
 def get_file_handler(filename="etl_pipeline.log"):
-    os.makedirs(os.path.dirname(LOGGING_PATH), exist_ok=True)
+    os.makedirs(os.path.dirname(logging_path), exist_ok=True)
     file_handler = TimedRotatingFileHandler(
-        os.path.join(LOGGING_PATH, filename), encoding="utf8", when="midnight"
+        os.path.join(logging_path, filename), encoding="utf8", when="midnight"
     )
     file_handler.setFormatter(FORMATTER)
     file_handler.setLevel(get_logging_level())
@@ -51,14 +51,14 @@ def get_file_handler(filename="etl_pipeline.log"):
 def get_logger(name, file=None):
     logger = logging.getLogger(name)
     if file:
-        LOGGING_PATH = None
+        logging_path = None
         try:
-            LOGGING_PATH = service_config.LOGGING_PATH
+            logging_path = service_config.logging_path
         except omegaconf.errors.ConfigAttributeError:
             pass
 
         logger.setLevel(get_logging_level())
-        if LOGGING_PATH:
+        if logging_path:
             logger.addHandler(get_file_handler(file))
         logger.addHandler(get_console_handler())
         logger.propagate = False

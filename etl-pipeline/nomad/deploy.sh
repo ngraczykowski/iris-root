@@ -2,10 +2,6 @@
 set  -e -o pipefail
 scriptdir="$(cd -- "$(dirname -- "${0}")" && pwd -P)"
 
-export WHEELDIR="temp"
-
-echo $PWD
-./scripts/local/download_deps.sh
 
 if [[ -z "$MINIO_ADDR" ]]; then
     if [[ -x $(command -v consul) && -x $(command -v jq) ]]; then

@@ -260,6 +260,18 @@ class MSPipeline(ETLPipeline):
             logger.warning("No input for ap_id_tp_marked_agent. Setting up default")
             match["ap_id_tp_marked_agent_input"] = ""
 
+    def select_discriminator(self, match):
+        dataset_name = match[cn.DATASET_TYPE]
+        if dataset_name == "ISG_PARTY":
+            match["ap_id_tp_marked_agent_input"] = match["ap_id_tp_marked_agent_input"][0]
+        elif dataset_name in ["WM_ADDRESS", "WM_PARTY"]:
+            match["ap_id_tp_marked_agent_input"] = match["ap_id_tp_marked_agent_input"][1]
+        elif dataset_name == "ISG_ACCOUNT":
+            match["ap_id_tp_marked_agent_input"] = match["ap_id_tp_marked_agent_input"][2]
+        else:
+            logger.warning("No input for ap_id_tp_marked_agent. Setting up default")
+            match["ap_id_tp_marked_agent_input"] = ""
+
     def set_up_entity_type_match(self, payload, match):
         if payload["alertedParty"]["AP_PARTY_TYPE"] == match["WLP_TYPE"]:
             payload["alertedParty"]["ENTITY_TYPE_MATCH"] = "Y"

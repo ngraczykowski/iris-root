@@ -1,4 +1,4 @@
-FROM python:3.6-slim
+FROM python:3.7-slim
 ARG PIP_INDEX_URL
 ENV PIP_INDEX_URL=$PIP_INDEX_URL
 

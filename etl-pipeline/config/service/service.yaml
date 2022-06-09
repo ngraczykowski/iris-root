@@ -1,17 +1,33 @@
+etl_service_port: 9091
+etl_service_ip: localhost
+logging_path: logs/
+logging_level: DEBUG
+processes: 20
+uds_batch_size: 100
 
-ETL_SERVICE_PORT: 9090
-ETL_SERVICE_IP: localhost
-LOGGING_PATH: logs/
-LOGGING_LEVEL: DEBUG
-PROCESSES: 20
-UDS_BATCH_SIZE: 100
+grpc_server_tls_private_key: tests/ssl/server-key.pem
+grpc_server_tls_public_key_chain: tests/ssl/server.pem
+grpc_server_tls_trusted_ca:  tests/ssl/ca.pem
 
-GRPC_SERVER_TLS_PRIVATE_KEY: tests/ssl/server-key.pem
-GRPC_SERVER_TLS_PUBLIC_KEY_CHAIN: tests/ssl/server.pem
-GRPC_SERVER_TLS_TRUSTED_CA:  tests/ssl/ca.pem
+grpc_client_tls_ca: tests/ssl/ca.pem
+grpc_client_tls_private_key: tests/ssl/server-key.pem
+grpc_client_tls_public_key_chain: tests/ssl/server.pem
 
-GRPC_CLIENT_TLS_CA: tests/ssl/ca.pem
-GRPC_CLIENT_TLS_PRIVATE_KEY: tests/ssl/server-key.pem
-GRPC_CLIENT_TLS_PUBLIC_KEY_CHAIN: tests/ssl/server.pem
+data_source_input_endpoint: localhost:50052
 
-DATA_SOURCE_INPUT_ENDPOINT: localhost:50052
+historical_decision_exchange:
+  exchange: 'bridge.historical'
+  routing-key: 'historical.historical-decisions-request.production'
+  queue-name: 'ls.historical-decision-request.production'
+  queue-durable: true
+  queue-arguments:
+    x-dead-letter-exchange: "learning.decision-dead-letter-exchange"
+    x-dead-letter-routing-key: "*"
+
+rabbitmq:
+   host: localhost
+   port: 24160
+   login: dev
+   password: dev
+   virtualhost: /
+

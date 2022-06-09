@@ -5,7 +5,7 @@ ENV PIP_INDEX_URL=$PIP_INDEX_URL
 
 
 ADD pipeline_for_playground.yaml /pipeline.yaml
-RUN conda install -c anaconda python=3.6
+RUN conda install -c anaconda python=3.7.5
 RUN apt-get update --fix-missing
 RUN apt install git gcc -y
 RUN conda env create  -f /pipeline.yaml
@@ -18,8 +18,6 @@ RUN conda install python
 RUN conda install jupyter
  
 ADD minimal_requirements.txt /requirements.txt
-RUN ls -l /
-RUN ls -l /requirements.txt
 RUN pip install -r /requirements.txt
 WORKDIR /app
 
