@@ -11,12 +11,6 @@ warehouse:
 {{ end -}}
 
 spring:
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: https://auth.silenteight.com/auth/realms/{{env "NOMAD_NAMESPACE" }}
-
   rabbitmq:
     addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
       {{ if $index }},{{ end -}}
