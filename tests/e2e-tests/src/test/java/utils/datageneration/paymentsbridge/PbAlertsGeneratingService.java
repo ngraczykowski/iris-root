@@ -22,6 +22,8 @@ public class PbAlertsGeneratingService {
     final int hitNumber = 1;
     final String hitId = "Hit-ID-" + hitNumber;
     final String messageId = randomUUID().toString();
+    final String messageData =
+        "{1:F01SVBKUS60XXXX0000000000}{2:I199SVBKUS60XXXXN}{3:{108:ECSAMT0000418871}{121:f299c3d8-0121-12c5-b352-1d16b7017419}}{4:\\n:20:ABCOFP1123\\n:23B:CRED BP00000009LK\\n:32A:10606CAD5431,26\\n:50K:\\/3300565427\\nSINA BANK\\nABCD LTD\\nSADDAM HUSSAIN CUBA Clara\\n:59A:nosccatt\\nSCOTT PLAZA 40 king street West\\nsuite 5800 PO Box 1011\\nTORONTO ON MSH 351 Canada\\n:71A:SHA\\n-}{5:{CHK:370453F95D8E}{TNG:}}";
 
     var template = getJsonTemplate("alertTemplates/sierra", "pbAlertTemplate");
     var payload =
@@ -33,7 +35,7 @@ public class PbAlertsGeneratingService {
                 "messageId",
                 messageId,
                 "messageData",
-                String.format("Message %s data", messageId),
+                String.format("Message %s data", messageData),
                 "hitId",
                 hitId));
     return PaymentsBridgeAlert.builder().id(alertId).payload(payload).build();

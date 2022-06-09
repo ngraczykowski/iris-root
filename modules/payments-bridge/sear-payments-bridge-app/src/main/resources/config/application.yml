@@ -246,7 +246,7 @@ spring:
       client:
         registration:
           callback:
-            clientId: clientId
+            client-id: clientId
             provider: external
             # client-id: <CLIENT ID>
             # client-secret: <CLIENT SECRET>

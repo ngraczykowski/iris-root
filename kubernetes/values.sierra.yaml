@@ -11,7 +11,7 @@ components:
       "pb.cmapi.callback.endpoint": 'http://{{ include "sear.fullname" . }}-payments-bridge.{{ .Release.Namespace }}.svc:{{ .component.containerPorts.http.port }}/rest/{{ .component.webPath }}/mock/cmapi'
       "spring.security.oauth2.resourceserver.jwt.issuer-uri": "{{ tpl .Values.keycloak.authServerUrl $ }}/realms/{{ .Values.keycloak.realm }}"
       "spring.security.oauth2.client.registration.callback.client-id": "{{ .Values.keycloak.cmapi.clientId }}"
-      "spring.security.oauth2.client.registration.callback.client-secret": "{{ .Values.keycloak.cmapi.secret }}"
+      "spring.security.oauth2.client.registration.callback.client-secret": "{{ .Values.keycloak.cmapi.clientSecret }}"
       "spring.security.oauth2.client.provider.external.token-uri": "{{ tpl .Values.keycloak.authServerUrl $ }}/realms/{{ .Values.keycloak.realm }}/protocol/openid-connect/token"
       "pb.email-notification.learning-enabled": true
       "pb.sear-learning.aws.file-list.bucket-name": devenv-6fa57739-906d-1130-4a76-90dd1c5dc8a3
@@ -85,23 +85,23 @@ agents:
     args:
       - --agent-exchange
     image:
-      tag: "0.16.0-sierra" #unfortunately, I didn't found any corresponding docker image to the https://gitlab.silenteight.com/devops/helm-workload-sierra-uat/-/blob/c0b2038e0077c5c5b57f0b01eb6f0683e99cc9ad/scripts/charts.json#L24
+      tag: "0.16.1-sierra"
   organization-name-agent2:
     amqp:
       routingKey: agents.companyName.versions.2_0_0.configs.1
       queueName: agent.companyname-requests-2
     from: organization-name-agent
     image:
-      tag: "0.16.0-sierra"
+      tag: "0.16.1-sierra"
 
   company-name-surrounding-agent:
     enabled: true
     image:
-      tag: "0.4.0.dev0" #the only working image tag
+      tag: "0.4.4"
   hit-type-name-agent:
     enabled: true
     image:
-      tag: "0.3.0-dev" #the only working image tag
+      tag: "0.3.7"
     amqp:
       routingKey: agents.hittype.versions.1_0_0.configs.1
       queueName: agent.hittype-requests
