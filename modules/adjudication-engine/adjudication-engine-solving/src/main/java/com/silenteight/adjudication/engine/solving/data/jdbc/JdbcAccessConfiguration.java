@@ -1,6 +1,7 @@
 package com.silenteight.adjudication.engine.solving.data.jdbc;
 
 import com.silenteight.adjudication.engine.solving.data.CommentInputDataAccess;
+import com.silenteight.adjudication.engine.solving.data.MatchCategoryDataAccess;
 import com.silenteight.adjudication.engine.solving.data.MatchFeatureDataAccess;
 
 import org.springframework.context.annotation.Bean;
@@ -25,5 +26,10 @@ public class JdbcAccessConfiguration {
   @Bean
   CommentInputDataAccess commentInputStoreService(JdbcTemplate jdbcTemplate) {
     return new JdbcCommentInputStoreDataAccess(new CommentInputJdbcRepository(jdbcTemplate));
+  }
+
+  @Bean
+  MatchCategoryDataAccess matchCategoryDataAccess(JdbcTemplate jdbcTemplate) {
+    return new JdbcMatchCategoryDataAccess(new MatchCategoryJdbcRepository(jdbcTemplate));
   }
 }

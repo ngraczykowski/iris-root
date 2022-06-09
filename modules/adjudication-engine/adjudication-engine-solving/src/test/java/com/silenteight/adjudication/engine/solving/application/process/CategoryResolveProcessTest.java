@@ -13,6 +13,7 @@ class CategoryResolveProcessTest {
 
   private CategoryResolveProcess categoryResolveProcess;
   private ReadyMatchFeatureVectorPortMock readyMatchFeatureVectorPortMock;
+  private MockMatchCategoryPublisherPort matchCategoryPublisherPort;
 
   @BeforeEach
   void setUp() {
@@ -22,12 +23,13 @@ class CategoryResolveProcessTest {
     var dataAccess = new InMemoryMatchFeatureDataAccess();
     InMemoryAlertSolvingRepositoryMock inMemoryAlertSolvingRepositoryMock =
         new InMemoryAlertSolvingRepositoryMock(dataAccess);
-
+    matchCategoryPublisherPort = new MockMatchCategoryPublisherPort();
     categoryResolveProcess =
         new CategoryResolveProcess(
             categoryValuesClientMock,
             inMemoryAlertSolvingRepositoryMock,
-            readyMatchFeatureVectorPortMock);
+            readyMatchFeatureVectorPortMock,
+            matchCategoryPublisherPort);
   }
 
   @Test
@@ -35,6 +37,7 @@ class CategoryResolveProcessTest {
     categoryResolveProcess.resolveCategoryValues(1L);
 
     assertThat(readyMatchFeatureVectorPortMock.getRequestsCount()).isEqualTo(2);
+    assertThat(matchCategoryPublisherPort.getResolvedCount()).isEqualTo(2);
   }
 
   @Test
@@ -42,6 +45,7 @@ class CategoryResolveProcessTest {
     categoryResolveProcess.resolveCategoryValues(3L);
 
     assertThat(readyMatchFeatureVectorPortMock.getRequestsCount()).isEqualTo(2);
+    assertThat(matchCategoryPublisherPort.getResolvedCount()).isEqualTo(2);
   }
 
   @Test

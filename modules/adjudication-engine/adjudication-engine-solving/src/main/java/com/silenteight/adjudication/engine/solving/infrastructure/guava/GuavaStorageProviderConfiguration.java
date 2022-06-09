@@ -52,6 +52,11 @@ class GuavaStorageProviderConfiguration {
   }
 
   @Bean
+  Queue<MatchCategory> matchCategoryStoreQueue() {
+    return new PriorityQueue<>(guavaConfigurationProperties.getInitialQueueCapacity());
+  }
+
+  @Bean
   Queue<Long> alertCategoryValuesQueue() {
     return new PriorityQueue<>(guavaConfigurationProperties.getInitialQueueCapacity());
   }

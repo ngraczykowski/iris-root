@@ -10,8 +10,11 @@ import com.silenteight.adjudication.engine.solving.application.publisher.dto.Ale
 import com.silenteight.adjudication.engine.solving.application.publisher.dto.MatchSolutionRequest;
 import com.silenteight.adjudication.engine.solving.application.publisher.port.CommentInputResolvePublisherPort;
 import com.silenteight.adjudication.engine.solving.application.publisher.port.CommentInputStorePublisherPort;
+import com.silenteight.adjudication.engine.solving.application.publisher.port.MatchCategoryPublisherPort;
 import com.silenteight.adjudication.engine.solving.application.publisher.port.ReadyMatchFeatureVectorPort;
 import com.silenteight.adjudication.engine.solving.data.CommentInputDataAccess;
+import com.silenteight.adjudication.engine.solving.data.MatchCategoryDataAccess;
+import com.silenteight.adjudication.engine.solving.domain.MatchCategory;
 import com.silenteight.adjudication.engine.solving.domain.comment.CommentInput;
 
 import org.springframework.context.annotation.Bean;
@@ -76,5 +79,14 @@ class PublisherConfiguration {
     var scheduledExecutorService = Executors.newScheduledThreadPool(1);
     return new CommentInputStorePublisher(
         commentInputDataAccess, scheduledExecutorService, alertCommentsInputStoreQueue);
+  }
+
+  @Bean
+  MatchCategoryPublisherPort matchCategoryPublisherPort(
+      MatchCategoryDataAccess matchCategoryDataAccess,
+      Queue<MatchCategory> matchCategoryStoreQueue) {
+    var scheduledExecutorService = Executors.newScheduledThreadPool(1);
+    return new MatchCategoryPublisher(
+        matchCategoryDataAccess, scheduledExecutorService, matchCategoryStoreQueue);
   }
 }

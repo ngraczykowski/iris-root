@@ -57,10 +57,14 @@ class ProcessConfiguration {
   public CategoryResolveProcess categoryResolveProcess(
       CategoryValuesClient categoryValueClient,
       AlertSolvingRepository alertSolvingRepository,
-      ReadyMatchFeatureVectorPort readyMatchFeatureVectorPublisher) {
+      ReadyMatchFeatureVectorPort readyMatchFeatureVectorPublisher,
+      MatchCategoryPublisherPort matchCategoryPublisherPort) {
 
     return new CategoryResolveProcess(
-        categoryValueClient, alertSolvingRepository, readyMatchFeatureVectorPublisher);
+        categoryValueClient,
+        alertSolvingRepository,
+        readyMatchFeatureVectorPublisher,
+        matchCategoryPublisherPort);
   }
 
   @Bean
