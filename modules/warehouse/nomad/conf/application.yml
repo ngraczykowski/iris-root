@@ -1,0 +1,49 @@
+server:
+  port: {{ env "NOMAD_PORT_http" }}
+
+warehouse:
+  db:
+    name: {{ env "NOMAD_NAMESPACE" }}-warehouse
+  {{- $nomad_namespace := env "NOMAD_NAMESPACE" -}}
+  {{- with service (print $nomad_namespace "-warehouse-db") }}
+  host: {{ (index . 0).Address }}
+  port: {{ (index . 0).Port }}
+  {{ end -}}
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://auth.silenteight.com/auth/realms/{{env "NOMAD_NAMESPACE" }}
+
+  rabbitmq:
+    addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
+      {{ if $index }},{{ end -}}
+      {{ $rabbit.Address }}:{{ $rabbit.Port -}}
+  {{- end }}
+# NOTE(ahaczewski): Intentionally left empty.
+    host:
+    virtual-host: /{{ env "NOMAD_NAMESPACE" }}
+
+  cloud:
+    consul:
+      enabled: true
+      host: localhost
+      port: 8500
+      scheme: http
+      discovery:
+        enabled: true
+        register: false
+        register-health-check: false
+        catalog-services-watch:
+          enabled: true
+      service-registry:
+        auto-registration:
+          enabled: false
+
+grpc:
+  logging:
+    enabled: true
+  server:
+    port: {{ env "NOMAD_PORT_grpc" }}

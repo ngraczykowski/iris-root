@@ -1,31 +1,3 @@
-server:
-  port: {{ env "NOMAD_PORT_http" }}
-
-spring:
-  rabbitmq:
-    addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
-      {{ if $index }},{{ end -}}
-      {{ $rabbit.Address }}:{{ $rabbit.Port -}}
-{{- end }}
-    # NOTE(ahaczewski): Intentionally left empty.
-    host:
-    virtual-host: /{{ env "NOMAD_NAMESPACE" }}
-  cloud:
-    consul:
-      enabled: true
-      host: localhost
-      port: 8500
-      scheme: http
-      discovery:
-        enabled: true
-        register: false
-        register-health-check: false
-        catalog-services-watch:
-          enabled: true
-      service-registry:
-        auto-registration:
-          enabled: false
-
 warehouse:
   migration:
     enabled: false
@@ -36,14 +8,6 @@ warehouse:
       labels:
         - "s8_lobCountryCode"
       recommendation-date-field: "recommendationDate"
-
-  db:
-    name: {{ env "NOMAD_NAMESPACE" }}-warehouse
-{{- $nomad_namespace := env "NOMAD_NAMESPACE" -}}
-{{- with service (print $nomad_namespace "-warehouse-db") }}
-    host: {{ (index . 0).Address }}
-    port: {{ (index . 0).Port }}
-  {{ end -}}
   minio:
     url: https://minio.silenteight.com
   retention:
@@ -61,22 +25,6 @@ warehouse:
           max-size: 16
           queue-capacity: 50
           thread-name-prefix: async-auth-aware-
-
-keycloak:
-  client-id: {{ env "NOMAD_NAMESPACE" }}-frontend
-  adapter:
-    auth-server-url: https://auth.silenteight.com
-    realm: sens-webapp
-    public-client: false
-    confidential-port: 0
-    principal-attribute: preferred_username
-    ssl-required: external
-
-grpc:
-  logging:
-    enabled: true
-  server:
-    port: {{ env "NOMAD_PORT_grpc" }}
 
 warehouse.report.statistics:
   all-alerts-query:

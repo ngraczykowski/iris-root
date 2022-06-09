@@ -17,6 +17,11 @@ variable "namespace" {
   default = "dev"
 }
 
+variable "app_profile" {
+  type = string
+  default = "hotel"
+}
+
 variable "http_tags" {
   type = list(string)
   default = []
@@ -242,9 +247,8 @@ job "warehouse" {
       }
 
       template {
-        data = file("./conf/${var.namespace}.yml")
+        data = file("./conf/application.yml")
         destination = "local/conf/application.yml"
-        change_mode = "restart"
       }
 
       template {
@@ -270,7 +274,7 @@ job "warehouse" {
           "-Dlogging.config=secrets/conf/logback.xml",
           "-jar",
           "local/warehouse-app.jar",
-          "--spring.profiles.active=linux,swagger,debug",
+          "--spring.profiles.active=linux,swagger,debug,${var.app_profile}",
           "--spring.config.additional-location=file:local/conf/"
         ]
       }

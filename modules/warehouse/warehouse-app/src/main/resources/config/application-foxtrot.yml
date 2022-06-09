@@ -1,9 +1,29 @@
 warehouse:
+  migration:
+    enabled: false
+  alert-level-security:
+    enabled: false
   persistence:
     alert:
-      labels:
-        - "s8_lobCountryCode"
       recommendation-date-field: "recommendationDate"
+
+  minio:
+    url: https://minio.silenteight.com
+  retention:
+    alert:
+      batch-size: 1000
+
+  sampling:
+    filters:
+
+  task:
+    async:
+      execution:
+        pool:
+          core-size: 4
+          max-size: 16
+          queue-capacity: 50
+          thread-name-prefix: async-auth-aware-
 
 warehouse.report.statistics:
   all-alerts-query:
