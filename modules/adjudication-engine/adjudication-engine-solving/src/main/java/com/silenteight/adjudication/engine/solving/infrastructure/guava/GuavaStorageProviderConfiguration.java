@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.adjudication.engine.solving.application.publisher.dto.AlertSolutionRequest;
 import com.silenteight.adjudication.engine.solving.application.publisher.dto.MatchSolutionRequest;
 import com.silenteight.adjudication.engine.solving.domain.*;
+import com.silenteight.adjudication.engine.solving.domain.comment.CommentInput;
 
 import com.google.common.cache.CacheBuilder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -42,6 +43,11 @@ class GuavaStorageProviderConfiguration {
 
   @Bean
   Queue<String> alertCommentsInputQueue() {
+    return new PriorityQueue<>(guavaConfigurationProperties.getInitialQueueCapacity());
+  }
+
+  @Bean
+  Queue<CommentInput> alertCommentsInputStoreQueue() {
     return new PriorityQueue<>(guavaConfigurationProperties.getInitialQueueCapacity());
   }
 

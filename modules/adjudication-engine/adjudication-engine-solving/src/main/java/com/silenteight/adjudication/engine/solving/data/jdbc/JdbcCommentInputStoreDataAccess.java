@@ -9,14 +9,11 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.adjudication.engine.solving.data.CommentInputDataAccess;
 import com.silenteight.adjudication.engine.solving.domain.comment.CommentInput;
 
-import org.springframework.scheduling.annotation.Async;
-
 @RequiredArgsConstructor
 class JdbcCommentInputStoreDataAccess implements CommentInputDataAccess {
 
   private final CommentInputJdbcRepository commentInputJdbcRepository;
 
-  @Async
   public void store(CommentInput commentInput) {
     commentInputJdbcRepository.store(commentInput);
   }

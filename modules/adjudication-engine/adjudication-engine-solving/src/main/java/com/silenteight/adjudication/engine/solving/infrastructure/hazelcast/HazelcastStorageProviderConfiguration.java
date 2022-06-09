@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.adjudication.engine.solving.application.publisher.dto.AlertSolutionRequest;
 import com.silenteight.adjudication.engine.solving.application.publisher.dto.MatchSolutionRequest;
 import com.silenteight.adjudication.engine.solving.domain.*;
+import com.silenteight.adjudication.engine.solving.domain.comment.CommentInput;
 import com.silenteight.adjudication.engine.solving.infrastructure.hazelcast.HazelcastConfigurationProperties.AsyncBackup;
 
 import com.hazelcast.config.Config;
@@ -38,6 +39,8 @@ class HazelcastStorageProviderConfiguration {
   private static final String MATCH_FEATURES_MAP = "in-memory-match-features";
   public static final String ALERT_CATEGORY_VALUE_QUEUE = "in-memory-alert-category-value";
   public static final String ALERT_COMMENTS_INPUTS_QUEUE = "in-memory-alert-comments-inputs";
+  public static final String ALERT_COMMENTS_INPUTS_STORE_QUEUE =
+      "in-memory-alert-comments-inputs-store";
   public static final String AE_GOVERNANCE_MATCH_TO_SEND_QUEUE =
       "in-memory-ae-governance-match-to-send";
   public static final String AE_GOVERNANCE_ALERT_TO_SEND_QUEUE =
@@ -66,6 +69,11 @@ class HazelcastStorageProviderConfiguration {
   @Bean
   Queue<String> alertCommentsInputQueue(HazelcastInstance hazelcastInstance) {
     return hazelcastInstance.getQueue(ALERT_COMMENTS_INPUTS_QUEUE);
+  }
+
+  @Bean
+  Queue<CommentInput> alertCommentsInputStoreQueue(HazelcastInstance hazelcastInstance) {
+    return hazelcastInstance.getQueue(ALERT_COMMENTS_INPUTS_STORE_QUEUE);
   }
 
   @Bean

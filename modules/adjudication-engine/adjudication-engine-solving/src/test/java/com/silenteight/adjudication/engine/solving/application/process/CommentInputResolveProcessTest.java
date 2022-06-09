@@ -21,7 +21,7 @@ class CommentInputResolveProcessTest {
 
   private CommentInputResolveProcess commentInputResolveProcess;
   private CommentInputClientRepository commentInputClientRepository;
-  private MockCommentInputDataAccess mockCommentInputDataAccess;
+  private MockCommentInputStorePublisherPort mockCommentInputStorePublisherPort;
 
   @BeforeEach
   void setUp() {
@@ -36,13 +36,13 @@ class CommentInputResolveProcessTest {
                     "com.silenteight.dataretention")
                 .create());
     commentInputClientRepository = new CommentInputClientRepository(new HashMap<>(), converter);
-    mockCommentInputDataAccess = new MockCommentInputDataAccess();
+    mockCommentInputStorePublisherPort = new MockCommentInputStorePublisherPort();
     commentInputResolveProcess =
         new CommentInputResolveProcess(
             commentInputClient,
             converter,
             commentInputClientRepository,
-            mockCommentInputDataAccess);
+            mockCommentInputStorePublisherPort);
   }
 
   @Test
@@ -50,6 +50,6 @@ class CommentInputResolveProcessTest {
     commentInputResolveProcess.retrieveCommentInput("alerts/1");
     var commentInput = commentInputClientRepository.get(1);
     assertThat(commentInput.get(COMMENT_INPUT_KEY)).isEqualTo(COMMENT_INPUT_VALUE);
-    assertThat(mockCommentInputDataAccess.getSavedCount()).isEqualTo(1);
+    assertThat(mockCommentInputStorePublisherPort.getSavedCount()).isEqualTo(1);
   }
 }

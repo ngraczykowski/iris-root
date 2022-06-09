@@ -9,7 +9,10 @@ import com.silenteight.adjudication.engine.solving.application.process.port.Solv
 import com.silenteight.adjudication.engine.solving.application.publisher.dto.AlertSolutionRequest;
 import com.silenteight.adjudication.engine.solving.application.publisher.dto.MatchSolutionRequest;
 import com.silenteight.adjudication.engine.solving.application.publisher.port.CommentInputResolvePublisherPort;
+import com.silenteight.adjudication.engine.solving.application.publisher.port.CommentInputStorePublisherPort;
 import com.silenteight.adjudication.engine.solving.application.publisher.port.ReadyMatchFeatureVectorPort;
+import com.silenteight.adjudication.engine.solving.data.CommentInputDataAccess;
+import com.silenteight.adjudication.engine.solving.domain.comment.CommentInput;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -64,5 +67,14 @@ class PublisherConfiguration {
     var scheduledExecutorService = Executors.newScheduledThreadPool(15);
     return new CommentInputResolvePublisher(
         commentInputResolveProcessPort, scheduledExecutorService, alertCommentsInputQueue);
+  }
+
+  @Bean
+  CommentInputStorePublisherPort commentInputStorePublisherPort(
+      CommentInputDataAccess commentInputDataAccess,
+      Queue<CommentInput> alertCommentsInputStoreQueue) {
+    var scheduledExecutorService = Executors.newScheduledThreadPool(1);
+    return new CommentInputStorePublisher(
+        commentInputDataAccess, scheduledExecutorService, alertCommentsInputStoreQueue);
   }
 }

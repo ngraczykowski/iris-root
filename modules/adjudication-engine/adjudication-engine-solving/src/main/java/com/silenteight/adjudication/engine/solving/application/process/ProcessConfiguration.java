@@ -7,7 +7,6 @@ import com.silenteight.adjudication.engine.comments.comment.CommentFacade;
 import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectNodeConverter;
 import com.silenteight.adjudication.engine.solving.application.publisher.RecommendationPublisher;
 import com.silenteight.adjudication.engine.solving.application.publisher.port.*;
-import com.silenteight.adjudication.engine.solving.data.CommentInputDataAccess;
 import com.silenteight.adjudication.engine.solving.data.MatchFeatureDataAccess;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
 import com.silenteight.adjudication.engine.solving.domain.comment.CommentInputClientRepository;
@@ -45,13 +44,13 @@ class ProcessConfiguration {
       final ProtoMessageToObjectNodeConverter converter,
       final CommentInputClient commentInputClient,
       final CommentInputClientRepository commentInputClientRepository,
-      final CommentInputDataAccess jdbcCommentInputStoreDataAccess) {
+      final CommentInputStorePublisherPort commentInputStorePublisherPort) {
 
     return new CommentInputResolveProcess(
         commentInputClient,
         converter,
         commentInputClientRepository,
-        jdbcCommentInputStoreDataAccess);
+        commentInputStorePublisherPort);
   }
 
   @Bean
