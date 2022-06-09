@@ -17,6 +17,7 @@ import com.hazelcast.config.MapConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +28,11 @@ import java.util.Queue;
 @Slf4j
 @RequiredArgsConstructor
 @EnableConfigurationProperties(HazelcastConfigurationProperties.class)
-class InMemoryStorageProviderConfiguration {
+@ConditionalOnProperty(
+    value = "ae.solving.engine",
+    havingValue = "HAZELCAST",
+    matchIfMissing = true)
+class HazelcastStorageProviderConfiguration {
 
   private static final String ALERT_MAP = "in-memory-alert";
   private static final String MATCH_FEATURES_MAP = "in-memory-match-features";
@@ -77,7 +82,7 @@ class InMemoryStorageProviderConfiguration {
     final IMap<Long, AlertSolving> map = hazelcastInstance.getMap(ALERT_MAP);
     log.info("Registering Entry Eviction listener");
 
-    return new InMemoryAlertSolvingRepository(map);
+    return new HazelcastAlertSolvingRepository(map);
   }
 
   private static MapConfig createAlertMapConfig(
@@ -104,6 +109,6 @@ class InMemoryStorageProviderConfiguration {
     final IMap<MatchFeatureKey, MatchFeature> map = hazelcastInstance.getMap(MATCH_FEATURES_MAP);
     log.info("Registering Entry Eviction listener for {}", MATCH_FEATURES_MAP);
 
-    return new InMemoryMatchFeaturesRepository(map);
+    return new HazelcastMatchFeaturesRepository(map);
   }
 }

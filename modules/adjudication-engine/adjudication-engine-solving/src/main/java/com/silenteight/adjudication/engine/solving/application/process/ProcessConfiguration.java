@@ -5,7 +5,6 @@ import com.silenteight.adjudication.engine.analysis.commentinput.CommentInputCli
 import com.silenteight.adjudication.engine.analysis.recommendation.RecommendationFacade;
 import com.silenteight.adjudication.engine.comments.comment.CommentFacade;
 import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectNodeConverter;
-import com.silenteight.adjudication.engine.governance.GovernanceFacade;
 import com.silenteight.adjudication.engine.solving.application.publisher.RecommendationPublisher;
 import com.silenteight.adjudication.engine.solving.application.publisher.port.*;
 import com.silenteight.adjudication.engine.solving.data.CommentInputDataAccess;
@@ -13,14 +12,9 @@ import com.silenteight.adjudication.engine.solving.data.MatchFeatureDataAccess;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
 import com.silenteight.adjudication.engine.solving.domain.comment.CommentInputClientRepository;
 
-import com.hazelcast.core.HazelcastInstance;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.core.JdbcTemplate;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Configuration
 @EnableConfigurationProperties(ProcessConfigurationProperties.class)
@@ -67,9 +61,7 @@ class ProcessConfiguration {
       ReadyMatchFeatureVectorPort readyMatchFeatureVectorPublisher) {
 
     return new CategoryResolveProcess(
-        categoryValueClient,
-        alertSolvingRepository,
-        readyMatchFeatureVectorPublisher);
+        categoryValueClient, alertSolvingRepository, readyMatchFeatureVectorPublisher);
   }
 
   @Bean

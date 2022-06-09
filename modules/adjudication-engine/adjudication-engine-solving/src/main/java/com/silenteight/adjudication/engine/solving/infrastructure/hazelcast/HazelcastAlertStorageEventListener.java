@@ -15,7 +15,7 @@ import com.hazelcast.map.listener.EntryExpiredListener;
 import com.hazelcast.map.listener.EntryRemovedListener;
 
 @Slf4j
-class InMemoryAlertStorageEventListener
+class HazelcastAlertStorageEventListener
     implements EntryEvictedListener<Long, AlertSolving>,
     EntryRemovedListener<Long, AlertSolving>,
     EntryExpiredListener<Long, AlertSolving> {

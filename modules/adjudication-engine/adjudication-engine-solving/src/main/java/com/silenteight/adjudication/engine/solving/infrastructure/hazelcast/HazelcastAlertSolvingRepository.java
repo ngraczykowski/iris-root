@@ -21,7 +21,7 @@ import java.util.function.Supplier;
 
 @Slf4j
 @RequiredArgsConstructor
-class InMemoryAlertSolvingRepository implements AlertSolvingRepository {
+class HazelcastAlertSolvingRepository implements AlertSolvingRepository {
   private final IMap<Long, AlertSolving> map;
 
   @Override

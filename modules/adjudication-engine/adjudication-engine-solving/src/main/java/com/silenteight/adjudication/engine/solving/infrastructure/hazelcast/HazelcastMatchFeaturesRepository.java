@@ -19,14 +19,16 @@ import java.util.function.Supplier;
 @Slf4j
 @RequiredArgsConstructor
 // TODO change to strong typing after model will be defined
-class InMemoryMatchFeaturesRepository implements MatchFeaturesRepository {
+class HazelcastMatchFeaturesRepository implements MatchFeaturesRepository {
 
   private final IMap<MatchFeatureKey, MatchFeature> map;
 
   @Override
-  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
+  @Timed(
+      percentiles = {0.5, 0.95, 0.99},
+      histogram = true)
   public MatchFeature get(MatchFeatureKey key) {
-    log.debug("Getting MatchFeature alertId:{}", key.getAlertId());
+    log.debug("[InMemorySolving] Getting MatchFeature alertId:{}", key.getAlertId());
     return this.executeInLock(key, () -> map.getOrDefault(key, MatchFeature.empty()));
   }
 
@@ -43,5 +45,4 @@ class InMemoryMatchFeaturesRepository implements MatchFeaturesRepository {
     // TODO: return null or throw exception.
     return null;
   }
-
 }

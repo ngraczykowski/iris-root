@@ -21,7 +21,7 @@ import static com.hazelcast.config.MaxSizePolicy.USED_HEAP_SIZE;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ConfigurationProperties(prefix = "ae.solving.in-memory")
+@ConfigurationProperties(prefix = "ae.solving.in-memory.hazelcast")
 public class HazelcastConfigurationProperties {
 
   private AsyncBackup asyncBackup = AsyncBackup.disabled();
