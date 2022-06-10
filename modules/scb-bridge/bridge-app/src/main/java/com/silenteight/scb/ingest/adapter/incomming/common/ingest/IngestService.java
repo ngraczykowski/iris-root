@@ -1,7 +1,6 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.ingest;
 
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,9 +32,7 @@ class IngestService implements BatchAlertIngestService {
   private final ReportsSenderService reportsSenderService;
   private final TrafficManager trafficManager;
   private final BatchInfoService batchInfoService;
-
-  @Getter
-  private long ingestedLearningAlertsCounter;
+  private final IngestedLearningAlertsCounter learningAlertsCounter;
 
   @Override
   public void ingestAlertsForLearn(@NonNull String internalBatchId, @NonNull List<Alert> alerts) {
@@ -91,7 +88,7 @@ class IngestService implements BatchAlertIngestService {
 
   private void registerAndPublishLearningAlertsInCore(String internalBatchId, List<Alert> alerts) {
     registerAndPublish(internalBatchId, alerts, RegistrationBatchContext.LEARNING_CONTEXT);
-    ingestedLearningAlertsCounter += alerts.size();
+    learningAlertsCounter.increment(alerts.size());
   }
 
   private IngestedAlertsStatus registerAndPublish(

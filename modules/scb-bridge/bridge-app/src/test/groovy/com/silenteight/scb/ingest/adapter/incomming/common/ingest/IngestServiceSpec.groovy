@@ -24,6 +24,7 @@ class IngestServiceSpec extends Specification {
   def reportsSenderService = Mock(ReportsSenderService)
   def trafficManager = Mock(TrafficManager)
   def batchInfoService = Mock(BatchInfoService)
+  def learningAlertsCounter = Mock(IngestedLearningAlertsCounter)
 
   def ingestService = IngestService.builder()
       .scbRecommendationService(scbRecommendationService)
@@ -32,6 +33,7 @@ class IngestServiceSpec extends Specification {
       .reportsSenderService(reportsSenderService)
       .trafficManager(trafficManager)
       .batchInfoService(batchInfoService)
+      .learningAlertsCounter(learningAlertsCounter)
       .build()
 
   def 'should ingest alerts without Recommendation for learn'() {
@@ -51,6 +53,7 @@ class IngestServiceSpec extends Specification {
         registrationResponse(alerts)
     1 * udsFeedingPublisher.publishToUds(internalBatchId, alerts, LEARNING_CONTEXT)
     1 * reportsSenderService.send({it.size() == 2})
+    1 * learningAlertsCounter.increment(alerts.size())
     0 * _
   }
 

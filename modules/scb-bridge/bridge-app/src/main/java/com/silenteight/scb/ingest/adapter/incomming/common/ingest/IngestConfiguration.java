@@ -9,7 +9,6 @@ import com.silenteight.scb.ingest.domain.AlertRegistrationFacade;
 import com.silenteight.scb.reports.domain.port.outgoing.ReportsSenderService;
 import com.silenteight.sep.base.common.messaging.MessagingConfiguration;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -27,6 +26,7 @@ class IngestConfiguration {
   private final ReportsSenderService reportsSenderService;
   private final TrafficManager trafficManager;
   private final BatchInfoService batchInfoService;
+  private final IngestedLearningAlertsCounter learningAlertsCounter;
 
   @Bean
   IngestService ingestService() {
@@ -37,12 +37,7 @@ class IngestConfiguration {
         .reportsSenderService(reportsSenderService)
         .trafficManager(trafficManager)
         .batchInfoService(batchInfoService)
+        .learningAlertsCounter(learningAlertsCounter)
         .build();
-  }
-
-  @Bean
-  @ConditionalOnBean(IngestService.class)
-  IngestServiceMetrics ingestServiceMetrics(IngestService ingestService) {
-    return new IngestServiceMetrics(ingestService);
   }
 }
