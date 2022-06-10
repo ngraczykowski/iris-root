@@ -8,13 +8,12 @@ import com.silenteight.adjudication.engine.solving.application.process.port.Gove
 import com.silenteight.adjudication.engine.solving.application.process.port.SolvedAlertPort;
 import com.silenteight.adjudication.engine.solving.application.publisher.dto.AlertSolutionRequest;
 import com.silenteight.adjudication.engine.solving.application.publisher.dto.MatchSolutionRequest;
-import com.silenteight.adjudication.engine.solving.application.publisher.port.CommentInputResolvePublisherPort;
-import com.silenteight.adjudication.engine.solving.application.publisher.port.CommentInputStorePublisherPort;
-import com.silenteight.adjudication.engine.solving.application.publisher.port.MatchCategoryPublisherPort;
-import com.silenteight.adjudication.engine.solving.application.publisher.port.ReadyMatchFeatureVectorPort;
+import com.silenteight.adjudication.engine.solving.application.publisher.port.*;
 import com.silenteight.adjudication.engine.solving.data.CommentInputDataAccess;
 import com.silenteight.adjudication.engine.solving.data.MatchCategoryDataAccess;
+import com.silenteight.adjudication.engine.solving.data.MatchFeatureStoreDataAccess;
 import com.silenteight.adjudication.engine.solving.domain.MatchCategory;
+import com.silenteight.adjudication.engine.solving.domain.MatchFeatureValue;
 import com.silenteight.adjudication.engine.solving.domain.comment.CommentInput;
 
 import org.springframework.context.annotation.Bean;
@@ -88,5 +87,14 @@ class PublisherConfiguration {
     var scheduledExecutorService = Executors.newScheduledThreadPool(1);
     return new MatchCategoryPublisher(
         matchCategoryDataAccess, scheduledExecutorService, matchCategoryStoreQueue);
+  }
+
+  @Bean
+  MatchFeaturePublisherPort matchFeaturePublisherPort(
+      MatchFeatureStoreDataAccess matchFeatureStoreDataAccess,
+      Queue<MatchFeatureValue> matchFeatureStoreQueue) {
+    var scheduledExecutorService = Executors.newScheduledThreadPool(2);
+    return new MatchFeaturePublisher(
+        matchFeatureStoreDataAccess, scheduledExecutorService, matchFeatureStoreQueue);
   }
 }

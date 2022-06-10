@@ -45,7 +45,8 @@ class HazelcastStorageProviderConfiguration {
       "in-memory-ae-governance-match-to-send";
   public static final String AE_GOVERNANCE_ALERT_TO_SEND_QUEUE =
       "in-memory-ae-governance-alert-to-send";
-  private static final String MATCH_CATEGORY_STORE_QUEUE = "in-memory-match-value-store";
+  private static final String MATCH_CATEGORY_STORE_QUEUE = "in-memory-match-category-value-store";
+  private static final String MATCH_FEATURE_STORE_QUEUE = "in-memory-match-feature-value-store";
   private final HazelcastConfigurationProperties hazelcastConfigurationProperties;
 
   @Bean
@@ -85,6 +86,11 @@ class HazelcastStorageProviderConfiguration {
   @Bean
   Queue<MatchCategory> matchCategoryStoreQueue(HazelcastInstance hazelcastInstance) {
     return hazelcastInstance.getQueue(MATCH_CATEGORY_STORE_QUEUE);
+  }
+
+  @Bean
+  Queue<MatchFeatureValue> matchFeatureStoreQueue(HazelcastInstance hazelcastInstance) {
+    return hazelcastInstance.getQueue(MATCH_FEATURE_STORE_QUEUE);
   }
 
   @Bean

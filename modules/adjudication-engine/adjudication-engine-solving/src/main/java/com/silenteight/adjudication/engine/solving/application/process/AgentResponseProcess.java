@@ -7,6 +7,7 @@ import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectN
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.adjudication.engine.solving.application.process.port.AgentResponsePort;
 import com.silenteight.adjudication.engine.solving.application.publisher.dto.MatchSolutionRequest;
+import com.silenteight.adjudication.engine.solving.application.publisher.port.MatchFeaturePublisherPort;
 import com.silenteight.adjudication.engine.solving.application.publisher.port.ReadyMatchFeatureVectorPort;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolving;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
@@ -28,6 +29,7 @@ class AgentResponseProcess implements AgentResponsePort {
   private final ReadyMatchFeatureVectorPort governanceProvider;
   private final AlertSolvingRepository alertSolvingRepository;
   private final ProtoMessageToObjectNodeConverter converter;
+  private final MatchFeaturePublisherPort matchFeatureStorePublisherPort;
 
   @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
   public void processMatchesFeatureValue(final AgentExchangeResponse agentResponse) {
@@ -42,6 +44,8 @@ class AgentResponseProcess implements AgentResponsePort {
       long matchId = ResourceName.create(matchName).getLong("matches");
 
       final var alertSolvingModel = updateMatchFeatureValues(agentOutput, matchId, alertId);
+      matchFeatureStorePublisherPort.resolve(alertSolvingModel,agentResponse);
+
       if (alertSolvingModel.isEmpty() || !alertSolvingModel.isMatchReadyForSolving(matchId)) {
         log.warn("Match is not ready for solving {}", matchId);
         continue;

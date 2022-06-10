@@ -3,6 +3,7 @@ package com.silenteight.adjudication.engine.solving.data.jdbc;
 import com.silenteight.adjudication.engine.solving.data.CommentInputDataAccess;
 import com.silenteight.adjudication.engine.solving.data.MatchCategoryDataAccess;
 import com.silenteight.adjudication.engine.solving.data.MatchFeatureDataAccess;
+import com.silenteight.adjudication.engine.solving.data.MatchFeatureStoreDataAccess;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,5 +32,10 @@ public class JdbcAccessConfiguration {
   @Bean
   MatchCategoryDataAccess matchCategoryDataAccess(JdbcTemplate jdbcTemplate) {
     return new JdbcMatchCategoryDataAccess(new MatchCategoryJdbcRepository(jdbcTemplate));
+  }
+
+  @Bean
+  MatchFeatureStoreDataAccess matchFeatureStoreDataAccess(JdbcTemplate jdbcTemplate) {
+    return new JdbcMatchFeatureStoreDataAccess(new MatchFeatureJdbcRepository(jdbcTemplate));
   }
 }

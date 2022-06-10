@@ -65,6 +65,14 @@ public class AlertSolving implements Serializable {
     return this.alertId == 0;
   }
 
+  public MatchFeatureValue getMatchFeatureValue(long matchId, String featureName) {
+    return new MatchFeatureValue(
+        matchId,
+        matches.get(matchId).getFeatures().get(featureName).getAgentConfigFeatureId(),
+        matches.get(matchId).getSolution(),
+        matches.get(matchId).getReason());
+  }
+
   public boolean hasCategories() {
     return matches.values().stream().findFirst().get().getCategories().size() > 0;
   }

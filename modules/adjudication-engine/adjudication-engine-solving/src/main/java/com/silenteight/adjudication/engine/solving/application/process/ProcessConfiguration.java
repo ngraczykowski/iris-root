@@ -92,8 +92,10 @@ class ProcessConfiguration {
   AgentResponseProcess agentResponseProcess(
       final ReadyMatchFeatureVectorPort governanceProvider,
       AlertSolvingRepository alertSolvingRepository,
-      ProtoMessageToObjectNodeConverter converter) {
-    return new AgentResponseProcess(governanceProvider, alertSolvingRepository, converter);
+      ProtoMessageToObjectNodeConverter converter,
+      MatchFeaturePublisherPort matchFeaturePublisherPort) {
+    return new AgentResponseProcess(
+        governanceProvider, alertSolvingRepository, converter, matchFeaturePublisherPort);
   }
 
   @Bean
