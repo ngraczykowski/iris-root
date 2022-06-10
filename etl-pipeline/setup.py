@@ -17,7 +17,7 @@ tests_require = ["pandas==1.1.5"]
 
 setup(
     name="etl_pipeline",
-    version="0.5.32-dev",
+    version="0.5.33-dev",
     description="ETL pipeline",
     author="Silent Eight Pte. Ltd.",
     author_email="support@silenteight.com",
