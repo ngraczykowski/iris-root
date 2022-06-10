@@ -76,6 +76,47 @@ message NameAgentReason {
 
   // AlertId and matchId used for matching results with alerts and matches
   Metadata metadata = 8;
+  ProcessingLog processing_log = 9;
+}
+
+message ProcessingLog {
+  NameExtraction name_extraction = 1;
+  repeated EvaluatorResult evaluator_results = 3;
+}
+
+message NameExtraction {
+  repeated NameCandidates alerted_party_name_candidates = 1;
+  repeated NameCandidates watchlist_party_name_candidates = 2 ;
+}
+
+message NameCandidates {
+  string original_name = 1;
+  repeated string extracted_names = 2;
+}
+
+message Name {
+  string value = 1;
+  repeated LanguageRegion detected_regions = 2;
+}
+
+message LanguageRegion {
+  string region_name = 1;
+  LanguageRegionReason reason = 2;
+}
+
+message LanguageRegionReason {
+  // Information which mechanism was used to detect language
+  string detected_by = 1;
+  // Human friendly message with explanation: unicode code, dict name, NB probability
+  string details = 2;
+}
+
+message EvaluatorResult {
+  Name alerted_party_name = 1;
+  Name watchlist_party_name = 2;
+
+  string decision_source = 3;
+  string decision = 4;
 }
 
 message MatchedNameValueGroup {
