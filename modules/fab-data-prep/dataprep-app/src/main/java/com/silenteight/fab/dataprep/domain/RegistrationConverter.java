@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.silenteight.fab.dataprep.domain.MetadataConverter.getMetadata;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
@@ -101,7 +102,7 @@ class RegistrationConverter {
         .builder()
         .status(AlertStatusIn.SUCCESS)
         .alertId(parsedAlertMessage.getMessageName())
-        .metadata("{}")
+        .metadata(getMetadata(parsedAlertMessage.getSystemId()))
         .matches(parsedAlertMessage
             .getHits()
             .values()

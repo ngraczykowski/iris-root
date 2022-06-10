@@ -23,11 +23,10 @@ class RegistrationServiceTest extends Specification {
 
   def "registered alerts should have name"() {
     given:
-    def systemId = 'systemId'
     def alerts = [(MESSAGE_NAME): ParsedAlertMessage.builder()
         .batchName(BATCH_NAME)
         .messageName(MESSAGE_NAME)
-        .systemId(systemId)
+        .systemId(SYSTEM_ID)
         .parsedMessageData(PARSED_PAYLOAD)
         .hits(PARSED_ALERT_MESSAGE.hits)
         .build()
@@ -38,7 +37,7 @@ class RegistrationServiceTest extends Specification {
             [AlertWithMatchesIn.builder()
                  .alertId(MESSAGE_NAME)
                  .status(AlertStatusIn.SUCCESS)
-                 .metadata('{}')
+                 .metadata(METADATA)
                  .matches(
                      [MatchIn.builder()
                           .matchId(HIT_ID)
@@ -70,7 +69,7 @@ class RegistrationServiceTest extends Specification {
     registeredAlerts.each {
       assert it.getAlertName() == ALERT_NAME
       assert it.getBatchName() == BATCH_NAME
-      assert it.getSystemId() == systemId
+      assert it.getSystemId() == SYSTEM_ID
       assert it.getStatus() == SUCCESS
       it.matches.each {assert it.getMatchName() == MATCH_NAME}
     }

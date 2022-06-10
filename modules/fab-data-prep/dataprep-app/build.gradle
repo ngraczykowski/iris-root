@@ -38,6 +38,7 @@ dependencies {
   runtimeOnly libraries.spring_cloud_starter_consul_config
 
   testImplementation project(':dataprep-test-fixtures')
+  testImplementation libraries.jsonassert
   testRuntimeOnly libraries.junit_jupiter_engine
 }
 
