@@ -50,6 +50,14 @@ agent:
 environment-variables-mapping:
   processes: AGENT_PROCESSES
   grpc_port: GRPC_PORT
-  consul_host: CONSUL_HOST
+
   rabbitmq_login: SPRING_RABBITMQ_USERNAME
   rabbitmq_password: SPRING_RABBITMQ_PASSWORD
+
+  consul_host: CONSUL_HTTP_ADDR
+  consul_secret_path: CONSUL_SECRET_PATH
+  consul_token: CONSUL_HTTP_TOKEN
+  trusted_ca: CONSUL_CACERT
+  consul_client_private_key: CONSUL_CLIENT_KEY
+  consul_client_public_key_chain: CONSUL_CLIENT_CERT
+

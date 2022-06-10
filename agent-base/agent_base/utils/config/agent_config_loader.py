@@ -108,7 +108,7 @@ class AgentConfigLoader:
     def _get_param(
         self,
         env_variable: str,
-        keys_from_yaml: List[str],
+        keys_from_yaml: List[str] = None,
         default: Any = None,
         required: bool = False,
     ) -> Any:
