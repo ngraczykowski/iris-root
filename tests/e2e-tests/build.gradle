@@ -47,7 +47,7 @@ sourceSets {
 
 test {
   useJUnitPlatform()
-  reports.junitXml.setEnabled(false)
+  reports.junitXml.required = false
   systemProperties(System.getProperties())
   outputs.upToDateWhen { false }
 }

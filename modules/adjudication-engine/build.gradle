@@ -1,5 +1,6 @@
 plugins {
   id('com.silenteight.iris.build.root-build')
+  id('com.silenteight.iris.build.sonarqube')
 
   alias(libs.plugins.freefair.aspectj.weaving) apply false
 }

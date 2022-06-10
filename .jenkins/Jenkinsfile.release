@@ -11,7 +11,7 @@ pipeline {
     label 'ec2-agent-devenv'
   }
   triggers {
-    pollSCM 'H 5-17 * * 1-5'
+    pollSCM scmpoll_spec: 'TZ=Europe/Warsaw\nH 7-16 * * 1-5', ignorePostCommitHooks: true
   }
   options {
     disableConcurrentBuilds()
@@ -115,6 +115,8 @@ pipeline {
             environment {
               E2E_TESTS_CREDS_2 = credentials('ra-username-password-2')
               ARTIFACTORY = credentials('artifactory-user')
+              // NOTE(ahaczewski): See https://blog.andresteingress.com/2018/09/05/gradle-daemon-and-jenkins.html.
+              JENKINS_NODE_COOKIE = 'kill-protection'
             }
             steps {
               withGradle {

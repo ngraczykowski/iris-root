@@ -5,6 +5,5 @@ plugins {
 dependencies {
   implementation(platform('com.silenteight.iris.platform:plugins-platform'))
 
-  implementation(project(':java-base'))
-  implementation(project(':sonarqube'))
+  implementation(libs.plugin.sonarqube)
 }

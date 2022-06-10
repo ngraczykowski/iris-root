@@ -1,0 +1,38 @@
+plugins {
+  id 'base'
+  id 'org.sonarqube'
+}
+
+/**
+ * Action creating file with name of task to call to perform SonarQube analysis.
+ */
+abstract class DeclareSonarUsageTask extends DefaultTask {
+  private java.nio.file.Path targetPath
+
+  @Inject
+  DeclareSonarUsageTask(Project project) {
+    targetPath = project.buildDir.toPath().resolve("${project.name}.sonarqube")
+  }
+
+  @OutputFile
+  java.nio.file.Path getOutputFile() {
+    return targetPath
+  }
+
+  @TaskAction
+  void execute() {
+    def targetFile = targetPath.toFile()
+    if (project.gradle.getParent())
+      targetFile.text = "${project.path}${project.name}:sonarqube\n"
+    else
+      targetFile.text = "${project.path}sonarqube\n"
+  }
+}
+
+def declareSonarUsage = tasks.register('declareSonarUsage', DeclareSonarUsageTask) {
+  description = 'Creates a file with SonarQube task name to help discover all projects requiring analysis.'
+}
+
+tasks.named('assemble') {
+  finalizedBy declareSonarUsage
+}

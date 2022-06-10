@@ -1,5 +1,6 @@
 plugins {
   id 'com.silenteight.iris.build.java-base'
+  id 'com.silenteight.iris.build.report-aggregation'
 
   id 'maven-publish'
 

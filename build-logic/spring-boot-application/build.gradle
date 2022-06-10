@@ -6,6 +6,7 @@ dependencies {
   implementation(platform('com.silenteight.iris.platform:plugins-platform'))
 
   implementation(project(':java-base'))
+  implementation(project(':report-aggregation'))
 
   implementation('org.springframework.boot:org.springframework.boot.gradle.plugin')
   implementation('com.google.cloud.tools.jib:com.google.cloud.tools.jib.gradle.plugin')

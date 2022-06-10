@@ -1,5 +1,8 @@
-tasks.register('clean') {Task task ->
-  task.group = 'build'
+plugins {
+  id 'base'
+}
+
+tasks.named('clean') {Task task ->
   task.description = 'Deletes the build directory in all subprojects.'
 
   subprojects {Project subproject ->
@@ -7,8 +10,7 @@ tasks.register('clean') {Task task ->
   }
 }
 
-tasks.register('build') {Task task ->
-  task.group = 'build'
+tasks.named('build') {Task task ->
   task.description = 'Builds all subprojects.'
 
   subprojects {Project subproject ->
