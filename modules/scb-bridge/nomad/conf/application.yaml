@@ -33,6 +33,10 @@ silenteight:
 
       {{ end -}}
 
+    gns-rt:
+      attach-qco-fields-to-response: true
+
+
 spring:
   rabbitmq:
     addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
