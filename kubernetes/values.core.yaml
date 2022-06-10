@@ -129,8 +129,10 @@ frontend:
       memory: 256Mi
     requests:
       memory: 128Mi
-
-#keycloak:
+keycloak:
+  resources:
+    requests:
+      cpu: 200m
   #Set `internal: false` if You want to provide external keycloak
   #internal: false
   #authServerUrl: https://auth.silenteight.com

@@ -70,7 +70,7 @@ pipeline {
                     --set keycloak.externalDatabase.host=${RELEASE_NAME}-postgres.${NAMESPACE}.svc \
                     --set keycloak.externalDatabase.existingSecret=keycloak.${RELEASE_NAME}-postgres.credentials.postgresql.acid.zalan.do \
                     --wait \
-                    --timeout 13m \
+                    --timeout 15m \
                     $RELEASE_NAME \
                     https://repo.silenteight.com/artifactory/helm/sear/sear-"${version}".tgz
                 """
