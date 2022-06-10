@@ -24,7 +24,12 @@ Feature: Sierra scenarios
     Then Activate solving model as user "B"
 
   Scenario: Get an alert from CMAPI
-    Given Send alert on solving
+    Given Subscribed to callbacks at "/mock/cmapi/pb"
+    When Send alert on solving
+    Then Wait for a message for max 20 seconds
+
+    When The last message contains following fields
+      | Body.msg_ReceiveDecision.Messages[0].Message.Comment | S8 recommended action: Manual Investigation |
     When Initialize generation of "AI_REASONING" report via warehouse and wait until it's generated
     And Download generated report
     Then Downloaded report contains 1 rows

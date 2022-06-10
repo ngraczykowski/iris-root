@@ -24,9 +24,12 @@ import utils.datageneration.webapp.User;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 public class Hooks implements En {
 
   public static ScenarioContext scenarioContext = new ScenarioContext();
+  public static final String STOMP_SESSION = "stompSession";
 
   public static final String BASE_URL = System.getProperty("test.url");
   private static final CustomLogFilter CUSTOM_LOG_FILTER = new CustomLogFilter();
@@ -101,6 +104,8 @@ public class Hooks implements En {
     And(
         "Default user is admin",
         () -> scenarioContext.setDefaultUser(scenarioContext.getAdminUser()));
+
+    And("Give it time - {int} seconds", (Integer seconds) -> SECONDS.sleep(seconds));
   }
 
   @SneakyThrows

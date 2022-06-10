@@ -385,6 +385,14 @@ components:
 
     dbName: "wh"
 
+  callback-mock:
+    enabled: false
+    useDb: false
+    useRabbit: false
+    replicaCount: 1
+    image:
+      repository: registry.dev.s8ops.com/iris/callback-mock
+
 # FIXME(pputerla) - remark - we're missing list of supported component keys
 agents:
   name-agent:

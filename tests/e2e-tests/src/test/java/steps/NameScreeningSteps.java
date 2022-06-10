@@ -155,11 +155,6 @@ public class NameScreeningSteps implements En {
           }
         });
 
-    And(
-        "Give it time - {int} seconds",
-        (Integer seconds) -> {
-          SECONDS.sleep(seconds);
-        }
-    );
+
   }
 }
