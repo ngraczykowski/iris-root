@@ -136,10 +136,12 @@ class Functions:
 
     @classmethod
     def set_up_for_wm_party(cls, payload):
-        ap_type = "I"
+        ap_type = None
         field = payload["xml_fields"]["PARTY1_ORGANIZATION_NAME"]
         if field:
-            ap_type = "C"
+            ap_type = "I"
+            if field.value:
+                ap_type = "C"
         return ap_type
 
     @classmethod

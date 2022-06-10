@@ -58,6 +58,10 @@ def pipeline_resource(request):
             "notebooks/sample/isg_account_in_payload_format_customer_type_with_no_token.json",
             "test_isg_account_in_payload_format_customer_type_no_token",
         ),
+        (
+            "notebooks/sample/wm_party_in_payload_format_customer_type_without_carrier_tag.json",
+            "test_wm_party_in_payload_format_customer_type_without_carrier_tag",
+        ),
     ],
 )
 async def test_parametrized(source_file, reference_folder, pipeline_resource):

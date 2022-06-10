@@ -136,7 +136,7 @@
         "triggerCategories": {
             "other": {},
             "address": {},
-            "job": {"tokens": ["PARTY1_ORGANIZATION_NAME"]},
+            "job": {},
             "name": {}
         },
         "triggeredTokens": {

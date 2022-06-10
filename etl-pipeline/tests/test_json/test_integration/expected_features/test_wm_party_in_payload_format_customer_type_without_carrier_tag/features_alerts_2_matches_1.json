@@ -3,21 +3,21 @@
         "feature": "features/name",
         "alertedPartyNames": [
             {
-                "name": "Eva None Pladimirova"
-            },
-            {
-                "name": "Pladimir Vutin"
-            },
-            {
                 "name": "Pladimir None Vutin"
             },
             {
+                "name": "Eva None Pladimirova"
+            },
+            {
                 "name": "Eva Pladimirova"
+            },
+            {
+                "name": "Pladimir Vutin"
             }
         ],
         "watchlistNames": [
             {
-                "name": "Joe Ding",
+                "name": "Joe Dong",
                 "type": "REGULAR"
             }
         ],
@@ -37,15 +37,15 @@
     {
         "feature": "features/document",
         "alertedPartyDocuments": [
-            "022368917",
-            "154421273"
+            "154421273",
+            "022368917"
         ]
     },
     {
         "feature": "features/employerName",
         "watchlistNames": [
             {
-                "name": "Joe Ding",
+                "name": "Joe Dong",
                 "type": "REGULAR"
             }
         ],
@@ -66,7 +66,7 @@
         "feature": "features/isApIdTpMarked",
         "modelKey": {
             "alertedParty": {
-                "id": "None"
+                "id": "A05003324172"
             }
         },
         "discriminator": {
@@ -86,43 +86,43 @@
     },
     {
         "feature": "features/geoNationality",
-        "alertedPartyLocation": "States United",
-        "watchlistLocation": "United States of America US|FL;US"
+        "alertedPartyLocation": "UNITED STATES OF AMERICA United States",
+        "watchlistLocation": "Poland PL"
     },
     {
         "feature": "features/geoPlaceOfBirth",
         "alertedPartyLocation": "United States",
-        "watchlistLocation": "United States of America US|FL;US"
+        "watchlistLocation": "PL Poland"
     },
     {
         "feature": "features/geoSanctioned",
-        "alertedPartyLocation": "States United",
-        "watchlistLocation": "Joe Ding United States of America US|FL;US"
+        "alertedPartyLocation": "UNITED STATES OF AMERICA United States",
+        "watchlistLocation": "PL Poland Joe Dong"
     },
     {
         "feature": "features/geoResidencies",
-        "alertedPartyLocation": "States United",
-        "watchlistLocation": "United States of America US|FL;US"
+        "alertedPartyLocation": "UNITED STATES OF AMERICA United States",
+        "watchlistLocation": "PL Poland"
     },
     {
         "feature": "features/companyName",
         "alertedPartyNames": [
             {
-                "name": "Eva None Pladimirova"
-            },
-            {
-                "name": "Pladimir Vutin"
-            },
-            {
                 "name": "Pladimir None Vutin"
             },
             {
+                "name": "Eva None Pladimirova"
+            },
+            {
                 "name": "Eva Pladimirova"
+            },
+            {
+                "name": "Pladimir Vutin"
             }
         ],
         "watchlistNames": [
             {
-                "name": "Joe Ding",
+                "name": "Joe Dong",
                 "type": "REGULAR"
             }
         ],
@@ -135,12 +135,32 @@
         ],
         "triggerCategories": {
             "other": {},
-            "address": {},
-            "job": {"tokens": ["PARTY1_ORGANIZATION_NAME"]},
+            "job": {},
+            "address": {
+                "tokens": [
+                    "ADDRESS1_COUNTRY",
+                    "ADDRESS1_PROVINCE",
+                    "CONCAT_ADDRESS",
+                    "ADDRESS1_STATE",
+                    "ADDRESS1_CITY"
+                ]
+            },
             "name": {}
         },
         "triggeredTokens": {
             "Doe": {
+                "tokensMap": {
+                    "CONCAT_ADDRESS": {
+                        "tokens": [
+                            "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
+                        ]
+                    },
+                    "ADDRESS1_LINE2": {
+                        "tokens": [
+                            "Jane Doe AA BBB"
+                        ]
+                    }
+                }
             }
         }
     }

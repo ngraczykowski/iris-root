@@ -29,8 +29,8 @@
         "alertedParty": {
             "ALL_PARTY_TYPES": [],
             "AP_DOB": [],
-            "AP_PARTY_TYPE": "I",
-            "ENTITY_TYPE_MATCH": "Y",
+            "AP_PARTY_TYPE": "UNKNOWN",
+            "ENTITY_TYPE_MATCH": "INCONCLUSIVE",
             "headerInfo": {
                 "currentVersionId": "122438658",
                 "datasetId": "1044",
@@ -719,8 +719,8 @@
         "alertedParty": {
             "ALL_PARTY_TYPES": [],
             "AP_DOB": [],
-            "AP_PARTY_TYPE": "I",
-            "ENTITY_TYPE_MATCH": "Y",
+            "AP_PARTY_TYPE": "UNKNOWN",
+            "ENTITY_TYPE_MATCH": "INCONCLUSIVE",
             "headerInfo": {
                 "currentVersionId": "122438658",
                 "datasetId": "1044",
