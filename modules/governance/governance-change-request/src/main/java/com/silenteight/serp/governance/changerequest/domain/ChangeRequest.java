@@ -22,6 +22,7 @@ import static java.time.OffsetDateTime.now;
 
 @Entity
 @Data
+@Table(name = "governance_change_request")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)

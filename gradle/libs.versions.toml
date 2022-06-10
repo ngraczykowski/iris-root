@@ -111,6 +111,28 @@ silenteight-serp-protocol-agent = { group = "com.silenteight.serp.protocol", nam
 silenteight-serp-protocol-base = { group = "com.silenteight.serp.protocol", name = "serp-protocol-base", version.ref = "serp-protocol" }
 silenteight-serp-protocol-ns = { group = "com.silenteight.serp.protocol", name = "serp-protocol-ns", version.ref = "serp-protocol" }
 silenteight-serp-protocol-scb = { group = "com.silenteight.serp.protocol", name = "serp-protocol-scb", version.ref = "serp-protocol" }
+#temporary; needed for governance, simulator and webapp merge to backend module
+silenteight-serp-governance-agent = { group = "com.silenteight.iris", name="governance-agent"}
+silenteight-serp-governance-change-request = { group = "com.silenteight.iris", name="governance-change-request"}
+silenteight-serp-governance-common-web = { group = "com.silenteight.iris", name="governance-common-web"}
+silenteight-serp-governance-db-changelog = { group = "com.silenteight.iris", name="governance-db-changelog"}
+silenteight-serp-governance-feature-vector = { group = "com.silenteight.iris", name="governance-feature-vector"}
+silenteight-serp-governance-file = { group = "com.silenteight.iris", name="governance-file"}
+silenteight-serp-governance-model = { group = "com.silenteight.iris", name="governance-model"}
+silenteight-serp-governance-policy = { group = "com.silenteight.iris", name="governance-policy"}
+silenteight-serp-governance-qa = { group = "com.silenteight.iris", name="governance-qa"}
+silenteight-serp-governance-strategy = { group = "com.silenteight.iris", name="governance-strategy"}
+silenteight-serp-governance-common-web-testing = { group = "com.silenteight.iris", name="governance-common-web-testing"}
+silenteight-simulator-dataset = { group = "com.silenteight.iris", name="simulator-dataset"}
+silenteight-simulator-common-web = { group = "com.silenteight.iris", name="simulator-common-web"}
+silenteight-simulator-common-web-testing = { group = "com.silenteight.iris", name="simulator-common-web-testing"}
+silenteight-simulator-db-changelog = { group = "com.silenteight.iris", name="simulator-db-changelog"}
+silenteight-simulator-documentation = { group = "com.silenteight.iris", name="simulator-documentation"}
+silenteight-simulator-management = { group = "com.silenteight.iris", name="simulator-management"}
+silenteight-simulator-model = { group = "com.silenteight.iris", name="simulator-model"}
+silenteight-simulator-processing = { group = "com.silenteight.iris", name="simulator-processing"}
+silenteight-simulator-retention = { group = "com.silenteight.iris", name="simulator-retention"}
+#end of temporary
 warehouse-data-api = { group = "com.silenteight.iris", name = "se-data-api" }
 warehouse-sampling-api = { group = "com.silenteight.iris", name = "se-sampling-alerts-api" }
 warehouse-internal-api = { group = "com.silenteight.iris", name = "se-warehouse-internal-api" }

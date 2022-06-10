@@ -1,0 +1,15 @@
+# Spring `foxtrot` profile configuration
+# Use this profile for Foxtrot client custom configuration.
+
+serp:
+  governance:
+    agent:
+      agent-configuration-source: classpath:foxtrot/agent_configs.json
+      agent-details-source: classpath:foxtrot/agent_details.json
+
+    featurevector.event.strategy: SOLVE
+
+    qa.sampling.schedule.enabled: false
+
+    model:
+      modelTransfer: LOCAL

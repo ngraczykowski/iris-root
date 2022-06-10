@@ -25,6 +25,7 @@ import static javax.persistence.CascadeType.ALL;
 
 @Entity
 @Data
+@Table(name = "governance_policy")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)

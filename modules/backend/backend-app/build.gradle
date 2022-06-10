@@ -1,0 +1,110 @@
+plugins {
+  id "groovy"
+  id "com.silenteight.iris.build.container-image"
+  id "com.silenteight.iris.build.spring-boot-application"
+}
+
+description = "Backend Application"
+
+dependencies {
+  implementation libs.silenteight.serp.governance.agent
+  implementation libs.silenteight.serp.governance.change.request
+  implementation libs.silenteight.serp.governance.common.web
+  implementation libs.silenteight.serp.governance.db.changelog
+  implementation libs.silenteight.serp.governance.feature.vector
+  implementation libs.silenteight.serp.governance.file
+  implementation libs.silenteight.serp.governance.model
+  implementation libs.silenteight.serp.governance.policy
+  implementation libs.silenteight.serp.governance.qa
+  implementation libs.silenteight.serp.governance.strategy
+
+//  implementation libs.silenteight.simulator.dataset
+//  implementation libs.silenteight.simulator.common.web
+//  implementation libs.silenteight.simulator.common.web.testing
+//  implementation libs.silenteight.simulator.db.changelog
+//  implementation libs.silenteight.simulator.documentation
+//  implementation libs.silenteight.simulator.management
+//  implementation libs.silenteight.simulator.model
+//  implementation libs.silenteight.simulator.processing
+//  implementation libs.silenteight.simulator.retention
+
+  implementation libs.commons.collections
+
+  implementation libs.silenteight.commons.app
+  //TODO(dsniezek): remove exclude when silenteight.filestorage.minio dependency
+  // will be fixed(should not contains test dependencies)
+  implementation(libs.silenteight.filestorage.minio){
+    exclude group: 'org.testcontainers', module: '*'
+  }
+  implementation libs.silenteight.sep.base.common
+  implementation libs.silenteight.serp.protocol.base
+
+  implementation libs.spring.boot.starter.actuator
+
+  implementation libs.spring.boot.starter.web
+
+  implementation libs.spring.context.support
+  implementation libs.spring.security.config
+  implementation libs.spring.security.web
+  implementation libs.spring.cloud.consul.discovery
+  implementation libs.spring.cloud.starter.consul.config
+  implementation libs.spring.integration.mail
+
+  implementation libs.commons.lang3
+
+  implementation libs.protobuf.java.util
+  implementation libs.grpc.api
+  implementation libs.grpc.stub
+  implementation libs.grpc.protobuf
+  implementation libs.grpc.census
+  implementation libs.consul.grpc.registration
+  implementation libs.grpc.server.spring.boot.starter
+
+  implementation libs.jaxb.api
+
+  // ANO: jackson.module.kotlin can be removed once spring and or jackson is bumped
+  // kotlin is required by minio
+  // https://stackoverflow.com/questions/67630048/springboot-2-5-0-for-jackson-kotlin-classes-support-please-add-com-fasterxml-ja
+  implementation libs.jackson.module.kotlin
+
+  implementation libs.jakarta.mail
+
+  implementation libs.protobuf.java.util
+
+  implementation libs.querydsl.jpa
+
+  //Sentry
+  runtimeOnly libs.sentry.spring.boot.starter
+  //having this at runtime ensure sending all ERROR level logs to Sentry
+  runtimeOnly libs.sentry.logback
+
+  runtimeOnly libs.hikari.cp
+  runtimeOnly libs.liquibase.core
+  runtimeOnly libs.liquibase.sessionlock
+  runtimeOnly libs.postgresql
+
+  annotationProcessor(libs.querydsl.apt.jpa) {
+    artifact {
+      classifier = 'jpa'
+    }
+  }
+  annotationProcessor libs.jakarta.persistence.api
+  annotationProcessor libs.jakarta.annotation.api
+  annotationProcessor libs.spring.boot.configuration.processor
+
+  testImplementation libs.silenteight.serp.governance.common.web.testing
+  testImplementation libs.spock.spring
+  testImplementation libs.spring.integration.test
+
+  testImplementation libs.rest.assured.spring.mock.mvc
+
+  aspect libs.silenteight.sep.base.aspects
+}
+
+publishing {
+  publications {
+    bootJava(MavenPublication) {
+      artifact bootJar
+    }
+  }
+}

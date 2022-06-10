@@ -14,6 +14,7 @@ import static com.silenteight.serp.governance.model.common.ModelResource.toResou
 
 @Entity
 @Data
+@Table(name = "governance_model")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)

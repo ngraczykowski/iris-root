@@ -811,16 +811,18 @@
     "alwaysDisplayInConsole" : false,
     "clientAuthenticatorType" : "client-secret",
     "redirectUris": [
-      "http://localhost:24410/rest/webapp/openapi/*",
       "http://localhost:24204/rest/governance/openapi/*",
+      "http://localhost:24410/rest/webapp/openapi/*",
+      "http://localhost:24025/rest/backend/openapi/*",
       "http://localhost:24890/rest/simulator/openapi/*",
       "http://localhost:24900/rest/warehouse/openapi/*"
     ],
     "webOrigins": [
-      "http://localhost:24410",
-      "http://localhost:24204",
       "http://localhost:24890",
-      "http://localhost:24900"
+      "http://localhost:24900",
+      "http://localhost:24204",
+      "http://localhost:24025",
+      "http://localhost:24410"
     ],
     "notBefore" : 0,
     "bearerOnly" : false,
