@@ -5,7 +5,6 @@
 @Library('pipeline-shared-library@master') _
 
 def version = ""
-def javaVersion = ""
 
 def sonarScan(String task, String version) {
   return {
@@ -15,15 +14,16 @@ def sonarScan(String task, String version) {
               credentialsId: 'artifactory-user',
               usernameVariable: 'S8_REPO_USER',
               passwordVariable: 'S8_REPO_PASSWORD')]) {
-        sh "./gradlew -Pversion=${version} ${task}"
+        sh "./gradlew -Dsonar.branch.name=\$CHANGE_BRANCH -Pversion=${version} ${task}"
       }
     }
   }
 }
 
 pipeline {
-  // NOTE(ahaczewski): Waiting for Quality Gate does not require an agent.
-  agent none
+  agent {
+    label 'ec2-agent'
+  }
   triggers {
     pollSCM scmpoll_spec: 'TZ=Europe/Warsaw\nH 7-16 * * 1-5', ignorePostCommitHooks: true
   }
@@ -36,19 +36,11 @@ pipeline {
       steps {
         script {
           version = sh(returnStdout: true, script: './scripts/get-version.sh').trim()
-          if (env.CHANGE_ID)
-            version += "-${env.BRANCH_NAME}"
-          // NOTE(ahaczewski): To keep the "version" clean of -SNAPSHOT, while still using
-          //  Artifactory mechanism for clearing -SNAPSHOTs.
-          javaVersion = env.CHANGE_ID ? "${version}-SNAPSHOT" : version
         }
         updateBuildName displayName: "#${env.BUILD_NUMBER} v${version}"
       }
     }
     stage('SonarQube') {
-      agent {
-        label 'ec2-agent'
-      }
       steps {
         withGradle {
           withCredentials(
@@ -56,27 +48,16 @@ pipeline {
                   credentialsId: 'artifactory-user',
                   usernameVariable: 'S8_REPO_USER',
                   passwordVariable: 'S8_REPO_PASSWORD')]) {
-            sh "./gradlew -Pversion=\"${javaVersion}\" clean build"
+            sh "./gradlew -Pversion=\"${version}\" clean build"
           }
         }
 
         script {
-          def scanList = findFiles(glob: 'modules/**/*.sonarqube').collect {readFile(file: it.path).trim()}
-          parallel scanList.collectEntries {[(it): sonarScan(it, javaVersion)]}
+          def scanList =
+              findFiles(glob: 'modules/**/*.sonarqube').collect {readFile(file: it.path).trim()}
+          parallel scanList.collectEntries {[(it): sonarScan(it, version)]}
         }
       }
     }
-    stage('Quality Gate') {
-      steps {
-        timeout(time: 30, unit: 'MINUTES') {
-          waitForQualityGate
-        }
-      }
-    }
-  }
-  post {
-    //failure {
-    //notifyBuild color: 'danger', channel: 'C03D4GD7RHP', title: ':rocket: Iris Release'
-    //}
   }
 }
