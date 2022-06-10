@@ -33,6 +33,6 @@ def declareSonarUsage = tasks.register('declareSonarUsage', DeclareSonarUsageTas
   description = 'Creates a file with SonarQube task name to help discover all projects requiring analysis.'
 }
 
-tasks.named('assemble') {
+tasks.named('build') {
   finalizedBy declareSonarUsage
 }
