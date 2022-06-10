@@ -1,24 +1,50 @@
+import dataclasses
 import logging
-from typing import Any, Mapping
+import os
+from typing import Any, Mapping, Optional
 
 import consul.aio
 
 
-class ConsulServiceException(Exception):
+class ConsulServiceError(Exception):
     pass
 
 
-class ConsulService:
-    def __init__(self, config):
-        self.logger = logging.getLogger("main").getChild("consul_service")
-        self.consul_prefix = "discovery:///"
+@dataclasses.dataclass
+class ConsulConfig:
+    host: str
+    port: int = 8500
+    token: Optional[str] = None
+    consul_secret_path: Optional[str] = None
+    trusted_ca: Optional[str] = None
+    client_private_key: Optional[str] = None
+    client_public_key_chain: Optional[str] = None
 
-        consul_config = config.get("consul")
-        if consul_config:
-            self.consul = consul.aio.Consul(**consul_config)
+    def __post_init__(self):
+        if self.port:
+            self.port = int(self.port)
+
+
+class ConsulService:
+    def __init__(self, config: ConsulConfig):
+        self.logger = logging.getLogger("main").getChild("consul_service")
+        self.consul = None
+        self.consul_prefix = "discovery:///"
+        config = self._update_consul_config_from_env(config)
+
+        if all((config.trusted_ca, config.client_public_key_chain, config.client_private_key)):
+            self.consul = consul.aio.Consul(
+                host=config.host,
+                port=config.port,
+                token=config.token,
+                verify=config.trusted_ca,
+                cert=[
+                    config.client_private_key,
+                    config.client_public_key_chain,
+                ],
+            )
         else:
-            self.consul = None
-            self.logger.info("Consul not configured")
+            self.consul = consul.aio.Consul(host=config.host, port=config.port, token=config.token)
 
     async def get_service(self, key: str, **kwargs) -> str:
         if self.consul_prefix in key:
@@ -34,10 +60,29 @@ class ConsulService:
         _, services = await self.consul.catalog.service(key, **kwargs)
         if not services:
             self.logger.error(f"Service {key} is not known")
-            raise ConsulServiceException(f"Service {key} is not known")
+            raise ConsulServiceError(f"Service {key} is not known")
 
         return services[0]
 
     async def get(self, key: str):
         _, value = self.consul.kv.get(key)
         return value["Value"] if value else None
+
+    @staticmethod
+    def _update_consul_config_from_env(config: ConsulConfig) -> ConsulConfig:
+        return ConsulConfig(
+            host=os.environ.get("CONSUL_HTTP_ADDR") if not config.host else config.host,
+            token=os.environ.get("CONSUL_HTTP_TOKEN") if not config.token else config.token,
+            consul_secret_path=os.environ.get("CONSUL_SECRET_PATH")
+            if not config.consul_secret_path
+            else config.consul_secret_path,
+            trusted_ca=os.environ.get("CONSUL_CACERT")
+            if not config.trusted_ca
+            else config.trusted_ca,
+            client_private_key=os.environ.get("CONSUL_CLIENT_KEY")
+            if not config.client_private_key
+            else config.client_private_key,
+            client_public_key_chain=os.environ.get("CONSUL_CLIENT_CERT")
+            if not config.client_public_key_chain
+            else config.client_public_key_chain,
+        )

@@ -1,14 +1,8 @@
-import dataclasses
 from typing import Union
 
 import grpc
 
-
-@dataclasses.dataclass
-class SSLCredentials:
-    client_ca_filename: str
-    client_private_key_filename: str
-    client_public_key_chain_filename: str
+from s8_python_network.ssl_credentials import SSLCredentials
 
 
 def get_channel(

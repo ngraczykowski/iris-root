@@ -5,7 +5,8 @@ import pytest
 from grpc_health.v1.health_pb2 import HealthCheckRequest, HealthCheckResponse
 from grpc_health.v1.health_pb2_grpc import HealthStub
 
-from s8_python_network.grpc_channel.grpc_channel import SSLCredentials, get_channel
+from s8_python_network.grpc_channel.grpc_channel import get_channel
+from s8_python_network.ssl_credentials import SSLCredentials
 from s8_python_network.utils import kill_process_on_the_port, kill_recursive
 
 TIMEOUT = 0.5
