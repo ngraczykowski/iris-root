@@ -45,4 +45,12 @@ public class ScenarioContext {
   public void setUser(String userLabel, User user) {
     set(USER + userLabel, user);
   }
+
+  public String getUserToken(String username) {
+    return (String) context.get("access_token_" + username);
+  }
+
+  void setUserToken(String username, String token) {
+    context.put("access_token_" + username, token);
+  }
 }

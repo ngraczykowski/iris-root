@@ -45,20 +45,29 @@ public class AuthUtils {
   }
 
   private static String getAuthTokenHeader(String username, String password) {
-    return given()
-        .auth()
-        .none()
-        .param("grant_type", "password")
-        .param("username", username)
-        .param("password", password)
-        .param("client_id", System.getProperty("test.clientId", "frontend"))
-        .contentType(ContentType.URLENC)
-        .post(OIDC_TOKEN_ENDPOINT)
-        .then()
-        .statusCode(200)
-        .extract()
-        .response()
-        .jsonPath()
-        .getString("access_token");
+
+    var token = scenarioContext.getUserToken(username);
+    if (token != null) {
+      return token;
+    }
+
+    token =
+        given()
+            .auth()
+            .none()
+            .param("grant_type", "password")
+            .param("username", username)
+            .param("password", password)
+            .param("client_id", System.getProperty("test.clientId", "frontend"))
+            .contentType(ContentType.URLENC)
+            .post(OIDC_TOKEN_ENDPOINT)
+            .then()
+            .statusCode(200)
+            .extract()
+            .response()
+            .jsonPath()
+            .getString("access_token");
+    scenarioContext.setUserToken(username, token);
+    return token;
   }
 }
