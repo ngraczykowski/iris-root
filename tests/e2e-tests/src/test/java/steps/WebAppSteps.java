@@ -98,6 +98,7 @@ public class WebAppSteps implements En {
         .patch(String.format("/rest/webapp/api/users/%s", user.getUserName()))
         .then()
         .statusCode(204);
+    scenarioContext.setUserToken(user.getUserName(), null);
   }
 
   private void deleteUser(String label) {
@@ -109,5 +110,6 @@ public class WebAppSteps implements En {
         .delete(String.format("/rest/webapp/api/users/%s", user.getUserName()))
         .then()
         .statusCode(204);
+    scenarioContext.setUserToken(user.getUserName(), null);
   }
 }

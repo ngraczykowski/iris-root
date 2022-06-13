@@ -50,7 +50,7 @@ public class ScenarioContext {
     return (String) context.get("access_token_" + username);
   }
 
-  void setUserToken(String username, String token) {
+  public void setUserToken(String username, String token) {
     context.put("access_token_" + username, token);
   }
 }
