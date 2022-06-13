@@ -1,4 +1,4 @@
-# Module [APP]() 
+# Module [APP]()
 
 ## Build
 
@@ -28,4 +28,4 @@ $ java -jar -Dserver.port=8080 -Dpb.cmapi.callback.login=TCMAPI -Dpb.cmapi.callb
   default `r+ZhajxNEhWTfS9YV/lRwgbpDFgl`)
 - `-Ddebug` - enable debug mode - print additional data
 
-## [Examples](../http-tests/ftcc-tests.http) with test requests. 
+## [Examples](../http-tests/ftcc-tests.http) with test requests.

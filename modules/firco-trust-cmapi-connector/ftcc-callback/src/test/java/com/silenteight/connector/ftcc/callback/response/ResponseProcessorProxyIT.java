@@ -37,4 +37,3 @@ class ResponseProcessorProxyIT extends BaseDataJpaTest {
     assertDoesNotThrow(() -> underTest.process(messageBatchCompleted));
   }
 }
-

@@ -39,4 +39,3 @@ class ResponseProcessorAspectjIT extends BaseDataJpaTest {
         () -> underTest.process(messageBatchCompleted)).getMessage();
   }
 }
-

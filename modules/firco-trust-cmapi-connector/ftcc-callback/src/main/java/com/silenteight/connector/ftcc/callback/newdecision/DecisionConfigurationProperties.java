@@ -10,4 +10,3 @@ class DecisionConfigurationProperties {
 
   String resourceLocation = "classpath:decision/decision.csv";
 }
-

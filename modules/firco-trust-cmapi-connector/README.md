@@ -22,7 +22,7 @@ Configuration
 ### AMQP
 - `ftcc.core-bridge.inbound.batch-completed.exchange` - **BatchCompleted** exchange name,
 - `ftcc.core-bridge.outbound.recommendations-delivered.exchange` - **RecommendationDelivered** exchange name,
- 
+
 ### Callback `ftcc.cmapi.callback`
 - `ftcc.cmapi.callback.endpoint` - callback endpoint (default: `http://localhost:8080/rest/ftcc/callback`)
 - `ftcc.cmapi.callback.login` - login placed in CallbackRequestDto (default: `user`)
@@ -71,4 +71,3 @@ add to configuration (`ftcc.decision.resource-location`) entry:
 
 - Java: **11**,
 - Spring Boot: **2.6.6**
-
