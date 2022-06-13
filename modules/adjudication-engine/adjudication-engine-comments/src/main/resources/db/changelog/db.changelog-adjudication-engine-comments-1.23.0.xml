@@ -60,4 +60,58 @@
     </insert>
   </changeSet>
 
+  <changeSet id="adjudication-engine-comments-1.23.0_2" author="jgajewski">
+
+    <insert tableName="ae_comment_template">
+      <column name="template_name" value="historical-agent-fp.ftl"/>
+      <column name="created_at" valueDate="${now}"/>
+      <column name="revision" valueNumeric="5"/>
+      <column name="template" valueClobFile="templates/historical-agent-fp-rev-5.ftl"/>
+    </insert>
+
+    <insert tableName="ae_comment_template">
+      <column name="template_name" value="historical-agent-tp.ftl"/>
+      <column name="created_at" valueDate="${now}"/>
+      <column name="revision" valueNumeric="5"/>
+      <column name="template" valueClobFile="templates/historical-agent-tp-rev-5.ftl"/>
+    </insert>
+
+    <insert tableName="ae_comment_template">
+      <column name="template_name" value="contextual-agent-fp.ftl"/>
+      <column name="created_at" valueDate="${now}"/>
+      <column name="revision" valueNumeric="5"/>
+      <column name="template" valueClobFile="templates/contextual-agent-fp-rev-5.ftl"/>
+    </insert>
+
+    <insert tableName="ae_comment_template">
+      <column name="template_name" value="contextual-agent-tp.ftl"/>
+      <column name="created_at" valueDate="${now}"/>
+      <column name="revision" valueNumeric="5"/>
+      <column name="template" valueClobFile="templates/contextual-agent-tp-rev-5.ftl"/>
+    </insert>
+
+    <insert tableName="ae_comment_template">
+      <column name="template_name" value="geo-agent.ftl"/>
+      <column name="created_at" valueDate="${now}"/>
+      <column name="revision" valueNumeric="2"/>
+      <column name="template" valueClobFile="templates/geo-agent-rev-2.ftl"/>
+    </insert>
+
+    <insert tableName="ae_comment_template">
+      <column name="template_name" value="organization-name-agent.ftl"/>
+      <column name="created_at" valueDate="${now}"/>
+      <column name="revision" valueNumeric="3"/>
+      <column name="template" valueClobFile="templates/organization-name-agent-rev-3.ftl"/>
+    </insert>
+
+    <insert tableName="ae_comment_template">
+      <column name="template_name" value="categories.ftl"/>
+      <column name="created_at" valueDate="${now}"/>
+      <column name="revision" valueNumeric="3"/>
+      <column name="template" valueClobFile="templates/categories-rev-7.ftl"/>
+    </insert>
+
+  </changeSet>
+
+
 </databaseChangeLog>
