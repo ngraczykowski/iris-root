@@ -1,5 +1,4 @@
 @Library('pipeline-shared-library@github') _
-def utils = new com.silenteight.jenkins.ci.Utils()
 def jenkins = new com.silenteight.jenkins.ci.Jenkins()
 
 def loadValuesYaml(key){
