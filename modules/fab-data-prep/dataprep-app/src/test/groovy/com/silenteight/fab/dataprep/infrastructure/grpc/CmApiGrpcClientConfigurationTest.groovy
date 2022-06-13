@@ -20,4 +20,3 @@ class CmApiGrpcClientConfigurationTest extends Specification {
     properties.getDeadline() == Duration.of(1, ChronoUnit.MINUTES)
   }
 }
-
