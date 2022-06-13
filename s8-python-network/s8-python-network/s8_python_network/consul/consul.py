@@ -4,6 +4,7 @@ import os
 from typing import Any, Mapping, Optional
 
 import consul.aio
+import requests
 
 
 class ConsulServiceError(Exception):
@@ -31,6 +32,8 @@ class ConsulService:
         self.consul = None
         self.consul_prefix = "discovery:///"
         config = self._update_consul_config_from_env(config)
+        self.map = {}
+        self.params = {}
 
         if all((config.trusted_ca, config.client_public_key_chain, config.client_private_key)):
             self.consul = consul.aio.Consul(
@@ -39,9 +42,10 @@ class ConsulService:
                 token=config.token,
                 verify=config.trusted_ca,
                 cert=[
-                    config.client_private_key,
                     config.client_public_key_chain,
+                    config.client_private_key,
                 ],
+                scheme="https",
             )
         else:
             self.consul = consul.aio.Consul(host=config.host, port=config.port, token=config.token)
@@ -68,6 +72,37 @@ class ConsulService:
         _, value = self.consul.kv.get(key)
         return value["Value"] if value else None
 
+    def get_secret(self, secret_name):
+        try:
+            return self.params[secret_name]
+        except KeyError:
+            pass
+        try:
+            return self.map[secret_name]
+        except KeyError:
+            if self.CONSUL_SECRET_PATH:
+                try:
+                    byte_secrets = self.c.kv.get(self.CONSUL_SECRET_PATH)[1]["Value"]
+                    secrets = byte_secrets.decode().splitlines()
+                    for secret in secrets:
+                        left_side_ix = secret.find("=")
+                        if left_side_ix == -1:
+                            self.logger.warning("No '=' in secret")
+
+                        variable_name = secret[:left_side_ix]
+                        if variable_name == secret_name:
+                            self.map[variable_name] = secret[left_side_ix + 1 :]
+                            self.logger.debug(f"Got environment variable: {variable_name}")
+                except (
+                    requests.exceptions.InvalidURL,
+                    requests.exceptions.ConnectionError,
+                    ConsulServiceError,
+                ):
+                    raise ConsulServiceError("No valid consul connection")
+            else:
+                raise ConsulServiceError("No valid consul service secrets path")
+        return self.map[secret_name]
+
     @staticmethod
     def _update_consul_config_from_env(config: ConsulConfig) -> ConsulConfig:
         return ConsulConfig(
@@ -86,3 +121,9 @@ class ConsulService:
             if not config.client_public_key_chain
             else config.client_public_key_chain,
         )
+
+    def __getattr__(self, name):
+        try:
+            return object.__getattribute__(self, name)
+        except AttributeError:
+            return self.get_secret(name)
