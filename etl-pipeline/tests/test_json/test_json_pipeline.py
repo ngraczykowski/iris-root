@@ -1,5 +1,6 @@
 import json
 from copy import deepcopy
+from dataclasses import asdict
 
 import pytest
 
@@ -8,6 +9,7 @@ from etl_pipeline.custom.ms.datatypes.field import (  # noqa F401; required for 
     InputRecordField,
 )
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
+from etl_pipeline.service.servicer import Match
 from pipelines.ms.ms_pipeline import MSPipeline
 from tests.test_json.constant import EXAMPLE_PARTIES
 
@@ -28,7 +30,8 @@ def run_pipeline(uut, file_path):
     payload_json = PayloadLoader().load_payload_from_json(payload_json)
 
     payload_json["match_ids"] = [
-        i for i in range(len(payload_json[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]))
+        Match(match_id=match["matchId"], match_name="dummy")
+        for match in payload_json[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
     ]
     payload = payload_json
     parsed_payloads = uut.transform_standardized_to_cleansed(payload)
@@ -75,8 +78,14 @@ def assert_compare_list_of_dict_of_list(tested, reference, col=None):
 
 def assert_nested_dict(tested, reference, key=None):
     if isinstance(reference, dict):
-        for key in reference:
-            assert_nested_dict(tested[key], reference[key], key)
+        if isinstance(tested, Match):
+            assert {"match_id": tested.match_id, "match_name": tested.match_name} == reference
+            return
+        try:
+            assert tested == reference
+        except:
+            for key in reference:
+                assert_nested_dict(tested[key], reference[key], key)
         return
     elif isinstance(reference, list):
         try:
@@ -84,6 +93,7 @@ def assert_nested_dict(tested, reference, key=None):
         except (TypeError, AssertionError):
             assert_compare_list_of_dict_of_list(tested, reference, key)
         return
+
     assert tested == reference, key
 
 
@@ -91,7 +101,6 @@ def load_payload(out_payload, reference_file):
     if reference_file.endswith(".json"):
         with open(reference_file, "r") as f:
             payload = json.load(f)
-        from dataclasses import asdict
 
         for i in out_payload:
             try:

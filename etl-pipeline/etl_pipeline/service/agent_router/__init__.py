@@ -1,4 +1,3 @@
-import asyncio
 import logging
 import os
 import time
@@ -94,6 +93,7 @@ class AgentInputCreator:
                 )
         self.date_input_config = date_input_config
         self.service_config = ConsulServiceConfig()
+        logger.debug("Try to initialize")
         self.initialize_categories()
 
     def connect_to_uds(self):
@@ -106,13 +106,15 @@ class AgentInputCreator:
                 channel = self.initiate_channel(
                     self.service_config.DATA_SOURCE_INPUT_ENDPOINT, self.ssl
                 )
+
                 self.agent_input_stub = AgentInputServiceStub(channel)
                 channel = self.initiate_channel(
                     self.service_config.DATA_SOURCE_INPUT_ENDPOINT, self.ssl
                 )
                 self.category_input_stub = CategoryValueServiceStub(channel)
                 break
-            except AttributeError:
+            except AttributeError as e:
+                logger.debug(str(e))
                 time.sleep(1)
 
     def initialize_categories(self):
@@ -149,14 +151,13 @@ class AgentInputCreator:
                 )
         logger.info(f"Categories created: {categories}")
 
-    def produce_feature_inputs(self, match_payload, payload=None):
+    def produce_feature_inputs(self, match_payload, payload=None, match_name=None):
         feature_inputs = []
         for producer in self.producers:
             try:
                 feature_input = producer.produce_feature_input(match_payload, payload)
                 if feature_input is None:
                     continue
-                logger.debug(f"Produced features {str(feature_input)}")
                 if isinstance(feature_input, list):
                     for input_ in feature_input:
                         target = Any()
@@ -172,6 +173,7 @@ class AgentInputCreator:
                     )
             except:
                 logger.error(f"Cannot parse features for {producer.feature_name}")
+        logger.debug(f"Features produced for {match_name}: {len(feature_inputs)}")
         return feature_inputs
 
     def produce_categories_inputs(self, payload, match_payload, alert, match_name):
@@ -183,7 +185,7 @@ class AgentInputCreator:
                 )
                 if category_value is None:
                     continue
-                logger.debug(f"Produced features {str(category_value)}")
+
                 category_matches.append(
                     CreateCategoryValuesRequest(
                         category=producer.feature_name, category_values=[category_value]
@@ -191,22 +193,23 @@ class AgentInputCreator:
                 )
             except:
                 logger.error(f"Cannot parse features for {producer.feature_name}")
+        logger.debug(f"Categories produced for {match_name}: {len(category_matches)}")
         return category_matches
 
     def produce_batch_create_agent_input_request(self, alert, payload, message_type="features"):
         agent_inputs = []
         match_id = payload[cn.MATCH_IDS]
         match = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
-        feature_inputs = self.produce_feature_inputs(match, payload)
+        feature_inputs = self.produce_feature_inputs(match, payload, match_id.match_name)
 
         agent_input = AgentInput(
             alert=alert.alert_name,
             match=f"{match_id.match_name}",
             feature_inputs=feature_inputs,
         )
-        logger.debug(agent_input)
+        logger.debug(f"Produced feature_inputs for {match_id.match_name}")
         agent_inputs.append(agent_input)
-        return BatchCreateAgentInputsRequest(agent_inputs=agent_inputs)
+        return agent_inputs
 
     def produce_batch_create_agent_input_category_request(self, alert, payload):
         all_category_values_requests = []
@@ -220,22 +223,22 @@ class AgentInputCreator:
             alert=alert.alert_name,
             match_name=f"{match_id.match_name}",
         )
+        logger.debug(f"Produced categories for {match_id.match_name}")
         if category_values_requests:
-            logger.debug(category_values_requests)
             all_category_values_requests.extend(category_values_requests)
-        return BatchCreateCategoryValuesRequest(requests=all_category_values_requests)
+        return all_category_values_requests
 
-    async def send_items(self, produce_func, alert, payload, message_type):
+    def send_items(self, batch, message_type):
         stub_request = None
-
-        batch = produce_func(alert, payload)
         response = None
         while True:
             logger.debug(f"Sending {message_type}")
             if message_type == "features":
                 stub_request = self.agent_input_stub.BatchCreateAgentInputs
+                batch = BatchCreateAgentInputsRequest(agent_inputs=batch)
             elif message_type == "categories":
                 stub_request = self.category_input_stub.BatchCreateCategoryValues
+                batch = BatchCreateCategoryValuesRequest(requests=batch)
             error_message = ""
             try:
                 response = stub_request(batch)
@@ -252,19 +255,9 @@ class AgentInputCreator:
             )
             time.sleep(5)
             self.initialize_categories()
-        logger.debug(f"Response from UDS: {response}")
-
-    async def upload_data_inputs(self, alert, payload):
-        logger.debug("Uploading messages to UDS")
-        tasks = [
-            self.send_items(
-                self.produce_batch_create_agent_input_request, alert, payload, "features"
-            ),
-            self.send_items(
-                self.produce_batch_create_agent_input_category_request,
-                alert,
-                payload,
-                "categories",
-            ),
-        ]
-        await asyncio.gather(*tasks)
+        response = (
+            "Successfully fed"
+            if response
+            else "Probably categories for one of the alerts in batch are already in UDS"
+        )
+        logger.debug(f"Response from UDS on {message_type}: {response}")

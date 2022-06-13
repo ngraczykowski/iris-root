@@ -1,3 +1,11 @@
+# flake8: noqa: E402
+
+
+import multiprocessing
+
+multiprocessing.set_start_method("spawn")
+
+
 import argparse
 import asyncio
 import contextlib
@@ -34,7 +42,7 @@ async def serve(args):
     try:
         max_length = service_config.MAX_MESSAGE_LENGTH
     except (KeyError, ConsulServiceError):
-        max_length = 22270800
+        max_length = 27838500
     server = grpc.aio.server(
         futures.ThreadPoolExecutor(max_workers=10),
         options=[
@@ -87,6 +95,7 @@ async def stop():
 
 
 if __name__ == "__main__":
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--ssl", action="store_true", required=False)
     args = parser.parse_args()

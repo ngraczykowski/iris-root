@@ -109,19 +109,16 @@ def compare_tested_uds_categories_with_reference(tested_file, reference_file):  
 def load_alert(filepath: str = "notebooks/sample/wm_address_in_payload_format.json"):
     with open(filepath, "r") as f:
         text = json.load(f)
-        matches = [
-            Match(match_id="0", match_name=f"alerts/2/matches/{num}")
-            for num, _ in enumerate(
-                set(
-                    [
-                        re.findall(r"matchRecords\[\d+\]", key)[0]
-                        for key in text
-                        if re.search(r"matchRecords\[\d+\]", key)
-                    ]
-                )
-            )
+        ids = [
+            text[i]
+            for key in text
+            for i in re.compile(r".*matchRecords\[\d+\].matchId.*").findall(key)
+            if i
         ]
-        alert = Alert(batch_id="1", alert_name="alerts/2", matches=matches)
+        matches_ids = [
+            Match(match_id=i, match_name=f"alerts/2/matches/{num}") for num, i in enumerate(ids)
+        ]
+        alert = Alert(batch_id="1", alert_name="alerts/2", matches=matches_ids)
         for key, value in text.items():
             alert.flat_payload[str(key)] = str(value)
     return alert
@@ -183,7 +180,7 @@ class BaseGrpcTestCase:
                 except AssertionError:
                     assert alert.etl_status == FAILURE
                     counter += 1
-            assert counter == 2
+            assert counter == 10
 
         @pytest.mark.asyncio
         def test_cross_input_match_records(self):

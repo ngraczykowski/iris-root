@@ -454,6 +454,7 @@ TEST_AGENT_INPUT_CASES = [
             "alertedParty.supplementalInfo.relatedParties.party[0].fields.dobDate": "02/31/1900",
             "alertedParty.supplementalInfo.relatedParties.party[1].fields.dobDate": "04/31/1910",
             "watchlistParty.matchRecords[0].entity.dobs[0].dob": "MAY 6, 1981",
+            "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
             ("ap", "alertedParty.AP_DOB"): ["02/31/1900", "04/31/1910"],
@@ -480,6 +481,7 @@ TEST_AGENT_INPUT_CASES = [
             "alertedParty.inputRecordHist.inputRecords[0].fields[1].sortOrder": "1",
             "watchlistParty.matchRecords[0].entity.dobs[0].dob": "MAY 6, 1981",
             "watchlistParty.matchRecords[0].entity.ids.id": "abc123",
+            "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
             ("ap", "ALL_CONNECTED_TAX_IDS"): ["154421273", "022368917"],
@@ -515,6 +517,7 @@ TEST_AGENT_INPUT_CASES = [
             "alertedParty.inputRecordHist.inputRecords[0].fields[1].value": "Janusz",
             "alertedParty.inputRecordHist.inputRecords[0].fields[1].sortOrder": "22",
             "watchlistParty.matchRecords[0].entity.name": "Joe Ding",
+            "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
             ("ap", "ALL_CONCAT_NAMES"): "Soft Ltd.",
@@ -558,6 +561,7 @@ TEST_AGENT_INPUT_CASES = [
             "alertedParty.inputRecordHist.inputRecords[0].fields[1].value": "Janusz",
             "alertedParty.inputRecordHist.inputRecords[0].fields[1].sortOrder": "22",
             "watchlistParty.matchRecords[0].entity.name": "Joe Ding",
+            "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
             ("ap", "ALL_CONCAT_NAMES"): "Soft Ltd.",
@@ -589,6 +593,7 @@ TEST_AGENT_INPUT_CASES = [
             "alertedParty.inputRecordHist.inputRecords[0].fields[1].isScreenable": "true",
             "alertedParty.inputRecordHist.inputRecords[0].fields[1].value": "JanuszSoft Ltd.",
             "alertedParty.inputRecordHist.inputRecords[0].fields[1].sortOrder": "22",
+            "watchlistParty.matchRecords[0].matchId": "49159509",
             "watchlistParty.matchRecords[0].entity.name": "Joe Joe Bring Ding",
             "watchlistParty.matchRecords[0].entity.aliases[0].alias": "Billabong the King",
         },
@@ -642,6 +647,7 @@ TEST_AGENT_INPUT_CASES = [
             "watchlistParty.matchRecords[0].entity.nationalities.nationality": "American",
             "watchlistParty.matchRecords[0].entity.pobs[0].pob": "Orlando, Florida",
             "watchlistParty.matchRecords[0].entity.citizenships.citizenship": "AMMMerican",
+            "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
             ("ap", "ALL_PARTY1_COUNTRY1_CITIZENSHIP"): "Moominland",
@@ -668,6 +674,7 @@ TEST_AGENT_INPUT_CASES = [
             "alertedParty.supplementalInfo.relatedParties.party[0].fields.partyType": "human",
             "alertedParty.supplementalInfo.relatedParties.party[1].fields.partyType": "monkey",
             "watchlistParty.matchRecords[0].entityType": "03",
+            "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
             ("ap", "alertedParty.ALL_PARTY_TYPES"): ["human", "monkey"],
@@ -688,6 +695,7 @@ TEST_AGENT_INPUT_CASES = [
             "watchlistParty.matchRecords[0].entity.addresses[0].country": "US",
             "watchlistParty.matchRecords[0].entity.pobs[0].pob": "Orlando, Florida",
             "watchlistParty.matchRecords[0].entity.nationalities.nationality": "American",
+            "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
             ("ap", "ALL_CONNECTED_PARTY_BIRTH_COUNTRIES"): ["Mongolia", "Kazachstan"],
@@ -750,6 +758,7 @@ TEST_AGENT_INPUT_CASES = [
             "watchlistParty.matchRecords[0].entity.addresses[0].countryName": "United States of America",
             "watchlistParty.matchRecords[0].entity.addresses[0].country": "US",
             "watchlistParty.matchRecords[0].entity.name": "Ding Dong",
+            "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
             ("ap", "ALL_CONNECTED_PARTY_BIRTH_COUNTRIES"): ["Mongolia-1", "Kazachstan-1"],
@@ -814,6 +823,7 @@ TEST_AGENT_INPUT_CASES = [
             "alertedParty.inputRecordHist.inputRecords[0].fields[6].sortOrder": "1",
             "watchlistParty.matchRecords[0].entity.addresses[0].countryName": "United States of Antarctica",
             "watchlistParty.matchRecords[0].entity.addresses[0].country": "USAntarctica",
+            "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
             (
@@ -918,6 +928,7 @@ TEST_AGENT_INPUT_CASES = [
             "alertedParty.inputRecordHist.inputRecords[0].fields[18].isScreenable": "true",
             "alertedParty.inputRecordHist.inputRecords[0].fields[18].value": "Joe King 18",
             "alertedParty.inputRecordHist.inputRecords[0].fields[18].sortOrder": "22",
+            "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
             (
@@ -1001,6 +1012,7 @@ TEST_AGENT_INPUT_CASES = [
             "alertedParty.inputRecordHist.inputRecords[0].versionId": "122438658",
             "watchlistParty.matchRecords[0].inputVersionId": "122438658",
             "watchlistParty.matchRecords[0].stopDescriptors[0].stopDescriptorDetails[0].inputToken": "Broken Token",
+            "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
             ("wl", "watchlistParty.matchRecords.WL_MATCHED_TOKENS"): '["Broken Token"]',
@@ -1016,6 +1028,7 @@ TEST_AGENT_INPUT_CASES = [
             "alertedParty.inputRecordHist.inputRecords[0].fields[0].isScreenable": "true",
             "alertedParty.inputRecordHist.inputRecords[0].fields[0].value": "Janusz",
             "alertedParty.inputRecordHist.inputRecords[0].fields[0].sortOrder": "22",
+            "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
             (
@@ -1034,6 +1047,7 @@ TEST_AGENT_INPUT_CASES = [
             "alertedParty.inputRecordHist.inputRecords[0].fields[0].isScreenable": "true",
             "alertedParty.inputRecordHist.inputRecords[0].fields[0].value": "ID312",
             "alertedParty.inputRecordHist.inputRecords[0].fields[0].sortOrder": "22",
+            "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
             ("ap", "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ID"): "ID312",
@@ -1049,6 +1063,7 @@ TEST_AGENT_INPUT_CASES = [
             "alertedParty.inputRecordHist.inputRecords[0].fields[0].isScreenable": "true",
             "alertedParty.inputRecordHist.inputRecords[0].fields[0].value": "1234321",
             "alertedParty.inputRecordHist.inputRecords[0].fields[0].sortOrder": "22",
+            "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
             (
@@ -1067,6 +1082,7 @@ TEST_AGENT_INPUT_CASES = [
             "alertedParty.inputRecordHist.inputRecords[0].fields[0].isScreenable": "true",
             "alertedParty.inputRecordHist.inputRecords[0].fields[0].value": "191919",
             "alertedParty.inputRecordHist.inputRecords[0].fields[0].sortOrder": "22",
+            "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
             (
@@ -1082,6 +1098,7 @@ TEST_AGENT_INPUT_CASES = [
             "alertedParty.inputRecordHist.inputRecords[0].versionId": "122438658",
             "watchlistParty.matchRecords[0].inputVersionId": "122438658",
             "watchlistParty.matchRecords[0].entityType": "00",
+            "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
             ("ap", "alertedParty.AP_PARTY_TYPE"): "UNKNOWN",
@@ -1095,6 +1112,7 @@ TEST_AGENT_INPUT_CASES = [
             "alertedParty.inputRecordHist.inputRecords[0].versionId": "122438658",
             "watchlistParty.matchRecords[0].inputVersionId": "122438658",
             "watchlistParty.matchRecords[0].entityType": "03",
+            "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
             ("ap", "alertedParty.AP_PARTY_TYPE"): "UNKNOWN",
@@ -1131,6 +1149,7 @@ TEST_AGENT_INPUT_CASES = [
             "alertedParty.inputRecordHist.inputRecords[0].fields[2].value": "Janusz",
             "alertedParty.inputRecordHist.inputRecords[0].fields[2].sortOrder": "22",
             "watchlistParty.matchRecords[0].entity.name": "Joe Ding",
+            "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
             ("ap", "ALL_CONCAT_NAMES"): "Soft Ltd.",
@@ -1177,6 +1196,7 @@ TEST_AGENT_INPUT_CASES = [
             "alertedParty.inputRecordHist.inputRecords[0].fields[1].isScreenable": "true",
             "alertedParty.inputRecordHist.inputRecords[0].fields[1].value": "Janusz",
             "alertedParty.inputRecordHist.inputRecords[0].fields[1].sortOrder": "22",
+            "watchlistParty.matchRecords[0].matchId": "49159509",
             "watchlistParty.matchRecords[0].entity.name": "Joe Ding",
         },
         expected_result={
@@ -1225,6 +1245,7 @@ TEST_AGENT_INPUT_CASES = [
             "alertedParty.inputRecordHist.inputRecords[0].fields[1].value": "Janusz",
             "alertedParty.inputRecordHist.inputRecords[0].fields[1].sortOrder": "22",
             "watchlistParty.matchRecords[0].entity.name": "Joe Ding",
+            "watchlistParty.matchRecords[0].matchId": "49159509",
             "alertedParty.alertSupplementalInfo.supplementalInfo[0].legalFormName": "Organization",
         },
         expected_result={
@@ -1277,6 +1298,7 @@ TEST_AGENT_INPUT_CASES = [
             "alertedParty.inputRecordHist.inputRecords[0].fields[2].value": "",
             "alertedParty.inputRecordHist.inputRecords[0].fields[2].sortOrder": "22",
             "watchlistParty.matchRecords[0].entity.name": "Joe Ding",
+            "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
             ("ap", "ALL_CONCAT_NAMES"): "Soft Ltd.",

@@ -189,8 +189,6 @@ class HitTypeFeatureInputProducer(Producer):
     def produce_feature_input(self, payload, auxiliary_payload=None):
         fields = deepcopy(dict(self.fields))
         payload = deepcopy(dict(payload))
-        logger.debug(f"Fields: {fields}, payload: {payload}")
-
         for input_key, payload_key in self.fields.items():
             if input_key == "normal_trigger_categories":
                 continue

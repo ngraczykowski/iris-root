@@ -27,9 +27,10 @@ class AgentInputServiceServicer(object):
             )
         if context.code() == grpc.StatusCode.OK:
             os.makedirs("/tmp/", exist_ok=True)
-            string_features = []
-            with open(f"/tmp/features_{agent_input.match.replace('/','_')}.json", "w") as f:
-                for agent_input in request.agent_inputs:
+
+            for agent_input in request.agent_inputs:
+                string_features = []
+                with open(f"/tmp/features_{agent_input.match.replace('/','_')}.json", "w") as f:
                     for feature in agent_input.feature_inputs:
                         path = feature.agent_feature_input.type_url.split("/")[1]
                         elements = path.split(".")
@@ -47,7 +48,7 @@ class AgentInputServiceServicer(object):
                         feature.agent_feature_input.Unpack(new_field)
 
                         string_features.append(MessageToDict(new_field))
-                json.dump(string_features, f)
+                    json.dump(string_features, f)
 
         return input__service__pb2.BatchCreateAgentInputsResponse(
             created_agent_inputs=created_agent_inputs

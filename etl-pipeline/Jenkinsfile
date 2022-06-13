@@ -24,11 +24,6 @@ pipeline {
             }
 
             stages {
-                stage('Prepare') {
-                    steps {
-                        sh 'pip install --index-url "${PIP_INDEX_URL}" --requirement requirements.txt'
-                    }
-                }
                 stage ('Build package') {
                     steps {
                         sh './scripts/clean.sh'

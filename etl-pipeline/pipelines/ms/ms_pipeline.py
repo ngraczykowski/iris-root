@@ -115,6 +115,8 @@ class MSPipeline(ETLPipeline):
             .get(cn.INPUT_RECORD_HIST, {})
             .get(cn.INPUT_RECORDS, [])
         )
+        match_ids = {match.match_id: match for match in payload[cn.MATCH_IDS]}
+
         match_records = payload.get(cn.WATCHLIST_PARTY, {}).get(cn.MATCH_RECORDS, [])
         for input_record in input_records:
             for num, match_record in enumerate(match_records):
@@ -127,7 +129,7 @@ class MSPipeline(ETLPipeline):
                         cn.INPUT_RECORDS
                     ] = input_record
                     pair_payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS] = match_record
-                    pair_payload[cn.MATCH_IDS] = pair_payload[cn.MATCH_IDS][num]
+                    pair_payload[cn.MATCH_IDS] = match_ids[match_record["matchId"]]
                     new_payloads.append(pair_payload)
         if not new_payloads:
             logger.warning("No input vs match pairs")

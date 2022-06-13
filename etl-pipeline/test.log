@@ -1,0 +1,24 @@
+============================= test session starts ==============================
+platform linux -- Python 3.6.13, pytest-7.0.1, pluggy-1.0.0 -- /env/ds/anaconda/envs/pipeline/bin/python
+cachedir: .pytest_cache
+rootdir: /app, configfile: setup.cfg
+plugins: asyncio-0.16.0
+collecting ... collected 1 item
+
+tests/test_json/test_json_pipeline.py::test_pipeline[notebooks/sample/wm_address_in_payload_format.json-tests/shared/parsed_payload.json-2-A05003324172] PASSED [100%]
+
+=============================== warnings summary ===============================
+../env/ds/anaconda/envs/pipeline/lib/python3.6/site-packages/fuzzywuzzy/fuzz.py:11
+  /env/ds/anaconda/envs/pipeline/lib/python3.6/site-packages/fuzzywuzzy/fuzz.py:11: UserWarning: Using slow pure-python SequenceMatcher. Install python-Levenshtein to remove this warning
+    warnings.warn('Using slow pure-python SequenceMatcher. Install python-Levenshtein to remove this warning')
+
+../env/ds/anaconda/envs/pipeline/lib/python3.6/site-packages/consul/base.py:812
+  /env/ds/anaconda/envs/pipeline/lib/python3.6/site-packages/consul/base.py:812: DeprecationWarning: Consul 1.4.0 deprecates the legacy ACL.
+    DeprecationWarning)
+
+../env/ds/anaconda/envs/pipeline/lib/python3.6/site-packages/consul/base.py:2558
+  /env/ds/anaconda/envs/pipeline/lib/python3.6/site-packages/consul/base.py:2558: DeprecationWarning: 1.6.0+: The discovery chain API is available in Consul versions 1.6.0 and newer.
+    'and newer.', DeprecationWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 1 passed, 3 warnings in 1.04s =========================

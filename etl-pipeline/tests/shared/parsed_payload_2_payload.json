@@ -410,7 +410,7 @@
         "concat_address_no_changes": true,
         "concat_residue": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ",
         "datasetType": "WM_ADDRESS",
-        "match_ids": 2,
+        "match_ids": {"match_id": "49159509", "match_name": "dummy"},
         "watchlistParty": {
             "matchRecords": {
                 "AP_TRIGGERS": {
@@ -1248,7 +1248,7 @@
         "concat_address_no_changes": true,
         "concat_residue": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ",
         "datasetType": "WM_ADDRESS",
-        "match_ids": 0,
+        "match_ids": {"match_id": "49159509", "match_name": "dummy"},
         "watchlistParty": {
             "matchRecords": {
                 "AP_TRIGGERS": {
@@ -2086,7 +2086,7 @@
         "concat_address_no_changes": true,
         "concat_residue": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ",
         "datasetType": "WM_ADDRESS",
-        "match_ids": 1,
+        "match_ids": {"match_id": "49159506", "match_name": "dummy"},
         "watchlistParty": {
             "matchRecords": {
                 "AP_TRIGGERS": {

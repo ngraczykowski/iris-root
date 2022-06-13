@@ -349,7 +349,7 @@
         "concat_address_no_changes": true,
         "concat_residue": "ABDALHADI SCKLBCNBJA",
         "datasetType": "WM_ADDRESS",
-        "match_ids": 0,
+        "match_ids": {"match_id": "197802910", "match_name": "dummy"},
         "watchlistParty": {
             "matchRecords": {
                 "AP_TRIGGERS": {
@@ -1436,7 +1436,7 @@
         "concat_address_no_changes": true,
         "concat_residue": "ABDALHADI SCKLBCNBJA",
         "datasetType": "WM_ADDRESS",
-        "match_ids": 1,
+        "match_ids": {"match_id": "197802906", "match_name":"dummy"},
         "watchlistParty": {
             "matchRecords": {
                 "AP_TRIGGERS": {
@@ -2261,7 +2261,7 @@
         "concat_address_no_changes": true,
         "concat_residue": "ABDALHADI SCKLBCNBJA",
         "datasetType": "WM_ADDRESS",
-        "match_ids": 2,
+        "match_ids": {"match_id": "197802913", "match_name": "dummy"},
         "watchlistParty": {
             "matchRecords": {
                 "AP_TRIGGERS": {
@@ -3116,7 +3116,7 @@
         "concat_address_no_changes": true,
         "concat_residue": "ABDALHADI SCKLBCNBJA",
         "datasetType": "WM_ADDRESS",
-        "match_ids": 3,
+        "match_ids": {"match_id": "197802907", "match_name": "dummy"},
         "watchlistParty": {
             "matchRecords": {
                 "AP_TRIGGERS": {
@@ -3936,7 +3936,7 @@
         "concat_address_no_changes": true,
         "concat_residue": "ABDALHADI SCKLBCNBJA",
         "datasetType": "WM_ADDRESS",
-        "match_ids": 4,
+        "match_ids": {"match_id": "197802911", "match_name": "dummy"},
         "watchlistParty": {
             "matchRecords": {
                 "AP_TRIGGERS": {
@@ -4836,7 +4836,7 @@
         "concat_address_no_changes": true,
         "concat_residue": "ABDALHADI SCKLBCNBJA",
         "datasetType": "WM_ADDRESS",
-        "match_ids": 5,
+        "match_ids": {"match_id": "197802909", "match_name": "dummy"},
         "watchlistParty": {
             "matchRecords": {
                 "AP_TRIGGERS": {
@@ -5529,7 +5529,7 @@
         "concat_address_no_changes": true,
         "concat_residue": "ABDALHADI SCKLBCNBJA",
         "datasetType": "WM_ADDRESS",
-        "match_ids": 6,
+        "match_ids": {"match_id": "197802908", "match_name": "dummy"},
         "watchlistParty": {
             "matchRecords": {
                 "AP_TRIGGERS": {
@@ -6410,7 +6410,7 @@
         "concat_address_no_changes": true,
         "concat_residue": "ABDALHADI SCKLBCNBJA",
         "datasetType": "WM_ADDRESS",
-        "match_ids": 7,
+        "match_ids": {"match_id": "197802912", "match_name": "dummy"},
         "watchlistParty": {
             "matchRecords": {
                 "AP_TRIGGERS": {
@@ -7219,7 +7219,7 @@
         "concat_address_no_changes": true,
         "concat_residue": "ABDALHADI SCKLBCNBJA",
         "datasetType": "WM_ADDRESS",
-        "match_ids": 8,
+        "match_ids": {"match_id": "197802914", "match_name": "dummy"},
         "watchlistParty": {
             "matchRecords": {
                 "AP_TRIGGERS": {
