@@ -16,7 +16,7 @@ class ConsulConfig:
     host: str
     port: int = 8500
     token: Optional[str] = None
-    consul_secret_path: Optional[str] = None
+    secret_path: Optional[str] = None
     trusted_ca: Optional[str] = None
     client_private_key: Optional[str] = None
     client_public_key_chain: Optional[str] = None
@@ -24,6 +24,8 @@ class ConsulConfig:
     def __post_init__(self):
         if self.port:
             self.port = int(self.port)
+        else:
+            self.port = 8500
 
 
 class ConsulService:
@@ -109,8 +111,8 @@ class ConsulService:
             host=os.environ.get("CONSUL_HTTP_ADDR") if not config.host else config.host,
             token=os.environ.get("CONSUL_HTTP_TOKEN") if not config.token else config.token,
             consul_secret_path=os.environ.get("CONSUL_SECRET_PATH")
-            if not config.consul_secret_path
-            else config.consul_secret_path,
+            if not config.secret_path
+            else config.secret_path,
             trusted_ca=os.environ.get("CONSUL_CACERT")
             if not config.trusted_ca
             else config.trusted_ca,
