@@ -4,6 +4,7 @@ import grpc
 import pytest
 from grpc_health.v1.health_pb2 import HealthCheckRequest, HealthCheckResponse
 from grpc_health.v1.health_pb2_grpc import HealthStub
+from s8_python_network.grpc_channel import SSLCredentials, get_channel
 from silenteight.agent.name.v1.api.name_agent_pb2 import (
     CompareNamesInput,
     CompareNamesRequest,
@@ -42,22 +43,23 @@ async def johnny_agent(config: Config):
 
 @pytest.fixture()
 async def channel(config: Config):
-    return grpc.aio.insecure_channel(
-        f"localhost:{config.application_config.agent_grpc_service.grpc_port}"
+    return get_channel(
+        f"localhost:{config.application_config.agent_grpc_service.grpc_port}", asynchronous=True
     )
 
 
 @pytest.fixture()
 async def secure_channel(config: Config):
-    with open("tests/resources/ssl_example/ca.pem", "rb") as f:
-        ca = f.read()
-    with open("tests/resources/ssl_example/client-key.pem", "rb") as f:
-        private_key = f.read()
-    with open("tests/resources/ssl_example/client.pem", "rb") as f:
-        certificate_chain = f.read()
-    server_credentials = grpc.ssl_channel_credentials(ca, private_key, certificate_chain)
-    return grpc.aio.secure_channel(
-        f"localhost:{config.application_config.agent_grpc_service.grpc_port}", server_credentials
+    ssl_credentials = SSLCredentials(
+        client_ca_filename="tests/resources/ssl_example/ca.pem",
+        client_private_key_filename="tests/resources/ssl_example/client-key.pem",
+        client_public_key_chain_filename="tests/resources/ssl_example/client.pem",
+    )
+    return get_channel(
+        f"localhost:{config.application_config.agent_grpc_service.grpc_port}",
+        asynchronous=True,
+        ssl=True,
+        ssl_credentials=ssl_credentials,
     )
 
 
