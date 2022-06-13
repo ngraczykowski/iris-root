@@ -3,13 +3,13 @@
 def version = ""
 def javaVersion = ""
 def images = []
-
+def abort = env.CHANGE_ID ? true : false
 pipeline {
   agent {
     label 'ec2-agent'
   }
   options {
-    disableConcurrentBuilds()
+    disableConcurrentBuilds(abortPrevious: abort)
     ansiColor('xterm')
   }
   stages {
