@@ -7,13 +7,13 @@ plugins {
 description = "Test HSBC Bridge client application"
 
 dependencies {
-  implementation project(":warehouse-common")
   implementation libs.commons.text
   implementation libs.silenteight.sep.base.common
   implementation libs.silenteight.commons.app
   implementation libs.silenteight.commons.core
   implementation libs.spring.boot.starter.undertow
   implementation libs.spring.boot.starter.webflux
+  implementation libs.spring.boot.starter.validation
 
   implementation libs.spring.context.support
 }
