@@ -1,6 +1,8 @@
 import dataclasses
 from typing import Any, Dict, Optional
 
+from s8_python_network.consul import ConsulConfig
+
 
 @dataclasses.dataclass
 class AgentServiceConfig:
@@ -9,16 +11,6 @@ class AgentServiceConfig:
     server_ca: Optional[str] = None
     server_private_key: Optional[str] = None
     server_public_key_chain: Optional[str] = None
-
-
-@dataclasses.dataclass
-class ConsulConfig:
-    host: str
-    port: int
-
-    def __post_init__(self):
-        if self.port:
-            self.port = int(self.port)
 
 
 @dataclasses.dataclass
@@ -80,7 +72,7 @@ class UDSConfig:
 
 
 @dataclasses.dataclass
-class AgentConfig:
+class ApplicationConfig:
     agent_grpc_service: AgentServiceConfig = None
     consul: ConsulConfig = None
     messaging: MessagingConfig = None

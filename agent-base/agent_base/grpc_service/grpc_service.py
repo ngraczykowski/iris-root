@@ -42,7 +42,7 @@ class GrpcService(AgentService):
         self.server = grpc.aio.server()
         self._add_servicers()
         self._add_reflection()
-        grpc_config = self.config.agent_config.agent_grpc_service
+        grpc_config = self.config.application_config.agent_grpc_service
         if not grpc_config:
             raise ConfigurationException("Agent grpc service configuration missing!")
         address = f"[::]:{grpc_config.grpc_port}"

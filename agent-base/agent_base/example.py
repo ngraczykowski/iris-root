@@ -104,7 +104,7 @@ def main():
         "-c",
         "--configuration-dirs",
         type=pathlib.Path,
-        default=(pathlib.Path("utils/config"),),
+        default=(pathlib.Path("./config"),),
         nargs="+",
         help="Path for configuration files",
     )

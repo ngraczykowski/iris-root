@@ -1,11 +1,12 @@
 import os
 from typing import Any, Dict, List
 
-from agent_base.utils.config.agent_config import (
-    AgentConfig,
+from s8_python_network.consul import ConsulConfig
+
+from agent_base.utils.config.application_config import (
     AgentServiceConfig,
+    ApplicationConfig,
     ConfigurationException,
-    ConsulConfig,
     MessagingConfig,
     MessagingRequest,
     MessagingResponse,
@@ -15,12 +16,12 @@ from agent_base.utils.config.agent_config import (
 )
 
 
-class AgentConfigLoader:
-    def __init__(self, application_config: Dict[str, Any]):
-        self._application_config = application_config
-        self._env_vars = application_config.get("environment-variables-mapping")
+class ApplicationConfigLoader:
+    def __init__(self, application_config_mapping: Dict[str, Any]):
+        self._application_config_mapping = application_config_mapping
+        self._env_vars = application_config_mapping.get("environment-variables-mapping")
 
-    def load(self) -> AgentConfig:
+    def load(self) -> ApplicationConfig:
         agent_service_config = AgentServiceConfig(
             processes=int(self._get_param("processes", ["agent", "processes"], required=True)),
             grpc_port=int(self._get_param("grpc_port", ["agent", "grpc", "port"], required=True)),
@@ -37,7 +38,16 @@ class AgentConfigLoader:
 
         consul_config = ConsulConfig(
             host=self._get_param("consul_host", ["consul", "host"]),
-            port=self._get_param("consul_port", ["consul", "port"]),
+            port=self._get_param("consul_port", ["consul", "port"], default=8500),
+            token=self._get_param("consul_token", ["consul", "token"]),
+            secret_path=self._get_param("consul_secret_path", ["consul", "secret_path"]),
+            trusted_ca=self._get_param("consul_cacert", ["consul", "cacert"]),
+            client_private_key=self._get_param(
+                "consul_client_private_key", ["consul", "client_private_key"]
+            ),
+            client_public_key_chain=self._get_param(
+                "consul_client_public_key_chain", ["consul", "client_public_key_chain"]
+            ),
         )
 
         messaging_request = MessagingRequest(
@@ -97,7 +107,7 @@ class AgentConfigLoader:
             ),
         )
 
-        return AgentConfig(
+        return ApplicationConfig(
             agent_service_config,
             consul_config,
             messaging_config,
@@ -121,7 +131,7 @@ class AgentConfigLoader:
             elif not keys_from_yaml:
                 return default
 
-            _param = self._application_config.copy()
+            _param = self._application_config_mapping.copy()
             for key in keys_from_yaml:
                 try:
                     _param = _param[key]

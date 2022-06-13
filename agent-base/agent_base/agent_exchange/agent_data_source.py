@@ -3,14 +3,14 @@ import time
 from typing import Any, AsyncGenerator, Generator, Tuple
 
 import grpc
-from s8_python_network.consul import ConsulServiceException
+from s8_python_network.consul import ConsulServiceError
 from s8_python_network.grpc_channel import SSLCredentials, get_channel
 from silenteight.agents.v1.api.exchange.exchange_pb2 import AgentExchangeRequest
 
 from agent_base.agent.exception import AgentException
 from agent_base.agent_exchange.address_service import AddressService
 from agent_base.utils import Config, ConfigurationException
-from agent_base.utils.config.agent_config import UDSConfig
+from agent_base.utils.config.application_config import UDSConfig
 
 
 class AgentDataSourceException(AgentException):
@@ -39,10 +39,10 @@ class AgentDataSource:
         while True:
             try:
                 self.config.reload()
-                self.data_source_config = self.config.agent_config.uds
+                self.data_source_config = self.config.application_config.uds
                 if not self.data_source_config.address:
                     raise ConfigurationException("Data Source configuration missing!")
-                address_service = AddressService(self.config.application_config)
+                address_service = AddressService(self.config.application_config.consul)
                 address = await address_service.get(self.data_source_config.address)
 
                 await self.initiate_channel(address)
@@ -52,7 +52,7 @@ class AgentDataSource:
                 self.logger.error(f"Configuration argument missing: {err}")
                 raise
 
-            except ConsulServiceException:
+            except ConsulServiceError:
                 self.logger.error("No UDS address in consul. Waiting 1s and trying again")
                 time.sleep(1)
 

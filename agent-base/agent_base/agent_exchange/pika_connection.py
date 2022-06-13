@@ -4,7 +4,7 @@ from typing import Callable
 import aio_pika
 
 from agent_base.agent.exception import AgentException
-from agent_base.utils.config.agent_config import MessagingConfig, RabbitMQConfig
+from agent_base.utils.config.application_config import MessagingConfig, RabbitMQConfig
 
 
 class PikaConnection:
@@ -91,7 +91,7 @@ class PikaConnection:
                 self.request_queue: aio_pika.queue.Queue = await channel.declare_queue(
                     name=self.messaging_configuration.request.queue_name,
                     durable=self.messaging_configuration.request.queue_durable,
-                    arguments=self.messaging_configuration.request.queue_durable,
+                    arguments=self.messaging_configuration.request.queue_arguments,
                 )
                 request_exchange = self.messaging_configuration.request.exchange
                 await self.request_queue.bind(

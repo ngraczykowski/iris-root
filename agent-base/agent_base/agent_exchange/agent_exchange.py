@@ -162,10 +162,10 @@ class AgentExchange(AgentService):
         return response
 
     async def _set_pika_connection(self):
-        max_requests_to_worker = self.config.agent_config.agent_grpc_service.processes
+        max_requests_to_worker = self.config.application_config.agent_grpc_service.processes
         for connection_config in self._prepare_connection_configurations():
             connection = PikaConnection(
-                self.config.agent_config.messaging,
+                self.config.application_config.messaging,
                 connection_config,
                 self.on_request,
                 max_requests_to_worker,
@@ -186,7 +186,7 @@ class AgentExchange(AgentService):
         raise Exception("No working pika connection")
 
     def _prepare_connection_configurations(self):
-        rabbitmq_config = self.config.agent_config.rabbitmq
+        rabbitmq_config = self.config.application_config.rabbitmq
 
         if rabbitmq_config.host:
             yield rabbitmq_config

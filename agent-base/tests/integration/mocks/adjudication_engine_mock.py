@@ -27,8 +27,8 @@ class AdjudicationEngineMock:
             None,
         )
         self.consume_responses = consume_responses
-        self.connection_configuration = self.config.agent_config.rabbitmq
-        self.messaging_config = self.config.agent_config.messaging
+        self.connection_configuration = self.config.application_config.rabbitmq
+        self.messaging_config = self.config.application_config.messaging
         self.logger = logging.getLogger("AdjudicationEngineMock")
 
     async def start(self):

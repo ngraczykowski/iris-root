@@ -43,7 +43,7 @@ async def johnny_agent(config: Config):
 @pytest.fixture()
 async def channel(config: Config):
     return grpc.aio.insecure_channel(
-        f"localhost:{config.application_config['agent']['grpc']['port']}"
+        f"localhost:{config.application_config.agent_grpc_service.grpc_port}"
     )
 
 
@@ -57,7 +57,7 @@ async def secure_channel(config: Config):
         certificate_chain = f.read()
     server_credentials = grpc.ssl_channel_credentials(ca, private_key, certificate_chain)
     return grpc.aio.secure_channel(
-        f"localhost:{config.application_config['agent']['grpc']['port']}", server_credentials
+        f"localhost:{config.application_config.agent_grpc_service.grpc_port}", server_credentials
     )
 
 

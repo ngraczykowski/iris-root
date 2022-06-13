@@ -44,11 +44,11 @@ def setup_and_tear_down():
 
 def test_config_default():
     config = Config()
-    assert config.agent_config.agent_grpc_service
-    assert config.agent_config.consul
-    assert config.agent_config.messaging
-    assert config.agent_config.rabbitmq
-    assert config.agent_config.uds
+    assert config.application_config.agent_grpc_service
+    assert config.application_config.consul
+    assert config.application_config.messaging
+    assert config.application_config.rabbitmq
+    assert config.application_config.uds
 
 
 def test_config_from_env(setup_and_tear_down):
@@ -63,13 +63,13 @@ def test_config_from_env(setup_and_tear_down):
 
     # param from env is superior to in this from application.yaml:
     config = Config()
-    assert config.agent_config.agent_grpc_service.grpc_port == new_grpc_port
+    assert config.application_config.agent_grpc_service.grpc_port == new_grpc_port
 
     os.environ.pop("GRPC_PORT")
 
     # when param not in env take from application.yaml:
     config = Config()
-    assert config.agent_config.agent_grpc_service.grpc_port == DEFAULT_GRPC_PORT
+    assert config.application_config.agent_grpc_service.grpc_port == DEFAULT_GRPC_PORT
 
 
 def test_config_reload(setup_and_tear_down):
@@ -77,7 +77,7 @@ def test_config_reload(setup_and_tear_down):
     os.environ["GRPC_PORT"] = str(DEFAULT_GRPC_PORT)
     os.environ["AGENT_PROCESSES"] = "2"
     config = Config((pathlib.Path("tests/resources/config"),))
-    assert config.agent_config.agent_grpc_service.grpc_port == DEFAULT_GRPC_PORT
+    assert config.application_config.agent_grpc_service.grpc_port == DEFAULT_GRPC_PORT
     os.environ["GRPC_PORT"] = str(new_grpc_port)
     config.reload()
-    assert config.agent_config.agent_grpc_service.grpc_port == new_grpc_port
+    assert config.application_config.agent_grpc_service.grpc_port == new_grpc_port

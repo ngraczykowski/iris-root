@@ -38,7 +38,7 @@ class AgentRunner:
         if self.running:
             raise Exception("Already running, stop services first")
 
-        processes = self.application_config["agent"].get("processes")
+        processes = self.application_config.agent_grpc_service.processes
         if not self.pool and processes and processes > 1:
             self.pool = concurrent.futures.ProcessPoolExecutor(processes)
 

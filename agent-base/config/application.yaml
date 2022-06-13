@@ -57,7 +57,6 @@ environment-variables-mapping:
   consul_host: CONSUL_HTTP_ADDR
   consul_secret_path: CONSUL_SECRET_PATH
   consul_token: CONSUL_HTTP_TOKEN
-  trusted_ca: CONSUL_CACERT
+  consul_cacert: CONSUL_CACERT
   consul_client_private_key: CONSUL_CLIENT_KEY
   consul_client_public_key_chain: CONSUL_CLIENT_CERT
-

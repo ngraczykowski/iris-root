@@ -14,7 +14,7 @@ install_require = [
     "name-agent-api>=0.27.0",
     "python-consul2==0.1.5",
     "pyyaml==5.4.1",
-    "s8_python_network==0.2.4",
+    "s8_python_network==0.2.9",
 ]
 
 tests_require = [

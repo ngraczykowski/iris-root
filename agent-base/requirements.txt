@@ -23,7 +23,7 @@ python-consul2==0.1.5
 PyYAML==5.4.1
 pytest>=6.1.2
 requests==2.26.0
-s8_python_network==0.2.4
+s8_python_network>=0.2.9
 six==1.16.0
 typing-extensions==3.10.0.0
 urllib3==1.26.6
