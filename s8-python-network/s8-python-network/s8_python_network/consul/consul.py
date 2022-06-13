@@ -110,7 +110,7 @@ class ConsulService:
         return ConsulConfig(
             host=os.environ.get("CONSUL_HTTP_ADDR") if not config.host else config.host,
             token=os.environ.get("CONSUL_HTTP_TOKEN") if not config.token else config.token,
-            consul_secret_path=os.environ.get("CONSUL_SECRET_PATH")
+            secret_path=os.environ.get("CONSUL_SECRET_PATH")
             if not config.secret_path
             else config.secret_path,
             trusted_ca=os.environ.get("CONSUL_CACERT")
