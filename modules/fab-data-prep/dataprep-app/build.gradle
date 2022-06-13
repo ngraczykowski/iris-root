@@ -1,84 +1,47 @@
 plugins {
-  id "java"
-  id "groovy"
-  id "org.springframework.boot" version "2.6.6"
-  id "com.google.cloud.tools.jib"
+  id "maven-publish"
+  id "com.silenteight.iris.build.spring-boot-application"
+  id "com.silenteight.iris.build.container-image"
 }
 
-description = "dataprep-app"
 
-apply from: "${rootProject.projectDir}/gradle/scripts/dependencies.gradle"
+description = "dataprep-app"
 
 dependencies {
   implementation project(':dataprep-learning')
 
-  implementation libraries.silenteight_fab_cmapi_connector_api
-  implementation libraries.universal_datasource_api_library
-  implementation libraries.data_source_agentinput_api
-  implementation libraries.data_source_categories_api
-  implementation libraries.data_source_api
-  implementation libraries.registration_api_proto
-  implementation libraries.registration_lib
-  implementation libraries.grpc_client_spring_boot_starter
-  implementation libraries.vavr
-  implementation libraries.json_path
-  implementation libraries.jackson_csv
+  implementation libs.silenteight.fab.cmapi.connector.api
+  implementation libs.data.source.api.uds.lib
+  implementation libs.data.source.agentinput.api
+  implementation libs.data.source.categories.api
+  implementation libs.data.source.api
+  implementation libs.silenteight.registration.api.proto
+  implementation libs.silenteight.registration.api.library
+  implementation libs.grpc.client.spring.boot.starter
+  implementation libs.vavr
+  implementation libs.json.path
+  implementation libs.jackson.dataformat.csv
 
   // Sentry
-  implementation libraries.sentry
-  runtimeOnly libraries.sentry_spring_boot_starter
-  runtimeOnly libraries.sentry_logback
+  implementation libs.sentry
+  runtimeOnly libs.sentry.spring.boot.starter
+  runtimeOnly libs.sentry.logback
 
-  runtimeOnly libraries.hibernate_validator
-  runtimeOnly libraries.spring_boot_starter_undertow
-  runtimeOnly libraries.spring_boot_starter_actuator
-  runtimeOnly libraries.grpc_brave_instrumentation
-  runtimeOnly libraries.spring_cloud_starter_sleuth
-  runtimeOnly libraries.spring_cloud_consul_discovery
-  runtimeOnly libraries.spring_cloud_starter_consul_config
+  runtimeOnly libs.hibernate.validator
+  runtimeOnly libs.spring.boot.starter.undertow
+  runtimeOnly libs.spring.boot.starter.actuator
+  runtimeOnly libs.brave.instrumentation.grpc
+  runtimeOnly libs.spring.cloud.starter.sleuth
+  runtimeOnly libs.spring.cloud.consul.discovery
+  runtimeOnly libs.spring.cloud.starter.consul.config
 
   testImplementation project(':dataprep-test-fixtures')
-  testImplementation libraries.jsonassert
-  testRuntimeOnly libraries.junit_jupiter_engine
+  testImplementation libs.jsonassert
+  testRuntimeOnly libs.junit.jupiter.engine
 }
 
 jar {
   manifest {
     attributes "Main-Class": "com.silenteight.fab.dataprep.FabDataPreparationApplication"
-  }
-}
-
-publishing {
-  publications {
-    bootJava(MavenPublication) {
-      artifact bootJar
-    }
-  }
-}
-
-jib {
-  from {
-    // NOTE(ahaczewski): Use debug version of the image for SNAPSHOT builds.
-    def imageTag = "$version".endsWith("-SNAPSHOT") ? "debug-nonroot" : "nonroot"
-    image = "gcr.io/distroless/java11-debian11:" + imageTag
-  }
-  to {
-    image = "docker.repo.silenteight.com/dataprep/${project.name}:${version}"
-    if ("$version".contains("-BUILD") || "$version".endsWith("-SNAPSHOT")) {
-      tags = ["snapshot"]
-    } else {
-      tags = ["latest"]
-    }
-  }
-  container {
-    jvmFlags = [
-        "-XX:MaxRAMPercentage=75",
-        "-Dfile.encoding=UTF-8",
-        "-Dsun.jnu.encoding=UTF-8",
-        "-Djava.net.preferIPv4Stack=true",
-        "-Djava.io.tmpdir=/tmp"
-    ]
-    user = "nonroot"
-    workingDirectory = "/silenteight"
   }
 }

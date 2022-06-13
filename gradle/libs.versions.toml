@@ -88,6 +88,7 @@ data-source-agentinput-api = { group = "com.silenteight.iris", name = "data-sour
 data-source-api = { group = "com.silenteight.iris", name = "data-source-api" }
 data-source-categories-api = { group = "com.silenteight.iris", name = "data-source-categories-api" }
 data-source-comments-api = { group = "com.silenteight.iris", name = "data-source-comments-api" }
+data-source-api-uds-lib = { group = "com.silenteight.universaldatasource.api.library", name = "uds-lib", version = "1.5.0" }
 governance-api = { group = "com.silenteight.iris", name = "se-governance-api" }
 governance-model-api = { group = "com.silenteight.iris", name = "se-model-api" }
 governance-solving-api = { group = "com.silenteight.iris", name = "se-solving-api" }

@@ -3,13 +3,14 @@ package com.silenteight.fab.dataprep.domain
 import com.silenteight.proto.fab.api.v1.AlertMessageDetails
 import com.silenteight.proto.fab.api.v1.AlertMessageStored
 
-import groovy.json.JsonSlurper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
 
 import static com.silenteight.fab.dataprep.domain.Fixtures.*
 import static com.silenteight.sep.base.common.support.jackson.JsonConversionHelper.INSTANCE
+import static org.skyscreamer.jsonassert.JSONAssert.assertEquals
+import static org.skyscreamer.jsonassert.JSONCompareMode.STRICT
 
 @ContextConfiguration(classes = ParserConfiguration)
 class AlertParserTest extends Specification {
@@ -19,7 +20,6 @@ class AlertParserTest extends Specification {
 
   def "AlertDetails should be parsed"() {
     given:
-    def parser = new JsonSlurper()
     def alertMessageDetails = AlertMessageDetails.newBuilder().setMessageName(MESSAGE_NAME)
         .setPayload(MESSAGE).build()
     def alertMessageStored = AlertMessageStored.newBuilder().setBatchName(BATCH_NAME)
@@ -37,7 +37,7 @@ class AlertParserTest extends Specification {
     parsedAlertMessage.hits.size() == 1
     parsedAlertMessage.hits.values().each {it ->
       assert it.getHitName() == 'PSY0003'
-      assert parser.parseText(it.getPayloads().first().toString()) == parser.parseText(HIT)
+      assertEquals(HIT, it.getPayloads().first().toString(), STRICT)
     }
   }
 

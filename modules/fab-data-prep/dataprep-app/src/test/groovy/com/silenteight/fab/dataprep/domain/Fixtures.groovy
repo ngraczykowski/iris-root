@@ -14,12 +14,13 @@ import com.silenteight.fab.dataprep.domain.model.RegisteredAlert.Match
 import com.silenteight.proto.fab.api.v1.AlertMessageDetails
 import com.silenteight.proto.fab.api.v1.AlertMessagesDetailsResponse
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.google.common.io.Resources
-import groovy.json.JsonSlurper
+import com.jayway.jsonpath.Configuration
+import com.jayway.jsonpath.JsonPath
+import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider
 
 import static com.silenteight.sep.base.common.support.jackson.JsonConversionHelper.INSTANCE
-import static groovy.json.JsonOutput.prettyPrint
-import static groovy.json.JsonOutput.toJson
 import static java.nio.charset.StandardCharsets.UTF_8
 
 class Fixtures {
@@ -68,7 +69,13 @@ class Fixtures {
 
   static String MESSAGE = Resources.toString(Resources.getResource("message.json"), UTF_8)
 
-  static String HIT = prettyPrint(toJson(new JsonSlurper().parseText(MESSAGE).Message.Hits[0].Hit))
+  static String HIT = JsonPath.using(
+      Configuration.builder()
+          .mappingProvider(new JacksonMappingProvider())
+          .build())
+      .parse(MESSAGE)
+      .read("Message.Hits[0].Hit", JsonNode.class)
+      .toPrettyString()
 
   static Match MATCH = Match.builder()
       .matchName(MATCH_NAME)

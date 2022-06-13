@@ -1,32 +1,23 @@
 plugins {
-  id "java-library"
-  id "groovy"
+  id "com.silenteight.iris.build.java-library"
 }
 
 description = "dataprep-test-fixtures"
 
-configurations {
-  implementation.extendsFrom starterDatabase
-  runtimeOnly.extendsFrom starterDatabaseRuntime
-}
-
-apply from: "${rootProject.projectDir}/gradle/scripts/dependencies.gradle"
-
 dependencies {
-  api libraries.spring_boot_test
-  api libraries.spring_test
+  implementation platform('com.silenteight.iris.platform:test-platform')
 
-  api libraries.groovy_all
-  api libraries.spock_core
-  api libraries.spock_spring
-  api libraries.junit_jupiter_api
-  api libraries.junit_jupiter_testcontainers
-  api libraries.mockito_core
-  api libraries.mockito_junit_jupiter
-  api libraries.spring_boot_test
-  api libraries.spring_boot_test_autoconfigure
-  api libraries.spring_test
-  api libraries.testcontainers_rabbitmq
-  api libraries.testcontainers_spock
-  api libraries.testcontainers_postgresql
+  api libs.spring.boot.test
+  api libs.spring.test
+
+  api libs.spock.core
+  api libs.spock.spring
+  api libs.junit.jupiter.api
+  api libs.spring.boot.test
+  api libs.spring.boot.test.autoconfigure
+  api libs.spring.test
+  api libs.test.containers.junit.jupiter
+  api libs.test.containers.postgresql
+  api libs.test.containers.rabbitmq
+  api libs.test.containers.spock
 }

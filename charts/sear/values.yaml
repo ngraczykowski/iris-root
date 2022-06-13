@@ -345,8 +345,7 @@ components:
     enabled: false
 
     image:
-      repository: registry.dev.s8ops.com/dataprep/dataprep-app
-      tag: "snapshot"
+      repository: registry.dev.s8ops.com/iris/dataprep-app
   #Fab bridge end
 
   core-bridge:

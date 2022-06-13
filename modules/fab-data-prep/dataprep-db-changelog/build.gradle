@@ -4,12 +4,6 @@ plugins {
 
 description = "DataPrep DB Changelog"
 
-configurations {
-  implementation.extendsFrom starterDatabase
-}
-
 dependencies {
-  implementation libraries.liquibase_sessionlock
-
-  runtimeOnly 'com.mattbertolini:liquibase-slf4j:4.1.0'
+  implementation libs.liquibase.sessionlock
 }
