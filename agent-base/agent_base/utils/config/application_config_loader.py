@@ -15,11 +15,18 @@ from agent_base.utils.config.application_config import (
     UDSConfig,
 )
 
+ENV_VARS_CONFIG_MAPPING = "environment-variables-mapping"
+
 
 class ApplicationConfigLoader:
     def __init__(self, application_config_mapping: Dict[str, Any]):
         self._application_config_mapping = application_config_mapping
-        self._env_vars = application_config_mapping.get("environment-variables-mapping")
+        try:
+            self._env_vars = application_config_mapping[ENV_VARS_CONFIG_MAPPING]
+        except KeyError:
+            raise ConfigurationException(
+                f"{ENV_VARS_CONFIG_MAPPING} section is missing from application.yaml!"
+            )
 
     def load(self) -> ApplicationConfig:
         agent_service_config = AgentServiceConfig(
