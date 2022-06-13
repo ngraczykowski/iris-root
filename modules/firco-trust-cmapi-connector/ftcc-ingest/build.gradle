@@ -1,5 +1,6 @@
 plugins {
-  id "java"
+  id "io.freefair.aspectj.post-compile-weaving"
+  id "com.silenteight.iris.build.java-library"
   id "groovy"
 }
 
@@ -10,31 +11,31 @@ dependencies {
   implementation project(":ftcc-db-changelog")
   implementation project(":ftcc-request")
 
-  implementation libraries.silenteight_sep_base_common
-  implementation libraries.sear_rabbitmq_common_schema
-  implementation libraries.core_bridge_registration_connector_lib
-  implementation libraries.core_bridge_registration_connector_proto
-  implementation libraries.fab_cmapi_connector_api
+  implementation libs.silenteight.sep.base.common
+  implementation libs.sear.rabbitmq.common.schema
+  implementation libs.silenteight.registration.api.library
+  implementation libs.silenteight.registration.api.proto
+  implementation libs.silenteight.fab.cmapi.connector.api
 
-  implementation libraries.jakarta_validation_api
+  implementation libs.jakarta.validation.api
 
-  implementation libraries.grpc_server_spring_boot_starter
+  implementation libs.grpc.server.spring.boot.starter
 
   // Jackson
-  implementation libraries.jackson_annotations
-  implementation libraries.jackson_databind
-  runtimeOnly libraries.jackson_datatype_jdk8
-  runtimeOnly libraries.jackson_datatype_jsr310
-  runtimeOnly libraries.jackson_module_afterburner
-  runtimeOnly libraries.jackson_module_paranamer
-  runtimeOnly libraries.jackson_module_parameter_names
+  implementation libs.jackson.annotations
+  implementation libs.jackson.databind
+  runtimeOnly libs.jackson.datatype.jdk8
+  runtimeOnly libs.jackson.datatype.jsr310
+  runtimeOnly libs.jackson.module.afterburner
+  runtimeOnly libs.jackson.module.paranamer
+  runtimeOnly libs.jackson.module.parameter.names
 
   testImplementation project(":ftcc-common-testing")
-  testImplementation libraries.silenteight_sep_base_testing
+  testImplementation libs.silenteight.sep.base.testing
 
-  aspect libraries.silenteight_sep_base_aspects
+  aspect libs.silenteight.sep.base.aspects
 
-  testRuntimeOnly libraries.tomcat_embed_el
-  testRuntimeOnly libraries.spock_spring
-  testRuntimeOnly libraries.hibernate_validator
+  testRuntimeOnly libs.tomcat.embed.el
+  testRuntimeOnly libs.spock.spring
+  testRuntimeOnly libs.hibernate.validator
 }

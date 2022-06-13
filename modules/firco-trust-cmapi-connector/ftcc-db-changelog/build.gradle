@@ -1,13 +1,5 @@
 plugins {
-  id "java"
+  id "com.silenteight.iris.build.java-library"
 }
 
 description = "Firco Trust CMAPI Connector DB Changelog"
-
-configurations {
-  implementation.extendsFrom starterDatabase
-}
-
-dependencies {
-  implementation libraries.liquibase_sessionlock
-}

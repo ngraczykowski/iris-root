@@ -1,37 +1,33 @@
 plugins {
-  id "java"
+  id "io.freefair.aspectj.post-compile-weaving"
+  id "com.silenteight.iris.build.java-library"
 }
 
 description = "Firco Trust CMAPI Connector Request"
-
-configurations {
-  implementation.extendsFrom starterDatabase
-  runtimeOnly.extendsFrom starterDatabaseRuntime
-}
 
 dependencies {
   implementation project(":ftcc-common")
   implementation project(":ftcc-db-changelog")
 
-  implementation libraries.silenteight_sep_base_common
+  implementation libs.silenteight.sep.base.common
 
-  implementation libraries.jakarta_annotation_api
-  implementation libraries.jakarta_validation_api
+  implementation libs.jakarta.annotation.api
+  implementation libs.jakarta.validation.api
 
-  implementation libraries.jackson_annotations
-  implementation libraries.jackson_databind
-  runtimeOnly libraries.jackson_datatype_jdk8
-  runtimeOnly libraries.jackson_datatype_jsr310
-  runtimeOnly libraries.jackson_module_afterburner
-  runtimeOnly libraries.jackson_module_paranamer
-  runtimeOnly libraries.jackson_module_parameter_names
+  implementation libs.jackson.annotations
+  implementation libs.jackson.databind
+  runtimeOnly libs.jackson.datatype.jdk8
+  runtimeOnly libs.jackson.datatype.jsr310
+  runtimeOnly libs.jackson.module.afterburner
+  runtimeOnly libs.jackson.module.paranamer
+  runtimeOnly libs.jackson.module.parameter.names
 
-  implementation libraries.hibernate_types
+  implementation libs.hibernate.types
 
   testImplementation project(":ftcc-common-testing")
-  testImplementation libraries.silenteight_sep_base_testing
+  testImplementation libs.silenteight.sep.base.testing
 
-  testRuntimeOnly libraries.hibernate_validator
+  testRuntimeOnly libs.hibernate.validator
 
-  aspect libraries.silenteight_sep_base_aspects
+  aspect libs.silenteight.sep.base.aspects
 }

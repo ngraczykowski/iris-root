@@ -23,7 +23,7 @@ def runScript(String name) {
       }
       filter(
           ReplaceTokens,
-          tokens: [jarfile: "ftcc-app-${project.version}-exec.jar".toString()],
+          tokens: [jarfile: "ftcc-app-${project.version}.jar".toString()],
           beginToken: "@@",
           endToken: "@@",
       )

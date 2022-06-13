@@ -1,34 +1,27 @@
 plugins {
-  id "java"
-  id "groovy"
+  id "com.silenteight.iris.build.java-library"
 }
 
 description = "Firco Trust CMAPI Connector - Callback"
-
-configurations {
-  implementation.extendsFrom starterDatabase
-
-  runtimeOnly.extendsFrom starterDatabaseRuntime
-}
 
 dependencies {
   implementation project(":ftcc-common")
   implementation project(":ftcc-request")
 
-  implementation libraries.silenteight_sep_base_common
-  implementation libraries.core_bridge_registration_connector_lib
-  implementation libraries.core_bridge_registration_connector_proto
-  implementation libraries.fab_cmapi_connector_api
-  implementation libraries.recommendation_api_library
-  implementation libraries.recommendation_internal_protos
-  implementation libraries.opencsv
-  implementation libraries.spring_boot_starter_web
-  implementation libraries.apache_http_client
+  implementation libs.silenteight.sep.base.common
+  implementation libs.silenteight.registration.api.library
+  implementation libs.silenteight.registration.api.proto
+  implementation libs.silenteight.fab.cmapi.connector.api
+  implementation libs.silenteight.recommendation.api.library
+  implementation libs.silenteight.recommendation.api.proto
+  implementation libs.opencsv
+  implementation libs.spring.boot.starter.web
+  implementation libs.apache.httpclient
 
-  implementation libraries.hibernate_types
-  testRuntimeOnly libraries.hibernate_validator
+  implementation libs.hibernate.types
+  testRuntimeOnly libs.hibernate.validator
 
   testImplementation project(":ftcc-common-testing")
-  testImplementation libraries.spock_spring
-  testImplementation libraries.silenteight_sep_base_testing
+  testImplementation libs.spock.spring
+  testImplementation libs.silenteight.sep.base.testing
 }

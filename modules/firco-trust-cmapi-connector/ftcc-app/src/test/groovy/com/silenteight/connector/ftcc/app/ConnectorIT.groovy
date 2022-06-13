@@ -24,12 +24,13 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.context.annotation.Import
+import org.springframework.http.HttpEntity
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
+import org.springframework.web.client.RestTemplate
 import spock.lang.Shared
 import spock.util.concurrent.PollingConditions
-import wslite.rest.RESTClient
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*
 import static com.silenteight.connector.ftcc.app.Fixtures.*
@@ -64,6 +65,9 @@ class ConnectorIT extends BaseSpecificationIT {
 
   @Autowired
   CoreBridgeListener coreBridgeListener
+
+  @Autowired
+  RestTemplate restTemplate
 
   @SpringBean
   RecommendationServiceClient recommendationServiceClient = Mock()
@@ -107,10 +111,8 @@ class ConnectorIT extends BaseSpecificationIT {
     String messageName = null
 
     when: "import alert"
-    RESTClient client = new RESTClient("http://localhost:$port$contextPath")
-    def response = client.post(path: "/v1/alert") {
-      json(jsonSlurper.parseText(Resources.getResource('solving-request.json').text))
-    }
+    def request = new HttpEntity(Resources.getResource('solving-request.json').text)
+    def response = restTemplate.postForEntity("http://localhost:$port$contextPath/v1/alert", request, String)
 
     then: "data-prep is notified"
     1 * registrationServiceClient.registerBatch(_) >> {RegisterBatchIn batch ->
@@ -120,8 +122,8 @@ class ConnectorIT extends BaseSpecificationIT {
       assert !batch.getIsSimulation()
       assert batch.getBatchPriority() == 10
     }
-    response.getStatusCode() == 200
-    assertEquals(IMPORT_RESPONSE_JSON, response.getContentAsString(), LENIENT)
+    response.getStatusCode().value() == 200
+    assertEquals(IMPORT_RESPONSE_JSON, response.getBody(), LENIENT)
 
     conditions.eventually {
       AlertMessageStored msg = dataPrepListener.getMessages().last()
@@ -166,10 +168,8 @@ class ConnectorIT extends BaseSpecificationIT {
     String messageName = null
 
     when: "import alert"
-    RESTClient client = new RESTClient("http://localhost:$port$contextPath")
-    def response = client.post(path: "/v1/alert") {
-      json(jsonSlurper.parseText(Resources.getResource('learning-request.json').text))
-    }
+    def request = new HttpEntity(Resources.getResource('learning-request.json').text)
+    def response = restTemplate.postForEntity("http://localhost:$port$contextPath/v1/alert", request, String)
 
     then: "data-prep is notified"
     1 * registrationServiceClient.registerBatch(_) >> {RegisterBatchIn batch ->
@@ -179,8 +179,8 @@ class ConnectorIT extends BaseSpecificationIT {
       assert batch.getIsSimulation()
       assert batch.getBatchPriority() == 1
     }
-    response.getStatusCode() == 200
-    assertEquals(IMPORT_RESPONSE_JSON, response.getContentAsString(), LENIENT)
+    response.getStatusCode().value() == 200
+    assertEquals(IMPORT_RESPONSE_JSON, response.getBody(), LENIENT)
 
     conditions.eventually {
       AlertMessageStored msg = dataPrepListener.getMessages().last()

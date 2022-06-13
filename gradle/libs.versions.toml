@@ -144,6 +144,7 @@ silenteight-registration-api-library = { group = 'com.silenteight.iris', name = 
 silenteight-registration-api-proto = { group = 'com.silenteight.iris', name = 'registration-internal-protos' }
 silenteight-governance-model-api-library = { group = 'com.silenteight.iris', name = 'governance-lib' }
 silenteight-adjudication-engine-api-library = { group = 'com.silenteight.iris', name = 'ae-lib' }
+silenteight-fab-cmapi-connector-api = { group = 'com.silenteight.iris', name = 'fab-cmapi-connector-api' }
 # Platforms
 platform-awssdk = { module = "software.amazon.awssdk:bom", version.ref = "platform-awssdk" }
 #TODO(dsniezek): check this?
@@ -355,6 +356,7 @@ jakarta-validation-api = { group = "jakarta.validation", name = "jakarta.validat
 javax-cache-api = { group = "javax.cache", name = "cache-api" }
 javax-mail = { group = "javax.mail", name = "mail", version = "1.4.1" }
 jaxb-api = { group = "jakarta.xml.bind", name = "jakarta.xml.bind-api" }
+jsonassert = { group = "org.skyscreamer", name = "jsonassert", version = "1.5.0" }
 keycloak-admin-client = { group = 'org.keycloak', name = 'keycloak-admin-client', version.ref = "platform-keycloak-adapter" }
 keycloak-spring-boot-starter = { group = "org.keycloak", name = "keycloak-spring-boot-starter" }
 liquibase-core = { group = "org.liquibase", name = "liquibase-core" }
@@ -394,6 +396,7 @@ mapstruct = { group = 'org.mapstruct', name = 'mapstruct', version.ref = 'mapstr
 mapstruct-processor = { group = 'org.mapstruct', name = 'mapstruct-processor', version.ref = 'mapstruct' }
 json-flattener = { group = 'com.github.wnameless', name = 'json-flattener', version = '0.7.1' }
 #TODO(pputerla): this is required by core-brige; remove once core bridge is cleansed
+wiremock = { group = 'com.github.tomakehurst', name = 'wiremock-standalone', version = '2.27.2' }
 vavr = { group = 'io.vavr', name = 'vavr', version = '0.10.4' }
 
 # Testing

@@ -1,23 +1,24 @@
 plugins {
-  id "java-library"
+  id "com.silenteight.iris.build.java-library"
   id "groovy"
 }
 
 description = "Firco Trust CMAPI Connector Common Testing"
 
 dependencies {
+  api platform('com.silenteight.iris.platform:test-platform')
   implementation project(":ftcc-common")
 
-  api libraries.spring_boot_test
-  api libraries.spring_boot_test_autoconfigure
+  api libs.spring.boot.test
+  api libs.spring.boot.test.autoconfigure
 
-  api libraries.junit_jupiter_api
+  api libs.junit.jupiter.api
 
-  api libraries.rest_assured
-  api libraries.rest_assured_spring_mock_mvc
+  api libs.rest.assured
+  api libs.rest.assured.spring.mock.mvc
 
-  api libraries.test_containers_rabbitmq
-  api libraries.test_containers_postgresql
-  api libraries.test_containers_spock
-  api libraries.spock_spring
+  api libs.test.containers.rabbitmq
+  api libs.test.containers.postgresql
+  api libs.test.containers.spock
+  api libs.spock.spring
 }

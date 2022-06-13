@@ -335,8 +335,7 @@ components:
     enabled: false
 
     image:
-      repository: registry.dev.s8ops.com/ftcc/ftcc-app
-      tag: "snapshot"
+      repository: registry.dev.s8ops.com/iris/ftcc-app
 
     db:
       name: "ftcc"
