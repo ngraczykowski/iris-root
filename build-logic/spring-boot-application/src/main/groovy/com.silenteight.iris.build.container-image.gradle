@@ -39,3 +39,9 @@ jib {
     workingDirectory = "/silenteight"
   }
 }
+
+pluginManager.withPlugin("com.silenteight.iris.build.spring-boot-application") {
+  tasks.named('publish') {Task task ->
+    task.dependsOn tasks.named('jib')
+  }
+}
