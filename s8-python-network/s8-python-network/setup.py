@@ -2,6 +2,7 @@ from setuptools import find_packages, setup
 
 install_require = [
     "aiohttp==3.7.4.post0",
+    "aio-pika==7.1.2",
     "grpcio>=1.46.3",
     "grpcio-health-checking>=1.46.3",
     "grpcio-reflection>=1.46.3",
