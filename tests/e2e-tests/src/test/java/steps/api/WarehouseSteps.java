@@ -1,4 +1,4 @@
-package steps;
+package steps.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;

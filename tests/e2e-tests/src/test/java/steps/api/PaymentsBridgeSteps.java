@@ -2,7 +2,7 @@
  * Copyright (c) 2022 Silent Eight Pte. Ltd. All rights reserved.
  */
 
-package steps;
+package steps.api;
 
 import io.cucumber.java8.En;
 import utils.datageneration.paymentsbridge.PaymentsBridgeAlert;

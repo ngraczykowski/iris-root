@@ -1,4 +1,4 @@
-package steps;
+package steps.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.datatable.DataTable;
@@ -15,7 +15,7 @@ import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 import static steps.Hooks.scenarioContext;
-import static steps.WarehouseSteps.COUNTRY_GROUP;
+import static steps.api.WarehouseSteps.COUNTRY_GROUP;
 import static utils.AuthUtils.getAuthTokenHeaderForAdmin;
 
 public class WebAppSteps implements En {

@@ -1,4 +1,4 @@
-package steps;
+package steps.api;
 
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java8.En;

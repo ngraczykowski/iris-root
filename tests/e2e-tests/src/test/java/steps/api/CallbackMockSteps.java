@@ -2,7 +2,7 @@
  * Copyright (c) 2022 Silent Eight Pte. Ltd. All rights reserved.
  */
 
-package steps;
+package steps.api;
 
 import lombok.extern.slf4j.Slf4j;
 

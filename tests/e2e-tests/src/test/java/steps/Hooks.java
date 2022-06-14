@@ -83,17 +83,11 @@ public class Hooks implements En {
           }
           List<Step> stepList = getStepListFromScenario(scenario);
           String currentStepName = stepList.get(stepNo).getText();
-
-          if (!currentStepName.startsWith("Prepare")
-              && StringUtils.isNotBlank(CUSTOM_LOG_FILTER.getCallLog().get())) {
-
             scenario.attach(
                 CUSTOM_LOG_FILTER.getCallLog().get(),
                 "text/plain",
                 "API communication for: " + currentStepName);
             CUSTOM_LOG_FILTER.clear();
-          }
-
           stepNo++;
         });
 
