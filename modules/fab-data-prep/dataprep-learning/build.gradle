@@ -1,4 +1,5 @@
 plugins {
+  id "groovy"
   id "com.silenteight.iris.build.java-library"
 }
 
