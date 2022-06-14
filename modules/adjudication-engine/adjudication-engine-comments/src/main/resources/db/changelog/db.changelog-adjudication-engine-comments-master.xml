@@ -12,5 +12,6 @@
   <include file="db/changelog/db.changelog-adjudication-engine-comments-1.19.0.xml"/>
   <include file="db/changelog/db.changelog-adjudication-engine-comments-1.20.0.xml"/>
   <include file="db/changelog/db.changelog-adjudication-engine-comments-1.23.0.xml"/>
+  <include file="db/changelog/db.changelog-adjudication-engine-comments-iris.xml"/>
 
 </databaseChangeLog>

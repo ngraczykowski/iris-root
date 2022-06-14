@@ -17,7 +17,7 @@ class FreemarkerCommentTemplateLoader implements TemplateLoader {
 
   @Override
   public Object findTemplateSource(String name) {
-    return repository.findFirstByTemplateNameOrderByRevisionDesc(name).orElse(null);
+    return repository.findFirstByTemplateName(name).orElse(null);
   }
 
   @Override

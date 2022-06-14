@@ -7,7 +7,6 @@ import com.google.common.io.CharStreams;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.io.IOException;
@@ -41,33 +40,6 @@ class PebbleCommentTemplateLoaderIT extends BaseDataJpaTest {
   }
 
   @Test
-  void shouldFailOnSameRevisionInsert() {
-    var name = UUID.randomUUID().toString();
-    var payload = "{{name}} payload";
-    var template = pebbleTemplate(name, 10, payload);
-
-    repository.save(template);
-
-    var sameTemplate = pebbleTemplate(name, 10, payload);
-    assertThatThrownBy(() -> repository.save(sameTemplate))
-        .isInstanceOf(DataIntegrityViolationException.class);
-  }
-
-  @Test
-  void shouldReadLatestVersionOfTheTemplate() throws IOException {
-    String name = UUID.randomUUID().toString();
-
-    repository.save(pebbleTemplate(name, "payload ver 1"));
-    repository.save(pebbleTemplate(name, "payload ver 2"));
-
-    assertThat(readTemplate(name)).isEqualTo("payload ver 2");
-
-    repository.save(pebbleTemplate(name, "payload ver 3"));
-
-    assertThat(readTemplate(name)).isEqualTo("payload ver 3");
-  }
-
-  @Test
   void shouldUsePrefix() throws IOException {
     repository.save(pebbleTemplate("prefix/name", PAYLOAD));
 
@@ -93,9 +65,5 @@ class PebbleCommentTemplateLoaderIT extends BaseDataJpaTest {
 
   private CommentTemplate pebbleTemplate(String name, String payload) {
     return commentTemplate(name + ".peb", payload);
-  }
-
-  private CommentTemplate pebbleTemplate(String name, int revision, String payload) {
-    return commentTemplate(name + ".peb", revision, payload);
   }
 }

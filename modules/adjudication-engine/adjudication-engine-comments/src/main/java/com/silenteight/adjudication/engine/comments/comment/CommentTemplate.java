@@ -23,7 +23,6 @@ import static lombok.AccessLevel.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
 @Builder(access = PACKAGE)
-//@Cacheable // TODO(ahaczewski): FIX ME DO IT
 class CommentTemplate extends BaseEntity implements IdentifiableEntity {
 
   @Id
@@ -36,9 +35,6 @@ class CommentTemplate extends BaseEntity implements IdentifiableEntity {
   @Column(nullable = false)
   @NonNull
   private String templateName;
-
-  @Column(nullable = false)
-  private Integer revision;
 
   @Column(nullable = false)
   @NonNull

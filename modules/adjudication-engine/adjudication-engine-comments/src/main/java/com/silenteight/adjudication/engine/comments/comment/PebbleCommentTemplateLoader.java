@@ -30,7 +30,7 @@ class PebbleCommentTemplateLoader implements Loader<String> {
     log.debug("Loading template from the database: templateName={}", templateName);
 
     return repository
-        .findFirstByTemplateNameOrderByRevisionDesc(getFullName(templateName))
+        .findFirstByTemplateName(getFullName(templateName))
         .map(CommentTemplate::toReader)
         .orElseThrow(() -> new PebbleTemplateNotFoundException(templateName));
   }
@@ -83,7 +83,7 @@ class PebbleCommentTemplateLoader implements Loader<String> {
 
   @Override
   public boolean resourceExists(String templateName) {
-    return repository.findFirstByTemplateNameOrderByRevisionDesc(getFullName(templateName))
+    return repository.findFirstByTemplateName(getFullName(templateName))
         .isPresent();
   }
 }

@@ -48,7 +48,6 @@ class CommentTemplateFixture {
 
     return CommentTemplate.builder()
         .templateName(name)
-        .revision(revision)
         .template(payload)
         .build();
   }

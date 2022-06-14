@@ -3,7 +3,7 @@ package com.silenteight.adjudication.engine.comments.comment;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,16 +13,31 @@ class InMemoryCommentTemplateRepository implements CommentTemplateRepository {
   private final List<CommentTemplate> store = new ArrayList<>();
 
   @Override
-  public Optional<CommentTemplate> findFirstByTemplateNameOrderByRevisionDesc(String name) {
+  public Optional<CommentTemplate> findFirstByTemplateName(String name) {
     return store
         .stream()
         .filter(ct -> ct.getTemplateName().equals(name))
-        .max(Comparator.comparingInt(CommentTemplate::getRevision));
+        .findFirst();
   }
 
   @Override
   public synchronized CommentTemplate save(CommentTemplate entity) {
     store.add(entity);
     return entity;
+  }
+
+  @Override
+  public List<CommentTemplate> saveAll(Iterable<CommentTemplate> entity) {
+    store.addAll((Collection<? extends CommentTemplate>) entity);
+    return store;
+  }
+
+  @Override
+  public void deleteAll() {
+    store.clear();
+  }
+
+  CommentTemplate getCommentTemplateByTemplateName(String templateName) {
+    return store.stream().filter(s -> s.getTemplateName().equals(templateName)).findFirst().get();
   }
 }

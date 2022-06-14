@@ -15,4 +15,6 @@ import org.springframework.validation.annotation.Validated;
 class CommentProperties {
 
   private boolean shouldCacheTemplates = true;
+
+  private String environment = "sierra";
 }
