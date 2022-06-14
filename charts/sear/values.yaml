@@ -159,12 +159,18 @@ common:
   type: spring
   # enable component
   enabled: true
-  # use database (inject postgres secrets)
-  useDb: true
   # use rabbit (inject rabbit secrets)
   useRabbit: true
-  # configure db name via postgres operator
-  dbName: ""
+  # configure db
+  db:
+    enabled: true
+    external: false  # use internal postgres operator
+    name: ""
+    host: ""
+    port: 5432
+    options: "sslmode=require&sslfactory=org.postgresql.ssl.NonValidatingFactory"
+    username: ""
+    password: ""
   # std k8s docker image settings
   image:
     repository: ""
@@ -273,7 +279,8 @@ common:
 ## override "common" node for agent deployments only
 agentsCommon:
   enabled: false
-  useDb: false
+  db:
+    enabled: false
   image:
     tag: "latest"
   ingress:
@@ -284,7 +291,7 @@ agentsCommon:
 #
 # Each component can have the following parameters customized:
 #
-#   dbName  - (String) name of the database. Defaults to the component name.
+#   db.name  - (String) name of the database. Defaults to the component name.
 #   webPath - (String) URL path of this component. Defaults to the component name.
 #
 # You can also overwrite the `common` configuration, by configuring the following values:
@@ -310,7 +317,9 @@ components:
     image:
       repository: registry.dev.s8ops.com/iris/hsbc-bridge-app
 
-    dbName: "hb"
+    db:
+      external: true
+      name: "hb"
     webPath: "hsbc-bridge"
 
   #FAB bridge start
@@ -321,7 +330,8 @@ components:
       repository: registry.dev.s8ops.com/ftcc/ftcc-app
       tag: "snapshot"
 
-    dbName: "ftcc"
+    db:
+      name: "ftcc"
     webPath: "ftcc"
 
   dataprep:
@@ -337,7 +347,8 @@ components:
 
     image:
       repository: registry.dev.s8ops.com/iris/bridge-app
-    dbName: cb
+    db:
+      name: "cb"
     webPath: cb
 
   payments-bridge:
@@ -346,34 +357,39 @@ components:
     image:
       repository: registry.dev.s8ops.com/iris/sear-payments-bridge-app
 
-    dbName: "pb"
+    db:
+      name: "pb"
     webPath: "pb"
 
   universal-data-source:
     image:
       repository: registry.dev.s8ops.com/iris/universal-data-source-app
 
-    dbName: "uds"
+    db:
+      name: "uds"
     webPath: "uds"
 
   adjudication-engine:
     image:
       repository: registry.dev.s8ops.com/iris/adjudication-engine-app
 
-    dbName: "ae"
+    db:
+      name: "ae"
     webPath: "ae"
 
   governance:
     image:
       repository: registry.dev.s8ops.com/iris/governance-app
 
-    dbName: "gov"
+    db:
+      name: "gov"
 
   simulator:
     image:
       repository: registry.dev.s8ops.com/iris/simulator-app
 
-    dbName: "sim"
+    db:
+      name: "sim"
 
   webapp:
     image:
@@ -383,11 +399,13 @@ components:
     image:
       repository: registry.dev.s8ops.com/iris/warehouse-app
 
-    dbName: "wh"
+    db:
+      name: "wh"
 
   callback-mock:
     enabled: false
-    useDb: false
+    db:
+      enabled: false
     useRabbit: false
     replicaCount: 1
     image:
@@ -423,16 +441,18 @@ agents:
     image:
       repository: registry.dev.s8ops.com/geo-agent-default
   learning-engine:
-    useDb: true
-    dbName: "learningengine"
+    db:
+      enabled: true
+      name: "learningengine"
     image:
       repository: registry.dev.s8ops.com/learning-engine-default
   is-pep-agent:
     image:
       repository: registry.dev.s8ops.com/is-pep-agent-default
   historical-decisions-agent:
-    useDb: true
-    dbName: "historicaldecisions"
+    db:
+      enabled: true
+      name: "historicaldecisions"
     image:
       repository: registry.dev.s8ops.com/historical-decisions-agent
   allow-list-agent:

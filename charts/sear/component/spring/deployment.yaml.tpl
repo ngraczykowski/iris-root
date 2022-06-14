@@ -32,7 +32,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       initContainers:
-        {{- if .component.useDb }}
+        {{- if .component.db.enabled }}
         {{- include "checkPostgresReadyInitContainer" . | indent 8 }}
         {{- end }}
         {{- if .component.useRabbit }}
@@ -114,7 +114,7 @@ spec:
             - --sentry.dsn={{ .component.sentry.dsn }}
             - --sentry.environment={{ include "sear.sentryEnvironment" . }}
             {{- end }}
-            {{- if .component.useDb }}
+            {{- if .component.db.enabled }}
             - --spring.datasource.url={{ include "sear.spring.jdbcUrl" . }}
             {{- end }}
             {{- if .component.containerPorts.grpc.enabled }}
@@ -140,7 +140,7 @@ spec:
               mountPath: "/var/run/secrets/spring/rabbitmq"
               readOnly: true
             {{- end }}
-            {{- if .component.useDb }}
+            {{- if .component.db.enabled }}
             - name: secret-postgres
               mountPath: "/var/run/secrets/spring/postgres"
               readOnly: true
@@ -193,7 +193,7 @@ spec:
               - key: password
                 path: spring/rabbitmq/password
         {{- end }}
-        {{- if .component.useDb }}
+        {{- if .component.db.enabled }}
         - name: secret-postgres
           secret:
             secretName: {{ include "sear.postgresqlSecretName" . }}

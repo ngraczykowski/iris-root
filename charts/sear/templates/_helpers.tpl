@@ -100,8 +100,14 @@ Creates the name of Sentry environment
 {{- end }}
 
 {{ define "sear.rabbitmqSecretName" }}{{ include "sear.fullname" . }}-rabbitmq-default-user{{ end }}
-{{ define "sear.postgresqlSecretName" }}{{ printf "%s.%s" .component.dbName (include "sear.fullname" .) }}-postgres.credentials.postgresql.acid.zalan.do{{ end }}
-{{ define "sear.postgresqlService" }}{{ include "sear.fullname" . }}-postgres.{{ .Release.Namespace }}.svc{{ end }}
+{{- define "sear.postgresqlSecretName" -}}
+{{- if .component.db.external -}}
+{{ printf "%s.%s" .component.db.name (include "sear.fullname" .) }}-postgres.external
+{{- else -}}
+{{ printf "%s.%s" .component.db.name (include "sear.fullname" .) }}-postgres.credentials.postgresql.acid.zalan.do
+{{- end }}{{ end -}}
+{{- define "sear.postgresqlService" }}{{ if .component.db.external }}{{ .component.db.host }}{{ else }}{{ include "sear.fullname" . }}-postgres.{{ .Release.Namespace }}.svc{{ end }}{{ end -}}
+{{- define "sear.postgresqlServicePort" }}{{ if .component.db.external }}{{ .component.db.port }}{{- else }}5432{{ end }}{{ end -}}
 
 {{- define "sear.mergedComponents" }}
 
@@ -109,12 +115,20 @@ Creates the name of Sentry environment
 
   {{- range $key, $value := $.Values.components }}
     {{- $common := $.Values.common }}
-    {{- $command := concat $common.command (default (list) $value.command) }}
-    {{- $args := concat $common.args (default (list) $value.args) }}
-    {{- $mergedValue := mergeOverwrite (deepCopy $common) $value (dict "args" $args "command" $command ) }}
-    {{- $mergedValue = mergeOverwrite (deepCopy $mergedValue) (dict "dbName" (default $key $mergedValue.dbName) "webPath" (default $key $mergedValue.webPath) ) }}
+    {{- $concatenated := dict }}
+    {{- range $toConcatenate := list "args" "command" "profiles" }}
+      {{- $_ := set $concatenated $toConcatenate (concat (get $common $toConcatenate) (default list (get $value $toConcatenate) ) ) }}
+    {{- end }}
+    {{- range $toMerge := list "properties" }}
+      {{- $_ := set $concatenated $toMerge (mergeOverwrite (deepCopy (get $common $toMerge)) (default dict (get $value $toMerge) ) ) }}
+    {{- end }}
+    {{- $mergedValue := mergeOverwrite (deepCopy $common) $value $concatenated }}
+    {{- $mergedValue = mergeOverwrite (deepCopy $mergedValue) (dict "db" (default $key $mergedValue.db) "webPath" (default $key $mergedValue.webPath) ) }}
     {{- if $mergedValue.enabled -}}
       {{- $_ := set $output $key $mergedValue }}
+    {{- end }}
+    {{- if not $mergedValue.db.name -}}
+      {{- $_ := set $mergedValue.db "name" $key }}
     {{- end }}
   {{- end }}
 
@@ -132,9 +146,12 @@ Creates the name of Sentry environment
       {{- $_ := set $concatenated $toMerge (mergeOverwrite (deepCopy (get $common $toMerge)) (default dict (get $value $toMerge) ) ) }}
     {{- end }}
     {{- $mergedValue := mergeOverwrite (deepCopy $common) $value $concatenated }}
-    {{- $mergedValue = mergeOverwrite (deepCopy $mergedValue) (dict "dbName" (default $key $mergedValue.dbName) "webPath" (default $key $mergedValue.webPath) ) }}
+    {{- $mergedValue = mergeOverwrite (deepCopy $mergedValue) (dict "db" (default $key $mergedValue.db) "webPath" (default $key $mergedValue.webPath) ) }}
     {{- if $mergedValue.enabled -}}
       {{- $_ := set $output $key $mergedValue }}
+    {{- end }}
+    {{- if not $mergedValue.db.name -}}
+      {{- $_ := set $mergedValue.db "name" $key }}
     {{- end }}
   {{- end }}
   {{- $output | mustToJson }}
@@ -179,7 +196,7 @@ Creates the name of Sentry environment
     - sh
     - -c
     - >-
-      until pg_isready -h {{ include "sear.postgresqlService" . }} -p 5432; do
+      until pg_isready -h {{ include "sear.postgresqlService" . }} -p {{ include "sear.postgresqlServicePort" . }}; do
         echo waiting for database;
         sleep 2;
       done;

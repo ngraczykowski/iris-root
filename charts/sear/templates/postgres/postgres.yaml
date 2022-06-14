@@ -23,8 +23,8 @@ spec:
     keycloak: []
     {{- end }}
     {{- range $componentName, $component := include "sear.mergedComponents" . | mustFromJson }}
-    {{- if and $component.enabled $component.useDb }}
-    {{ $component.dbName }}: []
+    {{- if and $component.enabled $component.db.enabled (not $component.db.external) }}
+    {{ $component.db.name }}: []
     {{- end }}
     {{- end }}
 
@@ -34,7 +34,7 @@ spec:
     keycloak: keycloak
     {{- end }}
     {{- range $componentName, $component := include "sear.mergedComponents" . | mustFromJson }}
-    {{- if and $component.enabled $component.useDb }}
-    {{ $component.dbName }}: {{ $component.dbName }}
+    {{- if and $component.enabled $component.db.enabled (not $component.db.external) }}
+    {{ $component.db.name }}: {{ $component.db.name }}
     {{- end }}
     {{- end }}
