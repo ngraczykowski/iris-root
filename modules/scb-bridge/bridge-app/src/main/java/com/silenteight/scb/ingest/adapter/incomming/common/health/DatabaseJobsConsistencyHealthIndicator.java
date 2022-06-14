@@ -19,8 +19,6 @@ class DatabaseJobsConsistencyHealthIndicator {
   final DataSource dataSource;
 
   private static final String TABLE_VIEW_QUERY = "SELECT tname FROM tab WHERE tname = '%s'";
-  static final String WRONG_NUMBER_OR_TYPES_OF_ARGS_ERROR = "ORA-06553";
-  static final String FUNCTION_QUERY = "SELECT %s FROM dual";
   static final String PRESENT = "present";
   static final String NOT_PRESENT = "not-present";
   static final String DB_ERROR = "db-error";
@@ -28,14 +26,16 @@ class DatabaseJobsConsistencyHealthIndicator {
   Map<String, String> verifyIfTableExists(String descriptionPrefix, String tableName) {
     String readableDescription = String.format("%s - %s", descriptionPrefix, tableName);
 
-    try (Connection connection = dataSource.getConnection();
+    try (
+        Connection connection = dataSource.getConnection();
         PreparedStatement preparedStatement = prepareStatement(tableName, connection);
         ResultSet rs = preparedStatement.executeQuery()) {
 
-      if (rs.next())
+      if (rs.next()) {
         return Map.of(readableDescription, PRESENT);
-      else
-        return Map.of(readableDescription, NOT_PRESENT);
+      }
+      log.warn("HealthIndicator - {} table doesn't exist in a database", tableName);
+      return Map.of(readableDescription, NOT_PRESENT);
     } catch (SQLException e) {
       log.debug("Database error while checking if table exists: {}", tableName, e);
       return Map.of(readableDescription, DB_ERROR);

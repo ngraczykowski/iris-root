@@ -1,5 +1,7 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.health;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.silenteight.scb.ingest.adapter.incomming.common.quartz.EcmBridgeLearningJobProperties;
 import com.silenteight.scb.ingest.adapter.incomming.common.quartz.ScbBridgeAlertLevelLearningJobProperties;
 
@@ -12,6 +14,7 @@ import javax.sql.DataSource;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
+@Slf4j
 class DatabaseLearningJobsConsistencyHealthIndicator
     extends DatabaseJobsConsistencyHealthIndicator implements HealthIndicator {
 
@@ -38,6 +41,7 @@ class DatabaseLearningJobsConsistencyHealthIndicator
     checkEcmLearningPrerequisites(result);
 
     if (result.containsValue(NOT_PRESENT) || result.containsValue(DB_ERROR)) {
+      log.error("DatabaseLearningJobsConsistencyHealthIndicator set health down");
       return Health.down().withDetails(result).build();
     } else {
       return Health.up().withDetails(result).build();

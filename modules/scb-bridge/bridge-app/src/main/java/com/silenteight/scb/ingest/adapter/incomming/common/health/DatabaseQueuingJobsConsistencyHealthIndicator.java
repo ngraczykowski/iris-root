@@ -1,5 +1,7 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.health;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.silenteight.scb.ingest.adapter.incomming.cbs.quartz.QueuingJobProperties;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.quartz.QueuingJobsProperties;
 
@@ -12,6 +14,7 @@ import javax.sql.DataSource;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
+@Slf4j
 class DatabaseQueuingJobsConsistencyHealthIndicator extends DatabaseJobsConsistencyHealthIndicator
     implements HealthIndicator {
 
@@ -32,6 +35,7 @@ class DatabaseQueuingJobsConsistencyHealthIndicator extends DatabaseJobsConsiste
         .forEach(job -> verifyJob(job, result));
 
     if (result.containsValue(NOT_PRESENT) || result.containsValue(DB_ERROR)) {
+      log.error("DatabaseQueuingJobsConsistencyHealthIndicator set health down");
       return Health.down().withDetails(result).build();
     } else {
       return Health.up().withDetails(result).build();

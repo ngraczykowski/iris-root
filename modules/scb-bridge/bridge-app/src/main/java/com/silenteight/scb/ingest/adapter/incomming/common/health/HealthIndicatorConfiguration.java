@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.scb.ingest.adapter.incomming.cbs.quartz.QueuingJobsProperties;
 import com.silenteight.scb.ingest.adapter.incomming.common.config.SyncDataSourcesConfiguration;
+import com.silenteight.scb.ingest.adapter.incomming.common.mode.OnLearningAlertCondition;
+import com.silenteight.scb.ingest.adapter.incomming.common.mode.OnLearningEcmCondition;
 import com.silenteight.scb.ingest.adapter.incomming.common.mode.OnOracleCondition;
-import com.silenteight.scb.ingest.adapter.incomming.common.order.ScbBridgeAlertOrderProperties;
+import com.silenteight.scb.ingest.adapter.incomming.common.mode.OnQueuingJobsCondition;
 import com.silenteight.scb.ingest.adapter.incomming.common.quartz.EcmBridgeLearningJobProperties;
 import com.silenteight.scb.ingest.adapter.incomming.common.quartz.ScbBridgeAlertLevelLearningJobProperties;
 
@@ -24,12 +26,12 @@ import javax.sql.DataSource;
 @Conditional(OnOracleCondition.class)
 public class HealthIndicatorConfiguration {
 
-  private final ScbBridgeAlertOrderProperties alertOrderProperties;
   private final ScbBridgeAlertLevelLearningJobProperties alertLevelLearningJobProperties;
   private final EcmBridgeLearningJobProperties ecmBridgeLearningJobProperties;
   private final QueuingJobsProperties queuingJobsProperties;
 
   @Bean
+  @Conditional(OnQueuingJobsCondition.class)
   HealthIndicator databaseQueuingJobsConsistencyHealthIndicator(
       @Qualifier("externalDataSource") DataSource externalDataSource) {
     return new DatabaseQueuingJobsConsistencyHealthIndicator(
@@ -37,14 +39,7 @@ public class HealthIndicatorConfiguration {
   }
 
   @Bean
-  HealthIndicator databaseSolvingJobsConsistencyHealthIndicator(
-      @Qualifier("externalDataSource") DataSource externalDataSource) {
-    return new DatabaseSolvingJobsConsistencyHealthIndicator(
-        externalDataSource,
-        alertOrderProperties);
-  }
-
-  @Bean
+  @Conditional({ OnLearningEcmCondition.class, OnLearningAlertCondition.class })
   HealthIndicator databaseLearningJobsConsistencyHealthIndicator(
       @Qualifier("externalDataSource") DataSource externalDataSource) {
     return new DatabaseLearningJobsConsistencyHealthIndicator(
