@@ -357,6 +357,7 @@ jakarta-validation-api = { group = "jakarta.validation", name = "jakarta.validat
 javax-cache-api = { group = "javax.cache", name = "cache-api" }
 javax-mail = { group = "javax.mail", name = "mail", version = "1.4.1" }
 jaxb-api = { group = "jakarta.xml.bind", name = "jakarta.xml.bind-api" }
+jsonassert = { group = "org.skyscreamer", name = "jsonassert", version = "1.5.0" }
 keycloak-admin-client = { group = 'org.keycloak', name = 'keycloak-admin-client', version.ref = "platform-keycloak-adapter" }
 keycloak-spring-boot-starter = { group = "org.keycloak", name = "keycloak-spring-boot-starter" }
 liquibase-core = { group = "org.liquibase", name = "liquibase-core" }
