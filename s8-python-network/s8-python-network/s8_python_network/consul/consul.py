@@ -13,6 +13,16 @@ class ConsulServiceError(Exception):
 
 @dataclasses.dataclass
 class ConsulConfig:
+    """
+    host: str
+    port: int = 8500
+    token: Optional[str] = None
+    secret_path: Optional[str] = None
+    trusted_ca: Optional[str] = None
+    client_private_key: Optional[str] = None
+    client_public_key_chain: Optional[str] = None
+    """
+
     host: str
     port: int = 8500
     token: Optional[str] = None
