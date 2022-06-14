@@ -16,7 +16,6 @@ import com.silenteight.registration.api.library.v1.RegistrationServiceClient
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.google.common.io.Resources
-import groovy.json.JsonSlurper
 import org.spockframework.spring.SpringBean
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.beans.factory.annotation.Autowired
@@ -42,8 +41,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @ActiveProfiles("dev")
 @Import([IngestConfiguration, CallbackConfiguration])
 class ConnectorIT extends BaseSpecificationIT {
-
-  JsonSlurper jsonSlurper = new JsonSlurper()
 
   @LocalServerPort
   int port
