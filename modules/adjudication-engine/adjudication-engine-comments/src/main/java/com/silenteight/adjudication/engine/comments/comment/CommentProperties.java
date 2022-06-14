@@ -17,4 +17,6 @@ class CommentProperties {
   private boolean shouldCacheTemplates = true;
 
   private String environment = "sierra";
+
+  private String resourcePath = "classpath:/comment-templates/";
 }

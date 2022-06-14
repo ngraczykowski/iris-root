@@ -31,7 +31,6 @@ class LoadCommentTemplatesUseCase {
   private final CommentProperties properties;
   private final CommentTemplateRepository commentTemplateRepository;
   private final ResourceLoader resourceLoader;
-  private static final String BASE_PATH = "classpath:comment-templates/";
 
   @EventListener(ApplicationReadyEvent.class)
   public List<String> loadCommentTemplates() {
@@ -51,7 +50,7 @@ class LoadCommentTemplatesUseCase {
   CommentTemplate createCommentTemplate(String templateName) {
     var resource =
         resourceLoader.getResource(
-            BASE_PATH + properties.getEnvironment() + "/" + templateName);
+            properties.getResourcePath() + properties.getEnvironment() + "/" + templateName);
     String content;
     try {
       var templateFile = resource.getFile();
@@ -63,7 +62,8 @@ class LoadCommentTemplatesUseCase {
   }
 
   List<String> getFiles() {
-    var resource = resourceLoader.getResource(BASE_PATH + properties.getEnvironment());
+    var resource =
+        resourceLoader.getResource(properties.getResourcePath() + properties.getEnvironment());
     File files;
     try {
       files = resource.getFile();
