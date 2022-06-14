@@ -11,6 +11,7 @@ import com.google.common.io.Files;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -29,6 +30,8 @@ class LoadCommentTemplatesUseCase {
 
   private final CommentProperties properties;
   private final CommentTemplateRepository commentTemplateRepository;
+  private final ResourceLoader resourceLoader;
+  private static final String BASE_PATH = "classpath:comment-templates/";
 
   @EventListener(ApplicationReadyEvent.class)
   public List<String> loadCommentTemplates() {
@@ -46,15 +49,12 @@ class LoadCommentTemplatesUseCase {
   }
 
   CommentTemplate createCommentTemplate(String templateName) {
-    var classLoader = LoadCommentTemplatesUseCase.class.getClassLoader();
-    var templateFile =
-        new File(
-            Objects.requireNonNull(
-                    classLoader.getResource(
-                        "comment-templates/" + properties.getEnvironment() + "/" + templateName))
-                .getFile());
+    var resource =
+        resourceLoader.getResource(
+            BASE_PATH + properties.getEnvironment() + "/" + templateName);
     String content;
     try {
+      var templateFile = resource.getFile();
       content = Files.asCharSource(templateFile, UTF_8).read();
     } catch (IOException e) {
       throw new RuntimeException(e);
@@ -63,12 +63,13 @@ class LoadCommentTemplatesUseCase {
   }
 
   List<String> getFiles() {
-    var classLoader = LoadCommentTemplatesUseCase.class.getClassLoader();
-    var files =
-        new File(
-            Objects.requireNonNull(
-                    classLoader.getResource("comment-templates/" + properties.getEnvironment()))
-                .getFile());
+    var resource = resourceLoader.getResource(BASE_PATH + properties.getEnvironment());
+    File files;
+    try {
+      files = resource.getFile();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
     return List.of(Objects.requireNonNull(files.list()));
   }
 }

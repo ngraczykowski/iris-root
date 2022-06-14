@@ -6,8 +6,7 @@ package com.silenteight.adjudication.engine.comments.comment;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
+import org.springframework.core.io.DefaultResourceLoader;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -20,8 +19,10 @@ class LoadCommentTemplatesUseCaseTest {
   void setUp() {
     inMemoryCommentTemplateRepository = new InMemoryCommentTemplateRepository();
     var properties = new CommentProperties();
+    var resourceLoader = new DefaultResourceLoader();
     loadCommentTemplatesUseCase =
-        new LoadCommentTemplatesUseCase(properties, inMemoryCommentTemplateRepository);
+        new LoadCommentTemplatesUseCase(
+            properties, inMemoryCommentTemplateRepository, resourceLoader);
   }
 
   @Test
