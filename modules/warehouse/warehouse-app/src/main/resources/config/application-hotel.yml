@@ -13,8 +13,6 @@ warehouse:
       field-name: "analyst_decision"
   statistics:
     daily:
-      scheduled-cron: "*/60 * * * * *"
-      recalculation-period: 40
       recommendation-enabled: true
   country:
     migration:

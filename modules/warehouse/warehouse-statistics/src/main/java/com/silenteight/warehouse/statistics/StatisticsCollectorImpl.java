@@ -48,7 +48,6 @@ public final class StatisticsCollectorImpl<T, S> implements StatisticsCollector 
   private final Integer dataRangeBucketSize;
 
   public void generateStatisticsData() {
-
     log.info("Staring daily statistics calculation");
     LocalDate startingDate = dataPersister.getLastPersistedRange(recalculationPeriod)
         .map(Range::upperEndpoint)
@@ -56,11 +55,15 @@ public final class StatisticsCollectorImpl<T, S> implements StatisticsCollector 
 
     // We are collecting data from day before to make sure we have all data for desired period
     var oneDayBeforeNow = timeSource.localDateTime().toLocalDate().minusDays(1);
-    var collectorRange = Range.closed(startingDate, oneDayBeforeNow);
-    List<Range<LocalDate>> collectorRangeBuckets = createRangeBuckets(collectorRange);
+    if (startingDate.isAfter(oneDayBeforeNow)) {
+      log.info("Skipping statistics calculation. Alert data from previous day not found.");
+    } else {
+      var collectorRange = Range.closed(startingDate, oneDayBeforeNow);
+      List<Range<LocalDate>> collectorRangeBuckets = createRangeBuckets(collectorRange);
 
-    collectorRangeBuckets.forEach(this::execution);
-    log.info("Daily statistics calculation finished");
+      collectorRangeBuckets.forEach(this::execution);
+      log.info("Daily statistics calculation finished");
+    }
   }
 
   private List<Range<LocalDate>> createRangeBuckets(Range<LocalDate> collectorRange) {
@@ -86,8 +89,7 @@ public final class StatisticsCollectorImpl<T, S> implements StatisticsCollector 
     var extractedData = dataExtractor.getData(range);
 
     log.debug("Number of models taken to the calculation {}", extractedData.size());
-    Map<Range<LocalDate>, List<T>> result =
-        dataAggregator.aggregate(range, extractedData);
+    Map<Range<LocalDate>, List<T>> result = dataAggregator.aggregate(range, extractedData);
 
     for (Entry<Range<LocalDate>, List<T>> entry : result.entrySet()) {
       var computedData = dataComputer.compute(entry.getValue());

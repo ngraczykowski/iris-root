@@ -26,6 +26,11 @@ spring:
         format-sql: true
 
 warehouse:
+  statistics:
+    daily:
+      scheduled-cron: "*/60 * * * * *"
+      recalculation-period: 40
+      recommendation-enabled: true
   alert-level-security:
     enabled: true
   persistence:
