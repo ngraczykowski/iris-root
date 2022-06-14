@@ -1,3 +1,10 @@
+{{- $internalRabbitUsage := 0 }}
+{{- range $componentName, $component := include "sear.mergedComponents" . | mustFromJson }}
+  {{- if and $component.enabled $component.rabbit.enabled (not $component.rabbit.external) }}
+    {{- $internalRabbitUsage = add1 $internalRabbitUsage }}
+  {{- end }}
+{{- end }}
+{{- if gt $internalRabbitUsage 0 }}
 apiVersion: rabbitmq.com/v1beta1
 kind: RabbitmqCluster
 metadata:
@@ -33,4 +40,5 @@ spec:
   tolerations:
     {{- toYaml . | nindent 8 }}
   {{- end }}
+{{- end }}
 {{- end }}

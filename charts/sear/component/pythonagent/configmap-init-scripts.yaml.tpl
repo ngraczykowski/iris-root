@@ -25,7 +25,7 @@ data:
         data-source:
           address: $UDS_ADDRESS
           timeout: 15
-    {{- if .component.useRabbit }}
+    {{- if .component.rabbit.enabled }}
     rabbitmq:
       host: $RABBITMQ_HOST
       port: $RABBITMQ_PORT

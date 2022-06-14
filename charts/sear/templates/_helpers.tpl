@@ -99,7 +99,13 @@ Creates the name of Sentry environment
   {{- default (printf "%s-%s.prv.dev.s8ops.com" (include "sear.fullname" $) $.Release.Namespace) .component.sentry.environment }}
 {{- end }}
 
-{{ define "sear.rabbitmqSecretName" }}{{ include "sear.fullname" . }}-rabbitmq-default-user{{ end }}
+{{- define "sear.rabbitmqSecretName" -}}
+{{- if .component.rabbit.external -}}
+{{ include "sear.fullname" . }}-rabbitmq.external
+{{- else -}}
+{{ include "sear.fullname" . }}-rabbitmq-default-user
+{{- end }}{{ end -}}
+
 {{- define "sear.postgresqlSecretName" -}}
 {{- if .component.db.external -}}
 {{ printf "%s.%s" .component.db.name (include "sear.fullname" .) }}-postgres.external

@@ -160,17 +160,26 @@ common:
   # enable component
   enabled: true
   # use rabbit (inject rabbit secrets)
-  useRabbit: true
+  rabbit:
+    enabled: true                 # component is using rabbit connection
+    external: false               # component is using externally provided rabbit server
+    check: true                   # use initContainer to check availability; warn: it's using port 15672 and rest api
+    host: ""                      # required if external==true
+    port: 5672                    # required if external==true
+    username: ""                  # required if external==true
+    password: ""                  # required if external==true
   # configure db
   db:
-    enabled: true
-    external: false  # use internal postgres operator
-    name: ""
-    host: ""
-    port: 5432
-    options: "sslmode=require&sslfactory=org.postgresql.ssl.NonValidatingFactory"
-    username: ""
-    password: ""
+    enabled: true                 # component is using database connection
+    external: false               # component is using externally provided postgres server
+    name: ""                      # required if external==true
+    host: ""                      # required if external==true
+    port: 5432                    # required if external==true
+    options: "sslmode=require&\
+      sslfactory=org.postgresql.\
+      ssl.NonValidatingFactory"   # append option to jdbc url
+    username: ""                  # required if external==true
+    password: ""                  # required if external==true
   # std k8s docker image settings
   image:
     repository: ""
@@ -318,7 +327,6 @@ components:
       repository: registry.dev.s8ops.com/iris/hsbc-bridge-app
 
     db:
-      external: true
       name: "hb"
     webPath: "hsbc-bridge"
 
@@ -406,7 +414,8 @@ components:
     enabled: false
     db:
       enabled: false
-    useRabbit: false
+    rabbit:
+      enabled: false
     replicaCount: 1
     image:
       repository: registry.dev.s8ops.com/iris/callback-mock
