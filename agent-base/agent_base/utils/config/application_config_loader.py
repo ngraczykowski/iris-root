@@ -29,8 +29,8 @@ class ApplicationConfigLoader:
 
     def load(self) -> ApplicationConfig:
         agent_service_config = AgentServiceConfig(
-            processes=int(self._get_param("processes", ["agent", "processes"], required=True)),
-            grpc_port=int(self._get_param("grpc_port", ["agent", "grpc", "port"], required=True)),
+            processes=self._get_param("processes", ["agent", "processes"], required=True),
+            grpc_port=self._get_param("grpc_port", ["agent", "grpc", "port"], required=True),
             server_ca=self._get_param("grpc_server_ca", ["agent", "grpc", "server_ca"]),
             server_private_key=self._get_param(
                 "grpc_server_private_key",

@@ -21,6 +21,12 @@ class AgentServiceConfig:
     server_private_key: Optional[str] = None
     server_public_key_chain: Optional[str] = None
 
+    def __post_init__(self):
+        if self.grpc_port:
+            self.grpc_port = int(self.grpc_port)
+        if self.processes:
+            self.processes = int(self.processes)
+
 
 @dataclasses.dataclass
 class MessagingRequest:
@@ -76,6 +82,10 @@ class UDSConfig:
     client_ca: Optional[str]
     client_private_key: Optional[str]
     client_public_key_chain: Optional[str]
+
+    def __post_init__(self):
+        if self.timeout:
+            self.timeout = int(self.timeout)
 
 
 @dataclasses.dataclass

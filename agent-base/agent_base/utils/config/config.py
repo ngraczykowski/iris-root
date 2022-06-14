@@ -28,11 +28,14 @@ class Config:
         self.application_config = self._load_application_config()
 
     def _load_application_config(self) -> Optional[ApplicationConfig]:
-        _application_config_mapping = self.load_yaml_config(
+        application_config_mapping = self.load_yaml_config(
             "application.yaml", required=self.required
         )
-        if _application_config_mapping:
-            return ApplicationConfigLoader(_application_config_mapping).load()
+        if application_config_mapping:
+            try:
+                return ApplicationConfigLoader(application_config_mapping).load()
+            except Exception as exc:
+                raise ConfigurationException(f"Wrong param in application.yaml: {exc}")
         else:
             return None
 
