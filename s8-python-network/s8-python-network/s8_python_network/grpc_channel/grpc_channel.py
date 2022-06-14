@@ -15,7 +15,7 @@ def get_channel(
     if ssl:
         if not ssl_credentials:
             raise AttributeError("When ssl=True, ssl_credentials must be provided")
-        with open(ssl_credentials.client_ca_filename, "rb") as f:
+        with open(ssl_credentials.ca_filename, "rb") as f:
             ca = f.read()
         with open(ssl_credentials.client_private_key_filename, "rb") as f:
             private_key = f.read()
