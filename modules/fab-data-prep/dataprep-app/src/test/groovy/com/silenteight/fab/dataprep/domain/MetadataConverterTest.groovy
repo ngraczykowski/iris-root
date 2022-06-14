@@ -1,18 +1,18 @@
 package com.silenteight.fab.dataprep.domain
 
+import org.springframework.test.util.JsonExpectationsHelper
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static org.skyscreamer.jsonassert.JSONAssert.assertEquals
-import static org.skyscreamer.jsonassert.JSONCompareMode.LENIENT
-
 class MetadataConverterTest extends Specification {
+
+  JsonExpectationsHelper jsonExpectationsHelper = new JsonExpectationsHelper()
 
   @Unroll
   def 'metadata should be created #systemId'() {
     expect:
     def result = MetadataConverter.getMetadata(systemId)
-    assertEquals(metadata, result, LENIENT)
+    jsonExpectationsHelper.assertJsonEqual(metadata, result)
 
     where:
     systemId            | metadata

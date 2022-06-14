@@ -5,18 +5,19 @@ import com.silenteight.proto.fab.api.v1.AlertMessageStored
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.util.JsonExpectationsHelper
 import spock.lang.Specification
 
 import static com.silenteight.fab.dataprep.domain.Fixtures.*
 import static com.silenteight.sep.base.common.support.jackson.JsonConversionHelper.INSTANCE
-import static org.skyscreamer.jsonassert.JSONAssert.assertEquals
-import static org.skyscreamer.jsonassert.JSONCompareMode.STRICT
 
 @ContextConfiguration(classes = ParserConfiguration)
 class AlertParserTest extends Specification {
 
   @Autowired
   AlertParser underTest
+
+  JsonExpectationsHelper jsonExpectationsHelper = new JsonExpectationsHelper()
 
   def "AlertDetails should be parsed"() {
     given:
@@ -37,7 +38,7 @@ class AlertParserTest extends Specification {
     parsedAlertMessage.hits.size() == 1
     parsedAlertMessage.hits.values().each {it ->
       assert it.getHitName() == 'PSY0003'
-      assertEquals(HIT, it.getPayloads().first().toString(), STRICT)
+      jsonExpectationsHelper.assertJsonEqual(HIT, it.getPayloads().first().toString())
     }
   }
 
