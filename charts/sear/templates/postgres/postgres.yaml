@@ -1,3 +1,13 @@
+{{- $internalDbUsage := 0 }}
+{{- range $componentName, $component := include "sear.mergedComponents" . | mustFromJson }}
+  {{- if and $component.enabled $component.db.enabled (not $component.db.external) }}
+    {{- $internalDbUsage = add1 $internalDbUsage }}
+  {{- end }}
+{{- end }}
+{{- if .Values.keycloak.internal }}
+  {{- $internalDbUsage = add1 $internalDbUsage }}
+{{- end }}
+{{- if gt $internalDbUsage 0 }}
 apiVersion: acid.zalan.do/v1
 kind: postgresql
 metadata:
@@ -38,3 +48,4 @@ spec:
     {{ $component.db.name }}: {{ $component.db.name }}
     {{- end }}
     {{- end }}
+{{- end }}
