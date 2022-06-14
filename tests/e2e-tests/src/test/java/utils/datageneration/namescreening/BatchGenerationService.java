@@ -11,6 +11,7 @@ import utils.datageneration.CommonUtils;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -67,7 +68,10 @@ public class BatchGenerationService {
       Integer alertNumber, String batchId, String flagKey) {
     String alertId =
         String.join("_", "QA-Alert", batchId, alertNumber.toString() + randomUUID().toString());
-    String alertDate = LocalDateTime.now().format(ofPattern(ALERT_DATE_PATTERN)).toUpperCase();
+    String alertDate =
+        LocalDateTime.now()
+            .format(ofPattern(ALERT_DATE_PATTERN).withLocale(Locale.ENGLISH))
+            .toUpperCase();
     String caseId = randomUUID().toString();
     String currentState =
         getRandomValue(
