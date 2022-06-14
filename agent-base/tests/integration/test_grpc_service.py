@@ -4,7 +4,8 @@ import grpc
 import pytest
 from grpc_health.v1.health_pb2 import HealthCheckRequest, HealthCheckResponse
 from grpc_health.v1.health_pb2_grpc import HealthStub
-from s8_python_network.grpc_channel import SSLCredentials, get_channel
+from s8_python_network.grpc_channel import get_channel
+from s8_python_network.ssl_credentials import SSLCredentials
 from silenteight.agent.name.v1.api.name_agent_pb2 import (
     CompareNamesInput,
     CompareNamesRequest,
@@ -51,7 +52,7 @@ async def channel(config: Config):
 @pytest.fixture()
 async def secure_channel(config: Config):
     ssl_credentials = SSLCredentials(
-        client_ca_filename="tests/resources/ssl_example/ca.pem",
+        ca_filename="tests/resources/ssl_example/ca.pem",
         client_private_key_filename="tests/resources/ssl_example/client-key.pem",
         client_public_key_chain_filename="tests/resources/ssl_example/client.pem",
     )

@@ -2,10 +2,19 @@ import dataclasses
 from typing import Any, Dict, Optional
 
 from s8_python_network.consul import ConsulConfig
+from s8_python_network.pika_connection import RabbitMQConfig
 
 
 @dataclasses.dataclass
 class AgentServiceConfig:
+    """
+    processes: int
+    grpc_port: int
+    server_ca: Optional[str] = None
+    server_private_key: Optional[str] = None
+    server_public_key_chain: Optional[str] = None
+    """
+
     processes: int
     grpc_port: int
     server_ca: Optional[str] = None
@@ -15,6 +24,14 @@ class AgentServiceConfig:
 
 @dataclasses.dataclass
 class MessagingRequest:
+    """
+    exchange: str
+    routing_key: str
+    queue_name: str
+    queue_durable: bool = True
+    queue_arguments: Optional[Dict[str, Any]] = None
+    """
+
     exchange: str
     routing_key: str
     queue_name: str
@@ -24,46 +41,36 @@ class MessagingRequest:
 
 @dataclasses.dataclass
 class MessagingResponse:
+    """
+    exchange: str
+    routing_key: str
+    """
+
     exchange: str
     routing_key: str
 
 
 @dataclasses.dataclass
 class MessagingConfig:
+    """
+    request: MessagingRequest
+    response: MessagingResponse
+    """
+
     request: MessagingRequest
     response: MessagingResponse
 
 
 @dataclasses.dataclass
-class RMQSSLOptions:
-    """
-    verify param: 1 or 0 - to verify certificate or not
-    """
-
-    cafile: str
-    keyfile: str
-    certfile: str
-    verify: int
-
-
-@dataclasses.dataclass
-class RabbitMQConfig:
-    """
-    Note: address, host & port are 'Optional', but at least one of: address, or host + port
-    must be set to connect with Rabbit MQ
-    """
-
-    login: str
-    password: str
-    virtualhost: str
-    host: Optional[str] = None
-    port: Optional[str] = None
-    addresses: Optional[str] = None
-    ssl_options: Optional[RMQSSLOptions] = None
-
-
-@dataclasses.dataclass
 class UDSConfig:
+    """
+    address: str
+    timeout: int
+    client_ca: Optional[str]
+    client_private_key: Optional[str]
+    client_public_key_chain: Optional[str]
+    """
+
     address: str
     timeout: int
     client_ca: Optional[str]
@@ -73,11 +80,19 @@ class UDSConfig:
 
 @dataclasses.dataclass
 class ApplicationConfig:
-    agent_grpc_service: AgentServiceConfig = None
-    consul: ConsulConfig = None
-    messaging: MessagingConfig = None
-    rabbitmq: RabbitMQConfig = None
-    uds: UDSConfig = None
+    """
+    agent_grpc_service: AgentServiceConfig
+    consul: ConsulConfig
+    messaging: MessagingConfig
+    rabbitmq: RabbitMQConfig
+    uds: UDSConfig
+    """
+
+    agent_grpc_service: AgentServiceConfig
+    consul: ConsulConfig
+    messaging: MessagingConfig
+    rabbitmq: RabbitMQConfig
+    uds: UDSConfig
 
 
 class ConfigurationException(Exception):

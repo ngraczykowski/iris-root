@@ -1,13 +1,13 @@
-import logging
 from typing import Callable
 
 import aio_pika
+from s8_python_network.pika_connection import BasePikaConnection, RabbitMQConfig
 
 from agent_base.agent.exception import AgentException
-from agent_base.utils.config.application_config import MessagingConfig, RabbitMQConfig
+from agent_base.utils.config.application_config import MessagingConfig
 
 
-class PikaConnection:
+class PikaConnection(BasePikaConnection):
     def __init__(
         self,
         messaging_configuration: MessagingConfig,
@@ -16,63 +16,21 @@ class PikaConnection:
         max_requests_to_worker: int,
         use_ssl: bool = False,
     ):
-        self.messaging_configuration = messaging_configuration
-        self.connection_configuration = connection_configuration
-        self.request_callback = callback
-        (self.connection, self.request_queue, self.callback_exchange, self.request_queue_tag,) = (
-            None,
-            None,
-            None,
-            None,
+        super().__init__(
+            connection_configuration=connection_configuration,
+            max_requests_to_worker=max_requests_to_worker,
+            use_ssl=use_ssl,
         )
-        self.logger = logging.getLogger("main").getChild("pika_connection")
-        self.max_requests_to_worker = max_requests_to_worker
-        self.ssl = use_ssl
+        self.messaging_configuration = messaging_configuration
+        self.request_callback = callback
+        self.request_queue, self.callback_exchange, self.request_queue_tag = None, None, None
 
     async def start(self) -> None:
-        if self.ssl:
-            if not self.connection_configuration.ssl_options:
-                raise ValueError(
-                    "No ssl connection parameters in config "
-                    "- add 'rabbitmq.ssl_options' section to application.yaml"
-                )
-            url = "".join(
-                map(
-                    str,
-                    (
-                        "amqps://",
-                        self.connection_configuration.login,
-                        ":",
-                        self.connection_configuration.password,
-                        "@",
-                        self.connection_configuration.host,
-                        ":",
-                        self.connection_configuration.port,
-                        "/",
-                        self.connection_configuration.virtualhost,
-                        "?cafile=",
-                        self.connection_configuration.ssl_options.cafile,
-                        "&keyfile=",
-                        self.connection_configuration.ssl_options.keyfile,
-                        "&certfile=",
-                        self.connection_configuration.ssl_options.certfile,
-                        "&no_verify_ssl=",  # that's how aio-pika named it ...
-                        self.connection_configuration.ssl_options.verify,
-                    ),
-                )
-            )
-            self.connection: aio_pika.RobustConnection = await aio_pika.connect_robust(url=url)
-        else:
-            self.connection: aio_pika.RobustConnection = await aio_pika.connect_robust(
-                host=self.connection_configuration.host,
-                port=self.connection_configuration.port,
-                login=self.connection_configuration.login,
-                password=self.connection_configuration.password,
-                virtualhost=self.connection_configuration.virtualhost,
-            )
-        self.channel: aio_pika.Channel = await self.connection.channel()
-        await self.channel.set_qos(prefetch_count=self.max_requests_to_worker)
+        await self.set_connection()
+        await self.set_channel()
+        await self.set_queue_and_exchanges()
 
+    async def set_queue_and_exchanges(self):
         try:
             self.request_queue = await self.channel.get_queue(
                 name=self.messaging_configuration.request.queue_name,
@@ -103,13 +61,11 @@ class PikaConnection:
                 )
             else:
                 raise
-
         self.callback_exchange = await self.channel.get_exchange(
             name=self.messaging_configuration.response.exchange,
             ensure=True,
         )
         self.logger.info(f"Got an existing (callback) exchange: {self.callback_exchange}")
-
         self.request_queue_tag = await self.request_queue.consume(
             callback=self.on_request, no_ack=False
         )

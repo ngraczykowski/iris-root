@@ -2,6 +2,7 @@ import os
 from typing import Any, Dict, List
 
 from s8_python_network.consul import ConsulConfig
+from s8_python_network.pika_connection import RabbitMQConfig, RMQSSLOptions
 
 from agent_base.utils.config.application_config import (
     AgentServiceConfig,
@@ -10,8 +11,6 @@ from agent_base.utils.config.application_config import (
     MessagingConfig,
     MessagingRequest,
     MessagingResponse,
-    RabbitMQConfig,
-    RMQSSLOptions,
     UDSConfig,
 )
 

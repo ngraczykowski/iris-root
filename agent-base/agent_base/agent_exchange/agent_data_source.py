@@ -4,7 +4,8 @@ from typing import Any, AsyncGenerator, Generator, Tuple
 
 import grpc
 from s8_python_network.consul import ConsulServiceError
-from s8_python_network.grpc_channel import SSLCredentials, get_channel
+from s8_python_network.grpc_channel import get_channel
+from s8_python_network.ssl_credentials import SSLCredentials
 from silenteight.agents.v1.api.exchange.exchange_pb2 import AgentExchangeRequest
 
 from agent_base.agent.exception import AgentException
