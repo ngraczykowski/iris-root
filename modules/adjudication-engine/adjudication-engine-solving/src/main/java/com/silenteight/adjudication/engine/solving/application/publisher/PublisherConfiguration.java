@@ -1,5 +1,7 @@
 package com.silenteight.adjudication.engine.solving.application.publisher;
 
+import lombok.RequiredArgsConstructor;
+
 import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectNodeConverter;
 import com.silenteight.adjudication.engine.governance.GovernanceFacade;
 import com.silenteight.adjudication.engine.solving.application.process.port.CategoryResolveProcessPort;
@@ -16,6 +18,7 @@ import com.silenteight.adjudication.engine.solving.domain.MatchCategory;
 import com.silenteight.adjudication.engine.solving.domain.MatchFeatureValue;
 import com.silenteight.adjudication.engine.solving.domain.comment.CommentInput;
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,7 +27,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Configuration
+@EnableConfigurationProperties(PublisherConfigurationProperties.class)
+@RequiredArgsConstructor
 class PublisherConfiguration {
+  private final PublisherConfigurationProperties properties;
 
   @Bean
   ReadyMatchFeatureVectorPort readyMatchFeatureVectorPort(
@@ -32,7 +38,8 @@ class PublisherConfiguration {
       Queue<MatchSolutionRequest> governanceMatchToSendQueue,
       GovernanceMatchResponsePort governanceMatchResponseProcess,
       ProtoMessageToObjectNodeConverter converter) {
-    final ExecutorService scheduledExecutorService = Executors.newFixedThreadPool(15);
+    ExecutorService scheduledExecutorService =
+        Executors.newFixedThreadPool(properties.getReadyMatchFeatureVectorPublisher());
     return new ReadyMatchFeatureVectorPublisher(
         governanceFacade,
         governanceMatchToSendQueue,
@@ -46,7 +53,8 @@ class PublisherConfiguration {
       GovernanceFacade governanceFacade,
       Queue<AlertSolutionRequest> governanceAlertsToSendQueue,
       SolvedAlertPort solvedAlertProcess) {
-    final ExecutorService scheduledExecutorService = Executors.newFixedThreadPool(15);
+    ExecutorService scheduledExecutorService =
+        Executors.newFixedThreadPool(properties.getGovernanceAlertPublisher());
     return new GovernanceAlertPublisher(
         governanceFacade,
         governanceAlertsToSendQueue,
@@ -57,7 +65,8 @@ class PublisherConfiguration {
   @Bean
   CategoryResolvePublisher categoryResolvePublisher(
       Queue<Long> alertCategoryValuesQueue, CategoryResolveProcessPort categoryResolveProcess) {
-    var scheduledExecutorService = Executors.newScheduledThreadPool(15);
+    var scheduledExecutorService =
+        Executors.newScheduledThreadPool(properties.getCategoryResolvePublisher());
     return new CategoryResolvePublisher(
         scheduledExecutorService, alertCategoryValuesQueue, categoryResolveProcess);
   }
@@ -66,7 +75,8 @@ class PublisherConfiguration {
   CommentInputResolvePublisherPort commentInputResolvePublisher(
       CommentInputResolveProcessPort commentInputResolveProcessPort,
       Queue<String> alertCommentsInputQueue) {
-    var scheduledExecutorService = Executors.newScheduledThreadPool(15);
+    var scheduledExecutorService =
+        Executors.newScheduledThreadPool(properties.getCommentInputResolvePublisher());
     return new CommentInputResolvePublisher(
         commentInputResolveProcessPort, scheduledExecutorService, alertCommentsInputQueue);
   }
@@ -75,7 +85,8 @@ class PublisherConfiguration {
   CommentInputStorePublisherPort commentInputStorePublisherPort(
       CommentInputDataAccess commentInputDataAccess,
       Queue<CommentInput> alertCommentsInputStoreQueue) {
-    var scheduledExecutorService = Executors.newScheduledThreadPool(1);
+    var scheduledExecutorService =
+        Executors.newScheduledThreadPool(properties.getCommentInputResolvePublisher());
     return new CommentInputStorePublisher(
         commentInputDataAccess, scheduledExecutorService, alertCommentsInputStoreQueue);
   }
@@ -84,7 +95,8 @@ class PublisherConfiguration {
   MatchCategoryPublisherPort matchCategoryPublisherPort(
       MatchCategoryDataAccess matchCategoryDataAccess,
       Queue<MatchCategory> matchCategoryStoreQueue) {
-    var scheduledExecutorService = Executors.newScheduledThreadPool(1);
+    var scheduledExecutorService =
+        Executors.newScheduledThreadPool(properties.getMatchCategoryPublisher());
     return new MatchCategoryPublisher(
         matchCategoryDataAccess, scheduledExecutorService, matchCategoryStoreQueue);
   }
@@ -93,7 +105,8 @@ class PublisherConfiguration {
   MatchFeaturePublisherPort matchFeaturePublisherPort(
       MatchFeatureStoreDataAccess matchFeatureStoreDataAccess,
       Queue<MatchFeatureValue> matchFeatureStoreQueue) {
-    var scheduledExecutorService = Executors.newScheduledThreadPool(2);
+    var scheduledExecutorService =
+        Executors.newScheduledThreadPool(properties.getMatchFeaturePublisher());
     return new MatchFeaturePublisher(
         matchFeatureStoreDataAccess, scheduledExecutorService, matchFeatureStoreQueue);
   }

@@ -121,7 +121,7 @@ agents:
           upper_bound: 1000000
       default_response: AGENT_ERROR
   hit-type-name-agent:
-    enabled: true
+    enabled: false
     image:
       tag: "0.3.7"
     amqp:

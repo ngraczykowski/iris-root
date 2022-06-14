@@ -15,6 +15,17 @@ ae:
     disable-security: false
   solving:
     enabled: false
+    in-memory:
+      publisher:
+        # BA publishers
+        ready-match-feature-vector-publisher: 15
+        governance-alert-publisher: 15
+        category-resolve-publisher: 15
+        comment-input-resolve-publisher: 15
+        # Storage publishers
+        comment-input-store-publisher: 1
+        match-category-publisher: 1
+        match-feature-publisher: 1
   messaging:
     concurrency: 4
     prefetch: 1
