@@ -16,7 +16,7 @@ yourself, just use it from client side by simply including this library in proje
 libraries.universal_datasource_api_library = [group: 'com.silenteight.universaldatasource.api.library', name: 'uds-lib', version: 1.0.0-SNAPSHOT]
 
 dependencies {
- implementation libraries.universal_datasource_api_library 
+ implementation libraries.universal_datasource_api_library
 }
 ```
 
