@@ -1,0 +1,50 @@
+[
+  {
+    "jobName": "webapp",
+    "folder": "webapp",
+    "version": "sens-webapp-backend-1.37.0-exec.jar",
+    "artifact_name": "sens-webapp-backend-1.37.0-exec.jar",
+    "nomadName": "webapp",
+    "checksum": "sha256:383dc776290ceab14ae1750751a81e24cdd56e7faef85ae6b643c39ffa36d8c4"
+  },
+  {
+    "jobName": "simulator",
+    "folder": "simulator",
+    "version": "simulator-app-1.13.0-exec.jar",
+    "artifact_name": "simulator-app-1.13.0-exec.jar",
+    "nomadName": "simulator",
+    "checksum": "sha256:f05636b956fd2410bf6868930f17aa1194628705da159392d86a76d8149256f2"
+  },
+  {
+    "jobName": "governance",
+    "folder": "governance",
+    "version": "governance-app-4.9.0-exec.jar",
+    "artifact_name": "governance-app-4.9.0-exec.jar",
+    "nomadName": "governance",
+    "checksum": "sha256:5ef245058a50f4641c953a8926ab5d5bf6b9b8916e4337fead5ef73ca2e08efd"
+  },
+  {
+    "jobName": "adjudication-engine",
+    "folder": "adjudication-engine",
+    "version": "1.17.5",
+    "artifact_name": "adjudication-engine-app-1.21.0-exec.jar",
+    "nomadName": "adjudication_engine",
+    "checksum": "sha256:6e6d682cbb8d0b93533b9c212c3d4f140982bbed92ca240414c5ce036bfdd487"
+  },
+  {
+    "jobName": "hsbc-bridge",
+    "folder": "hsbc-bridge",
+    "version": "hsbc-bridge-0.19.0.jar",
+    "artifact_name": "hsbc-bridge-0.19.0.jar",
+    "nomadName": "hsbc_bridge",
+    "checksum": "sha256:101445a6e4448b3f7e4ca94e27cc4f56db8565a00efb3a42d75273261ee0b958"
+  },
+  {
+    "jobName": "warehouse",
+    "folder": "warehouse",
+    "version": "warehouse-app-2.7.0-exec.jar",
+    "artifact_name": "warehouse-app-2.7.0-exec.jar",
+    "nomadName": "warehouse",
+    "checksum": "sha256:ace9a8be2a86741191a7f984ea32ec9725400c12570d240da8c7c0a5393ff612"
+  }
+]

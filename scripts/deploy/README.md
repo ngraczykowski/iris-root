@@ -59,12 +59,8 @@ Naming convention of files: ``artifacts_[client]_release_[number of release].jso
 ``artifacts_hsbc_release_1.3.0.json`` - json to deploy whole HSCB environment on Nomad
 
 ## How to run it ?
-1. Dry Run: ``python3 deploy.py <git-key> single_artifact.json --env dev --dry_run``
-2. Hot run: ``python3 deploy.py <git-key> single_artifact.json --env dev``
-
-replace ``<git-key>`` with your GitLab key
-
-You can generate it on site: https://gitlab.silenteight.com/-/profile/personal_access_tokens
+1. Dry Run: ``python3 deploy.py single_artifact.json --env dev --dry_run``
+2. Hot run: ``python3 deploy.py single_artifact.json --env dev``
 
 ## How to remove venv ?
 1. execute command ``deactivate``

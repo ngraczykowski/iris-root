@@ -1,0 +1,10 @@
+[
+  {
+    "jobName": "warehouse",
+    "folder": "warehouse",
+    "version": "warehouse-app-iris-2.8.0-SNAPSHOT.jar",
+    "artifact_name": "warehouse-app-iris-2.8.0-SNAPSHOT.jar",
+    "nomadName": "warehouse",
+    "checksum": "sha256:adbcda7c0205110cd2a65347972c533a879431c64b46025505c625625a9c37db"
+  }
+]
