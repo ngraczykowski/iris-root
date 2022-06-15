@@ -14,10 +14,10 @@ import org.springframework.context.event.EventListener;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Charsets.UTF_8;
@@ -64,12 +64,10 @@ class LoadCommentTemplatesUseCase {
   List<String> getFiles() {
     var resource =
         resourceLoader.getResource(properties.getResourcePath() + properties.getEnvironment());
-    File files;
     try {
-      files = resource.getFile();
+      return new BufferedReader(new InputStreamReader(resource.getInputStream())).lines().toList();
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-    return List.of(Objects.requireNonNull(files.list()));
   }
 }
