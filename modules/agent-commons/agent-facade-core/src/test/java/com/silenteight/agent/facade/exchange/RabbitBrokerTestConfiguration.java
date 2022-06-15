@@ -16,38 +16,22 @@ import org.springframework.context.annotation.Conditional;
 public class RabbitBrokerTestConfiguration {
 
   static final String TEST_FACADE_OUT_QUEUE = "agent.outQueue";
-  private final AgentFacadeProperties agentFacadeProperties;
-
-  private final AmqpAdmin amqpAdmin;
 
   @Bean("outQueue")
   Queue facadeOutQueue() {
-    Queue queue = QueueBuilder
+    return QueueBuilder
         .durable(TEST_FACADE_OUT_QUEUE)
         .build();
-    amqpAdmin.declareQueue(queue);
-    return queue;
-  }
-
-  @Bean("outExchange")
-  TopicExchange outExchange() {
-    TopicExchange exchange = ExchangeBuilder
-        .topicExchange(agentFacadeProperties.getOutboundExchangeName())
-        .build();
-    amqpAdmin.declareExchange(exchange);
-    return exchange;
   }
 
   @Bean
   Binding facadeOutQueueBinding(
       @Qualifier("outQueue") Queue facadeQueue,
       @Qualifier("outExchange") Exchange facadeExchange) {
-    Binding binding = BindingBuilder
+    return BindingBuilder
         .bind(facadeQueue)
         .to(facadeExchange)
         .with("")
         .noargs();
-    amqpAdmin.declareBinding(binding);
-    return binding;
   }
 }
