@@ -13,6 +13,7 @@ dependencies {
   implementation libs.silenteight.sep.base.common
   implementation libs.hibernate.types
   implementation libs.caffeine
+  implementation libs.commons.io
 
   // Enable aspects
   aspect libs.silenteight.sep.base.aspects
