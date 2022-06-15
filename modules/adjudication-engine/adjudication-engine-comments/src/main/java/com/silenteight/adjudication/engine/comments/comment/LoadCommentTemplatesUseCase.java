@@ -38,7 +38,7 @@ class LoadCommentTemplatesUseCase {
     commentTemplateRepository.deleteAll();
     var files = getFiles();
     log.info(
-        "Found {} comment templates for {} environment", files.size(), properties.getEnvironment());
+        "Found {} comment templates for {} environment", files, properties.getEnvironment());
     var templates = files.stream().map(this::createCommentTemplate).collect(Collectors.toList());
     var savedTemplates = commentTemplateRepository.saveAll(templates);
     log.info("Saved {} comment templates", savedTemplates.size());
