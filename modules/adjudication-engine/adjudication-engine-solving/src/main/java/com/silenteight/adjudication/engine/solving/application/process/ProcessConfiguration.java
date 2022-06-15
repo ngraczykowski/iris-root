@@ -102,7 +102,9 @@ class ProcessConfiguration {
   GovernanceMatchResponseProcess governanceMatchResponseProcess(
       final AlertSolvingRepository alertSolvingRepository,
       final GovernanceAlertPort governancePublisher,
+      final MatchSolutionPublisherPort matchSolutionPublisherPort,
       final ProcessConfigurationProperties processConfigurationProperties) {
-    return new GovernanceMatchResponseProcess(governancePublisher, alertSolvingRepository);
+    return new GovernanceMatchResponseProcess(
+        governancePublisher, alertSolvingRepository, matchSolutionPublisherPort);
   }
 }

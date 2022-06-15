@@ -1,9 +1,8 @@
 package com.silenteight.adjudication.engine.solving.data.jdbc;
 
-import com.silenteight.adjudication.engine.solving.data.CommentInputDataAccess;
-import com.silenteight.adjudication.engine.solving.data.MatchCategoryDataAccess;
-import com.silenteight.adjudication.engine.solving.data.MatchFeatureDataAccess;
-import com.silenteight.adjudication.engine.solving.data.MatchFeatureStoreDataAccess;
+import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectNodeConverter;
+import com.silenteight.adjudication.engine.solving.data.*;
+import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -62,5 +61,19 @@ public class JdbcAccessConfiguration {
   @Bean
   MatchFeatureStoreDataAccess matchFeatureStoreDataAccess(JdbcTemplate jdbcTemplate) {
     return new JdbcMatchFeatureStoreDataAccess(new MatchFeatureJdbcRepository(jdbcTemplate));
+  }
+
+  @Bean
+  MatchSolutionEntityExtractor matchSolutionEntityExtractor(
+      ProtoMessageToObjectNodeConverter converter) {
+    return new MatchSolutionEntityExtractor(
+        converter, JsonConversionHelper.INSTANCE.objectMapper());
+  }
+
+  @Bean
+  MatchSolutionStore matchSolutionStore(
+      JdbcTemplate jdbcTemplate, MatchSolutionEntityExtractor matchSolutionEntityExtractor) {
+    return new JdbcMatchSolutionStore(
+        new MatchSolutionJdbcRepository(jdbcTemplate), matchSolutionEntityExtractor);
   }
 }

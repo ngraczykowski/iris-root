@@ -73,6 +73,19 @@ public class AlertSolving implements Serializable {
         matches.get(matchId).getReason());
   }
 
+  public MatchSolution getMatchSolution(long matchId, String solution, String reason) {
+    final var match = matches.get(matchId);
+
+    return new MatchSolution(
+        analysisId,
+        matchId,
+        match.getClientMatchId(),
+        solution,
+        reason,
+        match.getFeatures(),
+        match.getCategories());
+  }
+
   public boolean hasCategories() {
     return matches.values().stream().findFirst().get().getCategories().size() > 0;
   }

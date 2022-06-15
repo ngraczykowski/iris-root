@@ -14,8 +14,10 @@ import com.silenteight.adjudication.engine.solving.application.publisher.port.*;
 import com.silenteight.adjudication.engine.solving.data.CommentInputDataAccess;
 import com.silenteight.adjudication.engine.solving.data.MatchCategoryDataAccess;
 import com.silenteight.adjudication.engine.solving.data.MatchFeatureStoreDataAccess;
+import com.silenteight.adjudication.engine.solving.data.MatchSolutionStore;
 import com.silenteight.adjudication.engine.solving.domain.MatchCategory;
 import com.silenteight.adjudication.engine.solving.domain.MatchFeatureValue;
+import com.silenteight.adjudication.engine.solving.domain.MatchSolution;
 import com.silenteight.adjudication.engine.solving.domain.comment.CommentInput;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -109,5 +111,14 @@ class PublisherConfiguration {
         Executors.newScheduledThreadPool(properties.getMatchFeaturePublisher());
     return new MatchFeaturePublisher(
         matchFeatureStoreDataAccess, scheduledExecutorService, matchFeatureStoreQueue);
+  }
+
+  @Bean
+  MatchSolutionPublisherPort matchSolutionPublisherPort(
+      MatchSolutionStore matchSolutionStore,
+      Queue<MatchSolution> matchSolutionStoreQueue) {
+    var scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+    return new MatchSolutionPublisher(
+        matchSolutionStore, scheduledExecutorService, matchSolutionStoreQueue);
   }
 }

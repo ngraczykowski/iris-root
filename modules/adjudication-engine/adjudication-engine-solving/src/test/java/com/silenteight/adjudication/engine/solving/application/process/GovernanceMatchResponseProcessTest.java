@@ -16,16 +16,19 @@ class GovernanceMatchResponseProcessTest {
   private GovernanceMatchResponseProcess governanceMatchResponseProcess;
   private MockGovernanceAlertPort mockGovernanceAlertPort;
   private InMemoryAlertSolvingRepositoryMock inMemoryAlertSolvingRepositoryMock;
+  private MockMatchSolutionPublisherPort matchSolutionPublisherPort;
 
   @BeforeEach
   void setUp() {
     mockGovernanceAlertPort = new MockGovernanceAlertPort();
     var dataAccess = new InMemoryMatchFeatureDataAccess();
     inMemoryAlertSolvingRepositoryMock = new InMemoryAlertSolvingRepositoryMock(dataAccess);
-
+    matchSolutionPublisherPort = new MockMatchSolutionPublisherPort();
     governanceMatchResponseProcess =
         new GovernanceMatchResponseProcess(
-            mockGovernanceAlertPort, inMemoryAlertSolvingRepositoryMock);
+            mockGovernanceAlertPort,
+            inMemoryAlertSolvingRepositoryMock,
+            matchSolutionPublisherPort);
   }
 
   @Test

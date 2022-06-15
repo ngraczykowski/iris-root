@@ -4,6 +4,8 @@
 
 package com.silenteight.adjudication.engine.app;
 
+import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectNodeConverterConfiguration;
+import com.silenteight.adjudication.engine.common.rabbit.MessageRegistryConfiguration;
 import com.silenteight.adjudication.engine.solving.data.AlertAggregate;
 import com.silenteight.adjudication.engine.solving.data.MatchFeatureDataAccess;
 import com.silenteight.adjudication.engine.solving.data.jdbc.JdbcAccessConfiguration;
@@ -20,7 +22,9 @@ import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@ContextConfiguration(classes = JdbcAccessConfiguration.class)
+@ContextConfiguration(classes = { JdbcAccessConfiguration.class,
+                                  ProtoMessageToObjectNodeConverterConfiguration.class,
+                                  MessageRegistryConfiguration.class })
 @Sql
 class SelectAnalysisFeaturesQueryIT extends BaseJdbcTest {
 

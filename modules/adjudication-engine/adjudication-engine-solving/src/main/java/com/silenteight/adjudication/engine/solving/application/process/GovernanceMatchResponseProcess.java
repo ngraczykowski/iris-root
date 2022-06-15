@@ -7,6 +7,7 @@ import com.silenteight.adjudication.engine.solving.application.process.dto.Match
 import com.silenteight.adjudication.engine.solving.application.process.port.GovernanceMatchResponsePort;
 import com.silenteight.adjudication.engine.solving.application.publisher.dto.AlertSolutionRequest;
 import com.silenteight.adjudication.engine.solving.application.publisher.port.GovernanceAlertPort;
+import com.silenteight.adjudication.engine.solving.application.publisher.port.MatchSolutionPublisherPort;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolving;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
 import com.silenteight.sep.base.aspects.metrics.Timed;
@@ -17,8 +18,11 @@ class GovernanceMatchResponseProcess implements GovernanceMatchResponsePort {
 
   private final GovernanceAlertPort governanceAlertPublisher;
   private final AlertSolvingRepository alertSolvingRepository;
+  private final MatchSolutionPublisherPort matchSolutionPublisherPort;
 
-  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
+  @Timed(
+      percentiles = {0.5, 0.95, 0.99},
+      histogram = true)
   public void processAlert(final MatchSolutionResponse matchSolutionResponse) {
 
     log.debug("Processing match solution from governance = {}", matchSolutionResponse);
@@ -27,10 +31,10 @@ class GovernanceMatchResponseProcess implements GovernanceMatchResponsePort {
     long matchId = matchSolutionResponse.getMatchId();
     var solution = matchSolutionResponse.getSolution();
     var reason = matchSolutionResponse.getReason();
-
     final var alertSolvingModel =
         alertSolvingRepository.updateMatchSolution(alertId, matchId, solution, reason);
-
+    matchSolutionPublisherPort.resolve(
+        alertSolvingModel.getMatchSolution(matchId, solution, reason));
     if (alertSolvingModel.isEmpty() || !alertSolvingModel.isAlertReadyForSolving()) {
       log.debug("Alert {} is not ready for solving", alertSolvingModel.getAlertId());
       return;
@@ -47,7 +51,6 @@ class GovernanceMatchResponseProcess implements GovernanceMatchResponsePort {
   private static AlertSolutionRequest createAlertSolutionRequest(
       long alertId, AlertSolving alertSolvingModel) {
     return new AlertSolutionRequest(
-        alertSolvingModel.getAlertName(),
-        alertSolvingModel.getMatchesSolution(), alertId);
+        alertSolvingModel.getAlertName(), alertSolvingModel.getMatchesSolution(), alertId);
   }
 }
