@@ -27,10 +27,14 @@ class BasePikaConnection:
 
     async def set_connection(self):
         if self.ssl:
-            if not self.connection_configuration.ssl_options:
+            ssl_options = self.connection_configuration.ssl_options
+            if not ssl_options or not all(
+                (ssl_options.cafile, ssl_options.keyfile, ssl_options.certfile, ssl_options.verify)
+            ):
                 raise ValueError(
                     "No ssl connection parameters in config "
-                    "- add 'rabbitmq.ssl_options' section to application.yaml"
+                    "- add 'rabbitmq.ssl_options' section to application.yaml "
+                    "or set relevant environment variables"
                 )
             url = "".join(
                 map(
