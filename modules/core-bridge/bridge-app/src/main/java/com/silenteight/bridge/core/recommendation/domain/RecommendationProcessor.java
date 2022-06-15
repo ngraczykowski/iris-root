@@ -26,7 +26,8 @@ class RecommendationProcessor {
   private static final String TIMED_OUT_RECOMMENDATION_NAME = "";
   private static final boolean RECOMMENDATION_IS_TIMED_OUT = true;
   private static final String TIMED_OUT_RECOMMENDATION_COMMENT = "";
-  private static final RecommendationMetadata TIMED_OUT_RECOMMENDATION_METADATA = null;
+  private static final RecommendationMetadata TIMED_OUT_RECOMMENDATION_METADATA =
+      new RecommendationMetadata(List.of());
 
   private final RecommendationEventPublisher eventPublisher;
   private final RecommendationRepository recommendationRepository;

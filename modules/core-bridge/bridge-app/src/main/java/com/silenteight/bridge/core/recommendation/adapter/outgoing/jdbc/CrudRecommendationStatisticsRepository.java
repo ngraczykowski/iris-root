@@ -11,7 +11,8 @@ interface CrudRecommendationStatisticsRepository
   @Query("""
       SELECT recommended_action, COUNT(recommended_action)
       FROM core_bridge_recommendations
-      WHERE analysis_name = :analysisName
+      WHERE payload IS NOT NULL
+      AND analysis_name = :analysisName
       GROUP BY recommended_action
       """)
   List<RecommendationStatisticProjection> getRecommendationStatistics(String analysisName);
@@ -20,7 +21,8 @@ interface CrudRecommendationStatisticsRepository
   @Query("""
       SELECT recommended_action, COUNT(recommended_action)
       FROM core_bridge_recommendations
-      WHERE analysis_name = :analysisName
+      WHERE payload IS NOT NULL
+      AND analysis_name = :analysisName
       AND alert_name IN (:alertsNames)
       GROUP BY recommended_action
       """)

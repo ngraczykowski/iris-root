@@ -52,7 +52,7 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
             m.name AS match_name
           FROM core_bridge_alerts a
           LEFT JOIN core_bridge_matches m ON m.alert_id = a.id
-          WHERE a.batch_id = :batchId""")
+          WHERE NOT a.is_archived AND a.batch_id = :batchId""")
   List<AlertWithMatchNamesProjection> findAllWithMatchesByBatchId(String batchId);
 
   @Query(
@@ -68,7 +68,7 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
             m.name AS match_name
           FROM core_bridge_alerts a
           LEFT JOIN core_bridge_matches m ON m.alert_id = a.id
-          WHERE a.batch_id = :batchId AND a.name IN(:alertNames)""")
+          WHERE NOT a.is_archived AND a.batch_id = :batchId AND a.name IN(:alertNames)""")
   List<AlertWithMatchNamesProjection> findAllWithMatchesByBatchIdAndAlertNamesIn(
       String batchId, List<String> alertNames);
 

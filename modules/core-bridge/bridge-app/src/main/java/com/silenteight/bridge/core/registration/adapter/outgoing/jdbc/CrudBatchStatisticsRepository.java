@@ -10,7 +10,7 @@ interface CrudBatchStatisticsRepository extends CrudRepository<AlertEntity, Long
   @Query("""
       SELECT status, COUNT(status)
       FROM core_bridge_alerts
-      WHERE batch_id = :batchId
+      WHERE NOT is_archived AND batch_id = :batchId
       GROUP BY status
       """)
   List<BatchStatisticProjection> getAlertsStatusStatistics(String batchId);
@@ -18,7 +18,7 @@ interface CrudBatchStatisticsRepository extends CrudRepository<AlertEntity, Long
   @Query("""
       SELECT status, COUNT(status)
       FROM core_bridge_alerts
-      WHERE batch_id = :batchId AND name IN(:alertsNames)
+      WHERE NOT is_archived AND batch_id = :batchId AND name IN(:alertsNames)
       GROUP BY status
       """)
   List<BatchStatisticProjection> getAlertsStatusStatistics(

@@ -23,7 +23,9 @@ class JdbcRecommendationRepository implements RecommendationRepository {
 
   @Override
   public List<RecommendationWithMetadata> findByAnalysisName(String analysisName) {
-    return crudRecommendationRepository.findByAnalysisName(analysisName).stream()
+    return crudRecommendationRepository
+        .findAllByAnalysisNameAndPayloadIsNotNull(analysisName)
+        .stream()
         .map(this::mapToRecommendationWithMetadata)
         .toList();
   }
@@ -40,7 +42,8 @@ class JdbcRecommendationRepository implements RecommendationRepository {
   @Override
   public List<RecommendationWithMetadata> findByAnalysisNameAndAlertNameIn(
       String analysisName, List<String> alertNames) {
-    return crudRecommendationRepository.findByAnalysisNameAndAlertNameIn(analysisName, alertNames)
+    return crudRecommendationRepository
+        .findByAnalysisNameAndAlertNameInAndPayloadIsNotNull(analysisName, alertNames)
         .stream()
         .map(this::mapToRecommendationWithMetadata)
         .toList();

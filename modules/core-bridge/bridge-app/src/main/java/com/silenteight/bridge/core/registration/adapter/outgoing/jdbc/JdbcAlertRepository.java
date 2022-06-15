@@ -104,8 +104,7 @@ class JdbcAlertRepository implements AlertRepository {
 
   @Override
   public Stream<AlertWithoutMatches> streamAllByBatchId(String batchId) {
-    MapSqlParameterSource params = new MapSqlParameterSource()
-        .addValue("batchId", batchId);
+    var params = new MapSqlParameterSource("batchId", batchId);
 
     return jdbcTemplate.queryForStream("""
         SELECT
@@ -116,14 +115,14 @@ class JdbcAlertRepository implements AlertRepository {
           a.metadata AS alert_metadata,
           a.error_description AS alert_error_description
         FROM core_bridge_alerts a
-        WHERE a.batch_id = :batchId
+        WHERE NOT a.is_archived AND a.batch_id = :batchId
         ORDER BY a.name""", params, new AlertWithoutMatchesRowMapper());
   }
 
   @Override
   public Stream<AlertWithoutMatches> streamAllByBatchIdAndNameIn(
       String batchId, List<String> alertNames) {
-    MapSqlParameterSource params = new MapSqlParameterSource()
+    var params = new MapSqlParameterSource()
         .addValue("batchId", batchId)
         .addValue("alertNames", alertNames);
 
@@ -136,7 +135,7 @@ class JdbcAlertRepository implements AlertRepository {
           a.metadata AS alert_metadata,
           a.error_description AS alert_error_description
         FROM core_bridge_alerts a
-        WHERE a.batch_id = :batchId AND a.name IN(:alertNames)
+        WHERE NOT a.is_archived AND a.batch_id = :batchId AND a.name IN(:alertNames)
         ORDER BY a.name""", params, new AlertWithoutMatchesRowMapper());
   }
 

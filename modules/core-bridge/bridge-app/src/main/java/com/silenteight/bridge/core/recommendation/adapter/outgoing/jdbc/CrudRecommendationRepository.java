@@ -8,7 +8,7 @@ import java.util.List;
 
 interface CrudRecommendationRepository extends CrudRepository<RecommendationEntity, Long> {
 
-  List<RecommendationEntity> findByAnalysisName(String analysisName);
+  List<RecommendationEntity> findAllByAnalysisNameAndPayloadIsNotNull(String analysisName);
 
   @Query("""
       SELECT alert_name
@@ -16,7 +16,7 @@ interface CrudRecommendationRepository extends CrudRepository<RecommendationEnti
       WHERE analysis_name = :analysisName""")
   List<RecommendationAlertNameProjection> findAlertNamesByAnalysisName(String analysisName);
 
-  List<RecommendationEntity> findByAnalysisNameAndAlertNameIn(
+  List<RecommendationEntity> findByAnalysisNameAndAlertNameInAndPayloadIsNotNull(
       String analysisName, List<String> alertNames);
 
 
