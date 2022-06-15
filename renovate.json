@@ -1,0 +1,34 @@
+{
+  "extends": [
+    ":dependencyDashboard",
+    ":autodetectPinVersions",
+    ":automergeMinor",
+    ":prHourlyLimit2",
+    ":prConcurrentLimit10",
+    "group:monorepos",
+    "group:recommended",
+    "workarounds:all"
+  ],
+  "semanticCommits": "enabled",
+  "semanticCommitType": "build",
+  "semanticCommitScope": "deps",
+  "assigneesFromCodeOwners": true,
+  "assigneesSampleSize": 1,
+  "ignorePaths": [
+    "build-logic/**"
+  ],
+  "enabledManagers": [
+    "gradle",
+    "helmv3"
+  ],
+  "gradle": {
+    "fileMatch": [
+      "^gradle/doNotUseLibs\\.versions\\.toml$"
+    ]
+  },
+  "schedule": [
+    "after 10pm and before 5am every weekday",
+    "every weekend"
+  ],
+  "timezone": "Europe/Warsaw"
+}
