@@ -70,7 +70,7 @@ pipeline {
             unstash 'sboms'
             withCredentials(
                 [string(credentialsId: 'dependency-track-apikey', variable: 'API_KEY')]) {
-              sendFilesToDependencyTrack(version)
+              sendFilesToDependencyTrack()
             }
           }
         }
@@ -79,12 +79,12 @@ pipeline {
   }
 }
 
-def sendFilesToDependencyTrack(def version) {
+def sendFilesToDependencyTrack() {
   findFiles(glob: '**/*.bom.json')
       .collect {file ->
         [
             projectName   : file.name.minus('.bom.json'),
-            projectVersion: version,
+            projectVersion: 'LATEST',
             autoCreate    : true,
             bom           : readFile(file: file.path).bytes.encodeBase64().toString()
         ]
