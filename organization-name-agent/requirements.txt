@@ -17,7 +17,7 @@ multidict==5.1.0
 organizationname-agent-api~=0.27.0
 organization-name-knowledge==0.9.0
 phonetics==1.0.5
-protobuf~=3.17.3
+protobuf~=3.19.4
 python-consul2~=0.1.5
 PyYAML==5.4.1
 rapidfuzz==1.7.1
