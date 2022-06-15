@@ -1,2 +1,16 @@
+
+
+
+includeBuild('../../platforms')
+includeBuild('../../build-logic')
+
+dependencyResolutionManagement {
+  versionCatalogs {
+    libs {
+      from(files("../../gradle/libs.versions.toml"))
+    }
+  }
+}
 rootProject.name = 'universal-data-source-connector'
-include 'uds-lib'
+
+include('uds-lib')

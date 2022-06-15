@@ -1,11 +1,29 @@
 plugins {
-  id 'idea'
-  id 'java-library'
-  id 'maven-publish'
+  id "com.silenteight.iris.build.java-library"
+  id "maven-publish"
 }
 
-ext {
-  gradleScriptDir = "${rootProject.projectDir}/gradle/scripts"
+dependencies {
+  annotationProcessor libs.lombok
+  compileOnly libs.lombok
+  implementation libs.data.source.categories.api
+  implementation libs.data.source.comments.api
+  implementation libs.data.source.agentinput.api
+  implementation libs.data.source.api
+  implementation libs.grpc.core
+  implementation libs.grpc.stub
+  implementation libs.grpc.protobuf
+  implementation libs.protobuf.java.util
+  implementation libs.slf4j.api
+  implementation libs.vavr
+
+  testAnnotationProcessor libs.lombok
+  testImplementation libs.lombok
+  testImplementation libs.assertj.core
+  testImplementation libs.junit.jupiter.api
+  testRuntimeOnly libs.junit.jupiter.engine
 }
 
-apply from: "${gradleScriptDir}/dependencies.gradle"
+test {
+  useJUnitPlatform()
+}

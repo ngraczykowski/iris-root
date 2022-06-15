@@ -1,15 +1,4 @@
 plugins {
-  id "com.silenteight.gradle.wrapper" version "1.1.0"
-  id "com.silenteight.gradle.release" version "1.4.0"
-  id "com.silenteight.gradle.convention" version "1.21.3"
-}
-
-projectSetup {
-  javaVersion = JavaVersion.VERSION_11
-}
-
-configure(subprojects) {Project subproject ->
-  subproject.pluginManager.withPlugin("java") {
-    archivesBaseName = "silenteight-" + subproject.name
-  }
+  id 'com.silenteight.iris.build.root-build'
+  id 'com.silenteight.iris.build.sonarqube'
 }
