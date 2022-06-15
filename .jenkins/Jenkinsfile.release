@@ -43,9 +43,9 @@ pipeline {
         }
         environment {
           ARTIFACTORY = credentials('artifactory-user')
-          INGRESS_HOST = "${ENVIRONMENT}-jenkins-pipeline.prv.dev.s8ops.com"
+          NAMESPACE = "test-e2e-${ENVIRONMENT}-${env.BUILD_NUMBER}-${GIT_COMMIT[0..7]}"
+          INGRESS_HOST = "${NAMESPACE}.prv.dev.s8ops.com"
           BASE_URL = "https://${env.INGRESS_HOST}"
-          NAMESPACE = "test-e2e-${ENVIRONMENT}-${env.BUILD_NUMBER}"
           RELEASE_NAME = "sear-${ENVIRONMENT}"
         }
         stages {
@@ -56,24 +56,28 @@ pipeline {
               withKubeConfig(
                   credentialsId: 'devenv-eks',
                   serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
-                sh """
-                  helm install \
+                withCredentials([aws(credentialsId: 'jenkins-ec2-devenv')]) {
+                  sh """
+                  helm \
+                    secrets -d vals \
+                    install \
                     --create-namespace \
-                    --namespace $NAMESPACE \
-                    --username "\$ARTIFACTORY_USR" \
-                    --password "\$ARTIFACTORY_PSW" \
+                    --namespace ${NAMESPACE} \
+                    --username "\${ARTIFACTORY_USR}" \
+                    --password "\${ARTIFACTORY_PSW}" \
                     --values kubernetes/values.core.yaml \
                     --values kubernetes/values.ingress-internal.yaml  \
                     --values kubernetes/values.${ENVIRONMENT}.yaml \
-                    --set ingress.hosts[0]=$INGRESS_HOST \
-                    --set keycloak.ingress.hostname=$INGRESS_HOST \
+                    --set ingress.hosts[0]=${INGRESS_HOST} \
+                    --set keycloak.ingress.hostname=${INGRESS_HOST} \
                     --set keycloak.externalDatabase.host=${RELEASE_NAME}-postgres.${NAMESPACE}.svc \
                     --set keycloak.externalDatabase.existingSecret=keycloak.${RELEASE_NAME}-postgres.credentials.postgresql.acid.zalan.do \
                     --wait \
                     --timeout 15m \
-                    $RELEASE_NAME \
+                    ${RELEASE_NAME} \
                     https://repo.silenteight.com/artifactory/helm/sear/sear-"${version}".tgz
                 """
+                }
               }
             }
             post {
@@ -154,8 +158,8 @@ pipeline {
                 credentialsId: 'devenv-eks',
                 serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
               sh """
-                helm uninstall --namespace test-e2e-${ENVIRONMENT}-${env.BUILD_NUMBER} sear-$ENVIRONMENT
-                kubectl delete namespace test-e2e-${ENVIRONMENT}-${env.BUILD_NUMBER}
+                helm uninstall --namespace ${NAMESPACE} ${RELEASE_NAME}
+                kubectl delete namespace ${NAMESPACE}
               """
             }
           }

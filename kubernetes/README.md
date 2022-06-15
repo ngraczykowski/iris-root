@@ -41,11 +41,28 @@ Before installing the chart, run the following command to grab chart dependencie
 helm dependency build ../charts/sear
 ```
 
+Install required plugin
+
+```bash
+helm plugin install https://github.com/jkroepke/helm-secrets
+```
+
+Install `vals` from https://github.com/variantdev/vals (by fetching the binary)
+
+```bash
+wget -qO- https://github.com/variantdev/vals/releases/download/v0.18.0/vals_0.18.0_linux_amd64.tar.gz | tar xvz vals
+```
+
 To install the chart, run the following command, replacing `<variables>` as documented below the command:
 
 ```bash
-ENV=<environment> RELEASE_NAME=<release-name> NAMESPACE=<namespace> ; \
-  helm upgrade --install \
+#!/bin/bash
+
+ENV=<environment> \
+RELEASE_NAME=<release-name> \
+NAMESPACE=<namespace> \
+HELM_SECRETS_VALS_PATH="\$(which vals | grep . || echo ./vals)" \
+helm secrets -d vals upgrade --install \
   --namespace $NAMESPACE \
   --values values.core.yaml \
   --values values.ingress-internal.yaml \
@@ -84,3 +101,16 @@ helm uninstall <release name>
 ### Upgrading chart
 
 When something changes in the chart, you can upgrade your environment by running the command in [Installing chart](#installing-chart).
+
+### Secret values
+
+with secrets plugin ("...secrets -d vals...") helm now supports secret rendering. SSM example:
+
+```yaml
+myValue: ref+awsssm://pp/test/param?region=eu-central-1
+```
+
+more info: https://github.com/variantdev/vals#cli ()
+
+In order for given secret type to work, one has to make sure the evnironment is contains proper credentials.
+EG: `VAULT_TOKEN` for vault, `AWS_*` for awsssm etc...
