@@ -58,7 +58,7 @@ def flatten(value):
     return value
 
 
-def remove_nulls_from_aggegated(match):
+def remove_nulls_from_aggregated(match):
     return [i for i in match if i]
 
 

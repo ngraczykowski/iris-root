@@ -232,11 +232,8 @@ class WatchlistExtractor:
 
     @safe_field_extractor
     def extract_wlp_type(self, wl_entitytype):
-        # entity_type_company = ['08', '09', '05', '06']
         entity_type_ind = ["03"]
         entity_type_pep = ["07"]
-        # entity_type_admin = ['01', '02']
-
         entity_type_ind = entity_type_ind + entity_type_pep
         value = "C"
         if wl_entitytype in entity_type_ind:

@@ -58,6 +58,7 @@ nationality_agent:
   - alertedParty.xml_fields.ADDRESS1_COUNTRY
   - alertedParty.xml_fields.PARTY1_ADDRESS1_COUNTRY
   - alertedParty.xml_fields.COUNTRY_CODE
+  - alertedParty.xml_fields.PARTY1_COUNTRY1
   - alertedParty.xml_fields.PARTY1_COUNTRY_DOMICILE1
   - alertedParty.xml_fields.PARTY1_COUNTRY1_CITIZENSHIP
   - alertedParty.xml_fields.PARTY1_COUNTRY_CITIZENSHIP1

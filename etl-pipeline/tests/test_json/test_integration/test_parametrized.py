@@ -62,6 +62,10 @@ def pipeline_resource(request):
             "notebooks/sample/wm_party_in_payload_format_customer_type_without_carrier_tag.json",
             "test_wm_party_in_payload_format_customer_type_without_carrier_tag",
         ),
+        (
+            "notebooks/sample/isg_party_in_payload_format_with_01_entitytype.json",
+            "test_lack_of_data_for_geo_agent",
+        ),
     ],
 )
 async def test_parametrized(source_file, reference_folder, pipeline_resource):

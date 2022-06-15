@@ -434,7 +434,10 @@
         "concat_address_no_changes": true,
         "concat_residue": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ",
         "datasetType": "WM_ADDRESS",
-        "match_ids": {"match_id": "49159509", "match_name": "dummy"},
+        "match_ids": {
+            "match_id": "49159509",
+            "match_name": "dummy"
+        },
         "watchlistParty": {
             "matchRecords": {
                 "AP_TRIGGERS": {
@@ -453,8 +456,8 @@
                 "SRC_REF_KEY": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480",
                 "TOKENS_RISK_CARRIER": "Doe",
                 "TRIGGERED_BY": [
-                    "matchStatus",
-                    "stopDescriptors"
+                    "stopDescriptors",
+                    "matchStatus"
                 ],
                 "VERSION_ID": "122438658",
                 "WLP_TYPE": "I",
@@ -484,16 +487,16 @@
                 "all_hit_type_aggregated": [
                     {
                         "address": [
-                            "ADDRESS1_STATE",
                             "CONCAT_ADDRESS",
-                            "ADDRESS1_CITY",
                             "ADDRESS1_PROVINCE",
-                            "ADDRESS1_COUNTRY"
+                            "ADDRESS1_STATE",
+                            "ADDRESS1_COUNTRY",
+                            "ADDRESS1_CITY"
                         ],
                         "job": [],
                         "name": [
-                            "PARTY1_NAME_FULL",
-                            "CONCAT_NAME"
+                            "CONCAT_NAME",
+                            "PARTY1_NAME_FULL"
                         ],
                         "other": []
                     }
@@ -502,13 +505,13 @@
                 "ap_all_ap_name_tp_markeds_aggregated": [],
                 "ap_all_company_names_aggregated": [
                     "Pladimir Vutin",
-                    "Janusz",
                     "Eva Pladimirova",
+                    "Janusz",
                     "Joe BlackJ"
                 ],
                 "ap_all_dobs_aggregated": [
-                    "02/31/1900",
-                    "04/31/1910"
+                    "04/31/1910",
+                    "02/31/1900"
                 ],
                 "ap_all_documents_aggregated": [
                     "022368917",
@@ -516,19 +519,19 @@
                 ],
                 "ap_all_employer_names_aggregated": [],
                 "ap_all_hit_types_aggregated": [
-                    "Joe BlackJ",
-                    "Janusz"
+                    "Janusz",
+                    "Joe BlackJ"
                 ],
                 "ap_all_matched_tokens_tp_markeds_aggregated": [],
                 "ap_all_names_aggregated": [
                     "Pladimir Vutin",
-                    "Janusz",
                     "Eva Pladimirova",
+                    "Janusz",
                     "Joe BlackJ"
                 ],
                 "ap_all_nationalities_aggregated": [
-                    "United States",
-                    "UNITED STATES OF AMERICA"
+                    "UNITED STATES OF AMERICA",
+                    "United States"
                 ],
                 "ap_all_party_types_aggregated": [
                     "Individual"
@@ -537,12 +540,12 @@
                     "United States"
                 ],
                 "ap_all_residencies_aggregated": [
-                    "United States",
-                    "UNITED STATES OF AMERICA"
+                    "UNITED STATES OF AMERICA",
+                    "United States"
                 ],
                 "ap_all_sanctioned_countries_aggregated": [
-                    "United States",
-                    "UNITED STATES OF AMERICA"
+                    "UNITED STATES OF AMERICA",
+                    "United States"
                 ],
                 "ap_id_tp_marked_agent_input": "A05003324172",
                 "ap_name_tp_marked_agent_input": "Janusz",
@@ -655,16 +658,16 @@
                 "entityVersion": "20150505194929",
                 "firstMatchedDate": "01/08/20",
                 "hit_type_agent_address": [
-                    "ADDRESS1_STATE",
                     "CONCAT_ADDRESS",
-                    "ADDRESS1_CITY",
                     "ADDRESS1_PROVINCE",
-                    "ADDRESS1_COUNTRY"
+                    "ADDRESS1_STATE",
+                    "ADDRESS1_COUNTRY",
+                    "ADDRESS1_CITY"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_name": [
-                    "PARTY1_NAME_FULL",
-                    "CONCAT_NAME"
+                    "CONCAT_NAME",
+                    "PARTY1_NAME_FULL"
                 ],
                 "hit_type_agent_other": [],
                 "inputVersionId": "122438658",
@@ -708,6 +711,7 @@
                 ],
                 "nationality_agent_ap": [
                     "UNITED STATES OF AMERICA",
+                    null,
                     null,
                     null,
                     null,
@@ -847,8 +851,8 @@
                     "Joe Ding"
                 ],
                 "wl_all_hit_types_aggregated": [
-                    "Joe BlackJ",
-                    "Janusz"
+                    "Janusz",
+                    "Joe BlackJ"
                 ],
                 "wl_all_matched_tokens_tp_markeds_aggregated": [],
                 "wl_all_names_aggregated": [
@@ -870,8 +874,8 @@
                     "United States of America"
                 ],
                 "wl_all_sanctioned_countries_aggregated": [
-                    "US|FL;US",
                     "Joe Ding",
+                    "US|FL;US",
                     "United States of America"
                 ]
             }
@@ -1301,7 +1305,10 @@
         "concat_address_no_changes": true,
         "concat_residue": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ",
         "datasetType": "WM_ADDRESS",
-        "match_ids": {"match_id": "49159506", "match_name": "dummy"},
+        "match_ids": {
+            "match_id": "49159506",
+            "match_name": "dummy"
+        },
         "watchlistParty": {
             "matchRecords": {
                 "AP_TRIGGERS": {
@@ -1320,8 +1327,8 @@
                 "SRC_REF_KEY": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480",
                 "TOKENS_RISK_CARRIER": "Doe",
                 "TRIGGERED_BY": [
-                    "matchStatus",
-                    "stopDescriptors"
+                    "stopDescriptors",
+                    "matchStatus"
                 ],
                 "VERSION_ID": "122438659",
                 "WLP_TYPE": "I",
@@ -1367,11 +1374,11 @@
                 "all_hit_type_aggregated": [
                     {
                         "address": [
-                            "ADDRESS1_STATE",
                             "CONCAT_ADDRESS",
-                            "ADDRESS1_CITY",
                             "ADDRESS1_PROVINCE",
-                            "ADDRESS1_COUNTRY"
+                            "ADDRESS1_STATE",
+                            "ADDRESS1_COUNTRY",
+                            "ADDRESS1_CITY"
                         ],
                         "job": [],
                         "name": [],
@@ -1385,8 +1392,8 @@
                     "Eva Pladimirova"
                 ],
                 "ap_all_dobs_aggregated": [
-                    "02/31/1900",
                     "04/31/1910",
+                    "02/31/1900",
                     "20/10/1963"
                 ],
                 "ap_all_documents_aggregated": [
@@ -1401,8 +1408,8 @@
                     "Eva Pladimirova"
                 ],
                 "ap_all_nationalities_aggregated": [
-                    "United States",
-                    "UNITED STATES OF AMERICA"
+                    "UNITED STATES OF AMERICA",
+                    "United States"
                 ],
                 "ap_all_party_types_aggregated": [
                     "Individual"
@@ -1411,12 +1418,12 @@
                     "United States"
                 ],
                 "ap_all_residencies_aggregated": [
-                    "United States",
-                    "UNITED STATES OF AMERICA"
+                    "UNITED STATES OF AMERICA",
+                    "United States"
                 ],
                 "ap_all_sanctioned_countries_aggregated": [
-                    "United States",
-                    "UNITED STATES OF AMERICA"
+                    "UNITED STATES OF AMERICA",
+                    "United States"
                 ],
                 "ap_id_tp_marked_agent_input": "A05003324172",
                 "ap_name_tp_marked_agent_input": null,
@@ -1530,11 +1537,11 @@
                 "entityVersion": "20150505194923",
                 "firstMatchedDate": "01/08/20",
                 "hit_type_agent_address": [
-                    "ADDRESS1_STATE",
                     "CONCAT_ADDRESS",
-                    "ADDRESS1_CITY",
                     "ADDRESS1_PROVINCE",
-                    "ADDRESS1_COUNTRY"
+                    "ADDRESS1_STATE",
+                    "ADDRESS1_COUNTRY",
+                    "ADDRESS1_CITY"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_name": [],
@@ -1580,6 +1587,7 @@
                 ],
                 "nationality_agent_ap": [
                     "UNITED STATES OF AMERICA",
+                    null,
                     null,
                     null,
                     null,
@@ -1740,24 +1748,24 @@
                     "Joe Dong"
                 ],
                 "wl_all_nationalities_aggregated": [
-                    "PL",
-                    "Poland"
+                    "Poland",
+                    "PL"
                 ],
                 "wl_all_party_types_aggregated": [
                     "I"
                 ],
                 "wl_all_pobs_aggregated": [
-                    "PL",
-                    "Poland"
+                    "Poland",
+                    "PL"
                 ],
                 "wl_all_residencies_aggregated": [
-                    "PL",
-                    "Poland"
+                    "Poland",
+                    "PL"
                 ],
                 "wl_all_sanctioned_countries_aggregated": [
+                    "Poland",
                     "Joe Dong",
-                    "PL",
-                    "Poland"
+                    "PL"
                 ]
             }
         }

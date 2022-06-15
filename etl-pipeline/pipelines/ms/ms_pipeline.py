@@ -47,8 +47,26 @@ class MSPipeline(ETLPipeline):
     def transform_cleansed_to_application(self, payloads):
         for payload in payloads:
             self.parse_agent_config(payload)
-            self.remove_nulls_from_aggegated(payload)
+            self.sanitize_logic(payload)
+            self.remove_nulls_from_aggregated(payload)
         return payloads
+
+    def sanitize_logic(self, payload):
+        self.sanitize_for_hit_type_agent(payload)
+        self.sanitize_for_geo_sanction_agent(payload)
+
+    def sanitize_for_hit_type_agent(self, match):
+        match = match["watchlistParty"]["matchRecords"]
+        match["all_hit_type_aggregated"] = {
+            key.split("_")[-1]: [i for i in match[key] if i]
+            for key in match
+            if key.startswith("hit")
+        }
+
+    def sanitize_for_geo_sanction_agent(self, match):
+        match = match["watchlistParty"]["matchRecords"]
+        if match["WL_ENTITYTYPE"] == "01":
+            match["wl_all_sanctioned_countries_aggregated"] = []
 
     def parse_agent_config(self, payload):
         match = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
@@ -95,12 +113,6 @@ class MSPipeline(ETLPipeline):
                 if key.endswith("_aggregated") or key.startswith("hit_type_agent")
             }
         )
-
-        match["all_hit_type_aggregated"] = {
-            key.split("_")[-1]: [i for i in match[key] if i]
-            for key in match
-            if key.startswith("hit")
-        }
 
     def reload_config(self):
         self.alert_agents_config = load_agent_configs()
@@ -213,7 +225,7 @@ class MSPipeline(ETLPipeline):
             return value[:1] + self.flatten(value[1:])
         return value
 
-    def remove_nulls_from_aggegated(self, payload):
+    def remove_nulls_from_aggregated(self, payload):
         match = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
         for key in match:
             if key.endswith("_aggregated") or key.startswith("hit_type_agent"):

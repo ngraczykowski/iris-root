@@ -1,24 +1,233 @@
 ============================= test session starts ==============================
-platform linux -- Python 3.6.13, pytest-7.0.1, pluggy-1.0.0 -- /env/ds/anaconda/envs/pipeline/bin/python
+platform linux -- Python 3.7.5, pytest-7.0.1, pluggy-1.0.0 -- /env/ds/anaconda/envs/pipeline/bin/python
 cachedir: .pytest_cache
 rootdir: /app, configfile: setup.cfg
-plugins: asyncio-0.16.0
-collecting ... collected 1 item
+plugins: asyncio-0.18.3
+asyncio: mode=legacy
+collecting ... collected 31 items
 
-tests/test_json/test_json_pipeline.py::test_pipeline[notebooks/sample/wm_address_in_payload_format.json-tests/shared/parsed_payload.json-2-A05003324172] PASSED [100%]
+tests/test_json/test_integration/test_client.py::TestGrpcServerWithoutSSL::test_cross_input_match_records PASSED [  3%]
+tests/test_json/test_integration/test_client.py::TestGrpcServerWithoutSSL::test_empty_flow PASSED [  6%]
+tests/test_json/test_integration/test_client.py::TestGrpcServerWithoutSSL::test_empty_supplemental_info PASSED [  9%]
+tests/test_json/test_integration/test_client.py::TestGrpcServerWithoutSSL::test_failures_flow PASSED [ 12%]
+tests/test_json/test_integration/test_client.py::TestGrpcServerWithoutSSL::test_isg_party_in_payload_format_customer_type_company PASSED [ 16%]
+tests/test_json/test_integration/test_client.py::TestGrpcServerWithoutSSL::test_ok_flow PASSED [ 19%]
+tests/test_json/test_integration/test_client.py::TestGrpcServerWithoutSSL::test_ok_for_big_payload PASSED [ 22%]
+tests/test_json/test_integration/test_client.py::TestGrpcServerWithoutSSL::test_partial_supplemental_info PASSED [ 25%]
+tests/test_json/test_integration/test_client.py::TestGrpcServerWithoutSSL::test_wm_party PASSED [ 29%]
+tests/test_json/test_integration/test_client.py::TestGrpcServerWithoutSSL::test_wm_party_in_payload_format_customer_type PASSED [ 32%]
+tests/test_json/test_integration/test_client.py::TestGrpcServerWithoutSSL::test_wm_party_in_payload_format_customer_type_individual PASSED [ 35%]
+tests/test_json/test_integration/test_client.py::TestGrpcServerWithoutSSL::test_wrong_alert_name PASSED [ 38%]
+tests/test_json/test_integration/test_parametrized.py::test_parametrized[notebooks/sample/isg_party_in_payload_format_customer_type_individual.json-test_isg_party_in_payload_format_customer_type_individual] FAILED [ 41%]
+tests/test_json/test_integration/test_parametrized.py::test_parametrized[notebooks/sample/isg_party_in_payload_format_customer_type_unknown.json-test_isg_party_in_payload_format_customer_type_unknown] PASSED [ 45%]
+tests/test_json/test_integration/test_parametrized.py::test_parametrized[notebooks/sample/isg_account_in_payload_format_customer_type_individual.json-test_isg_account_in_payload_format_customer_type_individual] PASSED [ 48%]
+tests/test_json/test_integration/test_parametrized.py::test_parametrized[notebooks/sample/isg_account_in_payload_format_customer_type_organization.json-test_isg_account_in_payload_format_customer_type_organization] PASSED [ 51%]
+tests/test_json/test_integration/test_parametrized.py::test_parametrized[notebooks/sample/isg_account_in_payload_format_customer_type_with_no_token.json-test_isg_account_in_payload_format_customer_type_no_token] PASSED [ 54%]
+tests/test_json/test_integration/test_parametrized.py::test_parametrized[notebooks/sample/wm_party_in_payload_format_customer_type_without_carrier_tag.json-test_wm_party_in_payload_format_customer_type_without_carrier_tag] PASSED [ 58%]
+tests/test_json/test_integration/test_parametrized.py::test_parametrized[notebooks/sample/isg_party_in_payload_format_with_01_entitytype.json-test_lack_of_data_for_geo_agent] PASSED [ 61%]
+tests/test_json/test_integration/test_ssl_client.py::TestSSLGrpcServer::test_cross_input_match_records PASSED [ 64%]
+tests/test_json/test_integration/test_ssl_client.py::TestSSLGrpcServer::test_empty_flow PASSED [ 67%]
+tests/test_json/test_integration/test_ssl_client.py::TestSSLGrpcServer::test_empty_supplemental_info PASSED [ 70%]
+tests/test_json/test_integration/test_ssl_client.py::TestSSLGrpcServer::test_failures_flow PASSED [ 74%]
+tests/test_json/test_integration/test_ssl_client.py::TestSSLGrpcServer::test_isg_party_in_payload_format_customer_type_company PASSED [ 77%]
+tests/test_json/test_integration/test_ssl_client.py::TestSSLGrpcServer::test_ok_flow PASSED [ 80%]
+tests/test_json/test_integration/test_ssl_client.py::TestSSLGrpcServer::test_ok_for_big_payload PASSED [ 83%]
+tests/test_json/test_integration/test_ssl_client.py::TestSSLGrpcServer::test_partial_supplemental_info PASSED [ 87%]
+tests/test_json/test_integration/test_ssl_client.py::TestSSLGrpcServer::test_wm_party PASSED [ 90%]
+tests/test_json/test_integration/test_ssl_client.py::TestSSLGrpcServer::test_wm_party_in_payload_format_customer_type PASSED [ 93%]
+tests/test_json/test_integration/test_ssl_client.py::TestSSLGrpcServer::test_wm_party_in_payload_format_customer_type_individual PASSED [ 96%]
+tests/test_json/test_integration/test_ssl_client.py::TestSSLGrpcServer::test_wrong_alert_name PASSED [100%]
+
+=================================== FAILURES ===================================
+_ test_parametrized[notebooks/sample/isg_party_in_payload_format_customer_type_individual.json-test_isg_party_in_payload_format_customer_type_individual] _
+
+source_file = 'notebooks/sample/isg_party_in_payload_format_customer_type_individual.json'
+reference_folder = 'test_isg_party_in_payload_format_customer_type_individual'
+pipeline_resource = <etl_pipeline.service.proto.api.etl_pipeline_pb2_grpc.EtlPipelineServiceStub object at 0x7ff379539ed0>
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        ["source_file", "reference_folder"],
+        [
+            (
+                "notebooks/sample/isg_party_in_payload_format_customer_type_individual.json",
+                "test_isg_party_in_payload_format_customer_type_individual",
+            ),
+            (
+                "notebooks/sample/isg_party_in_payload_format_customer_type_unknown.json",
+                "test_isg_party_in_payload_format_customer_type_unknown",
+            ),
+            (
+                "notebooks/sample/isg_account_in_payload_format_customer_type_individual.json",
+                "test_isg_account_in_payload_format_customer_type_individual",
+            ),
+            (
+                "notebooks/sample/isg_account_in_payload_format_customer_type_organization.json",
+                "test_isg_account_in_payload_format_customer_type_organization",
+            ),
+            (
+                "notebooks/sample/isg_account_in_payload_format_customer_type_with_no_token.json",
+                "test_isg_account_in_payload_format_customer_type_no_token",
+            ),
+            (
+                "notebooks/sample/wm_party_in_payload_format_customer_type_without_carrier_tag.json",
+                "test_wm_party_in_payload_format_customer_type_without_carrier_tag",
+            ),
+            (
+                "notebooks/sample/isg_party_in_payload_format_with_01_entitytype.json",
+                "test_lack_of_data_for_geo_agent",
+            ),
+        ],
+    )
+    async def test_parametrized(source_file, reference_folder, pipeline_resource):
+        request_alert = load_alert(source_file)
+        for match in request_alert.matches:
+            try:
+                os.remove(
+                    f'/tmp/categories_{match.match_name.replace("/", "_")}.json',
+                )
+            except FileNotFoundError:
+                pass
+>       response = pipeline_resource.RunEtl(RunEtlRequest(alerts=[request_alert]))
+
+tests/test_json/test_integration/test_parametrized.py:80: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/env/ds/anaconda/envs/pipeline/lib/python3.7/site-packages/grpc/_channel.py:946: in __call__
+    return _end_unary_response_blocking(state, call, False, None)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+state = <grpc._channel._RPCState object at 0x7ff379537050>
+call = <grpc._cython.cygrpc.SegregatedCall object at 0x7ff379522cd0>
+with_call = False, deadline = None
+
+    def _end_unary_response_blocking(state, call, with_call, deadline):
+        if state.code is grpc.StatusCode.OK:
+            if with_call:
+                rendezvous = _MultiThreadedRendezvous(state, call, None, deadline)
+                return state.response, rendezvous
+            else:
+                return state.response
+        else:
+>           raise _InactiveRpcError(state)
+E           grpc._channel._InactiveRpcError: <_InactiveRpcError of RPC that terminated with:
+E           	status = StatusCode.UNAVAILABLE
+E           	details = "Broken pipe"
+E           	debug_error_string = "{"created":"@1655201476.392885259","description":"Error received from peer ipv4:127.0.0.1:9090","file":"src/core/lib/surface/call.cc","file_line":952,"grpc_message":"Broken pipe","grpc_status":14}"
+E           >
+
+/env/ds/anaconda/envs/pipeline/lib/python3.7/site-packages/grpc/_channel.py:849: _InactiveRpcError
+---------------------------- Captured stdout setup -----------------------------
+2022-06-14 10:11:16,022 — main.agent_input_creator — DEBUG — initialize:96 — Try to initialize
+2022-06-14 10:11:16,025 — main.agent_input_creator — DEBUG — connect_to_uds:104 — Connecting to UDS via localhost:50052
+2022-06-14 10:11:16,028 — main.agent_input_creator — INFO — initialize_categories:152 — Categories created: [name: "categories/customerType"
+display_name: "Customer Type"
+type: ENUMERATED
+allowed_values: "I"
+allowed_values: "UNKNOWN"
+allowed_values: "C"
+, name: "categories/entitiesTypesMatch"
+display_name: "Entity Type Match"
+type: ENUMERATED
+allowed_values: "Y"
+allowed_values: "N"
+allowed_values: "INCONCLUSIVE"
+, name: "categories/alertType"
+display_name: "Dataset / alert type"
+type: ENUMERATED
+allowed_values: "ISG_PARTY"
+allowed_values: "WM_ADDRESS"
+allowed_values: "WM_PARTY"
+allowed_values: "ISG_ACCOUNT"
+]
+2022-06-14 10:11:16,028 — main.servicer — INFO — __init__:45 — Service started
+---------------------------- Captured stderr setup -----------------------------
+/env/ds/anaconda/envs/pipeline/lib/python3.7/site-packages/fuzzywuzzy/fuzz.py:11: UserWarning: Using slow pure-python SequenceMatcher. Install python-Levenshtein to remove this warning
+  warnings.warn('Using slow pure-python SequenceMatcher. Install python-Levenshtein to remove this warning')
+The following fields have not been found in any file:
+['ACCOUNTNUMBER', 'ALL_CONNECTED_COUNTRY_OF_INCORPORATION', 'COUNTRY_CODE', 'PARTY1_NAME_ALIAS1', 'PARTY1_NAME_ALIAS4', 'PARTY1_ADDRESS1_STATE', 'ADDRESS1_STATE', 'ADDRESS1_PROVINCE', 'PARTY1_ADDRESS1_CITY', 'ALL_CONNECTED_PARTY_BIRTH_COUNTRIES', 'PARTY1_POSITION_TITLE', 'PARTY1_NAME_FULL', 'PARTY1_COUNTRY_CITIZENSHIP1', 'PARTY1_NAME_ALIAS3', 'ALL_CONNECTED_GOVT_IDS', 'PARTY1_NAME_ALIAS2', 'ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES', 'ALL_CONNECTED_PARTY_RESIDENCY_COUNTRIES', 'PARTY1_ID', 'ALL_CONNECTED_TAX_IDS', 'ADDRESS1_CITY', 'UNIQUE_KEY']
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: PARTY1_COUNTRY1 is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: PARTY1_COUNTRY1 is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: PARTY1_COUNTRY1 is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yaml
+Field in agent configuration for: xml_fields is not registered field in pipeline.yamltests/scripts/start_services_ssl.sh: line 4: 139217 Killed                  python -m etl_pipeline --ssl
+tests/scripts/start_services_ssl.sh: line 4: 139218 Killed                  python ./tests/test_json/data_source_stub.py --ssl
 
 =============================== warnings summary ===============================
-../env/ds/anaconda/envs/pipeline/lib/python3.6/site-packages/fuzzywuzzy/fuzz.py:11
-  /env/ds/anaconda/envs/pipeline/lib/python3.6/site-packages/fuzzywuzzy/fuzz.py:11: UserWarning: Using slow pure-python SequenceMatcher. Install python-Levenshtein to remove this warning
-    warnings.warn('Using slow pure-python SequenceMatcher. Install python-Levenshtein to remove this warning')
+../env/ds/anaconda/envs/pipeline/lib/python3.7/site-packages/pytest_asyncio/plugin.py:191
+  /env/ds/anaconda/envs/pipeline/lib/python3.7/site-packages/pytest_asyncio/plugin.py:191: DeprecationWarning: The 'asyncio_mode' default value will change to 'strict' in future, please explicitly use 'asyncio_mode=strict' or 'asyncio_mode=auto' in pytest configuration file.
+    config.issue_config_time_warning(LEGACY_MODE, stacklevel=2)
 
-../env/ds/anaconda/envs/pipeline/lib/python3.6/site-packages/consul/base.py:812
-  /env/ds/anaconda/envs/pipeline/lib/python3.6/site-packages/consul/base.py:812: DeprecationWarning: Consul 1.4.0 deprecates the legacy ACL.
+tests/test_json/test_integration/test_client.py::TestGrpcServerWithoutSSL::test_cross_input_match_records
+tests/test_json/test_integration/test_parametrized.py::test_parametrized[notebooks/sample/isg_party_in_payload_format_customer_type_individual.json-test_isg_party_in_payload_format_customer_type_individual]
+tests/test_json/test_integration/test_ssl_client.py::TestSSLGrpcServer::test_cross_input_match_records
+  /env/ds/anaconda/envs/pipeline/lib/python3.7/site-packages/consul/base.py:812: DeprecationWarning: Consul 1.4.0 deprecates the legacy ACL.
     DeprecationWarning)
 
-../env/ds/anaconda/envs/pipeline/lib/python3.6/site-packages/consul/base.py:2558
-  /env/ds/anaconda/envs/pipeline/lib/python3.6/site-packages/consul/base.py:2558: DeprecationWarning: 1.6.0+: The discovery chain API is available in Consul versions 1.6.0 and newer.
+tests/test_json/test_integration/test_client.py::TestGrpcServerWithoutSSL::test_cross_input_match_records
+tests/test_json/test_integration/test_parametrized.py::test_parametrized[notebooks/sample/isg_party_in_payload_format_customer_type_individual.json-test_isg_party_in_payload_format_customer_type_individual]
+tests/test_json/test_integration/test_ssl_client.py::TestSSLGrpcServer::test_cross_input_match_records
+  /env/ds/anaconda/envs/pipeline/lib/python3.7/site-packages/consul/base.py:2558: DeprecationWarning: 1.6.0+: The discovery chain API is available in Consul versions 1.6.0 and newer.
     'and newer.', DeprecationWarning)
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-======================== 1 passed, 3 warnings in 1.04s =========================
+=========================== short test summary info ============================
+FAILED tests/test_json/test_integration/test_parametrized.py::test_parametrized[notebooks/sample/isg_party_in_payload_format_customer_type_individual.json-test_isg_party_in_payload_format_customer_type_individual]
+================== 1 failed, 30 passed, 7 warnings in 44.50s ===================

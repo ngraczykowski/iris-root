@@ -4,6 +4,7 @@ import re
 import subprocess
 import time
 from copy import deepcopy
+from glob import glob
 
 import grpc
 import pytest
@@ -128,6 +129,21 @@ class BaseGrpcTestCase:
     @pytest.mark.asyncio
     class TestGrpcServer(AsyncTestCase):
         TIMEOUT = 10
+
+        def setUp(self) -> None:
+
+            category_files = glob("/tmp/categories_*")
+            for i in category_files:
+                try:
+                    os.remove(i)
+                except FileNotFoundError:
+                    pass
+            category_files = glob("/tmp/features*")
+            for i in category_files:
+                try:
+                    os.remove(i)
+                except FileNotFoundError:
+                    pass
 
         @classmethod
         def tearDownClass(cls):
