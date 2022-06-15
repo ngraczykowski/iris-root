@@ -1,6 +1,7 @@
 /*
  * Copyright (c) 2022 Silent Eight Pte. Ltd. All rights reserved.
  */
+import groovy.json.JsonOutput
 
 @Library('pipeline-shared-library@master') _
 
@@ -27,7 +28,7 @@ pipeline {
         updateBuildName displayName: "#${env.BUILD_NUMBER} v${version}"
       }
     }
-    stage('SonarQube') {
+    stage('Build') {
       steps {
         withGradle {
           withCredentials(
@@ -35,22 +36,67 @@ pipeline {
                   credentialsId: 'artifactory-user',
                   usernameVariable: 'S8_REPO_USER',
                   passwordVariable: 'S8_REPO_PASSWORD')]) {
-            sh "./gradlew -Pversion=\"${version}\" clean build"
+            sh "./gradlew -Pversion=\"${version}\" -Dsbom=true clean build"
           }
         }
-        script {
-          scanList = findFiles(glob: 'modules/**/*.sonarqube').collect {readFile(file: it.path).trim()}
+        stash includes: 'modules/**/build/reports/*.bom.json', name: 'sboms'
+      }
+    }
+    stage('Parallel') {
+      parallel {
+        stage('SonarQube') {
+          steps {
+            script {
+              scanList =
+                  findFiles(glob: 'modules/**/*.sonarqube').collect {readFile(file: it.path).trim()}
+            }
+            withSonarQubeEnv(env.SONAR_NAME) {
+              withCredentials(
+                  [usernamePassword(
+                      credentialsId: 'artifactory-user',
+                      usernameVariable: 'S8_REPO_USER',
+                      passwordVariable: 'S8_REPO_PASSWORD')]) {
+                sh "./gradlew -Dsonar.branch.name=\$CHANGE_BRANCH -Pversion=${version} ${scanList.join(' ')}"
+              }
+            }
+          }
         }
-        withSonarQubeEnv(env.SONAR_NAME) {
-          withCredentials(
-              [usernamePassword(
-                  credentialsId: 'artifactory-user',
-                  usernameVariable: 'S8_REPO_USER',
-                  passwordVariable: 'S8_REPO_PASSWORD')]) {
-            sh "./gradlew -Dsonar.branch.name=\$CHANGE_BRANCH -Pversion=${version} ${scanList.join(' ')}"
+        stage('Dependency Track') {
+          agent {
+            label 'ec2-agent-devenv'
+          }
+          options {skipDefaultCheckout()}
+          steps {
+            unstash 'sboms'
+            withCredentials(
+                [string(credentialsId: 'dependency-track-apikey', variable: 'API_KEY')]) {
+              sendFilesToDependencyTrack(version)
+            }
           }
         }
       }
     }
   }
+}
+
+def sendFilesToDependencyTrack(def version) {
+  findFiles(glob: '**/*.bom.json')
+      .collect {file ->
+        [
+            projectName   : file.name.minus('.bom.json'),
+            projectVersion: version,
+            autoCreate    : true,
+            bom           : readFile(file: file.path).bytes.encodeBase64().toString()
+        ]
+      }
+      .each {payload ->
+        httpRequest(
+            contentType: 'APPLICATION_JSON',
+            customHeaders: [[maskValue: true, name: 'X-Api-Key', value: API_KEY]],
+            httpMode: 'PUT',
+            requestBody: JsonOutput.toJson(payload),
+            url: 'https://dtrack.prv.dev.s8ops.com/api/v1/bom',
+            validResponseCodes: '200', wrapAsMultipart: false
+        )
+      }
 }
