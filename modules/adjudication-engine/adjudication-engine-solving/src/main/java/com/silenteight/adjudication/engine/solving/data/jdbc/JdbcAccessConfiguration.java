@@ -15,13 +15,38 @@ public class JdbcAccessConfiguration {
 
   @Bean
   MatchFeatureDataAccess matchFeatureDataAccess(
-      SelectAnalysisFeaturesQuery selectAnalysisFeaturesQuery) {
-    return new JdbcMatchFeaturesDataAccess(selectAnalysisFeaturesQuery);
+      SelectAnalysisFeaturesQuery selectAnalysisFeaturesQuery,
+      SelectAnalysisMatchFeaturesQuery selectAnalysisMatchFeaturesQuery,
+      SelectAnalysisMatchCategoriesQuery selectAnalysisMatchCategoriesQuery,
+      SelectAnalysisAlertLabelsQuery selectAnalysisAlertLabelsQuery) {
+    return new JdbcMatchFeaturesDataAccess(
+        selectAnalysisFeaturesQuery,
+        selectAnalysisMatchFeaturesQuery,
+        selectAnalysisMatchCategoriesQuery,
+        selectAnalysisAlertLabelsQuery);
   }
 
   @Bean
   SelectAnalysisFeaturesQuery selectAnalysisFeaturesQuery(NamedParameterJdbcTemplate jdbcTemplate) {
     return new SelectAnalysisFeaturesQuery(jdbcTemplate);
+  }
+
+  @Bean
+  SelectAnalysisAlertLabelsQuery selectAnalysisAlertLabelsQuery(
+      NamedParameterJdbcTemplate jdbcTemplate) {
+    return new SelectAnalysisAlertLabelsQuery(jdbcTemplate);
+  }
+
+  @Bean
+  SelectAnalysisMatchFeaturesQuery selectAnalysisMatchFeaturesQuery(
+      NamedParameterJdbcTemplate jdbcTemplate) {
+    return new SelectAnalysisMatchFeaturesQuery(jdbcTemplate);
+  }
+
+  @Bean
+  SelectAnalysisMatchCategoriesQuery selectAnalysisMatchCategoriesQuery(
+      NamedParameterJdbcTemplate jdbcTemplate) {
+    return new SelectAnalysisMatchCategoriesQuery(jdbcTemplate);
   }
 
   @Bean

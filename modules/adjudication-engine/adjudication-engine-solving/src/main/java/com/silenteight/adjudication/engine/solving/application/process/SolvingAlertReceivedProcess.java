@@ -10,18 +10,12 @@ import com.silenteight.adjudication.engine.solving.application.publisher.port.Ag
 import com.silenteight.adjudication.engine.solving.application.publisher.port.CategoryResolvePublisherPort;
 import com.silenteight.adjudication.engine.solving.application.publisher.port.CommentInputResolvePublisherPort;
 import com.silenteight.adjudication.engine.solving.application.publisher.port.ReadyMatchFeatureVectorPort;
-import com.silenteight.adjudication.engine.solving.data.AlertAggregate;
 import com.silenteight.adjudication.engine.solving.data.MatchFeatureDataAccess;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolving;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
 import com.silenteight.adjudication.internal.v1.AnalysisAlertsAdded;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 
 @RequiredArgsConstructor
@@ -41,76 +35,64 @@ class SolvingAlertReceivedProcess implements SolvingAlertReceivedPort {
       histogram = true)
   public void handle(final AnalysisAlertsAdded message) {
     log.debug("Received alerts for solving = {}", message);
-
-    var alerts = fetchAlertMatchesFeatures(message);
-
-    var pendingAlerts =
-        message.getAnalysisAlertsList().stream()
-            .map(s -> ResourceName.create(s).getLong("alerts"))
-            .map(alertId -> new AlertSolving(alerts.get(alertId)))
-            .map(this.alertSolvingRepository::save)
-            .collect(Collectors.toList());
-
-    pendingAlerts.forEach(
-        alertSolving -> {
-
-          if (alertSolving.hasFeatures()) {
-            this.agentExchangeRequestMapper.from(alertSolving)
-                .forEach(matchesPublisherPort::publish);
-          }
-
-          if (alertSolving.hasCategories()) {
-            this.categoryResolvePublisherPort.resolve(alertSolving.getAlertId());
-          }
-
-          this.commentInputResolveProcessPort.resolve(alertSolving.getAlertName());
-        });
-
-    solveReadyMatches(pendingAlerts);
-
+    aggregateAndPublish(message);
     if (log.isDebugEnabled()) {
       log.debug("AnalysisAlertsAdded mapped to AlertsSolving done");
     }
   }
 
-  private void solveReadyMatches(List<AlertSolving> pendingAlerts) {
-    for (var alertSolving : pendingAlerts) {
-      for (var matchId : alertSolving.getMatchIds()) {
-        if (!alertSolving.isMatchReadyForSolving(matchId)) {
-          continue;
-        }
-        var matchSolutionRequest =
-            new MatchSolutionRequest(
-                alertSolving.getAlertId(),
-                matchId,
-                alertSolving.getPolicy(),
-                alertSolving.getMatchFeatureNames(matchId),
-                alertSolving.getMatchFeatureVectors(matchId));
-        readyMatchFeatureVectorPublisherPort.send(matchSolutionRequest);
+  private void solveReadyMatches(AlertSolving alertSolving) {
+
+    for (var matchId : alertSolving.getMatchIds()) {
+      if (!alertSolving.isMatchReadyForSolving(matchId)) {
+        continue;
       }
+      var matchSolutionRequest =
+          new MatchSolutionRequest(
+              alertSolving.getAlertId(),
+              matchId,
+              alertSolving.getPolicy(),
+              alertSolving.getMatchFeatureNames(matchId),
+              alertSolving.getMatchFeatureVectors(matchId));
+      readyMatchFeatureVectorPublisherPort.send(matchSolutionRequest);
     }
   }
 
   @Nonnull
-  private Map<Long, AlertAggregate> fetchAlertMatchesFeatures(AnalysisAlertsAdded message) {
-    Set<Long> analysis = new HashSet<>();
-    Set<Long> alerts = new HashSet<>();
-
+  private void aggregateAndPublish(AnalysisAlertsAdded message) {
     message
         .getAnalysisAlertsList()
         .forEach(
             s -> {
               var analysisId = ResourceName.create(s).getLong("analysis");
               var alertId = ResourceName.create(s).getLong("alerts");
-              analysis.add(analysisId);
-              alerts.add(alertId);
-            });
-    log.info("Getting data from analysis {} for {} alerts", analysis, alerts.size());
-    var alertAggregates = jdbcMatchFeaturesDataAccess.findAnalysisFeatures(analysis, alerts);
+              log.info("Getting data from analysisId: {} alertId:{} ", analysisId, alertId);
 
-    if (log.isTraceEnabled()) {
-      log.trace("Found features: {}", alertAggregates);
+              var alertAggregate =
+                  jdbcMatchFeaturesDataAccess.findAnalysisAlertAndAggregate(analysisId, alertId);
+              log.debug(
+                  "AlertAggregate analysisId: {} alertId:{} featuresCount:{} matchesCount:{}",
+                  analysisId,
+                  alertId,
+                  alertAggregate.agentFeatures().keySet().size(),
+                  alertAggregate.matches().size());
+
+              var alertSolving = this.alertSolvingRepository.save(new AlertSolving(alertAggregate));
+              log.debug("Publish AlertSolving analysisId: {} alertId:{} ", analysisId, alertId);
+              publishAlertSolving(alertSolving);
+              log.debug("SolveMatchesIfReady analysisId: {} alertId:{} ", analysisId, alertId);
+              solveReadyMatches(alertSolving);
+            });
+  }
+
+  private void publishAlertSolving(AlertSolving alertSolving) {
+    if (alertSolving.hasFeatures()) {
+      this.agentExchangeRequestMapper.from(alertSolving).forEach(matchesPublisherPort::publish);
     }
-    return alertAggregates;
+
+    if (alertSolving.hasCategories()) {
+      this.categoryResolvePublisherPort.resolve(alertSolving.getAlertId());
+    }
+    this.commentInputResolveProcessPort.resolve(alertSolving.getAlertName());
   }
 }

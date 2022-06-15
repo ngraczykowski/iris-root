@@ -35,8 +35,13 @@ VALUES (1, 'policy', 'startegy', '2022-05-06 08:14:20.440351', TRUE, TRUE);
 INSERT INTO public.ae_analysis_feature (analysis_feature_id, analysis_id, agent_config_feature_id)
 VALUES (1, 1, 1);
 
+INSERT INTO public.ae_analysis_feature (analysis_feature_id, analysis_id, agent_config_feature_id)
+VALUES (2, 1, 2);
+
 INSERT INTO public.ae_analysis_category (analysis_category_id, analysis_id, category_id)
 VALUES (1, 1, 1);
+INSERT INTO public.ae_analysis_category (analysis_category_id, analysis_id, category_id)
+VALUES (2, 1, 2);
 
 -- Alert with two matches and values
 INSERT INTO public.ae_alert (alert_id, client_alert_identifier, created_at, alerted_at, priority)
@@ -56,12 +61,25 @@ VALUES (1, 1, '2022-05-19 08:58:38.394104', 'NO_DECISION');
 INSERT INTO public.ae_match_category_value (match_id, category_id, created_at, value)
 VALUES (2, 1, '2022-05-19 08:58:38.394104', 'DECISION');
 
+INSERT INTO public.ae_match_category_value (match_id, category_id, created_at, value)
+VALUES (1, 2, '2022-05-19 08:58:38.394104', 'NO_DECISION');
+INSERT INTO public.ae_match_category_value (match_id, category_id, created_at, value)
+VALUES (2, 2, '2022-05-19 08:58:38.394104', 'DECISION');
+
 INSERT INTO public.ae_match_feature_value (match_id, agent_config_feature_id, created_at, value,
                                            reason)
 VALUES (1, 1, '2022-05-06 10:14:20.814190', 'INCONCLUSIVE', '{}');
 INSERT INTO public.ae_match_feature_value (match_id, agent_config_feature_id, created_at, value,
                                            reason)
 VALUES (2, 1, '2022-05-06 10:14:20.814190', 'INCONCLUSIVE', '{}');
+
+INSERT INTO public.ae_match_feature_value (match_id, agent_config_feature_id, created_at, value,
+                                           reason)
+VALUES (1, 2, '2022-05-06 10:14:20.814190', 'INCONCLUSIVE', '{}');
+INSERT INTO public.ae_match_feature_value (match_id, agent_config_feature_id, created_at, value,
+                                           reason)
+VALUES (2, 2, '2022-05-06 10:14:20.814190', 'INCONCLUSIVE', '{}');
+
 
 INSERT INTO public.ae_alert_labels (alert_id, name, value)
 VALUES (1, 'matchQuantity', 'many');

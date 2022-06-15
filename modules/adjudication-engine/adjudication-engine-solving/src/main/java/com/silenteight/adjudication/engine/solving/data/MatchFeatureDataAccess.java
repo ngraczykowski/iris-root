@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 
 public interface MatchFeatureDataAccess {
-
+  @Deprecated
   Map<Long, AlertAggregate> findAnalysisFeatures(Set<Long> analysis, Set<Long> alerts);
+
+  AlertAggregate findAnalysisAlertAndAggregate(Long analysis, Long alert);
 }

@@ -44,6 +44,15 @@ class InMemoryMatchFeatureDataAccess implements MatchFeatureDataAccess {
     return alertsAggregate;
   }
 
+  @Override
+  public AlertAggregate findAnalysisAlertAndAggregate(Long analysis, Long alert) {
+    try {
+      return getAlertWithAllData(alert);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   private static AlertAggregate getAlertWithAllData(Long alertId) throws IOException {
 
     var classLoader = InMemoryMatchFeatureDataAccess.class.getClassLoader();

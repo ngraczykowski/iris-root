@@ -38,6 +38,16 @@ class SelectAnalysisFeaturesQueryIT extends BaseJdbcTest {
         .isEqualTo(expectedAlert);
   }
 
+  @Test
+  void shouldSelectAlertDataForMultihit() throws JsonProcessingException {
+    var alert = jdbcMatchFeaturesDataAccess.findAnalysisAlertAndAggregate(1L, 1L);
+    assertThat(alert).isNotNull();
+    var expectedAlert = getAlertWithAllData();
+    assertThat(alert)
+        .usingRecursiveComparison()
+        .isEqualTo(expectedAlert);
+  }
+
   private static AlertAggregate getAlertWithAllData() throws JsonProcessingException {
     var jsonString = """
         {
@@ -54,11 +64,22 @@ class SelectAnalysisFeaturesQueryIT extends BaseJdbcTest {
                   "agentConfig": "agents/name/versions/1.0.0/configs/1",
                   "featureValue": "INCONCLUSIVE",
                   "featureReason": "{}"
+                },
+                "features/geo": {
+                  "agentConfigFeatureId": 2,
+                  "featureName": "features/geo",
+                  "agentConfig": "agents/geo/versions/1.0.0/configs/1",
+                  "featureValue": "INCONCLUSIVE",
+                  "featureReason": "{}"
                 }
               },
               "categories": {
                 "categories/test1": {
                   "categoryName": "categories/test1",
+                  "categoryValue": "NO_DECISION"
+                },
+                "categories/test2": {
+                  "categoryName": "categories/test2",
                   "categoryValue": "NO_DECISION"
                 }
               }
@@ -73,11 +94,22 @@ class SelectAnalysisFeaturesQueryIT extends BaseJdbcTest {
                   "agentConfig": "agents/name/versions/1.0.0/configs/1",
                   "featureValue": "INCONCLUSIVE",
                   "featureReason": "{}"
+                },
+                "features/geo": {
+                  "agentConfigFeatureId": 2,
+                  "featureName": "features/geo",
+                  "agentConfig": "agents/geo/versions/1.0.0/configs/1",
+                  "featureValue": "INCONCLUSIVE",
+                  "featureReason": "{}"
                 }
               },
               "categories": {
                 "categories/test1": {
                   "categoryName": "categories/test1",
+                  "categoryValue": "DECISION"
+                },
+                "categories/test2": {
+                  "categoryName": "categories/test2",
                   "categoryValue": "DECISION"
                 }
               }
@@ -88,6 +120,9 @@ class SelectAnalysisFeaturesQueryIT extends BaseJdbcTest {
           "agentFeatures": {
             "agents/name/versions/1.0.0/configs/1": [
               "features/name"
+            ],
+            "agents/geo/versions/1.0.0/configs/1": [
+              "features/geo"
             ]
           },
           "labels": {
