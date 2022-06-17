@@ -2,7 +2,10 @@ package com.silenteight.adjudication.engine.solving.data.jdbc;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.adjudication.engine.solving.data.*;
+import com.silenteight.adjudication.engine.solving.data.AlertAggregate;
+import com.silenteight.adjudication.engine.solving.data.FeatureAggregate;
+import com.silenteight.adjudication.engine.solving.data.MatchAggregate;
+import com.silenteight.adjudication.engine.solving.data.MatchFeatureDataAccess;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.transaction.annotation.Propagation;
@@ -62,6 +65,7 @@ class JdbcMatchFeaturesDataAccess implements MatchFeatureDataAccess {
         .analysisId(analysis)
         .matches(matches)
         .alertId(alert)
+        .priority(policyAndStrategy.get().priority())
         .labels(alertLabels)
         .agentFeatures(agentFeatures)
         .strategy(policyAndStrategy.get().strategy())

@@ -28,6 +28,7 @@ class SelectAnalysisMatchFeaturesQuery {
                  aa.strategy,
                  aa.analysis_id,
                  aaa.alert_id,
+                 al.priority,
                  am.match_id,
                  am.client_match_identifier,
                  aaf.agent_config_feature_id,
@@ -38,6 +39,7 @@ class SelectAnalysisMatchFeaturesQuery {
           FROM ae_analysis aa
                    LEFT JOIN ae_analysis_feature aaf ON aaf.analysis_id = aa.analysis_id
                    JOIN ae_analysis_alert aaa ON aaa.analysis_id = aa.analysis_id
+                   JOIN ae_alert al on al.alert_id=aaa.alert_id
                    JOIN ae_match am ON am.alert_id = aaa.alert_id
                    LEFT JOIN ae_agent_config_feature aacf
                              ON aacf.agent_config_feature_id = aaf.agent_config_feature_id
@@ -66,6 +68,7 @@ class SelectAnalysisMatchFeaturesQuery {
 
     @Override
     public MatchFeatureDao mapRow(ResultSet rs, int rowNum) throws SQLException {
+      var priority = rs.getInt("priority");
       var policy = rs.getString("policy");
       var strategy = rs.getString("strategy");
       var featureName = rs.getString("feature");
@@ -77,7 +80,7 @@ class SelectAnalysisMatchFeaturesQuery {
       var clientMatchId = rs.getString("client_match_identifier");
 
       return
-          new MatchFeatureDao(policy,strategy,matchId, clientMatchId,featureConfigId,
+          new MatchFeatureDao(priority,policy,strategy,matchId, clientMatchId,featureConfigId,
               featureName, agentConfig, featureValue, featureReason);
     }
   }

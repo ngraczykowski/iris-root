@@ -57,6 +57,7 @@ class SelectAnalysisFeaturesQueryIT extends BaseJdbcTest {
         {
           "analysisId": 1,
           "alertId": 1,
+          "priority": 5,
           "matches": {
             "1": {
               "matchId": 1,

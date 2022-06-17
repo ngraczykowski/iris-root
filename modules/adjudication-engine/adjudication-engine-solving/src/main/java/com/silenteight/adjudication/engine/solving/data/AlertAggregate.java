@@ -12,6 +12,7 @@ import java.util.Set;
 @Builder
 public record AlertAggregate(long analysisId,
                              long alertId,
+                             int priority,
                              Map<Long, MatchAggregate> matches,
                              String policy,
                              String strategy,

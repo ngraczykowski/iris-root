@@ -4,6 +4,6 @@
 
 package com.silenteight.adjudication.engine.solving.data.jdbc;
 
-record MatchFeatureDao(String policy,String strategy,long matchId, String clientMatchId,long featureConfigId,
+record MatchFeatureDao(int priority,String policy,String strategy,long matchId, String clientMatchId,long featureConfigId,
       String featureName, String agentConfig, String featureValue, String featureReason) {
 }

@@ -24,8 +24,10 @@ import static java.util.stream.Collectors.toSet;
 public class AlertSolving implements Serializable {
 
   @Serial private static final long serialVersionUID = 899871569338286453L;
+  private static final int DEFAULT_PRIORITY = 5;
   long alertId;
   long analysisId;
+  int priority;
   Map<String, Set<String>> agentFeatures;
   Map<Long, Match> matches;
   Map<String, String> labels;
@@ -43,6 +45,7 @@ public class AlertSolving implements Serializable {
     policy = alertAggregate.policy();
     strategy = alertAggregate.strategy();
     labels = alertAggregate.labels();
+    priority = alertAggregate.priority();
   }
 
   public AlertSolving(
@@ -54,6 +57,7 @@ public class AlertSolving implements Serializable {
     this.matches = new HashMap<>();
     this.agentFeatures = new HashMap<>();
     this.labels = new HashMap<>();
+    this.priority = DEFAULT_PRIORITY;
   }
 
   public static AlertSolving empty() {

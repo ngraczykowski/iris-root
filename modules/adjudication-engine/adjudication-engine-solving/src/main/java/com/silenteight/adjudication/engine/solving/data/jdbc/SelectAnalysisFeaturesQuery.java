@@ -30,6 +30,7 @@ class SelectAnalysisFeaturesQuery {
                  aaf.agent_config_feature_id,
                  am.match_id,
                  am.alert_id,
+                 a.priority,
                  aacf.agent_config,
                  aaa.policy,
                  aaa.strategy,
@@ -46,6 +47,7 @@ class SelectAnalysisFeaturesQuery {
                    LEFT Join ae_analysis_category aac on aaa.analysis_id = aac.analysis_id
                    LEFT JOIN ae_category ac on aac.category_id = ac.category_id
                    JOIN ae_analysis_alert aaa2 ON aaa.analysis_id = aaa2.analysis_id
+                   JOIN ae_alert a ON a.alert_id=aaa2.alert_id
                    JOIN ae_match am ON am.alert_id = aaa2.alert_id
                    LEFT JOIN ae_agent_config_feature aacf
                         ON aaf.agent_config_feature_id = aacf.agent_config_feature_id
@@ -81,6 +83,7 @@ class SelectAnalysisFeaturesQuery {
       var featureConfigId = rs.getLong("agent_config_feature_id");
       var matchId = rs.getLong("match_id");
       var alertId = rs.getLong("alert_id");
+      var priority = rs.getInt("priority");
       var agentConfig = rs.getString("agent_config");
       var policy = rs.getString("policy");
       var strategy = rs.getString("strategy");
@@ -98,6 +101,7 @@ class SelectAnalysisFeaturesQuery {
           new AlertAggregate(
               analysisId,
               alertId,
+              priority,
               new HashMap<>(),
               policy,
               strategy,
