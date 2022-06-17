@@ -361,7 +361,7 @@ jsonassert = { group = "org.skyscreamer", name = "jsonassert", version = "1.5.0"
 keycloak-admin-client = { group = 'org.keycloak', name = 'keycloak-admin-client', version.ref = "platform-keycloak-adapter" }
 keycloak-spring-boot-starter = { group = "org.keycloak", name = "keycloak-spring-boot-starter" }
 liquibase-core = { group = "org.liquibase", name = "liquibase-core" }
-liquibase-sessionlock = { group = "com.github.blagerweij", name = "liquibase-sessionlock", version = "1.5.1" }
+liquibase-sessionlock = { group = "com.github.blagerweij", name = "liquibase-sessionlock", version = "1.5.2" }
 logback-access = { group = "ch.qos.logback", name = "logback-access" }
 logback-classic = { group = "ch.qos.logback", name = "logback-classic" }
 logback-ecs-encoder = { group = "co.elastic.logging", name = "logback-ecs-encoder", version.ref = "ecs" }
