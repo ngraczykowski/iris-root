@@ -11,6 +11,9 @@ import com.silenteight.adjudication.engine.solving.data.MatchSolutionEntityExtra
 import com.silenteight.adjudication.engine.solving.data.MatchSolutionStore;
 import com.silenteight.adjudication.engine.solving.domain.MatchSolution;
 
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 @Slf4j
 @RequiredArgsConstructor
 public class JdbcMatchSolutionStore implements MatchSolutionStore {
@@ -18,6 +21,7 @@ public class JdbcMatchSolutionStore implements MatchSolutionStore {
   private final MatchSolutionJdbcRepository matchSolutionJdbcRepository;
   private final MatchSolutionEntityExtractor matchSolutionEntityExtractor;
 
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   @Override
   public void store(MatchSolution matchSolution) {
     try {

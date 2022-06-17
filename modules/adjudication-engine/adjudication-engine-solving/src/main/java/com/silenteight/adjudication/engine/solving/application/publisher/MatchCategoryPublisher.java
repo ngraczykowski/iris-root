@@ -33,7 +33,7 @@ public class MatchCategoryPublisher implements MatchCategoryPublisherPort {
 
   @Override
   public void resolve(MatchCategory matchCategory) {
-    log.debug("Store comment input: {}", matchCategory);
+    log.debug("Store match category: {}", matchCategory);
     this.alertCommentsInputQueue.add(matchCategory);
   }
 

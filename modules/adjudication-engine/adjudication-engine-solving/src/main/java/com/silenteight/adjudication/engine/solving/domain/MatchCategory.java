@@ -37,4 +37,14 @@ public class MatchCategory implements Serializable {
   public boolean hasValue() {
     return categoryValue != null;
   }
+
+  @Override
+  public String toString() {
+    return "MatchCategory{" +
+        "alertId=" + alertId +
+        ", matchId=" + matchId +
+        ", category='" + category + '\'' +
+        ", categoryValue='" + categoryValue + '\'' +
+        '}';
+  }
 }

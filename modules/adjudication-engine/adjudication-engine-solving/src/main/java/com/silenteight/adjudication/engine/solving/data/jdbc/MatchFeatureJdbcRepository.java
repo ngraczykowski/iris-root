@@ -18,13 +18,14 @@ import java.time.OffsetDateTime;
 @RequiredArgsConstructor
 class MatchFeatureJdbcRepository {
 
-  private static final String SQL = """
+  private static final String INSERT_QUERY = """
     INSERT INTO ae_match_feature_value(match_id, agent_config_feature_id, created_at, value, reason)
     VALUES (?, ?, ?, ?, ?::jsonb) ON CONFLICT DO NOTHING""";
   private final JdbcTemplate jdbcTemplate;
 
   void save(MatchFeatureValue matchFeature) {
-    jdbcTemplate.update(SQL,
+    jdbcTemplate.update(
+        INSERT_QUERY,
         new Object[]{ matchFeature.matchId(),
                       matchFeature.agentConfigFeatureId(),
                       Timestamp.valueOf(OffsetDateTime.now(Clock.systemUTC()).toLocalDateTime()),
