@@ -1,7 +1,7 @@
 package com.silenteight.simulator.management.details;
 
-import com.silenteight.simulator.common.testing.rest.BaseRestControllerTest;
-import com.silenteight.simulator.common.testing.rest.testwithrole.TestWithRole;
+import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.simulator.common.web.exception.GenericExceptionControllerAdvice;
 import com.silenteight.simulator.management.SimulationFixtures;
 import com.silenteight.simulator.management.common.SimulationControllerAdvice;
@@ -10,7 +10,7 @@ import com.silenteight.simulator.management.domain.exception.SimulationNotFoundE
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
-import static com.silenteight.simulator.common.testing.rest.TestRoles.*;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.simulator.management.SimulationFixtures.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -54,7 +54,7 @@ class SimulationDetailsRestControllerTest extends BaseRestControllerTest {
         .statusCode(NOT_FOUND.value());
   }
 
-  @TestWithRole(roles = { USER_ADMINISTRATOR })
+  @TestWithRole(roles = USER_ADMINISTRATOR)
   void its403_whenNotPermittedRole() {
     get(SIMULATION_DETAILS_URL).statusCode(FORBIDDEN.value());
   }

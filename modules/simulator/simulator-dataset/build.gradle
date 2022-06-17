@@ -17,5 +17,5 @@ dependencies {
 
   aspect libs.silenteight.sep.base.aspects
 
-  testImplementation project(":simulator-common-web-testing")
+  testImplementation libs.silenteight.serp.governance.common.web.testing
 }

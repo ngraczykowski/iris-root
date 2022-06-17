@@ -22,7 +22,7 @@ dependencies {
   implementation libs.grpc.api
   implementation libs.grpc.stub
 
-  testImplementation project(":governance-common-web-testing")
+  testImplementation libs.silenteight.serp.governance.common.web.testing
   testImplementation libs.rest.assured.spring.mock.mvc
   testImplementation libs.spring.security.test
   testImplementation libs.spock.spring

@@ -11,15 +11,18 @@ dependencies {
   api libs.junit.jupiter.api
   api libs.silenteight.sep.base.testing
   api libs.spring.test
+  api libs.spring.security.test
   api libs.spring.boot.test
   api libs.spring.boot.test.autoconfigure
   api libs.test.containers
   api libs.grpc.testing
   api libs.reactor.test
+  api libs.rest.assured
+  api libs.rest.assured.spring.mock.mvc
   //TODO maybe should be move to some more common lib?
   api libs.commons.io
 
-  implementation libs.silenteight.serp.governance.common.web
+  implementation project(":governance-common-web")
 
   implementation libs.spring.jdbc
   implementation libs.spring.test

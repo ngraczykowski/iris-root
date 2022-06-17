@@ -126,7 +126,6 @@ silenteight-serp-governance-strategy = { group = "com.silenteight.iris", name="g
 silenteight-serp-governance-common-web-testing = { group = "com.silenteight.iris", name="governance-common-web-testing"}
 silenteight-simulator-dataset = { group = "com.silenteight.iris", name="simulator-dataset"}
 silenteight-simulator-common-web = { group = "com.silenteight.iris", name="simulator-common-web"}
-silenteight-simulator-common-web-testing = { group = "com.silenteight.iris", name="simulator-common-web-testing"}
 silenteight-simulator-db-changelog = { group = "com.silenteight.iris", name="simulator-db-changelog"}
 silenteight-simulator-documentation = { group = "com.silenteight.iris", name="simulator-documentation"}
 silenteight-simulator-management = { group = "com.silenteight.iris", name="simulator-management"}

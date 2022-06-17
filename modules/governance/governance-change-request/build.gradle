@@ -17,7 +17,7 @@ dependencies {
   implementation libs.spring.webmvc
   implementation libs.spring.security.config
 
-  testImplementation project(":governance-common-web-testing")
+  testImplementation libs.silenteight.serp.governance.common.web.testing
   testImplementation libs.rest.assured.spring.mock.mvc
   testImplementation libs.spring.security.test
   testImplementation libs.silenteight.filestorage.minio

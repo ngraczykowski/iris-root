@@ -1,6 +1,6 @@
 package com.silenteight.simulator.dataset.archive;
 
-import com.silenteight.simulator.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.simulator.common.web.exception.GenericExceptionControllerAdvice;
 
 import org.junit.jupiter.api.Test;
@@ -8,7 +8,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import static com.silenteight.simulator.common.testing.rest.TestRoles.*;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.ARCHIVE_DATASET_REQUEST;
 import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.ID_1;
 import static java.lang.String.format;
@@ -29,7 +29,7 @@ class ArchiveDatasetRestControllerTest extends BaseRestControllerTest {
   private ArchiveDatasetUseCase useCase;
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER )
   void its204_whenDatasetArchived() {
     doNothing().when(useCase).activate(any());
 

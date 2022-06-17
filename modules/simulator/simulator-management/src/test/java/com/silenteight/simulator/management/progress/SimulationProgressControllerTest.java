@@ -1,18 +1,18 @@
 package com.silenteight.simulator.management.progress;
 
-import com.silenteight.simulator.common.testing.rest.BaseRestControllerTest;
-import com.silenteight.simulator.common.testing.rest.testwithrole.TestWithRole;
+import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
-import static com.silenteight.simulator.common.testing.rest.TestRoles.*;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static java.util.UUID.fromString;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
-@Import({ SimulationProgressController.class, })
+@Import(SimulationProgressController.class)
 class SimulationProgressControllerTest extends BaseRestControllerTest {
 
   @MockBean

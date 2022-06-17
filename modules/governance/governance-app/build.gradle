@@ -82,7 +82,7 @@ dependencies {
   annotationProcessor libs.jakarta.annotation.api
   annotationProcessor libs.spring.boot.configuration.processor
 
-  testImplementation project(":governance-common-web-testing")
+  testImplementation libs.silenteight.serp.governance.common.web.testing
   testImplementation libs.spock.spring
   testImplementation libs.spring.integration.test
 

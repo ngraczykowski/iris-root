@@ -1,7 +1,7 @@
 package com.silenteight.simulator.dataset.list;
 
-import com.silenteight.simulator.common.testing.rest.BaseRestControllerTest;
-import com.silenteight.simulator.common.testing.rest.testwithrole.TestWithRole;
+import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.simulator.common.web.exception.GenericExceptionControllerAdvice;
 import com.silenteight.simulator.dataset.domain.DatasetQuery;
 
@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.silenteight.simulator.common.testing.rest.TestRoles.*;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.simulator.dataset.domain.AlertMatch.MULTI;
 import static com.silenteight.simulator.dataset.domain.DatasetState.ACTIVE;
 import static com.silenteight.simulator.dataset.domain.DatasetState.ARCHIVED;

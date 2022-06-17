@@ -13,7 +13,6 @@ rootProject.name = 'simulator'
 
 include 'simulator-app'
 include 'simulator-common-web'
-include 'simulator-common-web-testing'
 include 'simulator-dataset'
 include 'simulator-db-changelog'
 include 'simulator-dist'

@@ -1,6 +1,6 @@
 package com.silenteight.simulator.management.create;
 
-import com.silenteight.simulator.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.simulator.common.web.exception.GenericExceptionControllerAdvice;
 import com.silenteight.simulator.dataset.domain.exception.NonActiveDatasetInSet;
 import com.silenteight.simulator.management.domain.NonUniqueSimulationException;
@@ -14,7 +14,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.stream.Stream;
 
-import static com.silenteight.simulator.common.testing.rest.TestRoles.*;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.simulator.management.SimulationFixtures.*;
 import static com.silenteight.simulator.management.create.CreateSimulationRestController.SIMULATIONS_URL;
 import static org.mockito.ArgumentMatchers.any;

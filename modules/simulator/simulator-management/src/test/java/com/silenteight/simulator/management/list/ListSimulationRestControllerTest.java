@@ -1,7 +1,7 @@
 package com.silenteight.simulator.management.list;
 
-import com.silenteight.simulator.common.testing.rest.BaseRestControllerTest;
-import com.silenteight.simulator.common.testing.rest.testwithrole.TestWithRole;
+import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.simulator.common.web.exception.GenericExceptionControllerAdvice;
 import com.silenteight.simulator.management.SimulationFixtures;
 import com.silenteight.simulator.management.domain.InvalidModelNameException;
@@ -9,7 +9,7 @@ import com.silenteight.simulator.management.domain.InvalidModelNameException;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
-import static com.silenteight.simulator.common.testing.rest.TestRoles.*;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.simulator.management.SimulationFixtures.*;
 import static java.lang.String.format;
 import static java.util.List.of;
@@ -52,7 +52,7 @@ class ListSimulationRestControllerTest extends BaseRestControllerTest {
         .body("[0].createdBy", is(SimulationFixtures.USERNAME));
   }
 
-  @TestWithRole(roles = { USER_ADMINISTRATOR })
+  @TestWithRole(roles = USER_ADMINISTRATOR )
   void its403_whenNotPermittedRoleForListing() {
     get(SIMULATIONS_URL_BY_STATES).statusCode(FORBIDDEN.value());
   }

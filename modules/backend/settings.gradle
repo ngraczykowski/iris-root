@@ -13,3 +13,4 @@ rootProject.name = 'backend'
 
 include 'backend-app'
 include 'governance-common-web'
+include 'governance-common-web-testing'

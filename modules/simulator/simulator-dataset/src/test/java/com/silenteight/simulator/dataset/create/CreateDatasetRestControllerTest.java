@@ -1,6 +1,6 @@
 package com.silenteight.simulator.dataset.create;
 
-import com.silenteight.simulator.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.simulator.common.web.exception.GenericExceptionControllerAdvice;
 import com.silenteight.simulator.dataset.create.dto.CreateDatasetRequestDto;
 import com.silenteight.simulator.dataset.create.exception.EmptyDatasetException;
@@ -14,7 +14,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.stream.Stream;
 
-import static com.silenteight.simulator.common.testing.rest.TestRoles.*;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.simulator.dataset.create.CreateDatasetRestController.DATASET_URL;
 import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.CREATE_DATASET_REQUEST_DTO;
 import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.CREATE_DATASET_REQUEST_WITH_NULL_DESCRIPTION;

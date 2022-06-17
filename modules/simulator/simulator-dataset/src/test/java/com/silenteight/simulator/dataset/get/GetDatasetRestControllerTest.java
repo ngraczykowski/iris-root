@@ -1,7 +1,7 @@
 package com.silenteight.simulator.dataset.get;
 
-import com.silenteight.simulator.common.testing.rest.BaseRestControllerTest;
-import com.silenteight.simulator.common.testing.rest.testwithrole.TestWithRole;
+import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.simulator.common.web.exception.GenericExceptionControllerAdvice;
 import com.silenteight.simulator.dataset.domain.DatasetQuery;
 import com.silenteight.simulator.dataset.domain.exception.DatasetNotFoundException;
@@ -9,7 +9,7 @@ import com.silenteight.simulator.dataset.domain.exception.DatasetNotFoundExcepti
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
-import static com.silenteight.simulator.common.testing.rest.TestRoles.*;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.simulator.dataset.domain.AlertMatch.MULTI;
 import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.*;
 import static org.hamcrest.CoreMatchers.is;

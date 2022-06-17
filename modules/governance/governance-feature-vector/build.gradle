@@ -19,7 +19,7 @@ dependencies {
   implementation libs.spring.webmvc
   implementation libs.spring.security.config
 
-  testImplementation project(":governance-common-web-testing")
+  testImplementation libs.silenteight.serp.governance.common.web.testing
   testImplementation(testFixtures(project(":governance-policy")))
   testImplementation libs.rest.assured.spring.mock.mvc
 
