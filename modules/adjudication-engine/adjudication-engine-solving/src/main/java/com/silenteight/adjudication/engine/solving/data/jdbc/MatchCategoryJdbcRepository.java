@@ -17,17 +17,19 @@ import java.time.OffsetDateTime;
 
 @RequiredArgsConstructor
 class MatchCategoryJdbcRepository {
-  private static final String SQL = """
+  private static final String INSERT_QUERY = """
     INSERT INTO ae_match_category_value (match_id, category_id, created_at, value)
-    VALUES (?, ?, ?, ?) ON CONFLICT DO NOTHING""";
+    VALUES (?, (select category_id from ae_category where category = ?), ?, ?)
+    ON CONFLICT DO NOTHING""";
   private final JdbcTemplate jdbcTemplate;
 
   void save(MatchCategory matchCategory) {
-    jdbcTemplate.update(SQL,
+    jdbcTemplate.update(
+        INSERT_QUERY,
         new Object[]{ matchCategory.getMatchId(),
                       matchCategory.getCategory(),
                       Timestamp.valueOf(OffsetDateTime.now(Clock.systemUTC()).toLocalDateTime()),
                       matchCategory.getCategoryValue()},
-        new int[]{ Types.BIGINT,Types.BIGINT, Types.TIMESTAMP, Types.VARCHAR});
+        new int[]{ Types.BIGINT,Types.VARCHAR, Types.TIMESTAMP, Types.VARCHAR});
   }
 }
