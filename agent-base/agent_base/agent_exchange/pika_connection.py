@@ -52,6 +52,9 @@ class PikaConnection(BasePikaConnection):
                     arguments=self.messaging_configuration.request.queue_arguments,
                 )
                 request_exchange = self.messaging_configuration.request.exchange
+
+                await self.get_or_create_exchange(request_exchange)
+
                 await self.request_queue.bind(
                     exchange=request_exchange,
                     routing_key=self.messaging_configuration.request.routing_key,
@@ -61,14 +64,22 @@ class PikaConnection(BasePikaConnection):
                 )
             else:
                 raise
-        self.callback_exchange = await self.channel.get_exchange(
-            name=self.messaging_configuration.response.exchange,
-            ensure=True,
+        self.callback_exchange = await self.get_or_create_exchange(
+            self.messaging_configuration.response.exchange
         )
-        self.logger.info(f"Got an existing (callback) exchange: {self.callback_exchange}")
         self.request_queue_tag = await self.request_queue.consume(
             callback=self.on_request, no_ack=False
         )
+
+    async def get_or_create_exchange(self, exchange_name: str) -> aio_pika.Exchange:
+        try:
+            exchange = await self.channel.get_exchange(name=exchange_name, ensure=True)
+            self.logger.info(f"Got an existing exchange {exchange}")
+        except Exception as err:
+            self.logger.debug(f"Exchange doesn't exits: {err!r}")
+            exchange = await self.channel.declare_exchange(name=exchange_name)
+            self.logger.info(f"Created exchange {exchange}")
+        return exchange
 
     async def stop(self) -> None:
         # not sure whenever order is important, so doing it without gather
