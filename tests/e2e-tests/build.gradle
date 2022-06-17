@@ -21,7 +21,7 @@ dependencies {
   testImplementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind',
       version: '2.13.2.2'
   testImplementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-csv',
-      version: '2.13.2'
+      version: '2.13.3'
   testImplementation group: 'org.apache.commons', name: 'commons-text', version: '1.9'
   testImplementation group: 'io.cucumber', name: 'cucumber-jvm-deps', version: '1.0.6'
   testImplementation group: 'io.cucumber', name: 'cucumber-junit', version: '7.3.4'
