@@ -21,6 +21,8 @@ import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.RabbitMQContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -40,9 +42,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 // Note: test methods will be executed by test classes extending this one
 @SuppressWarnings("unused")
 
-@SpringBootTest(
-    webEnvironment = SpringBootTest.WebEnvironment.NONE,
-    properties = "grpc.server.port=0")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @ContextConfiguration(initializers = Initializer.class)
 @DirtiesContext
 @Testcontainers
@@ -57,6 +57,11 @@ public abstract class CommonRabbitIntegrationTest {
   static {
     RABBIT = new RabbitMQContainer(RABBIT_DOCKER_IMAGE);
     RABBIT.start();
+  }
+
+  @DynamicPropertySource
+  static void mockPortProperty(DynamicPropertyRegistry registry) {
+    registry.add("grpc.server.port", PortUtils::findAvailablePort);
   }
 
   protected abstract String getFeatureName();

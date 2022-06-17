@@ -15,6 +15,8 @@ import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.RabbitMQContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -29,9 +31,7 @@ import static com.silenteight.agent.facade.exchange.RabbitIntegrationTestFixture
  * Rabbit Integration tests with RemoteDataSourceClient - needs to be run only with
  * "rabbitmq-declare" profile
  */
-@SpringBootTest(
-    webEnvironment = SpringBootTest.WebEnvironment.NONE,
-    properties = "grpc.server.port=0")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @ContextConfiguration(initializers = RabbitWithGrpcInitializer.class)
 @DirtiesContext
 @Testcontainers
@@ -54,6 +54,11 @@ public abstract class CommonRabbitWithGrpcConfigIntegrationTest {
   static {
     RABBIT = new RabbitMQContainer(RABBIT_DOCKER_IMAGE);
     RABBIT.start();
+  }
+
+  @DynamicPropertySource
+  static void mockPortProperty(DynamicPropertyRegistry registry) {
+    registry.add("grpc.server.port", PortUtils::findAvailablePort);
   }
 
   /**
