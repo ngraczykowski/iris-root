@@ -4,7 +4,7 @@
 #-----------------------------------
 agents-api = "0.4.0"
 agents-protocol = "0.14.0"
-hazelcast = "5.1.1"
+hazelcast = "5.1.2"
 learing-engine-store-api = "0.7.0"
 historical-decisions-model-api = "0.2.0"
 serp-protocol = "0.27.0"
