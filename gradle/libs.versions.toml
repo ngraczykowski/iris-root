@@ -429,7 +429,7 @@ test-containers-postgresql = { group = "org.testcontainers", name = "postgresql"
 test-containers-rabbitmq = { group = "org.testcontainers", name = "rabbitmq" }
 test-containers-localstack = { group = "org.testcontainers", name = "localstack" }
 test-containers-spock = { group = "org.testcontainers", name = "spock" }
-test-greenmail = { group = "com.icegreen", name = "greenmail-junit5", version = "1.6.1" }
+test-greenmail = { group = "com.icegreen", name = "greenmail-junit5", version = "1.6.9" }
 
 # Plugins (keep in sync with [plugins])
 plugin-cyclonedx-bom = { module = "org.cyclonedx.bom:org.cyclonedx.bom.gradle.plugin", version.ref = "plugin-cyclonedx-bom" }
