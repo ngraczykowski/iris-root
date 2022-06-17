@@ -61,9 +61,9 @@ class BasePikaConnection:
                     ),
                 )
             )
-            self.connection: aio_pika.RobustConnection = await aio_pika.connect_robust(url=url)
+            self.connection: aio_pika.Connection = await aio_pika.connect(url=url)
         else:
-            self.connection: aio_pika.RobustConnection = await aio_pika.connect_robust(
+            self.connection: aio_pika.Connection = await aio_pika.connect(
                 host=self.connection_configuration.host,
                 port=self.connection_configuration.port,
                 login=self.connection_configuration.login,
