@@ -19,7 +19,7 @@ dependencies {
   implementation group: 'com.codeborne', name: 'selenide', version: '6.5.2'
   testImplementation group: 'com.aventstack', name: 'extentreports', version: '5.0.9'
   testImplementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind',
-      version: '2.13.2.2'
+      version: '2.13.3'
   testImplementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-csv',
       version: '2.13.3'
   testImplementation group: 'org.apache.commons', name: 'commons-text', version: '1.9'
