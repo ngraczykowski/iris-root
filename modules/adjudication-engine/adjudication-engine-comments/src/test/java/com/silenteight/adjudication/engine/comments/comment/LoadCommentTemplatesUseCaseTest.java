@@ -6,6 +6,7 @@ package com.silenteight.adjudication.engine.comments.comment;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.io.DefaultResourceLoader;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -18,9 +19,10 @@ class LoadCommentTemplatesUseCaseTest {
   void setUp() {
     inMemoryCommentTemplateRepository = new InMemoryCommentTemplateRepository();
     var properties = new CommentProperties();
+    var resourceLoader = new DefaultResourceLoader();
     loadCommentTemplatesUseCase =
         new LoadCommentTemplatesUseCase(
-            properties, inMemoryCommentTemplateRepository);
+            properties, inMemoryCommentTemplateRepository, resourceLoader);
   }
 
   @Test
@@ -35,7 +37,7 @@ class LoadCommentTemplatesUseCaseTest {
     loadCommentTemplatesUseCase.loadCommentTemplates();
     var template =
         inMemoryCommentTemplateRepository.getCommentTemplateByTemplateName("name-agent.ftl");
-    assertThat(template.getTemplate()).contains("<#import \"match-utils.ftl\" as matchUtils>");
+    assertThat(template.getTemplate()).contains("name agent test example");
   }
 
   @Test

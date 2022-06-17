@@ -18,5 +18,5 @@ class CommentProperties {
 
   private String environment = "sierra";
 
-  private String resourcePath = "comment-templates/";
+  private String resourcePath = "classpath:/comment-templates/";
 }
