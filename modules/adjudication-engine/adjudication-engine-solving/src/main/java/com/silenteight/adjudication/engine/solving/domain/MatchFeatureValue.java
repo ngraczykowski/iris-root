@@ -4,6 +4,8 @@
 
 package com.silenteight.adjudication.engine.solving.domain;
 
+import java.io.Serializable;
+
 public record MatchFeatureValue(long matchId, long agentConfigFeatureId, String solution,
-                                String reason) {
+                                String reason) implements Serializable {
 }

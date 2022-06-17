@@ -6,6 +6,7 @@ package com.silenteight.adjudication.engine.solving.data;
 
 import lombok.Builder;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,6 +18,6 @@ public record AlertAggregate(long analysisId,
                              String policy,
                              String strategy,
                              Map<String, Set<String>> agentFeatures,
-                             Map<String, String> labels) {
+                             Map<String, String> labels) implements Serializable {
 
 }

@@ -4,6 +4,7 @@
 
 package com.silenteight.adjudication.engine.solving.domain;
 
+import java.io.Serializable;
 import java.util.Map;
 
 public record MatchSolution(
@@ -14,6 +15,6 @@ public record MatchSolution(
     String reason,
     Map<String, MatchFeature> features,
     Map<String, MatchCategory> categories
-    ) {
+    ) implements Serializable {
 
 }

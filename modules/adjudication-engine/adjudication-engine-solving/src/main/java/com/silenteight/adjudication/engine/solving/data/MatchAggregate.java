@@ -4,10 +4,11 @@
 
 package com.silenteight.adjudication.engine.solving.data;
 
+import java.io.Serializable;
 import java.util.Map;
 
 public record MatchAggregate(long matchId,
                              String clientMatchId,
                              Map<String, FeatureAggregate> features,
-                             Map<String, CategoryAggregate> categories) {
+                             Map<String, CategoryAggregate> categories) implements Serializable {
 }

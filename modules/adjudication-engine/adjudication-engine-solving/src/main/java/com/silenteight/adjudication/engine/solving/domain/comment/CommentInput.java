@@ -4,6 +4,8 @@
 
 package com.silenteight.adjudication.engine.solving.domain.comment;
 
-public record CommentInput(long alertId, String value) {
+import java.io.Serializable;
+
+public record CommentInput(long alertId, String value) implements Serializable {
 
 }

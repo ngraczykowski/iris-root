@@ -4,6 +4,8 @@
 
 package com.silenteight.adjudication.engine.solving.data;
 
+import java.io.Serializable;
+
 public record MatchSolutionEntity(long analysisId, long matchId, String solution,
-                                  String reason, String matchContext) {
+                                  String reason, String matchContext) implements Serializable {
 }
