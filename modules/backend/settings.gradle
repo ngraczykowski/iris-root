@@ -12,3 +12,4 @@ dependencyResolutionManagement {
 rootProject.name = 'backend'
 
 include 'backend-app'
+include 'governance-common-web'

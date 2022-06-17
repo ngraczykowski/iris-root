@@ -10,7 +10,7 @@ dependencies {
 
   implementation libs.silenteight.filestorage.api
   implementation project(":governance-db-changelog")
-  implementation project(":governance-common-web")
+  implementation libs.silenteight.serp.governance.common.web
 
   implementation libs.spring.data.jpa
   implementation libs.spring.webmvc

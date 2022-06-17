@@ -9,7 +9,7 @@ description = "Backend Application"
 dependencies {
   implementation libs.silenteight.serp.governance.agent
   implementation libs.silenteight.serp.governance.change.request
-  implementation libs.silenteight.serp.governance.common.web
+  implementation project(":governance-common-web")
   implementation libs.silenteight.serp.governance.db.changelog
   implementation libs.silenteight.serp.governance.feature.vector
   implementation libs.silenteight.serp.governance.file

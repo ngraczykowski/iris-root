@@ -19,7 +19,7 @@ dependencies {
   //TODO maybe should be move to some more common lib?
   api libs.commons.io
 
-  implementation project(":governance-common-web")
+  implementation libs.silenteight.serp.governance.common.web
 
   implementation libs.spring.jdbc
   implementation libs.spring.test

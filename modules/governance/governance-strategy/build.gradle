@@ -13,7 +13,7 @@ dependencies {
   implementation libs.governance.solving.api
 
   implementation project(":governance-db-changelog")
-  implementation project(":governance-common-web")
+  implementation libs.silenteight.serp.governance.common.web
 
   implementation libs.spring.webmvc
   implementation libs.spring.security.config
