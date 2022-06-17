@@ -1,4 +1,6 @@
 @hotel
+  #TODO(dsniezek): temporary remove after gov,soim, webapp merged to one backend application
+@hotel-backend
 Feature: Hotel scenarios
 
   Background:

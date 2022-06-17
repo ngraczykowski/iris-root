@@ -40,7 +40,7 @@ It is possible to specify a group of tests using one or more tags:
 * @hotel
 * @foxtrot
 ```
--Dcucumber.filter.tags="@smoke na @sierra"
+-Dcucumber.filter.tags="@smoke or @sierra"
 ```
 
 3. **Test Parameters**

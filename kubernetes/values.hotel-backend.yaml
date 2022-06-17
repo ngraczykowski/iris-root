@@ -1,0 +1,86 @@
+## This values configure Hotel environment, with HSBC Bridge as bridge
+##
+components:
+  hsbc-bridge:
+    enabled: true
+    properties:
+      "logging.level.com.silenteight": DEBUG
+    profiles:
+      - consuldisabled
+
+  governance:
+    image:
+      repository: registry.dev.s8ops.com/iris/backend-app
+    profiles:
+      - governance
+      - database
+      - rabbitmq
+      - messaging
+      - hsbc
+  warehouse:
+    enabled: true
+    profiles:
+      - linux
+      - warehouse
+      - messaging
+      - hotel
+
+agents:
+  name-agent:
+    image:
+      repository: registry.dev.s8ops.com/linguistics-agent-hotel-ns
+      tag: "3.22.0"
+    enabled: true
+
+  geo-agent:
+    enabled: true
+    image:
+      repository: registry.dev.s8ops.com/geo-agent-hotel
+      tag: "1.11.0" #in https://gitlab.silenteight.com/hsbc-bank/sear-installation/-/blob/26ec033050f90d39074ae4057eaec77a5665f929/ae/nomad/version.vars#L19 there is a 1.9.0 version, but we have no docker image with that tag
+
+  allow-list-agent:
+    enabled: true
+    image:
+      repository: registry.dev.s8ops.com/allow-list-agent-hotel
+      tag: "1.6.0-BUILD.124"
+
+  is-pep-agent:
+    enabled: true
+    image:
+      repository: registry.dev.s8ops.com/is-pep-agent-hotel
+      tag: "1.7.0-BUILD.170"
+
+  historical-decisions-agent:
+    enabled: true
+    image:
+      repository: registry.dev.s8ops.com/historical-decisions-agent-hotel
+      tag: "0.3.0-BUILD.106"
+
+  date-agent:
+    enabled: true
+    image:
+      repository: registry.dev.s8ops.com/date-agent-hotel-ns
+      tag: "1.13.0"
+
+  country-agent:
+    enabled: true
+    image:
+      tag: "2.11.0"
+
+  gender-agent:
+    enabled: true
+    image:
+      tag: "1.8.0"
+
+  document-comparer-agent:
+    enabled: true
+    image:
+      tag: "2.17.0"
+
+  document-number-agent:
+    enabled: true
+    image:
+      tag: "2.17.0"
+
+  learning-engine:
+    enabled: true
