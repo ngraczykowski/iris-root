@@ -57,9 +57,9 @@ pipeline {
                   credentialsId: 'devenv-eks',
                   serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
                 withCredentials([aws(credentialsId: 'jenkins-ec2-devenv')]) {
+                  //TODO(dsniezek): secrets -d vals removed as build failed
                   sh """
                   helm \
-                    secrets -d vals \
                     install \
                     --create-namespace \
                     --namespace ${NAMESPACE} \
