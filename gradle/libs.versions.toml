@@ -355,7 +355,7 @@ jakarta-servlet-api = { group = "jakarta.servlet", name = "jakarta.servlet-api" 
 jakarta-transaction-api = { group = "jakarta.transaction", name = "jakarta.transaction-api" }
 jakarta-validation-api = { group = "jakarta.validation", name = "jakarta.validation-api" }
 javax-cache-api = { group = "javax.cache", name = "cache-api" }
-javax-mail = { group = "javax.mail", name = "mail", version = "1.4.1" }
+javax-mail = { group = "javax.mail", name = "mail", version = "1.4.7" }
 jaxb-api = { group = "jakarta.xml.bind", name = "jakarta.xml.bind-api" }
 jsonassert = { group = "org.skyscreamer", name = "jsonassert", version = "1.5.0" }
 keycloak-admin-client = { group = 'org.keycloak', name = 'keycloak-admin-client', version.ref = "platform-keycloak-adapter" }
