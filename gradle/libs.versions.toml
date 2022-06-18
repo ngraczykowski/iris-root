@@ -293,7 +293,7 @@ bouncycastle-bcpkix = { group = "org.bouncycastle", name = "bcpkix-jdk15on", ver
 bouncycastle-bcprov = { group = "org.bouncycastle", name = "bcprov-jdk15on", version.ref = "bouncycastle" }
 bouncycastle-bcprov-ext = { group = "org.bouncycastle", name = "bcprov-ext-jdk15on", version.ref = "bouncycastle" }
 brave-instrumentation-grpc = { group = "io.zipkin.brave", name = "brave-instrumentation-grpc" }
-byte-buddy-agent = { group = "net.bytebuddy", name = "byte-buddy-agent", version = "1.12.5" }
+byte-buddy-agent = { group = "net.bytebuddy", name = "byte-buddy-agent", version = "1.12.10" }
 caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine" }
 caffeine-jcache = { group = "com.github.ben-manes.caffeine", name = "jcache" }
 commons-codec = { group = 'commons-codec', name = 'commons-codec' }
