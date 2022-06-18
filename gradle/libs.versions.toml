@@ -54,7 +54,7 @@ mockito = "4.4.0"
 # Plugins
 #-----------------------------------
 plugin-cyclonedx-bom = "1.6.1"
-plugin-intellij = "1.1.4"
+plugin-intellij = "1.1.5"
 plugin-jib = "3.2.1"
 plugin-nebula-resolution = "9.0.0"
 plugin-sonarqube = "3.3"
