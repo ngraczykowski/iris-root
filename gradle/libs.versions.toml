@@ -424,7 +424,7 @@ spock-spring = { group = "org.spockframework", name = "spock-spring" }
 test-containers = { group = "org.testcontainers", name = "testcontainers" }
 test-containers-elasticsearch = { group = "org.testcontainers", name = "elasticsearch" }
 test-containers-junit-jupiter = { group = "org.testcontainers", name = "junit-jupiter" }
-test-containers-keycloak = { group = 'com.github.dasniko', name = 'testcontainers-keycloak', version = "1.9.0" }
+test-containers-keycloak = { group = 'com.github.dasniko', name = 'testcontainers-keycloak', version = "1.10.0" }
 test-containers-oracle-xe = { group = "org.testcontainers", name = "oracle-xe" }
 test-containers-postgresql = { group = "org.testcontainers", name = "postgresql" }
 test-containers-rabbitmq = { group = "org.testcontainers", name = "rabbitmq" }
