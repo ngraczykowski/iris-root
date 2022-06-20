@@ -26,6 +26,8 @@ class BasePikaConnection:
         ...
 
     async def set_connection(self):
+        if not self.connection_configuration.all_required():
+            raise ValueError("Missing fields in RMQ connection configuration!")
         if self.ssl:
             ssl_options = self.connection_configuration.ssl_options
             if not ssl_options or not all(
