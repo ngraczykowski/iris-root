@@ -224,6 +224,8 @@ spring-batch-test = { group = "org.springframework.batch", name = "spring-batch-
 spring-cloud-consul-discovery = { group = "org.springframework.cloud", name = "spring-cloud-consul-discovery" }
 spring-cloud-dependencies = { group = "org.springframework.cloud", name = "spring-cloud-dependencies" }
 spring-cloud-starter-consul = { group = "org.springframework.cloud", name = "spring-cloud-starter-consul" }
+spring-cloud-config-server = { group = "org.springframework.cloud", name = "spring-cloud-config-server" }
+spring-cloud-starter-config = { group = "org.springframework.cloud", name = "spring-cloud-starter-config" }
 spring-cloud-starter-consul-config = { group = "org.springframework.cloud", name = "spring-cloud-starter-consul-config" }
 spring-cloud-starter-gateway = { group = "org.springframework.cloud", name = "spring-cloud-starter-gateway" }
 spring-cloud-starter-sleuth = { group = "org.springframework.cloud", name = "spring-cloud-starter-sleuth" }

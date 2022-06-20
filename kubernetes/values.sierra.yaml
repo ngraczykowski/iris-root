@@ -21,6 +21,8 @@ components:
       "pb.daily-reports-remove.file-prefix": '{{ printf "%s/%s/pb/reports" .Release.Namespace .Release.Name }}'
   callback-mock:
     enabled: true
+    properties:
+      "spring.config.import": '{{ include "sear.configServer" . }}'
   warehouse:
     enabled: true
     profiles:

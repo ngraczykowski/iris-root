@@ -1,0 +1,7 @@
+spring:
+  application:
+  name: callback-mock
+  cloud:
+    config:
+      import-check:
+        enabled: false

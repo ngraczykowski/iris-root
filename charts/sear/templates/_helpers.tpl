@@ -242,3 +242,6 @@ Creates the name of Sentry environment
     - name: UDS_ADDRESS
       value: {{ include "sear.fullname" . }}-universal-data-source.{{ .Release.Namespace }}.svc:9090
 {{- end }}
+{{- define "sear.configServer" -}}
+configserver:http://{{ include "sear.fullname" . }}-config-server.{{ .Release.Namespace }}.svc:{{ .component.containerPorts.http.port }}/rest/config-server
+{{- end -}}

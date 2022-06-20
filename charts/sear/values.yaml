@@ -418,6 +418,16 @@ components:
     image:
       repository: registry.dev.s8ops.com/iris/callback-mock
 
+  config-server:
+    enabled: false
+    useDb: false
+    useRabbit: false
+    ingress:
+      enabled: false
+    image:
+      repository: registry.dev.s8ops.com/iris/config-server
+
+
 # FIXME(pputerla) - remark - we're missing list of supported component keys
 agents:
   name-agent:
