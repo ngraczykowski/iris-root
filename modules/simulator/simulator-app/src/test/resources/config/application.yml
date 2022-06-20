@@ -36,7 +36,7 @@ spring:
   liquibase:
     default-schema: public
     contexts: default,test
-    change-log: classpath:db/changelog/db.changelog-master.xml
+    change-log: classpath:db/changelog/db.changelog-simulator-master.xml
   # Spring Data JPA
   jpa:
     # Do not show SQL in tests by default. Database integration tests override this anyway.

@@ -10,7 +10,7 @@ dependencies {
   implementation libs.governance.solving.api
   implementation libs.warehouse.data.api
 
-  implementation project(":governance-db-changelog")
+  implementation libs.silenteight.serp.governance.db.changelog
   implementation libs.silenteight.serp.governance.common.web
   implementation project(":governance-policy")
 

@@ -1,9 +1,0 @@
-plugins {
-  id "com.silenteight.iris.build.java-library"
-}
-
-description = "Simulator DB Changelog"
-
-dependencies {
-  implementation libs.silenteight.audit.bs
-}

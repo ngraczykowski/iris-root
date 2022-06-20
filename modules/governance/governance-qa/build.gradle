@@ -21,7 +21,7 @@ dependencies {
   implementation libs.grpc.client.spring.boot.starter
   implementation libs.grpc.server.spring.boot.starter
 
-  implementation project(":governance-db-changelog")
+  implementation libs.silenteight.serp.governance.db.changelog
   implementation libs.silenteight.serp.governance.common.web
 
   testImplementation libs.rest.assured.spring.mock.mvc

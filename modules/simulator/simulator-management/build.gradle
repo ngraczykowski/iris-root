@@ -7,7 +7,7 @@ description = "Simulator Management"
 dependencies {
   implementation project(":simulator-common-web")
   implementation project(":simulator-dataset")
-  implementation project(":simulator-db-changelog")
+  implementation libs.silenteight.serp.governance.db.changelog
 
   implementation libs.adjudication.engine.api
   implementation libs.governance.model.api

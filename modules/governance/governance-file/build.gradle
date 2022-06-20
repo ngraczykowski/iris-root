@@ -9,7 +9,7 @@ dependencies {
 
 
   implementation libs.silenteight.filestorage.api
-  implementation project(":governance-db-changelog")
+  implementation libs.silenteight.serp.governance.db.changelog
   implementation libs.silenteight.serp.governance.common.web
 
   implementation libs.spring.data.jpa

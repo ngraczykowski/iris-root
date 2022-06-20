@@ -9,7 +9,7 @@ description = "Simulator"
 dependencies {
   implementation project(":simulator-common-web")
   implementation project(":simulator-dataset")
-  implementation project(":simulator-db-changelog")
+  implementation libs.silenteight.serp.governance.db.changelog
   implementation project(":simulator-management")
   implementation project(":simulator-model")
   implementation project(":simulator-processing")

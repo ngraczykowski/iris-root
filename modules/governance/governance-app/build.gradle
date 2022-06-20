@@ -10,7 +10,7 @@ dependencies {
   implementation project(":governance-agent")
   implementation project(":governance-change-request")
   implementation libs.silenteight.serp.governance.common.web
-  implementation project(":governance-db-changelog")
+  implementation libs.silenteight.serp.governance.db.changelog
   implementation project(":governance-feature-vector")
   implementation project(":governance-file")
   implementation project(":governance-model")

@@ -105,7 +105,7 @@ spring:
 
   # Database migrations
   liquibase:
-    change-log: classpath:db/changelog/db.changelog-master.xml
+    change-log: classpath:db/changelog/db.changelog-simulator-master.xml
     default-schema: ${simulator.db.schema}
     contexts: default
 
@@ -135,7 +135,7 @@ spring:
   #-------------------------------------------------------------------------------------------------
   rabbitmq:
     host: localhost
-    port: 24160
+    port: 5672
     username: dev
     password: dev
     virtual-host: /
