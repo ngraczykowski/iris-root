@@ -73,8 +73,8 @@ public class AlertSolving implements Serializable {
     return new MatchFeatureValue(
         matchId,
         matches.get(matchId).getFeatures().get(featureName).getAgentConfigFeatureId(),
-        matches.get(matchId).getSolution(),
-        matches.get(matchId).getReason());
+        matches.get(matchId).getFeatures().get(featureName).getFeatureValue(),
+        matches.get(matchId).getFeatures().get(featureName).getReason());
   }
 
   public MatchSolution getMatchSolution(long matchId, String solution, String reason) {

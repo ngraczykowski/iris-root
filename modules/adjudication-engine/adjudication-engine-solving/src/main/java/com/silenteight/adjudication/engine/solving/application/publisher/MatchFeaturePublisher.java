@@ -45,11 +45,11 @@ public class MatchFeaturePublisher implements MatchFeaturePublisherPort {
   private void execute() {
     log.trace("Start process match feature value ");
     while (true) {
-      final var commentInput = this.matchFeaturesQueue.poll();
-      if (commentInput == null) {
+      var matchFeature = this.matchFeaturesQueue.poll();
+      if (matchFeature == null) {
         break;
       }
-      matchFeatureStoreDataAccess.store(commentInput);
+      matchFeatureStoreDataAccess.store(matchFeature);
     }
   }
 
@@ -57,10 +57,10 @@ public class MatchFeaturePublisher implements MatchFeaturePublisherPort {
   public void resolve(AlertSolving alertSolving, AgentExchangeResponse agentResponse) {
     for (var agentOutput : agentResponse.getAgentOutputsList()) {
       var matchId = ResourceName.create(agentOutput.getMatch()).getLong("matches");
-      log.debug("Store match feature value {}", matchId);
       for (var feature : agentOutput.getFeaturesList()) {
         var featureName = feature.getFeature();
         var matchFeature = alertSolving.getMatchFeatureValue(matchId, featureName);
+        log.debug("Store match feature value {} solution: {}", matchId, matchFeature.solution());
         this.matchFeaturesQueue.add(matchFeature);
       }
     }

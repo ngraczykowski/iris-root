@@ -57,7 +57,7 @@ class HazelcastAlertSolvingRepository implements AlertSolvingRepository {
           @Override
           public AlertSolving process(Entry<Long, AlertSolving> entry) {
             log.debug(
-                "[InMemorySolving] Updating features matchId:{}, foeatures: {}",
+                "[InMemorySolving] Updating features matchId:{}, features: {}",
                 matchId,
                 featureSolutions);
             entry.setValue(entry.getValue().updateMatchFeatureValues(matchId, featureSolutions));

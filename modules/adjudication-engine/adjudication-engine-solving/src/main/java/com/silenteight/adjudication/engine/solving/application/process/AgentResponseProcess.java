@@ -31,29 +31,35 @@ class AgentResponseProcess implements AgentResponsePort {
   private final ProtoMessageToObjectNodeConverter converter;
   private final MatchFeaturePublisherPort matchFeatureStorePublisherPort;
 
-  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
+  @Timed(
+      percentiles = {0.5, 0.95, 0.99},
+      histogram = true)
   public void processMatchesFeatureValue(final AgentExchangeResponse agentResponse) {
 
     for (AgentOutput agentOutput : agentResponse.getAgentOutputsList()) {
 
-      log.info(
-          "Parsing agent response: match: {} for features {}", agentOutput.getMatch(),
+      log.debug(
+          "Parsing agent response: match: {} for features {}",
+          agentOutput.getMatch(),
           agentOutput.getFeaturesCount());
       String matchName = agentOutput.getMatch();
       long alertId = ResourceName.create(matchName).getLong("alerts");
       long matchId = ResourceName.create(matchName).getLong("matches");
 
       final var alertSolvingModel = updateMatchFeatureValues(agentOutput, matchId, alertId);
-      matchFeatureStorePublisherPort.resolve(alertSolvingModel,agentResponse);
+      matchFeatureStorePublisherPort.resolve(alertSolvingModel, agentResponse);
 
       if (alertSolvingModel.isEmpty() || !alertSolvingModel.isMatchReadyForSolving(matchId)) {
-        log.warn("Match is not ready for solving {}", matchId);
+        log.info("Match is not ready for solving {}", matchId);
         continue;
       }
-      MatchSolutionRequest matchSolutionRequest = new MatchSolutionRequest(
-          alertId, matchId, alertSolvingModel.getPolicy(),
-          alertSolvingModel.getMatchFeatureNames(matchId),
-          alertSolvingModel.getMatchFeatureVectors(matchId));
+      MatchSolutionRequest matchSolutionRequest =
+          new MatchSolutionRequest(
+              alertId,
+              matchId,
+              alertSolvingModel.getPolicy(),
+              alertSolvingModel.getMatchFeatureNames(matchId),
+              alertSolvingModel.getMatchFeatureVectors(matchId));
       // TODO it may happen that two requests could be send to governance
       this.governanceProvider.send(matchSolutionRequest);
     }
@@ -70,10 +76,12 @@ class AgentResponseProcess implements AgentResponsePort {
 
   private List<FeatureSolution> createFeatureSolutions(List<Feature> featuresList) {
     return featuresList.stream()
-        .map(feature -> new FeatureSolution(
-            feature.getFeature(),
-            feature.getFeatureSolution().getSolution(),
-            createReason(feature.getFeatureSolution().getReason())))
+        .map(
+            feature ->
+                new FeatureSolution(
+                    feature.getFeature(),
+                    feature.getFeatureSolution().getSolution(),
+                    createReason(feature.getFeatureSolution().getReason())))
         .collect(Collectors.toList());
   }
 

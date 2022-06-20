@@ -45,10 +45,12 @@ class JdbcMatchFeaturesDataAccess implements MatchFeatureDataAccess {
           aggregate.features().putIfAbsent(m.featureName(), createFeatureAggregate(m));
           matches.putIfAbsent(m.matchId(), aggregate);
 
-          var matchCategories = matchCategoriesDaos.get(m.matchId());
-          matchCategories.stream()
-              .forEach(
-                  dao -> aggregate.categories().put(dao.category(), dao.toCategoryAggeregate()));
+          if (matchCategoriesDaos.containsKey(m.matchId())) {
+            var matchCategories = matchCategoriesDaos.get(m.matchId());
+            matchCategories.stream()
+                .forEach(
+                    dao -> aggregate.categories().put(dao.category(), dao.toCategoryAggeregate()));
+          }
 
           var agent = agentFeatures.getOrDefault(m.agentConfig(), new HashSet<>());
           agent.add(m.featureName());

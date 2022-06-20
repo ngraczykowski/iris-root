@@ -27,13 +27,21 @@ class GovernanceAlertPublisher implements GovernanceAlertPort {
     this.solvedAlertProcess = solvedAlertProcess;
     this.sendQueue = governanceAlertsToSendQueue;
     for (int i = 0; i < 15; i++) {
-      executorService.submit(this::consume);
+      executorService.submit(this::process);
     }
   }
 
   public void send(final AlertSolutionRequest alertSolutionRequest) {
     log.info("Sending alert for solving to Governance");
     this.sendQueue.add(alertSolutionRequest);
+  }
+
+  private void process() {
+    try {
+      consume();
+    } catch (Exception e) {
+      log.error("Processing sendRequestToGovernance failed: ", e);
+    }
   }
 
   void consume() {
