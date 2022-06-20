@@ -28,7 +28,7 @@ tests_require = [
 
 setup(
     name="s8-python-network",
-    version="0.3.0",
+    version="0.3.1",
     description="",
     author="Silent Eight Pte. Ltd.",
     author_email="support@silenteight.com",
