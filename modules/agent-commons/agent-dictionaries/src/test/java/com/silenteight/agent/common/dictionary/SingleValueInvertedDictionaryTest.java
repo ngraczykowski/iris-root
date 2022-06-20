@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
 
-class SingleValueDictionaryTest {
+class SingleValueInvertedDictionaryTest {
 
   private static final String PATH = "single_value_dictionary.dict";
 
@@ -13,18 +13,18 @@ class SingleValueDictionaryTest {
 
   @BeforeEach
   void givenSingleValueDictionary() {
-    dictionary = SingleValueDictionary.fromSource(
+    dictionary = SingleValueDictionary.fromSourceInverted(
         DictionarySource.fromResource(getClass(), PATH));
   }
 
   @Test
   void shouldReturnNormalizedNameForIsmail() {
-    assertThat(dictionary.findByKey("ESMAIL")).hasValue("ISHMAEL;ISHMAIL;ISMAIL");
+    assertThat(dictionary.findByKey("ISMAIL")).hasValue("ESMAIL");
   }
 
   @Test
   void shouldReturnNormalizedNameForIsmailLowerCase() {
-    assertThat(dictionary.findByKey("esmail")).hasValue("ISHMAEL;ISHMAIL;ISMAIL");
+    assertThat(dictionary.findByKey("ismail")).hasValue("ESMAIL");
   }
 
   @Test
@@ -34,12 +34,14 @@ class SingleValueDictionaryTest {
 
   @Test
   void shouldHasMappingForReturnCorrectResult() {
-    assertThat(dictionary.hasMappingFor("ismail", "ISHMAEL;ISHMAIL;ISMAIL")).isFalse();
-    assertThat(dictionary.hasMappingFor("esmail", "ISHMAEL;ISHMAIL;ISMAIL")).isTrue();
+    assertThat(dictionary.hasMappingFor("ismail", "esmail")).isTrue();
+    assertThat(dictionary.hasMappingFor("esmail", "ismail")).isTrue();
+    assertThat(dictionary.hasMappingFor("ismail", "abdul")).isFalse();
+    assertThat(dictionary.hasMappingFor("abdul", "ismail")).isFalse();
   }
 
   @Test
   void shouldContainOnlyKeys() {
-    assertThat(dictionary.getKeys()).containsExactly("ESMAIL");
+    assertThat(dictionary.getKeys()).containsExactly("ISHMAIL", "ISMAIL", "ISHMAEL");
   }
 }
