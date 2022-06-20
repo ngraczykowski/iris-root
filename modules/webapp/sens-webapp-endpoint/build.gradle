@@ -12,7 +12,7 @@ dependencies {
 
   implementation libs.silenteight.audit.bs
 
-  testImplementation project(":sens-webapp-db-changelog")
+  testImplementation libs.silenteight.serp.governance.db.changelog
   testImplementation libs.rest.assured.spring.mock.mvc
   testImplementation libs.spring.security.test
 }

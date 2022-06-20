@@ -1,9 +1,0 @@
-plugins {
-  id "com.silenteight.iris.build.java-library"
-}
-
-description = "SENS WebApp DB Changelog"
-
-dependencies {
-  implementation libs.liquibase.sessionlock
-}

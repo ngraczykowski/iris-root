@@ -13,7 +13,7 @@ dependencies {
   implementation libs.silenteight.audit.bs
   implementation libs.spring.data.jpa
 
-  testImplementation project(":sens-webapp-db-changelog")
+  testImplementation libs.silenteight.serp.governance.db.changelog
   testImplementation libs.rest.assured.spring.mock.mvc
   testImplementation libs.spring.security.test
 }

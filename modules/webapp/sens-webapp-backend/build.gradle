@@ -9,7 +9,7 @@ dependencies {
   implementation project(":sens-webapp-audit")
   implementation project(":sens-webapp-audit-api")
   implementation libs.silenteight.serp.governance.common.web
-  implementation project(":sens-webapp-db-changelog")
+  implementation libs.silenteight.serp.governance.db.changelog
   implementation project(":sens-webapp-endpoint")
   implementation project(":sens-webapp-logging")
   implementation project(":sens-webapp-notification")
@@ -69,7 +69,6 @@ dependencies {
 
   runtimeOnly libs.postgresql
 
-  testImplementation project(":sens-webapp-db-changelog")
   testImplementation libs.rest.assured
   testImplementation libs.rest.assured.spring.mock.mvc
   testImplementation libs.spring.security.test
