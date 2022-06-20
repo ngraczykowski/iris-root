@@ -49,9 +49,10 @@ class CategoryResolveProcess implements CategoryResolveProcessPort {
           matchId,
           CategoryValue.builder().category(cv.getName()).value(cv.getSingleValue()).build());
 
+      var categoryName = "categories/" + ResourceName.create(cv.getName()).get("categories");
       matchCategoryPublisherPort.resolve(
           new MatchCategory(
-              alertId, matchId, new CategoryAggregate(cv.getName(), cv.getSingleValue())));
+              alertId, matchId, new CategoryAggregate(categoryName, cv.getSingleValue())));
     }
 
     var alert = alertSolvingRepository.get(alertId);

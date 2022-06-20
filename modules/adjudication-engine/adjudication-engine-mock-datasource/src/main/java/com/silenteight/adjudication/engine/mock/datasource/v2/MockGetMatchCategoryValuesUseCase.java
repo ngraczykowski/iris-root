@@ -6,11 +6,14 @@ import com.silenteight.datasource.categories.api.v2.CategoryMatches;
 import com.silenteight.datasource.categories.api.v2.CategoryValue;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
 class MockGetMatchCategoryValuesUseCase {
+
+  private static final AtomicLong CATEGORY_DB_ID = new AtomicLong(1);
 
   public List<CategoryValue> getMatchCategoryValues(List<CategoryMatches> matchValues) {
     return matchValues.stream()
@@ -26,7 +29,7 @@ class MockGetMatchCategoryValuesUseCase {
 
   private static CategoryValue getCategoryValue(String category, String match) {
     var builder = CategoryValue.newBuilder()
-        .setName(category)
+        .setName(category + "/values/" + CATEGORY_DB_ID.getAndIncrement())
         .setMatch(match);
 
     if (category.contains("categories/source_system")) {

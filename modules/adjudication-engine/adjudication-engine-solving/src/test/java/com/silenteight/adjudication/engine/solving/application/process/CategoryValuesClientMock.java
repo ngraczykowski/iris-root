@@ -39,7 +39,7 @@ class CategoryValuesClientMock implements CategoryValuesClient {
             m ->
                 CategoryValue.newBuilder()
                     .setName(category)
-                    .setMatch(m)
+                    .setMatch(m + "/values/123")
                     .setSingleValue("RANDOM_VALUE")
                     .build());
   }
