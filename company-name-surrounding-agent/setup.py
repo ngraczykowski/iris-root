@@ -13,7 +13,7 @@ tests_require = [
 ]
 setup(
     name="company-name-surrounding-agent",
-    version="0.4.5",
+    version="0.4.6",
     description="Company Name Surrounding Agent",
     author="Silent Eight Pte. Ltd.",
     author_email="support@silenteight.com",
