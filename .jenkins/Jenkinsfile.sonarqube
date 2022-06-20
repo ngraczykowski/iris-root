@@ -10,7 +10,7 @@ def scanList = ""
 
 pipeline {
   agent {
-    label 'ec2-agent'
+    label 'iris'
   }
   triggers {
     pollSCM scmpoll_spec: 'TZ=Europe/Warsaw\nH 7-16 * * 1-5', ignorePostCommitHooks: true

@@ -6,7 +6,7 @@ def images = []
 def abort = env.CHANGE_ID ? true : false
 pipeline {
   agent {
-    label 'ec2-agent'
+    label 'iris'
   }
   options {
     disableConcurrentBuilds(abortPrevious: abort)
