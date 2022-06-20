@@ -28,7 +28,7 @@ class RegistrationServiceGrpcAdapterTest {
 
     var stub = RegistrationServiceGrpc.newBlockingStub(grpcServerExtension.getChannel());
 
-    underTest = new RegistrationServiceGrpcAdapter(stub, 1L);
+    underTest = new RegistrationServiceGrpcAdapter(stub, 10L);
   }
 
   @MethodSource("registerBatchParameters")

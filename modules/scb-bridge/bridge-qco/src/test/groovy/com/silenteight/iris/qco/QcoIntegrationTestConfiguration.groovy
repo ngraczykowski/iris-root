@@ -14,7 +14,7 @@ import org.springframework.context.annotation.ComponentScan
 
 @SpringBootConfiguration
 @TestConfiguration
-@ComponentScan("com.silenteight.qco")
+@ComponentScan("com.silenteight.iris.qco")
 class QcoIntegrationTestConfiguration {
 
   @Bean

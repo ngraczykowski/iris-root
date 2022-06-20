@@ -4,6 +4,10 @@
 
 package com.silenteight.iris.qco.domain
 
+import com.silenteight.iris.qco.domain.model.ChangeCondition
+import com.silenteight.iris.qco.domain.model.MatchSolution
+import com.silenteight.iris.qco.domain.model.ResolverCommand
+
 import org.apache.commons.lang3.StringUtils
 import spock.lang.Specification
 import spock.lang.Subject
@@ -25,9 +29,9 @@ class MatchResolverSpec extends Specification {
     given:
     def match = QCO_RECOMMENDATION_MATCH
     def condition = CHANGE_CONDITION
-    def command = new com.silenteight.iris.qco.domain.model.ResolverCommand(match, condition, OVERRIDE)
+    def command = new ResolverCommand(match, condition, OVERRIDE)
     def qcoComment = String.join(StringUtils.SPACE, prefix, COMMENT)
-    def matchSolution = new com.silenteight.iris.qco.domain.model.MatchSolution(QCO_SOLUTION, qcoComment, QCO_MARKED)
+    def matchSolution = new MatchSolution(QCO_SOLUTION, qcoComment, MatchSolution.QCO_MARKED)
     when:
     def result = underTest.overrideSolutionInMatch(command)
 
@@ -40,9 +44,9 @@ class MatchResolverSpec extends Specification {
   def "AlertResolver should not override matches and should not send to neither db and warehouse (NOT_CHANGE)"() {
     given:
     def match = QCO_RECOMMENDATION_MATCH
-    def condition = new com.silenteight.iris.qco.domain.model.ChangeCondition("policyId", "stepId", "solution_old")
-    def command = new com.silenteight.iris.qco.domain.model.ResolverCommand(match, condition, NOT_CHANGE)
-    def matchSolution = new com.silenteight.iris.qco.domain.model.MatchSolution(command.match().solution(), command.match().comment(), QCO_UNMARKED)
+    def condition = new ChangeCondition("policyId", "stepId", "solution_old")
+    def command = new ResolverCommand(match, condition, NOT_CHANGE)
+    def matchSolution = new MatchSolution(command.match().solution(), command.match().comment(), QCO_UNMARKED)
 
     when:
     def result = underTest.overrideSolutionInMatch(command)
@@ -57,8 +61,8 @@ class MatchResolverSpec extends Specification {
     given:
     def match = QCO_RECOMMENDATION_MATCH
     def condition = CHANGE_CONDITION
-    def command = new com.silenteight.iris.qco.domain.model.ResolverCommand(match, condition, ONLY_MARK)
-    def matchSolution = new com.silenteight.iris.qco.domain.model.MatchSolution(command.match().solution(), command.match().comment(), QCO_MARKED)
+    def command = new ResolverCommand(match, condition, ONLY_MARK)
+    def matchSolution = new MatchSolution(command.match().solution(), command.match().comment(), MatchSolution.QCO_MARKED)
 
     when:
     def result = underTest.overrideSolutionInMatch(command)

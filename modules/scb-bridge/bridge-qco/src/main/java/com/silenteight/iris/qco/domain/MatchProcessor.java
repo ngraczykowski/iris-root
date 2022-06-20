@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.iris.qco.domain.model.*;
-import com.silenteight.qco.domain.model.*;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;

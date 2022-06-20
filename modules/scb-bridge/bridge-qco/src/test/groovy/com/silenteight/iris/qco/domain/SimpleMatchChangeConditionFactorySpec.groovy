@@ -4,8 +4,9 @@
 
 package com.silenteight.iris.qco.domain
 
-import com.silenteight.qco.infrastructure.parser.FileParserConfiguration
-import com.silenteight.qco.infrastructure.parser.SolutionConfigurationFileProperties
+import com.silenteight.iris.qco.domain.model.ChangeCondition
+import com.silenteight.iris.qco.infrastructure.parser.FileParserConfiguration
+import com.silenteight.iris.qco.infrastructure.parser.SolutionConfigurationFileProperties
 
 import org.springframework.core.io.ClassPathResource
 import org.springframework.core.io.ResourceLoader
@@ -34,7 +35,7 @@ class SimpleMatchChangeConditionFactorySpec extends Specification {
     def condition = underTest.createChangeCondition(policyId, stepId, solution)
 
     then:
-    condition == new com.silenteight.iris.qco.domain.model.ChangeCondition(policyId, stepId, solution)
+    condition == new ChangeCondition(policyId, stepId, solution)
   }
 
   def "The specified policy,step and solution shouldn't be found in the configuration map"() {
@@ -54,7 +55,7 @@ class SimpleMatchChangeConditionFactorySpec extends Specification {
     def condition = underTest.createChangeCondition(policyId, stepId, solution)
 
     then:
-    condition != new com.silenteight.iris.qco.domain.model.ChangeCondition(policyId, stepId, solution)
-    condition == com.silenteight.iris.qco.domain.model.ChangeCondition.NO_CONDITION_FULFILLED
+    condition != new ChangeCondition(policyId, stepId, solution)
+    condition == ChangeCondition.NO_CONDITION_FULFILLED
   }
 }

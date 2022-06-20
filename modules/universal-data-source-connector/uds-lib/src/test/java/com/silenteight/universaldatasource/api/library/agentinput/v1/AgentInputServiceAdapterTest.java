@@ -29,7 +29,7 @@ class AgentInputServiceAdapterTest {
 
     var stub = AgentInputServiceGrpc.newBlockingStub(grpcServerExtension.getChannel());
 
-    underTest = new AgentInputServiceAdapter(stub, 1L);
+    underTest = new AgentInputServiceAdapter(stub, 10L);
   }
 
   @Test

@@ -1,6 +1,6 @@
 logging:
   level:
-    com.silenteight.qco: DEBUG
+    com.silenteight.iris.qco: DEBUG
 spring:
   jpa:
     hibernate:

@@ -95,7 +95,7 @@
   </logger>
 
   <logger
-      name="com.silenteight.qco"
+      name="com.silenteight.iris.qco"
       level="info"
       additivity="false">
     <appender-ref ref="ASYNC_CONSOLE"/>

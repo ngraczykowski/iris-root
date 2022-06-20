@@ -10,8 +10,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import org.springframework.transaction.annotation.EnableTransactionManagement
 
 @TestConfiguration
-@EntityScan(basePackages = "com.silenteight.qco.adapter.outgoing.jpa")
-@EnableJpaRepositories(basePackages = "com.silenteight.qco.adapter.outgoing.jpa")
+@EntityScan(basePackages = "com.silenteight.iris.qco.adapter.outgoing.jpa")
+@EnableJpaRepositories(basePackages = "com.silenteight.iris.qco.adapter.outgoing.jpa")
 @EnableTransactionManagement
 class QcoDbConfiguration {
 

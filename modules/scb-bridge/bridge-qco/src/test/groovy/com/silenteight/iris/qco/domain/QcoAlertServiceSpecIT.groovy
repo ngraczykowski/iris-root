@@ -4,6 +4,9 @@
 
 package com.silenteight.iris.qco.domain
 
+import com.silenteight.iris.qco.ContainersSpecificationIT
+import com.silenteight.iris.qco.QcoDbConfiguration
+import com.silenteight.iris.qco.QcoIntegrationTestConfiguration
 import com.silenteight.iris.qco.adapter.outgoing.jpa.QcoOverriddenRecommendation
 import com.silenteight.iris.qco.adapter.outgoing.jpa.QcoOverriddenRecommendationJpaRepository
 
@@ -16,9 +19,8 @@ import org.springframework.test.context.ActiveProfiles
 @ActiveProfiles("test")
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import(value = [com.silenteight.iris.qco.QcoIntegrationTestConfiguration.class, com
-    .silenteight.iris.qco.QcoDbConfiguration.class])
-class QcoAlertServiceSpecIT extends com.silenteight.iris.qco.ContainersSpecificationIT {
+@Import(value = [QcoIntegrationTestConfiguration.class, QcoDbConfiguration.class])
+class QcoAlertServiceSpecIT extends ContainersSpecificationIT {
 
   @Autowired
   private QcoAlertService qcoAlertService;
