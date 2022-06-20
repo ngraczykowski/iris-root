@@ -10,7 +10,7 @@ dependencyResolutionManagement {
 }
 rootProject.name = 'scb-bridge'
 
-include('bridge-app')
-include('bridge-dist')
 include('bridge-qco')
 include('bridge-qco-internal-protos')
+include('scb-bridge-app')
+include('scb-bridge-dist')
