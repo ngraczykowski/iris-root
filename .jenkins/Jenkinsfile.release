@@ -38,7 +38,7 @@ pipeline {
         axes {
           axis {
             name 'ENVIRONMENT'
-            values 'sierra', 'hotel', 'foxtrot'
+            values 'sierra', 'hotel', 'foxtrot', 'hotel-backend'
           }
         }
         environment {
