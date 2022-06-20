@@ -12,8 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.AUDITOR;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
 import static com.silenteight.sens.webapp.sso.SsoMappingTestFixtures.ROLE_MAPPING_DTO_1;
 import static com.silenteight.sens.webapp.sso.SsoMappingTestFixtures.ROLE_MAPPING_DTO_LIST;
 import static com.silenteight.sens.webapp.sso.SsoMappingTestFixtures.SS0_NAME;

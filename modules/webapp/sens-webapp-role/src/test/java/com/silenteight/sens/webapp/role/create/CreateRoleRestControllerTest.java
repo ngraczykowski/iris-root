@@ -1,7 +1,7 @@
 package com.silenteight.sens.webapp.role.create;
 
-import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
-import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
+import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.sens.webapp.role.create.dto.CreateRoleDto;
 
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.stream.Stream;
 
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.sens.webapp.role.RoleTestFixtures.*;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.mockito.ArgumentMatchers.any;

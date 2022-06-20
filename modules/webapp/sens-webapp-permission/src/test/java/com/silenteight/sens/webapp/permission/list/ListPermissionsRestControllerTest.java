@@ -1,14 +1,14 @@
 package com.silenteight.sens.webapp.permission.list;
 
-import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
-import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
+import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.sens.webapp.permission.PermissionTestFixtures.*;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.is;
@@ -16,7 +16,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
-@Import({ ListPermissionsRestController.class })
+@Import(ListPermissionsRestController.class)
 class ListPermissionsRestControllerTest extends BaseRestControllerTest {
 
   private static final String LIST_PERMISSIONS_URL = "/permissions";
@@ -37,7 +37,6 @@ class ListPermissionsRestControllerTest extends BaseRestControllerTest {
         .body("[1].description", is(PERMISSION_DESCRIPTION_2));
   }
 
-  @Test
   @TestWithRole(roles = { APPROVER, AUDITOR, MODEL_TUNER, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRoleOnListingAllPermissions() {
     get(LIST_PERMISSIONS_URL)

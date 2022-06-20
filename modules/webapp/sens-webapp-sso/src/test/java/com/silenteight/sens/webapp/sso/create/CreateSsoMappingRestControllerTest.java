@@ -1,7 +1,7 @@
 package com.silenteight.sens.webapp.sso.create;
 
-import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
-import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
+import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.sens.webapp.sso.create.dto.CreateSsoMappingDto;
 import com.silenteight.sep.usermanagement.api.identityprovider.exception.SsoRoleMapperAlreadyExistsException;
 
@@ -14,9 +14,10 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.stream.Stream;
 
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.sens.webapp.sso.SsoMappingTestFixtures.*;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -46,7 +47,6 @@ class CreateSsoMappingRestControllerTest extends BaseRestControllerTest {
     ;
   }
 
-  @Test
   @TestWithRole(roles = { APPROVER, AUDITOR, MODEL_TUNER, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
     post(CREATE_SSO_MAPPING_URL, CREATE_SSO_MAPPING_DTO)

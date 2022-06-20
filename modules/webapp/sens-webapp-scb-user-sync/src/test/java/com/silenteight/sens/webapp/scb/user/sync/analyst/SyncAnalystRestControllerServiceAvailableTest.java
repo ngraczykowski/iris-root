@@ -1,15 +1,15 @@
 package com.silenteight.sens.webapp.scb.user.sync.analyst;
 
-import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
-import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
+import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.APPROVER;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.MODEL_TUNER;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.APPROVER;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.AUDITOR;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.MODEL_TUNER;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
 import static com.silenteight.sens.webapp.scb.user.sync.analyst.SyncAnalystStatsDtoFixtures.ALL_CHANGED_WITH_ONE_ERROR;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;

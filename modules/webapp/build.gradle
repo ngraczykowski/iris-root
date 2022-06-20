@@ -25,10 +25,10 @@ tasks.register("deleteWebappPlugins", Delete).configure {
   }
 }
 
-configure(subprojects - project(":sens-webapp-common-testing")) {Project subproject ->
+configure(subprojects - libs.silenteight.serp.governance.common.web.testing) {Project subproject ->
   subproject.pluginManager.withPlugin("java") {
     subproject.dependencies {
-      testImplementation project(":sens-webapp-common-testing")
+      testImplementation libs.silenteight.serp.governance.common.web.testing
     }
   }
 }

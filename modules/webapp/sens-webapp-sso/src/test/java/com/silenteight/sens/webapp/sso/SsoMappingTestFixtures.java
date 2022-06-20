@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.AUDITOR;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
 import static com.silenteight.sens.webapp.sso.domain.DomainConstants.SSO_MAPPING_FIELD_MAX_LENGTH;
 import static java.util.Collections.emptyList;
 import static java.util.List.of;

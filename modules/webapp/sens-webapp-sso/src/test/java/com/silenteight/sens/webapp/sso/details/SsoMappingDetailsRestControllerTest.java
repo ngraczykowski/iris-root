@@ -1,7 +1,7 @@
 package com.silenteight.sens.webapp.sso.details;
 
-import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
-import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
+import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.sep.usermanagement.api.identityprovider.exception.IdentityProviderNotFoundException;
 import com.silenteight.sep.usermanagement.api.identityprovider.exception.SsoRoleMapperNotFoundException;
 
@@ -10,7 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.sens.webapp.sso.SsoMappingTestFixtures.SS0_NAME;
 import static com.silenteight.sens.webapp.sso.SsoMappingTestFixtures.SSO_ID_1;
 import static com.silenteight.sens.webapp.sso.SsoMappingTestFixtures.SSO_MAPPING_DTO_1;
@@ -43,7 +43,6 @@ class SsoMappingDetailsRestControllerTest extends BaseRestControllerTest {
         .body("roles[1]", is(AUDITOR));
   }
 
-  @Test
   @TestWithRole(roles = { APPROVER, AUDITOR, MODEL_TUNER, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
     get(DETAILS_SSO_MAPPING_URL)

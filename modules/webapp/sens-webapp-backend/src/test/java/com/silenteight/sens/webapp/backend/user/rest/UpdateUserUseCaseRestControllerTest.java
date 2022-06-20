@@ -1,17 +1,17 @@
 package com.silenteight.sens.webapp.backend.user.rest;
 
-import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
+import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.sens.webapp.user.update.exception.DisplayNameValidationException;
 import com.silenteight.sep.usermanagement.api.role.RoleValidationException;
 import com.silenteight.sep.usermanagement.api.user.UserUpdater.UserUpdateException;
 
 import org.springframework.context.annotation.Import;
 
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.APPROVER;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.AUDITOR;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.MODEL_TUNER;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
 import static com.silenteight.sens.webapp.backend.user.rest.dto.UpdateUserDtoFixtures.VALID_UPDATE_REQUEST;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.APPROVER;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.MODEL_TUNER;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.*;
 

@@ -1,11 +1,10 @@
 package com.silenteight.sens.webapp.backend.user.rest;
 
-import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
+import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.sep.usermanagement.api.role.RoleNotFoundException;
 
-
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.sens.webapp.backend.user.rest.UserRestControllerFixtures.AUDITOR_USER;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
 import static java.util.List.of;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;

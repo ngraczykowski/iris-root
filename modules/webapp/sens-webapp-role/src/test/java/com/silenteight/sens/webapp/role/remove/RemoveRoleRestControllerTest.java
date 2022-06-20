@@ -1,14 +1,15 @@
 package com.silenteight.sens.webapp.role.remove;
 
-import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
-import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
+
+import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.sens.webapp.role.RoleTestFixtures.ROLE_ID_1;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.mockito.ArgumentMatchers.any;
@@ -32,7 +33,6 @@ class RemoveRoleRestControllerTest extends BaseRestControllerTest {
     delete(REMOVE_ROLE_URL).statusCode(NO_CONTENT.value());
   }
 
-  @Test
   @TestWithRole(roles = { APPROVER, AUDITOR, MODEL_TUNER, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
     delete(REMOVE_ROLE_URL)

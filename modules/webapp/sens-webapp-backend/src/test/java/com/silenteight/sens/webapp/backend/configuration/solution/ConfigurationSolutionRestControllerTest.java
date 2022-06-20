@@ -1,18 +1,18 @@
 package com.silenteight.sens.webapp.backend.configuration.solution;
 
-import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
-import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
+import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
 import java.util.List;
 
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.APPROVER;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.AUDITOR;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.MODEL_TUNER;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
 import static com.silenteight.sens.webapp.backend.configuration.solution.ConfigurationSolutionRestControllerTest.ConfigurationSolutionRestControllerFixtures.*;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.APPROVER;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.MODEL_TUNER;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
 import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;

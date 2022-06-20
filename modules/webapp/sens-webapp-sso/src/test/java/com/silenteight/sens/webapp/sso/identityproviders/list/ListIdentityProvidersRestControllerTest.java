@@ -1,14 +1,14 @@
 package com.silenteight.sens.webapp.sso.identityproviders.list;
 
-import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
-import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
+import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.sens.webapp.sso.identityproviders.IdentityProvidersTestFixtures.*;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.is;
@@ -16,9 +16,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
-@Import({
-    ListIdentityProvidersRestController.class
-})
+@Import(ListIdentityProvidersRestController.class)
 class ListIdentityProvidersRestControllerTest extends BaseRestControllerTest {
 
   private static final String LIST_IDENTITY_PROVIDERS_URL = "/identity-providers";
@@ -42,7 +40,6 @@ class ListIdentityProvidersRestControllerTest extends BaseRestControllerTest {
         .body("[1].enabled", is(false));
   }
 
-  @Test
   @TestWithRole(roles = { APPROVER, AUDITOR, MODEL_TUNER, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
     get(LIST_IDENTITY_PROVIDERS_URL)

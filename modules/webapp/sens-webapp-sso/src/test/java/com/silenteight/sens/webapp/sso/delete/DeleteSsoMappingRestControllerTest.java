@@ -1,7 +1,7 @@
 package com.silenteight.sens.webapp.sso.delete;
 
-import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
-import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
+import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -9,7 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.sens.webapp.sso.SsoMappingTestFixtures.SSO_ID_1;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.*;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
-@Import({ DeleteSsoMappingRestController.class })
+@Import(DeleteSsoMappingRestController.class)
 class DeleteSsoMappingRestControllerTest extends BaseRestControllerTest {
 
   private static final String DELETE_SSO_MAPPING_URL = format("/sso/mappings/%s", SSO_ID_1);
@@ -39,7 +39,6 @@ class DeleteSsoMappingRestControllerTest extends BaseRestControllerTest {
     assertThat(command.getSsoMappingId()).isEqualTo(SSO_ID_1);
   }
 
-  @Test
   @TestWithRole(roles = { APPROVER, AUDITOR, MODEL_TUNER, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
     delete(DELETE_SSO_MAPPING_URL)

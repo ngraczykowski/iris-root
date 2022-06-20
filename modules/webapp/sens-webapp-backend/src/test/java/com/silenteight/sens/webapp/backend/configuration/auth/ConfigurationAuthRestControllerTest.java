@@ -2,24 +2,24 @@ package com.silenteight.sens.webapp.backend.configuration.auth;
 
 import lombok.*;
 
-import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
-import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
+import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.sep.usermanagement.api.configuration.ConfigurationQuery;
 import com.silenteight.sep.usermanagement.api.configuration.dto.AuthConfigurationDto;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.APPROVER;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.MODEL_TUNER;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.APPROVER;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.AUDITOR;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.MODEL_TUNER;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
 import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpStatus.OK;
 
-@Import({ ConfigurationAuthRestController.class })
+@Import(ConfigurationAuthRestController.class)
 class ConfigurationAuthRestControllerTest extends BaseRestControllerTest {
 
   @MockBean

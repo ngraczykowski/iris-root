@@ -15,7 +15,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.silenteight.sens.webapp.common.testing.matcher.StreamMatcher.streamThat;
+import static com.silenteight.sens.governance.common.testing.matcher.StreamMatcher.streamThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;

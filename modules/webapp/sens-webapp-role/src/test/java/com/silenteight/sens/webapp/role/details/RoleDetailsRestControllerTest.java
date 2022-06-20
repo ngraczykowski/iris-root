@@ -1,13 +1,12 @@
 package com.silenteight.sens.webapp.role.details;
 
-import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
-import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
+import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 
-import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.sens.webapp.role.RoleTestFixtures.*;
 import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.anything;
@@ -24,7 +23,7 @@ class RoleDetailsRestControllerTest extends BaseRestControllerTest {
   @MockBean
   RoleDetailsQuery roleDetailsQuery;
 
-  @TestWithRole(roles = { USER_ADMINISTRATOR })
+  @TestWithRole(roles = USER_ADMINISTRATOR)
   void its200_whenInvoked() {
     given(roleDetailsQuery.details(ROLE_ID_1)).willReturn(ROLE_DETAILS);
 
@@ -36,7 +35,6 @@ class RoleDetailsRestControllerTest extends BaseRestControllerTest {
         .body("updatedBy", is(USERNAME_1));
   }
 
-  @Test
   @TestWithRole(roles = { APPROVER, AUDITOR, MODEL_TUNER, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
     get(GET_ROLE_DETAILS_URL)

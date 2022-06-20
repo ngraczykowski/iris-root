@@ -1,7 +1,7 @@
 package com.silenteight.sens.webapp.backend.user.rest;
 
+import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.sens.webapp.backend.user.rest.dto.CreateUserDto;
-import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
 
 import io.vavr.control.Either;
 import org.hamcrest.Matchers;
@@ -10,14 +10,16 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.APPROVER;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.AUDITOR;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.MODEL_TUNER;
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
 import static com.silenteight.sens.webapp.backend.user.rest.UserRestControllerFixtures.USERNAME_NOT_UNIQUE;
 import static com.silenteight.sens.webapp.backend.user.rest.UserRestControllerFixtures.USER_REGISTRATION_DOMAIN_ERROR;
 import static com.silenteight.sens.webapp.backend.user.rest.UserRestControllerFixtures.USER_REGISTRATION_SUCCESS;
-import static com.silenteight.sens.webapp.backend.user.rest.dto.CreateUserDtoFixtures.*;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.APPROVER;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.MODEL_TUNER;
-import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
+import static com.silenteight.sens.webapp.backend.user.rest.dto.CreateUserDtoFixtures.INVALID_REQUEST_WITH_TOO_LONG_USER_NAME;
+import static com.silenteight.sens.webapp.backend.user.rest.dto.CreateUserDtoFixtures.INVALID_REQUEST_WITH_TOO_SHORT_USER_NAME;
+import static com.silenteight.sens.webapp.backend.user.rest.dto.CreateUserDtoFixtures.VALID_REQUEST;
 import static io.vavr.control.Either.left;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
