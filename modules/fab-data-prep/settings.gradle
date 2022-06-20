@@ -9,7 +9,7 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = 'fab-dataprep'
+rootProject.name = 'fab-data-prep'
 include 'dataprep-app'
 include 'dataprep-db-changelog'
 include "dataprep-dist"
