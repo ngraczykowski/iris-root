@@ -26,11 +26,17 @@ class BasePikaConnection:
         ...
 
     async def set_connection(self):
+        if not self.connection_configuration.all_required():
+            raise ValueError("Missing fields in RMQ connection configuration!")
         if self.ssl:
-            if not self.connection_configuration.ssl_options:
+            ssl_options = self.connection_configuration.ssl_options
+            if not ssl_options or not all(
+                (ssl_options.cafile, ssl_options.keyfile, ssl_options.certfile, ssl_options.verify)
+            ):
                 raise ValueError(
                     "No ssl connection parameters in config "
-                    "- add 'rabbitmq.ssl_options' section to application.yaml"
+                    "- add 'rabbitmq.ssl_options' section to application.yaml "
+                    "or set relevant environment variables"
                 )
             url = "".join(
                 map(
@@ -57,9 +63,9 @@ class BasePikaConnection:
                     ),
                 )
             )
-            self.connection: aio_pika.RobustConnection = await aio_pika.connect_robust(url=url)
+            self.connection: aio_pika.Connection = await aio_pika.connect(url=url)
         else:
-            self.connection: aio_pika.RobustConnection = await aio_pika.connect_robust(
+            self.connection: aio_pika.Connection = await aio_pika.connect(
                 host=self.connection_configuration.host,
                 port=self.connection_configuration.port,
                 login=self.connection_configuration.login,
