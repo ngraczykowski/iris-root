@@ -1,25 +1,89 @@
 plugins {
-  id "idea"
-  id "java"
   id "groovy"
   id "maven-publish"
-  id "org.springframework.boot" version "2.6.6"
+  id "com.silenteight.iris.build.spring-boot-application"
+  id "com.silenteight.iris.build.container-image"
 }
 
-description = "bridge-app"
+description = "scb-bridge-app"
 
-apply from: "${rootProject.projectDir}/gradle/scripts/dependencies.gradle"
+dependencies {
+  implementation project(":bridge-qco")
 
-configurations {
-  implementation.extendsFrom starterDatabase
-  runtimeOnly.extendsFrom starterDatabaseRuntime
+  implementation(group: "com.silenteight.iris", name: "sep-base-common") {
+    exclude group: 'io.zipkin.reporter2'
+    exclude group: 'org.springframework'
+  }
+  annotationProcessor libs.spring.boot.configuration.processor
+
+  implementation libs.silenteight.registration.api.library
+  implementation libs.silenteight.registration.api.proto
+  implementation libs.silenteight.recommendation.api.library
+  implementation libs.silenteight.recommendation.api.proto
+  implementation libs.data.source.api.uds.lib
+  implementation libs.data.source.agentinput.api
+  implementation libs.data.source.categories.api
+  implementation libs.warehouse.data.api
+  implementation libs.spring.boot.starter.data.jpa
+  implementation libs.oracle
+  implementation libs.grpc.client.spring.boot.starter
+  implementation libs.grpc.server.spring.boot.starter
+  implementation libs.commons.collections
+
+  implementation libs.spring.batch.core
+  implementation libs.spring.boot.starter.quartz
+
+  implementation libs.protobuf.java
+  implementation libs.protobuf.java.util
+
+  implementation libs.spring.boot
+  implementation libs.spring.boot.starter.actuator
+  implementation libs.spring.boot.starter.undertow
+  implementation libs.spring.boot.starter.webflux
+  implementation libs.spring.boot.starter.validation
+  implementation libs.spring.boot.starter.web
+  implementation libs.spring.boot.starter.amqp
+  implementation libs.spring.boot.starter.data.jdbc
+
+  implementation libs.spring.cloud.starter.bootstrap
+  implementation libs.spring.cloud.starter.consul.config
+  implementation libs.spring.cloud.consul.discovery
+  implementation libs.spring.retry
+  implementation libs.spring.integration.core
+  implementation libs.spring.integration.amqp
+
+  implementation libs.silenteight.sep.base.common
+  implementation libs.silenteight.sep.base.aspects
+  implementation libs.silenteight.serp.protocol.base
+  implementation libs.silenteight.serp.protocol.scb
+  implementation libs.silenteight.commons.core
+  implementation libs.data.retention.api
+
+  implementation libs.micrometer.prometheus
+  implementation libs.vavr
+
+  runtimeOnly libs.ecs.logging.core
+  runtimeOnly libs.logback.ecs.encoder
+  runtimeOnly libs.liquibase.core
+  runtimeOnly libs.hibernate.core
+  runtimeOnly libs.hibernate.envers
+  runtimeOnly libs.hikari.cp
+
+  runtimeOnly libs.postgresql
+  runtimeOnly libs.hibernate.jcache
+  runtimeOnly libs.caffeine
+  runtimeOnly libs.caffeine.jcache
+
+  testImplementation libs.silenteight.sep.base.testing
+  testImplementation libs.spock.spring
+  testImplementation libs.test.containers
+  testImplementation libs.json.path
+
+  testRuntimeOnly libs.junit.platform.commons
 }
 
 jar {
   manifest {
-    attributes "Main-Class": "com.silenteight.scb.ScbBridgeApplication"
+    attributes "Main-Class": "com.silenteight.iris.bridge.scb.ScbBridgeApplication"
   }
-}
-dependencies {
-  implementation project(":bridge-qco")
 }

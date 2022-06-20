@@ -3,7 +3,7 @@ package com.silenteight.scb.ingest.adapter.incomming.common.gnsparty;
 import lombok.Builder;
 import lombok.Value;
 
-import static org.testcontainers.shaded.org.apache.commons.lang.StringUtils.defaultString;
+import static org.testcontainers.shaded.org.apache.commons.lang3.StringUtils.defaultString;
 
 @Builder
 @Value

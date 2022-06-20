@@ -2,8 +2,11 @@ package com.silenteight.scb.outputrecommendation.infrastructure.grpc;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.proto.recommendation.api.v1.RecommendationResponse;
 import com.silenteight.recommendation.api.library.v1.*;
 
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -35,6 +38,13 @@ public class RecommendationServiceClientMock implements RecommendationServiceCli
                 .build())
             .build())
         .build();
+  }
+
+  @Override
+  public Iterator<RecommendationResponse> streamRecommendations(
+      RecommendationsIn request) {
+    log.info("MOCK: Stream recommendations called for analysis id: {}", request.getAnalysisName());
+    return Collections.emptyIterator();
   }
 
   public void add(String analysisName, List<RecommendationOut> recommendations) {

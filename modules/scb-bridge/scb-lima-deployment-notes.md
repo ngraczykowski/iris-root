@@ -65,7 +65,7 @@ use `serp cli` scripts for testing.
 # Release artifact to Minio and single component deployment
 
 `scb-bridge` artefacts are copied to Minio during invocation of `deployOnNomad` stage (
-inside `additionalStages`) defined in [Jenkinsfile](./Jenkinsfile).
+inside `additionalStages`).
 
 To release project's artefact to Minio, go
 to [scb-bridge jenkins job](https://jenkins.silenteight.com/view/all/job/sens/job/sens%252Fscb-bridge/job/master/)

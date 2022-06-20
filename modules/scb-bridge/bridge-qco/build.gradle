@@ -1,23 +1,30 @@
 plugins {
-  id "idea"
-  id "java"
-  id "groovy"
+  id "com.silenteight.iris.build.java-library"
   id "maven-publish"
+  id "groovy"
 }
 
 description = "bridge-qco"
 
-apply from: "${rootProject.projectDir}/gradle/scripts/dependencies.gradle"
-
 dependencies {
   implementation project(":bridge-qco-internal-protos")
-  implementation libraries.jackson_dataformat_csv
-  implementation libraries.warehouse_api
-  testImplementation libraries.spock_spring
-  testImplementation libraries.testcontainers
-  testImplementation libraries.testcontainers_postgresql
-  testImplementation libraries.testcontainers_spock
-  testImplementation libraries.postgresql
-  testImplementation libraries.liquibase_core
-  testImplementation libraries.testcontainers_rabbitmq
+  implementation libs.jackson.dataformat.csv
+  implementation libs.warehouse.data.api
+  implementation libs.spring.boot.starter.amqp
+  implementation libs.spring.boot.starter.data.jpa
+  implementation libs.grpc.server.spring.boot.starter
+  implementation libs.grpc.protobuf
+  implementation libs.commons.lang3
+  implementation libs.vavr
+
+  testImplementation libs.spring.test
+  testImplementation libs.spring.boot.starter.test
+
+  testImplementation libs.spock.spring
+  testImplementation libs.postgresql
+  testImplementation libs.liquibase.core
+  testImplementation libs.test.containers
+  testImplementation libs.test.containers.postgresql
+  testImplementation libs.test.containers.spock
+  testImplementation libs.test.containers.rabbitmq
 }
