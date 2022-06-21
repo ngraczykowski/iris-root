@@ -2,7 +2,7 @@ grpc:
   client:
     data-source:
       address: discovery:///{{ env "NOMAD_NAMESPACE" }}-universal-data-source
-      timeout: 10
+      timeout: 15
       # client_ca: {{ env "meta.silenteight.home" }}/cert/chain.pem
       # client_private_key: {{ env "meta.silenteight.home" }}/cert/company-name-agent/company-name-agent-key.pem
       # client_public_key_chain: {{ env "meta.silenteight.home" }}/cert/company-name-agent/company-name-agent-chain.pem
