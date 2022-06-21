@@ -19,8 +19,8 @@ class AuditLogUseCase implements AuditDataMessageHandler {
 
   @Override
   public void handle(@NonNull AuditData message) {
-    log.info(INTERNAL, "Audit message to be logged: message={}" + message);
+    log.info(INTERNAL, "Audit message to be logged: message={}", message);
     auditLogService.log(message);
-    log.info(INTERNAL, "Audit message has been logged: message={}" + message);
+    log.info(INTERNAL, "Audit message has been logged: message={}", message);
   }
 }
