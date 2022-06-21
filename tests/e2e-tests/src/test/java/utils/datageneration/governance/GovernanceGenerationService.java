@@ -1,21 +1,8 @@
 package utils.datageneration.governance;
 
-import lombok.SneakyThrows;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import utils.datageneration.CommonUtils;
-
-import lombok.SneakyThrows;
-
 import lombok.experimental.UtilityClass;
 
 import java.util.*;
-
-import static utils.datageneration.CommonUtils.getJsonTemplate;
-import static utils.datageneration.CommonUtils.template;
-import static utils.datageneration.CommonUtils.templateObject;
 
 @UtilityClass
 public class GovernanceGenerationService {

@@ -9,8 +9,8 @@ import lombok.SneakyThrows;
 import java.util.Map;
 
 import static java.util.UUID.randomUUID;
-import static utils.datageneration.CommonUtils.getJsonTemplate;
-import static utils.datageneration.CommonUtils.templateObject;
+import static utils.CommonUtils.getJsonTemplate;
+import static utils.CommonUtils.templateObject;
 
 public class PbAlertsGeneratingService {
 

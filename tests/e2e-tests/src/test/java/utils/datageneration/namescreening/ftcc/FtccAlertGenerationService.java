@@ -4,7 +4,7 @@
 
 package utils.datageneration.namescreening.ftcc;
 
-import utils.datageneration.CommonUtils;
+import utils.CommonUtils;
 
 public class FtccAlertGenerationService {
 

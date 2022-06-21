@@ -1,9 +1,14 @@
-package utils.datageneration;
+package utils;
+
+import com.codeborne.selenide.ClickOptions;
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
 import org.apache.commons.text.StringSubstitutor;
+import org.openqa.selenium.Keys;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -13,6 +18,10 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Random;
+
+import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.getFocusedElement;
 
 @UtilityClass
 public class CommonUtils {
@@ -57,6 +66,15 @@ public class CommonUtils {
         .atZoneSameInstant(ZoneOffset.UTC)
         .format(DateTimeFormatter.ISO_DATE_TIME);
   }
+
+  public static void setMatSelectAs(SelenideElement element, String value) {
+    SelenideElement valueElement = $(byText(value));
+    element.click();
+    valueElement.shouldBe(Condition.visible);
+    valueElement.click(ClickOptions.usingJavaScript());
+    getFocusedElement().sendKeys(Keys.ESCAPE);
+  }
+
   @SneakyThrows
   public static String template(String template, Map<String, String> parameters) {
     return StringSubstitutor.replace(template, parameters);

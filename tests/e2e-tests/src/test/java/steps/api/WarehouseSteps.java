@@ -25,9 +25,9 @@ import static io.restassured.RestAssured.when;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static steps.Hooks.scenarioContext;
 import static utils.AuthUtils.getAuthTokenHeaderForAdmin;
-import static utils.datageneration.CommonUtils.getDateTimeNow;
-import static utils.datageneration.CommonUtils.getDateTimeNowMinus;
-import static utils.datageneration.CommonUtils.getOnlyDateWithOffset;
+import static utils.CommonUtils.getDateTimeNow;
+import static utils.CommonUtils.getDateTimeNowMinus;
+import static utils.CommonUtils.getOnlyDateWithOffset;
 
 public class WarehouseSteps implements En {
 

@@ -7,7 +7,7 @@ import static utils.pom.LoginPage.loginAsUserViaFrontend;
 
 public class LoginSteps implements En {
   public LoginSteps() {
-    Given("Login as admin", () -> {
+    Given("User login as admin", () -> {
       open(System.getProperty("test.url"));
       loginAsUserViaFrontend(System.getProperty("test.admin.username"), System.getProperty("test.admin.password"));
     });

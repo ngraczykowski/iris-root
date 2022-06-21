@@ -11,7 +11,7 @@ import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static steps.Hooks.scenarioContext;
-import static utils.datageneration.CommonUtils.getOnlyDateWithOffset;
+import static utils.CommonUtils.getOnlyDateWithOffset;
 import static utils.datageneration.simulations.SimulationGenerationService.createDataset;
 import static utils.datageneration.simulations.SimulationGenerationService.createSimulation;
 

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import utils.datageneration.CommonUtils;
+import utils.CommonUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -23,9 +23,9 @@ import static java.lang.String.valueOf;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
-import static utils.datageneration.CommonUtils.getDateTimeNow;
-import static utils.datageneration.CommonUtils.getRandomValue;
-import static utils.datageneration.CommonUtils.template;
+import static utils.CommonUtils.getDateTimeNow;
+import static utils.CommonUtils.getRandomValue;
+import static utils.CommonUtils.template;
 
 public class BatchGenerationService {
 
