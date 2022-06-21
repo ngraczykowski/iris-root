@@ -116,4 +116,7 @@
     <#if nameType == 'ALIAS' >
         <#return 'name alias'>
     </#if>
+    <#if nameType == 'REGULAR' >
+        <#return 'name regular'>
+    </#if>
 </#function>
