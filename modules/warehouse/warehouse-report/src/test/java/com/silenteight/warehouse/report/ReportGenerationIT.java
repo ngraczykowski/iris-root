@@ -112,6 +112,7 @@ class ReportGenerationIT {
   void shouldGenerateReport() {
     storeData(DISCRIMINATOR_1, NAME_1, RECOMMENDATION_DATE, Map.of(
         PAYLOAD_KEY_SIGNATURE, PAYLOAD_VALUE_SIGNATURE,
+        PAYLOAD_KEY_COMMENT, PAYLOAD_VALUE_COMMENT_LONG,
         PAYLOAD_KEY_COUNTRY, COUNTRY_PL));
     storeData(DISCRIMINATOR_2, NAME_2, RECOMMENDATION_DATE, Map.of(
         PAYLOAD_KEY_SIGNATURE, PAYLOAD_VALUE_SIGNATURE,
@@ -128,11 +129,14 @@ class ReportGenerationIT {
 
     thenReportInDbHasCorrectExtension(instanceId, "CSV");
     assertThat(reportContent)
-        .hasLineCount(2)
+        .hasLineCount(3)
         .contains(
             "9HzsNs1bv",
             "PL",
             "TEST[AAAGLOBAL186R1038]_81596ace",
+            """
+              S8 recommended action: False PositivennSAN 2485278: Alerted Party's name (AO A C also known as 敖安成 | 敖安成先生) does not match Watchlist Party name (XXXYYY AO). Alerted Party's incorporation country (""\""CN"", CHINA, CN) does not match Watchlist Party country (XXXYYY, XXXYYY FEDERATION). Alerted Party's registration country (CHINA, ""\""CN"", CN) does not match Watchlist Party country (XXXYYY FEDERATION). Alerted Party's other countries (CHINA, CN) do not match Watchlist Party countries (XXXYYY, XXXYYY FEDERATION).
+            """,
             "alerts/123",
             "2021-01-12 10:00:37");
   }
@@ -180,7 +184,7 @@ class ReportGenerationIT {
 
     thenReportInDbHasCorrectExtension(instanceId, "CSV");
     assertThat(reportContent)
-        .hasLineCount(3)
+        .hasLineCount(5)
         .contains(NAME_1, NAME_2);
   }
 

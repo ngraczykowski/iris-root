@@ -10,6 +10,7 @@ import com.silenteight.warehouse.report.name.ReportFileName;
 import com.silenteight.warehouse.report.name.ReportFileNameDto;
 import com.silenteight.warehouse.report.persistence.ReportFileExtension;
 
+import liquibase.util.csv.opencsv.CSVParser;
 import liquibase.util.csv.opencsv.CSVReader;
 import liquibase.util.csv.opencsv.CSVWriter;
 
@@ -42,7 +43,7 @@ class ReportTempFileCreator {
     int rowsCount = 0;
     try (
         CSVReader csvReader = new CSVReader(new InputStreamReader(inputStream));
-        CSVWriter csvWriter = new CSVWriter(new FileWriter(tempCsvFile))) {
+        CSVWriter csvWriter = new CSVWriter(new FileWriter(tempCsvFile), CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER, CSVParser.DEFAULT_QUOTE_CHARACTER)) {
       String[] line;
       while ((line = csvReader.readNext()) != null) {
         csvWriter.writeNext(line);

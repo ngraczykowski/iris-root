@@ -32,6 +32,7 @@ warehouse.reports.v2:
       selectSqlQuery: >
         SELECT (payload ->> 'fvSignature') AS "Reasoning Branch ID",
                (payload ->> 'country') AS "Country",
+               (payload ->> 'comment') AS "Comment",
                discriminator AS "Alert S8 ID",
                name AS "Alert S8 Name",
                recommendation_date
