@@ -4,11 +4,13 @@ from typing import Any, Optional
 
 import yaml
 
+from agent_base.utils.config.application_config import (
+    ApplicationConfig,
+    ConfigurationException,
+)
+from agent_base.utils.config.application_config_loader import ApplicationConfigLoader
+
 CONFIG_DIRS = (pathlib.Path("./config"),)
-
-
-class ConfigurationException(Exception):
-    pass
 
 
 class Config:
@@ -22,7 +24,20 @@ class Config:
             *self._get_from_environment(env_configuration_dir_key),
             *configuration_dirs,
         )
-        self.application_config = self.load_yaml_config("application.yaml", required=required)
+        self.required = required
+        self.application_config = self._load_application_config()
+
+    def _load_application_config(self) -> Optional[ApplicationConfig]:
+        application_config_mapping = self.load_yaml_config(
+            "application.yaml", required=self.required
+        )
+        if application_config_mapping:
+            try:
+                return ApplicationConfigLoader(application_config_mapping).load()
+            except Exception as exc:
+                raise ConfigurationException(f"Wrong param in application.yaml: {exc}")
+        else:
+            return None
 
     @staticmethod
     def _get_from_environment(configuration_dir_key: str):
@@ -50,4 +65,4 @@ class Config:
             return yaml.load(config_file, Loader=yaml.FullLoader)
 
     def reload(self):
-        self.application_config = self.load_yaml_config("application.yaml", required=True)
+        self.application_config = self._load_application_config()

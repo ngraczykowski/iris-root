@@ -1,7 +1,6 @@
 import asyncio
 import collections
 import logging
-import os
 import time
 from typing import Any, AsyncGenerator, Dict, Generator, Tuple
 
@@ -163,11 +162,10 @@ class AgentExchange(AgentService):
         return response
 
     async def _set_pika_connection(self):
-        messaging_config = self.config.application_config["agent"]["agent-exchange"]
-        max_requests_to_worker = self.config.application_config["agent"]["processes"]
-        for connection_config in self._prepare_connection_configurations():
+        max_requests_to_worker = self.config.application_config.agent_grpc_service.processes
+        for connection_config in self.config.application_config.rabbitmq.generate():
             connection = PikaConnection(
-                messaging_config,
+                self.config.application_config.messaging,
                 connection_config,
                 self.on_request,
                 max_requests_to_worker,
@@ -179,35 +177,13 @@ class AgentExchange(AgentService):
             except Exception as err:
                 self.logger.info(
                     f"Unable to connect to queue on "
-                    f" {connection_config.get('host', '-')}:{connection_config.get('port', '-')}"
+                    f" {connection_config.host or '_'}:{connection_config.port or '_'}"
                     f" ({err!r})"
                 )
             else:
                 return connection
 
         raise Exception("No working pika connection")
-
-    def _prepare_connection_configurations(self):
-        rabbitmq_config = self.config.application_config["rabbitmq"]
-
-        # SPRING_RABBITMQ_USERNAME and SPRING_RABBITMQ_PASSWORD,
-        #  cause why not made it framework agnostic...
-        for config_key, environment_var in (
-            ("login", "SPRING_RABBITMQ_USERNAME"),
-            ("password", "SPRING_RABBITMQ_PASSWORD"),
-        ):
-            if config_key not in rabbitmq_config and environment_var in os.environ:
-                rabbitmq_config[config_key] = os.environ[environment_var]
-
-        if "host" in rabbitmq_config:
-            yield rabbitmq_config
-
-        if "addresses" in rabbitmq_config:
-            addresses = rabbitmq_config["addresses"]
-            del rabbitmq_config["addresses"]
-            for address in addresses.split(","):
-                host, port = address.split(":")
-                yield {"host": host, "port": port, **rabbitmq_config}
 
     @staticmethod
     def _update_absent_solutions(

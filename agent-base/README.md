@@ -16,17 +16,11 @@ or from source
 pip install .
 ```
 
-or building wheel from source in dist directory
-```bash
-./scripts/bootstrap.sh
-./scripts/prepare_artifacts.sh
-```
-
 
 ## Implementing your agent
 
 Sample dummy agent implementation can be found in `agent_base/example.py`. 
-Sample agent implemented using this package is company name agent.
+Sample agent implemented using this package is Organization Name Agent.
 
 ### Agent
 
@@ -59,7 +53,7 @@ Api protos can be found [here](https://gitlab.silenteight.com/ro/agents-api/-/tr
 ### Deployment
 
 Deployment is not currently included in this package.
-Sample deployment scripts can be found in [company name agent](https://gitlab.silenteight.com/data-science/organization-name-agent).
+Sample deployment scripts can be found in [organization name agent](https://gitlab.silenteight.com/data-science/organization-name-agent).
 
 
 ## Implementation
@@ -75,7 +69,7 @@ Tests are run with `pytest`.
 For gitlab runs, flag `--without-rabbitmq` is added - so tests with agent exchange
 are not run, as it needs running rabbitmq instance. Those tests should be run locally after starting rabbitmq 
 (for example using [this](https://gitlab.silenteight.com/sens/common-docker-infrastructure)).
-If you have time - please make this tests run in gitlab.
+If you have time - please make this tests run in CI/CD pipeline.
 
 ### Code quality
 
@@ -83,4 +77,4 @@ If you have time - please make this tests run in gitlab.
 * black
 * isort
 
-All code quality checks are included in tox (see `tox.ini`) and are checked in both gitlab pipeline.
+All code quality checks are included in tox (see `tox.ini`) and are checked in CI/CD pipeline.

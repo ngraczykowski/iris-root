@@ -1,5 +1,4 @@
 import logging
-import pathlib
 from typing import Generator, Tuple
 
 import pytest
@@ -26,24 +25,19 @@ FEATURE_NAME = "features/name"
 
 @pytest.fixture(autouse=True, scope="module")
 def config():
-    configuration_path = pathlib.Path("./config/application.yaml")
-    configuration_path.symlink_to("application.local.yaml")
-    try:
-        yield Config([configuration_path.parent])
-    finally:
-        configuration_path.unlink()
+    yield Config()
 
 
 @pytest.fixture(autouse=True)
 async def ae_mock(config):
-    async with AdjudicationEngineMock(config.application_config) as mock:
+    async with AdjudicationEngineMock(config) as mock:
         yield mock
 
 
 @pytest.fixture(autouse=True)
 async def data_source_mock(config):
     async with DataSourceMock(
-        address=config.application_config["grpc"]["client"]["data-source"]["address"],
+        address=config.application_config.uds.address,
     ) as mock:
         yield mock
 

@@ -11,9 +11,11 @@ from silenteight.agents.v1.api.exchange.exchange_pb2 import (
     AgentExchangeResponse,
 )
 
+from agent_base.utils import Config
+
 
 class AdjudicationEngineMock:
-    def __init__(self, config, consume_responses=True):
+    def __init__(self, config: Config, consume_responses=True):
         self.config = config
         self._events: Dict[str, asyncio.Event] = {}
         self._responses = {}
@@ -25,24 +27,26 @@ class AdjudicationEngineMock:
             None,
         )
         self.consume_responses = consume_responses
+        self.connection_configuration = self.config.application_config.rabbitmq
+        self.messaging_config = self.config.application_config.messaging
         self.logger = logging.getLogger("AdjudicationEngineMock")
 
     async def start(self):
-        connection_configuration = self.config["rabbitmq"].copy()
-        connection_configuration.pop("tls", None)
         self._connection: aio_pika.RobustConnection = await aio_pika.connect_robust(
-            **connection_configuration
+            host=self.connection_configuration.host,
+            port=self.connection_configuration.port,
+            login=self.connection_configuration.login,
+            password=self.connection_configuration.password,
+            virtualhost=self.connection_configuration.virtualhost,
         )
 
         channel: aio_pika.Channel = await self._connection.channel()
-        self._exchange = await channel.get_exchange(
-            self.config["agent"]["agent-exchange"]["request"]["exchange"]
-        )
+        self._exchange = await channel.get_exchange(self.messaging_config.request.exchange)
 
         if self.consume_responses:
             self._callback_queue = await channel.declare_queue(name="", exclusive=True)
             await self._callback_queue.bind(
-                exchange=self.config["agent"]["agent-exchange"]["response"]["exchange"],
+                exchange=self.messaging_config.response.exchange,
                 routing_key="#",
             )
         self.logger.info("AEMock started")
@@ -64,7 +68,7 @@ class AdjudicationEngineMock:
         if not correlation_id:
             correlation_id = str(uuid.uuid4())
         if routing_key is None:
-            routing_key = self.config["agent"]["agent-exchange"]["request"]["routing-key"]
+            routing_key = self.messaging_config.request.routing_key
         assert correlation_id not in self._events
         self._events[correlation_id] = asyncio.Event()
 
@@ -113,7 +117,7 @@ class AdjudicationEngineMock:
         if self._callback_queue:
             await self._callback_queue.cancel(self._callback_queue_tag)
             await self._callback_queue.unbind(
-                exchange=self.config["agent"]["agent-exchange"]["response"]["exchange"],
+                exchange=self.messaging_config.response.exchange,
             )
             await self._callback_queue.delete()
 

@@ -1,0 +1,16 @@
+{
+  "AGENT_PROCESSES": 2,
+  "GRPC_PORT": 9090,
+  "RABBITMQ_USERNAME": "user",
+  "RABBITMQ_PASSWORD": "pass",
+  "RABBITMQ_HOST": "best.host.ever",
+  "RABBITMQ_PORT": 12345,
+  "RABBITMQ_VIRTUALHOST": "vhost",
+  "REQUEST_EXCHANGE": "agent.request",
+  "REQUEST_ROUTING_KEY": "agents.EXAMPLE.versions.1_0_0.configs.1",
+  "REQUEST_QUEUE_NAME": "agent-EXAMPLE-requests",
+  "RESPONSE_EXCHANGE": "agent.response",
+  "RESPONSE_ROUTING_KEY": "routing-key",
+  "UDS_ADDRESS": "localhost:23455",
+  "UDS_TIMEOUT": 5
+}

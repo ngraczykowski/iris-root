@@ -1,13 +1,12 @@
 import random
-from typing import Mapping
 
-from s8_python_network.consul import ConsulService
+from s8_python_network.consul import ConsulConfig, ConsulService
 
 
 class AddressService:
     consul_prefix = "discovery:///"
 
-    def __init__(self, config: Mapping):
+    def __init__(self, config: ConsulConfig):
         self.consul = ConsulService(config)
 
     async def get(self, address: str) -> str:
