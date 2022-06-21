@@ -24,7 +24,7 @@ platform-reactor = "2020.0.20"
 platform-sentry = "5.7.4"
 platform-sep = "2.5.0"
 platform-spock = "2.1-groovy-3.0"
-platform-spring-boot = "2.6.6"
+platform-spring-boot = "2.6.8"
 platform-spring-cloud = "2021.0.3"
 platform-test-containers = "1.17.2"
 
