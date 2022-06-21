@@ -30,5 +30,21 @@
     "after 10pm and before 5am every weekday",
     "every weekend"
   ],
-  "timezone": "Europe/Warsaw"
+  "timezone": "Europe/Warsaw",
+  "automergeStrategy": "rebase",
+  "platformAutomerge": true,
+  "rebaseWhen": "conflicted",
+  "packageRules": [
+    {
+      "matchPackagePrefixes": ["org.springframework.boot:"],
+      "extends": [
+        ":separatePatchReleases"
+      ]
+    },
+    {
+      "matchPackagePrefixes": ["org.springframework.boot:"],
+      "matchUpdateTypes": ["minor"],
+      "automerge": false
+    }
+  ]
 }
