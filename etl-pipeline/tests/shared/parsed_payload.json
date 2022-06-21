@@ -1,40 +1,25 @@
 [
     {
-        "AP_CONCAT_NAMES": "Joe BlackJ",
         "AP_ACCOUNT_BENEFICIARY_NAMES": [
-            "Pladimir Vutin",
-            "Eva Pladimirova"
+            "Eva Pladimirova",
+            "Pladimir Vutin"
         ],
         "AP_ACCOUNT_BRANCH_ACCOUNT_NUMBERS": [
             "234_142529",
             "234_142529"
         ],
         "AP_ACCOUNT_NAMES": [
-            "Pladimir Vutin",
-            "Eva Pladimirova"
+            "Eva Pladimirova",
+            "Pladimir Vutin"
         ],
+        "AP_CONCAT_NAMES": "Joe BlackJ",
         "AP_COUNTRY_OF_INCORPORATION": [],
         "AP_GOVT_IDS": [],
         "AP_PARTIES_NAMES": [
-            "Pladimir Vutin",
-            "Eva Pladimirova"
-        ],
-        "AP_PARTY_BIRTH_COUNTRIES": [],
-        "AP_PARTY_CITIZENSHIP_COUNTRIES": [
-            "United States",
-            "United States"
-        ],
-        "AP_PARTY_NAMES": [
-            "Pladimir Vutin",
-            "Eva Pladimirova"
-        ],
-        "AP_PARTY_RESIDENCY_COUNTRIES": [],
-        "AP_TAX_IDS": [
-            "154421273",
-            "022368917"
+            "Eva Pladimirova",
+            "Pladimir Vutin"
         ],
         "AP_PARTY1_ADDRESS1_COUNTRY": "UNITED STATES OF AMERICA",
-        
         "AP_PARTY1_COUNTRY1": null,
         "AP_PARTY1_COUNTRY1_CITIZENSHIP": null,
         "AP_PARTY1_COUNTRY2_CITIZENSHIP": null,
@@ -42,21 +27,34 @@
         "AP_PARTY1_COUNTRY_FORMATION1": null,
         "AP_PARTY1_COUNTRY_OF_INCORPORATION": null,
         "AP_PARTY1_COUNTRY_PEP": null,
-        
         "AP_PARTY1_GOVTID1_NUMBER": null,
         "AP_PARTY1_GOVTID2_NUMBER": null,
+        "AP_PARTY_BIRTH_COUNTRIES": [],
+        "AP_PARTY_CITIZENSHIP_COUNTRIES": [
+            "United States",
+            "United States"
+        ],
+        "AP_PARTY_NAMES": [
+            "Eva Pladimirova",
+            "Pladimir Vutin"
+        ],
+        "AP_PARTY_RESIDENCY_COUNTRIES": [],
         "AP_PRTY_PRIM_CTZNSH_CNTRY": null,
         "AP_PRTY_RSDNC_CNTRY_CD": null,
+        "AP_TAX_IDS": [
+            "022368917",
+            "154421273"
+        ],
         "alertedParty": {
-            "AP_PARTY_TYPES": [
-                "Individual",
-                "Individual"
-            ],
             "AP_DOB": [
                 "02/31/1900",
                 "04/31/1910"
             ],
             "AP_PARTY_TYPE": "I",
+            "AP_PARTY_TYPES": [
+                "Individual",
+                "Individual"
+            ],
             "ENTITY_TYPE_MATCH": "Y",
             "headerInfo": {
                 "currentVersionId": "122438658",
@@ -470,8 +468,8 @@
                 "WL_COUNTRY": "US|FL;US",
                 "WL_COUNTRYNAME": "United States of America",
                 "WL_DOB": [
-                    "MAY 6, 1981",
-                    ""
+                    "",
+                    "MAY 6, 1981"
                 ],
                 "WL_DOCUMENT_NUMBER": [],
                 "WL_ENTITYTYPE": "03",
@@ -487,11 +485,11 @@
                 "all_hit_type_aggregated": [
                     {
                         "address": [
-                            "ADDRESS1_PROVINCE",
-                            "ADDRESS1_COUNTRY",
-                            "CONCAT_ADDRESS",
                             "ADDRESS1_CITY",
-                            "ADDRESS1_STATE"
+                            "ADDRESS1_COUNTRY",
+                            "ADDRESS1_PROVINCE",
+                            "ADDRESS1_STATE",
+                            "CONCAT_ADDRESS"
                         ],
                         "job": [],
                         "name": [
@@ -504,10 +502,10 @@
                 "ap_all_ap_id_tp_markeds_aggregated": [],
                 "ap_all_ap_name_tp_markeds_aggregated": [],
                 "ap_all_company_names_aggregated": [
-                    "Pladimir Vutin",
-                    "Janusz",
                     "Eva Pladimirova",
-                    "Joe BlackJ"
+                    "Janusz",
+                    "Joe BlackJ",
+                    "Pladimir Vutin"
                 ],
                 "ap_all_dobs_aggregated": [
                     "02/31/1900",
@@ -524,10 +522,10 @@
                 ],
                 "ap_all_matched_tokens_tp_markeds_aggregated": [],
                 "ap_all_names_aggregated": [
-                    "Pladimir Vutin",
-                    "Janusz",
                     "Eva Pladimirova",
-                    "Joe BlackJ"
+                    "Janusz",
+                    "Joe BlackJ",
+                    "Pladimir Vutin"
                 ],
                 "ap_all_nationalities_aggregated": [
                     "United States",
@@ -552,20 +550,20 @@
                 "company_name_agent_ap": [
                     "Joe BlackJ",
                     [
-                        "Pladimir Vutin",
-                        "Eva Pladimirova"
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
                     ],
                     [
-                        "Pladimir Vutin",
-                        "Eva Pladimirova"
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
                     ],
                     [
-                        "Pladimir Vutin",
-                        "Eva Pladimirova"
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
                     ],
                     [
-                        "Pladimir Vutin",
-                        "Eva Pladimirova"
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
                     ],
                     "Janusz",
                     null,
@@ -586,13 +584,13 @@
                     "04/31/1910"
                 ],
                 "dob_agent_wl": [
-                    "MAY 6, 1981",
-                    ""
+                    "",
+                    "MAY 6, 1981"
                 ],
                 "document_agent_ap": [
                     [
-                        "154421273",
-                        "022368917"
+                        "022368917",
+                        "154421273"
                     ],
                     [],
                     null,
@@ -640,13 +638,13 @@
                     ],
                     "sdfs": {
                         "sdf": [
+                            "05/05/2015 19:49:26",
                             "N/A",
                             "N/A",
                             "N/A",
                             "N/A",
                             "N/A",
-                            "PLEASE CALL AML HOT LINE AT 212 762 8000 AND REF CI-079385",
-                            "05/05/2015 19:49:26"
+                            "PLEASE CALL AML HOT LINE AT 212 762 8000 AND REF CI-079385"
                         ]
                     },
                     "source": "CON",
@@ -658,11 +656,11 @@
                 "entityVersion": "20150505194929",
                 "firstMatchedDate": "01/08/20",
                 "hit_type_agent_address": [
-                    "ADDRESS1_PROVINCE",
-                    "ADDRESS1_COUNTRY",
-                    "CONCAT_ADDRESS",
                     "ADDRESS1_CITY",
-                    "ADDRESS1_STATE"
+                    "ADDRESS1_COUNTRY",
+                    "ADDRESS1_PROVINCE",
+                    "ADDRESS1_STATE",
+                    "CONCAT_ADDRESS"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_name": [
@@ -682,20 +680,20 @@
                 "name_agent_ap": [
                     "Joe BlackJ",
                     [
-                        "Pladimir Vutin",
-                        "Eva Pladimirova"
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
                     ],
                     [
-                        "Pladimir Vutin",
-                        "Eva Pladimirova"
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
                     ],
                     [
-                        "Pladimir Vutin",
-                        "Eva Pladimirova"
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
                     ],
                     [
-                        "Pladimir Vutin",
-                        "Eva Pladimirova"
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
                     ],
                     "Janusz",
                     null,
@@ -818,9 +816,9 @@
                     null
                 ],
                 "sanctioned_country_agent_wl": [
+                    "Joe Ding",
                     "US|FL;US",
-                    "United States of America",
-                    "Joe Ding"
+                    "United States of America"
                 ],
                 "sourceCode": "CON",
                 "stopDescriptors": [
@@ -876,41 +874,26 @@
         }
     },
     {
-        "AP_CONCAT_NAMES": null,
         "AP_ACCOUNT_BENEFICIARY_NAMES": [
-            "Pladimir Vutin",
-            "Eva Pladimirova"
+            "Eva Pladimirova",
+            "Pladimir Vutin"
         ],
         "AP_ACCOUNT_BRANCH_ACCOUNT_NUMBERS": [
             "234_142529",
             "234_142529"
         ],
         "AP_ACCOUNT_NAMES": [
-            "Pladimir Vutin",
-            "Eva Pladimirova"
+            "Eva Pladimirova",
+            "Pladimir Vutin"
         ],
+        "AP_CONCAT_NAMES": null,
         "AP_COUNTRY_OF_INCORPORATION": [],
         "AP_GOVT_IDS": [],
         "AP_PARTIES_NAMES": [
-            "Pladimir Vutin",
-            "Eva Pladimirova"
-        ],
-        "AP_PARTY_BIRTH_COUNTRIES": [],
-        "AP_PARTY_CITIZENSHIP_COUNTRIES": [
-            "United States",
-            "United States"
-        ],
-        "AP_PARTY_NAMES": [
-            "Pladimir Vutin",
-            "Eva Pladimirova"
-        ],
-        "AP_PARTY_RESIDENCY_COUNTRIES": [],
-        "AP_TAX_IDS": [
-            "154421273",
-            "022368917"
+            "Eva Pladimirova",
+            "Pladimir Vutin"
         ],
         "AP_PARTY1_ADDRESS1_COUNTRY": "UNITED STATES OF AMERICA",
-        
         "AP_PARTY1_COUNTRY1": null,
         "AP_PARTY1_COUNTRY1_CITIZENSHIP": null,
         "AP_PARTY1_COUNTRY2_CITIZENSHIP": null,
@@ -918,22 +901,35 @@
         "AP_PARTY1_COUNTRY_FORMATION1": null,
         "AP_PARTY1_COUNTRY_OF_INCORPORATION": null,
         "AP_PARTY1_COUNTRY_PEP": null,
-        
         "AP_PARTY1_GOVTID1_NUMBER": null,
         "AP_PARTY1_GOVTID2_NUMBER": null,
+        "AP_PARTY_BIRTH_COUNTRIES": [],
+        "AP_PARTY_CITIZENSHIP_COUNTRIES": [
+            "United States",
+            "United States"
+        ],
+        "AP_PARTY_NAMES": [
+            "Eva Pladimirova",
+            "Pladimir Vutin"
+        ],
+        "AP_PARTY_RESIDENCY_COUNTRIES": [],
         "AP_PRTY_PRIM_CTZNSH_CNTRY": null,
         "AP_PRTY_RSDNC_CNTRY_CD": null,
+        "AP_TAX_IDS": [
+            "022368917",
+            "154421273"
+        ],
         "alertedParty": {
-            "AP_PARTY_TYPES": [
-                "Individual",
-                "Individual"
-            ],
             "AP_DOB": [
                 "02/31/1900",
                 "04/31/1910",
                 "20/10/1963"
             ],
             "AP_PARTY_TYPE": "I",
+            "AP_PARTY_TYPES": [
+                "Individual",
+                "Individual"
+            ],
             "ENTITY_TYPE_MATCH": "Y",
             "headerInfo": {
                 "currentVersionId": "122438658",
@@ -1348,8 +1344,8 @@
                     "Poland"
                 ],
                 "WL_DOB": [
-                    "MAY 6, 1981",
-                    ""
+                    "",
+                    "MAY 6, 1981"
                 ],
                 "WL_DOCUMENT_NUMBER": [],
                 "WL_ENTITYTYPE": "03",
@@ -1368,11 +1364,11 @@
                 "all_hit_type_aggregated": [
                     {
                         "address": [
-                            "ADDRESS1_PROVINCE",
-                            "ADDRESS1_COUNTRY",
-                            "CONCAT_ADDRESS",
                             "ADDRESS1_CITY",
-                            "ADDRESS1_STATE"
+                            "ADDRESS1_COUNTRY",
+                            "ADDRESS1_PROVINCE",
+                            "ADDRESS1_STATE",
+                            "CONCAT_ADDRESS"
                         ],
                         "job": [],
                         "name": [],
@@ -1386,9 +1382,9 @@
                     "Pladimir Vutin"
                 ],
                 "ap_all_dobs_aggregated": [
-                    "20/10/1963",
                     "02/31/1900",
-                    "04/31/1910"
+                    "04/31/1910",
+                    "20/10/1963"
                 ],
                 "ap_all_documents_aggregated": [
                     "022368917",
@@ -1424,20 +1420,20 @@
                 "company_name_agent_ap": [
                     null,
                     [
-                        "Pladimir Vutin",
-                        "Eva Pladimirova"
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
                     ],
                     [
-                        "Pladimir Vutin",
-                        "Eva Pladimirova"
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
                     ],
                     [
-                        "Pladimir Vutin",
-                        "Eva Pladimirova"
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
                     ],
                     [
-                        "Pladimir Vutin",
-                        "Eva Pladimirova"
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
                     ],
                     null,
                     null,
@@ -1459,13 +1455,13 @@
                     "20/10/1963"
                 ],
                 "dob_agent_wl": [
-                    "MAY 6, 1981",
-                    ""
+                    "",
+                    "MAY 6, 1981"
                 ],
                 "document_agent_ap": [
                     [
-                        "154421273",
-                        "022368917"
+                        "022368917",
+                        "154421273"
                     ],
                     [],
                     null,
@@ -1513,13 +1509,13 @@
                     },
                     "sdfs": {
                         "sdf": [
+                            "05/05/2015 19:49:26",
                             "N/A",
                             "N/A",
                             "N/A",
                             "N/A",
                             "N/A",
-                            "PLEASE CALL AML HOT LINE AT 212 762 8000 AND REF CI-079385",
-                            "05/05/2015 19:49:26"
+                            "PLEASE CALL AML HOT LINE AT 212 762 8000 AND REF CI-079385"
                         ]
                     },
                     "source": "CON",
@@ -1531,11 +1527,11 @@
                 "entityVersion": "20150505194923",
                 "firstMatchedDate": "01/08/20",
                 "hit_type_agent_address": [
-                    "ADDRESS1_PROVINCE",
-                    "ADDRESS1_COUNTRY",
-                    "CONCAT_ADDRESS",
                     "ADDRESS1_CITY",
-                    "ADDRESS1_STATE"
+                    "ADDRESS1_COUNTRY",
+                    "ADDRESS1_PROVINCE",
+                    "ADDRESS1_STATE",
+                    "CONCAT_ADDRESS"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_name": [],
@@ -1552,20 +1548,20 @@
                 "name_agent_ap": [
                     null,
                     [
-                        "Pladimir Vutin",
-                        "Eva Pladimirova"
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
                     ],
                     [
-                        "Pladimir Vutin",
-                        "Eva Pladimirova"
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
                     ],
                     [
-                        "Pladimir Vutin",
-                        "Eva Pladimirova"
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
                     ],
                     [
-                        "Pladimir Vutin",
-                        "Eva Pladimirova"
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
                     ],
                     null,
                     null,
@@ -1632,16 +1628,16 @@
                 ],
                 "pob_agent_wl": [
                     [
+                        ""
+                    ],
+                    [
+                        ""
+                    ],
+                    [
                         "PL"
                     ],
                     [
                         "Poland"
-                    ],
-                    [
-                        ""
-                    ],
-                    [
-                        ""
                     ]
                 ],
                 "residency_agent_ap": [
@@ -1740,21 +1736,25 @@
                     "Joe Dong"
                 ],
                 "wl_all_nationalities_aggregated": [
-                    "Poland",
-                    "PL"
+                    "PL",
+                    "Poland"
                 ],
                 "wl_all_party_types_aggregated": [
                     "I"
                 ],
                 "wl_all_pobs_aggregated": [
-                    "Poland",
-                    "PL"
+                    "PL",
+                    "Poland"
                 ],
                 "wl_all_residencies_aggregated": [
-                    "Poland",
-                    "PL"
+                    "PL",
+                    "Poland"
                 ],
-                "wl_all_sanctioned_countries_aggregated": []
+                "wl_all_sanctioned_countries_aggregated": [
+                    "Joe Dong",
+                    "PL",
+                    "Poland"
+                ]
             }
         }
     }

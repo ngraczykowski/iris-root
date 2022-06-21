@@ -1,19 +1,13 @@
 [
     {
-        "AP_CONCAT_NAMES": null,
         "AP_ACCOUNT_BENEFICIARY_NAMES": [],
         "AP_ACCOUNT_BRANCH_ACCOUNT_NUMBERS": [],
         "AP_ACCOUNT_NAMES": [],
+        "AP_CONCAT_NAMES": null,
         "AP_COUNTRY_OF_INCORPORATION": [],
         "AP_GOVT_IDS": [],
         "AP_PARTIES_NAMES": [],
-        "AP_PARTY_BIRTH_COUNTRIES": [],
-        "AP_PARTY_CITIZENSHIP_COUNTRIES": [],
-        "AP_PARTY_NAMES": [],
-        "AP_PARTY_RESIDENCY_COUNTRIES": [],
-        "AP_TAX_IDS": [],
         "AP_PARTY1_ADDRESS1_COUNTRY": "",
-        
         "AP_PARTY1_COUNTRY1": null,
         "AP_PARTY1_COUNTRY1_CITIZENSHIP": null,
         "AP_PARTY1_COUNTRY2_CITIZENSHIP": null,
@@ -21,15 +15,19 @@
         "AP_PARTY1_COUNTRY_FORMATION1": null,
         "AP_PARTY1_COUNTRY_OF_INCORPORATION": null,
         "AP_PARTY1_COUNTRY_PEP": null,
-        
         "AP_PARTY1_GOVTID1_NUMBER": null,
         "AP_PARTY1_GOVTID2_NUMBER": null,
+        "AP_PARTY_BIRTH_COUNTRIES": [],
+        "AP_PARTY_CITIZENSHIP_COUNTRIES": [],
+        "AP_PARTY_NAMES": [],
+        "AP_PARTY_RESIDENCY_COUNTRIES": [],
         "AP_PRTY_PRIM_CTZNSH_CNTRY": null,
         "AP_PRTY_RSDNC_CNTRY_CD": null,
+        "AP_TAX_IDS": [],
         "alertedParty": {
-            "AP_PARTY_TYPES": [],
             "AP_DOB": [],
             "AP_PARTY_TYPE": "UNKNOWN",
+            "AP_PARTY_TYPES": [],
             "ENTITY_TYPE_MATCH": "INCONCLUSIVE",
             "headerInfo": {
                 "currentVersionId": "122438658",
@@ -372,8 +370,8 @@
                 "WL_COUNTRY": "|FL;US",
                 "WL_COUNTRYNAME": "",
                 "WL_DOB": [
-                    "MAY 6, 1981",
-                    ""
+                    "",
+                    "MAY 6, 1981"
                 ],
                 "WL_DOCUMENT_NUMBER": [],
                 "WL_ENTITYTYPE": "03",
@@ -389,11 +387,11 @@
                 "all_hit_type_aggregated": [
                     {
                         "address": [
-                            "ADDRESS1_PROVINCE",
-                            "ADDRESS1_COUNTRY",
-                            "CONCAT_ADDRESS",
                             "ADDRESS1_CITY",
-                            "ADDRESS1_STATE"
+                            "ADDRESS1_COUNTRY",
+                            "ADDRESS1_PROVINCE",
+                            "ADDRESS1_STATE",
+                            "CONCAT_ADDRESS"
                         ],
                         "job": [],
                         "name": [],
@@ -438,8 +436,8 @@
                 "datasetType": "WM_PARTY",
                 "dob_agent_ap": [],
                 "dob_agent_wl": [
-                    "MAY 6, 1981",
-                    ""
+                    "",
+                    "MAY 6, 1981"
                 ],
                 "document_agent_ap": [
                     [],
@@ -489,13 +487,13 @@
                     ],
                     "sdfs": {
                         "sdf": [
+                            "05/05/2015 19:49:26",
                             "N/A",
                             "N/A",
                             "N/A",
                             "N/A",
                             "N/A",
-                            "PLEASE CALL AML HOT LINE AT 212 762 8000 AND REF CI-079385",
-                            "05/05/2015 19:49:26"
+                            "PLEASE CALL AML HOT LINE AT 212 762 8000 AND REF CI-079385"
                         ]
                     },
                     "source": "CON",
@@ -507,11 +505,11 @@
                 "entityVersion": "20150505194929",
                 "firstMatchedDate": "01/08/20",
                 "hit_type_agent_address": [
-                    "ADDRESS1_PROVINCE",
-                    "ADDRESS1_COUNTRY",
-                    "CONCAT_ADDRESS",
                     "ADDRESS1_CITY",
-                    "ADDRESS1_STATE"
+                    "ADDRESS1_COUNTRY",
+                    "ADDRESS1_PROVINCE",
+                    "ADDRESS1_STATE",
+                    "CONCAT_ADDRESS"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_name": [],
@@ -611,8 +609,8 @@
                     null
                 ],
                 "residency_agent_wl": [
-                    "|FL;US",
-                    ""
+                    "",
+                    "|FL;US"
                 ],
                 "riskScore": "-1.0",
                 "sanctioned_country_agent_ap": [
@@ -637,9 +635,9 @@
                     null
                 ],
                 "sanctioned_country_agent_wl": [
-                    "|FL;US",
                     "",
-                    "Joe Ding"
+                    "Joe Ding",
+                    "|FL;US"
                 ],
                 "sourceCode": "CON",
                 "stopDescriptors": [
@@ -684,25 +682,22 @@
                 "wl_all_residencies_aggregated": [
                     "|FL;US"
                 ],
-                "wl_all_sanctioned_countries_aggregated": []
+                "wl_all_sanctioned_countries_aggregated": [
+                    "Joe Ding",
+                    "|FL;US"
+                ]
             }
         }
     },
     {
-        "AP_CONCAT_NAMES": null,
         "AP_ACCOUNT_BENEFICIARY_NAMES": [],
         "AP_ACCOUNT_BRANCH_ACCOUNT_NUMBERS": [],
         "AP_ACCOUNT_NAMES": [],
+        "AP_CONCAT_NAMES": null,
         "AP_COUNTRY_OF_INCORPORATION": [],
         "AP_GOVT_IDS": [],
         "AP_PARTIES_NAMES": [],
-        "AP_PARTY_BIRTH_COUNTRIES": [],
-        "AP_PARTY_CITIZENSHIP_COUNTRIES": [],
-        "AP_PARTY_NAMES": [],
-        "AP_PARTY_RESIDENCY_COUNTRIES": [],
-        "AP_TAX_IDS": [],
         "AP_PARTY1_ADDRESS1_COUNTRY": "",
-        
         "AP_PARTY1_COUNTRY1": null,
         "AP_PARTY1_COUNTRY1_CITIZENSHIP": null,
         "AP_PARTY1_COUNTRY2_CITIZENSHIP": null,
@@ -710,15 +705,19 @@
         "AP_PARTY1_COUNTRY_FORMATION1": null,
         "AP_PARTY1_COUNTRY_OF_INCORPORATION": null,
         "AP_PARTY1_COUNTRY_PEP": null,
-        
         "AP_PARTY1_GOVTID1_NUMBER": null,
         "AP_PARTY1_GOVTID2_NUMBER": null,
+        "AP_PARTY_BIRTH_COUNTRIES": [],
+        "AP_PARTY_CITIZENSHIP_COUNTRIES": [],
+        "AP_PARTY_NAMES": [],
+        "AP_PARTY_RESIDENCY_COUNTRIES": [],
         "AP_PRTY_PRIM_CTZNSH_CNTRY": null,
         "AP_PRTY_RSDNC_CNTRY_CD": null,
+        "AP_TAX_IDS": [],
         "alertedParty": {
-            "AP_PARTY_TYPES": [],
             "AP_DOB": [],
             "AP_PARTY_TYPE": "UNKNOWN",
+            "AP_PARTY_TYPES": [],
             "ENTITY_TYPE_MATCH": "INCONCLUSIVE",
             "headerInfo": {
                 "currentVersionId": "122438658",
@@ -1074,8 +1073,8 @@
                     "Poland"
                 ],
                 "WL_DOB": [
-                    "MAY 6, 1981",
-                    ""
+                    "",
+                    "MAY 6, 1981"
                 ],
                 "WL_DOCUMENT_NUMBER": [],
                 "WL_ENTITYTYPE": "03",
@@ -1094,11 +1093,11 @@
                 "all_hit_type_aggregated": [
                     {
                         "address": [
-                            "ADDRESS1_PROVINCE",
-                            "ADDRESS1_COUNTRY",
-                            "CONCAT_ADDRESS",
                             "ADDRESS1_CITY",
-                            "ADDRESS1_STATE"
+                            "ADDRESS1_COUNTRY",
+                            "ADDRESS1_PROVINCE",
+                            "ADDRESS1_STATE",
+                            "CONCAT_ADDRESS"
                         ],
                         "job": [],
                         "name": [],
@@ -1143,8 +1142,8 @@
                 "datasetType": "WM_PARTY",
                 "dob_agent_ap": [],
                 "dob_agent_wl": [
-                    "MAY 6, 1981",
-                    ""
+                    "",
+                    "MAY 6, 1981"
                 ],
                 "document_agent_ap": [
                     [],
@@ -1194,13 +1193,13 @@
                     },
                     "sdfs": {
                         "sdf": [
+                            "05/05/2015 19:49:26",
                             "N/A",
                             "N/A",
                             "N/A",
                             "N/A",
                             "N/A",
-                            "PLEASE CALL AML HOT LINE AT 212 762 8000 AND REF CI-079385",
-                            "05/05/2015 19:49:26"
+                            "PLEASE CALL AML HOT LINE AT 212 762 8000 AND REF CI-079385"
                         ]
                     },
                     "source": "CON",
@@ -1212,11 +1211,11 @@
                 "entityVersion": "20150505194923",
                 "firstMatchedDate": "01/08/20",
                 "hit_type_agent_address": [
-                    "ADDRESS1_PROVINCE",
-                    "ADDRESS1_COUNTRY",
-                    "CONCAT_ADDRESS",
                     "ADDRESS1_CITY",
-                    "ADDRESS1_STATE"
+                    "ADDRESS1_COUNTRY",
+                    "ADDRESS1_PROVINCE",
+                    "ADDRESS1_STATE",
+                    "CONCAT_ADDRESS"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_name": [],
@@ -1292,16 +1291,16 @@
                 ],
                 "pob_agent_wl": [
                     [
+                        ""
+                    ],
+                    [
+                        ""
+                    ],
+                    [
                         "PL"
                     ],
                     [
                         "Poland"
-                    ],
-                    [
-                        ""
-                    ],
-                    [
-                        ""
                     ]
                 ],
                 "residency_agent_ap": [
@@ -1394,21 +1393,25 @@
                     "Joe Dong"
                 ],
                 "wl_all_nationalities_aggregated": [
-                    "Poland",
-                    "PL"
+                    "PL",
+                    "Poland"
                 ],
                 "wl_all_party_types_aggregated": [
                     "I"
                 ],
                 "wl_all_pobs_aggregated": [
-                    "Poland",
-                    "PL"
+                    "PL",
+                    "Poland"
                 ],
                 "wl_all_residencies_aggregated": [
-                    "Poland",
-                    "PL"
+                    "PL",
+                    "Poland"
                 ],
-                "wl_all_sanctioned_countries_aggregated": []
+                "wl_all_sanctioned_countries_aggregated": [
+                    "Joe Dong",
+                    "PL",
+                    "Poland"
+                ]
             }
         }
     }
