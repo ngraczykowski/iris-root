@@ -6,7 +6,7 @@ description = "SENS WebApp SSO"
 
 dependencies {
   implementation project(":sens-webapp-audit-api")
-  implementation project(":sens-webapp-common")
+  implementation libs.silenteight.serp.governance.common.web
   implementation project(":sens-webapp-logging")
   implementation libs.silenteight.sep.usermanagement.api
 

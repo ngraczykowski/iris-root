@@ -7,7 +7,7 @@ plugins {
 description = "Simulator"
 
 dependencies {
-  implementation project(":simulator-common-web")
+  implementation libs.silenteight.serp.governance.common.web
   implementation project(":simulator-dataset")
   implementation libs.silenteight.serp.governance.db.changelog
   implementation project(":simulator-management")

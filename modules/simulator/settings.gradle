@@ -12,7 +12,6 @@ dependencyResolutionManagement {
 rootProject.name = 'simulator'
 
 include 'simulator-app'
-include 'simulator-common-web'
 include 'simulator-dataset'
 include 'simulator-dist'
 include 'simulator-documentation'

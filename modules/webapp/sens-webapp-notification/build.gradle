@@ -5,5 +5,5 @@ plugins {
 description = "SENS WebApp Notification"
 
 dependencies {
-  implementation project(":sens-webapp-common")
+  implementation libs.silenteight.serp.governance.common.web
 }

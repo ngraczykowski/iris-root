@@ -6,7 +6,7 @@ description = "SENS WebApp Report"
 
 dependencies {
   implementation project(":sens-webapp-audit-api")
-  implementation project(":sens-webapp-common")
+  implementation libs.silenteight.serp.governance.common.web
 
   implementation libs.commons.lang3
   implementation libs.commons.io

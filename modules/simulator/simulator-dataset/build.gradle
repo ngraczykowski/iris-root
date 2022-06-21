@@ -5,7 +5,7 @@ plugins {
 description = "Simulator Dataset"
 
 dependencies {
-  implementation project(":simulator-common-web")
+  implementation libs.silenteight.serp.governance.common.web
   implementation libs.silenteight.serp.governance.db.changelog
 
   implementation libs.adjudication.engine.api

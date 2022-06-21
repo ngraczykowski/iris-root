@@ -55,7 +55,7 @@ dependencies {
   implementation libs.spring.amqp
   implementation libs.springdoc.security
 
-  implementation project(":sens-webapp-common")
+  implementation libs.silenteight.serp.governance.common.web
 
   implementation libs.rest.assured
   implementation libs.rest.assured.spring.mock.mvc

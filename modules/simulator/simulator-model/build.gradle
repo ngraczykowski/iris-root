@@ -5,7 +5,7 @@ plugins {
 description = "Simulator Model"
 
 dependencies {
-  implementation project(":simulator-common-web")
+  implementation libs.silenteight.serp.governance.common.web
   implementation project(":simulator-management")
 
   implementation libs.governance.model.api

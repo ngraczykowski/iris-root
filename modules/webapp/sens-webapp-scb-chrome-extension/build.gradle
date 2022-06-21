@@ -20,7 +20,7 @@ dependencies {
 
   implementation libs.spring.boot.starter.web
 
-  implementation project(":sens-webapp-common")
+  implementation libs.silenteight.serp.governance.common.web
 
   testImplementation libs.rest.assured
   testImplementation libs.rest.assured.spring.mock.mvc

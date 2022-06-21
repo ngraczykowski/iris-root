@@ -5,7 +5,7 @@ plugins {
 description = "Simulator Retention"
 
 dependencies {
-  implementation project(":simulator-common-web")
+  implementation libs.silenteight.serp.governance.common.web
   implementation project(":simulator-dataset")
   implementation project(":simulator-management")
 
