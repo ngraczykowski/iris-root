@@ -89,9 +89,9 @@ pipeline {
                 }
 
                 stage('Add to minio') {
-                    when {
-                        branch 'master'
-                    }
+                    // when {
+                    //     branch 'master'
+                    // }
                     steps {
                         withCredentials([gitUsernamePassword(credentialsId: 'Github-app-access')]) {
                             sh './scripts/local/download_deps.sh --index-url ${PIP_INDEX_URL}'

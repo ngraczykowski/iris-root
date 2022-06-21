@@ -1319,3 +1319,65 @@ TEST_AGENT_INPUT_CASES = [
         },
     ),
 ]
+
+
+HISTORICAL_DECISION_REQUEST = {
+    "alerts": [
+        {
+            "alertId": "alerts/2",
+            "matchId": "alerts/2/matches/2",
+            "watchlist": {"id": "1044"},
+            "alertedParty": {"id": "A05003324172"},
+            "decisions": [
+                {
+                    "id": "c2852641c7ac5f7b74fa87bb58f67738108901e3",
+                    "value": "FALSE_POSITIVE",
+                    "createdAt": "1641057943",
+                },
+                {
+                    "id": "b7827f81bb68ddf015a38ea90341d675e1a1f18e",
+                    "value": "FALSE_POSITIVE",
+                    "createdAt": "1641057943",
+                },
+                {
+                    "id": "091385c469cdb3da6926bba2ec25cabb0b843963",
+                    "value": "FALSE_POSITIVE",
+                    "createdAt": "1641057943",
+                },
+            ],
+            "discriminators": [
+                {"value": "mike_ap_id_tp_marked"},
+                {"value": "mike_tokens_tp_marked"},
+                {"value": "mike_ap_name_tp_marked"},
+            ],
+        },
+        {
+            "alertId": "alerts/2",
+            "matchId": "alerts/2/matches/2",
+            "watchlist": {"id": "1044"},
+            "alertedParty": {"id": "A05003324172"},
+            "decisions": [
+                {
+                    "id": "c1bfb772cfb20a8ee83c39c8a5990972bec5d88d",
+                    "value": "FALSE_POSITIVE",
+                    "createdAt": "1641057943",
+                },
+                {
+                    "id": "f50b4ee2ac54d91b628e1b6e9c6f6164edadd715",
+                    "value": "FALSE_POSITIVE",
+                    "createdAt": "1641057943",
+                },
+                {
+                    "id": "65df5fbc29ffd1f52373406060594588b1de7c96",
+                    "value": "FALSE_POSITIVE",
+                    "createdAt": "1641057943",
+                },
+            ],
+            "discriminators": [
+                {"value": "mike_ap_id_tp_marked"},
+                {"value": "mike_tokens_tp_marked"},
+                {"value": "mike_ap_name_tp_marked"},
+            ],
+        },
+    ]
+}

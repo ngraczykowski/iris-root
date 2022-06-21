@@ -85,7 +85,7 @@ class HistoricalDecisionBase:
         "watchlist",
         "alerted_party_id",
         "date",
-        "learning_event",
+        "status",
         "match",
         "alert",
     )
@@ -96,7 +96,7 @@ class HistoricalDecisionBase:
         watchlist: str,
         alerted_party_id: str,
         date: int,
-        learning_event: LearningEvent,
+        status: str,
         match: Match,
         alert: LearningAlertPayload,
     ):
@@ -105,5 +105,5 @@ class HistoricalDecisionBase:
         self.watchlist = watchlist
         self.alerted_party_id = alerted_party_id
         self.date = date
-        self.learning_event = learning_event
+        self.status = status
         self.alert = alert

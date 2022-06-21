@@ -1,15 +1,16 @@
 import asyncio
 import json
 import os
-import random
 import re
 import subprocess
 import time
 
 import grpc
+import lz4.frame
 import pytest
 from aio_pika.abc import AbstractIncomingMessage
 from aiounittest import AsyncTestCase
+from google.protobuf import json_format
 
 from etl_pipeline.config import ConsulServiceConfig
 from etl_pipeline.learning.proto.etl_learning_pb2 import (
@@ -18,7 +19,12 @@ from etl_pipeline.learning.proto.etl_learning_pb2 import (
     RunEtlLearningRequest,
 )
 from etl_pipeline.learning.proto.etl_learning_pb2_grpc import EtlLearningServiceStub
+from etl_pipeline.learning.proto.historical_decision_learning_pb2 import (
+    HistoricalDecisionLearningStoreExchangeRequest,
+)
 from etl_pipeline.learning.service.connection import HistoricalDecisionExchange
+from tests.test_json.constant import HISTORICAL_DECISION_REQUEST
+from tests.test_json.test_json_pipeline import assert_compare_list_of_dict_of_list
 
 
 def load_alert(filepath: str = "notebooks/sample/wm_address_in_payload_format.json"):
@@ -30,10 +36,7 @@ def load_alert(filepath: str = "notebooks/sample/wm_address_in_payload_format.js
             for i in re.compile(r".*matchRecords\[\d+\].matchId.*").findall(key)
             if i
         ]
-        matches_ids = [
-            LearningMatch(match_id=i, match_name=f"alerts/2/matches/{random.randint(1, 100000)}")
-            for num, i in enumerate(ids)
-        ]
+        matches_ids = [LearningMatch(match_id=i, match_name="alerts/2/matches/2") for i in ids]
         alert = LearningAlert(batch_id="1", alert_name="alerts/2", learning_matches=matches_ids)
         for key, value in text.items():
             alert.flat_payload[str(key)] = str(value)
@@ -62,7 +65,6 @@ class HistoricalDecisionStub:
 
     async def on_message(self, message: AbstractIncomingMessage) -> None:
         async with message.process():
-            print(message.body)
             self.result.result = message.body
 
     async def get_message(self):
@@ -105,5 +107,11 @@ class TestGrpcServer(AsyncTestCase):
         await historical_decision.get_message()
         assert not historical_decision.result.result
         await asyncio.sleep(1)
-        assert historical_decision.result.result
+        data = lz4.frame.decompress(historical_decision.result.result)
+        response = HistoricalDecisionLearningStoreExchangeRequest()
+        response.ParseFromString(data)
+        assert_compare_list_of_dict_of_list(
+            json_format.MessageToDict(response), HISTORICAL_DECISION_REQUEST
+        )
+
         await historical_decision.conn.stop()

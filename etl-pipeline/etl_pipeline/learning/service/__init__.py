@@ -14,7 +14,6 @@ from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.datatypes import (
     HistoricalDecisionBase,
     LearningAlertPayload,
-    LearningEvent,
     Match,
     PipelinedPayload,
 )
@@ -142,6 +141,7 @@ class EtlLearningServiceServicer(object):
             logger.debug(f"Number of alerts {len(alerts)}")
             etl_alerts = []
             tasks = []
+            self.process_request(alerts[0])
             for alert in alerts:
                 tasks.append(
                     asyncio.get_event_loop().create_task(
@@ -210,72 +210,59 @@ class EtlLearningServiceServicer(object):
 
 
 class PayloadToLearningAlertConverter:
-    def convert_to_learning_alert(self, result, learning_alert):
+    def convert_to_learning_alert(self, result, learning_alert: LearningAlertPayload):
         alerts = []
-        for pipeline_result in result.result:
 
+        for pipeline_result in result.result:
             watchlist = pipeline_result["watchlistParty"]["matchRecords"]["datasetId"]
             alerted_party_id = pipeline_result["watchlistParty"]["matchRecords"][
                 "ap_id_tp_marked_agent_input"
             ]
 
-            for learning_event in learning_alert.alert_event_history["alertEventHistory"][
-                "eventHistory"
-            ]:
-                learning_event = LearningEvent(**learning_event)
-                date = int(
-                    datetime.datetime.strptime(
-                        learning_event.createDate, "%Y-%m-%d %H:%M:%S.%f"
-                    ).timestamp()
-                )
+            events = learning_alert.alert_event_history["alertEventHistory"]["eventHistory"]
 
-                decision_base = HistoricalDecisionBase(
-                    watchlist=watchlist,
-                    alert=learning_alert,
-                    match=pipeline_result["match_ids"].match_name,
-                    alerted_party_id=alerted_party_id,
-                    result=pipeline_result,
-                    date=date,
-                    learning_event=learning_event,
+            date = int(
+                max(
+                    [
+                        datetime.datetime.strptime(
+                            learning_event["createDate"], "%Y-%m-%d %H:%M:%S.%f"
+                        ).timestamp()
+                        for learning_event in events
+                        if learning_event["event"] == "Status changed"
+                    ]
                 )
+            )
+            decision_base = HistoricalDecisionBase(
+                watchlist=watchlist,
+                alert=learning_alert,
+                match=pipeline_result["match_ids"].match_name,
+                alerted_party_id=alerted_party_id,
+                result=pipeline_result,
+                date=date,
+                status=learning_alert.status,
+            )
 
-                hist_data = self.prepare_historical_data_for_decision(decision_base)
-                decisions = []
-                discriminators = []
-                for event in hist_data:
-                    decisions.append(
-                        Decision(id=event["decision_id"], value=event["decision"], created_at=date)
-                    )
-                    discriminators.append(Discriminator(value=event["discriminator"]))
-                alert = Alert(
-                    alert_id=learning_alert.alert_name,
-                    match_id=pipeline_result["match_ids"].match_name,
-                    watchlist=Watchlist(id=watchlist),
-                    alerted_party=AlertedParty(id=alerted_party_id),
-                    decisions=decisions,
-                    discriminators=discriminators,
+            hist_data = self.prepare_historical_data_for_decision(decision_base)
+            decisions = []
+            discriminators = []
+            for event in hist_data:
+                decisions.append(
+                    Decision(id=event["decision_id"], value=event["decision"], created_at=date)
                 )
-                alerts.append(alert)
+                discriminators.append(Discriminator(value=event["discriminator"]))
+            alert = Alert(
+                alert_id=learning_alert.alert_name,
+                match_id=pipeline_result["match_ids"].match_name,
+                watchlist=Watchlist(id=watchlist),
+                alerted_party=AlertedParty(id=alerted_party_id),
+                decisions=decisions,
+                discriminators=discriminators,
+            )
+            alerts.append(alert)
         return HistoricalDecisionLearningStoreExchangeRequest(alerts=alerts)
 
-    def get_decision_value(self, event: LearningEvent):
-        if any(
-            f in event.eventNote
-            for f in ["Risk Accepted", "Case Created", "L3 Closed No Action - False Positive"]
-        ):
-            return DecisionType.TRUE_POSITIVE
-        elif any(
-            f in event.eventNote
-            for f in [
-                "False Positive",
-                " Could have been closed L1",
-                "L1 Closed",
-                "L3 Closed No Action - Could have been closed L2",
-                "L2 Closed No Action - False Positive",
-            ]
-        ):
-            return DecisionType.FALSE_POSITIVE
-        return DecisionType.ANALYST_PENDING
+    def get_decision_value(self, status):
+        return ANALYST_DECISION_MAP.get(status, DecisionType.FALSE_POSITIVE)
 
     def prepare_historical_data_for_decision(self, historical_decision: HistoricalDecisionBase):
         alerted_at = datetime.datetime.strptime(
@@ -294,10 +281,9 @@ class PayloadToLearningAlertConverter:
                 "decision_id": "",
                 "alerted_at": alerted_at,
                 "created_at": str(historical_decision.date),
-                "decision": self.get_decision_value(historical_decision.learning_event),
+                "decision": self.get_decision_value(historical_decision.status),
                 "discriminator": f"mike_{discriminator}",
             }
-            print(self.get_decision_value(historical_decision.learning_event))
             hist_data["decision_id"] = hashlib.sha1(
                 "".join(hist_data.values()).encode("utf8")
             ).hexdigest()
