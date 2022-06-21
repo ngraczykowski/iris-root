@@ -1,5 +1,4 @@
 @Library('pipeline-shared-library@github') _
-def jenkins = new com.silenteight.jenkins.ci.Jenkins()
 
 def loadValuesYaml(key){
   def valuesYaml = readYaml (file: './helm-chart/Chart.yaml')
