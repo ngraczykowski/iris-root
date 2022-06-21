@@ -311,7 +311,7 @@ fastutil = { group = "it.unimi.dsi", name = "fastutil" }
 feign-slf4j = { group = "io.github.openfeign", name = "feign-slf4j" }
 classgraph = { group = "io.github.classgraph", name = "classgraph", version = "4.8.147" }
 freemarker = { group = "org.freemarker", name = "freemarker" }
-google-common-protos = { group = "com.google.api.grpc", name = "proto-google-common-protos", version = "2.7.0" }
+google-common-protos = { group = "com.google.api.grpc", name = "proto-google-common-protos", version = "2.9.0" }
 grpc-api = { group = "io.grpc", name = "grpc-api", version.ref = "grpc" }
 grpc-auth = { group = "io.grpc", name = "grpc-auth", version.ref = "grpc" }
 grpc-census = { group = "io.grpc", name = "grpc-census", version.ref = "grpc" }
