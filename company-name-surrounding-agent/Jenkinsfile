@@ -154,11 +154,14 @@ pipeline {
         stage('Build and push image') {
           when {
             allOf {
-                anyOf {
-                    branch 'master'
-                    branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
-                }
+              anyOf {
+                branch 'master'
+                branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
+              }
+              anyOf {
                 expression { env.COMMIT_TYPE != "Bump version" }
+                expression { return params.RELEASE }
+              }
             }
           }
           steps {
@@ -203,7 +206,10 @@ pipeline {
                 branch 'master'
                 branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
               }
-              expression { env.COMMIT_TYPE != "Bump version" }
+              anyOf {
+                expression { env.COMMIT_TYPE != "Bump version" }
+                expression { return params.RELEASE }
+              }
             }
           }
           agent {
@@ -228,7 +234,10 @@ pipeline {
             branch 'master'
             branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
           }
-          expression { env.COMMIT_TYPE != "Bump version" }
+          anyOf {
+            expression { env.COMMIT_TYPE != "Bump version" }
+            expression { return params.RELEASE }
+          }
         }
       }
       stages {
@@ -239,12 +248,6 @@ pipeline {
           }
         }
         stage('Upload artifacts to artifactory') {
-          when {
-            anyOf {
-              branch 'master'
-              branch pattern: '^v(\\d+(\\.\\d+)*)\$', comparator: 'REGEXP'
-            }
-          }
           steps {
             rtServer (
               id: "silenteight-repo",
@@ -269,15 +272,6 @@ pipeline {
           }
         }
         stage('Deploy on nomad') {
-          when {
-            allOf {
-              anyOf {
-                branch 'master'
-                branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
-              }
-              expression { env.COMMIT_TYPE != "Bump version" }
-            }
-          }
           steps {
             sh './nomad/deploy.sh -var-file="vars/dev.vars"'
           }
