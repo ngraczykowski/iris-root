@@ -598,7 +598,6 @@ TEST_AGENT_INPUT_CASES = [
             "watchlistParty.matchRecords[0].entity.aliases[0].alias": "Billabong the King",
         },
         expected_result={
-            ("ap", "AP_PARTY1_EMPLOYERS"): "Macro Soft Ltd.",
             (
                 "ap",
                 "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_EMPLOYER",

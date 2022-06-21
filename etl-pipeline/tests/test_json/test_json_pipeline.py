@@ -321,7 +321,6 @@ def test_collect_party_values_from_parties(pipeline_resource):
         "AP_ACCOUNT_NAMES": [],
         "AP_ACCOUNT_BRANCH_ACCOUNT_NUMBERS": [],
         "AP_ACCOUNT_BENEFICIARY_NAMES": [],
-        "AP_PARTY1_EMPLOYERS": None,
         "AP_PARTY1_COUNTRY": None,
         "AP_PARTY1_COUNTRY1": None,
         "AP_PARTY1_COUNTRY_OF_INCORPORATION": None,

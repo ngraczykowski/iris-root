@@ -47,7 +47,7 @@ name_agent:
 
 employer_name_agent:
   ap:
-  - AP_PARTY1_EMPLOYERS
+  - alertedParty.xml_fields.PARTY1_EMPLOYER
   - alertedParty.xml_fields.PARTY1_ORGANIZATION_NAME
   wl:
   - watchlistParty.matchRecords.WL_NAME
