@@ -12,4 +12,3 @@ serp:
       password: password
       port: 1521
       host: localhost
-

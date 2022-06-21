@@ -70,7 +70,7 @@ Percentage of the requests served within a certain time (ms)
     - response times were very similar, but if we switch the app to use webflux we loose all old filters and other
       interceptors which were prepared for Servlet env
     - GnsRt Controller is started from IO thread, which is a thread that handles IO as expected
-    
+
 When replace reactive code with blocking:
    - response times went up 2-3 times
 

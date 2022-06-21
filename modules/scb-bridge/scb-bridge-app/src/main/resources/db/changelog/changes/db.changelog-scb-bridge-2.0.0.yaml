@@ -51,4 +51,3 @@ databaseChangeLog:
           tableName: batch_step_execution_context
           column:
             name: step_execution_id
-

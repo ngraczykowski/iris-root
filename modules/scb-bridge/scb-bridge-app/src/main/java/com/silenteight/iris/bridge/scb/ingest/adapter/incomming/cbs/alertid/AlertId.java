@@ -25,4 +25,3 @@ public class AlertId {
     this.batchId = batchId;
   }
 }
-

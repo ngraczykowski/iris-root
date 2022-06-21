@@ -68,7 +68,7 @@ The DB runs by docker compose contains about 2300 alerts and 20000 hits.
 
 ## Working mode
 
-SCB Bridge can be run in a few different modes which change the behavior of the application. 
+SCB Bridge can be run in a few different modes which change the behavior of the application.
 The available modes are:
 - ALL
 - REAL_TIME_SOLVING
@@ -78,11 +78,11 @@ The available modes are:
 
 `ALL` - It enables all modes: periodic solving, real-time solving and learning.
 
-`REAL_TIME_SOLVING` - It enables real-time alert solving. 
+`REAL_TIME_SOLVING` - It enables real-time alert solving.
 
-`PERIODIC_SOLVING` - It enables periodic alert solving. 
+`PERIODIC_SOLVING` - It enables periodic alert solving.
 
-`LEARNING` - This mode enables learning processing. 
+`LEARNING` - This mode enables learning processing.
 
 `NONE` - No modes are enabled. SCB-Bridge will not connect to the Oracle database.
 And it will not process periodic, real-time, or learning alerts.
@@ -160,7 +160,7 @@ following defaults will be used
 
 ### GNS-RT
 
-The SCB-Bridge supports real time mode. If you want to process only real-time alerts 
+The SCB-Bridge supports real time mode. If you want to process only real-time alerts
 you can set up the following mode: `silenteight.scb-bridge.working-mode=REAL_TIME_SOLVING`
 
 The simplest way to test GNS-RT locally is to send a JSON request using Postman:
@@ -266,17 +266,17 @@ Function signature:
 
     FUNCTION F_CBS_S8_LOG_RECOM
     (
-        P_SOURCE_APPLN                  IN VARCHAR2, 
-        P_SYSTEM_ID                     IN VARCHAR2, 
-        P_BATCH_ID                      IN VARCHAR2, 
-        P_HIT_WATCHLIST_ID              IN VARCHAR2, 
-        P_HIT_RECOMMENDED_STATUS        IN VARCHAR2, 
+        P_SOURCE_APPLN                  IN VARCHAR2,
+        P_SYSTEM_ID                     IN VARCHAR2,
+        P_BATCH_ID                      IN VARCHAR2,
+        P_HIT_WATCHLIST_ID              IN VARCHAR2,
+        P_HIT_RECOMMENDED_STATUS        IN VARCHAR2,
         P_HIT_RECOMMENDED_COMMENTS      IN CLOB,
-        P_LIST_RECOMMENDED_STATUS       IN VARCHAR2, 
+        P_LIST_RECOMMENDED_STATUS       IN VARCHAR2,
         P_LIST_RECOMMENDED_COMMENTS     IN CLOB,
-        P_POLICY_ID                     IN VARCHAR2, 
-        P_HIT_ID                        IN VARCHAR2, 
-        P_STEP_ID                       IN VARCHAR2, 
+        P_POLICY_ID                     IN VARCHAR2,
+        P_HIT_ID                        IN VARCHAR2,
+        P_STEP_ID                       IN VARCHAR2,
         P_FV_SIGNATURE                  IN VARCHAR2
         P_QA_SAMPLED                    IN VARCHAR2
     )

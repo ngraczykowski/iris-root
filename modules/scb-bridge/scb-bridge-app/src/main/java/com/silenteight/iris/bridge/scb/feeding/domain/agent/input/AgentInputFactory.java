@@ -21,7 +21,7 @@ public class AgentInputFactory {
 
   public AgentInputFactory(List<FeatureFactory> featureInputFactories,
       List<CategoryValue> categoryValues) {
-    
+
     if (featureInputFactories.isEmpty()) {
       throw new IllegalStateException("There are no agent inputs.");
     }

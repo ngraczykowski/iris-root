@@ -60,7 +60,7 @@ class GnsRtRequestMapperSpec extends Specification {
         .details(
             '''Suspect(s) detected by OFAC-Agent:3
 SystemId: BD_SCIC_DENY!9BE06FFA-0058416D-929B432D-FB8BD10B
-Associate: 
+Associate:
 =============================
 Suspect detected #1
 

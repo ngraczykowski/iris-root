@@ -24,4 +24,3 @@ public class CbsInvokeQueueingJobRequest {
   @Min(1)
   private int totalRecordsToRead = 1;
 }
-

@@ -34,7 +34,7 @@ class AlertsReaderQueryTemplates {
           + " FROM :dbRelationName R"
           + " JOIN FFF_HITS_DETAILS H ON H.SYSTEM_ID = R.SYSTEM_ID"
           + " WHERE R.SYSTEM_ID IN (%s)";
-  
+
   @Language("Oracle")
   static final String DECISIONS_QUERY =
       "SELECT D.SYSTEM_ID, D.OPERATOR, D.DECISION_DATE, D.TYPE, D.COMMENTS, S.STATE_NAME"

@@ -177,13 +177,13 @@ Can access virtual hosts: `/lima`
   Endpoint ```/rest/scb-bridge/management/health``` must be exposed in service. How to achieve that:
 
     - in application.yaml add section:
-  ``` 
+  ```
   management:
     endpoint:
-      health.show-details: always 
+      health.show-details: always
     endpoints:
       web:
-        base-path: /management 
+        base-path: /management
         exposure:
           include: ["health", "info", "liquibase", "metrics", "prometheus", "loggers"]
   ```  
@@ -231,14 +231,14 @@ Can access virtual hosts: `/lima`
   spring:
     cloud:
       consul:
-        enabled: true 
-        host: localhost 
-        port: 8500 
-        scheme: http 
+        enabled: true
+        host: localhost
+        port: 8500
+        scheme: http
         discovery:
-          enabled: true 
-          register: false 
-          register-health-check: false 
+          enabled: true
+          register: false
+          register-health-check: false
           catalog-services-watch:
             enabled: true
         service-registry:

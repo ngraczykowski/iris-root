@@ -21,4 +21,3 @@ public class CbsQueueAlertRequest {
   private String systemId;
 
 }
-

@@ -205,4 +205,3 @@ databaseChangeLog:
             tableName: scb_cbs_hits_details_helper
             columnNames: system_id, seq_no, gns_sync_id
             constraintName: pk_scb_cbs_hits_details_helper
-

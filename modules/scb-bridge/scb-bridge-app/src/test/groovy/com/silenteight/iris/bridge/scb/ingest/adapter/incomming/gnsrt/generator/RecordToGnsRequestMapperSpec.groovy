@@ -121,7 +121,7 @@ class RecordToGnsRequestMapperSpec extends Specification {
 
   def someGnsHitDetails = '''Suspect(s) detected by OFAC-Agent:3
 SystemId: BD_SCIC_DENY!9BE06FFA-0058416D-929B432D-FB8BD10B
-Associate: 
+Associate:
 =============================
 Suspect detected #1
 
@@ -133,16 +133,16 @@ RESULT: (0)
 
 BATCH: 2019/01/17_0003_BD_SCIC_DENY
 NAME: Dr MANUEL VÁZQUEZ
-  Synonyms: none 
+  Synonyms: none
 ADDRESS: 1961 Serrano Cliff
 East George, LA 17253
-  Synonyms: none 
+  Synonyms: none
 CITY: MOGADISHU
-  Synonyms: none 
+  Synonyms: none
 COUNTRY: SGP
-  Synonyms: none 
-STATE: 
-  Synonyms: none 
+  Synonyms: none
+STATE:
+  Synonyms: none
 ORIGIN:
 DBCOUNTRY
 DESIGNATION:
@@ -199,16 +199,16 @@ RESULT: (0)
 
 BATCH: 2019/01/17_0003_BD_SCIC_DENY
 NAME: MANUEL
-  Synonyms: none 
+  Synonyms: none
 ADDRESS: 410 Joshua Meadow Apt. 135
 West Ashleyville, KS 73370
-  Synonyms: none 
+  Synonyms: none
 CITY: None
-  Synonyms: none 
+  Synonyms: none
 COUNTRY: UNITED ARAB EMIRATES
-  Synonyms: none 
-STATE: 
-  Synonyms: none 
+  Synonyms: none
+STATE:
+  Synonyms: none
 ORIGIN:
 UN
 DESIGNATION:
@@ -265,16 +265,16 @@ RESULT: (0)
 
 BATCH: 2019/01/17_0003_BD_SCIC_DENY
 NAME: MANUEL
-  Synonyms: none 
+  Synonyms: none
 ADDRESS: 7790 Gregory Mission Suite 141
 Solisfort, KY 53778
-  Synonyms: none 
+  Synonyms: none
 CITY: None
-  Synonyms: none 
+  Synonyms: none
 COUNTRY: SINGAPORE
-  Synonyms: none 
-STATE: 
-  Synonyms: none 
+  Synonyms: none
+STATE:
+  Synonyms: none
 ORIGIN:
 DBCOUNTRY
 DESIGNATION:

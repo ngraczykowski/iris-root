@@ -71,4 +71,3 @@ public class AlertUnderProcessing extends BaseEntity {
     private String batchId;
   }
 }
-
