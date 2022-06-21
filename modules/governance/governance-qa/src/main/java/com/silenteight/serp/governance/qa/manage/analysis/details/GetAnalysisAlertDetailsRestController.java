@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.silenteight.serp.governance.common.web.rest.RestConstants.*;
+import static com.silenteight.sep.auth.authentication.RestConstants.*;
 import static com.silenteight.serp.governance.qa.manage.common.AlertResource.toResourceName;
 import static com.silenteight.serp.governance.qa.manage.domain.DomainConstants.QA_ENDPOINT_TAG;
 import static org.springframework.http.ResponseEntity.ok;

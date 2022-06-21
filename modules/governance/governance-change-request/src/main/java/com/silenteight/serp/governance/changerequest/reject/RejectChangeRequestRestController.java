@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 import javax.validation.Valid;
 
+import static com.silenteight.sep.auth.authentication.RestConstants.*;
 import static com.silenteight.serp.governance.changerequest.domain.DomainConstants.CHANGE_REQUEST_ENDPOINT_TAG;
-import static com.silenteight.serp.governance.common.web.rest.RestConstants.*;
 import static org.springframework.http.ResponseEntity.noContent;
 
 @Slf4j

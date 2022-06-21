@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static com.silenteight.simulator.common.web.rest.RestConstants.ROOT;
+import static com.silenteight.sep.auth.authentication.RestConstants.ROOT;
 import static com.silenteight.simulator.management.domain.DomainConstants.SIMULATION_ENDPOINT_TAG;
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY;
 import static java.util.List.of;

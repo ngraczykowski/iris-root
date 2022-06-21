@@ -26,7 +26,6 @@ import com.silenteight.sep.usermanagement.api.role.RoleValidationException;
 import com.silenteight.sep.usermanagement.api.role.dto.RolesDto;
 import com.silenteight.sep.usermanagement.api.user.UserUpdater.UserUpdateException;
 
-
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -45,9 +44,9 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import static com.silenteight.sens.webapp.common.rest.RestConstants.*;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 import static com.silenteight.sens.webapp.user.domain.DomainConstants.USER_ENDPOINT_TAG;
+import static com.silenteight.sep.auth.authentication.RestConstants.*;
 import static com.silenteight.sep.usermanagement.api.origin.SensOrigin.SENS_ORIGIN;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;

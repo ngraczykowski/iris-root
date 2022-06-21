@@ -6,7 +6,7 @@ import lombok.NonNull;
 import lombok.Value;
 
 import com.silenteight.auditing.bs.AuditDataDto;
-import com.silenteight.simulator.common.audit.AuditableRequest;
+import com.silenteight.serp.governance.common.audit.AuditableRequest;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;

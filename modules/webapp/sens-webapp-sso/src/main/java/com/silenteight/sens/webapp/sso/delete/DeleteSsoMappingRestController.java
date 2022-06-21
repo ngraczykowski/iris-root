@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
-import static com.silenteight.sens.webapp.common.rest.RestConstants.ACCEPTED_STATUS;
-import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
-import static com.silenteight.sens.webapp.common.rest.RestConstants.SUCCESS_RESPONSE_DESCRIPTION;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.SSO_MANAGEMENT;
 import static com.silenteight.sens.webapp.sso.domain.DomainConstants.SSO_ENDPOINT_TAG;
+import static com.silenteight.sep.auth.authentication.RestConstants.ACCEPTED_STATUS;
+import static com.silenteight.sep.auth.authentication.RestConstants.ROOT;
+import static com.silenteight.sep.auth.authentication.RestConstants.SUCCESS_RESPONSE_DESCRIPTION;
 import static org.springframework.http.ResponseEntity.noContent;
 
 @Slf4j

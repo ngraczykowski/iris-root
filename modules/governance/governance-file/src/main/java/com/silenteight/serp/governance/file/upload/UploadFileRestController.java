@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT;
+import static com.silenteight.sep.auth.authentication.RestConstants.ROOT;
 import static com.silenteight.serp.governance.file.domain.DomainConstants.FILE_ENDPOINT_TAG;
 
 @RestController

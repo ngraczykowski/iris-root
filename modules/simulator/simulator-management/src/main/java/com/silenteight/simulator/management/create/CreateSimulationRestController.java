@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.simulator.common.web.rest.RestConstants;
 import com.silenteight.simulator.management.create.dto.CreateSimulationRequestDto;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -20,17 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-import static com.silenteight.simulator.common.web.rest.RestConstants.BAD_REQUEST_DESCRIPTION;
-import static com.silenteight.simulator.common.web.rest.RestConstants.BAD_REQUEST_STATUS;
-import static com.silenteight.simulator.common.web.rest.RestConstants.CREATED_STATUS;
-import static com.silenteight.simulator.common.web.rest.RestConstants.SUCCESS_RESPONSE_DESCRIPTION;
+import static com.silenteight.sep.auth.authentication.RestConstants.*;
 import static com.silenteight.simulator.management.domain.DomainConstants.SIMULATION_ENDPOINT_TAG;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.ResponseEntity.status;
 
 @Slf4j
 @RestController
-@RequestMapping(RestConstants.ROOT)
+@RequestMapping(ROOT)
 @AllArgsConstructor
 @Tag(name = SIMULATION_ENDPOINT_TAG)
 class CreateSimulationRestController {

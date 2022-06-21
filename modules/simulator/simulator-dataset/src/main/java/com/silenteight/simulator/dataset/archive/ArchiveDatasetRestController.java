@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
-import static com.silenteight.simulator.common.web.rest.RestConstants.*;
+import static com.silenteight.sep.auth.authentication.RestConstants.*;
 import static com.silenteight.simulator.dataset.domain.DomainConstants.DATASET_ENDPOINT_TAG;
 import static org.springframework.http.ResponseEntity.noContent;
 

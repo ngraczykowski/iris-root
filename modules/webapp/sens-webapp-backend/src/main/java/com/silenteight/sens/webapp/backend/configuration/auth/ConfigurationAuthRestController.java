@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.silenteight.sens.webapp.backend.configuration.DomainConstants.CONFIGURATION_ENDPOINT_TAG;
-import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
+import static com.silenteight.sep.auth.authentication.RestConstants.ROOT;
 import static com.silenteight.sep.base.common.logging.LogMarkers.INTERNAL;
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 
-import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
+import static com.silenteight.sep.auth.authentication.RestConstants.ROOT;
 import static org.springframework.http.ResponseEntity.ok;
 
 @Slf4j

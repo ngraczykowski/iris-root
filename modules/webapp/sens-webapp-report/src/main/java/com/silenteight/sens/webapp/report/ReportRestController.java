@@ -17,9 +17,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.silenteight.sens.webapp.common.rest.RestConstants.*;
 import static com.silenteight.sens.webapp.common.support.request.IpAddressExtractor.from;
 import static com.silenteight.sens.webapp.report.ReportRestController.REPORT_ENDPOINT_TAG;
+import static com.silenteight.sep.auth.authentication.RestConstants.*;
 
 @Slf4j
 @RestController

@@ -22,7 +22,7 @@ import java.io.InputStream;
 import java.time.Duration;
 import java.util.concurrent.ForkJoinPool;
 
-import static com.silenteight.serp.governance.common.web.rest.RestConstants.*;
+import static com.silenteight.sep.auth.authentication.RestConstants.*;
 import static com.silenteight.serp.governance.policy.domain.DomainConstants.POLICY_ENDPOINT_TAG;
 import static java.util.Objects.requireNonNull;
 import static org.springframework.http.ResponseEntity.accepted;

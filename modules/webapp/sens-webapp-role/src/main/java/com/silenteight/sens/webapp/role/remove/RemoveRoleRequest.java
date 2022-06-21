@@ -5,7 +5,7 @@ import lombok.NonNull;
 import lombok.Value;
 
 import com.silenteight.auditing.bs.AuditDataDto;
-import com.silenteight.sens.webapp.common.audit.AuditableRequest;
+import com.silenteight.serp.governance.common.audit.AuditableRequest;
 
 import java.util.UUID;
 import java.util.function.Consumer;

@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.UUID;
 import javax.validation.Valid;
 
-import static com.silenteight.serp.governance.common.web.rest.RestConstants.*;
+import static com.silenteight.sep.auth.authentication.RestConstants.*;
 import static com.silenteight.serp.governance.policy.domain.DomainConstants.POLICY_ENDPOINT_TAG;
 import static java.util.stream.Collectors.toList;
 

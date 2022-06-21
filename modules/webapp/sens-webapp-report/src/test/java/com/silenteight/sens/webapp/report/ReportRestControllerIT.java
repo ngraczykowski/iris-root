@@ -3,7 +3,6 @@ package com.silenteight.sens.webapp.report;
 import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
-import com.silenteight.sens.webapp.common.rest.RestConstants;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -15,6 +14,7 @@ import java.util.Map;
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.QA;
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
 import static com.silenteight.sens.webapp.report.ReportTestFixtures.REPORT_NAME;
+import static com.silenteight.sep.auth.authentication.RestConstants.ROOT;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -42,7 +42,7 @@ class ReportRestControllerIT extends BaseRestControllerTest {
         .queryParam("paramA", "paramValueABC")
         .queryParam("paramB", "paramValueEFG")
         .accept("text/csv")
-        .when().get(RestConstants.ROOT + "/reports/" + REPORT_NAME)
+        .when().get(ROOT + "/reports/" + REPORT_NAME)
         .then().contentType("text/csv")
         .log().ifValidationFails()
         .statusCode(OK.value())

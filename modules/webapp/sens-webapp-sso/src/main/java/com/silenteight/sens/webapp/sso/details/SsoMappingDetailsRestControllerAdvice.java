@@ -1,16 +1,16 @@
 package com.silenteight.sens.webapp.sso.details;
 
-import com.silenteight.sens.webapp.common.rest.exception.AbstractErrorControllerAdvice;
-import com.silenteight.sens.webapp.common.rest.exception.dto.ErrorDto;
 import com.silenteight.sep.usermanagement.api.identityprovider.exception.IdentityProviderNotFoundException;
 import com.silenteight.sep.usermanagement.api.identityprovider.exception.SsoRoleMapperNotFoundException;
+import com.silenteight.serp.governance.common.web.exception.AbstractErrorControllerAdvice;
+import com.silenteight.serp.governance.common.web.exception.ErrorDto;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import static com.silenteight.sens.webapp.common.rest.exception.ControllerAdviceOrder.GLOBAL;
+import static com.silenteight.serp.governance.common.web.exception.ControllerAdviceOrder.GLOBAL;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @ControllerAdvice

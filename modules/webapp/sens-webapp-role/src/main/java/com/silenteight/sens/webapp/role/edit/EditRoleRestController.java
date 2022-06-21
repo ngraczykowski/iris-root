@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 import javax.validation.Valid;
 
-import static com.silenteight.sens.webapp.common.rest.RestConstants.ACCEPTED_STATUS;
-import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
-import static com.silenteight.sens.webapp.common.rest.RestConstants.SUCCESS_RESPONSE_DESCRIPTION;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.ROLE_MANAGEMENT;
 import static com.silenteight.sens.webapp.role.domain.DomainConstants.ROLE_ENDPOINT_TAG;
+import static com.silenteight.sep.auth.authentication.RestConstants.ACCEPTED_STATUS;
+import static com.silenteight.sep.auth.authentication.RestConstants.ROOT;
+import static com.silenteight.sep.auth.authentication.RestConstants.SUCCESS_RESPONSE_DESCRIPTION;
 import static org.springframework.http.ResponseEntity.ok;
 
 @Slf4j

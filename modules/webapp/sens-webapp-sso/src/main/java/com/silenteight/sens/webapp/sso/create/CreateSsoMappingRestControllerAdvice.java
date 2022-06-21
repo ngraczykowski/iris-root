@@ -1,9 +1,9 @@
 package com.silenteight.sens.webapp.sso.create;
 
-import com.silenteight.sens.webapp.common.rest.exception.AbstractErrorControllerAdvice;
-import com.silenteight.sens.webapp.common.rest.exception.ControllerAdviceOrder;
-import com.silenteight.sens.webapp.common.rest.exception.dto.ErrorDto;
 import com.silenteight.sep.usermanagement.api.identityprovider.exception.SsoRoleMapperAlreadyExistsException;
+import com.silenteight.serp.governance.common.web.exception.AbstractErrorControllerAdvice;
+import com.silenteight.serp.governance.common.web.exception.ControllerAdviceOrder;
+import com.silenteight.serp.governance.common.web.exception.ErrorDto;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;

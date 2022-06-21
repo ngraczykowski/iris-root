@@ -4,7 +4,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-
 import com.silenteight.sep.usermanagement.api.identityprovider.dto.IdentityProviderDto;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -16,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 
-import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.SSO_MANAGEMENT;
 import static com.silenteight.sens.webapp.sso.domain.DomainConstants.SSO_ENDPOINT_TAG;
+import static com.silenteight.sep.auth.authentication.RestConstants.ROOT;
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 

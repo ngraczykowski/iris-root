@@ -43,7 +43,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT;
+import static com.silenteight.sep.auth.authentication.RestConstants.ROOT;
 import static io.restassured.http.ContentType.JSON;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;

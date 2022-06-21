@@ -1,8 +1,7 @@
 package com.silenteight.sens.webapp.backend.config;
 
 import lombok.RequiredArgsConstructor;
-
-import com.silenteight.sens.webapp.common.rest.RestConstants;
+import com.silenteight.sep.auth.authentication.RestConstants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
-import static com.silenteight.serp.governance.common.web.rest.RestConstants.ACCEPTED_STATUS;
-import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT;
-import static com.silenteight.serp.governance.common.web.rest.RestConstants.SUCCESS_RESPONSE_DESCRIPTION;
+import static com.silenteight.sep.auth.authentication.RestConstants.ACCEPTED_STATUS;
+import static com.silenteight.sep.auth.authentication.RestConstants.ROOT;
+import static com.silenteight.sep.auth.authentication.RestConstants.SUCCESS_RESPONSE_DESCRIPTION;
 import static com.silenteight.serp.governance.policy.domain.DomainConstants.POLICY_ENDPOINT_TAG;
 import static org.springframework.http.ResponseEntity.accepted;
 
