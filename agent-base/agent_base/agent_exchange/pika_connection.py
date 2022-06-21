@@ -4,7 +4,10 @@ import aio_pika
 from s8_python_network.pika_connection import BasePikaConnection, RabbitMQConfig
 
 from agent_base.agent.exception import AgentException
-from agent_base.utils.config.application_config import MessagingConfig
+from agent_base.utils.config.application_config import (
+    ConfigurationException,
+    MessagingConfig,
+)
 
 
 class PikaConnection(BasePikaConnection):
@@ -39,12 +42,13 @@ class PikaConnection(BasePikaConnection):
             self.logger.info(f"Got an existing (request) queue: {self.request_queue}")
         except aio_pika.exceptions.ChannelNotFoundEntity as err:
             self.logger.debug(f"Queue doesn't exits: {err!r}")
-            if self.messaging_configuration.request.exchange:
+            if self.messaging_configuration.request.all_required:
 
                 # not sure why but on error close callbacks are called in aiormq,
                 # and more exceptions happens
                 await self.channel.close()
                 channel: aio_pika.Channel = await self.connection.channel()
+                await channel.set_qos(prefetch_count=self.max_requests_to_worker)
 
                 self.request_queue: aio_pika.queue.Queue = await channel.declare_queue(
                     name=self.messaging_configuration.request.queue_name,
@@ -63,7 +67,14 @@ class PikaConnection(BasePikaConnection):
                     f"Created queue {self.request_queue} and bind to exchange {request_exchange}"
                 )
             else:
+                self.logger.error(
+                    "Queue not exists and cannot be created - check messaging config 'request"
+                )
                 raise
+
+        if not self.messaging_configuration.response.all_required:
+            raise ConfigurationException("Messaging config not valid - check 'response")
+
         self.callback_exchange = await self.get_or_create_exchange(
             self.messaging_configuration.response.exchange
         )
@@ -76,8 +87,11 @@ class PikaConnection(BasePikaConnection):
             exchange = await self.channel.get_exchange(name=exchange_name, ensure=True)
             self.logger.info(f"Got an existing exchange {exchange}")
         except Exception as err:
+            channel: aio_pika.Channel = await self.connection.channel()
             self.logger.debug(f"Exchange doesn't exits: {err!r}")
-            exchange = await self.channel.declare_exchange(name=exchange_name)
+            exchange = await channel.declare_exchange(
+                name=exchange_name, durable=True, type="topic"
+            )
             self.logger.info(f"Created exchange {exchange}")
         return exchange
 

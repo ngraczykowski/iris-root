@@ -41,8 +41,8 @@ class AgentDataSource:
             try:
                 self.config.reload()
                 self.data_source_config = self.config.application_config.uds
-                if not self.data_source_config.address:
-                    raise ConfigurationException("Data Source configuration missing!")
+                if not self.data_source_config.all_required:
+                    raise ConfigurationException("Missing fields in Data Source configuration!")
                 address_service = AddressService(self.config.application_config.consul)
                 address = await address_service.get(self.data_source_config.address)
 

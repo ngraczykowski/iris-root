@@ -163,7 +163,7 @@ class AgentExchange(AgentService):
 
     async def _set_pika_connection(self):
         max_requests_to_worker = self.config.application_config.agent_grpc_service.processes
-        for connection_config in self._prepare_connection_configurations():
+        for connection_config in self.config.application_config.rabbitmq.generate():
             connection = PikaConnection(
                 self.config.application_config.messaging,
                 connection_config,
@@ -184,19 +184,6 @@ class AgentExchange(AgentService):
                 return connection
 
         raise Exception("No working pika connection")
-
-    def _prepare_connection_configurations(self):
-        rabbitmq_config = self.config.application_config.rabbitmq
-
-        if rabbitmq_config.host:
-            yield rabbitmq_config
-
-        if rabbitmq_config.addresses:
-            addresses = rabbitmq_config.addresses
-            for address in addresses.split(","):
-                rabbitmq_config.host, rabbitmq_config.port = address.split(":")
-
-                yield rabbitmq_config
 
     @staticmethod
     def _update_absent_solutions(

@@ -22,10 +22,13 @@ class AgentServiceConfig:
     server_public_key_chain: Optional[str] = None
 
     def __post_init__(self):
-        if self.grpc_port:
-            self.grpc_port = int(self.grpc_port)
-        if self.processes:
-            self.processes = int(self.processes)
+        try:
+            if self.grpc_port:
+                self.grpc_port = int(self.grpc_port)
+            if self.processes:
+                self.processes = int(self.processes)
+        except ValueError:
+            raise ConfigurationException("grpc_port and processes must be integers!")
 
 
 @dataclasses.dataclass
@@ -44,6 +47,12 @@ class MessagingRequest:
     queue_durable: bool = True
     queue_arguments: Optional[Dict[str, Any]] = None
 
+    @property
+    def all_required(self) -> bool:
+        return all(
+            (elem is not None for elem in (self.exchange, self.routing_key, self.queue_name))
+        )
+
 
 @dataclasses.dataclass
 class MessagingResponse:
@@ -54,6 +63,10 @@ class MessagingResponse:
 
     exchange: str
     routing_key: str
+
+    @property
+    def all_required(self) -> bool:
+        return all((self.exchange is not None, self.routing_key is not None))
 
 
 @dataclasses.dataclass
@@ -85,7 +98,14 @@ class UDSConfig:
 
     def __post_init__(self):
         if self.timeout:
-            self.timeout = int(self.timeout)
+            try:
+                self.timeout = int(self.timeout)
+            except ValueError:
+                raise ConfigurationException("Timeout must be an integer!")
+
+    @property
+    def all_required(self) -> bool:
+        return all((self.address is not None, self.timeout is not None))
 
 
 @dataclasses.dataclass

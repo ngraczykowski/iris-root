@@ -4,7 +4,7 @@
   "RABBITMQ_USERNAME": "user",
   "RABBITMQ_PASSWORD": "pass",
   "RABBITMQ_HOST": "best.host.ever",
-  "RABBITMQ_PORT": "12345",
+  "RABBITMQ_PORT": 12345,
   "RABBITMQ_VIRTUALHOST": "vhost",
   "REQUEST_EXCHANGE": "agent.request",
   "REQUEST_ROUTING_KEY": "agents.EXAMPLE.versions.1_0_0.configs.1",
