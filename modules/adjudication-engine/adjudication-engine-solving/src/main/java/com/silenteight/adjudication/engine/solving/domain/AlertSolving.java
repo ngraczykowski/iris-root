@@ -181,8 +181,8 @@ public class AlertSolving implements Serializable {
     return Stream.concat(features.stream(), categories.stream()).collect(toList());
   }
 
-  public AlertSolving updateMatchSolution(long matchId, String solution, String reson) {
-    matches.get(matchId).setSolution(solution, reson);
+  public AlertSolving updateMatchSolution(long matchId, String solution, String reason) {
+    matches.get(matchId).setSolution(solution, reason);
     return this;
   }
 

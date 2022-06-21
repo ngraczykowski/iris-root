@@ -39,7 +39,7 @@ class AgentResponseProcess implements AgentResponsePort {
     for (AgentOutput agentOutput : agentResponse.getAgentOutputsList()) {
 
       log.debug(
-          "Parsing agent response: match: {} for features {}",
+          "Parsing agent response match: {} for features size {}",
           agentOutput.getMatch(),
           agentOutput.getFeaturesCount());
       String matchName = agentOutput.getMatch();
@@ -47,7 +47,7 @@ class AgentResponseProcess implements AgentResponsePort {
       long matchId = ResourceName.create(matchName).getLong("matches");
 
       final var alertSolvingModel = updateMatchFeatureValues(agentOutput, matchId, alertId);
-      matchFeatureStorePublisherPort.resolve(alertSolvingModel, agentResponse);
+      matchFeatureStorePublisherPort.resolve(alertSolvingModel, matchId,agentOutput.getFeaturesList());
 
       if (alertSolvingModel.isEmpty() || !alertSolvingModel.isMatchReadyForSolving(matchId)) {
         log.info("Match is not ready for solving {}", matchId);

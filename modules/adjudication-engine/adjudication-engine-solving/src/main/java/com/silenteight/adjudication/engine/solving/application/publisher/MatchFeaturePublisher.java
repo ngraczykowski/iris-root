@@ -7,13 +7,13 @@ package com.silenteight.adjudication.engine.solving.application.publisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.adjudication.engine.solving.application.publisher.port.MatchFeaturePublisherPort;
 import com.silenteight.adjudication.engine.solving.data.MatchFeatureStoreDataAccess;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolving;
 import com.silenteight.adjudication.engine.solving.domain.MatchFeatureValue;
-import com.silenteight.agents.v1.api.exchange.AgentExchangeResponse;
+import com.silenteight.agents.v1.api.exchange.AgentOutput.Feature;
 
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -54,15 +54,17 @@ public class MatchFeaturePublisher implements MatchFeaturePublisherPort {
   }
 
   @Override
-  public void resolve(AlertSolving alertSolving, AgentExchangeResponse agentResponse) {
-    for (var agentOutput : agentResponse.getAgentOutputsList()) {
-      var matchId = ResourceName.create(agentOutput.getMatch()).getLong("matches");
-      for (var feature : agentOutput.getFeaturesList()) {
-        var featureName = feature.getFeature();
-        var matchFeature = alertSolving.getMatchFeatureValue(matchId, featureName);
-        log.debug("Store match feature value {} solution: {}", matchId, matchFeature.solution());
-        this.matchFeaturesQueue.add(matchFeature);
-      }
+  public void resolve(AlertSolving alertSolving, Long matchId, List<Feature> features) {
+    for (var feature : features) {
+      var featureName = feature.getFeature();
+      var matchFeature = alertSolving.getMatchFeatureValue(matchId, featureName);
+      log.debug(
+          "Store match feature matchId: {} feature: {} solution: {} applied to alertSolving: {}",
+          matchId,
+          featureName,
+          matchFeature.solution(),
+          alertSolving.getAlertId());
+      this.matchFeaturesQueue.add(matchFeature);
     }
   }
 }

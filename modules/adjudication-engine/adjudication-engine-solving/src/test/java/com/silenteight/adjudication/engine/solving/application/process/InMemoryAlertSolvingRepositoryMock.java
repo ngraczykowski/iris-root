@@ -23,9 +23,7 @@ class InMemoryAlertSolvingRepositoryMock implements AlertSolvingRepository {
     alerts.values().stream().map(AlertSolving::new).forEach(this::save);
   }
 
-  public InMemoryAlertSolvingRepositoryMock() {
-
-  }
+  public InMemoryAlertSolvingRepositoryMock() {}
 
   @Override
   public AlertSolving get(@NotNull Long key) {
@@ -46,8 +44,7 @@ class InMemoryAlertSolvingRepositoryMock implements AlertSolvingRepository {
   public AlertSolving updateMatchFeatureValue(
       long alertId, long matchId, List<FeatureSolution> featureSolutions) {
     synchronized (InMemoryAlertSolvingRepositoryMock.class) {
-      featureSolutions.forEach(
-          fs -> alerts.get(alertId).updateMatchSolution(matchId, fs.getSolution(), fs.getReason()));
+      alerts.get(alertId).updateMatchFeatureValues(matchId, featureSolutions);
       return alerts.get(alertId);
     }
   }
