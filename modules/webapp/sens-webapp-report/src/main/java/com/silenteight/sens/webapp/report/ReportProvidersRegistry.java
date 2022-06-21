@@ -1,6 +1,7 @@
 package com.silenteight.sens.webapp.report;
 
 import com.silenteight.sens.webapp.report.exception.ReportNotFoundException;
+import com.silenteight.sens.webapp.report.list.FilterDto;
 import com.silenteight.sens.webapp.report.list.ListReportsQuery;
 import com.silenteight.sens.webapp.report.list.ReportDto;
 
@@ -33,15 +34,15 @@ class ReportProvidersRegistry implements ReportProvider, ListReportsQuery {
         .filter(reportGenerator -> reportGenerator instanceof ConfigurableReport)
         .map(ConfigurableReport.class::cast)
         .filter(ConfigurableReport::isEnabled)
-        .map(this::toReportDto)
+        .map(ReportProvidersRegistry::toReportDto)
         .collect(toList());
   }
 
-  private ReportDto toReportDto(ConfigurableReport reportGenerator) {
+  private static ReportDto toReportDto(ConfigurableReport reportGenerator) {
     return ReportDto.builder()
         .name(reportGenerator.getName())
         .label(reportGenerator.getLabel())
-        .filter(reportGenerator.getFilterType())
+        .filter(FilterDto.builder().type(reportGenerator.getFilterType()).build())
         .build();
   }
 }

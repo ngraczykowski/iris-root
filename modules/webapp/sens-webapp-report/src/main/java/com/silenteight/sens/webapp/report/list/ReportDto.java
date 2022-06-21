@@ -1,17 +1,24 @@
 package com.silenteight.sens.webapp.report.list;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Builder.Default;
 import lombok.NonNull;
+import lombok.Value;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Builder
-@Data
+@Value
 public class ReportDto {
 
   @NonNull
   String name;
   @NonNull
+  @JsonProperty("title")
   String label;
   @NonNull
-  FilterType filter;
+  FilterDto filter;
+  @NonNull
+  @Default
+  DownloadType download = DownloadType.SYNC;
 }
