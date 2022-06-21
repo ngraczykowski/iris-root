@@ -23,8 +23,11 @@ from etl_pipeline.learning.proto.historical_decision_learning_pb2 import (
     HistoricalDecisionLearningStoreExchangeRequest,
 )
 from etl_pipeline.learning.service.connection import HistoricalDecisionExchange
-from tests.test_json.constant import HISTORICAL_DECISION_REQUEST
-from tests.test_json.test_json_pipeline import assert_compare_list_of_dict_of_list
+from tests.test_json.constant import (
+    HISTORICAL_DECISION_REQUEST,
+    HISTORICAL_DECISION_REQUEST_WITHOUT_MARK,
+)
+from tests.test_json.test_json_pipeline import assert_nested_dict
 
 
 def load_alert(filepath: str = "notebooks/sample/wm_address_in_payload_format.json"):
@@ -62,6 +65,7 @@ class HistoricalDecisionStub:
         self.queue = await self.conn.channel.get_queue(
             self.conn.messaging_configuration.get("queue-name")
         )
+        await self.queue.purge()
 
     async def on_message(self, message: AbstractIncomingMessage) -> None:
         async with message.process():
@@ -110,8 +114,23 @@ class TestGrpcServer(AsyncTestCase):
         data = lz4.frame.decompress(historical_decision.result.result)
         response = HistoricalDecisionLearningStoreExchangeRequest()
         response.ParseFromString(data)
-        assert_compare_list_of_dict_of_list(
-            json_format.MessageToDict(response), HISTORICAL_DECISION_REQUEST
-        )
+        assert_nested_dict(json_format.MessageToDict(response), HISTORICAL_DECISION_REQUEST)
+        await historical_decision.conn.stop()
 
+    @pytest.mark.asyncio
+    @pytest.mark.rabbitmq
+    async def test_empty_discriminator(self):
+        historical_decision = HistoricalDecisionStub()
+        await historical_decision.start()
+        request_alert = load_alert("notebooks/sample/wm_address_in_payload_format_two_marks.json")
+        self.stub.RunEtlLearning(RunEtlLearningRequest(learning_alerts=[request_alert]))
+        await historical_decision.get_message()
+        assert not historical_decision.result.result
+        await asyncio.sleep(1)
+        data = lz4.frame.decompress(historical_decision.result.result)
+        response = HistoricalDecisionLearningStoreExchangeRequest()
+        response.ParseFromString(data)
+        assert_nested_dict(
+            HISTORICAL_DECISION_REQUEST_WITHOUT_MARK, json_format.MessageToDict(response)
+        )
         await historical_decision.conn.stop()

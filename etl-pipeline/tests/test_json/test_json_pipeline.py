@@ -95,7 +95,9 @@ def assert_compare_list_of_dict_of_list(tested, reference, col=None):
 
 
 def assert_nested_dict(tested, reference, key=None):
+
     if isinstance(reference, dict):
+        assert len(tested) == len(reference)
         if isinstance(tested, Match):
             assert {"match_id": tested.match_id, "match_name": tested.match_name} == reference
             return
@@ -132,7 +134,12 @@ def load_payload(out_payload, reference_file):
                 }
             except TypeError:
                 pass
-        assert_nested_dict(sort_list(out_payload), sort_list(payload))
+        for match in out_payload:
+            match["match_ids"] = {
+                "match_id": match["match_ids"].match_id,
+                "match_name": match["match_ids"].match_name,
+            }
+        assert_nested_dict(sort_list(out_payload), payload)
         return
 
 

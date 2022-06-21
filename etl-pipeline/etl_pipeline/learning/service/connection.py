@@ -154,7 +154,7 @@ class HistoricalDecisionExchange:
 
     async def send_request(self, data):
         response_body = lz4.frame.compress(
-            data.SerializeToString(),
+            data,
             block_size=lz4.frame.BLOCKSIZE_MAX64KB,
             block_linked=False,
             compression_level=lz4.frame.COMPRESSIONLEVEL_MINHC,

@@ -103,13 +103,14 @@ class EtlLearningServiceServicer(object):
 
     @classmethod
     def process_request(cls, alert: LearningAlertPayload):
-        cls.get_logger()
+
         record = cls.parse_alert(alert)
         requests = cls.send(record, alert)
         return requests, record, alert
 
     @classmethod
     def parse_alert(cls, alert: LearningAlertPayload):
+        cls.get_logger()
         pipeline_result = PipelinedPayload()
         try:
             logger.debug(f"Starting parse for {alert.alert_name}")
@@ -153,9 +154,7 @@ class EtlLearningServiceServicer(object):
             tasks = []
             etl_alerts = []
             for alert in pipelined_records:
-                message = HistoricalDecisionLearningStoreExchangeRequest()
-                message.ParseFromString(alert[0])
-                tasks.append(self.exchange.send_request(message))
+                tasks.append(self.exchange.send_request(alert[0]))
             results = await asyncio.gather(*tasks)
             for alert, result in zip(alerts, results):
                 etl_alerts.append(self._parse_response_alert(alert, result))
@@ -212,7 +211,6 @@ class EtlLearningServiceServicer(object):
 class PayloadToLearningAlertConverter:
     def convert_to_learning_alert(self, result, learning_alert: LearningAlertPayload):
         alerts = []
-
         for pipeline_result in result.result:
             watchlist = pipeline_result["watchlistParty"]["matchRecords"]["datasetId"]
             alerted_party_id = pipeline_result["watchlistParty"]["matchRecords"][
@@ -245,11 +243,14 @@ class PayloadToLearningAlertConverter:
             hist_data = self.prepare_historical_data_for_decision(decision_base)
             decisions = []
             discriminators = []
-            for event in hist_data:
-                decisions.append(
-                    Decision(id=event["decision_id"], value=event["decision"], created_at=date)
-                )
-                discriminators.append(Discriminator(value=event["discriminator"]))
+            decisions.append(
+                Decision(id=hist_data["decision_id"], value=hist_data["decision"], created_at=date)
+            )
+            for discriminator in ["ap_id_tp_marked", "tokens_tp_marked", "ap_name_tp_marked"]:
+                if decision_base.result["watchlistParty"]["matchRecords"][
+                    f"{discriminator}_agent_input"
+                ]:
+                    discriminators.append(Discriminator(value=f"mike_{discriminator}"))
             alert = Alert(
                 alert_id=learning_alert.alert_name,
                 match_id=pipeline_result["match_ids"].match_name,
@@ -269,23 +270,19 @@ class PayloadToLearningAlertConverter:
             historical_decision.result["watchlistParty"]["matchRecords"]["lastMatchedDate"],
             "%m/%d/%y",
         ).strftime("%Y-%m-%d")
-        hist_data_array = []
 
-        for discriminator in ["ap_id_tp_marked", "tokens_tp_marked", "ap_name_tp_marked"]:
-            hist_data = {
-                "alert_id": historical_decision.alert.alert_name,
-                "match_id": historical_decision.match,
-                "alerted_party_id": historical_decision.alerted_party_id,
-                "watchlist_id": historical_decision.watchlist,
-                "watchlist_type": "",
-                "decision_id": "",
-                "alerted_at": alerted_at,
-                "created_at": str(historical_decision.date),
-                "decision": self.get_decision_value(historical_decision.status),
-                "discriminator": f"mike_{discriminator}",
-            }
-            hist_data["decision_id"] = hashlib.sha1(
-                "".join(hist_data.values()).encode("utf8")
-            ).hexdigest()
-            hist_data_array.append(hist_data)
-        return hist_data_array
+        hist_data = {
+            "alert_id": historical_decision.alert.alert_name,
+            "match_id": historical_decision.match,
+            "alerted_party_id": historical_decision.alerted_party_id,
+            "watchlist_id": historical_decision.watchlist,
+            "watchlist_type": "",
+            "decision_id": "",
+            "alerted_at": alerted_at,
+            "created_at": str(historical_decision.date),
+            "decision": self.get_decision_value(historical_decision.status),
+        }
+        hist_data["decision_id"] = hashlib.sha1(
+            "".join(hist_data.values()).encode("utf8")
+        ).hexdigest()
+        return hist_data

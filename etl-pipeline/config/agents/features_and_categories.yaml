@@ -46,7 +46,7 @@ isTokensTpMarked:
   feature_type: features
   producer_type: HistoricalDecisionsFeatureInputProducer
   fields:
-    alerted_party: matched_tokens_tp_marked_agent_input
+    alerted_party: tokens_tp_marked_agent_input
     discriminator: mike_tokens_tp_marked
 
 customerType:

@@ -405,7 +405,7 @@
                 "ap_all_documents_aggregated": [],
                 "ap_all_employer_names_aggregated": [],
                 "ap_all_hit_types_aggregated": [],
-                "ap_all_matched_tokens_tp_markeds_aggregated": [],
+                "ap_all_tokens_tp_markeds_aggregated": [],
                 "ap_all_names_aggregated": [],
                 "ap_all_nationalities_aggregated": [],
                 "ap_all_party_types_aggregated": [],
@@ -522,7 +522,7 @@
                 "matchId": "49159509",
                 "matchStatus": "O",
                 "matchType": "GWL",
-                "matched_tokens_tp_marked_agent_input": "Doe",
+                "tokens_tp_marked_agent_input": "Doe",
                 "name_agent_ap": [
                     null,
                     [],
@@ -666,7 +666,7 @@
                 "wl_all_documents_aggregated": [],
                 "wl_all_employer_names_aggregated":[],
                 "wl_all_hit_types_aggregated": [],
-                "wl_all_matched_tokens_tp_markeds_aggregated": [],
+                "wl_all_tokens_tp_markeds_aggregated": [],
                 "wl_all_names_aggregated": [
                     "Joe Ding"
                 ],
@@ -1111,7 +1111,7 @@
                 "ap_all_documents_aggregated": [],
                 "ap_all_employer_names_aggregated": [],
                 "ap_all_hit_types_aggregated": [],
-                "ap_all_matched_tokens_tp_markeds_aggregated": [],
+                "ap_all_tokens_tp_markeds_aggregated": [],
                 "ap_all_names_aggregated": [],
                 "ap_all_nationalities_aggregated": [],
                 "ap_all_party_types_aggregated": [],
@@ -1228,7 +1228,7 @@
                 "matchId": "49159506",
                 "matchStatus": "O",
                 "matchType": "GWL",
-                "matched_tokens_tp_marked_agent_input": "Doe",
+                "tokens_tp_marked_agent_input": "Doe",
                 "name_agent_ap": [
                     null,
                     [],
@@ -1388,7 +1388,7 @@
                 "wl_all_documents_aggregated": [],
                 "wl_all_employer_names_aggregated":[],
                 "wl_all_hit_types_aggregated": [],
-                "wl_all_matched_tokens_tp_markeds_aggregated": [],
+                "wl_all_tokens_tp_markeds_aggregated": [],
                 "wl_all_names_aggregated": [
                     "Joe Dong"
                 ],

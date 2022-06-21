@@ -177,7 +177,7 @@ hit_type_agent:
   other:
   - alertedParty.xml_fields.PARTY1_POSITION_TITLE
  
-matched_tokens_tp_marked_agent:
+tokens_tp_marked_agent:
   input:
   - watchlistParty.matchRecords.TOKENS_RISK_CARRIER
 
