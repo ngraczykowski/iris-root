@@ -1,10 +1,7 @@
 @Library('pipeline-shared-library@github') _
-def jenkins = new com.silenteight.jenkins.ci.Jenkins()
 
 pipeline {
-    agent {
-        label 'ec2-agent'
-    }
+    agent any
     environment {
         PYPI_URL = credentials('pypi-readonly-url')
         TWINE_REPOSITORY_URL = 'https://repo.silenteight.com/artifactory/api/pypi/pypi'
