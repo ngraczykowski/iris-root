@@ -11,12 +11,13 @@ dependencies {
 
   implementation libs.governance.model.api
 
-  implementation project(":governance-agent")
+
+  implementation libs.silenteight.serp.governance.agent
   implementation libs.silenteight.serp.governance.db.changelog
-  implementation project(":governance-change-request")
+  implementation libs.silenteight.serp.governance.change.request
   implementation libs.silenteight.serp.governance.common.web
-  implementation project(":governance-strategy")
-  implementation project(":governance-policy")
+  implementation libs.silenteight.serp.governance.strategy
+  implementation libs.silenteight.serp.governance.policy
 
   implementation libs.spring.data.jpa
   implementation libs.spring.webmvc
@@ -27,9 +28,9 @@ dependencies {
   implementation libs.grpc.server.spring.boot.starter
 
   testImplementation libs.silenteight.serp.governance.common.web.testing
-  testImplementation(testFixtures(project(":governance-agent")))
-  testImplementation(testFixtures(project(":governance-change-request")))
-  testImplementation(testFixtures(project(":governance-policy")))
+  testImplementation(testFixtures(libs.silenteight.serp.governance.agent))
+  testImplementation(testFixtures(libs.silenteight.serp.governance.change.request))
+  testImplementation(testFixtures(libs.silenteight.serp.governance.policy))
   testImplementation libs.rest.assured.spring.mock.mvc
   testImplementation libs.spring.security.test
 
