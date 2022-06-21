@@ -5,7 +5,7 @@ on:
 jobs:
   renovate:
     runs-on: ubuntu-latest
-    if: ${{ github.actor == 'renovate-bot' }}
+    if: ${{ github.actor == 'renovate[bot]' }}
     steps:
       - name: Approve a PR
         run: gh pr review --approve "$PR_URL" -b "Approved by Github Action"
