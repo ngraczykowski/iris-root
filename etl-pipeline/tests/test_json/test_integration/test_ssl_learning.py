@@ -2,6 +2,7 @@ import asyncio
 import json
 import os
 import re
+import shutil
 import subprocess
 import time
 
@@ -76,7 +77,13 @@ class TestGrpcServer(AsyncTestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.tearDownClass()
+        service_path = os.path.join(os.environ["CONFIG_APP_DIR"], "service")
+        shutil.copyfile(os.path.join(service_path, "service.yaml"), "backup_service_service.yaml")
+        shutil.copyfile(
+            os.path.join(service_path, "service.ssl.yaml"),
+            os.path.join(service_path, "service.yaml"),
+        )
+
         environment = os.environ.copy()
         service_config = ConsulServiceConfig()
         _ = subprocess.Popen("tests/scripts/start_services.sh", env=environment)
@@ -88,11 +95,11 @@ class TestGrpcServer(AsyncTestCase):
 
     @classmethod
     def tearDownClass(cls):
-        try:
-            os.remove("/tmp/categories.txt")
-        except FileNotFoundError:
-            pass
+
+        service_path = os.path.join(os.environ["CONFIG_APP_DIR"], "service")
         process = subprocess.Popen("tests/scripts/kill_services.sh")
+        shutil.copyfile("backup_service_service.yaml", os.path.join(service_path, "service.yaml"))
+        os.remove("backup_service_service.yaml")
         process.wait()
 
     @pytest.mark.asyncio

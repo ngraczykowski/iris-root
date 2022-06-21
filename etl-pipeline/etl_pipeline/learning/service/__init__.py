@@ -74,8 +74,13 @@ except omegaconf.errors.ConfigAttributeError:
     processes = 10
 
 
+def create_pool():
+    logger.debug("Create pool")
+    return futures.ProcessPoolExecutor(max_workers=service_config.processes)
+
+
 class EtlLearningServiceServicer(object):
-    pool = futures.ProcessPoolExecutor(max_workers=service_config.processes)
+    pool = create_pool()
     connections = {}
 
     loggers = {}
@@ -153,9 +158,10 @@ class EtlLearningServiceServicer(object):
             pipelined_records = await asyncio.gather(*tasks)
             tasks = []
             etl_alerts = []
+            results = []
             for alert in pipelined_records:
-                tasks.append(self.exchange.send_request(alert[0]))
-            results = await asyncio.gather(*tasks)
+                results.append(self.exchange.send_request(alert[0]))
+            # results = await asyncio.gather(*tasks)
             for alert, result in zip(alerts, results):
                 etl_alerts.append(self._parse_response_alert(alert, result))
             logger.debug(f"Sending: {etl_alerts}")

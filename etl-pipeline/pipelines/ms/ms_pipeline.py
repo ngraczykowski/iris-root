@@ -535,6 +535,6 @@ class MSPipeline(ETLPipeline):
 
     def get_field_value_name(self, fields, name):
         try:
-            return fields.get(name, name).value
+            return fields.get(name, None).value
         except AttributeError:
             return None

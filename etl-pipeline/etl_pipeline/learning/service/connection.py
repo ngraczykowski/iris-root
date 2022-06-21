@@ -1,11 +1,13 @@
 import os
+import ssl
 import time
 from typing import Dict, List
 
-import aio_pika
 import lz4.frame
-import pamqp
-from aio_pika import ExchangeType
+import pika
+from pika.adapters.blocking_connection import BlockingChannel
+from pika.delivery_mode import DeliveryMode
+from pika.exchange_type import ExchangeType
 
 from etl_pipeline.config import ConsulServiceConfig
 from etl_pipeline.logger import get_logger
@@ -33,94 +35,48 @@ class PikaConnection:
     async def start(self) -> None:
         connection_configuration = self.connection_configuration.copy()
         ssl_options = connection_configuration.pop("tls", None)
+        creds = pika.PlainCredentials(
+            connection_configuration["login"],
+            connection_configuration["password"],
+        )
+        if ssl_options:
+            context = ssl.create_default_context(cafile=ssl_options["ca_certs"])
+            context.load_cert_chain(ssl_options["certfile"], ssl_options["keyfile"])
+            context.options |= ssl.OP_NO_TLSv1
+            context.options |= ssl.OP_NO_TLSv1_1
 
-        if self.ssl:
-            if not ssl_options:
-                raise ValueError(
-                    "No ssl connection parameters in config "
-                    "- add 'rabbitmq.tls' section to application.yaml"
-                )
-            url = "".join(
-                map(
-                    str,
-                    (
-                        "amqps://",
-                        connection_configuration["login"],
-                        ":",
-                        connection_configuration["password"],
-                        "@",
-                        connection_configuration["host"],
-                        ":",
-                        connection_configuration["port"],
-                        "/",
-                        connection_configuration["virtualhost"],
-                        "?cafile=",
-                        ssl_options["cafile"],
-                        "&keyfile=",
-                        ssl_options["keyfile"],
-                        "&certfile=",
-                        ssl_options["certfile"],
-                        "&no_verify_ssl=",  # that's how aio-pika named it ...
-                        ssl_options["verify"],
-                    ),
-                )
-            )
-            self.connection: aio_pika.RobustConnection = await aio_pika.connect(
-                url=url, fail_fast=1
+            ssl_opts = pika.SSLOptions(context, connection_configuration["host"])
+            conn_params = pika.ConnectionParameters(
+                port=connection_configuration["port"],
+                virtual_host=connection_configuration["virtualhost"],
+                credentials=creds,
+                ssl_options=ssl_opts,
             )
         else:
-            self.connection: aio_pika.RobustConnection = await aio_pika.connect(
-                **connection_configuration
+            conn_params = pika.ConnectionParameters(
+                host=self.connection_configuration["host"],
+                port=self.connection_configuration["port"],
+                virtual_host=self.connection_configuration["virtualhost"],
+                credentials=creds,
             )
-        self.channel: aio_pika.Channel = await self.connection.channel(publisher_confirms=True)
-        await self.channel.set_qos()
-
-        try:
-            self.request_queue = await self.channel.get_queue(
-                name=self.messaging_configuration.get("queue-name"),
-                ensure=True,
-            )
-            logger.info(f"Got an existing (request) queue: {self.request_queue}")
-        except aio_pika.exceptions.ChannelNotFoundEntity as err:
-            logger.debug(f"Queue doesn't exits: {err!r}")
-            if "exchange" in self.messaging_configuration:
-                await self.channel.close()
-                self.channel: aio_pika.Channel = await self.connection.channel(
-                    publisher_confirms=True
-                )
-
-                # not sure why but on error close callbacks are called in aiormq,
-                # and more exceptions happens
-
-                self.request_queue: aio_pika.queue.Queue = await self.channel.declare_queue(
-                    name=self.messaging_configuration.get("queue-name", ""),
-                    durable=self.messaging_configuration.get("queue-durable", True),
-                    arguments=dict(self.messaging_configuration.get("queue-arguments", {})),
-                )
-
-            else:
-                raise
-
-        try:
-            request_exchange = await self.channel.get_exchange(
-                self.messaging_configuration.exchange
-            )
-        except:
-            await self.channel.close()
-            self.channel: aio_pika.Channel = await self.connection.channel(publisher_confirms=True)
-
-            request_exchange = await self.channel.declare_exchange(
-                self.messaging_configuration.exchange,
-                ExchangeType.DIRECT,
-            )
-        self.request_queue: aio_pika.queue.Queue = await self.channel.declare_queue(
-            name=self.messaging_configuration.get("queue-name", ""),
+        self.connection: pika.BlockingConnection = pika.BlockingConnection(conn_params)
+        self.connection_configuration = connection_configuration
+        self.channel: BlockingChannel = self.connection.channel()
+        self.request_queue = self.channel.queue_declare(
+            queue=self.messaging_configuration.get("queue-name", ""),
             durable=self.messaging_configuration.get("queue-durable", True),
-            arguments=dict(self.messaging_configuration.get("queue-arguments", None)),
+            arguments=dict(self.messaging_configuration.get("queue-arguments", {})),
         )
+        # logger.info(f"Got an existing (request) queue: {self.request_queue}")
 
-        await self.request_queue.bind(
-            exchange=request_exchange,
+        request_exchange = self.channel.exchange_declare(
+            self.messaging_configuration.exchange,
+            durable=self.messaging_configuration.get("queue-durable", True),
+            exchange_type=ExchangeType.direct,
+        )
+        self.channel.queue_bind(
+            queue=self.messaging_configuration.get("queue-name", ""),
+            exchange=self.messaging_configuration.exchange,
             routing_key=self.messaging_configuration.get("routing-key"),
         )
         logger.info(f"Created queue {self.request_queue} and bind to exchange {request_exchange}")
@@ -134,13 +90,16 @@ class PikaConnection:
         if self.connection:
             await self.connection.close()
 
-    async def on_request(self, response_message: aio_pika) -> None:
-        exchange = await self.channel.get_exchange(self.messaging_configuration["exchange"])
-        return await exchange.publish(
+    def on_request(self, body, properties) -> None:
+
+        self.channel.basic_publish(
+            exchange="bridge.historical",
             routing_key=self.messaging_configuration["routing-key"],
-            message=response_message,
-            timeout=1,
+            body=body,
+            properties=properties,
         )
+        self.channel.confirm_delivery()
+        return True
 
 
 class HistoricalDecisionExchange:
@@ -152,7 +111,7 @@ class HistoricalDecisionExchange:
         connection = await self._set_pika_connection()
         self.connections: List[PikaConnection] = [connection]
 
-    async def send_request(self, data):
+    def send_request(self, data):
         response_body = lz4.frame.compress(
             data,
             block_size=lz4.frame.BLOCKSIZE_MAX64KB,
@@ -162,22 +121,25 @@ class HistoricalDecisionExchange:
             store_size=False,
         )
         logger.debug("Trying to send")
-        message = aio_pika.Message(
-            response_body,
+        from pika.spec import BasicProperties
+
+        properties = BasicProperties(
             content_encoding="lz4",
             content_type="application/x-protobuf",
-            delivery_mode=aio_pika.DeliveryMode.PERSISTENT,
+            delivery_mode=DeliveryMode.Persistent,
             headers={"springAutoDecompress": True},
             timestamp=int(time.time()),
             type="silenteight.learningstore.historicaldecision.v2.api.HistoricalDecisionLearningStoreExchangeRequest",
         )
-        while True:
+        trials = 0
+        result = False
+        while trials < 10:
             try:
-                result = await self.connections[0].on_request(message)
+                result = self.connections[0].on_request(response_body, properties)
                 break
-            except:
-                await self.start()
-        result = isinstance(result, pamqp.commands.Basic.Ack)
+            except Exception as e:
+                trials += 1
+                logger.debug(f"Trying again {str(e)}")
         logger.debug(f"Result of publish: {'SUCCESS' if result else 'FAILURE'}")
         return result
 

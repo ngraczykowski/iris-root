@@ -29,6 +29,7 @@
             "AP_PARTY_TYPE": "UNKNOWN",
             "AP_PARTY_TYPES": [],
             "ENTITY_TYPE_MATCH": "INCONCLUSIVE",
+            "employer_party_type": "CLEAR",
             "headerInfo": {
                 "currentVersionId": "122438658",
                 "datasetId": "1044",
@@ -398,13 +399,13 @@
                 "ap_all_documents_aggregated": [],
                 "ap_all_employer_names_aggregated": [],
                 "ap_all_hit_types_aggregated": [],
-                "ap_all_tokens_tp_markeds_aggregated": [],
                 "ap_all_names_aggregated": [],
                 "ap_all_nationalities_aggregated": [],
                 "ap_all_party_types_aggregated": [],
                 "ap_all_pobs_aggregated": [],
                 "ap_all_residencies_aggregated": [],
                 "ap_all_sanctioned_countries_aggregated": [],
+                "ap_all_tokens_tp_markeds_aggregated": [],
                 "ap_id_tp_marked_agent_input": "A05003324172",
                 "ap_name_tp_marked_agent_input": null,
                 "company_name_agent_ap": [
@@ -515,7 +516,6 @@
                 "matchId": "49159509",
                 "matchStatus": "O",
                 "matchType": "GWL",
-                "tokens_tp_marked_agent_input": "Doe",
                 "name_agent_ap": [
                     null,
                     [],
@@ -647,6 +647,7 @@
                         "totalMatchScore": "0.9230769230769231"
                     }
                 ],
+                "tokens_tp_marked_agent_input": "Doe",
                 "uniqueCustomerId": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480\n      ",
                 "wl_all_ap_id_tp_markeds_aggregated": [],
                 "wl_all_ap_name_tp_markeds_aggregated": [],
@@ -659,7 +660,6 @@
                 "wl_all_documents_aggregated": [],
                 "wl_all_employer_names_aggregated":[],
                 "wl_all_hit_types_aggregated": [],
-                "wl_all_tokens_tp_markeds_aggregated": [],
                 "wl_all_names_aggregated": [
                     "Joe Ding"
                 ],
@@ -675,10 +675,8 @@
                 "wl_all_residencies_aggregated": [
                     "|FL;US"
                 ],
-                "wl_all_sanctioned_countries_aggregated": [
-                    "Joe Ding",
-                    "|FL;US"
-                ]
+                "wl_all_sanctioned_countries_aggregated": [],
+                "wl_all_tokens_tp_markeds_aggregated": []
             }
         }
     },
@@ -712,6 +710,7 @@
             "AP_PARTY_TYPE": "UNKNOWN",
             "AP_PARTY_TYPES": [],
             "ENTITY_TYPE_MATCH": "INCONCLUSIVE",
+            "employer_party_type": "CLEAR",
             "headerInfo": {
                 "currentVersionId": "122438658",
                 "datasetId": "1044",
@@ -1097,13 +1096,13 @@
                 "ap_all_documents_aggregated": [],
                 "ap_all_employer_names_aggregated": [],
                 "ap_all_hit_types_aggregated": [],
-                "ap_all_tokens_tp_markeds_aggregated": [],
                 "ap_all_names_aggregated": [],
                 "ap_all_nationalities_aggregated": [],
                 "ap_all_party_types_aggregated": [],
                 "ap_all_pobs_aggregated": [],
                 "ap_all_residencies_aggregated": [],
                 "ap_all_sanctioned_countries_aggregated": [],
+                "ap_all_tokens_tp_markeds_aggregated": [],
                 "ap_id_tp_marked_agent_input": "A05003324172",
                 "ap_name_tp_marked_agent_input": null,
                 "company_name_agent_ap": [
@@ -1214,7 +1213,6 @@
                 "matchId": "49159506",
                 "matchStatus": "O",
                 "matchType": "GWL",
-                "tokens_tp_marked_agent_input": "Doe",
                 "name_agent_ap": [
                     null,
                     [],
@@ -1362,6 +1360,7 @@
                         "totalMatchScore": "0.9230769230769231"
                     }
                 ],
+                "tokens_tp_marked_agent_input": "Doe",
                 "uniqueCustomerId": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480\n      ",
                 "wl_all_ap_id_tp_markeds_aggregated": [],
                 "wl_all_ap_name_tp_markeds_aggregated": [],
@@ -1374,7 +1373,6 @@
                 "wl_all_documents_aggregated": [],
                 "wl_all_employer_names_aggregated":[],
                 "wl_all_hit_types_aggregated": [],
-                "wl_all_tokens_tp_markeds_aggregated": [],
                 "wl_all_names_aggregated": [
                     "Joe Dong"
                 ],
@@ -1393,11 +1391,8 @@
                     "PL",
                     "Poland"
                 ],
-                "wl_all_sanctioned_countries_aggregated": [
-                    "Joe Dong",
-                    "PL",
-                    "Poland"
-                ]
+                "wl_all_sanctioned_countries_aggregated": [],
+                "wl_all_tokens_tp_markeds_aggregated": []
             }
         }
     }

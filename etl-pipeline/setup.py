@@ -12,6 +12,7 @@ dev_require = [
     "omegaconf==2.1.1",
     "protobuf==3.19.4",
     "python-consul2==0.1.5",
+    "pika==1.2.1",
 ]
 
 tests_require = ["pandas==1.1.5"]

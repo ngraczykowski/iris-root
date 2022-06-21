@@ -55,9 +55,11 @@ async def serve(args):
             ("grpc.max_receive_message_length", max_length),
         ],
     )
-    add_EtlLearningServiceServicer_to_server(EtlLearningServiceServicer(args.ssl), server)
+    if not args.disable_learning:
+        add_EtlLearningServiceServicer_to_server(EtlLearningServiceServicer(args.ssl), server)
+    if not args.disable_solving:
+        add_EtlPipelineServiceServicer_to_server(EtlPipelineServiceServicer(args.ssl), server)
 
-    add_EtlPipelineServiceServicer_to_server(EtlPipelineServiceServicer(args.ssl), server)
     if args.ssl:
         with open(service_config.grpc_server_tls_private_key, "rb") as f:
             private_key = f.read()
@@ -105,5 +107,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--ssl", action="store_true", required=False)
+    parser.add_argument("--disable_solving", action="store_true", required=False)
+    parser.add_argument("--disable_learning", action="store_true", required=False)
     args = parser.parse_args()
     run(functools.partial(serve, args), stop)

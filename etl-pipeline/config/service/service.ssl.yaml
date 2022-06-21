@@ -27,7 +27,11 @@ historical_decision_exchange:
 
 rabbitmq:
   host: localhost
-  port: 5672 
+  port: 5671
   login: dev
   password: dev
   virtualhost: /
+  tls:
+    ca_certs: "tests/ssl/ca.pem"
+    keyfile: "tests/ssl/client-key.pem"
+    certfile: "tests/ssl/client.pem"

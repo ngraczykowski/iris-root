@@ -24,69 +24,69 @@ pipeline {
             }
 
             stages {
-                stage ('Build package') {
-                    steps {
-                        sh './scripts/clean.sh'
-                        sh './scripts/build_package.sh'
-                    }
-                }
-                stage('Test') {
-                    steps {
-                        sh 'pip install --index-url "${PIP_INDEX_URL}" tox'
-                        sh './scripts/test.sh --index-url "${PIP_INDEX_URL}"'
-                    }
-                }
-                stage ('Build dist') {
-                    steps {
-                        sh './scripts/build_dist.sh'
-                    }
-                }
-                stage('Publish dist') {
-                    when {
-                        anyOf {
-                            branch 'master'
-                            branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
-                        }
-                        expression { return params.RELEASE }
-                    }
-                    steps {
-                        rtUpload (
-                         serverId: 'silenteight-repo-v2',
-                         spec: '''{
-      "files": [
-        {
-          "pattern": "dist/etl-pipeline-dist-*.tar.bz2",
-          "target": "python-dist-local/etl-pipeline/"
-        }
-     ]
-}'''
-                     )
-                    }
-                }
+//                 stage ('Build package') {
+//                     steps {
+//                         sh './scripts/clean.sh'
+//                         sh './scripts/build_package.sh'
+//                     }
+//                 }
+//                 stage('Test') {
+//                     steps {
+//                         sh 'pip install --index-url "${PIP_INDEX_URL}" tox'
+//                         sh './scripts/test.sh --index-url "${PIP_INDEX_URL}"'
+//                     }
+//                 }
+//                 stage ('Build dist') {
+//                     steps {
+//                         sh './scripts/build_dist.sh'
+//                     }
+//                 }
+//                 stage('Publish dist') {
+//                     when {
+//                         anyOf {
+//                             branch 'master'
+//                             branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
+//                         }
+//                         expression { return params.RELEASE }
+//                     }
+//                     steps {
+//                         rtUpload (
+//                          serverId: 'silenteight-repo-v2',
+//                          spec: '''{
+//       "files": [
+//         {
+//           "pattern": "dist/etl-pipeline-dist-*.tar.bz2",
+//           "target": "python-dist-local/etl-pipeline/"
+//         }
+//      ]
+// }'''
+//                      )
+//                     }
+//                 }
 
-                stage('Publish package') {
-                    when {
-                        anyOf {
-                            branch 'master'
-                            branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
-                        }
-                        expression { return params.RELEASE }
-                    }
-                    steps {
-                        sh 'pip install --index-url "${PIP_INDEX_URL}" bump2version tox'
-                        sh 'git tag --delete $(git tag --list)'
-                        withCredentials([gitUsernamePassword(credentialsId: 'Github-app-access')]) {
-                            sh './scripts/release.sh --index-url ${PIP_INDEX_URL}'
-                        }
-                        withCredentials([usernamePassword(
-                             credentialsId: 'pypi-deployment-user',
-                             usernameVariable: 'TWINE_USERNAME',
-                             passwordVariable: 'TWINE_PASSWORD',
-                         )]) {
-                            sh './scripts/publish.sh --index-url "${PIP_INDEX_URL}"'
-                         }
-                    }
-                }
+//                 stage('Publish package') {
+//                     when {
+//                         anyOf {
+//                             branch 'master'
+//                             branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
+//                         }
+//                         expression { return params.RELEASE }
+//                     }
+//                     steps {
+//                         sh 'pip install --index-url "${PIP_INDEX_URL}" bump2version tox'
+//                         sh 'git tag --delete $(git tag --list)'
+//                         withCredentials([gitUsernamePassword(credentialsId: 'Github-app-access')]) {
+//                             sh './scripts/release.sh --index-url ${PIP_INDEX_URL}'
+//                         }
+//                         withCredentials([usernamePassword(
+//                              credentialsId: 'pypi-deployment-user',
+//                              usernameVariable: 'TWINE_USERNAME',
+//                              passwordVariable: 'TWINE_PASSWORD',
+//                          )]) {
+//                             sh './scripts/publish.sh --index-url "${PIP_INDEX_URL}"'
+//                          }
+//                     }
+//                 }
 
                 stage('Add to minio') {
                     // when {
