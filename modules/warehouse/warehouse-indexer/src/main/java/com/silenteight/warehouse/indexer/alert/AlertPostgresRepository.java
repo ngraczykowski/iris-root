@@ -13,6 +13,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ListMultimap;
 import org.apache.commons.lang3.StringUtils;
 import org.intellij.lang.annotations.Language;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.ResultSet;
@@ -27,6 +28,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.validation.Valid;
 
 import static com.silenteight.warehouse.common.time.Timestamps.toSqlTimestamp;
@@ -53,8 +55,14 @@ public final class AlertPostgresRepository implements AlertRepository {
   @Language("PostgreSQL")
   private static final String CHECK_IF_KEY_EXISTS =
       "SELECT EXISTS(SELECT 1 FROM warehouse_alert WHERE (payload->?) IS NOT NULL)";
-  private static final String ALERT_NAME_FILTER = "AND name IN (%s)";
+
+  @Language("PostgreSQL")
+  private static final String FETCH_ALERTS = "SELECT * FROM warehouse_alert WHERE 1=1 %s";
+
+  private static final String IN_FILTER = "AND %s IN (%s)";
   private static final String JDBC_TEMPLATE_PARAMETER_INDICATOR = "?,";
+  public static final String NAME_COLUMN = "name";
+  public static final String COUNTRY_COLUMN = "(payload ->> 's8_lobCountryCode')";
 
   @Valid
   @NonNull
@@ -89,12 +97,12 @@ public final class AlertPostgresRepository implements AlertRepository {
     return paramsBuilder.build();
   }
 
-  private static String getAlertNameFilter(List<String> alertNames) {
-    if (alertNames.isEmpty()) {
+  private static String getInFilter(String paramName, List<String> values) {
+    if (values.isEmpty()) {
       return "";
     }
     return String.format(
-        ALERT_NAME_FILTER, createJdbTemplateIndicators(alertNames.size()));
+        IN_FILTER,paramName, createJdbTemplateIndicators(values.size()));
   }
 
   private static String createJdbTemplateIndicators(int indicatorsCount) {
@@ -140,7 +148,7 @@ public final class AlertPostgresRepository implements AlertRepository {
 
     String sql =
         String.format(
-            FETCH, alertColumnName.getName(), getAlertNameFilter(alertNames),
+            FETCH, alertColumnName.getName(), getInFilter(NAME_COLUMN, alertNames),
             getPayloadFilters(filters));
 
     List<Object> jdbcParameters =
@@ -179,8 +187,7 @@ public final class AlertPostgresRepository implements AlertRepository {
         .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
         .entrySet()
         .stream()
-        .map(AlertPostgresRepository::getAlertGroupingDto)
-        .collect(Collectors.toList());
+        .map(AlertPostgresRepository::getAlertGroupingDto).toList();
   }
 
   @Override
@@ -193,6 +200,31 @@ public final class AlertPostgresRepository implements AlertRepository {
   @Override
   public LocalDate getEarliestAlertLocaDate() {
     return jdbcTemplate.queryForObject(FETCH_ALL_WITH_RECOMMENDATION_DATE_ORDERED, LocalDate.class);
+  }
+
+  @Override
+  public List<AlertDto> fetchAlertsByNames(List<String> alertNameList) {
+    List<String> filters = List.of(getInFilter(NAME_COLUMN, alertNameList));
+
+    return buildFilterAndQuery(filters, alertNameList);
+  }
+
+  @Override
+  public List<AlertDto> fetchAlertsByNamesAndCountries(
+      List<String> alertNameList, List<String> countries) {
+    List<String> filters =
+        List.of(getInFilter(NAME_COLUMN, alertNameList), getInFilter(COUNTRY_COLUMN, countries));
+
+    List<String> filterValues = Stream.concat(alertNameList.stream(),countries.stream()).toList();
+
+    return buildFilterAndQuery(filters,filterValues);
+  }
+
+  @NotNull
+  private List<AlertDto> buildFilterAndQuery(List<String> filters, List<String> filterValues) {
+    String finalQuery = String.format(FETCH_ALERTS, String.join(" ", filters));
+
+    return jdbcTemplate.query(finalQuery, mapper, filterValues.toArray(new Object[0]));
   }
 
   private Map<String, String> getFieldsValueMap(ResultSet rs, List<String> fields) {
