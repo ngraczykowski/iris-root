@@ -147,7 +147,10 @@ pipeline {
                                 branch 'master'
                                 branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
                             }
-                            expression { env.COMMIT_TYPE != "Bump version" }
+                            anyOf {
+                                expression { env.COMMIT_TYPE != "Bump version" }
+                                expression { return params.RELEASE }
+                            }
                         }
                     }
                     steps {
@@ -192,7 +195,10 @@ pipeline {
 //                                branch 'master'
 //                                branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
 //                            }
-//                            expression { env.COMMIT_TYPE != "Bump version" }
+//                            anyOf {
+//                                expression { env.COMMIT_TYPE != "Bump version" }
+//                                expression { return params.RELEASE }
+//                            }
 //                        }
 //                    }
                 //     agent {
@@ -216,7 +222,10 @@ pipeline {
                         branch 'master'
                         branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
                     }
-                    expression { env.COMMIT_TYPE != "Bump version" }
+                    anyOf {
+                        expression { env.COMMIT_TYPE != "Bump version" }
+                        expression { return params.RELEASE }
+                    }
                 }
             }
             stages {
@@ -253,7 +262,10 @@ pipeline {
                                 branch 'master'
                                 branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
                             }
-                            expression { env.COMMIT_TYPE != "Bump version" }
+                            anyOf {
+                                expression { env.COMMIT_TYPE != "Bump version" }
+                                expression { return params.RELEASE }
+                            }
                         }
                     }
                     steps {
