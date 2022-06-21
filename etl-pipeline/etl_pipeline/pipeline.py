@@ -5,15 +5,11 @@ from abc import ABC
 from omegaconf import OmegaConf
 
 from etl_pipeline.config import CONFIG_APP_DIR, pipeline_config
-from etl_pipeline.data_processor_engine.engine.engine import ProcessingEngine
-from etl_pipeline.data_processor_engine.json_engine.json_engine import JsonProcessingEngine
 from pipelines.ms.functions import Functions
 
 
 class ETLPipeline(ABC):
-    def __init__(self, engine: ProcessingEngine, config=None):
-        self.engine: ProcessingEngine = engine
-        self.engine.pipeline_config = config
+    def __init__(self, config=None):
         self.pipeline_config = config
 
     def convert_raw_to_standardized(self):
@@ -54,5 +50,4 @@ class ETLPipeline(ABC):
 
             func_map[method_name] = functools.partial(func, **pipeline_func)
         functions = Functions(func_map)
-        engine = JsonProcessingEngine(pipeline_config)
-        return pipeline_type(engine, pipeline_config, functions)
+        return pipeline_type(pipeline_config, functions)

@@ -11,7 +11,12 @@ from etl_pipeline.custom.ms.datatypes.field import (  # noqa F401; required for 
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.service.servicer import Match
 from pipelines.ms.ms_pipeline import MSPipeline
-from tests.test_json.constant import EXAMPLE_PARTIES
+from tests.test_json.constant import (
+    EXAMPLE_FOR_TEST_SET_REF_KEY,
+    EXAMPLE_PARTIES,
+    EXAMPLE_PARTIES_WITH_NAMES,
+    RESULT_FOR_EXAMPLE_FOR_TEST_SET_REF_KEY,
+)
 
 cn = pipeline_config.cn
 
@@ -334,3 +339,66 @@ def test_collect_party_values_from_parties(pipeline_resource):
     }
 
     assert payload["alertedParty"]["AP_DOB"] == ["10/10/1969"]
+
+
+def test_set_trigger_reasons(pipeline_resource):
+    match = EXAMPLE_FOR_TEST_SET_REF_KEY
+    pipeline_resource.set_trigger_reasons(match, pipeline_config.config.FUZZINESS_LEVEL)
+    assert match[cn.TRIGGERED_BY] == sorted(RESULT_FOR_EXAMPLE_FOR_TEST_SET_REF_KEY)
+
+
+def test_set_beneficiary_hits(pipeline_resource):
+    match = EXAMPLE_FOR_TEST_SET_REF_KEY
+    assert match.get(cn.IS_BENEFICIARY_HIT, None) is None
+    pipeline_resource.set_beneficiary_hits(match)
+    assert not match.get(cn.IS_BENEFICIARY_HIT, None)
+
+
+def test_connect_full_names(pipeline_resource):
+    parties = deepcopy(EXAMPLE_PARTIES)
+    pipeline_resource._connect_full_names(parties)
+    for party in parties:
+        assert party[cn.CONNECTED_FULL_NAME] == ""
+
+    parties = deepcopy(EXAMPLE_PARTIES_WITH_NAMES)
+    pipeline_resource._connect_full_names(parties)
+    assert parties[0][cn.CONNECTED_FULL_NAME] == "Ultra Giga Pole"
+    assert parties[1][cn.CONNECTED_FULL_NAME] == ""
+
+
+def test_get_clean_names_from_concat_name(pipeline_resource):
+    assert pipeline_resource.get_clean_names_from_concat_name(
+        "KA LAI JOSEPH CHAN & KAR LUN KAREN LEE LUNKAREN",
+        {
+            "PRIN_OWN_NM": "KA LAI JOSEPH CHAN",
+            "ORD_PLACR_NM": "KA LAI JOSEPH CHAN",
+        },
+    ) == {
+        "PRIN_OWN_NM": "KA LAI JOSEPH CHAN",
+        "concat_residue": " & KAR LUN KAREN LEE LUNKAREN",
+    }
+
+    assert pipeline_resource.get_clean_names_from_concat_name(
+        "MANULIFE INVEST MANAGEMENT (US) LLC - MD SHORT TERM BOND FUND - SPOT ONLY REPATRIATION MANAGEMENT(US) BONDFUND",
+        {
+            "LAST_NM": "MANULIFE INVEST MANAGEMENT",
+            "FRST_NM": "MANULIFE INVEST MANAGEMENT",
+            "PRIN_OWN_NM": "MD SHORT TERM BOND FUND",
+        },
+    ) == {
+        "LAST_NM": "MANULIFE INVEST MANAGEMENT",
+        "PRIN_OWN_NM": "MD SHORT TERM BOND FUND",
+        "concat_residue": " (US) LLC -  - SPOT ONLY REPATRIATION MANAGEMENT(US) BONDFUND",
+    }
+
+    assert pipeline_resource.get_clean_names_from_concat_name(
+        "VTB CAPITAL PLC A/C JP MORGAN CHASE BANK NA PLCA/C",
+        {" ": ["VTB CAPITAL PLC", "Zoria"]},
+    ) == {" ": "VTB CAPITAL PLC", "concat_residue": " A/C JP MORGAN CHASE BANK NA PLCA/C"}
+
+    assert pipeline_resource.get_clean_names_from_concat_name(
+        "MSSB C/F SALVATORE P TADDEO JR IRA STANDARD DATED 09/11/97 28 WARREN ST RUMSON NJ 07760",
+        {"all_party_names": ["Taddeo, Lisa", "Taddeo, Sal"]},
+    ) == {
+        "concat_residue": "MSSB C/F SALVATORE P TADDEO JR IRA STANDARD DATED 09/11/97 28 WARREN ST RUMSON NJ 07760"
+    }
