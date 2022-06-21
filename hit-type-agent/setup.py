@@ -32,7 +32,7 @@ tests_require = [
 
 setup(
     name="hit-type",
-    version="0.4.1",
+    version="0.4.2",
     description="",
     author="Silent Eight Pte. Ltd.",
     author_email="support@silenteight.com",
