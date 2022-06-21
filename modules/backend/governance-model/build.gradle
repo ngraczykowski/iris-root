@@ -11,6 +11,7 @@ dependencies {
 
   implementation libs.governance.model.api
 
+  implementation libs.silenteight.simulator.management
 
   implementation libs.silenteight.serp.governance.agent
   implementation libs.silenteight.serp.governance.db.changelog
@@ -18,6 +19,7 @@ dependencies {
   implementation libs.silenteight.serp.governance.common.web
   implementation libs.silenteight.serp.governance.strategy
   implementation libs.silenteight.serp.governance.policy
+
 
   implementation libs.spring.data.jpa
   implementation libs.spring.webmvc
@@ -35,4 +37,6 @@ dependencies {
   testImplementation libs.spring.security.test
 
   testFixturesImplementation libs.aspectjrt
+
+  aspect libs.silenteight.sep.base.aspects
 }

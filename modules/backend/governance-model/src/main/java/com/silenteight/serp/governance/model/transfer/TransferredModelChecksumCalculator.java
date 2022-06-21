@@ -9,7 +9,9 @@ import com.silenteight.serp.governance.model.common.ChecksumCalculator;
 import com.silenteight.serp.governance.model.common.exception.InvalidChecksumException;
 import com.silenteight.serp.governance.model.transfer.dto.TransferredModelDto;
 
-import javax.validation.constraints.NotBlank;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.validation.ValidationException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TransferredModelChecksumCalculator {
@@ -21,7 +23,10 @@ public class TransferredModelChecksumCalculator {
     return ChecksumCalculator.calculate(model);
   }
 
-  public static void assertTheSame(@NotBlank String checksum, @NonNull TransferredModelDto dto) {
+  public static void assertTheSame(@NonNull String checksum, @NonNull TransferredModelDto dto) {
+    if(StringUtils.isBlank(checksum)) {
+      throw new ValidationException();
+    }
     if (!checksum.equals(calculate(dto)))
       throw new InvalidChecksumException("Checksum is different from expected.");
   }

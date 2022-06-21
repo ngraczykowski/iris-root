@@ -13,7 +13,7 @@ dependencies {
   implementation project(":governance-db-changelog")
   implementation libs.silenteight.serp.governance.feature.vector
   implementation libs.silenteight.serp.governance.file
-  implementation libs.silenteight.serp.governance.model
+  implementation project(":governance-model")
   implementation libs.silenteight.serp.governance.policy
   implementation libs.silenteight.serp.governance.qa
   implementation libs.silenteight.serp.governance.strategy

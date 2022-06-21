@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2022 Silent Eight Pte. Ltd. All rights reserved.
+ */
+
 package com.silenteight.simulator.model.archive;
 
 import lombok.AccessLevel;

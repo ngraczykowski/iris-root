@@ -1,9 +1,14 @@
+/*
+ * Copyright (c) 2022 Silent Eight Pte. Ltd. All rights reserved.
+ */
+
 package com.silenteight.simulator.model.archive;
 
 import com.silenteight.simulator.management.archive.ArchiveSimulationRequest;
 import com.silenteight.simulator.management.archive.ArchiveSimulationUseCase;
 import com.silenteight.simulator.management.list.ListSimulationsQuery;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -35,7 +40,7 @@ class ModelsArchivedUseCaseTest {
   @Test
   void shouldArchiveSimulations() {
     // given
-    when(listSimulationsQuery.findByModels(MODEL_NAMES)).thenReturn(of(SIMULATION_DTO));
+    when(listSimulationsQuery.findByModels(MODEL_NAMES)).thenReturn(List.of(SIMULATION_DTO));
 
     // when
     underTest.handle(MODELS_ARCHIVED_MESSAGE);
@@ -49,7 +54,7 @@ class ModelsArchivedUseCaseTest {
     List<ArchiveSimulationRequest> requests = argumentCaptor.getAllValues();
     assertThat(requests.size()).isEqualTo(1);
     ArchiveSimulationRequest request = requests.get(0);
-    assertThat(request.getId()).isEqualTo(SIMULATION_DTO.getId());
-    assertThat(request.getArchivedBy()).isEqualTo(ARCHIVED_BY);
+    Assertions.assertThat(request.getId()).isEqualTo(SIMULATION_DTO.getId());
+    Assertions.assertThat(request.getArchivedBy()).isEqualTo(ARCHIVED_BY);
   }
 }
