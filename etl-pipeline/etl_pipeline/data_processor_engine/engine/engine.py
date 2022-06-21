@@ -11,9 +11,9 @@ from etl_pipeline.pattern_json import (
     ADDRESS_ID,
     ALERT_ID,
     ALERTED_PARTY_NAME,
-    ALL_CONNECTED_PARTIES_NAMES,
-    ALL_PARTS_NAMES,
-    ALL_PARTY_DETAILS,
+    AP_PARTIES_NAMES,
+    AP_PARTS_NAMES,
+    AP_PARTY_DETAILS,
     CONCAT_RESIDUE,
     CONNECTED_FULL_NAME,
     DOB_DT,
@@ -98,22 +98,20 @@ class ProcessingEngine:
             cn.TRIGGERED_BY: payload[cn.TRIGGERED_BY],
             SRC_SYS_ACCT_KEY: payload[SRC_SYS_ACCT_KEY],
             ADDRESS_ID: payload[ADDRESS_ID],
-            ALL_PARTY_DETAILS: selected_parties_payload,
-            ALL_PARTS_NAMES: [party[PRTY_NM] for party in selected_parties_payload],
-            cn.ALL_PARTY_TYPES: [party[PRTY_TYP] for party in selected_parties_payload],
+            AP_PARTY_DETAILS: selected_parties_payload,
+            AP_PARTS_NAMES: [party[PRTY_NM] for party in selected_parties_payload],
+            cn.AP_PARTY_TYPES: [party[PRTY_TYP] for party in selected_parties_payload],
             cn.AP_DOB: [party[DOB_DT] for party in selected_parties_payload],
-            cn.ALL_PARTY_BIRTH_COUNTRIES: [
+            cn.AP_PARTY_BIRTH_COUNTRIES: [
                 party[PRTY_CNTRY_OF_BIRTH] for party in selected_parties_payload
             ],
-            cn.ALL_PARTY_CITIZENSHIP_COUNTRIES: [
+            cn.AP_PARTY_CITIZENSHIP_COUNTRIES: [
                 party[PRTY_PRIM_CTZNSH_CNTRY] for party in selected_parties_payload
             ],
-            cn.ALL_PARTY_RESIDENCY_COUNTRIES: [
+            cn.AP_PARTY_RESIDENCY_COUNTRIES: [
                 party[PRTY_RSDNC_CNTRY_CD] for party in selected_parties_payload
             ],
-            ALL_CONNECTED_PARTIES_NAMES: [
-                party[CONNECTED_FULL_NAME] for party in selected_parties_payload
-            ],
+            AP_PARTIES_NAMES: [party[CONNECTED_FULL_NAME] for party in selected_parties_payload],
         }
 
         return enhanced_df360_payload
@@ -159,7 +157,7 @@ class ProcessingEngine:
         return ProcessingEngine.get_clean_names_from_concat_name(concat_field, concat_fields_map)
 
     def set_clean_names(self, payload):
-        names_source_cols = [cn.ALL_PARTY_NAMES, ALL_CONNECTED_PARTIES_NAMES]
+        names_source_cols = [cn.AP_PARTY_NAMES, AP_PARTIES_NAMES]
         payload[cn.CLEANED_NAMES] = ProcessingEngine.get_clean_names_from_concat_name(
             cn.CONCAT_ADDRESS, *names_source_cols
         )

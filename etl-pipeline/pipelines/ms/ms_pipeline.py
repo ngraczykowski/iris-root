@@ -172,9 +172,9 @@ class MSPipeline(ETLPipeline):
         fields = self.collections.get_xml_fields(payload)
 
         names_source_cols = [
-            cn.ALL_CONNECTED_PARTY_NAMES,
-            cn.ALL_CONNECTED_PARTIES_NAMES,
-            cn.ALL_CONNECTED_ACCOUNT_NAMES,
+            cn.AP_PARTY_NAMES,
+            cn.AP_PARTIES_NAMES,
+            cn.AP_ACCOUNT_NAMES,
         ]
 
         payload.update(

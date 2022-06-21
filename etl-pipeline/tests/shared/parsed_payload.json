@@ -1,54 +1,54 @@
 [
     {
-        "ALL_CONCAT_NAMES": "Joe BlackJ",
-        "ALL_CONNECTED_ACCOUNT_BENEFICIARY_NAMES": [
+        "AP_CONCAT_NAMES": "Joe BlackJ",
+        "AP_ACCOUNT_BENEFICIARY_NAMES": [
             "Pladimir Vutin",
             "Eva Pladimirova"
         ],
-        "ALL_CONNECTED_ACCOUNT_BRANCH_ACCOUNT_NUMBERS": [
+        "AP_ACCOUNT_BRANCH_ACCOUNT_NUMBERS": [
             "234_142529",
             "234_142529"
         ],
-        "ALL_CONNECTED_ACCOUNT_NAMES": [
+        "AP_ACCOUNT_NAMES": [
             "Pladimir Vutin",
             "Eva Pladimirova"
         ],
-        "ALL_CONNECTED_COUNTRY_OF_INCORPORATION": [],
-        "ALL_CONNECTED_GOVT_IDS": [],
-        "ALL_CONNECTED_PARTIES_NAMES": [
+        "AP_COUNTRY_OF_INCORPORATION": [],
+        "AP_GOVT_IDS": [],
+        "AP_PARTIES_NAMES": [
             "Pladimir Vutin",
             "Eva Pladimirova"
         ],
-        "ALL_CONNECTED_PARTY_BIRTH_COUNTRIES": [],
-        "ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES": [
+        "AP_PARTY_BIRTH_COUNTRIES": [],
+        "AP_PARTY_CITIZENSHIP_COUNTRIES": [
             "United States",
             "United States"
         ],
-        "ALL_CONNECTED_PARTY_NAMES": [
+        "AP_PARTY_NAMES": [
             "Pladimir Vutin",
             "Eva Pladimirova"
         ],
-        "ALL_CONNECTED_PARTY_RESIDENCY_COUNTRIES": [],
-        "ALL_CONNECTED_TAX_IDS": [
+        "AP_PARTY_RESIDENCY_COUNTRIES": [],
+        "AP_TAX_IDS": [
             "154421273",
             "022368917"
         ],
-        "ALL_PARTY1_ADDRESS1_COUNTRY": "UNITED STATES OF AMERICA",
-        "ALL_PARTY1_COUNTRY": null,
-        "ALL_PARTY1_COUNTRY1": null,
-        "ALL_PARTY1_COUNTRY1_CITIZENSHIP": null,
-        "ALL_PARTY1_COUNTRY2_CITIZENSHIP": null,
-        "ALL_PARTY1_COUNTRY_DOMICILE1": null,
-        "ALL_PARTY1_COUNTRY_FORMATION1": null,
-        "ALL_PARTY1_COUNTRY_OF_INCORPORATION": null,
-        "ALL_PARTY1_COUNTRY_PEP": null,
-        "ALL_PARTY1_EMPLOYERS": null,
-        "ALL_PARTY1_GOVTID1_NUMBER": null,
-        "ALL_PARTY1_GOVTID2_NUMBER": null,
-        "ALL_PRTY_PRIM_CTZNSH_CNTRY": null,
-        "ALL_PRTY_RSDNC_CNTRY_CD": null,
+        "AP_PARTY1_ADDRESS1_COUNTRY": "UNITED STATES OF AMERICA",
+        "AP_PARTY1_COUNTRY": null,
+        "AP_PARTY1_COUNTRY1": null,
+        "AP_PARTY1_COUNTRY1_CITIZENSHIP": null,
+        "AP_PARTY1_COUNTRY2_CITIZENSHIP": null,
+        "AP_PARTY1_COUNTRY_DOMICILE1": null,
+        "AP_PARTY1_COUNTRY_FORMATION1": null,
+        "AP_PARTY1_COUNTRY_OF_INCORPORATION": null,
+        "AP_PARTY1_COUNTRY_PEP": null,
+        "AP_PARTY1_EMPLOYERS": null,
+        "AP_PARTY1_GOVTID1_NUMBER": null,
+        "AP_PARTY1_GOVTID2_NUMBER": null,
+        "AP_PRTY_PRIM_CTZNSH_CNTRY": null,
+        "AP_PRTY_RSDNC_CNTRY_CD": null,
         "alertedParty": {
-            "ALL_PARTY_TYPES": [
+            "AP_PARTY_TYPES": [
                 "Individual",
                 "Individual"
             ],
@@ -876,55 +876,55 @@
         }
     },
     {
-        "ALL_CONCAT_NAMES": null,
-        "ALL_CONNECTED_ACCOUNT_BENEFICIARY_NAMES": [
+        "AP_CONCAT_NAMES": null,
+        "AP_ACCOUNT_BENEFICIARY_NAMES": [
             "Pladimir Vutin",
             "Eva Pladimirova"
         ],
-        "ALL_CONNECTED_ACCOUNT_BRANCH_ACCOUNT_NUMBERS": [
+        "AP_ACCOUNT_BRANCH_ACCOUNT_NUMBERS": [
             "234_142529",
             "234_142529"
         ],
-        "ALL_CONNECTED_ACCOUNT_NAMES": [
+        "AP_ACCOUNT_NAMES": [
             "Pladimir Vutin",
             "Eva Pladimirova"
         ],
-        "ALL_CONNECTED_COUNTRY_OF_INCORPORATION": [],
-        "ALL_CONNECTED_GOVT_IDS": [],
-        "ALL_CONNECTED_PARTIES_NAMES": [
+        "AP_COUNTRY_OF_INCORPORATION": [],
+        "AP_GOVT_IDS": [],
+        "AP_PARTIES_NAMES": [
             "Pladimir Vutin",
             "Eva Pladimirova"
         ],
-        "ALL_CONNECTED_PARTY_BIRTH_COUNTRIES": [],
-        "ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES": [
+        "AP_PARTY_BIRTH_COUNTRIES": [],
+        "AP_PARTY_CITIZENSHIP_COUNTRIES": [
             "United States",
             "United States"
         ],
-        "ALL_CONNECTED_PARTY_NAMES": [
+        "AP_PARTY_NAMES": [
             "Pladimir Vutin",
             "Eva Pladimirova"
         ],
-        "ALL_CONNECTED_PARTY_RESIDENCY_COUNTRIES": [],
-        "ALL_CONNECTED_TAX_IDS": [
+        "AP_PARTY_RESIDENCY_COUNTRIES": [],
+        "AP_TAX_IDS": [
             "154421273",
             "022368917"
         ],
-        "ALL_PARTY1_ADDRESS1_COUNTRY": "UNITED STATES OF AMERICA",
-        "ALL_PARTY1_COUNTRY": null,
-        "ALL_PARTY1_COUNTRY1": null,
-        "ALL_PARTY1_COUNTRY1_CITIZENSHIP": null,
-        "ALL_PARTY1_COUNTRY2_CITIZENSHIP": null,
-        "ALL_PARTY1_COUNTRY_DOMICILE1": null,
-        "ALL_PARTY1_COUNTRY_FORMATION1": null,
-        "ALL_PARTY1_COUNTRY_OF_INCORPORATION": null,
-        "ALL_PARTY1_COUNTRY_PEP": null,
-        "ALL_PARTY1_EMPLOYERS": null,
-        "ALL_PARTY1_GOVTID1_NUMBER": null,
-        "ALL_PARTY1_GOVTID2_NUMBER": null,
-        "ALL_PRTY_PRIM_CTZNSH_CNTRY": null,
-        "ALL_PRTY_RSDNC_CNTRY_CD": null,
+        "AP_PARTY1_ADDRESS1_COUNTRY": "UNITED STATES OF AMERICA",
+        "AP_PARTY1_COUNTRY": null,
+        "AP_PARTY1_COUNTRY1": null,
+        "AP_PARTY1_COUNTRY1_CITIZENSHIP": null,
+        "AP_PARTY1_COUNTRY2_CITIZENSHIP": null,
+        "AP_PARTY1_COUNTRY_DOMICILE1": null,
+        "AP_PARTY1_COUNTRY_FORMATION1": null,
+        "AP_PARTY1_COUNTRY_OF_INCORPORATION": null,
+        "AP_PARTY1_COUNTRY_PEP": null,
+        "AP_PARTY1_EMPLOYERS": null,
+        "AP_PARTY1_GOVTID1_NUMBER": null,
+        "AP_PARTY1_GOVTID2_NUMBER": null,
+        "AP_PRTY_PRIM_CTZNSH_CNTRY": null,
+        "AP_PRTY_RSDNC_CNTRY_CD": null,
         "alertedParty": {
-            "ALL_PARTY_TYPES": [
+            "AP_PARTY_TYPES": [
                 "Individual",
                 "Individual"
             ],

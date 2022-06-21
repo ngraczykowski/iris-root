@@ -188,7 +188,7 @@ class Functions:
     def _set_up_party_type(cls, source_payload, target_field="", target_collection=""):
         party_types = [
             party_type
-            for party_type in source_payload["alertedParty"]["ALL_PARTY_TYPES"]
+            for party_type in source_payload["alertedParty"]["AP_PARTY_TYPES"]
             if party_type
         ]
         dataset_type = source_payload["metadata"]["datasetType"]
