@@ -41,6 +41,7 @@ class ReportProvidersRegistry implements ReportProvider, ListReportsQuery {
   private static ReportDto toReportDto(ConfigurableReport reportGenerator) {
     return ReportDto.builder()
         .name(reportGenerator.getName())
+        .type(reportGenerator.getName())
         .label(reportGenerator.getLabel())
         .filter(FilterDto.builder().type(reportGenerator.getFilterType()).build())
         .build();

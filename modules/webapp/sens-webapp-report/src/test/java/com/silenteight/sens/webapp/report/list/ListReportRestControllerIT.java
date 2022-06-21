@@ -20,12 +20,14 @@ class ListReportRestControllerIT extends BaseRestControllerTest {
 
   private static final ReportDto REPORT_DTO_1 = ReportDto.builder()
       .name("audit")
+      .type("audit")
       .label("Audit report")
       .filter(new FilterDto(FilterType.NONE))
       .build();
 
   private static final ReportDto REPORT_DTO_2 = ReportDto.builder()
       .name("user")
+      .type("user")
       .label("User report")
       .filter(new FilterDto(FilterType.DATE_RANGE))
       .build();
@@ -46,10 +48,12 @@ class ListReportRestControllerIT extends BaseRestControllerTest {
     get("/reports")
         .statusCode(OK.value())
         .body("[0].name", is(REPORT_DTO_1.getName()))
+        .body("[0].type", is(REPORT_DTO_1.getName()))
         .body("[0].title", is(REPORT_DTO_1.getLabel()))
         .body("[0].filter.type", is(REPORT_DTO_1.getFilter().getType().name()))
         .body("[0].download", is(DownloadType.SYNC.name()))
         .body("[1].name", is(REPORT_DTO_2.getName()))
+        .body("[1].type", is(REPORT_DTO_2.getName()))
         .body("[1].title", is(REPORT_DTO_2.getLabel()))
         .body("[1].filter.type", is(REPORT_DTO_2.getFilter().getType().name()))
         .body("[1].download", is(DownloadType.SYNC.name()))

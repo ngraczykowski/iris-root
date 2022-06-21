@@ -14,6 +14,8 @@ public class ReportDto {
   @NonNull
   String name;
   @NonNull
+  String type;
+  @NonNull
   @JsonProperty("title")
   String label;
   @NonNull
