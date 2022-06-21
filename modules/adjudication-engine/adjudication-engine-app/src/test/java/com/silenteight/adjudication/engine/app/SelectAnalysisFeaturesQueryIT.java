@@ -11,13 +11,16 @@ import com.silenteight.adjudication.engine.solving.data.MatchFeatureDataAccess;
 import com.silenteight.adjudication.engine.solving.data.jdbc.JdbcAccessConfiguration;
 import com.silenteight.sep.base.testing.BaseJdbcTest;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -28,114 +31,60 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @Sql
 class SelectAnalysisFeaturesQueryIT extends BaseJdbcTest {
 
+  private static final Map<Long, String> alerts =
+      Map.of(
+          1L,
+          "withAllValues.json",
+          2L,
+          "withoutFeatures.json");
+
   @Autowired MatchFeatureDataAccess jdbcMatchFeaturesDataAccess;
   private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
   @Test
-  void shouldSelectAlertData() throws JsonProcessingException {
+  void shouldSelectAlertData() {
     var alertMap = jdbcMatchFeaturesDataAccess.findAnalysisFeatures(Set.of(1L), Set.of(1L));
     assertThat(alertMap.size()).isEqualTo(1);
     var alert = alertMap.get(1L);
-    var expectedAlert = getAlertWithAllData();
+    var expectedAlert = getAlertWithAllData(1L);
     assertThat(alert)
         .usingRecursiveComparison()
         .isEqualTo(expectedAlert);
   }
 
   @Test
-  void shouldSelectAlertDataForMultihit() throws JsonProcessingException {
+  void shouldSelectAlertDataForMultihit() {
     var alert = jdbcMatchFeaturesDataAccess.findAnalysisAlertAndAggregate(1L, 1L);
     assertThat(alert).isNotNull();
-    var expectedAlert = getAlertWithAllData();
+    var expectedAlert = getAlertWithAllData(1L);
     assertThat(alert)
         .usingRecursiveComparison()
         .isEqualTo(expectedAlert);
   }
 
-  private static AlertAggregate getAlertWithAllData() throws JsonProcessingException {
-    var jsonString = """
-        {
-          "analysisId": 1,
-          "alertId": 1,
-          "priority": 5,
-          "matches": {
-            "1": {
-              "matchId": 1,
-              "clientMatchId": "911",
-              "features": {
-                "features/name": {
-                  "agentConfigFeatureId": 1,
-                  "featureName": "features/name",
-                  "agentConfig": "agents/name/versions/1.0.0/configs/1",
-                  "featureValue": "INCONCLUSIVE",
-                  "featureReason": "{}"
-                },
-                "features/geo": {
-                  "agentConfigFeatureId": 2,
-                  "featureName": "features/geo",
-                  "agentConfig": "agents/geo/versions/1.0.0/configs/1",
-                  "featureValue": "INCONCLUSIVE",
-                  "featureReason": "{}"
-                }
-              },
-              "categories": {
-                "categories/test1": {
-                  "categoryName": "categories/test1",
-                  "categoryValue": "NO_DECISION"
-                },
-                "categories/test2": {
-                  "categoryName": "categories/test2",
-                  "categoryValue": "NO_DECISION"
-                }
-              }
-            },
-            "2": {
-              "matchId": 2,
-              "clientMatchId": "912",
-              "features": {
-                "features/name": {
-                  "agentConfigFeatureId": 1,
-                  "featureName": "features/name",
-                  "agentConfig": "agents/name/versions/1.0.0/configs/1",
-                  "featureValue": "INCONCLUSIVE",
-                  "featureReason": "{}"
-                },
-                "features/geo": {
-                  "agentConfigFeatureId": 2,
-                  "featureName": "features/geo",
-                  "agentConfig": "agents/geo/versions/1.0.0/configs/1",
-                  "featureValue": "INCONCLUSIVE",
-                  "featureReason": "{}"
-                }
-              },
-              "categories": {
-                "categories/test1": {
-                  "categoryName": "categories/test1",
-                  "categoryValue": "DECISION"
-                },
-                "categories/test2": {
-                  "categoryName": "categories/test2",
-                  "categoryValue": "DECISION"
-                }
-              }
-            }
-          },
-          "policy": "policy",
-          "strategy": "startegy",
-          "agentFeatures": {
-            "agents/name/versions/1.0.0/configs/1": [
-              "features/name"
-            ],
-            "agents/geo/versions/1.0.0/configs/1": [
-              "features/geo"
-            ]
-          },
-          "labels": {
-            "matchQuantity": "many"
-          }
-        }
-        """;
+  @Test
+  void shouldSelectAlertWithoutFeatures() {
+    var alert = jdbcMatchFeaturesDataAccess.findAnalysisAlertAndAggregate(2L, 2L);
+    assertThat(alert).isNotNull();
+    var expectedAlert = getAlertWithAllData(2L);
+    assertThat(alert)
+        .usingRecursiveComparison()
+        .isEqualTo(expectedAlert);
+  }
 
-    return OBJECT_MAPPER.readValue(jsonString, AlertAggregate.class);
+
+  private static AlertAggregate getAlertWithAllData(Long alertId) {
+
+    var classLoader = SelectAnalysisFeaturesQueryIT.class.getClassLoader();
+    var file =
+        new File(
+            Objects.requireNonNull(classLoader.getResource("alerts/" + alerts.get(alertId)))
+                .getFile());
+
+    try {
+      return OBJECT_MAPPER.readValue(file, AlertAggregate.class);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 }

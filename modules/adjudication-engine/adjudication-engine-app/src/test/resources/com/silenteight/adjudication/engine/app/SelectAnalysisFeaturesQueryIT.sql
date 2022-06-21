@@ -27,7 +27,7 @@ INSERT INTO public.ae_category (category_id, created_at, category)
 VALUES (2, '2022-05-31 12:13:30.689969', 'categories/test2');
 
 
--- Analysis config
+-- Analysis with two features and two categories
 INSERT INTO public.ae_analysis (analysis_id, policy, strategy, created_at, attach_metadata,
                                 attach_recommendation)
 VALUES (1, 'policy', 'startegy', '2022-05-06 08:14:20.440351', TRUE, TRUE);
@@ -42,6 +42,15 @@ INSERT INTO public.ae_analysis_category (analysis_category_id, analysis_id, cate
 VALUES (1, 1, 1);
 INSERT INTO public.ae_analysis_category (analysis_category_id, analysis_id, category_id)
 VALUES (2, 1, 2);
+
+
+-- Analysis with one category
+INSERT INTO public.ae_analysis (analysis_id, policy, strategy, created_at, attach_metadata,
+                                attach_recommendation)
+VALUES (2, 'policy', 'startegy', '2022-05-06 08:14:20.440351', TRUE, TRUE);
+
+INSERT INTO public.ae_analysis_category (analysis_category_id, analysis_id, category_id)
+VALUES (3, 2, 2);
 
 -- Alert with two matches and values
 INSERT INTO public.ae_alert (alert_id, client_alert_identifier, created_at, alerted_at, priority)
@@ -83,3 +92,17 @@ VALUES (2, 2, '2022-05-06 10:14:20.814190', 'INCONCLUSIVE', '{}');
 
 INSERT INTO public.ae_alert_labels (alert_id, name, value)
 VALUES (1, 'matchQuantity', 'many');
+
+
+-- Alert with two matches and without values
+INSERT INTO public.ae_alert (alert_id, client_alert_identifier, created_at, alerted_at, priority)
+VALUES (2, '257', '2022-05-06 08:13:07.373764', '2022-05-06 08:13:07.339778', 5);
+
+INSERT INTO public.ae_analysis_alert (analysis_id, alert_id, deadline_at, created_at)
+VALUES (2, 2, NULL, '2022-05-06 10:14:20.524788');
+
+INSERT INTO public.ae_match (match_id, alert_id, created_at, client_match_identifier, sort_index)
+VALUES (4, 2, '2022-05-06 08:13:07.400305', '911', 0);
+
+INSERT INTO public.ae_match (match_id, alert_id, created_at, client_match_identifier, sort_index)
+VALUES (3, 2, '2022-05-06 08:13:07.400305', '912', 1);

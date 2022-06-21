@@ -1,0 +1,38 @@
+{
+  "analysisId": 2,
+  "alertId": 2,
+  "priority": 5,
+  "matches": {
+    "3": {
+      "matchId": 3,
+      "clientMatchId": "912",
+      "features": {
+
+      },
+      "categories": {
+        "categories/test2": {
+          "categoryName": "categories/test2",
+          "categoryValue": null
+        }
+      }
+    },
+    "4": {
+      "matchId": 4,
+      "clientMatchId": "911",
+      "features": {
+
+      },
+      "categories": {
+        "categories/test2": {
+          "categoryName": "categories/test2",
+          "categoryValue": null
+        }
+      }
+    }
+  },
+  "policy": "policy",
+  "strategy": "startegy",
+  "agentFeatures": {},
+  "labels": {
+  }
+}
