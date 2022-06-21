@@ -142,7 +142,10 @@ pipeline {
                                 branch 'master'
                                 branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
                             }
-                            expression { env.COMMIT_TYPE != "Bump version" }
+                            anyOf {
+                                expression { env.COMMIT_TYPE != "Bump version" }
+                                expression { return params.RELEASE }
+                            }
                         }
                     }
                     steps {
@@ -187,7 +190,10 @@ pipeline {
                                 branch 'master'
                                 branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
                             }
-                            expression { env.COMMIT_TYPE != "Bump version" }
+                            anyOf {
+                                expression { env.COMMIT_TYPE != "Bump version" }
+                                expression { return params.RELEASE }
+                            }
                         }
                     }
                     agent {
@@ -211,7 +217,10 @@ pipeline {
                         branch 'master'
                         branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
                     }
-                    expression { env.COMMIT_TYPE != "Bump version" }
+                    anyOf {
+                        expression { env.COMMIT_TYPE != "Bump version" }
+                        expression { return params.RELEASE }
+                    }
                 }
             }
             stages {
@@ -242,15 +251,6 @@ pipeline {
                     }
                 }
                 stage('Deploy on nomad') {
-                    when {
-                        allOf {
-                            anyOf {
-                                branch 'master'
-                                branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
-                            }
-                            expression { env.COMMIT_TYPE != "Bump version" }
-                        }
-                    }
                     steps {
                         sh './nomad/deploy.sh -var-file="vars/dev.vars"'
                         sh './nomad/deploy.sh -var-file="vars/mike.vars"'
