@@ -5,9 +5,9 @@ import os
 from pathlib import Path
 from typing import Dict, List, Tuple
 
-import data_models.reasons as reasons_data_models
-from bank_identification_codes_agent.agent import BankIdentificationCodesAgentInput
-from data_models.result import Reason, Solution
+from bank_identification_codes import BankIdentificationCodesAgentInput
+from bank_identification_codes.solution import reasons as reasons_data_models
+from bank_identification_codes.solution.result import Reason, Solution
 
 
 @dataclasses.dataclass

@@ -1,7 +1,7 @@
 @Library('pipeline-shared-library@github') _
 
 pipeline {
-    agent none
+    agent any
     environment {
         PYPI_URL = credentials('pypi-readonly-url')
         TWINE_REPOSITORY_URL = 'https://repo.silenteight.com/artifactory/api/pypi/pypi'
@@ -12,38 +12,61 @@ pipeline {
     parameters {
         booleanParam(name: 'RELEASE', defaultValue: false, description: 'Release new version')
     }
+
     stages {
-        stage('Build and publish') {
+        stage('Build and publish package') {
             agent {
                 docker {
                     image 'docker.repo.silenteight.com/python-build-image:3.7-bullseye'
                     args '--volume $HOME/.cache/agent/pip:/home/jenkins/.cache/pip'
-                    alwaysPull true
+                    reuseNode true
                 }
             }
             stages {
+               stage('Get commit msg') {
+                    steps {
+                        script {
+                            env.COMMIT_TYPE = sh (
+                                script: "git log -1 --pretty=%B | grep : | cut -d ':' -f 1",
+                                returnStdout: true
+                            ).trim()
+                        }
+                        echo "${COMMIT_TYPE}"
+                    }
+                }
                 stage('Prepare') {
                     steps {
                         sh 'pip install --index-url "${PYPI_URL}" --requirement requirements.txt'
                     }
                 }
-                stage('Build') {
+                stage('Build package') {
                     steps {
                         sh './scripts/clean.sh'
                         sh './scripts/build.sh --index-url "${PYPI_URL}"'
+                        script {
+                           env.VERSION = sh(
+                            returnStdout: true,
+                            script: '''#!/bin/bash
+                                grep ^current_version setup.cfg | awk '{ print $3 }'
+                            '''
+                           ).trim()
+                        }
                     }
                 }
-                stage('Test') {
+                stage('Test package') {
                     steps {
                         sh 'pip install --index-url "${PYPI_URL}" tox'
                         sh './scripts/test.sh --index-url "${PYPI_URL}"'
                     }
                 }
-                stage('Publish') {
+                stage('Publish package') {
                     when {
-                        anyOf {
-                            branch 'master'
-                            branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
+                        allOf {
+                            anyOf {
+                                branch 'master'
+                                branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
+                            }
+                            expression { env.COMMIT_TYPE != "Bump version" }
                         }
                     }
                     steps {
@@ -53,16 +76,18 @@ pipeline {
                             passwordVariable: 'TWINE_PASSWORD',
                         )]) {
                             sh './scripts/publish.sh --index-url "${PYPI_URL}"'
+                            sh 'git tag --delete $(git tag --list)'
+
+                            withCredentials([gitUsernamePassword(credentialsId: 'Github-app-access')]) {
+                                sh './scripts/tag_and_bump_version.sh'
+                            }
                         }
                     }
                 }
-                stage('Release') {
+                stage('Release package') {
                     when {
                         allOf {
-                            anyOf {
-                                branch 'master'
-                                branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
-                            }
+                            branch 'master'
                             expression { return params.RELEASE }
                         }
                     }
@@ -81,9 +106,9 @@ pipeline {
                         }
                     }
                 }
-                stage('Prepare nomad artifact') {
+                stage('Prepare nomad artifacts') {
                     steps {
-                        sh './scripts/prepare_nomad_artifacts.sh'
+                        sh './nomad/prepare.sh'
                     }
                 }
             }
@@ -100,15 +125,45 @@ pipeline {
                 }
             }
         }
-
-        stage('Deployment'){
-            agent {
-                label 'nomad'
+        stage('Build and publish docker image') {
+            stages {
+                stage('Build and push image') {
+                    when {
+                        allOf {
+                            anyOf {
+                                branch 'master'
+                                branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
+                            }
+                            anyOf {
+                                expression { env.COMMIT_TYPE != "Bump version" }
+                                expression { return params.RELEASE }
+                            }
+                        }
+                    }
+                    steps {
+                        withCredentials([usernamePassword(
+                             credentialsId: 'pypi-deployment-user',
+                             usernameVariable: 'TWINE_USERNAME',
+                             passwordVariable: 'TWINE_PASSWORD',
+                         )]) {
+                             buildAndPush("bank-identification-codes-agent", "${VERSION}", "--build-arg PYPI_URL=${PYPI_URL} -f Dockerfile .")
+                         }
+                    }
+                }
             }
+        }
+        stage('Zipped (.pyz) artifacts upload') {
+            agent any
             when {
-                anyOf {
-                    branch 'master'
-                    tag pattern: '^v[\\d\\.]+\$', comparator: "REGEXP"
+                allOf {
+                    anyOf {
+                        branch 'master'
+                        branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
+                    }
+                    anyOf {
+                        expression { env.COMMIT_TYPE != "Bump version" }
+                        expression { return params.RELEASE }
+                    }
                 }
             }
             stages {
@@ -124,30 +179,23 @@ pipeline {
                         rtUpload (
                             serverId: 'silenteight-repo',
                             spec: '''{
-                                  "files": [
+                                "files": [
                                     {
                                       "pattern": "dist/*.pyz",
                                       "target": "dist-public-local/bank-identification-codes-agent/"
-                                    }
-                                 ]
-                            }''',
-                        )
-                        rtUpload (
-                            serverId: 'silenteight-repo',
-                            spec: '''{
-                                  "files": [
+                                    },
                                     {
                                       "pattern": "dist/*.tgz",
                                       "target": "dist-public-local/bank-identification-codes-agent/"
                                     }
-                                 ]
+                                ]
                             }''',
                         )
                     }
                 }
-                stage('Deploy on nomad dev') {
+                stage('Deploy on nomad') {
                     steps {
-                       sh './nomad/deploy.sh'
+                        sh './nomad/deploy.sh -var-file="vars/dev.vars"'
                     }
                 }
             }

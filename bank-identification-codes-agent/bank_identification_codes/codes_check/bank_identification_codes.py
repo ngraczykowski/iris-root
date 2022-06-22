@@ -1,13 +1,13 @@
 import dataclasses
 from typing import List, Tuple
 
-from bank_identification_codes_agent.text_utils import (
+from bank_identification_codes.codes_check.text_utils import (
     get_first_match,
     is_headquarters,
     remove_no_word_characters,
     remove_words_separators,
 )
-from data_models.reasons import (
+from bank_identification_codes.solution.reasons import (
     MatchingTextDoesNotMatchMatchingFieldReason,
     MatchingTextDoesNotMatchWlSearchCodeReason,
     MatchingTextIsOnlyPartialMatchForSearchCodeReason,
@@ -17,7 +17,7 @@ from data_models.reasons import (
     MatchingTextTooShortToBeCodeReason,
     NoSearchCodeInWatchlistReason,
 )
-from data_models.result import Reason, Result, Solution
+from bank_identification_codes.solution.result import Reason, Result, Solution
 
 
 @dataclasses.dataclass

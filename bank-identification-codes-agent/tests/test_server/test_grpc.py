@@ -74,7 +74,7 @@ class TestServer(unittest.TestCase):
     def kill_process_on_the_port():
         kill = subprocess.Popen(
             f"kill -9 $(netstat -ltnp | "
-            "grep -w :{PORT} | "
+            f"grep -w :{PORT} | "
             "awk '{ print $7 }' | "
             "grep -o '[0-9]\+' )".split()
         )
@@ -83,7 +83,7 @@ class TestServer(unittest.TestCase):
     def setUp(self):
         self.kill_process_on_the_port()
         self.server_process = subprocess.Popen(
-            "python bank_identification_codes_agent -v --grpc".split()
+            "python bank_identification_codes -v --grpc".split()
         )
         self.wait_for_server()
 
