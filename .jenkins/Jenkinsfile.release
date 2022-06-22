@@ -178,8 +178,8 @@ pipeline {
           ]
       ]
     }
-    //failure {
-    //notifyBuild color: 'danger', channel: 'C03D4GD7RHP', title: ':rocket: Iris Release'
-    //}
+    failure {
+      notifyBuild color: 'danger', channel: 'C03D4GD7RHP', title: ':rocket: Iris Release'
+    }
   }
 }
