@@ -42,7 +42,8 @@ class AccountsReportGeneratorTest {
         repository,
         new MockTimeSource(Instant.parse("2011-12-03T10:15:30Z")),
         new ScbReportDateFormatter(),
-        ROLES_SCOPE);
+        ROLES_SCOPE,
+        new AccountsReportProperties());
   }
 
   @ParameterizedTest
@@ -71,7 +72,7 @@ class AccountsReportGeneratorTest {
   }
 
   @NotNull
-  private String getReportBody(Report report) {
+  private static String getReportBody(Report report) {
     return report.getReportContent().lines().collect(joining(""));
   }
 

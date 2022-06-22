@@ -13,9 +13,10 @@ import static org.assertj.core.api.Assertions.*;
 
 class EntitlementReportGeneratorTest {
 
-  private EntitlementReportGenerator underTest = new EntitlementReportGenerator(
+  private final EntitlementReportGenerator underTest = new EntitlementReportGenerator(
       new MockTimeSource(Instant.parse("2011-12-03T10:15:30Z")),
-      new ScbReportDateFormatter());
+      new ScbReportDateFormatter(),
+      new EntitlementReportProperties());
 
   @Test
   void generateEntitlementReportWhenRequested() {
