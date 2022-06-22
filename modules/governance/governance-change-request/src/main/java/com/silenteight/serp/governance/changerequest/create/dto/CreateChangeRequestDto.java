@@ -7,10 +7,12 @@ import lombok.NonNull;
 
 import java.util.UUID;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import static com.silenteight.serp.governance.changerequest.domain.DomainConstants.MAX_MODEL_NAME_LENGTH;
 import static com.silenteight.serp.governance.changerequest.domain.DomainConstants.MIN_MODEL_NAME_LENGTH;
+import static com.silenteight.serp.governance.common.web.rest.RestValidationConstants.FIELD_REGEX;
 
 @Data
 @NoArgsConstructor
@@ -23,5 +25,6 @@ public class CreateChangeRequestDto {
   @NotNull
   private String modelName;
   @NotNull
+  @Pattern(regexp = FIELD_REGEX)
   private String comment;
 }

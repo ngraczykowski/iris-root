@@ -37,6 +37,7 @@ class CreateStepRequestRestControllerTest extends BaseRestControllerTest {
   private static final String CREATE_STEP_URL = "/v1/policies/" + POLICY_ID + "/steps";
 
   private static final UUID STEP_ID = UUID.randomUUID();
+  private static final String STEP_NAME = "Random step name";
   private static final String DESCRIPTION = "description";
   private static final Solution SOLUTION = Solution.FALSE_POSITIVE;
 
@@ -76,5 +77,41 @@ class CreateStepRequestRestControllerTest extends BaseRestControllerTest {
     post(CREATE_STEP_URL, new CreateStepDto(STEP_ID, stepName, DESCRIPTION, SOLUTION, NARROW))
         .contentType(anything())
         .statusCode(BAD_REQUEST.value());
+  }
+
+  @ParameterizedTest
+  @MethodSource("com.silenteight.serp.governance.policy.domain.SharedTestFixtures#getForbiddenCharsAsInput")
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
+  void its400_whenStepNameContainsForbiddenChars(String stepName) {
+    post(CREATE_STEP_URL, new CreateStepDto(STEP_ID, stepName, DESCRIPTION, SOLUTION, NARROW))
+        .contentType(anything())
+        .statusCode(BAD_REQUEST.value());
+  }
+
+  @ParameterizedTest
+  @MethodSource("com.silenteight.serp.governance.policy.domain.SharedTestFixtures#getAllowedCharsAsInput")
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
+  void its400_whenStepNameContainsAllowedChars(String stepName) {
+    post(CREATE_STEP_URL, new CreateStepDto(STEP_ID, stepName, DESCRIPTION, SOLUTION, NARROW))
+        .contentType(anything())
+        .statusCode(NO_CONTENT.value());
+  }
+
+  @ParameterizedTest
+  @MethodSource("com.silenteight.serp.governance.policy.domain.SharedTestFixtures#getForbiddenCharsAsInput")
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
+  void its400_whenStepDescriptionContainsForbiddenChars(String description) {
+    post(CREATE_STEP_URL, new CreateStepDto(STEP_ID, STEP_NAME, description, SOLUTION, NARROW))
+        .contentType(anything())
+        .statusCode(BAD_REQUEST.value());
+  }
+
+  @ParameterizedTest
+  @MethodSource("com.silenteight.serp.governance.policy.domain.SharedTestFixtures#getAllowedCharsAsInput")
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
+  void its400_whenStepDescriptionContainsAllowedChars(String description) {
+    post(CREATE_STEP_URL, new CreateStepDto(STEP_ID, STEP_NAME, description, SOLUTION, NARROW))
+        .contentType(anything())
+        .statusCode(NO_CONTENT.value());
   }
 }

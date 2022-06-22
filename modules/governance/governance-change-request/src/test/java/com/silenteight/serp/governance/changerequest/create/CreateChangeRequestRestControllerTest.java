@@ -17,9 +17,7 @@ import static com.silenteight.serp.governance.changerequest.fixture.ChangeReques
 import static com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures.MODEL_NAME;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.mockito.Mockito.*;
-import static org.springframework.http.HttpStatus.ACCEPTED;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.*;
 
 @Import({
     CreateChangeRequestRestController.class,
@@ -38,7 +36,7 @@ class CreateChangeRequestRestControllerTest extends BaseRestControllerTest {
   )
   @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
   void its202_whenChangeRequestCreated(String modelName) {
-    post(CREATE_CHANGE_REQUEST_URL, makeCreateChangeRequestDto(modelName))
+    post(CREATE_CHANGE_REQUEST_URL, makeCreateChangeRequestDtoWithModelName(modelName))
         .contentType(anything())
         .statusCode(ACCEPTED.value());
 
@@ -54,7 +52,7 @@ class CreateChangeRequestRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { USER_ADMINISTRATOR, APPROVER, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
-    post(CREATE_CHANGE_REQUEST_URL, makeCreateChangeRequestDto(MODEL_NAME))
+    post(CREATE_CHANGE_REQUEST_URL, makeCreateChangeRequestDtoWithModelName(MODEL_NAME))
         .contentType(anything())
         .statusCode(FORBIDDEN.value());
   }
@@ -66,12 +64,38 @@ class CreateChangeRequestRestControllerTest extends BaseRestControllerTest {
   )
   @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
   void its400_whenFeatureNameLengthIsWrong(String modelName) {
-    post(CREATE_CHANGE_REQUEST_URL, makeCreateChangeRequestDto(modelName))
+    post(CREATE_CHANGE_REQUEST_URL, makeCreateChangeRequestDtoWithModelName(modelName))
         .contentType(anything())
         .statusCode(BAD_REQUEST.value());
   }
 
-  private static CreateChangeRequestDto makeCreateChangeRequestDto(String modelName) {
+  @ParameterizedTest
+  @MethodSource(
+      "com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures#"
+          + "getForbiddenCharsAsInput")
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
+  void its400_whenFeatureCommentContainsForbiddenChars(String comment) {
+    post(CREATE_CHANGE_REQUEST_URL, makeCreateChangeRequestDtoWithCreatorComment(comment))
+        .contentType(anything())
+        .statusCode(BAD_REQUEST.value());
+  }
+
+  @ParameterizedTest
+  @MethodSource(
+      "com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures#"
+          + "getAllowedCharsAsInput")
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
+  void its200_whenFeatureCommentContainsAllowedChars(String comment) {
+    post(CREATE_CHANGE_REQUEST_URL, makeCreateChangeRequestDtoWithCreatorComment(comment))
+        .contentType(anything())
+        .statusCode(ACCEPTED.value());
+  }
+
+  private static CreateChangeRequestDto makeCreateChangeRequestDtoWithModelName(String modelName) {
     return new CreateChangeRequestDto(CHANGE_REQUEST_ID, modelName, CREATOR_COMMENT);
+  }
+
+  private static CreateChangeRequestDto makeCreateChangeRequestDtoWithCreatorComment(String comment) {
+    return new CreateChangeRequestDto(CHANGE_REQUEST_ID, MODEL_NAME, comment);
   }
 }

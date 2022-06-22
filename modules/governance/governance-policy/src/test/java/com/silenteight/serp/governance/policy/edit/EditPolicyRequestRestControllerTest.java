@@ -85,6 +85,13 @@ class EditPolicyRequestRestControllerTest extends BaseRestControllerTest {
     return editPolicyDto;
   }
 
+  private EditPolicyDto getEditPolicyDtoWithDescription(String description) {
+    EditPolicyDto editPolicyDto = new EditPolicyDto();
+    editPolicyDto.setPolicyName(POLICY_NAME);
+    editPolicyDto.setDescription(description);
+    return editPolicyDto;
+  }
+
   @Test
   @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
   void its200_whenSavedStatusChanged() {
@@ -140,13 +147,57 @@ class EditPolicyRequestRestControllerTest extends BaseRestControllerTest {
 
   @ParameterizedTest
   @MethodSource(
-      "com.silenteight.serp.governance.policy.domain.SharedTestFixtures#getIncorrectPolicyNames"
+      "com.silenteight.serp.governance.policy.domain.SharedTestFixtures#getPolicyNamesWithIncorrectLenght"
   )
   @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
   void its400_whenPolicyNameLengthIsWrong(String policyName) {
     patch(EDIT_URL, getEditPolicyDto(policyName))
         .contentType(anything())
         .statusCode(BAD_REQUEST.value());
+  }
+
+  @ParameterizedTest
+  @MethodSource(
+      "com.silenteight.serp.governance.policy.domain.SharedTestFixtures#getForbiddenCharsAsInput"
+  )
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
+  void its400_whenPolicyNameContainsForbiddenChars(String policyName) {
+    patch(EDIT_URL, getEditPolicyDto(policyName))
+        .contentType(anything())
+        .statusCode(BAD_REQUEST.value());
+  }
+
+  @ParameterizedTest
+  @MethodSource(
+      "com.silenteight.serp.governance.policy.domain.SharedTestFixtures#getAllowedCharsAsInput"
+  )
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
+  void its200_whenPolicyNameContainsAllowedChars(String policyName) {
+    patch(EDIT_URL, getEditPolicyDto(policyName))
+        .contentType(anything())
+        .statusCode(OK.value());
+  }
+
+  @ParameterizedTest
+  @MethodSource(
+      "com.silenteight.serp.governance.policy.domain.SharedTestFixtures#getForbiddenCharsAsInput"
+  )
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
+  void its400_whenPolicyDescriptionContainsForbiddenChars(String description) {
+    patch(EDIT_URL, getEditPolicyDto(description))
+        .contentType(anything())
+        .statusCode(BAD_REQUEST.value());
+  }
+
+  @ParameterizedTest
+  @MethodSource(
+      "com.silenteight.serp.governance.policy.domain.SharedTestFixtures#getAllowedCharsAsInput"
+  )
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
+  void its200_whenPolicyDescriptionContainsAllowedChars(String description) {
+    patch(EDIT_URL, getEditPolicyDtoWithDescription(description))
+        .contentType(anything())
+        .statusCode(OK.value());
   }
 
   static class UsePolicyEventHandler {

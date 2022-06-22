@@ -6,6 +6,8 @@ import com.silenteight.serp.governance.changerequest.approve.dto.ApproveChangeRe
 import com.silenteight.serp.governance.common.web.exception.GenericExceptionControllerAdvice;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -37,14 +39,14 @@ class ApproveChangeRequestRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(username = USERNAME, authorities = APPROVER)
   void its204_whenApproverCallsEndpoint() {
-    post(mappingForApproval(CHANGE_REQUEST_ID), makeApproveChangeRequestDto())
+    post(mappingForApproval(CHANGE_REQUEST_ID), makeApproveChangeRequestDto(APPROVER_COMMENT))
         .statusCode(NO_CONTENT.value());
   }
 
   @Test
   @WithMockUser(username = USERNAME, authorities = APPROVER)
   void callsApproveUseCase() {
-    post(mappingForApproval(CHANGE_REQUEST_ID), makeApproveChangeRequestDto());
+    post(mappingForApproval(CHANGE_REQUEST_ID), makeApproveChangeRequestDto(APPROVER_COMMENT));
 
     ArgumentCaptor<ApproveChangeRequestCommand> commandCaptor =
         ArgumentCaptor.forClass(ApproveChangeRequestCommand.class);
@@ -58,7 +60,7 @@ class ApproveChangeRequestRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { USER_ADMINISTRATOR, MODEL_TUNER, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
-    post(mappingForApproval(CHANGE_REQUEST_ID), makeApproveChangeRequestDto())
+    post(mappingForApproval(CHANGE_REQUEST_ID), makeApproveChangeRequestDto(APPROVER_COMMENT))
         .statusCode(FORBIDDEN.value());
   }
 
@@ -71,11 +73,33 @@ class ApproveChangeRequestRestControllerTest extends BaseRestControllerTest {
         .body("extras.errors", hasItem("approverComment must not be blank"));
   }
 
+  @ParameterizedTest
+  @MethodSource(
+      "com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures#"
+          + "getForbiddenCharsAsInput")
+  @WithMockUser(username = USERNAME, authorities = APPROVER)
+  void its400_whenApproverCommentContainsForbiddenCharacters(String comment) {
+    post(
+        mappingForApproval(CHANGE_REQUEST_ID), new ApproveChangeRequestDto(comment))
+        .statusCode(BAD_REQUEST.value());
+  }
+
+  @ParameterizedTest
+  @MethodSource(
+      "com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures#"
+          + "getAllowedCharsAsInput")
+  @WithMockUser(username = USERNAME, authorities = APPROVER)
+  void its204_whenApproverCommentContainsAllowedCharacters(String comment) {
+    post(
+        mappingForApproval(CHANGE_REQUEST_ID), new ApproveChangeRequestDto(comment))
+        .statusCode(NO_CONTENT.value());
+  }
+
   private String mappingForApproval(UUID changeRequestId) {
     return "/v1/changeRequests/" + changeRequestId.toString() + ":approve";
   }
 
-  private static ApproveChangeRequestDto makeApproveChangeRequestDto() {
-    return new ApproveChangeRequestDto(APPROVER_COMMENT);
+  private static ApproveChangeRequestDto makeApproveChangeRequestDto(String comment) {
+    return new ApproveChangeRequestDto(comment);
   }
 }

@@ -62,4 +62,11 @@ public final class ChangeRequestFixtures {
   private static Stream<String> getIncorrectAttachments() {
     return Stream.of("files/this-is-no-uuid", "name/d293a102-85be-11ec-8c53-5f27abcfa50c");
   }
+
+  public static Stream<String> getForbiddenCharsAsInput() {
+    return Stream.of("###", "qwer#", "122*", "zxcv^");
+  }
+  public static Stream<String> getAllowedCharsAsInput() {
+    return Stream.of("aghsd", "ASDfgf", "GHgbd456", "dsadf-?!","@+~&/=");
+  }
 }

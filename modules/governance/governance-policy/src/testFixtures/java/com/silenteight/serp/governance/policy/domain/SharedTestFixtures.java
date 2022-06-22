@@ -29,7 +29,14 @@ public final class SharedTestFixtures {
     return Stream.of(POLICY_NAME, POLICY_NAME_WITH_MIN_LENGTH, POLICY_NAME_WITH_MAX_LENGTH);
   }
 
-  public static Stream<String> getIncorrectPolicyNames() {
+  public static Stream<String> getPolicyNamesWithIncorrectLenght() {
     return Stream.of(POLICY_NAME_SHORTER_THAN_MIN_LENGTH, POLICY_NAME_THAT_EXCEEDED_MAX_LENGTH);
+  }
+
+  public static Stream<String> getForbiddenCharsAsInput() {
+    return Stream.of("###", "qwer#", "122*", "zxcv^");
+  }
+  public static Stream<String> getAllowedCharsAsInput() {
+    return Stream.of("aghsd", "ASDfgf", "GHgbd456", "dsadf-?!","@+~&/=","232304");
   }
 }

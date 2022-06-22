@@ -90,12 +90,34 @@ class CreatePolicyRequestRestControllerTest extends BaseRestControllerTest {
 
   @ParameterizedTest
   @MethodSource(
-      "com.silenteight.serp.governance.policy.domain.SharedTestFixtures#getIncorrectPolicyNames"
+      "com.silenteight.serp.governance.policy.domain.SharedTestFixtures#getPolicyNamesWithIncorrectLenght"
   )
   @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
   void its400_whenPolicyNameLengthIsWrong(String policyName) {
     post(CREATE_POLICY_URL, new CreatePolicyDto(POLICY_ID, policyName, DRAFT))
         .contentType(anything())
         .statusCode(BAD_REQUEST.value());
+  }
+
+  @ParameterizedTest
+  @MethodSource(
+      "com.silenteight.serp.governance.policy.domain.SharedTestFixtures#getForbiddenCharsAsInput"
+  )
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
+  void its400_whenPolicyNameContainsForbiddenChars(String policyName) {
+    post(CREATE_POLICY_URL, new CreatePolicyDto(POLICY_ID, policyName, DRAFT))
+        .contentType(anything())
+        .statusCode(BAD_REQUEST.value());
+  }
+
+  @ParameterizedTest
+  @MethodSource(
+      "com.silenteight.serp.governance.policy.domain.SharedTestFixtures#getAllowedCharsAsInput"
+  )
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
+  void its201_whenPolicyNameContainsAllowedChars(String policyName) {
+    post(CREATE_POLICY_URL, new CreatePolicyDto(POLICY_ID, policyName, DRAFT))
+        .contentType(anything())
+        .statusCode(CREATED.value());
   }
 }

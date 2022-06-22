@@ -71,7 +71,7 @@ class CreateModelRestControllerTest extends BaseRestControllerTest {
 
   @ParameterizedTest
   @MethodSource(
-      "com.silenteight.serp.governance.policy.domain.SharedTestFixtures#getIncorrectPolicyNames"
+      "com.silenteight.serp.governance.policy.domain.SharedTestFixtures#getPolicyNamesWithIncorrectLenght"
   )
   @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
   void its400_whenPolicyNameLengthIsWrong(String policyName) {

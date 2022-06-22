@@ -79,4 +79,22 @@ class EditStepRequestRestControllerTest extends BaseRestControllerTest {
         .contentType(anything())
         .statusCode(BAD_REQUEST.value());
   }
+
+  @ParameterizedTest
+  @MethodSource("com.silenteight.serp.governance.policy.domain.SharedTestFixtures#getForbiddenCharsAsInput")
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
+  void its400_whenStepNameContainsForbiddenChars(String stepName) {
+    patch(STEP_URL, new EditStepDto(stepName, null, SOLUTION))
+        .contentType(anything())
+        .statusCode(BAD_REQUEST.value());
+  }
+
+  @ParameterizedTest
+  @MethodSource("com.silenteight.serp.governance.policy.domain.SharedTestFixtures#getAllowedCharsAsInput")
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
+  void its204_whenStepNameContainsAllowedChars(String stepName) {
+    patch(STEP_URL, new EditStepDto(stepName, null, SOLUTION))
+        .contentType(anything())
+        .statusCode(NO_CONTENT.value());
+  }
 }
