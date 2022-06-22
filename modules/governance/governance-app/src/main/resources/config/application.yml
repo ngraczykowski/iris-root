@@ -24,17 +24,11 @@ serp:
     agent:
       agent-configuration-source: classpath:agent_configs.json
       agent-details-source: classpath:agent_details.json
-    integration:
-      solution-discrepancy:
-        inbound-queue-name: ${serp.governance.messaging.broker.solution-discrepancy.queue-name}
-        outbound-exchange-name: ${serp.governance.messaging.exchange.notification}
-        reasoning-branches-disabled-routing-key: notification.reasoning-branches-disabled
     messaging:
       exchange:
         analytics: feature-vector
         model: gov.events
         notification: notification
-        solution-discrepancy: learning
         gov-events: gov.events
       broker:
         analytics:
@@ -64,9 +58,6 @@ serp:
         notification-send-mail:
           queue-name: notifier.send-mail
           routing-key: notifier.send-mail
-        solution-discrepancy:
-          queue-name: governance.solution-discrepancy
-          routing-key: learning.discrepancy-detected
         to-remove:
           bindings: []
           exchanges: []

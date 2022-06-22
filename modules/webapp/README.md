@@ -131,10 +131,9 @@ Make sure you have completed at least the following:
    ./bin/serp ctl start infra:*
    ```
 
-1. Start the following services: governance, circuit-breaker:
+1. Start the following services: governance
    ```
    ./bin/serp ctl start app:governance
-   ./bin/serp ctl start app:circuit-breaker
    ```
 
 #### Keycloak Import Scripts

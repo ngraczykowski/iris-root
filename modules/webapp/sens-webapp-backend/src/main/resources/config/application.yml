@@ -148,19 +148,11 @@ grpc:
     reco:
       address: static://localhost:24207
 
-    circuit-breaker:
-      address: static://localhost:24213
-
 sens.webapp.messaging:
   broker:
     audit-log:
       queue-name: webapp.audit-log
       routing-key: event.audit-log
-
-  circuit-breaker.discrepancy:
-    exchange: discrepancy
-    route:
-      archive: discrepancy.archive
 
 sens.webapp.change-request.max-closed: 30
 sens.webapp.discrepant-branches.max-archived: 10

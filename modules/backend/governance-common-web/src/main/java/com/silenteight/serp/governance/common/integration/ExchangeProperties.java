@@ -22,8 +22,5 @@ class ExchangeProperties {
   String notification;
 
   @NotBlank
-  String solutionDiscrepancy;
-
-  @NotBlank
   String govEvents;
 }

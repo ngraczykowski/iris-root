@@ -89,15 +89,6 @@ class BrokerConfiguration {
   }
 
   @Bean
-  Declarables solutionDiscrepancyBinding() {
-    return new Declarables(
-        binding(
-            brokerProperties.solutionDiscrepancyQueueName(),
-            exchangeProperties.getSolutionDiscrepancy(),
-            brokerProperties.solutionDiscrepancyRoutingKey()));
-  }
-
-  @Bean
   Declarables modelsArchivedQueueBinding() {
     return new Declarables(
         binding(
@@ -143,11 +134,6 @@ class BrokerConfiguration {
   @Bean
   Queue modelsArchivedQueue() {
     return queue(brokerProperties.modelsArchivedQueueName());
-  }
-
-  @Bean
-  Queue solutionDiscrepancyQueue() {
-    return queue(brokerProperties.solutionDiscrepancyQueueName());
   }
 
   private static Queue queue(String queueName) {

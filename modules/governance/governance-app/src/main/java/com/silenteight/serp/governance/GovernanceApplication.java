@@ -8,7 +8,6 @@ import com.silenteight.sep.auth.authentication.AuthenticationModule;
 import com.silenteight.sep.auth.authorization.AuthorizationModule;
 import com.silenteight.sep.filestorage.minio.S3FileStorageMinioModule;
 import com.silenteight.serp.governance.agent.AgentModule;
-import com.silenteight.serp.governance.branch.BranchModule;
 import com.silenteight.serp.governance.changerequest.ChangeRequestModule;
 import com.silenteight.serp.governance.common.grpc.GrpcCommonModule;
 import com.silenteight.serp.governance.common.integration.AmqpCommonModule;
@@ -18,10 +17,8 @@ import com.silenteight.serp.governance.file.FileModule;
 import com.silenteight.serp.governance.ingest.IngestModule;
 import com.silenteight.serp.governance.mailer.MailerModule;
 import com.silenteight.serp.governance.model.ModelModule;
-import com.silenteight.serp.governance.notifier.NotifierModule;
 import com.silenteight.serp.governance.policy.PolicyModule;
 import com.silenteight.serp.governance.qa.QaModule;
-import com.silenteight.serp.governance.solutiondiscrepancy.SolutionDiscrepancyModule;
 import com.silenteight.serp.governance.strategy.StrategyModule;
 import com.silenteight.serp.governance.vector.FeatureVectorModule;
 
@@ -41,16 +38,13 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     // NOTE(ahaczewski): Keep list of modules alphabetically sorted within section.
     // Domain modules
     AgentModule.class,
-    BranchModule.class,
     ChangeRequestModule.class,
     FileModule.class,
     FeatureVectorModule.class,
     IngestModule.class,
     ModelModule.class,
-    NotifierModule.class,
     PolicyModule.class,
     QaModule.class,
-    SolutionDiscrepancyModule.class,
     StrategyModule.class,
     SignatureModule.class,
     // Interface modules

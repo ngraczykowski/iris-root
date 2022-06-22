@@ -56,10 +56,6 @@ class BrokerProperties {
 
   @Valid
   @NestedConfigurationProperty
-  private AmpqProperties solutionDiscrepancy;
-
-  @Valid
-  @NestedConfigurationProperty
   private ToRemoveProperties toRemove;
 
   String analyticsQueueName() {
@@ -128,14 +124,6 @@ class BrokerProperties {
 
   String notificationSendMailRoutingKey() {
     return notificationSendMail.getRoutingKey();
-  }
-
-  String solutionDiscrepancyQueueName() {
-    return solutionDiscrepancy.getQueueName();
-  }
-
-  String solutionDiscrepancyRoutingKey() {
-    return solutionDiscrepancy.getRoutingKey();
   }
 
   List<BindingProperties> bindingsToRemove() {

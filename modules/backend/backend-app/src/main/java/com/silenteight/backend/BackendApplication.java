@@ -4,10 +4,7 @@
 
 package com.silenteight.backend;
 
-import com.silenteight.backend.branch.BranchModule;
 import com.silenteight.backend.mailer.MailerModule;
-import com.silenteight.backend.notifier.NotifierModule;
-import com.silenteight.backend.solutiondiscrepancy.SolutionDiscrepancyModule;
 import com.silenteight.commons.app.spring.ApplicationBuilderConfigurer;
 import com.silenteight.commons.app.spring.ConfigurableApplicationBuilder;
 import com.silenteight.commons.app.spring.DefaultSpringApplicationContextCallback;
@@ -45,16 +42,13 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     // NOTE(ahaczewski): Keep list of modules alphabetically sorted within section.
     // Domain modules
     AgentModule.class,
-    BranchModule.class,
     ChangeRequestModule.class,
     FileModule.class,
     FeatureVectorModule.class,
     IngestModule.class,
     ModelModule.class,
-    NotifierModule.class,
     PolicyModule.class,
     QaModule.class,
-    SolutionDiscrepancyModule.class,
     StrategyModule.class,
     SignatureModule.class,
     // Interface modules
