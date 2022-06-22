@@ -6,6 +6,8 @@ public interface ConfigurableReport {
 
   String getName();
 
+  String getType();
+
   String getLabel();
 
   FilterType getFilterType();

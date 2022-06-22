@@ -330,15 +330,18 @@ sens.webapp.reports:
   audit:
     enabled: true
     name: audit-report
+    type: AUDIT
     label: "Audit report"
     filter-type: DATE_RANGE
   users:
     enabled: true
     name: users-report
+    type: USERS
     label: "Users report"
     filter-type: DATE_RANGE
   security-matrix:
     enabled: true
     name: security-matrix-report
+    type: SECURITY_MATRIX
     label: "Security matrix report"
     filter-type: NONE

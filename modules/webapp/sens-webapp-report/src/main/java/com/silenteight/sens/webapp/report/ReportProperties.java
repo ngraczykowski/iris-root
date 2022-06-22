@@ -21,6 +21,8 @@ public abstract class ReportProperties {
   @NotBlank
   protected String name;
   @NotBlank
+  protected String type;
+  @NotBlank
   protected String label;
   @NotNull
   protected boolean enabled;

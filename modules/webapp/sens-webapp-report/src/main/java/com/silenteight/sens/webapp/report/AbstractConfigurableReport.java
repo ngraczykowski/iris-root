@@ -17,6 +17,10 @@ public abstract class AbstractConfigurableReport implements ConfigurableReport {
     return reportProperties.getName();
   }
 
+  public String getType() {
+    return reportProperties.getType();
+  }
+
   public String getLabel() {
     return reportProperties.getLabel();
   }
