@@ -98,6 +98,7 @@ warehouse.reports.v2:
                (wm.payload ->> 'feature_values_features/contextualLearningNameFP') AS "Contextual Learning - FP",
                (wm.payload ->> 'feature_values_features/organizationName') AS "Organization Name",
                (wm.payload ->> 'feature_values_features/organizationName2') AS "Organization Name v2",
+               (wm.payload ->> 'feature_values_features/organizationName3') AS "Organization Name v3",
                (wm.payload ->> 'category_values_categories/companyNameSurrounding') AS "Company Name Surrounding",
                count(wm.payload ->> 'feature_vector_signature') AS "Hits Count"
         FROM warehouse_alert wa JOIN warehouse_match wm ON wa.id = wm.alert_id where wa.recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
@@ -126,6 +127,7 @@ warehouse.reports.v2:
                (wm.payload ->> 'feature_values_features/contextualLearningNameFP'),
                (wm.payload ->> 'feature_values_features/organizationName'),
                (wm.payload ->> 'feature_values_features/organizationName2'),
+               (wm.payload ->> 'feature_values_features/organizationName3'),
                (wm.payload ->> 'category_values_categories/companyNameSurrounding')
     - name: RB_SCORER
       type: simulation
@@ -156,6 +158,7 @@ warehouse.reports.v2:
                wsm.payload ->> 'features/contextualLearningNameFP:solution'         AS "Contextual Learning - FP",
                wsm.payload ->> 'features/organizationName:solution'                 AS "Organization Name",
                wsm.payload ->> 'features/organizationName2:solution'                AS "Organization Name v2",
+               wsm.payload ->> 'features/organizationName3:solution'                AS "Organization Name v3",
                wsm.payload ->> 'categories/companyNameSurrounding:value'            AS "Company Name Surrounding",
                COUNT(wsm.payload ->> 'match_reason:feature_vector_signature')       AS "Hits Count"
         FROM warehouse_simulation_match wsm
@@ -185,6 +188,7 @@ warehouse.reports.v2:
                  wsm.payload ->> 'features/contextualLearningNameFP:solution',
                  wsm.payload ->> 'features/organizationName:solution',
                  wsm.payload ->> 'features/organizationName2:solution',
+                 wsm.payload ->> 'features/organizationName3:solution',
                  wsm.payload ->> 'categories/companyNameSurrounding:value'
     - name: AI_REASONING
       type: production
