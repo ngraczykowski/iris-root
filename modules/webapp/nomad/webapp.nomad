@@ -165,12 +165,6 @@ job "webapp" {
       }
 
       template {
-        data = file("./conf/application-consul.yml")
-        destination = "local/conf/application-consul.yml"
-        change_mode = "noop"
-      }
-
-      template {
         data = file("./conf/logback.xml")
         destination = "secrets/conf/logback.xml"
         change_mode = "noop"

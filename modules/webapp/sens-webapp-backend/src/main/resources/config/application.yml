@@ -13,8 +13,6 @@ sens.webapp.db.url: jdbc:postgresql://${sens.webapp.db.host}:${sens.webapp.db.po
 sens.webapp.db.connections.min: 1
 sens.webapp.db.connections.max: 10
 
-sens.webapp.grpc.timeout: PT7S
-
 sens.chrome-extension.auth-url: ${SENS_CHROME_EXTENSION_AUTH_URL}
 sens.chrome-extension.recommendation-url: ${SENS_CHROME_EXTENSION_RECOMMENDATION_URL}
 sens.chrome-extension.open-record-url-pattern: ${SENS_CHROME_EXTENSION_OPEN_RECORD_URL_PATTERN}
@@ -136,18 +134,6 @@ springdoc:
   swagger-ui:
     enabled: false
 
-grpc:
-  client:
-    GLOBAL:
-      negotiationType: PLAINTEXT
-      enableKeepAlive: true
-
-    governance:
-      address: static://localhost:24205
-
-    reco:
-      address: static://localhost:24207
-
 sens.webapp.messaging:
   broker:
     audit-log:
@@ -156,10 +142,6 @@ sens.webapp.messaging:
 
 sens.webapp.change-request.max-closed: 30
 sens.webapp.discrepant-branches.max-archived: 10
-
-sens:
-  grpc:
-    timeout: ${sens.webapp.grpc.timeout}
 
 server:
   port: 24410

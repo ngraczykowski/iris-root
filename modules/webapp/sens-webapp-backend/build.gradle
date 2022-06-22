@@ -49,12 +49,6 @@ dependencies {
   implementation libs.spring.cloud.starter.consul.config
   implementation libs.freemarker
 
-  implementation libs.protobuf.java.util
-
-  implementation libs.grpc.protobuf
-  implementation libs.grpc.stub
-  implementation libs.grpc.client.spring.boot.starter
-
   implementation libs.hikari.cp
   runtimeOnly libs.liquibase.core
   runtimeOnly libs.liquibase.sessionlock

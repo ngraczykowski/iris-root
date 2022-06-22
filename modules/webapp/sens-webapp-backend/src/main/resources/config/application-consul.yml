@@ -1,7 +1,0 @@
-grpc:
-  client:
-    governance:
-      address: discovery:///grpc-governance
-
-    reco:
-      address: discovery:///grpc-reco
