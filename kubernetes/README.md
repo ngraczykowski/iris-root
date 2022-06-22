@@ -114,3 +114,63 @@ more info: https://github.com/variantdev/vals#cli ()
 
 In order for given secret type to work, one has to make sure the evnironment is contains proper credentials.
 EG: `VAULT_TOKEN` for vault, `AWS_*` for awsssm etc...
+
+## Deploying local code on your namespace in devenv cluster
+
+### Create registry config file
+
+Lets call it reg.yaml and put in iris/kubernetes/reg.yaml
+Also choose your registry name (could be similar to namespace)
+
+```
+image:
+  tag: latest
+
+ingress:
+  enabled: true
+  className: ""
+  annotations:
+    kubernetes.io/ingress.class: nginx-internal
+    nginx.ingress.kubernetes.io/proxy-body-size: 0
+  hosts:
+    - <your-fancy-registry-name>.prv.dev.s8ops.com
+```
+
+Remember to be connected to VPN (printunl) for the next step
+
+### Install registry
+```bash
+helm install --values iris/kubernetes/reg.yaml --namespace=<namespace> twuni/docker-registry --generate-name
+```
+### Build artifact and deploy it on your registry
+On this example we will be building and deploying custom warehouse module
+```bash
+cd /home/user/repos/iris
+./gradlew -DjibRegistry=<your-fancy-registry-name>.prv.dev.s8ops.com :warehouse:warehouse-app:jib```
+```
+
+Now at finish you should have something like this
+
+```
+Built and pushed image as <your-fancy-registry-name>.prv.dev.s8ops.com/iris/warehouse-app:HEAD
+```
+
+Go to iris/charts/sear/values.yaml and change component image repository and tag to values from above
+
+```
+  warehouse:
+    image:
+      repository: <your-fancy-registry-name>.prv.dev.s8ops.com/iris/warehouse-app
+      tag: "HEAD"
+
+```
+
+All should be good now, you can reinstall helm chart
+
+### Removing
+Remember that docker registry also needs to be removed after your work
+
+```
+helm list
+helm uninstall <docker_registry_name>
+```
