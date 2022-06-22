@@ -1,27 +1,34 @@
 package com.silenteight.warehouse.report.availablereports;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Builder.Default;
 import lombok.NonNull;
+import lombok.Value;
 
 import java.util.List;
 
-@Data
+@Value
 @Builder
 class ReportTypeListDto {
 
   @NonNull
   List<ReportTypeDto> reportTypes;
 
-  @Data
+  @Value
   @Builder
   public static class ReportTypeDto {
 
     @NonNull
-    private String name;
+    String name;
     @NonNull
-    private String type;
+    String type;
     @NonNull
-    private String title;
+    String title;
+    @NonNull
+    @Default
+    FilterDto filter = new FilterDto(FilterType.DATE_RANGE);
+    @NonNull
+    @Default
+    DownloadType download = DownloadType.ASYNC;
   }
 }
