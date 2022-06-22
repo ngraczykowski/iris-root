@@ -351,8 +351,8 @@
                 "SRC_REF_KEY": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480\n      ",
                 "TOKENS_RISK_CARRIER": "Doe",
                 "TRIGGERED_BY": [
-                    "stopDescriptors",
-                    "matchStatus"
+                    "matchStatus",
+                    "stopDescriptors"
                 ],
                 "VERSION_ID": "122438658",
                 "WLP_TYPE": "I",
@@ -382,11 +382,11 @@
                 "all_hit_type_aggregated": [
                     {
                         "address": [
-                            "CONCAT_ADDRESS",
                             "ADDRESS1_PROVINCE",
-                            "ADDRESS1_STATE",
                             "ADDRESS1_COUNTRY",
-                            "ADDRESS1_CITY"
+                            "CONCAT_ADDRESS",
+                            "ADDRESS1_CITY",
+                            "ADDRESS1_STATE"
                         ],
                         "job": [],
                         "name": [],
@@ -500,11 +500,11 @@
                 "entityVersion": "20150505194929",
                 "firstMatchedDate": "01/08/20",
                 "hit_type_agent_address": [
-                    "CONCAT_ADDRESS",
                     "ADDRESS1_PROVINCE",
-                    "ADDRESS1_STATE",
                     "ADDRESS1_COUNTRY",
-                    "ADDRESS1_CITY"
+                    "CONCAT_ADDRESS",
+                    "ADDRESS1_CITY",
+                    "ADDRESS1_STATE"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_name": [],
@@ -679,10 +679,7 @@
                 "wl_all_residencies_aggregated": [
                     "|FL;US"
                 ],
-                "wl_all_sanctioned_countries_aggregated": [
-                    "|FL;US",
-                    "Joe Ding"
-                ]
+                "wl_all_sanctioned_countries_aggregated": []
             }
         }
     },
@@ -1038,8 +1035,8 @@
                 "SRC_REF_KEY": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480\n      ",
                 "TOKENS_RISK_CARRIER": "Doe",
                 "TRIGGERED_BY": [
-                    "stopDescriptors",
-                    "matchStatus"
+                    "matchStatus",
+                    "stopDescriptors"
                 ],
                 "VERSION_ID": "122438659",
                 "WLP_TYPE": "I",
@@ -1085,11 +1082,11 @@
                 "all_hit_type_aggregated": [
                     {
                         "address": [
-                            "CONCAT_ADDRESS",
                             "ADDRESS1_PROVINCE",
-                            "ADDRESS1_STATE",
                             "ADDRESS1_COUNTRY",
-                            "ADDRESS1_CITY"
+                            "CONCAT_ADDRESS",
+                            "ADDRESS1_CITY",
+                            "ADDRESS1_STATE"
                         ],
                         "job": [],
                         "name": [],
@@ -1203,11 +1200,11 @@
                 "entityVersion": "20150505194923",
                 "firstMatchedDate": "01/08/20",
                 "hit_type_agent_address": [
-                    "CONCAT_ADDRESS",
                     "ADDRESS1_PROVINCE",
-                    "ADDRESS1_STATE",
                     "ADDRESS1_COUNTRY",
-                    "ADDRESS1_CITY"
+                    "CONCAT_ADDRESS",
+                    "ADDRESS1_CITY",
+                    "ADDRESS1_STATE"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_name": [],
@@ -1401,11 +1398,7 @@
                     "Poland",
                     "PL"
                 ],
-                "wl_all_sanctioned_countries_aggregated": [
-                    "Poland",
-                    "Joe Dong",
-                    "PL"
-                ]
+                "wl_all_sanctioned_countries_aggregated": []
             }
         }
     }

@@ -108,8 +108,7 @@
     },
     {
         "feature": "features/geoSanctioned",
-        "alertedPartyLocation": "AHMEDOUA",
-        "watchlistLocation": "AL-FADHIL, ABD AL-AZIZ ADAY ZIMINY"
+        "alertedPartyLocation": "AHMEDOUA"
     },
     {
         "feature": "features/geoResidencies",

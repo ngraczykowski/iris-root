@@ -100,8 +100,7 @@
     },
     {
         "feature": "features/geoSanctioned",
-        "alertedPartyLocation": "AHMEDOUA",
-        "watchlistLocation": "AL-MILAD, ABD AL-RAHMAN LY LIBYAN ARAB JAMAHIRIYA"
+        "alertedPartyLocation": "AHMEDOUA"
     },
     {
         "feature": "features/geoResidencies",

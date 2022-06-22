@@ -456,8 +456,8 @@
                 "SRC_REF_KEY": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480",
                 "TOKENS_RISK_CARRIER": "Doe",
                 "TRIGGERED_BY": [
-                    "stopDescriptors",
-                    "matchStatus"
+                    "matchStatus",
+                    "stopDescriptors"
                 ],
                 "VERSION_ID": "122438658",
                 "WLP_TYPE": "I",
@@ -487,11 +487,11 @@
                 "all_hit_type_aggregated": [
                     {
                         "address": [
-                            "CONCAT_ADDRESS",
                             "ADDRESS1_PROVINCE",
-                            "ADDRESS1_STATE",
                             "ADDRESS1_COUNTRY",
-                            "ADDRESS1_CITY"
+                            "CONCAT_ADDRESS",
+                            "ADDRESS1_CITY",
+                            "ADDRESS1_STATE"
                         ],
                         "job": [],
                         "name": [
@@ -505,13 +505,13 @@
                 "ap_all_ap_name_tp_markeds_aggregated": [],
                 "ap_all_company_names_aggregated": [
                     "Pladimir Vutin",
-                    "Eva Pladimirova",
                     "Janusz",
+                    "Eva Pladimirova",
                     "Joe BlackJ"
                 ],
                 "ap_all_dobs_aggregated": [
-                    "04/31/1910",
-                    "02/31/1900"
+                    "02/31/1900",
+                    "04/31/1910"
                 ],
                 "ap_all_documents_aggregated": [
                     "022368917",
@@ -519,19 +519,19 @@
                 ],
                 "ap_all_employer_names_aggregated": [],
                 "ap_all_hit_types_aggregated": [
-                    "Janusz",
-                    "Joe BlackJ"
+                    "Joe BlackJ",
+                    "Janusz"
                 ],
                 "ap_all_matched_tokens_tp_markeds_aggregated": [],
                 "ap_all_names_aggregated": [
                     "Pladimir Vutin",
-                    "Eva Pladimirova",
                     "Janusz",
+                    "Eva Pladimirova",
                     "Joe BlackJ"
                 ],
                 "ap_all_nationalities_aggregated": [
-                    "UNITED STATES OF AMERICA",
-                    "United States"
+                    "United States",
+                    "UNITED STATES OF AMERICA"
                 ],
                 "ap_all_party_types_aggregated": [
                     "Individual"
@@ -540,12 +540,12 @@
                     "United States"
                 ],
                 "ap_all_residencies_aggregated": [
-                    "UNITED STATES OF AMERICA",
-                    "United States"
+                    "United States",
+                    "UNITED STATES OF AMERICA"
                 ],
                 "ap_all_sanctioned_countries_aggregated": [
-                    "UNITED STATES OF AMERICA",
-                    "United States"
+                    "United States",
+                    "UNITED STATES OF AMERICA"
                 ],
                 "ap_id_tp_marked_agent_input": "A05003324172",
                 "ap_name_tp_marked_agent_input": "Janusz",
@@ -658,11 +658,11 @@
                 "entityVersion": "20150505194929",
                 "firstMatchedDate": "01/08/20",
                 "hit_type_agent_address": [
-                    "CONCAT_ADDRESS",
                     "ADDRESS1_PROVINCE",
-                    "ADDRESS1_STATE",
                     "ADDRESS1_COUNTRY",
-                    "ADDRESS1_CITY"
+                    "CONCAT_ADDRESS",
+                    "ADDRESS1_CITY",
+                    "ADDRESS1_STATE"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_name": [
@@ -851,8 +851,8 @@
                     "Joe Ding"
                 ],
                 "wl_all_hit_types_aggregated": [
-                    "Janusz",
-                    "Joe BlackJ"
+                    "Joe BlackJ",
+                    "Janusz"
                 ],
                 "wl_all_matched_tokens_tp_markeds_aggregated": [],
                 "wl_all_names_aggregated": [
@@ -873,11 +873,7 @@
                     "US|FL;US",
                     "United States of America"
                 ],
-                "wl_all_sanctioned_countries_aggregated": [
-                    "Joe Ding",
-                    "US|FL;US",
-                    "United States of America"
-                ]
+                "wl_all_sanctioned_countries_aggregated": []
             }
         }
     },
@@ -1327,8 +1323,8 @@
                 "SRC_REF_KEY": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480",
                 "TOKENS_RISK_CARRIER": "Doe",
                 "TRIGGERED_BY": [
-                    "stopDescriptors",
-                    "matchStatus"
+                    "matchStatus",
+                    "stopDescriptors"
                 ],
                 "VERSION_ID": "122438659",
                 "WLP_TYPE": "I",
@@ -1374,11 +1370,11 @@
                 "all_hit_type_aggregated": [
                     {
                         "address": [
-                            "CONCAT_ADDRESS",
                             "ADDRESS1_PROVINCE",
-                            "ADDRESS1_STATE",
                             "ADDRESS1_COUNTRY",
-                            "ADDRESS1_CITY"
+                            "CONCAT_ADDRESS",
+                            "ADDRESS1_CITY",
+                            "ADDRESS1_STATE"
                         ],
                         "job": [],
                         "name": [],
@@ -1388,13 +1384,13 @@
                 "ap_all_ap_id_tp_markeds_aggregated": [],
                 "ap_all_ap_name_tp_markeds_aggregated": [],
                 "ap_all_company_names_aggregated": [
-                    "Pladimir Vutin",
-                    "Eva Pladimirova"
+                    "Eva Pladimirova",
+                    "Pladimir Vutin"
                 ],
                 "ap_all_dobs_aggregated": [
-                    "04/31/1910",
+                    "20/10/1963",
                     "02/31/1900",
-                    "20/10/1963"
+                    "04/31/1910"
                 ],
                 "ap_all_documents_aggregated": [
                     "022368917",
@@ -1404,12 +1400,12 @@
                 "ap_all_hit_types_aggregated": [],
                 "ap_all_matched_tokens_tp_markeds_aggregated": [],
                 "ap_all_names_aggregated": [
-                    "Pladimir Vutin",
-                    "Eva Pladimirova"
+                    "Eva Pladimirova",
+                    "Pladimir Vutin"
                 ],
                 "ap_all_nationalities_aggregated": [
-                    "UNITED STATES OF AMERICA",
-                    "United States"
+                    "United States",
+                    "UNITED STATES OF AMERICA"
                 ],
                 "ap_all_party_types_aggregated": [
                     "Individual"
@@ -1418,12 +1414,12 @@
                     "United States"
                 ],
                 "ap_all_residencies_aggregated": [
-                    "UNITED STATES OF AMERICA",
-                    "United States"
+                    "United States",
+                    "UNITED STATES OF AMERICA"
                 ],
                 "ap_all_sanctioned_countries_aggregated": [
-                    "UNITED STATES OF AMERICA",
-                    "United States"
+                    "United States",
+                    "UNITED STATES OF AMERICA"
                 ],
                 "ap_id_tp_marked_agent_input": "A05003324172",
                 "ap_name_tp_marked_agent_input": null,
@@ -1537,11 +1533,11 @@
                 "entityVersion": "20150505194923",
                 "firstMatchedDate": "01/08/20",
                 "hit_type_agent_address": [
-                    "CONCAT_ADDRESS",
                     "ADDRESS1_PROVINCE",
-                    "ADDRESS1_STATE",
                     "ADDRESS1_COUNTRY",
-                    "ADDRESS1_CITY"
+                    "CONCAT_ADDRESS",
+                    "ADDRESS1_CITY",
+                    "ADDRESS1_STATE"
                 ],
                 "hit_type_agent_job": [],
                 "hit_type_agent_name": [],
@@ -1762,11 +1758,7 @@
                     "Poland",
                     "PL"
                 ],
-                "wl_all_sanctioned_countries_aggregated": [
-                    "Poland",
-                    "Joe Dong",
-                    "PL"
-                ]
+                "wl_all_sanctioned_countries_aggregated": []
             }
         }
     }

@@ -96,7 +96,8 @@
     },
     {
         "feature": "features/geoSanctioned",
-        "alertedPartyLocation": "States United"
+        "alertedPartyLocation": "States United",
+        "watchlistLocation": "United States of America US|FL;US Ding Joe"
     },
     {
         "feature": "features/geoResidencies",

@@ -97,8 +97,7 @@
     },
     {
         "feature": "features/geoSanctioned",
-        "alertedPartyLocation": "UNITED STATES OF AMERICA United States",
-        "watchlistLocation": "PL Poland Joe Dong"
+        "alertedPartyLocation": "UNITED STATES OF AMERICA United States"
     },
     {
         "feature": "features/geoResidencies",

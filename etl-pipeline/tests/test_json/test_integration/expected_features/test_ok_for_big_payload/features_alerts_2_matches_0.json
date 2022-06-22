@@ -204,8 +204,7 @@
     },
     {
         "feature": "features/geoSanctioned",
-        "alertedPartyLocation": "AHMEDOUA",
-        "watchlistLocation": "DUMONT, LIONEL FR FRANCE"
+        "alertedPartyLocation": "AHMEDOUA"
     },
     {
         "feature": "features/geoResidencies",

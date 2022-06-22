@@ -124,8 +124,7 @@
     },
     {
         "feature": "features/geoSanctioned",
-        "alertedPartyLocation": "AHMEDOUA",
-        "watchlistLocation": "GUNAWAN, GUN GUN RUSMAN"
+        "alertedPartyLocation": "AHMEDOUA"
     },
     {
         "feature": "features/geoResidencies",

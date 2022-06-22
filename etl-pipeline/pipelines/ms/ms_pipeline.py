@@ -65,7 +65,7 @@ class MSPipeline(ETLPipeline):
 
     def sanitize_for_geo_sanction_agent(self, match):
         match = match["watchlistParty"]["matchRecords"]
-        if match["WL_ENTITYTYPE"] == "01":
+        if match["WL_ENTITYTYPE"] != "01":
             match["wl_all_sanctioned_countries_aggregated"] = []
 
     def parse_agent_config(self, payload):

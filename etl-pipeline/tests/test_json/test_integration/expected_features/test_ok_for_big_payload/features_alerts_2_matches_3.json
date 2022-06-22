@@ -108,8 +108,7 @@
     },
     {
         "feature": "features/geoSanctioned",
-        "alertedPartyLocation": "AHMEDOUA",
-        "watchlistLocation": "BA'ASYIR, ABU BAKAR ID INDONESIA"
+        "alertedPartyLocation": "AHMEDOUA"
     },
     {
         "feature": "features/geoResidencies",

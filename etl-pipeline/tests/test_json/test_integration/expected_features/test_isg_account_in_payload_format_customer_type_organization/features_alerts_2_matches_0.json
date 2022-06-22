@@ -94,8 +94,7 @@
     },
     {
         "feature": "features/geoSanctioned",
-        "alertedPartyLocation": "AMERICA OF STATES States UNITED United",
-        "watchlistLocation": "Joe Ding United States of America US|FL;US"
+        "alertedPartyLocation": "AMERICA OF STATES States UNITED United"
     },
     {
         "feature": "features/geoResidencies",
