@@ -70,10 +70,40 @@ class UserRestControllerInternalUserRegistrationTest extends UserRestControllerT
         .statusCode(BAD_REQUEST.value());
   }
 
+  @ParameterizedTest
+  @MethodSource("getCharsBreakingFieldRegex")
+  void its400WhenUserNameDoesNotMatchFieldRegex(String invalidPart) {
+    CreateUserDto createUserDto = CreateUserDto.builder()
+        .displayName("display_name")
+        .userName("user_name" + invalidPart)
+        .password("password")
+        .build();
+    post(USERS_URL, createUserDto)
+        .statusCode(BAD_REQUEST.value());
+  }
+
+  @ParameterizedTest
+  @MethodSource("getCharsBreakingFieldRegex")
+  void its400WhenDisplayNameDoesNotMatchFieldRegex(String invalidPart) {
+    CreateUserDto createUserDto = CreateUserDto.builder()
+        .displayName("display_name"  + invalidPart )
+        .userName("user_namee")
+        .password("password")
+        .build();
+    post(USERS_URL, createUserDto)
+        .statusCode(BAD_REQUEST.value());
+  }
+
   private static Stream<CreateUserDto> getDtosWithInvalidFieldsLength() {
     return Stream.of(
         INVALID_REQUEST_WITH_TOO_LONG_USER_NAME,
         INVALID_REQUEST_WITH_TOO_SHORT_USER_NAME
+    );
+  }
+
+  private static Stream<String> getCharsBreakingFieldRegex() {
+    return Stream.of(
+      "#","$","%",";","{",")","[",":",">"
     );
   }
 }
