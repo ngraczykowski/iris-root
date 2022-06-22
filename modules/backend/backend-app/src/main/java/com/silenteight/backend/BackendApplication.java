@@ -4,7 +4,6 @@
 
 package com.silenteight.backend;
 
-import com.silenteight.backend.mailer.MailerModule;
 import com.silenteight.commons.app.spring.ApplicationBuilderConfigurer;
 import com.silenteight.commons.app.spring.ConfigurableApplicationBuilder;
 import com.silenteight.commons.app.spring.DefaultSpringApplicationContextCallback;
@@ -57,7 +56,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     AuthorizationModule.class,
     S3FileStorageMinioModule.class,
     GrpcCommonModule.class,
-    MailerModule.class,
     WebModule.class,
 })
 @EnableIntegration

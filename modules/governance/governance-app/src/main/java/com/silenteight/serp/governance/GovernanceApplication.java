@@ -15,7 +15,6 @@ import com.silenteight.serp.governance.common.signature.SignatureModule;
 import com.silenteight.serp.governance.common.web.WebModule;
 import com.silenteight.serp.governance.file.FileModule;
 import com.silenteight.serp.governance.ingest.IngestModule;
-import com.silenteight.serp.governance.mailer.MailerModule;
 import com.silenteight.serp.governance.model.ModelModule;
 import com.silenteight.serp.governance.policy.PolicyModule;
 import com.silenteight.serp.governance.qa.QaModule;
@@ -53,7 +52,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     AuthorizationModule.class,
     S3FileStorageMinioModule.class,
     GrpcCommonModule.class,
-    MailerModule.class,
     WebModule.class,
 })
 @EnableIntegration
