@@ -59,6 +59,7 @@ plugin-jib = "3.2.1"
 plugin-nebula-resolution = "9.0.0"
 plugin-sonarqube = "3.3"
 plugin-freefair-aspectj = "6.4.3.1"
+plugin-git-properties = "2.4.1"
 plugin-google-protobuf = "0.8.18"
 
 [libraries]
@@ -444,6 +445,7 @@ plugin-sonarqube = { module = "org.sonarqube:org.sonarqube.gradle.plugin", versi
 plugin-spring-boot = { module = "org.springframework.boot:org.springframework.boot.gradle.plugin", version.ref = "platform-spring-boot" }
 plugin-freefair-aspectj = { module = "io.freefair.aspectj:io.freefair.aspectj.gradle.plugin", version.ref = "plugin-freefair-aspectj" }
 plugin-freefair-aspectj-weaving = { module = "io.freefair.aspectj.post-compile-weaving:io.freefair.aspectj.post-compile-weaving.gradle.plugin", version.ref = "plugin-freefair-aspectj" }
+plugin-git-properties = { module = "com.gorylenko.gradle-git-properties:com.gorylenko.gradle-git-properties.gradle.plugin", version.ref = "plugin-git-properties" }
 plugin-google-protobuf = { module = "com.google.protobuf:protobuf-gradle-plugin", version.ref = "plugin-google-protobuf" }
 
 [bundles]

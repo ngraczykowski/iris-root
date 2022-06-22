@@ -11,4 +11,5 @@ dependencies {
   implementation('org.springframework.boot:org.springframework.boot.gradle.plugin')
   implementation('com.google.cloud.tools.jib:com.google.cloud.tools.jib.gradle.plugin')
   implementation('org.cyclonedx.bom:org.cyclonedx.bom.gradle.plugin')
+  implementation(libs.plugin.git.properties)
 }

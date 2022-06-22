@@ -13,6 +13,7 @@ dependencies {
     api(libs.plugin.spring.boot)
     api(libs.plugin.freefair.aspectj)
     api(libs.plugin.freefair.aspectj.weaving)
+    api(libs.plugin.git.properties)
     api(libs.plugin.google.protobuf)
   }
 }
