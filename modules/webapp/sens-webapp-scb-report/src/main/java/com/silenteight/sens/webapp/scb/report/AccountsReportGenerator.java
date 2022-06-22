@@ -1,14 +1,15 @@
 package com.silenteight.sens.webapp.scb.report;
 
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.common.support.csv.CsvBuilder;
 import com.silenteight.sens.webapp.common.support.csv.LinesSupplier;
+import com.silenteight.sens.webapp.report.AbstractConfigurableReport;
 import com.silenteight.sens.webapp.report.Report;
 import com.silenteight.sens.webapp.report.ReportGenerator;
+import com.silenteight.sens.webapp.report.ReportProperties;
 import com.silenteight.sep.base.common.time.DateFormatter;
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.sep.usermanagement.api.user.UserQuery;
@@ -25,8 +26,7 @@ import static java.util.stream.Stream.concat;
 import static java.util.stream.Stream.of;
 
 @Slf4j
-@RequiredArgsConstructor
-class AccountsReportGenerator implements ReportGenerator {
+class AccountsReportGenerator extends AbstractConfigurableReport implements ReportGenerator {
 
   private static final String REPORT_NAME = "accounts-report";
   private static final String FILE_NAME = REPORT_NAME + ".csv";
@@ -43,6 +43,19 @@ class AccountsReportGenerator implements ReportGenerator {
   @NonNull
   private final String rolesScope;
 
+  protected AccountsReportGenerator(
+      @NonNull UserQuery userQuery,
+      @NonNull TimeSource timeSource,
+      @NonNull DateFormatter timeFormatter,
+      @NonNull String rolesScope,
+      @NonNull ReportProperties reportProperties) {
+    super(reportProperties);
+    this.userQuery = userQuery;
+    this.timeSource = timeSource;
+    this.timeFormatter = timeFormatter;
+    this.rolesScope = rolesScope;
+  }
+
   @Override
   public String getName() {
     return REPORT_NAME;
@@ -58,7 +71,7 @@ class AccountsReportGenerator implements ReportGenerator {
   private LinesSupplier getReportData() {
     List<ReportUserDto> users = getUsersDto();
     String date = timeFormatter.format(timeSource.now());
-    String reportHeader = new ReportHeaderTemplate().getHeader(date, users.size());
+    String reportHeader = ReportHeaderTemplate.getHeader(date, users.size());
     return () -> concat(of(reportHeader), buildReportData(users));
   }
 
@@ -102,7 +115,7 @@ class AccountsReportGenerator implements ReportGenerator {
             + "Run Date,%s,,,,,,,,,%n"
             + "Number of data records,%d,,,,,,,,,%n";
 
-    String getHeader(String date, int count) {
+    static String getHeader(String date, int count) {
       return String.format(HEADER, date, count);
     }
   }

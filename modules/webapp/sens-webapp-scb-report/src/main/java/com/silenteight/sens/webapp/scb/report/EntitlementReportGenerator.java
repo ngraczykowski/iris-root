@@ -1,7 +1,6 @@
 package com.silenteight.sens.webapp.scb.report;
 
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.report.*;
@@ -17,8 +16,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
-@RequiredArgsConstructor
-class EntitlementReportGenerator implements ReportGenerator {
+class EntitlementReportGenerator extends AbstractConfigurableReport implements ReportGenerator {
 
   private static final String REPORT_NAME = "entitlement-report";
   private static final String FILE_NAME = REPORT_NAME + ".csv";
@@ -29,6 +27,15 @@ class EntitlementReportGenerator implements ReportGenerator {
   @NonNull
   private final DateFormatter dateFormatter;
   private final ReportLinesReader reportLinesReader = new ReportLinesReader(FILE_NAME, ENCODING);
+
+  protected EntitlementReportGenerator(
+      @NonNull TimeSource timeProvider,
+      @NonNull DateFormatter dateFormatter,
+      @NonNull ReportProperties reportProperties) {
+    super(reportProperties);
+    this.timeProvider = timeProvider;
+    this.dateFormatter = dateFormatter;
+  }
 
   @Override
   public String getName() {

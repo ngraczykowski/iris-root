@@ -6,3 +6,17 @@ report-scb:
     cron: ${sens.report-scb.audit-history.cron-expression:0 0 0/1 ? * *}
   user-auth-activity:
     cron: ${sens.report-scb.user-auth-activity.cron-expression:0 0 0/1 ? * *}
+
+sens.webapp.reports:
+  accounts:
+    enabled: true
+    name: accounts-report
+    type: ACCOUNTS
+    label: "Accounts report"
+    filter-type: NONE
+  entitlement:
+    enabled: true
+    name: entitlement-report
+    type: ENTITLEMENT
+    label: "Entitlement report"
+    filter-type: NONE

@@ -17,24 +17,29 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Configuration
 @EnableScheduling
-@EnableConfigurationProperties(ScbReportsProperties.class)
+@EnableConfigurationProperties({
+    ScbReportsProperties.class, AccountsReportProperties.class, EntitlementReportProperties.class })
 class ScbReportsConfiguration {
 
   @Bean
   AccountsReportGenerator accountsReportGenerator(
-      UserQuery userQuery, RolesProperties rolesProperties) {
+      UserQuery userQuery,
+      RolesProperties rolesProperties,
+      AccountsReportProperties reportProperties) {
 
     return new AccountsReportGenerator(
         userQuery,
         DefaultTimeSource.INSTANCE,
         new ScbReportDateFormatter(),
-        rolesProperties.getRolesScope());
+        rolesProperties.getRolesScope(),
+        reportProperties);
   }
 
   @Bean
-  EntitlementReportGenerator entitlementReportGenerator() {
+  EntitlementReportGenerator entitlementReportGenerator(
+      EntitlementReportProperties reportProperties) {
     return new EntitlementReportGenerator(
-        DefaultTimeSource.INSTANCE, new ScbReportDateFormatter());
+        DefaultTimeSource.INSTANCE, new ScbReportDateFormatter(), reportProperties);
   }
 
   @Bean

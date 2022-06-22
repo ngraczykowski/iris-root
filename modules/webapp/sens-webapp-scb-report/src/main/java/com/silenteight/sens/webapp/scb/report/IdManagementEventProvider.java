@@ -46,11 +46,11 @@ class IdManagementEventProvider {
     return auditingFinder
         .find(from, to, ACTIONS.keySet())
         .stream()
-        .map(this::idManagementEventDtoFrom)
+        .map(IdManagementEventProvider::idManagementEventDtoFrom)
         .collect(toList());
   }
 
-  private IdManagementEventDto idManagementEventDtoFrom(AuditDataDto auditData) {
+  private static IdManagementEventDto idManagementEventDtoFrom(AuditDataDto auditData) {
     Collection<String> roles = getRoles(auditData);
     return IdManagementEventDto.builder()
         .username(auditData.getEntityId())
@@ -61,7 +61,7 @@ class IdManagementEventProvider {
         .build();
   }
 
-  private Collection<String> getRoles(AuditDataDto auditData) {
+  private static Collection<String> getRoles(AuditDataDto auditData) {
     return ROLES_EXTRACTING_FUNCTIONS
         .get(auditData.getType())
         .apply(auditData);
