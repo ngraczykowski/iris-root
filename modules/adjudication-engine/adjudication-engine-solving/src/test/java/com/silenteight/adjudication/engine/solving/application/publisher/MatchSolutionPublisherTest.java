@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.time.Duration;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -40,7 +41,9 @@ class MatchSolutionPublisherTest {
     }
 
     verify(matchSolutionQueue, times(numbers)).add(any());
-    await().until(() -> matchSolutionStore.storedObjects() == numbers);
+    await()
+        .atMost(Duration.ofSeconds(5))
+        .until(() -> matchSolutionStore.storedObjects() == numbers);
 
     verify(matchSolutionQueue, atLeast(numbers)).poll();
     assertThat(matchSolutionQueue).isEmpty();

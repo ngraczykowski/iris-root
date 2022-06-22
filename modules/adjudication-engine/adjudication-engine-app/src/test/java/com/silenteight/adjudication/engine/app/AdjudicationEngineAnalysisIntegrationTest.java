@@ -170,9 +170,9 @@ class AdjudicationEngineAnalysisIntegrationTest {
   @Test
   void checkAlertsCountInAnalysisWithSingleAlert() {
     var analysis =
-        createAnalysisWithDataset(datasetService, analysisService, alertService).getAnalysis();
-    assertThat(analysis.getAlertCount()).isEqualTo(2);
-    assertThat(analysis.getPendingAlerts()).isEqualTo(2);
+        createAnalysisWithDataset(datasetService, analysisService, alertService);
+    assertThat(analysis.getAnalysis().getAlertCount()).isEqualTo(2);
+    assertThat(analysis.getDataset().getAlertCount()).isEqualTo(2);
   }
 
   @Test
