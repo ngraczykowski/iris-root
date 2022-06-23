@@ -15,7 +15,7 @@ worldcheck-api = "0.4.0"
 #-----------------------------------
 # Platforms
 #-----------------------------------
-platform-awssdk = "2.17.216"
+platform-awssdk = "2.17.217"
 #TODO(dsniezek): should be updated
 platform-awssdk1 = "1.12.245"
 platform-junit5 = "5.8.2"
