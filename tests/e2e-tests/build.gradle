@@ -28,6 +28,7 @@ dependencies {
   testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '5.0.1'
   testImplementation group: 'io.cucumber', name: 'cucumber-java8', version: '7.3.4'
   testImplementation group: 'junit', name: 'junit', version: '4.13.2'
+  testImplementation group: 'io.github.bonigarcia', name: 'webdrivermanager', version: '5.2.0'
   testImplementation group: 'org.awaitility', name: 'awaitility', version: '4.2.0'
   testImplementation 'org.junit.vintage:junit-vintage-engine:5.8.2'
   testImplementation 'org.hamcrest:hamcrest-all:1.3'

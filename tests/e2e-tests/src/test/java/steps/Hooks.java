@@ -1,5 +1,7 @@
 package steps;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
+
 import lombok.SneakyThrows;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,6 +42,7 @@ public class Hooks implements En {
     Before(
         0,
         (Scenario scenario) -> {
+          WebDriverManager.chromedriver().setup();
           scenarioContext.clearScenarioContext();
           scenarioContext.setUser(
               "admin",
