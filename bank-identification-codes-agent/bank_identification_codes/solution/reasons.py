@@ -1,7 +1,7 @@
 import dataclasses
 from typing import List
 
-from data_models.result import Reason
+from bank_identification_codes.solution.result import Reason
 
 
 class NoSearchCodeInWatchlistReason(Reason):

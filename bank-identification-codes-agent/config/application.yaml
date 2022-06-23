@@ -22,5 +22,6 @@ agent:
 
       response:
           exchange: 'agent.response'
+          routing-key: ""
   grpc:
     port: 9090

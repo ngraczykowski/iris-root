@@ -27,7 +27,7 @@ def filter_none_values(data: List[str]) -> List[str]:
 
 def get_text_pattern(text: str) -> str:
     text_pattern = "[ ]{0,1}".join(text)
-    pattern = fr"""
+    pattern = rf"""
     ([\w]{{0,}}                 # Matches 0 to inf characters before actual pattern (no spaces)
     ({text_pattern})   # 2nd capture group for matching actual pattern
     [\w]{{0,}})                 # Matches 0 to inf characters after actual pattern

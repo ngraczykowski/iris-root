@@ -1,6 +1,9 @@
 import pytest
 
-from bank_identification_codes_agent.text_utils import get_first_match, remove_no_word_characters
+from bank_identification_codes.codes_check.text_utils import (
+    get_first_match,
+    remove_no_word_characters,
+)
 
 
 @pytest.mark.parametrize(

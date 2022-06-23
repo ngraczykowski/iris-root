@@ -3,9 +3,9 @@ import logging
 
 from agent_base.agent import Agent
 
-from bank_identification_codes_agent.bank_identification_codes import BankIdentificationCodes
-from bank_identification_codes_agent.text_utils import filter_none_values
-from data_models.result import Result, Solution
+from bank_identification_codes.codes_check.bank_identification_codes import BankIdentificationCodes
+from bank_identification_codes.codes_check.text_utils import filter_none_values
+from bank_identification_codes.solution.result import Result, Solution
 
 logger = logging.getLogger(__name__)
 c_handler = logging.StreamHandler()

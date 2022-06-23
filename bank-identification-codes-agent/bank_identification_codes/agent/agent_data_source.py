@@ -8,14 +8,16 @@ from silenteight.datasource.api.bankidentificationcodes.v1.bank_identification_c
     BankIdentificationCodesInputServiceStub,
 )
 
-from bank_identification_codes_agent.agent import BankIdentificationCodesAgentInput
+from bank_identification_codes.agent.agent import BankIdentificationCodesAgentInput
 
 
 class BankIdentificationCodesAgentDataSource(AgentDataSource):
     async def start(self):
         await super().start()
+
+    def prepare_stub(self):
         stub = BankIdentificationCodesInputServiceStub(self.channel)
-        self.command = stub.BatchGetMatchBankIdentificationCodesInputs
+        self.channel_stream_method = stub.BatchGetMatchBankIdentificationCodesInputs
 
     def prepare_request(
         self, request: AgentExchangeRequest

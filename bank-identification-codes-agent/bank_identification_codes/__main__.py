@@ -1,17 +1,18 @@
 import argparse
+import logging
 import pathlib
 
 from agent_base.agent import AgentRunner
 from agent_base.grpc_service import GrpcService
 from agent_base.utils import Config
-from tstoolkit.utils import LogLevel, setup_logging
+from agent_base.utils.logger import get_logger
 
-from bank_identification_codes_agent.agent import BankIdentificationCodesAgent
-from bank_identification_codes_agent.agent_data_source import (
+from bank_identification_codes import BankIdentificationCodesAgent
+from bank_identification_codes.agent.agent_data_source import (
     BankIdentificationCodesAgentDataSource,
 )
-from bank_identification_codes_agent.agent_exchange import BankIdentificationCodesAgentExchange
-from bank_identification_codes_agent.grpc_service import BankIdentificationCodesAgentGrpcServicer
+from bank_identification_codes.agent.agent_exchange import BankIdentificationCodesAgentExchange
+from bank_identification_codes.agent.grpc_service import BankIdentificationCodesAgentGrpcServicer
 
 
 def run(configuration_dirs, start_agent_exchange, start_grpc_service):
@@ -27,7 +28,7 @@ def run(configuration_dirs, start_agent_exchange, start_grpc_service):
         )
     if start_grpc_service:
         services.append(
-            GrpcService(config, servicers=(BankIdentificationCodesAgentGrpcServicer(),))
+            GrpcService(config, agent_servicer=BankIdentificationCodesAgentGrpcServicer())
         )
 
     AgentRunner(config).run(
@@ -61,9 +62,21 @@ def main():
         action="store_true",
         help="Increase verbosity for debug purpose",
     )
+    parser.add_argument(
+        "--log-file",
+        type=str,
+        default="bank_id_codes.log",
+        help="Path to the file to save logs in",
+    )
     args = parser.parse_args()
 
-    setup_logging(log_level=LogLevel.debug if args.verbose else LogLevel.info)
+    logger = get_logger(
+        "main",
+        log_level=logging.DEBUG if args.verbose else logging.INFO,
+        log_file=args.log_file,
+    )
+    logger.info(f"Start logging to stdout and to {args.log_file} file")
+
     run(
         configuration_dirs=(args.configuration_dir,),
         start_agent_exchange=args.agent_exchange,

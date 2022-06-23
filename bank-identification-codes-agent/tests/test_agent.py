@@ -1,7 +1,7 @@
 import pytest
 
-from bank_identification_codes_agent.agent import BankIdentificationCodesAgent
-from data_models.result import Solution
+from bank_identification_codes import BankIdentificationCodesAgent
+from bank_identification_codes.solution.result import Solution
 from tests.conftest import load_test_cases
 
 

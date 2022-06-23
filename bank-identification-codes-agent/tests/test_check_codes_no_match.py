@@ -1,11 +1,11 @@
 import pytest
 
-from bank_identification_codes_agent.bank_identification_codes import BankIdentificationCodes
-from data_models.reasons import (
+from bank_identification_codes.codes_check.bank_identification_codes import BankIdentificationCodes
+from bank_identification_codes.solution.reasons import (
     MatchingTextMatchesWlBicCodeReason,
     MatchingTextMatchesWlSearchCodeReason,
 )
-from data_models.result import Solution
+from bank_identification_codes.solution.result import Solution
 
 WL_TYPE = "Some text"  # this param is constant, not modified by any check rule
 
