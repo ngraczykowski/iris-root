@@ -11,6 +11,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 
 import javax.validation.Valid;
 
@@ -19,8 +22,21 @@ import javax.validation.Valid;
 @EnableConfigurationProperties(CallbackRequestProperties.class)
 class CallbackRequestConfiguration {
 
-  @Valid
-  private final CallbackRequestProperties properties;
+  @Valid private final CallbackRequestProperties properties;
+
+
+  @Bean
+  @ConditionalOnProperty(prefix = "pb.cmapi.callback", name = "enabled", havingValue = "true")
+  public OAuth2AuthorizedClientManager authorizedClientManager(
+      ClientRegistrationRepository clientRegistrationRepository,
+      OAuth2AuthorizedClientRepository authorizedClientRepository) {
+
+    DefaultOAuth2AuthorizedClientManager authorizedClientManager =
+        new DefaultOAuth2AuthorizedClientManager(
+            clientRegistrationRepository, authorizedClientRepository);
+
+    return authorizedClientManager;
+  }
 
   @Bean
   @ConditionalOnProperty(prefix = "pb.cmapi.callback", name = "enabled", havingValue = "true")
@@ -28,10 +44,12 @@ class CallbackRequestConfiguration {
       OAuth2AuthorizedClientManager manager, RestTemplateBuilder restTemplateBuilder) {
 
     var interceptor = getOAuth2Interceptor(manager);
-    var restTemplate = restTemplateBuilder.additionalInterceptors(interceptor)
-        .setConnectTimeout(properties.getConnectionTimeout())
-        .setReadTimeout(properties.getReadTimeout())
-        .build();
+    var restTemplate =
+        restTemplateBuilder
+            .additionalInterceptors(interceptor)
+            .setConnectTimeout(properties.getConnectionTimeout())
+            .setReadTimeout(properties.getReadTimeout())
+            .build();
 
     return new HttpCallbackRequestFactory(properties.getEndpoint(), restTemplate);
   }
@@ -45,13 +63,18 @@ class CallbackRequestConfiguration {
     return OAuth2AuthorizedClientInterceptor.builder()
         .manager(manager)
         .clientRegistrationId(properties.getClientRegistrationId())
-        .principalSupplier(() -> new AnonymousAuthenticationToken(
-            key, principal, AuthorityUtils.createAuthorityList("ANONYMOUS")))
+        .principalSupplier(
+            () ->
+                new AnonymousAuthenticationToken(
+                    key, principal, AuthorityUtils.createAuthorityList("ANONYMOUS")))
         .build();
   }
 
   @Bean
-  @ConditionalOnProperty(prefix = "pb.cmapi.callback", name = "enabled", havingValue = "false",
+  @ConditionalOnProperty(
+      prefix = "pb.cmapi.callback",
+      name = "enabled",
+      havingValue = "false",
       matchIfMissing = true)
   CallbackRequestFactory noCallbackRequestFactory() {
     return new NoopCallbackRequestFactory();
