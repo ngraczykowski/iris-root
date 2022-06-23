@@ -14,4 +14,4 @@ RUN apt-get update \
     && pip install . --index-url="$PYPI_URL"
 
 EXPOSE 9090
-ENTRYPOINT ["python", "-m", "company_name.main", "-c", "/app/config", "--grpc"]
+ENTRYPOINT ["python", "-m", "bank_identification_codes", "-c", "/app/config", "--grpc"]
