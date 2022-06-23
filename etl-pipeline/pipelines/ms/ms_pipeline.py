@@ -122,7 +122,7 @@ class MSPipeline(ETLPipeline):
         input_records = payload[cn.ALERTED_PARTY_FIELD][cn.INPUT_RECORD_HIST][cn.INPUT_RECORDS]
         fields = input_records[cn.INPUT_FIELD]
         self.handle_hit_type_agent(match, agent_config, fields)
-        self.select_ap_for_ap_id_tp_marked_agent(match)
+        self.select_ap_for_ap_id_tp_marked_agent(payload)
         self.set_up_entity_type_match(payload, match)
 
         self.sql_to_merge_specific_columns_to_standardized(
@@ -265,8 +265,9 @@ class MSPipeline(ETLPipeline):
         existing_fields = [field for field in requested_json_keys if fields.get(field, None)]
         return existing_fields
 
-    def select_ap_for_ap_id_tp_marked_agent(self, match):
-        dataset_name = match[cn.DATASET_TYPE]
+    def select_ap_for_ap_id_tp_marked_agent(self, payload):
+        dataset_name = payload[cn.DATASET_TYPE]
+        match = payload["watchlistParty"]["matchRecords"]
         if dataset_name == "ISG_PARTY":
             match["ap_id_tp_marked_agent_input"] = match["ap_id_tp_marked_agent_input"][0]
         elif dataset_name in ["WM_ADDRESS", "WM_PARTY"]:
@@ -277,17 +278,17 @@ class MSPipeline(ETLPipeline):
             logger.warning("No input for ap_id_tp_marked_agent. Setting up default")
             match["ap_id_tp_marked_agent_input"] = ""
 
-    def select_discriminator(self, match):
-        dataset_name = match[cn.DATASET_TYPE]
+    def select_discriminator(self, payload):
+        dataset_name = payload[cn.DATASET_TYPE]
         if dataset_name == "ISG_PARTY":
-            match["ap_id_tp_marked_agent_input"] = match["ap_id_tp_marked_agent_input"][0]
+            payload["ap_id_tp_marked_agent_input"] = payload["ap_id_tp_marked_agent_input"][0]
         elif dataset_name in ["WM_ADDRESS", "WM_PARTY"]:
-            match["ap_id_tp_marked_agent_input"] = match["ap_id_tp_marked_agent_input"][1]
+            payload["ap_id_tp_marked_agent_input"] = payload["ap_id_tp_marked_agent_input"][1]
         elif dataset_name == "ISG_ACCOUNT":
-            match["ap_id_tp_marked_agent_input"] = match["ap_id_tp_marked_agent_input"][2]
+            payload["ap_id_tp_marked_agent_input"] = payload["ap_id_tp_marked_agent_input"][2]
         else:
             logger.warning("No input for ap_id_tp_marked_agent. Setting up default")
-            match["ap_id_tp_marked_agent_input"] = ""
+            payload["ap_id_tp_marked_agent_input"] = ""
 
     def set_up_entity_type_match(self, payload, match):
         if payload["alertedParty"]["AP_PARTY_TYPE"] == match["WLP_TYPE"]:

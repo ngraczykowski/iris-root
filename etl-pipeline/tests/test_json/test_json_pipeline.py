@@ -211,55 +211,75 @@ def pipeline_resource(request):
         (
             {
                 cn.DATASET_TYPE: "ISG_PARTY",
-                "ap_id_tp_marked_agent_input": [
-                    "DUMMY_ISG_PARTY_ID",
-                    "DUMMY_ADDRESS_PARTY_ID",
-                    "DUMMY_ISG_ACCOUNT_ID",
-                ],
+                "watchlistParty": {
+                    "matchRecords": {
+                        "ap_id_tp_marked_agent_input": [
+                            "DUMMY_ISG_PARTY_ID",
+                            "DUMMY_ADDRESS_PARTY_ID",
+                            "DUMMY_ISG_ACCOUNT_ID",
+                        ],
+                    }
+                },
             },
             "DUMMY_ISG_PARTY_ID",
         ),
         (
             {
                 cn.DATASET_TYPE: "WM_ADDRESS",
-                "ap_id_tp_marked_agent_input": [
-                    "DUMMY_ISG_PARTY_ID",
-                    "DUMMY_ADDRESS_PARTY_ID",
-                    "DUMMY_ISG_ACCOUNT_ID",
-                ],
+                "watchlistParty": {
+                    "matchRecords": {
+                        "ap_id_tp_marked_agent_input": [
+                            "DUMMY_ISG_PARTY_ID",
+                            "DUMMY_ADDRESS_PARTY_ID",
+                            "DUMMY_ISG_ACCOUNT_ID",
+                        ],
+                    }
+                },
             },
             "DUMMY_ADDRESS_PARTY_ID",
         ),
         (
             {
                 cn.DATASET_TYPE: "WM_PARTY",
-                "ap_id_tp_marked_agent_input": [
-                    "DUMMY_ISG_PARTY_ID",
-                    "DUMMY_ADDRESS_PARTY_ID",
-                    "DUMMY_ISG_ACCOUNT_ID",
-                ],
+                "watchlistParty": {
+                    "matchRecords": {
+                        "ap_id_tp_marked_agent_input": [
+                            "DUMMY_ISG_PARTY_ID",
+                            "DUMMY_ADDRESS_PARTY_ID",
+                            "DUMMY_ISG_ACCOUNT_ID",
+                        ],
+                    }
+                },
             },
             "DUMMY_ADDRESS_PARTY_ID",
         ),
         (
             {
                 cn.DATASET_TYPE: "ISG_ACCOUNT",
-                "ap_id_tp_marked_agent_input": [
-                    "DUMMY_ISG_PARTY_ID",
-                    "DUMMY_ADDRESS_PARTY_ID",
-                    "DUMMY_ISG_ACCOUNT_ID",
-                ],
+                "watchlistParty": {
+                    "matchRecords": {
+                        "ap_id_tp_marked_agent_input": [
+                            "DUMMY_ISG_PARTY_ID",
+                            "DUMMY_ADDRESS_PARTY_ID",
+                            "DUMMY_ISG_ACCOUNT_ID",
+                        ],
+                    }
+                },
             },
             "DUMMY_ISG_ACCOUNT_ID",
         ),
         (
             {
                 cn.DATASET_TYPE: "UNKNOWN",
-                "ap_id_tp_marked_agent_input": [
-                    "DUMMY_ISG_PARTY_ID",
-                    "DUMMY_ADDRESS_PARTY_ID",
-                    "DUMMY_ISG_ACCOUNT_ID",
-                ],
+                "watchlistParty": {
+                    "matchRecords": {
+                        "ap_id_tp_marked_agent_input": [
+                            "DUMMY_ISG_PARTY_ID",
+                            "DUMMY_ADDRESS_PARTY_ID",
+                            "DUMMY_ISG_ACCOUNT_ID",
+                        ],
+                    }
+                },
             },
             "",
         ),
@@ -267,7 +287,10 @@ def pipeline_resource(request):
 )
 def test_select_ap_for_ap_id_tp_marked_agent(match, expected_result, pipeline_resource):
     pipeline_resource.select_ap_for_ap_id_tp_marked_agent(match)
-    assert match["ap_id_tp_marked_agent_input"] == expected_result
+    assert (
+        match[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]["ap_id_tp_marked_agent_input"]
+        == expected_result
+    )
 
 
 @pytest.mark.parametrize(

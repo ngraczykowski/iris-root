@@ -176,12 +176,12 @@ class AgentInputCreator:
         logger.debug(f"Features produced for {match_name}: {len(feature_inputs)}")
         return feature_inputs
 
-    def produce_categories_inputs(self, payload, match_payload, alert, match_name):
+    def produce_categories_inputs(self, payload, alert, match_name):
         category_matches = []
         for producer in self.category_producers:
             try:
                 category_value = producer.produce_feature_input(
-                    payload, match_payload, alert, match_name
+                    payload, alert, match_name, auxiliary_payload=payload
                 )
                 if category_value is None:
                     continue
@@ -215,11 +215,8 @@ class AgentInputCreator:
         all_category_values_requests = []
 
         match_id = payload[cn.MATCH_IDS]
-        match = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
-
         category_values_requests = self.produce_categories_inputs(
             payload,
-            match_payload=match,
             alert=alert.alert_name,
             match_name=f"{match_id.match_name}",
         )
