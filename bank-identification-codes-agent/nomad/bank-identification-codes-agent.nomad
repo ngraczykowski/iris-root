@@ -18,10 +18,22 @@ variable "bank_identification_codes_agent_config" {
   description = "Configuration files"
 }
 
+variable "application_config_file" {
+  type = string
+  description = "Path to YAML configuration file to be used as application.yaml (nomad dir relative)"
+  default = "configs/dev/application.yaml"
+}
+
 variable "namespace" {
   type = string
   default = "dev"
 }
+
+variable "run_args" {
+  type = list(string)
+  default = []
+}
+
 
 job "bank-identification-codes-agent" {
   type = "service"
@@ -139,7 +151,7 @@ job "bank-identification-codes-agent" {
       }
 
       template {
-        data = file("application.nomad.yaml")
+        data = file("${var.application_config_file}")
         destination = "local/config/application.yaml"
         change_mode = "restart"
       }
@@ -147,7 +159,7 @@ job "bank-identification-codes-agent" {
       config {
         image = "python:3.7"
         command = "python"
-        args = ["/app/bank_identification_codes-${var.bank_identification_codes_agent_version}.pyz", "-c", "/app/config", "--grpc", "-v"]
+        args = concat(["/app/bank_identification_codes-${var.bank_identification_codes_agent_version}.pyz"], var.run_args)
         network_mode = "host"
         volumes = ["local:/app"]
       }
