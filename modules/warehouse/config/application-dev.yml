@@ -30,7 +30,7 @@ warehouse:
     daily:
       scheduled-cron: "*/60 * * * * *"
       recalculation-period: 40
-      recommendation-enabled: true
+      recommendation-enabled: false
   alert-level-security:
     enabled: true
   persistence:
