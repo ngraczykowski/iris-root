@@ -45,7 +45,6 @@ shedlock = "4.27.0"
 spotbugs = "4.7.0"
 springdoc = "1.6.9"
 mapstruct = "1.5.2.Final"
-groovy-all = "3.0.10"
 
 #-----------------------------------
 # Testing
