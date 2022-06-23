@@ -328,10 +328,6 @@ def test_collect_party_values_from_parties(pipeline_resource):
         "AP_ACCOUNT_NAMES": [],
         "AP_ACCOUNT_BRANCH_ACCOUNT_NUMBERS": [],
         "AP_ACCOUNT_BENEFICIARY_NAMES": [],
-        "AP_PARTY1_COUNTRY_DOMICILE1": None,
-        "AP_PRTY_PRIM_CTZNSH_CNTRY": None,
-        "AP_PRTY_RSDNC_CNTRY_CD": None,
-        "AP_PARTY1_COUNTRY_PEP": None,
         "AP_CONCAT_NAMES": None,
     }
 

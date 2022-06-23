@@ -65,8 +65,8 @@ nationality_agent:
   - alertedParty.xml_fields.COUNTRY1
   - alertedParty.xml_fields.COUNTRY
   - alertedParty.xml_fields.COUNTRY1_CITIZENSHIP
-  - AP_PARTY1_COUNTRY_DOMICILE1
-  - AP_PRTY_RSDNC_CNTRY_CD
+  - alertedParty.xml_fields.COUNTRY_DOMICILE1
+  - alertedParty.xml_fields.PRTY_RSDNC_CNTRY_CD
   - AP_PARTY_BIRTH_COUNTRIES
   - AP_PARTY_CITIZENSHIP_COUNTRIES
   - AP_PARTY_RESIDENCY_COUNTRIES
@@ -114,10 +114,10 @@ sanctioned_country_agent:
   - alertedParty.xml_fields.COUNTRY
   - alertedParty.xml_fields.COUNTRY1_CITIZENSHIP
   - alertedParty.xml_fields.COUNTRY2_CITIZENSHIP
-  - AP_PARTY1_COUNTRY_DOMICILE1
+  - alertedParty.xml_fields.COUNTRY_DOMICILE1
   - alertedParty.xml_fields.PARTY1_COUNTRY_FORMATION1
   - alertedParty.xml_fields.PARTY1_COUNTRY_OF_INCORPORATION
-  - AP_PRTY_PRIM_CTZNSH_CNTRY
+  - alertedParty.xml_fields.PRTY_PRIM_CTZNSH_CNTRY
   wl:
   - watchlistParty.matchRecords.WL_COUNTRY
   - watchlistParty.matchRecords.WL_COUNTRYNAME
@@ -131,16 +131,16 @@ residency_agent:
   - alertedParty.xml_fields.PARTY1_COUNTRY1_CITIZENSHIP
   - alertedParty.xml_fields.PARTY1_COUNTRY_CITIZENSHIP1
   - alertedParty.xml_fields.COUNTRY_CODE
-  - AP_PARTY1_COUNTRY_DOMICILE1
+  - alertedParty.xml_fields.COUNTRY_DOMICILE1
   - alertedParty.xml_fields.PARTY1_COUNTRY1
   - AP_PARTY_BIRTH_COUNTRIES
   - AP_PARTY_CITIZENSHIP_COUNTRIES
   - AP_COUNTRY_OF_INCORPORATION
-  - AP_PRTY_PRIM_CTZNSH_CNTRY
+  - alertedParty.xml_fields.PRTY_PRIM_CTZNSH_CNTRY
   - alertedParty.xml_fields.COUNTRY1_CITIZENSHIP
   - alertedParty.xml_fields.COUNTRY2_CITIZENSHIP
-  - AP_PRTY_RSDNC_CNTRY_CD
-  - AP_PARTY1_COUNTRY_PEP
+  - alertedParty.xml_fields.PRTY_RSDNC_CNTRY_CD
+  - alertedParty.xml_fields.PARTY1_COUNTRY_PEP
   - alertedParty.xml_fields.PARTY1_COUNTRY_OF_INCORPORATION
   wl:
   - watchlistParty.matchRecords.WL_COUNTRY
