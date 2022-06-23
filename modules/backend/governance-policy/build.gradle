@@ -1,29 +1,33 @@
 plugins {
   id "com.silenteight.iris.build.java-library"
-  id "groovy"
+  id "java-test-fixtures"
 }
 
-description = "Governance Strategy"
+description = "Governance Policy"
 
 dependencies {
-  implementation libs.commons.collections
+  implementation libs.commons.io
   implementation libs.silenteight.sep.base.common
   implementation libs.silenteight.serp.protocol.base
 
   implementation libs.governance.solving.api
 
-  implementation libs.silenteight.serp.governance.db.changelog
-  implementation libs.silenteight.serp.governance.common.web
+  implementation project(":governance-common-web")
+  implementation project(":governance-db-changelog")
 
+  implementation libs.spring.data.jpa
   implementation libs.spring.webmvc
   implementation libs.spring.security.config
-  implementation libs.grpc.server.spring.boot.starter
 
   implementation libs.grpc.api
   implementation libs.grpc.stub
+  implementation libs.grpc.server.spring.boot.starter
 
-  testImplementation libs.silenteight.serp.governance.common.web.testing
+  implementation libs.commons.csv
+
+  testImplementation project(":governance-common-web-testing")
   testImplementation libs.rest.assured.spring.mock.mvc
   testImplementation libs.spring.security.test
-  testImplementation libs.spock.spring
+
+  testFixturesImplementation libs.aspectjrt
 }

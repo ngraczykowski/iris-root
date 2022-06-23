@@ -9,15 +9,15 @@ dependencies {
   implementation libs.silenteight.sep.base.common
   implementation libs.silenteight.filestorage.api
 
-  implementation libs.silenteight.serp.governance.db.changelog
-  implementation libs.silenteight.serp.governance.common.web
+  implementation project(":governance-db-changelog")
+  implementation project(":governance-common-web")
   implementation project(":governance-file")
 
   implementation libs.spring.data.jpa
   implementation libs.spring.webmvc
   implementation libs.spring.security.config
 
-  testImplementation libs.silenteight.serp.governance.common.web.testing
+  testImplementation project(":governance-common-web-testing")
   testImplementation libs.rest.assured.spring.mock.mvc
   testImplementation libs.spring.security.test
   testImplementation libs.silenteight.filestorage.minio

@@ -11,13 +11,5 @@ dependencyResolutionManagement {
 
 rootProject.name = 'governance'
 
-include 'governance-agent'
 include 'governance-app'
-include 'governance-change-request'
 include 'governance-dist'
-include 'governance-documentation'
-include 'governance-file'
-include 'governance-feature-vector'
-include 'governance-policy'
-include 'governance-qa'
-include 'governance-strategy'

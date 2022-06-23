@@ -6,16 +6,16 @@ plugins {
 description = "Governance Application"
 
 dependencies {
-  implementation project(":governance-agent")
-  implementation project(":governance-change-request")
+  implementation libs.silenteight.serp.governance.agent
+  implementation libs.silenteight.serp.governance.change.request
   implementation libs.silenteight.serp.governance.common.web
   implementation libs.silenteight.serp.governance.db.changelog
-  implementation project(":governance-feature-vector")
-  implementation project(":governance-file")
+  implementation libs.silenteight.serp.governance.feature.vector
+  implementation libs.silenteight.serp.governance.file
   implementation libs.silenteight.serp.governance.model
-  implementation project(":governance-policy")
-  implementation project(":governance-qa")
-  implementation project(":governance-strategy")
+  implementation libs.silenteight.serp.governance.policy
+  implementation libs.silenteight.serp.governance.qa
+  implementation libs.silenteight.serp.governance.strategy
 
   implementation libs.commons.collections
 

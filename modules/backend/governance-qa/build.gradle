@@ -21,13 +21,13 @@ dependencies {
   implementation libs.grpc.client.spring.boot.starter
   implementation libs.grpc.server.spring.boot.starter
 
-  implementation libs.silenteight.serp.governance.db.changelog
-  implementation libs.silenteight.serp.governance.common.web
+  implementation project(":governance-db-changelog")
+  implementation project(":governance-common-web")
 
   testImplementation libs.rest.assured.spring.mock.mvc
   testImplementation libs.spring.security.test
 
-  testImplementation libs.silenteight.serp.governance.common.web.testing
+  testImplementation project(":governance-common-web-testing")
 
   testFixturesImplementation libs.aspectjrt
 }

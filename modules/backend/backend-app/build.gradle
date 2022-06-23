@@ -6,27 +6,17 @@ plugins {
 description = "Backend Application"
 
 dependencies {
-  implementation libs.silenteight.serp.governance.agent
-  implementation libs.silenteight.serp.governance.change.request
+  implementation project(":governance-agent")
+  implementation project(":governance-change-request")
   implementation project(":governance-common-web")
   implementation project(":governance-db-changelog")
-  implementation libs.silenteight.serp.governance.feature.vector
-  implementation libs.silenteight.serp.governance.file
+  implementation project(":governance-feature-vector")
+  implementation project(":governance-file")
   implementation project(":governance-model")
-  implementation libs.silenteight.serp.governance.policy
-  implementation libs.silenteight.serp.governance.qa
-  implementation libs.silenteight.serp.governance.strategy
+  implementation project(":governance-policy")
+  implementation project(":governance-qa")
+  implementation project(":governance-strategy")
   implementation project(":frontend-configuration")
-
-//  implementation libs.silenteight.simulator.dataset
-//  implementation libs.silenteight.simulator.common.web
-//  implementation libs.silenteight.simulator.common.web.testing
-//  implementation libs.silenteight.simulator.db.changelog
-//  implementation libs.silenteight.simulator.documentation
-//  implementation libs.silenteight.simulator.management
-//  implementation libs.silenteight.simulator.model
-//  implementation libs.silenteight.simulator.processing
-//  implementation libs.silenteight.simulator.retention
 
   implementation libs.commons.collections
 

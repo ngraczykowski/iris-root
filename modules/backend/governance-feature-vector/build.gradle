@@ -10,8 +10,8 @@ dependencies {
   implementation libs.governance.solving.api
   implementation libs.warehouse.data.api
 
-  implementation libs.silenteight.serp.governance.db.changelog
-  implementation libs.silenteight.serp.governance.common.web
+  implementation project(":governance-db-changelog")
+  implementation project(":governance-common-web")
   implementation project(":governance-policy")
 
   implementation libs.guava
@@ -19,7 +19,7 @@ dependencies {
   implementation libs.spring.webmvc
   implementation libs.spring.security.config
 
-  testImplementation libs.silenteight.serp.governance.common.web.testing
+  testImplementation project(":governance-common-web-testing")
   testImplementation(testFixtures(project(":governance-policy")))
   testImplementation libs.rest.assured.spring.mock.mvc
 
