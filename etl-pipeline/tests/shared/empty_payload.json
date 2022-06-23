@@ -7,7 +7,7 @@
         "AP_COUNTRY_OF_INCORPORATION": [],
         "AP_GOVT_IDS": [],
         "AP_PARTIES_NAMES": [],
-        "AP_PARTY1_ADDRESS1_COUNTRY": "",
+        
         
         "AP_PARTY1_COUNTRY1_CITIZENSHIP": null,
         "AP_PARTY1_COUNTRY2_CITIZENSHIP": null,
@@ -554,7 +554,6 @@
                     null,
                     null,
                     null,
-                    "",
                     [],
                     [],
                     [],
@@ -626,7 +625,6 @@
                     [],
                     [],
                     [],
-                    "",
                     null,
                     null,
                     null,
@@ -697,7 +695,7 @@
         "AP_COUNTRY_OF_INCORPORATION": [],
         "AP_GOVT_IDS": [],
         "AP_PARTIES_NAMES": [],
-        "AP_PARTY1_ADDRESS1_COUNTRY": "",
+        
         
         "AP_PARTY1_COUNTRY1_CITIZENSHIP": null,
         "AP_PARTY1_COUNTRY2_CITIZENSHIP": null,
@@ -1260,7 +1258,6 @@
                     null,
                     null,
                     null,
-                    "",
                     [],
                     [],
                     [],
@@ -1344,7 +1341,6 @@
                     [],
                     [],
                     [],
-                    "",
                     null,
                     null,
                     null,
