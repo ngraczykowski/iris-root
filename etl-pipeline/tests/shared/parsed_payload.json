@@ -12,7 +12,6 @@
             "Eva Pladimirova",
             "Pladimir Vutin"
         ],
-        "AP_CONCAT_NAMES": "Joe BlackJ",
         "AP_COUNTRY_OF_INCORPORATION": [],
         "AP_GOVT_IDS": [],
         "AP_PARTIES_NAMES": [
@@ -887,8 +886,7 @@
             "Eva Pladimirova",
             "Pladimir Vutin"
         ],
-        "AP_CONCAT_NAMES": null,
-        "AP_COUNTRY_OF_INCORPORATION": [],
+                "AP_COUNTRY_OF_INCORPORATION": [],
         "AP_GOVT_IDS": [],
         "AP_PARTIES_NAMES": [
             "Eva Pladimirova",

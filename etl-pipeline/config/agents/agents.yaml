@@ -15,7 +15,7 @@ document_agent:
 
 company_name_agent:
   ap:
-  - AP_CONCAT_NAMES
+  - alertedParty.xml_fields.CONCAT_NAME
   - AP_PARTY_NAMES
   - AP_PARTIES_NAMES
   - AP_ACCOUNT_NAMES
@@ -31,7 +31,7 @@ company_name_agent:
 
 name_agent:
   ap:
-  - AP_CONCAT_NAMES
+  - alertedParty.xml_fields.CONCAT_NAME
   - AP_PARTY_NAMES
   - AP_PARTIES_NAMES
   - AP_ACCOUNT_NAMES

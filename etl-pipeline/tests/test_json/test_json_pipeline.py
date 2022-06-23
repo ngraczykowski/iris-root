@@ -328,7 +328,6 @@ def test_collect_party_values_from_parties(pipeline_resource):
         "AP_ACCOUNT_NAMES": [],
         "AP_ACCOUNT_BRANCH_ACCOUNT_NUMBERS": [],
         "AP_ACCOUNT_BENEFICIARY_NAMES": [],
-        "AP_CONCAT_NAMES": None,
     }
 
     assert payload["alertedParty"]["AP_DOB"] == ["10/10/1969"]

@@ -520,7 +520,7 @@ TEST_AGENT_INPUT_CASES = [
             "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
-            ("ap", "AP_CONCAT_NAMES"): "Soft Ltd.",
+            ("ap", "alertedParty.xml_fields.CONCAT_NAME"): "Soft Ltd.",
             ("ap", "AP_PARTY_NAMES"): ["Joe Small", "Johny B. Good"],
             ("ap", "AP_PARTIES_NAMES"): [
                 "Joe Middle Small",
@@ -564,7 +564,7 @@ TEST_AGENT_INPUT_CASES = [
             "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
-            ("ap", "AP_CONCAT_NAMES"): "Soft Ltd.",
+            ("ap", "alertedParty.xml_fields.CONCAT_NAME"): "Soft Ltd.",
             ("ap", "AP_PARTY_NAMES"): ["Joe Small", "Johny B. Good"],
             ("ap", "AP_PARTIES_NAMES"): [
                 "Joe Middle Small",
@@ -1150,7 +1150,7 @@ TEST_AGENT_INPUT_CASES = [
             "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
-            ("ap", "AP_CONCAT_NAMES"): "Soft Ltd.",
+            ("ap", "alertedParty.xml_fields.CONCAT_NAME"): "Soft Ltd.",
             ("ap", "AP_PARTY_NAMES"): ["Joe Small", "Johny B. Good"],
             ("ap", "AP_PARTIES_NAMES"): [
                 "Joe Middle Small",
@@ -1198,7 +1198,7 @@ TEST_AGENT_INPUT_CASES = [
             "watchlistParty.matchRecords[0].entity.name": "Joe Ding",
         },
         expected_result={
-            ("ap", "AP_CONCAT_NAMES"): "Soft Ltd.",
+            ("ap", "alertedParty.xml_fields.CONCAT_NAME"): "Soft Ltd.",
             ("ap", "AP_PARTY_NAMES"): ["Joe Small", "Johny B. Good"],
             ("ap", "AP_PARTIES_NAMES"): [
                 "Joe Middle Small",
@@ -1247,7 +1247,7 @@ TEST_AGENT_INPUT_CASES = [
             "alertedParty.alertSupplementalInfo.supplementalInfo[0].legalFormName": "Organization",
         },
         expected_result={
-            ("ap", "AP_CONCAT_NAMES"): "Soft Ltd.",
+            ("ap", "alertedParty.xml_fields.CONCAT_NAME"): "Soft Ltd.",
             ("ap", "AP_PARTY_NAMES"): ["Joe Small", "Johny B. Good"],
             ("ap", "AP_PARTIES_NAMES"): [
                 "Joe Middle Small",
@@ -1299,7 +1299,7 @@ TEST_AGENT_INPUT_CASES = [
             "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
-            ("ap", "AP_CONCAT_NAMES"): "Soft Ltd.",
+            ("ap", "alertedParty.xml_fields.CONCAT_NAME"): "Soft Ltd.",
             ("ap", "AP_PARTY_NAMES"): ["Joe Small", "Johny B. Good"],
             ("ap", "AP_PARTIES_NAMES"): [
                 "Joe Middle Small",

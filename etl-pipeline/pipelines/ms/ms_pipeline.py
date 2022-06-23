@@ -42,10 +42,6 @@ COLLECTIVE_REPRESENTATION_MAP_FOR_ACCOUNTS = {
     cn.AP_ACCOUNT_BENEFICIARY_NAMES: cn.BENEFICIARY_NAME,
 }
 
-COLLECTIVE_REPRESENTATION_MAP_FOR_FIELD = {
-    cn.AP_CONCAT_NAMES: cn.CONCAT_NAME,
-}
-
 
 class MSPipeline(ETLPipeline):
     REF_KEY_REGEX = r"(\d{4}-\d{2}-\d{2}-\d{2}.\d{2}.\d{2}.\d{6})"
@@ -194,9 +190,6 @@ class MSPipeline(ETLPipeline):
 
         accounts = self.collections.get_accounts(payload)
         self.collect_party_values_from_accounts(accounts, payload)
-
-        fields = self.collections.get_xml_fields(payload)
-        self.collect_party_values_from_parties_from_fields(fields, payload)
 
     def collect_concat_values(self, payload, match):
         """temporary for demo"""
@@ -515,10 +508,6 @@ class MSPipeline(ETLPipeline):
                     target_col, source_cols, mapper, aggregated
                 )
                 match_record.update(sql_expr)
-
-    def collect_party_values_from_parties_from_fields(self, fields, payload):
-        for connected_key, value in COLLECTIVE_REPRESENTATION_MAP_FOR_FIELD.items():
-            payload[connected_key] = self.get_field_value_name(fields, value)
 
     def get_field_value_name(self, fields, name):
         try:
