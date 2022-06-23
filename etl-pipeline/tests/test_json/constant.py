@@ -767,7 +767,7 @@ TEST_AGENT_INPUT_CASES = [
             ],
             ("ap", "AP_COUNTRY_OF_INCORPORATION"): ["Mongolia-3", "Kazachstan-3"],
             ("ap", "AP_PARTY1_ADDRESS1_COUNTRY"): "UNITED STATES OF AMERICA",
-            ("ap", "AP_PARTY1_COUNTRY1"): "UNITED STATES OF AMERICAAA",
+            ("ap", "alertedParty.xml_fields.COUNTRY1"): "UNITED STATES OF AMERICAAA",
             ("ap", "AP_PARTY1_COUNTRY1_CITIZENSHIP"): "Moominland",
             ("ap", "AP_PARTY1_COUNTRY2_CITIZENSHIP"): "Goominland",
             ("ap", "AP_PARTY1_COUNTRY_DOMICILE1"): "Lapland",

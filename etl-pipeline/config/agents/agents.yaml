@@ -62,6 +62,8 @@ nationality_agent:
   - alertedParty.xml_fields.PARTY1_COUNTRY_DOMICILE1
   - alertedParty.xml_fields.PARTY1_COUNTRY1_CITIZENSHIP
   - alertedParty.xml_fields.PARTY1_COUNTRY_CITIZENSHIP1
+  - alertedParty.xml_fields.COUNTRY1
+  - alertedParty.xml_fields.COUNTRY
   - AP_PARTY1_COUNTRY1_CITIZENSHIP
   - AP_PARTY1_COUNTRY_DOMICILE1
   - AP_PRTY_RSDNC_CNTRY_CD
@@ -111,7 +113,7 @@ sanctioned_country_agent:
   - AP_COUNTRY_OF_INCORPORATION 
   - AP_PARTY1_ADDRESS1_COUNTRY
   - alertedParty.xml_fields.PARTY1_COUNTRY
-  - AP_PARTY1_COUNTRY1
+  - alertedParty.xml_fields.COUNTRY
   - AP_PARTY1_COUNTRY1_CITIZENSHIP
   - AP_PARTY1_COUNTRY2_CITIZENSHIP
   - AP_PARTY1_COUNTRY_DOMICILE1
