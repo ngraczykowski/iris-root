@@ -19,7 +19,7 @@ common:
       cpu: 100m
       memory: 1Gi
 
-  reportDeployments: true
+  reportDeployments: false
 
 agentsCommon:
   resources:
