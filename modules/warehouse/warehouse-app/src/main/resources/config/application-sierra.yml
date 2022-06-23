@@ -255,10 +255,11 @@ warehouse.reports.v2:
                wa.payload ->> 'delivery_status'                        AS "Alert Delivery Status",
                wm.name                                                 AS "S8 Match ID"
         FROM warehouse_simulation_alert wsa
-          JOIN warehouse_simulation_match wsm ON wsa.name = wsm.alert_name
-          JOIN warehouse_match wm ON wsm.name = wm.name
-          JOIN warehouse_alert wa ON wsa.name = wa.name
+                 JOIN warehouse_simulation_match wsm ON wsa.name = wsm.alert_name
+                 JOIN warehouse_alert wa ON wsa.name = wa.name
+                 JOIN warehouse_match wm ON wa.id = wm.alert_id
         WHERE wsa.analysis_name = 'analysis/${analysisId}'
+          AND wsm.analysis_name = 'analysis/${analysisId}'
           AND (POSITION(wa.name IN wm.name) > 0 OR wm.name IS NULL)
     - name: ACCURACY
       type: production
