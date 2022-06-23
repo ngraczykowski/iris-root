@@ -11,6 +11,8 @@ import com.silenteight.agents.v1.api.exchange.AgentExchangeResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Set;
+
 @Slf4j
 public abstract class AbstractAgentFacade<DataSourceRequestT, AgentInputT extends AgentInput>
     extends AbstractAgentFacadeForMatch<AgentInputT> {
@@ -34,8 +36,8 @@ public abstract class AbstractAgentFacade<DataSourceRequestT, AgentInputT extend
 
   /**
    * the class is abstract thus dependency injection cannot be done in constructor without changing
-   * the implementation of child classes
-   * in order to preserve the client code, the injection is done via setter
+   * the implementation of child classes in order to preserve the client code, the injection is done
+   * via setter
    */
   @Autowired
   public void configure(AgentFacadeProperties agentFacadeProperties) {
@@ -45,12 +47,13 @@ public abstract class AbstractAgentFacade<DataSourceRequestT, AgentInputT extend
   }
 
   @Override
-  public AgentExchangeResponse processMessage(AgentExchangeRequest request) {
+  public AgentExchangeResponse processMessage(
+      AgentExchangeRequest request, Set<String> configNames) {
     log.info("Received new message: " + request.toString());
 
     try {
       var agentsInput = dataExtractor.extract(request);
-      return processor.process(agentsInput);
+      return processor.process(agentsInput, configNames);
     } catch (Exception dataSourceException) {
       log.error(
           "Data Source exception occurred: " + dataSourceException.getMessage(),

@@ -28,7 +28,9 @@ import javax.annotation.PostConstruct;
 
 import static com.silenteight.agent.facade.exchange.AgentFacadeConfiguration.INBOUND_CHANNEL_NAME;
 import static com.silenteight.agent.facade.exchange.AgentFacadeConfiguration.OUTBOUND_CHANNEL_NAME;
+import static com.silenteight.agent.facade.exchange.ConfigurationNameGenerator.getConfigurationNames;
 import static com.silenteight.agent.facade.exchange.DeleteQueueWithoutPrioritySupportUseCase.deleteIfEmptyQueueWithoutPrioritySupport;
+import static org.springframework.amqp.support.AmqpHeaders.RECEIVED_ROUTING_KEY;
 import static org.springframework.integration.IntegrationMessageHeaderAccessor.CORRELATION_ID;
 
 @Configuration
@@ -130,7 +132,12 @@ class MultiQueueIntegrationConfiguration {
         .transform(messageTransformer)
         .handle(
             AgentExchangeRequest.class,
-            (payload, headers) -> agentFacade.processMessage(payload))
+            (payload, headers) ->
+                agentFacade.processMessage(
+                    payload,
+                    getConfigurationNames(
+                        payload.getFeaturesList(),
+                        headers.get(RECEIVED_ROUTING_KEY, String.class))))
         .enrichHeaders(enricher -> enricher.correlationIdFunction(
             message -> message.getHeaders().get(CORRELATION_ID), Boolean.TRUE))
         .channel(outChannelName)

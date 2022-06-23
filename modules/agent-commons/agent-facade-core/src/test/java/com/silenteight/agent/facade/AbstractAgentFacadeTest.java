@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -37,8 +38,7 @@ class AbstractAgentFacadeTest {
     var agentInput = mock(AgentInput.class);
     var underTest = new AbstractAgentFacade<>(dataSourceClient, mapper, monitoring) {
       @Override
-      public AgentOutput getAgentResponsesForMatch(
-          AgentInput agentInput) {
+      public AgentOutput getAgentResponsesForMatch(AgentInput agentInput) {
         return agentOutput;
       }
     };
@@ -48,7 +48,7 @@ class AbstractAgentFacadeTest {
     props.setParallelism(parallelism);
     underTest.configure(props);
 
-    var result = underTest.processMessage(request);
+    var result = underTest.processMessage(request, Set.of("configName"));
 
     assertEquals(result.getAgentOutputsList().get(0), agentOutput);
   }

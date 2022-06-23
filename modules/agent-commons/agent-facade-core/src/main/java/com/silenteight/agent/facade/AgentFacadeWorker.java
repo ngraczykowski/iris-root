@@ -5,19 +5,20 @@ import lombok.SneakyThrows;
 import com.silenteight.agents.v1.api.exchange.AgentOutput;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.*;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 import static java.util.stream.Collectors.toList;
 
 class AgentFacadeWorker<T> {
 
-  private final Function<T, AgentOutput> mapper;
+  private final BiFunction<T, Set<String>, AgentOutput> mapper;
   private int parallelism;
   private ExecutorService executorService;
 
   AgentFacadeWorker(
-      Function<T, AgentOutput> mapper) {
+      BiFunction<T, Set<String>, AgentOutput> mapper) {
     this.mapper = mapper;
     this.parallelism = 1;
     this.executorService = new ForkJoinPool(parallelism);
@@ -29,26 +30,26 @@ class AgentFacadeWorker<T> {
     this.executorService = new ForkJoinPool(parallelism);
   }
 
-  List<AgentOutput> process(List<T> input) {
+  List<AgentOutput> process(List<T> input, Set<String> configNames) {
     if (parallelism == 1) {
-      return processSequence(input);
+      return processSequence(input, configNames);
     }
-    return processParallel(input);
+    return processParallel(input, configNames);
   }
 
-  private List<AgentOutput> processSequence(List<T> input) {
+  private List<AgentOutput> processSequence(List<T> input, Set<String> configNames) {
     return input
         .stream()
-        .map(mapper)
+        .map(t -> mapper.apply(t, configNames))
         .collect(toList());
   }
 
-  private List<AgentOutput> processParallel(List<T> input) {
+  private List<AgentOutput> processParallel(List<T> input, Set<String> configNames) {
     var stream = input.parallelStream();
 
     var task = (Callable<List<AgentOutput>>) () -> stream.map(x -> {
       try {
-        return mapper.apply(x);
+        return mapper.apply(x, configNames);
       } catch (Exception e) {
         throw new WrapperException(e);
       }

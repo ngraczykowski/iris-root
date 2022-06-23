@@ -7,7 +7,8 @@ import com.silenteight.agents.v1.api.exchange.AgentOutput;
 import com.silenteight.agents.v1.api.exchange.AgentOutput.Feature;
 
 import java.util.List;
-import java.util.function.Function;
+import java.util.Set;
+import java.util.function.BiFunction;
 
 import static com.silenteight.agents.logging.AgentLogger.debug;
 import static com.silenteight.agents.logging.AgentLogger.info;
@@ -18,7 +19,7 @@ class AgentFacadeProcessor<AgentInputT extends AgentInput> {
 
   private final AgentFacadeWorker<AgentInputT> worker;
 
-  AgentFacadeProcessor(Function<AgentInputT, AgentOutput> processingFunction) {
+  AgentFacadeProcessor(BiFunction<AgentInputT, Set<String>, AgentOutput> processingFunction) {
     worker = new AgentFacadeWorker<>(processingFunction);
   }
 
@@ -48,11 +49,11 @@ class AgentFacadeProcessor<AgentInputT extends AgentInput> {
         .collect(joining(","));
   }
 
-  public AgentExchangeResponse process(List<AgentInputT> agentsInput) {
+  public AgentExchangeResponse process(List<AgentInputT> agentsInput, Set<String> configNames) {
 
     logAgentsInputFromDataSource(agentsInput);
 
-    List<AgentOutput> agentOutputs = worker.process(agentsInput);
+    List<AgentOutput> agentOutputs = worker.process(agentsInput, configNames);
 
     logAgentOutputs(agentOutputs);
 

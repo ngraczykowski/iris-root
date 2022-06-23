@@ -10,7 +10,7 @@ import java.time.Instant;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -27,7 +27,7 @@ class AgentFacadeWorkerTest {
     var testStartTime = Instant.now();
     Set<String> observedThreads = Collections.synchronizedSet(new HashSet<>());
 
-    Function<Object, AgentOutput> mapper = o -> {
+    BiFunction<Object, Set<String>, AgentOutput> mapper = (o, s) -> {
       observedThreads.add(Thread.currentThread().getName());
       await().until(() -> Duration.between(testStartTime, Instant.now()).toMillis() > 100);
       return AgentOutput.getDefaultInstance();
@@ -40,7 +40,7 @@ class AgentFacadeWorkerTest {
         .mapToObj(i -> new Object())
         .collect(Collectors.toList());
 
-    underTest.process(data);
+    underTest.process(data, Set.of("configName"));
 
     assertEquals(parallelism, observedThreads.size(),
         () -> "Registered thread names: " + observedThreads);
@@ -53,7 +53,7 @@ class AgentFacadeWorkerTest {
     RuntimeException exception = new RuntimeException();
     var testStartTime = Instant.now();
 
-    Function<Object, AgentOutput> mapper = o -> {
+    BiFunction<Object, Set<String>, AgentOutput> mapper = (o, s) -> {
       await().until(() -> Duration.between(testStartTime, Instant.now()).toMillis() > 100);
       throw exception;
     };
@@ -65,7 +65,8 @@ class AgentFacadeWorkerTest {
         .mapToObj(i -> new Object())
         .collect(Collectors.toList());
 
-    var res = assertThrows(RuntimeException.class, () -> underTest.process(data));
+    var res =
+        assertThrows(RuntimeException.class, () -> underTest.process(data, Set.of("configName")));
 
     assertEquals(exception, res);
   }
