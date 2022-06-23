@@ -9,7 +9,7 @@ IFS='-' read -r name version rest <<< $(basename -- "$(ls -tr ./dist/*.whl)")
 
 artifact=$(basename -- "$(ls -tr ./dist/*.pyz)")
 artifact_path="$(ls "./dist/$artifact")"
-config="${name}-config-${version}.tgz"
+config="${name}_config-${version}.tgz"
 config_path="$(ls "./dist/${config}")"
 
 set -x
