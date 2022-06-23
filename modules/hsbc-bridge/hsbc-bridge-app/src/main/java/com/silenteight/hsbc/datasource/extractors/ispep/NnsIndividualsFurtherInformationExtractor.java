@@ -26,10 +26,7 @@ class NnsIndividualsFurtherInformationExtractor {
         .collect(
             Multimaps.toMultimap(
                 individual -> IsPepTimestampUtil.toUnixTimestamp(individual.getLastUpdatedDate()),
-                individual ->
-                    (StringUtils.isNotBlank(individual.getFurtherInformation()))
-                        ? individual.getFurtherInformation()
-                        : "",
+                individual -> StringUtils.defaultIfBlank(individual.getFurtherInformation(), ""),
                 HashMultimap::create))
         .entries()
         .stream()

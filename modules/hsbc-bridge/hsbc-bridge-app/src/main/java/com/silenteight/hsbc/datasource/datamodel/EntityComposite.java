@@ -1,7 +1,8 @@
 package com.silenteight.hsbc.datasource.datamodel;
 
+import org.apache.commons.collections.CollectionUtils;
+
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -18,19 +19,19 @@ public interface EntityComposite {
   List<NegativeNewsScreeningEntities> getNnsEntities();
 
   default boolean hasWorldCheckEntities() {
-    return Objects.nonNull(getWorldCheckEntities()) && !getWorldCheckEntities().isEmpty();
+    return CollectionUtils.isNotEmpty(getWorldCheckEntities());
   }
 
   default boolean hasPrivateListEntities() {
-    return Objects.nonNull(getPrivateListEntities()) && !getPrivateListEntities().isEmpty();
+    return CollectionUtils.isNotEmpty(getPrivateListEntities());
   }
 
   default boolean hasCtrpScreeningEntities() {
-    return Objects.nonNull(getCtrpScreeningEntities()) && !getCtrpScreeningEntities().isEmpty();
+    return CollectionUtils.isNotEmpty(getCtrpScreeningEntities());
   }
 
   default boolean hasNnsEntities() {
-    return Objects.nonNull(getNnsEntities()) && !getNnsEntities().isEmpty();
+    return CollectionUtils.isNotEmpty(getNnsEntities());
   }
 
   default Optional<String> getEntityWatchlistId() {

@@ -26,10 +26,7 @@ public class NnsEntitiesFurtherInformationExtractor {
         .collect(
             Multimaps.toMultimap(
                 nnsEntity -> IsPepTimestampUtil.toUnixTimestamp(nnsEntity.getLastUpdateDate()),
-                nnsEntity ->
-                    (StringUtils.isNotBlank(nnsEntity.getFurtherInformation()))
-                        ? nnsEntity.getFurtherInformation()
-                        : "",
+                nnsEntity -> StringUtils.defaultIfBlank(nnsEntity.getFurtherInformation(), ""),
                 HashMultimap::create))
         .entries()
         .stream()

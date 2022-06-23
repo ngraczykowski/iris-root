@@ -13,6 +13,10 @@ class CategoryModelHolder {
 
   private static final String CATEGORIES_PREFIX = "categories/";
 
+  private static final String NNS = "NNS";
+  private static final String NO = "NO";
+  private static final String YES = "YES";
+
   private final List<CategoryModel> categories = createCategories();
   private final Map<String, List<String>> categoryProperties;
 
@@ -31,7 +35,7 @@ class CategoryModelHolder {
         .displayName("Risk Type")
         .type(CategoryType.ENUMERATED)
         .multiValue(false)
-        .allowedValues(List.of("AML", "OTHER", "SAN", "PEP", "EXITS", "SSC", "NNS"))
+        .allowedValues(List.of("AML", "OTHER", "SAN", "PEP", "EXITS", "SSC", NNS))
         .valueRetriever(matchData -> {
           var caseInformation = matchData.getCaseInformation();
           var mappedValue = mapSourceRiskTypeValue(caseInformation.getExtendedAttribute5());
@@ -45,17 +49,17 @@ class CategoryModelHolder {
         .displayName("Terror Related")
         .type(CategoryType.ENUMERATED)
         .multiValue(false)
-        .allowedValues(List.of("YES", "NO"))
+        .allowedValues(List.of(YES, NO))
         .valueRetriever(matchData -> {
           var caseInformation = matchData.getCaseInformation();
           var nnsEntities = matchData.getNnsEntities();
           var nnsIndividuals = matchData.getNnsIndividuals();
 
-          if ("NNS".equals(caseInformation.getExtendedAttribute5())) {
+          if (NNS.equals(caseInformation.getExtendedAttribute5())) {
             return List.of(isTerrorRelated(nnsEntities, nnsIndividuals));
           }
 
-          return List.of("NO");
+          return List.of(NO);
         })
         .build();
 
@@ -80,7 +84,7 @@ class CategoryModelHolder {
     return nnsEntities.stream()
         .filter(entities -> entities.isContainingValue("Terror Related"))
         .findAny()
-        .map(entities -> "YES")
+        .map(entities -> YES)
         .orElseGet(() -> isTerrorRelatedIndividuals(nnsIndividuals));
   }
 
@@ -88,7 +92,7 @@ class CategoryModelHolder {
     return nnsIndividuals.stream()
         .filter(individuals -> individuals.isContainingValue("Terror Related"))
         .findAny()
-        .map(entities -> "YES")
-        .orElse("NO");
+        .map(entities -> YES)
+        .orElse(NO);
   }
 }

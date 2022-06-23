@@ -20,16 +20,15 @@ public interface IndividualComposite {
   List<NegativeNewsScreeningIndividuals> getNnsIndividuals();
 
   default boolean hasWorldCheckIndividuals() {
-    return Objects.nonNull(getWorldCheckIndividuals()) && !getWorldCheckIndividuals().isEmpty();
+    return CollectionUtils.isNotEmpty(getWorldCheckIndividuals());
   }
 
   default boolean hasPrivateListIndividuals() {
-    return Objects.nonNull(getPrivateListIndividuals()) && !getPrivateListIndividuals().isEmpty();
+    return CollectionUtils.isNotEmpty(getPrivateListIndividuals());
   }
 
   default boolean hasCtrpScreeningIndividuals() {
-    return Objects.nonNull(getCtrpScreeningIndividuals())
-        && !getCtrpScreeningIndividuals().isEmpty();
+    return CollectionUtils.isNotEmpty(getCtrpScreeningIndividuals());
   }
 
   default boolean hasNnsIndividuals() {
