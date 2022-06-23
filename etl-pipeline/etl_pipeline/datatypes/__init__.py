@@ -88,6 +88,7 @@ class HistoricalDecisionBase:
         "status",
         "match",
         "alert",
+        "customer_alert_id",
     )
 
     def __init__(
@@ -96,7 +97,6 @@ class HistoricalDecisionBase:
         watchlist: str,
         alerted_party_id: str,
         date: int,
-        status: str,
         match: Match,
         alert: LearningAlertPayload,
     ):
@@ -105,5 +105,6 @@ class HistoricalDecisionBase:
         self.watchlist = watchlist
         self.alerted_party_id = alerted_party_id
         self.date = date
-        self.status = status
+        self.status = alert.alert_event_history["alertEventHistory"]["statusName"]
         self.alert = alert
+        self.customer_alert_id = alert.alert_event_history["alertEventHistory"]["alertId"]

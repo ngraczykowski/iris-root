@@ -1324,13 +1324,13 @@ TEST_AGENT_INPUT_CASES = [
 HISTORICAL_DECISION_REQUEST = {
     "alerts": [
         {
-            "alertId": "alerts/2",
-            "matchId": "alerts/2/matches/2",
+            "alertId": "SANC-ASM-1252185",
+            "matchId": "49159509",
             "watchlist": {"id": "1044"},
             "alertedParty": {"id": "A05003324172"},
             "decisions": [
                 {
-                    "id": "9434653b6d70dd07f3057ed6980d6bc93ce6a0d1",
+                    "id": "8f501ae3f3f3d5e8f1188fc211ab59a516c56cf2",
                     "value": "FALSE_POSITIVE",
                     "createdAt": "1641057943",
                 },
@@ -1342,13 +1342,13 @@ HISTORICAL_DECISION_REQUEST = {
             ],
         },
         {
-            "alertId": "alerts/2",
-            "matchId": "alerts/2/matches/2",
+            "alertId": "SANC-ASM-1252185",
+            "matchId": "49159506",
             "watchlist": {"id": "1044"},
             "alertedParty": {"id": "A05003324172"},
             "decisions": [
                 {
-                    "id": "9434653b6d70dd07f3057ed6980d6bc93ce6a0d1",
+                    "id": "0204622a16e1a8850e9341b9f3c7e198dea041a3",
                     "value": "FALSE_POSITIVE",
                     "createdAt": "1641057943",
                 },
@@ -1364,13 +1364,13 @@ HISTORICAL_DECISION_REQUEST = {
 HISTORICAL_DECISION_REQUEST_WITHOUT_MARK = {
     "alerts": [
         {
-            "alertId": "alerts/2",
-            "matchId": "alerts/2/matches/2",
+            "alertId": "SANC-ASM-1252185",
+            "matchId": "49159509",
             "watchlist": {"id": "1044"},
             "alertedParty": {"id": "A05003324172"},
             "decisions": [
                 {
-                    "id": "9434653b6d70dd07f3057ed6980d6bc93ce6a0d1",
+                    "id": "8f501ae3f3f3d5e8f1188fc211ab59a516c56cf2",
                     "value": "FALSE_POSITIVE",
                     "createdAt": "1641057943",
                 },
@@ -1381,13 +1381,13 @@ HISTORICAL_DECISION_REQUEST_WITHOUT_MARK = {
             ],
         },
         {
-            "alertId": "alerts/2",
-            "matchId": "alerts/2/matches/2",
+            "alertId": "SANC-ASM-1252185",
+            "matchId": "49159506",
             "watchlist": {"id": "1044"},
             "alertedParty": {"id": "A05003324172"},
             "decisions": [
                 {
-                    "id": "9434653b6d70dd07f3057ed6980d6bc93ce6a0d1",
+                    "id": "0204622a16e1a8850e9341b9f3c7e198dea041a3",
                     "value": "FALSE_POSITIVE",
                     "createdAt": "1641057943",
                 },

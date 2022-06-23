@@ -44,27 +44,27 @@ logger = logging.getLogger("main").getChild("servicer")
 pipeline = MSPipeline.build_pipeline(MSPipeline)
 
 ANALYST_DECISION_MAP = {
-    "[L2 Closed Action - Case Created]": DecisionType.TRUE_POSITIVE,
-    "[L3 Closed Action - Case Created]": DecisionType.TRUE_POSITIVE,
-    "[L1 Closed - No Action False Positive]": DecisionType.FALSE_POSITIVE,
-    "[L1 Closed - No Action Procedural Close]": DecisionType.FALSE_POSITIVE,
-    "[L2 Closed No Action - Could have been closed by L1]": DecisionType.FALSE_POSITIVE,
-    "[L2 Closed No Action - False Positive]": DecisionType.FALSE_POSITIVE,
-    "[L2 Closed No Action - Non GFC Issue Risk Accepted No Action]": DecisionType.TRUE_POSITIVE,
-    "[L3 Closed No Action - Could have been closed by L2]": DecisionType.FALSE_POSITIVE,
-    "[L3 Closed No Action - False Positive]": DecisionType.FALSE_POSITIVE,
-    "[L3 Closed No Action - Non GFC Issue Risk Accepted No Action]": DecisionType.TRUE_POSITIVE,
-    "[L1 Review]": DecisionType.ANALYST_PENDING,
-    "[L1 New]": DecisionType.ANALYST_PENDING,
-    "[L2 Review]": DecisionType.ANALYST_PENDING,
-    "[L2 New]": DecisionType.ANALYST_PENDING,
-    "[L3 Review]": DecisionType.ANALYST_PENDING,
-    "[L3 New]": DecisionType.ANALYST_PENDING,
-    "[L1 Closed Action - Escalate to L2 Potential Match]": DecisionType.ANALYST_PENDING,
-    "[L1 Closed Action - Escalate to L2 Historical/Open Case(s) Exists]": DecisionType.ANALYST_PENDING,
-    "[L1 Closed Action - Escalate to L2 Unable to Clear]": DecisionType.ANALYST_PENDING,
-    "[L2 Closed Action - Escalate to L3 Unable to Clear]": DecisionType.ANALYST_PENDING,
-    "[L2 Closed Action - Escalate to L3 Potential Match]": DecisionType.ANALYST_PENDING,
+    "L2 Closed Action - Case Created": DecisionType.TRUE_POSITIVE,
+    "L3 Closed Action - Case Created": DecisionType.TRUE_POSITIVE,
+    "L1 Closed - No Action False Positive": DecisionType.FALSE_POSITIVE,
+    "L1 Closed - No Action Procedural Close": DecisionType.FALSE_POSITIVE,
+    "L2 Closed No Action - Could have been closed by L1": DecisionType.FALSE_POSITIVE,
+    "L2 Closed No Action - False Positive": DecisionType.FALSE_POSITIVE,
+    "L2 Closed No Action - Non GFC Issue Risk Accepted No Action": DecisionType.TRUE_POSITIVE,
+    "L3 Closed No Action - Could have been closed by L2": DecisionType.FALSE_POSITIVE,
+    "L3 Closed No Action - False Positive": DecisionType.FALSE_POSITIVE,
+    "L3 Closed No Action - Non GFC Issue Risk Accepted No Action": DecisionType.TRUE_POSITIVE,
+    "L1 Review": DecisionType.ANALYST_PENDING,
+    "L1 New": DecisionType.ANALYST_PENDING,
+    "L2 Review": DecisionType.ANALYST_PENDING,
+    "L2 New": DecisionType.ANALYST_PENDING,
+    "L3 Review": DecisionType.ANALYST_PENDING,
+    "L3 New": DecisionType.ANALYST_PENDING,
+    "L1 Closed Action - Escalate to L2 Potential Match": DecisionType.ANALYST_PENDING,
+    "L1 Closed Action - Escalate to L2 Historical/Open Case(s) Exists": DecisionType.ANALYST_PENDING,
+    "L1 Closed Action - Escalate to L2 Unable to Clear": DecisionType.ANALYST_PENDING,
+    "L2 Closed Action - Escalate to L3 Unable to Clear": DecisionType.ANALYST_PENDING,
+    "L2 Closed Action - Escalate to L3 Potential Match": DecisionType.ANALYST_PENDING,
 }
 service_config = ConsulServiceConfig()
 try:
@@ -203,12 +203,12 @@ class EtlLearningServiceServicer(object):
             )
         return logger
 
-    def _parse_response_alert(self, alert, result):
+    def _parse_response_alert(self, alert: LearningAlertPayload, result):
         if not result:
             alert.status = FAILURE
         etl_alert = etl__learning__pb2.EtlLearningAlert(
             batch_id=alert.batch_id,
-            alert_id=alert.alert_name,
+            alert_id=alert.alert_event_history["alertEventHistory"]["alertId"],
             etl_status=alert.status,
         )
         return etl_alert
@@ -239,11 +239,10 @@ class PayloadToLearningAlertConverter:
             decision_base = HistoricalDecisionBase(
                 watchlist=watchlist,
                 alert=learning_alert,
-                match=pipeline_result["match_ids"].match_name,
+                match=pipeline_result["match_ids"].match_id,
                 alerted_party_id=alerted_party_id,
                 result=pipeline_result,
                 date=date,
-                status=learning_alert.status,
             )
 
             hist_data = self.prepare_historical_data_for_decision(decision_base)
@@ -258,8 +257,8 @@ class PayloadToLearningAlertConverter:
                 ]:
                     discriminators.append(Discriminator(value=f"mike_{discriminator}"))
             alert = Alert(
-                alert_id=learning_alert.alert_name,
-                match_id=pipeline_result["match_ids"].match_name,
+                alert_id=decision_base.customer_alert_id,
+                match_id=pipeline_result["match_ids"].match_id,
                 watchlist=Watchlist(id=watchlist),
                 alerted_party=AlertedParty(id=alerted_party_id),
                 decisions=decisions,
