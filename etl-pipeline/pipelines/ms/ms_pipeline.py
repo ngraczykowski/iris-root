@@ -36,13 +36,6 @@ class PipelineError:
     pass
 
 
-COLLECTIVE_REPRESENTATION_MAP_FOR_ACCOUNTS = {
-    cn.AP_ACCOUNT_NAMES: cn.CONNECTED_FULL_NAME,
-    cn.AP_ACCOUNT_BRANCH_ACCOUNT_NUMBERS: cn.BRANCH_ACCOUNT_NUMBER,
-    cn.AP_ACCOUNT_BENEFICIARY_NAMES: cn.BENEFICIARY_NAME,
-}
-
-
 class MSPipeline(ETLPipeline):
     REF_KEY_REGEX = r"(\d{4}-\d{2}-\d{2}-\d{2}.\d{2}.\d{2}.\d{6})"
     REF_KEY_REGEX_PYTHON = re.compile(REF_KEY_REGEX)
@@ -188,8 +181,9 @@ class MSPipeline(ETLPipeline):
         self.functions.collect_party_country_of_incorporation(payload)
         self.functions.collect_party_government_id(payload)
 
-        accounts = self.collections.get_accounts(payload)
-        self.collect_party_values_from_accounts(accounts, payload)
+        self.functions.collect_full_name_accounts(payload)
+        self.functions.collect_branch_account_numbers(payload)
+        self.functions.collect_beneficiary_names(payload)
 
     def collect_concat_values(self, payload, match):
         """temporary for demo"""
@@ -380,15 +374,6 @@ class MSPipeline(ETLPipeline):
                     if value.get(field_name_to_collect, "")
                 ]
             ).strip()
-
-    def collect_party_values_from_accounts(self, accounts, payload):
-        for (
-            collective_field_name,
-            field_name_to_collect,
-        ) in COLLECTIVE_REPRESENTATION_MAP_FOR_ACCOUNTS.items():
-            payload[collective_field_name] = [
-                i.get(field_name_to_collect) for i in accounts if i.get(field_name_to_collect, "")
-            ]
 
     def load_raw_data(self, *args, **kwargs):
         return self.spark_instance.read_csv(*args, **kwargs)

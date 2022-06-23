@@ -122,6 +122,12 @@ class Functions:
                     aggregated.extend(
                         [i.get(field_name, "") for i in parties if i.get(field_name, "")]
                     )
+            elif collection == "accounts":
+                accounts = self.collections.get_accounts(payload)
+                for field_name in source["accounts"]:
+                    aggregated.extend(
+                        [i.get(field_name, "") for i in accounts if i.get(field_name, "")]
+                    )
             elif collection == "xml_fields":
                 fields = self.collections.get_xml_fields(payload)
                 for field in source[collection]:

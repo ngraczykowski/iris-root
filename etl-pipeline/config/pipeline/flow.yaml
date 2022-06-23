@@ -92,3 +92,24 @@ IS_BENEFICIARY_HIT:
   source:
     metadata:
       - TRIGGERED_BY
+
+AP_ACCOUNT_NAMES:
+  method_name: collect_full_name_accounts
+  pattern_method: pattern_aggregate
+  source:
+    accounts:
+      - CONNECTED_FULL_NAME
+
+AP_ACCOUNT_BRANCH_ACCOUNT_NUMBERS:
+  method_name: collect_branch_account_numbers
+  pattern_method: pattern_aggregate
+  source:
+    accounts:
+      - branchAccountNumber
+
+AP_ACCOUNT_BENEFICIARY_NAMES:
+  method_name: collect_beneficiary_names
+  pattern_method: pattern_aggregate
+  source:
+    accounts:
+      - beneficiaryName
