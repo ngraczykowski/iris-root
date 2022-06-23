@@ -16,15 +16,15 @@ consul:
   port: 8500
 
 agent:
-  process: 2
+  processes: 2
   agent-exchange:
-      request:
-          exchange: 'agent.request'
-          routing-key: 'agents.bankIdentificationCodes.versions.*.configs.*'
-          queue-name: 'agent.bankidentificationcodes-requests'
+    request:
+      exchange: 'agent.request'
+      routing-key: 'agents.bankIdentificationCodes.versions.*.configs.*'
+      queue-name: 'agent.bankidentificationcodes-requests'
 
-      response:
-          exchange: 'agent.response'
-          routing-key: ""
+    response:
+      exchange: 'agent.response'
+      routing-key: ""
   grpc:
     port: {{ env "NOMAD_PORT_grpc" }}

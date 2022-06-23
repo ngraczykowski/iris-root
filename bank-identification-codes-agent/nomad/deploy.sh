@@ -15,7 +15,7 @@ artifact_path="$(ls "$scriptdir"/artifacts/*.pyz)"
 artifact=$(basename -- "$artifact_path")
 
 IFS='-' read -r name version <<< "${artifact%.pyz}"
-config="${name}-config-${version}.tgz"
+config="${name}_config-${version}.tgz"
 
 
 export NOMAD_VAR_bank_identification_codes_agent_artifact=${NOMAD_VAR_bank_identification_codes_agent_artifact:-"${MINIO_ADDR}/artifacts/bank-identification-codes-agent/${artifact}"}

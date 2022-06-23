@@ -11,17 +11,22 @@ rabbitmq:
   password: dev
   virtualhost: /
 
+consul:
+  host: localhost
+  port: 8500
 
 agent:
-  process: 2
-  agent-exchange:
-      request:
-          exchange: 'agent.request'
-          routing-key: 'agents.bankIdentificationCodes.versions.1_0_0.configs.1'
-          queue-name: 'agent.bankidentificationcodes-requests'
+  processes: 2
 
-      response:
-          exchange: 'agent.response'
-          routing-key: ""
+  agent-exchange:
+    request:
+      exchange: 'agent.request'
+      routing-key: 'agents.EXAMPLE.versions.1_0_0.configs.1'
+      queue-name: 'agent.EXAMPLE-requests'
+
+    response:
+      exchange: 'agent.response'
+      routing-key: ""
+
   grpc:
     port: 9090
