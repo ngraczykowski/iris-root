@@ -15,6 +15,10 @@ dependencies {
 
   constraints {
     api(libs.awaitility)
+    api(libs.groovy)
+    api(libs.groovy.all)
+    api(libs.groovy.json)
+    api(libs.groovy.nio)
     api(libs.mockito.core)
     api(libs.mockito.junit.jupiter)
     api(libs.rabbitmq.mock)
