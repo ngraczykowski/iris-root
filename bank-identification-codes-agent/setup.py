@@ -12,7 +12,7 @@ tests_require = [
     ]
 setup(
     name="bank-identification-codes",
-    version="2.5.3",
+    version="2.5.4",
     description="Transaction Screening Bank Identification Codes Agent",
     author="Silent Eight Pte. Ltd.",
     author_email="support@silenteight.com",
