@@ -99,7 +99,7 @@ public final class DatasetFixtures {
           .setAlertCount(NO_ALERTS_COUNT)
           .build();
 
-  private static AlertSelectionCriteriaDto selectionCriteria(
+  public static AlertSelectionCriteriaDto selectionCriteria(
       OffsetDateTime from, OffsetDateTime to, List<String> countries) {
 
     return AlertSelectionCriteriaDto.builder()

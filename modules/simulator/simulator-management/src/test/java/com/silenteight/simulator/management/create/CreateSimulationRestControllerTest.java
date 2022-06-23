@@ -84,4 +84,44 @@ class CreateSimulationRestControllerTest extends BaseRestControllerTest {
     post(SIMULATIONS_URL, request)
         .statusCode(BAD_REQUEST.value());
   }
+
+  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER, AUDITOR })
+  @ParameterizedTest
+  @MethodSource("getCharsBreakingFieldRegex")
+  void its400_whenCreateSimulationRequestHasInvalidSimulationName(String invalidPart) {
+    CreateSimulationRequest createSimulationRequest =
+        CreateSimulationRequest.builder()
+            .id(ID)
+            .simulationName(SIMULATION_NAME + invalidPart)
+            .description(DESCRIPTION)
+            .model(MODEL_NAME)
+            .datasets(DATASETS)
+            .createdBy(USERNAME)
+            .build();
+    post(SIMULATIONS_URL, createSimulationRequest)
+        .statusCode(BAD_REQUEST.value());
+  }
+
+  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER, AUDITOR })
+  @ParameterizedTest
+  @MethodSource("getCharsBreakingFieldRegex")
+  void its400_whenCreateSimulationRequestHasInvalidDescription(String invalidPart) {
+    CreateSimulationRequest createSimulationRequest =
+        CreateSimulationRequest.builder()
+            .id(ID)
+            .simulationName(SIMULATION_NAME)
+            .description(DESCRIPTION + invalidPart)
+            .model(MODEL_NAME)
+            .datasets(DATASETS)
+            .createdBy(USERNAME)
+            .build();
+    post(SIMULATIONS_URL, createSimulationRequest)
+        .statusCode(BAD_REQUEST.value());
+  }
+
+  private static Stream<String> getCharsBreakingFieldRegex() {
+    return Stream.of(
+        "#", "$", "%", ";", "{", ")", "[", ":", ">"
+    );
+  }
 }

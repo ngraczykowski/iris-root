@@ -16,8 +16,7 @@ import java.util.stream.Stream;
 
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.simulator.dataset.create.CreateDatasetRestController.DATASET_URL;
-import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.CREATE_DATASET_REQUEST_DTO;
-import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.CREATE_DATASET_REQUEST_WITH_NULL_DESCRIPTION;
+import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.*;
 import static io.restassured.http.ContentType.JSON;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -69,5 +68,39 @@ class CreateDatasetRestControllerTest extends BaseRestControllerTest {
     post(DATASET_URL, CREATE_DATASET_REQUEST_DTO)
         .contentType(JSON)
         .statusCode(FORBIDDEN.value());
+  }
+
+  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
+  @ParameterizedTest
+  @MethodSource("getCharsBreakingFieldRegex")
+  void its400_whenDatasetHasInvalidDatasetName(String invalidPart) {
+    CreateDatasetRequestDto request = CreateDatasetRequestDto.builder()
+        .id(ID_1)
+        .datasetName(DATASET_NAME + invalidPart)
+        .description(DESCRIPTION)
+        .query(selectionCriteria(FROM, TO, COUNTRIES))
+        .build();
+    post(DATASET_URL, request)
+        .statusCode(BAD_REQUEST.value());
+  }
+
+  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
+  @ParameterizedTest
+  @MethodSource("getCharsBreakingFieldRegex")
+  void its400_whenDatasetHasInvalidDescription(String invalidPart) {
+    CreateDatasetRequestDto request = CreateDatasetRequestDto.builder()
+        .id(ID_1)
+        .datasetName(DATASET_NAME)
+        .description(DESCRIPTION + invalidPart)
+        .query(selectionCriteria(FROM, TO, COUNTRIES))
+        .build();
+    post(DATASET_URL, request)
+        .statusCode(BAD_REQUEST.value());
+  }
+
+  private static Stream<String> getCharsBreakingFieldRegex() {
+    return Stream.of(
+        "#", "$", "%", ";", "{", ")", "[", ":", ">"
+    );
   }
 }
