@@ -29,15 +29,15 @@ logger = logging.getLogger("main").getChild("servicer")
 
 service_config = ConsulServiceConfig()
 try:
-    PROCESSES = service_config.PROCESSES
+    processes = service_config.processes
 except omegaconf.errors.ConfigAttributeError:
-    PROCESSES = 10
+    processes = 10
 
 
-class EtlPipelineServiceServicer(object):
+class EtlPipelineServiceServicer:
     routers = {}
     loggers = {}
-    pool = futures.ProcessPoolExecutor(max_workers=service_config.PROCESSES)
+    pool = futures.ProcessPoolExecutor(max_workers=service_config.processes)
 
     def __init__(self, ssl) -> None:
         self.ssl = ssl
@@ -76,8 +76,8 @@ class EtlPipelineServiceServicer(object):
             etl_alerts = await asyncio.gather(*tasks)
 
             tasks = []
-            for n in range(0, len(etl_alerts), service_config.UDS_BATCH_SIZE):
-                etl_alerts_batch = etl_alerts[n : (n + 1) * service_config.UDS_BATCH_SIZE]
+            for n in range(0, len(etl_alerts), service_config.uds_batch_size):
+                etl_alerts_batch = etl_alerts[n : (n + 1) * service_config.uds_batch_size]
                 tasks.append(
                     asyncio.get_event_loop().create_task(
                         self.run_task_for_alert(
@@ -142,24 +142,6 @@ class EtlPipelineServiceServicer(object):
             )
         alert.data_inputs = DataInputRecords(category_batches, agent_input_batches)
         return alert
-
-    def upload_to_data_source(self, alert, record):
-        input_match_records, status, error = record
-        if status != FAILURE:
-            logger.info(f"Batch {alert.batch_id}, Alert {alert.alert_name} parsed successfully")
-            for input_match_record in input_match_records:
-                logger.info("Trying upload from pipeline to UDS")
-                try:
-                    self.add_to_datasource(alert, input_match_record)
-                except Exception as e:
-                    logger.error(f"Exception {e}")
-                    status = FAILURE
-                    break
-        else:
-            logger.info(
-                f"Batch {alert.batch_id}, Alert {alert.alert_name} - parsing error: {error}"
-            )
-        return alert, status
 
     def process_request(self, alert):
         record = self.parse_alert(alert)

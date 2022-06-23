@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package silenteight.learningstore.historicaldecision.v2.api;
+
+import "google/api/field_behavior.proto";
+
+option java_package = "com.silenteight.proto.learningstore.historicaldecision.v2.api";
+option java_outer_classname = "HistoricalDecisionLearningCommonProto";
+option java_multiple_files = true;
+
+message Watchlist {
+  string id = 1 [(google.api.field_behavior) = REQUIRED]; // e.g. WL_ID_123
+  // e.g. WorldCheckIndividuals | WorldCheckEntities | PrivateListIndividuals | PrivateListEntities
+  string type = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message Decision {
+  string id = 1 [(google.api.field_behavior) = REQUIRED]; // e.g. DECISION_ID_201
+  string value = 2 [(google.api.field_behavior) = REQUIRED]; // e.g. True Positive
+  int64 created_at = 3 [(google.api.field_behavior) = REQUIRED]; // Unix time
+}
+
+message Discriminator {
+  // Customer identification, e.g. siempre_ts_historical_learning
+  //  Should be the same in the Historical Decision Agent request
+  string value = 1 [(google.api.field_behavior) = REQUIRED];
+}

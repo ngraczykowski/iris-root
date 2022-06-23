@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 set -eu -o pipefail
 
+export WHEELDIR="temp"
+
 rm -R venv || true
-python3.6 -m venv venv
+python3.7 -m venv venv
 
 source venv/bin/activate
 rm -R $WHEELDIR  || true
@@ -10,9 +12,12 @@ rm -R $WHEELDIR  || true
 mkdir -p  $WHEELDIR
 
 # optional if there is a problem with pip
-curl https://bootstrap.pypa.io/pip/3.6/get-pip.py | python - 
-pip wheel . -w $WHEELDIR --no-cache-dir
+which pip
+pip install --upgrade setuptools pip wheel
 python setup.py bdist_wheel
+
+
+pip wheel . -w $WHEELDIR --no-cache-dir
 rm $WHEELDIR/etl*
 artifact=$(basename -- "$(ls ./dist/etl_pipeline-*.whl)")
 mv dist/$artifact $WHEELDIR/

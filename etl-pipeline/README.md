@@ -107,8 +107,8 @@ Before this flat payload is fed into ETL pipeline, the instance of `PayloadLoade
 ### Service
 
 You can configure:
-- `DATA_SOURCE_INPUT_ENDPOINT`, e.g. `localhost:50052` - the endpoint of Data Source Service where ETL pipeline sends created agent inputs and;
-- `ETL_SERVICE_PORT`, e.g. `9090`  - port at which the ETL pipeline service is available;
+- `data_source_input_endpoint`, e.g. `localhost:50052` - the endpoint of Data Source Service where ETL pipeline sends created agent inputs and;
+- `etl_service_port`, e.g. `9090`  - port at which the ETL pipeline service is available;
 
 
 

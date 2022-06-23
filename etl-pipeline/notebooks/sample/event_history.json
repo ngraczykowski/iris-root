@@ -1,0 +1,63 @@
+{
+    "alertEventHistory": {
+        "alertId": "SANC-ASM-1252185",
+        "alertInternalId": "2229113",
+        "alertTypeId": "10168",
+        "datasetId": "1044",
+        "datasetName": "R_US_Active_Address",
+        "uniqueCustId": "R_US_Active_Address_A05005818612_2020-11-09-09.25.28.978342",
+        "busDate": "20211201",
+        "statusId": "41",
+        "statusName": "L2 Closed No Action - False Positive",
+        "eventHistory": [
+            {
+                "createDate": "2022-01-01 18:25:43.511",
+                "event": "Alert created",
+                "eventNote": "Item identifier: SANC-ASM-JAN-AL-1",
+                "userNote": null,
+                "userInternalId": "39001",
+                "loginName": "amlcmu"
+            },
+            {
+                "createDate": "2022-01-01 18:25:43.51",
+                "event": "Status changed",
+                "eventNote": "Change step forward\nStatus changed from [L2 Review] to [L2 Closed No Action - False Positive]. Work Item Closed",
+                "userNote": null,
+                "userInternalId": "170301",
+                "loginName": "upadhabh"
+            },
+            {
+                "createDate": "2022-01-01 18:25:43.511",
+                "event": "Status changed",
+                "eventNote": "Change step forward\nStatus changed from [L1 Review] to [L1 Closed Action - Escalate to L2 Unable to Clear].\nReasons added: Sources Used (3 D / 3 D Docs / EDD)",
+                "userNote": null,
+                "userInternalId": "170301",
+                "loginName": "upadhabh"
+            },
+            {
+                "createDate": "2022-01-01 18:25:43.5",
+                "event": "Status changed",
+                "eventNote": "Change step forward\nStatus changed from [L2 New] to [L2 Review].",
+                "userNote": null,
+                "userInternalId": "170301",
+                "loginName": "upadhabh"
+            },
+            {
+                "createDate": "2022-01-01 18:25:43.511",
+                "event": "Note added",
+                "eventNote": "Note added during: Change step forward",
+                "userNote": "Escalating from L1 to L2 - unable to clear",
+                "userInternalId": "170301",
+                "loginName": "upadhabh"
+            },
+            {
+                "createDate": "2022-01-01 18:25:43.511",
+                "event": "Note added",
+                "eventNote": "Note added during: Change step forward",
+                "userNote": "Can be closed as false positive",
+                "userInternalId": "170301",
+                "loginName": "upadhabh"
+            }
+        ]
+    }
+}

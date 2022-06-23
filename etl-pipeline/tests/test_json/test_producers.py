@@ -401,7 +401,7 @@ def test_produce_name_feature_input_producer(
                 "feature_name": "",
                 "field_maps": {"type": "type_field"},
             },
-            ({}, {"type_field": "test name"}, "test_alert", "test_match"),
+            ({"type_field": "test name"}, "test_alert", "test_match"),
             {"single_value": "test name", "alert": "test_alert", "match": "test_match"},
         ),
         (
@@ -410,7 +410,7 @@ def test_produce_name_feature_input_producer(
                 "feature_name": "",
                 "field_maps": {"type": "type_field"},
             },
-            ({}, {"type_field": ""}, "None", None),
+            ({"type_field": ""}, "None", None),
             {"single_value": "", "alert": "None", "match": ""},
         ),
     ],

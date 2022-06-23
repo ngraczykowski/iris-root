@@ -57,14 +57,28 @@ class Producer(ABC):
     def produce_feature_input(self, match_payload, payload):
         pass
 
+    def produce_fields(self, payload, auxiliary_payload=None):
+        fields = deepcopy(self.fields)
+        payload = deepcopy(payload)
+        auxiliary_payload = deepcopy(auxiliary_payload)
+        for input_key, payload_key in self.fields.items():
+            if "." in payload_key:
+                keys = payload_key.split(".")
+                value = auxiliary_payload
+                for key in keys:
+                    value = value.get(key, {})
+                fields[input_key] = value
+            else:
+                fields[input_key] = payload.get(payload_key, [])
+            if isinstance(fields[input_key], list):
+                fields[input_key] = [i for i in fields[input_key] if i]
+        return fields
+
 
 class CountryFeatureInputProducer(Producer):
     @safe_produce
     def produce_feature_input(self, payload):
-        fields = deepcopy(self.fields)
-        payload = deepcopy(payload)
-        for input_key, payload_key in self.fields.items():
-            fields[input_key] = payload.get(payload_key, [])
+        fields = super().produce_fields(payload)
         return CountryFeatureInput(
             feature=self.feature_name,
             **fields,
@@ -74,10 +88,7 @@ class CountryFeatureInputProducer(Producer):
 class DateFeatureInputProducer(Producer):
     @safe_produce
     def produce_feature_input(self, payload, auxiliary_payload=None):
-        fields = deepcopy(self.fields)
-        payload = deepcopy(payload)
-        for input_key, payload_key in self.fields.items():
-            fields[input_key] = payload.get(payload_key, [])
+        fields = super().produce_fields(payload)
         return DateFeatureInput(
             feature=self.feature_name,
             alerted_party_type=DateFeatureInput.EntityType.INDIVIDUAL,
@@ -89,8 +100,7 @@ class DateFeatureInputProducer(Producer):
 class DocumentFeatureInputProducer(Producer):
     @safe_produce
     def produce_feature_input(self, payload, auxiliary_payload=None):
-        fields = deepcopy(self.fields)
-        payload = deepcopy(payload)
+        fields = super().produce_fields(payload)
         for input_key, payload_key in self.fields.items():
             fields[input_key] = [
                 i for i in payload.get(payload_key, []) if i is not None and i != "None"
@@ -104,10 +114,7 @@ class DocumentFeatureInputProducer(Producer):
 class HistoricalDecisionsFeatureInputProducer(Producer):
     @safe_produce
     def produce_feature_input(self, payload, auxiliary_payload=None):
-        fields = deepcopy(self.fields)
-        payload = deepcopy(payload)
-        for input_key, payload_key in self.fields.items():
-            fields[input_key] = payload.get(payload_key, [])
+        fields = super().produce_fields(payload)
         alerted_party = AlertedParty(id=str(fields["alerted_party"]))
         disc = Discriminator(value=str(self.fields["discriminator"]))
 
@@ -121,12 +128,9 @@ class HistoricalDecisionsFeatureInputProducer(Producer):
 class LocationFeatureInputProducer(Producer):
     @safe_produce
     def produce_feature_input(self, payload, auxiliary_payload=None):
-        fields = deepcopy(self.fields)
-        payload = deepcopy(payload)
-        for input_key, payload_key in self.fields.items():
-            fields[input_key] = " ".join(
-                [i for i in payload.get(payload_key, []) if i and i != "None"]
-            )
+        fields = super().produce_fields(payload, auxiliary_payload)
+        for input_key in self.fields:
+            fields[input_key] = " ".join([i for i in fields[input_key] if i and i != "None"])
 
         return LocationFeatureInput(
             feature=self.feature_name,
@@ -143,20 +147,7 @@ class NameFeatureInputProducer(Producer):
 
     @safe_produce
     def produce_feature_input(self, payload, auxiliary_payload=None):
-        fields = deepcopy(self.fields)
-        payload = deepcopy(payload)
-        for input_key, payload_key in self.fields.items():
-            if "." in payload_key:
-                keys = payload_key.split(".")
-                value = auxiliary_payload
-                for key in keys:
-                    value = value.get(key, {})
-                fields[input_key] = value
-            else:
-                fields[input_key] = payload.get(payload_key, [])
-            if isinstance(fields[input_key], list):
-                fields[input_key] = [i for i in fields[input_key] if i]
-
+        fields = super().produce_fields(payload, auxiliary_payload)
         alerted_party_type = fields["alerted_party_type"]
         if alerted_party_type == "UNKNOWN":
             alerted_party_type = payload.get("WLP_TYPE")
@@ -177,21 +168,9 @@ class NameFeatureInputProducer(Producer):
 
 class CategoryProducer(Producer):
     @safe_produce
-    def produce_feature_input(self, payload, match_payload, alert, match_name):
-        fields = deepcopy(self.fields)
-        type = ""
-        try:
-            type = match_payload.get(fields["type"], "")
-            if not type:
-                if "." in fields["type"]:
-                    type = payload
-                    for splitted_key in fields["type"].split("."):
-                        type = type.get(splitted_key, "")
-                else:
-                    type = payload.get(fields["type"], "")
-        except:
-            pass
-        return CategoryValue(single_value=type, alert=alert, match=match_name)
+    def produce_feature_input(self, payload, alert, match_name, auxiliary_payload=None):
+        fields = super().produce_fields(payload, auxiliary_payload)
+        return CategoryValue(single_value=fields["type"], alert=alert, match=match_name)
 
 
 class HitTypeFeatureInputProducer(Producer):

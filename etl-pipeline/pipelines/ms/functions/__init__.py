@@ -122,6 +122,12 @@ class Functions:
                     aggregated.extend(
                         [i.get(field_name, "") for i in parties if i.get(field_name, "")]
                     )
+            elif collection == "accounts":
+                accounts = self.collections.get_accounts(payload)
+                for field_name in source["accounts"]:
+                    aggregated.extend(
+                        [i.get(field_name, "") for i in accounts if i.get(field_name, "")]
+                    )
             elif collection == "xml_fields":
                 fields = self.collections.get_xml_fields(payload)
                 for field in source[collection]:
@@ -188,7 +194,7 @@ class Functions:
     def _set_up_party_type(cls, source_payload, target_field="", target_collection=""):
         party_types = [
             party_type
-            for party_type in source_payload["alertedParty"]["ALL_PARTY_TYPES"]
+            for party_type in source_payload["alertedParty"]["AP_PARTY_TYPES"]
             if party_type
         ]
         dataset_type = source_payload["metadata"]["datasetType"]

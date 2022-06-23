@@ -582,15 +582,15 @@
             "",
             ""
         ],
-        "ALL_PARTY_TYPES": [
+        "AP_PARTY_TYPES": [
             "Individual",
             "Individual"
         ],
-        "ALL_PARTY_NAMES": [
+        "AP_PARTY_NAMES": [
             "Pladimir Vutin",
             "Eva Pladimirova"
         ],
-        "ALL_TAX_IDS": [
+        "AP_TAX_IDS": [
             "154421273",
             "022368917"
         ],
@@ -598,40 +598,39 @@
             "02/31/1900",
             "04/31/1910"
         ],
-        "ALL_PARTY_BIRTH_COUNTRIES": [
+        "AP_PARTY_BIRTH_COUNTRIES": [
             null,
             null
         ],
-        "ALL_PARTY_CITIZENSHIP_COUNTRIES": [
+        "AP_PARTY_CITIZENSHIP_COUNTRIES": [
             "United States",
             "United States"
         ],
-        "ALL_PARTY_RESIDENCY_COUNTRIES": [
+        "AP_PARTY_RESIDENCY_COUNTRIES": [
             "",
             ""
         ],
-        "ALL_CONNECTED_PARTIES_NAMES": [
+        "AP_PARTIES_NAMES": [
             "Pladimir Vutin",
             "Eva Pladimirova"
         ],
-        "ALL_BRANCH_ACCOUNT_NUMBERS": [
+        "AP_BRANCH_ACCOUNT_NUMBERS": [
             "234_142529",
             "234_142529"
         ],
-        "ALL_BENEFICIARY_NAMES": [
+        "AP_BENEFICIARY_NAMES": [
             "",
             ""
         ],
-        "ALL_PARTY_EMPLOYERS": null,
-        "ALL_PARTY1_COUNTRY": null,
-        "ALL_PARTY1_COUNTRY1": null,
-        "ALL_PARTY1_ADDRESS1_COUNTRY": "",
-        "ALL_PARTY1_COUNTRY1_CITIZENSHIP": null,
-        "ALL_PARTY1_COUNTRY2_CITIZENSHIP": null,
-        "ALL_PARTY1_COUNTRY_FORMATION1": null,
-        "ALL_PARTY1_COUNTRY_DOMICILE1": null,
-        "ALL_PARTY1_COUNTRY_OF_INCORPORATION": null,
-        "ALL_CONNECTED_PARTY_TYPES": [
+        "AP_PARTY_EMPLOYERS": null,
+        
+        
+        
+        
+        
+        
+        
+        "AP_PARTY_TYPES": [
             "Individual",
             "Individual"
         ],
@@ -1247,15 +1246,15 @@
             "",
             ""
         ],
-        "ALL_PARTY_TYPES": [
+        "AP_PARTY_TYPES": [
             "Individual",
             "Individual"
         ],
-        "ALL_PARTY_NAMES": [
+        "AP_PARTY_NAMES": [
             "Pladimir Vutin",
             "Eva Pladimirova"
         ],
-        "ALL_TAX_IDS": [
+        "AP_TAX_IDS": [
             "154421273",
             "022368917"
         ],
@@ -1263,40 +1262,40 @@
             "02/31/1900",
             "04/31/1910"
         ],
-        "ALL_PARTY_BIRTH_COUNTRIES": [
+        "AP_PARTY_BIRTH_COUNTRIES": [
             null,
             null
         ],
-        "ALL_PARTY_CITIZENSHIP_COUNTRIES": [
+        "AP_PARTY_CITIZENSHIP_COUNTRIES": [
             "United States",
             "United States"
         ],
-        "ALL_PARTY_RESIDENCY_COUNTRIES": [
+        "AP_PARTY_RESIDENCY_COUNTRIES": [
             "",
             ""
         ],
-        "ALL_CONNECTED_PARTIES_NAMES": [
+        "AP_PARTIES_NAMES": [
             "Pladimir Vutin",
             "Eva Pladimirova"
         ],
-        "ALL_BRANCH_ACCOUNT_NUMBERS": [
+        "AP_BRANCH_ACCOUNT_NUMBERS": [
             "234_142529",
             "234_142529"
         ],
-        "ALL_BENEFICIARY_NAMES": [
+        "AP_BENEFICIARY_NAMES": [
             "",
             ""
         ],
-        "ALL_PARTY_EMPLOYERS": null,
-        "ALL_PARTY1_COUNTRY": null,
-        "ALL_PARTY1_COUNTRY1": null,
-        "ALL_PARTY1_ADDRESS1_COUNTRY": "",
-        "ALL_PARTY1_COUNTRY1_CITIZENSHIP": null,
-        "ALL_PARTY1_COUNTRY2_CITIZENSHIP": null,
-        "ALL_PARTY1_COUNTRY_FORMATION1": null,
-        "ALL_PARTY1_COUNTRY_DOMICILE1": null,
-        "ALL_PARTY1_COUNTRY_OF_INCORPORATION": null,
-        "ALL_CONNECTED_PARTY_TYPES": [
+        "AP_PARTY_EMPLOYERS": null,
+        
+        
+        
+        
+        
+        
+        
+        
+        "AP_PARTY_TYPES": [
             "Individual",
             "Individual"
         ],

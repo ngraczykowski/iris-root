@@ -191,7 +191,7 @@ EXAMPLES = [
 
 EXAMPLE_FOR_TEST_SET_REF_KEY = {
     "entityTextType": "UPIDDDD",
-    "AP_TRIGGERS": {"doe": {"ALL_PARTY_NAMES": ["John, Doe Doe"]}, "johnny": {}, "sude": {}},
+    "AP_TRIGGERS": {"doe": {"AP_PARTY_NAMES": ["John, Doe Doe"]}, "johnny": {}, "sude": {}},
     "TRIGGERED_BY": [
         "entityTextType",
         "SRC_REF_KEY",
@@ -484,10 +484,10 @@ TEST_AGENT_INPUT_CASES = [
             "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
-            ("ap", "ALL_CONNECTED_TAX_IDS"): ["154421273", "022368917"],
-            ("ap", "ALL_CONNECTED_GOVT_IDS"): ["123", "321"],
-            ("ap", "ALL_PARTY1_GOVTID1_NUMBER"): "131313",
-            ("ap", "ALL_PARTY1_GOVTID2_NUMBER"): "2323232",
+            ("ap", "AP_TAX_IDS"): ["154421273", "022368917"],
+            ("ap", "AP_GOVT_IDS"): ["123", "321"],
+            ("ap", "alertedParty.xml_fields.PARTY1_GOVTID1_NUMBER"): "131313",
+            ("ap", "alertedParty.xml_fields.PARTY1_GOVTID2_NUMBER"): "2323232",
             ("wl", "watchlistParty.matchRecords.WL_DOCUMENT_NUMBER"): ["abc123"],
         },
     ),
@@ -520,17 +520,17 @@ TEST_AGENT_INPUT_CASES = [
             "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
-            ("ap", "ALL_CONCAT_NAMES"): "Soft Ltd.",
-            ("ap", "ALL_CONNECTED_PARTY_NAMES"): ["Joe Small", "Johny B. Good"],
-            ("ap", "ALL_CONNECTED_PARTIES_NAMES"): [
+            ("ap", "alertedParty.xml_fields.CONCAT_NAME"): "Soft Ltd.",
+            ("ap", "AP_PARTY_NAMES"): ["Joe Small", "Johny B. Good"],
+            ("ap", "AP_PARTIES_NAMES"): [
                 "Joe Middle Small",
                 "Johnathanno Budger Good",
             ],
-            ("ap", "ALL_CONNECTED_ACCOUNT_NAMES"): ["Pladimir Vutin"],
-            ("ap", "ALL_CONNECTED_ACCOUNT_BENEFICIARY_NAMES"): ["BenePladimir Vutin"],
+            ("ap", "AP_ACCOUNT_NAMES"): ["Pladimir Vutin"],
+            ("ap", "AP_ACCOUNT_BENEFICIARY_NAMES"): ["BenePladimir Vutin"],
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL",
+                "alertedParty.xml_fields.PARTY1_NAME_FULL",
             ): "Janusz",
             ("wl", "watchlistParty.matchRecords.WL_NAME"): "Joe Ding",
         },
@@ -564,17 +564,17 @@ TEST_AGENT_INPUT_CASES = [
             "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
-            ("ap", "ALL_CONCAT_NAMES"): "Soft Ltd.",
-            ("ap", "ALL_CONNECTED_PARTY_NAMES"): ["Joe Small", "Johny B. Good"],
-            ("ap", "ALL_CONNECTED_PARTIES_NAMES"): [
+            ("ap", "alertedParty.xml_fields.CONCAT_NAME"): "Soft Ltd.",
+            ("ap", "AP_PARTY_NAMES"): ["Joe Small", "Johny B. Good"],
+            ("ap", "AP_PARTIES_NAMES"): [
                 "Joe Middle Small",
                 "Johnathanno Budger Good",
             ],
-            ("ap", "ALL_CONNECTED_ACCOUNT_NAMES"): ["Pladimir Vutin"],
-            ("ap", "ALL_CONNECTED_ACCOUNT_BENEFICIARY_NAMES"): ["BenePladimir Vutin"],
+            ("ap", "AP_ACCOUNT_NAMES"): ["Pladimir Vutin"],
+            ("ap", "AP_ACCOUNT_BENEFICIARY_NAMES"): ["BenePladimir Vutin"],
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL",
+                "alertedParty.xml_fields.PARTY1_NAME_FULL",
             ): "Janusz",
             ("wl", "watchlistParty.matchRecords.WL_NAME"): "Joe Ding",
         },
@@ -598,14 +598,13 @@ TEST_AGENT_INPUT_CASES = [
             "watchlistParty.matchRecords[0].entity.aliases[0].alias": "Billabong the King",
         },
         expected_result={
-            ("ap", "ALL_PARTY1_EMPLOYERS"): "Macro Soft Ltd.",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_EMPLOYER",
+                "alertedParty.xml_fields.PARTY1_EMPLOYER",
             ): "Macro Soft Ltd.",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ORGANIZATION_NAME",
+                "alertedParty.xml_fields.PARTY1_ORGANIZATION_NAME",
             ): "JanuszSoft Ltd.",
             ("wl", "watchlistParty.matchRecords.WL_NAME"): "Joe Joe Bring Ding",
             ("wl", "watchlistParty.matchRecords.WL_ALIASES"): [["Billabong the King"]],
@@ -630,11 +629,11 @@ TEST_AGENT_INPUT_CASES = [
             "alertedParty.inputRecordHist.inputRecords[0].fields[0].isScreenable": "true",
             "alertedParty.inputRecordHist.inputRecords[0].fields[0].value": "UNITED STATES OF AMERICA",
             "alertedParty.inputRecordHist.inputRecords[0].fields[0].sortOrder": "20",
-            "alertedParty.inputRecordHist.inputRecords[0].fields[1].name": "COUNTRY1_CITIZENSHIP",
+            "alertedParty.inputRecordHist.inputRecords[0].fields[1].name": "PARTY1_COUNTRY1_CITIZENSHIP",
             "alertedParty.inputRecordHist.inputRecords[0].fields[1].isScreenable": "false",
             "alertedParty.inputRecordHist.inputRecords[0].fields[1].value": "Moominland",
             "alertedParty.inputRecordHist.inputRecords[0].fields[1].sortOrder": "1",
-            "alertedParty.inputRecordHist.inputRecords[0].fields[2].name": "COUNTRY_DOMICILE1",
+            "alertedParty.inputRecordHist.inputRecords[0].fields[2].name": "PARTY1_COUNTRY_DOMICILE1",
             "alertedParty.inputRecordHist.inputRecords[0].fields[2].isScreenable": "false",
             "alertedParty.inputRecordHist.inputRecords[0].fields[2].value": "Lapland",
             "alertedParty.inputRecordHist.inputRecords[0].fields[2].sortOrder": "1",
@@ -650,14 +649,14 @@ TEST_AGENT_INPUT_CASES = [
             "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
-            ("ap", "ALL_PARTY1_COUNTRY1_CITIZENSHIP"): "Moominland",
-            ("ap", "ALL_PARTY1_COUNTRY_DOMICILE1"): "Lapland",
-            ("ap", "ALL_PRTY_RSDNC_CNTRY_CD"): "Finland",
-            ("ap", "ALL_PARTY1_ADDRESS1_COUNTRY"): "UNITED STATES OF AMERICA",
-            ("ap", "ALL_CONNECTED_PARTY_BIRTH_COUNTRIES"): ["Norway", "Sweden"],
-            ("ap", "ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES"): ["Belize", "Honduras"],
-            ("ap", "ALL_CONNECTED_PARTY_RESIDENCY_COUNTRIES"): ["NO", "SE"],
-            ("ap", "ALL_CONNECTED_COUNTRY_OF_INCORPORATION"): ["TOGO"],
+            ("ap", "alertedParty.xml_fields.PARTY1_COUNTRY1_CITIZENSHIP"): "Moominland",
+            ("ap", "alertedParty.xml_fields.PARTY1_COUNTRY_DOMICILE1"): "Lapland",
+            ("ap", "alertedParty.xml_fields.PRTY_RSDNC_CNTRY_CD"): "Finland",
+            ("ap", "alertedParty.xml_fields.ADDRESS1_COUNTRY"): "UNITED STATES OF AMERICA",
+            ("ap", "AP_PARTY_BIRTH_COUNTRIES"): ["Norway", "Sweden"],
+            ("ap", "AP_PARTY_CITIZENSHIP_COUNTRIES"): ["Belize", "Honduras"],
+            ("ap", "AP_PARTY_RESIDENCY_COUNTRIES"): ["NO", "SE"],
+            ("ap", "AP_COUNTRY_OF_INCORPORATION"): ["TOGO"],
             ("wl", "watchlistParty.matchRecords.WL_NATIONALITY"): ["American"],
             ("wl", "watchlistParty.matchRecords.WL_POB"): [["Orlando, Florida"]],
             ("wl", "watchlistParty.matchRecords.WL_CITIZENSHIP"): ["AMMMerican"],
@@ -677,7 +676,7 @@ TEST_AGENT_INPUT_CASES = [
             "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
-            ("ap", "alertedParty.ALL_PARTY_TYPES"): ["human", "monkey"],
+            ("ap", "alertedParty.AP_PARTY_TYPES"): ["human", "monkey"],
             ("wl", "watchlistParty.matchRecords.WLP_TYPE"): "I",
         },
     ),
@@ -698,9 +697,9 @@ TEST_AGENT_INPUT_CASES = [
             "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
-            ("ap", "ALL_CONNECTED_PARTY_BIRTH_COUNTRIES"): ["Mongolia", "Kazachstan"],
-            ("ap", "ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES"): ["Belize"],
-            ("ap", "ALL_CONNECTED_COUNTRY_OF_INCORPORATION"): ["TOGO"],
+            ("ap", "AP_PARTY_BIRTH_COUNTRIES"): ["Mongolia", "Kazachstan"],
+            ("ap", "AP_PARTY_CITIZENSHIP_COUNTRIES"): ["Belize"],
+            ("ap", "AP_COUNTRY_OF_INCORPORATION"): ["TOGO"],
             ("wl", "watchlistParty.matchRecords.WL_COUNTRY"): "US",
             ("wl", "watchlistParty.matchRecords.WL_COUNTRYNAME"): "United States of America",
             ("wl", "watchlistParty.matchRecords.WL_POB"): [["Orlando, Florida"]],
@@ -719,7 +718,7 @@ TEST_AGENT_INPUT_CASES = [
             "alertedParty.supplementalInfo.relatedParties.party[1].fields.partyCountryOfBirth": "Kazachstan-1",
             "alertedParty.supplementalInfo.relatedParties.party[1].fields.partyPrimaryCitizenshipCountry": "Kazachstan-2",
             "alertedParty.supplementalInfo.relatedParties.party[1].fields.countryOfIncorporation": "Kazachstan-3",
-            "alertedParty.inputRecordHist.inputRecords[0].fields[0].name": "ADDRESS1_COUNTRY",
+            "alertedParty.inputRecordHist.inputRecords[0].fields[0].name": "PARTY1_ADDRESS1_COUNTRY",
             "alertedParty.inputRecordHist.inputRecords[0].fields[0].isScreenable": "true",
             "alertedParty.inputRecordHist.inputRecords[0].fields[0].value": "UNITED STATES OF AMERICA",
             "alertedParty.inputRecordHist.inputRecords[0].fields[0].sortOrder": "20",
@@ -739,15 +738,15 @@ TEST_AGENT_INPUT_CASES = [
             "alertedParty.inputRecordHist.inputRecords[0].fields[4].isScreenable": "false",
             "alertedParty.inputRecordHist.inputRecords[0].fields[4].value": "Goominland",
             "alertedParty.inputRecordHist.inputRecords[0].fields[4].sortOrder": "1",
-            "alertedParty.inputRecordHist.inputRecords[0].fields[5].name": "COUNTRY_DOMICILE1",
+            "alertedParty.inputRecordHist.inputRecords[0].fields[5].name": "PARTY1_COUNTRY_DOMICILE1",
             "alertedParty.inputRecordHist.inputRecords[0].fields[5].isScreenable": "false",
             "alertedParty.inputRecordHist.inputRecords[0].fields[5].value": "Lapland",
             "alertedParty.inputRecordHist.inputRecords[0].fields[5].sortOrder": "1",
-            "alertedParty.inputRecordHist.inputRecords[0].fields[6].name": "COUNTRY_FORMATION1",
+            "alertedParty.inputRecordHist.inputRecords[0].fields[6].name": "PARTY1_COUNTRY_FORMATION1",
             "alertedParty.inputRecordHist.inputRecords[0].fields[6].isScreenable": "false",
             "alertedParty.inputRecordHist.inputRecords[0].fields[6].value": "Gapland",
             "alertedParty.inputRecordHist.inputRecords[0].fields[6].sortOrder": "1",
-            "alertedParty.inputRecordHist.inputRecords[0].fields[7].name": "COUNTRY_OF_INCORPORATION",
+            "alertedParty.inputRecordHist.inputRecords[0].fields[7].name": "PARTY1_COUNTRY_OF_INCORPORATION",
             "alertedParty.inputRecordHist.inputRecords[0].fields[7].isScreenable": "false",
             "alertedParty.inputRecordHist.inputRecords[0].fields[7].value": "Hapland",
             "alertedParty.inputRecordHist.inputRecords[0].fields[7].sortOrder": "1",
@@ -761,21 +760,20 @@ TEST_AGENT_INPUT_CASES = [
             "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
-            ("ap", "ALL_CONNECTED_PARTY_BIRTH_COUNTRIES"): ["Mongolia-1", "Kazachstan-1"],
-            ("ap", "ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES"): [
+            ("ap", "AP_PARTY_BIRTH_COUNTRIES"): ["Mongolia-1", "Kazachstan-1"],
+            ("ap", "AP_PARTY_CITIZENSHIP_COUNTRIES"): [
                 "Mongolia-2",
                 "Kazachstan-2",
             ],
-            ("ap", "ALL_CONNECTED_COUNTRY_OF_INCORPORATION"): ["Mongolia-3", "Kazachstan-3"],
-            ("ap", "ALL_PARTY1_ADDRESS1_COUNTRY"): "UNITED STATES OF AMERICA",
-            ("ap", "ALL_PARTY1_COUNTRY"): "UNITED STATES OF AMERICAA",
-            ("ap", "ALL_PARTY1_COUNTRY1"): "UNITED STATES OF AMERICAAA",
-            ("ap", "ALL_PARTY1_COUNTRY1_CITIZENSHIP"): "Moominland",
-            ("ap", "ALL_PARTY1_COUNTRY2_CITIZENSHIP"): "Goominland",
-            ("ap", "ALL_PARTY1_COUNTRY_DOMICILE1"): "Lapland",
-            ("ap", "ALL_PARTY1_COUNTRY_FORMATION1"): "Gapland",
-            ("ap", "ALL_PARTY1_COUNTRY_OF_INCORPORATION"): "Hapland",
-            ("ap", "ALL_PRTY_PRIM_CTZNSH_CNTRY"): "Trapland",
+            ("ap", "AP_COUNTRY_OF_INCORPORATION"): ["Mongolia-3", "Kazachstan-3"],
+            ("ap", "alertedParty.xml_fields.PARTY1_ADDRESS1_COUNTRY"): "UNITED STATES OF AMERICA",
+            ("ap", "alertedParty.xml_fields.COUNTRY1"): "UNITED STATES OF AMERICAAA",
+            ("ap", "alertedParty.xml_fields.COUNTRY1_CITIZENSHIP"): "Moominland",
+            ("ap", "alertedParty.xml_fields.COUNTRY2_CITIZENSHIP"): "Goominland",
+            ("ap", "alertedParty.xml_fields.PARTY1_COUNTRY_DOMICILE1"): "Lapland",
+            ("ap", "alertedParty.xml_fields.PARTY1_COUNTRY_FORMATION1"): "Gapland",
+            ("ap", "alertedParty.xml_fields.PARTY1_COUNTRY_OF_INCORPORATION"): "Hapland",
+            ("ap", "alertedParty.xml_fields.PRTY_PRIM_CTZNSH_CNTRY"): "Trapland",
             ("wl", "watchlistParty.matchRecords.WL_COUNTRY"): "US",
             ("wl", "watchlistParty.matchRecords.WL_COUNTRYNAME"): "United States of America",
             ("wl", "watchlistParty.matchRecords.WL_NAME"): "Ding Dong",
@@ -793,11 +791,11 @@ TEST_AGENT_INPUT_CASES = [
             "alertedParty.supplementalInfo.relatedParties.party[1].fields.partyCountryOfBirth": "Sweden",
             "alertedParty.supplementalInfo.relatedParties.party[1].fields.partyPrimaryCitizenshipCountry": "Honduras",
             "alertedParty.supplementalInfo.relatedParties.party[1].fields.countryOfIncorporation": "GOTO",
-            "alertedParty.inputRecordHist.inputRecords[0].fields[0].name": "ADDRESS1_COUNTRY",
+            "alertedParty.inputRecordHist.inputRecords[0].fields[0].name": "PARTY1_ADDRESS1_COUNTRY",
             "alertedParty.inputRecordHist.inputRecords[0].fields[0].isScreenable": "true",
             "alertedParty.inputRecordHist.inputRecords[0].fields[0].value": "5th Avenue 22",
             "alertedParty.inputRecordHist.inputRecords[0].fields[0].sortOrder": "22",
-            "alertedParty.inputRecordHist.inputRecords[0].fields[1].name": "COUNTRY_DOMICILE1",
+            "alertedParty.inputRecordHist.inputRecords[0].fields[1].name": "PARTY1_COUNTRY_DOMICILE1",
             "alertedParty.inputRecordHist.inputRecords[0].fields[1].isScreenable": "false",
             "alertedParty.inputRecordHist.inputRecords[0].fields[1].value": "Lapland",
             "alertedParty.inputRecordHist.inputRecords[0].fields[1].sortOrder": "1",
@@ -817,7 +815,7 @@ TEST_AGENT_INPUT_CASES = [
             "alertedParty.inputRecordHist.inputRecords[0].fields[5].isScreenable": "false",
             "alertedParty.inputRecordHist.inputRecords[0].fields[5].value": "PEP Republic",
             "alertedParty.inputRecordHist.inputRecords[0].fields[5].sortOrder": "1",
-            "alertedParty.inputRecordHist.inputRecords[0].fields[6].name": "COUNTRY_OF_INCORPORATION",
+            "alertedParty.inputRecordHist.inputRecords[0].fields[6].name": "PARTY1_COUNTRY_OF_INCORPORATION",
             "alertedParty.inputRecordHist.inputRecords[0].fields[6].isScreenable": "false",
             "alertedParty.inputRecordHist.inputRecords[0].fields[6].value": "Hapland",
             "alertedParty.inputRecordHist.inputRecords[0].fields[6].sortOrder": "1",
@@ -828,17 +826,17 @@ TEST_AGENT_INPUT_CASES = [
         expected_result={
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ADDRESS1_COUNTRY",
+                "alertedParty.xml_fields.PARTY1_ADDRESS1_COUNTRY",
             ): "5th Avenue 22",
-            ("ap", "ALL_PARTY1_COUNTRY_DOMICILE1"): "Lapland",
-            ("ap", "ALL_CONNECTED_PARTY_BIRTH_COUNTRIES"): ["Norway", "Sweden"],
-            ("ap", "ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES"): ["Belize", "Honduras"],
-            ("ap", "ALL_CONNECTED_COUNTRY_OF_INCORPORATION"): ["TOGO", "GOTO"],
-            ("ap", "ALL_PRTY_PRIM_CTZNSH_CNTRY"): "Trapland",
-            ("ap", "ALL_PARTY1_COUNTRY2_CITIZENSHIP"): "Goominland",
-            ("ap", "ALL_PRTY_RSDNC_CNTRY_CD"): "Finland",
-            ("ap", "ALL_PARTY1_COUNTRY_PEP"): "PEP Republic",
-            ("ap", "ALL_PARTY1_COUNTRY_OF_INCORPORATION"): "Hapland",
+            ("ap", "alertedParty.xml_fields.PARTY1_COUNTRY_DOMICILE1"): "Lapland",
+            ("ap", "AP_PARTY_BIRTH_COUNTRIES"): ["Norway", "Sweden"],
+            ("ap", "AP_PARTY_CITIZENSHIP_COUNTRIES"): ["Belize", "Honduras"],
+            ("ap", "AP_COUNTRY_OF_INCORPORATION"): ["TOGO", "GOTO"],
+            ("ap", "alertedParty.xml_fields.PRTY_PRIM_CTZNSH_CNTRY"): "Trapland",
+            ("ap", "alertedParty.xml_fields.COUNTRY2_CITIZENSHIP"): "Goominland",
+            ("ap", "alertedParty.xml_fields.PRTY_RSDNC_CNTRY_CD"): "Finland",
+            ("ap", "alertedParty.xml_fields.PARTY1_COUNTRY_PEP"): "PEP Republic",
+            ("ap", "alertedParty.xml_fields.PARTY1_COUNTRY_OF_INCORPORATION"): "Hapland",
             ("wl", "watchlistParty.matchRecords.WL_COUNTRY"): "USAntarctica",
             (
                 "wl",
@@ -933,80 +931,80 @@ TEST_AGENT_INPUT_CASES = [
         expected_result={
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.CONCAT_NAME",
+                "alertedParty.xml_fields.CONCAT_NAME",
             ): "Joe King 0",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS1",
+                "alertedParty.xml_fields.PARTY1_NAME_ALIAS1",
             ): "Joe King 1",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS2",
+                "alertedParty.xml_fields.PARTY1_NAME_ALIAS2",
             ): "Joe King 2",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS3",
+                "alertedParty.xml_fields.PARTY1_NAME_ALIAS3",
             ): "Joe King 3",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS4",
+                "alertedParty.xml_fields.PARTY1_NAME_ALIAS4",
             ): "Joe King 4",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL",
+                "alertedParty.xml_fields.PARTY1_NAME_FULL",
             ): "Joe King 5",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ADDRESS1_COUNTRY",
+                "alertedParty.xml_fields.ADDRESS1_COUNTRY",
             ): "Joe King 6",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_DOMICILE1",
+                "alertedParty.xml_fields.PARTY1_COUNTRY_DOMICILE1",
             ): "Joe King 7",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_FORMATION1",
+                "alertedParty.xml_fields.PARTY1_COUNTRY_FORMATION1",
             ): "Joe King 8",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PRTY_PRIM_CTZNSH_CNTRY",
+                "alertedParty.xml_fields.PRTY_PRIM_CTZNSH_CNTRY",
             ): "Joe King 9",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY2_CITIZENSHIP",
+                "alertedParty.xml_fields.PARTY1_COUNTRY2_CITIZENSHIP",
             ): "Joe King 10",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PRTY_RSDNC_CNTRY_CD",
+                "alertedParty.xml_fields.PRTY_RSDNC_CNTRY_CD",
             ): "Joe King 11",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_PEP",
+                "alertedParty.xml_fields.PARTY1_COUNTRY_PEP",
             ): "Joe King 13",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_OF_INCORPORATION",
+                "alertedParty.xml_fields.PARTY1_COUNTRY_OF_INCORPORATION",
             ): "Joe King 14",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ADDRESS1_COUNTRY",
+                "alertedParty.xml_fields.PARTY1_ADDRESS1_COUNTRY",
             ): "Joe King 15",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_EMPLOYER",
+                "alertedParty.xml_fields.PARTY1_EMPLOYER",
             ): "Joe King 16",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ORGANIZATION_NAME",
+                "alertedParty.xml_fields.PARTY1_ORGANIZATION_NAME",
             ): "Joe King 17",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_POSITION_TITLE",
+                "alertedParty.xml_fields.PARTY1_POSITION_TITLE",
             ): "Joe King 18",
         },
     ),
     TestAgentInput(
-        agent_name="matched_tokens_tp_marked_agent",
+        agent_name="tokens_tp_marked_agent",
         payload={
             "alertedParty.headerInfo.datasetName": "R_US_Active_Address",
             "alertedParty.inputRecordHist.inputRecords[0].versionId": "122438658",
@@ -1033,7 +1031,7 @@ TEST_AGENT_INPUT_CASES = [
         expected_result={
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL",
+                "alertedParty.xml_fields.PARTY1_NAME_FULL",
             ): "Janusz",
         },
     ),
@@ -1050,7 +1048,7 @@ TEST_AGENT_INPUT_CASES = [
             "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
-            ("ap", "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ID"): "ID312",
+            ("ap", "alertedParty.xml_fields.PARTY1_ID"): "ID312",
         },
     ),
     TestAgentInput(
@@ -1068,7 +1066,7 @@ TEST_AGENT_INPUT_CASES = [
         expected_result={
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.UNIQUE_KEY",
+                "alertedParty.xml_fields.UNIQUE_KEY",
             ): "1234321",
         },
     ),
@@ -1087,7 +1085,7 @@ TEST_AGENT_INPUT_CASES = [
         expected_result={
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ACCOUNTNUMBER",
+                "alertedParty.xml_fields.ACCOUNTNUMBER",
             ): "191919",
         },
     ),
@@ -1152,17 +1150,17 @@ TEST_AGENT_INPUT_CASES = [
             "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
-            ("ap", "ALL_CONCAT_NAMES"): "Soft Ltd.",
-            ("ap", "ALL_CONNECTED_PARTY_NAMES"): ["Joe Small", "Johny B. Good"],
-            ("ap", "ALL_CONNECTED_PARTIES_NAMES"): [
+            ("ap", "alertedParty.xml_fields.CONCAT_NAME"): "Soft Ltd.",
+            ("ap", "AP_PARTY_NAMES"): ["Joe Small", "Johny B. Good"],
+            ("ap", "AP_PARTIES_NAMES"): [
                 "Joe Middle Small",
                 "Johnathanno Budger Good",
             ],
-            ("ap", "ALL_CONNECTED_ACCOUNT_NAMES"): ["Pladimir Vutin"],
-            ("ap", "ALL_CONNECTED_ACCOUNT_BENEFICIARY_NAMES"): ["BenePladimir Vutin"],
+            ("ap", "AP_ACCOUNT_NAMES"): ["Pladimir Vutin"],
+            ("ap", "AP_ACCOUNT_BENEFICIARY_NAMES"): ["BenePladimir Vutin"],
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL",
+                "alertedParty.xml_fields.PARTY1_NAME_FULL",
             ): "Janusz",
             (
                 "ap",
@@ -1200,17 +1198,17 @@ TEST_AGENT_INPUT_CASES = [
             "watchlistParty.matchRecords[0].entity.name": "Joe Ding",
         },
         expected_result={
-            ("ap", "ALL_CONCAT_NAMES"): "Soft Ltd.",
-            ("ap", "ALL_CONNECTED_PARTY_NAMES"): ["Joe Small", "Johny B. Good"],
-            ("ap", "ALL_CONNECTED_PARTIES_NAMES"): [
+            ("ap", "alertedParty.xml_fields.CONCAT_NAME"): "Soft Ltd.",
+            ("ap", "AP_PARTY_NAMES"): ["Joe Small", "Johny B. Good"],
+            ("ap", "AP_PARTIES_NAMES"): [
                 "Joe Middle Small",
                 "Johnathanno Budger Good",
             ],
-            ("ap", "ALL_CONNECTED_ACCOUNT_NAMES"): ["Pladimir Vutin"],
-            ("ap", "ALL_CONNECTED_ACCOUNT_BENEFICIARY_NAMES"): ["BenePladimir Vutin"],
+            ("ap", "AP_ACCOUNT_NAMES"): ["Pladimir Vutin"],
+            ("ap", "AP_ACCOUNT_BENEFICIARY_NAMES"): ["BenePladimir Vutin"],
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL",
+                "alertedParty.xml_fields.PARTY1_NAME_FULL",
             ): "Janusz",
             (
                 "ap",
@@ -1249,17 +1247,17 @@ TEST_AGENT_INPUT_CASES = [
             "alertedParty.alertSupplementalInfo.supplementalInfo[0].legalFormName": "Organization",
         },
         expected_result={
-            ("ap", "ALL_CONCAT_NAMES"): "Soft Ltd.",
-            ("ap", "ALL_CONNECTED_PARTY_NAMES"): ["Joe Small", "Johny B. Good"],
-            ("ap", "ALL_CONNECTED_PARTIES_NAMES"): [
+            ("ap", "alertedParty.xml_fields.CONCAT_NAME"): "Soft Ltd.",
+            ("ap", "AP_PARTY_NAMES"): ["Joe Small", "Johny B. Good"],
+            ("ap", "AP_PARTIES_NAMES"): [
                 "Joe Middle Small",
                 "Johnathanno Budger Good",
             ],
-            ("ap", "ALL_CONNECTED_ACCOUNT_NAMES"): ["Pladimir Vutin"],
-            ("ap", "ALL_CONNECTED_ACCOUNT_BENEFICIARY_NAMES"): ["BenePladimir Vutin"],
+            ("ap", "AP_ACCOUNT_NAMES"): ["Pladimir Vutin"],
+            ("ap", "AP_ACCOUNT_BENEFICIARY_NAMES"): ["BenePladimir Vutin"],
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL",
+                "alertedParty.xml_fields.PARTY1_NAME_FULL",
             ): "Janusz",
             (
                 "ap",
@@ -1301,17 +1299,17 @@ TEST_AGENT_INPUT_CASES = [
             "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
-            ("ap", "ALL_CONCAT_NAMES"): "Soft Ltd.",
-            ("ap", "ALL_CONNECTED_PARTY_NAMES"): ["Joe Small", "Johny B. Good"],
-            ("ap", "ALL_CONNECTED_PARTIES_NAMES"): [
+            ("ap", "alertedParty.xml_fields.CONCAT_NAME"): "Soft Ltd.",
+            ("ap", "AP_PARTY_NAMES"): ["Joe Small", "Johny B. Good"],
+            ("ap", "AP_PARTIES_NAMES"): [
                 "Joe Middle Small",
                 "Johnathanno Budger Good",
             ],
-            ("ap", "ALL_CONNECTED_ACCOUNT_NAMES"): ["Pladimir Vutin"],
-            ("ap", "ALL_CONNECTED_ACCOUNT_BENEFICIARY_NAMES"): ["BenePladimir Vutin"],
+            ("ap", "AP_ACCOUNT_NAMES"): ["Pladimir Vutin"],
+            ("ap", "AP_ACCOUNT_BENEFICIARY_NAMES"): ["BenePladimir Vutin"],
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL",
+                "alertedParty.xml_fields.PARTY1_NAME_FULL",
             ): "Janusz",
             (
                 "ap",
@@ -1321,3 +1319,83 @@ TEST_AGENT_INPUT_CASES = [
         },
     ),
 ]
+
+
+HISTORICAL_DECISION_REQUEST = {
+    "alerts": [
+        {
+            "alertId": "alerts/2",
+            "matchId": "alerts/2/matches/2",
+            "watchlist": {"id": "1044"},
+            "alertedParty": {"id": "A05003324172"},
+            "decisions": [
+                {
+                    "id": "9434653b6d70dd07f3057ed6980d6bc93ce6a0d1",
+                    "value": "FALSE_POSITIVE",
+                    "createdAt": "1641057943",
+                },
+            ],
+            "discriminators": [
+                {"value": "mike_ap_id_tp_marked"},
+                {"value": "mike_tokens_tp_marked"},
+                {"value": "mike_ap_name_tp_marked"},
+            ],
+        },
+        {
+            "alertId": "alerts/2",
+            "matchId": "alerts/2/matches/2",
+            "watchlist": {"id": "1044"},
+            "alertedParty": {"id": "A05003324172"},
+            "decisions": [
+                {
+                    "id": "9434653b6d70dd07f3057ed6980d6bc93ce6a0d1",
+                    "value": "FALSE_POSITIVE",
+                    "createdAt": "1641057943",
+                },
+            ],
+            "discriminators": [
+                {"value": "mike_ap_id_tp_marked"},
+                {"value": "mike_tokens_tp_marked"},
+            ],
+        },
+    ]
+}
+
+HISTORICAL_DECISION_REQUEST_WITHOUT_MARK = {
+    "alerts": [
+        {
+            "alertId": "alerts/2",
+            "matchId": "alerts/2/matches/2",
+            "watchlist": {"id": "1044"},
+            "alertedParty": {"id": "A05003324172"},
+            "decisions": [
+                {
+                    "id": "9434653b6d70dd07f3057ed6980d6bc93ce6a0d1",
+                    "value": "FALSE_POSITIVE",
+                    "createdAt": "1641057943",
+                },
+            ],
+            "discriminators": [
+                {"value": "mike_ap_id_tp_marked"},
+                {"value": "mike_tokens_tp_marked"},
+            ],
+        },
+        {
+            "alertId": "alerts/2",
+            "matchId": "alerts/2/matches/2",
+            "watchlist": {"id": "1044"},
+            "alertedParty": {"id": "A05003324172"},
+            "decisions": [
+                {
+                    "id": "9434653b6d70dd07f3057ed6980d6bc93ce6a0d1",
+                    "value": "FALSE_POSITIVE",
+                    "createdAt": "1641057943",
+                },
+            ],
+            "discriminators": [
+                {"value": "mike_ap_id_tp_marked"},
+                {"value": "mike_tokens_tp_marked"},
+            ],
+        },
+    ]
+}

@@ -11,7 +11,12 @@ from etl_pipeline.custom.ms.datatypes.field import (  # noqa F401; required for 
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.service.servicer import Match
 from pipelines.ms.ms_pipeline import MSPipeline
-from tests.test_json.constant import EXAMPLE_PARTIES
+from tests.test_json.constant import (
+    EXAMPLE_FOR_TEST_SET_REF_KEY,
+    EXAMPLE_PARTIES,
+    EXAMPLE_PARTIES_WITH_NAMES,
+    RESULT_FOR_EXAMPLE_FOR_TEST_SET_REF_KEY,
+)
 
 cn = pipeline_config.cn
 
@@ -90,7 +95,9 @@ def assert_compare_list_of_dict_of_list(tested, reference, col=None):
 
 
 def assert_nested_dict(tested, reference, key=None):
+
     if isinstance(reference, dict):
+        assert len(tested) == len(reference)
         if isinstance(tested, Match):
             assert {"match_id": tested.match_id, "match_name": tested.match_name} == reference
             return
@@ -127,7 +134,12 @@ def load_payload(out_payload, reference_file):
                 }
             except TypeError:
                 pass
-        assert_nested_dict(sort_list(out_payload), sort_list(payload))
+        for match in out_payload:
+            match["match_ids"] = {
+                "match_id": match["match_ids"].match_id,
+                "match_name": match["match_ids"].match_name,
+            }
+        assert_nested_dict(sort_list(out_payload), payload)
         return
 
 
@@ -199,55 +211,75 @@ def pipeline_resource(request):
         (
             {
                 cn.DATASET_TYPE: "ISG_PARTY",
-                "ap_id_tp_marked_agent_input": [
-                    "DUMMY_ISG_PARTY_ID",
-                    "DUMMY_ADDRESS_PARTY_ID",
-                    "DUMMY_ISG_ACCOUNT_ID",
-                ],
+                "watchlistParty": {
+                    "matchRecords": {
+                        "ap_id_tp_marked_agent_input": [
+                            "DUMMY_ISG_PARTY_ID",
+                            "DUMMY_ADDRESS_PARTY_ID",
+                            "DUMMY_ISG_ACCOUNT_ID",
+                        ],
+                    }
+                },
             },
             "DUMMY_ISG_PARTY_ID",
         ),
         (
             {
                 cn.DATASET_TYPE: "WM_ADDRESS",
-                "ap_id_tp_marked_agent_input": [
-                    "DUMMY_ISG_PARTY_ID",
-                    "DUMMY_ADDRESS_PARTY_ID",
-                    "DUMMY_ISG_ACCOUNT_ID",
-                ],
+                "watchlistParty": {
+                    "matchRecords": {
+                        "ap_id_tp_marked_agent_input": [
+                            "DUMMY_ISG_PARTY_ID",
+                            "DUMMY_ADDRESS_PARTY_ID",
+                            "DUMMY_ISG_ACCOUNT_ID",
+                        ],
+                    }
+                },
             },
             "DUMMY_ADDRESS_PARTY_ID",
         ),
         (
             {
                 cn.DATASET_TYPE: "WM_PARTY",
-                "ap_id_tp_marked_agent_input": [
-                    "DUMMY_ISG_PARTY_ID",
-                    "DUMMY_ADDRESS_PARTY_ID",
-                    "DUMMY_ISG_ACCOUNT_ID",
-                ],
+                "watchlistParty": {
+                    "matchRecords": {
+                        "ap_id_tp_marked_agent_input": [
+                            "DUMMY_ISG_PARTY_ID",
+                            "DUMMY_ADDRESS_PARTY_ID",
+                            "DUMMY_ISG_ACCOUNT_ID",
+                        ],
+                    }
+                },
             },
             "DUMMY_ADDRESS_PARTY_ID",
         ),
         (
             {
                 cn.DATASET_TYPE: "ISG_ACCOUNT",
-                "ap_id_tp_marked_agent_input": [
-                    "DUMMY_ISG_PARTY_ID",
-                    "DUMMY_ADDRESS_PARTY_ID",
-                    "DUMMY_ISG_ACCOUNT_ID",
-                ],
+                "watchlistParty": {
+                    "matchRecords": {
+                        "ap_id_tp_marked_agent_input": [
+                            "DUMMY_ISG_PARTY_ID",
+                            "DUMMY_ADDRESS_PARTY_ID",
+                            "DUMMY_ISG_ACCOUNT_ID",
+                        ],
+                    }
+                },
             },
             "DUMMY_ISG_ACCOUNT_ID",
         ),
         (
             {
                 cn.DATASET_TYPE: "UNKNOWN",
-                "ap_id_tp_marked_agent_input": [
-                    "DUMMY_ISG_PARTY_ID",
-                    "DUMMY_ADDRESS_PARTY_ID",
-                    "DUMMY_ISG_ACCOUNT_ID",
-                ],
+                "watchlistParty": {
+                    "matchRecords": {
+                        "ap_id_tp_marked_agent_input": [
+                            "DUMMY_ISG_PARTY_ID",
+                            "DUMMY_ADDRESS_PARTY_ID",
+                            "DUMMY_ISG_ACCOUNT_ID",
+                        ],
+                    }
+                },
             },
             "",
         ),
@@ -255,7 +287,10 @@ def pipeline_resource(request):
 )
 def test_select_ap_for_ap_id_tp_marked_agent(match, expected_result, pipeline_resource):
     pipeline_resource.select_ap_for_ap_id_tp_marked_agent(match)
-    assert match["ap_id_tp_marked_agent_input"] == expected_result
+    assert (
+        match[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]["ap_id_tp_marked_agent_input"]
+        == expected_result
+    )
 
 
 @pytest.mark.parametrize(
@@ -304,33 +339,81 @@ def test_collect_party_values_from_parties(pipeline_resource):
         cn.ALERTED_PARTY_FIELD: {cn.SUPPLEMENTAL_INFO: {cn.RELATED_PARTIES: {cn.PARTIES: parties}}}
     }
     pipeline_resource.collect_party_values(payload)
-    assert {key: value for key, value in payload.items() if key.startswith("ALL")} == {
-        "ALL_CONNECTED_PARTIES_NAMES": [],
-        "ALL_CONNECTED_PARTY_NAMES": ["Shaolin kung fu master", "John, Doe Doe"],
-        "ALL_CONNECTED_TAX_IDS": ["1231413412312", "12097381208937"],
-        "ALL_CONNECTED_PARTY_BIRTH_COUNTRIES": ["1341412312312", "13413401280"],
-        "ALL_CONNECTED_PARTY_CITIZENSHIP_COUNTRIES": ["Arabian Emirates"],
-        "ALL_CONNECTED_PARTY_RESIDENCY_COUNTRIES": [],
-        "ALL_CONNECTED_COUNTRY_OF_INCORPORATION": ["Arabian Emirates"],
-        "ALL_CONNECTED_GOVT_IDS": [],
-        "ALL_CONNECTED_ACCOUNT_NAMES": [],
-        "ALL_CONNECTED_ACCOUNT_BRANCH_ACCOUNT_NUMBERS": [],
-        "ALL_CONNECTED_ACCOUNT_BENEFICIARY_NAMES": [],
-        "ALL_PARTY1_EMPLOYERS": None,
-        "ALL_PARTY1_COUNTRY": None,
-        "ALL_PARTY1_COUNTRY1": None,
-        "ALL_PARTY1_COUNTRY_OF_INCORPORATION": None,
-        "ALL_PARTY1_ADDRESS1_COUNTRY": None,
-        "ALL_PARTY1_COUNTRY1_CITIZENSHIP": None,
-        "ALL_PARTY1_COUNTRY2_CITIZENSHIP": None,
-        "ALL_PARTY1_COUNTRY_FORMATION1": None,
-        "ALL_PARTY1_COUNTRY_DOMICILE1": None,
-        "ALL_PRTY_PRIM_CTZNSH_CNTRY": None,
-        "ALL_PRTY_RSDNC_CNTRY_CD": None,
-        "ALL_PARTY1_COUNTRY_PEP": None,
-        "ALL_CONCAT_NAMES": None,
-        "ALL_PARTY1_GOVTID1_NUMBER": None,
-        "ALL_PARTY1_GOVTID2_NUMBER": None,
+    assert {key: value for key, value in payload.items() if key.startswith("AP")} == {
+        "AP_PARTIES_NAMES": [],
+        "AP_PARTY_NAMES": ["Shaolin kung fu master", "John, Doe Doe"],
+        "AP_TAX_IDS": ["1231413412312", "12097381208937"],
+        "AP_PARTY_BIRTH_COUNTRIES": ["1341412312312", "13413401280"],
+        "AP_PARTY_CITIZENSHIP_COUNTRIES": ["Arabian Emirates"],
+        "AP_PARTY_RESIDENCY_COUNTRIES": [],
+        "AP_COUNTRY_OF_INCORPORATION": ["Arabian Emirates"],
+        "AP_GOVT_IDS": [],
+        "AP_ACCOUNT_NAMES": [],
+        "AP_ACCOUNT_BRANCH_ACCOUNT_NUMBERS": [],
+        "AP_ACCOUNT_BENEFICIARY_NAMES": [],
     }
 
     assert payload["alertedParty"]["AP_DOB"] == ["10/10/1969"]
+
+
+def test_set_trigger_reasons(pipeline_resource):
+    match = EXAMPLE_FOR_TEST_SET_REF_KEY
+    pipeline_resource.set_trigger_reasons(match, pipeline_config.config.FUZZINESS_LEVEL)
+    assert match[cn.TRIGGERED_BY] == sorted(RESULT_FOR_EXAMPLE_FOR_TEST_SET_REF_KEY)
+
+
+def test_set_beneficiary_hits(pipeline_resource):
+    match = EXAMPLE_FOR_TEST_SET_REF_KEY
+    assert match.get(cn.IS_BENEFICIARY_HIT, None) is None
+    pipeline_resource.set_beneficiary_hits(match)
+    assert not match.get(cn.IS_BENEFICIARY_HIT, None)
+
+
+def test_connect_full_names(pipeline_resource):
+    parties = deepcopy(EXAMPLE_PARTIES)
+    pipeline_resource._connect_full_names(parties)
+    for party in parties:
+        assert party[cn.CONNECTED_FULL_NAME] == ""
+
+    parties = deepcopy(EXAMPLE_PARTIES_WITH_NAMES)
+    pipeline_resource._connect_full_names(parties)
+    assert parties[0][cn.CONNECTED_FULL_NAME] == "Ultra Giga Pole"
+    assert parties[1][cn.CONNECTED_FULL_NAME] == ""
+
+
+def test_get_clean_names_from_concat_name(pipeline_resource):
+    assert pipeline_resource.get_clean_names_from_concat_name(
+        "KA LAI JOSEPH CHAN & KAR LUN KAREN LEE LUNKAREN",
+        {
+            "PRIN_OWN_NM": "KA LAI JOSEPH CHAN",
+            "ORD_PLACR_NM": "KA LAI JOSEPH CHAN",
+        },
+    ) == {
+        "PRIN_OWN_NM": "KA LAI JOSEPH CHAN",
+        "concat_residue": " & KAR LUN KAREN LEE LUNKAREN",
+    }
+
+    assert pipeline_resource.get_clean_names_from_concat_name(
+        "MANULIFE INVEST MANAGEMENT (US) LLC - MD SHORT TERM BOND FUND - SPOT ONLY REPATRIATION MANAGEMENT(US) BONDFUND",
+        {
+            "LAST_NM": "MANULIFE INVEST MANAGEMENT",
+            "FRST_NM": "MANULIFE INVEST MANAGEMENT",
+            "PRIN_OWN_NM": "MD SHORT TERM BOND FUND",
+        },
+    ) == {
+        "LAST_NM": "MANULIFE INVEST MANAGEMENT",
+        "PRIN_OWN_NM": "MD SHORT TERM BOND FUND",
+        "concat_residue": " (US) LLC -  - SPOT ONLY REPATRIATION MANAGEMENT(US) BONDFUND",
+    }
+
+    assert pipeline_resource.get_clean_names_from_concat_name(
+        "VTB CAPITAL PLC A/C JP MORGAN CHASE BANK NA PLCA/C",
+        {" ": ["VTB CAPITAL PLC", "Zoria"]},
+    ) == {" ": "VTB CAPITAL PLC", "concat_residue": " A/C JP MORGAN CHASE BANK NA PLCA/C"}
+
+    assert pipeline_resource.get_clean_names_from_concat_name(
+        "MSSB C/F SALVATORE P TADDEO JR IRA STANDARD DATED 09/11/97 28 WARREN ST RUMSON NJ 07760",
+        {"all_party_names": ["Taddeo, Lisa", "Taddeo, Sal"]},
+    ) == {
+        "concat_residue": "MSSB C/F SALVATORE P TADDEO JR IRA STANDARD DATED 09/11/97 28 WARREN ST RUMSON NJ 07760"
+    }

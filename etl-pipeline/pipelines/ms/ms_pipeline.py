@@ -1,10 +1,15 @@
 import json
 import logging
 import os
+import re
 from copy import deepcopy
+from typing import Dict
+
+from fuzzywuzzy import fuzz
 
 from etl_pipeline import application
 from etl_pipeline.config import load_agent_configs, pipeline_config
+from etl_pipeline.custom.ms.trigger_discovery.discoverer import TriggeredTokensDiscoverer
 from etl_pipeline.custom.ms.watchlist_extractor import WatchlistExtractor
 from etl_pipeline.pipeline import ETLPipeline
 from pipelines.ms.collection import Collections
@@ -15,13 +20,29 @@ CONFIG_APP_DIR = os.environ["CONFIG_APP_DIR"]
 cn = pipeline_config.cn
 
 
+def safe_field_extractor(func):
+    def wrap(*args, **kwargs):
+        try:
+            result = func(*args, **kwargs)
+        except Exception as e:
+            logger.error(f"{str(e)} for {func}")
+            result = ""
+        return result
+
+    return wrap
+
+
 class PipelineError:
     pass
 
 
 class MSPipeline(ETLPipeline):
-    def __init__(self, engine, config, functions):
-        super().__init__(engine, config.config)
+    REF_KEY_REGEX = r"(\d{4}-\d{2}-\d{2}-\d{2}.\d{2}.\d{2}.\d{6})"
+    REF_KEY_REGEX_PYTHON = re.compile(REF_KEY_REGEX)
+    discoverer = TriggeredTokensDiscoverer(fuzzy_threshold=71)
+
+    def __init__(self, config, functions):
+        super().__init__(config.config)
         self.reload_config()
         self.dataset_config = config.dataset_config
         self.watchlist_extractor = WatchlistExtractor()
@@ -35,7 +56,7 @@ class MSPipeline(ETLPipeline):
             match = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
             self.collections.prepare_wl_values(match)
             self.set_up_dataset_type_match(payload, match)
-            self.engine.set_trigger_reasons(match, self.pipeline_config.FUZZINESS_LEVEL)
+            self.set_trigger_reasons(match, self.pipeline_config.FUZZINESS_LEVEL)
             self.functions.set_beneficiary_hits(match)
             self.connect_full_names(payload)
             self.collect_party_values(payload)
@@ -81,7 +102,7 @@ class MSPipeline(ETLPipeline):
         )
 
         config = self.get_key(payload, match, yaml_conf)
-        self.engine.sql_to_merge_specific_columns_to_standardized(
+        self.sql_to_merge_specific_columns_to_standardized(
             agent_input_prepended_agent_name_config,
             match,
             config,
@@ -101,10 +122,10 @@ class MSPipeline(ETLPipeline):
         input_records = payload[cn.ALERTED_PARTY_FIELD][cn.INPUT_RECORD_HIST][cn.INPUT_RECORDS]
         fields = input_records[cn.INPUT_FIELD]
         self.handle_hit_type_agent(match, agent_config, fields)
-        self.select_ap_for_ap_id_tp_marked_agent(match)
+        self.select_ap_for_ap_id_tp_marked_agent(payload)
         self.set_up_entity_type_match(payload, match)
 
-        self.engine.sql_to_merge_specific_columns_to_standardized(
+        self.sql_to_merge_specific_columns_to_standardized(
             agent_input_agg_col_config, match, config, False
         )
         match.update(
@@ -160,11 +181,9 @@ class MSPipeline(ETLPipeline):
         self.functions.collect_party_country_of_incorporation(payload)
         self.functions.collect_party_government_id(payload)
 
-        accounts = self.collections.get_accounts(payload)
-        self.engine.collect_party_values_from_accounts(accounts, payload)
-
-        fields = self.collections.get_xml_fields(payload)
-        self.engine.collect_party_values_from_parties_from_fields(fields, payload)
+        self.functions.collect_full_name_accounts(payload)
+        self.functions.collect_branch_account_numbers(payload)
+        self.functions.collect_beneficiary_names(payload)
 
     def collect_concat_values(self, payload, match):
         """temporary for demo"""
@@ -172,15 +191,15 @@ class MSPipeline(ETLPipeline):
         fields = self.collections.get_xml_fields(payload)
 
         names_source_cols = [
-            cn.ALL_CONNECTED_PARTY_NAMES,
-            cn.ALL_CONNECTED_PARTIES_NAMES,
-            cn.ALL_CONNECTED_ACCOUNT_NAMES,
+            cn.AP_PARTY_NAMES,
+            cn.AP_PARTIES_NAMES,
+            cn.AP_ACCOUNT_NAMES,
         ]
 
         payload.update(
             {
-                cn.CLEANED_NAMES: self.engine.get_clean_names_from_concat_name(
-                    self.engine.get_field_value_name(fields, cn.CONCAT_ADDRESS),
+                cn.CLEANED_NAMES: self.get_clean_names_from_concat_name(
+                    self.get_field_value_name(fields, cn.CONCAT_ADDRESS),
                     {key: payload[key] for key in names_source_cols},
                 )
             }
@@ -188,17 +207,15 @@ class MSPipeline(ETLPipeline):
 
         payload.update({cn.CONCAT_RESIDUE: payload[cn.CLEANED_NAMES][cn.CONCAT_RESIDUE]})
         concat_residue = payload[cn.CONCAT_RESIDUE]
-        concat_address = self.engine.get_field_value_name(fields, cn.CONCAT_ADDRESS)
+        concat_address = self.get_field_value_name(fields, cn.CONCAT_ADDRESS)
         payload.update({cn.CONCAT_ADDRESS_NO_CHANGES: concat_residue == concat_address})
-        match[cn.AP_TRIGGERS] = self.engine.set_triggered_tokens_discovery(match, fields)
+        match[cn.AP_TRIGGERS] = self.set_triggered_tokens_discovery(match, fields)
 
     def connect_full_names(self, payload):
         alerted_parties = self.collections.get_parties(payload)
-        self.engine.connect_full_names(
-            alerted_parties, [cn.PRTY_FST_NM, cn.PRTY_MDL_NM, cn.PRTY_LST_NM]
-        )
+        self._connect_full_names(alerted_parties, [cn.PRTY_FST_NM, cn.PRTY_MDL_NM, cn.PRTY_LST_NM])
         accounts = self.collections.get_accounts(payload)
-        self.engine.connect_full_names(accounts, [cn.ACCOUNT_FIRST_NAME, cn.ACCOUNT_LAST_NAME])
+        self._connect_full_names(accounts, [cn.ACCOUNT_FIRST_NAME, cn.ACCOUNT_LAST_NAME])
 
     def get_key(self, payload, match, conf):
         new_config = {}
@@ -248,8 +265,9 @@ class MSPipeline(ETLPipeline):
         existing_fields = [field for field in requested_json_keys if fields.get(field, None)]
         return existing_fields
 
-    def select_ap_for_ap_id_tp_marked_agent(self, match):
-        dataset_name = match[cn.DATASET_TYPE]
+    def select_ap_for_ap_id_tp_marked_agent(self, payload):
+        dataset_name = payload[cn.DATASET_TYPE]
+        match = payload["watchlistParty"]["matchRecords"]
         if dataset_name == "ISG_PARTY":
             match["ap_id_tp_marked_agent_input"] = match["ap_id_tp_marked_agent_input"][0]
         elif dataset_name in ["WM_ADDRESS", "WM_PARTY"]:
@@ -259,6 +277,18 @@ class MSPipeline(ETLPipeline):
         else:
             logger.warning("No input for ap_id_tp_marked_agent. Setting up default")
             match["ap_id_tp_marked_agent_input"] = ""
+
+    def select_discriminator(self, payload):
+        dataset_name = payload[cn.DATASET_TYPE]
+        if dataset_name == "ISG_PARTY":
+            payload["ap_id_tp_marked_agent_input"] = payload["ap_id_tp_marked_agent_input"][0]
+        elif dataset_name in ["WM_ADDRESS", "WM_PARTY"]:
+            payload["ap_id_tp_marked_agent_input"] = payload["ap_id_tp_marked_agent_input"][1]
+        elif dataset_name == "ISG_ACCOUNT":
+            payload["ap_id_tp_marked_agent_input"] = payload["ap_id_tp_marked_agent_input"][2]
+        else:
+            logger.warning("No input for ap_id_tp_marked_agent. Setting up default")
+            payload["ap_id_tp_marked_agent_input"] = ""
 
     def set_up_entity_type_match(self, payload, match):
         if payload["alertedParty"]["AP_PARTY_TYPE"] == match["WLP_TYPE"]:
@@ -292,3 +322,181 @@ class MSPipeline(ETLPipeline):
             if len(token) > 2
         ]
         match["TOKENS_RISK_CARRIER"] = ",".join(sorted(list(set(filtered_tokens))))
+
+    def extract_wl_matched_tokens(self, record):
+        threshold = 0.66
+        result = []
+
+        alerted_tokens = re.findall(
+            r'(?<="inputToken": ")[\w\-]+',
+            json.dumps(record["stopDescriptors"]["stopDescriptor"]),
+            flags=re.I,
+        )
+        tokens_scores = re.findall(
+            r'(?<="matchScore": ")\d\.\d{1,3}',
+            json.dumps(record["stopDescriptors"]["stopDescriptor"]),
+        )
+
+        result = [
+            alerted_tokens[i].upper()
+            for i in range(len(alerted_tokens))
+            if float(tokens_scores[i]) >= threshold
+        ]
+        return {cn.WL_MATCHED_TOKENS: json.dumps(result)}
+
+    @staticmethod
+    @safe_field_extractor
+    def set_trigger_reasons(match, fuzziness_level):
+
+        skip_columns = ["USER_NOTE_TEXT"]
+        result = []
+        for whole_token in json.loads(match[cn.WL_MATCHED_TOKENS]):
+            for token in whole_token.split():
+                for key, value in match.items():
+                    if not value or key.startswith("WL_") or key in skip_columns:
+                        continue
+
+                    value = str(value)
+
+                    ratio = fuzz.partial_ratio(value.lower(), token.lower())
+                    if ratio >= fuzziness_level:
+                        result.append(key)
+        match[cn.TRIGGERED_BY] = list(set(result))
+
+    def set_beneficiary_hits(self, payload):
+        payload[cn.IS_BENEFICIARY_HIT] = cn.AD_BNFL_NM in payload[cn.TRIGGERED_BY]
+
+    def _connect_full_names(self, values, fields=[cn.PRTY_FST_NM, cn.PRTY_MDL_NM, cn.PRTY_LST_NM]):
+        for value in values:
+            value[cn.CONNECTED_FULL_NAME] = " ".join(
+                [
+                    value[field_name_to_collect]
+                    for field_name_to_collect in fields
+                    if value.get(field_name_to_collect, "")
+                ]
+            ).strip()
+
+    def load_raw_data(self, *args, **kwargs):
+        return self.spark_instance.read_csv(*args, **kwargs)
+
+    def save_data(self, *args, **kwargs):
+        return self.spark_instance.safe_save_delta(*args, **kwargs)
+
+    def merge_to_target_col_from_source_cols(self, *args, **kwargs):
+        return self.spark_instance.merge_to_target_col_from_source_cols_sql_expression(
+            *args, **kwargs
+        )
+
+    def substitute_nulls_in_array_with_new_values(self, *args, **kwargs):
+        return self.spark_instance.substitute_nulls_in_array_with_new_values(*args, **kwargs)
+
+    def load_data(self, *args, **kwargs):
+        return self.spark_instance.read_delta(*args, **kwargs)
+
+    @staticmethod
+    @safe_field_extractor
+    def get_clean_names_from_concat_name(concat_field: str, source_fields: Dict[str, str]):
+
+        distinct_names = []
+        names = {}
+        concat_field_residue = concat_field
+
+        if concat_field is None:
+            names[cn.CONCAT_RESIDUE] = None
+        else:
+            for key, value in source_fields.items():
+                if isinstance(value, list):
+
+                    for v in value:
+                        if v and v in concat_field and v not in distinct_names:
+                            concat_field_residue = concat_field_residue.replace(v, "")
+                            names[key] = v
+                            distinct_names.append(v)
+
+                else:
+                    if (
+                        source_fields[key]
+                        and source_fields[key] in concat_field
+                        and value not in distinct_names
+                    ):
+                        concat_field_residue = concat_field_residue.replace(value, "")
+                        names[key] = value
+                        distinct_names.append(value)
+
+            names[cn.CONCAT_RESIDUE] = concat_field_residue
+
+        return names
+
+    @staticmethod
+    def prepare_and_get_clean_names_from_concat_name(concat_field, *columns):
+        concat_fields_map = {}
+        for key, col in enumerate(columns):
+            concat_fields_map[col] = columns[key]
+        return MSPipeline.get_clean_names_from_concat_name(concat_field, concat_fields_map)
+
+    def set_clean_names(self, payload):
+        names_source_cols = [cn.AP_PARTY_NAMES, cn.AP_PARTIES_NAMES]
+        payload[cn.CLEANED_NAMES] = MSPipeline.get_clean_names_from_concat_name(
+            cn.CONCAT_ADDRESS, *names_source_cols
+        )
+        return payload
+
+    def set_concat_residue(self, payload):
+        payload[cn.CONCAT_RESIDUE] = payload[cn.CLEANED_NAMES][cn.CONCAT_RESIDUE]
+        return payload
+
+    def set_concat_address_no_change(self, payload):
+        payload[cn.CONCAT_ADDRESS_NO_CHANGES] = None
+        if payload[cn.CONCAT_RESIDUE] == payload[cn.CONCAT_ADDRESS]:
+            payload[cn.CONCAT_ADDRESS_NO_CHANGES] = payload[cn.CONCAT_RESIDUE]
+        return payload
+
+    def set_triggered_tokens_discovery(self, match, fields):
+        TRIGGERS_MAP = {field: fields[field].value for field in fields if fields[field]}
+        return self.discoverer.discover(json.loads(match[cn.WL_MATCHED_TOKENS]), TRIGGERS_MAP)
+
+    def merge_to_target_col_from_source_cols_sql_expression(
+        self, target_col, source_cols, mapper, return_array
+    ):
+        if len(source_cols) >= 2:
+            value = []
+            for valid_source_col in source_cols:
+                try:
+                    value.append(mapper[valid_source_col])
+                except KeyError:
+                    if "hit_type" not in valid_source_col:
+                        logger.warning(f"No field in payload named: {valid_source_col}.")
+        elif len(source_cols) == 1:
+            try:
+                value = mapper[source_cols[0]]
+                if return_array:
+                    value = [value]
+            except KeyError:
+                if "hit_type" not in source_cols:
+                    logger.warning(f"No field in payload named: {source_cols}")
+        else:
+            value = None
+            if return_array:
+                value = [value]
+
+        return {target_col: value}
+
+    def sql_to_merge_specific_columns_to_standardized(
+        self,
+        agent_config,
+        match_record,
+        mapper,
+        aggregated: bool = False,
+    ):
+        for _, config in agent_config.items():
+            for target_col, source_cols in config.items():
+                sql_expr = self.merge_to_target_col_from_source_cols_sql_expression(
+                    target_col, source_cols, mapper, aggregated
+                )
+                match_record.update(sql_expr)
+
+    def get_field_value_name(self, fields, name):
+        try:
+            return fields.get(name, None).value
+        except AttributeError:
+            return None

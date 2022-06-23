@@ -1,5 +1,22 @@
-DATA_SOURCE_INPUT_ENDPOINT: discovery:///{{ env "NOMAD_NAMESPACE" }}-universal-data-source
+data_source_input_endpoint: discovery:///{{ env "NOMAD_NAMESPACE" }}-universal-data-source
 ETL_SERVICE_ADDR: {{ env "NOMAD_ADDR_grpc" }}
-LOGGING_LEVEL: DEBUG
-PROCESSES: 10
-UDS_BATCH_SIZE: 50
+logging_level: DEBUG
+processes: 10
+uds_batch_size: 50
+
+historical_decision_exchange:
+  exchange: 'bridge.historical'
+  routing-key: 'historical.historical-decisions-request.production'
+  queue-name: 'ls.historical-decision-request.production'
+  queue-durable: true
+  queue-arguments:
+    x-dead-letter-exchange: "learning.decision-dead-letter-exchange"
+    x-dead-letter-routing-key: "*"
+
+
+rabbitmq:
+  addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
+      {{ if $index }},{{ end -}}
+      {{ $rabbit.Address }}:{{ $rabbit.Port -}}
+  {{- end }}
+  virtualhost: /{{ env "NOMAD_NAMESPACE" }}

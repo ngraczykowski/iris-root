@@ -17,7 +17,7 @@ pipeline {
         stage('Build and publish package') {
             agent {
                 docker {
-                    image 'docker.repo.silenteight.com/python-build-image:3.6-bullseye'
+                    image 'docker.repo.silenteight.com/python-build-image:3.7-bullseye'
                     args '--volume $HOME/.cache/agent/pip:/home/jenkins/.cache/pip'
                     alwaysPull true
                 }
@@ -87,6 +87,18 @@ pipeline {
                          }
                     }
                 }
+
+                stage('Add to minio') {
+                    when {
+                        branch 'master'
+                    }
+                    steps {
+                        withCredentials([gitUsernamePassword(credentialsId: 'Github-app-access')]) {
+                            sh './scripts/local/download_deps.sh --index-url ${PIP_INDEX_URL}'
+                            stash includes: 'temp/**/*', name: 'ARTEFACT' 
+                        }
+                    }   
+                }
             }
         }
         stage('Build') {
@@ -108,6 +120,7 @@ pipeline {
                 branch 'master'
             }
             steps {
+                unstash 'ARTEFACT'
                 sh './nomad/deploy.sh'
             }
         }

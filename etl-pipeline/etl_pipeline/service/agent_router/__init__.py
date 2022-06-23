@@ -52,11 +52,11 @@ class AgentInputCreator:
     def initiate_channel(self, endpoint, ssl=False):
 
         if ssl:
-            with open(self.service_config.GRPC_CLIENT_TLS_CA, "rb") as f:
+            with open(self.service_config.grpc_client_tls_ca, "rb") as f:
                 ca = f.read()
-            with open(self.service_config.GRPC_CLIENT_TLS_PRIVATE_KEY, "rb") as f:
+            with open(self.service_config.grpc_client_tls_private_key, "rb") as f:
                 private_key = f.read()
-            with open(self.service_config.GRPC_CLIENT_TLS_PUBLIC_KEY_CHAIN, "rb") as f:
+            with open(self.service_config.grpc_client_tls_public_key_chain, "rb") as f:
                 certificate_chain = f.read()
             server_credentials = grpc.ssl_channel_credentials(ca, private_key, certificate_chain)
             channel = grpc.secure_channel(
@@ -101,15 +101,15 @@ class AgentInputCreator:
             try:
                 self.service_config.reload()
                 logger.debug(
-                    f"Connecting to UDS via {self.service_config.DATA_SOURCE_INPUT_ENDPOINT}"
+                    f"Connecting to UDS via {self.service_config.data_source_input_endpoint}"
                 )
                 channel = self.initiate_channel(
-                    self.service_config.DATA_SOURCE_INPUT_ENDPOINT, self.ssl
+                    self.service_config.data_source_input_endpoint, self.ssl
                 )
 
                 self.agent_input_stub = AgentInputServiceStub(channel)
                 channel = self.initiate_channel(
-                    self.service_config.DATA_SOURCE_INPUT_ENDPOINT, self.ssl
+                    self.service_config.data_source_input_endpoint, self.ssl
                 )
                 self.category_input_stub = CategoryValueServiceStub(channel)
                 break
@@ -134,7 +134,7 @@ class AgentInputCreator:
             try:
                 self.connect_to_uds()
                 channel = self.initiate_channel(
-                    self.service_config.DATA_SOURCE_INPUT_ENDPOINT, self.ssl
+                    self.service_config.data_source_input_endpoint, self.ssl
                 )
 
                 category_input_stub = CategoryServiceStub(channel)
@@ -147,7 +147,7 @@ class AgentInputCreator:
                 time.sleep(1)
                 self.connect_to_uds()
                 channel = self.initiate_channel(
-                    self.service_config.DATA_SOURCE_INPUT_ENDPOINT, self.ssl
+                    self.service_config.data_source_input_endpoint, self.ssl
                 )
         logger.info(f"Categories created: {categories}")
 
@@ -176,12 +176,12 @@ class AgentInputCreator:
         logger.debug(f"Features produced for {match_name}: {len(feature_inputs)}")
         return feature_inputs
 
-    def produce_categories_inputs(self, payload, match_payload, alert, match_name):
+    def produce_categories_inputs(self, payload, alert, match_name):
         category_matches = []
         for producer in self.category_producers:
             try:
                 category_value = producer.produce_feature_input(
-                    payload, match_payload, alert, match_name
+                    payload, alert, match_name, auxiliary_payload=payload
                 )
                 if category_value is None:
                     continue
@@ -215,11 +215,8 @@ class AgentInputCreator:
         all_category_values_requests = []
 
         match_id = payload[cn.MATCH_IDS]
-        match = payload[cn.WATCHLIST_PARTY][cn.MATCH_RECORDS]
-
         category_values_requests = self.produce_categories_inputs(
             payload,
-            match_payload=match,
             alert=alert.alert_name,
             match_name=f"{match_id.match_name}",
         )
@@ -251,7 +248,7 @@ class AgentInputCreator:
                 error_message = str(e)
                 pass
             logger.warning(
-                f"Cannot connect to UDS on {self.service_config.DATA_SOURCE_INPUT_ENDPOINT} because of {error_message}. Reinitialize connection"
+                f"Cannot connect to UDS on {self.service_config.data_source_input_endpoint} because of {error_message}. Reinitialize connection"
             )
             time.sleep(5)
             self.initialize_categories()

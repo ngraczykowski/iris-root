@@ -323,7 +323,7 @@ class TestGrpcServerWithoutSSL(BaseGrpcTestCase.TestGrpcServer):
         service_config = ConsulServiceConfig()
         _ = subprocess.Popen("tests/scripts/start_services.sh", env=environment)
         channel = grpc.insecure_channel(
-            f"{service_config.ETL_SERVICE_IP}:{service_config.ETL_SERVICE_PORT}"
+            f"{service_config.etl_service_ip}:{service_config.etl_service_port}"
         )
         TestGrpcServerWithoutSSL.stub = EtlPipelineServiceStub(channel)
         time.sleep(BaseGrpcTestCase.TestGrpcServer.TIMEOUT)

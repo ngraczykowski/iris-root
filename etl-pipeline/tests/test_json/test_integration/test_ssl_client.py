@@ -19,13 +19,16 @@ class TestSSLGrpcServer(BaseGrpcTestCase.TestGrpcServer):
         environment = os.environ.copy()
         subprocess.Popen("tests/scripts/start_services_ssl.sh", env=environment)
         service_config = ConsulServiceConfig()
-        with open(service_config.GRPC_CLIENT_TLS_CA, "rb") as f:
+        with open(service_config.grpc_client_tls_ca, "rb") as f:
             ca = f.read()
-        with open(service_config.GRPC_CLIENT_TLS_PRIVATE_KEY, "rb") as f:
+        with open(service_config.grpc_client_tls_private_key, "rb") as f:
             private_key = f.read()
-        with open(service_config.GRPC_CLIENT_TLS_PUBLIC_KEY_CHAIN, "rb") as f:
+        with open(service_config.grpc_client_tls_public_key_chain, "rb") as f:
             certificate_chain = f.read()
         server_credentials = grpc.ssl_channel_credentials(ca, private_key, certificate_chain)
-        channel = grpc.secure_channel("localhost:9090", server_credentials)
+        channel = grpc.secure_channel(
+            f"{service_config.etl_service_ip}:{service_config.etl_service_port}",
+            server_credentials,
+        )
         TestSSLGrpcServer.stub = EtlPipelineServiceStub(channel)
         time.sleep(BaseGrpcTestCase.TestGrpcServer.TIMEOUT)

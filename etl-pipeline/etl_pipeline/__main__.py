@@ -3,9 +3,10 @@
 
 import multiprocessing
 
-multiprocessing.set_start_method("spawn")
-
-
+try:
+    multiprocessing.set_start_method("spawn")
+except RuntimeError:
+    pass
 import argparse
 import asyncio
 import contextlib
@@ -17,6 +18,10 @@ import omegaconf
 
 import etl_pipeline.service.proto.api.etl_pipeline_pb2 as etl__pipeline__pb2
 from etl_pipeline.config import ConsulServiceConfig, ConsulServiceError
+from etl_pipeline.learning.proto.etl_learning_pb2_grpc import (
+    add_EtlLearningServiceServicer_to_server,
+)
+from etl_pipeline.learning.service import EtlLearningServiceServicer
 from etl_pipeline.logger import get_logger
 from etl_pipeline.service.servicer import EtlPipelineServiceServicer
 
@@ -50,26 +55,30 @@ async def serve(args):
             ("grpc.max_receive_message_length", max_length),
         ],
     )
-    add_EtlPipelineServiceServicer_to_server(EtlPipelineServiceServicer(args.ssl), server)
+    if not args.disable_learning:
+        add_EtlLearningServiceServicer_to_server(EtlLearningServiceServicer(args.ssl), server)
+    if not args.disable_solving:
+        add_EtlPipelineServiceServicer_to_server(EtlPipelineServiceServicer(args.ssl), server)
+
     if args.ssl:
-        with open(service_config.GRPC_SERVER_TLS_PRIVATE_KEY, "rb") as f:
+        with open(service_config.grpc_server_tls_private_key, "rb") as f:
             private_key = f.read()
-        with open(service_config.GRPC_SERVER_TLS_PUBLIC_KEY_CHAIN, "rb") as f:
+        with open(service_config.grpc_server_tls_public_key_chain, "rb") as f:
             certificate_chain = f.read()
-        with open(service_config.GRPC_SERVER_TLS_TRUSTED_CA, "rb") as f:
+        with open(service_config.grpc_server_tls_trusted_ca, "rb") as f:
             cert_list = f.read()
         server_credentials = grpc.ssl_server_credentials(
             ((private_key, certificate_chain),), cert_list, require_client_auth=True
         )
         server.add_secure_port(
-            f"{service_config.ETL_SERVICE_IP}:{service_config.ETL_SERVICE_PORT}",
+            f"{service_config.etl_service_ip}:{service_config.etl_service_port}",
             server_credentials,
         )
     else:
         try:
             address = service_config.ETL_SERVICE_ADDR
         except (omegaconf.errors.ConfigAttributeError, KeyError, ConsulServiceError):
-            address = f"{service_config.ETL_SERVICE_IP}:{service_config.ETL_SERVICE_PORT}"
+            address = f"{service_config.etl_service_ip}:{service_config.etl_service_port}"
         server.add_insecure_port(address)
     await server.start()
     asyncio.get_event_loop().create_task(server.wait_for_termination())
@@ -98,5 +107,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--ssl", action="store_true", required=False)
+    parser.add_argument("--disable_solving", action="store_true", required=False)
+    parser.add_argument("--disable_learning", action="store_true", required=False)
     args = parser.parse_args()
     run(functools.partial(serve, args), stop)

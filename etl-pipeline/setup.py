@@ -1,6 +1,7 @@
 from setuptools import find_packages, setup
 
 dev_require = [
+    "agent-base",
     "data-source-agentinput-api==0.21.0.5",
     "data-source-api==0.23.0.12",
     "data-source-categories-api==0.23.0.11",
@@ -11,6 +12,7 @@ dev_require = [
     "omegaconf==2.1.1",
     "protobuf==3.19.4",
     "python-consul2==0.1.5",
+    "pika==1.2.1",
 ]
 
 tests_require = ["pandas==1.1.5"]
@@ -35,5 +37,5 @@ setup(
         "pytest-runner>=5.1",
     ],
     tests_require=dev_require,
-    python_requires=">=3.6",
+    python_requires=">=3.7",
 )
