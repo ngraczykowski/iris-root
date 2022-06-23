@@ -2,7 +2,6 @@ package com.silenteight.bridge.core.registration.domain.strategy
 
 import com.silenteight.bridge.core.Fixtures
 import com.silenteight.bridge.core.registration.domain.RegistrationFixtures
-import com.silenteight.bridge.core.registration.domain.model.SimulationBatchCompleted
 import com.silenteight.bridge.core.registration.domain.model.SolvingBatchCompleted
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchEventPublisher
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository
@@ -18,7 +17,7 @@ class BatchCompletionSolvingStrategySpec extends Specification {
   @Subject
   def underTest = new BatchCompletionSolvingStrategy(eventPublisher, batchRepository)
 
-  def "should complete batch"() {
+  def "should #desc publish BatchCompleted message"() {
     given:
     def batch = RegistrationFixtures.BATCH
     def batchCompleted = new SolvingBatchCompleted(
@@ -32,7 +31,15 @@ class BatchCompletionSolvingStrategySpec extends Specification {
     underTest.completeBatch(batch)
 
     then:
-    1 * batchRepository.updateStatusToCompleted(batch.id())
-    1 * eventPublisher.publish(batchCompleted)
+    1 * batchRepository.updateStatusToCompleted(batch.id()) >> isBatchStatusUpdated
+    if (isBatchStatusUpdated) {
+      1 * eventPublisher.publish(batchCompleted)
+    }
+    0 * _
+
+    where:
+    desc  | isBatchStatusUpdated
+    ''    | true
+    'not' | false
   }
 }

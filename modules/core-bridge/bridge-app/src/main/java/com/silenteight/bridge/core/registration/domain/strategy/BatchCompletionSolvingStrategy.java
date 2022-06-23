@@ -26,14 +26,15 @@ class BatchCompletionSolvingStrategy implements BatchCompletionStrategy {
 
   @Override
   public void completeBatch(Batch batch) {
-    markSolvingBatchAsCompleted(batch.id());
-    publishSolvingBatchCompleted(batch);
+    if (markSolvingBatchAsCompleted(batch.id())) {
+      publishSolvingBatchCompleted(batch);
+    }
   }
 
-  private void markSolvingBatchAsCompleted(String batchId) {
+  private boolean markSolvingBatchAsCompleted(String batchId) {
     log.info(
         "Set solving batch status to [{}] with batch id [{}].", BatchStatus.COMPLETED, batchId);
-    batchRepository.updateStatusToCompleted(batchId);
+    return batchRepository.updateStatusToCompleted(batchId);
   }
 
   private void publishSolvingBatchCompleted(Batch batch) {

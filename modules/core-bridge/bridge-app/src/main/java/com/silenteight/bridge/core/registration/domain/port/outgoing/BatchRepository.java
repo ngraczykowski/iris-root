@@ -22,7 +22,7 @@ public interface BatchRepository {
 
   Batch create(Batch batch);
 
-  void updateStatusToCompleted(String batchId);
+  boolean updateStatusToCompleted(String batchId);
 
   void updateStatusAndErrorDescription(String batchId, BatchStatus status, String errorDescription);
 

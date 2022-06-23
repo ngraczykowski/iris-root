@@ -40,7 +40,8 @@ class JdbcBatchRepository implements BatchRepository {
   @Override
   public Optional<BatchPriorityWithStatus> findBatchPriorityById(String id) {
     return crudBatchRepository.findPriorityByBatchId(id)
-        .map(projection -> new BatchPriorityWithStatus(projection.priority(),
+        .map(projection -> new BatchPriorityWithStatus(
+            projection.priority(),
             BatchStatus.valueOf(projection.status().name())));
   }
 
@@ -50,8 +51,8 @@ class JdbcBatchRepository implements BatchRepository {
   }
 
   @Override
-  public void updateStatusToCompleted(String batchId) {
-    crudBatchRepository.updateStatusByBatchId(Status.COMPLETED.name(), batchId);
+  public boolean updateStatusToCompleted(String batchId) {
+    return crudBatchRepository.updateStatusByBatchId(Status.COMPLETED.name(), batchId);
   }
 
   @Override

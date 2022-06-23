@@ -44,6 +44,6 @@ interface CrudBatchRepository extends CrudRepository<BatchEntity, Long> {
   @Query("""
       UPDATE core_bridge_batches
       SET status = :status, updated_at = NOW()
-      WHERE batch_id = :batchId""")
-  void updateStatusByBatchId(String status, String batchId);
+      WHERE batch_id = :batchId AND status != :status""")
+  boolean updateStatusByBatchId(String status, String batchId);
 }
