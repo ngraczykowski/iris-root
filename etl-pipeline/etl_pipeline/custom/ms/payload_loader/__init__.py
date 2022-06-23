@@ -120,6 +120,7 @@ class PayloadLoader:
         for key, value in payload.items():
             splitted_keys = key.split(".")
             try:
+                value = None if value == "null" else value
                 extracted_dict, _ = self.extract_dict(splitted_keys, value)
                 new_payload = self.deep_update(new_payload, extracted_dict)
             except Exception as e:

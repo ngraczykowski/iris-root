@@ -121,7 +121,7 @@ def load_alert(filepath: str = "notebooks/sample/wm_address_in_payload_format.js
         ]
         alert = Alert(batch_id="1", alert_name="alerts/2", matches=matches_ids)
         for key, value in text.items():
-            alert.flat_payload[str(key)] = str(value)
+            alert.flat_payload[str(key)] = "null" if value is None else str(value)
     return alert
 
 

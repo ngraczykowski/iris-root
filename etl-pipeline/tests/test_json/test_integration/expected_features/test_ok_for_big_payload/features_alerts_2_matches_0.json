@@ -87,78 +87,7 @@
         "feature": "features/document"
     },
     {
-        "feature": "features/employerName",
-        "watchlistNames": [
-            {
-                "name": "TINET",
-                "type": "REGULAR"
-            },
-            {
-                "name": "ABOU HAMZA",
-                "type": "REGULAR"
-            },
-            {
-                "name": "KUMKAL",
-                "type": "REGULAR"
-            },
-            {
-                "name": "MERLIN",
-                "type": "REGULAR"
-            },
-            {
-                "name": "DUMONT, LIONEL",
-                "type": "REGULAR"
-            },
-            {
-                "name": "RENE, MERLIN OLIVER CHRISTIAN",
-                "type": "REGULAR"
-            },
-            {
-                "name": "ARFAJ, IMAM BEN YUSSUF",
-                "type": "REGULAR"
-            },
-            {
-                "name": "DIMON",
-                "type": "REGULAR"
-            },
-            {
-                "name": "KOUMKAL",
-                "type": "REGULAR"
-            },
-            {
-                "name": "BROUGERE, JACQUES",
-                "type": "REGULAR"
-            },
-            {
-                "name": "ANTONIO, DI KARLO",
-                "type": "REGULAR"
-            },
-            {
-                "name": "BILAL",
-                "type": "REGULAR"
-            },
-            {
-                "name": "BRUGERE",
-                "type": "REGULAR"
-            },
-            {
-                "name": "IMAD, ARFAUNI",
-                "type": "REGULAR"
-            },
-            {
-                "name": "HAMZA, ABU",
-                "type": "REGULAR"
-            },
-            {
-                "name": "HAMZA",
-                "type": "REGULAR"
-            },
-            {
-                "name": "HAMZA, ARFAUNI IMAD BEN YOUSSET",
-                "type": "REGULAR"
-            }
-        ],
-        "alertedPartyType": "INDIVIDUAL"
+        "feature": "features/employerName"
     },
     {
         "feature": "features/isApNameTpMarked",

@@ -47,38 +47,7 @@
         "feature": "features/document"
     },
     {
-        "feature": "features/employerName",
-        "watchlistNames": [
-            {
-                "name": "KARIM, ABDUL",
-                "type": "REGULAR"
-            },
-            {
-                "name": "RUSMAN, GUNAWAN",
-                "type": "REGULAR"
-            },
-            {
-                "name": "BUKHORY",
-                "type": "REGULAR"
-            },
-            {
-                "name": "GUNAWAN, GUN GUN RUSMAN",
-                "type": "REGULAR"
-            },
-            {
-                "name": "AL-HADI, ABD",
-                "type": "REGULAR"
-            },
-            {
-                "name": "BUKHORI",
-                "type": "REGULAR"
-            },
-            {
-                "name": "HADI, ABDUL",
-                "type": "REGULAR"
-            }
-        ],
-        "alertedPartyType": "INDIVIDUAL"
+        "feature": "features/employerName"
     },
     {
         "feature": "features/isApNameTpMarked",

@@ -545,9 +545,7 @@
                     ],
                     "wl_all_documents_aggregated": [],
                     "ap_all_employer_names_aggregated": [],
-                    "wl_all_employer_names_aggregated": [
-                        "Joe Ding"
-                    ],
+                    "wl_all_employer_names_aggregated":[],
                     "ap_all_names_aggregated": [
                         "Pladimir Vutin",
                         "Eva Pladimirova"
@@ -1205,9 +1203,7 @@
                     ],
                     "wl_all_documents_aggregated": [],
                     "ap_all_employer_names_aggregated": [],
-                    "wl_all_employer_names_aggregated": [
-                        "Joe Dong"
-                    ],
+                    "wl_all_employer_names_aggregated":[],
                     "ap_all_names_aggregated": [
                         "Pladimir Vutin",
                         "Eva Pladimirova"

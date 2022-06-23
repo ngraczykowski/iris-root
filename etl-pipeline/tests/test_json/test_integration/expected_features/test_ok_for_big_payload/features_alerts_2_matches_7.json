@@ -39,30 +39,7 @@
         "feature": "features/document"
     },
     {
-        "feature": "features/employerName",
-        "watchlistNames": [
-            {
-                "name": "AL-FADHALI, ABDALAZIZ AD'AI SAMIN FADHLI",
-                "type": "REGULAR"
-            },
-            {
-                "name": "AL-FADHL, ABD AL-AZIZ UDAI SAMIN",
-                "type": "REGULAR"
-            },
-            {
-                "name": "AL-FADHIL, ABD AL-AZIZ ADAY ZIMINY",
-                "type": "REGULAR"
-            },
-            {
-                "name": "AL-FADHLI, ABD AL-AZIZ ADHAY ZIMIN",
-                "type": "REGULAR"
-            },
-            {
-                "name": "AL-FADHLI, ABD AL-AZIZ UDAI SAMIN",
-                "type": "REGULAR"
-            }
-        ],
-        "alertedPartyType": "INDIVIDUAL"
+        "feature": "features/employerName"
     },
     {
         "feature": "features/isApNameTpMarked",

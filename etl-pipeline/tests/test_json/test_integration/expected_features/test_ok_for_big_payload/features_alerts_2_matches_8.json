@@ -39,30 +39,7 @@
         "feature": "features/document"
     },
     {
-        "feature": "features/employerName",
-        "watchlistNames": [
-            {
-                "name": "BASHIR, ABU BAKAR",
-                "type": "REGULAR"
-            },
-            {
-                "name": "SOMAD, ABDUS",
-                "type": "REGULAR"
-            },
-            {
-                "name": "BA'ASYIR, ABU BAKAR",
-                "type": "REGULAR"
-            },
-            {
-                "name": "BAASYIR, ABU BAKAR",
-                "type": "REGULAR"
-            },
-            {
-                "name": "SAMAD, ABDUS",
-                "type": "REGULAR"
-            }
-        ],
-        "alertedPartyType": "INDIVIDUAL"
+        "feature": "features/employerName"
     },
     {
         "feature": "features/isApNameTpMarked",

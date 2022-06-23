@@ -55,46 +55,7 @@
         "feature": "features/document"
     },
     {
-        "feature": "features/employerName",
-        "watchlistNames": [
-            {
-                "name": "AL-MASRI, ABU HAMZA",
-                "type": "REGULAR"
-            },
-            {
-                "name": "MUSTAPHA, MUSTAPHA KAMEL",
-                "type": "REGULAR"
-            },
-            {
-                "name": "EAMAN, ADAM RAMSEY",
-                "type": "REGULAR"
-            },
-            {
-                "name": "AL-MISRI, ABU HAMZA",
-                "type": "REGULAR"
-            },
-            {
-                "name": "MUSTAPHA, KAMEL MUSTAPHA",
-                "type": "REGULAR"
-            },
-            {
-                "name": "MUSTAFA, MUSTAFA KAMEL",
-                "type": "REGULAR"
-            },
-            {
-                "name": "MOSTAFA, MOSTAFA KAMEL",
-                "type": "REGULAR"
-            },
-            {
-                "name": "IBRAHIM, MOSTAFA KAMEL MOSTAFA",
-                "type": "REGULAR"
-            },
-            {
-                "name": "HAMZA, ABU",
-                "type": "REGULAR"
-            }
-        ],
-        "alertedPartyType": "INDIVIDUAL"
+        "feature": "features/employerName"
     },
     {
         "feature": "features/isApNameTpMarked",

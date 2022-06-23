@@ -156,7 +156,6 @@ def test_produce_document_feature_input_producer(
                 "feature": "features/employerName",
                 "ap": [
                     AlertedPartyName(name="Tech Ltd."),
-                    AlertedPartyName(name="None"),
                     AlertedPartyName(name="Bingo"),
                 ],
                 "wl": [WatchlistName(name="Soft Pte.", type=WatchlistName.NameType.REGULAR)],
@@ -172,16 +171,17 @@ def test_produce_employer_name_feature_input_producer(
         payload_fields,
         {"alertedParty": {"AP_PARTY_TYPE": initialization_params.get("ap_type", None)}},
     )
-    assert result == NameFeatureInput(
+
+    reference = NameFeatureInput(
         feature=reference_fields["feature"],
         alerted_party_type=NameFeatureInputProducer.AP_TYPE_MAPPING.get(
-            initialization_params.get(
-                "ap_type", NameFeatureInput.EntityType.ENTITY_TYPE_UNSPECIFIED
-            )
+            payload_fields.get("ap_type", NameFeatureInput.EntityType.ENTITY_TYPE_UNSPECIFIED),
+            None,
         ),
         alerted_party_names=reference_fields["ap"],
         watchlist_names=reference_fields["wl"],
     )
+    assert result == reference
 
 
 @pytest.mark.parametrize(
@@ -344,8 +344,8 @@ def test_produce_location_feature_input_producer(
                     "alerted_party_type": "ap_type",
                 },
             },
-            {"ap_payload_names": [""], "wl_payload_names": [], "ap_type": "C"},
-            {"feature": "features/name", "ap": [AlertedPartyName(name="")], "wl": []},
+            {"ap_payload_names": [], "wl_payload_names": [], "ap_type": "C"},
+            {"feature": "features/name", "ap": [], "wl": []},
         ),
         (
             {
@@ -365,7 +365,7 @@ def test_produce_location_feature_input_producer(
             },
             {
                 "feature": "features/last_name",
-                "ap": [AlertedPartyName(name="None")],
+                "ap": [],
                 "wl": [WatchlistName(name="Jim", type=WatchlistName.NameType.REGULAR)],
             },
         ),
@@ -383,12 +383,13 @@ def test_produce_name_feature_input_producer(
     result = producer.produce_feature_input(
         payload_fields, {"alertedParty": {"AP_PARTY_TYPE": alert_type}}
     )
-    assert result == NameFeatureInput(
+    reference = NameFeatureInput(
         feature=reference_fields["feature"],
         alerted_party_type=NameFeatureInputProducer.AP_TYPE_MAPPING.get(payload_fields["ap_type"]),
         alerted_party_names=reference_fields["ap"],
         watchlist_names=reference_fields["wl"],
     )
+    assert result == reference
 
 
 @pytest.mark.parametrize(

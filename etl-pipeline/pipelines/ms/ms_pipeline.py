@@ -54,6 +54,7 @@ class MSPipeline(ETLPipeline):
     def sanitize_logic(self, payload):
         self.sanitize_for_hit_type_agent(payload)
         self.sanitize_for_geo_sanction_agent(payload)
+        self.sanitize_employer_party_type(payload)
 
     def sanitize_for_hit_type_agent(self, match):
         match = match["watchlistParty"]["matchRecords"]
@@ -266,6 +267,14 @@ class MSPipeline(ETLPipeline):
             payload["alertedParty"]["ENTITY_TYPE_MATCH"] = "N"
         if payload["alertedParty"]["AP_PARTY_TYPE"] == "UNKNOWN":
             payload["alertedParty"]["ENTITY_TYPE_MATCH"] = "INCONCLUSIVE"
+
+    def sanitize_employer_party_type(self, payload):
+        if payload["alertedParty"]["AP_PARTY_TYPE"] == "I":
+            payload["alertedParty"]["employer_party_type"] = "C"
+        else:
+            payload["watchlistParty"]["matchRecords"]["wl_all_employer_names_aggregated"] = []
+            payload["watchlistParty"]["matchRecords"]["ap_all_employer_names_aggregated"] = []
+            payload["alertedParty"]["employer_party_type"] = "CLEAR"
 
     def set_up_dataset_type_match(self, payload, match):
         match[cn.DATASET_TYPE] = self.dataset_config.get(

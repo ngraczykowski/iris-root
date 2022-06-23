@@ -120,12 +120,12 @@ class Functions:
                 parties = self.collections.get_parties(payload)
                 for field_name in source["parties"]:
                     aggregated.extend(
-                        [i.get(field_name) for i in parties if i.get(field_name, "")]
+                        [i.get(field_name, "") for i in parties if i.get(field_name, "")]
                     )
             elif collection == "xml_fields":
                 fields = self.collections.get_xml_fields(payload)
                 for field in source[collection]:
-                    aggregated.append(fields.get(field).value if fields.get(field) else None)
+                    aggregated.append(fields.get(field).value if fields.get(field) else "")
         aggregated = [i for i in aggregated if i]
         if unique:
             aggregated = list(set([i for i in aggregated if i]))

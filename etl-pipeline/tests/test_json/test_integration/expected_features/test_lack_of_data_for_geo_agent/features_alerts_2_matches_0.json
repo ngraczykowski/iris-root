@@ -3,13 +3,7 @@
         "feature": "features/name",
         "alertedPartyNames": [
             {
-                "name": "Eva None Pladimirova"
-            },
-            {
                 "name": "Pladimir Vutin"
-            },
-            {
-                "name": "Pladimir None Vutin"
             },
             {
                 "name": "Eva Pladimirova"
@@ -43,13 +37,8 @@
     },
     {
         "feature": "features/employerName",
-        "watchlistNames": [
-            {
-                "name": "Joe Ding",
-                "type": "REGULAR"
-            }
-        ],
-        "alertedPartyType": "INDIVIDUAL"
+        "watchlistNames": [{"name": "Joe Ding", "type": "REGULAR"}],
+        "alertedPartyType": "ORGANIZATION"
     },
     {
         "feature": "features/isApNameTpMarked",
@@ -108,13 +97,7 @@
         "feature": "features/companyName",
         "alertedPartyNames": [
             {
-                "name": "Eva None Pladimirova"
-            },
-            {
                 "name": "Pladimir Vutin"
-            },
-            {
-                "name": "Pladimir None Vutin"
             },
             {
                 "name": "Eva Pladimirova"

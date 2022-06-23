@@ -23,6 +23,19 @@ def get_dummy_payload_for_dataset(dataset_name):
     return {cn.ALERTED_PARTY_FIELD: {cn.HEADER_INFO: {cn.DATASET_NAME: dataset_name}}}
 
 
+def sort_list(dict_):
+    if isinstance(dict_, dict):
+        for key in dict_:
+            dict_[key] = sort_list(dict_[key])
+    if isinstance(dict_, list):
+        sorted_ = [sort_list(i) for i in dict_]
+        try:
+            return sorted(sorted_)
+        except TypeError:
+            return sorted_
+    return dict_
+
+
 def run_pipeline(uut, file_path):
     with open(file_path, "r") as file:
         payload = json.loads(file.read())
@@ -114,7 +127,7 @@ def load_payload(out_payload, reference_file):
                 }
             except TypeError:
                 pass
-        assert_nested_dict(out_payload, payload)
+        assert_nested_dict(sort_list(out_payload), sort_list(payload))
         return
 
 

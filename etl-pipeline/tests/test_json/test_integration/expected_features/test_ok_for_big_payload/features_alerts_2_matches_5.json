@@ -17,14 +17,7 @@
         "feature": "features/document"
     },
     {
-        "feature": "features/employerName",
-        "watchlistNames": [
-            {
-                "name": "SATURN-TURBORUS, AO",
-                "type": "REGULAR"
-            }
-        ],
-        "alertedPartyType": "ORGANIZATION"
+        "feature": "features/employerName"
     },
     {
         "feature": "features/isApNameTpMarked",

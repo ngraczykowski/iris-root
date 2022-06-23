@@ -791,7 +791,7 @@
                         "name": "Joe Doe",
                         "stopDescriptorDetails": [
                             {
-                                "inputSynonym": "null",
+                                "inputSynonym": null,
                                 "inputToken": "Doe",
                                 "matchScore": "0.8571428571428572",
                                 "sdToken": "Doe"
@@ -810,9 +810,7 @@
                     "MAY 6, 1981"
                 ],
                 "wl_all_documents_aggregated": [],
-                "wl_all_employer_names_aggregated": [
-                    "Joe Ding"
-                ],
+                "wl_all_employer_names_aggregated":["Joe Ding"],
                 "wl_all_hit_types_aggregated": [],
                 "wl_all_matched_tokens_tp_markeds_aggregated": [],
                 "wl_all_names_aggregated": [
@@ -1629,7 +1627,7 @@
                         "name": "Joe Doe",
                         "stopDescriptorDetails": [
                             {
-                                "inputSynonym": "null",
+                                "inputSynonym": null,
                                 "inputToken": "Doe",
                                 "matchScore": "0.8571428571428572",
                                 "sdToken": "Doe"
@@ -1648,9 +1646,7 @@
                     "MAY 6, 1981"
                 ],
                 "wl_all_documents_aggregated": [],
-                "wl_all_employer_names_aggregated": [
-                    "Joe Ding"
-                ],
+                "wl_all_employer_names_aggregated":["Joe Ding"],
                 "wl_all_hit_types_aggregated": [],
                 "wl_all_matched_tokens_tp_markeds_aggregated": [],
                 "wl_all_names_aggregated": [
@@ -2499,7 +2495,7 @@
                         "name": "Joe Doe",
                         "stopDescriptorDetails": [
                             {
-                                "inputSynonym": "null",
+                                "inputSynonym": null,
                                 "inputToken": "Doe",
                                 "matchScore": "0.8571428571428572",
                                 "sdToken": "Doe"
@@ -2518,9 +2514,7 @@
                     "MAY 6, 1981"
                 ],
                 "wl_all_documents_aggregated": [],
-                "wl_all_employer_names_aggregated": [
-                    "Joe Dong"
-                ],
+                "wl_all_employer_names_aggregated":["Joe Dong"],
                 "wl_all_hit_types_aggregated": [],
                 "wl_all_matched_tokens_tp_markeds_aggregated": [],
                 "wl_all_names_aggregated": [

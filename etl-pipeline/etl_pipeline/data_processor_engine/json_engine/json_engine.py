@@ -107,7 +107,7 @@ class JsonProcessingEngine(ProcessingEngine):
         for value in values:
             value[cn.CONNECTED_FULL_NAME] = " ".join(
                 [
-                    value[field_name_to_collect]
+                    value.get(field_name_to_collect, "")
                     for field_name_to_collect in fields
                     if value.get(field_name_to_collect, "")
                 ]
@@ -170,7 +170,6 @@ class JsonProcessingEngine(ProcessingEngine):
                         distinct_names.append(value)
 
             names[cn.CONCAT_RESIDUE] = concat_field_residue
-
         return names
 
     @staticmethod

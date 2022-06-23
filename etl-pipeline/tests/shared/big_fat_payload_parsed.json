@@ -975,7 +975,7 @@
                         "name": "ABOUHAMZA",
                         "stopDescriptorDetails": [
                             {
-                                "inputSynonym": "null",
+                                "inputSynonym": null,
                                 "inputToken": "abouhamza",
                                 "matchScore": "1.0",
                                 "sdToken": "abouhamza"
@@ -987,7 +987,7 @@
                         "name": "ABUHAMZA",
                         "stopDescriptorDetails": [
                             {
-                                "inputSynonym": "null",
+                                "inputSynonym": null,
                                 "inputToken": "abouhamza",
                                 "matchScore": "0.8888888888888888",
                                 "sdToken": "abuhamza"
@@ -1026,23 +1026,7 @@
                 ],
                 "wl_all_documents_aggregated": [],
                 "wl_all_employer_names_aggregated": [
-                    "DUMONT, LIONEL",
-                    "KUMKAL",
-                    "ABOU HAMZA",
-                    "RENE, MERLIN OLIVER CHRISTIAN",
-                    "HAMZA",
-                    "HAMZA, ABU",
-                    "BRUGERE",
-                    "BROUGERE, JACQUES",
-                    "BILAL",
-                    "DIMON",
-                    "TINET",
-                    "ANTONIO, DI KARLO",
-                    "IMAD, ARFAUNI",
-                    "MERLIN",
-                    "KOUMKAL",
-                    "ARFAJ, IMAM BEN YUSSUF",
-                    "HAMZA, ARFAUNI IMAD BEN YOUSSET"
+                    
                 ],
                 "wl_all_hit_types_aggregated": [],
                 "wl_all_matched_tokens_tp_markeds_aggregated": [],
@@ -1827,7 +1811,7 @@
                         "name": "ABDALRAHMANALMILAD",
                         "stopDescriptorDetails": [
                             {
-                                "inputSynonym": "null",
+                                "inputSynonym": null,
                                 "inputToken": "abdalrahmanmilad",
                                 "matchScore": "0.8888888888888888",
                                 "sdToken": "abdalrahmanalmilad"
@@ -1839,7 +1823,7 @@
                         "name": "ABDALRAHMANMILAD",
                         "stopDescriptorDetails": [
                             {
-                                "inputSynonym": "null",
+                                "inputSynonym": null,
                                 "inputToken": "abdalrahmanmilad",
                                 "matchScore": "1.0",
                                 "sdToken": "abdalrahmanmilad"
@@ -1851,7 +1835,7 @@
                         "name": "ABDRAHMANMILAD",
                         "stopDescriptorDetails": [
                             {
-                                "inputSynonym": "null",
+                                "inputSynonym": null,
                                 "inputToken": "abdalrahmanmilad",
                                 "matchScore": "0.875",
                                 "sdToken": "abdrahmanmilad"
@@ -1877,10 +1861,6 @@
                 ],
                 "wl_all_documents_aggregated": [],
                 "wl_all_employer_names_aggregated": [
-                    "AL-BIJA",
-                    "AL-MILAD, ABD AL-RAHMAN",
-                    "MILAD, RAHMAN SALIM",
-                    "MILAD, ABDURAHMAN SALEM IBRAHIM"
                 ],
                 "wl_all_hit_types_aggregated": [],
                 "wl_all_matched_tokens_tp_markeds_aggregated": [],
@@ -2694,7 +2674,7 @@
                         "name": "ABDALHADI",
                         "stopDescriptorDetails": [
                             {
-                                "inputSynonym": "null",
+                                "inputSynonym": null,
                                 "inputToken": "abdalhadi",
                                 "matchScore": "1.0",
                                 "sdToken": "abdalhadi"
@@ -2706,7 +2686,7 @@
                         "name": "ABDULHADI",
                         "stopDescriptorDetails": [
                             {
-                                "inputSynonym": "null",
+                                "inputSynonym": null,
                                 "inputToken": "abdalhadi",
                                 "matchScore": "0.8888888888888888",
                                 "sdToken": "abdulhadi"
@@ -2735,13 +2715,6 @@
                 ],
                 "wl_all_documents_aggregated": [],
                 "wl_all_employer_names_aggregated": [
-                    "RUSMAN, GUNAWAN",
-                    "BUKHORY",
-                    "BUKHORI",
-                    "KARIM, ABDUL",
-                    "AL-HADI, ABD",
-                    "GUNAWAN, GUN GUN RUSMAN",
-                    "HADI, ABDUL"
                 ],
                 "wl_all_hit_types_aggregated": [],
                 "wl_all_matched_tokens_tp_markeds_aggregated": [],
@@ -3525,7 +3498,7 @@
                         "name": "ABDUSSOMAD",
                         "stopDescriptorDetails": [
                             {
-                                "inputSynonym": "null",
+                                "inputSynonym": null,
                                 "inputToken": "abdussomada",
                                 "matchScore": "0.9090909090909091",
                                 "sdToken": "abdussomad"
@@ -3552,11 +3525,6 @@
                 ],
                 "wl_all_documents_aggregated": [],
                 "wl_all_employer_names_aggregated": [
-                    "ABDUS SAMAD",
-                    "BAASYIR, ABU BAKAR",
-                    "BASHIR, ABU BAKAR",
-                    "ABDUS SOMAD",
-                    "BA'ASYIR, ABU BAKAR"
                 ],
                 "wl_all_hit_types_aggregated": [],
                 "wl_all_matched_tokens_tp_markeds_aggregated": [],
@@ -4413,7 +4381,7 @@
                         "name": "ABUHAMZA",
                         "stopDescriptorDetails": [
                             {
-                                "inputSynonym": "null",
+                                "inputSynonym": null,
                                 "inputToken": "abouhamza",
                                 "matchScore": "0.8888888888888888",
                                 "sdToken": "abuhamza"
@@ -4444,15 +4412,6 @@
                 ],
                 "wl_all_documents_aggregated": [],
                 "wl_all_employer_names_aggregated": [
-                    "AL-MASRI, ABU HAMZA",
-                    "IBRAHIM, MOSTAFA KAMEL MOSTAFA",
-                    "MUSTAPHA, MUSTAPHA KAMEL",
-                    "AL-MISRI, ABU HAMZA",
-                    "HAMZA, ABU",
-                    "MUSTAPHA, KAMEL MUSTAPHA",
-                    "MOSTAFA, MOSTAFA KAMEL",
-                    "MUSTAFA, MUSTAFA KAMEL",
-                    "EAMAN, ADAM RAMSEY"
                 ],
                 "wl_all_hit_types_aggregated": [],
                 "wl_all_matched_tokens_tp_markeds_aggregated": [],
@@ -5137,7 +5096,7 @@
                         "name": "1177627035211",
                         "stopDescriptorDetails": [
                             {
-                                "inputSynonym": "null",
+                                "inputSynonym": null,
                                 "inputToken": "1177627035211",
                                 "matchScore": "1.0",
                                 "sdToken": "1177627035211"
@@ -5155,7 +5114,6 @@
                 "wl_all_dobs_aggregated": [],
                 "wl_all_documents_aggregated": [],
                 "wl_all_employer_names_aggregated": [
-                    "SATURN-TURBORUS, AO"
                 ],
                 "wl_all_hit_types_aggregated": [],
                 "wl_all_matched_tokens_tp_markeds_aggregated": [],
@@ -5996,7 +5954,7 @@
                         "name": "AHMEDOU",
                         "stopDescriptorDetails": [
                             {
-                                "inputSynonym": "null",
+                                "inputSynonym": null,
                                 "inputToken": "ahmedoua",
                                 "matchScore": "0.875",
                                 "sdToken": "ahmedou"
@@ -6024,13 +5982,6 @@
                 ],
                 "wl_all_documents_aggregated": [],
                 "wl_all_employer_names_aggregated": [
-                    "ASRIW, AHMOUDOU AG",
-                    "AHMEDOU",
-                    "ISEREOUI",
-                    "ISRIOU",
-                    "AHMADOU",
-                    "ISRIW, AMADOU AG",
-                    "ISREW"
                 ],
                 "wl_all_hit_types_aggregated": [],
                 "wl_all_matched_tokens_tp_markeds_aggregated": [],
@@ -6811,13 +6762,13 @@
                         "name": "ALFADHLI UDAI",
                         "stopDescriptorDetails": [
                             {
-                                "inputSynonym": "null",
+                                "inputSynonym": null,
                                 "inputToken": "alfadhli",
                                 "matchScore": "1.0",
                                 "sdToken": "alfadhli"
                             },
                             {
-                                "inputSynonym": "null",
+                                "inputSynonym": null,
                                 "inputToken": "udaia",
                                 "matchScore": "0.8",
                                 "sdToken": "udai"
@@ -6844,11 +6795,6 @@
                 ],
                 "wl_all_documents_aggregated": [],
                 "wl_all_employer_names_aggregated": [
-                    "AL-FADHIL, ABD AL-AZIZ ADAY ZIMINY",
-                    "AL-FADHLI, ABD AL-AZIZ ADHAY ZIMIN",
-                    "AL-FADHL, ABD AL-AZIZ UDAI SAMIN",
-                    "AL-FADHALI, ABDALAZIZ AD'AI SAMIN FADHLI",
-                    "AL-FADHLI, ABD AL-AZIZ UDAI SAMIN"
                 ],
                 "wl_all_hit_types_aggregated": [],
                 "wl_all_matched_tokens_tp_markeds_aggregated": [],
@@ -7621,7 +7567,7 @@
                         "name": "ABDUSSOMAD",
                         "stopDescriptorDetails": [
                             {
-                                "inputSynonym": "null",
+                                "inputSynonym": null,
                                 "inputToken": "abdussomada",
                                 "matchScore": "0.9090909090909091",
                                 "sdToken": "abdussomad"
@@ -7648,11 +7594,6 @@
                 ],
                 "wl_all_documents_aggregated": [],
                 "wl_all_employer_names_aggregated": [
-                    "BAASYIR, ABU BAKAR",
-                    "SAMAD, ABDUS",
-                    "BASHIR, ABU BAKAR",
-                    "SOMAD, ABDUS",
-                    "BA'ASYIR, ABU BAKAR"
                 ],
                 "wl_all_hit_types_aggregated": [],
                 "wl_all_matched_tokens_tp_markeds_aggregated": [],

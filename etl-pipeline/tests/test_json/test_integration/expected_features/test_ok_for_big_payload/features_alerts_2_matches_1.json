@@ -35,26 +35,7 @@
         "feature": "features/document"
     },
     {
-        "feature": "features/employerName",
-        "watchlistNames": [
-            {
-                "name": "AL-BIJA",
-                "type": "REGULAR"
-            },
-            {
-                "name": "AL-MILAD, ABD AL-RAHMAN",
-                "type": "REGULAR"
-            },
-            {
-                "name": "MILAD, ABDURAHMAN SALEM IBRAHIM",
-                "type": "REGULAR"
-            },
-            {
-                "name": "MILAD, RAHMAN SALIM",
-                "type": "REGULAR"
-            }
-        ],
-        "alertedPartyType": "INDIVIDUAL"
+        "feature": "features/employerName"
     },
     {
         "feature": "features/isApNameTpMarked",

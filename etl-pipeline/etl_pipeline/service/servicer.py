@@ -65,6 +65,7 @@ class EtlPipelineServiceServicer(object):
             logger.debug(f"Number of alerts {len(alerts)}")
             etl_alerts = []
             tasks = []
+            self.process_request(alerts[0])
             for alert in alerts:
                 tasks.append(
                     asyncio.get_event_loop().create_task(

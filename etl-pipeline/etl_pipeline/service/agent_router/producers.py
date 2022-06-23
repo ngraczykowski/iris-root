@@ -146,14 +146,24 @@ class NameFeatureInputProducer(Producer):
         fields = deepcopy(self.fields)
         payload = deepcopy(payload)
         for input_key, payload_key in self.fields.items():
-            fields[input_key] = payload.get(payload_key, [])
-        alerted_party_type = auxiliary_payload["alertedParty"].get("AP_PARTY_TYPE")
+            if "." in payload_key:
+                keys = payload_key.split(".")
+                value = auxiliary_payload
+                for key in keys:
+                    value = value.get(key, {})
+                fields[input_key] = value
+            else:
+                fields[input_key] = payload.get(payload_key, [])
+            if isinstance(fields[input_key], list):
+                fields[input_key] = [i for i in fields[input_key] if i]
+
+        alerted_party_type = fields["alerted_party_type"]
         if alerted_party_type == "UNKNOWN":
             alerted_party_type = payload.get("WLP_TYPE")
         return NameFeatureInput(
             feature=self.feature_name,
             alerted_party_type=NameFeatureInputProducer.AP_TYPE_MAPPING.get(
-                alerted_party_type, NameFeatureInput.EntityType.ENTITY_TYPE_UNSPECIFIED
+                alerted_party_type, None
             ),
             alerted_party_names=[
                 AlertedPartyName(name=str(i)) for i in fields["alerted_party_names"]

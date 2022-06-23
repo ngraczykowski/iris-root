@@ -3,7 +3,7 @@
         "feature": "features/name",
         "alertedPartyNames": [
             {
-                "name": "Eva None Pladimirova"
+                "name": "Eva Pladimirova"
             },
             {
                 "name": "Joe BlackJ"
@@ -13,12 +13,6 @@
             },
             {
                 "name": "Pladimir Vutin"
-            },
-            {
-                "name": "Pladimir None Vutin"
-            },
-            {
-                "name": "Eva Pladimirova"
             }
         ],
         "watchlistNames": [
@@ -55,7 +49,7 @@
                 "type": "REGULAR"
             }
         ],
-        "alertedPartyType": "INDIVIDUAL"
+        "alertedPartyType": "ORGANIZATION"
     },
     {
         "feature": "features/isApNameTpMarked",
@@ -113,7 +107,7 @@
         "feature": "features/companyName",
         "alertedPartyNames": [
             {
-                "name": "Eva None Pladimirova"
+                "name": "Eva Pladimirova"
             },
             {
                 "name": "Joe BlackJ"
@@ -123,12 +117,6 @@
             },
             {
                 "name": "Pladimir Vutin"
-            },
-            {
-                "name": "Pladimir None Vutin"
-            },
-            {
-                "name": "Eva Pladimirova"
             }
         ],
         "watchlistNames": [

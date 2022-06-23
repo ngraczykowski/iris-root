@@ -46,38 +46,7 @@
         "feature": "features/document"
     },
     {
-        "feature": "features/employerName",
-        "watchlistNames": [
-            {
-                "name": "AHMADOU",
-                "type": "REGULAR"
-            },
-            {
-                "name": "ISRIW, AMADOU AG",
-                "type": "REGULAR"
-            },
-            {
-                "name": "ASRIW, AHMOUDOU AG",
-                "type": "REGULAR"
-            },
-            {
-                "name": "AHMEDOU",
-                "type": "REGULAR"
-            },
-            {
-                "name": "ISEREOUI",
-                "type": "REGULAR"
-            },
-            {
-                "name": "ISREW",
-                "type": "REGULAR"
-            },
-            {
-                "name": "ISRIOU",
-                "type": "REGULAR"
-            }
-        ],
-        "alertedPartyType": "INDIVIDUAL"
+        "feature": "features/employerName"
     },
     {
         "feature": "features/isApNameTpMarked",
