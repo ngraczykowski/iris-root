@@ -4,6 +4,7 @@
 
 package com.silenteight.backend;
 
+import com.silenteight.backend.frontend.FrontendConfigurationModule;
 import com.silenteight.commons.app.spring.ApplicationBuilderConfigurer;
 import com.silenteight.commons.app.spring.ConfigurableApplicationBuilder;
 import com.silenteight.commons.app.spring.DefaultSpringApplicationContextCallback;
@@ -54,6 +55,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     AmqpCommonModule.class,
     AuthenticationModule.class,
     AuthorizationModule.class,
+    FrontendConfigurationModule.class,
     S3FileStorageMinioModule.class,
     GrpcCommonModule.class,
     WebModule.class,

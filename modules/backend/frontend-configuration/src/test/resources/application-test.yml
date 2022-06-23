@@ -1,0 +1,5 @@
+frontend:
+  configuration:
+    serverApiUrl: "/rest/governance/api/v1"
+    governanceApiUrl": "/rest/governance/api/v1"
+    simulatorUrl": "/rest/governance/api/v1"

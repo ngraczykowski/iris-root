@@ -16,6 +16,7 @@ dependencies {
   implementation libs.silenteight.serp.governance.policy
   implementation libs.silenteight.serp.governance.qa
   implementation libs.silenteight.serp.governance.strategy
+  implementation project(":frontend-configuration")
 
 //  implementation libs.silenteight.simulator.dataset
 //  implementation libs.silenteight.simulator.common.web

@@ -521,6 +521,7 @@ sep.auth:
       - "VIEW_REASONING_BRANCHES"
   permit-all-urls:
     - "/management/**"
+    - "/api/v1/frontend/configuration"
 
 serp.governance.qa:
   sampling:
@@ -597,3 +598,9 @@ integration:
 sentry:
   environment: unknown
   traces-sample-rate: 0
+
+frontend:
+  configuration:
+    serverApiUrl: "/rest/webapp/api"
+    governanceApiUrl": "/rest/governance/api/v1"
+    simulatorUrl": "/rest/simulator/api/v1"

@@ -1,0 +1,10 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+}
+
+description = "Frontend Configuration"
+
+dependencies {
+  implementation project(":governance-common-web")
+  testImplementation project(":governance-common-web-testing")
+}

@@ -89,3 +89,4 @@ sep.auth:
   permit-all-urls:
     - "/management/**"
     - "/openapi/**"
+    - "/api/v1/frontend/configuration"
