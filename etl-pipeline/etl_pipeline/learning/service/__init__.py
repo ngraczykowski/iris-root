@@ -24,7 +24,6 @@ from etl_pipeline.learning.proto.historical_decision_learning_pb2 import (
     HistoricalDecisionLearningStoreExchangeRequest,
 )
 from etl_pipeline.learning.service.connection import HistoricalDecisionExchange
-from etl_pipeline.logger import get_logger
 from etl_pipeline.service.proto.api.etl_pipeline_pb2 import FAILURE
 from pipelines.ms.ms_pipeline import MSPipeline
 
@@ -147,7 +146,6 @@ class EtlLearningServiceServicer(object):
             logger.debug(f"Number of alerts {len(alerts)}")
             etl_alerts = []
             tasks = []
-            self.process_request(alerts[0])
             for alert in alerts:
                 tasks.append(
                     asyncio.get_event_loop().create_task(
@@ -200,7 +198,9 @@ class EtlLearningServiceServicer(object):
         try:
             logger = cls.loggers[os.getpid()]
         except KeyError:
-            logger = cls.loggers[os.getpid()] = get_logger("main", "ms_pipeline.log")
+            logger = cls.loggers[os.getpid()] = logging.getLogger("main").getChild(
+                str(os.getpid())
+            )
         return logger
 
     def _parse_response_alert(self, alert, result):

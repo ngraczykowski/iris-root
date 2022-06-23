@@ -10,7 +10,6 @@ import etl_pipeline.service.proto.api.etl_pipeline_pb2 as etl__pipeline__pb2
 from etl_pipeline.config import ConsulServiceConfig, pipeline_config
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.datatypes import AlertPayload, DataInputRecords, Match, PipelinedPayload
-from etl_pipeline.logger import get_logger
 from etl_pipeline.service.agent_router import AgentInputCreator
 from etl_pipeline.service.proto.api.etl_pipeline_pb2 import FAILURE, SUCCESS, EtlAlert, EtlMatch
 from pipelines.ms.ms_pipeline import MSPipeline
@@ -148,12 +147,13 @@ class EtlPipelineServiceServicer:
         result = self.prepare_inputs(alert, record)
         return result
 
-    def get_logger(self):
+    @classmethod
+    def get_logger(cls):
         try:
-            logger = EtlPipelineServiceServicer.loggers[os.getpid()]
+            logger = cls.loggers[os.getpid()]
         except KeyError:
-            logger = EtlPipelineServiceServicer.loggers[os.getpid()] = get_logger(
-                "main", "ms_pipeline.log"
+            logger = cls.loggers[os.getpid()] = logging.getLogger("main").getChild(
+                str(os.getpid())
             )
         return logger
 
@@ -189,7 +189,7 @@ class EtlPipelineServiceServicer:
         return etl_alert
 
     def add_to_datasource(self, alerts: List[AlertPayload]):
-        _ = get_logger("main", "ms_pipeline.log")
+        self.get_logger()
         router = self.get_router()
 
         category_batches = []

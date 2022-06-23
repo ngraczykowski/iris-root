@@ -1,3 +1,4 @@
+import logging
 import os
 import ssl
 import time
@@ -8,11 +9,11 @@ import pika
 from pika.adapters.blocking_connection import BlockingChannel
 from pika.delivery_mode import DeliveryMode
 from pika.exchange_type import ExchangeType
+from pika.spec import BasicProperties
 
 from etl_pipeline.config import ConsulServiceConfig
-from etl_pipeline.logger import get_logger
 
-logger = get_logger("main", "ms_pipeline.log").getChild("Test")
+logger = logging.getLogger("main").getChild("Connection")
 
 
 class PikaConnection:
@@ -42,24 +43,21 @@ class PikaConnection:
         if ssl_options:
             context = ssl.create_default_context(cafile=ssl_options["ca_certs"])
             context.load_cert_chain(ssl_options["certfile"], ssl_options["keyfile"])
-            context.options |= ssl.OP_NO_TLSv1
-            context.options |= ssl.OP_NO_TLSv1_1
-
             ssl_opts = pika.SSLOptions(context, connection_configuration["host"])
-            conn_params = pika.ConnectionParameters(
+            self.conn_params = pika.ConnectionParameters(
                 port=connection_configuration["port"],
                 virtual_host=connection_configuration["virtualhost"],
                 credentials=creds,
                 ssl_options=ssl_opts,
             )
         else:
-            conn_params = pika.ConnectionParameters(
+            self.conn_params = pika.ConnectionParameters(
                 host=self.connection_configuration["host"],
                 port=self.connection_configuration["port"],
                 virtual_host=self.connection_configuration["virtualhost"],
                 credentials=creds,
             )
-        self.connection: pika.BlockingConnection = pika.BlockingConnection(conn_params)
+        self.connection: pika.BlockingConnection = pika.BlockingConnection(self.conn_params)
         self.connection_configuration = connection_configuration
         self.channel: BlockingChannel = self.connection.channel()
         self.request_queue = self.channel.queue_declare(
@@ -80,6 +78,14 @@ class PikaConnection:
             routing_key=self.messaging_configuration.get("routing-key"),
         )
         logger.info(f"Created queue {self.request_queue} and bind to exchange {request_exchange}")
+
+    def restart_connection(self):
+        try:
+            self.connection.close()
+        except Exception:
+            pass
+        self.connection: pika.BlockingConnection = pika.BlockingConnection(self.conn_params)
+        self.channel: BlockingChannel = self.connection.channel()
 
     async def stop(self) -> None:
         # not sure whenever order is important, so doing it without gather
@@ -121,7 +127,6 @@ class HistoricalDecisionExchange:
             store_size=False,
         )
         logger.debug("Trying to send")
-        from pika.spec import BasicProperties
 
         properties = BasicProperties(
             content_encoding="lz4",
@@ -140,6 +145,7 @@ class HistoricalDecisionExchange:
             except Exception as e:
                 trials += 1
                 logger.debug(f"Trying again {str(e)}")
+                self.connections[0].restart_connection()
         logger.debug(f"Result of publish: {'SUCCESS' if result else 'FAILURE'}")
         return result
 

@@ -26,8 +26,7 @@ historical_decision_exchange:
   
 
 rabbitmq:
-  host: localhost
-  port: 5672 
-  login: dev
-  password: dev
-  virtualhost: /
+  login: mike-etl-historical-decision-ls
+  password: cgsp2NdZKFYEMZpBc
+  addresses: 10.8.0.1:31130,10.8.0.2:31130,10.8.0.3:31130
+  virtualhost: /mike
