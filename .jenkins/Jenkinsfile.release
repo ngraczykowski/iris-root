@@ -43,38 +43,40 @@ pipeline {
         }
         environment {
           ARTIFACTORY = credentials('artifactory-user')
-          NAMESPACE = "test-e2e-${ENVIRONMENT}-${env.BUILD_NUMBER}-${GIT_COMMIT[0..7]}"
-          INGRESS_HOST = "${NAMESPACE}.prv.dev.s8ops.com"
+          NAMESPACE = "test-e2e-${env.ENVIRONMENT}-${env.BUILD_NUMBER}-${env.GIT_COMMIT[0..7]}"
+          INGRESS_HOST = "${env.NAMESPACE}.prv.dev.s8ops.com"
           BASE_URL = "https://${env.INGRESS_HOST}"
-          RELEASE_NAME = "sear-${ENVIRONMENT}"
+          RELEASE_NAME = "sear-${env.ENVIRONMENT}"
         }
         stages {
           stage('Install chart') {
             steps {
-              echo "Deploying version ${version} to ${ENVIRONMENT}"
+              echo "Deploying version ${version} to ${env.ENVIRONMENT}"
 
               withKubeConfig(
                   credentialsId: 'devenv-eks',
                   serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
                 withCredentials([aws(credentialsId: 'jenkins-ec2-devenv')]) {
                   sh """
+                  chmod go-rw "\${KUBECONFIG}"
+
                   helm \
                     secrets -d vals \
                     install \
                     --create-namespace \
-                    --namespace ${NAMESPACE} \
+                    --namespace \${NAMESPACE} \
                     --username "\${ARTIFACTORY_USR}" \
                     --password "\${ARTIFACTORY_PSW}" \
                     --values kubernetes/values.core.yaml \
                     --values kubernetes/values.ingress-internal.yaml  \
-                    --values kubernetes/values.${ENVIRONMENT}.yaml \
-                    --set ingress.hosts[0]=${INGRESS_HOST} \
-                    --set keycloak.ingress.hostname=${INGRESS_HOST} \
-                    --set keycloak.externalDatabase.host=${RELEASE_NAME}-postgres.${NAMESPACE}.svc \
-                    --set keycloak.externalDatabase.existingSecret=keycloak.${RELEASE_NAME}-postgres.credentials.postgresql.acid.zalan.do \
+                    --values kubernetes/values.\${ENVIRONMENT}.yaml \
+                    --set ingress.hosts[0]=\${INGRESS_HOST} \
+                    --set keycloak.ingress.hostname=\${INGRESS_HOST} \
+                    --set keycloak.externalDatabase.host=\${RELEASE_NAME}-postgres.\${NAMESPACE}.svc \
+                    --set keycloak.externalDatabase.existingSecret=keycloak.\${RELEASE_NAME}-postgres.credentials.postgresql.acid.zalan.do \
                     --wait \
                     --timeout 15m \
-                    ${RELEASE_NAME} \
+                    \${RELEASE_NAME} \
                     https://repo.silenteight.com/artifactory/helm/sear/sear-"${version}".tgz
                 """
                 }
@@ -82,32 +84,34 @@ pipeline {
             }
             post {
               failure {
-                echo "Deployment of ${version} to ${ENVIRONMENT} failed!"
+                echo "Deployment of ${version} to ${env.ENVIRONMENT} failed!"
                 withKubeConfig(
                     credentialsId: 'devenv-eks',
                     serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
                   sh """
-                    export NAMESPACE=test-e2e-${ENVIRONMENT}-${env.BUILD_NUMBER}
-                    export LOGS_DIR=logs/${ENVIRONMENT}
+                    chmod go-rw "\${KUBECONFIG}"
 
-                    mkdir -p "\$LOGS_DIR"
+                    export LOGS_DIR=logs/\${ENVIRONMENT}
+                    export LOGS_PREFIX=\${LOGS_DIR}/\${ENVIRONMENT}
+
+                    mkdir -p "\${LOGS_DIR}"
 
                     kubectl get pods \
-                      --namespace \$NAMESPACE \
+                      --namespace \${NAMESPACE} \
                       --output wide \
-                      --sort-by '.status.containerStatuses[0].restartCount' | tee "\$LOGS_DIR"/${ENVIRONMENT}_pods.log
+                      --sort-by '.status.containerStatuses[0].restartCount' | tee "\${LOGS_PREFIX}_pods.log"
 
                     kubectl get events \
-                      --namespace \$NAMESPACE \
-                      --sort-by='.metadata.creationTimestamp' | tee "\$LOGS_DIR"/${ENVIRONMENT}_events.log
+                      --namespace \${NAMESPACE} \
+                      --sort-by='.metadata.creationTimestamp' | tee "\${LOGS_PREFIX}_events.log"
 
                     FAILED_PODS=\$(set +x && kubectl get pods \
-                      --namespace \$NAMESPACE \
+                      --namespace \${NAMESPACE} \
                       --output=custom-columns="POD:metadata.name" \
                       --no-headers)
-                    for pod in \$FAILED_PODS ; do
-                      kubectl --namespace \$NAMESPACE logs --previous \$pod >"\$LOGS_DIR"/${ENVIRONMENT}_\$pod.previous.log || true
-                      kubectl --namespace \$NAMESPACE logs \$pod >"\$LOGS_DIR"/${ENVIRONMENT}_\$pod.log || true
+                    for pod in \${FAILED_PODS} ; do
+                      kubectl --namespace \${NAMESPACE} logs --previous \$pod >\${LOGS_PREFIX}_\${pod}.previous.log || true
+                      kubectl --namespace \${NAMESPACE} logs \${pod} >\${LOGS_PREFIX}_\${pod}.log || true
                     done
                   """
                 }
@@ -124,12 +128,12 @@ pipeline {
             }
             steps {
               withGradle {
-                echo "Starting E2E tests for ${ENVIRONMENT} environment."
+                echo "Starting E2E tests for ${env.ENVIRONMENT} environment."
                 sh """
                   cd tests/e2e-tests
                   ../../gradlew test \
                   -Dcucumber.features="src/test/java/features" \
-                  -Dcucumber.filter.tags="@smoke or @${ENVIRONMENT}" \
+                  -Dcucumber.filter.tags="@smoke or @\${ENVIRONMENT}" \
                   -Dcucumber.plugin=json:report-\${ENVIRONMENT}.json \
                   -Dtest.clientId=frontend \
                   -Dtest.admin.username="\$E2E_TESTS_CREDS_2_USR" \
@@ -158,8 +162,9 @@ pipeline {
                 credentialsId: 'devenv-eks',
                 serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
               sh """
-                helm uninstall --namespace ${NAMESPACE} ${RELEASE_NAME}
-                kubectl delete namespace ${NAMESPACE}
+                chmod go-rw "\${KUBECONFIG}"
+                helm uninstall --namespace \${NAMESPACE} \${RELEASE_NAME}
+                kubectl delete namespace \${NAMESPACE}
               """
             }
           }
