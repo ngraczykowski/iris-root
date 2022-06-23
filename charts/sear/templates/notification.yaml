@@ -1,3 +1,4 @@
+{{- if .Values.common.reportDeployments }}
 ---
 kind: Pod
 apiVersion: v1
@@ -34,7 +35,7 @@ spec:
           name: notification-keys
           key: grafana_token
     - name: GRAFANA_URL
-      value: "http://kube-stack-prometheus-grafana.observability.svc.cluster.local/api/annotations"
+      value: "http://kube-stack-prometheus-grafana.observability.svc/api/annotations"
     - name: GRAFANA_DATA
       value: '{"text": "Deployment of {{ .Release.Namespace }}", "tags": [ "iris", "deploy" ] }'
 
@@ -55,3 +56,4 @@ spec:
     data: null
     metadata:
       name: notification-keys
+{{- end }}

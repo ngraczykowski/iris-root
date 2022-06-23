@@ -19,6 +19,8 @@ common:
       cpu: 100m
       memory: 1Gi
 
+  reportDeployments: false
+
 agentsCommon:
   resources:
     limits:
