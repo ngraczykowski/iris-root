@@ -78,7 +78,15 @@ class AccountsReportGeneratorTest {
 
   @NotNull
   private String getResourceAsString(String expectedReportFile) throws Exception {
-    InputStream reportStream = getClass().getClassLoader().getResourceAsStream(expectedReportFile);
-    return new String(reportStream.readAllBytes());
+    try (
+        InputStream reportStream = getClass()
+            .getClassLoader()
+            .getResourceAsStream(expectedReportFile)) {
+      if (reportStream == null) {
+        return "";
+      } else {
+        return new String(reportStream.readAllBytes());
+      }
+    }
   }
 }

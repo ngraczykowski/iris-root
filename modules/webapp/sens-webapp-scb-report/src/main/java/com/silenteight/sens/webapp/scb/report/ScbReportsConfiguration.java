@@ -15,6 +15,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import javax.validation.Valid;
+
 @Configuration
 @EnableScheduling
 @EnableConfigurationProperties({
@@ -24,8 +26,8 @@ class ScbReportsConfiguration {
   @Bean
   AccountsReportGenerator accountsReportGenerator(
       UserQuery userQuery,
-      RolesProperties rolesProperties,
-      AccountsReportProperties reportProperties) {
+      @Valid RolesProperties rolesProperties,
+      @Valid AccountsReportProperties reportProperties) {
 
     return new AccountsReportGenerator(
         userQuery,
@@ -37,7 +39,7 @@ class ScbReportsConfiguration {
 
   @Bean
   EntitlementReportGenerator entitlementReportGenerator(
-      EntitlementReportProperties reportProperties) {
+      @Valid EntitlementReportProperties reportProperties) {
     return new EntitlementReportGenerator(
         DefaultTimeSource.INSTANCE, new ScbReportDateFormatter(), reportProperties);
   }
@@ -45,7 +47,7 @@ class ScbReportsConfiguration {
   @Bean
   IdManagementReportGenerator idManagementReportGenerator(
       IdManagementEventProvider idManagementEventProvider,
-      ScbReportsProperties scbReportsProperties) {
+      @Valid ScbReportsProperties scbReportsProperties) {
 
     return new IdManagementReportGenerator(
         new DateRangeProvider(
@@ -64,7 +66,7 @@ class ScbReportsConfiguration {
   @Bean
   AuditHistoryReportGenerator auditHistoryReportGenerator(
       AuditHistoryEventProvider auditHistoryEventProvider,
-      ScbReportsProperties scbReportsProperties) {
+      @Valid ScbReportsProperties scbReportsProperties) {
 
     return new AuditHistoryReportGenerator(
         new DateRangeProvider(
@@ -82,7 +84,8 @@ class ScbReportsConfiguration {
 
   @Bean
   UserAuthActivityReportGenerator userAuthActivityReportGenerator(
-      UserAuthActivityEventProvider dataProvider, ScbReportsProperties properties) {
+      UserAuthActivityEventProvider dataProvider,
+      @Valid ScbReportsProperties properties) {
 
     return new UserAuthActivityReportGenerator(
         new DateRangeProvider(
@@ -99,7 +102,7 @@ class ScbReportsConfiguration {
       EventQuery eventQuery,
       ReportMetadataService reportMetadataService,
       UserRolesRetriever userRolesRetriever,
-      RolesProperties rolesProperties) {
+      @Valid RolesProperties rolesProperties) {
 
     return new UserAuthActivityEventProvider(
         configurationQuery,

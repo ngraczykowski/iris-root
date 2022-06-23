@@ -51,21 +51,21 @@ class AuditHistoryEventProviderTest {
 
     List<AuditHistoryEventDto> events = underTest.provide(from, to);
 
-    assertThat(events).hasSize(2);
-    assertThat(events).isEqualTo(
-        List.of(
-            AuditHistoryEventDto.builder()
-                .username(userName)
-                .status(FAILURE_STATUS)
-                .ipAddress(IP_ADDRESS)
-                .timestamp(loginErrorTimestamp)
-                .build(),
-            AuditHistoryEventDto.builder()
-                .username(userName)
-                .status(SUCCESS_STATUS)
-                .ipAddress(IP_ADDRESS)
-                .timestamp(loginTimestamp)
-                .build()));
+    assertThat(events).hasSize(2)
+        .isEqualTo(
+            List.of(
+                AuditHistoryEventDto.builder()
+                    .username(userName)
+                    .status(FAILURE_STATUS)
+                    .ipAddress(IP_ADDRESS)
+                    .timestamp(loginErrorTimestamp)
+                    .build(),
+                AuditHistoryEventDto.builder()
+                    .username(userName)
+                    .status(SUCCESS_STATUS)
+                    .ipAddress(IP_ADDRESS)
+                    .timestamp(loginTimestamp)
+                    .build()));
   }
 
   private static long createPastTimestamp(OffsetDateTime dateTime, int minutes) {

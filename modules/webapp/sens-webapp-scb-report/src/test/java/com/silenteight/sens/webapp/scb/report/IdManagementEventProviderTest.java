@@ -208,7 +208,7 @@ class IdManagementEventProviderTest {
     assertThat(idManagementEvent1.getRoles()).contains(role);
   }
 
-  private RemovedUserDetails removedUserDetailsWith(Collection<String> roles) {
+  private static RemovedUserDetails removedUserDetailsWith(Collection<String> roles) {
     return new RemovedUserDetails(
         RemoveUserCommand.builder()
             .username("not_used")
@@ -217,21 +217,25 @@ class IdManagementEventProviderTest {
         roles);
   }
 
-  private AuditDataDtoBuilder auditDataDtoWithDefaults() {
+  private static AuditDataDtoBuilder auditDataDtoWithDefaults() {
     return AuditDataDto.builder()
         .eventId(randomUUID())
         .correlationId(randomUUID())
         .timestamp(Timestamp.valueOf(LocalDateTime.now()));
   }
 
-  private CreatedUserDetails createdUserDetailsWith(Set<String> roles) {
+  private static CreatedUserDetails createdUserDetailsWith(Set<String> roles) {
     return new CreatedUserDetails(
-        new UserDetails("not_used", "not_used", new ObfuscatedCredentials(), roles),
+        new UserDetails(
+            "not_used",
+            "not_used",
+            new ObfuscatedCredentials(),
+            roles),
         "not_used",
         now());
   }
 
-  private UpdatedUserDetails updatedUserDetailsWith(Set<String> roles) {
+  private static UpdatedUserDetails updatedUserDetailsWith(Set<String> roles) {
     return new UpdatedUserDetails(
         UpdateUserCommand.builder()
             .username("not_used")
