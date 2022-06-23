@@ -20,6 +20,7 @@ message CompareGeoLocationsRequest {
 
   repeated CompareGeoLocationsInput alerted_party_inputs = 5 [(google.api.field_behavior) = REQUIRED];
   repeated CompareGeoLocationsInput watchlist_party_inputs = 6 [(google.api.field_behavior) = REQUIRED];
+  string configuration_name = 7 [(google.api.field_behavior) = REQUIRED];
 }
 
 message CompareGeoLocationsResponse {

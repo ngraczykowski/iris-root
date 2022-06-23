@@ -32,6 +32,7 @@ message BatchCompareLocationsResponse {
 message CompareLocationsRequest {
   string alerted_party_location = 1 [(google.api.field_behavior) = REQUIRED];
   string watchlist_party_location = 2 [(google.api.field_behavior) = REQUIRED];
+  string configuration_name = 3 [(google.api.field_behavior) = REQUIRED];
 }
 
 message CompareLocationsResponse {
@@ -49,5 +50,6 @@ message IdentifiedLocations {
 message CompareMultipleLocationsRequest {
   repeated string alerted_party_locations = 1 [(google.api.field_behavior) = REQUIRED];
   repeated string watchlist_party_locations = 2 [(google.api.field_behavior) = REQUIRED];
+  string configuration_name = 3 [(google.api.field_behavior) = REQUIRED];
 }
 
