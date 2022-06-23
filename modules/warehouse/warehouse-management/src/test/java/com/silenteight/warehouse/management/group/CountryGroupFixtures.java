@@ -3,6 +3,8 @@ package com.silenteight.warehouse.management.group;
 import com.silenteight.warehouse.management.group.domain.dto.CountryGroupDto;
 import com.silenteight.warehouse.management.group.update.dto.UpdateCountryGroupRequest;
 
+import java.util.stream.Stream;
+
 import static com.silenteight.warehouse.common.opendistro.roles.RolesFixtures.COUNTRY_GROUP_ID;
 
 public final class CountryGroupFixtures {
@@ -20,4 +22,12 @@ public final class CountryGroupFixtures {
 
   public static final UpdateCountryGroupRequest UPDATE_COUNTRY_GROUP_REQUEST =
       new UpdateCountryGroupRequest(UPDATED_NAME);
+
+  public static Stream<String> getForbiddenCharsAsInput() {
+    return Stream.of("###", "qwer#", "122*", "zxcv^");
+  }
+
+  public static Stream<String> getAllowedCharsAsInput() {
+    return Stream.of("aghsd", "ASDfgf", "GHgbd456", "dsadf-?!", "@+~&/=", "232304");
+  }
 }
