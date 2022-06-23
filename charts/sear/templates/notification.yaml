@@ -1,0 +1,57 @@
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: notifier-grafana
+  labels:
+    {{- include "sear.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/hook: "pre-install"
+spec:
+  restartPolicy: Never
+  # workaround for https://github.com/kubernetes/kubernetes/issues/105204
+  # may be removed after EKS is upgraded to 1.22.9+ or 1.23.6+ (https://github.com/kubernetes/kubernetes/issues/105204#issuecomment-1104427967)
+  automountServiceAccountToken: false
+  containers:
+  - name: notifier
+    #image: registry.dev.s8ops.com/curl:7.83.1
+    image: curlimages/curl:7.83.1
+    command:
+      - sh
+      - -c
+    args:
+      - 'curl -H "Authorization: Bearer $GRAFANA_TOKEN" -H "Content-Type: application/json" -X POST "$GRAFANA_URL" -d "$GRAFANA_DATA"'
+    resources:
+      requests:
+        cpu: "10m"
+      limits:
+        cpu: "100m"
+        memory: "16Mi"
+    env:
+    - name: GRAFANA_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: notification-keys
+          key: grafana_token
+    - name: GRAFANA_URL
+      value: "http://kube-stack-prometheus-grafana.observability.svc.cluster.local/api/annotations"
+    - name: GRAFANA_DATA
+      value: '{"text": "Deployment of {{ .Release.Namespace }}", "tags": [ "iris", "deploy" ] }'
+
+---
+# Secret refresh guide:
+#  Go to Grafana → Settings → API keys → Add API key, role Editor, no expiration
+#  echo -n APIKEY | kubectl create secret generic notification-keys --dry-run=client --from-file=grafana_token=/dev/stdin -o json > notification.secret.dontcommit.json
+#  kubeseal -o yaml < notification.secret.dontcommit.json
+#  put the output below
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: notification-keys
+spec:
+  encryptedData:
+    grafana_token: AgA+BTVAqL38U5y9uEeSymAQJc+QqHIUWjO+hDUXdkQtmtGVGDEgyrcP9T/61knDdZddJuiz3OPYRrPjKZqGAZoYcggrW4wb+17gFMJ64HCdulhtVMpVuNrJDHRaOWEgkU92993kRAZ0SNcT79kvZdBj8WTL0JMuv+3R82lbXMVzrbSuN5NUeYbtMNmul0mcmPV2kWFe32BfehfejRvsTOI6TZTNtCuY5aBAoF1Q1JEFCx7R2Jle6VsMW236bEo03+/4O67ynuSfW8JQ+Ly528zvYGOcsHz4YyBw9znpAyuDoBERVCsFykTY6b77kSyYQQjPz2W1XbpJ+WTnGdOe/vL9UYsWaw8IpPYI+w+/Nk4VH362zZI2HkzSdpVywpeFN020eMPWyVgy+F2Go73BNDfcNOmdQuxBaJIj+VPEFsbjyCqUNtq4R0josXxqw6k9TUGpU00pa5ZcA4xbCqYo7jRGVsAXpN0uP2fYIC0YI958GYkQWedIgaz536volbOJktZYN2hSe3+lbSwNkXqGPOWGJYkoTT5LT+DCRqBmY5v/clmNEJckz5F6ncPj9B4nTDC8BqMFidRxh8tA6I45J1pHm7V/uBhT9eaCXFKn3CZqCfs3HzQMRQx9aA0GEQw+dB7XmFPixdg89lRTqYnXZQrDuDBt1JPlbNSIfEd2TwNpiIiZ9b7L4oCuUp0Mcj9jX0c4b2kbvOjWxlwYZ34iQtpgXn9RPtZKhGCt5dAUuBOmF1Vj7nBVjmZyPDjXzemP1hIxwCZolqodoPlvUj09dTDFHMuZ2LJ4ebWFovMkER0iNXWasBWtQuhNt3qf3A==
+  template:
+    data: null
+    metadata:
+      name: notification-keys
