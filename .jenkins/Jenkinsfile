@@ -72,7 +72,13 @@ pipeline {
                   credentialsId: 'artifactory-user',
                   usernameVariable: 'S8_REPO_USER',
                   passwordVariable: 'S8_REPO_PASSWORD')]) {
-            sh "./gradlew -Pversion=\"${javaVersion}\" clean build"
+            sh """
+              ./gradlew \
+              -Pversion=\"${javaVersion}\" \
+              -Dsilenteight.repoDeploymentUser="\$ARTIFACTORY_USR" \
+              -Dsilenteight.repoDeploymentPassword="\$ARTIFACTORY_PSW" \
+              clean build
+              """
 
             withDockerRegistry(
                 url: 'https://docker.repo.silenteight.com',
