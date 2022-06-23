@@ -7,7 +7,4 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "sens.webapp.reports.accounts")
 class AccountsReportProperties extends ReportProperties {
 
-  AccountsReportProperties() {
-    super();
-  }
 }

@@ -7,7 +7,4 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "sens.webapp.reports.entitlement")
 class EntitlementReportProperties extends ReportProperties {
 
-  EntitlementReportProperties() {
-    super();
-  }
 }
