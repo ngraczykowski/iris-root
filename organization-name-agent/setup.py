@@ -25,8 +25,6 @@ tests_require = [
     "flake8-junit-report~=2.1.0",
     "flake8~=3.8.4",
     "isort",
-    "mypy==0.790",
-    "pytest-asyncio",
     "pytest~=6.1.2",
     "shiv",
     "tox~=3.20.1",
