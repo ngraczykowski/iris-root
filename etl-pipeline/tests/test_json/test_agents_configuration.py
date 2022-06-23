@@ -3,37 +3,11 @@ import pytest
 from etl_pipeline.config import pipeline_config
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.service.servicer import Match
+from pipelines.ms.functions import Functions
 from pipelines.ms.ms_pipeline import MSPipeline
 from tests.test_json.constant import TEST_AGENT_INPUT_CASES
 
 cn = pipeline_config.cn
-
-
-def parse_key(value, match, payload, new_config):
-    temp_dict = dict(value)
-    for new_key in temp_dict:
-        for element in temp_dict[new_key]:
-            elements = element.split(".")
-            if cn.MATCH_RECORDS in element:
-                value = match
-                elements = elements[2:]
-            else:
-
-                value = payload
-            for field_name in elements:
-                if field_name == cn.INPUT_FIELD:
-                    try:
-                        value = value[field_name][elements[-1]].value
-                    except (AttributeError, KeyError):
-                        value = None
-                    break
-                try:
-                    value = value.get(field_name, None)
-                except TypeError:
-                    key = PayloadLoader.LIST_ELEMENT_REGEX.sub("", field_name)
-                    ix = int(PayloadLoader.LIST_ELEMENT_REGEX.match(field_name).groups(0))
-                    value = value[key][ix]
-            new_config[elements[-1]] = value
 
 
 @pytest.fixture(scope="module")
@@ -56,7 +30,7 @@ def test_agent_input(test_case, pipeline_resource):
     match = payload.get(cn.WATCHLIST_PARTY, {}).get(cn.MATCH_RECORDS, [])
     for cat, key in expected_result.keys():
         new_config = {}
-        parse_key({cat: [key]}, match, payload, new_config)
+        Functions.parse_key({cat: [key]}, match, payload, new_config)
         key_short = key.split(".")[-1] if "." in key else key
         assert (
             new_config[key_short] == expected_result[(cat, key)]

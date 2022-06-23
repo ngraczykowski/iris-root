@@ -15,8 +15,8 @@
         "AP_PARTY1_COUNTRY_FORMATION1": null,
         "AP_PARTY1_COUNTRY_OF_INCORPORATION": null,
         "AP_PARTY1_COUNTRY_PEP": null,
-        "AP_PARTY1_GOVTID1_NUMBER": null,
-        "AP_PARTY1_GOVTID2_NUMBER": null,
+        
+        
         "AP_PARTY_BIRTH_COUNTRIES": [],
         "AP_PARTY_CITIZENSHIP_COUNTRIES": [],
         "AP_PARTY_NAMES": [],
@@ -703,8 +703,8 @@
         "AP_PARTY1_COUNTRY_FORMATION1": null,
         "AP_PARTY1_COUNTRY_OF_INCORPORATION": null,
         "AP_PARTY1_COUNTRY_PEP": null,
-        "AP_PARTY1_GOVTID1_NUMBER": null,
-        "AP_PARTY1_GOVTID2_NUMBER": null,
+        
+        
         "AP_PARTY_BIRTH_COUNTRIES": [],
         "AP_PARTY_CITIZENSHIP_COUNTRIES": [],
         "AP_PARTY_NAMES": [],

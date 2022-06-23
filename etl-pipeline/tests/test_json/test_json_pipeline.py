@@ -339,8 +339,6 @@ def test_collect_party_values_from_parties(pipeline_resource):
         "AP_PRTY_RSDNC_CNTRY_CD": None,
         "AP_PARTY1_COUNTRY_PEP": None,
         "AP_CONCAT_NAMES": None,
-        "AP_PARTY1_GOVTID1_NUMBER": None,
-        "AP_PARTY1_GOVTID2_NUMBER": None,
     }
 
     assert payload["alertedParty"]["AP_DOB"] == ["10/10/1969"]

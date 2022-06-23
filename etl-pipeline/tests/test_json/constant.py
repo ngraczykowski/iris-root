@@ -486,8 +486,8 @@ TEST_AGENT_INPUT_CASES = [
         expected_result={
             ("ap", "AP_TAX_IDS"): ["154421273", "022368917"],
             ("ap", "AP_GOVT_IDS"): ["123", "321"],
-            ("ap", "AP_PARTY1_GOVTID1_NUMBER"): "131313",
-            ("ap", "AP_PARTY1_GOVTID2_NUMBER"): "2323232",
+            ("ap", "alertedParty.xml_fields.PARTY1_GOVTID1_NUMBER"): "131313",
+            ("ap", "alertedParty.xml_fields.PARTY1_GOVTID2_NUMBER"): "2323232",
             ("wl", "watchlistParty.matchRecords.WL_DOCUMENT_NUMBER"): ["abc123"],
         },
     ),
@@ -530,7 +530,7 @@ TEST_AGENT_INPUT_CASES = [
             ("ap", "AP_ACCOUNT_BENEFICIARY_NAMES"): ["BenePladimir Vutin"],
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL",
+                "alertedParty.xml_fields.PARTY1_NAME_FULL",
             ): "Janusz",
             ("wl", "watchlistParty.matchRecords.WL_NAME"): "Joe Ding",
         },
@@ -574,7 +574,7 @@ TEST_AGENT_INPUT_CASES = [
             ("ap", "AP_ACCOUNT_BENEFICIARY_NAMES"): ["BenePladimir Vutin"],
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL",
+                "alertedParty.xml_fields.PARTY1_NAME_FULL",
             ): "Janusz",
             ("wl", "watchlistParty.matchRecords.WL_NAME"): "Joe Ding",
         },
@@ -600,11 +600,11 @@ TEST_AGENT_INPUT_CASES = [
         expected_result={
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_EMPLOYER",
+                "alertedParty.xml_fields.PARTY1_EMPLOYER",
             ): "Macro Soft Ltd.",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ORGANIZATION_NAME",
+                "alertedParty.xml_fields.PARTY1_ORGANIZATION_NAME",
             ): "JanuszSoft Ltd.",
             ("wl", "watchlistParty.matchRecords.WL_NAME"): "Joe Joe Bring Ding",
             ("wl", "watchlistParty.matchRecords.WL_ALIASES"): [["Billabong the King"]],
@@ -826,7 +826,7 @@ TEST_AGENT_INPUT_CASES = [
         expected_result={
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ADDRESS1_COUNTRY",
+                "alertedParty.xml_fields.ADDRESS1_COUNTRY",
             ): "5th Avenue 22",
             ("ap", "AP_PARTY1_COUNTRY_DOMICILE1"): "Lapland",
             ("ap", "AP_PARTY_BIRTH_COUNTRIES"): ["Norway", "Sweden"],
@@ -931,75 +931,75 @@ TEST_AGENT_INPUT_CASES = [
         expected_result={
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.CONCAT_NAME",
+                "alertedParty.xml_fields.CONCAT_NAME",
             ): "Joe King 0",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS1",
+                "alertedParty.xml_fields.PARTY1_NAME_ALIAS1",
             ): "Joe King 1",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS2",
+                "alertedParty.xml_fields.PARTY1_NAME_ALIAS2",
             ): "Joe King 2",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS3",
+                "alertedParty.xml_fields.PARTY1_NAME_ALIAS3",
             ): "Joe King 3",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_ALIAS4",
+                "alertedParty.xml_fields.PARTY1_NAME_ALIAS4",
             ): "Joe King 4",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL",
+                "alertedParty.xml_fields.PARTY1_NAME_FULL",
             ): "Joe King 5",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ADDRESS1_COUNTRY",
+                "alertedParty.xml_fields.ADDRESS1_COUNTRY",
             ): "Joe King 6",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_DOMICILE1",
+                "alertedParty.xml_fields.PARTY1_COUNTRY_DOMICILE1",
             ): "Joe King 7",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_FORMATION1",
+                "alertedParty.xml_fields.PARTY1_COUNTRY_FORMATION1",
             ): "Joe King 8",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PRTY_PRIM_CTZNSH_CNTRY",
+                "alertedParty.xml_fields.PRTY_PRIM_CTZNSH_CNTRY",
             ): "Joe King 9",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY2_CITIZENSHIP",
+                "alertedParty.xml_fields.PARTY1_COUNTRY2_CITIZENSHIP",
             ): "Joe King 10",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PRTY_RSDNC_CNTRY_CD",
+                "alertedParty.xml_fields.PRTY_RSDNC_CNTRY_CD",
             ): "Joe King 11",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_PEP",
+                "alertedParty.xml_fields.PARTY1_COUNTRY_PEP",
             ): "Joe King 13",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_COUNTRY_OF_INCORPORATION",
+                "alertedParty.xml_fields.PARTY1_COUNTRY_OF_INCORPORATION",
             ): "Joe King 14",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ADDRESS1_COUNTRY",
+                "alertedParty.xml_fields.PARTY1_ADDRESS1_COUNTRY",
             ): "Joe King 15",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_EMPLOYER",
+                "alertedParty.xml_fields.PARTY1_EMPLOYER",
             ): "Joe King 16",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ORGANIZATION_NAME",
+                "alertedParty.xml_fields.PARTY1_ORGANIZATION_NAME",
             ): "Joe King 17",
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_POSITION_TITLE",
+                "alertedParty.xml_fields.PARTY1_POSITION_TITLE",
             ): "Joe King 18",
         },
     ),
@@ -1031,7 +1031,7 @@ TEST_AGENT_INPUT_CASES = [
         expected_result={
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL",
+                "alertedParty.xml_fields.PARTY1_NAME_FULL",
             ): "Janusz",
         },
     ),
@@ -1048,7 +1048,7 @@ TEST_AGENT_INPUT_CASES = [
             "watchlistParty.matchRecords[0].matchId": "49159509",
         },
         expected_result={
-            ("ap", "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_ID"): "ID312",
+            ("ap", "alertedParty.xml_fields.PARTY1_ID"): "ID312",
         },
     ),
     TestAgentInput(
@@ -1066,7 +1066,7 @@ TEST_AGENT_INPUT_CASES = [
         expected_result={
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.UNIQUE_KEY",
+                "alertedParty.xml_fields.UNIQUE_KEY",
             ): "1234321",
         },
     ),
@@ -1085,7 +1085,7 @@ TEST_AGENT_INPUT_CASES = [
         expected_result={
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.ACCOUNTNUMBER",
+                "alertedParty.xml_fields.ACCOUNTNUMBER",
             ): "191919",
         },
     ),
@@ -1160,7 +1160,7 @@ TEST_AGENT_INPUT_CASES = [
             ("ap", "AP_ACCOUNT_BENEFICIARY_NAMES"): ["BenePladimir Vutin"],
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL",
+                "alertedParty.xml_fields.PARTY1_NAME_FULL",
             ): "Janusz",
             (
                 "ap",
@@ -1208,7 +1208,7 @@ TEST_AGENT_INPUT_CASES = [
             ("ap", "AP_ACCOUNT_BENEFICIARY_NAMES"): ["BenePladimir Vutin"],
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL",
+                "alertedParty.xml_fields.PARTY1_NAME_FULL",
             ): "Janusz",
             (
                 "ap",
@@ -1257,7 +1257,7 @@ TEST_AGENT_INPUT_CASES = [
             ("ap", "AP_ACCOUNT_BENEFICIARY_NAMES"): ["BenePladimir Vutin"],
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL",
+                "alertedParty.xml_fields.PARTY1_NAME_FULL",
             ): "Janusz",
             (
                 "ap",
@@ -1309,7 +1309,7 @@ TEST_AGENT_INPUT_CASES = [
             ("ap", "AP_ACCOUNT_BENEFICIARY_NAMES"): ["BenePladimir Vutin"],
             (
                 "ap",
-                "alertedParty.inputRecordHist.inputRecords.INPUT_FIELD.PARTY1_NAME_FULL",
+                "alertedParty.xml_fields.PARTY1_NAME_FULL",
             ): "Janusz",
             (
                 "ap",
