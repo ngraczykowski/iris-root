@@ -35,6 +35,7 @@ apache-http = "4.5.13"
 aspectj = "1.9.9.1"
 bouncycastle = "1.70"
 ecs = "1.4.0"
+groovy = "3.0.11"
 grpc = "1.47.0"
 grpc-starter = "2.13.1.RELEASE"
 jackson = "2.13.3"
@@ -76,9 +77,6 @@ plugin-google-protobuf = "0.8.18"
 #([^\s])([A-Z])([^\s])
 #$1-\l$2$3
 
-#groovy-core = { module = "org.codehaus.groovy:groovy", version.ref = "groovy" }
-#groovy-json = { module = "org.codehaus.groovy:groovy-json", version.ref = "groovy" }
-#groovy-nio = { module = "org.codehaus.groovy:groovy-nio", version.ref = "groovy" }
 #commons-lang3 = { group = "org.apache.commons", name = "commons-lang3", version = { strictly = "[3.8, 4.0[", prefer="3.9" } }
 
 # Silent Eight
@@ -315,6 +313,10 @@ feign-slf4j = { group = "io.github.openfeign", name = "feign-slf4j" }
 classgraph = { group = "io.github.classgraph", name = "classgraph", version = "4.8.147" }
 freemarker = { group = "org.freemarker", name = "freemarker" }
 google-common-protos = { group = "com.google.api.grpc", name = "proto-google-common-protos", version = "2.9.0" }
+groovy = { group = "org.codehaus.groovy", name = "groovy", version.ref = "groovy" }
+groovy-all = { group = "org.codehaus.groovy", name = "groovy-all", version.ref = "groovy" }
+groovy-json = { group = "org.codehaus.groovy", name = "groovy-json", version.ref = "groovy" }
+groovy-nio = { group = "org.codehaus.groovy", name = "groovy-nio", version.ref = "groovy" }
 grpc-api = { group = "io.grpc", name = "grpc-api", version.ref = "grpc" }
 grpc-auth = { group = "io.grpc", name = "grpc-auth", version.ref = "grpc" }
 grpc-census = { group = "io.grpc", name = "grpc-census", version.ref = "grpc" }
@@ -436,7 +438,6 @@ test-containers-rabbitmq = { group = "org.testcontainers", name = "rabbitmq" }
 test-containers-localstack = { group = "org.testcontainers", name = "localstack" }
 test-containers-spock = { group = "org.testcontainers", name = "spock" }
 test-greenmail = { group = "com.icegreen", name = "greenmail-junit5", version = "1.6.9" }
-groovy-all = { group = "org.codehaus.groovy", name = "groovy-all", version.ref = "groovy-all" }
 
 # Plugins (keep in sync with [plugins])
 plugin-cyclonedx-bom = { module = "org.cyclonedx.bom:org.cyclonedx.bom.gradle.plugin", version.ref = "plugin-cyclonedx-bom" }

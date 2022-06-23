@@ -55,6 +55,10 @@ dependencies {
     //TODO(dsniezek): libs.ecs.logging.core constraint can be removed when sep-base wil be moved
     // into iris (and not breaks dependency by fetch sep-dependencies)
     api(libs.ecs.logging.core)
+    api(libs.groovy)
+    api(libs.groovy.all)
+    api(libs.groovy.json)
+    api(libs.groovy.nio)
     api(libs.grpc.api)
     api(libs.grpc.auth)
     api(libs.grpc.census)

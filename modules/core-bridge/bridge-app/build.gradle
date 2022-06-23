@@ -59,7 +59,7 @@ dependencies {
   implementation libs.shedlock.jdbc.provider
 
 
-  testImplementation libs.groovy.all
+  testImplementation libs.groovy.json
   testImplementation libs.spock.core
   testImplementation libs.test.containers.junit.jupiter
   testImplementation libs.test.containers.localstack
