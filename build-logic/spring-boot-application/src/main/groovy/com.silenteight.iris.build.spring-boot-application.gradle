@@ -54,3 +54,11 @@ jar {
     }
   }
 }
+
+springBoot {
+  buildInfo() {
+    properties {
+      time = null
+    }
+  }
+}
