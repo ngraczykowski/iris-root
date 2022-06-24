@@ -15,7 +15,6 @@ import com.silenteight.sens.webapp.notification.NotificationModule;
 import com.silenteight.sens.webapp.permission.PermissionModule;
 import com.silenteight.sens.webapp.report.ReportModule;
 import com.silenteight.sens.webapp.role.RoleModule;
-import com.silenteight.sens.webapp.sso.SsoModule;
 import com.silenteight.sens.webapp.user.UserModule;
 import com.silenteight.sep.auth.authentication.AuthenticationModule;
 import com.silenteight.sep.auth.authorization.AuthorizationModule;
@@ -44,7 +43,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
         ReportModule.class,
         ReportDomainModule.class,
         RoleModule.class,
-        SsoModule.class,
         UserModule.class,
         UserRestModule.class,
         WebModule.class
