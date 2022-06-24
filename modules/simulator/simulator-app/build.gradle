@@ -33,6 +33,8 @@ dependencies {
   runtimeOnly libs.liquibase.sessionlock
   runtimeOnly libs.postgresql
 
+  runtimeOnly libs.spring.cloud.consul.discovery
+
   aspect libs.silenteight.sep.base.aspects
 
   testImplementation libs.silenteight.serp.governance.common.web.testing
