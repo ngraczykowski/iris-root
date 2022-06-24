@@ -10,10 +10,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.oauth2.client.AuthorizedClientServiceOAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizedClientManager;
-import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 
 import javax.validation.Valid;
 
@@ -29,11 +29,12 @@ class CallbackRequestConfiguration {
   @ConditionalOnProperty(prefix = "pb.cmapi.callback", name = "enabled", havingValue = "true")
   public OAuth2AuthorizedClientManager authorizedClientManager(
       ClientRegistrationRepository clientRegistrationRepository,
-      OAuth2AuthorizedClientRepository authorizedClientRepository) {
+      OAuth2AuthorizedClientService authorizedClientService) {
 
-    DefaultOAuth2AuthorizedClientManager authorizedClientManager =
-        new DefaultOAuth2AuthorizedClientManager(
-            clientRegistrationRepository, authorizedClientRepository);
+    OAuth2AuthorizedClientManager authorizedClientManager =
+        new AuthorizedClientServiceOAuth2AuthorizedClientManager(
+            clientRegistrationRepository,
+            authorizedClientService);
 
     return authorizedClientManager;
   }
