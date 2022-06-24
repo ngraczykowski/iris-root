@@ -18,6 +18,8 @@ dependencies {
   implementation libs.spring.boot.starter.actuator
   implementation libs.spring.boot.starter.web
 
+  implementation libs.spring.cloud.starter.consul.config
+
   implementation libs.grpc.api
   implementation libs.grpc.stub
   implementation libs.grpc.census
