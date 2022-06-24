@@ -9,6 +9,9 @@ def version = ""
 def scanList = ""
 
 pipeline {
+  environment {
+    ARTIFACTORY = credentials('artifactory-deployment-user')
+  }
   agent {
     label 'iris'
   }
@@ -29,9 +32,6 @@ pipeline {
       }
     }
     stage('Build') {
-      environment {
-        ARTIFACTORY = credentials('artifactory-deployment-user')
-      }
       steps {
         withGradle {
           sh "./gradlew -Pversion=\"${version}\" -Dsbom=true clean build"
@@ -48,13 +48,7 @@ pipeline {
                   findFiles(glob: 'modules/**/*.sonarqube').collect {readFile(file: it.path).trim()}
             }
             withSonarQubeEnv(env.SONAR_NAME) {
-              withCredentials(
-                  [usernamePassword(
-                      credentialsId: 'artifactory-user',
-                      usernameVariable: 'S8_REPO_USER',
-                      passwordVariable: 'S8_REPO_PASSWORD')]) {
-                sh "./gradlew -Dsonar.branch.name=\$CHANGE_BRANCH -Pversion=${version} ${scanList.join(' ')}"
-              }
+              sh "./gradlew -Dsonar.branch.name=\$CHANGE_BRANCH -Pversion=${version} ${scanList.join(' ')}"
             }
           }
         }

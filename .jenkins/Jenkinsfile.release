@@ -139,8 +139,6 @@ pipeline {
                   -Dtest.clientId=frontend \
                   -Dtest.admin.username="\$E2E_TESTS_CREDS_2_USR" \
                   -Dtest.admin.password="\$E2E_TESTS_CREDS_2_PSW" \
-                  -Dsilenteight.repoDeploymentUser="\$ARTIFACTORY_USR" \
-                  -Dsilenteight.repoDeploymentPassword="\$ARTIFACTORY_PSW" \
                   -Dtest.realm=Dev \
                   -Dtest.authServerUrl="\${BASE_URL}/auth" \
                   -Dtest.url="\$BASE_URL" \

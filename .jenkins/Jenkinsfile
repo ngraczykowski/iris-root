@@ -72,10 +72,6 @@ pipeline {
           sh """
             ./gradlew \
             -Pversion=\"${javaVersion}\" \
-            -Dsilenteight.repoUser="\$ARTIFACTORY_USR" \
-            -Dsilenteight.repoPassword="\$ARTIFACTORY_PSW" \
-            -Dsilenteight.repoDeploymentUser="\$ARTIFACTORY_USR" \
-            -Dsilenteight.repoDeploymentPassword="\$ARTIFACTORY_PSW" \
             clean build
             """
           withDockerRegistry(
@@ -83,8 +79,6 @@ pipeline {
               credentialsId: 'artifactory-deployment-user') {
                 sh """
                   ./gradlew \
-                  -Dsilenteight.repoDeploymentUser="\$ARTIFACTORY_USR" \
-                  -Dsilenteight.repoDeploymentPassword="\$ARTIFACTORY_PSW" \
                   -Djib.console=plain \
                   -DjibAdditionalTag="${env.CHANGE_ID ? env.BRANCH_NAME.toLowerCase() : ''}" \
                   -Pversion="${javaVersion}" \
