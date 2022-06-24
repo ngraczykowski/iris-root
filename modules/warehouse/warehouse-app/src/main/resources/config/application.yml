@@ -148,13 +148,6 @@ spring:
   #-------------------------------------------------------------------------------------------------
   aop:
     auto: false
-
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: https://auth.silenteight.com/realms/sens-webapp
-
   task:
     execution:
       pool:

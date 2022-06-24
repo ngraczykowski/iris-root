@@ -1,3 +1,10 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://auth.silent8.cloud/realms/sens-webapp
+
 warehouse:
   persistence:
     alert:
