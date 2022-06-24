@@ -164,7 +164,7 @@ Creates the name of Sentry environment
 {{- end }}
 {{- define "checkRabbitMqInitContainer" }}
 - name: check-rabbitmq-ready
-  image: busybox
+  image: public.ecr.aws/docker/library/busybox
   command:
      - sh
      - -c
@@ -209,7 +209,7 @@ Creates the name of Sentry environment
 {{- end }}
 {{- define "initScripts" }}
 - name: init-scripts
-  image: busybox
+  image: public.ecr.aws/docker/library/busybox
   command: ['sh', '-c', "run-parts /var/run/initScripts"]
   volumeMounts:
     - name: init-scripts

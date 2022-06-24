@@ -1,7 +1,7 @@
 version: '3.5'
 services:
   postgres:
-    image: postgres:10
+    image: public.ecr.aws/docker/library/postgres:10
     restart: unless-stopped
     ports:
       - "${POSTGRES_PORT:-24881}:5432"
@@ -21,7 +21,7 @@ services:
           memory: 1G
 
   minio:
-    image: minio/minio
+    image: quay.io/minio/minio
     restart: unless-stopped
     ports:
       - 9000:9000
@@ -37,7 +37,7 @@ services:
     command: server --address :9000 --console-address :9001 /data{1...4}
 
   createbuckets:
-    image: minio/mc
+    image: quay.io/minio/mc
     depends_on:
       - minio
     entrypoint: >

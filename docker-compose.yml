@@ -1,7 +1,7 @@
 services:
   postgres:
     container_name: iris_postgres
-    image: postgres:12
+    image: public.ecr.aws/docker/library/postgres:12
     restart: unless-stopped
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
@@ -22,7 +22,7 @@ services:
 
   rabbitmq:
     # TODO(ahaczewski): Update to newest RabbitMQ version (3.10)?
-    image: rabbitmq:3.8.31-management
+    image: public.ecr.aws/docker/library/rabbitmq:3.8.34-management
     container_name: iris_rabbitmq
     restart: unless-stopped
     ports:
@@ -76,7 +76,7 @@ services:
         reservations:
           memory: 1G
   minio:
-    image: minio/minio:RELEASE.2021-03-10T05-11-33Z
+    image: quay.io/minio/minio:RELEASE.2021-03-10T05-11-33Z
     container_name: iris_minio
     volumes:
       - minio-fs:/data1
@@ -96,7 +96,7 @@ services:
     networks:
       - odfe-net
   createbuckets:
-    image: minio/mc
+    image: quay.io/minio/mc
     depends_on:
       - minio
     entrypoint: >

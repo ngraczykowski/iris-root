@@ -1,7 +1,7 @@
 version: '3.5'
 services:
   postgres:
-    image: postgres:12
+    image: public.ecr.aws/docker/library/postgres:12
     restart: unless-stopped
     ports:
       - "${POSTGRES_PORT:-24882}:5432"
@@ -21,7 +21,7 @@ services:
           memory: 1G
 
   rabbitmq:
-    image: docker.io/library/rabbitmq:3.8.16-management
+    image: public.ecr.aws/docker/library/rabbitmq:3.8.34-management
     restart: unless-stopped
     ports:
       - 5680:5672
