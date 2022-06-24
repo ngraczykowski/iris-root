@@ -215,6 +215,13 @@ The Nomad deployment descriptor(the job file) `scb-bridge.nomad` contains job sp
 its requirements. Nomad scheduler deployed on-premise will use this file to run scb-bridge
 artifact (jar).
 
+## Temporary deployment instruction on LIMA
+1. From the repo https://repo.silenteight.com/ui/native/libs-release-local/com/silenteight/iris/scb-bridge-dist we download the scb-bridge version we are interested in.
+2. Unpack the package. From the lib directory, we take jar file.
+3. Put this jar manually into minio, to the /artifacts/iris/scb-bridge directory (https://console.minio.silenteight.com/object-browser/artifacts/iris/scb-bridge) -> select File on the right website and upload jar.
+4. In scb-nomad-lima-deployment, update versions and checksum in version.vars. We can check the versions in the name of jar, checksum by calling in the console:
+   `sha256sum <name>`
+
 ## Providing learning alert data by ECM (Hive)
 
 1) Login via ssh to the hive server
