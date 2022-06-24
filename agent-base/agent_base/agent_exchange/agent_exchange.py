@@ -183,7 +183,7 @@ class AgentExchange(AgentService):
             else:
                 return connection
 
-        raise Exception("No working pika connection")
+        raise Exception("No working RabbitMQ connection")
 
     @staticmethod
     def _update_absent_solutions(
