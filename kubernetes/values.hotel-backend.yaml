@@ -84,3 +84,7 @@ agents:
 
   learning-engine:
     enabled: true
+
+frontend:
+  image:
+    tag: "hotel-latest"

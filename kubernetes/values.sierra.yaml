@@ -131,3 +131,7 @@ agents:
       queueName: agent.hittype-requests
     args:
       - --agent-exchange
+
+frontend:
+  image:
+    tag: "sierra-latest"
