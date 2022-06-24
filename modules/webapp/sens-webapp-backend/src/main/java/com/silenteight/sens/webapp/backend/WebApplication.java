@@ -12,7 +12,6 @@ import com.silenteight.sens.webapp.backend.report.domain.ReportDomainModule;
 import com.silenteight.sens.webapp.backend.user.rest.UserRestModule;
 import com.silenteight.sens.webapp.common.integration.AmqpCommonModule;
 import com.silenteight.sens.webapp.notification.NotificationModule;
-import com.silenteight.sens.webapp.permission.PermissionModule;
 import com.silenteight.sens.webapp.report.ReportModule;
 import com.silenteight.sens.webapp.role.RoleModule;
 import com.silenteight.sens.webapp.user.UserModule;
@@ -39,7 +38,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
         ConfigurationModule.class,
         UsermanagementKeycloakModule.class,
         NotificationModule.class,
-        PermissionModule.class,
         ReportModule.class,
         ReportDomainModule.class,
         RoleModule.class,

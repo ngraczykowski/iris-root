@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2022 Silent Eight Pte. Ltd. All rights reserved.
+  -->
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="permissions-1.37.0-1" author="rpajdak">
+    <dropUniqueConstraint tableName="webapp_permission_endpoint_id" constraintName="fk_webapp_permission_permission_id"/>
+    <dropUniqueConstraint tableName="webapp_permission_endpoint_id" constraintName="fk_webapp_endpoint_endpoint_id"/>
+    <dropUniqueConstraint tableName="webapp_role_permission_id" constraintName="fk_webapp_permission_permission_id"/>
+
+    <dropTable tableName="webapp_permission"/>
+    <dropTable tableName="webapp_permission_endpoint_id"/>
+
+  </changeSet>
+</databaseChangeLog>
