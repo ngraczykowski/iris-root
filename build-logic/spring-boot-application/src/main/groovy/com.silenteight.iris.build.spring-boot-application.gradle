@@ -62,3 +62,14 @@ springBoot {
     }
   }
 }
+
+// NOTE(dsniezek): Unfortunately it is needed to correct cooperation betwean maven-publish and
+//  org.springframework.boot plugins see:
+//  https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/htmlsingle/#publishing-your-application.maven-publish .
+publishing {
+  publications {
+    bootJava(MavenPublication) {
+      artifact bootJar
+    }
+  }
+}

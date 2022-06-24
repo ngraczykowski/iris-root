@@ -78,11 +78,3 @@ dependencies {
 
   aspect libs.silenteight.sep.base.aspects
 }
-
-publishing {
-  publications {
-    bootJava(MavenPublication) {
-      artifact bootJar
-    }
-  }
-}

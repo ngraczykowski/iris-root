@@ -102,11 +102,3 @@ dependencies {
   testImplementation libs.hibernate.validator
   testImplementation libs.tomcat.embed.el
 }
-
-publishing {
-  publications {
-    bootJava(MavenPublication) {
-      artifact bootJar
-    }
-  }
-}

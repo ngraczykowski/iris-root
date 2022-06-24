@@ -1,5 +1,4 @@
 plugins {
-  id "java"
   id "groovy"
   id "com.silenteight.iris.build.spring-boot-application"
   id "com.silenteight.iris.build.container-image"

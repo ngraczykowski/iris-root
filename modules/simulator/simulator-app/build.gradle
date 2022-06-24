@@ -39,11 +39,3 @@ dependencies {
 
   testImplementation libs.spring.integration.test
 }
-
-publishing {
-  publications {
-    bootJava(MavenPublication) {
-      artifact bootJar
-    }
-  }
-}
