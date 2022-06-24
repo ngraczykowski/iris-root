@@ -4,7 +4,7 @@
     ":autodetectPinVersions",
     ":automergeMinor",
     ":prHourlyLimit2",
-    ":prConcurrentLimit10",
+    ":prConcurrentLimit20",
     "group:monorepos",
     "group:recommended",
     "workarounds:all"
