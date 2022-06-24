@@ -17,10 +17,6 @@ pipeline {
     options {
         timeout(time: 1, unit: 'HOURS')   // just to be safe
     }
-    parameters {
-        booleanParam(name: 'RELEASE', defaultValue: false, description: 'Release new version')
-    }
-
     stages {
         stage('Build and publish package') {
             agent {
@@ -92,33 +88,11 @@ pipeline {
                         }
                     }
                 }
-                stage('Release package') {
-                    when {
-                        allOf {
-                            branch 'master'
-                            expression { return params.RELEASE }
-                        }
-                    }
-                    steps {
-                        sh 'pip install --index-url "${PYPI_URL}" bump2version tox'
-                        sh 'git tag --delete $(git tag --list)'
-                        withCredentials([gitUsernamePassword(credentialsId: 'Github-app-access')]) {
-                            sh './scripts/release.sh --index-url ${PYPI_URL}'
-                        }
-                        withCredentials([usernamePassword(
-                            credentialsId: 'pypi-deployment-user',
-                            usernameVariable: 'TWINE_USERNAME',
-                            passwordVariable: 'TWINE_PASSWORD',
-                        )]) {
-                            sh './scripts/publish.sh --index-url "${PYPI_URL}"'
-                        }
-                    }
-                }
-                stage('Prepare nomad artifacts') {
-                    steps {
-                        sh './nomad/prepare.sh'
-                    }
-                }
+               stage('Prepare nomad artifacts') {
+                   steps {
+                       sh './nomad/prepare.sh'
+                   }
+               }
             }
             post {
                 always {
@@ -142,10 +116,7 @@ pipeline {
                                 branch 'master'
                                 branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
                             }
-                            anyOf {
-                                expression { env.COMMIT_TYPE != "Bump version" }
-                                expression { return params.RELEASE }
-                            }
+                            expression { env.COMMIT_TYPE != "Bump version" }
                         }
                     }
                     steps {
@@ -165,7 +136,7 @@ pipeline {
                                 branch 'master'
                                 branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
                             }
-                            expression { return params.RELEASE }
+                            expression { env.COMMIT_TYPE != "Bump version" }
                         }
                     }
                     steps {
@@ -190,10 +161,8 @@ pipeline {
                                 branch 'master'
                                 branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
                             }
-                            anyOf {
-                                expression { env.COMMIT_TYPE != "Bump version" }
-                                expression { return params.RELEASE }
-                            }
+                            expression { env.COMMIT_TYPE != "Bump version" }
+
                         }
                     }
                     agent {
@@ -217,10 +186,7 @@ pipeline {
                         branch 'master'
                         branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
                     }
-                    anyOf {
-                        expression { env.COMMIT_TYPE != "Bump version" }
-                        expression { return params.RELEASE }
-                    }
+                    expression { env.COMMIT_TYPE != "Bump version" }
                 }
             }
             stages {
