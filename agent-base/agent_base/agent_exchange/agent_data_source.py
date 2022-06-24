@@ -85,10 +85,29 @@ class AgentDataSource:
             async for response in self._request(request):
                 yield response
         except grpc.RpcError as err:
-            self.logger.warning(f"{err!r} for {request}")
-            await self.start()
-            async for response in self._request(request):
-                yield response
+            self.logger.warning(f"{err!r} for {request} - trying to reconnect to UDS")
+
+            reconnect_start_time = time.time()
+            while True:
+                if time.time() - reconnect_start_time < self.data_source_config.reconnect_timeout:
+                    try:
+                        await self.start()
+                    except Exception:
+                        self.logger.warning("Unable to reconnect to UDS - trying again")
+                    else:
+                        try:
+                            async for response in self._request(request):
+                                yield response
+                            break
+                        except grpc.RpcError as err:
+                            self.logger.warning(f"{err!r} for {request}")
+                            raise AgentDataSourceException(
+                                "UDS connection failed - possible request timeout"
+                            )
+                else:
+                    raise AgentDataSourceException(
+                        "UDS connection failed - reconnect timeout reached"
+                    )
 
     async def _request(self, request):
         async for response in self.channel_stream_method(

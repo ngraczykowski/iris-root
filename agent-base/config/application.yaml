@@ -3,6 +3,7 @@ grpc:
     data-source:
       address: localhost:24803
       timeout: 5
+      reconnect_timeout: 600
       client_ca: "tests/resources/ssl_example/ca.pem"
       client_private_key: "tests/resources/ssl_example/client-key.pem"
       client_public_key_chain: "tests/resources/ssl_example/client.pem"

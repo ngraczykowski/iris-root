@@ -101,6 +101,11 @@ class ApplicationConfigLoader:
         uds_config = UDSConfig(
             address=self._get_param("uds_address", ["grpc", "client", "data-source", "address"]),
             timeout=self._get_param("uds_timeout", ["grpc", "client", "data-source", "timeout"]),
+            reconnect_timeout=self._get_param(
+                "uds_reconnect_timeout",
+                ["grpc", "client", "data-source", "reconnect_timeout"],
+                default=600,
+            ),
             client_ca=self._get_param(
                 "uds_client_ca", ["grpc", "client", "data-source", "client_ca"]
             ),

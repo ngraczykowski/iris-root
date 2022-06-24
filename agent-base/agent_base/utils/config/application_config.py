@@ -23,10 +23,8 @@ class AgentServiceConfig:
 
     def __post_init__(self):
         try:
-            if self.grpc_port:
-                self.grpc_port = int(self.grpc_port)
-            if self.processes:
-                self.processes = int(self.processes)
+            self.grpc_port = int(self.grpc_port)
+            self.processes = int(self.processes)
         except ValueError:
             raise ConfigurationException("grpc_port and processes must be integers!")
 
@@ -95,13 +93,16 @@ class UDSConfig:
     client_ca: Optional[str]
     client_private_key: Optional[str]
     client_public_key_chain: Optional[str]
+    reconnect_timeout: Optional[int] = 600
 
     def __post_init__(self):
-        if self.timeout:
-            try:
+        try:
+            if self.timeout:
                 self.timeout = int(self.timeout)
-            except ValueError:
-                raise ConfigurationException("Timeout must be an integer!")
+            if self.reconnect_timeout:
+                self.reconnect_timeout = int(self.reconnect_timeout)
+        except ValueError:
+            raise ConfigurationException("Timeout must be an integer!")
 
     @property
     def all_required(self) -> bool:
@@ -110,19 +111,21 @@ class UDSConfig:
 
 @dataclasses.dataclass
 class ApplicationConfig:
-    """
+    """The only required field is Agent Service Config - sufficient to run with GRPC only,
+    without queues - no RabbitMQ and UDS connection (and no consul needed).
+
     agent_grpc_service: AgentServiceConfig
-    consul: ConsulConfig
-    messaging: MessagingConfig
-    rabbitmq: RabbitMQConfig
-    uds: UDSConfig
+    consul: Optional[ConsulConfig]
+    messaging: Optional[MessagingConfig]
+    rabbitmq: Optional[RabbitMQConfig]
+    uds: Optional[UDSConfig]
     """
 
     agent_grpc_service: AgentServiceConfig
-    consul: ConsulConfig
-    messaging: MessagingConfig
-    rabbitmq: RabbitMQConfig
-    uds: UDSConfig
+    consul: Optional[ConsulConfig]
+    messaging: Optional[MessagingConfig]
+    rabbitmq: Optional[RabbitMQConfig]
+    uds: Optional[UDSConfig]
 
 
 class ConfigurationException(Exception):
