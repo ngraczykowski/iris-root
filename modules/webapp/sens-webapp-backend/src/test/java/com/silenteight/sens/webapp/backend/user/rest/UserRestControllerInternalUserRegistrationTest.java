@@ -86,7 +86,7 @@ class UserRestControllerInternalUserRegistrationTest extends UserRestControllerT
   @MethodSource("getCharsBreakingFieldRegex")
   void its400WhenDisplayNameDoesNotMatchFieldRegex(String invalidPart) {
     CreateUserDto createUserDto = CreateUserDto.builder()
-        .displayName("display_name"  + invalidPart )
+        .displayName("display_name"  + invalidPart)
         .userName("user_namee")
         .password("password")
         .build();
@@ -103,7 +103,7 @@ class UserRestControllerInternalUserRegistrationTest extends UserRestControllerT
 
   private static Stream<String> getCharsBreakingFieldRegex() {
     return Stream.of(
-      "#","$","%",";","{",")","[",":",">"
+      "#", "$", "%", ";", "{", ")", "[", ":", ">"
     );
   }
 }

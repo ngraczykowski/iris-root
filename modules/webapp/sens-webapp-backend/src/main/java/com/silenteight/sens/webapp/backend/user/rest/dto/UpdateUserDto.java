@@ -3,9 +3,11 @@ package com.silenteight.sens.webapp.backend.user.rest.dto;
 import lombok.*;
 
 import com.silenteight.sens.webapp.user.update.UpdateUserUseCase.UpdateUserRequest;
+import com.silenteight.serp.governance.common.web.rest.RestValidationConstants;
 
 import java.util.Set;
 import javax.annotation.Nullable;
+import javax.validation.constraints.Pattern;
 
 import static java.util.Collections.emptySet;
 
@@ -16,6 +18,7 @@ import static java.util.Collections.emptySet;
 public class UpdateUserDto {
 
   @Nullable
+  @Pattern(regexp = RestValidationConstants.FIELD_REGEX)
   private String displayName;
 
   @Nullable
