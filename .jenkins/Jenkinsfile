@@ -12,6 +12,9 @@ pipeline {
     disableConcurrentBuilds(abortPrevious: abort)
     ansiColor('xterm')
   }
+  environment {
+    ARTIFACTORY = credentials('artifactory-deployment-user')
+  }
   stages {
     stage("Pre-Commit") {
       when {
@@ -61,43 +64,37 @@ pipeline {
     }
     stage('Applications') {
       environment {
-        ARTIFACTORY = credentials('artifactory-deployment-user')
         // NOTE(ahaczewski): See https://blog.andresteingress.com/2018/09/05/gradle-daemon-and-jenkins.html.
         JENKINS_NODE_COOKIE = 'kill-protection'
       }
       steps {
         withGradle {
-          withCredentials(
-              [usernamePassword(
-                  credentialsId: 'artifactory-user',
-                  usernameVariable: 'S8_REPO_USER',
-                  passwordVariable: 'S8_REPO_PASSWORD')]) {
-            sh """
-              ./gradlew \
-              -Pversion=\"${javaVersion}\" \
-              -Dsilenteight.repoDeploymentUser="\$ARTIFACTORY_USR" \
-              -Dsilenteight.repoDeploymentPassword="\$ARTIFACTORY_PSW" \
-              clean build
-              """
-
-            withDockerRegistry(
-                url: 'https://docker.repo.silenteight.com',
-                credentialsId: 'artifactory-deployment-user') {
-              script {
+          sh """
+            ./gradlew \
+            -Pversion=\"${javaVersion}\" \
+            -Dsilenteight.repoUser="\$ARTIFACTORY_USR" \
+            -Dsilenteight.repoPassword="\$ARTIFACTORY_PSW" \
+            -Dsilenteight.repoDeploymentUser="\$ARTIFACTORY_USR" \
+            -Dsilenteight.repoDeploymentPassword="\$ARTIFACTORY_PSW" \
+            clean build
+            """
+          withDockerRegistry(
+              url: 'https://docker.repo.silenteight.com',
+              credentialsId: 'artifactory-deployment-user') {
                 sh """
                   ./gradlew \
-                    -Dsilenteight.repoDeploymentUser="\$ARTIFACTORY_USR" \
-                    -Dsilenteight.repoDeploymentPassword="\$ARTIFACTORY_PSW" \
-                    -Djib.console=plain \
-                    -DjibAdditionalTag="${env.CHANGE_ID ? env.BRANCH_NAME.toLowerCase() : ''}" \
-                    -Pversion="${javaVersion}" \
-                    publish
-                """
-                images =
-                    findFiles(glob: '**/jib-image.json')
-                        .collect {readJSON(file: it.path)}
-                        .image.collect {it.minus('docker.repo.silenteight.com/')}
-              }
+                  -Dsilenteight.repoDeploymentUser="\$ARTIFACTORY_USR" \
+                  -Dsilenteight.repoDeploymentPassword="\$ARTIFACTORY_PSW" \
+                  -Djib.console=plain \
+                  -DjibAdditionalTag="${env.CHANGE_ID ? env.BRANCH_NAME.toLowerCase() : ''}" \
+                  -Pversion="${javaVersion}" \
+                  publish
+                  """
+            script {
+              images =
+                  findFiles(glob: '**/jib-image.json')
+                      .collect {readJSON(file: it.path)}
+                      .image.collect {it.minus('docker.repo.silenteight.com/')}
             }
           }
         }
@@ -124,9 +121,6 @@ pipeline {
       when {
         beforeAgent true
         branch 'master'
-      }
-      environment {
-        ARTIFACTORY = credentials('artifactory-deployment-user')
       }
       steps {
         sh """

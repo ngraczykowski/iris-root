@@ -29,15 +29,12 @@ pipeline {
       }
     }
     stage('Build') {
+      environment {
+        ARTIFACTORY = credentials('artifactory-deployment-user')
+      }
       steps {
         withGradle {
-          withCredentials(
-              [usernamePassword(
-                  credentialsId: 'artifactory-user',
-                  usernameVariable: 'S8_REPO_USER',
-                  passwordVariable: 'S8_REPO_PASSWORD')]) {
-            sh "./gradlew -Pversion=\"${version}\" -Dsbom=true clean build"
-          }
+          sh "./gradlew -Pversion=\"${version}\" -Dsbom=true clean build"
         }
         stash includes: 'modules/**/build/reports/*.bom.json', name: 'sboms'
       }

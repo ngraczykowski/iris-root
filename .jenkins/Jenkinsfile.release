@@ -17,6 +17,9 @@ pipeline {
     disableConcurrentBuilds()
     ansiColor('xterm')
   }
+  environment {
+    ARTIFACTORY = credentials('artifactory-deployment-user')
+  }
   stages {
     stage('Version') {
       steps {
@@ -42,7 +45,6 @@ pipeline {
           }
         }
         environment {
-          ARTIFACTORY = credentials('artifactory-user')
           NAMESPACE = "test-e2e-${env.ENVIRONMENT}-${env.BUILD_NUMBER}-${env.GIT_COMMIT[0..7]}"
           INGRESS_HOST = "${env.NAMESPACE}.prv.dev.s8ops.com"
           BASE_URL = "https://${env.INGRESS_HOST}"
@@ -122,7 +124,6 @@ pipeline {
           stage("E2E Tests") {
             environment {
               E2E_TESTS_CREDS_2 = credentials('ra-username-password-2')
-              ARTIFACTORY = credentials('artifactory-user')
               // NOTE(ahaczewski): See https://blog.andresteingress.com/2018/09/05/gradle-daemon-and-jenkins.html.
               JENKINS_NODE_COOKIE = 'kill-protection'
             }
@@ -138,8 +139,8 @@ pipeline {
                   -Dtest.clientId=frontend \
                   -Dtest.admin.username="\$E2E_TESTS_CREDS_2_USR" \
                   -Dtest.admin.password="\$E2E_TESTS_CREDS_2_PSW" \
-                  -Dsilenteight.repoUser="\$ARTIFACTORY_USR" \
-                  -Dsilenteight.repoPassword="\$ARTIFACTORY_PSW" \
+                  -Dsilenteight.repoDeploymentUser="\$ARTIFACTORY_USR" \
+                  -Dsilenteight.repoDeploymentPassword="\$ARTIFACTORY_PSW" \
                   -Dtest.realm=Dev \
                   -Dtest.authServerUrl="\${BASE_URL}/auth" \
                   -Dtest.url="\$BASE_URL" \
