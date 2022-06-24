@@ -1,5 +1,6 @@
 package steps;
 
+import com.codeborne.selenide.Configuration;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 import lombok.SneakyThrows;
@@ -42,6 +43,7 @@ public class Hooks implements En {
     Before(
         0,
         (Scenario scenario) -> {
+          Configuration.headless = true;
           WebDriverManager.chromedriver().setup();
           scenarioContext.clearScenarioContext();
           scenarioContext.setUser(
