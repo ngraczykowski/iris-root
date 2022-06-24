@@ -33,7 +33,7 @@ tests_require = [
 
 setup(
     name="agent-base",
-    version="0.24.0",
+    version="0.24.1",
     description="",
     author="Silent Eight Pte. Ltd.",
     author_email="support@silenteight.com",
