@@ -396,7 +396,7 @@ snakeyaml = { group = "org.yaml", name = "snakeyaml" }
 #TODO(dsniezek): in my opinion we should remove this lib(used only in keycloak, easy replace with pure java)
 streamex = { group = "one.util", name = "streamex", version = "0.8.1" }
 tomcat-embed-el = { group = "org.apache.tomcat.embed", name = "tomcat-embed-el" }
-tika-core = { group = "org.apache.tika", name = "tika-core", version = "2.1.0" }
+tika-core = { group = "org.apache.tika", name = "tika-core", version = "2.4.1" }
 #TODO(dsniezek): is it need?
 jjwt = { group = 'io.jsonwebtoken', name = 'jjwt', version = '0.9.1' }
 mapstruct = { group = 'org.mapstruct', name = 'mapstruct', version.ref = 'mapstruct' }
