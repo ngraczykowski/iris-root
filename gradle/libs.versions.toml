@@ -375,7 +375,7 @@ lz4-java = { group = "org.lz4", name = "lz4-java", version = "1.8.0" }
 micrometer-core = { group = "io.micrometer", name = "micrometer-core" }
 micrometer-influx = { group = "io.micrometer", name = "micrometer-registry-influx" }
 micrometer-prometheus = { group = "io.micrometer", name = "micrometer-registry-prometheus" }
-minio = { group = 'io.minio', name = 'minio', version = '8.2.0' }
+minio = { group = 'io.minio', name = 'minio', version = '8.4.2' }
 opencsv = { group = "com.opencsv", name = "opencsv", version = "5.6" }
 oracle = { group = "com.oracle", name = "ojdbc8", version = "12.2.0.1" }
 pebble = { group = "io.pebbletemplates", name = "pebble", version = "3.1.5" }
