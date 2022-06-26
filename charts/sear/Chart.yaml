@@ -4,6 +4,6 @@ version: 1.0.0
 appVersion: "latest"
 dependencies:
   - name: keycloak
-    version: 7.1.18
+    version: 9.3.2
     repository: https://charts.bitnami.com/bitnami
     condition: keycloak.internal
