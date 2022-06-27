@@ -279,8 +279,6 @@ ij_java_wrap_first_method_in_call_chain = true
 ij_java_wrap_long_lines = false
 
 [*.proto]
-indent_style = tab
-tab_width = 2
 ij_protobuf_keep_blank_lines_in_code = 2
 ij_protobuf_keep_indents_on_empty_lines = false
 ij_protobuf_keep_line_breaks = true
