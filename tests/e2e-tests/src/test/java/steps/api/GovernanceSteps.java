@@ -9,6 +9,7 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.*;
 import static steps.Hooks.scenarioContext;
 import static utils.AuthUtils.getAuthTokenHeaderForUser;
@@ -160,5 +161,19 @@ public class GovernanceSteps implements En {
               .then()
               .statusCode(204);
         });
+    And(
+        "Frontend Configuration API respond with 200 status code",
+        GovernanceSteps::getFrontendConfiguration);
+  }
+
+  private static void getFrontendConfiguration() {
+    given()
+        .when()
+        .get("rest/governance/api/v1/frontend/configuration")
+        .then()
+        .statusCode(200)
+        .body("serverApiUrl", is("/rest/webapp/api"))
+        .body("governanceApiUrl", is("/rest/governance/api/v1"))
+        .body("simulatorUrl", is("/rest/simulator/api/v1"));
   }
 }
