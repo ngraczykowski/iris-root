@@ -86,38 +86,7 @@ pipeline {
             }
             post {
               failure {
-                echo "Deployment of ${version} to ${env.ENVIRONMENT} failed!"
-                withKubeConfig(
-                    credentialsId: 'devenv-eks',
-                    serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
-                  sh """
-                    chmod go-rw "\${KUBECONFIG}"
-
-                    export LOGS_DIR=logs/\${ENVIRONMENT}
-                    export LOGS_PREFIX=\${LOGS_DIR}/\${ENVIRONMENT}
-
-                    mkdir -p "\${LOGS_DIR}"
-
-                    kubectl get pods \
-                      --namespace \${NAMESPACE} \
-                      --output wide \
-                      --sort-by '.status.containerStatuses[0].restartCount' | tee "\${LOGS_PREFIX}_pods.log"
-
-                    kubectl get events \
-                      --namespace \${NAMESPACE} \
-                      --sort-by='.metadata.creationTimestamp' | tee "\${LOGS_PREFIX}_events.log"
-
-                    FAILED_PODS=\$(set +x && kubectl get pods \
-                      --namespace \${NAMESPACE} \
-                      --output=custom-columns="POD:metadata.name" \
-                      --no-headers)
-                    for pod in \${FAILED_PODS} ; do
-                      kubectl --namespace \${NAMESPACE} logs --previous \$pod >\${LOGS_PREFIX}_\${pod}.previous.log || true
-                      kubectl --namespace \${NAMESPACE} logs \${pod} >\${LOGS_PREFIX}_\${pod}.log || true
-                    done
-                  """
-                }
-                archiveArtifacts allowEmptyArchive: true, artifacts: "logs/${ENVIRONMENT}/*"
+                saveLogs()
               }
             }
           }
@@ -147,6 +116,9 @@ pipeline {
               }
             }
             post {
+              failure {
+                saveLogs()
+              }
               always {
                 cucumber fileIncludePattern: "**/report-${env.ENVIRONMENT}.json",
                     reportTitle: env.ENVIRONMENT
@@ -186,4 +158,19 @@ pipeline {
       notifyBuild color: 'danger', channel: 'C03D4GD7RHP', title: ':rocket: Iris Release'
     }
   }
+}
+
+def saveLogs() {
+
+  echo "Deployment/test to ${env.ENVIRONMENT} failed!"
+  withKubeConfig(
+      credentialsId: 'devenv-eks',
+      serverUrl: 'https://72480afab36290b71d9d6395d9c66606.gr7.eu-central-1.eks.amazonaws.com/') {
+    sh """
+      chmod go-rw "${KUBECONFIG}"
+    """
+    sh(returnStdout: false, script: './scripts/get-logs.sh')
+  }
+  archiveArtifacts allowEmptyArchive: true, artifacts: "logs/${env.ENVIRONMENT}/*"
+
 }
