@@ -15,13 +15,6 @@ dependencyResolutionManagement {
 
 rootProject.name = 'webapp'
 
-include 'sens-webapp-audit'
-include 'sens-webapp-audit-api'
 include 'sens-webapp-backend'
 include 'sens-webapp-dist'
 include 'sens-webapp-documentation'
-include 'sens-webapp-logging'
-include 'sens-webapp-notification'
-include 'sens-webapp-report'
-include 'sens-webapp-user'
-include 'sens-webapp-scb-report'

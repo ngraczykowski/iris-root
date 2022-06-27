@@ -6,7 +6,7 @@ description = "SENS WebApp Report"
 
 dependencies {
   implementation project(":sens-webapp-audit-api")
-  implementation libs.silenteight.serp.governance.common.web
+  implementation project(":governance-common-web")
 
   implementation libs.commons.lang3
   implementation libs.commons.io
@@ -18,4 +18,5 @@ dependencies {
   testImplementation libs.rest.assured
   testImplementation libs.rest.assured.spring.mock.mvc
   testImplementation libs.spring.security.test
+  testImplementation libs.silenteight.serp.governance.common.web.testing
 }

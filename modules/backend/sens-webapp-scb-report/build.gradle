@@ -29,8 +29,8 @@ dependencies {
 
   implementation libs.hibernate.envers
 
-  implementation project(":sens-webapp-backend")
-  implementation libs.silenteight.serp.governance.common.web
+  implementation libs.silenteight.sens.webapp.backend
+  implementation project(":governance-common-web")
   implementation libs.silenteight.serp.governance.db.changelog
   implementation project(":sens-webapp-logging")
   implementation project(":sens-webapp-report")
@@ -53,6 +53,7 @@ dependencies {
   testImplementation libs.silenteight.serp.governance.db.changelog
   testImplementation libs.rest.assured
   testImplementation libs.rest.assured.spring.mock.mvc
+  testImplementation libs.silenteight.serp.governance.common.web.testing
 }
 
 shadowJar {

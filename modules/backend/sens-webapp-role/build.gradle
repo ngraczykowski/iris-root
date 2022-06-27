@@ -5,10 +5,10 @@ plugins {
 description = "SENS WebApp Role"
 
 dependencies {
-  implementation libs.silenteight.sens.webapp.audit.api
+  implementation project(":sens-webapp-audit-api")
   implementation project(":governance-common-web")
-  implementation libs.silenteight.sens.webapp.logging
-  implementation libs.silenteight.sens.webapp.report
+  implementation project(":sens-webapp-logging")
+  implementation project(":sens-webapp-report")
 
   implementation libs.spring.data.jpa
   implementation libs.silenteight.audit.bs

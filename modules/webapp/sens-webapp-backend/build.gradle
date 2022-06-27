@@ -6,15 +6,15 @@ plugins {
 description = "SENS WebApp Backend"
 
 dependencies {
-  implementation project(":sens-webapp-audit")
-  implementation project(":sens-webapp-audit-api")
+  implementation libs.silenteight.sens.webapp.audit
+  implementation libs.silenteight.sens.webapp.audit.api
   implementation libs.silenteight.serp.governance.common.web
   implementation libs.silenteight.serp.governance.db.changelog
-  implementation project(":sens-webapp-logging")
-  implementation project(":sens-webapp-notification")
-  implementation project(":sens-webapp-report")
+  implementation libs.silenteight.sens.webapp.logging
+  implementation libs.silenteight.sens.webapp.notification
+  implementation libs.silenteight.sens.webapp.report
   implementation libs.silenteight.sens.webapp.role
-  implementation project(":sens-webapp-user")
+  implementation libs.silenteight.sens.webapp.user
 
   implementation libs.silenteight.commons.app
   implementation libs.silenteight.commons.core

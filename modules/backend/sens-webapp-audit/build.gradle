@@ -6,7 +6,7 @@ description = "SENS WebApp Audit"
 
 dependencies {
   implementation project(":sens-webapp-audit-api")
-  implementation libs.silenteight.serp.governance.common.web
+  implementation project(":governance-common-web")
   implementation project(":sens-webapp-report")
 
   implementation libs.silenteight.audit.bs
@@ -14,6 +14,6 @@ dependencies {
 
   implementation libs.spring.data.jpa
   implementation libs.jakarta.servlet.api
-
+  testImplementation project(":governance-common-web-testing")
   api libs.spring.security.core
 }
