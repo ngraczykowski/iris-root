@@ -131,6 +131,10 @@ silenteight-simulator-management = { group = "com.silenteight.iris", name="simul
 silenteight-simulator-model = { group = "com.silenteight.iris", name="simulator-model"}
 silenteight-simulator-processing = { group = "com.silenteight.iris", name="simulator-processing"}
 silenteight-simulator-retention = { group = "com.silenteight.iris", name="simulator-retention"}
+silenteight-sens-webapp-audit-api = { group = "com.silenteight.iris", name="sens-webapp-audit-api"}
+silenteight-sens-webapp-logging = { group = "com.silenteight.iris", name="sens-webapp-logging"}
+silenteight-sens-webapp-report = { group = "com.silenteight.iris", name="sens-webapp-report"}
+silenteight-sens-webapp-role = { group = "com.silenteight.iris", name="sens-webapp-role"}
 #end of temporary
 warehouse-data-api = { group = "com.silenteight.iris", name = "se-data-api" }
 warehouse-sampling-api = { group = "com.silenteight.iris", name = "se-sampling-alerts-api" }

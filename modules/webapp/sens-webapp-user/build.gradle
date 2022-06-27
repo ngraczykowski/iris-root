@@ -9,7 +9,7 @@ dependencies {
   implementation libs.silenteight.serp.governance.common.web
   implementation project(":sens-webapp-logging")
   implementation project(":sens-webapp-report")
-  implementation project(":sens-webapp-role")
+  implementation libs.silenteight.sens.webapp.role
 
   implementation libs.guava
   implementation libs.silenteight.audit.bs
