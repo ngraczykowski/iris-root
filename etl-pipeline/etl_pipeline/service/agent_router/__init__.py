@@ -240,9 +240,11 @@ class AgentInputCreator:
             try:
                 response = stub_request(batch)
                 break
-            except (grpc.RpcError, AttributeError) as e:
+            except (grpc.RpcError) as e:
                 if e.code() in [grpc.StatusCode.INVALID_ARGUMENT]:
                     raise AgentInputCreatorError(f"Invalid argument: {str(e)}")
+                error_message = str(e)
+            except AttributeError as e:
                 error_message = str(e)
             except Exception as e:
                 error_message = str(e)

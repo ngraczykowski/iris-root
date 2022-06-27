@@ -103,11 +103,14 @@ async def stop():
     pass
 
 
-if __name__ == "__main__":
-
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--ssl", action="store_true", required=False)
     parser.add_argument("--disable_solving", action="store_true", required=False)
     parser.add_argument("--disable_learning", action="store_true", required=False)
     args = parser.parse_args()
     run(functools.partial(serve, args), stop)
+
+
+if __name__ == "__main__":
+    main()

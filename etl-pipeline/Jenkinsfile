@@ -57,6 +57,10 @@ pipeline {
         {
           "pattern": "dist/etl-pipeline-dist-*.tar.bz2",
           "target": "python-dist-local/etl-pipeline/"
+        },
+        {
+            "pattern": "dist/*.pyz",
+            "target": "python-dist-local/etl-pipeline/"
         }
      ]
 }'''
