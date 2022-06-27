@@ -234,6 +234,9 @@ common:
   #   cpu: 100m
   #   memory: 128Mi
 
+  # reportDeployments control if deployment info is pushed into integrated Grafana
+  reportDeployments: false
+
   service:
     # Determines how the Service is exposed. Valid options are ExternalName, ClusterIP, NodePort, and LoadBalancer.
     type: ClusterIP
