@@ -1,4 +1,4 @@
-rootProject.name = 'callback-mock'
+rootProject.name = 'e2e-agent'
 includeBuild('../../platforms')
 includeBuild('../../build-logic')
 

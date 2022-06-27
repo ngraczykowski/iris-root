@@ -420,7 +420,7 @@ components:
       enabled: false
     replicaCount: 1
     image:
-      repository: registry.dev.s8ops.com/iris/callback-mock
+      repository: registry.dev.s8ops.com/iris/e2e-agent
 
   config-server:
     enabled: false

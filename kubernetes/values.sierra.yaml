@@ -8,7 +8,7 @@ components:
       - mockcmapi
     properties:
       "pb.cmapi.callback.enabled": true
-      "pb.cmapi.callback.endpoint": 'http://{{ include "sear.fullname" . }}-callback-mock.{{ .Release.Namespace }}.svc:{{ .component.containerPorts.http.port }}/rest/callback-mock/mock/cmapi/pb'
+      "pb.cmapi.callback.endpoint": 'http://{{ include "sear.fullname" . }}-e2e-agent.{{ .Release.Namespace }}.svc:{{ .component.containerPorts.http.port }}/rest/callback-mock/mock/cmapi/pb'
       "spring.security.oauth2.resourceserver.jwt.issuer-uri": "{{ tpl .Values.keycloak.authServerUrl $ }}/realms/{{ .Values.keycloak.realm }}"
       "spring.security.oauth2.client.registration.callback.client-id": "{{ .Values.keycloak.cmapi.clientId }}"
       "spring.security.oauth2.client.registration.callback.client-secret": "{{ .Values.keycloak.cmapi.clientSecret }}"
