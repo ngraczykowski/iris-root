@@ -421,7 +421,6 @@ components:
     replicaCount: 1
     image:
       repository: registry.dev.s8ops.com/iris/callback-mock
-      tag: "HEAD"
 
   config-server:
     enabled: false
@@ -431,7 +430,6 @@ components:
       enabled: false
     image:
       repository: registry.dev.s8ops.com/iris/config-server
-      tag: "HEAD"
 
 
 # FIXME(pputerla) - remark - we're missing list of supported component keys
