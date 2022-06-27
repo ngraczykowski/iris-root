@@ -1,5 +1,8 @@
 package com.silenteight.agent.facade.exchange;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -8,6 +11,7 @@ import static java.lang.String.format;
 import static java.util.regex.Pattern.compile;
 import static java.util.stream.Collectors.toSet;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class ConfigurationNameGenerator {
 
   private static final Pattern VERSION_CONFIG_PATTERN = compile("versions.(.*).configs.(.*)");

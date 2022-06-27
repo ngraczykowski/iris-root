@@ -65,8 +65,10 @@ class AgentFacadeWorkerTest {
         .mapToObj(i -> new Object())
         .collect(Collectors.toList());
 
+    var configNames = Set.of("configName");
+
     var res =
-        assertThrows(RuntimeException.class, () -> underTest.process(data, Set.of("configName")));
+        assertThrows(RuntimeException.class, () -> underTest.process(data, configNames));
 
     assertEquals(exception, res);
   }
