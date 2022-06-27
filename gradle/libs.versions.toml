@@ -42,7 +42,7 @@ jackson = "2.13.3"
 lombok = "1.18.24"
 protobuf = "3.21.2"
 shedlock = "4.37.0"
-spotbugs = "4.7.0"
+spotbugs = "4.7.1"
 springdoc = "1.6.9"
 mapstruct = "1.5.2.Final"
 
