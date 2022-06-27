@@ -165,6 +165,7 @@ Creates the name of Sentry environment
 {{- define "checkRabbitMqInitContainer" }}
 - name: check-rabbitmq-ready
   image: public.ecr.aws/docker/library/busybox
+  imagePullPolicy: IfNotPresent
   command:
      - sh
      - -c
@@ -198,6 +199,7 @@ Creates the name of Sentry environment
 {{- define "checkPostgresReadyInitContainer" }}
 - name: check-db-ready
   image: "postgres:{{ .Values.database.postgresql.version }}"
+  imagePullPolicy: IfNotPresent
   command:
     - sh
     - -c
@@ -210,6 +212,7 @@ Creates the name of Sentry environment
 {{- define "initScripts" }}
 - name: init-scripts
   image: public.ecr.aws/docker/library/busybox
+  imagePullPolicy: IfNotPresent
   command: ['sh', '-c', "run-parts /var/run/initScripts"]
   volumeMounts:
     - name: init-scripts
