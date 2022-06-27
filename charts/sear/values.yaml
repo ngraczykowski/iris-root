@@ -417,7 +417,7 @@ components:
       enabled: false
     replicaCount: 1
     image:
-      repository: pputerla-dev2.prv.dev.s8ops.com/iris/callback-mock
+      repository: registry.dev.s8ops.com/iris/callback-mock
       tag: "HEAD"
 
   config-server:
@@ -427,7 +427,7 @@ components:
     ingress:
       enabled: false
     image:
-      repository: pputerla-dev2.prv.dev.s8ops.com/iris/config-server
+      repository: registry.dev.s8ops.com/iris/config-server
       tag: "HEAD"
 
 
