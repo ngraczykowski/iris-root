@@ -11,14 +11,19 @@ import java.util.List;
 @Builder
 public class RecommendationsIn {
 
-  String analysisName;
+  @Deprecated
+  @Builder.Default
+  String analysisName = "";
+  @Builder.Default
+  String batchId = "";
 
   @Builder.Default
   List<String> alertNames = List.of();
 
   RecommendationsRequest toRecommendationsRequest() {
     return RecommendationsRequest.newBuilder()
-        .setAnalysisName(this.analysisName)
+        .setBatchId(this.batchId)
+        .setAnalysisName(analysisName)
         .addAllAlertNames(alertNames)
         .build();
   }

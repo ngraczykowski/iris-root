@@ -33,21 +33,31 @@ class RecommendationServiceGrpcAdapterTest {
   }
 
   @Test
-  void getRecommendations() {
-    //when
-    var response = underTest.getRecommendations(Fixtures.RECOMMENDATIONS_IN);
+  void getRecommendationsByAnalysisName() {
+    // when
+    var response = underTest.getRecommendations(Fixtures.RECOMMENDATIONS_IN_ANALYSIS_NAME);
 
-    //then
+    // then
+    Assertions.assertEquals(response.getRecommendations().size(), 1);
+    Assertions.assertEquals(response, Fixtures.RESPONSE);
+  }
+
+  @Test
+  void getRecommendationsByBatchId() {
+    // when
+    var response = underTest.getRecommendations(Fixtures.RECOMMENDATIONS_IN_BATCH_ID);
+
+    // then
     Assertions.assertEquals(response.getRecommendations().size(), 1);
     Assertions.assertEquals(response, Fixtures.RESPONSE);
   }
 
   @Test
   void streamRecommendations() {
-    //when
-    var response = underTest.streamRecommendations(Fixtures.RECOMMENDATIONS_IN);
+    // when
+    var response = underTest.streamRecommendations(Fixtures.RECOMMENDATIONS_IN_ANALYSIS_NAME);
 
-    //then
+    // then
     var result = new ArrayList<>();
     response.forEachRemaining(result::add);
 
@@ -80,10 +90,16 @@ class RecommendationServiceGrpcAdapterTest {
     static final String ALERT_ERROR_MSG = "some_error_message";
 
     static final String ANALYSIS_NAME = "some_analysis";
+    static final String BATCH_ID = "d03e9580-2379-4f23-bb25-410b27eb7671";
     static final List<String> ALERTS_NAMES = List.of(ALERT_NAME);
 
-    static final RecommendationsIn RECOMMENDATIONS_IN = RecommendationsIn.builder()
+    static final RecommendationsIn RECOMMENDATIONS_IN_ANALYSIS_NAME = RecommendationsIn.builder()
         .analysisName(ANALYSIS_NAME)
+        .alertNames(ALERTS_NAMES)
+        .build();
+
+    static final RecommendationsIn RECOMMENDATIONS_IN_BATCH_ID = RecommendationsIn.builder()
+        .batchId(BATCH_ID)
         .alertNames(ALERTS_NAMES)
         .build();
 
