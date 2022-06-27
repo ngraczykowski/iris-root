@@ -18,7 +18,7 @@ dependencies {
   implementation libs.silenteight.sep.base.common
   implementation libs.guava
 
-  implementation 'org.jooq:jooq:3.13.4'
+  implementation 'org.jooq:jooq:3.17.1'
 
   implementation libs.test.containers.postgresql
   implementation libs.test.containers.junit.jupiter
