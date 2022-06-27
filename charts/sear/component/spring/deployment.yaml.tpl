@@ -32,6 +32,9 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       initContainers:
+        {{- if and .component.configServer.enabled (not (eq .componentName "config-server" )) }}
+        {{- include "checkConfigServerReadyInitContainer" . | indent 8 }}
+        {{- end }}
         {{- if .component.db.enabled }}
         {{- include "checkPostgresReadyInitContainer" . | indent 8 }}
         {{- end }}
@@ -96,6 +99,7 @@ spec:
             {{- toYaml .component.command | nindent 12 }}
           {{- end }}
           args:
+            {{- if not .component.configServer.enabled }}
             - --server.port={{ .component.containerPorts.http.port }}
             - --server.servlet.context-path=/rest/{{ .component.webPath }}
             - --spring.webflux.base-path=/rest/{{ .component.webPath }}
@@ -130,6 +134,19 @@ spec:
             {{- if $value }}
             - --{{ $key }}={{ include "sear.tplvalues.render" (dict "value" $value "context" $) }}
             {{- end }}
+            {{- end }}
+            {{- else }}
+            {{- if not (eq .componentName "config-server" ) }}
+            - --spring.config.import=configserver:{{ include "sear.configServerUrl" . }}
+            {{- else }}
+            - --server.port={{ .component.containerPorts.http.port }}
+            - --management.server.port={{ .component.containerPorts.management.port }}
+            - --management.server.base-path=/
+            - --management.endpoints.web.base-path=/management
+            - --spring.config.additional-location=file:/etc/spring/config/
+            - --spring.profiles.include=kubernetes
+            {{- end }}
+            - --spring.application.name={{ .componentName }}
             {{- end }}
           volumeMounts:
             - name: config

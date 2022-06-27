@@ -209,6 +209,19 @@ Creates the name of Sentry environment
         sleep 2;
       done;
 {{- end }}
+{{- define "checkConfigServerReadyInitContainer" }}
+- name: check-config-server-ready
+  image: public.ecr.aws/docker/library/busybox
+  imagePullPolicy: IfNotPresent
+  command:
+    - sh
+    - -c
+    - >-
+      until wget -q -O /dev/null {{ include "sear.configServerUrl" . }}/{{ .componentName }}/default 2>/dev/null; do
+        echo waiting for config server;
+        sleep 2;
+      done;
+{{- end }}
 {{- define "initScripts" }}
 - name: init-scripts
   image: public.ecr.aws/docker/library/busybox
@@ -245,6 +258,6 @@ Creates the name of Sentry environment
     - name: UDS_ADDRESS
       value: {{ include "sear.fullname" . }}-universal-data-source.{{ .Release.Namespace }}.svc:9090
 {{- end }}
-{{- define "sear.configServer" -}}
-configserver:http://{{ include "sear.fullname" . }}-config-server.{{ .Release.Namespace }}.svc:{{ .component.containerPorts.http.port }}/rest/config-server
+{{- define "sear.configServerUrl" -}}
+http://{{ include "sear.fullname" . }}-config-server.{{ .Release.Namespace }}.svc:{{ .component.containerPorts.http.port }}
 {{- end -}}

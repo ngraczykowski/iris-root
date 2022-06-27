@@ -180,6 +180,8 @@ common:
       ssl.NonValidatingFactory"   # append option to jdbc url
     username: ""                  # required if external==true
     password: ""                  # required if external==true
+  configServer:
+    enabled: false
   # std k8s docker image settings
   image:
     repository: ""
@@ -212,7 +214,6 @@ common:
   properties: {}
 
   # inject additional yaml entries into default config files:
-  # - /etc/spring/kubernetes.yaml for type: spring
   # - /app/config/application.yaml for type: pythonagent
   # (note - /app/config/application.yaml support os environment variables - see "configmap-init-scripts.yaml.tpl")
   additionalConfig: {}
@@ -416,7 +417,8 @@ components:
       enabled: false
     replicaCount: 1
     image:
-      repository: registry.dev.s8ops.com/iris/callback-mock
+      repository: pputerla-dev2.prv.dev.s8ops.com/iris/callback-mock
+      tag: "HEAD"
 
   config-server:
     enabled: false
@@ -425,7 +427,8 @@ components:
     ingress:
       enabled: false
     image:
-      repository: registry.dev.s8ops.com/iris/config-server
+      repository: pputerla-dev2.prv.dev.s8ops.com/iris/config-server
+      tag: "HEAD"
 
 
 # FIXME(pputerla) - remark - we're missing list of supported component keys

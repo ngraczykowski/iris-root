@@ -1,13 +1,18 @@
+#iris:
+#  static-config-base-location: jar:file:///some/jar/file.jar!
 server:
   port: 8888
 spring:
   profiles:
-    active: native
+    include: native
   cloud:
     config:
       server:
         native:
           order: 1
           searchLocations:
-            - classpath:/configurations
-            - classpath:/configurations/{application}
+            - classpath:/static
+            - ${iris.static-config-base-location}/configurations/global
+            - ${iris.static-config-base-location}/configurations/global/{profile}
+            - ${iris.static-config-base-location}/configurations/component/{application}
+            - ${iris.static-config-base-location}/configurations/component/{application}/{profile}

@@ -65,6 +65,18 @@ components:
 
   config-server:
     enabled: true
+    db:
+      enabled: false
+    rabbit:
+      enabled: false
+    configServer:
+      enabled: true
+    configFiles:
+      application-kubernetes.yml: |
+        iris:
+          kubernetes:
+            helm-release-name: {{ include "sear.fullname" . }}
+          config-server-url: {{ include "sear.configServerUrl" . }}
 
 
 agents:

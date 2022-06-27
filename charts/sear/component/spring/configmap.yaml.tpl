@@ -8,6 +8,7 @@ data:
   {{- if .component.configFiles }}
     {{- tpl (toYaml .component.configFiles) . | nindent 2 }}
   {{- end }}
+  {{- if not .component.configServer.enabled }}
   kubernetes.yml: |
     spring:
       config:
@@ -109,3 +110,4 @@ data:
         <appender-ref ref="ASYNC_CONSOLE"/>
       </root>
     </configuration>
+  {{- end }}
