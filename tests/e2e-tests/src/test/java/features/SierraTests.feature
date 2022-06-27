@@ -26,7 +26,7 @@ Feature: Sierra scenarios
   Scenario: Get an alert from CMAPI
     Given Subscribed to callbacks at "/mock/cmapi/pb"
     When Send alert on solving
-    Then Wait for a message for max 20 seconds
+    Then Wait for a message for max 50 seconds
 
     When The last message contains following fields
       | Body.msg_ReceiveDecision.Messages[0].Message.Comment | S8 recommended action: Manual Investigation |
