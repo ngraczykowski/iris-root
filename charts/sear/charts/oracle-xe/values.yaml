@@ -1,0 +1,12 @@
+oraclexe:
+  enabled: false
+  image:
+    repository: gvenzl/oracle-xe
+    pullPolicy: IfNotPresent
+    tag: "11.2.0.2"
+  resources: {}
+  initScripts:
+    enabled: false
+    image:
+      repository: ""
+      pullPolicy: IfNotPresent

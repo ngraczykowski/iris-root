@@ -638,3 +638,6 @@ keycloak:
     clientSecret: 468e81d6-ddca-11ec-bb7e-679f3017e8de
   kibana:
     clientId: kibana-sso
+
+oraclexe:
+  enabled: false

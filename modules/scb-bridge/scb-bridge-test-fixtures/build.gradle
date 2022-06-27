@@ -1,0 +1,16 @@
+plugins {
+  id "com.silenteight.iris.build.container-image"
+}
+
+jib {
+  from {
+    image = "public.ecr.aws/docker/library/busybox:latest"
+  }
+  container {
+    mainClass = "none"
+    appRoot = "/"
+    entrypoint = "/bin/sh"
+    user = "root"
+    workingDirectory = "/"
+  }
+}

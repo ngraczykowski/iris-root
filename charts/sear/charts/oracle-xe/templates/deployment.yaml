@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "oracle-xe.fullname" . }}
+  labels:
+    {{- include "oracle-xe.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "oracle-xe.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "oracle-xe.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "oracle-xe.serviceAccountName" . }}
+      {{- if .Values.oraclexe.initScripts.enabled }}
+      initContainers:
+        - name: init-scripts
+          image: "{{ .Values.oraclexe.initScripts.image.repository }}:{{ .Values.oraclexe.initScripts.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.oraclexe.initScripts.image.pullPolicy }}
+          command: ['sh', '-c', "cp -v /init_scripts/* /tmp/"]
+          volumeMounts:
+            - name: generated
+              mountPath: "/tmp"
+              readOnly: false
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.oraclexe.image.repository }}:{{ .Values.oraclexe.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.oraclexe.image.pullPolicy }}
+          env:
+            - name: APP_USER
+              value: scb
+            - name: APP_USER_PASSWORD
+              value: scb
+            - name: NLS_LANG
+              value: .AL32UTF8
+            - name: ORACLE_PASSWORD
+              value: scb
+          volumeMounts:
+            - mountPath: /docker-entrypoint-initdb.d/
+              name: generated
+              readOnly: true
+          ports:
+            - name: oracle
+              containerPort: 1521
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: oracle
+            failureThreshold: 1
+            periodSeconds: 20
+            initialDelaySeconds: 30
+          startupProbe:
+            tcpSocket:
+              port: oracle
+            failureThreshold: 15
+            periodSeconds: 20
+          resources:
+            {{- toYaml .Values.oraclexe.resources | nindent 12 }}
+      volumes:
+        - name: generated
+          emptyDir: {}

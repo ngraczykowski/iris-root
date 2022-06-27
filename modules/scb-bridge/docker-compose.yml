@@ -7,7 +7,7 @@ services:
     image: gvenzl/oracle-xe:11.2.0.2
     volumes:
       - oracle-storage:/opt/oracle/oradata
-      - ./docker/oracle/init_scripts:/docker-entrypoint-initdb.d:ro
+      - ./scb-bridge-test-fixtures/src/main/jib/init_scripts:/docker-entrypoint-initdb.d:ro
     ports:
       - 1521:1521
     environment:
