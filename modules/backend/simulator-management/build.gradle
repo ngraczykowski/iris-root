@@ -5,7 +5,7 @@ plugins {
 description = "Simulator Management"
 
 dependencies {
-  implementation libs.silenteight.serp.governance.common.web
+  implementation project(":governance-common-web")
   implementation project(":simulator-dataset")
   implementation libs.silenteight.serp.governance.db.changelog
 
@@ -20,5 +20,5 @@ dependencies {
 
   aspect libs.silenteight.sep.base.aspects
 
-  testImplementation libs.silenteight.serp.governance.common.web.testing
+  testImplementation project(":governance-common-web-testing")
 }

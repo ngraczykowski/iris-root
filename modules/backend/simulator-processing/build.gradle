@@ -2,20 +2,21 @@ plugins {
   id "com.silenteight.iris.build.java-library"
 }
 
-description = "Simulator Dataset"
+description = "Simulator Processing"
 
 dependencies {
-  implementation libs.silenteight.serp.governance.common.web
+  implementation project(":governance-common-web")
+  implementation project(":simulator-dataset")
   implementation libs.silenteight.serp.governance.db.changelog
+  implementation project(":simulator-management")
 
   implementation libs.adjudication.engine.api
-
-  implementation libs.silenteight.audit.bs
+  implementation libs.warehouse.data.api
 
   implementation libs.grpc.api
   implementation libs.grpc.client.spring.boot.starter
 
   aspect libs.silenteight.sep.base.aspects
 
-  testImplementation libs.silenteight.serp.governance.common.web.testing
+  testImplementation project(":governance-common-web-testing")
 }

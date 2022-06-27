@@ -8,12 +8,12 @@ description = "Simulator"
 
 dependencies {
   implementation libs.silenteight.serp.governance.common.web
-  implementation project(":simulator-dataset")
+  implementation libs.silenteight.simulator.dataset
   implementation libs.silenteight.serp.governance.db.changelog
-  implementation project(":simulator-management")
+  implementation libs.silenteight.simulator.management
   implementation libs.silenteight.serp.governance.model
-  implementation project(":simulator-processing")
-  implementation project(":simulator-retention")
+  implementation libs.silenteight.simulator.processing
+  implementation libs.silenteight.simulator.retention
 
   implementation libs.spring.boot.starter.actuator
   implementation libs.spring.boot.starter.web

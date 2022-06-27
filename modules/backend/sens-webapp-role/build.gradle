@@ -6,7 +6,7 @@ description = "SENS WebApp Role"
 
 dependencies {
   implementation libs.silenteight.sens.webapp.audit.api
-  implementation libs.silenteight.serp.governance.common.web
+  implementation project(":governance-common-web")
   implementation libs.silenteight.sens.webapp.logging
   implementation libs.silenteight.sens.webapp.report
 
@@ -14,7 +14,7 @@ dependencies {
   implementation libs.silenteight.audit.bs
 
   testImplementation libs.silenteight.serp.governance.db.changelog
-  testImplementation libs.silenteight.serp.governance.common.web.testing
+  testImplementation project(":governance-common-web-testing")
   testImplementation libs.rest.assured.spring.mock.mvc
   testImplementation libs.spring.security.test
 }

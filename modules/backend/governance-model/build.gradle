@@ -11,7 +11,7 @@ dependencies {
 
   implementation libs.governance.model.api
 
-  implementation libs.silenteight.simulator.management
+  implementation project(":simulator-management")
 
   implementation project(":governance-agent")
   implementation project(":governance-db-changelog")

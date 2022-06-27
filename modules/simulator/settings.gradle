@@ -12,9 +12,4 @@ dependencyResolutionManagement {
 rootProject.name = 'simulator'
 
 include 'simulator-app'
-include 'simulator-dataset'
 include 'simulator-dist'
-include 'simulator-documentation'
-include 'simulator-management'
-include 'simulator-processing'
-include 'simulator-retention'
