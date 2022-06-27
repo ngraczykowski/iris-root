@@ -2,7 +2,7 @@ package com.silenteight.simulator.management.cancel;
 
 
 import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
-import com.silenteight.simulator.common.web.exception.GenericExceptionControllerAdvice;
+import com.silenteight.serp.governance.common.web.exception.GenericExceptionControllerAdvice;
 import com.silenteight.simulator.management.common.SimulationControllerAdvice;
 import com.silenteight.simulator.management.domain.exception.SimulationNotFoundException;
 

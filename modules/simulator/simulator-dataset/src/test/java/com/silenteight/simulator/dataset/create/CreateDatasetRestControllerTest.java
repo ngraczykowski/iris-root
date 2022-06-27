@@ -1,7 +1,7 @@
 package com.silenteight.simulator.dataset.create;
 
 import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
-import com.silenteight.simulator.common.web.exception.GenericExceptionControllerAdvice;
+import com.silenteight.serp.governance.common.web.exception.GenericExceptionControllerAdvice;
 import com.silenteight.simulator.dataset.create.dto.CreateDatasetRequestDto;
 import com.silenteight.simulator.dataset.create.exception.EmptyDatasetException;
 

@@ -1,7 +1,7 @@
 package com.silenteight.simulator.management.create;
 
 import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
-import com.silenteight.simulator.common.web.exception.GenericExceptionControllerAdvice;
+import com.silenteight.serp.governance.common.web.exception.GenericExceptionControllerAdvice;
 import com.silenteight.simulator.dataset.domain.exception.NonActiveDatasetInSet;
 import com.silenteight.simulator.management.domain.NonUniqueSimulationException;
 

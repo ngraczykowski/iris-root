@@ -1,7 +1,7 @@
 package com.silenteight.simulator.dataset.archive;
 
 import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
-import com.silenteight.simulator.common.web.exception.GenericExceptionControllerAdvice;
+import com.silenteight.serp.governance.common.web.exception.GenericExceptionControllerAdvice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;

@@ -2,7 +2,7 @@ package com.silenteight.simulator.management.details;
 
 import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
-import com.silenteight.simulator.common.web.exception.GenericExceptionControllerAdvice;
+import com.silenteight.serp.governance.common.web.exception.GenericExceptionControllerAdvice;
 import com.silenteight.simulator.management.SimulationFixtures;
 import com.silenteight.simulator.management.common.SimulationControllerAdvice;
 import com.silenteight.simulator.management.domain.exception.SimulationNotFoundException;

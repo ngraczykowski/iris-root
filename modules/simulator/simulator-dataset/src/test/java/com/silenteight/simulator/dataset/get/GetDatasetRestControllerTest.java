@@ -2,7 +2,7 @@ package com.silenteight.simulator.dataset.get;
 
 import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRole;
-import com.silenteight.simulator.common.web.exception.GenericExceptionControllerAdvice;
+import com.silenteight.serp.governance.common.web.exception.GenericExceptionControllerAdvice;
 import com.silenteight.simulator.dataset.domain.DatasetQuery;
 import com.silenteight.simulator.dataset.domain.exception.DatasetNotFoundException;
 
