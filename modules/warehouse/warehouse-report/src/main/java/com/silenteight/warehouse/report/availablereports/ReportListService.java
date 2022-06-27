@@ -35,6 +35,7 @@ class ReportListService {
         .type(properties.getName())
         .title(properties.getDescription())
         .name(prepareReportName(type, properties.getName()))
+        .filter(new FilterDto(IS_PRODUCTION.test(type) ? FilterType.DATE_RANGE : FilterType.NONE))
         .build();
   }
 
