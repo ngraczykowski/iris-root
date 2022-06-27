@@ -20,6 +20,9 @@ import static utils.AuthUtils.getAuthTokenHeaderForAdmin;
 
 public class WebAppSteps implements En {
 
+  private static final String WEB_API_BASE_PATH =
+      System.getProperty("test.webApiBasePath", "rest/webapp/api");
+
   public WebAppSteps() {
     And(
         "Users endpoint responses with status code 200",
@@ -28,7 +31,7 @@ public class WebAppSteps implements En {
                 .auth()
                 .oauth2(getAuthTokenHeaderForAdmin())
                 .when()
-                .get("rest/webapp/api/users")
+                .get(WEB_API_BASE_PATH + "/users")
                 .then()
                 .statusCode(200));
 
@@ -42,7 +45,7 @@ public class WebAppSteps implements En {
               .auth()
               .oauth2(token)
               .when()
-              .post("/rest/webapp/api/users")
+              .post(WEB_API_BASE_PATH + "/users")
               .then()
               .statusCode(201);
           scenarioContext.setUser(label, user);
@@ -72,7 +75,7 @@ public class WebAppSteps implements En {
         given()
             .auth()
             .oauth2(token)
-            .get("/rest/webapp/api/users")
+            .get(WEB_API_BASE_PATH + "/users")
             .then()
             .extract()
             .response()
@@ -95,7 +98,7 @@ public class WebAppSteps implements En {
         .auth()
         .oauth2(token)
         .when()
-        .patch(String.format("/rest/webapp/api/users/%s", user.getUserName()))
+        .patch(WEB_API_BASE_PATH + String.format("/users/%s", user.getUserName()))
         .then()
         .statusCode(204);
     scenarioContext.setUserToken(user.getUserName(), null);
@@ -107,7 +110,7 @@ public class WebAppSteps implements En {
         .header("Authorization", getAuthTokenHeaderForAdmin())
         .contentType("application/json")
         .when()
-        .delete(String.format("/rest/webapp/api/users/%s", user.getUserName()))
+        .delete(WEB_API_BASE_PATH + String.format("/users/%s", user.getUserName()))
         .then()
         .statusCode(204);
     scenarioContext.setUserToken(user.getUserName(), null);

@@ -37,7 +37,3 @@ Feature: Smoke scenarios
   Scenario: Create and Delete user A
     Given Create user "A" with random name
     Then Delete user "A"
-
-  @hotel-backend
-  Scenario: Frontend Configuration via API is accessible without login
-    Given Frontend Configuration API respond with 200 status code

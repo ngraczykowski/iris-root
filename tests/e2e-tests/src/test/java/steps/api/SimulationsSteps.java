@@ -17,6 +17,9 @@ import static utils.datageneration.simulations.SimulationGenerationService.creat
 
 public class SimulationsSteps implements En {
 
+  private static final String SIM_API_BASE_PATH =
+      System.getProperty("test.simApiBasePath", "rest/simulator/api/v1");
+
   public SimulationsSteps() {
     And(
         "Simulation endpoint responses with status code {int}",
@@ -24,13 +27,15 @@ public class SimulationsSteps implements En {
             given()
                 .param("state", "NEW", "PENDING", "RUNNING", "DONE", "ERROR")
                 .when()
-                .get("rest/simulator/api/v1/simulations")
+                .get(SIM_API_BASE_PATH + "/simulations")
                 .then()
                 .statusCode(code));
 
-    And("Datasets endpoint responses with status code 200", () -> {
-      when().get("rest/simulator/api/v1/datasets").then().statusCode(200);
-    });
+    And(
+        "Datasets endpoint responses with status code 200",
+        () -> {
+          when().get(SIM_API_BASE_PATH + "/datasets").then().statusCode(200);
+        });
 
     And(
         "Create dataset with name {string} for recently created learning",
@@ -39,12 +44,7 @@ public class SimulationsSteps implements En {
               createDataset(value, getOnlyDateWithOffset(0), getOnlyDateWithOffset(1));
           scenarioContext.set("dataset", dataset);
 
-          given()
-              .body(dataset)
-              .when()
-              .post("/rest/simulator/api/v1/datasets")
-              .then()
-              .statusCode(201);
+          given().body(dataset).when().post(SIM_API_BASE_PATH + "/datasets").then().statusCode(201);
         });
 
     And(
@@ -56,7 +56,7 @@ public class SimulationsSteps implements En {
           given()
               .body(simulation)
               .when()
-              .post("/rest/simulator/api/v1/simulations")
+              .post(SIM_API_BASE_PATH + "/simulations")
               .then()
               .statusCode(201);
         });
@@ -67,7 +67,7 @@ public class SimulationsSteps implements En {
           CreateSimulation simulation = (CreateSimulation) scenarioContext.get("simulation");
 
           when()
-              .get(String.format("/rest/simulator/api/v1/simulations/%s", simulation.getId()))
+              .get(SIM_API_BASE_PATH + String.format("/simulations/%s", simulation.getId()))
               .then()
               .statusCode(200);
 
@@ -78,8 +78,8 @@ public class SimulationsSteps implements En {
                   () ->
                       when()
                           .get(
-                              String.format(
-                                  "/rest/simulator/api/v1/simulations/%s", simulation.getId()))
+                              SIM_API_BASE_PATH
+                                  + String.format("/simulations/%s", simulation.getId()))
                           .then()
                           .extract()
                           .response()

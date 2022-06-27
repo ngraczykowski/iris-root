@@ -9,6 +9,7 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
+import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.*;
 import static steps.Hooks.scenarioContext;
@@ -17,10 +18,13 @@ import static utils.datageneration.governance.GovernanceGenerationService.*;
 
 public class GovernanceSteps implements En {
 
+  private static final String GOV_API_BASE_PATH =
+      System.getProperty("test.govApiBasePath", "/rest/governance/api/v1");
+
   public GovernanceSteps() {
     And(
         "Policies endpoint responses with status code {int}",
-        (Integer code) -> when().get("rest/governance/api/v1/policies").then().statusCode(code));
+        (Integer code) -> when().get(GOV_API_BASE_PATH + "/policies").then().statusCode(code));
 
     And(
         "Create empty policy with name {string}",
@@ -31,7 +35,7 @@ public class GovernanceSteps implements En {
           given()
               .body(policy)
               .when()
-              .post("/rest/governance/api/v1/policies")
+              .post(GOV_API_BASE_PATH + "/policies")
               .then()
               .statusCode(anyOf(is(202), is(201)));
         });
@@ -51,9 +55,7 @@ public class GovernanceSteps implements En {
                     given()
                         .body(policyStep)
                         .when()
-                        .post(
-                            String.format(
-                                "/rest/governance/api/v1/policies/%s/steps", policy.getId()))
+                        .post(GOV_API_BASE_PATH + format("/policies/%s/steps", policy.getId()))
                         .then()
                         .statusCode(204);
 
@@ -81,9 +83,8 @@ public class GovernanceSteps implements En {
                         .body(featureLogic)
                         .when()
                         .put(
-                            String.format(
-                                "/rest/governance/api/v1/steps/%s/logic",
-                                policySteps.get(0).getId()))
+                            GOV_API_BASE_PATH
+                                + format("/steps/%s/logic", policySteps.get(0).getId()))
                         .then()
                         .statusCode(202);
                   });
@@ -96,7 +97,7 @@ public class GovernanceSteps implements En {
           given()
               .body("{\"state\":\"SAVED\"}")
               .when()
-              .patch(String.format("/rest/governance/api/v1/policies/%s", policy.getId()))
+              .patch(GOV_API_BASE_PATH + format("/policies/%s", policy.getId()))
               .then()
               .statusCode(200);
         });
@@ -106,7 +107,7 @@ public class GovernanceSteps implements En {
         () -> {
           CreatePolicy policy = (CreatePolicy) scenarioContext.get("policy");
           when()
-              .get(String.format("/rest/governance/api/v1/policies/%s", policy.getId()))
+              .get(GOV_API_BASE_PATH + format("/policies/%s", policy.getId()))
               .then()
               .statusCode(200);
         });
@@ -121,7 +122,7 @@ public class GovernanceSteps implements En {
           given()
               .body(solvingModel)
               .when()
-              .post("/rest/governance/api/v1/solvingModels")
+              .post(GOV_API_BASE_PATH + "/solvingModels")
               .then()
               .statusCode(202);
         });
@@ -138,7 +139,7 @@ public class GovernanceSteps implements En {
           given()
               .body(activationData)
               .when()
-              .post("/rest/governance/api/v1/changeRequests")
+              .post(GOV_API_BASE_PATH + "/changeRequests")
               .then()
               .statusCode(202);
         });
@@ -156,8 +157,7 @@ public class GovernanceSteps implements En {
               .oauth2(getAuthTokenHeaderForUser(user))
               .when()
               .post(
-                  String.format(
-                      "/rest/governance/api/v1/changeRequests/%s:approve", activationData.getId()))
+                  GOV_API_BASE_PATH + format("/changeRequests/%s:approve", activationData.getId()))
               .then()
               .statusCode(204);
         });
@@ -169,7 +169,7 @@ public class GovernanceSteps implements En {
   private static void getFrontendConfiguration() {
     given()
         .when()
-        .get("rest/governance/api/v1/frontend/configuration")
+        .get(GOV_API_BASE_PATH + "/frontend/configuration")
         .then()
         .statusCode(200)
         .body("serverApiUrl", is("/rest/webapp/api"))
