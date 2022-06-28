@@ -12,7 +12,7 @@ service CountryAgent {
 
     rpc CompareCountries (CompareCountriesRequest) returns (CompareCountriesResponse) {
     }
-    
+
     rpc ExtractCountries (ExtractCountriesRequest) returns (ExtractCountriesResponse) {
     }
 }

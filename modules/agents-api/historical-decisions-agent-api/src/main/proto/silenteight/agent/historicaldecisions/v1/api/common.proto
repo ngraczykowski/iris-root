@@ -38,6 +38,3 @@ message DecisionCount {
   // The number of decisions of the given name, e.g. 5
   int32 count = 2 [(google.api.field_behavior) = REQUIRED];
 }
-
-
-

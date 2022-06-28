@@ -54,4 +54,3 @@ message DiscountDatesConfig {
   //Minimum age that person could be for the event to occur.
   int32 min_age = 1;
 }
-

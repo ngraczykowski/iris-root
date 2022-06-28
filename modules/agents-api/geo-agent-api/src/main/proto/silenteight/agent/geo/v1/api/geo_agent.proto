@@ -52,4 +52,3 @@ message CompareMultipleLocationsRequest {
   repeated string watchlist_party_locations = 2 [(google.api.field_behavior) = REQUIRED];
   string configuration_name = 3 [(google.api.field_behavior) = REQUIRED];
 }
-

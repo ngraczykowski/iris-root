@@ -27,4 +27,3 @@ message CompareFreeTextResponse {
   string context = 2;
   string error_message = 3;
 }
-
