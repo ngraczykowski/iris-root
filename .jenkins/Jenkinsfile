@@ -126,7 +126,7 @@ pipeline {
                 .unique()
         }
         withSonarQubeEnv(env.SONAR_NAME) {
-          sh "./gradlew -Dsonar.branch.name=\$CHANGE_BRANCH -Pversion=${version} ${scanList.join(' ')}"
+          sh "./gradlew -Pversion=${version} ${scanList.join(' ')}"
         }
       }
     }
