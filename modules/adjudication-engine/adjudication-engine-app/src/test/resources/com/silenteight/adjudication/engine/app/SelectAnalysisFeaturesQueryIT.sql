@@ -66,14 +66,14 @@ INSERT INTO public.ae_match (match_id, alert_id, created_at, client_match_identi
 VALUES (2, 1, '2022-05-06 08:13:07.400305', '912', 1);
 
 INSERT INTO public.ae_match_category_value (match_id, category_id, created_at, value)
-VALUES (1, 1, '2022-05-19 08:58:38.394104', 'NO_DECISION');
+VALUES (1, 1, '2022-05-19 08:58:38.394104', 'NO_DECISION_1');
 INSERT INTO public.ae_match_category_value (match_id, category_id, created_at, value)
-VALUES (2, 1, '2022-05-19 08:58:38.394104', 'DECISION');
+VALUES (2, 1, '2022-05-19 08:58:38.394104', 'DECISION_3');
 
 INSERT INTO public.ae_match_category_value (match_id, category_id, created_at, value)
-VALUES (1, 2, '2022-05-19 08:58:38.394104', 'NO_DECISION');
+VALUES (1, 2, '2022-05-19 08:58:38.394104', 'NO_DECISION_2');
 INSERT INTO public.ae_match_category_value (match_id, category_id, created_at, value)
-VALUES (2, 2, '2022-05-19 08:58:38.394104', 'DECISION');
+VALUES (2, 2, '2022-05-19 08:58:38.394104', 'DECISION_4');
 
 INSERT INTO public.ae_match_feature_value (match_id, agent_config_feature_id, created_at, value,
                                            reason)

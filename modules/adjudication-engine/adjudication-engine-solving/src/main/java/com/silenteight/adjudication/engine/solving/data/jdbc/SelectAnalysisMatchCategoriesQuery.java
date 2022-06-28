@@ -33,6 +33,7 @@ class SelectAnalysisMatchCategoriesQuery {
                   JOIN ae_analysis_category aac ON aac.analysis_id = aa.analysis_id
                   JOIN ae_category ac ON ac.category_id = aac.category_id
                   LEFT JOIN ae_match_category_value amcv ON am.match_id = amcv.match_id
+                                                            AND amcv.category_id = ac.category_id
          WHERE aa.analysis_id = :analysis
             AND aaa.alert_id = :alert
          """;

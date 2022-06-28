@@ -21,7 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -31,7 +30,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @Sql
 class SelectAnalysisFeaturesQueryIT extends BaseJdbcTest {
 
-  private static final Map<Long, String> alerts =
+  private static final Map<Long, String> ALERTS =
       Map.of(
           1L,
           "withAllValues.json",
@@ -40,17 +39,6 @@ class SelectAnalysisFeaturesQueryIT extends BaseJdbcTest {
 
   @Autowired MatchFeatureDataAccess jdbcMatchFeaturesDataAccess;
   private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-
-  @Test
-  void shouldSelectAlertData() {
-    var alertMap = jdbcMatchFeaturesDataAccess.findAnalysisFeatures(Set.of(1L), Set.of(1L));
-    assertThat(alertMap.size()).isEqualTo(1);
-    var alert = alertMap.get(1L);
-    var expectedAlert = getAlertWithAllData(1L);
-    assertThat(alert)
-        .usingRecursiveComparison()
-        .isEqualTo(expectedAlert);
-  }
 
   @Test
   void shouldSelectAlertDataForMultihit() {
@@ -78,7 +66,7 @@ class SelectAnalysisFeaturesQueryIT extends BaseJdbcTest {
     var classLoader = SelectAnalysisFeaturesQueryIT.class.getClassLoader();
     var file =
         new File(
-            Objects.requireNonNull(classLoader.getResource("alerts/" + alerts.get(alertId)))
+            Objects.requireNonNull(classLoader.getResource("alerts/" + ALERTS.get(alertId)))
                 .getFile());
 
     try {

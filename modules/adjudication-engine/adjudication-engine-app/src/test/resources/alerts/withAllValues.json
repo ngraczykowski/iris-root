@@ -25,11 +25,11 @@
       "categories": {
         "categories/test1": {
           "categoryName": "categories/test1",
-          "categoryValue": "NO_DECISION"
+          "categoryValue": "NO_DECISION_1"
         },
         "categories/test2": {
           "categoryName": "categories/test2",
-          "categoryValue": "NO_DECISION"
+          "categoryValue": "NO_DECISION_2"
         }
       }
     },
@@ -55,11 +55,11 @@
       "categories": {
         "categories/test1": {
           "categoryName": "categories/test1",
-          "categoryValue": "DECISION"
+          "categoryValue": "DECISION_3"
         },
         "categories/test2": {
           "categoryName": "categories/test2",
-          "categoryValue": "DECISION"
+          "categoryValue": "DECISION_4"
         }
       }
     }
