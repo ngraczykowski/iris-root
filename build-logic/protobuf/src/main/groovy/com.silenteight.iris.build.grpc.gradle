@@ -28,7 +28,7 @@ dependencies {
   compileOnly libs.grpc.stub
   compileOnly libs.grpc.protobuf
 
-  implementation libs.reactor.grpc.stub
-  api libs.reactor.core
+  compileOnly libs.reactor.grpc.stub
+  compileOnly libs.reactor.core
 
 }
