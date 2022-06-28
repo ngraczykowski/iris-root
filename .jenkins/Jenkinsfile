@@ -118,12 +118,15 @@ pipeline {
       }
       steps {
         script {
-          scanList = pullRequest
+          changes = pullRequest
                 .files
                 .filename
                 .findAll {it.startsWith 'modules'}
-                .collect {":${it.split('/')[1]}:sonarqube"}
+                .collect {{it.split('/')[1]}}
                 .unique()
+          scanList = findFiles(glob: 'modules/**/*.sonarqube')
+                  .collect {readFile(file: it.path).trim()}
+                  .findAll {it.split(':')[1] in changes}
         }
         withSonarQubeEnv(env.SONAR_NAME) {
           sh "./gradlew -Pversion=${javaVersion} ${scanList.join(' ')}"
