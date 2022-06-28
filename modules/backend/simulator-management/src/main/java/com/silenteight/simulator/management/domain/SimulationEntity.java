@@ -26,6 +26,7 @@ import static java.util.Arrays.stream;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
+@Table(name="simulator_simulation")
 class SimulationEntity extends BaseModifiableEntity implements IdentifiableEntity, Serializable {
 
   private static final long serialVersionUID = 1696925601371419382L;

@@ -2,6 +2,8 @@ package com.silenteight.sens.webapp.common.integration;
 
 import lombok.Data;
 
+import com.silenteight.backend.common.integration.AmpqProperties;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.validation.annotation.Validated;
@@ -15,7 +17,7 @@ class BrokerProperties {
 
   @Valid
   @NestedConfigurationProperty
-  private AmqpProperties auditLog;
+  private AmpqProperties auditLog;
 
   String auditLogQueueName() {
     return auditLog.getQueueName();

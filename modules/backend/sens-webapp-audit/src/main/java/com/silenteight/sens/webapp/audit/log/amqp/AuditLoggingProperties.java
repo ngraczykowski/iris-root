@@ -2,7 +2,7 @@ package com.silenteight.sens.webapp.audit.log.amqp;
 
 import lombok.Data;
 
-import com.silenteight.sens.webapp.common.integration.AmqpInboundProperties;
+import com.silenteight.backend.common.integration.AmqpInboundProperties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;

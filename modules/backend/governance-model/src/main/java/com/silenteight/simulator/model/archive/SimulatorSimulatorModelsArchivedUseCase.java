@@ -9,14 +9,14 @@ import com.silenteight.simulator.management.archive.ArchiveSimulationRequest;
 import com.silenteight.simulator.management.archive.ArchiveSimulationUseCase;
 import com.silenteight.simulator.management.list.ListSimulationsQuery;
 import com.silenteight.simulator.management.list.dto.SimulationListDto;
-import com.silenteight.simulator.model.archive.amqp.listener.ModelsArchivedMessageHandler;
+import com.silenteight.simulator.model.archive.amqp.listener.SimulatorModelsArchivedMessageHandler;
 
 import java.util.Collection;
 import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-class ModelsArchivedUseCase implements ModelsArchivedMessageHandler {
+class SimulatorSimulatorModelsArchivedUseCase implements SimulatorModelsArchivedMessageHandler {
 
   static final String ARCHIVED_BY = "archived_model";
 
@@ -35,7 +35,7 @@ class ModelsArchivedUseCase implements ModelsArchivedMessageHandler {
 
     simulations
         .stream()
-        .map(ModelsArchivedUseCase::toArchiveSimulationRequest)
+        .map(SimulatorSimulatorModelsArchivedUseCase::toArchiveSimulationRequest)
         .forEach(archiveSimulationUseCase::activate);
 
     log.info("Simulations cancelled: simulations={}" + simulations);

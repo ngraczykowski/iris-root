@@ -15,7 +15,7 @@ class ModelsArchivedFlowAdapter extends IntegrationFlowAdapter {
   private final String inboundChannel;
 
   @NonNull
-  private final ModelsArchivedMessageHandler handler;
+  private final SimulatorModelsArchivedMessageHandler handler;
 
   @Override
   protected IntegrationFlowDefinition<?> buildFlow() {

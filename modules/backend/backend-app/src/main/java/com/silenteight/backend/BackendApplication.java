@@ -25,6 +25,11 @@ import com.silenteight.serp.governance.policy.PolicyModule;
 import com.silenteight.serp.governance.qa.QaModule;
 import com.silenteight.serp.governance.strategy.StrategyModule;
 import com.silenteight.serp.governance.vector.FeatureVectorModule;
+import com.silenteight.simulator.common.time.TimeModule;
+import com.silenteight.simulator.dataset.DatasetModule;
+import com.silenteight.simulator.management.ManagementModule;
+import com.silenteight.simulator.processing.ProcessingModule;
+import com.silenteight.simulator.retention.RetentionModule;
 
 import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -59,6 +64,15 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     S3FileStorageMinioModule.class,
     GrpcCommonModule.class,
     WebModule.class,
+    // Simulator Domain modules
+    DatasetModule.class,
+    ManagementModule.class,
+    com.silenteight.simulator.model.ModelModule.class,
+    ProcessingModule.class,
+    RetentionModule.class,
+    // Interface modules
+    com.silenteight.simulator.common.integration.AmqpCommonModule.class,
+    TimeModule.class,
 })
 @EnableIntegration
 @EnableIntegrationManagement

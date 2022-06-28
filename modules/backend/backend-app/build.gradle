@@ -18,6 +18,12 @@ dependencies {
   implementation project(":governance-strategy")
   implementation project(":frontend-configuration")
 
+  implementation project(":simulator-dataset")
+  implementation project(":simulator-management")
+  implementation project(":simulator-processing")
+  implementation project(":simulator-retention")
+
+
   implementation libs.commons.collections
 
   implementation libs.silenteight.commons.app
@@ -68,6 +74,8 @@ dependencies {
   runtimeOnly libs.liquibase.sessionlock
   runtimeOnly libs.postgresql
 
+  runtimeOnly libs.spring.cloud.consul.discovery
+
   annotationProcessor(libs.querydsl.apt.jpa) {
     artifact {
       classifier = 'jpa'
@@ -78,4 +86,8 @@ dependencies {
   annotationProcessor libs.spring.boot.configuration.processor
 
   aspect libs.silenteight.sep.base.aspects
+
+  testImplementation libs.silenteight.serp.governance.common.web.testing
+
+  testImplementation libs.spring.integration.test
 }

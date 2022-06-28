@@ -383,6 +383,9 @@ grpc:
     date-agent:
       address: static://localhost:24313
 
+    adjudicationengine:
+      address: static://localhost:24801
+
 
 serp.governance:
   cors:
@@ -398,6 +401,23 @@ serp.governance:
 
   policy.promotion:
     direct: false
+
+simulator:
+  #-------------------------------------------------------------------------------------------------
+  # DATASET CONFIGURATION
+  #-------------------------------------------------------------------------------------------------
+  dataset:
+    create:
+      labels: []
+
+  #-------------------------------------------------------------------------------------------------
+  # SIMULATION TIMEOUT
+  #-------------------------------------------------------------------------------------------------
+  simulation:
+    timeout:
+      cron: "0 0/10 * * * ?"
+      duration-time: PT1H
+
 
 sep.auth:
   permissionMethodsMappings:
@@ -448,6 +468,10 @@ sep.auth:
     DASHBOARD:
       - "LIST_POLICIES"
       - "LIST_MODELS"
+      - "LIST_SIMULATIONS"
+      - "SIMULATION_STATISTICS"
+      - "LIST_DATASETS"
+      - "VIEW_SIMULATION"
     VIEW_AI_SUGGESTIONS:
       - "LIST_POLICIES"
       - "EDIT_POLICY"
@@ -457,6 +481,8 @@ sep.auth:
       - "LIST_STEP_FEATURE_VECTORS"
       - "LIST_AGENTS"
       - "LIST_CATEGORIES"
+      - "CREATE_SIMULATION"
+      - "LIST_DATASETS"
     MANAGE_AI_SUGGESTION:
       - "IMPORT_POLICY"
     VIEW_REASONING_BRANCHES:
@@ -472,9 +498,28 @@ sep.auth:
       - "ALERTS_VALIDATION_DECISION"
     MANAGE_SIMULATION:
       - "CREATE_MODEL"
+      - "CANCEL_SIMULATION"
+      - "CREATE_SIMULATION"
+      - "LIST_DATASETS"
     ADD_ATTACHMENT_TO_APPROVAL_TICKET:
       - "UPLOAD_ATTACHMENTS"
       - "REMOVE_ATTACHMENTS"
+    VIEW_SIMULATIONS:
+      - "LIST_SIMULATIONS"
+      - "LIST_DATASETS"
+      - "VIEW_SIMULATION_PROGRESS"
+    VIEW_SIMULATION_RESULT:
+      - "VIEW_SIMULATION"
+      - "SIMULATION_STATISTICS"
+      - "LIST_DATASETS"
+    DOWNLOAD_SIMULATION_REPORTS:
+      - "CREATE_SIMULATION_REPORT"
+    ARCHIVE_DATASET:
+      - "ARCHIVE_DATASET"
+    CREATE_DATASET:
+      - "CREATE_DATASET"
+    VIEW_DATASETS:
+      - "LIST_DATASETS"
   rolePermissionsMappings:
     APPROVER:
       - "VIEW_POLICIES"
@@ -493,19 +538,29 @@ sep.auth:
       - "PROMOTE_MODEL_AS_CHANGE_REQUEST"
       - "VIEW_APPROVAL_QUEUE"
       - "CANCEL_APPROVAL_TICKET"
-      - "DASHBOARD"
-      - "VIEW_AI_SUGGESTIONS"
       - "MANAGE_AI_SUGGESTION"
       - "VIEW_REASONING_BRANCHES"
       - "ADD_ATTACHMENT_TO_APPROVAL_TICKET"
+      - "MANAGE_SIMULATION"
+      - "VIEW_SIMULATIONS"
+      - "VIEW_SIMULATION_RESULT"
+      - "DOWNLOAD_SIMULATION_REPORTS"
+      - "ARCHIVE_DATASET"
+      - "CREATE_DATASET"
+      - "VIEW_DATASETS"
+      - "DASHBOARD"
+      - "VIEW_AI_SUGGESTIONS"
     AUDITOR:
       - "VIEW_POLICIES"
       - "VIEW_APPROVAL_QUEUE"
       - "VIEW_QA_ALERTS"
       - "VIEW_QA_VERIFICATION"
+      - "VIEW_REASONING_BRANCHES"
+      - "VIEW_SIMULATIONS"
+      - "VIEW_DATASETS"
       - "DASHBOARD"
       - "VIEW_AI_SUGGESTIONS"
-      - "VIEW_REASONING_BRANCHES"
+      - "VIEW_SIMULATION_RESULT"
     QA:
       - "VIEW_POLICIES"
       - "VIEW_QA_ALERTS"

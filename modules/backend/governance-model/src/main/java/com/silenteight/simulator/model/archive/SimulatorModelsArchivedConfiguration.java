@@ -9,13 +9,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-class ModelsArchivedConfiguration {
+class SimulatorModelsArchivedConfiguration {
 
   @Bean
-  ModelsArchivedUseCase modelsArchivedUseCase(
+  SimulatorSimulatorModelsArchivedUseCase simulatorModelsArchivedUseCase(
       @NonNull ListSimulationsQuery listSimulationsQuery,
       @NonNull ArchiveSimulationUseCase archiveSimulationUseCase) {
 
-    return new ModelsArchivedUseCase(listSimulationsQuery, archiveSimulationUseCase);
+    return new SimulatorSimulatorModelsArchivedUseCase(listSimulationsQuery, archiveSimulationUseCase);
   }
 }

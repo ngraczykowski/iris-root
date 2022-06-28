@@ -9,13 +9,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-class ModelsArchivedConfiguration {
+class GovernanceModelsArchivedConfiguration {
 
   @Bean
-  ModelsArchivedUseCase modelsArchivedUseCase(
+  GovernanceGovernanceModelsArchivedUseCase governanceModelsArchivedUseCase(
       @NonNull ListChangeRequestsQuery listChangeRequestsQuery,
       @NonNull CancelChangeRequestUseCase cancelChangeRequestUseCase) {
 
-    return new ModelsArchivedUseCase(listChangeRequestsQuery, cancelChangeRequestUseCase);
+    return new GovernanceGovernanceModelsArchivedUseCase(listChangeRequestsQuery, cancelChangeRequestUseCase);
   }
 }

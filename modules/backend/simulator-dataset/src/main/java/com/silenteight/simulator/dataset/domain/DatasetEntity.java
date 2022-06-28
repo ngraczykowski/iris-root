@@ -32,7 +32,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @EqualsAndHashCode(callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
 @Entity
-@Table
+@Table(name="simulator_dataset")
 class DatasetEntity extends BaseEntity implements Serializable {
 
   private static final long serialVersionUID = 3449138657092155697L;

@@ -17,15 +17,15 @@ import static com.silenteight.serp.governance.changerequest.fixture.ChangeReques
 import static com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures.PENDING_CHANGE_REQUEST;
 import static com.silenteight.serp.governance.model.archive.ModelsArchivedFixtures.MODELS_ARCHIVED_MESSAGE;
 import static com.silenteight.serp.governance.model.archive.ModelsArchivedFixtures.MODEL_NAMES;
-import static com.silenteight.serp.governance.model.archive.ModelsArchivedUseCase.CANCELLED_BY;
+import static com.silenteight.serp.governance.model.archive.GovernanceGovernanceModelsArchivedUseCase.CANCELLED_BY;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class ModelsArchivedUseCaseTest {
+class SimulatorGovernanceModelsArchivedUseCaseTest {
 
   @InjectMocks
-  private ModelsArchivedUseCase underTest;
+  private GovernanceGovernanceModelsArchivedUseCase underTest;
 
   @Mock
   private ListChangeRequestsQuery listChangeRequestsQuery;

@@ -19,6 +19,7 @@ import static com.silenteight.simulator.processing.alert.index.domain.State.ACKE
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
+@Table(name="simulator_indexed_alert")
 class IndexedAlertEntity extends BaseModifiableEntity implements IdentifiableEntity, Serializable {
 
   private static final long serialVersionUID = -8832059739436178153L;

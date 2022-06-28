@@ -21,16 +21,16 @@ import java.util.List;
 import static com.silenteight.simulator.model.archive.ModelsArchivedFixtures.MODELS_ARCHIVED_MESSAGE;
 import static com.silenteight.simulator.model.archive.ModelsArchivedFixtures.MODEL_NAMES;
 import static com.silenteight.simulator.model.archive.ModelsArchivedFixtures.SIMULATION_DTO;
-import static com.silenteight.simulator.model.archive.ModelsArchivedUseCase.ARCHIVED_BY;
+import static com.silenteight.simulator.model.archive.SimulatorSimulatorModelsArchivedUseCase.ARCHIVED_BY;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class ModelsArchivedUseCaseTest {
+class SimulatorGovernanceModelsArchivedUseCaseTest {
 
   @InjectMocks
-  private ModelsArchivedUseCase underTest;
+  private SimulatorSimulatorModelsArchivedUseCase underTest;
 
   @Mock
   private ListSimulationsQuery listSimulationsQuery;

@@ -2,7 +2,7 @@ package com.silenteight.serp.governance.qa.retention.personalinformation;
 
 import lombok.Data;
 
-import com.silenteight.serp.governance.common.integration.AmqpInboundProperties;
+import com.silenteight.backend.common.integration.AmqpInboundProperties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;

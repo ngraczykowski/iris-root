@@ -1,11 +1,12 @@
-package com.silenteight.serp.governance.model.archive.amqp.listener;
+package com.silenteight.simulator.model.archive.amqp.listener;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
-import com.silenteight.serp.governance.model.archive.amqp.ModelArchivingProperties;
+import com.silenteight.simulator.model.archive.amqp.ModelArchivingProperties;
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.dsl.IntegrationFlow;
@@ -15,7 +16,8 @@ import javax.validation.Valid;
 
 @Configuration
 @RequiredArgsConstructor
-class ModelsArchivedListenerConfiguration {
+@EnableConfigurationProperties(ModelArchivingProperties.class)
+class SimulatorModelsArchivedListenerConfiguration {
 
   private static final String MODELS_ARCHIVED_INBOUND_CHANNEL = "modelsArchivedInboundChannel";
 
@@ -27,10 +29,10 @@ class ModelsArchivedListenerConfiguration {
   private final AmqpInboundFactory inboundFactory;
 
   @Bean
-  IntegrationFlow modelsArchivedMessagesQueueToChannelIntegrationFlow() {
+  IntegrationFlow simulatorModelsArchivedMessagesQueueToChannelIntegrationFlow() {
     return createInputFlow(
         MODELS_ARCHIVED_INBOUND_CHANNEL,
-        properties.modelArchivingInboundQueueName());
+        properties.modelsArchivedInboundQueueName());
   }
 
   private IntegrationFlow createInputFlow(String channel, String queue) {
@@ -43,8 +45,8 @@ class ModelsArchivedListenerConfiguration {
   }
 
   @Bean
-  ModelsArchivedFlowAdapter modelsArchivedMessagesCommandIntegrationFlowAdapter(
-      ModelsArchivedMessageHandler handler) {
+  ModelsArchivedFlowAdapter simulatorModelsArchivedMessagesCommandIntegrationFlowAdapter(
+      SimulatorModelsArchivedMessageHandler handler) {
 
     return new ModelsArchivedFlowAdapter(MODELS_ARCHIVED_INBOUND_CHANNEL, handler);
   }

@@ -3,6 +3,8 @@ package com.silenteight.serp.governance.common.integration;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.backend.common.integration.RabbitModuleConfiguration;
+
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.Declarables;
 import org.springframework.amqp.core.Queue;
@@ -12,6 +14,7 @@ import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 import javax.validation.Valid;
 
@@ -24,7 +27,8 @@ import static org.springframework.amqp.core.Binding.DestinationType.QUEUE;
 @Configuration
 @RequiredArgsConstructor
 @EnableConfigurationProperties(BrokerProperties.class)
-class BrokerConfiguration {
+@Import({ RabbitModuleConfiguration.class })
+class GovernanceBrokerConfiguration {
 
   @Valid
   @NonNull
@@ -132,7 +136,7 @@ class BrokerConfiguration {
   }
 
   @Bean
-  Queue modelsArchivedQueue() {
+  Queue governanceModelsArchivedQueue() {
     return queue(brokerProperties.modelsArchivedQueueName());
   }
 

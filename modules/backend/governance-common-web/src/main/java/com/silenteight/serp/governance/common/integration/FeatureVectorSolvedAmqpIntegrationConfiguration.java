@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.common.integration;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.backend.common.integration.AmqpInboundProperties;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
 

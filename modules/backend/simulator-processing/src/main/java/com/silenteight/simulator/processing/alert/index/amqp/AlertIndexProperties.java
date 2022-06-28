@@ -2,8 +2,8 @@ package com.silenteight.simulator.processing.alert.index.amqp;
 
 import lombok.Data;
 
-import com.silenteight.simulator.common.integration.AmqpInboundProperties;
-import com.silenteight.simulator.common.integration.AmqpOutboundProperties;
+import com.silenteight.backend.common.integration.AmqpInboundProperties;
+import com.silenteight.backend.common.integration.AmqpOutboundProperties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;

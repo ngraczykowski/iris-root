@@ -4,7 +4,7 @@ import lombok.NonNull;
 
 import com.silenteight.model.api.v1.ModelsArchived;
 
-public interface ModelsArchivedMessageHandler {
+public interface GovernanceModelsArchivedMessageHandler {
 
   void handle(@NonNull ModelsArchived message);
 }

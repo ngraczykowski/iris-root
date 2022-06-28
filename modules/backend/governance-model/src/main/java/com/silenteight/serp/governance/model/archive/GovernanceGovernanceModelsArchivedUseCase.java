@@ -9,7 +9,7 @@ import com.silenteight.serp.governance.changerequest.cancel.CancelChangeRequestC
 import com.silenteight.serp.governance.changerequest.cancel.CancelChangeRequestUseCase;
 import com.silenteight.serp.governance.changerequest.domain.dto.ChangeRequestDto;
 import com.silenteight.serp.governance.changerequest.list.ListChangeRequestsQuery;
-import com.silenteight.serp.governance.model.archive.amqp.listener.ModelsArchivedMessageHandler;
+import com.silenteight.serp.governance.model.archive.amqp.listener.GovernanceModelsArchivedMessageHandler;
 
 import java.util.Collection;
 import java.util.List;
@@ -20,7 +20,7 @@ import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @RequiredArgsConstructor
-class ModelsArchivedUseCase implements ModelsArchivedMessageHandler {
+class GovernanceGovernanceModelsArchivedUseCase implements GovernanceModelsArchivedMessageHandler {
 
   static final String CANCELLED_BY = "archived_model";
 
@@ -39,7 +39,7 @@ class ModelsArchivedUseCase implements ModelsArchivedMessageHandler {
 
     changeRequests
         .stream()
-        .map(ModelsArchivedUseCase::toCancelChangeRequestCommand)
+        .map(GovernanceGovernanceModelsArchivedUseCase::toCancelChangeRequestCommand)
         .forEach(cancelChangeRequestUseCase::activate);
 
     log.info("Change requests cancelled: changeRequests={}" + changeRequests);
