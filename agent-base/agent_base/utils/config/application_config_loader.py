@@ -90,6 +90,7 @@ class ApplicationConfigLoader:
             verify=self._get_param("rabbitmq_verify", ["rabbitmq", "ssl_options", "verify"]),
         )
         rabbitmq_config = RabbitMQConfig(
+            addresses=self._get_param("rabbitmq_addresses", ["rabbitmq", "addresses"]),
             host=self._get_param("rabbitmq_host", ["rabbitmq", "host"]),
             port=self._get_param("rabbitmq_port", ["rabbitmq", "port"]),
             login=self._get_param("rabbitmq_login", ["rabbitmq", "login"]),
