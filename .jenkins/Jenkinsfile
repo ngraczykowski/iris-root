@@ -126,7 +126,7 @@ pipeline {
                 .unique()
         }
         withSonarQubeEnv(env.SONAR_NAME) {
-          sh "./gradlew -Pversion=${version} ${scanList.join(' ')}"
+          sh "./gradlew -Pversion=${javaVersion} ${scanList.join(' ')}"
         }
       }
     }
