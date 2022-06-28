@@ -16,7 +16,6 @@ components:
       - messaging
       - hsbc
   warehouse:
-    enabled: true
     profiles:
       - linux
       - warehouse

@@ -46,7 +46,6 @@ components:
       - foxtrot
 
   warehouse:
-    enabled: true
     profiles:
       - linux
       - warehouse

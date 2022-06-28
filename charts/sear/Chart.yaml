@@ -9,4 +9,4 @@ dependencies:
     condition: keycloak.internal
   - name: oracle-xe
     version: 1.0.0
-    condition: oraclexe.enabled
+    condition: oracle-xe.enabled

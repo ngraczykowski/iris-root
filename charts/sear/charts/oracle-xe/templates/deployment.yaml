@@ -15,11 +15,11 @@ spec:
         {{- include "oracle-xe.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "oracle-xe.serviceAccountName" . }}
-      {{- if .Values.oraclexe.initScripts.enabled }}
+      {{- if .Values.initScripts.enabled }}
       initContainers:
         - name: init-scripts
-          image: "{{ .Values.oraclexe.initScripts.image.repository }}:{{ .Values.oraclexe.initScripts.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.oraclexe.initScripts.image.pullPolicy }}
+          image: "{{ .Values.initScripts.image.repository }}:{{ .Values.initScripts.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.initScripts.image.pullPolicy }}
           command: ['sh', '-c', "cp -v /init_scripts/* /tmp/"]
           volumeMounts:
             - name: generated
@@ -28,8 +28,8 @@ spec:
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.oraclexe.image.repository }}:{{ .Values.oraclexe.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.oraclexe.image.pullPolicy }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: APP_USER
               value: scb
@@ -59,7 +59,7 @@ spec:
             failureThreshold: 15
             periodSeconds: 20
           resources:
-            {{- toYaml .Values.oraclexe.resources | nindent 12 }}
+            {{- toYaml .Values.resources | nindent 12 }}
       volumes:
         - name: generated
           emptyDir: {}

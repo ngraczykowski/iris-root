@@ -334,6 +334,15 @@ components:
       name: "hb"
     webPath: "hsbc-bridge"
 
+  scb-bridge:
+    enabled: false
+    image:
+      repository: registry.dev.s8ops.com/iris/scb-bridge-app
+
+    db:
+      name: "scbb"
+    webPath: "scb-bridge"
+
   #FAB bridge start
   ftcc:
     enabled: false
@@ -639,5 +648,5 @@ keycloak:
   kibana:
     clientId: kibana-sso
 
-oraclexe:
+oracle-xe:
   enabled: false

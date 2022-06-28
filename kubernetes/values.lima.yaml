@@ -1,0 +1,106 @@
+## This values file configures Lima environment, with SCB Bridge
+##
+components:
+  core-bridge:
+    enabled: true
+    profiles:
+      - consuldisabled
+  scb-bridge:
+    enabled: true
+    properties:
+      "serp.gns.db.host": '{{ include "sear.fullname" . }}-oracle-xe.{{ .Release.Namespace }}.svc'
+      "serp.gns.db.port": 1521
+      "serp.gns.db.service.name": "XE"
+      "serp.gns.db.user": LC_GNS_WEB_SIT_01
+      "serp.gns.db.password": password
+      "grpc.client.universal-data-source.address": 'dns:///{{ include "sear.fullname" . }}-universal-data-source.{{ .Release.Namespace }}.svc:9090'
+  warehouse:
+    profiles:
+      - linux
+      - warehouse
+      - messaging
+      - lima
+
+agents:
+
+  name-agent:
+    enabled: true
+    image:
+      repository: registry.dev.s8ops.com/linguistics-agent
+      tag: "3.25.0"
+
+  organization-name-agent:
+    enabled: true
+    amqp:
+      routingKey: agents.companyName.versions.1_0_0.configs.1
+      queueName: agent.companyname-requests
+    args:
+      - --agent-exchange
+    image:
+      tag: "0.18.4"
+
+  date-agent:
+    enabled: true
+    properties:
+      "dob.agent.facade.enabled": true
+      "logicalDiscounting.agent.facade.enabled": true
+      "chronology.agent.facade.enabled": true
+      "facade.amqp.multi-queues.enabled": true
+      "facade.amqp.queueDefinitions[dob].inbound-exchange-name": agent.request
+      "facade.amqp.queueDefinitions[dob].inbound-queue-name": agent.date-requests
+      "facade.amqp.queueDefinitions[dob].inbound-queue-with-priority-support-name": agent.date-requests-prio-support
+      "facade.amqp.queueDefinitions[dob].inbound-routing-key": agents.date.versions.*.configs.*
+      "facade.amqp.queueDefinitions[dob].max-queue-priority": 10
+      "facade.amqp.queueDefinitions[dob].outbound-exchange-name": agent.response
+      "facade.amqp.queueDefinitions[dob].dead-letter-exchange-name": date-agent-dead-letter-exchange
+      "facade.amqp.queueDefinitions[dob].dead-letter-queue-name": date-agent-dead-letter-queue
+      "facade.amqp.queueDefinitions[dob].dead-letter-routing-key": date-agent-dead-letter-key
+      "facade.amqp.queueDefinitions[logicalDiscounting].inbound-exchange-name": agent.request
+      "facade.amqp.queueDefinitions[logicalDiscounting].inbound-queue-name": agent.logicaldiscounting-requests
+      "facade.amqp.queueDefinitions[logicalDiscounting].inbound-routing-key": agents.logicaldiscounting.versions.*.configs.*
+      "facade.amqp.queueDefinitions[logicalDiscounting].outbound-exchange-name": agent.response
+      "facade.amqp.queueDefinitions[logicalDiscounting].dead-letter-exchange-name": logicaldiscounting-agent-dead-letter-exchange
+      "facade.amqp.queueDefinitions[logicalDiscounting].dead-letter-queue-name": logicaldiscounting-agent-dead-letter-queue
+      "facade.amqp.queueDefinitions[logicalDiscounting].dead-letter-routing-key": logicaldiscounting-agent-dead-letter-key
+      "facade.amqp.queueDefinitions[chronology].inbound-exchange-name": agent.request
+      "facade.amqp.queueDefinitions[chronology].inbound-queue-name": agent.chronology-requests
+      "facade.amqp.queueDefinitions[chronology].inbound-routing-key": agents.chronology.versions.*.configs.*
+      "facade.amqp.queueDefinitions[chronology].outbound-exchange-name": agent.response
+      "facade.amqp.queueDefinitions[chronology].dead-letter-exchange-name": chronology-agent-dead-letter-exchange
+      "facade.amqp.queueDefinitions[chronology].dead-letter-queue-name": chronology-agent-dead-letter-queue
+      "facade.amqp.queueDefinitions[chronology].dead-letter-routing-key": chronology-agent-dead-letter-key
+
+    image:
+      repository: registry.dev.s8ops.com/date-agent
+      tag: "1.19.0"
+
+  country-agent:
+    enabled: true
+    image:
+      tag: "2.15.0"
+
+  gender-agent:
+    enabled: true
+    image:
+      tag: "1.11.0"
+
+  document-comparer-agent:
+    enabled: true
+    image:
+      tag: "2.17.0"
+
+  document-number-agent:
+    enabled: true
+    image:
+      tag: "2.21.0"
+
+frontend:
+  image:
+    tag: "latest"
+
+oracle-xe:
+  enabled: true
+  initScripts:
+    enabled: true
+    image:
+      repository: registry.dev.s8ops.com/iris/scb-bridge-test-fixtures
