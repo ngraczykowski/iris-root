@@ -41,14 +41,24 @@ class PikaConnection:
             connection_configuration["password"],
         )
         if ssl_options:
-            context = ssl.create_default_context(cafile=ssl_options["ca_certs"])
-            context.load_cert_chain(ssl_options["certfile"], ssl_options["keyfile"])
-            ssl_opts = pika.SSLOptions(context, connection_configuration["host"])
+            context = ssl.SSLContext()
+            context.verify_mode = ssl.CERT_REQUIRED
+            try:
+                context.load_verify_locations(ssl_options["ca_certs"])
+                context.load_cert_chain(ssl_options["certfile"], ssl_options["keyfile"])
+            except FileNotFoundError:
+                logger.debug("INVALID path to certs")
+                raise Exception("Invalid path to certs")
+
+            ssl_opts = pika.SSLOptions(context)
             self.conn_params = pika.ConnectionParameters(
+                host=self.connection_configuration["host"],
                 port=connection_configuration["port"],
                 virtual_host=connection_configuration["virtualhost"],
                 credentials=creds,
                 ssl_options=ssl_opts,
+                heartbeat=600,
+                blocked_connection_timeout=300,
             )
         else:
             self.conn_params = pika.ConnectionParameters(
@@ -155,7 +165,6 @@ class HistoricalDecisionExchange:
         while True:
             for connection_config in self._prepare_connection_configurations():
                 connection = PikaConnection(messaging_config, connection_config)
-
                 try:
                     await connection.start()
                 except Exception as err:
@@ -181,7 +190,6 @@ class HistoricalDecisionExchange:
 
         if "host" in rabbitmq_config:
             yield rabbitmq_config
-
         if "addresses" in rabbitmq_config:
             addresses = rabbitmq_config["addresses"]
             del rabbitmq_config["addresses"]
