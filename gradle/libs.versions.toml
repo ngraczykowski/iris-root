@@ -17,7 +17,7 @@ worldcheck-api = "0.4.0"
 #-----------------------------------
 platform-awssdk = "2.17.221"
 #TODO(dsniezek): should be updated
-platform-awssdk1 = "1.12.249"
+platform-awssdk1 = "1.12.250"
 platform-junit5 = "5.8.2"
 platform-keycloak-adapter = "17.0.1"
 platform-reactor = "2020.0.20"
