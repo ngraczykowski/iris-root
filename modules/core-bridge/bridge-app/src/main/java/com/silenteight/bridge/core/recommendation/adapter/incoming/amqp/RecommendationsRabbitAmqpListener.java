@@ -29,6 +29,12 @@ class RecommendationsRabbitAmqpListener {
             + "with [{}] recommendations.",
         analysisName, recommendations.getRecommendationInfosList().size());
 
+    if (isSimulationBatch(analysisName)) {
+      log.info(
+          "Ignoring recommendations from simulation batch for analysis name [{}]. ", analysisName);
+      return;
+    }
+
     var recommendationsWithMetadata = recommendations.getRecommendationInfosList().stream()
         .map(recommendationInfo ->
             mapper.toRecommendationWithMetadata(recommendationInfo, analysisName))
@@ -36,5 +42,9 @@ class RecommendationsRabbitAmqpListener {
 
     recommendationFacade.proceedReadyRecommendations(
         new ProceedReadyRecommendationsCommand(recommendationsWithMetadata, analysisName));
+  }
+
+  private boolean isSimulationBatch(String analysisName) {
+    return recommendationFacade.isSimulationBatch(analysisName);
   }
 }

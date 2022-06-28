@@ -102,6 +102,10 @@ public class RecommendationFacade {
     dataRetentionService.performDataRetention(command);
   }
 
+  public boolean isSimulationBatch(String analysisName) {
+    return registrationService.isSimulationBatch(analysisName);
+  }
+
   private void processRecommendations(
       List<AlertWithoutMatches> alerts,
       BatchIdWithPolicy batchId,

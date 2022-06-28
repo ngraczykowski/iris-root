@@ -124,6 +124,11 @@ public class RegistrationFacade {
     return batchService.findBatchPriority(command.analysisName());
   }
 
+  public boolean isSimulationBatch(String analysisName) {
+    return batchService.findBatchByAnalysisName(analysisName)
+        .isSimulation();
+  }
+
   private boolean allAlertsAreDelivered(Batch batch, List<String> alertNames) {
     if (CollectionUtils.isEmpty(alertNames)) {
       return true;

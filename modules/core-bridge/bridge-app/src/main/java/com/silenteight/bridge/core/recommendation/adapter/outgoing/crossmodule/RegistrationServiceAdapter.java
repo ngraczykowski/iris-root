@@ -53,6 +53,11 @@ class RegistrationServiceAdapter implements RegistrationService {
   }
 
   @Override
+  public boolean isSimulationBatch(String analysisName) {
+    return registrationFacade.isSimulationBatch(analysisName);
+  }
+
+  @Override
   public Stream<AlertWithoutMatches> streamAllAlerts(String batchId, List<String> alertsNames) {
     var command = new GetAlertsWithoutMatchesCommand(batchId, alertsNames);
     return registrationFacade.streamAllByBatchId(command);

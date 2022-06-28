@@ -20,6 +20,8 @@ public interface RegistrationService {
 
   BatchPriorityDto getBatchPriority(String analysisName);
 
+  boolean isSimulationBatch(String analysisName);
+
   Stream<AlertWithoutMatches> streamAllAlerts(String batchId, List<String> alertsNames);
 
   List<MatchWithAlertId> getAllMatchesForAlerts(Set<Long> alertsIds);

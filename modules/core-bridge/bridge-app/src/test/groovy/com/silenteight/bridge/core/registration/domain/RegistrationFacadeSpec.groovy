@@ -2,11 +2,7 @@ package com.silenteight.bridge.core.registration.domain
 
 import com.silenteight.bridge.core.Fixtures
 import com.silenteight.bridge.core.recommendation.domain.RecommendationFixtures
-import com.silenteight.bridge.core.registration.domain.command.GetBatchPriorityCommand
-import com.silenteight.bridge.core.registration.domain.command.MarkAlertsAsDeliveredCommand
-import com.silenteight.bridge.core.registration.domain.command.MarkAlertsAsRecommendedCommand
-import com.silenteight.bridge.core.registration.domain.command.StartDataRetentionCommand
-import com.silenteight.bridge.core.registration.domain.command.VerifyBatchTimeoutCommand
+import com.silenteight.bridge.core.registration.domain.command.*
 import com.silenteight.bridge.core.registration.domain.model.Alert
 import com.silenteight.bridge.core.registration.domain.model.Batch
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
@@ -303,5 +299,23 @@ class RegistrationFacadeSpec extends Specification {
     then:
     1 * batchService.findBatchPriority(RegistrationFixtures.ANALYSIS_NAME) >> new BatchPriority(RegistrationFixtures.BATCH_PRIORITY)
     result.priority() == RegistrationFixtures.BATCH_PRIORITY
+  }
+
+  @Unroll
+  def 'should return (#isSimulation) when #text simulation batch'() {
+    given:
+    def analysisName = RegistrationFixtures.ANALYSIS_NAME
+
+    when:
+    def result = underTest.isSimulationBatch(analysisName)
+
+    then:
+    1 * batchService.findBatchByAnalysisName(RegistrationFixtures.ANALYSIS_NAME) >> registeredBatch
+    result == isSimulation
+
+    where:
+    isSimulation | text        || registeredBatch
+    false        | 'it is not' || RegistrationFixtures.BATCH
+    true         | 'it is '    || RegistrationFixtures.SIMULATION_BATCH
   }
 }
