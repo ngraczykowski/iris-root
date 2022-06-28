@@ -76,7 +76,7 @@ async def serve(args):
         )
     else:
         try:
-            address = service_config.ETL_SERVICE_ADDR
+            address = service_config.etl_service_addr
         except (omegaconf.errors.ConfigAttributeError, KeyError, ConsulServiceError):
             address = f"{service_config.etl_service_ip}:{service_config.etl_service_port}"
         server.add_insecure_port(address)

@@ -15,5 +15,5 @@ artifact=$(basename -- "$(ls ./dist/etl_pipeline-*.whl)")
 version=$(ls -al "./dist/$artifact" | awk -F'etl_pipeline-|-py3-none-any.whl' '{print $2}')
 
 # zipfile (executable, to run without installing)
-pip install shiv
-shiv -e etl_pipeline.__main__:main "$@" --compressed -o "./dist/etl_pipeline-$version.pyz" "dist/$artifact"
+# pip install shiv
+# shiv -e etl_pipeline.__main__:main "$@" --compressed -o "./dist/etl_pipeline-$version.pyz" "dist/$artifact"

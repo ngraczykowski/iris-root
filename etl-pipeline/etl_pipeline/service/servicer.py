@@ -84,7 +84,6 @@ class EtlPipelineServiceServicer:
                         )
                     )
                 )
-
             etl_alerts_batches = await asyncio.gather(*tasks)
             etl_alerts = [
                 self._parse_alert(alert) for batch in etl_alerts_batches for alert in batch
@@ -184,7 +183,7 @@ class EtlPipelineServiceServicer:
             batch_id=alert.batch_id,
             alert_name=alert.alert_name,
             etl_status=alert.status,
-            etl_matches=[EtlMatch(match_name=str(match)) for match in alert.matches],
+            etl_matches=[EtlMatch(match_name=str(match.match_name)) for match in alert.matches],
         )
         return etl_alert
 

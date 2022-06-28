@@ -36,39 +36,48 @@ def pipeline_resource(request):
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
-    ["source_file", "reference_folder"],
+    ["source_file", "reference_folder", "alert_response_payload_length"],
     [
         (
             "notebooks/sample/isg_party_in_payload_format_customer_type_individual.json",
             "test_isg_party_in_payload_format_customer_type_individual",
+            1,
         ),
         (
             "notebooks/sample/isg_party_in_payload_format_customer_type_unknown.json",
             "test_isg_party_in_payload_format_customer_type_unknown",
+            1,
         ),
         (
             "notebooks/sample/isg_account_in_payload_format_customer_type_individual.json",
             "test_isg_account_in_payload_format_customer_type_individual",
+            1,
         ),
         (
             "notebooks/sample/isg_account_in_payload_format_customer_type_organization.json",
             "test_isg_account_in_payload_format_customer_type_organization",
+            1,
         ),
         (
             "notebooks/sample/isg_account_in_payload_format_customer_type_with_no_token.json",
             "test_isg_account_in_payload_format_customer_type_no_token",
+            1,
         ),
         (
             "notebooks/sample/wm_party_in_payload_format_customer_type_without_carrier_tag.json",
             "test_wm_party_in_payload_format_customer_type_without_carrier_tag",
+            1,
         ),
         (
             "notebooks/sample/isg_party_in_payload_format_with_01_entitytype.json",
             "test_lack_of_data_for_geo_agent",
+            1,
         ),
     ],
 )
-async def test_parametrized(source_file, reference_folder, pipeline_resource):
+async def test_parametrized(
+    source_file, reference_folder, alert_response_payload_length, pipeline_resource
+):
     request_alert = load_alert(source_file)
     for match in request_alert.matches:
         try:
@@ -78,6 +87,7 @@ async def test_parametrized(source_file, reference_folder, pipeline_resource):
         except FileNotFoundError:
             pass
     response = pipeline_resource.RunEtl(RunEtlRequest(alerts=[request_alert]))
+    assert len(response.etl_alerts) == alert_response_payload_length
     for etl_alert in response.etl_alerts:
         assert etl_alert.etl_status == SUCCESS
     for match in request_alert.matches:

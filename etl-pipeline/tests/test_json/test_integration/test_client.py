@@ -259,6 +259,7 @@ class BaseGrpcTestCase:
 
             for etl_alert in response.etl_alerts:
                 assert etl_alert.etl_status == SUCCESS
+            assert len(response.etl_alerts) == 1
             for match in request_alert.matches:
                 compare_tested_uds_features_with_reference(
                     f'/tmp/features_{match.match_name.replace("/", "_")}.json',

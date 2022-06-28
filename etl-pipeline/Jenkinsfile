@@ -105,20 +105,6 @@ pipeline {
                 }
             }
         }
-        stage('Build') {
-            steps {
-                sh './scripts/build.sh'
-            }
-        }
-        stage('Publish docker image') {
-            when {
-                branch 'master'
-            }
-            steps {
-                withCredentials([gitUsernamePassword(credentialsId: 'Github-app-access')]) {
-                    sh './scripts/push.sh --index-url ${PIP_INDEX_URL}'
-            }}
-            }
         stage('Deploy On Nomad mike') {
             when {
                 branch 'master'

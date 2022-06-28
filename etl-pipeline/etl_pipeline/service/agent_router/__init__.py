@@ -243,6 +243,8 @@ class AgentInputCreator:
             except (grpc.RpcError) as e:
                 if e.code() in [grpc.StatusCode.INVALID_ARGUMENT]:
                     raise AgentInputCreatorError(f"Invalid argument: {str(e)}")
+                if e.code() in [grpc.StatusCode.UNAVAILABLE]:
+                    pass
                 error_message = str(e)
             except AttributeError as e:
                 error_message = str(e)
