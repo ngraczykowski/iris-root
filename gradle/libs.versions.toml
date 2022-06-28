@@ -341,7 +341,7 @@ hibernate-envers = { group = "org.hibernate", name = "hibernate-envers" }
 hibernate-jcache = { group = "org.hibernate", name = "hibernate-jcache" }
 #TODO(dsniezek): not used, remove that
 hibernate-jpamodelgen = { group = "org.hibernate", name = "hibernate-jpamodelgen" }
-hibernate-types = { group = "com.vladmihalcea", name = "hibernate-types-52", version = "2.16.2" }
+hibernate-types = { group = "com.vladmihalcea", name = "hibernate-types-52", version = "2.16.3" }
 hibernate-validator = { group = "org.hibernate.validator", name = "hibernate-validator" }
 hikari-cp = { group = "com.zaxxer", name = "HikariCP" }
 jackson-annotations = { group = "com.fasterxml.jackson.core", name = "jackson-annotations", version.ref = "jackson" }
