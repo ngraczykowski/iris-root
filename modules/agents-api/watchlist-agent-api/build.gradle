@@ -1,10 +1,4 @@
 plugins {
-    id "java-library"
-    id "maven-publish"
-    id "com.google.protobuf"
-}
-
-protobufSetup {
-    generateGrpc = true
-    generateReactiveGrpc = true
+  id "maven-publish"
+  id "com.silenteight.iris.build.grpc"
 }

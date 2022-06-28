@@ -45,6 +45,7 @@ shedlock = "4.37.0"
 spotbugs = "4.7.1"
 springdoc = "1.6.9"
 mapstruct = "1.5.2.Final"
+reactive-grpc = "1.2.3"
 
 #-----------------------------------
 # Testing
@@ -394,6 +395,8 @@ protobuf-java-util = { group = "com.google.protobuf", name = "protobuf-java-util
 pw-swift-core = { group = "com.prowidesoftware", name = "pw-swift-core", version = "SRU2021-9.2.12" }
 querydsl-apt-jpa = { group = "com.querydsl", name = "querydsl-apt" }
 querydsl-jpa = { group = "com.querydsl", name = "querydsl-jpa" }
+reactor-grpc-gen = { group = "com.salesforce.servicelibs", name = "reactor-grpc", version.ref = "reactive-grpc" }
+reactor-grpc-stub = { group = "com.salesforce.servicelibs", name = "reactor-grpc-stub", version.ref = "reactive-grpc" }
 sentry = { group = "io.sentry", name = "sentry" }
 sentry-logback = { group = "io.sentry", name = "sentry-logback" }
 sentry-spring-boot-starter = { group = "io.sentry", name = "sentry-spring-boot-starter" }

@@ -7,12 +7,18 @@ protobuf {
   generateProtoTasks {
     all()*.plugins {
       grpc {}
+
+      reactor {}
     }
   }
 
   plugins {
     grpc {
       artifact = libs.grpc.gen.get()
+    }
+
+    reactor {
+      artifact = libs.reactor.grpc.gen.get()
     }
   }
 }
@@ -21,4 +27,8 @@ dependencies {
   compileOnly libs.javax.annotation.api
   compileOnly libs.grpc.stub
   compileOnly libs.grpc.protobuf
+
+  implementation libs.reactor.grpc.stub
+  api libs.reactor.core
+
 }
