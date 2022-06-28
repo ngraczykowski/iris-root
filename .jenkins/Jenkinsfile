@@ -111,6 +111,17 @@ pipeline {
         }
       }
     }
+    stage('SonarQube') {
+      steps {
+        script {
+          scanList =
+              findFiles(glob: 'modules/**/*.sonarqube').collect {readFile(file: it.path).trim()}
+        }
+        withSonarQubeEnv(env.SONAR_NAME) {
+          sh "./gradlew -Dsonar.branch.name=\$CHANGE_BRANCH -Pversion=${version} ${scanList.join(' ')}"
+        }
+      }
+    }
     stage('Chart') {
       when {
         beforeAgent true
