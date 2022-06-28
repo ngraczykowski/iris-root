@@ -37,6 +37,11 @@ dependencies {
   annotationProcessor libs.lombok
   testAnnotationProcessor libs.lombok
 
+  if (pluginManager.hasPlugin('io.freefair.aspectj.post-compile-weaving')) {
+    aspect platform('com.silenteight.iris.platform:product-platform')
+    aspect libs.spring.aspects
+  }
+
   testImplementation platform('com.silenteight.iris.platform:test-platform')
   testImplementation libs.assertj.core
   testImplementation libs.junit.jupiter.migrationsupport

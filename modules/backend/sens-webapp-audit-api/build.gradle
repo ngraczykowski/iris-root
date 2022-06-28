@@ -6,4 +6,6 @@ description = "SENS WebApp Audit API"
 
 dependencies {
   api libs.spring.security.core
+
+  compileOnly libs.spring.tx
 }
