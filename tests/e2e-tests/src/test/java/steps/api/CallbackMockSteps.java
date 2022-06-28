@@ -47,7 +47,7 @@ public class CallbackMockSteps implements En {
           WebSocketStompClient stompClient = new WebSocketStompClient(client);
           stompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
-          var url = HTTP_SCHEME.matcher(BASE_URL).replaceAll("ws") + "/rest/e2e-agent/ws";
+          var url = HTTP_SCHEME.matcher(BASE_URL).replaceAll("ws") + "/rest/e2e-helper/ws";
 
           StompSession stompSession =
               stompClient

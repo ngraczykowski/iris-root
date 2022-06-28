@@ -1,4 +1,4 @@
-rootProject.name = 'e2e-agent'
+rootProject.name = 'e2e-helper'
 includeBuild('../../platforms')
 includeBuild('../../build-logic')
 

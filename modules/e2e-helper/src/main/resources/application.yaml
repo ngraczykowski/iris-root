@@ -1,6 +1,6 @@
 spring:
   application:
-  name: e2e-agent
+  name: e2e-helper
   cloud:
     config:
       import-check:

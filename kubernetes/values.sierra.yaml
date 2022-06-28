@@ -8,7 +8,7 @@ components:
       - mockcmapi
     properties:
       "pb.cmapi.callback.enabled": true
-      "pb.cmapi.callback.endpoint": 'http://{{ include "sear.fullname" . }}-e2e-agent.{{ .Release.Namespace }}.svc:{{ .component.containerPorts.http.port }}/rest/e2e-agent/mock/cmapi/pb'
+      "pb.cmapi.callback.endpoint": 'http://{{ include "sear.fullname" . }}-e2e-helper.{{ .Release.Namespace }}.svc:{{ .component.containerPorts.http.port }}/rest/e2e-helper/mock/cmapi/pb'
       "spring.security.oauth2.resourceserver.jwt.issuer-uri": "{{ tpl .Values.keycloak.authServerUrl $ }}/realms/{{ .Values.keycloak.realm }}"
       "spring.security.oauth2.client.registration.callback.client-id": "{{ .Values.keycloak.cmapi.clientId }}"
       "spring.security.oauth2.client.registration.callback.client-secret": "{{ .Values.keycloak.cmapi.clientSecret }}"
@@ -19,7 +19,7 @@ components:
       "pb.agents.specific-terms2.bucket": devenv-6fa57739-906d-1130-4a76-90dd1c5dc8a3
       "pb.daily-reports-remove.bucket": devenv-6fa57739-906d-1130-4a76-90dd1c5dc8a3
       "pb.daily-reports-remove.file-prefix": '{{ printf "%s/%s/pb/reports" .Release.Namespace .Release.Name }}'
-  e2e-agent:
+  e2e-helper:
     enabled: true
     configServer:
       enabled: true

@@ -412,7 +412,7 @@ components:
     db:
       name: "wh"
 
-  e2e-agent:
+  e2e-helper:
     enabled: false
     db:
       enabled: false
@@ -420,7 +420,7 @@ components:
       enabled: false
     replicaCount: 1
     image:
-      repository: registry.dev.s8ops.com/iris/e2e-agent
+      repository: registry.dev.s8ops.com/iris/e2e-helper
 
   config-server:
     enabled: false
