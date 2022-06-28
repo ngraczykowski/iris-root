@@ -14,6 +14,16 @@
 #----------------------------------------------------------
 /modules/warehouse/**/*   @SilentEight/whiskey
 
+#----------------------------------------------------------
+# All-In team
+#----------------------------------------------------------
+/modules/core-bridge/**/*                           @SilentEight/all-in
+/modules/core-bridge-recommendation-connector/**/*  @SilentEight/all-in
+/modules/core-bridge-registration-connector/**/*    @SilentEight/all-in
+/modules/hsbc-bridge/**/*                           @SilentEight/all-in
+/modules/ms-bridge/**/*                             @SilentEight/all-in
+/modules/protobuf-spring-boot-starter/**/*          @SilentEight/all-in
+
 ####################################################################################################
 # NOTE(ahaczewski): Add code owners for modules above. Do not modify owners below.
 ####################################################################################################
