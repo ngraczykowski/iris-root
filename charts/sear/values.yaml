@@ -412,7 +412,7 @@ components:
     db:
       name: "wh"
 
-  callback-mock:
+  e2e-agent:
     enabled: false
     db:
       enabled: false
