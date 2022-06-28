@@ -114,6 +114,7 @@ pipeline {
     stage('SonarQube') {
       when {
         changeRequest()
+        changeset "modules/**"
       }
       steps {
         script {
