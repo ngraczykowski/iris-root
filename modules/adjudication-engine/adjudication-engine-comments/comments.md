@@ -3,7 +3,7 @@
 ## Adding comment template
 To add/edit comment templates go to in `adjudication-engine-app`
 ```
-resources/comment-templates/sierra/{environment}
+resources/comment-templates/{environment}
 ```
 and edit your template inside environment folder.
 
