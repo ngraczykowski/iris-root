@@ -1,0 +1,47 @@
+grpc:
+  client:
+    data-source:
+      address: discovery:///{{ env "NOMAD_NAMESPACE" }}-universal-data-source
+      timeout: 10
+      # client_ca: {{ env "meta.silenteight.home" }}/cert/chain.pem
+      # client_private_key: {{ env "meta.silenteight.home" }}/cert/hit-type-agent/hit-type-agent-key.pem
+      # client_public_key_chain: {{ env "meta.silenteight.home" }}/cert/hit-type-agent/hit-type-agent-chain.pem
+
+rabbitmq:
+  addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
+      {{ if $index }},{{ end -}}
+      {{ $rabbit.Address }}:{{ $rabbit.Port -}}
+  {{- end }}
+  virtualhost: /{{ env "NOMAD_NAMESPACE" }}
+  # tls:
+  #   ca_certs: "tests/ssl_example/ca.pem"
+  #   keyfile: "tests/ssl_example/client-key.pem"
+  #   certfile: "tests/ssl_example/client.pem"
+
+consul:
+  host: localhost
+  port: 8500
+
+agent:
+  processes: 2
+
+  agent-exchange:
+    request:
+      exchange: "agent.request"
+      queue-name: "agent.hittype-requests"
+      routing-key: "agents.hitType.versions.*.configs.*"
+
+    response:
+      exchange: "agent.response"
+      routing-key: ""
+
+  grpc:
+    port: {{ env "NOMAD_PORT_grpc" }}
+    # server_ca: {{ env "meta.silenteight.home" }}/cert/chain.pem
+    # server_private_key: {{ env "meta.silenteight.home" }}/cert/hit-type-agent/hit-type-agent-key.pem
+    # server_public_key_chain: {{ env "meta.silenteight.home" }}/cert/hit-type-agent/hit-type-agent-chain.pem
+
+# sentry:
+#   environment: unknown
+#   release: unknown
+#   sample_rate: 1.0

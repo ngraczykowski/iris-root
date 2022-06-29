@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package silenteight.agent.hittype.v1.api;
+
+option java_package = "com.silenteight.proto.agent.hittype.v1.api";
+option java_outer_classname = "HitTypeAgentApiProto";
+option java_multiple_files = true;
+
+service HitTypeAgent {
+
+  rpc CheckTriggers (CheckTriggersRequest) returns (CheckTriggersResponse) {
+  }
+}
+
+
+message StringList {
+    repeated string tokens = 1;
+ }
+
+message TokensMap {
+  map<string, StringList> tokens_map = 1;
+}
+
+message CheckTriggersRequest {
+    repeated string normal_trigger_categories = 1;
+    map<string, StringList> trigger_categories = 2;
+    map<string, TokensMap> triggered_tokens = 3;
+}
+
+message CheckTriggersResponse {
+  string solution = 1;
+  HitTypesReason reason = 2;
+}
+
+message HitTypesReason {
+    repeated string hit_categories = 1;
+    repeated string normal_categories = 2;
+}
+  
