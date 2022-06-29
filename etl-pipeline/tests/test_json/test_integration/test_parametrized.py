@@ -19,7 +19,11 @@ from tests.test_json.test_integration.test_client import (
 def pipeline_resource(request):
     environment = os.environ.copy()
     service_config = ConsulServiceConfig()
-    _ = subprocess.Popen("tests/scripts/start_services.sh", env=environment)
+    process = subprocess.Popen("tests/scripts/kill_services.sh")
+    process.wait()
+    _ = subprocess.Popen(
+        "tests/scripts/start_services.sh --disable_learning".split(), env=environment
+    )
     channel = grpc.insecure_channel(
         f"{service_config.etl_service_ip}:{service_config.etl_service_port}"
     )
@@ -39,37 +43,37 @@ def pipeline_resource(request):
     ["source_file", "reference_folder", "alert_response_payload_length"],
     [
         (
-            "notebooks/sample/isg_party_in_payload_format_customer_type_individual.json",
+            "tests/shared/sample/isg_party_in_payload_format_customer_type_individual.json",
             "test_isg_party_in_payload_format_customer_type_individual",
             1,
         ),
         (
-            "notebooks/sample/isg_party_in_payload_format_customer_type_unknown.json",
+            "tests/shared/sample/isg_party_in_payload_format_customer_type_unknown.json",
             "test_isg_party_in_payload_format_customer_type_unknown",
             1,
         ),
         (
-            "notebooks/sample/isg_account_in_payload_format_customer_type_individual.json",
+            "tests/shared/sample/isg_account_in_payload_format_customer_type_individual.json",
             "test_isg_account_in_payload_format_customer_type_individual",
             1,
         ),
         (
-            "notebooks/sample/isg_account_in_payload_format_customer_type_organization.json",
+            "tests/shared/sample/isg_account_in_payload_format_customer_type_organization.json",
             "test_isg_account_in_payload_format_customer_type_organization",
             1,
         ),
         (
-            "notebooks/sample/isg_account_in_payload_format_customer_type_with_no_token.json",
+            "tests/shared/sample/isg_account_in_payload_format_customer_type_with_no_token.json",
             "test_isg_account_in_payload_format_customer_type_no_token",
             1,
         ),
         (
-            "notebooks/sample/wm_party_in_payload_format_customer_type_without_carrier_tag.json",
+            "tests/shared/sample/wm_party_in_payload_format_customer_type_without_carrier_tag.json",
             "test_wm_party_in_payload_format_customer_type_without_carrier_tag",
             1,
         ),
         (
-            "notebooks/sample/isg_party_in_payload_format_with_01_entitytype.json",
+            "tests/shared/sample/isg_party_in_payload_format_with_01_entitytype.json",
             "test_lack_of_data_for_geo_agent",
             1,
         ),

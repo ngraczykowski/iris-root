@@ -107,7 +107,7 @@ def compare_tested_uds_categories_with_reference(tested_file, reference_file):  
     os.remove(tested_file)
 
 
-def load_alert(filepath: str = "notebooks/sample/wm_address_in_payload_format.json"):
+def load_alert(filepath: str = "tests/shared/sample/wm_address_in_payload_format.json"):
     with open(filepath, "r") as f:
         text = json.load(f)
         ids = [
@@ -131,7 +131,6 @@ class BaseGrpcTestCase:
         TIMEOUT = 10
 
         def setUp(self) -> None:
-
             category_files = glob("/tmp/categories_*")
             for i in category_files:
                 try:
@@ -201,7 +200,7 @@ class BaseGrpcTestCase:
         @pytest.mark.asyncio
         def test_cross_input_match_records(self):
             alert = load_alert(
-                "notebooks/sample/wm_address_in_payload_format_2_input_3_match_records.json"
+                "tests/shared/sample/wm_address_in_payload_format_2_input_3_match_records.json"
             )
             response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[alert]))
 
@@ -210,7 +209,9 @@ class BaseGrpcTestCase:
 
         @pytest.mark.asyncio
         def test_empty_supplemental_info(self):
-            alert = load_alert("notebooks/sample/wm_party_payload_without_supplemental_info.json")
+            alert = load_alert(
+                "tests/shared/sample/wm_party_payload_without_supplemental_info.json"
+            )
             response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[alert]))
 
             for alert in response.etl_alerts:
@@ -219,7 +220,7 @@ class BaseGrpcTestCase:
         @pytest.mark.asyncio
         def test_partial_supplemental_info(self):
             alert = load_alert(
-                "notebooks/sample/wm_party_payload_with_partial_supplemental_info.json"
+                "tests/shared/sample/wm_party_payload_with_partial_supplemental_info.json"
             )
             response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[alert]))
 
@@ -228,7 +229,7 @@ class BaseGrpcTestCase:
 
         @pytest.mark.asyncio
         def test_wm_party(self):
-            alert = load_alert("notebooks/sample/wm_party_in_payload_format.json")
+            alert = load_alert("tests/shared/sample/wm_party_in_payload_format.json")
             response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[alert]))
             for alert in response.etl_alerts:
                 assert alert.etl_status == SUCCESS
@@ -247,7 +248,7 @@ class BaseGrpcTestCase:
 
         @pytest.mark.asyncio
         async def test_ok_for_big_payload(self):
-            request_alert = load_alert("notebooks/sample/big_fat_flat_payload.json")
+            request_alert = load_alert("tests/shared/sample/big_fat_flat_payload.json")
             for match in request_alert.matches:
                 try:
                     os.remove(
@@ -273,7 +274,7 @@ class BaseGrpcTestCase:
         @pytest.mark.asyncio
         async def test_wm_party_in_payload_format_customer_type(self):
             request_alert = load_alert(
-                "notebooks/sample/wm_party_in_payload_format_customer_type.json"
+                "tests/shared/sample/wm_party_in_payload_format_customer_type.json"
             )
             response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[request_alert]))
             for etl_alert in response.etl_alerts:
@@ -287,7 +288,7 @@ class BaseGrpcTestCase:
         @pytest.mark.asyncio
         async def test_wm_party_in_payload_format_customer_type_individual(self):
             request_alert = load_alert(
-                "notebooks/sample/wm_party_in_payload_format_customer_type_individual.json"
+                "tests/shared/sample/wm_party_in_payload_format_customer_type_individual.json"
             )
             response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[request_alert]))
             for etl_alert in response.etl_alerts:
@@ -301,7 +302,7 @@ class BaseGrpcTestCase:
         @pytest.mark.asyncio
         async def test_isg_party_in_payload_format_customer_type_company(self):
             request_alert = load_alert(
-                "notebooks/sample/isg_party_in_payload_format_customer_type_company.json"
+                "tests/shared/sample/isg_party_in_payload_format_customer_type_company.json"
             )
             response = getattr(type(self), "stub").RunEtl(RunEtlRequest(alerts=[request_alert]))
             for etl_alert in response.etl_alerts:
@@ -322,7 +323,9 @@ class TestGrpcServerWithoutSSL(BaseGrpcTestCase.TestGrpcServer):
         cls.tearDownClass()
         environment = os.environ.copy()
         service_config = ConsulServiceConfig()
-        _ = subprocess.Popen("tests/scripts/start_services.sh", env=environment)
+        _ = subprocess.Popen(
+            "tests/scripts/start_services.sh --disable_learning".split(), env=environment
+        )
         channel = grpc.insecure_channel(
             f"{service_config.etl_service_ip}:{service_config.etl_service_port}"
         )

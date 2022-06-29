@@ -143,8 +143,8 @@ class AgentInputCreator:
                 )
                 break
             except (grpc.RpcError, AttributeError):
-                logger.error("No UDS response. Waiting 1s and try again")
-                time.sleep(1)
+                logger.error(f"No UDS response. Waiting 5ms and try again {os.getpid()}")
+                time.sleep(0.05)
                 self.connect_to_uds()
                 channel = self.initiate_channel(
                     self.service_config.data_source_input_endpoint, self.ssl
@@ -254,7 +254,7 @@ class AgentInputCreator:
             logger.warning(
                 f"Cannot connect to UDS on {self.service_config.data_source_input_endpoint} because of {error_message}. Reinitialize connection"
             )
-            time.sleep(5)
+            time.sleep(1)
             self.initialize_categories()
         response = (
             "Successfully fed"

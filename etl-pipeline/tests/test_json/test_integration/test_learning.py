@@ -29,7 +29,7 @@ from tests.test_json.constant import (
 from tests.test_json.test_json_pipeline import assert_nested_dict
 
 
-def load_alert(filepath: str = "notebooks/sample/wm_address_in_payload_format.json"):
+def load_alert(filepath: str = "tests/shared/sample/wm_address_in_payload_format.json"):
     with open(filepath, "r") as f:
         text = json.load(f)
         ids = [
@@ -42,7 +42,7 @@ def load_alert(filepath: str = "notebooks/sample/wm_address_in_payload_format.js
         alert = LearningAlert(batch_id="1", alert_name="alerts/2", learning_matches=matches_ids)
         for key, value in text.items():
             alert.flat_payload[str(key)] = str(value)
-    with open("notebooks/sample/event_history.json", "r") as f:
+    with open("tests/shared/sample/event_history.json", "r") as f:
         alert.alert_event_history = f.read()
     return alert
 
@@ -79,7 +79,9 @@ class TestGrpcServer(AsyncTestCase):
         cls.tearDownClass()
         environment = os.environ.copy()
         service_config = ConsulServiceConfig()
-        _ = subprocess.Popen("tests/scripts/start_services.sh", env=environment)
+        _ = subprocess.Popen(
+            "tests/scripts/start_services.sh --disable_solving".split(), env=environment
+        )
         channel = grpc.insecure_channel(
             f"{service_config.etl_service_ip}:{service_config.etl_service_port}"
         )
@@ -99,14 +101,14 @@ class TestGrpcServer(AsyncTestCase):
     @pytest.mark.rabbitmq
     async def test_ok_flow(self):
         await self.assert_request(
-            "notebooks/sample/wm_address_in_payload_format.json", HISTORICAL_DECISION_REQUEST
+            "tests/shared/sample/wm_address_in_payload_format.json", HISTORICAL_DECISION_REQUEST
         )
 
     @pytest.mark.asyncio
     @pytest.mark.rabbitmq
     async def test_empty_discriminator(self):
         await self.assert_request(
-            "notebooks/sample/wm_address_in_payload_format_two_marks.json",
+            "tests/shared/sample/wm_address_in_payload_format_two_marks.json",
             HISTORICAL_DECISION_REQUEST_WITHOUT_MARK,
         )
 
