@@ -26,7 +26,7 @@ platform-sep = "2.5.0"
 platform-spock = "2.1-groovy-3.0"
 platform-spring-boot = "2.6.9"
 platform-spring-cloud = "2021.0.3"
-platform-test-containers = "1.17.2"
+platform-test-containers = "1.17.3"
 
 #-----------------------------------
 # Others libraries
