@@ -29,8 +29,8 @@ agent:
   agent-exchange:
     request:
       exchange: 'agent.request'
-      routing-key: 'agents.EXAMPLE.versions.1_0_0.configs.1'
-      queue-name: 'agent.EXAMPLE-requests'
+      routing-key: 'agents.companyName.versions.1_0_0.configs.1'
+      queue-name: 'agent.companyname-requests'
       queue-durable: true
       queue-arguments:
         x-dead-letter-exchange: "companyname-agent-dead-letter-exchange"
