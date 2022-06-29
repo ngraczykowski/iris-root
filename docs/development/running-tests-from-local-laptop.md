@@ -2,6 +2,8 @@
 
 ## First we deploy custom environment
 
+Please refer to this [README.md](../../kubernetes/README.md) before proceding (to install required apps)
+
 ```bash
 #!/bin/bash
 #
@@ -13,8 +15,8 @@ ENVIRONMENT=$2
 REL=pp-tst-$ENVIRONMENT
 FULL_REL=$REL-$CHART
 HELM_SECRETS_DRIVER=vals helm secrets \
-  upgrade
-  --install
+  upgrade \
+  --install \
   --namespace $NAMESPACE \
   --create-namespace \
   --values values.core.yaml \

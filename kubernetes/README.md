@@ -51,6 +51,7 @@ Install `vals` from https://github.com/variantdev/vals (by fetching the binary)
 
 ```bash
 wget -qO- https://github.com/variantdev/vals/releases/download/v0.18.0/vals_0.18.0_linux_amd64.tar.gz | tar xvz vals
+mv vals /usr/local/bin/
 ```
 
 To install the chart, run the following command, replacing `<variables>` as documented below the command:
