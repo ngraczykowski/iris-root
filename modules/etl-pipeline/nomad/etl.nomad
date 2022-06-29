@@ -1,0 +1,126 @@
+variable "etl_pipeline_artifact" {
+  type = string
+  description = "The name of file containing artifact"
+}
+
+variable "namespace" {
+  type    = string
+  default = "mike"
+}
+
+job "etl-pipeline" {
+  type = "service"
+
+  datacenters = [
+    "dc1"
+  ]
+
+  namespace = "${var.namespace}"
+
+  update {
+    auto_revert = true
+  }
+
+  group "etl-pipeline" {
+    count = 4
+
+    network {
+      port "grpc" {
+        to = 9090
+      }
+    }
+    task "etl-pipeline" {
+      driver = "docker"
+
+      template {
+        data        = "{{ key \"${var.namespace}/etl_service/secrets\" }}"
+        destination = "secrets/etl_service.env"
+        env         = true
+      }
+
+      template {
+        data        = file("../config/pipeline/pipeline.yaml")
+        destination = "local/config/pipeline/pipeline.yaml"
+      }
+
+      template {
+        data        = file("../config/pipeline/flow.yaml")
+        destination = "local/config/pipeline/flow.yaml"
+      }
+
+      template {
+        data        = file("../config/service/service.nomad.yaml")
+        destination = "local/config/service/service.yaml"
+      }
+
+      template {
+        data        = file("../config/agents/features_and_categories.yaml")
+        destination = "local/config/agents/features_and_categories.yaml"
+      }
+
+      template {
+        data        = file("../config/agents/agents.yaml")
+        destination = "local/config/agents/agents.yaml"
+      }
+
+      template {
+        data        = file("./run_on_nomad.sh")
+        destination = "local/run_on_nomad.sh"
+      }
+
+      artifact {
+        source = var.etl_pipeline_artifact
+        mode        = "dir"
+        destination = "local/app/"
+      }
+
+      config {
+        image = "python:3.7"
+        command = "bash"
+        args = concat(["/app/run_on_nomad.sh"])
+        network_mode = "host"
+        volumes = ["local:/app"]
+      }
+
+      constraint {
+            attribute = "${node.unique.name}"
+            value = "eu3"
+      }
+      
+
+      service {
+        name = "${var.namespace}-etl-pipeline"
+        port = "grpc"
+        tags = [
+          "grpc",
+          # FIXME(ahaczewski): Remove when Consul Discovery can filter through results based on tags.
+          "gRPC.port=${NOMAD_PORT_grpc}",
+        ]
+
+        check {
+          name = "gRPC Port Alive Check"
+          type = "tcp"
+          interval = "30s"
+          timeout = "10s"
+        }
+      }
+      # Dummy registration of a service required for Spring Consul Discovery.
+      # FIXME(ahaczewski): Remove when Consul Discovery can filter through results based on tags.
+      service {
+        name = "${var.namespace}-grpc-etl-pipeline"
+        port = "grpc"
+        tags = [
+          "grpc",
+          "gRPC.port=${NOMAD_PORT_grpc}",
+        ]
+      }
+
+      resources {
+        cpu    = 2048
+        # MHz
+        memory = 2048
+        # MB
+      }
+    }
+  }
+}

@@ -1,0 +1,69 @@
+// Copyright 2022 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package silenteight.datascience.etllearning.v1.api;
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+
+option java_package = "com.silenteight.datascience.etllearning.v1.api";
+option java_outer_classname = "EtlLearningApiProto";
+option java_multiple_files = true;
+
+service EtlLearningService {
+
+  rpc RunEtlLearning (RunEtlLearningRequest) returns (RunEtlLearningResponse) {
+    option (google.api.http) = {
+      post: "/v1/etl:runEtlLearning"
+      body: "runEtlLearning"
+    };
+  }
+}
+
+message RunEtlLearningRequest {
+  repeated LearningAlert learning_alerts = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message LearningAlert {
+  // Client-assigned identifier of the batch.
+  string batch_id = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Adjudication Engine-assigned identifier of the alert.
+  string alert_name = 2 [(google.api.field_behavior) = REQUIRED];
+
+  repeated LearningMatch learning_matches = 3 [(google.api.field_behavior) = REQUIRED];
+
+  // Alert payload in a flattened JSON format.
+  map<string, string> flat_payload = 4 [(google.api.field_behavior) = REQUIRED];
+
+  // Alert event history data in a JSON format.
+  string alert_event_history = 5 [(google.api.field_behavior) = REQUIRED];
+}
+
+message LearningMatch {
+  // Client-assigned identifier of the match. Must be unique within the parent alert.
+  string match_id = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Adjudication Engine-assigned identifier of the match. Must be unique within the parent alert.
+  string match_name = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message RunEtlLearningResponse {
+  repeated EtlLearningAlert etl_alerts = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message EtlLearningAlert {
+  // Client-assigned identifier of the batch.
+  string batch_id = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // Client-assigned identifier of the alert.
+  string alert_id = 2 [(google.api.field_behavior) = REQUIRED];
+
+  EtlStatus etl_status = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+enum EtlStatus {
+  FAILURE = 0;
+  SUCCESS = 1;
+}

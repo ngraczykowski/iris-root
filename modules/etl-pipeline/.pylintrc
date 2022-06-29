@@ -1,0 +1,5 @@
+disable=
+    attribute-defined-outside-init,
+    duplicate-code,
+    invalid-name,
+    missing-docstring

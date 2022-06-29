@@ -1,0 +1,2536 @@
+[
+    {
+        "AP_ACCOUNT_BENEFICIARY_NAMES": [
+            "Eva Pladimirova",
+            "Pladimir Vutin"
+        ],
+        "AP_ACCOUNT_BRANCH_ACCOUNT_NUMBERS": [
+            "234_142529",
+            "234_142529"
+        ],
+        "AP_ACCOUNT_NAMES": [
+            "Eva Pladimirova",
+            "Pladimir Vutin"
+        ],
+                "AP_COUNTRY_OF_INCORPORATION": [],
+        "AP_GOVT_IDS": [],
+        "AP_PARTIES_NAMES": [
+            "Eva Pladimirova",
+            "Pladimir Vutin"
+        ],
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        "AP_PARTY_BIRTH_COUNTRIES": [],
+        "AP_PARTY_CITIZENSHIP_COUNTRIES": [
+            "United States",
+            "United States"
+        ],
+        "AP_PARTY_NAMES": [
+            "Eva Pladimirova",
+            "Pladimir Vutin"
+        ],
+        "AP_PARTY_RESIDENCY_COUNTRIES": [],
+        
+        
+        "AP_TAX_IDS": [
+            "022368917",
+            "154421273"
+        ],
+        "alertedParty": {
+            "AP_DOB": [
+                "02/31/1900",
+                "04/31/1910"
+            ],
+            "AP_PARTY_TYPE": "I",
+            "AP_PARTY_TYPES": [
+                "Individual",
+                "Individual"
+            ],
+            "ENTITY_TYPE_MATCH": "Y",
+            "employer_party_type": "C",
+            "headerInfo": {
+                "currentVersionId": "122438658",
+                "datasetId": "1044",
+                "datasetName": "R_US_Active_Address",
+                "firstVersionCreatedDt": "2020-01-08T09:31:30.264-05:00",
+                "inputVersionSample": "R_US_Active_Address_A05003324172_2020-01-07-07.06.",
+                "lastVersionUpdatedDt": "2020-01-08T09:31:30.264-05:00",
+                "masterId": "72951854",
+                "masterVersion": "412740c151535f0756e8dbec7440b726c7a3e135",
+                "stopDescriptors": {
+                    "stopDescriptor": {
+                        "name": "Joe Doe"
+                    }
+                },
+                "uniqueCustomerId": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480"
+            },
+            "inputRecordHist": {
+                "inputRecords": {
+                    "INPUT_FIELD": {
+                        "ADDRESS1_CITY": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_CITY",
+                            "sortOrder": "14",
+                            "value": ""
+                        },
+                        "ADDRESS1_COUNTRY": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_COUNTRY",
+                            "sortOrder": "20",
+                            "value": "UNITED STATES OF AMERICA"
+                        },
+                        "ADDRESS1_COUNTRYCODE": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_COUNTRYCODE",
+                            "sortOrder": "21",
+                            "value": "USA"
+                        },
+                        "ADDRESS1_FOREIGNDOMESTICCODE": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_FOREIGNDOMESTICCODE",
+                            "sortOrder": "22",
+                            "value": "DOMESTIC"
+                        },
+                        "ADDRESS1_LINE1": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE1",
+                            "sortOrder": "7",
+                            "value": "Joe Black &"
+                        },
+                        "ADDRESS1_LINE2": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE2",
+                            "sortOrder": "8",
+                            "value": "Jane Doe AA BBB"
+                        },
+                        "ADDRESS1_LINE3": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE3",
+                            "sortOrder": "9",
+                            "value": "111 A 11TH ST AAA 1A"
+                        },
+                        "ADDRESS1_LINE4": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE4",
+                            "sortOrder": "10",
+                            "value": "New Jersey NJ 10011"
+                        },
+                        "ADDRESS1_LINE5": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE5",
+                            "sortOrder": "11",
+                            "value": ""
+                        },
+                        "ADDRESS1_LINE6": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE6",
+                            "sortOrder": "12",
+                            "value": ""
+                        },
+                        "ADDRESS1_POSTALCODE": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_POSTALCODE",
+                            "sortOrder": "17",
+                            "value": ""
+                        },
+                        "ADDRESS1_PROVINCE": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_PROVINCE",
+                            "sortOrder": "16",
+                            "value": ""
+                        },
+                        "ADDRESS1_STATE": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_STATE",
+                            "sortOrder": "15",
+                            "value": ""
+                        },
+                        "ADDRESS1_ZIP4": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_ZIP4",
+                            "sortOrder": "19",
+                            "value": ""
+                        },
+                        "ADDRESS1_ZIP5": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_ZIP5",
+                            "sortOrder": "18",
+                            "value": ""
+                        },
+                        "ADDRESS_TYPE": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS_TYPE",
+                            "sortOrder": "4",
+                            "value": "Plating Address"
+                        },
+                        "ATTENTION_TO_TEXT": {
+                            "isScreenable": "true",
+                            "name": "ATTENTION_TO_TEXT",
+                            "sortOrder": "6",
+                            "value": ""
+                        },
+                        "BARCODE": {
+                            "isScreenable": "false",
+                            "name": "BARCODE",
+                            "sortOrder": "3",
+                            "value": ""
+                        },
+                        "CARE_OF_TEXT": {
+                            "isScreenable": "true",
+                            "name": "CARE_OF_TEXT",
+                            "sortOrder": "5",
+                            "value": ""
+                        },
+                        "CONCAT_ADDRESS": {
+                            "isScreenable": "true",
+                            "name": "CONCAT_ADDRESS",
+                            "sortOrder": "13",
+                            "value": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
+                        },
+                        "SOURCE_REF": {
+                            "isScreenable": "false",
+                            "name": "SOURCE_REF",
+                            "sortOrder": "1",
+                            "value": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480"
+                        },
+                        "UNIQUE_KEY": {
+                            "isScreenable": "false",
+                            "name": "UNIQUE_KEY",
+                            "sortOrder": "2",
+                            "value": "A05003324172"
+                        }
+                    },
+                    "createdDate": "01/08/20",
+                    "fields": [
+                        {
+                            "isScreenable": "false",
+                            "name": "SOURCE_REF",
+                            "sortOrder": "1",
+                            "value": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480"
+                        },
+                        {
+                            "isScreenable": "false",
+                            "name": "UNIQUE_KEY",
+                            "sortOrder": "2",
+                            "value": "A05003324172"
+                        },
+                        {
+                            "isScreenable": "false",
+                            "name": "BARCODE",
+                            "sortOrder": "3"
+                        },
+                        {
+                            "isScreenable": "false",
+                            "name": "ADDRESS_TYPE",
+                            "sortOrder": "4",
+                            "value": "Plating Address"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "CARE_OF_TEXT",
+                            "sortOrder": "5"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ATTENTION_TO_TEXT",
+                            "sortOrder": "6"
+                        },
+                        {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE1",
+                            "sortOrder": "7",
+                            "value": "Joe Black &"
+                        },
+                        {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE2",
+                            "sortOrder": "8",
+                            "value": "Jane Doe AA BBB"
+                        },
+                        {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE3",
+                            "sortOrder": "9",
+                            "value": "111 A 11TH ST AAA 1A"
+                        },
+                        {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE4",
+                            "sortOrder": "10",
+                            "value": "New Jersey NJ 10011"
+                        },
+                        {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE5",
+                            "sortOrder": "11"
+                        },
+                        {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE6",
+                            "sortOrder": "12"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "CONCAT_ADDRESS",
+                            "sortOrder": "13",
+                            "value": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_CITY",
+                            "sortOrder": "14"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_STATE",
+                            "sortOrder": "15"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_PROVINCE",
+                            "sortOrder": "16"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_POSTALCODE",
+                            "sortOrder": "17"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_ZIP5",
+                            "sortOrder": "18"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_ZIP4",
+                            "sortOrder": "19"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_COUNTRY",
+                            "sortOrder": "20",
+                            "value": "UNITED STATES OF AMERICA"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_COUNTRYCODE",
+                            "sortOrder": "21",
+                            "value": "USA"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_FOREIGNDOMESTICCODE",
+                            "sortOrder": "22",
+                            "value": "DOMESTIC"
+                        }
+                    ],
+                    "masterId": "72951854",
+                    "status": "A",
+                    "uniqueCustId": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480",
+                    "version": "412740c151535f0756e8dbec7440b726c7a3e135",
+                    "versionId": "123"
+                }
+            },
+            "supplementalInfo": {
+                "alertId": "SANC-ASM-6434404",
+                "busDate": "20211127",
+                "datasetName": "R_US_Active_Address",
+                "relatedAccounts": {
+                    "accounts": [
+                        {
+                            "CONNECTED_FULL_NAME": "Pladimir Vutin",
+                            "beneficiaryName": "Pladimir Vutin",
+                            "branchAccountNumber": "234_142529",
+                            "firstName": "Pladimir",
+                            "lastName": "Vutin",
+                            "srcSystemAccountKey": "2021-01-29-13.44.57.093694"
+                        },
+                        {
+                            "CONNECTED_FULL_NAME": "Eva Pladimirova",
+                            "beneficiaryName": "Eva Pladimirova",
+                            "branchAccountNumber": "234_142529",
+                            "firstName": "Eva",
+                            "lastName": "Pladimirova",
+                            "srcSystemAccountKey": "2021-01-29-13.44.57.093694"
+                        }
+                    ]
+                },
+                "relatedParties": {
+                    "party": [
+                        {
+                            "CONNECTED_FULL_NAME": "Pladimir Vutin",
+                            "countryOfIncorporation": null,
+                            "dobDate": "02/31/1900",
+                            "partyCountryOfBirth": null,
+                            "partyFirstName": "Pladimir",
+                            "partyId": "0002712291",
+                            "partyLastName": "Vutin",
+                            "partyMiddleName": null,
+                            "partyName": "Pladimir Vutin",
+                            "partyPrimaryCitizenshipCountry": "United States",
+                            "partyResidenceCountry": "United States",
+                            "partyType": "Individual",
+                            "taxId": "154421273",
+                            "taxIdType": "SSN"
+                        },
+                        {
+                            "CONNECTED_FULL_NAME": "Eva Pladimirova",
+                            "countryOfIncorporation": null,
+                            "dobDate": "04/31/1910",
+                            "partyCountryOfBirth": null,
+                            "partyFirstName": "Eva",
+                            "partyId": "0004727489",
+                            "partyLastName": "Pladimirova",
+                            "partyMiddleName": null,
+                            "partyName": "Eva Pladimirova",
+                            "partyPrimaryCitizenshipCountry": "United States",
+                            "partyResidenceCountry": "United States",
+                            "partyType": "Individual",
+                            "taxId": "022368917",
+                            "taxIdType": "SSN"
+                        }
+                    ]
+                },
+                "uniqueCustId": "R_US_Active_Address_A00170086018_2018-08-28-18.45.50.012201"
+            }
+        },
+        "cleaned_names": {
+            "concat_residue": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
+        },
+        "concat_address_no_changes": true,
+        "concat_residue": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ",
+        "datasetType": "WM_ADDRESS",
+        "match_ids": {
+            "match_id": "49159509",
+            "match_name": "dummy"
+        },
+        "watchlistParty": {
+            "matchRecords": {
+                "AP_TRIGGERS": {
+                    "Doe": {
+                        "ADDRESS1_LINE2": [
+                            "Jane Doe AA BBB"
+                        ],
+                        "CONCAT_ADDRESS": [
+                            "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
+                        ]
+                    }
+                },
+                "ENTITY_ID": "908043",
+                "ENTITY_VERSION": "20150505194929",
+                "IS_BENEFICIARY_HIT": false,
+                "SRC_REF_KEY": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480\n      ",
+                "TOKENS_RISK_CARRIER": "Doe",
+                "TRIGGERED_BY": [
+                    "matchStatus",
+                    "stopDescriptors"
+                ],
+                "VERSION_ID": "123",
+                "WLP_TYPE": "I",
+                "WL_ALIASES": [
+                    ""
+                ],
+                "WL_CITIZENSHIP": [
+                    ""
+                ],
+                "WL_COUNTRY": "US|FL;US",
+                "WL_COUNTRYNAME": "United States of America",
+                "WL_DOB": [
+                    "",
+                    "MAY 6, 1981"
+                ],
+                "WL_DOCUMENT_NUMBER": [],
+                "WL_ENTITYTYPE": "03",
+                "WL_MATCHED_TOKENS": "[\"Doe\"]",
+                "WL_NAME": "Joe Ding",
+                "WL_NATIONALITY": [
+                    ""
+                ],
+                "WL_POB": [
+                    ""
+                ],
+                "accountSeq": "1",
+                "all_hit_type_aggregated": [
+                    {
+                        "address": [
+                            "ADDRESS1_CITY",
+                            "ADDRESS1_COUNTRY",
+                            "ADDRESS1_PROVINCE",
+                            "ADDRESS1_STATE",
+                            "CONCAT_ADDRESS"
+                        ],
+                        "job": [],
+                        "name": [],
+                        "other": []
+                    }
+                ],
+                "ap_all_ap_id_tp_markeds_aggregated": [],
+                "ap_all_ap_name_tp_markeds_aggregated": [],
+                "ap_all_company_names_aggregated": [
+                    "Eva Pladimirova",
+                    "Pladimir Vutin"
+                ],
+                "ap_all_dobs_aggregated": [
+                    "02/31/1900",
+                    "04/31/1910"
+                ],
+                "ap_all_documents_aggregated": [
+                    "022368917",
+                    "154421273"
+                ],
+                "ap_all_employer_names_aggregated": [],
+                "ap_all_hit_types_aggregated": [],
+                "ap_all_names_aggregated": [
+                    "Eva Pladimirova",
+                    "Pladimir Vutin"
+                ],
+                "ap_all_nationalities_aggregated": [
+                    "UNITED STATES OF AMERICA",
+                    "United States"
+                ],
+                "ap_all_party_types_aggregated": [
+                    "Individual"
+                ],
+                "ap_all_pobs_aggregated": [
+                    "United States"
+                ],
+                "ap_all_residencies_aggregated": [
+                    "UNITED STATES OF AMERICA",
+                    "United States"
+                ],
+                "ap_all_sanctioned_countries_aggregated": [
+                    "UNITED STATES OF AMERICA",
+                    "United States"
+                ],
+                "ap_all_tokens_tp_markeds_aggregated": [],
+                "ap_id_tp_marked_agent_input": "A05003324172",
+                "ap_name_tp_marked_agent_input": null,
+                "company_name_agent_ap": [
+                    null,
+                    [
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
+                    ],
+                    [
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
+                    ],
+                    [
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
+                    ],
+                    [
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
+                    ],
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                "company_name_agent_wl": [
+                    "Joe Ding",
+                    [
+                        ""
+                    ]
+                ],
+                "datasetId": "1044",
+                "datasetType": "WM_ADDRESS",
+                "dob_agent_ap": [
+                    "02/31/1900",
+                    "04/31/1910"
+                ],
+                "dob_agent_wl": [
+                    "",
+                    "MAY 6, 1981"
+                ],
+                "document_agent_ap": [
+                    [
+                        "022368917",
+                        "154421273"
+                    ],
+                    [],
+                    null,
+                    null
+                ],
+                "document_agent_wl": null,
+                "employer_name_agent_ap": [
+                    null,
+                    null
+                ],
+                "employer_name_agent_wl": [
+                    "Joe Ding",
+                    [
+                        ""
+                    ]
+                ],
+                "entity": {
+                    "addresses": [
+                        {
+                            "address1": "111 STREET 999",
+                            "address2": "FL;US",
+                            "city": "ATLANTA",
+                            "country": "US",
+                            "countryName": "United States of America",
+                            "postalCode": "11111"
+                        }
+                    ],
+                    "createdDate": "10/16/2018",
+                    "dobs": [
+                        {
+                            "dob": "MAY 6, 1981"
+                        }
+                    ],
+                    "entityType": "03",
+                    "id": "908049",
+                    "ids": null,
+                    "lastUpdateDate": "04/19/2019",
+                    "listCode": "-1003",
+                    "listId": "15991",
+                    "name": "Joe Ding",
+                    "programs": [
+                        {
+                            "type": "MSSBGWM"
+                        }
+                    ],
+                    "sdfs": {
+                        "sdf": [
+                            "05/05/2015 19:49:26",
+                            "N/A",
+                            "N/A",
+                            "N/A",
+                            "N/A",
+                            "N/A",
+                            "PLEASE CALL AML HOT LINE AT 212 762 8000 AND REF CI-079385"
+                        ]
+                    },
+                    "source": "CON",
+                    "version": "20150505194929"
+                },
+                "entityId": "908043",
+                "entityTextType": "UPID",
+                "entityType": "03",
+                "entityVersion": "20150505194929",
+                "firstMatchedDate": "01/08/20",
+                "hit_type_agent_address": [
+                    "ADDRESS1_CITY",
+                    "ADDRESS1_COUNTRY",
+                    "ADDRESS1_PROVINCE",
+                    "ADDRESS1_STATE",
+                    "CONCAT_ADDRESS"
+                ],
+                "hit_type_agent_job": [],
+                "hit_type_agent_name": [],
+                "hit_type_agent_other": [],
+                "inputVersionId": "123",
+                "lastMatchedDate": "01/08/20",
+                "lastReviewDate": "01/08/20",
+                "masterId": "72951854",
+                "masterVersion": "412740c151535f0756e8dbec7440b726c7a3e135",
+                "matchId": "49159509",
+                "matchStatus": "O",
+                "matchType": "GWL",
+                "name_agent_ap": [
+                    null,
+                    [
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
+                    ],
+                    [
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
+                    ],
+                    [
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
+                    ],
+                    [
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
+                    ],
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                "name_agent_wl": [
+                    "Joe Ding",
+                    [
+                        ""
+                    ]
+                ],
+                "nationality_agent_ap": [
+                    "UNITED STATES OF AMERICA",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    [],
+                    [
+                        "United States",
+                        "United States"
+                    ],
+                    [],
+                    []
+                ],
+                "nationality_agent_wl": [
+                    [
+                        ""
+                    ],
+                    [
+                        ""
+                    ],
+                    [
+                        ""
+                    ],
+                    "US|FL;US",
+                    "United States of America"
+                ],
+                "party_type_agent_ap": [
+                    "Individual",
+                    "Individual"
+                ],
+                "party_type_agent_wl": "I",
+                "pob_agent_ap": [
+                    [],
+                    [
+                        "United States",
+                        "United States"
+                    ],
+                    null,
+                    []
+                ],
+                "pob_agent_wl": [
+                    "US|FL;US",
+                    "United States of America",
+                    [
+                        ""
+                    ],
+                    [
+                        ""
+                    ]
+                ],
+                "residency_agent_ap": [
+                    "UNITED STATES OF AMERICA",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    [],
+                    [
+                        "United States",
+                        "United States"
+                    ],
+                    [],
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                "residency_agent_wl": [
+                    "US|FL;US",
+                    "United States of America"
+                ],
+                "riskScore": "-1.0",
+                "sanctioned_country_agent_ap": [
+                    "UNITED STATES OF AMERICA",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    [],
+                    [
+                        "United States",
+                        "United States"
+                    ],
+                    [],
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                "sanctioned_country_agent_wl": [
+                    "Joe Ding",
+                    "US|FL;US",
+                    "United States of America"
+                ],
+                "sourceCode": "CON",
+                "stopDescriptors": [
+                    {
+                        "name": "Joe Doe",
+                        "stopDescriptorDetails": [
+                            {
+                                "inputSynonym": null,
+                                "inputToken": "Doe",
+                                "matchScore": "0.8571428571428572",
+                                "sdToken": "Doe"
+                            }
+                        ],
+                        "totalMatchScore": "0.9230769230769231"
+                    }
+                ],
+                "tokens_tp_marked_agent_input": "Doe",
+                "uniqueCustomerId": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480\n      ",
+                "wl_all_ap_id_tp_markeds_aggregated": [],
+                "wl_all_ap_name_tp_markeds_aggregated": [],
+                "wl_all_company_names_aggregated": [
+                    "Joe Ding"
+                ],
+                "wl_all_dobs_aggregated": [
+                    "MAY 6, 1981"
+                ],
+                "wl_all_documents_aggregated": [],
+                "wl_all_employer_names_aggregated":["Joe Ding"],
+                "wl_all_hit_types_aggregated": [],
+                "wl_all_names_aggregated": [
+                    "Joe Ding"
+                ],
+                "wl_all_nationalities_aggregated": [
+                    "US|FL;US",
+                    "United States of America"
+                ],
+                "wl_all_party_types_aggregated": [
+                    "I"
+                ],
+                "wl_all_pobs_aggregated": [
+                    "US|FL;US",
+                    "United States of America"
+                ],
+                "wl_all_residencies_aggregated": [
+                    "US|FL;US",
+                    "United States of America"
+                ],
+                "wl_all_sanctioned_countries_aggregated": [],
+                "wl_all_tokens_tp_markeds_aggregated": []
+            }
+        }
+    },
+    {
+        "AP_ACCOUNT_BENEFICIARY_NAMES": [
+            "Eva Pladimirova",
+            "Pladimir Vutin"
+        ],
+        "AP_ACCOUNT_BRANCH_ACCOUNT_NUMBERS": [
+            "234_142529",
+            "234_142529"
+        ],
+        "AP_ACCOUNT_NAMES": [
+            "Eva Pladimirova",
+            "Pladimir Vutin"
+        ],
+                "AP_COUNTRY_OF_INCORPORATION": [],
+        "AP_GOVT_IDS": [],
+        "AP_PARTIES_NAMES": [
+            "Eva Pladimirova",
+            "Pladimir Vutin"
+        ],
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        "AP_PARTY_BIRTH_COUNTRIES": [],
+        "AP_PARTY_CITIZENSHIP_COUNTRIES": [
+            "United States",
+            "United States"
+        ],
+        "AP_PARTY_NAMES": [
+            "Eva Pladimirova",
+            "Pladimir Vutin"
+        ],
+        "AP_PARTY_RESIDENCY_COUNTRIES": [],
+        
+        
+        "AP_TAX_IDS": [
+            "022368917",
+            "154421273"
+        ],
+        "alertedParty": {
+            "AP_DOB": [
+                "02/31/1900",
+                "04/31/1910"
+            ],
+            "AP_PARTY_TYPE": "I",
+            "AP_PARTY_TYPES": [
+                "Individual",
+                "Individual"
+            ],
+            "ENTITY_TYPE_MATCH": "Y",
+            "employer_party_type": "C",
+            "headerInfo": {
+                "currentVersionId": "122438658",
+                "datasetId": "1044",
+                "datasetName": "R_US_Active_Address",
+                "firstVersionCreatedDt": "2020-01-08T09:31:30.264-05:00",
+                "inputVersionSample": "R_US_Active_Address_A05003324172_2020-01-07-07.06.",
+                "lastVersionUpdatedDt": "2020-01-08T09:31:30.264-05:00",
+                "masterId": "72951854",
+                "masterVersion": "412740c151535f0756e8dbec7440b726c7a3e135",
+                "stopDescriptors": {
+                    "stopDescriptor": {
+                        "name": "Joe Doe"
+                    }
+                },
+                "uniqueCustomerId": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480"
+            },
+            "inputRecordHist": {
+                "inputRecords": {
+                    "INPUT_FIELD": {
+                        "ADDRESS1_CITY": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_CITY",
+                            "sortOrder": "14",
+                            "value": ""
+                        },
+                        "ADDRESS1_COUNTRY": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_COUNTRY",
+                            "sortOrder": "20",
+                            "value": "UNITED STATES OF AMERICA"
+                        },
+                        "ADDRESS1_COUNTRYCODE": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_COUNTRYCODE",
+                            "sortOrder": "21",
+                            "value": "USA"
+                        },
+                        "ADDRESS1_FOREIGNDOMESTICCODE": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_FOREIGNDOMESTICCODE",
+                            "sortOrder": "22",
+                            "value": "DOMESTIC"
+                        },
+                        "ADDRESS1_LINE1": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE1",
+                            "sortOrder": "7",
+                            "value": "Joe Black &"
+                        },
+                        "ADDRESS1_LINE2": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE2",
+                            "sortOrder": "8",
+                            "value": "Jane Doe AA BBB"
+                        },
+                        "ADDRESS1_LINE3": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE3",
+                            "sortOrder": "9",
+                            "value": "111 A 11TH ST AAA 1A"
+                        },
+                        "ADDRESS1_LINE4": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE4",
+                            "sortOrder": "10",
+                            "value": "New Jersey NJ 10011"
+                        },
+                        "ADDRESS1_LINE5": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE5",
+                            "sortOrder": "11",
+                            "value": ""
+                        },
+                        "ADDRESS1_LINE6": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE6",
+                            "sortOrder": "12",
+                            "value": ""
+                        },
+                        "ADDRESS1_POSTALCODE": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_POSTALCODE",
+                            "sortOrder": "17",
+                            "value": ""
+                        },
+                        "ADDRESS1_PROVINCE": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_PROVINCE",
+                            "sortOrder": "16",
+                            "value": ""
+                        },
+                        "ADDRESS1_STATE": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_STATE",
+                            "sortOrder": "15",
+                            "value": ""
+                        },
+                        "ADDRESS1_ZIP4": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_ZIP4",
+                            "sortOrder": "19",
+                            "value": ""
+                        },
+                        "ADDRESS1_ZIP5": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_ZIP5",
+                            "sortOrder": "18",
+                            "value": ""
+                        },
+                        "ADDRESS_TYPE": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS_TYPE",
+                            "sortOrder": "4",
+                            "value": "Plating Address"
+                        },
+                        "ATTENTION_TO_TEXT": {
+                            "isScreenable": "true",
+                            "name": "ATTENTION_TO_TEXT",
+                            "sortOrder": "6",
+                            "value": ""
+                        },
+                        "BARCODE": {
+                            "isScreenable": "false",
+                            "name": "BARCODE",
+                            "sortOrder": "3",
+                            "value": ""
+                        },
+                        "CARE_OF_TEXT": {
+                            "isScreenable": "true",
+                            "name": "CARE_OF_TEXT",
+                            "sortOrder": "5",
+                            "value": ""
+                        },
+                        "CONCAT_ADDRESS": {
+                            "isScreenable": "true",
+                            "name": "CONCAT_ADDRESS",
+                            "sortOrder": "13",
+                            "value": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
+                        },
+                        "SOURCE_REF": {
+                            "isScreenable": "false",
+                            "name": "SOURCE_REF",
+                            "sortOrder": "1",
+                            "value": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480"
+                        },
+                        "UNIQUE_KEY": {
+                            "isScreenable": "false",
+                            "name": "UNIQUE_KEY",
+                            "sortOrder": "2",
+                            "value": "A05003324172"
+                        }
+                    },
+                    "createdDate": "01/08/20",
+                    "fields": [
+                        {
+                            "isScreenable": "false",
+                            "name": "SOURCE_REF",
+                            "sortOrder": "1",
+                            "value": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480"
+                        },
+                        {
+                            "isScreenable": "false",
+                            "name": "UNIQUE_KEY",
+                            "sortOrder": "2",
+                            "value": "A05003324172"
+                        },
+                        {
+                            "isScreenable": "false",
+                            "name": "BARCODE",
+                            "sortOrder": "3"
+                        },
+                        {
+                            "isScreenable": "false",
+                            "name": "ADDRESS_TYPE",
+                            "sortOrder": "4",
+                            "value": "Plating Address"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "CARE_OF_TEXT",
+                            "sortOrder": "5"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ATTENTION_TO_TEXT",
+                            "sortOrder": "6"
+                        },
+                        {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE1",
+                            "sortOrder": "7",
+                            "value": "Joe Black &"
+                        },
+                        {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE2",
+                            "sortOrder": "8",
+                            "value": "Jane Doe AA BBB"
+                        },
+                        {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE3",
+                            "sortOrder": "9",
+                            "value": "111 A 11TH ST AAA 1A"
+                        },
+                        {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE4",
+                            "sortOrder": "10",
+                            "value": "New Jersey NJ 10011"
+                        },
+                        {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE5",
+                            "sortOrder": "11"
+                        },
+                        {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE6",
+                            "sortOrder": "12"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "CONCAT_ADDRESS",
+                            "sortOrder": "13",
+                            "value": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_CITY",
+                            "sortOrder": "14"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_STATE",
+                            "sortOrder": "15"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_PROVINCE",
+                            "sortOrder": "16"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_POSTALCODE",
+                            "sortOrder": "17"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_ZIP5",
+                            "sortOrder": "18"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_ZIP4",
+                            "sortOrder": "19"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_COUNTRY",
+                            "sortOrder": "20",
+                            "value": "UNITED STATES OF AMERICA"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_COUNTRYCODE",
+                            "sortOrder": "21",
+                            "value": "USA"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_FOREIGNDOMESTICCODE",
+                            "sortOrder": "22",
+                            "value": "DOMESTIC"
+                        }
+                    ],
+                    "masterId": "72951854",
+                    "status": "A",
+                    "uniqueCustId": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480",
+                    "version": "412740c151535f0756e8dbec7440b726c7a3e135",
+                    "versionId": "122438659"
+                }
+            },
+            "supplementalInfo": {
+                "alertId": "SANC-ASM-6434404",
+                "busDate": "20211127",
+                "datasetName": "R_US_Active_Address",
+                "relatedAccounts": {
+                    "accounts": [
+                        {
+                            "CONNECTED_FULL_NAME": "Pladimir Vutin",
+                            "beneficiaryName": "Pladimir Vutin",
+                            "branchAccountNumber": "234_142529",
+                            "firstName": "Pladimir",
+                            "lastName": "Vutin",
+                            "srcSystemAccountKey": "2021-01-29-13.44.57.093694"
+                        },
+                        {
+                            "CONNECTED_FULL_NAME": "Eva Pladimirova",
+                            "beneficiaryName": "Eva Pladimirova",
+                            "branchAccountNumber": "234_142529",
+                            "firstName": "Eva",
+                            "lastName": "Pladimirova",
+                            "srcSystemAccountKey": "2021-01-29-13.44.57.093694"
+                        }
+                    ]
+                },
+                "relatedParties": {
+                    "party": [
+                        {
+                            "CONNECTED_FULL_NAME": "Pladimir Vutin",
+                            "countryOfIncorporation": null,
+                            "dobDate": "02/31/1900",
+                            "partyCountryOfBirth": null,
+                            "partyFirstName": "Pladimir",
+                            "partyId": "0002712291",
+                            "partyLastName": "Vutin",
+                            "partyMiddleName": null,
+                            "partyName": "Pladimir Vutin",
+                            "partyPrimaryCitizenshipCountry": "United States",
+                            "partyResidenceCountry": "United States",
+                            "partyType": "Individual",
+                            "taxId": "154421273",
+                            "taxIdType": "SSN"
+                        },
+                        {
+                            "CONNECTED_FULL_NAME": "Eva Pladimirova",
+                            "countryOfIncorporation": null,
+                            "dobDate": "04/31/1910",
+                            "partyCountryOfBirth": null,
+                            "partyFirstName": "Eva",
+                            "partyId": "0004727489",
+                            "partyLastName": "Pladimirova",
+                            "partyMiddleName": null,
+                            "partyName": "Eva Pladimirova",
+                            "partyPrimaryCitizenshipCountry": "United States",
+                            "partyResidenceCountry": "United States",
+                            "partyType": "Individual",
+                            "taxId": "022368917",
+                            "taxIdType": "SSN"
+                        }
+                    ]
+                },
+                "uniqueCustId": "R_US_Active_Address_A00170086018_2018-08-28-18.45.50.012201"
+            }
+        },
+        "cleaned_names": {
+            "concat_residue": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
+        },
+        "concat_address_no_changes": true,
+        "concat_residue": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ",
+        "datasetType": "WM_ADDRESS",
+        "match_ids": {
+            "match_id": "49159509",
+            "match_name": "dummy"
+        },
+        "watchlistParty": {
+            "matchRecords": {
+                "AP_TRIGGERS": {
+                    "Doe": {
+                        "ADDRESS1_LINE2": [
+                            "Jane Doe AA BBB"
+                        ],
+                        "CONCAT_ADDRESS": [
+                            "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
+                        ]
+                    }
+                },
+                "ENTITY_ID": "908043",
+                "ENTITY_VERSION": "20150505194929",
+                "IS_BENEFICIARY_HIT": false,
+                "SRC_REF_KEY": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480\n      ",
+                "TOKENS_RISK_CARRIER": "Doe",
+                "TRIGGERED_BY": [
+                    "matchStatus",
+                    "stopDescriptors"
+                ],
+                "VERSION_ID": "122438659",
+                "WLP_TYPE": "I",
+                "WL_ALIASES": [
+                    ""
+                ],
+                "WL_CITIZENSHIP": [
+                    ""
+                ],
+                "WL_COUNTRY": "US|FL;US",
+                "WL_COUNTRYNAME": "United States of America",
+                "WL_DOB": [
+                    "",
+                    "MAY 6, 1981"
+                ],
+                "WL_DOCUMENT_NUMBER": [],
+                "WL_ENTITYTYPE": "03",
+                "WL_MATCHED_TOKENS": "[\"Doe\"]",
+                "WL_NAME": "Joe Ding",
+                "WL_NATIONALITY": [
+                    ""
+                ],
+                "WL_POB": [
+                    ""
+                ],
+                "accountSeq": "1",
+                "all_hit_type_aggregated": [
+                    {
+                        "address": [
+                            "ADDRESS1_CITY",
+                            "ADDRESS1_COUNTRY",
+                            "ADDRESS1_PROVINCE",
+                            "ADDRESS1_STATE",
+                            "CONCAT_ADDRESS"
+                        ],
+                        "job": [],
+                        "name": [],
+                        "other": []
+                    }
+                ],
+                "ap_all_ap_id_tp_markeds_aggregated": [],
+                "ap_all_ap_name_tp_markeds_aggregated": [],
+                "ap_all_company_names_aggregated": [
+                    "Eva Pladimirova",
+                    "Pladimir Vutin"
+                ],
+                "ap_all_dobs_aggregated": [
+                    "02/31/1900",
+                    "04/31/1910"
+                ],
+                "ap_all_documents_aggregated": [
+                    "022368917",
+                    "154421273"
+                ],
+                "ap_all_employer_names_aggregated": [],
+                "ap_all_hit_types_aggregated": [],
+                "ap_all_names_aggregated": [
+                    "Eva Pladimirova",
+                    "Pladimir Vutin"
+                ],
+                "ap_all_nationalities_aggregated": [
+                    "UNITED STATES OF AMERICA",
+                    "United States"
+                ],
+                "ap_all_party_types_aggregated": [
+                    "Individual"
+                ],
+                "ap_all_pobs_aggregated": [
+                    "United States"
+                ],
+                "ap_all_residencies_aggregated": [
+                    "UNITED STATES OF AMERICA",
+                    "United States"
+                ],
+                "ap_all_sanctioned_countries_aggregated": [
+                    "UNITED STATES OF AMERICA",
+                    "United States"
+                ],
+                "ap_all_tokens_tp_markeds_aggregated": [],
+                "ap_id_tp_marked_agent_input": "A05003324172",
+                "ap_name_tp_marked_agent_input": null,
+                "company_name_agent_ap": [
+                    null,
+                    [
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
+                    ],
+                    [
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
+                    ],
+                    [
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
+                    ],
+                    [
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
+                    ],
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                "company_name_agent_wl": [
+                    "Joe Ding",
+                    [
+                        ""
+                    ]
+                ],
+                "datasetId": "1044",
+                "datasetType": "WM_ADDRESS",
+                "dob_agent_ap": [
+                    "02/31/1900",
+                    "04/31/1910"
+                ],
+                "dob_agent_wl": [
+                    "",
+                    "MAY 6, 1981"
+                ],
+                "document_agent_ap": [
+                    [
+                        "022368917",
+                        "154421273"
+                    ],
+                    [],
+                    null,
+                    null
+                ],
+                "document_agent_wl": null,
+                "employer_name_agent_ap": [
+                    null,
+                    null
+                ],
+                "employer_name_agent_wl": [
+                    "Joe Ding",
+                    [
+                        ""
+                    ]
+                ],
+                "entity": {
+                    "addresses": [
+                        {
+                            "address1": "111 STREET 999",
+                            "address2": "FL;US",
+                            "city": "ATLANTA",
+                            "country": "US",
+                            "countryName": "United States of America",
+                            "postalCode": "11111"
+                        }
+                    ],
+                    "createdDate": "10/16/2018",
+                    "dobs": [
+                        {
+                            "dob": "MAY 6, 1981"
+                        }
+                    ],
+                    "entityType": "03",
+                    "id": "908049",
+                    "ids": null,
+                    "lastUpdateDate": "04/19/2019",
+                    "listCode": "-1003",
+                    "listId": "15991",
+                    "name": "Joe Ding",
+                    "programs": [
+                        {
+                            "type": "MSSBGWM"
+                        }
+                    ],
+                    "sdfs": {
+                        "sdf": [
+                            "05/05/2015 19:49:26",
+                            "N/A",
+                            "N/A",
+                            "N/A",
+                            "N/A",
+                            "N/A",
+                            "PLEASE CALL AML HOT LINE AT 212 762 8000 AND REF CI-079385"
+                        ]
+                    },
+                    "source": "CON",
+                    "version": "20150505194929"
+                },
+                "entityId": "908043",
+                "entityTextType": "UPID",
+                "entityType": "03",
+                "entityVersion": "20150505194929",
+                "firstMatchedDate": "01/08/20",
+                "hit_type_agent_address": [
+                    "ADDRESS1_CITY",
+                    "ADDRESS1_COUNTRY",
+                    "ADDRESS1_PROVINCE",
+                    "ADDRESS1_STATE",
+                    "CONCAT_ADDRESS"
+                ],
+                "hit_type_agent_job": [],
+                "hit_type_agent_name": [],
+                "hit_type_agent_other": [],
+                "inputVersionId": "122438659",
+                "lastMatchedDate": "01/08/20",
+                "lastReviewDate": "01/08/20",
+                "masterId": "72951854",
+                "masterVersion": "412740c151535f0756e8dbec7440b726c7a3e135",
+                "matchId": "49159509",
+                "matchStatus": "O",
+                "matchType": "GWL",
+                "name_agent_ap": [
+                    null,
+                    [
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
+                    ],
+                    [
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
+                    ],
+                    [
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
+                    ],
+                    [
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
+                    ],
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                "name_agent_wl": [
+                    "Joe Ding",
+                    [
+                        ""
+                    ]
+                ],
+                "nationality_agent_ap": [
+                    "UNITED STATES OF AMERICA",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    [],
+                    [
+                        "United States",
+                        "United States"
+                    ],
+                    [],
+                    []
+                ],
+                "nationality_agent_wl": [
+                    [
+                        ""
+                    ],
+                    [
+                        ""
+                    ],
+                    [
+                        ""
+                    ],
+                    "US|FL;US",
+                    "United States of America"
+                ],
+                "party_type_agent_ap": [
+                    "Individual",
+                    "Individual"
+                ],
+                "party_type_agent_wl": "I",
+                "pob_agent_ap": [
+                    [],
+                    [
+                        "United States",
+                        "United States"
+                    ],
+                    null,
+                    []
+                ],
+                "pob_agent_wl": [
+                    "US|FL;US",
+                    "United States of America",
+                    [
+                        ""
+                    ],
+                    [
+                        ""
+                    ]
+                ],
+                "residency_agent_ap": [
+                    "UNITED STATES OF AMERICA",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    [],
+                    [
+                        "United States",
+                        "United States"
+                    ],
+                    [],
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                "residency_agent_wl": [
+                    "US|FL;US",
+                    "United States of America"
+                ],
+                "riskScore": "-1.0",
+                "sanctioned_country_agent_ap": [
+                    "UNITED STATES OF AMERICA",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    [],
+                    [
+                        "United States",
+                        "United States"
+                    ],
+                    [],
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                "sanctioned_country_agent_wl": [
+                    "Joe Ding",
+                    "US|FL;US",
+                    "United States of America"
+                ],
+                "sourceCode": "CON",
+                "stopDescriptors": [
+                    {
+                        "name": "Joe Doe",
+                        "stopDescriptorDetails": [
+                            {
+                                "inputSynonym": null,
+                                "inputToken": "Doe",
+                                "matchScore": "0.8571428571428572",
+                                "sdToken": "Doe"
+                            }
+                        ],
+                        "totalMatchScore": "0.9230769230769231"
+                    }
+                ],
+                "tokens_tp_marked_agent_input": "Doe",
+                "uniqueCustomerId": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480\n      ",
+                "wl_all_ap_id_tp_markeds_aggregated": [],
+                "wl_all_ap_name_tp_markeds_aggregated": [],
+                "wl_all_company_names_aggregated": [
+                    "Joe Ding"
+                ],
+                "wl_all_dobs_aggregated": [
+                    "MAY 6, 1981"
+                ],
+                "wl_all_documents_aggregated": [],
+                "wl_all_employer_names_aggregated":["Joe Ding"],
+                "wl_all_hit_types_aggregated": [],
+                "wl_all_names_aggregated": [
+                    "Joe Ding"
+                ],
+                "wl_all_nationalities_aggregated": [
+                    "US|FL;US",
+                    "United States of America"
+                ],
+                "wl_all_party_types_aggregated": [
+                    "I"
+                ],
+                "wl_all_pobs_aggregated": [
+                    "US|FL;US",
+                    "United States of America"
+                ],
+                "wl_all_residencies_aggregated": [
+                    "US|FL;US",
+                    "United States of America"
+                ],
+                "wl_all_sanctioned_countries_aggregated": [],
+                "wl_all_tokens_tp_markeds_aggregated": []
+            }
+        }
+    },
+    {
+        "AP_ACCOUNT_BENEFICIARY_NAMES": [
+            "Eva Pladimirova",
+            "Pladimir Vutin"
+        ],
+        "AP_ACCOUNT_BRANCH_ACCOUNT_NUMBERS": [
+            "234_142529",
+            "234_142529"
+        ],
+        "AP_ACCOUNT_NAMES": [
+            "Eva Pladimirova",
+            "Pladimir Vutin"
+        ],
+                "AP_COUNTRY_OF_INCORPORATION": [],
+        "AP_GOVT_IDS": [],
+        "AP_PARTIES_NAMES": [
+            "Eva Pladimirova",
+            "Pladimir Vutin"
+        ],
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        "AP_PARTY_BIRTH_COUNTRIES": [],
+        "AP_PARTY_CITIZENSHIP_COUNTRIES": [
+            "United States",
+            "United States"
+        ],
+        "AP_PARTY_NAMES": [
+            "Eva Pladimirova",
+            "Pladimir Vutin"
+        ],
+        "AP_PARTY_RESIDENCY_COUNTRIES": [],
+        
+        
+        "AP_TAX_IDS": [
+            "022368917",
+            "154421273"
+        ],
+        "alertedParty": {
+            "AP_DOB": [
+                "02/31/1900",
+                "04/31/1910"
+            ],
+            "AP_PARTY_TYPE": "I",
+            "AP_PARTY_TYPES": [
+                "Individual",
+                "Individual"
+            ],
+            "ENTITY_TYPE_MATCH": "Y",
+            "employer_party_type": "C",
+            "headerInfo": {
+                "currentVersionId": "122438658",
+                "datasetId": "1044",
+                "datasetName": "R_US_Active_Address",
+                "firstVersionCreatedDt": "2020-01-08T09:31:30.264-05:00",
+                "inputVersionSample": "R_US_Active_Address_A05003324172_2020-01-07-07.06.",
+                "lastVersionUpdatedDt": "2020-01-08T09:31:30.264-05:00",
+                "masterId": "72951854",
+                "masterVersion": "412740c151535f0756e8dbec7440b726c7a3e135",
+                "stopDescriptors": {
+                    "stopDescriptor": {
+                        "name": "Joe Doe"
+                    }
+                },
+                "uniqueCustomerId": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480"
+            },
+            "inputRecordHist": {
+                "inputRecords": {
+                    "INPUT_FIELD": {
+                        "ADDRESS1_CITY": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_CITY",
+                            "sortOrder": "14",
+                            "value": ""
+                        },
+                        "ADDRESS1_COUNTRY": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_COUNTRY",
+                            "sortOrder": "20",
+                            "value": "UNITED STATES OF AMERICA"
+                        },
+                        "ADDRESS1_COUNTRYCODE": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_COUNTRYCODE",
+                            "sortOrder": "21",
+                            "value": "USA"
+                        },
+                        "ADDRESS1_FOREIGNDOMESTICCODE": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_FOREIGNDOMESTICCODE",
+                            "sortOrder": "22",
+                            "value": "DOMESTIC"
+                        },
+                        "ADDRESS1_LINE1": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE1",
+                            "sortOrder": "7",
+                            "value": "Joe Black &"
+                        },
+                        "ADDRESS1_LINE2": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE2",
+                            "sortOrder": "8",
+                            "value": "Jane Doe AA BBB"
+                        },
+                        "ADDRESS1_LINE3": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE3",
+                            "sortOrder": "9",
+                            "value": "111 A 11TH ST AAA 1A"
+                        },
+                        "ADDRESS1_LINE4": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE4",
+                            "sortOrder": "10",
+                            "value": "New Jersey NJ 10011"
+                        },
+                        "ADDRESS1_LINE5": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE5",
+                            "sortOrder": "11",
+                            "value": ""
+                        },
+                        "ADDRESS1_LINE6": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE6",
+                            "sortOrder": "12",
+                            "value": ""
+                        },
+                        "ADDRESS1_POSTALCODE": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_POSTALCODE",
+                            "sortOrder": "17",
+                            "value": ""
+                        },
+                        "ADDRESS1_PROVINCE": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_PROVINCE",
+                            "sortOrder": "16",
+                            "value": ""
+                        },
+                        "ADDRESS1_STATE": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_STATE",
+                            "sortOrder": "15",
+                            "value": ""
+                        },
+                        "ADDRESS1_ZIP4": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_ZIP4",
+                            "sortOrder": "19",
+                            "value": ""
+                        },
+                        "ADDRESS1_ZIP5": {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_ZIP5",
+                            "sortOrder": "18",
+                            "value": ""
+                        },
+                        "ADDRESS_TYPE": {
+                            "isScreenable": "false",
+                            "name": "ADDRESS_TYPE",
+                            "sortOrder": "4",
+                            "value": "Plating Address"
+                        },
+                        "ATTENTION_TO_TEXT": {
+                            "isScreenable": "true",
+                            "name": "ATTENTION_TO_TEXT",
+                            "sortOrder": "6",
+                            "value": ""
+                        },
+                        "BARCODE": {
+                            "isScreenable": "false",
+                            "name": "BARCODE",
+                            "sortOrder": "3",
+                            "value": ""
+                        },
+                        "CARE_OF_TEXT": {
+                            "isScreenable": "true",
+                            "name": "CARE_OF_TEXT",
+                            "sortOrder": "5",
+                            "value": ""
+                        },
+                        "CONCAT_ADDRESS": {
+                            "isScreenable": "true",
+                            "name": "CONCAT_ADDRESS",
+                            "sortOrder": "13",
+                            "value": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
+                        },
+                        "SOURCE_REF": {
+                            "isScreenable": "false",
+                            "name": "SOURCE_REF",
+                            "sortOrder": "1",
+                            "value": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480"
+                        },
+                        "UNIQUE_KEY": {
+                            "isScreenable": "false",
+                            "name": "UNIQUE_KEY",
+                            "sortOrder": "2",
+                            "value": "A05003324172"
+                        }
+                    },
+                    "createdDate": "01/08/20",
+                    "fields": [
+                        {
+                            "isScreenable": "false",
+                            "name": "SOURCE_REF",
+                            "sortOrder": "1",
+                            "value": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480"
+                        },
+                        {
+                            "isScreenable": "false",
+                            "name": "UNIQUE_KEY",
+                            "sortOrder": "2",
+                            "value": "A05003324172"
+                        },
+                        {
+                            "isScreenable": "false",
+                            "name": "BARCODE",
+                            "sortOrder": "3"
+                        },
+                        {
+                            "isScreenable": "false",
+                            "name": "ADDRESS_TYPE",
+                            "sortOrder": "4",
+                            "value": "Plating Address"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "CARE_OF_TEXT",
+                            "sortOrder": "5"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ATTENTION_TO_TEXT",
+                            "sortOrder": "6"
+                        },
+                        {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE1",
+                            "sortOrder": "7",
+                            "value": "Joe Black &"
+                        },
+                        {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE2",
+                            "sortOrder": "8",
+                            "value": "Jane Doe AA BBB"
+                        },
+                        {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE3",
+                            "sortOrder": "9",
+                            "value": "111 A 11TH ST AAA 1A"
+                        },
+                        {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE4",
+                            "sortOrder": "10",
+                            "value": "New Jersey NJ 10011"
+                        },
+                        {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE5",
+                            "sortOrder": "11"
+                        },
+                        {
+                            "isScreenable": "false",
+                            "name": "ADDRESS1_LINE6",
+                            "sortOrder": "12"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "CONCAT_ADDRESS",
+                            "sortOrder": "13",
+                            "value": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_CITY",
+                            "sortOrder": "14"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_STATE",
+                            "sortOrder": "15"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_PROVINCE",
+                            "sortOrder": "16"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_POSTALCODE",
+                            "sortOrder": "17"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_ZIP5",
+                            "sortOrder": "18"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_ZIP4",
+                            "sortOrder": "19"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_COUNTRY",
+                            "sortOrder": "20",
+                            "value": "UNITED STATES OF AMERICA"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_COUNTRYCODE",
+                            "sortOrder": "21",
+                            "value": "USA"
+                        },
+                        {
+                            "isScreenable": "true",
+                            "name": "ADDRESS1_FOREIGNDOMESTICCODE",
+                            "sortOrder": "22",
+                            "value": "DOMESTIC"
+                        }
+                    ],
+                    "masterId": "72951854",
+                    "status": "A",
+                    "uniqueCustId": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480",
+                    "version": "412740c151535f0756e8dbec7440b726c7a3e135",
+                    "versionId": "122438659"
+                }
+            },
+            "supplementalInfo": {
+                "alertId": "SANC-ASM-6434404",
+                "busDate": "20211127",
+                "datasetName": "R_US_Active_Address",
+                "relatedAccounts": {
+                    "accounts": [
+                        {
+                            "CONNECTED_FULL_NAME": "Pladimir Vutin",
+                            "beneficiaryName": "Pladimir Vutin",
+                            "branchAccountNumber": "234_142529",
+                            "firstName": "Pladimir",
+                            "lastName": "Vutin",
+                            "srcSystemAccountKey": "2021-01-29-13.44.57.093694"
+                        },
+                        {
+                            "CONNECTED_FULL_NAME": "Eva Pladimirova",
+                            "beneficiaryName": "Eva Pladimirova",
+                            "branchAccountNumber": "234_142529",
+                            "firstName": "Eva",
+                            "lastName": "Pladimirova",
+                            "srcSystemAccountKey": "2021-01-29-13.44.57.093694"
+                        }
+                    ]
+                },
+                "relatedParties": {
+                    "party": [
+                        {
+                            "CONNECTED_FULL_NAME": "Pladimir Vutin",
+                            "countryOfIncorporation": null,
+                            "dobDate": "02/31/1900",
+                            "partyCountryOfBirth": null,
+                            "partyFirstName": "Pladimir",
+                            "partyId": "0002712291",
+                            "partyLastName": "Vutin",
+                            "partyMiddleName": null,
+                            "partyName": "Pladimir Vutin",
+                            "partyPrimaryCitizenshipCountry": "United States",
+                            "partyResidenceCountry": "United States",
+                            "partyType": "Individual",
+                            "taxId": "154421273",
+                            "taxIdType": "SSN"
+                        },
+                        {
+                            "CONNECTED_FULL_NAME": "Eva Pladimirova",
+                            "countryOfIncorporation": null,
+                            "dobDate": "04/31/1910",
+                            "partyCountryOfBirth": null,
+                            "partyFirstName": "Eva",
+                            "partyId": "0004727489",
+                            "partyLastName": "Pladimirova",
+                            "partyMiddleName": null,
+                            "partyName": "Eva Pladimirova",
+                            "partyPrimaryCitizenshipCountry": "United States",
+                            "partyResidenceCountry": "United States",
+                            "partyType": "Individual",
+                            "taxId": "022368917",
+                            "taxIdType": "SSN"
+                        }
+                    ]
+                },
+                "uniqueCustId": "R_US_Active_Address_A00170086018_2018-08-28-18.45.50.012201"
+            }
+        },
+        "cleaned_names": {
+            "concat_residue": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
+        },
+        "concat_address_no_changes": true,
+        "concat_residue": "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ",
+        "datasetType": "WM_ADDRESS",
+        "match_ids": {
+            "match_id": "49159506",
+            "match_name": "dummy"
+        },
+        "watchlistParty": {
+            "matchRecords": {
+                "AP_TRIGGERS": {
+                    "Doe": {
+                        "ADDRESS1_LINE2": [
+                            "Jane Doe AA BBB"
+                        ],
+                        "CONCAT_ADDRESS": [
+                            "Joe Black & Jane Doe 111 A 11TH ST AAA 1A New Jersey NJ"
+                        ]
+                    }
+                },
+                "ENTITY_ID": "908044",
+                "ENTITY_VERSION": "20150505194923",
+                "IS_BENEFICIARY_HIT": false,
+                "SRC_REF_KEY": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480\n      ",
+                "TOKENS_RISK_CARRIER": "Doe",
+                "TRIGGERED_BY": [
+                    "matchStatus",
+                    "stopDescriptors"
+                ],
+                "VERSION_ID": "122438659",
+                "WLP_TYPE": "I",
+                "WL_ADDRESS1": [
+                    "111 STREET 999"
+                ],
+                "WL_ADDRESS2": [
+                    "FL;US"
+                ],
+                "WL_ALIASES": [
+                    ""
+                ],
+                "WL_CITIZENSHIP": [
+                    ""
+                ],
+                "WL_CITY": [
+                    "ATLANTA"
+                ],
+                "WL_COUNTRY": [
+                    "PL"
+                ],
+                "WL_COUNTRYNAME": [
+                    "Poland"
+                ],
+                "WL_DOB": [
+                    "",
+                    "MAY 6, 1981"
+                ],
+                "WL_DOCUMENT_NUMBER": [],
+                "WL_ENTITYTYPE": "03",
+                "WL_MATCHED_TOKENS": "[\"Doe\"]",
+                "WL_NAME": "Joe Dong",
+                "WL_NATIONALITY": [
+                    ""
+                ],
+                "WL_POB": [
+                    ""
+                ],
+                "WL_POSTALCODE": [
+                    "11111"
+                ],
+                "accountSeq": "1",
+                "all_hit_type_aggregated": [
+                    {
+                        "address": [
+                            "ADDRESS1_CITY",
+                            "ADDRESS1_COUNTRY",
+                            "ADDRESS1_PROVINCE",
+                            "ADDRESS1_STATE",
+                            "CONCAT_ADDRESS"
+                        ],
+                        "job": [],
+                        "name": [],
+                        "other": []
+                    }
+                ],
+                "ap_all_ap_id_tp_markeds_aggregated": [],
+                "ap_all_ap_name_tp_markeds_aggregated": [],
+                "ap_all_company_names_aggregated": [
+                    "Eva Pladimirova",
+                    "Pladimir Vutin"
+                ],
+                "ap_all_dobs_aggregated": [
+                    "02/31/1900",
+                    "04/31/1910"
+                ],
+                "ap_all_documents_aggregated": [
+                    "022368917",
+                    "154421273"
+                ],
+                "ap_all_employer_names_aggregated": [],
+                "ap_all_hit_types_aggregated": [],
+                "ap_all_names_aggregated": [
+                    "Eva Pladimirova",
+                    "Pladimir Vutin"
+                ],
+                "ap_all_nationalities_aggregated": [
+                    "UNITED STATES OF AMERICA",
+                    "United States"
+                ],
+                "ap_all_party_types_aggregated": [
+                    "Individual"
+                ],
+                "ap_all_pobs_aggregated": [
+                    "United States"
+                ],
+                "ap_all_residencies_aggregated": [
+                    "UNITED STATES OF AMERICA",
+                    "United States"
+                ],
+                "ap_all_sanctioned_countries_aggregated": [
+                    "UNITED STATES OF AMERICA",
+                    "United States"
+                ],
+                "ap_all_tokens_tp_markeds_aggregated": [],
+                "ap_id_tp_marked_agent_input": "A05003324172",
+                "ap_name_tp_marked_agent_input": null,
+                "company_name_agent_ap": [
+                    null,
+                    [
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
+                    ],
+                    [
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
+                    ],
+                    [
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
+                    ],
+                    [
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
+                    ],
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                "company_name_agent_wl": [
+                    "Joe Dong",
+                    [
+                        ""
+                    ]
+                ],
+                "datasetId": "1044",
+                "datasetType": "WM_ADDRESS",
+                "dob_agent_ap": [
+                    "02/31/1900",
+                    "04/31/1910"
+                ],
+                "dob_agent_wl": [
+                    "",
+                    "MAY 6, 1981"
+                ],
+                "document_agent_ap": [
+                    [
+                        "022368917",
+                        "154421273"
+                    ],
+                    [],
+                    null,
+                    null
+                ],
+                "document_agent_wl": null,
+                "employer_name_agent_ap": [
+                    null,
+                    null
+                ],
+                "employer_name_agent_wl": [
+                    "Joe Dong",
+                    [
+                        ""
+                    ]
+                ],
+                "entity": {
+                    "addresses": {
+                        "address": {
+                            "address1": "111 STREET 999",
+                            "address2": "FL;US",
+                            "city": "ATLANTA",
+                            "country": "PL",
+                            "countryName": "Poland",
+                            "postalCode": "11111"
+                        }
+                    },
+                    "createdDate": "10/16/2018",
+                    "dobs": [
+                        {
+                            "dob": "MAY 6, 1981"
+                        }
+                    ],
+                    "entityType": "03",
+                    "id": "908044",
+                    "ids": null,
+                    "lastUpdateDate": "04/19/2019",
+                    "listCode": "-1003",
+                    "listId": "15991",
+                    "name": "Joe Dong",
+                    "programs": {
+                        "program": {
+                            "type": "MSSBGWM"
+                        }
+                    },
+                    "sdfs": {
+                        "sdf": [
+                            "05/05/2015 19:49:26",
+                            "N/A",
+                            "N/A",
+                            "N/A",
+                            "N/A",
+                            "N/A",
+                            "PLEASE CALL AML HOT LINE AT 212 762 8000 AND REF CI-079385"
+                        ]
+                    },
+                    "source": "CON",
+                    "version": "20150505194923"
+                },
+                "entityId": "908044",
+                "entityTextType": "UPID",
+                "entityType": "03",
+                "entityVersion": "20150505194923",
+                "firstMatchedDate": "01/08/20",
+                "hit_type_agent_address": [
+                    "ADDRESS1_CITY",
+                    "ADDRESS1_COUNTRY",
+                    "ADDRESS1_PROVINCE",
+                    "ADDRESS1_STATE",
+                    "CONCAT_ADDRESS"
+                ],
+                "hit_type_agent_job": [],
+                "hit_type_agent_name": [],
+                "hit_type_agent_other": [],
+                "inputVersionId": "122438659",
+                "lastMatchedDate": "01/08/20",
+                "lastReviewDate": "01/08/20",
+                "masterId": "72951854",
+                "masterVersion": "412740c151535f0756e8dbec7440b726c7a3e135",
+                "matchId": "49159506",
+                "matchStatus": "O",
+                "matchType": "GWL",
+                "name_agent_ap": [
+                    null,
+                    [
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
+                    ],
+                    [
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
+                    ],
+                    [
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
+                    ],
+                    [
+                        "Eva Pladimirova",
+                        "Pladimir Vutin"
+                    ],
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                "name_agent_wl": [
+                    "Joe Dong",
+                    [
+                        ""
+                    ]
+                ],
+                "nationality_agent_ap": [
+                    "UNITED STATES OF AMERICA",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    [],
+                    [
+                        "United States",
+                        "United States"
+                    ],
+                    [],
+                    []
+                ],
+                "nationality_agent_wl": [
+                    [
+                        ""
+                    ],
+                    [
+                        ""
+                    ],
+                    [
+                        ""
+                    ],
+                    [
+                        "PL"
+                    ],
+                    [
+                        "Poland"
+                    ]
+                ],
+                "party_type_agent_ap": [
+                    "Individual",
+                    "Individual"
+                ],
+                "party_type_agent_wl": "I",
+                "pob_agent_ap": [
+                    [],
+                    [
+                        "United States",
+                        "United States"
+                    ],
+                    null,
+                    []
+                ],
+                "pob_agent_wl": [
+                    [
+                        ""
+                    ],
+                    [
+                        ""
+                    ],
+                    [
+                        "PL"
+                    ],
+                    [
+                        "Poland"
+                    ]
+                ],
+                "residency_agent_ap": [
+                    "UNITED STATES OF AMERICA",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    [],
+                    [
+                        "United States",
+                        "United States"
+                    ],
+                    [],
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                "residency_agent_wl": [
+                    [
+                        "PL"
+                    ],
+                    [
+                        "Poland"
+                    ]
+                ],
+                "riskScore": "-1.0",
+                "sanctioned_country_agent_ap": [
+                    "UNITED STATES OF AMERICA",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    [],
+                    [
+                        "United States",
+                        "United States"
+                    ],
+                    [],
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                "sanctioned_country_agent_wl": [
+                    [
+                        "PL"
+                    ],
+                    [
+                        "Poland"
+                    ],
+                    "Joe Dong"
+                ],
+                "sourceCode": "CON",
+                "stopDescriptors": [
+                    {
+                        "name": "Joe Doe",
+                        "stopDescriptorDetails": [
+                            {
+                                "inputSynonym": null,
+                                "inputToken": "Doe",
+                                "matchScore": "0.8571428571428572",
+                                "sdToken": "Doe"
+                            }
+                        ],
+                        "totalMatchScore": "0.9230769230769231"
+                    }
+                ],
+                "tokens_tp_marked_agent_input": "Doe",
+                "uniqueCustomerId": "R_US_Active_Address_A05003324172_2020-01-07-07.06.28.836480\n      ",
+                "wl_all_ap_id_tp_markeds_aggregated": [],
+                "wl_all_ap_name_tp_markeds_aggregated": [],
+                "wl_all_company_names_aggregated": [
+                    "Joe Dong"
+                ],
+                "wl_all_dobs_aggregated": [
+                    "MAY 6, 1981"
+                ],
+                "wl_all_documents_aggregated": [],
+                "wl_all_employer_names_aggregated":["Joe Dong"],
+                "wl_all_hit_types_aggregated": [],
+                "wl_all_names_aggregated": [
+                    "Joe Dong"
+                ],
+                "wl_all_nationalities_aggregated": [
+                    "PL",
+                    "Poland"
+                ],
+                "wl_all_party_types_aggregated": [
+                    "I"
+                ],
+                "wl_all_pobs_aggregated": [
+                    "PL",
+                    "Poland"
+                ],
+                "wl_all_residencies_aggregated": [
+                    "PL",
+                    "Poland"
+                ],
+                "wl_all_sanctioned_countries_aggregated": [],
+                "wl_all_tokens_tp_markeds_aggregated": []
+            }
+        }
+    }
+]

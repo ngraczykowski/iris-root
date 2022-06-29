@@ -1,0 +1,115 @@
+AP_PARTY_TYPE:
+  target_collection: alertedParty
+  method: set_up_party_type
+  source:
+    alertedParty:
+      - AP_PARTY_TYPES
+    metadata:
+      - datasetType
+    xml_fields:
+      - PARTY1_ORGANIZATION_NAME
+      - ORGANIZATIONPERSONIND
+    alertSupplementalInfo:
+      - supplementalInfo.legalFormName
+
+
+AP_PARTIES_NAMES:
+  method_name: collect_party_full_names
+  pattern_method: pattern_aggregate
+  source:
+    parties:
+      - CONNECTED_FULL_NAME
+
+AP_PARTY_TYPES:
+  target_collection: alertedParty
+  method_name: collect_party_types
+  pattern_method: pattern_aggregate
+  source:
+    parties:
+      - partyType
+
+AP_PARTY_NAMES:
+  method_name: collect_party_names
+  pattern_method: pattern_aggregate
+  source:
+    parties:
+      - partyName
+
+AP_TAX_IDS:
+  method_name: collect_party_tax_ids
+  pattern_method: pattern_aggregate
+  source:
+    parties:
+      - taxId
+
+AP_DOB:
+  target_collection: alertedParty
+  method: collect_party_dobs
+  source: 
+    parties:
+      - dobDate
+    xml_fields:
+      - PARTY1_DATE_OF_BIRTH
+
+AP_PARTY_BIRTH_COUNTRIES:
+  method_name: collect_party_birth_countries
+  pattern_method: pattern_aggregate
+  source:
+    parties:
+      - partyCountryOfBirth
+
+AP_PARTY_CITIZENSHIP_COUNTRIES:
+  method_name: collect_party_citizenship_countries
+  pattern_method: pattern_aggregate
+  source:
+    parties:
+      - partyPrimaryCitizenshipCountry
+
+AP_PARTY_RESIDENCY_COUNTRIES:
+  method_name: collect_party_residency_countries
+  pattern_method: pattern_aggregate
+  source:
+    parties:
+      - partyResidenceCountryCode
+
+AP_COUNTRY_OF_INCORPORATION:
+  method_name: collect_party_country_of_incorporation
+  pattern_method: pattern_aggregate
+  source:
+    parties:
+      - countryOfIncorporation
+
+AP_GOVT_IDS:
+  method_name: collect_party_government_id
+  pattern_method: pattern_aggregate
+  source:
+    parties:
+      - partyGovtIdNumber
+
+IS_BENEFICIARY_HIT:
+  method_name: set_beneficiary_hits
+  pattern_method: pattern_set_beneficiary_hits
+  source:
+    metadata:
+      - TRIGGERED_BY
+
+AP_ACCOUNT_NAMES:
+  method_name: collect_full_name_accounts
+  pattern_method: pattern_aggregate
+  source:
+    accounts:
+      - CONNECTED_FULL_NAME
+
+AP_ACCOUNT_BRANCH_ACCOUNT_NUMBERS:
+  method_name: collect_branch_account_numbers
+  pattern_method: pattern_aggregate
+  source:
+    accounts:
+      - branchAccountNumber
+
+AP_ACCOUNT_BENEFICIARY_NAMES:
+  method_name: collect_beneficiary_names
+  pattern_method: pattern_aggregate
+  source:
+    accounts:
+      - beneficiaryName

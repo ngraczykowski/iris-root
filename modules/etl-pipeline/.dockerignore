@@ -1,0 +1,11 @@
+env/*
+dependencies/*
+data/*
+dependencies
+docker/*
+python-datatoolbox/*
+agents/*
+.tox/*
+.git/*
+spark-manager/*
+.eggs/*

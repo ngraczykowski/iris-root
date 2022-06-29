@@ -1,0 +1,3 @@
+{"category": "categories/customerType", "categoryValues": [{"match": "alerts/2/matches/0", "singleValue": "C", "alert": "alerts/2"}]}
+{"category": "categories/entitiesTypesMatch", "categoryValues": [{"match": "alerts/2/matches/0", "singleValue": "N", "alert": "alerts/2"}]}
+{"category": "categories/alertType", "categoryValues": [{"match": "alerts/2/matches/0", "singleValue": "ISG_ACCOUNT", "alert": "alerts/2"}]}

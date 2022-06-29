@@ -1,0 +1,37 @@
+etl_service_port: 9091
+etl_service_ip: localhost
+logging_path: logs/
+logging_level: DEBUG
+processes: 20
+uds_batch_size: 100
+
+grpc_server_tls_private_key: tests/ssl/server-key.pem
+grpc_server_tls_public_key_chain: tests/ssl/server.pem
+grpc_server_tls_trusted_ca:  tests/ssl/ca.pem
+
+grpc_client_tls_ca: tests/ssl/ca.pem
+grpc_client_tls_private_key: tests/ssl/server-key.pem
+grpc_client_tls_public_key_chain: tests/ssl/server.pem
+
+data_source_input_endpoint: localhost:50052
+
+historical_decision_exchange:
+  exchange: 'bridge.historical'
+  routing-key: 'historical.historical-decisions-request.production'
+  queue-name: 'ls.historical-decision-request.production'
+  queue-durable: true
+  queue-arguments:
+    x-dead-letter-exchange: "learning.decision-dead-letter-exchange"
+    x-dead-letter-routing-key: "*"
+  
+
+rabbitmq:
+  host: localhost
+  port: 5671
+  login: dev
+  password: dev
+  virtualhost: /
+  tls:
+    ca_certs: "tests/ssl/ca.pem"
+    keyfile: "tests/ssl/client-key.pem"
+    certfile: "tests/ssl/client.pem"

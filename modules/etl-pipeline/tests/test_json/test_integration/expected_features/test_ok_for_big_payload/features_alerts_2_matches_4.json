@@ -1,0 +1,184 @@
+[
+    {
+        "feature": "features/name",
+        "watchlistNames": [
+            {
+                "name": "AL-MASRI, ABU HAMZA",
+                "type": "REGULAR"
+            },
+            {
+                "name": "MUSTAPHA, MUSTAPHA KAMEL",
+                "type": "REGULAR"
+            },
+            {
+                "name": "EAMAN, ADAM RAMSEY",
+                "type": "REGULAR"
+            },
+            {
+                "name": "AL-MISRI, ABU HAMZA",
+                "type": "REGULAR"
+            },
+            {
+                "name": "MUSTAPHA, KAMEL MUSTAPHA",
+                "type": "REGULAR"
+            },
+            {
+                "name": "MUSTAFA, MUSTAFA KAMEL",
+                "type": "REGULAR"
+            },
+            {
+                "name": "MOSTAFA, MOSTAFA KAMEL",
+                "type": "REGULAR"
+            },
+            {
+                "name": "IBRAHIM, MOSTAFA KAMEL MOSTAFA",
+                "type": "REGULAR"
+            },
+            {
+                "name": "HAMZA, ABU",
+                "type": "REGULAR"
+            }
+        ],
+        "alertedPartyType": "INDIVIDUAL"
+    },
+    {
+        "feature": "features/dateOfBirth",
+        "watchlistDates": [
+            "15",
+            "04",
+            "04/15/1958",
+            "1958"
+        ],
+        "alertedPartyType": "INDIVIDUAL"
+    },
+    {
+        "feature": "features/document"
+    },
+    {
+        "feature": "features/employerName"
+    },
+    {
+        "feature": "features/isApNameTpMarked",
+        "modelKey": {
+            "alertedParty": {
+                "id": "None"
+            }
+        },
+        "discriminator": {
+            "value": "mike_ap_name_tp_marked"
+        }
+    },
+    {
+        "feature": "features/isApIdTpMarked",
+        "modelKey": {
+            "alertedParty": {
+                "id": "A00183210139"
+            }
+        },
+        "discriminator": {
+            "value": "mike_ap_id_tp_marked"
+        }
+    },
+    {
+        "feature": "features/isTokensTpMarked",
+        "modelKey": {
+            "alertedParty": {
+                "id": "abouhamza"
+            }
+        },
+        "discriminator": {
+            "value": "mike_tokens_tp_marked"
+        }
+    },
+    {
+        "feature": "features/geoNationality",
+        "alertedPartyLocation": "AHMEDOUA",
+        "watchlistLocation": "US Alexandria, Egypt UNITED STATES"
+    },
+    {
+        "feature": "features/geoPlaceOfBirth",
+        "watchlistLocation": "US Alexandria, Egypt UNITED STATES"
+    },
+    {
+        "feature": "features/geoSanctioned",
+        "alertedPartyLocation": "AHMEDOUA"
+    },
+    {
+        "feature": "features/geoResidencies",
+        "alertedPartyLocation": "AHMEDOUA",
+        "watchlistLocation": "US UNITED STATES"
+    },
+    {
+        "feature": "features/companyName",
+        "watchlistNames": [
+            {
+                "name": "AL-MASRI, ABU HAMZA",
+                "type": "REGULAR"
+            },
+            {
+                "name": "MUSTAPHA, MUSTAPHA KAMEL",
+                "type": "REGULAR"
+            },
+            {
+                "name": "EAMAN, ADAM RAMSEY",
+                "type": "REGULAR"
+            },
+            {
+                "name": "AL-MISRI, ABU HAMZA",
+                "type": "REGULAR"
+            },
+            {
+                "name": "MUSTAPHA, KAMEL MUSTAPHA",
+                "type": "REGULAR"
+            },
+            {
+                "name": "MUSTAFA, MUSTAFA KAMEL",
+                "type": "REGULAR"
+            },
+            {
+                "name": "MOSTAFA, MOSTAFA KAMEL",
+                "type": "REGULAR"
+            },
+            {
+                "name": "IBRAHIM, MOSTAFA KAMEL MOSTAFA",
+                "type": "REGULAR"
+            },
+            {
+                "name": "HAMZA, ABU",
+                "type": "REGULAR"
+            }
+        ],
+        "alertedPartyType": "INDIVIDUAL"
+    },
+    {
+        "feature": "features/hitType",
+        "normalTriggerCategories": [
+            "name"
+        ],
+        "triggerCategories": {
+            "job": {},
+            "other": {},
+            "address": {
+                "tokens": [
+                    "ADDRESS1_PROVINCE",
+                    "ADDRESS1_STATE",
+                    "ADDRESS1_CITY",
+                    "ADDRESS1_COUNTRY",
+                    "CONCAT_ADDRESS"
+                ]
+            },
+            "name": {}
+        },
+        "triggeredTokens": {
+            "abouhamza": {
+                "tokensMap": {
+                    "ADDRESS1_POSTALCODE": {
+                        "tokens": [
+                            "ABOUHAMZA"
+                        ]
+                    }
+                }
+            }
+        }
+    }
+]

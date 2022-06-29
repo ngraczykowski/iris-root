@@ -1,0 +1,172 @@
+[
+    {
+        "feature": "features/name",
+        "watchlistNames": [
+            {
+                "name": "KARIM, ABDUL",
+                "type": "REGULAR"
+            },
+            {
+                "name": "RUSMAN, GUNAWAN",
+                "type": "REGULAR"
+            },
+            {
+                "name": "BUKHORY",
+                "type": "REGULAR"
+            },
+            {
+                "name": "GUNAWAN, GUN GUN RUSMAN",
+                "type": "REGULAR"
+            },
+            {
+                "name": "AL-HADI, ABD",
+                "type": "REGULAR"
+            },
+            {
+                "name": "BUKHORI",
+                "type": "REGULAR"
+            },
+            {
+                "name": "HADI, ABDUL",
+                "type": "REGULAR"
+            }
+        ],
+        "alertedPartyType": "INDIVIDUAL"
+    },
+    {
+        "feature": "features/dateOfBirth",
+        "watchlistDates": [
+            "06",
+            "07/06/1977",
+            "07",
+            "1977"
+        ],
+        "alertedPartyType": "INDIVIDUAL"
+    },
+    {
+        "feature": "features/document"
+    },
+    {
+        "feature": "features/employerName"
+    },
+    {
+        "feature": "features/isApNameTpMarked",
+        "modelKey": {
+            "alertedParty": {
+                "id": "None"
+            }
+        },
+        "discriminator": {
+            "value": "mike_ap_name_tp_marked"
+        }
+    },
+    {
+        "feature": "features/isApIdTpMarked",
+        "modelKey": {
+            "alertedParty": {
+                "id": "A00183210139"
+            }
+        },
+        "discriminator": {
+            "value": "mike_ap_id_tp_marked"
+        }
+    },
+    {
+        "feature": "features/isTokensTpMarked",
+        "modelKey": {
+            "alertedParty": {
+                "id": "abdalhadi"
+            }
+        },
+        "discriminator": {
+            "value": "mike_tokens_tp_marked"
+        }
+    },
+    {
+        "feature": "features/geoNationality",
+        "alertedPartyLocation": "AHMEDOUA",
+        "watchlistLocation": "Cianjur, West Java, Indonesia"
+    },
+    {
+        "feature": "features/geoPlaceOfBirth",
+        "watchlistLocation": "Cianjur, West Java, Indonesia"
+    },
+    {
+        "feature": "features/geoSanctioned",
+        "alertedPartyLocation": "AHMEDOUA"
+    },
+    {
+        "feature": "features/geoResidencies",
+        "alertedPartyLocation": "AHMEDOUA"
+    },
+    {
+        "feature": "features/companyName",
+        "watchlistNames": [
+            {
+                "name": "KARIM, ABDUL",
+                "type": "REGULAR"
+            },
+            {
+                "name": "RUSMAN, GUNAWAN",
+                "type": "REGULAR"
+            },
+            {
+                "name": "BUKHORY",
+                "type": "REGULAR"
+            },
+            {
+                "name": "GUNAWAN, GUN GUN RUSMAN",
+                "type": "REGULAR"
+            },
+            {
+                "name": "AL-HADI, ABD",
+                "type": "REGULAR"
+            },
+            {
+                "name": "BUKHORI",
+                "type": "REGULAR"
+            },
+            {
+                "name": "HADI, ABDUL",
+                "type": "REGULAR"
+            }
+        ],
+        "alertedPartyType": "INDIVIDUAL"
+    },
+    {
+        "feature": "features/hitType",
+        "normalTriggerCategories": [
+            "name"
+        ],
+        "triggerCategories": {
+            "other": {},
+            "job": {},
+            "name": {},
+            "address": {
+                "tokens": [
+                    "ADDRESS1_PROVINCE",
+                    "ADDRESS1_STATE",
+                    "ADDRESS1_CITY",
+                    "ADDRESS1_COUNTRY",
+                    "CONCAT_ADDRESS"
+                ]
+            }
+        },
+        "triggeredTokens": {
+            "abdalhadi": {
+                "tokensMap": {
+                    "CONCAT_ADDRESS": {
+                        "tokens": [
+                            "ABDALHADI SCKLBCNBJA"
+                        ]
+                    },
+                    "ADDRESS1_LINE1": {
+                        "tokens": [
+                            "ABDALHADIA"
+                        ]
+                    }
+                }
+            }
+        }
+    }
+]
