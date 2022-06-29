@@ -1,0 +1,26 @@
+environment-variables-mapping:
+  processes: AGENT_PROCESSES
+  grpc_port: GRPC_PORT
+
+  rabbitmq_login: RABBITMQ_USERNAME
+  rabbitmq_password: RABBITMQ_PASSWORD
+  rabbitmq_host: RABBITMQ_HOST
+  rabbitmq_port: RABBITMQ_PORT
+  rabbitmq_virtualhost: RABBITMQ_VIRTUALHOST
+
+  consul_host: CONSUL_HTTP_ADDR
+  consul_secret_path: CONSUL_SECRET_PATH
+  consul_token: CONSUL_HTTP_TOKEN
+  consul_cacert: CONSUL_CACERT
+  consul_client_private_key: CONSUL_CLIENT_KEY
+  consul_client_public_key_chain: CONSUL_CLIENT_CERT
+
+  request-exchange: REQUEST_EXCHANGE
+  request-routing-key: REQUEST_ROUTING_KEY
+  request-queue-name: REQUEST_QUEUE_NAME
+
+  response-exchange: RESPONSE_EXCHANGE
+  response-routing-key: RESPONSE_ROUTING_KEY
+
+  uds_address: UDS_ADDRESS
+  uds_timeout: UDS_TIMEOUT

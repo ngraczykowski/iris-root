@@ -1,0 +1,62 @@
+grpc:
+  client:
+    data-source:
+      address: localhost:24803
+      timeout: 5
+      reconnect_timeout: 60
+      client_ca: "tests/resources/ssl_example/ca.pem"
+      client_private_key: "tests/resources/ssl_example/client-key.pem"
+      client_public_key_chain: "tests/resources/ssl_example/client.pem"
+
+rabbitmq:
+  addresses: "localhost:1234,test_server:99099"
+  login: dev
+  password: dev
+  virtualhost: /
+  ssl_options:
+    cafile: "tests/resources/ssl_example/ca.pem"
+    keyfile: "tests/resources/ssl_example/client-key.pem"
+    certfile: "tests/resources/ssl_example/client.pem"
+    verify: 1
+
+consul:
+  host: localhost
+  port: 8500
+
+agent:
+  processes: 2
+
+  agent-exchange:
+    request:
+      exchange: 'agent.request'
+      routing-key: 'agents.EXAMPLE.versions.1_0_0.configs.1'
+      queue-name: 'agent.EXAMPLE-requests'
+      queue-durable: true
+      queue-arguments:
+        x-dead-letter-exchange: "companyname-agent-dead-letter-exchange"
+        x-dead-letter-routing-key: "companyname-agent-dead-letter-key"
+
+    response:
+      exchange: 'agent.response'
+      routing-key: ""
+
+  grpc:
+    port: 9090
+    server_ca: "tests/resources/ssl_example/ca.pem"
+    server_private_key: "tests/resources/ssl_example/server-key.pem"
+    server_public_key_chain: "tests/resources/ssl_example/server.pem"
+
+
+environment-variables-mapping:
+  processes: AGENT_PROCESSES
+  grpc_port: GRPC_PORT
+
+  rabbitmq_login: SPRING_RABBITMQ_USERNAME
+  rabbitmq_password: SPRING_RABBITMQ_PASSWORD
+
+  consul_host: CONSUL_HTTP_ADDR
+  consul_secret_path: CONSUL_SECRET_PATH
+  consul_token: CONSUL_HTTP_TOKEN
+  consul_cacert: CONSUL_CACERT
+  consul_client_private_key: CONSUL_CLIENT_KEY
+  consul_client_public_key_chain: CONSUL_CLIENT_CERT
