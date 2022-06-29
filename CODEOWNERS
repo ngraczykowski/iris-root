@@ -24,6 +24,11 @@
 /modules/ms-bridge/**/*                             @SilentEight/all-in
 /modules/protobuf-spring-boot-starter/**/*          @SilentEight/all-in
 
+#----------------------------------------------------------
+# Agents team
+#----------------------------------------------------------
+/modules/agents/**/*    @SilentEight/agents
+
 ####################################################################################################
 # NOTE(ahaczewski): Add code owners for modules above. Do not modify owners below.
 ####################################################################################################
