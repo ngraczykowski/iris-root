@@ -1,0 +1,30 @@
+rules:
+  - feature: blacklisted
+    threshold: 1
+    solution: MATCH
+
+  - feature: token_inclusion
+    threshold: 1
+    solution: MATCH
+
+  - feature: partial_fuzzy
+    threshold: 1
+    solution: MATCH
+
+  - feature: first_token
+    threshold: 1
+    solution: MATCH
+
+  - feature: abbreviation
+    threshold: 0.9
+    solution: MATCH
+    solution_probability: 0.8
+
+  - source: model/logistic_regression_model_12_07_2021.bin
+    solutions:
+      - solution: NO_MATCH
+        label: NO_MATCH
+        threshold: 0.93
+      - solution: MATCH
+        label: MATCH
+        threshold: 0
