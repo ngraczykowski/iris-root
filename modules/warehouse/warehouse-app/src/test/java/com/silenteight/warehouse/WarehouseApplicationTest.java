@@ -1,11 +1,14 @@
 package com.silenteight.warehouse;
 
-import org.junit.jupiter.api.Disabled;
+import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
+import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 
 @SpringBootTest(classes = WarehouseApplication.class)
-@Disabled
+@ContextConfiguration(initializers = {PostgresTestInitializer.class, RabbitTestInitializer.class})
 class WarehouseApplicationTest {
 
   @Test

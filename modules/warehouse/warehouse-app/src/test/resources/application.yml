@@ -1,20 +1,25 @@
 spring:
   application:
     name: warehouse
-  liquibase:
-    enabled: false
+  batch:
+    jdbc:
+      initialize-schema: never
+  rabbitmq:
+    #   If multiple brokers required:
+    #   host: <must be empty>
+    #   addresses: host1:port1,host2:port2,...
 
-keycloak:
-  client-id: warehouse-frontend
-  adapter:
-    authServerUrl: fakeAuthHost:8000
-    realm: sens-webapp
-    publicClient: false
-    confidentialPort: 0
-    principalAttribute: preferred_username
-    resource: backend
-    sslRequired: external
-    credentials.secret: 55555555-4444-3333-2222-000111000111
+    #   configuration for common-docker-infrastructure
+    host: localhost
+    port: 5672
+    username: dev
+    password: dev
+    virtual-host: /
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/auth/realms/Dev
 
 warehouse:
   persistence:
@@ -74,6 +79,7 @@ sep.filestorage:
     url: http://localhost:9000
     access-key: admin
     private-key: admin123
+    region: s3-test-region
 
 warehouse.report.statistics:
   all-alerts-query:
