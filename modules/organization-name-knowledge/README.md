@@ -1,7 +1,7 @@
 # Organization Name Knowledge
 
 Package created to provide access to all organization - name - related knowledge, that was collected when developing
-solution across various agents. Its purpose is to parse an organization name from a text that may be in cleaned, 
+solution across various agents. Its purpose is to parse an organization name from a text that may be in cleaned,
 or completely freetext form.
 
 ## Installation:
@@ -11,8 +11,8 @@ or completely freetext form.
 ```pip install organization-name-knowledge```
 
 ### Docker
-#### Docker building 
-Using agent inside Docker, its requirements are downloaded from our S8 PyPi. 
+#### Docker building
+Using agent inside Docker, its requirements are downloaded from our S8 PyPi.
 Thus, we need to do something like 'logging in' to be able to do so:
 Create in project level directory, a file named "pip_index_url"
 (this file is added to .gitignore and should never be copied anywhere !)
@@ -35,7 +35,7 @@ Parse a name string to NameInformation object, that contains information about:
 - common_prefixes (found in name string)
 - base (what is the base name of parsed organization name)
 - common_suffixes (found in name string)
-- legal (legal terms found withing name string, also from parentheses 
+- legal (legal terms found withing name string, also from parentheses
   (if parenthesis contains only legal terms, otherwise it is parsed as other name in parenthesis section)
 - countries (country names found within name string - from parentheses only)
 - parenthesis (information from parentheses found in string)
@@ -72,4 +72,4 @@ Static data used for comparison is currently stored in organization_name_knowled
 * prepositions.txt - i.e. "from", "in", "of"
 * sp_500.text - known huge organization names from SP 500 index
 * weak_words.json - words ignored in creating abbreviation or extracting legal terms or common words
-* words_mapping.json - mapping 
+* words_mapping.json - mapping
