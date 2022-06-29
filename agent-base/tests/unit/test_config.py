@@ -116,3 +116,20 @@ def test_config_load_from_env_only(setup_and_tear_down_all):
 
     assert app_config.uds.address == ENV_VARS_TO_VALUES["UDS_ADDRESS"]
     assert app_config.uds.timeout == ENV_VARS_TO_VALUES["UDS_TIMEOUT"]
+
+
+def test_rabbitmq_config():
+    # host, port provided in rabbitmq config
+    config_v1 = Config()
+    for rmq_config in config_v1.application_config.rabbitmq.generate():
+        assert rmq_config.host == "localhost"
+        assert rmq_config.port == 24160
+
+    # host, port generated from 'addresses' field in rabbitmq config
+    config_v2 = Config((pathlib.Path("tests/resources/config_rmq_addresses"),))
+    for rmq_config, expected in zip(
+        config_v2.application_config.rabbitmq.generate(),
+        [{"host": "localhost", "port": 1234}, {"host": "test_server", "port": 99099}],
+    ):
+        assert rmq_config.host == expected["host"]
+        assert rmq_config.port == expected["port"]
