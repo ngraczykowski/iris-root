@@ -84,7 +84,7 @@ silenteight.bridge:
       enabled: false
       duration: ${RETENTION_PERIOD:155d}
     dry-run-mode:
-      enabled: false
+      enabled: true
 
   ### JENKINS
 
