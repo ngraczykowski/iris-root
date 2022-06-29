@@ -29,7 +29,7 @@ Package needs Python >= 3.7. Package and dependencies zipped in .pyz file needs 
 
   `pip install company-name`
 
-  *When installing using pip, please note that you will need to download or create a config, please check 
+  *When installing using pip, please note that you will need to download or create a config, please check
   [Configuration](#configuration)*
 
 
@@ -65,7 +65,7 @@ For local run simply fill params in `config/application.yaml` - and prepare rabb
 ### running agent without installation
 
 Installation is not needed, if zipfile for your python version / system is available.
-Zipfile for latest python3.7 is available as artifact in 
+Zipfile for latest python3.7 is available as artifact in
 
 https://repo.silenteight.com:443/artifactory/dist-public/organization-name-agent/
 
@@ -139,8 +139,8 @@ Basic application configuration for running agent. Example configuration is stor
 
 ### Files
 
-* application.yaml - configuration for external integrations, such as agent exchange or data source; 
-  and for Sentry - to monitor running on remote. Before remote launch, modify 'sentry' config section: 
+* application.yaml - configuration for external integrations, such as agent exchange or data source;
+  and for Sentry - to monitor running on remote. Before remote launch, modify 'sentry' config section:
   set 'turn_on' to _true_, and 'environment' and 'release' to appropriate values.
 
 * blacklist.txt - list of blacklisted names, used to get blacklist score
@@ -153,7 +153,7 @@ Basic application configuration for running agent. Example configuration is stor
 
 Default configuration directory is `./config/`. It can be changed by:
 * environment variable `AGENT_CONFIGURATION_DIR`
-* argument `-c` or `--configuration-dirs` while starting the agent 
+* argument `-c` or `--configuration-dirs` while starting the agent
 
 Currently there is no way to use different configuration in one running agent.
 
@@ -179,7 +179,7 @@ Given two lists of names the agent approaches resolution in a few steps. The age
 The following example will be used to illustrate the high-level process:
 
 ```
-ap_names = {"Alphabet Inc.", "Bank Iowa"} 
+ap_names = {"Alphabet Inc.", "Bank Iowa"}
 wl_names= {"Bank of China", "Gazprom"}
 ```
 
@@ -204,7 +204,7 @@ wl_names= {"Bank of China", "Gazprom"}
 	  * ```("Bank Iowa", "Bank of China") ```
 	  * ```("Bank Iowa", "Gazprom") ```
 
-* The third step is to compare each pair of names. This is accomplished by producing a feature vector comprised of outputs from various algorithms. 
+* The third step is to compare each pair of names. This is accomplished by producing a feature vector comprised of outputs from various algorithms.
 	* Example ```("Bank Iowa", "Bank of China")```
 	  * ```parenthesis_match = 0```
 	  * ```abbreviation = 0 ```
@@ -235,7 +235,7 @@ wl_names= {"Bank of China", "Gazprom"}
 	* Example:
 	  * Solution for
 	    ```
-	    ap_names = {"Alphabet Inc.", "Bank Iowa"} 
+	    ap_names = {"Alphabet Inc.", "Bank Iowa"}
 	    wl_names= {"Bank of China", "Gazprom"}
 	    ```
 	    is ```MATCH``` with ```solution_probability=1```
@@ -330,7 +330,7 @@ Most scores are computed on cleaned names - lowercase and without national chara
   Score(status=<ScoreStatus.OK: 'OK'>, value=1.0, compared=((), ('HP',)))
   ```
   Possible Values: 0 or 1
-  
+
   Compared: prefixes + base + suffixes with one of parenthesis value
 
   Algorithm: The algorithm checks if there are strings of characters contained in parenthesis in both names. It then checks if the cleaned name (without legal identifiers) appears in the string enclosed by parenthesis in the other. If either cleaned name is contained within the enclosed string then a 1 is returned. In the example above, the empty string is contained in 'HP'
@@ -342,9 +342,9 @@ Most scores are computed on cleaned names - lowercase and without national chara
   Score(status=<ScoreStatus.OK: 'OK'>, value=1, compared=(('HP',), ('HEWLETT-PACKARD',)))
   ```
   Possible Values: between 0 and 1
-  
+
   Compared: base (assumed abbreviation) with prefixes + base + optionally suffixes + optionally legal (assumed source of abbreviation)
-  
+
   Algorithm: checking possible matches, traversing from left to right side of source and abbreviation simultaneously -
   acceptable non-obvious operations are:
     * using more letters from one word (but only consecutive ones)
@@ -358,7 +358,7 @@ Most scores are computed on cleaned names - lowercase and without national chara
     * treading hyphenated words as one or two
       * Example: "Hewlett-Packard" is treated as "Hewlett Packard" and ["Hewlett","Packard"]
 
-  
+
 * **fuzzy_on_base**, **fuzzy_on_suffix**, **fuzzy**
   ```
   fuzzy                Score(status='OK', value=0.79, compared=(('Indonesia North Industries',), ('North Indonesia Industries',)))
@@ -366,15 +366,15 @@ Most scores are computed on cleaned names - lowercase and without national chara
   fuzzy_on_suffix      Score(status='OK', value=1.0, compared=(('Industries',), ('Industries',)))
   ```
   Possible Value: between 0 and 1
-  
+
   Compared: base / suffixes / prefixes + base + suffixes
-  
+
   Algorithm: ratio from rapidfuzz library with removed spaces (using Levenshtein distance)
     * fuzzy: calculates the Levenshtein distance ratio between the two names without removing tokens
     * fuzzy_on_base: calculates the Levenshtein distance ratio between two names without legal identifiers
     * fuzzy_on_suffix: valculates the Levenshtein distance ratio between the suffixes of the two names
 
-  
+
 * **partial_fuzzy**, **sorted_fuzzy**
   ```
   fuzzy                Score(status='OK', value=0.79, compared=(('Indonesia North Industries',), ('North Indonesia Industries',)))
@@ -382,72 +382,72 @@ Most scores are computed on cleaned names - lowercase and without national chara
   sorted_fuzzy         Score(status='OK', value=1.0, compared=(('Indonesia North Industries',), ('North Indonesia Industries',)))
   ```
   Possible Value: between 0 and 1
-  
+
   Compared: prefixes + base + suffixes
-  
+
   Algorithm: partial ratio / sorted ratio from rapidfuzz library with removed spaces (using Levenshtein distance)
     * partial_fuzzy: returns the maximum Levenshtein distance ratio found by computing the Levenshtein distance ratios for the shorter name against all substrings of equal length in the longer name
     * sorted_fuzzy: sorts the tokens alphabetically then calculates the Levenshtein distance ratio
 
-  
+
 * **legal_terms**
   ```
   Score(status='OK', value=0.75, compared=(('private', 'limited'), ('ltd',)))
   ```
   Possible Value: between 0 and 1
-  
+
   Compared: legal
-  
+
   Algorithm: match combined legal terms meaning
     (or, if meaning not available in datasource, exact legal terms after expanding the abbreviation) -
     order is not taken into consideration
-  
-  
+
+
 * **absolute_tokenization**
   ```
   Score(status='OK', value=3, compared=(('THE', 'EMBASSY', 'OF', 'THE', 'REPUBLIC', 'OF', 'ANGOLA', 'IN', 'THE', 'REPUBLIC', 'OF', 'KENYA'), ('EMBASSY', 'OF', 'THE', 'REPUBLIC', 'OF', 'ANGOLA')))
   ```
   Possible Value: positive integers
-  
+
   Compared: prefixes + base + suffixes
-  
+
   Algorithm: number of tokens present in both names, without weak words
 
-  
+
 * **tokenization**
   ```
   Score(status='OK', value=0.5, compared=(('THE', 'EMBASSY', 'OF', 'THE', 'REPUBLIC', 'OF', 'ANGOLA', 'IN', 'THE', 'REPUBLIC', 'OF', 'KENYA'), ('EMBASSY', 'OF', 'THE', 'REPUBLIC', 'OF', 'ANGOLA')))
   ```
   Possible Value: between 0 and 1
-  
+
   Compared: prefixes + base + suffixes
-  
+
   Algorithm: ratio of tokens present in both names, without weak words
 
-  
+
 * **blacklisted**
   ```
   "Gazprom" vs "HP"
   Score(status=<ScoreStatus.OK: 'OK'>, value=1.0, compared=(('gazprom',), ()))
   ```
-  
+
   Possible Value: 0 or 1
-  
+
   Compared: cleaned input on alerted party side
-  
+
   Algorithm: search for defined words (does not need exact word, for example "gazprom" works for "gazprombank")
 
 
 * **country**
-  ``` 
+  ```
   "TOYOTA MOTOR FINANCE (CHINA)" vs "TOYOTA MOTOR FINANCE (THE PEOPLE'S REPUBLIC OF CHINA)"
   Score(status=<ScoreStatus.OK: 'OK'>, value=1.0, compared=(('CHINA',), ("THE PEOPLE'S REPUBLIC OF CHINA",)))
   ```
-  
+
   Possible Value: between 0 and 1
-  
+
   Compared: countries
-  
+
   Algorithm: match countries without taking their order into consideration
 
 
@@ -460,11 +460,11 @@ Most scores are computed on cleaned names - lowercase and without national chara
     Score(status=<ScoreStatus.OK: 'OK'>, value=0.83, compared=(('ANSMTMPRTKSPRT (John Smith import & export)',), ('ANSMTMPKSP (Jon Smit imp & exp)',)))
   ```
   Possible Value: between 0 and 1
-  
+
   Compared: base / prefixes + base + suffixes, original (not cleaned)
-  
+
   Algorithm: dmetaphone (from library phonetics, which do not support e.g. chinese or arabic) Double Metaphone is a phonetic algorithm that reduces a word to a combination of 12 consonant sounds. If there is ambiguity in the pronunciations, then two tokens are returned. Double Metaphone uses a set of rules to remove characters from a word before mapping the remaining characters to one of the 12 consonant sounds.
-  
+
 
 * **token_inclusion**
   ```
@@ -472,9 +472,9 @@ Most scores are computed on cleaned names - lowercase and without national chara
    Score(status=<ScoreStatus.OK: 'OK'>, value=1.0, compared=(('The', 'Walt', 'Disney'), ('Disney',)))
   ```
   Possible Value: 0 or 1
-  
+
   Compared: prefixes + base + suffixes
-  
+
   Algorithm: if exactly one word in exactly one of the names, check if this token also appears in the other name
 
 
@@ -482,7 +482,7 @@ Most scores are computed on cleaned names - lowercase and without national chara
   ```
   "Allstate Identity Protection" vs "Allstate Heritage Life Insurance Company"
    Score(status='OK', value=1.0, compared=((Allstate',), ('Allstate',)))
-  
+
   ```
   Possible Value: 0 or 1
 
@@ -530,7 +530,7 @@ The source is always relative to config directory and contains a model - current
     The model probability for ```MATCH``` or ```NO_MATCH``` must be met for that solution to be returned and the solutions are applied in the order they appear in the config file.
 
   The order that rules are written in the config file are the order the rules are applied to a name pair. For example, in the default config file in this repo the rules are, in order:
-  
+
   1. If ```blacklisted == 1```, then ```MATCH``` with solution probability 1
   2. Else, if ```token_inclusion==1``` , then ```MATCH``` with solution probability 1
   3. Else, if ```partial_fuzzy==1``` , then ```MATCH``` with solution probability 1
@@ -539,9 +539,9 @@ The source is always relative to config directory and contains a model - current
   6. Else, if ```model(alerted_party_name, wl_name)[1] >= 0.85```, then ```NO_MATCH``` with solution probability equal to the ```NO_MATCH``` likelihood (i.e. ```model(alerted_party_name, wl_name)[1]```)
   7. Else, if ```model(alerted_party_name, wl_name)[0] >= 0.15```, then ```MATCH``` with solution probability equal to the ```MATCH``` likelihood
   8. Else, ```INCONCLUSIVE```
-  
+
   **NOTE:** It is possible to set the thresholds of the model ```MATCH```/```NO_MATCH``` likelihoods so that ```INCONCLUSIVE``` is returned if neither condition is met. For example, if the threshold for ```NO_MATCH``` is set to 0.85 and the threshold for ```MATCH``` is set to 0.2, then if the model returns a likelihood of 0.83 for ```NO_MATCH``` and a likelihood of 0.17 for ```MATCH```, then neither condition is met and the result will be ```INCONCLUSIVE```.
-  
+
   All solutions used must be defined in `company_name/solution/solution.py` - but not all defined there needs to be used.
   If rules will not be comprehensive, the default solution is INCONCLUSIVE.
 
@@ -590,7 +590,7 @@ Run tests with pytest:
 Some tests are skipped - those are examples that needs a little more care to work correctly
 
 For jenkins runs, flag `--without-rabbitmq` is added - so tests with agent exchange
-are not run, as it needs running rabbitmq instance. 
+are not run, as it needs running rabbitmq instance.
 
 To run locally tests that depends on rabbit, use in example this repo:
 https://gitlab.silenteight.com/sens/common-docker-infrastructure
