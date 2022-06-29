@@ -36,4 +36,3 @@ message HitTypesReason {
     repeated string hit_categories = 1;
     repeated string normal_categories = 2;
 }
-
