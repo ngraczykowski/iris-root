@@ -1,6 +1,5 @@
 plugins {
-  id "com.silenteight.iris.build.spring-boot-application"
-  id "com.silenteight.iris.build.container-image"
+  id "com.silenteight.iris.build.web-application-starter"
   id "io.freefair.aspectj.post-compile-weaving"
   id "groovy"
 }
@@ -8,8 +7,6 @@ plugins {
 dependencies {
   implementation libs.mapstruct
   annotationProcessor libs.mapstruct.processor
-  annotationProcessor libs.lombok
-  annotationProcessor libs.spring.boot.configuration.processor
   implementation libs.commons.csv
   implementation libs.jakarta.persistence.api
   implementation libs.silenteight.sep.base.common
@@ -34,36 +31,25 @@ dependencies {
   implementation libs.jetbrains.annotations
   implementation libs.jjwt
   implementation libs.hibernate.types
-  implementation libs.liquibase.core
-  implementation libs.liquibase.sessionlock
   implementation libs.lz4.java
-  implementation libs.postgresql
   implementation libs.protobuf.java.util
-  implementation libs.shedlock.jdbc.provider
-  implementation libs.shedlock.spring
+  implementation libs.bundles.shedlock
   implementation libs.governance.model.api
   implementation libs.learning.engine.store.api
   implementation libs.spring.amqp
   aspect libs.spring.aspects
-  implementation libs.spring.boot
-  implementation libs.spring.boot.starter.actuator
-  implementation libs.spring.boot.actuator
-  implementation libs.spring.boot.starter.undertow
-  implementation libs.spring.boot.starter.validation
-  implementation libs.spring.boot.autoconfigure
   implementation libs.spring.boot.starter.data.jpa
   implementation libs.spring.cloud.starter.consul.config
   implementation libs.spring.cloud.consul.discovery
-  implementation libs.spring.cloud.starter.sleuth
   implementation libs.spring.amqp.rabbit
   implementation libs.spring.integration.amqp
   implementation libs.spring.retry
-  implementation libs.streamex
+  implementation doNotUseLibs.streamex
   implementation libs.warehouse.data.api
   implementation libs.worldcheck.api
   implementation libs.historical.decisions.api
-  runtimeOnly libs.ecs.logging.core
-  runtimeOnly libs.logback.ecs.encoder
+
+  runtimeOnly libs.bundles.postgres.runtime
 
   testAnnotationProcessor libs.lombok
   testImplementation libs.spock.core

@@ -49,8 +49,7 @@ dependencies {
 
   implementation libs.javax.mail
 
-  implementation libs.shedlock.jdbc.provider
-  implementation libs.shedlock.spring
+  implementation libs.bundles.shedlock
 
   testImplementation libs.spring.batch.test
   testImplementation libs.silenteight.sep.base.testing

@@ -3,7 +3,3 @@ plugins {
 }
 
 description = "Warehouse DB Changelog"
-
-dependencies {
-  implementation libs.liquibase.sessionlock
-}

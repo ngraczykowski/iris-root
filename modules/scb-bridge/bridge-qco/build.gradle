@@ -15,7 +15,7 @@ dependencies {
   implementation libs.grpc.server.spring.boot.starter
   implementation libs.grpc.protobuf
   implementation libs.commons.lang3
-  implementation libs.vavr
+  implementation doNotUseLibs.vavr
 
   testImplementation libs.spring.test
   testImplementation libs.spring.boot.starter.test

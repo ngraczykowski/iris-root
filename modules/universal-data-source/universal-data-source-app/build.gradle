@@ -1,8 +1,6 @@
 plugins {
-  id "java"
   id "groovy"
-  id "com.silenteight.iris.build.spring-boot-application"
-  id "com.silenteight.iris.build.container-image"
+  id "com.silenteight.iris.build.web-application-starter"
 }
 
 dependencies {
@@ -14,28 +12,14 @@ dependencies {
   implementation libs.commons.text
   implementation libs.guava
 
-  // Logging
-  runtimeOnly libs.ecs.logging.core
-  runtimeOnly libs.logback.ecs.encoder
-
   // Base libs
   implementation libs.silenteight.sep.base.common
   implementation libs.silenteight.commons.app
-  implementation libs.lombok
 
   // Application Starters
-  implementation libs.spring.boot.starter.actuator
-  implementation libs.spring.boot.starter.logging
   implementation libs.spring.boot.starter.security
-  implementation libs.spring.boot.starter.web
-  implementation libs.spring.boot.starter.undertow
-  implementation libs.micrometer.prometheus
 
-  // Sentry
-  runtimeOnly libs.sentry.spring.boot.starter
-  runtimeOnly libs.sentry.logback
-
-// Security
+  // Security
   implementation libs.spring.security.config
   implementation libs.spring.security.core
   implementation libs.spring.security.web
@@ -43,7 +27,6 @@ dependencies {
   // Cloud
   implementation libs.spring.cloud.consul.discovery
   implementation libs.spring.cloud.starter.consul.config
-  implementation libs.spring.cloud.starter.sleuth
 
   // Validator
   implementation libs.tomcat.embed.el
@@ -61,10 +44,8 @@ dependencies {
   // Database
   implementation libs.spring.boot.starter.data.jpa
   implementation libs.spring.boot.starter.jdbc
-  implementation libs.liquibase.core
-  implementation libs.hikari.cp
-  runtimeOnly libs.postgresql
-  runtimeOnly libs.liquibase.sessionlock
+
+  runtimeOnly libs.bundles.postgres.runtime
 
   // Messaging
   implementation libs.amqp.client
@@ -99,6 +80,4 @@ dependencies {
   testImplementation libs.silenteight.sep.base.testing
   testImplementation libs.adjudication.engine.api
   testImplementation libs.awaitility
-  testImplementation libs.hibernate.validator
-  testImplementation libs.tomcat.embed.el
 }

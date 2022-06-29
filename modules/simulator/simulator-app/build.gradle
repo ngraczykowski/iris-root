@@ -1,7 +1,6 @@
 plugins {
   id "groovy"
-  id "com.silenteight.iris.build.container-image"
-  id "com.silenteight.iris.build.spring-boot-application"
+  id "com.silenteight.iris.build.web-application-starter"
 }
 
 description = "Simulator"
@@ -15,9 +14,6 @@ dependencies {
   implementation libs.silenteight.simulator.processing
   implementation libs.silenteight.simulator.retention
 
-  implementation libs.spring.boot.starter.actuator
-  implementation libs.spring.boot.starter.web
-
   implementation libs.spring.cloud.starter.consul.config
 
   implementation libs.grpc.api
@@ -25,13 +21,7 @@ dependencies {
   implementation libs.grpc.census
   implementation libs.grpc.spring.boot.starter
 
-  runtimeOnly libs.sentry.spring.boot.starter
-  runtimeOnly libs.sentry.logback
-
-  runtimeOnly libs.hikari.cp
-  runtimeOnly libs.liquibase.core
-  runtimeOnly libs.liquibase.sessionlock
-  runtimeOnly libs.postgresql
+  runtimeOnly libs.bundles.postgres.runtime
 
   runtimeOnly libs.spring.cloud.consul.discovery
 

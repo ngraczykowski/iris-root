@@ -10,7 +10,7 @@ import com.silenteight.hsbc.bridge.model.rest.input.ModelType;
 import com.silenteight.hsbc.bridge.model.rest.output.SimpleModelResponse;
 import com.silenteight.hsbc.bridge.model.transfer.ModelManager;
 
-import liquibase.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -96,7 +96,7 @@ class ModelRestController {
   }
 
   private void checkRequestUri(String name) {
-    if (StringUtil.isEmpty(name)) {
+    if (StringUtils.isEmpty(name)) {
       throw new RequestNotValidException(name);
     }
   }

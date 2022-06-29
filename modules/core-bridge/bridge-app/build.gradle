@@ -1,6 +1,5 @@
 plugins {
-  id "com.silenteight.iris.build.spring-boot-application"
-  id "com.silenteight.iris.build.container-image"
+  id "com.silenteight.iris.build.web-application-starter"
   id "groovy"
 }
 
@@ -8,7 +7,6 @@ description = "bridge-app"
 
 
 dependencies {
-  annotationProcessor libs.spring.boot.configuration.processor
   implementation libs.silenteight.core.bridge.protobuf.spring.boot.starter
   implementation libs.silenteight.recommendation.api.library
   implementation libs.silenteight.recommendation.api.proto
@@ -25,15 +23,8 @@ dependencies {
 
   implementation libs.spring.aspects
   implementation libs.grpc.spring.boot.starter
-  implementation libs.spring.boot
-  implementation libs.spring.boot.actuator
-  implementation libs.spring.boot.starter.actuator
-  implementation libs.spring.boot.starter.undertow
-  implementation libs.spring.boot.starter.validation
-  implementation libs.spring.boot.starter.web
   implementation libs.spring.cloud.starter.consul.config
   implementation libs.spring.cloud.consul.discovery
-  implementation libs.spring.cloud.starter.sleuth
   implementation libs.spring.boot.starter.amqp
   implementation libs.spring.boot.starter.data.jdbc
   implementation libs.spring.retry
@@ -41,22 +32,16 @@ dependencies {
   implementation libs.commons.collections
   implementation libs.commons.validator
   implementation libs.commons.io
-  implementation libs.postgresql
-  implementation libs.streamex
-  implementation libs.vavr
+  implementation doNotUseLibs.streamex
+  implementation doNotUseLibs.vavr
   implementation libs.json.flattener
-  implementation libs.liquibase.core
-  runtimeOnly libs.ecs.logging.core
-  runtimeOnly libs.logback.ecs.encoder
-  runtimeOnly libs.sentry.logback
-  runtimeOnly libs.sentry.spring.boot.starter
   implementation libs.spring.amqp.rabbit
   implementation libs.lz4.java
   implementation libs.brave.instrumentation.grpc
-  implementation libs.micrometer.prometheus
-  implementation libs.shedlock.spring
-  implementation libs.shedlock.jdbc.provider
+  implementation libs.bundles.shedlock
+  implementation libs.postgresql
 
+  runtimeOnly libs.bundles.postgres.runtime
 
   testImplementation libs.groovy.json
   testImplementation libs.spock.core

@@ -8,7 +8,7 @@ dependencies {
   implementation libs.protobuf.java.util
   implementation libs.grpc.protobuf
   implementation libs.grpc.stub
-  implementation libs.vavr
+  implementation doNotUseLibs.vavr
   implementation libs.slf4j.api
   implementation project(":registration-internal-protos")
 }

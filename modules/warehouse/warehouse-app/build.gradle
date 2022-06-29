@@ -1,9 +1,5 @@
 plugins {
-  id "com.silenteight.iris.build.java-library"
-  id "maven-publish"
-  id "io.freefair.aspectj.post-compile-weaving"
-  id "com.silenteight.iris.build.spring-boot-application"
-  id "com.silenteight.iris.build.container-image"
+  id "com.silenteight.iris.build.web-application-starter"
 }
 
 description = "Warehouse"
@@ -29,10 +25,6 @@ dependencies {
   implementation libs.silenteight.sep.base.common
   implementation libs.silenteight.commons.app
 
-  implementation libs.spring.boot.starter.actuator
-  implementation libs.spring.boot.starter.undertow
-  implementation libs.spring.boot.starter.web
-
   implementation libs.spring.context.support
   implementation libs.spring.security.config
   implementation libs.spring.security.web
@@ -43,11 +35,8 @@ dependencies {
   implementation libs.jaxb.api
 
   implementation libs.protobuf.java.util
-  implementation libs.logback.ecs.encoder
-  implementation libs.ecs.logging.core
 
-  runtimeOnly libs.sentry.spring.boot.starter
-  runtimeOnly libs.sentry.logback
+  runtimeOnly libs.bundles.postgres.runtime
 
   testImplementation project(":warehouse-common-testing")
 

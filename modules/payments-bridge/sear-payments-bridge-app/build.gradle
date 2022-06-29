@@ -1,7 +1,6 @@
 plugins {
   id "groovy"
-  id "com.silenteight.iris.build.spring-boot-application"
-  id "com.silenteight.iris.build.container-image"
+  id "com.silenteight.iris.build.web-application-starter"
 }
 
 dependencies {
@@ -27,37 +26,19 @@ dependencies {
   implementation libs.commons.text
   implementation libs.guava
 
-  // Logging
-  runtimeOnly libs.ecs.logging.core
-  runtimeOnly libs.logback.ecs.encoder
-
-  // Sentry
-  runtimeOnly libs.sentry.spring.boot.starter
-  runtimeOnly libs.sentry.logback
-
   // Base libs
   implementation libs.silenteight.sep.base.common
   implementation libs.silenteight.commons.app
 
   // Application Starters
   implementation libs.spring.batch.starter
-  implementation libs.spring.boot.starter.actuator
-  implementation libs.spring.boot.starter.logging
   implementation libs.spring.boot.starter.oauth2.client
   implementation libs.spring.boot.starter.oauth2.resource.server
   implementation libs.spring.boot.starter.security
-  implementation libs.spring.boot.starter.undertow
-  implementation libs.spring.boot.starter.web
-  implementation libs.micrometer.prometheus
 
   // Cloud
   implementation libs.spring.cloud.consul.discovery
   implementation libs.spring.cloud.starter.consul.config
-  implementation libs.spring.cloud.starter.sleuth
-
-  // Validator
-  implementation libs.tomcat.embed.el
-  implementation libs.hibernate.validator
 
   // Jackson
   implementation libs.jackson.annotations
@@ -71,10 +52,7 @@ dependencies {
   // Database
   implementation libs.spring.boot.starter.data.jpa
   implementation libs.spring.boot.starter.jdbc
-  implementation libs.liquibase.core
-  implementation libs.hikari.cp
-  runtimeOnly libs.postgresql
-  runtimeOnly libs.liquibase.sessionlock
+  runtimeOnly libs.bundles.postgres.runtime
 
   // s3
   implementation libs.aws.auth
@@ -125,8 +103,7 @@ dependencies {
   testImplementation libs.test.greenmail
 
   // Shedlock
-  implementation libs.shedlock.spring
-  implementation libs.shedlock.jdbc.provider
+  implementation libs.bundles.shedlock
 
   testImplementation libs.silenteight.sep.base.testing
 }

@@ -1,6 +1,5 @@
 plugins {
-  id "com.silenteight.iris.build.container-image"
-  id "com.silenteight.iris.build.spring-boot-application"
+  id "com.silenteight.iris.build.web-application-starter"
 }
 
 description = "Governance Application"
@@ -28,10 +27,6 @@ dependencies {
   implementation libs.silenteight.sep.base.common
   implementation libs.silenteight.serp.protocol.base
 
-  implementation libs.spring.boot.starter.actuator
-
-  implementation libs.spring.boot.starter.web
-
   implementation libs.spring.context.support
   implementation libs.spring.security.config
   implementation libs.spring.security.web
@@ -57,15 +52,7 @@ dependencies {
 
   implementation libs.querydsl.jpa
 
-  //Sentry
-  runtimeOnly libs.sentry.spring.boot.starter
-  //having this at runtime ensure sending all ERROR level logs to Sentry
-  runtimeOnly libs.sentry.logback
-
-  runtimeOnly libs.hikari.cp
-  runtimeOnly libs.liquibase.core
-  runtimeOnly libs.liquibase.sessionlock
-  runtimeOnly libs.postgresql
+  runtimeOnly libs.bundles.postgres.runtime
 
   annotationProcessor(libs.querydsl.apt.jpa) {
     artifact {

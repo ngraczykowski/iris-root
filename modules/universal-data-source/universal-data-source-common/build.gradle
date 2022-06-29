@@ -4,7 +4,6 @@ plugins {
 }
 
 dependencies {
-  api libs.sentry
   implementation libs.silenteight.sep.base.common
   implementation libs.spring.context
   implementation libs.protobuf.java.util

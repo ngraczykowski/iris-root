@@ -25,7 +25,6 @@ dependencies {
   implementation libs.protobuf.java.util
   implementation libs.apache.httpclient
   implementation libs.apache.httpmime
-  implementation libs.hikari.cp
 
   testImplementation project(":warehouse-common-testing")
   testImplementation libs.awaitility

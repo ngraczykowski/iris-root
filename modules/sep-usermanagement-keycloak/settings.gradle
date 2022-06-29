@@ -7,5 +7,9 @@ dependencyResolutionManagement {
     libs {
       from(files("../../gradle/libs.versions.toml"))
     }
+
+    doNotUseLibs {
+      from(files("../../gradle/doNotUseLibs.versions.toml"))
+    }
   }
 }

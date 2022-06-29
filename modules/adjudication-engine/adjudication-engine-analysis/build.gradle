@@ -39,5 +39,5 @@ dependencies {
   testImplementation libs.protobuf.java.util
   testImplementation libs.silenteight.sep.base.testing
   testImplementation libs.tomcat.embed.el
-  testImplementation libs.shedlock.jdbc.provider
+  testImplementation libs.bundles.shedlock
 }

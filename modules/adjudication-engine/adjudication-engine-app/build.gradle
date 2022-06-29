@@ -1,6 +1,5 @@
 plugins {
-  id "com.silenteight.iris.build.spring-boot-application"
-  id "com.silenteight.iris.build.container-image"
+  id "com.silenteight.iris.build.web-application-starter"
 }
 
 description = "Adjudication Engine Application"
@@ -27,10 +26,7 @@ dependencies {
   implementation libs.commons.lang3
   implementation libs.commons.text
   implementation libs.guava
-  implementation libs.shedlock.spring
-  implementation libs.shedlock.jdbc.provider
-  runtimeOnly libs.ecs.logging.core
-  runtimeOnly libs.logback.ecs.encoder
+  implementation libs.bundles.shedlock
 
   // Base libs
   implementation libs.silenteight.sep.base.common
@@ -38,29 +34,15 @@ dependencies {
   implementation libs.sear.rabbitmq.common.schema
 
   // Application Starters
-  implementation libs.spring.boot.starter.actuator
-  implementation libs.spring.boot.starter.logging
   implementation libs.spring.boot.starter.webflux
   implementation libs.spring.boot.starter.oauth2.resource.server
   implementation libs.spring.boot.starter.oauth2.client
   implementation libs.spring.boot.starter.security
-  implementation libs.micrometer.prometheus
-
-  // Sentry
-  runtimeOnly libs.sentry.spring.boot.starter
-  runtimeOnly libs.sentry.logback
 
   // Security
   implementation libs.spring.security.config
   implementation libs.spring.security.core
   implementation libs.spring.security.web
-
-  // Spring Sleuth
-  implementation libs.spring.cloud.starter.sleuth
-
-  // Validator
-  implementation libs.tomcat.embed.el
-  implementation libs.hibernate.validator
 
   // APIs
   implementation libs.jakarta.persistence.api
@@ -77,16 +59,13 @@ dependencies {
   runtimeOnly libs.jackson.module.parameter.names
 
   // Database
-  implementation libs.liquibase.core
   implementation libs.spring.jdbc
   implementation libs.spring.data.jpa
-  implementation libs.hikari.cp
   implementation libs.hibernate.core
-  runtimeOnly libs.postgresql
+  runtimeOnly libs.bundles.postgres.runtime
   runtimeOnly libs.hibernate.jcache
   runtimeOnly libs.caffeine
   runtimeOnly libs.caffeine.jcache
-  runtimeOnly libs.liquibase.sessionlock
 
   // Messaging
   implementation libs.amqp.client

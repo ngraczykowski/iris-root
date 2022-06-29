@@ -12,8 +12,9 @@ rootProject.name = 'iris-build-logic'
 
 include('java-base')
 include('java-library')
+include('protobuf')
 include('report-aggregation')
 include('root-build')
 include('sonarqube')
 include('spring-boot-application')
-include('protobuf')
+include('starters')

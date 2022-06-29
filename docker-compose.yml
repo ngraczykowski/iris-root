@@ -76,7 +76,7 @@ services:
         reservations:
           memory: 1G
   minio:
-    image: quay.io/minio/minio:RELEASE.2021-03-10T05-11-33Z
+    image: minio/minio:RELEASE.2021-03-10T05-11-33Z
     container_name: iris_minio
     volumes:
       - minio-fs:/data1
@@ -96,7 +96,7 @@ services:
     networks:
       - odfe-net
   createbuckets:
-    image: quay.io/minio/mc
+    image: minio/mc
     depends_on:
       - minio
     entrypoint: >

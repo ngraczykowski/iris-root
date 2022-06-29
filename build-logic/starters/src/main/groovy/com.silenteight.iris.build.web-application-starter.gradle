@@ -1,0 +1,38 @@
+plugins {
+  id 'com.silenteight.iris.build.spring-boot-application'
+  id 'com.silenteight.iris.build.container-image'
+}
+
+dependencies {
+  // Base starter for Servlet-backed Web application
+  implementation libs.spring.boot.starter.web
+
+  // Logging dependencies and auto-configuration
+  implementation libs.spring.boot.starter.logging
+
+  // Validating inputs and configurations
+  implementation libs.spring.boot.starter.validation
+
+  // Enabling Spring Actuator for production-grade features
+  implementation libs.spring.boot.starter.actuator
+
+  // Tracing distributed requests with Spring Sleuth
+  implementation libs.spring.cloud.starter.sleuth
+
+  // Logging to Elastic Common Schema format (JSON)
+  runtimeOnly libs.bundles.ecs.logging
+
+  // Reporting errors to Sentry
+  runtimeOnly libs.bundles.sentry.spring
+
+  // Exporting metrics to Prometheus
+  runtimeOnly libs.micrometer.prometheus
+
+  // Generating JSON describing available configuration properties
+  annotationProcessor libs.spring.boot.configuration.processor
+
+  // Testing Spring applications
+  testImplementation libs.spring.test
+  testImplementation libs.spring.boot.test
+  testImplementation libs.spring.boot.test.autoconfigure
+}

@@ -18,7 +18,7 @@ dependencies {
   implementation libs.silenteight.sep.usermanagement.api
   implementation libs.keycloak.admin.client
   implementation libs.caffeine
-  implementation libs.streamex
+  implementation doNotUseLibs.streamex
   implementation libs.jackson.datatype.jsr310
   testImplementation libs.test.containers.keycloak
 

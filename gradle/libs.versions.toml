@@ -404,8 +404,6 @@ shedlock-core = { group = "net.javacrumbs.shedlock", name = "shedlock-core", ver
 shedlock-jdbc-provider = { group = "net.javacrumbs.shedlock", name = "shedlock-provider-jdbc-template", version.ref = "shedlock" }
 shedlock-spring = { group = "net.javacrumbs.shedlock", name = "shedlock-spring", version.ref = "shedlock" }
 snakeyaml = { group = "org.yaml", name = "snakeyaml" }
-#TODO(dsniezek): in my opinion we should remove this lib(used only in keycloak, easy replace with pure java)
-streamex = { group = "one.util", name = "streamex", version = "0.8.1" }
 tomcat-embed-el = { group = "org.apache.tomcat.embed", name = "tomcat-embed-el" }
 tika-core = { group = "org.apache.tika", name = "tika-core", version = "2.4.1" }
 #TODO(dsniezek): is it need?
@@ -415,7 +413,6 @@ mapstruct-processor = { group = 'org.mapstruct', name = 'mapstruct-processor', v
 json-flattener = { group = 'com.github.wnameless', name = 'json-flattener', version = '0.7.1' }
 #TODO(pputerla): this is required by core-brige; remove once core bridge is cleansed
 wiremock = { group = 'com.github.tomakehurst', name = 'wiremock-standalone', version = '2.27.2' }
-vavr = { group = 'io.vavr', name = 'vavr', version = '0.10.4' }
 
 # Testing
 assertj-core = { group = "org.assertj", name = "assertj-core" }
@@ -462,7 +459,11 @@ plugin-git-properties = { module = "com.gorylenko.gradle-git-properties:com.gory
 plugin-google-protobuf = { module = "com.google.protobuf:protobuf-gradle-plugin", version.ref = "plugin-google-protobuf" }
 
 [bundles]
-#groovy = ["groovy-core", "groovy-json", "groovy-nio"]
+postgres-runtime = ["hikari-cp", "postgresql", "liquibase-core", "liquibase-sessionlock"]
+ecs-logging = ["ecs-logging-core", "logback-ecs-encoder"]
+sentry-spring = ["sentry-logback", "sentry-spring-boot-starter"]
+hibernate-validator = ["tomcat-embed-el", "hibernate-validator"]
+shedlock = ["shedlock-spring", "shedlock-jdbc-provider"]
 
 [plugins]
 #jmh = { id = "me.champeau.jmh", version = "0.6.5" }

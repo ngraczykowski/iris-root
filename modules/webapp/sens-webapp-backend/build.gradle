@@ -1,6 +1,5 @@
 plugins {
-  id "com.silenteight.iris.build.container-image"
-  id "com.silenteight.iris.build.spring-boot-application"
+  id "com.silenteight.iris.build.web-application-starter"
 }
 
 description = "SENS WebApp Backend"
@@ -26,11 +25,6 @@ dependencies {
   implementation libs.commons.lang3
 
   implementation libs.hibernate.envers
-  implementation libs.hibernate.validator
-
-  implementation libs.spring.boot.starter.actuator
-
-  implementation libs.spring.boot.starter.web
 
   implementation libs.spring.data.jpa
 
@@ -46,19 +40,11 @@ dependencies {
   implementation libs.spring.cloud.starter.consul.config
   implementation libs.freemarker
 
-  implementation libs.hikari.cp
-  runtimeOnly libs.liquibase.core
-  runtimeOnly libs.liquibase.sessionlock
-
   implementation doNotUseLibs.vavr
   implementation libs.cronutils
 
-  //Sentry
-  runtimeOnly libs.sentry.spring.boot.starter
-  //having this at runtime ensure sending all ERROR level logs to Sentry
-  runtimeOnly libs.sentry.logback
-
-  runtimeOnly libs.postgresql
+  implementation libs.hikari.cp
+  runtimeOnly libs.bundles.postgres.runtime
 
   testImplementation libs.rest.assured
   testImplementation libs.rest.assured.spring.mock.mvc

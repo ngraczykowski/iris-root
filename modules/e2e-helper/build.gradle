@@ -1,11 +1,8 @@
 plugins {
-  id "com.silenteight.iris.build.spring-boot-application"
-  id "com.silenteight.iris.build.container-image"
+  id "com.silenteight.iris.build.web-application-starter"
 }
 
 dependencies {
-  implementation libs.spring.boot.starter.web
   implementation libs.spring.boot.starter.websocket
-  implementation libs.spring.boot.starter.actuator
   implementation libs.spring.cloud.starter.config
 }

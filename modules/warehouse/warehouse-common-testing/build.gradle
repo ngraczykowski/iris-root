@@ -45,5 +45,6 @@ dependencies {
 
   implementation libs.postgresql
   implementation libs.liquibase.core
+  implementation libs.liquibase.sessionlock
   implementation libs.hikari.cp
 }
