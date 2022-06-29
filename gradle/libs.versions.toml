@@ -62,7 +62,7 @@ plugin-nebula-resolution = "9.0.0"
 plugin-sonarqube = "3.4.0.2513"
 plugin-freefair-aspectj = "6.5.0.2"
 plugin-git-properties = "2.4.1"
-plugin-google-protobuf = "0.8.18"
+plugin-google-protobuf = "0.8.19"
 
 [libraries]
 #\[group:\s*'([^']+)',\s*name:\s*'([^']+)'(,[^]]*)?]
