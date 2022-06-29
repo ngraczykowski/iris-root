@@ -15,6 +15,10 @@ asciidoctorConfig {
   includeSources = {
     include "hld/*.adoc"
     include "technical-guide.adoc"
+    include "release-notes.adoc"
+    include "webapp-guide.adoc"
+    include "test-cases.adoc"
+    include "adrs/*.adoc"
   }
   publishAttributes = ["serp-opt-installer-version": serpOptInstallerVersion]
   additionalAsciidoctorjAttributes = ["serp-opt-installer-version": serpOptInstallerVersion]

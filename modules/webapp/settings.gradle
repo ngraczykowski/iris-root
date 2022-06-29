@@ -17,4 +17,3 @@ rootProject.name = 'webapp'
 
 include 'sens-webapp-backend'
 include 'sens-webapp-dist'
-include 'sens-webapp-documentation'
