@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -37,11 +38,13 @@ class AlertGrpcAdapterTest {
             .alertId("1")
             .alertPriority(5)
             .matchIds(List.of("1"))
+            .labels(Map.of("batchId", "235"))
             .build(),
         BatchRegisterAlertMatchesIn.builder()
             .alertId("2")
             .alertPriority(1)
             .matchIds(List.of("2", "3"))
+            .labels(Map.of("batchId", "6345"))
             .build());
 
     var request = RegisterAlertsAndMatchesIn.builder()
@@ -55,11 +58,13 @@ class AlertGrpcAdapterTest {
     assertThat(response.size()).isEqualTo(2);
     assertThat(response.get(0).getAlertId()).isEqualTo("1");
     assertThat(response.get(0).getAlertName()).isEqualTo("alert_1");
+    assertThat(response.get(0).getLabels()).isEqualTo(Map.of("batchId", "235"));
     assertThat(response.get(0).getMatches().get(0).getMatchId()).isEqualTo("1");
     assertThat(response.get(0).getMatches().get(0).getName()).isEqualTo("match_1");
 
     assertThat(response.get(1).getAlertId()).isEqualTo("2");
     assertThat(response.get(1).getAlertName()).isEqualTo("alert_2");
+    assertThat(response.get(1).getLabels()).isEqualTo(Map.of("batchId", "6345"));
     assertThat(response.get(1).getMatches().get(0).getMatchId()).isEqualTo("2");
     assertThat(response.get(1).getMatches().get(0).getName()).isEqualTo("match_2");
     assertThat(response.get(1).getMatches().get(1).getMatchId()).isEqualTo("3");
@@ -78,6 +83,7 @@ class AlertGrpcAdapterTest {
                       Alert.newBuilder()
                           .setName("alert_1")
                           .setAlertId("1")
+                          .putAllLabels(Map.of("batchId", "235"))
                           .addAllMatches(
                               List.of(
                                   Match.newBuilder()
@@ -90,6 +96,7 @@ class AlertGrpcAdapterTest {
                       Alert.newBuilder()
                           .setName("alert_2")
                           .setAlertId("2")
+                          .putAllLabels(Map.of("batchId", "6345"))
                           .addAllMatches(
                               List.of(
                                   Match.newBuilder()

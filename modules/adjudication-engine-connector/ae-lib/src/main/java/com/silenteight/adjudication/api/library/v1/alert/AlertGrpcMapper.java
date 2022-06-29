@@ -28,6 +28,7 @@ class AlertGrpcMapper {
         .setPriority(batchRegisterAlertMatchesIn.getAlertPriority())
         .mergeAlertTime(toTimestamp(batchRegisterAlertMatchesIn.getAlertTime()))
         .addAllMatches(toMatches(batchRegisterAlertMatchesIn.getMatchIds()))
+        .putAllLabels(batchRegisterAlertMatchesIn.getLabels())
         .build();
   }
 
@@ -39,6 +40,7 @@ class AlertGrpcMapper {
                 .alertId(alert.getAlertId())
                 .alertName(alert.getName())
                 .matches(AlertGrpcMapper.toAlertMatchesOut(alert.getMatchesList()))
+                .labels(alert.getLabelsMap())
                 .alertTime(toOffsetDateTime(alert.getAlertTimeOrBuilder()))
                 .build())
             .collect(Collectors.toList()))
