@@ -27,5 +27,3 @@ else
   echo "No nomad file in nomad directory, ignoring"
   cd -
 fi
-
-
