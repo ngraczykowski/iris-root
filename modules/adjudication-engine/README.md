@@ -72,3 +72,48 @@ ae:
 ```
 
 In this example default value is presented.
+
+## Solving mechanisms
+
+AE supports two different solving mechanisms.
+
+### Database solving mechanism (DEFAULT)
+
+In this behavior ae solution mechanism is using database storage to keep information about agent exchange.
+
+### In-memory solving
+
+In this behavior AE is using distributed cache mechanism to coordinate agent exchange data in memory.
+This increase performance due to decrease amount of IO's and increase system responsiveness by using events.
+The default engine is hazelcast which working in embedded mode.
+
+To enable in memory solving use:
+
+```yaml
+ae:
+  solving:
+    enabled: true
+```
+
+#### Hazelcast configuration
+
+In some cases there is a requirement to isolate hazelcast cluster, especially when there is no network isolation
+between environments like development, uat, production.
+Isolation can be set by using a different cluster names (groups) for each environment
+
+Example:
+
+```yaml
+ae:
+  solving:
+    in-memory:
+      hazelcast:
+        cluster-name: <some-environment-specific-name>
+```
+
+The default group name is: *in-memory-alert-processing*
+
+This will prevent clusters from different logical environments to connect to each other.
+
+>**NOTE**
+> Only HZ embedded mode (single AE instance) is currently supported.

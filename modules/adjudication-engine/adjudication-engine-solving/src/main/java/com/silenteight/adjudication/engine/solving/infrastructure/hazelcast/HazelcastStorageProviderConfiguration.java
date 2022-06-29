@@ -52,9 +52,11 @@ class HazelcastStorageProviderConfiguration {
 
   @Bean
   HazelcastInstance hazelcastInstance() {
-    log.info("Initialize Application InMemoryStorage");
+    log.info(
+        "Initialize Application InMemoryStorage with clusterName {}",
+        hazelcastConfigurationProperties.getClusterName());
     Config inMemoryConfig = new Config();
-    inMemoryConfig.setClusterName("in-memory-alert-processing");
+    inMemoryConfig.setClusterName(hazelcastConfigurationProperties.getClusterName());
     inMemoryConfig.getSerializationConfig().getCompactSerializationConfig().setEnabled(true);
     return Hazelcast.newHazelcastInstance(inMemoryConfig);
   }

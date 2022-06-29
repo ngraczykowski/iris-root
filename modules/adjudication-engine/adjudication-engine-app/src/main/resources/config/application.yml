@@ -16,6 +16,8 @@ ae:
   solving:
     enabled: false
     in-memory:
+      hazelcast:
+        cluster-name: in-memory-alert-processing
       publisher:
         # BA publishers
         ready-match-feature-vector-publisher: 15

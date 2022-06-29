@@ -24,6 +24,9 @@ import static com.hazelcast.config.MaxSizePolicy.USED_HEAP_SIZE;
 @ConfigurationProperties(prefix = "ae.solving.in-memory.hazelcast")
 public class HazelcastConfigurationProperties {
 
+  // Use this name to make cluster isolation in case no network isolation available
+  private String clusterName;
+
   private AsyncBackup asyncBackup = AsyncBackup.disabled();
   private boolean enableReadBackup = true;
   private Duration ttlMinutes = Duration.ofMinutes(60 * 3);
