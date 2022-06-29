@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.library.v1.analysis.*;
+import com.silenteight.adjudication.api.library.v1.analysis.AddAlertsToAnalysisOut.AddedAlert;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
 import com.silenteight.bridge.core.recommendation.infrastructure.amqp.RecommendationIncomingRecommendationsGeneratedConfigurationProperties;
 import com.silenteight.bridge.core.registration.infrastructure.application.RegistrationAnalysisProperties;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
-import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -54,7 +54,9 @@ class AnalysisServiceClientMock implements AnalysisServiceClient {
       publishRecommendationsGeneratedEvent(request);
     }
     return AddAlertsToAnalysisOut.builder()
-        .addedAlerts(List.of())
+        .addedAlerts(request.getAlerts().stream()
+            .map(this::createAddedAlerts)
+            .toList())
         .build();
   }
 
@@ -67,5 +69,12 @@ class AnalysisServiceClientMock implements AnalysisServiceClient {
         .build();
     rabbitTemplate.convertAndSend(
         properties.exchangeName(), properties.exchangeRoutingKey(), event);
+  }
+
+  private AddedAlert createAddedAlerts(AddAlertsToAnalysisIn.Alert alert) {
+    return AddedAlert.builder()
+        .name(alert.getName())
+        .createdAt(alert.getDeadlineTime())
+        .build();
   }
 }

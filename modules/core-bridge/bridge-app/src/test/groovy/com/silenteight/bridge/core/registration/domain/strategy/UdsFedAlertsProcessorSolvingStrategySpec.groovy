@@ -1,6 +1,8 @@
 package com.silenteight.bridge.core.registration.domain.strategy
 
 import com.silenteight.bridge.core.registration.domain.model.AlertStatus
+import com.silenteight.bridge.core.registration.domain.model.AlertsAddedToAnalysis
+import com.silenteight.bridge.core.registration.domain.model.AlertsAddedToAnalysis.Status
 import com.silenteight.bridge.core.registration.domain.model.Batch
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository
@@ -20,24 +22,53 @@ class UdsFedAlertsProcessorSolvingStrategySpec extends Specification {
   def alertRepository = Mock(AlertRepository)
 
   @Subject
-  def underTest = new UdsFedAlertsProcessorSolvingStrategy(analysisService, analysisProperties, alertRepository)
+  def underTest = new UdsFedAlertsProcessorSolvingStrategy(
+      analysisService, analysisProperties, alertRepository)
 
-  def 'should process UDS fed alerts for SOLVING batch'() {
+  def 'should process UDS fed alerts for SOLVING batch and update alerts status to PROCESSING'() {
     given:
     def alertNames = ['alertName1, alertName2']
     def batch = Batch.builder()
         .id('batchId')
-        .status(BatchStatus.COMPLETED)
+        .status(BatchStatus.STORED)
         .analysisName("analysisName")
         .isSimulation(false)
         .build()
+    def alertsAddedToAnalysis = new AlertsAddedToAnalysis(Status.SUCCESS, alertNames)
 
     when:
     underTest.processUdsFedAlerts(batch, alertNames)
 
     then:
-    1 * alertRepository.updateStatusToProcessing(batch.id(), alertNames, EnumSet.of(AlertStatus.RECOMMENDED, AlertStatus.DELIVERED))
-    1 * analysisService.addAlertsToAnalysis(batch.analysisName(), alertNames, _ as Timestamp)
+    1 * analysisService.addAlertsToAnalysis(batch.analysisName(), alertNames, _ as Timestamp) >>
+        alertsAddedToAnalysis
+    1 * alertRepository.updateStatusToProcessing(
+        batch.id(), alertNames, EnumSet.of(AlertStatus.RECOMMENDED, AlertStatus.DELIVERED))
+    0 * _
+  }
+
+  def 'should process UDS fed alerts for SOLVING batch and update alerts status to ERROR'() {
+    given:
+    def alertNames = ['alertName1, alertName2']
+    def batch = Batch.builder()
+        .id('batchId')
+        .status(BatchStatus.STORED)
+        .analysisName("analysisName")
+        .isSimulation(false)
+        .build()
+    def alertsAddedToAnalysis = new AlertsAddedToAnalysis(Status.FAILURE, alertNames)
+    def errorDescriptionsWithAlertNames =
+        ['Failed to add alerts to analysis.': new HashSet<>(alertNames)]
+
+    when:
+    underTest.processUdsFedAlerts(batch, alertNames)
+
+    then:
+    1 * analysisService.addAlertsToAnalysis(batch.analysisName(), alertNames, _ as Timestamp) >>
+        alertsAddedToAnalysis
+    1 * alertRepository.updateStatusToError(
+        batch.id(), errorDescriptionsWithAlertNames,
+        EnumSet.of(AlertStatus.RECOMMENDED, AlertStatus.DELIVERED))
     0 * _
   }
 
