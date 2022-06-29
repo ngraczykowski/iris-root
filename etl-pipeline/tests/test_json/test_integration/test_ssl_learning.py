@@ -30,7 +30,7 @@ from tests.test_json.constant import (
 from tests.test_json.test_json_pipeline import assert_nested_dict
 
 
-def load_alert(filepath: str = "notebooks/sample/wm_address_in_payload_format.json"):
+def load_alert(filepath: str = "tests/shared/sample/wm_address_in_payload_format.json"):
     with open(filepath, "r") as f:
         text = json.load(f)
         ids = [
@@ -43,7 +43,7 @@ def load_alert(filepath: str = "notebooks/sample/wm_address_in_payload_format.js
         alert = LearningAlert(batch_id="1", alert_name="alerts/2", learning_matches=matches_ids)
         for key, value in text.items():
             alert.flat_payload[str(key)] = str(value)
-    with open("notebooks/sample/event_history.json", "r") as f:
+    with open("tests/shared/sample/event_history.json", "r") as f:
         alert.alert_event_history = f.read()
     return alert
 
@@ -77,6 +77,7 @@ class TestGrpcServer(AsyncTestCase):
 
     @classmethod
     def setUpClass(cls):
+        cls.tearDownClass()
         service_path = os.path.join(os.environ["CONFIG_APP_DIR"], "service")
         shutil.copyfile(os.path.join(service_path, "service.yaml"), "backup_service_service.yaml")
         shutil.copyfile(
@@ -86,34 +87,49 @@ class TestGrpcServer(AsyncTestCase):
 
         environment = os.environ.copy()
         service_config = ConsulServiceConfig()
-        _ = subprocess.Popen("tests/scripts/start_services_ssl.sh", env=environment)
-        channel = grpc.insecure_channel(
-            f"{service_config.etl_service_ip}:{service_config.etl_service_port}"
+        _ = subprocess.Popen(
+            "tests/scripts/start_services.sh --disable_solving --ssl".split(), env=environment
+        )
+        with open(service_config.grpc_client_tls_ca, "rb") as f:
+            ca = f.read()
+        with open(service_config.grpc_client_tls_private_key, "rb") as f:
+            private_key = f.read()
+        with open(service_config.grpc_client_tls_public_key_chain, "rb") as f:
+            certificate_chain = f.read()
+
+        server_credentials = grpc.ssl_channel_credentials(ca, private_key, certificate_chain)
+        channel = grpc.secure_channel(
+            f"{service_config.etl_service_ip}:{service_config.etl_service_port}",
+            server_credentials,
         )
         cls.stub = EtlLearningServiceStub(channel)
         time.sleep(cls.TIMEOUT)
 
     @classmethod
     def tearDownClass(cls):
-
         service_path = os.path.join(os.environ["CONFIG_APP_DIR"], "service")
         process = subprocess.Popen("tests/scripts/kill_services.sh")
-        shutil.copyfile("backup_service_service.yaml", os.path.join(service_path, "service.yaml"))
-        os.remove("backup_service_service.yaml")
+        try:
+            shutil.copyfile(
+                "backup_service_service.yaml", os.path.join(service_path, "service.yaml")
+            )
+            os.remove("backup_service_service.yaml")
+        except FileNotFoundError:
+            pass
         process.wait()
 
     @pytest.mark.asyncio
     @pytest.mark.rabbitmq
     async def test_ok_flow(self):
         await self.assert_request(
-            "notebooks/sample/wm_address_in_payload_format.json", HISTORICAL_DECISION_REQUEST
+            "tests/shared/sample/wm_address_in_payload_format.json", HISTORICAL_DECISION_REQUEST
         )
 
     @pytest.mark.asyncio
     @pytest.mark.rabbitmq
     async def test_empty_discriminator(self):
         await self.assert_request(
-            "notebooks/sample/wm_address_in_payload_format_two_marks.json",
+            "tests/shared/sample/wm_address_in_payload_format_two_marks.json",
             HISTORICAL_DECISION_REQUEST_WITHOUT_MARK,
         )
 

@@ -137,7 +137,6 @@ class HistoricalDecisionExchange:
             store_size=False,
         )
         logger.debug("Trying to send")
-
         properties = BasicProperties(
             content_encoding="lz4",
             content_type="application/x-protobuf",
@@ -161,7 +160,6 @@ class HistoricalDecisionExchange:
 
     async def _set_pika_connection(self) -> PikaConnection:
         messaging_config = self.service_config.historical_decision_exchange
-
         while True:
             for connection_config in self._prepare_connection_configurations():
                 connection = PikaConnection(messaging_config, connection_config)

@@ -160,31 +160,31 @@ def assert_length_and_content_match(
     ["payload_file", "reference_file", "reference_length", "ap_id_tp_marked_agent_input"],
     [
         (
-            "notebooks/sample/wm_address_in_payload_format.json",
+            "tests/shared/sample/wm_address_in_payload_format.json",
             "tests/shared/parsed_payload.json",
             2,
             "A05003324172",
         ),
         (
-            "notebooks/sample/wm_address_in_payload_format_2_input_3_match_records.json",
+            "tests/shared/sample/wm_address_in_payload_format_2_input_3_match_records.json",
             "tests/shared/parsed_payload_2_payload.json",
             3,
             "A05003324172",
         ),
         (
-            "notebooks/sample/wm_party_payload_without_supplemental_info.json",
+            "tests/shared/sample/wm_party_payload_without_supplemental_info.json",
             "tests/shared/empty_payload.json",
             2,
             "A05003324172",
         ),
         (
-            "notebooks/sample/wm_party_payload_with_partial_supplemental_info.json",
+            "tests/shared/sample/wm_party_payload_with_partial_supplemental_info.json",
             "tests/shared/wm_party_payload_with_partial_supplemental_info.json",
             2,
             "A05003324172",
         ),
         (
-            "notebooks/sample/big_fat_flat_payload.json",
+            "tests/shared/sample/big_fat_flat_payload.json",
             "tests/shared/big_fat_payload_parsed.json",
             9,
             "A00183210139",

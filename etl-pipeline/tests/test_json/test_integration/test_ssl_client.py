@@ -17,7 +17,9 @@ class TestSSLGrpcServer(BaseGrpcTestCase.TestGrpcServer):
     def setUpClass(cls):
         cls.tearDownClass()
         environment = os.environ.copy()
-        subprocess.Popen("tests/scripts/start_services_ssl.sh", env=environment)
+        subprocess.Popen(
+            "tests/scripts/start_services.sh --disable_learning --ssl".split(), env=environment
+        )
         service_config = ConsulServiceConfig()
         with open(service_config.grpc_client_tls_ca, "rb") as f:
             ca = f.read()
