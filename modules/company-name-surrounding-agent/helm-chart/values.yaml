@@ -1,0 +1,13 @@
+name: company-name-surrounding-agent
+image_tag: company-name-surrounding-agent
+image_repo: company-name-surrounding-agent
+ports:
+  grpc: 9090
+
+replicaCount: 1
+imagePullPolicy: Always
+
+memoryLimit: 2048Mi
+memoryRequest: 512Mi
+
+args: [ "python", "/app/company_name_surrounding_agent.pyz", "-c", "/app/config", "--grpc","-v" ]
