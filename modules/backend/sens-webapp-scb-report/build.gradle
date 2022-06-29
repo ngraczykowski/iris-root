@@ -72,25 +72,6 @@ shadowJar {
   }
 }
 
-tasks.register("makePlugin", Copy).configure {
-  from shadowJar
-  into "$rootProject.projectDir/plugin/webapp"
-}
-
-tasks.register("deletePlugin", Delete).configure {
-  delete fileTree("${rootProject.projectDir}/plugin/webapp") {
-    include "$project.name-*.jar"
-  }
-}
-
-tasks.named(JavaBasePlugin.BUILD_TASK_NAME).configure {
-  dependsOn tasks.named("makePlugin")
-}
-
-tasks.named(BasePlugin.CLEAN_TASK_NAME).configure {
-  dependsOn tasks.named("deletePlugin")
-}
-
 publishing {
   publications {
     shadow(MavenPublication) {publication ->
