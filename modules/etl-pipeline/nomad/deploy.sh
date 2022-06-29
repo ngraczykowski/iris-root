@@ -14,7 +14,7 @@ echo MINIO_ADDR $MINIO_ADDR
 MINIO_ALIAS=${MINIO_ALIAS:-minio}
 
 
-FILE=etl_package_deps.tar.gz 
+FILE=etl_package_deps.tar.gz
 
 export NOMAD_VAR_etl_pipeline_artifact=${NOMAD_VAR_etl_pipeline_artifact:-"s3::${MINIO_ADDR}/artifacts/etl-pipeline/$FILE"}
 

@@ -23,4 +23,3 @@ message ContextualLearningAlert {
   repeated Decision decisions = 6 [(google.api.field_behavior) = REQUIRED];
   repeated Discriminator discriminators = 7 [(google.api.field_behavior) = REQUIRED];
 }
-

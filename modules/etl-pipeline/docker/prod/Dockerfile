@@ -16,7 +16,7 @@ RUN chmod +x /server_entrypoint/start.sh
 RUN conda clean --all --force-pkgs-dirs -y
 RUN conda install python
 RUN conda install jupyter
- 
+
 ADD minimal_requirements.txt /requirements.txt
 RUN pip install -r /requirements.txt
 WORKDIR /app

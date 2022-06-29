@@ -45,7 +45,7 @@ AP_TAX_IDS:
 AP_DOB:
   target_collection: alertedParty
   method: collect_party_dobs
-  source: 
+  source:
     parties:
       - dobDate
     xml_fields:

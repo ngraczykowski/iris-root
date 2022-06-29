@@ -23,7 +23,7 @@ historical_decision_exchange:
   queue-arguments:
     x-dead-letter-exchange: "learning.decision-dead-letter-exchange"
     x-dead-letter-routing-key: "*"
-  
+
 
 rabbitmq:
   host: localhost

@@ -86,7 +86,7 @@ job "etl-pipeline" {
             attribute = "${node.unique.name}"
             value = "eu3"
       }
-      
+
 
       service {
         name = "${var.namespace}-etl-pipeline"

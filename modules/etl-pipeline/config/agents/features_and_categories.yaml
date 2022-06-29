@@ -55,7 +55,7 @@ customerType:
   fields:
     type: alertedParty.AP_PARTY_TYPE
   display_name: "Customer Type"
-  allowed_values: 
+  allowed_values:
     - "I"
     - "UNKNOWN"
     - "C"
@@ -67,7 +67,7 @@ entitiesTypesMatch:
   fields:
     type: alertedParty.ENTITY_TYPE_MATCH
   display_name: "Entity Type Match"
-  allowed_values: 
+  allowed_values:
     - Y
     - N
     - INCONCLUSIVE
@@ -116,7 +116,7 @@ alertType:
   fields:
     type: datasetType
   display_name: "Dataset / alert type"
-  allowed_values: 
+  allowed_values:
     - ISG_PARTY
     - WM_ADDRESS
     - WM_PARTY
@@ -129,5 +129,5 @@ hitType:
   fields:
     normal_trigger_categories:
       - name
-    trigger_categories: all_hit_type_aggregated 
+    trigger_categories: all_hit_type_aggregated
     triggered_tokens: AP_TRIGGERS

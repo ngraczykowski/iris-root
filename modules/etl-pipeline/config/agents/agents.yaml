@@ -91,7 +91,7 @@ pob_agent:
   - AP_PARTY_CITIZENSHIP_COUNTRIES
   - alertedParty.xml_fields.PARTY1_COUNTRY1
   - AP_COUNTRY_OF_INCORPORATION
-    
+
   wl:
   - watchlistParty.matchRecords.WL_COUNTRY
   - watchlistParty.matchRecords.WL_COUNTRYNAME
@@ -109,7 +109,7 @@ sanctioned_country_agent:
   - alertedParty.xml_fields.COUNTRY_CODE
   - AP_PARTY_BIRTH_COUNTRIES
   - AP_PARTY_CITIZENSHIP_COUNTRIES
-  - AP_COUNTRY_OF_INCORPORATION 
+  - AP_COUNTRY_OF_INCORPORATION
   - alertedParty.xml_fields.PARTY1_COUNTRY
   - alertedParty.xml_fields.COUNTRY
   - alertedParty.xml_fields.COUNTRY1_CITIZENSHIP
@@ -176,14 +176,14 @@ hit_type_agent:
   - alertedParty.xml_fields.PARTY1_ORGANIZATION_NAME
   other:
   - alertedParty.xml_fields.PARTY1_POSITION_TITLE
- 
+
 tokens_tp_marked_agent:
   input:
   - watchlistParty.matchRecords.TOKENS_RISK_CARRIER
 
 ap_name_tp_marked_agent:
   input:
-  - alertedParty.xml_fields.PARTY1_NAME_FULL 
+  - alertedParty.xml_fields.PARTY1_NAME_FULL
 
 ap_id_tp_marked_agent:
   input:
