@@ -32,7 +32,7 @@ tests_require = [
 
 setup(
     name="company-name",
-    version="0.18.5",
+    version="0.18.6",
     description="",
     author="Silent Eight Pte. Ltd.",
     author_email="support@silenteight.com",
