@@ -1,7 +1,4 @@
 @Library('pipeline-shared-library@github') _
-def gradle = new com.silenteight.jenkins.ci.Gradle()
-def git = new com.silenteight.jenkins.ci.Git()
-def jenkins = new com.silenteight.jenkins.ci.Jenkins()
 
 def loadValuesYaml(key){
   def valuesYaml = readYaml (file: './helm-chart/Chart.yaml')
@@ -21,9 +18,6 @@ pipeline {
     }
     options {
         timeout(time: 1, unit: 'HOURS')   // just to be safe
-    }
-    parameters {
-        booleanParam(name: 'RELEASE', defaultValue: false, description: 'Release new version')
     }
 
     stages {
@@ -97,28 +91,6 @@ pipeline {
                         }
                     }
                 }
-                stage('Release package') {
-                    when {
-                        allOf {
-                            branch 'master'
-                            expression { return params.RELEASE }
-                        }
-                    }
-                    steps {
-                        sh 'pip install --index-url "${PYPI_URL}" bump2version tox'
-                        sh 'git tag --delete $(git tag --list)'
-                        withCredentials([gitUsernamePassword(credentialsId: 'Github-app-access')]) {
-                            sh './scripts/release.sh --index-url ${PYPI_URL}'
-                        }
-                        withCredentials([usernamePassword(
-                            credentialsId: 'pypi-deployment-user',
-                            usernameVariable: 'TWINE_USERNAME',
-                            passwordVariable: 'TWINE_PASSWORD',
-                        )]) {
-                            sh './scripts/publish.sh --index-url "${PYPI_URL}"'
-                        }
-                    }
-                }
                 stage('Prepare nomad artifacts') {
                     steps {
                         sh './nomad/prepare.sh'
@@ -147,10 +119,7 @@ pipeline {
                                 branch 'master'
                                 branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
                             }
-                            anyOf {
-                                expression { env.COMMIT_TYPE != "Bump version" }
-                                expression { return params.RELEASE }
-                            }
+                            expression { env.COMMIT_TYPE != "Bump version" }
                         }
                     }
                     steps {
@@ -170,7 +139,7 @@ pipeline {
                                 branch 'master'
                                 branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
                             }
-                            expression { return params.RELEASE }
+                            expression { env.COMMIT_TYPE != "Bump version" }
                         }
                     }
                     steps {
@@ -195,10 +164,7 @@ pipeline {
 //                                branch 'master'
 //                                branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
 //                            }
-//                            anyOf {
-//                                expression { env.COMMIT_TYPE != "Bump version" }
-//                                expression { return params.RELEASE }
-//                            }
+//                            expression { env.COMMIT_TYPE != "Bump version" }
 //                        }
 //                    }
                 //     agent {
@@ -222,10 +188,7 @@ pipeline {
                         branch 'master'
                         branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
                     }
-                    anyOf {
-                        expression { env.COMMIT_TYPE != "Bump version" }
-                        expression { return params.RELEASE }
-                    }
+                    expression { env.COMMIT_TYPE != "Bump version" }
                 }
             }
             stages {
@@ -262,10 +225,7 @@ pipeline {
                                 branch 'master'
                                 branch pattern: 'RELEASE-.*', comparator: 'REGEXP'
                             }
-                            anyOf {
-                                expression { env.COMMIT_TYPE != "Bump version" }
-                                expression { return params.RELEASE }
-                            }
+                            expression { env.COMMIT_TYPE != "Bump version" }
                         }
                     }
                     steps {
