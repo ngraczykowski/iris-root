@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 install_require = [
-    "agent-base==0.23.0",
+    "agent-base==0.23.3",
     "agents-api~=0.27.0",
     "aiohttp==3.7.4.post0",
     "data-source-api~=0.18.0",
@@ -25,8 +25,6 @@ tests_require = [
     "flake8-junit-report~=2.1.0",
     "flake8~=3.8.4",
     "isort",
-    "mypy==0.790",
-    "pytest-asyncio",
     "pytest~=6.1.2",
     "shiv",
     "tox~=3.20.1",
