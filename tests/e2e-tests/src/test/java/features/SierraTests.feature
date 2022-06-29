@@ -16,8 +16,8 @@ Feature: Sierra scenarios
       | name      | solution                |
       | some step | POTENTIAL_TRUE_POSITIVE |
     And Add features to recently created steps
-      | name                 | condition | values |
-      | features/commonNames | is        | YES    |
+      | name          | condition | values |
+      | features/name | is        | YES    |
     And Mark created policy as ready
     And Create solving model for created policy
     And Create policy state change request
@@ -29,7 +29,7 @@ Feature: Sierra scenarios
     Then Wait for a message for max 50 seconds
 
     When The last message contains following fields
-      | Body.msg_ReceiveDecision.Messages[0].Message.Comment | S8 recommended action: Manual Investigation |
+      | Body.msg_ReceiveDecision.Messages[0].Message.Comment | S8 recommended action: Manual Investigation\n\nManual Investigation hits:\nMatch Hit-ID-1(50K, #1)\nMatch AS00307517(50K, #2) |
     When Initialize generation of "AI_REASONING" report via warehouse and wait until it's generated
     And Download generated report
     Then Downloaded report contains 1 rows
