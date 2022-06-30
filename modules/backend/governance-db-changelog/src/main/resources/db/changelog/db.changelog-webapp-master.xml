@@ -34,4 +34,5 @@
   <include file="db/changelog/db.changelog-sens-webapp-permissions-220624.xml"/>
 
   <include file="db/changelog/db.changelog-sens-webapp-endpoints-220624.xml"/>
+  <include file="db/changelog/db.changelog-sens-webapp-roles-220630.xml"/>
 </databaseChangeLog>

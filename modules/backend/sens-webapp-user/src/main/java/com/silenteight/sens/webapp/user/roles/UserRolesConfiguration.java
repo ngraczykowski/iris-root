@@ -24,11 +24,4 @@ class UserRolesConfiguration {
   ListRolesUseCase listRoleUseCase(RolesQuery rolesQuery, @Valid RolesProperties rolesProperties) {
     return new ListRolesUseCase(rolesQuery, rolesProperties.getRolesScope());
   }
-
-  @Bean
-  UserRolesValidator userRolesValidator(
-      UserQuery userQuery, @Valid RolesProperties rolesProperties) {
-
-    return new UserRolesValidator(userQuery, rolesProperties.getRolesScope());
-  }
 }

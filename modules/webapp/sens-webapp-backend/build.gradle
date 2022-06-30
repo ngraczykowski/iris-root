@@ -12,7 +12,6 @@ dependencies {
   implementation libs.silenteight.sens.webapp.logging
   implementation libs.silenteight.sens.webapp.notification
   implementation libs.silenteight.sens.webapp.report
-  implementation libs.silenteight.sens.webapp.role
   implementation libs.silenteight.sens.webapp.user
 
   implementation libs.silenteight.commons.app
