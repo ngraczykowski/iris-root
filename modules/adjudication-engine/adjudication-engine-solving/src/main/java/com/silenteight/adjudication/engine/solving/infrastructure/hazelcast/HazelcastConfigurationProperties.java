@@ -53,7 +53,7 @@ public class HazelcastConfigurationProperties {
     private EvictionPolicy evictionPolicy;
 
     static AlertEvictionConfig common() {
-      return new AlertEvictionConfig(USED_HEAP_SIZE, 300000, LRU);
+      return new AlertEvictionConfig(USED_HEAP_SIZE, 1024, LRU);
     }
 
     EvictionConfig getEvictionConfig() {
