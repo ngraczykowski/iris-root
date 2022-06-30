@@ -28,5 +28,5 @@
     <#assign alertedPartyId = featureModel.reason.alertedPartyId>
     <#assign watchlistPartyId = featureModel.reason.watchlistPartyId>
     <#assign truePositiveCount = featureModel.reason.true_positive>
-    <#return "Alerted paaaarty account (${alertedPartyId}) and watchlist id (${watchlistPartyId}) was previously evaluated as Potential True Positive (${truePositiveCount}).">
+    <#return "Alerted party account (${alertedPartyId}) and watchlist id (${watchlistPartyId}) was previously evaluated as Potential True Positive (${truePositiveCount}).">
 </#function>
