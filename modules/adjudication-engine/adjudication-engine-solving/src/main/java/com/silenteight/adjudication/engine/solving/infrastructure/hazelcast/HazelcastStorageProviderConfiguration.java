@@ -23,6 +23,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Map;
 import java.util.Queue;
 
 @Configuration
@@ -36,6 +37,8 @@ import java.util.Queue;
 class HazelcastStorageProviderConfiguration {
 
   private static final String ALERT_MAP = "in-memory-alert";
+  private static final String COMMENT_INPUT_MAP = "in-memory-comment-inputs";
+
   private static final String MATCH_FEATURES_MAP = "in-memory-match-features";
   public static final String ALERT_CATEGORY_VALUE_QUEUE = "in-memory-alert-category-value";
   public static final String ALERT_COMMENTS_INPUTS_QUEUE = "in-memory-alert-comments-inputs";
@@ -102,10 +105,16 @@ class HazelcastStorageProviderConfiguration {
   }
 
   @Bean
+  Map<Long, String>  commentInputMap(HazelcastInstance hazelcastInstance) {
+    return hazelcastInstance.getMap(COMMENT_INPUT_MAP);
+  }
+
+  @Bean
   AlertSolvingRepository inMemoryAlertStorageProvider(final HazelcastInstance hazelcastInstance) {
     hazelcastInstance
         .getConfig()
-        .addMapConfig(createAlertMapConfig(hazelcastConfigurationProperties));
+        .addMapConfig(createAlertMapConfig(ALERT_MAP,hazelcastConfigurationProperties))
+        .addMapConfig(createAlertMapConfig(COMMENT_INPUT_MAP,hazelcastConfigurationProperties));
 
     final IMap<Long, AlertSolving> map = hazelcastInstance.getMap(ALERT_MAP);
     log.info("Registering Entry Eviction listener");
@@ -113,10 +122,10 @@ class HazelcastStorageProviderConfiguration {
     return new HazelcastAlertSolvingRepository(map);
   }
 
-  private static MapConfig createAlertMapConfig(
+  private static MapConfig createAlertMapConfig(String mapName,
       HazelcastConfigurationProperties hazelcastConfigurationProperties) {
     return new MapConfig()
-        .setName(ALERT_MAP)
+        .setName(mapName)
         .setMaxIdleSeconds(hazelcastConfigurationProperties.getTtlMinutes().toSecondsPart())
         .setAsyncBackupCount(hazelcastConfigurationProperties.getAsyncBackup().getMinAsyncBackups())
         .setReadBackupData(true)
