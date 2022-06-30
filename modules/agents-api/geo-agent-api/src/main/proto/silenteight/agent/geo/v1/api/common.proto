@@ -72,12 +72,18 @@ message GeoComparerReason {
 }
 
 message IdentifiedLocation {
-  string original_input = 1 [(google.api.field_behavior) = REQUIRED];
+  string original_input = 1 [deprecated = true, (google.api.field_behavior) = OPTIONAL];
   // input identified as...
   Location location = 2 [(google.api.field_behavior) = REQUIRED];
+  repeated OriginalInput original_inputs = 3 [(google.api.field_behavior) = REQUIRED];
 }
 
 message Coordinates {
   double latitude = 1 [(google.api.field_behavior) = OPTIONAL];
   double longitude = 2 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message OriginalInput {
+  string text = 1 [(google.api.field_behavior) = REQUIRED];
+  string matched_by = 2 [(google.api.field_behavior) = REQUIRED];
 }
