@@ -27,7 +27,11 @@
         <#assign categoriesComment = "Alerted party's address is a " + matchModel.categories['categories/crossmatch']?lower_case +  " to watchlist party name.">
     </#if>
     <#if shouldAddcompanyNameSurrounding(matchModel)>
-        <#assign categoriesComment = categoriesComment + "Alerted Party Organization is a crossmatch to Watchlist Party Individual.">
+        <#assign categoriesComment = categoriesComment + "Alerted Party Organization is a crossmatch to Watchlist Party">
+        <#if matchModel.categories['categories/watchlistType']??>
+            <#assign categoriesComment = categoriesComment + " " + matchModel.categories['categories/watchlistType']?lower_case?cap_first>
+        </#if>
+        <#assign categoriesComment = categoriesComment + ".">
     </#if>
     <#return categoriesComment>
 </#function>
