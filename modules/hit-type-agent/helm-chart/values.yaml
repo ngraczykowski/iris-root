@@ -1,0 +1,13 @@
+name: hit-type-agent
+image_tag: hit-type-agent
+image_repo: hit-type-agent
+ports:
+  grpc: 9090
+
+replicaCount: 1
+imagePullPolicy: Always
+
+memoryLimit: 2048Mi
+memoryRequest: 512Mi
+
+args: [ "python", "-m", "hit_type.main", "-c", "/app/config", "--grpc","--agent-exchange", "-v" ]
