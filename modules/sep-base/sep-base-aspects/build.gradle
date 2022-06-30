@@ -1,7 +1,6 @@
 plugins {
   id "com.silenteight.iris.build.java-library"
   id "maven-publish"
-  id "io.freefair.aspectj.post-compile-weaving"
 }
 
 description = "SEP Base Aspects"

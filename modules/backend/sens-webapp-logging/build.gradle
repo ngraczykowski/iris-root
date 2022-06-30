@@ -8,8 +8,4 @@ dependencies {
   implementation libs.logback.classic
   implementation doNotUseLibs.streamex
   implementation libs.commons.lang3
-
-  compileOnly libs.spring.tx
-  compileOnly libs.spring.beans
-  compileOnly libs.spring.context
 }

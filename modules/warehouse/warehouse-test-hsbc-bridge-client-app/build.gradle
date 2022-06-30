@@ -1,6 +1,4 @@
 plugins {
-  id "com.silenteight.iris.build.java-library"
-  id "io.freefair.aspectj.post-compile-weaving"
   id "com.silenteight.iris.build.spring-boot-application"
 }
 

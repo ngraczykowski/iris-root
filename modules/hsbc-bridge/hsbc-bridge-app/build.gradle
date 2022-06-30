@@ -1,6 +1,5 @@
 plugins {
   id "com.silenteight.iris.build.web-application-starter"
-  id "io.freefair.aspectj.post-compile-weaving"
   id "groovy"
 }
 

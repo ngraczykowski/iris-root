@@ -10,7 +10,9 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.util.concurrent.Executor;
 
-@EnableAsync
+import static org.springframework.context.annotation.AdviceMode.ASPECTJ;
+
+@EnableAsync(mode = ASPECTJ)
 @Configuration
 class AsyncConfiguration implements AsyncConfigurer {
 

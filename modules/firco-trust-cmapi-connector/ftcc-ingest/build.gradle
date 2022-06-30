@@ -1,5 +1,4 @@
 plugins {
-  id "io.freefair.aspectj.post-compile-weaving"
   id "com.silenteight.iris.build.java-library"
   id "groovy"
 }

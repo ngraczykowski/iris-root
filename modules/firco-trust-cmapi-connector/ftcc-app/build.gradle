@@ -1,6 +1,5 @@
 plugins {
   id "groovy"
-  id "io.freefair.aspectj.post-compile-weaving"
   id "com.silenteight.iris.build.spring-boot-application"
   id "com.silenteight.iris.build.container-image"
 }

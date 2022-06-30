@@ -61,12 +61,6 @@ dependencies {
   implementation libs.grpc.server.spring.boot.starter
   implementation libs.grpc.client.spring.boot.starter
 
-  // AspectJ
-  implementation libs.aspectjrt
-  aspect libs.silenteight.sep.base.aspects
-  compileOnly libs.spring.web
-  compileOnly libs.spring.tx
-
   //  Datasource API
   implementation libs.data.source.api
   implementation libs.data.source.categories.api

@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
 import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE;
 import static org.springframework.http.ResponseEntity.ok;
@@ -36,8 +38,8 @@ public class DashboardStatisticsRestController {
   @GetMapping(STATISTICS_URL)
   @PreAuthorize("isAuthorized('RECOMMENDATION_STATISTICS')")
   public ResponseEntity<StatisticsResponse> getStatistics(
-      @DateTimeFormat(iso = DATE) @RequestParam LocalDate from,
-      @DateTimeFormat(iso = DATE) @RequestParam LocalDate to
+      @Valid @DateTimeFormat(iso = DATE) @RequestParam LocalDate from,
+      @Valid @DateTimeFormat(iso = DATE) @RequestParam LocalDate to
   ) {
     return ok().body(dashboardUseCase.getTotalCount(StatisticsRequest.of(from, to)));
   }
@@ -45,8 +47,8 @@ public class DashboardStatisticsRestController {
   @GetMapping(DAILY_STATISTICS_URL)
   @PreAuthorize("isAuthorized('RECOMMENDATION_STATISTICS')")
   public ResponseEntity<List<DailyRecommendationStatisticsResponse>> getDailyStatistics(
-      @DateTimeFormat(iso = DATE) @RequestParam LocalDate from,
-      @DateTimeFormat(iso = DATE) @RequestParam LocalDate to
+      @Valid @DateTimeFormat(iso = DATE) @RequestParam LocalDate from,
+      @Valid @DateTimeFormat(iso = DATE) @RequestParam LocalDate to
   ) {
     return ok().body(dashboardUseCase.getTotalDailyCount(StatisticsRequest.of(from, to)));
   }

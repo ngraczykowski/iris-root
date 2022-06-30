@@ -75,5 +75,6 @@ dependencies {
   testImplementation libs.hibernate.validator
   testImplementation libs.awaitility
   testImplementation libs.assertj.core
+  testRuntimeOnly libs.tomcat.embed.el
 
 }

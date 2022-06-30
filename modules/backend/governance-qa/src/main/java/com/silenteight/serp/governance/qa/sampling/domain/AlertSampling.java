@@ -10,7 +10,6 @@ import com.silenteight.serp.governance.qa.sampling.domain.dto.DateRangeDto;
 
 import java.time.OffsetDateTime;
 import javax.persistence.*;
-import javax.validation.Valid;
 
 import static com.silenteight.serp.governance.qa.sampling.domain.JobState.FAILED;
 import static com.silenteight.serp.governance.qa.sampling.domain.JobState.FINISHED;
@@ -60,7 +59,7 @@ class AlertSampling extends BaseAggregateRoot implements IdentifiableEntity  {
   @Column(updatable = false, nullable = false)
   private OffsetDateTime rangeTo;
 
-  static AlertSampling of(@Valid DateRangeDto dateRange, OffsetDateTime startedAt) {
+  static AlertSampling of(DateRangeDto dateRange, OffsetDateTime startedAt) {
     AlertSampling alertSampling = new AlertSampling();
     alertSampling.setRangeFrom(dateRange.getFrom());
     alertSampling.setRangeTo(dateRange.getTo());

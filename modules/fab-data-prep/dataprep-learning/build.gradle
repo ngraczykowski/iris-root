@@ -27,4 +27,5 @@ dependencies {
 
   testImplementation project(':dataprep-test-fixtures')
   testRuntimeOnly libs.junit.jupiter.engine
+  testRuntimeOnly libs.tomcat.embed.el
 }

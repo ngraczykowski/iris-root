@@ -1,8 +1,6 @@
 plugins {
   id('com.silenteight.iris.build.root-build')
   id('com.silenteight.iris.build.sonarqube')
-
-  alias(libs.plugins.freefair.aspectj.weaving) apply false
 }
 
 subprojects {Project subproject ->
@@ -10,27 +8,14 @@ subprojects {Project subproject ->
     return
   }
   pluginManager.withPlugin("java") {
-    subproject.pluginManager.apply "io.freefair.aspectj.post-compile-weaving"
 
     subproject.dependencies {
       implementation libs.jaxb.api
-      aspect libs.spring.aspects
-      aspect libs.silenteight.sep.base.aspects
       annotationProcessor libs.spring.boot.configuration.processor
-
-      // Required by aspects
-      aspect libs.spring.security.aspects
-      aspect libs.spring.web
-      aspect libs.spring.tx
       annotationProcessor libs.lombok
     }
 
-    def ajcArgs = [
-        "-Xlintfile", "${rootProject.projectDir}/Xlint.properties".toString(),
-    ]
-
     subproject.tasks.named(JavaPlugin.COMPILE_JAVA_TASK_NAME).configure {JavaCompile java ->
-      java.ajc.options.compilerArgs = ajcArgs
       java.options.fork = true
       java.options.compilerArgs << "-parameters"
     }

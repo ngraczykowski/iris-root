@@ -12,15 +12,19 @@ import com.silenteight.iris.qco.adapter.outgoing.jpa.QcoOverriddenRecommendation
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.context.annotation.Import
+import org.springframework.scheduling.annotation.EnableAsync
+import org.springframework.scheduling.aspectj.AspectJAsyncConfiguration
 import org.springframework.test.context.ActiveProfiles
 import org.testcontainers.shaded.org.awaitility.Awaitility
 
 @ActiveProfiles("test")
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import(value = [QcoIntegrationTestConfiguration.class, QcoDbConfiguration.class])
+@EnableAsync
+@AutoConfigureTestDatabase(replace = Replace.NONE)
+@Import(value = [QcoIntegrationTestConfiguration, QcoDbConfiguration, AspectJAsyncConfiguration])
 class QcoAlertServiceSpecIT extends ContainersSpecificationIT {
 
   @Autowired

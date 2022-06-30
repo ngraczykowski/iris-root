@@ -1,5 +1,4 @@
 plugins {
-  id "java"
   id "groovy"
   id "com.silenteight.iris.build.spring-boot-application"
   id "com.silenteight.iris.build.container-image"
@@ -29,51 +28,10 @@ dependencies {
   implementation libs.spring.cloud.starter.consul.config
   implementation libs.spring.cloud.starter.gateway
   implementation libs.spring.cloud.starter.sleuth
-
-  // AspectJ
-  implementation libs.aspectjrt
-  aspect libs.silenteight.sep.base.aspects
 }
 
 jar {
   manifest {
     attributes "Main-Class": "com.silenteight.payments.apigateway.PaymentsApiGatewayApplication"
-  }
-}
-
-jib {
-  from {
-    // NOTE(ahaczewski): Use debug version of the image for SNAPSHOT builds.
-    def imageSuffix = ("$version".contains("-BUILD") || "$version".endsWith("-SNAPSHOT")) ?
-                      "-debug" : ""
-    image = "gcr.io/distroless/java-debian10:11" + imageSuffix
-  }
-  to {
-    image = "docker.repo.silenteight.com/papigw/${project.name}:${version}"
-    if ("$version".contains("-BUILD") || "$version".endsWith("-SNAPSHOT")) {
-      tags = ["snapshot"]
-    } else {
-      tags = ["latest"]
-    }
-  }
-  container {
-    appRoot = "/silenteight/app"
-    environment = [
-        "SILENTEIGHT_HOME"      : "/silenteight",
-        "SPRING_PROFILES_ACTIVE": "",
-    ]
-    jvmFlags = [
-        "-XX:MaxRAMPercentage=75",
-        "-Dfile.encoding=UTF-8",
-        "-Dsun.jnu.encoding=UTF-8",
-        "-Djava.net.preferIPv4Stack=true",
-        "-Djava.io.tmpdir=/tmp",
-        "-Dsilenteight.home=/silenteight",
-        "-Dspring.profiles.include=container",
-        "-Dserver.port=8080",
-    ]
-    ports = ["8080"]
-    user = "nonroot"
-    workingDirectory = "/silenteight"
   }
 }

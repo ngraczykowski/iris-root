@@ -1,13 +1,10 @@
 plugins {
   id('com.silenteight.iris.build.root-build')
   id('com.silenteight.iris.build.sonarqube')
-
-  alias(libs.plugins.freefair.aspectj.weaving) apply false
 }
 
 subprojects {Project project ->
   pluginManager.withPlugin("java") {
-    project.pluginManager.apply "io.freefair.aspectj.post-compile-weaving"
 
     project.dependencies {
       implementation libs.jaxb.api

@@ -1,4 +1,3 @@
 plugins {
-  id "com.silenteight.iris.build.java-library"
   id "com.silenteight.iris.build.protobuf"
 }
