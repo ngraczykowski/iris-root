@@ -46,5 +46,6 @@
       "automerge": false
     }
   ],
-  "labels": ["dependencies"]
+  "labels": ["dependencies"],
+  "stabilityDays": 6
 }
