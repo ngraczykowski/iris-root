@@ -1,0 +1,18 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "groovy"
+}
+
+description = "Agent Database Test"
+
+dependencies {
+  implementation platform('com.silenteight.iris.platform:test-platform')
+  api libs.spring.test
+  api libs.spring.boot.test
+  api libs.spring.boot.test.autoconfigure
+  api libs.spring.integration.test
+  api libs.test.containers
+
+  implementation libs.commons.lang3
+  implementation project(":agent-database")
+}

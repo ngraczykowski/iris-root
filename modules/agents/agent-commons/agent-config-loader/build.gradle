@@ -1,0 +1,41 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+}
+
+description = "Agent config loader"
+
+configurations {
+}
+
+dependencies {
+  // Commons
+  implementation project(":agent-logging")
+  implementation libs.silenteight.commons.core
+  implementation libs.commons.lang3
+  implementation libs.commons.text
+
+  // Validator
+  implementation libs.hibernate.validator
+
+  // Spring
+  implementation libs.spring.aspects
+  implementation libs.spring.aop
+  implementation libs.spring.beans
+  implementation libs.spring.context
+  implementation libs.spring.context.support
+  implementation libs.spring.core
+  implementation libs.spring.expression
+
+  // Spring Boot
+  implementation libs.spring.boot
+  implementation libs.spring.boot.autoconfigure
+  implementation libs.spring.boot.starter.logging
+  implementation libs.spring.boot.starter.actuator
+  implementation libs.spring.boot.starter.undertow
+  implementation libs.spring.boot.starter.web
+
+  // AspectJ
+  implementation libs.aspectjrt
+
+  implementation libs.micrometer.prometheus
+}

@@ -1,0 +1,13 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "groovy"
+}
+
+description = "Agent Metrics"
+project.pluginManager.apply "io.freefair.aspectj.post-compile-weaving"
+
+dependencies {
+  implementation libs.micrometer.core
+  implementation libs.spring.boot.starter.aop
+  implementation libs.commons.text
+}

@@ -1,0 +1,25 @@
+rootProject.name = 'agent-commons'
+
+includeBuild('../../..//platforms')
+includeBuild('../../../build-logic')
+
+dependencyResolutionManagement {
+  versionCatalogs {
+    libs {
+      from(files("../../../gradle/libs.versions.toml"))
+    }
+  }
+}
+include 'agent-config-loader'
+include 'agent-autoconfigure'
+include 'agent-starter'
+include 'agent-starter-test'
+include 'file-reading-commons'
+include 'agent-database'
+include 'agent-database-test'
+include 'agent-dictionaries'
+include 'agent-messaging'
+include 'agent-metrics'
+include 'agent-monitoring'
+include 'agent-facade-core'
+include 'agent-logging'

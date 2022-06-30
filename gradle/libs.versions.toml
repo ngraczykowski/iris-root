@@ -102,6 +102,7 @@ silenteight-commons-app = { group = "com.silenteight.commons", name = "silenteig
 silenteight-commons-core = { group = "com.silenteight.commons", name = "silenteight-commons-core", version.ref = "silenteight-commons" }
 silenteight-filestorage-api = { group = "com.silenteight.iris", name = "sep-filestorage-api" }
 silenteight-filestorage-minio = { group = "com.silenteight.iris", name = "sep-filestorage-minio-s3" }
+silenteight-rabbit-common-schema = { group = "com.silenteight.rabbitmqcommonschema", name = "sear-rabbitmq-common-schema-definitions", version = "1.11.0"}
 silenteight-sep-auth = { group = "com.silenteight.iris", name = "sep-auth" }
 silenteight-sep-base-aspects = { group = "com.silenteight.iris", name = "sep-base-aspects" }
 silenteight-sep-base-common = { group = "com.silenteight.iris", name = "sep-base-common" }
@@ -202,6 +203,7 @@ spring-boot-configuration-processor = { group = "org.springframework.boot", name
 spring-boot-starter = { group = "org.springframework.boot", name = "spring-boot-starter" }
 spring-boot-starter-actuator = { group = "org.springframework.boot", name = "spring-boot-starter-actuator" }
 spring-boot-starter-amqp = { group = "org.springframework.boot", name = "spring-boot-starter-amqp" }
+spring-boot-starter-aop = { group = "org.springframework.boot", name = "spring-boot-starter-aop" }
 spring-boot-starter-data-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }
 spring-boot-starter-data-jdbc = { group = 'org.springframework.boot', name = 'spring-boot-starter-data-jdbc' }
 spring-boot-starter-elasticsearch = { group = "org.springframework.boot", name = "spring-boot-starter-data-elasticsearch" }
@@ -406,6 +408,7 @@ shedlock-spring = { group = "net.javacrumbs.shedlock", name = "shedlock-spring",
 snakeyaml = { group = "org.yaml", name = "snakeyaml" }
 tomcat-embed-el = { group = "org.apache.tomcat.embed", name = "tomcat-embed-el" }
 tika-core = { group = "org.apache.tika", name = "tika-core", version = "2.4.1" }
+univocity-parsers = { group =  "com.univocity", name = "univocity-parsers", version = "2.9.0"}
 #TODO(dsniezek): is it need?
 jjwt = { group = 'io.jsonwebtoken', name = 'jjwt', version = '0.9.1' }
 mapstruct = { group = 'org.mapstruct', name = 'mapstruct', version.ref = 'mapstruct' }
@@ -426,7 +429,7 @@ junit-jupiter-migrationsupport = { group = "org.junit.jupiter", name = "junit-ju
 junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine" }
 junit-platform-commons = { group = "org.junit.platform", name = "junit-platform-commons" }
 junit-vintage-engine = { group = "org.junit.vintage", name = "junit-vintage-engine" }
-objenesis = { group = "org.objenesis", name = "objenesis" }
+objenesis = { group = "org.objenesis", name = "objenesis", version = "3.2"}
 rabbitmq-mock = { group = "com.github.fridujo", name = "rabbitmq-mock", version = "1.1.1" }
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
 mockito-inline = { group = "org.mockito", name = "mockito-inline", version.ref = "mockito" }

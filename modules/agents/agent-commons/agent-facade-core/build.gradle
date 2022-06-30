@@ -1,0 +1,31 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "groovy"
+}
+
+description = "Agent facade core"
+
+dependencies {
+  implementation platform('com.silenteight.iris.platform:test-platform')
+  api libs.test.containers.junit.jupiter
+  api libs.test.containers.rabbitmq
+
+  // S8 APIs
+  api libs.agents.api
+  api project(":agent-monitoring")
+  implementation project(":agent-starter")
+  implementation project(":agent-messaging")
+  implementation project(":agent-logging")
+  implementation libs.data.source.api
+  implementation libs.silenteight.rabbit.common.schema
+
+  // Dependencies for integration tests
+  testImplementation project(":agent-starter-test")
+  testImplementation libs.spring.boot.test
+  testImplementation libs.spring.test
+  testImplementation libs.spring.integration.test
+}
+
+jar {
+  from sourceSets.main.output + sourceSets.test.output
+}

@@ -1,0 +1,35 @@
+plugins {
+  id("com.silenteight.iris.build.java-library")
+  id('com.silenteight.iris.build.sonarqube')
+}
+
+description = "Agent Monitoring dependencies"
+project.pluginManager.apply "io.freefair.aspectj.post-compile-weaving"
+
+dependencies {
+  // Spring
+  implementation libs.spring.aspects
+  implementation libs.spring.aop
+  implementation libs.spring.beans
+  implementation libs.spring.context
+  implementation libs.spring.context.support
+  implementation libs.spring.core
+  implementation libs.spring.expression
+
+  // Spring Boot
+  implementation libs.spring.boot
+  implementation libs.spring.boot.autoconfigure
+  implementation libs.spring.boot.starter.logging
+
+  // Sentry
+  api libs.sentry
+  api libs.sentry.logback
+  api libs.sentry.spring.boot.starter
+}
+
+sonarqube {
+  properties {
+// Excludes files or folders from code coverage analysis, comma separated
+    property 'sonar.coverage.exclusions', "**/*.*"
+  }
+}

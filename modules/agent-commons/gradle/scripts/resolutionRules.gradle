@@ -1,8 +1,0 @@
-subprojects {
-  apply plugin: "nebula.resolution-rules"
-}
-
-dependencies {
-  resolutionRules "com.silenteight.sep.gradle:platform-resolution-rules:latest.release"
-  resolutionRules "com.netflix.nebula:gradle-resolution-rules:latest.release"
-}

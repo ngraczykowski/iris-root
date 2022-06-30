@@ -1,0 +1,28 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "groovy"
+}
+
+description = "Agent Messaging"
+
+dependencies {
+  // AMQP and messaging dependencies
+  api libs.protobuf.java
+  api libs.protobuf.java.util
+  api libs.spring.amqp
+  api libs.spring.amqp.rabbit
+  api libs.spring.integration.amqp
+
+  implementation project(":agent-logging")
+  implementation libs.spring.boot.configuration.processor
+  implementation libs.spring.boot.starter.amqp
+  implementation libs.spring.boot.starter.integration
+  implementation libs.spring.integration.core
+  implementation libs.amqp.client
+  implementation libs.lz4.java
+
+  implementation libs.commons.lang3
+  implementation libs.classgraph
+  implementation libs.jakarta.validation.api
+  implementation libs.guava
+}

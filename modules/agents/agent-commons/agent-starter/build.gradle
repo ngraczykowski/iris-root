@@ -1,0 +1,41 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+}
+
+description = "Agent starter dependencies"
+
+dependencies {
+  api libs.commons.lang3
+  api libs.commons.text
+
+  api libs.spring.aspects
+  api libs.spring.aop
+  api libs.spring.beans
+  api libs.spring.context
+  api libs.spring.context.support
+  api libs.spring.core
+  api libs.spring.expression
+
+  api libs.spring.boot
+  api libs.spring.boot.autoconfigure
+
+  api libs.aspectjrt
+  api libs.spring.data.commons
+  api libs.snakeyaml
+  api libs.javax.cache.api
+
+  api libs.spring.boot.starter.logging
+  api libs.spring.boot.starter.actuator
+  api libs.spring.boot.starter.undertow
+  api libs.spring.boot.starter.web
+  api libs.micrometer.prometheus
+
+  api libs.brave.instrumentation.grpc
+  api libs.grpc.protobuf
+  api libs.grpc.stub
+  api libs.grpc.client.spring.boot.starter
+  api libs.grpc.server.spring.boot.starter
+  api libs.consul.grpc.registration
+
+  api libs.reactor.grpc.stub
+}

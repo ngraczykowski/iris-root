@@ -1,0 +1,18 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id('com.silenteight.iris.build.sonarqube')
+  id "groovy"
+}
+
+description = "Agent Logging"
+
+dependencies {
+  implementation libs.commons.lang3
+}
+
+sonarqube {
+  properties {
+    // Excludes files or folders from code coverage analysis, comma separated
+    property 'sonar.coverage.exclusions', "**/*.*"
+  }
+}

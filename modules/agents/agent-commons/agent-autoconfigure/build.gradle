@@ -1,0 +1,23 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+}
+
+description = "Agent auto configuration"
+
+dependencies {
+  compileOnly libs.grpc.api
+  compileOnly libs.grpc.server.spring.boot.starter
+
+  implementation libs.jakarta.validation.api
+  implementation libs.commons.lang3
+  implementation libs.junit.jupiter.api
+  implementation libs.assertj.core
+
+  //TODO Check if cloud libs are necessary
+  compileOnly libs.spring.cloud.starter.sleuth
+  compileOnly libs.spring.cloud.consul.discovery
+  compileOnly libs.spring.cloud.starter.consul.config
+  compileOnly libs.spring.boot
+  compileOnly libs.spring.context
+  compileOnly libs.spring.core
+}

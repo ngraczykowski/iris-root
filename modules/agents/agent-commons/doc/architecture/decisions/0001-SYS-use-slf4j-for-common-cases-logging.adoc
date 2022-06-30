@@ -1,0 +1,61 @@
+= 1. SYS - Use Slf4j for common cases logging
+
+Date: 2022-03-29
+
+== Status
+
+Accepted
+
+== Context
+
+Agent teams faced an issue with common approach to logging.
+The https://docs.google.com/document/d/12qaAlT3JxWJ-CjyVRXStEMii5OQ7w5eYvLGaNukTRCw/edit#[Unified Logging] document was created as a try to standardize the approach.
+
+The `AgentLogger` class was created as an extension to the document.
+The class contains static methods with a bit of custom logic - mostly `ifXXXEnabled` - to help the situation.
+
+Unfortunately, the usage of the class is not too convenient.
+To keep the origin class name in the log message, a user of the class needs to pass a log reference to the static methods of the class, e.g. `info(log, "log message")`.
+
+The idea was to remove this inconvenience while still keeping the original class name in the log.
+
+== Solutions
+
+. Use aspects to either
+- inject `log` to each of the static method or
+- to do the `ifXXXEnabled` check directly in the aspect
+. Use Annotation Processing to inject custom `LoggerFactory` to classes annotated with `@SilentEightLog` or similar.
+. Provide a custom `Logger` implementation in Java Commons Logging (JCL).
+. Provide a custom implementation in Slf4j.
+. Use `log.xxx(...)` with default Slf4j implementation as before and keep just the custom static methods in `AggentLogger`.
+
+== Decision
+
+Use `log.xxx(...)` with default Slf4j implementation as before and keep just the custom static methods in `AggentLogger`.
+
+== Consequences
+
+. Both the injected logger (e.g. `@Slf4j`) and the `AgentLogger` class provides static references to handle the logging.
+Spring AOP does not allow to aspect static references.
+The alternative could be AspectJ, but using AOP for statics is considered a smell in general.
+. Annotation Processing could be an option but the result does not seem to justify the amount of code necessary to achieve it.
+. It proved to be relatively easy to provide a custom `Logger` in JCL, however this interface doesn't provide all the required methods, e.g. `log.info(String msg, Object arg1, Object arg2)`.
+Also, the change would make changing the injected logger in all the classes, i.e. `@Slf4j` to `@CommonsLog`.
+. While analysing the default Slf4j implementation, it appeared the `ifXXXEnabled` is already there:
+
+```java
+if (decision == FilterReply.NEUTRAL) {
+    if (effectiveLevelInt > level.levelInt) {
+        return;
+    }
+} else if (decision == FilterReply.DENY) {
+    return;
+}
+```
+
+This means the only value added by the `AgentLogger` were the 5 methods:
+
+- the one providing the default error
+- the four with `Supplier<Object>... parameters`.
+
+These methods were kept then as it seems a reasonable decision to provide `log` parameter only in these particular cases.

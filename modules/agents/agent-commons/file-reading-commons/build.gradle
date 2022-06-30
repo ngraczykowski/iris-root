@@ -1,0 +1,30 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "groovy"
+}
+
+description = "Agent File Reading Common"
+
+dependencies {
+  implementation project(":agent-config-loader")
+
+  api libs.univocity.parsers
+  implementation libs.guava
+  implementation libs.commons.lang3
+  implementation libs.commons.csv
+
+  testImplementation libs.spock.core
+
+  // Optional dependencies for using Spock
+  testImplementation libs.groovy.all
+
+  // Enables mocking by Spock
+  testImplementation libs.byte.buddy.agent
+  testImplementation libs.objenesis
+
+  // Use Hamcrest matchers with Spock
+  testImplementation libs.hamcrest
+
+  //enable json path
+  testImplementation libs.json.path
+}

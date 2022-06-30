@@ -1,0 +1,17 @@
+agent.consul.traefik.passTLSCert: false
+agent.consul.traefik.entryPoints: gateway,unprotectedGateway
+agent.consul.traefik.protocol: http
+
+server:
+  servlet:
+    context-path: /rest/${spring.application.name}
+
+management:
+  endpoint:
+    health.show-details: always
+
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: [ "health", "info", "metrics", "prometheus" ]

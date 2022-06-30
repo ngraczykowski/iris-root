@@ -1,0 +1,19 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "groovy"
+}
+
+description = "Agent Database"
+
+dependencies {
+  api libs.jakarta.transaction.api
+  api libs.spring.boot
+  api libs.spring.boot.autoconfigure
+  api libs.hibernate.core
+  api libs.hibernate.envers
+  api libs.jakarta.persistence.api
+  implementation libs.spring.orm
+  implementation libs.commons.lang3
+  implementation libs.guava
+  annotationProcessor libs.hibernate.jpamodelgen
+}

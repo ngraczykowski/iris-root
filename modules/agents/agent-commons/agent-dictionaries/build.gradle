@@ -1,0 +1,29 @@
+plugins {
+  id "com.silenteight.iris.build.java-library"
+  id "groovy"
+}
+
+description = "Agent Dictionaries"
+
+dependencies {
+  implementation project(":agent-config-loader")
+  implementation project(":agent-logging")
+
+  implementation libs.commons.lang3
+  implementation libs.commons.io
+
+  testImplementation libs.spock.core
+
+  // Optional dependencies for using Spock
+  testImplementation libs.groovy.all
+
+  // Enables mocking by Spock
+  testImplementation libs.byte.buddy.agent
+  testImplementation libs.objenesis
+
+  // Use Hamcrest matchers with Spock
+  testImplementation libs.hamcrest
+
+  //enable json path
+  testImplementation libs.json.path
+}
