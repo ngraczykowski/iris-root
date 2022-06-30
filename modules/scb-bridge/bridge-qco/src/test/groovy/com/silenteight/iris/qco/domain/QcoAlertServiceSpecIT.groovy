@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
+import org.testcontainers.shaded.org.awaitility.Awaitility
 
 @ActiveProfiles("test")
 @DataJpaTest
@@ -23,7 +24,7 @@ import org.springframework.test.context.ActiveProfiles
 class QcoAlertServiceSpecIT extends ContainersSpecificationIT {
 
   @Autowired
-  private QcoAlertService qcoAlertService;
+  private QcoAlertService qcoAlertService
 
   @Autowired
   private QcoOverriddenRecommendationJpaRepository repository
@@ -37,7 +38,7 @@ class QcoAlertServiceSpecIT extends ContainersSpecificationIT {
 
     then:
     result != null
-    Thread.currentThread().join(1_000)
+    Awaitility.await().until(() -> repository.count() > 0)
     def allResults = repository.findAll()
     allResults.size() == 1
     QcoOverriddenRecommendation savedEntity = allResults[0]
