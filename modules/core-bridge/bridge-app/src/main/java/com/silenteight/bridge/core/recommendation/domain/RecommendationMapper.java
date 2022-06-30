@@ -9,7 +9,6 @@ import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDt
 import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto.AlertWithMatchesDto.MatchDto;
 import com.silenteight.bridge.core.registration.adapter.outgoing.jdbc.AlertWithoutMatches;
 import com.silenteight.bridge.core.registration.adapter.outgoing.jdbc.MatchWithAlertId;
-import com.silenteight.bridge.core.registration.domain.model.BatchPriority;
 import com.silenteight.proto.recommendation.api.v1.*;
 import com.silenteight.proto.recommendation.api.v1.Alert.AlertStatus;
 import com.silenteight.proto.recommendation.api.v1.RecommendationsStatistics;
@@ -23,10 +22,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import static com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto.AlertStatus.DELIVERED;
-import static com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto.AlertStatus.ERROR;
-import static com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto.AlertStatus.RECOMMENDED;
 
 @UtilityClass
 class RecommendationMapper {
@@ -72,10 +67,6 @@ class RecommendationMapper {
                 .build())
         .setStatistics(toStatistics(recommendation.statistics()))
         .build();
-  }
-
-  BatchPriorityDto toBatchPriorityDto(BatchPriority batchPriority) {
-    return new BatchPriorityDto(batchPriority.priority());
   }
 
   private Recommendation.Builder toRecommendationBuilder(
@@ -161,9 +152,10 @@ class RecommendationMapper {
   }
 
   private AlertStatus toStatus(AlertWithMatchesDto alert) {
-    if (RECOMMENDED == alert.status() || DELIVERED == alert.status()) {
+    if (BatchWithAlertsDto.AlertStatus.RECOMMENDED == alert.status()
+        || BatchWithAlertsDto.AlertStatus.DELIVERED == alert.status()) {
       return AlertStatus.SUCCESS;
-    } else if (ERROR == alert.status()) {
+    } else if (BatchWithAlertsDto.AlertStatus.ERROR == alert.status()) {
       return AlertStatus.FAILURE;
     } else {
       throw new IllegalStateException(

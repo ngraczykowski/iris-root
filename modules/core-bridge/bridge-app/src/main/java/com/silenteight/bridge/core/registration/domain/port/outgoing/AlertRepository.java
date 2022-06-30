@@ -36,12 +36,15 @@ public interface AlertRepository {
 
   List<AlertWithMatches> findAllWithMatchesByBatchId(String batchId);
 
-  List<AlertWithMatches> findAllWithMatchesByBatchIdAndNameIn(
+  List<AlertWithMatches> findAllWithMatchesByBatchIdAndStatusIsNotRegistered(String batchId);
+
+  List<AlertWithMatches> findAllWithMatchesByBatchIdAndNameInAndStatusIsNotRegistered(
       String batchId, List<String> alertNames);
 
-  Stream<AlertWithoutMatches> streamAllByBatchId(String batchId);
+  Stream<AlertWithoutMatches> streamAllByBatchIdAndStatusIsNotRegistered(String batchId);
 
-  Stream<AlertWithoutMatches> streamAllByBatchIdAndNameIn(String batchId, List<String> alertNames);
+  Stream<AlertWithoutMatches> streamAllByBatchIdAndNameInAndStatusIsNotRegistered(
+      String batchId, List<String> alertNames);
 
   List<MatchWithAlertId> findMatchesByAlertIdIn(Set<Long> alertIds);
 

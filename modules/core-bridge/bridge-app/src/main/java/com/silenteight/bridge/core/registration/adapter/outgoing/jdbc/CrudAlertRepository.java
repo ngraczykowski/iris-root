@@ -68,9 +68,31 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
             m.name AS match_name
           FROM core_bridge_alerts a
           LEFT JOIN core_bridge_matches m ON m.alert_id = a.id
-          WHERE NOT a.is_archived AND a.batch_id = :batchId AND a.name IN(:alertNames)""")
-  List<AlertWithMatchNamesProjection> findAllWithMatchesByBatchIdAndAlertNamesIn(
-      String batchId, List<String> alertNames);
+          WHERE NOT a.is_archived
+            AND a.status != :status
+            AND a.batch_id = :batchId""")
+  List<AlertWithMatchNamesProjection> findAllWithMatchesByBatchIdAndNotInStatus(
+      String batchId, String status);
+
+  @Query(
+      rowMapperClass = AlertWithMatchNamesProjectionRowMapper.class,
+      value = """
+          SELECT
+            a.alert_id AS alert_alert_id,
+            a.name AS alert_name,
+            a.status AS alert_status,
+            a.metadata AS alert_metadata,
+            a.error_description AS alert_error_description,
+            m.match_id AS match_match_id,
+            m.name AS match_name
+          FROM core_bridge_alerts a
+          LEFT JOIN core_bridge_matches m ON m.alert_id = a.id
+          WHERE NOT a.is_archived
+            AND a.batch_id = :batchId
+            AND a.status != :status
+            AND a.name IN(:alertNames)""")
+  List<AlertWithMatchNamesProjection> findAllWithMatchesByBatchIdAndNotInStatusAndAlertNamesIn(
+      String batchId, String status, List<String> alertNames);
 
   @Query(
       rowMapperClass = AlertWithMatchNamesProjectionRowMapper.class,

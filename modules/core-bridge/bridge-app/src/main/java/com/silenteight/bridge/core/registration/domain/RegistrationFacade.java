@@ -151,6 +151,6 @@ public class RegistrationFacade {
     if (!alertNames.isEmpty()) {
       return alertService.getAlertsAndMatchesByName(batchId, alertNames);
     }
-    return alertService.getAlertsAndMatches(batchId);
+    return alertService.getAllAlertsAndMatches(batchId);
   }
 }

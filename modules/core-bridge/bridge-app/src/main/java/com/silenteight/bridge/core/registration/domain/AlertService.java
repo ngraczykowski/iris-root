@@ -39,8 +39,13 @@ class AlertService {
     return alertRepository.findAllWithMatchesByBatchId(batchId);
   }
 
+  List<AlertWithMatches> getAllAlertsAndMatches(String batchId) {
+    return alertRepository.findAllWithMatchesByBatchIdAndStatusIsNotRegistered(batchId);
+  }
+
   List<AlertWithMatches> getAlertsAndMatchesByName(String batchId, List<String> alertNames) {
-    return alertRepository.findAllWithMatchesByBatchIdAndNameIn(batchId, alertNames);
+    return alertRepository.findAllWithMatchesByBatchIdAndNameInAndStatusIsNotRegistered(
+        batchId, alertNames);
   }
 
   List<RegistrationAlert> registerAlertsAndMatches(
@@ -63,11 +68,11 @@ class AlertService {
   }
 
   Stream<AlertWithoutMatches> streamAllByBatchId(String batchId) {
-    return alertRepository.streamAllByBatchId(batchId);
+    return alertRepository.streamAllByBatchIdAndStatusIsNotRegistered(batchId);
   }
 
   Stream<AlertWithoutMatches> streamAllByBatchIdAndNameIn(String batchId, List<String> alertNames) {
-    return alertRepository.streamAllByBatchIdAndNameIn(batchId, alertNames);
+    return alertRepository.streamAllByBatchIdAndNameInAndStatusIsNotRegistered(batchId, alertNames);
   }
 
   List<MatchWithAlertId> getAllMatchesForAlerts(Set<Long> alertsIds) {

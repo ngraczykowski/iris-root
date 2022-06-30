@@ -95,16 +95,26 @@ class JdbcAlertRepository implements AlertRepository {
     return mapper.toAlertWithMatches(alertRepository.findAllWithMatchesByBatchId(batchId));
   }
 
-  @Override
-  public List<AlertWithMatches> findAllWithMatchesByBatchIdAndNameIn(
-      String batchId, List<String> alertNames) {
+  public List<AlertWithMatches> findAllWithMatchesByBatchIdAndStatusIsNotRegistered(
+      String batchId) {
     return mapper.toAlertWithMatches(
-        alertRepository.findAllWithMatchesByBatchIdAndAlertNamesIn(batchId, alertNames));
+        alertRepository.findAllWithMatchesByBatchIdAndNotInStatus(
+            batchId, AlertStatus.REGISTERED.name()));
   }
 
   @Override
-  public Stream<AlertWithoutMatches> streamAllByBatchId(String batchId) {
-    var params = new MapSqlParameterSource("batchId", batchId);
+  public List<AlertWithMatches> findAllWithMatchesByBatchIdAndNameInAndStatusIsNotRegistered(
+      String batchId, List<String> alertNames) {
+    return mapper.toAlertWithMatches(
+        alertRepository.findAllWithMatchesByBatchIdAndNotInStatusAndAlertNamesIn(
+            batchId, AlertStatus.REGISTERED.name(), alertNames));
+  }
+
+  @Override
+  public Stream<AlertWithoutMatches> streamAllByBatchIdAndStatusIsNotRegistered(String batchId) {
+    var params = new MapSqlParameterSource()
+        .addValue("batchId", batchId)
+        .addValue("status", AlertWithoutMatches.AlertStatus.REGISTERED.name());
 
     return jdbcTemplate.queryForStream("""
         SELECT
@@ -115,16 +125,19 @@ class JdbcAlertRepository implements AlertRepository {
           a.metadata AS alert_metadata,
           a.error_description AS alert_error_description
         FROM core_bridge_alerts a
-        WHERE NOT a.is_archived AND a.batch_id = :batchId
+        WHERE NOT a.is_archived
+          AND a.batch_id = :batchId
+          AND status != :status
         ORDER BY a.name""", params, new AlertWithoutMatchesRowMapper());
   }
 
   @Override
-  public Stream<AlertWithoutMatches> streamAllByBatchIdAndNameIn(
+  public Stream<AlertWithoutMatches> streamAllByBatchIdAndNameInAndStatusIsNotRegistered(
       String batchId, List<String> alertNames) {
     var params = new MapSqlParameterSource()
         .addValue("batchId", batchId)
-        .addValue("alertNames", alertNames);
+        .addValue("alertNames", alertNames)
+        .addValue("status", AlertWithoutMatches.AlertStatus.REGISTERED.name());
 
     return jdbcTemplate.queryForStream("""
         SELECT
@@ -135,7 +148,10 @@ class JdbcAlertRepository implements AlertRepository {
           a.metadata AS alert_metadata,
           a.error_description AS alert_error_description
         FROM core_bridge_alerts a
-        WHERE NOT a.is_archived AND a.batch_id = :batchId AND a.name IN(:alertNames)
+        WHERE NOT a.is_archived
+          AND a.batch_id = :batchId
+          AND status != :status
+          AND a.name IN(:alertNames)
         ORDER BY a.name""", params, new AlertWithoutMatchesRowMapper());
   }
 

@@ -78,10 +78,11 @@ public class RecommendationFacade {
   public void streamRecommendationResponses(
       GetRecommendationCommand command,
       StreamObserver<RecommendationResponse> responseObserver) {
-    var batchId = registrationService.getBatchId(command.analysisName());
-    var alertsStream = registrationService.streamAllAlerts(batchId.id(), command.alertNames());
+    var batchIdWithPolicy = registrationService.getBatchId(command.analysisName());
+    var alertsStream =
+        registrationService.streamAllAlerts(batchIdWithPolicy.id(), command.alertNames());
     var statistics = batchStatisticsService.createBatchStatistics(
-        batchId.id(),
+        batchIdWithPolicy.id(),
         command.analysisName(),
         command.alertNames());
 
@@ -92,7 +93,7 @@ public class RecommendationFacade {
               % streamProperties.registrationApiToRecommendationAlertsChunkSize() != 0)
           .forEach(
               alerts -> processRecommendations(
-                  alerts, batchId, statistics, command, responseObserver));
+                  alerts, batchIdWithPolicy, statistics, command, responseObserver));
     }
 
     responseObserver.onCompleted();

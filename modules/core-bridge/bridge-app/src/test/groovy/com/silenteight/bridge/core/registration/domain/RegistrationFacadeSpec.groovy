@@ -22,7 +22,8 @@ class RegistrationFacadeSpec extends Specification {
   def dataRetentionService = Mock(DataRetentionService)
 
   @Subject
-  def underTest = new RegistrationFacade(batchService, alertService, udsFedAlertsService, batchTimeoutService, dataRetentionService)
+  def underTest = new RegistrationFacade(
+      batchService, alertService, udsFedAlertsService, batchTimeoutService, dataRetentionService)
 
   def 'should call register batch method'() {
     given:
@@ -160,7 +161,7 @@ class RegistrationFacadeSpec extends Specification {
     then:
     1 * batchService.findBatchIdWithPolicyByAnalysisName(RegistrationFixtures.ANALYSIS_NAME) >>
         RegistrationFixtures.BATCH_ID_WITH_POLICY_PROJECTION
-    1 * alertService.getAlertsAndMatches(Fixtures.BATCH_ID) >> RecommendationFixtures.ALERTS
+    1 * alertService.getAllAlertsAndMatches(Fixtures.BATCH_ID) >> RecommendationFixtures.ALERTS
 
     result == RecommendationFixtures.BATCH_WITH_ALERTS
   }
@@ -297,7 +298,8 @@ class RegistrationFacadeSpec extends Specification {
     def result = underTest.getBatchPriority(command)
 
     then:
-    1 * batchService.findBatchPriority(RegistrationFixtures.ANALYSIS_NAME) >> new BatchPriority(RegistrationFixtures.BATCH_PRIORITY)
+    1 * batchService.findBatchPriority(RegistrationFixtures.ANALYSIS_NAME) >>
+        new BatchPriority(RegistrationFixtures.BATCH_PRIORITY)
     result.priority() == RegistrationFixtures.BATCH_PRIORITY
   }
 
