@@ -102,7 +102,6 @@ silenteight-commons-app = { group = "com.silenteight.commons", name = "silenteig
 silenteight-commons-core = { group = "com.silenteight.commons", name = "silenteight-commons-core", version.ref = "silenteight-commons" }
 silenteight-filestorage-api = { group = "com.silenteight.iris", name = "sep-filestorage-api" }
 silenteight-filestorage-minio = { group = "com.silenteight.iris", name = "sep-filestorage-minio-s3" }
-silenteight-rabbit-common-schema = { group = "com.silenteight.rabbitmqcommonschema", name = "sear-rabbitmq-common-schema-definitions", version = "1.11.0"}
 silenteight-sep-auth = { group = "com.silenteight.iris", name = "sep-auth" }
 silenteight-sep-base-aspects = { group = "com.silenteight.iris", name = "sep-base-aspects" }
 silenteight-sep-base-common = { group = "com.silenteight.iris", name = "sep-base-common" }

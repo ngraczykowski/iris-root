@@ -17,7 +17,7 @@ dependencies {
   implementation project(":agent-messaging")
   implementation project(":agent-logging")
   implementation libs.data.source.api
-  implementation libs.silenteight.rabbit.common.schema
+  implementation libs.sear.rabbitmq.common.schema
 
   // Dependencies for integration tests
   testImplementation project(":agent-starter-test")
