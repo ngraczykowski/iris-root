@@ -74,10 +74,14 @@ class SendResponseService implements SendResponseUseCase {
       alertDeliveredPublisherPort.sendDelivered(alertId, status);
 
     } catch (NonRecoverableCallbackException exception) {
+      log.error("The callback for alerts: {} failed with exception: {}",
+          requestDto.getSystemIds(), exception.getClass().getSimpleName());
       log.error("The callback failed with non-recoverable exception.");
       enrichException(exception, alertId, status);
       throw exception;
     } catch (RecoverableCallbackException exception) {
+      log.error("The callback for alerts: {} failed with exception: {}",
+          requestDto.getSystemIds(), exception.getClass().getSimpleName());
       log.warn("The callback failed with recoverable exception.");
       enrichException(exception, alertId, status);
       throw exception;

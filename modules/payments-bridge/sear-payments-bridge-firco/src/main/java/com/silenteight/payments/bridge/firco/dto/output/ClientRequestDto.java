@@ -10,6 +10,9 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies.UpperCamelCaseStr
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.io.Serializable;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Data
 @AllArgsConstructor
@@ -36,4 +39,9 @@ public class ClientRequestDto implements Serializable {
     body.receiveDecisionDto = receiveDecisionDto;
   }
 
+  public List<String> getSystemIds() {
+    return body.receiveDecisionDto.getMessages().stream()
+        .map(a -> a.getDecisionMessage().getSystemID())
+        .collect(toList());
+  }
 }
