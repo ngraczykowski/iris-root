@@ -21,6 +21,9 @@ components:
       - warehouse
       - messaging
       - hotel
+  adjudication-engine:
+    properties:
+      ae.comments.environment: "hotel"
 
 agents:
   name-agent:
