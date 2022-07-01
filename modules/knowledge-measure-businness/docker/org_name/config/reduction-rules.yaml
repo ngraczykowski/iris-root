@@ -1,0 +1,25 @@
+rules:
+- feature: blacklisted
+  solution: MATCH
+  threshold: 1
+- feature: token_inclusion
+  solution: MATCH
+  threshold: 1
+- feature: partial_fuzzy
+  solution: MATCH
+  threshold: 1
+- feature: first_token
+  solution: MATCH
+  threshold: 1
+- feature: abbreviation
+  solution: MATCH
+  solution_probability: 0.8
+  threshold: 0.9
+- solutions:
+  - label: NO_MATCH
+    solution: NO_MATCH
+    threshold: 0.85
+  - label: MATCH
+    solution: MATCH
+    threshold: 0.15
+  source: model/random_forest_model_21_03_2022.bin

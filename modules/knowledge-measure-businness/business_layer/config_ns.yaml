@@ -1,0 +1,41 @@
+decisions:
+  PTP:
+    verbal: Potential True Positive
+    comment_type: positive_comment
+  FP:
+    verbal: False Positive
+    comment_type: negative_comment
+  MI:
+    verbal: Manual Investigation
+    comment_type: null
+
+comment_intro: "S8 recommended action: {}\n"
+generic_positive_comment: &generic_positive_comment "Alerted Party's {context} ({ap_value}) matches Watchlist Party's {context} ({wl_value})"
+generic_negative_comment: &generic_negative_comment "Alerted Party's {context} ({ap_value}) does not match Watchlist Party's {context} ({wl_value})"
+
+feature_mapping:
+  standard_features:
+    geo:
+      measure:
+        fields: [nationalities, pobs, residencies]
+        contexts: [nationality, place_of_birth, residency]
+        comments:
+          negative_comment: *generic_negative_comment
+          positive_comment: *generic_positive_comment
+
+    org_name:
+      measure:
+        fields: [names]
+        contexts: [name]
+        comments:
+          negative_comment: *generic_negative_comment
+          positive_comment: *generic_positive_comment
+
+  custom_features:
+    example_sanctions:
+      measure:
+        fields: [residencies, nationalities]
+        contexts: [residency, nationality]
+        comments:
+          negative_comment: ""
+          positive_comment: "Alerted Party's {context} ({ap_value}) is on the sanctions list"

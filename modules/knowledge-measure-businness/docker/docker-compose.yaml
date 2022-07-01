@@ -1,0 +1,30 @@
+version: '3.1'
+
+services:
+  organization_name_knowledge:
+    image: docker.repo.silenteight.com/organization-name-knowledge
+    ports:
+      - "5000:5000"
+
+  geo_agent:
+    image: docker.repo.silenteight.com/geo-agent:1.11.0-BUILD.33
+    ports:
+      - "24317:24317"
+      - "24316:24316"
+
+  organization_name_agent:
+    image: docker.repo.silenteight.com/organization-name-agent:0.1.0-dev-scores-in-response
+    ports:
+      - "9090:9090"
+    volumes:
+      - "/home/user/PycharmProjects/knowledge-measure-business/docker/org_name/config:/app/config"
+
+  name_agent:
+    image: docker.repo.silenteight.com/linguistics-agent:latest
+    ports:
+      - "5001:24301"
+
+  date_agent:
+    image: docker.repo.silenteight.com/date-agent
+    ports:
+      - "24313:24313"

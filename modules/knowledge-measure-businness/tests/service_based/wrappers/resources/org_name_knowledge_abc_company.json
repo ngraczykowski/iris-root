@@ -1,0 +1,58 @@
+[
+  {
+    "source": {
+      "original": "ABC Company",
+      "cleaned": "abc company"
+    },
+    "common_prefixes": {
+      "cleaned_name": "",
+      "original_name": "",
+      "cleaned_tuple": [],
+      "original_tuple": []
+    },
+    "base": {
+      "cleaned_name": "abc",
+      "original_name": "ABC",
+      "cleaned_tuple": [
+        "abc"
+      ],
+      "original_tuple": [
+        "ABC"
+      ]
+    },
+    "common_suffixes": {
+      "cleaned_name": "",
+      "original_name": "",
+      "cleaned_tuple": [],
+      "original_tuple": []
+    },
+    "legal": {
+      "cleaned_name": "company",
+      "original_name": "Company",
+      "cleaned_tuple": [
+        "company"
+      ],
+      "original_tuple": [
+        "Company"
+      ]
+    },
+    "countries": {
+      "cleaned_name": "",
+      "original_name": "",
+      "cleaned_tuple": [],
+      "original_tuple": []
+    },
+    "parenthesis": {
+      "cleaned_name": "",
+      "original_name": "",
+      "cleaned_tuple": [],
+      "original_tuple": []
+    },
+    "other": {
+      "cleaned_name": "",
+      "original_name": "",
+      "cleaned_tuple": [],
+      "original_tuple": []
+    }
+  }
+]

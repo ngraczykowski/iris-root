@@ -1,0 +1,41 @@
+decisions:
+  PTP:
+    verbal: Potential True Positive
+    comment_type: positive_comment
+  FP:
+    verbal: False Positive
+    comment_type: negative_comment
+  MI:
+    verbal: Manual Investigation
+    comment_type: null
+
+comment_intro: "S8 recommended action: {}\n"
+generic_positive_comment: &generic_positive_comment "Alerted Party's {context} ({ap_value}) matches Watchlist Party's {context} ({wl_value})"
+generic_negative_comment: &generic_negative_comment "Alerted Party's {context} ({ap_value}) does not match Watchlist Party's {context} ({wl_value})"
+
+feature_mapping:
+  standard_features:
+    geo:
+      knowledge:
+        fields: [msg]
+      measure:
+        fields: [location]
+        contexts: [location]
+        comments:
+          negative_comment: *generic_negative_comment
+          positive_comment: *generic_positive_comment
+
+    org_name:
+      knowledge:
+        fields: [msg]
+      measure:
+        fields: [name]
+        contexts: [name]
+        comments:
+          negative_comment: *generic_negative_comment
+          positive_comment: *generic_positive_comment
+
+  custom_features:
+    identity:
+      knowledge:
+        fields: [msg]

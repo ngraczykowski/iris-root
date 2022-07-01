@@ -1,0 +1,12 @@
+decisions:
+  PTP:
+    verbal: Potential True Positive
+    comment_type: positive_comment
+
+comment_intro: "S8 recommended action: {}\n"
+
+feature_mapping:
+  standard_features:
+    abc_agent:
+      NOT_KNOWLEDGE_NOR_MEASURE:
+        fields: [a]

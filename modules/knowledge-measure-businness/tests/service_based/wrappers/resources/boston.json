@@ -1,0 +1,78 @@
+[
+  {
+    "original_input": "",
+    "name": "ALABAMA",
+    "type": "STATE",
+    "id": 1040479,
+    "code": "",
+    "parent_id": 840,
+    "explicitly_provided": false,
+    "derived_from": [4451827]
+  },
+  {
+    "original_input": "Boston",
+    "name": "BOSTON",
+    "type": "CITY",
+    "id": 5330956,
+    "code": "",
+    "parent_id": 1041000,
+    "explicitly_provided": true
+  },
+  {
+    "original_input": "Boston",
+    "name": "BOSTON HEIGHTS",
+    "type": "CITY",
+    "id": 5547904,
+    "code": "",
+    "parent_id": 1040303,
+    "explicitly_provided": true
+  },
+  {
+    "original_input": "Boston",
+    "name": "BRILLIANT",
+    "type": "CITY",
+    "id": 4451827,
+    "code": "",
+    "parent_id": 1040479,
+    "explicitly_provided": true
+  },
+  {
+    "original_input": "Massachusetts",
+    "name": "MASSACHUSETTS",
+    "type": "STATE",
+    "id": 1041000,
+    "code": "",
+    "parent_id": 840,
+    "explicitly_provided": true,
+    "derived_from": [5330956]
+  },
+  {
+    "original_input": "",
+    "name": "OHIO",
+    "type": "STATE",
+    "id": 1040303,
+    "code": "",
+    "parent_id": 840,
+    "explicitly_provided": false,
+    "derived_from": [5547904, 4920741]
+  },
+    {
+    "original_input": "Boston",
+    "name": "OWENSVILLE",
+    "type": "CITY",
+    "id": 4920741,
+    "code": "",
+    "parent_id": 1040303,
+    "explicitly_provided": true
+  },
+    {
+    "original_input": "US",
+    "name": "UNITED STATES",
+    "type": "COUNTRY",
+    "id": 840,
+    "code": "US",
+    "parent_id": 0,
+    "explicitly_provided": false,
+    "derived_from": [1040303, 1040479, 1041000, 5330956]
+  }
+]

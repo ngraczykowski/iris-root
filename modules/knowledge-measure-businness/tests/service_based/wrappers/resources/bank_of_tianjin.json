@@ -1,0 +1,58 @@
+[
+    {
+        "original_input": "CN",
+        "name": "CHINA",
+        "type": "COUNTRY",
+        "id": 156,
+        "parent_id": 0,
+        "code": "CN",
+        "explicitly_provided": false,
+        "derived_from": [2192947]
+    },
+    {
+        "original_input": "CO",
+        "name": "COLOMBIA",
+        "type": "COUNTRY",
+        "id": 170,
+        "parent_id": 0,
+        "code": "CO",
+        "explicitly_provided": true
+    },
+    {
+        "original_input": "CO",
+        "name": "COLORADO",
+        "type": "STATE",
+        "id": 1040595,
+        "parent_id": 840,
+        "code": "",
+        "explicitly_provided": true
+    },
+    {
+        "original_input": "IT",
+        "name": "ITALY",
+        "type": "COUNTRY",
+        "id": 380,
+        "parent_id": 0,
+        "code": "IT",
+        "explicitly_provided": true
+    },
+    {
+        "original_input": "TIANJIN",
+        "name": "TIANJIN",
+        "type": "CITY",
+        "id": 2192947,
+        "parent_id": 156,
+        "code": "",
+        "explicitly_provided": true
+    },
+    {
+        "original_input": "US",
+        "name": "UNITED STATES",
+        "type": "COUNTRY",
+        "id": 840,
+        "parent_id": 0,
+        "code": "US",
+        "explicitly_provided": false,
+        "derived_from": [1040595]
+    }
+]

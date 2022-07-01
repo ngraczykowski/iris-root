@@ -1,0 +1,36 @@
+@Library('pipeline-shared-library@github') _
+
+pipeline {
+  agent {
+    label 'ec2-agent'
+  }
+  environment {
+    PYPI_URL = credentials('pypi-readonly-url')
+    TWINE_REPOSITORY_URL = 'https://repo.silenteight.com/artifactory/api/pypi/pypi'
+  }
+  options {
+    timeout(time: 1, unit: 'HOURS')   // just to be safe
+    disableConcurrentBuilds()
+  }
+  stages {
+    stage('Run tests and check formatting') {
+      steps {
+         withDockerRegistry(url: 'https://docker.repo.silenteight.com', credentialsId: 'artifactory-deployment-user') {
+          sh '''
+            python3 -m venv venv
+            sh ./venv/bin/activate
+            pip install --index-url $PYPI_URL -r requirements.txt
+            pip install --index-url $PYPI_URL tox
+            python3 -m tox --index-url $PYPI_URL
+          '''
+        }
+      }
+    }
+  }
+  post {
+    always {
+      junit allowEmptyResults: true, testResults: '.tox/flake8-report.xml, .tox/pytest-report.xml'
+      publishCoverage adapters: [cobertura('.tox/coverage-report.xml')]
+    }
+  }
+}

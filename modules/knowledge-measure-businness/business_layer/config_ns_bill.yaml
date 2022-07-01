@@ -1,0 +1,67 @@
+decisions:
+  PTP:
+    verbal: Potential True Positive
+    comment_type: positive_comment
+  FP:
+    verbal: False Positive
+    comment_type: negative_comment
+  MI:
+    verbal: Manual Investigation
+    comment_type: null
+
+comment_intro: "S8 recommended action: {}\n"
+generic_positive_comment: &generic_positive_comment "Alerted Party's {context} ({ap_value}) matches Watchlist Party's {context} ({wl_value})"
+generic_negative_comment: &generic_negative_comment "Alerted Party's {context} ({ap_value}) does not match Watchlist Party's {context} ({wl_value})"
+
+feature_mapping:
+  standard_features:
+    geo:
+      measure:
+        fields: [locations]
+        contexts: [location]
+        comments:
+          negative_comment: *generic_negative_comment
+          positive_comment: *generic_positive_comment
+
+    org:
+      measure:
+        fields: [names]
+        contexts: [name]
+        comments:
+          negative_comment: *generic_negative_comment
+          positive_comment: *generic_positive_comment
+        ignore: true
+
+    individual:
+      measure:
+        fields: [names]
+        contexts: [name]
+        comments:
+          negative_comment: *generic_negative_comment
+          positive_comment: *generic_positive_comment
+        ignore: true
+
+  custom_features:
+    entity_type:
+      measure:
+        fields: [wl_type]
+        contexts: [wl_type]
+        comments:
+          negative_comment: ""
+          positive_comment: ""
+
+    name:
+      measure:
+        fields: [names]
+        contexts: [name]
+        comments:
+          negative_comment: *generic_negative_comment
+          positive_comment: *generic_positive_comment
+
+    sanctions:
+      measure:
+        fields: [locations]
+        contexts: [location]
+        comments:
+          negative_comment: ""
+          positive_comment: "Alerted Party's {context} ({ap_value}) is on the sanctions list"
