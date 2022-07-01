@@ -29,6 +29,10 @@ EOH
     read
 fi
 
+if [ -d "${LOGS_DIR}" ] && [ "${#LOGS_DIR}" -ge 1 ]
+then
+  rm -rf "${LOGS_DIR}"
+fi
 mkdir -p "${LOGS_DIR}"
 
 kubectl get pods \
