@@ -48,7 +48,7 @@ public class Match implements Serializable {
     this.reason = reason;
   }
 
-  boolean isSolved() {
+  public boolean isSolved() {
     return solution != null;
   }
 

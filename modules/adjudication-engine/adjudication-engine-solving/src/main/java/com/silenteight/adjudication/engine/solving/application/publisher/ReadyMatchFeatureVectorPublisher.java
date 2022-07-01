@@ -9,6 +9,7 @@ import com.silenteight.adjudication.engine.solving.application.process.dto.Match
 import com.silenteight.adjudication.engine.solving.application.process.port.GovernanceMatchResponsePort;
 import com.silenteight.adjudication.engine.solving.application.publisher.dto.MatchSolutionRequest;
 import com.silenteight.adjudication.engine.solving.application.publisher.port.ReadyMatchFeatureVectorPort;
+import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 import com.silenteight.solving.api.v1.BatchSolveFeaturesResponse;
 import com.silenteight.solving.api.v1.FeatureVectorSolution;
@@ -17,6 +18,7 @@ import com.silenteight.solving.api.v1.SolutionResponse;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -28,7 +30,8 @@ class ReadyMatchFeatureVectorPublisher implements ReadyMatchFeatureVectorPort {
   private final GovernanceFacade governanceFacade;
   private final GovernanceMatchResponsePort governanceMatchResponseProcess;
   private final ProtoMessageToObjectNodeConverter converter;
-
+  private final AlertSolvingRepository alertSolvingRepository;
+  private List<Long> processing = new ArrayList<>(10000);
 
   public void send(final MatchSolutionRequest matchSolutionRequest) {
     // Send for solving alert solution to governance via queue (internal)
@@ -52,15 +55,35 @@ class ReadyMatchFeatureVectorPublisher implements ReadyMatchFeatureVectorPort {
         alertId,
         matchId);
 
-    final BatchSolveFeaturesResponse batchSolveFeaturesResponse =
-        governanceFacade.batchSolveFeatures(batchSolveFeaturesRequest);
+    if (processing.contains(matchId) || checkIfAlreadyMatchSolved(alertId, matchId)) {
+      log.warn("Solve match feature vector request for match = {} is already sent", matchId);
+      return;
+    }
 
-    log.debug(
-        "Received match solution response from governance for alert: {}, Match: {}",
-        alertId,
-        matchId);
+    try {
+      processing.add(matchId);
+      var batchSolveFeaturesResponse =
+          governanceFacade.batchSolveFeatures(batchSolveFeaturesRequest);
 
-    sendForMatchSolutionProcess(alertId, matchId, batchSolveFeaturesResponse);
+      log.debug(
+          "Received match solution response from governance for alert: {}, Match: {}",
+          alertId,
+          matchId);
+
+      sendForMatchSolutionProcess(alertId, matchId, batchSolveFeaturesResponse);
+    } finally {
+      processing.remove(matchId);
+    }
+  }
+
+  private boolean checkIfAlreadyMatchSolved(long alertId, long matchId) {
+    var alert = alertSolvingRepository.get(alertId);
+    if (alert.isEmpty()) return true;
+    if (alert.getMatches().get(matchId).isSolved()) {
+      log.warn("Match {} in alert {} is already solved", matchId, alertId);
+      return true;
+    }
+    return false;
   }
 
   private void sendForMatchSolutionProcess(
