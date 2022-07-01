@@ -9,7 +9,7 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "agents-api"
+rootProject.name = "agents-api-root"
 
 include "agents-api"
 include 'allowlist-agent-api'

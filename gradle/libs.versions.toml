@@ -2,7 +2,6 @@
 #-----------------------------------
 # Silent Eight
 #-----------------------------------
-agents-api = "0.4.0"
 agents-protocol = "0.14.0"
 hazelcast = "5.1.2"
 learing-engine-store-api = "0.7.0"
@@ -81,7 +80,7 @@ plugin-google-protobuf = "0.8.19"
 
 # Silent Eight
 adjudication-engine-api = { group = "com.silenteight.iris", name = "adjudication-api" }
-agents-api = { group = "com.silenteight.agent.api", name = "agents-api", version.ref = "agents-api" }
+agents-api = { group = "com.silenteight.iris", name = "agents-api" }
 consul-grpc-registration = { group = "com.silenteight.commons", name = "consul-grpc-registration", version = "1.0.0" }
 data-retention-api = { group = "com.silenteight.iris", name = "data-retention-api" }
 data-source-agentinput-api = { group = "com.silenteight.iris", name = "data-source-agentinput-api" }

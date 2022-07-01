@@ -12,6 +12,7 @@ dependencies {
   api libs.spring.boot.test.autoconfigure
   api libs.spring.integration.test
   api libs.test.containers
+  api libs.test.containers.postgresql
 
   implementation libs.commons.lang3
   implementation project(":agent-database")
