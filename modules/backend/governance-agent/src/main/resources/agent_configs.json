@@ -11,6 +11,7 @@
     { "name": "agents/historicaldecisions/versions/1.0.0/configs/1" },
     { "name": "agents/invalidAlert/versions/1.0.0/configs/1" },
     { "name": "agents/allowlist/versions/1.0.0/configs/1" },
-    { "name": "agents/logicalDiscountingDob/versions/1.0.0/configs/1" }
+    { "name": "agents/logicalDiscountingDob/versions/1.0.0/configs/1" },
+    { "name": "agents/watchlist/versions/1.0.0/configs/1" }
   ]
 }

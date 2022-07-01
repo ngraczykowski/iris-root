@@ -291,5 +291,26 @@
       "INCONCLUSIVE"
     ],
     "configurations": []
+  },
+  "agents/watchlist/versions/1.0.0/configs/1": {
+    "agentId": "715d77bd-111a-464f-8ccc-19a3239337d0",
+    "features": [
+      "features/newsAge"
+    ],
+    "featuresList": [
+      {
+        "name": "features/newsAge",
+        "displayName": "News Age"
+      }
+    ],
+    "responses": [
+      "0-5Y",
+      "5-10Y",
+      "10Y+",
+      "INCONCLUSIVE",
+      "NO_DATA",
+      "DATA_SOURCE_ERROR"
+    ],
+    "configurations": []
   }
 }
