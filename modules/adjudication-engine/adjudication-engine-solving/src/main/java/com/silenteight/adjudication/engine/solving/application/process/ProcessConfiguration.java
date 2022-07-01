@@ -12,6 +12,7 @@ import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository
 import com.silenteight.adjudication.engine.solving.domain.comment.CommentInputClientRepository;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -76,7 +77,8 @@ class ProcessConfiguration {
       RecommendationFacade recommendationFacade,
       ProtoMessageToObjectNodeConverter converter,
       CommentInputClientRepository commentInputClientRepository,
-      final ProcessConfigurationProperties processConfigurationProperties) {
+      ProcessConfigurationProperties processConfigurationProperties,
+      ApplicationEventPublisher applicationEventPublisher) {
     return new SolvedAlertProcess(
         recommendationPublisher,
         alertSolvingRepository,
@@ -85,7 +87,7 @@ class ProcessConfiguration {
         recommendationFacade,
         converter,
         commentInputClientRepository,
-        processConfigurationProperties.getSolvedAlertProcess());
+        processConfigurationProperties.getSolvedAlertProcess(),applicationEventPublisher);
   }
 
   @Bean

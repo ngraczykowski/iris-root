@@ -85,6 +85,12 @@ class HazelcastAlertSolvingRepository implements AlertSolvingRepository {
   }
 
   @Override
+  public void remove(long alertId) {
+    log.debug("[InMemorySolving] Remove AlertSolvingModel id:{}", alertId);
+    map.delete(alertId);
+  }
+
+  @Override
   public AlertSolving updateMatchSolution(
       long alertId, long matchId, String matchSolution, String reason) {
     return this.map.executeOnKey(

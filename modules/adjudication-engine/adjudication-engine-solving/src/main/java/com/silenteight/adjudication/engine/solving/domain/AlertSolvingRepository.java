@@ -14,4 +14,6 @@ public interface AlertSolvingRepository {
   AlertSolving updateMatchSolution(long alertId, long matchId, String matchSolution, String reason);
 
   AlertSolving updateMatchCategoryValue(long alertId, long matchId, CategoryValue categoryValues);
+
+  void remove(long alertId);
 }

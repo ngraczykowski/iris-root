@@ -5,6 +5,8 @@
 package com.silenteight.adjudication.engine.solving.application.process;
 
 import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectNodeConverter;
+import com.silenteight.adjudication.engine.solving.application.listener.ApplicationEventPublisherMock;
+import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
 import com.silenteight.adjudication.engine.solving.domain.comment.CommentInputClientRepository;
 import com.silenteight.sep.base.common.protocol.MessageRegistryFactory;
 import com.silenteight.solving.api.v1.BatchSolveAlertsResponse;
@@ -12,22 +14,26 @@ import com.silenteight.solving.api.v1.SolveAlertSolutionResponse;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.HashMap;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class SolvedAlertProcessTest {
 
   private SolvedAlertProcess solvedAlertProcess;
   private MockRecommendationPublisher mockRecommendationPublisher;
+  private ApplicationEventPublisher applicationEventPublisher;
+  private AlertSolvingRepository inMemoryAlertSolvingRepositoryMock;
 
   @BeforeEach
   void setUp() {
     mockRecommendationPublisher = new MockRecommendationPublisher();
     var dataAccess = new InMemoryMatchFeatureDataAccess();
-    var inMemoryAlertSolvingRepositoryMock = new InMemoryAlertSolvingRepositoryMock(dataAccess);
+    inMemoryAlertSolvingRepositoryMock = new InMemoryAlertSolvingRepositoryMock(dataAccess);
+    applicationEventPublisher =
+        new ApplicationEventPublisherMock(inMemoryAlertSolvingRepositoryMock);
 
     inMemoryAlertSolvingRepositoryMock.updateMatchSolution(
         1,
@@ -62,7 +68,8 @@ class SolvedAlertProcessTest {
             recommendationFacade,
             converter,
             commentInputRepository,
-            properties);
+            properties,
+            applicationEventPublisher);
   }
 
   @Test
@@ -84,5 +91,7 @@ class SolvedAlertProcessTest {
     solvedAlertProcess.generateRecommendation(1L, batchSolvedAlertResponse);
 
     assertThat(mockRecommendationPublisher.getRecommendationCount()).isEqualTo(1);
+    // Just after sending recommendation object is purged from memory
+    assertThat(inMemoryAlertSolvingRepositoryMock.get(1L)).isNull();
   }
 }

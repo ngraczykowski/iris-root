@@ -64,4 +64,10 @@ class InMemoryAlertSolvingRepositoryMock implements AlertSolvingRepository {
       return alerts.get(alertId).updateMatchCategoryValues(matchId, List.of(categoryValues));
     }
   }
+
+  @Override
+  public void remove(long alertId) {
+    alerts.remove(alertId);
+  }
+
 }

@@ -86,6 +86,12 @@ class GuavaAlertSolvingRepository implements AlertSolvingRepository {
   }
 
   @Override
+  public void remove(long alertId) {
+    log.info("[GuavaSolving] invalidate cache key {}", alertId);
+    cache.invalidate(alertId);
+  }
+
+  @Override
   public AlertSolving updateMatchSolution(
       long alertId, long matchId, String matchSolution, String reason) {
     return this.executeInLock(

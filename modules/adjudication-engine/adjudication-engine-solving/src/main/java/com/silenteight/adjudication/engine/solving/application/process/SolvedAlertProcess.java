@@ -15,10 +15,12 @@ import com.silenteight.adjudication.engine.solving.application.publisher.Recomme
 import com.silenteight.adjudication.engine.solving.domain.AlertSolving;
 import com.silenteight.adjudication.engine.solving.domain.AlertSolvingRepository;
 import com.silenteight.adjudication.engine.solving.domain.comment.CommentInputClientRepository;
+import com.silenteight.adjudication.engine.solving.domain.event.AlertSolvedEvent;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 import com.silenteight.solving.api.v1.BatchSolveAlertsResponse;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
 import java.util.Map;
@@ -38,8 +40,11 @@ class SolvedAlertProcess implements SolvedAlertPort {
   private final ProtoMessageToObjectNodeConverter converter;
   private final CommentInputClientRepository commentInputClientRepository;
   private final ProcessConfigurationProperties.SolvedAlertProcess properties;
+  private final ApplicationEventPublisher applicationEventPublisher;
 
-  @Timed(percentiles = { 0.5, 0.95, 0.99 }, histogram = true)
+  @Timed(
+      percentiles = {0.5, 0.95, 0.99},
+      histogram = true)
   public void generateRecommendation(long alertId, BatchSolveAlertsResponse solvedAlert) {
 
     log.info("Generating recommendation for = {}", alertId);
@@ -57,28 +62,30 @@ class SolvedAlertProcess implements SolvedAlertPort {
 
     var recommendedAction = alertSolution.get().getAlertSolution();
     final Map<String, Object> commentsInputs = this.fetchCommentInputs(alertId);
-    var alertContext = alertSolvingAlertContextMapper.mapSolvingAlert(
-        alertSolvingModel,
-        recommendedAction,
-        commentsInputs
-    );
+    var alertContext =
+        alertSolvingAlertContextMapper.mapSolvingAlert(
+            alertSolvingModel, recommendedAction, commentsInputs);
     var comment = commentFacadePort.generateComment(properties.getCommentTemplate(), alertContext);
     var matchComments =
         commentFacadePort.generateMatchComments(
             properties.getMatchCommentTemplate(), alertContext.getMatches());
 
     var saveRequest =
-        new SaveRecommendationRequest(alertSolvingModel.getAnalysisId(), true, true, true, List.of(
-            AlertSolution
-                .builder()
-                .alertId(alertSolvingModel.getAlertId())
-                .recommendedAction(recommendedAction)
-                .matchIds(alertSolvingModel.getMatchIds())
-                .matchContexts(createMatchContexts(alertContext.getMatches()))
-                .comment(comment)
-                .matchComments(matchComments)
-                .alertLabels(converter.convert(alertSolvingModel.getLabels()))
-                .build()));
+        new SaveRecommendationRequest(
+            alertSolvingModel.getAnalysisId(),
+            true,
+            true,
+            true,
+            List.of(
+                AlertSolution.builder()
+                    .alertId(alertSolvingModel.getAlertId())
+                    .recommendedAction(recommendedAction)
+                    .matchIds(alertSolvingModel.getMatchIds())
+                    .matchContexts(createMatchContexts(alertContext.getMatches()))
+                    .comment(comment)
+                    .matchComments(matchComments)
+                    .alertLabels(converter.convert(alertSolvingModel.getLabels()))
+                    .build()));
     var recommendations = recommendationFacadePort.createRecommendations(saveRequest);
 
     log.debug("Generated recommendation for = {}", alertSolvingModel.getAlertId());
@@ -88,7 +95,6 @@ class SolvedAlertProcess implements SolvedAlertPort {
 
   private Map<String, Object> fetchCommentInputs(long alertId) {
     return this.commentInputClientRepository.get(alertId);
-
   }
 
   private void sendRecommendationNotification(
@@ -98,6 +104,8 @@ class SolvedAlertProcess implements SolvedAlertPort {
         createRecommendationsNotification(alertSolvingModel, recommendations);
 
     this.recommendationPublisher.publish(recommendationsGenerated);
+    this.applicationEventPublisher.publishEvent(
+        new AlertSolvedEvent(alertSolvingModel.getAlertId()));
   }
 
   @Nonnull
@@ -111,8 +119,7 @@ class SolvedAlertProcess implements SolvedAlertPort {
   }
 
   private ObjectNode[] createMatchContexts(List<MatchContext> matchContexts) {
-    return matchContexts
-        .stream()
+    return matchContexts.stream()
         .map(converter::convert)
         .filter(not(ObjectNode::isEmpty))
         .toArray(ObjectNode[]::new);
