@@ -378,3 +378,14 @@ databaseChangeLog:
               - column:
                   name: locked_by
                   type: varchar(255)
+
+  - changeSet:
+      id: 1.0.0-8
+      author: apozorski
+      changes:
+        - createIndex:
+            tableName: core_bridge_matches
+            indexName: core_bridge_matches_alert_id_index
+            columns:
+              - column:
+                  name: alert_id
