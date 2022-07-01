@@ -476,9 +476,9 @@ agents:
       name: "learningengine"
     image:
       repository: registry.dev.s8ops.com/learning-engine-default
-  is-pep-agent:
+  watchlist-agent:
     image:
-      repository: registry.dev.s8ops.com/is-pep-agent-default
+      repository: registry.dev.s8ops.com/watchlist-agent-default
   historical-decisions-agent:
     db:
       enabled: true

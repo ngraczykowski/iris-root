@@ -108,9 +108,20 @@ agents:
         memory: 2Gi
   learning-engine:
     properties:
-  is-pep-agent:
+  watchlist-agent:
     properties:
       "ispep.agent.facade.enabled": true
+      "news-age.agent.facade.enabled": true
+      # Remove queue properties from this file when watchlist-agent will be released with camelCase watchlist queue names
+      "facade.amqp.queueDefinitions[newsAge].inbound-exchange-name": agent.request
+      "facade.amqp.queueDefinitions[newsAge].inbound-queue-name": agent.newsAge-requests
+      "facade.amqp.queueDefinitions[newsAge].inbound-queue-with-priority-support-name": agent.newsAge-requests-prio-support
+      "facade.amqp.queueDefinitions[newsAge].inbound-routing-key": agents.newsAge.versions.*.configs.*
+      "facade.amqp.queueDefinitions[newsAge].max-queue-priority": 10
+      "facade.amqp.queueDefinitions[newsAge].outbound-exchange-name": agent.response
+      "facade.amqp.queueDefinitions[newsAge].dead-letter-exchange-name": newsAge-agent-dead-letter-exchange
+      "facade.amqp.queueDefinitions[newsAge].dead-letter-queue-name": newsAge-agent-dead-letter-queue
+      "facade.amqp.queueDefinitions[newsAge].dead-letter-routing-key": newsAge-agent-dead-letter-key
   historical-decisions-agent:
     properties:
       "historicaldecisions.agent.facade.enabled": true
