@@ -1,5 +1,6 @@
 package com.silenteight.adjudication.engine.solving.application.publisher;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.governance.GovernanceFacade;
@@ -7,50 +8,21 @@ import com.silenteight.adjudication.engine.solving.application.process.port.Solv
 import com.silenteight.adjudication.engine.solving.application.publisher.dto.AlertSolutionRequest;
 import com.silenteight.adjudication.engine.solving.application.publisher.port.GovernanceAlertPort;
 
-import java.util.Queue;
-import java.util.concurrent.ExecutorService;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.stereotype.Service;
 
 @Slf4j
+@Service
+@RequiredArgsConstructor
 class GovernanceAlertPublisher implements GovernanceAlertPort {
 
-  private final Queue<AlertSolutionRequest> sendQueue;
+  private final TaskExecutor inMemorySolvingExecutor;
   private final GovernanceFacade governanceFacade;
-
   private final SolvedAlertPort solvedAlertProcess;
-
-  public GovernanceAlertPublisher(
-      final GovernanceFacade governanceFacade,
-      final Queue<AlertSolutionRequest> governanceAlertsToSendQueue,
-      final ExecutorService executorService,
-      final SolvedAlertPort solvedAlertProcess) {
-    this.governanceFacade = governanceFacade;
-    this.solvedAlertProcess = solvedAlertProcess;
-    this.sendQueue = governanceAlertsToSendQueue;
-    for (int i = 0; i < 15; i++) {
-      executorService.submit(this::process);
-    }
-  }
 
   public void send(final AlertSolutionRequest alertSolutionRequest) {
     log.info("Sending alert for solving to Governance");
-    this.sendQueue.add(alertSolutionRequest);
-  }
-
-  private void process() {
-    try {
-      consume();
-    } catch (Exception e) {
-      log.error("Processing sendRequestToGovernance failed: ", e);
-    }
-  }
-
-  void consume() {
-    do {
-      final AlertSolutionRequest poll = this.sendQueue.poll();
-      if (poll != null) {
-        this.sendRequestToGovernance(poll);
-      }
-    } while (true);
+    inMemorySolvingExecutor.execute(() -> sendRequestToGovernance(alertSolutionRequest));
   }
 
   private void sendRequestToGovernance(AlertSolutionRequest alertSolutionRequest) {

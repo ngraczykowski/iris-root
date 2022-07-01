@@ -11,48 +11,20 @@ import com.silenteight.adjudication.engine.solving.application.publisher.port.Ma
 import com.silenteight.adjudication.engine.solving.data.MatchCategoryDataAccess;
 import com.silenteight.adjudication.engine.solving.domain.MatchCategory;
 
-import java.util.Queue;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.stereotype.Service;
 
 @Slf4j
+@Service
 @RequiredArgsConstructor
 public class MatchCategoryPublisher implements MatchCategoryPublisherPort {
 
-  private final Queue<MatchCategory> alertCommentsInputQueue;
+  private final TaskExecutor inMemorySolvingExecutor;
   private final MatchCategoryDataAccess matchCategoryDataAccess;
-
-  MatchCategoryPublisher(
-      final MatchCategoryDataAccess matchCategoryDataAccess,
-      final ScheduledExecutorService scheduledExecutorService,
-      final Queue<MatchCategory> alertCommentsInputQueue) {
-    this.matchCategoryDataAccess = matchCategoryDataAccess;
-    this.alertCommentsInputQueue = alertCommentsInputQueue;
-    scheduledExecutorService.scheduleAtFixedRate(this::process, 10, 500, TimeUnit.MILLISECONDS);
-  }
 
   @Override
   public void resolve(MatchCategory matchCategory) {
     log.debug("Store match category: {}", matchCategory);
-    this.alertCommentsInputQueue.add(matchCategory);
-  }
-
-  private void process() {
-    try {
-      execute();
-    } catch (Exception e) {
-      log.error("Processing of comment input store failed: ", e);
-    }
-  }
-
-  private void execute() {
-    log.trace("Start process single comment input");
-    while (true) {
-      final var commentInput = this.alertCommentsInputQueue.poll();
-      if (commentInput == null) {
-        break;
-      }
-      matchCategoryDataAccess.store(commentInput);
-    }
+    inMemorySolvingExecutor.execute(() -> matchCategoryDataAccess.store(matchCategory));
   }
 }

@@ -1,5 +1,6 @@
 package com.silenteight.adjudication.engine.solving.application.publisher;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectNodeConverter;
@@ -13,49 +14,28 @@ import com.silenteight.solving.api.v1.BatchSolveFeaturesResponse;
 import com.silenteight.solving.api.v1.FeatureVectorSolution;
 import com.silenteight.solving.api.v1.SolutionResponse;
 
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.ExecutorService;
 
 @Slf4j
+@Service
+@RequiredArgsConstructor
 class ReadyMatchFeatureVectorPublisher implements ReadyMatchFeatureVectorPort {
 
-  private final Queue<MatchSolutionRequest> sendQueue;
+  private final TaskExecutor inMemorySolvingExecutor;
   private final GovernanceFacade governanceFacade;
   private final GovernanceMatchResponsePort governanceMatchResponseProcess;
   private final ProtoMessageToObjectNodeConverter converter;
 
-  public ReadyMatchFeatureVectorPublisher(
-      final GovernanceFacade governanceFacade,
-      final Queue<MatchSolutionRequest> governanceMatchToSendQueue,
-      final ExecutorService executorService,
-      final GovernanceMatchResponsePort governanceMatchResponseProcess,
-      ProtoMessageToObjectNodeConverter converter) {
-    this.governanceFacade = governanceFacade;
-    this.governanceMatchResponseProcess = governanceMatchResponseProcess;
-    this.sendQueue = governanceMatchToSendQueue;
-    this.converter = converter;
-    for (int i = 0; i < 15; i++) {
-      executorService.submit(this::consume);
-    }
-  }
 
   public void send(final MatchSolutionRequest matchSolutionRequest) {
     // Send for solving alert solution to governance via queue (internal)
     // Create Governance internal queue listener and send to Gov
     log.info(
         "Queuing solve match features request for match = {}", matchSolutionRequest.getMatchId());
-    this.sendQueue.add(matchSolutionRequest);
-  }
-
-  void consume() {
-    do {
-      final MatchSolutionRequest poll = this.sendQueue.poll();
-      if (poll != null) {
-        log.debug("Pulled solve match features for match = {}", poll.getMatchId());
-        this.sendRequestToGovernance(poll);
-      }
-    } while (true);
+    inMemorySolvingExecutor.execute(() -> sendRequestToGovernance(matchSolutionRequest));
   }
 
   @Timed(

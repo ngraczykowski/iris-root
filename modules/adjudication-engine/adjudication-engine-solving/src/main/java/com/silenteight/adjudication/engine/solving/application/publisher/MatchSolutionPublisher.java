@@ -11,44 +11,16 @@ import com.silenteight.adjudication.engine.solving.application.publisher.port.Ma
 import com.silenteight.adjudication.engine.solving.data.MatchSolutionStore;
 import com.silenteight.adjudication.engine.solving.domain.MatchSolution;
 
-import java.util.Queue;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.stereotype.Service;
 
 @Slf4j
+@Service
 @RequiredArgsConstructor
 public class MatchSolutionPublisher implements MatchSolutionPublisherPort {
 
-  private final Queue<MatchSolution> matchSolutionQueue;
+  private final TaskExecutor inMemorySolvingExecutor;
   private final MatchSolutionStore matchSolutionStore;
-
-  MatchSolutionPublisher(
-      final MatchSolutionStore matchSolutionStore,
-      final ScheduledExecutorService scheduledExecutorService,
-      final Queue<MatchSolution> matchSolutionQueue) {
-    this.matchSolutionStore = matchSolutionStore;
-    this.matchSolutionQueue = matchSolutionQueue;
-    scheduledExecutorService.scheduleAtFixedRate(this::process, 10, 500, TimeUnit.MILLISECONDS);
-  }
-
-  private void process() {
-    try {
-      execute();
-    } catch (Exception e) {
-      log.error("Processing of match solution value failed: ", e);
-    }
-  }
-
-  private void execute() {
-    log.trace("Start process match solution value");
-    while (true) {
-      final var matchSolution = this.matchSolutionQueue.poll();
-      if (matchSolution == null) {
-        break;
-      }
-      matchSolutionStore.store(matchSolution);
-    }
-  }
 
   @Override
   public void resolve(MatchSolution matchSolution) {
@@ -56,6 +28,6 @@ public class MatchSolutionPublisher implements MatchSolutionPublisherPort {
         "Store match solution analysisId={}, matchId={}",
         matchSolution.analysisId(),
         matchSolution.matchId());
-    matchSolutionQueue.add(matchSolution);
+    inMemorySolvingExecutor.execute(() -> matchSolutionStore.store(matchSolution));
   }
 }

@@ -30,7 +30,7 @@ class HazelcastAlertSolvingRepository implements AlertSolvingRepository {
       histogram = true)
   public AlertSolving get(Long id) {
     log.debug("[InMemorySolving] Getting AlertSolvingModel id:{}", id);
-    return this.executeInLock(id, () -> map.getOrDefault(id, AlertSolving.empty()));
+    return map.getOrDefault(id, AlertSolving.empty());
   }
 
   @Override

@@ -11,49 +11,20 @@ import com.silenteight.adjudication.engine.solving.application.publisher.port.Co
 import com.silenteight.adjudication.engine.solving.data.CommentInputDataAccess;
 import com.silenteight.adjudication.engine.solving.domain.comment.CommentInput;
 
-import java.util.Queue;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.stereotype.Service;
 
 @Slf4j
+@Service
 @RequiredArgsConstructor
 class CommentInputStorePublisher implements CommentInputStorePublisherPort {
 
-  private final Queue<CommentInput> alertCommentsInputQueue;
+  private final TaskExecutor inMemorySolvingExecutor;
   private final CommentInputDataAccess commentInputDataAccess;
-
-  CommentInputStorePublisher(
-      final CommentInputDataAccess commentInputDataAccess,
-      final ScheduledExecutorService scheduledExecutorService,
-      final Queue<CommentInput> alertCommentsInputQueue) {
-    this.alertCommentsInputQueue = alertCommentsInputQueue;
-
-    this.commentInputDataAccess = commentInputDataAccess;
-    scheduledExecutorService.scheduleAtFixedRate(this::process, 10, 500, TimeUnit.MILLISECONDS);
-  }
-
-  private void process() {
-    try {
-      execute();
-    } catch (Exception e) {
-      log.error("Processing of comment input store failed: ", e);
-    }
-  }
-
-  private void execute() {
-    log.trace("Start process single comment input");
-    while (true) {
-      final var commentInput = this.alertCommentsInputQueue.poll();
-      if (commentInput == null) {
-        break;
-      }
-      commentInputDataAccess.store(commentInput);
-    }
-  }
 
   @Override
   public void resolve(CommentInput commentInput) {
     log.debug("Store comment input: {}", commentInput);
-    this.alertCommentsInputQueue.add(commentInput);
+    inMemorySolvingExecutor.execute(() -> commentInputDataAccess.store(commentInput));
   }
 }

@@ -18,8 +18,7 @@ import com.silenteight.sep.base.common.protocol.MessageRegistryFactory;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.concurrent.LinkedBlockingQueue;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
@@ -41,7 +40,8 @@ class AgentResponseProcessTest {
     alertSolvingRepository = new InMemoryAlertSolvingRepositoryMock();
     converter = new ProtoMessageToObjectNodeConverter(messageRegistryOverwrite());
     matchFeaturePublisherPort =
-        new MatchFeaturePublisher(new LinkedBlockingQueue<>(), matchFeatureStoreDataAccess);
+        new MatchFeaturePublisher(new SimpleAsyncTaskExecutor(),
+            matchFeatureStoreDataAccess);
     agentResponsePort =
         new AgentResponseProcess(
             readyMatchFeatureVectorPort,

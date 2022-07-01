@@ -5,26 +5,20 @@
 package com.silenteight.adjudication.engine.solving.application.publisher;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
-import org.springframework.validation.annotation.Validated;
 
 @Data
 @ConstructorBinding
 @ConfigurationProperties(prefix = "ae.solving.in-memory.publisher")
 class PublisherConfigurationProperties {
-  private static final int DEFAULT_POOL_SIZE = 15;
-  private static final int DEFAULT_STORE_POOL_SIZE = 1;
 
-  private final int readyMatchFeatureVectorPublisher = DEFAULT_POOL_SIZE;
-  // BA publishers
-  private final int governanceAlertPublisher = DEFAULT_POOL_SIZE;
-  private final int categoryResolvePublisher = DEFAULT_POOL_SIZE;
-  private final int commentInputResolvePublisher = DEFAULT_POOL_SIZE;
-  // Storage publishers.
-  private final int commentInputStorePublisher = DEFAULT_STORE_POOL_SIZE;
-  private final int matchCategoryPublisher = DEFAULT_STORE_POOL_SIZE;
-  private final int matchFeaturePublisher = DEFAULT_STORE_POOL_SIZE;
+  private static final int DEFAULT_CORE_POOL_SIZE = 8;
+  private static final int DEFAULT_MAX_POOL_SIZE = 128;
+  private static final int DEFAULT_QUEUE_CAPACITY = 1024 * 100000;
+
+  private final int corePoolSize = DEFAULT_CORE_POOL_SIZE;
+  private final int maxPoolSize = DEFAULT_MAX_POOL_SIZE;
+  private final int queueCapacity = DEFAULT_QUEUE_CAPACITY;
 }

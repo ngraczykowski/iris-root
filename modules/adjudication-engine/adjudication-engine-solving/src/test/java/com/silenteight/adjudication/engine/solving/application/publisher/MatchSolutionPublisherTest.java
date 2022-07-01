@@ -8,15 +8,17 @@ import com.silenteight.adjudication.engine.solving.data.MatchSolutionEntityGener
 import com.silenteight.adjudication.engine.solving.data.MatchSolutionStore;
 import com.silenteight.adjudication.engine.solving.domain.MatchSolution;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 import java.time.Duration;
-import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.*;
@@ -26,60 +28,54 @@ import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
 class MatchSolutionPublisherTest {
 
-  @Test
+  private ThreadPoolTaskScheduler taskExecutor;
+
+  @BeforeEach
+  void setUp() {
+    taskExecutor = new ThreadPoolTaskScheduler();
+    taskExecutor.setPoolSize(4);
+    taskExecutor.setWaitForTasksToCompleteOnShutdown(true);
+    taskExecutor.afterPropertiesSet();
+  }
+
+  @RepeatedTest(10)
   void testPublisherWithSingeExecutorAndMultiplePublishing() {
-    Queue<MatchSolution> matchSolutionQueue = Mockito.spy(new LinkedList<>());
-
     var matchSolutionStore = Mockito.spy(new MockMatchSolutionStore());
-    var matchSolutionPublisherPort =
-        new MatchSolutionPublisher(
-            matchSolutionStore, Executors.newSingleThreadScheduledExecutor(), matchSolutionQueue);
+    var matchSolutionPublisherPort = new MatchSolutionPublisher(taskExecutor, matchSolutionStore);
 
-    int numbers = 100;
+    int numbers = 10000;
     for (int i = 0; i < numbers; i++) {
       matchSolutionPublisherPort.resolve(MatchSolutionEntityGenerator.createMatchSolution());
     }
 
-    verify(matchSolutionQueue, times(numbers)).add(any());
-    await()
-        .atMost(Duration.ofSeconds(5))
-        .until(() -> matchSolutionStore.storedObjects() == numbers);
+    awaitForExecutor();
 
-    verify(matchSolutionQueue, atLeast(numbers)).poll();
-    assertThat(matchSolutionQueue).isEmpty();
+    assertThat(matchSolutionStore.storedObjects()).isEqualTo(numbers);
   }
 
   @Test
   void publishSolutionAndThrowExceptionQueueShouldBeEmpty() {
-    Queue<MatchSolution> matchSolutionQueue = Mockito.spy(new LinkedList<>());
-
     var matchSolutionStore = Mockito.spy(new MockMatchSolutionStoreThrowsEx());
-    var matchSolutionPublisherPort =
-        new MatchSolutionPublisher(
-            matchSolutionStore, Executors.newSingleThreadScheduledExecutor(), matchSolutionQueue);
+    var matchSolutionPublisherPort = new MatchSolutionPublisher(taskExecutor, matchSolutionStore);
 
     int numbers = 2;
     for (int i = 0; i < numbers; i++) {
       matchSolutionPublisherPort.resolve(MatchSolutionEntityGenerator.createMatchSolution());
     }
 
-    verify(matchSolutionQueue, times(numbers)).add(any());
+    awaitForExecutor();
 
-    await().until(() -> matchSolutionStore.storedObjects() == numbers);
-
-    verify(matchSolutionQueue, atLeast(numbers)).poll();
-    assertThat(matchSolutionQueue).isEmpty();
+    assertThat(matchSolutionStore.storedObjects()).isEqualTo(numbers);
   }
 
   @Disabled // -> https://github.com/mockito/mockito/issues/2540
-  @Test
+  @RepeatedTest(10)
   void testForMultipleExecutor() {
     Queue<MatchSolution> matchSolutionQueue = Mockito.spy(new ArrayBlockingQueue<>(100));
 
     var matchSolutionStore = Mockito.spy(new MockMatchSolutionStore());
     var matchSolutionPublisherPort =
-        new MatchSolutionPublisher(
-            matchSolutionStore, Executors.newScheduledThreadPool(10), matchSolutionQueue);
+        new MatchSolutionPublisher(new SimpleAsyncTaskExecutor(), matchSolutionStore);
 
     int numbers = 100_000;
     for (int i = 0; i < numbers; i++) {
@@ -91,6 +87,10 @@ class MatchSolutionPublisherTest {
     await().until(() -> matchSolutionStore.storedObjects() == numbers);
     assertThat(matchSolutionStore.storedObjects()).isEqualTo(numbers);
     assertThat(matchSolutionQueue).isEmpty();
+  }
+
+  private void awaitForExecutor() {
+    await().atMost(Duration.ofSeconds(5)).until(() -> taskExecutor.getActiveCount() == 0);
   }
 
   private static class MockMatchSolutionStore implements MatchSolutionStore {
