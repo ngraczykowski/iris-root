@@ -5,6 +5,7 @@ plugins {
 
 description = "Agent Monitoring dependencies"
 project.pluginManager.apply "io.freefair.aspectj.post-compile-weaving"
+group = "com.silenteight.iris.agent"
 
 dependencies {
   // Spring

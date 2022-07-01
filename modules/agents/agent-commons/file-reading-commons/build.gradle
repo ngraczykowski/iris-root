@@ -4,6 +4,7 @@ plugins {
 }
 
 description = "Agent File Reading Common"
+group = "com.silenteight.iris.agent"
 
 dependencies {
   implementation project(":agent-config-loader")

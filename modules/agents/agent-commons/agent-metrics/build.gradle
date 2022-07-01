@@ -4,6 +4,8 @@ plugins {
 }
 
 description = "Agent Metrics"
+group = "com.silenteight.iris.agent"
+
 project.pluginManager.apply "io.freefair.aspectj.post-compile-weaving"
 
 dependencies {

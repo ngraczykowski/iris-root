@@ -3,6 +3,7 @@ plugins {
 }
 
 description = "Agent starter dependencies"
+group = "com.silenteight.iris.agent"
 
 dependencies {
   api libs.commons.lang3

@@ -5,6 +5,7 @@ plugins {
 }
 
 description = "Agent Logging"
+group = "com.silenteight.iris.agent"
 
 dependencies {
   implementation libs.commons.lang3

@@ -4,6 +4,7 @@ plugins {
 }
 
 description = "Agent Messaging"
+group = "com.silenteight.iris.agent"
 
 dependencies {
   // AMQP and messaging dependencies

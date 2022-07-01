@@ -4,6 +4,7 @@ plugins {
 }
 
 description = "Agent Database"
+group = "com.silenteight.iris.agent"
 
 dependencies {
   api libs.jakarta.transaction.api

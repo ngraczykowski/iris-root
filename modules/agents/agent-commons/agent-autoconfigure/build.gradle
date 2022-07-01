@@ -3,6 +3,7 @@ plugins {
 }
 
 description = "Agent auto configuration"
+group = "com.silenteight.iris.agent"
 
 dependencies {
   compileOnly libs.grpc.api

@@ -3,6 +3,7 @@ plugins {
 }
 
 description = "Agent starter test"
+group = "com.silenteight.iris.agent"
 
 dependencies {
   implementation platform('com.silenteight.iris.platform:test-platform')

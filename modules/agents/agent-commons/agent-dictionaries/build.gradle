@@ -4,6 +4,7 @@ plugins {
 }
 
 description = "Agent Dictionaries"
+group = "com.silenteight.iris.agent"
 
 dependencies {
   implementation project(":agent-config-loader")

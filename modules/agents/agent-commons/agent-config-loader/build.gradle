@@ -3,6 +3,7 @@ plugins {
 }
 
 description = "Agent config loader"
+group = "com.silenteight.iris.agent"
 
 configurations {
 }
