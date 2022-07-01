@@ -406,7 +406,7 @@ shedlock-spring = { group = "net.javacrumbs.shedlock", name = "shedlock-spring",
 snakeyaml = { group = "org.yaml", name = "snakeyaml" }
 tomcat-embed-el = { group = "org.apache.tomcat.embed", name = "tomcat-embed-el" }
 tika-core = { group = "org.apache.tika", name = "tika-core", version = "2.4.1" }
-univocity-parsers = { group =  "com.univocity", name = "univocity-parsers", version = "2.9.0"}
+univocity-parsers = { group =  "com.univocity", name = "univocity-parsers", version = "2.9.1"}
 #TODO(dsniezek): is it need?
 jjwt = { group = 'io.jsonwebtoken', name = 'jjwt', version = '0.9.1' }
 mapstruct = { group = 'org.mapstruct', name = 'mapstruct', version.ref = 'mapstruct' }
