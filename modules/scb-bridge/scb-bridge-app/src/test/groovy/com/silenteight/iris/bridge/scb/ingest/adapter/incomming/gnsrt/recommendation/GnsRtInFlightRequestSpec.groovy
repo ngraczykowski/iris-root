@@ -12,18 +12,11 @@ import reactor.test.StepVerifier
 import spock.lang.Specification
 
 import java.time.Duration
-import java.util.concurrent.Executors
 import java.util.concurrent.TimeoutException
 
 class GnsRtInFlightRequestSpec extends Specification {
 
   def internalBatchId = InternalBatchIdGenerator.generate()
-
-  def executor = Executors.newSingleThreadExecutor()
-
-  def cleanup() {
-    executor.shutdown()
-  }
 
   def 'should Mono finish successfully and return Recommendations'() {
     given:
@@ -31,11 +24,10 @@ class GnsRtInFlightRequestSpec extends Specification {
     def request = new GnsRtInFlightRequest(internalBatchId)
 
     when:
-    def mono = request.mono()
-    executor.execute(() -> request.recommendationsReceived(recommendations))
+    request.recommendationsReceived(recommendations);
 
     then:
-    StepVerifier.create(mono)
+    StepVerifier.create(request.mono())
         .expectNext(recommendations)
         .verifyComplete()
   }
@@ -45,11 +37,10 @@ class GnsRtInFlightRequestSpec extends Specification {
     def request = new GnsRtInFlightRequest(internalBatchId)
 
     when:
-    def mono = request.mono()
-    executor.execute(() -> request.batchFailed("some error"))
+    request.batchFailed("some error")
 
     then:
-    StepVerifier.create(mono)
+    StepVerifier.create(request.mono())
         .expectError(RuntimeException)
         .verify()
   }
