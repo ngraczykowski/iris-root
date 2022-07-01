@@ -1,12 +1,9 @@
 <#import "agent-utils.ftl" as agentUtils>
-<#import "../match-utils.ftl" as matchUtils>
+<#import "match-utils.ftl" as matchUtils>
 <#import "national-id-agent.ftl" as nationalIdAgent>
-<#import "passport-agent.ftl" as passportAgent>
-<#import "registration-number-agent.ftl" as registrationNumberAgent>
-<#import "tax-id-agent.ftl" as taxIdAgent>
 
-<#assign otherDocumentFeatureNames = ['nationalIdAgent', 'passportAgent', 'registrationNumberAgent', 'taxIdAgent']>
-<#assign attribute="document number">
+<#assign otherDocumentFeatureNames = ['nationalIdAgent']>
+<#assign attribute="passport number">
 <#assign mappings={
 "PERFECT_MATCH": "is an exact match with",
 "DIGIT_MATCH": "matches",
@@ -14,8 +11,8 @@
 "WEAK_MATCH": "is near to",
 "NO_MATCH": "does not match"
 }>
-<#assign skippedSolutions = ["AGENT_SKIPPED", "NO_DATA", "INCONCLUSIVE", "WEAK_DIGIT_MATCH", "WEAK_MATCH", "NO_MATCH", "UNKNOWN"]>
-<#assign hintedSolutions = []>
+<#assign skippedSolutions = ["AGENT_SKIPPED", "NO_DATA", "INCONCLUSIVE", "UNKNOWN"]>
+<#assign hintedSolutions = ["WEAK_DIGIT_MATCH", "WEAK_MATCH"]>
 
 <#function isSolutionConsistent alertModel matchModel featureModel>
     <#if matchModel.solution?matches('.*FALSE_POSITIVE') && ['NO_MATCH', 'WEAK_DIGIT_MATCH', 'WEAK_MATCH']?seq_contains(featureModel.solution)>
@@ -28,13 +25,16 @@
 </#function>
 
 <#function shouldAdd alertModel matchModel featureModel>
+    <#assign matchSolution = matchModel.solution>
+    <#assign featureSolution = featureModel.solution>
+
     <#if featureModel.solution?matches('.*ERROR')>
         <#return false>
     <#elseif skippedSolutions?seq_contains(featureModel.solution)>
         <#return false>
-    <#elseif isHinted(featureModel.solution) && matchModel.solution?matches('.*NO_DECISION')>
-        <#return false>
     <#elseif !isSolutionConsistent(alertModel, matchModel, featureModel)>
+        <#return false>
+    <#elseif isHinted(featureModel.solution) && matchModel.solution?matches('.*NO_DECISION')>
         <#return false>
     </#if>
 
@@ -94,6 +94,5 @@
     <#assign customerValues = stringUtils.join(values['alertedValues'], ", ")>
     <#assign watchlistValues = stringUtils.join(values['matchedValues'], ", ")>
     <#assign output = agentUtils.simpleComment(featureSolution, attribute, attribute, customerValues, watchlistValues, mappings)>
-
     <#return output>
 </#function>
