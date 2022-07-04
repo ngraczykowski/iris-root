@@ -4,9 +4,6 @@ import lombok.Data;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
-import java.util.List;
 
 @Data
 public class NegativeNewsScreeningEntities {
@@ -169,11 +166,9 @@ public class NegativeNewsScreeningEntities {
 
   @JsonProperty("NNSEntities.SIC code-global keywords")
   @JsonAlias("NNSEntities.SIC code-global Keywords")
-  @JsonDeserialize(using = MultiValueFieldDeserializer.class)
-  private List<String> sicCodeGlobalKeyword;
+  private String sicCodeGlobalKeyword;
 
   @JsonProperty("NNSEntities.SIC code-local keywords")
   @JsonAlias("NNSEntities.SIC code-local Keywords")
-  @JsonDeserialize(using = MultiValueFieldDeserializer.class)
-  private List<String> sicCodeLocalKeyword;
+  private String sicCodeLocalKeyword;
 }

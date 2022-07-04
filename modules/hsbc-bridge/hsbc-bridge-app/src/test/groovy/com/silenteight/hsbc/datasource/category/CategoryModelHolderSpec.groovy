@@ -94,9 +94,9 @@ class CategoryModelHolderSpec extends Specification {
         ] as Map
   }
 
-  static def nnsEntitiesWithTerrorRelated = new NegativeNewsScreeningEntities(sicCodeGlobalKeyword: List.of("Terror Related"), sicCodeLocalKeyword: List.of("Terror Related"))
-  static def nnsEntitiesWithoutTerrorRelated = new NegativeNewsScreeningEntities(sicCodeGlobalKeyword: List.of("Bribery and Corruption", "Environmental Crime"), sicCodeLocalKeyword: List.of(""))
+  static def nnsEntitiesWithTerrorRelated = new NegativeNewsScreeningEntities(sicCodeGlobalKeyword: "Terror Related;Human Rights Violation", sicCodeLocalKeyword: "Terror Related;Human Rights Violation")
+  static def nnsEntitiesWithoutTerrorRelated = new NegativeNewsScreeningEntities(sicCodeGlobalKeyword: "Bribery and Corruption;Environmental Crime", sicCodeLocalKeyword: "")
 
-  static def nnsIndividualsWithTerrorRelated = new NegativeNewsScreeningIndividuals(sicCodeGlobalKeyword: List.of("Human Rights Violation", "Terror Related"), sicCodeLocalKeyword: List.of("Terror Related"))
-  static def nnsIndividualsWithoutTerrorRelated = new NegativeNewsScreeningIndividuals(sicCodeGlobalKeyword: List.of("Human Rights Violation"), sicCodeLocalKeyword: List.of("Money Laundering"))
+  static def nnsIndividualsWithTerrorRelated = new NegativeNewsScreeningIndividuals(sicCodeGlobalKeyword: "Human Rights Violation;Forgery and Uttering;Fraud;Terror Related", sicCodeLocalKeyword: "Terror Related;Fraud")
+  static def nnsIndividualsWithoutTerrorRelated = new NegativeNewsScreeningIndividuals(sicCodeGlobalKeyword: "Human Rights Violation;Fraud", sicCodeLocalKeyword: "Money Laundering")
 }

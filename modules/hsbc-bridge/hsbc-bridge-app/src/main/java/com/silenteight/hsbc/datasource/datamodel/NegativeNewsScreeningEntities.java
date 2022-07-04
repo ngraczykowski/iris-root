@@ -1,12 +1,12 @@
 package com.silenteight.hsbc.datasource.datamodel;
 
-import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
 public interface NegativeNewsScreeningEntities extends ListRecordId {
 
-  List<String> getSicCodeGlobalKeyword();
+  String getSicCodeGlobalKeyword();
 
-  List<String> getSicCodeLocalKeyword();
+  String getSicCodeLocalKeyword();
 
   String getFurtherInformation();
 
@@ -35,6 +35,7 @@ public interface NegativeNewsScreeningEntities extends ListRecordId {
   String getRegistrationCountry();
 
   default boolean isContainingValue(String value) {
-    return getSicCodeGlobalKeyword().contains(value) || getSicCodeLocalKeyword().contains(value);
+    return StringUtils.contains(getSicCodeGlobalKeyword(), value)
+        || StringUtils.contains(getSicCodeLocalKeyword(), value);
   }
 }

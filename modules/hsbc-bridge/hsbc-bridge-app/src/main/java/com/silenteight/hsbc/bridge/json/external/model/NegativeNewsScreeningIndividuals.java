@@ -3,9 +3,6 @@ package com.silenteight.hsbc.bridge.json.external.model;
 import lombok.Data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
-import java.util.List;
 
 @Data
 public class NegativeNewsScreeningIndividuals {
@@ -224,10 +221,8 @@ public class NegativeNewsScreeningIndividuals {
   private String recordType;
 
   @JsonProperty("NNSIndividuals.SIC code-global keywords")
-  @JsonDeserialize(using = MultiValueFieldDeserializer.class)
-  private List<String> sicCodeGlobalKeyword;
+  private String sicCodeGlobalKeyword;
 
   @JsonProperty("NNSIndividuals.SIC code-local keywords")
-  @JsonDeserialize(using = MultiValueFieldDeserializer.class)
-  private List<String> sicCodeLocalKeyword;
+  private String sicCodeLocalKeyword;
 }

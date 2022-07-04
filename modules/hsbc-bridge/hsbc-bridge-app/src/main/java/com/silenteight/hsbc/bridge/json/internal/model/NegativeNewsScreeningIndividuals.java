@@ -2,8 +2,6 @@ package com.silenteight.hsbc.bridge.json.internal.model;
 
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 public class NegativeNewsScreeningIndividuals implements
     com.silenteight.hsbc.datasource.datamodel.NegativeNewsScreeningIndividuals {
@@ -79,6 +77,6 @@ public class NegativeNewsScreeningIndividuals implements
   private String dobs;
   private String idNumbers;
   private String recordType;
-  private List<String> sicCodeGlobalKeyword;
-  private List<String> sicCodeLocalKeyword;
+  private String sicCodeGlobalKeyword;
+  private String sicCodeLocalKeyword;
 }
