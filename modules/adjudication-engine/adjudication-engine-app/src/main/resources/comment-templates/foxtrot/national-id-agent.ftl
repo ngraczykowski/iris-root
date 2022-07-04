@@ -1,5 +1,5 @@
 <#import "agent-utils.ftl" as agentUtils>
-<#import "../match-utils.ftl" as matchUtils>
+<#import "match-utils.ftl" as matchUtils>
 
 <#assign attribute="national id">
 

@@ -1,4 +1,4 @@
-<#import "../match-utils.ftl" as matchUtils>
+<#import "match-utils.ftl" as matchUtils>
 <#import "country-agent-helper.ftl" as helper>
 <#import "nationality-agent.ftl" as nationalityAgent>
 

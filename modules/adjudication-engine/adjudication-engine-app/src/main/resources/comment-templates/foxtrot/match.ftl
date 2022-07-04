@@ -1,18 +1,18 @@
 <#import "match-utils.ftl" as matchUtils>
 
 <#-- Templates for standalone features -->
-<#import "agents/name-agent.ftl" as nameTemplate>
-<#import "agents/date-agent.ftl" as dateTemplate>
-<#import "agents/document-agent.ftl" as otherDocumentTemplate>
-<#import "agents/national-id-agent.ftl" as nationalIdDocumentTemplate>
-<#import "agents/passport-agent.ftl" as passportNumberDocumentTemplate>
-<#import "agents/gender-agent.ftl" as genderTemplate>
-<#import "agents/nationality-agent.ftl" as nationalityCountryTemplate>
-<#import "agents/other-countries.ftl" as countryTemplate>
-<#import "agents/bic.ftl" as bicTemplate>
+<#import "name-agent.ftl" as nameTemplate>
+<#import "date-agent.ftl" as dateTemplate>
+<#import "document-agent.ftl" as otherDocumentTemplate>
+<#import "national-id-agent.ftl" as nationalIdDocumentTemplate>
+<#import "passport-agent.ftl" as passportNumberDocumentTemplate>
+<#import "gender-agent.ftl" as genderTemplate>
+<#import "nationality-agent.ftl" as nationalityCountryTemplate>
+<#import "other-countries.ftl" as countryTemplate>
+<#import "bic.ftl" as bicTemplate>
 
 <#-- Templates for grouped features and categories -->
-<#import "groups/visa-expiry.ftl" as visaExpiryTemplate>
+<#import "visa-expiry.ftl" as visaExpiryTemplate>
 
 <#-- If you want to create narrative for group of features/categories, you can define group here -->
 <#assign feature_and_category_groups = {

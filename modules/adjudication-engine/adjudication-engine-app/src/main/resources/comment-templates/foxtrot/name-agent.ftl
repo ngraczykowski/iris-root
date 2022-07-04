@@ -1,4 +1,4 @@
-<#import "../match-utils.ftl" as matchUtils>
+<#import "match-utils.ftl" as matchUtils>
 <#import "agent-utils.ftl" as agentUtils>
 
 <#assign apAttribute="name">

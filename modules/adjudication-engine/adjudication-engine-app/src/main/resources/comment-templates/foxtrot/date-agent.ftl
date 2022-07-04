@@ -1,5 +1,5 @@
 <#import "agent-utils.ftl" as utils>
-<#import "../match-utils.ftl" as matchUtils>
+<#import "match-utils.ftl" as matchUtils>
 
 <#assign falsePositiveMappings={
 "NEAR": "does not match",
