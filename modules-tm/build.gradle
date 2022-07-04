@@ -1,0 +1,30 @@
+tasks.register('clean') {Task task ->
+  task.group = 'build'
+  task.description = 'Deletes the build directory in all modules.'
+
+  dependOnModulesTask(task, 'clean')
+}
+
+tasks.register('build') {Task task ->
+  task.group = 'build'
+  task.description = 'Builds all modules.'
+
+  dependOnModulesTask(task, 'build')
+}
+
+tasks.register('publish') {Task task ->
+  task.group = 'publishing'
+  task.description = 'Publishes all publications produced by all modules.'
+
+  dependOnModulesTask(task, 'publish')
+}
+
+private void dependOnModulesTask(Task delegate, String taskName) {
+  gradle.includedBuilds().each {IncludedBuild build ->
+    // NOTE(ahaczewski): This check ensures only builds included from current - the "modules"
+    //  - directory are depended on.
+    if (build.projectDir.parentFile == project.projectDir) {
+      delegate.dependsOn build.task(":${taskName}")
+    }
+  }
+}

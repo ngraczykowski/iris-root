@@ -1,0 +1,14 @@
+includeBuild('../../platforms')
+includeBuild('../../build-logic')
+
+dependencyResolutionManagement {
+  versionCatalogs {
+    libs {
+      from(files("../../gradle/libs.versions.toml"))
+    }
+  }
+}
+
+rootProject.name = 'transaction-monitoring'
+
+include 'transaction-monitoring-app'
