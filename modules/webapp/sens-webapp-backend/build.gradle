@@ -31,10 +31,6 @@ dependencies {
   implementation libs.spring.security.config
   implementation libs.spring.security.cas
 
-  implementation libs.springdoc.ui
-  implementation libs.springdoc.data.rest
-  implementation libs.springdoc.security
-
   implementation libs.spring.cloud.consul.discovery
   implementation libs.spring.cloud.starter.consul.config
   implementation libs.freemarker

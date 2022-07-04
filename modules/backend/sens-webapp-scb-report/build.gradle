@@ -38,10 +38,6 @@ dependencies {
 
   implementation libs.silenteight.audit.bs
 
-  implementation libs.springdoc.ui
-  implementation libs.springdoc.data.rest
-  implementation libs.springdoc.security
-
   implementation libs.spring.cloud.starter.consul.config
   implementation libs.freemarker
 

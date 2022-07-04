@@ -19,9 +19,19 @@ dependencies {
   implementation libs.spring.webmvc
 
   implementation libs.javax.annotation.api
-  implementation libs.springdoc.ui
-  implementation libs.springdoc.data.rest
-  implementation libs.springdoc.security
+  // NOTE(dsniezek): Unfortunately, as parent of springdoc is spring-boot-starter-parent it brings
+  //  incompatible versions of spring-boot-autoconfigure->spring-boot that have to be excluded for
+  //  prevent conflict with version from spring-boot-dependencies.
+  //  See: https://github.com/springdoc/springdoc-openapi/blob/v1.6.9/pom.xml#L35
+  implementation(libs.springdoc.ui) {
+    exclude group: 'org.springframework.boot', module: 'spring-boot-autoconfigure'
+  }
+  implementation(libs.springdoc.data.rest) {
+    exclude group: 'org.springframework.boot', module: 'spring-boot-autoconfigure'
+  }
+  implementation(libs.springdoc.security) {
+    exclude group: 'org.springframework.boot', module: 'spring-boot-autoconfigure'
+  }
   implementation libs.protobuf.java.util
   implementation libs.apache.httpclient
   implementation libs.apache.httpmime
