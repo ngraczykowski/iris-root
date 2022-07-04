@@ -1,6 +1,6 @@
 rootProject.name = 'agent-commons'
 
-includeBuild('../../..//platforms')
+includeBuild('../../../platforms')
 includeBuild('../../../build-logic')
 
 dependencyResolutionManagement {
