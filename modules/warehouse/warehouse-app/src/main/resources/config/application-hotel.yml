@@ -3,7 +3,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: https://auth.silent8.cloud/realms/sens-webapp
+          issuer-uri: https://auth.silenteight.com/realms/sens-webapp
 
 warehouse:
   common:
