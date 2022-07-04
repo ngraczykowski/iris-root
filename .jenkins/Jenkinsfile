@@ -9,11 +9,14 @@ pipeline {
     label 'iris'
   }
   options {
-    disableConcurrentBuilds(abortPrevious: abort)
-    ansiColor('xterm')
+    disableConcurrentBuilds abortPrevious: abort
+    parallelsAlwaysFailFast()
+    ansiColor 'xterm'
   }
   environment {
     ARTIFACTORY = credentials('artifactory-deployment-user')
+    PIP_INDEX_URL = credentials('pypi-readonly-url')
+    TWINE_REPOSITORY_URL = 'https://repo.silenteight.com/artifactory/api/pypi/pypi'
   }
   stages {
     stage("Pre-Commit") {
@@ -22,30 +25,7 @@ pipeline {
       }
       steps {
         withCredentials([gitUsernamePassword(credentialsId: 'Github-app-access')]) {
-          sh '''#!/usr/bin/env bash
-          changed_java_files=$(git diff --cached --name-only --diff-filter=ACMR | grep ".*java$" )
-          echo $changed_java_files
-
-          if [[ -n "$changed_java_files" ]]; then
-            java \
-              --add-exports jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED \
-              --add-exports jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED \
-              --add-exports jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED \
-              --add-exports jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED \
-              --add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED \
-              -jar ~/.local/bin/google-java-format.jar --replace $changed_java_files
-          else
-            echo No Java files changed!
-          fi
-
-          pre-commit run --show-diff-on-failure --color=always --all-files
-          git diff --quiet
-          if [[ $? -ne 0 ]]; then
-            git checkout HEAD -B $CHANGE_BRANCH
-            git commit -am 'chore: pre-commit fixes'
-            git push --set-upstream origin $CHANGE_BRANCH
-          fi
-          '''
+          sh './scripts/pre-commit.sh'
         }
       }
     }
@@ -67,28 +47,54 @@ pipeline {
         // NOTE(ahaczewski): See https://blog.andresteingress.com/2018/09/05/gradle-daemon-and-jenkins.html.
         JENKINS_NODE_COOKIE = 'kill-protection'
       }
-      steps {
-        withGradle {
-          sh """
-            ./gradlew \
-            -Pversion=\"${javaVersion}\" \
-            clean build
-            """
-          withDockerRegistry(
-              url: 'https://docker.repo.silenteight.com',
-              credentialsId: 'artifactory-deployment-user') {
+      parallel {
+        stage("Java") {
+          steps {
+            withGradle {
+              sh """
+                ./gradlew \
+                -Pversion=\"${javaVersion}\" \
+                clean build
+                """
+              withDockerRegistry(
+                  url: 'https://docker.repo.silenteight.com',
+                  credentialsId: 'artifactory-deployment-user') {
+                    sh """
+                      ./gradlew \
+                      -Djib.console=plain \
+                      -DjibAdditionalTag="${env.CHANGE_ID ? env.BRANCH_NAME.toLowerCase() : ''}" \
+                      -Pversion="${javaVersion}" \
+                      publish
+                      """
+                script {
+                  images =
+                      findFiles(glob: '**/jib-image.json')
+                          .collect {readJSON(file: it.path)}
+                          .image.collect {it.minus('docker.repo.silenteight.com/')}
+                }
+              }
+            }
+          }
+        }
+        stage('Python') { //temporary stage until python modules are standardized
+          agent {
+            docker {
+              image 'docker.repo.silenteight.com/python-build-image:3.7-bullseye'
+              args '--volume $HOME/.cache/agent/pip:/home/jenkins/.cache/pip'
+              reuseNode true
+            }
+          }
+          steps {
+            dir('modules/etl-pipeline') { //custom workspaces do not work with Docker agents
+              withEnv(["PYTHON_PACKAGE_VERSION=${version}"]) {
                 sh """
-                  ./gradlew \
-                  -Djib.console=plain \
-                  -DjibAdditionalTag="${env.CHANGE_ID ? env.BRANCH_NAME.toLowerCase() : ''}" \
-                  -Pversion="${javaVersion}" \
-                  publish
-                  """
-            script {
-              images =
-                  findFiles(glob: '**/jib-image.json')
-                      .collect {readJSON(file: it.path)}
-                      .image.collect {it.minus('docker.repo.silenteight.com/')}
+                ./scripts/clean.sh
+                ./scripts/build_package.sh
+                pip install --index-url "${PIP_INDEX_URL}" tox
+                ./scripts/test.sh --index-url "${PIP_INDEX_URL}"
+                ./scripts/build_dist.sh
+                """
+              }
             }
           }
         }
@@ -138,37 +144,68 @@ pipeline {
         beforeAgent true
         branch 'master'
       }
-      steps {
-        sh """
-          helm package \
-            --dependency-update \
-            --app-version "${version}" \
-            --version "${version}" \
-            --destination build/charts \
-            charts/sear
+      parallel {
+        stage("Helm") {
+          steps {
+            sh """
+              helm package \
+                --dependency-update \
+                --app-version "${version}" \
+                --version "${version}" \
+                --destination build/charts \
+                charts/sear
 
-          helm push-artifactory \
-            --skip-reindex \
-            --username "\$ARTIFACTORY_USR" \
-            --password "\$ARTIFACTORY_PSW" \
-            build/charts/sear-"${version}".tgz \
-            https://repo.silenteight.com/artifactory/helm
-        """
-        // NOTE(ahaczewski): Temporarily package and push old, deprecated Helm charts.
-        sh '''#!/usr/bin/env bash
-          for chart in charts/deprecated/* ; do
-            helm package --dependency-update --destination build/charts/deprecated $chart
-          done
+              helm push-artifactory \
+                --skip-reindex \
+                --username "\$ARTIFACTORY_USR" \
+                --password "\$ARTIFACTORY_PSW" \
+                build/charts/sear-"${version}".tgz \
+                https://repo.silenteight.com/artifactory/helm
+            """
+            // NOTE(ahaczewski): Temporarily package and push old, deprecated Helm charts.
+            sh '''#!/usr/bin/env bash
+              for chart in charts/deprecated/* ; do
+                helm package --dependency-update --destination build/charts/deprecated $chart
+              done
 
-          for package in build/charts/deprecated/*.tgz ; do
-            helm push-artifactory \
-              --skip-reindex \
-              --username "$ARTIFACTORY_USR" \
-              --password "$ARTIFACTORY_PSW" \
-              "$package" \
-              https://repo.silenteight.com/artifactory/helm
-          done
-        '''
+              for package in build/charts/deprecated/*.tgz ; do
+                helm push-artifactory \
+                  --skip-reindex \
+                  --username "$ARTIFACTORY_USR" \
+                  --password "$ARTIFACTORY_PSW" \
+                  "$package" \
+                  https://repo.silenteight.com/artifactory/helm
+              done
+            '''
+          }
+        }
+        stage("Python dist") {
+          steps {
+            dir('modules/etl-pipeline') {
+              rtUpload(
+                serverId: 'silenteight-repo-v2',
+                spec: '''{
+                    "files": [
+                      {
+                        "pattern": "dist/etl-pipeline-dist-*.tar.bz2",
+                        "target": "python-dist-local/etl-pipeline/"
+                      },
+                      {
+                          "pattern": "dist/*.pyz",
+                          "target": "python-dist-local/etl-pipeline/"
+                      }
+                  ]
+              }'''
+            )
+            withCredentials([
+              gitUsernamePassword(credentialsId: 'Github-app-access'),
+              usernamePassword(credentialsId: 'pypi-deployment-user', usernameVariable: 'TWINE_USERNAME', passwordVariable: 'TWINE_PASSWORD')
+              ]) {
+                sh './scripts/publish.sh --index-url "${PIP_INDEX_URL}"'
+            }
+            }
+          }
+        }
       }
     }
     stage('ECR') {

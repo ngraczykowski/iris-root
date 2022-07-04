@@ -11,7 +11,9 @@ fi
 
 rm -rf etl-pipeline-dist
 mkdir -p dist etl-pipeline-dist/lib
+echo "Building wheels for all dependencies"
 pip wheel . -w etl-pipeline-dist/lib --no-cache-dir
+echo "Downloading pip"
 pip download -d etl-pipeline-dist/lib pip
 artifact=$(basename -- "$(ls ./etl-pipeline-dist/lib/etl_pipeline-*.whl)")
 version=$(ls -al "./etl-pipeline-dist/lib/$artifact" | awk -F'etl_pipeline-|-py3-none-any.whl' '{print $2}')

@@ -1,3 +1,7 @@
+import os
+import re
+import sys
+
 from setuptools import find_packages, setup
 
 dev_require = [
@@ -17,9 +21,22 @@ dev_require = [
 
 tests_require = ["pandas==1.1.5"]
 
+try:
+    version = os.environ["PYTHON_PACKAGE_VERSION"]
+except KeyError:
+    version = sys.argv[1]
+    if not re.match(r"^\d+\.\d+\.*\d*", version):
+        raise ValueError(
+            f"Provide version following SemVer scheme as a first argument. Given: {version}"
+        )
+    del sys.argv[1]
+except IndexError:
+    raise ValueError("Provide version as a first argument in setup.py run")
+
+
 setup(
     name="etl_pipeline",
-    version="0.5.41-dev",
+    version=version.replace("-", "+", 1),
     description="ETL pipeline",
     author="Silent Eight Pte. Ltd.",
     author_email="support@silenteight.com",
