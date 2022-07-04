@@ -289,7 +289,9 @@ warehouse.reports.v2:
                wa.payload ->> 'comment'                                     AS "S8 Alert Reason",
                wa.payload ->> 'analystDecision'                             AS "Analyst Alert Decision",
                wa.payload ->> 'analystDecisionModifiedDateTime'             AS "Analyst Alert Decision Timestamp",
-               wa.payload ->> 'analystReason'                               AS "Analyst Alert Reason"
+               wa.payload ->> 'analystReason'                               AS "Analyst Alert Reason",
+               STRING_AGG(NULLIF(wm.match_id, ''), ', ')                    AS "Hit IDs Selected for QA process",
+               wa.payload ->> 'qcoRecommendationStatus'                     AS "QA Adjusted Alert Resolution"
         FROM warehouse_alert wa
                  JOIN warehouse_match wm ON wa.id = wm.alert_id
         WHERE wa.recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
@@ -307,7 +309,8 @@ warehouse.reports.v2:
                  wa.payload ->> 'comment',
                  wa.payload ->> 'analystDecision',
                  wa.payload ->> 'analystDecisionModifiedDateTime',
-                 wa.payload ->> 'analystReason'
+                 wa.payload ->> 'analystReason',
+                 wa.payload ->> 'qcoRecommendationStatus'
 
     - name: ACCURACY_MATCH_LEVEL
       type: production
@@ -327,7 +330,9 @@ warehouse.reports.v2:
                wa.payload ->> 'batchWatchList'                  AS "Watchlist Type",
                wm.payload ->> 's8Recommendation'                AS "S8 Hit Resolution",
                wa.payload ->> 'recommendationDate'              AS "S8 Resolution Timestamp",
-               wm.payload ->> 's8Reason'                        AS "S8 Hit Reason"
+               wm.payload ->> 's8Reason'                        AS "S8 Hit Reason",
+               wm.payload ->> 'qcoSampled'                      AS "QA Sampled",
+               wm.payload ->> 'qcoRecommendationStatus'         AS "QA Adjusted Hit Resolution"
         FROM warehouse_alert wa
                  JOIN warehouse_match wm ON wa.id = wm.alert_id
         WHERE wa.recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
