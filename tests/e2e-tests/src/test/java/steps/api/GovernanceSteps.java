@@ -4,8 +4,8 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java8.En;
 import utils.datageneration.governance.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
@@ -44,7 +44,7 @@ public class GovernanceSteps implements En {
         "Add steps to recently created policy",
         (DataTable dataTable) -> {
           CreatePolicy policy = (CreatePolicy) scenarioContext.get("policy");
-          List<CreatePolicyStep> policyStepList = new ArrayList<>();
+          Map<String, String> stepInternalIdToStepId = new HashMap<>();
 
           dataTable
               .asMaps()
@@ -59,35 +59,33 @@ public class GovernanceSteps implements En {
                         .then()
                         .statusCode(204);
 
-                    policyStepList.add(policyStep);
-                    scenarioContext.set("policySteps", policyStepList);
+                    stepInternalIdToStepId.put(step.get("stepInternalId"), policyStep.getId());
                   });
+          scenarioContext.set("stepInternalIdToStepId", stepInternalIdToStepId);
         });
 
-    // TODO(kkicza): Make it able to process more than 1 feature per step
     And(
         "Add features to recently created steps",
         (DataTable dataTable) -> {
           @SuppressWarnings("unchecked")
-          List<CreatePolicyStep> policySteps =
-              (List<CreatePolicyStep>) scenarioContext.get("policySteps");
+          Map<String, String> stepInternalIdToStepId =
+              (Map<String, String>) scenarioContext.get("stepInternalIdToStepId");
 
-          dataTable
-              .asMaps()
-              .forEach(
-                  feature -> {
-                    CreateFeatureLogic featureLogic =
-                        createFeatureLogic(
-                            feature.get("name"), feature.get("condition"), feature.get("values"));
-                    given()
-                        .body(featureLogic)
-                        .when()
-                        .put(
-                            GOV_API_BASE_PATH
-                                + format("/steps/%s/logic", policySteps.get(0).getId()))
-                        .then()
-                        .statusCode(202);
-                  });
+          Map<String, List<Map<String, String>>> stepToFeatures =
+              dataTable.asMaps().stream()
+                  .collect(Collectors.groupingBy(feature -> feature.get("stepInternalId")));
+
+          stepToFeatures.forEach(
+              (stepInternalId, features) -> {
+                CreateFeatureLogic featureLogic = createFeatureLogic(features);
+                given()
+                    .body(featureLogic)
+                    .when()
+                    .put(GOV_API_BASE_PATH
+                        + format("/steps/%s/logic", stepInternalIdToStepId.get(stepInternalId)))
+                    .then()
+                    .statusCode(202);
+              });
         });
 
     And(

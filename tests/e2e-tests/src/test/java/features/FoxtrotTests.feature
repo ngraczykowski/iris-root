@@ -14,11 +14,11 @@ Feature: Foxtrot scenarios
     Given Send 5 alerts on "learning" to FTCC.
     And Create empty policy with name "QA Policy for simulation test"
     And Add steps to recently created policy
-      | name      | solution                |
-      | some step | POTENTIAL_TRUE_POSITIVE |
+      | stepInternalId  | name      | solution                |
+      | 1               | some step | POTENTIAL_TRUE_POSITIVE |
     And Add features to recently created steps
-      | name            | condition | values |
-      | features/gender | is        | YES    |
+      | stepInternalId  |  name             | condition | values |
+      | 1               | features/gender   | is        | YES    |
     And Mark created policy as ready
     And Create dataset with name "QA Dataset for simulation test" for recently created learning
     And Create solving model for created policy

@@ -16,11 +16,11 @@ Feature: Smoke scenarios
   Scenario: Create basic policy and activate
     Given Create empty policy with name "Test QA Policy"
     And Add steps to recently created policy
-      | name      | solution                |
-      | some step | POTENTIAL_TRUE_POSITIVE |
+      | stepInternalId  | name      | solution                |
+      | 1               | some step | POTENTIAL_TRUE_POSITIVE |
     And Add features to recently created steps
-      | name                 | condition | values |
-      | features/commonNames | is        | YES    |
+      | stepInternalId  | name                 | condition | values |
+      | 1               | features/commonNames | is        | YES    |
     And Mark created policy as ready
 
   Scenario: Create country group and assign it

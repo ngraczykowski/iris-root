@@ -1,0 +1,143 @@
+{
+  "screenCustomerNameRes": {
+    "screenCustomerNameResPayload": {
+      "payloadFormat": null,
+      "payloadVersion": null,
+      "screenCustomerNameResInfo": {
+        "header": {
+          "userBankID": "8aa1bf8b-17cf-442a-9d79-0c20049f7812",
+          "screeningUniqueReference": null,
+          "sourceSystem": "GNSRT",
+          "watchlistTypeAll": "Y",
+          "watchlistTypeSanctions": null,
+          "watchlistTypePEP": null,
+          "watchlistTypeAM": null,
+          "watchlistTypeDD": null,
+          "countryCode": "ES",
+          "segment": null,
+          "clientType": "C",
+          "partyType": null,
+          "genericSearchFlag": null,
+          "priorityScreeningFlag": null,
+          "userDepartment": null,
+          "requestorOrGroupMailId": null,
+          "emailNotificationRequiredOrNot": null,
+          "responseType": null,
+          "requestInTime": null,
+          "requestOutTime": null
+        },
+        "screenableData": {
+          "amlcountry": "ES",
+          "sourceSystemIdentifier": "ECDDP",
+          "customerIdentificationNo": "8aa1bf8b-17cf-442a-9d79-0c20049f7812",
+          "clientType": "C",
+          "fullLegalName": "Marcela Barajas",
+          "fullTradingName": null,
+          "legalParentOrGroupName": null,
+          "executiveManagementNames": null,
+          "supplementaryCardName": null,
+          "alternateName1": "Marcela Barajas",
+          "alternateName2": "Marcel Barajas",
+          "alternateName3": "Marcela Barajas",
+          "alternateNameRest": null,
+          "registeredOrResidentialAddress": "Conjunto Concepción 92, Málaga, Mad 26520",
+          "registeredOrResidentialAddressCountry": "ES",
+          "mailingOrCommunicationAddress": null,
+          "mailingOrCommunicationAddressCountry": null,
+          "operatingOrOfficialAddress": null,
+          "operatingOrOfficialAddressCountry": null,
+          "otherAddress": null,
+          "otherAddressCountry": null,
+          "registeredAddressOfHeadOffice": null,
+          "registeredAddressCountryOfHeadOffice": null,
+          "registeredAddressOfParentCompany": null,
+          "registeredAddressCountryOfParentCompany": null,
+          "nationalityAll": "Andorrans",
+          "establishmentCountryOfHO": null,
+          "establishmentCountryOfParentCompany": null,
+          "identificationType1": null,
+          "identificationNumber1": "205736665",
+          "identificationType2": null,
+          "identificationNumber2": null,
+          "identificationType3": null,
+          "identificationNumber3": null,
+          "identificationType4": null,
+          "identificationNumber4": null,
+          "identificationTypeRest": null,
+          "identificationNumberRest": null,
+          "dateOfBirthOrRegistration": "1963-07-01",
+          "countryOfBirthOrRegistration": "Albacete",
+          "homeStateAuthorityOrGovtCountryName": null,
+          "nameOfStockExchange": null,
+          "nameOfAuthority": null,
+          "businessNature": null,
+          "clientLegalEntityType": null,
+          "gender": null,
+          "countryOfEmployment": null,
+          "addressCity": null,
+          "dateTimeStamp": "2022-05-25T12:50:14.583592Z",
+          "supplementaryInformation1": null,
+          "supplementaryInformation2": null,
+          "supplementaryInformation3": null,
+          "supplementaryInformation4": null,
+          "supplementaryInformation5": null,
+          "supplementaryInformation6": null,
+          "supplementaryInformation7": null,
+          "supplementaryInformation8": null,
+          "supplementaryInformation9": null,
+          "supplementaryInformation10": null,
+          "partyType": null,
+          "supplierType": null,
+          "acctOrRelationshipOrProfileClosedDate": null,
+          "lastCDDApprovedDate": null,
+          "linkedCustomerIdentificationNo": null,
+          "natureOfRelationshipWithHomeStateAuthority": null,
+          "ownershipStatusOfClient": null,
+          "relationshipToThePrimaryCardholder": null,
+          "clientSegment": null,
+          "clientSubSegment": null,
+          "classesOfBeneficiary": null,
+          "customerStatus": null,
+          "staffAccountIdentifier": null,
+          "relatedPartyType": null,
+          "casaFlag": null,
+          "priorityIndicator": null,
+          "relianceFlgOrSuppTypOrKoreanName": null,
+          "realTimeMessageIndicator": null,
+          "changeOrPriorityIndicator": null,
+          "alternateID1Description": null,
+          "alternateID1": null,
+          "alternateID2Description": null,
+          "alternateID2": null,
+          "nottobeused": null,
+          "cddriskRating": null,
+          "pepstatus": null,
+          "rmcodeOfCDDOwner": null,
+          "rmlocationOfCDDOwner": null
+        },
+        "immediateResponseData": {
+          "immediateResponseTimestamp": "2022-05-25T14:08:57.000",
+          "overAllStatus": "POTENTIAL_MATCH",
+          "alerts": [
+            {
+              "watchlistType": "Sanctions",
+              "alertStatus": "POTENTIAL_MATCH",
+              "alertID": "ES_BTCH_DENY!8aa1bf8b-17cf-442a-9d79-0c20049f781",
+              "hitList": [
+                {
+                  "hitID": "19470",
+                  "hitDetails": "T0ZBQyBJRDogMTk0NzAKTUFUQ0g6IDAuMDAKVEFHOiBOQU0KTUFUQ0hJTkdURVhUOiBNYXJlY2xhIEJhcmFqYXMKUkVTVUxUOiAoMCkKCkJBVENIOiAyMDIyLzA1LzI1XzAwMDFfRVNfQlRDSF9ERU5ZCk5BTUU6IE1hcmNlbGEgQmFyYWphcwogIFN5bm9ueW1zOgogICAtIE1hcmNlbGEgQmFyYWphcwogICAtIE1hcmNlbGEgQmFyYWphcwogICAqIE1hcmNlbGEgQmFyYWphcwpBRERSRVNTOiBCYWphZGEgQXVyb3JhIFBlcmFsdGEgNjI5IFBsYW50YSBhbHRhLCBDb3lvYWPDoW4sIEJDUyAzNTQ4OQogIFN5bm9ueW1zOiBub25lCkNJVFk6IEFuZ29zdHVyYQogIFN5bm9ueW1zOiBub25lCkNPVU5UUlk6IE1hbGFzaWEKICBTeW5vbnltczogbm9uZQpTVEFURTogQmFqYWRhIEF1cm9yYSBQZXJhbHRhIDYyOSBQbGFudGEgYWx0YSwgQ295b2Fjw6FuLCBCQ1MgMzU0ODkKICBTeW5vbnltczogbm9uZQpPUklHSU46CkVEQQpERVNJR05BVElPTjoKR1dMClRZUEU6CkkKU0VBUkNIIENPREVTOgpub25lClVTRVIgREFUQSAxOgpub25lClVTRVIgREFUQSAyOgpub25lCk9GRklDSUFMIFJFRjoKbm9uZQpQQVNTUE9SVDoKMjA1NzM2NjY1CkJJQyBDT0RFUzoKbm9uZQpOQVRJRDoKUE4gODAgMjQgMzMgSQpQTEFDRSBPRiBCSVJUSDoKTGFzIE1hcmdhcml0YXMKREFURSBPRiBCSVJUSDoKMTk2My0wNy0wMQpOQVRJT05BTElUWToKUm9tYW5pYW5zCkFERElUSU9OQUwgSU5GT1M6Ckxpc3QgSUQ6IERFTlkgLyBDcmVhdGUgRGF0ZTogMjAyMi8wNS8yNSAxNDowODo1NyAvIExhc3QgVXBkYXRlIERhdGU6IG51bGwgLyBQcm9ncmFtOiBUQUxJQkFOIC8gVGl0bGU6IEdPVkVSTk9SIE9GIFNBUklQVUwgUFJPVklOQ0UgVU5ERVIgVEhFIFRBTElCQU4gUkVHSU1FOyBNQVVMQVZJIC8gTmF0aW9uYWxpdHk6IFJvbWFuaWFucyAvIE90aGVySW5mb3JtYXRpb246IE1lbWJlciBvZiBUYWxpYmFuIFN1cHJlbWUgQ291bmNpbCBhcyBhdCAyMDExLiBCZWxvbmdzIHRvIE51cnphaSB0cmliZS4gSU5URVJQT0wtVU4gU2VjdXJpdHkgQ291bmNpbCBTcGVjaWFsIE5vdGljZSB3ZWIgbGluazogaHR0cHM6Ly93d3cuaW50ZXJwb2wuaW50L2VuL25vdGljZS9zZWFyY2gvdW4vNDY3ODU1MyAvIE9yaWdpbmFsSUQ6IFRBaS4xMDcKRk1MIFRZUEU6CjAKRk1MIFBSSU9SSVRZOgowCkZNTCBDT05GSURFTlRJQUxJVFk6CjAKRk1MIElORk86Cm5vbmUKUEVQLUZFUDoKMCAwCktFWVdPUkRTOgpub25lCkhZUEVSTElOS1M6Cm5vbmUKVFlTOiAwCklTTjogMQo="
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "header": {
+      "originationDetails": {
+        "trackingId": "2022/05/25_0001_ES_BTCH_DENY"
+      }
+    }
+  }
+}

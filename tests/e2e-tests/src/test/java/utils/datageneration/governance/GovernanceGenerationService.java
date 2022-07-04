@@ -3,9 +3,13 @@ package utils.datageneration.governance;
 import lombok.experimental.UtilityClass;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 @UtilityClass
 public class GovernanceGenerationService {
+
+  private static final Pattern VALUES_PATTERN = Pattern.compile("\\s*,\\s*");
+
   public static CreatePolicy createPolicy(String policyName) {
     return CreatePolicy.builder()
         .id(UUID.randomUUID().toString())
@@ -24,28 +28,31 @@ public class GovernanceGenerationService {
         .build();
   }
 
-  @SuppressWarnings("unchecked")
-  public static CreateFeatureLogic createFeatureLogic(String name, String condition, String value) {
-    Feature feature = Feature.builder()
-        .name(name)
-        .condition(condition)
-        .values(Arrays.asList(value))
-        .build();
-
-    //TODO(kkicza): make it able to process more than 1 feature at once
-    ArrayList<Feature> featureList = new ArrayList<>();
-    featureList.add(feature);
+  public static CreateFeatureLogic createFeatureLogic(List<Map<String, String>> features) {
+    List<Feature> mappedFeatures = features.stream().map(feature -> createFeature(
+            feature.get("name"),
+            feature.get("condition"),
+            feature.get("values")))
+        .toList();
 
     FeaturesLogic featuresLogic = FeaturesLogic.builder()
-        .features(featureList)
-        .toFulfill(1)
+        .features(mappedFeatures)
+        .toFulfill(mappedFeatures.size())
         .build();
 
-    ArrayList<FeaturesLogic> featuresLogicList = new ArrayList<>();
+    List<FeaturesLogic> featuresLogicList = new ArrayList<>();
     featuresLogicList.add(featuresLogic);
 
     return CreateFeatureLogic.builder()
         .featuresLogic(featuresLogicList)
+        .build();
+  }
+
+  private static Feature createFeature(String name, String condition, String value) {
+    return Feature.builder()
+        .name(name)
+        .condition(condition)
+        .values(Arrays.asList(VALUES_PATTERN.split(value)))
         .build();
   }
 

@@ -8,12 +8,42 @@ components:
   scb-bridge:
     enabled: true
     properties:
-      "serp.gns.db.host": '{{ include "sear.fullname" . }}-oracle-xe.{{ .Release.Namespace }}.svc'
+      "serp.gns.db.host": '{{ .Release.Name }}-oracle-xe.{{ .Release.Namespace }}.svc'
       "serp.gns.db.port": 1521
       "serp.gns.db.service.name": "XE"
       "serp.gns.db.user": LC_GNS_WEB_SIT_01
       "serp.gns.db.password": password
+      "serp.scb.gnsrt.recommendation.deadline-in-seconds": 25
       "grpc.client.universal-data-source.address": 'dns:///{{ include "sear.fullname" . }}-universal-data-source.{{ .Release.Namespace }}.svc:9090'
+      "grpc.client.recommendation.address": 'dns:///{{ include "sear.fullname" . }}-core-bridge.{{ .Release.Namespace }}.svc:9090'
+      "grpc.client.registration.address": 'dns:///{{ include "sear.fullname" . }}-core-bridge.{{ .Release.Namespace }}.svc:9090'
+      "grpc.client.GLOBAL.max-inbound-message-size": 31457280
+      "silenteight.scb-bridge.grpc.recommendation.recommendation-deadline": 10m
+      "silenteight.scb-bridge.grpc.registration.registration-deadline": 10m
+      "silenteight.scb-bridge.grpc.universal-data-source.uds-deadline": 10m
+      "silenteight.scb-bridge.working-mode": ALL
+      "silenteight.scb-bridge.solving.alert-processor.enabled": true
+      "silenteight.scb-bridge.solving.alert-processor.fixed-delay": 1000
+      "silenteight.scb-bridge.solving.alert-processor.initial-delay": 2000
+      "silenteight.scb-bridge.solving.alert-processor.read-chunk-size": 100
+      "silenteight.scb-bridge.queuing.jobs[0].enabled": false
+      "silenteight.scb-bridge.queuing.jobs[0].ack-records": true
+      "silenteight.scb-bridge.queuing.jobs[0].cron-expression": 0/30 * * * * ?
+      "silenteight.scb-bridge.queuing.jobs[0].hit-details-view": '' #CBS_HITS_DETAILS_S8_HLPR_V_WL
+      "silenteight.scb-bridge.queuing.jobs[0].name": Watchlist-level queuing job (DENY)
+      "silenteight.scb-bridge.queuing.jobs[0].priority": 10
+      "silenteight.scb-bridge.queuing.jobs[0].chunk-size": 1000
+      "silenteight.scb-bridge.queuing.jobs[0].records-view": SERP_V_FFF_RECORDS_WL_DENY
+      "silenteight.scb-bridge.queuing.jobs[0].watchlist-level": true
+      "silenteight.scb-bridge.queuing.jobs[1].enabled": false
+      "silenteight.scb-bridge.queuing.jobs[1].ack-records": true
+      "silenteight.scb-bridge.queuing.jobs[1].cron-expression": 3/30 * * * * ?
+      "silenteight.scb-bridge.queuing.jobs[1].hit-details-view": '' #CBS_HITS_DETAILS_S8_HLPR_V_WL
+      "silenteight.scb-bridge.queuing.jobs[1].name": Watchlist-level queuing job (NON-DENY)
+      "silenteight.scb-bridge.queuing.jobs[1].priority": 1
+      "silenteight.scb-bridge.queuing.jobs[1].chunk-size": 1000
+      "silenteight.scb-bridge.queuing.jobs[1].records-view": SERP_V_FFF_RECORDS_WL_NON_DENY
+      "silenteight.scb-bridge.queuing.jobs[1].watchlist-level": true
   warehouse:
     profiles:
       - linux

@@ -13,11 +13,11 @@ Feature: Sierra scenarios
   Scenario: Create solving model from scratch without running simulation
     And Create empty policy with name "QA Policy for simulation test"
     And Add steps to recently created policy
-      | name      | solution                |
-      | some step | POTENTIAL_TRUE_POSITIVE |
+      | stepInternalId  | name      | solution                |
+      | 1               | some step | POTENTIAL_TRUE_POSITIVE |
     And Add features to recently created steps
-      | name          | condition | values |
-      | features/name | is        | YES    |
+      | stepInternalId  | name          | condition | values |
+      | 1               | features/name | is        | YES    |
     And Mark created policy as ready
     And Create solving model for created policy
     And Create policy state change request
