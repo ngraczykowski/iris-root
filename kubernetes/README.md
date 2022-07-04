@@ -77,7 +77,7 @@ helm secrets -d vals upgrade --install \
 
 For `<environment>` choose one of the provided environment values files (e.g., `sierra`, `hotel`, `foxtrot`).
 
-For `<release-name>` you can put any name you want (have to be unique in the namespace, e.g., `sear-sierra`). It allows you to install multiple releases of the chart to a single namespace.
+For `<release-name>` you can put any name(containing the `sear` sequence) you want (have to be unique in the namespace, e.g., `sear-sierra`). It allows you to install multiple releases of the chart to a single namespace.
 
 For `<namespace>` put your individual namespace name.
 
