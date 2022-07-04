@@ -5,16 +5,18 @@
 package com.silenteight.iris.bridge.scb.outputrecommendation.adapter.outgoing;
 
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.iris.bridge.scb.outputrecommendation.domain.model.BatchStatistics;
+import com.silenteight.iris.bridge.scb.outputrecommendation.domain.model.BatchStatistics.RecommendationsStatistics;
 import com.silenteight.iris.bridge.scb.outputrecommendation.domain.model.Recommendations;
 import com.silenteight.iris.bridge.scb.outputrecommendation.domain.model.Recommendations.*;
 import com.silenteight.recommendation.api.library.v1.*;
-import com.silenteight.iris.bridge.scb.outputrecommendation.domain.model.BatchStatistics;
-import com.silenteight.iris.bridge.scb.outputrecommendation.domain.model.BatchStatistics.RecommendationsStatistics;
 
 import java.util.HashMap;
 import java.util.List;
 
+@Slf4j
 @UtilityClass
 class RecommendationGrpcMapper {
 
@@ -42,7 +44,7 @@ class RecommendationGrpcMapper {
             recommendation.getMatches().stream().map(RecommendationGrpcMapper::toMatch).toList())
         .batchId(recommendation.getBatchId())
         .name(recommendation.getName())
-        .recommendedAction(RecommendedAction.valueOf(recommendation.getRecommendedAction()))
+        .recommendedAction(toRecommendedAction(recommendation.getRecommendedAction()))
         .recommendedComment(recommendation.getRecommendationComment())
         .policyId(recommendation.getPolicyId())
         .recommendedAt(recommendation.getRecommendedAt())
@@ -85,5 +87,14 @@ class RecommendationGrpcMapper {
             .errorCount(recommendationsStatistics.getErrorCount())
             .build())
         .build();
+  }
+
+  private RecommendedAction toRecommendedAction(String value) {
+    try {
+      return RecommendedAction.valueOf(value);
+    } catch (Exception e) {
+      log.error("Error was encountered while mapping {} value to RecommendedAction", value, e);
+      return RecommendedAction.ACTION_INVESTIGATE;
+    }
   }
 }

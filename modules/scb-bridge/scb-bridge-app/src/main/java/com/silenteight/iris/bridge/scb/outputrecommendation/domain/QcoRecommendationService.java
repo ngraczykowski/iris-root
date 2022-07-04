@@ -14,7 +14,6 @@ import com.silenteight.iris.bridge.scb.outputrecommendation.domain.model.Recomme
 import com.silenteight.iris.bridge.scb.outputrecommendation.infrastructure.QcoRecommendationProperties;
 import com.silenteight.iris.bridge.scb.outputrecommendation.infrastructure.QcoRecommendationProvider;
 
-import io.vavr.control.Try;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -30,17 +29,24 @@ class QcoRecommendationService {
       log.debug("The Qco processing is disabled");
       return recommendationsEvent;
     }
+    return safeUpdateMatches(recommendationsEvent);
+  }
 
-    return Try.of(() -> updateMatches(recommendationsEvent))
-        .onSuccess(recommendation -> {
-          if (log.isTraceEnabled()) {
-            log.trace("Recommendation was processed by QCO module {}", recommendation.toString());
-          }
-        })
-        .onFailure(e -> log.error(
-            "Failed to update recommendations with QCO, batchId: {}",
-            recommendationsEvent.batchId(), e))
-        .getOrElse(recommendationsEvent);
+  private RecommendationsGeneratedEvent safeUpdateMatches(
+      RecommendationsGeneratedEvent recommendationsEvent) {
+    try {
+      var recommendation = updateMatches(recommendationsEvent);
+      if (log.isTraceEnabled()) {
+        log.trace("Recommendation was processed by QCO module {}", recommendation);
+      }
+      return recommendation;
+    } catch (Exception e) {
+      log.error(
+          "Failed to update recommendations with QCO, batchId: {}",
+          recommendationsEvent.batchId(),
+          e);
+      return recommendationsEvent;
+    }
   }
 
   private RecommendationsGeneratedEvent updateMatches(RecommendationsGeneratedEvent event) {

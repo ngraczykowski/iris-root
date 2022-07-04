@@ -8,17 +8,16 @@ import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.iris.bridge.scb.ingest.adapter.incomming.cbs.alertid.AlertId;
+import com.silenteight.iris.bridge.scb.ingest.adapter.incomming.cbs.alertid.AlertIdWithDetails;
 import com.silenteight.iris.bridge.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertInFlightService;
 import com.silenteight.iris.bridge.scb.ingest.adapter.incomming.common.store.batchinfo.BatchInfoService;
 import com.silenteight.iris.bridge.scb.ingest.adapter.incomming.common.trafficmanagement.TrafficManager;
 import com.silenteight.iris.bridge.scb.ingest.adapter.incomming.common.util.InternalBatchIdGenerator;
-import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext;
-import com.silenteight.iris.bridge.scb.ingest.adapter.incomming.cbs.alertid.AlertId;
-import com.silenteight.iris.bridge.scb.ingest.adapter.incomming.cbs.alertid.AlertIdWithDetails;
 import com.silenteight.iris.bridge.scb.ingest.domain.model.BatchSource;
 import com.silenteight.iris.bridge.scb.ingest.domain.model.BatchStatus;
+import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext;
 
-import io.vavr.control.Try;
 import org.apache.commons.lang3.time.StopWatch;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -71,15 +70,15 @@ class AlertProcessor {
     batchInfoService.store(internalBatchId, BatchSource.CBS, alertIds.size());
 
     var stopWatch = StopWatch.createStarted();
-    Try.run(() -> processInternalBatch(internalBatchId, context, alertIds))
-        .onSuccess(__ -> batchInfoService.changeStatus(internalBatchId, BatchStatus.REGISTERED))
-        .onFailure(e -> {
-          batchInfoService.changeStatus(internalBatchId, BatchStatus.ERROR);
-          log.error(
-              "Error occurred while handling batch with internalBatchId: {}", internalBatchId, e);
-        })
-        .andFinally(
-            () -> log.info("Processing of batch: {}, executed in: {}", internalBatchId, stopWatch));
+    try {
+      processInternalBatch(internalBatchId, context, alertIds);
+      batchInfoService.changeStatus(internalBatchId, BatchStatus.REGISTERED);
+      log.info("Processing of batch: {}, executed in: {}", internalBatchId, stopWatch);
+    } catch (Exception e) {
+      batchInfoService.changeStatus(internalBatchId, BatchStatus.ERROR);
+      log.error(
+          "Error occurred while handling batch with internalBatchId: {}", internalBatchId, e);
+    }
   }
 
   private void processInternalBatch(

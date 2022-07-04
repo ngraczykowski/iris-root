@@ -8,9 +8,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.vavr.control.Try;
 
+import java.util.Optional;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -23,10 +24,13 @@ public class PayloadConverter {
   private final Validator validator;
   private final ObjectMapper objectMapper;
 
-  public <T> Try<String> serializeFromObjectToJson(T json) {
-    return Try
-        .of(() -> objectMapper.writeValueAsString(json))
-        .onFailure(e -> log.warn("Could not serialize object.", e));
+  public <T> Optional<String> serializeFromObjectToJson(T json) {
+    try {
+      return Optional.ofNullable(objectMapper.writeValueAsString(json));
+    } catch (JsonProcessingException e) {
+      log.warn("Could not serialize object.", e);
+      return Optional.empty();
+    }
   }
 
   public <T, X> T deserializeFromJsonToObject(X json, Class<T> clazz) {

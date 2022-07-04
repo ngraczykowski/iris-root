@@ -31,8 +31,9 @@ class RegistrationMapper {
         .alertCount(batch.alertCount())
         .isSimulation(batch.source() == BatchSource.LEARNING)
         .batchMetadata(
-            converter.serializeFromObjectToJson(batch.metadata())
-                .getOrElseThrow(IngestJsonMessageException::new))
+            converter
+                .serializeFromObjectToJson(batch.metadata())
+                .orElseThrow(IngestJsonMessageException::new))
         .batchPriority(batch.priority().getValue())
         .build();
   }
@@ -67,8 +68,9 @@ class RegistrationMapper {
     if (isMetadataNull(alertWithMatches)) {
       return EMPTY;
     }
-    return converter.serializeFromObjectToJson(alertWithMatches.getMetadata())
-        .getOrElse(EMPTY);
+    return converter
+        .serializeFromObjectToJson(alertWithMatches.getMetadata())
+        .orElse(EMPTY);
   }
 
   private boolean isMetadataNull(AlertWithMatches alertWithMatches) {

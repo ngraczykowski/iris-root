@@ -6,18 +6,19 @@ package com.silenteight.iris.bridge.scb.ingest.adapter.incomming.common.ingest;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.iris.bridge.scb.ingest.adapter.incomming.common.model.alert.Alert;
-import com.silenteight.proto.registration.api.v1.MessageBatchCompleted;
-import com.silenteight.recommendation.api.library.v1.AlertOut;
-import com.silenteight.recommendation.api.library.v1.AlertOut.AlertStatus;
-import com.silenteight.recommendation.api.library.v1.RecommendationOut;
-import com.silenteight.recommendation.api.library.v1.RecommendationServiceClient;
 import com.silenteight.iris.bridge.scb.feeding.domain.FeedingFacade;
+import com.silenteight.iris.bridge.scb.ingest.adapter.incomming.common.model.alert.Alert;
+import com.silenteight.iris.bridge.scb.ingest.domain.exceptons.IngestJsonMessageException;
 import com.silenteight.iris.bridge.scb.ingest.domain.model.AlertMetadata;
 import com.silenteight.iris.bridge.scb.ingest.domain.model.RegistrationBatchContext;
 import com.silenteight.iris.bridge.scb.ingest.domain.payload.PayloadConverter;
 import com.silenteight.iris.bridge.scb.outputrecommendation.domain.model.Recommendations.RecommendedAction;
 import com.silenteight.iris.bridge.scb.outputrecommendation.infrastructure.grpc.RecommendationServiceClientMock;
+import com.silenteight.proto.registration.api.v1.MessageBatchCompleted;
+import com.silenteight.recommendation.api.library.v1.AlertOut;
+import com.silenteight.recommendation.api.library.v1.AlertOut.AlertStatus;
+import com.silenteight.recommendation.api.library.v1.RecommendationOut;
+import com.silenteight.recommendation.api.library.v1.RecommendationServiceClient;
 
 import org.apache.commons.lang3.RandomUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -89,7 +90,7 @@ public class UdsFeedingPublisherMock implements UdsFeedingPublisher {
                             .systemId(a.details().getSystemId())
                             .discriminator(a.id().discriminator())
                             .build())
-                        .get())
+                        .orElseThrow(IngestJsonMessageException::new))
                     .build())
                 .build())
             .toList());
@@ -111,5 +112,4 @@ public class UdsFeedingPublisherMock implements UdsFeedingPublisher {
         .setBatchMetadata("{\"batchSource\":\"GNS_RT\"}")
         .build();
   }
-
 }

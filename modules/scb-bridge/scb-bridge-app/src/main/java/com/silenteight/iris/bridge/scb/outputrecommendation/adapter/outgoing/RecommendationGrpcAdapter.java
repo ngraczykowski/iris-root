@@ -12,7 +12,6 @@ import com.silenteight.iris.bridge.scb.outputrecommendation.domain.port.outgoing
 import com.silenteight.recommendation.api.library.v1.RecommendationLibraryException;
 import com.silenteight.recommendation.api.library.v1.RecommendationServiceClient;
 
-import io.vavr.control.Try;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
@@ -33,13 +32,13 @@ class RecommendationGrpcAdapter implements RecommendationApiClient {
           multiplierExpression = "${grpc.client.retry.multiplier}",
           delayExpression = "${grpc.client.retry.delay-in-milliseconds}"))
   public Recommendations getRecommendations(String analysisName, List<String> alertNames) {
-    return Try
-        .of(() -> recommendationServiceClient.getRecommendations(
-            RecommendationGrpcMapper.toRequest(analysisName, alertNames)))
-        .peek(response -> log.trace("Received recommendation {}", response))
-        .map(RecommendationGrpcMapper::toResponse)
-        .onSuccess(recommendations -> log.info("Received {} recommendations for analysis {}.",
-            recommendations.recommendations().size(), analysisName))
-        .get();
+    var recommendations =
+        recommendationServiceClient.getRecommendations(
+            RecommendationGrpcMapper.toRequest(analysisName, alertNames));
+    log.trace("Received recommendation {}", recommendations);
+    var response = RecommendationGrpcMapper.toResponse(recommendations);
+    log.info("Received {} recommendations for analysis {}.",
+        response.recommendations().size(), analysisName);
+    return response;
   }
 }

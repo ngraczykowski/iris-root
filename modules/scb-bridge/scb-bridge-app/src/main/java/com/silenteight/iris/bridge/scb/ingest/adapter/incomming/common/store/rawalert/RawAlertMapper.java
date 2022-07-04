@@ -12,7 +12,6 @@ import com.silenteight.iris.bridge.scb.ingest.adapter.incomming.common.store.raw
 import com.silenteight.iris.bridge.scb.ingest.adapter.incomming.common.util.SerializationUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.vavr.control.Try;
 
 import java.util.List;
 
@@ -38,10 +37,12 @@ class RawAlertMapper {
   }
 
   private byte[] toPayload(Alert alert) {
-    return Try.of(() -> serializeAlert(alert))
-        .onFailure(e -> log.error("Failed to serialize alert with systemId: {}.",
-            alert.details().getSystemId(), e))
-        .get();
+    try {
+      return serializeAlert(alert);
+    } catch (Exception e) {
+      log.error("Failed to serialize alert with systemId: {}.", alert.details().getSystemId(), e);
+      throw new RuntimeException(e);
+    }
   }
 
   private byte[] serializeAlert(Alert alert) throws JsonProcessingException {
