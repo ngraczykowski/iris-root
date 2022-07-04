@@ -253,6 +253,8 @@ warehouse.reports.v2:
                wa.payload ->> 'features/isTpMarked:solution'             AS "True Case - Watchlist",
                wa.payload ->> 'features/isCaseTpMarked:solution'         AS "True Case - Historical",
                wa.payload ->> 'features/logicalDiscountingDob:solution'  AS "Logical Discounting",
+               wa.payload ->> 'features/newsAge:solution'                AS "News Age",
+               wa.payload ->> 'categories/terrorRelated'                 AS "Terror Related",
                wa.payload ->> 'DN_CASE.ID'                               AS "Client Alert ID",
                wa.payload ->> 'status'                                   AS "Alert Status",
                wa.discriminator                                          AS "S8 Alert ID"
@@ -304,7 +306,9 @@ warehouse.reports.v2:
                wa.payload -> 'features/isCaseTpMarked:solution' @> '"NO_DATA"' OR
                wa.payload -> 'features/isCaseTpMarked:solution' @> '"DATA_SOURCE_ERROR"' OR
                wa.payload -> 'features/logicalDiscountingDob:solution' @> '"NO_DATA"' OR
-               wa.payload -> 'features/logicalDiscountingDob:solution' @> '"DATA_SOURCE_ERROR"')
+               wa.payload -> 'features/logicalDiscountingDob:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wa.payload -> 'features/newsAge:solution' @> '"NO_DATA"' OR
+               wa.payload -> 'features/newsAge:solution' @> '"DATA_SOURCE_ERROR"')
           AND wa.recommendation_date BETWEEN TIMESTAMP '${from}' AND TIMESTAMP '${to}'
     - name: DAD
       type: simulation
@@ -343,6 +347,8 @@ warehouse.reports.v2:
                wsm.payload ->> 'features/isTpMarked:solution'             AS "True Case - Watchlist",
                wsm.payload ->> 'features/isCaseTpMarked:solution'         AS "True Case - Historical",
                wsm.payload ->> 'features/logicalDiscountingDob:solution'  AS "Logical Discounting",
+               wsm.payload ->> 'features/newsAge:solution'                AS "News Age",
+               wsm.payload ->> 'categories/terrorRelated'                 AS "Terror Related",
                coalesce(
                   wa.payload ->> 'clientId',
                   wa.payload ->> 'DN_CASE.ID')                            AS "Client Alert ID",
@@ -399,7 +405,9 @@ warehouse.reports.v2:
                wsm.payload -> 'features/isCaseTpMarked:solution' @> '"NO_DATA"' OR
                wsm.payload -> 'features/isCaseTpMarked:solution' @> '"DATA_SOURCE_ERROR"' OR
                wsm.payload -> 'features/logicalDiscountingDob:solution' @> '"NO_DATA"' OR
-               wsm.payload -> 'features/logicalDiscountingDob:solution' @> '"DATA_SOURCE_ERROR"')
+               wsm.payload -> 'features/logicalDiscountingDob:solution' @> '"DATA_SOURCE_ERROR"' OR
+               wsm.payload -> 'features/newsAge:solution' @> '"NO_DATA"' OR
+               wsm.payload -> 'features/newsAge:solution' @> '"DATA_SOURCE_ERROR"')
           AND wsa.analysis_name = 'analysis/${analysisId}'
     - name: RB_SCORER
       type: production
@@ -435,6 +443,8 @@ warehouse.reports.v2:
                (payload ->> 'features/passportNumberDocument:solution') AS "Passport Number Document",
                (payload ->> 'features/registrationCountry:solution') AS "Registration Country",
                (payload ->> 'features/residencyCountry:solution') AS "Residency Country",
+               (payload ->> 'features/newsAge:solution') AS "News Age",
+               (payload ->> 'categories/terrorRelated') AS "Terror Related",
                count((payload ->> 'fvSignature')) AS "Matches Count",
                count(CASE WHEN (payload ->> 'qa.level-0.state') = 'FAILED' THEN 1 END ) AS "QA decision True Positive",
                count(CASE WHEN (payload ->> 'qa.level-0.state') = 'PASSED' THEN 1 END ) AS "QA decision False Positive",
@@ -470,7 +480,9 @@ warehouse.reports.v2:
                (payload ->> 'features/otherDocument:solution'),
                (payload ->> 'features/passportNumberDocument:solution'),
                (payload ->> 'features/registrationCountry:solution'),
-               (payload ->> 'features/residencyCountry:solution')
+               (payload ->> 'features/residencyCountry:solution'),
+               (payload ->> 'features/newsAge:solution'),
+               (payload ->> 'categories/terrorRelated')
     - name: RB_SCORER
       type: simulation
       description: Reasoning Branch Scorer
@@ -505,6 +517,8 @@ warehouse.reports.v2:
                (wsm.payload ->> 'features/passportNumberDocument:solution') AS "Passport Number Document",
                (wsm.payload ->> 'features/registrationCountry:solution') AS "Registration Country",
                (wsm.payload ->> 'features/residencyCountry:solution') AS "Residency Country",
+               (wsm.payload ->> 'features/newsAge:solution') AS "News Age",
+               (wsm.payload ->> 'categories/terrorRelated') AS "Terror Related",
                count((wsm.payload ->> 'match_reason:feature_vector_signature')) AS "Matches Count",
                count(CASE WHEN (wa.payload ->> 'qa.level-0.state') = 'FAILED' THEN 1 END ) AS "QA decision True Positive",
                count(CASE WHEN (wa.payload ->> 'qa.level-0.state') = 'PASSED' THEN 1 END ) AS "QA decision False Positive",
@@ -544,7 +558,9 @@ warehouse.reports.v2:
                  (wsm.payload ->> 'features/otherDocument:solution'),
                  (wsm.payload ->> 'features/passportNumberDocument:solution'),
                  (wsm.payload ->> 'features/registrationCountry:solution'),
-                 (wsm.payload ->> 'features/residencyCountry:solution')
+                 (wsm.payload ->> 'features/residencyCountry:solution'),
+                 (wsm.payload ->> 'features/newsAge:solution'),
+                 (wsm.payload ->> 'categories/terrorRelated')
     - name: METRICS
       type: production
       description: Metrics
