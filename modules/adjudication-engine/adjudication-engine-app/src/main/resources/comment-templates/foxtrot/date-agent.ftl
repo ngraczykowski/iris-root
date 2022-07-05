@@ -2,7 +2,6 @@
 <#import "match-utils.ftl" as matchUtils>
 
 <#assign falsePositiveMappings={
-"NEAR": "does not match",
 "OUT_OF_RANGE": "does not match"
 }>
 
@@ -16,7 +15,7 @@
 <#assign skippedSolutions = ["AGENT_SKIPPED", "NO_DATA", "YEAR_2Y", "INCONCLUSIVE", "UNKNOWN"]>
 
 <#function isSolutionConsistent alertModel matchModel featureModel>
-    <#if matchModel.solution?matches('.*FALSE_POSITIVE') && ['OUT_OF_RANGE', 'NEAR']?seq_contains(featureModel.solution)>
+    <#if matchModel.solution?matches('.*FALSE_POSITIVE') && ['OUT_OF_RANGE']?seq_contains(featureModel.solution)>
         <#return true>
     <#elseif matchModel.solution?matches('.*TRUE_POSITIVE') && ['EXACT', 'NEAR', 'YEAR_2Y']?seq_contains(featureModel.solution)>
         <#return true>
