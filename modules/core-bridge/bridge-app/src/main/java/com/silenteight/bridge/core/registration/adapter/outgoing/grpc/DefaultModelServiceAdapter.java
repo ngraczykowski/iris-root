@@ -1,4 +1,4 @@
-package com.silenteight.bridge.core.registration.adapter.outgoing.crossmodule;
+package com.silenteight.bridge.core.registration.adapter.outgoing.grpc;
 
 import lombok.RequiredArgsConstructor;
 

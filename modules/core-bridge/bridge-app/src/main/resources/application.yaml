@@ -41,6 +41,11 @@ grpc:
       delay-in-milliseconds: 2500
       multiplier: 2
       max-attempts: 3
+      add-alerts-to-analysis:
+        max-delay-in-milliseconds: 50000
+        delay-in-milliseconds: 2000
+        multiplier: 3
+        max-attempts: 6
     GLOBAL:
       negotiation-type: PLAINTEXT
 

@@ -1,4 +1,4 @@
-package com.silenteight.bridge.core.registration.adapter.outgoing.crossmodule
+package com.silenteight.bridge.core.registration.adapter.outgoing.grpc
 
 import com.silenteight.governance.api.library.v1.model.FeatureOut
 import com.silenteight.governance.api.library.v1.model.ModelServiceClient

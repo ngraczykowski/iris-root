@@ -1,4 +1,4 @@
-package com.silenteight.bridge.core.registration.adapter.outgoing.crossmodule;
+package com.silenteight.bridge.core.registration.adapter.outgoing.grpc;
 
 import com.silenteight.adjudication.api.library.v1.alert.*;
 import com.silenteight.bridge.core.registration.domain.model.AlertsToRegister;

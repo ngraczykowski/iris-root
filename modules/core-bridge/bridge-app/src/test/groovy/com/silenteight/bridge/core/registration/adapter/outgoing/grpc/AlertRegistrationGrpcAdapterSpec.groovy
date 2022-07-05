@@ -1,4 +1,4 @@
-package com.silenteight.bridge.core.registration.adapter.outgoing.crossmodule
+package com.silenteight.bridge.core.registration.adapter.outgoing.grpc
 
 import com.silenteight.adjudication.api.library.v1.alert.AlertServiceClient
 import com.silenteight.adjudication.api.library.v1.alert.RegisterAlertsAndMatchesIn
@@ -12,13 +12,13 @@ import spock.lang.Subject
 
 import java.time.OffsetDateTime
 
-class AlertRegistrationAdapterSpec extends Specification {
+class AlertRegistrationGrpcAdapterSpec extends Specification {
 
   def mapper = Mock(AlertRegistrationMapper)
   def alertServiceClient = Mock(AlertServiceClient)
 
   @Subject
-  def underTest = new AlertRegistrationAdapter(mapper, alertServiceClient)
+  def underTest = new AlertRegistrationGrpcAdapter(mapper, alertServiceClient)
 
   def 'should register alerts and matches'() {
     given:

@@ -1,4 +1,4 @@
-package com.silenteight.bridge.core.registration.adapter.outgoing.crossmodule;
+package com.silenteight.bridge.core.registration.adapter.outgoing.grpc;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,10 +22,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
-@Slf4j
-class AnalysisServiceAdapter implements AnalysisService {
+class AnalysisServiceGrpcAdapter implements AnalysisService {
 
   private static final boolean ATTACH_RECOMMENDATION_TO_ANALYSIS = true;
   private static final boolean ATTACH_METADATA_TO_ANALYSIS = true;
@@ -55,10 +55,11 @@ class AnalysisServiceAdapter implements AnalysisService {
   @Override
   @Retryable(
       value = AdjudicationEngineLibraryRuntimeException.class,
-      maxAttemptsExpression = "${grpc.client.retry.max-attempts}",
+      maxAttemptsExpression = "${grpc.client.retry.add-alerts-to-analysis.max-attempts}",
       backoff = @Backoff(
-          multiplierExpression = "${grpc.client.retry.multiplier}",
-          delayExpression = "${grpc.client.retry.delay-in-milliseconds}"))
+          multiplierExpression = "${grpc.client.retry.add-alerts-to-analysis.multiplier}",
+          delayExpression = "${grpc.client.retry.add-alerts-to-analysis.delay-in-milliseconds}",
+          maxDelayExpression = "${grpc.client.retry.add-alerts-to-analysis.max-delay-in-milliseconds}"))
   public AlertsAddedToAnalysis addAlertsToAnalysis(
       String analysisName, List<String> alertNames, Timestamp alertDeadlineTime) {
     log.info("Adding [{}] alerts to analysis [{}].", alertNames.size(), analysisName);

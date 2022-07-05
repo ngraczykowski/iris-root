@@ -1,4 +1,4 @@
-package com.silenteight.bridge.core.registration.adapter.outgoing.crossmodule
+package com.silenteight.bridge.core.registration.adapter.outgoing.grpc
 
 import com.silenteight.adjudication.api.library.v1.analysis.*
 import com.silenteight.adjudication.api.library.v1.analysis.AddAlertsToAnalysisOut.AddedAlert
@@ -12,12 +12,12 @@ import spock.lang.Subject
 
 import java.time.OffsetDateTime
 
-class AnalysisServiceAdapterSpec extends Specification {
+class AnalysisServiceGrpcAdapterSpec extends Specification {
 
   def analysisServiceClient = Mock(AnalysisServiceClient)
 
   @Subject
-  def underTest = new AnalysisServiceAdapter(analysisServiceClient)
+  def underTest = new AnalysisServiceGrpcAdapter(analysisServiceClient)
 
   def "Should create analysis"() {
     given:

@@ -1,4 +1,4 @@
-package com.silenteight.bridge.core.registration.adapter.outgoing.crossmodule;
+package com.silenteight.bridge.core.registration.adapter.outgoing.grpc;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-class AlertRegistrationAdapter implements AlertRegistrationService {
+class AlertRegistrationGrpcAdapter implements AlertRegistrationService {
 
   private final AlertRegistrationMapper mapper;
   private final AlertServiceClient alertServiceClient;
