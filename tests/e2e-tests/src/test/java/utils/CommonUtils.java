@@ -4,6 +4,8 @@ import com.codeborne.selenide.ClickOptions;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 
+import com.codeborne.selenide.commands.Click;
+
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
@@ -83,7 +85,7 @@ public class CommonUtils {
     element.click();
     SelenideElement valueElement = $("[role='listbox']").$(byText(value));
     valueElement.shouldBe(Condition.visible);
-    valueElement.click();
+    valueElement.click(ClickOptions.usingJavaScript());
   }
 
   @SneakyThrows

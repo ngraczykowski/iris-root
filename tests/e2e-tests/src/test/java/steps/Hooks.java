@@ -1,6 +1,7 @@
 package steps;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Screenshots;
 import com.codeborne.selenide.Selenide;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
@@ -19,14 +20,15 @@ import io.restassured.config.HeaderConfig;
 import io.restassured.config.ObjectMapperConfig;
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.http.ContentType;
-import org.apache.commons.lang3.StringUtils;
 import utils.CustomAuthFilter;
 import utils.CustomLogFilter;
 import utils.ScenarioContext;
 import utils.datageneration.webapp.User;
 
+import java.io.FileInputStream;
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -79,6 +81,13 @@ public class Hooks implements En {
     AfterStep(
         0,
         (Scenario scenario) -> {
+          if(scenario.isFailed()) {
+            try {
+              scenario.attach(new FileInputStream(Objects.requireNonNull(Screenshots.getLastScreenshot())).readAllBytes(), "image/png", "screenshot");
+            } catch (Exception e) {
+              System.out.println("failed to save screenshot");
+            }
+          }
           /*
            Cucumber do not provide steps info, so We had to create this mechanism
            We check scenario name to select index for desired step
