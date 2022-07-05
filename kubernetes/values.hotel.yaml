@@ -8,6 +8,9 @@ components:
     profiles:
       - consuldisabled
 
+  universal-data-source:
+    enabled: false
+
   governance:
     profiles:
       - governance
