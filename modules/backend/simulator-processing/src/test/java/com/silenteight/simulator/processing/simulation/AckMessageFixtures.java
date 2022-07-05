@@ -1,4 +1,8 @@
-package com.silenteight.simulator.processing.alert.index.ack;
+/*
+ * Copyright (c) 2022 Silent Eight Pte. Ltd. All rights reserved.
+ */
+
+package com.silenteight.simulator.processing.simulation;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -48,10 +52,10 @@ final class AckMessageFixtures {
       .setAlertCount(20L)
       .build();
 
-  static final Analysis ANALYSIS_2 = Analysis
+  static final Analysis ANALYSIS_FINISHED = Analysis
       .newBuilder()
       .setState(DONE)
-      .setAlertCount(42L)
+      .setAlertCount(2L)
       .build();
 
   public static final SimulationDetailsDto SIMULATION_DETAILS =

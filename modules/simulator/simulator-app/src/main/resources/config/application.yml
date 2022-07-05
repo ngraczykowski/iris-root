@@ -155,8 +155,8 @@ spring:
         consumers-per-queue: 2
         prefetch: 10
       simple:
-        concurrency: 1
-        max-concurrency: 2
+        concurrency: 2
+        max-concurrency: 4
         prefetch: 10
 
   # Task execution and scheduling
