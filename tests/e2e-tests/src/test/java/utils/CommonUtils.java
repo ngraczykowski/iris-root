@@ -15,7 +15,10 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
@@ -67,12 +70,20 @@ public class CommonUtils {
         .format(DateTimeFormatter.ISO_DATE_TIME);
   }
 
+  public static String getFullFormatDateWithOffset(int offset) {
+    ZonedDateTime dateTime = OffsetDateTime
+        .now()
+        .plusDays(offset)
+        .atZoneSameInstant(ZoneOffset.UTC);
+
+    return (String.format("%s %s %s", dateTime.getDayOfMonth(), dateTime.getMonth().toString().toLowerCase(), dateTime.getYear()));
+  }
+
   public static void setMatSelectAs(SelenideElement element, String value) {
-    SelenideElement valueElement = $(byText(value));
     element.click();
+    SelenideElement valueElement = $("[role='listbox']").$(byText(value));
     valueElement.shouldBe(Condition.visible);
-    valueElement.click(ClickOptions.usingJavaScript());
-    getFocusedElement().sendKeys(Keys.ESCAPE);
+    valueElement.click();
   }
 
   @SneakyThrows

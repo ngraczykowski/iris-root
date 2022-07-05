@@ -1,5 +1,5 @@
-@foxtrot
-Feature: Foxtrot scenarios
+@sierra
+Feature: Sierra API scenarios
 
   Background:
     Then Create user "A" with random name
@@ -10,33 +10,27 @@ Feature: Foxtrot scenarios
       | APPROVER |
     And Default user is "A"
 
-  Scenario: Send alert to FTCC
-    Given Send 5 alerts on "learning" to FTCC.
+  Scenario: Create solving model from scratch without running simulation
     And Create empty policy with name "QA Policy for simulation test"
     And Add steps to recently created policy
       | stepInternalId  | name      | solution                |
       | 1               | some step | POTENTIAL_TRUE_POSITIVE |
     And Add features to recently created steps
-      | stepInternalId  |  name             | condition | values |
-      | 1               | features/gender   | is        | YES    |
+      | stepInternalId  | name          | condition | values |
+      | 1               | features/name | is        | YES    |
     And Mark created policy as ready
-    And Create dataset with name "QA Dataset for simulation test" for recently created learning
     And Create solving model for created policy
-    When Create simulation based on created policy and dataset with name "QA Simulation"
-    And Wait until simulation is done
     And Create policy state change request
     Then Activate solving model as user "B"
 
-  Scenario:
-    Given Send 5 alerts on "solving" to FTCC.
-    And Give it time - 5 seconds
-    And Create country group
-    And Add countries to country group
-      | PL |
-      | MX |
-      | SG |
-    And Assign user "A" to country group
-    And Prepare report date range for today
+  Scenario: Get an alert from CMAPI
+    Given Subscribed to callbacks at "/mock/cmapi/pb"
+    When Send alert on solving
+    Then Wait for a message for max 50 seconds
+
+    When The last message contains following fields
+      | Body.msg_ReceiveDecision.Messages[0].Message.Comment | S8 recommended action: Manual Investigation\n\nManual Investigation hits:\nMatch Hit-ID-1(50K, #1)\nMatch AS00307517(50K, #2) |
     When Initialize generation of "AI_REASONING" report via warehouse and wait until it's generated
     And Download generated report
-    Then Downloaded report contains 5 rows
+    Then Downloaded report contains 1 rows
+    And All entries have "S8 Alert Resolution" equal to "ACTION_INVESTIGATE"

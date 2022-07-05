@@ -1,5 +1,5 @@
 @lima
-Feature: Lima scenarios
+Feature: Lima API scenarios
 
   Background:
     Then Create user "A" with random name

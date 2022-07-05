@@ -1,7 +1,7 @@
 @hotel
   #TODO(dsniezek): temporary remove after gov,soim, webapp merged to one backend application
 @hotel-backend
-Feature: Hotel scenarios
+Feature: Hotel API scenarios
 
   Background:
     Then Create user "A" with random name

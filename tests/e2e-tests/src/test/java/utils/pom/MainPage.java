@@ -14,15 +14,15 @@ import static com.codeborne.selenide.Selenide.$;
 public class MainPage {
 
   private final SelenideElement mainGrid = $("sep-app-main-grid");
-  private final SelenideElement policiesButton = $(byText("Policies"));
 
   public static void userIsOnMainPage() {
     mainGrid.shouldBe(Condition.visible);
     Assert.assertTrue(mainGrid.isDisplayed());
   }
 
-  public static void clickOnPoliciesButton() {
-    policiesButton.shouldBe(Condition.visible);
-    policiesButton.click();
+  public static void clickOnSidenavButtonWithText(String value) {
+    SelenideElement button = $("sep-app-sidenav").$(byText(value));
+    button.shouldBe(Condition.visible);
+    button.click();
   }
 }

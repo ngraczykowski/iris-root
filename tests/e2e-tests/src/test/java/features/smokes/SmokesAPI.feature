@@ -1,5 +1,5 @@
 @smoke
-Feature: Smoke scenarios
+Feature: API smokes scenarios
 
   Background:
     Given Default user is admin

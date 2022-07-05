@@ -1,5 +1,6 @@
 package utils.pom;
 
+import com.codeborne.selenide.ClickOptions;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 
@@ -77,7 +78,7 @@ public class PoliciesPage {
 
   public void userClicksOnAddNewRuleButton() {
     addNewRuleButton.shouldBe(Condition.visible);
-    addNewRuleButton.click();
+    addNewRuleButton.click(ClickOptions.usingJavaScript());
   }
 
   public void userSetFeatureNameSelect(String value) {
@@ -94,12 +95,12 @@ public class PoliciesPage {
 
   public void userClicksOnMarkAsReadyButton() {
     markAsReadyButton.shouldBe(Condition.visible);
-    markAsReadyButton.click();
+    markAsReadyButton.click(ClickOptions.usingJavaScript());
   }
 
   public void userClicksOnMarkAsReadyConfirmationButton() {
     markAsReadyConfirmationButton.shouldBe(Condition.visible);
-    markAsReadyConfirmationButton.click();
+    markAsReadyConfirmationButton.click(ClickOptions.usingJavaScript());
   }
 
   public void userSeesSuccessPromptWithText(String value) {
