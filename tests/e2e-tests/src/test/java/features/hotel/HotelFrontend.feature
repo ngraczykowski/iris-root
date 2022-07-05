@@ -17,7 +17,7 @@ Feature: Hotel Frontend scenarios
     And User clicks on add new rule button
     And User set feature name select as "Common Name"
     And User set feature condition select as "is"
-    And User set feature value select as "No Match"
+    And User set feature value select as "Yes"
     And User clicks on mark as ready button
     And User clicks on mark as ready confirmation button
     Then User sees success prompt with text "Policy Unnamed Policy successfully marked as ready"

@@ -33,7 +33,7 @@ public class SimulationsPage {
 
   public static void userClicksOnCreateSimulationButton() {
     createSimulationButton.shouldBe(Condition.visible);
-    createSimulationButton.click();
+    createSimulationButton.click(ClickOptions.usingJavaScript());
   }
 
   public static void userFillsSimulationNameWith(String value) {

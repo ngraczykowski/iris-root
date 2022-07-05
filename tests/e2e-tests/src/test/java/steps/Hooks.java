@@ -1,6 +1,7 @@
 package steps;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Selenide;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 import lombok.SneakyThrows;
@@ -45,6 +46,7 @@ public class Hooks implements En {
         (Scenario scenario) -> {
           Configuration.headless = true;
           WebDriverManager.chromedriver().setup();
+          Configuration.timeout = 15000;
           scenarioContext.clearScenarioContext();
           scenarioContext.setUser(
               "admin",
