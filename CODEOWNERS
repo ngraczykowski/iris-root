@@ -29,6 +29,19 @@
 #----------------------------------------------------------
 /modules/agents/**/*    @SilentEight/agents
 
+#----------------------------------------------------------
+# Python modules
+#----------------------------------------------------------
+/modules/agent-base/**/*                            @SilentEight/python
+/modules/bank-identification-codes-agent/**/*       @SilentEight/python
+/modules/company-name-surrounding-agent/**/*        @SilentEight/python
+/modules/etl-pipeline/**/*                          @SilentEight/python
+/modules/hit-type-agent/**/*                        @SilentEight/python
+/modules/knowledge-measure-businness/**/*           @SilentEight/python
+/modules/organization-name-agent/**/*               @SilentEight/python
+/modules/organization-name-knowledge/**/*           @SilentEight/python
+/modules/s8-python-network/**/*                     @SilentEight/python
+
 ####################################################################################################
 # NOTE(ahaczewski): Add code owners for modules above. Do not modify owners below.
 ####################################################################################################
