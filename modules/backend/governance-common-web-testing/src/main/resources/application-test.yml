@@ -1,4 +1,13 @@
-spring.cloud.consul.enabled: false
+spring:
+  cloud:
+    config:
+      import-check:
+        enabled: false
+    consul:
+      config:
+        enabled: false
+      enabled: false
+
 
 serp.governance.policy-step-solution.hinted-enabled: false
 

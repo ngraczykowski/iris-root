@@ -172,6 +172,9 @@ spring:
   # CONSUL SERVICE DISCOVERY
   #-------------------------------------------------------------------------------------------------
   cloud:
+    config:
+      import-check:
+        enabled: false
     consul:
       config:
         enabled: false
@@ -186,7 +189,6 @@ spring:
     url: jdbc:postgresql://${ae.db.host}:${ae.db.port}/${ae.db.name}?currentSchema=${ae.db.schema:public}
     username: ${ae.db.username}
     password: ${ae.db.password}
-    initialization-mode: never
 
     # Hikari pool configuration
     hikari:
@@ -224,6 +226,10 @@ spring:
         loginTimeout: ${ae.db.timeout.login:10}
         cancelSignalTimeout: ${ae.db.timeout.cancel-signal:10}
         socketTimeout: ${ae.db.timeout.socket:540}
+
+  sql:
+    init:
+      mode: never
 
   # Database migrations
   liquibase:

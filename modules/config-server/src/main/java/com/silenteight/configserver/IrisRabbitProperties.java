@@ -12,17 +12,16 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@ConfigurationProperties(prefix = IrisDbProperties.PREFIX)
+@ConfigurationProperties(prefix = IrisRabbitProperties.PREFIX)
 @Data
 @Validated
-public class IrisDbProperties {
+public class IrisRabbitProperties {
 
-  static final String PREFIX = "iris.db";
+  static final String PREFIX = "iris.rabbit";
 
   @NotBlank private String host;
   @NotNull private Integer port;
-  @NotBlank private String name;
-  private String schema;
+  @NotBlank private String virtualHost = "/"; // TODO default?
   private String options;
   @NotBlank private String username;
   @NotBlank private String password;

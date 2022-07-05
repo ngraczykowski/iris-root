@@ -15,7 +15,9 @@ spec:
     metadata:
       annotations:
         fluentbit.io/parser: spring-logback-json
+        {{- if include "useConfigmap" . }}
         silenteight.com/config-checksum: {{ tpl ($.Files.Get "component/spring/configmap.yaml.tpl") . | sha256sum }}
+        {{- end }}
         {{- with .Values.podAnnotations }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -32,14 +34,15 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       initContainers:
-        {{- if and .component.configServer.enabled (not (eq .componentName "config-server" )) }}
+        {{- if include "useConfigServer" . }}
         {{- include "checkConfigServerReadyInitContainer" . | indent 8 }}
-        {{- end }}
+        {{- else }}
         {{- if .component.db.enabled }}
         {{- include "checkPostgresReadyInitContainer" . | indent 8 }}
         {{- end }}
         {{- if and .component.rabbit.enabled .component.rabbit.check }}
         {{- include "checkRabbitMqInitContainer" . | indent 8 }}
+        {{- end }}
         {{- end }}
       containers:
         - name: {{ .componentName }}
@@ -99,7 +102,17 @@ spec:
             {{- toYaml .component.command | nindent 12 }}
           {{- end }}
           args:
-            {{- if not .component.configServer.enabled }}
+            - --spring.application.name={{ .component.name | default .componentName }}
+            {{- if include "useConfigServer" . }}
+            - --spring.config.import=configserver:{{ include "sear.configServerUrl" . }}
+            {{- else if include "isConfigServer" . }}
+            - --server.port={{ .component.containerPorts.http.port }}
+            - --management.server.port={{ .component.containerPorts.management.port }}
+            - --management.server.base-path=/
+            - --management.endpoints.web.base-path=/management
+            - --spring.config.additional-location=file:/etc/spring/config/
+            - --spring.profiles.include=kubernetes
+            {{- else }}
             - --server.port={{ .component.containerPorts.http.port }}
             - --server.servlet.context-path=/rest/{{ .component.webPath }}
             - --spring.webflux.base-path=/rest/{{ .component.webPath }}
@@ -127,6 +140,7 @@ spec:
             {{- if .component.args }}
               {{- include "sear.tplvalues.render" (dict "value" .component.args "context" $) | nindent 12 }}
             {{- end }}
+            {{- end }}
             {{- if .component.profiles }}
             - --spring.profiles.include={{ join "," .component.profiles }}
             {{- end }}
@@ -135,23 +149,13 @@ spec:
             - --{{ $key }}={{ include "sear.tplvalues.render" (dict "value" $value "context" $) }}
             {{- end }}
             {{- end }}
-            {{- else }}
-            {{- if not (eq .componentName "config-server" ) }}
-            - --spring.config.import=configserver:{{ include "sear.configServerUrl" . }}
-            {{- else }}
-            - --server.port={{ .component.containerPorts.http.port }}
-            - --management.server.port={{ .component.containerPorts.management.port }}
-            - --management.server.base-path=/
-            - --management.endpoints.web.base-path=/management
-            - --spring.config.additional-location=file:/etc/spring/config/
-            - --spring.profiles.include=kubernetes
-            {{- end }}
-            - --spring.application.name={{ .componentName }}
-            {{- end }}
           volumeMounts:
+            {{- if include "useConfigmap" . }}
             - name: config
               mountPath: "/etc/spring/config"
               readOnly: true
+            {{- end }}
+            {{- if or (include "isConfigServer" . ) (not (include "useConfigServer" .)) }}
             {{- if .component.rabbit.enabled }}
             - name: secret-rabbitmq
               mountPath: "/var/run/secrets/spring/rabbitmq"
@@ -162,40 +166,47 @@ spec:
               mountPath: "/var/run/secrets/spring/postgres"
               readOnly: true
             {{- end }}
-          # FIXME(ahaczewski): Remove these envs once all images remove these variables.
-          #  The reason to put them here is that the environment variables are overwriting
-          #  `configtree` secrets mounted as files.
+            {{- end }}
           env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: ""
-            {{- if .component.rabbit.enabled }}
-            - name: SPRING_RABBITMQ_ADDRESSES
-              value: ""
-            - name: SPRING_RABBITMQ_HOST
+            {{- if include "isConfigServer" . }}
+            - name: IRIS_RABBIT_HOST
               valueFrom:
                 secretKeyRef:
                   name: {{ include "sear.rabbitmqSecretName" . }}
                   key: host
-            - name: SPRING_RABBITMQ_PORT
+            - name: IRIS_RABBIT_PORT
               valueFrom:
                 secretKeyRef:
                   name: {{ include "sear.rabbitmqSecretName" . }}
                   key: port
-            - name: SPRING_RABBITMQ_USERNAME
+            - name: IRIS_RABBIT_USERNAME
               valueFrom:
                 secretKeyRef:
                   name: {{ include "sear.rabbitmqSecretName" . }}
                   key: username
-            - name: SPRING_RABBITMQ_PASSWORD
+            - name: IRIS_RABBIT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "sear.rabbitmqSecretName" . }}
                   key: password
+            - name: IRIS_DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "sear.postgresqlSecretName" . }}
+                  key: username
+            - name: IRIS_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "sear.postgresqlSecretName" . }}
+                  key: password
             {{- end }}
       volumes:
+        {{- if include "useConfigmap" . }}
         - name: config
           configMap:
             name: {{ include "sear.componentName" . }}
+        {{- end }}
+        {{- if not (include "useConfigServer" .) }}
         {{- if .component.rabbit.enabled }}
         - name: secret-rabbitmq
           secret:
@@ -219,6 +230,7 @@ spec:
                 path: spring/datasource/username
               - key: password
                 path: spring/datasource/password
+        {{- end }}
         {{- end }}
       {{- with .component.nodeSelector }}
       nodeSelector:

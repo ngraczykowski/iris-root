@@ -1,5 +1,6 @@
 {{- $internalDbUsage := 0 }}
-{{- range $componentName, $component := include "sear.mergedComponents" . | mustFromJson }}
+{{- $mergedComponents := include "sear.mergedComponents" . | mustFromJson }}
+{{- range $componentName, $component := $mergedComponents }}
   {{- if and $component.enabled $component.db.enabled (not $component.db.external) }}
     {{- $internalDbUsage = add1 $internalDbUsage }}
   {{- end }}
@@ -24,27 +25,46 @@ spec:
   numberOfInstances: {{ .Values.database.numberOfInstances }}
 
   volume:
-      size: {{ .Values.database.volume.size | quote }}
+    size: {{ .Values.database.volume.size | quote }}
 
   # <user> : <roles>
   # waring: username is used in sear.postgresqlSecretName
+  {{- $configServerConfig := get $mergedComponents "config-server" }}
   users:
     {{- if .Values.keycloak.internal }}
     keycloak: []
     {{- end }}
-    {{- range $componentName, $component := include "sear.mergedComponents" . | mustFromJson }}
-    {{- if and $component.enabled $component.db.enabled (not $component.db.external) }}
+    {{- if not $configServerConfig.db.external }}
+    {{ $configServerConfig.db.name }}_owner: []
+    {{- end }}
+    {{- range $componentName, $component := $mergedComponents }}
+    {{- if and $component.enabled $component.db.enabled (not $component.db.external) (not (eq $configServerConfig.db.name $component.db.name)) }}
     {{ $component.db.name }}: []
     {{- end }}
     {{- end }}
 
   # <db>: <user>
+
+  {{- if not $configServerConfig.db.external }}
+  preparedDatabases:
+    {{ $configServerConfig.db.name }}:
+      defaultUsers: true
+      schemas:
+        {{- range $componentName, $component := $mergedComponents }}
+        {{- if and $component.enabled $component.db.enabled (not $component.db.external) }}
+        {{ $component.db.name }}: {}
+        {{- end }}
+        {{- end }}
+  {{- end }}
   databases:
     {{- if .Values.keycloak.internal }}
     keycloak: keycloak
     {{- end }}
-    {{- range $componentName, $component := include "sear.mergedComponents" . | mustFromJson }}
-    {{- if and $component.enabled $component.db.enabled (not $component.db.external) }}
+    {{- if not $configServerConfig.db.external }}
+    {{ $configServerConfig.db.name }}: {{ $configServerConfig.db.name }}_owner
+    {{- end }}
+    {{- range $componentName, $component := $mergedComponents }}
+    {{- if and $component.enabled $component.db.enabled (not $component.db.external) (not (eq $configServerConfig.db.name $component.db.name)) }}
     {{ $component.db.name }}: {{ $component.db.name }}
     {{- end }}
     {{- end }}

@@ -379,6 +379,7 @@ components:
     db:
       name: "pb"
     webPath: "pb"
+    name: "pb"
 
   universal-data-source:
     image:
@@ -395,34 +396,38 @@ components:
     db:
       name: "ae"
     webPath: "ae"
+    name: ae
+    configServer:
+      enabled: true
 
   governance:
     image:
       repository: registry.dev.s8ops.com/iris/governance-app
-
-    db:
-      name: "gov"
+    configServer:
+      enabled: true
 
   simulator:
     image:
       repository: registry.dev.s8ops.com/iris/simulator-app
-
-    db:
-      name: "sim"
+    configServer:
+      enabled: true
 
   webapp:
     image:
       repository: registry.dev.s8ops.com/iris/sens-webapp-backend
+    configServer:
+      enabled: true
 
   warehouse:
     image:
       repository: registry.dev.s8ops.com/iris/warehouse-app
-
-    db:
-      name: "wh"
+    configServer:
+      enabled: true
 
   e2e-helper:
     enabled: false
+    configServer:
+      enabled: true
     db:
       enabled: false
     rabbit:

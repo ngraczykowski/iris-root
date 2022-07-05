@@ -191,7 +191,6 @@ spring:
     url: jdbc:postgresql://${warehouse.db.host}:${warehouse.db.port}/${warehouse.db.name}?currentSchema=${warehouse.db.schema:public}
     username: ${warehouse.db.username}
     password: ${warehouse.db.password}
-    initialization-mode: never
 
     # Hikari pool configuration
     hikari:
@@ -208,6 +207,10 @@ spring:
       connection-init-sql: SELECT 1
       data-source-properties:
         ApplicationName: Warehouse
+
+  sql:
+    init:
+      mode: never
 
   # Database migrations
   liquibase:
@@ -248,8 +251,11 @@ spring:
       enabled: false
     consul:
       enabled: false
+      config:
+        enabled: false
     config:
-      enabled: false
+      import-check:
+        enabled: false
     service-registry:
       auto-registration:
         enabled: false

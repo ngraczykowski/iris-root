@@ -21,8 +21,6 @@ components:
       "pb.daily-reports-remove.file-prefix": '{{ printf "%s/%s/pb/reports" .Release.Namespace .Release.Name }}'
   e2e-helper:
     enabled: true
-    configServer:
-      enabled: true
   warehouse:
     enabled: true
     profiles:

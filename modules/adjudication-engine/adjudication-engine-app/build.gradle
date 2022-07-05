@@ -21,6 +21,7 @@ dependencies {
 
   implementation libs.spring.cloud.consul.discovery
   implementation libs.spring.cloud.starter.consul.config
+  implementation libs.spring.cloud.starter.config
 
   // Utilities
   implementation libs.commons.lang3

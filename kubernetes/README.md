@@ -141,7 +141,7 @@ Remember to be connected to VPN (printunl) for the next step
 
 ### Install registry
 ```bash
-helm install --values iris/kubernetes/reg.yaml --namespace=<namespace> twuni/docker-registry --generate-name
+helm install --values iris/kubernetes/registry.yaml --namespace=<namespace> twuni/docker-registry --generate-name
 ```
 ### Build artifact and deploy it on your registry
 On this example we will be building and deploying custom warehouse module

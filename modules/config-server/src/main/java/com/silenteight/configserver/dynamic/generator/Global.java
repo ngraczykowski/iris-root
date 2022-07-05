@@ -22,6 +22,9 @@ import static java.util.Map.entry;
 @EnableConfigurationProperties(IrisProperties.class)
 class Global implements IrisDynamicPropertiesGenerator {
 
+  private static final Map<String, String> PROFILES =
+      Map.ofEntries(entry("adjudication-engine", "rabbitdeclare"));
+
   private final IrisProperties irisProperties;
 
   @Override
@@ -43,6 +46,8 @@ class Global implements IrisDynamicPropertiesGenerator {
         entry("management.server.port", irisProperties.getManagementPort()),
         entry("management.server.base-path", "/"),
         entry("management.endpoints.web.base-path", "/management"),
-        entry("grpc.server.port", irisProperties.getGrpcPort()));
+        entry("grpc.server.port", irisProperties.getGrpcPort()),
+        entry("serp.show-env", "true"),
+        entry("spring.profiles.include", PROFILES.getOrDefault(application, "")));
   }
 }

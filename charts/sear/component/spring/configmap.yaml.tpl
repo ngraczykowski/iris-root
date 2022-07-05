@@ -1,3 +1,4 @@
+{{- if include "useConfigmap" . }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -8,8 +9,10 @@ data:
   {{- if .component.configFiles }}
     {{- tpl (toYaml .component.configFiles) . | nindent 2 }}
   {{- end }}
-  {{- if not .component.configServer.enabled }}
+  {{- if or (include "isConfigServer" . ) (include "useConfigServer" . ) }}
+  {{- else }}
   kubernetes.yml: |
+    spring.rabbitmq.addresses: ""
     spring:
       config:
         import: optional:configtree:/var/run/secrets/spring/*/
@@ -111,3 +114,4 @@ data:
       </root>
     </configuration>
   {{- end }}
+{{- end }}

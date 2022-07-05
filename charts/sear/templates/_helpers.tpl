@@ -109,6 +109,8 @@ Creates the name of Sentry environment
 {{- define "sear.postgresqlSecretName" -}}
 {{- if .component.db.external -}}
 {{ printf "%s.%s" .component.db.name (include "sear.fullname" .) }}-postgres.external
+{{- else if include "isConfigServer" . -}}
+{{ printf "%s-owner-user.%s" .component.db.name (include "sear.fullname" .) }}-postgres.credentials.postgresql.acid.zalan.do
 {{- else -}}
 {{ printf "%s.%s" .component.db.name (include "sear.fullname" .) }}-postgres.credentials.postgresql.acid.zalan.do
 {{- end }}{{ end -}}
@@ -261,3 +263,12 @@ Creates the name of Sentry environment
 {{- define "sear.configServerUrl" -}}
 http://{{ include "sear.fullname" . }}-config-server.{{ .Release.Namespace }}.svc:{{ .component.containerPorts.http.port }}
 {{- end -}}
+{{- define "useConfigmap" }}
+{{- if or .component.configFiles (not .component.configServer.enabled) }}1{{ end }}
+{{- end }}
+{{- define "isConfigServer" }}
+{{- if eq .componentName "config-server" }}1{{ end }}
+{{- end }}
+{{- define "useConfigServer" }}
+{{- if and .component.configServer.enabled (not (include "isConfigServer" .)) }}1{{ end }}
+{{- end }}

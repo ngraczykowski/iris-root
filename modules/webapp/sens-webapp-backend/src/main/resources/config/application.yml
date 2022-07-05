@@ -53,7 +53,6 @@ spring:
     url: ${sens.webapp.db.url}
     username: ${sens.webapp.db.user}
     password: ${sens.webapp.db.password}
-    initialization-mode: never
 
     # Hikari pool configuration
     hikari:
@@ -66,6 +65,10 @@ spring:
       connection-init-sql: SELECT 1
       data-source-properties:
         ApplicationName: SENS WebApp
+
+  sql:
+    init:
+      mode: never
 
   # Database migrations
   liquibase:
@@ -117,6 +120,9 @@ spring:
 
   # Spring Cloud
   cloud:
+    config:
+      import-check:
+        enabled: false
     consul:
       config:
         enabled: false

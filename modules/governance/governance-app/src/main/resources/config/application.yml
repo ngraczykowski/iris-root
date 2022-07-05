@@ -245,7 +245,6 @@ spring:
     url: ${serp.db.url}
     username: ${serp.db.user}
     password: ${serp.db.password}
-    initialization-mode: never
 
     # Hikari pool configuration
     hikari:
@@ -262,6 +261,10 @@ spring:
       connection-init-sql: SELECT 1
       data-source-properties:
         ApplicationName: SERP (${spring.application.name})
+
+  sql:
+    init:
+      mode: never
 
   # Database migrations
   liquibase:
@@ -312,6 +315,9 @@ spring:
       check-template-location: false
 
   cloud:
+    config:
+      import-check:
+        enabled: false
     consul:
       config:
         enabled: false

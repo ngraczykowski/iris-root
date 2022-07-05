@@ -29,9 +29,6 @@ agentsCommon:
     - rabbitmq-declare
 
 components:
-  adjudication-engine:
-    profiles:
-      - rabbitdeclare
 
   governance:
     profiles:
@@ -66,9 +63,10 @@ components:
   config-server:
     enabled: true
     db:
-      enabled: false
+      enabled: true
+      name: irisonedb
     rabbit:
-      enabled: false
+      enabled: true
     configServer:
       enabled: true
     configFiles:
@@ -77,7 +75,17 @@ components:
           kubernetes:
             helm-release-name: {{ include "sear.fullname" . }}
           config-server-url: {{ include "sear.configServerUrl" . }}
-
+          keycloak:
+            realm: Dev
+            frontend-client-id: {{ .Values.keycloak.frontend.clientId | quote }}
+            backend-client-id: {{ .Values.keycloak.backend.clientId | quote }}
+            backend-client-secret: {{ .Values.keycloak.backend.clientSecret | quote }}
+            auth-server-url: {{ (tpl .Values.keycloak.authServerUrl . ) | quote }}
+          db:
+            host: {{ include "sear.postgresqlService" . }}
+            port: {{ include "sear.postgresqlServicePort" . }}
+            name: {{ .component.db.name }}
+            options: {{ .component.db.options }}
 
 agents:
   name-agent:

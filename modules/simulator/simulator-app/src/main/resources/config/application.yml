@@ -71,6 +71,9 @@ spring:
   # CONSUL SERVICE DISCOVERY
   #-------------------------------------------------------------------------------------------------
   cloud:
+    config:
+      import-check:
+        enabled: false
     consul:
       config:
         enabled: false
@@ -85,7 +88,6 @@ spring:
     url: ${simulator.db.url}
     username: ${simulator.db.user}
     password: ${simulator.db.password}
-    initialization-mode: never
 
     # Hikari pool configuration
     hikari:
@@ -102,6 +104,10 @@ spring:
       connection-init-sql: SELECT 1
       data-source-properties:
         ApplicationName: ${spring.application.name}
+
+  sql:
+    init:
+      mode: never
 
   # Database migrations
   liquibase:

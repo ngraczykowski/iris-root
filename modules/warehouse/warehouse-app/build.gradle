@@ -29,6 +29,8 @@ dependencies {
   implementation libs.spring.security.config
   implementation libs.spring.security.web
   implementation libs.spring.cloud.consul.discovery
+  implementation libs.spring.cloud.starter.consul.config
+  implementation libs.spring.cloud.starter.config
 
   implementation libs.commons.lang3
 
