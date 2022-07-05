@@ -1,8 +1,11 @@
+/*
+ * Copyright (c) 2022 Silent Eight Pte. Ltd. All rights reserved.
+ */
+
 package com.silenteight.agent.common.messaging;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;

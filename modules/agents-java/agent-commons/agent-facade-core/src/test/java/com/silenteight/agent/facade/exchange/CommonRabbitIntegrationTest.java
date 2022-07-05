@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2022 Silent Eight Pte. Ltd. All rights reserved.
+ */
+
 package com.silenteight.agent.facade.exchange;
 
 import com.silenteight.agent.facade.exchange.CommonRabbitIntegrationTest.Initializer;
@@ -36,7 +40,6 @@ import static com.silenteight.agent.facade.exchange.RabbitIntegrationTestFixture
 import static com.silenteight.agent.facade.exchange.RabbitIntegrationTestFixtures.RABBIT_DOCKER_IMAGE;
 import static com.silenteight.agent.facade.exchange.RabbitIntegrationTestFixtures.TIMEOUT;
 import static java.time.Instant.now;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 
 // Note: test methods will be executed by test classes extending this one

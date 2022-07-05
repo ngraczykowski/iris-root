@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2022 Silent Eight Pte. Ltd. All rights reserved.
+ */
+
 package com.silenteight.agent.facade;
 
 import lombok.RequiredArgsConstructor;
@@ -14,7 +18,6 @@ import com.silenteight.agents.v1.api.exchange.AgentOutput.FeatureSolution;
 import com.google.protobuf.Struct;
 
 import static java.lang.String.format;
-import static java.lang.String.join;
 
 @Slf4j
 @RequiredArgsConstructor

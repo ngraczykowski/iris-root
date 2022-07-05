@@ -25,9 +25,9 @@
 /modules/protobuf-spring-boot-starter/**/*          @SilentEight/all-in
 
 #----------------------------------------------------------
-# Agents team
+# Java Agents team
 #----------------------------------------------------------
-/modules/agents/**/*    @SilentEight/agents
+/modules/agents-java/**/*    @SilentEight/agents
 
 #----------------------------------------------------------
 # Python modules
