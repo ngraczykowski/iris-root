@@ -20,6 +20,9 @@ import io.restassured.config.HeaderConfig;
 import io.restassured.config.ObjectMapperConfig;
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.http.ContentType;
+
+import lombok.extern.slf4j.Slf4j;
+
 import utils.CustomAuthFilter;
 import utils.CustomLogFilter;
 import utils.ScenarioContext;
@@ -32,6 +35,7 @@ import java.util.Objects;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+@Slf4j
 public class Hooks implements En {
 
   public static ScenarioContext scenarioContext = new ScenarioContext();
@@ -81,11 +85,14 @@ public class Hooks implements En {
     AfterStep(
         0,
         (Scenario scenario) -> {
-          if(scenario.isFailed()) {
+          if (scenario.isFailed()) {
             try {
-              scenario.attach(new FileInputStream(Objects.requireNonNull(Screenshots.getLastScreenshot())).readAllBytes(), "image/png", "screenshot");
+              scenario.attach(
+                  new FileInputStream(
+                      Objects.requireNonNull(Screenshots.takeScreenShotAsFile())).readAllBytes(),
+                  "image/png", "screenshot");
             } catch (Exception e) {
-              System.out.println("failed to save screenshot");
+              log.info("Unable to take screenshot");
             }
           }
           /*
@@ -99,11 +106,11 @@ public class Hooks implements En {
           }
           List<Step> stepList = getStepListFromScenario(scenario);
           String currentStepName = stepList.get(stepNo).getText();
-            scenario.attach(
-                CUSTOM_LOG_FILTER.getCallLog().get(),
-                "text/plain",
-                "API communication for: " + currentStepName);
-            CUSTOM_LOG_FILTER.clear();
+          scenario.attach(
+              CUSTOM_LOG_FILTER.getCallLog().get(),
+              "text/plain",
+              "API communication for: " + currentStepName);
+          CUSTOM_LOG_FILTER.clear();
           stepNo++;
         });
 

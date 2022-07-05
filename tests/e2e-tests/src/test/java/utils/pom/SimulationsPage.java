@@ -58,7 +58,7 @@ public class SimulationsPage {
 
   public static void userClicksOnRunSimulationButton() {
     runSimulationButton.shouldBe(Condition.visible);
-    runSimulationButton.click(ClickOptions.usingJavaScript());
+    runSimulationButton.click();
   }
 
   public static void simulationWithNameDisplayedOnList(String value) {

@@ -1,6 +1,5 @@
 package utils;
 
-import com.codeborne.selenide.ClickOptions;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 
@@ -19,14 +18,13 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.getFocusedElement;
+import static com.codeborne.selenide.Selenide.sleep;
 
 @UtilityClass
 public class CommonUtils {
@@ -85,7 +83,12 @@ public class CommonUtils {
     element.click();
     SelenideElement valueElement = $("[role='listbox']").$(byText(value));
     valueElement.shouldBe(Condition.visible);
-    valueElement.click(ClickOptions.usingJavaScript());
+    valueElement.click();
+    //TEMPORARY WORKAROUND
+    sleep(100);
+    if ($("[role='listbox']").isDisplayed()) {
+      getFocusedElement().sendKeys(Keys.ESCAPE);
+    }
   }
 
   @SneakyThrows
