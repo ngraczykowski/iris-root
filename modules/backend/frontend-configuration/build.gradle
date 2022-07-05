@@ -6,5 +6,7 @@ description = "Frontend Configuration"
 
 dependencies {
   implementation project(":governance-common-web")
+  implementation libs.silenteight.sep.usermanagement.api
+
   testImplementation project(":governance-common-web-testing")
 }

@@ -388,14 +388,6 @@ grpc:
 
 
 serp.governance:
-  cors:
-    allowed-origins-patterns: "*"
-    allowed-methods: "*"
-    allowed-headers: "*"
-    exposed-headers: "Authorization,Link,X-Total-Count"
-    allow-credentials: true
-    max-age: 1800
-
   policy-step-solution:
     hinted-enabled: false
 

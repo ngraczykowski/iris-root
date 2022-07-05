@@ -8,4 +8,7 @@ dependencies {
   implementation libs.logback.classic
   implementation doNotUseLibs.streamex
   implementation libs.commons.lang3
+
+  compileOnly libs.spring.webmvc
+  compileOnly libs.jakarta.servlet.api
 }

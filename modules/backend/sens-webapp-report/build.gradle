@@ -15,8 +15,11 @@ dependencies {
   implementation libs.jakarta.servlet.api
   implementation doNotUseLibs.vavr
 
+  implementation libs.spring.data.jpa
+
   testImplementation libs.rest.assured
   testImplementation libs.rest.assured.spring.mock.mvc
   testImplementation libs.spring.security.test
   testImplementation libs.silenteight.serp.governance.common.web.testing
+  testImplementation libs.silenteight.serp.governance.db.changelog
 }

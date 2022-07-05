@@ -182,13 +182,6 @@ serp:
       enabled: true
 ####################################################################################################
 sens.web:
-  cors:
-    allowed-origins-patterns: "*"
-    allowed-methods: "*"
-    allowed-headers: "*"
-    exposed-headers: "Authorization,Link,X-Total-Count"
-    allow-credentials: true
-    max-age: 1800
 
   #   # Colors palette for AI Solutions
   #   ## Color code

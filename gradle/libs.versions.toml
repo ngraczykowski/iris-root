@@ -139,6 +139,7 @@ silenteight-sens-webapp-notification = { group = "com.silenteight.iris", name="s
 silenteight-sens-webapp-report = { group = "com.silenteight.iris", name="sens-webapp-report"}
 silenteight-sens-webapp-role = { group = "com.silenteight.iris", name="sens-webapp-role"}
 silenteight-sens-webapp-user = { group = "com.silenteight.iris", name="sens-webapp-user"}
+silenteight-backend-frontend-configuration = { group = "com.silenteight.iris", name="frontend-configuration" }
 #end of temporary
 warehouse-data-api = { group = "com.silenteight.iris", name = "se-data-api" }
 warehouse-sampling-api = { group = "com.silenteight.iris", name = "se-sampling-alerts-api" }

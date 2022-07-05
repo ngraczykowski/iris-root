@@ -20,6 +20,8 @@ dependencies {
   implementation libs.silenteight.sep.usermanagement.api
   implementation libs.silenteight.sep.usermanagement.keycloak
 
+  implementation libs.silenteight.backend.frontend.configuration
+
   implementation libs.bouncycastle.bcprov
   implementation libs.commons.lang3
 

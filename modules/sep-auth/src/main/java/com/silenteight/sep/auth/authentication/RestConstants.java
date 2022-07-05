@@ -8,7 +8,6 @@ import static lombok.AccessLevel.PRIVATE;
 public class RestConstants {
 
   public static final String ROOT = "/api";
-  public static final String MANAGEMENT_PREFIX = "/management";
   private static final String ISSUER_URI_SPRING_KEY =
       "${spring.security.oauth2.resourceserver.jwt.issuer-uri}";
 
