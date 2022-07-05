@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2022 Silent Eight Pte. Ltd. All rights reserved.
+ */
+
 package com.silenteight.payments.bridge.firco.alertmessage.service;
 
 import lombok.Data;
@@ -9,7 +13,6 @@ import java.time.Duration;
 @ConfigurationProperties("pb.alert-message")
 @Data
 class AlertMessageProperties {
-
   private long storedQueueLimit = 1000;
 
   private Duration decisionRequestedTime = Duration.ofSeconds(15);
@@ -17,5 +20,4 @@ class AlertMessageProperties {
   private boolean originalMessageDeletedAfterRecommendation = false;
 
   private int maxHitsPerAlert = 10;
-
 }

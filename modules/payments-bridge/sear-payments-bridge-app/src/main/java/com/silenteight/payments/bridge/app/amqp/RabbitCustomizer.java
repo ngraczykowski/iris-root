@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.payments.bridge.firco.callback.model.CallbackException;
 import com.silenteight.payments.bridge.firco.callback.model.NonRecoverableCallbackException;
 import com.silenteight.payments.bridge.firco.callback.model.RecoverableCallbackException;
+import com.silenteight.payments.bridge.firco.callback.port.AlertUndeliveredPort;
 
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.retry.MessageRecoverer;

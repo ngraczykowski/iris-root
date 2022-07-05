@@ -8,7 +8,6 @@ import com.silenteight.payments.bridge.common.model.AlertData;
 import com.silenteight.payments.bridge.common.model.AlertId;
 import com.silenteight.payments.bridge.firco.alertmessage.port.FilterAlertMessageUseCase;
 
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 
 import java.time.Clock;
@@ -19,12 +18,11 @@ import java.util.UUID;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.ACCEPTED;
 
 @Service
-@EnableConfigurationProperties(AlertMessageProperties.class)
 @RequiredArgsConstructor
 @Slf4j
 class FilterAlertMessageService implements FilterAlertMessageUseCase {
 
-  private final AlertMessageProperties alertMessageProperties;
+  private final AlertMessageConfiguration alertMessageConfiguration;
   private final AlertMessageStatusService alertMessageStatusService;
   private final AlertMessageService alertMessageService;
   @Setter private Clock clock = Clock.systemUTC();
@@ -55,17 +53,22 @@ class FilterAlertMessageService implements FilterAlertMessageUseCase {
   private static boolean isTransitionForbidden(AlertMessageStatusEntity alertMessageStatus) {
     if (!alertMessageStatus.getStatus().isTransitionAllowed(ACCEPTED)) {
       // the received event seems to be obsolete. Skip gracefully.
-      log.debug("The AlertMessage [{}] is already solved (status={}). Skipping further processing.",
-          alertMessageStatus.getAlertMessageId(), alertMessageStatus.getStatus().name());
+      log.debug(
+          "The AlertMessage [{}] is already solved (status={}). Skipping further processing.",
+          alertMessageStatus.getAlertMessageId(),
+          alertMessageStatus.getStatus().name());
       return true;
     }
     return false;
   }
 
   private boolean isRequiredResolutionTimeElapsed(AlertMessageStatusEntity alertMessageStatus) {
-    var isOverdue = alertMessageStatus.getCreatedAt()
-        .plus(alertMessageProperties.getDecisionRequestedTime())
-        .compareTo(OffsetDateTime.now(clock)) <= 0;
+    var isOverdue =
+        alertMessageStatus
+                .getCreatedAt()
+                .plus(alertMessageConfiguration.getDecisionRequestedTime())
+                .compareTo(OffsetDateTime.now(clock))
+            <= 0;
     if (isOverdue) {
       log.debug(
           "The AlertMessage [{}] is outdated. Skipping further processing.",
@@ -78,15 +81,17 @@ class FilterAlertMessageService implements FilterAlertMessageUseCase {
 
   private boolean isMaxHitsPerAlertExceeded(AlertId alert) {
     UUID alertId = alert.getAlertId();
-    Integer numberOfHits = Optional.of(alertId)
-        .map(alertMessageService::findByAlertMessageId)
-        .map(AlertData::getNumberOfHits)
-        .orElse(0);
+    Integer numberOfHits =
+        Optional.of(alertId)
+            .map(alertMessageService::findByAlertMessageId)
+            .map(AlertData::getNumberOfHits)
+            .orElse(0);
 
-    if (alertMessageProperties.getMaxHitsPerAlert() < numberOfHits) {
+    if (alertMessageConfiguration.getMaxHitsPerAlert() < numberOfHits) {
       log.warn(
           "The AlertMessage [{}] has too many hits [{}]. Responding with MANUAL_INVESTIGATION",
-          alertId, numberOfHits);
+          alertId,
+          numberOfHits);
       return true;
     }
     return false;

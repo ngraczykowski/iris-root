@@ -11,6 +11,7 @@ import com.silenteight.payments.bridge.firco.callback.model.CallbackException;
 import com.silenteight.payments.bridge.firco.callback.model.NonRecoverableCallbackException;
 import com.silenteight.payments.bridge.firco.callback.model.RecoverableCallbackException;
 import com.silenteight.payments.bridge.firco.callback.port.AlertDeliveredPublisherPort;
+import com.silenteight.payments.bridge.firco.callback.port.AlertUndeliveredPort;
 import com.silenteight.payments.bridge.firco.callback.port.SendResponseUseCase;
 import com.silenteight.payments.bridge.firco.dto.output.ClientRequestDto;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationId;
@@ -35,6 +36,7 @@ class SendResponseService implements SendResponseUseCase {
   private final CallbackRequestFactory callbackRequestFactory;
   private final ClientRequestDtoMapper mapper;
   private final AlertDeliveredPublisherPort alertDeliveredPublisherPort;
+  private final AlertUndeliveredPort alertUndeliveredPort;
 
   @LogContext
   @Override
@@ -73,16 +75,9 @@ class SendResponseService implements SendResponseUseCase {
       log.info("The callback invoked successfully.");
       alertDeliveredPublisherPort.sendDelivered(alertId, status);
 
-    } catch (NonRecoverableCallbackException exception) {
-      log.error("The callback for alerts: {} failed with exception: {}",
-          requestDto.getSystemIds(), exception.getClass().getSimpleName());
-      log.error("The callback failed with non-recoverable exception.");
-      enrichException(exception, alertId, status);
-      throw exception;
-    } catch (RecoverableCallbackException exception) {
-      log.error("The callback for alerts: {} failed with exception: {}",
-          requestDto.getSystemIds(), exception.getClass().getSimpleName());
-      log.warn("The callback failed with recoverable exception.");
+    } catch (NonRecoverableCallbackException | RecoverableCallbackException exception) {
+      log.error("The callback failed with exception: {}", exception.getClass().getSimpleName());
+      alertUndeliveredPort.sendUndelivered(alertId);
       enrichException(exception, alertId, status);
       throw exception;
     }

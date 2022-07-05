@@ -7,6 +7,8 @@ import java.util.UUID;
 
 public interface AlertMessageStatusUseCase {
 
+  void transitionAlertDeliveryStatus(UUID alertMessageId, DeliveryStatus delivery);
+
   boolean transitionAlertMessageStatus(
       UUID alertMessageId, AlertMessageStatus destinationStatus, DeliveryStatus delivery);
 

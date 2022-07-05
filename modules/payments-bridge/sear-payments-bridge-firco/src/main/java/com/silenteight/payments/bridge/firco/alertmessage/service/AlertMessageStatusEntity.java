@@ -73,11 +73,20 @@ class AlertMessageStatusEntity extends BaseVersionedEntity {
     var result = Collections.max(List.of(statusResult, deliveryResult));
     if (result == SUCCESS) {
       updateStatus(targetStatus, clock);
-      updateDelivery(targetDeliveryStatus, clock);
+      updateDeliveryStatus(targetDeliveryStatus, clock);
       setCurrentTimeForUpdatedAt();
     }
 
     return result;
+  }
+
+  void updateDeliveryStatus(DeliveryStatus targetDeliveryStatus, Clock clock) {
+    if (deliveryStatus != targetDeliveryStatus) {
+      deliveryStatus = targetDeliveryStatus;
+      if (DELIVERED == targetDeliveryStatus) {
+        deliveredAt = OffsetDateTime.now(clock);
+      }
+    }
   }
 
   private TransitionResult verifyStatusUpdate(AlertMessageStatus targetStatus) {
@@ -135,15 +144,6 @@ class AlertMessageStatusEntity extends BaseVersionedEntity {
         rejectedAt = dateTime;
         break;
       default:
-    }
-  }
-
-  private void updateDelivery(DeliveryStatus targetDeliveryStatus, Clock clock) {
-    if (deliveryStatus != targetDeliveryStatus) {
-      deliveryStatus = targetDeliveryStatus;
-      if (DELIVERED == targetDeliveryStatus) {
-        deliveredAt = OffsetDateTime.now(clock);
-      }
     }
   }
 

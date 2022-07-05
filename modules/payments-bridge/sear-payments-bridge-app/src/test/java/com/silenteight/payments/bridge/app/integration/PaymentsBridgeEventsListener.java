@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.common.event.LearningAlertRegisteredEvent;
 import com.silenteight.payments.bridge.common.event.SolvingAlertRegisteredEvent;
+import com.silenteight.proto.payments.bridge.internal.v1.event.ResponseCompleted;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,8 @@ class PaymentsBridgeEventsListener {
 
   private final Set<LearningAlertRegisteredEvent> learningAlertRegisteredEvents = new HashSet<>();
 
+  private final Set<ResponseCompleted> responseCompletedEvents = new HashSet<>();
+
   @EventListener
   public void onSolvingAlertRegisteredEvent(SolvingAlertRegisteredEvent event) {
     log.info("Received solving alert event alertId:{} alertName:{}",
@@ -33,6 +36,16 @@ class PaymentsBridgeEventsListener {
     learningAlertRegisteredEvents.add(event);
   }
 
+  @EventListener
+  public void onResponseCompleted(ResponseCompleted responseCompleted) {
+    log.info(
+        "Received response alert event alertName:{} status:{}, recommendation:{}",
+        responseCompleted.getAlert(),
+        responseCompleted.getStatus(),
+        responseCompleted.getRecommendation());
+    responseCompletedEvents.add(responseCompleted);
+  }
+
   boolean containsRegisteredAlert(UUID alertId) {
     return solvingAlertRegisteredEvents.stream()
         .anyMatch(are -> are.getAeAlert().getAlertId().equals(alertId));
@@ -42,5 +55,22 @@ class PaymentsBridgeEventsListener {
     return learningAlertRegisteredEvents
         .stream()
         .anyMatch(are -> are.getAlertMessageId().equals(alertId));
+  }
+
+  boolean containsResponseCompleted(UUID alertId, String status) {
+    return responseCompletedEvents.stream()
+        .anyMatch(response -> responseCompletedContains(alertId, status, response));
+  }
+
+  long responseCount(UUID alertId, String status) {
+    return responseCompletedEvents.stream()
+        .filter(response -> responseCompletedContains(alertId, status, response))
+        .count();
+  }
+
+  private static boolean responseCompletedContains(
+      UUID alertId, String status, ResponseCompleted responseCompleted) {
+    return responseCompleted.getAlert().contains(alertId.toString())
+        && responseCompleted.getStatus().contains(status);
   }
 }

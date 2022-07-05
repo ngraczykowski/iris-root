@@ -8,6 +8,7 @@ import com.silenteight.payments.bridge.common.indexing.DiscriminatorStrategy;
 import com.silenteight.payments.bridge.common.resource.csv.file.provider.port.CsvFileResourceProvider;
 import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
 import com.silenteight.payments.bridge.firco.alertmessage.port.CreateAlertMessageUseCase;
+import com.silenteight.payments.bridge.firco.alertmessage.service.AlertMessageConfiguration;
 import com.silenteight.payments.bridge.firco.dto.input.RequestDto;
 import com.silenteight.payments.bridge.mock.ae.MockAlertUseCase;
 import com.silenteight.payments.bridge.mock.datasource.MockDatasourceService;
@@ -78,7 +79,9 @@ class PaymentsBridgeApplicationIT {
 
   private static final String TOO_MANY_HITS_REQUEST_FILE = "2021-10-01_1837_osama_bin_laden.json";
 
+  public static final int WAIT_REJECTED_OUTDATED_MAX_SECONDS = 30;
   public static final int WAIT_REGISTRATION_MAX_SECONDS = 20;
+  public static final int DELAY_FOR_RECEIVING_RECOMMENDATION = 5;
 
   @Autowired ObjectMapper objectMapper;
   @Autowired CreateAlertMessageUseCase createAlertMessageUseCase;
@@ -91,6 +94,7 @@ class PaymentsBridgeApplicationIT {
   @Mock private CsvFileResourceProvider csvFileResourceProvider;
   @MockBean private IdGenerator idGenerator;
   @MockBean private DiscriminatorStrategy discriminatorStrategy;
+  @MockBean private AlertMessageConfiguration alertMessageConfiguration;
   private static final String ALERT_MESSAGE_ID = "cdd9c5ce-89dd-a37c-1e5f-b59b1f87f42b";
   private static final String ALERT_SYSTEM_ID = "alert_system_id";
   private static final String MESSAGE_ID = "87AB4899-BE5B-5E4F-E053-150A6C0A7A84";
@@ -146,9 +150,51 @@ class PaymentsBridgeApplicationIT {
     return VALID_REQUEST_FILES.stream();
   }
 
+  @ParameterizedTest
+  @MethodSource("filesFactory")
+  void shouldSendRecommendationForRejectedOutdated(String fileName) {
+    mockAlertMessageConfigurationAtRuntime(Duration.ZERO);
+
+    when(csvFileResourceProvider.getFilesList()).thenReturn(List.of());
+    when(discriminatorStrategy.create(anyString(), anyString(), anyString()))
+        .thenReturn(FIRCO_DISCRIMINATOR);
+
+    // assumed h_r_gtex is same format as gtex message
+    var alertId = createAlert(fileName);
+
+    await()
+        .conditionEvaluationListener(new ConditionEvaluationLogger(log::info))
+        .atMost(Duration.ofSeconds(WAIT_REJECTED_OUTDATED_MAX_SECONDS))
+        .until(
+            () ->
+                paymentsBridgeEventsListener.containsResponseCompleted(
+                    alertId, "REJECTED_OUTDATED"));
+  }
+
+  @ParameterizedTest
+  @MethodSource("filesFactory")
+  void shouldSendOneRecommendationForRejectedOutdatedWithAeResponse(String fileName) {
+    mockAlertMessageConfigurationAtRuntime(Duration.ZERO);
+
+    when(csvFileResourceProvider.getFilesList()).thenReturn(List.of());
+    when(discriminatorStrategy.create(anyString(), anyString(), anyString()))
+        .thenReturn(FIRCO_DISCRIMINATOR);
+
+    // assumed h_r_gtex is same format as gtex message
+    var alertId = createAlert(fileName);
+
+    await()
+        .conditionEvaluationListener(new ConditionEvaluationLogger(log::info))
+        .pollDelay(Duration.ofSeconds(DELAY_FOR_RECEIVING_RECOMMENDATION))
+        .atMost(Duration.ofSeconds(WAIT_REJECTED_OUTDATED_MAX_SECONDS))
+        .until(() -> paymentsBridgeEventsListener.responseCount(alertId, "REJECTED_OUTDATED") == 1);
+  }
+
   @Test
   @Sql(scripts = "db/cleanup.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
   void shouldRegisterAndIndexWithFircoDiscriminiator() {
+    mockAlertMessageConfigurationAtRuntime(Duration.ofSeconds(15L));
+
     when(discriminatorStrategy.create(ALERT_MESSAGE_ID, ALERT_SYSTEM_ID, MESSAGE_ID))
         .thenReturn(FIRCO_DISCRIMINATOR);
 
@@ -164,6 +210,8 @@ class PaymentsBridgeApplicationIT {
   @Test
   @Sql(scripts = "db/cleanup.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
   void shouldRegisterAndIndexWithDefaultDiscriminiator() {
+    mockAlertMessageConfigurationAtRuntime(Duration.ofSeconds(15L));
+
     when(discriminatorStrategy.create(ALERT_MESSAGE_ID, ALERT_SYSTEM_ID, MESSAGE_ID))
         .thenReturn(BRIDGE_DISCRIMINATOR);
 
@@ -176,9 +224,18 @@ class PaymentsBridgeApplicationIT {
     assertMailSent();
   }
 
+  private void mockAlertMessageConfigurationAtRuntime(Duration duration) {
+    when(alertMessageConfiguration.getDecisionRequestedTime()).thenReturn(duration);
+    when(alertMessageConfiguration.getStoredQueueLimit()).thenReturn(1000L);
+    when(alertMessageConfiguration.getMaxHitsPerAlert()).thenReturn(10);
+    when(alertMessageConfiguration.isOriginalMessageDeletedAfterRecommendation()).thenReturn(false);
+  }
+
   @ParameterizedTest
   @MethodSource("filesFactory")
   void shouldRegisterAlertAndInputs(String fileName) {
+    mockAlertMessageConfigurationAtRuntime(Duration.ofSeconds(15L));
+
     when(csvFileResourceProvider.getFilesList()).thenReturn(List.of());
     when(discriminatorStrategy.create(anyString(), anyString(), anyString()))
         .thenReturn(FIRCO_DISCRIMINATOR);
@@ -193,6 +250,8 @@ class PaymentsBridgeApplicationIT {
 
   @Test
   void shouldRemoveAlertRetention() {
+    mockAlertMessageConfigurationAtRuntime(Duration.ofSeconds(15L));
+
     when(discriminatorStrategy.create(anyString(), anyString(), anyString()))
         .thenReturn(FIRCO_DISCRIMINATOR);
 
@@ -235,6 +294,8 @@ class PaymentsBridgeApplicationIT {
 
   @Test
   void shouldRejectAlertWithTooManyHits() {
+    mockAlertMessageConfigurationAtRuntime(Duration.ofSeconds(15L));
+
     when(discriminatorStrategy.create(anyString(), anyString(), anyString()))
         .thenReturn(FIRCO_DISCRIMINATOR);
 

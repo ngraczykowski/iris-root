@@ -28,7 +28,6 @@ import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMess
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.REJECTED_OUTDATED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.REJECTED_OVERFLOWED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus.PENDING;
-import static com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus.UNDELIVERED;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -56,32 +55,25 @@ class CreateRecommendationService implements CreateRecommendationUseCase {
     applicationEventPublisher.publishEvent(new ManualInvestigationReasonEvent(reason.name()));
 
     var status = map(reason);
-    if (alertMessageUseCase.isOutdated(source)) {
-      alertMessageStatusUseCase.transitionAlertMessageStatus(alertId, status, UNDELIVERED);
-    } else {
-      var transited = alertMessageStatusUseCase
-          .transitionAlertMessageStatus(alertId, status, PENDING);
-      if (transited) {
-        applicationEventPublisher.publishEvent(
-            buildResponseCompleted(alertId, recommendationId.getId(), status));
-      }
+
+    var transited =
+        alertMessageStatusUseCase.transitionAlertMessageStatus(alertId, status, PENDING);
+    if (transited) {
+      applicationEventPublisher.publishEvent(
+          buildResponseCompleted(alertId, recommendationId.getId(), status));
     }
-    log.info("Alert bridge recommendation completed.");
+
+    log.info("Bridge recommendation completed for alertId: {}", alertId);
   }
 
-  private AlertMessageStatus map(RecommendationReason reason) {
-    switch (reason) {
-      case TOO_MANY_HITS:
-        return RECOMMENDED;
-      case OUTDATED:
-        return REJECTED_OUTDATED;
-      case DAMAGED:
-        return REJECTED_DAMAGED;
-      case QUEUE_OVERFLOWED:
-        return REJECTED_OVERFLOWED;
-      default:
-        throw new IllegalArgumentException("Unmapped recommendation reason");
-    }
+  private static AlertMessageStatus map(RecommendationReason reason) {
+    return switch (reason) {
+      case TOO_MANY_HITS -> RECOMMENDED;
+      case OUTDATED -> REJECTED_OUTDATED;
+      case DAMAGED -> REJECTED_DAMAGED;
+      case QUEUE_OVERFLOWED -> REJECTED_OVERFLOWED;
+      default -> throw new IllegalArgumentException("Unmapped recommendation reason");
+    };
   }
 
   @Transactional

@@ -2,13 +2,13 @@ package com.silenteight.payments.bridge.app.integration.callback;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.app.amqp.AlertUndeliveredPort;
 import com.silenteight.payments.bridge.common.indexing.DiscriminatorStrategy;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessageStatusUseCase;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessageUseCase;
 import com.silenteight.payments.bridge.firco.callback.port.AlertDeliveredPublisherPort;
+import com.silenteight.payments.bridge.firco.callback.port.AlertUndeliveredPort;
 import com.silenteight.payments.bridge.warehouse.index.model.IndexResponseDeliveredRequest;
 import com.silenteight.payments.bridge.warehouse.index.port.IndexResponseDeliveredUseCase;
 
@@ -32,6 +32,11 @@ public class AlertDeliveredIntegrationService
   @Override
   public void sendDelivered(UUID alertId, AlertMessageStatus status) {
     apply(alertId, status, DELIVERED);
+  }
+
+  @Override
+  public void sendUndelivered(UUID alertId) {
+    alertMessageStatusUseCase.transitionAlertDeliveryStatus(alertId, UNDELIVERED);
   }
 
   @Override
