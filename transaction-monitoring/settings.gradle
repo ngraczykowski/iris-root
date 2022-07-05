@@ -9,6 +9,6 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = 'modules-tm'
+rootProject.name = 'transaction-monitoring'
 
-includeBuild('transaction-monitoring')
+include 'tm-app'

@@ -1,4 +1,0 @@
-plugins {
-  id('com.silenteight.iris.build.root-build')
-  id('com.silenteight.iris.build.sonarqube')
-}
