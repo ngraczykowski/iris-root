@@ -1,5 +1,6 @@
 package utils;
 
+import com.codeborne.selenide.ClickOptions;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 
@@ -83,11 +84,11 @@ public class CommonUtils {
     element.click();
     SelenideElement valueElement = $("[role='listbox']").$(byText(value));
     valueElement.shouldBe(Condition.visible);
-    valueElement.click();
+    valueElement.click(ClickOptions.usingJavaScript());
     //TEMPORARY WORKAROUND
-    sleep(100);
+    sleep(300);
     if ($("[role='listbox']").isDisplayed()) {
-      getFocusedElement().sendKeys(Keys.ESCAPE);
+      $("[role='listbox']").sendKeys(Keys.ESCAPE);
     }
   }
 
