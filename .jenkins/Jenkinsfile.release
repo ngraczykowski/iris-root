@@ -99,20 +99,20 @@ pipeline {
             steps {
               withGradle {
                 echo "Starting E2E tests for ${env.ENVIRONMENT} environment."
-                sh """
+                sh '''
                   cd tests/e2e-tests
                   ../../gradlew test \
                   -Dcucumber.features="src/test/java/features" \
-                  -Dcucumber.filter.tags="@smoke or @\${ENVIRONMENT}" \
-                  -Dcucumber.plugin=json:report-\${ENVIRONMENT}.json \
+                  -Dcucumber.filter.tags="@smoke or @${ENVIRONMENT}" \
+                  -Dcucumber.plugin="json:build/test-results/cucumber/report-${ENVIRONMENT}.json, junit:build/test-results/test/report-${ENVIRONMENT}.xml" \
                   -Dtest.clientId=frontend \
-                  -Dtest.admin.username="\$E2E_TESTS_CREDS_2_USR" \
-                  -Dtest.admin.password="\$E2E_TESTS_CREDS_2_PSW" \
+                  -Dtest.admin.username="${E2E_TESTS_CREDS_2_USR}" \
+                  -Dtest.admin.password="${E2E_TESTS_CREDS_2_PSW}" \
                   -Dtest.realm=Dev \
-                  -Dtest.authServerUrl="\${BASE_URL}/auth" \
-                  -Dtest.url="\$BASE_URL" \
+                  -Dtest.authServerUrl="${BASE_URL}/auth" \
+                  -Dtest.url="${BASE_URL}" \
                   --info --stacktrace
-                """
+                '''
               }
             }
             post {
@@ -120,7 +120,8 @@ pipeline {
                 saveLogs()
               }
               always {
-                cucumber fileIncludePattern: "**/report-${env.ENVIRONMENT}.json",
+                junit allowEmptyResults: true, testResults: "**/build/test-results/test/report-${env.ENVIRONMENT}.xml"
+                cucumber fileIncludePattern: "**/build/test-results/cucumber/report-${env.ENVIRONMENT}.json",
                     reportTitle: env.ENVIRONMENT
               }
             }
