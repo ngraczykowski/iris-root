@@ -76,7 +76,9 @@ class ReportsSenderServiceAdapter implements ReportsSenderService {
         .setDiscriminator(report.alertData().id())
         .setAccessPermissionTag("") // TODO add correct value
         .setPayload(toStruct(getAlertDataPayload(report.batchId(), report.alertData())))
-        .addAllMatches(report.matches().stream()
+        .addAllMatches(Optional.ofNullable(report.matches())
+            .orElse(Collections.emptyList())
+            .stream()
             .map(this::toMatch)
             .toList())
         .build();
@@ -152,7 +154,7 @@ class ReportsSenderServiceAdapter implements ReportsSenderService {
 
   private String mapRecommendationToCustomerRecommendation(String recommendation) {
     return Optional.ofNullable(reportsProperties.customerRecommendationMap()
-            .get(recommendation.toUpperCase().trim()))
+            .get(getOptionalValueOrEmptyString(recommendation).toUpperCase().trim()))
         .orElseGet(() -> getUnknownCustomerRecommendation(recommendation));
   }
 

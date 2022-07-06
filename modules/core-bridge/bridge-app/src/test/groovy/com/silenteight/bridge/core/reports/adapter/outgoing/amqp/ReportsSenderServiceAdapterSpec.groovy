@@ -15,8 +15,10 @@ class ReportsSenderServiceAdapterSpec extends Specification {
   def routingKey = 'some routing key'
 
   def rabbitTemplate = Mock(RabbitTemplate)
-  def reportsOutgoingConfigurationProperties = new ReportsOutgoingConfigurationProperties(exchangeName, routingKey)
-  def reportsProperties = new ReportsProperties(true, 100, ReportFixtures.CUSTOMER_RECOMMENDATION_MAP)
+  def reportsOutgoingConfigurationProperties = new ReportsOutgoingConfigurationProperties(
+      exchangeName, routingKey)
+  def reportsProperties = new ReportsProperties(
+      true, 100, ReportFixtures.CUSTOMER_RECOMMENDATION_MAP)
 
   @Subject
   def underTest = new ReportsSenderServiceAdapter(
@@ -27,15 +29,27 @@ class ReportsSenderServiceAdapterSpec extends Specification {
 
   def 'should map reports and send them to rabbitmq'() {
     when:
-    underTest.send(ReportFixtures.ANALYSIS_NAME, [ReportFixtures.REPORT_ONE])
+    underTest.send(ReportFixtures.ANALYSIS_NAME, [report])
 
     then:
-    1 * rabbitTemplate.convertAndSend(exchangeName, routingKey, {
+    noExceptionThrown()
+    1 * rabbitTemplate.convertAndSend(
+        exchangeName, routingKey, {
       with((ProductionDataIndexRequest) it) {
         it.analysisName == ReportFixtures.ANALYSIS_NAME
         it.alertsCount == 1
-        it.alertsList == [ReportFixtures.WAREHOUSE_ALERT]
+        if (report == ReportFixtures.REPORT_ONE) {
+          it.alertsList == [ReportFixtures.WAREHOUSE_ALERT]
+        }
       }
     })
+    0 * _
+
+    where:
+    report << [ReportFixtures.REPORT_ONE,
+               ReportFixtures.REPORT_TWO,
+               ReportFixtures.REPORT_THREE,
+               ReportFixtures.ERROR_REPORT_ONE,
+               ReportFixtures.ERROR_REPORT_TWO]
   }
 }
